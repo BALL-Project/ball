@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile_test.C,v 1.30 2004/03/08 21:44:03 oliver Exp $
+// $Id: HINFile_test.C,v 1.31 2004/03/17 11:15:30 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.30 2004/03/08 21:44:03 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.31 2004/03/17 11:15:30 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -204,7 +204,7 @@ CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
 	m.insert(a);
 	a.setName("Atom1");
 	a.setPosition(Vector3(1,2,3));
-	HINFile f(filename, File::OUT);
+	HINFile f(filename, std::ios::out);
 	f.write(m);
 	f.close();
 	TEST_NOT_EQUAL(f.getSize(), 0)

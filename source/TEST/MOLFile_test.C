@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile_test.C,v 1.10 2003/08/26 19:04:54 oliver Exp $
+// $Id: MOLFile_test.C,v 1.11 2004/03/17 11:16:02 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.10 2003/08/26 19:04:54 oliver Exp $")
+START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.11 2004/03/17 11:16:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ CHECK(bool write(const System& system) throw(File::CannotWrite))
 	
 	TEST_FILE_REGEXP(filename.c_str(), "data/MOLFile_test2.mol")
 
-	MOLFile f2("MOLFile_test.C", File::IN);
+	MOLFile f2("MOLFile_test.C", std::ios::in);
 	TEST_EXCEPTION(File::CannotWrite, f2.write(S))
 RESULT
 

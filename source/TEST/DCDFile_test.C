@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.20 2004/01/15 16:18:53 amoll Exp $
+// $Id: DCDFile_test.C,v 1.21 2004/03/17 11:18:41 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.20 2004/01/15 16:18:53 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.21 2004/03/17 11:18:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -97,7 +97,7 @@ CHECK([EXTRA] full test writing)
 	pfile.read(system);
 	AmberFF amberFF;
 	NEW_TMP_FILE(filename);
-	DCDFile dcd(filename, File::OUT);
+	DCDFile dcd(filename, std::ios::out);
 	TEST_EQUAL(dcd.isAccessible(), true)
 	Options options;
 	SnapShotManager ssm(&system, &amberFF, options, &dcd, true);
@@ -192,10 +192,10 @@ CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw(File::CannotWr
 	TEST_EQUAL(ss.getNumberOfAtoms(), 892)
 	String temporary;
 	NEW_TMP_FILE(temporary)
-	DCDFile dcd(temporary, File::OUT);
+	DCDFile dcd(temporary, std::ios::out);
 	TEST_EQUAL(dcd.isOpen(), true)
 	TEST_EQUAL(dcd.isWritable(), true)
-	TEST_EQUAL(dcd.getOpenMode(), File::OUT)
+	TEST_EQUAL(dcd.getOpenMode(), std::ios::out)
 	TEST_EQUAL(dcd.isAccessible(), true)
 	TEST_EQUAL(dcd.getNumberOfSnapShots(), 0)
 	bool result = dcd.flushToDisk(v);
