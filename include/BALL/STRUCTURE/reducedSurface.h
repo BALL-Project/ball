@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.15 2001/06/20 12:45:04 anker Exp $
+// $Id: reducedSurface.h,v 1.16 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -92,7 +92,7 @@ namespace BALL
 			}
 
 
-	/** Generic ReducedSurface Class.	\\
+	/** Generic ReducedSurface Class.
 			{\bf Definition:} \URL{BALL/STRUCTURE/reducedSurface.h}
 	*/
 	template <typename T>
@@ -135,6 +135,7 @@ namespace BALL
 		/** @name Assignment
 		*/
 		//@{
+
 		/** Delete all vertices, edges and faces
 		*/
 		void clear()

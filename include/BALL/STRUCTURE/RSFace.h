@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.11 2001/06/18 17:24:18 strobel Exp $
+// $Id: RSFace.h,v 1.12 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -16,8 +16,8 @@ namespace BALL
 	template <typename T>
 	class TRSEdge;
 
-	/** Generic RSFace Class.	\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/RSFace.h} \\
+	/** Generic RSFace Class.	
+			{\bf Definition:} \URL{BALL/STRUCTURE/RSFace.h} 
 	*/
 	template <class T>
 	class TRSFace

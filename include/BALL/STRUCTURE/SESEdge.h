@@ -1,4 +1,4 @@
-// $Id: SESEdge.h,v 1.7 2001/02/23 02:40:45 amoll Exp $
+// $Id: SESEdge.h,v 1.8 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -23,8 +23,8 @@ namespace BALL
 	template <typename T>
 	class TRSEdge;
 
-	/** Generic SESEdge Class. \\
-			{\bf Definition:} \URL{BALL/STRUCTURE/SESEdge.h} \\
+	/** Generic SESEdge Class.
+			{\bf Definition:} \URL{BALL/STRUCTURE/SESEdge.h} 
 	*/
 	template <class T>
 	class TSESEdge

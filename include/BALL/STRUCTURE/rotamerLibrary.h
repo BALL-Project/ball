@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.13 2001/03/07 22:04:10 amoll Exp $
+// $Id: rotamerLibrary.h,v 1.14 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -22,7 +22,7 @@
 namespace BALL
 {
 
-	/** Rotamer class. \\
+	/** Rotamer class.
 			{\bf Definition:} \URL{BALL/STRUCTURE/rotamerLibrary.h}
 	*/
 	class Rotamer
@@ -74,7 +74,7 @@ namespace BALL
 	};
 
 
-	/** ResidueRotamerSet. \\
+	/** ResidueRotamerSet.
 			{\bf Definition:} \URL{BALL/STRUCTURE/rotamerLibrary.h}
 	*/
 	class ResidueRotamerSet

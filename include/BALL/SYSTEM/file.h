@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.27 2001/04/30 02:22:49 oliver Exp $
+// $Id: file.h,v 1.28 2001/06/21 08:58:57 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -29,7 +29,7 @@
 namespace BALL 
 {
 	
-	/**	File Class.	\\
+	/**	File Class.	
 			{\bf Definition:} \URL{BALL/SYSTEM/file.h} \\
 	*/
 	class File
@@ -444,12 +444,12 @@ namespace BALL
 	};
 
 
-	/** Helper class for data conversion.	\\
+	/** Helper class for data conversion.	
 			BinaryFileAdaptors are used to read and write binary data from and to
 			streams. This is done by reading the member {\tt data} as a byte stream
 			through an explicit cast and utilizing the stream read() and write() 
 			functions.\\
-			{\bf Definition:} \URL{BALL/SYSTEM/file.h} \\
+			{\bf Definition:} \URL{BALL/SYSTEM/file.h} 
 	*/
 	template <typename T>
 	class BinaryFileAdaptor
@@ -551,7 +551,6 @@ namespace BALL
 	/** Coping with endianness. This function swaps the bytes of a variable
 			of type T if this type is of size 2n.
 	*/
-
 	template <typename T>
 	BALL_INLINE
 	void swapBytes(T& t)

@@ -1,4 +1,4 @@
-// $Id: RDFSection.h,v 1.6 2001/02/23 02:40:44 amoll Exp $
+// $Id: RDFSection.h,v 1.7 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RDFSECTION_H
 #define BALL_STRUCTURE_RDFSECTION_H
@@ -14,7 +14,7 @@
 namespace BALL
 {
 
-	/** Helper class for RDFParameter.	\\
+	/** Helper class for RDFParameter.
 			{\bf Definition:} \URL{BALL/STRUCTURE/RDFSection.h}
 	 */
 	class RDFSection

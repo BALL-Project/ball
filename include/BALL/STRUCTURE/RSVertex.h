@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.8 2001/06/05 15:47:10 anker Exp $
+// $Id: RSVertex.h,v 1.9 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -11,15 +11,14 @@
 namespace BALL
 {
 	
-
 	template <typename T>
 	class TRSFace;
 
 	template <typename T>
 	class TRSEdge;
 
-	/** Generic RSVertex Class.	\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/RSVertex.h}	\\
+	/** Generic RSVertex Class.	
+			{\bf Definition:} \URL{BALL/STRUCTURE/RSVertex.h}	
 	*/
 	template <class T>
 	class TRSVertex

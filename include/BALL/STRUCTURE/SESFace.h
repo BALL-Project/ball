@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.9 2001/02/27 21:32:07 strobel Exp $
+// $Id: SESFace.h,v 1.10 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -23,8 +23,8 @@ namespace BALL
 	template <typename T>
 	class TRSFace;
 
-	/** Generic SESFace Class. \\
-			{\bf Definition:} \URL{BALL/STRUCTURE/SESFace.h} \\
+	/** Generic SESFace Class. 
+			{\bf Definition:} \URL{BALL/STRUCTURE/SESFace.h} 
 	*/
 	template <class T>
 	class TSESFace

@@ -1,4 +1,4 @@
-// $Id: rules.h,v 1.2 2001/03/06 00:12:23 amoll Exp $
+// $Id: rules.h,v 1.3 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RULES_H
 #define BALL_STRUCTURE_RULES_H
@@ -10,7 +10,7 @@
 namespace BALL 
 {
 
-	/**	@name	Rule-based assignments. \\
+	/**	@name	Rule-based assignments.
 			{\bf Definition:}\URL{BALL/STRUCTURES/rules.h}
 	*/
 	class RuleProcessor

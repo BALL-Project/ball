@@ -1,4 +1,4 @@
-// $Id: structureMapper.h,v 1.8 2001/03/06 00:12:24 amoll Exp $
+// $Id: structureMapper.h,v 1.9 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -40,7 +40,7 @@ namespace BALL
 	using std::vector;
 	using std::map;
 
-	/**	Structure mapping class. \\
+	/**	Structure mapping class.
 			{\bf Definition:} \URL{BALL/STRUCTURE/structureMapper.h}
 	*/
 	class StructureMapper

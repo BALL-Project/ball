@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.10 2001/06/18 16:58:25 strobel Exp $
+// $Id: BSDTree.h,v 1.11 2001/06/21 08:58:41 amoll Exp $
 
 #define DEBUG_BSDTREE
 
@@ -18,13 +18,11 @@
 #endif
 
 #include <vector>
-//#include <list>
-//#include <string>
 
 namespace BALL 
 {
 
-	/** Generic BSD Tree Class.	\\
+	/** Generic BSD Tree Class.	
 			{\bf Definition:}\URL{BALL/STRUCTURE/BSDTree.h}
 	*/
 	template <typename T>
@@ -176,6 +174,8 @@ namespace BALL
 		/**	@name	Acessors
 		*/
 		//@{
+		
+		///
 		void getExtrema(T& x_min, T& y_min, T& z_min,
 										T& x_max, T& y_max, T& z_max)
 		{
@@ -200,7 +200,8 @@ namespace BALL
 				z_max = Maths::max(point_[*i].z,z_max);
 			}
 		}
-
+	
+		///
 		void build()
 		{
 			if ((left_ == NULL) && (right_ == NULL))
@@ -270,7 +271,7 @@ namespace BALL
 			}
 		}
 
-
+		///
 		void get(const TVector3<T>& p, const T& length, HashSet<Index>& indices)
 		{
 			bool is_intersecting = true;
@@ -300,7 +301,7 @@ namespace BALL
 			}
 		}
 
-
+		///
 		void get(const TVector3<T>& p, const T& length, std::list<Index>& indices)
 		{
 			bool is_intersecting = true;
@@ -330,7 +331,7 @@ namespace BALL
 			}
 		}
 
-
+		///
 		void remove(Index i)
 		{
 			part_.erase(i);

@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.12 2001/05/18 21:11:43 amoll Exp $
+// $Id: directory.h,v 1.13 2001/06/21 08:58:57 amoll Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -24,7 +24,7 @@
 namespace BALL 
 {
 
-	/**	Directory class. \\
+	/**	Directory class. 
 			{\bf Definition:} \URL{BALL/SYSTEM/directory.C}
 	*/
 	class Directory
@@ -259,16 +259,17 @@ namespace BALL
 		//@}
 
 		private:
-			//switch to this dir
-			void synchronize_();
+		
+		//_switch to this dir
+		void synchronize_();
 
-			//switch back to the working directory
-			bool desynchronize_(bool result = true);
+		//_switch back to the working directory
+		bool desynchronize_(bool result = true);
 
-			DIR*						dir_;
-			dirent*					dirent_;
-			String					directory_path_;
-			String					backup_path_;
+		DIR*						dir_;
+		dirent*					dirent_;
+		String					directory_path_;
+		String					backup_path_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

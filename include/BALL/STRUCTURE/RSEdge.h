@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.10 2001/06/18 17:11:16 strobel Exp $
+// $Id: RSEdge.h,v 1.11 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -28,8 +28,8 @@ namespace BALL
 	template <typename T>
 	class TRSVertex;
 
-	/** Generic RSEdge Class.	\\
-      {\bf Definition:} \URL{BALL/STRUCTURE/RSEdge.h}  \\
+	/** Generic RSEdge Class.	
+      {\bf Definition:} \URL{BALL/STRUCTURE/RSEdge.h} 
 	*/
 	template <class T>
 	class TRSEdge

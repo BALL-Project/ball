@@ -1,4 +1,4 @@
-// $Id: SESVertex.h,v 1.7 2001/03/06 14:17:46 balltest Exp $
+// $Id: SESVertex.h,v 1.8 2001/06/21 08:58:41 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -16,8 +16,8 @@
 namespace BALL
 {
 
-	/** Generic SESVertex Class.	\\
-      {\bf Definition:} \URL{BALL/STRUCTURE/SESVertex.h}  \\
+	/** Generic SESVertex Class.	
+      {\bf Definition:} \URL{BALL/STRUCTURE/SESVertex.h}  
 	*/
 	template <class T>
 	class TSESVertex
@@ -164,13 +164,14 @@ namespace BALL
 														 << sesvertex.atom << ")");
 	}
 
-	//@}
 
 	/**	The Default SESVertex Type.
 			If double precision is not needed, {\tt SESVertex<float>} should
 			be used. It is predefined as {\tt SESVertex} for convenience.
 	*/
 	typedef TSESVertex<float> SESVertex;
+
+	//@}
 
 } // namespace BALL
 
