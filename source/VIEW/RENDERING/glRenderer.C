@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.14 2005/01/17 00:23:04 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.15 2005/01/17 17:16:35 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -30,7 +30,7 @@
 
 using namespace std;
 
- #define BALL_BENCHMARKING
+#define BALL_BENCHMARKING
 
 namespace BALL
 {
@@ -49,12 +49,18 @@ namespace BALL
 				object_to_name_(),
 				all_names_(0),
 				last_color_(&dummy_color_),
+				screen_buffer_(0),
 				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED),
- 				use_vertex_buffer_(false)
+ 				use_vertex_buffer_(false),
+ 				use_pixel_buffer_(false)
 		{
 #ifdef GL_ARB_vertex_buffer_object
 			use_vertex_buffer_ = true;
+#endif
+
+#ifdef GL_EXT_pixel_buffer_object
+			use_pixel_buffer_ = true;
 #endif
 		}
 
@@ -279,7 +285,7 @@ namespace BALL
 				return;
 			}
 
-			if (display_lists_.size() == 1)
+			if (display_lists_.size() + mesh_to_buffer_.size() < 2)
 			{
 				// we can use a faster approach
 				name_to_object_.clear();
@@ -306,10 +312,13 @@ namespace BALL
 			if (vertexBuffersEnabled() &&
 					isSurfaceModel(rep.getModelType()))
 			{
+Log.error() << "rebuild buffer " << std::endl;
 				clearVertexBuffersFor(*(Representation*)&rep);
 				render(rep);
 				return;
 			}
+
+Log.error() << "rebuild list " << std::endl;
 
 #ifdef BALL_BENCHMARKING
 	Timer t;
@@ -1477,9 +1486,12 @@ namespace BALL
 	void GLRenderer::drawFromDisplayList(const Representation& rep)
 		throw()
 	{
+		if (rep.isHidden()) return;
+
 		if (use_vertex_buffer_ && 
 				VIEW::isSurfaceModel(rep.getModelType()))
 		{
+Log.error() << "drawvertex" << std::endl;
 			const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 			for (; it != geometric_objects.end(); it++)
@@ -1494,14 +1506,54 @@ namespace BALL
 					hit->second->draw();
 				}
 			}
-		}
-
-		if (!display_lists_.has(&rep) || rep.isHidden()) 
-		{
 			return;
 		}
 
-		display_lists_[&rep]->draw();
+		DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
+		if (dit == display_lists_.end()) return;
+Log.error() << "drawlislistt" << std::endl;
+
+		dit->second->draw();
+	}
+
+
+	bool GLRenderer::storeScreenToBuffer()
+	{
+		#ifndef GL_EXT_pixel_buffer_object
+			return false;
+		#else
+			if (use_pixel_buffer_ == false) return false;
+
+			if (screen_buffer_ != 0)
+			{
+				glDeleteBuffersARB(1, &screen_buffer_);
+			}
+			glGenBuffersARB(1, &screen_buffer_);
+			Size size = (Size)(width_ * height_ * 4);
+			glReadBuffer(GL_FRONT);
+			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_EXT, screen_buffer_);
+			glReadPixels(0, 0, (Size)width_, (Size)height_, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+			glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_EXT, size, NULL, GL_STATIC_READ);
+		#endif
+
+		return true;
+	}
+
+	bool GLRenderer::restoreScreenFromBuffer()
+	{
+		#ifndef GL_EXT_pixel_buffer_object
+			return false;
+		#else
+			if (use_pixel_buffer_ == false) return false;
+
+			if (screen_buffer_ == 0) return false;
+
+			glDrawBuffer(GL_FRONT);
+			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_EXT, screen_buffer_);
+			glDrawPixels((Size)width_, (Size)height_, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+		#endif
+
+		return true;
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

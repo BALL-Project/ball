@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.58.2.1 2005/01/13 12:27:36 amoll Exp $
+// $Id: scene.h,v 1.58.2.2 2005/01/17 17:20:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -711,6 +711,7 @@ namespace BALL
 			List<Camera> animation_points_;
 			AnimationThread* animation_thread_;
 			bool stop_animation_;
+			bool content_changed_;
 		};
 
 

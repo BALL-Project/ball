@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.6 2005/01/17 00:22:42 amoll Exp $
+// $Id: scene.C,v 1.156.2.7 2005/01/17 17:20:50 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -85,7 +85,8 @@ namespace BALL
 				screenshot_nr_(10000),
 				pov_nr_(10000),
 				animation_thread_(0),
-				stop_animation_(false)
+				stop_animation_(false),
+				content_changed_(true)
 		{
 			gl_renderer_.setSize(600, 600);
 			setAcceptDrops(true);
@@ -120,7 +121,8 @@ namespace BALL
 				screenshot_nr_(10000),
 				pov_nr_(10000),
 				animation_thread_(0),
-				stop_animation_(false)
+				stop_animation_(false),
+				content_changed_(true)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
@@ -157,7 +159,8 @@ namespace BALL
 				screenshot_nr_(10000),
 				pov_nr_(10000),
 				animation_thread_(0),
-				stop_animation_(false)
+				stop_animation_(false),
+				content_changed_(true)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
@@ -257,6 +260,7 @@ namespace BALL
 			{
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = rm->getRepresentation();
+				content_changed_ = true;
 				switch (rm->getType())
 				{
  					case RepresentationMessage::ADD:
@@ -288,20 +292,24 @@ namespace BALL
 			switch (scene_message->getType())
 			{
 				case SceneMessage::REDRAW:
+					content_changed_ = true;
 					update(false);
 					return;
 
 				case SceneMessage::REBUILD_DISPLAY_LISTS:
+					content_changed_ = true;
 					update(true);
 					return;
 
 				case SceneMessage::UPDATE_CAMERA:
+					content_changed_ = true;
 					stage_->moveCameraTo(scene_message->getStage().getCamera());
 					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
 					updateCamera_();
 					return;
 
 				case SceneMessage::REMOVE_COORDINATE_SYSTEM:
+					content_changed_ = true;
 					stage_->showCoordinateSystem(false);
 					stage_settings_->updateFromStage();
 					return;
@@ -341,6 +349,10 @@ namespace BALL
 			gl_renderer_.initSolid();
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 			gl_renderer_.updateCamera();
+			
+String exts = (char*)glGetString(GL_EXTENSIONS);
+
+logString(String("#~~#   1 ") + String(exts )                        + "             " + __FILE__ + "  " + String(__LINE__));
 		}
 
 		void Scene::paintGL()
@@ -349,6 +361,17 @@ namespace BALL
 	Timer t;
 	t.start();
 #endif
+logString(String("#~~#   3 ") + String(content_changed_ )                        + "             " + __FILE__ + "  " + String(__LINE__));
+			if (!content_changed_ && gl_renderer_.pixelBuffersEnabled())
+			{
+Log.error() << "from pixel buffer" << std::endl;
+				if (gl_renderer_.restoreScreenFromBuffer()) 
+				{
+					content_changed_ = false;
+					return;
+				}
+			}
+				
 			// cannot call update here, because it calls updateGL
 			renderView_(DISPLAY_LISTS_RENDERING);
 #ifdef BALL_BENCHMARKING
@@ -376,6 +399,9 @@ namespace BALL
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
 			{
 				renderRepresentations_(mode);
+				content_changed_ = false;
+	Log.error() << "to pixel buffer" << std::endl;
+				gl_renderer_.storeScreenToBuffer();
 				return;
 			}
 
@@ -479,6 +505,9 @@ namespace BALL
  			light_settings_->updateFromStage();
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
+			content_changed_ = false;
+Log.error() << "to pixel buffer" << std::endl;
+			gl_renderer_.storeScreenToBuffer();
 		}
 
 
@@ -620,10 +649,6 @@ namespace BALL
 		{
 			if (rep.getGeometricObjects().size() == 0) return;
 
-#ifdef BALL_BENCHMARKING
-	Timer t;
-	t.start();
-#endif
 			switch (mode)
 			{
 				case DISPLAY_LISTS_RENDERING:
@@ -645,11 +670,6 @@ namespace BALL
 			{
 				return;
 			}
-
-#ifdef BALL_BENCHMARKING
-	t.stop();
- 	logString("Scene rendering time: " + String(t.getClockTime()));
-#endif
 		}
 
 		void Scene::rotateSystem2_(Scene* /*scene*/)
