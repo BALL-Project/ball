@@ -1,4 +1,4 @@
-// $Id: MOLFile.C,v 1.7 2001/12/27 17:30:08 oliver Exp $
+// $Id: MOLFile.C,v 1.8 2002/01/16 00:20:37 oliver Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -12,6 +12,7 @@
 #define MOLFILE_VERSION_STRING_3 "V3000"
 
 // enable/disable some debug output
+#define DEBUG
 #undef DEBUG
 
 namespace BALL 
@@ -544,52 +545,48 @@ namespace BALL
 
 		// parse the line according to the atom block format
 		atom.position.x = 0.0;
-		parseColumnFormat("%10.4f", 0, 10, (void*)&atom.position.x);
-
+		parseColumnFormat("%f", 0, 10, (void*)&(atom.position.x));
+		
 		atom.position.y = 0.0;
-		parseColumnFormat("%10.4f", 10, 10, (void*)&atom.position.y);
+		parseColumnFormat("%f", 10, 10, (void*)&(atom.position.y));
 
 		atom.position.z = 0.0;
-		parseColumnFormat("%10.4f", 20, 10, (void*)&atom.position.z);
+		parseColumnFormat("%f", 20, 10, (void*)&(atom.position.z));
 
 		atom.mass_difference = 0;
-		parseColumnFormat("%2d", 31, 2, (void*)&atom.mass_difference);
+		parseColumnFormat("%d", 31, 2, (void*)&atom.mass_difference);
 
 		atom.charge = 0;
-		parseColumnFormat("%3d", 33, 3, (void*)&atom.charge);
+		parseColumnFormat("%d", 33, 3, (void*)&atom.charge);
 
 		atom.parity = 0;
-		parseColumnFormat("%3d", 36, 3, (void*)&atom.parity);
+		parseColumnFormat("%d", 36, 3, (void*)&atom.parity);
 
 		atom.hydrogen_count = 0;
-		parseColumnFormat("%3d", 39, 3, (void*)&atom.hydrogen_count);
+		parseColumnFormat("%d", 39, 3, (void*)&atom.hydrogen_count);
 
 		atom.stereo_care_box = 0;
-		parseColumnFormat("%3d", 42, 3, (void*)&atom.stereo_care_box);
+		parseColumnFormat("%d", 42, 3, (void*)&atom.stereo_care_box);
 
 		atom.valence = 0;
-		parseColumnFormat("%3d", 45, 3, (void*)&atom.valence);
+		parseColumnFormat("%d", 45, 3, (void*)&atom.valence);
 
-		atom.H0_designator = 0;
-		parseColumnFormat("%3d", 48, 3, (void*)&atom.H0_designator);
 
 		atom.reaction_component_type = 0;
-		parseColumnFormat("%3d", 51, 3, (void*)&atom.reaction_component_type);
-
-		atom.reaction_component_type = 0;
-		parseColumnFormat("%3d", 51, 3, (void*)&atom.reaction_component_type);
-
 		atom.reaction_component_number = 0;
-		parseColumnFormat("%3d", 54, 3, (void*)&atom.reaction_component_number);
-
+		atom.H0_designator = 0;
 		atom.number = 0;
-		parseColumnFormat("%3d", 57, 3, (void*)&atom.number);
-
 		atom.inversion_retention = 0;
-		parseColumnFormat("%3d", 60, 3, (void*)&atom.inversion_retention);
-
 		atom.exact_change = 0;
-		parseColumnFormat("%3d", 63, 3, (void*)&atom.exact_change);
+		if (getLine().size() > 48)
+		{
+			parseColumnFormat("%d", 48, 3, (void*)&atom.H0_designator);
+			parseColumnFormat("%d", 51, 3, (void*)&atom.reaction_component_type);
+			parseColumnFormat("%d", 54, 3, (void*)&atom.reaction_component_number);
+			parseColumnFormat("%d", 57, 3, (void*)&atom.number);
+			parseColumnFormat("%d", 60, 3, (void*)&atom.inversion_retention);
+			parseColumnFormat("%d", 63, 3, (void*)&atom.exact_change);
+		}
 	}
 
 	void MOLFile::writeAtomLine_(const MOLFile::AtomStruct& atom)
