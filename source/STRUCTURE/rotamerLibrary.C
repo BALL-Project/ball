@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.3 1999/08/27 14:01:41 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.4 1999/08/27 14:11:18 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/SYSTEM/file.h>
@@ -85,10 +85,10 @@ namespace BALL
 		for (; set_it != amino_acids.end() ; set_it++)
 		{
 			name = *set_it;
-			list<String> variant_names = template_db.getVariantNames(name);
+			list<String> variant_names = fragment_db.getVariantNames(name);
 			for (list_it = variant_names.begin(); list_it != variant_names.end(); ++list_it)
 			{
-				ResidueRotamerSet rs(template_db.getResidue(*list_it));
+				ResidueRotamerSet rs(*fragment_db.getResidue(*list_it));
 				for (Size i = 0; i < lines.size(); i++)
 				{
 					if (lines[i](0, 3) == name)
