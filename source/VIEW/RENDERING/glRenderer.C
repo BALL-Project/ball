@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.11 2005/01/14 17:51:58 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.12 2005/01/15 10:55:15 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1362,6 +1362,22 @@ namespace BALL
 			return display_lists_.has(&rep);
 		}
 
+		bool GLRenderer::isExtensionSupported(const String& extension)
+		{
+			// Extension names should not have spaces
+			if (extension == "" || extension.hasSubstring(" ")) return false;
+
+			// Get Extensions String
+			if (glGetString(GL_EXTENSIONS) == 0) 
+			{
+				return false;
+			}
+
+			String supported_extensions = (const char*) glGetString(GL_EXTENSIONS);
+			if (supported_extensions.hasSubstring(extension)) return true;
+
+			return false;
+		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>
