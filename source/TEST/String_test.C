@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.38.4.2 2002/05/31 22:59:27 oliver Exp $
+// $Id: String_test.C,v 1.38.4.3 2002/12/03 10:18:34 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.38.4.2 2002/05/31 22:59:27 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.38.4.3 2002/12/03 10:18:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -2057,7 +2057,7 @@ RESULT
 
 CHECK(String::getline(istream&, char*))
 	String line;
-	std::ifstream instream("data/string_test.txt");
+	std::ifstream instream("data/String_test2.txt");
 	line.getline(instream);
 	TEST_EQUAL(line, "ABC DEF")
 	line.getline(instream);
@@ -2067,10 +2067,10 @@ CHECK(String::getline(istream&, char*))
 RESULT
 
 CHECK(String::getline(istream&, String&, char*))
-	std::ifstream test_stream("data/string_test.txt");
+	std::ifstream test_stream("data/String_test2.txt");
 	if (!test_stream.good())
 	{
-		throw Exception::FileNotFound(__FILE__, __LINE__, "data/string_test.txt");
+		throw Exception::FileNotFound(__FILE__, __LINE__, "data/String_test2.txt");
 	}
 	String s;
 	s.getline(test_stream);
