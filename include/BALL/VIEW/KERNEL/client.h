@@ -1,4 +1,4 @@
-// $Id: client.h,v 1.4 2000/01/13 22:24:07 oliver Exp $
+// $Id: client.h,v 1.5 2000/05/14 15:36:35 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -7,16 +7,24 @@
 # include <BALL/common.h>
 #endif
 
+#ifndef BALL_CONCEPT_COMPOSITE_H
+#	include <BALL/CONCEPT/composite.h>
+#endif
+
 #ifndef BALL_SYSTEM_SOCKET_H
 #	include <BALL/SYSTEM/socket.h>
 #endif
 
-#ifndef BALL_VIEW_COMMON_GLOBAL_H
-#	include <BALL/VIEW/COMMON/global.h>
+#ifndef BALL_CONCEPT_PERSISTENTOBJECT_H       
+# include <BALL/CONCEPT/persistentObject.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
-#	include <BALL/VIEW/KERNEL/clientScene.h>
+#ifndef BALL_CONCET_TEXTPERSISTENCEMANAGER_H
+# include <BALL/CONCEPT/textPersistenceManager.h>
+#endif
+
+#ifndef BALL_VIEW_COMMON_GLOBAL_H
+#	include <BALL/VIEW/COMMON/global.h>
 #endif
 
 namespace BALL
@@ -56,6 +64,27 @@ namespace BALL
 			virtual void destroy();
 			//@}
 		
+			/**	@name	Exceptions
+			*/
+			//@{
+			
+			class InvalidClient
+				:	public Exception::GeneralException
+			{
+				public:
+
+				InvalidClient(const char* file, int line);
+			};
+
+			class NoPersistentObject
+				:	public Exception::GeneralException
+			{
+				public:
+
+				NoPersistentObject(const char* file, int line);
+			};
+			//@}
+
 			/**	@name	Accessors
 			*/
 			//@{
@@ -64,10 +93,13 @@ namespace BALL
 			*/
 			void connect(const String& host, int port = VIEW_DEFAULT_PORT);
 
-			/** returns a clientscene from the server.
-			*/
-			ClientScene getScene();
+			void insert(Composite &composite);
 
+			void setCreatorValue(int address, int value);
+
+			int getCreatorValue(int address);
+
+			bool hasCreatorValue(int address, int value);
 			//@}
 
 			/**	@name	Debugging and Diagnostics
@@ -93,6 +125,8 @@ namespace BALL
 
 			String	host_;
 			int			port_;
+
+			TextPersistenceManager pm_;
 		};
 
 
