@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.5 2002/05/12 14:05:14 oliver Exp $
+// $Id: StructureMapper_test.C,v 1.6 2003/08/19 16:00:35 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <BALL/MATHS/quaternion.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.5 2002/05/12 14:05:14 oliver Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.6 2003/08/19 16:00:35 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -175,6 +175,23 @@ CHECK(Matrix4x4 StructureMapper::matchPoints(const Vector3& w1, const Vector3& w
 
 	TEST_REAL_EQUAL((T * w1 - v1).getSquareLength(), 0.0)
 	TEST_REAL_EQUAL((T * w2 - v2).getSquareLength(), 0.0)
+RESULT
+
+CHECK(double calculateRMSD())
+	Fragment f1,f2;
+	Atom a1,a2,b1,b2;
+	a1.setName("a1");
+	a2.setName("a2");
+	b1.setName("b1");
+	b2.setName("b2");
+	a1.setPosition(Vector3(1,0,0));
+	b1.setPosition(Vector3(0,-1,0));
+	f1.insert(a1);
+	f1.insert(b1);
+	f2.insert(a2);
+	f2.insert(b2);
+	StructureMapper m(f1,f2);
+	TEST_REAL_EQUAL(m.calculateRMSD(), 1.0)
 RESULT
 
 /////////////////////////////////////////////////////////////
