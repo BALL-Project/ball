@@ -7,7 +7,7 @@ cp ../lib/$PLATFORM/lib*.so deb-ball/opt/BALL/lib &&
 cp ../lib/$PLATFORM/BALLmodule.so deb-ball/usr/lib/python2.3/site-packages &&
 #cp /opt/sip-4.0rc1_gcc-3.3.3/siplib/sip.so deb-ball/usr/lib/python2.3/site-packages &&
 
-cp ../source/APPLICATIONS/BALLVIEW/BALLView deb-ball/opt/BALL/bin &&
+cp ../source/APPLICATIONS/BALLVIEW/BALLView deb-ball/opt/BALL/bin/BALLView &&
 
 cp -rf ../doc/BALLView deb-ball/opt/BALL/doc &&
 
