@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.14 2001/07/13 14:24:53 anker Exp $
+// $Id: expression.h,v 1.15 2001/07/15 20:22:32 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -282,10 +282,6 @@ namespace BALL
 		
 		protected:
 		
-		/** @name Protected methods
-		*/
-		//@{
-
 		/*_ A helper function for operator == () that compares the children of
 				a node.
 		*/
@@ -324,10 +320,10 @@ namespace BALL
 		*/
 		//@{
 
-		/// BAUSTELLE
+		/// An iterator for the children of a given node
 		typedef	list<SyntaxTree*>::iterator				Iterator;
 
-		/// BAUSTELLE
+		/// A const iterator for the children of a given node
 		typedef	list<SyntaxTree*>::const_iterator	ConstIterator;
 		
 		//@}
