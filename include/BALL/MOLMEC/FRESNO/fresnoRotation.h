@@ -1,13 +1,14 @@
-// $Id: fresnoRotation.h,v 1.1.2.6 2002/04/08 16:35:36 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.7 2003/02/14 11:02:13 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
 #define BALL_MOLMEC_FRESNO_FRESNOROTATION_H
 
+#include <stack>
+
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/DATATYPE/hashSet.h>
 #include <BALL/DATATYPE/hashGrid.h>
-#include <BALL/DATATYPE/stack.h>
 
 namespace BALL
 {
@@ -159,7 +160,7 @@ namespace BALL
 		void cycleDFS_(const Atom* atom,
 				HashSet<const Atom*>& visited,
 				HashSet<const Bond*>& tree,
-				Stack<const Bond*>& possible_cycle_bonds,
+				std::stack<const Bond*>& possible_cycle_bonds,
 				HashSet<const Bond*>& cycle_bonds,
 				int& cycle_count)
 			throw();

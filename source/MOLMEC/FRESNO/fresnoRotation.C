@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.13 2002/11/22 18:38:37 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.14 2003/02/14 11:02:45 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -201,7 +201,7 @@ namespace BALL
 		// cycles (or rings)
 		HashSet<const Atom*> visited;
 		HashSet<const Bond*> tree;
-		Stack<const Bond*> possible_cycle_bonds;
+		stack<const Bond*> possible_cycle_bonds;
 		HashSet<const Bond*> cycle_bonds;
 		int cycle_count = 0;
 
@@ -513,7 +513,7 @@ namespace BALL
 	void FresnoRotation::cycleDFS_(const Atom* atom,
 			HashSet<const Atom*>& visited,
 			HashSet<const Bond*>& tree,
-			Stack<const Bond*>& possible_cycle_bonds,
+			stack<const Bond*>& possible_cycle_bonds,
 			HashSet<const Bond*>& cycle_bonds,
 			int& cycle_count)
 		throw()
@@ -564,7 +564,7 @@ namespace BALL
 					do
 					{
 						// PARANOIA
-						if (possible_cycle_bonds.isEmpty())
+						if (possible_cycle_bonds.empty())
 						{
 							cerr << "Something's wrong here, no possible bonds left" 
 								<< endl;
@@ -627,7 +627,7 @@ namespace BALL
 					}
 					while ((tmp->getFirstAtom() != partner) 
 							&& (tmp->getSecondAtom() != partner)
-							&& (!possible_cycle_bonds.isEmpty())
+							&& (!possible_cycle_bonds.empty())
 							&& (keep_on_searching == true));
 
 					possible_cycle_bonds.push(bond);
