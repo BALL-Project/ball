@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bidirectionalIterator.h,v 1.27 2003/06/11 16:09:22 oliver Exp $ 
+// $Id: bidirectionalIterator.h,v 1.28 2003/06/12 14:58:59 sneumann Exp $ 
 //
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -67,8 +67,8 @@ namespace BALL
 		 */
 		//@{
 
-		using BaseIterator<Container, DataType, Position, Traits>::operator +;
-		using BaseIterator<Container, DataType, Position, Traits>::operator -;
+ 		using ConstForwardIterator<Container, DataType, Position, Traits>::operator +;
+ 		using ConstForwardIterator<Container, DataType, Position, Traits>::operator -;
 
 		/// Move the iterator to the beginning of the container
 		void toBegin() throw(Exception::InvalidIterator);
