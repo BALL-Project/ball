@@ -1,10 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.5 2003/09/11 22:37:05 amoll Exp $
+// $Id: modularWidget.C,v 1.6 2003/09/14 17:19:07 amoll Exp $
 //
-
-#define BALL_VIEW_DEBUG // ????
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -127,10 +125,10 @@ namespace BALL
 
 			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::x"))
 			{
-				widget->setGeometry(inifile.getValue("WINDOWS", getIdentifier() + "::x").toUnsignedInt(),
-													  inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt(),
-													  inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
-													  inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
+				widget->move(inifile.getValue("WINDOWS", getIdentifier() + "::x").toUnsignedInt(),
+										 inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt());
+				widget->resize(inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
+											 inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
 			} 
 		}
 		
