@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.17 2001/02/24 22:52:32 amoll Exp $ 
+// $Id: nucleicAcid.h,v 1.18 2001/05/24 14:45:02 anker Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -23,6 +23,7 @@ namespace BALL
 	class Nucleotide;
 
 	/**	Kernel class representing nucleic acids.
+			{\bf Definition:} \URL{BALL/KERNEL/nucleicAcid.h}
 	*/
 	class NucleicAcid
 		: public Molecule
@@ -57,9 +58,10 @@ namespace BALL
 		NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true)
 			throw();
 	
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 		*/
-		NucleicAcid(const String& name, const String& id = BALL_NUCLEICACID_DEFAULT_ID)
+		NucleicAcid(const String& name,
+				const String& id = BALL_NUCLEICACID_DEFAULT_ID)
 			throw();
 
 		/**	Destructor.
@@ -142,17 +144,21 @@ namespace BALL
 		//@{
 
 		/** Get a pointer to a child Nucleotide at a given position.
-				The pointer is 0 if this instance does not have a Nucleotide at the given position.
-				@param   position the position of the child Nucleotide
-				@return  Nucleotide* - mutable pointer to the child Nucleotide at {\em positon}
+				The pointer is 0 if this instance does not have a Nucleotide at the
+				given position.
+				@param		position the position of the child Nucleotide
+				@return		Nucleotide* - mutable pointer to the child Nucleotide at
+									{\em positon}
 		*/
 		Nucleotide* getNucleotide(Position position)
 			throw();
 	
 		/** Get a pointer to a child Nucleotide at a given position.
-				The pointer is 0 if this instance does not have a Nucleotide at the given position.
-				@param   position the position of the child Nucleotide
-				@return  Nucleotide* - constant pointer to the child Nucleotide at {\em positon}
+				The pointer is 0 if this instance does not have a Nucleotide at the
+				given position.
+				@param		position the position of the child Nucleotide
+				@return		Nucleotide* - constant pointer to the child Nucleotide at
+									{\em positon}
 		*/
 		const Nucleotide* getNucleotide(Position position) const
 			throw();
@@ -233,16 +239,18 @@ namespace BALL
 
 		/** Internal state and consistency self-validation.
 				@return	 bool - {\tt true} if the internal state of this instance atom 
-								 is correct (self-validated) and consistent,	{\tt false} otherwise
+								 is correct (self-validated) and consistent, {\tt false}
+								 otherwise
 		*/
 		virtual bool isValid() const
 			throw();
 
 			/** Internal state dump.
-					Dump the current internal state of this instance to the output ostream {\em s}
-					with dumping depth {\em depth}.
-					@param   s - output stream where to output the internal state of this instance
-					@param   depth - the dumping depth
+					Dump the current internal state of this instance to the output
+					ostream {\em s} with dumping depth {\em depth}.
+					@param	s - output stream where to output the internal state of
+									this instance
+					@param	depth - the dumping depth
 			*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
@@ -256,19 +264,21 @@ namespace BALL
 			 Read persistent data from the input stream {\em s} and restore 
 			 the state of this instance.	\\
 			 {\bf Note:} Not yet implemented.
-			 @param  s input stream from where to restore the internal state of this instance
+			 @param		s input stream from where to restore the internal state of
+			 					this instance
 		*/
 		virtual void read(std::istream& s)
-			throw();
+			throw(Exception::NotImplemented);
 
 		/* Persistent stream input and state restorage.
 			 Read persistent data from the input stream {\em s} and restore 
 			 the state of this instance.	\\
 			 {\bf Note:} Not yet implemented.
-			 @param  s input stream from where to restore the internal state of this instance
+			 @param		s input stream from where to restore the internal state of
+			 					this instance
 		*/
 		virtual void write(std::ostream& s) const
-			throw();
+			throw(Exception::NotImplemented);
 
 		//@}
 
