@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.8.4.5 2002/12/11 10:10:41 anker Exp $ 
+// $Id: regularData3D.h,v 1.8.4.6 2002/12/11 10:59:13 anker Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -108,19 +108,15 @@ namespace BALL
 		/**	Destructor. 
 				Frees all allocated memory.
 		*/
-		virtual ~TRegularData3D() throw()
-		{
-			if (data != 0)
-			{
-				delete [] data;
-			}
-		}
+		virtual ~TRegularData3D()
+			throw();
 
 		/** Clear method.
 				Frees all allocated memory.
 				The instance is set to not valid.
 		*/
-		virtual void clear() throw();
+		virtual void clear() 
+			throw();
 
 		//@}
 
@@ -453,6 +449,10 @@ namespace BALL
 		//@}
 		
 		///
+		void resize(Size i, Size j, Size k)
+			throw(Exception::OutOfMemory);
+
+		///
 		void resize(float lower_x, float lower_y, float lower_z,
 				float upper_x, float upper_y, float upper_z,
 				Size number_of_grid_points_x, Size number_of_grid_points_y, Size number_of_grid_points_z)
@@ -678,6 +678,13 @@ namespace BALL
 				(Size)((upper.z - lower.z) / spacing + 1));
 	}
 
+	template <class GridDataType>
+	TRegularData3D<GridDataType>::~TRegularData3D()
+		throw()
+	{
+		clear();
+	}
+
 	// assignment operator
 	template <typename GridDataType>
 	BALL_INLINE
@@ -700,19 +707,20 @@ namespace BALL
 
 	template <typename GridDataType>
 	BALL_INLINE
-	void TRegularData3D<GridDataType>::resize(float lower_x, float lower_y, float lower_z,
-			float upper_x, float upper_y, float upper_z,
-			Size number_of_grid_points_x, Size number_of_grid_points_y, Size number_of_grid_points_z)
+	void TRegularData3D<GridDataType>::resize(Size i, Size j, Size k)
 		throw(Exception::OutOfMemory)
 	{
-
-		// throw away the old data
-		clear();
+		// 
+		if (data != 0)
+		{
+			delete [] data;
+			data = 0;
+		}
 
 		// set the number of grid points in all directions
-		number_of_points_x_ = number_of_grid_points_x;
-		number_of_points_y_ = number_of_grid_points_y;
-		number_of_points_z_ = number_of_grid_points_z;
+		number_of_points_x_ = i;
+		number_of_points_y_ = j;
+		number_of_points_z_ = k;
 
 		// if the number of grid points in any direction is below 2
 		// (which means that the grid is not three-dimensional!)
@@ -729,6 +737,39 @@ namespace BALL
 		{
 			number_of_points_y_ = 2;
 		}
+
+		// calculate the total number of grid points
+		number_of_grid_points_ 
+			= number_of_points_x_ * number_of_points_y_ * number_of_points_z_;
+		
+		// allocate space for the array containing pointers to the objects
+		data = new GridDataType[number_of_grid_points_];
+
+		// mark this instance as invalid if the alloc failed
+		valid_ = (data != 0);			
+
+		if (!valid_)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, 
+					number_of_grid_points_ * (Size)sizeof(GridDataType));
+		}
+	}
+
+	template <typename GridDataType>
+	BALL_INLINE
+	void TRegularData3D<GridDataType>::resize(float lower_x, float lower_y, float lower_z,
+			float upper_x, float upper_y, float upper_z,
+			Size number_of_grid_points_x, Size number_of_grid_points_y, Size number_of_grid_points_z)
+		throw(Exception::OutOfMemory)
+	{
+
+		// throw away the old data
+		clear();
+
+		// resize the data section and set the internal variables holding the
+		// number of grid points for every direction
+		resize(number_of_grid_points_x, number_of_grid_points_y,
+				number_of_grid_points_z);
 
 		// calculate the origin as the lowest given coordinates
 		// of each direction
@@ -748,22 +789,6 @@ namespace BALL
 		spacing_.x = size_.x / (number_of_points_x_ - 1);
 		spacing_.y = size_.y / (number_of_points_y_ - 1);
 		spacing_.z = size_.z / (number_of_points_z_ - 1);
-		
-		// calculate the total number of grid points
-		number_of_grid_points_ = number_of_points_x_ * number_of_points_y_ * number_of_points_z_;
-		
-		// allocate space for the array containing pointers to the objects
-		data = new GridDataType[number_of_grid_points_];
-
-		// mark this instance as invalid if the alloc failed
-		valid_ = (data != 0);			
-
-		if (!valid_)
-		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, 
-					number_of_grid_points_ * (Size)sizeof(GridDataType));
-		}
-
   }
 
 	template <typename GridDataType>
