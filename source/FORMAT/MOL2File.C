@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.5 2000/05/23 08:37:56 oliver Exp $
+// $Id: MOL2File.C,v 1.6 2000/05/23 14:17:30 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -252,10 +252,6 @@ namespace BALL
 				String RTI = line_.after(TRIPOS);
 				RTI.trim();
 				
-				#ifdef BALL_DEBUG
-					// BAUSTELLE: debug code
-					Log.info() << "MOL2File::read: reading record " << RTI << " in line " << number_of_lines_ << endl;
-				#endif
 				
 				// interpret the RTI (at least the known ones)
 				if (RTI == "ATOM")
@@ -319,7 +315,7 @@ namespace BALL
 					atom.position.y = fields[3].toFloat();
 					atom.position.z = fields[4].toFloat();
 					atom.type = fields[5];
-					atom.substructure = fields[6].toInt();
+					atom.substructure = fields[6].toUnsignedInt();
 					atom.substructure_name = fields[7];
 					atom.charge = fields[8].toFloat();
 					
@@ -548,9 +544,9 @@ namespace BALL
 		}
 
 		// construct the substructures
-		vector<BaseFragment*>	sub_ptr;
+		vector<BaseFragment*>	sub_ptr(substructures_.size());
 		Position i;
-		for (i = 0; i < atoms_.size(); i++)
+		for (i = 0; i < substructures_.size(); i++)
 		{
 			BaseFragment* frag = 0;
 			if (substructures_[i].substructure_type == "RESIDUE")
@@ -560,12 +556,13 @@ namespace BALL
 
 				// Sybyl stores the residue (PDB) ID in the 
 				// residue name (e.g. ALA175)
-				RegularExpression re("[^0-9]+[A-Z]*$");
+				RegularExpression re("[0-9][0-9A-Z]*$");
 				Substring ID;
 				if (re.find(substructures_[i].name, ID))
 				{
 					// assign the ID to the residue
-					residue->setID(ID);
+					residue->setID(ID.toString());
+
 					// and remove it from the fragment name
 					ID = "";
 				}
@@ -598,13 +595,9 @@ namespace BALL
 			atom->setTypeName(atoms_[i].type);
 			atom->setCharge(atoms_[i].charge);
 			
-			// insert the atom into its substructure
-			sub_ptr[atoms_[i].substructure - 1]->insert(*atom);
-
 			// store the atom pointer for bond construction
 			atom_ptr[i] = atom;
 		}
-
 		// construct the bonds
 		for (i = 0; i < bonds_.size(); i++)
 		{
@@ -637,6 +630,29 @@ namespace BALL
 					Log.error() << "MOL2File::read: unkown bond type " << bonds_[i].type << endl;
 				}
 			}
+		}
+
+		// insert all atoms into their proper substructures
+		for (i = 0; i < sub_ptr.size(); i++)
+		{
+			Size last = atoms_.size();
+			if (i < sub_ptr.size() - 1)
+			{
+				last = substructures_[i + 1].root_atom - 1;
+			}
+
+			for (Size j = substructures_[i].root_atom; j <= last; j++)
+			{
+				if (j < 1)
+				{
+					Log.error() << "MOL2File::read: cannot access atom with index below 1 (root atom of substructure " << i + 1 << ")" << endl;
+				}
+				else
+				{
+					sub_ptr[i]->insert(*atom_ptr[j - 1]);
+				}
+			}
+			
 		}
 
 		// insert all substructures into the system
