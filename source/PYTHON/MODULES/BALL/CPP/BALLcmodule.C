@@ -1344,15 +1344,15 @@ extern "C" PyObject *sipDo_calculateSASVolume(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = calculateSASVolume(* a0, a1, a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -1386,15 +1386,15 @@ extern "C" PyObject *sipDo_calculateSASArea(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = calculateSASArea(* a0, a1, a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -1432,15 +1432,15 @@ extern "C" PyObject *sipDo_calculateBondAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = new Angle(calculateBondAngle(* a0,* a1,* a2));
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -1481,15 +1481,15 @@ extern "C" PyObject *sipDo_calculateTorsionAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = new Angle(calculateTorsionAngle(* a0,* a1,* a2,* a3));
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -1522,15 +1522,15 @@ extern "C" PyObject *sipDo_nucleicAcids(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = nucleicAcids(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyNucleicAcidList(res);
 
@@ -1565,15 +1565,15 @@ extern "C" PyObject *sipDo_nucleotides(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = nucleotides(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyNucleotideList(res);
 
@@ -1608,15 +1608,15 @@ extern "C" PyObject *sipDo_proteins(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = proteins(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyProteinList(res);
 
@@ -1651,15 +1651,15 @@ extern "C" PyObject *sipDo_chains(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = chains(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyChainList(res);
 
@@ -1694,15 +1694,15 @@ extern "C" PyObject *sipDo_secondaryStructures(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = secondaryStructures(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PySecondaryStructureList(res);
 
@@ -1737,15 +1737,15 @@ extern "C" PyObject *sipDo_residues(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = residues(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyResidueList(res);
 
@@ -1780,15 +1780,15 @@ extern "C" PyObject *sipDo_molecules(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = molecules(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyMoleculeList(res);
 
@@ -1823,15 +1823,15 @@ extern "C" PyObject *sipDo_fragments(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = fragments(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyFragmentList(res);
 
@@ -1866,15 +1866,15 @@ extern "C" PyObject *sipDo_atomContainers(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = atomContainers(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyAtomContainerList(res);
 
@@ -1909,15 +1909,15 @@ extern "C" PyObject *sipDo_bonds(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = bonds(* a0, (bool)a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyBondList(res);
 
@@ -1940,15 +1940,15 @@ extern "C" PyObject *sipDo_bonds(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = bonds(* a0);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyBondList(res);
 
@@ -1985,15 +1985,15 @@ extern "C" PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = PDBAtoms(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			if (istemp1)
 				delete a1;
@@ -2019,15 +2019,15 @@ extern "C" PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = PDBAtoms(* a0);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyPDBAtomList(res);
 
@@ -2064,15 +2064,15 @@ extern "C" PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = atoms(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			if (istemp1)
 				delete a1;
@@ -2098,15 +2098,15 @@ extern "C" PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = atoms(* a0);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			PyObject *resobj = sipConvertFrom_PyAtomList(res);
 
@@ -2143,15 +2143,15 @@ extern "C" PyObject *sipDo_getTorsionAngle(PyObject *,PyObject *sipArgs)
 		{
 			Angle *res;
 
-   try
-   {
+      try
+      {
 			res = new Angle(getTorsionAngle( a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11));
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -2186,15 +2186,15 @@ extern "C" PyObject *sipDo_isParallel(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isParallel(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2218,15 +2218,15 @@ extern "C" PyObject *sipDo_isParallel(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isParallel(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2250,15 +2250,15 @@ extern "C" PyObject *sipDo_isParallel(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isParallel(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2293,15 +2293,15 @@ extern "C" PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isIntersecting(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2325,15 +2325,15 @@ extern "C" PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isIntersecting(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2357,15 +2357,15 @@ extern "C" PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isIntersecting(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2389,15 +2389,15 @@ extern "C" PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isIntersecting(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2421,15 +2421,15 @@ extern "C" PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isIntersecting(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2453,15 +2453,15 @@ extern "C" PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isIntersecting(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2485,15 +2485,15 @@ extern "C" PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isIntersecting(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2517,15 +2517,15 @@ extern "C" PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isIntersecting(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2560,15 +2560,15 @@ extern "C" PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isOrthogonal(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2592,15 +2592,15 @@ extern "C" PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isOrthogonal(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2624,15 +2624,15 @@ extern "C" PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isOrthogonal(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2656,15 +2656,15 @@ extern "C" PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isOrthogonal(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2688,15 +2688,15 @@ extern "C" PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isOrthogonal(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2720,15 +2720,15 @@ extern "C" PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isOrthogonal(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2752,15 +2752,15 @@ extern "C" PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isOrthogonal(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2798,15 +2798,15 @@ extern "C" PyObject *sipDo_isComplanar(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isComplanar(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2836,15 +2836,15 @@ extern "C" PyObject *sipDo_isComplanar(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isComplanar(* a0,* a1,* a2,* a3);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2879,15 +2879,15 @@ extern "C" PyObject *sipDo_isCollinear(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = isCollinear(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2925,15 +2925,15 @@ extern "C" PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetIntersection(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2960,15 +2960,15 @@ extern "C" PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetIntersection(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2995,15 +2995,15 @@ extern "C" PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetIntersection(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3030,15 +3030,15 @@ extern "C" PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetIntersection(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3068,15 +3068,15 @@ extern "C" PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetIntersection(* a0,* a1,* a2,* a3);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3106,15 +3106,15 @@ extern "C" PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetIntersection(* a0,* a1,* a2,* a3);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3141,15 +3141,15 @@ extern "C" PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetIntersection(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3176,15 +3176,15 @@ extern "C" PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetIntersection(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3211,15 +3211,15 @@ extern "C" PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetIntersection(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3257,15 +3257,15 @@ extern "C" PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetAngle(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3292,15 +3292,15 @@ extern "C" PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetAngle(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3327,15 +3327,15 @@ extern "C" PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetAngle(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3362,15 +3362,15 @@ extern "C" PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetAngle(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3397,15 +3397,15 @@ extern "C" PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetAngle(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3432,15 +3432,15 @@ extern "C" PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetAngle(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3467,15 +3467,15 @@ extern "C" PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetAngle(* a0,* a1,* a2);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return sipConvertFromBool((int)res);
 		}
@@ -3510,15 +3510,15 @@ extern "C" PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetDistance(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3542,15 +3542,15 @@ extern "C" PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetDistance(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3574,15 +3574,15 @@ extern "C" PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetDistance(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3606,15 +3606,15 @@ extern "C" PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetDistance(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3638,15 +3638,15 @@ extern "C" PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetDistance(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3670,15 +3670,15 @@ extern "C" PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetDistance(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3702,15 +3702,15 @@ extern "C" PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetDistance(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3734,15 +3734,15 @@ extern "C" PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetDistance(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3766,15 +3766,15 @@ extern "C" PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = GetDistance(* a0,* a1);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3806,15 +3806,15 @@ extern "C" PyObject *sipDo_calculateDistanceCoulomb(PyObject *,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = calculateDistanceCoulomb(* a0);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble(res);
 		}
@@ -3846,15 +3846,15 @@ extern "C" PyObject *sipDo_calculateCoulomb(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = calculateCoulomb(* a0);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble(res);
 		}
@@ -3886,15 +3886,15 @@ extern "C" PyObject *sipDo_calculateACE(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-   try
-   {
+      try
+      {
 			res = calculateACE(* a0);
-   }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
-      return NULL;
-		}
+      }
+      catch (...)
+      {
+        PyErr_SetString(PyExc_Exception, "unknown");
+        return NULL;
+		   }
 
 			return PyFloat_FromDouble(res);
 		}
