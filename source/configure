@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.78 2000/03/15 09:35:05 oliver Exp $
+#  $Id: configure,v 1.79 2000/03/21 13:32:50 oliver Exp $
 
 
 ##################################################
@@ -2141,7 +2141,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 		CXXFLAGS="${CXXFLAGS} -KPIC"
 	fi
 	if test "${OS}" = IRIX ; then
-		CXXFLAGS="${CXXFLAGS} --pic"
+		CXXFLAGS="${CXXFLAGS} -KPIC"
 	fi
 	
 			CXXFLAGS_O="${CXXFLAGS_O} +K3"

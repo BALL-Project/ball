@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.69 2000/03/15 09:34:59 oliver Exp $
+dnl    $Id: configure.in,v 1.70 2000/03/21 13:32:47 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -952,7 +952,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 		CXXFLAGS="${CXXFLAGS} -KPIC"
 	fi
 	if test "${OS}" = IRIX ; then
-		CXXFLAGS="${CXXFLAGS} --pic"
+		CXXFLAGS="${CXXFLAGS} -KPIC"
 	fi
 	
 	dnl		optimze as on highest level: this compiler 
