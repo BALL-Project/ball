@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.37 2004/07/25 17:49:58 amoll Exp $
+// $Id: pyWidget.C,v 1.38 2004/07/25 21:16:30 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -340,6 +340,7 @@ namespace BALL
 			if (!command.has('\n'))
 			{
 				parseLine_(command);
+				return;
 			}
 
 			vector<String> lines;

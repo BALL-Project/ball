@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.24 2004/07/25 20:44:50 amoll Exp $
+// $Id: mainframe.C,v 1.25 2004/07/25 21:14:31 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -595,6 +595,7 @@ namespace BALL
 	{
 		#ifdef BALL_PYTHON_SUPPORT
 			PyWidget::getInstance(0)->reactTo(*e);
+			e->accept();
 		#endif
 	}
 	
