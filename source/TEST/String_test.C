@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.13 2000/06/23 06:21:18 oliver Exp $
+// $Id: String_test.C,v 1.14 2000/06/27 07:59:51 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.13 2000/06/23 06:21:18 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.14 2000/06/27 07:59:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -16,40 +16,40 @@ using namespace BALL;
 
 String* s;	
 CHECK(String::String())
-s = new String;
-TEST_NOT_EQUAL(0, s)
-TEST_EQUAL(0, strlen(s->c_str()))
+	s = new String;
+	TEST_NOT_EQUAL(0, s)
+	TEST_EQUAL(0, strlen(s->c_str()))
 RESULT
 
 CHECK(String::~String())
-delete s;
+	delete s;
 RESULT
 
 CHECK(String::size()/c_str())
-s = new String();
-TEST_EQUAL(strlen(s->c_str()), 0)
-TEST_EQUAL(s->size(), 0)
-delete s;
-s = new String("ABC");
-TEST_EQUAL(s->size(), 3)
-TEST_EQUAL(strlen(s->c_str()), 3)
-TEST_EQUAL(s->c_str()[0], 'A')
-TEST_EQUAL(s->c_str()[1], 'B')
-TEST_EQUAL(s->c_str()[2], 'C')
-TEST_EQUAL(strcmp("ABC", s->c_str()), 0)
+	s = new String();
+	TEST_EQUAL(strlen(s->c_str()), 0)
+	TEST_EQUAL(s->size(), 0)
+	delete s;
+	s = new String("ABC");
+	TEST_EQUAL(s->size(), 3)
+	TEST_EQUAL(strlen(s->c_str()), 3)
+	TEST_EQUAL(s->c_str()[0], 'A')
+	TEST_EQUAL(s->c_str()[1], 'B')
+	TEST_EQUAL(s->c_str()[2], 'C')
+	TEST_EQUAL(strcmp("ABC", s->c_str()), 0)
 RESULT
 
 String* s2;
 CHECK(String::String(String&))
-s2 = new String(*s);
-TEST_EQUAL(s2->size(), 3)
-TEST_EQUAL(strcmp(s2->c_str(), "ABC"), 0)
-delete s2;
-String* s3 = new String;
-s2 = new String(*s3);
-TEST_EQUAL(s2->size(), 0)
-TEST_EQUAL(strcmp(s2->c_str(), ""), 0)
-delete s3;
+	s2 = new String(*s);
+	TEST_EQUAL(s2->size(), 3)
+	TEST_EQUAL(strcmp(s2->c_str(), "ABC"), 0)
+	delete s2;
+	String* s3 = new String;
+	s2 = new String(*s3);
+	TEST_EQUAL(s2->size(), 0)
+	TEST_EQUAL(strcmp(s2->c_str(), ""), 0)
+	delete s3;
 RESULT
 delete s2;
 delete s;

@@ -1,11 +1,11 @@
-// $Id: PropertyManager_test.C,v 1.2 2000/01/10 15:51:17 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.3 2000/06/27 07:59:31 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/CONCEPT/property.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.2 2000/01/10 15:51:17 oliver Exp $")
+START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.3 2000/06/27 07:59:31 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -13,28 +13,28 @@ START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.2 2000/01/10 15:51:17 ol
 using namespace BALL;
 
 PropertyManager* p;
-CHECK(PropertyManager())
-p = new PropertyManager();
-TEST_NOT_EQUAL(p, 0)
+	CHECK(PropertyManager())
+	p = new PropertyManager();
+	TEST_NOT_EQUAL(p, 0)
 RESULT
 
 CHECK(~PropertyManager())
-delete p;
+	delete p;
 RESULT
 
 CHECK(setProperty(String&, float))
-PropertyManager m;
-m.setProperty("TEST_PROP", (float)0.56789);
-TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
-TEST_REAL_EQUAL(m.getProperty("TEST_PROP").getFloat(), 0.56789)
+	PropertyManager m;
+	m.setProperty("TEST_PROP", (float)0.56789);
+	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
+	TEST_REAL_EQUAL(m.getProperty("TEST_PROP").getFloat(), 0.56789)
 RESULT
 
 CHECK(setProperty(String&, int))
-PropertyManager m;
-TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
-m.setProperty("TEST_PROP", (unsigned int)123456);
-TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
-TEST_EQUAL(m.getProperty("TEST_PROP").getUnsignedInt(), 123456)
+	PropertyManager m;
+	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
+	m.setProperty("TEST_PROP", (unsigned int)123456);
+	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
+	TEST_EQUAL(m.getProperty("TEST_PROP").getUnsignedInt(), 123456)
 RESULT
 
 /////////////////////////////////////////////////////////////
