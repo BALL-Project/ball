@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.87 2004/05/15 10:58:01 amoll Exp $
+// $Id: mainControl.C,v 1.88 2004/05/22 16:36:07 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -597,10 +597,7 @@ namespace BALL
 
 						if (cmessage->updateRepresentations())
 						{
-							// faster, but doesnt always work correctly:
 							updateRepresentationsOf(*cmessage->getComposite(), false);
-					 
-//							 updateRepresentationsOf(*cmessage->getComposite(), true, true);
 						}
 
 						NewSelectionMessage* nws_message = new NewSelectionMessage;					
@@ -902,9 +899,7 @@ namespace BALL
 			HashSet<Composite*>::Iterator it = roots.begin();
 			for(; it != roots.end(); it++)
 			{
-				//faster, but doesnt always work:
 				updateRepresentationsOf(**it, false);
-//				 updateRepresentationsOf(**it, true, true);
 			}
 
 			#ifdef BALL_DEBUG_VIEW
@@ -1290,10 +1285,7 @@ namespace BALL
 			for (; it != getCompositeManager().end(); it++)
 			{
 				deselectCompositeRecursive(*it);
-				// faster, but doesnt always work:
 			 	updateRepresentationsOf(**it, false);
-				
-//		 		updateRepresentationsOf(**it, true, true);
 			}
 
 			getSelection().clear();
@@ -1467,9 +1459,7 @@ namespace BALL
 			{
 				complementSelectionHelper_(**it);
 
-				//faster, but doesnt always work:
 				updateRepresentationsOf(**it, false);
-//				 updateRepresentationsOf(**it, true, true);
 			}
 
 			NewSelectionMessage* new_message = new NewSelectionMessage;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bounding_box.C,v 1.8 2004/05/15 10:55:51 amoll Exp $
+// $Id: bounding_box.C,v 1.9 2004/05/22 16:35:43 amoll Exp $
 // BALLView tutorial example
 // ------------------------
 // visualise the bounding box of a molecular structure
@@ -52,6 +52,8 @@ int main(int argc, char **argv)
   QApplication application(argc, argv);
   MyMainframe mainframe;
   application.setMainWidget(&mainframe);
+	mainframe.setIdentifier("MAIN");
+	mainframe.registerThis();
   // start the application
   mainframe.show();
 
