@@ -1,0 +1,7 @@
+fd = MolecularFileDialog.getInstance(0)
+fd.openFile("bpti.pdb")
+dp = DisplayProperties.getInstance(0)
+dp.selectModel(MODEL_VDW)
+dp.applyButtonClicked()
+dp.selectModel(MODEL_LINES)
+dp.applyButtonClicked()
