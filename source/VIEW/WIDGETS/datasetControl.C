@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.35 2004/11/27 20:56:08 amoll Exp $
+// $Id: datasetControl.C,v 1.36 2005/03/08 14:57:14 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -11,6 +11,7 @@
 
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
 
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
@@ -699,14 +700,13 @@ void DatasetControl::computeIsoContourSurface()
 		}
 	}
 
-	if (nr_of_strange_normals > mesh->normal.size() / 2.0)
+	if (nr_of_strange_normals < mesh->normal.size() / 2.0)
 	{
 		for (Position i = 0; i < mesh->normal.size(); i++)
 		{
 			mesh->normal[i] *= -1;
 		}
 	}
-
 
 	// Create a new representation containing the contour surface.
 	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
