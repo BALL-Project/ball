@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.201 2003/06/26 12:13:09 amoll Exp $
+# $Id: Makefile,v 1.202 2003/06/26 14:50:27 amoll Exp $
 #
 
 DIRECTORY=TEST
@@ -118,6 +118,7 @@ EXECUTABLES_KERNEL = \
 	Residue_test\
 	Expression_test\
 	ExpressionParser_test\
+	ExpressionPredicate_test\
 	KernelPredicate_test\
 	Selector_test\
 	RuleEvaluator_test\
