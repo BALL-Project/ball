@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.35 2004/10/21 13:01:39 amoll Exp $
+// $Id: mainframe.C,v 1.36 2004/10/27 10:28:08 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -223,6 +223,35 @@ namespace BALL
 		ContourSurface cs(*surface_dialog_->getGrid(), surface_dialog_->getThreshold());
 		Mesh* mesh = new Mesh;
 		mesh->Surface::operator = (static_cast<Surface&>(cs));
+
+		// fix for the cases, where all normals of the surface are in the wrong direction
+		// calculate center of surface and count normals, which show to the center of the surface,
+		// if this are more than the normals in opposite direction, flip all normals
+		Vector3 center;
+		for (Position i = 0; i < mesh->vertex.size(); i++)
+		{
+			center += mesh->vertex[i];
+		}
+
+		center /= mesh->vertex.size();
+
+		Size nr_of_strange_normals = 0;
+		for (Position i = 0; i < mesh->normal.size(); i++)
+		{
+			if ((mesh->vertex[i] + mesh->normal[i]).getDistance(center) < (mesh->vertex[i] - mesh->normal[i]).getDistance(center))
+			{
+				nr_of_strange_normals ++;
+			}
+		}
+
+		if (nr_of_strange_normals > mesh->normal.size() / 2.0)
+		{
+			for (Position i = 0; i < mesh->normal.size(); i++)
+			{
+				mesh->normal[i] *= -1;
+			}
+		}
+
 
 		// Create a new representation containing the contour surface.
 		Representation* rep = getPrimitiveManager().createRepresentation();
