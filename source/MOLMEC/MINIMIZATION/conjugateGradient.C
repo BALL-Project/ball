@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.19 2003/02/05 19:14:52 oliver Exp $
+// $Id: conjugateGradient.C,v 1.20 2003/03/12 12:01:01 anhi Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -11,7 +11,7 @@
 #include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/COMMON/limits.h>
 
-// #define BALL_DEBUG
+#define BALL_DEBUG
 
 // The default method to use for the CG direction update
 // (FLETCHER_REEVES | POLAK_RIBIERE | SHANNO)
@@ -481,35 +481,230 @@ namespace BALL
 	} // end of method 'updateDirection'
 
 
+
+  // The minimizer optimizes the energy of the system 
+  // by using a conjugate gradient method. 
+  // Return value is true when no further steps can be taken!
+  bool ConjugateGradientMinimizer::minimize
+		(Size iterations, bool restart)
+  {
+		// TEST!!!
+		setMaximumDisplacement(4.0);
+
+		// Check for validity of minimizer and force field
+		if (!isValid() || getForceField() == 0 || !getForceField()->isValid())
+		{
+			Log.error() << "ConjugateGradientMinimizer: minimizer is not initialized correctly!" << std::endl;
+			return false;
+		}
+
+		// Make sure we have something worth moving.
+		if (getForceField()->getNumberOfMovableAtoms() == 0)
+		{
+			return true;
+		}
+
+		// Check the arguments.
+		if (restart)
+		{
+			// reset the number of iterations for a restart
+			setNumberOfIterations(0);
+		}
+		Size max_iterations = std::max(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
+
+		#ifdef BALL_DEBUG
+			Log.info() << "CGM: minimize(" << iterations << ", " << restart << ")" << endl;
+		#endif
+			
+/// !!!...Here begins the old code...!!!
+		
+		// remember <g_i, d_i> (the scalar product of the last 
+		// search direction and the last gradient)
+		// keep them static for restarts
+		static double old_dir_grad;
+		static bool old_dir_grad_valid;
+		
+		// if we start from scratch (i.e. no restart) we have to make sure
+		// to calculate all the quantities we need before we start
+		if (!restart)
+		{
+			// invalidate old_dir_grad if this is not a restart
+			old_dir_grad_valid = false;	
+		}
+		
+		// define an alias for the atom vector
+		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
+
+		// if this is not a restart or we do not have a valid
+		// gradient, recalculate the gradient, the energy, and the search 
+ 		// direction
+		if (!restart || !old_grad_.isValid() || old_grad_.size() == 0 || !initial_grad_.isValid())
+		{
+			#ifdef BALL_DEBUG
+				Log.info() << "CGM: calculating initial gradient...";
+			#endif
+
+			// Compute the initial energy and the initial forces
+			updateEnergy();
+			updateForces();
+
+			// store them for later use
+			storeGradientEnergy();
+
+			// obviously, we don't have "old" gradients and energies yet,
+			// so we initialize them with sensible values
+			old_grad_ = current_grad_;
+			old_energy_ = Limits<float>::max();
+
+			// the first direction we try is just the negative gradient
+			direction_ = current_grad_;
+			direction_.negate();
+
+			#ifdef BALL_DEBUG
+				Log.info() << " [" << current_grad_.size() << "/" << current_grad_.norm << "/" << current_grad_.rms << " / " << initial_energy_ << "]" << endl;
+			#endif
+
+			// reset the same energy counter
+			same_energy_counter_ = 0;
+		}
+		
+		// save the current atom positions
+		atoms.savePositions();
+
+		bool converged = false;	
+		
+		// iterate: while not converged and not enough iterations
+		while (!converged && (getNumberOfIterations() < max_iterations))	
+		{
+			// invalidate the current direction: we don't want to
+			// take this direction again. If findStep() 
+			// creates a new direction, we keep it (since a new
+			// Gradient object is valid). However, if the direction remains
+			// invalid, we calculate a new direction at the end of this loop
+			direction_.invalidate();
+
+			// try to find a new solution
+			double lambda = findStep();
+			
+			// ??? lambda = 0.0 seems to be problematic => infinite loops in 1kiq.pdb
+			bool result = (lambda > 0.0);
+			//bool result = (lambda >= 0.0);
+
+			// use this step as new reference step if findStep was succesful
+			if (result)
+			{
+				atoms.savePositions(); // ??? Should we do this if result == false?
+			}
+			else
+			{
+				// let's see if we have to recompute the forces and the energy
+				if (!current_grad_.isValid())
+				{	
+					#ifdef BALL_DEBUG
+						Log << "Computing new energy/forces!" << std::endl;
+					#endif
+					// ...calculate energy and forces for the new position
+					updateForces();
+					updateEnergy();
+				}
+			}
+			
+			// store the gradient and the energy
+			old_grad_ = initial_grad_;
+			old_energy_ = initial_energy_;
+			
+			// store the current gradient and energy
+			storeGradientEnergy();
+
+			// Calculate a new search direction if the search direction is invalid
+			// 
+			// If someone has already created a valid direction
+			// (e.g. by using the negative gradient as is done by findStep)
+			// it is flagged as valid (since it is new!)
+			//
+			if (!direction_.isValid())
+			{
+				// Log.info() << "CGM: updating direction..." << endl;
+				updateDirection();
+			}
+			else 
+			{ // ??? What is this code supposed to do? We should already _have_ 
+				//     a new direction... ???
+				// we have to use the current gradient
+	//				direction_ = initial_grad_;
+	//			direction_.negate();
+			}
+
+			// non-constant step size option
+			//
+			double dir_grad = initial_grad_ * direction_;
+			if (old_dir_grad_valid)
+			{
+				// ??? What should we do with this line... ???
+	//			step_ = lambda_ * step_ * old_dir_grad / dir_grad;
+			}
+			else
+			{
+				// for restart steps, we reset the step size 
+				// to 0.01/(||d_i||)
+				step_ = 0.01;
+			}
+			old_dir_grad = dir_grad;
+			old_dir_grad_valid = true;
+
+			#ifdef BALL_DEBUG
+				Log << "CGM: end of main: current grad RMS = " << current_grad_.rms << std::endl;
+			#endif
+
+			// Check for convergence.
+			converged = isConverged();
+			
+			// increment iteration counter, take snapshots, print energy,
+			// update pair lists, and check the same-energy counter
+			finishIteration();
+		}	
+
+		// check for convergence
+		if (converged)
+		{
+			Log.info() << "convergence reached" << endl;
+		}
+
+		return converged;
+  } // end of method 'minimize' 
+			
 	double ConjugateGradientMinimizer::findStep()
 	{		
-		// first, we search along the line by taking a step_ along direction_
-
 		// define an alias for the atom vector
-		AtomVector& atoms = const_cast<AtomVector&>(force_field_->getAtoms());
+		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
 		
 		#ifdef BALL_DEBUG
 			Log.info() << "CG: " << step_ << " " << lambda_ << " " << initial_energy_ << " " << current_grad_.norm << " " << direction_.norm << endl;
 		#endif
 		
 		bool success = true;
-		bool adjusted = false;
-		while (success && !adjusted)
+		bool step_too_large = false;
+
+		if (lambda_ > 0.0)
 		{
-			// TEST! This is a workaround...
-			// We try to find those cases where at least one atom might be
-			// translated more than getMaximumDisplacement()
-			if (direction_.norm * step_ * lambda_ <= direction_.size() * getMaximumDisplacement())
+			step_ *= lambda_;
+		}
+
+		// In order to find a sensible starting step, we take a full step along direction_,
+		// and if the energy decreases after that step, we double the step width. We iterate
+		// this as long as the energy increases and our step width stays below maximum_displacement
+		while (success && !step_too_large)
+		{
+			// We have to catch those cases where at least one atom might be
+			// translated more than getMaximumDisplacement().
+			if (step_<=getMaximumDisplacement())
 			{
-				#ifdef BALL_DEBUG
-					Log << "CG1: taking step: lambda = " << lambda_ << "  step = " << step_ << std::endl;
-				#endif
-				atoms.moveTo(direction_, lambda_ * step_);
+				atoms.moveTo(direction_, step_*direction_.inv_norm);
 			}
 			else
 			{
 				#ifdef BALL_DEBUG
-					Log.info() << "CG1: checking for adjustment: step = " << step_ << endl;
+					Log.info() << "CG: reached maximum step size... Adjusting..." << endl;
 				#endif
 
 				// find the maximal translation
@@ -525,24 +720,21 @@ namespace BALL
 					}
 				}
 				
-				if (sqrt(max)*lambda_*step_ >= getMaximumDisplacement())
+				if (sqrt(max)*step_*direction_.inv_norm >= getMaximumDisplacement())
 				{
-					step_ = getMaximumDisplacement() / (sqrt(max) * lambda_);
+					step_ = getMaximumDisplacement() / (direction_.inv_norm * sqrt(max));
 				}
 
 				#ifdef BALL_DEBUG
-					Log.info() << "CG2: new step = " << step_ << endl;
+					Log.info() << "CG: new step = " << step_ << " " << max << " " << step_*direction_.inv_norm << endl;
 				#endif
 
-				#ifdef BALL_DEBUG
-					Log << "CG1: taking step: lambda = " << lambda_ << "  step = " << step_ << std::endl;
-				#endif
-				atoms.moveTo(direction_, lambda_ * step_);
-				adjusted = true;
+				atoms.moveTo(direction_, step_*direction_.inv_norm);
+				step_too_large = true;
 			}
 
 			success = (updateEnergy() < initial_energy_);
-			if (success && !adjusted)
+			if (success)
 			{
 				// check whether the gradient decreases along direction
 				updateForces();
@@ -550,27 +742,31 @@ namespace BALL
 				success &= (dir_grad < 0.0);
 			}
 			
-			if (success && !adjusted)
+			if (success && !step_too_large)
 			{
 				step_ *= 2.0;
 			}
 		}
 		
 		#ifdef BALL_DEBUG
-			Log.info() << "CG2: new step " << step_ << endl; 	
+			Log.info() << "CG: new step " << step_ << endl; 	
 		#endif
 
-		// now we perform line searches along direction_
+		// now we perform a line search along direction_
 		LineSearch line_search(*this);
+
+		// ?? TEST if we need this ??
+		// Make sure that the line search resets the atom positions, energies and forces
+		initial_grad_.invalidate();
 	
-		bool result =  line_search.minimize(lambda_, step_);
+		bool result =  line_search.minimize(lambda_, step_*direction_.inv_norm);
 		#ifdef BALL_DEBUG
 			Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
 		#endif
 		
+		// This line search might fail...
 		if (!result)
 		{
-			// Log.info() << "resetting search direction to gradient [" << direction_.rms << "/";
 			// reset the search direction to the 
 			// negative gradient
 			direction_ = initial_grad_;
@@ -584,7 +780,7 @@ namespace BALL
 			current_grad_.invalidate();
 
 			// ...and try another line search
-			result = line_search.minimize(lambda_, step_);
+			result = line_search.minimize(lambda_, step_*direction_.inv_norm);
 			#ifdef BALL_DEBUG
 				Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
 			#endif
@@ -595,14 +791,14 @@ namespace BALL
 			#ifdef BALL_DEBUG
 				Log.info() << "resetting step length" << endl;
 			#endif
-			step_ = 0.01 / initial_grad_.norm;
+			step_ = 0.01;
 			
 			// invalidate the current gradient (LineSearch::minimize())
 			// recalculate it for lambda = 1.0;
 			current_grad_.invalidate();
 
 			// ...and try another line search
-			result = line_search.minimize(lambda_, step_);
+			result = line_search.minimize(lambda_, step_*direction_.inv_norm);
 			#ifdef BALL_DEBUG
 				Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
 			#endif
@@ -629,7 +825,7 @@ namespace BALL
 				lambda_ *= 0.5;
 			}
 		}
-
+Log.info() << "CG fS end: step, lambda " << step_ << " " << lambda_ << std::endl;
 		if (result == true)
 		{
 			return lambda_;
@@ -640,218 +836,8 @@ namespace BALL
 		}
 	} // end of method 'findStep'
 
-  // The minimizer optimizes the energy of the system 
-  // by using a conjugate gradient method. 
-  // Return value is true when no further steps can be taken!
-  bool ConjugateGradientMinimizer::minimize
-		(Size iterations, bool restart)
-  {
-		// remember <g_i, d_i> (the scalar product of the last 
-		// search direction and the last gradient)
-		// keep them static for restarts
-		static double old_dir_grad;
-		static bool old_dir_grad_valid;
-		if (!restart)
-		{
-			// invalidate old_dir_grad if this is not a restart
-			old_dir_grad_valid = false;	
-		}
-		
+	void ConjugateGradientMinimizer::updateStepSize(double lambda)
+	{
+	}
 
-		#ifdef BALL_DEBUG
-			Log.info() << "CGM: minimize(" << iterations << ", " << restart << ")" << endl;
-		#endif
-		
-    // Check the minimizer  and the force field connected to it 
-    if (isValid() == false || force_field_->isValid() == false)
-    {
-      Log.error() << "ConjugateGradientMinimize: the minimizer is not valid or " << endl
-                  << " the force field is not valid!. " << endl; 
-
-      return false;
-    }
-
-		// define an alias for the atom vector
-		AtomVector& atoms = const_cast<AtomVector&>(force_field_->getAtoms());
-
-    // If there are no atoms in the system, minimization is easy!
-    if (atoms.size() == 0)
-    {
-      return true;
-    }
-
-		// if this is not a restart or we do not have a valid
-		// gradient, recalculate the gradient, the energy, and the search 
- 		// direction
-		if (!restart || !old_grad_.isValid() || old_grad_.size() == 0 || !initial_grad_.isValid())
-		{
-			#ifdef BALL_DEBUG
-				Log.info() << "CGM: calculating initial gradient...";
-			#endif
-
-			// Compute initial forces, energy.
-			updateForces();
-			initial_grad_ = current_grad_;
-			initial_energy_ = updateEnergy();
-			old_grad_ = current_grad_;
-			old_energy_ = Limits<float>::max();
-
-			direction_ = current_grad_;
-			direction_.negate();
-
-			#ifdef BALL_DEBUG
-				Log.info() << " [" << current_grad_.size() << "/" << current_grad_.norm << "/" << current_grad_.rms << " / " << initial_energy_ << "]" << endl;
-			#endif
-
-			// reset the same energy counter
-			same_energy_counter_ = 0;
-		}
-		
-		// set a limit for the iterations:
-		// If no upper bound for the number of iterations is given, the value stored in 
-		// the options will be the limit
-		Size max_iteration = getMaxNumberOfIterations();
-		if (iterations == 0)
-		{
-			max_iteration += maximal_number_of_iterations_;
-		}
-		else
-		{
-			max_iteration += iterations;
-		}
-
-		// save the current atom positions
-		atoms.savePositions();
-
-		
-		// iterate: while not converged and not enough iterations
-		do
-		{
-			// invalidate the current direction: we don't want to
-			// take this direction again. If findStep() 
-			// creates a new direction, we keep it (since a new
-			// Gradient object is valid). However, if the direction remains
-			// invalid, we calculate a new direction at the end of this loop
-			direction_.invalidate();
-
-			// try to find a new solution
-			double lambda = findStep();
-			bool result = (lambda >= 0.0);
-
-			// take the step and save these positions
-
-			// TEST! This is a workaround...
-			// We try to find those cases where at least one atom might be
-			// translated more than getMaximumDisplacement()
-			if (direction_.norm * step_ * lambda_ <= direction_.size() * getMaximumDisplacement())
-			{
-				atoms.moveTo(direction_, lambda_ * step_);
-			}
-			else
-			{
-				// find the maximal translation
-				Gradient::ConstIterator grad_it(direction_.begin());
-				double max=0;
-				double cur=0;
-				for (; grad_it != direction_.end(); ++grad_it)
-				{
-					cur = (*grad_it).getSquareLength();
-					if (cur >= max)
-					{
-						max = cur;
-					}
-				}
-				
-				if (sqrt(max)*lambda_*step_ >= getMaximumDisplacement())
-				{
-					step_ = getMaximumDisplacement() / (sqrt(max) * lambda_);
-				}
-
-				atoms.moveTo(direction_, lambda_ * step_);
-			}
-
-			// if findStep only found an emergency solution...
-			if (!result)
-			{	
-				#ifdef BALL_DEBUG
-					Log << "Computing new energy/forces!" << std::endl;
-				#endif
-				// ...calculate energy and forces for the new position
-				updateForces();
-				updateEnergy();
-			} 
-			else
-			{
-				// take the step:
-				atoms.moveTo(direction_, lambda * step_);
-				atoms.savePositions();
-			}
-
-			
-			// store the gradient and the energy
-			old_grad_ = initial_grad_;
-			old_energy_ = initial_energy_;
-			
-			// store the current gradient and energy
-			initial_energy_ = current_energy_;
-			initial_grad_ = current_grad_;
-
-
-			// Calculate a new search direction if the search direction is invalid
-			// 
-			// If someone has already created a valid direction
-			// (e.g. by using the negative gradient as is done by findStep)
-			// it is flagged as valid (since it is new!)
-			//
-			if (!direction_.isValid())
-			{
-				// Log.info() << "CGM: updating direction..." << endl;
-				updateDirection();
-			}
-			else 
-			{
-				// we have to use the current gradient
-				direction_ = initial_grad_;
-				direction_.negate();
-			}
-
-			// non-constant step size option
-			//
-			double dir_grad = initial_grad_ * direction_;
-			if (old_dir_grad_valid)
-			{
-				step_ = lambda_ * step_ * old_dir_grad / dir_grad;
-			}
-			else
-			{
-				// for restart steps, we reset the step size 
-				// to 0.01/(||d_i||)
-				step_ = 0.01 / direction_.norm;
-			}
-			old_dir_grad = dir_grad;
-			old_dir_grad_valid = true;
-
-			#ifdef BALL_DEBUG
-				Log << "CGM: end of main: current grad RMS = " << current_grad_.rms << std::endl;
-			#endif
-
-			
-			// increment iteration counter, take snapshots, print energy,
-			// update pair lists, and check the same-energy counter
-			finishIteration();
-		}	
-		while (!isConverged() && (getNumberOfIterations() < max_iteration));
-		// end of main loop
-
-
-		// check for convergence
-		bool convergence_reached = isConverged();
-		if (convergence_reached)
-		{
-			Log.info() << "convergence reached" << endl;
-		}
-
-		return convergence_reached;
-  } // end of method 'minimize' 
-			
 } // end of namespace BALL

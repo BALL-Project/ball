@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.20 2003/02/05 13:00:18 oliver Exp $
+// $Id: energyMinimizer.C,v 1.21 2003/03/12 12:01:01 anhi Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
@@ -483,6 +483,11 @@ namespace BALL
 		}
 	}
 
+	// update the step size
+	void EnergyMinimizer::updateStepSize(double lambda)
+	{
+	}
+	
 	bool EnergyMinimizer::isConverged() const
 	{
 		bool converged = ((current_grad_.rms <= max_gradient_)

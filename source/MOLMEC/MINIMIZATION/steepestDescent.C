@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.13 2003/02/04 14:27:02 oliver Exp $
+// $Id: steepestDescent.C,v 1.14 2003/03/12 12:01:02 anhi Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -179,25 +179,15 @@ namespace BALL
 			}
 	
 			// Accept the step taken and compute new energy/forces.
-			atoms.moveTo(direction_, step_ * lambda * direction_.inv_norm);
+//			atoms.moveTo(direction_, step_ * lambda * direction_.inv_norm);
 			updateEnergy();
 			updateForces();
 			#ifdef BALL_DEBUG
 				Log << "SDM: step taken with lambda = " << lambda << std::endl;
 			#endif
 
-			// Adjust the step size
-			if (lambda < 0.2) 
-			{
-				step_ *= 0.5;
-			} 
-			else if (lambda > 0.9) 
-			{
-				step_ *= 2.;
-			}
-			#ifdef BALL_DEBUG
-				Log << "SDM: new step size: " << step_ << std::endl;
-			#endif
+			// Find a better step size for the next step
+			updateStepSize(lambda);
 	
 			// Check for convergence.
 			converged = isConverged();
@@ -227,6 +217,22 @@ namespace BALL
 		{
 			return lambda;
 		}
+	}
+
+	void SteepestDescentMinimizer::updateStepSize(double lambda)
+	{
+		// Use the lambda we have found to make a better guess for the step size
+		if (lambda < 0.2) 
+		{
+			step_ *= 0.5;
+		} 
+		else if (lambda > 0.9) 
+		{
+			step_ *= 2.;
+		}
+		#ifdef BALL_DEBUG
+			Log << "SDM: new step size: " << step_ << std::endl;
+		#endif
 	}
 
 	void SteepestDescentMinimizer::updateDirection()

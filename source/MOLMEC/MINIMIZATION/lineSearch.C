@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.9 2003/02/05 13:00:18 oliver Exp $
+// $Id: lineSearch.C,v 1.10 2003/03/12 12:01:02 anhi Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -229,10 +229,19 @@ namespace BALL
 			result = isSufficient(lambda, current_energy, current_dir_grad);
 		}		
 
+		// if the line search failed, reset the atom positions and return the
+		// best lambda we have to offer
 		if (!result)
 		{
-			// If we were'n successful, return the best lambda we found so far.
 			lambda = best_lambda;
+
+			// in this case, we also want to move the atoms to the position of the
+			// best lambda. since we don't know where the atoms are right now, we
+			// do a reset first
+			atoms.resetPositions();
+			atoms.moveTo(direction, lambda*step_);
+
+			gradient.invalidate();	
 		}
 
 		return result;
