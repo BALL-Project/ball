@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.8 2001/07/13 15:48:58 anker Exp $
+// $Id: Expression_test.C,v 1.9 2001/07/14 13:39:18 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Expression_test.C,v 1.8 2001/07/13 15:48:58 anker Exp $")
+START_TEST(class_name, "$Id: Expression_test.C,v 1.9 2001/07/14 13:39:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,6 +34,7 @@ class MickeyPredicate
 
 	BALL_CREATE(MickeyPredicate)
 	virtual bool operator () (const Atom& atom) const
+		throw()
 	{
 		return (atom.getElement().getSymbol() == "H");
 	}
@@ -609,32 +610,7 @@ Expression* e_ptr = 0;
 CHECK(Expression::Expression() throw())
 	e_ptr = new Expression;
 	TEST_NOT_EQUAL(e_ptr, 0)
-	StringHashMap<Expression::CreationMethod> test_map;
-	using namespace RTTI;
-	test_map.insert("true", TruePredicate::createDefault);
-	test_map.insert("selected", SelectedPredicate::createDefault);
-	test_map.insert("name", AtomNamePredicate::createDefault);
-	test_map.insert("type", AtomTypePredicate::createDefault);
-	test_map.insert("element", ElementPredicate::createDefault);
-	test_map.insert("residue", ResiduePredicate::createDefault);
-	test_map.insert("residueID", ResidueIDPredicate::createDefault);
-	test_map.insert("protein", ProteinPredicate::createDefault);
-	test_map.insert("secondaryStruct", SecondaryStructurePredicate::createDefault);
-	test_map.insert("solvent", SolventPredicate::createDefault);
-	test_map.insert("backbone", BackBonePredicate::createDefault);
-	test_map.insert("chain", ChainPredicate::createDefault);
-	test_map.insert("nucleotide", NucleotidePredicate::createDefault);
-	test_map.insert("inRing", InRingPredicate::createDefault);
-	test_map.insert("doubleBonds", DoubleBondsPredicate::createDefault);
-	test_map.insert("tripleBonds", TripleBondsPredicate::createDefault);
-	test_map.insert("aromaticBonds", AromaticBondsPredicate::createDefault);
-	test_map.insert("numberOfBonds", NumberOfBondsPredicate::createDefault);
-	test_map.insert("connectedTo", ConnectedToPredicate::createDefault);
-	test_map.insert("sp3Hybridized", Sp3HybridizedPredicate::createDefault);
-	test_map.insert("sp2Hybridized", Sp2HybridizedPredicate::createDefault);
-	test_map.insert("spHybridized", SpHybridizedPredicate::createDefault);
-	bool test = (test_map == e_ptr->getCreationMethods());
-	TEST_EQUAL(test, true)
+	TEST_EQUAL(e_ptr->getCreationMethods().size(), 22)
 RESULT
 
 
@@ -659,32 +635,8 @@ RESULT
 
 CHECK(Expression::Expression(const String& expression_string) throw())
 	Expression e("true()");
-	StringHashMap<Expression::CreationMethod> test_map;
-	using namespace RTTI;
-	test_map.insert("true", TruePredicate::createDefault);
-	test_map.insert("selected", SelectedPredicate::createDefault);
-	test_map.insert("name", AtomNamePredicate::createDefault);
-	test_map.insert("type", AtomTypePredicate::createDefault);
-	test_map.insert("element", ElementPredicate::createDefault);
-	test_map.insert("residue", ResiduePredicate::createDefault);
-	test_map.insert("residueID", ResidueIDPredicate::createDefault);
-	test_map.insert("protein", ProteinPredicate::createDefault);
-	test_map.insert("secondaryStruct", SecondaryStructurePredicate::createDefault);
-	test_map.insert("solvent", SolventPredicate::createDefault);
-	test_map.insert("backbone", BackBonePredicate::createDefault);
-	test_map.insert("chain", ChainPredicate::createDefault);
-	test_map.insert("nucleotide", NucleotidePredicate::createDefault);
-	test_map.insert("inRing", InRingPredicate::createDefault);
-	test_map.insert("doubleBonds", DoubleBondsPredicate::createDefault);
-	test_map.insert("tripleBonds", TripleBondsPredicate::createDefault);
-	test_map.insert("aromaticBonds", AromaticBondsPredicate::createDefault);
-	test_map.insert("numberOfBonds", NumberOfBondsPredicate::createDefault);
-	test_map.insert("connectedTo", ConnectedToPredicate::createDefault);
-	test_map.insert("sp3Hybridized", Sp3HybridizedPredicate::createDefault);
-	test_map.insert("sp2Hybridized", Sp2HybridizedPredicate::createDefault);
-	test_map.insert("spHybridized", SpHybridizedPredicate::createDefault);
-	bool test = (test_map == e.getCreationMethods());
-	TEST_EQUAL(test, true)
+	TEST_EQUAL(e.getCreationMethods().size(), 22)
+	TEST_EQUAL(e(Atom()), true)
 RESULT
 
 
@@ -732,7 +684,6 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	{
 		counter = 0;
 		e.setExpression(exp_iterator->first);
-		Log.info() << "expression: " << exp_iterator->first << endl;
 		for (AtomIterator it = S.beginAtom(); +it; ++it)
 		{
 			if (e.operator () (*it)) counter++;
