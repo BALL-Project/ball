@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.6 2003/09/19 23:36:19 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.7 2003/09/20 09:15:57 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -457,7 +457,7 @@ void ColorMeshDialog::onNotify(Message *message)
 			if (!mesh_) 
 			{
 				grid_ = rm->getRegularData3D();
-				grid_label->setText(rm->getCompositeName());
+				grid_label->setText(rm->getCompositeName().c_str());
 				return;
 			}
 			

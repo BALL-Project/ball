@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.3 2003/09/19 23:54:14 amoll Exp $
+// $Id: datasetControl.C,v 1.4 2003/09/20 09:15:57 oliver Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -295,7 +295,7 @@ void DatasetControl::add3DGrid()
 void DatasetControl::insertGrid_(RegularData3D* data, System& system, const String& name)
 	throw()
 {
-	QListViewItem* item = new QListViewItem(listview, name, system.getName().c_str());
+	QListViewItem* item = new QListViewItem(listview, name.c_str(), system.getName().c_str());
 	item_to_grid_[item] = data;
 	insertComposite_(&system, item);
 }
