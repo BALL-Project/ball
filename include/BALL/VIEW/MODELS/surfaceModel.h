@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.8 2003/12/12 15:20:48 amoll Exp $
+// $Id: surfaceModel.h,v 1.9 2004/02/04 17:32:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -57,6 +57,11 @@ namespace BALL
 			*/
 			virtual void clear()
 				throw();
+
+			///
+			virtual void clearComposites()
+				throw();
+
 
 			//@} 
 			/**	@name Accessors 

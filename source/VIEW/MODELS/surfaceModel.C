@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.9 2003/12/12 15:28:51 amoll Exp $
+// $Id: surfaceModel.C,v 1.10 2004/02/04 17:31:56 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -147,6 +147,12 @@ namespace BALL
 			ModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void AddSurfaceModel::clearComposites()
+			throw()
+		{
+			atoms_.clear();
 		}
 
 	} // namespace VIEW
