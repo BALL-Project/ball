@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.15.4.2 2002/05/16 00:22:58 oliver Exp $
+// $Id: structureMapper.C,v 1.15.4.3 2002/08/06 13:31:28 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -124,7 +124,7 @@ namespace BALL
 			fragment_A = A[i];
 			fragment_B = B[i];
 
-			// ?????: Atomnamen sollten auf Eindeutigkeit geprueft werden!
+			// ?????: atom names should be checked for uniqueness
 
 			//iterate over all atoms of A and compare names with atoms of B
 			for(AtomIterator atom_iterator1 = fragment_A->beginAtom(); +atom_iterator1; ++atom_iterator1)
