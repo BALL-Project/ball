@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.4 1999/12/04 18:34:05 oliver Exp $
+// $Id: logStream.h,v 1.5 2000/01/08 20:41:19 hekl Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -63,6 +63,8 @@ namespace BALL
 	class LogStreamNotifier
 	{
 		public:
+		
+		LogStreamNotifier();
 			
 		LogStreamNotifier(const NotificationTarget<LogStreamNotifier>& target);
 		

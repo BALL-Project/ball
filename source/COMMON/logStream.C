@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.10 1999/12/21 09:50:12 oliver Exp $
+// $Id: logStream.C,v 1.11 2000/01/08 20:41:24 hekl Exp $
 
 #include <BALL/COMMON/logStream.h>
 
@@ -103,6 +103,7 @@ namespace BALL
 							if (list_it->target != 0)
 							{
 								list_it->target->notify();
+								cerr << "logstream:notify" << endl;
 							}
 						}
 					}
@@ -231,9 +232,13 @@ namespace BALL
 		return result;
 	}
 
+	LogStreamNotifier::LogStreamNotifier()
+	{
+	}
+
 	LogStreamNotifier::LogStreamNotifier(const LogStream::Target& target)
 	{
-		NotificationRegister(*this, target);
+		NotificationRegister(*this, const_cast<LogStream::Target &>(target));
 	}
 
 	LogStreamNotifier::~LogStreamNotifier()
@@ -243,7 +248,7 @@ namespace BALL
 
 	void LogStreamNotifier::notify() const
 	{
-		Notify(*this);
+		Notify(const_cast<LogStreamNotifier &>(*this));
 	}
 
 	// keep the given buffer	
@@ -349,7 +354,8 @@ namespace BALL
 			if (list_it->stream == &s) 
 			{
 				// set the notification target
-				list_it->target = new LogStreamNotifier(target);
+				list_it->target = new LogStreamNotifier(const_cast<LogStream::Target &>(target));
+								cerr << "logstream:notify insert" << endl;
 				break;
 			}
 		}
