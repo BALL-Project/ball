@@ -1,12 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleDescriptors.C,v 1.5 2002/02/27 12:24:03 sturm Exp $
+// $Id: simpleDescriptors.C,v 1.6 2003/07/01 17:09:52 oliver Exp $
+//
 
 #include <BALL/QSAR/simpleDescriptors.h>
 
+#include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/expression.h>
+#include <BALL/KERNEL/fragment.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
 
 namespace BALL

@@ -1,9 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.C,v 1.8 2002/02/27 12:24:02 sturm Exp $
+// $Id: descriptor.C,v 1.9 2003/07/01 17:09:52 oliver Exp $
+//
 
+#include <BALL/CONCEPT/composite.h>
+#include <BALL/KERNEL/fragment.h>
 #include <BALL/QSAR/descriptor.h>
+
 
 namespace BALL
 {
