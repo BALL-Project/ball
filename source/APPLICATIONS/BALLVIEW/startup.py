@@ -3,6 +3,7 @@ pm = mc.getPrimitiveManager()
 cm = mc.getCompositeManager()
 dp = DisplayProperties.getInstance(0)
 fd = MolecularFileDialog.getInstance(0)
+moc = MolecularControl.getInstance(0)
 
 def clearRepresentations():
 	nr = pm.getNumberOfRepresentations()
@@ -19,4 +20,10 @@ def createStickModel():
 	dp.selectColoringMethod(COLORING_ELEMENT)
 	dp.setTransparency(0)
 	dp.apply()
+
+def removeWater():
+	mc.clearSelection()
+	if moc.applySelector("residue(HOH)") == 0:
+		return
+	moc.cut()
 

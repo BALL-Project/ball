@@ -15,6 +15,7 @@ added:
 - Benchmark Scripts for BALLView
 - Visualisation for double-, triple- and aromatic bonds in BallAndStick Model
 - Preferences for material parameters in OpenGL
+- added more classes to the Python SIP interface
 
 fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier
