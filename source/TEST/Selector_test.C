@@ -1,4 +1,4 @@
-// $Id: Selector_test.C,v 1.5 2001/07/15 17:32:41 amoll Exp $
+// $Id: Selector_test.C,v 1.6 2001/07/15 20:24:22 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,15 +11,12 @@
 
 ///////////////////////////
 
-START_TEST(Selector, "$Id: Selector_test.C,v 1.5 2001/07/15 17:32:41 amoll Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.6 2001/07/15 20:24:22 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-
-///  insert tests for each member function here         
-///
 
 Selector* ptr;
 
