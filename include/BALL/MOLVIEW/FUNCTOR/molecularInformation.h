@@ -1,4 +1,4 @@
-// $Id: molecularInformation.h,v 1.6.4.1 2002/10/23 14:25:03 amoll Exp $
+// $Id: molecularInformation.h,v 1.6.4.2 2002/11/26 15:28:26 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
@@ -28,7 +28,8 @@ namespace BALL
 				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularInformation.h} 
 				@see     Information
 		*/
-		class MolecularInformation: public VIEW::Information
+		class MolecularInformation
+			: public VIEW::Information
 		{
 			public:
 			

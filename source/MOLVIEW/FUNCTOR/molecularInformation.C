@@ -1,4 +1,4 @@
-// $Id: molecularInformation.C,v 1.7.4.1 2002/10/23 14:25:20 amoll Exp $
+// $Id: molecularInformation.C,v 1.7.4.2 2002/11/26 15:28:27 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 #include <BALL/KERNEL/system.h>
@@ -12,7 +12,7 @@ namespace BALL
 
 		MolecularInformation::MolecularInformation()
 			throw()
-			:	Information()
+			:	VIEW::Information()
 		{
 		}
 
@@ -30,7 +30,7 @@ namespace BALL
 		void MolecularInformation::clear()
 			throw()
 		{
-			Information::clear();
+			VIEW::Information::clear();
 			type_ = TYPE__UNKNOWN;
 		}
 
@@ -51,7 +51,7 @@ namespace BALL
 			}
 			else // try your luck within View-objects
 			{
-				Information::visit(composite);
+				VIEW::Information::visit(composite);
 			}
 		}
 
