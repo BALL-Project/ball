@@ -1,5 +1,5 @@
 ###############################################################
-# Main Makefile   ($Id: Makefile.multiplatform,v 1.4 2001/02/21 17:09:22 anker Exp $)
+# Main Makefile   ($Id: Makefile.multiplatform,v 1.5 2001/07/13 18:19:03 oliver Exp $)
 ###############################################################
 
 BINFMT=`config/binfmt.sh`
@@ -45,13 +45,14 @@ depend:
 test:
 	@$(DIRMAKE) test
 
-doc:	texdoc htmldoc
+doc:
+	@../doc/tools/makedoc complete
 	
 texdoc:
-	@config/maketexdoc
+	@../doc/tools/makedoc tex
 
 htmldoc:
-	@config/makehtmldoc
+	@../doc/tools/makedoc html
 
 configure:  config/configure.in config/configure.header
 	@echo "Creating new ./configure from config/configure.in"
