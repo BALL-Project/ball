@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Protein_test.C,v 1.11 2002/12/12 11:34:43 oliver Exp $
+// $Id: Protein_test.C,v 1.12 2003/07/01 12:25:00 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Protein, "$Id: Protein_test.C,v 1.11 2002/12/12 11:34:43 oliver Exp $")
+START_TEST(Protein, "$Id: Protein_test.C,v 1.12 2003/07/01 12:25:00 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,16 +25,16 @@ using std::ios;
 
 Protein* p1;
 
-CHECK(Protein())
+CHECK(Protein() throw())
 	p1 = new Protein;
 	TEST_NOT_EQUAL(p1, 0)
 RESULT											
 
-CHECK(~Protein())
+CHECK(~Protein() throw())
 	delete p1;
 RESULT
 
-CHECK(Protein(const Protein& Protein, bool deep = true))
+CHECK(Protein(const Protein& protein, bool deep = true) throw())
 	Residue r1;
 	Protein p1("p1"), p2;
 	p1.append(r1);
@@ -43,14 +43,14 @@ CHECK(Protein(const Protein& Protein, bool deep = true))
 	TEST_EQUAL(p2.countResidues(), 1)
 RESULT
 
-CHECK(Protein(const String& name))
+CHECK(Protein(const String& name, const String& id = BALL_PROTEIN_DEFAULT_ID) throw())
 	Protein p1("p1");
 	TEST_EQUAL(p1.getName(), "p1")
 	Protein p2("");
 	TEST_EQUAL(p2.getName(), "")
 RESULT
 
-CHECK(clear())
+CHECK(void clear() throw())
 	System sys1;
 	Protein p1("p1");
 	Residue r1;
@@ -61,7 +61,7 @@ CHECK(clear())
 	TEST_EQUAL(p1.countResidues(), 0)
 RESULT
 
-CHECK(destroy())
+CHECK(void destroy() throw())
 	System sys1;
 	Protein p1("p1");
 	Residue r1;
@@ -72,7 +72,7 @@ CHECK(destroy())
 	TEST_EQUAL(p1.countResidues(), 0)
 RESULT
 
-CHECK(Protein::set(const Protein& Protein, bool deep = true))
+CHECK(void set(const Protein& protein, bool deep = true) throw())
 	Protein p1("p1"), p2;
 	Residue r1;
 	p1.append(r1);
@@ -81,7 +81,7 @@ CHECK(Protein::set(const Protein& Protein, bool deep = true))
 	TEST_EQUAL(p2.countResidues(), 1)
 RESULT
 
-CHECK(Protein::Protein& operator = (const Protein& Protein))
+CHECK(Protein& operator = (const Protein& protein) throw())
 	Protein p1("p1"), p2;
 	Residue r1;
 	p1.append(r1);
@@ -90,7 +90,7 @@ CHECK(Protein::Protein& operator = (const Protein& Protein))
 	TEST_EQUAL(p2.countResidues(), 1)
 RESULT
 
-CHECK(Protein::get(Protein& Protein, bool deep = true) const )
+CHECK(void get(Protein& protein, bool deep = true) const throw())
 	Protein p1("p1"), p2;
 	Residue r1;
 	p1.append(r1);
@@ -99,7 +99,7 @@ CHECK(Protein::get(Protein& Protein, bool deep = true) const )
 	TEST_EQUAL(p2.countResidues(), 1)
 RESULT
 
-CHECK(Protein::swap(Protein& Protein))
+CHECK(void swap(Protein& protein) throw())
 	Protein p1("p1");
 	Protein p2("p2");
 	Residue r1, r2, r3;
@@ -113,7 +113,7 @@ CHECK(Protein::swap(Protein& Protein))
 	TEST_EQUAL(p2.countResidues(), 2)
 RESULT
 
-CHECK(Protein::getChain(Position position))
+CHECK(Chain* getChain(Position position) throw())
 	Protein p1("p1");
 	TEST_EQUAL(p1.getChain(0), 0)
 	Chain c1("X");
@@ -122,7 +122,7 @@ CHECK(Protein::getChain(Position position))
 	TEST_EQUAL(p1.getChain(0), &c1)
 RESULT
 
-CHECK(Protein::getChain(Position position) const )
+CHECK(const Chain* getChain(Position position) const throw())
 	Protein p1("p1");
 	TEST_EQUAL(p1.getChain(0), 0)
 	Chain c1("c1");
@@ -130,7 +130,7 @@ CHECK(Protein::getChain(Position position) const )
 	TEST_EQUAL(p1.getChain(0), &c1)
 RESULT
 
-CHECK(Protein::getSecondaryStructure(Position position))
+CHECK(SecondaryStructure* getSecondaryStructure(Position position) throw())
 	Protein p1("p1");
 	TEST_EQUAL(p1.getSecondaryStructure(0), 0)
 	SecondaryStructure s1("X");
@@ -139,7 +139,7 @@ CHECK(Protein::getSecondaryStructure(Position position))
 	TEST_EQUAL(p1.getSecondaryStructure(0), &s1)
 RESULT
 
-CHECK(Protein::getSecondaryStructure(Position position) const )
+CHECK(const SecondaryStructure* getSecondaryStructure(Position position) const throw())
 	Protein p1("p1");
 	TEST_EQUAL(p1.getSecondaryStructure(0), 0)
 	SecondaryStructure s1("s1");
@@ -147,7 +147,7 @@ CHECK(Protein::getSecondaryStructure(Position position) const )
 	TEST_EQUAL(p1.getSecondaryStructure(0), &s1)
 RESULT
 
-CHECK(Protein::getResidue(Position position))
+CHECK(Residue* getResidue(Position position) throw())
 	Protein p1("p1");
 	TEST_EQUAL(p1.getResidue(0), 0)
 	Residue r1("X");
@@ -156,7 +156,7 @@ CHECK(Protein::getResidue(Position position))
 	TEST_EQUAL(r1.getName(), "r1")
 RESULT
 
-CHECK(Protein::getResidue(Position position) const )
+CHECK(const Residue* getResidue(Position position) const throw())
 	Protein p1("p1");
 	TEST_EQUAL(p1.getResidue(0), 0)
 	Residue r1("r1");
@@ -164,7 +164,7 @@ CHECK(Protein::getResidue(Position position) const )
 	TEST_EQUAL(p1.getResidue(0), &r1)
 RESULT
 
-CHECK(Protein::getPDBAtom(Position position))
+CHECK(PDBAtom* getPDBAtom(Position position) throw())
 	Protein p1("p1");
 	TEST_EQUAL(p1.getPDBAtom(0), 0)
 	PDBAtom a1("x");
@@ -175,7 +175,7 @@ CHECK(Protein::getPDBAtom(Position position))
 	TEST_EQUAL(a1.getName(), "a1")
 RESULT
 
-CHECK(Protein::getPDBAtom(Position position) const )
+CHECK(const PDBAtom* getPDBAtom(Position position) const throw())
 	Protein p1("p1");
 	TEST_EQUAL(p1.getPDBAtom(0), 0)
 	Residue r1;
@@ -185,7 +185,7 @@ CHECK(Protein::getPDBAtom(Position position) const )
 	TEST_EQUAL(p1.getPDBAtom(0), &a1)
 RESULT
 
-CHECK(Protein::getNTerminal())
+CHECK(Residue* getNTerminal() throw())
 	Protein p1;
 	Residue r1("X");
 	Residue r2("r2");
@@ -202,7 +202,7 @@ CHECK(Protein::getNTerminal())
 	TEST_EQUAL(r1.getName(), "r1")
 RESULT
 
-CHECK(Protein::getNTerminal() const )
+CHECK(const Residue* getNTerminal() const throw())
 	Protein p1;
 	Residue r1("r1");
 	Residue r2("r2");
@@ -218,7 +218,7 @@ CHECK(Protein::getNTerminal() const )
 	}
 RESULT
 
-CHECK(Protein::getCTerminal())
+CHECK(Residue* getCTerminal() throw())
 	Protein p1;
 	Residue r1("1");
 	Residue r2("2");
@@ -235,7 +235,7 @@ CHECK(Protein::getCTerminal())
 	TEST_EQUAL(r2.getName(), "r2")
 RESULT
 
-CHECK(Protein::getCTerminal() const )
+CHECK(const Residue* getCTerminal() const throw())
 	Protein p1;
 	Residue r1("r1");
 	Residue r2("r2");
@@ -251,7 +251,7 @@ CHECK(Protein::getCTerminal() const )
 	}
 RESULT
 
-CHECK(Protein::countChains() const )
+CHECK(Size countChains() const throw())
 	Protein p1;
 	Chain c1;
 	TEST_EQUAL(p1.countChains(), 0)
@@ -259,7 +259,7 @@ CHECK(Protein::countChains() const )
 	TEST_EQUAL(p1.countChains(), 1)
 RESULT
 
-CHECK(Protein::countSecondaryStructures() const )
+CHECK(Size countSecondaryStructures() const throw())
 	Protein p1;
 	SecondaryStructure s1("s1");
 	TEST_EQUAL(p1.countSecondaryStructures(), 0)
@@ -267,7 +267,7 @@ CHECK(Protein::countSecondaryStructures() const )
 	TEST_EQUAL(p1.countSecondaryStructures(), 1)
 RESULT
 
-CHECK(Protein::countResidues() const )
+CHECK(Size countResidues() const throw())
 	Protein p1;
 	Residue r1("r1");
 	TEST_EQUAL(p1.countResidues(), 0)
@@ -275,7 +275,7 @@ CHECK(Protein::countResidues() const )
 	TEST_EQUAL(p1.countResidues(), 1)
 RESULT
 
-CHECK(Protein::countPDBAtoms() const )
+CHECK(Size countPDBAtoms() const throw())
 	Protein p1;
 	Residue r1("r1");
 	PDBAtom a1("a1");
@@ -286,7 +286,7 @@ CHECK(Protein::countPDBAtoms() const )
 RESULT
 
 
-CHECK(Protein::prepend(Residue& Residue))
+CHECK([EXTRA]Protein::prepend(Residue& Residue))
 	Protein p1;
 	Residue r1;
 	Residue r2;
@@ -297,7 +297,7 @@ CHECK(Protein::prepend(Residue& Residue))
 	TEST_EQUAL(p1.getResidue(1), &r1)
 RESULT
 
-CHECK(Protein::append(Residue& Residue))
+CHECK([EXTRA]Protein::append(Residue& Residue))
 	Protein p1;
 	Residue r1;
 	Residue r2;
@@ -307,7 +307,7 @@ CHECK(Protein::append(Residue& Residue))
 	TEST_EQUAL(p1.getResidue(1), &r2)
 RESULT
 
-CHECK(Protein::insert(Residue& Residue))
+CHECK([EXTRA]Protein::insert(Residue& Residue))
 	Protein p1;
 	Residue r1;
 	Residue r2;
@@ -317,7 +317,7 @@ CHECK(Protein::insert(Residue& Residue))
 	TEST_EQUAL(p1.getResidue(1), &r2)
 RESULT
 
-CHECK(Protein::insertBefore(Residue& Residue, Composite& before))
+CHECK([EXTRA]Protein::insertBefore(Residue& Residue, Composite& before))
 	Protein p1;
 	Residue r1;
 	Residue r2;
@@ -330,7 +330,7 @@ CHECK(Protein::insertBefore(Residue& Residue, Composite& before))
 	TEST_EQUAL(p1.getResidue(2), &r2)
 RESULT
 
-CHECK(Protein::insertAfter(Residue& Residue, Composite& after))
+CHECK([EXTRA]Protein::insertAfter(Residue& Residue, Composite& after))
 	Protein p1;
 	Residue r1;
 	Residue r2;
@@ -343,7 +343,7 @@ CHECK(Protein::insertAfter(Residue& Residue, Composite& after))
 	TEST_EQUAL(p1.getResidue(2), &r2)
 RESULT
 
-CHECK(Protein::remove(Residue& Residue))
+CHECK([EXTRA]Protein::remove(Residue& Residue))
 	Protein p1("p1");
 	Residue r1;
 	Residue r2;
@@ -354,7 +354,7 @@ CHECK(Protein::remove(Residue& Residue))
 	TEST_EQUAL(p1.getResidue(0), &r2)
 RESULT
 
-CHECK(Protein::spliceBefore(Protein& Protein))
+CHECK([EXTRA]Protein::spliceBefore(Protein& Protein))
 	Protein p1('x');
 	Protein p2('x');
 	Residue r1("r1");
@@ -366,7 +366,7 @@ CHECK(Protein::spliceBefore(Protein& Protein))
 	TEST_EQUAL(p1.getResidue(1), &r1)
 RESULT
 
-CHECK(Protein::spliceAfter(Protein& Protein))
+CHECK([EXTRA]Protein::spliceAfter(Protein& Protein))
 	Protein p1('x');
 	Protein p2('x');
 	Residue r1("r1");
@@ -378,7 +378,7 @@ CHECK(Protein::spliceAfter(Protein& Protein))
 	TEST_EQUAL(p1.getResidue(1), &r2)
 RESULT
 
-CHECK(Protein::splice(Protein& Protein))
+CHECK([EXTRA]Protein::splice(Protein& Protein))
 	Protein p1('x');
 	Protein p2('x');
 	Residue r1("r1");
@@ -390,14 +390,14 @@ CHECK(Protein::splice(Protein& Protein))
 	TEST_EQUAL(p1.getResidue(1), &r1)
 RESULT
 
-CHECK(Protein::isValid() const )
+CHECK([EXTRA]Protein::isValid() const )
 	Protein p1("p1");
 	Residue r1;
 	p1.append(r1);
 	TEST_EQUAL(p1.isValid(), true)
 RESULT
 
-CHECK(Protein::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK([EXTRA]Protein::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Protein p1("Protein1");
 	Residue r1, r2;
 	r1.setName("Residue1");
@@ -416,7 +416,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<Protein>(), Protein::createDefault);
 pm.registerClass(getStreamName<Chain>(), Chain::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Protein* f1= new Protein("name1");
 	Chain* f2 = new Chain("name2");
@@ -429,7 +429,7 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -450,12 +450,54 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const Protein& protein) const throw())
 	Protein b1;
 	Protein b2;
 	TEST_EQUAL(b1 == b2, false)
 	b1 = b2;
 	TEST_EQUAL(b1 == b1, true)
+RESULT
+
+CHECK(bool operator != (const Protein& protein) const throw())
+	Protein b1;
+	Protein b2;
+	TEST_EQUAL(b1 != b2, true)
+	b1 = b2;
+	TEST_EQUAL(b1 != b1, false)
+RESULT
+
+CHECK(const String& getID() const throw())
+	Protein p;
+	TEST_EQUAL(p.getID(), "")
+RESULT
+
+CHECK(void setID(const String& id) throw())
+	Protein p;
+	p.setID("asddd");
+	TEST_EQUAL(p.getID(), "asddd")
+RESULT
+
+CHECK(BALL_CREATE_DEEP(Protein))
+	Protein p1;
+	Residue r1;
+	Residue r2;
+	p1.insert(r1);
+	p1.insert(r2);
+	p1.setName("protein1");
+	r1.setName("r1");
+	p1.setID("p1");
+	
+	Protein* test = (Protein*) p1.create(false, true);
+	TEST_EQUAL(test->getName(), "")
+	TEST_EQUAL(test->getID(), "")
+	TEST_EQUAL(test->countResidues(), 0)
+	delete test;
+	test = (Protein*) p1.create(true, false);
+	TEST_EQUAL(test->getName(), "protein1")
+	TEST_EQUAL(test->getID(), "p1")
+	TEST_EQUAL(test->countResidues(), 2)
+	TEST_EQUAL(test->getResidue(0)->getName(), "r1")
+  delete test;
 RESULT
 
 /////////////////////////////////////////////////////////////
