@@ -25,6 +25,7 @@
  <node>#include:Amber<value>fragments/Names.Amber.db:/Amber</value></node>
  <node>#include:CHARMM<value>fragments/Names.CHARMM.db:/CHARMM</value></node>
  <node>#include:XPLOR<value>fragments/Names.XPLOR.db:/XPLOR</value></node>
+ <node>#include:Star<value>fragments/Names.Star.db:/Star</value></node>
 </node>
 <node>Defaults
  <node>Naming<value>PDB</value></node>

@@ -1,11 +1,17 @@
- <node>XPLOR<value>PDB</value>
+ <node>Star<value>PDB</value>
  <node>*:H1<value>*:1H</value></node>
  <node>*:H2<value>*:2H</value></node>
  <node>*:H3<value>*:3H</value></node>
+ <node>*:HT1<value>*:1H</value></node>
+ <node>*:HT2<value>*:2H</value></node>
+ <node>*:HT3<value>*:3H</value></node>
+ <node>*:OT1<value>*:O</value></node>
+ <node>*:OT2<value>*:OXT</value></node>
  <node>*:N<value>*:N</value></node>
  <node>*:O<value>*:O</value></node>
  <node>*:C<value>*:C</value></node>
  <node>*:HN<value>*:H</value></node>
+ <node>*:H<value>*:H</value></node>
  <node>ALA:CA<value>ALA:CA</value></node>
  <node>ALA:HA<value>ALA:HA</value></node>
  <node>ALA:CB<value>ALA:CB</value></node>
@@ -35,8 +41,8 @@
  <node>ASN:CA<value>ASN:CA</value></node>
  <node>ASN:HA<value>ASN:HA</value></node>
  <node>ASN:CB<value>ASN:CB</value></node>
- <node>ASN:HB1<value>ASN:1HB</value></node>
- <node>ASN:HB2<value>ASN:2HB</value></node>
+ <node>ASN:HB2<value>ASN:1HB</value></node>
+ <node>ASN:HB3<value>ASN:2HB</value></node>
  <node>ASN:CG<value>ASN:CG</value></node>
  <node>ASN:OD1<value>ASN:OD1</value></node>
  <node>ASN:ND2<value>ASN:ND2</value></node>
@@ -45,34 +51,34 @@
  <node>ASP:CA<value>ASP:CA</value></node>
  <node>ASP:HA<value>ASP:HA</value></node>
  <node>ASP:CB<value>ASP:CB</value></node>
- <node>ASP:HB1<value>ASP:1HB</value></node>
- <node>ASP:HB2<value>ASP:2HB</value></node>
+ <node>ASP:HB2<value>ASP:1HB</value></node>
+ <node>ASP:HB3<value>ASP:2HB</value></node>
  <node>ASP:CG<value>ASP:CG</value></node>
  <node>ASP:OD1<value>ASP:OD1</value></node>
  <node>ASP:OD2<value>ASP:OD2</value></node>
  <node>CYS:CA<value>CYS:CA</value></node>
  <node>CYS:HA<value>CYS:HA</value></node>
  <node>CYS:CB<value>CYS:CB</value></node>
- <node>CYS:HB1<value>CYS:1HB</value></node>
- <node>CYS:HB2<value>CYS:2HB</value></node>
+ <node>CYS:HB2<value>CYS:1HB</value></node>
+ <node>CYS:HB3<value>CYS:2HB</value></node>
  <node>CYS:SG<value>CYS:SG</value></node>
  <node>CYS:HG<value>CYS:HG</value></node>
  <node>GLU:CA<value>GLU:CA</value></node>
  <node>GLU:HA<value>GLU:HA</value></node>
  <node>GLU:CB<value>GLU:CB</value></node>
- <node>GLU:HB1<value>GLU:1HB</value></node>
- <node>GLU:HB2<value>GLU:2HB</value></node>
+ <node>GLU:HB2<value>GLU:1HB</value></node>
+ <node>GLU:HB3<value>GLU:2HB</value></node>
  <node>GLU:CG<value>GLU:CG</value></node>
- <node>GLU:HG1<value>GLU:1HG</value></node>
- <node>GLU:HG2<value>GLU:2HG</value></node>
+ <node>GLU:HG2<value>GLU:1HG</value></node>
+ <node>GLU:HG3<value>GLU:2HG</value></node>
  <node>GLU:CD<value>GLU:CD</value></node>
  <node>GLU:OE1<value>GLU:OE1</value></node>
  <node>GLU:OE2<value>GLU:OE2</value></node>
  <node>GLN:CA<value>GLN:CA</value></node>
  <node>GLN:HA<value>GLN:HA</value></node>
  <node>GLN:CB<value>GLN:CB</value></node>
- <node>GLN:HB1<value>GLN:1HB</value></node>
- <node>GLN:HB2<value>GLN:2HB</value></node>
+ <node>GLN:HB2<value>GLN:1HB</value></node>
+ <node>GLN:HB3<value>GLN:2HB</value></node>
  <node>GLN:CG<value>GLN:CG</value></node>
  <node>GLN:HG1<value>GLN:1HG</value></node>
  <node>GLN:HG2<value>GLN:2HG</value></node>
@@ -82,13 +88,13 @@
  <node>GLN:HE21<value>GLN:1HE2</value></node>
  <node>GLN:HE22<value>GLN:2HE2</value></node>
  <node>GLY:CA<value>GLY:CA</value></node>
- <node>GLY:HA1<value>GLY:1HA</value></node>
- <node>GLY:HA2<value>GLY:2HA</value></node>
+ <node>GLY:HA2<value>GLY:1HA</value></node>
+ <node>GLY:HA3<value>GLY:2HA</value></node>
  <node>HIS:CA<value>HIS:CA</value></node>
  <node>HIS:HA<value>HIS:HA</value></node>
  <node>HIS:CB<value>HIS:CB</value></node>
- <node>HIS:HB1<value>HIS:1HB</value></node>
- <node>HIS:HB2<value>HIS:2HB</value></node>
+ <node>HIS:HB2<value>HIS:1HB</value></node>
+ <node>HIS:HB3<value>HIS:2HB</value></node>
  <node>HIS:CG<value>HIS:CG</value></node>
  <node>HIS:ND1<value>HIS:ND1</value></node>
  <node>HIS:HD1<value>HIS:HD1</value></node>
@@ -107,8 +113,8 @@
  <node>ILE:HG22<value>ILE:2HG2</value></node>
  <node>ILE:HG23<value>ILE:3HG2</value></node>
  <node>ILE:CG1<value>ILE:CG1</value></node>
- <node>ILE:HG11<value>ILE:1HG1</value></node>
- <node>ILE:HG12<value>ILE:2HG1</value></node>
+ <node>ILE:HG12<value>ILE:1HG1</value></node>
+ <node>ILE:HG13<value>ILE:2HG1</value></node>
  <node>ILE:CD1<value>ILE:CD1</value></node>
  <node>ILE:HD11<value>ILE:1HD1</value></node>
  <node>ILE:HD12<value>ILE:2HD1</value></node>
@@ -116,8 +122,8 @@
  <node>LEU:CA<value>LEU:CA</value></node>
  <node>LEU:HA<value>LEU:HA</value></node>
  <node>LEU:CB<value>LEU:CB</value></node>
- <node>LEU:HB1<value>LEU:1HB</value></node>
- <node>LEU:HB2<value>LEU:2HB</value></node>
+ <node>LEU:HB2<value>LEU:1HB</value></node>
+ <node>LEU:HB3<value>LEU:2HB</value></node>
  <node>LEU:CG<value>LEU:CG</value></node>
  <node>LEU:HG<value>LEU:HG</value></node>
  <node>LEU:CD1<value>LEU:CD1</value></node>
@@ -131,17 +137,17 @@
  <node>LYS:CA<value>LYS:CA</value></node>
  <node>LYS:HA<value>LYS:HA</value></node>
  <node>LYS:CB<value>LYS:CB</value></node>
- <node>LYS:HB1<value>LYS:1HB</value></node>
- <node>LYS:HB2<value>LYS:2HB</value></node>
+ <node>LYS:HB2<value>LYS:1HB</value></node>
+ <node>LYS:HB3<value>LYS:2HB</value></node>
  <node>LYS:CG<value>LYS:CG</value></node>
- <node>LYS:HG1<value>LYS:1HG</value></node>
- <node>LYS:HG2<value>LYS:2HG</value></node>
+ <node>LYS:HG2<value>LYS:1HG</value></node>
+ <node>LYS:HG3<value>LYS:2HG</value></node>
  <node>LYS:CD<value>LYS:CD</value></node>
- <node>LYS:HD1<value>LYS:1HD</value></node>
- <node>LYS:HD2<value>LYS:2HD</value></node>
+ <node>LYS:HD2<value>LYS:1HD</value></node>
+ <node>LYS:HD3<value>LYS:2HD</value></node>
  <node>LYS:CE<value>LYS:CE</value></node>
- <node>LYS:HE1<value>LYS:1HE</value></node>
- <node>LYS:HE2<value>LYS:2HE</value></node>
+ <node>LYS:HE2<value>LYS:1HE</value></node>
+ <node>LYS:HE3<value>LYS:2HE</value></node>
  <node>LYS:NZ<value>LYS:NZ</value></node>
  <node>LYS:HZ1<value>LYS:1HZ</value></node>
  <node>LYS:HZ2<value>LYS:2HZ</value></node>
@@ -149,11 +155,11 @@
  <node>MET:CA<value>MET:CA</value></node>
  <node>MET:HA<value>MET:HA</value></node>
  <node>MET:CB<value>MET:CB</value></node>
- <node>MET:HB1<value>MET:1HB</value></node>
- <node>MET:HB2<value>MET:2HB</value></node>
+ <node>MET:HB2<value>MET:1HB</value></node>
+ <node>MET:HB3<value>MET:2HB</value></node>
  <node>MET:CG<value>MET:CG</value></node>
- <node>MET:HG1<value>MET:1HG</value></node>
- <node>MET:HG2<value>MET:2HG</value></node>
+ <node>MET:HG2<value>MET:1HG</value></node>
+ <node>MET:HG3<value>MET:2HG</value></node>
  <node>MET:SD<value>MET:SD</value></node>
  <node>MET:CE<value>MET:CE</value></node>
  <node>MET:HE1<value>MET:1HE</value></node>
@@ -162,8 +168,8 @@
  <node>PHE:CA<value>PHE:CA</value></node>
  <node>PHE:HA<value>PHE:HA</value></node>
  <node>PHE:CB<value>PHE:CB</value></node>
- <node>PHE:HB1<value>PHE:1HB</value></node>
- <node>PHE:HB2<value>PHE:2HB</value></node>
+ <node>PHE:HB2<value>PHE:1HB</value></node>
+ <node>PHE:HB3<value>PHE:2HB</value></node>
  <node>PHE:CG<value>PHE:CG</value></node>
  <node>PHE:CD1<value>PHE:CD1</value></node>
  <node>PHE:HD1<value>PHE:HD1</value></node>
@@ -178,19 +184,19 @@
  <node>PRO:CA<value>PRO:CA</value></node>
  <node>PRO:HA<value>PRO:HA</value></node>
  <node>PRO:CD<value>PRO:CD</value></node>
- <node>PRO:HD1<value>PRO:1HD</value></node>
- <node>PRO:HD2<value>PRO:2HD</value></node>
+ <node>PRO:HD2<value>PRO:1HD</value></node>
+ <node>PRO:HD3<value>PRO:2HD</value></node>
  <node>PRO:CG<value>PRO:CG</value></node>
- <node>PRO:HG1<value>PRO:1HG</value></node>
- <node>PRO:HG2<value>PRO:2HG</value></node>
+ <node>PRO:HG2<value>PRO:1HG</value></node>
+ <node>PRO:HG3<value>PRO:2HG</value></node>
  <node>PRO:CB<value>PRO:CB</value></node>
- <node>PRO:HB1<value>PRO:1HB</value></node>
- <node>PRO:HB2<value>PRO:2HB</value></node>
+ <node>PRO:HB2<value>PRO:1HB</value></node>
+ <node>PRO:HB3<value>PRO:2HB</value></node>
  <node>SER:CA<value>SER:CA</value></node>
  <node>SER:HA<value>SER:HA</value></node>
  <node>SER:CB<value>SER:CB</value></node>
- <node>SER:HB1<value>SER:1HB</value></node>
- <node>SER:HB2<value>SER:2HB</value></node>
+ <node>SER:HB2<value>SER:1HB</value></node>
+ <node>SER:HB3<value>SER:2HB</value></node>
  <node>SER:OG<value>SER:OG</value></node>
  <node>SER:HG<value>SER:HG</value></node>
  <node>THR:CA<value>THR:CA</value></node>
@@ -206,8 +212,8 @@
  <node>TRP:CA<value>TRP:CA</value></node>
  <node>TRP:HA<value>TRP:HA</value></node>
  <node>TRP:CB<value>TRP:CB</value></node>
- <node>TRP:HB1<value>TRP:1HB</value></node>
- <node>TRP:HB2<value>TRP:2HB</value></node>
+ <node>TRP:HB2<value>TRP:1HB</value></node>
+ <node>TRP:HB3<value>TRP:2HB</value></node>
  <node>TRP:CG<value>TRP:CG</value></node>
  <node>TRP:CD1<value>TRP:CD1</value></node>
  <node>TRP:HD1<value>TRP:HD1</value></node>
@@ -226,8 +232,8 @@
  <node>TYR:CA<value>TYR:CA</value></node>
  <node>TYR:HA<value>TYR:HA</value></node>
  <node>TYR:CB<value>TYR:CB</value></node>
- <node>TYR:HB1<value>TYR:1HB</value></node>
- <node>TYR:HB2<value>TYR:2HB</value></node>
+ <node>TYR:HB2<value>TYR:1HB</value></node>
+ <node>TYR:HB3<value>TYR:2HB</value></node>
  <node>TYR:CG<value>TYR:CG</value></node>
  <node>TYR:CD1<value>TYR:CD1</value></node>
  <node>TYR:HD1<value>TYR:HD1</value></node>
