@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.5 2000/02/17 09:48:11 oliver Exp $
+// $Id: file.h,v 1.6 2000/05/31 19:58:30 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -127,6 +127,10 @@ namespace BALL
 		/**
 		*/
 		File(const String& name, OpenMode open_mode = std::ios::in);
+
+		/**	Copy constructor.
+		*/
+		File(const File& file);
 
 		/**
 		*/
@@ -325,8 +329,6 @@ namespace BALL
 		//@}
 		
 		private:
-
-		File(const File& file);
 
 		File& operator = (const File& file);
 
