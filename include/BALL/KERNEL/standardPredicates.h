@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.15 2001/05/24 13:51:44 anker Exp $
+// $Id: standardPredicates.h,v 1.16 2001/05/24 14:45:50 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -316,8 +316,10 @@ namespace BALL
 				throw();
 
 		private:
-			bool dfs(const Atom& atom, const Atom& first_atom, 
-				const Size limit, HashSet<const Bond*>& visited) const;
+			bool dfs_(const Atom& atom, const Atom& first_atom, 
+					const Size limit, HashSet<const Bond*>& visited) const
+				throw();
+				
 	};
 
 
@@ -339,7 +341,8 @@ namespace BALL
 				throw();
 
 		protected:
-			bool testPredicate_(const Atom& atom, Bond::Order order) const;
+			bool testPredicate_(const Atom& atom, Bond::Order order) const
+				throw();
 	};
 
 
@@ -449,14 +452,18 @@ namespace BALL
 				throw();
 		
 		private:
-			bool parse(const String& group, 
-					std::list< std::pair<String, String> >& subs) const;
-			bool bondOrderMatch(const String& bond_description, 
-					const Bond::Order order) const;
-			bool find(const String& group, const Atom& atom, 
-					const Bond* source) const;
-			bool findAndTest(const String& group, const Atom& atom,
-					const Bond* source) const;
+			bool parse_(const String& group, 
+					std::list< std::pair<String, String> >& subs) const
+				throw();
+			bool bondOrderMatch_(const String& bond_description, 
+					const Bond::Order order) const
+				throw();
+			bool find_(const String& group, const Atom& atom, 
+					const Bond* source) const
+				throw();
+			bool findAndTest_(const String& group, const Atom& atom,
+					const Bond* source) const
+				throw();
 	};
 
 	/** Predicate indicating sp hybridized atoms.
