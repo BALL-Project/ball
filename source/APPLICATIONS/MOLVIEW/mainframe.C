@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.104 2003/12/19 14:44:36 anne Exp $
+// $Id: mainframe.C,v 1.105 2003/12/19 20:24:30 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -29,7 +29,7 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/FORMAT/DCDFile.h>
-#include <BALL/VIEW/WIDGETS/dockablePixmapWidget.h>
+//#include <BALL/VIEW/WIDGETS/dockablePixmapWidget.h>
 #include <BALL/VIEW/WIDGETS/dockableRegularData1DWidget.h>
 #include <BALL/MATHS/parsedFunction.h>
 #include <BALL/VIEW/DIALOGS/parsedFunctionDialog.h>
@@ -683,8 +683,8 @@ void Mainframe::amberMDSimulation()
 
 void Mainframe::about()
 {
-	ParsedFunctionDialog* pfd = new ParsedFunctionDialog();
-	pfd->exec();
+// 	ParsedFunctionDialog* pfd = new ParsedFunctionDialog();
+// 	pfd->exec();
 //	return;
 	
 	//QPixmap* pix = new QPixmap;			
@@ -695,37 +695,43 @@ void Mainframe::about()
 	//pcv->plot();
 	//dump();
 	
-	QString s = pfd->y_axis->text();
-	ParsedFunction<float> pf(s.latin1());
+// 	QString s = pfd->y_axis->text();
+// 	ParsedFunction<float> pf(s.latin1());
 	RegularData1D *d = new RegularData1D(0.0, 4.*M_PI, 0.01);
 
 	for (int i=0; i<d->size(); i++)
 	{
-		(*d)[i] = pf((float)d->getCoordinates(i));
+	//	(*d)[i] = pf((float)d->getCoordinates(i));
+	(*d)[i] = i;
 	}
 	
 DockableRegularData1DWidget *rwd = new DockableRegularData1DWidget(*d, this);
 //	RegularData1DWidget *rwd = new RegularData1DWidget(*d, this);
 //	rwd->createPlot();
- QString s2 = pfd->x_axis->text();
+//  QString s2 = pfd->x_axis->text();
  cout << " vH: " << rwd->getWidget().height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
  cout << " vW: " << rwd->getWidget().width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
 
+ rwd->getWidget().resize(rwd->size());
 rwd->plot();
  //	rwd->getWidget().zoom(atof(s2), atof(s2));
  rwd->getWidget().zoomToFit();	
  // rwd->plot();
 	rwd->show();
-	//rwd->getWidget().zoomToFit();	
-	//AboutDialog about;
-	//about.exec(); 
+ rwd->getWidget().zoomToFit();	
+	
  cout << " vH: " << rwd->getWidget().height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
  cout << " vW: " << rwd->getWidget().width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
-// rwd->undock();
-// rwd->resize(500,500);
 cout << " vH2: " << rwd->height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
  cout << " vW2: " << rwd->width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
 
+//  rwd->getWidget().resize(rwd->size());
+
+Log.error() << "#~~#   2 " << std::endl;
+ cout << " vH: " << rwd->getWidget().height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
+ cout << " vW: " << rwd->getWidget().width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
+cout << " vH2: " << rwd->height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
+ cout << " vW2: " << rwd->width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
 return;
 	AboutDialog about;
 	about.exec();
