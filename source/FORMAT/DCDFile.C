@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.4 2000/12/19 15:22:57 anker Exp $
+// $Id: DCDFile.C,v 1.5 2000/12/20 18:39:02 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -230,7 +230,40 @@ namespace BALL
 	bool DCDFile::writeHeader()
 		throw()
 	{
-		*this << BinaryFileAdaptor<struct DCDHeader>(header_);
+		// the following would be nice. Unfortunately the compiler does strange
+		// things when storing the struct in memory...
+		// *this << BinaryFileAdaptor<struct DCDHeader>(header_);
+
+		Size i;
+
+		*this << BinaryFileAdaptor<Size>(header_.start_info_block);
+		for (i = 0; i < 4; ++i)
+		{
+			*this << BinaryFileAdaptor<char>(header_.CORD[i]);
+		}
+		*this << BinaryFileAdaptor<Size>(header_.number_of_coordinate_sets);
+		*this << BinaryFileAdaptor<Size>(header_.step_number_of_starting_time);
+		*this << BinaryFileAdaptor<Size>(header_.steps_between_saves);
+		for (i = 0; i < 6; ++i)
+		{
+			*this << BinaryFileAdaptor<Size>(header_.unused_1[i]);
+		}
+		*this << BinaryFileAdaptor<DoubleReal>(header_.time_step_length);
+		for (i = 0; i < 9; ++i)
+		{
+			*this << BinaryFileAdaptor<Size>(header_.unused_2[i]);
+		}
+		*this << BinaryFileAdaptor<Size>(header_.end_info_block);
+		*this << BinaryFileAdaptor<Size>(header_.start_title_block);
+		*this << BinaryFileAdaptor<Size>(header_.number_of_comments);
+		for (i = 0; i < 160; ++i)
+		{
+			*this << BinaryFileAdaptor<char>(header_.title[i]);
+		}
+		*this << BinaryFileAdaptor<Size>(header_.end_title_block);
+		*this << BinaryFileAdaptor<Size>(header_.start_atomnumber_block);
+		*this << BinaryFileAdaptor<Size>(header_.number_of_atoms);
+		*this << BinaryFileAdaptor<Size>(header_.end_atomnumber_block);
 		return true;
 	}
 
@@ -266,19 +299,19 @@ namespace BALL
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		for (Size atom = 0; atom < noa; ++atom)
 		{
-			*this << BinaryFileAdaptor<DoubleReal>(positions[atom].x);
+			*this << BinaryFileAdaptor<Real>((Real) positions[atom].x);
 		}
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		for (Size atom = 0; atom < noa; ++atom)
 		{
-			*this << BinaryFileAdaptor<DoubleReal>(positions[atom].y);
+			*this << BinaryFileAdaptor<Real>((Real) positions[atom].y);
 		}
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		for (Size atom = 0; atom < noa; ++atom)
 		{
-			*this << BinaryFileAdaptor<DoubleReal>(positions[atom].z);
+			*this << BinaryFileAdaptor<Real>((Real) positions[atom].z);
 		}
 		*this << BinaryFileAdaptor<Size>(4*noa);
 

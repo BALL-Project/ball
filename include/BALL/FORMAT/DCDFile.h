@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.3 2000/12/19 13:19:36 anker Exp $
+// $Id: DCDFile.h,v 1.4 2000/12/20 18:39:00 anker Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -41,10 +41,11 @@ namespace BALL
 		class DCDHeader
 		{
 
-			public:
+			public: 
 
 			///
 			Size				start_info_block;
+
 			///
 			char				CORD[4];
 
@@ -73,11 +74,11 @@ namespace BALL
 			Size				start_title_block;
 
 			/// the number of 80 byte comments in this record
-			Size				number_of_80_byte_records;
+			Size				number_of_comments;
 
 			///
-			char				title[80];
-
+			char				title[160];
+			
 			///
 			Size				end_title_block;
 
@@ -95,33 +96,54 @@ namespace BALL
 				:	start_info_block(84),
 					// CORD("CORD"),
 					number_of_coordinate_sets(0),
-					step_number_of_starting_time(0),
+					step_number_of_starting_time(1),
 					steps_between_saves(0),
 					// unused_1(),
 					time_step_length(0.0),
 					// unused_2()
 					end_info_block(84),
-					start_title_block(84),
-					number_of_80_byte_records(1),
-					end_title_block(84),
+					start_title_block(164),
+					number_of_comments(2),
+					end_title_block(164),
 					start_atomnumber_block(4),
 					number_of_atoms(0),
 					end_atomnumber_block(4)
 			{
+				CORD[0] = 'C';
+				CORD[1] = 'O';
+				CORD[2] = 'R';
+				CORD[3] = 'D';
+				Size argh;
+				for (argh = 0; argh < 6; ++argh)
+				{
+					unused_1[argh] = 0;
+				}
+				for (argh = 0; argh < 9; ++argh)
+				{
+					unused_2[argh] = 0;
+				}
+				for (argh = 0; argh < 160; ++argh)
+				{
+					title[argh] = ' ';
+				}
 			}
 
 			/**	@name I/O operators
 			*/
 			//@{
 
+			/*
 			/// 
-			friend ::std::ostream& operator << (::std::ostream& os, const DCDHeader& header)
+			friend ::std::ostream& operator << (::std::ostream& os,
+					const DCDHeader& header)
 				throw();
 
 			///
-			friend ::std::istream& operator >> (::std::istream& os, DCDHeader& header)
+			friend ::std::istream& operator >> (::std::istream& os,
+					DCDHeader& header)
 				throw();
 			//@}
+			*/
 
 		};
 
