@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.4 2000/01/10 23:05:20 oliver Exp $ 
+// $Id: nucleicAcid.h,v 1.5 2000/01/11 20:12:52 oliver Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -22,7 +22,7 @@ namespace BALL
 
 	class Nucleotide;
 
-	/**
+	/**	Kernel class representing nucleic acids.
 	*/
 	class NucleicAcid
 		: public Molecule
@@ -46,22 +46,29 @@ namespace BALL
 		/** @name	Constructors and Destructors */
 		//@{
 
-		///
+		/**	Default constructor
+		*/
 		NucleicAcid();
 	
-		///
+		/**	Copy constructor
+		*/
 		NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true);
 	
-		///
+		/**	Detailled constructor
+		*/
 		NucleicAcid(const String& name, const String& id = BALL_NUCLEICACID_DEFAULT_ID);
 
-		///
+		/**	Destructor
+		*/
 		virtual ~NucleicAcid();
 	
-		///
+		/**	Clear the contents of the nucleic acid.
+		*/
 		virtual void clear();
 	
-		///
+		/**	Clear the contents of the nucleic acid and remove it from 
+				other kernel objects.
+		*/
 		virtual void destroy();
 
 		//@}
@@ -86,15 +93,15 @@ namespace BALL
 		*/
 		void set(const NucleicAcid& nucleic_acid, bool deep = true);
 
-		/**
+		/**	Assignment operator
 		*/
 		NucleicAcid& operator = (const NucleicAcid& nucleic_acid);
 
-		/**
+		/**	Assign an NucleicAcid object from another
 		*/
 		void get(NucleicAcid& nucleic_acid, bool deep = true) const;
 	
-		/**
+		/**	Swap the contents of two NucleicAcid objects
 		*/
 		void swap(NucleicAcid& nucleic_acid);
 	
@@ -104,28 +111,34 @@ namespace BALL
 		/**	@name Accessors */
 		//@{
 
-		///
+		/**	Retrieve a pointer to the Nucleotide a the 3'-end of the nucleic acid
+		*/
 		Nucleotide* get3Prime();
 
-		///		
+		/**	Retrieve a const pointer to the nucleotide a the 3'-end of the nucleic acid
+		*/
 		const Nucleotide* get3Prime() const;
 
-		///		
+		/**	Retrieve a pointer to the Nucleotide a the 5'-end of the nucleic acid
+		*/
 		Nucleotide* get5Prime();
 
-		///		
+		/**	Retrieve a const pointer to the Nucleotide a the 5'-end of the nucleic acid
+		*/
 		const Nucleotide* get5Prime() const;
 
-		///		
+		/**	Set the ID of the NucleicAcid.
+				@param id the new ID
+		*/
 		void setID(const String& id);
 
-		///
-		String& getID();
-
-		///
+		/**	Retrieve the ID of the NucleicAcid.
+				@return String the ID
+		*/
 		const String& getID() const;
 
-		///
+		/**	Return the number of Nucleotides contained in the NucleicAcid
+		*/
 		Size countNucleotides() const;
 		//@}
 
@@ -180,8 +193,8 @@ namespace BALL
 		// --- EXTERNAL ITERATORS
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Nucleotide)
-
 		
+
 		private:
 
 		void clear_();
