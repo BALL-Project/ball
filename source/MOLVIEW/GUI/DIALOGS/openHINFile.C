@@ -1,4 +1,4 @@
-// $Id: openHINFile.C,v 1.5 2001/05/13 16:28:12 hekl Exp $
+// $Id: openHINFile.C,v 1.6 2002/01/16 02:59:38 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 
@@ -126,13 +126,8 @@ namespace BALL
 
 			QString filename = getFileName().c_str();
 
-			cerr << filename << endl;
-			cerr << getPathName() << endl;
-
 			// construct a name (the filename without the dir path)
 			filename.remove(0, getPathName().length() + 1);
-
-			cerr << filename << endl;
 
 			if (filename.find('.') != -1)
 			{

@@ -1,10 +1,8 @@
-// $Id: embeddable.C,v 1.10 2001/12/26 03:35:52 oliver Exp $
+// $Id: embeddable.C,v 1.11 2002/01/16 02:59:38 oliver Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
 using namespace std;
-
-#define DEBUG
 
 namespace BALL
 {

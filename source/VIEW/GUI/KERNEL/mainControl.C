@@ -1,10 +1,7 @@
-// $Id: mainControl.C,v 1.21 2001/12/30 13:29:04 sturm Exp $
+// $Id: mainControl.C,v 1.22 2002/01/16 02:59:38 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
-
-#define BALL_VIEW_DEBUG
-
 
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
