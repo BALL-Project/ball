@@ -2002,6 +2002,9 @@
 					RelativePath="..\..\..\source\STRUCTURE\SESVertex.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\STRUCTURE\UCK.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\STRUCTURE\analyticalSES.C">
 				</File>
 				<File
@@ -2027,6 +2030,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\graphVertex.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\md5.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\molecularGraph.C">
@@ -2479,6 +2485,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\DATATYPE\contourLine.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\DATATYPE\contourSurface.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\DATATYPE\forEach.h">
@@ -3147,6 +3156,9 @@
 					RelativePath="..\..\..\include\BALL\STRUCTURE\SESVertex.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\UCK.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\analyticalSES.h">
 				</File>
 				<File
@@ -3169,6 +3181,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\graphVertex.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\md5.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\molecularGraph.h">
