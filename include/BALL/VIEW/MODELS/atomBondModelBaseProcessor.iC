@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.iC,v 1.3 2003/09/03 12:34:51 amoll Exp $
+// $Id: atomBondModelBaseProcessor.iC,v 1.4 2003/12/15 15:12:21 amoll Exp $
 
 BALL_INLINE
 void AtomBondModelBaseProcessor::insertAtom_(const Atom* atom)
 	throw()
 {
 	used_atoms_.push_back(atom);
+	atom_set_.insert(atom);
 }
 
 BALL_INLINE
@@ -15,6 +16,7 @@ void AtomBondModelBaseProcessor::clearUsedAtoms_()
 	throw()
 {
 	used_atoms_.clear();
+	atom_set_.clear();
 }
 
 BALL_INLINE
