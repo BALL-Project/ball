@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.31 2004/03/04 13:02:39 amoll Exp $
+// $Id: molecularStructure.C,v 1.32 2004/03/04 14:00:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1225,7 +1225,7 @@ namespace BALL
 				float radius2 = ((**it2).getElement().getVanDerWaalsRadius());
 				if (radius2 == 0) radius2 = ((**it2).getElement().getAtomicRadius());
 
-				float radius_sum = (radius1 + radius2 * 0.25);
+				float radius_sum = (radius1 + radius2) * 0.4;
 				if (square_distance >= radius_sum * radius_sum) continue;
 
 				// ok, now we found 2 atoms which are too near
@@ -1252,7 +1252,8 @@ namespace BALL
 				(**it2).host(information);
 				info2 += information.getName();
 
-				Log.error() << info1 << "  " << info2 << " : " << square_distance*square_distance << " A" << std::endl;
+				Log.error() << info1 << "  " << info2 << " : " << sqrt(square_distance) << " A      < " 
+					          << "(" << radius1 << " A + " << radius2 << " A)* 0.4" << std::endl;
 				(**it1).select();
 				(**it2).select();
 
