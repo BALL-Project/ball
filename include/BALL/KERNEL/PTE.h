@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.5 2000/05/18 22:02:11 amoll Exp $
+// $Id: PTE.h,v 1.6 2000/05/19 12:48:04 oliver Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -468,14 +468,14 @@ namespace BALL
 					@param element, the Element to compare with
 					@return bool
 			*/
-			bool operator ==(const Element& element) const;
+			bool operator == (const Element& element) const;
 
 			/** Inequality operator.
 					Tests if the atomic number of two elements are inequal.
 					@param element, the Element to compare with
 					@return bool
 			*/
-			bool operator !=(const Element& element) const;
+			bool operator != (const Element& element) const;
 
 			/** Less operator.
 					Tests if the atomic number of this instance is less
@@ -483,7 +483,7 @@ namespace BALL
 					@param element, the Element to compare with
 					@return bool
 			*/
-			bool operator <(const Element& element) const;
+			bool operator < (const Element& element) const;
 
 			/** Less or equal operator.
 					Tests if the atomic number of this instance is less
@@ -491,7 +491,7 @@ namespace BALL
 					@param element, the Element to compare with
 					@return bool
 			*/
-			bool operator <=(const Element& element) const;
+			bool operator <= (const Element& element) const;
 
 			/** More or equal operator.
 					Tests if the atomic number of this instance is more
@@ -499,7 +499,7 @@ namespace BALL
 					@param element, the Element to compare with
 					@return bool
 			*/
-			bool operator >=(const Element& element) const;
+			bool operator >= (const Element& element) const;
 
 			/** More operator.
 					Tests if the atomic number of this instance is more
@@ -671,42 +671,42 @@ namespace BALL
 			/** Access operator with a given symbol.
 					@return Element the Element with the symbol {\em symbol}
 			*/
-			Element &operator [](const String& symbol);
+			Element& operator [] (const String& symbol);
 
 			/** Access operator with a given symbol.
 					@return Element the const Element with the symbol {\em symbol}
 			*/
-			const Element &operator [](const String& symbol) const;
+			const Element& operator [] (const String& symbol) const;
 
 			/** Access operator with a given name.
 					@return Element the Element with the name {\em name}
 			*/
-			Element &operator [](Element::Name name);
+			Element& operator [] (Element::Name name);
 
 			/** Access operator with a given name.
 					@return Element the const Element with the name {\em name}
 			*/
-			const Element &operator [](Element::Name name) const;
+			const Element& operator [] (Element::Name name) const;
 
 			/** Access operator with a given Element::Symbol.
 					@return Element the Element with the symbol {\em symbol}
 			*/
-			Element &operator [](Element::Symbol symbol);
+			Element& operator [] (Element::Symbol symbol);
 
 			/** Access operator with a given Element::Symbol.
 					@return Element the const Element with the symbol {\em symbol}
 			*/
-			const Element &operator [](Element::Symbol symbol) const;
+			const Element& operator [] (Element::Symbol symbol) const;
 
 			/** Access operator with a given position.
 					@return Element the Element with the position {\em position}
 			*/
-			Element &operator [](Position position);
+			Element& operator [] (Position position);
 
 			/** Access operator with a given position.
 					@return Element the const Element with the position {\em position}
 			*/
-			const Element &operator [](Position position) const;
+			const Element& operator [] (Position position) const;
 
 			//@}
 
