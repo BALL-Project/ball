@@ -3,6 +3,7 @@ DIRECTORY=SYSTEM
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	directory.C\
 	file.C\
 	fileSystem.C\
 	socket.C\
