@@ -1,4 +1,4 @@
-// $Id: PDBAtomIterator.h,v 1.9 2001/07/11 00:06:49 oliver Exp $ 
+// $Id: PDBAtomIterator.h,v 1.10 2001/07/15 16:14:21 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
 #define BALL_KERNEL_PDBATOMITERATOR_H
@@ -46,7 +46,7 @@ namespace BALL
 			throw();
 			
 		/// BAUSTELLE
-		PDBAtomIteratorTraits_ &operator = (const PDBAtomIteratorTraits_ &traits)
+		PDBAtomIteratorTraits_& operator = (const PDBAtomIteratorTraits_ &traits)
 			throw();
 
 		/// BAUSTELLE

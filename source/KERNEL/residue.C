@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.20 2001/06/26 19:35:41 amoll Exp $
+// $Id: residue.C,v 1.21 2001/07/15 16:12:43 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -59,7 +59,7 @@ namespace BALL
 	}
 
 	void Residue::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			Fragment::persistentWrite(pm);
@@ -69,7 +69,7 @@ namespace BALL
 	}
 
 	void Residue::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Fragment>());
 			Fragment::persistentRead(pm);

@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.13 2001/07/05 10:34:28 oliver Exp $
+// $Id: atomContainer.h,v 1.14 2001/07/15 16:14:22 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -119,13 +119,13 @@ namespace BALL
 				@param pm the persistence manager
 		*/
 		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Read an AtomContainer object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		virtual void persistentRead(PersistenceManager& pm)
-			throw();
+			throw(Exception::GeneralException);
 			
 		//@}			
 		/**	@name	Assignment 

@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.27 2001/06/29 19:31:18 oliver Exp $
+// $Id: bond.h,v 1.28 2001/07/15 16:14:22 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -259,13 +259,13 @@ namespace BALL
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Read a bond from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Finalize the deserialization.
 				Bond might have to swap {\tt first_} and {\tt second_} to ensure

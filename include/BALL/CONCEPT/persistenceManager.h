@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.30 2001/07/14 13:12:14 amoll Exp $
+// $Id: persistenceManager.h,v 1.31 2001/07/15 16:14:05 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -223,7 +223,7 @@ namespace BALL
 								pointer otherwise
 		*/	
 		PersistentObject*	readObject()
-      throw();
+      throw(Exception::GeneralException);
 
 		/**	Write a persistent object to the stream.
 				This method writes a persistent object to a stream.
@@ -754,7 +754,7 @@ namespace BALL
 		/*_
 		*/
 		void addNeededObjects_()
-			throw();
+			throw(Exception::GeneralException);
 
 		/*_
 		*/

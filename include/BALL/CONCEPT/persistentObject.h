@@ -1,4 +1,4 @@
-// $Id: persistentObject.h,v 1.5 2001/05/28 15:45:05 anker Exp $
+// $Id: persistentObject.h,v 1.6 2001/07/15 16:14:05 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
 #define BALL_CONCEPT_PERSISTENTOBJECT_H
@@ -57,7 +57,7 @@ namespace BALL
 								operations)
 		*/
 		PersistenceManager& operator >> (PersistenceManager& pm) const
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Serialize the object.
 				This method serializes the object by calls to Layer 1 methods of 
@@ -69,7 +69,7 @@ namespace BALL
 				@param	name the name of the object (0 for writing base classes)
 		*/
 		virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Deserialize the object.
 				This method reads the contents of an persistent object into an
@@ -83,7 +83,7 @@ namespace BALL
 				@param pm the PersistenceManager
 		*/
 		virtual void persistentRead(PersistenceManager& pm)
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Finalize the deserialization.
 				This method is called for all objects after their pointers have
@@ -93,7 +93,7 @@ namespace BALL
 				usually left unimplemented.
 		*/
 		virtual void finalize()
-			throw()
+			throw(Exception::GeneralException)
 		{
 		}
 		//@}

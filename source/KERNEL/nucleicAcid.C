@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.12 2001/06/26 19:35:40 amoll Exp $
+// $Id: nucleicAcid.C,v 1.13 2001/07/15 16:12:42 oliver Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -50,7 +50,7 @@ namespace BALL
 	}
 		
 	void NucleicAcid::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			Molecule::persistentWrite(pm);
@@ -59,7 +59,7 @@ namespace BALL
 	}
 
 	void NucleicAcid::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Molecule>());
 			Molecule::persistentRead(pm);

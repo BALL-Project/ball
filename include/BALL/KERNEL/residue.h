@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.26 2001/06/26 19:35:29 amoll Exp $
+// $Id: residue.h,v 1.27 2001/07/15 16:14:23 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -127,13 +127,13 @@ namespace BALL
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Reads a Residue object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
-			throw();
+			throw(Exception::GeneralException);
 
 		//@}
 		/**	@name	Assignment 

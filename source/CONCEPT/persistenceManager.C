@@ -1,4 +1,4 @@
-// $Id: persistenceManager.C,v 1.13 2001/05/30 15:15:22 anker Exp $
+// $Id: persistenceManager.C,v 1.14 2001/07/15 16:13:38 oliver Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/KERNEL/system.h>
@@ -122,7 +122,7 @@ namespace BALL
 	}
 
 	PersistenceManager& PersistentObject::operator >> (PersistenceManager& pm) const
-		throw()
+		throw(Exception::GeneralException)
 	{ 
 		pm.startOutput();
 		persistentWrite(pm, "");
@@ -131,12 +131,12 @@ namespace BALL
 	}
 
 	void PersistentObject::persistentWrite(PersistenceManager& /* pm */, const char* /* name */) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 	}
 
 	void PersistentObject::persistentRead(PersistenceManager& /* pm */)
-		throw()
+		throw(Exception::GeneralException)
 	{
 	}
 
@@ -241,7 +241,7 @@ namespace BALL
 	}
 	
 	PersistentObject*	PersistenceManager::readObject()
-		throw()
+		throw(Exception::GeneralException)
 	{
 		if (istr_ == 0)
 		{
@@ -364,7 +364,7 @@ namespace BALL
 	}
 
 	void PersistenceManager::addNeededObjects_() 
-		throw()
+		throw(Exception::GeneralException)
 	{
 		while (object_out_needed_.size() > 0)
 		{

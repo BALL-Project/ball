@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.20 2001/07/03 20:46:23 anker Exp $
+// $Id: PDBAtom.h,v 1.21 2001/07/15 16:14:21 oliver Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -145,16 +145,16 @@ namespace BALL
 
 		/**	Writes a PDBAtom object to a persistent stream.
 				@param pm the persistence manager
-				@param name BAUSTELLE
+				@param name the instance name
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Reads a PDBAtom object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
-			throw();
+			throw(Exception::GeneralException);
 
 		//@}
 		/**	@name	Assignment

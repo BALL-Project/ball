@@ -1,4 +1,4 @@
-// $Id: chain.C,v 1.13 2001/06/26 19:35:40 amoll Exp $
+// $Id: chain.C,v 1.14 2001/07/15 16:12:42 oliver Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -34,7 +34,7 @@ namespace BALL
 	}
 
   void Chain::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
   {
     pm.writeObjectHeader(this, name);
       AtomContainer::persistentWrite(pm);
@@ -42,7 +42,7 @@ namespace BALL
 	}
 
   void Chain::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
   {
     pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
 			AtomContainer::persistentRead(pm);

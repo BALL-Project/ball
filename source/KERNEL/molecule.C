@@ -1,4 +1,4 @@
-// $Id: molecule.C,v 1.11 2001/06/26 19:35:40 amoll Exp $
+// $Id: molecule.C,v 1.12 2001/07/15 16:12:42 oliver Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -33,7 +33,7 @@ namespace BALL
 	}
 		
 	void Molecule::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			AtomContainer::persistentWrite(pm);
@@ -41,7 +41,7 @@ namespace BALL
 	}
 
 	void Molecule::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
 			AtomContainer::persistentRead(pm);

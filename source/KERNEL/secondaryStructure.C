@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.C,v 1.12 2001/06/26 19:35:41 amoll Exp $
+// $Id: secondaryStructure.C,v 1.13 2001/07/15 16:12:43 oliver Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -48,7 +48,7 @@ namespace BALL
 	}
 		
   void SecondaryStructure::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
   {
     pm.writeObjectHeader(this, name);
       AtomContainer::persistentWrite(pm);
@@ -56,7 +56,7 @@ namespace BALL
 	}
 
   void SecondaryStructure::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
   {
     pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
 			AtomContainer::persistentRead(pm);

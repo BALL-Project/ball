@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.34 2001/06/26 19:35:40 amoll Exp $
+// $Id: atom.C,v 1.35 2001/07/15 16:12:42 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -92,7 +92,7 @@ namespace BALL
 	}
 
 	void Atom::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 
@@ -117,7 +117,7 @@ namespace BALL
 	}
 
 	void Atom::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);

@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.24 2001/06/28 18:34:31 amoll Exp $
+// $Id: bond.C,v 1.25 2001/07/15 16:12:42 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -119,7 +119,7 @@ namespace BALL
 	}
 
  void Bond::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 
@@ -136,7 +136,7 @@ namespace BALL
 	}
 
   void Bond::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);

@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.9 2001/07/04 00:13:55 oliver Exp $
+// $Id: atomContainer.C,v 1.10 2001/07/15 16:12:42 oliver Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -63,7 +63,7 @@ namespace BALL
 	}
 		
 	void AtomContainer::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			Composite::persistentWrite(pm);
@@ -75,7 +75,7 @@ namespace BALL
 	}
 
 	void AtomContainer::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);

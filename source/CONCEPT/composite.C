@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.30 2001/06/05 15:48:56 anker Exp $
+// $Id: composite.C,v 1.31 2001/07/15 16:13:38 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -90,7 +90,7 @@ namespace BALL
 	}
 
   void Composite::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
   {
 		pm.writeObjectHeader(this, name);
 			pm.writeStorableObject(*(Selectable*)this, "Selectable");
@@ -111,7 +111,7 @@ namespace BALL
 	}
 
   void Composite::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
   {
 		pm.readStorableObject(*(Selectable*)this, "Selectable");
 
