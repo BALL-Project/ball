@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.9 2000/03/02 22:22:14 amoll Exp $
+// $Id: plane3.h,v 1.10 2000/03/03 10:01:19 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -274,10 +274,10 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  position: " << p << endl;
+			s << "  position: " << p << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  normal: " << n << endl;
+			s << "  normal: " << n << std::endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
