@@ -1,4 +1,4 @@
-// $Id: concept.doc,v 1.6 2001/02/16 18:22:29 amoll Exp $
+// $Id: concept.doc,v 1.7 2001/05/29 16:33:08 anker Exp $
 
 /** @name	Concepts
 		This chapter contains all relevant information on 
@@ -10,6 +10,7 @@
 	//@Include: baseFunctor.h
 	//@Include: callback.h
 	//@Include: classTest.h
+	//@Include: benchmark.h
 	//@Include: comparator.h
 	//@Include: composite.h
 	//@Include: embeddable.h
@@ -30,28 +31,36 @@
 	//@Include: object.h
 	
 	/**	@name Object Persistence.
-      Ball provides support for the serialization and deserialization of objects and
-      their platform-independent storage.\\
-			All persistent object have to be derived from PersistentObject.
-			The management, serialization, and deserialization is performed by the
-			PersistenceManager class. A persistence manager possess an input stream and an output stream 
-			({\em persistent streams}).
-			It can write objects to the output stream, thereby converting them to a portable format and
-			serializing all dependend objects, too. It can also read objects from the input stream,
-			create the corresponding objects dynamically and demangle pointers and references.\\
-			There are two main problems related with this trivial persistence concept:
+			Ball provides support for the serialization and deserialization of
+			objects and their platform-independent storage.
+			\\
+			All persistent object have to be derived from PersistentObject.  The
+			management, serialization, and deserialization is performed by the
+			PersistenceManager class. A persistence manager possess an input
+			stream and an output stream ({\em persistent streams}).  It can write
+			objects to the output stream, thereby converting them to a portable
+			format and serializing all dependend objects, too. It can also read
+			objects from the input stream, create the corresponding objects
+			dynamically and demangle pointers and references.
+			\\
+			There are two main problems related with this trivial persistence
+			concept:
 			\begin{itemize}
 				\item multiple inheritence from a single base class
 				\item static members variables
 			\end{itemize}
-			These problems are inherent problems of C++ and cannot be solved. However, they can be avoided
-			in most cases. To circumvent problems related to multiple instances of a common base class
-			(which would normally require virtual inheritence - but this does not solve the problem),
-			we introduced the model {\em storable}. Storable objects are not derived from PersistentObject,
-			but they provide two functions (read/write) to write themselves to a persistent stream and
-			to retrieve their contents again.\\
-			Static member variables should usually be ignored when  reading/writing persistent objects.
-			However, this has to be decided on a case-by-case basis.
+			These problems are inherent problems of C++ and cannot be solved.
+			However, they can be avoided in most cases. To circumvent problems
+			related to multiple instances of a common base class (which would
+			normally require virtual inheritence - but this does not solve the
+			problem), we introduced the model {\em storable}. Storable objects
+			are not derived from PersistentObject, but they provide two functions
+			(read/write) to write themselves to a persistent stream and to
+			retrieve their contents again.
+			\\
+			Static member variables should usually be ignored when
+			reading/writing persistent objects.  However, this has to be decided
+			on a case-by-case basis.
   */
   //@{
 	
