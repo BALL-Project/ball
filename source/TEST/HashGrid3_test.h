@@ -17,7 +17,7 @@ namespace BALL
 	class TestProcessor2
 		:	public UnaryProcessor< HashGridBox3<int> >
 	{
-		virtual Processor::Result operator () (HashGridBox3<int> arg)
+		virtual Processor::Result operator () (HashGridBox3<int>& arg)
 			throw()
 		{
 			TestProcessor proc;
