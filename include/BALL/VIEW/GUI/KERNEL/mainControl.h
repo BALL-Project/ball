@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.18 2001/07/16 14:49:30 amoll Exp $
+// $Id: mainControl.h,v 1.19 2001/07/25 11:30:08 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -178,7 +178,7 @@ namespace BALL
 			};
 			//@}
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructor
 			*/
 			//@{
 
@@ -205,18 +205,16 @@ namespace BALL
 			MainControl(QWidget* parent = 0, const char* name = 0 , String inifile = ".BALL.preferences")
 				throw();
 
-			//@}
-
-			/** @name Destructors 
-			*/
-			//@{
-
 			/** Destructor.
 					Default destruction of {\em *this} MainControl.
 					Calls \Ref{destroy}
 					@see  destroy
 			*/
 			virtual ~MainControl()
+				throw();
+					
+			// copy ctor needed for Python support only!
+			MainControl(const MainControl& main_control)
 				throw();
 
 			/** Explicit default initialization.
