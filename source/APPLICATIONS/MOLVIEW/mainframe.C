@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.63 2003/08/27 16:40:08 amoll Exp $
-
+// $Id: mainframe.C,v 1.64 2003/08/28 12:40:21 amoll Exp $
 
 #include "mainframe.h"
 #include "icons.h"
@@ -26,6 +25,8 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/FORMAT/DCDFile.h>
+
+#include "aboutDialog.h"
 
 #ifdef BALL_PYTHON_SUPPORT
 #	include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -588,15 +589,14 @@ void Mainframe::amberMDSimulation()
 
 void Mainframe::about()
 {
+	/*
 	ParsedFunctionDialog* pfd = new ParsedFunctionDialog();
 	pfd->show();
 	return;
-	
-	/*
-	DlgAbout about_box;
-	about_box.exec();
 	*/
 	
+	AboutDialog about;
+	about.exec();
 }
 
 void Mainframe::fetchPreferences(INIFile& inifile)
