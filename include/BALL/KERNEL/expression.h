@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.2 2000/05/19 12:49:19 oliver Exp $
+// $Id: expression.h,v 1.3 2000/05/20 13:34:44 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -31,8 +31,7 @@ namespace BALL
 	{
 		public:
 
-		// BAUSTELLE
-		// BALL_CREATE_NODEEP(ExpressionPredicate)
+		BALL_CREATE_NODEEP(ExpressionPredicate)
 
 		/**	@name	Constructors and Destructors.
 		*/
@@ -61,7 +60,7 @@ namespace BALL
 				the selected predicate of atom.
 				@param atom the atom to compare with
 		*/
-		virtual bool operator () (const Atom& atom) const = 0;
+		virtual bool operator () (const Atom& atom) const;
 
 		/** set the Argument of this ExpressionPredicate
 				@param argument the string to use for this predicate
@@ -74,6 +73,8 @@ namespace BALL
 		String argument_;
 	};
 
+	/**
+	*/
 	class ExpressionTree
 	{
 		public:
@@ -81,13 +82,25 @@ namespace BALL
 		// BAUSTELLE
 		// BALL_CREATE_NODEEP(ExpressionTree)
 
+
+		/**	@name	Type Definitions
+		*/
+		//@{
+
+		/**
+		*/
 		enum Type
 		{	
+			///
 			INVALID = 0,
+			///
 			LEAF,
+			///
 			OR,
+			///
 			AND
 		};
+		//@}
 
 		/**	@name	Constructors and Destructors
 		*/
