@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.8 2004/09/27 15:29:15 oliver Exp $
+// $Id: forceModel.C,v 1.9 2005/02/23 12:48:52 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/forceModel.h>
@@ -36,28 +36,22 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<ForceModel>() << std::endl;
+				Log.error() << "Destructing object " << this << " of class ForceModel" << std::endl;
 			#endif 
 		}
 
 		Processor::Result ForceModel::operator() (Composite &composite)
 		{
-			if (!RTTI::isKindOf<Atom>(composite))
-			{
-				return Processor::CONTINUE;
-			}
-			Atom* atom = (Atom*) &composite;
+			Atom* atom = dynamic_cast<Atom*>(&composite);
+			if (!atom == 0) return Processor::CONTINUE;
 
 			Vector3 force = atom->getForce() * pow((float)10.0, 12);
-			if (force.getSquareLength() == 0) return Processor::CONTINUE;
+			if (Maths::isZero(force.getSquareLength())) return Processor::CONTINUE;
 			float forcev = log(force.getLength()) * scaling_; 
 
 			if (forcev < 0) return Processor::CONTINUE;
-			if (forcev > max_length_)
-			{
-				forcev = max_length_;
-			}	
+
+			if (forcev > max_length_) forcev = max_length_;
 
 			// prevent problems in normalize
 			force *= 10000000000.0;
@@ -68,12 +62,10 @@ namespace BALL
 			line->setVertex1Address(atom->getPosition());
 			line->setVertex2(atom->getPosition() + force);
 			line->setComposite(atom);
-			line->setColor(ColorRGBA(1.0,1.0,1.0,1.0));
 			geometric_objects_.push_back(line);
 
 			return Processor::CONTINUE;
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

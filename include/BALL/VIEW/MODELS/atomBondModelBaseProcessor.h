@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.13 2004/07/12 21:19:36 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.14 2005/02/23 12:50:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -60,7 +60,7 @@ namespace BALL
 			/** Explicit default initialization.
 					Reset the state of this AtomBondModelBaseProcessor:
 					  - clear the used atoms
-					  ­ clear the ModelProcessor
+					  - clear the ModelProcessor
 					Calls ModelProcessor::clear.
 					Calls clearUsedAtoms_().
 			*/
@@ -75,22 +75,14 @@ namespace BALL
 			/** Assignment.
 					Calls clearUsedAtoms_().
 					Calls ModelProcessor::set.
-					\param       processor the AtomBondModelBaseProcessor to be copied 
 			*/
 			virtual void set(const AtomBondModelBaseProcessor& processor)
 				throw();
 
 			/** Assignment operator.
 					Calls set.
-					\param       processor the AtomBondModelBaseProcessor to be copied
 			*/
 			const AtomBondModelBaseProcessor& operator = (const AtomBondModelBaseProcessor& processor)
-				throw();
-
-			/** Swapping of AtomBondModelBaseProcessor.
-					Calls ModelProcessor::swap
-			*/
-			void swap(AtomBondModelBaseProcessor& processor)
 				throw();
 
 			//@} 
