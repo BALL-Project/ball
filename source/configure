@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.65 2000/01/31 16:34:03 oliver Exp $
+#  $Id: configure,v 1.66 2000/01/31 17:42:03 oliver Exp $
 
 
 ##################################################
@@ -2049,7 +2049,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 	MAKEDEP_CXX_OPTS="-M"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-							CXXFLAGS="${CXXFLAGS} --one_per"
+							CXXFLAGS="${CXXFLAGS} -one_per"
 	if test "${OS}" = Linux ; then
 		CXXFLAGS="${CXXFLAGS} -fPIC"
 	fi
