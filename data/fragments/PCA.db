@@ -1,0 +1,56 @@
+<node>PCA
+  <node>Names
+		<node>Pyroglutamate</node>
+		<node>Pyroglutamat</node>
+		<node>PCA</node>
+  </node>
+  <node>Atoms
+    <node>N<value>N 0.633233 -0.738520 0.753950</value></node>
+    <node>H<value>H 0.354342 -1.687937 0.623119</value></node>
+    <node>CA<value>C -0.480480 0.254947 0.696080</value></node>
+    <node>C<value>C -1.757691 -0.270758 -0.060790</value></node>
+    <node>O<value>O -1.739275 -1.432777 -0.530185</value></node>
+    <node>CB<value>C 0.102054 1.514384 0.035819</value></node>
+    <node>CG<value>C 1.511340 1.164025 -0.440294</value></node>
+    <node>CD<value>C 1.725147 -0.277577 -0.025832</value></node>
+    <node>OE<value>O 2.716615 -0.966582 -0.238284</value></node>
+    <node>HA<value>H -0.765277 0.458788 1.753344</value></node>
+    <node>1HB<value>H -0.540287 1.847529 -0.801287</value></node>
+    <node>2HB<value>H 0.122684 2.361261 0.746090</value></node>
+    <node>1HG<value>H 1.616550 1.265144 -1.535904</value></node>
+    <node>2HG<value>H 2.282434 1.821242 0.000860</value></node>
+    <node>OXT<value>O -2.740502 0.498543 -0.143251</value></node>
+  </node>
+  <node>Bonds
+    <node>4<value>H N s</value></node>
+    <node>5<value>C CA s</value></node>
+    <node>8<value>O C d</value></node>
+    <node>11<value>CB CA s</value></node>
+    <node>13<value>CG CB s</value></node>
+    <node>17<value>CD CG s</value></node>
+    <node>19<value>CD N s</value></node>
+    <node>20<value>OE CD d</value></node>
+    <node>21<value>HA CA s</value></node>
+    <node>22<value>1HB CB s</value></node>
+    <node>23<value>2HB CB s</value></node>
+    <node>24<value>1HG CG s</value></node>
+    <node>25<value>2HG CG s</value></node>
+    <node>26<value>OXT C s</value></node>
+  </node>
+	<node>Connections
+		<node>N-term<value>N C-term s 1.33 0.5</value></node>
+	</node>
+	<node>Properties
+		<node>AMINO_ACID</node>
+	</node>
+	<node>Variants
+		<node>PCA-N
+			<node>Delete
+				<node>OXT</node>
+			</node>
+			<node>Properties
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+	</node>
+</node>
