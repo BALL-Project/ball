@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.15 2000/08/22 17:03:31 amoll Exp $
+// $Id: binarySearchTree.h,v 1.16 2000/08/28 20:00:17 oliver Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -1436,16 +1436,16 @@ void TBSTree<DataType>::dump(std::ostream& s, Size depth) const
 	BALL_DUMP_HEADER(s, this, this);
 
 	BALL_DUMP_DEPTH(s, depth);
-	s << "  comparator: " << (void *)comparator_ << endl;
+	s << "  comparator: " << (void *)comparator_ << std::endl;
 
 	BALL_DUMP_DEPTH(s, depth);
-	s << "  height: " << getHeight() << endl;
+	s << "  height: " << getHeight() << std::endl;
 
 	BALL_DUMP_DEPTH(s, depth);
-	s << "  size: " << getSize() << endl;
+	s << "  size: " << getSize() << std::endl;
 
 	BALL_DUMP_DEPTH(s, depth);
-	s << "  items: " << endl;
+	s << "  items: " << std::endl;
 
 	BALL_DUMP_DEPTH(s, depth);
 	s << "    root: ";
@@ -1540,7 +1540,7 @@ void TBSTree<DataType>::dump_
 
 	if (item != 0)
 	{
-		s << item->getData() << " (" << (int)item->getColor() << ')' << endl;
+		s << item->getData() << " (" << (int)item->getColor() << ')' << std::endl;
 
 		if (item->getRightChild() != 0)
 		{
