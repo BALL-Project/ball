@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.6 2000/02/23 07:53:24 oliver Exp $
+// $Id: system.C,v 1.7 2000/03/03 08:04:36 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -175,11 +175,7 @@ namespace BALL
 
 	void System::dump(ostream& s, Size depth) const
 	{
-		BALL_DUMP_STREAM_PREFIX(s);
-		
 		BaseFragment::dump(s, depth);
-
-		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
 	void System::read(istream& /* s */)
