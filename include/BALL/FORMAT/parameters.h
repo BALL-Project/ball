@@ -1,4 +1,4 @@
-// $Id: parameters.h,v 1.5 2000/10/05 17:29:41 anker Exp $
+// $Id: parameters.h,v 1.6 2000/10/16 19:56:02 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H
@@ -50,7 +50,8 @@ namespace BALL
 
 		/**	Clear method.
 		*/
-		virtual void clear();
+		virtual void clear()
+			throw();
 
 		//@}
 
