@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.3 2000/10/07 15:25:17 hekl Exp $
+// $Id: mainControl.C,v 1.4 2000/10/22 15:16:37 hekl Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -66,6 +66,11 @@ namespace BALL
 			{
 				menu = new QPopupMenu(this);
 				CHECK_PTR(menu);
+
+				connect(menu,
+								SIGNAL(aboutToShow()),
+								this,
+								SLOT(checkMenus()));
 
 				Log.info() << "new menu entry: " << ID << endl;
 				int max_id = menuBar()->count();
@@ -154,18 +159,32 @@ namespace BALL
 			QMainWindow::show();
 		}
 
-		bool MainControl::remove(const Composite& composite)
+		void MainControl::checkMenus()
+		{
+			// checks all modular widgets 
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			{
+				(*it)->checkMenu(*this);
+			}
+		}
+
+		bool MainControl::remove(const Composite& composite, bool sent_message)
 		{
 			ListIteratorHashMap::Iterator map_iterator 
 				= composite_map_.find((void*)&composite);
 
 			if (map_iterator != composite_map_.end())
 			{
-        // send a message that the composite descriptor
-        // will be deleted
-        RemovedCompositeMessage message;
-        message.setComposite(composite);
-        notify_(message);
+				if (sent_message)
+				{
+					// send a message that the composite descriptor
+					// will be deleted
+					RemovedCompositeMessage *message = new RemovedCompositeMessage;
+					message->setComposite(composite);
+					message->setDeletable(true);
+					notify_(message);
+				}
  
 				// delete all information concerning the composite
 				CompositeDescriptor* descriptor = *(map_iterator->second);
@@ -328,8 +347,9 @@ namespace BALL
 			
 			// BAUSTELLE!!
 			// update scene
-			SceneMessage scene_message;
-			scene_message.updateOnly();
+			SceneMessage *scene_message = new SceneMessage;
+			scene_message->updateOnly();
+			scene_message->setDeletable(true);
 			notify_(scene_message); 
 		}
 
@@ -379,7 +399,7 @@ namespace BALL
 				RemovedCompositeMessage *composite_message 
 					= RTTI::castTo<RemovedCompositeMessage>(*message);
 
-				remove(*composite_message->getComposite());
+				remove(*composite_message->getComposite(), false);
 			}
 			else if (RTTI::isKindOf<ChangedCompositeMessage>(*message))
 			{
@@ -526,7 +546,7 @@ namespace BALL
 			return mc;
 		}
 		
-		int MainControl::current_id_ = 10000;
+		int MainControl::current_id_ = 15000;
 
 		int MainControl::getNextID()
 		{
@@ -554,6 +574,7 @@ namespace BALL
 					{
 						entry_ID = getNextID();
 					}
+
 					popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID);
 					return entry_ID;
 				}
