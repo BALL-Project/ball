@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.26 2000/12/14 06:36:59 oliver Exp $
+// $Id: HINFile.C,v 1.27 2001/01/24 11:52:07 anker Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -831,9 +831,11 @@ namespace BALL
 					// retrieve the periodic boundary
 					// we assume that the box is centered about the origin
 					// of the coordinate system
-					box_.a.x = - line.getField(1).toFloat();
-					box_.a.y = - line.getField(2).toFloat();
-					box_.a.z = - line.getField(3).toFloat();
+					// The manual says the parameters are the dimensions of the box,
+					// so we have to divide by two.
+					box_.a.x = - line.getField(1).toFloat() / 2.0;
+					box_.a.y = - line.getField(2).toFloat() / 2.0;
+					box_.a.z = - line.getField(3).toFloat() / 2.0;
 					
 					box_.b.x = - box_.a.x;
 					box_.b.y = - box_.a.y;
