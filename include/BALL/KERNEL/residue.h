@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.12 2000/04/27 15:09:48 amoll Exp $
+// $Id: residue.h,v 1.13 2000/05/02 14:03:50 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -175,44 +175,44 @@ namespace BALL
 		/** Get a pointer to the parent protein.
 				The reference is 0 if {\em *this} residue does not have a parent protein.
 				@return  Protein* -
-								 mutable reference to the parent protein of {\em *this},
+								 mutable reference to the parent protein of {\em *this}
 		*/
 		Protein* getProtein();
 
 		/** Get a constant pointer to the parent protein.
 				The reference is 0 if {\em *this} residue does not have a parent protein.
 				@return  Protein* -
-								 constant reference to the parent protein of {\em *this},
+								 constant reference to the parent protein of {\em *this}
 		*/
 		const Protein* getProtein() const;
 
 		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} residue does not have a parent chain.
 				@return  Chain* -
-								 mutable reference to the parent chain of {\em *this},
+								 mutable reference to the parent chain of {\em *this}
 		*/
 		Chain* getChain();
 
 		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} residue does not have a parent chain.
 				@return  Chain* -
-								 constant reference to the parent chain of {\em *this},
+								 constant reference to the parent chain of {\em *this}
 		*/
 		const Chain* getChain() const;
 
-		/** Get a pointer to a subaltern PDBAtom at a given position.
+		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
-				@param   position the position of the subaltern PDBAtom
+				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
-								 mutable reference to the subaltern PDBAtom at {\em position} of {\em *this},
+								 mutable reference to the child PDBAtom at {\em position} of {\em *this}
 		*/
 		PDBAtom* getPDBAtom(Position position);
 	
-		/** Get a pointer to a subaltern PDBAtom at a given position.
+		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
-				@param   position the position of the subaltern PDBAtom
+				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
-								 constant reference to the subaltern PDBAtom at {\em position} of {\em *this},
+								 constant reference to the child PDBAtom at {\em position} of {\em *this}
 		*/
 		const PDBAtom* getPDBAtom(Position position) const;
 	
@@ -333,7 +333,6 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
-	
 				@param	s output stream where to output the internal state of {\em *this}
 				@param  depth the dumping depth
 		*/

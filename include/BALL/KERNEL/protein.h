@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.7 2000/04/27 15:09:47 amoll Exp $ 
+// $Id: protein.h,v 1.8 2000/05/02 14:03:50 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -80,8 +80,7 @@ namespace BALL
 		/// Clears the contents of the protein
 		virtual void clear();
 	
-		/* Clears the contents of the protein and removes
-			 it from all composite structures
+		/* Clears the contents of the protein and removes it from all composite structures.
 		*/
 		virtual void destroy();
 
@@ -188,25 +187,25 @@ namespace BALL
 		*/
 		const Residue* getResidue(Position position) const;
 
-		/** Get a pointer to a the N-terminal Residue.
+		/** Get a pointer to the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a N-terminal Residue.
 				@return  Residue* - mutable reference to the N-terminal	Residue
 		*/
 		Residue* getNTerminal();
 
-		/** Get a pointer to a the N-terminal Residue.
+		/** Get a pointer to the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a N-terminal Residue.
 				@return  Residue* - constant reference to the N-terminal Residue
 		*/
 		const Residue* getNTerminal() const;
 
-		/** Get a pointer to a the C-terminal Residue.
+		/** Get a pointer to the C-terminal Residue.
 				The reference is 0 if {\em *this} does not have a C-terminal Residue.
 				@return  Residue* - mutable reference to the C-terminal	Residue
 		*/
 		Residue* getCTerminal();
 
-		/** Get a pointer to a the C-terminal Residue.
+		/** Get a pointer to the C-terminal Residue.
 				The reference is 0 if {\em *this} does not have a C-terminal Residue.
 				@return  Residue* - constant reference to the C-terminal Residue
 		*/

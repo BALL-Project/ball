@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.7 2000/04/25 16:52:26 amoll Exp $
+// $Id: PDBAtom.h,v 1.8 2000/05/02 14:03:48 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -106,10 +106,10 @@ namespace BALL
 		/// Destructor
 		virtual ~PDBAtom();
 
-		/// Clears the contents of the atom
+		/// Clears the contents of the atom.
 		virtual void clear();
 	
-		/// Clears the contents of the atom and removes it from all composite structures
+		/// Clears the contents of the atom and removes it from all composite structures.
 		virtual void destroy();
 
 		//@}
@@ -130,7 +130,7 @@ namespace BALL
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the PDB-atom {\em pdb_atom} to {\em *this} PDB-atom.
+				Assign the PDB-atom {\em pdb_atom} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param  pdb_atom the PDB-atom to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em pdb_atom}
@@ -138,7 +138,7 @@ namespace BALL
 		void set(const PDBAtom& pdb_atom, bool deep = true);
 
 		/** Assignment operator.
-				Assign the PDB-atom {\em pdb_atom} to {\em *this} pdb_atom.
+				Assign the PDB-atom {\em pdb_atom} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param   pdb_atom the PDB-atom to be copied (cloned)
 				@return  pdb_atom& - {\em *this} PDB-atom
@@ -146,14 +146,14 @@ namespace BALL
 		PDBAtom& operator = (const PDBAtom& pdb_atom);
 
 		/** Copying with cloning facility.
-				Copy {\em *this} PDB-atom to the PDB-atom {\em pdb_atom}.
+				Copy {\em *this} PDB-atom to {\em pdb_atom}.
 				The assignment is either deep or shallow (default).
 				@param  pdb_atom the PDB-atom to be assigned to
 		*/
 		void get(PDBAtom& pdb_atom, bool deep = true) const;
 
 		/** Swapping of PDB-atom.
-				Swap the states of {\em *this} PDB-atom with the PDB-atom {\em pdb_atom}.
+				Swap the states of {\em *this} PDB-atom with the {\em pdb_atom}.
 				@param  pdb_atom the PDB-atom {\em *this} PDB-atom is being swapped with
 		*/
 		void swap(PDBAtom& pdb_atom);
@@ -261,8 +261,8 @@ namespace BALL
 		//@{
 
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} PDB-atom to the output ostream {\em s} with dumping depth {\em depth}.
-	
+				Dump the current internal state of {\em *this} to the 
+				output ostream {\em s} with dumping depth {\em depth}.
 				@param	s output stream where to output the internal state of {\em *this} PDB-atom
 				@param  depth the dumping depth
 		*/
@@ -275,7 +275,7 @@ namespace BALL
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this} PDB-atom.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this} PDB-atom
@@ -283,7 +283,7 @@ namespace BALL
 		virtual void read(std::istream& s);
 
 		/* Persistent stream output and state storage.
-				Write persistent bond data to the output stream {\em s} and store the state of {\em *this} PDB-atom.
+				Write persistent bond data to the output stream {\em s} and store the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this} PDB-atom

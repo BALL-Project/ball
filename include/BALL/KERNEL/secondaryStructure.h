@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.10 2000/04/27 15:09:48 amoll Exp $
+// $Id: secondaryStructure.h,v 1.11 2000/05/02 14:03:51 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -103,10 +103,10 @@ namespace BALL
 				Assign {\em secondary_structure} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param   secondary_structure the SecondaryStructure to be copied (cloned)
-				@return  secondary_structure& - {\em *this} SecondaryStructure
+				@return  Secondary_structure& - {\em *this}
 				@see     SecondaryStructure::set
 		*/
-		SecondaryStructure &operator =(const SecondaryStructure& secondary_structure);
+		SecondaryStructure& operator =(const SecondaryStructure& secondary_structure);
 
 		/** Copying with cloning facility.
 				Copy {\em *this} to {\em secondary_structure}.
@@ -129,30 +129,30 @@ namespace BALL
 		//@{
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} SecondaryStructure does not have a parent protein.
+				The reference is 0 if {\em *this} does not have a parent protein.
 				@return  Protein* -
-								 mutable reference to the parent protein of {\em *this} SecondaryStructure,
+								 mutable reference to the parent protein of {\em *this},
 		*/
 		Protein* getProtein();
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} SecondaryStructure does not have a parent protein.
+				The reference is 0 if {\em *this} does not have a parent protein.
 				@return  Protein* -
-								 constant reference to the parent protein of {\em *this} SecondaryStructure,
+								 constant reference to the parent protein of {\em *this},
 		*/
 		const Protein* getProtein() const;
 
 		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} does not have a parent chain.
 				@return  Protein* -
-								 mutable reference to the parent chain of {\em *this} SecondaryStructure,
+								 mutable reference to the parent chain of {\em *this},
 		*/
 		Chain* getChain();
 
 		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} does not have a parent chain.
 				@return  Protein* -
-								 constant reference to the parent chain of {\em *this} SecondaryStructure,
+								 constant reference to the parent chain of {\em *this},
 		*/
 		const Chain* getChain() const;
 
@@ -160,7 +160,7 @@ namespace BALL
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
 				@param   position the position of the child Residue
 				@return  Residue* -
-								 mutable reference to the child Residue at {\em position} of {\em *this} residue,
+								 mutable reference to the child Residue at {\em position} of {\em *this},
 		*/
 		Residue* getResidue(Position position);
 	
@@ -168,44 +168,40 @@ namespace BALL
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
 				@param   position the position of the child Residue
 				@return  Residue* -
-								 constant reference to the child Residue at {\em position} of {\em *this} residue,
+								 constant reference to the child Residue at {\em position} of {\em *this},
 		*/
 		const Residue* getResidue(Position position) const;
 
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} does not have a Residue at the given position.
-
+				The reference is 0 if {\em *this} does not have a N-terminal Residue.
 				@return  Residue* -
 								 mutable reference to the N-terminal Residue
 		*/
 		Residue* getNTerminal();
 	
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} does not have a Residue at the given position.
-
+				The reference is 0 if {\em *this} does not have a N-terminal Residue.
 				@return  Residue* -
 								 constant reference to the N-terminal Residue
 		*/
 		const Residue* getNTerminal() const;
 
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} does not have a Residue at the given position.
-
+				The reference is 0 if {\em *this} does not have a C-terminal Residue.
 				@return  Residue* -
 								 mutable reference to the C-terminal Residue
 		*/
 		Residue* getCTerminal();
 	
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} does not have a Residue at the given position.
-
+				The reference is 0 if {\em *this} does not have a C-terminal Residue.
 				@return  Residue* -
 								 constant reference to the C-terminal Residue
 		*/
 		const Residue* getCTerminal() const;
 
 		/** Get a pointer to a child PDBAtom at a given position.
-				The reference is 0 if {\em *this} residue does not have a PDBAtom at the given position.
+				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
 								 constant reference to the child PDBAtom at {\em position} of {\em *this},
@@ -213,19 +209,19 @@ namespace BALL
 		PDBAtom* getPDBAtom(Position position);
 	
 		/** Get a pointer to a child PDBAtom at a given position.
-				The reference is 0 if {\em *this} residue does not have a PDBAtom at the given position.
+				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
 								 mutable reference to the child PDBAtom at {\em position} of {\em *this},
 		*/
 		const PDBAtom* getPDBAtom(Position position) const;
 	
-		/** Count the Residues
+		/** Count the Residues.
 				@return  Size the number of residues
 		*/
 		Size countResidues() const;
 
-		/** Count the PDBAtoms
+		/** Count the PDBAtoms.
 				@return  Size the number of PDBAtoms
 		*/
 		Size countPDBAtoms() const;
@@ -257,17 +253,19 @@ namespace BALL
 		*/
 		void insertAfter(Residue& residue, Composite& after);
 
-		/** Remove a Residue
+		/** Remove a Residue.
 				@param residue the Residue to remove
 		*/
 		bool remove(Residue& residue);
 
-		/**	Cut all children of {\tt secondary_structure} and prepend them before the children of {\em *this}.
+		/**	Move the children of {\tt secondary_structure} into {\em *this}.
+				Cut all children of {\tt secondary_structure} and prepend them before the children of {\em *this}.
 				@param secondary_structure the SecondaryStructure to access
 		*/
 		void spliceBefore(SecondaryStructure& secondary_structure);
 
-		/**	Cut all children of {\tt secondary_structure} and append them after the children of {\em *this}.
+		/**	Move the children of {\tt secondary_structure} into {\em *this}.
+				Cut all children of {\tt secondary_structure} and append them after the children of {\em *this}.
 				@param secondary_structure the SecondaryStructure to access
 		*/
 		void spliceAfter(SecondaryStructure& secondary_structure);
@@ -293,7 +291,6 @@ namespace BALL
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
-	
 				@param	s output stream where to output the internal state of {\em *this}
 				@param  depth the dumping depth
 		*/

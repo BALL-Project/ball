@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.7 2000/04/27 15:09:46 amoll Exp $
+// $Id: nucleotide.h,v 1.8 2000/05/02 14:03:50 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -101,7 +101,7 @@ namespace BALL
 		void set(const Nucleotide& nucleotide, bool deep = true);
 
 		/** Assignment operator.
-				Assign the nucleotide {\em nucleotide} to {\em *this} nucleotide.
+				Assign the nucleotide {\em nucleotide} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param   nucleotide the nucleotide to be copied (cloned)
 				@return  nucleotide& - {\em *this} nucleotide
@@ -119,7 +119,7 @@ namespace BALL
 
 		/** Swapping of nucleotide.
 				Swap the states of {\em *this} nucleotide with the nucleotide {\em nucleotide}.
-				@param  nucleotide the nucleotide {\em *this} nucleotide is being swapped with
+				@param  nucleotide the nucleotide {\em *this} is being swapped with
 		*/
 		void swap(Nucleotide& nucleotide);
 	
@@ -128,17 +128,17 @@ namespace BALL
 		/**	@name	Accessors */
 		//@{
 
-		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} nucleotide does not have a parent protein.
-				@return  Protein* -
-								 mutable reference to the parent protein of {\em *this} nucleotide,
+		/** Get a pointer to the parent NucleicAcid.
+				The reference is 0 if {\em *this} nucleotide does not have a parent NucleicAcid.
+				@return  NucleicAcid* -
+								 mutable reference to the parent NucleicAcid of {\em *this} nucleotide,
 		*/
 		NucleicAcid* getNucleicAcid();
 		
-		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} nucleotide does not have a parent protein.
-				@return  Protein* -
-								 constant reference to the parent protein of {\em *this} nucleotide,
+		/** Get a pointer to the parent NucleicAcid.
+				The reference is 0 if {\em *this} nucleotide does not have a parent NucleicAcid.
+				@return  NucleicAcid* -
+								 constant reference to the parent NucleicAcid of {\em *this} nucleotide,
 		*/
 		const NucleicAcid* getNucleicAcid() const;
 
@@ -185,7 +185,7 @@ namespace BALL
 
 		/** Insert an atom after a given {\em Comosite} object.
 				@param atom, the atom to insert
-				@param after, the {\em Comosite} object to insert before
+				@param after, the {\em Comosite} object to insert after
 		*/
 		void insertAfter(Atom& atom, Composite& after);
 
@@ -206,7 +206,7 @@ namespace BALL
 
 		/**	Move the children of {\tt nucleotide} into this nucleotide.
 				The children of {\tt nucleotide} are inserted at the position of 
-				{\tt nucleotide} if {\tt nucleotide} is a child of {\tt this}.
+				{\tt nucleotide} if it is a child of {\em *this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(Nucleotide& nucleotide);
@@ -241,18 +241,18 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				Initiate self-validation of the internal state and data structure consistencies of {\em *this} nucleotide.
-				If the internal state of {\em *this} nucleotide is correct (self-validated) and consistent {\tt true} is returned,
-				{\tt false} otherwise. 
+				Initiate self-validation of the internal state and data structure consistencies of {\em *this}.
+				If the internal state of {\em *this} nucleotide is correct (self-validated)
+				and consistent {\tt true} is returned, {\tt false} otherwise. 
 				@return			bool -
-										{\tt true} if the internal state of {\em *this} nucleotide is correct (self-validated) and consistent,
-										{\tt false} otherwise
+										{\tt true} if the internal state of {\em *this} nucleotide is correct
+										(self-validated) and consistent, {\tt false} otherwise
 		*/
 		virtual bool isValid() const;
 
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} nucleotide to the output ostream {\em s} with dumping depth {\em depth}.
-	
+				Dump the current internal state of {\em *this} 
+				to the output ostream {\em s} with dumping depth {\em depth}.
 				@param	s output stream where to output the internal state of {\em *this} nucleotide
 				@param  depth the dumping depth
 		*/
@@ -264,7 +264,7 @@ namespace BALL
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this} nucleotide.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this} nucleotide
@@ -272,7 +272,7 @@ namespace BALL
 		virtual void read(std::istream& s);
 
 		/* Persistent stream output and state storage.
-				Write persistent bond data to the output stream {\em s} and store the state of {\em *this} nucleotide.
+				Write persistent bond data to the output stream {\em s} and store the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this} nucleotide

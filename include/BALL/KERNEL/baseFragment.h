@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.17 2000/04/27 15:09:46 amoll Exp $
+// $Id: baseFragment.h,v 1.18 2000/05/02 14:03:49 amoll Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -134,8 +134,8 @@ namespace BALL
 		void get(BaseFragment& base_fragment, bool deep = true) const;
 
 		/** Swapping of BaseFragment.
-				Swap the states of {\em *this} BaseFragment with the BaseFragment {\em base_fragment}.
-				@param  base_fragment the BaseFragment {\em *this} BaseFragment is being swapped with
+				Swap the states of {\em *this} with the BaseFragment {\em base_fragment}.
+				@param  base_fragment the BaseFragment {\em *this} is being swapped with
 		*/
 		void swap(BaseFragment& base_fragment);
 
@@ -145,21 +145,21 @@ namespace BALL
 		//@{
 
 		/** Change of the BaseFragment's name.
-				Change the name of {\em *this} BaseFragment to {\em name}.
+				Change the name of {\em *this} to {\em name}.
 				@param  name the new name of {\em *this} BaseFragment
 				@see    BaseFragment::getName
 		*/
 		void setName(const String& name);
 
     /** Mutable inspection of the BaseFragment's name.
-    Access a mutable reference to the name of {\em *this} BaseFragment.
+    Access a mutable reference to the name of {\em *this}.
 	  @return  String& - mutable reference to the name of {\em *this} BaseFragment
     @see     BaseFragment::setName
 		*/
 		String& getName();
 
 		/** Constant inspection of the BaseFragment's name.
-				Access a constant reference to the name of {\em *this} BaseFragment.
+				Access a constant reference to the name of {\em *this}.
 				@return  String& - constant reference to the name of {\em *this} BaseFragment
 				@see     BaseFragment::setName
 		*/
@@ -167,7 +167,7 @@ namespace BALL
 
 		/** Mutable inspection of the BaseFragment's parent molecule.
 				Access a mutable reference to the parent molecule of {\em *this} BaseFragment.
-				The reference is 0 if {\em *this} BaseFragment does not have a parent molecule.\\
+				The reference is 0 if {\em *this} does not have a parent molecule.\\
 				\\
 				{\bf Note:} No corresponding mutator BaseFragment::setMolecule exists to
 				consider design of contract - a BaseFragment may not insert into a molecule,
@@ -187,83 +187,83 @@ namespace BALL
 				it must be inserted via the molecule.
 				@return  Molecule* -
 								 constant reference to the parent molecule of {\em *this} BaseFragment,
-								 0 if {\em *this} atom does not have a parent molecule
+								 0 if {\em *this} does not have a parent molecule
 		*/
 		const Molecule* getMolecule() const;
 
 		/** Get a pointer to the superior BaseFragment.
 				The reference is 0 if {\em *this} BaseFragment does not have a parent BaseFragment.
 				@return  BaseFragment* -
-								 mutable reference to the parent BaseFragment of {\em *this} BaseFragment,
+								 mutable reference to the parent BaseFragment of {\em *this},
 		*/
 		BaseFragment* getSuperBaseFragment();
 
 		/** Get a constant pointer to the superior BaseFragment.
 				The reference is 0 if {\em *this} BaseFragment does not have a parent BaseFragment.
 				@return  BaseFragment* -
-								 constant reference to the parent BaseFragment of {\em *this} BaseFragment,
+								 constant reference to the parent BaseFragment of {\em *this},
 		*/
 		const BaseFragment* getSuperBaseFragment() const;
 
-		/** Get a pointer to a subaltern BaseFragment at a given position.
+		/** Get a pointer to a child BaseFragment at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have a BaseFragment at the given position.
-				@param   position of the subaltern BaseFragment
+				@param   position of the child BaseFragment
 				@return  BaseFragment* -
-								 mutable reference to the subaltern BaseFragment  at {\em positon}  of {\em *this},
+								 mutable reference to the child BaseFragment at {\em positon} of {\em *this},
 		*/
 		BaseFragment* getBaseFragment(Position position);
 	
-		/** Get a constant pointer to a subaltern BaseFragment at a given position.
-				The reference is 0 if {\em *this} BaseFragment does not have a BaseFragment at the given position.
-				@param   position of the subaltern BaseFragment
+		/** Get a constant pointer to a child BaseFragment at a given position.
+				The reference is 0 if {\em *this} does not have a BaseFragment at the given position.
+				@param   position of the child BaseFragment
 				@return  BaseFragment* -
-								 constant reference to the subaltern BaseFragment at {\em positon} of {\em *this},
+								 constant reference to the child BaseFragment at {\em positon} of {\em *this},
 		*/
 		const BaseFragment* getBaseFragment(Position position) const;
 	
-		/** Get a pointer to a subaltern atom at a given position.
+		/** Get a pointer to a child atom at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have an atom at the given position.
-				@param   position the position of the subaltern atom
+				@param   position the position of the child atom
 				@return  Atom* -
-								 mutable reference to the subaltern atom at {\em positon} of {\em *this},
+								 mutable reference to the child atom at {\em positon} of {\em *this},
 		*/
 		Atom* getAtom(Position position);
 	
-		/** Get a pointer to a subaltern atom at a given position.
+		/** Get a pointer to a child atom at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have an atom at the given position.
-				@param   position the position of the subaltern atom
+				@param   position the position of the child atom
 				@return  Atom* -
-								 constant reference to the subaltern atom at {\em position} of {\em *this},
+								 constant reference to the child atom at {\em position} of {\em *this},
 		*/
 		const Atom* getAtom(Position position) const;
 	
-		/** Get a pointer to a subaltern atom with the name {\em name}.
+		/** Get a pointer to a child atom with the name {\em name}.
 				The reference is 0 if {\em *this} BaseFragment does not have an atom with this name.
-				@param   name the name of the subaltern atom
+				@param   name the name of the child atom
 				@return  Atom* -
-								 mutable reference to the subaltern atom with the name {\em name} of {\em *this},
+								 mutable reference to the child atom with the name {\em name} of {\em *this},
 		*/
 		Atom* getAtom(const String& name);
 	
-		/** Get a pointer to a subaltern atom with the name {\em name}.
+		/** Get a pointer to a child atom with the name {\em name}.
 				The reference is 0 if {\em *this} BaseFragment does not have an atom with this name.
-				@param   name the name of the subaltern atom
+				@param   name the name of the child atom
 				@return  Atom* -
-								 constant reference to the subaltern atom with the name {\em name} of {\em *this},
+								 constant reference to the child atom with the name {\em name} of {\em *this},
 		*/
 		const Atom* getAtom(const String& name) const;
 	
-		/** Count the subaltern BaseFragments.
+		/** Count the child BaseFragments.
 				@return Size the number of BaseFragments
 		*/
 		Size countBaseFragments() const;
 
-		/** Count the subaltern atoms.
+		/** Count the child atoms.
 				@return Size the number of atoms
 		*/
 		Size countAtoms() const;
 
-		/** Count the subaltern bonds.
+		/** Count the child bonds.
 				@return Size the number of bonds
 		*/
 		Size countBonds() const;
@@ -337,26 +337,26 @@ namespace BALL
 		*/
 		void insertAfter(BaseFragment& base_fragment, Composite& after);
 
-		/**	Cut all children of {\tt base_fragment} and prepend them before the children of this BaseFragment.
+		/**	Cut all children of {\tt base_fragment} and prepend them before the children of {\em *this}.
 				@param base_fragment the BaseFragment to access
 		*/
 		void spliceBefore(BaseFragment& base_fragment);
 
-		/**	Cut all children of {\tt base_fragment} and append them after the children of this BaseFragment.
+		/**	Cut all children of {\tt base_fragment} and append them after the children of {\em *this}.
 				@param base_fragment the BaseFragment to access
 		*/
 		void spliceAfter(BaseFragment& base_fragment);
 
-		/**	Move the children of {\em base_fragment} into this BaseFragment.
-				The children of {\tt base_fragment} are inserted at the position of 
-				{\tt base_fragment} if {\tt base_fragment} is a child of {\tt this}.
+		/**	Move the children of {\em base_fragment} into {\em *this} BaseFragment.
+				The children of {\tt base_fragment} are inserted at its position
+				if it is is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(BaseFragment& base_fragment);
 
 		/** Remove a BaseFragment
 				@param base_fragment the BaseFragment to remove
-				@return false if base_fragment could not be removed
+				@return false if {\em base_fragment} could not be removed
 		*/
 		bool remove(BaseFragment& base_fragment);
 
@@ -374,12 +374,12 @@ namespace BALL
 		/**	@name	Predicates */
 		//@{
 
-		/** Test if a BaseFragment is a SubBaseFragment of {\tt this} BaseFragment
+		/** Test if a BaseFragment is a SubBaseFragment of {\tt this}.
 				@param base_fragment the BaseFragment to test
 		*/
 		bool isSubBaseFragmentOf(const BaseFragment& base_fragment) const;
 
-		/** Test if a BaseFragment is a SuperBaseFragment of {\tt this} BaseFragment
+		/** Test if a BaseFragment is a SuperBaseFragment of {\tt this}.
 				@param base_fragment the BaseFragment to test
 		*/
 		bool isSuperBaseFragmentOf(const BaseFragment& base_fragment) const;
@@ -393,7 +393,7 @@ namespace BALL
 				If the internal state of {\em *this} BaseFragment is correct (self-validated) and consistent {\tt true} is returned,
 				{\tt false} otherwise. 
 				@return			bool -
-										{\tt true} if the internal state of {\em *this} BaseFragment is correct (self-validated) and consistent,
+										{\tt true} if the internal state of {\em *this} is correct (self-validated) and consistent,
 										{\tt false} otherwise
 		*/
 		virtual bool isValid() const;

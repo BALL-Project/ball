@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.9 2000/04/25 16:52:26 amoll Exp $
+// $Id: molecule.h,v 1.10 2000/05/02 14:03:50 amoll Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -47,16 +47,16 @@ namespace BALL
 		/**	@name	Constructors and Destructors */
 		//@{
 
-		/**	Default constructor */
+		/**	Default constructor. */
 		Molecule();
 	
-		/** Copy constructor */
+		/** Copy constructor. */
 		Molecule(const Molecule& molecule, bool deep = true);
 	
-		/** Detailled constructor */
+		/** Detailled constructor. */
 		Molecule(const String& name);
 
-		/** Destructor */
+		/** Destructor. */
 		virtual ~Molecule();
 		
 		//@}
@@ -122,49 +122,49 @@ namespace BALL
 		*/
 		const System* getSystem() const;
 
-		/** Insert an atom as the first child of the instance
+		/** Insert an atom as the first child of the instance.
 				@param atom the atom to add
 		*/
 		void prepend(Atom& atom);
 
-		/** Insert an atom as the last child of the instance
+		/** Insert an atom as the last child of the instance.
 				@param atom the atom to add
 		*/
 		void append(Atom& atom);
 
-		/** Insert an atom as the last child of the instance
+		/** Insert an atom as the last child of the instance.
 				@param atom the atom to add
 		*/
 		void insert(Atom& atom);
 
-		/** Insert an atom before a given {\em Comosite} object.
+		/** Insert an atom before a {\em Comosite} object.
 				@param atom, the atom to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
 		void insertBefore(Atom& atom, Composite& before);
 
-		/** Insert an atom after a given {\em Comosite} object.
+		/** Insert an atom after a {\em Comosite} object.
 				@param atom, the atom to insert
 				@param after, the {\em Comosite} object to insert after
 		*/
 		void insertAfter(Atom& atom, Composite& after);
 
-		/** Remove an Atom
-				@param atom the Atom to remove
+		/** Remove an atom.
+				@param atom the atom to remove
 		*/
 		bool remove(Atom& atom);
 
-		/** Insert a BaseFragment as the first child of the instance
+		/** Insert a BaseFragment as the first child of the instance.
 				@param base_fragment the BaseFragment to add
 		*/
 		void prepend(BaseFragment& base_fragment);
 
-		/** Append a BaseFragment as the last child of the instance
+		/** Append a BaseFragment as the last child of the instance.
 				@param base_fragment the BaseFragment to add
 		*/
 		void append(BaseFragment& base_fragment);
 
-		/** Insert a BaseFragment as the last child of the instance
+		/** Insert a BaseFragment as the last child of the instance.
 				@param base_fragment the BaseFragment to add
 		*/
 		void insert(BaseFragment& base_fragment);
@@ -198,7 +198,7 @@ namespace BALL
 		*/
 		void splice(BaseFragment& base_fragment);
 
-		/** Remove a BaseFragment
+		/** Remove a BaseFragment.
 				@param base_fragment the BaseFragment to remove
 		*/
 		bool remove(BaseFragment& base_fragment);
@@ -210,8 +210,8 @@ namespace BALL
 		//@{
 
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} molecule to the output ostream {\em s} with dumping depth {\em depth}.
-	
+				Dump the current internal state of {\em *this} molecule to the 
+				output ostream {\em s} with dumping depth {\em depth}.
 				@param	s output stream where to output the internal state of {\em *this} molecule
 				@param  depth the dumping depth
 		*/
