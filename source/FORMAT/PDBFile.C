@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.19 2000/12/11 21:15:59 oliver Exp $
+// $Id: PDBFile.C,v 1.20 2001/01/22 08:59:56 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -431,14 +431,18 @@ namespace BALL
 			Protein p;
 			((Composite&)p).splice((Composite&)system);
 			write_(p, true);
-			((Composite&)system).splice((Composite &)p);
-		} else {
+			((Composite&)system).splice((Composite&)p);
+		} 
+		else 
+		{
 			Composite::SubcompositeIterator it = system.beginSubcomposite();
 			for (; +it && !RTTI::isKindOf<Protein>(*it); ++it);
 			if (+it)
 			{
 				write_(*it, true);
-			} else {
+			} 
+			else 
+			{
 				Log.error() << "PDBFile::write: cannot find a protein in the current system." << endl;
 			}
 		}
@@ -1099,9 +1103,11 @@ namespace BALL
 					*/
 				}
 			}
-		} else {
+		} 
+		else 
+		{
 			BALL_FOREACH_ATOM(molecule, atom_it)
-    {
+			{
       ++number_of_atomic_coordinate_records;
 
       current_atom = &(*atom_it);
@@ -1250,16 +1256,16 @@ namespace BALL
 						record_type_format_[PDB::RECORD_TYPE__CONECT].format_string,
 						record_type_format_[PDB::RECORD_TYPE__CONECT].string,
 						((*atom_map.find((void *)current_atom)).second),
-						(covalent_bonded_atom[0] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[0])).second) : 0,
-						(covalent_bonded_atom[1] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[1])).second) : 0,
-						(covalent_bonded_atom[2] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[2])).second) : 0,
-						(covalent_bonded_atom[3] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[3])).second) : 0,
-						(hydrogen_bonded_atom[0] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[0])).second) : 0,
-						(hydrogen_bonded_atom[1] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[1])).second) : 0,
-						(saltbridge_bonded_atom[0] != 0) ? ((*atom_map.find((void *)saltbridge_bonded_atom[0])).second) : 0,
-						(hydrogen_bonded_atom[2] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[2])).second) : 0,
-						(hydrogen_bonded_atom[3] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[3])).second) : 0,
-						(saltbridge_bonded_atom[1] != 0) ? ((*atom_map.find((void *)saltbridge_bonded_atom[1])).second) : 0);
+						(covalent_bonded_atom[0] != 0) ? ((*atom_map.find((void*)covalent_bonded_atom[0])).second) : 0,
+						(covalent_bonded_atom[1] != 0) ? ((*atom_map.find((void*)covalent_bonded_atom[1])).second) : 0,
+						(covalent_bonded_atom[2] != 0) ? ((*atom_map.find((void*)covalent_bonded_atom[2])).second) : 0,
+						(covalent_bonded_atom[3] != 0) ? ((*atom_map.find((void*)covalent_bonded_atom[3])).second) : 0,
+						(hydrogen_bonded_atom[0] != 0) ? ((*atom_map.find((void*)hydrogen_bonded_atom[0])).second) : 0,
+						(hydrogen_bonded_atom[1] != 0) ? ((*atom_map.find((void*)hydrogen_bonded_atom[1])).second) : 0,
+						(saltbridge_bonded_atom[0] != 0) ? ((*atom_map.find((void*)saltbridge_bonded_atom[0])).second) : 0,
+						(hydrogen_bonded_atom[2] != 0) ? ((*atom_map.find((void*)hydrogen_bonded_atom[2])).second) : 0,
+						(hydrogen_bonded_atom[3] != 0) ? ((*atom_map.find((void*)hydrogen_bonded_atom[3])).second) : 0,
+						(saltbridge_bonded_atom[1] != 0) ? ((*atom_map.find((void*)saltbridge_bonded_atom[1])).second) : 0);
 
 		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 		File::getFileStream() << line_buffer << endl;
