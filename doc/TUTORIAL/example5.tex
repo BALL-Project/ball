@@ -29,6 +29,7 @@ char* B = "enate";
 String C = A + B;
 \end{lstlisting}
 
+\noindent
 Another very useful operation is swapping two strings:
 \begin{lstlisting}{}
 String A("Swap");
@@ -36,12 +37,14 @@ String B("swaP");
 A.swap(B);
 \end{lstlisting}
 
+\noindent
 Something we might also use very often is reversing a string:
 \begin{lstlisting}{}
 String A("Swap");
 A.reverse();
 \end{lstlisting}
 
+\noindent
 And finally, it is even possible to substitute parts of a string with another
 String by using the \method{substitute} method:
 \begin{lstlisting}{}
@@ -54,11 +57,9 @@ A.substitute(B, C);
 
 \subsection{Conversion}
 
-BALL strings are featured with many conversion mechanisms. They are either
-implemented through constructors or by one of the many explicit conversion
-methods available. We will first have a look at some constructors taking other
-types as argument. Let us first construct a String from some basic C types:
-{\tt char}:
+BALL strings are featured with many conversion mechanisms. Converting other
+types to a BALL string is done by using a constructor. Let us first construct
+a string from some basic C types:
 \begin{lstlisting}{}
 char c_char = 'B';
 int c_int = 1;
@@ -71,18 +72,107 @@ String C(c_float);
 There are many other simple types supported, like {\tt unsigned int}, {\tt
 double}, etc. Refer to the reference manual for further information.
 
-Let us turn to explicit conversions. 
+\noindent
+How do we make an {\tt int} out of a BALL string? Or a {\tt char}? That's
+equally easy. We only need to call the explicit conversion method. All those
+methods are named {\tt toType}, where {\tt Type} is the type you want to
+convert to. Have a look at the following example:
+\begin{lstlisting}{}
+String i_wanna_be_an_int("4711");
+String i_wanna_be_a_char("A");
+String i_wanna_be_a_double("6.0221e23");
+
+int i_am_an_int = i_wanna_be_an_int.toInt();
+char i_am_a_char = i_wanna_be_a_char.toChar();
+double i_am_a_double = i_wanna_be_a_double.toDouble();
+\end{lstlisting}
 
 \subsection{Predicates}
 
 BALL Strings provide many predicates that can be used for determining special
-properties. One ca find out, whether a String contains a certain substring, 
+properties. One can find out whether a String contains a certain substring, 
 starts with a special prefix, ends with a suffix, consists only of letters or 
 is simply a floating point number. The following code snippet will give you
 some idea of the power of the predicates.
+\begin{lstlisting}{}
+String test_string("This STRING does not start with PREFIX");
+cout << "String is empty? " 
+	<< test_string.isEmpty() << endl;
+cout << "Has prefix \"PREFIX\"? " 
+	<< test_string.hasPrefix("PREFIX") << endl;
+cout << "Contains substring \"PREFIX\"? " 
+	<< test_string.hasSubstring("PREFIX") << endl;
+cout << "Contains only letters? "
+	<< test_string.isAlpha() << endl;
+\end{lstlisting}
+We will get the following output:
+\begin{lstlisting}{}
+String is empty? false
+Has prefix "PREFIX"? false
+Contains substring "PREFIX"? true
+Contains only letters? true
+\end{lstlisting}
 
 \subsection{Comparing Strings}
 
-Commonly one often wants to compare strings, which was a pain with C type
-character fields. BALL strings provide you with a simple interface and rih
-functionality. 
+Commonly one often wants to compare strings, which is a pain with C type
+character fields. BALL strings provide you with a simple interface and rich
+functionality. Let's first have a look at equality tests. Note that you are
+not bound to BALL strings for those comparisons but can use C strings as well.
+also use C strings as arguments to all those operations:
+\begin{lstlisting}{}
+String test_string("Compare me.");
+String another_test_string("Blah.");
+char* test_C_string = "No match.";
+
+cout << test_string.compare(another_test_string) << endl;
+cout << test_string.compare(test_C_string) << endl;
+cout << test_string == test_string << endl;
+cout << test_string != "No, this is not equal." << endl;
+\end{lstlisting}
+You can also check whether a string is lexicographically less than another
+one:
+\begin{lstlisting}{}
+cout << test_string < another_test_string << endl;
+\end{lstlisting}
+And finally it is even possible to limit the comparison to a certain area of
+a string by defining the start index and the length of the segment:
+\begin{lstlisting}{}
+int start_index = 9;
+int length = 2;
+cout << test_string.compare("me", start_index, length) << endl;
+\end{lstlisting}
+
+\subsection{Stream and Field Operations}
+
+Everyone familiar with measurement data processing encountered the problem of
+getting data fields out of lines containing several values of data. Quite
+often interpreter languages like awk or perl are used for such tasks. The
+disadvantage of using such tools obviuosly is that you cannot integrate such
+languages easily into a C++ program. The BALL development team was also
+frequently confronted with such problems. Resultingly, BALL strings provide
+methods to extract fields from strings.
+\begin{lstlisting}{}
+String data = "1 2 3 4.567 8 blah";
+cout << "Line contains " << data.countFields() << " values" << endl;
+cout << "The data at index 5 is " << data.getField(5) << endl;
+\end{lstlisting}
+The code above should print the number 8.
+Sometimes log files contain quoted data. You can even handle such lines by
+using the filed functions for quoted entries:
+\begin{lstlisting}{}
+String data = "1 2 3 4.567 \"8 blah\"";
+cout << "Line contains " << data.countFieldsQuoted() << " values" << endl;
+cout << "The data at index 5 is " << data.getFieldQuoted(5) << endl;
+\end{lstlisting}
+The code above should print the number "8 blah".
+
+Additionally BALL strings know how to get single lines from a stream. So, if
+you want to read and analyze a log file, open it, read the sinlge lines and
+get the values you want:
+\begin{lstlisting}{}
+istream is;
+int index = 5;
+String line = getline(is)
+String value = line.getField(index)
+\end{lstlisting}{}
