@@ -1,4 +1,4 @@
-// $Id: assignTypes.C,v 1.3 1999/09/07 13:49:01 len Exp $
+// $Id: assignTypes.C,v 1.4 1999/09/08 09:44:18 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 #include <iostream.h>
@@ -43,13 +43,23 @@ namespace BALL
 				base_name = name;
 				if (RTTI<Residue>::isKindOf(*frag))
 				{
+					String suffix = "-";
 					Residue*	res = RTTI<Residue>::castTo(*frag);
 					if (res->isNTerminal())
 					{
-						name += "-N";
+						suffix += "N";
 					} else if (res->isCTerminal())
 					{
-						name += "-C";
+						suffix += "C";
+					}
+					if (res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+					{
+						suffix += "S";
+					}
+					
+					if (suffix != "-")
+					{
+						name += suffix;
 					}
 				}
 			}
