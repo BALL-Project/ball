@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.19.4.2 2002/05/16 10:52:08 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.19.4.3 2002/05/23 01:36:36 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.19.4.2 2002/05/16 10:52:08 oliver Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.19.4.3 2002/05/23 01:36:36 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -576,6 +576,18 @@ RESULT
 
 CHECK(PropertyManager::write(PersistenceManager& pm) const )
 	NEW_TMP_FILE(filename)
+	String str("test");
+	PersistentObject ob;
+	m.setProperty("PROP1", true);
+  m.setProperty("PROP2", -12345);
+  m.setProperty("PROP3", (unsigned int)12345);
+  m.setProperty("PROP4", (float)1.2345);
+  m.setProperty("PROP5", (double) 2.345);
+  m.setProperty("PROP6", str);
+  m.setProperty("PROP7", ob);
+  m.setProperty("PROP8");
+  m.setProperty(0);
+  m.setProperty(2);
 	ofstream  ofile(filename.c_str(), File::OUT);
 	pm.setOstream(ofile);
 	m.write(pm);
