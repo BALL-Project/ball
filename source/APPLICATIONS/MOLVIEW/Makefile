@@ -1,4 +1,4 @@
-// $Id: Makefile,v 1.28 2000/12/08 09:29:57 oliver Exp $
+# $Id: Makefile,v 1.29 2000/12/09 12:55:55 oliver Exp $
 
 EXECUTABLE=molview
 DIRECTORY=APPLICATIONS/MOLVIEW
