@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.36 2004/02/07 20:00:50 amoll Exp $
+// $Id: molecularControl.C,v 1.37 2004/02/09 12:50:56 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1091,9 +1091,9 @@ void MolecularControl::applySelector()
 	{
 		s.setExpression(Expression(selector_edit_->text().ascii()));
 	}
-	catch(...)
+	catch(Exception::ParseError e)
 	{
-		setStatusbarText("Invalid regular expression");
+		setStatusbarText("Invalid expression " + e.getExpression() + ": "+ e.getMessage());
 		return;
 	}
 
