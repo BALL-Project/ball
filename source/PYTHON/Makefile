@@ -1,8 +1,10 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.15 2000/07/12 19:35:13 oliver Exp $
+# $Id: Makefile,v 1.16 2000/07/16 19:24:07 oliver Exp $
 #
+
+
 
 all: libBALLc.so
 
@@ -16,6 +18,7 @@ SIP_SOURCES_CONCEPT=\
 	sipBALLAtomProcessor.C\
 	sipBALLCompositeProcessor.C\
 	sipBALLComposite.C\
+	sipBALLEmbeddable.C\
 	sipBALLNamedProperty.C\
 	sipBALLObject.C\
 	sipBALLPersistentObject.C\
@@ -26,8 +29,12 @@ SIP_SOURCES_CONCEPT=\
 	sipBALLUnaryCompositePredicate.C
 
 SIP_SOURCES_DATATYPE=\
+	sipBALLGridIndex.C\
+	sipBALLFloatPointGrid.C\
 	sipBALLOptions.C\
+	sipBALLRegularExpression.C\
 	sipBALLString.C\
+	sipBALLSubstring.C\
 	sipBALLBit.C\
 	sipBALLBitVector.C
 
@@ -49,6 +56,8 @@ SIP_SOURCES_KERNEL=\
 	sipBALLBond.C\
 	sipBALLChain.C\
 	sipBALLElement.C\
+	sipBALLExpression.C\
+	sipBALLExpressionPredicate.C\
 	sipBALLFragment.C\
 	sipBALLMolecule.C\
 	sipBALLNucleotide.C\
@@ -114,9 +123,11 @@ SIP_SOURCES_SYSTEM=\
 	sipBALLOpenMode.C
 
 SIP_SOURCES_PYTHON=\
+	sipBALLPyAtomDict.C\
 	sipBALLPyAtomList.C\
 	sipBALLPyBondList.C\
 	sipBALLPyBaseFragmentList.C\
+	sipBALLPyCompositeDescriptorList.C\
 	sipBALLPyFragmentList.C\
 	sipBALLPyMoleculeList.C\
 	sipBALLPyPDBAtomList.C\
@@ -140,6 +151,10 @@ SIP_SOURCES_STRUCTURE=\
 	sipBALLGeometricCenterProcessor.C\
 	sipBALLFragmentDistanceCollector.C
 
+SIP_SOURCES_VIEW_OPENGL_KERNEL=\
+	sipBALLCompositeDescriptor.C\
+	sipBALLMainControl.C
+
 SIP_SOURCES=\
 	$(SIP_SOURCES_COMMON)\
 	$(SIP_SOURCES_CONCEPT)\
@@ -157,6 +172,7 @@ SIP_SOURCES=\
 	$(SIP_SOURCES_SOLVATION)\
 	$(SIP_SOURCES_STRUCTURE)\
 	$(SIP_SOURCES_SYSTEM)\
+	$(SIP_SOURCES_VIEW_OPENGL_KERNEL)\
 	BALLcmodule.C
 
 PYBALL_SOURCES=\
@@ -181,6 +197,8 @@ include ../${BALL_BINFMT}/config.mak
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
 
+BALL_INCLUDES=$(BALLVIEW_INCLUDES)
+BALL_LIBS=$(BALLVIEW_LIBS)
 
 sip:
 	@echo "running SIP..."
@@ -199,5 +217,7 @@ clean:
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES) $(SIBOBJECTS) libBALLc.so
 
 libBALLc.so:	$(SIP_OBJECTS) $(PYBALL_OBJECTS)
-	$(DYNAR) $(DYNAROPTS) libBALLc.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) -lBALL
+	$(DYNAR) $(DYNAROPTS) libBALLc.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) $(BALL_LIBS)
 
+install: libBALLc.so
+	cp libBALLc.so BALL.py BALL.pyc $(BALL_PATH)/lib/$(BINFMT)

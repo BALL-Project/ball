@@ -1,4 +1,4 @@
-// $Id: vector3.sip,v 1.3 2000/07/03 11:11:41 oliver Exp $
+// $Id: vector3.sip,v 1.4 2000/07/16 19:25:11 oliver Exp $
 
 class Vector3
  : PersistentObject
@@ -73,14 +73,23 @@ class Vector3
   return PyString_FromString(tmp.c_str());
 %End
 
+	PyMethods:
+	// Vector3 operator + (const Vector3& a, const Vector3& b)
+	__add__(self,other):
+%PythonMemberCode
+	return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
+%End
+	// Vector3 operator - (const Vector3& a, const Vector3& b)
+	__sub__(self,other):
+%PythonMemberCode
+	return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
+%End
 
   float x;
   float y;
   float z;
 };
 
-// Vector3 operator + (const Vector3& a, const Vector3& b)
-// Vector3 operator - (const Vector3& a, const Vector3& b)
 // Vector3 operator * (float scalar, const Vector3& vector)
 // Vector3 operator * (const Vector3& vector, float scalar)
 // std::istream& operator >> (std::istream& s, Vector3& v)

@@ -1,4 +1,4 @@
-// $Id: options.sip,v 1.3 2000/07/12 19:35:14 oliver Exp $
+// $Id: options.sip,v 1.4 2000/07/16 19:24:11 oliver Exp $
 class Options
   // : public StringHashMap<String> 
 {
@@ -34,5 +34,15 @@ class Options
   bool setDefaultBool(const String& /key/, bool /value/);
   bool readOptionFile(const String& /filename/);
   // virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
+%MemberCode
+  Options* ptr;
+  if ((ptr = (Options*)sipGetCppPtr(sipThis,sipClass_Options)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Options ") + ptr->getName()
+        + " { " + String(ptr->getSize()) + " entries }").c_str());
+%End
+
+	
 };
  

@@ -6,6 +6,7 @@
 PyObject *sipClass_VersionInfo;
 
 static void sipDealloc_VersionInfo(sipThisType *);
+static PyObject *sipPyInternalRepr_VersionInfo(sipThisType *);
 
 static PyTypeObject sipType_VersionInfo = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_VersionInfo = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_VersionInfo,
 };
 
 static PyObject *sipDo_VersionInfo_getVersion(PyObject *,PyObject *sipArgs)
@@ -130,6 +131,13 @@ static void sipDealloc_VersionInfo(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_VersionInfo(sipThisType *sipThis)
+{
+#line 25 "version.sip"
+  return PyString_FromString(VersionInfo::getVersion());  	
+#line 145 "./sipBALLVersionInfo.cpp"
 }
 
 PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)

@@ -51,14 +51,14 @@ static PyObject *sipPyInternalRepr_OpenMode(sipThisType *sipThis)
     return NULL;
 	
 	String mode_string;
-	switch (*ptr)
+	switch ((int)*ptr)
 	{
-		case File::APP: 		mode_string = "File::APP"; break;
-		case File::BINARY:	mode_string = "File::BINARY"; break;
-		case File::ATE: 		mode_string = "File::ATE"; break;
-		case File::TRUNC: 	mode_string = "File::TRUNC"; break;
-		case File::OUT: 		mode_string = "File::OUT"; break;
-		case File::IN: 			mode_string = "File::IN"; break;
+		case (int)File::APP: 		mode_string = "File::APP"; break;
+		case (int)File::BINARY:	mode_string = "File::BINARY"; break;
+		case (int)File::ATE: 		mode_string = "File::ATE"; break;
+		case (int)File::TRUNC: 	mode_string = "File::TRUNC"; break;
+		case (int)File::OUT: 		mode_string = "File::OUT"; break;
+		case (int)File::IN: 			mode_string = "File::IN"; break;
 		default:						mode_string = *ptr;
 	}
 

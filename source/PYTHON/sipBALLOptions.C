@@ -919,31 +919,14 @@ static PyObject *sipDo_Options_readOptionFile(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const String *a0;
-		PyObject *a0obj;
+#line 38 "options.sip"
+  Options* ptr;
+  if ((ptr = (Options*)sipGetCppPtr(sipThis,sipClass_Options)) == NULL)
+    return NULL;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
-		{
-			bool res;
-			Options *ptr;
-
-			if ((ptr = (Options *)sipGetCppPtr(sipThis,sipClass_Options)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> Options::readOptionFile(* a0);
-
-			if (istemp0)
-				delete a0;
-
-			return sipConvertFromBool((int)res);
-		}
+  return PyString_FromString(String(String("Options ") + ptr->getName()
+        + " { " + String(ptr->getSize()) + " entries }").c_str());
+#line 934 "./sipBALLOptions.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.

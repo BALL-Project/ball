@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.11 2000/07/06 14:08:44 oliver Exp $
+// $Id: BALL.sip,v 1.12 2000/07/16 19:24:07 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -29,6 +29,7 @@
 // classTest.h      // not needed
 // comparator.h     // ??
 %Include composite.sip
+%Include embeddable.sip
 // enumerator.h     // ??
 // forwardIterator.h // not supported
 // notification.h    // ??
@@ -50,15 +51,15 @@
 %Include bitVector.sip 
 // forEach.h // not supported -> extractors!
 // hashGrid.h // ??
-// hashMap.h // ??
+// hashMap.h // ?? ->pyAtomDict
 // hashSet.h // ??
 // list.h // ??
 // listStack.h // ?? 
 %Include options.sip
-// pointGrid.h // ?? float only?
+%Include pointGrid.sip //  float only!
 // quadruple.h // ??
 // redBlackTree.h // ??
-// %Include regExp.sip
+%Include regExp.sip
 // splayTree.h
 %Include string.sip
 // stringHashMap.h // ??
@@ -94,7 +95,7 @@
 %Include baseFragment.sip
 %Include chain.sip
 // chainIterator.h // not needed
-// %Include expression.sip 
+%Include expression.sip 
 // forEach.h // not needed
 %Include fragment.sip
 // fragmentIterator.h // not needed
@@ -123,7 +124,7 @@
 %Include angle.sip
 %Include box3.sip
 %Include circle3.sip
-// %Include common.sip
+// %Include common.sip - trouble! namespaces...
 %Include line3.sip
 %Include matrix44.sip
 %Include plane3.sip
@@ -200,9 +201,10 @@
 
 // PYTHON
 %Include extractors.sip
-// %Include pyAtomDict.sip
+%Include pyAtomDict.sip
 %Include pyAtomList.sip
 %Include pyAtomProcessor.sip
+%Include pyCompositeDescriptorList.sip
 %Include pyCompositeProcessor.sip
 %Include pyBondList.sip
 %Include pyBaseFragmentList.sip
@@ -228,7 +230,7 @@
 // %Include fragmentDB.sip
 %Include geometricProperties.sip
 %Include geometricTransformations.sip
-// %Include numericalSAS.sip 
+%Include numericalSAS.sip 
 // %Include residueChecker.sip // ??
 // %Include rotamerLibrary.sip
 // %Include rules.sip
@@ -244,3 +246,5 @@
 // %Include timer.sip
 
 // VIEW ??
+%Include mainControl.sip
+%Include compositeDescriptor.sip

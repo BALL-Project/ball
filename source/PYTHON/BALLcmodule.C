@@ -6,6 +6,7 @@
 #include "sipBALLSize.h"
 #include "sipBALLVersionInfo.h"
 #include "sipBALLComposite.h"
+#include "sipBALLEmbeddable.h"
 #include "sipBALLObject.h"
 #include "sipBALLPersistentObject.h"
 #include "sipBALLUnaryCompositePredicate.h"
@@ -17,6 +18,10 @@
 #include "sipBALLBit.h"
 #include "sipBALLBitVector.h"
 #include "sipBALLOptions.h"
+#include "sipBALLGridIndex.h"
+#include "sipBALLFloatPointGrid.h"
+#include "sipBALLRegularExpression.h"
+#include "sipBALLSubstring.h"
 #include "sipBALLString.h"
 #include "sipBALLHINFile.h"
 #include "sipBALLINIFile.h"
@@ -33,6 +38,8 @@
 #include "sipBALLBond.h"
 #include "sipBALLBaseFragment.h"
 #include "sipBALLChain.h"
+#include "sipBALLExpressionPredicate.h"
+#include "sipBALLExpression.h"
 #include "sipBALLFragment.h"
 #include "sipBALLMolecule.h"
 #include "sipBALLNucleicAcid.h"
@@ -75,8 +82,10 @@
 #include "sipBALLMolecularDynamics.h"
 #include "sipBALLConjugateGradientMinimizer.h"
 #include "sipBALLEnergyMinimizer.h"
+#include "sipBALLPyAtomDict.h"
 #include "sipBALLPyAtomList.h"
 #include "sipBALLAtomProcessor.h"
+#include "sipBALLPyCompositeDescriptorList.h"
 #include "sipBALLCompositeProcessor.h"
 #include "sipBALLPyBondList.h"
 #include "sipBALLPyBaseFragmentList.h"
@@ -100,7 +109,28 @@
 #include "sipBALLTransformationProcessor.h"
 #include "sipBALLFile.h"
 #include "sipBALLOpenMode.h"
+#include "sipBALLMainControl.h"
+#include "sipBALLCompositeDescriptor.h"
 
+char sipName_BALL_isDeepCopy[] = "isDeepCopy";
+char sipName_BALL_isShallowCopy[] = "isShallowCopy";
+char sipName_BALL_drawDirect[] = "drawDirect";
+char sipName_BALL_drawEntity[] = "drawEntity";
+char sipName_BALL_getQuaternion[] = "getQuaternion";
+char sipName_BALL_setQuaternion[] = "setQuaternion";
+char sipName_BALL_CompositeDescriptor[] = "CompositeDescriptor";
+char sipName_BALL_getInstance[] = "getInstance";
+char sipName_BALL_countInstances[] = "countInstances";
+char sipName_BALL_isInserted[] = "isInserted";
+char sipName_BALL_getOptions[] = "getOptions";
+char sipName_BALL_updateAll[] = "updateAll";
+char sipName_BALL_getBoundingBox[] = "getBoundingBox";
+char sipName_BALL_setBoundingBox[] = "setBoundingBox";
+char sipName_BALL_setCenter[] = "setCenter";
+char sipName_BALL_getDescriptorList[] = "getDescriptorList";
+char sipName_BALL_getDescriptor[] = "getDescriptor";
+char sipName_BALL_unkown[] = "unkown";
+char sipName_BALL_MainControl[] = "MainControl";
 char sipName_BALL_OpenMode[] = "OpenMode";
 char sipName_BALL_isExecutable[] = "isExecutable";
 char sipName_BALL_isWritable[] = "isWritable";
@@ -109,7 +139,6 @@ char sipName_BALL_isCanonized[] = "isCanonized";
 char sipName_BALL_isAccessible[] = "isAccessible";
 char sipName_BALL_isClosed[] = "isClosed";
 char sipName_BALL_isOpen[] = "isOpen";
-char sipName_BALL_truncate[] = "truncate";
 char sipName_BALL_renameTo[] = "renameTo";
 char sipName_BALL_copyTo[] = "copyTo";
 char sipName_BALL_getOpenMode[] = "getOpenMode";
@@ -120,6 +149,10 @@ char sipName_BALL_BINARY[] = "BINARY";
 char sipName_BALL_APP[] = "APP";
 char sipName_BALL_OUT[] = "OUT";
 char sipName_BALL_IN[] = "IN";
+char sipName_BALL_calculateSASPoints[] = "calculateSASPoints";
+char sipName_BALL_calculateSASAtomAreas[] = "calculateSASAtomAreas";
+char sipName_BALL_calculateSASVolume[] = "calculateSASVolume";
+char sipName_BALL_calculateSASArea[] = "calculateSASArea";
 char sipName_BALL_getTransformation[] = "getTransformation";
 char sipName_BALL_setTransformation[] = "setTransformation";
 char sipName_BALL_TransformationProcessor[] = "TransformationProcessor";
@@ -155,9 +188,11 @@ char sipName_BALL_PyMoleculeList[] = "PyMoleculeList";
 char sipName_BALL_PyFragmentList[] = "PyFragmentList";
 char sipName_BALL_PyBaseFragmentList[] = "PyBaseFragmentList";
 char sipName_BALL_PyBondList[] = "PyBondList";
+char sipName_BALL_PyCompositeDescriptorList[] = "PyCompositeDescriptorList";
 char sipName_BALL_finish[] = "finish";
 char sipName_BALL_AtomProcessor[] = "AtomProcessor";
 char sipName_BALL_PyAtomList[] = "PyAtomList";
+char sipName_BALL_PyAtomDict[] = "PyAtomDict";
 char sipName_BALL_nucleicAcids[] = "nucleicAcids";
 char sipName_BALL_nucleotides[] = "nucleotides";
 char sipName_BALL_proteins[] = "proteins";
@@ -293,9 +328,6 @@ char sipName_BALL_specificSetup[] = "specificSetup";
 char sipName_BALL_ForceField[] = "ForceField";
 char sipName_BALL_AmberFF[] = "AmberFF";
 char sipName_BALL_Vector4[] = "Vector4";
-char sipName_BALL_z[] = "z";
-char sipName_BALL_y[] = "y";
-char sipName_BALL_x[] = "x";
 char sipName_BALL_isOrthogonalTo[] = "isOrthogonalTo";
 char sipName_BALL_isZero[] = "isZero";
 char sipName_BALL_getTripleProduct[] = "getTripleProduct";
@@ -363,10 +395,8 @@ char sipName_BALL_invert[] = "invert";
 char sipName_BALL_Operator__div__[] = "Operator__div__";
 char sipName_BALL_Operator__mul__[] = "Operator__mul__";
 char sipName_BALL_Operator__sub__[] = "Operator__sub__";
-char sipName_BALL_Operator__add__[] = "Operator__add__";
 char sipName_BALL_Operator__neg__[] = "Operator__neg__";
 char sipName_BALL_Operator__pos__[] = "Operator__pos__";
-char sipName_BALL_Operator__getitem__[] = "Operator__getitem__";
 char sipName_BALL_getDiagonal[] = "getDiagonal";
 char sipName_BALL_isEqual[] = "isEqual";
 char sipName_BALL_setColumn[] = "setColumn";
@@ -432,11 +462,18 @@ char sipName_BALL_setID[] = "setID";
 char sipName_BALL_get5Prime[] = "get5Prime";
 char sipName_BALL_get3Prime[] = "get3Prime";
 char sipName_BALL_getNucleotide[] = "getNucleotide";
-char sipName_BALL_[] = "";
 char sipName_BALL_NucleicAcid[] = "NucleicAcid";
 char sipName_BALL_getSystem[] = "getSystem";
 char sipName_BALL_Molecule[] = "Molecule";
 char sipName_BALL_Fragment[] = "Fragment";
+char sipName_BALL_getExpression[] = "getExpression";
+char sipName_BALL_setExpression[] = "setExpression";
+char sipName_BALL_getPredicate[] = "getPredicate";
+char sipName_BALL_[] = "";
+char sipName_BALL_hasPredicate[] = "hasPredicate";
+char sipName_BALL_Expression[] = "Expression";
+char sipName_BALL_setArgument[] = "setArgument";
+char sipName_BALL_ExpressionPredicate[] = "ExpressionPredicate";
 char sipName_BALL_countPDBAtoms[] = "countPDBAtoms";
 char sipName_BALL_countResidues[] = "countResidues";
 char sipName_BALL_countSecondaryStructures[] = "countSecondaryStructures";
@@ -590,8 +627,6 @@ char sipName_BALL_HINFile[] = "HINFile";
 char sipName_BALL_calculateDistanceCoulomb[] = "calculateDistanceCoulomb";
 char sipName_BALL_calculateCoulomb[] = "calculateCoulomb";
 char sipName_BALL_calculateACE[] = "calculateACE";
-char sipName_BALL_size[] = "size";
-char sipName_BALL_c_str[] = "c_str";
 char sipName_BALL_isWhitespace[] = "isWhitespace";
 char sipName_BALL_isSpace[] = "isSpace";
 char sipName_BALL_isDigit[] = "isDigit";
@@ -600,9 +635,89 @@ char sipName_BALL_isAlpha[] = "isAlpha";
 char sipName_BALL_hasSuffix[] = "hasSuffix";
 char sipName_BALL_hasPrefix[] = "hasPrefix";
 char sipName_BALL_hasSubstring[] = "hasSubstring";
-char sipName_BALL_has[] = "has";
+char sipName_BALL_substitute[] = "substitute";
 char sipName_BALL_reverse[] = "reverse";
+char sipName_BALL_Operator__add__[] = "Operator__add__";
+char sipName_BALL_instr[] = "instr";
+char sipName_BALL_right[] = "right";
+char sipName_BALL_left[] = "left";
+char sipName_BALL_truncate[] = "truncate";
+char sipName_BALL_trim[] = "trim";
+char sipName_BALL_trimRight[] = "trimRight";
+char sipName_BALL_trimLeft[] = "trimLeft";
+char sipName_BALL_getField[] = "getField";
+char sipName_BALL_countFields[] = "countFields";
+char sipName_BALL_after[] = "after";
+char sipName_BALL_from[] = "from";
+char sipName_BALL_through[] = "through";
+char sipName_BALL_before[] = "before";
+char sipName_BALL_getSubstring[] = "getSubstring";
+char sipName_BALL_toDouble[] = "toDouble";
+char sipName_BALL_toFloat[] = "toFloat";
+char sipName_BALL_toLong[] = "toLong";
+char sipName_BALL_toInt[] = "toInt";
+char sipName_BALL_toShort[] = "toShort";
+char sipName_BALL_toChar[] = "toChar";
+char sipName_BALL_toBool[] = "toBool";
+char sipName_BALL_getCompareMode[] = "getCompareMode";
+char sipName_BALL_setCompareMode[] = "setCompareMode";
 char sipName_BALL_String[] = "String";
+char sipName_BALL_isBound[] = "isBound";
+char sipName_BALL_toUpper[] = "toUpper";
+char sipName_BALL_toLower[] = "toLower";
+char sipName_BALL_size[] = "size";
+char sipName_BALL_getLastIndex[] = "getLastIndex";
+char sipName_BALL_getFirstIndex[] = "getFirstIndex";
+char sipName_BALL_c_str[] = "c_str";
+char sipName_BALL_getBoundString[] = "getBoundString";
+char sipName_BALL_unbind[] = "unbind";
+char sipName_BALL_bind[] = "bind";
+char sipName_BALL_toString[] = "toString";
+char sipName_BALL_Substring[] = "Substring";
+char sipName_BALL_find[] = "find";
+char sipName_BALL_match[] = "match";
+char sipName_BALL_countSubexpressions[] = "countSubexpressions";
+char sipName_BALL_getPattern[] = "getPattern";
+char sipName_BALL_WHITESPACE[] = "WHITESPACE";
+char sipName_BALL_UPPERCASE[] = "UPPERCASE";
+char sipName_BALL_NON_WHITESPACE[] = "NON_WHITESPACE";
+char sipName_BALL_NON_NUMERIC[] = "NON_NUMERIC";
+char sipName_BALL_NON_ALPHANUMERIC[] = "NON_ALPHANUMERIC";
+char sipName_BALL_NON_ALPHA[] = "NON_ALPHA";
+char sipName_BALL_LOWERCASE[] = "LOWERCASE";
+char sipName_BALL_HEXADECIMAL_INTEGER[] = "HEXADECIMAL_INTEGER";
+char sipName_BALL_INTEGER[] = "INTEGER";
+char sipName_BALL_IDENTIFIER[] = "IDENTIFIER";
+char sipName_BALL_REAL[] = "REAL";
+char sipName_BALL_ALPHANUMERIC[] = "ALPHANUMERIC";
+char sipName_BALL_ALPHA[] = "ALPHA";
+char sipName_BALL_RegularExpression[] = "RegularExpression";
+char sipName_BALL_getInterpolatedValue[] = "getInterpolatedValue";
+char sipName_BALL_has[] = "has";
+char sipName_BALL_getDimension[] = "getDimension";
+char sipName_BALL_setOrigin[] = "setOrigin";
+char sipName_BALL_getOrigin[] = "getOrigin";
+char sipName_BALL_getBoxIndices[] = "getBoxIndices";
+char sipName_BALL_getGridCoordinates[] = "getGridCoordinates";
+char sipName_BALL_Operator__getitem__[] = "Operator__getitem__";
+char sipName_BALL_getIndex[] = "getIndex";
+char sipName_BALL_getZSpacing[] = "getZSpacing";
+char sipName_BALL_getYSpacing[] = "getYSpacing";
+char sipName_BALL_getXSpacing[] = "getXSpacing";
+char sipName_BALL_getMaxZIndex[] = "getMaxZIndex";
+char sipName_BALL_getMaxYIndex[] = "getMaxYIndex";
+char sipName_BALL_getMaxXIndex[] = "getMaxXIndex";
+char sipName_BALL_getMinZ[] = "getMinZ";
+char sipName_BALL_getMinY[] = "getMinY";
+char sipName_BALL_getMinX[] = "getMinX";
+char sipName_BALL_getMaxZ[] = "getMaxZ";
+char sipName_BALL_getMaxY[] = "getMaxY";
+char sipName_BALL_getMaxX[] = "getMaxX";
+char sipName_BALL_FloatPointGrid[] = "FloatPointGrid";
+char sipName_BALL_z[] = "z";
+char sipName_BALL_y[] = "y";
+char sipName_BALL_x[] = "x";
+char sipName_BALL_GridIndex[] = "GridIndex";
 char sipName_BALL_readOptionFile[] = "readOptionFile";
 char sipName_BALL_setDefaultBool[] = "setDefaultBool";
 char sipName_BALL_setDefaultReal[] = "setDefaultReal";
@@ -665,6 +780,9 @@ char sipName_BALL_compare[] = "compare";
 char sipName_BALL_getNewHandle[] = "getNewHandle";
 char sipName_BALL_getNextHandle[] = "getNextHandle";
 char sipName_BALL_getHandle[] = "getHandle";
+char sipName_BALL_registerThis[] = "registerThis";
+char sipName_BALL_unregisterThis[] = "unregisterThis";
+char sipName_BALL_Embeddable[] = "Embeddable";
 char sipName_BALL_isValid[] = "isValid";
 char sipName_BALL_containsSelection[] = "containsSelection";
 char sipName_BALL_isHomomorph[] = "isHomomorph";
@@ -775,6 +893,172 @@ char sipName_BALL_E[] = "E";
 char sipName_BALL_PI[] = "PI";
 char sipName_BALL_Constant[] = "Constant";
 char sipName_BALL_BALL[] = "BALL";
+
+static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
+{
+
+	{
+#line 52 "numericalSAS.sip"
+	const BaseFragment *a0;
+	PyObject *a0obj;
+	float a1 = 1.5;
+	Size *a2 = NULL;
+	PyObject *a2obj = NULL;
+
+	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,sipCanConvertTo_Size,&a2obj))
+	{
+		Surface *res;
+
+		int iserr = 0;
+
+		sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+		int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
+
+		if (iserr)
+			return NULL;
+
+		res = new Surface;
+		calculateSASPoints(* a0, *res, a1,* a2);
+
+		if (istemp2)
+			delete a2;
+
+		return sipMapCppToSelf(res,sipClass_Surface);
+	}
+#line 933 "./BALLcmodule.cpp"
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoFunction(sipName_BALL_calculateSASPoints);
+
+	return NULL;
+}
+
+static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
+{
+
+	{
+#line 15 "numericalSAS.sip"
+	const BaseFragment *a0;
+	PyObject *a0obj;
+	float a1 = 1.5;
+	Size *a2 = NULL;
+	PyObject *a2obj = NULL;
+
+	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,sipCanConvertTo_Size,&a2obj))
+	{
+		PyAtomDict *res;
+
+		int iserr = 0;
+
+		sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+		int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
+		if (a2 == NULL)
+		{
+			a2 = new Size;
+			*a2 = 400;
+		}
+
+		if (iserr)
+			return NULL;
+
+		res = new PyAtomDict;
+		calculateSASAtomAreas(* a0, *res, a1,* a2);
+		PyObject *resobj = sipConvertFrom_PyAtomDict(res);
+
+		delete res;
+		delete a2;
+
+		return resobj;
+	}
+#line 980 "./BALLcmodule.cpp"
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoFunction(sipName_BALL_calculateSASAtomAreas);
+
+	return NULL;
+}
+
+static PyObject *sipDo_calculateSASVolume(PyObject *,PyObject *sipArgs)
+{
+
+	{
+		const BaseFragment *a0;
+		PyObject *a0obj;
+		float a1 = 1.5;
+		Size a2def = Size(400);
+		Size *a2 = &a2def;
+		PyObject *a2obj = NULL;
+
+		if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,sipCanConvertTo_Size,&a2obj))
+		{
+			float res;
+
+			int iserr = 0;
+
+			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = calculateSASVolume(* a0, a1,* a2);
+
+			if (istemp2)
+				delete a2;
+
+			return PyFloat_FromDouble((double)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoFunction(sipName_BALL_calculateSASVolume);
+
+	return NULL;
+}
+
+static PyObject *sipDo_calculateSASArea(PyObject *,PyObject *sipArgs)
+{
+
+	{
+		const BaseFragment *a0;
+		PyObject *a0obj;
+		float a1 = 1.5;
+		Size a2def = Size(400);
+		Size *a2 = &a2def;
+		PyObject *a2obj = NULL;
+
+		if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,sipCanConvertTo_Size,&a2obj))
+		{
+			float res;
+
+			int iserr = 0;
+
+			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = calculateSASArea(* a0, a1,* a2);
+
+			if (istemp2)
+				delete a2;
+
+			return PyFloat_FromDouble((double)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoFunction(sipName_BALL_calculateSASArea);
+
+	return NULL;
+}
 
 static PyObject *sipDo_calculateBondAngle(PyObject *,PyObject *sipArgs)
 {
@@ -2715,6 +2999,8 @@ static PyObject *sipDo_calculateACE(PyObject *,PyObject *sipArgs)
 }
 
 static sipClassDef classesTable[] = {
+	{sipName_BALL_CompositeDescriptor, sipNew_CompositeDescriptor, &sipClass_CompositeDescriptor, sipClassAttrTab_CompositeDescriptor, NULL},
+	{sipName_BALL_MainControl, sipNew_MainControl, &sipClass_MainControl, sipClassAttrTab_MainControl, NULL},
 	{sipName_BALL_OpenMode, sipNew_OpenMode, &sipClass_OpenMode, sipClassAttrTab_OpenMode, NULL},
 	{sipName_BALL_TransformationProcessor, sipNew_TransformationProcessor, &sipClass_TransformationProcessor, sipClassAttrTab_TransformationProcessor, NULL},
 	{sipName_BALL_TranslationProcessor, sipNew_TranslationProcessor, &sipClass_TranslationProcessor, sipClassAttrTab_TranslationProcessor, NULL},
@@ -2736,7 +3022,9 @@ static sipClassDef classesTable[] = {
 	{NULL, NULL, NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
+	{NULL, NULL, NULL, NULL, NULL},
 	{sipName_BALL_AtomProcessor, sipNew_AtomProcessor, &sipClass_AtomProcessor, sipClassAttrTab_AtomProcessor, NULL},
+	{NULL, NULL, NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
 	{sipName_BALL_EnergyMinimizer, sipNew_EnergyMinimizer, &sipClass_EnergyMinimizer, sipClassAttrTab_EnergyMinimizer, sipClassVarHierTab_EnergyMinimizer},
 	{sipName_BALL_ConjugateGradientMinimizer, sipNew_ConjugateGradientMinimizer, &sipClass_ConjugateGradientMinimizer, sipClassAttrTab_ConjugateGradientMinimizer, sipClassVarHierTab_ConjugateGradientMinimizer},
@@ -2781,6 +3069,8 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_NucleicAcid, sipNew_NucleicAcid, &sipClass_NucleicAcid, sipClassAttrTab_NucleicAcid, NULL},
 	{sipName_BALL_Molecule, sipNew_Molecule, &sipClass_Molecule, sipClassAttrTab_Molecule, NULL},
 	{sipName_BALL_Fragment, sipNew_Fragment, &sipClass_Fragment, sipClassAttrTab_Fragment, NULL},
+	{sipName_BALL_Expression, sipNew_Expression, &sipClass_Expression, sipClassAttrTab_Expression, NULL},
+	{sipName_BALL_ExpressionPredicate, sipNew_ExpressionPredicate, &sipClass_ExpressionPredicate, sipClassAttrTab_ExpressionPredicate, NULL},
 	{sipName_BALL_Chain, sipNew_Chain, &sipClass_Chain, sipClassAttrTab_Chain, NULL},
 	{sipName_BALL_BaseFragment, sipNew_BaseFragment, &sipClass_BaseFragment, sipClassAttrTab_BaseFragment, NULL},
 	{sipName_BALL_Bond, sipNew_Bond, &sipClass_Bond, sipClassAttrTab_Bond, NULL},
@@ -2798,6 +3088,10 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_File, sipNew_File, &sipClass_File, sipClassAttrTab_File, NULL},
 	{sipName_BALL_HINFile, sipNew_HINFile, &sipClass_HINFile, sipClassAttrTab_HINFile, NULL},
 	{sipName_BALL_String, sipNew_String, &sipClass_String, sipClassAttrTab_String, NULL},
+	{sipName_BALL_Substring, sipNew_Substring, &sipClass_Substring, sipClassAttrTab_Substring, NULL},
+	{sipName_BALL_RegularExpression, sipNew_RegularExpression, &sipClass_RegularExpression, sipClassAttrTab_RegularExpression, NULL},
+	{sipName_BALL_FloatPointGrid, sipNew_FloatPointGrid, &sipClass_FloatPointGrid, sipClassAttrTab_FloatPointGrid, NULL},
+	{sipName_BALL_GridIndex, sipNew_GridIndex, &sipClass_GridIndex, sipClassAttrTab_GridIndex, sipClassVarHierTab_GridIndex},
 	{sipName_BALL_Options, sipNew_Options, &sipClass_Options, sipClassAttrTab_Options, NULL},
 	{sipName_BALL_BitVector, sipNew_BitVector, &sipClass_BitVector, sipClassAttrTab_BitVector, NULL},
 	{sipName_BALL_Bit, sipNew_Bit, &sipClass_Bit, sipClassAttrTab_Bit, NULL},
@@ -2806,6 +3100,7 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_Processor, sipNew_Processor, &sipClass_Processor, sipClassAttrTab_Processor, NULL},
 	{sipName_BALL_UnaryAtomPredicate, sipNew_UnaryAtomPredicate, &sipClass_UnaryAtomPredicate, sipClassAttrTab_UnaryAtomPredicate, NULL},
 	{sipName_BALL_UnaryCompositePredicate, sipNew_UnaryCompositePredicate, &sipClass_UnaryCompositePredicate, sipClassAttrTab_UnaryCompositePredicate, NULL},
+	{sipName_BALL_Embeddable, sipNew_Embeddable, &sipClass_Embeddable, sipClassAttrTab_Embeddable, NULL},
 	{sipName_BALL_Selectable, sipNew_Selectable, &sipClass_Selectable, sipClassAttrTab_Selectable, NULL},
 	{sipName_BALL_Object, sipNew_Object, &sipClass_Object, sipClassAttrTab_Object, NULL},
 	{sipName_BALL_PersistentObject, sipNew_PersistentObject, &sipClass_PersistentObject, sipClassAttrTab_PersistentObject, NULL},
@@ -2819,7 +3114,7 @@ static sipClassDef classesTable[] = {
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	100,
+	111,
 	classesTable
 };
 
@@ -2854,6 +3149,10 @@ static PyObject *initModule(PyObject *,PyObject *)
 	// Add the global functions to the dictionary.
 
 	static PyMethodDef globfuncs[] = {
+		{sipName_BALL_calculateSASPoints, sipDo_calculateSASPoints, METH_VARARGS, NULL},
+		{sipName_BALL_calculateSASAtomAreas, sipDo_calculateSASAtomAreas, METH_VARARGS, NULL},
+		{sipName_BALL_calculateSASVolume, sipDo_calculateSASVolume, METH_VARARGS, NULL},
+		{sipName_BALL_calculateSASArea, sipDo_calculateSASArea, METH_VARARGS, NULL},
 		{sipName_BALL_calculateBondAngle, sipDo_calculateBondAngle, METH_VARARGS, NULL},
 		{sipName_BALL_calculateTorsionAngle, sipDo_calculateTorsionAngle, METH_VARARGS, NULL},
 		{sipName_BALL_nucleicAcids, sipDo_nucleicAcids, METH_VARARGS, NULL},
@@ -2922,6 +3221,28 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 	};
 
 	if (sipAddClassInstances(((PyClassObject *)sipClass_File) -> cl_dict,FileclassInstances) < 0)
+		return NULL;
+
+	// Add the class instances to the dictionary.
+
+	static sipClassInstanceDef RegularExpressionclassInstances[] = {
+		{sipName_BALL_ALPHA, &RegularExpression::ALPHA, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_ALPHANUMERIC, &RegularExpression::ALPHANUMERIC, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_REAL, &RegularExpression::REAL, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_IDENTIFIER, &RegularExpression::IDENTIFIER, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_INTEGER, &RegularExpression::INTEGER, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_HEXADECIMAL_INTEGER, &RegularExpression::HEXADECIMAL_INTEGER, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_LOWERCASE, &RegularExpression::LOWERCASE, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_NON_ALPHA, &RegularExpression::NON_ALPHA, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_NON_ALPHANUMERIC, &RegularExpression::NON_ALPHANUMERIC, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_NON_NUMERIC, &RegularExpression::NON_NUMERIC, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_NON_WHITESPACE, &RegularExpression::NON_WHITESPACE, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_UPPERCASE, &RegularExpression::UPPERCASE, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_WHITESPACE, &RegularExpression::WHITESPACE, sipClass_String, SIP_SIMPLE},
+		NULL
+	};
+
+	if (sipAddClassInstances(((PyClassObject *)sipClass_RegularExpression) -> cl_dict,RegularExpressionclassInstances) < 0)
 		return NULL;
 
 	// Add the class instances to the dictionary.
