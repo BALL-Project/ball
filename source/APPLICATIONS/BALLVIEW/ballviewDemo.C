@@ -175,7 +175,7 @@ void BALLViewDemo::accept()
 	else if (id == 7)
 	{
 		getMainControl()->getMolecularControlSelection().clear();
-		getMainControl()->getMolecularControlSelection().push_back(system);
+		getMainControl()->getMolecularControlSelection().push_back(system_);
 		ms->calculateHBonds();
    	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
    	notify_(crmsg);
