@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.12 2001/03/12 10:49:09 oliver Exp $
+// $Id: HINFile.h,v 1.13 2001/06/05 15:44:05 anker Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -59,9 +59,10 @@ namespace BALL
 		*/
 		//@{
 		
-		/**	Write a system to the HIN file
+		/**	Write a system to the HIN file.
+				Note that this changes the properties of atoms in the system.
 		*/
-		virtual void write(const System&	system);
+		virtual void write(const System& system);
 		
 		/**	Read a system from the HIN file
 		*/
@@ -72,8 +73,9 @@ namespace BALL
 		virtual HINFile& operator >> (System& system);
 		
 		/**	Write a system to a HIN file.
+				Note that this changes the properties of atoms in the system.
 		*/
-		virtual HINFile& operator << (const System& system);
+		virtual HINFile& operator << (System& system);
 		
 		//@}
 
