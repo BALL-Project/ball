@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.20.4.5 2002/12/03 15:54:13 amoll Exp $
+// $Id: mainControl.h,v 1.20.4.6 2002/12/06 16:57:10 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -810,7 +810,12 @@ namespace BALL
 			const HashSet<Composite*>& getSelection() const
 				throw();
 
-			/** Return true if exact one system is selected and nothing else
+			/** Get the selection of the control (not the selection with checkboxes).
+			 */
+			List<Composite*>& getControlSelection()
+				throw();
+
+			/** Return true if exact one system is selected in the control and nothing else
 			 */
 			System* getSelectedSystem()
 				throw();
@@ -857,7 +862,12 @@ namespace BALL
 
 			/*_ List with the selected composites
 			*/
-			HashSet<Composite*> 						selection_;
+			HashSet<Composite*> 				selection_;
+
+			/*_ List with the selected composites of the control.
+			 		(Not the one with the checkboxes!)
+			*/
+			List<Composite*>						control_selection_;		
 
 			private:
 
