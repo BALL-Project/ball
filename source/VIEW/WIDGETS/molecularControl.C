@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.92 2005/02/06 20:57:11 oliver Exp $
+// $Id: molecularControl.C,v 1.93 2005/02/14 14:10:49 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -200,7 +200,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// 																			no simulation running &&
 	// 																			it makes sense
 	bool allow_paste = getSelection().size() <= 1 &&
-										 copy_list_.size() && 
+										 copy_list_.size() > 0 && 
 										 !busy;
 	if (allow_paste)
 	{
@@ -754,10 +754,9 @@ void MolecularControl::setSelection_(bool open, bool force)
 void MolecularControl::cut()
 {
 	// delete old composites in copy list
-	if (!was_delete_)
-	{
-		clearClipboard();
-	}
+	if (!was_delete_) clearClipboard();
+
+	listview->setUpdatesEnabled(false);
 
 	// remove the selected composites from the tree and from the scene
 	// if !was_delete_, copy them into the copy_list_
@@ -780,10 +779,7 @@ void MolecularControl::cut()
 
 		getMainControl()->remove(**it, was_delete_);
 
-		if (!was_delete_) 
-		{
- 			copy_list_.push_back(*it);
-		}
+		if (!was_delete_) copy_list_.push_back(*it);
 	}
 
 	setStatusbarText("Deleted " + String(nr_of_items) + " items.");
@@ -795,10 +791,9 @@ void MolecularControl::cut()
 	notify_(message);
 
 	HashSet<Composite*>::Iterator roots_it = roots.begin();
-	for (roots_it = roots.begin(); roots_it != roots.end(); roots_it++)
+	for (; roots_it != roots.end(); roots_it++)
 	{
-		CompositeMessage* ccmessage = new CompositeMessage(**roots_it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-		notify_(ccmessage);
+		getMainControl()->update(**roots_it, true);
 	}
 }
 
@@ -857,23 +852,11 @@ void MolecularControl::paste()
 		changed_roots.insert(&parent->getRoot());
 	}
 
-	listview->setUpdatesEnabled(false);
-
-	// update of molecular control first
-	HashSet<Composite*>::Iterator it = changed_roots.begin();
-	for (; it != changed_roots.end(); it++)
-	{
-		updateListViewItem_(0, **it);
-		listview->setUpdatesEnabled(true);
-	}
-
-	listview->triggerUpdate();
-
 	// update of representations, etc.
+	HashSet<Composite*>::Iterator it = changed_roots.begin();
 	for (it = changed_roots.begin(); it != changed_roots.end(); it++)
 	{
-		CompositeMessage *new_message = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-		notify_(*new_message);
+		getMainControl()->update(**it, true);
 	}
 }
 
