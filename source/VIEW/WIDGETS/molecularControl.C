@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.81 2004/12/07 22:46:07 amoll Exp $
+// $Id: molecularControl.C,v 1.82 2004/12/08 01:31:13 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -638,10 +638,9 @@ void MolecularControl::removeRecursiveComposite_(Composite& composite, bool firs
 	SelectableListViewItem* item = composite_to_item_[&composite];
 
 	SelectableListViewItem* child = dynamic_cast<SelectableListViewItem*>(item->firstChild());
-	Composite* c_ptr = 0;
 	while (child != 0)
 	{
-		c_ptr = child->getComposite();
+		Composite* c_ptr = child->getComposite();
 		composite_to_item_.erase(c_ptr);
 		removeRecursiveComposite_(*c_ptr, false);
 		delete child;
@@ -649,7 +648,12 @@ void MolecularControl::removeRecursiveComposite_(Composite& composite, bool firs
 		nr_items_removed_++;
 	}
 
-	if (first_call) delete item;
+	if (first_call) 
+	{
+		composite_to_item_.erase(&composite);
+		delete item;
+		nr_items_removed_++;
+	}
 }
 
 
@@ -878,6 +882,11 @@ void MolecularControl::paste()
 		Composite* parent = *selected_.begin();
 		Composite *new_child = (Composite*)(*list_it)->create();
 
+#ifdef BALL_PLATFORM_WINDOWS
+		//  prevent a strange problem with paste under windows
+		composite_to_item_.erase(new_child);
+#endif
+
 		parent->appendChild(*new_child);
 		changed_roots.insert(&parent->getRoot());
 	}
@@ -885,11 +894,10 @@ void MolecularControl::paste()
 	HashSet<Composite*>::Iterator it = changed_roots.begin();
 	for (; it != changed_roots.end(); it++)
 	{
+		updateListViewItem_(0, **it);
 		CompositeMessage *new_message = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
 		notify_(*new_message);
-		updateListViewItem_(0, **it);
 	}
-
 }
 
 
