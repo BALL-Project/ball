@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyGeometricObjectList.sip,v 1.1 2003/12/11 02:15:16 amoll Exp $
+// $Id: pyGeometricObjectList.sip,v 1.2 2003/12/11 02:20:10 amoll Exp $
 //
 
 %MappedType PyGeometricObjectList
@@ -27,8 +27,6 @@
 		GeometricObject& obj = **it;
 		PyObject *inst;
 
-		
-		//if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		if ((inst = sipMapCppToSelf(&obj, sipClass_GeometricObject)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
