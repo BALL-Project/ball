@@ -70,4 +70,36 @@ String getColoringName(ColoringMethod type)
 	return "Unknown";
 }
 
+
+bool isSurfaceModel(ModelType type)
+	throw()
+{
+	if (type == MODEL_SE_SURFACE || 
+			type == MODEL_SA_SURFACE ||
+			type == MODEL_CONTOUR_SURFACE)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+bool modelMustBeRebuild(ModelType type)
+	throw()
+{
+	return (type == MODEL_SE_SURFACE ||
+					type == MODEL_SA_SURFACE ||
+					type == MODEL_BACKBONE 	||
+					type == MODEL_CARTOON);
+}
+
+
+bool modelMuteableByDisplayProperties(ModelType type)
+	throw()
+{ 
+	return type < MODEL_LABEL && type > MODEL_UNKNOWN;
+}
+
+
 } } //namespaces
