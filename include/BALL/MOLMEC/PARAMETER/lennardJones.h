@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.11 2000/09/22 16:32:02 anker Exp $
+// $Id: lennardJones.h,v 1.12 2000/10/05 08:31:00 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -26,13 +26,13 @@ namespace BALL
 
 			If the Slater-Kirkwood format is used, the values for $A_{ij}$ and $B_{ij}$ are calculated
 			as follows (see e.g. Brooks et al., J. Comput. Chem, 4(2):187-217 (1983))
-			\TEX{
-				\begin{aligned}
+			\[
 				B_{ij} & = & \frac{3}{2} \left(\frac{1}{4 \pi \varepsilon_0}\right)^\frac{1}{2}
-						\frac{e \hbar \sqrt{m_e} \alpha_i \alpha_j}{\sqrt{\frac{\alpha_i}{N_i} + \sqrt{\frac{\alpha_j}{N_j}}}}\\
+						\frac{e \hbar \sqrt{m_e} \alpha_i \alpha_j}{\sqrt{\frac{\alpha_i}{N_i} + \sqrt{\frac{\alpha_j}{N_j}}}}
+			\]
+			\[
 				A_{ij} & = & \frac{1}2{} B_{ij} (R_i + R_j)^6
-				\end{aligned}
-			}
+			\]
 			\\
 			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/lennardJones.h}	
 			\\
