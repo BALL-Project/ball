@@ -69,6 +69,10 @@ EXECUTABLES = \
 	Vector4_test\
 	XYZFile_test
 
+# required for clean and depend
+CPP_SOURCES=$(EXECUTABLES:=.C)
+OBJECTS=$(EXECUTABLES:=.o)
+
 include ../common.mak
 include .Dependencies
 
@@ -78,12 +82,10 @@ BALL_CXXFLAGS=
 # do not optimize tests (reduces compile time drastically)
 CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 
-CPP_SOURCES=$(EXECUTABLES:=.C)
-OBJECTS=$(EXECUTABLES:=.o)
-
-
-%_test: %_test.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+# 
+.C:
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
+ 	
 
 all:	$(EXECUTABLES)
 
