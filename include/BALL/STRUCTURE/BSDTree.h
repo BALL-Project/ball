@@ -1,6 +1,4 @@
-// $Id: BSDTree.h,v 1.13 2001/06/28 19:12:36 amoll Exp $
-
-#define DEBUG_BSDTREE
+// $Id: BSDTree.h,v 1.14 2001/09/19 17:56:58 strobel Exp $
 
 #ifndef BALL_STRUCTURE_BSDTREE_H
 #define BALL_STRUCTURE_BSDTREE_H
@@ -59,8 +57,8 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				This method creates a new TBSDTree object. It contains no points,
-				the direction of division is set to {\tt x}, the bounding box is
+				This method creates a new TBSDTree object. It contains no points,	
+				the direction of division is set to {\tt x}, the bounding box is	
 				empty and there exist no children.
 		*/
 		TBSDTree()
@@ -75,8 +73,8 @@ namespace BALL
 			throw();
 
 		/**	Detailed constructor.
-				Create a new BSDTree object from a vector of TVector3, a list of
-				Index, a Direction and two pointers to BSDTrees.
+				Create a new BSDTree object from a vector of TVector3, a HashSet of	
+				Index, a Direction, a TBox3 and two pointers to BSDTrees.
 				@param	point					assigned to the points
 				@param	part					assigned to the indices of this part of the tree
 				@param	division			assigned to the direction of division
@@ -84,8 +82,26 @@ namespace BALL
 				@param	left					assigned to the left child
 				@param	right					assigned to the right child
 		*/
-		TBSDTree(const vector<TVector3<T> >& point,
+		TBSDTree(const ::std::vector<TVector3<T> >& point,
 				const HashSet<Index>& part,
+				const Direction& division,
+				const TBox3<T>& bounding_box,
+				TBSDTree<T>* left,
+				TBSDTree<T>* right)
+			throw();
+
+		/**	Detailed constructor.
+				Create a new BSDTree object from a vector of TVector3, a list of	
+				Index, a Direction, a TBox3 and two pointers to BSDTrees.
+				@param	point					assigned to the points
+				@param	part					assigned to the indices of this part of the tree
+				@param	division			assigned to the direction of division
+				@param	bounding_box	assigned to the bounding box
+				@param	left					assigned to the left child
+				@param	right					assigned to the right child
+		*/
+		TBSDTree(const ::std::vector<TVector3<T> >& point,
+				const ::std::list<Index>& part,
 				const Direction& division,
 				const TBox3<T>& bounding_box,
 				TBSDTree<T>* left,
@@ -96,16 +112,27 @@ namespace BALL
 				Create a new BSDTree object from a vector of TVector3
 				@param	p assigned to the points
 		*/
-		TBSDTree(const vector< TVector3<T> >& point)
+		TBSDTree(const ::std::vector< TVector3<T> >& point)
 			throw();
 
 		/**	Detailed constructor.
-				Create a new BSDTree object from a vector of TVector3, a list of
+				Create a new BSDTree object from a vector of TVector3, a HashSet of	
 				Index
 				@param	point	assigned to the points
 				@param	part	assigned to the indices of this part of the tree
 		*/
-		TBSDTree(const vector< TVector3<T> >& point, const HashSet<Index>& part)
+		TBSDTree(const ::std::vector< TVector3<T> >& point,
+				const HashSet<Index>& part)
+			throw();
+
+		/**	Detailed constructor.
+				Create a new BSDTree object from a vector of TVector3, a list of	
+				Index
+				@param	point	assigned to the points
+				@param	part	assigned to the indices of this part of the tree
+		*/
+		TBSDTree(const ::std::vector< TVector3<T> >& point,
+				const ::std::list<Index>& part)
 			throw();
 
 		/**	Destructor.	
@@ -120,9 +147,9 @@ namespace BALL
 		//@{
 
 		/**	Assign from another BSDTree.
-				@param bsd_tree	the BSDTree object to assign from
+				@param	bsd_tree	the BSDTree object to assign from
 		*/
-		void set(const TBSDTree& bsd_tree)
+		void set(const TBSDTree<T>& bsd_tree)
 			throw();
 
 		//@}
@@ -176,8 +203,8 @@ namespace BALL
 		/** Remove a point from the BSDTree.
 				@param	i	the index ofthe pointto be removed
 		*/
-		void remove(Index i)
-			throw(Exception::IndexOverflow);
+		//void remove(Index i)
+		//	throw(Exception::IndexOverflow);
 
 		//@}
 
@@ -185,10 +212,11 @@ namespace BALL
 
 		/*_ the points stored in the BSDTree
 		*/
-		vector< TVector3<T> > point_;
+		::std::vector< TVector3<T> > point_;
 		/*_ the indices of the points stored in this part of the BSDTree
 		*/
-		HashSet<Index> part_;
+		//HashSet<Index> part_;
+		::std::list<Index> part_;
 		/*_ the direction of division of this node of the BSDTree
 		*/
 		Direction division_;
@@ -248,12 +276,36 @@ namespace BALL
 
 	template <typename T>
 	TBSDTree<T>::TBSDTree
-		 (const vector<TVector3<T> >& point,
-			const HashSet<Index>&				part,
-			const Direction&						division,
-			const TBox3<T>&							bounding_box,
-			TBSDTree<T>*								left,
-			TBSDTree<T>*								right)
+		 (const ::std::vector<TVector3<T> >& point,
+			const HashSet<Index>&							 part,
+			const Direction&									 division,
+			const TBox3<T>&										 bounding_box,
+			TBSDTree<T>*											 left,
+			TBSDTree<T>*											 right)
+		throw()
+		: point_(point),
+			part_(),
+			division_(division),
+			bounding_box_(bounding_box),
+			left_(left),
+			right_(right)
+	{
+		HashSet<Index>::ConstIterator i;
+		for (i = part.begin(); i != part.end(); i++)
+		{
+			part_.push_back(*i);
+		}
+	}
+
+
+	template <typename T>
+	TBSDTree<T>::TBSDTree
+		 (const ::std::vector<TVector3<T> >& point,
+			const ::std::list<Index>&					 part,
+			const Direction&									 division,
+			const TBox3<T>&										 bounding_box,
+			TBSDTree<T>*											 left,
+			TBSDTree<T>*											 right)
 		throw()
 		: point_(point),
 			part_(part),
@@ -266,7 +318,7 @@ namespace BALL
 
 
 	template <typename T>
-	TBSDTree<T>::TBSDTree(const vector< TVector3<T> >& point)
+	TBSDTree<T>::TBSDTree(const ::std::vector< TVector3<T> >& point)
 		throw()
 		:	point_(point),
 			part_(),
@@ -276,7 +328,7 @@ namespace BALL
 	{
 		for (Position i = 0; i < point.size(); i++)
 		{
-			part_.insert(i);
+			part_.push_back(i);
 		}
 		if (part_.size() > 0)
 		{
@@ -289,8 +341,33 @@ namespace BALL
 
 
 	template <typename T>
-	TBSDTree<T>::TBSDTree(const vector< TVector3<T> >& point,
+	TBSDTree<T>::TBSDTree(const ::std::vector< TVector3<T> >& point,
 			const HashSet<Index>& part)
+		throw()
+		:	point_(point),
+			part_(),
+			bounding_box_(),
+			left_(NULL),
+			right_(NULL)
+	{
+		HashSet<Index>::ConstIterator i;
+		for (i = part.begin(); i != part.end(); i++)
+		{
+			part_.push_back(*i);
+		}
+		if (part_.size() > 0)
+		{
+			T x_min, y_min, z_min, x_max, y_max, z_max;
+			getExtrema(x_min,y_min,z_min,x_max,y_max,z_max);
+			bounding_box_ = TBox3<T>(TVector3<T>(x_min,y_min,z_min),
+															 TVector3<T>(x_max,y_max,z_max)	);
+		}
+	}
+
+
+	template <typename T>
+	TBSDTree<T>::TBSDTree(const ::std::vector< TVector3<T> >& point,
+			const ::std::list<Index>& part)
 		throw()
 		:	point_(point),
 			part_(part),
@@ -324,7 +401,7 @@ namespace BALL
 
 
 	template <typename T>
-	void TBSDTree<T>::set(const TBSDTree& bsd_tree)
+	void TBSDTree<T>::set(const TBSDTree<T>& bsd_tree)
 		throw()
 	{
 		point_ = bsd_tree.point_;
@@ -351,7 +428,7 @@ namespace BALL
 		x_max = point_[*part_.begin()].x;
 		y_max = point_[*part_.begin()].y;
 		z_max = point_[*part_.begin()].z;
-		HashSet<Index>::Iterator i;
+		::std::list<Index>::iterator i;
 		for (i = part_.begin(); i != part_.end(); i++)
 		{
 			x_min = Maths::min(point_[*i].x,x_min);
@@ -408,18 +485,18 @@ namespace BALL
 					case TBSDTree<T>::DIRECTION_Y :	d = 1; break;
 					case TBSDTree<T>::DIRECTION_Z :	d = 2; break;
 				}
-				HashSet<Index> left_part;
-				HashSet<Index> right_part;
-				HashSet<Index>::Iterator i;
+				::std::list<Index> left_part;
+				::std::list<Index> right_part;
+				::std::list<Index>::iterator i;
 				for (i = part_.begin(); i != part_.end(); i++)
 				{
 					if (Maths::isLess(point_[*i][d],middle))
 					{
-						left_part.insert(*i);
+						left_part.push_back(*i);
 					}
 					else
 					{
-						right_part.insert(*i);
+						right_part.push_back(*i);
 					}
 				}
 				left_ = new TBSDTree<T>(point_,left_part);
@@ -442,19 +519,19 @@ namespace BALL
 		throw()
 	{
 		bool is_intersecting = true;
-   	for (Position i = 0; i < 3; i++)
- 	  {
-      if ((p[i]+length < bounding_box_.a[i]) ||
-      		(p[i]-length > bounding_box_.b[i])		)
-     	{
-   	    is_intersecting = false;
- 	    }
-    }
+		for (Position i = 0; i < 3; i++)
+		{
+			if ((p[i]+length < bounding_box_.a[i]) ||
+					(p[i]-length > bounding_box_.b[i])		)
+			{
+				is_intersecting = false;
+			}
+		}
 		if (is_intersecting)
 		{
 			if (left_ == NULL)
 			{
-				HashSet<Index>::Iterator i;
+				::std::list<Index>::const_iterator i;
 				for (i = part_.begin(); i != part_.end(); i++)
 				{
 					indices.insert(*i);
@@ -487,11 +564,7 @@ namespace BALL
 		{
 			if (left_ == NULL)
 			{
-				HashSet<Index>::Iterator i;
-				for (i = part.begin(); i != part.end(); i++)
-				{
-					indices.push_back(*i);
-				}
+				indices.insert(indices.end(),part_.begin(),part_.end());
 			}
 			else
 			{
@@ -502,7 +575,7 @@ namespace BALL
 	}
 
 
-	template <typename T>
+	/*template <typename T>
 	void TBSDTree<T>::remove(Index i)
 		throw(Exception::IndexOverflow)
 	{
@@ -510,7 +583,7 @@ namespace BALL
 		{
 			throw Exception::SizeOverflow(__FILE__, __LINE__);
 		}
-		part_.erase(i);
+		part_.remove(i);
 		if (left_ != NULL)
 		{
 			if (left_->bounding_box_.has(point_[i]))
@@ -525,7 +598,7 @@ namespace BALL
 				right_->remove(i);
 			}
 		}
-	}
+	}*/
 
 
 
