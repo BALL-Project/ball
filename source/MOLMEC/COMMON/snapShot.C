@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.8 2000/03/05 11:28:22 oliver Exp $
+// $Id: snapShot.C,v 1.9 2000/03/25 22:54:45 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
@@ -14,7 +14,7 @@ namespace BALL
 	const unsigned int SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY = 100;
 
 	// The default constructor of the SnapShot class. 
-  SnapShot::SnapShot ()
+	  SnapShot::SnapShot()
 	{
 		valid = false;
 		index = 0;
@@ -22,7 +22,7 @@ namespace BALL
 
 	// The constructor of this class expects the number of atoms in the system
 	// and reserves the necessary amount of memory for the data
-	SnapShot::SnapShot (const Size number)
+	SnapShot::SnapShot (Size number)
 	{
 		Vector3 tmp;
 
@@ -43,11 +43,11 @@ namespace BALL
 
 	// The  destructor just deletes all STL components (superfluous and just
 	// for clarity) 
-	SnapShot::~SnapShot ()
+	SnapShot::~SnapShot()
 	{
-		position.clear ();
-		velocity.clear ();
-		force.clear ();
+		position.clear();
+		velocity.clear();
+		force.clear();
 	}
 
 
@@ -113,7 +113,7 @@ namespace BALL
 	}
 
 	// A simple constructor for SnapShotManager, which does basically nothing 
-	SnapShotManager::SnapShotManager ()
+	SnapShotManager::SnapShotManager()
 	{
 		valid_ = false;
 		force_field_ptr_ = 0;
@@ -147,7 +147,7 @@ namespace BALL
 		// right size. The actual contents (=pointers) must be copied then:
 		snapshot_list_ = rhs.snapshot_list_;
 
-		for (it = snapshot_list_.begin (); it != snapshot_list_.end (); ++it)
+		for (it = snapshot_list_.begin(); it != snapshot_list_.end(); ++it)
 		{
 			// create a new SnapShot object and copy all data from the original to it
 			tmp_ptr = new SnapShot (no_of_atoms_);
@@ -187,7 +187,7 @@ namespace BALL
 		snapshot_list_ = rhs.snapshot_list_;
 
 
-		for (it = snapshot_list_.begin (); it != snapshot_list_.end (); ++it)
+		for (it = snapshot_list_.begin(); it != snapshot_list_.end(); ++it)
 		{
 			// create a new SnapShot object and copy all data from the original to it
 			tmp_ptr = new SnapShot (no_of_atoms_);
@@ -210,10 +210,10 @@ namespace BALL
 	}
 
 	// The destructor of SnapShotManager 
-	SnapShotManager::~SnapShotManager ()
+	SnapShotManager::~SnapShotManager()
 	{
 		// Flush all remaining snapshots to disk
-		flushToDisk ();
+		flushToDisk();
 	}
 
 
@@ -227,17 +227,17 @@ namespace BALL
 		  vector < SnapShot * >::iterator it;
 
 		// delete the vector of pointers to SnapShot objects
-		for (it = snapshot_list_.begin (); it != snapshot_list_.end (); ++it)
+		for (it = snapshot_list_.begin(); it != snapshot_list_.end(); ++it)
 		{
 			delete *it;
 		}
 
-		snapshot_list_.clear ();
+		snapshot_list_.clear();
 
 		// first store the current force field
 		force_field_ptr_ = &my_forcefield;
 
-		if (force_field_ptr_ == 0 || force_field_ptr_->isValid () == false)
+		if (force_field_ptr_ == 0 || force_field_ptr_->isValid() == false)
 		{
 			// no valid force field: no more to do
 			valid_ = false;
@@ -248,7 +248,7 @@ namespace BALL
 		// get the current system      
 		system_ptr_ = &my_system;
 
-		if (system_ptr_ != force_field_ptr_->getSystem ())
+		if (system_ptr_ != force_field_ptr_->getSystem())
 		{
 			Log.level (LogStream::ERROR) << "The given force field is not bound to the given system!" << endl;
 			Log.level (LogStream::WARNING) << "Setup of SnapShotManager has failed!" << endl;
@@ -256,7 +256,7 @@ namespace BALL
 			return false;
 		}
 
-		if (system_ptr_ == 0 || system_ptr_->isValid () == false)
+		if (system_ptr_ == 0 || system_ptr_->isValid() == false)
 		{
 			// no valid force field: no more to do
 			Log.level (LogStream::WARNING) << "No valid SnapShotManager because no valid system!" << endl;
@@ -265,7 +265,7 @@ namespace BALL
 		}
 
 		// the number of atoms in the system
-		no_of_atoms_ = system_ptr_->countAtoms ();
+		no_of_atoms_ = system_ptr_->countAtoms();
 
 		// set the options 
 		options = myoptions;
@@ -341,7 +341,7 @@ namespace BALL
 		if (strcmp (header.Title, "BALL SNAPSHOT      ") != 0)
 		{
 			Log.level (LogStream::ERROR) << "File " << filename << " is no valid Snapshot file!" << endl;
-			input_file.close ();
+			input_file.close();
 			return false;
 		}
 
@@ -438,7 +438,7 @@ namespace BALL
 		output_file.write ((char *) &header.no_of_snapshots, sizeof (header.no_of_snapshots));
 
 		// we will later on save the offset here for appending snapshots 
-		position = output_file.tellp ();
+		position = output_file.tellp();
 		output_file.write ((char *) &header.start_position, sizeof (header.start_position));
 
 		output_file.write ((char *) &header.reserved1, sizeof (header.reserved1));
@@ -459,36 +459,36 @@ namespace BALL
 
 
 		// remember where the first snapshot entry will be written 
-		header.start_position = output_file.tellp ();
+		header.start_position = output_file.tellp();
 		output_file.seekp (position);
 		output_file.write ((char *) &header.start_position, sizeof (header.start_position));
 
-		output_file.close ();
+		output_file.close();
 		return true;
 	}
 
 
 	// This method calculates the current kinetic energy of the system
 	// (only selected atoms are considered) 
-	float SnapShotManager::calculateKineticEnergy ()
+	double SnapShotManager::calculateKineticEnergy()
 	{
 		// First define some local variables 
-		float sq_velocity;
-		float sum, result;
+		double sq_velocity;
+		double sum, result;
 
-		  vector < Atom * >::iterator atom_it;
-		  vector < Atom * >selected_atoms;
+		AtomVector::Iterator atom_it;
+		AtomVector selected_atoms;
 
-		  sum = 0.0;
-		  selected_atoms = force_field_ptr_->getAtoms ();
+		sum = 0.0;
+		selected_atoms = force_field_ptr_->getAtoms();
 
 		// The current temperature (calculated as instantaneous kinetic energy)
 		// If we use a periodic boundary box, then we use the molecules' centres of
 		// gravity, otherwise we iterate directly over the individual atoms of the system 
 
-		  atom_it = selected_atoms.begin ();
+		atom_it = selected_atoms.begin();
 
-		if (force_field_ptr_->periodic_boundary.isEnabled () == true)
+		if (force_field_ptr_->periodic_boundary.isEnabled() == true)
 		{
 			float molecule_mass = 0;
 			float mass;
@@ -499,20 +499,20 @@ namespace BALL
 			Vector3 centre_velocity;
 
 
-			  centre_velocity.x = centre_velocity.y = centre_velocity.z = 0;
+			centre_velocity.x = centre_velocity.y = centre_velocity.z = 0;
 
 			// Get the molecule of the first atom in the system 
-			  old = (*atom_it)->getMolecule ();
+			old = (*atom_it)->getMolecule();
 
 			// Iterate over all atoms in the system and determine for every
 			// molecule the velocity of its centre of mass
 			// This velocity contributes to the overall temperature 
-			  vector < Atom * >::iterator end_it = selected_atoms.end ();
+			AtomVector::Iterator end_it = selected_atoms.end();
 
 			while (atom_it != end_it)
 			{
 				// determine the molecule of the current atom
-				current = (*atom_it)->getMolecule ();
+				current = (*atom_it)->getMolecule();
 
 				if (current != old)
 				{
@@ -535,9 +535,9 @@ namespace BALL
 
 				// add the atom's velocity to the total velocity  
 				// of the current molecule
-				mass = (*atom_it)->getElement ().getAtomicWeight ();
+				mass = (*atom_it)->getElement().getAtomicWeight();
 				molecule_mass += mass;
-				centre_velocity += mass * (*atom_it)->getVelocity ();
+				centre_velocity += mass * (*atom_it)->getVelocity();
 
 
 				// go on to the next atom
@@ -569,11 +569,11 @@ namespace BALL
 			int no_of_atoms = 0;
 
 			// Iterate over all atoms and calculate \sum m_i \cdot v_i^2  
-			for (atom_it = selected_atoms.begin (); atom_it != selected_atoms.end (); ++atom_it)
+			for (atom_it = selected_atoms.begin(); atom_it != selected_atoms.end(); ++atom_it)
 			{
 				no_of_atoms++;
-				sq_velocity = (*atom_it)->getVelocity () * (*atom_it)->getVelocity ();
-				sum += (*atom_it)->getElement ().getAtomicWeight () * sq_velocity;
+				sq_velocity = (*atom_it)->getVelocity() * (*atom_it)->getVelocity();
+				sum += (*atom_it)->getElement().getAtomicWeight() * sq_velocity;
 			}
 
 			// 0.01 scales Da*A^2/ps^2 to kJ/mol 
@@ -590,7 +590,7 @@ namespace BALL
 	// taken, all snapshots so far are saved to disk 
 	// The first snapshot taken (and with no other previous snapshots in a file)
 	// has index 1. 
-	void SnapShotManager::takeSnapShot ()
+	void SnapShotManager::takeSnapShot()
 	{
 		// local variables
 		AtomIterator atom_it;
@@ -612,7 +612,7 @@ namespace BALL
 		{
 			// there was not enough memory available 
 			// flush all snapshots taken so far to disk and try again
-			flushToDisk ();
+			flushToDisk();
 
 			snapshot_ptr = new SnapShot (no_of_atoms_);
 
@@ -629,21 +629,21 @@ namespace BALL
 		// snapshot object
 
 		// This is the data section of the snapshot object 
-		for (atom_it = system_ptr_->beginAtom (); atom_it != system_ptr_->endAtom (); ++atom_it)
+		for (atom_it = system_ptr_->beginAtom(); atom_it != system_ptr_->endAtom(); ++atom_it)
 		{
-			snapshot_ptr->position.push_back (atom_it->getPosition ());
-			snapshot_ptr->velocity.push_back (atom_it->getVelocity ());
-			snapshot_ptr->force.push_back (atom_it->getForce ());
+			snapshot_ptr->position.push_back (atom_it->getPosition());
+			snapshot_ptr->velocity.push_back (atom_it->getVelocity());
+			snapshot_ptr->force.push_back (atom_it->getForce());
 		}
 
 		// store the potential energies      
-		snapshot_ptr->potential_energy = force_field_ptr_->getEnergy ();
+		snapshot_ptr->potential_energy = force_field_ptr_->getEnergy();
 
 
 		// store the kinetic energy of all selected atoms in the system 
 		// the current value must be calculated as it is not provided by
 		// the force field 
-		snapshot_ptr->kinetic_energy = calculateKineticEnergy ();
+		snapshot_ptr->kinetic_energy = calculateKineticEnergy();
 
 		// These items are the admininistrative  data 
 		// First store the index of this snapshot. SnapShots are counted starting with 1. 
@@ -653,16 +653,16 @@ namespace BALL
 		snapshot_list_.push_back (snapshot_ptr);
 		snapshot_counter_++;
 
-		if (snapshot_list_.size () >= flush_to_disk_freq_)
+		if (snapshot_list_.size() >= flush_to_disk_freq_)
 		{
 			// write all snapshots to disk in order to prevent memory overflow
-			flushToDisk ();
+			flushToDisk();
 		}
 	}	// end of SnapShotManager::takeSnapShot() 
 
 
 	// This method writes all snapshots in memory to the snapshot file on disk
-	void SnapShotManager::flushToDisk ()
+	void SnapShotManager::flushToDisk()
 	{
 		// local variables
 		bool result;
@@ -670,7 +670,7 @@ namespace BALL
 		  vector < SnapShot * >::iterator it;
 
 		// if no snapshots are in main memory, then there is nothing to do
-		if (snapshot_list_.size () == 0 || valid_ == false)
+		if (snapshot_list_.size() == 0 || valid_ == false)
 			  return;
 
 
@@ -705,7 +705,7 @@ namespace BALL
 			return;
 		}
 
-		for (it = snapshot_list_.begin (); it != snapshot_list_.end (); ++it)
+		for (it = snapshot_list_.begin(); it != snapshot_list_.end(); ++it)
 		{
 			output_file << *(*it);
 			delete *it;
@@ -715,18 +715,18 @@ namespace BALL
 
 
 		// clear the snapshot list
-		snapshot_list_.clear ();
+		snapshot_list_.clear();
 
 		// close the output file
-		output_file.close ();
+		output_file.close();
 
 	}	// end of SnapShotManager::flushToDisk()
 
 	// This method does the same as flushToDisk(). Included for convenience and 
 	// sloth of users only.
-	void SnapShotManager::close ()
+	void SnapShotManager::close()
 	{
-		flushToDisk ();
+		flushToDisk();
 	}
 
 
@@ -755,9 +755,9 @@ namespace BALL
 		AtomIterator atom_it;
 		vector < Vector3 >::iterator force_it, pos_it, vel_it;
 
-		for (atom_it = cmp.beginAtom (), force_it = tmp.force.begin (),
-				 pos_it = tmp.position.begin (),
-				 vel_it = tmp.velocity.end (); atom_it != cmp.endAtom (); ++atom_it, ++force_it, ++pos_it, ++vel_it)
+		for (atom_it = cmp.beginAtom(), force_it = tmp.force.begin(),
+				 pos_it = tmp.position.begin(),
+				 vel_it = tmp.velocity.end(); atom_it != cmp.endAtom(); ++atom_it, ++force_it, ++pos_it, ++vel_it)
 		{
 			atom_it->setPosition (*pos_it);
 			atom_it->setVelocity (*vel_it);
@@ -781,9 +781,9 @@ namespace BALL
 		SnapShot tmp;
 
 		// first look in main memory
-		Size pos = index - snapshot_counter_ + snapshot_list_.size () - 1;
+		Size pos = index - snapshot_counter_ + snapshot_list_.size() - 1;
 
-		if (pos < snapshot_list_.size ())
+		if (pos < snapshot_list_.size())
 		{
 			// one of the recent snapshots is wanted -> it should be in
 			// main memory 
@@ -800,7 +800,7 @@ namespace BALL
 			}
 		}
 
-		if (pos > snapshot_list_.size ())
+		if (pos > snapshot_list_.size())
 		{
 			// the list in memory always contains the highest index. If the calculated 
 			// position is beyond the current size, this means that no such snapshot
@@ -834,7 +834,7 @@ namespace BALL
 		{
 			// read the index of the snapshot object and check if it is
 			// the right one
-			position = input_file.tellp ();
+			position = input_file.tellp();
 
 			input_file.read ((char *) &tmp.valid, sizeof (tmp.valid));
 			input_file.read ((char *) &tmp.index, sizeof (tmp.index));
@@ -846,7 +846,7 @@ namespace BALL
 				input_file.seekp ((Index) position);
 				input_file >> tmp;
 
-				input_file.close ();
+				input_file.close();
 				return tmp;
 			}
 			else
@@ -857,7 +857,7 @@ namespace BALL
 			}
 		}
 
-		input_file.close ();
+		input_file.close();
 
 		// unsuccessful search
 		tmp.valid = false;
@@ -896,7 +896,7 @@ namespace BALL
 		os.write ((char *) &snap_shot.kinetic_energy, sizeof (snap_shot.kinetic_energy));
 
 		// Now output the positions of all atoms
-		for (it = snap_shot.position.begin (); it != snap_shot.position.end (); ++it)
+		for (it = snap_shot.position.begin(); it != snap_shot.position.end(); ++it)
 		{
 			os.write ((char *) &(it->x), sizeof (it->x));
 			os.write ((char *) &(it->y), sizeof (it->y));
@@ -904,7 +904,7 @@ namespace BALL
 		}
 
 		// Now output the velocities of all atoms
-		for (it = snap_shot.velocity.begin (); it != snap_shot.velocity.end (); ++it)
+		for (it = snap_shot.velocity.begin(); it != snap_shot.velocity.end(); ++it)
 		{
 			os.write ((char *) &(it->x), sizeof (it->x));
 			os.write ((char *) &(it->y), sizeof (it->y));
@@ -912,7 +912,7 @@ namespace BALL
 		}
 
 		// Now output the forces of all atoms
-		for (it = snap_shot.force.begin (); it != snap_shot.force.end (); ++it)
+		for (it = snap_shot.force.begin(); it != snap_shot.force.end(); ++it)
 		{
 			os.write ((char *) &(it->x), sizeof (it->x));
 			os.write ((char *) &(it->y), sizeof (it->y));
