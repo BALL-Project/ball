@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.4 2000/06/25 12:51:48 amoll Exp $
+// $Id: timer.C,v 1.5 2000/08/28 07:08:05 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -96,7 +96,9 @@ namespace BALL
 		if (is_running_ == false)
 		{
 			clear();
-		} else {
+		} 
+		else 
+		{
 			stop();
 			clear();
 			start();
@@ -119,10 +121,13 @@ namespace BALL
 		long micro_useconds;
 
 		if (is_running_ == false)
-		{ /* timer is currently off, so just return accumulated time */
+		{ 
+			/* timer is currently off, so just return accumulated time */
 			elapsed_seconds = current_secs_;
 			micro_useconds = current_usecs_;
-		} else { 
+		} 
+		else 
+		{ 
 			/* timer is currently running, so add the elapsed time since */
 			/* the timer was last started to the accumulated time        */
 
@@ -160,9 +165,12 @@ namespace BALL
 		struct tms tms_buffer;	
 
 		if (is_running_ == false)
-		{ /* timer is off, just return accumulated time */
+		{ 
+			/* timer is off, just return accumulated time */
 			temp_value = (float)current_user_time_;
-		}	else { 
+		}	
+		else 
+		{
 			/* timer is on, add current running time to accumulated time */
 			times(&tms_buffer);
 
@@ -189,9 +197,12 @@ namespace BALL
 		struct tms tms_buffer;
 												
 		if (is_running_ == false)
-		{ /* timer is off, just return accumulated time */
+		{ 
+			/* timer is off, just return accumulated time */
 			temp_value = (float)current_system_time_;
-		} else { 
+		} 
+		else 
+		{ 
 			/* timer is on, return accumulated plus current */
 			times(&tms_buffer);
 
