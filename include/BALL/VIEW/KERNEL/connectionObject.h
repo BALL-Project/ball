@@ -1,11 +1,7 @@
-// $Id: connectionObject.h,v 1.8 2001/07/16 14:49:32 amoll Exp $
+// $Id: connectionObject.h,v 1.8.4.1 2002/10/22 18:15:42 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -32,7 +28,6 @@
 #include <typeinfo>
 
 using std::string;
-//using namespace BALL;
 
 namespace BALL
 {
