@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.C,v 1.22 2002/02/27 12:21:25 sturm Exp $
+// $Id: residue.C,v 1.23 2003/01/08 09:24:31 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -131,7 +131,7 @@ namespace BALL
 		}
 		// the torsion angle psi is not defined for
 		// the C-terminus
-		return !isCTerminal();
+		return !isCTerminal() && hasProperty(PROPERTY__AMINO_ACID);
 	}
 	
 	Angle Residue::getTorsionPsi() const
@@ -197,7 +197,7 @@ namespace BALL
 		}
 		// the torsion angle phi is not defined for
 		// the N-terminus
-		return !isNTerminal();
+		return !isNTerminal() && hasProperty(PROPERTY__AMINO_ACID);
 	}
 	
 	Angle Residue::getTorsionPhi() const
