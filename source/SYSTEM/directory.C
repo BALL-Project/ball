@@ -1,4 +1,4 @@
-// $Id: directory.C,v 1.11 2000/06/27 09:08:52 oliver Exp $
+// $Id: directory.C,v 1.12 2000/06/27 10:40:51 amoll Exp $
 
 #include <dirent.h>
 #include <stdio.h>
@@ -9,7 +9,6 @@
 #include <iostream>
 #include <errno.h>
 #include <BALL/SYSTEM/directory.h>
-
 
 namespace BALL 
 {
