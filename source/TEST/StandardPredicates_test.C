@@ -1,15 +1,18 @@
-// $Id: StandardPredicates_test.C,v 1.2 2000/05/22 17:43:13 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.3 2000/05/23 07:56:43 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 // insert includes here
 #include <BALL/KERNEL/standardPredicates.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/FORMAT/HINFile.h>
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.2 2000/05/22 17:43:13 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.3 2000/05/23 07:56:43 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
