@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.1 2003/08/26 12:11:23 oliver Exp $
+// $Id: events.h,v 1.2 2003/08/26 15:26:41 amoll Exp $
 //
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2030,7 +2030,7 @@ namespace BALL
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/WIDGETS/events.iC>
+#			include <BALL/VIEWWIDGETS/events.iC>
 #		endif
   
 	} // namespace VIEW

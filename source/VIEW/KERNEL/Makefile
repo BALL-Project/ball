@@ -4,7 +4,6 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
   client.C\
-  clientScene.C\
   compositeManager.C\
   connectionObject.C\
   events.C\

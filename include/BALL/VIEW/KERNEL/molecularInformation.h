@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.1 2003/08/26 12:11:25 oliver Exp $
+// $Id: molecularInformation.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
 
-#ifndef BALL_VIEW_FUNCTOR_MOLECULARINFORMATION_H
-#define BALL_VIEW_FUNCTOR_MOLECULARINFORMATION_H
+#ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
+#define BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -127,4 +127,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_FUNCTOR_MOLECULARINFORMATION_H
+#endif // BALL_VIEW_KERNEL_MOLECULARINFORMATION_H

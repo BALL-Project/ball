@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.1 2003/08/26 12:11:24 oliver Exp $
+// $Id: mainControl.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -19,8 +19,8 @@
 #	include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_KERNEL_PRIMITIVEMANAGER_H
-#	include <BALL/VIEW/GUI/KERNEL/primitiveManager.h>
+#ifndef BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
+#	include <BALL/VIEW/KERNEL/primitiveManager.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -583,8 +583,6 @@ namespace BALL
 			static int 									current_id_;
 			bool 												composites_muteable_;
 
-			bool 												composites_muteable_;
-
 			// used to acces the global instance of MainControl
 			static MainControl* 				theMainControl_;
 
@@ -596,7 +594,7 @@ namespace BALL
 		};
 
 #ifndef BALL_NO_INLINE_FUNCTIONS
-#	include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
+#	include <BALL/VIEWKERNEL/mainControl.iC>
 #endif 
     
 		} // namespace VIEW

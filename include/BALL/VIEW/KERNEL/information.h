@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.1 2003/08/26 12:11:23 oliver Exp $
+// $Id: information.h,v 1.2 2003/08/26 15:26:41 amoll Exp $
 //
 
-#ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
-#define BALL_VIEW_FUNCTOR_INFORMATION_H
+#ifndef BALL_VIEW_KERNEL_INFORMATION_H
+#define BALL_VIEW_KERNEL_INFORMATION_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -160,11 +160,11 @@ namespace BALL
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
-#	 include <BALL/VIEW/FUNCTOR/information.iC>
+#	 include <BALL/VIEW/KERNEL/information.iC>
 #	endif
 
 	} // namespace VIEW
 
 } // namespace BALL
 
-#endif // BALL_VIEW_FUNCTOR_INFORMATION_H
+#endif // BALL_VIEW_KERNEL_INFORMATION_H

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.1 2003/08/26 12:11:22 oliver Exp $
+// $Id: common.h,v 1.2 2003/08/26 15:26:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 #define BALL_VIEW_KERNEL_COMMON_H
 
-#define BALL_MOLVIEW_PRINT_PROPERTY(property) \
+#define BALL_VIEW_PRINT_PROPERTY(property) \
 		(hasProperty(property) ? "yes" : "no")
 
 namespace BALL
@@ -106,8 +106,8 @@ namespace BALL
 		//@}
     
 		/** Predefined properties.
-				Enumeration of all properties that are used by the MOLVIEW kernel.
-				This properties define the models available in MOLVIEW.
+				Enumeration of all properties that are used by the VIEW kernel.
+				This properties define the models available in VIEW.
 		*/
 		enum ModelTypes
 		{
@@ -163,7 +163,7 @@ namespace BALL
 			COLORING_CUSTOM
 		};
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 
 } // namespace BALL
 

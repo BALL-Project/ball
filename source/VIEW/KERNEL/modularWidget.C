@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.1 2003/08/26 12:38:35 oliver Exp $
+// $Id: modularWidget.C,v 1.2 2003/08/26 15:26:32 amoll Exp $
 
-#include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/FORMAT/INIFile.h>
-#include <BALL/VIEW/GUI/DIALOGS/preferences.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/DIALOGS/preferences.h>
 
 using namespace std;
 

@@ -1,4 +1,4 @@
-#include <BALL/VIEW/GUI/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/stage.h>
 
 namespace BALL
 {

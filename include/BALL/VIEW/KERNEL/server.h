@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.1 2003/08/26 12:11:26 oliver Exp $
+// $Id: server.h,v 1.2 2003/08/26 15:26:43 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
-#define BALL_VIEW_GUI_KERNEL_SERVER_H
+#ifndef BALL_VIEW_KERNEL_SERVER_H
+#define BALL_VIEW_KERNEL_SERVER_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -19,12 +19,12 @@
 #	include <BALL/VIEW/KERNEL/QTTimer.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-#	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+#	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
-# include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
+#ifndef BALL_VIEW_KERNEL_OBJECTCREATOR_H
+# include <BALL/VIEW/KERNEL/objectCreator.h>
 #endif
 
 class QLabel;
@@ -365,10 +365,10 @@ namespace BALL
 
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/server.iC>
+#			include <BALL/VIEW/KERNEL/server.iC>
 #		endif
   
 	}// namespace VIEW
 }// namespace BALL
 
-#endif // BALL_VIEW_GUI_KERNEL_SERVER_H
+#endif // BALL_VIEW_KERNEL_SERVER_H

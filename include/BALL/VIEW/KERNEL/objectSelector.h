@@ -1,18 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectSelector.h,v 1.1 2003/08/26 12:11:25 oliver Exp $
+// $Id: objectSelector.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
 
-#ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
-#define BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
+#ifndef BALL_VIEW_KERNEL_OBJECTSELECTOR_H
+#define BALL_VIEW_KERNEL_OBJECTSELECTOR_H
 
-#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
-#	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
+#ifndef BALL_VIEW_KERNEL_ATOMBONDMODELBASEPROCESSOR_H
+#	include <BALL/VIEW/KERNEL/atomBondModelBaseProcessor.h>
 #endif
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** ObjectSelector class.
 				The class ObjectSelector is responsible for selecting
@@ -75,7 +75,7 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite)
 				throw();
 		};
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
+#endif // BALL_VIEW_KERNEL_OBJECTSELECTOR_H

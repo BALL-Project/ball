@@ -1,21 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.h,v 1.1 2003/08/26 12:11:25 oliver Exp $
+// $Id: moleculeObjectCreator.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
 
-#ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
-#define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
+#ifndef BALL_VIEW_KERNEL_MOLECULEOBJECTCREATOR_H
+#define BALL_VIEW_KERNEL_MOLECULEOBJECTCREATOR_H
 
-#ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
-#	include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
+#ifndef BALL_VIEW_KERNEL_OBJECTCREATOR_H
+#	include <BALL/VIEW/KERNEL/objectCreator.h>
 #endif
   
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
-		using VIEW::ObjectCreator;
-
 		/** MoleculeObjectCreator class.
 				The class MoleculeObjectCreator is a class for converting PersistentObject
 				objects that represent molecular structures into Composite objects.
@@ -86,7 +84,7 @@ namespace BALL
 			//@}
 		};
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H 
+#endif // BALL_VIEW_KERNEL_MOLECULEOBJECTCREATOR_H

@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.21 2003/08/26 12:11:24 oliver Exp $
+// $Id: message.h,v 1.22 2003/08/26 15:26:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
 
-#ifndef BALL_VIEW_GUI_KERNEL_STAGE_H
-#	include <BALL/VIEW/GUI/KERNEL/stage.h>
+#ifndef BALL_VIEW_KERNEL_STAGE_H
+#	include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
 namespace BALL
@@ -701,7 +701,7 @@ namespace BALL
 				change)  \link Composites Composites \endlink  objects. One can use the  \link RTTI RTTI \endlink  mechanism to identify
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
-				This class is only provided for convinience. So in MOLVIEW applications one can
+				This class is only provided for convinience. So in VIEW applications one can
 				use this class in the same way as the class  \link ChangedCompositeMessage ChangedCompositeMessage \endlink .  \par
 				
 		*/
@@ -758,7 +758,7 @@ namespace BALL
 				One can use the  \link RTTI RTTI \endlink  mechanism to identify
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
-				This class is only provided for convinience. So in MOLVIEW applications one can
+				This class is only provided for convinience. So in VIEW applications one can
 				use this class in the same way as the class  \link SelectionMessage SelectionMessage \endlink .  \par
 				
 		*/

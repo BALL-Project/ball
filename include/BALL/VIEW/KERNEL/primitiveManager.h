@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.1 2003/08/26 12:11:25 oliver Exp $
+// $Id: primitiveManager.h,v 1.2 2003/08/26 15:26:43 amoll Exp $
 
-#ifndef  BALL_VIEW_GUI_KERNEL_PRIMITIVEMANAGER_H
-#define  BALL_VIEW_GUI_KERNEL_PRIMITIVEMANAGER_H
+#ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
+#define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 
-#ifndef BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
-#	include <BALL/VIEW/GUI/KERNEL/representation.h>
+#ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
+#	include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
 namespace BALL

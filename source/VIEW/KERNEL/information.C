@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.C,v 1.1 2003/08/26 12:38:34 oliver Exp $
+// $Id: information.C,v 1.2 2003/08/26 15:26:31 amoll Exp $
 
-#include <BALL/VIEW/FUNCTOR/information.h>
-#include <BALL/VIEW/PRIMITIV/line.h>
-#include <BALL/VIEW/PRIMITIV/sphere.h>
-#include <BALL/VIEW/PRIMITIV/tube.h>
-#include <BALL/VIEW/PRIMITIV/point.h>
-#include <BALL/VIEW/PRIMITIV/mesh.h>
-#include <BALL/VIEW/PRIMITIV/box.h>
+#include <BALL/VIEW/KERNEL/information.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/point.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
 
 namespace BALL
 {
@@ -129,7 +129,7 @@ namespace BALL
     }
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/FUNCTOR/information.iC>
+#			include <BALL/VIEW/KERNEL/information.iC>
 #		endif
 
 	} // namespace VIEW

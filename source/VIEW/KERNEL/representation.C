@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.1 2003/08/26 12:38:36 oliver Exp $
+// $Id: representation.C,v 1.2 2003/08/26 15:26:33 amoll Exp $
 
-#include <BALL/VIEW/GUI/KERNEL/representation.h>
-#include <BALL/VIEW/GUI/FUNCTOR/modelProcessor.h>
+#include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
-#include <BALL/VIEW/COMMON/global.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/MATHS/common.h>
 
 namespace BALL

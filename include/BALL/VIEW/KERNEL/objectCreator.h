@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.h,v 1.1 2003/08/26 12:11:25 oliver Exp $
+// $Id: objectCreator.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
-#define BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
+#ifndef BALL_VIEW_KERNEL_OBJECTCREATOR_H
+#define BALL_VIEW_KERNEL_OBJECTCREATOR_H
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -23,8 +23,8 @@
 #	include <BALL/SYSTEM/socket.h>
 #endif
 
-#ifndef BALL_VIEW_COMMON_GLOBAL_H
-#	include <BALL/VIEW/COMMON/global.h>
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+#	include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 #include <vector>
@@ -131,7 +131,6 @@ namespace BALL
 
   
 	}// namespace VIEW
-		
 }// namespace BALL
 
-#endif // BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
+#endif // BALL_VIEW_KERNEL_OBJECTCREATOR_H

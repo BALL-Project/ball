@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.1 2003/08/26 12:38:35 oliver Exp $
+// $Id: mainControl.C,v 1.2 2003/08/26 15:26:31 amoll Exp $
 //
 
 // this is required for QMenuItem
 //#define iNCLUDE_MENUITEM_DEy
 
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
-#include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
-#include <BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h>
-#include <BALL/VIEW/GUI/DIALOGS/preferences.h>
+#include <BALL/VIEW/KERNEL/modularWidget.h>
+#include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
+#include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
 #include <BALL/KERNEL/system.h>
@@ -29,11 +29,11 @@
 #include <algorithm> // sort
 
 
-#include <BALL/VIEW/GUI/WIDGETS/control.h>
-#include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
-#include <BALL/VIEW/KERNEL/logView.h>
-#include <BALL/VIEW/GUI/WIDGETS/scene.h>
-#include <BALL/VIEW/GUI/WIDGETS/geometricControl.h>
+#include <BALL/VIEW/WIDGETS/control.h>
+#include <BALL/VIEW/WIDGETS/pyWidget.h>
+#include <BALL/VIEW/WIDGETS/logView.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/WIDGETS/geometricControl.h>
 using std::istream;
 using std::ostream;
 using std::endl;
@@ -893,7 +893,7 @@ namespace BALL
 		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
+#		include <BALL/VIEW/KERNEL/mainControl.iC>
 #	endif
 
 	} // namespace VIEW

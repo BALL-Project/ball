@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.1 2003/08/26 12:38:36 oliver Exp $
+// $Id: primitiveManager.C,v 1.2 2003/08/26 15:26:32 amoll Exp $
 
-#include <BALL/VIEW/GUI/KERNEL/primitiveManager.h>
+#include <BALL/VIEW/KERNEL/primitiveManager.h>
 
 namespace BALL
 {

@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.C,v 1.1 2003/08/26 12:38:35 oliver Exp $
+// $Id: moleculeObjectCreator.C,v 1.2 2003/08/26 15:26:32 amoll Exp $
 
-#include <BALL/MOLVIEW/KERNEL/moleculeObjectCreator.h>
+#include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
@@ -16,7 +16,7 @@ using namespace std;
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		MoleculeObjectCreator::MoleculeObjectCreator()
@@ -123,5 +123,5 @@ namespace BALL
 			return 0;
     }
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.1 2003/08/26 12:38:36 oliver Exp $
+// $Id: server.C,v 1.2 2003/08/26 15:26:33 amoll Exp $
 
-#include <BALL/VIEW/GUI/KERNEL/server.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/server.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/GUI/DIALOGS/preferences.h>
-#include <BALL/VIEW/GUI/WIDGETS/serverPreferences.h>
+#include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/DIALOGS/serverPreferences.h>
 #include <BALL/SYSTEM/socket.h>
 #include <BALL/FORMAT/INIFile.h>
 
@@ -364,7 +364,7 @@ namespace BALL
 
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/server.iC>
+#			include <BALL/VIEW/KERNEL/server.iC>
 #		endif 
 
 	} // namespace VIEW
