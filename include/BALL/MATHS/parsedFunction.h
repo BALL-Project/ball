@@ -1,4 +1,4 @@
-// $Id: parsedFunction.h,v 1.1.2.1 2002/09/01 16:51:23 anhi Exp $
+// $Id: parsedFunction.h,v 1.1.2.2 2002/11/26 22:59:36 oliver Exp $
 
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
 #define BALL_MATHS_PARSEDFUNCTION_H
@@ -29,7 +29,8 @@ namespace BALL
 			is parsed and evaluated.
 	*/
 	template <typename arg> 
-	class ParsedFunction : unary_function<arg, double> 
+	class ParsedFunction 
+		: public unary_function<arg, double> 
 	{
 		public:
 			
