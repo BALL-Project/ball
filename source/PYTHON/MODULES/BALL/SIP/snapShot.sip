@@ -1,3 +1,5 @@
+// $Id: snapShot.sip,v 1.2 2000/07/24 22:16:02 oliver Exp $
+
 // class SnapShot
 // {
 // 	public:
@@ -25,16 +27,16 @@
 class SnapShotManager
 {
 %HeaderCode
-#include <BALL/MOLMEC/COMMON/snapShot.h>
-using namespace BALL;
+	#include <BALL/MOLMEC/COMMON/snapShot.h>
+	using namespace BALL;
 %End
   public:
 	SnapShotManager(); 
-	SnapShotManager(System&, ForceField&, String,bool); 
-	SnapShotManager(System&, ForceField&, String, bool, Options&);
-	SnapShotManager(const  SnapShotManager& , bool);
-	// ~SnapShotManager(); 
-	bool setup( System&, ForceField&, String, bool, Options&);
+	SnapShotManager(System& /system/, ForceField& /forcefield/, const String& /filename/, bool /overwrite/ = false); 
+	SnapShotManager(System& /system/, ForceField& /forcefield/, Options& /options/, const String& /filename/, bool /overwrite/ = true);
+	SnapShotManager(const SnapShotManager&, bool);
+	~SnapShotManager(); 
+	bool setup( System&, ForceField&, Options&, const String&, bool);
 	// SnapShotManager &operator=(const SnapShotManager &rhs);
 	bool isValid() const;
 	void setFlushToDiskFrequency(int); 
