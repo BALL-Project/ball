@@ -96,7 +96,7 @@ Mainframe::Mainframe
 	open_pdb_file_ = new OpenPDBFile(this);
 	CHECK_PTR(open_pdb_file_);
 
-	molecular_properties_ = new MolecularProperties();
+	molecular_properties_ = new MolecularProperties(this);
 	CHECK_PTR(molecular_properties_);
 
 	server_ = new Server();
@@ -141,26 +141,10 @@ Mainframe::Mainframe
 	// Dialogs setup ---------
 	// ---------------------
 
-	display_properties_->registerObjectProcessor(object_processor_);
 	display_properties_->getPreferences(preferences_);
 	preferences_dialog_->getPreferences(preferences_);
 	minimization_dialog_->getPreferences(preferences_);
 	label_properties_->getPreferences(preferences_);
-
-	// ---------------------
-	// Control setup -------
-	// ---------------------
-
-	control_->addColumn("Name");
-	control_->addColumn("Type");
-	control_->setColumnWidth(0, 80);
-	control_->setColumnWidth(1, 60);
-
- 	// ---------------------
-	// molecularProperties setup -------
-	// ---------------------
-
-	molecular_properties_->registerFragmentDB(fragment_db_);
 
 	// ---------------------
 	// LogView setup ------
@@ -183,10 +167,7 @@ Mainframe::Mainframe
 	// ---------------------
 	// Menu ----------------
 	// ---------------------
-
 	// File-Menu -------------------------------------------------------------------
-
-	insertMenuEntry(MainControl::FILE, "E&xit", qApp, SLOT(quit()), CTRL+Key_X);
 
 	// Edit-Menu -------------------------------------------------------------------
 	
@@ -253,7 +234,6 @@ Mainframe::Mainframe
 	checkServer();
 
 	// building internal connection ------------------------------------------------
-	registerConnectionObject(*molecular_properties_);
 	registerConnectionObject(*server_);
 	registerConnectionObject(*geometric_convertor_);
 }
