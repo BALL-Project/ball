@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.24 2000/09/25 19:13:35 oliver Exp $
+// $Id: fragmentDB.C,v 1.25 2000/09/27 07:45:20 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -951,11 +951,10 @@ namespace BALL
 
 
 	// match an RES/ATOM pair in a map
-	bool FragmentDB::NormalizeNamesProcessor::matchName(String&	res_name, 
-																											String&	atom_name,
-																											const StringHashMap<String>*	map) const
+	bool FragmentDB::NormalizeNamesProcessor::matchName
+		(String&	res_name, String&	atom_name,
+		 const StringHashMap<String>*	map) const
 	{
-
 		String	match_name;	
 		String	s[2];
 		String	r_name;	// residue name (non const)
@@ -982,10 +981,13 @@ namespace BALL
 			a_name = s[1];
 			r_name = s[0];
 			hit = true;
-		} else {
+		} 
+		else 
+		{
 			// second, try wildcard match for residue names
 			match_name = "*:" + a_name;
-			if (map->has(match_name)){
+			if (map->has(match_name))
+			{
 				(*map->find(match_name)).second.split(s, 2, ":");
 				a_name = s[1];
 				hit = true;
@@ -1007,7 +1009,7 @@ namespace BALL
 
 		StringHashMap<StringHashMap<String>*>::Iterator		it;
 
-		StringHashMap<Index>																usable_maps;
+		StringHashMap<Index> usable_maps;
 
 		int number_of_tables = 0;
 		for (it = table.begin(); !(it == table.end()); ++it)
@@ -1027,7 +1029,7 @@ namespace BALL
 		String													atom_name;
 		String													res_name;
 		String													res_name_suffix;
-		int															hit_counter;
+		Size														hit_counter;
 
 		for (map_iterator = usable_maps.begin(); !(map_iterator == usable_maps.end()); ++map_iterator)
 		{
@@ -1047,34 +1049,49 @@ namespace BALL
 					if (residue->isCTerminal())
 					{
 						res_name_suffix = "-C";
-					} else {
+					} 
+					else 
+					{
 						if (residue->isNTerminal())
 						{
 							res_name_suffix = "-N";
 						}				
 					}
-				} else {
+				} 
+				else 
+				{
 					res_name_suffix = "";
 				}
 
-				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it){
+				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it)
+				{
 					atom_name = (*atom_it).getName();
 
 					// first, try to match exactly
 					match_name = res_name + res_name_suffix;
-					if (matchName(match_name, atom_name, map)){
+					if (matchName(match_name, atom_name, map))
+					{
 						hit_counter++;
-					} else {
+					} 
+					else 
+					{
 						// try to match non-terminal residues
-						if (matchName(res_name, atom_name, map)){
+						if (matchName(res_name, atom_name, map))
+						{
 							hit_counter++;
-						} else {
+						} 
+						else 
+						{
 							match_name = "*" + res_name_suffix;
-							if (matchName(match_name, atom_name, map)){
+							if (matchName(match_name, atom_name, map))
+							{
 								hit_counter++;
-							} else {
+							} 
+							else 
+							{
 								match_name = "*";
-								if (matchName(match_name, atom_name, map)){
+								if (matchName(match_name, atom_name, map))
+								{
 									hit_counter++;
 								}
 							}
@@ -1101,17 +1118,20 @@ namespace BALL
 			}
 		}
 
+		Log.info() << "USING map " << map_name << endl;
+
 
 		// after having identified the map, use it to replace the names
 		// first, get the map
 		if (table.find(map_name) != table.end())
 		{
 			map = (*table.find(map_name)).second;
-		} else {
+		} 
+		else 
+		{
 			map = 0;
 		}
-
-			
+	
 		// we found an appropriate map, so use it
 		if ((max_hits > 0) && (map != 0))
 		{
@@ -1129,18 +1149,23 @@ namespace BALL
 					if (residue->isCTerminal())
 					{
 						res_name_suffix = "-C";
-					} else {
+					}		
+					else 
+					{
 						if (residue->isNTerminal())
 						{
 							res_name_suffix = "-N";
 						}				
 					}
-				} else {
+				} 
+				else 
+				{
 					res_name_suffix = "";
 				}
 
 				// now, iterate over the fragment`s atoms
-				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it){
+				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it)
+				{
 					// get the atom name
 					atom_name = (*atom_it).getName();
 
@@ -1151,7 +1176,9 @@ namespace BALL
 						// OK, got it. Change the names
 						(*atom_it).setName(atom_name);
 						(*atom_it).getFragment()->setName(res_name);
-					} else {
+					} 
+					else 
+					{
 						// second, try to match non-terminal residues exactly
 						match_name = res_name;
 						if (matchName(match_name, atom_name, map))
@@ -1159,7 +1186,9 @@ namespace BALL
 							// OK, got it. Change the names
 							(*atom_it).setName(atom_name);
 							(*atom_it).getFragment()->setName(res_name);
-						} else {
+						}
+						else 
+						{
 							// try wildcard match for residue names
 							match_name = "*" + res_name_suffix;
 							if (matchName(match_name, atom_name, map))
@@ -1167,7 +1196,9 @@ namespace BALL
 								// OK, got it. Change names
 								(*atom_it).setName(atom_name);
 								(*atom_it).getFragment()->setName(res_name);
-							} else {
+							} 
+							else 
+							{
 								// last alternative: try wildcard with unmodified name
 								match_name = "*";
 								if (matchName(match_name, atom_name, map))
@@ -1183,7 +1214,8 @@ namespace BALL
 		}
 
 		// if we couldn't find an appropriate table, complain about it!
-		if ((number_of_tables == 0) || (max_hits < 0)){
+		if ((number_of_tables == 0) || (max_hits < 0))
+		{
 			Log.error() << "FragmentDB: cannot locate an appropriate name conversion table!" << endl;
 			return false;
 		}
@@ -1605,7 +1637,9 @@ namespace BALL
 				if (h_table_.has(variant_name)) 
 				{
 					h_atoms_ = h_table_[variant_name];
-				} else {
+				} 
+				else 
+				{
 					// constructing hashtable entry using prototype information
 					
 					// iterating the fragment and save the name of every hydrogen
@@ -1656,12 +1690,16 @@ namespace BALL
 					if (inserted) 
 					{     
 						k++;
-					} else {
-						if(ini_table_.has(h_atoms_[k]))	
+					} 
+					else 
+					{
+						if (ini_table_.has(h_atoms_[k]))	
 						{
 							// identify the atoms needed to get the new atom's coordinates
 							atoms_ = ini_table_[h_atoms_[k]]; 
-						} else {
+						} 
+						else 
+						{
 							// constructing hashtable entry
 							atoms_=new String[5];
 							// searching prototype for h_atoms_[k] 
@@ -1737,7 +1775,9 @@ namespace BALL
 								{
 									atom = (PDBAtom*)&prot_table_[atoms_[i]];
 									xx[i] = atom->getPosition();
-								} else {
+								} 
+								else 
+								{
 									// if template is not known in prot_table
 									// it has to be added
 									addToTemplateTable_(tmp);
@@ -1746,17 +1786,19 @@ namespace BALL
 								}
 							}
 						
-						// getting the position of reference hydrogen
+							// getting the position of reference hydrogen
 							if (prot_table_.has(h_atoms_[k]))
 							{
 								atom = (PDBAtom*)&prot_table_[h_atoms_[k]];
 								xtarget = atom->getPosition(); 
-							} else {
+							} 
+							else 
+							{
 								Log.error() << "prot_table_ Eintrag nicht gefunden :"<< h_atoms_[k] << endl;
 								continue;
 							}
 					
-						// getting position of reference atoms of actual residue
+							// getting position of reference atoms of actual residue
 							for (i = 0; i <= 3; i++)
 							{
 								for (atom_iter = residue_->beginAtom(); +atom_iter; ++atom_iter)
