@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.11 2001/03/06 14:03:52 anker Exp $ 
+// $Id: amber.h,v 1.12 2001/06/24 21:26:09 oliver Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -243,6 +243,11 @@ namespace BALL
 		/**	Return true, if the parameters have already been initialized
 		*/
 		bool hasInitializedParameters() const;
+
+		/**	Return the recommended number of iterations between updates.
+				This method return 20 as a default value.
+		*/
+		Size getUpdateFrequency() const;
 
 		//@}
 

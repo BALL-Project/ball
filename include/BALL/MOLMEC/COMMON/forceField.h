@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.14 2001/03/02 00:34:15 amoll Exp $
+// $Id: forceField.h,v 1.15 2001/06/24 21:26:10 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -279,7 +279,7 @@ namespace BALL
 		double getRMSGradient() const;
 
 		/**	Return the update frequency for pair lists etc.
-				This method is used by minimzers or the MD simulation to determine the number
+				This method is used by minimizers or the MD simulation to determine the number
 				of iterations between two calls to \Ref{update}.
 		*/
 		virtual Size getUpdateFrequency() const;

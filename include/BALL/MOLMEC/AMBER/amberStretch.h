@@ -1,4 +1,4 @@
-// $Id: amberStretch.h,v 1.11 2001/05/16 01:39:02 oliver Exp $ 
+// $Id: amberStretch.h,v 1.12 2001/06/24 21:26:10 oliver Exp $ 
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERSTRETCH_H
@@ -89,11 +89,7 @@ namespace BALL
 
 		/*_
 		*/
-		QuadraticBondStretch::Data*	stretch_;
-
-		/*_	The number of stretches in the system 
-		*/
-		Size number_of_stretches_;
+		std::vector<QuadraticBondStretch::Data>	stretch_;
 
 		/*_	The stretch parameters section
 		*/
