@@ -1,4 +1,4 @@
-// $Id: radius.h,v 1.5 2001/05/13 13:47:48 hekl Exp $
+// $Id: radius.h,v 1.6 2001/07/09 17:57:02 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_RADIUS_H
 #define BALL_VIEW_KERNEL_RADIUS_H
@@ -20,9 +20,9 @@ namespace BALL
 				needs a radius. It provides the derived class with methods for accessing
 				that radius value.
 				@memo    Radius class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:47:48 $
+				@author  $Author: sturm $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:57:02 $
 		*/
 		class Radius
 		{
@@ -146,10 +146,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the value of {\em *this} radius.
-					Access the constant reference of the value of {\em *this} radius.
-					@return      Real& constant reference to the value of {\em *this} radius
-					@see         setRadius
-					@see         Real
+					For further information see \Ref{getRadius}.
 			*/
 			const Real& getRadius() const
 				throw();
