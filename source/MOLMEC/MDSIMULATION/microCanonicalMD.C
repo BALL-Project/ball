@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.C,v 1.7 2001/05/17 01:30:54 oliver Exp $
+// $Id: microCanonicalMD.C,v 1.8 2001/09/01 16:09:26 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
@@ -8,38 +8,41 @@ namespace BALL
 	using namespace std;
 
 	// The default constructor with no arguments
-	  MicroCanonicalMD::MicroCanonicalMD():MolecularDynamics()
+	MicroCanonicalMD::MicroCanonicalMD()
+		:	MolecularDynamics()
 	{
 		valid_ = false;
 	}
 
 
 	// This constructor uses the given force field 
-	MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield):MolecularDynamics (myforcefield)
+	MicroCanonicalMD::MicroCanonicalMD(ForceField& my_force_field)
+		:	MolecularDynamics(my_force_field)
 	{
 		// the user does not want to take snapshots. 
 		// Create a dummy manager 
 		SnapShotManager tmp;
-		valid_ = setup (myforcefield, &tmp);
+		valid_ = setup(my_force_field, &tmp);
 	}
 
 	// This constructor uses the given force field and snapshot manager 
-	MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):MolecularDynamics (myforcefield)
+	MicroCanonicalMD::MicroCanonicalMD(ForceField& my_force_field, SnapShotManager * ssm)
+		:	MolecularDynamics(my_force_field)
 	{
-		valid_ = setup (myforcefield, ssm);
+		valid_ = setup(my_force_field, ssm);
 	}
 
 	// This constructor uses the given force field and options 
-	MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield,
-																			SnapShotManager * ssm, const Options & myoptions):MolecularDynamics (myforcefield)
+	MicroCanonicalMD::MicroCanonicalMD(ForceField& my_force_field,
+																			SnapShotManager * ssm, const Options& my_options)
+		:	MolecularDynamics(my_force_field)
 	{
-		valid_ = setup (myforcefield, ssm, myoptions);
+		valid_ = setup(my_force_field, ssm, my_options);
 	}
 
 	// The destructor
 	MicroCanonicalMD::~MicroCanonicalMD()
 	{
-		// Nothing to do 
 	}
 
 
@@ -47,37 +50,37 @@ namespace BALL
   // computed anew
   void MicroCanonicalMD::setTimeStep(double time)
   {
-	// call the corresponding method in the base class
-	MolecularDynamics::setTimeStep(time);
+		// call the corresponding method in the base class
+		MolecularDynamics::setTimeStep(time);
 
-  // calculate the new factors 
-	MicroCanonicalMD::calculateFactors(); 
+		// calculate the new factors 
+		MicroCanonicalMD::calculateFactors(); 
   }
 
 	// This method does the general setup. 
-	bool MicroCanonicalMD::setup (ForceField & myforcefield, SnapShotManager * ssm)
+	bool MicroCanonicalMD::setup(ForceField& my_force_field, SnapShotManager * ssm)
 	{
 		// No specific options have been named -> we use the force field's options
-		valid_ = setup (myforcefield, ssm, myforcefield.options);
+		valid_ = setup(my_force_field, ssm, my_force_field.options);
 
 		return valid_;
 	}
 
-	bool MicroCanonicalMD::setup (ForceField & myforcefield, SnapShotManager * ssm, const Options & myoptions)
+	bool MicroCanonicalMD::setup(ForceField& my_force_field, SnapShotManager * ssm, const Options& my_options)
 	{
 		// First check whether the force field is valid. If not, then it is useless
 		// to do anything here.
-		if (myforcefield.isValid() == false)
+		if (my_force_field.isValid() == false)
 		{
 			// The setup has failed for some reason. Output an error message.
-			Log.level (LogStream::ERROR) << "Setup of instance of class 'MicroCanonical' has failed" << endl;
+			Log.error() << "MicroCanonicalMD::setup: setup failed because the force field was not valid!" << std::endl;
 
 			valid_ = false;
 			return false;
 		}
 
 		// call the base class setup method
-		valid_ = MolecularDynamics::setup (myforcefield, ssm, myoptions);
+		valid_ = MolecularDynamics::setup(my_force_field, ssm, my_options);
 
 		if (valid_ == false)
 			return false;
@@ -97,7 +100,7 @@ namespace BALL
 		mass_factor_.clear();
 
 		vector < Atom * >::iterator it;
-		Aux_Factors item;
+		AuxFactors item;
 		Atom *atom_ptr;
 
 		for (it = atom_vector_.begin(); it != atom_vector_.end(); ++it)
@@ -108,7 +111,7 @@ namespace BALL
 			atom_ptr = *it;
 			item.factor2 = Constants::AVOGADRO / 1e23 * 1e12 * 0.5 * time_step_ / atom_ptr->getElement().getAtomicWeight();
 			item.factor1 = item.factor2 * time_step_;
-			mass_factor_.push_back (item);
+			mass_factor_.push_back(item);
 		}
 
 	}	// end of ' calculateFactors' 
@@ -118,22 +121,20 @@ namespace BALL
 	// to those done in MolecularDynamics::setup 
 	bool MicroCanonicalMD::specificSetup()
 	{
-		if (!valid_)
-			return false;
-
-		// Nothing more to do at  the moment 
-		return true;
+		// nothing to do...
+		return valid_;
 	}
 
 	// The copy constructor 
-	MicroCanonicalMD::MicroCanonicalMD (const MicroCanonicalMD & rhs, bool deep):MolecularDynamics (rhs, deep)
+	MicroCanonicalMD::MicroCanonicalMD(const MicroCanonicalMD& rhs, bool deep)
+		:	MolecularDynamics(rhs, deep)
 	{
 		// copy class specific variables 
 		mass_factor_ = rhs.mass_factor_;
 	}
 
 	// The assignment operator 
-	MicroCanonicalMD & MicroCanonicalMD::operator = (const MicroCanonicalMD & rhs)
+	MicroCanonicalMD& MicroCanonicalMD::operator = (const MicroCanonicalMD& rhs)
 	{
 		mass_factor_ = rhs.mass_factor_;
 
@@ -144,37 +145,10 @@ namespace BALL
 	}
 
 	// This method does the actual simulation stuff
-	// It runs for up to getMaximalNumberOfIterations() if the starting iteration is 0.          
-  // restart=true means that the counting of iterations is started with the end
-  // value of the previous run 
-	void MicroCanonicalMD::simulate (bool restart)
-	{
-		simulateIterations (maximal_number_of_iterations_, restart);
-	}
-
-
-	// This method does the actual simulation stuff
-	// It runs for the indicated simulation time in picoseconds. 
-  // restart=true means that the counting of iterations is started with the end
-  // value of the previous run 
-	void MicroCanonicalMD::simulateTime (double simulation_time, bool restart)
-	{
-		Size number;
-
-		// determine the number  of iterations and call 'simulateIterations'
-		if (valid_)
-		{
-			number = static_cast < Size > (simulation_time / time_step_);
-			simulateIterations (number, restart);
-		}
-	}
-
-
-	// This method does the actual simulation stuff
 	// It runs for the indicated number of iterations           
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
-	void MicroCanonicalMD::simulateIterations (Size iterations, bool restart)
+	void MicroCanonicalMD::simulateIterations(Size iterations, bool restart)
 	{
 		// local variables
 		double current_energy;
@@ -183,9 +157,6 @@ namespace BALL
 		Atom *atom_ptr;
 		Size force_update_freq;
 		Size iteration;
-
-	  vector < Atom * >::iterator atom_it;
-	  vector < Aux_Factors >::iterator factor_it;
 
     if (restart == false)
     {
@@ -201,10 +172,8 @@ namespace BALL
 			number_of_iteration_++; 
     }
 
-     
 		// determine the largest value for the iteration counter 
 	  max_number = number_of_iteration_ + iterations;
-
 
 		// pre-calculate some needed factors
 	  calculateFactors();
@@ -216,9 +185,9 @@ namespace BALL
 
 		// First check whether the  force field and the MD instance
 		// are valid
-		if (valid_ == false || force_field_ptr_ == 0 || force_field_ptr_->isValid() == false)
+		if (!valid_ || force_field_ptr_ == 0 || !force_field_ptr_->isValid())
 		{
-			Log.level (LogStream::ERROR) << "MD simulation not possible! " << "MD class is  not valid." << endl;
+			Log.error() << "MD simulation not possible! " << "MD class is  not valid." << endl;
 			return;
 		}
 
@@ -236,8 +205,9 @@ namespace BALL
 		// Calculate the forces at the beginning of the simulation
 		force_field_ptr_->updateForces();
 
-// DEBUG
-		force_field_ptr_->updateEnergy();	// only done for debugging purposes 
+		// DEBUG ???
+		//force_field_ptr_->updateEnergy();	
+		// only done for debugging purposes 
 
 
 
@@ -264,37 +234,38 @@ namespace BALL
 				current_energy = force_field_ptr_->updateEnergy();
 				updateInstantaneousTemperature();
 
-				Log.level (LogStream::INFORMATION)
+				Log.info()
 					<< "Microcanonical MD simulation System has potential energy "
 					<< current_energy << " kJ/mol at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;
 
 
-				Log.level (LogStream::INFORMATION)
+				Log.info()
 					<< "Microcanonical MD simulation System has kinetic energy "
 					<< kinetic_energy_ << " kJ/mol at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;
 
         
          /* BAUSTELLE  Temperatur ausgeben? 
-				Log.level (LogStream::INFORMATION)
+				Log.info()
 					<< "MicroCanonical MD simulation System has temperature  "
 					<< current_temperature_ << " K at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;
                                  */       
 			}
 
 			// Calculate new atomic positions and new tentative velocities 
-			for (atom_it = atom_vector_.begin(),
-					 factor_it = mass_factor_.begin(); atom_it != atom_vector_.end(); ++atom_it, ++factor_it)
+			vector<Atom*>::iterator atom_it(atom_vector_.begin());
+			vector<AuxFactors>::iterator factor_it(mass_factor_.begin());
+			for (; atom_it != atom_vector_.end(); ++atom_it, ++factor_it)
 			{
 				atom_ptr = *atom_it;
 
 				// First calculate the new atomic position
 				// x(t+1) = x(t) + time_step_ * v(t) + time_step_^2/(2*mass) * F(t)
-				atom_ptr->setPosition (atom_ptr->getPosition()
+				atom_ptr->setPosition(atom_ptr->getPosition()
 															 + (float)time_step_ * atom_ptr->getVelocity() + (float)factor_it->factor1 * atom_ptr->getForce());
 
 				// calculate a tentative  velocity 'v_tent' for the next iteration
 				// v_tent(t+1) = v(t) + time_step_ / (2 * mass) * F(t)
-				atom_ptr->setVelocity (atom_ptr->getVelocity() + (float)factor_it->factor2 * atom_ptr->getForce());
+				atom_ptr->setVelocity(atom_ptr->getVelocity() + (float)factor_it->factor2 * atom_ptr->getForce());
 			}	// next atom 
 
 
@@ -307,7 +278,7 @@ namespace BALL
 				atom_ptr = *atom_it;
 
 				// Calculate the final velocity for the next iteration
-				atom_ptr->setVelocity (atom_ptr->getVelocity() + (float)factor_it->factor2 * atom_ptr->getForce());
+				atom_ptr->setVelocity(atom_ptr->getVelocity() + (float)factor_it->factor2 * atom_ptr->getForce());
 			}	// next atom
 
 			// Take a snapshot in regular intervals if desired              
@@ -319,7 +290,7 @@ namespace BALL
 		}	// next iteration 
 
 		// update the current time
-		current_time_ += (double) iterations *time_step_;
+		current_time_ += (double)iterations * time_step_;
 
     // set the current iteration
     number_of_iteration_ = iteration - 1; 
@@ -330,6 +301,4 @@ namespace BALL
 
 	}	// end of simulateIterations() 
 
-
-
-}	// end of namespace Ball
+}	// end of namespace BALL

@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.C,v 1.9 2001/05/17 12:19:23 oliver Exp $
+// $Id: molecularDynamics.C,v 1.10 2001/09/01 16:09:26 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -110,17 +110,17 @@ namespace BALL
 
 	// This method does all necessary initialisations. It basically calls
 	// another setup method where the work is really done
-	bool MolecularDynamics::setup (ForceField& force_field, SnapShotManager* ssm)
+	bool MolecularDynamics::setup(ForceField& force_field, SnapShotManager* ssm)
 	{
 		// No specific Options have been handed over, so we use the options of the
 		// force field instead.
-		valid_ = setup (force_field, ssm, force_field.options);
+		valid_ = setup(force_field, ssm, force_field.options);
 
 		return valid_;
 	}
 
 	// This is the real setup method doing all the work! 
-	bool MolecularDynamics::setup (ForceField & force_field, SnapShotManager* ssm, const Options& new_options)
+	bool MolecularDynamics::setup(ForceField & force_field, SnapShotManager* ssm, const Options& new_options)
 	{
 		// First check whether the force field is valid. If not, then it is useless
 		// to do anything here.
@@ -136,10 +136,10 @@ namespace BALL
 
 		// store the force field and some important data
 		force_field_ptr_ = &force_field;
-		system_ptr_ = force_field_ptr_->getSystem ();
+		system_ptr_ = force_field_ptr_->getSystem();
 
 		// check if the user wants to do snapshots 
-		if (ssm->isValid () == true)
+		if ((ssm != 0) && (ssm->isValid()))
 		{
 			snapshot_manager_ptr_ = ssm;
 		}
@@ -148,14 +148,14 @@ namespace BALL
 			snapshot_manager_ptr_ = 0;
 		}
 
-
 		atom_vector_ = force_field_ptr_->getAtoms ();
 
 		// Check if the system is valid 
 		if (system_ptr_ == 0)
 		{
+			Log.error() << "MolecularDynamics::setup: ERROR: No valid system bound to the force field.";
 			valid_ = false;
-			return valid_;
+			return false;
 		}
 
 		// set the options 
@@ -170,51 +170,49 @@ namespace BALL
 		maximal_number_of_iterations_ = (Size)options.getInteger (MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS);
 
     // An equivalent formulation by time
-		options.setDefaultReal (MolecularDynamics::Option::MAXIMAL_SIMULATION_TIME,     
-															 MolecularDynamics::Default::MAXIMAL_SIMULATION_TIME);
+		options.setDefaultReal(MolecularDynamics::Option::MAXIMAL_SIMULATION_TIME,     
+													 MolecularDynamics::Default::MAXIMAL_SIMULATION_TIME);
 
 
 		// The start value for the iteration number 
-		options.setDefaultInteger (MolecularDynamics::Option::NUMBER_OF_ITERATION,
-															 MolecularDynamics::Default::NUMBER_OF_ITERATION);
-		number_of_iteration_ = (Size)options.getInteger (MolecularDynamics::Option::NUMBER_OF_ITERATION);
+		options.setDefaultInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION,
+														  MolecularDynamics::Default::NUMBER_OF_ITERATION);
+		number_of_iteration_ = (Size)options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
 
 
 		// The length of a single time step in picoseconds 
 		options.setDefaultReal (MolecularDynamics::Option::TIME_STEP, MolecularDynamics::Default::TIME_STEP);
-		time_step_ = options.getReal (MolecularDynamics::Option::TIME_STEP);
+		time_step_ = options.getReal(MolecularDynamics::Option::TIME_STEP);
 
 		// The reference temperature. This temperature is important for MD runs with
 		// heat-bath coupling enabled. 
-		options.setDefaultReal (MolecularDynamics::Option::REFERENCE_TEMPERATURE,
-														MolecularDynamics::Default::REFERENCE_TEMPERATURE);
-		reference_temperature_ = options.getReal (MolecularDynamics::Option::REFERENCE_TEMPERATURE);
+		options.setDefaultReal(MolecularDynamics::Option::REFERENCE_TEMPERATURE,
+													 MolecularDynamics::Default::REFERENCE_TEMPERATURE);
+		reference_temperature_ = options.getReal(MolecularDynamics::Option::REFERENCE_TEMPERATURE);
 
 
 
 		// The current time of the simulation. This is useful when several MD runs shall be done.
 		options.setDefaultReal (MolecularDynamics::Option::CURRENT_TIME, MolecularDynamics::Default::CURRENT_TIME);
-		current_time_ = options.getReal (MolecularDynamics::Option::CURRENT_TIME);
+		current_time_ = options.getReal(MolecularDynamics::Option::CURRENT_TIME);
 
 		// After how many iterations is energy data saved and the current kinetic
 		// temperature calculated and saved 
-		options.setDefaultInteger (MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY,
-															 MolecularDynamics::Default::ENERGY_OUTPUT_FREQUENCY);
+		options.setDefaultInteger(MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY,
+															MolecularDynamics::Default::ENERGY_OUTPUT_FREQUENCY);
 		energy_output_frequency_ = (Size)options.getInteger (MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY);
 
 		// After how many iterations are positions and velocities saved 
 		options.setDefaultInteger (MolecularDynamics::Option::SNAPSHOT_FREQUENCY,
 															 MolecularDynamics::Default::SNAPSHOT_FREQUENCY);
+
 		snapshot_frequency_ = (Size)options.getInteger (MolecularDynamics::Option::SNAPSHOT_FREQUENCY);
-
-
-
-
 
 		// Calculate the current temperature of the system (via kinetic energy)
 		updateInstantaneousTemperature ();
 
-		return valid_;
+		valid_ = true;
+		return true;
 	}
 
 
@@ -392,22 +390,37 @@ namespace BALL
 	}
 
 	// This method will be overwritten by a subclass
-	void MolecularDynamics::simulate (bool /* restart */)
+	void MolecularDynamics::simulateIterations(Size /* number */, bool /* restart */)
 	{
 	}
 
-	// This method will be overwritten by a subclass
-	void MolecularDynamics::simulateIterations (Size /* number */, bool /* restart */)
+	// This method does the actual simulation stuff
+  // It runs for getMaximalNumberOfIterations() iterations. 
+  // restart=true means that the counting of iterations is started with the end
+  // value of the previous run
+	void MolecularDynamics::simulate(bool restart)
 	{
+		simulateIterations(maximal_number_of_iterations_, restart);
 	}
 
-	// This method will be overwritten by a subclass
-	void MolecularDynamics::simulateTime (double /* time */, bool /* restart */)
-	{
-	}
 
+	// This method does the actual simulation stuff
+	// It runs for the indicated simulation time in picoseconds. 
+  // restart=true means that the counting of iterations is started with the end
+  // value of the previous run
+	void MolecularDynamics::simulateTime (double simulation_time, bool restart)
+	{
+		Size number;
+
+		// determine the number  of iterations and call 'simulateIterations'
+		if (valid_)
+		{
+			number = static_cast < Size > (simulation_time / time_step_);
+			simulateIterations (number, restart);
+		}
+	}
 	// This method will be overwritten by a subclass
-	bool MolecularDynamics::specificSetup ()
+	bool MolecularDynamics::specificSetup()
 	{
 		return true;
 	}

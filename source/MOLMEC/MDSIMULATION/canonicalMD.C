@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.14 2001/05/17 01:30:54 oliver Exp $
+// $Id: canonicalMD.C,v 1.15 2001/09/01 16:09:26 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -205,35 +205,6 @@ namespace BALL
 		this->MolecularDynamics::operator = (rhs);
 
 		return *this;
-	}
-
-
-	// This method does the actual simulation stuff
-  // It runs for getMaximalNumberOfIterations() iterations. 
-  // restart=true means that the counting of iterations is started with the end
-  // value of the previous run
-	void CanonicalMD::simulate(bool restart)
-		throw()
-	{
-		simulateIterations(maximal_number_of_iterations_, restart);
-	}
-
-
-	// This method does the actual simulation stuff
-	// It runs for the indicated simulation time in picoseconds. 
-  // restart=true means that the counting of iterations is started with the end
-  // value of the previous run
-	void CanonicalMD::simulateTime (double simulation_time, bool restart)
-		throw()
-	{
-		Size number;
-
-		// determine the number  of iterations and call 'simulateIterations'
-		if (valid_)
-		{
-			number = static_cast < Size > (simulation_time / time_step_);
-			simulateIterations (number, restart);
-		}
 	}
 
 
