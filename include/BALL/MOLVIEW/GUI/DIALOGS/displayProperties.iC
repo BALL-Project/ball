@@ -1,0 +1,55 @@
+BALL_INLINE
+void DisplayProperties::setValue_(int address, int value)
+{
+	address_array_[address] = value;
+}
+		
+BALL_INLINE
+int DisplayProperties::getValue_(int address)
+{
+	return address_array_[address];
+}
+
+BALL_INLINE
+bool DisplayProperties::hasValue_(int address, int value)
+{
+	return (address_array_[address] == value);
+}
+
+
+
+BALL_INLINE
+void DisplayProperties::setViewCenter_(const Vector3 &vector)
+{
+	view_center_vector_ = vector;
+}
+
+BALL_INLINE
+Vector3 DisplayProperties::getViewCenter_() const
+{
+	return view_center_vector_;
+}
+
+BALL_INLINE
+void DisplayProperties::setViewDirection_(int direction)
+{
+	view_direction_ = direction;
+}
+
+BALL_INLINE
+int DisplayProperties::getViewDirection_() const
+{
+	return view_direction_;
+}
+
+BALL_INLINE
+void DisplayProperties::setViewDistance_(Real distance)
+{
+  view_distance_ = distance;
+}
+
+BALL_INLINE
+Real DisplayProperties::getViewDistance_() const
+{
+	return view_distance_;
+}
