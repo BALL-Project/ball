@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PersistenceManager_test.C,v 1.8 2002/12/12 11:34:43 oliver Exp $
+// $Id: PersistenceManager_test.C,v 1.9 2002/12/22 18:55:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -42,12 +42,12 @@ namespace BALL
 		// Layer 0
 
 		void writeHeader(const char* /* type_name */, const char* /* name */,
-										 PointerSizeInt /* ptr */)
+										 PointerSizeUInt /* ptr */)
 		{
 		}
 
 		bool checkHeader(const char* /* type_name */, const char* /* name */,
-										 PointerSizeInt& /* ptr */)
+										 PointerSizeUInt& /* ptr */)
 		{
 			return true;
 		}
@@ -79,7 +79,7 @@ namespace BALL
 			return true;
 		}
 
-		bool getObjectHeader(String& /* type_name */, PointerSizeInt& /* ptr */)
+		bool getObjectHeader(String& /* type_name */, PointerSizeUInt& /* ptr */)
 		{
 			return true;
 		}
@@ -199,7 +199,7 @@ namespace BALL
 		{
 		}
 
-		void put(const PointerSizeInt /* p */)
+		void put(const PointerSizeUInt /* p */)
 		{
 		}
 
@@ -235,7 +235,7 @@ namespace BALL
 		{
 		}
 
-		void get(PointerSizeInt& /* p */)
+		void get(PointerSizeUInt& /* p */)
 		{
 		}
 
@@ -247,7 +247,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.8 2002/12/12 11:34:43 oliver Exp $")
+START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.9 2002/12/22 18:55:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
