@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.43 2004/06/24 23:03:43 amoll Exp $
+// $Id: scene.h,v 1.44 2004/06/28 15:55:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -561,6 +561,9 @@ namespace BALL
 			void createCoordinateSystem_()
 				throw();
 			
+			virtual void renderClippingPlane_(const Representation& rep)
+				throw();
+
 			// Menu entry IDs
 			Index rotate_id_, picking_id_;
 			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
@@ -602,6 +605,7 @@ namespace BALL
 			QPoint last_pos_;
 
 			static QGLFormat gl_format_;
+			GLint  current_clipping_plane_;
 		};
 
 } } // namespaces
