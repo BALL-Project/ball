@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.h,v 1.44 2004/02/18 23:24:04 oliver Exp $
+// $Id: line3.h,v 1.45 2004/02/23 15:19:59 anhi Exp $
 //
 
 #ifndef BALL_MATHS_LINE3_H
@@ -21,13 +21,20 @@
 
 namespace BALL 
 {
-	/** @name Line
-  \ingroup GeometricObjects
-	 */
+	/** \defgroup Line Generic Line in Three-Dimensional Space.
+
+		\ingroup GeometricObjects
+	*/
+	
 	//@{
+
 	template <typename T>
 	class TLine3;
 	
+	/** @name Storers
+		Stream operators of Line3
+	*/
+	//@{
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
 		throw();
@@ -35,10 +42,9 @@ namespace BALL
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TLine3<T>& line)
 		throw();
+	//@}
 	
 	/**	Generic Line in Three-Dimensional Space.
-			 \par
-      S/line3.h
 	*/
 	template <typename T>
 	class TLine3
@@ -349,14 +355,13 @@ namespace BALL
 		TVector3<T> d;
 		//@}
 	};
+	//@}
 
 	/**	Default line of type <b>float</b>.
+	 		\ingroup Line
 	*/
 	typedef TLine3<float> Line3;
 
-	/**	Stream operators of Line3
-	*/
-	//@{
 	/**	Input operator.
 			Reads two objcts of type <b>TVector3</b> from an <tt>istream</tt> and
 			assigns them to <tt>d</tt> and <tt>p</tt>.
@@ -384,8 +389,6 @@ namespace BALL
 		s << '(' << line.p << ' ' << line.d << ')';
 		return s;
 	}
-	//@}
-	
 } // namespace BALL
 
 #endif // BALL_MATHS_LINE3_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: visitor.h,v 1.13 2003/08/26 08:04:09 oliver Exp $
+// $Id: visitor.h,v 1.14 2004/02/23 15:19:58 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_VISITOR_H
@@ -19,6 +19,7 @@ namespace BALL
 			
 			\ingroup ConceptsMiscellaneous
 	*/
+	//@{
 	template <typename Host>
 	class Visitor
 	{
@@ -52,7 +53,8 @@ namespace BALL
 
 		virtual void dummy();
 	};
-
+	//@}
+	
 	template <typename T>
 	void Visitor<T>::dummy(){}
 
@@ -63,9 +65,9 @@ namespace BALL
 	{
 	}
 
-	template <typename T>
+	template <typename Host>
 	BALL_INLINE
-	Visitor<T>::Visitor(const Visitor<T>& /* visitor */)
+	Visitor<Host>::Visitor(const Visitor<Host>& /* visitor */)
 		throw()
 	{
 	}

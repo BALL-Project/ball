@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forwardIterator.h,v 1.26 2003/08/26 08:04:08 oliver Exp $
+// $Id: forwardIterator.h,v 1.27 2004/02/23 15:19:57 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_FORWARDITERATOR_H
@@ -121,6 +121,7 @@ namespace BALL
 		{
 		}
 	};
+	//@}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
@@ -310,7 +311,6 @@ namespace BALL
 		return iterator;
 	}
 
-	//@}
 
 } // namespace BALL
 

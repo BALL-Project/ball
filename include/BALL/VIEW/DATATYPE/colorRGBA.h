@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.16 2003/12/04 09:51:20 amoll Exp $
+// $Id: colorRGBA.h,v 1.17 2004/02/23 15:20:02 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -390,28 +390,28 @@ namespace BALL
 
 			/** Smaller test.
 					Smaller means that all components of this are smaller than all the
-					components of <b> color colorRGBA. 
+					components of <b> color</b> colorRGBA. 
 			*/
 			bool operator < (const ColorRGBA& color) const
 				throw();
 
 			/** Smaller or equal test.
 					Smaller or equal means that all components of this are smaller or equal than all the
-					components of <b> color colorRGBA. 
+					components of <b> color</b> colorRGBA. 
 			*/
 			bool operator <= (const ColorRGBA& color) const
 				throw();
 
 			/** Greater test.
 					Greater means that all components of this are greater than all the
-					components of <b> color colorRGBA.
+					components of <b> color</b> colorRGBA.
 			*/
 			bool operator > (const ColorRGBA& color) const
 				throw();
 
 			/** Greater or equal test.
 					Greater or equal means that all components of this are greater or equal than all the
-					components of <b> color colorRGBA.
+					components of <b> color</b> colorRGBA.
 			*/
 			bool operator >= (const ColorRGBA& color) const
 				throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: limits.h,v 1.17 2003/08/26 08:04:05 oliver Exp $
+// $Id: limits.h,v 1.18 2004/02/23 15:19:55 anhi Exp $
 //
 
 #ifndef BALL_COMMON_LIMITS_H
@@ -34,9 +34,9 @@ namespace BALL
 			the differnet data types.
 			It a substitute for the <tt>numeric_limits</tt> class described in the
 			ISO/ANSI standard (chapter 18.2.1.1), as most compiler still do not support
-			this feature (or more precisely: the header file <limits> is not implemented).
-			If <limits> exists, Limits is just a wrapper around the <tt>numeric_limits</tt> class,
-			otherwise it returns the value from the standard C header <limits.h>. \par
+			this feature (or more precisely: the header file \<limits\> is not implemented).
+			If \<limits\> exists, Limits is just a wrapper around the <tt>numeric_limits</tt> class,
+			otherwise it returns the value from the standard C header \<limits.h\>. \par
 			
 	    \ingroup Common
 	*/

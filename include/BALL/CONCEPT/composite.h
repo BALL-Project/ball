@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.55 2004/01/14 13:54:08 anhi Exp $
+// $Id: composite.h,v 1.56 2004/02/23 15:19:56 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -56,7 +56,8 @@ namespace BALL
 			hierarchical selection and deselection of arbitrary subtrees. The
 			time of the last selection/deselection operation is stored as well as
 			the time of the last modification operation in time stamps that can
-			be accessed via  \link getModificationTime getModificationTime \endlink  and  \link getSelectionTime getSelectionTime \endlink .
+			be accessed via  \link getModificationTime getModificationTime \endlink  
+			and  \link getSelectionTime getSelectionTime \endlink .
 			Selecting or deselecting a Composite automatically selects or
 			deselects all its children (recursively!).  Selecting or deselecting
 			all children of a node deselects their parent as well.	Selection
@@ -437,8 +438,8 @@ namespace BALL
 				Update one or both of the two time stamps with the
 				current time. The time stamp is then propagated up to the
 				root of the composite tree. Each composite contains two stamps. 
-				the \emph{modification stamp} is updated each time the tree structure
-				changes, while the \emph{selection stamp} is updated each time the
+				the <em>modification stamp</em> is updated each time the tree structure
+				changes, while the <em>selection stamp</em> is updated each time the
 				selection status changes.
 				@param stamp the time stamp type 
 		*/
@@ -484,8 +485,8 @@ namespace BALL
 			throw();
 
 		/**	Insert a node before this node.
-				This method inserts <tt>composite</tt> before <tt>this</tt> node, if {\tt
-				this} node has a parent and is not a descendant of <tt>composite</tt>.
+				This method inserts <tt>composite</tt> before <tt>this</tt> node, if
+				<tt>this</tt> node has a parent and is not a descendant of <tt>composite</tt>.
 				Self-insertion is recognized and ignored (nothing is done).
 				 \par
 				This method updates the modification time stamp.
@@ -495,8 +496,8 @@ namespace BALL
 		void insertBefore(Composite& composite) throw();
 
 		/**	Insert a node after this node.
-				This method inserts <tt>composite</tt> after <tt>this</tt> node, if {\tt
-				this} node has a parent and is not a descendant of <tt>composite</tt>.
+				This method inserts <tt>composite</tt> after <tt>this</tt> node, if 
+				<tt>this</tt> node has a parent and is not a descendant of <tt>composite</tt>.
 				Self-insertion is recognized and ignored (nothing is done).
 				 \par
 				This method updates the modification time stamp.
@@ -736,7 +737,7 @@ B		*/
 
 		/**	Visitor host method.
 				Composites may be visited.
-				For an example look into Composite\_test.C
+				For an example look into Composite_test.C
 				@param	visitor	the visitor
 		*/
 		void host(Visitor<Composite>& visitor)

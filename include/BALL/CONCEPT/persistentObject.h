@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistentObject.h,v 1.14 2003/08/26 08:04:08 oliver Exp $
+// $Id: persistentObject.h,v 1.15 2004/02/23 15:19:57 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
@@ -73,8 +73,8 @@ namespace BALL
 		/**	Serialize the object.
 				This method serializes the object by calls to Layer 1 methods of 
 				 \link PersistenceManager PersistenceManager \endlink .  The first method in the implementation
-				of persistentRead should be a call to {\tt
-				pm.writeObjectHeader(*this, name)}. Likewise the last method in
+				of persistentRead should be a call to 
+				<tt>pm.writeObjectHeader(*this, name)</tt>. Likewise the last method in
 				this method should be <tt>pm.writeObjectTrailer(name)</tt>.
 				@param	pm the persistence manager
 				@param	name the name of the object (0 for writing base classes)
@@ -99,8 +99,8 @@ namespace BALL
 		/**	Finalize the deserialization.
 				This method is called for all objects after their pointers have
 				been demangled. It is intended for the adaptation of internal data
-				structures. For example, the bond class has to swap <tt>first\_</tt>
-				and <tt>second\_</tt> depending on the order of the atoms. It is
+				structures. For example, the bond class has to swap <tt>first_</tt>
+				and <tt>second_</tt> depending on the order of the atoms. It is
 				usually left unimplemented.
 		*/
 		virtual void finalize()

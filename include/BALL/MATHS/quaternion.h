@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.38 2003/08/26 08:04:22 oliver Exp $
+// $Id: quaternion.h,v 1.39 2004/02/23 15:20:00 anhi Exp $
 //
 
 #ifndef BALL_MATHS_QUATERNION_H
@@ -20,8 +20,8 @@
 namespace BALL 
 {
 
-	/** @name Quaternions
-	 \ingroup Primitives
+	/** \defgroup Quaternions Quaternion
+		\ingroup Primitives
 	 */
 	//@{
 
@@ -246,6 +246,7 @@ namespace BALL
 		//@}
 
 	};
+	//@}
 
 	template <typename T>
 	TQuaternion<T>::TQuaternion()
@@ -559,10 +560,16 @@ namespace BALL
 		return (i != q.i || j != q.j || k != q.k || angle != q.angle);
 	}
 
+	/** @name Storers
+	 		Stream operators for class Quaternion
+	*/
+	//@{
+	
 	/**	Input Operator.
 			Read the values of the quaternion from an input stream.
 			@param s	the input stream
 			@param q  the quaternion to read 
+	 		\ingroup Quaternions
 	*/	
 	template <typename T>
 	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
@@ -581,6 +588,7 @@ namespace BALL
 			<tt>(0.32 0.45 0.12 1.0)</tt>
 			@param s	the output stream
 			@param q  the quaternion to write 
+	 		\ingroup Quaternions
 	*/	
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
@@ -591,7 +599,8 @@ namespace BALL
 
 		return s;
 	}   
-
+	//@}
+	
 	template <typename T>
 	void TQuaternion<T>::dump(std::ostream& s, Size depth) const
 		throw()
@@ -614,14 +623,14 @@ namespace BALL
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
-
+	
 	/**	The Default TQuaternion Type.
 			If double precision is not needed, <tt>TQuaternion<float></tt> should
 			be used. It is predefined as <tt>Quaternion</tt> for convenience.
+	 		\ingroup Quaternions
 	*/
 	typedef TQuaternion<float> Quaternion;
 
-	//@}
 } // namespace BALL
 
 #endif // BALL_MATHS_QUATERNION_H

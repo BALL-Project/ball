@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.50 2004/02/18 23:24:03 oliver Exp $
+// $Id: classTest.h,v 1.51 2004/02/23 15:19:56 anhi Exp $
 //
 
 #ifndef BALL_SYSTEM_H
@@ -319,7 +319,7 @@ int main(int argc, char **argv)\
 
 /**	Create a temporary filename.
 		This macro assigns a new temporary filename to the string variable given as
-		its argument. The filename is created using  \link File::createTemporaryFilename File::createTemporaryFilename \endlink .
+		its argument. The filename is created using  \link BALL::File::createTemporaryFilename File::createTemporaryFilename \endlink .
 		All temporary files are deleted if  \link #END_TEST END_TEST \endlink  is called.
 		@param	filename String will contain the filename on completion of the macro
 		\ingroup ClassTest
@@ -760,7 +760,7 @@ int main(int argc, char **argv)\
 /**	Redirect output to the global logging facility.
 		This macro (together with  \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink ) can be used
 		to ensure that a function prints an error message to the
-		global logging facility  \link #BALL::Log Log \endlink . It disables the output
+		global logging facility  \link BALL::Log Log \endlink . It disables the output
 		to <tt>cout</tt> and <tt>cerr</tt> and redirects all output to
 		<tt>level</tt> to a temporary <tt>ostringstream</tt>. The contents 
 		of this stream can be compared with the expected output	
@@ -788,7 +788,7 @@ int main(int argc, char **argv)\
 /**	Redirect output to the global logging facility.
 		This macro (together with  \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink ) can be used
 		to ensure that a function prints an error message to the
-		global logging facility  \link #BALL::Log Log \endlink . It disables the output
+		global logging facility  \link BALL::Log Log \endlink . It disables the output
 		to <tt>cout</tt> and <tt>cerr</tt> and redirects all output to
 		<tt>level</tt> to a temporary <tt>ostringstream</tt>. The contents 
 		of this stream can be compared with the expected output	

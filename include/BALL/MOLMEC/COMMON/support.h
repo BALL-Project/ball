@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.25 2004/02/18 18:19:05 anhi Exp $
+// $Id: support.h,v 1.26 2004/02/23 15:20:01 anhi Exp $
 //
 
 
@@ -76,7 +76,7 @@ namespace BALL
 				(<tt>type == HASH_GRID</tt>) is used.
 				@param	pair_vector the vector containing pairs of interacting atoms
 				@param	atom_vector the atoms to be considered for pairs
-				@param	box	the periodic boundary used (if {\tt	periodic_boundary_enabled == true})
+				@param	box	the periodic boundary used (if <tt>	periodic_boundary_enabled == true</tt>)
 				@param	distance the maximum distance (cut-off distance) for two atoms
 				@param	periodic_boundary_enabled flag indicating the use of periodic boundary conditions
 				@param	type	the type of algorithm used to calculate the pair vector
@@ -102,7 +102,7 @@ namespace BALL
 				Solvent molecules are added to <tt>system</tt> if the molecules lie in the 
 				<tt>box</tt> and if they do not overlap with	the molecules in <tt>solute_grid</tt>. 
 				A molecule has an overlap with another molecule if any atom of the first 
-				molecule is within {\tt	distance} of any atom of the other molecule.
+				molecule is within <tt>	distance</tt> of any atom of the other molecule.
 				@param	system the system to be filled
 				@param	solute_grid a hash grid containing the solute molecules
 				@param	solvent the system containing the solvent
@@ -138,6 +138,7 @@ namespace BALL
 				@return the number of torsions added to <tt>torsions</tt>
 				@param start an iterator pointing to the start of the atoms
 				@param end a past-the-end iterator for the atoms 
+				@param torsions the vector of torsions
 				@param use_selection if set to <b>true</b>, a torsion will be added only if all four atoms are selected
 		*/
     template <typename TorsionType, typename AtomIteratorType>

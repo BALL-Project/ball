@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.47 2003/11/23 13:46:58 anhi Exp $
+// $Id: matrix44.h,v 1.48 2004/02/23 15:20:00 anhi Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H
@@ -29,14 +29,19 @@
 
 namespace BALL 
 {
-	/**	@name	4x4 Matrix
-			@memo matrix representing transformations: class  \link TMatrix4x4 TMatrix4x4 \endlink  and class  \link Matrix4x4 Matrix4x4 \endlink 
-  \ingroup Primitives
+	/**	\defgroup Matrix44 4x4 Matrix
+			Matrix representing transformations: class  \link TMatrix4x4 TMatrix4x4 \endlink  and class  \link Matrix4x4 Matrix4x4 \endlink 
+
+			\ingroup Primitives
 	*/
 	//@{
+	/// Default Type
 	template <typename T>
 	class TMatrix4x4;
 
+	/** @name Storers
+	 */
+	//@{
 	/**	Input Operator.
 			Read sixteen values of type <tt>T</tt> from an input stream.
 			@param s	the input stream
@@ -54,9 +59,9 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m)
 		throw();
+	//@}
 	
 	/**	Generic 4x4 Matrix Class.
-      S/matrix44.h
  	*/
 	template <typename T>
 	class TMatrix4x4
@@ -833,6 +838,7 @@ namespace BALL
 		// pointers to the components of the matrix 
 		T* comp_ptr_[16];
 	};
+	//@}
 
 	template <typename T>
 	TMatrix4x4<T>::TMatrix4x4()
@@ -2464,10 +2470,10 @@ namespace BALL
 
 	/**	The Default TMatrix4x4 Type.
 			This default is predefined for convenience for those cases where single precision is sufficient.
+	 		\ingroup Matrix44
 	*/
 	typedef TMatrix4x4<float> Matrix4x4;
 
-	//@}
 } // namespace BALL
 
 #endif // BALL_MATHS_MATRIX44_H

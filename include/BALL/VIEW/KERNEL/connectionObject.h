@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.20 2003/12/10 15:26:42 amoll Exp $
+// $Id: connectionObject.h,v 1.21 2004/02/23 15:20:03 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -24,7 +24,7 @@ namespace BALL
 				dialog and widget. In this process a tree will be created that connects all 
 				connectionObject objects.	See ModularWidget for further information concerning
 				widget and dialog interface definition.
-				The widgets communicate with the help of the method notify\_. With this method
+				The widgets communicate with the help of the method notify_. With this method
 				a message can be sent through the connectionObject tree. One connectionObject
 				will be the root of this tree and therefore responsible for handling and sending
 				all	incoming messages. A Message will first be sent to the root of the connectionObject
@@ -106,7 +106,7 @@ namespace BALL
 
 			/** Test if connectionObject is registered.
 					\param   object the connectionObject to be tested
-					\return  bool <tt> true</b> if <b> object</b> is a child of this connectionObject, <tt> false</b> otherwise
+					\return  bool <tt> true</tt> if <b> object</b> is a child of this connectionObject, <tt> false</tt> otherwise
 					\see     registerConnectionObject
 					\see     unregisterConnectionObject
 			*/

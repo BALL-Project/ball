@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.42 2004/02/18 23:24:02 oliver Exp $
+// $Id: exception.h,v 1.43 2004/02/23 15:19:55 anhi Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -36,20 +36,20 @@ namespace BALL
 				current filename and line number and is usually printed in case of
 				an uncaught exception.  To support this feature, each <b>throw</b>
 				directive should look as follows:  \par
-				<tt><b>throw Exception::GeneralException</b>(\_\_FILE\_\_, \_\_LINE\_\_);</tt> \par
-				<tt>\_\_FILE\_\_</tt> and <tt>\_\_LINE\_\_</tt> are built-in preprocessor
+				<tt><b>throw Exception::GeneralException</b>(__FILE__, __LINE__);</tt> \par
+				<tt>__FILE__</tt> and <tt>__LINE__</tt> are built-in preprocessor
 				macros that hold the desired information.
 				 \par
-				BALL provides its own  \link terminate terminate \endlink  handler. This handler
+				BALL provides its own  \link BALL::Exception::terminate terminate \endlink  handler. This handler
 				extracts as much information as possible from the exception, prints
-				it to <tt>cerr</tt> and  \link Log Log \endlink , and finally calls exits the program
+				it to <tt>cerr</tt> and  \link BALL::Log Log \endlink , and finally calls exits the program
 				cleanly (with exit code 1).  This can be rather inconvenient for
 				debugging, since you are told where the exception was thrown, but
 				in general you do not know anything about the context.  Therefore
 				<tt>terminate</tt> can also create a core dump. Using a debugger (e.g.
 				dbx or gdb) you can then create a stack traceback.  To create a
-				core dump, you should set the environment variable {\tt
-				BALL_DUMP_CORE} to any (non empty) value.
+				core dump, you should set the environment variable <tt>
+				BALL_DUMP_CORE</tt> to any (non empty) value.
 				 \par
 				
 				 \par

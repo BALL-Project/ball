@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.10 2004/02/18 18:19:03 anhi Exp $
+// $Id: FFT1D.h,v 1.11 2004/02/23 15:19:58 anhi Exp $
 //
 
 #ifndef BALL_MATHS_FFT1D_H
@@ -33,8 +33,7 @@ namespace BALL
 			found at http://www.fftw.org
 			coordinate system can be handled automatically. The normaliztion is chosen
 			symmetrically.
-			 \par
-			S/FFT1D.h
+			\URL{FFT1D.h}
 	 */
 	class FFT1D 
 		: public TRegularData1D<Complex>

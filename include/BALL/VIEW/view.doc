@@ -1,4 +1,4 @@
-// $Id: view.doc,v 1.15 2004/02/18 23:24:05 oliver Exp $
+// $Id: view.doc,v 1.16 2004/02/23 15:20:02 anhi Exp $
 
 /**	\addtogroup Visualisation
          VIEW is a framework for the implementation of GUI based visualizations.
@@ -37,7 +37,7 @@
          The forth class we introduce is the class \link BALL::VIEW::Scene Scene \endlink that provides the three-dimensional
          interactive visualization of the above mentioned \link BALL::VIEW::GeometricObject GeometricObject \endlink objects.
          With this class it is possible to rotate, translate, zoom or pick objects by mouse click.
-         Another important class is the class \link BALL::VIEW::GenericControl Control \endlink. With the help of this class the
+         Another important class is the class \link BALL::VIEW::GenericControl GenericControl \endlink. With the help of this class the
          hierarchical structure of the visualized objects can be displayed and manipulated.
 				 <br> <br> <br>
          The following code is an example for building an application (the includes have been omitted):
@@ -56,7 +56,7 @@
            main.setCentralWidget(splitter);
 
            // create the control and insert it into the splitter
-           new Control(splitter);
+           new GenericControl(splitter);
 
            // create the scene and insert it into the splitter
            new Scene(splitter);
@@ -67,12 +67,9 @@
          }
          \endcode
          <b>Note</b> This application only demonstrates how to build an application.
-         It opens a main window with both the \link BALL::VIEW::Control Control \endlink and \link BALL::VIEW::Scene Scene \endlink
+         It opens a main window with both the \link BALL::VIEW::GenericControl GenericControl \endlink and \link BALL::VIEW::Scene Scene \endlink
 				 but as there are no means by which any geometric object can be added no objects will be shown in either
-         the \link BALL::VIEW::Control Control \endlink and the \link BALL::VIEW::Scene Scene \endlink widget.
-         In the section \link MOLVIEW MOLVIEW \endlink there is an example application that extends this example by using
-         several more widgets to allow loading of \link BALL::System System \endlink objects, changing the
-         visualization of the inserted objects and manipulating those objects.
+         the \link BALL::VIEW::GenericControl GenericControl \endlink and the \link BALL::VIEW::Scene Scene \endlink widget.
 				 <br> <br>
          For more information about QT widgets and application programming see
          the documentation of the QT-library.

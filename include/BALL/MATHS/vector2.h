@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.19 2004/02/18 23:24:04 oliver Exp $
+// $Id: vector2.h,v 1.20 2004/02/23 15:20:01 anhi Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR2_H
@@ -23,9 +23,10 @@
 namespace BALL 
 {
 
-	/**	@name	Two-dimensional vectors.
-			@memo Representation of points and vectors in two-dimensional space:
-						class  \link TVector2 TVector2 \endlink  and class  \link Vector2 Vector2 \endlink .
+	/**	\defgroup Vector2 Two-dimensional vectors.
+			Representation of points and vectors in two-dimensional space:
+			class  \link TVector2 TVector2 \endlink  and class  \link Vector2 Vector2 \endlink .
+
 	\ingroup Primitives
 	*/
 	//@{
@@ -60,8 +61,6 @@ namespace BALL
 	//@}
 
 	/** Generic Two-Dimensional Vector.
-      S/vector2.h
-       \par
 	*/
 	template <typename T>
 	class TVector2
@@ -427,7 +426,8 @@ namespace BALL
 		private:
 
 	};
-
+	//@}
+	
 	template <typename T>
 	TVector2<T>::TVector2()
 		throw()
@@ -853,6 +853,8 @@ namespace BALL
 
 	/**	Default two-dimensional vector class.
 			This is the class used in BALL kernel to represent points, coordinates.
+	 
+			\ingroup Vector2
 	*/
 	typedef TVector2<float> Vector2;
 

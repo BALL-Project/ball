@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.24 2003/08/26 08:04:05 oliver Exp $
+// $Id: rtti.h,v 1.25 2004/02/23 15:19:56 anhi Exp $
 //
 
 #ifndef BALL_COMMON_RTTI_H
@@ -47,12 +47,12 @@ namespace BALL
 			ANSI C++ provides support for runtime type identification (RTTI). However, the support
 			is very basic. The template functions of the RTTI namespace  provide a more 
 			readable support for RTTI. It defines
-			predicates such as  \link isKindOf isKindOf \endlink  that simplify tests on the hereditary relationship of
+			predicates such as  \link BALL::RTTI::isKindOf isKindOf \endlink that simplify tests on the hereditary relationship of
 			different objects. \par
 			To use the RTTI template functions, parametrize it with the type you are interested in.
 			For example, to find out whether a given molecule is a protein, the following code
 			can be used: \par
-			\begin{verbatim}
+			\code
 				Molecule& m =...;
 				...
 				if (RTTI::isKindOf<Protein>(m)) 
@@ -61,7 +61,7 @@ namespace BALL
 				} else {
 					// this is only a molecule...
 				}
-			\end{verbatim}
+			\endcode
 	
 			\ingroup Common
 	*/
@@ -92,7 +92,7 @@ namespace BALL
 		}
 
 		/**	Return the name of the class.
-				This method returns the name of the class as given by <tt>typeid(<class instance>.name())</tt>.
+				This method returns the name of the class as given by <tt>typeid(\<class instance\>.name())</tt>.
 				No additional name demangling and whitespace substitution are performed.
 		*/
 		template <typename T>
@@ -115,10 +115,10 @@ namespace BALL
 				resulting string blanks are substituted by underscores, so the
 				name can be read from a stream as one string.
 				The typical usage is something like
-				\begin{verbatim}
+				\code
 					String class_name = RTTI::getStreamName<Residue>();
 					...
-				\end{verbatim}
+				\endcode
 		*/
 		template <typename T>
 		const char* getStreamName()
@@ -183,12 +183,12 @@ namespace BALL
 		/**	Return true if <tt>u</tt> is a kind of T.
 				If <tt>u</tt> is an instance of a class derived from T,
 				this predicate returns true: \par
-				\begin{verbatim}
+				\code
 					Protein p;
 
 					// return true, since Protein is derived from Molecule
 					bool is_molecule = RTTI::isKindOf<Molecule>(p);
-				\end{verbatim}
+				\endcode
 		*/
 		template <typename T, typename U>
 		bool isKindOf(const U&  u)
@@ -198,7 +198,7 @@ namespace BALL
 
 		/**	Cast an object to a specialized class.
 				<b>Example:</b> \par
-				\begin{verbatim}
+				\code
 					Composite* composite = ...;
 					...
 				
@@ -211,7 +211,7 @@ namespace BALL
 						atom->setCharge(0);
 						...
 					}
-				\end{verbatim}
+				\endcode
 		*/
 		template <typename T, typename U>
 		T* castTo(const U& u)

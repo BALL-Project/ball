@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.42 2003/08/26 08:04:09 oliver Exp $
+// $Id: bitVector.h,v 1.43 2004/02/23 15:19:58 anhi Exp $
 //
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
@@ -407,19 +407,19 @@ namespace BALL
 		*/
 		unsigned long getUnsignedLong() const throw();
 
-		/** Compute {\em this or bit\_vector}.
+		/** Compute {\em this or bit_vector}.
 				The result is saved in this instance.
 		*/
 		void bitwiseOr(const BitVector& bit_vector) 
 			throw(Exception::OutOfMemory);
 
-		/** Compute {\em this xor bit\_vector}.
+		/** Compute {\em this xor bit_vector}.
 				The result is saved in this instance.
 		*/
 		void bitwiseXor(const BitVector& bit_vector) 
 			throw(Exception::OutOfMemory);
 
-		/** Compute {\em this and bit\_vector}.
+		/** Compute {\em this and bit_vector}.
 				The result is saved in this instance.
 		*/
 		void bitwiseAnd(const BitVector& bit_vector) 
@@ -427,12 +427,12 @@ namespace BALL
 
 		/** Or Operator.
 				Creates a new BitVector object and fills it with the result of
-				{\em this or bit\_Vector}.
+				{\em this or bit_Vector}.
 		*/
 		BitVector operator | (const BitVector& bit_vector) 
 			throw(Exception::OutOfMemory);
 
-		/** Compute {\em this or bit\_vector}.
+		/** Compute {\em this or bit_vector}.
 				The result is saved in this instance.
 		*/
 		BitVector& operator |= (const BitVector& bit_vector) 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.48 2004/02/18 23:24:05 oliver Exp $
+// $Id: vector4.h,v 1.49 2004/02/23 15:20:01 anhi Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR4_H
@@ -21,17 +21,18 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Primitives
-     *  @{
-     */
-	/**	@name	Four-dimensional vector
-			@memo	Representation of points and vectors in four-dimensional space.
+	/**	\defgroup	Vector4 Four-dimensional vector.
+	 		\ingroup Primitives
 	*/
 	//@{
 
 	template <typename T>
 	class TVector4;
 	
+	/**	@name	Global binary operators for three-dimensional vectors.
+	*/
+	//@{
+
 	template <typename T>
 	BALL_INLINE
 	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b)
@@ -49,10 +50,10 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& vector)
 		throw();
-
+		
 	/**	Generic Four-Dimensional Vector.
-			S/vector4.h
-			 \par
+			Representation of points and vectors in four-dimensional space.
+			\URL{vector4.h}
 	*/
 	template <typename T>
 	class TVector4
@@ -418,7 +419,8 @@ namespace BALL
 
 		//@}
 	};
-
+	//@}
+	
 	template <typename T>
 	TVector4<T>::TVector4()
 		throw()
@@ -901,9 +903,6 @@ namespace BALL
 	*/
 	typedef TVector4<float> Vector4;
 
-	/**	@name	Operators
-	*/
-	//@{
 	/**	Addition operator for two vectors
 	*/
 	template <typename T>
@@ -975,8 +974,6 @@ namespace BALL
 		
 		return s;
 	}
-	//@}
-	//@}
 } // namespace BALL
 
 #endif // BALL_MATHS_VECTOR4_H

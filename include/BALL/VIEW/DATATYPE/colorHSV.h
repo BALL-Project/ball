@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.h,v 1.15 2003/08/29 15:36:44 amoll Exp $
+// $Id: colorHSV.h,v 1.16 2004/02/23 15:20:02 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
@@ -297,7 +297,7 @@ namespace BALL
 
 			/** Changes the value of the hue component.
 					Changes the value of of the hue component of this colorHSV to the value
-					represented by the parameter <b> hue. See ColorUnitHue for further
+					represented by the parameter <b> hue</b>. See ColorUnitHue for further
 					information concerning the format.
 					\param       hue the new hue component of this colorHSV
 					\see         getHue
@@ -324,7 +324,7 @@ namespace BALL
 
 			/** Changes the value of the saturation component.
 					Changes the value of of the saturation component of this colorHSV to the value
-					represented by the parameter <b> saturation. See ColorUnit for further
+					represented by the parameter <b> saturation</b>. See ColorUnit for further
 					information concerning the format.
 					\param       saturation the new saturation component of this colorHSV
 					\see         getSaturation
@@ -351,7 +351,7 @@ namespace BALL
 
 			/** Changes the value of the value component.
 					Changes the value of of the value component of this colorHSV to the value
-					represented by the parameter <b> value. See ColorUnit for further
+					represented by the parameter <b> value</b>. See ColorUnit for further
 					information concerning the format.
 					\param       value the new value component of this colorHSV
 					\see         getValue
@@ -420,7 +420,7 @@ namespace BALL
 					ColorUnitHue for further information concerning equality tests.
 					\param   color the colorHSV to be compared with
 					\return  bool -	<tt> true</tt> if the color of this is 
-									 equal to <b> color</b>, <tt> false</b> otherwise
+									 equal to <b> color</b>, <tt> false</tt> otherwise
 					\see     ColorUnit
 					\see     ColorUnitHue
 
@@ -434,7 +434,7 @@ namespace BALL
 					ColorUnitHue for further information concerning unequality tests.
 					\param   color the colorHSV to be compared with
 					\return  bool -	<tt> true</tt> if the color of this is not 
-									 equal to <b> color</b>, <tt> false</b> otherwise
+									 equal to <b> color</b>, <tt> false</tt> otherwise
 					\see     ColorUnit
 					\see     ColorUnitHue
 			*/
@@ -444,11 +444,11 @@ namespace BALL
 			/** Smaller test.
 					Tests if this is smaller than <b> color</b> colorHSV.
 					Smaller means that all components of this are smaller than all the
-					components of <b> color colorHSV. See ColorUnit and
+					components of <b> color</b> colorHSV. See ColorUnit and
 					ColorUnitHue for further information concerning unequality tests.
 					\param   color the colorHSV to be compared with
 					\return  bool -	<tt> true</tt> if the color of this is 
-									 smaller than <b> color</b>, <tt> false</b> otherwise
+									 smaller than <b> color</b>, <tt> false</tt> otherwise
 					\see     ColorUnit
 					\see     ColorUnitHue
 			*/
@@ -458,11 +458,11 @@ namespace BALL
 			/** Smaller or equal test.
 					Tests if this is smaller or equal than <b> color</b> colorHSV.
 					Smaller or equal means that all components of this are smaller or
-					equal than all the components of <b> color colorHSV. See ColorUnit and
+					equal than all the components of <b> color</b> colorHSV. See ColorUnit and
 					ColorUnitHue for further information concerning unequality tests.
 					\param   color the colorHSV to be compared with
 					\return  bool -	<tt> true</tt> if the color of this is smaller or 
-									 equal than <b> color</b>, <tt> false</b> otherwise
+									 equal than <b> color</b>, <tt> false</tt> otherwise
 					\see     ColorUnit
 					\see     ColorUnitHue
 			*/
@@ -472,11 +472,11 @@ namespace BALL
 			/** Greater test.
 					Tests if this is greater than <b> color</b> colorHSV.
 					Greater means that all components of this are greater than all the
-					components of <b> color colorHSV. See ColorUnit and
+					components of <b> color</b> colorHSV. See ColorUnit and
 					ColorUnitHue for further information concerning greater tests.
 					\param   color the colorHSV to be compared with
 					\return  bool -	<tt> true</tt> if the color of this is 
-									 greater than <b> color</b>, <tt> false</b> otherwise
+									 greater than <b> color</b>, <tt> false</tt> otherwise
 					\see     ColorUnit
 					\see     ColorUnitHue
 			*/
@@ -486,11 +486,11 @@ namespace BALL
 			/** Greater or equal test.
 					Tests if this is greater or equal than <b> color</b> colorHSV.
 					Greater or equal means that all components of this are greater or
-					equal than all the components of <b> color colorHSV. See ColorUnit and
+					equal than all the components of <b> color</b> colorHSV. See ColorUnit and
 					ColorUnitHue for further information concerning greater or equal tests.
 					\param   color the colorHSV to be compared with
 					\return  bool -	<tt> true</tt> if the color of this is greater 
-									 or equal than <b> color</b>, <tt> false</b> otherwise
+									 or equal than <b> color</b>, <tt> false</tt> otherwise
 					\see     ColorUnit
 					\see     ColorUnitHue
 			*/

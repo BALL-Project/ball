@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.40 2003/08/26 08:04:20 oliver Exp $
+// $Id: box3.h,v 1.41 2004/02/23 15:19:59 anhi Exp $
 //
 
 #ifndef BALL_MATHS_BOX3_H
@@ -17,10 +17,9 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  GeometricObjects
-     *  @{
-     */
-	/** @name Box
+	/** \defgroup Box Generic three-dimensional box.
+
+      \ingroup  GeometricObjects
 	 */
 	//@{
 
@@ -242,6 +241,7 @@ namespace BALL
 		T height_;
 		T depth_;
 	};
+	//@}
 
 
 	template <typename T>
@@ -465,10 +465,10 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	/**	@name	Storers
+	/** @name Storers
+	 		\ingroup Box
 	*/
 	//@{
-
 	/**	Input operator.
 			Reads in two objects of type TVector3 a and b 
 	*/
@@ -502,10 +502,10 @@ namespace BALL
 						 << box.getHeightVector() << " " 
 						 << box.getDepth();
 	}
-
 	//@}
 
 	/**	Default three-dimensional box class of type <b>float</b>
+      \ingroup Box 
 	*/
 	typedef TBox3<float> Box3;
 

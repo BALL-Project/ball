@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.38 2004/02/18 18:19:03 anhi Exp $
+// $Id: circle3.h,v 1.39 2004/02/23 15:19:59 anhi Exp $
 //
 
 #ifndef BALL_MATHS_CIRCLE3_H
@@ -22,26 +22,30 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  GeometricObjects
-     *  @{
-     */
-	/**	@name	Circle 
+	/** \defgroup Circle Generic three-dimensional circle.
+
+			\ingroup GeometricObjects
 	*/
 	//@{
-
 	template <typename T>
 	class TCircle3;
 
+	/** @name Storers
+	 		\ingroup Circle
+	*/
+	//@{
+	///
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
 		throw();
 
+	///
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
 		throw();
-
+	//@}
+	
 	/**	Generic Circle in Three-Dimensional Space.
-			S/circle3.h
 	*/
 	template <typename T>
 	class TCircle3
@@ -305,14 +309,12 @@ namespace BALL
 
 		//@}
 	};
+	//@}
 
 	/**	Default three-dimensional circle class of type <b>float</b>
+	 	\ingroup Circle
 	*/
 	typedef TCircle3<float> Circle3;
-
-	/**	@name	Storers
-	*/
-	//@{
 
 	/**	Input operator.
 			Reads in two TVector3 and a <b>T</b> value: p, n, radius
@@ -345,8 +347,6 @@ namespace BALL
 							 << ')';
 	}
 
-	//@}
-	//@}
 } // namespace BALL
 
 #endif // BALL_MATHS_CIRCLE3_H

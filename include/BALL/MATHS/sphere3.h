@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.36 2004/02/18 23:24:04 oliver Exp $
+// $Id: sphere3.h,v 1.37 2004/02/23 15:20:00 anhi Exp $
 //
 
 #ifndef BALL_MATHS_SPHERE3_H
@@ -23,13 +23,12 @@
 
 namespace BALL 
 {
-	/** @name Sphere
+	/** \defgroup Sphere Sphere
     \ingroup GeometricObjects
 	 */
 	//@{
 
 	/** Generic Sphere Class.
-      \S Sphere3.h
 	*/
 	template <typename T>
 	class TSphere3
@@ -272,8 +271,12 @@ namespace BALL
 
 		//@}
 	};
+	//@}
 
 	/**	@name	Storers
+	 		Stream operators for the class Sphere
+
+			\ingroup Sphere
 	*/
 	//@{
 
@@ -302,16 +305,14 @@ namespace BALL
 		s << '(' << sphere.p << ' ' << sphere.radius << ')';
 		return s;
 	}
-
 	//@}
-
+	
 	/**	Default sphere type.
 			If double precision is not needed, <tt>TSphere3<float></tt> should
 			be used. It is predefined as <tt>Sphere3</tt> for convenience.
+	 		\ingroup Sphere
 	*/
 	typedef TSphere3<float> Sphere3;
-	
-	//@}
 
 } // namespace BALL
 

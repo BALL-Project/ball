@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.61 2004/02/18 23:24:04 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.62 2004/02/23 15:19:59 anhi Exp $
 //
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -1396,18 +1396,18 @@ namespace BALL
 	}
  
 	/**	Return the torsion angle of four points to each other.
-			@param TVector3& ax 1. vector x component
-			@param TVector3& ay 1. vector y component
-			@param TVector3& az 1. vector z component
-			@param TVector3& bx 2. vector x component
-			@param TVector3& by 2. vector y component
-			@param TVector3& bz 2. vector z component
-			@param TVector3& cx 3. vector x component
-			@param TVector3& cy 3. vector y component
-			@param TVector3& cz 3. vector z component
-			@param TVector3& dx 4. vector x component
-			@param TVector3& dy 4. vector y component
-			@param TVector3& dz 4. vector z component
+			@param  ax 1. vector x component
+			@param  ay 1. vector y component
+			@param  az 1. vector z component
+			@param  bx 2. vector x component
+			@param  by 2. vector y component
+			@param  bz 2. vector z component
+			@param  cx 3. vector x component
+			@param  cy 3. vector y component
+			@param  cz 3. vector z component
+			@param  dx 4. vector x component
+			@param  dy 4. vector y component
+			@param  dz 4. vector z component
 			@return TAngle the torsion angle
 	*/
 	template <typename T>

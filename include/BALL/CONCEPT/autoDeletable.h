@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: autoDeletable.h,v 1.22 2003/08/26 08:04:06 oliver Exp $
+// $Id: autoDeletable.h,v 1.23 2004/02/23 15:19:56 anhi Exp $
 //
 
 
@@ -40,9 +40,9 @@ namespace BALL
 			AutoDeletable has on overloaded new operator. When invoked, this
 			operator allocates storage for an instance of AutoDeletable using the
 			global new operator and remembers the address of in a private
-			variable <b>last\_ptr\_</b>.  Each constructor of AutoDeletable checks
-			whether its <b>this</b> pointer is equal to the address stored in {\bf
-			last\_ptr\_}. If both pointers are equal, the object has been created
+			variable <b>last_ptr_</b>.  Each constructor of AutoDeletable checks
+			whether its <b>this</b> pointer is equal to the address stored in 
+			<b>last_ptr_</b>. If both pointers are equal, the object has been created
 			using the new operator and so it is safe to delete it automatically.
 			If the adresses do not match, the object is either part of an array
 			or static and should not be deleted automatically. \par

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.69 2004/02/18 23:24:05 oliver Exp $
+// $Id: vector3.h,v 1.70 2004/02/23 15:20:01 anhi Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -26,8 +26,8 @@
 
 namespace BALL 
 {
-	/**	@name	Three-dimensional vector.
-			@memo representation of points and vectors in three-dimensional space: class  \link TVector3 TVector3 \endlink  and class  \link Vector3 Vector3 \endlink 
+	/**	\defgroup Vector3 Three-dimensional vector.
+			Representation of points and vectors in three-dimensional space: class  \link TVector3 TVector3 \endlink  and class  \link Vector3 Vector3 \endlink 
 	\ingroup Primitives
 	*/
 	//@{
@@ -66,7 +66,6 @@ namespace BALL
 	//@}
 
 	/** Generic Three-Dimensional Vector.
-      S/vector3.h
 	*/
 	template <typename T>
 	class TVector3
@@ -580,7 +579,7 @@ namespace BALL
 			}
 		}
 	};
-
+	//@}
 
 	template <typename T>
 	BALL_INLINE

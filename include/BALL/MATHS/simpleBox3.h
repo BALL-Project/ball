@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox3.h,v 1.4 2004/02/18 18:19:04 anhi Exp $
+// $Id: simpleBox3.h,v 1.5 2004/02/23 15:20:00 anhi Exp $
 //
 
 #ifndef BALL_MATHS_SIMPLEBOX3_H
@@ -17,7 +17,8 @@
 
 namespace BALL 
 {
-	/** @name Box
+	/** \defgroup SimpleBox Box
+	 		\ingroup GeometricObjects
 	 */
 	//@{
 
@@ -269,6 +270,7 @@ namespace BALL
 		TVector3<T> b;
 		//@}
 	};
+	//@}
 
 	template <typename T>
 	TSimpleBox3<T>::TSimpleBox3()
@@ -610,6 +612,7 @@ namespace BALL
 
 	/**	Input operator.
 			Reads in two objects of type TVector3 a and b 
+	 		\ingroup SimpleBox
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSimpleBox3<T>& box)
@@ -626,6 +629,7 @@ namespace BALL
 			{\bf Example:}\\
 			{\tt ((0 1 2) (7.5 3.4 10))}\\
 			@see TVector3::operator<<
+	 		\ingroup SimpleBox
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSimpleBox3<T>& box)
@@ -633,9 +637,9 @@ namespace BALL
 	{
 		return s << "(" << box.a << ' ' << box.b << ')';
 	}
-	//@}
 
 	/**	Default three-dimensional box class of type {\bf float}
+	 		\ingroup SimpleBox
 	*/
 	typedef TSimpleBox3<float> SimpleBox3;
 

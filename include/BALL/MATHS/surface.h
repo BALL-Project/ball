@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.27 2003/09/04 15:42:03 aubertin Exp $
+// $Id: surface.h,v 1.28 2004/02/23 15:20:01 anhi Exp $
 //
 
 #ifndef BALL_MATHS_SURFACE_H
@@ -13,7 +13,9 @@
 
 namespace BALL 
 {
-	/** @name Surface
+	/** \defgroup GeometricSurface Surface in three-dimensional space.
+
+	 		\ingroup GeometricObjects
 	 */
 	//@{
 
@@ -22,8 +24,6 @@ namespace BALL
 			Each triangle is represented by three indices to vertices (as
 			described by the  \link TSurface::Triangle TSurface::Triangle \endlink ). Each of the vertices has
 			a position and possibly a normal vector associated.
-			\par
-			\ingroup GeometricObjects
 	*/
 	template <typename T>
 	class TSurface
@@ -215,6 +215,7 @@ namespace BALL
 		vector<Triangle>	triangle;
 		//@}
 	};
+	//@}
 
 	template <typename T>
 	TSurface<T>::TSurface()
@@ -527,10 +528,10 @@ namespace BALL
 
 
 	/**	Default surface type.
+	 		\ingroup GeometricSurface
 	*/
 	typedef TSurface<float> Surface;
 
-	//@}
 } // namespace BALL
 
 #endif // BALL_MATHS_SURFACE_H

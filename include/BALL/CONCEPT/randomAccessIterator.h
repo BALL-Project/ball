@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomAccessIterator.h,v 1.29 2004/02/18 18:19:02 anhi Exp $ 
+// $Id: randomAccessIterator.h,v 1.30 2004/02/23 15:19:57 anhi Exp $ 
 //
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -18,10 +18,10 @@
 namespace BALL 
 {
 
-	/**	Generic Constant Random Access Iterator
-			 \par
-			
+	/** @name	Generic Constant Random Access Iterator
+		\ingroup  ConceptsIterators
 	*/
+	//@{
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstRandomAccessIterator
 		: public ConstBidirectionalIterator<Container, DataType, Position, Traits>
@@ -184,7 +184,8 @@ namespace BALL
 		{
 		}
 	};
-
+	//@}
+	
 	/** Return an incremented iterator.
 	 *  It points to the element with the given distance from the element 
 	 *  of the given iterator.
@@ -419,8 +420,6 @@ namespace BALL
 	}
 
 	/**	@name	Generic Random Access Iterator Classes.
-			 \par
-			
 	 	 \ingroup  ConceptsIterators
 	*/
 	//@{
@@ -508,7 +507,8 @@ namespace BALL
 		}
 
 	};
-
+	//@}
+	
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	RandomAccessIterator<Container, DataType, Position, Traits> 
 		RandomAccessIterator<Container, DataType, Position, Traits>::begin(const Container& container)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.h,v 1.16 2003/08/26 08:04:09 oliver Exp $
+// $Id: textPersistenceManager.h,v 1.17 2004/02/23 15:19:57 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -61,19 +61,15 @@ namespace BALL
 				If <tt>name</tt> is a null pointer, the object is a base object of the current
 				object. This method then writes the string <tt>BASEOBJECT</tt>. If <tt>name</tt>
 				is a name or an empty string, <tt>OBJECT</tt> is written. \par
-				Then, the object's <tt>type\_name</tt> is written, followed by a blank, the character
+				Then, the object's <tt>type_name</tt> is written, followed by a blank, the character
 				"@" to indicate an address and then the object's <tt>this</tt> pointer in decimal
 				format. The last string in the line is either "-" (for a base object or an object without
 				name) or the object's <tt>name</tt>. \par
 				The indentation level is incremented.
 				<b>Example for a base object:</b>
-				\begin{verbatim}
-					BASEOBJECT BALL::Composite @ 1145254238 -
-				\end{verbatim}
+				<tt> BASEOBJECT BALL::Composite @ 1145254238 -</tt>
 				<b>Example for a member object:</b>
-				\begin{verbatim}
-					BASEOBJECT BALL::Bond @ 2334208924 bond_
-				\end{verbatim}
+					<tt>BASEOBJECT BALL::Bond @ 2334208924 bond_</tt>
 		*/
 		virtual void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr);
 

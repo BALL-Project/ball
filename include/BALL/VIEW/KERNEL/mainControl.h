@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.38 2004/02/18 23:11:41 amoll Exp $
+// $Id: mainControl.h,v 1.39 2004/02/23 15:20:03 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -242,7 +242,7 @@ namespace BALL
 				throw() { return composite_manager_;}
 			
 			/** Redraws all Representation objects for a Composite.
-					If the Composite is not inserted into this MainControl <tt>false</b> will be returned.
+					If the Composite is not inserted into this MainControl <tt>false</tt> will be returned.
 					updateRepresentationsOf() is called after receiving a CompositeMessage with type CHANGED_COMPOSITE in onNotify().
 					It sends a RepresentationMessage with type UPDATE for every Representation, which was build for the 
 					Composite.  After this a SceneMessage is send to redraw the Scene.
@@ -378,7 +378,7 @@ namespace BALL
 					Calls ModularWidget::applyPreferences() \par
 					Calls Preferences::fetchPreferences() \par
 					Calls QMainWindow::show() \par
-					<b>Note: <\b>Call this method to start the application.
+					<b> Note:<\b> Call this method to start the application.
 			*/
 			virtual void show();
 

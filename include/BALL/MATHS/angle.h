@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.42 2004/02/18 23:24:04 oliver Exp $
+// $Id: angle.h,v 1.43 2004/02/23 15:19:59 anhi Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -25,17 +25,14 @@
 
 namespace BALL 
 {
-  /**  \addtogroup  Primitives
-    *  @{
-  */
+	/** \defgroup Angle Representation of angles.
+	 	  class  \link TAngle TAngle \endlink  and class  \link Angle Angle \endlink 
+	 		\ingroup Primitives
+	 */
+	//@{
 	template <typename T>
 	class TAngle;
 
-	/**	@name Angle
-			Representation of angles: class  \link TAngle TAngle \endlink  and class  \link Angle Angle \endlink 
-	*/
-	//@{
-	
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator * (const T& val, const TAngle<T>& angle)
@@ -51,12 +48,11 @@ namespace BALL
 	TAngle<T> operator - (const T& val, const TAngle<T>& angle)
 		throw();
 
-
-	/**	Generic Angle Class.
+	/**	@name Angle
+	 		Generic Angle Class.
 			Use this class to describe angles. The TAngle class permits the conversion
 			from degree to radians and is the return type of all functions used to calculate
-			angles. \par
-			
+			angles.
 	*/
 	template <typename T>
 	class TAngle
@@ -174,7 +170,7 @@ namespace BALL
 
 		/**	Assign the value to a variable of type <tt>T</tt>.
 				@param	val the variable to assign the value to
-				@param	radian, if set to <tt>true</tt> assigns the value in radians (default).
+				@param	radian if set to <tt>true</tt> assigns the value in radians (default).
 		*/
 		void get(T& val, bool radian = true) const
 			throw();
@@ -426,6 +422,7 @@ namespace BALL
 
 		//@}
 	};
+	//@}
 
 	template <typename T>
 	TAngle<T>::TAngle()
@@ -788,10 +785,6 @@ namespace BALL
 	*/
 	typedef TAngle<float> Angle;
 
-	/**	Operators
-	*/
-	//@{
-
 	/**	Multiplication operator.
 			Multiplies a number with an angle.
 	*/
@@ -851,8 +844,6 @@ namespace BALL
 		return s;
 	}
 
-	//@}
-	//@}
 } // namespace BALL
 
 #endif // BALL_MATHS_ANGLE_H

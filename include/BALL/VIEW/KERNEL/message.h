@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.44 2004/02/20 11:05:07 amoll Exp $
+// $Id: message.h,v 1.45 2004/02/23 15:20:03 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -36,7 +36,7 @@ namespace BALL
 		Message is the base class of all message classes and provides a base interface.
 		Message classes will be sent through the ConnectionObject tree for
 		the purpose of communication between several ConnectionObject classes.
-		Each ConnectionObject handels in its <b>onNotify() method messages
+		Each ConnectionObject handels in its <b>onNotify()</b> method messages
 		that are relevant for that class by means of RTTI. 
 		This class can be given a sender object that is a pointer to the 
 		ConnectionObject that has initially sent the message. This methods

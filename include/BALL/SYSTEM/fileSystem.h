@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.h,v 1.12 2003/08/26 08:04:55 oliver Exp $
+// $Id: fileSystem.h,v 1.13 2004/02/23 15:20:02 anhi Exp $
 //
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
@@ -34,7 +34,7 @@ namespace BALL
 	/**	File System Class
 			This class is a wrapper around some very basic properties
 			of the machine's file system properties.
-			The method ( \link canonizePath canonizePath \endlink ) is mainly used
+			The method ( \link FileSystem::canonizePath canonizePath \endlink ) is mainly used
 			by  \link File File \endlink  to obtain a unique and unambiguous representation
 			of a path.
 \ingroup System
@@ -82,7 +82,7 @@ namespace BALL
 		/** Convert a given filename to a canonical name.
 				This method creates a unique and unambiguous representation
 				of any absolute or relative path.
-				It expands the user's homedirectory (<tt>'\~'</tt>) and
+				It expands the user's homedirectory (<tt>'~'</tt>) and
 				duplicate or redundant separators, e.g.
         '//' is reduced to /'/' and '/./' is removed.
 		*/
@@ -91,13 +91,13 @@ namespace BALL
 
 		/** Return the base name of a file.
 				This strips the path from the filename, i.e. everything
-				before and including the last occurence of  \link PATH_SEPARATOR PATH_SEPARATOR \endlink .
+				before and including the last occurence of  \link FileSystem::PATH_SEPARATOR PATH_SEPARATOR \endlink .
 		*/
 		static String baseName(const String& filename);
 
 		/** Return the path to a file.
 				This method returns the path to a file, i.e. everything up to
-				and including the last occurence of  \link PATH_SEPARATOR PATH_SEPARATOR \endlink .
+				and including the last occurence of  \link FileSystem::PATH_SEPARATOR PATH_SEPARATOR \endlink .
 		*/
 		static String path(const String& filename);
 		//@}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.h,v 1.35 2003/08/26 08:04:08 oliver Exp $
+// $Id: property.h,v 1.36 2004/02/23 15:19:57 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_PROPERTY_H
@@ -47,29 +47,29 @@ namespace BALL
 		*/
 		enum Type
 		{
-			/**	@doc Bool-type properties can have the value <b>true</b> or 
+			/**	Bool-type properties can have the value <b>true</b> or 
 					<b>false</b>.
 			*/
 			BOOL,
 
-			/** @doc Int-type properties contain a variable of type <b>int</b>
+			/** Int-type properties contain a variable of type <b>int</b>
 			*/
 			INT,
 
-			/** @doc Unsigned-int-type properties contain a variable of type 
+			/** Unsigned-int-type properties contain a variable of type 
 					<b>unsigned int</b>
 			*/
 			UNSIGNED_INT,
 
-			/**	@doc Float-type properties contain a variable of type <b>double</b>
+			/**	Float-type properties contain a variable of type <b>double</b>
 			*/
 			FLOAT,
 
-			/**	@doc Double-type properties contain a variable of type <b>double</b>
+			/**	Double-type properties contain a variable of type <b>double</b>
 			*/
 			DOUBLE,
 
-			/** @doc String-type properties contain a pointer to a string.
+			/** String-type properties contain a pointer to a string.
 					When destructing the property, the string is destructed, too.
 			*/
 			STRING,

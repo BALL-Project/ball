@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.39 2003/08/26 08:04:11 oliver Exp $
+// $Id: regularData1D.h,v 1.40 2004/02/23 15:19:58 anhi Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -77,7 +77,6 @@ namespace BALL
 		TRegularData1D(const TRegularData1D& data)
 			throw(Exception::OutOfMemory);
 	
-		///
 		TRegularData1D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing)
 			throw(Exception::OutOfMemory);
 		

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.32 2003/08/26 08:04:07 oliver Exp $
+// $Id: enumerator.h,v 1.33 2004/02/23 15:19:57 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
@@ -158,10 +158,8 @@ namespace BALL
 				 \par
 				<b>Example:</b> To construct a hex counter with three
 				digits, you can use something like:
-				\begin{verbatim}
-					EnumerationIndex counter;
-					counter << 16 << 16 << 16;
-				\end{verbatim}
+				<tt> EnumerationIndex counter;</tt>\par
+				<tt>	counter << 16 << 16 << 16;</tt>\par
 				The counter will be initialized with all zeros.
 			@exception OutOfRange if the modulus is less than 2
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.26 2003/08/26 08:04:05 oliver Exp $
+// $Id: logStream.h,v 1.27 2004/02/23 15:19:56 anhi Exp $
 //
 
 #ifndef BALL_COMMON_LOGSTREAM_H
@@ -159,10 +159,10 @@ namespace BALL
 				(especially this method is called by flush or endl).
 				It transfers the contents of the streambufs putbuffer 
 				into a logline if a newline or linefeed character 
-				is found in the buffer ("$\backslash$n" or "$\backslash$r" resp.).
+				is found in the buffer ("\n" or "\r" resp.).
 				The line is then removed from the putbuffer.
-				Incomplete lines (not terminated by $\backslash$n/$\backslash$r are
-				stored in incomplete\_line\_.
+				Incomplete lines (not terminated by \n/\r are
+				stored in incomplete_line_.
 		*/
 		virtual int sync();
 
@@ -285,7 +285,7 @@ namespace BALL
 
 		/** Constructor.
 				Creates a new LogStream object that is not associated with any stream.
-				If the argument <tt>associate\_stdio</tt> is set to <b>true</b>,
+				If the argument <tt>associate_stdio</tt> is set to <b>true</b>,
 				<tt>cout</tt> is associated with all messages of levels  \link INFORMATION INFORMATION \endlink  
 				and  \link WARNING WARNING \endlink , and <tt>cerr</tt> is associated with all messages
 				of level  \link ERROR ERROR \endlink .
@@ -327,9 +327,9 @@ namespace BALL
 		void setLevel(int level);
 
 		/**	Return the current log level.
-				The LogStreamBuf object has an internal current log level (<tt>level\_</tt>).
+				The LogStreamBuf object has an internal current log level (<tt>level_</tt>).
 				It is set to 0 by the LogStreamBuf default constructor.
-				This method returns <tt>rdbuf()->level\_</tt> if rdbuf() does not
+				This method returns <tt>rdbuf()->level_</tt> if rdbuf() does not
 				return a null pointer, 0 otherwise.
 				@return		int the current log level
 		*/
@@ -340,11 +340,9 @@ namespace BALL
 				It is valid unly until the next <b>flush</b> or <b>endl</b> is issued. \par
 				Use this command to log a single line with a certain log level. \par
 				<b>Example:</b>
-				\begin{verbatim}
-					log << "log message 1" << endl;
-					log.level(4) << "log message 2" << endl;
-					log << "log message 3" << endl;
-				\end{verbatim}
+					<tt>log << "log message 1" << endl;</tt> \par
+					<tt>log.level(4) << "log message 2" << endl;</tt> \par
+					<tt>log << "log message 3" << endl;</tt> \par
 				In this example, only the second message will be logged using level 4.
 				
 				@return	LogStream the log stream
@@ -381,10 +379,10 @@ namespace BALL
 				associated streams and sets the corresponding minimum
 				and maximum log levels.
 				Any message that is subsequently logged, will be copied
-				to this stream if its log level is between <tt>min\_level</tt>
-				and <tt>max\_level</tt>. If <tt>min\_level</tt> and <tt>max\_level</tt>
+				to this stream if its log level is between <tt>min_level</tt>
+				and <tt>max_level</tt>. If <tt>min_level</tt> and <tt>max_level</tt>
 				are omitted, all messages are copied to this stream.
-				If <tt>min\_level</tt>	and <tt>max\_level</tt> are equal, this function can be used
+				If <tt>min_level</tt>	and <tt>max_level</tt> are equal, this function can be used
 				to listen to a specified channel.
 				@param	s a reference to the stream to be associated
 				@param	min_level the minimum level of messages copied to this stream
@@ -476,7 +474,7 @@ namespace BALL
 				This method returns the content of a specific message without
 				time and level.
 				@return string the text of the message
-				@param	Index the index of the line
+				@param	index the index of the line
 		*/
 		string getLineText(const Index& index) const;
 

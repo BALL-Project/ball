@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.35 2004/02/18 23:24:04 oliver Exp $
+// $Id: plane3.h,v 1.36 2004/02/23 15:20:00 anhi Exp $
 //
 
 #ifndef BALL_MATHS_PLANE3_H
@@ -28,14 +28,18 @@
 
 namespace BALL 
 {
-	/** @name Plane
-	\ingroup GeometricObjects
+	/** \defgroup Plane Plane in three-dimensional space.
+		\ingroup GeometricObjects
 	 */
 	//@{
 	
 	template <typename T>
 	class TPlane3;
 
+	/** @name Storers
+	 		Stream operators for class TPlane3
+	*/
+	//@{
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
 		throw();
@@ -43,9 +47,9 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
 		throw();
+	//@}
 
 	/** Threedimensional plane.
-      S/plane3.h
 			A plane is defined by a point and its normal.
 	*/
 	template <typename T>
@@ -372,11 +376,7 @@ namespace BALL
 
 		//@}
 	};
-
-
-	/**	@name	Storers
-	*/
-	//@{
+//@}
 
 	/**	Input operator
 			reads in two instances of TVector3: <b>p, n</b>
@@ -400,9 +400,8 @@ namespace BALL
 		return (s << '(' << plane.p << ' '  << plane.n << ')');
 	}
 	
-	//@}
-
 	/**	Default plane class of type <b>float</b>
+	 		\ingroup Plane
 	*/
 	typedef TPlane3<float> Plane3;
 	

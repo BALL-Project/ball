@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.h,v 1.21 2003/12/15 02:58:51 amoll Exp $
+// $Id: colorUnitHue.h,v 1.22 2004/02/23 15:20:02 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -417,7 +417,7 @@ namespace BALL
 
 			/** Assignment operator with float.
 					Calls set.
-					\param       value a float containing a value of range 0-1.0
+					\param       init a float containing a value of range 0-1.0
 					\exception   InvalidRange if <tt> value < 0.0 || value > 1.0</tt>
 			*/
 			const ColorUnitHue& operator = (const float init)
