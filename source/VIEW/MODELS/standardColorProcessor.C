@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.50.2.5 2005/01/13 01:18:21 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.50.2.6 2005/01/14 13:11:54 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -389,6 +389,7 @@ namespace BALL
 				neutral_color_("FFFFFFFF"),
 				negative_color_("FF0000FF")
 		{
+			update_always_needed_ = true;
 		}
 
 		AtomChargeColorProcessor::AtomChargeColorProcessor(const AtomChargeColorProcessor& color_processor)
@@ -456,6 +457,7 @@ namespace BALL
 				null_distance_color_("FFFF00FF"),
 				full_distance_color_("0000FFFF")
 		{
+			update_always_needed_ = true;
 		}
 
 		AtomDistanceColorProcessor::AtomDistanceColorProcessor(const AtomDistanceColorProcessor& color_processor)
@@ -776,6 +778,7 @@ namespace BALL
 			max_color_.set(1.0, 0, 0),
 			min_value_ = 0;
 			max_value_ = 10;
+			update_always_needed_ = true;
 		}
 
 		void ForceColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.9 2005/01/13 23:14:24 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.10 2005/01/14 13:11:45 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -24,7 +24,8 @@ namespace BALL
 
 		ColorProcessor::ColorProcessor()
 			throw()
-			:	UnaryProcessor<GeometricObject*>()
+			:	UnaryProcessor<GeometricObject*>(),
+				update_always_needed_(false)
 		{
 			clear();
 		}

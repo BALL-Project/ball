@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.27.2.4 2005/01/14 13:11:41 amoll Exp $
+// $Id: colorProcessor.h,v 1.27.2.5 2005/01/14 13:13:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -129,7 +129,7 @@ class BALL_EXPORT ColorProcessor
 			Initialise the member update_always_needed_ to true in derived classes, if the derived ColorProcessor shall
 			always be applied.
 	*/
-	bool updateAlwaysNeeded() { return update_always_needed_}
+	bool updateAlwaysNeeded() { return update_always_needed_;}
 
 	/** Change the default color.
 	*/
