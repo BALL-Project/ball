@@ -8,71 +8,13 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>483</width>
-            <height>318</height>
+            <width>546</width>
+            <height>374</height>
         </rect>
     </property>
     <property name="caption">
         <string>ColoringSettingsDialog</string>
     </property>
-    <widget class="QListBox">
-        <item>
-            <property name="text">
-                <string>Element</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Residue Index</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Residue Name</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Atom Charge</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Atom Distance</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Temperature Factor</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Occupancy</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Secondary Structure</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Forces</string>
-            </property>
-        </item>
-        <property name="name">
-            <cstring>list_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>8</x>
-                <y>12</y>
-                <width>154</width>
-                <height>290</height>
-            </rect>
-        </property>
-    </widget>
     <widget class="QWidgetStack">
         <property name="name">
             <cstring>widget_stack</cstring>
@@ -80,9 +22,9 @@
         <property name="geometry">
             <rect>
                 <x>167</x>
-                <y>16</y>
-                <width>306</width>
-                <height>292</height>
+                <y>14</y>
+                <width>378</width>
+                <height>359</height>
             </rect>
         </property>
         <widget class="QWidget">
@@ -8051,6 +7993,64 @@
             </widget>
         </widget>
     </widget>
+    <widget class="QListBox">
+        <item>
+            <property name="text">
+                <string>Element</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Residue Index</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Residue Name</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Atom Charge</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Atom Distance</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Temperature Factor</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Occupancy</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Secondary Structure</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Forces</string>
+            </property>
+        </item>
+        <property name="name">
+            <cstring>list_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>8</x>
+                <y>12</y>
+                <width>154</width>
+                <height>359</height>
+            </rect>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -8190,6 +8190,12 @@
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
         <slot>unassignedTFColorPressed()</slot>
+    </connection>
+    <connection>
+        <sender>list_box</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>showPage_(int)</slot>
     </connection>
 </connections>
 <includes>

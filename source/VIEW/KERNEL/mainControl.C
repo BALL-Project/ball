@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.105 2004/09/16 11:23:54 amoll Exp $
+// $Id: mainControl.C,v 1.106 2004/09/16 13:15:25 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -661,6 +661,7 @@ namespace BALL
 			}
 			else if (RTTI::isKindOf<TransformationMessage> (*message))
 			{
+				if (!composites_muteable_) return;
 				moveItems(((TransformationMessage*) message)->getMatrix());
 			}
 		}

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PythonSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,22 +8,38 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>440</width>
+            <width>550</width>
             <height>291</height>
         </rect>
     </property>
     <property name="caption">
         <string>PythonSettings</string>
     </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>clear_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>460</x>
+                <y>52</y>
+                <width>80</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Clear</string>
+        </property>
+    </widget>
     <widget class="QLineEdit">
         <property name="name">
             <cstring>script_edit</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>20</y>
-                <width>420</width>
+                <x>9</x>
+                <y>24</y>
+                <width>531</width>
                 <height>23</height>
             </rect>
         </property>
@@ -41,14 +57,30 @@
             <bool>true</bool>
         </property>
     </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>choose_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>371</x>
+                <y>52</y>
+                <width>80</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Browse</string>
+        </property>
+    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>textLabel1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>0</y>
+                <x>9</x>
+                <y>4</y>
                 <width>166</width>
                 <height>20</height>
             </rect>
@@ -63,38 +95,6 @@
         </property>
         <property name="text">
             <string>Startup script</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>choose_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>262</x>
-                <y>49</y>
-                <width>80</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Browse</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>clear_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>351</x>
-                <y>49</y>
-                <width>80</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Clear</string>
         </property>
     </widget>
 </widget>

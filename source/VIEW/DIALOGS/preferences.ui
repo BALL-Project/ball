@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PreferencesData</class>
 <widget class="QDialog">
     <property name="name">
@@ -7,9 +7,9 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>3</y>
-            <width>620</width>
-            <height>350</height>
+            <y>0</y>
+            <width>700</width>
+            <height>446</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -22,14 +22,14 @@
     </property>
     <property name="minimumSize">
         <size>
-            <width>620</width>
+            <width>700</width>
             <height>350</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
             <width>640</width>
-            <height>350</height>
+            <height>450</height>
         </size>
     </property>
     <property name="caption">
@@ -44,10 +44,10 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>133</x>
+                <x>132</x>
                 <y>6</y>
-                <width>2</width>
-                <height>303</height>
+                <width>3</width>
+                <height>397</height>
             </rect>
         </property>
         <property name="frameShape">
@@ -60,27 +60,6 @@
             <enum>Vertical</enum>
         </property>
     </widget>
-    <widget class="QListBox">
-        <property name="name">
-            <cstring>list_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>6</y>
-                <width>122</width>
-                <height>300</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>7</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-    </widget>
     <widget class="QWidgetStack">
         <property name="name">
             <cstring>widget_stack</cstring>
@@ -89,8 +68,8 @@
             <rect>
                 <x>139</x>
                 <y>7</y>
-                <width>476</width>
-                <height>300</height>
+                <width>560</width>
+                <height>400</height>
             </rect>
         </property>
         <property name="frameShape">
@@ -117,8 +96,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>207</x>
-                <y>314</y>
+                <x>281</x>
+                <y>412</y>
                 <width>145</width>
                 <height>30</height>
             </rect>
@@ -148,8 +127,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>358</x>
-                <y>314</y>
+                <x>432</x>
+                <y>412</y>
                 <width>127</width>
                 <height>30</height>
             </rect>
@@ -176,8 +155,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>491</x>
-                <y>314</y>
+                <x>565</x>
+                <y>412</y>
                 <width>126</width>
                 <height>30</height>
             </rect>
@@ -198,6 +177,27 @@
             <bool>true</bool>
         </property>
     </widget>
+    <widget class="QListBox">
+        <property name="name">
+            <cstring>list_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>6</y>
+                <width>122</width>
+                <height>398</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -213,13 +213,13 @@
         <slot>close()</slot>
     </connection>
 </connections>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
 <slots>
     <slot>showPage(int)</slot>
     <slot>defaultsClicked()</slot>
 </slots>
-<includes>
-	<include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
-</includes>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
