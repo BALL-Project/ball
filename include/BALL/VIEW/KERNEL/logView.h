@@ -1,7 +1,7 @@
 // $Id: 
 
-#ifndef BALL_VIEW_KERNEL_TIMERTEXTVIEW_H
-#define BALL_VIEW_KERNEL_TIMERTEXTVIEW_H
+#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
+#define BALL_VIEW_KERNEL_LOGVIEW_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -32,7 +32,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		class TimerTextView
+		class LogView
 			: public NotificationTarget<LogStreamNotifier>,
 			  public QMultiLineEdit
 		{
@@ -42,21 +42,21 @@ namespace BALL
 			*/
 			//@{
 
-			/** default constructor. creates an instance of TimerTextView.
+			/** default constructor. creates an instance of LogView.
 			*/
-			TimerTextView(QWidget *parent = 0, const char *name = 0);
+			LogView(QWidget *parent = 0, const char *name = 0);
 
-			TimerTextView(const TimerTextView& view, bool deep = true);
+			LogView(const LogView& view, bool deep = true);
 
-			/** default destructor. destroys an instance of TimerTextView.
+			/** default destructor. destroys an instance of LogView.
 			*/
-			virtual ~TimerTextView();
+			virtual ~LogView();
 
-			/** clear methode. resets the timer used to control the TimerTextView
+			/** clear method. 
 			*/
 			virtual void clear();
 
-			/** destroy methode. resets the timer used to control the TimerTextView
+			/** destroy method.
 			*/
 			virtual void destroy();
 			//@}
@@ -79,7 +79,7 @@ namespace BALL
 			*/
 			//@{
 
-			/** returns true if the underlying timer is valid.
+			/** returns true
 		  */
 			virtual bool isValid() const;
 
@@ -124,11 +124,11 @@ namespace BALL
 
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/timerTextView.iC>
+#			include <BALL/VIEW/KERNEL/logView.iC>
 #		endif
 
 	}// namespace VIEW
 		
 }// namespace BALL
 
-#endif // BALL_VIEW_KERNEL_TIMERTEXTVIEW_H
+#endif // BALL_VIEW_KERNEL_LOGVIEW_H
