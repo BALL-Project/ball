@@ -3,7 +3,7 @@ DIRECTORY=NMR
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	assignShiftProcessor.C
+	assignShiftProcessor.C\
 	LEF.C\
 	anisotropy.C\
 	haighMallion.C\
