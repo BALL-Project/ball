@@ -5,11 +5,7 @@
 //
 
 #include <BALL/VIEW/WIDGETS/logView.h>
-#include <BALL/COMMON/exception.h>
-#include <BALL/DATATYPE/string.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <qpopupmenu.h>
-#include <qmenubar.h>
 
 using namespace std;
 
@@ -18,88 +14,86 @@ namespace BALL
 	namespace VIEW
 	{
   
-		LogView::LogView(QWidget *parent, const char *name)
-			throw()
-			: DockWidget(parent, name),
-				NotificationTarget<LogStreamNotifier>(),
-				text_edit_(new QTextEdit()),
-				history_string_(),
-				strstream_(),
-				output_running_(false)
-		{
-			setGuest(*text_edit_);
-		}
 
-		LogView::LogView(const LogView& view)
-			throw()
-			: DockWidget((QWidget*)view.getParent()),
-			 	NotificationTarget<LogStreamNotifier>(),
-				text_edit_(new QTextEdit()),
-				history_string_(view.history_string_),
-				strstream_(),
-				output_running_(false)
-		{
-			setGuest(*text_edit_);
-		}
+LogView::LogView(QWidget *parent, const char *name)
+	throw()
+	: DockWidget(parent, name),
+		NotificationTarget<LogStreamNotifier>(),
+		text_edit_(new QTextEdit()),
+		history_string_(),
+		strstream_(),
+		output_running_(false)
+{
+	setGuest(*text_edit_);
+}
 
-		LogView::~LogView()
-			throw()
-		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<LogView>() << endl;
-			#endif 
+LogView::LogView(const LogView& view)
+	throw()
+	: DockWidget((QWidget*)view.getParent()),
+		NotificationTarget<LogStreamNotifier>(),
+		text_edit_(new QTextEdit()),
+		history_string_(view.history_string_),
+		strstream_(),
+		output_running_(false)
+{
+	setGuest(*text_edit_);
+}
 
-			//destroy();
-		}
-		
-	  bool LogView::onNotify(LogStreamNotifier& /* source */)
-			throw()
-		{
-			if (output_running_) return false;
-			output_running_ = true;
-			char c;
-			strstream_.get(c);
+LogView::~LogView()
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "Destructing object " << (void *)this 
+								<< " of class " << RTTI::getName<LogView>() << endl;
+	#endif 
+}
 
-			String line;
-			while (strstream_.gcount() > 0)
-			{
-				line += c;
-				strstream_.get(c);
-			}
+bool LogView::onNotify(LogStreamNotifier& /* source */)
+	throw()
+{
+	if (output_running_) return false;
+	output_running_ = true;
+	char c;
+	strstream_.get(c);
 
-			strstream_.clear();
+	String line;
+	while (strstream_.gcount() > 0)
+	{
+		line += c;
+		strstream_.get(c);
+	}
 
-			if (line.size() > 0)
-			{
-				text_edit_->append(line.c_str());
-				text_edit_->scrollToBottom();
-			}
+	strstream_.clear();
 
-			output_running_ = false;
-			return true;
-		}
+	if (line.size() > 0)
+	{
+		text_edit_->append(line.c_str());
+		text_edit_->scrollToBottom();
+	}
 
-		void LogView::initializeWidget(MainControl& main_control)
-			throw()
-		{
-			Log.insert(strstream_);
-			Log.insertNotification(strstream_, *this);
-			text_edit_->setReadOnly(TRUE);
-			text_edit_->setTextFormat(PlainText);
+	output_running_ = false;
+	return true;
+}
 
-			DockWidget::initializeWidget(main_control);
-			main_control.insertMenuEntry(MainControl::TOOLS, "Clear Logs", text_edit_, SLOT(clear()));
-			getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
-		}
+void LogView::initializeWidget(MainControl& main_control)
+	throw()
+{
+	Log.insert(strstream_);
+	Log.insertNotification(strstream_, *this);
+	text_edit_->setReadOnly(TRUE);
+	text_edit_->setTextFormat(PlainText);
+
+	DockWidget::initializeWidget(main_control);
+	main_control.insertMenuEntry(MainControl::TOOLS, "Clear Logs", text_edit_, SLOT(clear()));
+}
 
 
-		void LogView::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			DockWidget::finalizeWidget(main_control);
-			main_control.removeMenuEntry(MainControl::TOOLS, "Clear Logs", text_edit_, SLOT(clear()));
-			Log.remove(strstream_);
-		}
+void LogView::finalizeWidget(MainControl& main_control)
+	throw()
+{
+	DockWidget::finalizeWidget(main_control);
+	main_control.removeMenuEntry(MainControl::TOOLS, "Clear Logs", text_edit_, SLOT(clear()));
+	Log.remove(strstream_);
+}
 
 } } // namespaces
