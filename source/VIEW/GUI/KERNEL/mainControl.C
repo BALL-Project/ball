@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.8 2000/11/15 20:28:07 oliver Exp $
+// $Id: mainControl.C,v 1.9 2000/12/10 20:02:06 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -52,6 +52,8 @@ namespace BALL
 		
 		MainControl::MainControl(const MainControl& main_control)
 			:	QMainWindow((QWidget*)main_control.parent(), 0, 0),
+				ConnectionObject(main_control),
+				Embeddable(main_control),
 				composite_map_(),
 				descriptor_map_(),
 				descriptors_(),
