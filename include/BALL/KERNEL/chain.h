@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.14 2000/05/15 12:07:56 amoll Exp $
+// $Id: chain.h,v 1.16 2000/06/03 00:12:03 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -69,10 +69,16 @@ namespace BALL
 		/** @name Persistence */
 		//@{
 
-		/// Persistent writing
+		/**	Persistent writing.
+				Writes a Chain object to a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		/// Persistent reading
+		/**	Persistent reading.
+				Reads a Chain object from a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentRead(PersistenceManager& pm);
 
 		//@}

@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.22 2000/05/04 20:57:10 oliver Exp $
+// $Id: atom.h,v 1.23 2000/06/03 00:09:23 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -82,9 +82,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Atom class (BALL kernel framework)
-			@author  $Author: oliver $
-			@version $Revision: 1.22 $
-			@date    $Date: 2000/05/04 20:57:10 $
+			@author  $Author: amoll $
+			@version $Revision: 1.23 $
+			@date    $Date: 2000/06/03 00:09:23 $
 	*/
 	class Atom
 		: public Composite,
@@ -283,10 +283,16 @@ namespace BALL
 			/**	@name	Persistence */
 			//@{
 	
-			///			
+			/**	Persistent writing.
+					Writes a Atom object to a persistent stream.
+					@param pm the persistence manager
+			*/
 			virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-			/// 
+			/**	Persistent reading.
+					Reads a Atom object from a persistent stream.
+					@param pm the persistence manager
+			*/
 			virtual void persistentRead(PersistenceManager& pm);
 			//@}
 

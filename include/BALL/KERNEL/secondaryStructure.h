@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.12 2000/05/15 12:07:57 amoll Exp $
+// $Id: secondaryStructure.h,v 1.13 2000/06/03 00:09:25 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -80,10 +80,16 @@ namespace BALL
 		/** @name Persistence */
 		//@{
 
-		/// Persistent writing
+		/**	Persistent writing.
+				Writes a SecondaryStructure object to a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		/// Persistent reading
+		/**	Persistent reading.
+				Reads a SecondaryStructure object from a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentRead(PersistenceManager& pm);
 
 		//@}

@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.10 2000/05/15 12:07:56 amoll Exp $
+// $Id: PDBAtom.h,v 1.11 2000/06/03 00:09:23 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -120,10 +120,16 @@ namespace BALL
 		/** @name Persistence */
 		//@{
 
-		/// Persistent writing of PDBAtoms
+		/**	Persistent writing.
+				Writes a PDBAtom object to a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		/// Persistent reading of PDBAtoms
+		/**	Persistent reading.
+				Reads a PDBAtom object from a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentRead(PersistenceManager& pm);
 
 		//@}

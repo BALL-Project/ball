@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.12 2000/05/22 17:41:11 anker Exp $
+// $Id: system.h,v 1.13 2000/06/03 00:09:25 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -78,10 +78,16 @@ namespace BALL
 		/** @name Persistence */
 		//@{
 
-		/// Persistent writing
+		/**	Persistent writing.
+				Writes a System object to a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		/// Persistent reading
+		/**	Persistent reading.
+				Reads a System object from a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentRead(PersistenceManager& pm);
 
 		//@}
@@ -234,7 +240,12 @@ namespace BALL
 		/**	@name	Storers */
 		//@{
 
-		///
+		/* Persistent stream input and state restorage.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				\\
+				{\bf Note:} Not yet implemented.
+				@param  s input stream from where to restore the internal state of {\em *this}
+		*/
 		virtual void read(std::istream& s);
 
 		///

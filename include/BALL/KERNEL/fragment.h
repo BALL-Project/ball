@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.7 2000/05/15 12:07:56 amoll Exp $
+// $Id: fragment.h,v 1.8 2000/06/03 00:09:24 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -63,10 +63,16 @@ namespace BALL
 		/** @name Persistence */
 		//@{
 
-		/// Persistent writing.
+		/**	Persistent writing.
+				Writes a Fragment object to a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		/// Persistent reading.
+		/**	Persistent reading.
+				Reads a Fragment object from a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentRead(PersistenceManager& pm);
 
 		//@}
@@ -100,10 +106,20 @@ namespace BALL
 		/**	@name	Storers */
 		//@{
 
-		///
+		/* Persistent stream input and state restorage.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				\\
+				{\bf Note:} Not yet implemented.
+				@param  s input stream from where to restore the internal state of {\em *this}
+		*/
 		virtual void read(std::istream& s);
 
-		///
+		/* Persistent stream input and state restorage.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				\\
+				{\bf Note:} Not yet implemented.
+				@param  s input stream from where to restore the internal state of {\em *this}
+		*/
 		virtual void write(std::ostream& s) const;
 		//@}
 	};

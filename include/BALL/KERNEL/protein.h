@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.9 2000/05/15 12:07:57 amoll Exp $ 
+// $Id: protein.h,v 1.10 2000/06/03 00:09:24 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -90,11 +90,17 @@ namespace BALL
 		/**	@name	Persistence */
 		//@{
 		
-		/// Persistent writing
+		/**	Persistent writing.
+				Writes a Protein object to a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		/// Persistent reading
-		void persistentRead(PersistenceManager& pm);
+		/**	Persistent reading.
+				Reads a Protein object from a persistent stream.
+				@param pm the persistence manager
+		*/
+ 		void persistentRead(PersistenceManager& pm);
 
 		//@}
 
@@ -305,11 +311,19 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/* Persistent stream input and state restorage.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				\\
+				{\bf Note:} Not yet implemented.
+				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
 		virtual void read(std::istream& s);
 
-		/**
+		/* Persistent stream input and state restorage.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				\\
+				{\bf Note:} Not yet implemented.
+				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
 		virtual void write(std::ostream& s) const;
 		//@}

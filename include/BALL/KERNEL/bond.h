@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.11 2000/05/02 14:03:49 amoll Exp $
+// $Id: bond.h,v 1.13 2000/06/03 00:12:02 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.11 $
-			@date    $Date: 2000/05/02 14:03:49 $
+			@version $Revision: 1.13 $
+			@date    $Date: 2000/06/03 00:12:02 $
 	*/
 	class Bond
 		: public Composite,
@@ -269,10 +269,16 @@ namespace BALL
 		/**	@name Persistence */
 		//@{
 	
-		///
+		/**	Persistent writing.
+				Writes a Bond object to a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		///
+		/**	Persistent reading.
+				Reads a Bond object from a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentRead(PersistenceManager& pm);
 
 		/**	Finalize the deserialization.

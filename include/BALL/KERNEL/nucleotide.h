@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.10 2000/05/15 11:40:03 amoll Exp $
+// $Id: nucleotide.h,v 1.11 2000/06/03 00:09:24 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -80,10 +80,16 @@ namespace BALL
 		/** @name Persistence */
 		//@{
 
-		/// Persistent writing
+		/**	Persistent writing.
+				Writes a Nucleotide object to a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		/// Persistent reading
+		/**	Persistent reading.
+				Reads a Nucleotide object from a persistent stream.
+				@param pm the persistence manager
+		*/
 		void persistentRead(PersistenceManager& pm);
 
 		//@}
