@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.39 2003/03/26 14:11:12 anhi Exp $
+// $Id: exception.h,v 1.40 2003/06/11 16:09:19 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -96,6 +96,10 @@ namespace BALL
 
 			///	Returns the error message of the exception
 			const char* getMessage() const
+				throw();
+
+			/// Modify the exception's error message
+			void setMessage(const std::string& message)
 				throw();
 
 			/// Returns the line number where it occured
@@ -402,9 +406,32 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
+			///
 			ParseError(const char* file, int line, const String& expression,
 					const String& message)
 				throw();
+		};
+
+		/**	Precondition failed.
+				A precondition (as defined by BALL_PRECONDITION_EXCEPTION) has failed.
+		*/
+		class Precondition
+			: public GeneralException
+		{
+			public:
+			///
+			Precondition(const char* file, int line, const char* condition)	throw();
+		};
+
+		/**	Postcondition failed.
+				A postcondition (as defined by BALL_POSTCONDITION_EXCEPTION) has failed.
+		*/
+		class Postcondition
+			: public GeneralException
+		{
+			public:
+			///
+			Postcondition(const char* file, int line, const char* condition) throw();
 		};
 
 		/**
