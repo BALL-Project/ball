@@ -1,4 +1,4 @@
-// $Id: reconstruct_fragment.C,v 1.3 2003/05/09 12:54:27 anker Exp $
+// $Id: reconstruct_fragment.C,v 1.4 2003/05/28 04:13:41 anker Exp $
 //
 // A little helper program that tries to reconstruct broken fragments in a
 // molecule. This program assumes that there is only *one* chain in the
@@ -82,8 +82,8 @@ int main(int argc, char** argv)
 		}
 
 		const Fragment& ref = *db.getFragment(reference_fragment_name);
-		Size atoms = ReconstructFragmentProcessor::reconstructFragment(*res_it, ref);
-		Log.info() << " added " << atoms << " atoms" << std::endl;
+		list<Atom*> atoms = ReconstructFragmentProcessor::reconstructFragment(*res_it, ref);
+		Log.info() << " added " << atoms.size() << " atoms" << std::endl;
 		Size bonds = db.build_bonds.buildFragmentBonds(*res_it, ref);
 		Log.info() << " added " << bonds << " bonds" << std::endl;
 	}
