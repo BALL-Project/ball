@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.11.4.5 2002/11/09 20:56:34 amoll Exp $
+// $Id: displayProperties.h,v 1.11.4.6 2002/11/17 18:35:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -375,7 +375,7 @@ namespace BALL
 			*/
 			//@{
 					
-			/** Changes the drawing precision.
+			/** Changes the drawing precision for the static modell.
 					This slot is connected to the drawing precision combo box and will be automatically
 					called if the contents of this combo box is changed.
 					This method changes the drawing precision of the selected model.
@@ -384,19 +384,25 @@ namespace BALL
 					@see     applyButtonClicked
 					@see     selectModel
 			*/
-			virtual void selectPrecision(const QString& string);
+			virtual void selectPrecisionStatic(const QString& string);
+
+			/** Changes the drawing precision for the dynamic modell.
+			 */
+			virtual void selectPrecisionDynamic(const QString& string);
 				
-			/** Changes the model.
-					This slot is connected to the model combo box and will be automatically
+			/** Changes the static model.
+					This slot is connected to the static model combo box and will be automatically
 					called if the content of this combo box is changed.
-					This method changes the model the will be created by pressing the apply button.
-					The selected drawing precision and the coloring method will be used for this model.
 					@param   string the string containing the new model
 					@see     selectColoringMethod
 					@see     applyButtonClicked
 					@see     selectPrecision
 			*/
-			virtual void selectModel(const QString& string);
+			virtual void selectModelStatic(const QString& string);
+
+			/** Changes the dynamic model.
+			 */
+			virtual void selectModelDynamic(const QString& string);
 			
 			/** Changes the coloring method.
 					This slot is connected to the coloring method combo box and will be automatically
@@ -435,10 +441,16 @@ namespace BALL
 					@see   selectColoringMethod
 			 */ 
 			virtual void editColor();
+
+			/** Opens the color dialog for the color of selected items.
+			 		@see BALL_SELECTED_COLOR
+			*/
+			virtual void editSelectionColor();
 			//@}
 				
 			private:
 			
+			/*_ Set the selection of a given combobox to a given value */
 			void setComboBoxIndex_(QComboBox* combo_box, QString& item_string);
 
 			// --------------------------------------------------------------------------------
@@ -532,8 +544,10 @@ namespace BALL
 			int build_bonds_id_;
 			int add_hydrogens_id_;
 			
-			QString  					model_string_;
-			QString   				precision_string_;
+			QString  					model_string_static_;
+			QString  					model_string_dynamic_;
+			QString   				precision_string_static_;
+			QString   				precision_string_dynamic_;
 			QString   				coloring_method_string_;
 			ColorRGBA 				custom_color_;
 			
@@ -557,13 +571,17 @@ namespace BALL
 			ColorCalculator*						color_calculator_;
 			GLAtomBondModelConnector 		model_connector_;
 
-			AddGLBallAndStickModel 			ball_and_stick_model_;
-			AddGLBackboneModel 					backbone_model_;
-			AddGLLineModel 							line_model_;
+			AddGLBallAndStickModel 			ball_and_stick_model_static_;
+			AddGLBallAndStickModel 			ball_and_stick_model_dynamic_;
 			AddGLSurfaceModel 					surface_model_static_;
-			AddGLVanDerWaalsModel 			van_der_waals_model_;
+			AddGLSurfaceModel 					surface_model_dynamic_;
+			AddGLVanDerWaalsModel 			van_der_waals_model_static_;
+			AddGLVanDerWaalsModel 			van_der_waals_model_dynamic_;
+			AddGLBackboneModel 					backbone_model_static_;
+			AddGLBackboneModel 					backbone_model_dynamic_;
 			RemoveModel 								remove_model_static_;
 			RemoveModel 								remove_model_dynamic_;
+			AddGLLineModel 							line_model_;
 			ObjectSelector 							selector_;			
 			ObjectDeselector 						deselector_;			
 

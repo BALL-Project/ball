@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.10 2002/11/12 14:43:32 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.11 2002/11/17 18:35:51 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -7,6 +7,9 @@
 
 #include <qcolordialog.h>
 #include <qmenubar.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qcombobox.h>
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/protein.h>
@@ -35,8 +38,10 @@ namespace BALL
 				center_camera_id_(-1),
 				build_bonds_id_(-1),
 				add_hydrogens_id_(-1),
-				model_string_("stick"),
-				precision_string_("high"),
+				model_string_static_("stick"),
+				model_string_dynamic_("line"),
+				precision_string_static_("high"),
+				precision_string_dynamic_("high"),
 				coloring_method_string_("by element"),
 				distance_coloring_(false),
 				selection_(),
@@ -50,13 +55,17 @@ namespace BALL
 				color_calculator_(0),
 				model_connector_(),
 				
-				ball_and_stick_model_(),
-				backbone_model_(),
-				line_model_(),
+				ball_and_stick_model_static_(),
+				ball_and_stick_model_dynamic_(),
 				surface_model_static_(),
-				van_der_waals_model_(),
+				surface_model_dynamic_(),
+				van_der_waals_model_static_(),
+				van_der_waals_model_dynamic_(),
+				backbone_model_static_(),
+				backbone_model_dynamic_(),
 				remove_model_static_(),
 				remove_model_dynamic_(),
+				line_model_(),
 				selector_(),
 				deselector_(),
 				
@@ -69,19 +78,20 @@ namespace BALL
 				distance_color_calculator_(),
 				custom_color_calculator_()
 		{
-			setCaption("Display Settings");
-
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
 
 			color_calculator_ = &element_color_calculator_;
 
-			 van_der_waals_model_.registerModelConnector(model_connector_);
-			ball_and_stick_model_.registerModelConnector(model_connector_);
+			 van_der_waals_model_static_.registerModelConnector(model_connector_);
+			 van_der_waals_model_dynamic_.registerModelConnector(model_connector_);
+			ball_and_stick_model_static_.registerModelConnector(model_connector_);
+			ball_and_stick_model_dynamic_.registerModelConnector(model_connector_);
 								line_model_.registerModelConnector(model_connector_);
 
 			// seting up defaults
-			ball_and_stick_model_.enableStickModel();
+			ball_and_stick_model_static_.enableStickModel();
+			ball_and_stick_model_dynamic_.enableStickModel();
 
 			setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_HIGH);
 			setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
@@ -128,24 +138,38 @@ namespace BALL
 				color_sample->setBackgroundColor(qcolor);
 			}
 
-			if (inifile.hasEntry("WINDOWS", "Display::model"))
+			if (inifile.hasEntry("WINDOWS", "Display::modeldynamic"))
 			{
-				model_string_ = inifile.getValue("WINDOWS", "Display::model").c_str();
-				setComboBoxIndex_(model_type_combobox_, model_string_);
-				selectModel(model_string_);
+				model_string_dynamic_ = inifile.getValue("WINDOWS", "Display::modeldynamic").c_str();
+				setComboBoxIndex_(model_type_combobox_dynamic, model_string_dynamic_);
+				selectModelDynamic(model_string_dynamic_);
+			}
+
+			if (inifile.hasEntry("WINDOWS", "Display::modelstatic"))
+			{
+				model_string_static_ = inifile.getValue("WINDOWS", "Display::modelstatic").c_str();
+				setComboBoxIndex_(model_type_combobox_static, model_string_static_);
+				selectModelStatic(model_string_static_);
 			}
 			
-			if (inifile.hasEntry("WINDOWS", "Display::precision"))
+			if (inifile.hasEntry("WINDOWS", "Display::precisionstatic"))
 			{
-				precision_string_ = inifile.getValue("WINDOWS", "Display::precision").c_str();
-				setComboBoxIndex_(mode_resolution_combobox_, precision_string_);
-				selectPrecision(precision_string_);
+				precision_string_static_ = inifile.getValue("WINDOWS", "Display::precisionstatic").c_str();
+				setComboBoxIndex_(mode_resolution_combobox_static, precision_string_static_);
+				selectPrecisionStatic(precision_string_static_);
 			}
-			
+				
+			if (inifile.hasEntry("WINDOWS", "Display::precisiondynamic"))
+			{
+				precision_string_dynamic_ = inifile.getValue("WINDOWS", "Display::precisiondynamic").c_str();
+				setComboBoxIndex_(mode_resolution_combobox_dynamic, precision_string_dynamic_);
+				selectPrecisionDynamic(precision_string_dynamic_);
+			}
+					
 			if (inifile.hasEntry("WINDOWS", "Display::colormethod"))
 			{
 				coloring_method_string_ = inifile.getValue("WINDOWS", "Display::colormethod").c_str();
-				setComboBoxIndex_(coloring_type_combobox_, coloring_method_string_);
+				setComboBoxIndex_(coloring_type_combobox, coloring_method_string_);
 				selectColoringMethod(coloring_method_string_);
 			}
 		}
@@ -159,8 +183,10 @@ namespace BALL
 			inifile.insertValue("WINDOWS", "Display::y", String(y()));
 
 			// the combobox values
-			inifile.insertValue("WINDOWS", "Display::model", model_string_.ascii());
-			inifile.insertValue("WINDOWS", "Display::precision", precision_string_.ascii());
+			inifile.insertValue("WINDOWS", "Display::modelstatic", model_string_static_.ascii());
+			inifile.insertValue("WINDOWS", "Display::modeldynamic", model_string_dynamic_.ascii());
+			inifile.insertValue("WINDOWS", "Display::precisionstatic", precision_string_static_.ascii());
+			inifile.insertValue("WINDOWS", "Display::precisiondynamic", precision_string_dynamic_.ascii());
 			inifile.insertValue("WINDOWS", "Display::colormethod", coloring_method_string_.ascii());
 			inifile.insertValue("WINDOWS", "Display::customcolor", custom_color_);
 		}
@@ -226,79 +252,147 @@ namespace BALL
 		{
 			show();
 			raise();
+			setComboBoxIndex_(coloring_type_combobox, coloring_method_string_);
+			setComboBoxIndex_(mode_resolution_combobox_static, precision_string_static_);
+			setComboBoxIndex_(mode_resolution_combobox_dynamic, precision_string_dynamic_);
+			setComboBoxIndex_(model_type_combobox_static, model_string_static_);
+			setComboBoxIndex_(model_type_combobox_dynamic, model_string_dynamic_);
 		}
 
 
-		void DisplayProperties::selectPrecision(const QString& string)
+		void DisplayProperties::selectPrecisionStatic(const QString& string)
 		{
-			precision_string_ = string;
+			precision_string_static_ = string;
 
 			if (string == "low")
 			{
 				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
 			}
 			else if (string == "medium")
 			{
 				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_MEDIUM);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
 			}
 			else if (string == "high")
 			{
 				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_HIGH);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
 			}
 			else if (string == "ultra")
 			{
 				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_ULTRA);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
+			}
+			else
+			{
+				Log.error() << "Unknown static precision: " << string << std::endl;
 			}
 		}
-		 
 
-		void DisplayProperties::selectModel(const QString& string)
+		void DisplayProperties::selectPrecisionDynamic(const QString& string)
 		{
-			model_string_ = string;
+			precision_string_dynamic_ = string;
+
+			if (string == "low")
+			{
+				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
+			}
+			else if (string == "medium")
+			{
+				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_MEDIUM);
+			}
+			else if (string == "high")
+			{
+				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_HIGH);
+			}
+			else if (string == "ultra")
+			{
+				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_ULTRA);
+			}
+			else
+			{
+				Log.error() << "Unknown dynamic precision: " << string << std::endl;
+			}
+		}
+
+		void DisplayProperties::selectModelStatic(const QString& string)
+		{
+			model_string_static_ = string;
 
 			setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
 
 			if (string == "none")
 			{
 				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
 			}
 			else if (string == "line")
 			{
 				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_LINES);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 			}
 			else if (string == "stick")
 			{
 				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 			}
 			else if (string == "ball and stick")
 			{
 				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 			}
 			else if (string == "backbone")
 			{
 				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_BACKBONE);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 			}
 			else if (string == "surface")
 			{
 				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_SURFACE);
+			}
+			else if (string == "van der Waals")
+			{
+				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
+			}
+			else
+			{
+				Log.error() << "Unknown static model: " << string << std::endl;
+			}
+		}
+
+		void DisplayProperties::selectModelDynamic(const QString& string)
+		{
+			model_string_dynamic_ = string;
+
+			setValue_(ADDRESS__STATIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
+
+			if (string == "none")
+			{
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
+			}
+			else if (string == "line")
+			{
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+			}
+			else if (string == "stick")
+			{
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_STICK);
+			}
+			else if (string == "ball and stick")
+			{
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
+			}
+			else if (string == "backbone")
+			{
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_BACKBONE);
+			}
+			else if (string == "surface")
+			{
 				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_SURFACE);
 				setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_DOTS);
 			}
 			else if (string == "van der Waals")
 			{
-				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
+			}
+			else
+			{
+				Log.error() << "Unknown dynamic model: " << string << std::endl;
 			}
 		}
+
 
 		void DisplayProperties::selectColoringMethod(const QString& string)
 		{
@@ -426,11 +520,11 @@ namespace BALL
 			// disable apply button if selection is empty
 			if (selection_.empty())
 			{
-				apply_button_->setEnabled(false);
+				apply_button->setEnabled(false);
 			}
 			else
 			{
-				apply_button_->setEnabled(true);
+				apply_button->setEnabled(true);
 			}
 		}
 
@@ -687,6 +781,7 @@ namespace BALL
 			notify_(scene_message);
 			
 			setStatusbarText_("");
+			hide();
 		}
 
 
@@ -704,11 +799,24 @@ namespace BALL
 			setColorCalculator_(COLORCALCULATOR_VALUES__CUSTOM, color);
 
 			coloring_method_string_ = "custom";
-			setComboBoxIndex_(coloring_type_combobox_, coloring_method_string_);
+			setComboBoxIndex_(coloring_type_combobox, coloring_method_string_);
 			selectColoringMethod(coloring_method_string_);
 			update();
 		}
 
+		void DisplayProperties::editSelectionColor()
+		{
+			color_sample_selection->setBackgroundColor(QColorDialog::getColor(color_sample_selection->backgroundColor()));
+			ColorRGBA color;
+			QColor qcolor = color_sample_selection->backgroundColor();
+			color.set((float)qcolor.red() / 255.0,
+								(float)qcolor.green() / 255.0,
+								(float)qcolor.blue() / 255.0);
+
+			BALL_SELECTED_COLOR = color;
+
+			update();
+		}
 
 		void DisplayProperties::setComboBoxIndex_(QComboBox* combo_box, QString& item_string)
 		{
@@ -725,6 +833,7 @@ namespace BALL
 
 			if (!found)
 			{
+				Log.error() << "Unknown item: " << item_string << std::endl;
 				combo_box->setCurrentItem(0);
 			}
 		}
@@ -759,17 +868,17 @@ namespace BALL
 					break;
 
 				case VALUE__MODEL_STICK:
-					ball_and_stick_model_.enableStickModel();
-					static_base_model_pointer_ = &ball_and_stick_model_;
+					ball_and_stick_model_static_.enableStickModel();
+					static_base_model_pointer_ = &ball_and_stick_model_static_;
 					break;
 				
 				case VALUE__MODEL_BALL_AND_STICK:
-					ball_and_stick_model_.enableBallAndStickModel();
-					static_base_model_pointer_ = &ball_and_stick_model_;
+					ball_and_stick_model_static_.enableBallAndStickModel();
+					static_base_model_pointer_ = &ball_and_stick_model_static_;
 					break;
 				
 				case VALUE__MODEL_BACKBONE:
-					static_base_model_pointer_ = &backbone_model_;
+					static_base_model_pointer_ = &backbone_model_static_;
 					break;
 				
 				case VALUE__MODEL_SURFACE:
@@ -777,7 +886,7 @@ namespace BALL
 					break;
 
 				case VALUE__MODEL_VAN_DER_WAALS:
-					static_base_model_pointer_ = &van_der_waals_model_;
+					static_base_model_pointer_ = &van_der_waals_model_static_;
 					break;
 
 				case VALUE__MODEL_REMOVE:
@@ -852,21 +961,21 @@ namespace BALL
 					break;
 					
 				case VALUE__MODEL_STICK:
-					ball_and_stick_model_.enableStickModel();
-					dynamic_base_model_pointer_ = &ball_and_stick_model_;
+					ball_and_stick_model_dynamic_.enableStickModel();
+					dynamic_base_model_pointer_ = &ball_and_stick_model_dynamic_;
 					break;
 					
 				case VALUE__MODEL_BALL_AND_STICK:
-					ball_and_stick_model_.enableBallAndStickModel();
-					dynamic_base_model_pointer_ = &ball_and_stick_model_;
+					ball_and_stick_model_dynamic_.enableBallAndStickModel();
+					dynamic_base_model_pointer_ = &ball_and_stick_model_dynamic_;
 					break;
 					
 				case VALUE__MODEL_SURFACE:
-					dynamic_base_model_pointer_ = &line_model_;
+					dynamic_base_model_pointer_ = &surface_model_dynamic_;
 					break;
 					
 				case VALUE__MODEL_VAN_DER_WAALS:
-					dynamic_base_model_pointer_ = &van_der_waals_model_;
+					dynamic_base_model_pointer_ = &van_der_waals_model_dynamic_;
 					break;
 					
 				case VALUE__MODEL_REMOVE:
