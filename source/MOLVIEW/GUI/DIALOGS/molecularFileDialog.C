@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.2 2002/12/12 10:57:45 oliver Exp $
+// $Id: molecularFileDialog.C,v 1.3 2002/12/12 17:45:57 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -44,9 +44,9 @@ namespace BALL
 		void MolecularFileDialog::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.insertMenuEntry(MainControl::FILE, "&Read ...", (QObject *)this, 
+			main_control.insertMenuEntry(MainControl::FILE, "&Open...", (QObject *)this, 
 																	 SLOT(readFile()), QFileDialog::CTRL+QFileDialog::Key_R);
-			main_control.insertMenuEntry(MainControl::FILE, "&Write ...", (QObject *)this, 
+			main_control.insertMenuEntry(MainControl::FILE, "&Save As...", (QObject *)this, 
 																	 SLOT(writeFile()), QFileDialog::CTRL+QFileDialog::Key_W);
 		}
 		
