@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.49 2004/02/02 17:20:47 amoll Exp $
+# $Id: Makefile,v 1.50 2004/02/09 10:52:00 amoll Exp $
 #
 
 EXECUTABLE=molview
@@ -13,10 +13,6 @@ clean:	default_clean
 
 include ../../common.mak
 include .Dependencies
-
-# replace library-specific flags by application-
-# specific compiler flags
-LIB_CXXFLAGS=$(NONLIB_CXXFLAGS) -DQT_THREAD_SUPPORT
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
