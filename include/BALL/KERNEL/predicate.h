@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.8.2.1 2003/01/07 13:17:56 anker Exp $
+// $Id: predicate.h,v 1.8.2.2 2003/02/05 14:57:50 anker Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -21,7 +21,7 @@
 namespace BALL 
 {
 
-	/**	@name	Kernel Predicates
+	/**	@name	Kernel predicates
 			This chapter describes a set of unary predicates acting on \Ref{Composites}, that
 			can be used to identify the class type of a composite at runtime.\\
 			This predicates are functionally similar to the \Ref{RTTI:isKindOf} function.

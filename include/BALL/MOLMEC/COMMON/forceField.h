@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.17.2.1 2003/01/07 13:18:09 anker Exp $
+// $Id: forceField.h,v 1.17.2.2 2003/02/05 15:01:12 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -105,14 +105,20 @@ namespace BALL
 		BALL_CREATE(ForceField)
 
 		/**	Default constructor.
+				A default-constructed force field is not valid!
+				It becomes valid after a successful call to setup.
 		*/
 		ForceField();
 
 		/**	Constructor.
+				The successful setup of the force field can be verified
+				by the \Ref{isValid} method.
 		*/
 		ForceField(System& system);
 
 		/**	Constructor.
+				The successful setup of the force field can be verified
+				by the \Ref{isValid} method.
 		*/
 		ForceField(System& system, const Options& options);
 
@@ -139,16 +145,20 @@ namespace BALL
 		ForceField&	operator = (const ForceField& force_field);
 
 		//@}
+
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{
 
-		/**	Is the force field valid?
+		/**	Check the force field's validity.
+				A force field is valid if it is bound to a system
+				and \Ref{setup} was successful.
 		*/
 		bool isValid() const
 			throw();
 
 		//@}
+
 		/**	@name	Setup methods 
 		*/
 		//@{

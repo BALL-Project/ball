@@ -1,17 +1,11 @@
-// $Id: kernel.doc,v 1.12.2.1 2003/01/07 13:17:54 anker Exp $
+// $Id: kernel.doc,v 1.12.2.2 2003/02/05 14:57:47 anker Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on BALL kernel datastructures. 
 		\\
 		The hierarchy of the kernel classes looks like this: 
 		\\
-		\TEX{
-			\begin{figure}[htbp]
-				\begin{center}
-					\includegraphics[width=17cm]{../../doc/images/KERNEL}
-				\end{center}
-			\end{figure}
-		}
+		\IMG{../../doc/images/KERNEL.gif}
 */
 //@{
 
@@ -28,7 +22,7 @@
   //@Include: secondaryStructure.h
   //@Include: system.h
 
-	/** @name Iterator classes.
+	/** @name Iterator classes
 			Iterators for KERNEL classes
 	*/
 	//@{

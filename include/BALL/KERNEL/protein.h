@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.18.2.1 2003/01/07 13:17:56 anker Exp $ 
+// $Id: protein.h,v 1.18.2.2 2003/02/05 14:57:51 anker Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -40,10 +40,11 @@
 namespace BALL 
 {
 
-	/**	Kernel Protein Class.
+	/**	Protein Class.
 			This class is used to represent proteins.
 			A protein may contain several \Ref{Chain}, \Ref{SecondaryStructure},
-			and \Ref{Residue}.\\
+			and \Ref{Residue}.
+			\\
 			{\bf Definition:} \URL{BALL/KERNEL/protein.h}
 	*/
 	class Protein

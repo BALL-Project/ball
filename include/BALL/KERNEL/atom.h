@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.43.2.2 2003/02/05 14:57:38 anker Exp $
+// $Id: atom.h,v 1.43.2.3 2003/02/05 14:58:13 anker Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -1058,73 +1058,6 @@ namespace BALL
 
 		//@}
 
-<<<<<<< atom.h
-		/**	@name Efficient handling of atom attributes
-		*/
-		//@{
-		///
-		class StaticAtomAttributes
-		{
-			public:
-			///
-			float 					charge;
-			///
-			Vector3 				position;
-			///
-			Type 						type;
-			///
-			Vector3 				velocity;
-			///
-			Vector3 				force;
-			///
-			Atom*						ptr;
-
-			/// Set the attributes to their default values
-			void clear();
-
-			/** Swap the contents of the two attributes.
-					Adjusts the {\tt ptr} and {\tt index_} members of
-					\Ref{StaticAtomAttributes} and \Ref{Atom}.
-			*/
-			void swap(StaticAtomAttributes& attr);
-
-			/** Assign the contents from a different atom attribute.
-			*/
-			void set(StaticAtomAttributes& attr);
-		};
-
-		
-		///
-		typedef std::vector<StaticAtomAttributes> AttributeVector;
-
-		///
-		typedef std::list<Atom*> AtomPtrList;
-
-		///
-		typedef std::list<Position> AtomIndexList;
-			
-		/**	Compact memory for a list of atoms.
-				This method packs the static attributes of the atom in the given 
-				range into a contiguous memory segment in order to increase 
-				locality.
-		*/
-		static Position compact(const AtomIndexList& indices)
-			throw(Exception::OutOfRange);
-
-		/** Access to the static attribute array
-		*/
-		static AttributeVector& getAttributes();
-
-		/** Return the index in the static attribute array
-		*/
-		Position getIndex() const;
-
-		StaticAtomAttributes* getAttributePtr();
-		const StaticAtomAttributes* getAttributePtr() const;
-		//@}
-
-
-=======
 		/**	@name Efficient handling of atom attributes
 		*/
 		//@{
@@ -1194,7 +1127,6 @@ namespace BALL
 		//@}
 
 
->>>>>>> 1.46
 		protected:
 
 		/**	@name Attributes

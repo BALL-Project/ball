@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.h,v 1.21.2.1 2003/01/07 13:17:55 anker Exp $ 
+// $Id: nucleicAcid.h,v 1.21.2.2 2003/02/05 14:57:48 anker Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -25,8 +25,10 @@ namespace BALL
 
 	class Nucleotide;
 
-	/**	Kernel class representing nucleic acids.
+	/**	Nucleic acid class.
+			\\
 			{\bf Definition:} \URL{BALL/KERNEL/nucleicAcid.h}
+			\\
 	*/
 	class NucleicAcid
 		: public Molecule

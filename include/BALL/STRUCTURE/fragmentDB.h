@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.14.2.1 2003/01/07 13:19:06 anker Exp $
+// $Id: fragmentDB.h,v 1.14.2.2 2003/02/05 15:03:42 anker Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -278,7 +278,10 @@ namespace BALL
 			*/
 			void setFragmentDB(FragmentDB& db);
 
-			/**
+			/** Set the naming standard for normalizing names.
+					By default the normalize\_names processor maps to PDB names.
+					Specify ``AMBER'' here to map all names to Amber names or ``PDB''
+					for mapping to PDB names.
 			*/
 			void setNamingStandard(const String& naming_standard);
 		

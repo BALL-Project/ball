@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.23.2.1 2003/01/07 13:17:59 anker Exp $
+// $Id: system.h,v 1.23.2.2 2003/02/05 14:57:54 anker Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -49,7 +49,7 @@ namespace BALL
 
 	class Molecule;
 
-	/** Kernel System Class.
+	/** System class.
 			This class is used to represent a system, i.e., a collection
 			of molecules.\\
 			{\bf Definition:}\URL{BALL/KERNEL/system.h}

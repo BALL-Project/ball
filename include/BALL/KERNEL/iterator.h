@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.11.2.1 2003/01/07 13:17:54 anker Exp $
+// $Id: iterator.h,v 1.11.2.2 2003/02/05 14:57:47 anker Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -70,7 +70,7 @@ rend##Type () const \
 namespace BALL 
 {
 
-	/**	Composite Iterator Traits.	
+	/**	Composite Iterator Traits
 			This class is used in the implementation of the kernel iterators.
 			It is intended for internal use only.
 			\\
