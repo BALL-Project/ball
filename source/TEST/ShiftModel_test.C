@@ -1,4 +1,4 @@
-// $Id: ShiftModel_test.C,v 1.4 2000/09/22 11:21:20 amoll Exp $
+// $Id: ShiftModel_test.C,v 1.5 2000/09/22 12:17:08 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.4 2000/09/22 11:21:20 amoll Exp $")
+START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.5 2000/09/22 12:17:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,17 +21,14 @@ CHECK(ShiftModel::ShiftModel() throw())
 	TEST_NOT_EQUAL(sm, 0)
 RESULT
 
-
 CHECK(ShiftModel::~ShiftModel() throw())
   delete sm;
 RESULT
-
 
 CHECK(ShiftModel::isValid() const  throw())
   ShiftModel sm;
 	TEST_EQUAL(sm.isValid(), false)
 RESULT
-
 
 CHECK(ShiftModel::isRegistered(const String& name) const  throw())
   ShiftModel sm;
@@ -45,13 +42,11 @@ CHECK(ShiftModel::isRegistered(const String& name) const  throw())
 	TEST_EQUAL(sm.isRegistered("ElectricField"), true)
 RESULT
 
-
 CHECK(ShiftModel::getParameters() throw())
   ShiftModel sm;
 	TEST_NOT_EQUAL(&sm.getParameters(), 0)
 	TEST_EQUAL(sm.getParameters().isValid(), false)
 RESULT
-
 
 CHECK(ShiftModel::setFilename(const String& filename) throw(Exception::FileNotFound))
 	ShiftModel sm;
@@ -63,7 +58,6 @@ CHECK(ShiftModel::setFilename(const String& filename) throw(Exception::FileNotFo
 	TEST_EQUAL(sm.getParameters().isValid(), true)
 RESULT
 
-
 CHECK(ShiftModel::getFilename() const  throw())
 	ShiftModel sm;
 	TEST_EXCEPTION(Exception::FileNotFound, sm.setFilename("XXXXXX"))
@@ -74,7 +68,6 @@ CHECK(ShiftModel::getFilename() const  throw())
 	TEST_EQUAL(sm.getFilename(), "data/ShiftModel_test.ini")
 RESULT
 
-
 CHECK(ShiftModel::getModuleList() throw())
 	ShiftModel sm;
 	TEST_EQUAL(sm.getModuleList().size(), 0)
@@ -82,7 +75,6 @@ CHECK(ShiftModel::getModuleList() throw())
 	sm.setFilename("data/ShiftModel_test.ini");
 	TEST_EQUAL(sm.getModuleList().size(), 2)
 RESULT
-
 
 CHECK(ShiftModel::registerModule(const String& name, CreateMethod method) throw(Exception::NullPointer))
 	ShiftModel sm;
@@ -95,7 +87,6 @@ CHECK(ShiftModel::registerModule(const String& name, CreateMethod method) throw(
 	TEST_EXCEPTION(Exception::NullPointer, sm.registerModule("TEST2", 0))
 	TEST_EQUAL(sm.isRegistered("TEST2"), false)
 RESULT
-
 
 CHECK(ShiftModel::unregisterModule(const String& name) throw())
 	ShiftModel sm;
@@ -110,7 +101,6 @@ CHECK(ShiftModel::unregisterModule(const String& name) throw())
 	TEST_EQUAL(sm.isRegistered("TEST"), false)	
 RESULT
 
-
 CHECK(ShiftModel::ShiftModel(const String& filename) throw())
   ShiftModel sm("data/ShiftModel_test.ini");
 	TEST_EQUAL(sm.isValid(), true)
@@ -121,7 +111,6 @@ CHECK(ShiftModel::ShiftModel(const String& filename) throw())
 		TEST_EQUAL((*mod_list.begin())->getName(), "JB_ring_current")
 	}
 RESULT
-
 
 CHECK(ShiftModel::clear() throw())
   ShiftModel sm("data/ShiftModel_test.ini");
@@ -144,7 +133,6 @@ CHECK(ShiftModel::ShiftModel(const ShiftModel& model) throw())
 	}
 RESULT
 
-
 CHECK(ShiftModel::ShiftModel& operator = (const ShiftModel& model) throw())
 	ShiftModel sm = smx;
 	TEST_EQUAL(sm.isValid(), true)
@@ -156,7 +144,6 @@ CHECK(ShiftModel::ShiftModel& operator = (const ShiftModel& model) throw())
 	}
 RESULT
 
-
 CHECK(ShiftModel::ShiftModel& operator = (const String& filename) throw())
 	ShiftModel sm = String("data/ShiftModel_test.ini");
 	TEST_EQUAL(sm.isValid(), true)
@@ -166,10 +153,7 @@ CHECK(ShiftModel::ShiftModel& operator = (const String& filename) throw())
 	{
 		TEST_EQUAL((*mod_list.begin())->getName(), "JB_ring_current")
 	}
-RESULT
-
-
-											
+RESULT		
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
