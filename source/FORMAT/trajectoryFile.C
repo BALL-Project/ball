@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.C,v 1.7.2.1 2003/01/07 13:20:48 anker Exp $
+// $Id: trajectoryFile.C,v 1.7.2.2 2003/01/20 10:47:07 anker Exp $
 
 #include <BALL/FORMAT/trajectoryFile.h>
 
@@ -10,26 +10,30 @@ using namespace std;
 namespace BALL
 {
 
-	TrajectoryFile::TrajectoryFile
-		()
+	TrajectoryFile::TrajectoryFile()
 		throw()
-		:	File()
+		:	File(),
+			number_of_snapshots_(0),
+			number_of_atoms_(0)
 	{
 	}
 
 
-	TrajectoryFile::TrajectoryFile
-		(const TrajectoryFile& file)
+	TrajectoryFile::TrajectoryFile(const TrajectoryFile& file)
 		throw()
-		:	File(file)
+		:	File(file),
+			number_of_snapshots_(file.number_of_snapshots_),
+			number_of_atoms_(file.number_of_atoms_)
 	{
 	}
 
 
-	TrajectoryFile::TrajectoryFile
-		(const String& filename, File::OpenMode open_mode)
+	TrajectoryFile::TrajectoryFile(const String& filename,
+			File::OpenMode open_mode)
 		throw()
-		: File(filename, open_mode)
+		: File(filename, open_mode),
+			number_of_snapshots_(0),
+			number_of_atoms_(0)
 	{
 	}
 
@@ -48,6 +52,9 @@ namespace BALL
 	{
 		File::operator = (file);
 
+		number_of_snapshots_ = file.number_of_snapshots_;
+		number_of_atoms_ = file.number_of_atoms_;
+
 		return *this;
 	}
 
@@ -56,6 +63,10 @@ namespace BALL
 		throw()
 	{
 		File::clear();
+
+		number_of_snapshots_ = 0;
+		number_of_atoms_ = 0;
+
 	}
 
 
@@ -63,7 +74,9 @@ namespace BALL
 		(const TrajectoryFile& file) const
 		throw()
 	{
-		return File::operator == (file);
+		return((File::operator == (file))
+				&& (number_of_snapshots_ == number_of_snapshots_)
+				&& (number_of_atoms_ == file.number_of_atoms_));
 	}
 
 
