@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.9 2003/10/04 12:23:01 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.10 2003/10/05 16:26:58 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -422,13 +422,6 @@ void ColorMeshDialog::saveSettings_()
 	{
 		config.tab = 2;
 	}
-
-	/*
-	if (grid_label->text() != "")
-	{
-		config.selected_grid = grid_label->text().ascii();
-	}
-	*/
 }
 
 
