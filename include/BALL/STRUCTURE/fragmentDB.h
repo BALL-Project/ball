@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.9 2000/09/18 14:37:06 oliver Exp $
+// $Id: fragmentDB.h,v 1.10 2001/01/29 09:59:48 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -12,6 +12,14 @@
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRINGHASHSET_H
+#	include <BALL/DATATYPE/stringHashSet.h>
+#endif
+
+#ifndef BALL_DATATYPE_QUADRUPLE_H
+#	include <BALL/DATATYPE/quadruple.h>
 #endif
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
@@ -391,36 +399,30 @@ namespace BALL
 			
 			/** @name Processor-related methods */
 			//@{
-			/**	start method.
-					is called first after an apply() call.
-					count\_h\_ is set to 0.
-					nothing important is done here
+			/**	Processor start method
 			*/
 			virtual bool start();
 			
-			/**	finish method function.
-					is called after apply has finished.
-					in this case it does nothing.
+			/**	Processor finish method
 			*/
 			virtual bool finish();
 			
 			/**
-			apply() function
-			adds the missing hydrogens to the passed fragment
-			\begin{itemize}
-			\item first the actual residue is identified and its database template is stored in tmp
-			\item searching tmp for hydrogens to be inserted,
-			      save them names in {\tt h\_atoms\_} and store this entry in {\tt h\_table\_} for further use
-			\item iterating the actual residues {\tt h\_table\_} entry :
-				\item test wether actual hydrogen is inserted
-				\item try to acces {\tt ini\_table} entry of actual hydrogen in order to get names of reference atoms
-			       	      if not accessable, entry is built and stored for further use
-				\item getting coordinates of reference vectors and call calculate function in order
-			   	      to calculate position of actual hydrogen 
-			\end{itemize}
-
+				apply() function
+				adds the missing hydrogens to the passed fragment
+				\begin{itemize}
+				\item first the actual residue is identified and its database template is stored in tmp
+				\item searching tmp for hydrogens to be inserted,
+							save them names in {\tt h\_atoms\_} and store this entry in {\tt h\_table\_} for further use
+				\item iterating the actual residues {\tt h\_table\_} entry :
+					\item test wether actual hydrogen is inserted
+					\item try to acces {\tt ini\_table} entry of actual hydrogen in order to get names of reference atoms
+											if not accessable, entry is built and stored for further use
+					\item getting coordinates of reference vectors and call calculate function in order
+									to calculate position of actual hydrogen 
+				\end{itemize}
 			*/
-			virtual Processor::Result operator()(Fragment&);
+			virtual Processor::Result operator() (Fragment&);
 			//@}
 		
 			/** @name Accessors
@@ -428,7 +430,7 @@ namespace BALL
 			//@{
 			
 			/**returns number of recently inserted hydrogens*/
-			Size getNumberOfInsertedH();
+			Size getNumberOfInsertedHydrogens();
 
 			/**	Set the fragment database
 			*/
@@ -436,51 +438,26 @@ namespace BALL
 			//@}
 			
 		
-			private:
+			protected:
 			
-			/*_ @name Private variables */
+			/*_ @name Protected variables */
 			//_@{
 
-			/*_	pointer to used fragmentDataBase*/	
+			/*_	Pointer to the fragment DB */	
 			const FragmentDB*	fragment_db_;
 			
-			/*_ Counts recently inserted hydrogens*/
-			Size			count_h_;
+			/*_ Number of hydrogens inserted during the last application */
+			Size			number_of_inserted_h_;
 			
-			/*_ saves shortnames of the aminoacids*/
-			vector<String>		template_names_;
-			
-			/*_ it saves for every hydrogen atom of each residue the needed
-					atoms to start the geometric comparison calculation.
-			*/
-			StringHashMap<String*> ini_table_;
-						
-			/*_ it saves for every residue the names of the hydrogens to be inserted
-			*/
-			StringHashMap<String*> h_table_;
-						
-			/*_ it saves the coordinates of the prototype atoms under their unique names*/
-			StringHashMap<Atom> prot_table_;
-						
-			Residue*	residue_;
 
-			/*_ list of the hydrogens to be inserted according to the passed residue*/ 
-			String *h_atoms_;
-			
-			/*_ list of the atoms needed for geometric comparison according to the passed residue*/
-			String *atoms_;
+			/*_	Maps the handle of the reference fragments onto StringHashMaps containing the hydrogen names in this fragment */
+			HashMap<Handle, StringHashSet> reference_fragment_h_names_;
 			//_@}
 			
 			/*_ @name private functions
 			*/	
 			//_@{
 
-			/*_ saves prototype atoms of the fragmentDataBase in prot\_table*/
-			void addToTemplateTable_(const Fragment*);
-						
-			/*_ create tables ini_table_ and h_table_*/
-			void readTemplates_();
-						
 			/*_ turns passed vector around x1- axis*/
 			void turn_x1_(Vector3&,const float);
 						
@@ -523,7 +500,15 @@ namespace BALL
 			\end{itemize}		  
 					
 			*/
-			void calculate_(String, Atom*, Vector3& ,Vector3& ,Vector3&, Vector3&, Vector3& ,Vector3& ,Vector3& ,Vector3& ,Vector3&);			
+			PDBAtom* createNewHydrogen_
+				(const Atom& ref_hydrogen, 
+				 const Atom& center_atom, const Atom& atom_1, const Atom& atom_2, const Atom& atom_3,
+				 const Atom& ref_center_atom, const Atom& ref_atom_1, const Atom& ref_atom_2, const Atom& ref_atom_3)
+				throw();
+
+			Quadruple<bool, const Atom*, const Atom*, const Atom*>
+				getThreeReferenceAtoms_(const Atom& ref_center_atom)
+				throw();
 			//_@}	
 			
 		};
