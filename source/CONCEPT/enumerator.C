@@ -1,4 +1,4 @@
-// $Id: enumerator.C,v 1.5 2000/07/18 08:29:52 oliver Exp $
+// $Id: enumerator.C,v 1.6 2000/10/17 10:15:38 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/CONCEPT/enumerator.h>
@@ -29,7 +29,7 @@ namespace BALL
 	{
 		Index i;
 		bool add_one = true;
-		for (i = size() - 1; (i >= 0) && add_one; i--)
+		for (i = (Index)size() - 1; (i >= 0) && add_one; i--)
 		{
 			operator[](i)++;
 			add_one = false;
@@ -53,7 +53,7 @@ namespace BALL
 	{
 		Index i;
 		bool sub_one = true;
-		for (i = size() - 1; (i >= 0) && sub_one; i--)
+		for (i = (Index)size() - 1; (i >= 0) && sub_one; i--)
 		{
 			if (operator[](i) == 0)
 			{
