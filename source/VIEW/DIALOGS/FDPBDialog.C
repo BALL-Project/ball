@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.11 2004/05/14 10:23:45 amoll Exp $
+// $Id: FDPBDialog.C,v 1.12 2004/05/26 12:08:04 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -24,7 +24,8 @@ namespace BALL
 
 		FDPBDialog::FDPBDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
 			: FDPBDialogData(parent, name, modal, fl),
-				ModularWidget("FDPBDialog")
+				ModularWidget("FDPBDialog"),
+				system_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new FDPBDialog " << this << std::endl;
