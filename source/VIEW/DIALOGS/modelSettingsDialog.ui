@@ -1723,49 +1723,6 @@
                         <string>scaling (10^X)</string>
                     </property>
                 </widget>
-                <widget class="QSlider">
-                    <property name="name">
-                        <cstring>force_scaling_slider</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>138</x>
-                            <y>11</y>
-                            <width>84</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>84</width>
-                            <height>21</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>84</width>
-                            <height>21</height>
-                        </size>
-                    </property>
-                    <property name="minValue">
-                        <number>5</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>20</number>
-                    </property>
-                    <property name="value">
-                        <number>11</number>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="tickmarks">
-                        <enum>Above</enum>
-                    </property>
-                    <property name="tickInterval">
-                        <number>7</number>
-                    </property>
-                </widget>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>force_scaling_label</cstring>
@@ -1806,6 +1763,49 @@
                     </property>
                     <property name="alignment">
                         <set>AlignCenter</set>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>force_scaling_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>50</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>500</number>
+                    </property>
+                    <property name="value">
+                        <number>130</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>70</number>
                     </property>
                 </widget>
             </widget>
@@ -1930,13 +1930,13 @@
                         </size>
                     </property>
                     <property name="minValue">
-                        <number>1</number>
+                        <number>10</number>
                     </property>
                     <property name="maxValue">
-                        <number>30</number>
+                        <number>300</number>
                     </property>
                     <property name="value">
-                        <number>10</number>
+                        <number>100</number>
                     </property>
                     <property name="orientation">
                         <enum>Horizontal</enum>
@@ -1945,7 +1945,7 @@
                         <enum>Above</enum>
                     </property>
                     <property name="tickInterval">
-                        <number>7</number>
+                        <number>70</number>
                     </property>
                 </widget>
             </widget>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.18 2004/09/01 15:02:09 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.19 2004/09/01 15:16:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -81,8 +81,8 @@ namespace BALL
 
 			if (all || list_box->currentItem() == 7)
 			{
-				force_max_length_slider->setValue(10);
-				force_scaling_slider->setValue(11);
+				force_max_length_slider->setValue((Size)(10 * 10.0));
+				force_scaling_slider->setValue(Size(11 * 10.0));
 			}
 		}
 
@@ -245,8 +245,8 @@ namespace BALL
 					
 			if (RTTI::isKindOf<ForceModel>(mp))
 			{
-				((ForceModel*) &mp)->setMaxLength(getForceMaxLength());
-				((ForceModel*) &mp)->setScaling(getForceScaling());
+				((ForceModel*) &mp)->setMaxLength((float)(getForceMaxLength()) / 10.0);
+				((ForceModel*) &mp)->setScaling((float)(getForceScaling()) / 10.0);
 				return;
 			}
 		}
