@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.16 2000/09/05 07:16:59 oliver Exp $ 
+// $Id: hashSet.h,v 1.17 2000/09/05 09:17:40 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -200,7 +200,7 @@ namespace BALL
 		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
 		*/
-		bool erase(const KeyType& key);
+		Size erase(const KeyType& key);
 
 		/**	Erase element at a given position.
 				@param pos an iterator pointing to the element to delete
@@ -702,19 +702,20 @@ namespace BALL
 			}
 			
 			Position bucket = hashBucket_(item);
-			
-			bucket_[bucket] = newNode_(item, bucket_[bucket]);
+
+			Node* next = bucket_[bucket];
+			bucket_[bucket] = newNode_(item, next);
 			
 			++size_;
-			// BAUSTELLE: Effizienz?
-			it = find(item);
+			it.getTraits().position_ = bucket_[bucket];
+			it.getTraits().bucket_ = bucket;
 		}
 
 		return std::pair<Iterator, bool>(it, true);
 	}
 
 	template <class Key>
-	bool HashSet<Key>::erase(const KeyType& key)
+	Size HashSet<Key>::erase(const KeyType& key)
 	{
 		Position	bucket = hashBucket_(key);
 		Node*			previous = 0;
@@ -742,7 +743,8 @@ namespace BALL
 
 		deleteNode_(node_ptr);
 		--size_;
-		return true;
+
+		return 1;
 	}
 
 	template <class Key>
@@ -753,23 +755,29 @@ namespace BALL
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 
-		if (pos == end())
+		if ((pos == end()) || (size_ == 0))
 		{
 			return;
 		}
 				
-		if (pos.getTraits().getPosition() == bucket_[pos.getTraits().bucket_])
+		if (pos.getTraits().position_ == bucket_[pos.getTraits().bucket_])
 		{
-			bucket_[pos.getTraits().bucket_] = pos.getTraits().getPosition()->next;
+			bucket_[pos.getTraits().bucket_] = pos.getTraits().position_->next;
 		} 
 		else 
 		{
-			(pos.getTraits().getPosition() - 1)->next = pos.getTraits().getPosition()->next;
+			// walk over all nodes in this bucket and identify the predecessor
+			// of the node refered to by the iterator pos
+			Node* prev = bucket_[pos.getTraits().bucket_];
+			for (; (prev != 0) && (prev->next != pos.getTraits().position_); prev = prev->next);
+			if (prev != 0)
+			{
+				// remove the node and reconnect the list
+				prev->next = pos.getTraits().position_->next;
+				deleteNode_(pos.getTraits().position_);
+				--size_;
+			}
 		}
-
-
-		deleteNode_(pos.getTraits().getPosition());
-		--size_;
 	}
 
 	template <class Key>
@@ -895,7 +903,7 @@ namespace BALL
 		s << "  size: " << getSize() << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  bucket size: " << getBucketSize() << std::endl;
+		s << "  # buckets: " << getBucketSize() << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  capacity: " << getCapacity() << std::endl;
@@ -906,7 +914,12 @@ namespace BALL
 		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
 		{
 			BALL_DUMP_DEPTH(s, depth);
-			s << "    bucket " << bucket << " (" << (void*)bucket_[bucket] << "):" << std::endl;
+			s << "    bucket " << bucket << ": ";
+			for (Node* ptr = bucket_[bucket]; ptr != 0; ptr = ptr->next)
+			{
+				s << "(" << (void*)ptr << ") ";
+			}
+			s << "(0)" << std::endl;
 		}
 
 		BALL_DUMP_STREAM_SUFFIX(s);
