@@ -1,11 +1,11 @@
 Changes Since Version 1.0 (02.06.04):
 
 Added:
-- Esc key now switches to last used modus in Scene
 - Documentation for BALLView in the folder BALL/doc/BALLView
 - Stereo Modi: Side-by-Side and for shutter googles 
 - Clipping Planes
 - Writing and loading of BALLView project files
+- Esc key now switches to last used modus in Scene
 - Hotkey support for starting any (BALL-)Python command from BALLView
 - new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
 - new rotate mode for Scene

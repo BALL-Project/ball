@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.130 2004/09/14 15:01:13 amoll Exp $
+// $Id: scene.C,v 1.131 2004/09/14 15:14:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1312,6 +1312,11 @@ namespace BALL
 			hint = "Switch to picking mode, e.g. to identify singe atoms or groups";
 			picking_id_ = main_control.insertMenuEntry(
 					MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
+
+			hint = "Move selected items";
+			picking_id_ = main_control.insertMenuEntry(
+					MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()), 0, -1, hint);
+
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
