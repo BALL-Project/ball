@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.9 2000/03/14 22:46:23 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.10 2000/05/24 09:21:41 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -41,7 +41,8 @@ namespace BALL
 		*istr_ >> s;
 		if (s != value)
 		{
-			Log.error() << "textPersistenceManager::expect: read " << s << ", expected " << value << endl;
+			Log.error() << "textPersistenceManager::expect: " 
+				<< " at position " << istr_->tellg() << ": read " << s << ", expected " << value << endl;
 		}
 		
 		return (s == value);
