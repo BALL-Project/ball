@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.26 2002/12/16 17:49:27 oliver Exp $
+// $Id: energyMinimizer.h,v 1.27 2002/12/17 17:12:44 anker Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -175,6 +175,10 @@ namespace BALL
 		EnergyMinimizer&	operator = (const EnergyMinimizer& energy_minimizer);
 
 		//@}
+
+		/// Equality operator
+		bool operator == (const EnergyMinimizer& energy_minimizer)
+			throw();
 
 		/**	@name	Debugging and Diagnostics 
 		*/

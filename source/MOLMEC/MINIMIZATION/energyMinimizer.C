@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.14 2002/12/16 18:05:50 oliver Exp $
+// $Id: energyMinimizer.C,v 1.15 2002/12/17 17:12:44 anker Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
@@ -510,6 +510,26 @@ namespace BALL
 
 		// increment the iteration counter
 		number_of_iteration_++;
+	}
+
+	bool EnergyMinimizer::operator == (const EnergyMinimizer& energy_minimizer)
+		throw()
+	{
+		return ((force_field_ == energy_minimizer.force_field_)
+			&& (options == energy_minimizer.options)
+			&& (valid_ == energy_minimizer.valid_)
+			// ?????
+			// && (snapshot_ == energy_minimizer.snapshot_)
+			&& (number_of_iteration_ == energy_minimizer.number_of_iteration_)
+			&& (maximal_number_of_iterations_ == energy_minimizer.maximal_number_of_iterations_ )
+			&& (energy_output_frequency_ == energy_minimizer.energy_output_frequency_)
+			&& (snapshot_frequency_ == energy_minimizer.snapshot_frequency_)
+      && (max_same_energy_ == energy_minimizer.max_same_energy_) 
+			&& (energy_difference_bound_ == energy_minimizer.energy_difference_bound_ )
+			&& (max_gradient_ == energy_minimizer.max_gradient_ )
+			&& (maximal_shift_ == energy_minimizer.maximal_shift_)
+      && (force_update_counter_ == energy_minimizer.force_update_counter_)
+			&& (energy_update_counter_ == energy_minimizer.energy_update_counter_));
 	}
 
 } // namespace Ball
