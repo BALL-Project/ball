@@ -165,20 +165,6 @@ namespace BALL
 		bool substituteFace(Face* old_vertex, Face* new_vertex)
 			throw();
 
-		/*void remove()
-		{	
-			vertex_[0]->deleteEdge(this);
-			vertex_[1]->deleteEdge(this);
-			//if (face0_ != NULL)
-			//{
-			//	face0_->deleteEdge(this);
-			//}
-			//if (face1_ != NULL)
-			//{
-			//	face1_->deleteEdge(this);
-			//}
-		}*/
-
 		/**	Delete a face of the GraphEdge.
 				If the second face of the GraphEdge should be deleted, it is set to NULL. If the first one should	
 				be deleted, the second one is copied to first position and then set to NULL.
@@ -213,7 +199,7 @@ namespace BALL
 		//@}
 
 
-		//protected:
+		protected:
 
 		/*_ The vertices of the GraphEdge
 		*/
