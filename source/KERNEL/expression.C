@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.25 2001/07/15 17:04:44 oliver Exp $
+// $Id: expression.C,v 1.26 2001/07/15 20:57:41 oliver Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -325,7 +325,7 @@ namespace BALL
 	{
 		type_ = INVALID;
 		negate_ = false;
-		// BAUSTELLE:
+		// BAUSTELLE
 		// memory leak if nobody cares for the predicate.
 		predicate_ = 0;
 		children_.clear();
