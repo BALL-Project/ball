@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.152 2004/12/07 13:34:06 amoll Exp $
+// $Id: mainControl.C,v 1.153 2004/12/09 12:59:31 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1513,6 +1513,12 @@ namespace BALL
 				}
 
 				updateRepresentationsOf(* const_cast<Composite*>(so->getComposite()), true);
+
+				// prevent deadlock if no representation has to be updated:
+				if (!primitive_manager_.getUpdateThread().running())
+				{
+					getPrimitiveManager().setUpdatePending(false);
+				}
 			}
 		#else
 			e->type(); // prevent warning for single thread build

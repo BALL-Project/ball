@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.33 2004/12/02 16:00:54 amoll Exp $
+// $Id: primitiveManager.C,v 1.34 2004/12/09 12:58:49 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -405,5 +405,4 @@ bool PrimitiveManager::usesMultithreading()
 	return multi_threading_mode_;
 }
 			
-
 } } // namespaces

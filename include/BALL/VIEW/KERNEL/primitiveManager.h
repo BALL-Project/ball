@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.18 2004/11/15 02:07:14 amoll Exp $
+// $Id: primitiveManager.h,v 1.19 2004/12/09 12:58:46 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -191,7 +191,7 @@ namespace BALL
 					This is needed to sync the main thread and the SimulationThread.
 					(Only used in Multithreaded code.)
 			*/
-			void notifyOfPendingingUpdate() { update_pending_ = true;}
+			void setUpdatePending(bool state) { update_pending_ = state;}
 
 			/** Returns true if an Update will accour soon or an update is running
 					(Only used in Multithreaded code.)

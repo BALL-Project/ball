@@ -56,9 +56,9 @@ namespace BALL
 				throw Exception::NullPointer(__FILE__, __LINE__);
 			}
 
-			if (main_control_->getPrimitiveManager().updatePending())
+			while (main_control_->getPrimitiveManager().updatePending())
 			{
-				main_control_->getPrimitiveManager().getUpdateWaitCondition().wait();
+				main_control_->getPrimitiveManager().getUpdateWaitCondition().wait(100);
 			}
 		}
 
@@ -69,7 +69,7 @@ namespace BALL
 				throw Exception::NullPointer(__FILE__, __LINE__);
 			}
 
-			main_control_->getPrimitiveManager().notifyOfPendingingUpdate();
+			main_control_->getPrimitiveManager().setUpdatePending(true);
 			// notify MainControl to update all Representations for the Composite
 			UpdateCompositeEvent* se = new UpdateCompositeEvent;
 			se->setComposite(composite_);
