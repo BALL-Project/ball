@@ -1,4 +1,4 @@
-// $Id: residueChecker.h,v 1.7 2001/03/06 00:12:23 amoll Exp $
+// $Id: residueChecker.h,v 1.8 2001/07/31 00:44:23 oliver Exp $
 
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -29,11 +29,11 @@ namespace BALL
 	{
 		public:
 
+		BALL_CREATE_DEEP(ResidueChecker)
+
 		/**	Constructors and Destructors
 		*/
 		//@{
-
-		BALL_CREATE_DEEP(ResidueChecker)
 
 		/**	Default constructor
 		*/
@@ -80,6 +80,31 @@ namespace BALL
 		*/
 		bool finish();
 
+		//@}
+
+		/**@name	Explicit tests
+		*/
+		//@{
+		/**
+		*/
+		bool checkAtomPositions(const Residue& res, const String& res_name)
+			throw();
+
+		/**
+		*/
+		bool checkCharge(const Residue& res, const String& res_name)
+			throw();
+
+		/**
+		*/
+		bool checkCompleteness(const Residue& res, const Residue& reference, const String& res_name)
+			throw();
+
+		/**
+		*/
+		bool checkTemplate(const Residue& res, const Residue& reference, const String& res_name)
+			throw();
+			
 		//@}
 			
 		protected:
