@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.19 2004/01/17 00:35:20 amoll Exp $
+// $Id: molecularProperties.C,v 1.20 2004/01/17 00:40:23 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -45,7 +45,7 @@ MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
 	
 	hint = "Add missing H-atoms to a selected structure."; 
 	add_hydrogens_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
-																										SLOT(addHydrogens()), CTRL+Key_H);
+																										SLOT(addHydrogens()), CTRL+Key_H, -1, hint);
 	
  	hint = "Check a structure against the fragment database.";
 	check_structure_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
@@ -65,12 +65,13 @@ MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
 	
 	hint = "Create a grid with the distance to the geometric center of a structure.";
 	create_distance_grid_id_ = main_control.insertMenuEntry(MainControl::TOOLS_CREATE_GRID, 
-																			"&Distance Grid", this, SLOT(createGridFromDistance()));   
+																			"&Distance Grid", this, SLOT(createGridFromDistance()), 
+																			0, -1, hint);   
 
 	hint = "Map two proteins.";
 	map_proteins_ = main_control.insertMenuEntry(MainControl::TOOLS,
 																			"&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
-	}
+}
 
 MolecularProperties::~MolecularProperties()
 	throw()
