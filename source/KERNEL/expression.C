@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.22 2001/07/12 20:00:20 anker Exp $
+// $Id: expression.C,v 1.23 2001/07/13 14:24:55 anker Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -418,16 +418,18 @@ namespace BALL
 
 
 	bool ExpressionTree::operator == (const ExpressionTree& tree) const
-		throw(Exception::NullPointer)
+		throw()
 	{
 		if ((predicate_ == 0) && (tree.predicate_ == 0))
 		{
 			// both pointers are null pointers. Expressions should have null
 			// pointers only if they are default constructed, so a consistency
 			// check might be useful 
+
+
 			return ((type_ == tree.type_)
 					&& (negate_ == tree.negate_)
-					&& (children_ == tree.children_));
+					&& compareChildren_(tree));
 		}
 		else
 		{
@@ -441,7 +443,31 @@ namespace BALL
 				return ((type_ == tree.type_)
 						&& (negate_ == tree.negate_)
 						&& (*predicate_ == *tree.predicate_)
-						&& (children_ == tree.children_));
+						&& compareChildren_(tree));
+			}
+		}
+	}
+
+	bool ExpressionTree::operator != (const ExpressionTree& tree) const
+		throw()
+	{
+		return ! operator == (tree);
+	}
+
+	bool ExpressionTree::compareChildren_(const ExpressionTree& tree) const
+		throw()
+	{
+		if (children_.size() != tree.children_.size())
+		{
+			return false;
+		}
+		list<const ExpressionTree*>::const_iterator it1 = children_.begin();
+		list<const ExpressionTree*>::const_iterator it2 = tree.children_.begin();
+		for (; it1 != children_.end(); ++it1, ++it2)
+		{
+			if (**it1 != **it2)
+			{
+				return false;
 			}
 		}
 	}
