@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.h,v 1.3 2000/09/20 07:24:31 oliver Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.4 2000/09/22 12:06:31 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 # include <BALL/KERNEL/bond.h>
@@ -112,6 +112,15 @@ namespace BALL
 			Effectors of C=N anisotropy are all bounds between atoms named "C" and "N".
 		*/
 		virtual Processor::Result operator() (Composite& composite) throw();
+		//@}
+
+		/**	@name	Accessors
+		*/
+		//@{
+		/**	Module initialization
+		*/
+		virtual void init()
+			throw();
 		//@}
 		
 		protected:
