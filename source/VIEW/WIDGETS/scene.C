@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.60 2004/05/27 19:50:03 oliver Exp $
+// $Id: scene.C,v 1.61 2004/05/28 14:12:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -304,15 +304,73 @@ namespace BALL
 
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glPushMatrix();
 			if (!gl_renderer_.isInStereoMode())
 			{
+				glPushMatrix();
 				renderRepresentations_(mode);
 				glPopMatrix();
 
 				return;
 			}
 
+			Vector3	diff = stage_->getCamera().getRightVector();
+			Vector3 old_view_point = stage_->getCamera().getViewPoint();
+			Vector3 old_look_at = stage_->getCamera().getLookAtPosition();
+			diff.normalize();
+			diff = diff * (stage_->getEyeDistance() / 2.0);  
+
+			float nearf = 1.5; 
+			float farf = 300;
+
+			float focallength = 20; ///???????????????
+			float ndfl    = nearf / focallength;
+			float eye_distance = stage_->getEyeDistance();
+
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      float left  = -2.0 *gl_renderer_.getXScale() - 0.5 * eye_distance * ndfl;
+      float right =  2.0 *gl_renderer_.getXScale() - 0.5 * eye_distance * ndfl;
+			glFrustum(left,right,
+								-2.0 * gl_renderer_.getYScale(), 
+								 2.0 * gl_renderer_.getYScale(),
+								nearf,farf);
+
+      glMatrixMode(GL_MODELVIEW);
+      glDrawBuffer(GL_BACK_RIGHT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			glPushMatrix();
+			stage_->getCamera().setViewPoint(old_view_point + diff);
+			stage_->getCamera().setViewPoint(old_look_at + diff);
+			gl_renderer_.updateCamera();
+			renderRepresentations_(mode);
+			glPopMatrix();
+
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      left  = -2.0 *gl_renderer_.getXScale() + 0.5 * eye_distance * ndfl;
+      right =  2.0 *gl_renderer_.getXScale() + 0.5 * eye_distance * ndfl;
+	
+			glFrustum(left,right,
+								-2.0 * gl_renderer_.getYScale(), 
+								 2.0 * gl_renderer_.getYScale(),
+								nearf,farf);
+
+      glMatrixMode(GL_MODELVIEW);
+      glDrawBuffer(GL_BACK_LEFT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			glPushMatrix();
+			stage_->getCamera().setViewPoint(old_view_point - diff);
+			stage_->getCamera().setViewPoint(old_look_at - diff);
+			gl_renderer_.updateCamera();
+			renderRepresentations_(DISPLAY_LISTS_RENDERING);
+			glPopMatrix();
+
+			stage_->getCamera().setViewPoint(old_view_point);
+			stage_->getCamera().setLookAtPosition(old_look_at);
+
+/*
 			Vector3 old_view_point = stage_->getCamera().getViewPoint();
 			
 			// distance between the eyepoints
@@ -333,6 +391,8 @@ namespace BALL
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
 			stage_->getCamera().setViewPoint(old_view_point);
+*/
+
 		}
 
 
@@ -1030,10 +1090,10 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-//			 stereo_id_ = main_control.insertMenuEntry (
-//  					MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()), ALT+Key_Y);
-//  			menuBar()->setItemChecked(stereo_id_, false) ;
-// 
+			stereo_id_ = main_control.insertMenuEntry (
+ 					MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()), ALT+Key_Y);
+ 			menuBar()->setItemChecked(stereo_id_, false) ;
+
 			hint = "Print the coordinates of the current viewpoint";
 			main_control.insertMenuEntry(
 					MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W, -1, hint);
@@ -1068,7 +1128,7 @@ namespace BALL
 					SLOT(setViewPoint_()), CTRL+Key_N);		
 			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
 					SLOT(resetCamera_()), CTRL+Key_T);		
-//			main_control.removeMenuEntry(MainControl::DISPLAY, "&  Stereo Mode", this, SLOT( switchStereo()), ALT+Key_Y);		
+			main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT( switchStereo()), ALT+Key_Y);		
 			main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
 			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 		}
@@ -1367,6 +1427,7 @@ namespace BALL
 		void Scene::switchStereo()
 			throw()
 		{
+			/*
 			GLboolean enabled = false;
 			glGetBooleanv(GL_STEREO, &enabled);
 			if (!enabled)
@@ -1375,11 +1436,21 @@ namespace BALL
 				setStatusbarText("No Stereo mode capability in driver");
 				return;
 			}
+			*/
 			
 			QMenuBar* menu = getMainControl()->menuBar();
 			bool stereo;
 			if (menu->isItemChecked(stereo_id_))
 			{
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				glFrustum(-2.0 * gl_renderer_.getXScale(), 
+									 2.0 * gl_renderer_.getXScale(), 
+									-2.0 * gl_renderer_.getYScale(), 
+									 2.0 * gl_renderer_.getYScale(),
+									 1.5, 300);
+				glMatrixMode(GL_MODELVIEW);
+
 				hide();
 				showNormal();
 				reparent((QWidget*)getMainControl(), getWFlags() & ~WType_Mask, last_pos_, false);
