@@ -1247,41 +1247,31 @@
         <widget class="QComboBox">
             <item>
                 <property name="text">
-                    <string>none</string>
+                    <string>low</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>line</string>
+                    <string>medium</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>stick</string>
+                    <string>high</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>ball and stick</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>surface</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>van der Waals</string>
+                    <string>ultra</string>
                 </property>
             </item>
             <property name="name">
-                <cstring>model_type_combobox_static</cstring>
+                <cstring>mode_resolution_combobox_static</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>90</x>
-                    <y>20</y>
+                    <y>50</y>
                     <width>140</width>
                     <height>24</height>
                 </rect>
@@ -1320,31 +1310,46 @@
         <widget class="QComboBox">
             <item>
                 <property name="text">
-                    <string>low</string>
+                    <string>none</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>medium</string>
+                    <string>line</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>high</string>
+                    <string>stick</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>ultra</string>
+                    <string>ball and stick</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>surface</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>van der Waals</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>backbone</string>
                 </property>
             </item>
             <property name="name">
-                <cstring>mode_resolution_combobox_static</cstring>
+                <cstring>model_type_combobox_static</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>90</x>
-                    <y>50</y>
+                    <y>20</y>
                     <width>140</width>
                     <height>24</height>
                 </rect>
@@ -1815,6 +1820,11 @@
             <item>
                 <property name="text">
                     <string>van der Waals</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>backbone</string>
                 </property>
             </item>
             <property name="name">
@@ -3187,9 +3197,6 @@
     <tabstop>mode_resolution_combobox_static</tabstop>
     <tabstop>edit_button</tabstop>
 </tabstops>
-<includes>
-    <include location="local" impldecl="in implementation">displayProperties.ui.h</include>
-</includes>
 <slots>
     <slot>applyButtonClicked()</slot>
     <slot>editColor()</slot>
