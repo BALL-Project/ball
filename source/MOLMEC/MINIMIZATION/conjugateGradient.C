@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.26 2003/03/24 09:29:37 oliver Exp $
+// $Id: conjugateGradient.C,v 1.27 2003/04/03 17:22:35 anhi Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -11,8 +11,8 @@
 #include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/COMMON/limits.h>
 
-#define BALL_DEBUG
-//#undef BALL_DEBUG
+//#define BALL_DEBUG
+#undef BALL_DEBUG
 
 // The default method to use for the CG direction update
 // (FLETCHER_REEVES | POLAK_RIBIERE | SHANNO)
@@ -725,7 +725,7 @@ namespace BALL
 			// translated more than getMaximumDisplacement().
 			if (step_ <= getMaximumDisplacement())
 			{
-				atoms.moveTo(direction_, step_ * direction_.inv_norm);
+				atoms.moveTo(direction_, step_ );//* direction_.inv_norm);
 			}
 			else
 			{
@@ -746,16 +746,16 @@ namespace BALL
 					}
 				}
 				
-				if (sqrt(max) * step_ * direction_.inv_norm >= getMaximumDisplacement())
+				if (sqrt(max) * step_  >= getMaximumDisplacement())
 				{
-					step_ = getMaximumDisplacement() / (direction_.inv_norm * sqrt(max));
+					step_ = getMaximumDisplacement() / ( sqrt(max));
 				}
 
 				#ifdef BALL_DEBUG
 					Log.info() << "CG: new step = " << step_ << " " << max << " " << step_ * direction_.inv_norm << endl;
 				#endif
 
-				atoms.moveTo(direction_, step_ * direction_.inv_norm);
+				atoms.moveTo(direction_, step_ );
 				step_too_large = true;
 			}
 
@@ -785,7 +785,7 @@ namespace BALL
 		// Make sure that the line search resets the atom positions, energies and forces
 		initial_grad_.invalidate();
 	
-		bool result =  line_search.minimize(lambda_, step_*direction_.inv_norm);
+		bool result =  line_search.minimize(lambda_, step_);//*direction_.inv_norm);
 		#ifdef BALL_DEBUG
 			Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
 		#endif
@@ -806,7 +806,7 @@ namespace BALL
 			current_grad_.invalidate();
 
 			// ...and try another line search
-			result = line_search.minimize(lambda_, step_ * direction_.inv_norm);
+			result = line_search.minimize(lambda_, step_ );//* direction_.inv_norm);
 			#ifdef BALL_DEBUG
 				Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
 			#endif
@@ -824,7 +824,7 @@ namespace BALL
 			current_grad_.invalidate();
 
 			// ...and try another line search
-			result = line_search.minimize(lambda_, step_*direction_.inv_norm);
+			result = line_search.minimize(lambda_, step_);//*direction_.inv_norm);
 			#ifdef BALL_DEBUG
 				Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
 			#endif
@@ -871,6 +871,7 @@ namespace BALL
 				Log.info() << " doubling step ";
 			}
 		}
+		step_ = std::max(0.01, step_);
 		Log.info() << " -- step = " << step_ << std::endl;
 	}
 

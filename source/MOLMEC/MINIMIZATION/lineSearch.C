@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.13 2003/03/24 09:29:37 oliver Exp $
+// $Id: lineSearch.C,v 1.14 2003/04/03 17:22:35 anhi Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -211,7 +211,7 @@ namespace BALL
 
 			// Make sure we don't run into numerical inaccuracies due to 
 			// *too* small a lambda.
-			if (lambda < 1e-8)
+			if (lambda < 1e-5)
 			{
 				lambda = 0.0;
 				result = false;
@@ -348,7 +348,8 @@ namespace BALL
 			Log.info() << " C1: " << current_energy - initial_energy_ << "/" << alpha_ * lambda * step_ * current_dir_grad
 								<< "  C2: " << fabs(current_dir_grad) << "/" << beta_ * fabs(initial_dir_grad_) << " --- ";
 		#endif
-		return ((current_energy <= (initial_energy_ + alpha_ * lambda * step_ * current_dir_grad))
+		//return ((current_energy <= (initial_energy_ + alpha_ * lambda * step_ * current_dir_grad))
+		return ((current_energy <= (initial_energy_ + alpha_ * lambda * step_ * initial_dir_grad_))
 						&& (fabs(current_dir_grad) <= beta_ * fabs(initial_dir_grad_)));
 	}
 
