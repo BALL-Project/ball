@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.4 2002/10/27 20:25:56 amoll Exp $
+// $Id: control.h,v 1.10.4.5 2002/11/07 19:20:09 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -224,9 +224,8 @@ namespace BALL
 					@param entry_ID the id for the new menu entry (default: -1, will create a new one)
 					@see   buildContextMenu
 			*/
-			void insertContextMenuEntry
-				(const String& name, const QObject* receiver = 0, 
-				 const char* slot = 0, int accel = 0, int entry_ID = -1)
+			void insertContextMenuEntry(const String& name, const QObject* receiver = 0, 
+																  const char* slot = 0, int accel = 0, int entry_ID = -1)
 				throw();
 
 			/**	Initialize the widget.
@@ -392,7 +391,7 @@ namespace BALL
 					@param  column not used at the moment
 					@see    buildContextMenu
 			*/
-			void onContextMenu(QListViewItem* item,  const QPoint& point, int column);
+			void onContextMenu(QListViewItem* item, const QPoint& point, int column);
 
 			/** Erase a geometricObject.
 					Erase a \Ref{GeometricObject} object previously selected with the context menu.
@@ -525,8 +524,7 @@ namespace BALL
 					@see    getInformationVisitor_
 					@see    recurseGeneration_
 			*/
-			void generateListViewItem_
-				(QListViewItem* item, Composite* composite, QString* default_name = 0)
+			void generateListViewItem_(QListViewItem* item, Composite* composite, QString* default_name = 0)
 				throw();
 			
 			/** Update the item tree recursivly.
@@ -545,8 +543,7 @@ namespace BALL
 					@see    generateListViewItem_
 					@see    recurseUpdate_
 			*/
-			bool updateListViewItem_
-				(QListViewItem* item, Composite* composite, QString* default_name = 0)
+			bool updateListViewItem_(QListViewItem* item, Composite* composite, QString* default_name = 0)
 				throw();
 			
 			/** Search the item tree for a composite.

@@ -1,4 +1,4 @@
-// $Id: glSurfaceModel.h,v 1.5.4.2 2002/10/19 14:20:34 amoll Exp $
+// $Id: glSurfaceModel.h,v 1.5.4.3 2002/11/07 19:23:05 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
@@ -49,12 +49,10 @@ namespace BALL
 					@return      AddGLSurfaceModel new constructed addGLSurfaceModel copied from {\em add_gl_surface_model}
 					@see         AddSurfaceModel
 			*/
-			AddGLSurfaceModel
-				(const AddGLSurfaceModel& add_gl_surface_model, bool deep = true)
+			AddGLSurfaceModel(const AddGLSurfaceModel& add_gl_surface_model, bool deep = true)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -67,14 +65,12 @@ namespace BALL
 			virtual ~AddGLSurfaceModel()
 				throw();
 
-			//@}
-
 			protected:
 
+			//@}
 			/** @name Creation method
 					This method creates primitives with OpenGL implementation used
-					for generating the graphical representation of the shapes they
-					represent.
+					for generating the graphical representation of the shapes they represent.
 					This method is the overridden method of the base class 
 					\Ref{AddSurfaceModel}.
 					@see  AddSurfaceModel

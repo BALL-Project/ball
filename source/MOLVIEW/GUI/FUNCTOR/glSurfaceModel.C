@@ -1,13 +1,11 @@
-// $Id: glSurfaceModel.C,v 1.3.4.2 2002/10/18 14:48:27 amoll Exp $
+// $Id: glSurfaceModel.C,v 1.3.4.3 2002/11/07 19:21:30 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h>
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
 		using VIEW::GLMesh;
 			
 		AddGLSurfaceModel::AddGLSurfaceModel()
@@ -16,9 +14,7 @@ namespace BALL
 		{
 		}
 
-		AddGLSurfaceModel::AddGLSurfaceModel
-			(const AddGLSurfaceModel &add_gl_surface_model,
-			 bool deep)
+		AddGLSurfaceModel::AddGLSurfaceModel(const AddGLSurfaceModel &add_gl_surface_model, bool deep)
 			throw()
 			:	AddSurfaceModel(add_gl_surface_model, deep)
 		{
@@ -28,8 +24,7 @@ namespace BALL
       throw()
  		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<AddGLSurfaceModel>() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<AddGLSurfaceModel>() << endl;
 			#endif 
 
 			AddSurfaceModel::destroy();
@@ -37,9 +32,8 @@ namespace BALL
 
 		Mesh* AddGLSurfaceModel::createMesh_()
 		{
-			return (Mesh *)(new GLMesh());
+			return (new GLMesh());
 		}
 
 	} // namespace MOLVIEW
-
 } // namespace BALL

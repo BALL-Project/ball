@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.h,v 1.7.4.3 2002/10/25 23:33:11 amoll Exp $
+// $Id: glPrimitiveManager.h,v 1.7.4.4 2002/11/07 19:21:18 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -16,13 +16,11 @@
 #endif
 
 #include <GL/gl.h>
-#include <GL/glu.h>
 
 #define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE 12
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 		/**	GLDisplayListObject_ class.
@@ -35,14 +33,6 @@ namespace BALL
 		*/
 		class GLDisplayListObject_
 		{
-			/** @name Class friends
-					\begin{itemize}
-						\item class GeometricObject
-					\end{itemize}
-			*/
-			
-			friend class GeometricObject;
-
 			public:
 
 			/**	@name	Exceptions
@@ -106,8 +96,7 @@ namespace BALL
 			//@{
 
 			/** Return a glDisplayList (Pure virtual method).
-					This method must be overridden from the derived classes. They must implement
-					this method. 
+					This method must be overridden from the derived classes. They must implement this method. 
 					@param   drawing_mode the drawing mode the \Ref{GLDisplayList} should have
 					@param   drawing_precision the drawing precision the \Ref{GLDisplayList} should have
 					@return  GLDisplayList& a reference to a \Ref{GLDisplayList}
@@ -253,7 +242,9 @@ namespace BALL
 			void subdivideTriangle_(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
 				throw();
 
-			/* the display lists */
+			/* the BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE (12) display lists
+			 	 (drawing_mode[3] * drawing_precision[4] = 12)
+			*/
 			GLDisplayList* GL_display_list_;
 
 			/* static array of vertices for sphere dots */
@@ -711,6 +702,10 @@ namespace BALL
 
 			Name all_names_;
 		};
+
+#		ifndef BALL_NO_INLINE_FUNCTIONS
+#			include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.iC>
+#		endif 
 
 
 	} // namespace VIEW
