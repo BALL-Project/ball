@@ -1,4 +1,4 @@
-// $Id: NumericalIntegrator_test.C,v 1.1 2000/12/19 14:05:43 anker Exp $
+// $Id: NumericalIntegrator_test.C,v 1.2 2001/07/05 17:53:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: NumericalIntegrator_test.C,v 1.1 2000/12/19 14:05:43 anker Exp $")
+START_TEST(class_name, "$Id: NumericalIntegrator_test.C,v 1.2 2001/07/05 17:53:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,10 +19,6 @@ using namespace BALL;
 ///
 
 // tests for class NumericalIntegrator::
-
-CHECK(GROSSBAUSTELLE!)
-	TEST_EQUAL(0,1)
-RESULT
 
 CHECK(NumericalIntegrator::NumericalIntegrator() throw())
   //BAUSTELLE
