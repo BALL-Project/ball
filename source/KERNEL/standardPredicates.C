@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.38 2002/12/20 19:10:22 oliver Exp $
+// $Id: standardPredicates.C,v 1.39 2003/01/07 08:44:06 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -592,7 +592,7 @@ namespace BALL
 	void ConnectedToPredicate::CTPNode::removeChild(CTPNode* child)
 		throw()
 	{
-		CTPNode::Iterator it = std::find(begin(), end(), child);
+		Iterator it = std::find(begin(), end(), child);
 		if (it != end())
 		{
 			children_.erase(it);
