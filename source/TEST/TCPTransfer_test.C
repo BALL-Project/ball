@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.11 2002/01/03 01:24:42 oliver Exp $
+// $Id: TCPTransfer_test.C,v 1.12 2002/01/09 12:22:17 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -17,7 +17,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.11 2002/01/03 01:24:42 oliver Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.12 2002/01/09 12:22:17 amoll Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ CHECK(http/no login)
 RESULT
 
 CHECK(http/login)
-	ABORT_IF(!NetworkTest::test("www.www.mpi-sb.mpg.de", NetworkTest::HTTP))
+	ABORT_IF(!NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP))
 	String filename;
 	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), std::ios::out);
