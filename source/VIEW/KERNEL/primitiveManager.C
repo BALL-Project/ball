@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.3 2003/10/15 13:38:26 amoll Exp $
+// $Id: primitiveManager.C,v 1.4 2003/10/21 15:37:51 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 
@@ -192,7 +192,7 @@ List<Representation*> PrimitiveManager::changedComposite(const Composite& compos
 	rep_it = changed_representations.begin();
 	for (; rep_it != changed_representations.end(); rep_it++)
 	{
-		(*rep_it)->update();
+		(*rep_it)->update(true);
 	}
 	return changed_representations;
 }
