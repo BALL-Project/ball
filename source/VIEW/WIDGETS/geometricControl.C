@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.70 2004/12/14 15:10:00 amoll Exp $
+// $Id: geometricControl.C,v 1.71 2004/12/14 15:28:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -66,8 +66,7 @@ namespace BALL
 			{
 				ignore_change_ = true;
 				setOn(!state);
-				VIEW::getMainControl()
-					->setStatusbarText("Cannot switch on/off Representation now!", true);
+				VIEW::getMainControl()->setStatusbarText("Cannot switch on/off Representation now!", true);
 				return;
 			}
 			control_reference_.selectedRepresentation(*representation_, isOn());
@@ -381,9 +380,6 @@ namespace BALL
 			if (representation.needsUpdate()) 
 			{
 				representation.update(true);
-				RepresentationMessage* msg = 
-					new RepresentationMessage(representation, RepresentationMessage::UPDATE);
-				notify_(msg);
 			}
 		}
 

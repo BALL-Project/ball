@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.57 2004/12/14 15:10:06 amoll Exp $
+// $Id: representation.C,v 1.58 2004/12/14 15:27:35 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -305,6 +305,16 @@ namespace BALL
 #ifdef BALL_BENCHMARKING
 			Log.info() << "Calculating Representation time: " << t.getCPUTime() << std::endl;
 			t.stop();
+#endif
+
+			// if multithreaded, the PrimitiveManager will send the Update message, otherwise do it here...
+#ifndef BALL_QT_HAS_THREADS
+			MainControl* mc = getMainControl();
+			if (mc != 0)
+			{
+				RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::UPDATE);
+				mc->sendMessage(message);
+			}
 #endif
 		}
 		
