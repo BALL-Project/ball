@@ -1,3 +1,29 @@
+1.0pre2: 20.02.2004
+-------------------
+Added + improved:
+  - All new and shiny: we did a major code overhaul of almost all visualization classes
+  - Multi-threaded: you can run MD simulations, energy minimizations in the background, models can be computed in the background
+  - Separate widgets for managing structures and representations of structures
+  - Mousewheel support, customizable mouse sensitivity
+  - All widgets are now dockable
+  - OpenGL code has been accelerated significantly
+  - Surfaces: computation of solvent-accessible and solvent-excluded surfaces has been accelerated
+  - Cartoon model for secondary structures has been added
+  - Additional coloring modes (secondary structure, occupancy, ...)
+  - Image export to PovRay or as PNG
+  -	Simplified enabling/disabling of representations
+  -	Peptide builder: construct a peptide/protein from its sequence
+  -	Simulations are now possible using AMBER or CHARMM force fields
+  -	Replay/animate trajectories
+  -	All force field options can now be set through the user interface
+  -	Cut and copy of molecular structure and parts of these
+  -	Selection of kernel objects with boolean expressions
+  -	Improved electrostatics calculations with finite-difference Poisson-Boltzmann solver (FDPB) and visualization of electrostatic potentials (coloring, isopotential surfaces)
+  -	Loading of molecules from the command line
+  -	Calculation and visualisation of H-bonds
+  -	DSSP algorithm for secondary structure determination
+
+
 1.0pre1: 23.12.2002
 -------------------
 Additional platform:
