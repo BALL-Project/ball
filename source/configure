@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.58 2000/01/28 10:56:41 oliver Exp $
+#  $Id: configure,v 1.59 2000/01/28 11:08:44 oliver Exp $
 
 
 ##################################################
@@ -1874,7 +1874,7 @@ echo "configure:1726: checking compiler version" >&5
 	fi
 fi
 
-if "${IS_KCC}" = true ; then
+if test "${IS_KCC}" = true ; then
 	echo $ac_n "checking compiler version""... $ac_c" 1>&6
 echo "configure:1779: checking compiler version" >&5
 	echo "int main(){}" > conftest.C
@@ -1898,8 +1898,8 @@ echo "configure:1779: checking compiler version" >&5
 	fi
 fi
 
-
-if "${IS_GXX}" != true -a "${IS_KCC}" != true; then
+if test "${IS_GXX}" != true -a "${IS_KCC}" != true ; then
+	echo "IS_GXX=${IS_GXX} / IS_KCC=${IS_KCC}"
 					if test "${OS}" = "IRIX" ; then
 		echo $ac_n "checking compiler version""... $ac_c" 1>&6
 echo "configure:1805: checking compiler version" >&5

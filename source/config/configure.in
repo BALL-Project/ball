@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.50 2000/01/28 10:56:38 oliver Exp $
+dnl    $Id: configure.in,v 1.51 2000/01/28 11:08:46 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -682,7 +682,7 @@ fi
 dnl
 dnl identify the KAI version
 dnl
-if "${IS_KCC}" = true ; then
+if test "${IS_KCC}" = true ; then
 	AC_MSG_CHECKING(compiler version)
 	echo "int main(){}" > conftest.C
 	CXX_VERSION=`${CXX} -v --version conftest.C 2>&1| ${GREP} "KAI C++ " | ${CUT} -d" " -f3`
@@ -705,8 +705,8 @@ if "${IS_KCC}" = true ; then
 	fi
 fi
 
-
-if "${IS_GXX}" != true -a "${IS_KCC}" != true; then
+if test "${IS_GXX}" != true -a "${IS_KCC}" != true ; then
+	echo "IS_GXX=${IS_GXX} / IS_KCC=${IS_KCC}"
 	dnl
 	dnl		Now we got a problem: we have to identify the compiler
 	dnl		This is nearly impossible, but we give our best...
