@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.4 2000/10/19 14:24:52 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.5 2000/10/19 14:49:03 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -353,49 +353,55 @@ namespace BALL
 			setIncidences();
 		}
 
-		void refineSphere(const T& radius, const bool out)
+		void refineSphere(const T& radius, bool out)
 		{
-			std::list<Edge*> new_edges;
-			for (std::list<Edge*>::iterator i = edges.begin(); i != edges.end(); i++)
+			list<Edge<T>*> new_edges;
+			for (list<Edge*>::iterator i = edges.begin(); i != edges.end(); i++)
 				{
-					Point* point1 = (*i)->point[0];
-					Point* point2 = (*i)->point[1];
-					Point* new_point = new Point();
+					Point<T>* point1 = (*i)->point[0];
+					Point<T>* point2 = (*i)->point[1];
+					Point<T>* new_point = new Point<T>();
 					new_point->p = (point1->p+point2->p).normalize();
 					new_point->p *= radius;
-					new_point->n = (out ? new_point->p : -new_point->p);
-					new_point->n.normalize();
+					if (out == true) 
+					{
+						new_point->n = new_point->p;
+					} 
+					else 
+					{
+						new_point->n = -new_point->p;
+					}
 					(*i)->triangle[0]->point.push_back(new_point);
 					(*i)->triangle[1]->point.push_back(new_point);
 					points.push_back(new_point);
-					Edge* new_edge1 = new Edge;
+					Edge<T>* new_edge1 = new Edge<T>();
 					new_edge1->point[0] = point1;
 					new_edge1->point[1] = new_point;
 					(*i)->triangle[0]->edge.push_back(new_edge1);
 					(*i)->triangle[1]->edge.push_back(new_edge1);
 					new_edges.push_back(new_edge1);
-					Edge* new_edge2 = new Edge;
+					Edge<T>* new_edge2 = new Edge<T>();
 					new_edge2->point[0] = point2;
 					new_edge2->point[1] = new_point;
 					(*i)->triangle[0]->edge.push_back(new_edge2);
 					(*i)->triangle[1]->edge.push_back(new_edge2);
 					new_edges.push_back(new_edge2);
 				}
-			std::list<Triangle*> new_triangles;
-			for (std::list<Triangle*>::iterator i = triangles.begin(); i != triangles.end(); i++)
+			list<Triangle*> new_triangles;
+			for (list<Triangle*>::iterator i = triangles.begin(); i != triangles.end(); i++)
 				{
 					Triangle current = *(*i);
-					vector<Triangle* > t(4);
+					vector< Triangle<T>* > t(4);
 					for (int k = 0; k < 4; k++)				// create four new triangles
 						{
-							t[k] = new Triangle;
+							t[k] = new Triangle<T>();
 						}
-					vector< Edge* > e(3);
+					vector< Edge<T>* > e(3);
 					for (int k = 0; k < 3; k++)				// create three new edges
 						{
-							e[k] = new Edge;
+							e[k] = new Edge<T>();
 						}
-					std::list<Edge*> edge_list;
+					list<Edge*> edge_list;
 					for (int k = 3; k < 9; k++)				// list of edges created in the first for-loop
 						{																//  that belong to current
 							edge_list.push_back(current.edge[k]);
@@ -407,83 +413,85 @@ namespace BALL
 							Point* p1 = NULL;
 							Point* p2 = NULL;
 							Point* p3 = current.point[k];
-							std::list<Edge*>::iterator l = edge_list.begin();
+							list<Edge*>::iterator l = edge_list.begin();
 							while (first == NULL)
 								{
-									first = *l;
-									p1 = (*l)->point[1];
-									edge_list.remove(*l);
+									if ((*l)->point[0]->p == p3->p)
+										{
+											first = *l;
+											p1 = (*l)->point[1];
+											edge_list.remove(*l);
+										}
+									if ((*l)->point[1]->p == p3->p)
+										{
+											first = *l;
+											p1 = (*l)->point[0];
+											edge_list.remove(*l);
+										}
+									l++;
 								}
-							if ((*l)->point[1]->p == p3->p)
+							l = edge_list.begin();
+							while (second == NULL)
 								{
-									first = *l;
-									p1 = (*l)->point[0];
-									edge_list.remove(*l);
+									if ((*l)->point[0]->p == p3->p)
+										{
+											second = *l;
+											p2 = (*l)->point[1];
+											edge_list.remove(*l);
+										}
+									if ((*l)->point[1]->p == p3->p)
+										{
+											second = *l;
+											p2 = (*l)->point[0];
+											edge_list.remove(*l);
+										}
+									l++;
 								}
-							l++;
-						}
-					l = edge_list.begin();
-					while (second == NULL)
-						{
-							if ((*l)->point[0]->p == p3->p)
+							t[k]->point[0] = p1;
+							t[k]->point[1] = p2;
+							t[k]->point[2] = p3;
+							t[k]->edge[0] = first;
+							t[k]->edge[1] = second;
+							t[k]->edge[2] = e[k];
+							if (first->triangle[0] == NULL)
 								{
-									second = *l;
-									p2 = (*l)->point[1];
-									edge_list.remove(*l);
+									first->triangle[0] = t[k];
 								}
-							if ((*l)->point[1]->p == p3->p)
+								else
 								{
-									second = *l;
-									p2 = (*l)->point[0];
-									edge_list.remove(*l);
+									first->triangle[1] = t[k];
 								}
-							l++;
+							if (second->triangle[0] == NULL)
+								{
+									second->triangle[0] = t[k];
+								}
+								else
+								{
+									second->triangle[1] = t[k];
+								}
+							e[k]->triangle[0] = t[k];
+							e[k]->triangle[1] = t[4];
+							e[k]->point[0] = p1;
+							e[k]->point[1] = p2;
 						}
-					t[k]->point[0] = p1;
-					t[k]->point[1] = p2;
-					t[k]->point[2] = p3;
-					t[k]->edge[0] = first;
-					t[k]->edge[1] = second;
-					t[k]->edge[2] = e[k];
-					if (first->triangle[0] == NULL)
-						{
-							first->triangle[0] = t[k];
-						}
-						else
-						{
-							first->triangle[1] = t[k];
-						}
-					if (second->triangle[0] == NULL)
-						{
-							second->triangle[0] = t[k];
-						}
-						else
-						{
-							second->triangle[1] = t[k];
-						}
-					e[k]->triangle[0] = t[k];
-					e[k]->triangle[1] = t[4];
-					e[k]->point[0] = p1;
-					e[k]->point[1] = p2;
+					t[3]->point[0] = current.point[3];
+					t[3]->point[1] = current.point[4];
+					t[3]->point[2] = current.point[5];
+					t[3]->edge[0] = e[0];
+					t[3]->edge[1] = e[1];
+					t[3]->edge[2] = e[2];
+					e[0]->triangle[1] = t[3];
+					e[1]->triangle[1] = t[3];
+					e[2]->triangle[1] = t[3];
+					new_edges.push_back(e[0]);
+					new_edges.push_back(e[1]);
+					new_edges.push_back(e[2]);
+					new_triangles.push_back(t[0]);
+					new_triangles.push_back(t[1]);
+					new_triangles.push_back(t[2]);
+					new_triangles.push_back(t[3]);
+					delete *i;
 				}
-				t[3]->point[0] = current.point[3];
-				t[3]->point[1] = current.point[4];
-				t[3]->point[2] = current.point[5];
-				t[3]->edge[0] = e[0];
-				t[3]->edge[1] = e[1];
-				t[3]->edge[2] = e[2];
-				e[0]->triangle[1] = t[3];
-				e[1]->triangle[1] = t[3];
-				e[2]->triangle[1] = t[3];
-				new_edges.push_back(e[0]);
-				new_edges.push_back(e[1]);
-				new_edges.push_back(e[2]);
-				new_triangles.push_back(t[0]);
-				new_triangles.push_back(t[1]);
-				new_triangles.push_back(t[2]);
-				new_triangles.push_back(t[3]);
-				delete *i;
-			}
 			edges.erase(edges.begin(),edges.end());
 			edges = new_edges;
 			triangles.erase(triangles.begin(),triangles.end());
