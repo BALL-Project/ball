@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.4 2000/06/16 10:40:53 anker Exp $
+// $Id: enumerator.h,v 1.5 2000/06/30 05:54:02 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -329,6 +329,22 @@ namespace BALL
 			{
 				mutate_(it->first, it->second[index[i]]);
 			}
+		}
+
+		Iterator begin()
+		{
+			Iterator it(*this);
+			it.toBegin();
+			
+			return it;
+		}
+
+		Iterator end()
+		{
+			Iterator it(*this);
+			it.toEnd();
+			
+			return it;
 		}
 
 		//@}
