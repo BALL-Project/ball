@@ -56,7 +56,8 @@ namespace BALL
 		/** Calculated the aromaticity of the molcule and sets the properties
 				"IsAromatic" for aromatic atoms, and Bond::ORDER__AROMATIC for 
 				bonds which are aromatic. 
-				@param SSSR ring set as vector<vector<Atom*> >, (vector of rings in vector<Atom*>)
+				@param SSSR ring set as vector<vector<Atom*> >, (vector of rings in vector<Atom*>) 
+				after the processing this variable holds all aromatic systems, which are not necessarily single rings!
 		*/
   	void aromatize(vector<vector<Atom*> >& sssr, AtomContainer& ac);
 
@@ -99,6 +100,10 @@ namespace BALL
 				@param ring as HashSet<Atom*>, from which the number of pi electrons to count
 		*/
 		Size countPiElectrons_(HashSet<Atom*>& ring);
+
+		/*_ this static container holds the current aromatic rings
+		*/
+		static vector<vector<Atom*> > aromatic_systems_;
 	};
 } // namespace BALL
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.3 2005/03/23 16:30:01 bertsch Exp $
+// $Id: aromaticityProcessor.C,v 1.4 2005/03/24 23:44:40 bertsch Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -25,6 +25,8 @@ using namespace std;
 
 namespace BALL
 {
+	vector<vector<Atom*> > AromaticityProcessor::aromatic_systems_;
+
 	AromaticityProcessor::AromaticityProcessor()
 		:	UnaryProcessor<AtomContainer>()
 	{
@@ -97,6 +99,9 @@ namespace BALL
 			sssr.push_back(ring);
 		}
 
+		// clear old data from the aromatic systems container
+		aromatic_systems_.clear();
+
 		// first erase rings which have C atoms which cannot be aromatic
 		vector<HashSet<Atom*> > sssr_new;
 		for (vector<HashSet<Atom*> >::iterator it1=sssr.begin();it1!=sssr.end();++it1)
@@ -161,7 +166,7 @@ namespace BALL
 			if (may_be && destab < 2 && !(destab == 1 && it1->size() == 6) && !(destab == 1 && it1->size() == 7))
 			{
 					sssr_new.push_back(*it1);
-		}
+			}
 		}
 		sssr = sssr_new;
 
@@ -267,8 +272,9 @@ namespace BALL
 				b_it->getPartner(*(b_it->getSecondAtom()))->setProperty("IsAromatic", true);
 			}
 		}
-	//cerr << "..ended!" << endl;
-}
+		cerr << "size of aromatic systems: " << aromatic_systems_.size() << endl;
+		sssr_orig = aromatic_systems_;
+	}
 
 	void AromaticityProcessor::extendAromaticSystem_(vector<HashSet<Atom*> >& sssr, HashSet<Atom*> ring)
 	{
@@ -407,6 +413,7 @@ namespace BALL
 					else
 					{
 						// Hückel's rule not satifsfied for merge -> set aromaticity
+						vector<Atom*> new_aromatic_system;
 						for (HashSet<Atom*>::iterator it=ring.begin();it!=ring.end();++it)
 						{
 							(*it)->setProperty("IsAromatic", true);
@@ -417,14 +424,17 @@ namespace BALL
 									b_it->setOrder(Bond::ORDER__AROMATIC);
 								}
 							}
+							new_aromatic_system.push_back(*it);
 						}
+						aromatic_systems_.push_back(new_aromatic_system);
 					}
 				}
 				else
 				{
 					// merged ring has no conj. double bonds -> set aromaticity
+					vector<Atom*> new_aromatic_system;
 					for (HashSet<Atom*>::iterator it=ring.begin();it!=ring.end();++it)
-						{
+					{
 						(*it)->setProperty("IsAromatic", true);
 						for (Atom::BondIterator b_it=(*it)->beginBond();b_it!=(*it)->endBond();++b_it)
 						{
@@ -433,7 +443,9 @@ namespace BALL
 								b_it->setOrder(Bond::ORDER__AROMATIC);
 							}
 						}
+						new_aromatic_system.push_back(*it);
 					}
+					aromatic_systems_.push_back(new_aromatic_system);
 				}
 			}
 		}
@@ -442,6 +454,7 @@ namespace BALL
 			// ring has no further intersection with other rings -> check aromaticity
 			if ((countPiElectrons_(ring)-2)%4 == 0)
 			{
+				vector<Atom*> new_aromatic_system;
 				for (HashSet<Atom*>::iterator it=ring.begin();it!=ring.end();++it)
 				{
 					(*it)->setProperty("IsAromatic", true);
@@ -452,7 +465,9 @@ namespace BALL
 							b_it->setOrder(Bond::ORDER__AROMATIC);
 						}
 					}
+					new_aromatic_system.push_back(*it);
 				}
+				aromatic_systems_.push_back(new_aromatic_system);
 			}
 		}
 		
