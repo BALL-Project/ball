@@ -930,10 +930,10 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>7</x>
-                        <y>6</y>
-                        <width>539</width>
-                        <height>183</height>
+                        <x>9</x>
+                        <y>-1</y>
+                        <width>293</width>
+                        <height>207</height>
                     </rect>
                 </property>
                 <property name="title">
@@ -951,7 +951,7 @@
                             <x>6</x>
                             <y>16</y>
                             <width>280</width>
-                            <height>167</height>
+                            <height>125</height>
                         </rect>
                     </property>
                     <vbox>
@@ -1390,34 +1390,34 @@
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>two_colored_ribbons</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>309</x>
-                            <y>47</y>
-                            <width>208</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>enable twocolored Ribbons</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
                         <cstring>ribbons_enabled</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>303</x>
-                            <y>24</y>
-                            <width>141</width>
+                            <x>13</x>
+                            <y>153</y>
+                            <width>268</width>
                             <height>21</height>
                         </rect>
                     </property>
                     <property name="text">
                         <string>enable Ribbons</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>two_colored_ribbons</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>19</x>
+                            <y>176</y>
+                            <width>262</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>enable twocolored Ribbons</string>
                     </property>
                 </widget>
             </widget>
@@ -1428,9 +1428,9 @@
                 <property name="geometry">
                     <rect>
                         <x>7</x>
-                        <y>192</y>
-                        <width>300</width>
-                        <height>178</height>
+                        <y>213</y>
+                        <width>296</width>
+                        <height>160</height>
                     </rect>
                 </property>
                 <property name="title">
@@ -1439,77 +1439,14 @@
                 <property name="alignment">
                     <set>AlignHCenter</set>
                 </property>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>dna_cartoon_model_type</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>18</y>
-                            <width>279</width>
-                            <height>39</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="title">
-                        <string>Type of model</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignHCenter</set>
-                    </property>
-                    <property name="exclusive">
-                        <bool>true</bool>
-                    </property>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>cartoon_dna_wac</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>117</x>
-                                <y>20</y>
-                                <width>137</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Base cartoon</string>
-                        </property>
-                        <property name="checked">
-                            <bool>false</bool>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>cartoon_dna_ladder</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>10</x>
-                                <y>19</y>
-                                <width>104</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Ladder</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>layout11</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>6</x>
-                            <y>70</y>
+                            <x>7</x>
+                            <y>60</y>
                             <width>280</width>
                             <height>95</height>
                         </rect>
@@ -1843,6 +1780,69 @@
                             </hbox>
                         </widget>
                     </vbox>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>dna_cartoon_model_type</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>18</y>
+                            <width>279</width>
+                            <height>39</height>
+                        </rect>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="title">
+                        <string>Type of model</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignHCenter</set>
+                    </property>
+                    <property name="exclusive">
+                        <bool>true</bool>
+                    </property>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>cartoon_dna_wac</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>117</x>
+                                <y>20</y>
+                                <width>137</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Base cartoon</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>cartoon_dna_ladder</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>10</x>
+                                <y>19</y>
+                                <width>104</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Ladder</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
                 </widget>
             </widget>
         </widget>
