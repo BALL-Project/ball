@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.13.4.2 2002/08/26 15:55:32 oliver Exp $
+// $Id: surfaceModel.C,v 1.13.4.3 2002/09/24 16:58:19 anhi Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -101,35 +101,7 @@ namespace BALL
 										 << sp.getSurface().triangle.size() << " triangles)" << endl;
 					*static_cast<Surface*>(mesh) = sp.getSurface();
 
-					// TEST!!! TEST!!! TEST!!!
-					mesh->colorList.resize(mesh->vertex.size());
-					ColorRGBA list[3];
-					list[0] = ColorRGBA(0.,0.,1.,1.);
-					list[1] = ColorRGBA(0.,1.,1.,1.);
-					list[2] = ColorRGBA(1.,1.,0.,1.);
-					
-					ColorTable table(list, 3);
-					table.setNumberOfColors(53);
-					table.createTable();
-					table.setRange(0.,20.);
-
-					// calculate the center of mass of the mesh
-					Vector3 com = Vector3(0,0,0);
-					
-					for (int i=0; i<mesh->colorList.size(); i++)
-					{
-						com += mesh->vertex[i];
-					}
-
-					com /= (float)mesh->colorList.size();
-					
-					for (int i=0; i<mesh->colorList.size();i++)
-					{
-						float len = (mesh->vertex[i]-com).getLength();
-
-						mesh->colorList[i] = table.map(len);
-					}
-					
+				
 					mesh->setName(String("Surface of ")
 												+ molecular_information.getTypeName() 
 												+ String(" (")

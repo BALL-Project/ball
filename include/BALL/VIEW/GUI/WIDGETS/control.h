@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10 2001/07/16 14:49:31 amoll Exp $
+// $Id: control.h,v 1.10.4.1 2002/09/24 16:57:58 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -37,6 +37,14 @@
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #	include <BALL/VIEW/FUNCTOR/filter.h>
+#endif
+
+#ifndef BALL_VIEW_PRIMITIV_MESH_H
+# include <BALL/VIEW/PRIMITIV/mesh.h>
+#endif
+
+#ifndef BALL_VIEW_GUI_DIALOGS_COLORMESHDIALOG_H
+# include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 #endif
 
 namespace BALL
@@ -410,6 +418,11 @@ namespace BALL
 					@see    GeometricObject
 			*/
 			void eraseGeometricObject();
+
+			/** Color a mesh.
+			 */
+			void colorMesh();
+
 			//@}
 		
 
@@ -650,6 +663,8 @@ namespace BALL
 
 			Composite* context_composite_;
 			QListViewItem *context_item_;
+
+			ColorMeshDialog* colorMeshDlg_;
 		};
 		
 		
