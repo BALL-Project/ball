@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.78.2.5 2005/01/25 01:07:44 amoll Exp $
+// $Id: molecularStructure.C,v 1.78.2.6 2005/01/31 15:01:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -115,7 +115,6 @@ namespace BALL
 			hint = "Configure the force field";
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
 												SLOT(setupForceField()),0,-1, hint);
-			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
 			// Tools Menu -------------------------------------------------------------------
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
