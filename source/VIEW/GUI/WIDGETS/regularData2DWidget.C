@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.20 2001/05/13 16:29:53 hekl Exp $
+// $Id: regularData2DWidget.C,v 1.21 2001/06/06 14:14:46 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -36,15 +36,15 @@ QColor con2rgb(double arg, double min, double max)
     {
       if (fabs(arg) <= 2. / 3) 
       {
-	r = 255 * (arg - 1./3) * 3 * arg;
-	g = 255;
-	b = 255 - (255 * (arg - 1./3) * 3 * arg);
+				r = 255 * (arg - 1./3) * 3 * arg;
+				g = 255;
+				b = 255 - (255 * (arg - 1./3) * 3 * arg);
       } 
       else 
       {
-	r = 255;
-	g = 255 * (1 - (arg - 2./3) * 3 * arg);
-	b = 0;
+				r = 255;
+				g = 255 * (1 - (arg - 2./3) * 3 * arg);
+				b = 0;
       }
     }
     
@@ -76,8 +76,6 @@ NewRegularData2DMessage::~NewRegularData2DMessage()
 RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) 
   : QScrollView(parent, "RegularData2DWidget", WRepaintNoErase|WResizeNoErase|WNorthWestGravity), 
 		ModularWidget("RegularData2DWidget"), 
-		pm_(0), 
-		legend_map_(0), 
 		legend_last_x_(0),
 		legend_last_y_(0),
 		lengthx_(lx_), 
@@ -99,11 +97,13 @@ RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double ma
 		ind_updown_(0), 
 		spec_length_x_(0), 
 		spec_length_y_(0), 
+		pm_(0),
+		legend_map_(0),
 		pm_cont_(0), 
 		plot_cont_(false), 
 		plot_data_(true),
-                select_(false),
-                legend_wid_(0)
+    select_(false),
+    legend_wid_(0)
 {
   createLegend(20, 40);
 
@@ -137,14 +137,14 @@ RegularData2DWidget::~RegularData2DWidget()
 }
 
 void RegularData2DWidget::initializeWidget(MainControl& main_control)
-	throw()
+//	throw()
 {
   main_control.insertMenuEntry(MainControl::TOOLS, "&2D-NMR", this, SLOT(createPlot()));
   stat_ = MainControl::getMainControl(this)->statusBar();
 }
 
 void RegularData2DWidget::finalizeWidget(MainControl& main_control)
-	throw()
+//	throw()
 {
   main_control.removeMenuEntry(MainControl::TOOLS, "&2D-NMR", this, SLOT(createPlot()));
 }
@@ -160,8 +160,10 @@ bool RegularData2DWidget::isVisibleAs(double x, double y, pair<Position, Positio
   // we need the information stored in xvis & yvis, step_x_ & step_y_
   if ((x > xvis_low_) && (x < xvis_high_) && (y > yvis_low_) && (y < yvis_high_))
   {
-    spec_->getNearestPosition(x, y, res); // this would be the position with a zoom of 1
+    RegularData2D::GridIndex r = spec_->getIndex(x, y); // this would be the position with a zoom of 1
 
+		res.first  =  r.x;
+		res.second =  r.y;
     res.first  -= act_lower_left_x_;      // move the origin
     res.second -= act_lower_left_y_;
     
@@ -184,36 +186,37 @@ bool RegularData2DWidget::reactToMessages_(Message* message)
       // set the RegularData2D we have been sent. Then set all the other attributes.
       if (spec_)
       {
-	delete (spec_);
+				delete (spec_);
       }
+			Vector2 vec;
+			
       spec_ = (RegularData2D *)composite_message->getComposite();
-      min_ = spec_->getLowerBound();
-      max_ = spec_->getUpperBound();
-      lengthx_ = spec_->getXSize();
-      lengthy_ = spec_->getYSize();
-      spec_length_x_ = spec_->getXSize();
-      spec_length_y_ = spec_->getYSize();
+      min_ = *(spec_->getMinValue(vec));
+      max_ = *(spec_->getMaxValue(vec));
+      lengthx_ = spec_->getMaxXIndex();
+      lengthy_ = spec_->getMaxYIndex();
+      spec_length_x_ = spec_->getMaxXIndex();
+      spec_length_y_ = spec_->getMaxYIndex();
 
       if (pm_)
       {
-	delete (pm_);
-	pm_ = 0;
+				delete (pm_);
+				pm_ = 0;
       }
 
-      lengthx_ = spec_->getXSize();
-      lengthy_ = spec_->getYSize();
+      lengthx_ = spec_->getMaxXIndex();
+      lengthy_ = spec_->getMaxYIndex();
       
       full_length_x_ = visibleWidth();
       full_length_y_ = visibleHeight();
 
-      pair<float, float> dum;
-
-      spec_->getConvertedPosition(0, 0, dum);
-      xvis_low_ = dum.first;
-      yvis_low_ = dum.second;
-      spec_->getConvertedPosition(lengthx_, lengthy_, dum);
-      xvis_high_ = dum.first;
-      yvis_high_ = dum.second;
+      Vector2 v = spec_->getGridCoordinates(0, 0);
+      xvis_low_ = v.x;
+      yvis_low_ = v.y;
+      
+			v = spec_->getGridCoordinates(lengthx_, lengthy_);
+      xvis_high_ = v.x;
+      yvis_high_ = v.y;
 
       createPlot();
 
@@ -295,11 +298,11 @@ void RegularData2DWidget::plot()
 void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x2, double y2)
 {
   cout << "Scaling: " << x1 << " " << y1 << " " << x2 << " " << y2 << endl;
-  pair<Position, Position> pa;
-  spec_->getNearestPosition(x1, y1, pa);
-  cout << pa.first << " " << pa.second << " ";
-  spec_->getNearestPosition(x2, y2, pa);
-  cout << pa.first << " " << pa.second << endl;
+  
+	RegularData2D::GridIndex pa = spec_->getIndex(x1, y1);
+  cout << pa.x << " " << pa.y << " ";
+  pa = spec_->getIndex(x2, y2);
+  cout << pa.x << " " << pa.y << endl;
 
   if (nx && ny && spec_)
   {
@@ -336,9 +339,9 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
     {
       for (x=0; x<nx; x++) 
       {
-	pCol = con2rgb(spec_->getValue(actx+x*stepx, acty+y*stepy), min_, max_);
-	paint.setPen(pCol);
-	paint.drawPoint(x, y);
+				pCol = con2rgb((double) *(spec_->getData(actx+x*stepx, acty+y*stepy)), min_, max_);
+				paint.setPen(pCol);
+				paint.drawPoint(x, y);
       }
     }
     paint.end();
@@ -360,7 +363,7 @@ void RegularData2DWidget::addLorentzian(double xpos, double ypos, double amp, in
     {
       for (x=0; x<lengthx_; x++) 
       {
-	(*spec_)[x + lengthx_*y] += amp/(1 + pow(((x - xpos)/xwidth), 2) + pow(((y - ypos)/ywidth), 2));
+				(*spec_)[x + lengthx_*y] += amp/(1 + pow(((x - xpos)/xwidth), 2) + pow(((y - ypos)/ywidth), 2));
       }
     }
   }
@@ -386,10 +389,11 @@ void RegularData2DWidget::plotOverlay()
   // This should be replaced by setting the variables via a dialog
   cont_num_ = 5;
 
-  spec_->createGroundState();
-  cont_start_ = spec_->getGroundState() + 0.5*spec_->getSigmaGroundState();
-  //cont_start_   = spec_->getUpperBound() / 2;
-  cont_end_   = spec_->getUpperBound();
+  //spec_->createGroundState();
+  //cont_start_ = spec_->getGroundState() + 0.5*spec_->getSigmaGroundState();
+	Vector2 v;
+  cont_start_   = *(spec_->getMaxValue(v)) / 2;
+  cont_end_     = *(spec_->getMaxValue(v));
   // up to here...
 
   cont_ = new Contour(cont_num_, cont_start_, cont_end_);
@@ -434,8 +438,10 @@ void RegularData2DWidget::createPlot()
     delete (pm_); 
   }
 
-  spec_->createGroundState();
-  min_ = spec_->getGroundState() + spec_->getSigmaGroundState();
+  
+  // min_ = spec_->getGroundState() + spec_->getSigmaGroundState();
+	Vector2 v;
+  min_ = (double) *(spec_->getMinValue(v));
  
   act_lower_left_x_ = 0;
   act_lower_left_y_ = 0;
@@ -505,9 +511,12 @@ void RegularData2DWidget::plotContour()
       ++i;
       
       // draw this ContourLine.
-      while (l.getNextPoint(p))
+			Vector2 v(p.first, p.second);
+			Vector2 v2(p2.first, p2.second);
+			
+      while (l.getNextPoint(v))
 	{
-	  if (l.getNextPoint(p2))
+	  if (l.getNextPoint(v2))
 	    {
 	      // draw a line from p to p2
 	      pair<Position, Position> qp1, qp2;
@@ -577,52 +586,54 @@ void RegularData2DWidget::paintEvent(QPaintEvent*)
 
 void RegularData2DWidget::Selected(QPoint beg, QPoint end)
 {
-  if (spec_) {
-    // The user has selected a rectangle in the data -> zoom into it
-    // first: convert the position into position in the data
-    pair<float, float> dummy, dummy2;
-    pair<Position, Position> pos_dummy;
-    double numpx_, numpy_;
+	// The user has selected a rectangle in the data. Now we should zoom in on it.
+	// "beg" contains the position of the first corner, "end" of the second. Both
+	// are relative to the viewport (????)
+	
+	if (spec_) { // to be sure that there *is* data to zoom into
+		
+		// First we have to convert the positions into the corresponding positions in
+		// the dataset. For this, we need to know the resolution we are working at right
+		// now.
+		int xh, yh;
+		Position newx_low, newy_low, newx_up, newy_up, numpx, numpy;
+		viewportToContents(beg.x(), beg.y(), xh, yh); // this should account for scrolling
+																									// in the data
+								
+		xh = full_length_x_ - xh;
+		yh = full_length_y_ - yh; // for some reason, we always have to reverse the y direction
     
-    int xh, yh;
-    viewportToContents(beg.x(), beg.y(), xh, yh);
-    //    xh = full_length_x_ - xh;
-    yh = full_length_y_ - yh;
-
-    spec_->getConvertedPosition(xh, yh, dummy);
-    cout << dummy.first << " " << dummy.second << endl;
-
-    //    spec_->getConvertedPosition((int) (beg.x() / zoom_x_ + act_lower_left_x_), (int) (beg.y() / zoom_y_ + act_lower_left_y_), dummy);
-    spec_->getConvertedPosition((int) (xh / zoom_x_ + act_lower_left_x_), (int) (yh / zoom_y_ + act_lower_left_y_), dummy);
-
-    viewportToContents(end.x(), end.y(), xh, yh);
-    xh = full_length_x_ - xh;
-    yh = full_length_y_ - yh;
-
-    spec_->getConvertedPosition((int) (xh / zoom_x_ + act_lower_left_x_), (int) (yh / zoom_y_ + act_lower_left_y_), dummy2);
+		newx_low = (Position) (beg.x() / zoom_x_ + act_lower_left_x_); // this corresponds to the index in the data.
+		newy_low = (Position) (beg.y() / zoom_y_ + act_lower_left_y_);
+		newx_up  = (Position) (end.x() / zoom_x_ + act_lower_left_x_);
+		newy_up  = (Position) (end.y() / zoom_y_ + act_lower_left_y_);
+		
+		Vector2 vec_low = spec_->getGridCoordinates(newx_low, newy_low);
+		Vector2 vec_up  = spec_->getGridCoordinates(newx_up,  newy_up);  // these should now contain the new values.
+		
     
-    xvis_low_  = dummy.first;
-    xvis_high_ = dummy2.first;
-    yvis_low_  = dummy.second;
-    yvis_high_ = dummy2.second;
+		// now set all the class variables concerned with the position in the data
+		xvis_low_  = vec_low.x;
+    xvis_high_ = vec_up.x;
+    yvis_low_  = vec_low.y;
+    yvis_high_ = vec_up.y;
     
-    spec_->getNearestPosition(xvis_low_, yvis_low_, pos_dummy);
-    act_lower_left_x_ = pos_dummy.first;
-    act_lower_left_y_ = pos_dummy.second;
+    act_lower_left_x_ = newx_low; 
+    act_lower_left_y_ = newy_low;
     
-    lengthx_ = (Position) spec_->getXSize();
-    lengthy_ = (Position) spec_->getYSize();
+    lengthx_ = (Position) spec_->getMaxXIndex() + 1;
+    lengthy_ = (Position) spec_->getMaxYIndex() + 1;
     
-    numpx_ = (Position) (lengthx_ * fabs(xvis_high_ - xvis_low_) / fabs(spec_->getXUpper() - spec_->getXLower()));
-    numpy_ = (Position) (lengthy_ * fabs(yvis_high_ - yvis_low_) / fabs(spec_->getYUpper() - spec_->getYLower()));
+    numpx = (Position) (lengthx_ * fabs(xvis_high_ - xvis_low_) / fabs(spec_->getMaxX() - spec_->getMinX()));
+    numpy = (Position) (lengthy_ * fabs(yvis_high_ - yvis_low_) / fabs(spec_->getMaxY() - spec_->getMinY()));
     
     full_length_x_ = visibleWidth();
     full_length_y_ = visibleHeight();
     
-    zoom_x_ = (double) full_length_x_ / numpx_;
-    zoom_y_ = (double) full_length_y_ / numpy_;
+    zoom_x_ = (double) full_length_x_ / numpx;
+    zoom_y_ = (double) full_length_y_ / numpy;
     
-    scale(width(), height(), dummy.first, dummy.second, dummy2.first, dummy2.second);
+    scale(width(), height(), vec_low.x, vec_low.y, vec_up.x, vec_up.y);
     plotContour();
   }
 }
@@ -630,7 +641,7 @@ void RegularData2DWidget::Selected(QPoint beg, QPoint end)
 void RegularData2DWidget::slotZoomOut()
 {
   if (spec_) {
-    scale(visibleWidth(), visibleHeight(), spec_->getXLower(), spec_->getYLower(), spec_->getXUpper(), spec_->getYUpper());
+    scale(visibleWidth(), visibleHeight(), spec_->getMinX(), spec_->getMinY(), spec_->getMaxX(), spec_->getMaxY());
   }
 }
 
@@ -674,10 +685,11 @@ void RegularData2DWidget::createContour()
   // This should be replaced by setting the variables via a dialog
   cont_num_ = 5;
 
-  spec_->createGroundState();
-  cont_start_ = spec_->getGroundState() + 0.5 * spec_->getSigmaGroundState();
-  //  cont_start_   = spec_->getUpperBound() / 2;
-  cont_end_   = spec_->getUpperBound();
+  //spec_->createGroundState();
+  //cont_start_ = spec_->getGroundState() + 0.5 * spec_->getSigmaGroundState();
+	Vector2 v;
+  cont_start_   = *(spec_->getMaxValue(v)) / 2;
+  cont_end_     = *(spec_->getMaxValue(v));
   // up to here...
 
   cont_ = new Contour(cont_num_, cont_start_, cont_end_);
@@ -704,25 +716,26 @@ void RegularData2DWidget::NewMousePos(Position x, Position y)
     {
       if (posLabel_)
       {
-	stat_->removeWidget(posLabel_);
-	delete posLabel_;
-	posLabel_ = NULL;
+				stat_->removeWidget(posLabel_);
+				delete posLabel_;
+				posLabel_ = NULL;
       }
 
       QString message, dummy;
-      double numDum;
-      pair<float, float> numDum2;
+      double nx, ny, numDum;
 
-      spec_->getConvertedPosition(x, y, numDum2);
+      Vector2 vec = spec_->getGridCoordinates(x, y);
+			nx = vec.x;
+			ny = vec.y;
 
       message = "x: ";
-      message += dummy.setNum(numDum2.first, 'e', 5);
+      message += dummy.setNum(nx, 'e', 5);
       message += "y: ";
-      message += dummy.setNum(numDum2.second, 'e', 5);
+      message += dummy.setNum(ny, 'e', 5);
       message += "z: ";
       if (spec_ && (y < full_length_y_)) 
       {
-	numDum = (*spec_)[x + full_length_x_ * y];
+				numDum = (*spec_)[x + full_length_x_ * y];
       }
 
       message += dummy.setNum(numDum, 'e', 5);

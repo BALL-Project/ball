@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.C,v 1.4 2001/05/13 16:29:53 hekl Exp $
+// $Id: regularData1DWidget.C,v 1.5 2001/06/06 14:14:46 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
 
@@ -55,13 +55,11 @@ RegularData1DWidget::~RegularData1DWidget()
 }
 
 void RegularData1DWidget::initializeWidget(MainControl& main_control)
-  throw()
 {
   main_control.insertMenuEntry(MainControl::TOOLS, "&1D-NMR", this, SLOT(createPlot()));
 }
 
 void RegularData1DWidget::finalizeWidget(MainControl& main_control)
-  throw()
 {
   main_control.removeMenuEntry(MainControl::TOOLS, "&1D-NMR", this, SLOT(createPlot()));
 }
@@ -81,9 +79,9 @@ bool RegularData1DWidget::reactToMessages_(Message* message)
     // set the RegularData1D we have been sent. Then set all the other attributes.
     if (spec_)
     {
-      delete (spec_);
+      cout << spec_ << endl;
+      //      delete (spec_);
     }
-    
     spec_ = (RegularData1D *)composite_message->getComposite();
     min_ = spec_->getLowerBound();
     max_ = spec_->getUpperBound();
@@ -158,11 +156,15 @@ void RegularData1DWidget::createPlot()
 
   for (Size i=0; i<length_; i++)
   {
-    fdummy.putPoints(i, 1, i, (*spec_)[i]);
-    cout << (*spec_)[i] << endl;
+    fdummy.putPoints(i, 1, i, (*spec_)[i]*10e4);
   }
   p.setPen( QColor(red) );
   p.drawPolyline( fdummy );
+
+
+p.drawText(length_/2, (*spec_)[length_/2], "Hallo!");
+cout << (*spec_)[length_/2] << endl; 
+  p.drawLine(0,0,length_, max_el);
 
   p.end();
 
@@ -182,6 +184,8 @@ void RegularData1DWidget::paintEvent(QPaintEvent *e)
   if ((pm_.size() != QSize(0,0)))
   {
     QPainter paint(viewport());
+
+    pm_.save("abc.ppm", "PPMRAW");
     
     paint.setClipRect(contentsX(), contentsY(), contentsWidth(), contentsHeight());
     paint.drawPixmap(contentsX(), contentsY(), pm_, contentsX(), contentsY(), contentsWidth(), contentsHeight());
