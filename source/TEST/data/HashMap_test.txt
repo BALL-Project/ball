@@ -1,0 +1,7 @@
+  size: 2
+  bucket size: 3
+  capacity: 4
+  load factor: 0.666667
+/    bucket 0 ([0-9a-x]+):
+/    bucket 1 ([0-9a-x]+):
+    bucket 2 ((nil)):
