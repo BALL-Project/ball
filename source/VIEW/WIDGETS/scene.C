@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.27 2003/12/10 15:10:27 amoll Exp $
+// $Id: scene.C,v 1.28 2003/12/11 10:52:07 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1429,7 +1429,7 @@ void Scene::rotateMode_()
 void Scene::pickingMode_()
 {
 	rotate_mode_ = false;
-	setCursor(QCursor(Qt::Qt::CrossCursor));
+	setCursor(QCursor(Qt::CrossCursor));
 	
 	// unrotation mode controls
 	NotificationUnregister(events.MouseLeftButtonPressed & events.MouseMoved); 
