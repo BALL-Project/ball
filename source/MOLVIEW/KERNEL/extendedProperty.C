@@ -1,4 +1,4 @@
-// $Id: extendedProperty.C,v 1.3 2000/06/13 18:20:27 hekl Exp $
+// $Id: extendedProperty.C,v 1.4 2000/06/18 16:35:19 hekl Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 
@@ -73,7 +73,7 @@ namespace BALL
 				clearProperty(GeometricObject::PROPERTY__MODEL_VDW);
 				clearProperty(GeometricObject::PROPERTY__MODEL_DOTS);
 				clearProperty(GeometricObject::PROPERTY__MODEL_STARS);
-				clearProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
+				clearProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
 				clearProperty(GeometricObject::PROPERTY__MODEL_LINES);
 			}
 
