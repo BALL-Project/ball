@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.15 2001/07/29 17:25:31 oliver Exp $
+// $Id: singularities.h,v 1.16 2001/09/19 17:40:13 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -25,6 +25,10 @@
 #	include <BALL/MATHS/circle3.h>
 #endif
 
+#ifndef BALL_STRUCTURE_BSDTREE_H
+#	include <BALL/STRUCTURE/BSDTree.h>
+#endif
+
 #ifndef BALL_DATATYPE_STRING_H
 #	include <BALL/DATATYPE/string.h>
 #endif
@@ -45,40 +49,32 @@
 #	include <BALL/STRUCTURE/solventExcludedSurface.h>
 #endif
 
-#ifndef BALL_KERNEL_ATOM_H
-# include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_MOLECULE_H
-# include <BALL/KERNEL/molecule.h>
-#endif
-
-/*
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
-
-#ifndef BALL_KERNEL_PTE_H
-# include <BALL/KERNEL/PTE.h>
-#endif
-
-
-#ifndef BALL_FORMAT_HINFILE_H
-# include <BALL/FORMAT/HINFile.h>
-#endif
-*/
-
 #include <vector>
 #include <list>
+#include <set>
+
 #include <fstream>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/FORMAT/HINFile.h>
 
 namespace BALL
 {
 
+			#ifdef debug_singularities
+			int STOP_SINGULARITIES;
+			#endif
+
 	template <class T>
 	void TreatSingularities(TSolventExcludedSurface<T>*& ses,
-													TReducedSurface<T>*& rs, const T& radius_of_probe)
+													TReducedSurface<T>*& rs,
+													const T& radius_of_probe)
 	{
+				#ifdef debug_singularities
+				STOP_SINGULARITIES = 0;
+				#endif
 		list<TSESFace<T>*> singular_faces;
 		GetSingularFaces(ses,singular_faces);
 		try
@@ -87,11 +83,17 @@ namespace BALL
 		}
 		catch (Exception::GeneralException e)
 		{
-			if (e.getMessage() == "reduced surface modified")
+			String message = e.getMessage();
+			String test_message = "reduced surface modified";
+			if (message == test_message)
 			{
 				rs->clean();
 						#ifdef debug_singularities
-						std::cout << *rs;
+						std::cin >> STOP_SINGULARITIES;
+						if (STOP_SINGULARITIES == 0)
+						{
+							std::cout << *rs;
+						}
 						#endif
 				delete ses;
 				ses = new SolventExcludedSurface(rs);
@@ -126,14 +128,15 @@ namespace BALL
 	template <class T>
 	void TreatFirstCategory(TSolventExcludedSurface<T>* ses,
 													 TReducedSurface<T>* rs,
-													 list<TSESFace<T>*>& singular_faces,
+													 std::list<TSESFace<T>*>& singular_faces,
 													 const T& radius_of_probe)
 	{
-		list<TSESFace<T>*> faces;
+		std::list<TSESFace<T>*> faces;
 		GetFirstCategoryFaces(singular_faces,faces);
 				#ifdef debug_singularities
 				std::cout << "SingularFaces.size() = " << singular_faces.size() << "\n";
-				std::cout << "FirstCategoryFaces.size() = " << faces.size() << "\n";
+				std::cout << "FirstCategoryFaces.size() = " << faces.size();
+				if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 				#endif
 		while (faces.size() > 0)
 		{
@@ -156,18 +159,15 @@ namespace BALL
 				case 0 :	NoCut(face1,face2,radius_of_probe,ses);
 									break;
 				case 1 :	break;
-				//case 2 :	TwoCuts(face1,face2,radius_of_probe,ses);
-				//					break;
-				//case 3 :	ThreeCuts(face1,face2,radius_of_probe,ses);
-				//					break;
 				case 2 :	;
 				case 3 :	rs->deleteSimilarFaces(face1->rsface,face2->rsface);
-									std::ofstream print("singularities.log");
-									print << *rs;
-									print.close();
+									//std::ofstream print("singularities.log");
+									//print << *rs;
+									//print.close();
 									throw Exception::GeneralException(__FILE__,__LINE__,
 																										"SingularBreak",
 																										"reduced surface modified");
+									break;
 			}
 		}
 	}
@@ -409,28 +409,32 @@ namespace BALL
 	{
 				#ifdef debug_singularities
 				std::cout << "TreatSingularEdge( " << *edge << " , [" << faces.size() << "] , tree, ses, "
-									<< radius_of_probe << ")\n";
+									<< radius_of_probe << " )  ";
+				if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 				#endif
 		HashSet<Index> candidates;
 		tree->get(edge->circle.p,edge->circle.radius+radius_of_probe,candidates);
 		if (candidates.size() == 0)
 		{
 					#ifdef debug_singularities
-					std::cout << "end\n";
+					std::cout << "end";
+					if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 					#endif
 			return;
 		}
 		TVector3<T> normal((edge->vertex1->p-edge->circle.p)%
 											 (edge->vertex2->p-edge->circle.p));
 				#ifdef debug_singularities
-				std::cout << "  Drehvektor: " << normal << "\n";
+				std::cout << "  Drehvektor: " << normal;
+				if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 				#endif
 		TAngle<T> phi;
 		GetAngle(edge->vertex1->p-edge->circle.p,
 						 edge->vertex2->p-edge->circle.p,
 						 phi);
 				#ifdef debug_singularities
-				std::cout << "  Winkel der Edge: " << phi << "\n";
+				std::cout << "  Winkel der Edge: " << phi;
+				if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 				#endif
 		TAngle<T> min_phi(Constants::PI,true);
 		TAngle<T> max_phi(0,true);
@@ -453,13 +457,15 @@ namespace BALL
 		{
 			probe.p = faces[*i]->rsface->getCenter();
 					#ifdef debug_singularities
-					std::cout << "  Schneide edge mit probe " << *i << " (" << probe << ") ...\n";
+					std::cout << "  Schneide edge mit probe " << *i << " (" << probe << ") ... ";
+					if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 					#endif
 			if (GetIntersectionPointsAndAngles(edge,probe,normal,p1,phi1,p2,phi2))
 			{
 						#ifdef debug_singularities
 						std::cout << "    " << p1 << "  " << phi1 << "\n";
-						std::cout << "    " << p2 << "  " << phi2 << "\n";
+						std::cout << "    " << p2 << "  " << phi2 << "  ";
+						if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 						#endif
 				if (Maths::isGreater(phi1.value,0) && (phi1 < min_phi))
 				{
@@ -468,7 +474,8 @@ namespace BALL
 					min_probe = probe;
 					min = (Index)*i;
 							#ifdef debug_singularities
-							std::cout << "    ... new min\n";
+							std::cout << "    ... new min  ";
+							if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 							#endif
 				}
 				if (Maths::isLess(phi2.value,phi.value) && (phi2 > max_phi))
@@ -478,14 +485,16 @@ namespace BALL
 					max_probe = probe;
 					max = (Index)*i;
 							#ifdef debug_singularities
-							std::cout << "    ... new max\n";
+							std::cout << "    ... new max  ";
+							if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 							#endif
 				}
 			}
 			else
 			{
 						#ifdef debug_singularities
-						std::cout << "    ... kein Schntt\n";
+						std::cout << "    ... kein Schnitt  ";
+						if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 						#endif
 			}
 		}
@@ -504,6 +513,7 @@ namespace BALL
 										<< "    Probe: " << max << ":  (" << max_probe << ")\n"
 										<< "    Punkt: " << max_point << "  (" << max_phi << ")\n";
 				}
+				if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 				/*Molecule* molecule = new Molecule;
 				if (min != -1)
 				{
@@ -568,6 +578,7 @@ namespace BALL
 				std::cout << "  ns2: " << *ns2 << "\n  a:   ";
 				if (a == NULL) std::cout << "(nil)\n  na:  "; else std::cout << *a << "\n  na:  ";
 				if (na == NULL) std::cout << "(nil)\n"; else std::cout << *na << "\n";
+				if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 				/*Molecule* molecule = new Molecule;
 				Atom* atom = new Atom;
 				atom->setPosition(ns1->p);
@@ -621,7 +632,7 @@ namespace BALL
 			}
 			try
 			{
-				EndEdges(a1,a2,a3,a4,probe1,probe2,min_probe,max_probe,ns1,ns2);
+				EndEdges(a1,a2,a3,a4,probe1,probe2,min_probe,max_probe,ns1,ns2,ses);
 			}
 			catch (Exception::GeneralException)
 			{
@@ -666,6 +677,7 @@ namespace BALL
 			a->face2->orientation.push_back(a->face2->orientation[a->face2->getRelativeEdgeIndex(edge->index)]);
 					#ifdef debug_singularities
 					std::cout << "  a == " << *a << " != NULL\n";
+					if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 					#endif
 		}
 		if (na != NULL)
@@ -680,6 +692,7 @@ namespace BALL
 			na->face2->orientation.push_back(na->face2->orientation[na->face2->getRelativeEdgeIndex(edge->index)]);
 					#ifdef debug_singularities
 					std::cout << "  na == " << *na << " != NULL\n";
+					if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 					#endif
 		}
 		if (a1 != NULL)
@@ -694,6 +707,7 @@ namespace BALL
 			a1->face2->orientation.push_back(1);
 					#ifdef debug_singularities
 					std::cout << "  a1 == " << *a1 << " != NULL\n";
+					if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 					#endif
 		}
 		if (a2 != NULL)
@@ -708,6 +722,7 @@ namespace BALL
 			a2->face2->orientation.push_back(1);
 					#ifdef debug_singularities
 					std::cout << "  a2 == " << *a2 << " != NULL\n";
+					if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 					#endif
 		}
 		if (a3 != NULL)
@@ -722,6 +737,7 @@ namespace BALL
 			a3->face2->orientation.push_back(1);
 					#ifdef debug_singularities
 					std::cout << "  a3 == " << *a3 << " != NULL\n";
+					if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 					#endif
 		}
 		if (a4 != NULL)
@@ -736,13 +752,13 @@ namespace BALL
 			a4->face2->orientation.push_back(1);
 					#ifdef debug_singularities
 					std::cout << "  a4 == " << *a4 << " != NULL\n";
+					if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 					#endif
 		}
 		edge->face1->edge[edge->face1->getRelativeEdgeIndex(edge->index)] = NULL;
 		edge->face2->edge[edge->face2->getRelativeEdgeIndex(edge->index)] = NULL;
 		ses->edges[edge->index] = NULL;
 		ses->singular_edges.remove(edge);
-		delete edge;
 		if (a != NULL)
 		{
 			ns1->index = ses->vertices.size();
@@ -758,7 +774,19 @@ namespace BALL
 				//print << *ses;
 				//print.close();
 				//std::cout << "\n\n" << *ses << "\n\n";
+				std::cout << "edge(" << edge << "):  "; if (edge != NULL) std::cout << *edge; else std::cout << "---"; std::cout << "\n";
+				std::cout << "a(" << a << "):  "; if (a != NULL) std::cout << *a; else std::cout << "---"; std::cout << "\n";
+				std::cout << "na(" << na << "):  "; if (na != NULL) std::cout << *na; else std::cout << "---"; std::cout << "\n";
+				std::cout << "a1(" << a1 << "):  "; if (a1 != NULL) std::cout << *a1; else std::cout << "---"; std::cout << "\n";
+				std::cout << "a2(" << a2 << "):  "; if (a2 != NULL) std::cout << *a2; else std::cout << "---"; std::cout << "\n";
+				std::cout << "a3(" << a3 << "):  "; if (a3 != NULL) std::cout << *a3; else std::cout << "---"; std::cout << "\n";
+				std::cout << "a4(" << a4 << "):  "; if (a4 != NULL) std::cout << *a4; else std::cout << "---"; std::cout << "\n";
+				std::cout << "ns1(" << ns1 << "):  "; if (ns1 != NULL) std::cout << *ns1; else std::cout << "---"; std::cout << "\n";
+				std::cout << "ns2(" << ns2 << "):  "; if (ns2 != NULL) std::cout << *ns2; else std::cout << "---"; std::cout << "\n";
+				STOP_SINGULARITIES = 0;
+				if (STOP_SINGULARITIES == 0) std::cin >> STOP_SINGULARITIES; else { STOP_SINGULARITIES--; std::cout << "\n"; }
 				#endif
+		delete edge;
 	}
 
 
@@ -832,7 +860,8 @@ namespace BALL
 		 const TSphere3<T>& min_probe,
 		 const TSphere3<T>& max_probe,
 		 TSESVertex<T>*			ns1,
-		 TSESVertex<T>*			ns2)
+		 TSESVertex<T>*			ns2,
+		 TSolventExcludedSurface<T>* ses)
 	{
 		if (edge1 != NULL)
 		{
@@ -886,6 +915,8 @@ namespace BALL
 					v->p = point2;
 				}
 				edge1->vertex2 = v;
+				v->index = ses->vertices.size();
+				ses->vertices.push_back(v);
 			}
 			if (edge3 != NULL)
 			{
@@ -903,6 +934,8 @@ namespace BALL
 					v->p = point2;
 				}
 				edge3->vertex2 = v;
+				v->index = ses->vertices.size();
+				ses->vertices.push_back(v);
 			}
 		}
 		else
@@ -929,6 +962,8 @@ namespace BALL
 					v->p = point2;
 				}
 				edge2->vertex2 = v;
+				v->index = ses->vertices.size();
+				ses->vertices.push_back(v);
 			}
 			if (edge4 != NULL)
 			{
@@ -946,6 +981,8 @@ namespace BALL
 					v->p = point2;
 				}
 				edge4->vertex2 = v;
+				v->index = ses->vertices.size();
+				ses->vertices.push_back(v);
 			}
 		}
 		else
