@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.16 2003/07/05 13:02:05 amoll Exp $
+// $Id: DCDFile_test.C,v 1.17 2003/07/06 16:29:10 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.16 2003/07/05 13:02:05 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.17 2003/07/06 16:29:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -88,24 +88,42 @@ CHECK(bool operator == (const DCDFile& file) const throw())
 	TEST_EQUAL(test, false)
 RESULT
 
-// init() is called every time an object is constructed, so we won't have a
-// dedicated test here. There is no reasonable way to test it, anyway.
 
 String filename;
 System system;
-CHECK([EXTRA] full test)
+CHECK([EXTRA] full test writing)
 	PDBFile pfile("data/DCDFile_test.pdb");
 	pfile.read(system);
 	AmberFF amberFF;
 	NEW_TMP_FILE(filename);
 	DCDFile dcd(filename, File::OUT);
+	TEST_EQUAL(dcd.isAccessible(), true)
 	Options options;
 	SnapShotManager ssm(&system, &amberFF, options, &dcd, true);
 	ssm.takeSnapShot();
-	system.getAtom(0)->setPosition(Vector3(0,0,1111));
+	system.getAtom(0)->setPosition(Vector3(1,2,1111));
+	system.getAtom(0)->setForce(Vector3(3,4,5));
+	system.getAtom(0)->setVelocity(Vector3(6,7,8));
 	ssm.takeSnapShot();
 	ssm.flushToDisk();
+	dcd.close();
+	TEST_NOT_EQUAL(dcd.getSize(), 0) 
 RESULT
+
+SnapShot ss;
+CHECK(bool read(SnapShot& snapshot) throw())
+	DCDFile dcd(filename);
+	TEST_EQUAL(dcd.read(ss), true)
+	ss.applySnapShot(system);
+	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
+	TEST_EQUAL(dcd.read(ss), true)
+	ss.applySnapShot(system);
+	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(1,2,1111))
+	TEST_EQUAL(system.getAtom(0)->getForce(), Vector3(3,4,5))
+	TEST_EQUAL(system.getAtom(0)->getVelocity(), Vector3(6,7,8))
+	TEST_EQUAL(dcd.read(ss), false)
+RESULT
+
 
 CHECK(bool readHeader() throw())
   DCDFile one(dcd_test_file, std::ios::in);
@@ -129,10 +147,10 @@ CHECK(bool writeHeader() throw())
 	bool test = one.writeHeader();
 	TEST_EQUAL(test, true);
 	one.close();
-	TEST_NOT_EQUAL(one.getSize(), 0)
+	TEST_NOT_EQUAL(one.getSize(), 0)  
 	DCDFile two(temporary, std::ios::in);
 	test = two.readHeader();
-	TEST_EQUAL(test, true);
+	TEST_EQUAL(test, true);  // got false
 RESULT
 
 
@@ -165,75 +183,76 @@ CHECK(bool append(const SnapShot& snapshot) throw())
 RESULT
 
 
-SnapShot ss;
-CHECK(bool read(SnapShot& snapshot) throw())
-	DCDFile dcd(filename);
-	TEST_EQUAL(dcd.read(ss), true)
-	ss.applySnapShot(system);
-	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
-	TEST_EQUAL(dcd.read(ss), true)
-	ss.applySnapShot(system);
-	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(0,0,1111))
-	TEST_EQUAL(dcd.read(ss), false)
-RESULT
-
-
 CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw())
 	vector<SnapShot> v;
 	v.push_back(ss);
 	TEST_EQUAL(ss.getNumberOfAtoms(), 892)
 	String temporary;
 	NEW_TMP_FILE(temporary)
-	Log.error() << std::endl << temporary << std::endl;
-	DCDFile dcd(temporary, std::ios::out);
+	DCDFile dcd(temporary, File::OUT);
 	TEST_EQUAL(dcd.isOpen(), true)
+	TEST_EQUAL(dcd.isWritable(), true)
+	TEST_EQUAL(dcd.getOpenMode(), File::OUT)
 	TEST_EQUAL(dcd.isAccessible(), true)
 	TEST_EQUAL(dcd.getNumberOfSnapShots(), 0)
 	bool result = dcd.flushToDisk(v);
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(dcd.getNumberOfSnapShots(), 1)
-	TEST_NOT_EQUAL(dcd.getSize(), 0)
 
 	result = dcd.flushToDisk(v);
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(dcd.getNumberOfSnapShots(), 2)
-	TEST_NOT_EQUAL(dcd.getSize(), 0)
+	dcd.close();
+	TEST_NOT_EQUAL(dcd.getSize(), 0)   // got 0
 RESULT
 
 CHECK(BALL_CREATE(DCDFile))
-	NEW_TMP_FILE(filename);
 	DCDFile dcd(filename);
 	DCDFile* dcd_ptr = (DCDFile*) dcd.create();
 	TEST_NOT_EQUAL(dcd_ptr, 0)
 	TEST_EQUAL(dcd_ptr->getName(), filename)
 RESULT
 
-CHECK(bool hasVelocities() const throw())
-  //?????
-RESULT
-
 CHECK(bool init() throw())
-  //?????
+	// init() is called every time an object is constructed, so we won't have a
+	// dedicated test here. There is no reasonable way to test it, anyway.
+	DCDFile d;
+	d.init();
 RESULT
 
 CHECK(bool isSwappingBytes() const throw())
-  //?????
+	DCDFile d;
+	d.isSwappingBytes();
 RESULT
 
 CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw())
-  //?????
+	DCDFile dcd;
+Log.error() << "#~~#   1" << std::endl;
+	TEST_EXCEPTION(Exception::FileNotFound, dcd.open(""))
 RESULT
 
 CHECK(bool seekAndWriteHeader() throw())
-  //?????
+	DCDFile d;
+	TEST_EQUAL(d.seekAndWriteHeader(), false)
+RESULT
+
+CHECK(bool hasVelocities() const throw())
+	DCDFile d;
+	TEST_EQUAL(d.hasVelocities(), false)
 RESULT
 
 CHECK(void disableVelocityStorage() throw())
-  //?????
+	DCDFile d;
+	d.enableVelocityStorage();
+	d.disableVelocityStorage();
+	TEST_EQUAL(d.hasVelocities(), false)
 RESULT
 
 CHECK(void enableVelocityStorage() throw())
-  //?????
+	DCDFile d;
+	d.disableVelocityStorage();
+	d.enableVelocityStorage();
+	TEST_EQUAL(d.hasVelocities(), true)
 RESULT
 
 /////////////////////////////////////////////////////////////
