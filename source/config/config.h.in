@@ -1,11 +1,14 @@
-// $Id: config.h.in,v 1.37 2003/04/17 06:07:21 oliver Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+/// $Id: config.h.in,v 1.38 2003/04/22 21:58:11 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
 
-// here are some global configuration flags for BALL
+// Here are some global configuration flags for BALL
 
-// this flag is used by GenericPDBFile
+// This flag is used by GenericPDBFile
 // if it is not set, the length of each line has
 // to be meet the PDB spcifications exactly.
 // As virtually no existing PDB file fulfills
@@ -24,37 +27,33 @@
 #undef BALL_NO_INLINE_FUNCTIONS
 
 
-// this define is used to determine
+// This define is used to determine
 // wheter BALL shall try to close a socket conection
-// via shutdown or close
-// (see socket.C)
+// via shutdown or close (see socket.C).
 #define BALL_USE_SOCKET_SHUTDOWN
 
-// this idefine is used in string.C and enables a workaround
-// on on of these ppor systems that do not define vsnprintf
+// This define is used in string.C and enables a workaround
+// on on of these poor systems that do not define vsnprintf.
 #undef BALL_HAVE_VSNPRINTF
 
-// these two flags are set by configure according to 
-// the OS and compiler found. HAS_BOOL_TYPE and 
-// _CC_BOOL_DEF_ are required for compatibility
-// reasons with QT.
-
-// the path to the directory where BALL is installed
+// The path to the directory where BALL is installed.
 #define BALL_PATH "BALL"
-// the string describing the binary format
+
+// The string describing the binary format.
 #define BALL_BINFMT "(unknown)"
 
-// used in COMMON/namespace.h to cause the inclusion of COMMON/memory.h
+// Used in COMMON/namespace.h to cause the inclusion of COMMON/memory.h.
 #undef BALL_LOG_MEMORY
 #define BALL_LOG_MEMORY_FILE "memory.log"
 
-// define architecture
+// Define architecture
 #undef BALL_ARCH_SPARC
 #undef BALL_ARCH_MIPS
 #undef BALL_ARCH_I386
 #undef BALL_ARCH_ALPHA
+#undef BALL_ARCH_POWERPC
 
-//define OS
+// Define OS
 #undef BALL_OS_LINUX
 #undef BALL_OS_SOLARIS
 #undef BALL_OS_SUNOS
@@ -102,7 +101,7 @@
 // Note: inet_aton is a marginally improved version of inet_addr
 // If configure finds inet_aton, HAVE_INET_ATON is set and used
 // in SYSTEM/socket.C.
-#undef HAVE_INET_ATON
+#undef BALL_HAVE_INET_ATON
 
 // Define the type needed for getsockname, getpeername, and accept
 // This type is probably one of socklen_t, size_t, or int

@@ -1,7 +1,7 @@
 #!/usr/bin/env /opt/bin/python2.1
 from ClassTest import *
 
-START_TEST("RegularExpression", "$Id: RegularExpression_test.py,v 1.1 2003/04/20 16:40:18 oliver Exp $")
+START_TEST("RegularExpression", "$Id: RegularExpression_test.py,v 1.2 2003/04/22 21:58:11 oliver Exp $")
 
 CHECK('RegularExpression()')
 re = RegularExpression()
@@ -86,8 +86,11 @@ CHECK('RegularExpression::match(const String& text, Index from = 0, int execute_
 re2.set("a[bc]+d")
 s = String("abbcbbd")
 TEST_EQUAL(re2.isValid(), true)
-TEST_EQUAL(re2.match(s), true)
 TEST_EQUAL(re2.match(s, 1, 0), false)
+TEST_EQUAL(re2.match(s, 0, 0), true)
+TEST_EQUAL(re2.match(s, 0), true)
+TEST_EQUAL(re2.match(s, 1), false)
+TEST_EQUAL(re2.match(s), true)
 re2.set(".*bd")
 TEST_EQUAL(re2.isValid(), true)
 TEST_EQUAL(re2.match(s), true)
