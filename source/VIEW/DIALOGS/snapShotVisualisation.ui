@@ -8,60 +8,212 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>153</width>
-            <height>243</height>
+            <width>400</width>
+            <height>221</height>
         </rect>
     </property>
     <property name="caption">
         <string>Snapshot Visualisation</string>
     </property>
-    <widget class="QPushButton">
+    <widget class="QCheckBox">
         <property name="name">
-            <cstring>cancelButton</cstring>
+            <cstring>export_PNG</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>81</x>
-                <y>207</y>
-                <width>65</width>
-                <height>28</height>
+                <x>10</x>
+                <y>150</y>
+                <width>110</width>
+                <height>21</height>
             </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>110</width>
+                <height>0</height>
+            </size>
         </property>
         <property name="text">
-            <string>Close</string>
+            <string>export PNGs</string>
         </property>
     </widget>
-    <widget class="QPushButton">
+    <widget class="QGroupBox">
         <property name="name">
-            <cstring>animateButton</cstring>
+            <cstring>sliderBox</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>5</x>
-                <y>208</y>
-                <width>65</width>
-                <height>28</height>
+                <x>10</x>
+                <y>60</y>
+                <width>380</width>
+                <height>80</height>
             </rect>
         </property>
-        <property name="text">
-            <string>Animate</string>
+        <property name="title">
+            <string></string>
         </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>startSnapshot</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>69</x>
-                <y>59</y>
-                <width>72</width>
-                <height>20</height>
-            </rect>
-        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>oneBackwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>150</x>
+                    <y>40</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>hundredBackwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>50</x>
+                    <y>40</y>
+                    <width>40</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;&lt;&lt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>tenBackwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>40</y>
+                    <width>40</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;&lt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>oneForwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>200</x>
+                    <y>40</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>tenForwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>240</x>
+                    <y>40</y>
+                    <width>40</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&gt;&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>firstSnapshotButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>40</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>|&lt;</string>
+            </property>
+        </widget>
+        <widget class="QSlider">
+            <property name="name">
+                <cstring>snapShotSlider</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>360</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>360</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="cursor">
+                <cursor>6</cursor>
+            </property>
+            <property name="pageStep">
+                <number>5</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Right</enum>
+            </property>
+            <property name="tickInterval">
+                <number>0</number>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>hundredForwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>290</x>
+                    <y>40</y>
+                    <width>40</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&gt;&gt;&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>lastSnapshotButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>340</x>
+                    <y>40</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&gt;|</string>
+            </property>
+        </widget>
     </widget>
     <widget class="QLabel">
         <property name="name">
@@ -69,49 +221,20 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>6</x>
+                <x>12</x>
                 <y>2</y>
-                <width>59</width>
-                <height>20</height>
+                <width>70</width>
+                <height>23</height>
             </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>70</width>
+                <height>0</height>
+            </size>
         </property>
         <property name="text">
-            <string>snapshots</string>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>currentSnapshot</cstring>
-        </property>
-        <property name="enabled">
-            <bool>true</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>69</x>
-                <y>31</y>
-                <width>72</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="readOnly">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel2_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>6</x>
-                <y>32</y>
-                <width>60</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>current</string>
+            <string>Snapshots</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -120,14 +243,64 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>6</x>
-                <y>62</y>
-                <width>44</width>
-                <height>20</height>
+                <x>12</x>
+                <y>31</y>
+                <width>70</width>
+                <height>23</height>
             </rect>
         </property>
+        <property name="minimumSize">
+            <size>
+                <width>70</width>
+                <height>0</height>
+            </size>
+        </property>
         <property name="text">
-            <string>start</string>
+            <string>Start</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>204</x>
+                <y>2</y>
+                <width>70</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>70</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Current</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>204</x>
+                <y>31</y>
+                <width>70</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>70</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>End</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -139,14 +312,99 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>69</x>
+                <x>88</x>
                 <y>2</y>
-                <width>72</width>
-                <height>20</height>
+                <width>110</width>
+                <height>23</height>
             </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>100</width>
+                <height>0</height>
+            </size>
         </property>
         <property name="readOnly">
             <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>currentSnapshot</cstring>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>280</x>
+                <y>2</y>
+                <width>110</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>100</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>animateButton</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>14</x>
+                <y>182</y>
+                <width>186</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Animate</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancelButton</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>206</x>
+                <y>182</y>
+                <width>186</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Close</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>startSnapshot</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>88</x>
+                <y>31</y>
+                <width>110</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>100</width>
+                <height>0</height>
+            </size>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -155,171 +413,17 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>69</x>
-                <y>90</y>
-                <width>72</width>
-                <height>20</height>
+                <x>280</x>
+                <y>31</y>
+                <width>110</width>
+                <height>23</height>
             </rect>
         </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>hundredForwardButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>39</x>
-                <y>151</y>
-                <width>40</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&gt;&gt;&gt;</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>oneBackwardButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>109</x>
-                <y>122</y>
-                <width>30</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&lt;</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>tenForwardButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>79</x>
-                <y>151</y>
-                <width>30</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&gt;&gt;</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>lastSnapshotButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>151</y>
-                <width>30</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&gt;|</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>oneForwardButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>109</x>
-                <y>151</y>
-                <width>30</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&gt;</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>tenBackwardButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>79</x>
-                <y>122</y>
-                <width>30</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&lt;&lt;</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>firstSnapshotButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>122</y>
-                <width>30</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>|&lt;</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>hundredBackwardButton</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>39</x>
-                <y>122</y>
-                <width>40</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&lt;&lt;&lt;</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel2_4</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>6</x>
-                <y>92</y>
-                <width>47</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>end</string>
-        </property>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>export_PNG</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>184</y>
-                <width>94</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>export PNGs</string>
+        <property name="minimumSize">
+            <size>
+                <width>100</width>
+                <height>0</height>
+            </size>
         </property>
     </widget>
 </widget>
@@ -384,6 +488,30 @@
         <receiver>SnapshotVisualisationDialogData</receiver>
         <slot>lastSnapshotClicked()</slot>
     </connection>
+    <connection>
+        <sender>snapShotSlider</sender>
+        <signal>sliderMoved(int)</signal>
+        <receiver>SnapshotVisualisationDialogData</receiver>
+        <slot>sliderMovedToPos()</slot>
+    </connection>
+    <connection>
+        <sender>snapShotSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>SnapshotVisualisationDialogData</receiver>
+        <slot>sliderMovedToPos()</slot>
+    </connection>
+    <connection>
+        <sender>startSnapshot</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>SnapshotVisualisationDialogData</receiver>
+        <slot>snapShotInputTest()</slot>
+    </connection>
+    <connection>
+        <sender>endSnapshot</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>SnapshotVisualisationDialogData</receiver>
+        <slot>snapShotInputTest()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>firstSnapshotClicked()</slot>
@@ -395,6 +523,8 @@
     <slot>oneForwardClicked()</slot>
     <slot>tenBackwardClicked()</slot>
     <slot>tenForwardClicked()</slot>
+    <slot>sliderMovedToPos()</slot>
+    <slot>snapShotInputTest()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

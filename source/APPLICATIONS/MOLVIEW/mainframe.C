@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.108 2003/12/23 12:47:15 amoll Exp $
+// $Id: mainframe.C,v 1.109 2004/01/12 08:45:26 bender Exp $
 //
 
 #include "mainframe.h"
@@ -452,6 +452,7 @@ void Mainframe::amberMinimization()
 	amber->options[AmberFF::Option::FILENAME] = filename;
 
 	//amber->options.dump();
+
 	if (!amber->setup(*system))
 	{
 		Log.error() << "Setup of AMBER force field failed." << endl;
@@ -489,11 +490,13 @@ void Mainframe::amberMinimization()
 	thread->setMainframe(this);
 	thread->setComposite(system);
 
-#if BALL_QT_VERSION >=	0x030200
+	#if BALL_QT_VERSION >=	0x030200
+
 		thread->start(QThread::LowPriority);
- #else
+	#else
 		thread->start();
- #endif
+	#endif
+	
 #else
 	// ============================= WITHOUT MULTITHREADING =================================
 	// iterate until done and refresh the screen every "steps" iterations
@@ -626,11 +629,13 @@ void Mainframe::amberMDSimulation()
 	thread->setSaveImages(md_dialog_->saveImages());
 	thread->setDCDFile(dcd);
 	thread->setComposite(system);
- #if BALL_QT_VERSION >=	0x030200
+
+	#if BALL_QT_VERSION >=	0x030200
 		thread->start(QThread::LowPriority);
- #else
+	#else
 		thread->start();
- #endif
+	#endif
+
 #else
 	// ============================= WITHOUT MULTITHREADING ==============================
 	// iterate until done and refresh the screen every "steps" iterations

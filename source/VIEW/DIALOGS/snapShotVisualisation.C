@@ -5,6 +5,7 @@
 #include <BALL/FORMAT/trajectoryFile.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
+#include <qslider.h>
 
 namespace BALL
 {
@@ -32,6 +33,7 @@ void SnapshotVisualisationDialog::firstSnapshotClicked()
   if (snap_shot_manager_->applyFirstSnapShot())
 	{
 		tmp_.setNum(1, 10);
+		snapShotSlider->setValue(1);
 		update_();
 	}
   else
@@ -75,6 +77,7 @@ void SnapshotVisualisationDialog::lastSnapshotClicked()
 	if (snap_shot_manager_->applySnapShot(
 				snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots()))
 	{
+		snapShotSlider->setValue(snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
 		update_();
 	}
   else
@@ -100,6 +103,7 @@ void SnapshotVisualisationDialog::animateClicked()
 		}
 
 		setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
+		snapShotSlider->setValue(i);
 		update_();
 		if (export_PNG->isChecked())
 		{
@@ -133,6 +137,7 @@ void SnapshotVisualisationDialog::backward(Size nr)
  
   if (snap_shot_manager_->applySnapShot(tmpnr))
 	{
+		snapShotSlider->setValue(tmpnr);
 		tmp_.setNum(tmpnr);
 		update_();
 	}
@@ -145,22 +150,23 @@ void SnapshotVisualisationDialog::backward(Size nr)
 void SnapshotVisualisationDialog::forward(Size nr)
 {
 	Size tmpnr = (currentSnapshot->text().toInt()) + nr;
-  if (tmpnr >= snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots())
-  {
-    lastSnapshotClicked();
-  }
-  else
-  {
-    if (snap_shot_manager_->applySnapShot(tmpnr))
+  	if (tmpnr >= snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots())
+  	{
+  		lastSnapshotClicked();
+  	}
+	else
+	{
+		if (snap_shot_manager_->applySnapShot(tmpnr))
 		{
-	  	tmp_.setNum(tmpnr);
+			snapShotSlider->setValue(tmpnr);
+	  		tmp_.setNum(tmpnr);
 			update_();
 		}
-    else
+		else
 		{
-	  	Log.error() << "Could not apply  snapshot" <<std::endl;
+	  		Log.error() << "Could not apply  snapshot" <<std::endl;
 		} 
-  }
+	}
 }
 
 
@@ -191,6 +197,22 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 	}
 }
 
+void SnapshotVisualisationDialog::sliderMovedToPos()
+{
+	currentSnapshot->setText((String) snapShotSlider->value());
+	Position tmpnr = (currentSnapshot->text().toInt());	
+	
+	if (snap_shot_manager_->applySnapShot(tmpnr))
+	{
+		tmp_.setNum(tmpnr);
+		update_();
+	}
+	else
+	{
+		Log.error() << "Could not apply  snapshot" <<std::endl;
+	} 
+}
+
 void SnapshotVisualisationDialog::update_()
 {
   currentSnapshot->setText(tmp_);
@@ -206,10 +228,55 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
   tmp_.setNum(snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
 	numberOfSnapshots->setText(tmp_);
 	endSnapshot->setText(tmp_);
+	snapShotSlider->setRange(1,snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
 	tmp_.setNum(1);
   currentSnapshot->setText(tmp_);
 	startSnapshot->setText(tmp_);
 }
-  
+
+void SnapshotVisualisationDialog::snapShotInputTest()
+{
+	string startSnap = startSnapshot->text().ascii();
+	string endSnap = endSnapshot->text().ascii();
+	string valid_char = "0123456789";
+	//test if input is valid
+	if(startSnap.size()!=0)
+	{
+		for(unsigned int i = 0; i!=startSnap.size(); i++)
+		{
+			if(valid_char.find(startSnap.substr(i,1)) == string::npos)
+			{
+				startSnap = startSnap.substr(0,(startSnap.size()-1)); //if written char is not a number, set string to old string
+				startSnapshot->setText(startSnap);
+				break;
+			}
+		}
+	}
+	if(endSnap.size()!=0)
+	{
+		for(unsigned int i = 0; i!=endSnap.size(); i++)
+		{
+			if(valid_char.find(endSnap.substr(i,1)) == string::npos)
+			{
+				endSnap = endSnap.substr(0,(endSnap.size()-1)); //if written char is not a number, set string to old string
+				endSnapshot->setText(endSnap);
+				break;
+			}
+		}
+	}
+
+	// set line edits to number of snapshots, if written number is bigger then number of snapshots
+	String num_of_shots = numberOfSnapshots->text().ascii();
+	String num_of_startsnap = startSnapshot->text().ascii();
+	String num_of_endsnap = endSnapshot->text().ascii();
+	int num_shots = num_of_shots.toInt();
+	int num_startsnap = num_of_startsnap.toInt();
+	int num_endsnap = num_of_endsnap.toInt();
+	if(num_startsnap > num_shots)
+		startSnapshot->setText(num_of_shots);
+	if(num_endsnap > num_shots)
+		endSnapshot->setText(num_of_shots);
+}
+
 } } // namespace
 

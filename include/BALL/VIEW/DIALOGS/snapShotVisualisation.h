@@ -75,12 +75,17 @@ class SnapshotVisualisationDialog
 	///
 	virtual void close();
 	
+	///test wether input in line edits startSnapshot or endSnapshot are valid
+	virtual void snapShotInputTest();
+	
 	///
 	Size getStartSnapshot() const;
 
 	///
 	Size getEndSnapshot() const;
 	
+	///
+	virtual void sliderMovedToPos();
 
 	protected:
   
