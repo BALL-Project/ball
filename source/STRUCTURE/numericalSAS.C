@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.14 2000/07/03 15:19:10 anker Exp $
+// $Id: numericalSAS.C,v 1.15 2000/08/03 08:54:49 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -337,7 +337,7 @@ namespace BALL
 	}
 	
   float calculateSASAtomPoints
-		(const BaseFragment& fragment, HashMap<Atom*,Surface*>& atom_surfaces,
+		(const BaseFragment& fragment, HashMap<Atom*,Surface>& atom_surfaces,
 		 float probe_radius,  Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
@@ -388,24 +388,21 @@ namespace BALL
 				 &internal_atom_dots);
 
 
-		// clear the surface object
-		Surface* surface;
+		// clear the hash map's contents
+		atom_surfaces.clear();
 
 		// iterate over all atoms and add the surface points 
 		// to the surface object
 		Size point = 0;
 
-		// BAUSTELLE: Sind die Daten in der gleichen Reihenfolge in den Feldern
-		// gespeichert wie der Iterator über das Fragment läuft?
-
 		for (Size j = 0; j < atoms.size(); ++j)
 		{
-			// create a surface object for the hashmap
-			surface = new Surface;
+			// create a new surface for this atom
+			Surface surface;
 
 			// resize the surface's vectors
-			surface->vertex.resize(number_of_surface_dots);
-			surface->normal.resize(number_of_surface_dots);
+			surface.vertex.resize(internal_atom_dots[j]);
+			surface.normal.resize(internal_atom_dots[j]);
 
 			// retrieve the center of the atom
 			Vector3 center(coordinates[j * 3], coordinates[j * 3 + 1], coordinates[j * 3 + 2]);
@@ -417,15 +414,15 @@ namespace BALL
 			// and calculate the normal
 			for (Size i = 0; i < (Size)internal_atom_dots[j]; ++i)
 			{
-				surface->vertex[point].set(internal_surface_dots[point * 3], 
-																	internal_surface_dots[point * 3 + 1], 
-																	internal_surface_dots[point * 3 + 2]);
-				surface->normal[point] = surface->vertex[point] - center;
-				surface->normal[point].normalize();
-				surface->normal[point] *= length;
+				surface.vertex[i].set(internal_surface_dots[point * 3], 
+															internal_surface_dots[point * 3 + 1], 
+															internal_surface_dots[point * 3 + 2]);
+				surface.normal[i] = surface.vertex[i] - center;
+				surface.normal[i].normalize();
+				surface.normal[i] *= length;
 				point++;
 			}
-			atom_surfaces.insert(pair<Atom*, Surface*>(atoms[j], surface));
+			atom_surfaces.insert(pair<Atom*, Surface>(atoms[j], surface));
 		}
 
 		// free arrays (if created)
