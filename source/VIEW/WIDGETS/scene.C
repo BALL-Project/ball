@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.37 2004/02/09 13:50:10 amoll Exp $
+// $Id: scene.C,v 1.38 2004/02/12 16:17:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -305,7 +305,7 @@ void Scene::initializeGL()
 {
 	if (!format().rgba())  Log.error() << "no rgba mode for OpenGL available." << endl;
 
-	gl_renderer_.init(*stage_);
+	gl_renderer_.init(*stage_, (float) width(), (float) height());
 	gl_renderer_.initSolid();
 	if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 	gl_renderer_.updateCamera();
@@ -742,20 +742,32 @@ void Scene::createCoordinateSystem_()
 void Scene::exportScene(Renderer &er) const
 	throw()
 {
-	PrimitiveManager::RepresentationList::ConstIterator it;
-	MainControl *main_control = MainControl::getMainControl(this);
-
-	it = main_control->getPrimitiveManager().getRepresentations().begin();
-	for (; it != main_control->getPrimitiveManager().getRepresentations().end(); it++)
+	if (er.init(*stage_, (float) width(), (float) height()))
 	{
-		List<GeometricObject*>::ConstIterator it2;
-		for (it2 =  (*it)->getGeometricObjects().begin();
-				 it2 != (*it)->getGeometricObjects().end();
-				 it2++)
+		PrimitiveManager::RepresentationList::ConstIterator it;
+		MainControl *main_control = MainControl::getMainControl(this);
+
+		it = main_control->getPrimitiveManager().getRepresentations().begin();
+		for (; it != main_control->getPrimitiveManager().getRepresentations().end(); it++)
 		{
-			er.render_(*it2);
+			List<GeometricObject*>::ConstIterator it2;
+			for (it2 =  (*it)->getGeometricObjects().begin();
+					 it2 != (*it)->getGeometricObjects().end();
+					 it2++)
+			{
+				er.render_(*it2);
+			}
+		}
+
+		if (er.finish())
+		{
+			// cant call Scene::setStatusbarText(..), no idea why!!!
+			getMainControl()->setStatusbarText("Successfully exported Scene...");
+			return;
 		}
 	}
+
+	getMainControl()->setStatusbarText("Error while exporting Scene...");
 }
 
 //##########################PREFERENCES#################################
