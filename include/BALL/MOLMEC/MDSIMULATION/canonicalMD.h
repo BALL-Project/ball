@@ -1,4 +1,4 @@
-// $Id: canonicalMD.h,v 1.7 2000/08/30 19:58:19 oliver Exp $
+// $Id: canonicalMD.h,v 1.8 2001/01/16 17:19:22 anker Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -82,14 +82,14 @@ namespace BALL
     */
     //@{
 
-    // BALL_CREATE_DEEP(CanonicalMD)
+    BALL_CREATE(CanonicalMD)
 
     /** The default constructor with no arguments
     */
     CanonicalMD(); 
 
     /** This constructor expects a force field 
-        The force field's options are used and no saving  of snapshots is done 
+        The force field's options are used and no saving of snapshots is done 
     */
     CanonicalMD(ForceField& myforcefield); 
 
@@ -98,7 +98,8 @@ namespace BALL
     */
     CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm); 
 
-    /** This constructor wants a force field, a snapshot manager  and new options 
+    /** This constructor wants a force field, a snapshot manager and new 
+				options 
     */
     CanonicalMD(ForceField &myforcefield,SnapShotManager *ssm, const Options &myoptions);
 

@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.7 2000/12/08 14:52:28 amoll Exp $
+// $Id: regularData1D.h,v 1.8 2001/01/16 17:17:35 anker Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -133,13 +133,14 @@ namespace BALL
 			throw();
 
 		/**	Resize the data.
-				If {\tt new_size} is larger than the current size, the data {\tt vector}
-				is extended to the new size and filled with default constructed items of type
-				{\tt T}. Resizing to a value lesser than the current size truncates the vector.
+				If {\tt new_size} is larger than the current size, the data 
+				{\tt vector} is extended to the new size and filled with default
+				constructed items of type {\tt T}. Resizing to a value lesser than
+				the current size truncates the vector.
 				\\
-				The boundaries are adapted keep the positions of the retained items fixed, i.e.
-				the upper bound is increased or decreased proportionally while the lower bound
-				remains unchanged.
+				The boundaries are adapted keep the positions of the retained items
+				fixed, i.e.  the upper bound is increased or decreased
+				proportionally while the lower bound remains unchanged.
 				
 				@param new_size the new size
 		*/
@@ -297,7 +298,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	void TRegularData1D<T>::setUpper(double lower)
+	void TRegularData1D<T>::setUpper(double upper)
 		throw()
 	{
 		upper_ = upper;
