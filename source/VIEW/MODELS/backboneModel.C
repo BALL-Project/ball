@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.20 2004/12/28 13:50:18 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.21 2004/12/28 14:09:44 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -293,8 +293,9 @@ namespace BALL
 			}
 					
 			////////////////////////////////////////////////////////////
+			// calculate normal vector r to direction vector dir, with length of radius
+			////////////////////////////////////////////////////////////
 			Vector3 n = Vector3(0,1,0);
-			// normal vector to direction vector dir, with length of radius
 			Vector3 r = dir % n;
 			if (Maths::isZero(r.getSquareLength())) 
 			{ 
@@ -310,29 +311,26 @@ namespace BALL
 
 			////////////////////////////////////////////////////////////
 			// initialise a first set of points in a circle around the start position
-			vector<Vector3> points1, points2;
+			////////////////////////////////////////////////////////////
+			vector<Vector3> new_points;
 			Matrix4x4 m;
 			m.setRotation(slides_angle, n % r);
 			Vector3 x = r;
-			points1.push_back(x);
+			new_points.push_back(x);
 			for (Position p = 0; p < slides - 1; p++)
 			{
 				x = m * x;
-				points1.push_back(x);
+				new_points.push_back(x);
 			}
 			// add also a dummy for closing of ring
-			points1.push_back(points1[0]);
-
-			points2.resize(points1.size());
+			new_points.push_back(new_points[0]);
 
 			////////////////////////////////////////////////////////////
 			// same data structures for faster access
+			////////////////////////////////////////////////////////////
 			Mesh::Triangle t;
-			vector<Vector3>*  new_points = &points2;
-			vector<Vector3>* last_points = &points1;
-			vector<Vector3>* dummy = 0;
-			Size s_old = 0;
-			Size s_new = 0;
+			Size s_old = 0;  // start position of the last points in the meshs vertices
+			Size s_new = 0;  // start position of the  new points in the meshs vertices
 				
 			// create a new mesh with the points and triangles
 			// every residue get its own mesh to enable picking for the tube model
@@ -342,6 +340,7 @@ namespace BALL
 				
 			//------------------------------------------------------>
 			// iterate over all spline_points_
+			//------------------------------------------------------>
 			for (Position p = start; p < end -1; p++)
 			{
 				// faster access to the current spline point
@@ -360,52 +359,60 @@ namespace BALL
 
 				////////////////////////////////////////////////////////////
 				// rotate all points of the circle according to new normal
+				////////////////////////////////////////////////////////////
 				m.setRotation(slides_angle, dir_new);
 				x = r_new;
-				(*new_points)[0] = x;
+				new_points[0] = x;
 				const Position middle = (Position)(slides / 2.0);
 				for (Position i= 1; i < middle; i++)
 				{
 					x = m * x;
-					(*new_points)[i] = x;
+					new_points[i] = x;
 				}
 
 				// second part of points can be calculated by negating first points
 				for (Position i = middle; i < slides; i++)
 				{
-					(*new_points)[i] = - (*new_points)[i - middle];
+					new_points[i] = - new_points[i - middle];
 				}
 
 				// dont forget the dummy for closing the ring
- 				(*new_points)[new_points->size() - 1] = (*new_points)[0];
-				////////////////////////////////////////////////////////////
+ 				new_points[new_points.size() - 1] = new_points[0];
 				
+				////////////////////////////////////////////////////////////
 				// create a new mesh if we have a different atom now
+				////////////////////////////////////////////////////////////
 				if (mesh->getComposite() != atoms_of_spline_points_[p]->getParent())
 				{
+					const Mesh* old_mesh = mesh;
 					mesh = new Mesh();
 					mesh->setComposite(atoms_of_spline_points_[p]->getParent());
 					geometric_objects_.push_back(mesh);
 
 					s_old = 0;
 
-					// iterater over all points of the circle
-					for (Position point_pos = 0; point_pos < slides; point_pos++)
+					// insert the vertices and normals of last points again into the new mesh
+					for (Position point_pos = old_mesh->vertex.size() - 1 - slides;
+							 					point_pos < old_mesh->vertex.size() - 1; point_pos++)
 					{
-						// insert the vertices and normals of last points again into the new mesh
-						mesh->vertex.push_back(last_point_ + (*last_points)[point_pos]);
-						mesh->normal.push_back((*last_points)[point_pos]);
+						mesh->vertex.push_back(old_mesh->vertex[point_pos]);
+						mesh->normal.push_back(old_mesh->normal[point_pos]);
 					}
 				}
 				
+				////////////////////////////////////////////////////////////
 				// insert only the new points, the old ones are already stored in the mesh
+				////////////////////////////////////////////////////////////
+				// we will add an other point next, so here we do an off by one :)
 				s_new = mesh->vertex.size();
 
-				// iterater over all points of the circle
+				//------------------------------------------------------>
+				// iterate over all points of the circle
+				//------------------------------------------------------>
 				for (Position point_pos = 0; point_pos < slides; point_pos++)
 				{
-					mesh->vertex.push_back(point + (*new_points)[point_pos]);
-					mesh->normal.push_back((*new_points)[point_pos]);
+					mesh->vertex.push_back(point + new_points[point_pos]);
+					mesh->normal.push_back(new_points[point_pos]);
 				
 					t.v1 = s_old;			// last lower
 					t.v2 = s_old + 1;	// last upper
@@ -421,16 +428,11 @@ namespace BALL
 					s_new++;
 				}
 
-				// swap between the two point vectors to prevent copying the values from
-				// one vector to the other
-				dummy = new_points;
-				new_points  = last_points;
-				last_points = dummy;
-
 				r = r_new;
 				last_point_ = point;
 			}
 
+			// add mesh if not already done ???????????
 			if (*geometric_objects_.rbegin() != mesh)
 			{
 				geometric_objects_.push_back(mesh);
@@ -445,6 +447,7 @@ namespace BALL
  			sphere->setComposite(atoms_of_spline_points_[end - 1]);
 			geometric_objects_.push_back(sphere);
 		}
+
 
 		void AddBackboneModel::clear_()
 			throw()
