@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.18 2000/03/14 19:35:46 oliver Exp $
+// $Id: Vector3_test.C,v 1.19 2000/03/16 08:51:35 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.18 2000/03/14 19:35:46 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.19 2000/03/16 08:51:35 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -474,10 +474,25 @@ CHECK(TAngle<T> TVector3<T>::getTorsionAngle())
 	c = Vector3(50.0, 101.0, 202.0);
 	d = Vector3(200.0, 401.0, 602.0);
 	angle = a.getTorsionAngle(a, b, c, d);
-  TEST_EQUAL(angle, 0.0)
-	d = Vector3(50.0, 101.0, 602.0);
+  TEST_EQUAL(angle, Constants::PI)
+	a = Vector3(0.0, 0.0, 0.0);
+	b = Vector3(100.0, 0.0, 0.0);
+	c = Vector3(50.0, 0.0, 0.0);
+	d = Vector3(50.0, 0.0, 112.1);
 	angle = a.getTorsionAngle(a, b, c, d);
-  TEST_EQUAL(angle, 0.0)
+  TEST_EQUAL(angle, Constants::PI/2)
+	a = Vector3(0.0, 0.0, 0.0);
+	b = Vector3(0.0, 100.0, 0.0);
+	c = Vector3(0.0, 50.0, 0.0);
+	d = Vector3(112.1, 50.0, 112.1);
+	angle = a.getTorsionAngle(a, b, c, d);
+  TEST_EQUAL(angle, Constants::PI/2)
+	a = Vector3(0.0, 0.0, 0.0);
+	b = Vector3(0.0, 0.0, 100.0);
+	c = Vector3(0.0, 0.0, 50.0);
+	d = Vector3(0.0, 112.1, 50.0);
+	angle = a.getTorsionAngle(a, b, c, d);
+  TEST_EQUAL(angle, Constants::PI/2)
 RESULT
 
 //line 449
