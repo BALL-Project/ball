@@ -1,4 +1,4 @@
-// $Id: RDFParameter.h,v 1.2 2000/09/01 10:25:04 anker Exp $
+// $Id: RDFParameter.h,v 1.3 2000/10/17 17:15:13 anker Exp $
 
 #ifndef BALL__RDFPARAMETER_H
 #define BALL__RDFPARAMETER_H
@@ -39,19 +39,13 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		RDFParameter();
+		RDFParameter() throw();
 
 		/** Copy constructor */
-		RDFParameter(const RDFParameter& rdf_parameter);
+		RDFParameter(const RDFParameter& rdf_parameter) throw();
 
 		/** Destructor */
-		virtual ~RDFParameter();
-
-		/** Destroy method */
-		virtual void destroy();
-
-		/** Clear method */
-		virtual void clear();
+		virtual ~RDFParameter() throw();
 
 		//@}
 
@@ -59,11 +53,12 @@ namespace BALL
 		/** @name Assignment */
 		//@{
 
-		/** */
-		void set(const RDFParameter& rdf_parameter);
+		/** Assignment operator */
+		const RDFParameter& operator = (const RDFParameter& rdf_parameter)
+		throw();
 
-		/** */
-		const RDFParameter& operator = (const RDFParameter& rdf_parameter);
+		/** Clear method */
+		virtual void clear() throw();
 
 		//@}
 
@@ -72,37 +67,40 @@ namespace BALL
 		//@{
 
 		/** */
-		Position getIndex(Atom::Type type_i, Atom::Type type_j) const;
+		Position getIndex(Atom::Type type_i, Atom::Type type_j) const throw();
 
 		/** Return a radial distribution function determined by type */
 		const RadialDistributionFunction& getRDF(Atom::Type type_i, 
-				Atom::Type type_j) const;
+				Atom::Type type_j) const throw();
 
 		/** Return a radial distribution function determined by index */
-		const RadialDistributionFunction& getRDF(Position index) const;
+		const RadialDistributionFunction& getRDF(Position index) const throw();
 
 		//@}
 
 		/** */
 		virtual bool extractSection(ForceFieldParameters& parameters,
-				const String& section_name);
+				const String& section_name) throw();
 
 		/** @name Predicates */
 		//@{
 
 		/** */
 		bool hasRDF(Atom::Type solvent_atom_type,
-				Atom::Type solute_atom_type) const;
+				Atom::Type solute_atom_type) const throw();
 
 		/** @see hasRDF */
 		bool hasParameters(Atom::Type solvent_atom_type,
-				Atom::Type solute_atom_type) const;
+				Atom::Type solute_atom_type) const throw();
 
 		//@}
 
 		protected:
 
+		/*_ The vector containing all the read RDF representations */
 		std::vector<RadialDistributionFunction> rdf_list_;
+
+		/*_ This maps Atom:Types to Indices of rdf_list_ */
 		HashMap< Atom::Type, HashMap<Atom::Type, Position> > rdf_indices_;
 
 
