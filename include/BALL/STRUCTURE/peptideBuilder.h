@@ -1,24 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideBuilder.h,v 1.4 2004/05/10 09:40:25 amoll Exp $
+// $Id: peptideBuilder.h,v 1.5 2004/05/10 11:34:05 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
 #define BALL_STRUCTURE_PEPTIDEBUILDER_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_STRUCTURE_PEPTIDES_H
 #	include <BALL/STRUCTURE/peptides.h>
 #endif
-
-#ifndef BALL_KERNEL_PROTEIN_H
-#	include <BALL/KERNEL/protein.h>
-#endif
-
 
 namespace BALL
 {

@@ -1,27 +1,16 @@
-// Headers ????
-
+/// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: peptideBuilder.C
+//
 
 #include <BALL/STRUCTURE/peptideBuilder.h>
 
-#include <BALL/common.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/residue.h>
-#include <BALL/KERNEL/protein.h>
-#include <BALL/KERNEL/chain.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/FORMAT/HINFile.h>
-#include <BALL/STRUCTURE/peptides.h>
 #include <math.h>
-#include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
-#include <BALL/MATHS/matrix44.h> 
-#include <BALL/MATHS/vector3.h> 
-#include <BALL/MATHS/angle.h>     
 
 namespace BALL
 {
