@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.22 2000/03/01 21:25:23 oliver Exp $
+// $Id: vector3.h,v 1.23 2000/03/02 22:53:36 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -499,17 +499,19 @@ namespace BALL
 
 		private:
 
-		TAngle<T> getAngle_(const T& x, const T& y) const
+		TAngle<T> getAngle_(const T& a, const T& b) const
 		{
 			TAngle<T> angle;
 	
-			if (Maths::isNotZero(x)){
-				angle = atan(y / x);
+			if (Maths::isNotZero(x))
+			{
+				angle = atan(b / a);
 			} else {
-				angle = BALL_SGN(y) * Constants::PI / 2;
+				angle = BALL_SGN(b) * Constants::PI / 2;
 			}
 
-			if (Maths::isLess(x, 0)) {
+			if (Maths::isLess(a, 0)) 
+			{
 				angle += Constants::PI;
 			}
 
@@ -984,7 +986,7 @@ namespace BALL
 		BALL_DUMP_HEADER(s, this, this);
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  (x =  " << x << ", y = " << y << ", z = " << z << ")" << endl;
+		s << "  (x =  " << x << ", y = " << y << ", z = " << z << ")" << std::endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
