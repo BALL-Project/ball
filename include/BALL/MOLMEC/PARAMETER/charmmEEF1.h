@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.h,v 1.8 2001/03/02 22:10:27 amoll Exp $
+// $Id: charmmEEF1.h,v 1.9 2001/09/25 11:43:47 anker Exp $
 // Molecular Mechanics Parameter: class describing parameters needed 
 // for the EEF1 solvation component in the CHARMM force field
  
@@ -26,24 +26,33 @@ namespace BALL
 	{
 		public:
 
-		/**	
+		/**	BAUSTELLE
 		*/
 		struct Values 
 		{
+			/// BAUSTELLE
 			float V;
+			/// BAUSTELLE
 			float dG_ref;
+			/// BAUSTELLE
 			float dG_free;
+			/// BAUSTELLE
 			float r_min;
+			/// BAUSTELLE
 			float sig_w;
+			/// BAUSTELLE
 			float dH_ref;
+			/// BAUSTELLE
 			float Cp_ref;
 		};
 
-		/**
+		/** BAUSTELLE
 		*/
 		struct Data
 		{
+			/// BAUSTELLE
 			Atom*		atom;
+			/// BAUSTELLE
 			Values	values;
 		};
 
@@ -72,13 +81,15 @@ namespace BALL
 
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section_name from ini_file,
-				interprets (if given) a format line, reads the data from this section according to 
-				the format, and builds some datastructures for fast and easy acces this data.
+				interprets (if given) a format line, reads the data from this
+				section according to the format, and builds some datastructures for
+				fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, 
 				const String& section_name) throw();
 
-		///
+		/** BAUSTELLE
+		*/
 		virtual bool extractSection(Parameters& parameters, 
 				const String& section_name) throw();
 
@@ -118,22 +129,31 @@ namespace BALL
 
 		protected:
 
+		//_ BAUSTELLE
 		Size					number_of_atom_types_;
 
+		//_ BAUSTELLE
 		float*				V_;
 		
+		//_ BAUSTELLE
 		float*				dG_ref_;
 		
+		//_ BAUSTELLE
 		float*				dG_free_;
 
+		//_ BAUSTELLE
 		float*				dH_ref_;
 
+		//_ BAUSTELLE
 		float*				Cp_ref_;
 
+		//_ BAUSTELLE
 		float*				sig_w_;
 
+		//_ BAUSTELLE
 		float*				R_min_;
 		
+		//_ BAUSTELLE
 		bool*					is_defined_;
 	};
 
