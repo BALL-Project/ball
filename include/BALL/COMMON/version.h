@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.18 2003/03/14 11:48:44 sturm Exp $
+// $Id: version.h,v 1.19 2003/03/26 13:08:12 sturm Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -17,9 +17,6 @@
 
 namespace BALL
 {
-	/**  \addtogroup  Common
-	 *  @{
-	 */
 
 	/**	Version information class.
 			The BALL release, release data and related version
@@ -32,7 +29,7 @@ namespace BALL
 			The VersionInfo class contains only static methods
 			that can be used to retrieve the desired information.
 			 \par
-			
+	\ingroup Common		
 	*/
 	class VersionInfo
 	{
@@ -76,7 +73,7 @@ namespace BALL
 		static const char* RELEASE_DATE_AND_TIME;
 	  static const char* RELEASE_WHAT_STRING;
 	};
-	/** @} */
+	
 }
 
 #endif // BALL_COMMON_VERSION_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeDescriptor.h,v 1.16 2003/03/14 11:50:13 sturm Exp $
+// $Id: compositeDescriptor.h,v 1.17 2003/03/26 13:08:52 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -46,9 +46,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiKernelComposite
-     *  @{
-     */
 		/** CompositeDescriptor class.
 				The class CompositeDescriptor is responsible for maintaining
 				the graphical representation stored in  \link GLEntityDescriptor GLEntityDescriptor \endlink  objects of 
@@ -71,6 +68,7 @@ namespace BALL
 				deleted as well because all attributs are no longer available. This mechanism
 				will work automatically.  \par
 				<b>Defintion:</b> BALL/VIEW/GUI/KERNEL/compositeDescriptor.h
+		\ingroup ViewGuiKernelComposite
 		*/
 		class CompositeDescriptor
 		{
@@ -543,7 +541,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/compositeDescriptor.iC>
 #		endif 
-    /** @} */
+    
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peak.h,v 1.15 2003/03/14 11:49:48 sturm Exp $
+// $Id: peak.h,v 1.16 2003/03/26 13:08:18 sturm Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -22,16 +22,13 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Spectra
-     *  @{
-     */	
 	class Atom;
 
 	/**	Generic Peak Class.
 			Each peak contains a pointer to an associated atom 
 			(in the case of NMR: the atom that causes this peak).	
 			 \par
-			
+			\ingroup Spectra		
 	*/
 	template <typename PositionType>
 	class Peak
@@ -259,6 +256,7 @@ namespace BALL
 	}
 
 	/**	@name	Convenience typedefs
+		\ingroup Spectra	
 	*/
 	//@{
 	typedef Peak<float>		Peak1D;
@@ -266,7 +264,7 @@ namespace BALL
 	typedef Peak<Vector3>	Peak3D;
 	//@}
 
-  /** @} */
+  
 } // namespace BALL
 
 #endif // BALL_NMR_PEAK_H

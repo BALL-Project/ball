@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpRDFIntegrator.h,v 1.19 2003/03/14 11:49:53 sturm Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.20 2003/03/26 13:08:27 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -24,16 +24,13 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Solvation
-     *  @{
-     */
 	/** 6-exp pair potential integrator.
 			This class provides a tool for calculating the integral part of the
 			van-der-Waals interaction energies. The difference to the values
 			calculated with the standard interaction energy processor is the
 			inclusion of a radial distribution function  \link RadialDistributionFunction RadialDistributionFunction \endlink  
 			into the computaion.  \par
-			
+		\ingroup Solvation	
 	 */
 
 	class PairExpRDFIntegrator
@@ -292,7 +289,7 @@ namespace BALL
 		double unproject(double x) const throw();
 
 	};
-   /** @} */
+   
 } // namespace BALL
 
 #endif //  BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H

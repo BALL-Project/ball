@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ooiEnergy.h,v 1.9 2003/03/14 11:49:52 sturm Exp $
+// $Id: ooiEnergy.h,v 1.10 2003/03/26 13:08:26 sturm Exp $
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
 #define BALL_SOLVATION_OOIENERGY_H
@@ -16,9 +16,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Solvation
-     *  @{
-     */
 	class AtomContainer;
 
 	/** Calculate the solvation energy after OOI et al. 
@@ -27,10 +24,10 @@ namespace BALL
 			Unparametrized atoms are simply ignored, this leads to unreasonable values.  \par
 			<b>Files:</b> \par
  types are taken from <tt>solvation/Ooi.ini</tt> \par
-			
+	\ingroup Solvation	
 	*/ 
 	double calculateOoiEnergy(AtomContainer& atoms);
-   /** @} */	
+   	
 } // namespace BALL
 
 #endif

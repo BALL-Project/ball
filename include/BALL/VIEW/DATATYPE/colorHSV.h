@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.h,v 1.12 2003/03/14 11:50:08 sturm Exp $
+// $Id: colorHSV.h,v 1.13 2003/03/26 13:08:46 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
 #define BALL_VIEW_DATATYPE_COLORHSV_H
@@ -29,9 +29,7 @@ namespace BALL
 {
 	namespace VIEW 
 	{
-    /**  \addtogroup  ViewDatatypeColors
-     *  @{
-     */
+
 		class ColorRGBA;
 
 		/** ColorHSV class.
@@ -40,7 +38,7 @@ namespace BALL
 				 \link ColorUnit ColorUnit \endlink 's. The component hue is of class type  \link ColorUnitHue ColorUnitHue \endlink .
 				See description of these classes for further informations concerning type
 				conversions.  \par
-				
+			\ingroup ViewDatatypeColors	
 		*/
 		class ColorHSV
 		{
@@ -596,7 +594,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorHSV.iC>
 #		endif
-  /** @} */		
+  		
 	} // namespace VIEW
 
 } // namespace BALL

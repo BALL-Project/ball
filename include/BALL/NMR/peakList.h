@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peakList.h,v 1.13 2003/03/14 11:49:48 sturm Exp $
+// $Id: peakList.h,v 1.14 2003/03/26 13:08:18 sturm Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -20,12 +20,10 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Spectra
-     *  @{
-     */
+
 	/**	A generic peak list for spectra of arbitrary dimension.
 			 \par
-			
+	\ingroup Spectra		
 	*/
 	template <typename PT>
 	class PeakList
@@ -152,6 +150,7 @@ namespace BALL
 	};
 
 	/**	@name	Standard typedefs
+		\ingroup Spectra	
 	*/
 	//@{
 		
@@ -165,7 +164,7 @@ namespace BALL
 	typedef PeakList<Peak<Vector3> >		PeakList3D;
 	
 	//@}
-  /** @} */
+  
 } // namespace BALL
 
 #endif // BALL_NMR_PEAKLIST_H

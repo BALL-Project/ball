@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.h,v 1.10 2003/03/03 14:18:24 anhi Exp $
+// $Id: fileSystem.h,v 1.11 2003/03/26 13:08:44 sturm Exp $
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H
@@ -30,15 +30,13 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  System
-     *  @{
-     */
 	/**	File System Class
 			This class is a wrapper around some very basic properties
 			of the machine's file system properties.
 			The method ( \link canonizePath canonizePath \endlink ) is mainly used
 			by  \link File File \endlink  to obtain a unique and unambiguous representation
 			of a path.
+\ingroup System
 	*/
 	class FileSystem
 	{
@@ -108,7 +106,7 @@ namespace BALL
 		static void expandTilde_(String& path)
 			throw();
 	};
-  /** @} */
+  
 } // namespace BALL
 
 #endif // BALL_SYSTEM_FILESYSTEM_H

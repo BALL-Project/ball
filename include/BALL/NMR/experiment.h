@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: experiment.h,v 1.8 2003/03/14 11:49:47 sturm Exp $
+// $Id: experiment.h,v 1.9 2003/03/26 13:08:16 sturm Exp $
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H
@@ -20,9 +20,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Spectra
-     *  @{
-     */
 	/**	Class describing a certain type of NMR experiment.
 			This class (and its subclasses) are used to describe
 			how a list of peaks is derived from the shifts calculated
@@ -30,6 +27,7 @@ namespace BALL
 			 \par
 			
 			 \par
+	\ingroup Spectra
 	*/
 	template <typename PeakListType>
 	class Experiment
@@ -129,6 +127,7 @@ namespace BALL
 	}
 
 	/**	@name	Convenience typedefs
+	\ingroup Spectra
 	*/
 	//@{
 	/**	1D NMR experiment
@@ -152,6 +151,7 @@ namespace BALL
 			all atoms with an assigned shift value are added to 
 			the peak list. The default peak intensity and width
 			are user-defined ( \link setDefaultPeak setDefaultPeak \endlink ).
+	\ingroup Spectra
 	*/
 	class SimpleExperiment1D
 		:	public Experiment1D
@@ -207,7 +207,7 @@ namespace BALL
 		protected:
 		Expression expression_;
 	};
-  /** @} */
+  
 } //namespace BALL
 	 
 #endif // BALL_NMR_EXPERIMENT_H

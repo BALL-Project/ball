@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.12 2003/03/03 14:18:32 anhi Exp $
+// $Id: regularData1DWidget.h,v 1.13 2003/03/26 13:08:59 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
@@ -41,10 +41,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiWidgets
-     *  @{
-     */
 /**  New RegularData1D Message Classic.
+ \ingroup ViewGuiWidgets
  */
 class NewRegularData1DMessage: public CompositeMessage
 {
@@ -69,6 +67,7 @@ class NewRegularData1DMessage: public CompositeMessage
 
 
 /** Widget used to display one-dimensional data.
+ \ingroup ViewGuiWidgets
  */
 class RegularData1DWidget
   : public QScrollView,
@@ -175,6 +174,6 @@ class RegularData1DWidget
   RegularData1D* spec_;
 	
 };
-  /** @} */
+  
 } } // namespaces
 #endif // BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.12 2003/03/14 11:50:10 sturm Exp $
+// $Id: information.h,v 1.13 2003/03/26 13:08:49 sturm Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -53,9 +53,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewFunctors
-     *  @{
-     */		
 		/** Information class.
 				The class Information is a base class for information objects.
 				This class retrieves information concerning
@@ -69,6 +66,7 @@ namespace BALL
 				about the shown  \link Composite Composite \endlink  objects.  \par
 				
 				@see     Control
+		\ingroup ViewFunctors
 		*/
 		class Information: public Visitor<Composite>
 		{
@@ -244,7 +242,6 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/VIEW/FUNCTOR/information.iC>
 #			endif
-  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

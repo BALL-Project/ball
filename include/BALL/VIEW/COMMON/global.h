@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.13 2003/03/14 11:50:07 sturm Exp $
+// $Id: global.h,v 1.14 2003/03/26 13:08:45 sturm Exp $
 
 #ifndef BALL_VIEW_COMMON_GLOBAL_H
 #define BALL_VIEW_COMMON_GLOBAL_H
@@ -14,13 +14,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewCommon
-     *  @{
-     */
 		/**     @name Type aliases defined by VIEW
 						These predefined types are used in VIEW for portability and
 						comprehensibility.
-						
+		 \ingroup ViewCommon				
 		*/
 		//@{
 		
@@ -32,6 +29,7 @@ namespace BALL
 		//@}
 
 		/**			@name Constant definition
+		 \ingroup ViewCommon
 		*/	
 		//@{
 
@@ -44,6 +42,7 @@ namespace BALL
 		//@}
 
 		/**     @name Enums defined by VIEW
+		 \ingroup ViewCommon
 		*/
 		//@{
 
@@ -72,6 +71,7 @@ namespace BALL
 				This exception is thrown if {\em *this} scene is not inserted into a
 				 \link MainControl MainControl \endlink  object.
 				@see GeneralException
+		 \ingroup ViewCommon
 		*/
  		class MainControlMissing: public Exception::GeneralException
 		{
@@ -81,8 +81,7 @@ namespace BALL
 					: Exception::GeneralException(file, line, string("MainControlMissing"), data)
 				{
     		}
-		};
-  /** @} */    
+		};   
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.33 2003/03/14 11:50:04 sturm Exp $
+// $Id: surfaceProcessor.h,v 1.34 2003/03/26 13:08:41 sturm Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -18,11 +18,9 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Surface
-     *  @{
-     */
+
 	/** SurfaceProcessor.
-			
+	\ingroup Surface			
 	*/
 	class SurfaceProcessor
 		:	public UnaryProcessor<Atom>,
@@ -106,5 +104,5 @@ namespace BALL
 		//_
 		double													probe_radius_;
 	};
-   /** @} */
+   
 }

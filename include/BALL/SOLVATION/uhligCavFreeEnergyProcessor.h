@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.15 2003/03/14 11:49:55 sturm Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.16 2003/03/26 13:08:29 sturm Exp $
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
@@ -20,14 +20,11 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Solvation
-     *  @{
-     */
 	/** Processor for the computation of the cavitation free energy. 
 			This processor is using the method proposed by Simonson/Bruenger, J.
 			Phys. Chem. 98:4683--4694, 1994 which is based on Uhlig, J. Phys. Chem.
 			41(9):1215--1225, 1937.  \par
-			
+	\ingroup Solvation		
 	 */
 	class UhligCavFreeEnergyProcessor
 		:	public EnergyProcessor
@@ -185,7 +182,7 @@ namespace BALL
 		void setDefaultOptions() throw();
 
 	};
-   /** @} */
+   
 }
 
 #endif // BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H

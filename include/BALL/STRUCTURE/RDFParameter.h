@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFParameter.h,v 1.14 2003/03/14 11:49:56 sturm Exp $
+// $Id: RDFParameter.h,v 1.15 2003/03/26 13:08:30 sturm Exp $
 
 #ifndef BALL_STRUCTURE_RDFPARAMETER_H
 #define BALL_STRUCTURE_RDFPARAMETER_H
@@ -24,12 +24,9 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  RDF
-     *  @{
-     */
 	/** Parametersection for radial distribution function
 		?????
-		
+	\ingroup RDF
 	 */
 	
 	class RDFParameter
@@ -151,6 +148,6 @@ namespace BALL
 
 
 	};
-   /** @} */
+   
 } // namespace BALL
 #endif // BALL__RDFPARAMETER_H

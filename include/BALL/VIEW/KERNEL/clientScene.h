@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clientScene.h,v 1.11 2003/03/03 14:18:33 anhi Exp $
+// $Id: clientScene.h,v 1.12 2003/03/26 13:09:01 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
 #define BALL_VIEW_KERNEL_CLIENTSCENE_H
@@ -34,11 +34,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewKernelClient
-     *  @{
-     */
-     
-		/**	
+    
+		/**	ClientScene
+		\ingroup ViewKernelClient				 
 		*/
 		class ClientScene
 		{
@@ -137,7 +135,7 @@ namespace BALL
 			SceneHandle scenehandle_;
 			TextPersistenceManager pm_;
 		};
-  /** @} */	
+  	
 	} // namespace VIEW
 	
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.15 2003/03/14 11:49:52 sturm Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.16 2003/03/26 13:08:25 sturm Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -20,16 +20,13 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Solvation
-     *  @{
-     */
 	/** Processor for the computation of the cavitation free energy. 
 			This processor is using the SPT theory approach implemented in the PCM
 			model. It is based on Pierotti, Chem. Rev. 76(6):717--726, 1976 and the
 			modification for non-spherical solutes by Huron/Claverie, J. Phys.
 			Chem. 76(15):2123-2133, 1972.	 \par
 			The energy value is returned in units of kJ/mol.  \par
-			
+			\ingroup Solvation
 	 */
 	class PCMCavFreeEnergyProcessor
 		:	public EnergyProcessor
@@ -169,7 +166,7 @@ namespace BALL
 		//@}
 
 	};
-   /** @} */
+   
 }
 
 #endif // BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H

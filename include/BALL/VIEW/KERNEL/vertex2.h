@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.13 2003/03/14 11:50:24 sturm Exp $
+// $Id: vertex2.h,v 1.14 2003/03/26 13:09:04 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
 #define BALL_VIEW_KERNEL_VERTEX2_H
@@ -20,9 +20,6 @@ namespace BALL
 	
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewKernelGeometricPrimitives
-     *  @{
-     */
 		/** Vertex2 class.
 				The class Vertex2 is used as a base class for all geometric objects that
 				have two vertices. It provides the derived class with methods for accessing
@@ -31,7 +28,7 @@ namespace BALL
 				changes the values of the vectors of {\em *this} vertex2 changes 
 				as well. To avoid segmentation faults these vector addresses must be 
 				valid as long as {\em *this} vertex2 exists.  \par
-				
+		\ingroup ViewKernelGeometricPrimitives				
 		*/
 		class Vertex2
 		{
@@ -536,7 +533,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/vertex2.iC>
 #		endif
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

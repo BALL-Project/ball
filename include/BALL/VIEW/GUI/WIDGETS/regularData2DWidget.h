@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.22 2003/03/03 14:18:32 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.23 2003/03/26 13:08:59 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -62,10 +62,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiWidgets
-     *  @{
-     */
 /** New RegularData2D Message Class.
+\ingroup ViewGuiWidgets
  */
 class NewRegularData2DMessage
 	: public CompositeMessage
@@ -91,8 +89,9 @@ class NewRegularData2DMessage
 	
 };
 
-
-/// RegularData2DWidget.
+/** RegularData2DWidget.
+\ingroup ViewGuiWidgets
+ */
 class RegularData2DWidget 
 	: public QScrollView,
     public ModularWidget
@@ -332,7 +331,7 @@ class RegularData2DWidget
   bool isOverlay_;
 	
 };
-  /** @} */
+  
 } } // namespaces
 
 #endif

@@ -17,16 +17,13 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiWidgets
-     *  @{
-     */
 		/** MainControlPreferences class.
 				The class MainControlPreferences is a widget that will be inserted into the
 				tab dialog  \link Preferences Preferences \endlink . It contains the style preferences 
 				of the  \link MainControl MainControl \endlink .
 				{\em *this} mainControlPreferences will be created in the  \link MainControl MainControl \endlink 
 				object and will be inserted into the  \link Preferences Preferences \endlink  dialog.
-				
+		\ingroup ViewGuiWidgets		
 		*/
 		class MainControlPreferences : public QWidget
 		{
@@ -110,7 +107,7 @@ namespace BALL
 			QRadioButton *is_motif_style;
 			QRadioButton *is_cde_style;
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.h,v 1.13 2003/03/14 11:49:47 sturm Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.14 2003/03/26 13:08:17 sturm Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -18,12 +18,9 @@
 #include <list>
 
 namespace BALL 
-{
-    /**  \addtogroup  ShiftModulesNMR
-     *  @{
-     */				
+{				
 	/**	Shift assignment processor implementing Haigh Mallion theory. 
-			
+		\ingroup ShiftModulesNMR	
 	*/
 	class HaighMallionShiftProcessor
 		:	public ShiftModule
@@ -108,6 +105,6 @@ namespace BALL
 		static const float little_loop_radius_;
 		static const float B_;
 	};
-  /** @} */
+  
 } // namespace BALL
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.31 2003/03/14 11:50:14 sturm Exp $
+// $Id: mainControl.h,v 1.32 2003/03/26 13:08:54 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -63,9 +63,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiKernelComposite
-     *  @{
-     */
 		class ModularWidget;
 
 		/**	MainControl class.
@@ -92,7 +89,7 @@ namespace BALL
 				It handles also the general preferences tab  \link Preferences Preferences \endlink  of the main
 				application and notifies all
 				registered  \link ModularWidget ModularWidget \endlink  objects if the preferences has changed.
-				
+		\ingroup ViewGuiKernelComposite		
 		*/
 		class MainControl
 			: public QMainWindow,
@@ -917,7 +914,7 @@ namespace BALL
 #ifndef BALL_NO_INLINE_FUNCTIONS
 #	include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
 #endif 
-    /** @} */
+    
 		} // namespace VIEW
 
 	} // namespace BALL

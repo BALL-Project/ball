@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glmesh.h,v 1.14 2003/03/14 11:50:16 sturm Exp $
+// $Id: glmesh.h,v 1.15 2003/03/26 13:08:55 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLMESH_H
 #define BALL_VIEW_GUI_PRIMITIV_GLMESH_H
@@ -22,9 +22,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiPrimitives
-     *  @{
-     */
 		/** GLMesh class.
 				An instance of GLMesh represents an instance of the geometric visualization "mesh".
 				The class GLMesh is derived from the classes  \link Mesh Mesh \endlink  and
@@ -33,7 +30,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				mesh. OpenGL code is used for the visualization.
 				See these classes for further information.
-				
+		\ingroup ViewGuiPrimitives		
 		*/
 		class GLMesh
 			: public Mesh,
@@ -194,7 +191,7 @@ namespace BALL
 
 			//@}
 		};
-  /** @} */
+  
 	} // namespace VIEW
 } // namespace BALL
 

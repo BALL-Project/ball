@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.17 2003/03/14 11:48:43 sturm Exp $
+// $Id: global.h,v 1.18 2003/03/26 13:08:11 sturm Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -34,10 +34,6 @@
 
 namespace BALL
 {
-	 
-	/**  \addtogroup  Common
-	 *	@{
-	 */
 	typedef int (*ComparatorType)(const void *, const void *);
 
 
@@ -46,6 +42,7 @@ namespace BALL
 			These predefined types are used in BALL for portability and
 			comprehensibility.
 			
+	\ingroup Common
 	*/
 	//@{
 
@@ -235,7 +232,7 @@ namespace BALL
 	static const Size SIZE_MIN = 0;
 	static const Size SIZE_MAX = INT_MAX - 1;
 	
-	/** @} */
+	
 }
 
 #endif // BALL_COMMON_GLOBAL_H

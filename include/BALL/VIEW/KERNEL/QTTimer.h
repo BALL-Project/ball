@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.h,v 1.16 2003/03/14 11:50:20 sturm Exp $
+// $Id: QTTimer.h,v 1.17 2003/03/26 13:09:00 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #define BALL_VIEW_KERNEL_QTTIMER_H
@@ -19,9 +19,6 @@ namespace BALL
 	
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewKernelClient
-     *  @{
-     */
 		/** QTTimer class.		
 				The QTTimer class is a timer class that is useful to have a job repeated
 				unhindered by other jobs that are already processing.
@@ -34,7 +31,7 @@ namespace BALL
 				{\em timer} method.
 				The class is derived from the  \link QObject QObject \endlink  class from the QT library. 
 				Therefore it will only function within a qt application.
-				
+		\ingroup ViewKernelClient				 		
 		*/
 		class QTTimer: public QObject
 		{
@@ -284,7 +281,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/QTTimer.iC>
 #		endif
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

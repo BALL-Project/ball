@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.46 2003/03/14 11:50:06 sturm Exp $
+// $Id: file.h,v 1.47 2003/03/26 13:08:44 sturm Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -63,9 +63,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  System
-     *  @{
-     */
 	/**	This class handles automatic file transformation methods.
 		   \link File File \endlink  provides the ability to transform files on the fly using predefined 
 			transformation commands  (e.g. unix-style filters). For example, compressed 
@@ -79,6 +76,7 @@ namespace BALL
 			User-defined transformation may be defined at any time using the 
 			 \link registerTransformation registerTransformation \endlink  method of the static instance of  \link TransformationManager TransformationManager \endlink 
 			accessible through  \link File::getTransformationManager File::getTransformationManager \endlink .
+	\ingroup System
 	*/
 	class TransformationManager
 	{	
@@ -136,7 +134,7 @@ namespace BALL
 	};
 		
 	/**	File Class.	
-			
+	\ingroup System		
 	*/
 	class File
 		: public std::fstream
@@ -638,7 +636,7 @@ namespace BALL
 			<b>Caveat:</b> This concept relies on the C++ memory layout and thus 
 			is highly non-portable!
 			 \par
-			
+	\ingroup System		
 	*/
 	template <typename T>
 	class BinaryFileAdaptor
@@ -765,7 +763,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/SYSTEM/file.iC>
 #	endif
-  /** @} */
+  
 } // namespace BALL
 
 #endif // BALL_SYSTEM_FILE_H

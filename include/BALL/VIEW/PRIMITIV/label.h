@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.15 2003/03/14 11:50:24 sturm Exp $
+// $Id: label.h,v 1.16 2003/03/26 13:09:04 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
 #define BALL_VIEW_PRIMITIV_LABEL_H
@@ -30,9 +30,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-        /**  \addtogroup  ViewPrimitives
-         *  @{
-         */
 
 		/** Label class.
 				An instance of Label represents an instance of the geometric representation "label".
@@ -48,7 +45,7 @@ namespace BALL
 				The class Label is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
 				and  \link Vertex Vertex \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				
+		\ingroup ViewPrimitives		
 		*/
 		class Label
 			: public GeometricObject,
@@ -274,7 +271,7 @@ namespace BALL
 #			include <BALL/VIEW/PRIMITIV/label.iC>
 #		endif
 
-  /** @} */
+  
 		
 	} // namespace VIEW
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModule.h,v 1.15 2003/03/14 11:49:49 sturm Exp $
+// $Id: shiftModule.h,v 1.16 2003/03/26 13:08:19 sturm Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -28,9 +28,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  ShiftModel
-     *  @{
-     */
 	/**	A single contribution of a NMR shift model.
 			NMR shift models typically consist of a number of different 
 			contributions (e.g. ring current, ansisotopy, etc.). Each of these
@@ -42,7 +39,7 @@ namespace BALL
 			Applying the same processor multiply will give incorrect results, as the ShiftModules
 			\emph{add} their shift contribution. Before applying a ShiftModule, these
 			properties can be reset to zero by applying a  \link ClearShiftProcessor ClearShiftProcessor \endlink .  \par
-			
+	\ingroup ShiftModel
 	*/
 	class ShiftModule 
 		: public UnaryProcessor<Composite>
@@ -193,7 +190,7 @@ namespace BALL
 		*/
 		bool valid_;
 	};
-  /** @} */
+  
 } // namespace BALL
 
 #endif // BALL_NMR_SHIFTMODULE_H

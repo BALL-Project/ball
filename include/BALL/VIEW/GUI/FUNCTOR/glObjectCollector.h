@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glObjectCollector.h,v 1.12 2003/03/03 14:18:27 anhi Exp $
+// $Id: glObjectCollector.h,v 1.13 2003/03/26 13:08:51 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
 #define BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
@@ -18,9 +18,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiFunctors
-     *  @{
-     */
 		/** GLObjectCollector class.
 				The class GLObjectCollector is responsible for collecting the  \link GLObject GLObject \endlink 
 				objects that are found in a  \link Composite Composite \endlink  tree for the later processing
@@ -30,6 +27,7 @@ namespace BALL
 				This class will be used internally from the  \link CompositeDescriptor CompositeDescriptor \endlink  class
 				to collect {\em *this} objects.  \par
 				<b>Defintion:</b> BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h
+		\ingroup ViewGuiFunctors
 		*/
 		class GLObjectCollector
 			: public UnaryProcessor<Composite>
@@ -508,7 +506,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/FUNCTOR/glObjectCollector.iC>
 #		endif
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

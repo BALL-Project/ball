@@ -38,9 +38,6 @@ namespace BALL
 	
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewKernelLogView
-     *  @{
-     */
 		/** LogView class.
 				The class LogView records all messages sent to the  \link Log Log \endlink  object and
 				displays them as a text history. The class is derived from 
@@ -50,7 +47,7 @@ namespace BALL
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widgets of your application and it will
 				record and show all messages sent to the  \link Log Log \endlink  object.
-				
+		\ingroup ViewKernelLogView		
 		*/
 		class LogView
 			: public NotificationTarget<LogStreamNotifier>,
@@ -129,7 +126,7 @@ namespace BALL
 
 			std::stringstream strstream_;
 		};
-  /** @} */	
+  	
 	}// namespace VIEW
 		
 }// namespace BALL

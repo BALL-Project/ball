@@ -1,14 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: create.h,v 1.8 2003/03/03 14:17:31 anhi Exp $
+// $Id: create.h,v 1.9 2003/03/26 13:08:10 sturm Exp $
 
 #ifndef BALL_COMMON_CREATE_H
 #define BALL_COMMON_CREATE_H
 
-/**	@name	Dynamic Creation and Virtual Construction of Objects
-* 	 \addtogroup  Common
-*/
 //@{
 
 /**	Virtual construction macro.
@@ -25,6 +22,7 @@
 		a new instance of <tt>name</tt>.
 		
 		@param	name the class name
+  \ingroup Common
 */
 #define BALL_CREATE_DEEP(name)\
 \

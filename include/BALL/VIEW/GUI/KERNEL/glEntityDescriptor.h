@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glEntityDescriptor.h,v 1.17 2003/03/14 11:50:13 sturm Exp $
+// $Id: glEntityDescriptor.h,v 1.18 2003/03/26 13:08:52 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
@@ -14,9 +14,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiKernelComposite
-     *  @{
-     */
 		/** GLEntityDescriptor class.
 				The class GLEntityDescriptor is a container for  \link GLDisplayList GLDisplayList \endlink 's.
 				A graphical representation of an object contains different graphical
@@ -57,7 +54,7 @@ namespace BALL
 								 of other objects.
 				
 				This class is used internally by the  \link CompositeDescriptor CompositeDescriptor \endlink  class.  \par
-				
+			\ingroup ViewGuiKernelComposite	
 		*/
 		class GLEntityDescriptor
 		{
@@ -364,7 +361,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/glEntityDescriptor.iC>
 #		endif 
-    /** @} */
+    
 	} // namespace VIEW
 } // namespace BALL
 

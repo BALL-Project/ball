@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.17 2003/03/14 11:50:25 sturm Exp $
+// $Id: mesh.h,v 1.18 2003/03/26 13:09:05 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -30,12 +30,7 @@ namespace BALL
 {
 	
 	namespace VIEW
-	{
-        /**  \addtogroup  ViewPrimitives
-         *  @{
-         */
-         
-         
+	{           
 		/** Mesh class.			
 				An instance of Mesh represents an instance of the geometric representation "mesh".
 				A mesh has the following properties. 
@@ -46,7 +41,7 @@ namespace BALL
 				and  \link Surface Surface \endlink . The data structures defining the mesh are implemented in
 				the class  \link Surface Surface \endlink . Therefore one can use {\em *this} mesh in the
 				same fashion as  \link Surface Surface \endlink .  \par
-				
+		\ingroup ViewPrimitives		
 		*/
 		class Mesh
 			: public GeometricObject,
@@ -231,7 +226,7 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.17 2003/03/14 11:50:15 sturm Exp $
+// $Id: server.h,v 1.18 2003/03/26 13:08:54 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -52,9 +52,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiKernelServer
-     *  @{
-     */
 		/** Server class.
 				The class Server handles all incoming  \link PersistentObject PersistentObject \endlink  objects,
 				converts them into  \link Composite Composite \endlink  objects (if possible) and sents
@@ -65,7 +62,7 @@ namespace BALL
 				 \link RemovedCompositeMessage RemovedCompositeMessage \endlink  will be sent through the  \link ConnectionObject ConnectionObject \endlink 
 				tree and after that the the message  \link NewCompositeMessage NewCompositeMessage \endlink  with the new
 				received composite will be sent.
-				
+		\ingroup ViewGuiKernelServer	
 		*/
 		class Server
 			: public QTTimer,
@@ -399,7 +396,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/server.iC>
 #		endif
-  /** @} */
+  
 	}// namespace VIEW
 		
 }// namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.17 2003/03/14 11:50:25 sturm Exp $
+// $Id: point.h,v 1.18 2003/03/26 13:09:05 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H
@@ -32,9 +32,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-        /**  \addtogroup  ViewPrimitives
-         *  @{
-         */
     
 		/** Point class.
 				An instance of Point represents an instance of the geometric representation "point".
@@ -46,7 +43,7 @@ namespace BALL
 				The class Point is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
 				and  \link Vertex Vertex \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				
+			\ingroup ViewPrimitives	
 		*/
 		class Point
 			: public GeometricObject,
@@ -230,7 +227,7 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

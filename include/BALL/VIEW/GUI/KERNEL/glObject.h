@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glObject.h,v 1.15 2003/03/14 11:50:13 sturm Exp $
+// $Id: glObject.h,v 1.16 2003/03/26 13:08:53 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLOBJECT_H
@@ -14,9 +14,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-	    /**  \addtogroup  ViewGuiKernelOpenGL
-     *  @{
-     */
 		class CompositeDescriptor;
 		
 		/** GLObject class.
@@ -28,6 +25,7 @@ namespace BALL
 				The class glObject has access to the class glPrimitiveManager that holds a number
 				of primitives in variable resolutions. See  \link GLPrimitiveManager GLPrimitiveManager \endlink  for further
 				information concerning available primitives.
+		\ingroup ViewGuiKernelOpenGL
 		*/
 		class GLObject
 		{
@@ -239,7 +237,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/glObject.iC>
 #		endif
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

@@ -18,9 +18,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiWidgets
-     *  @{
-     */
 		/** ServerPreferences class.
 				The class ServerPreferences is a widget that will be inserted into the
 				tab dialog  \link Preferences Preferences \endlink . It contains the preferences 
@@ -29,7 +26,7 @@ namespace BALL
 				{\em *this} serverPreferences will be created by the  \link Server Server \endlink 
 				object in the  \link Server::initializePreferencesTab Server::initializePreferencesTab \endlink  and will be inserted
 				into the  \link Preferences Preferences \endlink  dialog by the  \link MainControl MainControl \endlink .
-				
+		\ingroup ViewGuiWidgets		
 		*/
 		class ServerPreferences : public QWidget
 		{
@@ -151,7 +148,7 @@ namespace BALL
 			QLineEdit *port_;
 			QCheckBox *server_status_;
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricCollector.h,v 1.12 2003/03/14 11:50:10 sturm Exp $
+// $Id: geometricCollector.h,v 1.13 2003/03/26 13:08:48 sturm Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
 #define BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
@@ -21,10 +21,7 @@
 namespace BALL
 {
 	namespace VIEW
-	{
-    /**  \addtogroup  ViewFunctors
-     *  @{
-     */		
+	{	
 		/** GeometricCollector class.
 				The class GeometricCollector is a  \link Processor Processor \endlink  that collects
 				 \link GeometricObject GeometricObject \endlink  objects that can either be selected or
@@ -35,6 +32,7 @@ namespace BALL
 				
 				@see     GeometricObject
 				@see     Scene
+		\ingroup ViewFunctors
 		*/
 		class GeometricCollector: public UnaryProcessor<Composite>
 		{
@@ -190,7 +188,6 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/FUNCTOR/geometricCollector.iC>
 #		endif
-  /** @} */
 	} // namespace VIEW
 } // namespace BALL
 

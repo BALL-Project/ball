@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.14 2003/03/14 11:49:54 sturm Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.15 2003/03/26 13:08:28 sturm Exp $
 
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
@@ -19,17 +19,14 @@
 #endif
 
 namespace BALL
-{
-    /**  \addtogroup  Solvation
-     *  @{
-     */  
+{ 
 	/** Processor for the computation of the cavitation free energy. 
 			This processor is using the SPT theory approach by Pierotti,
 			Chem. Rev. 76(6):717--726, 1976 with the modification for
 			non-spherical solutes by Huron/Claverie, J. Phys. Chem.
 			76(15):2123-2133, 1972.	 \par
 			Energy returned in units of kJ/mol.	 \par
-			
+		\ingroup Solvation	
 	 */
 	class PierottiCavFreeEnergyProcessor
 		:	public EnergyProcessor
@@ -188,7 +185,7 @@ namespace BALL
 		void setDefaultOptions() throw();
 
 	};
-   /** @} */
+   
 }
 
 #endif // BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.h,v 1.12 2003/03/03 14:18:24 anhi Exp $
+// $Id: timer.h,v 1.13 2003/03/26 13:08:45 sturm Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -23,10 +23,8 @@
 
 namespace BALL
 {
-    /**  \addtogroup  System
-     *  @{
-     */
 	/**	Timer Class
+	\ingroup System
 	*/
 	class Timer
 	{
@@ -240,7 +238,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include "timer.iC"
 #	endif
-  /** @} */
+  
 }
 
 #endif // BALL_SYSTEM_TIMER_H

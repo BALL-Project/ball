@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBondList.h,v 1.7 2003/03/03 14:18:13 anhi Exp $
+// $Id: pyBondList.h,v 1.8 2003/03/26 13:08:21 sturm Exp $
 
 #ifndef BALL_PYTHON_PYBONDLIST_H
 #define BALL_PYTHON_PYBONDLIST_H
@@ -106,7 +106,7 @@ namespace BALL
 		void set(const Atom& atom);
 		//@}
 	};
-   /** @} */
+   
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYBONDLIST_H

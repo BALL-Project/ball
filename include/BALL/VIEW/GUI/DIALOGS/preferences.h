@@ -18,9 +18,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiDialogs
-     *  @{
-     */
 		/** Preferences class.
 				The class Preferences is a tab dialog for other preference dialogs to be
 				inserted. An interface for adding and removing other tab dialogs is
@@ -28,7 +25,7 @@ namespace BALL
 				 \link MainControl MainControl \endlink . The  \link MainControl MainControl \endlink  will add other tab dialogs of
 				 \link ModularWidget ModularWidget \endlink  objects to {\em *this} preferences dialog if those
 				other  \link ModularWidget ModularWidget \endlink  objects have preferences tab dialogs.  \par
-				
+		\ingroup ViewGuiDialogs		
 		*/
 		class Preferences 
 			: public QTabDialog
@@ -151,7 +148,7 @@ namespace BALL
 
 			int number_of_tabs_;
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

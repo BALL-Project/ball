@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.18 2003/03/14 11:50:26 sturm Exp $
+// $Id: tube.h,v 1.19 2003/03/26 13:09:06 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -26,9 +26,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-        /**  \addtogroup  ViewPrimitives
-         *  @{
-         */
          
 		/** Tube class.				
 				An instance of Tube represents an instance of the geometric representation "tube".
@@ -43,7 +40,7 @@ namespace BALL
 				 \link Radius Radius \endlink  and  \link Vertex2 Vertex2 \endlink . 
 				See these classes for further information concerning
 				interface and additional methods.  \par
-				
+		\ingroup ViewPrimitives		
 		*/
 		class Tube
 			: public GeometricObject,
@@ -280,7 +277,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/PRIMITIV/tube.iC>
 #	endif
-  /** @} */		
+  		
 	} // namespace VIEW
 	 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glpoint.h,v 1.15 2003/03/14 11:50:17 sturm Exp $
+// $Id: glpoint.h,v 1.16 2003/03/26 13:08:56 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
 #define BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
@@ -24,9 +24,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiPrimitives
-     *  @{
-     */
 		/** GLPoint class.				
 				An instance of GLPoint represents an instance of the geometric
 				visualization "point".
@@ -36,7 +33,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				point. OpenGL code is used for the visualization.
 				See these classes for further information.
-				
+		\ingroup ViewGuiPrimitives		
 		*/
 		class GLPoint
 			: public Point,
@@ -196,7 +193,7 @@ namespace BALL
 				throw();
 			//@}
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

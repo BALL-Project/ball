@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.13 2003/03/14 11:50:13 sturm Exp $
+// $Id: glDisplayList.h,v 1.14 2003/03/26 13:08:52 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
@@ -16,9 +16,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiKernelComposite
-     *  @{
-     */
 		/** GLDisplayList class.
 				The class GLDisplayList is a container for graphical objects.
 				Graphical objects can be drawn directly to the screen or the can be
@@ -28,7 +25,7 @@ namespace BALL
 				It defines some useful methods for easy creation of a display list and
 				handles errors that can occur when using display lists. See the OpenGL
 				defintion of display lists for further information concerning display lists. \par
-				
+		\ingroup ViewGuiKernelComposite		
 		*/
 		class GLDisplayList
 		{
@@ -270,7 +267,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/glDisplayList.iC>
 #		endif
-    /** @} */
+    
 	} // namespace VIEW
 
 } // namespace BALL

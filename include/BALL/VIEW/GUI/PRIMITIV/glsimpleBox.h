@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glsimpleBox.h,v 1.14 2003/03/14 11:50:17 sturm Exp $
+// $Id: glsimpleBox.h,v 1.15 2003/03/26 13:08:56 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
@@ -24,9 +24,6 @@ namespace BALL
 	
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiPrimitives
-     *  @{
-     */
 		/** GLSimpleBox class.
 				An instance of GLSimpleBox represents an instance of the geometric
 				visualization "simpleBox".
@@ -36,7 +33,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				simpleBox. OpenGL code is used for the visualization.
 				See these classes for further information.
-				
+		\ingroup ViewGuiPrimitives		
 		*/
 		class GLSimpleBox
 			: public SimpleBox,
@@ -199,7 +196,7 @@ namespace BALL
 
 			//@}
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

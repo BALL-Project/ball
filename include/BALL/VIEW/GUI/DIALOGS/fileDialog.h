@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileDialog.h,v 1.14 2003/03/14 11:50:11 sturm Exp $
+// $Id: fileDialog.h,v 1.15 2003/03/26 13:08:50 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -16,9 +16,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiDialogs
-     *  @{
-     */
 		/** FileDialog class.
 				The class FileDialog is a base class for file dialogs. Its base classes are
 				 \link QFileDialog QFileDialog \endlink  (See QT documentation) and  \link ModularWidget ModularWidget \endlink .
@@ -26,7 +23,7 @@ namespace BALL
 				what should be done with the selected file. With the method  \link exec exec \endlink 
 				{\em *this} fileDialog can be opened. If a file was selected the path and the file
 				name can be accessed with the methods  \link getPathName getPathName \endlink  and  \link getFileName getFileName \endlink .  \par
-				
+			\ingroup ViewGuiDialogs	
 		*/
 		class FileDialog
 			: public QFileDialog,	public ModularWidget
@@ -138,7 +135,7 @@ namespace BALL
 #ifndef BALL_NO_INLINE_FUNCTIONS
 #	include <BALL/VIEW/GUI/DIALOGS/fileDialog.iC>
 #endif 
-  /** @} */
+  
 		} // namespace VIEW
 
 	} // namespace BALL

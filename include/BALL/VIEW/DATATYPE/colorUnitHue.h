@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.h,v 1.15 2003/03/14 11:50:09 sturm Exp $
+// $Id: colorUnitHue.h,v 1.16 2003/03/26 13:08:47 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
 #define BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -25,9 +25,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewDatatypeFormat
-     *  @{
-     */
 		/** ColorUnitHue class.
 				An instance of ColorUnitHue represents a value for the hue
 				component of the class  \link ColorHSV ColorHSV \endlink .
@@ -38,7 +35,7 @@ namespace BALL
 				ColorUnitHue provides certain conversion functions as well that will convert
 				its value to the needed type.
 				This class is used by the class  \link ColorHSV ColorHSV \endlink .  \par
-				
+		\ingroup ViewDatatypeFormat		
 		*/
 		class ColorUnitHue
 		{
@@ -750,7 +747,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorUnitHue.iC>
 #		endif
-  /** @} */
+  
 	} // namspace VIEW
 	
 } // namespace BALL

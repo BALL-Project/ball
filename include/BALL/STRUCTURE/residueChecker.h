@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.14 2003/03/14 11:50:02 sturm Exp $
+// $Id: residueChecker.h,v 1.15 2003/03/26 13:08:39 sturm Exp $
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
 #define BALL_STRUCTURE_RESIDUECHECKER_H
@@ -16,9 +16,6 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Structure
-     *  @{
-     */
 	/**	Residue Consistency Checker.
 			This processor checks residues for internal consistency.
 			It identifies missing or superfluous atoms, suspect bond lengths
@@ -26,7 +23,7 @@ namespace BALL
 			Atom positions are checked as well: a warning is printed, if any of the 
 			atom's coordinates is not a number (NaN).
 			Warnings are emitted to  \link Log Log \endlink .  \par
-			
+	\ingroup Structure		
 	*/
 	class ResidueChecker
 		:	public	UnaryProcessor<Residue>
@@ -116,7 +113,7 @@ namespace BALL
 		FragmentDB*	fragment_db_;
 		bool				status_;
 	}; 
-  /** @} */					
+  					
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_RESIDUE_CHECKER

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.41 2003/03/14 11:50:01 sturm Exp $
+// $Id: reducedSurface.h,v 1.42 2003/03/26 13:08:38 sturm Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -52,9 +52,6 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Surface
-     *  @{
-     */
 	class RSComputer;
 	class SolventExcludedSurface;
 	class SESComputer;
@@ -65,7 +62,7 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic ReducedSurface Class.
-			
+	\ingroup Structure		
 	*/
 	class ReducedSurface
 	{
@@ -380,7 +377,7 @@ namespace BALL
 
 
 	/** Generic RSComputer Class.
-			
+	\ingroup Structure		
 	*/
 	class RSComputer
 	{
@@ -879,7 +876,7 @@ namespace BALL
 	};
 
 
-   /** @} */
+   
 } // namespace BALL
 
 #endif  // BALL_STRUCTURE_REDUCEDSURFACE_H

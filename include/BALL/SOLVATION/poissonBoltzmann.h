@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.24 2003/03/14 11:49:54 sturm Exp $ 
+// $Id: poissonBoltzmann.h,v 1.25 2003/03/26 13:08:28 sturm Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -28,11 +28,8 @@ using std::vector;
 
 namespace BALL 
 {
-    /**  \addtogroup  Solvation
-     *  @{
-     */
 	/** Finite Difference Poisson Boltzmann Solver.
-			
+	\ingroup Solvation		
 	*/			
 	class FDPB 
 	{
@@ -943,7 +940,7 @@ namespace BALL
  
 		static const char* error_message_[];
 	};
-   /** @} */
+   
 } // namespace BALL 
 
 #endif 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.6 2003/03/03 14:18:20 anhi Exp $
+// $Id: molecularGraph.h,v 1.7 2003/03/26 13:08:35 sturm Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -22,9 +22,6 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Structure
-     *  @{
-     */
 	// forward declarations to resolve nasty dependencies
 	template <typename Node, typename Edge> 
 	class EdgeItem;
@@ -33,6 +30,7 @@ namespace BALL
 	class TMolecularGraph;
 
 	/**	The node type in a molecular graph
+		\ingroup Structure
 	*/
 	template <typename Node, typename Edge>
 	class NodeItem
@@ -84,6 +82,7 @@ namespace BALL
 		Atom* atom_;
 		std::list<EdgeItemType*> adjacent_edges_;
 	};
+
 
 	template <typename Node, typename Edge>
 	class EdgeItem
@@ -488,7 +487,7 @@ namespace BALL
 		return bond_to_edge_.size();
 	}
 
-  /** @} */
+  
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_MOLECULARGRAPH_H

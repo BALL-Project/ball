@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glline.h,v 1.13 2003/03/14 11:50:16 sturm Exp $
+// $Id: glline.h,v 1.14 2003/03/26 13:08:55 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLINE_H
@@ -24,9 +24,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiPrimitives
-     *  @{
-     */
 		/** GLLine class.
 				An instance of GLLine represents an instance of the geometric
 				visualization "line".
@@ -36,7 +33,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				line. OpenGL code is used for the visualization.
 				See these classes for further information.
-				
+		\ingroup ViewGuiPrimitives		
 		*/
 		class GLLine
 			: public Line,
@@ -197,7 +194,7 @@ namespace BALL
 
 			//@}
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

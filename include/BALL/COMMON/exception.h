@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.37 2003/03/14 11:48:43 sturm Exp $
+// $Id: exception.h,v 1.38 2003/03/26 13:08:11 sturm Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -22,9 +22,6 @@ namespace BALL
 
 	class String;
 
-	/**	Exception Handling
-	 * 	 \addtogroup  Common
-   */
 	//@{
 	namespace Exception 
 	{
@@ -53,6 +50,7 @@ namespace BALL
 				 \par
 				
 				 \par
+		\ingroup Common
 		*/
 		
 		class GeneralException 

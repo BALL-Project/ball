@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.12 2003/03/14 11:50:08 sturm Exp $
+// $Id: colorRGBA.h,v 1.13 2003/03/26 13:08:46 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -25,9 +25,6 @@ namespace BALL
 {
 	namespace VIEW 
 	{
-    /**  \addtogroup  ViewDatatypeColors
-     *  @{
-     */
 		// forward declarations 
 		class ColorHSV;
 
@@ -36,7 +33,7 @@ namespace BALL
 				red, green, blue and alpha. The components are  \link ColorUnit ColorUnit \endlink 's. This class
 				allows many types of input parameters. See description of this class for further
 				informations.  \par
-				
+		\ingroup ViewDatatypeColors		
 		*/
 		class ColorRGBA
 		{
@@ -595,7 +592,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorRGBA.iC>
 #		endif
-  /** @} */		
+  		
 	} // namespace VIEW
 
 } // namespace BALL

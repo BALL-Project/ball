@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptides.h,v 1.6 2003/03/03 14:18:20 anhi Exp $
+// $Id: peptides.h,v 1.7 2003/03/26 13:08:36 sturm Exp $
 
 #ifndef BALL_STRUCTURE_PEPTIDES_H
 #define BALL_STRUCTURE_PEPTIDES_H
@@ -19,10 +19,8 @@ namespace BALL
 
 	namespace Peptides
 	{
-    /**  \addtogroup  Structure
-     *  @{
-     */		
 		/**	@name	Type definitions
+		\ingroup Structure
 		*/
 		//@{
 
@@ -34,6 +32,7 @@ namespace BALL
 		//@}
 
 		/**	@name Amino acid sequence conversion
+		\ingroup Structure
 		*/
 		//@{
 
@@ -67,7 +66,7 @@ namespace BALL
 		*/
 		OneLetterAASequence GetSequence(const Protein& protein);
 		//@}
-	  /** @} */
+	  
 	}  // namespace Peptides
 
 } // namespace BALL

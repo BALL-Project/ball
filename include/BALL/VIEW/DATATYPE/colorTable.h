@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorTable.h,v 1.8 2003/03/03 14:18:25 anhi Exp $
+// $Id: colorTable.h,v 1.9 2003/03/26 13:08:47 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -26,11 +26,9 @@ namespace BALL
 
 	namespace VIEW 
 	{
-    /**  \addtogroup  ViewDatatypeColors
-     *  @{
-     */
 		/** This class is used to implement a color table that can be used to
 		 *  map a floating point value into a color.
+		\ingroup ViewDatatypeFormat
 		*/
 		class ColorTable
 			: public vector<ColorRGBA>
@@ -151,7 +149,7 @@ namespace BALL
 			float			min_;
 			float			max_;
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

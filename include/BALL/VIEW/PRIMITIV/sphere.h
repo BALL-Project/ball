@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.18 2003/03/14 11:50:26 sturm Exp $
+// $Id: sphere.h,v 1.19 2003/03/26 13:09:05 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -31,9 +31,6 @@ namespace BALL
 	
 	namespace VIEW
 	{
-        /**  \addtogroup  ViewPrimitives
-         *  @{
-         */
        
 		/** Sphere class.			
 				An instance of Sphere represents an instance of the geometric representation "sphere".
@@ -46,7 +43,7 @@ namespace BALL
 				The class Sphere is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink ,
 				 \link Vertex Vertex \endlink  and  \link Radius Radius \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				
+		\ingroup ViewPrimitives		
 		*/
 		class Sphere
 			: public GeometricObject,
@@ -263,7 +260,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/PRIMITIV/sphere.iC>
 #	endif
-  /** @} */		
+  		
 	} // namespace VIEW
 
 } // namespace BALL

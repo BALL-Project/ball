@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.h,v 1.15 2003/03/14 11:50:18 sturm Exp $
+// $Id: control.h,v 1.16 2003/03/26 13:08:57 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -66,7 +66,7 @@ namespace BALL
 				To use this widget in the application just create it with  \link MainControl MainControl \endlink  as
 				parent and all inserted  \link Composite Composite \endlink  objects sent with  \link NewCompositeMessage NewCompositeMessage \endlink 
 				will be shown in the structure view of {\em *this} control.
-				
+		\ingroup ViewGuiWidgets		
 		*/
 		class Control
 			: public QListView, 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyChainList.h,v 1.7 2003/03/03 14:18:13 anhi Exp $
+// $Id: pyChainList.h,v 1.8 2003/03/26 13:08:22 sturm Exp $
 
 #ifndef BALL_PYTHON_PYCHAINLIST_H
 #define BALL_PYTHON_PYCHAINLIST_H
@@ -16,13 +16,11 @@
 
 namespace BALL 
 {
-  /**  \addtogroup  PythonExtensions
-   *  @{
-   */
 	class Chain;
 	class AtomContainer;
 	
-	/**
+	/** pyChainList
+		\ingroup PythonExtensions
 	*/
 	class PyChainList
 		:	public List<Chain*>
@@ -87,7 +85,7 @@ namespace BALL
 		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
-   /** @} */
+   
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYCHAINLIST_H

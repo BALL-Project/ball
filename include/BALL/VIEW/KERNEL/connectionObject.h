@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.15 2003/03/14 11:50:22 sturm Exp $
+// $Id: connectionObject.h,v 1.16 2003/03/26 13:09:03 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -38,9 +38,6 @@ namespace BALL
 	namespace VIEW
 	{
 
-    /**  \addtogroup  ViewKernelConnectivity
-     *  @{
-     */
 		/** ConnectionObject class.		
 				The class ConnectionObject is a base class for all widgets and dialogs that
 				handles communication between these classes through message posting.
@@ -62,7 +59,7 @@ namespace BALL
 				always be created with the new command and the flag deletable must be set to {\em true}.
 				If a message if statically created in the {\em onNotify} method there is the possibility
 				that the message is already destroyed when it should be processed.
-				
+		\ingroup ViewKernelConnectivity		
 		*/
 		class ConnectionObject
 		{
@@ -265,7 +262,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/connectionObject.iC>
 #		endif
-  /** @} */		
+  		
 	} // namespace VIEW
 
 } // namespace BALL

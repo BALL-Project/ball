@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: filter.h,v 1.10 2003/03/14 11:50:10 sturm Exp $
+// $Id: filter.h,v 1.11 2003/03/26 13:08:48 sturm Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H
@@ -28,9 +28,7 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewFunctors
-     *  @{
-     */				
+			
 		/** Filter class.
 				The class Filter is a base class for filter objects. This class filters
 				 \link Composite Composite \endlink  objects. Override the method  \link visit visit \endlink  to
@@ -44,6 +42,7 @@ namespace BALL
 				objects.  \par
 				
 				@see     Control
+		\ingroup ViewFunctors
 		*/
 		class Filter: public Visitor<Composite>
 		{
@@ -180,7 +179,6 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/VIEW/FUNCTOR/filter.iC>
 #			endif
-  /** @} */
 	} // namespace VIEW
 
 } // namespace BALL

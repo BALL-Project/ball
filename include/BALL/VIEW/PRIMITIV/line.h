@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.h,v 1.16 2003/03/14 11:50:25 sturm Exp $
+// $Id: line.h,v 1.17 2003/03/26 13:09:05 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #define BALL_VIEW_PRIMITIV_LINE_H
@@ -28,10 +28,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-        /**  \addtogroup  ViewPrimitives
-         *  @{
-         */
-         
          
 		/** Line class.
 				An instance of Line represents an instance of the geometric representation "line".
@@ -44,7 +40,7 @@ namespace BALL
 				The class Line is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
 				and  \link Vertex2 Vertex2 \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				
+			\ingroup ViewPrimitives	
 		*/
 		class Line
 			: public GeometricObject,
@@ -232,7 +228,7 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.h,v 1.15 2003/03/14 11:50:14 sturm Exp $
+// $Id: glPrimitiveManager.h,v 1.16 2003/03/26 13:08:53 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -24,16 +24,13 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiKernelOpenGLPredefined
-     *  @{
-     */
 		/**	GLDisplayListObject_ class.
 				The class GLDisplayListObject_ is a base class for the concrete display list
 				classes  \link GLSphereDisplayLists_ GLSphereDisplayLists_ \endlink ,  \link GLTubeDisplayLists_ GLTubeDisplayLists_ \endlink  and
 				 \link GLSimpleBoxDisplayLists_ GLSimpleBoxDisplayLists_ \endlink . It defines an interface that every display
 				list class must have.
 				This is an internally used class and should not be used in any programs.  \par
-				
+		\ingroup ViewGuiKernelOpenGLPredefined		
 		*/
 		class GLDisplayListObject_
 		{
@@ -128,7 +125,7 @@ namespace BALL
 				It is derived from the class  \link GLDisplayListObject_ GLDisplayListObject_ \endlink  and creates the
 				different graphical visualizations of a sphere.
 				This is an internally used class and should not be used in any programs.  \par
-				
+			\ingroup ViewGuiKernelOpenGLPredefined	
 		*/
 		class GLSphereDisplayLists_: public GLDisplayListObject_
 		{
@@ -263,7 +260,7 @@ namespace BALL
 				It is derived from the class  \link GLDisplayListObject_ GLDisplayListObject_ \endlink  and creates the
 				different graphical visualizations of a tube.
 				This is an internally used class and should not be used in any programs.  \par
-				
+			\ingroup ViewGuiKernelOpenGLPredefined	
 		*/
 		class GLTubeDisplayLists_: public GLDisplayListObject_
 		{
@@ -381,7 +378,7 @@ namespace BALL
 				It is derived from the class  \link GLDisplayListObject_ GLDisplayListObject_ \endlink  and creates the
 				different graphical visualizations of a simpleBox.
 				This is an internally used class and should not be used in any programs.  \par
-				
+			\ingroup ViewGuiKernelOpenGLPredefined	
 		*/
 		class GLSimpleBoxDisplayLists_: public GLDisplayListObject_
 		{
@@ -507,7 +504,7 @@ namespace BALL
 				Further it provides methods for naming and accessing  \link GeometricObject GeometricObject \endlink  objects.
 				This mechanism is used by the class  \link Scene Scene \endlink  to name all primitives to identify them
 				when picked.  \par
-				
+			\ingroup ViewGuiKernelOpenGLPredefined	
 		*/
 		class GLPrimitiveManager
 		{
@@ -689,7 +686,7 @@ namespace BALL
 #			include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.iC>
 #		endif 
 
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.12 2003/03/14 11:49:49 sturm Exp $
+// $Id: spectrum.h,v 1.13 2003/03/26 13:08:19 sturm Exp $
 
 #ifndef BALL_NMR_SPECTRUM_H
 #define BALL_NMR_SPECTRUM_H
@@ -25,13 +25,11 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Spectra
-     *  @{
-     */
 	/**	A generic NMR spectrum class.
 			 \par
 			
 			 \par
+	\ingroup Spectra
 	*/
 	template <typename DataT, typename PeakT, typename PositionT = typename PeakT::Position>
 	class Spectrum
@@ -130,6 +128,7 @@ namespace BALL
 	}
 
 	/**	Convenience typedefs
+	\ingroup Spectra
 	*/
 	//@{
 	/// One-dimensional spectrum
@@ -141,7 +140,7 @@ namespace BALL
 	/// Three-dimensional spectrum
 	typedef Spectrum<RegularData1D, Peak3D> Spectrum3D;
 	//@}
-  /** @} */
+  
 } // namespace BALL
 
 #endif // BALL_NMR_SPECTRUM_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.16 2003/03/14 11:50:26 sturm Exp $
+// $Id: simpleBox.h,v 1.17 2003/03/26 13:09:05 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
 #define BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -32,9 +32,7 @@ namespace BALL
 	
 	namespace VIEW
 	{
-        /**  \addtogroup  ViewPrimitives
-         *  @{
-         */
+
       
 		/** SimpleBox class.	
 				An instance of SimpleBox represents an instance of the geometric representation "Box".
@@ -50,7 +48,7 @@ namespace BALL
 				The class SimpleBox is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
 				and  \link Vertex2 Vertex2 \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				
+			\ingroup ViewPrimitives	
 		*/
 		class SimpleBox
 			: public GeometricObject,
@@ -237,7 +235,7 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

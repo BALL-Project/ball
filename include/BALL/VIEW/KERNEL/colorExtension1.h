@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension1.h,v 1.13 2003/03/14 11:50:21 sturm Exp $
+// $Id: colorExtension1.h,v 1.14 2003/03/26 13:09:01 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION1_H
@@ -19,14 +19,11 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewKernelGeometricPrimitives
-     *  @{
-     */
 		/** ColorExtension class.
 				The class ColorExtension is used as a base class for all geometric 
 				objects that need a single color  \link ColorRGBA ColorRGBA \endlink . It provides the derived
 				class with methods for accessing that color.
-				
+		\ingroup ViewKernelGeometricPrimitives						
 		*/
 		class ColorExtension
 		{
@@ -248,7 +245,7 @@ namespace BALL
 #			include <BALL/VIEW/KERNEL/colorExtension1.iC>
 #		endif
 
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

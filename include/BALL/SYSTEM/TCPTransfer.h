@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.14 2003/03/03 14:18:23 anhi Exp $
+// $Id: TCPTransfer.h,v 1.15 2003/03/26 13:08:43 sturm Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -20,15 +20,14 @@
 
 namespace BALL
 {
-    /**  \addtogroup  System
-     *  @{
-     */
 	/** Class for TCPTransfers.
 	 * 	You can use http and ftp protocol to transfer files
 	 * 	from the internet and store them in an ofstream.
 	 * 	Support for login, password and port is build in for
 	 * 	FTP and HTTP. FTP transports are done by passive FTP, so
 	 * 	no problems with local firewalls are encountered.
+	 
+	 \ingroup System
 	 */
 	class TCPTransfer
 	{
@@ -77,6 +76,7 @@ namespace BALL
 			
 			/** TransferFailed exception.
 			 		This exception is thrown if a transfer fails.
+			\ingroup System
 			*/
 			class TransferFailed : public Exception::GeneralException
 			{
@@ -286,7 +286,7 @@ namespace BALL
 				void operator = (TCPTransfer)
 					throw();
 	};
-  /** @} */
+  
 }
 
 #endif // BALL_SYSTEM_TCPTRANSFER_H 

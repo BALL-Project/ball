@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.h,v 1.17 2003/03/14 11:50:20 sturm Exp $
+// $Id: client.h,v 1.18 2003/03/26 13:09:01 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -34,9 +34,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewKernelClient
-     *  @{
-     */
 		/** Client class.	
 				The class Client introduces a rudimentary interface for sending  \link Composite Composite \endlink 
 				objects to the visualization.
@@ -51,6 +48,7 @@ namespace BALL
 				the VIEW library. See  \link Server Server \endlink  for further information.
 				
 				@see     Server
+		\ingroup ViewKernelClient				 
 		*/
 		class Client
 		{
@@ -204,7 +202,7 @@ namespace BALL
 
 			TextPersistenceManager pm_;
 		};
-  /** @} */
+  
 	} // namespace VIEW
 	
 } // namespace BALL

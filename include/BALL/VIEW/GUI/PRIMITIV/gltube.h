@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gltube.h,v 1.14 2003/03/14 11:50:17 sturm Exp $
+// $Id: gltube.h,v 1.15 2003/03/26 13:08:57 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
@@ -24,9 +24,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiPrimitives
-     *  @{
-     */
 		/** GLTube class.
 				An instance of GLTube represents an instance of the geometric
 				visualization "tube".
@@ -36,7 +33,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				tube. OpenGL code is used for the visualization.
 				See these classes for further information.
-				
+			\ingroup ViewGuiPrimitives	
 		*/
 		class GLTube
 			: public Tube,
@@ -201,7 +198,7 @@ namespace BALL
 
 			//@}
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

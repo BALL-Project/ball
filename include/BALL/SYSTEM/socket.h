@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.h,v 1.32 2003/03/14 11:50:07 sturm Exp $
+// $Id: socket.h,v 1.33 2003/03/26 13:08:44 sturm Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -105,9 +105,6 @@
 
 namespace BALL 
 {
-	  /**  \addtogroup  System
-     *  @{
-     */
 	void errnoError_(const char* method_name);
 
 	/**	@name	Network socket support 
@@ -118,7 +115,7 @@ namespace BALL
 
 
 	/**	Socket addresses. This is an interface definition only.
-			
+	\ingroup System		
 	*/
 	class SockAddr 
 	{
@@ -178,7 +175,7 @@ namespace BALL
 
 
 	/**	Socket buffer class.
-			
+	\ingroup System		
 	*/
 	class SocketBuf
 		: public std::streambuf 
@@ -588,7 +585,7 @@ namespace BALL
 #endif
 
 	/**	Input stream from a socket
-			
+	\ingroup System		
 	*/
 	class ISockStream
 		: public std::istream 
@@ -646,7 +643,7 @@ namespace BALL
 
 
 	/**	Output stream from a socket.
-			
+	\ingroup System		
 	*/
 	class OSockStream
 		: public std::ostream 
@@ -698,7 +695,7 @@ namespace BALL
 
 
 	/**	INET socket address.
-			
+	\ingroup System		
 	*/
 	class SockInetAddr
 		: public SockAddr, 
@@ -794,7 +791,7 @@ namespace BALL
 
 
 	/**	INET socket buffer.
-			
+	\ingroup System		
 	*/
 	class SockInetBuf
 		: public SocketBuf 
@@ -935,7 +932,8 @@ namespace BALL
 	};
 
 
-	/**	
+	/**	IOSocketStream
+	\ingroup System
 	*/
 	class IOSockStream
 		: public std::iostream 
@@ -990,7 +988,8 @@ namespace BALL
 		//@}
 	};
 
-	/**	
+	/**	IOStreamSocket
+	\ingroup System
 	*/
 	class IOStreamSocket
 		: public IOSockStream
@@ -1039,7 +1038,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/SYSTEM/socket.iC>
 #	endif
-  /** @} */
+  
 } // namespace BALL
 
 #endif	// BALL_SYSTEM_SOCKET_H

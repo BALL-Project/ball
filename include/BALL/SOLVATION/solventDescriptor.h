@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventDescriptor.h,v 1.14 2003/03/14 11:49:55 sturm Exp $
+// $Id: solventDescriptor.h,v 1.15 2003/03/26 13:08:28 sturm Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
 #define BALL_SOLVATION_SOLVENTDESCRIPTOR_H
@@ -16,14 +16,13 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Solvation
-     *  @{
-     */
 	/** @name Solvent Classes
+	\ingroup Solvation
 	*/
 	//@{
 
 	/** This struct contains the information for one atom type of the solvent 
+	\ingroup Solvation
 	*/
 	typedef struct 
 	{
@@ -49,7 +48,7 @@ namespace BALL
 	/** Solvent Description.
 			The calculation of van-der-Waals energies requires information about the
 			solvent which is stored in this structure.	 \par
-			
+	  \ingroup Solvation		
 	*/
 	class SolventDescriptor
 	{
@@ -177,7 +176,7 @@ namespace BALL
 		bool valid_;
 
 	};
-   /** @} */
+   
 }
 	
 //@}

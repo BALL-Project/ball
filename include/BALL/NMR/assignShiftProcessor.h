@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.h,v 1.18 2003/03/14 11:49:46 sturm Exp $
+// $Id: assignShiftProcessor.h,v 1.19 2003/03/26 13:08:15 sturm Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -21,12 +21,9 @@
 #include <vector>
 
 namespace BALL 
-{
-    /**  \addtogroup  Spectra
-     *  @{
-     */               
+{             
 	/**	Set a property called chemical_shift.
-			
+	\ingroup Spectra		
 	*/
 	class AssignShiftProcessor
 		: public UnaryProcessor<Composite>
@@ -95,7 +92,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/NMR/assignShiftProcessor.iC>
 #	endif
-  /** @} */
+  
 } // namespace BALL
 
 #endif // BALL_NMR_ASSIGNSHIFTPROCESSOR_H

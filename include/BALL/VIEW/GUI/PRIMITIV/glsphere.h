@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glsphere.h,v 1.16 2003/03/14 11:50:17 sturm Exp $
+// $Id: glsphere.h,v 1.17 2003/03/26 13:08:56 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -22,9 +22,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiPrimitives
-     *  @{
-     */
 		/** GLSphere class.
 				An instance of GLSphere represents an instance of the geometric
 				visualization "sphere".
@@ -34,7 +31,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				sphere. OpenGL code is used for the visualization.
 				See these classes for further information. \par
-				
+		\ingroup ViewGuiPrimitives		
 		*/
 		class GLSphere
 			: public Sphere,
@@ -195,7 +192,7 @@ namespace BALL
 				throw();
 			//@}
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL

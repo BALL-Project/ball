@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gllabel.h,v 1.12 2003/03/14 11:50:16 sturm Exp $
+// $Id: gllabel.h,v 1.13 2003/03/26 13:08:55 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
@@ -28,9 +28,6 @@ namespace BALL
 	
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiPrimitives
-     *  @{
-     */
 		/** GLLabel class.
 				An instance of GLLabel represents an instance of the geometric
 				visualization "label".
@@ -40,7 +37,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				label. OpenGL code is used for the visualization.
 				See these classes for further information.
-				
+		\ingroup ViewGuiPrimitives		
 		*/
 		class GLLabel
 			: public Label,
@@ -265,7 +262,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/PRIMITIV/gllabel.iC>
 #		endif
-	/** @} */
+	
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.h,v 1.5 2003/03/03 14:18:21 anhi Exp $
+// $Id: reconstructFragmentProcessor.h,v 1.6 2003/03/26 13:08:36 sturm Exp $
 
 #ifndef BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
 #define BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
@@ -24,13 +24,10 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Structure
-     *  @{
-     */
 	class FragmentDB;
 
 	/** ReconstructFragmentProcessor.
-			
+	\ingroup Structure		
 	*/
 	class ReconstructFragmentProcessor 
 		: public UnaryProcessor<Fragment> 
@@ -151,7 +148,7 @@ namespace BALL
 		Size	number_of_inserted_atoms_;
 		//_@}
 	};
-  /** @} */
+  
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H_

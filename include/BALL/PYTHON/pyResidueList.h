@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.h,v 1.8 2003/03/03 14:18:15 anhi Exp $
+// $Id: pyResidueList.h,v 1.9 2003/03/26 13:08:24 sturm Exp $
 
 #ifndef BALL_PYTHON_PYRESIDUELIST_H
 #define BALL_PYTHON_PYRESIDUELIST_H
@@ -16,13 +16,11 @@
 
 namespace BALL 
 {
-  /**  \addtogroup  PythonExtensions
-   *  @{
-   */
 	class Residue;
 	class AtomContainer;
 	
-	/**
+	/** pyResidueList
+		\ingroup PythonExtensions
 	*/
 	class PyResidueList
 		:	public List<Residue*>
@@ -87,7 +85,7 @@ namespace BALL
 		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
-   /** @} */
+   
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYRESIDUELIST_H

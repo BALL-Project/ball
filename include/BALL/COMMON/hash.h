@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.h,v 1.17 2003/03/03 14:17:33 anhi Exp $
+// $Id: hash.h,v 1.18 2003/03/26 13:08:11 sturm Exp $
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H
@@ -16,17 +16,12 @@
 
 namespace BALL 
 {
-
-	/**	@name	Hashing
-	* 	 \addtogroup  Common
-	*/
-	//@{
-
 	/**	General Hash Function Template.
 			This template function provides a simple wrapper
 			for the specialized hash functions. It facilitates their use 
 			in STL hash associative containers which expect a <b>Hasher</b>
 			class as template parameter.
+	\ingroup Common
 	*/
   template <typename T>
   class HashFunction

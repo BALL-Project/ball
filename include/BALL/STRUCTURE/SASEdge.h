@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASEdge.h,v 1.5 2003/03/14 11:49:57 sturm Exp $
+// $Id: SASEdge.h,v 1.6 2003/03/26 13:08:31 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SASEDGE_H
 #define BALL_STRUCTURE_SASEDGE_H
@@ -29,7 +29,7 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic SASEdge Class.
-			
+	\ingroup Surface			
 	*/
 	class SASEdge	:	public GraphEdge< SASVertex,SASEdge,SASFace >
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.18 2003/03/14 11:50:23 sturm Exp $
+// $Id: message.h,v 1.19 2003/03/26 13:09:03 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -32,10 +32,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewKernelConnectivity
-     *  @{
-     */
-		
 		// class forward
 		class ConnectionObject;
 
@@ -57,7 +53,7 @@ namespace BALL
 				for avoiding segmentation faults.
 				See  \link ConnectionObject ConnectionObject \endlink  for further information concerning message handling
 				and message posting.  \par
-				
+			\ingroup ViewKernelConnectivity	
 		*/
 		class Message
 		{
@@ -170,7 +166,7 @@ namespace BALL
 				The CompositeMessage class is a base class for messages that are relevant for
 				 \link ConnectionObject ConnectionObject \endlink  objects that must react to  \link Composite Composite \endlink  changes.
 				 \par
- 
+      \ingroup ViewKernelConnectivity
 		*/
 		class CompositeMessage: public Message
 		{
@@ -279,7 +275,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				  \par
- 
+      \ingroup ViewKernelConnectivity
 		*/
 		class NewCompositeMessage: public CompositeMessage
 		{
@@ -332,7 +328,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				 \par
- 
+    \ingroup ViewKernelConnectivity
 		*/
 		class RemovedCompositeMessage: public CompositeMessage
 		{
@@ -385,7 +381,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				 \par
- 
+    \ingroup ViewKernelConnectivity
 		*/
 		class ChangedCompositeMessage: public CompositeMessage
 		{
@@ -440,7 +436,7 @@ namespace BALL
 				There are methods available that will tell the  \link Scene Scene \endlink  to update its contents
 				or change the camera positions.
 				 \par
- 
+     \ingroup ViewKernelConnectivity
 		*/
 		class SceneMessage: public Message
 		{
@@ -580,7 +576,7 @@ namespace BALL
 				this message and extract the new contents of status bar that any other
 				 \link ConnectionObject ConnectionObject \endlink  object has sent through the  \link ConnectionObject ConnectionObject \endlink  tree.
 				 \par
- 
+     \ingroup ViewKernelConnectivity
 		*/
 		class WindowMessage: public Message
 		{
@@ -661,7 +657,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				 \par
- 
+     \ingroup ViewKernelConnectivity
 		*/
 		class SelectionMessage: public Message
 		{
@@ -738,6 +734,7 @@ namespace BALL
 
 
 		/** Used to inform MainControl of selection in Control (not the one of the checkboxes!)
+		\ingroup ViewKernelConnectivity
 		 */
 		class ControlSelectionMessage: public SelectionMessage
 		{
@@ -748,6 +745,7 @@ namespace BALL
 
 		/** Used to inform MainControl and MolecularProperties of the selection of one composite in Control.
 		 		MolecularProperties sends as answer a CompositeChanged message to inform the Scene.
+		\ingroup ViewKernelConnectivity
 		 */
 		class CompositeSelectedMessage: public Message
 		{
@@ -761,6 +759,7 @@ namespace BALL
 		};
 
 		/** Send by MainControl to Controls to sync selection
+		 \ingroup ViewKernelConnectivity
 		 */
 		class NewSelectionMessage: public Message
 		{
@@ -778,7 +777,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				 \par
- 
+         \ingroup ViewKernelConnectivity
 		*/
 		class GeometricObjectSelectionMessage: public SelectionMessage
 		{
@@ -825,6 +824,7 @@ namespace BALL
 
 		/** Message to build bonds.
 		 		Send by MolecularControl to MolecularProperties.
+		 \ingroup ViewKernelConnectivity
 		 */
 		class BuildBondsMessage: public Message
 		{
@@ -837,6 +837,7 @@ namespace BALL
 
 		/** Message to center camera.
 		 		Send by MolecularControl to MolecularProperties.
+		 \ingroup ViewKernelConnectivity
 		 */
 		class CenterCameraMessage: public CompositeMessage
 		{
@@ -850,6 +851,7 @@ namespace BALL
 
 		/** Message to check residues.
 		 		Send by MolecularControl to MolecularProperties.
+		 \ingroup ViewKernelConnectivity
 		 */
 		class CheckResidueMessage: public Message
 		{
@@ -862,6 +864,7 @@ namespace BALL
 
 		/** Message to (re)draw a composite.
 		 		Send by MolecularProperties to DisplayProperties.
+		\ingroup ViewKernelConnectivity
 		 */
 		class DrawMessage: public CompositeMessage
 		{
@@ -875,6 +878,7 @@ namespace BALL
 
 		/** Message to select or deselect composites.
 		 		Send by MolecularControl to MolecularProperties.
+		 \ingroup ViewKernelConnectivity
 		 */
 		class SelectMessage: public Message
 		{
@@ -891,7 +895,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/message.iC>
 #		endif
-  /** @} */			
+  			
 	} // namespace VIEW
 
 } // namespace BALL

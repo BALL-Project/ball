@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.18 2003/03/14 11:49:52 sturm Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.19 2003/03/26 13:08:26 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -36,15 +36,12 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Solvation
-     *  @{
-     */
 	/** Processor for the computation of the van-der-Waals interaction energy
 			of a molecule with its surrounding.
 			This processor uses a 6_12 pair potential for the calculation of
 			dispersion and repulsion energies.  \par
 			Energies are computed in units of kJ/mol.  \par
-
+\ingroup Solvation
 	 */
 	
 	class Pair6_12InteractionEnergyProcessor
@@ -300,7 +297,7 @@ namespace BALL
 		void getExternalSurface_(vector< pair<Vector3, Surface> >& surface_map, 
 				const char* surface_file) throw();
 	};
-   /** @} */
+   
 } // namespace BALL
 
 #endif // BALL__PAIR6_12INTERACTIONENERGYPROCESSOR_H

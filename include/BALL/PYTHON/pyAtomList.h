@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.h,v 1.9 2003/03/03 14:18:12 anhi Exp $
+// $Id: pyAtomList.h,v 1.10 2003/03/26 13:08:21 sturm Exp $
 
 #ifndef BALL_PYTHON_PYATOMLIST_H
 #define BALL_PYTHON_PYATOMLIST_H
@@ -97,7 +97,7 @@ namespace BALL
 		void set(const AtomContainer& fragment, const String& expression = "");
 		//@}
 	};
-   /** @} */
+   
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYATOMLIST_H

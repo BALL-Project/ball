@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: externalRenderer.h,v 1.8 2003/03/14 11:50:12 sturm Exp $
+// $Id: externalRenderer.h,v 1.9 2003/03/26 13:08:51 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
@@ -18,13 +18,11 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiFunctors
-     *  @{
-     */
+
 		/** ExternalRenderer class.
 		    This class provides an interface for exporting the glObjects contained
 				in a Scene to the file format of an external renderer.
-				
+			\ingroup ViewGuiFunctors	
 			*/
 		class ExternalRenderer : public UnaryProcessor<Composite>
 		{
@@ -87,7 +85,7 @@ namespace BALL
 		  protected:
 			  const Scene *scene_;
 		};
-  /** @} */
+  
 	} // namespace VIEW
 
 }  // namespace BALL

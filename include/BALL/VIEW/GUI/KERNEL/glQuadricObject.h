@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.14 2003/03/14 11:50:14 sturm Exp $
+// $Id: glQuadricObject.h,v 1.15 2003/03/26 13:08:53 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
@@ -16,9 +16,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiKernelOpenGLPrimitives
-     *  @{
-     */
 		/** GLQuadricObject class.
 				The class QLQuadricObject is a wrapper class for the quadric objects
 				of the OpenGL graphical library. It defines some useful methods to define
@@ -27,7 +24,7 @@ namespace BALL
 				quadric objects.
 				See the documentation of the OpenGL graphical library for information
 				concerning quadric objects. \par
-				
+			\ingroup ViewGuiKernelOpenGLPrimitives	
 		*/
 		class GLQuadricObject
 		{
@@ -410,7 +407,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/glQuadricObject.iC>
 #		endif
-  /** @} */	
+  	
 	} // namespace VIEW
 } // namespace BALL
 

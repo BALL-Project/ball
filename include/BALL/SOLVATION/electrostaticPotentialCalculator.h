@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: electrostaticPotentialCalculator.h,v 1.6 2003/03/03 14:18:16 anhi Exp $
+// $Id: electrostaticPotentialCalculator.h,v 1.7 2003/03/26 13:08:25 sturm Exp $
 
 #ifndef BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
 #define BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
@@ -32,13 +32,11 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Solvation
-     *  @{
-     */
 	/** This class is used to compute the electrostatic potential for
 	    of a system. It is intended that several different models will
 			be implemented. Right now, the only model is the nonlocal electrostatic
 			potential of a sum of Born ions.
+      \ingroup Solvation
 	 */
 
 	class ElectrostaticPotentialCalculator
@@ -132,7 +130,6 @@ namespace BALL
 		AssignChargeProcessor charges_;
 		//_@}
 	};
-   /** @} */
 }
 
 

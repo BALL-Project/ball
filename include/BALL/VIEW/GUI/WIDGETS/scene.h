@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.15 2003/03/14 11:50:19 sturm Exp $
+// $Id: scene.h,v 1.16 2003/03/26 13:08:59 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -57,9 +57,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /**  \addtogroup  ViewGuiWidgets
-     *  @{
-     */
 		// necessary forward declaration
 		class ExternalRenderer;
 
@@ -77,7 +74,7 @@ namespace BALL
 				scenes. These other scenes can have different camera angles or other properties.
 				The class  \link Events Events \endlink  is a container class of appropriate events that can
 				be assigned to a scene.
-				
+		\ingroup ViewGuiWidgets		
 		*/
 		class Scene
 			: public QGLWidget, public ModularWidget
@@ -881,7 +878,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/WIDGETS/scene.iC>
 #		endif
-  /** @} */
+  
 	} // namespace VIEW
 
 } // namespace BALL
