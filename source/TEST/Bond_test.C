@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.9 2000/05/26 19:25:01 amoll Exp $
+// $Id: Bond_test.C,v 1.10 2000/05/27 13:30:38 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.9 2000/05/26 19:25:01 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.10 2000/05/27 13:30:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -57,15 +57,44 @@ CHECK(Bond(String&, Atom&, Atom&, Order, Type))
 RESULT
 
 CHECK(createBond(Bond&, Atom&, Atom&))
-/*	Atom a1;
+	Atom a1;
 	Atom a2;
-	Bond b1("bond", a1, a2), b2;
-	b2.createBond(b1, a1, a2)
-	TEST_EQUAL(b2.getFirstAtom(), &a1)
-	TEST_EQUAL(b2.getSecondAtom(), &a2)
-	TEST_EQUAL(a1.countBonds(), 1)
-	TEST_EQUAL(a2.countBonds(), 1) ???
-	Exception*/
+	Atom a3;
+	Atom a4;
+	Atom a5;
+	Atom a6;
+	Atom a7;
+	Atom a8;
+	Atom a9;
+	Atom a10;
+	Bond b1;
+	Bond b2;
+
+	TEST_NOT_EQUAL(b1.createBond(b1, a1, a2), 0);
+	TEST_EQUAL(a1.countBonds(), 1);
+	TEST_EQUAL(a2.countBonds(), 1);
+	TEST_EQUAL(b1.getFirstAtom(), &a1);
+	TEST_EQUAL(b1.getSecondAtom(), &a2);
+
+	TEST_EQUAL(b2.createBond(b2, a1, a2), &b1);
+	TEST_EQUAL(a1.countBonds(), 1);
+	TEST_EQUAL(a2.countBonds(), 1);
+
+	TEST_NOT_EQUAL(b2.createBond(b2, a1, a3), 0);
+	TEST_EQUAL(a1.countBonds(), 2);
+	TEST_EQUAL(a3.countBonds(), 1);
+
+	Bond b3("bond", a1, a4);		
+	Bond b4("bond", a1, a5);
+	Bond b5("bond", a1, a6);
+	Bond b6("bond", a1, a7);
+	Bond b7("bond", a1, a8);
+	Bond b8("bond", a1, a9);
+	Bond b9;
+	TEST_EQUAL(b9.createBond(b9, a3, a3), 0);
+	TEST_EXCEPTION(Exception::GeneralException, b9.createBond(b9, a1, a10))
+	TEST_EQUAL(a1.countBonds(), 1); //ernstes Problem
+	TEST_EXCEPTION(Exception::GeneralException, b9.createBond(b9, a10, a1))
 RESULT
 
 CHECK(clear())
@@ -267,7 +296,7 @@ CHECK(getLength())
 RESULT
 
 CHECK(getBond(Atom&, Atom&))
-/*	Atom a1;
+	Atom a1;
 	Atom a2;
 	a1.setName("a1");
 	a2.setName("a2");
@@ -275,9 +304,8 @@ CHECK(getBond(Atom&, Atom&))
 	b1.setType(1);
 	b1.setOrder(1);
 	b1.setName("abc");
-	b2.getBond(a1, a2);
-	TEST_EQUAL(b1.getFirstAtom()->getName(), b2.getFirstAtom()->getName())
-	TEST_EQUAL(b1.getSecondAtom()->getName(), b2.getSecondAtom()->getName())*/
+	b2.getBond(a1, a2)->setName("XXX");
+	TEST_EQUAL(b1.getName(), "XXX")
 RESULT
 
 CHECK(getBondedAtomOf(Atom&))
@@ -434,7 +462,19 @@ CHECK(dump(ostream&, Size))
 RESULT
 
 CHECK(finalize())
-//BAUSTELLE
+	Atom a1;
+	Atom a2;
+	Atom a3;
+	Bond b1("bond", a2, a1);
+	TEST_EQUAL(b1.getFirstAtom(), &a1);
+	TEST_EQUAL(b1.getSecondAtom(), &a2);
+	b1.setFirstAtom(&a3);
+	TEST_EQUAL(b1.getFirstAtom(), &a3);
+	b1.finalize();
+	TEST_EQUAL(b1.getFirstAtom(), &a2);
+	TEST_EQUAL(b1.getSecondAtom(), &a3);
+	TEST_EQUAL(a1.countBonds(), 1);
+	TEST_EQUAL(a2.countBonds(), 1);
 RESULT
 
 CHECK(persistentWrite(PersistenceManager&, String&, bool))
