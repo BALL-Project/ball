@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData2D_test.C,v 1.18 2003/09/06 07:28:13 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.19 2004/02/25 11:22:44 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.18 2003/09/06 07:28:13 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.19 2004/02/25 11:22:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -539,7 +539,7 @@ CHECK(size_type max_size() const throw())
 	TEST_EQUAL(rg.max_size() > 10000, true)
 RESULT
 
-CHECK(void binaryWrite(const String& filename) const throw())
+CHECK(void binaryWrite(const String& filename) const throw(Exception::FileNotFound))
 	NEW_TMP_FILE(filename)
  	RegularData2D g(Vector2(1,2), Vector2(8,10), Vector2(1.0, 1.0));
 	for (Position x = 0; x < 7; x++) 
@@ -560,7 +560,7 @@ CHECK(void binaryWrite(const String& filename) const throw())
 	g.binaryWrite(filename);
 RESULT
 
-CHECK(void binaryRead(const String& filename) throw())
+CHECK(void binaryRead(const String& filename) throw(Exception::FileNotFound))
 	RegularData2D g;
 	g.binaryRead(filename);
 	for (Position x = 0; x < 7; x++) 

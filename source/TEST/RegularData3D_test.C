@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.17 2003/06/30 20:15:55 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.18 2004/02/25 11:22:44 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.17 2003/06/30 20:15:55 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.18 2004/02/25 11:22:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -543,21 +543,21 @@ CHECK(size_type max_size() const throw())
 	TEST_EQUAL(g.max_size() > 1000, true)
 RESULT
 
-CHECK(void binaryWrite(const String& filename) const throw())
+CHECK(void binaryWrite(const String& filename) const throw(Exception::FileNotFound))
 	NEW_TMP_FILE(filename)
   RegularData3D g(Vector3(1.0, 2.0, 3.0), Vector3(4.0, 5.0, 6.0), Vector3(0.1, 0.2, 0.3));
 	for (Position x = 0; x < g.getSize().x; x++)
 		for (Position y = 0; y < g.getSize().y; y++)
 			for (Position z = 0; z < g.getSize().z; z++)
 	{
-		g[RegularData3D::IndexType(x,y,z)] = x*y*z;
+		g[RegularData3D::IndexType(x,y,z)] = x * y * z;
 	}
 
 	g.binaryWrite(filename);
 	TEST_EXCEPTION(Exception::FileNotFound, g.binaryWrite("/not/there/strange_file!"))
 RESULT
 
-CHECK(void binaryRead(const String& filename) throw())
+CHECK(void binaryRead(const String& filename) throw(Exception::FileNotFound))
 	RegularData3D g;
 	RegularData3D empty;
 	TEST_EQUAL(g == empty, true)

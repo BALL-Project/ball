@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ruleEvaluator.sip,v 1.4 2003/11/01 09:27:40 oliver Exp $
+// $Id: ruleEvaluator.sip,v 1.5 2004/02/25 11:22:41 oliver Exp $
 //
 
 class RuleEvaluator
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
+	#include "sipBALLAtom.h"
+	using namespace BALL;
 %End
   public:
 

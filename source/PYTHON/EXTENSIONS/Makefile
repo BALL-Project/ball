@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.31 2004/02/23 19:51:24 oliver Exp $
+# $Id: Makefile,v 1.32 2004/02/25 11:22:40 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -69,7 +69,7 @@ sip:
 	@$(SIP) $(SIP_OPTS) BALL.sip
 	@echo "removing SIP headers..."
 	@-rm -f SIP/tmp 2>/dev/null
-	for i in SIP/*; do echo $$i SIP/tmp ; mv $$i SIP/tmp ; cat SIP/tmp |sed 4d > $$i ; rm -rf SIP/tmp 2>/dev/null ; done
+	@for i in SIP/*; do mv $$i SIP/tmp ; cat SIP/tmp |sed 4d > $$i ; rm -rf SIP/tmp 2>/dev/null ; done
 	@echo "updating modified files..."
 	@for i in SIP/*; do if cmp -s $$i `basename $$i`; then true ; else echo " - $$i"; cp $$i . ; fi ; done
 
