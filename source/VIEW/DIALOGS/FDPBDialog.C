@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.18 2004/12/02 14:59:47 amoll Exp $
+// $Id: FDPBDialog.C,v 1.18.2.1 2005/01/14 14:44:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -263,7 +263,7 @@ namespace BALL
 			}
 
 			if (!lockComposites()) return false;
-			#ifdef BALL_QT_HAS_THREADS
+			#ifdef BALL_QT_HAS_THREADS_
 				if (thread_ == 0)
 				{
 					thread_ = new CalculateFDPBThread();
@@ -481,7 +481,7 @@ namespace BALL
 
 			CompositeMessage* message = new CompositeMessage;
 			message->setComposite(*system_);
-			message->setType(CompositeMessage::CHANGED_COMPOSITE);
+			message->setType(CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 			notify_(message);
 
 			return true;
