@@ -1,5 +1,5 @@
-// $Id: Vector3_test.C,v 1.4 2000/02/20 14:34:46 oliver Exp $ #include
-<BALL/CONCEPT/classTest.h>
+// $Id: Vector3_test.C,v 1.5 2000/02/20 16:44:52 oliver Exp $ #include
+#include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.4 2000/02/20 14:34:46 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.5 2000/02/20 16:44:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
