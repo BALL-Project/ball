@@ -78,53 +78,84 @@ void BALLViewDemo::onNotify(Message *message)
 	Log.error() << "BALLViewDemo " << this << " onNotify " << message << std::endl;
 #endif
 
+	if (!isVisible()) return;
+
 	CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
-	switch (step_)
+	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
+
+	QString title = this->title(currentPage());
+	if (title == "Building a peptide from a given sequence")
 	{
-		case 0:
+		if (cmsg != 0 && cmsg->getType() == CompositeMessage::NEW_MOLECULE)
 		{
-			if (cmsg != 0 && cmsg->getType() == CompositeMessage::NEW_MOLECULE)
+			enableNextStep_();
+		}
+	}
+
+	else if (title == "Hierarchy of molecules")
+	{
+		if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+		{
+			if (first_selection_) 
 			{
-				enableNextStep_();
+				first_selection_ = false;
 				return;
 			}
-		}
 
-		case 1:
+			ControlSelectionMessage* msg = RTTI::castTo<ControlSelectionMessage>(*message);
+
+			nextButton()->setEnabled(msg->getSelection().size() == 1 &&
+															 RTTI::isKindOf<System>(**msg->getSelection().begin()));
+	}
+
+	else if (title == "Molecular Dynamics Simulation")
+	{
+Log.error() << "#~~#   9 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+		if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
 		{
-			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
-			{
-				if (first_selection_) 
-				{
-					first_selection_ = false;
-					return;
-				}
-
-				ControlSelectionMessage* msg = RTTI::castTo<ControlSelectionMessage>(*message);
-
-				nextButton()->setEnabled(msg->getSelection().size() == 1 &&
-																 RTTI::isKindOf<System>(**msg->getSelection().begin()));
-				return;
-			}
+Log.error() << "#~~#   10 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			enableNextStep_();
 		}
+	}
 
-		case 2:
+	else if (title == "Visualisation of trajectories")
+	{
+		if (cmsg != 0 && cmsg->getType() == CompositeMessage::CHANGED_COMPOSITE)
 		{
-			if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
-			{
-				enableNextStep_();
-				return;
-			}
+			enableNextStep_();
 		}
+	}
 
-		case 3:
+	else if (title == "Calculation of electrostatics")
+	{
+		RegularData3DMessage* msg = RTTI::castTo<RegularData3DMessage>(*message);
+		if (msg != 0)
 		{
-			if (cmsg != 0 && cmsg->getType() == CompositeMessage::CHANGED_COMPOSITE)
-			{
-				enableNextStep_();
-				return;
-			}
+			enableNextStep_();
 		}
+	}
+
+	else if (title == "Creating a Solvent Excluded Surface")
+	{
+		if (rmsg != 0 && 
+				rmsg->getType() == RepresentationMessage::ADD &&
+				rmsg->getRepresentation()->getModelType() == MODEL_SE_SURFACE)
+		{
+			enableNextStep_();
+		}
+	}
+
+	else if (title == "Coloring a SES by electrostatics")
+	{
+		if (rmsg != 0 && 
+				rmsg->getType() == RepresentationMessage::UPDATE &&
+				rmsg->getRepresentation()->getModelType() == MODEL_SE_SURFACE)
+		{
+			enableNextStep_();
+		}
+	}
+
+
 
 
 	} // switch
