@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-# $Id: makedoc,v 1.2 2001/07/13 18:26:11 amoll Exp $
+# $Id: makedoc,v 1.3 2001/07/16 11:40:15 amoll Exp $
 
 # This script is used to build the BALL-documentation.
 # It can receive "complete", "html", and "tex" as first parameter to
@@ -15,31 +15,32 @@
 # If have the patched version of docpp, which ignores namespaces, use
 # also the option "-N".
 
+
 makedoc_init ()
 {
 	DOCPP_HTML_OPTIONS_DEFAULT="-u -m -w -W -v -ep amsmath -ep graphicx -G -eo 11pt -d"
 	 DOCPP_TEX_OPTIONS_DEFAULT="-u -m -w -W -v -ep amsmath -ng -X -D 3 -ei -t -o"
 
 	#=================== Path to BALL ==================================
-	if [ -z $BALL_PATH ]
+	if [ -z "$BALL_PATH" ]
 	then
 		echo BALL_PATH is not definded, testing ~/BALL .
 		BALL_PATH="$HOME/BALL"
 	fi
-	if [ ! -d $BALL_PATH ]
+	if [ ! -d "$BALL_PATH" ]
 	then
 		echo "Can not find the BALL-directory at $BALL_PATH ."
 		exit
 	fi
 
 	#=================== Path to docpp =================================
-	if [ -z $DOCPP_PATH ]
+	if [ -z "$DOCPP_PATH" ]
 	then
 		echo "DOCPP_PATH is not definded, trying $BALL_PATH/doc/tools/doc++"
 		DOCPP_PATH="$BALL_PATH/doc/tools/doc++"
 	fi
 
-	if [ ! -e $DOCPP_PATH ]
+	if [ ! -e "$DOCPP_PATH" ]
 	then
 		echo "docpp can not be found at $BALL_PATH."
 		exit
@@ -48,16 +49,20 @@ makedoc_init ()
 	echo using `$DOCPP_PATH -V`
 
 	#=================== Commandline options ============================
-	if [ -z $DOCPP_HTML_OPTIONS ]
+	if [ -z "$DOCPP_HTML_OPTIONS" ]
 	then
-		echo "DOCPP_HTML_OPTIONS is not definded, using default [ $DOCPP_HTML_OPTIONS_DEFAULT ]."
-		DOCPP_HTML_OPTIONS="$DOCPP_HTML_OPTIONS_DEFAULT"
+		echo DOCPP_HTML_OPTIONS was not definded, using default [ $DOCPP_HTML_OPTIONS_DEFAULT ].
+		DOCPP_HTML_OPTIONS=$DOCPP_HTML_OPTIONS_DEFAULT
+	else 
+		echo DOCPP_HTML_OPTIONS was definded, using [ $DOCPP_HTML_OPTIONS ]
 	fi
 
-	if [ -z $DOCPP_TEX_OPTIONS ]
+	if [ -z "$DOCPP_TEX_OPTIONS" ]
 	then
-		echo "DOCPP_TEX_OPTIONS is not definded, using default [ $DOCPP_TEX_OPTIONS_DEFAULT ]."
+		echo DOCPP_TEX_OPTIONS was not definded, using default [ $DOCPP_TEX_OPTIONS_DEFAULT ].
 		DOCPP_TEX_OPTIONS="$DOCPP_TEX_OPTIONS_DEFAULT"
+	else 
+		echo DOCPP_TEX_OPTIONS was definded, using [ $DOCPP_TEX_OPTIONS ]
 	fi
 }
 
