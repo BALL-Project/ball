@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomicContactEnergy_test.C,v 1.8 2003/05/06 20:23:41 oliver Exp $
+// $Id: AtomicContactEnergy_test.C,v 1.9 2003/05/07 18:23:39 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(AtomicContactEnergy, "$Id: AtomicContactEnergy_test.C,v 1.8 2003/05/06 20:23:41 oliver Exp $")
+START_TEST(AtomicContactEnergy, "$Id: AtomicContactEnergy_test.C,v 1.9 2003/05/07 18:23:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -45,17 +45,17 @@ CHECK(calculateACE())
 	float ACE_A = calculateACE(A);
 	TEST_REAL_EQUAL(ACE_A, -2222.15)
 	float ACE_B = calculateACE(B);
-	TEST_REAL_EQUAL(ACE_B, -562.372)
+	TEST_REAL_EQUAL(ACE_B, -562.36)
 
 	// join A and B and calculate the total energy
 	STATUS("calculating the ACE of AB")
 	A.splice(B);
 	float ACE_AB = calculateACE(A);
-	TEST_REAL_EQUAL(ACE_AB, -2806.097)
+	TEST_REAL_EQUAL(ACE_AB, -2806.2)
 
 	// calculate the difference in binding energies
 	float dG_bind = ACE_AB - ACE_A - ACE_B;
-	TEST_REAL_EQUAL(dG_bind, -21.5764)
+	TEST_REAL_EQUAL(dG_bind, -21.6891)
 RESULT											
 
 /////////////////////////////////////////////////////////////
