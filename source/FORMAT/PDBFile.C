@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.45 2004/02/24 13:05:47 anker Exp $
+// $Id: PDBFile.C,v 1.46 2005/02/08 17:32:37 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -186,7 +186,7 @@ namespace BALL
 		// extract a pointer to the atom, if it was found in the hash map
 		if (atom_map_it == PDB_atom_map_.end())
 		{
-			return true;  // illegal atom number, abort
+			return false;  // illegal atom number, abort
 		}
 		else
 		{
@@ -388,8 +388,7 @@ namespace BALL
 		return true;
 	}
 
-	bool  
-	PDBFile::readRecordTURN
+	bool PDBFile::readRecordTURN
 		(PDB::Integer /* sequence_number */,
 		 PDB::LString3 turn_ID,
 		 PDB::RecordTURN::InitialResidue &initial_residue,
@@ -446,7 +445,7 @@ namespace BALL
 		if (number_of_proteins > 1)
 		{
 			Log.error() << "PDBFile::write(): cannot write a system with multiple proteins to a PDB file." << endl;
-			return true;
+			return false;
 		}
 		
 		if (number_of_proteins == 0)
@@ -454,8 +453,8 @@ namespace BALL
 			if (system.countMolecules() != 1)
 			{
 				Log.error() << "PDBFile::write(System): "
-					<< "Cannot write empty/multiple molecules to a PDB file." << endl;
-					return false;
+										<< "Cannot write empty/multiple molecules to a PDB file." << endl;
+				return false;
 			}
 			else
 			{
@@ -479,6 +478,7 @@ namespace BALL
 			else 
 			{
 				Log.error() << "PDBFile::write: cannot find a protein in the current system." << endl;
+				return false;
 			}
 		}
 

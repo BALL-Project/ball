@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDB_bench.C,v 1.4 2002/06/16 19:12:55 oliver Exp $
+// $Id: PDB_bench.C,v 1.5 2005/02/08 17:32:37 oliver Exp $
 
 #include <BALL/CONCEPT/benchmark.h>
 
@@ -13,15 +13,16 @@
 
 using namespace BALL;
 
-START_BENCHMARK(PDBFile, 1.0, "$Id: PDB_bench.C,v 1.4 2002/06/16 19:12:55 oliver Exp $")
+START_BENCHMARK(PDBFile, 1.0, "$Id: PDB_bench.C,v 1.5 2005/02/08 17:32:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 START_SECTION(Reading, 1.0)
-	for (int count = 0; count < 100; count++)
+	for (Position count = 0; count < 100; count++)
 	{
 		PDBFile infile("data/AmberFF_bench.pdb");
+		infile.options.setBool(GenericPDBFile::Option::STORE_SKIPPED_RECORDS, false);
 		System S;
 		START_TIMER
 		infile >> S;

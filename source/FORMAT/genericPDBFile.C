@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.C,v 1.23 2004/02/18 14:56:50 oliver Exp $
+// $Id: genericPDBFile.C,v 1.24 2005/02/08 17:32:37 oliver Exp $
 //
 
 #include <BALL/FORMAT/genericPDBFile.h>
@@ -17,9 +17,9 @@ namespace BALL
 
 
 	extern "C" int 
-#ifdef BALL_COMPILER_MSVC
+	#ifdef BALL_COMPILER_MSVC
 	__cdecl
-#endif
+	#endif
 	GenericPDBFileRecordNameComparator_
 		(const void* a_ptr, const void* b_ptr)
 	{
@@ -89,37 +89,46 @@ namespace BALL
 	// options and defaults for the GenericPDBFile class
 
 	const char* GenericPDBFile::Option::VERBOSITY = "verbosity";
-	const char* GenericPDBFile::Option::STRICT_LINE_CHECKING 
-		= "strict_line_checking";
+	const char* GenericPDBFile::Option::STRICT_LINE_CHECKING = "strict_line_checking";
 	const char* GenericPDBFile::Option::CHOOSE_MODEL = "choose_model";
+	const char* GenericPDBFile::Option::STORE_SKIPPED_RECORDS = "store_skipped_records";
+	const char* GenericPDBFile::Option::IGNORE_XPLOR_PSEUDO_ATOMS = "ignore_xplor_pseudo_atoms";
 
-	const int GenericPDBFile::Default::VERBOSITY = 0;
-	const bool GenericPDBFile::Default::STRICT_LINE_CHECKING = false;
-	const int GenericPDBFile::Default::CHOOSE_MODEL = 1;
-
+	const Index GenericPDBFile::Default::VERBOSITY = 0;
+	const bool  GenericPDBFile::Default::STRICT_LINE_CHECKING = false;
+	const Index GenericPDBFile::Default::CHOOSE_MODEL = 1;
+	const bool  GenericPDBFile::Default::STORE_SKIPPED_RECORDS = true;
+	const bool  GenericPDBFile::Default::IGNORE_XPLOR_PSEUDO_ATOMS = true;
 
 	GenericPDBFile::GenericPDBFile()
-		:	verbosity_(0),
-			strict_line_checking_(false),
+		:	options(),
+			info(),
 			current_model_(INVALID_INDEX),
-			selected_model_(1),
 			current_record_(INVALID_INDEX),
 			record_fields_(0),
-			current_record_type_(PDB::RECORD_TYPE__UNKNOWN)
+			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
+			verbosity_(0),
+			strict_line_checking_(false),
+			selected_model_(1),
+			store_skipped_records_(true),
+			ignore_xplor_pseudo_atoms_(true)
 	{
 		init_();
 	}
 
 	GenericPDBFile::GenericPDBFile(const Options& new_options)
-		:	verbosity_(0),
-			strict_line_checking_(false),
+		:	options(new_options),
+			info(),
 			current_model_(INVALID_INDEX),
-			selected_model_(1),
 			current_record_(INVALID_INDEX),
 			record_fields_(0),
-			current_record_type_(PDB::RECORD_TYPE__UNKNOWN)
+			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
+			verbosity_(0),
+			strict_line_checking_(false),
+			selected_model_(1),
+			store_skipped_records_(true),
+			ignore_xplor_pseudo_atoms_(true)
 	{
-		options = new_options;
 		init_();
 	}
 
@@ -127,21 +136,25 @@ namespace BALL
 		throw()
 		:	File(),
 			PropertyManager(file),
-			verbosity_(0),
-			strict_line_checking_(false),
+			options(file.options),
+			info(file.info),
 			current_model_(INVALID_INDEX),
-			selected_model_(1),
 			current_record_(INVALID_INDEX),
 			record_fields_(0),
-			current_record_type_(PDB::RECORD_TYPE__UNKNOWN)
+			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
+			verbosity_(0),
+			strict_line_checking_(false),
+			selected_model_(1),
+			store_skipped_records_(file.store_skipped_records_),
+			ignore_xplor_pseudo_atoms_(file.ignore_xplor_pseudo_atoms_)
 	{
-		options = file.options;
 		init_();
 	}
 
 	GenericPDBFile::~GenericPDBFile()
 		throw()
 	{
+		clear();
 		close();
 	}
 
@@ -191,8 +204,7 @@ namespace BALL
 	}
 
 	Size GenericPDBFile::countRecord
-		(PDB::RecordType record_type,
-		 bool from_begin_of_file)
+		(PDB::RecordType record_type, bool from_begin_of_file)
 	{
 		if (eof())
 		{
@@ -270,6 +282,7 @@ namespace BALL
 		// initialize the model as model 1 to prevent reading nothing if the
 		// model specifier is missing.
 		current_model_ = 1;
+		info.setCurrentModel(1);
 
 		return readNextRecord(read_values);
 	}
@@ -288,8 +301,7 @@ namespace BALL
 		
 		// The PDB format description says: "Each line in the PDB entry file
 		// consists of 80 columns." 
-		// ????? perhaps we should solve this via a private member.
-		if (options.getBool(Option::STRICT_LINE_CHECKING) == true)
+		if (strict_line_checking_ == true)
 		{
 			if (size <= PDB::SIZE_OF_PDB_RECORD_LINE)
 			{ 
@@ -299,18 +311,20 @@ namespace BALL
 			
 		++current_record_;
 
-		return readLine
-			(line_buffer_,
-			 size,
-			 read_values);
+		return readLine(line_buffer_, size, read_values);
 	}
 
 	bool GenericPDBFile::readRecords()
 	{
-		// Selecting models only makes sense when reading a whole file, so
-		// select the model only if reading *all* records.
-		int desired_model = options.getInteger(Option::CHOOSE_MODEL);
-		selectModel(desired_model);
+		// Extract all relevant options
+		verbosity_ = options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		strict_line_checking_ = options.setDefaultBool(Option::STRICT_LINE_CHECKING, Default::STRICT_LINE_CHECKING);
+		selected_model_ = options.setDefaultInteger(Option::CHOOSE_MODEL, Default::CHOOSE_MODEL);
+		ignore_xplor_pseudo_atoms_ = options.setDefaultBool(Option::IGNORE_XPLOR_PSEUDO_ATOMS, Default::IGNORE_XPLOR_PSEUDO_ATOMS);
+		store_skipped_records_ = options.setDefaultBool(Option::STORE_SKIPPED_RECORDS, Default::STORE_SKIPPED_RECORDS);
+													 
+		// Clear the information in info and prepare it for the new stuff.
+		info.clear();
 
 		if (readFirstRecord(true) == false)
 		{
@@ -330,11 +344,27 @@ namespace BALL
 
 	bool GenericPDBFile::readUnknownRecord(const char* /* line */)
 	{
+		// Store the record in the skipped_records field of info
+		// for retrieval by the used, we have no idea what
+		// to do with it.
+		return skipCurrentRecord();
+	}
+
+	bool GenericPDBFile::readInvalidRecord(const char* line)
+	{
+		// We know how it *should* look like, but we cannot parse
+		// it the way it is. Store it in invalid records of info
+		info.getInvalidRecords().push_back(line);
 		return true;
 	}
 
-	bool GenericPDBFile::readInvalidRecord(const char* /* line */)
+	bool GenericPDBFile::skipCurrentRecord()
 	{
+		// Store skipped stuff only if the corresponding flag is set
+		if (store_skipped_records_ == true)
+		{
+			info.getSkippedRecords().push_back(line_buffer_);
+		}
 		return true;
 	}
 
@@ -356,7 +386,7 @@ namespace BALL
 		 PDB::LString2 /* element_symbol */,
 		 PDB::LString2 /* charge */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordATOM
@@ -374,14 +404,14 @@ namespace BALL
 		 PDB::LString2 /* element_symbol */,
 		 PDB::LString2 /* charge */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordAUTHOR
 		(PDB::Continuation /* continuation */,
 		 PDB::PDBList /* authors */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordCAVEAT
@@ -389,7 +419,7 @@ namespace BALL
 		 PDB::IDcode /* entry_code */,
 		 PDB::PDBString /* comment */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordCISPEP
@@ -398,14 +428,14 @@ namespace BALL
 		 PDB::Integer /*  specific_model_ID */,
 		 PDB::Real /* angle_measure */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordCOMPND
 		(PDB::Continuation /* continuation */,
 		 PDB::SpecificationList /* component_description */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordCONECT
@@ -414,13 +444,13 @@ namespace BALL
 		 PDB::Integer* /*  hydrogen_bonded_atom_serial_number[4] */,
 		 PDB::Integer* /*  salt_bridged_atom_serial_number[2] */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordCRYST1
 		(PDB::RecordCRYST1::UnitCell& /* unit_cell */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordDBREF
@@ -434,24 +464,24 @@ namespace BALL
 		 PDB::RecordDBREF::InitialDatabaseSegment& /* initial_database_segment */,
 		 PDB::RecordDBREF::EndingDatabaseSegment& /* ending_database_segment */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordEND()
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordENDMDL()
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordEXPDTA
 		(PDB::Continuation /* continuation */,
 		 PDB::SList /* technique */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordFORMUL
@@ -461,14 +491,14 @@ namespace BALL
 		 PDB::Character /* is_water */,
 		 PDB::PDBString /* chemical_formula */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordFTNOTE
 		(PDB::Integer /* number */,
 		 PDB::PDBString /* text */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordHEADER
@@ -476,7 +506,7 @@ namespace BALL
 		 PDB::Date /* deposition_date */,
 		 PDB::IDcode /* ID_code */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordHELIX
@@ -488,7 +518,7 @@ namespace BALL
 		 PDB::PDBString /* comment */,
 		 PDB::Integer /* length */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordHET
@@ -499,7 +529,7 @@ namespace BALL
 		 PDB::Integer /* number_of_HETATM_records */,
 		 PDB::PDBString /* text */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordHETATM
@@ -517,7 +547,7 @@ namespace BALL
 		 PDB::LString2 /* element_symbol */,
 		 PDB::LString2 /* charge */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordHETNAM
@@ -525,7 +555,7 @@ namespace BALL
 		 PDB::LString3 /* het_ID */,
 		 PDB::PDBString /* chemical_name */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordHYDBND
@@ -534,20 +564,20 @@ namespace BALL
 		 PDB::SymmetryOperator /* first_non_hydrogen_atom */,
 		 PDB::SymmetryOperator /* second_non_hydrogen_atom */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordJRNL
 		(PDB::LString /* text */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordKEYWDS
 		(PDB::Continuation /* continuation */,
 		 PDB::PDBList /* keywords */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordLINK
@@ -555,7 +585,7 @@ namespace BALL
 		 PDB::SymmetryOperator /* first_atom */,
 		 PDB::SymmetryOperator /* second_atom */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordMASTER
@@ -572,13 +602,13 @@ namespace BALL
 		 PDB::Integer /* number_of_CONECT_records */,
 		 PDB::Integer /* number_of_SEQRES_records */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordMODEL
 		(PDB::Integer /* model_serial_number */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordMODRES
@@ -590,7 +620,7 @@ namespace BALL
 		 PDB::ResidueName /* standard_residue_name */,
 		 PDB::PDBString /* comment */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordMTRIX1
@@ -598,7 +628,7 @@ namespace BALL
 		 PDB::Real /* transformation_matrix */[4],
 		 PDB::Integer /* is_given */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordMTRIX2
@@ -606,7 +636,7 @@ namespace BALL
 		 PDB::Real /* transformation_matrix */[4],
 		 PDB::Integer /* is_given */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordMTRIX3
@@ -614,7 +644,7 @@ namespace BALL
 		 PDB::Real /* transformation_matrix */[4],
 		 PDB::Integer /* is_given */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordOBSLTE
@@ -623,32 +653,32 @@ namespace BALL
 		 PDB::IDcode /* entry_code */,
 		 PDB::IDcode /* replacing_entry */[8])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordORIGX1
 		(PDB::Real /* transformation_matrix */[4])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordORIGX2
 		(PDB::Real /* transformation_matrix */[4])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordORIGX3
 		(PDB::Real /* transformation_matrix */[4])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordREMARK
 		(PDB::Integer /* remark_number */,
 		 PDB::LString /* text */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 		
 	bool GenericPDBFile::readRecordREVDAT
@@ -659,25 +689,25 @@ namespace BALL
 		 PDB::Integer /* modification_type */,
 		 PDB::LString6 /* name_of_modified_record */[4])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSCALE1
 		(PDB::Real /* transformation_matrix */[4])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSCALE2
 		(PDB::Real /* transformation_matrix */[4])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSCALE3
 		(PDB::Real /* transformation_matrix */[4])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSEQRES
@@ -686,7 +716,7 @@ namespace BALL
 		 PDB::Integer /* number_of_residues_in_chain */,
 		 PDB::ResidueName /* residue_name */[13])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSHEET
@@ -701,7 +731,7 @@ namespace BALL
 		 PDB::Atom /* atom_name_in_previous_strand */,
 		 PDB::RecordSHEET::ResidueInPreviousStrand& /* residue_in_previous_strand */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSIGATM
@@ -719,7 +749,7 @@ namespace BALL
 		 PDB::LString2 /* element_symbol */,
 		 PDB::LString2 /* charge */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSIGUIJ
@@ -740,7 +770,7 @@ namespace BALL
 		 PDB::LString2 /* element_symbol */,
 		 PDB::LString2 /* charge */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSITE
@@ -749,7 +779,7 @@ namespace BALL
 		 PDB::Integer /* number_of_residues */,
 		 PDB::RecordSITE::Residue /* residue */[4])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSLTBRG
@@ -757,21 +787,21 @@ namespace BALL
 		 PDB::SymmetryOperator /* first_atom */,
 		 PDB::SymmetryOperator /* second_atom */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSOURCE
 		(PDB::Continuation /* continuation */,
 		 PDB::SpecificationList /*sources */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordSSBOND
 		(PDB::Integer /* serial_number */,
 		 PDB::RecordSSBOND::PartnerResidue /* partner_residue */[2])
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordTER
@@ -781,14 +811,14 @@ namespace BALL
 		 PDB::Integer /* residue_sequence_number */,
 		 PDB::AChar /* insertion_code */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordTITLE
 		(PDB::Continuation /* continuation */,
 		 PDB::PDBString /* title */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordTURN
@@ -798,7 +828,7 @@ namespace BALL
 		 PDB::RecordTURN::TerminalResidue& /* terminal_residue */,
 		 PDB::PDBString /* comment */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::readRecordTVECT
@@ -806,7 +836,7 @@ namespace BALL
 		 PDB::Real /* translation_vector */[3],
 		 PDB::PDBString /*comment */)
 	{
-		return true;
+		return skipCurrentRecord();
 	}
 
 	bool GenericPDBFile::hasFormat()
@@ -1002,7 +1032,7 @@ namespace BALL
 		{
 			case PDB::RECORD_TYPE__ANISOU:
 
-				if (selected_model_ != 0 && selected_model_ != current_model_)
+				if ((selected_model_ != 0) && (selected_model_ != current_model_))
 				{
 					return true;
 				}
@@ -1051,7 +1081,7 @@ namespace BALL
 			
 			case PDB::RECORD_TYPE__ATOM:
 				
-				if (selected_model_ != 0 && selected_model_ != current_model_)
+				if ((selected_model_ != 0) && (selected_model_ != current_model_))
 				{
 					return true;
 				}
@@ -1083,10 +1113,10 @@ namespace BALL
 					 record_ATOM.element_symbol,
 					 record_ATOM.charge);
 
-				if (hasProperty(PDB::PROPERTY__PSEUDO_XPLOR_ATOM_IMPORT) == false
-						&& record_ATOM.orthogonal_vector[0] == 9999.000
-						&& record_ATOM.orthogonal_vector[1] == 9999.000
-						&& record_ATOM.orthogonal_vector[2] == 9999.000)
+				if ((ignore_xplor_pseudo_atoms_ == true)
+						&& record_ATOM.orthogonal_vector[0] >= 9998.0
+						&& record_ATOM.orthogonal_vector[1] >= 9998.0
+						&& record_ATOM.orthogonal_vector[2] >= 9998.0)
 				{ // ignore XPLOR pseudo atoms (see Rasmol2.6 source 'molecule.c/ReadPDBAtom')
 					return true;
 				}
@@ -1118,9 +1148,7 @@ namespace BALL
 					 &record_AUTHOR.continuation,
 					 record_AUTHOR.authors);
 				
-				return readRecordAUTHOR
-		(record_AUTHOR.continuation,
-		 record_AUTHOR.authors);
+				return readRecordAUTHOR(record_AUTHOR.continuation, record_AUTHOR.authors);
 
 
 				
@@ -1138,7 +1166,6 @@ namespace BALL
 					(record_CAVEAT.continuation,
 					 record_CAVEAT.entry_code,
 					 record_CAVEAT.comment);
-
 
 				
 			case PDB::RECORD_TYPE__CISPEP:
@@ -1432,8 +1459,7 @@ namespace BALL
 
 			case PDB::RECORD_TYPE__HETATM:
 
-				if (selected_model_ != 0
-						&& selected_model_ != current_model_)
+				if ((selected_model_ != 0) && (selected_model_ != current_model_))
 				{
 					return true;
 				}
@@ -1979,8 +2005,7 @@ namespace BALL
 
 			case PDB::RECORD_TYPE__SIGATM:
 
-							if (selected_model_ != 0
-									&& selected_model_ != current_model_)
+							if ((selected_model_ != 0) && (selected_model_ != current_model_))
 							{
 								return true;
 							}
@@ -2025,8 +2050,7 @@ namespace BALL
 
 			case PDB::RECORD_TYPE__SIGUIJ:
 
-							if (selected_model_ != 0
-									&& selected_model_ != current_model_)
+							if ((selected_model_ != 0) && (selected_model_ != current_model_))
 							{
 								return true;
 							}
@@ -2180,8 +2204,7 @@ namespace BALL
 
 			case PDB::RECORD_TYPE__TER:
 
-								 if (selected_model_ != 0
-										 && selected_model_ != current_model_)
+								 if ((selected_model_ != 0) && (selected_model_ != current_model_))
 								 {
 									 return true;
 								 }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.h,v 1.27 2004/02/18 23:24:04 oliver Exp $
+// $Id: genericPDBFile.h,v 1.28 2005/02/08 17:32:36 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
@@ -19,6 +19,10 @@
 #	include <BALL/DATATYPE/options.h>
 #endif
 
+#ifndef BALL_FORMAT_PDBINFO_H
+#	include <BALL/FORMAT/PDBInfo.h>
+#endif
+
 namespace BALL 
 {
 
@@ -27,8 +31,6 @@ namespace BALL
 	*/
 	namespace PDB 
 	{
-		// ?????
-		// Shouldn't this be implemented via Options?
 		/**
 		*/
 		enum
@@ -38,16 +40,7 @@ namespace BALL
 			SIZE_OF_FORMAT_STRING_BUFFER = 256
 		};
 
-		// ?????
-		// Shouldn't this be implemented via Options?
-		/**
-		*/
-		enum Property
-		{
-			PROPERTY__PSEUDO_XPLOR_ATOM_IMPORT = 0
-		};
-		
-		/** The rcord types of a PDB file.
+		/** The record types of a PDB file.
 		*/
 		enum RecordType
 		{
@@ -952,7 +945,6 @@ namespace BALL
 					0 = terse \par
 					99 = tell me everything
 					@see		Default::VERBOSITY
-					@param	verbosity  integer
 			*/
 			static const char* VERBOSITY;
 
@@ -961,7 +953,6 @@ namespace BALL
 					very simple test for the correct length of input lines. The
 					default is to keep line checking turned off. 
 					@see		Default::LINE_CHECKING
-					@param	verbosity  boolean
 			*/
 			static const char* STRICT_LINE_CHECKING;
 			
@@ -971,10 +962,22 @@ namespace BALL
 					appearing, denoted by Index 0. If you want to read all models,
 					choose index -1.
 					@see		Default::CHOOSE_MODEL
-					@param	model	integer
 			*/
 			static const char* CHOOSE_MODEL;
 
+			/**	Store skipped records in info.
+					If this option is set, all unparsed records will end up 
+					in the skipped record list of info.
+					@see		Default::STORE_SKIPPED_RECORDS
+			*/
+			static const char* STORE_SKIPPED_RECORDS;
+
+			/**	Ignore XPLOR pseudo atoms.
+					If this option is set XPLOR pseudo atoms (recognized
+					by their x/y/z coordinates of 9999.0) will be dropped.
+					@see		Default::IGNORE_XPLOR_PSEUDO_ATOMS
+			*/
+			static const char* IGNORE_XPLOR_PSEUDO_ATOMS;
 		};
 
 		/** Default values for PDBFile options.  
@@ -985,7 +988,7 @@ namespace BALL
 					0 - shut up!
 					@see	Option::VERBOSITY
 			*/
-			static const int VERBOSITY;
+			static const Index VERBOSITY;
 
 			/** Default for strict line checking option.
 					false - don't check lines lengths.
@@ -998,13 +1001,25 @@ namespace BALL
 					@see	Option::CHOOSE_MODEL
 			*/
 			static const Index CHOOSE_MODEL;
+
+			/**	Store skipped records in info.
+					true -- store everything we cannot interpret.
+			*/
+			static const bool STORE_SKIPPED_RECORDS;
+
+			/**	Ignore XPLOR pseudo atoms.
+					true -- skip them.
+			*/
+			static const bool IGNORE_XPLOR_PSEUDO_ATOMS;
 		};
 
 		/** @name Options
 		*/
 		//@{
-		///
+		/// The options for parsing the file
 		Options options;
+		/// Summary information on the last file read
+		PDBInfo info;
 		//@}
 
 		/** @name Constructurs and destructor.
@@ -1046,11 +1061,11 @@ namespace BALL
 		*/
 		void selectModel(Index index);
 
+		/// Return the model currently selected
+		Index getSelectedModel() const;
+
 		/// Selects all models for reading.
 		void selectAllModels();
-
-		/// Returns the number of the currently selected model.
-		Index getSelectedModel() const;
 
 		/// Returns the number of the model weare currently reading. (?????)
 		Index getCurrentModel() const;
@@ -1078,11 +1093,11 @@ namespace BALL
 		virtual const char* getAtomName
 			(const PDB::Atom atom_name);
 
-		/// ?????
+		/// Extract the PDB remoteness indicator of an atom record
 		virtual char getAtomRemotenessIndicator
 			(const PDB::Atom atom_name);
 
-		/// ?????
+		/// Extract the PDB branch designator of an atom record
 		virtual short getAtomBranchDesignator
 			(const PDB::Atom atom_name);
 
@@ -1102,7 +1117,10 @@ namespace BALL
 			(bool from_begin_of_file = true);
 		//@}
 
-		/** @name Functions for reading parts of the PDB file.
+		/** @name Methods for parsing individual records.
+				These methods are typically required if you want to 
+				implement your own PDB parser (derived from PDBFile or
+				GenericPDBFile).
 		*/
 		//@{
 		/// Parse a line from a PDBFile. This is a helper function for readLine().
@@ -1117,16 +1135,31 @@ namespace BALL
 		/// Read the next record of a PDB file.
 		bool readNextRecord(bool read_values = true);
 
-		/** Reads all records of a file and returns true if all records were
-				readable without error, false ow.
+		/** Reads all records of a file.
+				@return true if all records were parsed without error
+				@return false otherwise
 		*/
 		bool readRecords();
 
-		/// ``Reads'' an unknown record by simply returning true.
+		/** Called for unknown PDB records.
+				The default implementation does nothing, it always returns true.
+				@return true
+		*/
 		virtual bool readUnknownRecord(const char* line);
 
-		/// ``Reads'' an invalid record by simply returning true.
+		/** Called an invalid record by simply returning true.
+		*/
 		virtual bool readInvalidRecord(const char* line);
+
+		/**	Skip the current record.
+				If storeSkippedRecords is set to true, the records are
+				added to the skipped records of info. Otherwise, they are
+				just ignored. This method should be called by
+				those readRecord methods that want to skip a particular record
+				(this is the default behavior implemented in GenericPDBFile).
+				@return true
+		*/
+		bool skipCurrentRecord();
 
 		/// Reads an anisotropic temperature factor record.
 		virtual bool readRecordANISOU
@@ -1558,20 +1591,10 @@ namespace BALL
 		/*_ A helper function for initializing certain data structures. Used by
 				constructors.
 		*/
-		void init_()
-			throw();
-
-		//_
-		int verbosity_;
-
-		//_
-		bool strict_line_checking_;
+		void init_() throw();
 
 		//_ 
 		Index current_model_;
-
-		//_
-		Index selected_model_;
 
 		//_
 		Index current_record_;
@@ -1642,12 +1665,27 @@ namespace BALL
 			PDB::RecordTURN    record_TURN;
 			PDB::RecordTVECT   record_TVECT;
 		};
+		
+		///_Verbosity level
+		int verbosity_;
 
+		/// Strict line length checking enabled?
+		bool strict_line_checking_;
+
+		/// The selected model_
+		Index selected_model_;
+
+		/// Store the skipped records in info?
+		bool store_skipped_records_;
+
+		/// Ignore XPLOR pseudo atoms?
+		bool ignore_xplor_pseudo_atoms_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/genericPDBFile.iC>
 #	endif
+
 } // namespace BALL
 
 #endif // BALL_FORMAT_GENERICPDBFILE_H

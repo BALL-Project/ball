@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.17 2005/01/25 15:42:07 amoll Exp $
+# $Id: Makefile.lst,v 1.18 2005/02/08 17:32:38 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -189,6 +189,8 @@ EXECUTABLES_FORMATS =\
 	MOL2File_test$(EXEEXT)\
 	NMRStarFile_test$(EXEEXT)\
 	DCDFile_test$(EXEEXT)\
+	PDBRecords_test$(EXEEXT)\
+	PDBInfo_test$(EXEEXT)\
 	PDBFile_test$(EXEEXT)\
 	TrajectoryFile_test$(EXEEXT)\
 	XYZFile_test$(EXEEXT)

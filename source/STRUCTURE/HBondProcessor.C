@@ -1,12 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.7 2004/03/24 19:57:31 anne Exp $
+// $Id: HBondProcessor.C,v 1.8 2005/02/08 17:32:38 oliver Exp $
+//
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
 #include <BALL/STRUCTURE/peptides.h>
-
-
+#include <BALL/DATATYPE/hashGrid.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 namespace BALL
 {
@@ -23,7 +26,7 @@ namespace BALL
 	{
 	}
 
-	void HBondProcessor::preComputeBonds(ResidueIterator& data)
+	void HBondProcessor::preComputeBonds_(ResidueIterator& data)
 	{
 		POS pos;
 		int j=0;                // index to serially the residues TOTHINK:maybe it is possible 
@@ -49,18 +52,18 @@ namespace BALL
 			{
 				if(ai->getName() == "C")
 				{
-					pos.posC=ai->getPosition();
-					haveC=true;
+					pos.pos_C = ai->getPosition();
+					haveC = true;
 				}
 				else if(ai->getName() == "O")
 				{
-					pos.posO=ai->getPosition();
-					haveO=true;
+					pos.pos_O = ai->getPosition();
+					haveO = true;
 				}
 				else if(ai->getName() == "N")
 				{
-					pos.posN=ai->getPosition();
-          haveN=true;
+					pos.pos_N = ai->getPosition();
+          haveN = true;
 				}
 			}	
 
@@ -75,7 +78,7 @@ namespace BALL
 
 			pos.number = j;
 			j++;
-			pos.pres   = &(*data);
+			pos.res = &(*data);
 			++data;
 			found_N_term=true;
 			vec_.push_back(pos);  
@@ -100,18 +103,18 @@ namespace BALL
 			{
 				if(ai->getName() == "N")
 				{
-					pos.posN=ai->getPosition();
-					haveN=true;
+					pos.pos_N = ai->getPosition();
+					haveN = true;
 				}
 				else if(ai->getName() == "C")
 				{
-					pos.posC=ai->getPosition();
-					haveC=true;
+					pos.pos_C = ai->getPosition();
+					haveC = true;
 				}
 				else if(ai->getName() == "O")
 				{
-					pos.posO=ai->getPosition();
-					haveO=true;
+					pos.pos_O = ai->getPosition();
+					haveO = true;
 				}
 			}
 			
@@ -125,14 +128,18 @@ namespace BALL
 			}
 			 	
 			// evaluate the position of H 
-			Vector3 O = vec_[j-1].posO;
-			Vector3 C = vec_[j-1].posC;
+			Vector3 O = vec_[j-1].pos_O;
+			Vector3 C = vec_[j-1].pos_C;
 
 			//TODO: Division durch 0!!!
 			if ((O - C).getLength() != 0.)
-				pos.posH=pos.posN-((O-C)*BOND_LENGTH_N_H)/(O-C).getLength();
+			{
+				pos.pos_H = pos.pos_N - ((O-C) * BOND_LENGTH_N_H)/(O-C).getLength();
+			}
 			else
+			{
 				pos.is_complete = false;
+			}
 
 			//set identification number of the residue
 			// pos.number=res.getID().toInt();
@@ -140,7 +147,7 @@ namespace BALL
 			j++;
 			
 			// point pres at data
-			pos.pres = &(*data);
+			pos.res = &(*data);
 			
 			vec_.push_back(pos);  // insert the residue in position vector
 		}
@@ -153,10 +160,10 @@ namespace BALL
 		//      TODO  :  if vec_.size()==0 there was no composit 
 
 		// matrix to save the existence of a HBond
-		HBondPairs_.resize(vec_.size()); 
+		h_bond_pairs_.resize(vec_.size()); 
 
 		//create a grid inside the bounding box
-		HashGrid3<POS> atom_grid(lower_, upper_-lower_, MAX_LENGTH);
+		HashGrid3<POS> atom_grid(lower_, upper_ - lower_, MAX_LENGTH);
 
 
 		// insert all protein-residues in respect of N-atom
@@ -166,7 +173,7 @@ namespace BALL
 		{
 			if (vec_[i].is_complete)
 			{
-				Vector3 r(vec_[i].posN);
+				Vector3 r(vec_[i].pos_N);
 				atom_grid.insert(r, vec_[i]);
 			}
 		}                   
@@ -181,7 +188,7 @@ namespace BALL
 		{
 			if (vec_[i].is_complete)
 			{
-				box = atom_grid.getBox(vec_[i].posN);
+				box = atom_grid.getBox(vec_[i].pos_N);
 
 				// We iterate over the grid ourselves, since the beginBox()... didn't work... :-(
 				Position x, y, z;                            // indices of the actual box
@@ -214,10 +221,10 @@ namespace BALL
 									if (((int)abs((int)(data_it->number - vec_[i].number)) > 1) && (data_it->number!=0))
 									{
 										// compute the distances between the relevant atoms
-										dist_ON = (vec_[i].posO - data_it->posN).getLength();
-										dist_CH = (vec_[i].posC - data_it->posH).getLength();
-										dist_OH = (vec_[i].posO - data_it->posH).getLength();
-										dist_CN = (vec_[i].posC - data_it->posN).getLength();
+										dist_ON = (vec_[i].pos_O - data_it->pos_N).getLength();
+										dist_CH = (vec_[i].pos_C - data_it->pos_H).getLength();
+										dist_OH = (vec_[i].pos_O - data_it->pos_H).getLength();
+										dist_CN = (vec_[i].pos_C - data_it->pos_N).getLength();
 
 										// compute the electrostatic energy of the bond-building groups
 										energy  = 0.42*0.20 * 332.;
@@ -225,11 +232,11 @@ namespace BALL
 
 										if (energy < -0.5)
 										{
-											HBondPairs_[vec_[i].number].push_back(data_it->number);
+											h_bond_pairs_[vec_[i].number].push_back(data_it->number);
 											AtomIterator ai;
 											Atom *acceptor = 0;
 											Atom* donor = 0; 
-											for(ai=(vec_[i].pres)->beginAtom(); +ai; ++ai)
+											for(ai=(vec_[i].res)->beginAtom(); +ai; ++ai)
 											{
 												if(ai->getName() == "O")
 												{
@@ -237,7 +244,7 @@ namespace BALL
 												}
 											}	
 
-											for(ai=(data_it->pres)->beginAtom(); +ai; ++ai)
+											for(ai=(data_it->res)->beginAtom(); +ai; ++ai)
 											{
 												if(ai->getName() == "N")
 												{
@@ -313,7 +320,7 @@ namespace BALL
 
 		// compute the H-Bonds
 		
-		preComputeBonds(ri);
+		preComputeBonds_(ri);
 	  	
 		return Processor::BREAK;
 
@@ -321,12 +328,12 @@ namespace BALL
 
 	std::ostream& operator << (std::ostream& s, const BALL::HBondProcessor::POS& p)
 	{
-		return s << p.posC << " " << p.posN << " " << p.posH << " " << p.posO << " " << p.number << std::endl;
+		return s << p.pos_C << " " << p.pos_N << " " << p.pos_H << " " << p.pos_O << " " << p.number << std::endl;
 	}
 
 	const std::vector< std::vector<int> >& HBondProcessor::getHBondPairs() const
 	{
-		return HBondPairs_;
+		return h_bond_pairs_;
 	}
 
 	const std::vector<HBondProcessor::POS>& HBondProcessor::getPosVec() const

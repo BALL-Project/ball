@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.iC,v 1.7 2002/12/13 12:44:07 anker Exp $
+// $Id: genericPDBFile.iC,v 1.8 2005/02/08 17:32:36 oliver Exp $
 
 BALL_INLINE 
 void GenericPDBFile::clear(int state)
@@ -25,6 +25,7 @@ void GenericPDBFile::selectModel(Index index)
 BALL_INLINE 
 void GenericPDBFile::selectAllModels()
 {
+	options.setInteger(Option::CHOOSE_MODEL, 0);
   selected_model_ = 0;
 }
 

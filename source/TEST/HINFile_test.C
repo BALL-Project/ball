@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile_test.C,v 1.32 2005/01/19 13:36:07 amoll Exp $
+// $Id: HINFile_test.C,v 1.33 2005/02/08 17:32:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.32 2005/01/19 13:36:07 amoll Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.33 2005/02/08 17:32:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ CHECK(bool read(System& system) throw(Exception::ParseError))
   TEST_REAL_EQUAL(system.getAtom(0)->getRadius(), 1.4)
   TEST_EQUAL(system.getAtom(0)->countBonds(), 2) 
 
-  TEST_NOT_EQUAL(system.getAtom(1)->getRadius(), 0)
+  TEST_EQUAL(system.getAtom(1)->getRadius() > 0.0, true)
 	PRECISION(0.001)
 	TEST_REAL_EQUAL(hin.getTemperature(), 297.5626)
 	TEST_REAL_EQUAL(hin.getPeriodicBoundary().a.x, -9.35068)
@@ -179,6 +179,14 @@ CHECK(HINFile(const HINFile& file) throw(Exception::FileNotFound))
 	HINFile f3;
 	f3.setName("asddasddddddasdasdasdasd");
 	HINFile* f4 = 0;
+	try
+	{
+		f4 = new HINFile(f3);
+	}
+	catch (Exception::FileNotFound)
+	{
+		STATUS("Caught!")
+	}
 	TEST_EXCEPTION(Exception::FileNotFound, f4 = new HINFile(f3))
 	delete f4;
 RESULT

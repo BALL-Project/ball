@@ -19,6 +19,8 @@ CPP_SOURCES=\
 	parameters.C\
 	parameterSection.C\
 	PDBFile.C\
+	PDBInfo.C\
+	PDBRecords.C\
 	resourceFile.C\
 	trajectoryFile.C\
 	TRRFile.C\

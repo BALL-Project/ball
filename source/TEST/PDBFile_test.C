@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.22 2004/11/23 21:11:08 amoll Exp $
+// $Id: PDBFile_test.C,v 1.23 2005/02/08 17:32:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.22 2004/11/23 21:11:08 amoll Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.23 2005/02/08 17:32:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -82,22 +82,27 @@ CHECK([EXTRA]PDBFile::selectModel())
 	System s;
 	f.read(s);
 	TEST_EQUAL(s.countAtoms(), 1)
+	TEST_EQUAL(f.options.getInteger(GenericPDBFile::Option::CHOOSE_MODEL), 1)
 	s.clear();
 	f.selectModel(2);
 	f.read(s);
 	TEST_EQUAL(s.countAtoms(), 2)
+	TEST_EQUAL(f.options.getInteger(GenericPDBFile::Option::CHOOSE_MODEL), 2)
 	s.clear();
 	f.selectModel(3);
 	f.read(s);
 	TEST_EQUAL(s.countAtoms(), 3)
+	TEST_EQUAL(f.options.getInteger(GenericPDBFile::Option::CHOOSE_MODEL), 3)
 	s.clear();
 	f.selectModel(4);
 	f.read(s);
 	TEST_EQUAL(s.countAtoms(), 0)
+	TEST_EQUAL(f.options.getInteger(GenericPDBFile::Option::CHOOSE_MODEL), 4)
 	s.clear();
 	f.selectModel(0);
 	f.read(s);
 	TEST_EQUAL(s.countAtoms(), 6)
+	TEST_EQUAL(f.options.getInteger(GenericPDBFile::Option::CHOOSE_MODEL), 0)
 	s.clear();
 	f.options.setInteger(GenericPDBFile::Option::CHOOSE_MODEL, 0);
 	f.read(s);
