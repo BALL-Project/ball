@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.5 2000/02/22 10:16:31 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.6 2000/02/22 12:33:26 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -189,19 +189,19 @@ namespace BALL
 			if (van_der_waals_parameters_.options.has("ATOM"))
 			{
 				// the ATOM option either takes CDIEL or RDIEL as an argument
-				// meaning constant DC or distance-dependend DC
+				// meaning constant DC or distance-dependent DC
 				String value = van_der_waals_parameters_.options["ATOM"];
 				if ((value != "CDIEL") && (value != "RDIEL"))
 				{
-					Log.warn() << "CharmmNonBonded::setup: unknown CHARMM arguemtn to ATOM: " << value 
-							<< "   - using distance dependend electrostatics." << endl;
+					Log.warn() << "CharmmNonBonded::setup: unknown CHARMM argument for ATOM: " << value 
+							<< "   - using distance dependent electrostatics." << endl;
 				}
 				
 				if (value == "CDIEL")
 				{
 					use_dist_depend_dielectric_ = false;
 				} else {
-					use_dist_depend_dielectric_ = false;
+					use_dist_depend_dielectric_ = true;
 				}
 
 				// store the value back in the options
