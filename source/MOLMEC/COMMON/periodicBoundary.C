@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.17 2001/05/17 01:30:53 oliver Exp $
+// $Id: periodicBoundary.C,v 1.18 2001/06/06 10:57:06 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -426,7 +426,7 @@ namespace BALL
 		// (we add 102% of the distance to make sure we get no points
 		// on the grid boundary)
 		Vector3	additional_space(solvent_solute_distance * 1.02);
-		HashGrid3<Atom*> solute_grid(box_.a - additional_space,
+		HashGrid3<const Atom*> solute_grid(box_.a - additional_space,
 				box_.b - box_.a + additional_space + additional_space,
 				solvent_solute_distance);
 

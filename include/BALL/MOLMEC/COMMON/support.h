@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.13 2001/05/16 01:37:39 oliver Exp $
+// $Id: support.h,v 1.14 2001/06/06 10:56:36 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -100,7 +100,7 @@ namespace BALL
 				@return	the number of molecules added to {\tt system}
 		*/
 		BALL::Size addNonOverlappingMolecules
-			(System& system, const HashGrid3<Atom*>& solute_grid,
+			(System& system, const HashGrid3<const Atom*>& solute_grid,
 			 const System& solvent, const Box3& box, double distance);
 
 		/** Adapt periodic water (or general solvent) boxes to our periodic
