@@ -256,13 +256,14 @@ namespace BALL
 		std::vector<Vertex*> vertex_;
 		/*_ The number of edges of the GrpahFace
 		*/
-		Size number_of_edges_;
+		Position number_of_edges_;
 		/*_ The edges of the GraphFace
 		*/
 		std::vector<Edge*> edge_;
 		/* The index of the GraphFace
 		*/
 		Index index_;
+
 	};
 
 
@@ -301,9 +302,9 @@ namespace BALL
 			const std::vector<Edge*>& edges,
 			Index index)
 		throw()
-		: number_of_vertices_((Size)vertices.size()),
+		: number_of_vertices_(vertices.size()),
 			vertex_(vertices),
-			number_of_edges_((Size)edges.size()),
+			number_of_edges_(edges.size()),
 			edge_(edges),
 			index_(index)
 	{
@@ -395,7 +396,7 @@ namespace BALL
 		throw()
 	{
 		vertex_.push_back(vertex);
-		number_of_vertices++;
+		number_of_vertices_++;
 	}
 
 
@@ -442,7 +443,7 @@ namespace BALL
 		throw()
 	{
 		edge_.push_back(edge);
-		number_of_edges++;
+		number_of_edges_++;
 	}
 
 
@@ -481,10 +482,13 @@ namespace BALL
 		bool found2 = false;
 		while ((!found1) && (i < number_of_edges_))
 		{
-			if ((edge_[i]->vertex_[0] == vertex) || (edge_[i]->vertex_[1] == vertex))
+			if (edge_[i] != NULL)
 			{
-				edge1 = edge_[i];
-				found1 = true;
+				if ((edge_[i]->vertex_[0] == vertex) || (edge_[i]->vertex_[1] == vertex))
+				{
+					edge1 = edge_[i];
+					found1 = true;
+				}
 			}
 			i++;
 		}
@@ -492,10 +496,13 @@ namespace BALL
 		{
 			while ((!found2) && (i < number_of_edges_))
 			{
-				if ((edge_[i]->vertex_[0] == vertex) || (edge_[i]->vertex_[1] == vertex))
+				if (edge_[i] != NULL)
 				{
-					edge2 = edge_[i];
-					found2 = true;
+					if ((edge_[i]->vertex_[0] == vertex) || (edge_[i]->vertex_[1] == vertex))
+					{
+						edge2 = edge_[i];
+						found2 = true;
+					}
 				}
 				i++;
 			}
@@ -514,11 +521,14 @@ namespace BALL
 		bool found = false;
 		while ((!found) && (i < number_of_edges_))
 		{
-			if (((edge_[i]->vertex_[0] == vertex1) && (edge_[i]->vertex_[1] == vertex2)) ||
-					((edge_[i]->vertex_[0] == vertex2) && (edge_[i]->vertex_[1] == vertex1))		)
+			if (edge_[i] != NULL)
 			{
-				edge = edge_[i];
-				found = true;
+				if (((edge_[i]->vertex_[0] == vertex1) && (edge_[i]->vertex_[1] == vertex2)) ||
+						((edge_[i]->vertex_[0] == vertex2) && (edge_[i]->vertex_[1] == vertex1))		)
+				{
+					edge = edge_[i];
+					found = true;
+				}
 			}
 			i++;
 		}
@@ -557,8 +567,7 @@ namespace BALL
 
 
 	template <typename Vertex, typename Edge>
-	bool GraphFace<Vertex,Edge>::substituteVertex(Vertex* old_vertex,
-			Vertex* new_vertex)
+	bool GraphFace<Vertex,Edge>::substituteVertex(Vertex* old_vertex, Vertex* new_vertex)
 		throw()
 	{
 		for (Position i = 0; i < number_of_vertices_; i++)
