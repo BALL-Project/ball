@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.35 2000/09/05 19:10:28 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.36 2000/09/06 14:20:09 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -48,6 +48,7 @@ namespace BALL
 			@param	m pointer to matrix
 			@param	dim dimension of the matrix
 	*/
+	BALL_INLINE
 	template <typename T>
 	T GetDeterminant_(const T* m, Size dim)
 	{
@@ -85,7 +86,6 @@ namespace BALL
 			@param	dim dimension of the matrix
 	*/
 	template <typename T>
-	BALL_INLINE 
 	T GetDeterminant(const T* m, Size dim)
 	{
 		if (dim == 2)
@@ -117,6 +117,7 @@ namespace BALL
 		Size dim = 2;
 		return (BALL_CELL(0,0) * BALL_CELL(1,1) - BALL_CELL(0,1) * BALL_CELL(1,0));
 	}
+
 	/**	Get the determinant of an 2x2 matrix.
 			@param	m00 first value of the matrix
 			@param	m01 second value of the matrix
@@ -914,46 +915,33 @@ namespace BALL
 		(const TSphere3<T>& a, const TSphere3<T>& b, 
 		 TCircle3<T>& intersection_circle)
 	{
-		// if the two spheres are concentric, there is
-		// no intersection circle - return false
-		if (Maths::isZero((a.p - b.p).getSquareLength()))
-		{
-			return false;
-		}
-		
-		// check for intersection
-		// x is the fraction of the difference vector of
-		// a.p and b.p where the intersection plane is cut
-		T difference_squared = (b.p.x - a.p.x) * (b.p.x - a.p.x) 
-												 + (b.p.y - a.p.y) * (b.p.y - a.p.y) 
-												 + (b.p.z - a.p.z) * (b.p.z - a.p.z);
-		T x = 0.5 + (a.radius * a.radius - b.radius * b.radius) / (2.0 * difference_squared);
-		if ((x < 0.0) || (x > 1.0) || (sqrt(difference_squared) > (a.radius + b.radius))) 
-		{
-			// the two spheres do not intersect!
-			return false;
-		}
-		
-		// calculate the intersection plane
-		TPlane3<T> plane
-			(-2 * b.p.x + 2 * a.p.x,
-			 -2 * b.p.y + 2 * a.p.y,
-			 -2 * b.p.z + 2 * a.p.z,
-				 b.p.x * b.p.x 
-			 + b.p.y * b.p.y 
-			 + b.p.z * b.p.z
-			 - b.radius * b.radius
-			 - a.p.x * a.p.x 
-			 - a.p.y * a.p.y 
-			 - a.p.z * a.p.z
-			 + a.radius * a.radius);
-
-		plane.hessify();
-
-		// calculate the circle lying on that plane
-		T d = plane.n * plane.p;
-		intersection_circle.set(d * plane.n, plane.n, sqrt(a.radius * a.radius - d * d));
-
+		TVector3<T> norm = b.p-a.p;
+		T square_dist = norm*norm;
+		if (Maths::isZero(square_dist))
+			{
+				return false;
+			}
+		T dist = sqrt(square_dist);
+		if (Maths::isLess(a.radius+b.radius,dist))
+			{
+				return false;
+			}
+		if (Maths::isGreaterOrEqual(Maths::abs(a.radius-b.radius),dist))
+			{
+				return false;
+			}
+		T radius1_square = (a.radius)*(a.radius);
+		T radius2_square = (b.radius)*(b.radius);
+		T u = radius1_square-radius2_square+square_dist;
+		T length = u/(2*square_dist);
+		intersection_circle.p = a.p+(norm*length);
+		T square_radius = radius1_square-u*length/2;
+		if (Maths::isLess(square_radius,0))
+			{
+				return false;
+			}
+		intersection_circle.radius = sqrt(square_radius);
+		intersection_circle.n = norm;
 		return true;
 	}
 
