@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.80 2004/04/30 13:17:15 amoll Exp $
+// $Id: mainControl.C,v 1.81 2004/05/05 14:45:53 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -33,6 +33,7 @@
 #include <qtooltip.h>
 #include <qpushbutton.h> // needed for preferences
 #include <qcursor.h>     // wait cursor
+#include <qmessagebox.h> 
 
 #include <algorithm> // sort
 
@@ -97,6 +98,22 @@ namespace BALL
 		void MainControl::setup_()
 			throw()
 		{
+			if (!fragment_db_.isValid()) 
+			{
+				QMessageBox::critical(0, "Critical error",
+						QString("Could not read the FragmentDB data!\n") + 
+						"Please set the BALL_DATA_PATH or BALLVIEW_DATA_PATH\n" + 
+						"environment variable to the directory containing the\n" + 
+						"BALL or BALLView data directory (e.g. to C:\\BALL\\data).\n"+
+						"If the problem persists, start the application with the\n"+
+						"-l flag to enable logging and read the file "+
+						logging_file_name_ + ". This file is created in either\n" +
+						"your home directory or in the directory with this\n" + 
+						"executeable.",
+						QMessageBox::Abort,  QMessageBox::NoButton);
+				exit(-1);
+			}
+
 			preferences_.read();
 
 			statusBar()->setMinimumSize(2, 25);
