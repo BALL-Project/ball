@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.14 2004/06/25 15:51:12 amoll Exp $
+// $Id: POVRenderer.C,v 1.15 2004/06/25 16:33:55 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -238,17 +238,13 @@ namespace BALL
 			for (;it != clipping_planes_.end(); it++)
 			{
 				outfile_ << "  clipped_by{" << endl
-								 << "   plane{<1, 1, 1>, 0" << endl
-								 << "  translate<"
-								 << (*it).translation.x << ", " 
-								 << (*it).translation.y << ", " 
-								 << (*it).translation.z << ">" << endl
-								 << "  rotate<"
+								 << "   plane{< -"  // negate normal vector
 					       << (*it).normal.x << ", " 
 					       << (*it).normal.y << ", " 
-					       << (*it).normal.z << "> " << endl
-								 <<   "  }" << endl
-								 <<   "  }" << endl;
+					       << (*it).normal.z << ">, "
+					       << (*it).translation
+								 << "  }" << endl
+								 << " }" << endl;
 			}
 			outfile_ << "}" << endl;
 			outfile_.close();
@@ -496,12 +492,10 @@ namespace BALL
 			throw()
 		{
 			POVRendererClippingPlane plane;
-			plane.normal = Vector3(rep.getProperty("VX").getDouble(),
-														 rep.getProperty("VY").getDouble(),
-														 rep.getProperty("VZ").getDouble());
-			plane.translation = Vector3(rep.getProperty("TX").getDouble(),
-																  rep.getProperty("TY").getDouble(),
-														 			rep.getProperty("TZ").getDouble());
+			plane.normal = Vector3(rep.getProperty("AX").getDouble(),
+														 rep.getProperty("BY").getDouble(),
+														 rep.getProperty("CZ").getDouble());
+			plane.translation = rep.getProperty("D").getDouble();
 
 			clipping_planes_.push_back(plane);
 		}

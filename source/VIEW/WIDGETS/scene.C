@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.88 2004/06/25 15:51:13 amoll Exp $
+// $Id: scene.C,v 1.89 2004/06/25 16:34:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -440,14 +440,13 @@ namespace BALL
 				}
 
 				glPushMatrix();
-				glTranslatef ((**it).getProperty("TX").getDouble(),
-											(**it).getProperty("TY").getDouble(),
-											(**it).getProperty("TZ").getDouble());
-				glRotated((**it).getProperty("VX").getDouble(), 1, 0, 0);
-				glRotated((**it).getProperty("VY").getDouble(), 0, 1, 0);
-				glRotated((**it).getProperty("VZ").getDouble(), 0, 0, 1);
+				
+				GLdouble plane[] ={
+					(**it).getProperty("AX").getDouble(),
+					(**it).getProperty("BX").getDouble(),
+					(**it).getProperty("CX").getDouble(),
+					(**it).getProperty("D").getDouble()};
 
-				GLdouble plane[] ={1, 0, 0, 0};
 				glEnable(current_clipping_plane);
 				glClipPlane(current_clipping_plane, plane);
 				glPopMatrix();
@@ -1623,13 +1622,10 @@ namespace BALL
 		{
 			Representation* rep = new Representation();
 			rep->setModelType(MODEL_CLIPPING_PLANE);
-			rep->setProperty("TX", 25);
-			rep->setProperty("TY", 25);
-			rep->setProperty("TZ", 25);
-			rep->setProperty("VX", 0);
-			rep->setProperty("VY", 0);
-			rep->setProperty("VZ", 0);
-
+			rep->setProperty("AX", 1);
+			rep->setProperty("BY", 1);
+			rep->setProperty("CZ", 1);
+			rep->setProperty("D", 0);
 			getMainControl()->insert(*rep);
 		}
 		
