@@ -1,7 +1,7 @@
-// $Id: proteinMapper.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: proteinMapper.C,v 1.2 1999/12/22 16:52:44 oliver Exp $
 
 #include <BALL/common.h>
-#include <iostream.h>
+#include <iostream>
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/PSE.h>
@@ -10,7 +10,7 @@
 #include <BALL/MATHS/matrix44.h>
 #include <map>
 
-using std::map;
+using namespace std;
 using namespace BALL;
 
 int main(int argc, char** argv) 
