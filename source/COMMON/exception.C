@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.22 2001/01/21 23:02:04 amoll Exp $
+// $Id: exception.C,v 1.23 2001/06/21 02:40:05 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -15,11 +15,10 @@
 #define BALL_CORE_DUMP_ENVNAME "BALL_DUMP_CORE"
 
 #define DEF_EXCEPTION(a,b) \
-	a##::##a##(const char* file, int line) throw()\
+	a :: a (const char* file, int line) throw()\
 		: GeneralException(file, line, #a, b)\
 	{\
 	}\
-\
 	
 
 using std::string;
