@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.6 2000/01/07 21:50:19 oliver Exp $ 
+// $Id: hashSet.h,v 1.7 2000/03/29 17:25:17 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -114,7 +114,7 @@ namespace BALL
 			
 		/**	Copy Constructor.
 		*/
-		HashSet(const HashSet& hash_set, bool deep = true);
+		HashSet(const HashSet& hash_set);
 
 		/**	Destructor.
 		*/
@@ -141,7 +141,7 @@ namespace BALL
 
 		/**
 		*/
-		void set(const HashSet& hash_set, bool deep = true);
+		void set(const HashSet& hash_set);
 
 		/**
 		*/
@@ -149,7 +149,7 @@ namespace BALL
 
 		/**
 		*/
-		void get(HashSet& hash_set, bool deep = true) const;
+		void get(HashSet& hash_set) const;
 
 		/**
 		*/
@@ -486,7 +486,7 @@ namespace BALL
 
 	template <class Key>
 	HashSet<Key>::HashSet
-		(const HashSet& hash_set, bool clone_deep)
+		(const HashSet& hash_set)
 		:	size_(hash_set.size_),
 			capacity_(hash_set.capacity_),
 			bucket_(hash_set.bucket_.size())
@@ -534,7 +534,7 @@ namespace BALL
 	template <class Key>
 	BALL_INLINE 
 	void HashSet<Key>::set
-		(const HashSet& hash_set, bool deep)
+		(const HashSet& hash_set)
 	{
 		if (&hash_set == this)
 		{
@@ -573,9 +573,9 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	void HashSet<Key>::get(HashSet& hash_set, bool deep) const
+	void HashSet<Key>::get(HashSet& hash_set) const
 	{
-		hash_set.set(*this, clone_deep);
+		hash_set.set(*this);
 	}
 
 	template <class Key>
