@@ -1,4 +1,4 @@
-// $Id: OOIEnergy.h,v 1.1 2000/02/07 10:18:15 len Exp $
+// $Id: ooiEnergy.h,v 1.1 2000/02/12 19:36:44 oliver Exp $
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
 #define BALL_SOLVATION_OOIENERGY_H
@@ -18,16 +18,15 @@ namespace BALL
 			Calculates the solvation energy after
 			OOI et al. (Proc. of the National US Academy of Sciences)
 			The energy is returned in units of kJ/mol
-			Unparametrized Atoms are simply ignored, this leads to
+			Unparametrized atoms are simply ignored, this leads to
 			unreasonable values.\\
 
 			{\bf Files:}\\
-			types are taken from data/solvation/OOITypes.dat\\
-			values for energies are taken from data/solvation/OOIEnergies.dat\\
-			{\bf Definition:} \URL{BALL/SOLVATION/OOIEnergy.h}
+			types are taken from {\tt solvation/Ooi.ini}\\
+			{\bf Definition:} \URL{BALL/SOLVATION/ooiEnergy.h}
 			\\
 	*/ 
-	double calculateOOIEnergy(System& system);
+	double calculateOoiEnergy(Composite& composite);
 
 		
 } // namespace BALL
