@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.5 1999/12/30 18:05:34 oliver Exp $
+// $Id: residue.C,v 1.6 2000/02/10 15:12:45 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -328,6 +328,36 @@ namespace BALL
 	{
 		id_ = BALL_RESIDUE_DEFAULT_ID;
 		insertion_code_ = BALL_RESIDUE_DEFAULT_INSERTION_CODE;
+	}
+
+	String Residue::getFullName() const
+	{
+		String full_name = getName();
+		full_name.trim();
+		String suffix = "-";
+		if (isNTerminal()) 
+		{	
+			suffix = "-N";
+		}
+		if (isCTerminal()) 
+		{
+			suffix = "-C";
+		}
+		if (isCTerminal() && isNTerminal()) 
+		{
+			suffix = "-M";
+		}
+		if (hasProperty(Residue::PROPERTY__HAS_SSBOND)) 
+		{
+			suffix += "S";
+		}
+		
+		if (suffix != "-")
+		{
+			full_name += suffix;
+		}
+
+		return full_name;
 	}
 
 } // namespace BALL
