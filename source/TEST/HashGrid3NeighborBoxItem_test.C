@@ -1,10 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3_test5.C,v 1.1 2003/06/20 12:38:09 amoll Exp $
+// $Id: HashGrid3NeighborBoxItem_test.C,v 1.1 2003/06/22 10:21:48 oliver Exp $
 //
-// This line is for testing purposes. Remove me.
-//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,15 +12,15 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test5.C,v 1.1 2003/06/20 12:38:09 amoll Exp $")
+START_TEST(HashGrid3::NeighborBoxItem, "$Id: HashGrid3NeighborBoxItem_test.C,v 1.1 2003/06/22 10:21:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-// BALL::HashGridBox3::DataItem_
+//BALL::HashGridBox3::NeighbourBoxItem
 
-CHECK(DataItem_(const Item& item, DataItem_* next) throw())
+CHECK(NeighbourBoxItem(HashGridBox3* box, NeighbourBoxItem* next) throw())
   // ???
 RESULT
 

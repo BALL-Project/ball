@@ -1,10 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3_test4.C,v 1.1 2003/06/20 12:38:09 amoll Exp $
+// $Id: HashGrid3DataIteratorTraits_test.C,v 1.1 2003/06/22 10:21:48 oliver Exp $
 //
-// This line is for testing purposes. Remove me.
-//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,14 +12,14 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test4.C,v 1.1 2003/06/20 12:38:09 amoll Exp $")
+START_TEST(HashGrid3::DataIteratorTraits, "$Id: HashGrid3DataIteratorTraits_test.C,v 1.1 2003/06/22 10:21:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-CHECK(BALL_CREATE_DEEP(DataIteratorTraits_))
+CHECK(BALL_CREATE_DEEP(DataIteratorTraits))
   // ???
 RESULT
 
@@ -28,15 +27,15 @@ CHECK(DataIteratorPosition& getPosition() throw())
   // ???
 RESULT
 
-CHECK(DataIteratorTraits_() throw())
+CHECK(DataIteratorTraits() throw())
   // ???
 RESULT
 
-CHECK(DataIteratorTraits_(const DataIteratorTraits_& traits, bool /* deep */ = true) throw())
+CHECK(DataIteratorTraits(const DataIteratorTraits& traits, bool /* deep */ = true) throw())
   // ???
 RESULT
 
-CHECK(DataIteratorTraits_(const HashGridBox3& box) throw())
+CHECK(DataIteratorTraits(const HashGridBox3& box) throw())
   // ???
 RESULT
 
@@ -64,11 +63,11 @@ CHECK(bool isValid() const throw())
   // ???
 RESULT
 
-CHECK(bool operator != (const DataIteratorTraits_ &traits) const throw())
+CHECK(bool operator != (const DataIteratorTraits &traits) const throw())
   // ???
 RESULT
 
-CHECK(bool operator == (const DataIteratorTraits_ &traits) const throw())
+CHECK(bool operator == (const DataIteratorTraits &traits) const throw())
   // ???
 RESULT
 
@@ -76,7 +75,7 @@ CHECK(const DataIteratorPosition& getPosition() const throw())
   // ???
 RESULT
 
-CHECK(const DataIteratorTraits_& operator = (const DataIteratorTraits_ &traits) throw())
+CHECK(const DataIteratorTraits& operator = (const DataIteratorTraits &traits) throw())
   // ???
 RESULT
 

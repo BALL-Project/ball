@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.198 2003/06/21 10:52:14 amoll Exp $
+# $Id: Makefile,v 1.199 2003/06/22 10:21:50 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -60,12 +60,12 @@ EXECUTABLES_DATATYPES = \
 	HashMap_test\
 	StringHashMap_test\
 	HashSet_test\
-	HashGrid3_test1\
-	HashGrid3_test2\
-	HashGrid3_test3\
-	HashGrid3_test4\
-	HashGrid3_test5\
-	HashGrid3_test6\
+	HashGrid3_test\
+	HashGridBox3_test\
+	HashGrid3DataIteratorTraits_test\
+	HashGrid3BoxIteratorTraits_test\
+	HashGrid3DataItem_test\
+	HashGrid3NeighborBoxItem_test\
 	Options_test\
 	String_test1\
 	String_test2\

@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AmberFF_test.C,v 1.12 2002/02/27 12:24:21 sturm Exp $
+// $Id: AmberFF_test.C,v 1.13 2003/06/22 10:21:47 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +13,7 @@
 #include <BALL/FORMAT/HINFile.h>
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.12 2002/02/27 12:24:21 sturm Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.13 2003/06/22 10:21:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

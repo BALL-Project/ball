@@ -1,10 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3_test3.C,v 1.1 2003/06/20 12:38:09 amoll Exp $
+// $Id: HashGrid3BoxIteratorTraits_test.C,v 1.1 2003/06/22 10:21:47 oliver Exp $
 //
-// This line is for testing purposes. Remove me.
-//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,26 +12,24 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test3.C,v 1.1 2003/06/20 12:38:09 amoll Exp $")
+START_TEST(HashGrid3::BoxIteratorTraits, "$Id: HashGrid3BoxIteratorTraits_test.C,v 1.1 2003/06/22 10:21:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-// tests for class HashGridBox3::BoxIteratorTraits_::
-
-HashGridBox3<int>::BoxIteratorTraits_* it_tr_ptr = 0;
-CHECK(BoxIteratorTraits_() throw())
-	it_tr_ptr = new HashGridBox3<int>::BoxIteratorTraits_;
+HashGridBox3<int>::BoxIteratorTraits* it_tr_ptr = 0;
+CHECK(BoxIteratorTraits() throw())
+	it_tr_ptr = new HashGridBox3<int>::BoxIteratorTraits;
 	TEST_NOT_EQUAL(it_tr_ptr, 0)
 RESULT
 
-CHECK([EXTRA]~BoxIteratorTraits_() throw())
+CHECK([EXTRA]~BoxIteratorTraits() throw())
 	delete it_tr_ptr;
 RESULT
 
-CHECK(BALL_CREATE_DEEP(BoxIteratorTraits_))
+CHECK(BALL_CREATE_DEEP(BoxIteratorTraits))
   // ???
 RESULT
 
@@ -40,11 +37,11 @@ CHECK(BoxIteratorPosition& getPosition() throw())
   // ???
 RESULT
 
-CHECK(BoxIteratorTraits_(const BoxIteratorTraits_& traits, bool /* deep */ = true) throw())
+CHECK(BoxIteratorTraits(const BoxIteratorTraits& traits, bool /* deep */ = true) throw())
   // ???
 RESULT
 
-CHECK(BoxIteratorTraits_(const HashGridBox3& box) throw())
+CHECK(BoxIteratorTraits(const HashGridBox3& box) throw())
   // ???
 RESULT
 
@@ -72,11 +69,11 @@ CHECK(bool isValid() const throw())
   // ???
 RESULT
 
-CHECK(bool operator != (const BoxIteratorTraits_& traits) const throw())
+CHECK(bool operator != (const BoxIteratorTraits& traits) const throw())
   // ???
 RESULT
 
-CHECK(bool operator == (const BoxIteratorTraits_& traits) const throw())
+CHECK(bool operator == (const BoxIteratorTraits& traits) const throw())
   // ???
 RESULT
 
@@ -84,7 +81,7 @@ CHECK(const BoxIteratorPosition& getPosition() const throw())
   // ???
 RESULT
 
-CHECK(const BoxIteratorTraits_& operator = (const BoxIteratorTraits_& traits) throw())
+CHECK(const BoxIteratorTraits& operator = (const BoxIteratorTraits& traits) throw())
   // ???
 RESULT
 
