@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.9 2000/08/19 20:25:35 amoll Exp $
+// $Id: property.h,v 1.11 2000/08/22 17:03:27 amoll Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -59,7 +59,7 @@ namespace BALL
 			DOUBLE,
 
 			/** @doc String-type properties contain a pointer to a string.
-					When destructing the property, the string is destructed, too.
+					When destructing the property, the string is destructed, too. ???
 			*/
 			STRING,
 
@@ -128,7 +128,7 @@ namespace BALL
 		NamedProperty(const string& name, float value);
 
 		/** Constructor for double-type properties.
-				Creates a NamedProperty object containing a float value.
+				Creates a NamedProperty object containing a double value.
 				The {\tt Type} is set to \Ref{DOUBLE}.
 				@param	name the property's name
 				@param	value the double value stored in the property
@@ -225,7 +225,7 @@ namespace BALL
 		PersistentObject* getObject() const;
 
 		/** Return the data of the property object as a string.
-				If the property object is not of BOOL type, {\bf ""}
+				If the property object is not of STRING type, {\bf ""}
 				is returned.
 		*/
 		string getString() const;
@@ -270,8 +270,8 @@ namespace BALL
 			this, all kernel classes derived from PropertyManager contain a public enum
 			that defines a value NUMBER_OF_PROPERTIES. All user defined properties should	
 			refer to this constant (e.g. by defining {\tt MY_PROPERTY = Molecule::NUMBER_OF_PROPERTIES + 1}).\\
-			The second way of storing properties is much mor flexible, but less efficient. 
-			It uses the class NamedProperty that also allow to store additional information 
+			The second way of storing properties is much more flexible, but less efficient. 
+			It uses the class NamedProperty that also allows to store additional information 
 			along with the property. In this case, each property is accessed via a 
 			unique name.\\
 			{\bf Definition:} \URL{BALL/CONCEPT/property.h}
@@ -319,7 +319,7 @@ namespace BALL
 		PropertyManager& operator = (const PropertyManager& property_manager);
 
 		/** Assign properties to another property manager.
-				This method copies the contents of the a PropertyManager object
+				This method copies the contents of the PropertyManager object
 				to the given {\tt property_manager}.
 				@param	property_manager the target object
 				@param	deep ignored (just for interface compatibility)
@@ -404,9 +404,9 @@ namespace BALL
 		//@}
 	
 		/**	@name	Handling named properties 
-				PropertyManager contains an array of \Ref{NamedProperty} objects.
+				PropertyManager contains an vector of \Ref{NamedProperty} objects.
 				Each of the NamedProeprty objects has to have a {\em unique} name.
-				The setProperty methods ensure the uniqueness of theis name.
+				The setProperty methods ensure the uniqueness of this name.
 				If a setProperty method is called for an existing name, the
 				existing object is destructed prior to the insertion of the new object.
 		*/
@@ -482,9 +482,9 @@ namespace BALL
 		*/
 		void setProperty(const string& name, const string& value);
 
-		/**	Set a named property containing a string.
+		/**	Set a named property containing a PersistentObject.
 				This method creates a new named property containing a
-				string ({\tt NamedProperty::Type == STRING}).
+				string ({\tt NamedProperty::Type == OBJECT}).
 				Already existing data using the same {\tt name} is overwritten.
 				@param	name the name to be used for the new property
 				@param	value the data 
@@ -492,7 +492,7 @@ namespace BALL
 		void setProperty(const string& name, const PersistentObject& value);
 
 		/**	Retrieve a named property.
-				If the proeprty manager contains a property named {\tt name}
+				If the property manager contains a property named {\tt name}
 				this property is returned. An empty property is returned
 				otherwise.
 				@param	name the name of the proeprty to be retrieved
@@ -526,10 +526,10 @@ namespace BALL
 		/**	@name	Storers */
 		//@{
 
-		///
+		/// Output operator
 		friend std::ostream& operator << (std::ostream& s, const PropertyManager& property_manager);
 
-		///
+		/// Input operator
 		friend std::istream& operator >> (std::istream& s, PropertyManager& property_manager);
 		//@}
 
@@ -552,10 +552,18 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
-		///
+		/**	Test if instance is valid.
+				Returns true if the bitvector is valid.
+				@return bool {\bf true}
+		*/
 		bool isValid() const;
 	
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 

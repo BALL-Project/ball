@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.42 2000/07/22 10:41:36 amoll Exp $
+// $Id: vector3.h,v 1.43 2000/08/20 15:41:06 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -473,7 +473,13 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
-		///
+
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		/**	Test if instance is valid.
