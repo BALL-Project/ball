@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.36 2004/10/27 10:28:08 amoll Exp $
+// $Id: mainframe.C,v 1.37 2004/11/03 15:25:39 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -361,12 +361,13 @@ namespace BALL
 		CompositeManager::CompositeIterator cit = getCompositeManager().begin();
 		for (Index system_nr = 1; cit != getCompositeManager().end(); cit++)
 		{
+			if (!RTTI::isKindOf<System>(**cit)) continue;
 			String molecular_file = String(result.ascii())+"_molecule" + String(system_nr) + ".xdr";
 			out.insertValue("BALLVIEW_PROJECT", "MolecularFile" + String(system_nr), molecular_file);
 
 			ofstream outfile(molecular_file.c_str(), std::ios::out);
 			TextPersistenceManager pm(outfile);
-			*(System*) *cit >> pm;
+			(*dynamic_cast<System*>(*cit)) >> pm;
 			outfile.close();
 			system_nr++;
 		}
