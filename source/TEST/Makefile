@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.203 2003/06/27 09:29:08 anker Exp $
+# $Id: Makefile,v 1.204 2003/06/28 19:18:37 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -97,8 +97,14 @@ EXECUTABLES_CONCEPTS = \
 	CompositeCompositeIteratorTraits_test\
 	CompositeChildcompositeIteratorTraits_test\
 	CompositeAncestorIteratorTraits_test\
-	CompositeIteratorTraits_test\
-	Embeddable_test
+	Embeddable_test\
+	BaseIterator_test\
+	ConstForwardIterator_test\
+	ForwardIterator_test\
+	ConstBidirectionalIterator_test\
+	BidirectionalIterator_test\
+	ConstRandomAccessIterator_test\
+	RandomAccessIterator_test
 
 EXECUTABLES_KERNEL = \
 	PTE_test\
@@ -128,15 +134,10 @@ EXECUTABLES_KERNEL = \
 	FragmentDB_test\
 	ForEach_test\
 	GlobalKernel_test\
-	BaseIterator_test\
-	ConstForwardIterator_test\
-	ForwardIterator_test\
-	ConstBidirectionalIterator_test\
-	BidirectionalIterator_test\
-	AtomIterator_test
+	CompositeIteratorTraits_test\
+	AtomIterator_test\
+	AtomBondIteratorTraits_test
 
-#	ConstRandomAccessIterator_test\
-#	RandomAccessIterator_test\
 
 EXECUTABLES_MOLMEC = \
 	Gradient_test\
@@ -278,7 +279,7 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -O0
 
 .o.vgr: 
 	@$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.o $(LDFLAGS) -o $@ $(LIBS)
-	@$(VALGRIND) $(VALGRIND_OPTS) $* 2>$*.vgr || true
+	$(VALGRIND) $(VALGRIND_OPTS) $* 2>$*.vgr || true
 
 dummy:
 
@@ -328,6 +329,6 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 	@./runtests -section SOLVATION $(TEST_OPTIONS) $(EXECUTABLES_SOLVATION)
 
 clean:	default_clean
-	@$(RM) -rf *.o *~ *.vgr *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
+	@$(RM) -rf *.o *~ *.vgr *.log ii_files Templates.DB	SunWS_cache *.TMP core core.* a.out $(EXECUTABLES)
 
 valgrind: $(VALGRINDS)

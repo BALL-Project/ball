@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RandomAccessIterator_test.C,v 1.11 2003/06/11 08:10:05 oliver Exp $
+// $Id: RandomAccessIterator_test.C,v 1.12 2003/06/28 19:18:37 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -326,7 +326,7 @@ class VectorIteratorTraits_
 		position_ += distance;
 	}
 
-	DataType& getData(Index index)
+	DataType& getData(Index index) const
 		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
@@ -357,7 +357,7 @@ class VectorIteratorTraits_
 typedef RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 typedef reverse_iterator<RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > > MyReverseIterator;
 
-START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.11 2003/06/11 08:10:05 oliver Exp $")
+START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.12 2003/06/28 19:18:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -380,12 +380,6 @@ v.push_back((float)0.2);
 v.push_back((float)0.3);
 v.push_back((float)0.4);
 
-CHECK(RandomAccessIterator(const Container& container))
-	MyIterator m(MyIterator::begin(v));
-	TEST_EQUAL(m.isValid(), true)
-	TEST_REAL_EQUAL(*m, 0.1)
-RESULT
-
 MyIterator m(MyIterator::begin(v));
 MyIterator n;
 
@@ -394,294 +388,10 @@ CHECK(RandomAccessIterator(const RandomAccessIterator& iterator) throw())
 	TEST_REAL_EQUAL(*m2, 0.1)
 RESULT
 
-CHECK(RandomAccessIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator) throw())
-	BaseIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > bi;
-	MyIterator m2(bi);
-RESULT
-
-CHECK(bool operator + () const throw())
-	TEST_EQUAL(+m, true)
-	TEST_EQUAL(+n, false)
-RESULT
-
-CHECK(bool operator - () const throw())
-	TEST_EQUAL(-m, false)
-	TEST_EQUAL(-n, true)
-RESULT
-
-CHECK(void toBegin() throw(Exception::InvalidIterator))
-	++m;
-	TEST_REAL_EQUAL(*m, 0.2)
-	m.toBegin();
-	TEST_REAL_EQUAL(*m, 0.1)	
-
-	TEST_EXCEPTION(Exception::InvalidIterator, n.toBegin())
-RESULT
-
-CHECK(bool isBegin() const throw(Exception::InvalidIterator))
-	TEST_EQUAL(m.isBegin(), true)
-	++m;
-	TEST_EQUAL(m.isBegin(), false)
-	TEST_EXCEPTION(Exception::InvalidIterator, n.isBegin())
-RESULT
-
-CHECK(void toEnd() throw(Exception::InvalidIterator))
-	TEST_REAL_EQUAL(*m, 0.2)
-	m.toEnd();
-	TEST_EXCEPTION(Exception::InvalidIterator, *m)
-	--m;
-	TEST_REAL_EQUAL(*m, 0.4)	
-
-	TEST_EXCEPTION(Exception::InvalidIterator, n.toEnd())
-RESULT
-
-CHECK(bool isEnd() const throw(Exception::InvalidIterator))
-	m.toEnd();
-	TEST_EQUAL(m.isEnd(), true)
-	--m;
-	TEST_EQUAL(m.isEnd(), false)
-	TEST_EXCEPTION(Exception::InvalidIterator, n.isEnd())
-RESULT
-
-CHECK(void toRBegin() throw(Exception::InvalidIterator))
-	m.toRBegin();
-	TEST_REAL_EQUAL(*m, 0.4)
-
-	TEST_EXCEPTION(Exception::InvalidIterator, n.toRBegin())
-RESULT
-
-CHECK(bool isRBegin() const throw(Exception::InvalidIterator))
-	TEST_EQUAL(m.isRBegin(), true)
-	m.toEnd();
-	TEST_EQUAL(m.isRBegin(), false)
-
-	TEST_EXCEPTION(Exception::InvalidIterator, n.isRBegin())
-RESULT
-
-CHECK(void toREnd() throw(Exception::InvalidIterator))
-  m.toREnd();
-  TEST_EXCEPTION(Exception::InvalidIterator, *m)
-  --m;
-  TEST_REAL_EQUAL(*m, 0.1)
-  TEST_EXCEPTION(Exception::InvalidIterator, n.toREnd())
-RESULT
-
-CHECK(bool isREnd() const throw(Exception::InvalidIterator))
-	m.toREnd();
-	TEST_EQUAL(m.isREnd(), true)
-	m.toBegin();
-	m++;
-	TEST_EQUAL(m.isREnd(), false)
-
-	MyIterator my;
-	TEST_EXCEPTION(Exception::InvalidIterator, my.isREnd())
-RESULT
-
-CHECK(RandomAccessIterator& operator ++ () throw(Exception::InvalidIterator))
-	m.toBegin();
-	TEST_REAL_EQUAL(*m, 0.1)
-	++m;
-	TEST_REAL_EQUAL(*m, 0.2)
-
-	m.toEnd();
-	MyIterator my;
-	TEST_EXCEPTION(Exception::InvalidIterator, ++my)
-	TEST_EXCEPTION(Exception::InvalidIterator, ++m)
-	TEST_EXCEPTION(Exception::InvalidIterator, ++n)
-RESULT
-
-CHECK(RandomAccessIterator operator ++ (int) throw(Exception::InvalidIterator))
-	m.toBegin();
-	TEST_REAL_EQUAL(*m, 0.1)
-	m++;
-	TEST_REAL_EQUAL(*m, 0.2)
-
-	m.toEnd();
-	TEST_EXCEPTION(Exception::InvalidIterator, m++)
-	TEST_EXCEPTION(Exception::InvalidIterator, n++)
-	MyIterator my;
-	TEST_EXCEPTION(Exception::InvalidIterator, my++)
-RESULT
-
-
-CHECK(RandomAccessIterator& operator -- () throw(Exception::InvalidIterator))
-	m.toEnd();
-	--m;
-	TEST_REAL_EQUAL(*m, 0.4)
-
-	m.toREnd();
-	TEST_EXCEPTION(Exception::InvalidIterator, --m)
-	TEST_EXCEPTION(Exception::InvalidIterator, --n)
-	MyIterator my;
-	TEST_EXCEPTION(Exception::InvalidIterator, --my)
-RESULT
-
-
-CHECK(RandomAccessIterator operator -- (int) throw(Exception::InvalidIterator))
-	m.toEnd();
-	m--;
-	TEST_REAL_EQUAL(*m, 0.4)
-
-	m.toREnd();
-	TEST_EXCEPTION(Exception::InvalidIterator, m--)
-	TEST_EXCEPTION(Exception::InvalidIterator, n--)
-
-	MyIterator my;
-	TEST_EXCEPTION(Exception::InvalidIterator, my--)
-RESULT
-
-
-CHECK(RandomAccessIterator& operator += (Distance distance) throw(Exception::InvalidIterator))
-	m.toBegin();
-	m+=2;
-	TEST_REAL_EQUAL(*m, 0.3)
-	m+=2;
-	TEST_EQUAL(m.isEnd(), true)
-	TEST_EXCEPTION(Exception::InvalidIterator, m += 1)
-	TEST_EXCEPTION(Exception::InvalidIterator, n += 1)
-
-	MyIterator my;
-	TEST_EXCEPTION(Exception::InvalidIterator, my += 1)
-RESULT
-
-
-CHECK(RandomAccessIterator& operator -= (Distance distance) throw(Exception::InvalidIterator))
-	m.toEnd();
-	m-=2;
-	TEST_REAL_EQUAL(*m, 0.3)
-	m-=3;
-	TEST_EQUAL(m.isREnd(), true)
-	TEST_EXCEPTION(Exception::InvalidIterator, m-=1)
-	TEST_EXCEPTION(Exception::InvalidIterator, n-=1)
-
-	MyIterator my;
-	TEST_EXCEPTION(Exception::InvalidIterator, my -= 1)
-RESULT
-
-
-CHECK(RandomAccessIterator operator + (Distance distance) const throw(Exception::InvalidIterator))
-	MyIterator p;
-	m.toBegin();
-	p = m + 2;
-	TEST_REAL_EQUAL(*p, 0.3)
-	p = m + 4;
-	TEST_EQUAL(p.isEnd(), true)
-	TEST_EXCEPTION(Exception::InvalidIterator, p + 1)
-	TEST_EXCEPTION(Exception::InvalidIterator, n + 1)
-
-	MyIterator my;
-	TEST_EXCEPTION(Exception::InvalidIterator, my + 1)
-RESULT
-
-
-CHECK(RandomAccessIterator operator - (Distance distance) const throw(Exception::InvalidIterator))
-	MyIterator p;
-	m.toEnd();
-	p = m - 2;
-	TEST_REAL_EQUAL(*p, 0.3)
-	p = m - 5;
-	TEST_EQUAL(p.isREnd(), true)
-	TEST_EXCEPTION(Exception::InvalidIterator, p - 1)
-	TEST_EXCEPTION(Exception::InvalidIterator, n - 1)
-
-	MyIterator my;
-	TEST_EXCEPTION(Exception::InvalidIterator, my - 1)
-RESULT
-
 vector<float> v1;
 v1.push_back((float)99.9);
 
-CHECK(Distance operator - (const RandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
-	TEST_EXCEPTION(Exception::InvalidIterator, m - n)
-	TEST_EXCEPTION(Exception::InvalidIterator, n - m)
-	MyIterator m1(MyIterator::begin(v1));
-	m.toBegin();
-	TEST_EXCEPTION(Exception::IncompatibleIterators, m - m1)
-	m1 = MyIterator::end(v);
-	m1--;
-	TEST_EQUAL(m - m1, -3)
-	TEST_EQUAL(m1 - m, 3)
-
-	MyIterator my1;
-	MyIterator my2;
-	TEST_EXCEPTION(Exception::InvalidIterator, my1 - my2)
-RESULT
-
-
-CHECK(bool operator < (const RandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
-	MyIterator m1(MyIterator::begin(v1));
-	m1.toBegin();
-	m.toBegin();
-	TEST_EXCEPTION(Exception::IncompatibleIterators, m1 < m)
-	TEST_EXCEPTION(Exception::IncompatibleIterators, m < m1)
-	TEST_EXCEPTION(Exception::InvalidIterator, n < m)
-	
-	m1 = MyIterator(MyIterator::begin(v));
-	m.toBegin();
-	TEST_REAL_EQUAL(*m1, 0.1)
-	TEST_REAL_EQUAL(*m, 0.1)
-	TEST_EQUAL(m1 < m, false)
-	m++; 
-	TEST_EQUAL(m < m1, false)
-	TEST_EQUAL(m1 < m, true)
-RESULT
-
-
-CHECK(bool operator <= (const RandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
-	MyIterator m1(MyIterator::begin(v1));
-	m.toBegin();
-	TEST_EXCEPTION(Exception::IncompatibleIterators, m1 <= m)
-	TEST_EXCEPTION(Exception::IncompatibleIterators, m <= m1)
-	TEST_EXCEPTION(Exception::InvalidIterator, n <= m)
-	
-	m1 = MyIterator(MyIterator::begin(v));
-	m.toBegin();
-	TEST_EQUAL(m1 <= m, true)
-	TEST_EQUAL(m <= m1, true)
-	m++; 
-	
-	TEST_REAL_EQUAL(*m, 0.2)
-	TEST_REAL_EQUAL(*m1, 0.1)
-
-	TEST_EQUAL(m <= m1, false)
-	TEST_EQUAL(m1 <= m, true)
-RESULT
-
-
-CHECK(bool operator > (const RandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
-	MyIterator m1(MyIterator::begin(v1));
-	m.toBegin();
-	TEST_EXCEPTION(Exception::IncompatibleIterators, m1 > m)
-	TEST_EXCEPTION(Exception::IncompatibleIterators, m > m1)
-	TEST_EXCEPTION(Exception::InvalidIterator, n > m)
-	
-	m1 = MyIterator(MyIterator::begin(v));
-	m.toBegin();
-	TEST_EQUAL(m > m1, false)
-	m++; 
-	TEST_EQUAL(m1 > m, false)
-	TEST_EQUAL(m > m1, true)
-RESULT
-
-
-CHECK(bool operator >= (const RandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
-	MyIterator m1(MyIterator::begin(v1));
-	m.toBegin();
-	TEST_EXCEPTION(Exception::IncompatibleIterators, m1 >= m)
-	TEST_EXCEPTION(Exception::IncompatibleIterators, m >= m1)
-	TEST_EXCEPTION(Exception::InvalidIterator, n >= m)
-	
-	m1 = MyIterator(MyIterator::begin(v));
-	m.toBegin();
-	TEST_EQUAL(m1 >= m, true)
-	TEST_EQUAL(m >= m1, true)
-	m++; 
-	TEST_EQUAL(m1 >= m, false)
-	TEST_EQUAL(m >= m1, true)
-RESULT
-
-
-CHECK(DataType& operator [] (Index index) throw(Exception::InvalidIterator))
+CHECK(DataType& operator [] (Index index) const throw(Exception::InvalidIterator))
 	TEST_REAL_EQUAL(m[2], (float) 0.3)
 	TEST_EXCEPTION(Exception::InvalidIterator, m[6])
 	MyIterator m2;
@@ -712,7 +422,11 @@ CHECK(static RandomAccessIterator rend(const Container& container) throw(Excepti
 	TEST_EXCEPTION(Exception::InvalidIterator, m1++);
 RESULT
 
-CHECK(BALL_CREATE(RandomAccessIterator))
+CHECK(pointer operator -> () const throw(Exception::InvalidIterator))
+  // ???
+RESULT
+
+CHECK(reference operator * () const throw(Exception::InvalidIterator))
   // ???
 RESULT
 

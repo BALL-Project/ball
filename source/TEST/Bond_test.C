@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bond_test.C,v 1.31 2003/06/26 12:45:00 amoll Exp $
+// $Id: Bond_test.C,v 1.32 2003/06/28 19:18:36 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +16,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.31 2003/06/26 12:45:00 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.32 2003/06/28 19:18:36 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

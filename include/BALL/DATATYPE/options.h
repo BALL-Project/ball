@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.19 2003/03/26 13:56:18 anhi Exp $
+// $Id: options.h,v 1.20 2003/06/28 19:14:56 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -42,6 +43,8 @@ namespace BALL
 		
 		public:
 
+		BALL_CREATE(Options)
+
 		/**	@name	Constants 
 		*/
 		//@{
@@ -63,9 +66,8 @@ namespace BALL
 		/**	Copy constructor.	
 				Creates a new option table from an existing one.
 				@param	options the options to be copied
-				@param	deep bool, no effect		
 		*/
-		Options(const Options& options, bool deep = true) throw();
+		Options(const Options& options) throw();
 
 		/**		Destructor.
 					Destructs the option table and frees all 

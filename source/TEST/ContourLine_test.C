@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ContourLine_test.C,v 1.1 2003/06/23 12:26:35 amoll Exp $
+// $Id: ContourLine_test.C,v 1.2 2003/06/28 19:18:36 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,19 +10,20 @@
 #include <BALL/DATATYPE/contourLine.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ContourLine_test.C,v 1.1 2003/06/23 12:26:35 amoll Exp $")
+START_TEST(TContourLine, "$Id: ContourLine_test.C,v 1.2 2003/06/28 19:18:36 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
+ContourLine* cl_ptr = 0;
 CHECK(TContourLine(T height = 0))
-	ContourLine* line = new ContourLine;
+	cl_ptr = new ContourLine;
 RESULT
 
 CHECK(~TContourLine())
-  // ???
+	delete cl_ptr;
 RESULT
 
 CHECK(TContourLine(const TContourLine& copyTContourLine))

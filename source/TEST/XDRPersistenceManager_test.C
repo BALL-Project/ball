@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.11 2003/06/22 10:21:51 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.12 2003/06/28 19:18:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.11 2003/06/22 10:21:51 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.12 2003/06/28 19:18:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -49,6 +49,7 @@ CHECK(XDRPersistenceManager(std::istream& is) throw())
 	is.close();
 	TEST_NOT_EQUAL(po, 0)
 	TEST_EQUAL(RTTI::isKindOf<Composite>(*po), true)
+	delete po;
 RESULT
 
 
@@ -64,6 +65,7 @@ CHECK(XDRPersistenceManager(std::istream& is, std::ostream& os) throw())
 	TEST_EQUAL(RTTI::isKindOf<Composite>(*po), true)
 	// *po >> pm;
 	os.close();
+	delete po;
 RESULT
 
 

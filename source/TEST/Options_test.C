@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Options_test.C,v 1.8 2003/06/17 13:36:00 amoll Exp $
+// $Id: Options_test.C,v 1.9 2003/06/28 19:18:37 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/options.h>
 
-START_TEST(Options, "$Id: Options_test.C,v 1.8 2003/06/17 13:36:00 amoll Exp $")
+START_TEST(Options, "$Id: Options_test.C,v 1.9 2003/06/28 19:18:37 oliver Exp $")
 
 using BALL::Options;
 using BALL::Vector3;
@@ -36,7 +37,7 @@ CHECK(const String& getName() const throw())
 RESULT
 
 Options*	options2;
-CHECK(Options(const Options& options, bool deep = true) throw())
+CHECK(Options(const Options& options) throw())
 	options2 = new Options(*options);
 	TEST_EQUAL(options2->getName(), options->getName())
 	TEST_EQUAL(options2->get("ABC"), options->get("ABC"))

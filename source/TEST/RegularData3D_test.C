@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.14 2003/06/23 12:22:08 amoll Exp $
+// $Id: RegularData3D_test.C,v 1.15 2003/06/28 19:18:37 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.14 2003/06/23 12:22:08 amoll Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.15 2003/06/28 19:18:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -371,7 +372,6 @@ CHECK([EXTRA]operator << (ostream& os, const RegularData3D&))
 	STATUS(7)
 	for (Position i = 0; i < data.size(); i++)
 	{
-		//STATUS(i)
 		TEST_REAL_EQUAL(data[i], in_data[i])
 	}
 RESULT
@@ -385,6 +385,7 @@ CHECK(BALL_CREATE(TRegularData3D<ValueType>))
 	RegularData3D* p = (RegularData3D*)g.create(false, true);
 	RegularData3D empty;
 	TEST_EQUAL(*p, empty)
+	delete p;
 	p = (RegularData3D*)g.create();
 	TEST_REAL_EQUAL(p->getOrigin().x, 1.0)
 	TEST_REAL_EQUAL(p->getOrigin().y, 2.0)
@@ -396,6 +397,7 @@ CHECK(BALL_CREATE(TRegularData3D<ValueType>))
 	TEST_REAL_EQUAL(p->getSpacing().y, 0.2)
 	TEST_REAL_EQUAL(p->getSpacing().z, 0.3)
 	TEST_REAL_EQUAL((*p)[0], 1.23)
+	delete p;
 RESULT
 
 CHECK(ConstIterator begin() const throw())
@@ -451,6 +453,7 @@ CHECK(IndexType())
 	TEST_EQUAL(it->x, 0)
 	TEST_EQUAL(it->y, 0)
 	TEST_EQUAL(it->z, 0)
+	delete it;
 RESULT
 
 CHECK(IndexType(Position p))
@@ -459,6 +462,7 @@ CHECK(IndexType(Position p))
 	TEST_EQUAL(it->x, 5)
 	TEST_EQUAL(it->y, 5)
 	TEST_EQUAL(it->z, 5)
+  delete it;
 RESULT
 
 CHECK(IndexType(Position p, Position q, Position r))
@@ -467,6 +471,7 @@ CHECK(IndexType(Position p, Position q, Position r))
 	TEST_EQUAL(it->x, 1)
 	TEST_EQUAL(it->y, 2)
 	TEST_EQUAL(it->z, 3)
+	delete it;
 RESULT
 
 CHECK(TRegularData3D(const TRegularData3D<ValueType>& grid) throw(Exception::OutOfMemory))
@@ -578,17 +583,22 @@ CHECK(void binaryRead(const String& filename) throw())
 RESULT
 
 CHECK(void rescale(const IndexType& new_size) throw(Exception::OutOfMemory))
-  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
-	g[RegularData3D::IndexType(0,0,1)] = 1;
-	g[RegularData3D::IndexType(0,1,1)] = 1;
-	g[RegularData3D::IndexType(1,0,1)] = 1;
-	g[RegularData3D::IndexType(1,1,1)] = 1;
-	g.resize(RegularData3D::IndexType(1,1,2));
-	TEST_REAL_EQUAL(g[RegularData3D::IndexType(0,0,2)], 1) // got 0
-	TEST_REAL_EQUAL(g[RegularData3D::IndexType(0,2,2)], 1)
-	TEST_REAL_EQUAL(g[RegularData3D::IndexType(2,0,2)], 1)
-	TEST_REAL_EQUAL(g[RegularData3D::IndexType(2,2,2)], 1)
-	TEST_REAL_EQUAL(g[RegularData3D::IndexType(0,0,1)], 0.5) // got 1
+  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(2, 2, 2));
+	g[RegularData3D::IndexType(0,0,1)] = 0;
+	g[RegularData3D::IndexType(0,1,1)] = 0;
+	g[RegularData3D::IndexType(1,0,1)] = 0;
+	g[RegularData3D::IndexType(1,1,1)] = 0;
+	g[RegularData3D::IndexType(0,0,0)] = 1;
+	g[RegularData3D::IndexType(0,1,0)] = 1;
+	g[RegularData3D::IndexType(1,0,0)] = 1;
+	g[RegularData3D::IndexType(1,1,0)] = 1;
+	g.rescale(RegularData3D::IndexType(3, 3, 3));
+	STATUS(g.getSize().x << " x " << g.getSize().y << " x " << g.getSize().z)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0,0,2)), 0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0,2,2)), 0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2,0,2)), 0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2,2,2)), 0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0,0,1)), 0.5)
 RESULT
 
 CHECK(void setDimension(const CoordinateType& dimension) throw())
