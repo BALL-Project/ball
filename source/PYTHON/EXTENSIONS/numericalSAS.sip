@@ -1,4 +1,4 @@
-// $Id: numericalSAS.sip,v 1.1 2001/09/03 16:53:10 oliver Exp $
+// $Id: numericalSAS.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 %HeaderCode
 	#include <BALL/STRUCTURE/numericalSAS.h>
@@ -16,8 +16,8 @@ PyAtomDict& calculateSASAtomAreas
 	PyObject *a0obj;
 	float a1 = 1.5;
 	Size a2 = 0;
-
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|fI",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
+	// if (sipParseArgs(&sipArgsParsed,sipArgs,"mJ0",sipThisObj,sipClass_QWindowsStyle,&ptr,sipClass_QScrollBar,&a0)
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"J0fi",sipClass_AtomContainer,&a0obj,&a1,&a2))
 	{
 		PyAtomDict *res;
 
@@ -46,18 +46,16 @@ Surface& calculateSASPoints
 	float a1 = 1.5;
 	Size a2 = 0;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|fI",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"J0fi",sipClass_AtomContainer,&a0obj,&a1,&a2))
 	{
 		Surface *res;
 
-		int iserr = 0;
-
-		sipConvertTo_AtomContainer(a0obj,(AtomContainer **)&a0,1,&iserr);
-		if (iserr)
+		a0 = (AtomContainer*)sipConvertToCpp(a0obj,sipClass_AtomContainer,sipIsErr);	
+		if (sipIsErr)
 			return NULL;
 
 		res = new Surface;
-		calculateSASPoints(* a0, *res, a1,a2);
+		calculateSASPoints(*a0, *res, a1,a2);
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}

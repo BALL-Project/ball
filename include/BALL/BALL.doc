@@ -9,18 +9,19 @@
 			solvation methods, comparison and analysis of protein structures, file
 			import/export, and visualization.\\
 			BALL has been carefully designed to be
-			robust, easy to use, and open to extensions. Especially its extensibility
-			which results from an object-oriented and generic programming approach
+			robust, easy to use, and open to extensions. Especially its extensibility,
+			which results from an object-oriented and generic programming approach,
 			distinguishes it from other software packages. BALL is well suited to serve
 			as a public repository for reliable data structures and algorithms.  The development
 			of new methods is greatly simplified when using the data structures and 
 			functionality provided by BALL.
 
 		@memo \begin{center}{\Large Biochemical Algorithms Library}\\Reference Manual\end{center}
-		@version 1.0a
+		@version 1.0b
 		@author Tim Aubertin\\
 						Nicolas Pascal Boghossian\\
 		 				Andreas Burchardt\\ 
+						Andreas Hildebrandt\\
 						Heiko Klein\\
 						Andreas Kerzmann\\
 						Oliver Kohlbacher\\

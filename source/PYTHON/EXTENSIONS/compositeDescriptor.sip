@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.sip,v 1.1 2001/09/03 16:53:06 oliver Exp $
+// $Id: compositeDescriptor.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 class CompositeDescriptor
 {
@@ -64,8 +64,7 @@ class CompositeDescriptor
   // virtual void write(std::ostream& s) const;
 
 	// __repr__ code:
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   CompositeDescriptor* ptr;
   if ((ptr = (CompositeDescriptor*)sipGetCppPtr((sipThisType*)a0,sipClass_CompositeDescriptor)) == NULL)

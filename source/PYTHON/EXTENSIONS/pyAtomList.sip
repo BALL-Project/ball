@@ -1,4 +1,4 @@
-// $Id: pyAtomList.sip,v 1.1 2001/09/03 16:53:12 oliver Exp $
+// $Id: pyAtomList.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 %MappedType PyAtomList
 {
@@ -30,10 +30,6 @@
 	}
 
 	return pl;
-%End
- 
-%CanConvertToTypeCode
-	return PyList_Check(sipPy);
 %End
  
 %ConvertToTypeCode

@@ -1,4 +1,4 @@
-// $Id: global.sip,v 1.1 2001/09/03 16:53:09 oliver Exp $
+// $Id: global.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 %MappedType Index
 {
@@ -7,10 +7,6 @@
 	#include "sipBALLIndex.h"
 %End
 
-%CanConvertToTypeCode
-	// automatic conversion of Py integers to Position 
-	return PyInt_Check(sipPy);
-%End
 %ConvertToTypeCode
 	if (PyInt_Check(sipPy))
 	{
@@ -28,10 +24,6 @@
 
 %MappedType Position
 {
-%CanConvertToTypeCode
-	// automatic conversion of Py integers to Position 
-	return PyInt_Check(sipPy);
-%End
 %ConvertToTypeCode
 	if (PyInt_Check(sipPy))
 	{
@@ -60,10 +52,6 @@ typedef double DoubleReal;
 //     return NULL;
 // 
 //   return PyString_FromString(String(*ptr).c_str());
-// %End
-// %CanConvertToClassCode
-// 	// automatic conversion of Py integers to Size 
-// 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Size));
 // %End
 // %ConvertToClassCode
 // 	if (PyInt_Check(sipPy))

@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.1 2001/09/03 16:53:08 oliver Exp $
+// $Id: file.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 class std__openmode
 {
@@ -100,8 +100,7 @@ class OpenMode
 	typedef File::OpenMode OpenMode;
 %End
   public:
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   OpenMode* ptr;
   if ((ptr = (OpenMode*)sipGetCppPtr((sipThisType*)a0,sipClass_OpenMode)) == NULL)
@@ -120,10 +119,6 @@ class OpenMode
 	}
 
   return PyString_FromString(mode_string.c_str());
-%End
-%CanConvertToTypeCode
-  // automatic conversion of Py integers to Position
-  return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_OpenMode));
 %End
 %ConvertToTypeCode
   if (PyInt_Check(sipPy))

@@ -1,4 +1,4 @@
-// $Id: fragment.sip,v 1.1 2001/09/03 16:53:08 oliver Exp $
+// $Id: fragment.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 class Fragment
   : AtomContainer
@@ -23,8 +23,7 @@ class Fragment
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // virtual void read(std::istream& s);
   // virtual void write(std::ostream& s) const;
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   Fragment* ptr;
   if ((ptr = (Fragment*)sipGetCppPtr((sipThisType*)a0,sipClass_Fragment)) == NULL)

@@ -1,4 +1,4 @@
-// $Id: vector3.sip,v 1.1 2001/09/03 16:53:18 oliver Exp $
+// $Id: vector3.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
 
 class Vector3
  : PersistentObject
@@ -65,8 +65,7 @@ class Vector3
   float x;
   float y;
   float z;
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   Vector3* ptr;
   if ((ptr = (Vector3*)sipGetCppPtr((sipThisType*)a0,sipClass_Vector3)) == NULL)

@@ -1,4 +1,4 @@
-// $Id: atomContainer.sip,v 1.1 2001/09/03 16:53:04 oliver Exp $
+// $Id: atomContainer.sip,v 1.2 2001/12/22 16:39:14 oliver Exp $
 
 class AtomContainer
   : Composite, 
@@ -71,8 +71,7 @@ class AtomContainer
 	bool apply(ResidueProcessor& /processor/);
 
 	
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   AtomContainer* ptr;
   if ((ptr = (AtomContainer*)sipGetCppPtr((sipThisType*)a0,sipClass_AtomContainer)) == NULL)

@@ -1,4 +1,4 @@
-// $Id: options.sip,v 1.1 2001/09/03 16:53:10 oliver Exp $
+// $Id: options.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 class IllegalKey
 	:	GeneralException
@@ -53,8 +53,7 @@ class Options
 	const String& operator [] (const String& /key/) const
 		throw(IllegalKey);
 
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   Options* ptr;
   if ((ptr = (Options*)sipGetCppPtr((sipThisType*)a0,sipClass_Options)) == NULL)

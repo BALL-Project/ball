@@ -1,4 +1,4 @@
-// $Id: pyNucleicAcidList.sip,v 1.1 2001/09/03 16:53:13 oliver Exp $
+// $Id: pyNucleicAcidList.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 %MappedType PyNucleicAcidList
 {
@@ -31,10 +31,6 @@
 	}
 
 	return pl;
-%End
- 
-%CanConvertToTypeCode
-	return PyList_Check(sipPy);
 %End
  
 %ConvertToTypeCode

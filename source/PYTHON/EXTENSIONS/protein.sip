@@ -1,4 +1,4 @@
-// $Id: protein.sip,v 1.1 2001/09/03 16:53:11 oliver Exp $
+// $Id: protein.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 class Protein
   : Molecule
@@ -42,8 +42,7 @@ class Protein
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   Protein* ptr;
   if ((ptr = (Protein*)sipGetCppPtr((sipThisType*)a0,sipClass_Protein)) == NULL)

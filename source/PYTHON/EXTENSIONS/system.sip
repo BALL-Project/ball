@@ -1,4 +1,4 @@
-// $Id: system.sip,v 1.1 2001/09/03 16:53:17 oliver Exp $
+// $Id: system.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
 
 class System
   : AtomContainer,
@@ -44,8 +44,7 @@ class System
 	//  template <typename T>
 	//  bool apply(UnaryProcessor<T>& processor)
 
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   System* ptr;
   if ((ptr = (System*)sipGetCppPtr((sipThisType*)a0,sipClass_System)) == NULL)

@@ -1,4 +1,4 @@
-// $Id: molecule.sip,v 1.1 2001/09/03 16:53:09 oliver Exp $
+// $Id: molecule.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
 
 class Molecule
   : AtomContainer
@@ -41,8 +41,7 @@ class Molecule
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   Molecule* ptr;
   if ((ptr = (Molecule*)sipGetCppPtr((sipThisType*)a0,sipClass_Molecule)) == NULL)

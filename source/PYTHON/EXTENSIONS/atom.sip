@@ -1,4 +1,4 @@
-// $Id: atom.sip,v 1.1 2001/09/03 16:53:04 oliver Exp $
+// $Id: atom.sip,v 1.2 2001/12/22 16:39:14 oliver Exp $
 
 class Atom
   : Composite,
@@ -95,8 +95,7 @@ class Atom
    // bool applyBonds(UnaryProcessor<Bond>& processor);
 	
 	// convert the atom to a string representation
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   Atom* ptr;
   if ((ptr = (Atom*)sipGetCppPtr((sipThisType*)a0 ,sipClass_Atom)) == NULL)
@@ -117,10 +116,6 @@ class AtomType
 	typedef Atom::Type AtomType;
 %End
 	public:
-%CanConvertToTypeCode
-	// automatic conversion of Py integers to Position 
-	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_AtomType));
-%End
 %ConvertToTypeCode
 	if (PyInt_Check(sipPy))
 	{
@@ -133,8 +128,8 @@ class AtomType
 
 	return 0;
 %End
-	PyMethods:
-	__str__
+
+	PyMethod __str__
 %MemberCode
 	AtomType* ptr;
   if ((ptr = (AtomType*)sipGetCppPtr((sipThisType*)a0,sipClass_AtomType)) == NULL)

@@ -1,4 +1,4 @@
-// $Id: PDBAtom.sip,v 1.1 2001/09/03 16:53:03 oliver Exp $
+// $Id: PDBAtom.sip,v 1.2 2001/12/22 16:39:14 oliver Exp $
 
 class PDBAtom
   : Atom
@@ -54,8 +54,7 @@ class PDBAtom
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   PDBAtom* ptr;
   if ((ptr = (PDBAtom*)sipGetCppPtr((sipThisType*)a0,sipClass_PDBAtom)) == NULL)

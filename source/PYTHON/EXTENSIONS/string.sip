@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.1 2001/09/03 16:53:17 oliver Exp $
+// $Id: string.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
 
 class Substring
 {
@@ -233,8 +233,7 @@ class String
   // friend ::std::istream& getline(::std::istream& s,  String& string,  char delimiter = '\n');
 	int size() const;
 
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   const char *s;
   String *ptr;
@@ -252,10 +251,6 @@ class String
 %End
 
  
-%CanConvertToTypeCode
-	// automatic conversion of Py-Strings to Strings
-	return (PyString_Check(sipPy) || sipIsSubClassInstance(sipPy,sipClass_String));
-%End
 %ConvertToTypeCode
   if (PyString_Check(sipPy))
   {

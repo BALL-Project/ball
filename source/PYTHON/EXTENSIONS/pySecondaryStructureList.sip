@@ -1,4 +1,4 @@
-// $Id: pySecondaryStructureList.sip,v 1.1 2001/09/03 16:53:15 oliver Exp $
+// $Id: pySecondaryStructureList.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
 
 %MappedType PySecondaryStructureList
 {
@@ -31,10 +31,6 @@
 	}
 
 	return pl;
-%End
- 
-%CanConvertToTypeCode
-	return PyList_Check(sipPy);
 %End
  
 %ConvertToTypeCode

@@ -1,4 +1,4 @@
-// $Id: vector2.sip,v 1.1 2001/09/03 16:53:18 oliver Exp $
+// $Id: vector2.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
 
 //Vector2 operator * (float scalar, const Vector2& vector)
 //  throw();
@@ -113,8 +113,7 @@ class Vector2
 	float x;
 	float y;
 
-	PyMethods:
-  __str__
+	PyMethod __str__
 %MemberCode
   Vector2* ptr;
   if ((ptr = (Vector2*)sipGetCppPtr((sipThisType*)a0,sipClass_Vector2)) == NULL)

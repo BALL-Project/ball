@@ -1,4 +1,4 @@
-// $Id: timeStamp.sip,v 1.1 2001/09/03 16:53:17 oliver Exp $
+// $Id: timeStamp.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
 
 class PreciseTime
 {
@@ -24,8 +24,7 @@ class PreciseTime
   static PreciseTime now() throw();
   //  void write(PersistenceManager& pm)const;
   //  bool read(PersistenceManager& pm);
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   PreciseTime* ptr;
   if ((ptr = (PreciseTime*)sipGetCppPtr((sipThisType*)a0,sipClass_PreciseTime)) == NULL)
@@ -62,8 +61,7 @@ class TimeStamp
   //  void write(PersistenceManager& pm) const;
   //  bool read(PersistenceManager& pm);
 
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   TimeStamp* ptr;
   if ((ptr = (TimeStamp*)sipGetCppPtr((sipThisType*)a0,sipClass_TimeStamp)) == NULL)

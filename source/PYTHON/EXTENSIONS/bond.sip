@@ -1,4 +1,4 @@
-// $Id: bond.sip,v 1.1 2001/09/03 16:53:04 oliver Exp $
+// $Id: bond.sip,v 1.2 2001/12/22 16:39:14 oliver Exp $
 
 class Bond
 	: Composite,
@@ -82,8 +82,7 @@ class Bond
   virtual bool isValid() const throw();
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // convert the atom to a string representation
-	PyMethods:
-	__str__
+	PyMethod __str__
 %MemberCode
   Bond* ptr;
   if ((ptr = (Bond*)sipGetCppPtr((sipThisType*)a0,sipClass_Bond)) == NULL)
