@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.28 2004/02/28 14:21:48 amoll Exp $
+// $Id: molecularControl.h,v 1.29 2004/03/02 00:26:31 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -436,6 +436,10 @@ namespace BALL
 					\param  composite the Composite object whose subtree will be checked against <b>item</b>
 			*/
 			void updateListViewItem_(SelectableListViewItem* item, Composite& composite)
+				throw();
+
+			//_ Test, if its allowed to paste the copy liste into the current selected context item.
+			bool pasteAllowedFor_(Composite& composite)
 				throw();
 
 			//@} 

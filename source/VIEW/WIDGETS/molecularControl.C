@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.47 2004/02/28 14:21:25 amoll Exp $
+// $Id: molecularControl.C,v 1.48 2004/03/02 00:26:23 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -163,8 +163,21 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// prevent changes to composites while simulations are running
 	copy_list_filled = copy_list_filled && main_control.compositesAreMuteable();
 
-	// check for paste-slot: enable only if copy_list_ not empty
-	menuBar()->setItemEnabled(paste_id_, copy_list_filled);	
+	// check for paste-slot: enable only if copy_list_ not empty and it makes sense
+	bool allow_paste = copy_list_filled;
+	if (allow_paste)
+	{
+		List<Composite*>::Iterator it = getCopyList_().begin();
+		for (; it != getCopyList_().end(); it++)
+		{
+			if (!pasteAllowedFor_(**it)) 
+			{
+				allow_paste = false;
+				break;
+			}
+		}
+	}
+	menuBar()->setItemEnabled(paste_id_, allow_paste);	
 
 	// check for clearClipboard-slot: enable only if copy_list_ not empty
 	menuBar()->setItemEnabled(clipboard_id_, copy_list_filled);
@@ -1150,6 +1163,33 @@ void MolecularControl::deleteCurrentItems()
 	was_delete_ = true;
 	cut();
 	was_delete_ = false;
+}
+
+
+bool MolecularControl::pasteAllowedFor_(Composite& child)
+	throw()
+{
+	Composite& parent = *context_item_->getComposite();
+
+	if (RTTI::isKindOf<System>(child)) return false;
+
+	if (RTTI::isKindOf<Atom>(parent)) return false;
+
+	if (RTTI::isKindOf<Residue>(parent)) return (RTTI::isKindOf<Atom>(child));
+
+	if (RTTI::isKindOf<SecondaryStructure>(parent)) return (RTTI::isKindOf<Residue>(child));
+
+	if (RTTI::isKindOf<Chain>(parent)) return (RTTI::isKindOf<SecondaryStructure>(child));
+	
+	if (RTTI::isKindOf<Protein>(parent)) return (RTTI::isKindOf<Chain>(child));
+
+	if (RTTI::isKindOf<Nucleotide>(parent)) return (RTTI::isKindOf<Atom>(child));
+
+	if (RTTI::isKindOf<NucleicAcid>(parent)) return (RTTI::isKindOf<Nucleotide>(child));
+
+	if (RTTI::isKindOf<System>(parent)) return (RTTI::isKindOf<Molecule>(child));
+
+	return true;
 }
 
 } } // namespaces
