@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.27 2000/05/04 11:06:33 amoll Exp $
+// $Id: matrix44.h,v 1.28 2000/05/04 13:53:46 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -33,14 +33,17 @@ namespace BALL
 	template <typename T>
 	class TMatrix4x4;
 
-	/**	Input- Operator
-			reads in sixteen {\bf T}.
+	/**	Input Operator.
+			Read sixteen values of type {\tt T} from an input stream.
+
+			@param s	the input stream
+			@param m the matrix to read 
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m);
 
-	/**	Output- Operator
-			prints out sixteen {\bf T} :
+	/**	Output Operator
+			Write 
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m);

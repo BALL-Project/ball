@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.19 2000/05/04 11:06:34 amoll Exp $
+// $Id: quaternion.h,v 1.20 2000/05/04 13:53:46 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -149,19 +149,19 @@ namespace BALL
 
 		/**	Return the conjugate TQuaternion.
 				(The axis components are negated.)
-				@return TQuaternion&, the conjugate TQuaternion
+				@return TQuaternion the conjugate TQuaternion
 		*/
 		TQuaternion getConjugate() const;
 
 		/**	Add a TQuaternion to this TQuaternion.
 				@param q the TQuaternion to add
-				@return TQuaternion&, {\em *this}
+				@return TQuaternion& {\em *this}
 		*/
 		TQuaternion& operator += (const TQuaternion& q);
 
 		/**	Substract a TQuaternion from this TQuaternion.
 				@param q the TQuaternion to substract
-				@return TQuaternion&, {\em *this}
+				@return TQuaternion& {\em *this}
 		*/
 		TQuaternion& operator -= (const TQuaternion& q);
 
