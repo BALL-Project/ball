@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.6 2004/03/19 15:02:53 anne Exp $
+// $Id: secondaryStructureProcessor.C,v 1.7 2004/03/24 19:57:32 anne Exp $
 //
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
@@ -39,8 +39,8 @@ namespace BALL
 		{
 			sheet[i]='-';
 		}
-		bridge1   = sheet;
-		bridge2  	= sheet;
+		//bridge1   = sheet;
+		//bridge2  	= sheet;
 		Fiveturn  = sheet;
 		Fourturn  = sheet;
 		Threeturn = sheet;
@@ -54,12 +54,6 @@ namespace BALL
 
 		for(Size i=0; i<size; i++)
 		{
-			/*
-			for (Size j=0; j<HBonds_[i].size(); j++)
-				cout << "Schleife nr " << i << " HBP " << HBonds_[i][j] << " ";
-			cout << std::endl;
-			*/
-
 			if(HBonds_[i].size() != 0 )
 			{
 				// over all HBondpartners
@@ -150,194 +144,278 @@ namespace BALL
 		//	 * secondly  we search bridges
 		//	 ****************************************/
 
-
-		char parallel = 'a'-1;
-		char antiparallel = 'A'-1;
-		enum pattern { PARALLEL, ANTIPARALLEL, DEFAULT } lastpattern;
-
+		//initialize posbridges_
+		posbridges_.resize(size);
+		
 		//over all residues
-		lastpattern = DEFAULT;
-		bool found_a_pattern = false;
-
-		for(Size i=0; i<size; i++)
+		for(Size current_res=0; current_res<size; current_res++)
 		{		
-			found_a_pattern = false;
-
-			if(HBonds_[i].size() != 0 )
+			if(HBonds_[current_res].size() != 0 )
 			{
 				// over all HBondpartners
-				for(Size n=0; n<HBonds_[i].size(); n++)
+				for(Size current_bond=0; current_bond<HBonds_[current_res].size(); current_bond++)
 				{		
-					int k = HBonds_[i][n];
+					int partner = HBonds_[current_res][current_bond];
 
-					// actually we have HBP(i,k)
+					// actually we have HBP(i,k) with  i=current_res, k=partner
 					// do we have HBP(k, i+2) ? => parallel bridge(i+1,k) 			
-
-					for (Size s = 0; (s < HBonds_[k].size()); s++)
+					for (Size s = 0; (s < HBonds_[partner].size()); s++)
 					{
-						if(HBonds_[k][s]== (int)(i+2)) 
+						if(HBonds_[partner][s]== (int)(current_res+2)) 
 						{
-							if (lastpattern != PARALLEL)
-							{
-								parallel+=1;
-								if(parallel == 'z'+1) parallel='a';
-							}
-
 							//insert
-							if(bridge1[i+1] == '-')
-							{
-								bridge1[i+1] = parallel;
-							}
-							else
-							{
-								bridge2[i+1] = parallel;
-							}
-							if(bridge1[k] == '-')
-							{
-								bridge1[k] = parallel;
-							}
-							else
-							{
-								bridge2[k] = parallel;
-							}
+							//NOTE: there might be  more than two bridges for this
+							// residue
+							// but this should never happen ;-)
+							
+							posbridges_[current_res+1].push_back(partner);
+							posbridges_[partner].push_back(current_res+1);
 
-							lastpattern     = PARALLEL;
-							found_a_pattern = true;
-
-							break;
+							sheet[current_res+1]= '+';
+							sheet[partner]  = '+';
 						}
 					}	 //forend parallelbridge
 
-
-					// currently we have HBP(i,k)
+					// currently we have HBP(i,k) with i=current_res and k=partner
 					// do we have HBP(k, i) ? => antiparallel bridge(i,k)
-					for (Size s = 0; (s < HBonds_[k].size()); s++)
+					for (Size s = 0; (s < HBonds_[partner].size()); s++)
 					{
-						if(HBonds_[k][s]== (int)i) 
+						if(HBonds_[partner][s]== (int)current_res) 
 						{
 		    		  // we aren't allowed to overwrite antiparallel bridges found before!
 							// remember: we have two equal cases: 
 							// 							first : HBP(k,i) && HBP(i,k)  
-							// 					and second: HBP(i,k) && HBP(k,i)  						
-							if(   ((bridge1[i]==bridge1[k])&&(bridge1[i]!='-')) 
-									||((bridge1[i]==bridge2[k])&&(bridge1[i]!='-')) 
-									||((bridge2[i]==bridge1[k])&&(bridge2[i]!='-'))
-									||((bridge2[i]==bridge2[k])&&(bridge2[i]!='-'))
-									||(k==(int)i)
-								)
-							{ 
-							}
-							else
-							{
-								//insert
-
-								if (lastpattern != ANTIPARALLEL)
-								{
-									antiparallel+=1;
-									if(antiparallel == 'Z'+1) antiparallel='A';
-								}
-
-								if(bridge1[i] == '-')
-								{
-									bridge1[i] = antiparallel;
-								}
-								else
-								{
-									bridge2[i] = antiparallel;
-								}
-								if(bridge1[k] == '-')
-								{
-									bridge1[k] = antiparallel;
-								}
-								else
-								{
-									bridge2[k] = antiparallel;
-								}
-
-								lastpattern     = ANTIPARALLEL;
-								found_a_pattern = true;
-
-								break;
-							}
+							// 					and second: HBP(i,k) && HBP(k,i)   						
+								
+							//insert
+							//NOTE: there might be  more than two bridges for this residue
+							// but this should never happen ;-)
+						
+							posbridges_[current_res].push_back(partner);
+							posbridges_[partner].push_back(current_res);
+							sheet[current_res]= '/';
+						  sheet[partner]  = '/';
 						}
-					}//forend antiparallelbridge1
+					}//forend antiparallelbridge
 
-					// currently we have HBP(i,k)
+					// currently we have HBP(i,k) with i=current_res and k=partner
 					// do we have HBP(k-2, i+2) ? => antiparallel bridge(i+1,k-1)
-					if(((k-2)>=0) && ((i+2) <=size))
+					if(((partner-2)>=0) && ((current_res+2) <=size))
 					{
-						for (Size s = 0;(s < HBonds_[k-2].size()); s++)
+						for (Size s = 0;(s < HBonds_[partner-2].size()); s++)
 						{
 
-							if (    (HBonds_[k-2][s] == (int)(i+2))
-									&& ((int)(i+1) != (k-1)))
+							if (    (HBonds_[partner-2][s] == (int)(current_res+2))
+									&& ((int)(current_res+1) != (partner-1)))
 							{
-
-								// make sure that we have not already seen this bridge
-								if (  ((bridge1[i+1]==bridge1[k-1]) && (bridge1[i+1]!='-'))
-										||((bridge1[i+1]==bridge2[k-1]) && (bridge1[i+1]!='-'))
-										||((bridge2[i+1]==bridge1[k-1]) && (bridge2[i+1]!='-'))
-										||((bridge2[i+1]==bridge2[k-1]) && (bridge2[i+1]!='-')) )
-								{
-									continue;
-								}
-
 								//insert
-								if (lastpattern != ANTIPARALLEL)
-								{
-									antiparallel+=1;
-									if(antiparallel == 'Z'+1) antiparallel='A';
-								}
-
-								if(bridge1[i+1]=='-')
-								{
-									bridge1[i+1] = antiparallel;
-								}
-								else
-								{
-									bridge2[i+1]= antiparallel;
-								}
-								if(bridge1[k-1]=='-')
-								{
-									bridge1[k-1] = antiparallel;
-								}
-								else
-								{
-									bridge2[k-1]= antiparallel;
-								}
-
-								lastpattern     = ANTIPARALLEL;
-								found_a_pattern = true;
-
-								break;
+							  //NOTE: there might be  more than two bridges for this residue
+							  // but this should never happen ;-)
+						
+								posbridges_[current_res+1].push_back(partner-1);
+								posbridges_[partner-1].push_back(current_res+1);
+								sheet[current_res+1]= '/';
+						  	sheet[partner-1]  = '/';
 							}
 						}
-					}	// if (k==...)
-
-					if (!found_a_pattern) lastpattern = DEFAULT;
+					}	// if (partner-2>=...)
 				}//	for(int k=0; k<HBonds_[i].size(); k++)
-
 			}//	if(HBonds_[i].size() != 0 )
-
 		}//for all residues
 
+		
+		//
+		//  now we search ladders!
+		//
+	  // ladder: set of one or more consecutive bridges of identical type
+		// or bulge-linked ladders: two ladders or bridges of the same type 
+		//                          connected by at most one extra residue 
+		//                          on one strand and at most four extra 
+		//                          residues on the other strand
+		
+		char parallel = 'a'-1;
+		char antiparallel = 'A'-1;
+		enum pattern { PARALLEL, ANTIPARALLEL, DEFAULT } last_pattern;
+	 	char letter='-';
+	 	
+		//over all residues
+		last_pattern = DEFAULT;
+		bool found_a_pattern = false;
+		int no_residue = -5;
+		int last_parallel_res = no_residue; 
+		int last_antiparallel_res = no_residue;
+		int last_residue = no_residue;
+		
+		for(  Size residue = 0; 
+			   (residue<sheet.size()) && (residue<posbridges_.size()); 
+				  residue++)
+	  { 
+			// do we have a bridge?		 	
+			if( (sheet[residue]!='-'))
+			{
+				// parallel bridge				
+				if(    (sheet[residue]=='+') 
+						|| (  (sheet[residue]>('a'-1)) 
+						    &&(sheet[residue]<('z'+1))
+							 )
+					)	
+				{
+					last_residue = last_parallel_res;
+					last_pattern = PARALLEL;
+				}
+				else // antiparallel bridge
+				{
+					last_residue = last_antiparallel_res;
+					last_pattern = ANTIPARALLEL;
+				}				
+				
+				found_a_pattern = false;
+				bool has_bonds_to_the_left = false;
+				
+				if(last_residue != no_residue)
+				{
+					for(Size last_part_i=0; last_part_i < posbridges_[last_residue].size(); last_part_i++)
+					{
+						for(Size curr_part_i=0; curr_part_i < posbridges_[residue].size(); curr_part_i++)
+						{				
+							int last_part=posbridges_[last_residue][last_part_i];
+							int curr_part=posbridges_[residue][curr_part_i];			
+						
+							// have we already seen this residue by a bridge before?
+							if (curr_part < (int)residue)
+							{
+								has_bonds_to_the_left = true;
+								letter = sheet[curr_part];
+							}
+							
+							// do we have a continuation of a ladder?
+							// allowed are bulge-linked ladders 
+							//   which consist of two ladders or bridges of the same type 
+							//   connected by at most one extra residue on one strand and 
+							//   at most four extra residues on the other strand!   
+							// too
+							  
+							if(  (    ((residue   - last_residue) == 1)
+				   		       && (abs(curr_part - last_part) == 1) 
+									 )
+					 			|| (    ((residue   - last_residue) < 2) 
+				   		       && (abs(curr_part - last_part) < 5)
+									 )
+								|| (    ((residue   - last_residue) < 5 )
+									   && (abs(curr_part - last_part) < 2)
+									 ) 
+								)
+							{
+								found_a_pattern= true;
+							}
+						}	//end for
+					}//end for	
+				}//end if
+				
+
+				// NOTE: there is no problem if we have seen the 
+				// residue before and set the letter 
+				// AND found a pattern and overwrite the letter perhaps! 
+				// the sheet-Loop(see below) will give them a unique letter 
+				if(    (last_residue != no_residue) 
+						&& (found_a_pattern))
+				{	
+					letter=sheet[last_residue];	
+				}
+				else 
+				{
+					if (!has_bonds_to_the_left)
+					{
+						if(last_pattern == PARALLEL)
+						{
+							parallel+=1;
+							if(parallel == 'z'+1) parallel='a';
+							letter = parallel;	
+						}
+						else 
+						{
+							antiparallel+=1;
+							if(antiparallel == 'Z'+1) antiparallel='A';
+							letter = antiparallel;	
+						}				
+					}
+				}
+
+				if(last_pattern == PARALLEL)
+						last_parallel_res = residue;
+				else 
+						last_antiparallel_res = residue;
+
+				// name all residues belonging to this bridge
+				// NOTE: in most cases there will be just one entry
+				sheet[residue]=letter;	
+				for(Size curr_part=0; curr_part < posbridges_[residue].size(); curr_part++)
+				{
+						if (posbridges_[residue][curr_part] > (int)residue)
+						{ //if we have a bridge to the right, we name the partner
+							//	sheet[posbridges_[residue][curr_part]]=letter;
+						}
+						//		sheet[posbridges_[residue][curr_part]]=letter;
+				}
+
+			}//if(sheet[residue]!='-'
+		}//for(Size residue = 0 ....		
+			
 		String s1(&(summary[0]), 0, summary.size());
 		String s2(&(Threeturn[0]), 0, Threeturn.size());
 		String s3(&(Fourturn[0]), 0, Fourturn.size());
 		String s4(&(Fiveturn[0]), 0, Fiveturn.size());
-		String s5(&(bridge1[0]), 0, bridge1.size());
-		String s6(&(bridge2[0]), 0, bridge2.size());
+		String s5(&(sheet[0]), 0, sheet.size());
 		
-/**		std::cout << "-----------turns and Bridges----------------------------------------" << std::endl;
+/**		std::cout << "-----------turns and Bridges and ladders --------------------------------------" << std::endl;
 		std::cout << "summary   "<< s1 << std::endl;
 		std::cout << "Threeturn " << s2 << std::endl;
 		std::cout << "Fourturn  "<< s3 << std::endl;
 		std::cout << "Fiveturn  " << s4 << std::endl;
-		std::cout << "Bridge1   " << s5 << std::endl;
-		std::cout << "Bridge2   " << s6 << std::endl;
-*/	
+		std::cout << "sheet     " << s5 << std::endl;
+	*/
+
 		
+		//
+		// now we are looking for sheets
+		//
+		// sheet: set of one or more ladders connected by shared residues
+	
+		for(  Size residue = 0; 
+			   (residue<sheet.size()) && (residue<posbridges_.size()); 
+				  residue++)
+	  { 
+			// do we have a bridge?		 	
+			if( (sheet[residue]!='-'))
+			{
+				letter = sheet[residue];
+				for(Size curr_part_i=0; curr_part_i < posbridges_[residue].size(); curr_part_i++)
+				{
+						int curr_part=posbridges_[residue][curr_part_i];			
+						if(sheet[curr_part]!=letter)
+						{
+							change_all_X_to_Y(sheet[curr_part], letter, sheet);
+						}				
+				}				
+			}
+		}
 		
+		s1.set(&(summary[0]), 0, summary.size());
+		s2.set(&(Threeturn[0]), 0, Threeturn.size());
+		s3.set(&(Fourturn[0]), 0, Fourturn.size());
+		s4.set(&(Fiveturn[0]), 0, Fiveturn.size());
+		s5.set(&(sheet[0]), 0, sheet.size());
+		
+
+	/**
+		std::cout << "----------- all ----------------------------------------" << std::endl;
+		std::cout << "summary   "<< s1 << std::endl;
+		std::cout << "Threeturn " << s2 << std::endl;
+		std::cout << "Fourturn  "<< s3 << std::endl;
+		std::cout << "Fiveturn  " << s4 << std::endl;
+		std::cout << "sheet     " << s5 << std::endl;
+		*/
+	
 		// /***********************************
 		//  * now we repair the irregularities
 		// 	***********************************/
@@ -364,11 +442,11 @@ namespace BALL
 				 			|| hasPrefix("XX", i+3, Threeturn)
 				 			|| hasPrefix(">X", i+3, Threeturn)
 				 			|| hasPrefix("X>", i+3, Threeturn) 
-						 )
+						 )	
+					&& ((Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
 				)
 			{
 				insert_turn(turn, i+2);
-			 //	insert_turn(turn, i+3);	
 			}
 			
 			// offset three turns	
@@ -383,11 +461,12 @@ namespace BALL
 				 			|| hasPrefix(">X", i+4, Threeturn)
 				 			|| hasPrefix("X>", i+4, Threeturn) 
 						 )
+					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
+					&& ( (Fourturn[i+3]!= '>') && (Fourturn[i+3]!='X')  )
 				)
 			{
 				insert_turn(turn, i+2);
 			 	insert_turn(turn, i+3);
-		//		insert_turn(turn, i+4);	
 			}			
 		}
 	
@@ -411,10 +490,10 @@ namespace BALL
 				 			|| hasPrefix(">X", i+3, Fourturn)
 				 			|| hasPrefix("X>", i+3, Fourturn) 
 						 )
+					&& ((Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
 				)
 			{
 				insert_turn(turn, i+2);
-			 	insert_turn(turn, i+3);	
 			}		
 			// offset three turns	
 			if((   (i+3+length) < size)  
@@ -428,11 +507,12 @@ namespace BALL
 				 			|| hasPrefix(">X", i+4, Fourturn)
 				 			|| hasPrefix("X>", i+4, Fourturn) 
 						 )
+					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
+					&& ( (Fourturn[i+3]!= '>') && (Fourturn[i+3]!='X')  )
 				)
 			{
 				insert_turn(turn, i+2);
-			 	insert_turn(turn, i+3);
-				insert_turn(turn, i+4);	
+			 	insert_turn(turn, i+3);		
 			}			
 		}
 		
@@ -457,10 +537,10 @@ namespace BALL
 				 			|| hasPrefix(">X", i+3, Fiveturn)
 				 			|| hasPrefix("X>", i+3, Fiveturn) 
 						 )
+					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
 				)
 			{
 				insert_turn(turn, i+2);
-			 	insert_turn(turn, i+3);	
 			}		
 			// offset three turns	
 			if((   (i+3+length) < size)  
@@ -474,11 +554,12 @@ namespace BALL
 				 			|| hasPrefix(">X", i+4, Fiveturn)
 				 			|| hasPrefix("X>", i+4, Fiveturn) 
 						 )
+					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
+					&& ( (Fourturn[i+3]!= '>') && (Fourturn[i+3]!='X')  )
 				)
 			{
 				insert_turn(turn, i+2);
 			 	insert_turn(turn, i+3);
-				insert_turn(turn, i+4);	
 			}			
 		}	
    
@@ -486,20 +567,20 @@ namespace BALL
 		s2.set(&(Threeturn[0]), 0, Threeturn.size());
 		s3.set(&(Fourturn[0]), 0, Fourturn.size());
 		s4.set(&(Fiveturn[0]), 0, Fiveturn.size());
-		s5.set(&(bridge1[0]), 0, bridge1.size());
-	  s6.set(&(bridge2[0]), 0, bridge2.size());
+		s5.set(&(sheet[0]), 0, sheet.size());
 		
 /**		std::cout << "---------------------repaired turns----------------------------------" << std::endl;
 		std::cout << "summary   "<< s1 << std::endl;
 		std::cout << "Threeturn " << s2 << std::endl;
 		std::cout << "Fourturn  "<< s3 << std::endl;
 		std::cout << "Fiveturn  " << s4 << std::endl;
-		std::cout << "Bridge1   " << s5 << std::endl;
-		std::cout << "Bridge2   " << s6 << std::endl;
+		std::cout << "Sheet     " << s5 << std::endl;
 */
-
+		
 		// /*****************************************************
+		// *
 		// * -------- now we construct the summary string ----------
+		// *
 		// * structural overlaps are eleminated by considering
   	// * hierarchy H > B > E > G > I > T
   	// * 		H means 4 Helices, B means single bridges, 
@@ -536,22 +617,29 @@ namespace BALL
 					summary[i+5]= 'I';
 				}	
 			}// do we have a helix reduced to less than minimal size?
-			else if(   ( ! hasPrefix("II", i, summary)) 
-							&& (  (hasPrefix(">5", i, Fiveturn)) 
+			else if( //  ( ! hasPrefix("II", i, summary)) &&
+							   (  (hasPrefix(">5", i, Fiveturn))
+									||(hasPrefix("X5", i, Fiveturn)
+									||(hasPrefix("><", i, Fiveturn))
+									||(hasPrefix("X<", i, Fiveturn))				
+								 ) 
 							)  ) 
 			{
-				if( (i+5) < size)
-				{				
-					summary[i+1]= 'T';
-					summary[i+2]= 'T';
-					summary[i+3]= 'T';
-					summary[i+4]= 'T';
-					summary[i+5]= 'T';
+				for(int j=1; (j<5) && ((i+j)<summary.size()) && ((i+j)<Fiveturn.size()) ;j++)
+				{			
+					//if( (i+5) < size){				
+					//summary[i+1]= 'T';
+					//summary[i+2]= 'T';
+					//summary[i+3]= 'T';
+					//summary[i+4]= 'T';}
+					if(Fiveturn[i+j]!='I')
+					{
+						summary[i+j]= 'T';
+					}				
 				}	
 			}	
 		}	
 		
-
 		// -------------------3 helices ------------------------
 		for(Size i= 0; i<size; i++)
 		{
@@ -560,7 +648,6 @@ namespace BALL
 				 || (hasPrefix("X>", i, Threeturn))
 				 || (hasPrefix("XX", i, Threeturn))
 				)  
-							
 			{
 				if( (i+3) < size)
 				{
@@ -570,9 +657,13 @@ namespace BALL
 				}	
 			}// do we have a helix reduced to less than minimal size?
 			 // we have to consider, that we do not overwrite 
-			else if(hasPrefix(">3", i, Threeturn))  
+			else if(   (hasPrefix(">3", i, Threeturn) )
+							|| (hasPrefix("X3", i, Threeturn) )
+							|| (hasPrefix("><", i, Threeturn))
+							|| (hasPrefix("X<", i, Threeturn))
+						 )
 			{
-				if( (i+3) < size)
+				if( (i+3) < summary.size())
 				{
 					for(Size j=1; j<3;j++)
 					{ 
@@ -587,53 +678,36 @@ namespace BALL
 			}	
 		}	
 
-
 		// ---------------- Extended Bridges and Single Bridges --------------
 		// according to the paper:
 		// 		single bridges are ladders of length one -> B, 
 		// 		all other ladder residues -> E
 		// we assume that there is a mistake in the paper: E has a higher priority than B
 		// first we generate the sheet-line and than summarize it in the summary line
-		for(Size i= 0; i<size; i++)
+		for(Size i=0; i< (sheet.size()); i++)
 		{
-			if(bridge1[i]!='-')
+			if(sheet[i]!='-')
 			{
+				letter = sheet[i];			
 				int j=0;			
-				for(j=0; ((i+j)<size) && (bridge1[i+j]!='-'); j++)
+				for(j=0; ((i+j)<sheet.size()) && (sheet[i+j]==letter); j++)
 				{
 				}
 				if((j==1)&&(summary[i]!='E')) //single bridge
 				{
 					summary[i]='B';
-				}else //extended bridge
-				{
-					for(int n=0; n<j;n++)
-					{
-						summary[i]='E';
-					}
-				}							
-				i=i+j;				
-			}				
-    }
-		for(Size i= 0; i<size; i++)
-		{
-			if(bridge2[i]!='-')
-			{
-				int j=0;			
-				for(j=0; ((i+j)<size) && (bridge2[i+j]!='-'); j++)
+				}
+				else if(j==0)
 				{
 				}
-				if((j==1)&&(summary[i]!='E')) //single bridge
-				{
-					summary[i]='B';
-				}else //extended bridge
-				{
-					for(int n=0; n<j;n++)
+				else //extended bridge
+				{		
+					for(int n=0; n<j; n++)
 					{
-						summary[i]='E';
+						summary[i+n]='E';
 					}
-				}							
-				i=i+j;				
+				  i=i+j-1;	
+				}								
 			}				
     }
 		
@@ -657,7 +731,9 @@ namespace BALL
 				}	
 			}// do we have a helix reduced to less than minimal size?
 			 // we have to consider, that we do not overwrite 
-			else if(hasPrefix(">4", i, Fourturn))  
+			else if(   (hasPrefix(">4", i, Fourturn))
+						  || (hasPrefix("X4", i, Fourturn))
+						 )  
 			{
 							
 				if( (i+4) < size)
@@ -665,32 +741,82 @@ namespace BALL
 					for(Size j=1; j<4;j++)
 					{ 
 						if(  ( summary[i+j]!= 'G')
-							 &&(!summary[i+j]!= 'H')
-							 &&(!summary[i+j]!= 'I')
-							 &&(!summary[i+j]!= 'E')
-							 &&(!summary[i+j]!= 'B')
+							 &&( summary[i+j]!= 'H')
+							 &&( summary[i+j]!= 'I')
+							 &&( summary[i+j]!= 'E')
+							 &&( summary[i+j]!= 'B')
 							)
 						{	
 							summary[i+j]= 'T';	
 						}
-					}
-				}	
+					}//end for
+				}//end if	
+			}//end if	
+		}//end for
+	
+		// we should read the summary string again in order to substitute
+		// single G or I, generated by overwriting GGG or IIIII by HHHH 
+		for(Size i=0; i<( summary.size()); i++)
+		{			
+			if( (     ((i+2)< summary.size())
+					  && (summary[i]  !='G')
+				    && (summary[i+1]=='G')
+				    && (summary[i+2]!='G')
+				  )
+				||(    ((i+2)< summary.size())
+						&& (summary[i]  !='I')
+				    && (summary[i+1]=='I')
+				    && (summary[i+2]!='I')
+				   )
+				)
+			{
+				summary[i+1]='T';
+			}		
+			if( (     ((i+3)< summary.size())
+					  && (summary[i]  !='G')
+				    && (summary[i+1]=='G')
+				    && (summary[i+2]=='G')
+				    && (summary[i+3]!='G')
+				  )
+				||(    ((i+3)< summary.size())
+    			  && (summary[i]  !='I')
+				    && (summary[i+1]=='I')
+				    && (summary[i+2]=='I')
+				    && (summary[i+3]!='I')
+					)
+				)				
+			{
+
+				summary[i+1]='T';
+				summary[i+2]='T';
 			}	
-		}	
+			
+			if( (     ((i+4)< summary.size())
+    			  &&  (summary[i]  !='I')
+				    &&  (summary[i+1]=='I')
+				    &&  (summary[i+2]=='I')
+				    &&  (summary[i+3]=='I')
+				    &&  (summary[i+4]!='I')
+					)
+				)				
+			{
+				summary[i+1]='T';
+				summary[i+2]='T';
+				summary[i+3]='T';
+			}	
+		}
 	  s1.set(&(summary[0]), 0, summary.size());
 		s2.set(&(Threeturn[0]), 0, Threeturn.size());
 		s3.set(&(Fourturn[0]), 0, Fourturn.size());
 		s4.set(&(Fiveturn[0]), 0, Fiveturn.size());
-		s5.set(&(bridge1[0]), 0, bridge1.size());
-		s6.set(&(bridge2[0]), 0, bridge2.size());
+		s5.set(&(sheet[0]), 0, sheet.size());
 		
 /**		std::cout << "----------------------------------summary string-----" << std::endl;
-		std::cout << "summary   "<< s1 << std::endl;
-		std::cout << "Threeturn " << s2 << std::endl;
-		std::cout << "Fourturn  "<< s3 << std::endl;
-		std::cout << "Fiveturn  " << s4 << std::endl;
-		std::cout << "Bridge1   " << s5 << std::endl;
-		std::cout << "Bridge2   " << s6 << std::endl;
+		std::cout << "summary   "<< s1 << std::endl;   std::cout << "1" << std::endl;
+		std::cout << "Threeturn " << s2 << std::endl;  std::cout << "2" << std::endl;
+		std::cout << "Fourturn  "<< s3 << std::endl;	 std::cout << "3" << std::endl;
+		std::cout << "Fiveturn  " << s4 << std::endl;	 std::cout << "4" << std::endl;
+		std::cout << "Sheet     " << s5 << std::endl;	 std::cout << "5" << std::endl;
 */
 		
 	}
@@ -723,7 +849,7 @@ namespace BALL
 			{
 				(*n_turn)[position]   = '>';
 			}
-			//position in between
+			//positions in between
 			for (int j=1; j<turn; j++)
 			{
 				if((*n_turn)[position+j]=='-')
@@ -732,10 +858,30 @@ namespace BALL
 					(*n_turn)[position+j]= s[0];
 				}
 			}
-			//last position has always to be <
-			(*n_turn)[position+turn] = '<';
+			//last position 
+			if(	  ((*n_turn)[position+turn] == '>') 
+				 || ((*n_turn)[position+turn] == 'X'))
+			{				
+				(*n_turn)[position+turn] = 'X';
+			}else
+			{
+				(*n_turn)[position+turn] = '<';
+			}
 		}			
 	}
+
+	
+	void SecondaryStructureProcessor::change_all_X_to_Y(char X, char Y, vector<char>& target)
+	{
+		for(Size i=0; i<target.size(); i++)
+		{
+			if(target[i]==X)
+			{
+				target[i]=Y;
+			}
+		}				
+	}
+	
 	
 	bool SecondaryStructureProcessor::hasPrefix(const String& pattern, Size i, const vector<char>& target)
 	{

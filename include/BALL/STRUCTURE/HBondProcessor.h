@@ -107,6 +107,8 @@ namespace BALL
     Vector3 posO;
     Size number;
     Residue *pres; 
+
+		bool is_complete; // sometimes there are defect residues around...
   };
   
 

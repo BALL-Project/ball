@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.6 2004/03/19 15:02:53 anne Exp $
+// $Id: HBondProcessor.C,v 1.7 2004/03/24 19:57:31 anne Exp $
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
 #include <BALL/STRUCTURE/peptides.h>
@@ -25,11 +25,14 @@ namespace BALL
 
 	void HBondProcessor::preComputeBonds(ResidueIterator& data)
 	{
-					
 		POS pos;
-		int j=1;                // index to serially the residues TOTHINK:maybe it is possible 
+		int j=0;                // index to serially the residues TOTHINK:maybe it is possible 
 		                        //   to identify the residue by residue ID 
-
+		bool haveO=false;
+		bool haveN=false;
+		bool haveC=false;
+		bool found_N_term=false;
+		
 		// iteration over all residues of the protein
 		// to find the C,N,O atoms
 
@@ -37,37 +40,57 @@ namespace BALL
 
 		PDBAtomIterator ai;
 		Residue res=*data;
-
-//		Peptides::OneLetterCode(res->getFullName());
+  
+		for(; +data && (!found_N_term) ; ++data)
+		{	
+			res=*data;
 		
-		for(ai=res.beginPDBAtom();+ai;++ai)
-		{
-			if(ai->getName() == "C")
+			for(ai=res.beginPDBAtom();+ai;++ai)
 			{
-				pos.posC=ai->getPosition();
-			}
-			else if(ai->getName() == "O")
-			{
-				pos.posO=ai->getPosition();
-			}
-			else if(ai->getName() == "N")
-			{
+				if(ai->getName() == "C")
+				{
+					pos.posC=ai->getPosition();
+					haveC=true;
+				}
+				else if(ai->getName() == "O")
+				{
+					pos.posO=ai->getPosition();
+					haveO=true;
+				}
+				else if(ai->getName() == "N")
+				{
 					pos.posN=ai->getPosition();
+          haveN=true;
+				}
+			}	
+
+			if(haveN && haveO && haveC)
+			{ // we have to overread incomplete residues					
+				pos.is_complete = true;
+    	}
+			else
+			{
+				pos.is_complete = false;
 			}
-		}
-		pos.number = 0;
-		pos.pres   = &(*data);
-		++data;
 
-		vec_.push_back(pos);  
-
+			pos.number = j;
+			j++;
+			pos.pres   = &(*data);
+			++data;
+			found_N_term=true;
+			vec_.push_back(pos);  
+		}	
+		
 		//iterate over the following residues
-
 		for(; +data; ++data)
 		{	
-						
 			res=*data;
 
+			//initialize the bool
+			haveO=false;
+			haveN=false;
+			haveC=false;
+			
 			if (!res.isAminoAcid())
 			{
 				continue;
@@ -78,23 +101,38 @@ namespace BALL
 				if(ai->getName() == "N")
 				{
 					pos.posN=ai->getPosition();
+					haveN=true;
 				}
 				else if(ai->getName() == "C")
 				{
 					pos.posC=ai->getPosition();
+					haveC=true;
 				}
 				else if(ai->getName() == "O")
 				{
 					pos.posO=ai->getPosition();
+					haveO=true;
 				}
 			}
-
-			// evaluate the position of H 
 			
+			if(haveO && haveN && haveC)
+			{ // we have to overread the incomplete residues					
+				pos.is_complete = true;
+			}
+			else
+			{
+				pos.is_complete = false;
+			}
+			 	
+			// evaluate the position of H 
 			Vector3 O = vec_[j-1].posO;
 			Vector3 C = vec_[j-1].posC;
 
-			pos.posH=pos.posN-((O-C)*BOND_LENGTH_N_H)/(O-C).getLength();
+			//TODO: Division durch 0!!!
+			if ((O - C).getLength() != 0.)
+				pos.posH=pos.posN-((O-C)*BOND_LENGTH_N_H)/(O-C).getLength();
+			else
+				pos.is_complete = false;
 
 			//set identification number of the residue
 			// pos.number=res.getID().toInt();
@@ -126,8 +164,11 @@ namespace BALL
 //		for(Size i=0; i<(vec_.size()-1); i++) 
 		for(Size i=0; i<(vec_.size()); i++) 
 		{
-			Vector3 r(vec_[i].posN);
-			atom_grid.insert(r, vec_[i]);
+			if (vec_[i].is_complete)
+			{
+				Vector3 r(vec_[i].posN);
+				atom_grid.insert(r, vec_[i]);
+			}
 		}                   
 
 		HashGridBox3<POS>::DataIterator data_it;       // iterate over residues of neighbouring boxes
@@ -138,98 +179,90 @@ namespace BALL
  		// now compute the energies and see whether we have a hydrogen bond
 		for (Size i=0; i<vec_.size(); i++)
 		{
-			box = atom_grid.getBox(vec_[i].posN);
-
-			// We iterate over the grid ourselves, since the beginBox()... didn't work... :-(
-			Position x, y, z;                            // indices of the actual box
-			int size_x = atom_grid.getSizeX();           // size of x dimension
-			int size_y = atom_grid.getSizeY();           // size of y dimension
-			int size_z = atom_grid.getSizeZ();           // size of z dimension
-
-			atom_grid.getIndices(*box, x, y, z);         // compute the indices of the actual box
-
-			// Iterate over all the neighbouring boxes
-			// for (box_it=box->beginBox(); +box_it; ++box_it) //as mentioned beginBox doesn't work
-			for (int nx=x-1; (nx < size_x) && (nx < (int)x+2); nx++)
+			if (vec_[i].is_complete)
 			{
-				for (int ny=y-1; (ny < size_y) && (ny < (int)y+2); ny++)
+				box = atom_grid.getBox(vec_[i].posN);
+
+				// We iterate over the grid ourselves, since the beginBox()... didn't work... :-(
+				Position x, y, z;                            // indices of the actual box
+				int size_x = atom_grid.getSizeX();           // size of x dimension
+				int size_y = atom_grid.getSizeY();           // size of y dimension
+				int size_z = atom_grid.getSizeZ();           // size of z dimension
+
+				atom_grid.getIndices(*box, x, y, z);         // compute the indices of the actual box
+
+				// Iterate over all the neighbouring boxes
+				// for (box_it=box->beginBox(); +box_it; ++box_it) //as mentioned beginBox doesn't work
+				for (int nx=x-1; (nx < size_x) && (nx < (int)x+2); nx++)
 				{
-					for (int nz=z-1; (nz < size_z) && (nz < (int)z+2); nz++)
+					for (int ny=y-1; (ny < size_y) && (ny < (int)y+2); ny++)
 					{
-						if ( (nx>=0) && (ny>=0) && (nz>=0) )  // we shouldn't run outside the box
+						for (int nz=z-1; (nz < size_z) && (nz < (int)z+2); nz++)
 						{
-							// compute the neighbour box
-							HashGridBox3<POS> *nb = atom_grid.getBox(nx, ny, nz); 
-
-							//iterate over all residues of the neighbouring box
-							for (data_it = nb->beginData(); +data_it; ++data_it)
+							if ( (nx>=0) && (ny>=0) && (nz>=0) )  // we shouldn't run outside the box
 							{
-								// TODO: We don't want H-bonds between neighboring residues!
-								//       Does this criterion always work? We should check for
-								//       an existing bond between data_it and vec[i] instead!
+								// compute the neighbour box
+								HashGridBox3<POS> *nb = atom_grid.getBox(nx, ny, nz); 
 
-								if (((int)abs((int)(data_it->number - vec_[i].number)) > 1) && (data_it->number!=0))
+								//iterate over all residues of the neighbouring box
+								for (data_it = nb->beginData(); +data_it; ++data_it)
 								{
-									// compute the distances between the relevant atoms
-									dist_ON = (vec_[i].posO - data_it->posN).getLength();
-									dist_CH = (vec_[i].posC - data_it->posH).getLength();
-									dist_OH = (vec_[i].posO - data_it->posH).getLength();
-									dist_CN = (vec_[i].posC - data_it->posN).getLength();
+									// TODO: We don't want H-bonds between neighboring residues!
+									//       Does this criterion always work? We should check for
+									//       an existing bond between data_it and vec[i] instead!
 
-									// compute the electrostatic energy of the bond-building groups
-									energy  = 0.42*0.20 * 332.;
-									energy *= (1./dist_ON + 1./dist_CH - 1./dist_OH - 1./dist_CN);
-																
-									if (energy < -0.5)
+									if (((int)abs((int)(data_it->number - vec_[i].number)) > 1) && (data_it->number!=0))
 									{
-										HBondPairs_[vec_[i].number].push_back(data_it->number);
-										AtomIterator ai;
-										Atom *acceptor = 0;
-										Atom* donor = 0; 
-										for(ai=(vec_[i].pres)->beginAtom(); +ai; ++ai)
-										{
-											if(ai->getName() == "O")
-											{
-												acceptor=&(*ai);
-											}
-										}	
-										
-										for(ai=(data_it->pres)->beginAtom(); +ai; ++ai)
-										{
-											if(ai->getName() == "N")
-											{
-												donor=&*ai;
-											}
-										}		
-										
-										if (!donor || !acceptor) continue;
-										
-										Bond* bond = donor->createBond(*acceptor);
-										bond->setType(Bond::TYPE__HYDROGEN);
-										bond->setOrder(1);
-										bond->setName("calculated H-Bond");
+										// compute the distances between the relevant atoms
+										dist_ON = (vec_[i].posO - data_it->posN).getLength();
+										dist_CH = (vec_[i].posC - data_it->posH).getLength();
+										dist_OH = (vec_[i].posO - data_it->posH).getLength();
+										dist_CN = (vec_[i].posC - data_it->posN).getLength();
 
-										donor->setProperty("HBOND_DONOR", *acceptor);
+										// compute the electrostatic energy of the bond-building groups
+										energy  = 0.42*0.20 * 332.;
+										energy *= (1./dist_ON + 1./dist_CH - 1./dist_OH - 1./dist_CN);
+
+										if (energy < -0.5)
+										{
+											HBondPairs_[vec_[i].number].push_back(data_it->number);
+											AtomIterator ai;
+											Atom *acceptor = 0;
+											Atom* donor = 0; 
+											for(ai=(vec_[i].pres)->beginAtom(); +ai; ++ai)
+											{
+												if(ai->getName() == "O")
+												{
+													acceptor=&(*ai);
+												}
+											}	
+
+											for(ai=(data_it->pres)->beginAtom(); +ai; ++ai)
+											{
+												if(ai->getName() == "N")
+												{
+													donor=&*ai;
+												}
+											}		
+
+											if (!donor || !acceptor) continue;
+
+											Bond* bond = donor->createBond(*acceptor);
+											bond->setType(Bond::TYPE__HYDROGEN);
+											bond->setOrder(1);
+											bond->setName("calculated H-Bond");
+
+											donor->setProperty("HBOND_DONOR", *acceptor);
+										}
 									}
-								}
-							} 
+								} 
+							}
 						}
 					}
 				}
 			}
 		}
 
-		/*	for (Size i=0; i<vec_.size(); i++)
-		{
-		    for (Size j=0; j<vec_.size(); j++)
-				{
-				   if (HBondPairs_[i].size()!=0)
-				   {
-				      std::cout << "HBond between " << i << " O and " << j << " N" << std::endl;
-					 }
-				}
-		 }
-		*/
 		return true;
 	}
 
