@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.73 2004/11/27 22:13:59 amoll Exp $
+// $Id: molecularStructure.C,v 1.74 2004/11/27 22:23:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -523,6 +523,8 @@ namespace BALL
 																										composites_muteable); 
 			menuBar()->setItemEnabled(calculate_ramachandran_, (number_of_selected_objects == 1) &&
 							RTTI::isKindOf<Protein>(**getMainControl()->getMolecularControlSelection().begin()));
+			menuBar()->setItemEnabled(menu_FPDB_, !getMainControl()->compositesAreLocked() && 
+																						 (getMainControl()->getSelectedSystem() != 0));
 		}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.41 2004/11/27 21:36:22 amoll Exp $
+// $Id: mainframe.C,v 1.42 2004/11/27 22:24:16 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -44,8 +44,7 @@ namespace BALL
 			dataset_control_(0),
 			display_properties_(0),
 			file_dialog_(0),
-			fullscreen_(false),
-			menu_FPDB_(-1)
+			fullscreen_(false)
 	{
 		#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new Mainframe " << this << std::endl;
@@ -148,13 +147,6 @@ namespace BALL
 	Mainframe::~Mainframe()
 		throw()
 	{
-	}
-
-	void Mainframe::checkMenus()
-	{
-		if (menu_FPDB_ == -1) return;
-		menuBar()->setItemEnabled(menu_FPDB_, !compositesAreLocked() && (getSelectedSystem() != 0));
-		MainControl::checkMenus();
 	}
 
 	void Mainframe::exportPOVRay()

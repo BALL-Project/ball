@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.7 2004/11/27 20:54:03 amoll Exp $
+// $Id: mainframe.h,v 1.8 2004/11/27 22:24:16 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -69,9 +69,6 @@ namespace BALL
 		// Help menu
 		void about();
 
-		///
-		virtual void checkMenus();
-
 		/** Open a file.
 				Calls MolecularFileDialog::openFile
 		*/
@@ -96,8 +93,6 @@ namespace BALL
 		DisplayProperties*    		display_properties_;
 		MolecularFileDialog*  		file_dialog_;
 		bool 											fullscreen_;
-
-		Index menu_cs_, menu_FPDB_;
 	};
 
 } // namespace BALL
