@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.33 2000/12/08 09:22:52 oliver Exp $
+// $Id: string.C,v 1.34 2000/12/17 17:10:39 amoll Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -141,6 +141,18 @@ namespace BALL
 		}
 
 		return s;
+	}
+
+	String::String(const char* char_ptr, Index from, Size len)
+ 	 throw(Exception::NullPointer, Exception::IndexUnderflow,
+	Exception::IndexOverflow)
+ 	 : string()
+	{
+ 	 validateCharPtrRange_(from, len, char_ptr);
+ 	 if (len > 0)
+ 	 {
+ 	   assign(char_ptr + from, len);
+ 	 }
 	}
 
 	// hand-coded create method

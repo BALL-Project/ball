@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.31 2000/12/15 13:09:03 amoll Exp $
+// $Id: string.iC,v 1.32 2000/12/17 17:10:33 amoll Exp $
 
 BALL_INLINE 
 String::String()
@@ -35,18 +35,6 @@ String::String(const string& s)
 {
 }
 
-BALL_INLINE 
-String::String(const char* char_ptr, Index from, Size len)
-	throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
-	: string()
-{
-	validateCharPtrRange_(from, len, char_ptr);
-	if (len > 0)
-	{
-		assign(char_ptr + from, len);
-	}
-}
- 
 BALL_INLINE 
 String::String(const String& s, Index from, Size len)
 	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
