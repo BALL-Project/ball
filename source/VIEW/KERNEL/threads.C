@@ -147,11 +147,7 @@ namespace BALL
 					output_(message.ascii());
 
 					// prevent continuation of simulation, before update of visualisation has finished
-					while (main_control_->updateOfRepresentationRunning() && 
-								!main_control_->stopedSimulation()) 
-					{
-						msleep(10);
-					}
+					main_control_->getPrimitiveManager().getUpdateThread().wait();
 				}
 
 				updateScene_();
@@ -216,15 +212,11 @@ namespace BALL
 				while (md_->getNumberOfIterations() < steps_ &&
 							 !main_control_->stopedSimulation())
 				{
-					// prevent continuation of simulation, before update of visualisation has finished
-					while (main_control_->updateOfRepresentationRunning() && 
-								 !main_control_->stopedSimulation()) 
-					{
-						msleep(10);
-					}
-
 					md_->simulateIterations(steps_between_updates_, true);
 					updateScene_();
+					
+					// prevent continuation of simulation, before update of visualisation has finished
+					main_control_->getPrimitiveManager().getUpdateThread().wait();
 
 					QString message;
 					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
