@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.25 2001/07/15 17:32:38 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.26 2001/12/13 18:18:52 strobel Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(AnalyticalGeometry, "$Id: AnalyticalGeometry_test.C,v 1.25 2001/07/15 17:32:38 amoll Exp $")
+START_TEST(AnalyticalGeometry, "$Id: AnalyticalGeometry_test.C,v 1.26 2001/12/13 18:18:52 strobel Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -880,22 +880,22 @@ RESULT
 
 PRECISION(1E-5)
 CHECK(TAngle<T> getOrientedAngle<T>(T ax, T ay, T az, T bx, T by, T bz, T nx, T ny, T nz))
-	a1 = getOrientedAngle((float)0.0,  (float)0.0,  (float)10.0,
-											  (float)0.0,  (float)10.0, (float)0.0,
-											  (float)10.0, (float)0.0,	(float)0.0);
+	a1 = getOrientedAngle((float)10.0,  (float)0.0,  (float)0.0,
+											  (float)0.0,   (float)10.0, (float)0.0,
+											  (float)0.0,   (float)0.0,   (float)10.0);
 	Angle res(90, false);
 	TEST_EQUAL(a1, res)
 
-	a1 = getOrientedAngle((float)0.0,  (float)10.0, (float)0.0,
-											  (float)0.0,  (float)0.0,	(float)10.0,
-											  (float)-10.0, (float)0.0,	(float)0.0);
-	res.set(90, false);
+	a1 = getOrientedAngle((float)0.0,   (float)10.0, (float)0.0,
+											  (float)10.0,  (float)0.0,	 (float)0.0,
+											  (float)10.0,  (float)0.0,	 (float)10.0);
+	res.set(270, false);
 	TEST_EQUAL(a1, res)
 
 	a1 = getOrientedAngle((float)0.0, (float)0.0, (float)10.0,
 											  (float)0.0, (float)0.0, (float)-10.0,
 											  (float)0.0, (float)0.0, (float)0.0);
-	res.set(0, false);
+	res.set(180, false);
 	TEST_EQUAL(a1, res)
 	a1 = getOrientedAngle((float)0.0,  (float)0.0,   (float)10.0,
 											  (float)0.0,  (float)0.0,   (float)-10.0,
@@ -909,18 +909,18 @@ RESULT
 CHECK(TAngle<T> getOrientedAngle<T>(const TVector<T>& a, const TVector3<T>& b, const TVector3<T>& normal))
 	Vector3 v1, v2, v3;
 
-	v1.set(0.0, 0.0, 10.0);
+	v1.set(10.0, 0.0, 0.0);
 	v2.set(0.0, 10.0, 0.0);
-	v3.set(10.0, 0.0, 0.0);
+	v3.set(0.0, 0.0, 10.0);
 	a1 = getOrientedAngle(v1, v2, v3);
 	Angle res(90, false);
 	TEST_EQUAL(a1, res)
 
-	v1.set(0.0, 10.0, 0.0);
-	v2.set(0.0, 0.0, 10.0);
-	v3.set(-10.0, 0.0, 0.0);
+	v1.set(0.0, 10.0,  0.0);
+	v2.set(10.0, 0.0,  0.0);
+	v3.set(0.0,  0.0, 10.0);
 	a1 = getOrientedAngle(v1, v2, v3);
-	res.set(90, false);
+	res.set(270, false);
 	TEST_EQUAL(a1, res)
 
 	v1.set(0.0, 0.0, 0.0);
