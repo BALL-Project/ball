@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.32 2005/02/06 20:57:10 oliver Exp $
+// $Id: colorProcessor.C,v 1.33 2005/02/07 12:35:49 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -247,6 +247,9 @@ namespace BALL
 
 			const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
 			
+			// abort for strange molecules with huge dimension
+			if (diagonal.getSquareLength() > 10000000.0) return;
+
 			// grid spacing, tradeoff between speed and memory consumption
 			float grid_spacing = 4.0;
 			if (diagonal.getSquareLength() < 5000)
