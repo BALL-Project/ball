@@ -4,6 +4,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	basetube.C\
+	label.C\
 	line.C\
 	mesh.C\
 	point.C\
