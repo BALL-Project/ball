@@ -1,9 +1,0 @@
-// $Id: widgets.doc,v 1.6 2003/02/25 10:33:25 anhi Exp $
-
-/** \defgroup ViewGuiWidgets	Widget classes
-		\ingroup ViewGui
-		This section contains some predefined widgets that can be used
-		in an application, some preference widgets that are used by other
-		objects and the class modularWidget that is a base class for user
-		defined widgets.
- */

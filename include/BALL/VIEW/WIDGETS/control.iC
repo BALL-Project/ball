@@ -1,0 +1,32 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: control.iC,v 1.1 2003/08/26 12:11:40 oliver Exp $
+
+BALL_INLINE
+List<Composite*>& Control::getSelection()
+	throw()
+{
+	return selected_;
+}
+
+BALL_INLINE
+const List<Composite*>& Control::getSelection() const
+	throw()
+{
+	return selected_;
+}
+
+BALL_INLINE
+List<Composite*>& Control::getCopyList_()
+	throw()
+{
+	return copy_list_;
+}
+			
+BALL_INLINE
+const List<Composite*>& Control::getCopyList_() const
+	throw()
+{
+	return copy_list_;
+}

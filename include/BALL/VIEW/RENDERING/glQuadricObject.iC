@@ -1,0 +1,32 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glQuadricObject.iC,v 1.1 2003/08/26 12:11:40 oliver Exp $
+
+BALL_INLINE
+int GLQuadricObject::getDrawStyle() const
+	throw()
+{
+  return draw_style_;
+}
+
+BALL_INLINE
+int GLQuadricObject::getOrientation() const
+	throw()
+{
+  return orientation_;
+}
+
+BALL_INLINE
+bool GLQuadricObject::getTextureCoordinateGeneration() const
+	throw()
+{
+  return generate_texture_coordinates_;
+}
+
+BALL_INLINE
+int GLQuadricObject::getNormals() const
+	throw()
+{
+  return normals_;
+}

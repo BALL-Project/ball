@@ -1,8 +1,0 @@
-// $Id: functor.doc,v 1.5 2003/02/25 10:33:22 anhi Exp $
-
-/** \defgroup ViewGuiFunctors Functor classes
-		\ingroup ViewGui
-		This section contains functor classes that are used by other
-		classes.
-*/
-

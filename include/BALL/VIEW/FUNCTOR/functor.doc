@@ -1,6 +1,0 @@
-// $Id: functor.doc,v 1.4 2003/02/25 10:33:19 anhi Exp $
-
-/** \defgroup ViewFunctors Functors
-		\ingroup View
-		In this section some useful visitors and processors are defined.
-*/
