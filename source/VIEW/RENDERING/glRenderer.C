@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.12 2003/12/03 19:22:44 oliver Exp $
+// $Id: glRenderer.C,v 1.13 2003/12/05 23:55:13 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -247,7 +247,7 @@ namespace BALL
 		}
 
 
-		void GLRenderer::addRepresentation(const Representation& rep)
+		void GLRenderer::buildDisplayListFor(const Representation& rep)
 			throw()
 		{
 			if (display_lists_.has(&rep)) return;
@@ -261,7 +261,7 @@ namespace BALL
 			display_list->endDefinition();
 		}
 
-		void GLRenderer::removeRepresentation(const Representation& rep)
+		void GLRenderer::removeDisplayListFor(const Representation& rep)
 			throw()
 		{
 			if (!display_lists_.has(&rep)) return;
@@ -269,7 +269,7 @@ namespace BALL
 			display_lists_.erase(&rep);
 		}
 
-		void GLRenderer::updateRepresentation(const Representation& rep)
+		void GLRenderer::rebuildDisplayListFor(const Representation& rep)
 			throw()
 		{
 			if (!display_lists_.has(&rep)) return;
