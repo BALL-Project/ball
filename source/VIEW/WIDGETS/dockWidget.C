@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.10 2003/09/13 14:31:20 amoll Exp $
+// $Id: dockWidget.C,v 1.11 2003/09/14 17:21:02 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -17,11 +17,12 @@ namespace BALL
 		
 DockWidget::DockWidget(QWidget* parent, const char* name)
 : QDockWindow(QDockWindow::InDock, parent),
-	ModularWidget(name)
+	ModularWidget(name),
+	guest_(0)
 {
 	layout_ = new QVBoxLayout(this);
   caption_label_ = new QLabel(this, "caption_label");
-	caption_label_->resize(120, 12);
+	caption_label_->resize(90, 12);
   caption_label_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
   caption_label_->setPaletteBackgroundColor( QColor( 255, 255, 127 ) );
   QFont caption_label_font(caption_label_->font());
@@ -34,7 +35,6 @@ DockWidget::DockWidget(QWidget* parent, const char* name)
 	boxLayout()->addItem(layout_);
 
 	setOrientation(Qt::Vertical);
-  resize( QSize(132, 293));
 
 	if (name != 0) 
 	{ 
@@ -54,9 +54,10 @@ void DockWidget::setGuest(QWidget& guest)
 {
 	QPoint p;
 	guest.reparent(this, p, true);
-	guest.resize(120,1000);
+	guest.resize(120,100);
   guest.setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, 0, 0, false));
 	layout_->addWidget(&guest);
+	guest_ = &guest;
 	setMinimumSize(20, 20);
 	setCloseMode(QDockWindow::Always);
 	setResizeEnabled(true);
@@ -68,10 +69,8 @@ void DockWidget::initializeWidget(MainControl& main_control)
 	window_menu_entry_id_ = 
 		main_control.insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
 	getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
-	connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(mytest(bool)));
-											 
+	connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setWindowsMenuEntry(bool)));
 }
-
 
 void DockWidget::finalizeWidget(MainControl& main_control)
 	throw()
@@ -91,7 +90,6 @@ void DockWidget::writePreferences(INIFile& inifile)
 	Dock dock;
 	Index index, offset;
 	bool newline;
-	//getLocation ( QDockWindow * dw, Dock & dock, int & index, bool & nl, int & extraOffset ) 
 	getMainControl()->getLocation(this, dock, index, newline, offset);
 	inifile.insertValue("WINDOWS", getIdentifier() + "::dockarea", String(dock));
 	inifile.insertValue("WINDOWS", getIdentifier() + "::dockindex", String(index));
@@ -126,6 +124,16 @@ void DockWidget::fetchPreferences(INIFile & inifile)
 	}
 
 	ModularWidget::fetchPreferences(inifile);
+	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::height"))
+	{
+		Index width = inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt();
+		Index height = inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt();
+
+		if (guest_)
+		{
+			guest_->resize(width, height);
+		}
+	}
 
 	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
 			!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
@@ -158,7 +166,7 @@ void DockWidget::switchShowWidget()
 	}
 }
 
-void DockWidget::mytest(bool state) 
+void DockWidget::setWindowsMenuEntry(bool state) 
 {
 	QMenuBar* menu = getMainControl()->menuBar();
 	if (menu->isItemChecked(window_menu_entry_id_) != isVisible())
