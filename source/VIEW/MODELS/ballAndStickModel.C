@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.5 2003/10/17 16:17:37 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.6 2003/11/24 23:53:35 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -20,8 +20,8 @@ namespace BALL
 AddBallAndStickModel::AddBallAndStickModel()
 	throw()
 	: AtomBondModelBaseProcessor(),
-		ball_radius_((Real)0.4),
-		stick_radius_((Real)0.2),
+		ball_radius_((float)0.4),
+		stick_radius_((float)0.2),
 		ball_and_stick_(true)
 {
 }
@@ -49,8 +49,8 @@ void AddBallAndStickModel::clear()
 {
 	AtomBondModelBaseProcessor::clear();
 
-	ball_radius_ = (Real)0.4;
-	stick_radius_ = (Real)0.2;
+	ball_radius_ = (float)0.4;
+	stick_radius_ = (float)0.2;
 	ball_and_stick_ = true;
 }
 
@@ -77,24 +77,24 @@ void AddBallAndStickModel::swap(AddBallAndStickModel &add_ball_and_stick)
 {
 	AtomBondModelBaseProcessor::swap(add_ball_and_stick);
 
-	Real temp_Real = ball_radius_;
+	float temp_float = ball_radius_;
 	ball_radius_ = add_ball_and_stick.ball_radius_;
-	add_ball_and_stick.ball_radius_ = temp_Real;
+	add_ball_and_stick.ball_radius_ = temp_float;
 
-	temp_Real = stick_radius_;
+	temp_float = stick_radius_;
 	stick_radius_ = add_ball_and_stick.stick_radius_;
-	add_ball_and_stick.stick_radius_ = temp_Real;
+	add_ball_and_stick.stick_radius_ = temp_float;
 
 	bool temp_bool = ball_and_stick_;
 	ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
 	add_ball_and_stick.ball_and_stick_ = temp_bool;
 }
 
-void AddBallAndStickModel::setBallRadius(const Real radius)
+void AddBallAndStickModel::setBallRadius(const float radius)
 	throw(Exception::OutOfRange)
 {
 	// a radius never can be lower or equal 0
-	if (radius <= (Real)0)
+	if (radius <= (float)0)
 	{
 		throw Exception::OutOfRange(__FILE__, __LINE__);
 	}
@@ -102,11 +102,11 @@ void AddBallAndStickModel::setBallRadius(const Real radius)
 	ball_radius_ = radius;
 }
 
-void AddBallAndStickModel::setStickRadius(const Real radius)
+void AddBallAndStickModel::setStickRadius(const float radius)
 	throw(Exception::OutOfRange)
 {
 	// a radius never can be lower or equal 0
-	if (radius <= (Real)0)
+	if (radius <= (float)0)
 	{
 		throw Exception::OutOfRange(__FILE__, __LINE__);
 	}

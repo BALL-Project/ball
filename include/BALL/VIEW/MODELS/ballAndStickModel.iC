@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.iC,v 1.1 2003/08/26 12:11:28 oliver Exp $
+// $Id: ballAndStickModel.iC,v 1.2 2003/11/24 23:54:38 amoll Exp $
 
 BALL_INLINE
-Real AddBallAndStickModel::getBallRadius() const
+float AddBallAndStickModel::getBallRadius() const
   throw()
 {
   return ball_radius_;
 }
 
 BALL_INLINE
-Real AddBallAndStickModel::getStickRadius() const
+float AddBallAndStickModel::getStickRadius() const
   throw()
 {
   return stick_radius_;

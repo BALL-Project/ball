@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.5 2003/09/03 12:34:51 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.6 2003/11/24 23:54:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -104,30 +104,30 @@ namespace BALL
 					\param       radius the new radius of the ball-component: (<b>radius > 0</b>)
 					\exception  OutOfRange thrown if <b>radius <= 0</b>
 			*/
-			void setBallRadius(const Real radius)
+			void setBallRadius(const float radius)
 				throw(Exception::OutOfRange);
 
 			/** Inspection of the radius of the ball-component.
 			*/
-			Real getBallRadius() const
+			float getBallRadius() const
 				throw();
 
 			/** Copy the radius of the ball-component to real.
 					\param  radius the real receiving the radius of the ball-component
 			*/
-			void getBallRadius(Real& radius)
+			void getBallRadius(float& radius)
 				throw();
 
 			/** Change the radius of the stick-component.
 					\param       radius the new radius of the stick-component: (radius > 0)
 					\exception  OutOfRange thrown if radius <= 0
 			*/
-			void setStickRadius(const Real radius)
+			void setStickRadius(const float radius)
 				throw(Exception::OutOfRange);
 
 			/** Inspection of the radius of the stick-component.
 			*/
-			Real getStickRadius() const
+			float getStickRadius() const
 				throw();
 
 			/** Enable the creation of the ball and stick model.
@@ -221,8 +221,8 @@ namespace BALL
 
 			private:
 
-			Real ball_radius_;
-			Real stick_radius_;
+			float ball_radius_;
+			float stick_radius_;
 		
 			bool ball_and_stick_;
 		};

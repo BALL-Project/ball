@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.11 2003/11/21 01:22:23 amoll Exp $
+// $Id: scene.h,v 1.12 2003/11/24 23:57:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -558,7 +558,7 @@ namespace BALL
 
 			void calculateQuaternion_(Quaternion& quaternion, const Quaternion* rotate = 0);
 
-			Real sphereProject_(Real radius, Real x, Real y);
+			float sphereProject_(float radius, float x, float y);
 
 			void selectObjects_(bool select = true);
 
@@ -585,17 +585,17 @@ namespace BALL
 			bool need_update_;
 			bool update_running_;
 
-			Real x_window_pos_old_;
-			Real y_window_pos_old_;
+			float x_window_pos_old_;
+			float y_window_pos_old_;
 
-			Real x_window_pos_new_;
-			Real y_window_pos_new_;
+			float x_window_pos_new_;
+			float y_window_pos_new_;
 
-			Real x_window_pick_pos_first_;
-			Real y_window_pick_pos_first_;
+			float x_window_pick_pos_first_;
+			float y_window_pick_pos_first_;
 
-			Real x_window_pick_pos_second_;
-			Real y_window_pick_pos_second_;
+			float x_window_pick_pos_second_;
+			float y_window_pick_pos_second_;
 
 			Stage* stage_;
 

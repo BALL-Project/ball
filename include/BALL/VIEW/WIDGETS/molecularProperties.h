@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.8 2003/11/03 17:55:50 amoll Exp $
+// $Id: molecularProperties.h,v 1.9 2003/11/24 23:58:59 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
@@ -178,7 +178,7 @@ private:
 
 	
 	Vector3 										view_center_vector_;
-	Real 												view_distance_;
+	float 												view_distance_;
 
 };
 

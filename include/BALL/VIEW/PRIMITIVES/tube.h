@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.6 2003/11/18 14:47:55 amoll Exp $
+// $Id: tube.h,v 1.7 2003/11/24 23:51:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
@@ -120,14 +120,14 @@ namespace BALL
 
 			/** Inspection of the length of the tube.
 					Access the length of this tube.
-					\return  Real the length of this tube
+					\return  float the length of this tube
 			*/
 			float getLength() const
 				throw() {return (getVertex1() - getVertex2()).getLength();}
 
 			/** Inspection of the square length of the tube.
 					Access the square length of this tube.
-					\return  Real the square length of this tube
+					\return  float the square length of this tube
 			*/
 			float getSquareLength() const
 				throw() {return (getVertex1() - getVertex2()).getSquareLength();}
@@ -172,19 +172,19 @@ namespace BALL
 
 			/**	Get the radius.
 			 */
-			Real getRadius() const
+			float getRadius() const
 				throw() { return radius_;}
 
 			/** Set the radius.
 			 */
-			void setRadius(Real radius)
+			void setRadius(float radius)
 				throw() { radius_ = radius;}
 
 			//@}
 				
 			private:
 
-			Real radius_;
+			float radius_;
 		};
 
 	} // namespace VIEW

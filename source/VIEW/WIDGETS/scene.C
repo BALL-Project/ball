@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.23 2003/11/23 15:35:41 amoll Exp $
+// $Id: scene.C,v 1.24 2003/11/24 23:57:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -507,13 +507,13 @@ void Scene::calculateQuaternion_(Quaternion& q, const Quaternion* rotate)
 
 	Quaternion tmp;
 
-	Real right1 = (gl_renderer_.getWidth()  - x_window_pos_old_ * 2.0) / 
+	float right1 = (gl_renderer_.getWidth()  - x_window_pos_old_ * 2.0) / 
 								 gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
-	Real up1 = 		(gl_renderer_.getHeight() - y_window_pos_old_ * 2.0) / 
+	float up1 = 		(gl_renderer_.getHeight() - y_window_pos_old_ * 2.0) / 
 								 gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
-	Real right2 = (gl_renderer_.getWidth()  - x_window_pos_new_ * 2.0) / 
+	float right2 = (gl_renderer_.getWidth()  - x_window_pos_new_ * 2.0) / 
 								 gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
-	Real up2 = 		(gl_renderer_.getHeight() - y_window_pos_new_ * 2.0) / 
+	float up2 = 		(gl_renderer_.getHeight() - y_window_pos_new_ * 2.0) / 
 								 gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
 
 	Camera& camera = stage_->getCamera();
@@ -539,37 +539,37 @@ void Scene::calculateQuaternion_(Quaternion& q, const Quaternion* rotate)
 		cross.set(tmp_vector.x, tmp_vector.y, tmp_vector.z);
 	}
 
-	Real phi = (a - b).getLength();
+	float phi = (a - b).getLength();
 	
-	if (BALL_REAL_GREATER(phi, (Real)1, Constants::EPSILON))
+	if (BALL_REAL_GREATER(phi, (float)1, Constants::EPSILON))
 	{
-		phi = (Real)1;
+		phi = (float)1;
 	}
 
-	if (BALL_REAL_LESS(phi, (Real)-1, Constants::EPSILON))
+	if (BALL_REAL_LESS(phi, (float)-1, Constants::EPSILON))
 	{
-		phi = (Real)-1;
+		phi = (float)-1;
 	}
 
-	phi = (Real)(2.0 * asin((float)phi));
+	phi = (float)(2.0 * asin((float)phi));
 	
 	tmp.set(cross, -phi);
 	q = tmp;
 }
 
 
-Real Scene::sphereProject_(Real radius, Real x, Real y)
+float Scene::sphereProject_(float radius, float x, float y)
 {
-	Real dist = (Real)sqrt((float)(x * x + y * y));
-	Real z;
+	float dist = (float)sqrt((float)(x * x + y * y));
+	float z;
 
 	if (BALL_REAL_LESS(dist, radius * sqrt(2.0) / 2.0, Constants::EPSILON))
 	{
-		z = (Real)sqrt((float)(radius * radius - dist * dist));
+		z = (float)sqrt((float)(radius * radius - dist * dist));
 	}
 	else
 	{
-		Real t = radius / sqrt(2.0);
+		float t = radius / sqrt(2.0);
 		z = t * t / dist;
 	}
 

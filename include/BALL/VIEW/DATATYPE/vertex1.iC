@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.iC,v 1.1 2003/08/26 12:11:01 oliver Exp $
+// $Id: vertex1.iC,v 1.2 2003/11/24 23:49:14 amoll Exp $
 
 BALL_INLINE
 void Vertex::setVertex(const Vector3& v)
@@ -12,7 +12,7 @@ void Vertex::setVertex(const Vector3& v)
 
 BALL_INLINE
 void Vertex::setVertex
-  (const Real x, const Real y, const Real z)
+  (const float x, const float y, const float z)
 	throw()
 {
   vertex1_ptr_->set(x, y, z);
@@ -40,7 +40,7 @@ void Vertex::getVertex(Vector3& v) const
 }
 
 BALL_INLINE
-void Vertex::getVertex(Real &x, Real &y, Real &z) const
+void Vertex::getVertex(float &x, float &y, float &z) const
 	throw()
 {
   vertex1_ptr_->get(x, y, z);
