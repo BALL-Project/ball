@@ -1,0 +1,36 @@
+// $Id: standardColorCalculator.iC,v 1.1 2000/01/11 20:19:51 hekl Exp $
+BALL_INLINE
+void AtomChargeColorCalculator::setPositiveColor(const ColorRGBA& color)
+{
+	positive_color_ = color;
+}
+
+BALL_INLINE
+const ColorRGBA& AtomChargeColorCalculator::getPositiveColor() const
+{
+	return positive_color_;
+}
+
+BALL_INLINE
+void AtomChargeColorCalculator::setNeutralColor(const ColorRGBA& color)
+{
+	neutral_color_ = color;
+}
+
+BALL_INLINE
+const ColorRGBA& AtomChargeColorCalculator::getNeutralColor() const
+{
+	return neutral_color_;
+}
+
+BALL_INLINE
+void AtomChargeColorCalculator::setNegativeColor(const ColorRGBA& color)
+{
+	negative_color_ = color;
+}
+
+BALL_INLINE
+const ColorRGBA& AtomChargeColorCalculator::getNegativeColor() const
+{
+	return negative_color_;
+}
