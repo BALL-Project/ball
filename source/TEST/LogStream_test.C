@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LogStream_test.C,v 1.21 2004/11/07 14:44:16 oliver Exp $
+// $Id: LogStream_test.C,v 1.22 2005/01/18 23:00:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.21 2004/11/07 14:44:16 oliver Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.22 2005/01/18 23:00:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ class TestTarget
 
 String filename;
 
-LogStream* l1;
+LogStream* l1 = 0;
 
 CHECK(LogStream(LogStreamBuf*, bool, bool))
 	l1 = new LogStream(new LogStreamBuf);
@@ -102,9 +102,9 @@ CHECK(info(int n = 0))
 	l1.info() << "TEST" <<endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
-	TEST_EQUAL(l1.getLineLevel(0), LogStream::INFORMATION)
+	TEST_EQUAL(l1.getLineLevel(0), LogStream::INFORMATION_LEVEL)
 	l1.info(1) << "TEST2" <<endl;
-	TEST_EQUAL(l1.getLineLevel(1), LogStream::INFORMATION + 1)
+	TEST_EQUAL(l1.getLineLevel(1), LogStream::INFORMATION_LEVEL + 1)
 RESULT
 
 CHECK(error(int n = 0))
@@ -112,9 +112,9 @@ CHECK(error(int n = 0))
 	l1.error() << "TEST" <<endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
-	TEST_EQUAL(l1.getLineLevel(0), LogStream::ERROR)
+	TEST_EQUAL(l1.getLineLevel(0), LogStream::ERROR_LEVEL)
 	l1.error(1) << "TEST2" <<endl;
-	TEST_EQUAL(l1.getLineLevel(1), LogStream::ERROR + 1)
+	TEST_EQUAL(l1.getLineLevel(1), LogStream::ERROR_LEVEL + 1)
 RESULT
 
 CHECK(warn(int n = 0))
@@ -122,9 +122,9 @@ CHECK(warn(int n = 0))
 	l1.warn() << "TEST" <<endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
-	TEST_EQUAL(l1.getLineLevel(0), LogStream::WARNING)
+	TEST_EQUAL(l1.getLineLevel(0), LogStream::WARNING_LEVEL)
 	l1.warn(1) << "TEST2" <<endl;
-	TEST_EQUAL(l1.getLineLevel(1), LogStream::WARNING + 1)
+	TEST_EQUAL(l1.getLineLevel(1), LogStream::WARNING_LEVEL + 1)
 RESULT
 
 CHECK(insert(std::ostream& s, int min_level = LogStreamBuf::MIN_LEVEL, int max_level = LogStreamBuf::MAX_LEVEL))
