@@ -85,8 +85,7 @@ Box3_test:	Box3_test.o
 CharmmFF_test:	CharmmFF_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-
-Circle3_test:	Circle_test.o
+Circle3_test:	Circle3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 ClassTest_test:	ClassTest_test.o
