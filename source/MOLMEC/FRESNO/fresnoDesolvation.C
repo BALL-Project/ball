@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.6 2002/04/06 20:03:10 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.7 2002/04/07 17:42:28 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -99,9 +99,9 @@ namespace BALL
 		fdpb.options[FDPB::Option::BORDER] = 8.0;
 		fdpb.options[FDPB::Option::PROBE_RADIUS] = 1.8;
 		fdpb.options[FDPB::Option::BOUNDARY] = FDPB::Boundary::FOCUSING;
-		fdpb.options[FDPB::Default::DIELECTRIC_SMOOTHING] 
+		fdpb.options[FDPB::Option::DIELECTRIC_SMOOTHING] 
 			= FDPB::DielectricSmoothing::HARMONIC;
-		fdpb.options[FDPB::Default::CHARGE_DISTRIBUTION]
+		fdpb.options[FDPB::Option::CHARGE_DISTRIBUTION]
 			= FDPB::ChargeDistribution::TRILINEAR;
 
 		if (fdpb.setup(ligand_system))
@@ -109,15 +109,16 @@ namespace BALL
 			fdpb.solve();
 			energy_ = fdpb.getReactionFieldEnergy();
 			// DEBUG
-			Log.info() << "water " << fdpb.getReactionFieldEnergy();
+			Log.info() << "water " << fdpb.getReactionFieldEnergy() << endl;
 			// /DEBUG
 
 			fdpb.options[FDPB::Option::SOLVENT_DC] = 1.0;
 			fdpb.setup(ligand_system);
 			fdpb.solve();
 			energy_ -= fdpb.getReactionFieldEnergy();
+			energy_ = - energy_;
 			// DEBUG
-			Log.info() << "vacuum " << fdpb.getReactionFieldEnergy();
+			Log.info() << "vacuum " << fdpb.getReactionFieldEnergy() << endl;
 			// /DEBUG
 
 			// DEBUG
