@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.25 2003/02/19 13:17:28 amoll Exp $
+// $Id: displayProperties.C,v 1.26 2003/02/19 16:16:59 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -496,7 +496,6 @@ namespace BALL
 
 					if (RTTI::isKindOf<AddGLSurfaceModel>(*static_base_model_pointer_))
 					{
-						Log.error() << "apply in DP" << std::endl;
 						updates.apply(remove_model_static_);
 						updates.apply(surface_model_static_);
 					}
