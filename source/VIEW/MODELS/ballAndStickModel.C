@@ -1,12 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.3 2003/09/01 10:27:20 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.4 2003/09/03 12:34:32 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
 using namespace std;
 

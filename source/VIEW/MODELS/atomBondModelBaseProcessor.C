@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.4 2003/09/03 10:16:21 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.5 2003/09/03 12:34:31 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #include <BALL/KERNEL/forEach.h>
@@ -17,14 +17,16 @@ namespace BALL
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor()
 			throw()
 			:	ModelProcessor(),
-			  used_atoms_()
+			  used_atoms_(),
+				atom_set_()
 		{
 		}
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor(const AtomBondModelBaseProcessor& processor)
 			throw()
 			:	ModelProcessor(processor),
-				used_atoms_()
+				used_atoms_(),
+				atom_set_()
 		{
 		}
 
@@ -41,13 +43,14 @@ namespace BALL
 			throw()
 		{
 			ModelProcessor::clear();
-			clearUsedAtoms_();
+			atom_set_.clear();
+			used_atoms_.clear();
 		}
 
 		void AtomBondModelBaseProcessor::set(const AtomBondModelBaseProcessor& processor)
 			throw()
 		{
-			clearUsedAtoms_();
+			clear();
 			ModelProcessor::set(processor);
 		}
 
@@ -66,7 +69,8 @@ namespace BALL
 
 		bool AtomBondModelBaseProcessor::start()
 		{
-			clearUsedAtoms_();
+			atom_set_.clear();
+			used_atoms_.clear();
 			return ModelProcessor::start();
 		}
 				

@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.2 2003/08/26 18:35:38 amoll Exp $
+// $Id: vanDerWaalsModel.C,v 1.3 2003/09/03 12:34:32 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
-#include <BALL/KERNEL/atom.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/KERNEL/atom.h>
 
 using namespace std;
 
@@ -40,20 +41,16 @@ namespace BALL
 			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
-			//setProperty(PROPERTY__MODEL_VDW);
 		}
 
 		bool AddVanDerWaalsModel::start()
 		{
-			// init model connector
-			//getModelConnector()->setProperties(*this);
-
 			return AtomBondModelBaseProcessor::start();
 		}
 				
 		bool AddVanDerWaalsModel::finish()
 		{
-			buildBondModels_(); // ????? kann man vielleicht weglassen?
+//			buildBondModels_(); // ????? kann man vielleicht weglassen?
 
 			return true;
 		}
