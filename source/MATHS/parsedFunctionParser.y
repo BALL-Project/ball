@@ -54,7 +54,7 @@ exp:     NUM               { $$ = $1;                         			        			}
 
 %%
 
-void parsedFunctionerror(char *s)
+void parsedFunctionerror(char* /* s */)
 {
 	//throw Exception::ParseError(__FILE__, 0,
 	cerr << "Parse Error!" << endl;
