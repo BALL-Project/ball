@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.32 2000/12/07 21:32:04 amoll Exp $
+// $Id: string.C,v 1.33 2000/12/08 09:22:52 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -47,6 +47,8 @@ namespace BALL
 	const char* String::CHARACTER_CLASS__WHITESPACE = " \n\t\r\f\v";
 	const char* String::CHARACTER_CLASS__QUOTES = "\"";
 
+	const Size String::EndPos = (Size)-1;
+
 	String::CompareMode String::compare_mode_ = String::CASE_SENSITIVE;
 
 	Substring::UnboundSubstring::UnboundSubstring(const char* file, int line)
@@ -62,8 +64,8 @@ namespace BALL
 	Substring::Substring()
 		throw()
 		:	bound_(0),
-			from_((Index)string::npos),
-			to_((Index)string::npos)
+			from_((Index)String::EndPos),
+			to_((Index)String::EndPos)
 	{
 	}
 
@@ -305,7 +307,7 @@ namespace BALL
 			return;
 		}
 
-		Size len = std::min(max_len, size() - from);
+		Size len = std::min(max_len, (Size)(size() - from));
 
 		const char*	string_ptr = &(c_str()[from]);
 
@@ -324,14 +326,14 @@ namespace BALL
 	bool String::toBool() const
 		throw()
 	{
-		Size index = find_first_not_of(CHARACTER_CLASS__WHITESPACE);
+		Size index = (Size)find_first_not_of(CHARACTER_CLASS__WHITESPACE);
 		
 		if (size() == 0)
 		{
 			return true;
 		}
 
-		if (index != npos)
+		if (index != (Size)string::npos)
 		{
 			if (!(c_str()[index] == '0' && (isWhitespace(c_str()[index + 1]) == true || c_str()[index + 1] == '\0'))
 					&& !(c_str()[index++] == 'f'
@@ -735,7 +737,7 @@ namespace BALL
 				{
 					if (current_char >= end)
 					{
-						*from_and_next_field = (Index)npos;
+						*from_and_next_field = (Index)EndPos;
 					}
 					else 
 					{
@@ -764,7 +766,7 @@ namespace BALL
 
 		if (from_and_next_field != 0)
 		{
-			*from_and_next_field = (Index)npos;
+			*from_and_next_field = (Index)EndPos;
 		}
 
 		return String();
@@ -878,10 +880,10 @@ namespace BALL
 
 		if (from_and_next_field != 0)
 		{
-			*from_and_next_field = (current_char - &(c_str()[0]));
+			*from_and_next_field = (Index)(current_char - &(c_str()[0]));
 			if (current_char >= end)
 			{
-				*from_and_next_field = (Index)npos;
+				*from_and_next_field = (Index)EndPos;
 			}
 		}
 
@@ -898,7 +900,7 @@ namespace BALL
 			return 0;
 		}
 
-		while(from != (Index)npos)
+		while(from != (Index)EndPos)
 		{
 			string_array[array_index] = getField(0, delimiters, &from);
 			
@@ -922,7 +924,7 @@ namespace BALL
 		// clear the vector anyway
 		strings.clear();
 
-		while(from != (Index)npos)
+		while(from != (Index)EndPos)
 		{
 			String field = getField(0, delimiters, &from);
 			
@@ -932,7 +934,7 @@ namespace BALL
 			}
 		}
 
-		return strings.size(); 
+		return (Size)strings.size(); 
 	}
 
 	Size String::splitQuoted(vector<String>& strings, const char* delimiters, const char* quotes, Index from) const
@@ -941,7 +943,7 @@ namespace BALL
 		// clear the vector anyway
 		strings.clear();
 
-		while (from != (Index)npos)
+		while (from != (Index)EndPos)
 		{
 			String field = getFieldQuoted(0, delimiters, quotes, &from);
 			
@@ -951,7 +953,7 @@ namespace BALL
 			}
 		}
 
-		return strings.size(); 
+		return (Size)strings.size(); 
 	}
 
 	String& String::trimLeft(const char* trimmed_chars)
@@ -990,7 +992,7 @@ namespace BALL
 			return *this;
 		}
 
-		Size index = find_last_not_of(trimmed_chars);
+		Size index = (Size)find_last_not_of(trimmed_chars);
 		
 		if (index < (size() - 1))
 		{
@@ -1111,7 +1113,7 @@ namespace BALL
 			return 0;
 		}
 
-		Size newlen = std::min(s.size(), len);
+		Size newlen = std::min((Size)s.size(), len);
 
 		int result = 0;
 		if (compare_mode_ == CASE_INSENSITIVE)
@@ -1152,8 +1154,8 @@ namespace BALL
 			return 0;
 		}
 
-		Size len = size() - from;
-		Size newlen = std::min(s.size(), len);
+		Size len = (Size)(size() - from);
+		Size newlen = std::min((Size)s.size(), len);
 
 		int result = 0;
 		if (compare_mode_ == CASE_INSENSITIVE)
@@ -1200,7 +1202,7 @@ namespace BALL
 			return 0;
 		}
 	
-		Size newlen = strlen(char_ptr);
+		Size newlen = (Size)strlen(char_ptr);
 		
 		newlen = std::min(len, newlen);
 
@@ -1244,7 +1246,7 @@ namespace BALL
 
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
-		Size string_size = size();
+		Size string_size = (Size)size();
 		if (from < 0)
 		{
 			from = (Index)string_size + from;
@@ -1269,7 +1271,7 @@ namespace BALL
 			return 0;
 		}
 	
-		Size newlen = std::min(strlen(char_ptr), len);
+		Size newlen = std::min((Size)strlen(char_ptr), len);
 
 		newlen = len;
 		
@@ -1350,7 +1352,7 @@ namespace BALL
 	Index String::substitute(const String& to_replace, const String& replacing)
 		throw()
 	{
-		Size replaced_size = to_replace.size();
+		Size replaced_size = (Size)to_replace.size();
 
 		Index found = 0;
 		if (to_replace != "")
@@ -1358,7 +1360,7 @@ namespace BALL
 			found = (Index)find(to_replace);
 		}
 
-		if (found != (Index)npos)
+		if (found != (Index)EndPos)
 		{
 			replace(found, replaced_size, replacing);
 		}
@@ -1372,7 +1374,7 @@ namespace BALL
 	{
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
-		Size string_size = size();
+		Size string_size = (Size)size();
 		if (index < 0)
 		{
 			index = (Index)string_size + index;
@@ -1394,7 +1396,7 @@ namespace BALL
 	void String::validateRange_(Index& from, Size& len) const
 		throw (Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
-		Size string_size = size();
+		Size string_size = (Size)size();
 		
     // indices may be given as negative arguments: start from the end
     // -1 therefore means the last character of the string.
@@ -1415,7 +1417,7 @@ namespace BALL
       throw Exception::IndexOverflow(__FILE__, __LINE__, from, string_size);
 		}
 
-		if (len == npos)
+		if (len == EndPos)
 		{
 			len = string_size - from;
 		}
@@ -1450,7 +1452,7 @@ namespace BALL
       throw Exception::IndexOverflow(__FILE__, __LINE__, from, size);
 		}
 
-		if (len == string::npos)
+		if (len == String::EndPos)
 		{
 			len = size - from;
 		}
@@ -1469,7 +1471,7 @@ namespace BALL
 			throw Exception::NullPointer(__FILE__, __LINE__);
 		}
 
-		Size total_len = strlen(char_ptr);
+		Size total_len = (Size)strlen(char_ptr);
 
     // indices may be given as negative arguments: start from the end
     // -1 therefore means the to bit.
@@ -1490,7 +1492,7 @@ namespace BALL
       throw Exception::IndexOverflow(__FILE__, __LINE__, from, len);
 		}
 
-		if (len == npos)
+		if (len == EndPos)
 		{
 			len = total_len - from;
 		}
