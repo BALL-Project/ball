@@ -1,0 +1,14 @@
+// $Id: label.iC,v 1.1 2000/05/09 09:27:30 hekl Exp $
+
+BALL_INLINE
+void Label::setText(const String text)
+{
+	setName(text);
+}
+
+BALL_INLINE
+String Label::getText() const
+{
+	return getName();
+}
+
