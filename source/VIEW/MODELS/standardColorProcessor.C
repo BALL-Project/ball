@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.50 2004/10/23 18:24:51 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.50.2.1 2004/12/27 17:38:53 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -289,24 +289,19 @@ namespace BALL
 			if (composite == 0) return default_color_;
 			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
-			Residue residue;
-			if (!RTTI::isKindOf<Residue>(*composite) &&
-					composite->getAncestor(residue) == 0)
-			{
-				return default_color_;
-			}
-
 			Position pos;
-
 			try
 			{
-				if (RTTI::isKindOf<Residue>(*composite))
+				if (!RTTI::isKindOf<Residue>(*composite))
 				{
-					pos = ((const Residue*)composite)->getID().toUnsignedShort();
+					Residue dummy;
+					const Residue* residue = composite->getAncestor(dummy);
+					if (residue == 0) return default_color_;
+					pos = residue->getID().toUnsignedShort();
 				}
 				else
 				{
-					pos = ((const Residue*)(composite->getAncestor(residue)))->getID().toUnsignedShort();
+					pos = ((const Residue*)composite)->getID().toUnsignedShort();
 				}
 			}
 			catch(...)
