@@ -34,7 +34,7 @@ BALLViewDemo::BALLViewDemo(QWidget* parent, const char* name)
 	}
 
 	setNextEnabled(page(pageCount() - 1), false);
-	setFinishEnabled(page(pageCount() - 1), false);
+	setFinishEnabled(page(pageCount() - 1), true);
 
 	hide();
 }
@@ -128,7 +128,7 @@ void BALLViewDemo::onNotify(Message *message)
 	else if (title == "Creating a Solvent Excluded Surface")
 	{
 		if (rmsg != 0 && 
-				rmsg->getType() == RepresentationMessage::ADD &&
+				rmsg->getType() == RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL &&
 				rmsg->getRepresentation()->getModelType() == MODEL_SE_SURFACE)
 		{
 			enableNextStep_();

@@ -100,9 +100,6 @@ namespace BALL
 		private:
 			
 			void enableNextStep_();
-			bool first_selection_;
-
-			Position step_;
 		};
 
 } } // namespaces
