@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.23 2001/02/23 00:57:16 amoll Exp $
+// $Id: Bond_test.C,v 1.24 2001/06/27 10:44:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.23 2001/02/23 00:57:16 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.24 2001/06/27 10:44:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -284,34 +284,14 @@ CHECK(getLength())
 	Bond b1("bond", a1, a2);
 	TEST_REAL_EQUAL(b1.getLength(), ::sqrt(3.0))
 	Bond b2;
-	TEST_EXCEPTION(Bond::NotBounded, b2.getLength())
+	TEST_EXCEPTION(Bond::NotBound, b2.getLength())
 	b2.setFirstAtom(&a1);
-	TEST_EXCEPTION(Bond::NotBounded, b2.getLength())
+	TEST_EXCEPTION(Bond::NotBound, b2.getLength())
 	b2.setSecondAtom(&a2);
 	TEST_REAL_EQUAL(b2.getLength(), ::sqrt(3.0))
 RESULT
 
-CHECK(getBond(Atom&, Atom&))
-	Atom a1;
-	Atom a2;
-	a1.setName("a1");
-	a2.setName("a2");
-	Bond b1("bond", a1, a2), b2;
-	b1.setType(1);
-	b1.setOrder(1);
-	b1.setName("abc");
-	b2.getBond(a1, a2)->setName("XXX");
-	TEST_EQUAL(b1.getName(), "XXX")
-RESULT
-
-CHECK(getBoundAtom(Atom&))
-	Atom a1, a2;
-	Bond b1("bond", a1, a2);
-	b1.getBoundAtom(a1)->setCharge(0.1);
-	TEST_REAL_EQUAL(a2.getCharge(), 0.1)
-RESULT
-
-CHECK(getBoundaAtom(Atom&) const )
+CHECK(getBoundAtom(Atom&) const )
 	Atom a1, a2;
 	a2.setCharge(0.1);
 	Bond b1("bond", a1, a2);
