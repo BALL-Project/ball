@@ -1,4 +1,4 @@
-// $Id: ParameterSection_test.C,v 1.11 2001/12/30 13:28:59 sturm Exp $
+// $Id: ParameterSection_test.C,v 1.12 2002/01/10 11:37:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.11 2001/12/30 13:28:59 sturm Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.12 2002/01/10 11:37:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -89,7 +89,6 @@ ps.extractSection(param, "Section2");
 
 
 CHECK(ParameterSection::getValue(const String& key, const String& variable) const )
-
 	TEST_EQUAL(ps.getValue("A", "val"), "B")
 	TEST_EQUAL(ps.getValue("C", "val"), "C")
 	TEST_EQUAL(ps.getValue("D", "val"), "E")
@@ -117,7 +116,6 @@ CHECK(ParameterSection::has(const String& key) const )
 	TEST_EQUAL(ps.has("A"), true)
 	TEST_EQUAL(ps.has(" L"), true)
 	TEST_EQUAL(ps.has("X"), false)
-
 RESULT
 
 
@@ -161,13 +159,36 @@ CHECK(ParameterSection::isValid() const )
 RESULT
 
 
-CHECK(const ParameterSection& ParameterSection::operator = (const ParameterSection& parameter_section))
-  //?????
+CHECK(bool ParameterSection::operator == (const ParameterSection& parameter_section))
+	// there's no practical way to test that stuff...
+	ParameterSection ps2(ps);
+	bool result = (ps2 == ps);
+	TEST_EQUAL(result, true)
+	result = (ps == ps2);
+	TEST_EQUAL(result, true)
+	ParameterSection ps1;
+	result = (ps == ps1);
+	TEST_EQUAL(result, false)
 RESULT
 
 
-CHECK(bool ParameterSection::operator == (const ParameterSection& parameter_section))
-  //?????
+CHECK(const ParameterSection& ParameterSection::operator = (const ParameterSection& parameter_section))
+	ParameterSection ps2;
+	ps2 = ps;
+
+	TEST_EQUAL(ps2.getValue("A", "val"), "B")
+	TEST_EQUAL(ps2.getValue("C", "val"), "C")
+	TEST_EQUAL(ps2.getValue("D", "val"), "E")
+	TEST_EQUAL(ps2.getValue("F", "val"), "G")
+	TEST_EQUAL(ps2.getValue("J", "val"), " K")
+	TEST_EQUAL(ps2.getValue(" L", "val"), " M")
+	TEST_EQUAL(ps2.getValue("N", "val"), "O")
+	TEST_EQUAL(ps2.getValue("X", "val"), ParameterSection::UNDEFINED)
+
+	TEST_EQUAL(ps2.getValue(2, 0), "E")
+	TEST_EQUAL(ps2.getValue(2, 1), ParameterSection::UNDEFINED)
+	TEST_EQUAL(ps2.getValue(20, 1), ParameterSection::UNDEFINED)
+	TEST_EQUAL(ps2.getValue(20, 60000), ParameterSection::UNDEFINED)
 RESULT
 
 

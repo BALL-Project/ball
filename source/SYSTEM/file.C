@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.31 2002/01/09 16:49:23 amoll Exp $
+// $Id: file.C,v 1.32 2002/01/10 11:37:38 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -248,10 +248,10 @@ namespace BALL
 				{
 					TCPTransfer tcp_t(os, name_);
 				}
-				catch(TCPTransfer::TransferFailed exception)
+				catch(TCPTransfer::TransferFailed& exception)
 				{
 					throw Exception::FileNotFound(__FILE__, __LINE__, 
-									String(" from Network Transfer, which failed, ") + exception.getMessage());
+									String(" from network transfer, which failed, ") + exception.getMessage());
 				}
 				name_ = tmp_file;
 				is_temporary_ = true;

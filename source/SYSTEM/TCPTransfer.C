@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.12 2002/01/09 16:36:05 amoll Exp $
+// $Id: TCPTransfer.C,v 1.13 2002/01/10 11:37:37 oliver Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -25,7 +25,7 @@ TCPTransfer::TransferFailed::TransferFailed(const char* file, int line, Index er
 {
 }
 
-TCPTransfer::TCPTransfer(::std::ofstream& file, const String& address)
+TCPTransfer::TCPTransfer(std::ofstream& file, const String& address)
 	throw(TransferFailed) 
 {
 	buffer_ = new char[BUFFER_SIZE];
@@ -70,7 +70,7 @@ TCPTransfer::TCPTransfer()
 	buffer_ = new char[BUFFER_SIZE];
 }
 
-void TCPTransfer::set(::std::ofstream&  file, 
+void TCPTransfer::set(std::ofstream&  file, 
 												 Protocol 			protocol, 
 												 const String& 	host_address, 
 												 const String& 	file_address,
@@ -115,7 +115,7 @@ TCPTransfer::Status TCPTransfer::transfer()
 	return UNKNOWN_PROTOCOL_ERROR;
 }
 
-bool TCPTransfer::set(::std::ofstream& file, const String& address)
+bool TCPTransfer::set(std::ofstream& file, const String& address)
 	throw()
 {
 	if (socket_ != 0)
@@ -413,7 +413,7 @@ void TCPTransfer::output_()
 {
 	for (Position pos = 0; pos < (Position) received_bytes_; pos++)
 	{
-		::std::cout << buffer_[pos];
+		std::cout << buffer_[pos];
 	}
 }
 

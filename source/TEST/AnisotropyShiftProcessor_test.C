@@ -1,4 +1,4 @@
-// $Id: AnisotropyShiftProcessor_test.C,v 1.5 2001/12/30 13:28:56 sturm Exp $
+// $Id: AnisotropyShiftProcessor_test.C,v 1.6 2002/01/10 11:37:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.5 2001/12/30 13:28:56 sturm Exp $")
+START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.6 2002/01/10 11:37:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,27 +31,29 @@ RESULT
 
 
 CHECK(AnisotropyShiftProcessor::AnisotropyShiftProcessor(const AnisotropyShiftProcessor& processor) throw())
-  //?????
+	AnisotropyShiftProcessor asp;
+	AnisotropyShiftProcessor asp2(asp);
+	// there's not much here to test...
 RESULT
 
 
 CHECK(AnisotropyShiftProcessor::init() throw())
-  //?????
+  // tested below
 RESULT
 
 
 CHECK(AnisotropyShiftProcessor::start() throw())
-  //?????
+  // tested below
 RESULT
 
 
 CHECK(AnisotropyShiftProcessor::Processor::Result operator () (Composite& composite) throw())
-  //?????
+  // tested below
 RESULT
 
 
 CHECK(AnisotropyShiftProcessor::finish() throw())
-  //?????
+  // tested below
 RESULT
 
 HINFile f("data/AnisotropyShiftProcessor_test.hin");
