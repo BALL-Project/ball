@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.h,v 1.22 2004/02/26 08:41:39 anhi Exp $
+// $Id: QTTimer.h,v 1.23 2004/05/18 15:18:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
@@ -22,15 +22,15 @@ namespace BALL
 		/** QTTimer class.		
 				The QTTimer class is a timer class that is useful to have a job repeated
 				unhindered by other jobs that are already processing.
-				The protected method <b> timer</b> will be called every <b> intervall</b> msec
+				The protected method timer() will be called every <b> intervall</b> msec
 				to process its contents. It is important that the process time for executing
-				the code in the <b> timer</b> method is minimal else the application will hang
-				for the time needed by the <b> timer</b> method.
-				The <b> timer</b> method will not save any values when it exits. Therefore
+				the code in the timer() method is minimal else the application will hang
+				for the time needed by the timer() method.
+				The timer() method will not save any values when it exits. Therefore
 				the necessary initialization and value savings must be done by the user in the
-				<b> timer</b> method.
+				timer() method.
 				The class is derived from the QObject class from the QT library. 
-				Therefore it will only function within a qt application.
+				Therefore it will only function within a QT application.
 				\ingroup ViewKernelClient				 		
 		*/
 		class BALL_EXPORT QTTimer: public QObject
@@ -53,12 +53,12 @@ namespace BALL
 				NoValidInterval(const char* file, int line, const string& data)
   				throw();
 			};
-			//@}
 
+			//@}
 			/**	@name	Constructors
 			*/	
 			//@{
-
+			
 			/** Default Constructor.
 					The state is:
 					  - interval is set to 100
@@ -125,8 +125,8 @@ namespace BALL
 
 			/** Changes the interval of this qtTimer to the value
 					represented by the parameter <b> interval</b>. This QTTimer will
-					call the method <b> timer</b> every <b> interval</b> msec.
-					\param       interval the new interval of this qtTimer
+					call the method timer() every <b> interval</b> msec.
+					\param       interval the new interval 
 					\exception   NoValidInterval thrown if the value of <b> interval</b> is lower or equal <tt> 0</tt>
 					\see         startTimer
 					\see         stopTimer
@@ -135,7 +135,7 @@ namespace BALL
 			void setInterval(int interval)
 				throw(NoValidInterval);
 
-			/** Accesses the interval of this qtTimer.
+			/** Accesses the interval
 					\return      int the value of the interval of this qtTimer
 					\see         setInterval
 			*/
@@ -143,19 +143,16 @@ namespace BALL
 				throw();
 
 			/** Starts the timer.
-					After this method is called the method <b> timer</b> will be called
+					After this method is called timer() will be called
 					every <b> interval</b> msec.
 					\see     stopTimer
-					\see     timer
 			*/
 			void startTimer()
 				throw();
 			
 			/** Stops the timer.
-					After this method is called the execution of the <b> timer</b> method
-					will be stopped.
+					After this method is called the execution of timer() will be stopped.
 					\see     startTimer
-					\see     timer
 			*/
 			void stopTimer()
 				throw();
@@ -165,14 +162,14 @@ namespace BALL
 			*/
 			//@{
 
-			/** Tests if this qtTimer is running.
+			/** Tests if this QTTimer is running.
 					\see     startTimer
 					\see     stopTimer
 			*/
 			bool isTimerEnabled() const
 				throw();
 
-			/** Tests if this qtTimer is stopped.
+			/** Tests if this QTTimer is stopped.
 					\see     startTimer
 					\see     stopTimer
 			*/
@@ -187,17 +184,15 @@ namespace BALL
 			/** Internal value dump.
 					Dumps the current state of this QTTimer to 
 					the output ostream <b> s</b> with dumping depth <b> depth</b>.
-					\param   s output stream where to output the state of this qtTimer
+					\param   s output stream where to output the state
 					\param   depth the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
-			//@}
-
 			protected:
 
-
+			//@}
 			/** @name Timer method.
 			*/
 			//@{
