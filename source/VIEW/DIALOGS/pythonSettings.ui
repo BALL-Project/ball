@@ -15,38 +15,6 @@
     <property name="caption">
         <string>PythonSettings</string>
     </property>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>clear_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>460</x>
-                <y>52</y>
-                <width>80</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Clear</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>choose_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>371</x>
-                <y>52</y>
-                <width>80</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Browse</string>
-        </property>
-    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>textLabel1</cstring>
@@ -79,7 +47,7 @@
             <rect>
                 <x>6</x>
                 <y>24</y>
-                <width>534</width>
+                <width>363</width>
                 <height>27</height>
             </rect>
         </property>
@@ -92,6 +60,38 @@
         </property>
         <property name="readOnly">
             <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>clear_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>289</x>
+                <y>55</y>
+                <width>80</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Clear</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>choose_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>200</x>
+                <y>55</y>
+                <width>80</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Browse</string>
         </property>
     </widget>
 </widget>

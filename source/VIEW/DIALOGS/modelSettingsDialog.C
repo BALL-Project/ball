@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.30 2004/09/30 15:51:21 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.31 2004/09/30 16:09:03 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -22,7 +22,6 @@
 
 #include <qslider.h>
 #include <qlabel.h>
-#include <qlistbox.h>
 #include <qwidgetstack.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
@@ -73,56 +72,56 @@ namespace BALL
 		void ModelSettingsDialog::setDefaults(bool all)
 			throw()
 		{
-			/*
-			if (all || list_box->currentItem() == 0)
+			Position current = widget_stack->id(widget_stack->visibleWidget());
+
+			if (all || current == 0)
 			{
 				AddBallAndStickModel dummy;
 				dummy.enableStickModel();
 				getSettings(dummy);
 			}
 			
-			if (all || list_box->currentItem() == 1)
+			if (all || current == 1)
 			{
 				AddBallAndStickModel dummy;
 				getSettings(dummy);
 			}
 			
-			if (all || list_box->currentItem() == 2)
+			if (all || current == 2)
 			{
 				AddVanDerWaalsModel dummy;
 				getSettings(dummy);
 			}
 			
-			if (all || list_box->currentItem() == 3)
+			if (all || current == 3)
 			{
 				AddSurfaceModel dummy;
 				getSettings(dummy);
 			}
 			
-			if (all || list_box->currentItem() == 4)
+			if (all || current == 4)
 			{
 				AddBackboneModel dummy;
 				getSettings(dummy);
 			}
 
-			if (all || list_box->currentItem() == 5)
+			if (all || current == 5)
 			{
 				AddCartoonModel dummy;
 				getSettings(dummy);
 			}
 			
-			if (all || list_box->currentItem() == 6)
+			if (all || current == 6)
 			{
 				HBondModelProcessor dummy;
 				getSettings(dummy);
 			}
 			
-			if (all || list_box->currentItem() == 7)
+			if (all || current == 7)
 			{
 				ForceModel dummy;
 				getSettings(dummy);
 			}
-			*/
 		}
 
 		float ModelSettingsDialog::getFloatValue_(const QSlider* const& slider) const
@@ -346,49 +345,47 @@ namespace BALL
 		void ModelSettingsDialog::showPage(ModelType type)
 			throw()
 		{
-			/*
 			switch (type)
 			{
 				case MODEL_LINES:
 					break;
 					
 				case MODEL_STICK:
-					showPage_(0);
+					showEntry((unsigned int) 0);
 					break;
 
 				case MODEL_BALL_AND_STICK:
-					showPage_(1);
+					showEntry(1);
 					break;
 					
 				case MODEL_SE_SURFACE:
 				case MODEL_SA_SURFACE:
-					showPage_(3);
+					showEntry(3);
 					break;
 					
 				case MODEL_VDW:
-					showPage_(2);
+					showEntry(2);
 					break;
 
 				case MODEL_BACKBONE:
-					showPage_(4);
+					showEntry(4);
 					break;
 
 				case MODEL_CARTOON:
-					showPage_(5);
+					showEntry(5);
 					break;
 					
 				case MODEL_HBONDS:
-					showPage_(6);
+					showEntry(6);
 					break;
 
 				case MODEL_FORCES:
-					showPage_(7);
+					showEntry(7);
 					break;
 
 				default:
 					break;
 			}
-			*/
 		}
 
 	} // namespace VIEW

@@ -9,11 +9,9 @@
 #include <qcolordialog.h>
 #include <qslider.h>
 #include <qlabel.h>
-#include <qlistbox.h>
 #include <qwidgetstack.h>
 #include <qcheckbox.h>
 
-//#include < qpoint.h>
 namespace BALL
 {
 	namespace VIEW
@@ -236,51 +234,52 @@ void ColoringSettingsDialog::setDefaults(bool all)
 		residue_table_->setContent(names, colors);
 	}
 		
+	Position current = widget_stack->id(widget_stack->visibleWidget());
 	// =============================================================
 	// setting residue number colors
-	if (all || widget_stack->id(widget_stack->visibleWidget()) == 1)
+	if (all || current == 1)
 	{
 		ResidueNumberColorProcessor dummy;
 		getSettings(dummy);
 	}
 	// =============================================================
 	// setting charge colors
-	if (all || widget_stack->id(widget_stack->visibleWidget()) == 3)
+	if (all || current == 3)
 	{
 		AtomChargeColorProcessor dummy;
 		getSettings(dummy);
 	}
 	// =============================================================
 	// setting distance colors
-	if (all || widget_stack->id(widget_stack->visibleWidget()) == 4)
+	if (all || current == 4)
 	{
 		AtomDistanceColorProcessor dummy;
 		getSettings(dummy);
 	}
 	// =============================================================
 	// setting temperature factor colors
-	if (all || widget_stack->id(widget_stack->visibleWidget()) == 5)
+	if (all || current == 5)
 	{
 		TemperatureFactorColorProcessor dummy;
 		getSettings(dummy);
 	}
 	// =============================================================
 	// setting occupancy colors
-	if (all || widget_stack->id(widget_stack->visibleWidget()) == 6) 
+	if (all || current == 6) 
 	{
 		OccupancyColorProcessor dummy;
 		getSettings(dummy);
 	}
 	// =============================================================
 	// setting secondary structure colors
-	if (all || widget_stack->id(widget_stack->visibleWidget()) == 7)
+	if (all || current == 7)
 	{
 		SecondaryStructureColorProcessor dummy;
 		getSettings(dummy);
 	}
 	// =============================================================
 	// setting force colors
-	if (all || widget_stack->id(widget_stack->visibleWidget()) == 8)
+	if (all || current == 8)
 	{
 		ForceColorProcessor dummy;
 		getSettings(dummy);
@@ -691,49 +690,47 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 void ColoringSettingsDialog::showPage(ColoringMethod method)
 	throw()
 {
-	/*
 	switch (method)
 	{
 		case COLORING_ELEMENT:
-			showPage_(0);
+			showEntry((unsigned int)0);
 			break;
 
 		case COLORING_RESIDUE_NAME:
-			showPage_(2);
+			showEntry(2);
 			break;
 
 		case COLORING_RESIDUE_INDEX:
-			showPage_(1);
+			showEntry(1);
 			break;
 
 		case COLORING_SECONDARY_STRUCTURE:
-			showPage_(7);
+			showEntry(7);
 			break;
 
 		case COLORING_ATOM_CHARGE:
-			showPage_(3);
+			showEntry(3);
 			break;
 
 		case COLORING_DISTANCE:
-			showPage_(4);
+			showEntry(4);
 			break;
 
 		case COLORING_TEMPERATURE_FACTOR:
-			showPage_(5);
+			showEntry(5);
 			break;
 
 		case COLORING_OCCUPANCY:
-			showPage_(6);
+			showEntry(6);
 			break;
 
 		case COLORING_FORCES:
-			showPage_(8);
+			showEntry(8);
 			break;
 
 		default:
 			break;
 	}
-	*/
 }
 
 
