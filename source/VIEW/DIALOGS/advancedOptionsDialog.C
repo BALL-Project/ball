@@ -1,6 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: advancedOptionsDialog.C,v 1.6 2003/12/21 10:10:20 oliver Exp $
+//
 
 #include <BALL/VIEW/DIALOGS/advancedOptionsDialog.h>
 
@@ -15,7 +17,7 @@ namespace BALL
 	{
 
 		AdvancedOptionsDialog::AdvancedOptionsDialog(QWidget* parent, const char* name)
-			:AdvancedOptions( parent, name )
+			:	AdvancedOptions(parent, name)
 		{
 		}
 
@@ -72,13 +74,6 @@ namespace BALL
 			parameter_file_edit->setText(filename.c_str());
 			parameter_file_edit->update();
 		}
-/*//experimental
-		void AdvancedOptionsDialog::setNonbondedCutoff(float nonbonded_cutoff)
-		{
-			nonbonded_cutoff_line_edit->setText((String) nonbonded_cutoff);
-		}
-//experimtental
-*/
 		
 		bool AdvancedOptionsDialog::getUseDistanceDependentDC() const
 		{
@@ -159,9 +154,14 @@ namespace BALL
 			return overwrite_typenames_checkBox->isChecked();
 		}
 		//function to restore previously changed options
-		void AdvancedOptionsDialog::setOptions(float nonbonded_cutoff, float vdw_cutoff, float vdw_cuton, float electrostatic_cutoff, float electrostatic_cuton,
-									    float scaling_electrostatic_1_4, float scaling_vdw_1_4, bool use_dddc, bool assign_charges,
-									    bool assign_typenames, bool assign_types, bool overwrite_charges, bool overwrite_typenames)
+		void AdvancedOptionsDialog::setOptions
+					(float nonbonded_cutoff, float vdw_cutoff, 
+					 float vdw_cuton, float electrostatic_cutoff, 
+					 float electrostatic_cuton,
+					 float scaling_electrostatic_1_4, float scaling_vdw_1_4, 
+					 bool use_dddc, bool assign_charges,
+					 bool assign_typenames, bool assign_types, 
+					 bool overwrite_charges, bool overwrite_typenames)
 		{
 			nonbonded_cutoff_line_edit->setText(String(nonbonded_cutoff).c_str());
 			vdw_cutoff_line_edit->setText(String(vdw_cutoff).c_str());
@@ -179,5 +179,6 @@ namespace BALL
 			overwrite_typenames_checkBox->setChecked(overwrite_typenames);
 		}
 
-	}//namespace View
-}//namespace Ball
+	}//namespace VIEW
+
+}//namespace BALL

@@ -1,6 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: advancedOptionsDialog.h,v 1.4 2003/12/21 10:10:20 oliver Exp $
+//
 
 #ifndef BALL_VIEW_DIALOGS_ADVANCEDOPTIONSDIALOG_H
 #define BALL_VIEW_DIALOGS_ADVANCEDOPTIONSDIALOG_H
@@ -19,7 +21,7 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class AdvancedOptionsDialog
-		: public AdvancedOptions
+			: public AdvancedOptions
 		{
 			Q_OBJECT
 			
@@ -34,9 +36,6 @@ namespace BALL
 			
 			///
 			void setFilename(const String& filename);
-/*//experimental
-			void setNonbondedCutoff(float nonbonded_cutoff);
-//experimental*/
 			///
 			bool getUseDistanceDependentDC() const;
 			
