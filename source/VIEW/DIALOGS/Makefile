@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.10 2003/08/27 13:58:30 amoll Exp $
+# $Id: Makefile,v 1.11 2003/08/27 14:09:39 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -94,7 +94,7 @@ UIC_SOURCES=\
 	contourSurfaceDialogData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
-	labelDialog.C\
+	labelDialogData.C\
 	lightSettingsData.C\
 	molecularDynamicsDialogData.C\
 	mouseSensitivityData.C\

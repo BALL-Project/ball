@@ -22,6 +22,7 @@ MOC_SOURCES=\
 	geometricControl_moc.C\
 	logView_moc.C\
 	molecularControl_moc.C\
+	molecularProperties_moc.C\
 	scene_moc.C\
 	regularData1DWidget_moc.C
 
@@ -48,6 +49,9 @@ logView_moc.C:	$(HEADER_DIR)/logView.h
 
 molecularControl_moc.C:	$(HEADER_DIR)/molecularControl.h
 	$(MOC) $(HEADER_DIR)/molecularControl.h -o $@
+
+molecularProperties_moc.C:	$(HEADER_DIR)/molecularProperties.h
+	$(MOC) $(HEADER_DIR)/molecularProperties.h -o $@
 
 scene_moc.C:	$(HEADER_DIR)/scene.h
 	$(MOC) $(HEADER_DIR)/scene.h -o $@

@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
+// $Id: modelProcessor.C,v 1.3 2003/08/27 14:09:40 amoll Exp $
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
-#include <BALL/VIEW/COMMON/global.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
 using namespace std;
 

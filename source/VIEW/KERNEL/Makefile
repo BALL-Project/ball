@@ -6,7 +6,6 @@ CPP_SOURCES=\
   client.C\
   compositeManager.C\
   connectionObject.C\
-  events.C\
   geometricObject.C\
   information.C\
   mainControl.C\
@@ -22,8 +21,13 @@ CPP_SOURCES=\
   stage.C\
 
 MOC_SOURCES=\
+	mainControl_moc.C
 
 include ../../common.mak
 include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES)
+
+mainControl_moc.C:  $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h
+	$(MOC) $(BALL_PATH)/include/BALL/VIEW/KERNEL/mainControl.h -o mainControl_moc.C
+ 
