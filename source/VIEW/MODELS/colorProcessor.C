@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.24 2003/12/17 16:13:48 amoll Exp $
+// $Id: colorProcessor.C,v 1.25 2004/02/05 14:46:15 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -27,10 +27,10 @@ namespace BALL
 			clear();
 		}
 
-		ColorProcessor::ColorProcessor(const ColorProcessor& color_Processor)
+		ColorProcessor::ColorProcessor(const ColorProcessor& cp)
 			throw()
-			:	UnaryProcessor<GeometricObject*>(color_Processor),
-				default_color_(color_Processor.default_color_),
+			:	UnaryProcessor<GeometricObject*>(cp),
+				default_color_(cp.default_color_),
 				transparency_(0)
 		{
 		}
@@ -52,19 +52,19 @@ namespace BALL
 			clearAtomGrid();
 		}
 
-		void ColorProcessor::set(const ColorProcessor& color_Processor)
+		void ColorProcessor::set(const ColorProcessor& cp)
 			throw()
 		{
-			default_color_ = color_Processor.default_color_;
-			composites_ = color_Processor.composites_;
-			transparency_ = color_Processor.transparency_;
+			default_color_ = cp.default_color_;
+			composites_ = cp.composites_;
+			transparency_ = cp.transparency_;
 		}
 
 
-		const ColorProcessor& ColorProcessor::operator = (const ColorProcessor& color_Processor)
+		const ColorProcessor& ColorProcessor::operator = (const ColorProcessor& cp)
 			throw()
 		{
-			set(color_Processor);
+			set(cp);
 			return *this;
 		}
 
@@ -286,6 +286,10 @@ namespace BALL
 							{
 								// this is not 
 								float radius = (*hit)->getElement().getVanDerWaalsRadius();
+								if (model_type_ == MODEL_SA_SURFACE)
+								{
+									radius += 2;
+								}
 								if (radius <= 0.0) radius = 1;
 								// avoid calculation of the square roots
 								float new_dist = ((*hit)->getPosition() - point).getSquareLength() - radius * radius;

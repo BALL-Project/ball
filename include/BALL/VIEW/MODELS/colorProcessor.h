@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.17 2003/11/10 16:37:08 amoll Exp $
+// $Id: colorProcessor.h,v 1.18 2004/02/05 14:47:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_DATATYPE_LIST_H
 # include <BALL/DATATYPE/list.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 namespace BALL
@@ -166,6 +170,9 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
+			///
+			void setModelType(ModelType type) {model_type_ = type;}
+
 			protected:
 			
 			//_ Create the threedimensional grid from the CompositeSet.
@@ -194,6 +201,7 @@ namespace BALL
 
 			AtomGrid 		atom_grid_;
 			bool 				atom_grid_created_;
+			ModelType   model_type_;
 			//@}
 		};
 

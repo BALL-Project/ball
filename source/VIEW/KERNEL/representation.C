@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.24 2004/01/27 16:25:53 amoll Exp $
+// $Id: representation.C,v 1.25 2004/02/05 14:45:56 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -79,7 +79,6 @@ namespace BALL
 				geometric_objects_(),
 				composites_(composites)
 		{
-			// drawing properties form processors
 		}
 
 				
@@ -322,6 +321,7 @@ namespace BALL
 				// make sure, that the atom grid is recomputed for meshes
 				if (rebuild) color_processor_->setComposites(&composites_);
 				color_processor_->setTransparency(transparency_);
+				color_processor_->setModelType(model_type_);
 				geometric_objects_.apply(*color_processor_);
 			}
 		}
