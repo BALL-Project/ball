@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.36 2005/01/11 15:12:55 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.37 2005/01/18 22:09:25 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -41,7 +41,7 @@ namespace BALL
 		{
 		}
 
-		bool AddBackboneModel::SplinePoint::operator < (const SplinePoint::SplinePoint& point) const
+		bool AddBackboneModel::SplinePoint::operator < (const AddBackboneModel::SplinePoint& point) const
 			throw()
 		{
 			try
