@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.10 2000/07/12 19:36:45 oliver Exp $
+// $Id: Composite_test.C,v 1.11 2000/08/09 18:24:10 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 using namespace BALL;
 using namespace std;
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.10 2000/07/12 19:36:45 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.11 2000/08/09 18:24:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ CHECK(Composite(const Composite&, bool))
 	TEST_EQUAL(g.countDescendants(), 0)
 RESULT
 
-CHECK(Composite::clone(Composite&, UnaryPredicate<Composite>&) const)
+CHECK(Composite::clone(Composite&, KernelPredicateType&) const)
 	Composite a, b, c, d, e;
 	a.appendChild(b);
 	b.appendChild(c);
@@ -235,10 +235,11 @@ RESULT
 
 
 TextPersistenceManager  pm;
-	Composite composite;
-	composite.select();
-	String filename;
-	CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
+Composite composite;
+composite.select();
+String filename;
+
+CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
 	NEW_TMP_FILE(filename)
 	std::ofstream  ofile(filename.c_str(), File::OUT);
 	pm.setOstream(ofile);
@@ -686,57 +687,37 @@ CHECK(isDescendantOf() const)
 	TEST_EQUAL(f.isDescendantOf(d), false)
 RESULT
 
-// 		bool hasAnyAncestor() const;
-// 		template <class T> bool hasAncestor(const T& t) const 
-// 		bool isAncestor() const;
-// 		bool isAncestorOf(const Composite& composite) const
-// 		bool isRelatedWith(const Composite& composite) const;
-// 		bool isHomomorph(const Composite& composite) const;
+cout << endl;
+cout << "a " << &a <<endl;
+cout << "b " << &b <<endl;
+cout << "c " << &c <<endl;
+cout << "d " << &d <<endl;
+cout << "e " << &e <<endl;
+cout << "f " << &f <<endl;
+cout << endl;
+CHECK(getLowestCommonAncestor(Composite& composite))
+	TEST_EQUAL(d.getLowestCommonAncestor(e), &b)
+	TEST_EQUAL(d.getLowestCommonAncestor(f), 0)
+	TEST_EQUAL(f.getLowestCommonAncestor(f), &f)
+RESULT
 
+CHECK(getLowestCommonAncestor(Composite& composite) const)
+	TEST_EQUAL(c_d.getLowestCommonAncestor(e), &b)
+	TEST_EQUAL(c_d.getLowestCommonAncestor(f), 0)
+	TEST_EQUAL(c_f.getLowestCommonAncestor(f), &f)
+RESULT
 
-// 		Composite* getLowestCommonAncestor(Composite& composite);
-// 		const Composite* getLowestCommonAncestor(const Composite& composite) const;
-// 
-// 		template <class T> Composite* getAncestor(const T& /* t */)
-// 		template <class T> const Composite* getAncestor(const T& t) const
-// 		Composite* getParent();
-// 		const Composite* getParent() const;
-// 		Composite* getChild(Index index);
-// 		const Composite* getChild(Index index) const;
-// 		Composite* getSibling(Index index);
-// 		const Composite* getSibling(Index index) const;
-// 		Composite* getFirstChild();
-// 		const Composite* getFirstChild() const;
-// 		Composite* getLastChild();
-// 		const Composite* getLastChild() const;
-// 		void expand();
-// 		void collapse();
-// 		static bool insertParent
-// 			(Composite& parent, Composite& first, 
-// 			 Composite& last, bool destroy_parent = true);
-// 
-// 		void insertBefore(Composite& composite);
-// 		void insertAfter(Composite& composite);
-// 		void spliceBefore(Composite& composite);
-// 		void spliceAfter(Composite& composite);
-// 		void splice(Composite& composite);
-// 		bool removeChild(Composite& child);
-// 		void replace(Composite& composite);
-// 		void swap(Composite& composite);
-// 
-// 		bool isExpanded() const;
-// 		bool isCollapsed() const;
-// 
-// 		void host(Visitor<Composite>& visitor);
-// 		bool applyAncestor(UnaryProcessor<Composite>& processor);
-// 		bool applyChild(UnaryProcessor<Composite>& processor);
-// 		bool applyDescendantPreorder(UnaryProcessor<Composite>& processor);
-// 		bool applyDescendantPostorder(UnaryProcessor<Composite>& processor);
-// 		bool applyDescendant(UnaryProcessor<Composite>& processor);
-// 		bool applyPreorder(UnaryProcessor<Composite>& processor);
-// 		bool applyPostorder(UnaryProcessor<Composite>& processor);
-// 		bool apply(UnaryProcessor<Composite>& processor);
-// 		bool applyLevel(UnaryProcessor<Composite>& processor, long level);
+CHECK(getAncestor(const T& /* t */)) // wie mache ich einen anderen typ comp???
+	TEST_EQUAL(a.getAncestor(b), 0)
+	TEST_EQUAL(f.getAncestor(b), 0)
+	TEST_EQUAL(e.getAncestor(b), &c)
+RESULT
+
+CHECK(getAncestor(const T& t) const)
+	TEST_EQUAL(c_a.getAncestor(b), 0)
+	TEST_EQUAL(c_f.getAncestor(b), 0)
+	TEST_EQUAL(c_e.getAncestor(b), &c)
+RESULT
 
 CHECK(template<T> getPrevious(const T&))
 	// a single composite should return zero
@@ -786,7 +767,244 @@ CHECK(template<T> getNext(const T&) const)
 	TEST_EQUAL(c_e.getNext(RTTI::getDefault<Composite>()), &d)
 RESULT
 
-CHECK(set(const Composite&, UnaryPredicate<Composite>&))
+
+CHECK(getParent())
+	TEST_EQUAL(a.getParent(), 0)
+	TEST_EQUAL(e.getParent(), &c)
+RESULT
+
+CHECK(getParent() const)
+	TEST_EQUAL(c_a.getParent(), 0)
+	TEST_EQUAL(c_e.getParent(), &c)
+RESULT
+
+CHECK(getChild(Index index))
+	TEST_EQUAL(a.getChild(1), 0)
+	TEST_EQUAL(a.getChild(0), &b)
+	TEST_EQUAL(b.getChild(1), &d)
+	TEST_EQUAL(e.getChild(0), 0)
+RESULT
+
+CHECK(getChild(Index index) const)
+	TEST_EQUAL(c_a.getChild(1), 0)
+	TEST_EQUAL(c_a.getChild(0), &b)
+	TEST_EQUAL(c_b.getChild(1), &d)
+	TEST_EQUAL(c_e.getChild(0), 0)
+RESULT
+
+CHECK(getSibling(Index index))
+	TEST_EQUAL(a.getSibling(0), &a)
+	TEST_EQUAL(c.getSibling(-1), 0)
+	TEST_EQUAL(c.getSibling(0), &c)
+	TEST_EQUAL(c.getSibling(1), &d)
+	TEST_EQUAL(d.getSibling(-1), &c)
+	TEST_EQUAL(d.getSibling(0), &d)
+	TEST_EQUAL(d.getSibling(1), 0)
+	TEST_EQUAL(e.getSibling(0), &e)
+RESULT
+
+CHECK(getSibling(Index index) const)
+	TEST_EQUAL(c_a.getSibling(0), &a)
+	TEST_EQUAL(c_c.getSibling(-1), 0)
+	TEST_EQUAL(c_c.getSibling(0), &c)
+	TEST_EQUAL(c_c.getSibling(1), &d)
+	TEST_EQUAL(c_d.getSibling(-1), &c)
+	TEST_EQUAL(c_d.getSibling(0), &d)
+	TEST_EQUAL(c_d.getSibling(1), 0)
+	TEST_EQUAL(c_e.getSibling(0), &e)
+RESULT
+
+CHECK(getFirstChild())
+	TEST_EQUAL(a.getFirstChild(), &b)
+	TEST_EQUAL(b.getFirstChild(), &c)
+	TEST_EQUAL(e.getFirstChild(), 0)
+RESULT
+
+CHECK(getFirstChild() const)
+	TEST_EQUAL(c_a.getFirstChild(), &b)
+	TEST_EQUAL(c_b.getFirstChild(), &c)
+	TEST_EQUAL(c_e.getFirstChild(), 0)
+RESULT
+
+CHECK(getLastChild())
+	TEST_EQUAL(a.getLastChild(), &b)
+	TEST_EQUAL(b.getLastChild(), &d)
+	TEST_EQUAL(e.getLastChild(), 0)
+RESULT
+
+CHECK(getLastChild() const)
+	TEST_EQUAL(c_a.getLastChild(), &b)
+	TEST_EQUAL(c_b.getLastChild(), &d)
+	TEST_EQUAL(c_e.getLastChild(), 0)
+RESULT
+
+CHECK(expand())
+	a.expand();
+RESULT
+
+CHECK(collapse())
+	a.collapse();
+RESULT
+
+CHECK(static bool insertParent(Composite& parent, Composite& first, 
+															 Composite& last, bool destroy_parent = true))
+//
+RESULT
+
+CHECK(insertBefore(Composite& composite))
+	f.insertBefore(e);
+	TEST_EQUAL(c.getFirstChild(), &f)
+	TEST_EQUAL(c.getLastChild(), &e)
+	TEST_EQUAL(f.getParent(), &c)
+	c.removeChild(f);
+	Composite x;
+	f.insertBefore(x);
+	TEST_EQUAL(x.getParent(), &f)
+	TEST_EQUAL(f.getFirstChild(), &x)
+RESULT
+
+CHECK(insertAfter(Composite& composite))
+	f.insertAfter(e);
+	TEST_EQUAL(c.getFirstChild(), &e)
+	TEST_EQUAL(c.getLastChild(), &f)
+	TEST_EQUAL(f.getParent(), &c)
+	c.removeChild(f);
+	Composite x;
+	f.insertAfter(x);
+	TEST_EQUAL(x.getFirstChild(), &f)
+	TEST_EQUAL(f.getParent(), &x)
+RESULT
+
+CHECK(spliceBefore(Composite& composite))
+//
+RESULT
+
+CHECK(spliceAfter(Composite& composite))
+//
+RESULT
+
+CHECK(splice(Composite& composite))
+//
+RESULT
+
+CHECK(bool removeChild(Composite& child))
+	TEST_EQUAL(b.removeChild(d), true)
+	TEST_EQUAL(d.getParent(), 0)
+	TEST_EQUAL(b.getChild(1), 0)
+	b.appendChild(d);
+	TEST_EQUAL(f.removeChild(d), false)
+RESULT
+
+CHECK(replace(Composite& composite))
+	f.replace(d);
+	TEST_EQUAL(d.getParent(), 0)
+	TEST_EQUAL(f.getParent(), &d)
+	TEST_EQUAL(b.getChild(1), &f)
+	d.replace(f);
+RESULT
+
+CHECK(swap(Composite& composite))
+	b.swap(c);
+	TEST_EQUAL(c.getParent(), &a)
+	TEST_EQUAL(b.getParent(), &c)
+	TEST_EQUAL(e.getParent(), &b)
+	TEST_EQUAL(d.getParent(), &c)
+	TEST_EQUAL(a.getChild(1), &b)
+	TEST_EQUAL(c.getChild(1), &b)
+	TEST_EQUAL(b.getChild(1), &e)
+	b.swap(c);
+RESULT
+
+CHECK(bool isExpanded() const)
+	a.expand();
+	TEST_EQUAL(a.isExpanded(), true)
+	a.collapse();
+	TEST_EQUAL(a.isExpanded(), false)
+RESULT
+
+CHECK(bool isCollapsed() const)
+	a.expand();
+	TEST_EQUAL(a.isCollapsed(), false)
+	a.collapse();
+	TEST_EQUAL(a.isCollapsed(), true)
+RESULT
+
+CHECK(bool hasAnyAncestor() const)
+	TEST_EQUAL(a.hasAnyAncestor(), false)
+	TEST_EQUAL(b.hasAnyAncestor(), true)
+	TEST_EQUAL(f.hasAnyAncestor(), false)
+RESULT
+
+CHECK(template <class T> bool hasAncestor(const T& t) const)
+//
+RESULT
+
+CHECK(isAncestor())
+//
+RESULT
+
+CHECK(isAncestorOf(const Composite& composite) const)
+//
+RESULT
+
+CHECK(isRelatedWith(const Composite& composite))
+//
+RESULT
+
+CHECK(isHomomorph(const Composite& composite))
+//
+RESULT
+
+CHECK(dump())
+  String filename;
+	NEW_TMP_FILE(filename)
+	std::ofstream outfile(filename.c_str(), File::OUT);
+	a.dump(outfile);
+	outfile.close();
+	TEST_FILE(filename.c_str(), "data/Composite_test.txt", true)
+RESULT
+
+CHECK(host(Visitor<Composite>& visitor))
+//
+RESULT
+
+CHECK(bool applyAncestor(UnaryProcessor<Composite>& processor))
+//
+RESULT
+
+CHECK(bool applyChild(UnaryProcessor<Composite>& processor))
+//
+RESULT
+
+CHECK(bool applyDescendantPreorder(UnaryProcessor<Composite>& processor))
+//
+RESULT
+
+CHECK(bool applyDescendantPostorder(UnaryProcessor<Composite>& processor))
+//
+RESULT
+
+CHECK(bool applyDescendant(UnaryProcessor<Composite>& processor))
+//
+RESULT
+
+CHECK(bool applyPreorder(UnaryProcessor<Composite>& processor))
+//
+RESULT
+
+CHECK(bool applyPostorder(UnaryProcessor<Composite>& processor))
+//
+RESULT
+
+CHECK(bool apply(UnaryProcessor<Composite>& processor))
+//
+RESULT
+
+CHECK(bool applyLevel(UnaryProcessor<Composite>& processor, long level))
+//
+RESULT
+
+CHECK(set(const Composite&, KernelPredicateType&))
 //BAUSTELLE
 RESULT
 
@@ -798,7 +1016,7 @@ CHECK(operator = (const Composite&))
 //BAUSTELLE
 RESULT
 
-CHECK(get(Composite&, UnaryPredicate<Composite>&) const)
+CHECK(get(Composite&, KernelPredicateType&) const)
 //BAUSTELLE
 RESULT
 
