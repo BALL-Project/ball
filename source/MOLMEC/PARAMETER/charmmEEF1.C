@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmEEF1.C,v 1.11 2003/05/26 09:16:22 anhi Exp $
+// $Id: charmmEEF1.C,v 1.12 2003/05/26 09:31:44 anhi Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -395,6 +395,23 @@ namespace BALL
 
 		// copy attributes
 		number_of_atom_types_ = charmm_EEF1.number_of_atom_types_;
+
+		if (V_)
+			delete [] V_;
+		if (dG_ref_)
+			delete [] dG_ref_;
+		if (dG_free_)	 
+			delete [] dG_free_; 
+		if (dH_ref_)
+			delete []	dH_ref_;
+		if (Cp_ref_)
+			delete [] Cp_ref_;
+		if (sig_w_)
+			delete [] sig_w_;
+		if (R_min_)
+			delete [] R_min_;
+		if (is_defined_)
+			delete [] is_defined_;
 
 		V_ = new float [number_of_atom_types_];
 		memcpy(V_, charmm_EEF1.V_, sizeof(float) * number_of_atom_types_);
