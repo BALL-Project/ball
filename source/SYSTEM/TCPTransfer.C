@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.13 2002/01/10 11:37:37 oliver Exp $
+// $Id: TCPTransfer.C,v 1.14 2002/01/15 16:14:53 oliver Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -8,9 +8,9 @@
 #include <netinet/in.h> 	// sockaddr_in
 #include <unistd.h>  			// close
 #include <fstream>				// ofstream
-#include <iostream.h> 		// cout, endl
+#include <iostream>				// cout, endl
 
-#if defined(__hpux__) || defined(__linux__)
+#if defined(__hpux__) || defined(__linux__) || defined(__osf__)
 # include <sys/ioctl.h>		//ioctl, FIONBIO
 #else
 # include <sys/filio.h>		//ioctl, FIONBIO
