@@ -1,138 +1,123 @@
-#include <iostream> 
-#include <fstream>
-#include <string>
-#include <vector>
 #include<BALL/FORMAT/readFile.h>
-
-using namespace std;
 
 namespace BALL
 {
 
-	char* ReadFile::getToken_(Position& pos, char delimiter) const
+	String ReadFile::getToken_(Position& pos, char delimiter) const
 	{
-		int len = 0;
-		char* p = new char[200];
-
-		if(pos >= strlen(line_)) 
+		if (pos >= line_.size())
 		{
 			Log.error() << "in getToken_ : pos too large" << endl;
 			throw ReadFileError();
 		}
 
-		while (line_[pos] && line_[pos] != delimiter)
+		while (pos < line_.size() && line_[pos] != delimiter)
 		{
 			++pos;
 		}
-
 		++pos;
+
+		if (pos >= line_.size())
+		{
+			Log.error() << "open token" << endl;
+			throw ReadFileError();
+		}
+
+		String token;
 
 		while (line_[pos] != delimiter)
 		{
-			if (!line_[pos])
+			if (pos >= line_.size())
 			{
 				Log.error() << "open token" << endl;
 				throw ReadFileError();
 			}
 
-			p[len] = line_[pos];
-			++len;
+			token += line_[pos];
 			++pos;
 		}
 
 		++pos;
 
-		if(len == 0) 
+		if(token.size() == 0) 
 		{
 			Log.error() << "token could not be read" << endl;
 			throw ReadFileError();
 		}
 
-		p[len] = '\0';
-		return p;
+		return token;
 	}
 
-	char* ReadFile::getToken_(Position& pos) const
+	String ReadFile::getToken_(Position& pos) const
 	{
-		int len = 0;
-		char* p = new char[200];
-
-		if(pos >= strlen(line_)) 
+		if (pos >= line_.size())
 		{
 			Log.error() << "in getToken_ : pos too large" << endl;
 			throw ReadFileError();
 		}
 
-		while (line_[pos] && isspace(line_[pos]))
+		while (pos < line_.size() && isspace(line_[pos]))
 		{
 			++pos;
 		}
 
-		while (line_[pos] && !isspace(line_[pos]))
+		String token;
+
+		while (pos < line_.size() && !isspace(line_[pos]))
 		{
-			p[len] = line_[pos];
-			++len;
+			token += line_[pos];
 			++pos;
 		}
-		
-		if(len == 0) 
+		++pos;
+	
+		if(token.size() == 0) 
 		{
 			Log.error() << "token could not be read" << endl;
 			throw ReadFileError();
 		}
 
-		p[len] = '\0';
-		return p;
+		return token;
 	}
 
-	char* ReadFile::getToken_() const
+	String ReadFile::getToken_() const
 	{
-		if (strlen(line_) > 199)
-		{
-			Log.error() << "line too long" << endl;
-			throw ReadFileError();
-		}
-		int len = 0;
-		int pos = 0;
+		Position pos = 0;
 
-		char* p = new char[200];
-
-		if(p == 0) 
-		{
-			Log.error() << "memory could not be assigned" << endl;
-			throw ReadFileError();
-		}
-
-		while (line_[pos] && isspace(line_[pos]))
+		while (pos < line_.size() && isspace(line_[pos]))
 		{
 			++pos;
 		}
 
-		while (line_[pos] && !isspace(line_[pos]))
+		String token;
+
+		while (pos < line_.size() && !isspace(line_[pos]))
 		{
-			p[len] = line_[pos];
-			++len;
+			token += line_[pos];
 			++pos;
 		}
 		
-		if(len == 0) 
+		if(token.size() == 0) 
 		{
 			Log.error() << "token could not be read" << endl;
 			throw ReadFileError();
 		}
 
-		p[len] = '\0';
-		return p;
+		return token;
 	}
 
-	string ReadFile::copyString_(Position start, Position end) const
+	String ReadFile::copyString_(Position start, Position end) const
 	{
-		if (end >= strlen(line_))
+		if (end == 0)
+		{
+			end = line_.size() - 1;
+		}
+
+		if (end >= line_.size())
 		{
 			Log.error() << "error in copyString_";
 			throw ReadFileError();
 		}
-		string dest;
+		String dest;
 		for (; start <= end ; ++start)
 		{
 			dest += line_[start];
@@ -140,26 +125,24 @@ namespace BALL
 		return dest;
 	}
 
-	int ReadFile::switch_(const vector<string>& data) const
+	int ReadFile::switch_(const vector<String>& data) const
 	{
-		Position i = 0;
-		while (i < data.size())
+		for (Position i = 0; i < data.size(); i++)
 		{
-			if (strcmp(line_, data[i].c_str()) == 0)
+			if (line_ == data[i])
 			{
 				return i;
 			}
-			++i;
 		}
 		return (-1);
 	}
 
-	bool ReadFile::startsWith_(const char* text) const
+	bool ReadFile::startsWith_(const String& text) const
 	{
-		return (memcmp(line_, text, strlen(text)) == 0);
+		return line_.hasPrefix(text);
 	}
 
-	bool ReadFile::search_(const char* text)
+	bool ReadFile::search_(const String& text)
 	{
 		while (!in.eof())
 		{
@@ -173,7 +156,7 @@ namespace BALL
 		return false;
 	}
 
-	bool ReadFile::search_(const char* text, const char* stop)
+	bool ReadFile::search_(const String& text, const String& stop)
 	{
 		while (!in.eof())
 		{
@@ -191,63 +174,39 @@ namespace BALL
 		return false;
 	}
 
-	void ReadFile::test_(bool condition, char* msg) const
+	void ReadFile::test_(bool condition, const String& msg) const
 	{
 		if (condition == false)
 		{
-			Log.warn() << msg;
+			Log.warn() << msg << endl;
 			throw ReadFileError();
 		}
 	}
 
 	void ReadFile::readLine_()
 	{
-		in.getline(line_,200);
+		char* c = new char[200];
+		in.getline(c, 200);
+		line_ = c;
+		//in.getline(const_cast<char*>(line_.c_str()), 200);
 	}
 
-	void ReadFile::skipLines_(int number)
+	void ReadFile::skipLines_(Size number)
 	{
-		for (int i = 0;  i <= number ; i++)
+		for (Position i = 0; i <= number; i++)
 		{
-			in.getline(line_,200);
+			readLine_();
 		}
 	}
 
-	bool ReadFile::has_(const char* text) const
+	bool ReadFile::has_(const String& text) const
 	{
-		Position pos_line = 0;
-		Position pos_line2;
-		Position pos_text;
-		if(strlen(line_) == 0 || strlen(text) == 0 ||
-			 strlen(line_) < strlen(text) ) 
-		{
-			return false;
-		}
-
-		while (line_[pos_line])
-		{
-			pos_text = 0;
-			pos_line2 = pos_line;
-			while (text[pos_text])
-			{
-				if (line_[pos_line2] != text[pos_text])
-				{
-					break;
-				}
-				++pos_text;
-				++pos_line2;
-			}
-
-			if (!text[pos_text])
-			{
-				return true;
-			}
-
-			++pos_line;
-		}
-
-		return false;
+		return line_.hasSubstring(text);
 	}
 
+	void ReadFile::rewind_()
+	{
+		in.seekg(0);
+	}
 
-} //namespace BALL
+} //namespace

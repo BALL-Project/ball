@@ -1,43 +1,17 @@
-// $Id: assignShiftProcessor.C,v 1.9 2000/09/19 12:20:15 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.10 2000/09/23 17:48:38 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
-
-#ifndef BALL_KERNEL_PDBATOM_H
-#	include<BALL/KERNEL/PDBAtom.h>
-#endif
-
-#ifndef BALL_KERNEL_PTE_H
-# include <BALL/KERNEL/PTE.h>
-#endif
-
-#ifndef BALL_STRUCTURE_FRAGMENTDB_H
-# include <BALL/STRUCTURE/fragmentDB.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-# include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_COMMON_PATH_H
-# include <BALL/SYSTEM/path.h>
-#endif
-
-using namespace std;
+#include<BALL/KERNEL/PDBAtom.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/DATATYPE/string.h>
+#include <BALL/SYSTEM/path.h>
 
 namespace BALL
 {
 
 	bool AssignShiftProcessor::start()
 	{
-		// BAUSTELLE: this could be done in a more general manner
-		FragmentDB frag_db;
-		StringHashMap<String>* map = 0;
-		if (frag_db.getNamingStandards().has("Amber"))
-		{
-			map = frag_db.getNamingStandards()["Amber"];
-		}
-		
-		
 		if (!valid_)
 		{
 			Log.error() << "AssignShiftProcessor: shift data were not assigned" << endl;
@@ -46,16 +20,24 @@ namespace BALL
 
 		// ---------------------read translate table ------------------------
 		Path path;
-		ifstream tableFile(path.find("NMR/translate.dat").c_str(),ios::in);
-
+		ifstream tableFile(path.find("NMR/translate.dat").c_str(), ios::in);
 		if (!tableFile)
 		{
 			Log.error() << "AssignShiftProcessor: translate.dat not found:" << endl;   
 			return false;
 		}
-		StringHashMap<String> transformTable;
 
+		// BAUSTELLE: this could be done in a more general manner
+		FragmentDB frag_db;
+		StringHashMap<String>* map = 0;
+		if (frag_db.getNamingStandards().has("Amber"))
+		{
+			map = frag_db.getNamingStandards()["Amber"];
+		}
+
+		StringHashMap<String> transformTable;
 		String name;
+
 		do
 		{
 			String entry;
@@ -65,6 +47,7 @@ namespace BALL
 cout << name << " " << entry << endl;
 		}
 		while (name != "END");
+
 		tableFile.close();
 cout << endl << endl;
 
@@ -73,7 +56,7 @@ cout << endl << endl;
 		{
 			// normalize the atom name to reflect the PDB standard
 			String residue_name = atom_data_[atompos]->residueLabel;
-			String atom_name = atom_data_[atompos]->atomName;
+			String atom_name    = atom_data_[atompos]->atomName;
 			if (map != 0)
 			{
 				frag_db.normalize_names.matchName(residue_name, atom_name, map);
@@ -95,7 +78,6 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 			}
 
 			// from now on getting the transformed name for H-atoms
-
 			if (!transformTable[entry].has('/'))
 			{
 				String fullName(residue_name);
@@ -105,22 +87,22 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 				continue;
 			}
 
-			String arr[5];
-			Size size = transformTable[entry].split(arr, 5, "/");
+			std::vector<String> tokens;
+			Size size = transformTable[entry].split(tokens, "/");
 			for (Position wordpos = 0; wordpos < size ; wordpos++ )
 			{
-				String fullName(prefix);
-				fullName += arr[wordpos];	
-				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
-cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
+				shift_table_[tokens[wordpos]] = atom_data_[atompos]->shiftValue;
+cout << tokens[wordpos] << " " << atom_data_[atompos]->shiftValue << endl;
 			}
 		}
 
+		molecule_ = 0;
 		return true;
 	}
 
-	Processor::Result AssignShiftProcessor::operator()(Composite&  object)
+	Processor::Result AssignShiftProcessor::operator()(Composite& object)
 	{
+cout << "--" << endl;
 		//-----------------switching by the type of given object--------------------------
 		if (RTTI::isKindOf<Molecule>(object))
 		{
@@ -128,13 +110,13 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 			{
 				molecule_ = RTTI::castTo<Molecule>(object);
 				number_of_fragment_ = 0;
+cout << "molekuel gesetzt" << endl;
+				return Processor::CONTINUE;
 			}
-			return Processor::CONTINUE;
-
-			if (RTTI::castTo<Molecule>(object) != molecule_)
+			else
 			{
-					Log.error() << "AssignShiftProcessor: atom not from same molecule as before" << endl;
-					return Processor::BREAK;
+				Log.error() << "AssignShiftProcessor: a second molecule was given" << endl;
+				return Processor::BREAK;
 			}
 		}
 
@@ -146,6 +128,7 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 
 		if (!RTTI::isKindOf<PDBAtom>(object))
 		{
+cout << "kein PDBAtom" << endl;
 			return Processor::CONTINUE;
 		}
 
@@ -158,10 +141,10 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 		fullName += ":";
 		fullName += patom_->getName();
 
-		patom_->clearProperty("chemical_shift");
+		patom_->clearProperty(ShiftModule::PROPERTY__SHIFT);
 		if (shift_table_.has(fullName))
 		{
-			patom_->setProperty("chemical_shift", shift_table_[fullName]);
+			patom_->setProperty(ShiftModule::PROPERTY__SHIFT, shift_table_[fullName]);
 cout << "atom found " << fullName << endl;
 		}
 else 

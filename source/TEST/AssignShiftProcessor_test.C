@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include <BALL/FORMAT/NMRStarFile.h>
 #include <BALL/NMR/assignShiftProcessor.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
-
+#include <BALL/FORMAT/NMRStarFile.h>
 using namespace BALL;
 
 int main()
@@ -15,6 +14,33 @@ int main()
 	f >> system;
 	FragmentDB frag_db;
 	system.apply(frag_db.normalize_names);
+
+	//NMRStarFile rs("data/parvulin.str");
+	NMRStarFile rs("data/bmr4789.str");
+	cout << "Size: " << rs.getData()[0]->atomData.size() << endl;
+	cout << "number of atoms: " << rs.getNumberOfAtoms() << endl;
+	/*
+	for (int i = 0;  i < rs.getData()[0]->atomData.size(); i++)
+	{
+		cout << *(rs.getData()[0]->atomData[i]);
+	}
+	*/
+	
+	AssignShiftProcessor asp(rs.getData()[0]->atomData);
+	system.apply(asp);
+
+	int numberOfShiftAtoms = 0;
+	for (int i = 0; i < system.countAtoms(); i++)
+	{
+		if (system.getAtom(i)->hasProperty(ShiftModule::PROPERTY__SHIFT))
+		{
+			numberOfShiftAtoms++;
+		}
+	}
+ 	cout << "numberOfShiftAtoms " << numberOfShiftAtoms << endl;
+}
+
+
 /*
 	for (int i = 0; i < system.countAtoms(); i++)
 	{
@@ -51,8 +77,3 @@ int main()
 			<< ":" << system.getMolecule(0)->getAtom(posatom)->getName() << endl;
 		}
 	}*/
-
-	NMRStarFile rs("parvulin.str");
-	AssignShiftProcessor asp(rs.getData()[0]->atomData);
-	system.apply(asp);
-}

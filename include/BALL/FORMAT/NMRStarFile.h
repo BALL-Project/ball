@@ -5,12 +5,15 @@
 # include<BALL/FORMAT/readFile.h>
 #endif
 
-#include <string>
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
+
 #include <vector>
 
 namespace BALL 
 {
-	using namespace std;
+	//using namespace std;
 
 	/** @name	NMRAtomData.
 			This structure includes all information for one atom 
@@ -23,8 +26,8 @@ namespace BALL
 	{
 		Position atomID;
 		Position residueSeqCode;
-		string residueLabel;
-		string atomName;
+		String residueLabel;
+		String atomName;
 		char atomType;
 		float shiftValue;
 		float errorValue;
@@ -41,7 +44,7 @@ namespace BALL
 	{
 		SampleCondition();
 
-		string name;
+		String name;
 		float temperature;
 		float pH;
 		float pressure;
@@ -57,11 +60,11 @@ namespace BALL
 	{
 		ShiftReferenceElement();
 
-		string molCommonName;
+		String molCommonName;
 		char atomType;
 		Position isotopeNumber;
-		string atomGroup;
-		string shiftUnits;
+		String atomGroup;
+		String shiftUnits;
 		float shiftValue;
 		char referenceMethod;
 		char referenceType;
@@ -76,20 +79,26 @@ namespace BALL
 	*/
 	struct ShiftReferenceSet
 	{
-		string name;
-		vector<ShiftReferenceElement*> elements;
+		String name;
+		std::vector<ShiftReferenceElement*> elements;
 	};
 
 	struct NMRAtomDataSet
 	{
 		NMRAtomDataSet();
 
-		string name;
-		vector<NMRAtomData*> atomData;
+		String name;
+		std::vector<NMRAtomData*> atomData;
 		SampleCondition* condition;
 		ShiftReferenceSet* reference;
 	};
 
+	ostream& operator << (ostream &s, const NMRAtomData& ad);
+	ostream& operator << (::std::ostream& s, const SampleCondition& sc);
+	ostream& operator << (::std::ostream& s, const ShiftReferenceElement& sre);
+	ostream& operator << (::std::ostream& s, const ShiftReferenceSet& sr);
+	ostream& operator << (::std::ostream& s, const NMRAtomDataSet& set);
+	
 	//@}
 
 	/** @name	NMRStarFile.
@@ -116,7 +125,7 @@ namespace BALL
 
 			/** Get the extracted data for the atoms.
 			*/
-			const vector<NMRAtomDataSet*>& getData() const;
+			const std::vector<NMRAtomDataSet*>& getData() const;
 
 			enum ReferenceMethod
 			{
@@ -170,19 +179,19 @@ namespace BALL
 			Size numberOfShifts;
 
 			/// the data for the atoms is stored here
-			vector<NMRAtomDataSet*> atomDataSets_;
+			std::vector<NMRAtomDataSet*> atomDataSets_;
 
 			/// the data for different sample sets
-			vector<SampleCondition*> sampleConditions_;
+			std::vector<SampleCondition*> sampleConditions_;
 
 			/// the data for shift references
-			vector<ShiftReferenceSet*> shiftReferences_;
+			std::vector<ShiftReferenceSet*> shiftReferences_;
 
-			/// contains strings with the used reference options
-			vector<string> referenceOptions_; // ??? soll static werden
+			/// contains Strings with the used reference options
+			std::vector<String> referenceOptions_; // ??? soll static werden
 
 			/// name of the molecular system
-			string systemName_;
+			String systemName_;
 
 			enum ShiftReferenceTypes
 			{
