@@ -13,7 +13,7 @@ int main(int argc, char **argv)
   application.setMainWidget(&mainframe);
 
 	// create widgets
-	mainframe.setCentralWidget(new RegularData2DWidget(4096, 4096));
+	mainframe.setCentralWidget(new RegularData2DWidget(4096, 4096, 0.0, 1.0, &mainframe));
 	new OpenBruker2DFile(&mainframe);
         
   // start the application
