@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.23 2001/06/24 16:40:47 oliver Exp $
+// $Id: PDBFile.C,v 1.24 2001/07/20 08:05:57 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -120,7 +120,7 @@ namespace BALL
 		{
 			ResidueQuadruple unique_residue(residue_name, chain_ID, residue_sequence_number, insertion_code);
 
-			current_residue_ = new Residue();
+			current_residue_ = new Residue;
 			current_chain_->insert(*current_residue_);
 			residue_map_[unique_residue] = current_residue_;
 			
@@ -132,24 +132,32 @@ namespace BALL
 			{
 				current_residue_->setProperty(Residue::PROPERTY__AMINO_ACID);
 			}
-			current_residue_->setName(residue_name_);
+			String trimmed_name = residue_name_;
+			current_residue_->setName(trimmed_name.trim());
 			current_residue_->setID(residue_sequence_number_);
 			current_residue_->setInsertionCode(insertion_code_);
 		}
 
-		current_PDB_atom_ = new PDBAtom;
-		current_residue_->insert(*current_PDB_atom_);
-		PDB_atom_map_[serial_number] = current_PDB_atom_;
-		
-		current_PDB_atom_->setName(getAtomName(atom_name));
-		current_PDB_atom_->setRemotenessIndicator(getAtomRemotenessIndicator(atom_name));
-		current_PDB_atom_->setBranchDesignator(getAtomBranchDesignator(atom_name));
-		current_PDB_atom_->setAlternateLocationIndicator(alternate_location_indicator);
-		current_PDB_atom_->setOccupancy(occupancy);
-		current_PDB_atom_->setTemperatureFactor(temperature_factor);
-		current_PDB_atom_->setElement(PTE[GenericPDBFile::getAtomElementSymbol(atom_name, element_symbol)]);
-		current_PDB_atom_->setRadius(current_PDB_atom_->getElement().getVanDerWaalsRadius());
-		current_PDB_atom_->setPosition(Vector3(orthogonal_vector[0], orthogonal_vector[1], orthogonal_vector[2]));
+		// make sure we read only the first location if alternate
+		// locations are present to avoid invalid structures due
+		// to duplicate atoms
+		if ((alternate_location_indicator == ' ' )
+				|| (alternate_location_indicator == 'A'))
+		{
+			current_PDB_atom_ = new PDBAtom;
+			current_residue_->insert(*current_PDB_atom_);
+			PDB_atom_map_[serial_number] = current_PDB_atom_;
+			
+			current_PDB_atom_->setName(getAtomName(atom_name));
+			current_PDB_atom_->setRemotenessIndicator(getAtomRemotenessIndicator(atom_name));
+			current_PDB_atom_->setBranchDesignator(getAtomBranchDesignator(atom_name));
+			current_PDB_atom_->setAlternateLocationIndicator(alternate_location_indicator);
+			current_PDB_atom_->setOccupancy(occupancy);
+			current_PDB_atom_->setTemperatureFactor(temperature_factor);
+			current_PDB_atom_->setElement(PTE[GenericPDBFile::getAtomElementSymbol(atom_name, element_symbol)]);
+			current_PDB_atom_->setRadius(current_PDB_atom_->getElement().getVanDerWaalsRadius());
+			current_PDB_atom_->setPosition(Vector3(orthogonal_vector[0], orthogonal_vector[1], orthogonal_vector[2]));
+		}
 		
 		return true;
 	}
@@ -865,7 +873,9 @@ namespace BALL
 					{
 						chain_name = BALL_CHAIN_DEFAULT_NAME;
 					}
-				} else {
+				} 
+				else 
+				{
 					chain_name = BALL_CHAIN_DEFAULT_NAME;
 				}
 				char chain_name_B;
@@ -876,7 +886,9 @@ namespace BALL
 					{
 						chain_name_B = BALL_CHAIN_DEFAULT_NAME;
 					}
-				} else {
+				} 
+				else 
+				{
 					chain_name_B = BALL_CHAIN_DEFAULT_NAME;
 				}
 
@@ -959,7 +971,9 @@ namespace BALL
 						{
 							offset = 1;
 							PDB_atom_name[0] = ' ';
-						} else {
+						} 
+						else 
+						{
 							offset = 0;
 						}
 
@@ -1054,7 +1068,9 @@ namespace BALL
 							if (current_fragment != 0)
 							{
 								current_fragment->getName().get(PDB_residue_name[0], 0, 3);
-							} else {
+							} 
+							else 
+							{
 								PDB_residue_name[0][0] = '\0';
 							}
 
@@ -1121,7 +1137,9 @@ namespace BALL
       if (current_fragment != 0)
       {
 				current_fragment->getName().get(PDB_residue_name[0], 0, 4);
-      } else {
+      } 
+			else 
+			{
 				PDB_residue_name[0][0] = '\0';
       }
 
@@ -1203,7 +1221,9 @@ namespace BALL
 						if (*hydrogen_bonded_atom[hydrogen_bond] >= *current_atom)
 						{
 							hydrogen_bonded_atom[hydrogen_bond] = 0;
-						} else {
+						} 
+						else 
+						{
 							++hydrogen_bond;
 						}
 					}
@@ -1220,7 +1240,9 @@ namespace BALL
 						if (*saltbridge_bonded_atom[saltbridge_bond] >= *current_atom)
 						{
 							saltbridge_bonded_atom[saltbridge_bond] = 0;
-						} else {
+						} 
+						else 
+						{
 							++saltbridge_bond;
 						}
 					}
@@ -1238,7 +1260,9 @@ namespace BALL
 						if (*covalent_bonded_atom[covalent_bond] >= *current_atom)
 						{
 							covalent_bonded_atom[covalent_bond] = 0;
-						} else {
+						} 
+						else 
+						{
 							++covalent_bond;
 						}
 					}
