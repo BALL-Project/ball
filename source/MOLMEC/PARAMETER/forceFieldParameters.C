@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldParameters.C,v 1.10 2002/02/27 12:21:42 sturm Exp $
+// $Id: forceFieldParameters.C,v 1.11 2003/01/31 15:39:25 anhi Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
@@ -46,7 +46,7 @@ namespace BALL
 		throw()
 	{
 		// clean up everything
-		// ?????: Sollte INIFile::clear() aufrufen
+		// ?????: This should call INIFile::clear()
 		INI_file_.destroy();
 		valid_ = false;
 	}
@@ -89,7 +89,7 @@ namespace BALL
 
 	bool ForceFieldParameters::operator == (const ForceFieldParameters& param) const
 	{
-		// ?????: Gleichheit der Mutterklasse Parameters
+		// ?????: Equality of the mother class Parameters
 		return (param.atom_types_ == atom_types_);
 	}
 
