@@ -1,4 +1,4 @@
- // $Id: peakList.h,v 1.2 2001/06/22 11:05:05 oliver Exp $
+ // $Id: peakList.h,v 1.3 2001/06/22 14:07:29 amoll Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -33,16 +33,17 @@ namespace BALL
 		/**	@name Typedefs
 		*/
 		//@{
+			
 		///	The peak position type
 		typedef typename PT::Position Position;
 
 		/// The peak type
 		typedef	PT										PeakType;
+	
+		typedef typename List<PT>::iterator					Iterator;
+		typedef typename List<PT>::ConstIterator		ConstIterator;
 		
-		typedef List<PT>::Iterator				Iterator;
-		typedef List<PT>::ConstIterator		ConstIterator;
 		//@}
-
 		/** @name	Constructors and Destructors
 		*/
 		//@{
@@ -61,10 +62,10 @@ namespace BALL
 			throw();
 		
 		//@}
-		
 		/**	@name	Accessors
 		*/
 		//@{
+			
 		/**	Scale all peak intensities with a factor.
 		*/
 		void scale(float x);
@@ -86,18 +87,21 @@ namespace BALL
 		/**	Determine the maximum position of the spectrum (all dimensions)
 		*/
 		Position getMaxPosition() const;
+		
 		//@}
 	};
 
 	/**	@name	Standard typedefs
 	*/
 	//@{
+		
 	/// 1D peak list
 	typedef PeakList<Peak<float> >			PeakList1D;
 	/// 2D peak list
 	typedef PeakList<Peak<Vector2> >		PeakList2D;
 	/// 3D peak list
 	typedef PeakList<Peak<Vector3> >		PeakList3D;
+	
 	//@}
 
 	template <typename PT>
