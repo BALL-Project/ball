@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.50 2004/02/13 15:52:29 oliver Exp $
+// $Id: fragmentDB.C,v 1.51 2004/02/16 16:11:25 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -17,6 +17,7 @@
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/quaternion.h>
 #include <BALL/DATATYPE/stringHashMap.h>
+#include <BALL/FORMAT/resourceFile.h>
 	
 /*			Things still missing (among others)
 				===================================
@@ -1272,41 +1273,65 @@ namespace BALL
 	bool FragmentDB::BuildBondsProcessor::finish()
 	{
 		// if there are no inter-fragment bonds, return
-		if (fragment_list_.size() >= 2)
+		if (connections_.size() >= 2)
 		{
-			// iterate over all pairs of fragments 
-			// in the list and try to construct bonds between them
-			list<Fragment*>::iterator it1 = fragment_list_.begin();
-			list<Fragment*>::iterator it2 = it1;
-			for (; it1 != fragment_list_.end(); ++it1)
+			ConnectionList::iterator it1(connections_.begin());
+			ConnectionList::iterator it2;
+			for (; it1 != connections_.end(); ++it1)
 			{
-				for (it2 = it1, ++it2; it2 != fragment_list_.end(); ++it2)
+				for (it2 = it1, ++it2; it2 != connections_.end(); ++it2)
 				{
-					Size inter_fragment_bonds = buildInterFragmentBonds(**it1, **it2);
-					bonds_built_ += inter_fragment_bonds;
-
-					// check for the special case of cyclic structures (peptides)
-					Residue* res1 = dynamic_cast<Residue*>(&**it1);
-					Residue* res2 = dynamic_cast<Residue*>(&**it2);
-					if ((inter_fragment_bonds > 0) && (res1 != 0) && (res2 != 0)
-							&& res1->isTerminal() && res2->isTerminal())
+					if ((it1->atom != 0) && (it2->atom != 0))
 					{
-						// ?????: wie sieht es bei terminal CYS-verbrueckten 
-						//   Peptiden aus?
-						// assign them the CYCLIC property and thus prevent
-						// getNTerminal/getCTerminal to recognize them
-						// as terminal from now on
-						(**it1).setProperty(Residue::PROPERTY__CYCLIC);
-						(**it2).setProperty(Residue::PROPERTY__CYCLIC);
+						bool built = buildConnection_(*it1, *it2);
+						if (built)
+						{
+							// Remember we built a bond
+							bonds_built_++;
+							// Remove the connection we made from the list of connections
+							it1->atom = 0;	
+							it2->atom = 0;
+						}
 					}
 				}
 			}
 		}
 
-		// clear the fragment list
-		fragment_list_.clear();
+		// Clear the connection list
+		connections_.clear();
 
 		return true;
+	}
+
+	bool FragmentDB::BuildBondsProcessor::buildConnection_(FragmentDB::BuildBondsProcessor::Connection& con1, FragmentDB::BuildBondsProcessor::Connection& con2)
+	{
+		if ((con1.type_name == con2.connect_to) && (con1.connect_to == con2.type_name))
+		{
+			// if the two connection types match,
+			// check for distance condition and the two atoms
+			float distance = con1.atom->getPosition().getDistance(con2.atom->getPosition());
+			if ((fabs(con1.dist - distance) <= con1.delta) && (fabs(con2.dist - distance) <= con2.delta))
+			{
+				// create the bond only if it does not exist
+				if (!con1.atom->isBoundTo(*con2.atom))
+				{
+					// create the bond
+					Bond* bond = con1.atom->createBond(*con2.atom);
+
+					if (bond != 0)
+					{
+						bond->setOrder(con1.order);
+						if (con1.order != con2.order)
+						{
+							Log.warn() << "FragmentDB::BuildBondsProcessor: inconsistent bond orders for connection between " << con1.atom->getFullName() << " and " << con2.atom->getFullName() << std::endl;
+						}
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	Processor::Result FragmentDB::BuildBondsProcessor::operator () (Fragment& fragment)
@@ -1316,7 +1341,7 @@ namespace BALL
 		
 		// store a pointer to the fragment in a list
 		// to build all inter-fragment bonds in the finish method
-		fragment_list_.push_back(&fragment);
+		storeConnections_(fragment);
 
 		return Processor::CONTINUE;
 	}
@@ -1444,6 +1469,81 @@ namespace BALL
 		return buildFragmentBonds(fragment, *tplate);
 	}
 
+	void FragmentDB::BuildBondsProcessor::storeConnections_(Fragment& fragment)
+	{
+		if (fragment_db_ == 0)
+		{
+			return;
+		}
+
+		String name(fragment.getName());
+
+		ResourceEntry* first_entry = fragment_db_->tree->getEntry("/Fragments/" + name + "/Connections");
+		if (first_entry == 0)
+		{
+			return;
+		}
+
+		ResourceEntry::Iterator	it1 = first_entry->begin();
+		ResourceEntry::Iterator	it2;
+		for (++it1; +it1; ++it1)
+		{
+			// split the fields of the "Connections" entry.
+			// It should have the following format:
+			//   (<name> <atom_name> <match_name> <distance> <tolerance>)
+			//	<name>:				Name of the connection type (eg C-term)
+			//	<atom_name>:	Name of the atom that might create the connection
+			//  <bond_order>: s/d/t/a (single/double/triple/aromatic)
+			//	<match_name>:	Name of a matching connection type: this connection is 
+			//								created if the two names match
+			//	<distance>:		Distance of the connection in Angstrom
+			//	<tolerance>:	Tolerance: connection will be built only if the distance
+			//								of the two atoms within <tolerance> of <distance>
+			//	Example entry:
+			//		(C-term C s N-term 1.33 0.5):
+			//			This will build a connection to a fragment with a N-term connection
+			//			if the two atoms are 1.33+/-0.5 Angstrom apart. The bond is a single bond.
+			
+			String	s[6];
+			it1->getValue().split(s, 6);
+			Connection conn;
+			conn.atom = 0;
+			for (AtomIterator ai = fragment.beginAtom(); +ai; ++ai)
+			{
+				if (ai->getName() == s[0])
+				{
+					conn.atom = &*ai;
+					break;
+				}
+			}
+			// If there is a matching atom, store the connection.
+			if (conn.atom != 0)
+			{
+				conn.type_name = it1->getKey();
+				conn.connect_to = s[1];
+				
+				conn.dist = s[3].toFloat();
+				conn.delta = s[4].toFloat();
+				// set the bond order
+				switch (s[2][0])
+				{
+					case 's':
+						conn.order = Bond::ORDER__SINGLE; break;
+					case 'd':
+						conn.order = Bond::ORDER__DOUBLE; break;
+					case 't':
+						conn.order = Bond::ORDER__TRIPLE; break;
+					case 'a':
+						conn.order = Bond::ORDER__AROMATIC; break;
+					default:
+						Log.warn() << "FragmentDB::BuildBondsProcessor: unknown bond order " 
+											 << s[2] << " (in " << first_entry->getPath() << ")" << std::endl;
+				}
+				
+				connections_.push_back(conn);	
+			}
+		}
+	}
 
 	Size FragmentDB::BuildBondsProcessor::buildInterFragmentBonds
 		(Fragment& first, Fragment& second) const

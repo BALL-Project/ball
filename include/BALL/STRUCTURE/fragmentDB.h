@@ -1,8 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.26 2003/08/26 08:04:51 oliver Exp $
+// $Id: fragmentDB.h,v 1.27 2004/02/16 16:11:25 oliver Exp $
 //
+
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
 
@@ -12,22 +13,6 @@
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRINGHASHSET_H
-#	include <BALL/DATATYPE/stringHashSet.h>
-#endif
-
-#ifndef BALL_DATATYPE_TRIPLE_H
-#	include <BALL/DATATYPE/triple.h>
-#endif
-
-#ifndef BALL_MATHS_MATRIX44_H
-#	include <BALL/MATHS/matrix44.h>
-#endif
-
-#ifndef BALL_FORMAT_RESOURCEFILE_H
-#	include <BALL/FORMAT/resourceFile.h>
 #endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
@@ -42,6 +27,10 @@
 #	include <BALL/KERNEL/molecule.h>
 #endif
 
+#ifndef BALL_KERNEL_BOND_H
+#	include <BALL/KERNEL/bond.h>
+#endif
+
 #ifndef BALL_STRUCTURE_RECONSTRUCTFRAGMENTPROCESSOR_H
 #	include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
 #endif
@@ -51,6 +40,9 @@
 
 namespace BALL 
 {
+
+	class ResourceEntry;
+
 	/**	FragmentDB - fragment database class.
 			The fragment database is used to store commonly
 			used subunits as amino acids, sugars and the like.
@@ -328,53 +320,65 @@ namespace BALL
 
 			public:
 
-			/** @name	Constructors and Destrutors
+			/**	@name Type definitions	
+			*/
+			//@{
+			///
+			struct Connection
+			{
+				Atom*				atom;
+				String			type_name;
+				String			connect_to;
+				Bond::Order order;
+				float				dist;
+				float				delta;
+			};
+
+			///
+			typedef std::list<Connection> ConnectionList;
+			//@}
+
+
+			/** @name	Constructors and Destructors
 			*/
 			//@{
 		
-			/**	Default constructor
-			*/
+			///	
 			BuildBondsProcessor();
 			
-			/**	Constructor
-			*/
+			///
 			BuildBondsProcessor(const FragmentDB& db);
 
-			/**	Destructor
-			*/
+			/// 
 			virtual ~BuildBondsProcessor();
-
 			//@}
-			/**	@name	Processor specific methods 
+
+			/**	@name	Processor-related methods 
 			*/
 			//@{
 
-			/**	
-			*/
+			///
 			virtual bool finish();
 
-			/**	
-			*/
+			///
 			virtual bool start();
 
-			/**	
-			*/
+			///
 			virtual Processor::Result operator () (Fragment& fragment);
-
 			//@}
+
 			/**	@name	Accessors
 			*/
 			//@{
 			
-			/**	Return the number of bonds built during the last application.
-			*/
+			/// Return the number of bonds built during the last application.
 			Size getNumberOfBondsBuilt();
 
-			/**	Set the fragment database
-			*/
+			/// Set the fragment database
 			void setFragmentDB(const FragmentDB& fragment_db);
 
 			//@}
+
 			/**	@name	Bond building methods 
 			*/
 			//@{
@@ -403,17 +407,29 @@ namespace BALL
 
 			//@}
 
-			private:
+			protected:
+
+			/**	Store connections for a fragment.
+					This method extracts all possible connections for a given fragment
+					and stores them in a list of possible connections.
+					finish will then check that list for possible inter-residue bonds.
+			*/
+			void storeConnections_(Fragment& fragment);
+
+			/**	Build a connection between two atoms, if possible
+			*/
+			bool buildConnection_(Connection& con1, Connection& con2);
 			
-			/*_	A pointer to the fragment database 
+
+			/**	A pointer to the fragment database 
 			*/
 			FragmentDB*			fragment_db_;
 			
-			/*_	A list of all fragments.
+			/**	A list of all fragments.
 					This list is constructed incrementally by the operator ()
 					and is used by finish() to create the inter-fragment bonds
 			*/
-			list<Fragment*>	fragment_list_;
+			std::list<Fragment*>	fragment_list_;
 
 			/*_	The number of bonds built.
 					This value is reset in the start method, so each application of 
@@ -421,6 +437,10 @@ namespace BALL
 					the number of bonds built in the last application.
 			*/
 			Size	bonds_built_;
+
+			/*_	The list of connects between(!) fragments still to be examined
+			*/
+			ConnectionList	connections_;
 		};
 
 		//@}

@@ -1,12 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_test.C,v 1.10 2003/05/21 14:40:07 oliver Exp $
+// $Id: FragmentDB_test.C,v 1.11 2004/02/16 16:11:25 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/FORMAT/PDBFile.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/PTE.h>
@@ -15,9 +18,10 @@
 #include <BALL/KERNEL/atom.h>
 
 using namespace BALL;
+
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.10 2003/05/21 14:40:07 oliver Exp $")
+START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.11 2004/02/16 16:11:25 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -170,6 +174,7 @@ CHECK(FragmentDB::BuildBondsProcessor::operator () / Tripeptide)
 	S.apply(db.build_bonds);
 	
 	// check the bonds
+	Position residue = 0;
 	for (res_it = S.beginResidue(); +res_it; ++res_it)
 	{
 		Position i = 0;
@@ -178,8 +183,42 @@ CHECK(FragmentDB::BuildBondsProcessor::operator () / Tripeptide)
 			i++;
 			STATUS("  " << bond_it->getFirstAtom()->getFullName() << "-" << bond_it->getSecondAtom()->getFullName())
 		}	
-		STATUS("Number of bonds in residue " << res_it->getName() << ": " << i)
+		STATUS("Number of bonds in residue " << residue << " (" << res_it->getName() << "): " << i)
+		switch (residue)
+		{
+			case 0:
+			case 2:
+				TEST_EQUAL(i, 12)
+				break;
+			case 1:
+				TEST_EQUAL(i, 8);
+				break;
+			default:
+				STATUS("We should never have gotten here!")
+				TEST_EQUAL(1, 2)
+		}
+		residue++;
 	}
+	// Check the bonds within the whole protein
+	
+RESULT
+
+CHECK(FragmentDB::BuildBondsProcessor::operator () / BPTI)
+  PDBFile infile("data/OoiEnergy_test.pdb");
+	System S;
+	infile >> S;
+	TEST_EQUAL(S.countAtoms(), 892)
+
+	TEST_EQUAL(S.countResidues(), 58)
+	ABORT_IF(S.countResidues() != 58)
+
+	// Delete all bonds
+	S.destroyBonds();
+	TEST_EQUAL(S.countBonds(), 0)
+				
+	// build the bonds
+	S.apply(db.build_bonds);
+	TEST_EQUAL(S.countBonds(), 906)	
 RESULT
 
 /////////////////////////////////////////////////////////////
