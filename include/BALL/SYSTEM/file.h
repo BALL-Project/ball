@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.31 2001/08/18 14:45:45 oliver Exp $
+// $Id: file.h,v 1.32 2001/08/20 14:49:16 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -125,7 +125,7 @@ namespace BALL
 			///
 			TRANSFORMATION__FILTER = 2,
 			///
-			TRANSFORMATION__URL = 3,
+			TRANSFORMATION__URL = 3
 		};
 
 		/** Filetype
