@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.27.2.1 2004/05/06 12:55:36 amoll Exp $
+// $Id: fragmentDB.h,v 1.27.2.2 2004/05/10 12:15:00 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
@@ -105,6 +105,7 @@ namespace BALL
 		FragmentDB();
 
 		/**	Creates a FragmentDB object and reads the contents of <tt>filename</tt>.
+		 		If filename is an empty string, the default value "fragments/Fragments.db" is used.
 				@exception Exception::FileNotFound if the file is not found in the BALL_DATA_PATH
 		*/
 		FragmentDB(const String& filename)
