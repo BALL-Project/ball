@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.50 2004/03/20 15:24:25 amoll Exp $
+// $Id: file.C,v 1.51 2004/05/03 11:43:34 amoll Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -211,6 +211,8 @@ namespace BALL
 			throw Exception::FileNotFound(__FILE__, __LINE__, "<empty name>");
 		}
 		open(name, open_mode);
+
+		if (!isOpen()) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
 	}
 
 	File::File(const File& file)
