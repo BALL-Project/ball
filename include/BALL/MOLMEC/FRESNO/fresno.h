@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.1 2002/02/14 17:02:48 anker Exp $
+// $Id: fresno.h,v 1.1.2.2 2002/02/14 19:03:29 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -139,6 +139,10 @@ namespace BALL
 					\end{itemize}
 			*/
 			HBOND_ACCEPTOR,
+
+			/** H-bond hydrogen.
+			*/
+			HBOND_HYDROGEN,
 
 			/** Polar (non H-bonding) atoms.
 					Defined as:
