@@ -1,4 +1,4 @@
-// $Id: version.C,v 1.4 2000/07/17 21:25:03 oliver Exp $
+// $Id: version.C,v 1.5 2000/07/17 22:37:18 oliver Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
@@ -10,19 +10,19 @@ namespace BALL
 		return BALL_RELEASE_STRING " ("__DATE__", " __TIME__ ")";
 	}
 
-	int VersionInfo::getMajorRevision()
+	int VersionInfo::getMinorRevision()
 	{
 		static String release(BALL_RELEASE_STRING);
-		String minor = release.getField(0, ".");
+		String minor = release.getField(1, ".");
 		minor.trimRight(String::CHARACTER_CLASS__ASCII_ALPHA);
 
-		return release.getField(0, ".").toInt();
+		return minor.toInt();
 	}
 	
 	int VersionInfo::getMinorRevision()
 	{
 		static String release(BALL_RELEASE_STRING);
-		return release.getField(1, ". ").toInt();
+		return release.getField(0, ". ").toInt();
 	}
 	
 	VersionInfo::Type VersionInfo::getType()
