@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.6 2003/11/19 22:44:05 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.7 2003/11/20 01:02:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -13,43 +13,34 @@
  #include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_FORMAT_INIFILE_H
- #include <BALL/FORMAT/INIFile.h>
-#endif
-
-#ifndef BALL_KERNEL_PTE_H
- #include <BALL/KERNEL/PTE.h>
-#endif
-
-#include <vector>
-
 #ifndef BALL_VIEW_DATATYPE_COLORGBA_H
  #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
 #include <qtable.h>
-#include <qcolor.h>
+#include <vector>
 			
 namespace BALL
 {
+	class PTE;
+	class INIFile;
+
 	namespace VIEW
 	{
 		class ColorProcessor;
 
 		class QColorTableItem : public QTableItem
 		{
-		public:
+			public:
 				QColorTableItem(QTable* t, EditType et, const ColorRGBA& color);
 				
 				void paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected );
 				
-				QWidget *createEditor() const;
-				
-				void setContentFromEditor( QWidget *w );
-
 				void setColor(ColorRGBA color) { color_rgba_ = color;}
+				
 				const ColorRGBA& getColor() const { return color_rgba_;}
-		protected:
+
+			protected:
 				ColorRGBA color_rgba_;
 		};
 
@@ -58,19 +49,34 @@ namespace BALL
 		{
 				Q_OBJECT
 
-		public:
-				QColorTable(QWidget* parent = 0);
-				void setNamesTitle(const String& string);
-				void setContent(const vector<String>& names, const vector<ColorRGBA>& colors);
+			public:
+				QColorTable(QWidget* parent = 0)
+					throw();
+				
+				void setNamesTitle(const String& string)
+					throw();
+				
+				void setContent(const vector<String>& names, const vector<ColorRGBA>& colors)
+					throw();
 
-		private slots:
-				void recalcSum( int row, int col ){};
+				void setColors(const vector<ColorRGBA>& colors)
+					throw();
+
+				const vector<ColorRGBA>& getColors() const
+					throw() { return colors_;}
+
+				const vector<String>& getNames() const
+					throw() { return names_;}
+
+			private slots:
+				
 				QWidget* beginEdit(int row, int col, bool replace);
-		private:
-				void initTable();
+				
+			private:
 				vector<ColorRGBA> colors_;
 				vector<String>    names_;
 		};
+
 
 		/** Dialog for the molecular model coloring settings
 				\ingroup ViewDialogs
@@ -122,7 +128,6 @@ namespace BALL
 			virtual void positiveChargeColorPressed();
 			virtual void nullDistanceColorPressed();
 			virtual void maxDistanceColorPressed();
-			virtual void maxDistanceChanged();
 			virtual void minimumTFColorPressed();
 			virtual void maximumTFColorPressed();
 			virtual void unassignedTFColorPressed();
@@ -134,9 +139,25 @@ namespace BALL
 			virtual void strandColorPressed();
 			virtual void coilColorPressed();
 
+			virtual void maxDistanceChanged();
+			virtual void maxTFChanged();
+
 			protected:
 
 			void setNewColor_(QLabel* label, ColorRGBA& to)
+				throw();
+
+			void setColorToLabel_(QLabel* label, const ColorRGBA& color)
+				throw();
+
+			void setLabelColorsFromValues_()
+				throw();
+
+			bool fetchPreference_(const INIFile& inifile, const String& entry, ColorRGBA& color)
+				throw();
+
+			void writePreference_(INIFile& inifile, const String& entry, 
+														const ColorRGBA& color) const
 				throw();
 
 			QColorTable* element_table_;

@@ -3,11 +3,12 @@
 //
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
-#include <BALL/DATATYPE/hashMap.h>
+#include <BALL/FORMAT/INIFile.h>
+#include <BALL/KERNEL/PTE.h>
 
-#include <qpainter.h>
 #include <qtabwidget.h>
 #include <qcolordialog.h>
+#include <qslider.h>
 #include <qlabel.h>
 
 namespace BALL
@@ -28,17 +29,9 @@ void QColorTableItem::paint(QPainter *p, const QColorGroup &cg, const QRect &cr,
   QTableItem::paint( p, g, cr, selected );
 }
 
-void QColorTableItem::setContentFromEditor( QWidget* )
-{
-}
-
-QWidget* QColorTableItem::createEditor() const
-{
-	return 0;
-}
-
 // ==============================================================================================
 QColorTable::QColorTable(QWidget* parent) 
+	throw()
 	: QTable(parent) 
 {
   setNumCols(2);
@@ -46,18 +39,14 @@ QColorTable::QColorTable(QWidget* parent)
 	setGeometry(5,5, 260, 250);
 }
 
-void QColorTable::initTable()
-{
-	vector<ColorRGBA>::iterator color_it = colors_.begin();
-	vector<String>::iterator name_it = names_.begin();
-}
-
 void QColorTable::setNamesTitle(const String& name)
+	throw()
 {
   horizontalHeader()->setLabel(0, name.c_str());
 }
 	
 void QColorTable::setContent(const vector<String>& names, const vector<ColorRGBA>& colors)
+	throw()
 {
 	colors_ = colors;
 	names_ = names;
@@ -67,6 +56,19 @@ void QColorTable::setContent(const vector<String>& names, const vector<ColorRGBA
 	{
     QColorTableItem* c2 = new QColorTableItem(this, QTableItem::WhenCurrent, colors_[p]);
     setText(p, 0, names_[p].c_str());
+    setItem(p, 1, c2 );
+	}
+}
+
+void QColorTable::setColors(const vector<ColorRGBA>& colors)
+	throw()
+{
+	colors_ = colors;
+
+  setNumRows(colors_.size());
+	for (Position p = 0; p < names_.size(); p++)
+	{
+    QColorTableItem* c2 = new QColorTableItem(this, QTableItem::WhenCurrent, colors_[p]);
     setItem(p, 1, c2 );
 	}
 }
@@ -97,13 +99,107 @@ ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* na
 void ColoringSettingsDialog::writePreferences(INIFile& file)
 	throw()
 {
-	file.isValid();
+	file.appendSection("COLORING_OPTIONS");
+	writePreference_(file, "minimum_occupancy_color", minimum_occupancy_color_);
+	writePreference_(file, "middle_residue_color", middle_residue_color_);
+	writePreference_(file, "last_residue_color", last_residue_color_);
+	writePreference_(file, "negative_charge_color", negative_charge_color_);
+	writePreference_(file, "neutral_charge_color", neutral_charge_color_);
+	writePreference_(file, "positive_charge_color", positive_charge_color_);
+	writePreference_(file, "null_distance_color", null_distance_color_);
+	writePreference_(file, "max_distance_color", max_distance_color_);
+	writePreference_(file, "minimum_tf_color", minimum_tf_color_);
+	writePreference_(file, "maximum_tf_color", maximum_tf_color_);
+	writePreference_(file, "unassigned_tf_color", unassigned_tf_color_);
+	writePreference_(file, "maximum_occupancy_color", maximum_occupancy_color_);
+	writePreference_(file, "unassigned_occupancy_color", unassigned_occupancy_color_);
+	writePreference_(file, "first_residue_color", first_residue_color_);
+	writePreference_(file, "helix_color", helix_color_);
+	writePreference_(file, "coil_color", coil_color_);
+	writePreference_(file, "strand_color", strand_color_);
+	writePreference_(file, "turn_color", turn_color_);
+
+	for (Position p = 0; p < element_table_->getColors().size(); p ++)
+	{
+		writePreference_(file, String(p).c_str(), element_table_->getColors()[p]);
+	}
+
+	for (Position p = 0; p < residue_table_->getColors().size(); p ++)
+	{
+		writePreference_(file, residue_table_->getNames()[p].c_str(), 
+										 residue_table_->getColors()[p]);
+	}
+
+	file.insertValue("COLORING_OPTIONS", "max_distance", 
+			String((float)max_distance_slider->value() / 10.0).c_str() );
+	file.insertValue("COLORING_OPTIONS", "max_tf", 
+			String((float)max_tf_slider->value() / 10.0).c_str());
 }
 
 void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
 	throw()
 {
-	file.isValid();
+	if (!file.hasSection("COLORING_OPTIONS"))
+	{
+		//setDefaults();
+		return;
+	}
+
+	fetchPreference_(file, "minimum_occupancy_color", minimum_occupancy_color_);
+	fetchPreference_(file, "middle_residue_color", middle_residue_color_);
+	fetchPreference_(file, "last_residue_color", last_residue_color_);
+	fetchPreference_(file, "negative_charge_color", negative_charge_color_);
+	fetchPreference_(file, "neutral_charge_color", neutral_charge_color_);
+	fetchPreference_(file, "positive_charge_color", positive_charge_color_);
+	fetchPreference_(file, "null_distance_color", null_distance_color_);
+	fetchPreference_(file, "max_distance_color", max_distance_color_);
+	fetchPreference_(file, "minimum_tf_color", minimum_tf_color_);
+	fetchPreference_(file, "maximum_tf_color", maximum_tf_color_);
+	fetchPreference_(file, "unassigned_tf_color", unassigned_tf_color_);
+	fetchPreference_(file, "maximum_occupancy_color", maximum_occupancy_color_);
+	fetchPreference_(file, "unassigned_occupancy_color", unassigned_occupancy_color_);
+	fetchPreference_(file, "first_residue_color", first_residue_color_);
+	fetchPreference_(file, "helix_color", helix_color_);
+	fetchPreference_(file, "coil_color", coil_color_);
+	fetchPreference_(file, "strand_color", strand_color_);
+	fetchPreference_(file, "turn_color", turn_color_);
+
+	vector<ColorRGBA> colors;
+	for (Position p = 0; p < 112; p ++)
+	{
+		ColorRGBA color;
+		if (!fetchPreference_(file, String(p), color)) break;
+		colors.push_back(color);
+	}
+	if (colors.size() == element_table_->getNames().size())
+	{
+		element_table_->setColors(colors);
+	}
+
+	colors.clear();
+	for (Position p = 0; p < residue_table_->getColors().size(); p ++)
+	{
+		ColorRGBA color;
+		if (!fetchPreference_(file, residue_table_->getNames()[p], color)) break;
+		colors.push_back(color);
+	}
+	if (colors.size() == residue_table_->getColors().size())
+	{
+		residue_table_->setColors(colors);
+	}
+	
+	
+	if (file.hasEntry("COLORING_OPTIONS", "max_distance")) 
+	{
+		max_distance_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "max_distance").toFloat() * 10.0));
+	}
+
+	if (file.hasEntry("COLORING_OPTIONS", "max_tf")) 
+	{
+		max_tf_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "max_tf").toFloat() * 10.0));
+	}
+
+	setLabelColorsFromValues_();
 }
 
 void ColoringSettingsDialog::setDefaults()
@@ -132,6 +228,7 @@ void ColoringSettingsDialog::setDefaults()
 	names.clear();
 	colors.clear();
 
+	// =============================================================
 	// setting residue name colors
 	// create a dummy processor to get the default values
 	ResidueNameColorProcessor rcp;
@@ -146,6 +243,36 @@ void ColoringSettingsDialog::setDefaults()
 
 	residue_table_->setNamesTitle("Residue");
 	residue_table_->setContent(names, colors);
+	
+	// =============================================================
+	first_residue_color_.set(255,255,0);
+	middle_residue_color_.set(0,255,0);
+	last_residue_color_.set(0,0,255);
+	// =============================================================
+	negative_charge_color_.set(255,0,0);
+	neutral_charge_color_.set(255,255,255);
+	positive_charge_color_.set(0,0,255);
+	// =============================================================
+	null_distance_color_.set(255,0,0);
+	max_distance_color_.set(0,0,255);
+	max_distance_slider->setValue(10 * 10);
+	// =============================================================
+	minimum_tf_color_.set(0,0,255);
+	maximum_tf_color_.set(255,255,0);
+	unassigned_tf_color_.set(255,255,255);
+	max_tf_slider->setValue(50 * 10);
+	// =============================================================
+	minimum_occupancy_color_.set(0,0,255);
+	maximum_occupancy_color_.set(255,255,0);
+	unassigned_occupancy_color_.set(255,255,255);
+	// =============================================================
+  helix_color_.set(0,0,255);
+	coil_color_.set(0,155,155);
+	strand_color_.set(255,0,0);
+	turn_color_.set(255,255,0);
+
+	// =============================================================
+	setLabelColorsFromValues_();
 }
 
 vector<ColorRGBA> ColoringSettingsDialog::getElementColors() const
@@ -225,6 +352,7 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 		AtomDistanceColorProcessor& dp = (*(AtomDistanceColorProcessor*)&cp);
 		dp.setNullDistanceColor(null_distance_color_);
 		dp.setMaxDistanceColor(max_distance_color_);
+		dp.setDistance(((float)max_distance_slider->value()) / 10.0);
 		return;
 	}
 
@@ -251,8 +379,11 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 	if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
 	{
 		TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
+		dp.setMinMinColor(unassigned_tf_color_);
 		dp.setMinColor(minimum_tf_color_);
 		dp.setMaxColor(maximum_tf_color_);
+		dp.setMaxMaxColor(unassigned_tf_color_);
+		dp.setMaxValue(((float)max_tf_slider->value()) / 10.0);
 		return;
 	}
 }
@@ -311,10 +442,6 @@ void ColoringSettingsDialog::maxDistanceColorPressed()
 	setNewColor_(max_distance_label, max_distance_color_);
 }
 	
-void ColoringSettingsDialog::maxDistanceChanged()
-{
-}
-	
 void ColoringSettingsDialog::minimumTFColorPressed()
 {
 	setNewColor_(minimum_tf_label, minimum_tf_color_);
@@ -364,6 +491,70 @@ void ColoringSettingsDialog::coilColorPressed()
 {
 	setNewColor_(coil_color_label, coil_color_);
 }
+
+
+void ColoringSettingsDialog::maxDistanceChanged()
+{
+	String text = String(((float)max_distance_slider->value()) / 10.0);
+	text = text.trimRight("0");
+	if (text.hasSuffix(".")) text += "0";
+	max_distance_value_label->setText(text.c_str());
+}
+	
+void ColoringSettingsDialog::maxTFChanged()
+{
+	String text = String(((float)max_tf_slider->value()) / 10.0);
+	text = text.trimRight("0");
+	if (text.hasSuffix(".")) text += "0";
+	max_tf_label->setText(text.c_str());
+}
+
+void ColoringSettingsDialog::setColorToLabel_(QLabel* label, const ColorRGBA& color)
+	throw()
+{
+	label->setBackgroundColor(QColor(color.getRed(), color.getGreen(), color.getBlue()));
+}
+
+void ColoringSettingsDialog::setLabelColorsFromValues_()
+	throw()
+{
+	setColorToLabel_(minimum_o_label, minimum_occupancy_color_);
+	setColorToLabel_(middle_residue_label, middle_residue_color_);
+	setColorToLabel_(last_residue_label, last_residue_color_);
+	setColorToLabel_(negative_charge_label, negative_charge_color_);
+	setColorToLabel_(neutral_charge_label, neutral_charge_color_);
+	setColorToLabel_(positive_charge_label, positive_charge_color_);
+	setColorToLabel_(null_distance_label, null_distance_color_);
+	setColorToLabel_(max_distance_label, max_distance_color_);
+	setColorToLabel_(minimum_tf_label, minimum_tf_color_);
+	setColorToLabel_(maximum_tf_label, maximum_tf_color_);
+	setColorToLabel_(unassigned_tf_label, unassigned_tf_color_);
+	setColorToLabel_(maximum_o_label, maximum_occupancy_color_);
+	setColorToLabel_(unassigned_o_label, unassigned_occupancy_color_);
+	setColorToLabel_(first_residue_label, first_residue_color_);
+	setColorToLabel_(helix_color_label, helix_color_);
+	setColorToLabel_(coil_color_label, coil_color_);
+	setColorToLabel_(strand_color_label, strand_color_);
+	setColorToLabel_(turn_color_label, turn_color_);
+}
+	
+
+bool ColoringSettingsDialog::fetchPreference_(const INIFile& inifile, const String& entry, 
+																						  ColorRGBA& color)
+	throw()
+{
+	if (!inifile.hasEntry("COLORING_OPTIONS", entry)) return false;
+	color = inifile.getValue("COLORING_OPTIONS", entry);
+	return true;
+}
+
+void ColoringSettingsDialog::writePreference_(INIFile& inifile, const String& entry, 
+																							const ColorRGBA& color) const
+	throw()
+{
+	inifile.insertValue("COLORING_OPTIONS", entry, color);
+}
+
 
 
 } } // NAMESPACE
