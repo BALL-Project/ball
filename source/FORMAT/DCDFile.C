@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.34 2004/08/27 11:35:48 amoll Exp $
+// $Id: DCDFile.C,v 1.35 2004/08/29 16:28:32 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -482,7 +482,6 @@ namespace BALL
 		}
 		writeVector_(snapshot.getAtomPositions());
 
-
 		if (has_velocities_)
 		{
 			if (snapshot.getAtomVelocities().size() == 0)
@@ -492,7 +491,6 @@ namespace BALL
 			}
 			writeVector_(snapshot.getAtomVelocities());
 		}
-
 
 		return seekAndWriteHeader();
 	}
@@ -686,6 +684,8 @@ namespace BALL
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
+		if (buffer.size() == 0) return true;
+
 		// adjust the number of snapshots for header
 		number_of_snapshots_ += buffer.size();
 		// ?????:
@@ -693,8 +693,7 @@ namespace BALL
 		// snapshot manager is set up or at some similar place. the question is
 		// how much information has to be replicated at which place in the code.
 		// we should think about something like updateHeader().
-		::std::vector<SnapShot>::const_iterator it = buffer.begin();
-		number_of_atoms_ = it->getNumberOfAtoms();
+		number_of_atoms_ = buffer[0].getNumberOfAtoms();
 
 		// write the header
 		seekp(0, ios::beg);
@@ -704,11 +703,13 @@ namespace BALL
 			return false;
 		}
 
-		// adjust the number of snapshots back, because, append increases this number also
+		// adjust the number of snapshots back because append increases this number also
 		number_of_snapshots_ -= buffer.size();
 
 		// append the data
 		seekp(0, ios::end);
+
+		::std::vector<SnapShot>::const_iterator it = buffer.begin();
 		for(; it != buffer.end(); ++it)
 		{
 			if (!append(*it))
