@@ -1,4 +1,4 @@
-// $Id: PTE.C,v 1.11 2001/03/09 09:43:11 amoll Exp $
+// $Id: PTE.C,v 1.12 2001/05/06 20:38:11 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -95,7 +95,7 @@ namespace BALL
 		Element("Nitrogen"/*Nitrogenium*/, "N",         15,    2,       7,      14.00674,   0.71,  0.7,  1.54, 3.04),
 		Element("Nobelium",                "No"/*259*/,  0,    7,     102,     259.1009,    0.0,   0.0,  0.0,  0.0), 
 		Element("Osmium",                  "Os",         8,    6,      76,     190.23,      1.35,  1.26, 0.0,  2.2),
-		Element("Oxygen"/*Oxygenium*/,     "O",         16,    2,       8,      15.9994,    0.0,   0.66, 1.4,  3.44),
+		Element("Oxygen"/*Oxygenium*/,     "O",         16,    2,       8,      15.9994,    0.6,   0.66, 1.4,  3.44),
 		Element("Palladium",               "Pd",        10,    5,      46,     106.42,      1.38,  1.28, 0.0,  2.2),
 		Element("Phosphorus",              "P",         15,    3,      15,      30.973762,  1.15,  1.10, 1.9,  2.19),
 		Element("Platinum",                "Pt",        10,    6,      78,     195.08,      1.38,  1.29, 0.0,  2.54),
