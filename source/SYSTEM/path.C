@@ -1,4 +1,4 @@
-// $Id: path.C,v 1.2 2001/05/10 23:33:33 oliver Exp $
+// $Id: path.C,v 1.2.4.1 2002/12/01 21:45:23 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/SYSTEM/path.h>
@@ -12,7 +12,7 @@ namespace BALL
 {
 
 	Path::Path()
-		:	path_(BALL_PATH"/data/"),
+		:	path_(BALL_PATH "/data/"),
 			path_array_valid_(false),
 			environment_checked_(false),
 			path_array_()
@@ -32,7 +32,7 @@ namespace BALL
 
 	string Path::getDefaultDataPath()
 	{	
-		return BALL_PATH"/data/";
+		return BALL_PATH "/data/";
 	}
 
 	void Path::buildPathArray_() 

@@ -1,4 +1,4 @@
-// $Id: timer.h,v 1.6.4.1 2002/11/30 09:48:44 oliver Exp $
+// $Id: timer.h,v 1.6.4.2 2002/12/01 21:45:23 oliver Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -7,14 +7,12 @@
 #	include <BALL/common.h>
 #endif
 
-// WIN
 #ifdef BALL_HAS_SYS_TIME_H
 #	include <sys/time.h>
 #endif
 #ifdef BALL_HAS_TIME_H
 #	include <time.h>
 #endif
-// WIN
 
 #include <iostream>
 
@@ -197,9 +195,8 @@ namespace BALL
 		private:
 #ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 		static long clock_speed_;
-#endif
-
 		static long cpu_speed_;
+#endif
 
 		// state of timer, either true(on) or false(off) 
 		bool is_running_;

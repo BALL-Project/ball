@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.9.4.8 2002/11/30 14:09:41 oliver Exp $
+// $Id: global.h,v 1.9.4.9 2002/12/01 21:45:23 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -25,7 +25,7 @@
 #endif
 
 // Added to avoid warnings with MS Visual Studio .NET
-#ifdef __win32
+#ifdef BALL_COMPILER_MSVC
 #pragma warning( disable : 4290 )
 #endif
 

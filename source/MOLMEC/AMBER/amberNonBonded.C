@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.19 2002/11/27 08:11:29 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.20 2002/12/01 21:45:23 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -13,6 +13,7 @@ using namespace std;
 // ???? Relics induced by SGI/CC
 // #define TPL_ARG_INLINE inline
 #define TPL_ARG_INLINE 
+#define inline
 
 
 namespace BALL 

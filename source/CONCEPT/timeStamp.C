@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.17.4.2 2002/11/30 09:48:44 oliver Exp $
+// $Id: timeStamp.C,v 1.17.4.3 2002/12/01 21:45:23 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
@@ -65,12 +65,17 @@ namespace BALL
 	PreciseTime PreciseTime::now() 
 		throw()
 	{
+#ifdef BALL_COMPILER_MSVC
+		struct _timeb tv;
+		_ftime(&tv);
+		return PreciseTime(tv.time, tv.millitm * 1000);
+#else
 		// get the current time via the system call
 		// gettimeofday()
 		struct timeval tv;
 		gettimeofday(&tv, 0);
-
 		return PreciseTime(tv.tv_sec, tv.tv_usec);
+#endif
 	}
 
 	const PreciseTime PreciseTime::ZERO;

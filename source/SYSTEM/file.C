@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.33.4.1 2002/12/01 13:49:11 oliver Exp $
+// $Id: file.C,v 1.33.4.2 2002/12/01 21:45:23 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -26,6 +26,21 @@ using std::endl;
 
 namespace BALL 
 {
+
+
+			/// Open for input (default)
+		
+	const File::OpenMode File::IN = std::ios::in;
+		/// Open for output
+	const File::OpenMode File::OUT = std::ios::out;
+		/// Append. Seek to end before each write operation
+	const File::OpenMode File::APP = std::ios::app;
+		/// Binary mode
+	const File::OpenMode File::BINARY = std::ios::binary;
+		/// Seek to end directly after opening.
+	const File::OpenMode File::ATE = std::ios::ate;
+		/// Truncate an existing file.
+	const File::OpenMode File::TRUNC = std::ios::trunc;
 
 	TransformationManager::TransformationManager()
 	{
@@ -169,14 +184,6 @@ namespace BALL
 																				| BALL_BIT(File::TRANSFORMATION__FILTER) 
 																				| BALL_BIT(File::TRANSFORMATION__URL);
 
-
-  const File::OpenMode File::IN;
-  const File::OpenMode File::OUT;
-  const File::OpenMode File::APP;
-  const File::OpenMode File::BINARY;
-  const File::OpenMode File::ATE;
-  const File::OpenMode File::TRUNC;
- 
 	File::File()
 		throw()
 		:	fstream(),
@@ -436,11 +443,11 @@ namespace BALL
 		#endif
 
 		#ifdef BALL_COMPILER_MSVC
-			if ((stats.st_mode && _S_IFDIR) == _S_IFDIR)
+			if ((stats.st_mode & _S_IFDIR) == _S_IFDIR)
 			{
 				return File::TYPE__REGULAR_FILE;
 			}
-			if ((stats.st_mode && _S_IFREG) == _S_IFREG)
+			if ((stats.st_mode & _S_IFREG) == _S_IFREG)
 			{
 				return File::TYPE__DIRECTORY;
 			}

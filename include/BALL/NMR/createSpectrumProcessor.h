@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.h,v 1.13 2001/09/28 14:44:25 amoll Exp $
+// $Id: createSpectrumProcessor.h,v 1.13.4.1 2002/12/01 21:45:23 oliver Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -150,8 +150,8 @@ namespace BALL
 		vector<String>					equivalency_residues_;
 		vector<vector<String> >	equivalency_atoms_;
 		float width_;
-		float use_averaging_;
-		float use_ignore_table_;
+		bool	use_averaging_;
+		bool	use_ignore_table_;
 		Expression expression_;
 	};
 
