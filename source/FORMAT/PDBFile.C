@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.26 2001/08/24 01:26:52 oliver Exp $
+// $Id: PDBFile.C,v 1.26.4.1 2002/08/16 15:36:30 anhi Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -1401,10 +1401,30 @@ namespace BALL
 			initial = residue_map_.find(*res_it);
 			++res_it;
 			terminal = residue_map_.find(*res_it);
+		
+			// This is to catch those cases where initial comes after terminal in the
+			// residue sequence.
+			// We first swap initial and terminal. Then we walk along the chain begining
+			// with the old initial (which is now terminal), and if we encounter the old
+			// terminal (which is now initial) on the way, then we swap the residues
+			// again.
+			ResidueMap::Iterator dummy = initial;
+			initial = terminal;
+			terminal = dummy;
 			
+			for (;dummy != residue_map_.end(); ++dummy)
+			{
+				if (dummy == initial)
+				{
+					initial = terminal;
+					terminal = dummy;
+					break;
+				}
+			}
+
 			if (!(initial != residue_map_.end() && terminal != residue_map_.end()
 						&& initial->second->getChain() == terminal->second->getChain()
-						&& Composite::insertParent(*(*helix_it), *initial->second, *terminal->second, false) == true))
+						&& (Composite::insertParent(*(*helix_it), *initial->second, *terminal->second, false) == true)))
 			{
 				delete (*helix_it);
 			}
