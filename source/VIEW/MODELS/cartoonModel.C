@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.19 2004/02/24 17:16:18 amoll Exp $
+// $Id: cartoonModel.C,v 1.20 2004/02/24 18:39:45 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -292,39 +292,55 @@ namespace BALL
 			t.v3 = 3;
 			mesh->triangle.push_back(t);
 
-			vector<Vector3>& vertices   = mesh->vertex;
-			vector<Vector3>& normals    = mesh->normal;
+			vector<Vector3>* vertices = &mesh->vertex;
+			vector<Vector3>* normals  = &mesh->normal;
 
 			// we insert all points twice (the first once even thrice!) 
 			// in order to get sensible normals for
 			// the triangles...
 			last_vertices = 4;
 
-			vertices.push_back(last_points[0]);
-			normals.push_back(perpendic*-1.);
-			vertices.push_back(last_points[0]);
-			normals.push_back(normal*-1.);
+			vertices->push_back(last_points[0]);
+			normals->push_back(perpendic*-1.);
+			vertices->push_back(last_points[0]);
+			normals->push_back(normal*-1.);
 
-			vertices.push_back(last_points[1]);
-			normals.push_back(perpendic*-1.);
-			vertices.push_back(last_points[1]);
-			normals.push_back(normal);
+			vertices->push_back(last_points[1]);
+			normals->push_back(perpendic*-1.);
+			vertices->push_back(last_points[1]);
+			normals->push_back(normal);
 
-			vertices.push_back(last_points[2]);
-			normals.push_back(perpendic);
-			vertices.push_back(last_points[2]);
-			normals.push_back(normal);
+			vertices->push_back(last_points[2]);
+			normals->push_back(perpendic);
+			vertices->push_back(last_points[2]);
+			normals->push_back(normal);
 
-			vertices.push_back(last_points[3]);
-			normals.push_back(perpendic);
-			vertices.push_back(last_points[3]);
-			normals.push_back(normal*-1.);
+			vertices->push_back(last_points[3]);
+			normals->push_back(perpendic);
+			vertices->push_back(last_points[3]);
+			normals->push_back(normal*-1.);
 
 
+			Mesh* last_mesh = 0;
 			// iterate over all but the last amino acid (last amino acid becomes the arrow)
 			Position i;
 			for (i=0; i<spline_vector_.size() - 2; i++)
 			{
+				if (i != 0) 
+				{
+					mesh = new Mesh();
+					vertices = &mesh->vertex;
+					normals  = &mesh->normal;
+					mesh->setComposite(ss.getResidue(i));
+
+					for (Position p = 0; p < 8; p++)
+					{
+						vertices->push_back(last_mesh->vertex[last_mesh->vertex.size() - 8 + p]);
+						normals->push_back(last_mesh->normal[last_mesh->normal.size() - 8 + p]);
+					}
+					last_vertices = 0;
+				}
+
 				// iterate over the spline points between two amino acids
 				for (Position j=0; j<=8; j++)
 				{
@@ -346,25 +362,25 @@ namespace BALL
 					current_points[3] = current_points[2] - normal * arrow_height_;
 
 					// put the next 4 points and 8 triangles into the mesh
-					vertices.push_back(current_points[0]);
-					normals.push_back(perpendic*-1.);
-					vertices.push_back(current_points[0]);
-					normals.push_back(normal*-1.);
+					vertices->push_back(current_points[0]);
+					normals->push_back(perpendic*-1.);
+					vertices->push_back(current_points[0]);
+					normals->push_back(normal*-1.);
 
-					vertices.push_back(current_points[1]);
-					normals.push_back(perpendic*-1.);
-					vertices.push_back(current_points[1]);
-					normals.push_back(normal);
+					vertices->push_back(current_points[1]);
+					normals->push_back(perpendic*-1.);
+					vertices->push_back(current_points[1]);
+					normals->push_back(normal);
 
-					vertices.push_back(current_points[2]);
-					normals.push_back(perpendic);
-					vertices.push_back(current_points[2]);
-					normals.push_back(normal);
+					vertices->push_back(current_points[2]);
+					normals->push_back(perpendic);
+					vertices->push_back(current_points[2]);
+					normals->push_back(normal);
 
-					vertices.push_back(current_points[3]);
-					normals.push_back(perpendic);
-					vertices.push_back(current_points[3]);
-					normals.push_back(normal*-1.);
+					vertices->push_back(current_points[3]);
+					normals->push_back(perpendic);
+					vertices->push_back(current_points[3]);
+					normals->push_back(normal*-1.);
 
 					insertTriangle_(last_vertices    , last_vertices +  2, last_vertices + 10, *mesh);
 					insertTriangle_(last_vertices    , last_vertices + 10, last_vertices +  8, *mesh);
@@ -377,6 +393,9 @@ namespace BALL
 
 					last_vertices+=8;
 				}
+
+				last_mesh = mesh;
+				geometric_objects_.push_back(mesh);
 			}
 
 			// finally, we draw the arrow
@@ -399,25 +418,25 @@ namespace BALL
 				current_points[3] = current_points[2] - normal * arrow_height_;
 
 				// put the next 4 points and 8 triangles into the mesh
-				vertices.push_back(current_points[0]);
-				normals.push_back(perpendic*-1.);
-				vertices.push_back(current_points[0]);
-				normals.push_back(normal*-1.);
+				vertices->push_back(current_points[0]);
+				normals->push_back(perpendic*-1.);
+				vertices->push_back(current_points[0]);
+				normals->push_back(normal*-1.);
 
-				vertices.push_back(current_points[1]);
-				normals.push_back(perpendic*-1.);
-				vertices.push_back(current_points[1]);
-				normals.push_back(normal);
+				vertices->push_back(current_points[1]);
+				normals->push_back(perpendic*-1.);
+				vertices->push_back(current_points[1]);
+				normals->push_back(normal);
 
-				vertices.push_back(current_points[2]);
-				normals.push_back(perpendic);
-				vertices.push_back(current_points[2]);
-				normals.push_back(normal);
+				vertices->push_back(current_points[2]);
+				normals->push_back(perpendic);
+				vertices->push_back(current_points[2]);
+				normals->push_back(normal);
 
-				vertices.push_back(current_points[3]);
-				normals.push_back(perpendic);
-				vertices.push_back(current_points[3]);
-				normals.push_back(normal*-1.);
+				vertices->push_back(current_points[3]);
+				normals->push_back(perpendic);
+				vertices->push_back(current_points[3]);
+				normals->push_back(normal*-1.);
 
 				insertTriangle_(last_vertices    , last_vertices +  2, last_vertices + 10, *mesh);
 				insertTriangle_(last_vertices    , last_vertices + 10, last_vertices +  8, *mesh);
@@ -430,8 +449,6 @@ namespace BALL
 
 				last_vertices+=8;
 			}
-			geometric_objects_.push_back(mesh);
-			
 
 			last_spline_point_ = spline_vector_[spline_vector_.size()-1];
 			last_point_ = last_spline_point_.getVector();
