@@ -1,4 +1,4 @@
-// $Id: server.C,v 1.5 2001/05/13 14:28:36 hekl Exp $
+// $Id: server.C,v 1.6 2001/05/13 16:29:09 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
 #include <BALL/COMMON/logStream.h>
@@ -283,7 +283,6 @@ namespace BALL
 
 		// main event loop
 	  void Server::timer()
-				throw(NotCompositeObject)
 		{
 			unsigned int command;
 

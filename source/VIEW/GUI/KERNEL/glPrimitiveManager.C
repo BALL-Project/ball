@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
+// $Id: glPrimitiveManager.C,v 1.5 2001/05/13 16:29:09 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 
@@ -38,7 +38,7 @@ namespace BALL
 		const GLDisplayList& 
 		GLDisplayListObject_::operator ()
 			(unsigned int drawing_mode, unsigned int drawing_precision) const
-			throw()
+			throw(WrongModes)
 		{
 			return ((GLDisplayListObject_ *)this)->operator()
 								(drawing_mode, drawing_precision);

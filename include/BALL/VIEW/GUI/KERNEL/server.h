@@ -1,4 +1,4 @@
-// $Id: server.h,v 1.6 2001/05/13 13:57:02 hekl Exp $
+// $Id: server.h,v 1.7 2001/05/13 16:31:02 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -70,8 +70,8 @@ namespace BALL
 				received composite will be sent.
 				@memo    Server class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 13:57:02 $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/05/13 16:31:02 $
 		*/
 		class Server
 			: public QTTimer,
@@ -385,8 +385,7 @@ namespace BALL
 					@see    QTTimer::timer
 					@exception NotCompositeObject thrown if another object than \Ref{Composite} object is received
 			*/
-			virtual void timer()
-				throw(NotCompositeObject);
+			virtual void timer();
 			//@}
 
 

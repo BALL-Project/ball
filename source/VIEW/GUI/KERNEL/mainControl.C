@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.14 2001/05/13 14:28:36 hekl Exp $
+// $Id: mainControl.C,v 1.15 2001/05/13 16:29:09 hekl Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -16,8 +16,9 @@
 
 using std::istream;
 using std::ostream;
-
-
+using std::endl;
+using std::cerr;
+using std::cout;
 
 namespace BALL
 {

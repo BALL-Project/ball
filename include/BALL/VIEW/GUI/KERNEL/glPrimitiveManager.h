@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.h,v 1.5 2001/05/13 13:57:02 hekl Exp $
+// $Id: glPrimitiveManager.h,v 1.6 2001/05/13 16:31:02 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -43,8 +43,8 @@ namespace BALL
 				This is an internally used class and should not be used in any programs.
 				@memo    GLDisplayListObject_ class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:57:02 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/05/13 16:31:02 $
 		*/
 		class GLDisplayListObject_
 		{
@@ -130,7 +130,7 @@ namespace BALL
 			*/
 			virtual GLDisplayList& operator ()
 				(unsigned int drawing_mode, unsigned int drawing_precision)
-				throw() = 0;
+				throw(WrongModes) = 0;
 			
 			/** Return a glDisplayList.
 					Calls \Ref{operator()}
@@ -141,7 +141,7 @@ namespace BALL
 			*/
 			const GLDisplayList& operator ()
 				(unsigned int drawing_mode, unsigned int drawing_precision) const
-				throw();
+				throw(WrongModes);
 			//@}
 		};
 
@@ -156,8 +156,8 @@ namespace BALL
 				This is an internally used class and should not be used in any programs.
 				@memo    GLSphereDisplayLists_ class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:57:02 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/05/13 16:31:02 $
 		*/
 		class GLSphereDisplayLists_: public GLDisplayListObject_
 		{
@@ -295,8 +295,8 @@ namespace BALL
 				This is an internally used class and should not be used in any programs.
 				@memo    GLTubeDisplayLists_ class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:57:02 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/05/13 16:31:02 $
 		*/
 		class GLTubeDisplayLists_: public GLDisplayListObject_
 		{
@@ -417,8 +417,8 @@ namespace BALL
 				This is an internally used class and should not be used in any programs.
 				@memo    GLSimpleBoxDisplayLists_ class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:57:02 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/05/13 16:31:02 $
 		*/
 		class GLSimpleBoxDisplayLists_: public GLDisplayListObject_
 		{
@@ -548,8 +548,8 @@ namespace BALL
 				when picked.
 				@memo    GLPrimitiveManager class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:57:02 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/05/13 16:31:02 $
 		*/
 		class GLPrimitiveManager
 		{
