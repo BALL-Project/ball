@@ -1,16 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.9 2002/03/12 16:14:30 anker Exp $
-
+// $Id: pyWidget.C,v 1.10 2003/01/06 17:43:30 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
+#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <Python.h>
 
 #include <qscrollbar.h>
 
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+namespace BALL
+{
+	namespace VIEW;
+	{
 
 PyWidget::PyWidget
 	(QWidget* parent, const char* name)
@@ -318,3 +321,5 @@ void PyWidget::newPrompt_()
 
 	emit textChanged();
 }
+
+} } // namespace
