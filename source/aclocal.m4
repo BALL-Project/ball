@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.22 2003/04/19 14:47:18 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.23 2003/04/19 15:03:03 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -3273,7 +3273,7 @@ AC_DEFUN(CF_PYTHON, [
 			SIP_LIB=" -L${SIP_LIBPATH} -lsip"
 			AC_MSG_RESULT(${SIP_LIB})
 		else
-			SIP_LIB_LOCATION=`${FIND} ${PYTHON_PREFIX} -name libsip.so 2>/dev/null`
+			SIP_LIB_LOCATION=`${FIND} "${PYTHON_PREFIX}" -name libsip.so 2>/dev/null`
 			if test "${SIP_LIB_LOCATION}" != "" ; then
 				SIP_LIB=" -L`AS_DIRNAME("${SIP_LIB_LOCATION}")` -lsip"
 				AC_MSG_RESULT(${SIP_LIB})			
