@@ -1,4 +1,4 @@
-// $Id: ReissCavFreeEnergyProcessor_test.C,v 1.2 2001/09/01 22:59:55 aubertin Exp $
+// $Id: ReissCavFreeEnergyProcessor_test.C,v 1.3 2001/09/11 09:59:24 aubertin Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(ReissCavFreeEnergyProcessor, "$Id: ReissCavFreeEnergyProcessor_test.C,v 1.2 2001/09/01 22:59:55 aubertin Exp $")
+START_TEST(ReissCavFreeEnergyProcessor, "$Id: ReissCavFreeEnergyProcessor_test.C,v 1.3 2001/09/11 09:59:24 aubertin Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ CHECK(ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor(const ReissCavFre
   ReissCavFreeEnergyProcessor proc;
   S.apply(proc);
   ReissCavFreeEnergyProcessor proc2(proc); 
-  //TEST_EQUAL((proc==proc2), true) op == not yet implemented
+  TEST_EQUAL((proc==proc2), true) 
   bool test = proc.isValid()==proc2.isValid();
   TEST_EQUAL(test, true)
   test = proc.getEnergy()==proc2.getEnergy();
@@ -71,12 +71,12 @@ CHECK(ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor& operator = (cons
   ReissCavFreeEnergyProcessor proc;
   S.apply(proc);
   ReissCavFreeEnergyProcessor proc2;
-  //proc2 = proc;
-  //TEST_EQUAL((proc == proc2), true)
-  //bool test = proc.isValid()==proc2.isValid();
-  //TEST_EQUAL(test, true)
-  //test = proc.getEnergy()==proc2.getEnergy();
-  //TEST_EQUAL(test, true) operator = not yet implemented
+  proc2 = proc;
+  TEST_EQUAL((proc == proc2), true)
+  bool test = proc.isValid()==proc2.isValid();
+  TEST_EQUAL(test, true)
+  test = proc.getEnergy()==proc2.getEnergy();
+  TEST_EQUAL(test, true) 
 RESULT
 
 
