@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.4 2002/02/28 03:36:03 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.5 2002/03/01 02:55:36 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -11,7 +11,6 @@ using namespace std;
 
 // define a macro for the square function
 #define SQR(x) ((x) * (x))
-
 
 namespace BALL 
 {
@@ -664,56 +663,92 @@ namespace BALL
 		}
 	}	// end  of function AMBERcalculateNBEnergy() 
 
+
+	struct SwitchingCutOnOff
+	{
+		float cutoff_2;
+		float cuton_2;
+		float inverse_distance_off_on_3;
+	};
+
 	struct NBStruct
 	{
 		Atom::StaticAtomAttributes* atom1;
 		Atom::StaticAtomAttributes* atom2;
-		double charge_product;
-		double A;
-		double B;
+		float charge_product;
+		float A;
+		float B;
 	};
 		
-	inline double nonperiodicInverseSquareDistance(const Vector3& a, const Vector3& b)
-	{
-		return SQR(a.x - b.x) + SQR(a.y - b.y) + SQR(a.z - b.z);
-	}
-
-	inline double distanceDependentCoulomb(double inverse_square_distance, double charge_product)
-	{
-		return charge_product * inverse_square_distance * sqrt(inverse_square_distance);
-	}
-
-	inline double coulomb(double inverse_square_distance, double charge_product)
+	inline float distanceDependentCoulomb(float inverse_square_distance, float charge_product)
 	{
 		return charge_product * inverse_square_distance;
 	}
 
-	inline double vdwSixTwelve(double inverse_square_distance, double A, double B)
+	inline float coulomb(float inverse_square_distance, float charge_product)
 	{
-		register double inv_dist_6(inverse_square_distance * inverse_square_distance * inverse_square_distance);
+		return charge_product * sqrt(inverse_square_distance);
+	}
+
+	inline float vdwSixTwelve(float inverse_square_distance, float A, float B)
+	{
+		register float inv_dist_6(inverse_square_distance * inverse_square_distance * inverse_square_distance);
 		return (inv_dist_6 * (inv_dist_6 * A - B)); 
 	}
 
-	typedef double (*ESEnergyFunction) (double square_dist, double q1_q2);
-	typedef double (*VdWEnergyFunction) (double square_dist, double A, double B);
+	typedef float (*ESEnergyFunction) (float square_dist, float q1_q2);
+	typedef float (*VdWEnergyFunction) (float square_dist, float A, float B);
+	typedef float (*SwitchingFct) (double square_distance, const SwitchingCutOnOff& cutoffs);
 
-	
-	template <ESEnergyFunction es_energy_fct, VdWEnergyFunction vdw_energy_fct>
-	void AmberNBEnergy(LennardJones::Data* ptr, LennardJones::Data* end_ptr, double& es_energy, double& vdw_energy)
+	template <ESEnergyFunction ESEnergy, 
+						VdWEnergyFunction VdwEnergy,
+						SwitchingFct Switch>
+	inline
+	void AmberNBEnergy
+		(LennardJones::Data* ptr, LennardJones::Data* end_ptr, 
+		 double& es_energy, double& vdw_energy, 
+		 const SwitchingCutOnOff& switching_es, const SwitchingCutOnOff& switching_vdw)
 	{
 		// iterate over all pairs
 		for (; ptr != end_ptr; ++ptr)
 		{
-			// compute the square distance and correct for periodic boundary if necessary
-			double inverse_square_distance(1.0 / ptr->atom1->position.getSquareDistance(ptr->atom2->position));
-			es_energy += es_energy_fct(inverse_square_distance, ptr->atom1->charge * ptr->atom2->charge);
-			vdw_energy += vdw_energy_fct(inverse_square_distance, ptr->values.A, ptr->values.B);
+			// compute the square distance
+			double square_distance(ptr->atom1->position.getSquareDistance(ptr->atom2->position));
+			double inverse_square_distance(1.0 / square_distance);
+			es_energy += ESEnergy(inverse_square_distance, ptr->atom1->charge * ptr->atom2->charge) * Switch(square_distance, switching_es);
+			vdw_energy += VdwEnergy(inverse_square_distance, ptr->values.A, ptr->values.B) * Switch(square_distance, switching_vdw);
 		}
 	}
 
-	template <ESEnergyFunction es_energy_fct, VdWEnergyFunction vdw_energy_fct>
+	inline float cubicSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
+	{
+		return SQR(cutoffs.cutoff_2 - square_distance) 
+						* (cutoffs.cutoff_2 + 2.0 * square_distance - 3.0 * cutoffs.cuton_2)
+						* cutoffs.inverse_distance_off_on_3;
+	}
+
+	template <SwitchingFct Switch>
+	inline float switchMultiplier(double square_distance, const SwitchingCutOnOff& cutoffs)
+	{
+		float below_off = ((square_distance < cutoffs.cutoff_2) ? 1.0 : 0.0);
+		float below_on = ((square_distance >= cutoffs.cuton_2) ? 1.0 : 0.0);
+		return 1.0; // ???below_off * (below_on + (1.0 - below_on) * Switch(square_distance, cutoffs));
+	}
+
+	inline float cutoffSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
+	{
+		return ((square_distance <= cutoffs.cutoff_2) ? 1.0 : 0.0);
+	}
+
+	template <ESEnergyFunction ESEnergyFct, 
+						VdWEnergyFunction VdwEnergyFct,
+						SwitchingFct Switch>
 	inline 
-	void AmberNBEnergyPeriodic(LennardJones::Data* ptr, LennardJones::Data* end_ptr, double& es_energy, double& vdw_energy, const Vector3& period)
+	void AmberNBEnergyPeriodic
+		(LennardJones::Data* ptr, LennardJones::Data* end_ptr, 
+		 double& es_energy, double& vdw_energy, 
+		 const SwitchingCutOnOff& es_switching, const SwitchingCutOnOff& vdw_switching,
+		 const Vector3& period)
 	{
 		// iterate over all pairs
 		for (; ptr != end_ptr; ++ptr)
@@ -722,9 +757,11 @@ namespace BALL
 			AMBERcalculateMinimumImage(difference, period);
 
 			// compute the square distance and correct for periodic boundary if necessary
-			double inverse_square_distance(1.0 / difference.getSquareLength());
-			es_energy += es_energy_fct(inverse_square_distance, ptr->atom1->charge * ptr->atom2->charge);
-			vdw_energy += vdw_energy_fct(inverse_square_distance, ptr->values.A, ptr->values.B);
+			double square_distance(difference.getSquareLength());
+			double inverse_square_distance(1.0 / square_distance);
+
+			es_energy += ESEnergyFct(inverse_square_distance, ptr->atom1->charge * ptr->atom2->charge) * Switch(square_distance, es_switching);
+			vdw_energy += VdwEnergyFct(inverse_square_distance, ptr->values.A, ptr->values.B) * Switch(square_distance, vdw_switching);
 		}
 	}
 
@@ -943,6 +980,13 @@ namespace BALL
 		double cut_on_electrostatic_2 = SQR(cut_on_electrostatic_);
 		double cut_on_vdw_2 = SQR(cut_on_vdw_);
 
+		#ifdef NEW_STYLE
+			SwitchingCutOnOff cutoffs_es 
+				= { SQR(cut_off_electrostatic_), SQR(cut_on_electrostatic_), inverse_distance_off_on_electrostatic_3_};
+			SwitchingCutOnOff cutoffs_vdw 
+				= { SQR(cut_off_vdw_), SQR(cut_on_vdw_), inverse_distance_off_on_vdw_3_};
+		#endif
+
 		// Define the different components of the non-bonded energy
 		double vdw_energy = 0;
 		double vdw_energy_1_4 = 0;
@@ -966,10 +1010,12 @@ namespace BALL
 			period = box.b - box.a;
 
 			#ifdef NEW_STYLE
-				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve>
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, period);
-				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve>
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy, period);
+				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
+					 cutoffs_es, cutoffs_vdw, period);
+				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy, 
+					 cutoffs_es, cutoffs_vdw, period);
 			#else
 				// first evaluate 1-4 non-bonded pairs 
 				for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
@@ -1000,10 +1046,12 @@ namespace BALL
 				period = box.b - box.a;
 
 				#ifdef NEW_STYLE
-					AmberNBEnergyPeriodic<coulomb, vdwSixTwelve>
-						(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, period);
-					AmberNBEnergyPeriodic<coulomb, vdwSixTwelve>
-						(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy, period);
+					AmberNBEnergyPeriodic<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+						(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, 
+						 cutoffs_es, cutoffs_vdw, period);
+					AmberNBEnergyPeriodic<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+						(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy, 
+						 cutoffs_es, cutoffs_vdw, period);
 				#else
 					// first evaluate 1-4 non-bonded pairs 
 					for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
@@ -1033,11 +1081,13 @@ namespace BALL
 
 					// first evaluate 1-4 non-bonded pairs 
 					#ifdef NEW_STYLE
-						AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve>
-							(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4);
+						AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+							(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
+							 cutoffs_es, cutoffs_vdw);
 
-						AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve>	
-							(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy);
+						AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >	
+							(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy,
+							 cutoffs_es, cutoffs_vdw);
 					#else
 						for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 						{
@@ -1063,10 +1113,12 @@ namespace BALL
 					// no periodic boundary enabled and use a constant dielectric 
 
 					#ifdef NEW_STYLE
-						AmberNBEnergy<coulomb, vdwSixTwelve>
-							(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4);
-						AmberNBEnergy<coulomb, vdwSixTwelve>
-							(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy);
+						AmberNBEnergy<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+							(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
+							 cutoffs_es, cutoffs_vdw);
+						AmberNBEnergy<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+							(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy,
+							 cutoffs_es, cutoffs_vdw);
 					#else
 						// first evaluate 1-4 non-bonded pairs 
 						for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
@@ -1095,8 +1147,15 @@ namespace BALL
 			vdw_energy_ 
 				= vdw_factor * (vdw_energy + scaling_vdw_1_4_ * vdw_energy_1_4);
 
-			const double electrostatic_factor 
+			double electrostatic_factor 
 				= NA * e0 * e0 * 1e7 / (4.0 * PI * VACUUM_PERMITTIVITY);
+			#ifdef NEW_STYLE
+				if (use_dist_depend_dielectric_)
+				{
+					// correct for the additional factor of four in the distance dependent case
+					electrostatic_factor *= 0.25;
+				}
+			#endif
 			electrostatic_energy_ = electrostatic_factor * 
 				(electrostatic_energy 
 				 + scaling_electrostatic_1_4_ * electrostatic_energy_1_4);
