@@ -1,4 +1,4 @@
-// $Id: label.h,v 1.2 2000/12/12 16:15:48 oliver Exp $
+// $Id: label.h,v 1.3 2000/12/19 21:54:08 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
 #define BALL_VIEW_PRIMITIV_LABEL_H
@@ -87,7 +87,8 @@ namespace BALL
 			*/
 			//@{
 
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			virtual void dump
 				(std::ostream&  s = std::cout, Size depth = 0) const

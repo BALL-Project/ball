@@ -1,4 +1,4 @@
-// $Id: point.h,v 1.4 2000/12/12 16:15:48 oliver Exp $
+// $Id: point.h,v 1.5 2000/12/19 21:54:08 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H
@@ -77,7 +77,8 @@ namespace BALL
 			*/
 			//@{
 
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			virtual void dump
 				(std::ostream&  s = std::cout, Size depth = 0) const
