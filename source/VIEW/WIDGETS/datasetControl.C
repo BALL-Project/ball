@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.31 2004/09/01 11:14:58 amoll Exp $
+// $Id: datasetControl.C,v 1.32 2004/10/21 13:37:07 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -278,8 +278,7 @@ void DatasetControl::deleteItem_(QListViewItem& item)
 	Composite* composite = item_to_composite_[&item];
 	composite_to_items_[composite].erase(&item);
 	item_to_composite_.erase(&item);
-	delete &item;
-	listview->triggerUpdate();
+	GenericControl::removeItem_(&item, true);
 }
 
 

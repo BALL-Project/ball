@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.12 2004/02/26 08:41:46 anhi Exp $
+// $Id: genericControl.h,v 1.13 2004/10/21 13:31:42 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -118,6 +118,7 @@ namespace BALL
 			/// Called by MyListView, if del is pressed
 			virtual void deleteCurrentItems()
 				throw() {};
+
 			
 		  protected slots:
 			
@@ -131,6 +132,9 @@ namespace BALL
 			virtual void updateSelection();
 			
 		  protected:
+
+			virtual void removeItem_(QListViewItem* item, bool update = false)
+				throw();
 
 			QListViewItem* 								context_item_;
 			MyListView* 										listview;

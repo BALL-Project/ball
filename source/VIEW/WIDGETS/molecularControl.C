@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.74 2004/10/20 14:32:45 amoll Exp $
+// $Id: molecularControl.C,v 1.75 2004/10/21 13:31:37 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -262,7 +262,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 				return false;
 			
 			case CompositeMessage::REMOVED_COMPOSITE:
-				removeComposite(*(Composite *)composite_message->getComposite());
+				removeRecursiveComposite(*(Composite *)composite_message->getComposite());
 				return false;
 			
 			case CompositeMessage::CHANGED_COMPOSITE:
@@ -280,7 +280,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 					}
 				}
 
-				removeComposite(composite_message->getComposite()->getRoot());
+				removeRecursiveComposite(composite_message->getComposite()->getRoot());
  				addComposite(composite_message->getComposite()->getRoot());
 
 				List<Composite*>::Iterator lit = open_items.begin();
@@ -611,18 +611,6 @@ void MolecularControl::addComposite(Composite& composite, QString* own_name)
 }
 
 
-void MolecularControl::removeComposite(Composite& composite)
-	throw()
-{
-	if (!composite_to_item_.has(&composite)) return;
-
-	SelectableListViewItem* item = composite_to_item_[&composite];
-	delete item;
-	composite_to_item_.erase(&composite);		
-	listview->triggerUpdate();
-}
-
-
 Size MolecularControl::removeRecursiveComposite(Composite& composite)
 	throw()
 {
@@ -637,7 +625,7 @@ Size MolecularControl::removeRecursiveComposite(Composite& composite)
 		nr += removeRecursiveComposite(child);
 	}
 
-	delete item;
+	removeItem_(item, false);
 	composite_to_item_.erase(&composite);		
 
 	return nr;

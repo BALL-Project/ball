@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.13 2004/10/21 13:13:13 amoll Exp $
+// $Id: genericControl.C,v 1.14 2004/10/21 13:31:37 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -113,5 +113,18 @@ void GenericControl::initializeWidget(MainControl& main_control)
 	main_control.insertDeleteEntry();
 	DockWidget::initializeWidget(main_control);
 } 
+
+void GenericControl::removeItem_(QListViewItem* item, bool update)
+	throw()
+{
+	while (item->firstChild() != 0)
+	{
+		removeItem_(item->firstChild(), false);
+	}
+
+	delete item;
+
+	if (update) listview->triggerUpdate();
+}
 
 } } // namespaces

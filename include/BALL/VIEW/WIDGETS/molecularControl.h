@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.37 2004/09/16 11:23:58 amoll Exp $
+// $Id: molecularControl.h,v 1.38 2004/10/21 13:31:42 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -157,14 +157,6 @@ namespace BALL
 			void addComposite(Composite& composite, QString* name = 0)
 				throw();
 
-			/** Remove a Composite from this Control.\par
-					Calls findListViewItem_() for composite.\par
-					Calls updateContents.
-					\param   composite a pointer to the Composite to be removed from the Control
-			*/
-			void removeComposite(Composite& composite)
-				throw();
-	
 			/** Recursive removal of a Composite from the Control.
 			 		\see removeComposite
 			*/
