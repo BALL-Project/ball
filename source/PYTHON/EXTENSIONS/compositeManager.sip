@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.sip,v 1.3 2003/11/17 14:50:22 amoll Exp $
+// $Id: compositeManager.sip,v 1.4 2003/11/17 18:11:24 amoll Exp $
 //
 class CompositeManager
 {
@@ -23,6 +23,7 @@ class CompositeManager
   bool insert(Composite& /composite/) throw();
   bool remove(Composite& /composite/) throw();
   void clear() throw();
+	PyCompositeList getComposites() throw();
   // void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
   ~CompositeManager() throw();
 };
