@@ -10,6 +10,8 @@ CPP_SOURCES=\
 	fragment.C\
 	global.C\
 	molecule.C\
+	nucleicAcid.C\
+	nucleotide.C\
 	PDBAtom.C\
 	protein.C\
 	PSE.C\
