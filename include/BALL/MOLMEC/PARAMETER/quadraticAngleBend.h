@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.h,v 1.5 2000/02/14 22:42:40 oliver Exp $
+// $Id: quadraticAngleBend.h,v 1.6 2000/02/15 18:13:05 oliver Exp $
 // Molecular Mechanics Parameter: class describing the parameters required to
 // implement a harmonic potential describing angles
  
@@ -82,15 +82,11 @@ namespace BALL
 
 		protected:
 
-		Size									number_of_atom_types_;
+		Size						number_of_atom_types_;
 
-		float*								k_;
-		
-		float*								theta0_;
+		vector<Values>	values_;
 
-		bool*									is_defined_;
-			
-		String*								names_;
+		vector<Index>		value_index_;
 	};
 
 } // namespace BALL
