@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.15 2004/02/18 20:54:35 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.16 2004/02/24 11:10:31 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -53,7 +53,7 @@ namespace BALL
 		{
 			String hint("Open a PDB, HIN, MOL or MOL2 file");
 			main_control.insertMenuEntry(MainControl::FILE_OPEN, "&Structure", (QObject *)this, 
-																	 SLOT(readFile()), CTRL+Key_O, -1, hint);
+																	 SLOT(readFiles()), CTRL+Key_O, -1, hint);
 			hint = "Save a system as PDB, HIN, MOL or MOL2 file (1 System has to be selected)";
 			save_id_ = main_control.insertMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
 																	 SLOT(writeFile()), CTRL+Key_S, -1, hint);
@@ -65,16 +65,16 @@ namespace BALL
 			throw()
 		{
 			main_control.removeMenuEntry(MainControl::FILE_OPEN, "&Open Structure", (QObject *)this, 
-																	 SLOT(readFile()), CTRL+Key_R);
+																	 SLOT(readFiles()), CTRL+Key_R);
 			main_control.removeMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
 																		SLOT(writeFile()), CTRL+Key_S);
 		}
 
-		void MolecularFileDialog::readFile()
+		void MolecularFileDialog::readFiles()
 		{
 			QFileDialog *fd = new QFileDialog(getMainControl(), "Molecular File Dialog", true);
 
-			fd->setMode(QFileDialog::ExistingFile);
+			fd->setMode(QFileDialog::ExistingFiles);
 			fd->setFilter("PDB Files (*.pdb *.brk *.ent)");
 			fd->addFilter("HIN Files (*.hin)");
 			fd->addFilter("MOL Files (*.mol)");
@@ -97,19 +97,23 @@ namespace BALL
 			if (!result_dialog == QDialog::Accepted) return;
 
 
-			String filename(fd->selectedFile().ascii());
+			QStringList files = fd->selectedFiles();
 			String filter(fd->selectedFilter().ascii());
 
-			// construct a name for the system(the filename without the dir path)
-			QString qfilename = fd->selectedFile();
-			qfilename.remove(0, fd->dirPath().length() + 1);
-
-			if (qfilename.find('.') != -1)
+ 		  for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) 
 			{
-				qfilename = qfilename.left(qfilename.find('.'));
-			}
+				QString qfile = *it;
+				QString qfilename = *it;
+				// construct a name for the system(the filename without the dir path)
+				qfilename.remove(0, fd->dirPath().length() + 1);
 
-			openFile(String(fd->selectedFile().ascii()), String(filter), String(qfilename.ascii()));
+				if (qfilename.find('.') != -1)
+				{
+					qfilename = qfilename.left(qfilename.find('.'));
+				}
+
+				openFile(String(qfile.ascii()), String(filter), String(qfilename.ascii()));
+			}
 		}
 
 

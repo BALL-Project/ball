@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.9 2004/02/12 13:00:36 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.10 2004/02/24 11:10:36 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -91,7 +91,7 @@ public slots:
 			\see		CompositeMessage
 			\see		ConnectionObject
 	 */
-	virtual void readFile();
+	virtual void readFiles();
 
 	/** Open a given molecular file.
 	 		The file type is identified by the filename extension.
