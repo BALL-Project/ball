@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.131 2004/03/04 15:47:10 amoll Exp $
+// $Id: mainframe.C,v 1.132 2004/03/04 17:14:00 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -39,7 +39,9 @@ namespace BALL
 			file_dialog_(0),
 			server_(0),
 			logview_(0),
-			fullscreen_(false)
+			fullscreen_(false),
+			menu_cs_(-1),
+			menu_FPDB_(-1)
 	{
 	#ifdef BALL_VIEW_DEBUG
 	Log.error() << "new Mainframe " << this << std::endl;
@@ -166,8 +168,9 @@ namespace BALL
 
 	void Mainframe::checkMenus()
 	{
-		menuBar()->setItemEnabled(menu_FPDB_, getSelectedSystem() && composites_muteable_);
-		menuBar()->setItemEnabled(menu_cs_, composites_muteable_ && dataset_control_->getGrids().size());
+		if (menu_cs_ == -1) return;
+		menuBar()->setItemEnabled( menu_FPDB_, (getSelectedSystem() != 0) && composites_muteable_);
+ 	  menuBar()->setItemEnabled(menu_cs_, composites_muteable_ && (dataset_control_->countGrids() != 0));
 		MainControl::checkMenus();
 	}
 
