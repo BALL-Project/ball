@@ -1,4 +1,4 @@
-// $Id: glmesh.C,v 1.5.4.1 2002/08/16 15:33:37 anhi Exp $
+// $Id: glmesh.C,v 1.5.4.2 2002/09/25 15:03:00 anhi Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 #include <GL/gl.h>
@@ -112,7 +112,6 @@ namespace BALL
 			}
 
 			glPushMatrix();
-
 			// If we have only one color for the whole mesh, this can
 			// be assigned efficiently
 			if (colorList.size() < vertex.size())

@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.1 2002/09/24 16:57:44 anhi Exp $
+// $Id: control.C,v 1.7.4.2 2002/09/25 15:03:00 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -202,6 +202,7 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* item)
 		}
 		colorMeshDlg_ = new ColorMeshDialog();
 
+		colorMeshDlg_->mesh = (Mesh*)RTTI::castTo<Mesh>(*composite);
 		insertContextMenuEntry("Color mesh", colorMeshDlg_, SLOT(show()));	
 	}
 

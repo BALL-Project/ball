@@ -7,6 +7,7 @@
 
 #include <qlineedit.h>
 #include <qfiledialog.h>
+#include <qspinbox.h>
 
 using namespace BALL;
 using namespace VIEW;
@@ -21,8 +22,8 @@ using namespace VIEW;
 ColorMeshDialog::ColorMeshDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
     : colorMeshDialogData( parent, name, modal, fl )
 {
-	connect(this, SIGNAL(Compute_->clicked()), this, SLOT(ColorMesh()));
-	connect(this, SIGNAL(Browseload->clicked()), this, SLOT(browseLoadFiles()));
+	connect((QObject*)Compute_, SIGNAL(clicked()), this, SLOT(colorMesh()));
+	connect((QObject*)Browseload, SIGNAL(clicked()), this, SLOT(browseLoadFiles()));
 }
 
 /*  
@@ -45,7 +46,7 @@ void ColorMeshDialog::colorMesh()
 
 		infile >> dat;
 		infile.close();
-		
+	
 		// now do the colorizing stuff...
 		mesh->colorList.resize(mesh->vertex.size());
 		ColorRGBA list[3];
@@ -54,15 +55,21 @@ void ColorMeshDialog::colorMesh()
 		list[2] = ColorRGBA(1.,1.,0.,1.);
 
 		ColorTable table(list, 3);
-		table.setNumberOfColors(53);
+		table.setNumberOfColors(numberOfColors->value());
 		table.createTable();
-		table.setRange(0.,20.);
+		table.setRange(atof(MinVal->text().latin1()), atof(MaxVal->text().latin1()));
 
-		for (Position i=0; i<mesh->colorList.size(); i++)
-		{
-			mesh->colorList[i] = table.map(dat[mesh->vertex[i]]);
-		}
-
+		try {
+			for (Position i=0; i<mesh->colorList.size(); i++)
+			{
+			//	Log.info() << table.map(dat[mesh->vertex[i]]) << endl;
+				mesh->colorList[i] = table.map(dat[mesh->vertex[i]]);
+			}
+		}	catch (Exception::OutOfGrid)
+			{
+				Log.error() << "Error! There is a point contained in the surface that is not inside the grid! Aborting the coloring..." << endl;
+				return;
+			}
 	}
 }
 
