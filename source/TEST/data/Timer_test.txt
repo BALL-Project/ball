@@ -6,7 +6,7 @@ is running: false
 /last user time: [0-9]+
 /last system time: [0-9]+
 /current clock seconds: [0-9]+
-/current user seconds: [/-0-9]+
+/current user seconds: [0-9]+
 /current user time: [0-9]+
 /current system time: 0
 /effective clock time: [0-9]+
