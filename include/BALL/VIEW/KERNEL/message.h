@@ -1,4 +1,4 @@
-// $Id: message.h,v 1.9.4.1 2002/11/29 00:39:46 amoll Exp $
+// $Id: message.h,v 1.9.4.2 2002/12/02 16:37:00 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -82,7 +82,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -92,8 +91,8 @@ namespace BALL
 			*/
 			virtual ~Message()
 				throw();
+
 			//@}
-		
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -198,7 +197,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -302,7 +300,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -355,7 +352,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -408,7 +404,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -469,7 +464,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -607,7 +601,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
       */
 			//@{
@@ -617,8 +610,8 @@ namespace BALL
 			*/
 			virtual ~WindowMessage()
 				throw();
+			
 			//@}
-		
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -688,7 +681,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -698,8 +690,8 @@ namespace BALL
 			*/
 			virtual ~SelectionMessage()
 				throw();
+							
 			//@}
-		
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -739,10 +731,7 @@ namespace BALL
 			public:
 
 			CompositeSelectedMessage(Composite* composite, bool selected) 
-				throw()
-				:	composite_(composite),
-					selected_(selected)
-			{Log.error() << "CompositeSelectedMessage" << std::endl;};
+				throw();
 
 			Composite* composite_;
 			bool selected_;
@@ -753,7 +742,7 @@ namespace BALL
 		class NewSelectionMessage: public Message
 		{
 			public:
-			NewSelectionMessage() { Log.error() << "NewSelectionMessage" << std::endl;};
+			NewSelectionMessage();
 		};
 
 		/** GeometricObjectSelectionMessage class.
@@ -795,7 +784,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
