@@ -1,4 +1,4 @@
-// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.6 2001/05/18 02:28:29 oliver Exp $
+// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.7 2001/07/14 19:45:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.6 2001/05/18 02:28:29 oliver Exp $")
+START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.7 2001/07/14 19:45:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -104,9 +104,12 @@ CHECK(chemical shifts/with rings)
 	String name;
 	float shift;
 	while (infile.good())
-	{
+	{	
 		infile >> name >> shift;
-		rc_shifts.insert(name, shift);
+		if (name != "")
+		{
+			rc_shifts.insert(name, shift);
+		}
 	}
 	TEST_EQUAL(rc_shifts.size(), 160)
 
@@ -115,6 +118,8 @@ CHECK(chemical shifts/with rings)
 	sp.init();
 	TEST_EQUAL(sp.isValid(), true)
 	TEST_EQUAL(S.countAtoms(), 328)
+
+	PRECISION(0.01)
 	
 	if (S.countAtoms() == 328)
 	{
@@ -126,8 +131,9 @@ CHECK(chemical shifts/with rings)
 		{
 			if (atom_it->hasProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT))
 			{
+				STATUS("atom " << atom_it->getFullName() << " has shift property = " << atom_it->getProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat())
 				shift = atom_it->getProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat();
-				if (shift != 0)
+				if (shift != 0.0)
 				{
 					STATUS("shift of " << atom_it->getFullName() << ": " << shift)
 					TEST_EQUAL(rc_shifts.has(atom_it->getFullName()), true)
