@@ -1,5 +1,5 @@
 
-EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy
+EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran
 
 all:	$(EXECUTABLES)
 
@@ -21,5 +21,8 @@ amberEnergy:	amberEnergy.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 bindingEnergy:	bindingEnergy.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+ramachandran:	ramachandran.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
