@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.22 2003/03/12 16:11:50 oliver Exp $
+// $Id: energyMinimizer.C,v 1.23 2003/03/21 14:37:31 anhi Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
@@ -11,6 +11,7 @@
 using namespace std;
 
 // #define BALL_DEBUG
+#undef BALL_DEBUG
 
 namespace BALL 
 {
@@ -491,8 +492,8 @@ namespace BALL
 	bool EnergyMinimizer::isConverged() const
 	{
 		/// ???
-		Log.info()  << " current_grad.rms = " << current_grad_.rms << "  max_grad = " << max_gradient_ 
-							  << " same energy: " << same_energy_counter_ << "/" << max_same_energy_ << std::endl;
+//		Log.info()  << " current_grad.rms = " << current_grad_.rms << "  max_grad = " << max_gradient_ 
+//						  << " same energy: " << same_energy_counter_ << "/" << max_same_energy_ << std::endl;
 
 		bool converged = ((current_grad_.rms <= max_gradient_)
 											|| (same_energy_counter_ >= max_same_energy_));

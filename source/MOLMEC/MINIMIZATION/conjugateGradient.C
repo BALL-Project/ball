@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.22 2003/03/14 10:11:27 oliver Exp $
+// $Id: conjugateGradient.C,v 1.23 2003/03/21 14:37:30 anhi Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -11,7 +11,8 @@
 #include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/COMMON/limits.h>
 
-#define BALL_DEBUG
+//#define BALL_DEBUG
+#undef BALL_DEBUG
 
 // The default method to use for the CG direction update
 // (FLETCHER_REEVES | POLAK_RIBIERE | SHANNO)
@@ -34,7 +35,9 @@ namespace BALL
 			step_(1.0),
 			lambda_(0.0),
 			number_of_atoms_(0),
-			method_(DEFAULT_METHOD)
+			method_(DEFAULT_METHOD),
+			first_call_(true),
+			restart_frequency_(1)
 	{
 	}
 
@@ -44,7 +47,9 @@ namespace BALL
 			step_(1.0),
 			lambda_(0.0),
 			number_of_atoms_(0),
-			method_(DEFAULT_METHOD)
+			method_(DEFAULT_METHOD),
+			first_call_(true),
+			restart_frequency_(1)
 	{
 		valid_ = setup(force_field);
 
@@ -61,7 +66,9 @@ namespace BALL
 			step_(1.0),
 			lambda_(0.0),
 			number_of_atoms_(0),
-			method_(DEFAULT_METHOD)
+			method_(DEFAULT_METHOD),
+			first_call_(true),
+			restart_frequency_(1)
 	{
 		valid_ = setup(force_field, ssm);
 
@@ -79,7 +86,9 @@ namespace BALL
 			step_(1.0),
 			lambda_(0.0),
 			number_of_atoms_(0),
-			method_(DEFAULT_METHOD)
+			method_(DEFAULT_METHOD),
+			first_call_(true),
+			restart_frequency_(1)
 	{
 		// The actual work is done in setup 
 		valid_ = setup(force_field, new_options);
@@ -97,7 +106,9 @@ namespace BALL
 			step_(1.0),
 			lambda_(0.0),
 			number_of_atoms_(0),
-			method_(DEFAULT_METHOD)
+			method_(DEFAULT_METHOD),
+			first_call_(true),
+			restart_frequency_(1)
 	{
 		// The actual work is done in setup 
 		valid_ = setup(force_field, ssm, new_options);
@@ -122,7 +133,17 @@ namespace BALL
 			step_(rhs.step_),
 			lambda_(rhs.lambda_),
 			number_of_atoms_(rhs.number_of_atoms_),
-			method_(rhs.method_)
+			method_(rhs.method_),
+			first_call_(rhs.first_call_),
+			a_i_(rhs.a_i_),
+			b_i_(rhs.b_i_),
+			p_t_(rhs.p_t_),
+			y_t_(rhs.y_t_),
+			p_i_(rhs.p_i_),
+			y_i_(rhs.y_i_),
+			D_1_(rhs.D_1_),
+			D_4_(rhs.D_4_),
+			restart_frequency_(rhs.restart_frequency_)
 	{
 	}
 
@@ -136,7 +157,18 @@ namespace BALL
 		lambda_ = rhs.lambda_;
 		number_of_atoms_ = rhs.number_of_atoms_;
 
-    return *this;
+   	first_call_ = rhs.first_call_;
+		a_i_ = rhs.a_i_;
+		b_i_ = rhs.b_i_;
+		p_t_ = rhs.p_t_;
+		y_t_ = rhs.y_t_;
+		p_i_ = rhs.p_i_;
+		y_i_ = rhs.y_i_;
+		D_1_ = rhs.D_1_;
+		D_4_ = rhs.D_4_;
+		restart_frequency_ = rhs.restart_frequency_;
+ 	
+		return *this;
 	}
 		
   // This method is responsible for doing the specific setup of this class       
@@ -196,6 +228,17 @@ namespace BALL
 
 			// Calculate the current gradient and determine the current
 			// direction as the direction of steepest descent.
+			updateForces();
+			direction_ = current_grad_;
+			direction_.negate();
+
+			return;
+		}
+
+		// look for a restart
+		if (!direction_.isValid())
+		{
+			first_call_ = true; // needed for the SHANNO - criterion
 			updateForces();
 			direction_ = current_grad_;
 			direction_.negate();
@@ -288,11 +331,7 @@ namespace BALL
 				//			for Energy Minimization"
 				//      Journal of Computational Chemistry, Vol. 9, No. 6, pp. 650-661 (1988)
 				//
-				static bool first_call = true;
-				static vector <Vector3> a_i, b_i, p_t, y_t, p_i, y_i;
-				static double D_1, D_4;
-				static Size restart_frequency = 1;
-
+				
 				// The new search direction d_k is calculated as follows:
 				// d_i+1 = - b_i + D_8 / D_5 * a_i - (1 + D_6/D_5) * D_8/D_5 - D_7/D_5) * p_i            
 				// with
@@ -310,21 +349,21 @@ namespace BALL
 				// y_t = grad_new - grad_old  in iteration t
 				// d_t = search direction in iteration t
 
-				if (first_call == true)
+				if (first_call_ == true)
 				{
-					restart_frequency = 3 * number_of_atoms_;
+					restart_frequency_ = 3 * number_of_atoms_;
 
-					p_t.resize (number_of_atoms_);
-					y_t.resize (number_of_atoms_);
-					y_i.resize (number_of_atoms_);
-					p_i.resize (number_of_atoms_);
-					a_i.resize (number_of_atoms_);
-					b_i.resize (number_of_atoms_);
+					p_t_.resize (number_of_atoms_);
+					y_t_.resize (number_of_atoms_);
+					y_i_.resize (number_of_atoms_);
+					p_i_.resize (number_of_atoms_);
+					a_i_.resize (number_of_atoms_);
+					b_i_.resize (number_of_atoms_);
 
-					first_call = false;
+					first_call_ = false;
 
-					D_1 = 0;
-					D_4 = 0;
+					D_1_ = 0;
+					D_4_ = 0;
 
 					// Do some initialisations 
 					// Note: when this method is called for the first time, the 
@@ -332,14 +371,14 @@ namespace BALL
 
 					for (i = 0; i < number_of_atoms_; i++)
 					{
-						p_t[i] = direction_[i] * lambda_ * step_;
-						y_t[i] = initial_grad_[i] - old_grad_[i];
+						p_t_[i] = direction_[i] * lambda_ * step_;
+						y_t_[i] = initial_grad_[i] - old_grad_[i];
 
-						D_1 += p_t[i] * y_t[i];
-						D_4 += y_t[i] * y_t[i];
+						D_1_ += p_t_[i] * y_t_[i];
+						D_4_ += y_t_[i] * y_t_[i];
 					}
 
-					if (D_4 == 0)
+					if (D_4_ == 0)
 					{
 						throw Exception::DivisionByZero(__FILE__, __LINE__);
 					}
@@ -349,11 +388,11 @@ namespace BALL
 				double sum2 = 0;
 				for (i = 0; i < number_of_atoms_; i++)
 				{
-					y_i[i] = initial_grad_[i] - old_grad_[i];
-					p_i[i] = direction_[i] * step_ * lambda_;
+					y_i_[i] = initial_grad_[i] - old_grad_[i];
+					p_i_[i] = direction_[i] * step_ * lambda_;
 
-					sum1 += y_i[i] * y_i[i];
-					sum2 += p_i[i] * p_i[i];
+					sum1 += y_i_[i] * y_i_[i];
+					sum2 += p_i_[i] * p_i_[i];
 				}
 
 				if (sum1 == 0 || sum2 == 0)
@@ -366,7 +405,7 @@ namespace BALL
 				}
 
 
-				if ((number_of_iterations_ % restart_frequency == 0))
+				if ((number_of_iterations_ % restart_frequency_ == 0))
 				{
 					double condition = 0;
 
@@ -380,19 +419,19 @@ namespace BALL
 
 					if (condition >= 0.2 * initial_grad_.norm * initial_grad_.norm)
 					{
-						D_1 = 0;
-						D_4 = 0;
+						D_1_ = 0;
+						D_4_ = 0;
 
 						for (i = 0; i < number_of_atoms_; i++)
 						{
-							p_t[i] = direction_[i] * lambda_ * step_;
-							y_t[i] = initial_grad_[i] - old_grad_[i];
+							p_t_[i] = direction_[i] * lambda_ * step_;
+							y_t_[i] = initial_grad_[i] - old_grad_[i];
 
-							D_1 += p_t[i] * y_t[i];
-							D_4 += y_t[i] * y_t[i];
+							D_1_ += p_t_[i] * y_t_[i];
+							D_4_ += y_t_[i] * y_t_[i];
 						}
 
-						if (D_4 == 0)
+						if (D_4_ == 0)
 						{
 							throw Exception::DivisionByZero(__FILE__, __LINE__);
 						}
@@ -408,27 +447,27 @@ namespace BALL
 				double D_3 = 0.0;
 				for (i = 0; i < number_of_atoms_; i++)
 				{
-					C_1 += p_t[i] * initial_grad_[i];
-					C_2 += y_t[i] * initial_grad_[i];
-					D_2 += p_t[i] * y_i[i];
-					D_3 += y_t[i] * y_i[i];
+					C_1 += p_t_[i] * initial_grad_[i];
+					C_2 += y_t_[i] * initial_grad_[i];
+					D_2 += p_t_[i] * y_i_[i];
+					D_3 += y_t_[i] * y_i_[i];
 				}
 
-				double factor1 = D_1 / D_4;
-				double factor2 = D_2 / D_4;
-				double factor3 = (2 * D_2 / D_1 - D_3 / D_4);
+				double factor1 = D_1_ / D_4_;
+				double factor2 = D_2 / D_4_;
+				double factor3 = (2 * D_2 / D_1_ - D_3 / D_4_);
 
 				for (i = 0; i < number_of_atoms_; i++)
 				{
-					a_i[i] = y_i[i] * factor1 - y_t[i] * factor2 + p_t[i] * factor3;
+					a_i_[i] = y_i_[i] * factor1 - y_t_[i] * factor2 + p_t_[i] * factor3;
 				}
 
-				factor2 = C_1 / D_4;
-				factor3 = (2 * C_1 / D_1 - C_2 / D_4);
+				factor2 = C_1 / D_4_;
+				factor3 = (2 * C_1 / D_1_ - C_2 / D_4_);
 
 				for (i = 0; i < number_of_atoms_; i++)
 				{
-					b_i[i] = initial_grad_[i] * factor1 - y_t[i] * factor2 + p_t[i] * factor3;
+					b_i_[i] = initial_grad_[i] * factor1 - y_t_[i] * factor2 + p_t_[i] * factor3;
 				}
 
 				double D_5 = 0;
@@ -437,10 +476,10 @@ namespace BALL
 				double D_8 = 0;
 				for (i = 0; i < number_of_atoms_; i++)
 				{
-					D_5 += p_i[i] * y_i[i];
-					D_6 += a_i[i] * y_i[i];
-					D_7 += a_i[i] * initial_grad_[i];
-					D_8 += p_i[i] * initial_grad_[i];
+					D_5 += p_i_[i] * y_i_[i];
+					D_6 += a_i_[i] * y_i_[i];
+					D_7 += a_i_[i] * initial_grad_[i];
+					D_8 += p_i_[i] * initial_grad_[i];
 				}
 
 				if (D_5 == 0)
@@ -460,7 +499,7 @@ namespace BALL
 
 				for (i = 0; i < number_of_atoms_; i++)
 				{
-					direction_[i] = -b_i[i] + a_i[i] * factor1 - p_i[i] * factor2;
+					direction_[i] = -b_i_[i] + a_i_[i] * factor1 - p_i_[i] * factor2;
 					direction_.norm += direction_[i] * direction_[i];
 				}
 
@@ -479,8 +518,6 @@ namespace BALL
 				}
 		}
 	} // end of method 'updateDirection'
-
-
 
   // The minimizer optimizes the energy of the system 
   // by using a conjugate gradient method. 
@@ -518,10 +555,38 @@ namespace BALL
 			setNumberOfIterations(0);
 			same_energy_counter_ = 0;
 
+			current_grad_.invalidate();
 			// Compute an initial direction (along the negative gradient).
 			old_dir_grad_valid = false;	
-			direction_.invalidate();
-			updateDirection();
+
+			// If we do not have a valid gradient, recalculate the gradient, the energy, and the search 
+			// direction
+			if (!old_grad_.isValid() || old_grad_.size() == 0 || !initial_grad_.isValid())
+			{
+				#ifdef BALL_DEBUG
+					Log.info() << "CGM: calculating initial gradient...";
+				#endif
+
+				// Compute the initial energy and the initial forces
+				updateEnergy();
+				updateForces();
+
+				// store them for later use
+				storeGradientEnergy();
+
+				// obviously, we don't have "old" gradients and energies yet,
+				// so we initialize them with sensible values
+				old_grad_ = current_grad_;
+				old_energy_ = Limits<float>::max();
+
+				// the first direction we try is just the negative gradient
+				direction_ = current_grad_;
+				direction_.negate();
+
+				#ifdef BALL_DEBUG
+					Log.info() << " [" << current_grad_.size() << "/" << current_grad_.norm << "/" << current_grad_.rms << " / " << initial_energy_ << "]" << endl;
+				#endif
+			}	
 		}
 
 		Size max_iterations = std::max(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
@@ -529,39 +594,6 @@ namespace BALL
 		#ifdef BALL_DEBUG
 			Log.info() << "CGM: minimize(" << iterations << ", " << resume << ")" << endl;
 		#endif
-			
-		// If this is not a resume run or we do not have a valid
-		// gradient, recalculate the gradient, the energy, and the search 
- 		// direction
-		if (!resume || !old_grad_.isValid() || old_grad_.size() == 0 || !initial_grad_.isValid())
-		{
-			#ifdef BALL_DEBUG
-				Log.info() << "CGM: calculating initial gradient...";
-			#endif
-
-			// Compute the initial energy and the initial forces
-			updateEnergy();
-			updateForces();
-
-			// store them for later use
-			storeGradientEnergy();
-
-			// obviously, we don't have "old" gradients and energies yet,
-			// so we initialize them with sensible values
-			old_grad_ = current_grad_;
-			old_energy_ = Limits<float>::max();
-
-			// the first direction we try is just the negative gradient
-			direction_ = current_grad_;
-			direction_.negate();
-
-			#ifdef BALL_DEBUG
-				Log.info() << " [" << current_grad_.size() << "/" << current_grad_.norm << "/" << current_grad_.rms << " / " << initial_energy_ << "]" << endl;
-			#endif
-
-			// reset the same energy counter
-			same_energy_counter_ = 0;
-		}
 		
 		// save the current atom positions
 		atoms.savePositions();
@@ -612,9 +644,8 @@ namespace BALL
 			// (e.g. by using the negative gradient as is done by findStep)
 			// it is flagged as valid (since it is new!)
 			//
-			if (!direction_.isValid())
+//			if (!direction_.isValid())
 			{
-				// Log.info() << "CGM: updating direction..." << endl;
 				updateDirection();
 			}
 
@@ -623,13 +654,19 @@ namespace BALL
 			double dir_grad = initial_grad_ * direction_;
 			if (old_dir_grad_valid)
 			{
-				// ??? What should we do with this line... ???
-	//			step_ = lambda_ * step_ * old_dir_grad / dir_grad;
-			}
+/*				step_ = lambda_ * step_ * old_dir_grad / dir_grad;
+
+				// we have to capture those cases where step_ would be zero
+				if (step_ == 0.0)
+				{
+					step_ = 0.01;
+				}
+	*/
+				}
 			else
 			{
 				// for restart steps, we reset the step size 
-				// to 0.01/(||d_i||)
+				// to 0.01/(||d_i||) ??? what and where is ||d_i|| ???
 				step_ = 0.01;
 			}
 			old_dir_grad = dir_grad;
@@ -746,7 +783,7 @@ namespace BALL
 		#ifdef BALL_DEBUG
 			Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
 		#endif
-		
+
 		// This line search might fail...
 		if (!result)
 		{
@@ -787,6 +824,21 @@ namespace BALL
 			#endif
 		}			
 
+		updateStepSize(result);
+		//Log.info() << "CG fS end: step, lambda " << step_ << " " << lambda_ << std::endl;
+		
+		if (result == true)
+		{
+			return lambda_;
+		} 
+		else 
+		{
+			return -1.0;
+		}
+	} // end of method 'findStep'
+
+	void ConjugateGradientMinimizer::updateStepSize(bool result)
+	{
 		if (result)
 		{
 			if (lambda_ < 0.1)
@@ -807,27 +859,6 @@ namespace BALL
 				step_ *= 2.0;
 				lambda_ *= 0.5;
 			}
-		}
-Log.info() << "CG fS end: step, lambda " << step_ << " " << lambda_ << std::endl;
-		if (result == true)
-		{
-			return lambda_;
-		} 
-		else 
-		{
-			return -1.0;
-		}
-	} // end of method 'findStep'
-
-	void ConjugateGradientMinimizer::updateStepSize(double lambda)
-	{
-		if (lambda > 0.9) 
-		{
-			step_ *= 2.0;
-		}
-		else if (lambda < 0.1)
-		{
-			step_ *= 0.5;
 		}
 	}
 

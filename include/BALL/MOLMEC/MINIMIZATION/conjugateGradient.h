@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.20 2003/03/14 11:49:28 sturm Exp $ 
+// $Id: conjugateGradient.h,v 1.21 2003/03/21 14:34:55 anhi Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -204,7 +204,7 @@ namespace BALL
 
 		/** Update the step size.
 		 */
-		virtual void updateStepSize(double lambda);
+		virtual void updateStepSize(bool result);
 
     /**	Minimize the energy of the system.
 				This method executes at most <tt>iterations</tt> minimization steps.
@@ -239,6 +239,13 @@ namespace BALL
 		/*_	The update method used for the CG
 		*/
 		UpdateMethod method_;
+
+		
+		// Some variables that are needed for the Shanno criterion
+		bool first_call_;
+		vector <Vector3> a_i_, b_i_, p_t_, y_t_, p_i_, y_i_;
+		double D_1_, D_4_;
+		Size restart_frequency_;
 
     //@}
 

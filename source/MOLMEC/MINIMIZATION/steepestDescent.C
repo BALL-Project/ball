@@ -1,11 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.15 2003/03/12 16:11:50 oliver Exp $
+// $Id: steepestDescent.C,v 1.16 2003/03/21 14:37:31 anhi Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/COMMON/limits.h>
+
+#undef BALL_DEBUG
 
 using namespace std;
 
@@ -179,10 +181,6 @@ namespace BALL
 				}
 			}
 	
-			// Accept the step taken and compute new energy/forces.
-//			atoms.moveTo(direction_, step_ * lambda * direction_.inv_norm);
-			updateEnergy();
-			updateForces();
 			#ifdef BALL_DEBUG
 				Log << "SDM: step taken with lambda = " << lambda << std::endl;
 			#endif

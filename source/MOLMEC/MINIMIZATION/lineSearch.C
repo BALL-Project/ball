@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.11 2003/03/17 10:28:12 anhi Exp $
+// $Id: lineSearch.C,v 1.12 2003/03/21 14:37:31 anhi Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -19,6 +19,7 @@
 #define LINESEARCH__DEFAULT_MAX_STEPS			10
 
 //#define BALL_DEBUG
+#undef BALL_DEBUG
 
 namespace BALL 
 {
@@ -238,11 +239,16 @@ namespace BALL
 			lambda = best_lambda;
 
 			// in this case, we also want to move the atoms to the position of the
-			// best lambda. since we don't know where the atoms are right now, we
-			// do a reset first
-			atoms.resetPositions();
-			atoms.moveTo(direction, lambda*step_);
-
+			// best lambda, if the energy at that point has improved.
+			if (best_energy < initial_energy_)
+			{
+				atoms.moveTo(direction, lambda*step_);
+			}
+			else
+			{
+				atoms.resetPositions();
+			}
+			
 			gradient.invalidate();	
 		}
 
