@@ -1,4 +1,4 @@
-// $Id: pyWidget.C,v 1.2 2000/12/12 16:18:45 oliver Exp $
+// $Id: pyWidget.C,v 1.3 2001/03/02 14:50:45 anker Exp $
 
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
@@ -25,6 +25,7 @@ PyWidget::PyWidget(const PyWidget& widget)
 }
 
 PyWidget::~PyWidget()
+	throw()
 {	
 }
 
