@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.11 2005/03/01 07:33:10 oliver Exp $
+// $Id: sysinfo.C,v 1.12 2005/03/01 08:14:49 oliver Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -130,8 +130,8 @@ namespace BALL
 			return (LongIndex) statex.ullAvailPageFile;
 		}
 
-#else // We have no idea how to retrieve that information on this
-			// platform, so we just return -1 everywhere
+#else
+#ifdef BALL_PLATFORM_DARWIN
 
 		LongIndex getAvailableMemory()
 		{
@@ -161,7 +161,11 @@ namespace BALL
 
 		Index getNumberOfProcessors()
 		{
-			return -1;
+			int mib[2] = { CTL_HW, HW_NCPU };
+			int num_proc = 0;
+			size_t len = sizeof(num_proc);
+			sysctl(mib, 2, &num_proc, &len, NULL, 0);
+			return (Index)num_proc;
 		}
 
 		LongIndex getFreeSwapSpace()
@@ -169,6 +173,41 @@ namespace BALL
 			return -1;
 		}
 
+
+#else // We have no idea how to retrieve that information on this
+			// platform, so we just return -1 everywhere
+
+		LongIndex getAvailableMemory()
+		{
+			return -1
+		}
+
+		LongIndex getFreeMemory()
+		{
+			return -1;
+		}
+
+		LongIndex getTotalMemory()
+		{
+			return -1;
+		}
+
+		LongIndex getBufferedMemory()
+		{
+			return -1;
+		}
+
+		Time getUptime()
+		{
+			return -1;
+		}
+
+		Index getNumberOfProcessors()
+		{
+			return -1;
+		}
+
+#endif
 #endif
 #endif
 
