@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.8 2000/05/21 19:38:59 amoll Exp $
+// $Id: logStream.h,v 1.9 2000/05/29 12:56:23 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -236,7 +236,7 @@ namespace BALL
 				Constants for the different predefined log levels.
 				Use \Ref{ERROR} to indicate a severe error, \Ref{WARNING} to 
 				indicate a problem that could be fixed or is of minor importance, 
-				and \Ref{INFORMATION} for messages that do not indicate nay problem 
+				and \Ref{INFORMATION} for messages that do not indicate any problem 
 				(e.g. progress messages).
 		*/
 		enum 
