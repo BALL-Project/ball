@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.9 2004/01/18 17:22:53 oliver Exp $
+// $Id: StructureMapper_test.C,v 1.10 2004/04/17 19:56:10 anhi Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.9 2004/01/18 17:22:53 oliver Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.10 2004/04/17 19:56:10 anhi Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -400,7 +400,7 @@ RESULT
 
 CHECK(RSMD for two bptis)
 	System s1, s2;
-	PDBFile pf("../APPLICATIONS/MOLVIEW/bpti.pdb");
+	PDBFile pf("data/StructureMapper_test.pdb");
 	pf >> s1;
 	pf >> s2;
 	StructureMapper sm(s1, s2);	
