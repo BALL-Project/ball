@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.26 2004/12/28 15:14:54 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.27 2004/12/28 15:21:52 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -335,7 +335,10 @@ namespace BALL
 			////////////////////////////////////////////////////////////
 			// every residue get its own mesh to enable picking for the tube model
 			Mesh* mesh = new Mesh();
-			mesh->setComposite(atoms_of_spline_points_[start]->getParent());
+			if (atoms_of_spline_points_[start] != 0)
+			{
+				mesh->setComposite(atoms_of_spline_points_[start]->getParent());
+			}
 			geometric_objects_.push_back(mesh);
 
 			for (Position p = 0; p < slides + 1; p++)
@@ -394,7 +397,10 @@ namespace BALL
 				{
 					const Mesh* old_mesh = mesh;
 					mesh = new Mesh();
-					mesh->setComposite(atoms_of_spline_points_[p]->getParent());
+					if (atoms_of_spline_points_[p] != 0)
+					{
+						mesh->setComposite(atoms_of_spline_points_[p]->getParent());
+					}
 					geometric_objects_.push_back(mesh);
 
 					// insert the vertices and normals of the last points again into the new mesh
