@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.33 2004/01/16 16:12:36 amoll Exp $
+// $Id: BALL.sip,v 1.34 2004/02/12 13:02:29 amoll Exp $
 //
 //
 //
@@ -325,6 +325,7 @@
 // VIEW/DIALOGS
 %Include preferences.sip
 %Include displayProperties.sip
+%Include molecularFileDialog.sip
 
 // VIEW/WIDGETS
 %Include modularWidget.sip

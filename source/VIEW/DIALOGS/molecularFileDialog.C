@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.13 2004/01/13 15:16:37 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.14 2004/02/12 13:00:34 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -535,5 +535,12 @@ namespace BALL
 		{
 			getMainControl()->menuBar()->setItemEnabled(save_id_, getMainControl()->getSelectedSystem());
 		}
+
+
+		MolecularFileDialog::MolecularFileDialog(const MolecularFileDialog& mfd)
+			throw()
+			: QWidget(),
+				ModularWidget(mfd)
+		{}
 
 } } //namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.8 2004/02/12 12:57:14 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.9 2004/02/12 13:00:36 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -170,7 +170,7 @@ public slots:
 
 	// Only for Python interface
 	MolecularFileDialog(const MolecularFileDialog& mfd)
-		throw() {};
+		throw();
 
 
 	bool finish_(const String& filename, const String& system_name, System* system)
