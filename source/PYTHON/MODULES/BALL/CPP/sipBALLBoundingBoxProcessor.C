@@ -377,7 +377,7 @@ PyObject *sipNew_BoundingBoxProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipBoundingBoxProcessor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -395,7 +395,7 @@ PyObject *sipNew_BoundingBoxProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipBoundingBoxProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

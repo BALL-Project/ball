@@ -259,15 +259,15 @@ static PyObject *sipDo_FragmentDistanceCollector_getNumberOfFragments(PyObject *
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			FragmentDistanceCollector *ptr;
 
 			if ((ptr = (FragmentDistanceCollector *)sipGetCppPtr(sipThis,sipClass_FragmentDistanceCollector)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> FragmentDistanceCollector::getNumberOfFragments());
+			res = ptr -> FragmentDistanceCollector::getNumberOfFragments();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -457,7 +457,7 @@ PyObject *sipNew_FragmentDistanceCollector(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipFragmentDistanceCollector();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -475,7 +475,7 @@ PyObject *sipNew_FragmentDistanceCollector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipFragmentDistanceCollector(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -494,7 +494,7 @@ PyObject *sipNew_FragmentDistanceCollector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipFragmentDistanceCollector(* a0, a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -512,7 +512,7 @@ PyObject *sipNew_FragmentDistanceCollector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipFragmentDistanceCollector(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -175,7 +175,7 @@ PyObject *sipNew_UnaryCompositePredicate(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipUnaryCompositePredicate();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -193,7 +193,7 @@ PyObject *sipNew_UnaryCompositePredicate(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipUnaryCompositePredicate(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

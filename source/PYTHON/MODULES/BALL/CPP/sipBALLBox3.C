@@ -511,7 +511,7 @@ PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Box3();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -529,7 +529,7 @@ PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Box3(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -550,7 +550,7 @@ PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Box3(* a0,* a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -565,7 +565,7 @@ PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-ffffff",&a0,&a1,&a2,&a3,&a4,&a5))
 		{
 			sipNew = new Box3( a0, a1, a2, a3, a4, a5);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

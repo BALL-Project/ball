@@ -134,7 +134,7 @@ PyObject *sipNew_ClearChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipClearChargeProcessor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -152,7 +152,7 @@ PyObject *sipNew_ClearChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipClearChargeProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -2375,7 +2375,7 @@ PyObject *sipNew_Composite(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipComposite();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2394,7 +2394,7 @@ PyObject *sipNew_Composite(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipComposite(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2412,7 +2412,7 @@ PyObject *sipNew_Composite(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipComposite(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

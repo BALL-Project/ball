@@ -274,15 +274,15 @@ static PyObject *sipDo_FloatPointGrid_getMaxXIndex(PyObject *sipThisObj,PyObject
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			FloatPointGrid *ptr;
 
 			if ((ptr = (FloatPointGrid *)sipGetCppPtr(sipThis,sipClass_FloatPointGrid)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> FloatPointGrid::getMaxXIndex());
+			res = ptr -> FloatPointGrid::getMaxXIndex();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -303,15 +303,15 @@ static PyObject *sipDo_FloatPointGrid_getMaxYIndex(PyObject *sipThisObj,PyObject
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			FloatPointGrid *ptr;
 
 			if ((ptr = (FloatPointGrid *)sipGetCppPtr(sipThis,sipClass_FloatPointGrid)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> FloatPointGrid::getMaxYIndex());
+			res = ptr -> FloatPointGrid::getMaxYIndex();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -332,15 +332,15 @@ static PyObject *sipDo_FloatPointGrid_getMaxZIndex(PyObject *sipThisObj,PyObject
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			FloatPointGrid *ptr;
 
 			if ((ptr = (FloatPointGrid *)sipGetCppPtr(sipThis,sipClass_FloatPointGrid)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> FloatPointGrid::getMaxZIndex());
+			res = ptr -> FloatPointGrid::getMaxZIndex();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -361,15 +361,15 @@ static PyObject *sipDo_FloatPointGrid_getSize(PyObject *sipThisObj,PyObject *sip
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			FloatPointGrid *ptr;
 
 			if ((ptr = (FloatPointGrid *)sipGetCppPtr(sipThis,sipClass_FloatPointGrid)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> FloatPointGrid::getSize());
+			res = ptr -> FloatPointGrid::getSize();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -1083,7 +1083,7 @@ PyObject *sipNew_FloatPointGrid(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new FloatPointGrid();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1102,7 +1102,7 @@ PyObject *sipNew_FloatPointGrid(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new FloatPointGrid(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1113,35 +1113,14 @@ PyObject *sipNew_FloatPointGrid(PyObject *sipSelf,PyObject *sipArgs)
 		float a3;
 		float a4;
 		float a5;
-		Size *a6;
-		PyObject *a6obj;
-		Size *a7;
-		PyObject *a7obj;
-		Size *a8;
-		PyObject *a8obj;
+		int a6;
+		int a7;
+		int a8;
 
-		if (sipParseArgs(sipArgs,"-ffffffIII",&a0,&a1,&a2,&a3,&a4,&a5,sipCanConvertTo_Size,&a6obj,sipCanConvertTo_Size,&a7obj,sipCanConvertTo_Size,&a8obj))
+		if (sipParseArgs(sipArgs,"-ffffffiii",&a0,&a1,&a2,&a3,&a4,&a5,&a6,&a7,&a8))
 		{
-			int iserr = 0;
-
-			int istemp6 = sipConvertTo_Size(a6obj,&a6,1,&iserr);
-			int istemp7 = sipConvertTo_Size(a7obj,&a7,1,&iserr);
-			int istemp8 = sipConvertTo_Size(a8obj,&a8,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new FloatPointGrid( a0, a1, a2, a3, a4, a5,* a6,* a7,* a8);
-
-			if (istemp6)
-				delete a6;
-
-			if (istemp7)
-				delete a7;
-
-			if (istemp8)
-				delete a8;
-		}
+			sipNew = new FloatPointGrid( a0, a1, a2, a3, a4, a5, a6, a7, a8);
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1150,37 +1129,22 @@ PyObject *sipNew_FloatPointGrid(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		const Vector3 *a1;
 		PyObject *a1obj;
-		Size *a2;
-		PyObject *a2obj;
-		Size *a3;
-		PyObject *a3obj;
-		Size *a4;
-		PyObject *a4obj;
+		int a2;
+		int a3;
+		int a4;
 
-		if (sipParseArgs(sipArgs,"-IIIII",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Size,&a2obj,sipCanConvertTo_Size,&a3obj,sipCanConvertTo_Size,&a4obj))
+		if (sipParseArgs(sipArgs,"-IIiii",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,&a2,&a3,&a4))
 		{
 			int iserr = 0;
 
 			sipConvertTo_Vector3(a0obj,(Vector3 **)&a0,1,&iserr);
 			sipConvertTo_Vector3(a1obj,(Vector3 **)&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
-			int istemp3 = sipConvertTo_Size(a3obj,&a3,1,&iserr);
-			int istemp4 = sipConvertTo_Size(a4obj,&a4,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			sipNew = new FloatPointGrid(* a0,* a1,* a2,* a3,* a4);
-
-			if (istemp2)
-				delete a2;
-
-			if (istemp3)
-				delete a3;
-
-			if (istemp4)
-				delete a4;
-		}
+			sipNew = new FloatPointGrid(* a0,* a1, a2, a3, a4);
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1202,7 +1166,7 @@ PyObject *sipNew_FloatPointGrid(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new FloatPointGrid(* a0,* a1, a2);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1220,7 +1184,7 @@ PyObject *sipNew_FloatPointGrid(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new FloatPointGrid(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

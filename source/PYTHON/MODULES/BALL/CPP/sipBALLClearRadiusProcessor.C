@@ -116,7 +116,7 @@ PyObject *sipNew_ClearRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipClearRadiusProcessor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -134,7 +134,7 @@ PyObject *sipNew_ClearRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipClearRadiusProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -417,11 +417,11 @@ static PyObject *sipDo_PyWidget_countInstances(PyObject *,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,"-"))
 		{
-			Size *res;
+			int res;
 
-			res = new Size(PyWidget::countInstances());
+			res = PyWidget::countInstances();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -871,7 +871,7 @@ PyObject *sipNew_PyWidget(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipPyWidget(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

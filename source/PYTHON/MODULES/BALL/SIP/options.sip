@@ -1,4 +1,4 @@
-// $Id: options.sip,v 1.1 2000/07/18 21:27:52 oliver Exp $
+// $Id: options.sip,v 1.2 2000/07/20 19:35:06 oliver Exp $
 class Options
   // : public StringHashMap<String> 
 {
@@ -7,7 +7,7 @@ class Options
 	using namespace BALL;
 %End
   public:
-  static const Size &MAX_ENTRY_LENGTH;
+  static const Size MAX_ENTRY_LENGTH;
   Options();
   Options(const Options& /options/, bool /deep/ = true);
   ~Options();

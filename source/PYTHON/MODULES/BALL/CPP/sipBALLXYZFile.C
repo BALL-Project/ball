@@ -266,7 +266,7 @@ PyObject *sipNew_XYZFile(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipXYZFile();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -293,7 +293,7 @@ PyObject *sipNew_XYZFile(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -311,7 +311,7 @@ PyObject *sipNew_XYZFile(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipXYZFile(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

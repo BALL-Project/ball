@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.19 2000/07/18 22:14:37 oliver Exp $
+# $Id: Makefile,v 1.20 2000/07/20 19:34:10 oliver Exp $
 
 DIRECTORY=PYTHON
 
@@ -9,3 +9,5 @@ CPP_SOURCES=\
 
 include ../common.mak
 include .Dependencies
+
+ADD_INCLUDES=$(PYTHON_INCLUDES)

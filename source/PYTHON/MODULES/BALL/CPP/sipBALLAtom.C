@@ -1047,15 +1047,15 @@ static PyObject *sipDo_Atom_countBonds(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			Atom *ptr;
 
 			if ((ptr = (Atom *)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> Atom::countBonds());
+			res = ptr -> Atom::countBonds();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -1645,7 +1645,7 @@ PyObject *sipNew_Atom(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipAtom();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1664,7 +1664,7 @@ PyObject *sipNew_Atom(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAtom(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1709,7 +1709,7 @@ PyObject *sipNew_Atom(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp2)
 				delete a2;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1727,7 +1727,7 @@ PyObject *sipNew_Atom(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAtom(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

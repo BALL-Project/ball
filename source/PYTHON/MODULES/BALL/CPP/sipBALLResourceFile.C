@@ -227,15 +227,15 @@ static PyObject *sipDo_ResourceFile_getSize(PyObject *sipThisObj,PyObject *sipAr
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			ResourceFile *ptr;
 
 			if ((ptr = (ResourceFile *)sipGetCppPtr(sipThis,sipClass_ResourceFile)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> ResourceFile::getSize());
+			res = ptr -> ResourceFile::getSize();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -650,7 +650,7 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new ResourceFile();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -671,7 +671,7 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -689,7 +689,7 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new ResourceFile(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

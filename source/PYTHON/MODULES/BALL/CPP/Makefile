@@ -1,13 +1,12 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.2 2000/07/18 23:27:07 oliver Exp $
+# $Id: Makefile,v 1.3 2000/07/20 19:34:11 oliver Exp $
 #
 
 all: libBALLc.so
 
 SIP_SOURCES_COMMON=\
-	sipBALLSize.C\
 	sipBALLIndex.C\
 	sipBALLPosition.C\
 	sipBALLVersionInfo.C

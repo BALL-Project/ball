@@ -97,7 +97,7 @@ void sipMicroCanonicalMD::simulate(bool a0)
 	else
 		MicroCanonicalMD::simulate(a0);
 }
-void sipMicroCanonicalMD::simulateIterations(Size a0,bool a1)
+void sipMicroCanonicalMD::simulateIterations(int a0,bool a1)
 {
 	int relLock;
 
@@ -288,28 +288,17 @@ static PyObject *sipDo_MicroCanonicalMD_simulateIterations(PyObject *sipThisObj,
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Size,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"i|l",&a0,&a1))
 		{
 			MicroCanonicalMD *ptr;
 
 			if ((ptr = (MicroCanonicalMD *)sipGetCppPtr(sipThis,sipClass_MicroCanonicalMD)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> MicroCanonicalMD::simulateIterations(* a0, (bool)a1);
-
-			if (istemp0)
-				delete a0;
+			ptr -> MicroCanonicalMD::simulateIterations( a0, (bool)a1);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -406,7 +395,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipMicroCanonicalMD();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -424,7 +413,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -445,7 +434,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0, a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -469,7 +458,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0, a1,* a2);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -488,7 +477,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -506,7 +495,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

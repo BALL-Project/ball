@@ -717,7 +717,7 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Element();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -736,7 +736,7 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Element(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -754,7 +754,7 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Element(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -325,15 +325,15 @@ static PyObject *sipDo_AssignRadiusProcessor_getNumberOfAssignments(PyObject *si
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			AssignRadiusProcessor *ptr;
 
 			if ((ptr = (AssignRadiusProcessor *)sipGetCppPtr(sipThis,sipClass_AssignRadiusProcessor)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> AssignRadiusProcessor::getNumberOfAssignments());
+			res = ptr -> AssignRadiusProcessor::getNumberOfAssignments();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -354,15 +354,15 @@ static PyObject *sipDo_AssignRadiusProcessor_getNumberOfErrors(PyObject *sipThis
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			AssignRadiusProcessor *ptr;
 
 			if ((ptr = (AssignRadiusProcessor *)sipGetCppPtr(sipThis,sipClass_AssignRadiusProcessor)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> AssignRadiusProcessor::getNumberOfErrors());
+			res = ptr -> AssignRadiusProcessor::getNumberOfErrors();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -424,7 +424,7 @@ PyObject *sipNew_AssignRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipAssignRadiusProcessor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -445,7 +445,7 @@ PyObject *sipNew_AssignRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -463,7 +463,7 @@ PyObject *sipNew_AssignRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAssignRadiusProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

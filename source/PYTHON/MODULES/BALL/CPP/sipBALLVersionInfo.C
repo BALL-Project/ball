@@ -159,7 +159,7 @@ PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new VersionInfo();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -177,7 +177,7 @@ PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new VersionInfo(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -270,7 +270,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Gradient();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -288,7 +288,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Gradient(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -307,7 +307,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Gradient(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -325,7 +325,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Gradient(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -451,7 +451,7 @@ PyObject *sipNew_CharmmNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipCharmmNonBonded();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -469,7 +469,7 @@ PyObject *sipNew_CharmmNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmNonBonded(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -488,7 +488,7 @@ PyObject *sipNew_CharmmNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmNonBonded(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -506,7 +506,7 @@ PyObject *sipNew_CharmmNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmNonBonded(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -229,7 +229,7 @@ PyObject *sipNew_ExpressionPredicate(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipExpressionPredicate();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -250,7 +250,7 @@ PyObject *sipNew_ExpressionPredicate(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -268,7 +268,7 @@ PyObject *sipNew_ExpressionPredicate(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipExpressionPredicate(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -63,10 +63,9 @@ static PyObject *sipDo_String_set(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		Index *a1 = NULL;
 		PyObject *a1obj = NULL;
-		Size *a2 = (Size *)&string::npos;
-		PyObject *a2obj = NULL;
+		int a2 = string::npos;
 
-		if (sipParseArgs(sipArgs,"I|II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"I|Ii",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
 		{
 			String *ptr;
 
@@ -77,21 +76,17 @@ static PyObject *sipDo_String_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			ptr -> String::set(* a0,* a1,* a2);
+			ptr -> String::set(* a0,* a1, a2);
 
 			if (istemp0)
 				delete a0;
 
 			if (istemp1)
 				delete a1;
-
-			if (istemp2)
-				delete a2;
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -102,10 +97,9 @@ static PyObject *sipDo_String_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const char *a0;
 		Index *a1 = NULL;
 		PyObject *a1obj = NULL;
-		Size *a2 = (Size *)&string::npos;
-		PyObject *a2obj = NULL;
+		int a2 = string::npos;
 
-		if (sipParseArgs(sipArgs,"s|II",&a0,sipCanConvertTo_Index,&a1obj,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"s|Ii",&a0,sipCanConvertTo_Index,&a1obj,&a2))
 		{
 			String *ptr;
 
@@ -115,18 +109,14 @@ static PyObject *sipDo_String_set(PyObject *sipThisObj,PyObject *sipArgs)
 			int iserr = 0;
 
 			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			ptr -> String::set( a0,* a1,* a2);
+			ptr -> String::set( a0,* a1, a2);
 
 			if (istemp1)
 				delete a1;
-
-			if (istemp2)
-				delete a2;
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -135,27 +125,16 @@ static PyObject *sipDo_String_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	{
 		char a0;
-		Size *a1 = NULL;
-		PyObject *a1obj = NULL;
+		int a1 = 1;
 
-		if (sipParseArgs(sipArgs,"c|I",&a0,sipCanConvertTo_Size,&a1obj))
+		if (sipParseArgs(sipArgs,"c|i",&a0,&a1))
 		{
 			String *ptr;
 
 			if ((ptr = (String *)sipGetCppPtr(sipThis,sipClass_String)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp1 = sipConvertTo_Size(a1obj,&a1,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> String::set( a0,* a1);
-
-			if (istemp1)
-				delete a1;
+			ptr -> String::set( a0, a1);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -511,10 +490,9 @@ static PyObject *sipDo_String_toLower(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		Index *a0 = NULL;
 		PyObject *a0obj = NULL;
-		Size *a1 = (Size *)&string::npos;
-		PyObject *a1obj = NULL;
+		int a1 = string::npos;
 
-		if (sipParseArgs(sipArgs,"|II",sipCanConvertTo_Index,&a0obj,sipCanConvertTo_Size,&a1obj))
+		if (sipParseArgs(sipArgs,"|Ii",sipCanConvertTo_Index,&a0obj,&a1))
 		{
 			String *ptr;
 
@@ -524,18 +502,14 @@ static PyObject *sipDo_String_toLower(PyObject *sipThisObj,PyObject *sipArgs)
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
-			int istemp1 = sipConvertTo_Size(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			ptr -> String::toLower(* a0,* a1);
+			ptr -> String::toLower(* a0, a1);
 
 			if (istemp0)
 				delete a0;
-
-			if (istemp1)
-				delete a1;
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -559,10 +533,9 @@ static PyObject *sipDo_String_toUpper(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		Index *a0 = NULL;
 		PyObject *a0obj = NULL;
-		Size *a1 = (Size *)&string::npos;
-		PyObject *a1obj = NULL;
+		int a1 = string::npos;
 
-		if (sipParseArgs(sipArgs,"|II",sipCanConvertTo_Index,&a0obj,sipCanConvertTo_Size,&a1obj))
+		if (sipParseArgs(sipArgs,"|Ii",sipCanConvertTo_Index,&a0obj,&a1))
 		{
 			String *ptr;
 
@@ -572,18 +545,14 @@ static PyObject *sipDo_String_toUpper(PyObject *sipThisObj,PyObject *sipArgs)
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
-			int istemp1 = sipConvertTo_Size(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			ptr -> String::toUpper(* a0,* a1);
+			ptr -> String::toUpper(* a0, a1);
 
 			if (istemp0)
 				delete a0;
-
-			if (istemp1)
-				delete a1;
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -607,10 +576,9 @@ static PyObject *sipDo_String_getSubstring(PyObject *sipThisObj,PyObject *sipArg
 	{
 		Index *a0 = NULL;
 		PyObject *a0obj = NULL;
-		Size *a1 = (Size *)&string::npos;
-		PyObject *a1obj = NULL;
+		int a1 = string::npos;
 
-		if (sipParseArgs(sipArgs,"|II",sipCanConvertTo_Index,&a0obj,sipCanConvertTo_Size,&a1obj))
+		if (sipParseArgs(sipArgs,"|Ii",sipCanConvertTo_Index,&a0obj,&a1))
 		{
 			Substring *res;
 			String *ptr;
@@ -621,18 +589,14 @@ static PyObject *sipDo_String_getSubstring(PyObject *sipThisObj,PyObject *sipArg
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
-			int istemp1 = sipConvertTo_Size(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = new Substring(ptr -> String::getSubstring(* a0,* a1));
+			res = new Substring(ptr -> String::getSubstring(* a0, a1));
 
 			if (istemp0)
 				delete a0;
-
-			if (istemp1)
-				delete a1;
 
 			return sipNewCppToSelf(res,sipClass_Substring,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -655,10 +619,9 @@ static PyObject *sipDo_String_Operator__call__(PyObject *sipThisObj,PyObject *si
 	{
 		Index *a0;
 		PyObject *a0obj;
-		Size *a1 = (Size *)&string::npos;
-		PyObject *a1obj = NULL;
+		int a1 = string::npos;
 
-		if (sipParseArgs(sipArgs,"I|I",sipCanConvertTo_Index,&a0obj,sipCanConvertTo_Size,&a1obj))
+		if (sipParseArgs(sipArgs,"I|i",sipCanConvertTo_Index,&a0obj,&a1))
 		{
 			Substring *res;
 			String *ptr;
@@ -669,18 +632,14 @@ static PyObject *sipDo_String_Operator__call__(PyObject *sipThisObj,PyObject *si
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
-			int istemp1 = sipConvertTo_Size(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = new Substring(ptr -> String::operator()(* a0,* a1));
+			res = new Substring(ptr -> String::operator()(* a0, a1));
 
 			if (istemp0)
 				delete a0;
-
-			if (istemp1)
-				delete a1;
 
 			return sipNewCppToSelf(res,sipClass_Substring,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -897,15 +856,15 @@ static PyObject *sipDo_String_countFields(PyObject *sipThisObj,PyObject *sipArgs
 
 		if (sipParseArgs(sipArgs,"|s",&a0))
 		{
-			Size *res;
+			int res;
 			String *ptr;
 
 			if ((ptr = (String *)sipGetCppPtr(sipThis,sipClass_String)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> String::countFields( a0));
+			res = ptr -> String::countFields( a0);
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -1060,10 +1019,9 @@ static PyObject *sipDo_String_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Size,&a0obj))
+		if (sipParseArgs(sipArgs,"i",&a0))
 		{
 			String *res;
 			String *ptr;
@@ -1071,17 +1029,7 @@ static PyObject *sipDo_String_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (String *)sipGetCppPtr(sipThis,sipClass_String)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = &ptr -> String::truncate(* a0);
-
-			if (istemp0)
-				delete a0;
+			res = &ptr -> String::truncate( a0);
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -1102,10 +1050,9 @@ static PyObject *sipDo_String_left(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Size,&a0obj))
+		if (sipParseArgs(sipArgs,"i",&a0))
 		{
 			Substring *res;
 			String *ptr;
@@ -1113,17 +1060,7 @@ static PyObject *sipDo_String_left(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (String *)sipGetCppPtr(sipThis,sipClass_String)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = new Substring(ptr -> String::left(* a0));
-
-			if (istemp0)
-				delete a0;
+			res = new Substring(ptr -> String::left( a0));
 
 			return sipNewCppToSelf(res,sipClass_Substring,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -1144,10 +1081,9 @@ static PyObject *sipDo_String_right(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Size,&a0obj))
+		if (sipParseArgs(sipArgs,"i",&a0))
 		{
 			Substring *res;
 			String *ptr;
@@ -1155,17 +1091,7 @@ static PyObject *sipDo_String_right(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (String *)sipGetCppPtr(sipThis,sipClass_String)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = new Substring(ptr -> String::right(* a0));
-
-			if (istemp0)
-				delete a0;
+			res = new Substring(ptr -> String::right( a0));
 
 			return sipNewCppToSelf(res,sipClass_Substring,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -1326,10 +1252,9 @@ static PyObject *sipDo_String_reverse(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		Index *a0 = NULL;
 		PyObject *a0obj = NULL;
-		Size *a1 = (Size *)&string::npos;
-		PyObject *a1obj = NULL;
+		int a1 = string::npos;
 
-		if (sipParseArgs(sipArgs,"|II",sipCanConvertTo_Index,&a0obj,sipCanConvertTo_Size,&a1obj))
+		if (sipParseArgs(sipArgs,"|Ii",sipCanConvertTo_Index,&a0obj,&a1))
 		{
 			String *res;
 			String *ptr;
@@ -1340,18 +1265,14 @@ static PyObject *sipDo_String_reverse(PyObject *sipThisObj,PyObject *sipArgs)
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
-			int istemp1 = sipConvertTo_Size(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = &ptr -> String::reverse(* a0,* a1);
+			res = &ptr -> String::reverse(* a0, a1);
 
 			if (istemp0)
 				delete a0;
-
-			if (istemp1)
-				delete a1;
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -1795,10 +1716,9 @@ static PyObject *sipDo_String_compare(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		Index *a1;
 		PyObject *a1obj;
-		Size *a2;
-		PyObject *a2obj;
+		int a2;
 
-		if (sipParseArgs(sipArgs,"III",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"IIi",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
 		{
 			int res;
 			String *ptr;
@@ -1810,21 +1730,17 @@ static PyObject *sipDo_String_compare(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = ptr -> String::compare(* a0,* a1,* a2);
+			res = ptr -> String::compare(* a0,* a1, a2);
 
 			if (istemp0)
 				delete a0;
 
 			if (istemp1)
 				delete a1;
-
-			if (istemp2)
-				delete a2;
 
 			return PyInt_FromLong((long)res);
 		}
@@ -1863,10 +1779,9 @@ static PyObject *sipDo_String_compare(PyObject *sipThisObj,PyObject *sipArgs)
 		const char *a0;
 		Index *a1;
 		PyObject *a1obj;
-		Size *a2;
-		PyObject *a2obj;
+		int a2;
 
-		if (sipParseArgs(sipArgs,"sII",&a0,sipCanConvertTo_Index,&a1obj,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"sIi",&a0,sipCanConvertTo_Index,&a1obj,&a2))
 		{
 			int res;
 			String *ptr;
@@ -1877,18 +1792,14 @@ static PyObject *sipDo_String_compare(PyObject *sipThisObj,PyObject *sipArgs)
 			int iserr = 0;
 
 			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = ptr -> String::compare( a0,* a1,* a2);
+			res = ptr -> String::compare( a0,* a1, a2);
 
 			if (istemp1)
 				delete a1;
-
-			if (istemp2)
-				delete a2;
 
 			return PyInt_FromLong((long)res);
 		}
@@ -2011,7 +1922,7 @@ static void sipDealloc_String(sipThisType *sipThis)
 
 static PyObject *sipPyInternalRepr_String(sipThisType *sipThis)
 {
-#line 230 "string.sip"
+#line 238 "string.sip"
   const char *s;
   String *ptr;
 
@@ -2025,7 +1936,7 @@ static PyObject *sipPyInternalRepr_String(sipThisType *sipThis)
   }
 
   return PyString_FromString(s);
-#line 2033 "../CPP/sipBALLString.cpp"
+#line 1944 "../CPP/sipBALLString.cpp"
 }
 
 PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
@@ -2047,7 +1958,7 @@ PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new String();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2056,31 +1967,44 @@ PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		Index *a1;
 		PyObject *a1obj;
-		Size *a2 = (Size *)&string::npos;
-		PyObject *a2obj = NULL;
+		int a2 = string::npos;
 
-		if (sipParseArgs(sipArgs,"-II|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"-II|i",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
+		{
+		try
 		{
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			sipNew = new String(* a0,* a1,* a2);
+			sipNew = new String(* a0,* a1, a2);
 
 			if (istemp0)
 				delete a0;
 
 			if (istemp1)
 				delete a1;
-
-			if (istemp2)
-				delete a2;
 		}
+		catch (NullPointer e)
+		{
+			PyErr_SetString(PyExc_Exception, "NullPointer");
+			return NULL;
+		}
+		catch (IndexOverflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexOverflow");
+			return NULL;
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2088,49 +2012,51 @@ PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
 		const char *a0;
 		Index *a1 = NULL;
 		PyObject *a1obj = NULL;
-		Size *a2 = (Size *)&string::npos;
-		PyObject *a2obj = NULL;
+		int a2 = string::npos;
 
-		if (sipParseArgs(sipArgs,"-s|II",&a0,sipCanConvertTo_Index,&a1obj,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"-s|Ii",&a0,sipCanConvertTo_Index,&a1obj,&a2))
+		{
+		try
 		{
 			int iserr = 0;
 
 			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			sipNew = new String( a0,* a1,* a2);
+			sipNew = new String( a0,* a1, a2);
 
 			if (istemp1)
 				delete a1;
-
-			if (istemp2)
-				delete a2;
 		}
+		catch (NullPointer e)
+		{
+			PyErr_SetString(PyExc_Exception, "NullPointer");
+			return NULL;
+		}
+		catch (IndexOverflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexOverflow");
+			return NULL;
+		}
+		catch (IndexUnderflow e)
+		{
+			PyErr_SetString(PyExc_Exception, "IndexUnderflow");
+			return NULL;
+		}
+	}
 	}
 
 	if (sipNew == NULL)
 	{
 		char a0;
-		Size *a1 = NULL;
-		PyObject *a1obj = NULL;
+		int a1 = 1;
 
-		if (sipParseArgs(sipArgs,"-c|I",&a0,sipCanConvertTo_Size,&a1obj))
+		if (sipParseArgs(sipArgs,"-c|i",&a0,&a1))
 		{
-			int iserr = 0;
-
-			int istemp1 = sipConvertTo_Size(a1obj,&a1,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new String( a0,* a1);
-
-			if (istemp1)
-				delete a1;
-		}
+			sipNew = new String( a0, a1);
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2140,7 +2066,7 @@ PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-h",&a0))
 		{
 			sipNew = new String( a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2150,7 +2076,7 @@ PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-i",&a0))
 		{
 			sipNew = new String( a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2160,7 +2086,7 @@ PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-l",&a0))
 		{
 			sipNew = new String( a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2170,7 +2096,7 @@ PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-f",&a0))
 		{
 			sipNew = new String( a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2180,7 +2106,7 @@ PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-d",&a0))
 		{
 			sipNew = new String( a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2201,7 +2127,7 @@ PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -2275,10 +2201,10 @@ PyMethodDef sipClassAttrTab_String[] = {
 
 int sipCanConvertTo_String(PyObject *sipPy)
 {
-#line 252 "string.sip"
+#line 260 "string.sip"
 	// automatic conversion of Py-Strings to Strings
 	return (PyString_Check(sipPy) || sipIsSubClassInstance(sipPy,sipClass_String));
-#line 2286 "../CPP/sipBALLString.cpp"
+#line 2212 "../CPP/sipBALLString.cpp"
 }
 
 int sipConvertTo_String(PyObject *sipPy,String **sipCppPtr,int sipNoNull,int *sipIsErr)
@@ -2296,7 +2222,7 @@ int sipConvertTo_String(PyObject *sipPy,String **sipCppPtr,int sipNoNull,int *si
 		return false;
 	}
 
-#line 256 "string.sip"
+#line 264 "string.sip"
   if (PyString_Check(sipPy))
   {
     *sipCppPtr = new String(PyString_AS_STRING(sipPy));
@@ -2307,7 +2233,7 @@ int sipConvertTo_String(PyObject *sipPy,String **sipCppPtr,int sipNoNull,int *si
   *sipCppPtr = (String*)sipConvertToCpp(sipPy,sipClass_String,sipIsErr);
 
   return 0;
-#line 2315 "../CPP/sipBALLString.cpp"
+#line 2241 "../CPP/sipBALLString.cpp"
 }
 
 String *sipForceConvertTo_String(PyObject *valobj,int *iserrp)

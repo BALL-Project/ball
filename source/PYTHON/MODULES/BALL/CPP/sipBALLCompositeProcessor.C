@@ -233,7 +233,7 @@ PyObject *sipNew_CompositeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipCompositeProcessor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -251,7 +251,7 @@ PyObject *sipNew_CompositeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCompositeProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

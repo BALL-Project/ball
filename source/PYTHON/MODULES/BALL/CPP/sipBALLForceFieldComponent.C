@@ -537,7 +537,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipForceFieldComponent();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -555,7 +555,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceFieldComponent(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -574,7 +574,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceFieldComponent(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -592,7 +592,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceFieldComponent(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

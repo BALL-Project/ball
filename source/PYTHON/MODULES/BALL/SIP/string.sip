@@ -1,10 +1,11 @@
-// $Id: string.sip,v 1.1 2000/07/18 21:28:29 oliver Exp $
+// $Id: string.sip,v 1.2 2000/07/20 19:35:07 oliver Exp $
 
 class Substring
 {
 %HeaderCode
 	#include <BALL/DATATYPE/string.h>
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
   // friend class String;
   public:
@@ -83,11 +84,18 @@ class String
   // static const char* CHARACTER_CLASS__ASCII_UPPER;
   // static const char* CHARACTER_CLASS__ASCII_NUMERIC;
   // static const char* CHARACTER_CLASS__WHITESPACE;
+
   String();
+
   // String(const String& /string/);
   // String(const string& string);
-  String(const String& /s/, Index /from/, Size /len/ = string::npos);
-  String(const char* /char_ptr/, Index /from/ = 0, Size /len/ = string::npos);
+
+  String(const String& /s/, Index /from/, Size /len/ = string::npos)
+		throw(NullPointer, IndexOverflow, IndexUnderflow);
+
+  String(const char* /char_ptr/, Index /from/ = 0, Size /len/ = string::npos) 
+		throw(NullPointer, IndexOverflow, IndexUnderflow);
+
   // String(Size buffer_size, const char* format, ... );
   // String(std::strstream& s);
   String(char /c/, Size /size/ = 1);

@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.C,v 1.5 2000/05/10 08:40:03 pmueller Exp $
+// $Id: microCanonicalMD.C,v 1.6 2000/07/20 19:34:10 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
@@ -24,7 +24,7 @@ namespace BALL
 	}
 
 	// This constructor uses the given force field and snapshot manager 
-MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):MolecularDynamics (myforcefield)
+	MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):MolecularDynamics (myforcefield)
 	{
 		valid_ = setup (myforcefield, ssm);
 	}

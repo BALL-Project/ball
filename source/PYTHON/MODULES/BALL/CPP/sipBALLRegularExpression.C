@@ -344,15 +344,15 @@ static PyObject *sipDo_RegularExpression_countSubexpressions(PyObject *sipThisOb
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			RegularExpression *ptr;
 
 			if ((ptr = (RegularExpression *)sipGetCppPtr(sipThis,sipClass_RegularExpression)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> RegularExpression::countSubexpressions());
+			res = ptr -> RegularExpression::countSubexpressions();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -653,7 +653,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipRegularExpression();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -672,7 +672,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipRegularExpression(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -694,7 +694,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -712,7 +712,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipRegularExpression(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

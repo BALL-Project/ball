@@ -241,7 +241,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipFragment();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -260,7 +260,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipFragment(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -281,7 +281,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -299,7 +299,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipFragment(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

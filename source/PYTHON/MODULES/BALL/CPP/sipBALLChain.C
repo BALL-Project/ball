@@ -1236,7 +1236,7 @@ PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipChain();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1255,7 +1255,7 @@ PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipChain(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1276,7 +1276,7 @@ PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1294,7 +1294,7 @@ PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipChain(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

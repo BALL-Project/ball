@@ -3,7 +3,6 @@
 #include "sipBALLConstant.h"
 #include "sipBALLIndex.h"
 #include "sipBALLPosition.h"
-#include "sipBALLSize.h"
 #include "sipBALLVersionInfo.h"
 #include "sipBALLComposite.h"
 #include "sipBALLEmbeddable.h"
@@ -873,7 +872,6 @@ char sipName_BALL_getMinorRevision[] = "getMinorRevision";
 char sipName_BALL_getMajorRevision[] = "getMajorRevision";
 char sipName_BALL_getVersion[] = "getVersion";
 char sipName_BALL_VersionInfo[] = "VersionInfo";
-char sipName_BALL_Size[] = "Size";
 char sipName_BALL_Position[] = "Position";
 char sipName_BALL_Index[] = "Index";
 char sipName_BALL_CAL_PER_JOULE[] = "CAL_PER_JOULE";
@@ -916,34 +914,28 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 {
 
 	{
-#line 52 "numericalSAS.sip"
+#line 44 "numericalSAS.sip"
 	const BaseFragment *a0;
 	PyObject *a0obj;
 	float a1 = 1.5;
-	Size *a2 = NULL;
-	PyObject *a2obj = NULL;
+	Size a2 = 0;
 
-	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,sipCanConvertTo_Size,&a2obj))
+	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,&a2))
 	{
 		Surface *res;
 
 		int iserr = 0;
 
 		sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
-		int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
-
 		if (iserr)
 			return NULL;
 
 		res = new Surface;
-		calculateSASPoints(* a0, *res, a1,* a2);
-
-		if (istemp2)
-			delete a2;
+		calculateSASPoints(* a0, *res, a1,a2);
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 951 "../CPP/BALLcmodule.cpp"
+#line 943 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -961,36 +953,28 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 	const BaseFragment *a0;
 	PyObject *a0obj;
 	float a1 = 1.5;
-	Size *a2 = NULL;
-	PyObject *a2obj = NULL;
+	Size a2 = 0;
 
-	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,sipCanConvertTo_Size,&a2obj))
+	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,&a2))
 	{
 		PyAtomDict *res;
 
 		int iserr = 0;
 
 		sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
-		int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
-		if (a2 == NULL)
-		{
-			a2 = new Size;
-			*a2 = 400;
-		}
 
 		if (iserr)
 			return NULL;
 
 		res = new PyAtomDict;
-		calculateSASAtomAreas(* a0, *res, a1,* a2);
+		calculateSASAtomAreas(* a0, *res, a1, a2);
 		PyObject *resobj = sipConvertFrom_PyAtomDict(res);
 
 		delete res;
-		delete a2;
 
 		return resobj;
 	}
-#line 998 "../CPP/BALLcmodule.cpp"
+#line 982 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -1007,26 +991,20 @@ static PyObject *sipDo_calculateSASVolume(PyObject *,PyObject *sipArgs)
 		const BaseFragment *a0;
 		PyObject *a0obj;
 		float a1 = 1.5;
-		Size a2def = Size(400);
-		Size *a2 = &a2def;
-		PyObject *a2obj = NULL;
+		int a2 = 400;
 
-		if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"-I|fi",sipCanConvertTo_BaseFragment,&a0obj,&a1,&a2))
 		{
 			float res;
 
 			int iserr = 0;
 
 			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = calculateSASVolume(* a0, a1,* a2);
-
-			if (istemp2)
-				delete a2;
+			res = calculateSASVolume(* a0, a1, a2);
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -1046,26 +1024,20 @@ static PyObject *sipDo_calculateSASArea(PyObject *,PyObject *sipArgs)
 		const BaseFragment *a0;
 		PyObject *a0obj;
 		float a1 = 1.5;
-		Size a2def = Size(400);
-		Size *a2 = &a2def;
-		PyObject *a2obj = NULL;
+		int a2 = 400;
 
-		if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_BaseFragment,&a0obj,&a1,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"-I|fi",sipCanConvertTo_BaseFragment,&a0obj,&a1,&a2))
 		{
 			float res;
 
 			int iserr = 0;
 
 			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = calculateSASArea(* a0, a1,* a2);
-
-			if (istemp2)
-				delete a2;
+			res = calculateSASArea(* a0, a1, a2);
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3126,7 +3098,6 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_PersistentObject, sipNew_PersistentObject, &sipClass_PersistentObject, sipClassAttrTab_PersistentObject, NULL},
 	{sipName_BALL_Composite, sipNew_Composite, &sipClass_Composite, sipClassAttrTab_Composite, NULL},
 	{sipName_BALL_VersionInfo, sipNew_VersionInfo, &sipClass_VersionInfo, sipClassAttrTab_VersionInfo, NULL},
-	{sipName_BALL_Size, sipNew_Size, &sipClass_Size, sipClassAttrTab_Size, NULL},
 	{sipName_BALL_Position, sipNew_Position, &sipClass_Position, sipClassAttrTab_Position, NULL},
 	{sipName_BALL_Index, sipNew_Index, &sipClass_Index, sipClassAttrTab_Index, NULL},
 	{sipName_BALL_Constant, sipNew_Constant, &sipClass_Constant, sipClassAttrTab_Constant, NULL},
@@ -3134,7 +3105,7 @@ static sipClassDef classesTable[] = {
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	113,
+	112,
 	classesTable
 };
 
@@ -3265,24 +3236,24 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 	if (sipAddClassInstances(((PyClassObject *)sipClass_RegularExpression) -> cl_dict,RegularExpressionclassInstances) < 0)
 		return NULL;
 
-	// Add the class instances to the dictionary.
+	// Add the longs to the dictionary.
 
-	static sipClassInstanceDef OptionsclassInstances[] = {
-		{sipName_BALL_MAX_ENTRY_LENGTH, &Options::MAX_ENTRY_LENGTH, sipClass_Size, SIP_SIMPLE},
-		NULL
+	static sipLongInstanceDef OptionslongInstances[] = {
+		{sipName_BALL_MAX_ENTRY_LENGTH, Options::MAX_ENTRY_LENGTH},
+		{NULL}
 	};
 
-	if (sipAddClassInstances(((PyClassObject *)sipClass_Options) -> cl_dict,OptionsclassInstances) < 0)
+	if (sipAddLongInstances(((PyClassObject *)sipClass_Options) -> cl_dict,OptionslongInstances) < 0)
 		return NULL;
 
-	// Add the class instances to the dictionary.
+	// Add the longs to the dictionary.
 
-	static sipClassInstanceDef BitVectorclassInstances[] = {
-		{sipName_BALL_BlockSize, &BitVector::BlockSize, sipClass_Size, SIP_SIMPLE},
-		NULL
+	static sipLongInstanceDef BitVectorlongInstances[] = {
+		{sipName_BALL_BlockSize, BitVector::BlockSize},
+		{NULL}
 	};
 
-	if (sipAddClassInstances(((PyClassObject *)sipClass_BitVector) -> cl_dict,BitVectorclassInstances) < 0)
+	if (sipAddLongInstances(((PyClassObject *)sipClass_BitVector) -> cl_dict,BitVectorlongInstances) < 0)
 		return NULL;
 
 	// Add the doubles to the dictionary.

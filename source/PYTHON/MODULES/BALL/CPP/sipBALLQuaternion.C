@@ -408,7 +408,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Quaternion();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -426,7 +426,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Quaternion(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -445,7 +445,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Quaternion(* a0, a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -458,7 +458,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-ffff",&a0,&a1,&a2,&a3))
 		{
 			sipNew = new Quaternion( a0, a1, a2, a3);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

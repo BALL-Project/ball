@@ -319,7 +319,7 @@ PyObject *sipNew_GeometricCenterProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipGeometricCenterProcessor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -337,7 +337,7 @@ PyObject *sipNew_GeometricCenterProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipGeometricCenterProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

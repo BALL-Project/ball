@@ -752,7 +752,7 @@ PyObject *sipNew_PropertyManager(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new PropertyManager();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -771,7 +771,7 @@ PyObject *sipNew_PropertyManager(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PropertyManager(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -789,7 +789,7 @@ PyObject *sipNew_PropertyManager(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PropertyManager(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

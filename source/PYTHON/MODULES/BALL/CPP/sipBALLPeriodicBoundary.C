@@ -374,7 +374,7 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new PeriodicBoundary();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -392,7 +392,7 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PeriodicBoundary(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -411,7 +411,7 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PeriodicBoundary(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -429,7 +429,7 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PeriodicBoundary(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

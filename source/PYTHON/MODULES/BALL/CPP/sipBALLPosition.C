@@ -73,7 +73,7 @@ PyObject *sipNew_Position(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Position();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -94,7 +94,7 @@ PyObject *sipNew_Position(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -349,7 +349,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new SnapShotManager();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -377,7 +377,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp2)
 				delete a2;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -408,7 +408,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp2)
 				delete a2;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -427,7 +427,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new SnapShotManager(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -445,7 +445,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new SnapShotManager(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -61,7 +61,7 @@ PyObject *sipNew_GridIndex(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new GridIndex();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -79,7 +79,7 @@ PyObject *sipNew_GridIndex(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new GridIndex(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

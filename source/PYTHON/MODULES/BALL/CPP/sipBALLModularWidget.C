@@ -517,7 +517,7 @@ PyObject *sipNew_ModularWidget(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipModularWidget();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -535,7 +535,7 @@ PyObject *sipNew_ModularWidget(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipModularWidget(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

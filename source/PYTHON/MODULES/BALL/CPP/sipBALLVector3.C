@@ -1033,7 +1033,7 @@ PyObject *sipNew_Vector3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Vector3();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1043,7 +1043,7 @@ PyObject *sipNew_Vector3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-f",&a0))
 		{
 			sipNew = new Vector3( a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1055,7 +1055,7 @@ PyObject *sipNew_Vector3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-fff",&a0,&a1,&a2))
 		{
 			sipNew = new Vector3( a0, a1, a2);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1073,7 +1073,7 @@ PyObject *sipNew_Vector3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Vector3(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1095,7 +1095,7 @@ PyObject *sipNew_Vector3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Vector3( a0,* a1,* a2);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -976,7 +976,7 @@ PyObject *sipNew_Options(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Options();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -995,7 +995,7 @@ PyObject *sipNew_Options(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Options(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1013,7 +1013,7 @@ PyObject *sipNew_Options(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Options(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

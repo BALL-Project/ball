@@ -305,7 +305,7 @@ PyObject *sipNew_Circle3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Circle3();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -323,7 +323,7 @@ PyObject *sipNew_Circle3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Circle3(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -345,7 +345,7 @@ PyObject *sipNew_Circle3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Circle3(* a0,* a1, a2);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

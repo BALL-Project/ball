@@ -725,7 +725,7 @@ PyObject *sipNew_Vector4(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Vector4();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -738,7 +738,7 @@ PyObject *sipNew_Vector4(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-fff|f",&a0,&a1,&a2,&a3))
 		{
 			sipNew = new Vector4( a0, a1, a2, a3);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -756,7 +756,7 @@ PyObject *sipNew_Vector4(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Vector4(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -266,7 +266,7 @@ PyObject *sipNew_MOL2File(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipMOL2File();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -293,7 +293,7 @@ PyObject *sipNew_MOL2File(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -311,7 +311,7 @@ PyObject *sipNew_MOL2File(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMOL2File(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

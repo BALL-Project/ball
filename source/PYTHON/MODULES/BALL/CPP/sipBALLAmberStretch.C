@@ -217,7 +217,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipAmberStretch();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -235,7 +235,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberStretch(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -254,7 +254,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberStretch(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -272,7 +272,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberStretch(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

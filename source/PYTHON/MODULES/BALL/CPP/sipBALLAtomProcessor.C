@@ -233,7 +233,7 @@ PyObject *sipNew_AtomProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipAtomProcessor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -251,7 +251,7 @@ PyObject *sipNew_AtomProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAtomProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

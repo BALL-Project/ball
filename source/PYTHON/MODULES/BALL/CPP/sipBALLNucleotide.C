@@ -966,7 +966,7 @@ PyObject *sipNew_Nucleotide(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipNucleotide();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -985,7 +985,7 @@ PyObject *sipNew_Nucleotide(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipNucleotide(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1013,7 +1013,7 @@ PyObject *sipNew_Nucleotide(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1031,7 +1031,7 @@ PyObject *sipNew_Nucleotide(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipNucleotide(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

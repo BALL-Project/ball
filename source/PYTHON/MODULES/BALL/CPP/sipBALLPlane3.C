@@ -416,7 +416,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Plane3();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -434,7 +434,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Plane3(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -455,7 +455,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Plane3(* a0,* a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -479,7 +479,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Plane3(* a0,* a1,* a2);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -492,7 +492,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-ffff",&a0,&a1,&a2,&a3))
 		{
 			sipNew = new Plane3( a0, a1, a2, a3);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -217,7 +217,7 @@ PyObject *sipNew_AmberBend(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipAmberBend();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -235,7 +235,7 @@ PyObject *sipNew_AmberBend(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberBend(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -254,7 +254,7 @@ PyObject *sipNew_AmberBend(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberBend(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -272,7 +272,7 @@ PyObject *sipNew_AmberBend(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberBend(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

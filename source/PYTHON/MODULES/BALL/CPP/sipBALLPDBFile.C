@@ -407,7 +407,7 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipPDBFile();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -434,7 +434,7 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -452,7 +452,7 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipPDBFile(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

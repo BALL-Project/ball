@@ -794,7 +794,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipPDBAtom();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -813,7 +813,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipPDBAtom(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -865,7 +865,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp3)
 				delete a3;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -883,7 +883,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipPDBAtom(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

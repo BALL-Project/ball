@@ -194,28 +194,17 @@ static PyObject *sipDo_BitVector_setSize(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Size,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"i|l",&a0,&a1))
 		{
 			BitVector *ptr;
 
 			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> BitVector::setSize(* a0, (bool)a1);
-
-			if (istemp0)
-				delete a0;
+			ptr -> BitVector::setSize( a0, (bool)a1);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -239,15 +228,15 @@ static PyObject *sipDo_BitVector_getSize(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			BitVector *ptr;
 
 			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> BitVector::getSize());
+			res = ptr -> BitVector::getSize();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -270,15 +259,15 @@ static PyObject *sipDo_BitVector_countValue(PyObject *sipThisObj,PyObject *sipAr
 
 		if (sipParseArgs(sipArgs,"l",&a0))
 		{
-			Size *res;
+			int res;
 			BitVector *ptr;
 
 			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> BitVector::countValue( (bool)a0));
+			res = ptr -> BitVector::countValue( (bool)a0);
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -854,28 +843,17 @@ PyObject *sipNew_BitVector(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new BitVector();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Size,&a0obj))
+		if (sipParseArgs(sipArgs,"-i",&a0))
 		{
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new BitVector(* a0);
-
-			if (istemp0)
-				delete a0;
-		}
+			sipNew = new BitVector( a0);
+	}
 	}
 
 	if (sipNew == NULL)
@@ -894,7 +872,7 @@ PyObject *sipNew_BitVector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new BitVector(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -904,7 +882,7 @@ PyObject *sipNew_BitVector(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-s",&a0))
 		{
 			sipNew = new BitVector( a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -922,7 +900,7 @@ PyObject *sipNew_BitVector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new BitVector(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

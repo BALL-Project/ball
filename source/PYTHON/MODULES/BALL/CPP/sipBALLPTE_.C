@@ -113,7 +113,7 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new PTE_();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -132,7 +132,7 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PTE_(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -150,7 +150,7 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PTE_(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

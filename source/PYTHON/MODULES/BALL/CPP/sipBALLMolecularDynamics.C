@@ -87,7 +87,7 @@ void sipMolecularDynamics::simulate(bool a0)
 	else
 		MolecularDynamics::simulate(a0);
 }
-void sipMolecularDynamics::simulateIterations(Size a0,bool a1)
+void sipMolecularDynamics::simulateIterations(int a0,bool a1)
 {
 	int relLock;
 
@@ -325,17 +325,12 @@ releaseLock:
 // The common handler for all classes that inherit this virtual member
 // function.
 
-void sipMolecularDynamics::sipVH_simulateIterations(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Size a0,bool a1)
+void sipMolecularDynamics::sipVH_simulateIterations(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,int a0,bool a1)
 {
 	PyObject *resobj;
 	PyObject *sipArgs;
-	PyObject *a0obj;
 
-	a0obj = sipMapCppToSelf(&a0,sipClass_Size);
-
-	sipArgs = Py_BuildValue("(OOi)",sipThis -> sipSelf,a0obj,a1);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(Oii)",sipThis -> sipSelf,a0,a1);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -573,27 +568,16 @@ static PyObject *sipDo_MolecularDynamics_setNumberOfIteration(PyObject *sipThisO
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Size,&a0obj))
+		if (sipParseArgs(sipArgs,"i",&a0))
 		{
 			MolecularDynamics *ptr;
 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> MolecularDynamics::setNumberOfIteration(* a0);
-
-			if (istemp0)
-				delete a0;
+			ptr -> MolecularDynamics::setNumberOfIteration( a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -615,27 +599,16 @@ static PyObject *sipDo_MolecularDynamics_setMaximalNumberOfIterations(PyObject *
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Size,&a0obj))
+		if (sipParseArgs(sipArgs,"i",&a0))
 		{
 			MolecularDynamics *ptr;
 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> MolecularDynamics::setMaximalNumberOfIterations(* a0);
-
-			if (istemp0)
-				delete a0;
+			ptr -> MolecularDynamics::setMaximalNumberOfIterations( a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -781,27 +754,16 @@ static PyObject *sipDo_MolecularDynamics_setEnergyOutputFrequency(PyObject *sipT
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Size,&a0obj))
+		if (sipParseArgs(sipArgs,"i",&a0))
 		{
 			MolecularDynamics *ptr;
 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> MolecularDynamics::setEnergyOutputFrequency(* a0);
-
-			if (istemp0)
-				delete a0;
+			ptr -> MolecularDynamics::setEnergyOutputFrequency( a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -823,27 +785,16 @@ static PyObject *sipDo_MolecularDynamics_setSnapShotFrequency(PyObject *sipThisO
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Size,&a0obj))
+		if (sipParseArgs(sipArgs,"i",&a0))
 		{
 			MolecularDynamics *ptr;
 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> MolecularDynamics::setSnapShotFrequency(* a0);
-
-			if (istemp0)
-				delete a0;
+			ptr -> MolecularDynamics::setSnapShotFrequency( a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -867,15 +818,15 @@ static PyObject *sipDo_MolecularDynamics_getEnergyOutputFrequency(PyObject *sipT
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			MolecularDynamics *ptr;
 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> MolecularDynamics::getEnergyOutputFrequency());
+			res = ptr -> MolecularDynamics::getEnergyOutputFrequency();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -896,15 +847,15 @@ static PyObject *sipDo_MolecularDynamics_getNumberOfIteration(PyObject *sipThisO
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			MolecularDynamics *ptr;
 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> MolecularDynamics::getNumberOfIteration());
+			res = ptr -> MolecularDynamics::getNumberOfIteration();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -925,15 +876,15 @@ static PyObject *sipDo_MolecularDynamics_getMaximalNumberOfIterations(PyObject *
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			MolecularDynamics *ptr;
 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> MolecularDynamics::getMaximalNumberOfIterations());
+			res = ptr -> MolecularDynamics::getMaximalNumberOfIterations();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -1012,15 +963,15 @@ static PyObject *sipDo_MolecularDynamics_getSnapShotFrequency(PyObject *sipThisO
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			MolecularDynamics *ptr;
 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> MolecularDynamics::getSnapShotFrequency());
+			res = ptr -> MolecularDynamics::getSnapShotFrequency();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -1244,28 +1195,17 @@ static PyObject *sipDo_MolecularDynamics_simulateIterations(PyObject *sipThisObj
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Size,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"i|l",&a0,&a1))
 		{
 			MolecularDynamics *ptr;
 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> MolecularDynamics::simulateIterations(* a0, (bool)a1);
-
-			if (istemp0)
-				delete a0;
+			ptr -> MolecularDynamics::simulateIterations( a0, (bool)a1);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1357,7 +1297,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipMolecularDynamics();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1375,7 +1315,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMolecularDynamics(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1394,7 +1334,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMolecularDynamics(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1412,7 +1352,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMolecularDynamics(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -352,7 +352,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new AtomVector();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -371,7 +371,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new AtomVector(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -390,7 +390,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new AtomVector(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -408,7 +408,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new AtomVector(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

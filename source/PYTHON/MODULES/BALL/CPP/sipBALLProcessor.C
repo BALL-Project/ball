@@ -61,7 +61,7 @@ PyObject *sipNew_Processor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Processor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -79,7 +79,7 @@ PyObject *sipNew_Processor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Processor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

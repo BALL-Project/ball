@@ -311,7 +311,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -333,7 +333,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -355,7 +355,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -377,7 +377,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -404,7 +404,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -428,7 +428,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -446,7 +446,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new NamedProperty(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -454,7 +454,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new NamedProperty();
-		}
+	}
 	}
 
 	if (sipNew == NULL)

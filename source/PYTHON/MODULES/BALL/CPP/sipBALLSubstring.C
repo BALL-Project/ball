@@ -91,10 +91,9 @@ static PyObject *sipDo_Substring_bind(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		Index *a1 = NULL;
 		PyObject *a1obj = NULL;
-		Size *a2 = (Size *)&string::npos;
-		PyObject *a2obj = NULL;
+		int a2 = string::npos;
 
-		if (sipParseArgs(sipArgs,"I|II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"I|Ii",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
 		{
 			Substring *res;
 			Substring *ptr;
@@ -106,21 +105,17 @@ static PyObject *sipDo_Substring_bind(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = &ptr -> Substring::bind(* a0,* a1,* a2);
+			res = &ptr -> Substring::bind(* a0,* a1, a2);
 
 			if (istemp0)
 				delete a0;
 
 			if (istemp1)
 				delete a1;
-
-			if (istemp2)
-				delete a2;
 
 			return sipMapCppToSelf(res,sipClass_Substring);
 		}
@@ -131,10 +126,9 @@ static PyObject *sipDo_Substring_bind(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		Index *a1 = NULL;
 		PyObject *a1obj = NULL;
-		Size *a2 = (Size *)&string::npos;
-		PyObject *a2obj = NULL;
+		int a2 = string::npos;
 
-		if (sipParseArgs(sipArgs,"I|II",sipCanConvertTo_Substring,&a0obj,sipCanConvertTo_Index,&a1obj,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"I|Ii",sipCanConvertTo_Substring,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
 		{
 			Substring *res;
 			Substring *ptr;
@@ -146,18 +140,14 @@ static PyObject *sipDo_Substring_bind(PyObject *sipThisObj,PyObject *sipArgs)
 
 			sipConvertTo_Substring(a0obj,(Substring **)&a0,1,&iserr);
 			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = &ptr -> Substring::bind(* a0,* a1,* a2);
+			res = &ptr -> Substring::bind(* a0,* a1, a2);
 
 			if (istemp1)
 				delete a1;
-
-			if (istemp2)
-				delete a2;
 
 			return sipMapCppToSelf(res,sipClass_Substring);
 		}
@@ -305,27 +295,16 @@ static PyObject *sipDo_Substring_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	{
 		const char *a0;
-		Size *a1 = (Size *)&string::npos;
-		PyObject *a1obj = NULL;
+		int a1 = string::npos;
 
-		if (sipParseArgs(sipArgs,"s|I",&a0,sipCanConvertTo_Size,&a1obj))
+		if (sipParseArgs(sipArgs,"s|i",&a0,&a1))
 		{
 			Substring *ptr;
 
 			if ((ptr = (Substring *)sipGetCppPtr(sipThis,sipClass_Substring)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp1 = sipConvertTo_Size(a1obj,&a1,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> Substring::set( a0,* a1);
-
-			if (istemp1)
-				delete a1;
+			ptr -> Substring::set( a0, a1);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -463,15 +442,15 @@ static PyObject *sipDo_Substring_size(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			Substring *ptr;
 
 			if ((ptr = (Substring *)sipGetCppPtr(sipThis,sipClass_Substring)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> Substring::size());
+			res = ptr -> Substring::size();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -709,7 +688,7 @@ PyObject *sipNew_Substring(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Substring();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -728,7 +707,7 @@ PyObject *sipNew_Substring(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Substring(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -737,31 +716,26 @@ PyObject *sipNew_Substring(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		Index *a1 = NULL;
 		PyObject *a1obj = NULL;
-		Size *a2 = (Size *)&string::npos;
-		PyObject *a2obj = NULL;
+		int a2 = string::npos;
 
-		if (sipParseArgs(sipArgs,"-I|II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,sipCanConvertTo_Size,&a2obj))
+		if (sipParseArgs(sipArgs,"-I|Ii",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
 		{
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
 			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_Size(a2obj,&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			sipNew = new Substring(* a0,* a1,* a2);
+			sipNew = new Substring(* a0,* a1, a2);
 
 			if (istemp0)
 				delete a0;
 
 			if (istemp1)
 				delete a1;
-
-			if (istemp2)
-				delete a2;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -779,7 +753,7 @@ PyObject *sipNew_Substring(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Substring(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

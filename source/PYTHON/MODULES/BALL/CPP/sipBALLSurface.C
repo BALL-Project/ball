@@ -303,7 +303,7 @@ PyObject *sipNew_Surface(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Surface();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -321,7 +321,7 @@ PyObject *sipNew_Surface(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Surface(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

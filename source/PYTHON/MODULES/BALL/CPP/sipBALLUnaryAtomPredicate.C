@@ -175,7 +175,7 @@ PyObject *sipNew_UnaryAtomPredicate(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipUnaryAtomPredicate();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -193,7 +193,7 @@ PyObject *sipNew_UnaryAtomPredicate(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipUnaryAtomPredicate(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

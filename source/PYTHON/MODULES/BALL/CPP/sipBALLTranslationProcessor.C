@@ -207,7 +207,7 @@ PyObject *sipNew_TranslationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipTranslationProcessor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -225,7 +225,7 @@ PyObject *sipNew_TranslationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipTranslationProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -243,7 +243,7 @@ PyObject *sipNew_TranslationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipTranslationProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

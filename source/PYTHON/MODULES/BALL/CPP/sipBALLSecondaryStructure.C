@@ -1047,7 +1047,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipSecondaryStructure();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1066,7 +1066,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSecondaryStructure(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1087,7 +1087,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1105,7 +1105,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSecondaryStructure(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

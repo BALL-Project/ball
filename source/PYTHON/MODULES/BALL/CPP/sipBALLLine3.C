@@ -333,7 +333,7 @@ PyObject *sipNew_Line3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Line3();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -351,7 +351,7 @@ PyObject *sipNew_Line3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Line3(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -373,7 +373,7 @@ PyObject *sipNew_Line3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Line3(* a0,* a1, (Line3::Form)a2);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

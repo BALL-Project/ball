@@ -61,7 +61,7 @@ PyObject *sipNew_PersistentObject(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new PersistentObject();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -79,7 +79,7 @@ PyObject *sipNew_PersistentObject(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PersistentObject(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -648,15 +648,15 @@ static PyObject *sipDo_BaseFragment_countBaseFragments(PyObject *sipThisObj,PyOb
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> BaseFragment::countBaseFragments());
+			res = ptr -> BaseFragment::countBaseFragments();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -677,15 +677,15 @@ static PyObject *sipDo_BaseFragment_countAtoms(PyObject *sipThisObj,PyObject *si
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> BaseFragment::countAtoms());
+			res = ptr -> BaseFragment::countAtoms();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -706,15 +706,15 @@ static PyObject *sipDo_BaseFragment_countBonds(PyObject *sipThisObj,PyObject *si
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> BaseFragment::countBonds());
+			res = ptr -> BaseFragment::countBonds();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -735,15 +735,15 @@ static PyObject *sipDo_BaseFragment_countInterBonds(PyObject *sipThisObj,PyObjec
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> BaseFragment::countInterBonds());
+			res = ptr -> BaseFragment::countInterBonds();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -764,15 +764,15 @@ static PyObject *sipDo_BaseFragment_countIntraBonds(PyObject *sipThisObj,PyObjec
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> BaseFragment::countIntraBonds());
+			res = ptr -> BaseFragment::countIntraBonds();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -1562,7 +1562,7 @@ PyObject *sipNew_BaseFragment(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipBaseFragment();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1581,7 +1581,7 @@ PyObject *sipNew_BaseFragment(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipBaseFragment(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1602,7 +1602,7 @@ PyObject *sipNew_BaseFragment(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1620,7 +1620,7 @@ PyObject *sipNew_BaseFragment(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipBaseFragment(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

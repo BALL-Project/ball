@@ -245,10 +245,9 @@ static PyObject *sipDo_INIFile_getLine(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Size,&a0obj))
+		if (sipParseArgs(sipArgs,"i",&a0))
 		{
 			String *res;
 			INIFile *ptr;
@@ -256,17 +255,7 @@ static PyObject *sipDo_INIFile_getLine(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> INIFile::getLine(* a0);
-
-			if (istemp0)
-				delete a0;
+			res = ptr -> INIFile::getLine( a0);
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -287,12 +276,11 @@ static PyObject *sipDo_INIFile_setLine(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 		const String *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Size,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(sipArgs,"iI",&a0,sipCanConvertTo_String,&a1obj))
 		{
 			bool res;
 			INIFile *ptr;
@@ -302,16 +290,12 @@ static PyObject *sipDo_INIFile_setLine(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
 			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = ptr -> INIFile::setLine(* a0,* a1);
-
-			if (istemp0)
-				delete a0;
+			res = ptr -> INIFile::setLine( a0,* a1);
 
 			if (istemp1)
 				delete a1;
@@ -337,15 +321,15 @@ static PyObject *sipDo_INIFile_getNumberOfLines(PyObject *sipThisObj,PyObject *s
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			INIFile *ptr;
 
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> INIFile::getNumberOfLines());
+			res = ptr -> INIFile::getNumberOfLines();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -411,7 +395,7 @@ static PyObject *sipDo_INIFile_getSectionFirstLine(PyObject *sipThisObj,PyObject
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
-			Size *res;
+			int res;
 			INIFile *ptr;
 
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
@@ -424,12 +408,12 @@ static PyObject *sipDo_INIFile_getSectionFirstLine(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
-			res = new Size(ptr -> INIFile::getSectionFirstLine(* a0));
+			res = ptr -> INIFile::getSectionFirstLine(* a0);
 
 			if (istemp0)
 				delete a0;
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -453,7 +437,7 @@ static PyObject *sipDo_INIFile_getSectionLastLine(PyObject *sipThisObj,PyObject 
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
-			Size *res;
+			int res;
 			INIFile *ptr;
 
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
@@ -466,12 +450,12 @@ static PyObject *sipDo_INIFile_getSectionLastLine(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
-			res = new Size(ptr -> INIFile::getSectionLastLine(* a0));
+			res = ptr -> INIFile::getSectionLastLine(* a0);
 
 			if (istemp0)
 				delete a0;
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -495,7 +479,7 @@ static PyObject *sipDo_INIFile_getSectionLength(PyObject *sipThisObj,PyObject *s
 
 		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
-			Size *res;
+			int res;
 			INIFile *ptr;
 
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
@@ -508,12 +492,12 @@ static PyObject *sipDo_INIFile_getSectionLength(PyObject *sipThisObj,PyObject *s
 			if (iserr)
 				return NULL;
 
-			res = new Size(ptr -> INIFile::getSectionLength(* a0));
+			res = ptr -> INIFile::getSectionLength(* a0);
 
 			if (istemp0)
 				delete a0;
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -714,7 +698,7 @@ PyObject *sipNew_INIFile(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new INIFile();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -735,7 +719,7 @@ PyObject *sipNew_INIFile(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -753,7 +737,7 @@ PyObject *sipNew_INIFile(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new INIFile(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

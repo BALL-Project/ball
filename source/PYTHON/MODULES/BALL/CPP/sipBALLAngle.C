@@ -313,7 +313,7 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Angle();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -332,7 +332,7 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Angle(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -343,7 +343,7 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-f|l",&a0,&a1))
 		{
 			sipNew = new Angle( a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -361,7 +361,7 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Angle(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

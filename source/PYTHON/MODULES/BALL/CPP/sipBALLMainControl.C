@@ -1608,11 +1608,11 @@ static PyObject *sipDo_MainControl_countInstances(PyObject *,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,"-"))
 		{
-			Size *res;
+			int res;
 
-			res = new Size(MainControl::countInstances());
+			res = MainControl::countInstances();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -1719,7 +1719,7 @@ PyObject *sipNew_MainControl(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMainControl(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1737,7 +1737,7 @@ PyObject *sipNew_MainControl(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMainControl(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

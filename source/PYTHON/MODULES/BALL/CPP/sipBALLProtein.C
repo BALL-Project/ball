@@ -827,7 +827,7 @@ PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipProtein();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -846,7 +846,7 @@ PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipProtein(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -873,7 +873,7 @@ PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -891,7 +891,7 @@ PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipProtein(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

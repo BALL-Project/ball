@@ -61,7 +61,7 @@ PyObject *sipNew_Constant(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Constant();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -79,7 +79,7 @@ PyObject *sipNew_Constant(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Constant(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

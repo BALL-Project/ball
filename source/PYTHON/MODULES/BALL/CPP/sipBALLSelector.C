@@ -176,15 +176,15 @@ static PyObject *sipDo_Selector_getNumberOfSelectedAtoms(PyObject *sipThisObj,Py
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			Selector *ptr;
 
 			if ((ptr = (Selector *)sipGetCppPtr(sipThis,sipClass_Selector)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> Selector::getNumberOfSelectedAtoms());
+			res = ptr -> Selector::getNumberOfSelectedAtoms();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -246,7 +246,7 @@ PyObject *sipNew_Selector(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipSelector();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -264,7 +264,7 @@ PyObject *sipNew_Selector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSelector(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -285,7 +285,7 @@ PyObject *sipNew_Selector(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)

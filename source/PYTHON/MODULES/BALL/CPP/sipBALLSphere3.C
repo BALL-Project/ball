@@ -328,7 +328,7 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new Sphere3();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -346,7 +346,7 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Sphere3(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -365,7 +365,7 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Sphere3(* a0, a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -1659,7 +1659,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipEnergyMinimizer();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1677,7 +1677,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEnergyMinimizer(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1698,7 +1698,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEnergyMinimizer(* a0,* a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1717,7 +1717,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEnergyMinimizer(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1735,7 +1735,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEnergyMinimizer(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -217,7 +217,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipCharmmImproperTorsion();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -235,7 +235,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmImproperTorsion(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -254,7 +254,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmImproperTorsion(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -272,7 +272,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmImproperTorsion(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -143,61 +143,7 @@ bool sipConjugateGradientMinimizer::minimize(int a0,bool a1)
 
 	return sipIsPyMethod(&sipPyMethods[9],sipPyThis,NULL,sipName_BALL_minimize,&relLock) ?
 		sipEnergyMinimizer::sipVH_minimize(&sipPyMethods[9],sipPyThis,relLock,a0,a1) :
-		EnergyMinimizer::minimize(a0,a1);
-}
-bool sipConjugateGradientMinimizer::minimize(Size a0,bool a1)
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[9],sipPyThis,NULL,sipName_BALL_minimize,&relLock) ?
-		sipConjugateGradientMinimizer::sipVH_minimize(&sipPyMethods[9],sipPyThis,relLock,a0,a1) :
 		ConjugateGradientMinimizer::minimize(a0,a1);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipConjugateGradientMinimizer::sipVH_minimize(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Size a0,bool a1)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-	PyObject *a0obj;
-
-	a0obj = sipMapCppToSelf(&a0,sipClass_Size);
-
-	sipArgs = Py_BuildValue("(OOi)",sipThis -> sipSelf,a0obj,a1);
-
-	Py_XDECREF(a0obj);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_ConjugateGradientMinimizer,sipName_BALL_minimize);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
 }
 
 static PyObject *sipDo_ConjugateGradientMinimizer_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
@@ -355,11 +301,10 @@ static PyObject *sipDo_ConjugateGradientMinimizer_minimize(PyObject *sipThisObj,
 		return NULL;
 
 	{
-		Size *a0 = NULL;
-		PyObject *a0obj = NULL;
+		int a0 = 0;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"|Il",sipCanConvertTo_Size,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"|il",&a0,&a1))
 		{
 			bool res;
 			ConjugateGradientMinimizer *ptr;
@@ -367,17 +312,7 @@ static PyObject *sipDo_ConjugateGradientMinimizer_minimize(PyObject *sipThisObj,
 			if ((ptr = (ConjugateGradientMinimizer *)sipGetCppPtr(sipThis,sipClass_ConjugateGradientMinimizer)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> ConjugateGradientMinimizer::minimize(* a0, (bool)a1);
-
-			if (istemp0)
-				delete a0;
+			res = ptr -> ConjugateGradientMinimizer::minimize( a0, (bool)a1);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -441,7 +376,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipConjugateGradientMinimizer();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -459,7 +394,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipConjugateGradientMinimizer(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -480,7 +415,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipConjugateGradientMinimizer(* a0, a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -504,7 +439,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipConjugateGradientMinimizer(* a0, a1,* a2);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -525,7 +460,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipConjugateGradientMinimizer(* a0,* a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -544,7 +479,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipConjugateGradientMinimizer(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -562,7 +497,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipConjugateGradientMinimizer(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -97,7 +97,7 @@ void sipCanonicalMD::simulate(bool a0)
 	else
 		CanonicalMD::simulate(a0);
 }
-void sipCanonicalMD::simulateIterations(Size a0,bool a1)
+void sipCanonicalMD::simulateIterations(int a0,bool a1)
 {
 	int relLock;
 
@@ -348,28 +348,17 @@ static PyObject *sipDo_CanonicalMD_simulateIterations(PyObject *sipThisObj,PyObj
 		return NULL;
 
 	{
-		Size *a0;
-		PyObject *a0obj;
+		int a0;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Size,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"i|l",&a0,&a1))
 		{
 			CanonicalMD *ptr;
 
 			if ((ptr = (CanonicalMD *)sipGetCppPtr(sipThis,sipClass_CanonicalMD)) == NULL)
 				return NULL;
 
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> CanonicalMD::simulateIterations(* a0, (bool)a1);
-
-			if (istemp0)
-				delete a0;
+			ptr -> CanonicalMD::simulateIterations( a0, (bool)a1);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -466,7 +455,7 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipCanonicalMD();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -484,7 +473,7 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCanonicalMD(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -505,7 +494,7 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCanonicalMD(* a0, a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -529,7 +518,7 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCanonicalMD(* a0, a1,* a2);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -548,7 +537,7 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCanonicalMD(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -566,7 +555,7 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCanonicalMD(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -77,7 +77,7 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -95,7 +95,7 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Bit(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

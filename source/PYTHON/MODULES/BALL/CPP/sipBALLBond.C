@@ -1235,7 +1235,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipBond();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1254,7 +1254,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipBond(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1283,7 +1283,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1301,7 +1301,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipBond(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

@@ -1,4 +1,4 @@
-// $Id: global.sip,v 1.1 2000/07/18 21:27:40 oliver Exp $
+// $Id: global.sip,v 1.2 2000/07/20 19:35:06 oliver Exp $
 
 class Index
 {
@@ -58,32 +58,34 @@ class Position
 %End
 };
 
+typedef int Size;
 
-class Size
-{
-	public:
-	operator const char* ();
-%MemberCode
-	Size* ptr;
-  if ((ptr = (Size*)sipGetCppPtr(sipThis,sipClass_Size)) == NULL)
-    return NULL;
-
-  return PyString_FromString(String(*ptr).c_str());
-%End
-%CanConvertToClassCode
-	// automatic conversion of Py integers to Size 
-	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Size));
-%End
-%ConvertToClassCode
-	if (PyInt_Check(sipPy))
-	{
-		*sipCppPtr = new Size(PyInt_AS_LONG(sipPy));
-	
-		return 1;
-	}
-	
-	*sipCppPtr = (Size*)sipConvertToCpp(sipPy, sipClass_Size, sipIsErr);
-
-	return 0;
-%End
-};
+// class Size
+// {
+// 	public:
+// 	operator const char* ();
+// %MemberCode
+// 	Size* ptr;
+//   if ((ptr = (Size*)sipGetCppPtr(sipThis,sipClass_Size)) == NULL)
+//     return NULL;
+// 
+//   return PyString_FromString(String(*ptr).c_str());
+// %End
+// %CanConvertToClassCode
+// 	// automatic conversion of Py integers to Size 
+// 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Size));
+// %End
+// %ConvertToClassCode
+// 	if (PyInt_Check(sipPy))
+// 	{
+// 		*sipCppPtr = new Size(PyInt_AS_LONG(sipPy));
+// 	
+// 		return 1;
+// 	}
+// 	
+// 	*sipCppPtr = (Size*)sipConvertToCpp(sipPy, sipClass_Size, sipIsErr);
+// 
+// 	return 0;
+// %End
+// };
+// 

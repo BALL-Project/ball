@@ -364,15 +364,15 @@ static PyObject *sipDo_System_countMolecules(PyObject *sipThisObj,PyObject *sipA
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			System *ptr;
 
 			if ((ptr = (System *)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> System::countMolecules());
+			res = ptr -> System::countMolecules();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -393,15 +393,15 @@ static PyObject *sipDo_System_countFragments(PyObject *sipThisObj,PyObject *sipA
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			System *ptr;
 
 			if ((ptr = (System *)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> System::countFragments());
+			res = ptr -> System::countFragments();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -422,15 +422,15 @@ static PyObject *sipDo_System_countAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			System *ptr;
 
 			if ((ptr = (System *)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> System::countAtoms());
+			res = ptr -> System::countAtoms();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -923,7 +923,7 @@ PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipSystem();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -942,7 +942,7 @@ PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSystem(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -963,7 +963,7 @@ PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -981,7 +981,7 @@ PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSystem(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

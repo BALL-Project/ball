@@ -183,7 +183,7 @@ PyObject *sipNew_Embeddable(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipEmbeddable();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -201,7 +201,7 @@ PyObject *sipNew_Embeddable(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEmbeddable(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

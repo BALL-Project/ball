@@ -213,7 +213,7 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new sipAssignChargeProcessor();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -234,7 +234,7 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -252,7 +252,7 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAssignChargeProcessor(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)

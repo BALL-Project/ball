@@ -541,15 +541,15 @@ static PyObject *sipDo_ResourceEntry_countChildren(PyObject *sipThisObj,PyObject
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			ResourceEntry *ptr;
 
 			if ((ptr = (ResourceEntry *)sipGetCppPtr(sipThis,sipClass_ResourceEntry)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> ResourceEntry::countChildren());
+			res = ptr -> ResourceEntry::countChildren();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -570,15 +570,15 @@ static PyObject *sipDo_ResourceEntry_countDescendants(PyObject *sipThisObj,PyObj
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			ResourceEntry *ptr;
 
 			if ((ptr = (ResourceEntry *)sipGetCppPtr(sipThis,sipClass_ResourceEntry)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> ResourceEntry::countDescendants());
+			res = ptr -> ResourceEntry::countDescendants();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -599,15 +599,15 @@ static PyObject *sipDo_ResourceEntry_getSize(PyObject *sipThisObj,PyObject *sipA
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			ResourceEntry *ptr;
 
 			if ((ptr = (ResourceEntry *)sipGetCppPtr(sipThis,sipClass_ResourceEntry)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> ResourceEntry::getSize());
+			res = ptr -> ResourceEntry::getSize();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -628,15 +628,15 @@ static PyObject *sipDo_ResourceEntry_getDepth(PyObject *sipThisObj,PyObject *sip
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			Size *res;
+			int res;
 			ResourceEntry *ptr;
 
 			if ((ptr = (ResourceEntry *)sipGetCppPtr(sipThis,sipClass_ResourceEntry)) == NULL)
 				return NULL;
 
-			res = new Size(ptr -> ResourceEntry::getDepth());
+			res = ptr -> ResourceEntry::getDepth();
 
-			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
+			return PyInt_FromLong((long)res);
 		}
 	}
 
@@ -1475,7 +1475,7 @@ PyObject *sipNew_ResourceEntry(PyObject *sipSelf,PyObject *sipArgs)
 		if (sipParseArgs(sipArgs,"-"))
 		{
 			sipNew = new ResourceEntry();
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1494,7 +1494,7 @@ PyObject *sipNew_ResourceEntry(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new ResourceEntry(* a0, (bool)a1);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1524,7 +1524,7 @@ PyObject *sipNew_ResourceEntry(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-		}
+	}
 	}
 
 	if (sipNew == NULL)
@@ -1542,7 +1542,7 @@ PyObject *sipNew_ResourceEntry(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new ResourceEntry(* a0);
-		}
+	}
 	}
 
 	if (sipNew == NULL)
