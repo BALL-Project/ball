@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.16 2000/07/10 19:17:30 amoll Exp $
+// $Id: String_test.C,v 1.17 2000/07/11 13:20:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.16 2000/07/10 19:17:30 amoll Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.17 2000/07/11 13:20:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -627,24 +627,24 @@ RESULT
 
 CHECK(String::toLong())
 	s4.set("123.4");
-	TEST_REAL_EQUAL(s4.toLong(),(long)123.4)
+	TEST_EQUAL(s4.toLong(),(long)123.4)
 	s4.set("abc");
 	TEST_EQUAL(s4.toLong(), (long)0)
 	s4.set("");
 	TEST_EQUAL(s4.toLong(), (long)0)
 	s4.set("-12.34");
-	TEST_REAL_EQUAL(s4.toLong(), (long)-12.34)
+	TEST_EQUAL(s4.toLong(), (long)-12.34)
 RESULT
 
 CHECK(String::toUnsignedLong())
 	s4.set("123.4");
-	TEST_REAL_EQUAL(s4.toUnsignedLong(),(unsigned long)123.4)
+	TEST_EQUAL(s4.toUnsignedLong(),(unsigned long)123.4)
 	s4.set("abc");
 	TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
 	s4.set("");
 	TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
 	s4.set("-12.34");
-	TEST_REAL_EQUAL(s4.toUnsignedLong(), (unsigned long)-12.34)
+	TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
 RESULT
 
 CHECK(String::toFloat())
@@ -1956,7 +1956,7 @@ CHECK(Substring::set(const String& string))
 	test_sub1.set(ABCDEF);
 	TEST_EQUAL(test_string, "ABCDEF")
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1.set(ABCDEF))	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1.set(ABCDEF))	
 RESULT
 
 CHECK(Substring::set(const Substring& s))
@@ -1966,7 +1966,7 @@ CHECK(Substring::set(const Substring& s))
 	test_sub1.set(test_sub2);
 	TEST_EQUAL(test_string, "ABCDEF")
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub2.set(test_sub1))	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub2.set(test_sub1))	
 RESULT
 
 CHECK(Substring::set(const char* char_ptr, Size size = string::npos))
@@ -1975,7 +1975,7 @@ CHECK(Substring::set(const char* char_ptr, Size size = string::npos))
 	TEST_EQUAL(sub, "12")
 	sub.set("test");
 	TEST_EQUAL(s, "ABtestCDEF")
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1.set(0))	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1.set(0))	
 RESULT
 
 CHECK(Substring::Substring& operator = (const String& string))
@@ -2016,14 +2016,14 @@ CHECK(Substring::getFirstIndex() const )
 	String temp = "AAAA";
 	test_sub1.bind(temp, 2, 1);
 	TEST_EQUAL(test_sub1.getFirstIndex(), 2)
-	TEST_EXCEPTION(Exception::GeneralException, empty_sub.getFirstIndex())	
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.getFirstIndex())	
 RESULT
 
 CHECK(Substring::getLastIndex() const )
 	String temp = "AAAA";
 	test_sub1.bind(temp, 1, 2);
 	TEST_EQUAL(test_sub1.getLastIndex(), 2)
-	TEST_EXCEPTION(Exception::GeneralException, empty_sub.getLastIndex())	
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.getLastIndex())	
 RESULT
 
 CHECK(Substring::size() const )
@@ -2079,8 +2079,8 @@ RESULT
 
 CHECK(Substring::bool operator == (const Substring& substring) const )
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1 == test_sub2)	
-	TEST_EXCEPTION(Exception::GeneralException,  test_sub2 == test_sub1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 == test_sub2)	
+	TEST_EXCEPTION(Substring::UnboundSubstring,  test_sub2 == test_sub1)	
 	test_sub1.bind(ABCDEF, 0, 5);
 	test_sub2.bind(ABCDEF, 0, 5);
 	TEST_EQUAL(test_sub1 == test_sub2, true)
@@ -2090,8 +2090,8 @@ RESULT
 
 CHECK(Substring::bool operator != (const Substring& substring) const )
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1 != test_sub2)	
-	TEST_EXCEPTION(Exception::GeneralException,  test_sub2 != test_sub1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 != test_sub2)	
+	TEST_EXCEPTION(Substring::UnboundSubstring,  test_sub2 != test_sub1)	
 	test_sub1.bind(ABCDEF, 0, 5);
 	test_sub2.bind(ABCDEF, 0, 5);
 	TEST_EQUAL(test_sub1 != test_sub2, false)
@@ -2106,7 +2106,7 @@ CHECK(Substring::bool operator == (const String& string) const )
 	test_string = "ABCDE";
 	TEST_EQUAL(test_sub1 == ABCDEF, false)
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1 == ABCDEF)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 == ABCDEF)	
 RESULT
 
 CHECK(Substring::bool operator != (const String& string) const )
@@ -2116,7 +2116,7 @@ CHECK(Substring::bool operator != (const String& string) const )
 	test_string = "ABCDE";
 	TEST_EQUAL(test_sub1 != ABCDEF, true)
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1 != ABCDEF)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 != ABCDEF)	
 RESULT
 
 CHECK(Substring::bool operator == (const String& string, const Substring& substring))
@@ -2126,7 +2126,7 @@ CHECK(Substring::bool operator == (const String& string, const Substring& substr
 	test_string = "ABCDE";
 	TEST_EQUAL(ABCDEF == test_sub1, false)
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, ABCDEF == test_sub1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, ABCDEF == test_sub1)	
 RESULT
 
 CHECK(Substring::bool operator != (const String& string, const Substring& substring))
@@ -2136,7 +2136,7 @@ CHECK(Substring::bool operator != (const String& string, const Substring& substr
 	test_string = "ABCDE";
 	TEST_EQUAL(ABCDEF != test_sub1, true)
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, ABCDEF != test_sub1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, ABCDEF != test_sub1)	
 RESULT
 
 CHECK(Substring::bool operator == (const char* char_ptr) const )
@@ -2147,7 +2147,7 @@ CHECK(Substring::bool operator == (const char* char_ptr) const )
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1 == char1, false)////////
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1 == char1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 == char1)	
 RESULT
 
 CHECK(Substring::bool operator != (const char* char_ptr) const )
@@ -2158,7 +2158,7 @@ CHECK(Substring::bool operator != (const char* char_ptr) const )
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1 != char1, true)
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1 != char1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 != char1)	
 RESULT
 
 CHECK(Substring::bool operator == (char c) const )
@@ -2170,7 +2170,7 @@ CHECK(Substring::bool operator == (char c) const )
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1 == c, false)//////////
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1 == c)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 == c)	
 RESULT
 
 CHECK(Substring::bool operator != (char c) const )///////
@@ -2182,7 +2182,7 @@ CHECK(Substring::bool operator != (char c) const )///////
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1 != c, true)
 	test_sub1.unbind();
-	TEST_EXCEPTION(Exception::GeneralException, test_sub1 != c)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 != c)	
 RESULT
 
 String filename;
