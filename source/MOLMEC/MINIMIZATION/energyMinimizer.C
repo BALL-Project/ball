@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.13 2002/12/16 12:23:00 sturm Exp $
+// $Id: energyMinimizer.C,v 1.14 2002/12/16 18:05:50 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
@@ -387,6 +387,26 @@ namespace BALL
 	bool EnergyMinimizer::specificSetup()
 	{
 		return true;
+	}
+
+	//	The minimizer optimizes the energy of the system bound to the force field.
+	//	The function is virtual.
+	//
+	bool EnergyMinimizer::minimize(Size /* steps */, bool /* restart */)
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
+
+	// udpate the search direction
+	void EnergyMinimizer::updateDirection()
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
+
+	// determine the new step along direction_
+	bool EnergyMinimizer::findStep()
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	// calculate a new energy
