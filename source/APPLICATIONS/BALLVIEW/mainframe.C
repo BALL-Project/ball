@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.47 2004/11/29 13:53:46 amoll Exp $
+// $Id: mainframe.C,v 1.48 2005/01/20 23:30:54 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -151,35 +151,31 @@ namespace BALL
 
 	void Mainframe::exportPOVRay()
 	{
-		QFileDialog fd(this, "", true);
-		fd.setMode(QFileDialog::AnyFile);
-		fd.setCaption("Export POVRay File");
-		fd.setViewMode(QFileDialog::Detail);
+		QString qresult = QFileDialog::getSaveFileName(
+											getWorkingDir().c_str(),
+											"*.pov",
+											this,
+											"Export POVRay File",
+											"Choose a filename" );
 
-		if (!fd.exec()== QDialog::Accepted) return;
+	 	if (qresult == QString::null) return;
 
-		POVRenderer pr(fd.selectedFile().ascii());
-		scene_->exportScene(pr);
-	}
+		String result = qresult.ascii();
 
-	void Mainframe::exportVRML()
-	{
-		QFileDialog *fd = new QFileDialog(this, "", true);
-		fd->setMode(QFileDialog::AnyFile);
-		fd->setCaption("Export POVRay File");
-		fd->setViewMode(QFileDialog::Detail);
+		if (!result.hasSuffix(".pov"))
+		{
+			result += ".pov";
+		}
 
-		if (!fd->exec()== QDialog::Accepted) return;
-
-		String filename(fd->selectedFile().ascii());
-		delete fd;
-
-		VRMLRenderer pr(filename);
-		pr.width  = scene_->width();
-		pr.height = scene_->height(); 
-		pr.init(*(scene_->getStage()));
-		scene_->exportScene(pr);
-		pr.finish();
+		POVRenderer pr(result);
+		if (!scene_->exportScene(pr))
+		{
+			setStatusbarText("Could not export POV to " + result, true);
+		}
+		else
+		{
+			setStatusbarText("Exported POV to " + result);
+		}
 	}
 
 	void Mainframe::about()
@@ -259,14 +255,24 @@ namespace BALL
 	void Mainframe::saveBALLViewProjectFile()
 		throw()
 	{
-		QString result = QFileDialog::getSaveFileName(
-				getWorkingDir().c_str(), "*.bvp", 0, "Select a BALLView project file");
-		if (result.isEmpty())
+		QString qresult = QFileDialog::getSaveFileName(
+											getWorkingDir().c_str(), 
+											"*.bvp", 
+											this, 
+											"Select a BALLView project file");
+
+	 	if (qresult == QString::null) return;
+
+		String result = qresult.ascii();
+
+		if (result.isEmpty()) return;
+
+		if (!result.hasSuffix(".bvp"))
 		{
-			return;
+			result += ".bvp";
 		}
 
-		MainControl::saveBALLViewProjectFile(result.ascii());
+		setStatusbarText("Saved project to " + result);
 	} 
 
 
