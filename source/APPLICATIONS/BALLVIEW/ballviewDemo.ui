@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>529</width>
-            <height>317</height>
+            <height>344</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -77,7 +77,7 @@
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
 Welcome to the BALLView demo. It will show you some of
-BALLViews main features. We will start with the different
+BALLView's main features. We will start with the different
 ModelTypes BALLView has to offer. Press OK to start the
 demonstration.
 
@@ -114,10 +114,11 @@ demonstration.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-This is a Line model, it is the fastest model available and suited best for 
-huge molecules or slow computers.
-It is colored by element. &lt;br&gt;
-(red = oxygen, blue = nitrogen, grey = carbon, yellow = sulfor)
+This is a Line model, the fastest model available, which is best suited for 
+huge molecules or slow computers. In this model, each bond contained
+in the molecule is shown as a single line.&lt;br&gt;&lt;br&gt;
+For this example, we have chosen a coloring by element. &lt;br&gt;
+(red = oxygen, blue = nitrogen, grey = carbon, yellow = sulfur)
 &lt;br&gt;&lt;br&gt;
 Press OK to continue.
 
@@ -154,8 +155,13 @@ Press OK to continue.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-This is a Stick model, it is still quite fast and
-gives the best overview of all atoms in a molecule.
+This is a Stick model, again visualizing each bond in a given
+molecule. In contrast to the Line model, the bonds are drawn
+as cylinders with a finite radius, that are closed with a spherical
+cap.&lt;br&gt;&lt;br&gt;
+Similar to the Line model, the Stick model is quite fast, and offers
+a clear and simple representation of the molecule without too much
+confusing eye-candy.
 
 &lt;/blockquote&gt;</string>
                                 </property>
@@ -190,7 +196,9 @@ gives the best overview of all atoms in a molecule.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-The Ball- and- Stick model can show douple/ tripple and aromatic bonds.
+The Ball- and- Stick model adds spheres at the positions of the individual
+atoms of the molecule to the Line model. In addition, it distinguishes
+between douple, triple and aromatic bonds.
 
 &lt;/blockquote&gt;</string>
                                 </property>
@@ -225,10 +233,13 @@ The Ball- and- Stick model can show douple/ tripple and aromatic bonds.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Van Der Waals model
+The Van-Der-Waals model is possibly the most intuitive of the
+availabe models: each atom is drawn as a sphere, with a radius
+corresponding to its type.
 &lt;br&gt;&lt;br&gt;
 
-Next we will calculate a Solvent Excluded Surface, this will take a moment.
+The computation of the next model, a Solvent Excluded Surface, might
+take a moment, depending on the performance of your machine.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -262,7 +273,17 @@ Next we will calculate a Solvent Excluded Surface, this will take a moment.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Solvent Excluded Surface (SES)
+Defining the &lt;it&gt;surface&lt;/it&gt; of a molecule turns out to be a nontrivial
+task with no unique solution. Apart from the implications of quantum 
+mechanics ("atoms have no boundaries"), different "objects" will
+"see" different surfaces for a given molecule.&lt;br&gt;
+
+A Solvent Excluded Surface (SES), which we see here, is defined as
+that part of the molecule that would be "visible" to the hull of a water
+molecule: the molecule is considered as a union of Van-der-Waals
+spheres, over which a water molecule is rolled. The points where
+the surface of the water touches the surface of one Van-der-Waals
+sphere of the molecule compose the SES.
 &lt;br&gt;&lt;br&gt;
 Next we will calculate a Solvent Accesible Surface, this will take a moment.
 &lt;/blockquote&gt;</string>
@@ -298,7 +319,10 @@ Next we will calculate a Solvent Accesible Surface, this will take a moment.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Solvent Accessible Surface (SAS)
+The Solvent Accessible Surface (SAS), shown in this example, is
+conceptually similar to the SES. For its definition, we use the same process
+as for the SES, but use the &lt;it&gt;center&lt;/it&gt; of the probing water molecule
+rather than its surface.
 
 &lt;/blockquote&gt;</string>
                                 </property>
