@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.43 2004/12/14 12:56:01 amoll Exp $
+// $Id: molecularControl.h,v 1.44 2004/12/15 15:23:52 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -473,7 +473,7 @@ namespace BALL
 		  protected:
 
 			//
-			void removeRecursiveComposite_(Composite& composite)
+			void removeRecursive_(SelectableListViewItem* item)
 				throw();
 
 			// only for Python Interface

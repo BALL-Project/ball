@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.88 2004/12/14 13:42:50 amoll Exp $
+// $Id: molecularControl.C,v 1.89 2004/12/15 15:23:50 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -417,8 +417,9 @@ void MolecularControl::checkResidue()
 
 void MolecularControl::showFilename()
 {
-	Composite* c_ptr = context_composite_;
-	c_ptr = &context_composite_->getRoot();
+	if (context_composite_ == 0) return;
+
+	Composite* c_ptr = &context_composite_->getRoot();
 	
 	if (RTTI::isKindOf<AtomContainer>(*c_ptr))
 	{
@@ -438,8 +439,7 @@ void MolecularControl::updateSelection()
 
 	selected_.clear();
 
-	// we have to prevent, to insert child items of already selected parents,
-	// otherwise we get trouble in DisplayProperties
+	// we have to prevent inserting childs of already selected parents, otherwise we get serious trouble
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
@@ -457,11 +457,9 @@ void MolecularControl::updateSelection()
 			List<Composite*>::Iterator lit = selected_.begin();
 			for (; lit != selected_.end(); lit++)
 			{
-				if (composite->isDescendantOf(**lit))
-				{
-					break;
-				}
+				if (composite->isDescendantOf(**lit)) break;
 			}
+
 			// no added parent found
 			if (lit == selected_.end())
 			{
@@ -487,22 +485,20 @@ void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point,
 {
 	// clear the context menu
 	context_menu_.clear();
+	SelectableListViewItem* sitem = dynamic_cast<SelectableListViewItem*>(item);
 
-	// get composite address
-	if (item == 0 ||
-			(dynamic_cast<SelectableListViewItem*>(item)) == 0)
+	if (item == 0 || sitem == 0)
 	{
-			return;
+		return;
 	}
 
-	Composite* composite = (dynamic_cast<SelectableListViewItem*>(item))->getComposite();
+	Composite* composite = sitem->getComposite();
 
 	// create the context menu
 	if (composite != 0)
 	{
 		context_composite_ = composite;
-		context_item_ = (SelectableListViewItem*)item;
-
+		context_item_ = sitem;
 		buildContextMenu(*composite);
 	}
 
@@ -628,27 +624,30 @@ void MolecularControl::addComposite(Composite& composite, QString* own_name)
 Size MolecularControl::removeComposite(Composite& composite)
 	throw()
 {
+	if (!composite_to_item_.has(&composite)) 
+	{
+		setStatusbarText(String("Tried to remove an invalid Composite in ") + __FILE__ + __LINE__, true);
+		return 0;
+	}
+
 	nr_items_removed_ = 1;
-	removeRecursiveComposite_(composite);
+	removeRecursive_(composite_to_item_[&composite]);
 	return nr_items_removed_;
 }
 
-void MolecularControl::removeRecursiveComposite_(Composite& composite)
+void MolecularControl::removeRecursive_(SelectableListViewItem* item)
 	throw()
 {
-	if (!composite_to_item_.has(&composite)) return;
-	SelectableListViewItem* item = composite_to_item_[&composite];
+	composite_to_item_.erase(item->getComposite());
 
 	SelectableListViewItem* child = dynamic_cast<SelectableListViewItem*>(item->firstChild());
 	while (child != 0)
 	{
-		Composite* c_ptr = child->getComposite();
-		removeRecursiveComposite_(*c_ptr);
+		removeRecursive_(child);
 		child = dynamic_cast<SelectableListViewItem*>(item->firstChild());
 		nr_items_removed_++;
 	}
 
-	composite_to_item_.erase(&composite);
 	delete item;
 }
 
@@ -735,8 +734,8 @@ void MolecularControl::setSelection_(bool open, bool force)
 
 void MolecularControl::cut()
 {
-	// delete old composites
-	if (!was_delete_ && copy_list_.size() > 0)
+	// delete old composites in copy list
+	if (!was_delete_)
 	{
 		clearClipboard();
 	}
@@ -746,6 +745,7 @@ void MolecularControl::cut()
 	// for all roots of removed items the representations are rebuild
 	Size nr_of_items = 0;
 	HashSet<Composite*> roots;
+
 	List<Composite*>::Iterator it = selected_.begin();	
 	for (; it != selected_.end(); it++)
 	{
@@ -768,10 +768,8 @@ void MolecularControl::cut()
 		}
 		else
 		{
-			if (!(**it).isRoot())
-			{
-				delete *it;
-			}
+			// Systems are deleted above with remove()
+ 			if (!(**it).isRoot()) delete *it;
 		}
 	}
 
@@ -798,10 +796,7 @@ void MolecularControl::copy()
 	setStatusbarText("copied " + String(selection.size()) + " objects ...");
 
 	// delete old cutted composites
-	if (copy_list_.size() > 0)
-	{
-		clearClipboard();
-	}
+	clearClipboard();
 
 	// copy the selected composites into the copy_list_
 	List<Composite*>::Iterator it = selected_.begin();	
@@ -830,10 +825,8 @@ void MolecularControl::paste()
 
 			// insert Composite in mainControl
 			new_composite->host(getInformationVisitor_());
-			CompositeMessage *new_message = new CompositeMessage(*new_composite, CompositeMessage::NEW_COMPOSITE);
-			new_message->setCompositeName(getInformationVisitor_().getName());
-			notify_(new_message);
-			continue;
+			getMainControl()->insert(*new_composite, getInformationVisitor_().getName());
+ 			continue;
 		}
 
 		if (selected_.size() != 1)
@@ -843,12 +836,6 @@ void MolecularControl::paste()
 		}
 
 		Composite *new_child = (Composite*)(*list_it)->create();
-
-		// prevent a strange problem with paste under windows
-		// the new_child pointer is then already in composite_to_item_
-		// this shouldnt happen , but it does, no idea why
-		// maybe its removeRecursiveComposite_ in cut()
-//   		composite_to_item_.erase(new_child);
 
 		Composite* parent = *selected_.begin();
 		parent->appendChild(*new_child);
@@ -894,6 +881,13 @@ MolecularControl::SelectableListViewItem*
 																					Composite& composite, QString* default_name)
 	throw()
 {
+  #ifdef BALL_VIEW_DEBUG
+	if (composite_to_item_.has(&composite))
+	{
+		Log.error() << "Composite " << & composite << " already added!" << std::endl;
+	}
+  #endif
+
 	// if getName returns "<xxxx>"  and name contains a valid string
 	// use it instead of the default name
 	// get information about the composite
@@ -934,7 +928,6 @@ MolecularControl::SelectableListViewItem*
 	CHECK_PTR(new_item);
 
 	composite_to_item_[&composite] = new_item;
-	if (composite.isSelected()) new_item->setOn(true);
 
 	recurseGeneration_(new_item, composite);
 
