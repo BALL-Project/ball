@@ -62,9 +62,17 @@ void SetCamera::okPressed()
 		}
 	}
 
+	Vector3 vp(strings1[0].toFloat(), strings1[1].toFloat(), strings1[2].toFloat());
+	Vector3 lp(strings2[0].toFloat(), strings2[1].toFloat(), strings2[2].toFloat());
+	if (vp == lp) 
+	{
+		Log.error() << "Invalid values for setCamera: viewpoint = look at" << std::endl;
+		return;
+	}
+
 	Camera& camera = ((Scene*) parentWidget())->getStage()->getCamera();
-	camera.setViewPoint(Vector3(strings1[0].toFloat(), strings1[1].toFloat(), strings1[2].toFloat()));
-	camera.setLookAtPosition(Vector3(strings2[0].toFloat(), strings2[1].toFloat(), strings2[2].toFloat()));
+	camera.setViewPoint(vp);
+	camera.setLookAtPosition(lp);
 }
 
 // NAMESPACE
