@@ -1,16 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.8 2005/01/25 17:20:25 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.9 2005/01/25 17:20:52 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 ///////////////////////////
 #include <BALL/SYSTEM/sysinfo.h>
-#include <BALL/COMMON/limits.h>
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.8 2005/01/25 17:20:25 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.9 2005/01/25 17:20:52 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
