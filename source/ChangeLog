@@ -3,10 +3,20 @@
 Changed:
   - molview has been renamed to BALLView in order to avoid
     name collisions
-  - ????
 
 Added + improved:
-  - ????
+  - Dialog to download and open PDB files directly from www.PDB.org
+	- Minor bugfixes in dialog for coloring surfaces
+	- Improved Python bindings for VIEW library
+	- further cleanup of the VIEW library
+	- Emulation in Scene for PCs with only one mouse button (e.g. Mac)
+	- Mousewheel sensitivity can be adjusted
+	- Added icon to BALLView executable
+	- Now using Windows native dialogs on Windows platforms
+	- Added capablity to BALLView to log to file
+	- Added capablity to BALLView to calculate RMSDs for proteins
+	- Fixed: Problems, when user cant write to BALLView installation dir
+	- Fixed: Problems, when BALLView cant find the data directory
 
 Installation:
   - Additional platform: Mac OS X (Panther)
