@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.10 2000/05/22 07:25:31 oliver Exp $
+// $Id: rtti.h,v 1.11 2001/02/05 00:25:10 amoll Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -30,8 +30,8 @@ namespace BALL
 			blanks in the name (as returned by RTTI::getName()) with underscores ("_").
 			In the case of {\tt gcc}, however a name demangling decodes the string first.
 			This function is needed for object persistence.
-			@param		type_info t the {\tt type_info} structure as returned by {\tt typeid}
-			@return		string the coverted class name
+			@param	t the {\tt type_info} structure as returned by {\tt typeid}
+			@return	string the coverted class name
 	*/ 
 	string streamClassName(const std::type_info& t);
 
@@ -44,16 +44,16 @@ namespace BALL
 			To use the RTTI template functions, parametrize it with the type you are interested in.
 			For example, to find out whether a given molecule is a protein, the following code
 			can be used:\\
-\begin{verbatim}
-	Molecule& m =...;
-	...
-	if (RTTI::isKindOf<Protein>(m)) 
-	{
-		// perform some protein specific operations
-	} else {
-		// this is only a molecule...
-	}
-\end{verbatim}
+			\begin{verbatim}
+				Molecule& m =...;
+				...
+				if (RTTI::isKindOf<Protein>(m)) 
+				{
+					// perform some protein specific operations
+				} else {
+					// this is only a molecule...
+				}
+			\end{verbatim}
 	*/
 	//@{
 

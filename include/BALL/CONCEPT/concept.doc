@@ -1,9 +1,8 @@
-// $Id: concept.doc,v 1.4 2000/07/16 19:28:10 oliver Exp $
+// $Id: concept.doc,v 1.5 2001/02/05 00:24:40 amoll Exp $
 
-/**@name	Concepts
-	This chapter contains all relevant information on 
-	the classes representing BALL concepts.
-	@nonames
+/** @name	Concepts
+		This chapter contains all relevant information on 
+		the classes representing BALL concepts.
 */
 //@{
 
