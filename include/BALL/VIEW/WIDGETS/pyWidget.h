@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.20 2004/07/25 17:49:58 amoll Exp $
+// $Id: pyWidget.h,v 1.21 2004/09/08 11:53:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -314,6 +314,8 @@ namespace BALL
 
 			///
 			void reactTo(const QKeyEvent& e) throw();
+
+			void run(const String& filename) throw() {text_edit_->runFile(filename);}
 
 			protected:
 
