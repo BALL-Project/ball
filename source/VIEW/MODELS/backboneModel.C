@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.38 2005/01/19 00:10:56 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.39 2005/01/19 16:30:56 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -10,6 +10,7 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/forEach.h>
 
 #include <BALL/VIEW/PRIMITIVES/line.h>
@@ -25,6 +26,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+		HashMap<const Residue*, Position> AddBackboneModel::residue_map_;
 
 		AddBackboneModel::SplinePoint::SplinePoint()
 			: point_(),
@@ -44,16 +47,8 @@ namespace BALL
 		bool AddBackboneModel::SplinePoint::operator < (const AddBackboneModel::SplinePoint& point) const
 			throw()
 		{
-			try
-			{
-   			return ((Residue*)       atom_->getParent())->getID().toUnsignedInt() <
-   						 ((Residue*) point.atom_->getParent())->getID().toUnsignedInt();
-			}
-			catch(...)
-			{
-			}
-
-			return (atom_ < point.atom_);
+			return AddBackboneModel::residue_map_[(Residue*) getAtom()->getParent()] <
+						 AddBackboneModel::residue_map_[(Residue*) point.getAtom()->getParent()];
 		}
 
 
@@ -188,8 +183,26 @@ namespace BALL
 		void AddBackboneModel::createBackbone_()
 			throw()
 		{
+			if (spline_vector_.size() == 0) return;
+
+			const Chain dummy_chain;
+			const Chain* const chain = (*spline_vector_.begin()).getAtom()->getAncestor(dummy_chain);
+
+			if (chain == 0) return;
+			
+			ResidueConstIterator it = chain->beginResidue();
+
+			Position pos = 0;
+			for (; +it; ++it)
+			{
+				pos ++;
+				residue_map_[&*it] = pos;
+			}
+			
 			// we have to sort the spline points, in case that we create a backbone for single residues
  			sort(spline_vector_.begin(), spline_vector_.end());
+
+			residue_map_.clear();
 
 			calculateTangentialVectors_();
 			createSplinePath_();

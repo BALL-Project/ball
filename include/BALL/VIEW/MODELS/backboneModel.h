@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.14.2.8 2005/01/11 14:53:37 amoll Exp $
+// $Id: backboneModel.h,v 1.14.2.9 2005/01/19 16:30:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -65,6 +65,8 @@ namespace BALL
 				Vector3 tangent_;
 				const Atom* atom_;
 			};
+
+			friend class SplinePoint;
 
 			public:
 
@@ -177,7 +179,11 @@ namespace BALL
 			//_
 			Size 	interpolation_steps_;
 
+			//_
 			Index last_spline_point_;
+
+			//_
+			static HashMap<const Residue*, Position> residue_map_;
 		};
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.12 2005/01/18 16:24:10 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.13 2005/01/19 16:33:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -38,8 +38,6 @@
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
 # include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #endif
-
-#include <qgl.h>
 
 namespace BALL
 {
@@ -210,19 +208,19 @@ namespace BALL
 			void initAlwaysFront()
 				throw();
 			
-			///
+			/// Remove all VertexBuffer and DisplayLists for the given Representation
 			void removeRepresentation(const Representation& rep)
 				throw();
 
-			///
+			/// Buffer the visualisation for the given Representation into OpenGL VertexBuffer Objects and DisplayLists.
 			void bufferRepresentation(const Representation& rep)
 				throw();
 
-			///
+			/// Draw the visualisation of the given Representation from the VertexBuffers and a DisplayList.
 			void drawBuffered(const Representation& rep)
 				throw();
 
-			///
+			/// Test if a Representation has a DisplayList.
 			bool hasDisplayListFor(const Representation& rep) const
 				throw();
 			
