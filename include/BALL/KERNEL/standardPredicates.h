@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.14 2001/02/27 01:57:54 amoll Exp $
+// $Id: standardPredicates.h,v 1.15 2001/05/24 13:51:44 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -27,7 +27,8 @@
 namespace BALL 
 {
 
-	/**	@name	Predefined Predicates
+	/**	@name	Predefined Predicates. {\bf Note:} These predicates do not
+			provide the OCI. \\
 			@see ExpressionPredicate \\
 			{\bf Definition:}\URL{BALL/KERNEL/standardPredicates.h}	\\
 	*/
@@ -52,7 +53,8 @@ namespace BALL
 	};
 
 	/** Selection predicate.
-			This predicate is {\bf true}, if the atom is selected, {\bf false} otherwise.
+			This predicate is {\bf true}, if the atom is selected, {\bf false}
+			otherwise.
 	 */
 	class SelectedPredicate
 		:	public ExpressionPredicate
@@ -68,7 +70,9 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate for atom names
+	/** Predicate for matching atom names. Returns {\tt true}, if the name of
+			the atom matches the argument of this predicate. This is an exact
+			match.
 	 */
 	class AtomNamePredicate
 		:	public	ExpressionPredicate
@@ -84,7 +88,8 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate for matching atom types. Returns {\tt true}, if the type name
+			of the atom matches exactly the argument of this predicate. 
 	 */
 	class AtomTypePredicate
 		:	public	ExpressionPredicate
@@ -100,7 +105,8 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate for matching elements. Returns {\tt true}, if the element
+			symbol of the atom matches exactly the argument  of this predicate.
 	 */
 	class ElementPredicate
 		:	public	ExpressionPredicate
@@ -116,7 +122,9 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate for matching residues. Returns {\tt true}, if the name of the 
+			residue that the atom belongs to matches exactly the argument of this
+			predicate.
 	 */
 	class ResiduePredicate
 		:	public	ExpressionPredicate
@@ -132,7 +140,9 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate for matching residues IDs. Returns {\tt true}, if the ID of
+			the residue that the atom belongs to matches exactly the argument of
+			this predicate.
 	 */
 	class ResidueIDPredicate
 		:	public	ExpressionPredicate
@@ -148,7 +158,9 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate for matching proteins. Returns {\tt true}, if the name of the
+			protein that the atom belongs to matches exactly the argument of this
+			predicate.
 	 */
 	class ProteinPredicate
 		:	public	ExpressionPredicate
@@ -164,7 +176,9 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate for matching chains. Returns {\tt true}, if the name of the
+			chain that the atom belongs to matches exactly the argument of this
+			expression.
 	 */
 	class ChainPredicate
 		:	public	ExpressionPredicate
@@ -180,7 +194,9 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate for matching secondary structures. Returns {\tt true}, if the
+			name of the secondary structure that the atom belongs to matches
+			exactly the argument of this predicate.
 	 */
 	class SecondaryStructurePredicate
 		:	public	ExpressionPredicate
@@ -196,7 +212,8 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate indicating solvent atoms. Returns {\tt true}, if the atom
+			belongs to a solvent molecule. 
 	 */
 	class SolventPredicate
 		:	public	ExpressionPredicate
@@ -212,7 +229,8 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate for matching molecules. Returns {\tt true}, if the atom
+			belongs to the molecule defined by the expression of this predicate.
 	 */
 	class MoleculePredicate
 		:	public	ExpressionPredicate
@@ -228,7 +246,9 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate indicating backbone atoms. Returns {\tt true}, if the atom
+			belongs to the backbone of a protein, i. e. is one of the members of
+			the peptide bond.
 	 */
 	class BackBonePredicate
 		:	public	ExpressionPredicate
@@ -260,7 +280,8 @@ namespace BALL
 				throw();
 	};
 
-	/**
+	/** Predicate indicating nucleotide atoms. Returns {\tt true}, if the
+			atom belongs to a nucleotide.
 	 */
 	class NucleotidePredicate
 		:	public	ExpressionPredicate
@@ -299,7 +320,8 @@ namespace BALL
 				const Size limit, HashSet<const Bond*>& visited) const;
 	};
 
-	/** Predicate for bearing double bonds. 
+
+	/** Predicate for atoms bearing double bonds. 
 			Arguments of this class are	\emph{required} to consist 
 			of an relational operator and a number between 1 and 8.
 	 */
@@ -320,7 +342,10 @@ namespace BALL
 			bool testPredicate_(const Atom& atom, Bond::Order order) const;
 	};
 
+
 	/** Predicate class for atoms bearing single bonds.
+			Arguments of this class are	\emph{required} to consist 
+			of an relational operator and a number between 1 and 8.
 	 */
 	class SingleBondsPredicate
 		:	public DoubleBondsPredicate
@@ -336,7 +361,10 @@ namespace BALL
 				throw();
 	};
 
+
 	/** Predicate class for atoms bearing triple bonds.
+			Arguments of this class are	\emph{required} to consist 
+			of an relational operator and a number between 1 and 8.
 	 */
 	class TripleBondsPredicate
 		:	public DoubleBondsPredicate
@@ -352,7 +380,10 @@ namespace BALL
 				throw();
 	};
 
+
 	/** Predicate class for atoms bearing aromatic bonds.
+			Arguments of this class are	\emph{required} to consist 
+			of an relational operator and a number between 1 and 8.
 	 */
 	class AromaticBondsPredicate
 		:	public DoubleBondsPredicate
@@ -368,7 +399,10 @@ namespace BALL
 				throw();
 	};
 
+
 	/** Predicate class for atoms bearing a certain number of bonds.
+			Arguments of this class are	\emph{required} to consist 
+			of an relational operator and a number between 1 and 8.
 	 */
 	class NumberOfBondsPredicate
 		:	public	ExpressionPredicate
@@ -383,6 +417,7 @@ namespace BALL
 			virtual bool operator () (const Atom& atom) const
 				throw();
 	};
+
 
 	/** Predicate class for atoms being connected to a constellation defined
 			by an expression. Syntax:
@@ -424,7 +459,7 @@ namespace BALL
 					const Bond* source) const;
 	};
 
-	/** Predicate class for atoms being sp hybridized ...
+	/** Predicate indicating sp hybridized atoms.
 	 */
 	class SpHybridizedPredicate
 		:	public	ExpressionPredicate
@@ -440,7 +475,7 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate class for atoms being sp2 hybridized.
+	/** Predicate indicating sp2 hybridized atoms.
 	 */
 	class Sp2HybridizedPredicate
 		:	public	ExpressionPredicate
@@ -456,7 +491,8 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate class for atoms being sp3 hybridized.
+
+	/** Predicate indicating sp3 hybridized atoms.
 	 */
 	class Sp3HybridizedPredicate
 		:	public	ExpressionPredicate
