@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.8 2000/05/04 21:01:28 oliver Exp $
+// $Id: lennardJones.h,v 1.9 2000/07/03 13:57:39 anker Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -33,6 +33,7 @@ namespace BALL
 				A_{ij} & = & \frac{1}2{} B_{ij} (R_i + R_j)^6
 				\end{aligned}
 			\]
+			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/lennardJones.h}
 	*/
 	class LennardJones 
 		:	public ParameterSection
