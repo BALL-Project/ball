@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.16 2003/08/26 09:17:46 oliver Exp $
+// $Id: MOLFile.C,v 1.17 2004/02/17 16:07:19 oliver Exp $
 //
 
 
@@ -67,8 +67,9 @@ namespace BALL
 
 	MOLFile::MOLFile(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
-		: GenericMolFile(name, open_mode)
+		: GenericMolFile()
 	{
+		GenericMolFile::open(name, open_mode);
 	}
 
 	MOLFile::MOLFile(const MOLFile& file)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.30 2003/08/26 08:04:15 oliver Exp $
+// $Id: lineBasedFile.h,v 1.31 2004/02/17 16:07:18 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
@@ -65,8 +65,8 @@ namespace BALL
 		/** Inequality operator
 		*/
 		bool operator != (const LineBasedFile& f)  throw();
-
 		//@}
+
 		/**	@name Assignment
 		*/
 		//@{

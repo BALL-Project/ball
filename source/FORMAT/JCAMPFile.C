@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.15 2003/08/26 09:17:46 oliver Exp $
+// $Id: JCAMPFile.C,v 1.16 2004/02/17 16:07:19 oliver Exp $
 //
 
 
@@ -11,12 +11,14 @@
 namespace BALL
 {
 
-	JCAMPFile::JCAMPFile( const String& name, OpenMode open_mode) 
+	JCAMPFile::JCAMPFile(const String& name, OpenMode open_mode) 
 		throw(Exception::FileNotFound)
-		: LineBasedFile(name, open_mode, true), 
+		: LineBasedFile(), 
 			header_(),
 			entries_()
 	{
+		LineBasedFile::open(name, open_mode);
+		enableTrimWhitespaces(true);
 	}
 
 	JCAMPFile::JCAMPFile(const JCAMPFile& file) 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.C,v 1.28 2003/08/26 09:17:47 oliver Exp $
+// $Id: lineBasedFile.C,v 1.29 2004/02/17 16:07:19 oliver Exp $
 //
 
 #include <BALL/FORMAT/lineBasedFile.h>
@@ -36,10 +36,11 @@ namespace BALL
 
 	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode, bool trim_whitespaces)
 		throw(Exception::FileNotFound)
-		: File(filename, open_mode),
+		: File(),
 			line_number_(0),
 			trim_whitespaces_(trim_whitespaces)
 	{
+		File::open(filename, open_mode);
 		if (!isAccessible())
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
