@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.8.4.5 2002/11/03 15:37:33 amoll Exp $
+// $Id: scene.h,v 1.8.4.6 2002/11/04 18:10:41 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -104,6 +104,9 @@ namespace BALL
 			/**	@name	Constructors
 			*/	
 			//@{
+
+			Scene()
+				throw();
 
 			/** Default Constructor.
 					Construct new scene.
