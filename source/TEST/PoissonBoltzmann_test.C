@@ -1,16 +1,16 @@
-// $Id: PoissonBoltzmann_test.C,v 1.6 2000/05/23 10:23:47 oliver Exp $
+// $Id: PoissonBoltzmann_test.C,v 1.7 2000/05/23 12:24:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 
-PRECISION(0.005)
-
-START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.6 2000/05/23 10:23:47 oliver Exp $")
+START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.7 2000/05/23 12:24:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 			
 using namespace BALL;
+
+PRECISION(0.005)
 
 System*		system = new System;
 Atom*			atom = new Atom;
