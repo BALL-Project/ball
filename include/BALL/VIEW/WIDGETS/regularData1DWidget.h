@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.4 2003/12/15 01:27:24 amoll Exp $
+<<<<<<< regularData1DWidget.h
+// $Id: regularData1DWidget.h,v 1.5 2003/12/19 14:40:27 anne Exp $
+=======
+// $Id: regularData1DWidget.h,v 1.5 2003/12/19 14:40:27 anne Exp $
+>>>>>>> 1.4
 //
-
-#ifndef BALL_VIEW_WIDGET_REGULARDATA1DWIDGET_H
-#define BALL_VIEW_WIDGET_REGULARDATA1DWIDGET_H
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 # include <BALL/VIEW/KERNEL/message.h>
@@ -15,19 +16,25 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
+#ifndef BALL_VIEW_WIDGETS_CANVASWIDGET_H
+# include <BALL/VIEW/WIDGETS/canvasWidget.h>
+#endif
+
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 # include <BALL/DATATYPE/regularData1D.h>
 #endif
 
-#include <qscrollview.h>
-#include <qpixmap.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qcanvas.h>
+#include <qpointarray.h>
+#include <qcolor.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
+		//  class regularData1DWidget used to plot one-dimensional data
 		class MainControl;
 
 		/**  New RegularData1D Message Classic.
@@ -72,144 +79,49 @@ namespace BALL
 		 \ingroup ViewWidgets
 		 */
 		class RegularData1DWidget
-			: public QScrollView,
-				public ModularWidget
+			:public CanvasWidget 
 		{
-			Q_OBJECT
+			Q_OBJECT  //macro for QT messages
 				
 			public:
-				
-			BALL_EMBEDDABLE(RegularData1DWidget)
-
-			/** Constructors and Destructors
+		
+			//			BALL_EMBEDDABLE(RegularData1DWidget) //macro for BALL messages
+			
+			/** Detailed constructor
 			 */
-			//@{
-			
-			/// Detailed constructor
-			RegularData1DWidget(RegularData1D* data, QWidget* parent = 0)
+			RegularData1DWidget(const RegularData1D& data, QWidget *parent = 0)
 				throw();
 
-			/// Copy constructor
-			RegularData1DWidget(const RegularData1DWidget& widget)
-				throw();
-
-			/// Destructor
-			virtual ~RegularData1DWidget()
-				throw();
-			
-			//@}
-			/** Assignment
+			/** Copy constructor
 			 */
-			//@{
+			/*	RegularData1DWidget(RegularData1DWidget* widget)
+					throw() ; */
 
-			/// Assignment operator
-			const RegularData1DWidget& operator = (const RegularData1DWidget &widget)
-				throw();
-
-			/// Clear method
-			virtual void clear()
-				throw();
-
-			void setData(RegularData1D* data)
-			{ 
-				data_ = data;
-			}
-			
-			//@}
-			/** @name Predicates
+			/** Destructor
 			 */
-			//@{
+			~RegularData1DWidget()
+				throw();
 
-			/** Equality operator. 
-					Two spectra are equal by definition if they point to the same data.
+			public slots: //catches signals from messages
+
+			/** Creator of a plot
 			 */
-			bool operator == (const RegularData1DWidget &widget) const
-				throw();
-
-			//@}
-
-			void onNotify(Message *message)
-				throw();
-
-			public slots:
-			
-			/** @name ModularWidget related methods.
-			 */
-			//@{
-			
-			/** Setup the menu entries.
-					RegularData1DWidget creates an entry in Tools|RegularData1DWidget and connects
-					the entry to createPlot()
-			*/
-			virtual void initializeWidget(MainControl& main_control);
-
-			/** Remove menu entries.
-			 */
-			virtual void finalizeWidget(MainControl& main_control);
-			
-			///
-			void setXAxisText(const String& text)
+			void createPolygon()
 				throw();
 			
-			///
-			void setYAxisText(const String& text)
-				throw();
-
-			///
-			const String& getXAxisText() const
-				throw();
-
-			///
-			const String& getYAxisText() const
-				throw();
-
-			///
-			void setBackgroundColor(const QColor& color)
-				throw();
-
-			///
-			const QColor& getBackgroundColor() const
-				throw();
-			
-			///
-			void setDiagramColor(const QColor& color)
-				throw();
-
-			///
-			const QColor& getDiagramColor() const
-				throw();
-
-			///
-			void setLineStyle(bool state)
-				throw();
-
-			///
-			bool isLineStyle() const
-				throw();
-
-			//@}
-
-			public slots:
-
-			///
-			void createPlot();
-
-		 protected:
-			
-			QGridLayout layout_;
-			QPixmap pm_;
-			QLabel diagram_;
-			QLabel x_label_;
-			QLabel y_label_;
-			QLabel dummy_label_;
-			RegularData1D* data_;
-			Size width_, height_;
-			String x_axis_text_, y_axis_text_;
-			QColor background_color_;
+		protected:
+			RegularData1D data_;
+			//QPointArray point_data_; //to create the polygon
+			//			QCanvasPolygon *polygon_;
+			//QCanvasSpline *polygon_;
 			QColor diagram_color_;
+			QColor background_color_;
+			Size height_; // is it neccessary? 
 			bool line_style_;
-		};
-	} // namespace VIEW
-} // namespace BALL
+			
 
-#endif // BALL_VIEW_WIDGET_REGULARDATA1DWIDGET_H
+		}; //end of class RegularData1DWidget
+
+	} //end of namespace VIEW
+
+}//end of namespace BALL
