@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 
 	// transmit the system
 	cout << "sending " << S.countAtoms() << " atoms to " << host << endl;
-	client.getScene().insert(S);
+	client.insert(S);
 
 	
 	// that's it.
