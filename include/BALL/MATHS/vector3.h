@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.38 2000/05/04 11:06:34 amoll Exp $
+// $Id: vector3.h,v 1.39 2000/05/04 18:27:15 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -214,13 +214,11 @@ namespace BALL
 				{\tt phi}	ranges from 0 to $2 \pi$, {\tt theta} ranges from 0 (north pole, positive z-axis)
 				to $\pi$ (south pole, negative z-axis).\\
 				Coordinates are calculated according to the following formulas:\\
-				\TEX{
-				\begin{eqnarray*}
+				\[
 					x & = & r \sin \theta \cos \phi\\
 					y & = & r \sin \theta \sin \phi\\
 					z & = & r \cos \theta
-				\end{eqnarray*}
-				}
+				\]
 				@param	r the radius
 				@param	phi the azimuth
 				@param	theta	the co-latitude
