@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: residue.C,v 1.2 1999/09/07 19:36:01 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -247,8 +247,7 @@ namespace BALL
 
 	bool Residue::isTerminal(void) const
 	{
-		return (isNTerminal()
-						|| isCTerminal());
+		return (isNTerminal() || isCTerminal());
 	}
 
 	bool Residue::isNTerminal(void) const
@@ -260,9 +259,9 @@ namespace BALL
 			if (chain != 0)
 			{
 				ResidueConstIterator res_it = chain->beginResidue();
+				for (; +res_it && &(*res_it) != this && !res_it->isAminoAcid(); ++res_it);
 
-				return (!res_it.isEnd()
-								&& &(*res_it) == this);
+				return (&(*res_it) == this);
 			}
 		}
 
@@ -278,9 +277,9 @@ namespace BALL
 			if (chain != 0)
 			{
 				ResidueConstIterator res_it = chain->rbeginResidue();
+				for (; +res_it && &(*res_it) != this && !res_it->isAminoAcid(); --res_it);
 
-				return (!res_it.isREnd()
-								&& &(*res_it) == this);
+				return (&(*res_it) == this);
 			}
 		}
 
