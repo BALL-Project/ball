@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.20 2003/12/04 01:28:10 amoll Exp $
+// $Id: molecularControl.C,v 1.21 2003/12/04 15:29:34 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -387,14 +387,6 @@ void MolecularControl::selectedComposite_(Composite* composite, bool state)
 	if (selection.has(composite) == state)
 	{
 		return;
-	}
-	if (state)
-	{
-		getMainControl()->selectCompositeRecursive(composite, true);
-	}
-	else
-	{
-		getMainControl()->deselectCompositeRecursive(composite, true);
 	}
 	
 	SelectableListViewItem* item = composite_to_item_[composite];
