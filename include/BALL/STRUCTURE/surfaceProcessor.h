@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.20 2001/12/08 17:09:03 strobel Exp $
+// $Id: surfaceProcessor.h,v 1.21 2002/01/07 18:07:50 strobel Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -88,7 +88,7 @@ namespace BALL
 	bool SurfaceProcessor::finish()
 	{
 		double old_epsilon = Constants::EPSILON;
-		Constants::EPSILON = 1e-4;
+		//Constants::EPSILON = 1e-4;
 				probe_radius_ = 1.5;
 				density_ = 4.5;
 
