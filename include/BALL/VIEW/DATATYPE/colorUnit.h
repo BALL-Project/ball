@@ -1,4 +1,4 @@
-// $Id: colorUnit.h,v 1.7 2001/02/11 13:04:38 hekl Exp $
+// $Id: colorUnit.h,v 1.8 2001/05/13 13:28:50 hekl Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -20,11 +20,8 @@ namespace BALL
 	{
 
 		/** ColorUnit class.
-
 				{\bf Framework:} BALL/VIEW/DATATYPE\\
-				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorUnit.h}
-				\\
-				
+				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorUnit.h}\\ \\	
 				An instance of ColorUnit can represent a value for the red, green, blue
 				and alpha component of the class \Ref{ColorRGBA}. Furthermore this class is
 				used for the value and saturation component of the class \Ref{ColorHSV}.
@@ -35,11 +32,10 @@ namespace BALL
 				ColorUnit provides certain conversion functions as well that will convert
 				its value to the needed type.
 				This class is used by the class \Ref{ColorRGBA} and \Ref{ColorHSV}.
-
 				@memo    ColorUnit class (BALL VIEW datatype framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/02/11 13:04:38 $
+				@version $Revision: 1.8 $
+				@date    $Date: 2001/05/13 13:28:50 $
 		*/
 		class ColorUnit
 		{
@@ -59,7 +55,8 @@ namespace BALL
 			{
 				public:
 
-				NotInHexFormat(const char* file, int line, const string& data);
+				NotInHexFormat(const char* file, int line, const string& data)
+					throw();
 			};
 			//@}
 
@@ -69,139 +66,139 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new colorUnit. Its value will be set to zero (0).
-
-					@return      ColorUnit - new constructed colorUnit
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit();
+			ColorUnit()
+				throw();
 		
 			/** Copy constructor.
 					Construct new colorUnit by copying the colorUnit {\em color_unit}.
-
 					@param       color_unit the colorUnit to be copied
-					@return      ColorUnit - new constructed colorUnit copied from {\em color_unit}
+					@return      ColorUnit new constructed colorUnit copied from {\em color_unit}
 			*/
-			ColorUnit(const ColorUnit& color_unit);
+			ColorUnit(const ColorUnit& color_unit)
+				throw();
 
 			/** Constructor with Parameter char*.
 					Construct new colorUnit by initialising its value with the given pointer to
 					a string representing a value in hex format (00 - FF, or 00 - ff).
-
 					@param       value the pointer to a string (00 - FF, or 00 - ff)
-					@exception   InvalidRange - if {\tt string length != 2}
-					@exception   NotInHexFormat - if string contains characters g-z or G-Z
-					@return      ColorUnit - new constructed colorUnit
+					@exception   InvalidRange if {\tt string length != 2}
+					@exception   NotInHexFormat if string contains characters g-z or G-Z
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const char* value);
+			ColorUnit(const char* value)
+				throw(Exception::InvalidRange, NotInHexFormat);
 
 			/** Constructor with Parameter String.
 					Construct new colorUnit by initialising its value with the given 
 					string representing a value in hex format (00 - FF, or 00 - ff).
-
 					@param       value a string (00 - FF, or 00 - ff)
-					@exception   InvalidRange - if {\tt string length != 2}
-					@exception   NotInHexFormat - if string contains characters g-z or G-Z
-					@return      ColorUnit - new constructed colorUnit
+					@exception   InvalidRange if {\tt string length != 2}
+					@exception   NotInHexFormat if string contains characters g-z or G-Z
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const String& value);
+			ColorUnit(const String& value)
+				throw(Exception::InvalidRange, NotInHexFormat);
 
 			/** Constructor with Parameter unsigned char.
 					Construct new colorUnit by initialising its value with the given 
 					unsigned char representing a value in integer format (0 - 255).
-
-					@param       value a char value (0 - 255)
-					@return      ColorUnit - new constructed colorUnit
+					@param       value a char (0 - 255)
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const unsigned char value);
+			ColorUnit(const unsigned char value)
+				throw();
 
 			/** Constructor with Parameter short.
 					Construct new colorUnit by initialising its value with the given 
 					short representing a value in integer format (0 - 255).
-
-					@param       value a short value (0 - 255)
-					@exception   InvalidRange - if {\tt value < 0 || value > 255}
-					@return      ColorUnit - new constructed colorUnit
+					@param       value a short (0 - 255)
+					@exception   InvalidRange if {\tt value < 0 || value > 255}
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const short value);
+			ColorUnit(const short value)
+				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter unsigned short.
 					Construct new colorUnit by initialising its value with the given 
 					unsigned short representing a value in integer format (0 - 255).
-
-					@param       value a unsigned short value (0 - 255)
-					@exception   InvalidRange - if {\tt value > 255}
-					@return      ColorUnit - new constructed colorUnit
+					@param       value a unsigned short (0 - 255)
+					@exception   InvalidRange if {\tt value > 255}
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const unsigned short value);
+			ColorUnit(const unsigned short value)
+				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter int.
 					Construct new colorUnit by initialising its value with the given 
 					int representing a value in integer format (0 - 255).
-
-					@param       value an int value (0 - 255)
-					@exception   InvalidRange - if {\tt value < 0 || value > 255}
-					@return      ColorUnit - new constructed colorUnit
+					@param       value an int (0 - 255)
+					@exception   InvalidRange if {\tt value < 0 || value > 255}
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const int value);
+			ColorUnit(const int value)
+				throw(Exception::InvalidRange);
 		
 			/** Constructor with Parameter unsigned int.
 					Construct new colorUnit by initialising its value with the given 
 					unsigned int representing a value in integer format (0 - 255).
-
-					@param       value an unsigned int value (0 - 255)
-					@exception   InvalidRange - if {\tt value > 255}
-					@return      ColorUnit - new constructed colorUnit
+					@param       value an unsigned int (0 - 255)
+					@exception   InvalidRange if {\tt value > 255}
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const unsigned int value);
+			ColorUnit(const unsigned int value)
+				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter long.
 					Construct new colorUnit by initialising its value with the given 
 					long representing a value in integer format (0 - 255).
-
-					@param       value an long value (0 - 255)
-					@exception   InvalidRange - if {\tt value < 0 || value > 255}
-					@return      ColorUnit - new constructed colorUnit
+					@param       value an long (0 - 255)
+					@exception   InvalidRange if {\tt value < 0 || value > 255}
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const long value);
+			ColorUnit(const long value)
+				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter unsigned long.
 					Construct new colorUnit by initialising its value with the given 
 					unsigned long representing a value in integer format (0 - 255).
-
-					@param       value an unsigned long value (0 - 255)
-					@exception   InvalidRange - if {\tt value > 255}
-					@return      ColorUnit - new constructed colorUnit
+					@param       value an unsigned long (0 - 255)
+					@exception   InvalidRange if {\tt value > 255}
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const unsigned long value);
+			ColorUnit(const unsigned long value)
+				throw(Exception::InvalidRange);
 		
 			/** Constructor with Parameter float.
 					Construct new colorUnit by initialising its value with the given 
 					float representing a value of range (0 - 1.0).
-
-					@param       value a float value (0 - 1.0)
-					@exception   InvalidRange - if {\tt value < 0.0 || value > 1.0}
-					@return      ColorUnit - new constructed colorUnit
+					@param       value a float (0 - 1.0)
+					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const float value);
+			ColorUnit(const float value)
+				throw(Exception::InvalidRange);
 		
 			/** Constructor with Parameter double.
 					Construct new colorUnit by initialising its value with the given 
 					double representing a value of range (0 - 1.0).
-
-					@param       value a double value (0 - 1.0)
-					@exception   InvalidRange - if {\tt value < 0.0 || value > 1.0}
-					@return      ColorUnit - new constructed colorUnit
+					@param       value a double (0 - 1.0)
+					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const double value);
+			ColorUnit(const double value)
+				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter long double.
 					Construct new colorUnit by initialising its value with the given 
 					long double representing a value of range (0 - 1.0).
-
-					@param       value a long double value (0 - 1.0)
-					@exception   InvalidRange - if {\tt value < 0.0 || value > 1.0}
-					@return      ColorUnit - new constructed colorUnit
+					@param       value a long double (0 - 1.0)
+					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
+					@return      ColorUnit new constructed colorUnit
 			*/
-			ColorUnit(const long double value);
+			ColorUnit(const long double value)
+				throw(Exception::InvalidRange);
 
 			//@}
 
@@ -210,11 +207,11 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} colorUnit.
-
-					Calls \Ref{ColorUnit::destroy}.
-					@see         ColorUnit::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~ColorUnit();
+			virtual ~ColorUnit()
+				throw();
 
 			/** Explicit default initialization.
 					Set the value of {\em *this} colorUnit to the default value.
@@ -223,102 +220,103 @@ namespace BALL
 						\item value is zero (0)
 					\end{itemize}
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Empty for further purpose.
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 				
 			//@}
 
 			/**	@name	Converters
 			*/
 			//@{
-
 			/** Conversion to string.
 					This operator casts an instance of colorUnit to the string type.
-					
-					@return      a string with format "00"-"FF" or "00"-"ff"
+					@return      string with format {\tt "00"-"FF"} or {\tt "00"-"ff"}
 			*/
-			operator String () const;
+			operator String () const
+				throw();
 
 			/** Conversion to char.
 					This operator casts an instance of colorUnit to the char type.
-
-					@return      a char with a value of range 0 - 255
+					@return      char with a value of range {\tt 0 - 255}
 			*/
-			operator char () const;
+			operator char () const
+				throw();
 
 			/** Conversion to unsigned char.
 					This operator casts an instance of colorUnit to the unsigned char type.
-
-					@return      a unsigned char with a value of range 0 - 255
+					@return      unsigned char with a value of range {\tt 0 - 255}
 			*/
-			operator unsigned char () const;
+			operator unsigned char () const
+				throw();
 
 			/** Conversion to short.
 					This operator casts an instance of colorUnit to the short type.
-
-					@return      a short with a value of range 0 - 255
+					@return      short with a value of range {\tt 0 - 255}
 			*/
-			operator short () const;
+			operator short () const
+				throw();
 			
 			/** Conversion to unsigned short.
 					This operator casts an instance of colorUnit to the unsigned short type.
-
-					@return      a unsigned short with a value of range 0 - 255
+					@return      unsigned short with a value of range {\tt 0 - 255}
 			*/
-			operator unsigned short	() const;
+			operator unsigned short	() const
+				throw();
 			
 			/** Conversion to int.
 					This operator casts an instance of colorUnit to the int type.
-
-					@return      a int with a value of range 0 - 255
+					@return      int with a value of range {\tt 0 - 255}
 			*/
-			operator int () const;
+			operator int () const
+				throw();
 
 			/** Conversion to unsigned int.
 					This operator casts an instance of colorUnit to the unsigned int type.
-
-					@return      a unsigned int with a value of range 0 - 255
+					@return      unsigned int with a value of range {\tt 0 - 255}
 			*/
-			operator unsigned int () const;
+			operator unsigned int () const
+				throw();
 
 			/** Conversion to long.
 					This operator casts an instance of colorUnit to the long type.
-
-					@return      a long with a value of range 0 - 255
+					@return      long with a value of range {\tt 0 - 255}
 			*/
-			operator long () const;
+			operator long () const
+				throw();
 
 			/** Conversion to unsigned long.
 					This operator casts an instance of colorUnit to the unsigned long type.
-
-					@return      a unsigned long with a value of range 0 - 255
+					@return      unsigned long with a value of range {\tt 0 - 255}
 			*/
-			operator unsigned long () const;
+			operator unsigned long () const
+				throw();
 
 			/** Conversion to float.
 					This operator casts an instance of colorUnit to the float type.
-
-					@return      a float with a value of range 0 - 1.0
+					@return      float with a value of range {\tt 0 - 1.0}
 			*/
-			operator float () const;
+			operator float () const
+				throw();
 
 			/** Conversion to double.
 					This operator casts an instance of colorUnit to the double type.
-
-					@return      a double with a value of range 0 - 1.0
+					@return      double with a value of range {\tt 0 - 1.0}
 			*/
-			operator double () const;
+			operator double () const
+				throw();
 			
 			/** Conversion to long double.
 					This operator casts an instance of colorUnit to the long double type.
-
-					@return      a long double with a value of range 0 - 1.0
+					@return      long double with a value of range {\tt 0 - 1.0}
 			*/
-			operator long double () const;
+			operator long double () const
+				throw();
 
 			//@}
 
@@ -329,38 +327,39 @@ namespace BALL
 			/** Assignment.
 					Assign the colorUnit {\em color_unit} to {\em *this} colorUnit.
 					The value of {\em *this} is initialized to the value of the colorUnit {\em color_unit}.\\
-
 					@param       color_unit the colorUnit to be copied 
 			*/
-			void set(const ColorUnit& color_unit);
+			void set(const ColorUnit& color_unit)
+				throw();
 
 			/** Assignment operator.
 					Assign the colorUnit {\em color_unit} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
+					Calls \Ref{set}.
 					The value of {\em *this} is initialized to the value of the colorUnit {\em color_unit}.\\
-
 					@param       color_unit the colorUnit to be copied
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const ColorUnit& color_unit);
+			const ColorUnit& operator = (const ColorUnit& color_unit)
+				throw();
 		
 			/** Copying.
 					Copy {\em *this} colorUnit to the colorUnit {\em color_unit}.
-					Calls \Ref{ColorUnit::set}.
+					Calls \Ref{set}.
 					The value of the colorUnit {\em color_unit} is initialized to the value of {\em *this} colorUnit.\\
-
 					@param       color_unit the colorUnit to be assigned to
-					@see         ColorUnit::set
+					@see         set
 			*/
-			void get(ColorUnit& color_unit) const;
+			void get(ColorUnit& color_unit) const
+				throw();
 
 			/** Swapping of colorUnits.
 					Swap the values of {\em *this} colorUnit with the colorUnit {\em color_unit}.
 					@param       color_unit the colorUnit being swapped with {\em *this} colorUnit 
-					@see         ColorUnit::ColorUnit
+					@see         ColorUnit
 			*/
-			void swap(ColorUnit& color_unit);
+			void swap(ColorUnit& color_unit)
+				throw();
 
 			//@}
 
@@ -371,355 +370,354 @@ namespace BALL
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					a pointer {\em value} to a string.
-
-					@param       value the new value of {\em *this} colorUnit (a string in the format "00"-"FF" or "00"-"ff")
-
-					@exception   InvalidRange - if {\tt string length != 2}
-					@exception   NotInHexFormat - if string contains characters g-z or G-Z
-					@see         ColorUnit::getValue
+					@param       value the new value of {\em *this} colorUnit (a string in the format {\tt "00"-"FF"} or {\tt "00"-"ff"})
+					@exception   InvalidRange if {\tt string length != 2}
+					@exception   NotInHexFormat if string contains characters g-z or G-Z
+					@see         get
 			*/
-			void set(const char* value);
+			void set(const char* value)
+				throw(Exception::InvalidRange, NotInHexFormat);
 
 			/** Assignment operator with char*
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
-					@param       value the pointer to a string containing a value in hex format ("00"-"FF" or "00"-"ff")
-					@exception   InvalidRange - if {\tt string length != 2}
-					@exception   NotInHexFormat - if string contains characters g-z or G-Z
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					Calls \Ref{set}.
+					@param       value the pointer to a string containing a value in hex format ({\tt "00"-"FF"} or {\tt "00"-"ff"})
+					@exception   InvalidRange if {\tt string length != 2}
+					@exception   NotInHexFormat if string contains characters g-z or G-Z
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const char* value);
+			const ColorUnit& operator = (const char* value)
+				throw(Exception::InvalidRange, NotInHexFormat);
 		
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using a char pointer.
 					Memory must be allocated for this parameter. The memory must be at least
 					the size of 3 bytes.
-					
-					@param   value a char* receiving the value of {\em *this} colorUnit in hex format ("00"-"FF" or "00"-"ff")
-					@see     ColorUnit::setValue
+					@param   value a char* receiving the value of {\em *this} colorUnit in hex format ({\tt "00"-"FF"} or {\tt "00"-"ff"})
+					@see     set
 			*/
-			void get(char* value) const;
+			void get(char* value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					a string {\em value}.
-
-					@param       value a string (in the format "00"-"FF" or "00"-"ff")
-					@exception   InvalidRange - if {\tt string length != 2}
-					@exception   NotInHexFormat - if string contains characters g-z or G-Z
-					@see         ColorUnit::getValue
+					@param       value a string (in the format {\tt "00"-"FF"} or {\tt "00"-"ff"})
+					@exception   InvalidRange if {\tt string length != 2}
+					@exception   NotInHexFormat if string contains characters g-z or G-Z
+					@see         get
 			*/
-			void set(const String& value);
+			void set(const String& value)
+				throw(Exception::InvalidRange, NotInHexFormat);
 
 			/** Assignment operator with string
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
-					@param       value a string containing a value in hex format ("00"-"FF" or "00"-"ff")
-					@exception   InvalidRange - if {\tt string length != 2}
-					@exception   NotInHexFormat - if string contains characters g-z or G-Z
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					Calls \Ref{set}.
+					@param       value a string containing a value in hex format ({\tt "00"-"FF"} or {\tt "00"-"ff"})
+					@exception   InvalidRange if {\tt string length != 2}
+					@exception   NotInHexFormat if string contains characters g-z or G-Z
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const String& value);
+			const ColorUnit& operator = (const String& value)
+				throw(Exception::InvalidRange, NotInHexFormat);
 		
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using a string.
-					
-					@param   value a string receiving the value of {\em *this} colorUnit in hex format ("00"-"FF" or "00"-"ff")
-					@see     ColorUnit::setValue
+					@param   value a string receiving the value of {\em *this} colorUnit in hex format ({\tt "00"-"FF"} or {\tt "00"-"ff"})
+					@see     set
 			*/
-			void get(String& value) const;
+			void get(String& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					a unsigned char {\em value}.
-
-					@param       value an unsigned char of range 0-255
-					@see         ColorUnit::getValue
+					@param       value an unsigned char of range {\tt 0-255}
+					@see         get
 			*/
-			void set(const unsigned char value);
+			void set(const unsigned char value)
+				throw();
 
 			/** Assignment operator with unsigned char
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
-					@param       value an unsigned char containing a value of range 0-255
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					Calls \Ref{set}.
+					@param       value an unsigned char containing a value of range {\tt 0-255}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const unsigned char value);
+			const ColorUnit& operator = (const unsigned char value)
+				throw();
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using an unsigned char.
-					
-					@param   value an unsigned char receiving the value of {\em *this} colorUnit (range: 0-255)
-					@see     ColorUnit::setValue
+					@param   value an unsigned char receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
+					@see     set
 			*/
-			void get(unsigned char& value) const;
+			void get(unsigned char& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					a short {\em value}.
-
-					@param       value a short of range 0-255
-					@exception   InvalidRange - if {\tt value < 0 || value > 255}
-					@see         ColorUnit::getValue
+					@param       value a short of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value < 0 || value > 255}
+					@see         get
 			*/
-			void set(const short value);
+			void set(const short value)
+				throw(Exception::InvalidRange);
 
 			/** Assignment operator with short
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
-					@param       value a short containing a value of range 0-255
-					@exception   InvalidRange - if {\tt value < 0 || value > 255}
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					Calls \Ref{set}.
+					@param       value a short containing a value of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value < 0 || value > 255}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const short value);
+			const ColorUnit& operator = (const short value)
+				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using a short.
-					
-					@param   value a short receiving the value of {\em *this} colorUnit (range: 0-255)
-					@see     ColorUnit::setValue
+					@param   value a short receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
+					@see     set
 			*/
-			void get(short& value) const;
+			void get(short& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					an unsigned short {\em value}.
-
-					@param       value an unsigned short of range 0-255
-					@exception   InvalidRange - if {\tt value > 255}
-					@see         ColorUnit::getValue
+					@param       value an unsigned short of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value > 255}
+					@see         get
 			*/
-			void set(const unsigned short value);
+			void set(const unsigned short value)
+				throw(Exception::InvalidRange);
 
 			/** Assignment operator with unsigned short
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
-					@param       value an unsigned short containing a value of range 0-255
-					@exception   InvalidRange - if {\tt value > 255}
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					Calls \Ref{set}.
+					@param       value an unsigned short containing a value of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value > 255}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const unsigned short value);
+			const ColorUnit& operator = (const unsigned short value)
+				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using an unsigned short.
-					
-					@param   value an unsigned short receiving the value of {\em *this} colorUnit (range: 0-255)
-					@see     ColorUnit::setValue
+					@param   value an unsigned short receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
+					@see     set
 			*/
-			void get(unsigned short& value) const;
+			void get(unsigned short& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					an int {\em value}.
-
-					@param       value an int of range 0-255
-					@exception   InvalidRange - if {\tt value < 0 || value > 255}
-					@see         ColorUnit::getValue
+					@param       value an int of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value < 0 || value > 255}
+					@see         get
 			*/
-			void set(const int value);
+			void set(const int value)
+				throw(Exception::InvalidRange);
 
 			/** Assignment operator with int
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
-					@param       value an int containing a value of range 0-255
-					@exception   InvalidRange - if {\tt value < 0 || value > 255}
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					Calls \Ref{set}.
+					@param       value an int containing a value of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value < 0 || value > 255}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const int value);
+			const ColorUnit& operator = (const int value)
+				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using an int.
-					
-					@param   value an int receiving the value of {\em *this} colorUnit (range: 0-255)
-					@see     ColorUnit::setValue
+					@param   value an int receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
+					@see     set
 			*/
-			void get(int& value) const;
+			void get(int& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					an unsigned int {\em value}.
-
-					@param       value an unsigned int of range 0-255
-					@exception   InvalidRange - if {\tt value > 255}
-					@see         ColorUnit::getValue
+					@param       value an unsigned int of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value > 255}
+					@see         get
 			*/
-			void set(const unsigned int value);
+			void set(const unsigned int value)
+				throw(Exception::InvalidRange);
 
 			/** Assignment operator with unsigned int
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
-					@param       value an unsigned int containing a value of range 0-255
-					@exception   InvalidRange - if {\tt value > 255}
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					Calls \Ref{set}.
+					@param       value an unsigned int containing a value of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value > 255}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const unsigned int value);
+			const ColorUnit& operator = (const unsigned int value)
+				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using an unsigned int.
-					
-					@param   value an unsigned int receiving the value of {\em *this} colorUnit (range: 0-255)
-					@see     ColorUnit::setValue
+					@param   value an unsigned int receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
+					@see     set
 			*/
-			void get(unsigned int& value) const;
+			void get(unsigned int& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					a long {\em value}.
-
-					@param       value a long of range 0-255
-					@exception   InvalidRange - if {\tt value < 0 || value > 255}
-					@see         ColorUnit::getValue
+					@param       value a long of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value < 0 || value > 255}
+					@see         get
 			*/
-			void set(const long value);
+			void set(const long value)
+				throw(Exception::InvalidRange);
 
 			/** Assignment operator with long
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
-					@param       value a long containing a value of range 0-255
-					@exception   InvalidRange - if {\tt value < 0 || value > 255}
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					Calls \Ref{set}.
+					@param       value a long containing a value of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value < 0 || value > 255}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const long value);
+			const ColorUnit& operator = (const long value)
+				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using a long.
-					
-					@param   value a long receiving the value of {\em *this} colorUnit (range: 0-255)
-					@see     ColorUnit::setValue
+					@param   value a long receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
+					@see     set
 			*/
-			void get(long& value) const;
+			void get(long& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					an unsigned long {\em value}.
-
-					@param       value an unsigned long of range 0-255
-					@exception   InvalidRange - if {\tt value > 255}
-					@see         ColorUnit::getValue
+					@param       value an unsigned long of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value > 255}
+					@see         get
 			*/
-			void set(const unsigned long value);
+			void set(const unsigned long value)
+				throw(Exception::InvalidRange);
 
 			/** Assignment operator with unsigned long
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
-					@param       value an unsigned long containing a value of range 0-255
-					@exception   InvalidRange - if {\tt value > 255}
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					Calls \Ref{set}.
+					@param       value an unsigned long containing a value of range {\tt 0-255}
+					@exception   InvalidRange if {\tt value > 255}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const unsigned long value);
+			const ColorUnit& operator = (const unsigned long value)
+				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using an unsigned long.
-					
-					@param   value an unsigned long receiving the value of {\em *this} colorUnit (range: 0-255)
-					@see     ColorUnit::setValue
+					@param   value an unsigned long receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
+					@see     set
 			*/
-			void get(unsigned long& value) const;
+			void get(unsigned long& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					a float {\em value}.
-
 					@param       value a float of range 0-1.0
-					@exception   InvalidRange - if {\tt value < 0.0 || value > 1.0}
-					@see         ColorUnit::getValue
+					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
+					@see         get
 			*/
-			void set(const float value);
+			void set(const float value)
+				throw(Exception::InvalidRange);
 
 			/** Assignment operator with float
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
+					Calls \Ref{set}.
 					@param       value a float containing a value of range 0-1.0
-					@exception   InvalidRange - if {\tt value < 0.0 || value > 1.0}
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const float value);
+			const ColorUnit& operator = (const float value)
+				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using a float.
-					
 					@param   value a float receiving the value of {\em *this} colorUnit (range: 0-1.0)
-					@see     ColorUnit::setValue
+					@see     set
 			*/
-			void get(float& value) const;
+			void get(float& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					a double {\em value}.
-
 					@param       value a double of range 0-1.0
-					@exception   InvalidRange - if {\tt value < 0.0 || value > 1.0}
-					@see         ColorUnit::getValue
+					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
+					@see         get
 			*/
-			void set(const double value);
+			void set(const double value)
+				throw(Exception::InvalidRange);
 
 			/** Assignment operator with double
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
+					Calls \Ref{set}.
 					@param       value a double containing a value of range 0-1.0
-					@exception   InvalidRange - if {\tt value < 0.0 || value > 1.0}
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const double value);
+			const ColorUnit& operator = (const double value)
+				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using a double.
-					
 					@param   value a double receiving the value of {\em *this} colorUnit (range: 0-1.0)
-					@see     ColorUnit::setValue
+					@see     set
 			*/
-			void get(double& value) const;
+			void get(double& value) const
+				throw();
 
 			/** Change the value of the colorUnit.
 					Change the value of {\em *this} colorUnit to the value represented by 
 					a long double {\em value}.
-
 					@param       value a long double of range 0-1.0
-					@exception   InvalidRange - if {\tt value < 0.0 || value > 1.0}
-					@see         ColorUnit::getValue
+					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
+					@see         get
 			*/
-			void set(const long double value);
+			void set(const long double value)
+				throw(Exception::InvalidRange);
 
 			/** Assignment operator with long double
 					Assign the contents of {\em value} to {\em *this} colorUnit.
-					Calls \Ref{ColorUnit::set}.
-
+					Calls \Ref{set}.
 					@param       value a long double containing a value of range 0-1.0
-					@exception   InvalidRange - if {\tt value < 0.0 || value > 1.0}
-					@return      ColorUnit& - {\em *this} colorUnit
-					@see         ColorUnit::set
+					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
+					@return      ColorUnit& constant reference of {\em *this} colorUnit
+					@see         set
 			*/
-			ColorUnit& operator = (const long double value);
+			const ColorUnit& operator = (const long double value)
+				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
 					Access the value of {\em *this} colorUnit by using a long double.
-					
 					@param   value a long double receiving the value of {\em *this} colorUnit (range: 0-1.0)
-					@see     ColorUnit::setValue
+					@see     set
 			*/
-			void get(long double& value) const;
+			void get(long double& value) const
+				throw();
 			
 			//@}
 
@@ -731,61 +729,61 @@ namespace BALL
 					Test if {\em color_unit} is equal to {\em *this} colorUnit.
 					Equality means that the internals value (floats) of the colorUnit's
 					are equal.
-
 					@param   color_unit the colorUnit to be compared with
-					@return  bool -	{\tt true} if the value of {\em *this} is equal to {\em color_unit}, {\tt false} otherwise
+					@return  bool {\tt true} if the value of {\em *this} is equal to {\em color_unit}, {\tt false} otherwise
 			*/
-			bool operator == (const ColorUnit& color_unit) const;
+			bool operator == (const ColorUnit& color_unit) const
+				throw();
 
 			/** Unequality test.
 					Test if {\em color_unit} is not equal to {\em *this} colorUnit.
 					Unequality means that the internals value (floats) of the colorUnit's
 					are unequal.
-
 					@param   color_unit the colorUnit to be compared with
-					@return  bool -	{\tt true} if the value of {\em *this} is not equal to {\em color_unit}, {\tt false} otherwise
+					@return  bool	{\tt true} if the value of {\em *this} is not equal to {\em color_unit}, {\tt false} otherwise
 			*/
-			bool operator != (const ColorUnit& color_unit) const;
+			bool operator != (const ColorUnit& color_unit) const
+				throw();
 			
 			/** Smaller test.
 					Test if {\em *this} is smaller than {\em color_unit} colorUnit.
 					Smaller means that the internal value (float) {\em *this} is
 					smaller than the internal value (float) of {\em color_unit} colorUnit.
-
 					@param   color_unit the colorUnit to be compared with
-					@return  bool -	{\tt true} if the value of {\em *this} is smaller than {\em color_unit}, {\tt false} otherwise
+					@return  bool	{\tt true} if the value of {\em *this} is smaller than {\em color_unit}, {\tt false} otherwise
 			*/
-			bool operator < (const ColorUnit& color_unit) const;
+			bool operator < (const ColorUnit& color_unit) const
+				throw();
 			
 			/** Smaller or equal test.
 					Test if {\em *this} is smaller or equal than {\em color_unit} colorUnit.
 					Smaller or equal means that the internal value (float) {\em *this} is
 					smaller or equal than the internal value (float) of {\em color_unit} colorUnit.
-
 					@param   color_unit the colorUnit to be compared with
-					@return  bool -	{\tt true} if the value of {\em *this} is smaller or equal than {\em color_unit}, {\tt false} otherwise
+					@return  bool	{\tt true} if the value of {\em *this} is smaller or equal than {\em color_unit}, {\tt false} otherwise
 			*/
-			bool operator <= (const ColorUnit& color_unit) const;
+			bool operator <= (const ColorUnit& color_unit) const
+				throw();
 			
 			/** Greater test.
 					Test if {\em *this} is greater than {\em color_unit} colorUnit.
 					Greater means that the internal value (float) {\em *this} is
 					greater than the internal value (float) of {\em color_unit} colorUnit.
-
 					@param   color_unit the colorUnit to be compared with
-					@return  bool -	{\tt true} if the value of {\em *this} is greater than {\em color_unit}, {\tt false} otherwise
+					@return  bool	{\tt true} if the value of {\em *this} is greater than {\em color_unit}, {\tt false} otherwise
 			*/
-			bool operator > (const ColorUnit& color_unit) const;
+			bool operator > (const ColorUnit& color_unit) const
+				throw();
 
 			/** Greater or equal test.
 					Test if {\em *this} is greater or equal than {\em color_unit} colorUnit.
 					Greater or equal means that the internal value (float) {\em *this} is
 					greater or equal than the internal value (float) of {\em color_unit} colorUnit.
-
 					@param   color_unit the colorUnit to be compared with
-					@return  bool -	{\tt true} if the value of {\em *this} is greater or equal than {\em color_unit}, {\tt false} otherwise
+					@return  bool	{\tt true} if the value of {\em *this} is greater or equal than {\em color_unit}, {\tt false} otherwise
 			*/ 
-			bool operator >= (const ColorUnit& color_unit) const;
+			bool operator >= (const ColorUnit& color_unit) const
+				throw();
 			//@}
 			
 			/**	@name	debuggers and diagnostics
@@ -795,12 +793,12 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current value of {\em *this} colorUnit to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					The value will be outputed as an integer of range 0-255.
-
+					The value will be outputed as an integer of range {\tt 0-255}.
 					@param   s output stream where to output the value of {\em *this} colorUnit
 					@param   depth the dumping depth (depth is irrelevant here)
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 
 			//@}
 
@@ -809,30 +807,25 @@ namespace BALL
 			//@{
 
 			/** Persistent stream input and value restorage.
-					Read persistent colorUnit data from the input stream {\em s} and restore the value of {\em *this}.
-					\\
+					Read persistent colorUnit data from the input stream {\em s} and restore the value of {\em *this}.\\
 					{\bf Note:} Not yet implemented.
-					
 					@param  s input stream from where to restore the value of {\em *this} colorUnit
-					@exception   NotImplemented - always
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and value storage.
-					Write persistent colorUnit data to the output stream {\em s} and store the value of {\em *this}.
-					\\
+					Write persistent colorUnit data to the output stream {\em s} and store the value of {\em *this}.\\
 					{\bf Note:} Not yet implemented.
-					
 					@param  s output stream to where the value of {\em *this} colorUnit will be stored
-					@exception   NotImplemented - always
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 
 			/** Friendly stream input.
 					Read colorUnit data from the input stream {\em s} and restore the value of {\em *this}.
-					The value will be needed in integer format of range 0-255.
+					The value will be needed in integer format of range {\tt 0-255}.
 					This method is provided for convienience.
-
 					@param  s input stream from where to restore the value of {\em *this} colorUnit
 					@param  color_unit the colorUnit to which the value will be restored
 			*/
@@ -840,19 +833,18 @@ namespace BALL
 
 			/** Friendly stream output.
 					Write colorUnit data to the output stream {\em s} and store the value of {\em *this}.
-					The value will be stored in integer format of range 0-255.
+					The value will be stored in integer format of range {\tt 0-255}.
 					This method is provided for convienience.
-
 					@param  s output stream to where the value of {\em *this} colorUnit will be stored
 					@param  color_unit the colorUnit from which the value will be stored
 			*/
 			friend std::ostream& operator << (std::ostream& s, const ColorUnit& color_unit);
-
 			//@}
 
 			private:
 		
-			float hexToFloat_(const char* value);
+			float hexToFloat_(const char* value)
+				throw(Exception::InvalidRange, NotInHexFormat);
 			
 			float value_;
 		

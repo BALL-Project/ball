@@ -1,4 +1,4 @@
-// $Id: colorHSV.h,v 1.2 2001/02/14 02:01:15 amoll Exp $
+// $Id: colorHSV.h,v 1.3 2001/05/13 13:28:49 hekl Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
 #define BALL_VIEW_DATATYPE_COLORHSV_H
@@ -31,16 +31,16 @@ namespace BALL
 
 		/** ColorHSV class.
 				{\bf Framework:} BALL/VIEW/DATATYPE\\
-				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorHSV.h}	\\
+				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorHSV.h}	\\ \\
 				An instance of ColorHSV represents a color consisting of the components
 				hue, saturation and value. The components staturation and values are 
 				\Ref{ColorUnit}'s. The component hue is of class type \Ref{ColorUnitHue}.
 				See description of these classes for further informations concerning type
 				conversions.
 				@memo    ColorHSV class (BALL VIEW datatype framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.2 $
-				@date    $Date: 2001/02/14 02:01:15 $
+				@author  $Author: hekl $
+				@version $Revision: 1.3 $
+				@date    $Date: 2001/05/13 13:28:49 $
 		*/
 		class ColorHSV
 		{
@@ -59,23 +59,26 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new colorHSV. Initialized with color black (hue=0, saturation=0, value=0).
-					@return      ColorHSV - new constructed colorHSV
+					@return      ColorHSV new constructed colorHSV
 			*/
-			ColorHSV();
+			ColorHSV()
+				throw();
 
 			/** Copy constructor.
 					Construct new colorHSV by copying the colorHSV {\em color}.
 					@param       color the colorHSV to be copied
-					@return      ColorHSV - new constructed colorHSV copied from {\em color}
+					@return      ColorHSV new constructed colorHSV copied from {\em color}
 			*/
-			ColorHSV(const ColorHSV& color);
+			ColorHSV(const ColorHSV& color)
+				throw();
 
 			/** Constructor with ColorRGBA.
 					Construct new colorHSV by converting the colorRGBA {\em color}.
 					@param       color the colorRGBA to be converted. See \Ref{ColorRGBA}
-					@return      ColorHSV - new constructed colorHSV converted from {\em color}
+					@return      ColorHSV new constructed colorHSV converted from {\em color}
 			*/
-			ColorHSV(const ColorRGBA& color);
+			ColorHSV(const ColorRGBA& color)
+				throw();
 
 			/** Constructor with Parameter char*
 					Construct new colorHSV by initialising its value with the given pointer to
@@ -84,12 +87,14 @@ namespace BALL
 					long. See \Ref{ColorUnitHue} and \Ref{ColorUnit} for information concerning
 					to string format.
 					@param       value the pointer to a string representing a color
-					@exception   InvalidRange - if {\tt string length != 6 && string length != 7}
-					@return      ColorHSV - new constructed colorHSV
-					@see         ColorUnit::ColorUnit
-					@see         ColorUnitHue::ColorUnitHue
+					@exception   InvalidRange if {\tt string length != 6 && string length != 7}
+					@exception   NotInHexFormat if the string is not a valid hex format string
+					@return      ColorHSV new constructed colorHSV
+					@see         ColorUnit
+					@see         ColorUnitHue
 			*/
-			ColorHSV(const char* value);
+			ColorHSV(const char* value)
+				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Constructor with Parameter string
 					Construct new colorHSV by initialising its value with  
@@ -98,26 +103,29 @@ namespace BALL
 					long. See \Ref{ColorUnitHue} and \Ref{ColorUnit} for information concerning
 					to string format.
 					@param       value a string representing a color
-					@exception   InvalidRange - if {\tt string length != 6 && string length != 7}
-					@return      ColorHSV - new constructed colorHSV
-					@see         ColorUnit::ColorUnit
-					@see         ColorUnitHue::ColorUnitHue
+					@exception   InvalidRange if {\tt string length != 6 && string length != 7}
+					@exception   NotInHexFormat if the string is not a valid hex format string
+					@return      ColorHSV new constructed colorHSV
+					@see         ColorUnit
+					@see         ColorUnitHue
 			*/
-			ColorHSV(const String& value);
+			ColorHSV(const String& value)
+				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Detailed component initializing constructor.
 					Construct new colorHSV using the given component parameters.
 					@param   hue the hue component. See \Ref{ColorUnitHue}
 					@param   saturation the staturation component. See \Ref{ColorUnit}
 					@param   value the value component. See \Ref{ColorUnit}
-					@return      ColorHSV - new constructed colorHSV
-					@see         ColorUnit::ColorUnit
-					@see         ColorUnitHue::ColorUnitHue
+					@return      ColorHSV new constructed colorHSV
+					@see         ColorUnit
+					@see         ColorUnitHue
 			*/
 			ColorHSV
 				(const ColorUnitHue& hue,
 				 const ColorUnit& saturation,
-				 const ColorUnit& value);
+				 const ColorUnit& value)
+				throw();
 
 			//@}
 			/** @name Destructors 
@@ -126,10 +134,11 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} colorHSV.
-					Calls \Ref{ColorHSV::destroy}.
-					@see         ColorHSV::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~ColorHSV();
+			virtual ~ColorHSV()
+				throw();
 
 			/** Explicit default initialization.
 					Set the color of {\em *this} colorHSV to the default color (black).
@@ -140,12 +149,14 @@ namespace BALL
 						\item value component is zero (0)
 					\end{itemize}
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Empty for further purpose.
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 
 			//@}
 			/**	@name	Converters
@@ -155,9 +166,10 @@ namespace BALL
 			/** Conversion to string.
 					This operator casts an instance of colorHSV to the string type.
 					@return      a string with hex format. See constructor for information concerning the string format
-					@see         ColorHSV::ColorHSV
+					@see         ColorHSV
 			*/
-			operator String () const;
+			operator String () const
+				throw();
 
 			//@}
 			/**	@name	Assignment	
@@ -169,128 +181,145 @@ namespace BALL
 					The color of {\em *this} is initialized to the color of the colorHSV {\em color}.\\
 					@param       color the colorHSV to be copied 
 			*/
-			void set(const ColorHSV& color);
+			void set(const ColorHSV& color)
+				throw();
 
 			/** Assignment operator.
 					Assign the colorHSV {\em color} to {\em *this} colorHSV.
-					Calls \Ref{ColorHSV::set}.
+					Calls \Ref{set}.
 					The color of {\em *this} is initialized to the color of the colorHSV {\em color}.\\
 					@param       color the colorHSV to be copied
-					@return      ColorHSV& - {\em *this} colorHSV
-					@see         ColorHSV::set
+					@return      ColorHSV& constant reference of {\em *this} colorHSV
+					@see         set
 			*/
-			ColorHSV& operator = (const ColorHSV& color);
+			const ColorHSV& operator = (const ColorHSV& color)
+				throw();
 
 			/** Copying.
 					Copy {\em *this} colorHSV to the colorHSV {\em color}.
-					Calls \Ref{ColorHSV::set}.
+					Calls \Ref{set}.
 					The color of the colorHSV {\em color} is initialized to the color of {\em *this} colorHSV.\\
 					@param       color the colorHSV to be assigned to
-					@see         ColorHSV::set
+					@see         set
 			*/
-			void get(ColorHSV& color) const;
+			void get(ColorHSV& color) const
+				throw();
 
 			/** Assignment with ColorRGBA.
 					Assign the colorRGBA {\em color} to {\em *this} colorHSV.
 					The color of {\em *this} is initialized to the color of the colorRGBA {\em color}.\\
 					@param       color the colorRGBA to be copied 
 			*/
-			void set(const ColorRGBA& color);
+			void set(const ColorRGBA& color)
+				throw();
 
 			/** Assignment operator with ColorRGBA.
 					Assign the colorRGBA {\em color} to {\em *this} colorHSV.
-					Calls \Ref{ColorHSV::set}.
+					Calls \Ref{set}.
 					The color of {\em *this} is initialized to the color of the colorRGBA {\em color}.\\
 					@param       color the colorRGBA to be copied
-					@return      ColorHSV& - {\em *this} colorHSV
-					@see         ColorHSV::set
+					@return      ColorHSV& constant reference of {\em *this} colorHSV
+					@see         set
 			*/
-			ColorHSV& operator = (const ColorRGBA& color);
+			const ColorHSV& operator = (const ColorRGBA& color)
+				throw();
 
 			/** Copying to ColorRGBA.
 					Copy {\em *this} colorHSV to the colorRGBA {\em color}.
-					Calls \Ref{ColorHSV::set}.
+					Calls \Ref{set}.
 					The color of the colorRGBA {\em color} is initialized to the color of {\em *this} colorHSV.\\
 					@param       color the colorRGBA to be assigned to
-					@see         ColorHSV::set
+					@see         set
 			*/
-			void get(ColorRGBA& color) const;
+			void get(ColorRGBA& color) const
+				throw();
 
 			/** Assignment with char*.
 					Assign the color represented by the string {\em value} to {\em *this} colorHSV.
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string 
-					@exception   InvalidRange - if {\tt string length != 6 && string length != 7}
-					@see         ColorHSV::ColorHSV
+					@exception   InvalidRange if {\tt string length != 6 && string length != 7}
+					@exception   NotInHexFormat if the string is not a valid hex format string
+					@see         ColorHSV
 			*/
-			void set(const char* value);
+			void set(const char* value)
+				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Assignment operator with char*.
 					Assign the color represented by the string {\em value} to {\em *this} colorHSV.
-					Calls \Ref{ColorHSV::set}.
+					Calls \Ref{set}.
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string
-					@exception   InvalidRange - if {\tt string length != 6 && string length != 7}
-					@return      ColorHSV& - {\em *this} colorHSV
-					@see         ColorHSV::set
-					@see         ColorHSV::ColorHSV
+					@exception   InvalidRange if {\tt string length != 6 && string length != 7}
+					@exception   NotInHexFormat if the string is not a valid hex format string
+					@return      ColorHSV& constant reference of {\em *this} colorHSV
+					@see         set
+					@see         ColorHSV
 			*/
-			ColorHSV& operator = (const char* value);
+			const ColorHSV& operator = (const char* value)
+				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Copying to char*.
 					Copy the color of {\em *this} colorHSV to the string represented by the pointer {\em value}.
-					Calls \Ref{ColorHSV::set}.
+					Calls \Ref{set}.
 					The string {\em value} is initialized to the color of {\em *this} colorHSV.
 					At least 8 bytes must be allocated for the string. The format of the string is
 					the same as the one given to the constructor.
 					@param       value the pointer to string (at least 8 bytes long)
-					@see         ColorHSV::set
-					@see         ColorHSV::ColorHSV
+					@see         set
+					@see         ColorHSV
 			*/
-			void get(char* value) const;
+			void get(char* value) const
+				throw();
 
 			/** Assignment with string.
 					Assign the color represented by the string {\em value} to {\em *this} colorHSV.
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string 
-					@exception   InvalidRange - if {\tt string length != 6 && string length != 7}
-					@see         ColorHSV::ColorHSV
+					@exception   InvalidRange if {\tt string length != 6 && string length != 7}
+					@exception   NotInHexFormat if the string is not a valid hex format string
+					@see         ColorHSV
 			*/
-			void set(const String& value);
+			void set(const String& value)
+				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Assignment operator with string.
 					Assign the color represented by the string {\em value} to {\em *this} colorHSV.
-					Calls \Ref{ColorHSV::set}.
+					Calls \Ref{set}.
 					The color of {\em *this} is initialized to the color represented by the string {\em value}.
 					See constructor for format description.
 					@param       value the color represented by a string
-					@exception   InvalidRange - if {\tt string length != 6 && string length != 7}
-					@return      ColorHSV& - {\em *this} colorHSV
-					@see         ColorHSV::set
-					@see         ColorHSV::ColorHSV
+					@exception   InvalidRange if {\tt string length != 6 && string length != 7}
+					@exception   NotInHexFormat if the string is not a valid hex format string
+					@return      ColorHSV& constant reference of {\em *this} colorHSV
+					@see         set
+					@see         ColorHSV
 			*/
-			ColorHSV& operator = (const String& value);
+			const ColorHSV& operator = (const String& value)
+				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			/** Copying to string.
 					Copy the color of {\em *this} colorHSV to the string represented by the pointer {\em value}.
-					Calls \Ref{ColorHSV::set}.
+					Calls \Ref{set}.
 					The string {\em value} is initialized to the color of {\em *this} colorHSV.
 					The format of the string is	the same as the one given to the constructor.
 					@param       value the string receiving the color in hex format
-					@see         ColorHSV::set
-					@see         ColorHSV::ColorHSV
+					@see         set
+					@see         ColorHSV
 			*/
-			void get(String& value) const;
+			void get(String& value) const
+				throw();
 
 			/** Swapping of colorHSVs.
 					Swap the color of {\em *this} colorHSV with the colorHSV {\em color}.
 					@param       color the colorHSV being swapped with {\em *this} colorHSV
-					@see         ColorHSV::ColorHSV
+					@see         ColorHSV
 			*/
-			void swap(ColorHSV& color);
+			void swap(ColorHSV& color)
+				throw();
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -302,84 +331,93 @@ namespace BALL
 					represented by the parameter {\em hue}. See \Ref{ColorUnitHue} for further
 					information concerning the format.
 					@param       hue the new hue component of {\em *this} colorHSV
-					@see         ColorHSV::hue
-					@see         ColorUnitHue::ColorUnitHue
+					@see         getHue
+					@see         ColorUnitHue
 			*/
-			void setHue(const ColorUnitHue& hue);
+			void setHue(const ColorUnitHue& hue)
+				throw();
 
 			/** Mutable inspection of the hue component.
 					Access the mutual reference of the hue component of {\em *this} colorHSV.
 					See \Ref{ColorUnitHue} for further information concerning type conversion.
-					@return      ColorUnitHue& - mutable reference to the hue component of {\em *this} colorHSV
-					@see         ColorHSV::setHue
-					@see         ColorUnitHue::ColorUnitHue
+					@return      ColorUnitHue& mutable reference to the hue component of {\em *this} colorHSV
+					@see         setHue
+					@see         ColorUnitHue
 			*/
-			ColorUnitHue& hue();
+			ColorUnitHue& getHue()
+				throw();
 
 			/** Non-mutable inspection of the hue component.
 					Access the constant reference of the hue component of {\em *this} colorHSV.
 					See \Ref{ColorUnitHue} for further information concerning type conversion.
-					@return      ColorUnitHue& - constant reference to the hue component of {\em *this} colorHSV
-					@see         ColorHSV::setHue
-					@see         ColorUnitHue::ColorUnitHue
+					@return      ColorUnitHue& constant reference to the hue component of {\em *this} colorHSV
+					@see         setHue
+					@see         ColorUnitHue
 			*/
-			const ColorUnitHue& hue() const;
+			const ColorUnitHue& getHue() const
+				throw();
 
 			/** Change the value of the saturation component.
 					Change the value of of the saturation component of {\em *this} colorHSV to the value
 					represented by the parameter {\em saturation}. See \Ref{ColorUnit} for further
 					information concerning the format.
 					@param       saturation the new saturation component of {\em *this} colorHSV
-					@see         ColorHSV::saturation
-					@see         ColorUnit::ColorUnit
+					@see         getSaturation
+					@see         ColorUnit
 			*/
-			void setSaturation(const ColorUnit& saturation);
+			void setSaturation(const ColorUnit& saturation)
+				throw();
 
 			/** Mutable inspection of the saturation component.
 					Access the mutual reference of the saturation component of {\em *this} colorHSV.
 					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& - mutable reference to the saturation component of {\em *this} colorHSV
-					@see         ColorHSV::setSaturation
-					@see         ColorUnit::ColorUnit
+					@return      ColorUnit& mutable reference to the saturation component of {\em *this} colorHSV
+					@see         setSaturation
+					@see         ColorUnit
 			*/
-			ColorUnit& saturation();
+			ColorUnit& getSaturation()
+				throw();
 
 			/** Non-mutable inspection of the saturation component.
 					Access the constant reference of the saturation component of {\em *this} colorHSV.
 					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& - constant reference to the saturation component of {\em *this} colorHSV
-					@see         ColorHSV::setSaturation
-					@see         ColorUnit::ColorUnit
+					@return      ColorUnit& constant reference to the saturation component of {\em *this} colorHSV
+					@see         setSaturation
+					@see         ColorUnit
 			*/
-			const ColorUnit& saturation() const;
+			const ColorUnit& getSaturation() const
+				throw();
 
 			/** Change the value of the value component.
 					Change the value of of the value component of {\em *this} colorHSV to the value
 					represented by the parameter {\em value}. See \Ref{ColorUnit} for further
 					information concerning the format.
 					@param       value the new value component of {\em *this} colorHSV
-					@see         ColorHSV::value
-					@see         ColorUnit::ColorUnit
+					@see         getValue
+					@see         ColorUnit
 			*/
-			void setValue(const ColorUnit& value);
+			void setValue(const ColorUnit& value)
+				throw();
 
 			/** Mutable inspection of the value component.
 					Access the mutual reference of the value component of {\em *this} colorHSV.
 					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& - mutable reference to the value component of {\em *this} colorHSV
-					@see         ColorHSV::setValue
-					@see         ColorUnit::ColorUnit
+					@return      ColorUnit& mutable reference to the value component of {\em *this} colorHSV
+					@see         setValue
+					@see         ColorUnit
 			*/
-			ColorUnit& value();
+			ColorUnit& getValue()
+				throw();
 
 			/** Non-mutable inspection of the value component.
 					Access the constant reference of the value component of {\em *this} colorHSV.
 					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& - constant reference to the value component of {\em *this} colorHSV
-					@see         ColorHSV::setValue
-					@see         ColorUnit::ColorUnit
+					@return      ColorUnit& constant reference to the value component of {\em *this} colorHSV
+					@see         setValue
+					@see         ColorUnit
 			*/
-			const ColorUnit& value() const;
+			const ColorUnit& getValue() const
+				throw();
 
 			/** Change the values of the hue, saturation and value component.
 					Change the values of of the hue, saturation and value component of {\em *this}
@@ -388,14 +426,15 @@ namespace BALL
 					@param       hue the new hue component of {\em *this} colorHSV
 					@param       saturation the new saturation component of {\em *this} colorHSV
 					@param       value the new value component of {\em *this} colorHSV
-					@see         ColorHSV::get
-					@see         ColorUnit::ColorUnit
-					@see         ColorUnitHue::ColorUnitHue
+					@see         get
+					@see         ColorUnit
+					@see         ColorUnitHue
 			*/
 			void set
 				(const ColorUnitHue& hue,
 				 const ColorUnit& saturation,
-				 const ColorUnit& value);
+				 const ColorUnit& value)
+				throw();
 
 			/** Inspection of the colorHSV's components.
 					Access all the components of {\em *this} colorHSV by using \Ref{ColorUnit}
@@ -403,14 +442,15 @@ namespace BALL
 					@param      hue the colorUnitHue receiving the hue component of {\em *this} colorHSV
 					@param      saturation the colorUnit receiving the saturation component of {\em *this} colorHSV
 					@param      value the colorUnit receiving the value component of {\em *this} colorHSV
-					@see        ColorHSV::set
-					@see        ColorUnit::ColorUnit
-					@see        ColorUnitHue::ColorUnitHue
+					@see        set
+					@see        ColorUnit
+					@see        ColorUnitHue
 			*/
 			void get
 				(ColorUnitHue& hue,
 				 ColorUnit& saturation,
-				 ColorUnit& value) const;
+				 ColorUnit& value) const
+				throw();
 
 			//@}
 			/**	@name	Predicates
@@ -424,10 +464,11 @@ namespace BALL
 					@param   color the colorHSV to be compared with
 					@return  bool -	{\tt true} if the color of {\em *this} is 
 									 equal to {\em color}, {\tt false} otherwise
-					@see     ColorUnit::ColorUnit
-					@see     ColorUnitHue::ColorUnitHue
+					@see     ColorUnit
+					@see     ColorUnitHue
 			*/
-			bool operator == (const ColorHSV& color) const;
+			bool operator == (const ColorHSV& color) const
+				throw();
 
 			/** Unequality test.
 					Test if {\em color} is not equal to {\em *this} colorHSV.
@@ -436,10 +477,11 @@ namespace BALL
 					@param   color the colorHSV to be compared with
 					@return  bool -	{\tt true} if the color of {\em *this} is not 
 									 equal to {\em color}, {\tt false} otherwise
-					@see     ColorUnit::ColorUnit
-					@see     ColorUnitHue::ColorUnitHue
+					@see     ColorUnit
+					@see     ColorUnitHue
 			*/
-			bool operator != (const ColorHSV& color) const;
+			bool operator != (const ColorHSV& color) const
+				throw();
 
 			/** Smaller test.
 					Test if {\em *this} is smaller than {\em color} colorHSV.
@@ -449,10 +491,11 @@ namespace BALL
 					@param   color the colorHSV to be compared with
 					@return  bool -	{\tt true} if the color of {\em *this} is 
 									 smaller than {\em color}, {\tt false} otherwise
-					@see     ColorUnit::ColorUnit
-					@see     ColorUnitHue::ColorUnitHue
+					@see     ColorUnit
+					@see     ColorUnitHue
 			*/
-			bool operator < (const ColorHSV& color) const;
+			bool operator < (const ColorHSV& color) const
+				throw();
 
 			/** Smaller or equal test.
 					Test if {\em *this} is smaller or equal than {\em color} colorHSV.
@@ -462,10 +505,11 @@ namespace BALL
 					@param   color the colorHSV to be compared with
 					@return  bool -	{\tt true} if the color of {\em *this} is smaller or 
 									 equal than {\em color}, {\tt false} otherwise
-					@see     ColorUnit::ColorUnit
-					@see     ColorUnitHue::ColorUnitHue
+					@see     ColorUnit
+					@see     ColorUnitHue
 			*/
-			bool operator <= (const ColorHSV& color) const;
+			bool operator <= (const ColorHSV& color) const
+				throw();
 
 			/** Greater test.
 					Test if {\em *this} is greater than {\em color} colorHSV.
@@ -475,10 +519,11 @@ namespace BALL
 					@param   color the colorHSV to be compared with
 					@return  bool -	{\tt true} if the color of {\em *this} is 
 									 greater than {\em color}, {\tt false} otherwise
-					@see     ColorUnit::ColorUnit
-					@see     ColorUnitHue::ColorUnitHue
+					@see     ColorUnit
+					@see     ColorUnitHue
 			*/
-			bool operator > (const ColorHSV& color) const;
+			bool operator > (const ColorHSV& color) const
+				throw();
 
 			/** Greater or equal test.
 					Test if {\em *this} is greater or equal than {\em color} colorHSV.
@@ -488,10 +533,11 @@ namespace BALL
 					@param   color the colorHSV to be compared with
 					@return  bool -	{\tt true} if the color of {\em *this} is greater 
 									 or equal than {\em color}, {\tt false} otherwise
-					@see     ColorUnit::ColorUnit
-					@see     ColorUnitHue::ColorUnitHue
+					@see     ColorUnit
+					@see     ColorUnitHue
 			*/
-			bool operator >= (const ColorHSV& color) const;
+			bool operator >= (const ColorHSV& color) const
+				throw();
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -506,8 +552,8 @@ namespace BALL
 					@see     ColorUnit::dump
 					@see     ColorUnitHue::dump
 			*/
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 
 			//@}
 			/**	@name	Storers
@@ -519,14 +565,16 @@ namespace BALL
 					{\bf Note:} Not yet implemented.
 					@param  s input stream from where to restore the color of {\em *this} colorHSV
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and color storage.
 					Write persistent colorHSV data to the output stream {\em s} and store the color of {\em *this}. \\
 					{\bf Note:} Not yet implemented.
 					@param  s output stream to where the color of {\em *this} colorHSV will be stored
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 
 			/** Friendly stream input.
 					Read colorHSV data from the input stream {\em s} and restore the color of {\em *this}.
@@ -555,15 +603,18 @@ namespace BALL
 			void calculateHSV_
 				(const ColorUnit red,
 				 const ColorUnit green,
-				 const ColorUnit blue);
+				 const ColorUnit blue)
+				throw();
 
 			void calculateRGB_
 				(ColorUnit& red,
 				 ColorUnit& green,
-				 ColorUnit& blue) const;
+				 ColorUnit& blue) const
+				throw();
 
 			void stringToHSV_
-				(const String& value);
+				(const String& value)
+				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 
 			ColorUnitHue hue_;
 			ColorUnit saturation_;

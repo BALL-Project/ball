@@ -1,56 +1,65 @@
-// $Id: colorHSV.iC,v 1.1 2001/02/04 15:58:18 hekl Exp $
+// $Id: colorHSV.iC,v 1.2 2001/05/13 13:28:49 hekl Exp $
 
 BALL_INLINE 
 void ColorHSV::setHue(const ColorUnitHue& hue)
+	throw()
 {
   hue_ = hue;
 }
 
 BALL_INLINE 
-ColorUnitHue& ColorHSV::hue()
+ColorUnitHue& ColorHSV::getHue()
+	throw()
 {
   return hue_;
 }
 
 BALL_INLINE 
-const ColorUnitHue& ColorHSV::hue() const
+const ColorUnitHue& ColorHSV::getHue() const
+	throw()
 {
   return hue_;
 }
 
 BALL_INLINE 
 void ColorHSV::setSaturation(const ColorUnit& saturation)
+	throw()
 {
   saturation_ = saturation;
 }
 
 BALL_INLINE 
-ColorUnit& ColorHSV::saturation()
+ColorUnit& ColorHSV::getSaturation()
+	throw()
 {
   return saturation_;
 }
 
 BALL_INLINE 
 const ColorUnit& 
-ColorHSV::saturation() const
+ColorHSV::getSaturation() const
+	throw()
 {
   return saturation_;
 }
 
 BALL_INLINE 
 void ColorHSV::setValue(const ColorUnit& value)
+	throw()
 {
   value_ = value;
 }
 
 BALL_INLINE 
-ColorUnit& ColorHSV::value()
+ColorUnit& ColorHSV::getValue()
+	throw()
 {
   return value_;
 }
 
 BALL_INLINE 
-const ColorUnit& ColorHSV::value() const
+const ColorUnit& ColorHSV::getValue() const
+	throw()
 {
   return value_;
 }
@@ -60,6 +69,7 @@ void ColorHSV::set
   (const ColorUnitHue& hue,
    const ColorUnit& saturation,
    const ColorUnit& value)
+	throw()
 {
   hue_				= hue;
   saturation_ = saturation;
@@ -71,6 +81,7 @@ void ColorHSV::get
   (ColorUnitHue& hue,
    ColorUnit& saturation,
    ColorUnit& value) const
+	throw()
 {
   hue					= hue_;
   saturation	= saturation_;
@@ -79,6 +90,7 @@ void ColorHSV::get
 
 BALL_INLINE 
 bool ColorHSV::operator == (const ColorHSV& color) const
+	throw()
 {
   return (bool)(hue_ == color.hue_
 								&& saturation_ == color.saturation_
@@ -87,12 +99,14 @@ bool ColorHSV::operator == (const ColorHSV& color) const
 
 BALL_INLINE 
 bool ColorHSV::operator != (const ColorHSV& color) const
+	throw()
 {
   return (bool)!(this->operator==(color));
 }
 
 BALL_INLINE 
 bool ColorHSV::operator < (const ColorHSV& color) const
+	throw()
 {
   return (bool)(hue_ < color.hue_
 								&& saturation_ < color.saturation_
@@ -101,6 +115,7 @@ bool ColorHSV::operator < (const ColorHSV& color) const
 
 BALL_INLINE 
 bool ColorHSV::operator > (const ColorHSV &color) const
+	throw()
 {
   return (bool)(hue_ > color.hue_
 								&& saturation_ > color.saturation_
@@ -109,12 +124,14 @@ bool ColorHSV::operator > (const ColorHSV &color) const
 
 BALL_INLINE 
 bool ColorHSV::operator <= (const ColorHSV &color) const
+	throw()
 {
   return (bool)!(this->operator>(color));
 }
 
 BALL_INLINE 
 bool ColorHSV::operator >= (const ColorHSV &color) const
+	throw()
 {
   return (bool)!(this->operator<(color));  
 }
