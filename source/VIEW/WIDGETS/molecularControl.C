@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.12 2003/11/03 16:52:18 amoll Exp $
+// $Id: molecularControl.C,v 1.13 2003/11/03 20:10:55 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -133,7 +133,8 @@ bool MolecularControl::reactToMessages_(Message* message)
 				return false;
 			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
 			case CompositeMessage::CHANGED_COMPOSITE:
-				recurseUpdate_(0, *composite_message->getComposite());
+				removeComposite(*(Composite *)composite_message->getComposite());
+				addComposite(*(Composite *)composite_message->getComposite());
 				return (composite_message->getType() == CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 			case CompositeMessage::SELECTED_COMPOSITE:
 			case CompositeMessage::DESELECTED_COMPOSITE:
