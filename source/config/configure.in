@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.80 2000/03/29 11:47:59 oliver Exp $
+dnl    $Id: configure.in,v 1.81 2000/03/29 14:46:19 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1767,9 +1767,9 @@ if test "${USE_BALLVIEW}" = true ; then
 
 			if test "${USE_BALLVIEW}" = true ; then
 				AC_MSG_CHECKING(for Mesa library)
-				AC_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
+				AC_FIND_LIB(MESA_LIBS,libGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
 				if test "${MESA_LIBS}" = "" ; then
-					AC_FIND_LIB(MESA_LIBS,libGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
+					AC_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
 				fi
 				if test "${MESA_LIBS}" = "" ; then
 					AC_MSG_RESULT((not found!))
@@ -2055,7 +2055,7 @@ if test "${USE_BALLVIEW}" = true ; then
 		dnl
 		dnl  out first guess for the names of the Mesa libraries
 		dnl
-		OPENGL_LIBS="-lMesaGLU -lMesaGL"
+		OPENGL_LIBS="-lGLU -lGL"
 
 		dnl
 		dnl  try to link against mesa libraries
@@ -2067,11 +2067,11 @@ if test "${USE_BALLVIEW}" = true ; then
 		LIBS=${SAVE_LIBS}
 
 		dnl
-		dnl  could not link against libMesaGLU/libMesaGL,
-    dnl  so try libGLU/libGL
+		dnl  could not link against libGLU/libGL,
+    dnl  so try libMesaGLU/libMesaGL
 		dnl
 		if test "${HAVE_MESALIBS+set}" != set ; then
-			OPENGL_LIBS="-lGLU -lGL"
+			OPENGL_LIBS="-lMesaGLU -lMesaGL"
 			SAVE_LIBS=${LIBS}
 			LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
 			AC_TRY_LINK([],[], HAVE_MESALIBS=1)
