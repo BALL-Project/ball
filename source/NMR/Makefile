@@ -2,21 +2,20 @@ DIRECTORY=NMR
 
 THISLIB=$(LIBNAME)
 
-XCPP_SOURCES=EFShiftProcessor.C
-
 CPP_SOURCES=\
 	anisotropyShiftProcessor.C\
 	assignShiftProcessor.C\
 	clearShiftProcessor.C\
-	createSpectrumProcessor.C\
 	EFShiftProcessor.C\
-	haighMallionShiftProcessor.C\
+	experiment.C\
 	HBondShiftProcessor.C\
-	makeSpectrumProcessor.C\
+	haighMallionShiftProcessor.C\
+	createSpectrumProcessor.C\
 	peak.C\
+	peakList.C\
 	shiftModel.C\
 	shiftModule.C\
-	NMRSpectrum.C\
+	spectrum.C\
 	johnsonBoveyShiftProcessor.C\
 	randomCoilShiftProcessor.C
 
