@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.4 2000/05/23 19:36:37 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.5 2000/05/23 20:43:23 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.4 2000/05/23 19:36:37 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.5 2000/05/23 20:43:23 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -131,7 +131,6 @@ f.close();
 // tests for class inRingPredicate::
 
 CHECK(InRingPredicate::()(const Atom& atom) const )
-	/*
 	InRingPredicate in0Ring;
 	in0Ring.setArgument("0");
 	InRingPredicate in1Ring;
@@ -201,7 +200,6 @@ CHECK(InRingPredicate::()(const Atom& atom) const )
 				TEST_EQUAL(in9Ring(*it), false)
 		}
 	}
-	*/
   //BAUSTELLE
 RESULT
 

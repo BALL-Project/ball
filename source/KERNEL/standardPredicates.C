@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.4 2000/05/23 19:35:52 anker Exp $
+// $Id: standardPredicates.C,v 1.5 2000/05/23 20:43:18 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -123,8 +123,8 @@ namespace BALL
 	{
 	}
 
-	bool InRingPredicate::dfs(const Atom* atom, const Atom* first_atom,
-		const Size limit, HashSet<Atom*>& visited) const
+	bool InRingPredicate::dfs(const Atom& atom, const Atom& first_atom,
+		const Size limit, HashSet<const Bond*>& visited) const
 	{
 		// the following recursive function performs an ad-hoc dfs and returns
 		// true, if a ring was found and false otherwise.
@@ -152,14 +152,17 @@ namespace BALL
 			}
 		}
 		Size i;
+		const Bond* bond;
 		Atom* descend;
-		for (i = 0; i < atom->countBonds(); ++i)
+		HashSet<const Bond*> my_visited(visited);
+		for (i = 0; i < atom.countBonds(); ++i)
 		{
-			descend = atom->getBond(i)->getPartner(*atom);
-			if (!visited.has(descend))
+			bond = atom.getBond(i);
+			if (!my_visited.has(bond))
 			{
-				visited.insert(descend);
-				if (dfs(descend, first_atom, limit-1, visited))
+				descend = bond->getPartner(atom);
+				my_visited.insert(bond);
+				if (dfs(*descend, first_atom, limit-1, my_visited))
 				{
 					return true;
 				}
@@ -179,8 +182,8 @@ namespace BALL
 			return false;
 		}
 
-		HashSet<Atom*> visited;
-		if (dfs (&atom,&atom,n,visited))
+		HashSet<const Bond*> visited;
+		if (dfs (atom,atom,n,visited))
 		{
 			return true;
 		}

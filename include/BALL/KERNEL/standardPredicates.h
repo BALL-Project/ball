@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.3 2000/05/23 19:39:32 anker Exp $
+// $Id: standardPredicates.h,v 1.4 2000/05/23 20:43:14 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -225,6 +225,7 @@ namespace BALL
 				BALL_CREATE_NODEEP(InRingPredicate)
 
 				InRingPredicate();
+				
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -232,8 +233,8 @@ namespace BALL
 				virtual bool operator () (const Atom& atom) const;
 
 			private:
-				bool dfs(const Atom* atom, const Atom* first_atom, 
-					const Size limit, HashSet<Atom*>& visited) const;
+				bool dfs(const Atom& atom, const Atom& first_atom, 
+					const Size limit, HashSet<const Bond*>& visited) const;
 		};
 
 	/** Predicate for bearing double bonds. Arguments of this class are
