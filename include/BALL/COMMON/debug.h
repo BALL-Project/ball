@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: debug.h,v 1.6 2003/06/12 13:44:09 anker Exp $
+// $Id: debug.h,v 1.7 2003/06/12 14:03:37 anker Exp $
 //
 
 #ifndef BALL_COMMON_DEBUG_H
@@ -22,10 +22,12 @@
 #	define BALL_PRECONDITION_EXCEPTION(condition, message)\
 	if (!(condition))\
 	{\
-		Exception::Precondition e(__FILE__, __LINE__);\
+		Exception::Precondition e(__FILE__, __LINE__, #condition);\
 		if (message != "")\
 		{\
-			e.setMessage(std::string(e.getMessage()) + std::string(message), #condition);\
+      std::string tmp(e.getMessage());\
+			tmp += std::string(message);\
+			e.setMessage(tmp);\
 		}\
 		throw e;\
 	}\
@@ -36,7 +38,9 @@
 		Exception::PostCondition e(__FILE__, __LINE__, #condition);\
 		if (message != "")\
 		{\
-			e.setMessage(std::string(e.getMessage()) + std::string(message));\
+      std::string tmp(e.getMessage());\
+			tmp += std::string(message);\
+			e.setMessage(tmp);\
 		}\
 		throw e;\
 	}\
