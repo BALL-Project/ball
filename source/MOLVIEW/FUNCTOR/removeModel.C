@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: removeModel.C,v 1.13 2002/12/12 10:57:43 oliver Exp $
+// $Id: removeModel.C,v 1.14 2003/02/19 16:15:12 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 #include <BALL/KERNEL/forEach.h>
@@ -16,13 +16,15 @@ namespace BALL
 
 		RemoveModel::RemoveModel()
 			throw()
-			: AtomBondModelBaseProcessor()
+			: AtomBondModelBaseProcessor(),
+				UnaryProcessor<Composite*>()
 		{
 		}
 
 		RemoveModel::RemoveModel(const RemoveModel &model, bool deep)
 			throw()
-			: AtomBondModelBaseProcessor(model, deep)
+			: AtomBondModelBaseProcessor(model, deep),
+				UnaryProcessor<Composite*>(model)
 		{
 		}
 

@@ -1,11 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.20 2002/12/18 03:14:02 amoll Exp $
+// $Id: surfaceModel.C,v 1.21 2003/02/19 16:15:12 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
+#include <BALL/KERNEL/atomContainer.h>
+#include <BALL/KERNEL/forEach.h>
 
 using namespace std;
 
@@ -17,6 +19,7 @@ namespace BALL
 		AddSurfaceModel::AddSurfaceModel()
 			throw()
 			: BaseModelProcessor(),
+				UnaryProcessor<BALL::Composite*>(),
 				get_composite_(true),
 				start_composite_(0)
 		{
@@ -25,6 +28,7 @@ namespace BALL
 		AddSurfaceModel::AddSurfaceModel(const AddSurfaceModel& add_surface, bool deep)
 			throw()
 			:	BaseModelProcessor(add_surface, deep),
+				UnaryProcessor<BALL::Composite*>(add_surface),
 				get_composite_(true),
 				start_composite_(0)
 		{
@@ -58,14 +62,14 @@ namespace BALL
 		{
 			get_composite_ = true;
 			start_composite_ = 0;
+			atoms_.clear();
 			return BaseModelProcessor::start();
 		}
 				
 		bool AddSurfaceModel::finish()
 		{
 			// insert surface only if a composite exist
-			if (start_composite_ == 0 ||
-					RTTI::isKindOf<GeometricObject>(*start_composite_))
+			if (start_composite_ == 0)
 			{
 				return false;
 			}
@@ -102,10 +106,9 @@ namespace BALL
 				Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
 			}
 
-
 			try 
 			{
-				start_composite_->apply(sp);
+				atoms_.apply(sp);
 			}
 			catch (Exception::GeneralException e)
 			{
@@ -143,6 +146,19 @@ namespace BALL
 				start_composite_ = &composite;
 				get_composite_ = false;
 			}
+			if (RTTI::isKindOf<AtomContainer>(composite)) 
+			{
+				AtomIterator it;
+				BALL_FOREACH_ATOM(*(AtomContainer*) &composite, it)
+				{
+					atoms_.insert((Atom*) &*it);
+				}
+				return Processor::CONTINUE;
+			}
+			
+			if (!RTTI::isKindOf<Atom>(composite)) return Processor::CONTINUE;
+
+			atoms_.insert((Atom*) &composite);
 
 			return Processor::CONTINUE;
 		}
