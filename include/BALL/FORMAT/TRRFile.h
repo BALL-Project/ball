@@ -1,4 +1,4 @@
-// $Id: TRRFile.h,v 1.2 2002/01/15 02:00:08 oliver Exp $
+// $Id: TRRFile.h,v 1.2.4.1 2002/12/06 10:20:09 oliver Exp $
 
 #ifndef BALL_FORMAT_TRRFILE_H
 #define BALL_FORMAT_TRRFILE_H
@@ -172,7 +172,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/// Detailed constructor
-		TRRFile(const String& name, File::OpenMode open_mode = File::IN)
+		TRRFile(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw();
 
 		/// Destructor

@@ -1,4 +1,4 @@
-// $Id: XYZFile.h,v 1.6 2001/08/01 01:06:27 oliver Exp $
+// $Id: XYZFile.h,v 1.6.4.1 2002/12/06 10:20:09 oliver Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
@@ -50,7 +50,7 @@ namespace BALL
 				@param filename the filename
 				@param open_mode the openmode - default is \Ref{File::IN}
 		*/
-		XYZFile(const String& filename, File::OpenMode open_mode = File::IN)
+		XYZFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/**	Copy constructor

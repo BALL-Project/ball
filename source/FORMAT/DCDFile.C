@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.18 2001/12/30 13:28:45 sturm Exp $
+// $Id: DCDFile.C,v 1.18.4.1 2002/12/06 10:20:09 oliver Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -42,7 +42,7 @@ namespace BALL
 		// If we want to open the file for writing, we need a valid header for
 		// later use by readHeader(). If we open it for reading, we have to
 		// synchronize header and DCDFile by calling init().
-		if ((open_mode & File::OUT) == 1)
+		if ((open_mode & std::ios::out) == 1)
 		{
 			// if this file is to be overwritten, write a default header.
 			writeHeader();
@@ -677,11 +677,11 @@ namespace BALL
 		header_.number_of_atoms = it->getNumberOfAtoms();
 
 		// write the header
-		reopen(File::IN | File::OUT | File::BINARY);
+		reopen(std::ios::in | std::ios::out | std::ios::binary);
 		writeHeader();
 
 		// append the data
-		reopen(File::APP | File::BINARY);
+		reopen(std::ios::app | std::ios::binary);
 		for(; it != buffer.end(); ++it)
 		{
 			append(*it);

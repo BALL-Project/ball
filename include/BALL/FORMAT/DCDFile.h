@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.15 2002/01/15 02:00:08 oliver Exp $
+// $Id: DCDFile.h,v 1.15.4.1 2002/12/06 10:20:08 oliver Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -169,7 +169,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/// Detailed constructor
-		DCDFile(const String& name, File::OpenMode open_mode = File::IN)
+		DCDFile(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw();
 
 		/// Destructor
