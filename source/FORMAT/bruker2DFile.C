@@ -49,44 +49,30 @@ namespace BALL
 		// Zurück an den Anfang des Files.
 		f.reopen( );
 
-		matNumF2 = (int) (SIF1_ / XDIMF2_); // Anzahl Matrizen in F2 - Richtung
+		matNumF2 = (int) (SIF2_ / XDIMF2_); // Anzahl Matrizen in F2 - Richtung
 		matNumF1 = (int) (SIF1_ / XDIMF1_); // Anzahl Matrizen in F1 - Richtung
 
 		for ( actMat=0; actMat < matNumF2 * matNumF1; actMat++ ) { // Gehe alle Submatrizen durch
 			for ( f1 = 0; f1 < XDIMF1_; f1++ ) {   // in jeder Matrix: gehe alle Zeilen durch
 				for ( f2 = 0; f2 < XDIMF2_; f2++ ) { // gehe alle Spalten durch
-		if (!f.good()) {
-			break;
-		};
+				  if (!f.good()) {
+				    break;
+				  };
 		
-		f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
-		if ( parsf1_->parameter( "BYTORDP" ) == 1 ) {
-			numdum=GINT32_FROM_BE(numdum);
-		} else {
-			numdum=GINT32_FROM_LE(numdum);
-		};
+				  f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
+				  if ( parsf1_->parameter( "BYTORDP" ) == 1 ) {
+				    numdum=GINT32_FROM_LE(numdum);
+				  } else {
+				    numdum=GINT32_FROM_BE(numdum);
+				  };
 
-		// Die wievielte Matrix in der aktuellen Zeile/Spalte haben wir erreicht?
-		actMatF2 = (actMat % matNumF2);
-		actMatF1 = (actMat / matNumF2);
+				  // Die wievielte Matrix in der aktuellen Zeile/Spalte haben wir erreicht?
+				  actMatF2 = (actMat % matNumF2);
+				  actMatF1 = (actMat / matNumF2);
 
-		dat[ f2 + XDIMF2_ * actMatF2 + ( ( f1 + XDIMF1_ * actMatF1 ) * SIF2_ ) ] = numdum;
+				  dat[ f2 + XDIMF2_ * actMatF2 + ( ( f1 + XDIMF1_ * actMatF1 ) * SIF2_ ) ] = numdum;
 				};
 			};
-		};
-	}
-
-	// Test!!!
-	int main( int argc, char *argv[] )
-	{
-		Bruker2D t( "/home/andreas/projekte/nmr/hsqc/pdata/1" );
-
-		vector<double> data;
-
-		t.read( data );
-		for (int i=0; i<data.size(); i++)
-		{
-			cout << data[i] << endl;
 		};
 	}
 }

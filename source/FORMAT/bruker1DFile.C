@@ -1,7 +1,7 @@
-// $Id: bruker1DFile.C,v 1.1 2000/09/14 12:23:44 oliver Exp $
+// $Id: bruker1DFile.C,v 1.2 2000/10/05 22:34:09 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
-#include <BALL/FORMAT/Bruker1D.h>
+#include <BALL/FORMAT/bruker1DFile.h>
 
 namespace BALL 
 {
@@ -52,19 +52,4 @@ namespace BALL
 			actpos++;
 		}
 	}
-
-	// Test!!!
-	int main( int argc, char *argv[] )
-	{
-		Bruker1D t( "/home/andreas/projekte/nmr/parvulin1d/pdata/1" );
-
-		vector<double> data;
-
-		t.read( data );
-		for (int i=0; i<data.size(); i++)
-		{
-			cout << data[i] << endl;
-		};
-	}
-
 }
