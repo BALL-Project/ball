@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.12 2005/03/01 08:14:49 oliver Exp $
+// $Id: sysinfo.C,v 1.13 2005/03/01 10:31:04 oliver Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -14,7 +14,7 @@
 #	  define WIN32_LEAN_AND_MEAN
 #	  include <windows.h>
 # endif
-# ifdef BALL_PLATFORM_DARWIN
+# ifdef BALL_OS_DARWIN
 #  include <sys/sysctl.h>
 #	endif
 #endif
@@ -131,7 +131,7 @@ namespace BALL
 		}
 
 #else
-#ifdef BALL_PLATFORM_DARWIN
+#ifdef BALL_OS_DARWIN
 
 		LongIndex getAvailableMemory()
 		{
@@ -179,7 +179,7 @@ namespace BALL
 
 		LongIndex getAvailableMemory()
 		{
-			return -1
+			return -1;
 		}
 
 		LongIndex getFreeMemory()
