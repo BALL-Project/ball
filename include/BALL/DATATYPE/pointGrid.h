@@ -1,11 +1,7 @@
-// $Id: pointGrid.h,v 1.10 2000/02/17 00:30:39 oliver Exp $ 
+// $Id: pointGrid.h,v 1.11 2000/05/04 13:35:34 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
-
-//#ifndef BALL_COMMON_H
-//#	include <BALL/common.h>
-//#endif
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
@@ -28,6 +24,8 @@ namespace BALL
 	class PointGrid 
 	{
 		public:
+
+		BALL_CREATE(PointGrid<GridDataType>)
 
 		/**	@name	Type Definitions
 		*/
@@ -68,9 +66,10 @@ namespace BALL
 
 		/**	Copy constructor.
 				Creates a copy of an existing PointGrid object.
-				@memo
+				@param grid the grid to be copied
+				@param bool ignored
 		*/
-		PointGrid(PointGrid<GridDataType>& grid, bool deep = true);	
+		PointGrid(const PointGrid<GridDataType>& grid, bool deep = true);	
 
 		/**	Constructor for PointGrid.
 				{\em lower_[x|y|z]} should be set to the coordinates of
@@ -135,6 +134,24 @@ namespace BALL
 
 		//@}
 
+		/**	@name Assignment
+		*/
+		//@{
+		/**	Copy the contents of another grid.
+				Replaces the contents and dimensions of the current
+				grid with those of {\tt grid}. The previous content
+				is deleted and memory is freed.
+				If copying the grid fails (e.g., due to insufficient memory),
+				\Ref{isValid} returns {\bf false} after this operation.
+		*/
+		void set(const PointGrid& grid);
+
+		/**	Assignment operator.
+				Implemented using \Ref{set}.
+				@see set
+		*/
+		const PointGrid& operator = (const PointGrid& grid);
+		//@}
 
 		/**	@name	Debugging and Diagnostics
 		*/
@@ -319,16 +336,56 @@ namespace BALL
 				@memo
 		*/
 		Vector3 getGridCoordinates(const Index index) const;
+
+		/**	Return the indices of the grid points of the enclosing box.
+				This method calculates the grid box that contains the given vector
+				and returns the indices of the grid points forming this box.
+				@return bool {\bf true} if the vector is inside the grid
+				@param vector a point inside the grid
+				@param llf  left lower front corner of the box
+				@param rlf  right lower front corner of the box
+				@param luf  left upper front corner of the box
+				@param ruf  right upper front corner of the box
+				@param llb  left lower back corner of the box
+				@param rlb  right lower back corner of the box
+				@param lub  left upper back corner of the box
+				@param rub  right upper back corner of the box
+		*/
+		bool getBoxIndices
+			(const Vector3& vector,
+			Position& llf, Position& rlf, Position& luf, Position& ruf,
+			Position& llb, Position& rlb, Position& lub, Position& rub) const;
+													
+		
+		/**	Return the data at the grid points of the enclosing box.
+				This method calculates the grid box that contains the given vector
+				and returns the values at the grid points forming this box.
+				@see getBoxIndices
+				@return bool {\bf true} if the vector is inside the grid
+				@param vector a point inside the grid
+				@param llf  value at the left lower front corner of the box
+				@param rlf  value at the right lower front corner of the box
+				@param luf  value at the left upper front corner of the box
+				@param ruf  value at the right upper front corner of the box
+				@param llb  value at the left lower back corner of the box
+				@param rlb  value at the right lower back corner of the box
+				@param lub  value at the left upper back corner of the box
+				@param rub  value at the right upper back corner of the box
+		*/
+		bool getBoxData
+			(const Vector3& vector,
+			GridDataType& llf, GridDataType& rlf, GridDataType& luf, GridDataType& ruf,
+			GridDataType& llb, GridDataType& rlb, GridDataType& lub, GridDataType& rub) const;
+													
 		
 		/**		Returns a vector to the grid's origin.
-					@return					Vector3\&
-				@memo
+					@return					Vector3 the grid origin
 		*/
 		Vector3& getOrigin();
 
 		/**		Returns a vector to the grid's origin (const method).
 					@return					Vector3
-				@memo
+					@memo
 
 		*/
 		const Vector3& getOrigin() const;
@@ -405,11 +462,11 @@ namespace BALL
 
 		/*_ number of grid points of the box
 		*/
-		Index number_of_points_x_, number_of_points_y_, number_of_points_z_;
+		Size number_of_points_x_, number_of_points_y_, number_of_points_z_;
 
 		/*_ contains the total number of grid points
 		*/
-		Index number_of_grid_points_;
+		Size number_of_grid_points_;
 
 		/*_ is set to true, if the grid has been set up correctly.
 				If the requested memory couldn't be allocated, valid_ is set to
@@ -435,7 +492,7 @@ namespace BALL
 
 	// copy constructor
 	template <class GridDataType>
-	PointGrid<GridDataType>::PointGrid(PointGrid<GridDataType>& grid, bool deep)
+	PointGrid<GridDataType>::PointGrid(const PointGrid<GridDataType>& grid, bool deep)
 		:	data(0),
 			origin_(0,0,0),
 			size_(0,0,0),
@@ -445,11 +502,31 @@ namespace BALL
 			number_of_points_z_(0),
 			number_of_grid_points_(0)
 	{
-		data = new GridDataType[grid.getSize()];
+		set(grid);
+	}
+
+	// assignment operator
+	template <typename GridDataType>
+	const PointGrid<GridDataType>& PointGrid<GridDataType>::operator = (const PointGrid<GridDataType>& grid)
+	{
+		set(grid);
+		return *this;
+	}
+
+	// set method
+	template <typename GridDataType>
+	void PointGrid<GridDataType>::set(const PointGrid<GridDataType>& grid)
+	{
+		// throw away the old data 
+		delete [] data;
+
+		// create a new array to hold the contents of the grid
+		data = new GridDataType[grid.number_of_grid_points_];
 
 		// if the alloc failed, mark this instance as invalid
 		valid_ = (data != 0);
 
+		// copy the remaining attributes
 		origin_ = grid.getOrigin();
 		size_ = grid.getDimension();
 		spacing_.set(grid.getXSpacing(), grid.getYSpacing(), grid.getZSpacing());
@@ -458,11 +535,15 @@ namespace BALL
 		number_of_points_z_ = grid.number_of_points_z_;
 		number_of_grid_points_ = grid.number_of_grid_points_;
 
-		// copy the grid if enough memory could be allocated
-		if (valid_){
-			memcpy(data, grid.data, grid.getSize());
+		// copy the contents of grid (if enough memory could be allocated)
+		if (valid_)
+		{
+			for (Position i = 0; i < number_of_grid_points_; i++)
+			{
+				data[i] = grid.data[i];
+			}
 		}
-	}
+  }
 
 	//  First constructor for PointGrid
 	//  lower_[x|y|z] should be set to the coordinates of
@@ -498,12 +579,17 @@ namespace BALL
 		// (which means that the grid is not three-dimensional!)
 		// then increase to at least one point in each dimension
 		if (number_of_points_x_ < 2)
+		{
 			number_of_points_x_ = 2;
+		}
 		if (number_of_points_y_ < 2)
+		{
 			number_of_points_y_ = 2;
+		}
 		if (number_of_points_y_ < 2)
+		{
 			number_of_points_y_ = 2;
-
+		}
 
 		// calculate the origin as the lowest given coordinates
 		// of each direction
@@ -534,12 +620,13 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	PointGrid<GridDataType>::PointGrid(
-				const Vector3 &lower,
-				const Vector3 &upper,
-				const Size grid_points_x,
-				const Size grid_points_y,
-				const Size grid_points_z) {
+	PointGrid<GridDataType>::PointGrid
+		(const Vector3& lower,
+		 const Vector3& upper,
+		 const Size grid_points_x,
+		 const Size grid_points_y,
+		 const Size grid_points_z) 
+	{
 
 		// set data and number_of_grid_points_ to 0/0, just to be sure 
 		data = (GridDataType*) 0;
@@ -554,7 +641,8 @@ namespace BALL
 		// if the number of grid points in any direction is below 2
 		// (which means that the grid is not three-dimensional!)
 		// an error occured, so destroy everything again
-		if ((number_of_points_x_ < 2) || (number_of_points_y_ < 2) || (number_of_points_z_ < 2)){
+		if ((number_of_points_x_ < 2) || (number_of_points_y_ < 2) || (number_of_points_z_ < 2))
+		{
 			delete this;
 			return;
 		}
@@ -588,11 +676,11 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	PointGrid<GridDataType>::PointGrid(
-				const Vector3 &lower,
-				const Vector3 &upper,
-				const float spacing) {
-
+	PointGrid<GridDataType>::PointGrid
+		(const Vector3 &lower,
+		 const Vector3 &upper,
+		 const float spacing) 
+	{
 		// set data and number_of_grid_points_ to 0/0, just to be sure 
 		data = (GridDataType*) 0;
 		number_of_grid_points_ = 0;
@@ -650,13 +738,11 @@ namespace BALL
 	template <class GridDataType>
 	void PointGrid<GridDataType>::dump(std::ostream& stream) const
 	{
-		Index i;
-
 		stream << "Dump of " << typeid(this).name()<< " (" << getMaxXIndex() 
 					 << "x" << getMaxYIndex() << "x" << getMaxZIndex() 
 					 << ")" << std::endl;
 		stream << "--------------------------------------" << std::endl;
-		for (i = 0; i < number_of_grid_points_; i++)
+		for (Position i = 0; i < number_of_grid_points_; i++)
 		{
 			stream << "(" << data[i] << ")";
 		}
@@ -758,34 +844,52 @@ namespace BALL
 		Index 		i;
 		
 		i = (long)((r.x - origin_.x) / spacing_.x + 0.5);
-		if (i < 0){
+		if (i < 0)
+		{
 			index.x = 0;
-		} else {
-			if  (i >= (long)number_of_points_x_){
+		} 
+		else 
+		{
+			if  (i >= (long)number_of_points_x_)
+			{
 				index.x = number_of_points_x_ - 1;
-			} else {
+			} 
+			else 
+			{
 				index.x = (Index) i;
 			}
 		}
 
 		i = (long)((r.y - origin_.y) / spacing_.y + 0.5);
-		if (i < 0){
+		if (i < 0)
+		{
 			index.y = 0;
-		} else {
-			if  (i >= (long)number_of_points_y_){
+		} 
+		else 
+		{
+			if  (i >= (long)number_of_points_y_)
+			{
 				index.y = number_of_points_y_ - 1;
-			} else {
+			} 
+			else 
+			{
 				index.y = (Index) i;
 			}
 		}
 
 		i = (long)((r.z - origin_.z) / spacing_.z + 0.5);
-		if (i < 0){
+		if (i < 0)
+		{
 			index.z = 0;
-		} else {
-			if  (i >= (long)number_of_points_z_){
+		} 
+		else 
+		{
+			if  (i >= (long)number_of_points_z_)
+			{
 				index.z = number_of_points_z_ - 1;
-			} else {
+			} 
+			else 
+			{
 				index.z = (Index) i;
 			}
 		}
@@ -828,36 +932,54 @@ namespace BALL
 		
 		i = (long)((x - origin_.x) / spacing_.x + 0.5);
 
-		if (i < 0){
+		if (i < 0)
+		{
 			index.x = 0;
-		} else {
-			if  (i >= (long)number_of_points_x_){
+		} 
+		else 
+		{
+			if  (i >= (long)number_of_points_x_)
+			{
 				index.x = number_of_points_x_ - 1;
-			} else {
+			} 
+			else 
+			{
 				index.x = (Index) i;
 			}
 		}
 
 		i = (long)((y - origin_.y) / spacing_.y + 0.5);
 
-		if (i < 0){
+		if (i < 0)
+		{
 			index.y = 0;
-		} else {
-			if  (i >= (long)number_of_points_y_){
+		} 
+		else 
+		{
+			if  (i >= (long)number_of_points_y_)
+			{
 				index.y = number_of_points_y_ - 1;
-			} else {
+			} 
+			else 
+			{
 				index.y = (Index) i;
 			}
 		}
 
 		i = (long)((z - origin_.z) / spacing_.z + 0.5);
 
-		if (i < 0){
+		if (i < 0)
+		{
 					index.z = 0;
-		} else {
-			if  (i >= (long)number_of_points_z_){
+		} 
+		else 
+		{
+			if  (i >= (long)number_of_points_z_)
+			{
 				index.z = number_of_points_z_ - 1;
-			} else {
+			} 
+			else 
+			{
 				index.z = (Index) i;
 			}
 		}
@@ -900,7 +1022,9 @@ namespace BALL
 		if (index > (Position)number_of_grid_points_)
 		{
 			return 0;
-		} else {
+		} 
+		else 
+		{
 			return &(data[index]);
 		}
 	}
@@ -967,6 +1091,79 @@ namespace BALL
 						 origin_.z + (float)z * spacing_.z);
 
 		return r;
+	}
+
+
+	template <typename GridDataType>
+	BALL_INLINE
+	bool PointGrid<GridDataType>::getBoxIndices
+		(const Vector3& vector,
+		Position& llf, Position& rlf, Position& luf, Position& ruf,
+		Position& llb, Position& rlb, Position& lub, Position& rub) const
+	{
+		// calculate the grid indices of the lower left front corner
+		// of the enclosing box
+		GridIndex index;
+		index.x = (Position)((vector.x - origin_.x) / spacing_.x);
+		index.y = (Position)((vector.y - origin_.y) / spacing_.y);
+		index.z = (Position)((vector.z - origin_.z) / spacing_.z);
+
+		// check whether the box is still inside the grid
+		if (((Position)index.x >= number_of_points_x_)
+			  || ((Position)index.y >= number_of_points_y_)
+			  || ((Position)index.z >= number_of_points_z_))
+		{
+			// return false if outside!
+			return false;
+		}
+		
+
+		// calculate the (linear) indices of the eight
+		// box corners
+		llf = index.x + number_of_points_x_ * index.y 
+				+ number_of_points_x_ * number_of_points_y_ * index.z;
+		rlf = llf + 1;
+		luf = llf + number_of_points_x_;
+		ruf = luf + 1;
+		llb = llf + number_of_points_x_ * number_of_points_y_;
+		rlb = llb + 1;
+		lub = llb + number_of_points_x_;
+		rub = lub + 1;
+
+
+		// return true
+		return true;
+	}
+
+	template <typename GridDataType>
+	BALL_INLINE
+	bool PointGrid<GridDataType>::getBoxData
+		(const Vector3& vector,
+		GridDataType& llf, GridDataType& rlf, GridDataType& luf, GridDataType& ruf,
+		GridDataType& llb, GridDataType& rlb, GridDataType& lub, GridDataType& rub) const
+	{
+		// compute the eight grid indices forming the enclosing box
+		Position llf_idx, rlf_idx, luf_idx, ruf_idx, llb_idx, rlb_idx, lub_idx, rub_idx;
+		bool result = getBoxIndices(vector, llf_idx, rlf_idx, luf_idx, ruf_idx, llb_idx, rlb_idx, lub_idx, rub_idx);
+		
+		// if the box was outside, return
+		if (!result)
+		{
+			return false;
+		}
+		
+		// retrieve the grid values
+		llf = data[llf_idx];
+		rlf = data[rlf_idx];
+		luf = data[luf_idx];
+		ruf = data[ruf_idx];
+		llb = data[llb_idx];
+		rlb = data[rlb_idx];
+		lub = data[lub_idx];
+		rub = data[rub_idx];
+
+		// that's it
+		return true;
 	}
 
 	template <class GridDataType> 
