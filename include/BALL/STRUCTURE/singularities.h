@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.14 2001/07/15 21:03:05 oliver Exp $
+// $Id: singularities.h,v 1.15 2001/07/29 17:25:31 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -23,6 +23,10 @@
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #	include <BALL/MATHS/circle3.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
@@ -79,7 +83,7 @@ namespace BALL
 		GetSingularFaces(ses,singular_faces);
 		try
 		{
-			TreatFirstCathegory(ses,rs,singular_faces,radius_of_probe);
+			TreatFirstCategory(ses,rs,singular_faces,radius_of_probe);
 		}
 		catch (Exception::GeneralException e)
 		{
@@ -98,10 +102,10 @@ namespace BALL
 			else
 			{
 				// BAUSTELLE: add documentation for that fucking exception
-				throw Exception::GeneralException(__FILE__, __LINE__, "undocumented exception in TreatSingularities!");
+				throw Exception::GeneralException(__FILE__, __LINE__, "undocumented exception in TreatSingularities!", "");
 			}
 		}				
-		TreatSecondCathegory(ses,radius_of_probe);
+		TreatSecondCategory(ses,radius_of_probe);
 	}
 	
 	
@@ -120,16 +124,16 @@ namespace BALL
 
 
 	template <class T>
-	void TreatFirstCathegory(TSolventExcludedSurface<T>* ses,
+	void TreatFirstCategory(TSolventExcludedSurface<T>* ses,
 													 TReducedSurface<T>* rs,
 													 list<TSESFace<T>*>& singular_faces,
 													 const T& radius_of_probe)
 	{
 		list<TSESFace<T>*> faces;
-		GetFirstCathegoryFaces(singular_faces,faces);
+		GetFirstCategoryFaces(singular_faces,faces);
 				#ifdef debug_singularities
 				std::cout << "SingularFaces.size() = " << singular_faces.size() << "\n";
-				std::cout << "FirstCathegoryFaces.size() = " << faces.size() << "\n";
+				std::cout << "FirstCategoryFaces.size() = " << faces.size() << "\n";
 				#endif
 		while (faces.size() > 0)
 		{
@@ -170,7 +174,7 @@ namespace BALL
 
 
 	template <class T>
-	void TreatSecondCathegory(TSolventExcludedSurface<T>* ses,
+	void TreatSecondCategory(TSolventExcludedSurface<T>* ses,
 														const T& radius_of_probe)
 	{
 		vector<TSESFace<T>*> faces;
@@ -197,7 +201,7 @@ namespace BALL
 
 
 	template <class T>
-	void GetFirstCathegoryFaces(const list< TSESFace<T>* >& singular_faces,
+	void GetFirstCategoryFaces(const list< TSESFace<T>* >& singular_faces,
 															list<TSESFace<T>*>& faces)
 	{
 		list<TSESFace<T>*> singular(singular_faces);
