@@ -34,7 +34,7 @@ Limits                              /           /
 LogStreamNotifier                   EI,         X
 LogStreamBuf                        EI,         X
 LogStream                           EI,         X
-Rtti                                /           Z
+Rtti                                /           /
 VersionInfo                         /           /
 ------------------------DATATYPE--------------------------------------------
 Bit                                 /           /
@@ -44,7 +44,7 @@ HashGridBox3                        X           Z       HashGridBox3<Item>::set 
       NeighbourBoxItem_
       BoxIteratorTraits_
       DataIteratorTraits_
-HashGrid3                           /           Z      
+HashGrid3                           /           X      
       BoxIteratorTraits_
 HashMap                             /           /       
       IllegalKey
@@ -60,7 +60,7 @@ RegularData1D                       /           /
 RegularData2D                       IX          /				
 RegularData3D                       /           /
 RegularExpression                   /           /
-String                              /           X
+String                              /           X??
 Substring                           /           /
       UnboundSubstring
       InvalidSubstring
@@ -72,23 +72,23 @@ BaseIterator                        /           Z
 ConstBaseIterator                   /           Z
 BidirectionalIterator               /           Z
 ConstBidirectionalIterator          /           Z
-ForwardIterator                     /           /
-ConstForwardIterator                /           /
+ForwardIterator                     /           Z
+ConstForwardIterator                /           Z
 
-AutoDeletable                       /           X       Interface so lassen!
+AutoDeletable                       /           /?       Interface so lassen!
 Callback                            I           Z
 Classtest                           /           /
 Comparator                          /           Z
-Composite                           /,          X       ausgabe in test
-      AncestorIteratorTraits_       I           Z
-      ChildCompositeIteratorTraits_ I           Z
-      CompositeIteratorPosition_    I           Z
-      CompositeIteratorTraits_      I           Z
-      SubcompositeIteratorTraits_   I           Z
+Composite                           /,          /       ausgabe in test
+      AncestorIteratorTraits_       I           /
+      ChildCompositeIteratorTraits_ I           /
+      CompositeIteratorPosition_    I           /
+      CompositeIteratorTraits_      I           /
+      SubcompositeIteratorTraits_   I           /
 Embeddable                          /           X
 EnumeratorIndex                     IX          X
       IncompatibleIndex             I,          X
-Enumerator                          IX,         X       delete_variants
+Enumerator                          IX,         X       delete_variants // many methods in test still missing
       IteratorTraits_               IX,         X
 NamedProperty                       /           /
 PropertyManager                     /           /
@@ -101,8 +101,8 @@ NotificationTarget                  I           Z
 NotificationTarget1                 I           Z
 NotificationTarget2                 I           Z
 
-Object                              (/)         (/)       read/write fehlen
-PersistenceManager                  I           Z
+Object                              (/)         /       read/write fehlen
+PersistenceManager                  I           X       Test is little more than a skeleton! 
 PersistentObject                    /           /
 RandomAccessIterator                IX          X 
 ConstRandomAccessIterator           I           Z
@@ -111,14 +111,14 @@ ConstReverseRandomAccessIterator    I           Z
 ReverseBidirectionalIterator        I           Z
 ConstReverseBidirectionalIterator   I           Z
 Selectable                          /           /
-TextPersistenceManager              E           Z
-TimeStamp                           /           X
-PreciseTime                         /           X
+TextPersistenceManager              E           /
+TimeStamp                           /           /
+PreciseTime                         /           /
 Visitor                             I           Z
-XDRPersistenceManager               IX          Z
+XDRPersistenceManager               IX          X       many tests missing
 
-UnaryFunctor                        /,          /
-BinaryFunctor                       /,          /
+UnaryFunctor                        /,          Z
+BinaryFunctor                       /,          Z
 UnaryPredicate                      I           Z
 BinaryPredicate                     I           Z
 UnaryProcessor                      I           Z
@@ -133,24 +133,25 @@ EnergyProcessor                     /           /
 Bruker1D                            EI,         Z
 Bruker2D                            EI,         Z
 BrukerParameter                     EIX,        Z       warum in JCAMPFILE?, parameter->getParameter
-resourcefile                        E,          Z
+resourcefile                        E,          X       many tests missing
 resourceEntry                       E,          X
 GenericMolFile                      /,          /
 GenericPDBFile                      EI,         Z
-HINFile                             EX,         X
+HINFile                             EX,         /
 INIFile                             /         	/
 LineBasedFile                       /           /
       LineBasedFileError            I           Z
-MOLFile                             /           Z
-MOL2File                            /,          X
+MOLFile                             /           /
+MOL2File                            /,          /
 NMRStarFile                         /           /
-Parameters                          E           X
-ParameterSection                    I,          X
-trajectoryFile                      /           X
-JCAMPFile                           /           Z     
-PDBFile                             /,          X
+Parameters                          E           /
+ParameterSection                    I,          /
+trajectoryFile                      /           X       Test is empty!       
+JCAMPFile                           /           Z 
+SDFile                              /?          /?    
+PDBFile                             /,          /
 XYZFile                             /,          /
-DCDFile                             X?          Z
+DCDFile                             X?          X       some tests missing
 ------------------------KERNEL----------------------------------------------
 Atom                                /           /
             BondIteratorTraits_     /           Z
@@ -162,13 +163,13 @@ Bond                                /           /
 Chain                               /           /
 ChainIteratorTraits_                /           Z
 CompositeIteratorTraits_            /           Z
-Expression                          /X          Z          attrib doku
-ExpressionPredicate                 IX          Z          attrib doku
-ExpressionTree                      IX          Z          OCI(UnaryPred)
-SyntaxTree                          I           Z          attrib doku
+Expression                          X           (X)        attrib doku
+ExpressionPredicate                 IX          (X)        attrib doku
+ExpressionTree                      IX          (X)        OCI(UnaryPred)
+SyntaxTree                          I           (X)        attrib doku
 Fragment                            /           / 
 FragmentIteratorTraits_             EI          Z
-Element                             /           /
+Element                             /           Z
 PTE_                                /           /
 KernelPredicate                     I           /
 Molecule                            /           /
@@ -185,7 +186,7 @@ Residue                             /           /
 ResidueIteratorTraits_              EI          Z
 SecondaryStructure                  /           /
 SecondaryStructureIteratorTraits_   EI          Z
-Selector                            /
+Selector                            /           /
 System                              /           /
 
  AromaticBondsPredicate             /           /           OCI nicht notwendig
@@ -215,23 +216,24 @@ System                              /           /
  TruePredicate                      /           /           OCI nicht notwendig
 ------------------------MATHS-----------------------------------------------    
 AnalyticalGeometry                  /           /
+MathsCommon                         /           /
 TAngle                              /           /
 TBox3                               /           /
 TCircle3                            /           /
 TLine3                              /           /
 TMatrix4x4                          /           /
 PiecewiseFunction                   X           X
-PiecewisePolynomial                 X           X
+PiecewisePolynomial                 X           X       tests for special cases missing        
 RombergIntegrator                   /           Z  
 TPlane3                             /           /
 TQuaternion                         /           /
 TSphere3                            /           /
-TSurface                            /           Z    
+TSurface                            /           /    
 TVector2                            /           /
 TVector3                            /           /
 TVector4                            /           /
 Function                            I           /
-NumericalIntegrator                 /           Z
+NumericalIntegrator                 /           /
 ------------------------MOLMEC----------------------------------------------
                         ---------AMBER-----
 amberBend                           EI          Z
@@ -254,13 +256,13 @@ AssignTypeProcessor                 EI          Z
 ChargeRuleProcessor                 EI          Z
 ForceField                          E           Z
 ForceFieldComponent                 EI          Z
-Gradient                            EI          X
+Gradient                            EI          /
 PeriodicBoundary                    /           Z
 RadiusRuleProcessor                 EI          Z
-RuleEvaluator                       X           X       ruleEvaluator::dump missing
+RuleEvaluator                       X           X       ruleEvaluator::dump missing // some tests missing
 RuleProcessor                       EIX         Z       ::set and ::dump not implemented
-SnapShot                            EI          Z       problems with operator >>
-SnapShotManager                     EIX         Z       ::clear and ::applyFirstSnapShot
+SnapShot                            EI          X       problems with operator >> // test empty!
+SnapShotManager                     EIX         X       ::clear and ::applyFirstSnapShot // test empty!
 TypeRuleProcessor                   EI          Z
 TypenameRuleProcessor               EI          Z
 (support)                           EI          Z
@@ -271,7 +273,7 @@ MolecularDynamics                   E           Z
                         -----MINIMIZATION--
 ConjugateGradientMinimizer          EIX         Z       copy constructor and operator =
 EnergyMinimizer                     EIX         X       copy constructor, assignment op = and ::setMaximalNumberOfIterations
-LineSearch                          E           X
+LineSearch                          E           Z
 SteepestDescentMinimizer            EI          Z
                         -----PARAMETER-----
 AtomTypes                           (/)         Z
@@ -354,29 +356,30 @@ Backbone                            EI?         Z
 TwoColoredLine                      /           Z
 TwoColoredTube                      /           Z
 ------------------------NMR-------------------------------------------------
-AnisotropyShiftProcessor            X           X
+AnisotropyShiftProcessor            X           /
 AssignShiftProcessor                I           /
-ClearShiftProcessor                 I           X
-CreateSpectrumProcessor             X           Z       operator << not implemented
-EFShiftProcessor                    I           X
+ClearShiftProcessor                 I           /
+CreateSpectrumProcessor             X           X       operator << not implemented // a few tests missing
+EFShiftProcessor                    I           X       many tests missing
 Experiment                          X	        Z
-HaighMallionShiftProcessor          X           X
+HaighMallionShiftProcessor          X           X       
 HBondShiftProcessor                 X           Z
-JohnsonBoveyShiftProcessor          X           X
+JohnsonBoveyShiftProcessor          X           /
 MakeSpectrumProcessor               EI          X
 Spectrum  		            X           X
-Peak1D                              EI          X
-RandomCoilShiftProcessor            EI          X
+Peak1D                              EI          /
+PeakList                            /           /
+RandomCoilShiftProcessor            EI          X       some tests missing
 ShiftModel                          I           /
 ShiftModule                         I           /
 ------------------------PYTHON----------------------------------------------
 (extractors)                        /           Z
 PyAtomContainerList                 E           Z
 PyAtomList                          E           Z
-PyBALLSipHelper                     /           /
+PyBALLSipHelper                     /           Z
 PyBondList                          E           Z
 PyChainList                         E           Z
-PyConstant                          /           /
+PyConstant                          /           Z
 PyFragmentList                      E           Z
 PyInterpreter                       E           Z
 PyNucleotideList                    E           Z
@@ -390,7 +393,7 @@ PySecondaryStructureList            E           Z
 Descriptor                          /           X?
 SimpleDescriptors                   /           X?
 ------------------------SOLVATION-------------------------------------------
-ClaverieParameter                   /           Z
+ClaverieParameter                   /           /
 FDPB                                IX          X
 (molecularSurfaceGrid)              /           Z
 OoiEnergy                           /           /
@@ -398,18 +401,17 @@ Pair6_12InteractionEnergyProcessor  IX          X
 Pair6_12RDFIntegrator               EIX         X
 PairExpRDFIntegrator                IX          X       options::clear
 PairExpInteractionEnergyProcessor   IX          X
-PCMCavFreeEnergyProcessor           I           Z
-PierottiCavFreeEnergyProcessor      /           Z
+PCMCavFreeEnergyProcessor           I           /
+PierottiCavFreeEnergyProcessor      /           /
 PoissonBoltzmann                    X           X       setupSASGrid implementation missing
-ReissCavFreeEnergyProcessor         /           Z
-SolventParameter                    X           Z       ::operator ==
-SolventDescriptor                   X           Z
-UhligCavFreeEnergyProcessor         /           Z
+ReissCavFreeEnergyProcessor         /           /
+SolventParameter                    X           X       ::operator == and extraxtSextion
+SolventDescriptor                   X           X       test: const and muteable methods
+UhligCavFreeEnergyProcessor         /           /
 ------------------------STRUCTURE-------------------------------------------
 analyticalSES                       EI          /
 AssignChargeProcessor               I           /
 AssignRadiusProcessor               I           /
-BoundingBoxProcessor                EI          /
 GeometricCenterProcessor            EI          /
 FragmentDistanceCollector           EI          /
 
@@ -426,20 +428,20 @@ FragmentDB                          IX          X
             NoFragmentNode          I           Z
             NormalizeNamesProcessor I           Z
             AddHydrogensProcessor   I           Z
-            BuildBondsProcessor     I           Z
+            BuildBondsProcessor     I           /
 
 (numericalSAS)                      EI          /           der code ist furchtbar!
 RadialDistributionFunction          /           /
 ResidueChecker                      E           Z
 RDFIntegrator                       /           X
-RDFParameter                        /           X
-RDFSection                          /           X
+RDFParameter                        /           X       test is empty!         
+RDFSection                          /           X       test is empty!
 Rotamer                             EI          Z
 ResidueRotamerSet                   EI          Z
 RotamerLibrary                      E           Z
 RuleProcessor                       EI          Z
 singularities                       (D)         Z
-SmilesParser                        X?          Z
+SmilesParser                        X?          /?
 SurfaceProcessor                    /           Z
 StructureMapper                     EIX         X
 TranslationProcessor                EI          X
