@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.20 2001/04/11 10:01:53 amoll Exp $
+// $Id: parameterSection.C,v 1.21 2001/05/10 22:03:06 amoll Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -151,12 +151,11 @@ namespace BALL
 		Size number_of_fields(format_line_.split(f, String::CHARACTER_CLASS__WHITESPACE));
 
 		if (number_of_fields == 0 || number_of_fields > 20)
-		{
+		{				
 			Log.error() << "ParameterSection::extractSection: error reading section " << section_name 
-				<< " of file " << ini_file.getFilename() << ": wrong number of fields in the format line: " 
-				<< number_of_fields << endl;
-			Log.error() << "FORMAT: " << format_line_ << endl;
-
+									<< " of file " << ini_file.getFilename() << ":" << endl 
+									<< "Wrong number of fields in the format line: "
+									<< number_of_fields << ". FORMAT: " << format_line_ << endl;
 			return false;
 		}
 
