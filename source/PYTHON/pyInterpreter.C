@@ -1,4 +1,4 @@
-// $Id: pyInterpreter.C,v 1.1 2000/07/16 19:24:13 oliver Exp $
+// $Id: pyInterpreter.C,v 1.2 2000/07/18 16:42:08 oliver Exp $
 
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <Python.h>
@@ -108,7 +108,7 @@ namespace BALL
 		}
 	}
 
-	String PyInterpreter::runFile(const String& s)
+	String PyInterpreter::runFile(const String& /* s */)
 	{
 		// BAUSTELLE
 		return "<not implemented yet>";

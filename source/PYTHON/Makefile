@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.17 2000/07/18 08:30:00 oliver Exp $
+# $Id: Makefile,v 1.18 2000/07/18 16:41:26 oliver Exp $
 #
 
 
@@ -156,6 +156,7 @@ SIP_SOURCES_VIEW_OPENGL_KERNEL=\
 	sipBALLMainControl.C
 
 SIP_SOURCES_VIEW_OPENGL_WIDGETS=\
+	sipBALLModularWidget.C\
 	sipBALLPyWidget.C
 
 SIP_SOURCES=\
@@ -176,6 +177,7 @@ SIP_SOURCES=\
 	$(SIP_SOURCES_STRUCTURE)\
 	$(SIP_SOURCES_SYSTEM)\
 	$(SIP_SOURCES_VIEW_OPENGL_KERNEL)\
+	$(SIP_SOURCES_VIEW_OPENGL_WIDGETS)\
 	BALLcmodule.C
 
 PYBALL_SOURCES=\

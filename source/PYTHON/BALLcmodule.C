@@ -111,7 +111,25 @@
 #include "sipBALLOpenMode.h"
 #include "sipBALLMainControl.h"
 #include "sipBALLCompositeDescriptor.h"
+#include "sipBALLModularWidget.h"
+#include "sipBALLPyWidget.h"
 
+char sipName_BALL_cursorRight[] = "cursorRight";
+char sipName_BALL_backspace[] = "backspace";
+char sipName_BALL_cursorLeft[] = "cursorLeft";
+char sipName_BALL_newLine[] = "newLine";
+char sipName_BALL_cursorDown[] = "cursorDown";
+char sipName_BALL_cursorUp[] = "cursorUp";
+char sipName_BALL_stopInterpreter[] = "stopInterpreter";
+char sipName_BALL_startInterpreter[] = "startInterpreter";
+char sipName_BALL_PyWidget[] = "PyWidget";
+char sipName_BALL_checkMenu[] = "checkMenu";
+char sipName_BALL_finalizeWidget[] = "finalizeWidget";
+char sipName_BALL_initializeWidget[] = "initializeWidget";
+char sipName_BALL_registerWidget[] = "registerWidget";
+char sipName_BALL_getIdentifier[] = "getIdentifier";
+char sipName_BALL_setIdentifier[] = "setIdentifier";
+char sipName_BALL_ModularWidget[] = "ModularWidget";
 char sipName_BALL_isDeepCopy[] = "isDeepCopy";
 char sipName_BALL_isShallowCopy[] = "isShallowCopy";
 char sipName_BALL_drawDirect[] = "drawDirect";
@@ -925,7 +943,7 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 933 "./BALLcmodule.cpp"
+#line 951 "./BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -972,7 +990,7 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 		return resobj;
 	}
-#line 980 "./BALLcmodule.cpp"
+#line 998 "./BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -2999,6 +3017,8 @@ static PyObject *sipDo_calculateACE(PyObject *,PyObject *sipArgs)
 }
 
 static sipClassDef classesTable[] = {
+	{sipName_BALL_PyWidget, sipNew_PyWidget, &sipClass_PyWidget, sipClassAttrTab_PyWidget, NULL},
+	{sipName_BALL_ModularWidget, sipNew_ModularWidget, &sipClass_ModularWidget, sipClassAttrTab_ModularWidget, NULL},
 	{sipName_BALL_CompositeDescriptor, sipNew_CompositeDescriptor, &sipClass_CompositeDescriptor, sipClassAttrTab_CompositeDescriptor, NULL},
 	{sipName_BALL_MainControl, sipNew_MainControl, &sipClass_MainControl, sipClassAttrTab_MainControl, NULL},
 	{sipName_BALL_OpenMode, sipNew_OpenMode, &sipClass_OpenMode, sipClassAttrTab_OpenMode, NULL},
@@ -3114,7 +3134,7 @@ static sipClassDef classesTable[] = {
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	111,
+	113,
 	classesTable
 };
 
