@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.16 2001/01/14 21:57:14 amoll Exp $
+// $Id: PDBAtom.h,v 1.17 2001/01/20 00:26:28 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -126,8 +126,7 @@ namespace BALL
 
 
 		/**	Equality operator.
-				Two PDBAtoms are equal if they have the same attributes and properties.
-				@see Atom::operator ==
+				@see Object::operator ==
 		*/
 		bool operator == (const PDBAtom& pdb_atom) const
 			throw();
@@ -162,30 +161,30 @@ namespace BALL
 		/**	@name	*/
 		//@{
 
-		/** Assignment with cloning facility.
-				Assign the PDBAtom {\em pdb_atom} to {\em *this}.
-				The assignment is either deep or shallow (default).
-				@param  pdb_atom the PDBAtom to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em pdb_atom}
-		*/
-		void set(const PDBAtom& pdb_atom, bool deep = true)
-			throw();
+    /** Assignment with cloning facility.
+        Assign the PDBAtom {\em pdb_atom} to {\em *this}.
+        The assignment is either deep or shallow (default).
+        @param  pdb_atom the PDBAtom to be copied (cloned)
+        @param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em pdb_atom}
+    */
+    void set(const PDBAtom& pdb_atom, bool deep = true)
+      throw(); 
+
+    /** Copying with cloning facility.
+        Copy {\em *this} PDBAtom to {\em pdb_atom}.
+        The assignment is either deep or shallow (default).
+        @param  pdb_atom the PDBAtom to be assigned to
+    */
+    void get(PDBAtom& pdb_atom, bool deep = true) const
+      throw();
 
 		/** Assignment operator.
 				Assign the PDBAtom {\em pdb_atom} to {\em *this}.
-				The assignment is either deep or shallow (default).
+				The assignment is deep.
 				@param   pdb_atom the PDBAtom to be copied (cloned)
 				@return  pdb_atom& - {\em *this} PDBAtom
 		*/
 		const PDBAtom& operator = (const PDBAtom& pdb_atom)
-			throw();
-
-		/** Copying with cloning facility.
-				Copy {\em *this} PDBAtom to {\em pdb_atom}.
-				The assignment is either deep or shallow (default).
-				@param  pdb_atom the PDBAtom to be assigned to
-		*/
-		void get(PDBAtom& pdb_atom, bool deep = true) const
 			throw();
 
 		/** Swapping of PDBAtoms.

@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.18 2001/01/14 21:57:14 amoll Exp $
+// $Id: bond.h,v 1.19 2001/01/20 00:26:44 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.18 $
-			@date    $Date: 2001/01/14 21:57:14 $
+			@version $Revision: 1.19 $
+			@date    $Date: 2001/01/20 00:26:44 $
 	*/
 	class Bond
 		: public Composite,
@@ -312,9 +312,7 @@ namespace BALL
 		//@}
 
 		/**	Equality operator.
-				Two bonds are equal if they have the same attributes and point to two equal atoms.
-				@see PropertyManager::operator ==
-				@see Atom::operator ==
+				@see Object::operator ==
 		*/
 		bool operator == (const Bond& bond) const
 			throw();
@@ -328,20 +326,36 @@ namespace BALL
 		/** @name Assignment methods */
 		//@{
 
-		/** Assignment with cloning facility.
-				Assign the bond {\em bond} to {\em *this}.
-				The assignment is either deep or shallow (default).
-				The state of {\em *this} bond is initialized to the state of the bond {\em bond}.\\
-				\\
-				{\bf Note:} Deep copying of bonds is not supported.
-				The use of this method is not recommended because it may result in inconcistencies
-				of the whole system. It is used for backup only.
+    /** Assignment with cloning facility.
+        Assign the bond {\em bond} to {\em *this}.
+        The assignment is either deep or shallow (default).
+        The state of {\em *this} bond is initialized to the state of the bond {\em bond}.\\
+        \\
+        {\bf Note:} Deep copying of bonds is not supported.
+        The use of this method is not recommended because it may result in inconcistencies
+        of the whole system. It is used for backup only.
 
-				@param bond the bond to be copied (cloned)
-				@param deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
-		*/
-		void set(const Bond& bond, bool deep = true)
-			throw();
+        @param bond the bond to be copied (cloned)
+        @param deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
+    */
+    void set(const Bond& bond, bool deep = true)
+      throw();
+
+    /** Copying with cloning facility.
+        Copy {\em *this} to the bond {\em bond}.
+        The assignment is either deep or shallow (default).
+        Calls \Ref{Bond::set}.
+        The state of the bond {\em bond} is initialized to the state of {\em *this}.\\
+        \\
+        {\bf Note:} Deep copying of bonds is not supported.
+        The use of this method is not recommended because it may result in inconcistencies
+        of the whole system. It is used for backup only.
+
+        @param bond the bond to be assigned to
+        @see   Bond::set
+    */  
+    void get(Bond& bond, bool deep = true) const
+      throw();
 		
 		/** Assignment operator.
 				Assign the bond {\em bond} to {\em *this}.
@@ -358,22 +372,6 @@ namespace BALL
 				@see    Bond::set
 		*/
 		const Bond& operator = (const Bond& bond)
-			throw();
-
-		/** Copying with cloning facility.
-				Copy {\em *this} to the bond {\em bond}.
-				The assignment is either deep or shallow (default).
-				Calls \Ref{Bond::set}.
-				The state of the bond {\em bond} is initialized to the state of {\em *this}.\\
-				\\
-				{\bf Note:} Deep copying of bonds is not supported.
-				The use of this method is not recommended because it may result in inconcistencies 
-				of the whole system. It is used for backup only.
-
-				@param bond the bond to be assigned to
-				@see   Bond::set
-		*/
-		void get(Bond& bond, bool deep = true) const
 			throw();
 
 		/** Swapping of bonds.
@@ -587,6 +585,7 @@ namespace BALL
 		/** Determine whether the bond connects two fragments.
 				Query, if {\em *this} bond connects its two atoms within a common parent \Ref{Composite} instance.
 				If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
+				If both atoms have no roots, the result is false.
 				Calls \Ref{Composite::getRoot}.
 				@return      bool -
 										 {\tt true} if {\em *this} bond is intermolecular
@@ -626,8 +625,8 @@ namespace BALL
 		/**	Request for the intramolecular bonding of {\em *this} bond.
 				Query, if {\em *this} bond connects its two atoms within a common parent \Ref{Composite} instance.
 				If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
+				If both atoms have no roots, the result is true.
 				Calls \Ref{Composite::getRoot}.
-	
 				@return      bool -
 										 {\tt true} if {\em *this} bond is intramolecular
 										 {\tt false} otherwise

@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.30 2001/01/14 21:57:14 amoll Exp $
+// $Id: atom.h,v 1.31 2001/01/20 00:26:34 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -84,8 +84,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.30 $
-			@date    $Date: 2001/01/14 21:57:14 $
+			@version $Revision: 1.31 $
+			@date    $Date: 2001/01/20 00:26:34 $
 	*/
 	class Atom
 		: public Composite,
@@ -307,22 +307,36 @@ namespace BALL
 			/** @name Assignment methods */
 			//@{
 
-			/** Assignment with cloning facility.
-					Assign the atom {\em atom} to {\em *this} atom.
-					The assignment is either deep or shallow (default).
-					The state of {\em *this} atom is initialized to the state of the atom {\em atom}.\\
-					\\
-					{\bf Note:} Deep copying of bonds is not supported.
+      /** Assignment with cloning facility.
+          Assign the atom {\em atom} to {\em *this} atom.
+          The assignment is either deep or shallow (default).
+          The state of {\em *this} atom is initialized to the state of the atom {\em atom}.\\
+          \\
+          {\bf Note:} Deep copying of bonds is not supported.
 
-					@param       atom the atom to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
-			*/
-			void set(const Atom& atom, bool deep = true)
-				throw();
+          @param       atom the atom to be copied (cloned)
+          @param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
+      */
+      void set(const Atom& atom, bool deep = true)
+        throw();
+
+      /** Copying with cloning facility.
+          Copy {\em *this} atom to the atom {\em atom}.
+          The assignment is either deep or shallow (default).
+          Calls \Ref{Atom::set}.
+          The state of the atom {\em atom} is initialized to the state of {\em *this} atom.\\
+          \\
+          {\bf Note:} Deep copying of bonds is not supported.
+
+          @param  atom the atom to be assigned to
+          @see         Atom::set
+      */
+      void get(Atom& atom, bool deep = true) const
+        throw();
 
 			/** Assignment operator.
 					Assign the atom {\em atom} to {\em *this} atom.
-					The assignment is either deep or shallow (default).
+					The assignment is deep.
 					Calls \Ref{Atom::set}.
 					The state of {\em *this} atom is initialized to the state of the atom {\em atom}.\\
 					\\
@@ -333,20 +347,6 @@ namespace BALL
 					@see         Atom::set
 			*/
 			const Atom& operator = (const Atom& atom)
-				throw();
-
-			/** Copying with cloning facility.
-					Copy {\em *this} atom to the atom {\em atom}.
-					The assignment is either deep or shallow (default).
-					Calls \Ref{Atom::set}.
-					The state of the atom {\em atom} is initialized to the state of {\em *this} atom.\\
-					\\
-					{\bf Note:} Deep copying of bonds is not supported.
-
-					@param  atom the atom to be assigned to
-					@see         Atom::set
-			*/
-			void get(Atom& atom, bool deep = true) const
 				throw();
 
 			/** Swapping of atoms.
@@ -361,7 +361,7 @@ namespace BALL
 
 			/**	Equality operator.
 					Two atoms are equal if they have the same attributes and the same properties.
-					@see PropertyManager::operator ==
+					@see Object::operator ==
 			*/
 			bool operator == (const Atom& atom) const
 				throw();

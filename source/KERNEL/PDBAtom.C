@@ -1,4 +1,4 @@
-// $Id: PDBAtom.C,v 1.9 2001/01/14 21:57:15 amoll Exp $
+// $Id: PDBAtom.C,v 1.10 2001/01/20 00:27:04 amoll Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -116,30 +116,37 @@ namespace BALL
 		pm.readPrimitive(occupancy_, "occupancy_");
 		pm.readPrimitive(temperature_factor_, "temperature_factor_");		
 	}
- 
-	void PDBAtom::set(const PDBAtom& pdb_atom, bool deep)
+
+  void PDBAtom::set(const PDBAtom& pdb_atom, bool deep)
+    throw()
+  {
+    Atom::set(pdb_atom, deep);
+
+    branch_designator_ = pdb_atom.branch_designator_;
+    remoteness_indicator_ = pdb_atom.remoteness_indicator_;
+    alternate_location_indicator_ = pdb_atom.alternate_location_indicator_;
+    occupancy_ = pdb_atom.occupancy_;
+    temperature_factor_ = pdb_atom.temperature_factor_;
+  }			
+
+  void PDBAtom::get(PDBAtom& pdb_atom, bool deep) const
+    throw()
+  {
+    pdb_atom.set(*this, deep);
+  }
+
+	const PDBAtom& PDBAtom::operator =(const PDBAtom& pdb_atom)
 		throw()
 	{
-		Atom::set(pdb_atom, deep);
+		Atom::operator =(pdb_atom);
 
 		branch_designator_ = pdb_atom.branch_designator_;
 		remoteness_indicator_ = pdb_atom.remoteness_indicator_;
 		alternate_location_indicator_ = pdb_atom.alternate_location_indicator_;
 		occupancy_ = pdb_atom.occupancy_;
 		temperature_factor_ = pdb_atom.temperature_factor_;
-	}
-			
-	const PDBAtom& PDBAtom::operator =(const PDBAtom& pdb_atom)
-		throw()
-	{
-		set(pdb_atom);
-		return *this;
-	}
 
-	void PDBAtom::get(PDBAtom& pdb_atom, bool deep) const
-		throw()
-	{
-		pdb_atom.set(*this, deep);
+		return *this;
 	}
 			
 	void PDBAtom::swap(PDBAtom& pdb_atom)
@@ -329,11 +336,7 @@ namespace BALL
 	bool PDBAtom::operator == (const PDBAtom& pdb_atom) const
 		throw()
 	{
-		return(Atom::operator == (pdb_atom) &&
-					 branch_designator_							== pdb_atom.branch_designator_						&&
-					 remoteness_indicator_					== pdb_atom.remoteness_indicator_					&&
-					 alternate_location_indicator_	== pdb_atom.alternate_location_indicator_ &&
-					 temperature_factor_						== pdb_atom.temperature_factor_						);
+		return(Object::operator == (pdb_atom));
 	}
 
 	bool PDBAtom::operator != (const PDBAtom& pdb_atom) const

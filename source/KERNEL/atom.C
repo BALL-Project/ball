@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.31 2001/01/14 21:57:15 amoll Exp $
+// $Id: atom.C,v 1.32 2001/01/20 00:27:19 amoll Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -158,11 +158,35 @@ namespace BALL
 		}
 	}
 
-	void Atom::set(const Atom& atom, bool deep)
+  void Atom::set(const Atom& atom, bool deep)
+    throw()
+  {
+    Composite::set(atom, deep);
+    PropertyManager::operator =(atom);
+    
+    element_ = atom.element_;
+    charge_ = atom.charge_;
+    name_ = atom.name_;
+    type_name_ = atom.type_name_;
+    position_.set(atom.position_);
+    radius_ = atom.radius_;
+    type_ = atom.type_;
+    velocity_.set(atom.velocity_);
+    force_.set(atom.force_);
+    number_of_bonds_ = 0;
+  }
+
+  void Atom::get(Atom &atom, bool deep) const
+    throw()
+  {
+    atom.set(*this, deep);
+  }
+
+	const Atom& Atom::operator =(const Atom &atom)
 		throw()
 	{
-		Composite::set(atom, deep);
-		PropertyManager::set(atom, deep);
+		Composite::operator =(atom);
+		PropertyManager::operator =(atom);
 		
 		element_ = atom.element_;
 		charge_ = atom.charge_;
@@ -174,36 +198,14 @@ namespace BALL
 		velocity_.set(atom.velocity_);
 		force_.set(atom.force_);
 		number_of_bonds_ = 0;
-	}
-			
-	const Atom& Atom::operator =(const Atom &atom)
-		throw()
-	{
-		set(atom);
-		return *this;
-	}
 
-	void Atom::get(Atom &atom, bool deep) const
-		throw()
-	{
-		atom.set(*this, deep);
+		return *this;
 	}
 			
 	bool Atom::operator == (const Atom& atom) const
 		throw()
 	{
-		return(
-			PropertyManager::operator ==(atom) &&
-			element_		== atom.element_		&&
-			charge_			== atom.charge_			&&
-			name_				== atom.name_				&&
-			type_name_	== atom.type_name_	&&
-			position_		== atom.position_		&&
-			radius_			== atom.radius_			&&
-			type_				== atom.type_				&&
-			velocity_		== atom.velocity_		&&
-			force_			== atom.force_			&&
-			number_of_bonds_ == atom.number_of_bonds_);
+		return(Object::operator ==(atom));
 	}
 
 	bool Atom::operator != (const Atom& atom) const
