@@ -1,4 +1,4 @@
-// $Id: RandomAccessIterator_test.C,v 1.1 2001/06/11 15:37:21 amoll Exp $
+// $Id: RandomAccessIterator_test.C,v 1.2 2001/06/24 10:33:10 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -175,17 +175,18 @@ class VectorIteratorTraits_
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		return (position_ >= bound_->size());
+		return (position_ >= (Index) bound_->size());
 	}
 
 	DataType& getData()
-		throw(Exception::IndexOverflow, Exception::InvalidIterator)
+		throw(Exception::InvalidIterator, Exception::IndexOverflow, Exception::IndexUnderflow)
 	{
 		if (bound_ == 0)
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		if (position_ >= bound_->size())
+		
+		if (position_ >= (Index) bound_->size())
 		{
 			throw(Exception::IndexOverflow(__FILE__, __LINE__, position_, bound_->size() - 1));
 		}
@@ -199,11 +200,17 @@ class VectorIteratorTraits_
 	}
 
 	void forward()
-		throw(Exception::InvalidIterator)
+		throw(Exception::InvalidIterator, Exception::IndexOverflow)
 	{
 		if (bound_ == 0)
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
+		}
+
+		cout << "@" << position_ <<"@"<< bound_->size() << endl;
+		if (position_ >= (Index) bound_->size())
+		{
+			throw(Exception::IndexOverflow(__FILE__, __LINE__, position_ + 1, bound_->size() - 1));
 		}
 		++position_;
 	}
@@ -245,7 +252,7 @@ class VectorIteratorTraits_
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		return (position_ == bound_->size() - 1);
+		return (position_ == (Index) bound_->size() - 1);
 	}
 	
 	void toREnd()
@@ -299,7 +306,7 @@ class VectorIteratorTraits_
 	}
 
 	DataType& getData(Index index)
-		throw(Exception::InvalidIterator)
+		throw(Exception::InvalidIterator, Exception::IndexOverflow, Exception::IndexUnderflow)
 	{
 		if (bound_ == 0)
 		{
@@ -333,7 +340,7 @@ class MyIterator
 };
 
 
-START_TEST(class_name, "$Id: RandomAccessIterator_test.C,v 1.1 2001/06/11 15:37:21 amoll Exp $")
+START_TEST(class_name, "$Id: RandomAccessIterator_test.C,v 1.2 2001/06/24 10:33:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -404,7 +411,7 @@ CHECK(toEnd)
 	TEST_REAL_EQUAL(*m, 0.2)
 	m.toEnd();
 	//BAUSTELLE
-	//TEST_EXCEPTION(Exception::IndexOverflow, *m)
+	TEST_EXCEPTION(Exception::InvalidIterator, *m)
 	--m;
 	TEST_REAL_EQUAL(*m, 0.4)	
 
@@ -437,18 +444,31 @@ RESULT
 CHECK(toREnd)
 	m.toREnd();
 	//BAUSTELLE
-	//TEST_EXCEPTION(Exception::IndexUnderflow, *m)
+	TEST_EXCEPTION(Exception::InvalidIterator, *m)
 	++m;
 	TEST_REAL_EQUAL(*m, 0.1)
 	
 	TEST_EXCEPTION(Exception::InvalidIterator, n.toREnd())
 RESULT
-/*
+
 CHECK(isREnd)
+	m.toREnd();
 	TEST_EQUAL(m.isREnd(), true)
 	m.toBegin();
 	m++;
 	TEST_EQUAL(m.isREnd(), false)
 RESULT
-*/
+
+CHECK(operator ++)
+	m.toBegin();
+	TEST_REAL_EQUAL(*m, 0.1)
+	++m;
+	TEST_REAL_EQUAL(*m, 0.2)
+
+	m.toEnd();
+	//TEST_EXCEPTION(Exception::IndexOverflow, ++m)
+
+	TEST_EXCEPTION(Exception::InvalidIterator, n.toREnd())
+RESULT
+
 END_TEST
