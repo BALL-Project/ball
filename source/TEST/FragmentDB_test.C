@@ -1,13 +1,13 @@
-// $Id: FragmentDB_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: FragmentDB_test.C,v 1.2 1999/09/17 11:18:07 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-#include <BALL/KERNEL/fragmentDB.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/KERNEL/residue.h>
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(class_name, "$Id: FragmentDB_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(class_name, "$Id: FragmentDB_test.C,v 1.2 1999/09/17 11:18:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
