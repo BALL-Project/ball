@@ -1,4 +1,4 @@
-// $Id: structure.doc,v 1.4 2001/03/07 22:19:47 amoll Exp $
+// $Id: structure.doc,v 1.5 2001/07/16 00:34:07 amoll Exp $
 
 /**	@name	Molecular Structure
 		This chapter contains all relevant information on 
@@ -16,7 +16,6 @@
   //@Include: reducedSurface.h
   //@Include: residueChecker.h
   //@Include: rotamerLibrary.h
-  //@Include: rules.h
   //@Include: singularities.h
   //@Include: solventExcludedSurface.h
   //@Include: structureMapper.h
