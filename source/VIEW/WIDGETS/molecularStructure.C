@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.28 2004/02/24 18:49:41 amoll Exp $
+// $Id: molecularStructure.C,v 1.29 2004/03/04 12:41:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
+#	include <BALL/VIEW/KERNEL/molecularInformation.h>
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -135,6 +136,10 @@ namespace BALL
 		hint = "To assign H-bonds, one System has to be selected.";
 		calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-Bonds", this, SLOT(calculateHBonds()),
 										CTRL+Key_9, -1, hint);
+
+		hint = "Check for a System if some of its atoms are too near to each other, which could produce strange energies";
+		check_overlap_ = insertMenuEntry(MainControl::TOOLS, "Check overlapping atoms", this, SLOT(checkOverlap()),
+										0, -1, hint);
 
 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
@@ -412,6 +417,8 @@ namespace BALL
 
 		menuBar()->setItemEnabled(select_id_, selected);
 		menuBar()->setItemEnabled(deselect_id_, selected);
+
+		menuBar()->setItemEnabled(check_overlap_, (getMainControl()->getSelectedSystem() != 0)&& composites_muteable);
 	}
 
 
@@ -1181,6 +1188,80 @@ namespace BALL
 		{
 			showCharmmForceFieldOptions();
 		}
+	}
+
+	void MolecularStructure::checkOverlap()
+	{
+		System* system = getMainControl()->getSelectedSystem();
+		if (system == 0) 
+		{
+			return;
+		}
+
+		AtomIterator atit = system->beginAtom();
+
+		vector<Atom*> atoms;
+		for (; +atit; ++atit)
+		{
+			atoms.push_back(&*atit);
+		}
+
+		MolecularInformation 	information;
+		bool found = false;
+		vector<Atom*>::iterator it1 = atoms.begin();
+		for (; it1 != atoms.end(); it1++)
+		{
+			vector<Atom*>::iterator it2 = it1;
+			it2++;
+			for (;it2 != atoms.end(); it2++)
+			{
+				if ((**it1).isBoundTo(**it2)) continue;
+
+				float square_distance = Vector3((**it1).getPosition() - (**it2).getPosition()).getSquareLength();
+				float radius_sum = (**it1).getElement().getAtomicRadius() + (**it2).getElement().getAtomicRadius();
+				if (square_distance >= radius_sum * radius_sum) continue;
+
+				// ok, now we found 2 atoms which are too near
+				// print a header if not done so already
+				if (!found)
+				{
+					Log.error() << "Following atom pairs are too near to each other: " << std::endl;
+				}
+
+				String info1, info2;
+				// get information about the composites parent
+				(**it1).getParent()->host(information);
+				info1 += information.getName();
+				info1 += "->";
+				// get information about the composite
+				(**it1).host(information);
+				info1 += information.getName();
+
+				// get information about the composites parent
+				(**it2).getParent()->host(information);
+				info2 += information.getName();
+				info2 += "->";
+				// get information about the composite
+				(**it2).host(information);
+				info2 += information.getName();
+
+				Log.error() << info1 << "  " << info2 << std::endl;
+				(**it1).select();
+				(**it2).select();
+
+				CompositeMessage* msg = new CompositeMessage(**it1, CompositeMessage::SELECTED_COMPOSITE);
+				notify_(msg);
+
+				CompositeMessage* msg2 = new CompositeMessage(**it2, CompositeMessage::SELECTED_COMPOSITE);
+				notify_(msg2);
+
+				if (!found) centerCamera(*it1);
+				found = true;
+			}
+		}
+
+		if (found) setStatusbarText("Found some overlapping atoms. See Logs...");
+		else  		 setStatusbarText("No overlapping atoms found.");
 	}
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.11 2004/02/26 08:41:47 anhi Exp $
+// $Id: molecularStructure.h,v 1.12 2004/03/04 12:41:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -227,6 +227,9 @@ namespace BALL
 			// Calculate the charges for a Molecule
 //	 		void assignCharges();
 
+			/// Test if some atoms overlap, which could produce strange energies
+			void checkOverlap();
+
 			/// Calculate the energy for the currently selected force field
 			void calculateForceFieldEnergy();
 
@@ -278,6 +281,7 @@ namespace BALL
 			Index	calculate_hbonds_id_;
 			Index	amber_ff_id_;
 			Index	charmm_ff_id_;
+			Index check_overlap_;
 			
 			bool use_amber_;
 
