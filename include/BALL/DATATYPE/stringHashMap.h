@@ -1,4 +1,4 @@
-// $Id: stringHashMap.h,v 1.11 2000/11/30 22:59:33 amoll Exp $
+// $Id: stringHashMap.h,v 1.12 2000/12/01 14:13:20 amoll Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -167,7 +167,7 @@ namespace BALL
 				@return	bool {\bf true} if the key was removed
 		*/
 		bool remove(const String& key)	
-			throw(Exception::IncompatibleIterators, Exception::InvalidIterator)
+			throw()
 		{
 			// search the key
 			Iterator it = find(key);
@@ -199,17 +199,9 @@ namespace BALL
 		float getLoadFactor() const
 			throw()
 		{
-			return (float)size() / (float)bucket_count();
+			return (float)size() / (float)HashMap<String, Value>::getBucketSize();
 		}
-
-		/**	Return the number of buckets.
-		*/
-		Size getBucketSize() const
-			throw()
-		{
-			return bucket_count();
-		}
-		
+	
 		//@}
 
 		/**	@name	Predicates */
@@ -257,7 +249,7 @@ namespace BALL
 		void host(Visitor<StringHashMap<Value> >& visitor)
 			throw()
 		{
-			visitor.visit(*this);
+			visitor.visit(*this);  
 		}
 		//@}
 
