@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.9 2003/10/27 16:55:45 amoll Exp $
+// $Id: representation.C,v 1.10 2003/10/28 00:23:17 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -19,6 +19,7 @@ namespace BALL
 				: PropertyManager(),
 					drawing_mode_(DRAWING_MODE_SOLID),
 					drawing_precision_(DRAWING_PRECISION_HIGH),
+					transparency_(0),
 					model_type_(MODEL_UNKNOWN),
 					coloring_type_(COLORING_UNKNOWN),
 					model_processor_(0),
@@ -44,6 +45,7 @@ namespace BALL
 					drawing_mode_(drawing_mode),
 					drawing_precision_(drawing_precision),
 					model_type_(model_type),
+					transparency_(0),
 					model_processor_(0),
 					color_processor_(0),
 					geometric_objects_(),
@@ -58,6 +60,7 @@ namespace BALL
 			:	PropertyManager(),
 				drawing_mode_(DRAWING_MODE_SOLID),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
+				transparency_(0),
 				model_processor_(model_processor),
 				color_processor_(0),
 				geometric_objects_(),
@@ -74,6 +77,7 @@ namespace BALL
 			drawing_precision_= representation.drawing_precision_;
 			model_type_ = representation.model_type_;
 			coloring_type_ = representation.coloring_type_;
+			transparency_ = representation.transparency_;
 
 			PropertyManager::operator = (representation);
 
@@ -89,6 +93,7 @@ namespace BALL
 			if (representation.color_processor_ != 0)
 			{
 				color_processor_ = new ColorProcessor(*representation.color_processor_);
+				color_processor_->setTransparency(transparency_);
 			}
 			else
 			{
@@ -134,6 +139,7 @@ namespace BALL
 			drawing_precision_= DRAWING_PRECISION_HIGH;
 			model_type_ = MODEL_UNKNOWN;
 			coloring_type_ = COLORING_UNKNOWN;
+			transparency_ = 0;
 		}
 
 		
@@ -184,7 +190,8 @@ namespace BALL
 			throw()
 		{
 			if (drawing_precision_  < 0 || drawing_precision_ > BALL_VIEW_MAXIMAL_DRAWING_PRECISION ||
-					drawing_mode_ 			< 0 || drawing_mode_ > BALL_VIEW_MAXIMAL_DRAWING_MODE)
+					drawing_mode_ 			< 0 || drawing_mode_ > BALL_VIEW_MAXIMAL_DRAWING_MODE ||
+					transparency_ 			> 255)
 			{
 				return false;
 			}
@@ -225,6 +232,7 @@ namespace BALL
 			{
 				// make sure, that the atom grid is recomputed for meshes
 				if (rebuild) color_processor_->setComposites(&composites_);
+				color_processor_->setTransparency(transparency_);
 				geometric_objects_.apply(*color_processor_);
 			}
 		}
@@ -249,7 +257,11 @@ namespace BALL
 				delete model_processor_;
 			}
 			model_processor_ = processor;
-			if (model_processor_ != 0) model_processor_->setDrawingPrecision(drawing_precision_);
+			
+			if (model_processor_ != 0) 
+			{
+				model_processor_->setDrawingPrecision(drawing_precision_);
+			}
 		}
 
 		void Representation::setColorProcessor(ColorProcessor* processor)
@@ -264,6 +276,7 @@ namespace BALL
 			if (color_processor_ != 0)
 			{
 				color_processor_->setComposites(&composites_);
+				color_processor_->setTransparency(transparency_);
 			}
 		}
 
@@ -281,6 +294,15 @@ namespace BALL
 			if (model_processor_ != 0) model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
 		}
 
+		void Representation::setTransparency(Size value)
+			throw()
+		{
+			transparency_ = value;
+			if (transparency_ > 255)
+			{
+				transparency_ = 255;
+			}
+		}
 
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.12 2003/10/24 22:55:48 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.13 2003/10/28 00:23:16 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -293,11 +293,11 @@ void ColorMeshDialog::colorByCustomColor_()
 
 	if (transparency_group_custom->selected() == (QButton*) none_button_custom)
 	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
+		rep_->setTransparency(0);
 	}
 	else if (transparency_group_custom->selected() == (QButton*) alpha_button_custom)
 	{
-		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
+		rep_->setTransparency(min_min_color.getAlpha());
 	}
 }
 
@@ -341,11 +341,11 @@ void ColorMeshDialog::colorByGrid_()
 
 	if (transparency_group_grid->selected() == (QButton*) none_button_grid)
 	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
+		rep_->setTransparency(0);
 	}
 	else if (transparency_group_grid->selected() == (QButton*) alpha_button_grid)
 	{
-		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
+		rep_->setTransparency(min_min_color.getAlpha());
 	}
 }
 

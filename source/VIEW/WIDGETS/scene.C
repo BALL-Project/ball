@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.19 2003/10/24 22:37:19 amoll Exp $
+// $Id: scene.C,v 1.20 2003/10/28 00:23:18 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -379,7 +379,7 @@ void Scene::renderRepresentations_(RenderMode mode)
 	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 	for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 	{
-		if (!(*it)->hasProperty(Representation::PROPERTY__TRANSPARENT_BLENDING)&&
+		if ((*it)->getTransparency() == 0 &&
 				!(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 		{
 			render_(**it, mode);
@@ -390,7 +390,7 @@ void Scene::renderRepresentations_(RenderMode mode)
 	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 	for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 	{
-		if ((*it)->hasProperty(Representation::PROPERTY__TRANSPARENT_BLENDING))
+		if ((*it)->getTransparency() != 0)
 		{
 			render_(**it, mode);
 		}

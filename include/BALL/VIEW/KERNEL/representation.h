@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.7 2003/10/27 16:55:44 amoll Exp $
+// $Id: representation.h,v 1.8 2003/10/28 00:23:16 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -54,7 +54,6 @@ namespace BALL
 			enum Properties
 			{
 				PROPERTY__HIDDEN = 0,
-				PROPERTY__TRANSPARENT_BLENDING,
 				PROPERTY__ALWAYS_FRONT,
 				PROPERTY__IS_COORDINATE_SYSTEM
 			};
@@ -145,6 +144,14 @@ namespace BALL
 			///
 			Index getDrawingMode() const
 				throw() { return drawing_mode_;}
+			
+			///
+			Size getTransparency() const
+				throw() { return transparency_;}
+
+			///
+			void setTransparency(Size value)
+				throw();
 			
 			///
 			const GeometricObjectList& getGeometricObjects() const
@@ -259,6 +266,9 @@ namespace BALL
 
 			//_
 			Index 							coloring_type_;
+
+			//_
+			Size  							transparency_;
 
 			//_
 			ModelProcessor* 		model_processor_;

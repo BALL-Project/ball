@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.16 2003/10/26 22:51:04 amoll Exp $
+// $Id: colorProcessor.C,v 1.17 2003/10/28 00:23:18 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -30,7 +30,8 @@ namespace BALL
 		ColorProcessor::ColorProcessor(const ColorProcessor& color_Processor)
 			throw()
 			:	UnaryProcessor<GeometricObject*>(color_Processor),
-				default_color_(color_Processor.default_color_)
+				default_color_(color_Processor.default_color_),
+				transparency_(0)
 		{
 		}
 
@@ -46,6 +47,7 @@ namespace BALL
 			throw()
 		{
 			default_color_.set("FF0000FF");
+			transparency_ = 0;
 			composites_ = 0;
 			clearAtomGrid();
 		}
@@ -55,6 +57,7 @@ namespace BALL
 		{
 			default_color_ = color_Processor.default_color_;
 			composites_ = color_Processor.composites_;
+			transparency_ = color_Processor.transparency_;
 		}
 
 
@@ -229,6 +232,13 @@ namespace BALL
 			atom_grid_created_ = false;
 		}
 
+		void ColorProcessor::setDefaultColor(const ColorRGBA& color)
+			throw()
+		{
+			default_color_ = color;
+			default_color_.setAlpha(255 - transparency_);
+		}
+
 		//////////////////////////////////////////////////////////////////////
 		InterpolateColorProcessor::InterpolateColorProcessor()
 			: ColorProcessor(),
@@ -259,7 +269,8 @@ namespace BALL
 
 			return ColorRGBA(red1 + (value * (red2 - red1)) 			/ max_value_,
 											 green1 + (value * (green2 - green1))	/ max_value_,
-											 blue1 + (value * (blue2 - blue1)) 		/ max_value_);
+											 blue1 + (value * (blue2 - blue1)) 		/ max_value_,
+											 255 - transparency_);
 		}
 
 		void InterpolateColorProcessor::setMinColor(const ColorRGBA& color)
@@ -323,5 +334,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
  } // namespace BALL

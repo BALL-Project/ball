@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.13 2003/10/26 10:29:02 oliver Exp $
+// $Id: standardColorProcessor.C,v 1.14 2003/10/28 00:23:18 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -163,7 +163,9 @@ namespace BALL
 			Position pos = ((Atom*) composite)->getElement().getAtomicNumber();
 			if (color_map_.has(pos))
 			{
-				return color_map_[pos];
+				ColorRGBA color = color_map_[pos];
+				color.setAlpha(255 - transparency_);
+				return color;
 			}
 			else
 			{
@@ -225,17 +227,17 @@ namespace BALL
 			{
 				return default_color_;
 			} 
-			else 
+			
+			String name = ((Residue*) composite->getParent())->getName();
+			if (color_map_.has(name))
 			{
-				String name = ((Residue*) composite->getParent())->getName();
-				if (color_map_.has(name))
-				{
-					return color_map_[name];
-				}
-				else
-				{
-					return default_color_;
-				}
+				ColorRGBA color = color_map_[name];
+				color.setAlpha(255 - transparency_);
+				return color;
+			}
+			else
+			{
+				return default_color_;
 			}
 		}
 
@@ -287,7 +289,9 @@ namespace BALL
 					return default_color_;
 				}
 				while (pos > max_) pos = pos - max_;
-				return colors_[pos];
+				ColorRGBA color = colors_[pos];
+				color.setAlpha(255 - transparency_);
+				return color;
 			}
 		}
 
@@ -348,7 +352,8 @@ namespace BALL
 
 			return ColorRGBA(red1 * charge + (1.0 - charge) * red2,
 											 green1 * charge + (1.0 - charge) * green2,
-											 blue1 * charge + (1.0 - charge) * blue2);
+											 blue1 * charge + (1.0 - charge) * blue2,
+											 255 - transparency_);
 		}
 
 		////////////////////////////////////////////////////////////////////
@@ -446,7 +451,8 @@ namespace BALL
 
 			return ColorRGBA(red1 + (distance * (red2 - red1)) 			/ distance_,
 											 green1 + (distance * (green2 - green1)) 	/ distance_,
-											 blue1 + (distance * (blue2 - blue1)) 		/ distance_);
+											 blue1 + (distance * (blue2 - blue1)) 		/ distance_,
+											 255 - transparency_);
 		}
 
 		bool AtomDistanceColorProcessor::finish()
@@ -563,6 +569,5 @@ namespace BALL
 #	endif
 
 	} // namespace VIEW
-
 } // namespace BALL
 

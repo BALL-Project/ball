@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.13 2003/10/21 15:38:31 amoll Exp $
+// $Id: colorProcessor.h,v 1.14 2003/10/28 00:23:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -112,7 +112,7 @@ namespace BALL
 			/** Change the default color.
 			*/
 			void setDefaultColor(const ColorRGBA& color)
-				throw() {default_color_ = color;}
+				throw();
 
 			/** Non-mutable inspection of the default color.
 			*/
@@ -130,6 +130,14 @@ namespace BALL
 			*/
 			virtual ColorRGBA getColor(const Composite* /*composite*/)
 			{ return default_color_;}
+
+			///
+			Size getTransparency() const
+				throw() { return transparency_;}
+
+			///
+			void setTransparency(Size value)
+				throw() { transparency_ = value;}
 
 			/** Set the pointer to the CompositeSet.
 			 		This method is called by Representation::setColorProcessor and Representation::update.
@@ -176,6 +184,7 @@ namespace BALL
 
 			//_ a color that will be used if no other color can be calculated.
 			ColorRGBA		default_color_;
+			Size 				transparency_;
 
 			const 			CompositeSet* composites_;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.28 2003/10/27 22:08:01 amoll Exp $
+// $Id: displayProperties.C,v 1.29 2003/10/28 00:23:17 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -195,7 +195,7 @@ void DisplayProperties::modifyRepresentationMode()
 	precision_combobox->setCurrentItem(rep_->getDrawingPrecision());
 	if (rep_->getSurfaceDrawingPrecision() != -1)
 	{
-		precision_slider->setValue((Position)rep_->getSurfaceDrawingPrecision() * 10);
+		precision_slider->setValue((Position)(rep_->getSurfaceDrawingPrecision() * 10));
 		custom_precision_button->setChecked(true);
 	}
 	else
@@ -208,6 +208,8 @@ void DisplayProperties::modifyRepresentationMode()
 	custom_color_ = rep_->getColorProcessor()->getDefaultColor();
 	QColor qcolor(custom_color_.getRed(), custom_color_.getGreen(), custom_color_.getBlue());
 	color_sample->setBackgroundColor(qcolor);
+
+	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
 
 	apply_button->setEnabled(true);
 }
@@ -319,11 +321,14 @@ void DisplayProperties::applyButtonClicked()
 		return;
 	}
 
+	setStatusbarText("building model...");
 	createRepresentation_();
+	setStatusbarText("drawing representation...");
 
 	// update scene
 	SceneMessage* scene_message = new SceneMessage(SceneMessage::REDRAW);
 	notify_(scene_message);
+	setStatusbarText("finished drawing");
 }
 
 
@@ -489,15 +494,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 
 	rep->setColorProcessor(color_processor);
 	rep->setModelProcessor(model_processor);
-	if (transparency_slider->value() != 0)
-	{
-		rep->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-	}
-	else
-	{
-		rep->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-	}
-
+	rep->setTransparency(Size((float)transparency_slider->value() * 2.55));
 	
 	if (rep_ == 0) 
 	{	
