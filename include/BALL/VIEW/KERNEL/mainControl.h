@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.59 2004/11/09 15:55:04 amoll Exp $
+// $Id: mainControl.h,v 1.60 2004/11/09 21:35:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -688,6 +688,9 @@ namespace BALL
 
 			///
 			ModularWidget* getLockingWidget() throw();
+
+			///
+			bool updateOfRepresentationRunning() throw();
 					
 			/// Returns true, if the simulation was told to stop, but hasnt done this so far.
 			bool stopedSimulation() { return stop_simulation_;}

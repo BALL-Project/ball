@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.49 2004/11/09 15:56:09 amoll Exp $
+// $Id: representation.C,v 1.50 2004/11/09 21:35:24 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -9,7 +9,6 @@
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
-#include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
@@ -25,11 +24,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
-#ifdef BALL_QT_HAS_THREADS
-		UpdateRepresentationThread* Representation::thread_ = 0;
-#endif
-
 		Representation::Representation()
 			throw()
 				: PropertyManager(),
@@ -43,7 +37,7 @@ namespace BALL
 					color_processor_(0),
 					geometric_objects_(),
 					composites_(),
-					update_running_(false),
+					rebuild_(true),
 					hidden_(false)
 		{
 		}
@@ -62,7 +56,7 @@ namespace BALL
 					color_processor_(0),
 					geometric_objects_(),
 					composites_(rp.composites_),
-					update_running_(false),
+					rebuild_(rp.rebuild_),
 					hidden_(rp.hidden_)
 		{
 			if (rp.model_processor_ != 0)
@@ -98,7 +92,7 @@ namespace BALL
 					color_processor_(0),
 					geometric_objects_(),
 					composites_(),
-					update_running_(false),
+					rebuild_(true),
 					hidden_(false)
 		{
 		}
@@ -116,7 +110,7 @@ namespace BALL
 				color_processor_(0),
 				geometric_objects_(),
 				composites_(composites),
-				update_running_(false),
+				rebuild_(true),
 				hidden_(false)
 		{
 		}
@@ -164,8 +158,7 @@ namespace BALL
 
 			composites_ = representation.composites_;
 
-			update_running_ = false;
-
+			rebuild_ = true;
 			hidden_ = representation.hidden_;
 
 			return *this;
@@ -197,6 +190,7 @@ namespace BALL
 			transparency_ = 0;
 			surface_drawing_precision_ = -1;
 
+			rebuild_ = true;
 			hidden_ = false;
 		}
 
@@ -241,8 +235,6 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "model processor: " << model_processor_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
-			s << "update runnning: " << update_running_ << std::endl;
-			BALL_DUMP_DEPTH(s, depth);
 			s << "hidden: " << hidden_ << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
@@ -276,104 +268,36 @@ namespace BALL
 			return true;
 		}
 
-		
-		void Representation::update(bool rebuild) 
+		void Representation::update(bool rebuild)
 			throw()
 		{
+			rebuild_ = rebuild;
+
+#ifdef BALL_QT_HAS_THREADS
 			MainControl* mc = MainControl::getInstance(0);
-			
-			// ????? dirty trick to avoid getInstance problem under windows
-#ifdef BALL_PLATFORM_WINDOWS
-			mc = dynamic_cast<MainControl*>(qApp->mainWidget());
+			if (mc != 0)
+			{
+//   				MainControl* mc = dynamic_cast<MainControl*>(qApp->mainWidget());
+				mc->getPrimitiveManager().update_(*this);
+				return;
+			}
 #endif
 
-			// no need to update hidden representations
-			if (isHidden() && mc != 0) 
-			{
-				needs_update_ = true;
-				// update of GeometricControl, also if Representation is hidden
-				RepresentationMessage* msg = new RepresentationMessage(*this, RepresentationMessage::UPDATE);
-				mc->sendMessage(*msg);
-				return;
-			}
-			else
-			{
-				needs_update_ = false;
-			}
-#ifndef BALL_QT_HAS_THREADS
-			update_(rebuild);
-#else
-			if (mc == 0)
-			{
-				update_(rebuild);
-				return;
-			}
-
-			if (thread_ != 0)
-			{
-				thread_->wait();
-				delete thread_;
-				thread_ = 0;
-			}
-
-			thread_ = new UpdateRepresentationThread;
-			thread_->setRepresentation(*this);
-			thread_->setRebuild(rebuild);
-			thread_->start();
-
-//   			mc->setCompositesMuteable(false); ??????
-			
-			
-			Position pos = 3;
-			String dots;
-			while (thread_->running())
-			{
-				qApp->wakeUpGuiThread();
- 				qApp->processEvents();
-				if (pos < 40) 
-				{
-					pos ++;
-					dots +="..";
-				}
-				else 
-				{
-					pos = 3;
-					dots = "...";
-				}
-			
-				mc->setStatusbarText("Creating " + getModelName() + " Model " + dots);
-				
-				thread_->wait(500); 
-			}
-
-			delete thread_;
-			thread_ = 0;
-			mc->setStatusbarText("");
-//   			mc->setCompositesMuteable(true);
-			
- 			if (mc->getPrimitiveManager().has(*this))
-			{
-				RepresentationMessage* msg = new RepresentationMessage(*this, RepresentationMessage::UPDATE);
-				mc->sendMessage(*msg);
-				return;
-			}
-
-			mc->insert(*this);
- 			mc->setStatusbarText("");
-#endif
+			update_();
 		}
-
-		void Representation::update_(bool rebuild) 
+		
+		void Representation::update_() 
 			throw()
 		{
+			needs_update_ = false;
+
 #ifdef BALL_BENCHMARKING
 	Timer t;
 	t.start();
 #endif
-			update_running_ = true;
 			// if no ModelProcessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
-			if (model_processor_ != 0 && rebuild) 
+			if (model_processor_ != 0 && rebuild_)
 			{
 				clearGeometricObjects();
 				model_processor_->getGeometricObjects().clear();
@@ -392,17 +316,15 @@ namespace BALL
 			if (color_processor_ != 0) 
 			{
 				// make sure, that the atom grid is recomputed for meshes
-				if (rebuild) color_processor_->setComposites(&composites_);
+				if (rebuild_) color_processor_->setComposites(&composites_);
 				color_processor_->setTransparency(transparency_);
 				color_processor_->setModelType(model_type_);
 				geometric_objects_.apply(*color_processor_);
 			}
 
-			update_running_ = false;
-
 #ifdef BALL_BENCHMARKING
-	Log.info() << "Calculating Representation time: " << t.getCPUTime() << std::endl;
-	t.stop();
+			Log.info() << "Calculating Representation time: " << t.getCPUTime() << std::endl;
+			t.stop();
 #endif
 		}
 		

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.26 2004/10/19 09:23:49 oliver Exp $
+// $Id: representation.h,v 1.27 2004/11/09 21:35:30 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -35,6 +35,7 @@ namespace BALL
 		class ColorProcessor;
 		class GeometricObject;
 		class UpdateRepresentationThread;
+		class PrimitiveManager;
 
 		/** Representation
 		 		A Representation is a collection of geometric objects for a group of 
@@ -49,6 +50,7 @@ namespace BALL
 			: public PropertyManager
 		{
 			friend class UpdateRepresentationThread;
+			friend class PrimitiveManager;
 			public:
 
 			BALL_CREATE(Representation)
@@ -265,10 +267,6 @@ namespace BALL
 			bool needsUpdate() const
 				throw();
 
-			/// Return true, if the Representation is currently updated by another thread
-			bool updateRunning() const
-				throw() { return update_running_;}
-
 			///
 			void dump(std::ostream& s, Size depth) const
 				throw();
@@ -293,17 +291,15 @@ namespace BALL
 			CompositesConstIterator end() const
 				throw() { return composites_.end();}
 
-			#ifdef BALL_QT_HAS_THREADS
-			///
-			static UpdateRepresentationThread* getUpdateThread() { return thread_;}
-			#endif
-			
 			//@}
 
 			protected:
 
-			/// Can be called by rebuild directly, or by UpdateRepresentationThread
-			void update_(bool rebuild)
+			/** Wrapper method for multithreading.
+			 		Can be called by update() directly, or by the PrimitiveManager' s 
+					UpdateRepresentationThread.
+			*/
+			void update_()
 				throw();
 
 			void collectRecursive_(const Composite& c, HashMap<const Composite*, Position>& hashmap) const
@@ -345,19 +341,14 @@ namespace BALL
 			//_ set to true, if update is called, while representation is hidden
 			bool 								needs_update_;
 
-			//_ 								true, if thread is currently updateing this representation
-			bool 								update_running_;
+			//_ true means the ModelProcessor will be applied in the next update
+			bool 								rebuild_;
 
 			//_
 			bool 								hidden_;
-
-			#ifdef BALL_QT_HAS_THREADS
-			static UpdateRepresentationThread* thread_;
-			#endif
 		};
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_REPRESENTATION_H

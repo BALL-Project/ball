@@ -62,7 +62,10 @@ namespace BALL
 		void UpdateRepresentationThread::run()
 		{
 			if (rep_ == 0) return;
-			rep_->update_(rebuild_);
+ 			rep_->update_();
+			rep_ = 0;
+			FinishedRepresentionUpdateEvent* se = new FinishedRepresentionUpdateEvent;
+			qApp->postEvent(MainControl::getInstance(0), se);
 		}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.39 2004/11/09 15:56:08 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.40 2004/11/09 21:35:24 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -204,7 +204,8 @@ void ColorMeshDialog::gridSelected()
 
 	// prevent freezing, if clicking on representation, while
 	// an other is still rendering
-	if (getMainControl()->compositesAreLocked() || rep_->updateRunning())
+	if (getMainControl()->compositesAreLocked() || 
+			getMainControl()->updateOfRepresentationRunning())
 	{
 		return;
 	}
@@ -319,7 +320,7 @@ void ColorMeshDialog::colorByGrid_()
 			mesh_ == 0 ||
 			getMainControl()->compositesAreLocked() ||
 			rep_ == 0 ||
-			rep_->updateRunning())
+			getMainControl()->updateOfRepresentationRunning())
 	{
 		setStatusbarText("Could not color surface, maybe because an other thread is still running?");
 		return;

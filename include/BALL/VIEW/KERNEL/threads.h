@@ -74,15 +74,9 @@ namespace VIEW
 			Representation* getRepresentation()
 				throw() { return rep_; }
 
-			///
-			void setRebuild(bool rebuild)
-				throw(){ rebuild_ = rebuild;}
-
 		protected:
 
 			Representation* rep_;
-
-			bool rebuild_;
 	};
 
 	/** Baseclass for threads, which perform a simulation.
@@ -266,7 +260,17 @@ namespace VIEW
 			protected:
 				const Composite* composite_;
 		};
-
+		
+		///
+		class BALL_EXPORT FinishedRepresentionUpdateEvent
+			: public QCustomEvent
+		{
+			public:
+				///
+				FinishedRepresentionUpdateEvent()
+					:QCustomEvent(FINISHED_REPRESENTATION_UPDATE_EVENT)
+				{}
+		};
 
 	}
 }

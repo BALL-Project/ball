@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.119 2004/11/09 15:56:09 amoll Exp $
+// $Id: mainControl.C,v 1.120 2004/11/09 21:35:24 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -83,6 +83,7 @@ namespace BALL
 				Embeddable("BALL::VIEW::MainControl"),
 				selection_(),
 				message_label_(new QLabel("" , statusBar())),
+				primitive_manager_(this),
 				main_control_preferences_(0),
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
@@ -1451,6 +1452,12 @@ namespace BALL
 			e->type(); // prevent warning for single thread build
 
 		#ifdef BALL_QT_HAS_THREADS
+			if (e->type() == (QEvent::Type)FINISHED_REPRESENTATION_UPDATE_EVENT)
+			{
+				primitive_manager_.finishedUpdate_();
+				return;
+			}
+
 			if (e->type() == (QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT)
 			{
 				stopSimulation();
@@ -1758,8 +1765,11 @@ namespace BALL
 		}
 
 
-
-
+		bool MainControl::updateOfRepresentationRunning()
+			throw()
+		{
+			return primitive_manager_.updateRunning();
+		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>

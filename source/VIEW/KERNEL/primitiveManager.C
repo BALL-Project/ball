@@ -1,18 +1,27 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.7 2004/10/22 20:44:14 amoll Exp $
+// $Id: primitiveManager.C,v 1.8 2004/11/09 21:35:24 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/threads.h>
+#include <BALL/VIEW/KERNEL/message.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-PrimitiveManager::PrimitiveManager()
+#ifdef BALL_QT_HAS_THREADS
+	UpdateRepresentationThread PrimitiveManager::thread_;
+#endif
+
+
+PrimitiveManager::PrimitiveManager(MainControl* mc)
 	throw()
-	:Object()
+	: Object(),
+		main_control_(mc)
 {
 }
 
@@ -191,5 +200,119 @@ List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& co
 
 	return changed_representations;
 }
+
+void PrimitiveManager::update_(Representation& rep)
+	throw()
+{
+	if (rep.isHidden()) 
+	{
+		rep.needs_update_ = true;
+		// update of GeometricControl, also if Representation is hidden
+		RepresentationMessage* msg = new RepresentationMessage(rep, 
+																				RepresentationMessage::UPDATE);
+		main_control_->sendMessage(*msg);
+		return;
+	}
+
+//   	if (willBeUpdated(rep)) return;
+
+	representations_to_be_updated_.push_back(&rep);
+
+	if (representations_to_be_updated_.size() == 1)
+	{
+		startUpdateThread_(rep);
+		return;
+	}
+}
+
+void PrimitiveManager::startUpdateThread_(Representation& rep)
+	throw()
+{
+	if (thread_.getRepresentation() != 0)
+	{
+		Log.error() << "Problem while updateing Representations in " 
+								<< __FILE__ << " " << __LINE__ << std::endl;
+		return;
+	}
+
+	thread_.setRepresentation(rep);
+	thread_.start();
+}
+
+void PrimitiveManager::finishedUpdate_()
+	throw()
+{
+	if (representations_to_be_updated_.size() == 0)
+	{
+		Log.error() << "Problem while updateing Representations in " 
+								<< __FILE__ << " " << __LINE__ << std::endl;
+		return;
+	}
+
+	Representation* rep = *representations_to_be_updated_.begin();
+	representations_to_be_updated_.pop_front();
+
+	if (!has(*rep)) 
+	{
+		main_control_->insert(*rep);
+		return;
+	}
+
+	RepresentationMessage* msg = new RepresentationMessage(*rep, 
+																			RepresentationMessage::UPDATE);
+	main_control_->sendMessage(*msg);
+
+	if (!updateRunning())
+	{
+		startUpdateThread_(**representations_to_be_updated_.begin());
+	}
+}
+
+bool PrimitiveManager::willBeUpdated(const Representation& rep) const
+	throw()
+{
+	RepresentationList::ConstIterator it = representations_to_be_updated_.begin();
+	for (; it != representations_to_be_updated_.end(); it++)
+	{
+ 		if (*it == &rep) return true;
+	}
+
+	return false;
+}
+
+bool PrimitiveManager::updateRunning() const
+	throw()
+{
+	return (thread_.getRepresentation() != 0);
+}
+
+
+/*
+			
+			Position pos = 3;
+			String dots;
+			while (thread_->running())
+			{
+				qApp->wakeUpGuiThread();
+ 				qApp->processEvents();
+				if (pos < 40) 
+				{
+					pos ++;
+					dots +="..";
+				}
+				else 
+				{
+					pos = 3;
+					dots = "...";
+				}
+			
+				mc->setStatusbarText("Creating " + getModelName() + " Model " + dots);
+				
+				thread_->wait(500); 
+			}
+
+			mc->setStatusbarText("");
+			*/
+			
 
 } } // namespaces

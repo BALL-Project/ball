@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.6 2004/02/26 08:41:39 anhi Exp $
+// $Id: primitiveManager.h,v 1.7 2004/11/09 21:35:30 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -16,6 +16,9 @@ namespace BALL
 
 	namespace VIEW
 	{
+		class MainControl;
+		class UpdateRepresentationThread;
+
 		/** PrimitiveManager manages the graphical Representation objects and all GeometricObject.
 		 		All Representation objects which shall be inserted should be created using createRepresentation().
 				When the PrimitiveManager is destroyed, all inserted Representation are deleted.
@@ -24,6 +27,10 @@ namespace BALL
 		class BALL_EXPORT PrimitiveManager
 			:	public Object
 		{
+			friend class Representation;
+			friend class UpdateRepresentationThread;
+			friend class MainControl;
+
 			public:
 
 			BALL_CREATE(PrimitiveManager)
@@ -47,7 +54,7 @@ namespace BALL
 
 			/** Default Constructor
 			*/
-			PrimitiveManager()
+			PrimitiveManager(MainControl* mc = 0)
 				throw();
 
 			/** Copy constructor
@@ -142,10 +149,45 @@ namespace BALL
 			List<Representation*> getRepresentationsOf(const Composite& composite)
 				throw();
 
+			/// Return true, if a Representation is currently beeing updated
+			bool updateRunning() const
+				throw();
+
+			/// Return true if a Representation will be updated
+			bool willBeUpdated(const Representation& rep) const
+				throw();
+
+			///
+			void setMainControl(MainControl& mc)
+				throw() { main_control_ = &mc;}
+
+			#ifdef BALL_QT_HAS_THREADS
+			///
+			static UpdateRepresentationThread& getUpdateThread() { return thread_;}
+			#endif
+			
 			protected:
+
+			void startUpdateThread_(Representation& rep)
+				throw();
+
+			void update_(Representation& rep)
+				throw();
+
+			void finishedUpdate_()
+				throw();
 
 			//_ List with all representations
 			RepresentationList representations_;
+			
+			//_ List with all representations, which will be updated
+			RepresentationList representations_to_be_updated_;
+
+			#ifdef BALL_QT_HAS_THREADS
+			static UpdateRepresentationThread thread_;
+			#endif
+
+			MainControl* 	main_control_;
 		};
 
 	} // namespace VIEW

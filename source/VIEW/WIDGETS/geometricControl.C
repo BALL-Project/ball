@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.61 2004/11/09 15:55:49 amoll Exp $
+// $Id: geometricControl.C,v 1.62 2004/11/09 21:35:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -120,8 +120,9 @@ namespace BALL
 		void GeometricControl::updateRepresentation(Representation& rep)
 			throw()
 		{
+			if (!representation_to_item_.has(&rep)) return;
+
 			SelectableListViewItem* item = (SelectableListViewItem*) representation_to_item_[&rep]; 
-			if (item == 0) return;
 
 			// prevent flickering in GeometricControl, e.g. while a simulation is running
 			String new_text = getRepresentationName_(rep);
