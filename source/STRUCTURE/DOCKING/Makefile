@@ -8,7 +8,10 @@ CPP_SOURCES= \
 	dockingAlgorithm.C\
 	conformationSet.C\
 	energeticEvaluation.C\
+	forceFieldEvaluation.C\
+	amberEvaluation.C\
 	$(FFT_DEPENDENT_SOURCES)
+# randomEvaluation.C
 
 include ../../common.mak
 include .Dependencies
