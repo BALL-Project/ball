@@ -12,11 +12,14 @@ CPP_SOURCES=\
 	dlgMoveOverlay.C\
 	dlgMoveOverlayData.C\
 	pythonSettings.C\
-	pythonSettingsData.C
+	pythonSettingsData.C\
+	FDPBDialog.C\
+	FDPBDialogData.C
 
 UIC_SOURCES=\
 	colorMeshDialog.ui\
-	pythonSettings
+	pythonSettings.ui\
+	FDPBDialog.ui
 	
 
 MOC_SOURCES=\
@@ -27,7 +30,9 @@ MOC_SOURCES=\
 	dlgMoveOverlay_moc.C\
 	dlgMoveOverlayData_moc.C\
 	pythonSettings_moc.C\
-	pythonSettingsData_moc.C
+	pythonSettingsData_moc.C\
+	FDPBDialog_moc.C\
+	FDPBDialogData_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -69,4 +74,17 @@ pythonSettingsData.C:	$(HEADER_DIR)/pythonSettingsData.h
 
 $(HEADER_DIR)/pythonSettingsData.h:	pythonSettings.ui
 	$(UIC) -o $@ pythonSettings.ui
+
+
+FDPBDialog_moc.C:	$(HEADER_DIR)/FDPBDialog.h
+	$(MOC) $< -o $@
+
+FDPBDialogData_moc.C:	$(HEADER_DIR)/FDPBDialogData.h
+	$(MOC) $< -o $@
+
+FDPBDialogData.C:	$(HEADER_DIR)/FDPBDialogData.h
+	$(UIC) -o $@ -impl $(HEADER_DIR)/FDPBDialogData.h FDPBDialog.ui
+
+$(HEADER_DIR)/FDPBDialogData.h:	FDPBDialog.ui
+	$(UIC) -o $@ FDPBDialog.ui
 

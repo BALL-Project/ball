@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.17 2002/12/22 13:19:20 oliver Exp $
+// $Id: control.C,v 1.18 2003/06/04 15:46:34 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -238,7 +238,8 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* /* item */)
 			delete colorMeshDlg_;
 		}
 		colorMeshDlg_ = new ColorMeshDialog(this);
-		colorMeshDlg_->mesh = (Mesh*)RTTI::castTo<Mesh>(*composite);
+		colorMeshDlg_->setMesh(*(Mesh*)RTTI::castTo<Mesh>(*composite));
+		colorMeshDlg_->setComposite(*composite->getParent());
 		insertContextMenuEntry("Properties", colorMeshDlg_, SLOT(show()));	
 	}
 }
