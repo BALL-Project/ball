@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.158 2005/02/06 22:47:34 amoll Exp $
+// $Id: scene.C,v 1.159 2005/02/07 19:46:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -647,13 +647,6 @@ namespace BALL
 				case DIRECT_RENDERING:
 					gl_renderer_.render(rep);
 					break;
-			}
-
-			// no benchmark output for vertex buffer usage
-			if (gl_renderer_.vertexBuffersEnabled()&& 
-					VIEW::isSurfaceModel(rep.getModelType()))
-			{
-				return;
 			}
 		}
 
