@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.29 2004/07/10 16:39:21 amoll Exp $
+// $Id: glRenderer.C,v 1.30 2004/07/13 12:45:03 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -657,26 +657,24 @@ namespace BALL
 				}
 				else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
 				{
+					glBegin(GL_LINE_STRIP);
 					// draw the triangles with lines
 					for (Size index = 0; index < mesh.triangle.size(); ++index)
 					{
-						glBegin(GL_LINE_STRIP);
 						normalVector3_(normal_vector_);
 
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-
-						glEnd();
 					}
+					glEnd();
 				}
 				else
 				{
 					// draw the triangles
+					glBegin(GL_TRIANGLES);
 					for (Size index = 0; index < mesh.triangle.size(); ++index)
 					{
-						glBegin(GL_TRIANGLES);
-
 						normalVector3_(mesh.normal[mesh.triangle[index].v1]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
 
@@ -685,20 +683,8 @@ namespace BALL
 
 						normalVector3_(mesh.normal[mesh.triangle[index].v3]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-
-						/*
-// draw inside triangles
-normalVector3_(mesh.normal[-mesh.triangle[index].v1]);
-vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
-
-normalVector3_(mesh.normal[-mesh.triangle[index].v2]);
-vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
-
-normalVector3_(mesh.normal[-mesh.triangle[index].v3]);
-vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-	*/
-						glEnd();
 					}
+					glEnd();
 				}
 				
 				if (drawing_mode_ == DRAWING_MODE_DOTS ||
@@ -727,10 +713,10 @@ vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
 			}
 			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
 			{
+				glBegin(GL_LINE_STRIP);
 				// draw the triangles with lines
 				for (Size index = 0; index < mesh.triangle.size(); ++index)
 				{
-					glBegin(GL_LINE_STRIP);
 					normalVector3_(normal_vector_);
 
 					setColorRGBA_(mesh.colorList[mesh.triangle[index].v1]);
@@ -741,17 +727,16 @@ vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
 
 					setColorRGBA_(mesh.colorList[mesh.triangle[index].v3]);
 					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-
-					glEnd();
 				}
+				glEnd();
 				// ------------------
 			}
 			else
 			{
 				// draw the triangles
+				glBegin(GL_TRIANGLES);
 				for (Size index = 0; index < mesh.triangle.size(); ++index)
 				{
-					glBegin(GL_TRIANGLES);
 
 					setColorRGBA_(mesh.colorList[mesh.triangle[index].v1]);
 					normalVector3_(mesh.normal[mesh.triangle[index].v1]);
@@ -765,8 +750,8 @@ vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
 					normalVector3_(mesh.normal[mesh.triangle[index].v3]);
 					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
 
-					glEnd();
 				}
+				glEnd();
 				// ------------------
 			}
 
@@ -1400,13 +1385,6 @@ vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
 		{
 			if (state == stereo_) return;
 			stereo_ = state;
-
-			/*
-			glDrawBuffer(GL_BACK_LEFT);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glDrawBuffer(GL_BACK_RIGHT);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			*/
 		}
 
 } } // namespaces
