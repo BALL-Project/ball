@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.1 2000/12/15 17:18:35 anker Exp $
+// $Id: DCDFile.h,v 1.2 2000/12/17 15:56:01 oliver Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -38,22 +38,24 @@ namespace BALL
 				{\bf Definition:} \URL{BALL/Format/DCDFile.h}
 				\\
 		*/
-		struct DCDHeader
+		class DCDHeader
 		{
+			public:
+
 			/// The number of coordinate sets in this file
-			int 			number_of_coordinate_sets;
+			Size 			number_of_coordinate_sets;
 			/// The number of the starting time step
-			int 			step_number_of_starting_time;
+			Size 			step_number_of_starting_time;
 			/// The number of steps between saves
-			int				steps_between_saves;
+			Size			steps_between_saves;
 			/// The length of one time step (in units of ???)
-			double		time_step_length;
+			DoubleReal		time_step_length;
 
 			/// the number of 80 byte comments in this record
-			int				number_of_80_byte_records;
+			Size				number_of_80_byte_records;
 
 			/// the number of atoms covered by every timestep
-			int				number_of_atoms;
+			Size				number_of_atoms;
 
 			DCDHeader()
 				throw()
@@ -64,6 +66,19 @@ namespace BALL
 					number_of_atoms(0)
 			{
 			}
+
+			/**	@name I/O operators
+			*/
+			//@{
+
+			/// 
+			friend ::std::ostream& operator << (::std::ostream& os, const DCDHeader& header)
+				throw();
+
+			///
+			friend ::std::istream& operator >> (::std::istream& os, DCDHeader& header)
+				throw();
+			//@}
 
 		};
 
