@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.11 2003/10/20 21:51:57 amoll Exp $
+// $Id: common.h,v 1.12 2003/11/03 16:49:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -176,12 +176,31 @@ enum ColoringMethod
 	COLORING_UNKNOWN
 };
 
+///
 String getModelName(ModelTypes type) 
 	throw();
 
+///
 String getColoringName(ColoringMethod type) 
 	throw();
 
+
+/// Enumeration of Events
+enum EventsIDs
+{
+	///
+	SCENE_UPDATE_EVENT = 60000,
+
+	///
+	SIMULATION_THREAD_FINISHED_EVENT,
+
+	///
+	SIMULATION_OUTPUT_EVENT,
+
+	///
+	UPDATE_COMPOSITE_EVENT
+};
+	
 //@}
 
 } } //namespaces
