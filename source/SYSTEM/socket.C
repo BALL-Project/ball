@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.16 2000/07/18 08:30:02 oliver Exp $
+// $Id: socket.C,v 1.17 2000/07/18 17:22:39 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -102,7 +102,7 @@ namespace BALL
 	}
 
 	SocketBuf::SocketBuf(const SocketBuf& sb)
-		: streambuf(sb),
+		: std::streambuf(),
 			rep(sb.rep), 
 			stmo(sb.stmo), 
 			rtmo(sb.rtmo)
