@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.10 2001/06/21 08:58:41 amoll Exp $
+// $Id: SESFace.h,v 1.11 2001/07/15 21:02:29 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -244,7 +244,7 @@ namespace BALL
 			{
 				return;
 			}
-					//cout << *this << "\n";
+
 			if (singular == false)
 			{
 				TSESEdge<T>* edge0;
