@@ -23,6 +23,7 @@ Added:
   	- Clipping planes
   	- storing and loading of BALLView project files
   	- support for drag and drop of molecular files
+		- possibility to highlight the selected molecular items
   	- new move mode for (partial) structures
   	- Esc key now switches to last used mode in Scene
   	- Python scripting
