@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.26 2001/07/16 12:38:07 anker Exp $
+// $Id: standardPredicates.C,v 1.27 2001/07/17 00:51:54 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -25,6 +25,14 @@ namespace BALL
 		throw()
 	{
     return true;
+ 	}
+
+	// False predicate
+
+	bool FalsePredicate::operator () (const Atom& /* atom */) const
+		throw()
+	{
+    return false;
  	}
 
 	// selected predicate
