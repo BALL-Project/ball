@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.45 2004/09/27 22:05:58 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.46 2004/09/27 23:21:58 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -277,7 +277,10 @@ namespace BALL
 		// ========================================================================
 		ResidueNumberColorProcessor::ResidueNumberColorProcessor()
 			throw()
-			: ColorProcessor()
+			: ColorProcessor(),
+				first_color_("FF0000"),
+				middle_color_("00FF00"),
+				last_color_("0000FF")
 		{
 		}
 

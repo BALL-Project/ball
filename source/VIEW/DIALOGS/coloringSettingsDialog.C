@@ -630,6 +630,10 @@ void ColoringSettingsDialog::setLabelColorsFromValues_()
 	setColorToLabel_(turn_color_label, turn_color_);
 	setColorToLabel_(force_max_color_label, force_max_color_);
 	setColorToLabel_(force_min_color_label, force_min_color_);
+
+	setColorToLabel_(first_residue_label, first_residue_color_);
+	setColorToLabel_(middle_residue_label, middle_residue_color_);
+	setColorToLabel_(last_residue_label, last_residue_color_);
 }
 	
 

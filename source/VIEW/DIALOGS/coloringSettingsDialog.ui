@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ColoringSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8072,16 +8072,16 @@
         <slot>forceMaxColorPressed()</slot>
     </connection>
     <connection>
-        <sender>force_min_color_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ColoringSettingsDialog</receiver>
-        <slot>forceMinColorPressed()</slot>
-    </connection>
-    <connection>
         <sender>force_max_value_slider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>ColoringSettingsDialog</receiver>
         <slot>forceMaxValueChanged()</slot>
+    </connection>
+    <connection>
+        <sender>force_min_color_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>forceMinColorPressed()</slot>
     </connection>
     <connection>
         <sender>force_min_value_slider</sender>
@@ -8096,6 +8096,12 @@
         <slot>helixColorPressed()</slot>
     </connection>
     <connection>
+        <sender>list_box</sender>
+        <signal>highlighted(int)</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>showPage_(int)</slot>
+    </connection>
+    <connection>
         <sender>max_distance_button</sender>
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
@@ -8108,6 +8114,12 @@
         <slot>maxDistanceChanged()</slot>
     </connection>
     <connection>
+        <sender>max_tf_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>maxTFChanged()</slot>
+    </connection>
+    <connection>
         <sender>maximum_o_button</sender>
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
@@ -8118,12 +8130,6 @@
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
         <slot>maximumTFColorPressed()</slot>
-    </connection>
-    <connection>
-        <sender>max_tf_slider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>ColoringSettingsDialog</receiver>
-        <slot>maxTFChanged()</slot>
     </connection>
     <connection>
         <sender>middle_residue_button</sender>
@@ -8192,10 +8198,10 @@
         <slot>unassignedTFColorPressed()</slot>
     </connection>
     <connection>
-        <sender>list_box</sender>
-        <signal>highlighted(int)</signal>
+        <sender>last_residue_button</sender>
+        <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
-        <slot>showPage_(int)</slot>
+        <slot>lastResidueColorPressed()</slot>
     </connection>
 </connections>
 <includes>
