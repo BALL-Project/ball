@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.16 2003/11/13 17:07:43 amoll Exp $
+// $Id: pyWidget.C,v 1.17 2003/11/14 13:39:14 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -104,21 +104,22 @@ namespace BALL
 			removeParagraph(row +1);
 		}
 
-
-		void PyWidgetData::contentsMousePressEvent(QMouseEvent* /* m */)
+	//	void PyWidgetData::contentsMousePressEvent(QMouseEvent* /* m */)
+/*
 		{
 			setCursorPosition(paragraphs() - 1, 4);
 			// we ignore the mouse events! 
 			// they might place the cursor anywhere!
 		}
-	
-		void PyWidgetData::mousePressEvent(QMouseEvent* /* m */) 
+*/	
+	//	void PyWidgetData::mousePressEvent(QMouseEvent* /* m */) 
+	/*
 		{
 			setCursorPosition(paragraphs() - 1, 4);
 			// we ignore the mouse events! 
 			// they might place the cursor anywhere!
 		}
-
+*/
 
 		bool PyWidgetData::returnPressed()
 		{
@@ -256,6 +257,11 @@ namespace BALL
 		{
 			int row, col;
 			getCursorPosition(&row, &col);
+
+			if (row != paragraphs()-1)
+			{
+				setCursorPosition(paragraphs()-1, paragraphLength(paragraphs() -1) -1);
+			}
 
 			if (e->key() == Key_Left || e->key() == Key_Backspace)
 			{
@@ -435,7 +441,19 @@ namespace BALL
 			QTextEdit::clear();
 			newPrompt_();
 		}
-		
+
+		void PyWidgetData::paste()
+		{
+			int row, col;
+			getCursorPosition(&row, &col);
+
+			if (row != paragraphs()-1)
+			{
+				setCursorPosition(paragraphs()-1, paragraphLength(paragraphs() -1) -1);
+			}
+
+			QTextEdit::paste();
+		}
 // ######################################################################################################
 
 		PyWidget::PyWidget(QWidget *parent, const char *name)

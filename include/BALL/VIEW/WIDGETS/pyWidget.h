@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.9 2003/11/13 15:02:09 amoll Exp $
+// $Id: pyWidget.h,v 1.10 2003/11/14 13:39:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -124,17 +124,23 @@ namespace BALL
 
 			protected:
 
-			//_ Avoid set of cursor with mouse or other nonsense
+			// old way of handling mouse, maybe to be removed in the future (today 14.11.2003)
+			/*
 			virtual void ensureCursorVisible() {}
 			virtual void scrollToBottom() {}
-			virtual void placeCursor ( const QPoint& /*pos*/, QTextCursor* /*c = 0*/ ){}
-			virtual void mousePressEvent(QMouseEvent* m);
-			virtual void contentsMousePressEvent(QMouseEvent* m);
+			*/
+			//virtual void placeCursor ( const QPoint& /*pos*/, QTextCursor* /*c = 0*/ ){}
+//			virtual void mousePressEvent(QMouseEvent* m);
+//			virtual void contentsMousePressEvent(QMouseEvent* m);
 
 			virtual void keyPressEvent(QKeyEvent* e);
 
+			///
 			virtual void clear();
+			///
 			virtual void cut();
+			///
+			virtual void paste();
 
 			void parseLine_();
 
@@ -147,6 +153,7 @@ namespace BALL
 			*/
 			void newPrompt_();
 
+			//_
 			const char* getPrompt_() const;
 
 			/**	Replace the line the cursor is in with a line from the history.
