@@ -138,6 +138,14 @@ namespace BALL
      */
     Processor::Result operator() (Composite &composite);
 
+    /**
+     */
+    const std::vector< std::vector<int> >& getHBondPairs() const;
+
+    /**
+     */	
+    const std::vector<POS>& getPosVec() const;
+    
 
   protected:  
     Vector3 upper_;
@@ -154,9 +162,9 @@ namespace BALL
      */
     vector<POS> vec_; //!!!!!!!!!!!!!posvec_ would be more understandable 
 
-    /** HBondBool_ : matrix to save the existence of a HBond
+    /** HBondPairs_ : vector to save HBondpartners
      */
-    vector<bool> HBondBool_;
+    vector< vector<int> > HBondPairs_;
 
   }; //class HBondProcessor
 

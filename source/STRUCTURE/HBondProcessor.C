@@ -1,3 +1,8 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HBondProcessor.C,v 1.3 2003/09/10 13:25:25 anne Exp $
+
 #include <BALL/STRUCTURE/HBondProcessor.h>
 
 namespace BALL
@@ -17,19 +22,55 @@ namespace BALL
 
 	void HBondProcessor::preComputeBonds(ResidueIterator& data)
 	{
+std::cout << "-->HBP preComputeBonds" << std::endl;
+
 		//vector<POS> vec;      // includes the atom positions per residue     // class member!!!
 		//	ResidueIterator i;
 		POS pos;
-		int j=0;                // index to serially the residues TOTHINK:maybe it is possible 
+		int j=1;                // index to serially the residues TOTHINK:maybe it is possible 
 		                        //   to identify the residue by residue ID 
 
 		// iteration over all residues of the protein
 		// to find the C,N,O atoms
-		for(; +data; ++data)
-		{
-			Residue res=*data;
 
-			PDBAtomIterator ai;
+		// the N-terminus is special
+
+		PDBAtomIterator ai;
+		Residue res=*data;
+		
+		for(ai=res.beginPDBAtom();+ai;++ai)
+		{
+			if(ai->getName() == "C")
+			{
+				pos.posC=ai->getPosition();
+			}
+			else if(ai->getName() == "O")
+			{
+				pos.posO=ai->getPosition();
+			}
+			else if(ai->getName() == "N")
+			{
+					pos.posN=ai->getPosition();
+			}
+		}
+		pos.number = 0;
+		pos.pres   = &(*data);
+		++data;
+
+		vec_.push_back(pos);  
+
+std::cout << "-->HBP preComputeBonds  first residue is inserted" << std::endl;
+
+
+		for(; +data; ++data)
+		{		
+			res=*data;
+
+			if (!res.isAminoAcid())
+			{
+				continue;
+			}
+
 			for(ai=res.beginPDBAtom();+ai;++ai)
 			{
 				if(ai->getName() == "N")
@@ -47,7 +88,11 @@ namespace BALL
 			}
 
 			// evaluate the position of H 
-			pos.posH=pos.posN-((pos.posO-pos.posC)*BOND_LENGTH_N_H/BOND_LENGTH_C_O);
+			
+			Vector3 O = vec_[j-1].posO;
+			Vector3 C = vec_[j-1].posC;
+
+			pos.posH=pos.posN-((O-C)*BOND_LENGTH_N_H)/(O-C).getLength();
 
 			//set identification number of the residue
 			// pos.number=res.getID().toInt();
@@ -59,43 +104,41 @@ namespace BALL
 			
 			vec_.push_back(pos);  // insert the residue in position vector
 		}
+std::cout << "--->HBP end of preComputeBonds " << std::endl;
 	}
 
 	bool HBondProcessor::finish()
 	{
+		//TODO :::  if vec_.size()==0 there was no composit 
+
+		
+std::cout << "-->HBP finish " << std::endl;
+
 		// matrix to save the existence of a HBond
-		HBondBool_.resize(vec_.size() * vec_.size(), false); //!!!!!!!!!!!TODO: substitute by secondaryStructure
-
-		//create an Hashgrid
-		//BoundingBoxProcessor box_processor; 
-		// create a mantel box (bounding box)  which should include the protein
-		//system.apply(box_processor);
-
-		// identify the edges of the mantel box
-		//Vector3 lower = box_processor.getLower();
-		//Vector3 upper = box_processor.getUpper();
+		HBondPairs_.resize(vec_.size()); 
 
 		//create a grid inside the bounding box
 		HashGrid3<POS> atom_grid(lower_, upper_-lower_, MAX_LENGTH);
 
+std::cout << "-->finish vor insert the residues " << std::endl;
+ std::cout << "-->finish vor insert size:  " << vec_.size() <<  std::endl;
 		// insert all protein-residues in respect of N-atom
 		// the last residue does not _have_ an O. => don't use it
-		for(Size i=0; i<vec_.size()-1; i++) 
+		for(Size i=0; i<(vec_.size()-1); i++) 
 		{
+
+std::cout << "----->finish for(i<size()-1): vec[i] " << vec_[i].posN  << std::endl;	                                                                               	
 			Vector3 r(vec_[i].posN);
-			//!!!!!!!!!!!!!!!!!!!!!!!!!!
-			//    Position x, y, z;
-			//    atom_grid.getIndices(*(atom_grid.getBox(r)), x, y, z);
-			//    std::cout << i << " " <<  x << " " << y << " " << z << " " << r << std::endl;
-			//!!!!!!!!!!!!!!!!!!!!!!!!!!
 			atom_grid.insert(r, vec_[i]);
-		}
+std::cout << "----->finish end of for(i<size()-1): vec[i] "  << std::endl;	
+		}                   
 
 		HashGridBox3<POS>::DataIterator data_it;       // iterate over residues of neighbouring boxes
 		HashGridBox3<POS>* box;                        // iterate over all boxes of the grid
 		HashGridBox3<POS>::BoxIterator box_it;         // iterator
 		float energy, dist_ON, dist_CH, dist_OH, dist_CN;
 
+std::cout << "      compute energies" << std::endl;
 		// now compute the energies and see whether we have a hydrogen bond
 		for (Size i=0; i<vec_.size(); i++)
 		{
@@ -129,7 +172,7 @@ namespace BALL
 								//       Does this criterion always work? We should check for
 								//       an existing bond between data_it and vec[i] instead!
 
-								if ((int)abs((int)(data_it->number - vec_[i].number)) > 1)
+								if (((int)abs((int)(data_it->number - vec_[i].number)) > 1) && (data_it->number!=0))
 								{
 									// compute the distances between the relevant atoms
 									dist_ON = (vec_[i].posO - data_it->posN).getLength();
@@ -140,21 +183,21 @@ namespace BALL
 									// compute the electrostatic energy of the bond-building groups
 									energy  = 0.42*0.20 * 332.;
 									energy *= (1./dist_ON + 1./dist_CH - 1./dist_OH - 1./dist_CN);
-
-									//			HBondBool_[vec_[i].number + vec_.size()*(data_it->number)] = 
-									//	(energy < -0.5) ? true : false;
+									//!!!!!
+									//									std::cout << "En " << vec_[i].number << "->" << data_it->number <<" : " << energy << std::endl;
 									
 									if (energy < -0.5)
 									{
-										HBondBool_[vec_[i].number + vec_.size()*(data_it->number)] = true;
+										HBondPairs_[vec_[i].number].push_back(data_it->number);
+										//HBondPairs_[vec_[i].number + vec_.size()*(data_it->number)] = true;
 										AtomIterator ai;
-										Atom *pacceptor = 0;
+										Atom *acceptor = 0;
 										Atom* donor = 0; 
 										for(ai=(vec_[i].pres)->beginAtom(); +ai; ++ai)
 										{
 											if(ai->getName() == "O")
 											{
-												pacceptor=&(*ai);
+												acceptor=&(*ai);
 											}
 										}	
 										
@@ -165,13 +208,13 @@ namespace BALL
 												donor=&*ai;
 											}
 										}		
-										if (!donor || !pacceptor) continue;
-										donor->setProperty("HBOND_DONOR", *pacceptor);
+										if (!donor || !acceptor) continue;
+										donor->setProperty("HBOND_DONOR", *acceptor);
 									}
-									else
-									{
-										HBondBool_[vec_[i].number + vec_.size()*(data_it->number)] = false;
-									}
+									//else
+									//{
+									//	HBondPairs_[vec_[i].number + vec_.size()*(data_it->number)] = false;
+									//}
 									
 								}
 							} 
@@ -183,21 +226,26 @@ namespace BALL
 
 		for (Size i=0; i<vec_.size(); i++)
 		{
-			for (Size j=0; j<vec_.size(); j++)
-			{
-				if (HBondBool_[i+j*vec_.size()])
+			//		for (Size j=0; j<vec_.size(); j++)
+			//	{
+				if (HBondPairs_[i].size()!=0)
 				{
 					//		std::cout << "HBond between " << i << " O and " << j << " N" << std::endl;
 				}
-			}
+				//}
 		}
-
+std::cout << "--->HBP end of finish " << std::endl;
 		return true;
 	}
 
+
+
 	Processor::Result HBondProcessor::operator() (Composite &composite)
 	{
-		ResidueIterator ri;
+
+std::cout << "-->HBP operator " << std::endl;
+		
+    ResidueIterator ri;
 	 // create a mantel box (bounding box)  which should include the composit
 		BoundingBoxProcessor bp;
 
@@ -208,35 +256,55 @@ namespace BALL
 			s->apply(bp);
 			upper_ = bp.getUpper();
 			lower_ = bp.getLower();
+std::cout << "--->operator found a System " << std::endl;
 
-			ri = s->beginResidue();
-		}
+      ri = s->beginResidue();
+
+		}else
 		if (RTTI::isKindOf<Protein>(composite))
 		{
 			Protein *s = RTTI::castTo<Protein>(composite);
 			s->apply(bp);
 			upper_ = bp.getUpper();
 			lower_ = bp.getLower();
+std::cout << "--->operator found a Protein " << std::endl;
 
-			ri = s->beginResidue();
-		}
+      ri = s->beginResidue();
+Log.error() << "#~~# A " << s->countResidues() << std::endl;
+		
+		}else
+			{
+				std::cout << "else protein" << std::endl;
+		
+			}
 		if (RTTI::isKindOf<Chain>(composite))
 		{
 			Chain *s = RTTI::castTo<Chain>(composite);
 			s->apply(bp);
 			upper_ = bp.getUpper();
 			lower_ = bp.getLower();
+std::cout << "--->operator found a Chain " << std::endl;
 
+Log.error() << "#~~# B  " << s->countResidues() << std::endl;
 			ri = s->beginResidue();
+		
 		}
+		
+		if(+ri)
+			std::cout <<"--->operator  ri is valid  "  << std::endl;
 
-		if (!(+ri))
+		if (!(+ri))// ri doesn't seem to exist
 		{
+std::cout << "--->operator ::!(+ri) ->rausgeflogen " << std::endl;
 			return Processor::CONTINUE;
 		}
 
 		// compute the H-Bonds
+		
+std::cout << "--->operator :: vor precompute " << std::endl;
 		preComputeBonds(ri);
+		
+std::cout << "--->HBP end of operator " << std::endl;
 		return Processor::BREAK;
 
 	}
@@ -246,4 +314,16 @@ namespace BALL
 		return s << p.posC << " " << p.posN << " " << p.posH << " " << p.posO << " " << p.number << std::endl;
 	}
 
-}
+	const std::vector< std::vector<int> >& HBondProcessor::getHBondPairs() const
+	{
+		return HBondPairs_;
+	}
+
+	const std::vector<HBondProcessor::POS>& HBondProcessor::getPosVec() const
+	{
+		return vec_;
+	}
+
+
+} //Namespace BALL
+
