@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.41 2004/02/26 08:41:38 anhi Exp $
+// $Id: mainControl.h,v 1.42 2004/04/14 14:01:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -397,6 +397,9 @@ namespace BALL
 			/// Stop a currently running calculation
 			void stopSimulation();
 	
+			///
+			void complementSelection();
+
 			/** Apply preferences.
 					This method calls the method <b>ModularWidget::applyPreferences</b> of all registered
 					ModularWidget objects if the apply button of the Preferences dialog is pressed. 
@@ -749,6 +752,8 @@ namespace BALL
 			void setup_()
 				throw();
 
+			void complementSelectionHelper_(Composite& c);
+			
 			//_
 			FragmentDB fragment_db_;
 

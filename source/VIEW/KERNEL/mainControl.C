@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.74 2004/03/17 19:37:49 oliver Exp $
+// $Id: mainControl.C,v 1.75 2004/04/14 14:01:57 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -105,7 +105,7 @@ namespace BALL
 			message_label_->setFont(font); 
 			message_label_->setFrameShape(QLabel::NoFrame);
 
-			timer_->setInterval(1000);
+			timer_->setInterval(2000);
 			timer_->setLabel(message_label_);
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
@@ -272,6 +272,8 @@ namespace BALL
 				insertMenuEntry(MainControl::MOLECULARMECHANICS, "Abort Calculation", this, SLOT(stopSimulation()),
 						ALT+Key_C, MENU_STOPSIMULATION, hint);
 			#endif
+
+			insertMenuEntry(MainControl::EDIT, "Toggle Selection", this, SLOT(complementSelection()));
 
 			// establish connection 
 			connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
@@ -1385,6 +1387,44 @@ namespace BALL
 		{
 			return simulation_thread_;
 		}
+
+
+		void MainControl::complementSelection()
+		{
+			CompositeManager::iterator it = getCompositeManager().begin();
+			for (; it != getCompositeManager().end(); it++)
+			{
+				complementSelectionHelper_(**it);
+
+				//faster, but doesnt always work:
+				//updateRepresentationsOf(**it, false);
+				updateRepresentationsOf(**it, true, true);
+			}
+
+			NewSelectionMessage* new_message = new NewSelectionMessage;
+			notify_(new_message);
+			printSelectionInfos();
+		}
+
+		void MainControl::complementSelectionHelper_(Composite& c)
+		{
+			if (c.isSelected()) 
+			{
+				deselectCompositeRecursive(&c, true);
+			}
+			else if (!c.containsSelection())
+			{
+				selectCompositeRecursive(&c, true);
+			}
+			else
+			{
+				for (Position i = 0; i < c.getDegree(); i++)
+				{
+					complementSelectionHelper_(*c.getChild(i));
+				}
+			}
+		}
+
 
 		// ======================= StatusbarTimer =========================
 		StatusbarTimer::StatusbarTimer(QObject* parent)
