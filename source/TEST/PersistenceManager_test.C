@@ -1,4 +1,4 @@
-// $Id: PersistenceManager_test.C,v 1.2 2001/06/14 11:59:24 oliver Exp $
+// $Id: PersistenceManager_test.C,v 1.3 2001/07/05 17:56:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -244,7 +244,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PersistenceManager_test.C,v 1.2 2001/06/14 11:59:24 oliver Exp $")
+START_TEST(class_name, "$Id: PersistenceManager_test.C,v 1.3 2001/07/05 17:56:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -267,6 +267,8 @@ CHECK(PersistenceManager::PersistenceManager(::std::istream& is) throw())
 	// BAUSTELLE:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_
+	// no, we don't We just have to create an intermediate derived class
+	// for testing!
 RESULT
 
 
