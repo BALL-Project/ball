@@ -1,14 +1,15 @@
-// $Id: HashGrid3_test.C,v 1.4 2002/01/14 22:30:14 anker Exp $
+// $Id: HashGrid3_test.C,v 1.5 2002/01/15 16:04:22 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 // insert includes here
 #include <BALL/DATATYPE/hashGrid.h>
+#include "HashGrid3_test.h"
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.4 2002/01/14 22:30:14 anker Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.5 2002/01/15 16:04:22 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -40,12 +41,24 @@ RESULT
 
 
 CHECK(HashGridBox3::clear() throw())
-	// ?????
+	HashGridBox3<int> hbox;
+	for (int i = 0; i < 5; ++i)
+	{
+		hbox.insert(i);
+	}
+	hbox.clear();
+	// TODO: did it really clear?
 RESULT
 
 
 CHECK(HashGridBox3::destroy() throw())
-  //?????
+	HashGridBox3<int> hbox;
+	for (int i = 0; i < 5; ++i)
+	{
+		hbox.insert(i);
+	}
+	hbox.destroy();
+	// TODO: did it really destroy?
 RESULT
 
 
@@ -65,12 +78,32 @@ RESULT
 
 
 CHECK(HashGridBox3::find(const Item &item) throw())
-  //?????
+	HashGridBox3<int> hbox;
+	for (int i = 0; i < 5; ++i)
+	{
+		hbox.insert(i);
+	}
+	int* found = hbox.find(3);
+	TEST_NOT_EQUAL(found, 0)
+	bool test = (*found == 3);
+	TEST_EQUAL(test, true)
+	found = hbox.find(9);
+	TEST_EQUAL(found, 0)
 RESULT
 
 
 CHECK(HashGridBox3::find(const Item& item) const  throw())
-  //?????
+	HashGridBox3<int> hbox;
+	for (int i = 0; i < 5; ++i)
+	{
+		hbox.insert(i);
+	}
+	const int* found = hbox.find(3);
+	TEST_NOT_EQUAL(found, 0)
+	bool test = (*found == 3);
+	TEST_EQUAL(test, true)
+	found = hbox.find(9);
+	TEST_EQUAL(found, 0)
 RESULT
 
 
@@ -86,7 +119,10 @@ RESULT
 
 
 CHECK(HashGridBox3::insert(const Item& item) throw())
-	// ?????
+	HashGridBox3<int> hbox;
+	hbox.insert(567);
+	bool test = (*hbox.find(567) == 567);
+	TEST_EQUAL(test, true)
 RESULT
 
 
@@ -204,12 +240,31 @@ RESULT
 
 
 CHECK(HashGridBox3::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
-  //?????
+	HashGridBox3<int> hbox;
+	for (int i = 0; i < 5; i++)
+	{
+		hbox.insert(i);
+	}
+	String tmp_filename;
+	NEW_TMP_FILE(tmp_filename)
+	std::ofstream dump_stream(tmp_filename.c_str(), std::ios::out);
+	hbox.dump(dump_stream);
+	STATUS(tmp_filename)
+	dump_stream.clear();
+	dump_stream.close();
+	TEST_FILE(tmp_filename.c_str(), "data/hashgrid3_test_dump0.txt", true)
 RESULT
 
 
 CHECK(HashGridBox3::apply(UnaryProcessor<Item>& processor) throw())
-  //?????
+	TestProcessor proc;
+	HashGridBox3<int> hbox;
+	hbox.insert(5);
+	hbox.apply(proc);
+	int* result = hbox.find(6);
+	TEST_NOT_EQUAL(result, 0)
+	bool test = (*result == 6);
+	TEST_EQUAL(test, true)
 RESULT
 
 
@@ -343,7 +398,32 @@ RESULT
 
 // tests for class HashGrid3::
 
-CHECK(HashGrid3::BALL_CREATE(HashGrid3))
+CHECK(HashGrid3::HashGrid3() throw())
+  //?????
+RESULT
+
+
+CHECK(HashGrid3::HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, Size dimension_z, float spacing_x, float spacing_y, float spacing_z) throw())
+  //?????
+RESULT
+
+
+CHECK(HashGrid3::HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, Size dimension_z, float spacing) throw())
+  //?????
+RESULT
+
+
+CHECK(HashGrid3::HashGrid3(const Vector3& origin, const Vector3& size, float spacing) throw())
+  //?????
+RESULT
+
+
+CHECK(HashGrid3::HashGrid3(const HashGrid3& grid, bool deep = true) throw())
+  //?????
+RESULT
+
+
+CHECK(HashGrid3::~HashGrid3() throw())
   //?????
 RESULT
 
