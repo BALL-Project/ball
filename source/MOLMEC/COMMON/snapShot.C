@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.23 2001/03/28 13:49:51 anker Exp $
+// $Id: snapShot.C,v 1.24 2001/04/02 09:48:33 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -416,7 +416,7 @@ namespace BALL
 		{
 			is >> data[i];
 		}
-		ss.setAtomVelocitites(data);
+		ss.setAtomVelocities(data);
 
 		for (Size i = 0; i < number; ++i)
 		{
