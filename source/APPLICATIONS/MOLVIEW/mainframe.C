@@ -17,6 +17,8 @@
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
+#include <BALL/STRUCTURE/residueChecker.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #ifdef BALL_PYTHON_SUPPORT
 #	include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
