@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.C,v 1.7 2003/05/26 15:43:40 oliver Exp $
+// $Id: triangulatedSES.C,v 1.8 2003/06/05 11:17:03 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -134,7 +134,6 @@ namespace BALL
 	SESTriangulator::~SESTriangulator()
 		throw()
 	{
-std::cout << "delete template spheres ...\n";
 		std::list<TrianglePoint*>::iterator i;
 		for (i = template_spheres_[0].begin(); i != template_spheres_[0].end(); i++)
 		{
@@ -152,7 +151,6 @@ std::cout << "delete template spheres ...\n";
 		{
 			delete *i;
 		}
-std::cout << "... successful\n";
 	}
 
 
