@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.21 2001/08/18 14:25:34 oliver Exp $
+// $Id: regularData1D.h,v 1.22 2001/08/20 14:46:57 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -37,9 +37,9 @@ namespace BALL
 		*/
 		typedef ::std::vector<T>	VectorType;
 		/// A mutable iterator
-		typedef ::std::vector<T>::iterator Iterator;
+		typedef typename ::std::vector<T>::iterator Iterator;
 		/// A constant iterator
-		typedef ::std::vector<T>::const_iterator ConstIterator;
+		typedef typename ::std::vector<T>::const_iterator ConstIterator;
 
 		//@}
 		/** @name Constructors and Destructors.
