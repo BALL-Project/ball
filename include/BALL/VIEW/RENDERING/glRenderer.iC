@@ -150,3 +150,9 @@ void GLRenderer::setColorRGBA_(const ColorRGBA& color)
 	glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 	last_color_  = &color;
 }
+
+BALL_INLINE
+bool GLRenderer::vertexBuffersEnabled() const
+{
+	return use_vertex_buffer_;
+}

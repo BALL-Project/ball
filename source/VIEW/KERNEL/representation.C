@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.60.2.5 2005/01/14 17:33:45 amoll Exp $
+// $Id: representation.C,v 1.60.2.6 2005/01/16 22:54:52 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -12,7 +12,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/timer.h>
 
-#define BALL_BENCHMARKING
+//     #define BALL_BENCHMARKING
 
 namespace BALL
 {

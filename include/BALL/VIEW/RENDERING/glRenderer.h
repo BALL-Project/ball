@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.5 2005/01/15 10:54:47 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.6 2005/01/16 22:57:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -33,6 +33,10 @@
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 # include <BALL/VIEW/RENDERING/glDisplayList.h>
+#endif
+
+#ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
+# include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #endif
 
 #include <qgl.h>
@@ -237,6 +241,24 @@ namespace BALL
 			*/
 			bool isExtensionSupported(const String& extension);
 
+			///
+			String getVendor();
+
+			///
+			String getRenderer();
+
+			///
+			String getOpenGLVersion();
+
+			///
+			vector<String> getExtensions();
+
+			///
+			bool enableVertexBuffers(bool state);
+
+			///
+			bool vertexBuffersEnabled() const;
+
 			//@}
 			// protected:
 
@@ -356,6 +378,10 @@ namespace BALL
 			void setColorRGBA_(const ColorRGBA& color)
 				throw();
 
+			//_
+			void renderMeshWithVertexArray_(const Mesh& mesh)
+				throw();
+
 			///
 			Index 								drawing_mode_;
 
@@ -385,6 +411,7 @@ namespace BALL
 			GeometricObjectHashMap	name_to_object_;
 			NameHashMap							object_to_name_;
 			DisplayListHashMap 			display_lists_;
+			HashMap<const Mesh*, MeshBuffer*> mesh_to_buffer_;
 			Name 										all_names_;
 			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
 			Vector3 								normal_vector_;
@@ -393,6 +420,7 @@ namespace BALL
 
 			StereoMode stereo_;
 			RenderMode render_mode_;
+			bool use_vertex_buffer_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

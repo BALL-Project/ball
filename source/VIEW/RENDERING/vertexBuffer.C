@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.4 2005/01/16 22:17:10 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.5 2005/01/16 22:51:30 amoll Exp $
 //
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -58,10 +58,8 @@ bool MeshBuffer::initialize()
 	// Get valid Names
 	glGenBuffersARB(4, buffers_);
 
-	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
-//        			glEnableClientState(GL_INDEX_ARRAY); 
 
 	float* data = new float[nr_vertices * 4];
 	for (Size index = 0; index < nr_vertices; ++index)
@@ -86,17 +84,23 @@ bool MeshBuffer::initialize()
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[1]);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 3, data, GL_STATIC_DRAW_ARB);
 
-	for (Size index = 0; index < nr_vertices; ++index)
+	if (mesh_->colorList.size() > 1)
 	{
-		const Size start = index * 4;
-		data[start] = (float) mesh_->colorList[index].getRed();
-		data[start + 1] = (float) mesh_->colorList[index].getGreen();
-		data[start + 2] = (float) mesh_->colorList[index].getBlue();
-		data[start + 3] = (float) mesh_->colorList[index].getAlpha();
+		for (Size index = 0; index < nr_vertices; ++index)
+		{
+			const Size start = index * 4;
+			data[start] = (float) mesh_->colorList[index].getRed();
+			data[start + 1] = (float) mesh_->colorList[index].getGreen();
+			data[start + 2] = (float) mesh_->colorList[index].getBlue();
+			data[start + 3] = (float) mesh_->colorList[index].getAlpha();
+		}
+
+		glEnableClientState(GL_COLOR_ARRAY);
+
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[2]);
+		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 4, data, GL_STATIC_DRAW_ARB);
 	}
 
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[2]);
-	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 4, data, GL_STATIC_DRAW_ARB);
 	delete[] data;
 
 	unsigned int* indices = new unsigned int[nr_triangles * 3];
@@ -144,11 +148,27 @@ bool MeshBuffer::draw()
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[1]);
 	glNormalPointer(GL_FLOAT, 0, 0);
 
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[2]);
-	glColorPointer (4, GL_FLOAT, 0, 0);
-
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffers_[3]);
 	glIndexPointer(GL_UNSIGNED_INT, 0, 0);
+
+	if (mesh_->colorList.size() > 1)
+	{
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[2]);
+		glColorPointer (4, GL_FLOAT, 0, 0);
+	}
+	else
+	{
+		if (mesh_->colorList.size() == 1)
+		{
+			const ColorRGBA& color = mesh_->colorList[0];
+			glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+		}
+		else
+		{
+			ColorRGBA color("0000FF");
+			glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+		}
+	}
 
 	glDrawElements(GL_TRIANGLES, mesh_->triangle.size() * 3, GL_UNSIGNED_INT, 0);
 #endif
