@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.26 2001/06/14 00:31:12 oliver Exp $
+// $Id: property.C,v 1.27 2001/07/14 18:45:36 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -30,7 +30,7 @@ namespace BALL
 		} 
 		else 
 		{
-			data_.s = new string(*property.data_.s);
+			data_.s = new string(*(property.data_.s));
 		}
 	}
  
@@ -98,9 +98,10 @@ namespace BALL
 		throw()
   {	
 		s << property.type_;
-		s << endl;
+		s << std::endl;
 		s << property.name_;
-		s << endl;
+		s << std::endl;
+
 		switch (property.type_)
 		{
 			case NamedProperty::BOOL:					s << property.data_.b; break;
@@ -108,7 +109,7 @@ namespace BALL
 			case NamedProperty::UNSIGNED_INT: s << property.data_.ui; break;
 			case NamedProperty::FLOAT:				s << property.data_.f; break;
 			case NamedProperty::DOUBLE:				s << property.data_.d; break;
-			case NamedProperty::STRING:				s << *property.data_.s; break;
+			case NamedProperty::STRING:				s << *(property.data_.s); break;
 			case NamedProperty::OBJECT:
 				{
 					TextPersistenceManager pm;
@@ -127,35 +128,44 @@ namespace BALL
 	istream& operator >> (std::istream& s, NamedProperty& property)
 		throw()
   {	
+		// delete previous content
+		property.clear();
+		
+		// determine the property type
 		Index tmp;
 		s >> tmp;
 		property.type_ = (NamedProperty::Type)tmp;
+
+		// read the name of the property
 		s >> property.name_;
+
+		// read the value
 		switch (property.type_)
 		{
-			case NamedProperty::BOOL : 	s >> property.data_.b; break;
-			case NamedProperty::INT : 	s >> property.data_.i; break;
+			case NamedProperty::BOOL :					s >> property.data_.b; break;
+			case NamedProperty::INT :						s >> property.data_.i; break;
 			case NamedProperty::UNSIGNED_INT : 	s >> property.data_.ui; break;
-			case NamedProperty::FLOAT : s >> property.data_.f; break;
-			case NamedProperty::DOUBLE :s >> property.data_.d; break;
+			case NamedProperty::FLOAT :					s >> property.data_.f; break;
+			case NamedProperty::DOUBLE :				s >> property.data_.d; break;
 			case NamedProperty::OBJECT :
-			{
-				TextPersistenceManager pm;
-				pm.setIstream(s);
-				pm.readObjectPointer(property.data_.object, "data_.object"); 
-				break;
-			}
+				{
+					TextPersistenceManager pm;
+					pm.setIstream(s);
+					pm.readObjectPointer(property.data_.object, "data_.object"); 
+					break;
+				}
 			case NamedProperty::NONE : break;
 			case NamedProperty::STRING :
-			{
-				string str;
-				s >> str;
-				property.data_.s = new string(str);
-				break;
-			}
+				{
+					string str;
+					s >> str;
+					property.data_.s = new string(str);
+					break;
+				}
 			default:
 				Log.error() << "Unknown type while reading NamedProperty: " << (int)property.type_ << endl;
 		}
+
 		return s;
 	}
 
