@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.27 2002/02/27 12:21:18 sturm Exp $
+// $Id: PDBFile.C,v 1.28 2002/12/12 10:19:13 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -343,7 +343,7 @@ namespace BALL
 		
 		new_sheet_secstruc_list_.push_back(sec_struc);
 		sec_struc->setProperty(SecondaryStructure::PROPERTY__STRAND);
-		sec_struc->setProperty("STRAND_SENSE", (void *)sense_of_strand);
+		sec_struc->setProperty("STRAND_SENSE", (void*)sense_of_strand);
 		
 		sheet_list_.push_back(partner_residue);
 		
@@ -1404,10 +1404,30 @@ namespace BALL
 			initial = residue_map_.find(*res_it);
 			++res_it;
 			terminal = residue_map_.find(*res_it);
+		
+			// This is to catch those cases where initial comes after terminal in the
+			// residue sequence.
+			// We first swap initial and terminal. Then we walk along the chain begining
+			// with the old initial (which is now terminal), and if we encounter the old
+			// terminal (which is now initial) on the way, then we swap the residues
+			// again.
+			ResidueMap::Iterator dummy = initial;
+			initial = terminal;
+			terminal = dummy;
 			
+			for (;dummy != residue_map_.end(); ++dummy)
+			{
+				if (dummy == initial)
+				{
+					initial = terminal;
+					terminal = dummy;
+					break;
+				}
+			}
+
 			if (!(initial != residue_map_.end() && terminal != residue_map_.end()
 						&& initial->second->getChain() == terminal->second->getChain()
-						&& Composite::insertParent(*(*helix_it), *initial->second, *terminal->second, false) == true))
+						&& (Composite::insertParent(*(*helix_it), *initial->second, *terminal->second, false) == true)))
 			{
 				delete (*helix_it);
 			}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: proteinMapper.C,v 1.8 2002/02/27 12:21:15 sturm Exp $
+// $Id: proteinMapper.C,v 1.9 2002/12/12 10:17:21 oliver Exp $
 
 //========================================================================
 // protein mapper example
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
 		tolerance = atof(argv[6]);
 	}
 
-	map<String,int> type_map;
+	map<String, Position> type_map;
 	type_map["ALA"] = 0;
 	type_map["GLY"] = 1;
 	type_map["VAL"] = 2;
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
 	// map the two proteins
 	Matrix4x4				T;
 	StructureMapper	mapper;
-	int							no_ca;
+	Size						no_ca;
 	double					rmsd;
 	
 	cout << "mapping " << argv[1] << " onto " << argv[2] << " (this may take a while)..." << endl;
@@ -121,7 +121,7 @@ int main(int argc, char** argv)
 	Timer	t;
 	t.start();
 
-	T = mapper.mapProteins_(protein1, protein2, type_map, no_ca, rmsd, upper, lower, tolerance);
+	T = mapper.mapProteins(protein1, protein2, type_map, no_ca, rmsd, upper, lower, tolerance);
 
 	t.stop();
 

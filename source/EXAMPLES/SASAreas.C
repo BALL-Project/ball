@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASAreas.C,v 1.2 2002/02/27 12:21:14 sturm Exp $
+// $Id: SASAreas.C,v 1.3 2002/12/12 10:17:21 oliver Exp $
 
 // Calculate the solvent accessible surface (SAS) areas of the
 // residues of a protein.
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
 	// calculate the contribution of every single
 	// atom of the surface and store it in a hash map
-	HashMap<Atom*, float> atom_areas;
+	HashMap<const Atom*, float> atom_areas;
 	double total_area = calculateSASAtomAreas(S, atom_areas, 1.5, 400);
 	Log.info() <<  "total area: " << total_area << "A^2" << endl;
 	Log.info() << "# of SAS atoms: " << atom_areas.size() << endl;

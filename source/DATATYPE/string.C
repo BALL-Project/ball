@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.41 2002/02/27 12:21:12 sturm Exp $
+// $Id: string.C,v 1.42 2002/12/12 10:13:11 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -12,7 +12,7 @@
 
 using std::ostream;
 using std::istream;
-using std::strstream;
+using std::stringstream;
 using std::endl;
 using std::ends;
 using std::vector;
@@ -199,13 +199,11 @@ namespace BALL
 		delete [] buffer;
 	}
 
-	String::String(strstream& s)
+	String::String(stringstream& s)
 		throw()
 		: string("")
 	{
-		s << ends;
-		char* str = s.str();
-		assign(str);
+		s >> (*this);
 	}
 
 #	define BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(type, format_string) \
@@ -1228,6 +1226,7 @@ namespace BALL
 
 			for (; newlen > 0; ptr1++, ptr2++)
 			{
+				newlen--;
 				result = tolower(*ptr1) - tolower(*ptr2);
 
 				if (result != 0)
@@ -1298,6 +1297,7 @@ namespace BALL
 
 			for (; newlen > 0; ptr1++, ptr2++)
 			{
+				newlen--;
 				result = tolower(*ptr1) - tolower(*ptr2);
 
 				if (result != 0)

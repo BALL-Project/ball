@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.31 2002/02/27 12:21:25 sturm Exp $
+// $Id: standardPredicates.C,v 1.32 2002/12/12 10:20:16 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -121,8 +121,6 @@ namespace BALL
  		const Chain* chain = atom.getAncestor(RTTI::getDefault<Chain>());
 		if (chain != 0)
 		{
-			// DEBUG
-			// Log.info() << "NAME: " << chain->getName() << endl;
 			return (chain->getName() == argument_);
 		}
 
@@ -466,423 +464,736 @@ namespace BALL
 	}
 
 
-	bool ConnectedToPredicate::parse_(const String& group,
-			std::list<std::pair<String,String> >& subs) const
+	ConnectedToPredicate::CTPNode::CTPNode()
+		throw()
+		:	element_symbol_("<uninitialized>"),
+			bond_type_(BONDTYPE__UNINITIALISED),
+			children_(),
+			parent_(0),
+			finished_(false),
+			linked_(false),
+			link_list_()
+	{
+	}
+
+	ConnectedToPredicate::CTPNode::CTPNode(const ConnectedToPredicate::CTPNode& node)
+		throw()
+		:	element_symbol_(node.element_symbol_),
+			bond_type_(node.bond_type_),
+			children_(node.children_),
+			parent_(node.parent_),
+			finished_(node.finished_),
+			linked_(node.linked_),
+			link_list_(node.link_list_)
+	{
+	}
+
+	ConnectedToPredicate::CTPNode::~CTPNode()
 		throw()
 	{
 		// ?????
-		// EIGENTLICH müssen hier Symbolfolgen erzeugt werden, keine Strings.
+		// TODO
+	}
 
-		int depth = 0;
-		Size position = 0;
-		std::pair<String, String> this_pair;
-		String tmp;
-
-		for (; position < group.size(); ++position)
+	void ConnectedToPredicate::CTPNode::setParent(ConnectedToPredicate::CTPNode* parent)
+		throw()
+	{
+		if (parent == 0)
 		{
-			switch (group[position]) 
+			Log.error() << "ConnectedToPredicate::CTPNode::setParent(): "
+				<< "Trying to set NULL as parent. Ignoring." << endl;
+		}
+		else
+		{
+			parent_ = parent;
+		}
+	}
+
+	ConnectedToPredicate::CTPNode* ConnectedToPredicate::CTPNode::getParent() const
+		throw()
+	{
+		return parent_;
+	}
+
+	void ConnectedToPredicate::CTPNode::addChild(ConnectedToPredicate::CTPNode* child)
+		throw()
+	{
+		if (child == 0)
+		{
+			Log.error() << "ConnectedToPredicate::CTPNode::addChild(): "
+				<< "Trying to add NULL as child. Ignoring." << endl;
+		}
+		else
+		{
+			children_.push_back(child);
+		}
+	}
+
+	ConnectedToPredicate::CTPNode::Iterator ConnectedToPredicate::CTPNode::begin()
+		throw()
+	{
+		return children_.begin();
+	}
+
+	ConnectedToPredicate::CTPNode::ConstIterator ConnectedToPredicate::CTPNode::begin() const
+		throw()
+	{
+		return children_.begin();
+	}
+
+	ConnectedToPredicate::CTPNode::Iterator ConnectedToPredicate::CTPNode::end()
+		throw()
+	{
+		return children_.end();
+	}
+
+	ConnectedToPredicate::CTPNode::ConstIterator ConnectedToPredicate::CTPNode::end() const
+		throw()
+	{
+		return children_.end();
+	}
+
+	/* 
+	ConnectedToPredicate::CTPNode* ConnectedToPredicate::CTPNode::getChild(Size index) const
+		throw()
+	{
+		if (index < getNumberOfChildren())
+		{
+			ConnectedToPredicate::CTPNode* child = children_[index];
+			return child;
+		}
+		else
+		{
+			Log.error() << "ConnectedToPredicate::CTPNode::getChild(): "
+				<< "Trying to access non-existant child with index " << index
+				<< ". Returning NULL." << endl;
+			return 0;
+		}
+	}
+	*/
+
+	void ConnectedToPredicate::CTPNode::removeChild(CTPNode* child)
+		throw()
+	{
+		CTPNode::Iterator it = std::find(begin(), end(), child);
+		if (it != end())
+		{
+			children_.erase(it);
+		}
+	}
+
+	Size ConnectedToPredicate::CTPNode::getNumberOfChildren() const
+		throw()
+	{
+		return children_.size();
+	}
+
+	void ConnectedToPredicate::CTPNode::setBondType(Size type)
+		throw()
+	{
+		// ?????
+		// TODO: check whether type exists...
+		bond_type_ = type;
+	}
+
+	void ConnectedToPredicate::CTPNode::setBondType(char type)
+		throw()
+	{
+		switch (type)
+		{
+			case '.':
+				bond_type_ = BONDTYPE__ANY;
+				break;
+
+			case '-':
+				bond_type_ = BONDTYPE__SINGLE;
+				break;
+
+			case '=':
+				bond_type_ = BONDTYPE__DOUBLE;
+				break;
+
+			case '#':
+				bond_type_ = BONDTYPE__TRIPLE;
+				break;
+
+			case '~':
+				bond_type_ = BONDTYPE__AROMATIC;
+				break;
+
+			default:
+				Log.error() << "ConnectedToPredicate::CTPNode::setBondType(): "
+					<< "Unknown bond type character, defaulting to <any>." << endl;
+				bond_type_ = BONDTYPE__ANY;
+		}
+	}
+
+	Size ConnectedToPredicate::CTPNode::getBondType() const
+		throw()
+	{
+		return bond_type_;
+	}
+
+	char ConnectedToPredicate::CTPNode::getBondTypeChar() const
+		throw()
+	{
+		switch (bond_type_)
+		{
+			case BONDTYPE__ANY:
+				return('.');
+
+			case BONDTYPE__SINGLE:
+				return('-');
+
+			case BONDTYPE__DOUBLE:
+				return('=');
+
+			case BONDTYPE__TRIPLE:
+				return('#');
+
+			case BONDTYPE__QUADRUPLE:
+			  return('%');
+
+			case BONDTYPE__AROMATIC:
+				return('~');
+
+			case BONDTYPE__UNINITIALISED:
+				return('U');
+
+			default:
+				return('?');
+		}
+	}
+
+	String ConnectedToPredicate::CTPNode::getSymbol() const
+		throw()
+	{
+		return element_symbol_;
+	}
+
+	void ConnectedToPredicate::CTPNode::setSymbol(const String& symbol)
+		throw()
+	{
+		element_symbol_ = symbol;
+	}
+
+	void ConnectedToPredicate::CTPNode::setFinished()
+		throw()
+	{
+		finished_ = true;
+	}
+
+	void ConnectedToPredicate::CTPNode::unsetFinished()
+		throw()
+	{
+		finished_ = false;
+	}
+
+	bool ConnectedToPredicate::CTPNode::isFinished() const
+		throw()
+	{
+		return finished_;
+	}
+
+	void ConnectedToPredicate::CTPNode::setLinked()
+		throw()
+	{
+		linked_ = true;
+	}
+
+	void ConnectedToPredicate::CTPNode::unsetLinked()
+		throw()
+	{
+		linked_ = false;
+	}
+
+	bool ConnectedToPredicate::CTPNode::isLinked() const
+		throw()
+	{
+		return linked_;
+	}
+
+	void ConnectedToPredicate::CTPNode::linkWith(const ConnectedToPredicate::CTPNode* partner)
+		throw()
+	{
+		if (partner == 0)
+		{
+			Log.error() << "ConnectedToPredicate::CTPNode::linkWith(): "
+				<< "Trying to link with NULL. Ignoring." << endl;
+			return;
+		}
+		link_list_.push_back(partner);
+	}
+
+	const std::list<const ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getLinkList() const
+		throw()
+	{
+		return link_list_;
+	}
+
+	ConnectedToPredicate::ConnectedToPredicate()
+		throw()
+		:	tree_(0),
+			link_map_(),
+			link_mark_(0)
+	{
+	}
+
+	ConnectedToPredicate::~ConnectedToPredicate()
+		throw()
+	{
+	}
+			
+	ConnectedToPredicate::CTPNode* ConnectedToPredicate::createNewNode_(ConnectedToPredicate::CTPNode* node)
+		throw()
+	{
+		// whenever we create a new node, the old one is finished.
+		node->setFinished();
+		CTPNode* child = new CTPNode;
+		child->setParent(node);
+		node->addChild(child);
+		if (link_mark_ != 0)
+		{
+			pair<CTPNode*, CTPNode*> tmp(child, 0);
+			link_map_.insert(pair<char, pair<CTPNode*, CTPNode*> >(link_mark_, tmp));
+			child->setLinked();
+			link_mark_ = 0;
+		}
+		return child;
+	}
+
+	ConnectedToPredicate::CTPNode* ConnectedToPredicate::parse_() 
+		throw()
+	{
+		return(parse_(argument_));
+	}
+
+	ConnectedToPredicate::CTPNode* ConnectedToPredicate::parse_(const String& input) 
+		throw()
+	{
+		Size depth = 0;
+		int bracket_count = 0;
+		Size position = 0;
+		CTPNode* current = 0;
+		Size verbosity = 1;
+		std::list<CTPNode*> all_nodes;
+		std::vector<CTPNode*> bracket_stack;
+
+		CTPNode* root = new CTPNode;
+		root->setSymbol("/");
+		current = root;
+		all_nodes.push_back(root);
+
+		String bond_chars(".-=#%~");
+		String uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		String lowercase("abcdefghijklmnopqrstuvwxyz");
+		String numbers("12345678");
+
+
+		for (; position < input.size(); ++position)
+		{
+			if (verbosity > 90)
 			{
-				case '(' : 
-					if (depth == 0)
+				Log.info() << "Examining character " << input[position] << endl;
+			}
+			if (input[position] == '(')
+			{
+				if (bond_chars.has(input[position - 1]))
+				{
+					Log.error() << "ConnectedToPredicate:parse_(): " << endl
+						<< "\tparse error: bond char before bracket." << endl;
+					return(false);
+				}
+				bracket_stack.push_back(current);
+				current = createNewNode_(current);
+				all_nodes.push_back(current);
+				depth++;
+				bracket_count++;
+				if (verbosity > 90)
+				{
+					Log.info() << "Found (, created new node, new depth is " << depth
+						<< endl;
+				}
+			}
+			else
+			{
+				if (input[position] == ')')
+				{
+					if (current == 0)
 					{
-						// if there was no bond symbol, we assume any bond.
-						if (position < (group.size() - 1))
-						{
-							switch (group[position+1])
-							{
-								case '.' :
-								case '-' :
-								case '=' :
-								case '#' :
-								case '~' :
-									this_pair.first = group[position+1];
-									break;
-								default:
-									this_pair.first = '.';
-							}
-						} 
-						else
-						{
-							Log.error() << "ConnectedToPredicate::parse_(): "
-								<< "Invalid String" << endl;
-							return false;
-						}
-						tmp = "";
+						Log.error() << "ConnectedToPredicate::parse_(): " << endl
+							<< "\ttried to access a NULL pointer. Aborting." << endl;
+						return(false);
 					}
-					if (depth > 0)
-					{
-						// We're in depth 1, so append this char.
-						tmp = tmp + '(';
-					}
-					depth++;
-					break;
-
-				case ')' :
+					current->setFinished();
 					depth--;
-					if (depth > 0)
+					bracket_count--;
+					if (verbosity > 90)
 					{
-						// We're in depth 1, so append this char.
-						tmp = tmp + ')';
+						Log.info() << "Found ), new depth is " << depth
+							<< endl;
 					}
-					if (depth == 0) 
+					if (bracket_stack.size() > 0)
 					{
-						this_pair.second = tmp;
-						subs.push_back(this_pair);
-					}
-					if (depth < 0)
-					{
-						Log.error() << "ConnectedToPredicate::parse_(): Got negative bracket count" << endl;
-						return false;
-					}
-					break;
-
-				case '.' :
-				case '-' :
-				case '=' :
-				case '#' :
-				case '~' :
-					if (depth > 1)
-					{
-						tmp = tmp + group[position];
-					}
-					break;
-
-					/*
-				case '2':
-				case '3':
-				case '4':
-				case '5':
-				case '6':
-				case '7':
-				case '8':
-					if (depth == 1)
-					{
-						Log.info() << "about to copy " << group[position-1] << " " << 
-							group[position] << " times" << endl;
-						if (position == 0)
-						{
-							Log.error() << "encountered a number as first char." << endl;
-							return false;
-						}
-						if (group[position-1] == ')')
-						{
-							// ?????
-						}
-						else
-						{
-							// assumming the string to be correct, i. e.
-							// group[position-1] is an element.
-							for (int j = 1; j < ((String) group[position]).toInt(); ++j)
-							{
-								tmp = tmp + group[position-1];
-							}
-						}
-					}
-					break;
-					*/
-
-				/* 
-				case 'H' : 
-				case 'C' : 
-				case 'O' : 
-				case 'N' : 
-					if (depth == 0)
-					{
-						Log.info() << "encountered Element without brackets, applying ()";
-						tmp = tmp + '(' + group[position] + ')';
-						Log.info() << tmp << endl;
+						current = bracket_stack.back();
+						bracket_stack.pop_back();
 					}
 					else
 					{
-						tmp = tmp + group[position];
+						Log.error() << "ConnectedToPredicate::parse_(): " << endl
+							<< "\tparse error: missing opening bracket." << endl;
+						return(false);
 					}
-					break;
-				 */
-				
-				default :
-					if (depth > 0)
-					{
-						tmp = tmp + group[position];
-					}
-			}
-		}
-		if (depth > 0)
-		{
-			Log.error() << "ConnectedToPredicate::parse_(): Got positive bracket count" << endl; 
-			return false;
-		}
-		return true;
-	}
-
-
-	bool ConnectedToPredicate::bondOrderMatch_(const String& bond_description,
-			const Bond::Order order) const
-		throw()
-	{
-		Bond::Order required_order;
-		bool result = false;
-		if (bond_description[0] != '.')
-		{
-			switch (bond_description[0]) 
-			{
-				case '-' : required_order = Bond::ORDER__SINGLE; break;
-				case '=' : required_order = Bond::ORDER__DOUBLE; break;
-				case '#' : required_order = Bond::ORDER__TRIPLE; break;
-				case '~' : required_order = Bond::ORDER__AROMATIC; break;
-			}
-			result = (required_order == order);
-		}
-		else
-		{
-			result = true;
-		}
-
-		return result;
-	}
-
-
-	bool ConnectedToPredicate::findAndTest_(const String& group,
-			const Atom& atom, const Bond* source) const
-		throw()
-	{
-		if ((group[0] == atom.getElement().getSymbol()) || (group[0] == '*'))
-		{
-			return find_(group, atom, source);
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	bool ConnectedToPredicate::find_(const String& group, const Atom& atom,
-			const Bond* source) const
-		throw()
-	{
-		// ?????
-
-		// ANNAHME: Nur Elemente mit EINEM Buchstaben. Der Rest muss nuch
-		// irgendwie gefummelt werden. Wahrscheinlich über Symbolfolgen, die
-		// aus parse_() rausfallen.
-
-		// Now we have to find pattern matches...
-
-		// subgroups is a pair consisting of a String describing the bond
-		// that is binding the subgroup described by another String.
-
-		std::list< std::pair<String, String> > subgroups;
-
-		if (!parse_(group, subgroups))
-		{
-			Log.error() << "ConnectedToPredicate::find_(): couldn't parse_()." 
-				<< endl;
-			return false;
-		}
-
-		// If the bond description matches a bond of the atom, descend the
-		// "tree" and search for subgroup matches
-
-		std::list< HashSet<const Bond*> > L;
-		std::list< std::pair<String, String> >::iterator subgroups_it;
-
-		// go through all bonds of this atom and through all substrings
-		// with matching bond.
-
-		const Bond* bond;
-		for (subgroups_it = subgroups.begin(); subgroups_it !=
-				 subgroups.end(); ++subgroups_it) 
-		{
-			if (subgroups.size() >= atom.countBonds())
-			{
-				// Log.info() << "Too few bonds (" << atom.countBonds() 
-				// 	<< " instead of " << subgroups.size() << ")" << endl;
-				// return false;
-			}
-
-			HashSet<const Bond*> deeper; 
-
-			// Iterate over all bonds of atom
-			for (Size i = 0; i < atom.countBonds(); ++i)
-			{
-				bond = atom.getBond(i);
-				// DEBUG
-				// Log.info() << "Bond: " << atom.getFullName() << " - " 
-				//	<< bond->getPartner(atom)->getFullName();
-
-				// Follow this bond only if its type matches and it isn't the bond
-				// we came from. This implies special treatment of cycles.
-				if (bond != source)
+				}
+				else
 				{
-					// DEBUG
-					//Log.info() << ": not source";
-					if (bondOrderMatch_(subgroups_it->first, bond->getOrder()))
+					if (bond_chars.has(input[position]))
 					{
-						// DEBUG
-						// Log.info() << ", order match";
-						if (subgroups_it->second.size() < 1) 
+						if (current->getSymbol() != "<uninitialized>")
 						{
-							Log.error() << "ConnectedToPredicate::find_(): "
-								<< "subgroup too short: " 
-								<< subgroups_it->second.size() << " " 
-								<< subgroups_it->second << endl;
-							return false;
-						}
-
-						if (subgroups_it->second.size() == 1)
-						{
-							if ((bond->getPartner(atom)->getElement().getSymbol()
-										== subgroups_it->second) || (subgroups_it->second == '*'))
+							current = createNewNode_(current);
+							all_nodes.push_back(current);
+							depth++;
+							if (verbosity > 90)
 							{
-								// DEBUG
-								// Log.info() << ", base match.";
-								deeper.insert(bond);
+								Log.info() << "Tried to set bond type of finished node, created a new one, new depth is " << depth << endl;
+							}
+						}
+						current->setBondType(input[position]);
+					}
+					else
+					{
+						if (uppercase.has(input[position]) || (input[position] == '*'))
+						{
+							if (current->getSymbol() != "<uninitialized>")
+							{
+								current = createNewNode_(current);
+								all_nodes.push_back(current);
+								depth++;
+								if (verbosity > 90)
+								{
+									Log.info() << "Found uppercase letter without prior \"(\", created new node, new depth is " << depth
+										<< endl;
+								}
+							}
+							// We are in a fresh node.
+							current->setSymbol(input[position]);
+							if (current->getBondType() == CTPNode::BONDTYPE__UNINITIALISED)
+							{
+								current->setBondType((Size) CTPNode::BONDTYPE__ANY);
 							}
 						}
 						else
 						{
-							if (findAndTest_(subgroups_it->second, 
-										*(atom.getBond(i)->getPartner(atom)), bond))
+							if (lowercase.has(input[position]))
 							{
-								// DEBUG
-								// Log.info() << ", recursion.";
-								deeper.insert(bond);
+								if (current->isFinished() == true)
+								{
+									Log.error() << "ConnectedToPredicate::parse_(): " << endl
+										<< "\tparse error: trying to add a lowercase char to an already finished node." 
+										<< endl;
+									return(0);
+								}
+								String symbol = current->getSymbol();
+								if (symbol.size() != 1)
+								{
+									Log.error() << "ConnectedToPredicate::parse_(): "
+										<< "\tparse error: trying to add a lowercase char to a symbol with length != 1." 
+										<< endl;
+									return(0);
+								}
+								if (symbol == '*')
+								{
+									Log.error() << "ConnectedToPredicate::parse_(): " << endl
+										<< "\tparse error: trying to add a lowercase char to a \"*\"." 
+										<< endl;
+									return(0);
+								}
+								symbol += input[position];
+								current->setSymbol(symbol);
+							}
+							else
+							{
+								if (input[position] == '@')
+								{
+									link_mark_ = input[++position];
+									if (numbers.has(link_mark_))
+									{
+
+										if (link_map_.has(link_mark_) == true)
+										{
+											if (link_map_[link_mark_].second != 0)
+											{
+												Log.error() << "ConnectedToPredicate::parse_(): "
+													<< "\tparse error: triple mark: " << link_mark_ << endl;
+												return(0);
+											}
+											link_map_[link_mark_].second = current;
+											CTPNode* first = link_map_[link_mark_].first;
+											current->linkWith(first);
+										}
+									}
+									else
+									{
+										Log.error() << "ConnectedToPredicate::parse_(): "
+											<< "\tparse error: only numbers are allowed as marks." << endl;
+										return(0);
+									}
+								}
+								else
+								{
+									if (numbers.has(input[position]))
+									{
+										char n = input[position];
+										Size N = atoi(&n);
+										CTPNode* parent = current->getParent();
+										if (parent == 0)
+										{
+											Log.error() << "ConnectedToPredicate::parse_(): " << endl
+												<< "\tmultiplier without parent. Aborting."
+												<< endl;
+											return(0);
+										}
+										CTPNode* new_child = 0;
+										for (Size i = 0; i < (N - 1); ++i)
+										{
+											new_child = new CTPNode(*current);
+											all_nodes.push_back(new_child);
+											parent->addChild(new_child);
+										}
+										current = parent;
+									}
+									else
+									{
+										Log.error() << "ConnectedToPredicate::parse_(): " << endl
+											<< "\tparse error: unknown input char: " 
+											<< input[position] << endl;
+										return(false);
+									}
+								}
 							}
 						}
 					}
 				}
-				// DEBUG
-				// Log.info() << endl;
-			}
-			if (!deeper.isEmpty())
-			{
-				L.push_back(deeper);
 			}
 		}
 
-		// Log.info() << "L: " << L.size();
-		if (L.empty()  || (L.size() != subgroups.size()))
+		if (bracket_count > 0)
 		{
-			return false;
+			Log.error() << "ConnectedToPredicate::parse_(): " << endl
+				<< "\tparse error: too many opening brackets." << endl;
+			return(0);
 		}
 
-		// Now L contains a list of size number of subgroups.
-
-		while (L.size() > 0) 
+		if (bracket_count < 0)
 		{
+			Log.error() << "ConnectedToPredicate::parse_(): " << endl
+				<< "\tparse error: Too many closing brackets." << endl;
+			return(0);
+		}
 
-			// FIRST BLOCK: delete all definite cases 
-
-			list<const Bond*> del_list;
-			list<const Bond*>::iterator del_it;
-			list<HashSet <const Bond*> >::iterator it = L.begin();
-			list< list< HashSet<const Bond*> >:: iterator > hash_del_list;
-
-			// DEBUG
-			// Log.info() << "Sizes of hash sets before first block:";
-			for (; it != L.end(); ++it)
+		HashMap<char, pair<CTPNode*, CTPNode*> >::Iterator it = link_map_.begin();
+		for (; +it; ++it)
+		{
+			if (it->second.first == 0)
 			{
-				//writeit(*it);
-				// Log.info() << " " << it->size();
-				if (it->size() == 1)
+				it->second.first = root;
+			}
+
+			if (it->second.second == 0)
+			{
+				Log.error() << "ConnectedToPredicate::parse_(): " << endl
+					<< "unresolved mark: " << it->first << endl;
+				return(0);
+			}
+
+			it->second.first->addChild(it->second.second);
+
+		}
+
+		std::list<CTPNode*>::iterator sort_it = all_nodes.begin();
+		for (; sort_it != all_nodes.end(); ++sort_it)
+		{
+			CTPNode::Iterator child_it = (*sort_it)->begin();
+			for (; child_it != (*sort_it)->end(); ++child_it)
+			{
+				if ((*child_it)->getSymbol() == "*")
 				{
-					if (std::find(del_list.begin(), del_list.end(),
-								*(it->begin())) != del_list.end())
-					{
-						// This match was assumed to be definite, but obviously
-						// isn't. So the pattern couldn't be applied.
-						// Log.info() << "DOUBLE SINGLE." << endl;
-						return false;
-					}
-					// this match is now assumed to be definite, so delete it from
-					// all other lists...
-					del_list.push_back(*(it->begin()));
-
-					// ... and save it for return
-					// deeper.insert(*(it->begin()));
-
-					// Now clear the hashset.
-					it->clear();
-					hash_del_list.push_back(it);
+					(*sort_it)->removeChild(*child_it);
+					(*sort_it)->addChild(*child_it);
 				}
 			}
-			// Log.info() << endl;
+		}
 
-			// now erase the empty hashsets in L
+		tree_ = root;
+		return(root);
+	}
 
-			list< list< HashSet<const Bond*> >:: iterator >::iterator
-				hash_del_it;
+	bool ConnectedToPredicate::bondOrderMatch_(const Bond& bond, const ConnectedToPredicate::CTPNode& node) const
+		throw()
+	{
 
-			for (hash_del_it = hash_del_list.begin(); hash_del_it !=
-				hash_del_list.end(); ++hash_del_it)
+		bool result = false;
+
+		switch (node.getBondType())
+		{
+			case CTPNode::BONDTYPE__UNINITIALISED:
+				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << endl
+					<< "\tuninitialized bond. Returning false." << endl;
+				result = false;
+				break;
+
+			case CTPNode::BONDTYPE__ANY:
+				result = true;
+				break;
+
+			case CTPNode::BONDTYPE__SINGLE:
+				if (bond.getOrder() == Bond::ORDER__SINGLE) result = true;
+				else result = false;
+				break;
+
+			case CTPNode::BONDTYPE__DOUBLE:
+				if (bond.getOrder() == Bond::ORDER__DOUBLE) result = true;
+				else result = false;
+				break;
+
+			case CTPNode::BONDTYPE__TRIPLE:
+				if (bond.getOrder() == Bond::ORDER__TRIPLE) result = true;
+				else result = false;
+				break;
+
+			case CTPNode::BONDTYPE__QUADRUPLE:
+				if (bond.getOrder() == Bond::ORDER__QUADRUPLE) result = true;
+				else result = false;
+				break;
+
+			case CTPNode::BONDTYPE__AROMATIC:
+				if (bond.getOrder() == Bond::ORDER__AROMATIC) result = true;
+				else result = false;
+				break;
+
+			default:
+				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << endl
+					<< "\tunknown bond type " << node.getBondType() << endl;
+				result = false;
+		}
+		return result;
+
+	}
+
+	bool ConnectedToPredicate::find_(const Atom& atom, const ConnectedToPredicate::CTPNode* current, HashSet<const Bond*>& visited) const
+		throw()
+	{
+		Atom* partner;
+		const Bond* bond;
+		Size verbosity = 1;
+
+		if (current == 0)
+		{
+			Log.error() << "ConnectedToPredicate::find_(): " << endl
+				<< "\tencountered NULL as node pointer, aborting." << endl;
+			return(false);
+		}
+
+		CTPNode::ConstIterator child_it = current->begin();
+		for (; child_it != current->end(); ++child_it)
+		{
+			bool this_result = false;
+
+			for (Size j = 0; j < atom.countBonds(); ++j)
 			{
-				L.erase(*hash_del_it);
-			}
-
-			// delete definite items from all other hashsets
-
-			// Log.info() << "Sizes of remaining sets before GREEDY:";
-			for (it = L.begin(); it != L.end(); ++it) 
-			{
-				// Delete the contents of del_list in all Hashsets
-				for (del_it = del_list.begin(); del_it != del_list.end(); ++del_it)
+				bond = atom.getBond(j);
+				if (visited.has(bond) == false)
 				{
-					// delete definite items from those hash sets
-					if (it->has(*del_it))
+					if (bondOrderMatch_(*bond, **child_it) == true)
 					{
-						it->erase(*del_it);
-					}
-
-
-					// if there is an empty hashset, something went wrong
-					if (it->size() == 0)
-					{
-						return false;
+						partner = bond->getPartner(atom);
+						if (((*child_it)->getSymbol() == "*")
+							|| (partner->getElement().getSymbol() == (*child_it)->getSymbol()))
+						{
+							visited.insert(bond);
+							this_result = find_(*partner, *child_it, visited);
+							if (this_result == true)
+							{
+								if (verbosity > 90)
+								{
+									Log.info() << "found " 
+										<< partner->getElement().getSymbol() << endl;
+								}
+								break;
+							}
+							else
+							{
+								visited.erase(bond);
+							}
+						}
 					}
 				}
-				//writeit(*it);
-				// Log.info() << " " << it->size();
 			}
-			// Log.info() << endl;
-
-			// SECOND BLOCK: If there are ambiguous results, just grab one
-			// and make it definite by deleting a hashset containing it and
-			// all occurrences in all other hashsets. (GREEDY).
-
-			// Log.info() << "Sizes of remaining sets after GREEDY:";
-
-			if (L.size() > 0)
+			if (this_result == false)
 			{
-				const Bond* grab = *(L.begin()->begin());
-				// deeper.insert(grab);
-				L.erase(L.begin());
-				for (it = L.begin(); it != L.end(); ++it)
-				{
-					if (it->has(grab))
-					{
-						it->erase(grab);
-					}
-
-					//writeit(*it);
-					// Log.info() << " " << it->size();
-
-					if (it->size() == 0)
-					{
-						return false;
-					}
-				}
+				return(false);
 			}
-			// Log.info() << endl;
-		} while (L.size() > 0);
+		}
+		return(true);
+	}
 
-		// L was emptied and no errors occurred, so return true.
-		return true;
-	} 
+	void ConnectedToPredicate::dump() const
+		throw()
+	{
+		Log.info() << endl;
+		dump(tree_);
+		Log.info() << flush << endl << endl;
+	}
 
+	void ConnectedToPredicate::dump(const ConnectedToPredicate::CTPNode* current) const
+		throw()
+	{
+		if (current == 0)
+		{
+			Log.error() << "dump(): got 0" << endl;
+			return;
+		}
+		if (current->isLinked())
+		{
+			Log.info() << "@{" << current << "}";
+		}
+		Log.info() << current->getBondTypeChar() << current->getSymbol() << flush;
+		list<const CTPNode*>::const_iterator it = current->getLinkList().begin();
+		for(; it != current->getLinkList().end(); ++it)
+		{
+			Log.info() << "@[" << *it << "]";
+		}
+		CTPNode::ConstIterator child_it = current->begin();
+		for (; child_it != current->end(); ++child_it)
+		{
+			Log.info() << "(" << flush;
+			dump(*child_it);
+			Log.info() << ")" << flush;
+		}
+	}
+
+	void ConnectedToPredicate::setArgument(const String& argument)
+		throw()
+	{
+		argument_ = argument;
+		if (tree_ != 0)
+		{
+			delete(tree_);
+		}
+		tree_ = parse_(argument_);
+		link_map_.clear();
+		link_mark_ = 0;
+		// DEBUG
+		// dump();
+		// /DEBUG
+	}
 
 	bool ConnectedToPredicate::operator () (const Atom& atom) const
 		throw()
 	{
-		return find_(argument_, atom, 0);
+		HashSet<const Bond*> visited;
+		return find_(atom, tree_, visited);
 	}
 
 
@@ -946,6 +1257,13 @@ namespace BALL
 		Size i;
 		if (atom.countBonds() != 4)
 		{
+			if (atom.getElement() == PTE[Element::O])
+			{
+				if (atom.countBonds() == 2)
+				{
+					return true;
+				}
+			}
 			return false;
 		}
 		else
@@ -959,6 +1277,44 @@ namespace BALL
 			}
 			return true;
 		}
+	}
+
+
+	bool ChargePredicate::operator () (const Atom& atom) const
+		throw()
+	{
+		String s = argument_;
+		s.trim();
+
+		float crg = atom.getCharge();
+		bool result = true;
+
+		if (s.hasPrefix("<="))
+		{
+			result = (crg <= s.after("<=").toString().toFloat());
+		}
+		else if (s.hasPrefix(">="))
+		{
+			result = (crg >= s.after(">=").toString().toFloat());
+		}
+		else if (s.hasPrefix("<"))
+		{
+			result = (crg < s.after("<").toString().toFloat());
+		}
+		else if (s.hasPrefix(">"))
+		{
+			result = (crg > s.after(">").toString().toFloat());
+		}
+		else if (s.hasPrefix("="))
+		{
+			result = (fabs(crg - s.after("=").toString().toFloat()) < Constants::EPSILON);
+		}
+		else					
+		{
+			result = (fabs(crg - s.toFloat()) < Constants::EPSILON);
+		}
+
+		return result;
 	}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.C,v 1.8 2002/02/27 12:21:21 sturm Exp $
+// $Id: trajectoryFile.C,v 1.9 2002/12/12 10:19:13 oliver Exp $
 
 #include <BALL/FORMAT/trajectoryFile.h>
 
@@ -120,7 +120,8 @@ namespace BALL
 	bool TrajectoryFile::flushToDisk(const std::vector<SnapShot>& /* buffer */)
 		throw()
 	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
+		// empty implementation
+		return false;
 	}
 	
 } // namespace BALL

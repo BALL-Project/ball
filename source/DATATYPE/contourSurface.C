@@ -1,15 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.C,v 1.2 2002/09/06 10:44:56 aubertin Exp $
+// $Id: contourSurface.C,v 1.3 2002/12/12 10:13:11 oliver Exp $
 
 #include <BALL/DATATYPE/contourSurface.h>
 
 namespace BALL
 {
 
-	template<>
-	HashIndex BALL::Hash(const KeyType& p)
+	template <>
+	HashIndex Hash(const KeyType& p) 
+		throw()
 	{
 		return (HashIndex)(p.first + p.second);
 	}

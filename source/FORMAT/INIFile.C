@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.28 2002/02/27 12:21:16 sturm Exp $
+// $Id: INIFile.C,v 1.29 2002/12/12 10:19:12 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -432,6 +432,19 @@ namespace BALL
 
 		// check the hash map for the key
 		return section_index_[section_name]->key_map_.has(key);
+	}
+
+	bool INIFile::insertValue(const String& section_name, const String& key, const String& value)
+	{
+		// does section exists?
+		if (!section_index_.has(section_name) ||
+				hasEntry(section_name, key)) 
+			return false;
+
+		String new_line(key + "=" + value);
+		appendLine(section_name, new_line);
+
+		return true;
 	}
 
 	bool INIFile::setValue(const String& section_name, const String& key, const String& new_value)

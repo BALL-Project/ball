@@ -1,13 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.C,v 1.24 2002/02/27 12:21:20 sturm Exp $
+// $Id: lineBasedFile.C,v 1.25 2002/12/12 10:19:13 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
 #include <stdio.h>
-
-#define BALL_MAX_LINE_LENGTH 65536
 
 using namespace std;
 
