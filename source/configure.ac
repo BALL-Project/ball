@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.4 2002/11/29 14:03:21 oliver Exp $
+dnl    $Id: configure.ac,v 1.1.2.6 2002/11/29 22:02:57 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -317,6 +317,20 @@ CF_CHECK_STDINT_H
 CF_CHECK_IEEEFP_H
 CF_CHECK_VALUES_H
 CF_CHECK_REGEX_H
+CF_CHECK_UNISTD_H
+CF_CHECK_PROCESS_H
+CF_CHECK_SYS_TIME_H
+CF_CHECK_TIME_H
+CF_CHECK_SYS_PARAM_H
+CF_CHECK_DIRENT_H
+CF_CHECK_DIRECT_H
+CF_CHECK_IO_H
+CF_CHECK_SYS_SOCKET_H
+CF_CHECK_NETINET_IN_H
+CF_CHECK_NETDB_H
+CF_CHECK_ARPA_INET_H
+CF_CHECK_SYSCONF
+CF_CHECK_KILL
 
 dnl
 dnl		Check whether vsnprintf is defined and working correctly.

@@ -1,10 +1,10 @@
-	dnl
-	dnl		display the license and abort if not accepted
-	dnl		we create the file config.lic if the license was
-	dnl		accepted and do not show the license the second time
-	dnl
+dnl
+dnl		display the license and abort if not accepted
+dnl		we create the file config.lic if the license was
+dnl		accepted and do not show the license the second time
+dnl
 
-	AC_DEFUN(CF_CHECK_LICENSE,[
+AC_DEFUN(CF_CHECK_LICENSE,[
 	AC_PATH_PROG(PAGER, more, no)
 	if test "${PAGER}" = "no" ; then
 		PAGER=cat
@@ -23,12 +23,12 @@
 			echo "accepted" > config.lic
 		fi
 	fi
-	])
+])
 
-	dnl		define a macro to remove the directory name
-	dnl		from a fully specified path
-	dnl
-	AC_DEFUN(CF_BASENAME,[
+dnl		define a macro to remove the directory name
+dnl		from a fully specified path
+dnl
+AC_DEFUN(CF_BASENAME,[
 	TMP__DIR="$1/"
 	while test "${TMP__DIR}" != "" ; do
 		TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
@@ -37,13 +37,13 @@
 			TMP__DIR=""
 		fi
 	done
-	])
+])
 
-	dnl    define a macro to inform the user about failed tests for programs
-	dnl    it checks for the unix command given as second parameter and
-	dnl    sets the shell variable given as second parameter to its absolute path
-	dnl 
-	AC_DEFUN(CF_MSG_PATH_PROG,[
+dnl    define a macro to inform the user about failed tests for programs
+dnl    it checks for the unix command given as second parameter and
+dnl    sets the shell variable given as second parameter to its absolute path
+dnl 
+AC_DEFUN(CF_MSG_PATH_PROG,[
 	AC_PATH_PROG($1,$2,no)
 	if test $$1 = no ; then
 		AC_MSG_RESULT()
@@ -54,21 +54,21 @@
 		AC_MSG_ERROR(aborted)
 		exit
 	fi
-	])
+])
 
-	dnl
-	dnl    define macro to search for header files that may be somewhere in the filesystem
-	dnl    if ${FIND}!=- (i.e. it has been set BEFORE py AC_PATH_PROG!) find will be used
-	dnl    too if everything fails - this may take some time...
-	dnl
-	dnl    syntax: AC_FIND_HEADER(<PATH_VAR>,<header.h>,<additional dirnames>)
-	dnl    
-	dnl        PATH_VAR will be set to the include path or to empty string (if not found)
-	dnl        header.h is the header file name (e.g. wait.h, GL/gl.h)
-	dnl        additional dirnames are included in searches these should be absolute names!
-	dnl 
+dnl
+dnl    define macro to search for header files that may be somewhere in the filesystem
+dnl    if ${FIND}!=- (i.e. it has been set BEFORE py AC_PATH_PROG!) find will be used
+dnl    too if everything fails - this may take some time...
+dnl
+dnl    syntax: AC_FIND_HEADER(<PATH_VAR>,<header.h>,<additional dirnames>)
+dnl    
+dnl        PATH_VAR will be set to the include path or to empty string (if not found)
+dnl        header.h is the header file name (e.g. wait.h, GL/gl.h)
+dnl        additional dirnames are included in searches these should be absolute names!
+dnl 
 
-	AC_DEFUN(CF_FIND_HEADER,[
+AC_DEFUN(CF_FIND_HEADER,[
 	_INCLUDES=
 
 	dnl    immediate return on predefined directory (read from file?)
@@ -143,22 +143,22 @@
 	fi
 
 	$1="${_INCLUDES}"
-	])
+])
 
 
-	dnl
-	dnl    define macro to search for libraries that may be somewhere in the filesystem
-	dnl    if ${FIND}!=- (i.e. it has been set BEFORE py AC_PATH_PROG!) find will be used
-	dnl    too if everything fails - this may take some time...
-	dnl
-	dnl    syntax: CF_FIND_LIB(<PATH_VAR>,<libXXX>,<additional dirnames>)
-	dnl    
-	dnl        PATH_VAR will be set to the library path or to empty string (if not found)
-	dnl        libXXX is the header file name (e.g. libGLUT, libGL) .a, .so etc. should be omitted
-	dnl        additional dirnames are included in searches these should be absolute names!
-	dnl 
+dnl
+dnl    define macro to search for libraries that may be somewhere in the filesystem
+dnl    if ${FIND}!=- (i.e. it has been set BEFORE py AC_PATH_PROG!) find will be used
+dnl    too if everything fails - this may take some time...
+dnl
+dnl    syntax: CF_FIND_LIB(<PATH_VAR>,<libXXX>,<additional dirnames>)
+dnl    
+dnl        PATH_VAR will be set to the library path or to empty string (if not found)
+dnl        libXXX is the header file name (e.g. libGLUT, libGL) .a, .so etc. should be omitted
+dnl        additional dirnames are included in searches these should be absolute names!
+dnl 
 
-	AC_DEFUN(CF_FIND_LIB,[
+AC_DEFUN(CF_FIND_LIB,[
 	_LIBS=
 
 	dnl   immediate "return" on preset directory (read from file?)
@@ -231,15 +231,15 @@
 	fi
 
 	$1="${_LIBS}"
-	])
+])
 
 
 
-	dnl
-	dnl   check whether "echo" understands "-n" (required on some
-	dnl   platforms to expand '\n')
-	dnl
-	AC_DEFUN(CF_CHECK_ECHO,[
+dnl
+dnl   check whether "echo" understands "-n" (required on some
+dnl   platforms to expand '\n')
+dnl
+AC_DEFUN(CF_CHECK_ECHO,[
 	AC_MSG_CHECKING(whether echo accepts -e)
 	if `/bin/sh -c "echo -e \"\n\"" >/dev/null 2>&1` ; then
 		if test "`/bin/sh -c echo -e 2>&1`" = "" -a "`/bin/sh -c echo -e OK`" = "OK" ; then
@@ -254,14 +254,14 @@
 		AC_MSG_RESULT(no)
 	fi
 	AC_SUBST(ECHO_COMMAND)
-	])
+])
 
 
-	dnl
-	dnl   check whether find can be called with the parameter -path
-	dnl   (needed to find headers in a certain path like GL/libgl.h
-	dnl
-	AC_DEFUN(CF_CHECK_FIND,[
+dnl
+dnl   check whether find can be called with the parameter -path
+dnl   (needed to find headers in a certain path like GL/libgl.h
+dnl
+AC_DEFUN(CF_CHECK_FIND,[
 	if test "${FIND}" != "no" ; then
 		RESULT=`${FIND} KERNEL -path . -print 2>&1`
 		if test "${RESULT}" != "" ; then     dnl    did get an error message ... bad.
@@ -270,12 +270,12 @@
 			FIND_KNOWS_PATH=true
 		fi
 	fi
-	])
+])
 
-	dnl
-	dnl    determine OS and architecture and all this stuff
-	dnl
-	AC_DEFUN(CF_DETECT_OS,[
+dnl
+dnl    determine OS and architecture and all this stuff
+dnl
+AC_DEFUN(CF_DETECT_OS,[
 	AC_SUBST(OSMAJOR)
 	AC_SUBST(OS)
 	AC_SUBST(OSREV)
@@ -1181,9 +1181,9 @@ AC_DEFUN(CF_CHECK_NUM_LIMITS, [
 				float c = DBL_MAX;
 				float d = DBL_MIN;
 			],
-			BALL_INCLUDE_FLOAT_H=false
+			BALL_HAS_FLOAT_H=false
 		)
-		if test "${BALL_INCLUDE_FLOAT_H}" != false ; then
+		if test "${BALL_HAS_FLOAT_H}" != false ; then
 			AC_TRY_COMPILE(
 				[
 					#include <float.h>
@@ -1194,17 +1194,17 @@ AC_DEFUN(CF_CHECK_NUM_LIMITS, [
 					float c = DBL_MAX;
 					float d = DBL_MIN;
 				],
-				BALL_INCLUDE_FLOAT_H=true
+				BALL_HAS_FLOAT_H=true
 			)
 		fi
-		if test "${BALL_INCLUDE_FLOAT_H+set}" != set ; then
+		if test "${BALL_HAS_FLOAT_H+set}" != set ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(limits.h seems to be corrupt or float.h is missing!)
 			AC_MSG_RESULT()
 		else
-			if test "${BALL_INCLUDE_FLOAT_H}" = true ; then
+			if test "${BALL_HAS_FLOAT_H}" = true ; then
 				AC_MSG_RESULT(yes)
-				AC_DEFINE(BALL_INCLUDE_FLOAT_H)
+				AC_DEFINE(BALL_HAS_FLOAT_H)
 			else
 				AC_MSG_RESULT(no)
 			fi
@@ -1484,12 +1484,12 @@ dnl
 dnl   Check whether ieeefp.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_IEEEFP_H, [
-	if test "$BALL_INCLUDE_IEEEFP" = true ; then
+	if test "$BALL_HAS_IEEEFP_H" = true ; then
 		AC_CHECK_HEADERS(ieeefp.h,
-				[BALL_INCLUDE_IEEEFP=true],
-				[BALL_INCLUDE_IEEEFP=false])
-		if test ${BALL_INCLUDE_IEEEFP} = true ; then
-			AC_DEFINE(BALL_INCLUDE_IEEEFP,)
+				[BALL_HAS_IEEEFP_H=true],
+				[BALL_HAS_IEEEFP_H=false])
+		if test ${BALL_HAS_IEEEFP_H} = true ; then
+			AC_DEFINE(BALL_HAS_IEEEFP_H,)
 		fi
 	fi
 ])
@@ -1499,10 +1499,10 @@ dnl   check for ISO C99 stdint.h
 dnl
 AC_DEFUN(CF_CHECK_STDINT_H, [
 	AC_CHECK_HEADERS(stdint.h,
-				[BALL_INCLUDE_STDINT=true],
-				[BALL_INCLUDE_STDINT=false])
-	if test ${BALL_INCLUDE_STDINT} = true ; then
-		AC_DEFINE(BALL_INCLUDE_STDINT,)
+				[BALL_HAS_STDINT_H=true],
+				[BALL_HAS_STDINT_H=false])
+	if test ${BALL_HAS_STDINT_H} = true ; then
+		AC_DEFINE(BALL_HAS_STDINT_H,)
 	fi
 ])
 
@@ -1511,12 +1511,183 @@ dnl   check whether values.h does really exist
 dnl
 AC_DEFUN(CF_CHECK_VALUES_H, [
 	AC_CHECK_HEADERS(values.h,
-				[BALL_INCLUDE_VALUES=true],
-				[BALL_INCLUDE_VALUES=false])
-	if test ${BALL_INCLUDE_VALUES} = true ; then
-		AC_DEFINE(BALL_INCLUDE_VALUES,)
+				[BALL_HAS_VALUES_H=true],
+				[BALL_HAS_VALUES_H=false])
+	if test ${BALL_HAS_VALUES_H} = true ; then
+		AC_DEFINE(BALL_HAS_VALUES_H,)
 	fi
 ])
+
+dnl
+dnl   Check whether unistd.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_UNISTD_H, [
+	if test "$BALL_HAS_UNISTD_H" = true ; then
+		AC_CHECK_HEADERS(unistd.h,
+				[BALL_HAS_UNISTD_H=true],
+				[BALL_HAS_UNISTD_H=false])
+		if test ${BALL_HAS_UNISTD_H} = true ; then
+			AC_DEFINE(BALL_HAS_UNISTD_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether process.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_PROCESS_H, [
+	if test "$BALL_HAS_PROCESS_H" = true ; then
+		AC_CHECK_HEADERS(process.h,
+				[BALL_HAS_PROCESS_H=true],
+				[BALL_HAS_PROCESS_H=false])
+		if test ${BALL_HAS_PROCESS_H} = true ; then
+			AC_DEFINE(BALL_HAS_PROCESS_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether sys/time.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_SYS_TIME_H, [
+	if test "$BALL_HAS_SYS_TIME_H" = true ; then
+		AC_CHECK_HEADERS(sys/time.h,
+				[BALL_HAS_SYS_TIME_H=true],
+				[BALL_HAS_SYS_TIME_H=false])
+		if test ${BALL_HAS_SYS_TIME_H} = true ; then
+			AC_DEFINE(BALL_HAS_SYS_TIME_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether time.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_TIME_H, [
+	if test "$BALL_HAS_TIME_H" = true ; then
+		AC_CHECK_HEADERS(time.h,
+				[BALL_HAS_TIME_H=true],
+				[BALL_HAS_TIME_H=false])
+		if test ${BALL_HAS_TIME_H} = true ; then
+			AC_DEFINE(BALL_HAS_TIME_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether sys/param.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_SYS_PARAM_H, [
+	if test "$BALL_HAS_SYS_PARAM_H" = true ; then
+		AC_CHECK_HEADERS(sys/param.h,
+				[BALL_HAS_SYS_PARAM_H=true],
+				[BALL_HAS_SYS_PARAM_H=false])
+		if test ${BALL_HAS_SYS_PARAM_H} = true ; then
+			AC_DEFINE(BALL_HAS_SYS_PARAM_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether dirent.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_DIRENT_H, [
+	if test "$BALL_HAS_DIRENT_H" = true ; then
+		AC_CHECK_HEADERS(dirent.h,
+				[BALL_HAS_DIRENT_H=true],
+				[BALL_HAS_DIRENT_H=false])
+		if test ${BALL_HAS_DIRENT_H} = true ; then
+			AC_DEFINE(BALL_HAS_DIRENT_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether direct.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_DIRECT_H, [
+	if test "$BALL_HAS_DIRECT_H" = true ; then
+		AC_CHECK_HEADERS(direct.h,
+				[BALL_HAS_DIRECT_H=true],
+				[BALL_HAS_DIRECT_H=false])
+		if test ${BALL_HAS_DIRECT_H} = true ; then
+			AC_DEFINE(BALL_HAS_DIRECT_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether io.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_IO_H, [
+	if test "$BALL_HAS_IO_H" = true ; then
+		AC_CHECK_HEADERS(io.h,
+				[BALL_HAS_IO_H=true],
+				[BALL_HAS_IO_H=false])
+		if test ${BALL_HAS_IO_H} = true ; then
+			AC_DEFINE(BALL_HAS_IO_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether sys/socket.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_SYS_SOCKET_H, [
+	if test "$BALL_HAS_SYS_SOCKET_H" = true ; then
+		AC_CHECK_HEADERS(sys/socket.h,
+				[BALL_HAS_SYS_SOCKET_H=true],
+				[BALL_HAS_SYS_SOCKET_H=false])
+		if test ${BALL_HAS_SYS_SOCKET_H} = true ; then
+			AC_DEFINE(BALL_HAS_SYS_SOCKET_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether netinet/in.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_NETINET_IN_H, [
+	if test "$BALL_HAS_NETINET_IN_H" = true ; then
+		AC_CHECK_HEADERS(netinet/in.h,
+				[BALL_HAS_NETINET_IN_H=true],
+				[BALL_HAS_NETINET_IN_H=false])
+		if test ${BALL_HAS_NETINET_IN_H} = true ; then
+			AC_DEFINE(BALL_HAS_NETINET_IN_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether netdb.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_NETDB_H, [
+	if test "$BALL_HAS_NETDB_H" = true ; then
+		AC_CHECK_HEADERS(netdb.h,
+				[BALL_HAS_NETDB_H=true],
+				[BALL_HAS_NETDB_H=false])
+		if test ${BALL_HAS_NETDB_H} = true ; then
+			AC_DEFINE(BALL_HAS_NETDB_H,)
+		fi
+	fi
+])
+
+dnl
+dnl   Check whether arpa/inet.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_ARPA_INET_H, [
+	if test "$BALL_HAS_ARPA_INET_H" = true ; then
+		AC_CHECK_HEADERS(arpa/inet.h,
+				[BALL_HAS_ARPA_INET_H=true],
+				[BALL_HAS_ARPA_INET_H=false])
+		if test ${BALL_HAS_ARPA_INET_H} = true ; then
+			AC_DEFINE(BALL_HAS_ARPA_INET_H,)
+		fi
+	fi
+])
+
+AC_DEFUN(CF_CHECK_SYSCONF, [])
+AC_DEFUN(CF_CHECK_KILL, [])
 
 dnl
 dnl   check whether vsnprintf is defined
