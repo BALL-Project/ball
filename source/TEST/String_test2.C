@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test2.C,v 1.5 2003/05/23 06:47:52 oliver Exp $
+// $Id: String_test2.C,v 1.6 2003/06/24 13:57:10 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test2.C,v 1.5 2003/05/23 06:47:52 oliver Exp $")
+START_TEST(String,"$Id: String_test2.C,v 1.6 2003/06/24 13:57:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,52 +33,52 @@ Substring test_sub2;
 String test_string;
 String s4;
 
-CHECK(String::operator = (unsigned char))
+CHECK(const String& operator = (unsigned char uc) throw())
 	s4 = (unsigned char)'b';
 	TEST_EQUAL(s4, "b")
 RESULT
 
-CHECK(String::operator = (short))
+CHECK(const String& operator = (short s) throw())
 	s4 = (short)-12;
 	TEST_EQUAL(s4, "-12")
 RESULT
 
-CHECK(String::operator = (unsigned short))
+CHECK(const String& operator = (unsigned short us) throw())
 	s4 = (unsigned short)78;
 	TEST_EQUAL(s4, "78")
 RESULT
 
-CHECK(String::operator = (int))
+CHECK(const String& operator = (int i) throw())
 	s4 = (int)-19;
 	TEST_EQUAL(s4, "-19")
 RESULT
 
-CHECK(String::operator = (unsigned int))
+CHECK(const String& operator = (unsigned int ui) throw())
 	s4 = (unsigned int)123;
 	TEST_EQUAL(s4, "123")
 RESULT
 
-CHECK(String::operator = (long))
+CHECK(const String& operator = (long l) throw())
 	s4 = (long)-123456789;
 	TEST_EQUAL(s4, "-123456789")
 RESULT
 
-CHECK(String::operator = (unsigned long))
+CHECK(const String& operator = (unsigned long ) throw())
 	s4 = (unsigned long)912345678;
 	TEST_EQUAL(s4, "912345678")
 RESULT
 
-CHECK(String::operator = (float))
+CHECK(const String& operator = (float f) throw())
 	s4 = (float)-123.456;
 	TEST_REAL_EQUAL(atof(s4.c_str()), -123.456)
 RESULT
 
-CHECK(String::operator = (double))
+CHECK(const String& operator = (double d) throw())
 	s4 = (double)-456.123;
 	TEST_REAL_EQUAL(atof(s4.c_str()), -456.123)
 RESULT
 
-CHECK(String::setCompareMode(CompareMode)/getCompareMode())
+CHECK(static void setCompareMode(CompareMode compare_mode) throw())
 	String::CompareMode default_mode = String::getCompareMode();
 	String::setCompareMode(String::CASE_SENSITIVE);
 	TEST_EQUAL(String::getCompareMode(), String::CASE_SENSITIVE)
@@ -87,7 +87,14 @@ CHECK(String::setCompareMode(CompareMode)/getCompareMode())
 	String::setCompareMode(default_mode);
 RESULT
 
-CHECK(String::toBool())
+CHECK(static CompareMode getCompareMode() throw())
+	String::CompareMode default_mode = String::getCompareMode();
+	String::setCompareMode(String::CASE_SENSITIVE);
+	TEST_EQUAL(String::getCompareMode(), String::CASE_SENSITIVE)
+	String::setCompareMode(default_mode);
+RESULT
+
+CHECK(bool toBool() const throw())
 	s4.set("		false  ");
 	TEST_EQUAL(s4.toBool(), false)
 	s4.set("FALSE");
@@ -102,21 +109,21 @@ CHECK(String::toBool())
 	TEST_EQUAL(s4.toBool(), true)
 RESULT
 
-CHECK(String::toChar())
+CHECK(char toChar() const throw())
 	s4.set("abcdef");
 	TEST_EQUAL(s4.toChar(), 'a')
 	s4.set("");
 	TEST_EQUAL(s4.toChar(), (char)0)
 RESULT
 
-CHECK(String::toUnsignedChar())
+CHECK(unsigned char toUnsignedChar() const throw())
 	s4.set("abcdef");
 	TEST_EQUAL(s4.toChar(), 'a')
 	s4.set("");
 	TEST_EQUAL(s4.toChar(), (unsigned char)0)
 RESULT
 
-CHECK(String::toShort())
+CHECK(short toShort() const throw(Exception::InvalidFormat))
 	s4.set("123");
 	TEST_EQUAL(s4.toShort(), (short)123)
 	s4.set("abc");
@@ -129,7 +136,7 @@ CHECK(String::toShort())
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toShort())
 RESULT
 
-CHECK(String::toUnsignedShort())
+CHECK(unsigned short toUnsignedShort() const throw(Exception::InvalidFormat))
 	s4.set("123");
 	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)123)
 	s4.set("abc");
@@ -142,7 +149,7 @@ CHECK(String::toUnsignedShort())
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedShort())
 RESULT
 
-CHECK(String::toInt())
+CHECK(int toInt() const throw(Exception::InvalidFormat))
 	s4.set("123");
 	TEST_EQUAL(s4.toInt(), (int)123)
 	s4.set("abc");
@@ -153,7 +160,7 @@ CHECK(String::toInt())
 	TEST_EQUAL(s4.toInt(), (int)12)
 RESULT
 
-CHECK(String::toUnsignedInt())
+CHECK(unsigned int toUnsignedInt() const throw(Exception::InvalidFormat))
 	s4.set("123");
 	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)123)
 	s4.set("abc");
@@ -164,7 +171,7 @@ CHECK(String::toUnsignedInt())
 	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)12.34)
 RESULT
 
-CHECK(String::toLong())
+CHECK(long toLong() const throw(Exception::InvalidFormat))
 	s4.set("123.4");
 	TEST_EQUAL(s4.toLong(),(long)123.4)
 	s4.set("abc");
@@ -175,7 +182,7 @@ CHECK(String::toLong())
 	TEST_EQUAL(s4.toLong(), (long)-12.34)
 RESULT
 
-CHECK(String::toUnsignedLong())
+CHECK(unsigned long toUnsignedLong() const throw(Exception::InvalidFormat))
 	s4.set("123.4");
 	TEST_EQUAL(s4.toUnsignedLong(),(unsigned long)123.4)
 	s4.set("abc");
@@ -184,7 +191,7 @@ CHECK(String::toUnsignedLong())
 	TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
 RESULT
 
-CHECK(String::toFloat())
+CHECK(float toFloat() const throw(Exception::InvalidFormat))
 	PRECISION(0.01)
 	s4.set("123.4");
 	TEST_REAL_EQUAL(s4.toFloat(),(float)123.4)
@@ -202,7 +209,7 @@ CHECK(String::toFloat())
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toFloat())
 RESULT
 
-CHECK(String::toDouble())
+CHECK(double toDouble() const throw(Exception::InvalidFormat))
 	s4.set("123.4");
 	TEST_REAL_EQUAL(s4.toDouble(),(double)123.4)
 	s4.set("abc");
@@ -219,7 +226,7 @@ CHECK(String::toDouble())
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toDouble())
 RESULT
 
-CHECK(String::toLower())
+CHECK(void toLower(Index from = 0, Size len = EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abCD efGH";
 	s4.toLower();
 	TEST_EQUAL(s4, "abcd efgh")
@@ -244,7 +251,7 @@ CHECK(String::toLower())
 	TEST_EXCEPTION(Exception::IndexUnderflow, s4.toLower(-10, 0))
 RESULT
 
-CHECK(String::toUpper())
+CHECK(void toUpper(Index from = 0, Size len = EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abCD efGH";
 	s4.toUpper();
 	TEST_EQUAL(s4, "ABCD EFGH")
@@ -269,7 +276,7 @@ CHECK(String::toUpper())
 	TEST_EXCEPTION(Exception::IndexUnderflow, s4.toUpper(-10, 0))
 RESULT
 
-CHECK(String::getSubstring(Index, Size))
+CHECK(Substring getSubstring(Index from = 0, Size len = EndPos) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abcdefg";
 	Substring sub(s4.getSubstring());
 	TEST_EQUAL(sub, s4)
@@ -284,7 +291,7 @@ CHECK(String::getSubstring(Index, Size))
 	TEST_EXCEPTION(Exception::IndexUnderflow, Substring sub6(sub = s4.getSubstring(-10, 0)))
 RESULT
 
-CHECK(String::operator () (Index, Size))
+CHECK(Substring operator () (Index from, Size len = EndPos) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abcdefg";
 	Substring sub(s4(0, 3));
 	TEST_EQUAL(sub, "abc")
@@ -296,7 +303,7 @@ CHECK(String::operator () (Index, Size))
 	TEST_EXCEPTION(Exception::IndexUnderflow, Substring sub5(s4(-10, 0)))
 RESULT
 
-CHECK(String::before(String&, Index))
+CHECK(Substring before(const String& s, Index from = 0) const throw())
 	s4 = "abcdefghabcabcdefghi";
 	String res;
 	res = s4.before("c");
@@ -309,7 +316,7 @@ CHECK(String::before(String&, Index))
 	TEST_EQUAL(res, "")
 RESULT
 
-CHECK(String::through(String&, Index))
+CHECK(Substring through(const String& s, Index from = 0) const throw())
 	s4 = "abcdefghabcabcdefghi";
 	String res;
 	res = s4.through("c");
@@ -322,7 +329,7 @@ CHECK(String::through(String&, Index))
 	TEST_EQUAL(res, "")
 RESULT
 
-CHECK(String::from(String&, Index))
+CHECK(Substring from(const String& s, Index from = 0) const throw())
 	s4 = "abcdefghabcabcdefghi";
 	String res;
 	res = s4.from("c");
@@ -335,7 +342,7 @@ CHECK(String::from(String&, Index))
 	TEST_EQUAL(res, s4)
 RESULT
 
-CHECK(String::after(String&, Index))
+CHECK(Substring after(const String& s, Index from = 0) const throw())
 	s4 = "abcdefghabcabcdefghi";
 	String res;
 	res = s4.after("c");
@@ -349,7 +356,7 @@ CHECK(String::after(String&, Index))
 	TEST_EQUAL(res, s4)
 RESULT
 
-CHECK(String::countFields(char*))
+CHECK(Size countFields(const char* delimiters = CHARACTER_CLASS__WHITESPACE) const throw(Exception::NullPointer))
 	s4 = "aa bb cc";
 	TEST_EQUAL(s4.countFields(), 3)
 	TEST_EQUAL(s4.countFields("a"), 1)
@@ -367,7 +374,7 @@ CHECK(String::countFields(char*))
 	TEST_EQUAL(s4.countFields(), 1)
 RESULT
 
-CHECK(String::countFieldsQuoted(const char* delimiters, const char* quotes))
+CHECK(Size countFieldsQuoted(const char* delimiters = CHARACTER_CLASS__WHITESPACE, const char* quotes = CHARACTER_CLASS__QUOTES) const throw(Exception::NullPointer))
 	s4 = "aa b cc b";
 	TEST_EQUAL(s4.countFieldsQuoted(), 4)
 	TEST_EQUAL(s4.countFieldsQuoted("a"), 1)
@@ -384,7 +391,7 @@ CHECK(String::countFieldsQuoted(const char* delimiters, const char* quotes))
 	TEST_EQUAL(s4.countFieldsQuoted(), 2)
 RESULT
 
-CHECK(String::getField(Index, char*, Index*))
+CHECK(String getField(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index* from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
 	s4 = "aa bb cc";
 	TEST_EQUAL(s4.getField(0), "aa")
 	TEST_EQUAL(s4.getField(1), "bb")
@@ -414,7 +421,7 @@ CHECK(String::getField(Index, char*, Index*))
 	TEST_EXCEPTION(Exception::IndexUnderflow, s4.getField(-99, ","))	
 RESULT
 
-CHECK(String::getFieldQuoted(Index field, const char* delimiters, const char* quotes, Index* from))
+CHECK(String getFieldQuoted(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, const char* quotes = CHARACTER_CLASS__QUOTES, Index* from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
 	// test the default (unquoted behviour)
 	s4 = "aa bb cc";
 	TEST_EQUAL(s4.getFieldQuoted(0), "aa")
@@ -479,7 +486,7 @@ CHECK(String::getFieldQuoted(Index field, const char* delimiters, const char* qu
 	TEST_EQUAL(s4.getFieldQuoted(7), "")
 RESULT
 
-CHECK(String::split(String[], Size, char*, Index))
+CHECK(Size split(String string_array[], Size array_size, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
 	String arr[10];
 	s4 = "a b c d e f g";
 	TEST_EQUAL(s4.split(arr, 10), 7)

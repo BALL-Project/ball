@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test4.C,v 1.5 2003/05/25 21:45:58 amoll Exp $
+// $Id: String_test4.C,v 1.6 2003/06/24 13:57:10 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test4.C,v 1.5 2003/05/25 21:45:58 amoll Exp $")
+START_TEST(String,"$Id: String_test4.C,v 1.6 2003/06/24 13:57:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ String hall("Hall");
 String halloh("Halloh");
 String s4;
 
-CHECK(String::compare(char*, Index))
+CHECK(int compare(const char* char_ptr, Index from = 0) const throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abc";
 	TEST_EQUAL(s4.compare("abc"), 0)
 	TEST_EQUAL(s4.compare("abc", -3), 0)
@@ -46,7 +46,7 @@ CHECK(String::compare(char*, Index))
 	TEST_EXCEPTION(Exception::NullPointer, s4.compare(c, 0))
 RESULT
 
-CHECK(String::compare(char*, Index, Size))
+CHECK(int compare(const char* char_ptr, Index from, Size len) const throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abc";
 	TEST_EQUAL(s4.compare("abc", 0, 1), 0)
 	TEST_EQUAL(s4.compare("abc", 0, 2), 0)
@@ -75,7 +75,7 @@ CHECK(String::compare(char*, Index, Size))
 	TEST_EXCEPTION(Exception::IndexOverflow, s4.compare("a", 0, 99))
 RESULT
 
-CHECK(String::compare(char, Index))
+CHECK(int compare(char c, Index from = 0) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abcd";
 	TEST_EQUAL(s4.compare('a'), 0)
 	TEST_EQUAL(s4.compare('a', 0), 0)
@@ -92,7 +92,7 @@ CHECK(String::compare(char, Index))
 RESULT
 
 String s5;
-CHECK(String::operator == (String&))
+CHECK([EXTRA]bool operator == (const String& string) const throw())
 	s4 = "abcd";
 	s5 = "abcd";
 	TEST_EQUAL(s4, s5)
@@ -109,7 +109,7 @@ CHECK(String::operator == (String&))
 	TEST_NOT_EQUAL(s4, s5)
 RESULT
 
-CHECK(String::operator != (String&))
+CHECK(bool operator != (const String& string) const throw())
 	s4 = "abcd";
 	s5 = "abcd";
 	TEST_EQUAL((s4 != s5), false)
@@ -126,7 +126,7 @@ CHECK(String::operator != (String&))
 	TEST_EQUAL((s4 != s5), true)
 RESULT
 
-CHECK(String::operator < (String&))
+CHECK(bool operator < (const String& string) const throw())
 	s4 = "abc";
 	s5 = "abd";
 	TEST_EQUAL((s4 < s5), true)
@@ -147,7 +147,7 @@ CHECK(String::operator < (String&))
 	TEST_EQUAL((s4 < s5), true)
 RESULT
 
-CHECK(String::operator <= (String&))
+CHECK(bool operator <= (const String& string) const throw())
 	s4 = "abc";
 	s5 = "abd";
 	TEST_EQUAL((s4 <= s5), true)
@@ -168,7 +168,7 @@ CHECK(String::operator <= (String&))
 	TEST_EQUAL((s4 <= s5), true)
 RESULT
 
-CHECK(String::operator > (String&))
+CHECK(bool operator > (const String& string) const throw())
 	s4 = "abc";
 	s5 = "abd";
 	TEST_EQUAL((s4 > s5), false)
@@ -192,7 +192,7 @@ CHECK(String::operator > (String&))
 	TEST_EQUAL((s4 > s5), false)
 RESULT
 
-CHECK(String::operator >= (String&))
+CHECK(bool operator >= (const String& string) const throw())
 	s4 = "abc";
 	s5 = "abd";
 	TEST_EQUAL((s4 >= s5), false)
@@ -216,7 +216,7 @@ CHECK(String::operator >= (String&))
 	TEST_EQUAL((s4 >= s5), false)
 RESULT
 
-CHECK(operator == (char*, String&))
+CHECK(friend bool operator == (const char* char_ptr, const String& string) throw(Exception::NullPointer))
 	s5 = "abd";
 	TEST_EQUAL(("abc" == s5), false)
 	s5 = "abc";
@@ -233,7 +233,7 @@ CHECK(operator == (char*, String&))
 	TEST_EQUAL(("a" == s5), false)
 RESULT
 
-CHECK(operator != (char*, String&))
+CHECK(friend bool operator != (const char* char_ptr, const String& string) throw(Exception::NullPointer))
 	s5 = "abd";
 	TEST_EQUAL(("abc" != s5), true)
 	s5 = "abc";
@@ -250,7 +250,7 @@ CHECK(operator != (char*, String&))
 	TEST_EQUAL(("a" != s5), true)
 RESULT
 
-CHECK(operator < (char*, String&))
+CHECK(friend bool operator < (const char* char_ptr, const String& string) throw(Exception::NullPointer))
 	s5 = "abd";
 	TEST_EQUAL(("abc" < s5), true)
 	s5 = "abc";
@@ -267,7 +267,7 @@ CHECK(operator < (char*, String&))
 	TEST_EQUAL(("a" < s5), false)
 RESULT
 
-CHECK(operator <= (char*, String&))
+CHECK(friend bool operator <= (const char* char_ptr, const String& string) throw(Exception::NullPointer))
 	s5 = "abd";
 	TEST_EQUAL(("abc" <= s5), true)
 	s5 = "abc";
@@ -284,7 +284,7 @@ CHECK(operator <= (char*, String&))
 	TEST_EQUAL(("a" <= s5), false)
 RESULT
 
-CHECK(operator > (char*, String&))
+CHECK(friend bool operator > (const char* char_ptr, const String& string) throw(Exception::NullPointer))
 	s5 = "abd";
 	TEST_EQUAL(("abc" > s5), false)
 	s5 = "abc";
@@ -301,7 +301,7 @@ CHECK(operator > (char*, String&))
 	TEST_EQUAL(("a" > s5), true)
 RESULT
 
-CHECK(operator >= (char*, String&))
+CHECK(friend bool operator >= (const char* char_ptr, const String& string) throw(Exception::NullPointer))
 	s5 = "abd";
 	TEST_EQUAL(("abc" >= s5), false)
 	s5 = "abc";
@@ -318,7 +318,7 @@ CHECK(operator >= (char*, String&))
 	TEST_EQUAL(("a" >= s5), true)
 RESULT
 
-CHECK(String::operator == (char*))
+CHECK([EXTRA]bool operator == (const char* char_ptr) const throw(Exception::NullPointer))
 	s5 = "abc";
 	TEST_EQUAL((s5 == "abc"), true)
 	TEST_EQUAL((s5 == "abd"), false)
@@ -334,7 +334,7 @@ CHECK(String::operator == (char*))
 	TEST_EQUAL((s5 == ""), true)
 RESULT
 
-CHECK(String::operator != (char*))
+CHECK(bool operator != (const char* char_ptr) const throw(Exception::NullPointer))
 	s5 = "abc";
 	TEST_EQUAL((s5 != "abc"), false)
 	TEST_EQUAL((s5 != "abd"), true)
@@ -350,7 +350,7 @@ CHECK(String::operator != (char*))
 	TEST_EQUAL((s5 != ""), false)
 RESULT
 
-CHECK(String::operator < (char*))
+CHECK(bool operator < (const char* char_ptr) const throw(Exception::NullPointer))
 	s5 = "abc";
 	TEST_EQUAL((s5 < "abc"), false)
 	TEST_EQUAL((s5 < "abd"), true)
@@ -366,7 +366,7 @@ CHECK(String::operator < (char*))
 	TEST_EQUAL((s5 < ""), false)
 RESULT
 
-CHECK(String::operator <= (char*))
+CHECK(bool operator <= (const char* char_ptr) const throw(Exception::NullPointer))
 	s5 = "abc";
 	TEST_EQUAL((s5 <= "abc"), true)
 	TEST_EQUAL((s5 <= "abd"), true)
@@ -382,7 +382,7 @@ CHECK(String::operator <= (char*))
 	TEST_EQUAL((s5 <= ""), true)
 RESULT
 
-CHECK(String::operator > (char*))
+CHECK(bool operator > (const char* char_ptr) const throw(Exception::NullPointer))
 	s5 = "abc";
 	TEST_EQUAL((s5 > "abc"), false)
 	TEST_EQUAL((s5 > "abd"), false)
@@ -398,7 +398,7 @@ CHECK(String::operator > (char*))
 	TEST_EQUAL((s5 > ""), false)
 RESULT
 
-CHECK(String::operator >= (char*))
+CHECK(bool operator >= (const char* char_ptr) const throw(Exception::NullPointer))
 	s5 = "abc";
 	TEST_EQUAL((s5 >= "abc"), true)
 	TEST_EQUAL((s5 >= "abd"), false)
@@ -414,7 +414,7 @@ CHECK(String::operator >= (char*))
 	TEST_EQUAL((s5 >= ""), true)
 RESULT
 
-CHECK(operator == (char, String&))
+CHECK(friend bool operator == (char c, const String& string) throw())
 	s5 = "bc";
 	TEST_EQUAL(('a' == s5), false)
 	TEST_EQUAL(('b' == s5), true)
@@ -423,7 +423,7 @@ CHECK(operator == (char, String&))
 	TEST_EQUAL(('a' == s5), false)
 RESULT
 
-CHECK(operator != (char, String&))
+CHECK(friend bool operator != (char c, const String& string) throw())
 	s5 = "bc";
 	TEST_EQUAL(('a' != s5), true)
 	TEST_EQUAL(('b' != s5), false)
@@ -432,7 +432,7 @@ CHECK(operator != (char, String&))
 	TEST_EQUAL(('a' != s5), true)
 RESULT
 
-CHECK(operator < (char, String&))
+CHECK(friend bool operator < (char c, const String& string) throw())
 	s5 = "bc";
 	TEST_EQUAL(('a' < s5), true)
 	TEST_EQUAL(('b' < s5), false)
@@ -441,7 +441,7 @@ CHECK(operator < (char, String&))
 	TEST_EQUAL(('a' < s5), false)
 RESULT
 
-CHECK(operator <= (char, String&))
+CHECK(friend bool operator <= (char c, const String& string) throw())
 	s5 = "bc";
 	TEST_EQUAL(('a' <= s5), true)
 	TEST_EQUAL(('b' <= s5), true)
@@ -450,7 +450,7 @@ CHECK(operator <= (char, String&))
 	TEST_EQUAL(('a' <= s5), false)
 RESULT
 
-CHECK(operator > (char, String&))
+CHECK(friend bool operator > (char c, const String& string) throw())
 	s5 = "bc";
 	TEST_EQUAL(('a' > s5), false)
 	TEST_EQUAL(('b' > s5), false)
@@ -459,7 +459,7 @@ CHECK(operator > (char, String&))
 	TEST_EQUAL(('a' > s5), true)
 RESULT
 
-CHECK(operator >= (char, String&))
+CHECK(friend bool operator >= (char c, const String& string) throw())
 	s5 = "bc";
 	TEST_EQUAL(('a' >= s5), false)
 	TEST_EQUAL(('b' >= s5), true)
@@ -468,7 +468,7 @@ CHECK(operator >= (char, String&))
 	TEST_EQUAL(('a' >= s5), true)
 RESULT
 
-CHECK(operator == (char))
+CHECK(bool operator == (char c) const throw())
 	s5 = "bc";
 	TEST_EQUAL((s5 == 'a'), false)
 	TEST_EQUAL((s5 == 'b'), true)
@@ -477,7 +477,7 @@ CHECK(operator == (char))
 	TEST_EQUAL((s5 == 'a'), false)
 RESULT
 
-CHECK(operator != (char))
+CHECK(bool operator != (char c) const throw())
 	s5 = "bc";
 	TEST_EQUAL((s5 != 'a'), true)
 	TEST_EQUAL((s5 != 'b'), false)
@@ -486,7 +486,7 @@ CHECK(operator != (char))
 	TEST_EQUAL((s5 != 'a'), true)
 RESULT
 
-CHECK(operator < (char))
+CHECK(bool operator < (char c) const throw())
 	s5 = "bc";
 	TEST_EQUAL((s5 < 'a'), false)
 	TEST_EQUAL((s5 < 'b'), false)
@@ -495,7 +495,7 @@ CHECK(operator < (char))
 	TEST_EQUAL((s5 < 'a'), true)
 RESULT
 
-CHECK(operator <= (char))
+CHECK(bool operator <= (char c) const throw())
 	s5 = "bc";
 	TEST_EQUAL((s5 <= 'a'), false)
 	TEST_EQUAL((s5 <= 'b'), true)
@@ -504,7 +504,7 @@ CHECK(operator <= (char))
 	TEST_EQUAL((s5 <= 'a'), true)
 RESULT
 
-CHECK(operator > (char))
+CHECK(bool operator > (char c) const throw())
 	s5 = "bc";
 	TEST_EQUAL((s5 > 'a'), true)
 	TEST_EQUAL((s5 > 'b'), false)
@@ -513,7 +513,7 @@ CHECK(operator > (char))
 	TEST_EQUAL((s5 > 'a'), false)
 RESULT
 
-CHECK(operator >= (char))
+CHECK(bool operator >= (char c) const throw())
 	s5 = "bc";
 	TEST_EQUAL((s5 >= 'a'), true)
 	TEST_EQUAL((s5 >= 'b'), true)
@@ -522,13 +522,13 @@ CHECK(operator >= (char))
 	TEST_EQUAL((s5 >= 'a'), false)
 RESULT
 
-CHECK(String::isValid())
+CHECK(bool isValid() const throw())
 	s2 = new String;
 	TEST_EQUAL(s2->isValid(), true)
 	delete s2;
 RESULT
 
-CHECK(String::dump(ostream&, Size))
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	String tmp_filename;
 	NEW_TMP_FILE(tmp_filename)
 	std::ofstream dump_stream(tmp_filename.c_str(), std::ios::out);
@@ -546,7 +546,7 @@ CHECK(String::dump(ostream&, Size))
 	delete s2;
 RESULT
 
-CHECK(String::getline(istream&, char*))
+CHECK(std::istream& getline(std::istream& s = std::cin, char delimiter = '\n') throw())
 	String line;
 	std::ifstream instream("data/String_test2.txt");
 	line.getline(instream);
@@ -557,7 +557,7 @@ CHECK(String::getline(istream&, char*))
 	TEST_EQUAL(line, "mno")
 RESULT
 
-CHECK(String::getline(istream&, String&, char*))
+CHECK(friend std::istream& getline(std::istream& s, String& string, char delimiter = '\n') throw())
 	std::ifstream test_stream("data/String_test2.txt");
 	if (!test_stream.good())
 	{
@@ -574,13 +574,18 @@ CHECK(String::getline(istream&, String&, char*))
 	TEST_EQUAL(s, "")
 RESULT
 
-CHECK(String::operator Substring())
+CHECK(Substring operator () (Index from, Size len = EndPos) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abcdef";
 	Substring sub((Substring)s4);
 	TEST_EQUAL(sub.toString(), s4)
 RESULT
 
-CHECK(encodeBase64/decodeBase64)
+CHECK(String encodeBase64() throw())
+	String test("abcdefghi");
+	String erg = test.encodeBase64();
+RESULT
+
+CHECK(String decodeBase64() throw())
 	String test("abcdefghi");
 	String erg = test.encodeBase64();
 	TEST_EQUAL(erg, "YWJjZGVmZ2hp")
@@ -593,6 +598,12 @@ CHECK(encodeBase64/decodeBase64)
 RESULT
 
 
+CHECK(void clear() throw())
+	String test("abcdefghi");
+	test.clear();
+	TEST_EQUAL(test.size(), 0)
+	TEST_EQUAL(test, "")
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

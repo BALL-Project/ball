@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test3.C,v 1.4 2003/05/23 06:47:52 oliver Exp $
+// $Id: String_test3.C,v 1.5 2003/06/24 13:57:10 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test3.C,v 1.4 2003/05/23 06:47:52 oliver Exp $")
+START_TEST(String,"$Id: String_test3.C,v 1.5 2003/06/24 13:57:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ String hall("Hall");
 String halloh("Halloh");
 String s4;
 
-CHECK(String::split(vector<String>& strings, const char* delimiters, Index from = 0))
+CHECK(Size split(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
 	vector<String> arr;
 	s4 = "a b c d e f g";
 	TEST_EQUAL(s4.split(arr), 7)
@@ -67,7 +67,7 @@ CHECK(String::split(vector<String>& strings, const char* delimiters, Index from 
 	TEST_EQUAL(arr.size(), 2)
 RESULT
 
-CHECK(String::splitQuoted(vector<String>& strings, const char* delimiters, const char* quotes, Index from = 0))
+CHECK(Size splitQuoted(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, const char* quotes = CHARACTER_CLASS__QUOTES, Index from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
 	vector<String> arr;
 	s4 = "a b c d e f g";
 	TEST_EQUAL(s4.splitQuoted(arr), 7)
@@ -114,7 +114,7 @@ CHECK(String::splitQuoted(vector<String>& strings, const char* delimiters, const
 	TEST_EQUAL(arr.size(), 2)
 RESULT
 
-CHECK(String::trimLeft(char*))
+CHECK(String& trimLeft(const char* trimmed = CHARACTER_CLASS__WHITESPACE) throw())
 	s4 = "\t     abc  \t";
 	TEST_EQUAL(s4.trimLeft(), "abc  \t")
 	s4 = "    ";
@@ -127,7 +127,7 @@ CHECK(String::trimLeft(char*))
 	TEST_EQUAL(s4.trimLeft(), "")
 RESULT
 
-CHECK(String::trimRight(char*))
+CHECK(String& trimRight(const char* trimmed = CHARACTER_CLASS__WHITESPACE) throw())
 	s4 = "\t     abc  \t";
 	TEST_EQUAL(s4.trimRight(), "\t     abc")
 	s4 = "    ";
@@ -140,7 +140,7 @@ CHECK(String::trimRight(char*))
 	TEST_EQUAL(s4.trimRight(), "")
 RESULT
 
-CHECK(String::trim(char*))
+CHECK(String trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE) const throw())
 	s4 = "\t     a b\tc  \t";
 	TEST_EQUAL(s4.trim(), "a b\tc")
 	s4 = "    ";
@@ -153,7 +153,21 @@ CHECK(String::trim(char*))
 	TEST_EQUAL(s4.trim(), "")
 RESULT
 
-CHECK(String::truncate(Size))
+CHECK(String& trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE) throw())
+	s4 = "\t     a b\tc  \t";
+	const String& c = s4;
+	TEST_EQUAL(c.trim(), "a b\tc")
+	s4 = "    ";
+	TEST_EQUAL(c.trim(), "")
+	s4 = "abba";
+	TEST_EQUAL(c.trim("a"), "bb")
+	s4 = "abba";
+	TEST_EQUAL(c.trim("c"), "abba")
+	s4 = "";
+	TEST_EQUAL(c.trim(), "")
+RESULT
+
+CHECK(String& truncate(Size size) throw())
 	s4 = "abcd";
 	TEST_EQUAL(s4.truncate(2), "ab")
 	TEST_EQUAL(s4.truncate(5), "ab")
@@ -161,7 +175,7 @@ CHECK(String::truncate(Size))
 	TEST_EQUAL(s4.truncate(5), "")
 RESULT
 
-CHECK(String::left(Size))
+CHECK(Substring left(Size len) const throw())
 	s4 = "abcdefg";
 	TEST_EQUAL(s4.left(4), "abcd")
 	TEST_EQUAL(s4.left(20), "abcdefg")
@@ -171,7 +185,7 @@ CHECK(String::left(Size))
 	TEST_EQUAL(s4.left(0), "")
 RESULT
 
-CHECK(String::right(Size))
+CHECK(Substring right(Size len) const throw())
 	s4 = "abcdefg";
 	TEST_EQUAL(s4.right(4), "defg")
 	TEST_EQUAL(s4.right(20), "abcdefg")
@@ -181,7 +195,7 @@ CHECK(String::right(Size))
 	TEST_EQUAL(s4.right(0), "")
 RESULT
 
-CHECK(String::instr(string&, Size))
+CHECK(Substring instr(const String& pattern, Index from = 0) const throw())
 	s4 = "abcdefghabcdefg";
 	TEST_EQUAL(s4.instr("defg"), "defg")
 	TEST_EQUAL(s4.instr("defgh"), "defgh")
@@ -194,7 +208,7 @@ CHECK(String::instr(string&, Size))
 	TEST_EQUAL(s4.instr(""), "")
 RESULT
 
-CHECK(String::operator + (string&))
+CHECK(String operator + (const string& string) const throw())
 	string stl_str("def");
 	s4 = "abc";
 	TEST_EQUAL(s4 + stl_str, "abcdef")
@@ -209,7 +223,7 @@ CHECK(String::operator + (string&))
 	TEST_EQUAL(s4 + stl_str, "")
 RESULT
 
-CHECK(String::operator + (char*))
+CHECK(friend String operator + (const char* char_ptr, const String& s) throw())
 	s4 = "abc";
 	TEST_EQUAL(s4 + "def", "abcdef")
 	TEST_EQUAL(s4 + "", "abc")
@@ -218,14 +232,14 @@ CHECK(String::operator + (char*))
 	TEST_EQUAL(s4 + "", "")
 RESULT
 
-CHECK(String::operator + (char))
+CHECK(String operator + (char c) const throw())
 	s4 = "abc";
 	TEST_EQUAL(s4 + 'd', "abcd")
 	s4 = "";
 	TEST_EQUAL(s4 + 'd', "d")
 RESULT
 
-CHECK(String::operator + (char*, String&))
+CHECK(String operator + (const char* char_ptr) const throw())
 	s4 = "abc";
 	TEST_EQUAL("def" + s4, "defabc")
 	TEST_EQUAL("" + s4, "abc")
@@ -234,14 +248,14 @@ CHECK(String::operator + (char*, String&))
 	TEST_EQUAL("" + s4, "")
 RESULT
 
-CHECK(String::operator + (char*, String&))
+CHECK(friend String operator + (char c, const String& s) throw())
 	s4 = "abc";
 	TEST_EQUAL('d' + s4, "dabc")
 	s4 = "";
 	TEST_EQUAL('d' + s4, "d")
 RESULT
 
-CHECK(String::swap(String&))
+CHECK(void swap(String& s) throw())
 	s4 = "abc";
 	String s5 = "def";
 	s4.swap(s5);
@@ -264,7 +278,7 @@ CHECK(String::swap(String&))
 	TEST_EQUAL(s5, "abc")
 RESULT
 
-CHECK(String::reverse(Index, Size))
+CHECK(String& reverse(Index from = 0, Size len = EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abcd";
 	s4.reverse();
 	TEST_EQUAL(s4, "dcba")
@@ -297,7 +311,7 @@ CHECK(String::reverse(Index, Size))
 	TEST_EQUAL(s4, "abcde")
 RESULT
 
-CHECK(String::substitute(String&, String&))
+CHECK(Size substitute(const String& to_replace, const String& replacing) throw())
 	s4 = "abcdef";
 	s4.substitute("ab", "XX");
 	TEST_EQUAL(s4, "XXcdef")
@@ -315,7 +329,7 @@ CHECK(String::substitute(String&, String&))
 	TEST_EQUAL(s4, "XXabcdefabcdef")
 RESULT
 
-CHECK(String::has(char))
+CHECK(bool has(char c) const throw())
 	s4 = "abcdef";
 	TEST_EQUAL(s4.has('a'), true)
 	TEST_EQUAL(s4.has('b'), true)
@@ -328,7 +342,7 @@ CHECK(String::has(char))
 	TEST_EQUAL(s4.has('a'), false)
 RESULT
 
-CHECK(String::hasSubstring(String&, Index))
+CHECK(bool hasSubstring(const String& s, Index from = 0) const throw())
 	s4 = "abcdefghabcdef";
 	TEST_EQUAL(s4.hasSubstring("abc"), true)
 	TEST_EQUAL(s4.hasSubstring(""), true)
@@ -342,7 +356,7 @@ CHECK(String::hasSubstring(String&, Index))
 	TEST_EQUAL(s4.hasSubstring("a"), false)
 RESULT
 
-CHECK(String::hasPrefix(String&))
+CHECK(bool hasPrefix(const String& s) const throw())
 	s4 = "abcdefgh";
 	TEST_EQUAL(s4.hasPrefix(""), true)
 	TEST_EQUAL(s4.hasPrefix("abcd"), true)
@@ -352,7 +366,7 @@ CHECK(String::hasPrefix(String&))
 	TEST_EQUAL(s4.hasPrefix("a"), false)
 RESULT
 
-CHECK(String::hasSuffix(String&))
+CHECK(bool hasSuffix(const String& s) const throw())
 	s4 = "abcdefgh";
 	TEST_EQUAL(s4.hasSuffix(""), true)
 	TEST_EQUAL(s4.hasSuffix("fgh"), true)
@@ -362,7 +376,7 @@ CHECK(String::hasSuffix(String&))
 	TEST_EQUAL(s4.hasSuffix("h"), false)
 RESULT
 
-CHECK(String::isEmpty())
+CHECK(bool isEmpty() const throw())
 	s4 = "a";
 	TEST_EQUAL(s4.isEmpty(), false)
 	s4 = "ab";
@@ -371,7 +385,7 @@ CHECK(String::isEmpty())
 	TEST_EQUAL(s4.isEmpty(), true)
 RESULT
 
-CHECK(String::isAlpha())
+CHECK(static bool isAlpha(char c) throw())
 	s4 = "abc";
 	TEST_EQUAL(s4.isAlpha(), true)
 	s4 = "a";
@@ -386,7 +400,7 @@ CHECK(String::isAlpha())
 	TEST_EQUAL(s4.isAlpha(), true)
 RESULT
 
-CHECK(String::isAlnum())
+CHECK(bool isAlnum() const throw())
 	s4 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	TEST_EQUAL(s4.isAlnum(), true)
 	s4 = "123";
@@ -405,7 +419,7 @@ CHECK(String::isAlnum())
 	TEST_EQUAL(s4.isAlnum(), true)
 RESULT
 
-CHECK(String::isDigit())
+CHECK(bool isDigit() const throw())
 	s4 = "";
 	TEST_EQUAL(s4.isDigit(), true)
 	s4 = "1";
@@ -416,7 +430,7 @@ CHECK(String::isDigit())
 	TEST_EQUAL(s4.isDigit(), false)
 RESULT
 
-CHECK(String::isSpace())
+CHECK(bool isSpace() const throw())
 	s4 = "";
 	TEST_EQUAL(s4.isSpace(), true)
 	s4 = " ";
@@ -431,7 +445,7 @@ CHECK(String::isSpace())
 	TEST_EQUAL(s4.isSpace(), false)
 RESULT
 
-CHECK(String::isWhitespace())
+CHECK(bool isWhitespace() const throw())
 	s4 = "";
 	TEST_EQUAL(s4.isWhitespace(), true)
 	s4 = " ";
@@ -444,7 +458,7 @@ CHECK(String::isWhitespace())
 	TEST_EQUAL(s4.isWhitespace(), false)
 RESULT
 
-CHECK(String::isFloat())
+CHECK(bool isFloat() const throw())
 	s4 = "";
 	TEST_EQUAL(s4.isFloat(), true)
 	s4 = "z";
@@ -465,7 +479,7 @@ CHECK(String::isFloat())
 	TEST_EQUAL(s4.isFloat(), false)
 RESULT
 
-CHECK(String::isAlpha(char))
+CHECK(bool isAlpha() const throw())
 	String char_class = String::CHARACTER_CLASS__ASCII_ALPHA;
 	for (char c = CHAR_MIN; c != CHAR_MAX; c++)
 	{
@@ -473,7 +487,7 @@ CHECK(String::isAlpha(char))
 	}
 RESULT
 
-CHECK(String::isAlnum(char))
+CHECK(static bool isAlnum(char c) throw())
 	String char_class = String::CHARACTER_CLASS__ASCII_ALPHANUMERIC;
 	for (char c = CHAR_MIN; c != CHAR_MAX; c++)
 	{
@@ -481,7 +495,7 @@ CHECK(String::isAlnum(char))
 	}
 RESULT
 
-CHECK(String::isDigit(char))
+CHECK(static bool isDigit(char c) throw())
 	String char_class = String::CHARACTER_CLASS__ASCII_NUMERIC;
 	for (char c = CHAR_MIN; c != CHAR_MAX; c++)
 	{
@@ -489,7 +503,7 @@ CHECK(String::isDigit(char))
 	}
 RESULT
 
-CHECK(String::isWhitespace(char))
+CHECK(static bool isWhitespace(char c) throw())
 	String char_class = String::CHARACTER_CLASS__WHITESPACE;
 	for (char c = '\0'; c != (char)255; c++)
 	{
@@ -497,14 +511,14 @@ CHECK(String::isWhitespace(char))
 	}
 RESULT
 
-CHECK(String::isSpace(char))
+CHECK(static bool isSpace(char c) throw())
 	for (char c = '\0'; c != (char)255; c++)
 	{
 		TEST_EQUAL(String::isSpace(c), (c == ' '))
 	}
 RESULT
 
-CHECK(String::compare(String&, Index))
+CHECK(int compare(const String& string, Index from = 0) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abc";
 	String s5 = "abc";
 	TEST_EQUAL(s4.compare(s5), 0)
@@ -535,7 +549,7 @@ CHECK(String::compare(String&, Index))
 	TEST_NOT_EQUAL(s4.compare(s5, 0), 0)
 RESULT
 
-CHECK(String::compare(String&, Index, Size))
+CHECK(int compare(const String& string, Index from, Size len) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	s4 = "abc";
 	String s5 = "abc";
 	TEST_EQUAL(s4.compare(s5, 0, 1), 0)
