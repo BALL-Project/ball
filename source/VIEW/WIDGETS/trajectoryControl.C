@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.C,v 1.2 2003/09/02 10:57:09 amoll Exp $
+// $Id: trajectoryControl.C,v 1.3 2003/09/02 14:20:16 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -106,6 +106,7 @@ void TrajectoryControl::addTrajectory()
 void TrajectoryControl::insertTrajectory_(TrajectoryFile* file, System& system)
 	throw()
 {
+Log.error() << "#~~#   2 " << file << std::endl;
 	if (file->getNumberOfAtoms() != system.countAtoms())
 	{
 		setStatusbarText("Number of atoms do not match. Aborting...");
@@ -113,7 +114,8 @@ void TrajectoryControl::insertTrajectory_(TrajectoryFile* file, System& system)
 		return;
 	}
 
-	SnapShotManager* manager = new SnapShotManager(getMainControl()->getSelectedSystem(), 0, file);
+Log.error() << "#~~#   4" << std::endl;
+	SnapShotManager* manager = new SnapShotManager(&system, 0, file);
 
 	String name = file->getName();
 	name = name.getField(name.countFields(String(FileSystem::PATH_SEPARATOR).c_str()), 
