@@ -1,4 +1,4 @@
-// $Id: ParameterSection_test.C,v 1.5 2000/10/07 13:21:42 oliver Exp $
+// $Id: ParameterSection_test.C,v 1.6 2001/03/09 20:50:16 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.5 2000/10/07 13:21:42 oliver Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.6 2001/03/09 20:50:16 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -58,10 +58,10 @@ CHECK(ParameterSection::extractSection(Parameters& parameters, const String& sec
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(ps.getSectionName(), "Section3")
 	result = ps.extractSection(param, "Section4");
-	TEST_EQUAL(result, true)
+	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section4")
 	result = ps.extractSection(param, "Section5");
-	TEST_EQUAL(result, true)
+	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section5")
 	result = ps.extractSection(param, "Section6");
 	TEST_EQUAL(result, false)
