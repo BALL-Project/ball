@@ -1,4 +1,4 @@
-// $Id: splayTree.C,v 1.2 2000/01/10 15:51:10 oliver Exp $
+// $Id: splayTree.C,v 1.3 2000/08/01 12:37:12 amoll Exp $
 
 #include <BALL/DATATYPE/splayTree.h>
 
@@ -17,11 +17,11 @@ namespace BALL
 	// Returns 0 if parent_item->left is 0.
 	BSTreeItem* SplayTree::linkRight(BSTreeItem *parent_item, BSTreeItem *right_item)
 	{
-		BSTreeItem *newparent_item = parent_item->left;
+		BSTreeItem *newparent_item = parent_item->getLeftChild();
 
-		parent_item->left = 0;
-		right_item->right->left = parent_item;
-		right_item->right = parent_item;
+		parent_item->getLeftChild() = 0;
+		right_item->getRightChild()->getLeftChild() = parent_item;
+		right_item->getRightChild() = parent_item;
 
 		return newparent_item;
 	}
@@ -38,11 +38,11 @@ namespace BALL
 	// Returns 0 if parent_item->right is 0.
 	BSTreeItem* SplayTree::linkLeft(BSTreeItem *parent_item, BSTreeItem *left_item)
 	{
-		BSTreeItem *newparent_item = parent_item->right;
+		BSTreeItem *newparent_item = parent_item->getRightChild();
 
-		parent_item->right = 0;
-		left_item->left->right = parent_item;
-		left_item->left = parent_item;
+		parent_item->getRightChild() = 0;
+		left_item->getLeftChild()->getRightChild() = parent_item;
+		left_item->getLeftChild() = parent_item;
 	 
 		return newparent_item;
 	}
@@ -54,16 +54,16 @@ namespace BALL
 	// of left_item & right_item, respectively.
 	void SplayTree::assemble(BSTreeItem *parent_item, BSTreeItem *left_item, BSTreeItem *right_item)
 	{
-		if (left_item->right) 
+		if (left_item->getRightChild()) 
 		{
-			left_item->left->right = parent_item->left;
-			parent_item->left = left_item->right;
+			left_item->getLeftChild()->getRightChild() = parent_item->getLeftChild();
+			parent_item->getLeftChild() = left_item->getRightChild();
 		}
 
-		if (right_item->left) 
+		if (right_item->getLeftChild()) 
 		{
-			right_item->right->left = parent_item->right;
-			parent_item->right = right_item->left;
+			right_item->getRightChild()->getLeftChild() = parent_item->getRightChild();
+			parent_item->getRightChild() = right_item->getLeftChild();
 		}
 	}
 
@@ -76,17 +76,17 @@ namespace BALL
 
 		BSTreeItem left_item, right_item; 
 
-		left_item.left = &left_item; 
-		left_item.right = 0;
+		left_item.getLeftChild() = &left_item; 
+		left_item.getRightChild() = 0;
 
-		right_item.left = 0;  
-		right_item.right = &right_item;
+		right_item.getLeftChild() = 0;  
+		right_item.getRightChild() = &right_item;
 
-		while(item->left) 
+		while(item->getLeftChild()) 
 		{ // Go left as far as possible, splaying along the way.
 			// We have either a zig-zig, or a zig orientation
 
-			if (item->left->left)
+			if (item->getLeftChild()->getLeftChild())
 			{
 				item = item->rotateRight();
 			}
@@ -112,17 +112,17 @@ namespace BALL
 
 		BSTreeItem left_item, right_item; 
 
-		left_item.left = &left_item; 
-		left_item.right = 0;
+		left_item.getLeftChild() = &left_item; 
+		left_item.getRightChild() = 0;
 
-		right_item.left = 0;  
-		right_item.right = &right_item;
+		right_item.getLeftChild() = 0;  
+		right_item.getRightChild() = &right_item;
 
-		while(item->right) 
+		while(item->getRightChild()) 
 		{ // Go right as far as possible, splaying along the way
 			// We have either a zig-zig, or a zig orientation
 
-			if (item->right->right)
+			if (item->getRightChild()->getRightChild())
 			{
 				item = item->rotateLeft();
 			}
@@ -152,12 +152,12 @@ namespace BALL
 		// empty, since the left child is always null.
 		BSTreeItem *old_root_item = root;
 
-		if (root->right) 
+		if (root->getRightChild()) 
 		{
-			root = splayMinimum(root->right);
-			root->left = old_root_item->left;
+			root = splayMinimum(root->getRightChild());
+			root->getLeftChild() = old_root_item->getLeftChild();
 		}
-		//// else root = root->left;
+		//// else root = root->getLeftChild();
 		else
 		{
 			root = 0;
@@ -186,12 +186,12 @@ namespace BALL
 		// empty, since the right child is always null.
 		BSTreeItem *old_root_item = root;
 
-		if (root->left) 
+		if (root->getLeftChild()) 
 		{
-			root = splayMaximum(root->left);
-			root->right = old_root_item->right;
+			root = splayMaximum(root->getLeftChild());
+			root->getRightChild() = old_root_item->getRightChild();
 		}
-		////  else root = root->right;
+		////  else root = root->getRightChild();
 		else
 		{
 			root = 0;
