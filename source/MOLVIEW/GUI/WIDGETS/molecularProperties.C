@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.10 2002/12/12 17:13:51 amoll Exp $
+// $Id: molecularProperties.C,v 1.11 2002/12/15 01:10:39 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -42,7 +42,13 @@ namespace BALL
   	MolecularProperties::~MolecularProperties()
 			throw()
     {
-    }
+			MainControl& main_control = *MainControl::getMainControl(this);
+			main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
+			main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
+			main_control.removeMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A);
+			main_control.removeMenuEntry(MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B);
+			main_control.removeMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H);
+		}
 
 	  void MolecularProperties::onNotify(Message *message)
 			throw()
@@ -183,7 +189,7 @@ namespace BALL
 			}
 			else if (RTTI::isKindOf<CenterCameraMessage>(*message))
 			{
-				centerCamera();
+				centerCamera(((CenterCameraMessage*) message)->getComposite());
 			}
 			else if (RTTI::isKindOf<SelectMessage>(*message))
 			{
@@ -327,15 +333,22 @@ namespace BALL
 		}
 
 		
-		void MolecularProperties::centerCamera()
+		void MolecularProperties::centerCamera(Composite* composite)
 		{
-			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
+			Composite* to_center_on = composite;
+			
+			if (to_center_on == 0)
 			{
-				return;
+				if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
+				{
+					return;
+				}
+
+				to_center_on = *MainControl::getMainControl(this)->getControlSelection().begin();
 			}
 
 			// use specified object processor for calculating the center
-			calculateCenter_(**MainControl::getMainControl(this)->getControlSelection().begin());
+			calculateCenter_(*to_center_on);
 
 			Vector3 view_point = view_center_vector_;
 
