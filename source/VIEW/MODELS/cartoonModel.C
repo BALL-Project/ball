@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.37 2004/09/10 13:53:20 amoll Exp $
+// $Id: cartoonModel.C,v 1.38 2004/09/10 14:07:04 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -1044,6 +1044,8 @@ namespace BALL
 				mesh->setComposite(r);
 				geometric_objects_.push_back(mesh);
 
+				AtomIterator it;
+				bool error = false;
 				Atom* atoms[9];
 				for (Position p = 0; p < 9; p++)
 				{
@@ -1053,7 +1055,6 @@ namespace BALL
 				if (r->getName() == "A" ||
 						r->getName() == "G")
 				{
-					AtomIterator it;
 					BALL_FOREACH_ATOM(*r, it)
 					{
 						if 			(it->getName() == "N9") atoms[0] = &*it;
@@ -1067,7 +1068,6 @@ namespace BALL
 						else if (it->getName() == "C8") atoms[8] = &*it;
 					}
 
-					bool error = false;
 					for (Position p = 0; p < 9; p++)
 					{
 						if (atoms[p] == 0)
@@ -1087,32 +1087,70 @@ namespace BALL
 					createTriangle_(*mesh, *atoms[1], *atoms[4], *atoms[5], atoms[4], atoms[5], 0); 				// C4,N1,C6
 					createTriangle_(*mesh, *atoms[1], *atoms[5], *atoms[6], atoms[5], atoms[6], 0); 				// C4,C6,C5
 					// we are done for A + G
+				}
+
+				// -------------------------------------------------
+				else if (r->getName() == "C")
+				{
+					BALL_FOREACH_ATOM(*r, it)
+					{
+						if 			(it->getName() == "N1") atoms[0] = &*it;
+						else if (it->getName() == "C2") atoms[1] = &*it;
+						else if (it->getName() == "N3") atoms[2] = &*it;
+						else if (it->getName() == "C4") atoms[3] = &*it;
+						else if (it->getName() == "C5") atoms[4] = &*it;
+						else if (it->getName() == "C6") atoms[5] = &*it;
+					}
+
+					for (Position p = 0; p < 6; p++)
+					{
+						if (atoms[p] == 0)
+						{
+							error = true;
+							break;
+						}
+					}
+					// all atoms found?
+					if (error) continue;
+
+					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// C2,N3,C4
+					createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // N1,C2,C4
+					createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// N1,C4,C5
+					createTriangle_(*mesh, *atoms[0], *atoms[5], *atoms[4], atoms[0], atoms[5], atoms[4]); 	// N1,C6,C5
+					// we are done for C
+				}
+
+				// -------------------------------------------------
+				else if (r->getName() == "T")
+				{
+					BALL_FOREACH_ATOM(*r, it)
+					{
+						if 			(it->getName() == "C2") atoms[0] = &*it;
+						else if (it->getName() == "N3") atoms[1] = &*it;
+						else if (it->getName() == "C4") atoms[2] = &*it;
+						else if (it->getName() == "C5") atoms[3] = &*it;
+						else if (it->getName() == "C6") atoms[4] = &*it;
+						else if (it->getName() == "N1") atoms[5] = &*it;
+					}
+
+					for (Position p = 0; p < 6; p++)
+					{
+						if (atoms[p] == 0)
+						{
+							error = true;
+							break;
+						}
+					}
+					// all atoms found?
+					if (error) continue;
+
+					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// N3,C4,C5
+					createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // C2,N3,C5
+					createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// C2,C5,C6
+					createTriangle_(*mesh, *atoms[0], *atoms[5], *atoms[4], atoms[0], atoms[5], atoms[4]); 	// C2,N1,C6
+					// we are done for T
 					continue;
 				}
-
-				continue;
-
-				/*
-				// -------------------------------------------------
-				if (r->getName() == "C")
-				{
-					BALL_FOREACH_ATOM(*r, it)
-					{
-						if 			(it->getName() == "") atoms[] = &*it;
-						else if (it->getName() == "") atoms[] = &*it;
-					}
-				}
-
-				// -------------------------------------------------
-				if (r->getName() == "T")
-				{
-					BALL_FOREACH_ATOM(*r, it)
-					{
-						if 			(it->getName() == "") atoms[] = &*it;
-						else if (it->getName() == "") atoms[] = &*it;
-					}
-				}
-				*/
 			}
 		}
 
