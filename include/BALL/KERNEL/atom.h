@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.38 2001/06/27 01:32:41 oliver Exp $
+// $Id: atom.h,v 1.39 2001/06/27 18:03:29 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -131,7 +131,7 @@ namespace BALL
 			*/
 			enum Property
 			{
-				NUMBER_OF_PROPERTIES = 0,
+				NUMBER_OF_PROPERTIES = 0
 			};
 				
 			/**	The type of name used for getFullName.
