@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.16 2004/07/13 11:47:14 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.17 2004/07/14 22:34:04 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -201,6 +201,45 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 		geometric_objects_.push_back(tube);
 		return;
 	}
+
+	if (bond.getOrder() == Bond::ORDER__TRIPLE)
+	{
+		Vector3 dir = bond.getSecondAtom()->getPosition() - bond.getFirstAtom()->getPosition();
+		Vector3 normal;
+		normal = dir % Vector3(1,0,0);
+		if (normal.getSquareLength() == .0)
+		{
+			normal = dir % Vector3(0,1,0);
+		}
+		normal.normalize();
+		normal *= stick_radius_ / 1.5;
+
+		Vector3 normal2;
+		normal2 = dir % normal;
+		normal2.normalize();
+		normal2 *= stick_radius_ / 1.5;
+		
+		TwoColoredTube* tube = new TwoColoredTube;
+		tube->setRadius(stick_radius_ / 2.4);
+		tube->setVertex1(bond.getFirstAtom()->getPosition() - normal - normal2);
+		tube->setVertex2(bond.getSecondAtom()->getPosition() - normal - normal2);
+		tube->setComposite(&bond);
+		geometric_objects_.push_back(tube);
+		
+		TwoColoredTube* tube2 = new TwoColoredTube;
+		tube2->setRadius(stick_radius_ / 2.4);
+		tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal - normal2);
+		tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal - normal2);
+		tube2->setComposite(&bond);
+		geometric_objects_.push_back(tube2);
+
+		TwoColoredTube* tube3 = new TwoColoredTube;
+		tube3->setRadius(stick_radius_ / 2.4);
+		tube3->setVertex1(bond.getFirstAtom()->getPosition() + normal2);
+		tube3->setVertex2(bond.getSecondAtom()->getPosition() + normal2);
+		tube3->setComposite(&bond);
+		geometric_objects_.push_back(tube3);
+	}	
 
 	if (ring_atoms_.has(bond.getFirstAtom()) &&
 			ring_atoms_.has(bond.getSecondAtom()))

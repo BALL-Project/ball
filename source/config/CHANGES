@@ -12,7 +12,7 @@ added:
 - Visualisation of forces
 - Writing and loading of project files
 - Benchmark Scritps for BALLView
-- Visualisation for double- and aromatic bonds in BallAndStick Model
+- Visualisation for double-, triple- and aromatic bonds in BallAndStick Model
 
 fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier
@@ -28,3 +28,6 @@ fixed:
 changed:
 - Scene Preferences
 - interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
+- doubled OpenGL performance since BALL(View) 1.0 !
+- GeometricObjects no longe have names
+- removed Information Processor for GeometricObjects
