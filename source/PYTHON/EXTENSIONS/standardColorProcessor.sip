@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.sip,v 1.1 2003/12/11 16:22:41 amoll Exp $
+// $Id: standardColorProcessor.sip,v 1.2 2005/01/14 00:26:22 amoll Exp $
 //
 
 class AtomChargeColorProcessor
@@ -15,7 +15,7 @@ class AtomChargeColorProcessor
   public:
   AtomChargeColorProcessor() throw();
   AtomChargeColorProcessor(const AtomChargeColorProcessor&) throw();
-  ColorRGBA getColor(const Composite*);
+	void getColor(const Composite&, ColorRGBA&);
   const ColorRGBA& getNegativeColor() const throw();
   const ColorRGBA& getPositiveColor() const throw();
   const ColorRGBA& getNeutralColor() const throw();
@@ -37,7 +37,7 @@ class AtomDistanceColorProcessor
 
   AtomDistanceColorProcessor() throw();
   AtomDistanceColorProcessor(const AtomDistanceColorProcessor&) throw();
-  ColorRGBA getColor(const Composite*);
+	void getColor(const Composite&, ColorRGBA&);
   void setDistance(float) throw();
   float getDistance() const throw();
   void setMaxDistanceColor(const ColorRGBA&) throw();
@@ -76,7 +76,7 @@ class ElementColorProcessor
 	public:
 
 	ElementColorProcessor() throw();
-  ColorRGBA getColor(const Composite*);
+	void getColor(const Composite&, ColorRGBA&);
   //HashMap<Position, ColorRGBA> & getColorMap();
   //constHashMap<Position, ColorRGBA> & getColorMap() const;
 };
@@ -93,7 +93,7 @@ class OccupancyColorProcessor
 	public:
 
   OccupancyColorProcessor();
-  ColorRGBA getColor(const Composite*);
+	void getColor(const Composite&, ColorRGBA&);
 };
 
   
@@ -108,7 +108,7 @@ class ResidueNameColorProcessor
 	public:
 
   ResidueNameColorProcessor() throw();
-  ColorRGBA getColor(const Composite*);
+	void getColor(const Composite&, ColorRGBA&);
   //StringHashMap<ColorRGBA> & getColorMap();
   //constStringHashMap<ColorRGBA> & getColorMap() const;
 };
@@ -125,7 +125,7 @@ class ResidueNumberColorProcessor
 	public:
 
   ResidueNumberColorProcessor() throw();
-  ColorRGBA getColor(const Composite*);
+	void getColor(const Composite&, ColorRGBA&);
   const ColorRGBA& getFirstColor() const;
   const ColorRGBA& getMiddleColor() const;
   const ColorRGBA& getLastColor() const;
@@ -148,7 +148,7 @@ class TemperatureFactorColorProcessor
 	public:
 
   TemperatureFactorColorProcessor();
-  ColorRGBA getColor(const Composite*);
+	void getColor(const Composite&, ColorRGBA&);
 };
 
 

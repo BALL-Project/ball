@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.sip,v 1.2 2003/11/15 12:53:57 oliver Exp $
+// $Id: colorProcessor.sip,v 1.3 2005/01/14 00:26:22 amoll Exp $
 //
 
 class ColorProcessor
@@ -15,7 +15,7 @@ class ColorProcessor
 
   ColorProcessor() throw();
   ColorProcessor(const ColorProcessor& /color_calculator/) throw();
-  ColorRGBA getColor(const Composite* /composite/);
+	void getColor(const Composite&, ColorRGBA&);
   //Processor::Result operator() (GeometricObject& /object/);
 //%MethodCode
 //	sipRes = sipCpp->operator () (*a0);
