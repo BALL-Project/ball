@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.12 2004/10/18 13:42:00 amoll Exp $
+// $Id: preferencesEntry.C,v 1.13 2004/10/22 20:42:46 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -160,7 +160,7 @@ namespace BALL
 		{
 			if (widget == 0) return;
 
-			if (widget->name() == "")
+			if (widget->name().isEmpty())
 			{
 				Log.error() << "Unnamed Preferences object!" << std::endl;
 				return;

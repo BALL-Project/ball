@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.6 2003/12/16 15:53:39 amoll Exp $
+// $Id: primitiveManager.C,v 1.7 2004/10/22 20:44:14 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 
@@ -129,7 +129,7 @@ const PrimitiveManager& PrimitiveManager::operator = (const PrimitiveManager& pm
 bool PrimitiveManager::operator == (const PrimitiveManager& pm) const
 	throw()
 {
-	if (!pm.getNumberOfRepresentations() == getNumberOfRepresentations()) return false;
+	if (pm.getNumberOfRepresentations() != getNumberOfRepresentations()) return false;
 
 	RepresentationsConstIterator it1 = begin();
 	RepresentationsConstIterator it2 = pm.begin();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.15 2004/08/31 14:34:03 amoll Exp $
+// $Id: modularWidget.C,v 1.16 2004/10/22 20:40:09 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -56,7 +56,7 @@ void ModularWidget::clear()
 }
 
 void ModularWidget::registerWidget(ModularWidget* mwidget)
-	throw()
+	throw(Exception::NullPointer)
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.info() << "registering ModularWidget at " << mwidget << endl;
