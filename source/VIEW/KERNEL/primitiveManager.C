@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.31 2004/12/02 15:42:46 amoll Exp $
+// $Id: primitiveManager.C,v 1.33 2004/12/02 16:00:54 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -50,13 +50,7 @@ PrimitiveManager::PrimitiveManager(const PrimitiveManager& pm)
 void PrimitiveManager::clear()
 	throw()
 {
-	// call clear for all stored representations to clear also their geometric objects
-	RepresentationsIterator it = begin();
-	for (; it != end(); it++)
-	{
-		(*it)->clear();
-	}
-	representations_.clear();
+	representations_to_be_updated_.clear();
 
 #ifdef BALL_QT_HAS_THREADS
 	if (thread_.running())
@@ -65,6 +59,14 @@ void PrimitiveManager::clear()
 		thread_.wait();
 	}
 #endif
+
+	// call clear for all stored representations to clear also their geometric objects
+	RepresentationsIterator it = begin();
+	for (; it != end(); it++)
+	{
+		(*it)->clear();
+	}
+	representations_.clear();
 }
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.148 2004/11/29 23:02:55 amoll Exp $
+// $Id: mainControl.C,v 1.149 2004/12/02 15:57:41 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -237,16 +237,6 @@ namespace BALL
 			#endif 
 
 			clear();
-
-			#ifdef BALL_QT_HAS_THREADS
-				stop_simulation_ = true;
-				if (simulation_thread_ != 0)
-				{
-					if (simulation_thread_->running()) simulation_thread_->wait();
-					delete simulation_thread_;
-					simulation_thread_ = 0;
-				}
-			#endif
 		}
 
 		QPopupMenu* MainControl::initPopupMenu(int ID)
@@ -336,6 +326,20 @@ namespace BALL
 			selection_.clear();
 			primitive_manager_.clear();
 			composite_manager_.clear();
+
+			return;
+			#ifdef BALL_QT_HAS_THREADS
+			if (simulation_thread_ != 0)
+			{
+				if (simulation_thread_->running())
+				{
+					simulation_thread_->wait();
+				}
+
+				delete simulation_thread_;
+				simulation_thread_ = 0;
+			}
+			#endif
 		}
 			
 		void MainControl::show()
@@ -515,6 +519,19 @@ namespace BALL
 			{
 				unregisterConnectionObject(**it);
 			}
+
+			#ifdef BALL_QT_HAS_THREADS
+				if (simulation_thread_ != 0)
+				{
+					if (simulation_thread_->running()) 
+					{
+						simulation_thread_->terminate();
+						simulation_thread_->wait();
+					}
+					delete simulation_thread_;
+					simulation_thread_ = 0;
+				}
+			#endif
 
 			modular_widgets_.clear();
 
