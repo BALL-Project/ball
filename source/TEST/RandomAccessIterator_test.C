@@ -1,4 +1,4 @@
-// $Id: RandomAccessIterator_test.C,v 1.5 2001/07/01 21:23:10 amoll Exp $
+// $Id: RandomAccessIterator_test.C,v 1.6 2001/07/02 10:21:31 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -180,7 +180,7 @@ class VectorIteratorTraits_
 	}
 
 	DataType& getData()
-		throw(Exception::InvalidIterator, Exception::IndexOverflow, Exception::IndexUnderflow)
+		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -188,19 +188,19 @@ class VectorIteratorTraits_
 		}
 		if (position_ >= (VectorIteratorPosition_)bound_->size())
 		{
-			throw(Exception::IndexOverflow(__FILE__, __LINE__, position_, bound_->size() - 1));
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
 		
 		if (position_ < 0)
 		{
-			throw(Exception::IndexUnderflow(__FILE__, __LINE__, position_, 0));
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
 
 		return *(&bound_->operator [] (position_));
 	}
 
 	void forward()
-		throw(Exception::InvalidIterator, Exception::IndexOverflow)
+		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -210,7 +210,6 @@ class VectorIteratorTraits_
 		if (position_ >= (Index) bound_->size())
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
-			//throw(Exception::IndexOverflow(__FILE__, __LINE__, position_ + 1, bound_->size() - 1));
 		}
 		++position_;
 	}
@@ -304,7 +303,7 @@ class VectorIteratorTraits_
 	}
 
 	DataType& getData(Index index)
-		throw(Exception::InvalidIterator, Exception::IndexOverflow, Exception::IndexUnderflow)
+		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -313,12 +312,12 @@ class VectorIteratorTraits_
 		
 		if (index >= (VectorIteratorPosition_)bound_->size())
 		{
-			throw(Exception::IndexOverflow(__FILE__, __LINE__, index, bound_->size() - 1));
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
 		
 		if (index < 0)
 		{
-			throw(Exception::IndexUnderflow(__FILE__, __LINE__, index, 0));
+			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
 
 
@@ -333,7 +332,7 @@ class VectorIteratorTraits_
 
 typedef RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 
-START_TEST(class_name, "$Id: RandomAccessIterator_test.C,v 1.5 2001/07/01 21:23:10 amoll Exp $")
+START_TEST(class_name, "$Id: RandomAccessIterator_test.C,v 1.6 2001/07/02 10:21:31 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -642,7 +641,7 @@ RESULT
 
 CHECK(operator [])
 	TEST_REAL_EQUAL(m[2], (float) 0.3)
-	TEST_EXCEPTION(Exception::IndexOverflow, m[6])
+	TEST_EXCEPTION(Exception::InvalidIterator, m[6])
 	MyIterator m2;
 	TEST_EXCEPTION(Exception::InvalidIterator, m2[2])
 RESULT
@@ -673,5 +672,4 @@ RESULT
 
 
 END_TEST
-
 
