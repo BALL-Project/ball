@@ -34,7 +34,9 @@ def runTest(name, model):
 clearRepresentations()
 dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
+dp.setSurfaceDrawingPrecision(6.5)
 dp.selectMode(DRAWING_MODE_SOLID)
+dp.selectColoringMethod(COLORING_ELEMENT)
 dp.setTransparency(0)
 fd.openFile("bpti.pdb")
 

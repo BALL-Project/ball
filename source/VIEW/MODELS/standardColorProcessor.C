@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.28 2004/07/09 23:55:38 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.29 2004/07/12 13:22:53 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -658,14 +658,13 @@ namespace BALL
 
 			Vector3 force = (dynamic_cast<const Atom*>(composite))->getForce();
 			if (force.getSquareLength() == 0) return min_color_;
-			force.normalize();
-			force *= 10000000000.0;
+			force *= 100000000000.0;
 
 			float forcev = std::log(force.getLength());
 			if (forcev < 0) return min_color_;
-			if (forcev > 10)
+			if (forcev > 50)
 			{
-				forcev = 10;
+				forcev = 50;
 			}	
 			return interpolateColor(forcev);
 		}
