@@ -1,16 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.33 2004/02/24 08:45:11 oliver Exp $
+// $Id: logStream.C,v 1.34 2004/04/07 12:29:26 anker Exp $
 //
 
-#include <limits.h>
+#include <limits>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/notification.h>
-
-#include <stdio.h>
-#include <limits.h>
-#include <string.h>
 
 #define BUFFER_LENGTH 32768
 
@@ -337,10 +333,11 @@ namespace BALL
 		}
 			
 		// find the stream in the LogStreamBuf's list
-		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
+		std::list<LogStreamBuf::StreamStruct>::iterator	list_it 
+			= rdbuf()->stream_list_.begin();
 		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
 		{
-			if ((*list_it).stream == &stream) 
+			if (list_it->stream == &stream) 
 			{
 				// remove the stream - iterator becomes invalid, so exit
 				rdbuf()->stream_list_.erase(list_it);
@@ -500,7 +497,7 @@ namespace BALL
 			return "";
 		}
 
-		LogStream*	non_const_this = const_cast<LogStream*>(this);
+		LogStream* non_const_this = const_cast<LogStream*>(this);
 
 		if (non_const_this->rdbuf() == 0)
 		{
