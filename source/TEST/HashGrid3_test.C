@@ -1,24 +1,20 @@
-// $Id: HashGrid3_test.C,v 1.7 2002/01/16 02:16:56 oliver Exp $
+// $Id: HashGrid3_test.C,v 1.8 2002/01/16 02:23:55 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/DATATYPE/hashGrid.h>
 #include "HashGrid3_test.h"
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.7 2002/01/16 02:16:56 oliver Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.8 2002/01/16 02:23:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-///  insert tests for each member function here         
-///
-	
 // tests for class HashGridBox3::
 
 HashGridBox3<int>* hbox3;
@@ -271,14 +267,14 @@ RESULT
 CHECK(HashGridBox3::apply(UnaryProcessor< HashGridBox3<Item> >& processor) throw())
 	TestProcessor2 proc;
 	HashGridBox3<int> hbox;
+	hbox.insert(1);
 	hbox.insert(5);
+	hbox.insert(12);
 	hbox.apply(proc);
 	int* result = hbox.find(6);
 	TEST_NOT_EQUAL(result, 0)
 	ABORT_IF(result == 0)
-	bool test = (*result == 6);
-	TEST_EQUAL(test, true)
-	// TODO: more complex example
+	TEST_EQUAL(*result, 6)
 RESULT
 
 
