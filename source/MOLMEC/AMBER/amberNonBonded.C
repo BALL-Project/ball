@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.13 2002/06/07 10:36:59 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.14 2002/06/17 11:09:54 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -10,7 +10,7 @@ using namespace std;
 // define a macro for the square function
 #define SQR(x) ((x) * (x))
 
-#define TPL_ARG_INLINE
+#define TPL_ARG_INLINE inline
 
 namespace BALL 
 {
