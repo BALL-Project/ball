@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.4 2004/07/15 17:31:05 amoll Exp $
+// $Id: main.C,v 1.5 2004/07/16 11:18:18 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -202,15 +202,18 @@ int main(int argc, char **argv)
 		nr++;
 		nr2++;
 
+		// abort, if we can not fork!
 		if ( (childpid = fork()) < 0) 
 		{
 			std::cout << "Could not fork!" << std::endl;
 			return -1;
 		}
+		// we are in the parent process and wait for the child to finish
 		else if (childpid != 0)
 		{
 			waitpid( -1, &status, 0 );
 		}
+		// we are in the child process and start povray
 		else
 		{
 //		  	close(1);
