@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.8 2000/08/30 19:58:27 oliver Exp $
+// $Id: geometricObject.h,v 1.9 2000/12/12 16:15:45 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -109,11 +109,14 @@ namespace BALL
 				
 			GeometricObject(const GeometricObject& object, bool deep = true);
 
-			virtual ~GeometricObject();
+			virtual ~GeometricObject()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Assignment
@@ -171,7 +174,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
