@@ -216,7 +216,7 @@ namespace BALL
 	}
 
 	void NMRStarFile::readEntryInformation_()
-		throw (LineBasedFileError, Exception::InvalidFormat)
+		throw (LineBasedFile::LineBasedFileError, Exception::InvalidFormat)
 	{
 		try
 		{
@@ -527,7 +527,7 @@ namespace BALL
 	}
 
 	NMRAtomData* NMRStarFile::processShiftLine_()
-		throw (LineBasedFileError)
+		throw (LineBasedFile::LineBasedFileError)
 	{
 		NMRAtomData* ad = new NMRAtomData();
 
@@ -560,14 +560,14 @@ namespace BALL
 		catch (Exception::InvalidFormat e)
 		{
 			Log.error() << "An error occured while reading shift data:" << endl;
-			throw LineBasedFileError(__FILE__, __LINE__, this, e.getMessage());
+			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, e.getMessage());
 		}
 		readLine();
 		return ad;
 	}
 
 	void NMRStarFile::readShifts_()
-		throw (LineBasedFileError)
+		throw (LineBasedFile::LineBasedFileError)
 	{
 		test(__FILE__, __LINE__, 
 				search("#      9             Ambiguous, specific ambiguity not defined    #", false),
