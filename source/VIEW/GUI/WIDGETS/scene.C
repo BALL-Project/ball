@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.6.4.6 2002/11/04 18:14:23 amoll Exp $
+// $Id: scene.C,v 1.6.4.7 2002/11/27 14:04:56 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
@@ -366,8 +366,8 @@ namespace BALL
 			}
 
 			glFrontFace(GL_CCW);
-			glCullFace(GL_BACK);
-			glEnable(GL_CULL_FACE);
+//			glCullFace(GL_BACK);
+//			glEnable(GL_CULL_FACE);
 
 			glEnable(GL_NORMALIZE);
 
