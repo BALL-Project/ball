@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.h,v 1.8 2000/09/18 17:09:27 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.1 2000/09/19 13:34:59 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -35,7 +35,7 @@ namespace BALL
 
 	/**	Shift assignment processor implementing Johnson Bovey theory.
 	*/
-	class JohnsonBoveyShift
+	class JohnsonBoveyShiftProcessor
 		:	public ShiftModule
 	{
 		public:
@@ -59,11 +59,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		JohnsonBoveyShift() throw();
+		JohnsonBoveyShiftProcessor() throw();
 
 		/**	Destructor
 		*/
-		virtual ~JohnsonBoveyShift() throw();
+		virtual ~JohnsonBoveyShiftProcessor() throw();
 
 		//@}
 

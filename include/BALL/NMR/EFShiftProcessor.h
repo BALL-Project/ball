@@ -1,7 +1,7 @@
-// $Id: LEFShiftProcessor.h,v 1.1 2000/09/19 11:39:58 amoll Exp $
+// $Id: EFShiftProcessor.h,v 1.1 2000/09/19 13:34:56 oliver Exp $
 
-#ifndef BALL_NMR_LEF_H
-#define BALL_NMR_LEF_H
+#ifndef BALL_NMR_EFSHIFTPROCESSOR_H
+#define BALL_NMR_EFSHIFTPROCESSOR_H
 
 #ifndef BALL_NMR_SHIFT_MODULE
 #	include<BALL/NMR/shiftModule.h>
@@ -24,9 +24,9 @@ namespace BALL
 
 	class Atom;
 		
-	/**	Shift assignment processor implementing LEF.
+	/**	Shift assignment processor implementing the electric field effect.
 	*/
-	class LEFShiftProcessor
+	class EFShiftProcessor
 		:	public ShiftModule
 	{
 		public:
@@ -37,14 +37,18 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		LEFShiftProcessor()
+		EFShiftProcessor()
 			throw();
 	
+		/**	Copy constructor
+		*/
+		EFShiftProcessor(const EFShiftProcessor& processor)
+			throw();
+			
 		/**	Destructor
 		*/
-		virtual ~LEFShiftProcessor()
-			throw();
-	
+		virtual ~EFShiftProcessor()
+			throw();	
 		//@}
 
 	
@@ -85,7 +89,7 @@ namespace BALL
 			throw();
 
 		/**	operator ().
-				PDBAtoms are assigned to two different lists, named {\tt proton\_list\_}
+				Atoms are assigned to two different lists, named {\tt proton\_list\_}
 				and {\tt atom\_list\_}. In {\tt proton\_list\_} every Hydrogen is stored except
 				the ones called "H". That special Hydrogen is stored as well as PDBAtoms named
 				"C", "N" and "O" in {\tt atom\_list\_}.
@@ -94,32 +98,16 @@ namespace BALL
 			throw();
 		//@}
 
-		/**	@name Accessors
-		*/
-		//@{
-		/**	
-		*/
-		const String& getFilename() const
-			throw();
-			
-		/**	
-		*/
-		void setFilename(const String& filename)
-			throw();
-		//@}
-	
 		protected:
 	
 		list<Atom*>					proton_list_;	
 		list<Atom*>					effector_list_;
 		list<Atom*>					atom_list_;
-		String							ini_filename_;
 		vector<Expression>  first_atom_expressions_;
 		vector<Expression>  second_atom_expressions_;
-		Parameters					parameters_;
 		ParameterSection		parameter_section_;
  	};
 
 } // namespace BALL
 
-#endif // BALL_NMR_SHIFTMODULE_H
+#endif // BALL_NMR_EFSHIFTPROCESSOR_H

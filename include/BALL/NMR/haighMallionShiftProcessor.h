@@ -1,4 +1,4 @@
-// $Id: haighMallion.h,v 1.6 2000/09/18 17:09:26 oliver Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.1 2000/09/19 13:34:58 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -19,7 +19,7 @@ namespace BALL
 		
 	/**	Shift assignment processor implementing Haigh Mallion theory.
 	*/
-	class HaighMallionShift
+	class HaighMallionShiftProcessor
 		:	public ShiftModule
 	{
 		public:
@@ -30,11 +30,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		HaighMallionShift() throw();
+		HaighMallionShiftProcessor() throw();
 		
 		/**	Destructor
 		*/
-		virtual ~HaighMallionShift() throw();
+		virtual ~HaighMallionShiftProcessor() throw();
 		
 		//@}
 

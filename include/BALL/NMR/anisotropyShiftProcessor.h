@@ -1,4 +1,4 @@
-// $Id: anisotropy.h,v 1.5 2000/09/18 17:09:26 oliver Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.1 2000/09/19 13:34:58 oliver Exp $
 
 #include<BALL/COMMON/constants.h>
 #include<BALL/KERNEL/system.h>
@@ -32,7 +32,7 @@ namespace BALL
 
 
 
-class AnIsoShift:public ShiftModule
+class AnisotropyShiftProcessor:public ShiftModule
 	{
 	public:
 	
@@ -42,11 +42,11 @@ class AnIsoShift:public ShiftModule
 
 	/**	Default constructor.
 	*/
-	AnIsoShift() throw();
+	AnisotropyShiftProcessor() throw();
 	
 	/**	Destructor
 	*/
-	virtual ~AnIsoShift() throw();
+	virtual ~AnisotropyShiftProcessor() throw();
 	
 	//@}
 

@@ -1,4 +1,4 @@
-// $Id: randomCoil.h,v 1.5 2000/09/18 17:09:27 oliver Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.1 2000/09/19 13:34:59 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
@@ -28,7 +28,7 @@ namespace BALL
 
 	/**	adding random coil shifts to Hydrogens
 	*/
-	class RandomCoilShift
+	class RandomCoilShiftProcessor
 		:	public ShiftModule
 	{
 		public:
@@ -39,11 +39,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		RandomCoilShift() throw();
+		RandomCoilShiftProcessor() throw();
 		
 		/**	Destructor
 		*/
-		virtual ~RandomCoilShift() throw();
+		virtual ~RandomCoilShiftProcessor() throw();
 		
 		//@}
 

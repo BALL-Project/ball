@@ -1,18 +1,14 @@
-// $Id: NMRSpectrum.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
+// $Id: NMRSpectrum.h,v 1.4 2000/09/19 13:34:57 oliver Exp $
 
 #ifndef BALL_NMR_NMRSPECTRUM_H
 #define BALL_NMR_NMRSPECTRUM_H
-
-#ifndef BALL_NMR_NAMES_H
-#	include<BALL/NMR/names.h>
-#endif
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #	include<BALL/NMR/createSpectrumProcessor.h>
 #endif
 
-#ifndef BALL_NMR_SHIFTMODULE_H
-#	include<BALL/NMR/shiftModule.h>
+#ifndef BALL_NMR_SHIFTMODEL_H
+#	include<BALL/NMR/shiftModel.h>
 #endif
 
 #ifndef BALL_NMR_PEAK_H
@@ -172,9 +168,8 @@ namespace BALL
 		protected:
 
 		list<Peak1D> spectrum_;
-		list<ShiftModule*> processorlist_;
 		System* system_;
-		ShiftNames names_;
+		ShiftModel	shift_model_;
 		CreateSpectrumProcessor create_spectrum_;
 		Size density_;
 	};
