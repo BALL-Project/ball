@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Embeddable_test.C,v 1.5 2003/06/19 10:45:52 oliver Exp $
+// $Id: Embeddable_test.C,v 1.6 2004/02/08 21:46:31 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,8 +19,7 @@ class A
 	: public Embeddable
 {
 	public:
-	BALL_EMBEDDABLE(A)
-
+	BALL_EMBEDDABLE(A,Embeddable)
 };
 
 class B
@@ -28,14 +27,15 @@ class B
 	public:
 };
 
-class C : public B, public A
+class C 
+	: public B, 
+		public A
 {
 	public:
-	BALL_EMBEDDABLE(C)
-
+	BALL_EMBEDDABLE(C,A)
 };
 
-START_TEST(Embeddable, "$Id")
+START_TEST(Embeddable, "$Id: Embeddable_test.C,v 1.6 2004/02/08 21:46:31 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,8 +43,6 @@ START_TEST(Embeddable, "$Id")
 // avoid nasty error messages when 
 // testing multiple registrateion/deregistration
 Log.remove(std::cout);
-
-// tests for class 
 
 CHECK(~Embeddable() throw())
   A* a_ptr = new A;
@@ -89,24 +87,24 @@ CHECK(void registerThis() throw())
 	TEST_EQUAL(A::countInstances(), 1)
 	TEST_EQUAL(C::countInstances(), 0)
 	c_ptr->registerThis();
-	TEST_EQUAL(A::countInstances(), 1)
+	TEST_EQUAL(A::countInstances(), 2)
 	TEST_EQUAL(C::countInstances(), 1)
 	c_ptr->registerThis();
-	TEST_EQUAL(A::countInstances(), 1)
+	TEST_EQUAL(A::countInstances(), 2)
 	TEST_EQUAL(C::countInstances(), 1)
 RESULT
 
 CHECK(void unregisterThis() throw())
+	TEST_EQUAL(A::countInstances(), 2)
+	TEST_EQUAL(C::countInstances(), 1)
+	a_ptr->unregisterThis();
 	TEST_EQUAL(A::countInstances(), 1)
 	TEST_EQUAL(C::countInstances(), 1)
 	a_ptr->unregisterThis();
-	TEST_EQUAL(A::countInstances(), 0)
-	TEST_EQUAL(C::countInstances(), 1)
-	a_ptr->unregisterThis();
-	TEST_EQUAL(A::countInstances(), 0)
+	TEST_EQUAL(A::countInstances(), 1)
 	TEST_EQUAL(C::countInstances(), 1)
 	delete a_ptr;
-	TEST_EQUAL(A::countInstances(), 0)
+	TEST_EQUAL(A::countInstances(), 1)
 	TEST_EQUAL(C::countInstances(), 1)
 	delete c_ptr;
 	TEST_EQUAL(A::countInstances(), 0)
