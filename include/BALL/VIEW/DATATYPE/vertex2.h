@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.2 2003/08/26 13:14:32 oliver Exp $
-//
+// $Id: vertex2.h,v 1.3 2003/08/26 14:08:03 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
 #define BALL_VIEW_KERNEL_VERTEX2_H
@@ -21,6 +20,7 @@ namespace BALL
 	
 	namespace VIEW
 	{
+
 		/** Vertex2 class.
 				The class Vertex2 is used as a base class for all geometric objects that
 				have two vertices. It provides the derived class with methods for accessing
@@ -284,6 +284,111 @@ namespace BALL
 			void getVertex2(Vector3& v) const
 				throw();
 
+			/** Inspection of the components of the second vector of this vertex2.
+					Access the components of the second vector of this vertex2 
+					by using Real.
+					\param       x the x component of the second vector of this vertex2
+					\param       y the y component of the second vector of this vertex2
+					\param       z the z component of the second vector of this vertex2
+					\see         setVertex2
+					\see         Real
+			*/
+			void getVertex2(Real& x, Real& y, Real& z) const
+				throw();
+
+			/** Change the vector address of the second vector of this vertex2.
+					Change the vector address of the second vector of this vertex2
+					to the vector address	represented by the parameter <b> v</b>.
+					If a vector address is given the value of the first vector of this
+					vertex2	is ignored. Instead if the method getVertex2 (or any other access
+					method concerning the second vector) are called the value of the vector
+					given by the vertex address is returned.
+					The vector to which the second vertex address points must exist and be
+					valid as long as this vertex2 exists.
+					An object that uses this method can hook itself onto another object
+					(speaking in terms of position). If the	object changes its second
+					position so the object derived from this vertex2	changes
+					its second position.
+					\param       v the new second vector address of this vertex2
+					\see         getVertex2Address
+					\see         Vector3
+			*/
+			void setVertex2Address(const Vector3& v)
+				throw();
+
+			/** Change the second vector address of this vertex2 to the
+					default address.
+					This method resets the second vertex address to the second vector of
+					this vertex2. So the value of the second vector of this
+					vertex2 will no longer be ignored and all access methods will return 
+					it again.
+					This method unhooks the object from any other objects prio connected
+					with setVertex2Address.
+					\see         Vertex::setVertex2Address
+			*/
+			void setDefaultVertex2Address()
+				throw();
+
+			/** Mutable inspection of the second vertex address of this vertex2.
+					Access the pointer of the second vector that contains the value of
+					this	vertex2.
+					\return      Vector3* pointer to the second vector that contains the value of this vertex2
+					\see         setVertex2Address
+					\see         Vector3
+			*/
+			Vector3* getVertex2Address() const
+				throw();
+
+			/** Change the first and second vector of this vertex2.
+					Change the first and second vector of this vertex2 to the vectors
+					represented by the parameters <b> vertex1</b> and <b> vertex2</b>.
+					\param       vertex1 the new first vector of this vertex2
+					\param       vertex2 the new second vector of this vertex2
+					\see         getVertices
+					\see         Vector3
+			*/
+			void setVertices(const Vector3& vertex1, const Vector3& vertex2)
+				throw();
+
+			/** Change the first and second vector of this vertex2.
+					Change the first and second vector of this vertex2 to the vectors 
+					represented by the parameters <b> vertex1_x</b>, <b> vertex1_y</b>,
+					<b> vertex1_z</b> and <b> vertex2_x</b>, <b> vertex2_y</b>, <b> vertex2_z</b>. 
+					\param       vertex1_x the x component of the new first vector of this vertex2
+					\param       vertex1_y the y component of the new first vector of this vertex2
+					\param       vertex1_z the z component of the new first vector of this vertex2
+					\param       vertex2_x the x component of the new second vector of this vertex2
+					\param       vertex2_y the y component of the new second vector of this vertex2
+					\param       vertex2_z the z component of the new second vector of this vertex2
+					\see         getVertices
+					\see         Vector3
+					\see         Real
+			*/
+			void setVertices
+				(const Real vertex1_x,
+				 const Real vertex1_y,
+				 const Real vertex1_z,
+				 const Real vertex2_x,
+				 const Real vertex2_y,
+				 const Real vertex2_z)
+				throw();
+
+			/** Change the vector addresses of the first and second vector of this
+					vertex2.
+					Change the vector addresses of the first and second vector of this
+					vertex2	to the vector addresses	represented by the parameters
+					<b> vertex1</b> and <b> vertex2</b>.
+					See setVertex1Address or setVertex2Address for further information
+					concerning vector addresses.
+					\param       vertex1 the new first vector address of this vertex2
+					\param       vertex2 the new second vector address of this vertex2
+					\see         setVertex1Address
+					\see         setVertex2Address
+					\see         Vector3
+			*/
+			void setVertexAddresses(const Vector3& vertex1, const Vector3& vertex2)
+				throw();
+
 			/** Inspection of the first and second vector of this vertex2.
 					Access the first and second vector of this vertex 
 					by using Vector3.
@@ -420,7 +525,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/vertex2.iC>
 #		endif
-  
+	
 	} // namespace VIEW
 
 } // namespace BALL

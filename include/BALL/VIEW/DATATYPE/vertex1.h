@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.1 2003/08/26 12:11:01 oliver Exp $
+// $Id: vertex1.h,v 1.2 2003/08/26 14:08:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
@@ -288,7 +288,7 @@ namespace BALL
 
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/vertex1.iC>
+#			include <BALL/VIEW/DATATYPE/vertex1.iC>
 #		endif
   
 	} // namespace VIEW

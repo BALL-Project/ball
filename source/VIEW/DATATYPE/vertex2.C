@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.C,v 1.2 2003/08/26 13:14:47 oliver Exp $
-//
+// $Id: vertex2.C,v 1.3 2003/08/26 14:07:39 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/vertex2.h>
 
@@ -10,7 +9,6 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -160,5 +158,4 @@ namespace BALL
 #		endif 
 
 	} // namespace VIEW
-
 } // namespace BALL
