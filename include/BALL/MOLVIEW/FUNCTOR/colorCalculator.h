@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorCalculator.h,v 1.13 2003/02/25 15:53:35 sturm Exp $
+// $Id: colorCalculator.h,v 1.14 2003/03/03 14:18:03 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup ColorCalculators
+    /**  \addtogroup  ColorCalculators
      *  @{
      */							
 		using VIEW::ColorTable;
@@ -34,9 +34,9 @@ namespace BALL
 		
 		/** ColorCalculator class.
 				The class ColorCalculator is derived from both  \link Visitor Visitor \endlink  of  \link Atom Atom \endlink 
-				and  \link Composite Composite \endlink . So there are  \link visit visit \endlink  methods for both \Ref{Atom} and
+				and  \link Composite Composite \endlink . So there are  \link visit visit \endlink  methods for both  \link Atom Atom \endlink  and
 				 \link Composite Composite \endlink  objects. The class ColorCalculator is used for calculating
-				a  \link ColorRGBA ColorRGBA \endlink  for each given  \link Atom Atom \endlink  object. A \Ref{ColorMap} is used
+				a  \link ColorRGBA ColorRGBA \endlink  for each given  \link Atom Atom \endlink  object. A  \link ColorMap ColorMap \endlink  is used
 				to store the colors with a given name. That name will be calculated by the method
 				 \link calculateKey calculateKey \endlink  from the given object. If a name is not inserted into the 
 				color map a default color	will be returned. 

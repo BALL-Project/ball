@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gradient.h,v 1.14 2003/03/03 08:17:21 sturm Exp $ 
+// $Id: gradient.h,v 1.15 2003/03/03 14:17:57 anhi Exp $ 
 
 // A conjugate gradient minimizer for geometry optimisation
 
@@ -20,7 +20,7 @@
 
 namespace BALL 
 { 
-    /** \ingroup MolmecCommon
+    /**  \addtogroup  MolmecCommon
      *  @{
      */	
 	class AtomVector;

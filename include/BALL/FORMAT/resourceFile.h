@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.18 2003/02/25 15:53:08 sturm Exp $
+// $Id: resourceFile.h,v 1.19 2003/03/03 14:17:44 anhi Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -40,7 +40,7 @@
 
 namespace BALL 
 {
-    /** \ingroup General
+    /**  \addtogroup  General
      *  @{
      */
 	/**	@name	Support for hierarchical text data.
@@ -72,7 +72,7 @@ namespace BALL
 		ResourceEntry(const ResourceEntry& entry, bool deep = true);
 
 		/**	Create a new resource entry.
-				An entry with <tt>key</tt> and <tt>value</tt> is created. If {\tt parent} is given,
+				An entry with <tt>key</tt> and <tt>value</tt> is created. If <tt>parent</tt> is given,
 				the new entries parent pointer is set to this value. Take care: the parents
 				child array is {\em not} updated - so use this option only if you really know 
 				what you are doing. To keep this data consistent, use  \link insertChild insertChild \endlink .

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeIterator.h,v 1.6 2003/02/25 15:53:15 sturm Exp $
+// $Id: moleculeIterator.h,v 1.7 2003/03/03 14:17:48 anhi Exp $
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
 #define BALL_KERNEL_MOLECULEITERATOR_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup KernelIterators
+    /**  \addtogroup  KernelIterators
      *  @{
      */
 	class MoleculeIteratorTraits_

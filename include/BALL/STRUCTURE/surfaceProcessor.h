@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.31 2003/02/25 13:28:01 sturm Exp $
+// $Id: surfaceProcessor.h,v 1.32 2003/03/03 14:18:22 anhi Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -18,7 +18,7 @@
 
 namespace BALL
 {
-    /** \ingroup Surface
+    /**  \addtogroup  Surface
      *  @{
      */
 	/** SurfaceProcessor.

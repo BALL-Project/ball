@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: removeModel.h,v 1.14 2003/02/25 15:53:37 sturm Exp $
+// $Id: removeModel.h,v 1.15 2003/03/03 14:18:04 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -14,7 +14,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewFunctorsModels
+    /**  \addtogroup  MolviewFunctorsModels
      *  @{
      */
 		/** RemoveModel class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.45 2003/02/25 15:52:59 sturm Exp $
+// $Id: string.h,v 1.46 2003/03/03 14:17:40 anhi Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -30,15 +30,20 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sstream>
 #include <iostream>
 #include <vector>
+
+#ifdef BALL_HAS_SSTREAM
+# include <sstream>
+#else
+# include <strstream>
+#endif
 
 using std::string;
 
 namespace BALL 
 {
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */
 	// forward declaration

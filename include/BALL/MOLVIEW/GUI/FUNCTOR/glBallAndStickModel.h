@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBallAndStickModel.h,v 1.9 2003/03/03 08:17:30 sturm Exp $
+// $Id: glBallAndStickModel.h,v 1.10 2003/03/03 14:18:06 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
@@ -27,7 +27,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewGuiFunctor
+    /**  \addtogroup  MolviewGuiFunctor
      *  @{
      */
 		/** AddGLBallAndStickModel class.

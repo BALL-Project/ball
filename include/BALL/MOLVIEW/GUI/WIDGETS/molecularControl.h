@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.13 2003/03/03 08:17:33 sturm Exp $
+// $Id: molecularControl.h,v 1.14 2003/03/03 14:18:08 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewGuiWidgets
+    /**  \addtogroup  MolviewGuiWidgets
      *  @{
      */
 		using VIEW::Control;
@@ -97,7 +97,7 @@ namespace BALL
 			/**	Menu checking method.
 					This method is called by the method  \link checkMenus checkMenus \endlink  from the
 					 \link MainControl MainControl \endlink  object before a popup menu is shown.
-					The menus  \link cut cut \endlink ,  \link copy copy \endlink , \Ref{paste} and \Ref{clearClipboard} will
+					The menus  \link cut cut \endlink ,  \link copy copy \endlink ,  \link paste paste \endlink  and \Ref{clearClipboard} will
 					be enabled and disabled as molecular structures are selected.  \link Paste Paste \endlink 
 					and  \link clearClipboard clearClipboard \endlink  will only be enabled if  \link System System \endlink  objects
 					were cutted or copied before.

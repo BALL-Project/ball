@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFIntegrator.h,v 1.13 2003/02/25 13:27:52 sturm Exp $
+// $Id: RDFIntegrator.h,v 1.14 2003/03/03 14:18:18 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
 #define BALL_STRUCTURE_RDFINTEGRATOR_H
@@ -12,7 +12,7 @@
 
 namespace BALL
 {
-    /** \ingroup RDF
+    /**  \addtogroup  RDF
      *  @{
      */
 	/** Integrator class for radial distribution functions.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.29 2003/02/25 15:52:57 sturm Exp $
+// $Id: hashGrid.h,v 1.30 2003/03/03 14:17:39 anhi Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -32,7 +32,7 @@
 
 namespace BALL 
 {
-    /** \ingroup GenericHash
+    /**  \addtogroup  GenericHash
      *  @{
      */
 	/**	@name	Three-dimensional Hash Grid
@@ -165,14 +165,14 @@ namespace BALL
 
 		/** Test whether an item is in the data item list
 				@param item
-				@return bool - <tt>true</tt> if instance has <tt>item</tt>, {\tt false} otherwise.
+				@return bool - <tt>true</tt> if instance has <tt>item</tt>, <tt>false</tt> otherwise.
 		*/
 		bool has(const Item& item) const
 			throw();
 
 		/** Test, whether this box is empty, i. e. the data item list contains
 				nothing
-				@return bool - <tt>true</tt>, if <tt>this</tt> is empty. {\tt false} otherwise. 
+				@return bool - <tt>true</tt>, if <tt>this</tt> is empty. <tt>false</tt> otherwise. 
 		*/
 		bool isEmpty() const
 			throw();
@@ -1094,7 +1094,7 @@ namespace BALL
 
 		/** Constructor using two vectors and a single spacing.
 				This constructor creates a hash grid at <tt>origin</tt> with spacing
-				<tt>spacing</tt>. The vector <tt>size</tt> has to be relative to {\tt origin}
+				<tt>spacing</tt>. The vector <tt>size</tt> has to be relative to <tt>origin</tt>
 				and defines the opposite corner of the grid, thereby setting the size 
 				of the grid.
 				@param origin a vector defining the origin of our cubic hash grid

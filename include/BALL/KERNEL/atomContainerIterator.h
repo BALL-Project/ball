@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainerIterator.h,v 1.9 2003/02/25 15:53:10 sturm Exp $ 
+// $Id: atomContainerIterator.h,v 1.10 2003/03/03 14:17:46 anhi Exp $ 
 
 #ifndef BALL_KERNEL_ATOMCONTAINERITERATOR_H
 #define BALL_KERNEL_ATOMCONTAINERITERATOR_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */
 	class AtomContainer;

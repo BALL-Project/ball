@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticAngleBend.h,v 1.14 2003/02/25 15:53:31 sturm Exp $
+// $Id: quadraticAngleBend.h,v 1.15 2003/03/03 14:18:00 anhi Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
@@ -20,7 +20,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecParameters
+    /**  \addtogroup  MolmecParameters
      *  @{
      */			
 	/** QuadraticAngleBend.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentIterator.h,v 1.9 2003/02/25 15:53:13 sturm Exp $
+// $Id: fragmentIterator.h,v 1.10 2003/03/03 14:17:47 anhi Exp $
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
 #define BALL_KERNEL_FRAGMENTITERATOR_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup KernelIterators
+    /**  \addtogroup  KernelIterators
      *  @{
      */
 	/** Traits class for the FragmentIterator.

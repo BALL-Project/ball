@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeGLObjectCollector.h,v 1.9 2003/03/03 08:17:31 sturm Exp $
+// $Id: moleculeGLObjectCollector.h,v 1.10 2003/03/03 14:18:07 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
@@ -14,7 +14,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewGuiFunctor
+    /**  \addtogroup  MolviewGuiFunctor
      *  @{
      */
 		using VIEW::GLObjectCollector;
@@ -68,7 +68,7 @@ namespace BALL
 					Collects all  \link GLObject GLObject \endlink  objects that are accessable on each  \link Bond Bond \endlink 
 					of the processed  \link Molecule Molecule \endlink  object (if  \link getRootComposite getRootComposite \endlink  is of type
 					 \link Molecule Molecule \endlink ).
-					Calls  \link GLObjectCollector::operator() GLObjectCollector::operator() \endlink  for each  \link Bond Bond \endlink  of \Ref{Molecule}.
+					Calls  \link GLObjectCollector::operator() GLObjectCollector::operator() \endlink  for each  \link Bond Bond \endlink  of  \link Molecule Molecule \endlink .
 					@return bool <tt>true</tt> if the finish of {\em *this} moleculeGLObjectCollector was successful, 
 					             <tt>false</tt> otherwise
 			*/

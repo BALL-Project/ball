@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.16 2003/02/25 15:52:58 sturm Exp $
+// $Id: options.h,v 1.17 2003/03/03 14:17:39 anhi Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup GenericHash
+    /**  \addtogroup  GenericHash
      *  @{
      */
 	/**		Options class.

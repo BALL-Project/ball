@@ -20,7 +20,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiDialogs
+    /**  \addtogroup  ViewGuiDialogs
      *  @{
      */
 		class ColorMeshDialog 

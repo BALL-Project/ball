@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.h,v 1.13 2003/02/25 10:48:04 anhi Exp $
+// $Id: textPersistenceManager.h,v 1.14 2003/03/03 14:17:38 anhi Exp $
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -13,7 +13,7 @@
 namespace BALL 
 {
 
-	/** \ingroup Persistence
+	/**  \addtogroup  Persistence
 	 *	@{
 	 */
 

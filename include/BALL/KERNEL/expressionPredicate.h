@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionPredicate.h,v 1.6 2003/02/25 15:53:13 sturm Exp $
+// $Id: expressionPredicate.h,v 1.7 2003/03/03 14:17:47 anhi Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPREDICATE_H
 #define BALL_KERNEL_EXPRESSIONPREDICATE_H
@@ -12,7 +12,7 @@
 
 namespace BALL
 {
-    /** \ingroup Predicates
+    /**  \addtogroup  Predicates
      *  @{
      */
 	/** ExpressionPredicate. 

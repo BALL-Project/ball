@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.23 2003/02/25 15:53:16 sturm Exp $
+// $Id: nucleotide.h,v 1.24 2003/03/03 14:17:48 anhi Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Kernel
+    /**  \addtogroup  Kernel
      *  @{
      */
 	class NucleicAcid;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyProcessor.h,v 1.10 2003/02/25 15:53:02 sturm Exp $
+// $Id: energyProcessor.h,v 1.11 2003/03/03 14:17:42 anhi Exp $
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #define BALL_ENERGY_ENERGYPROCESSOR_H
@@ -20,7 +20,7 @@
 
 namespace BALL
 {
-    /** \ingroup Energy
+    /**  \addtogroup  Energy
      *  @{
      */
 	/** Processor for energy calculations.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glVanDerWaalsModel.h,v 1.10 2003/03/03 08:17:31 sturm Exp $
+// $Id: glVanDerWaalsModel.h,v 1.11 2003/03/03 14:18:07 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewGuiFunctor
+    /**  \addtogroup  MolviewGuiFunctor
      *  @{
      */
 		/** AddGLVanDerWaalsModel class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.13 2003/02/25 15:53:41 sturm Exp $
+// $Id: twoColoredLine.h,v 1.14 2003/03/03 14:18:09 anhi Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
 #define BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewPrimitives
+    /**  \addtogroup MolviewPrimitives
      *  @{
      */
 		using VIEW::GeometricObject;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.h,v 1.19 2003/03/03 08:17:24 sturm Exp $
+// $Id: canonicalMD.h,v 1.20 2003/03/03 14:17:58 anhi Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -52,7 +52,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MDSimulation
+    /**  \addtogroup  MDSimulation
      *  @{
      */
 	/** A MD simulation in the canoncial ensemble.

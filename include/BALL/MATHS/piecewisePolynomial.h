@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewisePolynomial.h,v 1.12 2003/02/25 15:53:25 sturm Exp $
+// $Id: piecewisePolynomial.h,v 1.13 2003/03/03 14:17:53 anhi Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-    /** \ingroup FunctionClasses
+    /**  \addtogroup  FunctionClasses
      *  @{
      */  
 	/** Piecewise polynomial curve object.

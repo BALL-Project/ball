@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.11 2003/02/25 13:28:05 sturm Exp $
+// $Id: global.h,v 1.12 2003/03/03 14:18:25 anhi Exp $
 
 #ifndef BALL_VIEW_COMMON_GLOBAL_H
 #define BALL_VIEW_COMMON_GLOBAL_H
@@ -14,7 +14,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewCommon
+    /**  \addtogroup  ViewCommon
      *  @{
      */
 		/**     @name Type aliases defined by VIEW

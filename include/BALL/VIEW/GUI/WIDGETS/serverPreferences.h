@@ -18,7 +18,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiWidgets
+    /**  \addtogroup  ViewGuiWidgets
      *  @{
      */
 		/** ServerPreferences class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.h,v 1.22 2003/02/25 15:53:30 sturm Exp $
+// $Id: lennardJones.h,v 1.23 2003/03/03 14:18:00 anhi Exp $
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
@@ -18,7 +18,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecParameters
+    /**  \addtogroup  MolmecParameters
      *  @{
      */		
 	/**	Lennard Jones parameter section.

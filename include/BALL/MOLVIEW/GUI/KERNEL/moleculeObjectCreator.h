@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.h,v 1.8 2003/03/03 08:17:31 sturm Exp $
+// $Id: moleculeObjectCreator.h,v 1.9 2003/03/03 14:18:07 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -43,7 +43,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewGui
+    /**  \addtogroup  MolviewGui
      *  @{
      */
 		using VIEW::ObjectCreator;
@@ -122,7 +122,7 @@ namespace BALL
 
 			/** Converts persistent objects.
 					If {\em po} is an object that represents a molecular structure (an  \link Atom Atom \endlink ,
-					 \link Protein Protein \endlink  or  \link System System \endlink ) it will be converted into a \Ref{Composite}
+					 \link Protein Protein \endlink  or  \link System System \endlink ) it will be converted into a  \link Composite Composite \endlink 
 					object and returned. If it is none of the above <tt>0</tt> will be returned.
 					See  \link TextPersistenceManager TextPersistenceManager \endlink  for information
 					on how to convert  \link PersistentObject PersistentObject \endlink  objects into other objects.				

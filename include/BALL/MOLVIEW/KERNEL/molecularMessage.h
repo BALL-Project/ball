@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularMessage.h,v 1.11 2003/02/25 15:53:39 sturm Exp $
+// $Id: molecularMessage.h,v 1.12 2003/03/03 14:18:09 anhi Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -19,7 +19,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewKernel
+    /**  \addtogroup  MolviewKernel
      *  @{
      */
 		/** NewMolecularMessage class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.10 2003/02/25 15:53:06 sturm Exp $
+// $Id: XYZFile.h,v 1.11 2003/03/03 14:17:43 anhi Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
@@ -20,7 +20,7 @@
 
 namespace BALL 
 {
-    /** \ingroup StructureFormats
+    /**  \addtogroup  StructureFormats
      *  @{
      */
 	/**	XYZ file class.

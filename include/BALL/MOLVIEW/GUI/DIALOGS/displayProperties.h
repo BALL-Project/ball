@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.24 2003/03/03 08:17:27 sturm Exp $
+// $Id: displayProperties.h,v 1.25 2003/03/03 14:18:05 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -66,7 +66,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewDialogs
+    /**  \addtogroup  MolviewDialogs
      *  @{
      */
 		/// Exception to be thrown if invalid option is given for a modelprocessor
@@ -289,7 +289,7 @@ namespace BALL
 
 			/** Starts the displayProperties dialog.
 					Opens {\em *this} displayProperties dialog.
-					Calls  \link show show \endlink  and  \link raise raise \endlink  from \Ref{QDialog} class.
+					Calls  \link show show \endlink  and  \link raise raise \endlink  from  \link QDialog QDialog \endlink  class.
 					See documentation of QT-library for information concerning QDialog widgets.
 			*/
 			void openDialog();

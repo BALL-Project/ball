@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.10 2003/02/25 13:28:08 sturm Exp $
+// $Id: information.h,v 1.11 2003/03/03 14:18:26 anhi Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -53,7 +53,7 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /** \ingroup ViewFunctors
+    /**  \addtogroup  ViewFunctors
      *  @{
      */		
 		/** Information class.

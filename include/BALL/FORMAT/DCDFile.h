@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.21 2003/02/25 15:53:02 sturm Exp $
+// $Id: DCDFile.h,v 1.22 2003/03/03 14:17:42 anhi Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -12,7 +12,7 @@
 
 namespace BALL
 {
-    /** \ingroup MDFormats
+    /**  \addtogroup  MDFormats
      *  @{
      */
 	/** DCD Trajectory file format. This class enables BALL to write DCD

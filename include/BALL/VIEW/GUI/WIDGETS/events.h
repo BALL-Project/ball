@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.11 2003/02/25 13:28:17 sturm Exp $
+// $Id: events.h,v 1.12 2003/03/03 14:18:30 anhi Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -918,7 +918,7 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiWidgets
+    /**  \addtogroup  ViewGuiWidgets
      *  @{
      */
 		/* forward */

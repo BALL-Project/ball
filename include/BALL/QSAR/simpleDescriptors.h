@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleDescriptors.h,v 1.7 2003/02/25 15:53:52 sturm Exp $
+// $Id: simpleDescriptors.h,v 1.8 2003/03/03 14:18:15 anhi Exp $
 
 #ifndef BALL_QSAR_SIMPLEDESCRIPTORS_H
 #define BALL_QSAR_SIMPLEDESCRIPTORS_H
@@ -13,7 +13,7 @@
 namespace BALL
 {
 
-    /** \ingroup MolecularDescriptors
+    /**  \addtogroup  MolecularDescriptors
      *  @{
      */	
 	/**	Descriptor returning the molecular mass of a molecule

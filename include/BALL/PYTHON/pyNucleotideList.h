@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyNucleotideList.h,v 1.6 2003/02/25 15:53:50 sturm Exp $
+// $Id: pyNucleotideList.h,v 1.7 2003/03/03 14:18:14 anhi Exp $
 
 #ifndef BALL_PYTHON_PYNUCLEOTIDELIST_H
 #define BALL_PYTHON_PYNUCLEOTIDELIST_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-  /** \ingroup PythonExtensions
+  /**  \addtogroup  PythonExtensions
    *  @{
    */
 	class Nucleotide;

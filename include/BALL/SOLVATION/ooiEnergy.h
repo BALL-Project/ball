@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ooiEnergy.h,v 1.7 2003/02/25 15:53:54 sturm Exp $
+// $Id: ooiEnergy.h,v 1.8 2003/03/03 14:18:16 anhi Exp $
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
 #define BALL_SOLVATION_OOIENERGY_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Solvation
+    /**  \addtogroup  Solvation
      *  @{
      */
 	class AtomContainer;

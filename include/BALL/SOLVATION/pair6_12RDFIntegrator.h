@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12RDFIntegrator.h,v 1.15 2003/02/25 15:53:55 sturm Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.16 2003/03/03 14:18:16 anhi Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -26,7 +26,7 @@
 
 namespace BALL
 {
-    /** \ingroup Solvation
+    /**  \addtogroup  Solvation
      *  @{
      */
 	/** 6-12 pair potential integrator.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.38 2003/02/25 10:47:55 anhi Exp $
+// $Id: persistenceManager.h,v 1.39 2003/03/03 14:17:36 anhi Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -61,7 +61,7 @@ namespace BALL
 			@see	PersistentObject
 			@see	XDRPersistenceManager
 			@see	TextPersistenceManager
-	*		\ingroup Persistence
+	*		 \addtogroup  Persistence
 	*/		
 	class PersistenceManager
 	{

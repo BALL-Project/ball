@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.6 2003/02/25 10:47:57 anhi Exp $
+// $Id: predicate.h,v 1.7 2003/03/03 14:17:37 anhi Exp $
 
 #ifndef BALL_CONCEPT_PREDICATE_H
 #define BALL_CONCEPT_PREDICATE_H
@@ -10,7 +10,7 @@
 
 namespace BALL 
 {
-	/** \ingroup Concepts
+	/**  \addtogroup  Concepts
 	 * 	@{
 	 */
 

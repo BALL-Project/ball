@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: radialDistributionFunction.h,v 1.15 2003/02/25 13:27:57 sturm Exp $
+// $Id: radialDistributionFunction.h,v 1.16 2003/03/03 14:18:21 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -12,7 +12,7 @@
 
 namespace BALL
 {
-    /** \ingroup RDF
+    /**  \addtogroup  RDF
      *  @{
      */
 	/** Radial distribution function.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.h,v 1.19 2003/02/25 15:53:13 sturm Exp $
+// $Id: fragment.h,v 1.20 2003/03/03 14:17:47 anhi Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -20,7 +20,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Kernel
+    /**  \addtogroup  Kernel
      *  @{
      */
 	/**	Fragment class.

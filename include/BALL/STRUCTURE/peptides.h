@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptides.h,v 1.5 2003/02/25 13:27:57 sturm Exp $
+// $Id: peptides.h,v 1.6 2003/03/03 14:18:20 anhi Exp $
 
 #ifndef BALL_STRUCTURE_PEPTIDES_H
 #define BALL_STRUCTURE_PEPTIDES_H
@@ -19,7 +19,7 @@ namespace BALL
 
 	namespace Peptides
 	{
-    /** \ingroup Structure
+    /**  \addtogroup  Structure
      *  @{
      */		
 		/**	@name	Type definitions

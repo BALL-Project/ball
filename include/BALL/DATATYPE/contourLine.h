@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourLine.h,v 1.10 2003/02/25 15:52:56 sturm Exp $
+// $Id: contourLine.h,v 1.11 2003/03/03 14:17:38 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -18,7 +18,7 @@
 
 namespace BALL
 {
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */
   // First I define some macros needed for the marching cube-algorithm. 

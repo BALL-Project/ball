@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.20 2003/02/21 16:03:47 anhi Exp $
+// $Id: common.h,v 1.21 2003/03/03 14:17:52 anhi Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -141,7 +141,7 @@ namespace BALL
 
 		/**	Return the sign of a number.
 				@param	t the number
-				@return Index <tt>-1</tt> t < 0;  <tt>0</tt> t = 0; {\tt 1} t > 0
+				@return Index <tt>-1</tt> t < 0;  <tt>0</tt> t = 0; <tt>1</tt> t > 0
 		*/
 		template <typename T>
 		inline 
@@ -169,7 +169,7 @@ namespace BALL
 
 		/**	Test whether a number is infinite.
 				@param	t the number
-				@return bool, <b>true</b> if <tt>t</tt> equals <tt>inf</tt> or {\tt -inf}
+				@return bool, <b>true</b> if <tt>t</tt> equals <tt>inf</tt> or <tt>-inf</tt>
 		*/
 		template <typename T>
 		inline 
@@ -324,7 +324,7 @@ namespace BALL
 		/**	Compare two numbers to each other.
 				@param	a the first number
 				@param	b the second number
-				@return Index <tt>-1</tt> a < b; <tt>0</tt> a = b; {\tt 1} a > b
+				@return Index <tt>-1</tt> a < b; <tt>0</tt> a = b; <tt>1</tt> a > b
 		*/
 		template <typename T1, typename T2>
 		inline 
@@ -338,7 +338,7 @@ namespace BALL
 				@param	a the first number
 				@param	b the second number
 				@param	max_diff the maximum allowed difference between the two numbers
-				@return bool, <b>true</b> if the absolute distance between <tt>a</tt> and <tt>b</tt> is below {\tt max_diff}
+				@return bool, <b>true</b> if the absolute distance between <tt>a</tt> and <tt>b</tt> is below <tt>max_diff</tt>
 		*/
 		template <typename T>
 		inline 

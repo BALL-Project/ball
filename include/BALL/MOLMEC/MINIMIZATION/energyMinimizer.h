@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.33 2003/03/03 08:17:25 sturm Exp $
+// $Id: energyMinimizer.h,v 1.34 2003/03/03 14:17:59 anhi Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -30,7 +30,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecEnergyMinimizer
+    /**  \addtogroup  MolmecEnergyMinimizer
      *  @{
      */
 	class ForceField;

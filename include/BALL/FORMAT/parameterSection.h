@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameterSection.h,v 1.19 2003/02/25 15:53:08 sturm Exp $
+// $Id: parameterSection.h,v 1.20 2003/03/03 14:17:44 anhi Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -17,7 +17,7 @@
 
 namespace BALL 
 {
-    /** \ingroup General
+    /**  \addtogroup  General
      *  @{
      */
 	class Parameters;
@@ -25,7 +25,7 @@ namespace BALL
 	/**	General Parameter Section Class.
 			It is similar to  \link INIFile INIFile \endlink , but a little bit more sophisticated.
 			Just as in a INIFile there can be comment lines starting with either 
-			"<b>;</b>", "<b>!</b>" or "{\bf \#}" and it is divided in sections.
+			"<b>;</b>", "<b>!</b>" or "<b>\#</b>" and it is divided in sections.
 			A section-line looks like "<b>[ElectricFieldEffect]</b>".
 			The first non-comment line in a section is the format-line.
 			It defines the sort of values stored in the section and their order:  \par

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.13 2003/02/25 15:53:42 sturm Exp $
+// $Id: twoColoredTube.h,v 1.14 2003/03/03 14:18:10 anhi Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewPrimitives
+    /**  \addtogroup  MolviewPrimitives
      *  @{
      */
 		using VIEW::GeometricObject;
@@ -48,7 +48,7 @@ namespace BALL
 				from vertex1 til middle vertex) is colored by the color1 and the other half 
 				(starting from middle vertex to vertex2) is colored by color2.
 				The class TwoColoredTube is derived from the classes  \link GeometricObject GeometricObject \endlink ,
-				 \link ColorExtension2 ColorExtension2 \endlink ,  \link Radius Radius \endlink 	and \Ref{Vertex2}.
+				 \link ColorExtension2 ColorExtension2 \endlink ,  \link Radius Radius \endlink 	and  \link Vertex2 Vertex2 \endlink .
 				See these classes for further information concerning
 				interface and additional methods.  \par
 				<b>Definition:</b> BALL/MOLVIEW/PRIMITIV/twoColoredTube.h

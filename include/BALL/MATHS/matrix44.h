@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.41 2003/02/25 15:53:24 sturm Exp $
+// $Id: matrix44.h,v 1.42 2003/03/03 14:17:52 anhi Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -28,7 +28,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Primitives
+    /**  \addtogroup  Primitives
      *  @{
      */
 	/**	@name	4x4 Matrix
@@ -375,7 +375,7 @@ namespace BALL
 		/**	Constant random access operator.
 				Access single elements of the matrix. <tt>index</tt> may assume
 				values in the range of 0 - 15. The elements of the matrix
-				are returned rows first, i.e., in the following order: <tt>m11</tt>, <tt>m12</tt>, {\tt m13}...
+				are returned rows first, i.e., in the following order: <tt>m11</tt>, <tt>m12</tt>, <tt>m13</tt>...
 				
 		*/
 		const T& operator [] (Position index) const

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: spectrum.h,v 1.10 2003/02/25 15:53:46 sturm Exp $
+// $Id: spectrum.h,v 1.11 2003/03/03 14:18:12 anhi Exp $
 
 #ifndef BALL_NMR_SPECTRUM_H
 #define BALL_NMR_SPECTRUM_H
@@ -25,7 +25,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Spectra
+    /**  \addtogroup  Spectra
      *  @{
      */
 	/**	A generic NMR spectrum class.

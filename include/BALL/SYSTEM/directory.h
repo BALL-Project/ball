@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.h,v 1.19 2003/02/25 13:28:03 sturm Exp $
+// $Id: directory.h,v 1.20 2003/03/03 14:18:24 anhi Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -41,7 +41,7 @@
 
 namespace BALL 
 {
-    /** \ingroup System
+    /**  \addtogroup  System
      *  @{
      */
 	/**	Directory class. 

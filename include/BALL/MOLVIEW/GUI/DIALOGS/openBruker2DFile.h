@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.h,v 1.8 2003/03/03 08:17:29 sturm Exp $
+// $Id: openBruker2DFile.h,v 1.9 2003/03/03 14:18:06 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER2DFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER2DFILE_H
@@ -25,7 +25,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewDialogs
+    /**  \addtogroup  MolviewDialogs
      *  @{
      */
 	/** This class provides an interface to select and open spectra stored in the bruker file format.

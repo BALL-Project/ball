@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.12 2003/02/25 15:53:56 sturm Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.13 2003/03/03 14:18:17 anhi Exp $
 
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
@@ -20,7 +20,7 @@
 
 namespace BALL
 {
-    /** \ingroup Solvation
+    /**  \addtogroup  Solvation
      *  @{
      */  
 	/** Processor for the computation of the cavitation free energy. 

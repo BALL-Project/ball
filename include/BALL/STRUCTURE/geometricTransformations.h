@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricTransformations.h,v 1.10 2003/02/25 13:27:56 sturm Exp $
+// $Id: geometricTransformations.h,v 1.11 2003/03/03 14:18:20 anhi Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
 #define BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -28,7 +28,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Structure
+    /**  \addtogroup  Structure
      *  @{
      */
 	/**	@name	Geometric transformation applicators

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.40 2003/02/25 10:47:48 anhi Exp $
+// $Id: composite.h,v 1.41 2003/03/03 14:17:35 anhi Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -71,7 +71,7 @@ namespace BALL
 			Composites are persistent objects. 
 			 \par
 			<b>Definition:</b> BALL/CONCEPT/composite.h
-	* 	\ingroup Concepts
+	* 	 \addtogroup  Concepts
 	*/
 	class Composite
 		: public PersistentObject,
@@ -518,7 +518,7 @@ namespace BALL
 				into <tt>parent</tt> and <tt>parent</tt> is inserted in the former
 				position of <tt>first</tt>. The method returns <b>false</b>, if {\tt
 				first} or <tt>last</tt> have differing parents, if <tt>parent</tt> is
-				identical with either <tt>first</tt> or <tt>last</tt>, or if {\tt first}
+				identical with either <tt>first</tt> or <tt>last</tt>, or if <tt>first</tt>
 				is already a descendant of <tt>parent</tt>.  
 				 \par
 				This method updates the modification time stamp.
@@ -582,7 +582,7 @@ namespace BALL
 
 		/**	Insert the children of composite into this composite.
 				The children of <tt>composite</tt> are inserted at the position of 
-				<tt>composite</tt> if <tt>composite</tt> is a child of {\tt this}.
+				<tt>composite</tt> if <tt>composite</tt> is a child of <tt>this</tt>.
 				Otherwise the children are inserted using  \link spliceBefore spliceBefore \endlink .
 				 \par
 				This method updates the modification time stamp.

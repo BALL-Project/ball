@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glSurfaceModel.h,v 1.9 2003/03/03 08:17:30 sturm Exp $
+// $Id: glSurfaceModel.h,v 1.10 2003/03/03 14:18:07 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewGuiFunctor
+    /**  \addtogroup  MolviewGuiFunctor
      *  @{
      */
 		/** AddGLSurfaceModel class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: function.h,v 1.19 2003/02/25 15:53:23 sturm Exp $
+// $Id: function.h,v 1.20 2003/03/03 14:17:52 anhi Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -12,7 +12,7 @@
 
 namespace BALL
 {
-    /** \ingroup FunctionClasses
+    /**  \addtogroup  FunctionClasses
      *  @{
      */  
 	/** Constant function class. This function represents a constant that is

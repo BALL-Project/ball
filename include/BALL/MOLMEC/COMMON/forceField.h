@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.22 2003/03/03 08:17:20 sturm Exp $
+// $Id: forceField.h,v 1.23 2003/03/03 14:17:56 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -42,7 +42,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecCommon
+    /**  \addtogroup  MolmecCommon
      *  @{
      */	
 	class ForceFieldComponent;

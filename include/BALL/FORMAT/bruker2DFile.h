@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.h,v 1.17 2003/02/25 15:53:06 sturm Exp $
+// $Id: bruker2DFile.h,v 1.18 2003/03/03 14:17:44 anhi Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
@@ -36,7 +36,7 @@
 
 namespace BALL
 {
-    /** \ingroup NMRFileFormats
+    /**  \addtogroup  NMRFileFormats
      *  @{
      */
 	/**	Bruker 2D spectrum format.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.h,v 1.13 2003/02/25 13:28:07 sturm Exp $
+// $Id: colorUnitHue.h,v 1.14 2003/03/03 14:18:25 anhi Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
 #define BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -25,7 +25,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewDatatypeFormat
+    /**  \addtogroup  ViewDatatypeFormat
      *  @{
      */
 		/** ColorUnitHue class.

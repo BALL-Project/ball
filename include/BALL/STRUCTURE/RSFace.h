@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSFace.h,v 1.26 2003/02/25 13:27:53 sturm Exp $
+// $Id: RSFace.h,v 1.27 2003/03/03 14:18:18 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -16,7 +16,7 @@
 
 namespace BALL
 {
-    /** \ingroup Surface
+    /**  \addtogroup  Surface
      *  @{
      */	
 	class RSVertex;

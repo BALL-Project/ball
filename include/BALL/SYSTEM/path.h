@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.h,v 1.6 2003/02/25 13:28:04 sturm Exp $
+// $Id: path.h,v 1.7 2003/03/03 14:18:24 anhi Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H
@@ -18,7 +18,7 @@ using std::vector;
 
 namespace BALL 
 {
-    /** \ingroup System
+    /**  \addtogroup  System
      *  @{
      */
 	/**	Data path management class.

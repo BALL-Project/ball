@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.h,v 1.16 2003/03/03 08:17:16 sturm Exp $ 
+// $Id: amber.h,v 1.17 2003/03/03 14:17:55 anhi Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -21,7 +21,7 @@
 
 namespace BALL 
 {
-    /** \ingroup AMBER
+    /**  \addtogroup  AMBER
      *  @{
      */
 	/**	AMBER force field class.

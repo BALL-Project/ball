@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.11 2003/02/25 15:53:33 sturm Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.12 2003/03/03 14:18:02 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
@@ -33,7 +33,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewFunctorsBase
+    /**  \addtogroup  MolviewFunctorsBase
      *  @{
      */
 		/** AtomBondModelBaseProcessor class.

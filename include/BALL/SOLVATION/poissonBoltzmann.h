@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.22 2003/02/25 15:53:56 sturm Exp $ 
+// $Id: poissonBoltzmann.h,v 1.23 2003/03/03 14:18:17 anhi Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -28,7 +28,7 @@ using std::vector;
 
 namespace BALL 
 {
-    /** \ingroup Solvation
+    /**  \addtogroup  Solvation
      *  @{
      */
 	/** Finite Difference Poisson Boltzmann Solver.

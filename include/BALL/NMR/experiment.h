@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: experiment.h,v 1.6 2003/02/25 15:53:44 sturm Exp $
+// $Id: experiment.h,v 1.7 2003/03/03 14:18:11 anhi Exp $
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H
@@ -20,7 +20,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Spectra
+    /**  \addtogroup  Spectra
      *  @{
      */
 	/**	Class describing a certain type of NMR experiment.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.h,v 1.10 2003/02/25 13:28:14 sturm Exp $
+// $Id: objectCreator.h,v 1.11 2003/03/03 14:18:28 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
 #define BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
@@ -32,7 +32,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiKernelServer
+    /**  \addtogroup  ViewGuiKernelServer
      *  @{
      */
 		/** ObjectCreator class.

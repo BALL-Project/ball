@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: radiusRuleProcessor.h,v 1.8 2003/03/03 08:17:22 sturm Exp $
+// $Id: radiusRuleProcessor.h,v 1.9 2003/03/03 14:17:57 anhi Exp $
 // Molecular Mechanics: rule-based assignment of radii
 
 #ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
@@ -13,7 +13,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecAssignment
+    /**  \addtogroup  MolmecAssignment
      *  @{
      */
 	/**	Radius Rule Processor.

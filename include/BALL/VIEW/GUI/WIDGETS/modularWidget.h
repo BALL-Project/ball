@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.14 2003/02/25 13:28:18 sturm Exp $
+// $Id: modularWidget.h,v 1.15 2003/03/03 14:18:31 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -34,7 +34,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiWidgets
+    /**  \addtogroup  ViewGuiWidgets
      *  @{
      */
 		/**	The ModularWidget class.
@@ -186,7 +186,7 @@ namespace BALL
 			
 			/**	Remove the preferences tab.
 					This method can remove a preferences widget (if created in 
-					 \link initializePreferencesTab initializePreferencesTab \endlink )	from the  \link Preferences Preferences \endlink  dialog of the \Ref{MainControl}.
+					 \link initializePreferencesTab initializePreferencesTab \endlink )	from the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink .
 					This method is called automatically by the method  \link aboutToExit aboutToExit \endlink  from the
 					 \link MainControl MainControl \endlink  object at the end of the application.
 					@param  preferences the  \link Preferences Preferences \endlink  dialog of the  \link MainControl MainControl \endlink 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.44 2003/02/25 13:28:03 sturm Exp $
+// $Id: file.h,v 1.45 2003/03/03 14:18:24 anhi Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -63,7 +63,7 @@
 
 namespace BALL 
 {
-    /** \ingroup System
+    /**  \addtogroup  System
      *  @{
      */
 	/**	This class handles automatic file transformation methods.
@@ -118,8 +118,8 @@ namespace BALL
 					\item <tt>%s</tt> is replaced by the full content of <tt>name</tt>
 					\item <tt>%f</tt> is replaced by the full content of <tt>name</tt>, without any file type suffix (i.e. anything after
 								the last dot in the filename is removed)
-					\item <tt>%f[suffix]</tt> is replaced by the previous content of <tt>name</tt> without the {\tt suffix}
-					\item <tt>%b</tt> and <tt>%b[suffix]</tt> like {\tt %f} and {\tt %f[suffix]}, except that the
+					\item <tt>%f[suffix]</tt> is replaced by the previous content of <tt>name</tt> without the <tt>suffix</tt>
+					\item <tt>%b</tt> and <tt>%b[suffix]</tt> like <tt>%f</tt> and {\tt %f[suffix]}, except that the
 								path is removed as well, so it is only the {\em base name} of the file
 					\item <tt>%p</tt> the path to the file
 					\item <tt>%t</tt> a temporary file name (all occurences of <tt>%t</tt> are replace with the same file name for

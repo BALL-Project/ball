@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.15 2003/02/25 15:53:07 sturm Exp $
+// $Id: genericMolFile.h,v 1.16 2003/03/03 14:17:44 anhi Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -12,7 +12,7 @@
 
 namespace BALL 
 {
-    /** \ingroup StructureFormats
+    /**  \addtogroup  StructureFormats
      *  @{
      */
 	class Atom;

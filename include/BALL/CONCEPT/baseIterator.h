@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseIterator.h,v 1.21 2003/02/25 10:47:42 anhi Exp $
+// $Id: baseIterator.h,v 1.22 2003/03/03 14:17:34 anhi Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -54,7 +54,7 @@ namespace BALL
 				}
 			\endcode
 			<b>Definition:</b> BALL/CONCEPT/baseIterator.h
-	* 	\ingroup ConceptsIterators
+	* 	 \addtogroup  ConceptsIterators
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstBaseIterator
@@ -527,7 +527,7 @@ namespace BALL
 
 	/**	Constant Basic Iterator.
 			<b>Definition:</b> BALL/CONCEPT/baseIterator.h
-	* 	\ingroup ConceptsIterators
+	* 	 \addtogroup  ConceptsIterators
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class BaseIterator

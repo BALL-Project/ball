@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.11 2003/02/25 13:28:25 sturm Exp $
+// $Id: vertex2.h,v 1.12 2003/03/03 14:18:35 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
 #define BALL_VIEW_KERNEL_VERTEX2_H
@@ -20,7 +20,7 @@ namespace BALL
 	
 	namespace VIEW
 	{
-    /** \ingroup ViewKernelGeometricPrimitives
+    /**  \addtogroup  ViewKernelGeometricPrimitives
      *  @{
      */
 		/** Vertex2 class.

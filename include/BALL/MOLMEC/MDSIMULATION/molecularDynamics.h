@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.h,v 1.23 2003/03/03 08:17:25 sturm Exp $
+// $Id: molecularDynamics.h,v 1.24 2003/03/03 14:17:58 anhi Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -61,7 +61,7 @@
 namespace BALL
 {
 
-    /** \ingroup MDSimulation
+    /**  \addtogroup  MDSimulation
      *  @{
      */
    	/**	Molecular Dynamics base class.

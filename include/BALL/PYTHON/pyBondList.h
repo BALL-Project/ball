@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBondList.h,v 1.6 2003/02/25 15:53:48 sturm Exp $
+// $Id: pyBondList.h,v 1.7 2003/03/03 14:18:13 anhi Exp $
 
 #ifndef BALL_PYTHON_PYBONDLIST_H
 #define BALL_PYTHON_PYBONDLIST_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-  /** \ingroup PythonExtensions
+  /**  \addtogroup  PythonExtensions
    *  @{
    */
 	class Bond;

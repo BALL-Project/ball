@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.16 2003/02/25 15:53:42 sturm Exp $
+// $Id: EFShiftProcessor.h,v 1.17 2003/03/03 14:18:10 anhi Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-    /** \ingroup ShiftModulesNMR
+    /**  \addtogroup  ShiftModulesNMR
      *  @{
      */		
 	class Atom;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.27 2003/02/25 10:48:07 anhi Exp $
+// $Id: regularData1D.h,v 1.28 2003/03/03 14:17:40 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -14,7 +14,7 @@
 
 namespace BALL
 {
-	/** \ingroup RegularData
+	/**  \addtogroup  RegularData
 	 *  @{
 	 */
 
@@ -188,7 +188,7 @@ namespace BALL
 			throw();
 
 		/**	Rescale and change the boundaries.
-				<tt>lower</tt> and <tt>upper</tt> define the new boundaries, while {\tt new_size}
+				<tt>lower</tt> and <tt>upper</tt> define the new boundaries, while <tt>new_size</tt>
 				gives the number of new data points. The existing data is cut/extended to the
 				new boundaries and the resulting new data points (<tt>new_size</tt> data
 				points in total) are obtained by linear interpolation of the current data.

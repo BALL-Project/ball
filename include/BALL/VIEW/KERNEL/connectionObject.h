@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.13 2003/02/25 13:28:23 sturm Exp $
+// $Id: connectionObject.h,v 1.14 2003/03/03 14:18:34 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -38,7 +38,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-    /** \ingroup ViewKernelConnectivity
+    /**  \addtogroup  ViewKernelConnectivity
      *  @{
      */
 		/** ConnectionObject class.		

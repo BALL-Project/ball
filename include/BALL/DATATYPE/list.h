@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: list.h,v 1.17 2003/02/25 15:52:57 sturm Exp $
+// $Id: list.h,v 1.18 2003/03/03 14:17:39 anhi Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -22,7 +22,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */	
 	/** Extended list object.

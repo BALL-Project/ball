@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.15 2003/02/25 10:47:32 anhi Exp $
+// $Id: global.h,v 1.16 2003/03/03 14:17:32 anhi Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -35,7 +35,7 @@
 namespace BALL
 {
 	 
-	/** \ingroup Common
+	/**  \addtogroup  Common
 	 *	@{
 	 */
 	typedef int (*ComparatorType)(const void *, const void *);

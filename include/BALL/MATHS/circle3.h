@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.33 2003/02/25 15:53:22 sturm Exp $
+// $Id: circle3.h,v 1.34 2003/03/03 14:17:52 anhi Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup GeometricObjects
+    /**  \addtogroup  GeometricObjects
      *  @{
      */
 	/**	@name	Circle 
@@ -331,7 +331,7 @@ namespace BALL
 	}
 
 	/**	Output  Operator.
-			Writes the values of <tt>p</tt>, <tt>n</tt>, and {\tt radius} to an 
+			Writes the values of <tt>p</tt>, <tt>n</tt>, and <tt>radius</tt> to an 
 			output stream. The three values are separated by spaces and enclosed in brackets. \par
 			<b>Example:</b> \par
 			<tt>((0 0 0) (1 2 1) 3.5)</tt>

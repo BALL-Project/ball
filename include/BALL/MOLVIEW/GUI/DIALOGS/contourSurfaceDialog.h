@@ -28,7 +28,7 @@ namespace BALL
 {
  namespace MOLVIEW
    {
-    /** \ingroup MolviewDialogs
+    /**  \addtogroup  MolviewDialogs
      *  @{
      */
 class ContourSurfaceDialog : public QDialog

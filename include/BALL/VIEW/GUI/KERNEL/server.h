@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.15 2003/02/25 13:28:14 sturm Exp $
+// $Id: server.h,v 1.16 2003/03/03 14:18:28 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -52,7 +52,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiKernelServer
+    /**  \addtogroup  ViewGuiKernelServer
      *  @{
      */
 		/** Server class.

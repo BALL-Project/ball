@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.49 2003/02/25 15:53:09 sturm Exp $
+// $Id: atom.h,v 1.50 2003/03/03 14:17:45 anhi Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -47,7 +47,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Kernel
+    /**  \addtogroup  Kernel
      *  @{
      */
 	class Bond;

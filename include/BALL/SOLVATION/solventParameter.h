@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventParameter.h,v 1.12 2003/02/25 15:53:57 sturm Exp $
+// $Id: solventParameter.h,v 1.13 2003/03/03 14:18:17 anhi Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
 #define BALL_SOLVATION_SOLVENTPARAMETER_H
@@ -24,7 +24,7 @@
 
 namespace BALL
 {
-    /** \ingroup Solvation
+    /**  \addtogroup  Solvation
      *  @{
      */
 	/** Parameter section for the solvent description.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.h,v 1.21 2003/02/25 13:27:57 sturm Exp $
+// $Id: numericalSAS.h,v 1.22 2003/03/03 14:18:20 anhi Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -20,7 +20,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Surface
+    /**  \addtogroup  Surface
      *  @{
      */
 	class Atom;

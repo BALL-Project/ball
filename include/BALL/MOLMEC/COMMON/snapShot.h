@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.h,v 1.21 2003/03/03 08:17:22 sturm Exp $
+// $Id: snapShot.h,v 1.22 2003/03/03 14:17:57 anhi Exp $
 
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
@@ -27,7 +27,7 @@
 
 namespace BALL
 {
-    /** \ingroup MolmecCommon
+    /**  \addtogroup  MolmecCommon
      *  @{
      */	
 	/** SnapShot class, containing the actual data of one single snapshot.

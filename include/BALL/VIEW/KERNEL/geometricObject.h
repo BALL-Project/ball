@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.25 2003/02/25 13:28:23 sturm Exp $
+// $Id: geometricObject.h,v 1.26 2003/03/03 14:18:34 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -25,7 +25,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewKernelGeometricPrimitives
+    /**  \addtogroup  ViewKernelGeometricPrimitives
      *  @{
      */
 		/** GeometricObject class.

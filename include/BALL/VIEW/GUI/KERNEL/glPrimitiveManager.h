@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.h,v 1.13 2003/02/25 13:28:13 sturm Exp $
+// $Id: glPrimitiveManager.h,v 1.14 2003/03/03 14:18:28 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -24,7 +24,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiKernelOpenGLPredefined
+    /**  \addtogroup  ViewGuiKernelOpenGLPredefined
      *  @{
      */
 		/**	GLDisplayListObject_ class.
@@ -503,7 +503,7 @@ namespace BALL
 
 		/**	GLPrimitiveManager class.
 				The class GLPrimitiveManager is container for the predefined primitives
-				 \link GLSphereDisplayLists_ GLSphereDisplayLists_ \endlink ,  \link GLTubeDisplayLists_ GLTubeDisplayLists_ \endlink  and \Ref{GLSimpleBoxDisplayLists_}.
+				 \link GLSphereDisplayLists_ GLSphereDisplayLists_ \endlink ,  \link GLTubeDisplayLists_ GLTubeDisplayLists_ \endlink  and  \link GLSimpleBoxDisplayLists_ GLSimpleBoxDisplayLists_ \endlink .
 				Further it provides methods for naming and accessing  \link GeometricObject GeometricObject \endlink  objects.
 				This mechanism is used by the class  \link Scene Scene \endlink  to name all primitives to identify them
 				when picked.  \par

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackbone.h,v 1.11 2003/03/03 08:17:32 sturm Exp $
+// $Id: glBackbone.h,v 1.12 2003/03/03 14:18:07 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -33,7 +33,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewGuiPrimitves
+    /**  \addtogroup  MolviewGuiPrimitves
      *  @{
      */
 		/** GlBackbone class.
@@ -152,7 +152,7 @@ namespace BALL
 					Assigns the glBackbone {\em glbackbone} to {\em *this} glBackbone.	The copy is deep.
 					This method does not copy the structure of {\em glbackbone} into {\em *this} glBackbone. 
 					Only the geometric properties and the the access to the  \link GLPrimitiveManager GLPrimitiveManager \endlink  are copied.
-					See  \link GeometricObject GeometricObject \endlink  and	 \link GLObject GLObject \endlink  for information.  Calls \Ref{set}.
+					See  \link GeometricObject GeometricObject \endlink  and	 \link GLObject GLObject \endlink  for information.  Calls  \link set set \endlink .
 					The value of {\em *this} glBackbone is initialized to the value 
 					of the glBackbone {\em glbackbone}. \par
 					@param       glbackbone the glBackbone to be copied
@@ -168,7 +168,7 @@ namespace BALL
 					This method does not copy the structure of {\em *this} glBackbone into {\em glbackbone}. 
 					Only the geometric properties and the the access to the
 					 \link GLPrimitiveManager GLPrimitiveManager \endlink  are copied.
-					See  \link GeometricObject GeometricObject \endlink  and	 \link GLObject GLObject \endlink  for information.  Calls \Ref{set}.
+					See  \link GeometricObject GeometricObject \endlink  and	 \link GLObject GLObject \endlink  for information.  Calls  \link set set \endlink .
 					The value of the glBackbone {\em glbackbone} is initialized to the
 					value of {\em *this} glBackbone. \par
 					@param       glbackbone the glBackbone to be assigned to

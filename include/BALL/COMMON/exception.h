@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.35 2003/02/25 10:47:11 anhi Exp $
+// $Id: exception.h,v 1.36 2003/03/03 14:17:31 anhi Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -23,7 +23,7 @@ namespace BALL
 	class String;
 
 	/**	Exception Handling
-	 * 	\ingroup Common
+	 * 	 \addtogroup  Common
    */
 	//@{
 	namespace Exception 
@@ -418,7 +418,7 @@ namespace BALL
 
 			/**	Default constructor.
 					This constructor installs the BALL specific handlers for
-					<tt>terminate</tt>, <tt>unexpected</tt>, and {\tt new_handler}.
+					<tt>terminate</tt>, <tt>unexpected</tt>, and <tt>new_handler</tt>.
 					<tt>terminate</tt> or <tt>unexpected</tt> are called to abort 
 					a program if an exception was not caught or a function 
 					exits via an exception that is not allowed by its exception
@@ -491,7 +491,7 @@ namespace BALL
 	}
 	//@}
 		/**	Output operator for exceptions.
-				\ingroup Common
+				 \addtogroup  Common
 				All BALL exceptions can be printed to an arbitrary output stream.
 				Information written contains the exception class, the error message,
         and the location (file, line number). The following code block

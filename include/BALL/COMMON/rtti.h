@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.20 2003/02/25 10:47:37 anhi Exp $
+// $Id: rtti.h,v 1.21 2003/03/03 14:17:33 anhi Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -18,7 +18,7 @@ using std::string;
 namespace BALL 
 {
 
-	/** \ingroup Common
+	/**  \addtogroup  Common
 	 * 	@{
 	 */
 

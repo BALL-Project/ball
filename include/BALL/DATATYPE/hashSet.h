@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashSet.h,v 1.35 2003/02/25 15:52:57 sturm Exp $ 
+// $Id: hashSet.h,v 1.36 2003/03/03 14:17:39 anhi Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -39,7 +39,7 @@
 
 namespace BALL
 {
-    /** \ingroup GenericHash
+    /**  \addtogroup  GenericHash
      *  @{
      */
   /** Generic Hash Set Class.

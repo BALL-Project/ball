@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.13 2003/02/25 13:28:19 sturm Exp $
+// $Id: scene.h,v 1.14 2003/03/03 14:18:32 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -57,7 +57,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiWidgets
+    /**  \addtogroup  ViewGuiWidgets
      *  @{
      */
 		// necessary forward declaration
@@ -127,9 +127,9 @@ namespace BALL
 					\end{itemize}
 					The following events are used initially:
 					\begin{itemize}
-					  \item  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{RotateSystem}
-					  \item  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{ZoomSystem}
-					  \item  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{TranslateSystem}
+					  \item  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link RotateSystem RotateSystem \endlink 
+					  \item  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link ZoomSystem ZoomSystem \endlink 
+					  \item  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link TranslateSystem TranslateSystem \endlink 
 					\end{itemize}					
 					Register a default  \link GLObjectCollector GLObjectCollector \endlink .
 					A  \link GLPrimitiveManager GLPrimitiveManager \endlink  is initialized for {\em *this} scene.
@@ -152,9 +152,9 @@ namespace BALL
 					 \link GLObjectCollector GLObjectCollector \endlink 	of {\em scene}
 					The following events are used initially:
 					\begin{itemize}
-					  \item  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{RotateSystem}
-					  \item  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{ZoomSystem}
-					  \item  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to \Ref{TranslateSystem}
+					  \item  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link RotateSystem RotateSystem \endlink 
+					  \item  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link ZoomSystem ZoomSystem \endlink 
+					  \item  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link TranslateSystem TranslateSystem \endlink 
 					\end{itemize}					
 					A  \link GLPrimitiveManager GLPrimitiveManager \endlink  is initialized for {\em *this} scene.
 					Calls  \link registerWidget registerWidget \endlink .

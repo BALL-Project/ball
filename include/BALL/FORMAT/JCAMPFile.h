@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.11 2003/02/25 15:53:03 sturm Exp $
+// $Id: JCAMPFile.h,v 1.12 2003/03/03 14:17:42 anhi Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -20,7 +20,7 @@
 
 namespace BALL
 {
-    /** \ingroup NMRFileFormats
+    /**  \addtogroup  NMRFileFormats
      *  @{
      */
 	/**	JCAMP file.

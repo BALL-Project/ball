@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.27 2003/02/25 15:53:20 sturm Exp $
+// $Id: system.h,v 1.28 2003/03/03 14:17:50 anhi Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -46,7 +46,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Kernel
+    /**  \addtogroup  Kernel
      *  @{
      */
 	class Molecule;

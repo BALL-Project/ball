@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.h,v 1.16 2003/02/25 15:53:43 sturm Exp $
+// $Id: assignShiftProcessor.h,v 1.17 2003/03/03 14:18:10 anhi Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -22,7 +22,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Spectra
+    /**  \addtogroup  Spectra
      *  @{
      */               
 	/**	Set a property called chemical_shift.

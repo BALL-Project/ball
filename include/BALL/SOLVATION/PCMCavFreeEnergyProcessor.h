@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.13 2003/02/25 15:53:53 sturm Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.14 2003/03/03 14:18:15 anhi Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -20,7 +20,7 @@
 
 namespace BALL
 {
-    /** \ingroup Solvation
+    /**  \addtogroup  Solvation
      *  @{
      */
 	/** Processor for the computation of the cavitation free energy. 

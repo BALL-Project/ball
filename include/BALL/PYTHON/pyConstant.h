@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyConstant.h,v 1.4 2003/02/25 15:53:48 sturm Exp $
+// $Id: pyConstant.h,v 1.5 2003/03/03 14:18:13 anhi Exp $
 
 #ifndef BALL_PYTHON_PYCONSTANT_H
 #define BALL_PYTHON_PYCONSTANT_H
 
 namespace BALL 
 {
-  /** \ingroup PythonExtensions
+  /**  \addtogroup  PythonExtensions
    *  @{
    */
 	/**	Python constants namespace wrapper.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.h,v 1.17 2003/03/03 08:17:24 sturm Exp $
+// $Id: microCanonicalMD.h,v 1.18 2003/03/03 14:17:58 anhi Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -50,7 +50,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MDSimulation
+    /**  \addtogroup  MDSimulation
      *  @{
      */
 	/** Microcanonical MD: A class for doing molecular dynamics simulations      

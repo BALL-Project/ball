@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.35 2003/02/25 15:53:21 sturm Exp $
+// $Id: angle.h,v 1.36 2003/03/03 14:17:51 anhi Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Primitives
+    /**  \addtogroup  Primitives
      *  @{
      */
 	template <typename T>
@@ -95,7 +95,7 @@ namespace BALL
 
 		/**	Detailed constructor.
 				Create a new angle object and set its value to 
-				<tt>new_value</tt>. <tt>radian</tt> determines whether {\tt new_value}
+				<tt>new_value</tt>. <tt>radian</tt> determines whether <tt>new_value</tt>
 				is in radians or in degrees.
 				@param	new_value the value of the angle object
 				@param	radian <b>true</b> if <tt>new_value</tt> is in radians, <tt>false</tt> otherwise 

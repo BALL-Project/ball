@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.13 2003/03/03 08:17:26 sturm Exp $
+// $Id: lineSearch.h,v 1.14 2003/03/03 14:17:59 anhi Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
@@ -13,7 +13,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecEnergyMinimizer
+    /**  \addtogroup  MolmecEnergyMinimizer
      *  @{
      */
 	class EnergyMinimizer;

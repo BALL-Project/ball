@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.17 2003/02/25 15:53:32 sturm Exp $
+// $Id: common.h,v 1.18 2003/03/03 14:18:01 anhi Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -23,7 +23,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewCommon
+    /**  \addtogroup  MolviewCommon
      *  @{
      */
 		//		struct GeometricObject

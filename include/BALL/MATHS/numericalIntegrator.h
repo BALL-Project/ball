@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalIntegrator.h,v 1.10 2003/02/25 15:53:24 sturm Exp $
+// $Id: numericalIntegrator.h,v 1.11 2003/03/03 14:17:53 anhi Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -12,7 +12,7 @@
 
 namespace BALL
 {
-    /** \ingroup FunctionClasses
+    /**  \addtogroup  FunctionClasses
      *  @{
      */  
 	/** Numerical integrator class.

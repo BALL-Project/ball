@@ -16,7 +16,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewDialogs
+    /**  \addtogroup  MolviewDialogs
      *  @{
      */
 		class LabelPropertiesData : public QDialog

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension1.h,v 1.11 2003/02/25 13:28:21 sturm Exp $
+// $Id: colorExtension1.h,v 1.12 2003/03/03 14:18:33 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION1_H
@@ -19,7 +19,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewKernelGeometricPrimitives
+    /**  \addtogroup  ViewKernelGeometricPrimitives
      *  @{
      */
 		/** ColorExtension class.

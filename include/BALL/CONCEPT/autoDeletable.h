@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: autoDeletable.h,v 1.17 2003/02/25 10:47:40 anhi Exp $
+// $Id: autoDeletable.h,v 1.18 2003/03/03 14:17:34 anhi Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -49,7 +49,7 @@ namespace BALL
 			certain instances of objects, however usually this should not be
 			neccessary. \par
 			<b>Definition:</b> BALL/CONCEPT/autoDeletable.h
-	* 	\ingroup Concepts
+	* 	 \addtogroup  Concepts
 	*/
 	class AutoDeletable
 	{

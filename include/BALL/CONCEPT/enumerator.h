@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.24 2003/02/25 10:47:50 anhi Exp $
+// $Id: enumerator.h,v 1.25 2003/03/03 14:17:35 anhi Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -41,7 +41,7 @@ namespace BALL
 			is operator [] (0), so incrementing starts at operator [] (size() - 1)
 			 \par
 			<b>Definition:</b> BALL/CONCEPT/enumerator.h
-	* 	\ingroup Concepts
+	* 	 \addtogroup  Concepts
 	*/
 	class EnumeratorIndex
 		: private std::vector<Position>
@@ -287,7 +287,7 @@ namespace BALL
 			\end{itemize}
 			In the case of a string sequence that has to be mutated, the <tt>Container</tt>
 			is of class  \link String String \endlink , the <tt>SiteIterator</tt> is of type
-			<tt>String::Iterator</tt>, and <tt>Variant</tt> is obviously of type {\tt char}.
+			<tt>String::Iterator</tt>, and <tt>Variant</tt> is obviously of type <tt>char</tt>.
 			 \par
 			<b>Definition:</b> BALL/CONCEPT/enumerator.h
 	*/

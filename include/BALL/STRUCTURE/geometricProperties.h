@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.h,v 1.16 2003/02/25 13:27:56 sturm Exp $
+// $Id: geometricProperties.h,v 1.17 2003/03/03 14:18:20 anhi Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -40,7 +40,7 @@ using std::vector;
 
 namespace BALL 
 {
-    /** \ingroup Structure
+    /**  \addtogroup  Structure
      *  @{
      */
 	/**	@name	Geometric property processors.

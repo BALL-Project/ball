@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.h,v 1.16 2003/03/03 08:17:21 sturm Exp $
+// $Id: periodicBoundary.h,v 1.17 2003/03/03 14:17:57 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
 #define BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -20,7 +20,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecCommon
+    /**  \addtogroup  MolmecCommon
      *  @{
      */	
 	class ForceField;

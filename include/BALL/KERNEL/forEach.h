@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forEach.h,v 1.10 2003/02/25 14:28:43 anhi Exp $
+// $Id: forEach.h,v 1.11 2003/03/03 14:17:47 anhi Exp $
 
 #ifndef BALL_KERNEL_FOREACH_H
 #define BALL_KERNEL_FOREACH_H
@@ -11,7 +11,7 @@
 #endif
 
 /** @name Convenient iteration macros
-* 	\ingroup Miscellaneous 
+* 	 \addtogroup  Miscellaneous 
 */
 
 //@{

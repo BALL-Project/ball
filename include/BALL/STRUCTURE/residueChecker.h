@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.12 2003/02/25 13:27:59 sturm Exp $
+// $Id: residueChecker.h,v 1.13 2003/03/03 14:18:21 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
 #define BALL_STRUCTURE_RESIDUECHECKER_H
@@ -16,7 +16,7 @@
 
 namespace BALL
 {
-    /** \ingroup Structure
+    /**  \addtogroup  Structure
      *  @{
      */
 	/**	Residue Consistency Checker.

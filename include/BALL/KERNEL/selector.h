@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.20 2003/02/25 15:53:19 sturm Exp $
+// $Id: selector.h,v 1.21 2003/03/03 14:17:50 anhi Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -25,7 +25,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Predicates
+    /**  \addtogroup  Predicates
      *  @{
      */
 	/**	@name	Kernel Object Selection.

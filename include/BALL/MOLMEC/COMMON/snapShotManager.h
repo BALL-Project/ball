@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.h,v 1.9 2003/03/03 08:17:23 sturm Exp $
+// $Id: snapShotManager.h,v 1.10 2003/03/03 14:17:58 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -36,7 +36,7 @@
 
 namespace BALL
 {
-    /** \ingroup MolmecCommon
+    /**  \addtogroup  MolmecCommon
      *  @{
      */	
 	class TrajectoryFile;

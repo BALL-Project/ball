@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.h,v 1.9 2003/02/25 13:28:04 sturm Exp $
+// $Id: fileSystem.h,v 1.10 2003/03/03 14:18:24 anhi Exp $
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H
@@ -30,7 +30,7 @@
 
 namespace BALL 
 {
-    /** \ingroup System
+    /**  \addtogroup  System
      *  @{
      */
 	/**	File System Class

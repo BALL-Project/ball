@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.16 2003/03/03 08:17:33 sturm Exp $
+// $Id: molecularProperties.h,v 1.17 2003/03/03 14:18:08 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -23,14 +23,14 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewGuiWidgets
+    /**  \addtogroup  MolviewGuiWidgets
      *  @{
      */
 		/**	The MolecularProperties class.
 				The class MolecularProperties is a widget that converts certain  \link Message Message \endlink 
 				objects to other  \link Message Message \endlink  objects.
 				This class is necessary to convert new  \link Composite Composite \endlink  objects opened with either
-				 \link openPDBFile openPDBFile \endlink  or  \link openHINFile openHINFile \endlink  to \Ref{Composite} objects
+				 \link openPDBFile openPDBFile \endlink  or  \link openHINFile openHINFile \endlink  to  \link Composite Composite \endlink  objects
 				that have certain molecular properties. Further it converts the geometric selection
 				sent by  \link Scene Scene \endlink  to a molecular selection whose objects can be given a new
 				graphical representation by the  \link DisplayProperties DisplayProperties \endlink  dialog.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.h,v 1.13 2003/02/21 16:07:41 anhi Exp $
+// $Id: control.h,v 1.14 2003/03/03 14:18:30 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -177,7 +177,7 @@ namespace BALL
 					Calls  \link generateListViewItem_ generateListViewItem_ \endlink  for {\em composite}.
 					@param   composite a pointer to the  \link Composite Composite \endlink  object that will be inserted into {\em *this} control
 					@param   name a name {\em composite} should receive
-					@return  bool <tt>true</tt> if <tt>composite != 0</tt>, {\tt false} otherwise
+					@return  bool <tt>true</tt> if <tt>composite != 0</tt>, <tt>false</tt> otherwise
 					@see     getInformationVisitor_
 					@see     generateListViewItem_
 					@see     updateContents

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forEach.h,v 1.6 2003/02/25 15:52:56 sturm Exp $
+// $Id: forEach.h,v 1.7 2003/03/03 14:17:39 anhi Exp $
 
 #ifndef BALL_DATATYPE_FOREACH_H
 #define BALL_DATATYPE_FOREACH_H
@@ -9,7 +9,7 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */
 /**	Container Iteration Macro.

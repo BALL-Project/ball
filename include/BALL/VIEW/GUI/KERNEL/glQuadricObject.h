@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.12 2003/02/25 13:28:13 sturm Exp $
+// $Id: glQuadricObject.h,v 1.13 2003/03/03 14:18:28 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
@@ -16,7 +16,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiKernelOpenGLPrimitives
+    /**  \addtogroup  ViewGuiKernelOpenGLPrimitives
      *  @{
      */
 		/** GLQuadricObject class.

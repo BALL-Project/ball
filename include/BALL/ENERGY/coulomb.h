@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coulomb.h,v 1.8 2003/02/25 15:53:01 sturm Exp $
+// $Id: coulomb.h,v 1.9 2003/03/03 14:17:41 anhi Exp $
 
 #ifndef BALL_ENERGY_COULOMB_H
 #define BALL_ENERGY_COULOMB_H
@@ -12,7 +12,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Electrostatic
+    /**  \addtogroup  Electrostatic
      *  @{
      */
 	class AtomContainer;

@@ -13,7 +13,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewDialogs
+    /**  \addtogroup  MolviewDialogs
      *  @{
      */
 class AtomProperties : public AtomPropertiesData

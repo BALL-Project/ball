@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.33 2003/02/25 15:52:55 sturm Exp $
+// $Id: bitVector.h,v 1.34 2003/03/03 14:17:38 anhi Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -33,7 +33,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */
 	class BitVector;

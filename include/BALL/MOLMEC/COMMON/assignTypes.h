@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignTypes.h,v 1.10 2003/03/03 08:17:20 sturm Exp $
+// $Id: assignTypes.h,v 1.11 2003/03/03 14:17:56 anhi Exp $
 // Molecular Mechanics: atom type assignment
 
 #ifndef BALL_MOLMEC_COMMON_ASSIGNTYPES_H
@@ -19,7 +19,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecCommon
+    /**  \addtogroup  MolmecCommon
      *  @{
      */	
 	/**	Type assignment processor.

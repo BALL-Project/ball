@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.14 2003/02/25 13:28:27 sturm Exp $
+// $Id: simpleBox.h,v 1.15 2003/03/03 14:18:35 anhi Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
 #define BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -32,7 +32,7 @@ namespace BALL
 	
 	namespace VIEW
 	{
-        /** \ingroup ViewPrimitives
+        /**  \addtogroup  ViewPrimitives
          *  @{
          */
       

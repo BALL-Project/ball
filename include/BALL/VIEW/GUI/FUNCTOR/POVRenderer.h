@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.5 2003/02/25 13:28:09 sturm Exp $
+// $Id: POVRenderer.h,v 1.6 2003/03/03 14:18:26 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiFunctors
+    /**  \addtogroup  ViewGuiFunctors
      *  @{
      */
 		/** POVRenderer class.

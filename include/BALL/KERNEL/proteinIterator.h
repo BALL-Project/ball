@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: proteinIterator.h,v 1.5 2003/02/25 15:53:17 sturm Exp $
+// $Id: proteinIterator.h,v 1.6 2003/03/03 14:17:49 anhi Exp $
 
 #ifndef BALL_KERNEL_PROTEINITERATOR_H
 #define BALL_KERNEL_PROTEINITERATOR_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup KernelIterators
+    /**  \addtogroup  KernelIterators
      *  @{
      */
 	class ProteinIteratorTraits_

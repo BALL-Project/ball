@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.19 2003/02/25 15:53:09 sturm Exp $
+// $Id: PTE.h,v 1.20 2003/03/03 14:17:45 anhi Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -39,14 +39,14 @@
 
 namespace BALL 
 {
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */
 	/**	@name	Periodic Table of Elements
 			These classes represent elements and the periodic table of elements.
 			The  \link Element Element \endlink  class is used to describe common properties of atoms
 			(e.g., mass, nuclear charge, element symbol). Elements can be retrieved
-			from the  \link PTE PTE \endlink  object (<b>P</b>eriodic <b>T</b>able of {\bf E}lements)
+			from the  \link PTE PTE \endlink  object (<b>P</b>eriodic <b>T</b>able of <b>E</b>lements)
 			which is a global instance of  \link PTE_ PTE_ \endlink . \par
 			<b>Definition:</b>BALL/KERNEL/PTE.h
 			@see Atom::setElement

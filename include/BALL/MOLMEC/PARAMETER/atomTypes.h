@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomTypes.h,v 1.12 2003/02/25 15:53:29 sturm Exp $
+// $Id: atomTypes.h,v 1.13 2003/03/03 14:17:59 anhi Exp $
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
 #define BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -19,7 +19,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecParameters
+    /**  \addtogroup  MolmecParameters
      *  @{
      */		
 	class ForceFieldParameters;

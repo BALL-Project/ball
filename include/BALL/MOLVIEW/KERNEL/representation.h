@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.2 2003/02/25 15:53:40 sturm Exp $
+// $Id: representation.h,v 1.3 2003/03/03 14:18:09 anhi Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_REPRESENTATION_H
 #define BALL_MOLVIEW_KERNEL_REPRESENTATION_H
@@ -20,7 +20,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewKernel
+    /**  \addtogroup  MolviewKernel
      *  @{
      */
 		/** Representation

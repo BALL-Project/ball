@@ -18,7 +18,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiDialogs
+    /**  \addtogroup  ViewGuiDialogs
      *  @{
      */
 		/** Preferences class.

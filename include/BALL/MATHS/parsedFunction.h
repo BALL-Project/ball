@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.h,v 1.6 2003/02/25 15:53:24 sturm Exp $
+// $Id: parsedFunction.h,v 1.7 2003/03/03 14:17:53 anhi Exp $
 
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
 #define BALL_MATHS_PARSEDFUNCTION_H
@@ -20,7 +20,7 @@ using std::unary_function;
 
 namespace BALL
 {
-    /** \ingroup FunctionClasses
+    /**  \addtogroup  FunctionClasses
      *  @{
      */  
 	extern HashMap<String, double*> *parsedFunctionConstants;

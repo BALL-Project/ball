@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bondIterator.h,v 1.5 2003/02/25 15:53:11 sturm Exp $
+// $Id: bondIterator.h,v 1.6 2003/03/03 14:17:46 anhi Exp $
 
 #ifndef BALL_KERNEL_BONDITERATOR_H
 #define BALL_KERNEL_BONDITERATOR_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-    /** \ingroup KernelIterators
+    /**  \addtogroup  KernelIterators
      *  @{
      */
 	/** @name Typedefs for the various BondIterators

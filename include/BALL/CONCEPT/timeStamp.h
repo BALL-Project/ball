@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.h,v 1.18 2003/02/25 10:48:05 anhi Exp $
+// $Id: timeStamp.h,v 1.19 2003/03/03 14:17:38 anhi Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -39,7 +39,7 @@ namespace BALL
 			(below seconds).  \par
 			<b>Interface:</b> <tt>Storable</tt>	 \par
 			<b>Definition:</b> BALL/CONCEPT/timeStamp.h
-			\ingroup Concepts
+			 \addtogroup  Concepts
 	*/
 	class PreciseTime
 	{

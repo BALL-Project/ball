@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.16 2003/02/25 15:53:14 sturm Exp $
+// $Id: iterator.h,v 1.17 2003/03/03 14:17:48 anhi Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -69,7 +69,7 @@ rend##Type () const \
 
 namespace BALL 
 {
-    /** \ingroup KernelIterators
+    /**  \addtogroup  KernelIterators
      *  @{
      */
 	/**	Composite Iterator Traits

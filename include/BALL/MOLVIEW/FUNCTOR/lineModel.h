@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.13 2003/02/25 15:53:35 sturm Exp $
+// $Id: lineModel.h,v 1.14 2003/03/03 14:18:03 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewFunctorsModels
+    /**  \addtogroup  MolviewFunctorsModels
      *  @{
      */
 		using VIEW::Point;
@@ -131,7 +131,7 @@ namespace BALL
 			
 			/**	Operator method.
 					This method iterates over each  \link Composite Composite \endlink  object reachable in the 
-					 \link Composite Composite \endlink  tree. If {\em composite} is of kind  \link Atom Atom \endlink  than a \Ref{Point}
+					 \link Composite Composite \endlink  tree. If {\em composite} is of kind  \link Atom Atom \endlink  than a  \link Point Point \endlink 
 					is created for that atom, appended to {\em composite} and inserted with the
 					method  \link insertAtom_ insertAtom_ \endlink .
 					All previously appended primitives to {\em composite}	are removed using the method

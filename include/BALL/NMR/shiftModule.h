@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModule.h,v 1.13 2003/02/25 15:53:46 sturm Exp $
+// $Id: shiftModule.h,v 1.14 2003/03/03 14:18:12 anhi Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -28,7 +28,7 @@
 
 namespace BALL 
 {
-    /** \ingroup ShiftModel
+    /**  \addtogroup  ShiftModel
      *  @{
      */
 	/**	A single contribution of a NMR shift model.
@@ -136,7 +136,7 @@ namespace BALL
 		/**	Parameter initalization.
 				Use this method to implement the extraction and initialization of
 				the module's parameters.
-				 \link init init \endlink  is called by  \link ShiftModel ShiftModel \endlink  as soon as the \Ref{ShiftModule}
+				 \link init init \endlink  is called by  \link ShiftModel ShiftModel \endlink  as soon as the  \link ShiftModule ShiftModule \endlink 
 				is constructed and parameters and name are assigned. \par
 				All implementations in derived classes should set the  \link valid_ valid_ \endlink  flag
 				to <b>true</b> if the initialization was successful and to <b>false</b> otherwise.

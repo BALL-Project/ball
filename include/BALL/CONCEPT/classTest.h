@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.36 2003/02/25 10:47:46 anhi Exp $
+// $Id: classTest.h,v 1.37 2003/03/03 14:17:34 anhi Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -13,7 +13,12 @@
 
 #include <string>
 #include <list>
-#include <sstream>
+
+#ifdef BALL_HAS_SSTREAM
+# include <sstream>
+#else
+# include <strstream>
+#endif
 
 /**	@name	Class Black Box Testing
 		To provide a maximum reliability for all BALL classes, each class
@@ -51,7 +56,7 @@
 		<a href="../../source/BALL/TEST/Skeleton_test.C">source/TEST/Skeleton_test.C</a>
 		 \par
 		<b>Definitions:</b> BALL/CONCEPT/classTest.h
-* 	\ingroup Concepts
+* 	 \addtogroup  Concepts
 */
 //@{
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.15 2003/02/25 10:47:53 anhi Exp $
+// $Id: notification.h,v 1.16 2003/03/03 14:17:36 anhi Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -18,7 +18,7 @@
 
 namespace BALL 
 {
-	/** \ingroup Concepts
+	/**  \addtogroup  Concepts
 	 *	@{
 	 */
 

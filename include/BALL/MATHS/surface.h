@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.20 2003/02/25 15:53:27 sturm Exp $
+// $Id: surface.h,v 1.21 2003/03/03 14:17:54 anhi Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-    /** \ingroup GeometricObjects
+    /**  \addtogroup  GeometricObjects
      *  @{
      */
 	/** @name Surface

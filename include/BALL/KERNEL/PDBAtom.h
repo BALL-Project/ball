@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.h,v 1.25 2003/02/25 15:53:09 sturm Exp $
+// $Id: PDBAtom.h,v 1.26 2003/03/03 14:17:45 anhi Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Kernel
+    /**  \addtogroup  Kernel
      *  @{
      */
 	class Chain;

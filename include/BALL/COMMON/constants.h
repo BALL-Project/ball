@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: constants.h,v 1.10 2003/02/25 10:47:06 anhi Exp $
+// $Id: constants.h,v 1.11 2003/03/03 14:17:31 anhi Exp $
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #define BALL_COMMON_CONSTANTS_H
@@ -20,12 +20,12 @@ namespace BALL
 			<tt>using namespace BALL::Constants;  \par
 			float my_pi = PI;</tt>
 			<b>Definition:</b> BALL/COMMON/constants.h
-	* 	\ingroup Common
+	* 	 \addtogroup  Common
 	*/
 	namespace Constants 
 	{
 
-		/** \ingroup Common
+		/**  \addtogroup  Common
 		 *  @{
 		 */
 

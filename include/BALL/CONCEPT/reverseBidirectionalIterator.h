@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reverseBidirectionalIterator.h,v 1.12 2003/02/25 10:48:01 anhi Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.13 2003/03/03 14:17:37 anhi Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -23,7 +23,7 @@ namespace BALL
 
 	/**	@name Generic Reverse Bidirectional Iterator Classes.
 			<b>Definition:</b> BALL/CONCEPT/reverseBidirectionalIterator.h
-	* 	\ingroup ConceptsIterators
+	* 	 \addtogroup  ConceptsIterators
 	*/
 	//@{
 

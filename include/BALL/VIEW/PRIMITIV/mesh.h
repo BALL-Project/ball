@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.15 2003/02/25 13:28:26 sturm Exp $
+// $Id: mesh.h,v 1.16 2003/03/03 14:18:35 anhi Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -31,7 +31,7 @@ namespace BALL
 	
 	namespace VIEW
 	{
-        /** \ingroup ViewPrimitives
+        /**  \addtogroup  ViewPrimitives
          *  @{
          */
          

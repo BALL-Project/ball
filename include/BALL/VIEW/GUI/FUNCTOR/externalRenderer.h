@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: externalRenderer.h,v 1.6 2003/02/25 13:28:10 sturm Exp $
+// $Id: externalRenderer.h,v 1.7 2003/03/03 14:18:26 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiFunctors
+    /**  \addtogroup  ViewGuiFunctors
      *  @{
      */
 		/** ExternalRenderer class.

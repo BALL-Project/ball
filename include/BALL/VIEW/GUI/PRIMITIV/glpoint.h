@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glpoint.h,v 1.13 2003/02/25 13:28:16 sturm Exp $
+// $Id: glpoint.h,v 1.14 2003/03/03 14:18:29 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
 #define BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
@@ -24,7 +24,7 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiPrimitives
+    /**  \addtogroup  ViewGuiPrimitives
      *  @{
      */
 		/** GLPoint class.				

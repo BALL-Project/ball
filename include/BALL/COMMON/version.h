@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.16 2003/02/25 10:47:38 anhi Exp $
+// $Id: version.h,v 1.17 2003/03/03 14:17:33 anhi Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -17,7 +17,7 @@
 
 namespace BALL
 {
-	/** \ingroup Common
+	/**  \addtogroup  Common
 	 *  @{
 	 */
 

@@ -5045,6 +5045,57 @@ rm -f conftest.$ac_objext conftest.$ac_ext
 echo "${ECHO_T}$BALL_HAS_ANSI_IOSTREAM" >&6
 
 
+	echo "$as_me:$LINENO: checking for sstream headers" >&5
+echo $ECHO_N "checking for sstream headers... $ECHO_C" >&6
+	BALL_HAS_SSTREAM=no
+	cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+			#include <sstream>
+			class A : public std::stringbuf
+			{
+				A() : std::stringbuf()
+				{}
+			};
+
+int
+main ()
+{
+
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  BALL_HAS_SSTREAM=yes
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+	echo "$as_me:$LINENO: result: $BALL_HAS_SSTREAM" >&5
+echo "${ECHO_T}$BALL_HAS_SSTREAM" >&6
+
+
 	echo "$as_me:$LINENO: checking for ANSI or ARM style access modification" >&5
 echo $ECHO_N "checking for ANSI or ARM style access modification... $ECHO_C" >&6
 	BALL_CFG_USING_METHOD_DIRECTIVE=none
@@ -17575,6 +17626,13 @@ _ACEOF
 if test "$BALL_HAS_ANSI_IOSTREAM" = yes ; then
 	cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_ANSI_IOSTREAM 1
+_ACEOF
+
+fi
+
+if test "$BALL_HAS_SSTREAM" = yes ; then
+	cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_SSTREAM 1
 _ACEOF
 
 fi

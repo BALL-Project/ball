@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.5 2003/02/25 15:53:49 sturm Exp $ 
+// $Id: pyInterpreter.h,v 1.6 2003/03/03 14:18:14 anhi Exp $ 
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-  /** \ingroup PythonExtensions
+  /**  \addtogroup  PythonExtensions
    *  @{
    */
 	/** Embedded Python interpreter.
@@ -33,7 +33,7 @@ namespace BALL
 
 		/**	Initialize the interpreter.
 				Initialize the interpreter (by calling <tt>PY_Initialize</tt>) and 
-				load the modules <tt>sys</tt>, <tt>site</tt>, and {\tt BALL}.
+				load the modules <tt>sys</tt>, <tt>site</tt>, and <tt>BALL</tt>.
 				A second call to <tt>initialize</tt> may be used to restart the intepreter.
 		*/
 		static void initialize();

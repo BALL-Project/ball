@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcidIterator.h,v 1.4 2003/02/25 15:53:15 sturm Exp $
+// $Id: nucleicAcidIterator.h,v 1.5 2003/03/03 14:17:48 anhi Exp $
 
 #ifndef BALL_KERNEL_NUCLEICACIDITERATOR_H
 #define BALL_KERNEL_NUCLEICACIDITERATOR_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup KernelIterators
+    /**  \addtogroup  KernelIterators
      *  @{
      */
 	class NucleicAcid;

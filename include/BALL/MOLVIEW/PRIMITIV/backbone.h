@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backbone.h,v 1.12 2003/02/25 15:53:41 sturm Exp $
+// $Id: backbone.h,v 1.13 2003/03/03 14:18:09 anhi Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
@@ -44,7 +44,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewPrimitives
+    /**  \addtogroup  MolviewPrimitives
      *  @{
      */
 		/** Backbone class.

@@ -10,7 +10,11 @@
 #	include <BALL/common.h>
 #endif
 
-#include <sstream>
+#ifdef BALL_HAS_SSTREAM
+# include <sstream>
+#else
+# include <strstream>
+#endif
 
 #ifndef QAPPLICATION_H
 #	include <qapplication.h>
@@ -34,7 +38,7 @@ namespace BALL
 	
 	namespace VIEW
 	{
-    /** \ingroup ViewKernelLogView
+    /**  \addtogroup  ViewKernelLogView
      *  @{
      */
 		/** LogView class.

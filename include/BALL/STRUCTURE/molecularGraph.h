@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.5 2003/02/25 13:27:56 sturm Exp $
+// $Id: molecularGraph.h,v 1.6 2003/03/03 14:18:20 anhi Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -22,7 +22,7 @@
 
 namespace BALL
 {
-    /** \ingroup Structure
+    /**  \addtogroup  Structure
      *  @{
      */
 	// forward declarations to resolve nasty dependencies

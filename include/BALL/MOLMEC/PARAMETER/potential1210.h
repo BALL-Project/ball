@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: potential1210.h,v 1.13 2003/02/25 15:53:30 sturm Exp $
+// $Id: potential1210.h,v 1.14 2003/03/03 14:18:00 anhi Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_POTENTIAL1210_H
 #define BALL_MOLMEC_PARAMETER_POTENTIAL1210_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-    /** \ingroup MolmecParameters
+    /**  \addtogroup  MolmecParameters
      *  @{
      */		
 	/**	Potential1210. 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stringHashSet.h,v 1.7 2003/02/25 15:53:00 sturm Exp $
+// $Id: stringHashSet.h,v 1.8 2003/03/03 14:17:41 anhi Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHSET_H
 #define BALL_DATATYPE_STRINGHASHSET_H
@@ -16,7 +16,7 @@
 
 namespace BALL 
 {
-    /** \ingroup GenericHash
+    /**  \addtogroup  GenericHash
      *  @{
      */
 	/**	A string hash set.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadruple.h,v 1.9 2003/02/25 15:52:58 sturm Exp $
+// $Id: quadruple.h,v 1.10 2003/03/03 14:17:39 anhi Exp $
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
 #define BALL_DATATYPE_QUADRUPLE_H
@@ -12,7 +12,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */
 	/**	Quadruple Class.

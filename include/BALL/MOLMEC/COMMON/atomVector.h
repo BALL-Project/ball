@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.h,v 1.17 2003/03/03 08:17:20 sturm Exp $
+// $Id: atomVector.h,v 1.18 2003/03/03 14:17:56 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -16,7 +16,7 @@
 
 namespace BALL 
 { 
-    /** \ingroup MolmecCommon
+    /**  \addtogroup  MolmecCommon
      *  @{
      */	
 	class Gradient;
@@ -93,7 +93,7 @@ namespace BALL
 				Calls  \link set set \endlink  and extracts all atoms, if none of the atoms in 
 				<tt>composite</tt> are selected or the selected atoms	only 
 				(if any atom is selected in <tt>composite</tt>.
-				The implementation calls <tt> \link set</tt>(<tt>rhs set</tt>({\tt rhs \endlink , {\tt rhs</tt>. \link containsSelection containsSelection \endlink ())}.
+				The implementation calls <tt> \link set</tt>(<tt>rhs set</tt>(<tt>rhs \endlink , {\tt rhs</tt>. \link containsSelection containsSelection \endlink ())</tt>.
 				@see	Selectable
     */
     const AtomVector& operator = (const Composite& rhs);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.29 2003/02/25 13:28:13 sturm Exp $
+// $Id: mainControl.h,v 1.30 2003/03/03 14:18:28 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -63,7 +63,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiKernelComposite
+    /**  \addtogroup  ViewGuiKernelComposite
      *  @{
      */
 		class ModularWidget;

@@ -31,7 +31,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewDialogs
+    /**  \addtogroup  MolviewDialogs
      *  @{
      */
 		/**	The LabelProperties class.
@@ -180,7 +180,7 @@ namespace BALL
 				
 			/** Starts the labelProperties dialog.
 					Opens {\em *this} labelProperties dialog.
-					Calls  \link show show \endlink  and  \link raise raise \endlink  from \Ref{QDialog} class.
+					Calls  \link show show \endlink  and  \link raise raise \endlink  from  \link QDialog QDialog \endlink  class.
 					See documentation of QT-library for information concerning QDialog widgets.
 			*/
 			void openDialog();

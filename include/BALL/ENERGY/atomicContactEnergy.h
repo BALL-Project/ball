@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomicContactEnergy.h,v 1.8 2003/02/25 15:53:00 sturm Exp $
+// $Id: atomicContactEnergy.h,v 1.9 2003/03/03 14:17:41 anhi Exp $
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
 #define BALL_ENERGY_ATOMICCONTACTENERGY_H
@@ -12,7 +12,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Energy
+    /**  \addtogroup  Energy
      *  @{
      */
 	class AtomContainer;

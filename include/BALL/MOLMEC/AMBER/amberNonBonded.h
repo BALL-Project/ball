@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.h,v 1.22 2003/03/03 08:17:17 sturm Exp $
+// $Id: amberNonBonded.h,v 1.23 2003/03/03 14:17:55 anhi Exp $
 
 // Molecular Mechanics: Amber force field, non-bonded component
 
@@ -30,7 +30,7 @@
 
 namespace BALL 
 {
-    /** \ingroup AMBER
+    /**  \addtogroup  AMBER
      *  @{
      */
 	/**	Amber NonBonded (VdW + Electrostatic) component

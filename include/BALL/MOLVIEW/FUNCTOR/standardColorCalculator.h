@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorCalculator.h,v 1.15 2003/02/25 15:53:37 sturm Exp $
+// $Id: standardColorCalculator.h,v 1.16 2003/03/03 14:18:04 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup ColorCalculators
+    /**  \addtogroup  ColorCalculators
      *  @{
      */			
 		/** ElementColorCalculator class.
@@ -112,7 +112,7 @@ namespace BALL
 				and a color for the positive charge (<tt>charge = +1</tt>).
 				If a charge of an  \link Atom Atom \endlink  object lies between these boundaries the resulting
 				color will be interpolated according to the charge. If a charge of an  \link Atom Atom \endlink  object
-				is greater than <tt>+1</tt> or lower than <tt>-1</tt> it will be set to {\tt +1} or
+				is greater than <tt>+1</tt> or lower than <tt>-1</tt> it will be set to <tt>+1</tt> or
 				<tt>-1</tt>.
 				This colorCalculator can be set in the class  \link DisplayProperties DisplayProperties \endlink 
 				to color an entire object in its atom charge colors.  \par
@@ -336,7 +336,7 @@ namespace BALL
 
 		/** AtomDistanceColorCalculator class.
 				The class AtomDistanceColorCalculator is derived from the class  \link ColorCalculator ColorCalculator \endlink 
-				and from  \link UnaryProcessor UnaryProcessor \endlink  for  \link Atom Atom \endlink  and \Ref{Composite}.
+				and from  \link UnaryProcessor UnaryProcessor \endlink  for  \link Atom Atom \endlink  and  \link Composite Composite \endlink .
 				It is used for calculating distance colors of  \link Atom Atom \endlink  objects that are stored in
 				multiple atom containers.
 				There can be two colors for the distance of atom objects. A color for the null distance 

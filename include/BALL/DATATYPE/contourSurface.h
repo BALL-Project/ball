@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.7 2003/02/25 15:52:56 sturm Exp $
+// $Id: contourSurface.h,v 1.8 2003/03/03 14:17:39 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -34,7 +34,7 @@
 
 namespace BALL
 {
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */
 	typedef std::pair<Position, Position> KeyType;

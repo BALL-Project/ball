@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModel.h,v 1.16 2003/02/25 15:53:34 sturm Exp $
+// $Id: baseModel.h,v 1.17 2003/03/03 14:18:03 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -30,7 +30,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewFunctorsBase
+    /**  \addtogroup  MolviewFunctorsBase
      *  @{
      */
 		/** BaseModelProcessor class.
@@ -415,7 +415,7 @@ namespace BALL
 					If the internal state of {\em *this} atomBondModelConnector is correct 
 					(self-validated) and consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					{\em *this} atomBondModelConnector is valid if:
-					 \link ExentedPropertyManager ExentedPropertyManager \endlink ,  \link BaseModelConnector BaseModelConnector \endlink  and \Ref{FindGeometricObjects}
+					 \link ExentedPropertyManager ExentedPropertyManager \endlink ,  \link BaseModelConnector BaseModelConnector \endlink  and  \link FindGeometricObjects FindGeometricObjects \endlink 
 					is valid.
 					Calls  \link ExentedPropertyManager::isValid ExentedPropertyManager::isValid \endlink .
 					Calls  \link BaseModelConnector::isValid BaseModelConnector::isValid \endlink .

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.14 2003/02/25 15:52:59 sturm Exp $ 
+// $Id: regularData3D.h,v 1.15 2003/03/03 14:17:40 anhi Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -14,7 +14,7 @@
 
 namespace BALL 
 {
-	/** \ingroup RegularData
+	/**  \addtogroup  RegularData
 	 * 	@{
 	 */
 	/**	Simple 3D grid class.

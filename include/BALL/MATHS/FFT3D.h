@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.4 2003/02/25 15:53:21 sturm Exp $
+// $Id: FFT3D.h,v 1.5 2003/03/03 14:17:51 anhi Exp $
 
 #ifndef BALL_MATHS_FFT3D_H
 #define BALL_MATHS_FFT3D_H
@@ -27,7 +27,7 @@
 
 namespace BALL
 {
-    /** \ingroup FFT
+    /**  \addtogroup  FFT
      *  @{
      */
 	/** A class to perform Fast Fourier Transforms and inverse Fast Fourier Transforms

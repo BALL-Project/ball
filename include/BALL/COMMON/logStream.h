@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.19 2003/02/25 10:47:36 anhi Exp $
+// $Id: logStream.h,v 1.20 2003/03/03 14:17:33 anhi Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -59,7 +59,7 @@ namespace BALL
 			class, which does the actual buffering and storing, but is only
 			of interest if you want to implement a derived class, as the 
 			actual user interface is implemented in the LogStream class.
-	* 	\ingroup Common
+	* 	 \addtogroup  Common
 	*/
 	//@{
 
@@ -379,7 +379,7 @@ namespace BALL
 				and maximum log levels.
 				Any message that is subsequently logged, will be copied
 				to this stream if its log level is between <tt>min\_level</tt>
-				and <tt>max\_level</tt>. If <tt>min\_level</tt> and {\tt max\_level}
+				and <tt>max\_level</tt>. If <tt>min\_level</tt> and <tt>max\_level</tt>
 				are omitted, all messages are copied to this stream.
 				If <tt>min\_level</tt>	and <tt>max\_level</tt> are equal, this function can be used
 				to listen to a specified channel.

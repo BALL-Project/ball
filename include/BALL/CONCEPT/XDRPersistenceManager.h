@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.h,v 1.18 2003/02/25 10:47:39 anhi Exp $
+// $Id: XDRPersistenceManager.h,v 1.19 2003/03/03 14:17:34 anhi Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -15,7 +15,7 @@
 
 namespace BALL 
 {
-	/** \ingroup Persistence
+	/**  \addtogroup  Persistence
 	 *	@{
 	 */
 

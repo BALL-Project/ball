@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.61 2003/02/25 15:53:27 sturm Exp $
+// $Id: vector3.h,v 1.62 2003/03/03 14:17:54 anhi Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -31,7 +31,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Primitives
+    /**  \addtogroup  Primitives
      *  @{
      */
 	/**	@name	Three-dimensional vector.
@@ -127,7 +127,7 @@ namespace BALL
 		/**	Spherical polar coordinate constructor.
 				Create a TVector3 object and set its coordinates to 
 				the point described by the three spherical polar coordinates
-				<tt>r</tt> (radius), <tt>phi</tt> (azimuth), and {\tt theta} (co-latitude).
+				<tt>r</tt> (radius), <tt>phi</tt> (azimuth), and <tt>theta</tt> (co-latitude).
 				@see set(const T& r, const TAngle<T>& phi, const TAngle<T> &theta)
 				@param r the radius
 				@param phi the azimuth 
@@ -156,7 +156,7 @@ namespace BALL
 		//@{
 
 		/**	Assign from an array.
-				Assign the three components <tt>x</tt>, <tt>y</tt>, and {\tt z} from
+				Assign the three components <tt>x</tt>, <tt>y</tt>, and <tt>z</tt> from
 				the first three elements of the array pointed to by <tt>ptr</tt>.
 				@param ptr an array
 				@exception Nullpointer if <tt>ptr == 0</tt>
@@ -251,7 +251,7 @@ namespace BALL
 			throw();
 
 		/**	Assign to polar coordinates.
-				Sets <tt>r</tt>, <tt>phi</tt>, and {\tt theta} to the
+				Sets <tt>r</tt>, <tt>phi</tt>, and <tt>theta</tt> to the
 				coordinates of the vector in spherical polar coordinates.
 				@param	r the radius (returned)
 				@param  phi the azimuth (returned)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackboneModel.h,v 1.9 2003/03/03 08:17:29 sturm Exp $
+// $Id: glBackboneModel.h,v 1.10 2003/03/03 14:18:06 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewGuiFunctor
+    /**  \addtogroup  MolviewGuiFunctor
      *  @{
      */
 		/** AddGLBackboneModel class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clearShiftProcessor.h,v 1.8 2003/02/25 15:53:44 sturm Exp $
+// $Id: clearShiftProcessor.h,v 1.9 2003/03/03 14:18:10 anhi Exp $
 
 #ifndef BALL_NMR_CLEARSHIFTPROCESSOR_H
 #define BALL_NMR_CLEARSHIFTPROCESSOR_H
@@ -12,7 +12,7 @@
 
 namespace BALL 
 {
-    /** \ingroup ShiftModulesNMR
+    /**  \addtogroup  ShiftModulesNMR
      *  @{
      */		
 	/**	Clear assigned shift data of all atoms.

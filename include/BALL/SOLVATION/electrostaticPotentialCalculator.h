@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: electrostaticPotentialCalculator.h,v 1.5 2003/02/25 15:53:54 sturm Exp $
+// $Id: electrostaticPotentialCalculator.h,v 1.6 2003/03/03 14:18:16 anhi Exp $
 
 #ifndef BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
 #define BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
@@ -32,7 +32,7 @@
 
 namespace BALL
 {
-    /** \ingroup Solvation
+    /**  \addtogroup  Solvation
      *  @{
      */
 	/** This class is used to compute the electrostatic potential for

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peak.h,v 1.13 2003/02/25 15:53:45 sturm Exp $
+// $Id: peak.h,v 1.14 2003/03/03 14:18:11 anhi Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -22,7 +22,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Spectra
+    /**  \addtogroup  Spectra
      *  @{
      */	
 	class Atom;

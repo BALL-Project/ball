@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.22 2003/02/25 15:53:05 sturm Exp $
+// $Id: PDBFile.h,v 1.23 2003/03/03 14:17:43 anhi Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -38,7 +38,7 @@
 
 namespace BALL 
 {
-    /** \ingroup StructureFormats
+    /**  \addtogroup  StructureFormats
      *  @{
      */
 	inline

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composedEnergyProcessor.h,v 1.8 2003/02/25 15:53:01 sturm Exp $
+// $Id: composedEnergyProcessor.h,v 1.9 2003/03/03 14:17:41 anhi Exp $
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR
@@ -20,7 +20,7 @@
 
 namespace BALL
 {
-    /** \ingroup Energy
+    /**  \addtogroup  Energy
      *  @{
      */
 	/** A class for composed energy calculations.

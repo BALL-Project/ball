@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triple.h,v 1.5 2003/02/25 15:53:00 sturm Exp $
+// $Id: triple.h,v 1.6 2003/03/03 14:17:41 anhi Exp $
 
 #ifndef BALL_DATATYPE_TRIPLE_H
 #define BALL_DATATYPE_TRIPLE_H
@@ -12,7 +12,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Miscellaneous
+    /**  \addtogroup  Miscellaneous
      *  @{
      */
 	/**	Triple Class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyPDBAtomList.h,v 1.8 2003/02/25 15:53:50 sturm Exp $
+// $Id: pyPDBAtomList.h,v 1.9 2003/03/03 14:18:14 anhi Exp $
 
 #ifndef BALL_PYTHON_PYPDBATOMLIST_H
 #define BALL_PYTHON_PYPDBATOMLIST_H
@@ -20,7 +20,7 @@
 
 namespace BALL 
 {
-  /** \ingroup PythonExtensions
+  /**  \addtogroup  PythonExtensions
    *  @{
    */
 	class PDBAtom;

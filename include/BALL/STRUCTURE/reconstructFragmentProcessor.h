@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.h,v 1.4 2003/02/25 13:27:58 sturm Exp $
+// $Id: reconstructFragmentProcessor.h,v 1.5 2003/03/03 14:18:21 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
 #define BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Structure
+    /**  \addtogroup  Structure
      *  @{
      */
 	class FragmentDB;
@@ -107,10 +107,10 @@ namespace BALL
 		//@{
 		/**	Map three vectors onto each other.
 				This method computes the transformation which 
-				move the three points given in <tt>v1</tt>, <tt>v2</tt>, and {\tt v3} 
-				onto the the three reference points <tt>w1</tt>, <tt>w2</tt>, and {\tt w3}.
+				move the three points given in <tt>v1</tt>, <tt>v2</tt>, and <tt>v3</tt> 
+				onto the the three reference points <tt>w1</tt>, <tt>w2</tt>, and <tt>w3</tt>.
 				<tt>v1</tt> is always mapped exactly onto <tt>w1</tt>, and the plane spanned by
-				<tt>v1</tt>, <tt>v2</tt>, and {\tt v3} is always mapped onto  the plane spanned
+				<tt>v1</tt>, <tt>v2</tt>, and <tt>v3</tt> is always mapped onto  the plane spanned
         by the three reference points. Furthermore, <tt>v2</tt> is mapped such that
 				the vector connecting <tt>v1</tt> and <tt>v2</tt> is parallel to the vector 
 				connecting <tt>w1</tt> and <tt>w2</tt> after the transformation.

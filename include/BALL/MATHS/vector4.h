@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.42 2003/02/25 15:53:28 sturm Exp $
+// $Id: vector4.h,v 1.43 2003/03/03 14:17:54 anhi Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -31,7 +31,7 @@
 
 namespace BALL 
 {
-    /** \ingroup Primitives
+    /**  \addtogroup  Primitives
      *  @{
      */
 	/**	@name	Four-dimensional vector
@@ -138,7 +138,7 @@ namespace BALL
 		//@{
 	
 		/**	Assign from an array.
-				Assign the four components <tt>x</tt>, <tt>y</tt>, {\tt z} and {\tt h} from
+				Assign the four components <tt>x</tt>, <tt>y</tt>, <tt>z</tt> and {\tt h} from
 				the first four elements of the array pointed to by <tt>ptr</tt>.
 				@param ptr an array
 				@exception Nullpointer if <tt>ptr == 0</tt>

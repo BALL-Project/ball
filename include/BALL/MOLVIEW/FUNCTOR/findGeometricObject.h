@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: findGeometricObject.h,v 1.12 2003/02/25 15:53:35 sturm Exp $
+// $Id: findGeometricObject.h,v 1.13 2003/03/03 14:18:03 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
 #define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
@@ -32,7 +32,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewFunctorsHelper
+    /**  \addtogroup  MolviewFunctorsHelper
      *  @{
      */		
 		/** FindGeometricObjects class.

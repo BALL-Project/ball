@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.16 2003/02/25 13:28:27 sturm Exp $
+// $Id: tube.h,v 1.17 2003/03/03 14:18:36 anhi Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-        /** \ingroup ViewPrimitives
+        /**  \addtogroup  ViewPrimitives
          *  @{
          */
          

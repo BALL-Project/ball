@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorTable.h,v 1.7 2003/02/25 13:28:06 sturm Exp $
+// $Id: colorTable.h,v 1.8 2003/03/03 14:18:25 anhi Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -26,7 +26,7 @@ namespace BALL
 
 	namespace VIEW 
 	{
-    /** \ingroup ViewDatatypeColors
+    /**  \addtogroup  ViewDatatypeColors
      *  @{
      */
 		/** This class is used to implement a color table that can be used to

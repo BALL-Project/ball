@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.h,v 1.15 2003/03/03 08:17:17 sturm Exp $
+// $Id: amberTorsion.h,v 1.16 2003/03/03 14:17:55 anhi Exp $
 
 // Molecular Mechanics: Amber force field, bond stretch component
 
@@ -22,7 +22,7 @@
 
 namespace BALL 
 {
-    /** \ingroup AMBER
+    /**  \addtogroup  AMBER
      *  @{
      */
 	/**	Amber bond stretch component

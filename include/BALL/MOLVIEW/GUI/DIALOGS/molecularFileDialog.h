@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.7 2003/03/03 08:17:28 sturm Exp $
+// $Id: molecularFileDialog.h,v 1.8 2003/03/03 14:18:05 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
@@ -21,7 +21,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewDialogs
+    /**  \addtogroup  MolviewDialogs
      *  @{
      */
 		/** MolecularFileDialog class.
@@ -107,7 +107,7 @@ namespace BALL
 			/** Open a molecular file.
 			 		This method tries to open and read a molecular file, selected from a QFileDialog,
 					and, if susccesfull, converts is into a  \link System System \endlink . Then it sends a  \link NewCompositeMessage NewCompositeMessage \endlink 
-					containing the  \link Composite Composite \endlink  object made from the  \link System System \endlink  to the other \Ref{ConnectionObject}
+					containing the  \link Composite Composite \endlink  object made from the  \link System System \endlink  to the other  \link ConnectionObject ConnectionObject \endlink 
 					objects.
 			 		A  \link WindowMessage WindowMessage \endlink  will be sent to change the status bar text of the main application.
 					@see		NewCompositeMessage

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extendedProperty.h,v 1.11 2003/02/25 15:53:39 sturm Exp $
+// $Id: extendedProperty.h,v 1.12 2003/03/03 14:18:08 anhi Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
@@ -14,7 +14,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewKernel
+    /**  \addtogroup  MolviewKernel
      *  @{
      */
 		/** ExtendedPropertyManager class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: filter.h,v 1.8 2003/02/25 13:28:07 sturm Exp $
+// $Id: filter.h,v 1.9 2003/03/03 14:18:26 anhi Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H
@@ -28,7 +28,7 @@ namespace BALL
 
 	namespace VIEW
 	{
-    /** \ingroup ViewFunctors
+    /**  \addtogroup  ViewFunctors
      *  @{
      */				
 		/** Filter class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeDescriptor.h,v 1.14 2003/02/25 13:28:11 sturm Exp $
+// $Id: compositeDescriptor.h,v 1.15 2003/03/03 14:18:27 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -46,7 +46,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-    /** \ingroup ViewGuiKernelComposite
+    /**  \addtogroup  ViewGuiKernelComposite
      *  @{
      */
 		/** CompositeDescriptor class.

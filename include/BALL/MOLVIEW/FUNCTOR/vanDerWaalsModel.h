@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.15 2003/02/25 15:53:38 sturm Exp $
+// $Id: vanDerWaalsModel.h,v 1.16 2003/03/03 14:18:05 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /** \ingroup MolviewFunctorsModels
+    /**  \addtogroup  MolviewFunctorsModels
      *  @{
      */
 		using VIEW::Sphere;
@@ -120,7 +120,7 @@ namespace BALL
 
 			/**	Operator method.
 					This method iterates over each  \link Composite Composite \endlink  object reachable in the 
-					 \link Composite Composite \endlink  tree. If {\em composite} is of kind  \link Atom Atom \endlink  than a \Ref{Sphere}
+					 \link Composite Composite \endlink  tree. If {\em composite} is of kind  \link Atom Atom \endlink  than a  \link Sphere Sphere \endlink 
 					with radius  \link getVanDerWaalsRadius getVanDerWaalsRadius \endlink 
 					is created for that atom, appended to {\em composite} and inserted with the
 					method  \link insertAtom_ insertAtom_ \endlink .
