@@ -1,17 +1,14 @@
-// $Id: geometricObjectSelector.iC,v 1.1 2000/01/08 20:31:27 hekl Exp $
+// $Id: geometricObjectSelector.iC,v 1.2 2001/01/24 12:30:46 amoll Exp $
 
 BALL_INLINE
-void 
-GeometricObjectSelector::setSelectionColor
-  (const ColorRGBA &color)
+void GeometricObjectSelector::setSelectionColor(const ColorRGBA &color)
 {
 	selection_color_ = color;
 }
 
 BALL_INLINE
 const ColorRGBA &
-GeometricObjectSelector::getSelectionColor
-  (void) const
+GeometricObjectSelector::getSelectionColor() const
 {
 	return selection_color_;
 }
@@ -34,13 +31,13 @@ BALL_INLINE
 bool 
 GeometricObjectSelector::isSelectionColorUsed()
 {
-	return (bool)(selection_ == true);
+	return selection_;
 }
 
 BALL_INLINE
 bool 
 GeometricObjectSelector::isObjectColorUsed()
 {
-	return (bool)(selection_ == false);
+	return (!selection_);
 }
 

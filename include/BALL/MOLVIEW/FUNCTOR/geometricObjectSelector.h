@@ -1,4 +1,4 @@
-// $Id: geometricObjectSelector.h,v 1.6 2000/12/12 16:16:52 oliver Exp $
+// $Id: geometricObjectSelector.h,v 1.7 2001/01/24 12:30:46 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
@@ -78,14 +78,11 @@ namespace BALL
 			*/
 			//@{
 
-			void set
-				(const GeometricObjectSelector& selector, bool deep = true);
+			void set(const GeometricObjectSelector& selector, bool deep = true);
 
-			GeometricObjectSelector& operator =
-				(const GeometricObjectSelector& selector);
+			GeometricObjectSelector& operator = (const GeometricObjectSelector& selector);
 
-			void get
-				(GeometricObjectSelector& selector, bool deep = true) const;
+			void get(GeometricObjectSelector& selector, bool deep = true) const;
 
 			void swap(GeometricObjectSelector& selector);
 			//@}
@@ -94,11 +91,9 @@ namespace BALL
 			*/
 			//@{
 
-			void setSelectionColor
-				(const ColorRGBA &color);
+			void setSelectionColor(const ColorRGBA &color);
 
-			const ColorRGBA &getSelectionColor
-				(void) const;
+			const ColorRGBA &getSelectionColor() const;
 
 			void useSelectionColor();
 
