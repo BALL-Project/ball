@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.5 2003/11/14 13:54:48 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.6 2003/11/15 01:39:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -80,7 +80,7 @@ namespace BALL
 
 			///
 			float getCartoonHelixRadius() const
-				throw() {return getFloatValue_(cartoon_sphere_radius);}
+				throw() {return getFloatValue_(cartoon_helix_radius);}
 
 			///
 			float getCartoonArrowWidth() const
@@ -124,7 +124,7 @@ namespace BALL
 
 			///
 			void setCartoonHelixRadius(float value) 
-				throw() { setValue_(cartoon_sphere_radius,value);}
+				throw() { setValue_(cartoon_helix_radius,value);}
 
 			///
 			void setCartoonArrowWidth(float value) 
