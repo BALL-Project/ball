@@ -1,4 +1,4 @@
-// $Id: parameters.C,v 1.2 2000/09/18 12:15:31 oliver Exp $
+// $Id: parameters.C,v 1.3 2000/09/18 12:26:57 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameters.h>
@@ -24,7 +24,7 @@ namespace BALL
 	}
 
 
-	Parameters::clear()
+	void Parameters::clear()
 	{
 		// clean up everything
 		INI_file_.destroy();
