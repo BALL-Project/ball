@@ -1,33 +1,60 @@
-// $Id: Directory_test.C,v 1.1 2000/06/15 19:14:00 amoll Exp $
+// $Id: Directory_test.C,v 1.2 2000/06/21 10:35:37 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/directory.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Directory_test.C,v 1.1 2000/06/15 19:14:00 amoll Exp $")
+START_TEST(class_name, "$Id: Directory_test.C,v 1.2 2000/06/21 10:35:37 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-Directory* d1;
+Directory* dd;
+String testDir = ::getcwd(NULL, 64);
 
 CHECK(Directory::Directory())
-	d1 = new Directory();
-	TEST_NOT_EQUAL(d1, 0)
+	dd = new Directory();
+	TEST_NOT_EQUAL(dd, 0)
+	TEST_EQUAL(dd->getPath(), String(::getcwd(NULL, 64)))
+	TEST_EQUAL(dd->isCurrent(), true)
 RESULT
 
 CHECK(Directory::~Directory())
-	delete d1;
+	delete dd;
+RESULT
+
+Directory d;
+
+CHECK(Directory::setCurrent(const String& path))
+	TEST_EQUAL(d.setCurrent("data"), true);
+	TEST_EQUAL(::getcwd(NULL, 64), testDir + "/data")
+	TEST_EQUAL(d.setCurrent(testDir), true);
+	TEST_EQUAL(::getcwd(NULL, 64), testDir)
 RESULT
 
 CHECK(Directory::Directory(const String& directory_path, bool set_current = false))
-	Directory d("data/");
-	TEST_EQUAL(d.getPath(), "data/")
-	d = Directory("data/", true);
-	TEST_EQUAL(d.isCurrent(), true)
+	Directory d("data");
+	TEST_EQUAL(d.isValid(), true)
+	String s = String(::getcwd(NULL, 64)) + "/data";
+	TEST_EQUAL(d.getPath(), s)
+
+	Directory d1("data/", true);
+	TEST_EQUAL(d1.isCurrent(), true)
+	TEST_EQUAL(d1.isValid(), true)
+	TEST_EQUAL(d.setCurrent(testDir), true);
+
+	Directory d2("data/Directory_test/");
+	TEST_EQUAL(d2.isValid(), true)
+
+	Directory d3(testDir);
+	TEST_EQUAL(d3.isValid(), true)
+
+	Directory d5("data/Directory_test1");
+	TEST_EQUAL(d5.isValid(), false)
+
 RESULT
 
 CHECK(Directory::Directory(const Directory& directory))
@@ -50,148 +77,134 @@ RESULT
 CHECK(Directory::set(const String& directory_path, bool set_current = false))
 	Directory d;
 	d.set("data/Directory_test/");
-	TEST_EQUAL(d.getPath(), "data/Directory_test/")
+	TEST_EQUAL(d.getPath(), testDir + "/data/Directory_test")
 	TEST_EQUAL(d.isCurrent(), false)
 	d.set("data/Directory_test/", true);
 	TEST_EQUAL(d.isCurrent(), true)
+	d.setCurrent(testDir);
 RESULT
 
 CHECK(Directory::set(const Directory& directory))
 	Directory d("data/");
 	Directory d1;
 	d1.set(d);
-	TEST_EQUAL(d1.getPath(), "data/")
+	TEST_EQUAL(d1.getPath(), testDir + "/data")
 RESULT
 
 CHECK(Directory::Directory& operator = (const Directory& directory))
 	Directory d("data/");
 	Directory d1;
 	d1 = d;
-	TEST_EQUAL(d1.getPath(), "data/")	
+	TEST_EQUAL(d1.getPath(), testDir + "/data")	
 RESULT
 
 CHECK(Directory::get(Directory& directory) const )
 	Directory d("data/");
 	Directory d1;
 	d.get(d1);
-	TEST_EQUAL(d1.getPath(), "data/")
+	TEST_EQUAL(d1.getPath(), testDir + "/data")
 RESULT
 
 CHECK(Directory::swap(Directory& directory))
 	Directory d1("data/");
 	Directory d2("data/Directory_test/", true);
 	d1.swap(d2);
-	TEST_EQUAL(d1.getPath(), "data/Directory_test/")
-	TEST_EQUAL(d2.getPath(), "data/")
+	TEST_EQUAL(d1.getPath(), testDir + "/data/Directory_test")
+	TEST_EQUAL(d2.getPath(), testDir + "/data")
 	TEST_EQUAL(d1.isCurrent(), true)
 	TEST_EQUAL(d2.isCurrent(), false)
+	d.setCurrent(testDir);
 RESULT
 
 CHECK(Directory::getPath() const )
 	Directory d1("data/");
-	TEST_EQUAL(d1.getPath(), "data/")
+	TEST_EQUAL(d1.getPath(), testDir + "/data")
 RESULT
 
 CHECK(Directory::create(String& path, mode_t mode = 0777))
-	Directory d1("data/");
-	TEST_EQUAL(d1.create("Directory_test/test1"), true)
-RESULT
-
-CHECK(Directory::rename(String old_path, String new_path))
-	Directory d1("data/");
-	TEST_EQUAL(d1.rename("Directory_test/test1", "Directory_test/test2"), true)	  
-RESULT
-
-CHECK(Directory::renameTo(const String& new_path))
-	Directory d1("data/Directory_test/test2");
-	TEST_EQUAL(d1.renameTo("Directory_test/test1"), true)	  
-RESULT
-
-CHECK(Directory::setCurrent(String& directory_path))
-	Directory d1("data/Directory_test/test1");
-	TEST_EQUAL(d1.setCurrent("Directory_test/test1"), true)
-	TEST_EQUAL(d1.isCurrent(), true)	
-RESULT
-
-CHECK(Directory::setCurrent())
-	Directory d1("data/Directory_test/test1");
-	TEST_EQUAL(d1.setCurrent("Directory_test/"), true)
-	TEST_EQUAL(d1.setCurrent(), true)
-	TEST_EQUAL(d1.isCurrent(), true)	
+	Directory d1("data/Directory_test/", true);
+	TEST_EQUAL(d1.isValid(), true)
+	d1.remove("test1");
+	d1.remove("test2");
+	d1.remove("test3");
+	TEST_EQUAL(d1.create("test1"), true)
+	TEST_EQUAL(d.setCurrent(testDir), true)
+	Directory d2;
+	TEST_EQUAL(d2.create("data/Directory_test/test2"), true)
+	TEST_EQUAL(d2.isCurrent(), true)
+	TEST_EQUAL(d.setCurrent(testDir), true)
 RESULT
 
 CHECK(Directory::remove(String old_path))
-	Directory d1("data/Directory_test/");
+	Directory d1("data/Directory_test/", true);
+	TEST_EQUAL(d1.isValid(), true)
 	TEST_EQUAL(d1.remove("test1"), true)
+	TEST_EQUAL(d1.remove("test2"), true)
+	d.setCurrent(testDir);
 RESULT
 
-CHECK(Directory::getFirstEntry(String& entry))
-	Directory d1("data/Directory_test/");
-	String s;
-	TEST_EQUAL(d1.getFirstEntry(s), true)
-	s = "aa";
-	TEST_EQUAL(d1.has("aa"), true)
-	s = "a";
+CHECK(Directory::rename(String old_path, String new_path))
+	Directory d1("data/Directory_test", true);
+	TEST_EQUAL(d1.isValid(), true)
+	TEST_EQUAL(d1.create("test1"), true)
+	TEST_EQUAL(d1.rename("test1", "test2"), true)	  
+	TEST_EQUAL(d1.rename("test2", "test3"), true)	  
+	TEST_EQUAL(d1.rename("testz", "test"), false)	  
+	TEST_EQUAL(d1.remove("test3"), true)
+	d.setCurrent(testDir);
 RESULT
+
+CHECK(Directory::renameTo(const String& new_path))
+	Directory d1("data/Directory_test");
+	TEST_EQUAL(d1.create("test1"), true)
+	d.setCurrent(testDir);
+	Directory d2("data/Directory_test/test1", true);
+	TEST_EQUAL(d2.isValid(), true)
+	TEST_EQUAL(d2.renameTo("test2"), true)	  
+	TEST_EQUAL(d1.remove("test2"), true)
+	d.setCurrent(testDir);
+RESULT
+
+Directory d1("data/Directory_test/");
 
 CHECK(Directory::getFirstEntry(String& entry) const )
-	Directory d1("data/Directory_test/");
 	String s;
 	TEST_EQUAL(d1.getFirstEntry(s), true)
-	TEST_EQUAL(s, "a");
+	TEST_EQUAL(s, ".");
 	TEST_EQUAL(d1.getFirstEntry(s), true)
-	TEST_EQUAL(s, "a");
+	TEST_EQUAL(s, ".");
 RESULT
 
 CHECK(Directory::getNextEntry(String& entry))
-	Directory d1("data/Directory_test/");
 	String s;
 	TEST_EQUAL(d1.getNextEntry(s), true)
-	s = "bb";
-	TEST_EQUAL(d1.has("bb"), true)
-	s = "b";
-RESULT
-
-CHECK(Directory::getNextEntry(String& entry) const )
-	Directory d1("data/Directory_test/");
-	String s;
-	TEST_EQUAL(d1.getNextEntry(s), true)
-	TEST_EQUAL(s, "b");
-	TEST_EQUAL(d1.getNextEntry(s), true)
-	TEST_EQUAL(s, "b");
+	TEST_EQUAL(s, "..");
 	TEST_EQUAL(d1.getNextEntry(s), true)
 	TEST_EQUAL(s, "CVS");
+	TEST_EQUAL(d1.getNextEntry(s), true)
+	TEST_EQUAL(s, "a");
 RESULT
  
 CHECK(Directory::countItems() const )
-	Directory d1("data/Directory_test/");
 	TEST_EQUAL(d1.countItems(), 3)
 RESULT
 
 CHECK(Directory::countFiles() const )
-	Directory d1("data/Directory_test/");
 	TEST_EQUAL(d1.countFiles(), 2)
 RESULT
 
 CHECK(Directory::countDirectories() const )
-	Directory d1("data/Directory_test/");
 	TEST_EQUAL(d1.countDirectories(), 1)
 RESULT
 
-CHECK(Directory::find(const String& filename, String& filepath, bool recursive = false))
+CHECK(Directory::find(const String& filename, String& filepath))
 	Directory d1("data/");
 	String s;
-	TEST_EQUAL(d1.find("a", s, true ), true)
-	s = "Directory_test1";
-	TEST_EQUAL(d1.rename(s, "Directory_test"), true)
-RESULT
-
-CHECK(Directory::find(const String& filename, String& filepath, bool recursive = false) const )
-	Directory d1("data/");
-	String s;
-	TEST_EQUAL(d1.find("a", s, true ), true)
-	TEST_EQUAL(s, "Directory_test");
-	TEST_EQUAL(d1.find("a", s, false ), false)
+	TEST_EQUAL(d1.find("Directory_test", s), true)
+	TEST_EQUAL(s, testDir + "/data");
+	d1.set(testDir);
+	TEST_EQUAL(d1.find("a", s), true)
+	TEST_EQUAL(s, testDir + "/data/Directory_test")
 RESULT
 
 CHECK(Directory::has(const String& filename, bool recursive = false) const )
@@ -205,6 +218,7 @@ CHECK(Directory::isCurrent() const )
 	TEST_EQUAL(d1.isCurrent(), false)
 	d1.setCurrent();
 	TEST_EQUAL(d1.isCurrent(), true)
+	d.setCurrent(testDir);
 RESULT
 
 CHECK(Directory::isEmpty() const )
@@ -230,14 +244,6 @@ CHECK(Directory::bool operator != (const Directory& directory) const )
 	TEST_EQUAL(d != d1, false)
 	d1.set("data/Directory_test/");
 	TEST_EQUAL(d != d1, true)
-RESULT
-
-CHECK(Directory::apply(DirectoryProcessor& processor))
-  //BAUSTELLE
-RESULT
-
-CHECK(Directory::apply(DirectoryRecursiveProcessor& processor))
-  //BAUSTELLE
 RESULT
 
 /////////////////////////////////////////////////////////////
