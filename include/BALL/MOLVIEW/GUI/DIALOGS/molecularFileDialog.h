@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.h,v 1.1.2.3 2002/12/11 14:04:28 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.1.2.4 2002/12/11 21:17:47 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
@@ -124,6 +124,11 @@ namespace BALL
 			/** Read a HIN file
 			 */
 			bool readHINFile(String filename, String system_name)
+				throw();
+
+			/** Read a MOL file
+			 */
+			bool readMOLFile(String filename, String system_name)
 				throw();
 		
 			/** Read a MOL2 file

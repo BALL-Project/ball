@@ -1,9 +1,10 @@
-// $Id: molecularFileDialog.C,v 1.1.2.4 2002/12/11 14:04:19 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.1.2.5 2002/12/11 21:18:03 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
 #include <BALL/MATHS/box3.h>
@@ -67,6 +68,7 @@ namespace BALL
 			fd->setMode(QFileDialog::ExistingFile);
 			fd->addFilter("PDB Files (*.pdb *.brk *.ent)");
 			fd->addFilter("HIN Files (*.hin)");
+			fd->addFilter("MOL Files (*.mol)");
 			fd->addFilter("MOL2 Files (*.mol2)");
 
 			fd->setSelectedFilter(1);
@@ -96,6 +98,10 @@ namespace BALL
 			else if (filter.hasSubstring("HIN"))
 			{
 				readHINFile(filename, String(qfilename));
+			}
+			else if (filter.hasSubstring("MOL"))
+			{
+				readMOLFile(filename, String(qfilename));
 			}
 			else if (filter.hasSubstring("MOL2"))
 			{
@@ -265,6 +271,48 @@ namespace BALL
 			setStatusbarText("");
 			return true;
 		}
+
+
+		bool MolecularFileDialog::readMOLFile(String filename, String system_name)
+			throw()
+		{
+			// notify the main window
+			setStatusbarText("reading MOL file...");
+
+			// reading MOL2 File
+			System* system = new System();
+
+			try
+			{
+				MOLFile mol_file(filename);
+				mol_file >> *system;
+				mol_file.close();
+			}
+			catch(...)
+			{
+				Log.info() << "> read MOL file failed." << std::endl;
+				delete system;
+				return false;
+			}
+
+			// writing info to log
+			Log.info() << "> read " << system->countAtoms() << " atoms from MOL file \"" << filename<< "\"" << std::endl;
+
+			if (system->getName() == "")
+			{
+				system->setName(filename);
+			}
+
+			// notify tree of a new composite
+			NewCompositeMessage new_message;
+			new_message.setComposite(system);
+			new_message.setCompositeName(system_name);
+			notify_(new_message);
+
+			setStatusbarText("");
+			return true;
+		}
+
 
 		bool MolecularFileDialog::readMOL2File(String filename, String system_name)
 			throw()
