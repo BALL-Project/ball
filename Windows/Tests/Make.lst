@@ -1,0 +1,258 @@
+DIRECTORY=TEST
+
+XDR_DEPENDENT_EXECUTABLES=\
+	XDRPersistenceManager_test$(e)
+
+EXECUTABLES_BASIC = \
+	ClassTest_test$(e)\
+	RegularExpression_test$(e)\
+	GlobalTypes_test$(e)\
+	Limits_test$(e)\
+	VersionInfo_test$(e)\
+	RTTI_test$(e)
+
+EXECUTABLES_MATHS = \
+	MathsCommon_test$(e)\
+	AnalyticalGeometry_test$(e)\
+	Angle_test$(e)\
+	Vector2_test$(e)\
+	Vector3_test$(e)\
+	Vector4_test$(e)\
+	Quaternion_test$(e)\
+	Matrix44_test$(e)\
+	NumericalIntegrator_test$(e)\
+	Line3_test$(e)\
+	Circle3_test$(e)\
+	Box3_test$(e)\
+	Plane3_test$(e)\
+	Sphere3_test$(e)\
+	Surface_test$(e)\
+	Function_test$(e)\
+	PiecewiseFunction_test$(e)\
+	PiecewisePolynomial_test$(e) 
+
+EXECUTABLES_SYSTEM = \
+	FileSystem_test$(e)\
+	Directory_test$(e)\
+	Socket_test$(e)\
+#	TCPTransfer_test$(e)\
+#	File_test$(e)\
+	Path_test$(e)\
+	PreciseTime_test$(e)\
+#	Timer_test$(e)\
+	TimeStamp_test$(e)\
+	TransformationManager_test$(e)
+
+EXECUTABLES_DATATYPES = \
+	BitVector_test$(e)\
+	List_test$(e)\
+	Hash_test$(e)\
+	HashMap_test$(e)\
+	StringHashMap_test$(e)\
+	HashSet_test$(e)\
+	HashGrid3_test$(e)\
+	Options_test$(e)\
+#	String_test$(e)\
+	Substring_test$(e)\
+	Triple_test$(e)\
+	Quadruple_test$(e)\
+	RegularData1D_test$(e)\
+	RegularData2D_test$(e)\
+	RegularData3D_test$(e)
+
+EXECUTABLES_CONCEPTS = Enumerator_test$(e)\
+	Factory_test$(e)\
+	LogStream_test$(e)\
+	AutoDeletable_test$(e)\
+	Object_test$(e)\
+	PersistentObject_test$(e)\
+	PersistenceManager_test$(e)\
+	TextPersistenceManager_test$(e)\
+	Selectable_test$(e)\
+	PropertyManager_test$(e)\
+#	Composite_test$(e)\
+	Embeddable_test$(e)\
+	RandomAccessIterator_test$(e)
+
+EXECUTABLES_KERNEL = \
+	PTE_test$(e)\
+	Atom_test$(e)\
+	AtomIterator_test$(e)\
+	Bond_test$(e)\
+	AtomContainer_test$(e)\
+	Fragment_test$(e)\
+	Chain_test$(e)\
+	Molecule_test$(e)\
+	SecondaryStructure_test$(e)\
+	System_test$(e)\
+	Protein_test$(e)\
+	PDBAtom_test$(e)\
+	NucleicAcid_test$(e)\
+	Nucleotide_test$(e)\
+	Residue_test$(e)\
+	Expression_test$(e)\
+	ExpressionParser_test$(e)\
+	KernelPredicate_test$(e)\
+	Selector_test$(e)\
+	RuleEvaluator_test$(e)\
+	StandardPredicates_test$(e)\
+	DefaultProcessors_test$(e)\
+	FragmentDB_test$(e)\
+	ForEach_test$(e)\
+	GlobalKernel_test$(e)
+
+EXECUTABLES_MOLMEC = \
+	Gradient_test$(e)\
+	AtomVector_test$(e)\
+	MolmecSupport_test$(e)\
+	AmberFF_test$(e)\
+	CharmmFF_test$(e)\
+	EnergyMinimizer_test$(e)\
+	SnapShot_test$(e)\
+	SnapShotManager_test$(e)
+
+EXECUTABLES_NMR = \
+	AssignShiftProcessor_test$(e)\
+	RandomCoilShiftProcessor_test$(e)\
+	AnisotropyShiftProcessor_test$(e)\
+	ClearShiftProcessor_test$(e)\
+	CreateSpectrumProcessor_test$(e)\
+	EFShiftProcessor_test$(e)\
+	HaighMallionShiftProcessor_test$(e)\
+	JohnsonBoveyShiftProcessor_test$(e)\
+	ShiftModel_test$(e)\
+	ShiftModule_test$(e)\
+	Spectrum_test$(e)\
+	Peak_test$(e)\
+#	PeakList_test$(e)
+
+EXECUTABLES_FORMATS =\
+	LineBasedFile_test$(e)\
+	BinaryFileAdaptor_test$(e)\
+	INIFile_test$(e)\
+	Parameters_test$(e)\
+	ParameterSection_test$(e)\
+	ResourceFile_test$(e)\
+#	GenericMolFile_test$(e)\
+#	HINFile_test$(e)\
+	MOLFile_test$(e)\
+	SDFile_test$(e)\
+	MOL2File_test$(e)\
+	NMRStarFile_test$(e)\
+	DCDFile_test$(e)\
+	PDBFile_test$(e)\
+	TrajectoryFile_test$(e)\
+	XYZFile_test$(e)
+
+EXECUTABLES_ENERGY = \
+	AtomicContactEnergy_test$(e)\
+#	ComposedEnergyProcessor_test$(e)\
+	EnergyProcessor_test$(e)\
+	OoiEnergy_test$(e)
+
+EXECUTABLES_STRUCTURE = \
+	AnalyticalSES_test$(e)\
+	MolecularGraph_test$(e)\
+	NumericalSAS_test$(e)\
+	Peptides_test$(e)\
+	RadialDistributionFunction_test$(e)\
+	RDFIntegrator_test$(e)\
+	RDFParameter_test$(e)\
+	RDFSection_test$(e)\
+	ReconstructFragmentProcessor_test$(e)\
+	SmilesParser_test$(e)\
+	StructureMapper_test$(e)\
+	TransformationApplicator_test$(e)\
+	TranslationApplicator_test$(e)
+
+EXECUTABLES_SOLVATION = \
+	PoissonBoltzmann_test$(e)\
+	SolventDescriptor_test$(e)\
+	SolventParameter_test$(e)\
+	ClaverieParameter_test$(e)\
+	ReissCavFreeEnergyProcessor_test$(e)\
+  UhligCavFreeEnergyProcessor_test$(e)\
+  PCMCavFreeEnergyProcessor_test$(e)\
+  PierottiCavFreeEnergyProcessor_test$(e)\
+	Pair6_12RDFIntegrator_test$(e)\
+	Pair6_12InteractionEnergyProcessor_test$(e)\
+	PairExpInteractionEnergyProcessor_test$(e)\
+	PairExpRDFIntegrator_test$(e)
+
+EXECUTABLES_QSAR = \
+	Descriptor_test$(e)\
+	SimpleDescriptors_test$(e)
+
+EXECUTABLES = \
+	$(EXECUTABLES_BASIC)\
+	$(EXECUTABLES_SYSTEM)\
+	$(EXECUTABLES_MATHS)\
+	$(EXECUTABLES_DATATYPES)\
+	$(EXECUTABLES_CONCEPTS)\
+	$(EXECUTABLES_KERNEL)\
+	$(EXECUTABLES_FORMATS)\
+	$(EXECUTABLES_MOLMEC)\
+	$(EXECUTABLES_NMR)\
+	$(EXECUTABLES_ENERGY)\
+	$(EXECUTABLES_STRUCTURE)\
+	$(EXECUTABLES_QSAR)\
+	$(EXECUTABLES_SOLVATION)
+
+# default target
+all:	$(EXECUTABLES)
+	
+#all:	MolecularGraph_test
+
+	
+
+
+#test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
+#	@./runtests -success
+
+#info:
+#	@./runtests -info
+
+#basic_test:	$(EXECUTABLES_BASIC)
+#	@./runtests -section "BASIC" $(TEST_OPTIONS) $(EXECUTABLES_BASIC)
+
+#system_test:	$(EXECUTABLES_SYSTEM)
+#	@./runtests -section "SYSTEM" $(TEST_OPTIONS) $(EXECUTABLES_SYSTEM)
+
+#maths_test:	$(EXECUTABLES_MATHS)
+#	@./runtests -section "MATHS" $(TEST_OPTIONS) $(EXECUTABLES_MATHS)
+
+#datatypes_test:	$(EXECUTABLES_DATATYPES)
+#	@./runtests -section "DATATYPES" $(TEST_OPTIONS) $(EXECUTABLES_DATATYPES)
+	
+#concepts_test:	$(EXECUTABLES_CONCEPTS)
+#	@./runtests -section "CONCEPTS" $(TEST_OPTIONS) $(EXECUTABLES_CONCEPTS)
+	
+#kernel_test:	$(EXECUTABLES_KERNEL)
+#	@./runtests -section "KERNEL" $(TEST_OPTIONS) $(EXECUTABLES_KERNEL)
+	
+#formats_test:	$(EXECUTABLES_FORMATS)
+#	@./runtests -section "FORMATS" $(TEST_OPTIONS) $(EXECUTABLES_FORMATS)
+	
+#energy_test:	$(EXECUTABLES_ENERGY)
+#	@./runtests -section "ENERGY" $(TEST_OPTIONS) $(EXECUTABLES_ENERGY)
+	
+#molmec_test:	$(EXECUTABLES_MOLMEC)
+#	@./runtests -section "MOLMEC" $(TEST_OPTIONS) $(EXECUTABLES_MOLMEC)
+	
+#nmr_test:	$(EXECUTABLES_NMR)
+#	@./runtests -section "NMR" $(TEST_OPTIONS) $(EXECUTABLES_NMR)
+
+#structure_test:	$(EXECUTABLES_STRUCTURE)
+#	@./runtests -section "STRUCTURE" $(TEST_OPTIONS) $(EXECUTABLES_STRUCTURE)
+
+#qsar_test:	$(EXECUTABLES_QSAR)
+#	@./runtests -section "QSAR" $(TEST_OPTIONS) $(EXECUTABLES_QSAR)
+
+#solvation_test:	$(EXECUTABLES_SOLVATION)
+#	@./runtests -section "SOLVATION" $(TEST_OPTIONS) $(EXECUTABLES_SOLVATION)
+
+#clean:	default_clean
+#	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
+
+#Enumerator_test:	Enumerator_test.o ../CONCEPT/enumerator.o
+#	$(CXX) $(LDFLAGS) -o Enumerator_test Enumerator_test.o ../CONCEPT/enumerator.o $(LIBS)

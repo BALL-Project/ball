@@ -1177,8 +1177,7 @@
 				<File
 					RelativePath="..\..\..\source\SYSTEM\directory.C">
 					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="TRUE">
+						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
