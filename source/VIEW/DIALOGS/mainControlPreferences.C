@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.7 2003/09/02 14:24:54 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.8 2003/09/15 15:13:56 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
 #include <qcombobox.h>
+#include <qcheckbox.h>
 #include <qstylefactory.h>
 
 namespace BALL
@@ -51,6 +53,11 @@ namespace BALL
 			{
 				style_box_->setCurrentText(*QStyleFactory::keys().grep(style.c_str()).begin());
 			}
+			if (inifile.hasEntry("WINDOWS", "DockWindows::show_labels"))
+			{
+				BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = inifile.getValue("WINDOWS", "DockWindows::show_labels").toUnsignedInt();
+			}
+			show_labels->setChecked(BALL_VIEW_DOCKWINDOWS_SHOW_LABELS);
 		}
 		
 		void MainControlPreferences::writePreferences(INIFile& inifile)
@@ -59,9 +66,13 @@ namespace BALL
 			// save the style settings
 			String style = style_box_->currentText().ascii();
 			inifile.insertValue("WINDOWS", "style", style);
+			inifile.insertValue("WINDOWS", "DockWindows::show_labels", String(BALL_VIEW_DOCKWINDOWS_SHOW_LABELS));
 		}
 		
-	} // namespace VIEW
-
-} // namespace BALL
-
+		bool MainControlPreferences::showLabelsEnabled() const
+			throw()
+		{
+			return show_labels->isChecked();
+		}
+		
+} } // namespaces

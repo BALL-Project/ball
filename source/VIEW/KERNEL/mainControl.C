@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.5 2003/09/14 17:16:55 amoll Exp $
+// $Id: mainControl.C,v 1.6 2003/09/15 15:13:57 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -565,6 +565,7 @@ void MainControl::applyPreferences(Preferences & /* preferences */)
 	if (main_control_preferences_ != 0)
 	{
 		QApplication::setStyle(main_control_preferences_->getStyle());
+		BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = main_control_preferences_->showLabelsEnabled();
 		QWidget::update();
 	}
 }

@@ -58,6 +58,12 @@ class DockWidget
 	virtual void writePreferences(INIFile& inifile)
 		throw();
 
+	/** Apply Preferences
+	 		@see ModularWidget::applyPreferences
+	*/
+	virtual void applyPreferences(Preferences & /* preferences */)
+		throw();
+		
 	//@}
 	/** @name Public slots 
 	*/ 

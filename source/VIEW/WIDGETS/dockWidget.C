@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.11 2003/09/14 17:21:02 amoll Exp $
+// $Id: dockWidget.C,v 1.12 2003/09/15 15:13:57 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <qmenubar.h>
 #include <qlabel.h>
 
@@ -140,6 +141,8 @@ void DockWidget::fetchPreferences(INIFile & inifile)
 	{
 		switchShowWidget();
 	}
+
+	if (!BALL_VIEW_DOCKWINDOWS_SHOW_LABELS) caption_label_->hide();
 }
 
 void DockWidget::switchShowWidget()
@@ -175,5 +178,11 @@ void DockWidget::setWindowsMenuEntry(bool state)
 	}
 }
 
+void DockWidget::applyPreferences(Preferences & /* preferences */)
+	throw()
+{
+	if (!BALL_VIEW_DOCKWINDOWS_SHOW_LABELS) caption_label_->hide();
+	else caption_label_->show();
+}
 
 } } // namespaces
