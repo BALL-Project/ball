@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.10 2000/08/30 19:58:26 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.11 2001/02/03 13:36:48 amoll Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -6,12 +6,15 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
+
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>
 #endif
+
 #ifndef BALL_KERNEL_RESIDUE_H
 #	include <BALL/KERNEL/residue.h>
 #endif
+
 #ifndef BALL_STRUCTURE_FRAGMENT_DB_H
 #	include <BALL/STRUCTURE/fragmentDB.h>
 #endif
@@ -19,34 +22,34 @@
 namespace BALL
 {
 
-	/**
+	/** Rotamer class.
 	*/
 	class Rotamer
 	{
 		public:
 
-		/**	@name	Constructors
+		/**	@name	Constructors.
 		*/
 		//@{
 
-		/**	Default constructor
+		/**	Default constructor.
 		*/
 		Rotamer();
 
-		/**	Copy constructor
+		/**	Copy constructor.
 		*/
 		Rotamer(const Rotamer& rotamer);
 
-		/**	Detailled constructor
+		/**	Detailled constructor.
 		*/
 		Rotamer(float new_P, float new_chi1, float new_chi2, float new_chi3, float new_chi4);
 		//@}
 
-		/**	@name	Attributes
+		/**	@name	Attributes.
 		*/
 		//@{
 
-		/**	Probability
+		/**	Probability.
 		*/
 		float P;
 		
