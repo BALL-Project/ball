@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.13 2001/03/07 22:19:44 amoll Exp $
+// $Id: PDBFile.h,v 1.14 2001/06/05 15:44:52 anker Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -260,9 +260,13 @@ namespace BALL
 		SecStrucList		new_turn_secstruc_list_;
 
 		Protein*				current_protein_;
+		const Protein*	current_const_protein_;
 		Chain*					current_chain_;
+		const Chain*		current_const_chain_;
 		Residue*				current_residue_;
+		const Residue*	current_const_residue_;
 		PDBAtom*				current_PDB_atom_;
+		const PDBAtom*	current_const_PDB_atom_;
 		String					residue_name_;
 
 		PDB::Character	chain_ID_;
