@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator.C,v 1.3 2000/09/01 06:09:46 oliver Exp $
+// $Id: RDFIntegrator.C,v 1.4 2000/09/02 16:18:02 anker Exp $
 
 #include <BALL/STRUCTURE/RDFIntegrator.h>
 
@@ -7,16 +7,22 @@ using namespace std;
 namespace BALL
 {
 	RDFIntegrator::RDFIntegrator()
-		:	RadialDistributionFunction()
+		:	rdf_()
 	{
 	}
 
 
 	RDFIntegrator::RDFIntegrator(const RDFIntegrator& integrator)
-		:	RadialDistributionFunction(integrator)
+		: rdf_(integrator.rdf_)
 	{
 	}
 	
+
+	RDFIntegrator::RDFIntegrator(const RadialDistributionFunction& rdf)
+		: rdf_(rdf)
+	{
+	}
+
 
 	RDFIntegrator::~RDFIntegrator()
 	{
@@ -32,13 +38,25 @@ namespace BALL
 
 	void RDFIntegrator::clear()
 	{
-		RadialDistributionFunction::clear();
+		rdf_.clear();
 	}
 
 
 	void RDFIntegrator::set(const RDFIntegrator& integrator)
 	{
-		RadialDistributionFunction::set(integrator);
+		rdf_ = integrator.rdf_;
+	}
+
+
+	void RDFIntegrator::setRDF(const RadialDistributionFunction& rdf)
+	{
+		rdf_ = rdf;
+	}
+
+
+	RadialDistributionFunction& RDFIntegrator::getRDF() 
+	{
+		return rdf_;
 	}
 
 

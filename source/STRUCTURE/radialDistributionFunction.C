@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.C,v 1.1 2000/08/31 13:04:19 anker Exp $
+// $Id: radialDistributionFunction.C,v 1.2 2000/09/02 16:18:02 anker Exp $
 
 #include <BALL/STRUCTURE/radialDistributionFunction.h>
 
@@ -6,12 +6,14 @@ namespace BALL
 {
 
 	RadialDistributionFunction::RadialDistributionFunction()
-		:	valid_(false)
+		:	representation_(),
+			valid_(false)
 	{
 	}
 
 
-	RadialDistributionFunction::RadialDistributionFunction(const RadialDistributionFunction& rdf)
+	RadialDistributionFunction::RadialDistributionFunction
+		(const RadialDistributionFunction& rdf)
 		:	representation_(rdf.representation_),
 			valid_(rdf.valid_)
 	{
