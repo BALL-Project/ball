@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.5 2005/01/18 17:17:02 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.6 2005/01/19 09:41:47 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -252,13 +252,22 @@ namespace BALL
 		bool DockDialog::calculate()
 			throw()
 		{
+			// get options user has chosen
+			applyValues_();
 			// before docking, apply processors, e.g. add hydrogens
 			applyProcessors_();
-			
+			//setup docking
+			docking_.setup(*docking_partner1_,*docking_partner2_,options_)
 			Log.info() << "End of calculate" << std::endl;
 			return true;
 		}
 		
+		//set options_ with values user has chosen 
+		void DockDialog::applyValues_()
+			throw()
+		{
+		
+		}
 		/// apply the processors to the systems
 		bool DockDialog::applyProcessors_()
 			throw()

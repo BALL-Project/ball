@@ -11,7 +11,7 @@
 using namespace std;
 
 
-void BALL::Docking::DockingAlgorithm::setup()
+void BALL::Docking::DockingAlgorithm::setup(System &system1,System &system2 ,Options &options)
 	throw()
 {
 	Log.error() << "This is just an interface definition. Check your dynamic binding" << std::endl;

@@ -41,6 +41,11 @@
  #include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+ #include <BALL/DATATYPE/options.h>
+#endif
+
+#include "dockingAlgorithm.h"
 #include "dockDialogData.h"
 
 namespace BALL
@@ -154,6 +159,8 @@ namespace BALL
 				protected:
 				
 					bool applyProcessors_() throw();
+					//set options_ with values user has chosen  
+					void applyValues_() throw();
 					void selectFile_(QLineEdit& lineedit) throw();
 					//find chosen system
 					System* partnerChosen_(QString qstr) throw();
@@ -165,6 +172,11 @@ namespace BALL
 					System* docking_partner1_;
 					System* docking_partner2_;
 				
+					//options for the docking algorithm
+					Options 	options_;
+					DockingAlgorithm docking_;
+					//Docking docking_;
+					
 					//menu entry id
 					int id_;
 					
