@@ -1,6 +1,6 @@
 START
 OBJECT BALL::NamedProperty @ 134874880 -
-  int type_ = 7 
+  BALL::Index type_ = 7 
   BALL::String name_ = 5 test3 
 END_OBJECT
 END

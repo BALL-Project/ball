@@ -1,4 +1,4 @@
-unsigned_int size = 4 
+BALL::Size size = 4 
 bool - = FALSE 
 bool - = TRUE 
 bool - = FALSE 

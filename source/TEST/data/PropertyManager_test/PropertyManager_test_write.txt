@@ -1,46 +1,46 @@
 STORABLE BALL::BitVector  bitvector_ 
-  unsigned_int size = 3 
+  BALL::Size size = 3 
   bool - = TRUE 
   bool - = FALSE 
   bool - = TRUE 
 END_STORABLE
-unsigned_int size = 8 
+BALL::Size size = 8 
 /OBJECT BALL::NamedProperty @ [0-9a-fx]* -
-  int type_ = 0 
+  BALL::Index type_ = 0 
   BALL::String name_ = 5 PROP1 
   bool data_.b = TRUE 
 END_OBJECT
 /OBJECT BALL::NamedProperty @ [0-9a-fx]* -
-  int type_ = 1 
+  BALL::Index type_ = 1 
   BALL::String name_ = 5 PROP2 
-  int data_.i = -12345 
+  BALL::Index data_.i = -12345 
 END_OBJECT
 /OBJECT BALL::NamedProperty @ [0-9a-fx]* -
-  int type_ = 2 
+  BALL::Index type_ = 2 
   BALL::String name_ = 5 PROP3 
-  unsigned_int data_.ui = 12345 
+  BALL::Size data_.ui = 12345 
 END_OBJECT
 /OBJECT BALL::NamedProperty @ [0-9a-fx]* -
-  int type_ = 3 
+  BALL::Index type_ = 3 
   BALL::String name_ = 5 PROP4 
   float data_.f = 1.2345 
 END_OBJECT
 /OBJECT BALL::NamedProperty @ [0-9a-fx]* -
-  int type_ = 4 
+  BALL::Index type_ = 4 
   BALL::String name_ = 5 PROP5 
   double data_.d = 2.345 
 END_OBJECT
 /OBJECT BALL::NamedProperty @ [0-9a-fx]* -
-  int type_ = 5 
+  BALL::Index type_ = 5 
   BALL::String name_ = 5 PROP6 
   BALL::String data_.s = 4 test 
 END_OBJECT
 /OBJECT BALL::NamedProperty @ [0-9a-fx]* -
-  int type_ = 6 
+  BALL::Index type_ = 6 
   BALL::String name_ = 5 PROP7 
 /  BALL::PersistentObject \* data_.object  [0-9a-fx]*
 END_OBJECT
 /OBJECT BALL::NamedProperty @ [0-9a-fx]* -
-  int type_ = 7 
+  BALL::Index type_ = 7 
   BALL::String name_ = 5 PROP8 
 END_OBJECT

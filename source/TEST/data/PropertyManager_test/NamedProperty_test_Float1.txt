@@ -1,6 +1,6 @@
 START
 OBJECT BALL::NamedProperty @ 134873544 -
-  int type_ = 3 
+  BALL::Index type_ = 3 
   BALL::String name_ = 4 test 
   float data_.f = -99.9 
 END_OBJECT

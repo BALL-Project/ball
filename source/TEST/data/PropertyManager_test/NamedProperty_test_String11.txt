@@ -1,6 +1,6 @@
 START
 /OBJECT BALL::NamedProperty @ [0-9]+ -
-  int type_ = 5 
+  BALL::Index type_ = 5 
   BALL::String name_ = 5 test4 
   BALL::String data_.s = 5 titel 
 END_OBJECT
