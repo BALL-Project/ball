@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.4 2000/08/01 10:13:26 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.5 2000/08/01 12:53:08 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -66,7 +66,7 @@ class BSTreeItemCollector
 };
 
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.4 2000/08/01 10:13:26 amoll Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.5 2000/08/01 12:53:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -132,10 +132,9 @@ RESULT
 CHECK(setLeftChild(BSTreeItem* item))
   item.setLeftChild(0);
 	TEST_EQUAL(item.getLeftChild(), 0)
-  item.setLeftChild(&right);
-	TEST_EQUAL(item.getLeftChild(), &right)
   item.setLeftChild(&left);
 	TEST_EQUAL(item.getLeftChild(), &left)
+	//BAUSTELLE: EXCEPTION
 RESULT
 
 CHECK(getRightChild())
@@ -146,8 +145,6 @@ RESULT
 CHECK(setRightChild(BSTreeItem *item))
   item.setRightChild(0);
 	TEST_EQUAL(item.getRightChild(), 0)
-  item.setRightChild(&left);
-	TEST_EQUAL(item.getRightChild(), &left)
   item.setRightChild(&right);
 	TEST_EQUAL(item.getRightChild(), &right)
 RESULT
