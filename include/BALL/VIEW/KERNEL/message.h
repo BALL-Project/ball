@@ -1,4 +1,4 @@
-// $Id: message.h,v 1.12 2002/12/12 17:13:04 amoll Exp $
+// $Id: message.h,v 1.13 2002/12/15 01:09:46 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -823,12 +823,13 @@ namespace BALL
 		/** Message to center camera.
 		 		Send by MolecularControl to MolecularProperties.
 		 */
-		class CenterCameraMessage: public Message
+		class CenterCameraMessage: public CompositeMessage
 		{
 			public:
 
 			CenterCameraMessage()
 				throw()
+				: CompositeMessage()
 			{};
 		};
 
