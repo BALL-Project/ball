@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.21 2003/08/29 15:37:56 amoll Exp $
+// $Id: geometricObject.C,v 1.21.2.1 2004/05/18 16:05:27 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -81,9 +81,6 @@ namespace BALL
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "name           : " << name_ << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "type name      : " << getTypeName() << endl;
 
 			BALL_DUMP_DEPTH(s,depth);
 			s << "composite 		 : " << composite_ << endl;

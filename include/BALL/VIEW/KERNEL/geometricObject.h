@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.34 2004/02/26 08:41:37 anhi Exp $
+// $Id: geometricObject.h,v 1.34.2.1 2004/05/18 16:04:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -132,17 +132,6 @@ namespace BALL
 			bool hasName() const
 				throw() {return !name_.isEmpty();}
 
-			/** Return the type name of this geometricObject.
-					Virtually overrideable method for specifying the type name of this geometricObject.
-					This method is used by the Control class to identify the geometricObjects.
-					If the derived primitive geometric object should have a type name displayed by the
-					control class, this method should be overridden.
-					\return  String the type name of this geometricObject
-					\see     Control
-			*/
-			virtual String getTypeName() const
-				throw() {return "GeometricObject";}
-							
 			//@} 
 			/**	@name	debuggers and diagnostics */ 
 			//@{
