@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.23 2000/08/30 19:58:02 oliver Exp $
+// $Id: string.h,v 1.24 2000/09/16 08:30:16 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -29,6 +29,7 @@
 #include <string.h>
 #include <strstream>
 #include <iostream>
+#include <vector>
 
 using std::string;
 
@@ -714,6 +715,14 @@ namespace BALL
 
 		/// Split the string into fields and assign these field to an array of strings
 		Size split(String string_array[], Size array_size, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const
+			throw(Exception::IndexUnderflow, Exception::NullPointer);
+
+		/** Split the string into fields and assign these field to a vector of strings.
+				The vector of strings is cleared in any case. Its final size is returned.
+				@exception IndexOverflow if {\tt from < 0}
+				@exception NullPointer if {\tt delimiters == 0}
+		*/
+		Size split(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
 		//@}
