@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6.4.3 2002/10/23 14:25:26 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.4 2002/10/27 20:28:45 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -7,11 +7,10 @@
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
-using namespace std;
+using std::endl;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -60,7 +59,6 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// top level selections
 	(main_control.menuBar())->setItemEnabled(cut_id_, list_filled);
 	(main_control.menuBar())->setItemEnabled(copy_id_, list_filled);	
-
 }
 
 void MolecularControl::sentSelection()
@@ -77,14 +75,6 @@ void MolecularControl::sentSelection()
 	message->setDeletable(true);
 
 	notify_(message);
-}
-
-void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* item)
-	throw()
-{
-	Control::buildContextMenu(composite, item);
-
-	// to be added: Context menus for molecular objects
 }
 
 Information& MolecularControl::getInformationVisitor_()
@@ -157,11 +147,12 @@ bool MolecularControl::reactToMessages_(Message* message)
 	return update;
 }
 
-
-/*
-void MolecularControl::ContextMenu(QListViewItem* item, const QPoint& point, int column)
+void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* item)
+	throw()
 {
-	enum
+	Control::buildContextMenu(composite, item);
+
+	enum MenuEntries
 	{
 		OBJECT__REMOVE               = 0,
 		OBJECT__CUT                  = 1,
@@ -176,143 +167,38 @@ void MolecularControl::ContextMenu(QListViewItem* item, const QPoint& point, int
 		DISPLAY__CHANGE              = 50
 	};
 
-	if (item == 0)
-	{
-		return;
-	}
-
-	bool no_context_available = false;
-	// select the current listviewitem
-	setSelected(item, TRUE);
-
-	// get composite address
-	Composite* composite = getCompositeAddress_(item);
-	
-	// storing ptr
-	selectedcomposite_ = composite;
-	selected__mpQListViewItem_ = item;
-
-	// get names and types
-	selected_name__mQString_ = _getName(item);
-	selected_root_name__mQString_ = _getRootName(item);
-	selected_type__mQString_ = _getTypeName(item);
-	selected_root_type__mQString_ = _getRootTypeName(item);
-
-	QPopupMenu __QPopupMenu;
-
 	// build the context menu
-	switch (getType(composite))
+	if (RTTI::isKindOf<Residue>(*composite) || 
+			RTTI::isKindOf<System>(*composite) ||
+			RTTI::isKindOf<Protein>(*composite) ||
+			RTTI::isKindOf<Molecule>(*composite) ||
+			RTTI::isKindOf<Chain>(*composite) ||
+			RTTI::isKindOf<SecondaryStructure>(*composite) ||
+			RTTI::isKindOf<Fragment>(*composite))
 	{
-	  case TYPE__RESIDUE:
-	  case TYPE__SYSTEM:
-	  case TYPE__PROTEIN:
-	  case TYPE__MOLECULE:
-	  case TYPE__CHAIN:
-	  case TYPE__SECONDARY_STRUCTURE:
-	  case TYPE__FRAGMENT:
-			{
-				__QPopupMenu.insertItem("check Residue", RESIDUE__CHECK);
-				__QPopupMenu.insertSeparator();
-				__QPopupMenu.insertItem("cut", OBJECT__CUT);
-				__QPopupMenu.insertItem("copy", OBJECT__COPY);
-				__QPopupMenu.insertItem("paste", OBJECT__PASTE);
-				
-				if (copiedcomposite_ != 0)
-				{
-					__QPopupMenu.setItemEnabled(OBJECT__PASTE, TRUE);
-				}
-				else
-				{
-					__QPopupMenu.setItemEnabled(OBJECT__PASTE, FALSE);
-				}
-				
-				__QPopupMenu.insertSeparator();
-				__QPopupMenu.insertItem("build Bonds", BONDS__BUILD);
-				__QPopupMenu.insertItem("remove Bonds", BONDS__REMOVE);
-				__QPopupMenu.insertSeparator();
-				
-				QString __QString("remove ");
-				__QString += getTypeName(composite);
+		insertContextMenuEntry("check Residue", this, SLOT(checkResidue()), RESIDUE__CHECK);
+		context_menu_.insertSeparator();
+		insertContextMenuEntry("cut", this, SLOT(cut()), OBJECT__CUT);
+		insertContextMenuEntry("copy", this, SLOT(copy()), OBJECT__COPY);
+		insertContextMenuEntry("paste", this, SLOT(paste()), OBJECT__PASTE);
+		context_menu_.setItemEnabled(OBJECT__PASTE, getCopyList_().size() > 0);
+		
+		context_menu_.insertSeparator();
+		insertContextMenuEntry("build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
+		insertContextMenuEntry("remove Bonds", this, SLOT(removeBonds()), BONDS__REMOVE);
 
-				__QPopupMenu.insertItem(__QString, OBJECT__REMOVE);
-				__QPopupMenu.insertSeparator();
-				__QPopupMenu.insertItem("select", SELECT);
-				__QPopupMenu.insertItem("deselect", DESELECT);
-	
-				if (composite->isSelected())
-				{
-  				__QPopupMenu.setItemEnabled(SELECT, FALSE);
-  				__QPopupMenu.setItemEnabled(DESELECT, TRUE);
-				}
-				else
-				{
-					__QPopupMenu.setItemEnabled(SELECT, TRUE);
-					__QPopupMenu.setItemEnabled(DESELECT, FALSE);
-				}
-	
-				__QPopupMenu.insertSeparator();
-				__QPopupMenu.insertItem("center Camera", CAMERA__CENTER);
-			}
-			break;
+		context_menu_.insertSeparator();
+		insertContextMenuEntry("select", this, SLOT(select()), SELECT);
+		insertContextMenuEntry("deselect", this, SLOT(deselect()), DESELECT);
+		context_menu_.setItemEnabled(SELECT,   !composite->isSelected());
+		context_menu_.setItemEnabled(DESELECT,  composite->isSelected());
 
-	  default:
-			no_context_available__bool = true;
-			break;
-	}
-
-	if (no_context_available__bool)
-	{
-		return;
-	}
-
-	// execute the action
-	switch (__QPopupMenu.exec(point))
-	{
-	  case RESIDUE__CHECK:
-			checkResidue();
-			break;
-
-	  case OBJECT__CUT:
-			cut();
-			break;
-
-	  case OBJECT__COPY:
-			copy();
-			break;
-
-	  case OBJECT__PASTE:
-			paste();
-			break;
-
-	  case OBJECT__REMOVE:
-			removeObject();
-			break;
-
-	  case BONDS__BUILD:
-			buildBonds();
-			break;
-
-	  case BONDS__REMOVE:
-			removeBonds();
-			break;
-
-	  case SELECT:
-			select();
-			break;
-
-	  case DESELECT:
-			deselect();
-			break;
-
-	  case CAMERA__CENTER:
-			centerCamera();
-			break;
-
-	  default:
-			break;
+		context_menu_.insertSeparator();
+		insertContextMenuEntry("center Camera", this, SLOT(centerCamera()), CAMERA__CENTER);
 	}
 }
-*/
+
+
 	} // namespace MOLVIEW
 
 } // namespace BALL
