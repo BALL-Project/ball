@@ -1,10 +1,11 @@
-// $Id: classTest.h,v 1.19 2001/05/06 22:58:35 oliver Exp $
+// $Id: classTest.h,v 1.20 2001/05/07 00:10:00 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
 
 #include <string>
 #include <list>
+#include <strstream>
 
 /**	@name	Class Black Box Testing
 		To provide a maximum reliability for all BALL classes, each class
@@ -86,6 +87,7 @@ namespace TEST {\
 	std::ifstream	templatefile;\
 	bool					equal_files;\
 	double				precision = 1e-6;\
+	std::strstream			strstr;\
 }\
 \
 \
@@ -587,4 +589,56 @@ int main(int argc, char **argv)\
 		}\
 	}
 
+
+/**	Redirect output to the global logging facility.
+		This macro (together with \Ref{COMPARE_OUTPUT}) can be used
+		to ensure that a function prints an error message to the
+		global logging facility \Ref{Log}. It disables the output
+		to {\tt cout} and {\tt cerr} and redirects all output to
+		{\tt level} to a temporary {\tt strstream}. The contents 
+		of this stream can be compared with the expected output	
+		afterwards using the macro \Ref{COMPARE_OUTPUT}.
+		Each {\tt CAPTURE_OUTPUT} requires exactly one subsequent
+		\Ref{COMPARE_OUTPUT} macro.
+*/
+#define CAPTURE_OUTPUT(level) \
+	{\
+		std::strstream TEST_strstr;\
+		Log.remove(std::cout);\
+		Log.remove(std::cerr);\
+		Log.insert(TEST_strstr, level, level);
+
+/**	Compare output made to the global logging facility.
+		@see CAPTURE_OUTPUT
+*/
+#define COMPARE_OUTPUT(text) \
+		Log.remove(TEST_strstr);\
+		Log.insert(std::cout, LogStream::INFORMATION, LogStream::ERROR - 1);\
+		Log.insert(std::cerr, LogStream::ERROR);\
+		TEST::this_test = (::strncmp(TEST_strstr.str(), text, TEST_strstr.pcount()) == 0);\
+		TEST::test = TEST::test && TEST::this_test;\
+		\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+			/* reserve space for the null-terminated content of the strstrem */\
+			char* TEST_strstr_contents = new char[TEST_strstr.pcount() + 1];\
+			::strncpy(TEST_strstr_contents, TEST_strstr.str(), TEST_strstr.pcount());\
+			TEST_strstr_contents[TEST_strstr.pcount()] = '\0';\
+			\
+			if (!TEST::newline)\
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got " << (TEST_strstr_contents) << ", expected " << (text) << ") ";\
+			if (TEST::this_test)\
+				std::cout << " + " << std::endl;\
+			else \
+				std::cout << " - " << std::endl;\
+			delete [] TEST_strstr_contents;\
+		}\
+	}\
+	
+	
+	
 //@}
