@@ -1,4 +1,4 @@
-// $Id: shiftModule.h,v 1.9 2001/03/02 22:19:34 amoll Exp $
+// $Id: shiftModule.h,v 1.10 2001/05/16 09:59:58 amoll Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -25,7 +25,6 @@
 
 namespace BALL 
 {
-
 	/**	A single contribution of a NMR shift model.
 			NMR shift models typically consist of a number of different 
 			contributions (e.g. ring current, ansisotopy, etc.). Each of these
@@ -174,15 +173,15 @@ namespace BALL
 
 		protected:
 
-		/**	The module name
+		/*_	The module name
 		*/
 		String			module_name_;		
 
-		/**	A pointer to the modules parameters
+		/*_	A pointer to the modules parameters
 		*/
 		Parameters*	parameters_;
 
-		/**	The module's validity flag.
+		/*_	The module's validity flag.
 				This flag should indicate that the module was correctly
 				initialized (using \Ref{init}).
 		*/

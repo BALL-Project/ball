@@ -1,4 +1,4 @@
-// $Id: atomVector.h,v 1.6 2001/05/14 19:21:52 amoll Exp $
+// $Id: atomVector.h,v 1.7 2001/05/16 10:07:14 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -19,7 +19,7 @@ namespace BALL
 	class Composite;
 	
 	/**	Atom vector class.
-			This class is used to store atom pointers.
+			This class is used to store atom pointers. \\
 			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/atomVector.h}
 	*/
 	class AtomVector
@@ -110,7 +110,7 @@ namespace BALL
 		*/
 		using std::vector<Atom*>::size;
 
-		// BAUSTELLE: problem with docu
+		// BAUSTELLE: PROBLEM IN DOCU: using
     /* Random access operator
     */
     using std::vector<Atom*>::operator [];
