@@ -1,4 +1,4 @@
-// $Id: atomVector.h,v 1.5 2001/03/02 00:34:14 amoll Exp $
+// $Id: atomVector.h,v 1.6 2001/05/14 19:21:52 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -110,7 +110,8 @@ namespace BALL
 		*/
 		using std::vector<Atom*>::size;
 
-    /** Random access operator
+		// BAUSTELLE: problem with docu
+    /* Random access operator
     */
     using std::vector<Atom*>::operator [];
 
