@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.29 2005/02/06 20:57:06 oliver Exp $
+// $Id: glRenderer.h,v 1.30 2005/02/14 14:58:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -411,10 +411,6 @@ namespace BALL
 
 			//_
 			void renderMeshWithVertexArray_(const Mesh& mesh)
-				throw();
-
-			//_ Wait until Renderer is not busy anymore
-			void checkBusy_()
 				throw();
 
 			///

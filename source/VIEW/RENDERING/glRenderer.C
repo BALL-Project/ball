@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.61 2005/02/08 06:09:30 oliver Exp $
+// $Id: glRenderer.C,v 1.62 2005/02/14 14:58:50 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -287,7 +287,7 @@ namespace BALL
 	void GLRenderer::removeRepresentation(const Representation& rep)
 		throw()
 	{
-		checkBusy_();
+		busy_ = true;
 
 		if (rep.getGeometricObjects().size() == 0) return;
 
@@ -314,7 +314,7 @@ namespace BALL
 Timer t;
 t.start();
 #endif
-		checkBusy_();
+		busy_ = true;
 
 		GLDisplayList* display_list;
 		if (display_lists_.has(&rep))
@@ -332,9 +332,7 @@ t.start();
 
 		display_list->startDefinition();
 		
-		busy_ = false;
 		render(rep, true);
-		checkBusy_();
 		
 		display_list->endDefinition();
 
@@ -374,7 +372,7 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 			return false;
 		}
 
-		checkBusy_();
+		busy_ = true;
 
 		drawing_precision_  = representation.getDrawingPrecision();
 		drawing_mode_ 		  = representation.getDrawingMode();
@@ -1646,21 +1644,6 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		throw()
 	{
 		return isExtensionSupported("GL_ARB_vertex_buffer_object");
-	}
-
-	void GLRenderer::checkBusy_()
-		throw()
-	{
-		while (busy_)
-		{
-#ifdef BALL_PLATFORM_WINDOWS
-			Sleep(1);
-#else
-//			sleep(1);
-#endif
-		}
-
-		busy_ = true;
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
