@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.56 2004/09/03 13:25:55 amoll Exp $
+// $Id: molecularStructure.C,v 1.57 2004/10/15 14:09:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -42,7 +42,6 @@ namespace BALL
 			throw()
 			:	QWidget(parent, name),
 				ModularWidget(name),
-				view_distance_(25),
 				amber_(),
 				charmm_(),
 				amber_dialog_(this),
@@ -412,30 +411,63 @@ namespace BALL
 				to_center_on = *getMainControl()->getMolecularControlSelection().begin();
 			}
 
-			// use specified object processor for calculating the center
-			calculateCenter_(*to_center_on);
+			// use processor for calculating the center
+			GeometricCenterProcessor center;
+			to_center_on->apply((UnaryProcessor<Atom>&) center);			
+			Vector3 view_point = center.getCenter();
 
-			Vector3 view_point = view_center_vector_;
+			Vector3 max_distance_point;
+			float max_square_distance = -1;
+			if (RTTI::isKindOf<Atom>(*composite)) 
+			{
+				max_distance_point = ((Atom*) composite)->getPosition() - Vector3(1,1,1);
+			}
+			else
+			{
+				AtomContainer* ai = (AtomContainer*) composite;
+				AtomIterator ait = ai->beginAtom();
+				for (; ait != ai->endAtom(); ait++)
+				{
+					float sd = ((*ait).getPosition() - view_point).getSquareLength();
+					if (sd > max_square_distance)
+					{
+						max_square_distance = sd;
+						max_distance_point = (*ait).getPosition();
+					}
+				}
+			}
+
+ 			Vector3 max_distance_vector(max_distance_point - view_point);
+
+			Vector3 up_vector = Vector3(1,0,0);
+			Vector3 view_vector = up_vector % max_distance_vector;
+			if (Maths::isZero(view_vector.getSquareLength())) 
+			{
+				up_vector = Vector3(0,1,0);
+				view_vector = up_vector % max_distance_vector;
+			}
+
+			if (Maths::isZero(view_vector.getSquareLength()))
+			{
+				up_vector = Vector3(0,0,1);
+				view_vector = up_vector % max_distance_vector;
+			}
+
+			if (!Maths::isZero(view_vector.getSquareLength())) view_vector.normalize();
+
+			float distance = max_distance_vector.getLength() / tan(Angle(30, false).toRadian());
+			if (distance < 4) 	distance = 4;
+			if (distance > 100) distance = 100;
+
+			view_vector *= distance;
+
 
 			// update scene
 			SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
 			scene_message->getStage().getCamera().setLookAtPosition(view_point);
-			view_point.z += view_distance_;
-			scene_message->getStage().getCamera().setViewPoint(view_point);
+			scene_message->getStage().getCamera().setViewPoint(view_point - view_vector);
+			scene_message->getStage().getCamera().setLookUpVector(up_vector);
 			notify_(scene_message);
-		}
-
-
-		void MolecularStructure::calculateCenter_(Composite &composite)
-		{
-			GeometricCenterProcessor center;
-			composite.apply((UnaryProcessor<Atom>&) center);			
-					
-			view_center_vector_ = center.getCenter();
-
-			BoundingBoxProcessor bbox;
-			composite.apply(bbox);				
-			view_distance_ = (bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z + 3;
 		}
 
 
