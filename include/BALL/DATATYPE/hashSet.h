@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.9 2000/05/22 14:02:00 anker Exp $ 
+// $Id: hashSet.h,v 1.10 2000/06/15 17:21:16 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -323,7 +323,7 @@ namespace BALL
 			
 			bool isSingular() const
 			{
-				return (bool)(bound_ == 0);
+				return (bound_ == 0);
 			}
 			
 			IteratorPosition& getPosition()
@@ -338,17 +338,17 @@ namespace BALL
 
 			bool operator == (const IteratorTraits_& traits) const
 			{
-				return (bool)(position_ == traits.position_);
+				return (position_ == traits.position_);
 			}
 
 			bool operator != (const IteratorTraits_& traits) const
 			{
-				return (bool)(position_ != traits.position_);
+				return (position_ != traits.position_);
 			}
 			
 			bool isValid() const
 			{
-				return (bool)((bound_ != 0) && (position_ != 0)
+				return ((bound_ != 0) && (position_ != 0)
 											&& (bucket_ < (Position)bound_->bucket_.size()));
 			}
 
@@ -381,7 +381,9 @@ namespace BALL
 						if (position_ == bound_->bucket_[bucket_])
 						{
 							return true;
-						} else {
+						} 
+						else 
+						{
 							return false;
 						}
 					}
@@ -397,7 +399,7 @@ namespace BALL
 			
 			bool isEnd() const
 			{
-				return (bool)(position_ == 0);
+				return (position_ == 0);
 			}
 			
 			ValueType& getData()
@@ -746,28 +748,28 @@ namespace BALL
 	BALL_INLINE 
 	bool HashSet<Key>::has(const Key& key) const
 	{
-		return (bool)(find(key) != end());
+		return (find(key) != end());
 	}
 
 	template <class Key>
 	BALL_INLINE 
 	bool HashSet<Key>::isEmpty() const
 	{
-		return (bool)(size_ == 0);
+		return (size_ == 0);
 	}
 
 	template <class Key>
 	BALL_INLINE 
 	bool HashSet<Key>::operator == (const HashSet& hash_set) const
 	{
-		return (bool)(size_ == hash_set.size_ && isSubsetOf(hash_set));
+		return (size_ == hash_set.size_ && isSubsetOf(hash_set));
 	}
 
 	template <class Key>
 	BALL_INLINE
 	bool HashSet<Key>::operator != (const HashSet& hash_set) const
 	{
-		return (bool)!(*this == hash_set);
+		return !(*this == hash_set);
 	}
 
 	template <class Key>
@@ -789,7 +791,7 @@ namespace BALL
 			}
 		}
 
-		return (bool)(size_ == size);
+		return (size_ == size);
 	}      
 
 	template <class Key>
@@ -874,7 +876,7 @@ namespace BALL
 	BALL_INLINE 
 	bool HashSet<Key>::needRehashing_() const
 	{
-		return (bool)(size_ >= capacity_);
+		return (size_ >= capacity_);
 	}
 
 	template <class Key>
