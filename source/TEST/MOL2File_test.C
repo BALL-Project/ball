@@ -1,4 +1,4 @@
-// $Id: MOL2File_test.C,v 1.3 2000/05/23 14:18:46 oliver Exp $
+// $Id: MOL2File_test.C,v 1.4 2000/05/23 14:45:37 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.3 2000/05/23 14:18:46 oliver Exp $")
+START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.4 2000/05/23 14:45:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ CHECK(MOL2File::MOL2File& operator << (const System& system))
 	String filename;
 	NEW_TMP_FILE(filename)
 	MOL2File f(filename, std::ios::out);
-	f << write(S);	
+	f << S;	
 	f.close();
 	
 	TEST_FILE(filename.c_str(), "data/MOL2File_test.mol2", true)
