@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.17 2003/02/21 16:03:06 anhi Exp $
+// $Id: resourceFile.h,v 1.18 2003/02/25 15:53:08 sturm Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -40,7 +40,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup General
+     *  @{
+     */
 	/**	@name	Support for hierarchical text data.
 	*/
 	//@{ 
@@ -845,7 +847,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/resourceFile.iC>
 #	endif
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_RESOURCEFILE_H

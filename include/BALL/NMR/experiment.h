@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: experiment.h,v 1.5 2003/02/21 16:05:40 anhi Exp $
+// $Id: experiment.h,v 1.6 2003/02/25 15:53:44 sturm Exp $
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H
@@ -20,7 +20,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Spectra
+     *  @{
+     */
 	/**	Class describing a certain type of NMR experiment.
 			This class (and its subclasses) are used to describe
 			how a list of peaks is derived from the shifts calculated
@@ -205,6 +207,7 @@ namespace BALL
 		protected:
 		Expression expression_;
 	};
+  /** @} */
 } //namespace BALL
 	 
 #endif // BALL_NMR_EXPERIMENT_H

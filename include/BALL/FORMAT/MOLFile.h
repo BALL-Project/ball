@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.6 2003/02/21 16:02:53 anhi Exp $
+// $Id: MOLFile.h,v 1.7 2003/02/25 15:53:04 sturm Exp $
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -16,6 +16,9 @@
 
 namespace BALL 
 {
+    /** \ingroup StructureFormats
+     *  @{
+     */
 	class System;
 	class Atom;
 	class Molecule;
@@ -206,7 +209,7 @@ namespace BALL
 		/// Write a line of the bond block 
 		void writeBondLine_(const BondStruct& bond);
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_MOLFILE_H

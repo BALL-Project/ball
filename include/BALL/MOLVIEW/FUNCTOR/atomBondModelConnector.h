@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelConnector.h,v 1.8 2003/02/21 16:04:50 anhi Exp $
+// $Id: atomBondModelConnector.h,v 1.9 2003/02/25 15:53:33 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
@@ -36,6 +36,9 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
+    /** \ingroup MolviewFunctorsBase
+     *  @{
+     */
 		/** AtomBondModelConnector class.
 				The class AtomBondModelConnector is derived from  \link BaseModelConnector BaseModelConnector \endlink .
 				This class is a connector class which connects different models with each
@@ -226,7 +229,7 @@ namespace BALL
 
 		};
 
-			
+  /** @} */			
 	} // namespace MOLVIEW
 
 } // namespace BALL

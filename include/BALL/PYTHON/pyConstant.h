@@ -1,13 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyConstant.h,v 1.3 2003/02/21 16:05:55 anhi Exp $
+// $Id: pyConstant.h,v 1.4 2003/02/25 15:53:48 sturm Exp $
 
 #ifndef BALL_PYTHON_PYCONSTANT_H
 #define BALL_PYTHON_PYCONSTANT_H
 
 namespace BALL 
 {
+  /** \ingroup PythonExtensions
+   *  @{
+   */
 	/**	Python constants namespace wrapper.
 			This class is a wrapper for the constants namespace.	
 			 \par
@@ -168,6 +171,7 @@ namespace BALL
 			*/
 			static double	CAL_PER_JOULE;
 	};
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYCONSTANT_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.h,v 1.10 2003/02/21 16:05:42 anhi Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.11 2003/02/25 15:53:45 sturm Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -31,7 +31,9 @@
 
 namespace BALL 
 {
-		
+    /** \ingroup ShiftModulesNMR
+     *  @{
+     */				
 	/**	Shift assignment processor implementing Johnson Bovey theory. 
 			<b>Definition</b>BALL/NMR/johnsonBoveyShiftProcessor.h
 	*/
@@ -123,5 +125,5 @@ namespace BALL
 		double legendreEllipticalIntegral1_(double, double);	// Legendre elliptical Integral of 1st kind
 		double legendreEllipticalIntegral2_(double, double);	// Legendre elliptical Integral of 2nd kind
 	};
-
+  /** @} */
 } // namespace BALL 

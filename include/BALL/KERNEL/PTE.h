@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.18 2003/02/21 16:03:10 anhi Exp $
+// $Id: PTE.h,v 1.19 2003/02/25 15:53:09 sturm Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -39,7 +39,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Miscellaneous
+     *  @{
+     */
 	/**	@name	Periodic Table of Elements
 			These classes represent elements and the periodic table of elements.
 			The  \link Element Element \endlink  class is used to describe common properties of atoms
@@ -859,7 +861,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/KERNEL/PTE.iC>
 #	endif
-
+  /** @} */
 } //namespace BALL 
 
 

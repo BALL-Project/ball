@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.34 2003/02/21 16:03:44 anhi Exp $
+// $Id: angle.h,v 1.35 2003/02/25 15:53:21 sturm Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -16,6 +16,9 @@
 
 namespace BALL 
 {
+    /** \ingroup Primitives
+     *  @{
+     */
 	template <typename T>
 	class TAngle;
 
@@ -841,7 +844,7 @@ namespace BALL
 
 	//@}
 	//@}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_ANGLE_H

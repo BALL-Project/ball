@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.44 2003/02/21 16:02:04 anhi Exp $
+// $Id: string.h,v 1.45 2003/02/25 15:52:59 sturm Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -38,7 +38,9 @@ using std::string;
 
 namespace BALL 
 {
-
+    /** \ingroup Miscellaneous
+     *  @{
+     */
 	// forward declaration
 	class Substring;
 
@@ -1274,7 +1276,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/string.iC>
 #	endif
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_STRING_H

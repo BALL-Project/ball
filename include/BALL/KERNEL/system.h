@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.26 2003/02/21 16:03:39 anhi Exp $
+// $Id: system.h,v 1.27 2003/02/25 15:53:20 sturm Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -46,7 +46,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Kernel
+     *  @{
+     */
 	class Molecule;
 
 	/** System class.
@@ -288,7 +290,7 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(NucleicAcid)
 
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_SYSTEM_H

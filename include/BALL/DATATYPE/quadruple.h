@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadruple.h,v 1.8 2003/02/21 16:01:59 anhi Exp $
+// $Id: quadruple.h,v 1.9 2003/02/25 15:52:58 sturm Exp $
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
 #define BALL_DATATYPE_QUADRUPLE_H
@@ -12,7 +12,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Miscellaneous
+     *  @{
+     */
 	/**	Quadruple Class.
 			This template class is used to represent quadruples of arbitrary types
 			(like the STL type <tt>pair</tt>).
@@ -284,7 +286,7 @@ namespace BALL
 						(first == quadruple.first	&& second == quadruple.second	&& third == quadruple.third
 											&& fourth > quadruple.fourth));
 	}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_QUADRUPLE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.27 2003/02/21 16:03:56 anhi Exp $
+// $Id: plane3.h,v 1.28 2003/02/25 15:53:25 sturm Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -31,7 +31,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup GeometricObjects
+     *  @{
+     */
 	/** @name Plane
 	 */
 	//@{
@@ -411,7 +413,7 @@ namespace BALL
 	typedef TPlane3<float> Plane3;
 	
 	//@}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_PLANE3_H

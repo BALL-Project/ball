@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyProcessor.h,v 1.9 2003/02/21 16:02:46 anhi Exp $
+// $Id: energyProcessor.h,v 1.10 2003/02/25 15:53:02 sturm Exp $
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #define BALL_ENERGY_ENERGYPROCESSOR_H
@@ -20,6 +20,9 @@
 
 namespace BALL
 {
+    /** \ingroup Energy
+     *  @{
+     */
 	/** Processor for energy calculations.
 			With this class we provide an interface to different (free) energy
 			calculations.
@@ -109,6 +112,7 @@ namespace BALL
 		bool valid_;
 
 	};
+  /** @} */
 }
 
 #endif // BALL_ENERGY_ENERGYPROCESSOR_H

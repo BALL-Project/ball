@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: anisotropyShiftProcessor.h,v 1.13 2003/02/21 16:05:36 anhi Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.14 2003/02/25 15:53:43 sturm Exp $
 
 #ifndef BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
 #define BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
@@ -22,7 +22,9 @@
 
 namespace BALL 
 {
-		
+    /** \ingroup ShiftModulesNMR
+     *  @{
+     */				
 	/**	Shift assignment processor implementing Anisotropy.
 			<b>Definition</b>BALL/NMR/anisotropyShiftProcessor.h
 	*/
@@ -155,7 +157,7 @@ namespace BALL
 		std::list<const Bond*> eff_list_2_;
 		bool ignore_other_chain_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.27 2003/02/21 16:03:35 anhi Exp $
+// $Id: secondaryStructure.h,v 1.28 2003/02/25 15:53:18 sturm Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -24,7 +24,9 @@
 
 namespace BALL 
 {
-	 
+	 /** \ingroup Kernel
+     *  @{
+     */
 	class Protein;
 
 	/**	Secondary structure class.
@@ -410,7 +412,7 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_SECONDARYSTRUCTURE_H

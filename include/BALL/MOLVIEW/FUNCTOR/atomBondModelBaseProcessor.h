@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.10 2003/02/21 16:04:49 anhi Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.11 2003/02/25 15:53:33 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
@@ -33,7 +33,9 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewFunctorsBase
+     *  @{
+     */
 		/** AtomBondModelBaseProcessor class.
 				The class AtomBondModelBaseProcessor is the base class for all
 				models whose structure is somewhat orientated after the  \link Atom Atom \endlink 
@@ -345,7 +347,7 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.iC>
 #			endif
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

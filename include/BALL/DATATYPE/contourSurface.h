@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.6 2003/02/21 16:01:52 anhi Exp $
+// $Id: contourSurface.h,v 1.7 2003/02/25 15:52:56 sturm Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -34,6 +34,9 @@
 
 namespace BALL
 {
+    /** \ingroup Miscellaneous
+     *  @{
+     */
 	typedef std::pair<Position, Position> KeyType;
 
 
@@ -632,7 +635,7 @@ void TContourSurface<T>::computeTriangles(int topology, RegularData3D& from) {
 			 }
     }
 }
-
+  /** @} */
 }
 #endif
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.32 2003/02/21 16:03:46 anhi Exp $
+// $Id: circle3.h,v 1.33 2003/02/25 15:53:22 sturm Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -24,6 +24,9 @@
 
 namespace BALL 
 {
+    /** \ingroup GeometricObjects
+     *  @{
+     */
 	/**	@name	Circle 
 	*/
 	//@{
@@ -346,7 +349,7 @@ namespace BALL
 
 	//@}
 	//@}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_CIRCLE3_H

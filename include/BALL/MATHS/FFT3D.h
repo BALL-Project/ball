@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.3 2003/02/21 16:03:42 anhi Exp $
+// $Id: FFT3D.h,v 1.4 2003/02/25 15:53:21 sturm Exp $
 
 #ifndef BALL_MATHS_FFT3D_H
 #define BALL_MATHS_FFT3D_H
@@ -27,7 +27,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup FFT
+     *  @{
+     */
 	/** A class to perform Fast Fourier Transforms and inverse Fast Fourier Transforms
 			on regularly spaced three dimensional data.  \par
 			This class makes use of the freely available library <b>FFTW</b>, which can be
@@ -352,7 +354,7 @@ namespace BALL
 	 */
 	const RegularData3D& operator << (RegularData3D& to, const FFT3D& from)
 		throw();
-	
+  /** @} */	
 }
 
 #endif // BALL_MATHS_FFT3D_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameterSection.h,v 1.18 2003/02/21 16:03:04 anhi Exp $
+// $Id: parameterSection.h,v 1.19 2003/02/25 15:53:08 sturm Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -17,7 +17,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup General
+     *  @{
+     */
 	class Parameters;
 
 	/**	General Parameter Section Class.
@@ -239,7 +241,7 @@ namespace BALL
 		bool		valid_;
 
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_PARAMETERSECTION_H

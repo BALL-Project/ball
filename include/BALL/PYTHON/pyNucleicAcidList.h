@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyNucleicAcidList.h,v 1.5 2003/02/21 16:05:59 anhi Exp $
+// $Id: pyNucleicAcidList.h,v 1.6 2003/02/25 15:53:50 sturm Exp $
 
 #ifndef BALL_PYTHON_PYNUCLEICACIDLIST_H
 #define BALL_PYTHON_PYNUCLEICACIDLIST_H
@@ -16,6 +16,9 @@
 
 namespace BALL 
 {
+  /** \ingroup PythonExtensions
+   *  @{
+   */
 	class NucleicAcid;
 	class AtomContainer;
 	
@@ -84,7 +87,7 @@ namespace BALL
 		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
-
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYNUCLEICACIDLIST_H

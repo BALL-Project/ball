@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.9 2003/02/21 16:02:58 anhi Exp $
+// $Id: XYZFile.h,v 1.10 2003/02/25 15:53:06 sturm Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
@@ -20,7 +20,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup StructureFormats
+     *  @{
+     */
 	/**	XYZ file class.
 			This class enables BALL to read and write XMol XYZ files.
 			The XYZ format is a very simple molecular file format. It contains
@@ -97,7 +99,7 @@ namespace BALL
 		
 		//@}
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_XYZFILE_H

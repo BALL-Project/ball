@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.23 2003/02/21 16:03:28 anhi Exp $
+// $Id: molecule.h,v 1.24 2003/02/25 15:53:14 sturm Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -20,7 +20,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Kernel
+     *  @{
+     */
 	class System;
 
 	/**	Molecule class.
@@ -300,7 +302,7 @@ namespace BALL
 		bool isSubAtomContainerOf(const AtomContainer& atom_container) const
 			throw();
 	};
-
+  /** @} */
 } // namespace BALL 
 
 #endif // BALL_KERNEL_MOLECULE_H

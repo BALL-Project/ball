@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.22 2003/02/21 16:03:19 anhi Exp $
+// $Id: expression.h,v 1.23 2003/02/25 15:53:12 sturm Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -28,7 +28,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Predicates
+     *  @{
+     */
 	/** Expression class. 
 			This class provides a frontend to ExpressionTree.	 \par
 			Expressions may be built from the following modules:  \par
@@ -195,7 +197,7 @@ namespace BALL
 
 		//@}
 	};
-
+  /** @} */
 }	
 
 #endif // BALL_KERNEL_EXPRESSION_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.22 2003/02/21 16:03:31 anhi Exp $
+// $Id: nucleotide.h,v 1.23 2003/02/25 15:53:16 sturm Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -24,7 +24,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Kernel
+     *  @{
+     */
 	class NucleicAcid;
 	class Protein;
 
@@ -378,7 +380,7 @@ namespace BALL
     return 0;
   }
  
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_NUCLEOTIDE_H

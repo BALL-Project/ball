@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticBondStretch.h,v 1.12 2003/02/21 16:04:44 anhi Exp $
+// $Id: quadraticBondStretch.h,v 1.13 2003/02/25 15:53:31 sturm Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
@@ -16,7 +16,9 @@
 
 namespace BALL 
 {
-		
+    /** \ingroup MolmecParameters
+     *  @{
+     */		
 	/** QuadraticBondStretch.
 			<b>Definition:</b>BALL/MOLMEC/PARAMETER/quadraticBondStretch.h
 			Molecular Mechanics Parameter: class describing the parameters
@@ -97,7 +99,7 @@ namespace BALL
 			
 		String*								names_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H

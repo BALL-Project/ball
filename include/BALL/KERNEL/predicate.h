@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.11 2003/02/21 16:03:32 anhi Exp $
+// $Id: predicate.h,v 1.12 2003/02/25 15:53:16 sturm Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -20,7 +20,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Predicates
+     *  @{
+     */
 	/**	@name	Kernel predicates
 			This chapter describes a set of unary predicates acting on  \link Composites Composites \endlink , that
 			can be used to identify the class type of a composite at runtime. \par
@@ -71,7 +73,7 @@ namespace BALL
 	}
 
 	//@}
-
+  /** @} */
 } // namespace BALL
 
 

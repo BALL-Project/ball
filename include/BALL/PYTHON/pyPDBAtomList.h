@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyPDBAtomList.h,v 1.7 2003/02/21 16:06:01 anhi Exp $
+// $Id: pyPDBAtomList.h,v 1.8 2003/02/25 15:53:50 sturm Exp $
 
 #ifndef BALL_PYTHON_PYPDBATOMLIST_H
 #define BALL_PYTHON_PYPDBATOMLIST_H
@@ -20,6 +20,9 @@
 
 namespace BALL 
 {
+  /** \ingroup PythonExtensions
+   *  @{
+   */
 	class PDBAtom;
 	class AtomContainer;
 	
@@ -94,7 +97,7 @@ namespace BALL
 		void set(const AtomContainer& fragment, const String& expression = "" );
 		//@}
 	};
-
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYPDBATOMLIST_H

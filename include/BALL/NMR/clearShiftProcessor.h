@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clearShiftProcessor.h,v 1.7 2003/02/21 16:05:38 anhi Exp $
+// $Id: clearShiftProcessor.h,v 1.8 2003/02/25 15:53:44 sturm Exp $
 
 #ifndef BALL_NMR_CLEARSHIFTPROCESSOR_H
 #define BALL_NMR_CLEARSHIFTPROCESSOR_H
@@ -12,7 +12,9 @@
 
 namespace BALL 
 {
-		
+    /** \ingroup ShiftModulesNMR
+     *  @{
+     */		
 	/**	Clear assigned shift data of all atoms.
 			This processors clears the named property defined by  \link ShiftModule::PROPERTY__SHIFT ShiftModule::PROPERTY__SHIFT \endlink 
 			in the atoms of all data structures it is applied to.  \par
@@ -56,7 +58,7 @@ namespace BALL
 		//@}
 		
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_NMR_CLEARSHIFTPROCESSOR_H

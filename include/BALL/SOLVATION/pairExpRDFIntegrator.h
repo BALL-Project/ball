@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpRDFIntegrator.h,v 1.16 2003/02/21 16:06:20 anhi Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.17 2003/02/25 15:53:56 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -24,6 +24,9 @@
 
 namespace BALL
 {
+    /** \ingroup Solvation
+     *  @{
+     */
 	/** 6-exp pair potential integrator.
 			This class provides a tool for calculating the integral part of the
 			van-der-Waals interaction energies. The difference to the values
@@ -289,7 +292,7 @@ namespace BALL
 		double unproject(double x) const throw();
 
 	};
-
+   /** @} */
 } // namespace BALL
 
 #endif //  BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H

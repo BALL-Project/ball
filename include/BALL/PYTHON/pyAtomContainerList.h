@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomContainerList.h,v 1.4 2003/02/21 16:05:50 anhi Exp $
+// $Id: pyAtomContainerList.h,v 1.5 2003/02/25 15:53:47 sturm Exp $
 
 #ifndef BALL_PYTHON_PYATOMCONTAINERLIST_H
 #define BALL_PYTHON_PYATOMCONTAINERLIST_H
@@ -16,6 +16,9 @@
 
 namespace BALL 
 {
+  /** \ingroup PythonExtensions
+   *  @{
+   */
 	class AtomContainer;
 	
 	/**
@@ -83,7 +86,7 @@ namespace BALL
 		void set(const AtomContainer& fragment, bool selected_only = false);
 		//@}
 	};
-
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYATOMCONTAINERLIST_H

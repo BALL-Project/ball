@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.32 2003/02/21 16:03:15 anhi Exp $
+// $Id: bond.h,v 1.33 2003/02/25 15:53:11 sturm Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -36,7 +36,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Kernel
+     *  @{
+     */
 	class Atom;
 	class Fragment;
 	class System;
@@ -538,7 +540,7 @@ namespace BALL
 # ifndef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/KERNEL/bond.iC>
 # endif
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_BOND_H

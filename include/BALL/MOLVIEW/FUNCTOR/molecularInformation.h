@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.9 2003/02/21 16:04:59 anhi Exp $
+// $Id: molecularInformation.h,v 1.10 2003/02/25 15:53:36 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
@@ -18,7 +18,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-		
+    /** \ingroup MolviewFunctorsHelper
+     *  @{
+     */			
 		/** MolecularInformation class.
 				The class MolecularInformation is derived from the class  \link Information Information \endlink .
 				It overrides the  \link visit visit \endlink  method to extract the name and the type of
@@ -161,7 +163,7 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/FUNCTOR/molecularInformation.iC>
 #			endif
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

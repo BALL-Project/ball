@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.10 2003/02/21 16:05:49 anhi Exp $
+// $Id: extractors.h,v 1.11 2003/02/25 15:53:47 sturm Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H
@@ -12,6 +12,9 @@
 
 namespace BALL 
 {
+  /** \ingroup PythonExtensions
+   *  @{
+   */
 	class PyAtomList;
 	class PyBondList;
 	class PyAtomContainerList;
@@ -129,7 +132,7 @@ namespace BALL
 	PyNucleotideList* nucleotides(const AtomContainer& fragment, bool selected_only = false);
 
 	//@}
-
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_PYTHON_EXTRACTORS_H

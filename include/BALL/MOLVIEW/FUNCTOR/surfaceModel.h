@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.11 2003/02/21 16:05:03 anhi Exp $
+// $Id: surfaceModel.h,v 1.12 2003/02/25 15:53:38 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -22,7 +22,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewFunctorsModels
+     *  @{
+     */
 		using VIEW::Mesh;
 
 		/** AddSurfaceModel class.
@@ -186,7 +188,7 @@ namespace BALL
 
 			HashSet<Atom*> 		atoms_;
 		};
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

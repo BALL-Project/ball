@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.12 2003/02/21 16:03:26 anhi Exp $
+// $Id: global.h,v 1.13 2003/02/25 15:53:14 sturm Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -24,7 +24,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Miscellaneous
+     *  @{
+     */
 	/**	Bond cloning method.
 			This template function implements the cloning of  \link Bond Bond \endlink s in
 			AtomContainers.  As Bonds are not integrated in the Composite tree
@@ -119,7 +121,7 @@ namespace BALL
 			@see	cloneBonds
 	*/
 	extern bool clone_bonds;
-
+  /** @} */
 } // namespace BALL  
 
 #endif // BALL_KERNEL_GLOBAL_H

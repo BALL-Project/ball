@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.10 2003/02/21 16:02:51 anhi Exp $
+// $Id: JCAMPFile.h,v 1.11 2003/02/25 15:53:03 sturm Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -20,7 +20,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup NMRFileFormats
+     *  @{
+     */
 	/**	JCAMP file.
 			This class....	 \par
 			<b>Definition:</b>BALL/FORMAT/JCAMPFile.h
@@ -78,6 +80,7 @@ namespace BALL
 
 		static const Size			MAX_LENGTH_;
 	};
+  /** @} */
 }
 
 #endif // BALL_FORMAT_JCAMPFILE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.14 2003/02/21 16:06:19 anhi Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.15 2003/02/25 15:53:55 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -43,7 +43,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup Solvation
+     *  @{
+     */
 	/** Processor for the computation of the van-derWaals interaction energy
 			of a molecule.
 			This processor uses a 6-exp pair potential for the calculation of
@@ -267,7 +269,7 @@ namespace BALL
 				const char* surface_file) throw();
 
 	};
-
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H

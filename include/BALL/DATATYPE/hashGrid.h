@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.28 2003/02/21 16:01:54 anhi Exp $
+// $Id: hashGrid.h,v 1.29 2003/02/25 15:52:57 sturm Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -32,7 +32,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup GenericHash
+     *  @{
+     */
 	/**	@name	Three-dimensional Hash Grid
 	*/
 	//@{
@@ -2309,7 +2311,7 @@ namespace BALL
 		
 		return result;
 	}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_HASHGRID_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.h,v 1.19 2003/02/21 16:03:02 anhi Exp $
+// $Id: genericPDBFile.h,v 1.20 2003/02/25 15:53:07 sturm Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -29,7 +29,9 @@ namespace BALL
 	*/
 	namespace PDB 
 	{
-
+    /** \ingroup StructureFormats
+     *  @{
+     */
 		// ?????
 		// Shouldn't this be implemented via Options?
 		/**
@@ -1633,7 +1635,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/genericPDBFile.iC>
 #	endif
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_GENERICPDBFILE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.h,v 1.14 2003/02/21 16:03:53 anhi Exp $
+// $Id: piecewiseFunction.h,v 1.15 2003/02/25 15:53:25 sturm Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -20,7 +20,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup FunctionClasses
+     *  @{
+     */  
 	/** Every piece of a piecewise function needs a bunch of coefficients 
 	*/
 	typedef std::vector<double> Coefficients;
@@ -195,7 +197,7 @@ namespace BALL
 		void calculateRange() throw();
 
 	};
-
+  /** @} */
 }
 
 #endif

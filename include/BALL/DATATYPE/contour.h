@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contour.h,v 1.11 2003/01/06 10:37:03 amoll Exp $
+// $Id: contour.h,v 1.12 2003/02/25 15:52:55 sturm Exp $
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H
@@ -19,6 +19,9 @@
 
 namespace BALL
 {
+    /** \ingroup Miscellaneous
+     *  @{
+     */  
 	/** This class is intended to create and store ContourLines belonging to the same data-set.
 	*/
 	template <typename T>
@@ -174,7 +177,7 @@ namespace BALL
 		index_ = 0;
 	}
 
-
+  /** @} */
 } // namespace BALL
 
 #endif

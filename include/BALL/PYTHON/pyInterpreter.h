@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.4 2003/02/21 16:05:57 anhi Exp $ 
+// $Id: pyInterpreter.h,v 1.5 2003/02/25 15:53:49 sturm Exp $ 
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
@@ -16,6 +16,9 @@
 
 namespace BALL 
 {
+  /** \ingroup PythonExtensions
+   *  @{
+   */
 	/** Embedded Python interpreter.
 			There's just one global instance of the interpreter,
 			so all methods are static. The use of subinterpreters
@@ -65,7 +68,7 @@ namespace BALL
 		*/
 		static bool importModule(const String& module_name);
 	};
-
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYINTERPRETER_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourLine.h,v 1.9 2003/02/21 16:01:51 anhi Exp $
+// $Id: contourLine.h,v 1.10 2003/02/25 15:52:56 sturm Exp $
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -18,6 +18,9 @@
 
 namespace BALL
 {
+    /** \ingroup Miscellaneous
+     *  @{
+     */
   // First I define some macros needed for the marching cube-algorithm. 
 	// The names come from the number associated with the different corners of the square.
   #define INTERPOL12 { \
@@ -325,5 +328,6 @@ namespace BALL
       it_ = data_.begin();
       index_ = 0;
     }
+  /** @} */
 }
 #endif

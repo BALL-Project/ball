@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.h,v 1.7 2003/02/21 16:02:56 anhi Exp $
+// $Id: SDFile.h,v 1.8 2003/02/25 15:53:05 sturm Exp $
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -12,6 +12,9 @@
 
 namespace BALL 
 {
+    /** \ingroup StructureFormats
+     *  @{
+     */
 	class System;
 	class Atom;
 	class Molecule;
@@ -117,7 +120,7 @@ namespace BALL
 		*/
 		bool read_atoms_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_SDFILE_H

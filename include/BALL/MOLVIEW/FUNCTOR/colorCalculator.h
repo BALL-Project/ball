@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorCalculator.h,v 1.12 2003/02/21 16:04:55 anhi Exp $
+// $Id: colorCalculator.h,v 1.13 2003/02/25 15:53:35 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -26,7 +26,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-				
+    /** \ingroup ColorCalculators
+     *  @{
+     */							
 		using VIEW::ColorTable;
 		using VIEW::ColorRGBA;
 		
@@ -340,7 +342,7 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/FUNCTOR/colorCalculator.iC>
 #			endif
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

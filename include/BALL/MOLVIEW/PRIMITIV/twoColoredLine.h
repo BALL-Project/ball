@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.12 2003/02/21 16:05:32 anhi Exp $
+// $Id: twoColoredLine.h,v 1.13 2003/02/25 15:53:41 sturm Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
 #define BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
@@ -26,7 +26,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewPrimitives
+     *  @{
+     */
 		using VIEW::GeometricObject;
 		using VIEW::ColorExtension2;
 		using VIEW::Vertex2;
@@ -259,7 +261,7 @@ namespace BALL
 	#ifndef BALL_NO_INLINE_FUNCTIONS
 	# include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.iC>
 	#endif
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

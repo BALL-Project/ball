@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cosineTorsion.h,v 1.11 2003/02/21 16:04:39 anhi Exp $
+// $Id: cosineTorsion.h,v 1.12 2003/02/25 15:53:29 sturm Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
 #define BALL_MOLMEC_PARAMETER_COSINETORSION_H
@@ -16,7 +16,9 @@
 
 namespace BALL 
 {
-		
+    /** \ingroup MolmecParameters
+     *  @{
+     */		
 	/** Cosine Torsion. 
 			<b>Definition:</b> BALL/MOLMEC/PARAMETER/cosineTorsion.h
 			Molecular Mechanics Parameter: class describing the parameter
@@ -203,7 +205,7 @@ namespace BALL
 		
 		HashMap<Size, Size>		torsion_hash_map_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_PARAMETER_COSINETORSION_H

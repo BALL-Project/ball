@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.20 2003/02/21 16:02:48 anhi Exp $
+// $Id: DCDFile.h,v 1.21 2003/02/25 15:53:02 sturm Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -12,7 +12,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup MDFormats
+     *  @{
+     */
 	/** DCD Trajectory file format. This class enables BALL to write DCD
 			files that can be read by VMD. The format stems from the xplor
 			package. This format is <b>NOT</b> portable.	 \par
@@ -190,6 +192,7 @@ namespace BALL
 		Size number_of_comments_;
 
 	};
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_DCDFILE_H 

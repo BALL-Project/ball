@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFilter.h,v 1.9 2003/02/21 16:04:58 anhi Exp $
+// $Id: molecularFilter.h,v 1.10 2003/02/25 15:53:36 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
@@ -14,7 +14,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-		
+    /** \ingroup MolviewFunctorsHelper
+     *  @{
+     */			
 		/** MolecularFilter class.
 				The class MolecularFilter is a class that filters
 				 \link Composite Composite \endlink  objects. The  \link visit visit \endlink  method implements the filter
@@ -89,7 +91,7 @@ namespace BALL
   		private:
 		};
 
-			
+	/** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

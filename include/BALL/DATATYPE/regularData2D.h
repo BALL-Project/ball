@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.22 2003/02/25 10:48:08 anhi Exp $
+// $Id: regularData2D.h,v 1.23 2003/02/25 15:52:59 sturm Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -1189,7 +1189,6 @@ namespace BALL
 		return !(*this == grid);
 	}
 	/** @} */
-
  } // namespace BALL
 
 #endif // BALL_DATATYPE_TRegularData2D_H

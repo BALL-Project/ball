@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.16 2003/02/21 16:03:12 anhi Exp $
+// $Id: atomContainer.h,v 1.17 2003/02/25 15:53:10 sturm Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -39,7 +39,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Miscellaneous
+     *  @{
+     */
 	class Atom;
 	class Molecule;
 
@@ -476,7 +478,7 @@ namespace BALL
 		String  name_;
 
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_ATOMCONTAINER_H

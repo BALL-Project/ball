@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.14 2003/02/21 16:05:04 anhi Exp $
+// $Id: vanDerWaalsModel.h,v 1.15 2003/02/25 15:53:38 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -18,6 +18,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
+    /** \ingroup MolviewFunctorsModels
+     *  @{
+     */
 		using VIEW::Sphere;
 
 		/** AddVanDerWaalsModel class.
@@ -189,7 +192,7 @@ namespace BALL
 			virtual Sphere* createSphere_();
 			//@}
 		};
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

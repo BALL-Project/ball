@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.27 2003/02/21 16:03:16 anhi Exp $
+// $Id: chain.h,v 1.28 2003/02/25 15:53:12 sturm Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -27,7 +27,9 @@
 
 namespace BALL 
 {
-	
+	 /** \ingroup Kernel
+     *  @{
+     */
 	class Protein;
 
 	/** Protein chain class.
@@ -441,7 +443,7 @@ namespace BALL
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_CHAIN_H

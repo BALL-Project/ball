@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModel.h,v 1.15 2003/02/21 16:04:53 anhi Exp $
+// $Id: baseModel.h,v 1.16 2003/02/25 15:53:34 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -30,6 +30,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
+    /** \ingroup MolviewFunctorsBase
+     *  @{
+     */
 		/** BaseModelProcessor class.
 				The class BaseModelProcessor is derived from  \link UnaryProcessor UnaryProcessor \endlink  and
 				 \link ExtendedPropertyManager ExtendedPropertyManager \endlink . It contains therefore the processor interface
@@ -522,7 +525,7 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/FUNCTOR/baseModel.iC>
 #			endif
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModule.h,v 1.12 2003/02/21 16:05:47 anhi Exp $
+// $Id: shiftModule.h,v 1.13 2003/02/25 15:53:46 sturm Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -28,6 +28,9 @@
 
 namespace BALL 
 {
+    /** \ingroup ShiftModel
+     *  @{
+     */
 	/**	A single contribution of a NMR shift model.
 			NMR shift models typically consist of a number of different 
 			contributions (e.g. ring current, ansisotopy, etc.). Each of these
@@ -190,7 +193,7 @@ namespace BALL
 		*/
 		bool valid_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_NMR_SHIFTMODULE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: distanceCoulomb.h,v 1.6 2002/02/27 12:18:37 sturm Exp $
+// $Id: distanceCoulomb.h,v 1.7 2003/02/25 15:53:01 sturm Exp $
 
 #ifndef BALL_ENERGY_DISTANCE_COULOMB_H
 #define BALL_ENERGY_DISTANCE_COULOMB_H
@@ -12,6 +12,9 @@
 
 namespace BALL 
 {
+    /** \ingroup Electrostatic
+     *  @{
+     */
 	class AtomContainer;
 
 	/**	Returns the electrostatic (self) energy of a molecular system.
@@ -24,7 +27,7 @@ namespace BALL
 			@see	AssignChargeProcessor
 	*/
 	double calculateDistanceCoulomb(const AtomContainer& fragment);
-
+  /** @} */
 } // namespace BALL
 
 #endif //  BALL_ENERGY_DISTANCE_COULOMB_H

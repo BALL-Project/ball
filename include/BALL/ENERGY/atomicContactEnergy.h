@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomicContactEnergy.h,v 1.7 2003/02/21 16:02:44 anhi Exp $
+// $Id: atomicContactEnergy.h,v 1.8 2003/02/25 15:53:00 sturm Exp $
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
 #define BALL_ENERGY_ATOMICCONTACTENERGY_H
@@ -12,6 +12,9 @@
 
 namespace BALL 
 {
+    /** \ingroup Energy
+     *  @{
+     */
 	class AtomContainer;
 
 	/** Calculate the atomic contact energy.
@@ -26,7 +29,7 @@ namespace BALL
 			<b>Definition:</b> BALL/ENERGY/atomicContactEnergy.h
 	*/ 
 	double calculateACE(AtomContainer& atoms);
-
+  /** @} */
 } // namespace BALL
 
 #endif

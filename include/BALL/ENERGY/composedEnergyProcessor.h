@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composedEnergyProcessor.h,v 1.7 2002/02/27 12:18:36 sturm Exp $
+// $Id: composedEnergyProcessor.h,v 1.8 2003/02/25 15:53:01 sturm Exp $
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR
@@ -20,7 +20,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup Energy
+     *  @{
+     */
 	/** A class for composed energy calculations.
 			Most energies are compositions of several energy contributions. To model
 			this in a convenient way this class is intended to calculate and sum a
@@ -125,6 +127,6 @@ namespace BALL
 		void checkValidity() throw();
 
 	};
-
+  /** @} */
 } // namespace BALL
 #endif //  BALL_ENERGY_COMPOSEDENERGYPROCESSOR

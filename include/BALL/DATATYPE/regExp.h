@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regExp.h,v 1.17 2003/02/21 16:02:00 anhi Exp $
+// $Id: regExp.h,v 1.18 2003/02/25 15:52:58 sturm Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -44,7 +44,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Miscellaneous
+     *  @{
+     */
 	/**	Regular expression class
 	*/
 	class RegularExpression
@@ -319,7 +321,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/regExp.iC>
 #	endif
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_REGEXP_H

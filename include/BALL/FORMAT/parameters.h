@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameters.h,v 1.10 2003/02/21 16:03:05 anhi Exp $
+// $Id: parameters.h,v 1.11 2003/02/25 15:53:08 sturm Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H
@@ -17,7 +17,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup General
+     *  @{
+     */
 	/**	General Parameter class.
 			This class is intended to simplify parameter management 
 			for force fields or other stronlgy parameterized methods.
@@ -118,7 +120,7 @@ namespace BALL
 		INIFile	INI_file_;
 		//_@} 
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_PARAMETERS_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.13 2003/02/21 16:03:07 anhi Exp $
+// $Id: trajectoryFile.h,v 1.14 2003/02/25 15:53:08 sturm Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -20,7 +20,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup MDFormats
+     *  @{
+     */
 	class SnapShot;
 	class SnapShotManager;
 
@@ -150,7 +152,7 @@ namespace BALL
 		//@}
 		
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif //  BALL_FORMAT_TRAJECTORYFILE_H

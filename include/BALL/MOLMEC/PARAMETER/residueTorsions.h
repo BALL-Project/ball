@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueTorsions.h,v 1.12 2003/02/21 16:04:46 anhi Exp $
+// $Id: residueTorsions.h,v 1.13 2003/02/25 15:53:31 sturm Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -17,7 +17,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup MolmecParameters
+     *  @{
+     */		
 	/**	Parameter class containing all proper torsions occuring in a residue.
 			Several force fields (e.g. CHARMM) do not necessarily consider or
 			parametrize all occurring torsions but explicitly list the torsions
@@ -133,7 +135,7 @@ namespace BALL
 		*/
 		HashSet<String>								all_torsions_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H

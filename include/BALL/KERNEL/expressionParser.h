@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.h,v 1.5 2003/02/21 16:03:20 anhi Exp $
+// $Id: expressionParser.h,v 1.6 2003/02/25 15:53:12 sturm Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
 #define BALL_KERNEL_EXPRESSIONPARSER_H
@@ -207,7 +207,7 @@ namespace BALL
 		SyntaxTree*								syntax_tree_;
 		static ExpressionParser*	current_parser_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_EXPRESSIONPARSER_H

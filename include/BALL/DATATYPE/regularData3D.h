@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.13 2003/02/21 16:02:03 anhi Exp $ 
+// $Id: regularData3D.h,v 1.14 2003/02/25 15:52:59 sturm Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -14,7 +14,9 @@
 
 namespace BALL 
 {
-
+	/** \ingroup RegularData
+	 * 	@{
+	 */
 	/**	Simple 3D grid class.
 			Unlike BoxGrid this class represents a three-dimensional
 			array. An instance of GridDataType will be created
@@ -1290,7 +1292,7 @@ namespace BALL
 	{
 		return !(*this == grid);
 	}
-
+  /** @} */
  } // namespace BALL
 
 #endif // BALL_DATATYPE_REGULARDATA3D_H

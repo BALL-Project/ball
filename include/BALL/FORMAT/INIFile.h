@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.28 2003/02/21 16:02:50 anhi Exp $
+// $Id: INIFile.h,v 1.29 2003/02/25 15:53:03 sturm Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -24,7 +24,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup General
+     *  @{
+     */
 	class INIFile;
 
 	/**	INIFile.
@@ -665,7 +667,7 @@ namespace BALL
 		// hashmap with the section names  => index
 		StringHashMap<SectionIterator>		section_index_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_INIFILE_H

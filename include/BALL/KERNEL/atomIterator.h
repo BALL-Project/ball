@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomIterator.h,v 1.11 2003/02/21 16:03:14 anhi Exp $
+// $Id: atomIterator.h,v 1.12 2003/02/25 15:53:11 sturm Exp $
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
 #define BALL_KERNEL_ATOMITERATOR_H
@@ -24,7 +24,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup KernelIterators
+     *  @{
+     */
 	/** Traits class for the AtomIterators
 			<b>Definition:</b> BALL/KERNEL/atomIterator.h
 	*/
@@ -114,7 +116,7 @@ namespace BALL
 		AtomConstReverseIterator;
 	
 	//@}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_ATOMITERATOR_H

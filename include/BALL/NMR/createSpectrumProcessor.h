@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: createSpectrumProcessor.h,v 1.18 2003/02/21 16:05:39 anhi Exp $
+// $Id: createSpectrumProcessor.h,v 1.19 2003/02/25 15:53:44 sturm Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -36,6 +36,9 @@
 
 namespace BALL 
 {
+    /** \ingroup Spectra
+     *  @{
+     */
 	class Atom;
 
 	/**	Processor creates peaklist_. 
@@ -172,7 +175,7 @@ namespace BALL
 			by its position $\delta_i$, intensity $h_i$, and width $w_i$.
 	*/
 	const RegularData1D& operator << (RegularData1D& data, const PeakList1D& peak_list) throw();
-
+  /** @} */
 } //namespace BALL
 	 
 #endif // BALL_NMR_CREATESPECTRUMPROCESSOR_H

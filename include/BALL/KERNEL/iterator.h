@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.15 2003/02/21 16:03:27 anhi Exp $
+// $Id: iterator.h,v 1.16 2003/02/25 15:53:14 sturm Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -69,7 +69,9 @@ rend##Type () const \
 
 namespace BALL 
 {
-
+    /** \ingroup KernelIterators
+     *  @{
+     */
 	/**	Composite Iterator Traits
 			This class is used in the implementation of the kernel iterators.
 			It is intended for internal use only.
@@ -503,7 +505,7 @@ namespace BALL
 	{
 		return predicate_;
 	}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_ITERATOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coulomb.h,v 1.7 2003/02/21 16:02:45 anhi Exp $
+// $Id: coulomb.h,v 1.8 2003/02/25 15:53:01 sturm Exp $
 
 #ifndef BALL_ENERGY_COULOMB_H
 #define BALL_ENERGY_COULOMB_H
@@ -12,7 +12,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Electrostatic
+     *  @{
+     */
 	class AtomContainer;
 
 	/**	Returns the electrostatic (self) energy of a molecular system.
@@ -23,7 +25,7 @@ namespace BALL
 			<b>Definition:</b> BALL/ENERGY/coulomb.h
 	*/
 	double calculateCoulomb(const AtomContainer& atoms);
-
+  /** @} */
 } // namespace BALL
 
 #endif //  BALL_ENERGY_COULOMB_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.30 2003/02/21 16:03:34 anhi Exp $
+// $Id: residue.h,v 1.31 2003/02/25 15:53:17 sturm Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -32,7 +32,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Kernel
+     *  @{
+     */
 	class Chain;
 	class Protein;
 
@@ -502,7 +504,7 @@ namespace BALL
     return 0;
   }
  
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_RESIDUE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotideIterator.h,v 1.4 2002/02/27 12:18:50 sturm Exp $
+// $Id: nucleotideIterator.h,v 1.5 2003/02/25 15:53:16 sturm Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDEITERATOR_H
 #define BALL_KERNEL_NUCLEOTIDEITERATOR_H
@@ -24,7 +24,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup KernelIterators
+     *  @{
+     */
 	class Nucleotide;
 
 	class NucleotideIteratorTraits_
@@ -80,7 +82,7 @@ namespace BALL
 	typedef ConstReverseBidirectionalIterator
 		<Composite, Nucleotide, Composite::SubcompositeIterator, NucleotideIteratorTraits_>
 		NucleotideConstReverseIterator;
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_NUCLEOTIDEITERATOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.h,v 1.16 2003/02/21 16:02:52 anhi Exp $
+// $Id: MOL2File.h,v 1.17 2003/02/25 15:53:04 sturm Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -16,7 +16,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup StructureFormats
+     *  @{
+     */
 	class Atom;
 	class System;
 
@@ -170,7 +172,7 @@ namespace BALL
 		char buffer_[4096];
 		String line_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_MOL2FILE_H

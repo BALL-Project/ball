@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: claverieParameter.h,v 1.9 2003/02/21 16:06:14 anhi Exp $
+// $Id: claverieParameter.h,v 1.10 2003/02/25 15:53:53 sturm Exp $
 
 #ifndef BALL_SOLVATION_CLAVERIEPARAMETER_H
 #define BALL_SOLVATION_CLAVERIEPARAMETER_H
@@ -20,7 +20,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup Solvation
+     *  @{
+     */
 	/** ClaverieParameter class. 
 			This class provides the parameters needed for the computation of
 			van-der-Waals interaction energies according to the scheme by Huron and
@@ -136,6 +138,7 @@ namespace BALL
 		HashMap<Atom::Type, Index> indices_;
 
 	};
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_SOLVATION_CLAVERIEPARAMETER_H

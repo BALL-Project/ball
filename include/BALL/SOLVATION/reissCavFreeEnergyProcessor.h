@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reissCavFreeEnergyProcessor.h,v 1.12 2003/02/21 16:06:23 anhi Exp $
+// $Id: reissCavFreeEnergyProcessor.h,v 1.13 2003/02/25 15:53:57 sturm Exp $
 
 #ifndef BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
@@ -20,7 +20,10 @@
 
 namespace BALL
 {
-	/** Processor for the computation of the cavitation free energy. 
+    /** \ingroup Solvation
+     *  @{
+     */
+  /** Processor for the computation of the cavitation free energy. 
 			This processor is using the SPT theory approach by Reiss et al.,
 			J. Chem. Phys. 37(1):119-124, 1960 with the modification for
 			non-spherical solutes by Huron/Claverie, J. Phys. Chem.
@@ -186,6 +189,7 @@ namespace BALL
 		void setDefaultOptions() throw();
 
 	};
+   /** @} */
 }
 
 #endif // BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H

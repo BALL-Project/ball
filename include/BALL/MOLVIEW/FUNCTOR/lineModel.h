@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.12 2003/02/21 16:04:57 anhi Exp $
+// $Id: lineModel.h,v 1.13 2003/02/25 15:53:35 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
@@ -26,7 +26,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewFunctorsModels
+     *  @{
+     */
 		using VIEW::Point;
 		using VIEW::Line;
 
@@ -235,7 +237,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/MOLVIEW/FUNCTOR/lineModel.iC>
 #	endif
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namspace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventDescriptor.h,v 1.11 2003/02/21 16:06:24 anhi Exp $
+// $Id: solventDescriptor.h,v 1.12 2003/02/25 15:53:57 sturm Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
 #define BALL_SOLVATION_SOLVENTDESCRIPTOR_H
@@ -16,7 +16,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup Solvation
+     *  @{
+     */
 	/** @name Solvent Classes
 	*/
 	//@{
@@ -175,6 +177,7 @@ namespace BALL
 		bool valid_;
 
 	};
+   /** @} */
 }
 	
 //@}

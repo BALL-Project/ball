@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomCoilShiftProcessor.h,v 1.10 2003/02/21 16:05:45 anhi Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.11 2003/02/25 15:53:46 sturm Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
@@ -13,7 +13,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup ShiftModulesNMR
+     *  @{
+     */		
 	/**	Random coil shift assignment processor.
 			<b>Definition</b>BALL/NMR/randomCoilShiftProcessor.h
 	*/
@@ -91,5 +93,5 @@ namespace BALL
 		*/
 		StringHashMap<float>		shift_map_;
 	};
-
+  /** @} */
 } // namespace BALL

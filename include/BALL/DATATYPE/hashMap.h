@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.30 2003/02/21 16:01:55 anhi Exp $ 
+// $Id: hashMap.h,v 1.31 2003/02/25 15:52:57 sturm Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -42,7 +42,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup GenericHash
+     *  @{
+     */
 	/**	Generic Hash Map Class.
 			<b>Definition:</b> BALL/DATATYPE/hashMap.h
 	*/
@@ -1274,7 +1276,7 @@ namespace BALL
 			}
 		}		
 	}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_HASHMAP_H

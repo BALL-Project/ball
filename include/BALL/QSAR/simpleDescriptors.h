@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleDescriptors.h,v 1.6 2002/02/27 12:19:37 sturm Exp $
+// $Id: simpleDescriptors.h,v 1.7 2003/02/25 15:53:52 sturm Exp $
 
 #ifndef BALL_QSAR_SIMPLEDESCRIPTORS_H
 #define BALL_QSAR_SIMPLEDESCRIPTORS_H
@@ -13,7 +13,9 @@
 namespace BALL
 {
 
-	
+    /** \ingroup MolecularDescriptors
+     *  @{
+     */	
 	/**	Descriptor returning the molecular mass of a molecule
 	*/
 	class MolecularMass
@@ -48,7 +50,7 @@ namespace BALL
 		PolarSurfaceArea();
 		virtual double compute(const Molecule& molecule);
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_QSAR_SIMPLEDESCRIPTORS_H

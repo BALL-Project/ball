@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.14 2003/02/21 16:03:01 anhi Exp $
+// $Id: genericMolFile.h,v 1.15 2003/02/25 15:53:07 sturm Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -12,6 +12,9 @@
 
 namespace BALL 
 {
+    /** \ingroup StructureFormats
+     *  @{
+     */
 	class Atom;
 	class System;
 	class Molecule;
@@ -181,7 +184,7 @@ namespace BALL
 		virtual GenericMolFile& operator << (const Molecule& molecule);
 		//@}
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_GENERICMOLFILE_H

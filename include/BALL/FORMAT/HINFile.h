@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.21 2003/02/21 16:02:49 anhi Exp $
+// $Id: HINFile.h,v 1.22 2003/02/25 15:53:03 sturm Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -16,6 +16,9 @@
 
 namespace BALL 
 {
+    /** \ingroup StructureFormats
+     *  @{
+     */
 	/**	HyperChem file class.
 			This class enables BALL to read and write HyperChem HIN files.  \par
 			<b>Definition:</b> BALL/FORMAT/HINFile.h
@@ -119,7 +122,7 @@ namespace BALL
 	
 		void writeAtom_(const Atom& atom, Size number, Size atom_offset);
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_HINFILE_H

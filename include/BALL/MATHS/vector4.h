@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.41 2003/02/21 16:04:03 anhi Exp $
+// $Id: vector4.h,v 1.42 2003/02/25 15:53:28 sturm Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -31,7 +31,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup Primitives
+     *  @{
+     */
 	/**	@name	Four-dimensional vector
 			@memo	Representation of points and vectors in four-dimensional space.
 	*/
@@ -985,7 +987,7 @@ namespace BALL
 	}
 	//@}
 	//@}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_VECTOR4_H

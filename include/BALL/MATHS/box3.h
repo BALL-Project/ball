@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.34 2003/02/21 16:03:45 anhi Exp $
+// $Id: box3.h,v 1.35 2003/02/25 15:53:22 sturm Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -16,6 +16,9 @@
 
 namespace BALL 
 {
+    /** \ingroup GeometricObjects
+     *  @{
+     */
 	/** @name Box
 	 */
 	//@{
@@ -639,7 +642,7 @@ namespace BALL
 	typedef TBox3<float> Box3;
 
 	//@}
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_BOX3_H

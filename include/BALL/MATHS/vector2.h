@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.10 2003/02/21 16:04:01 anhi Exp $
+// $Id: vector2.h,v 1.11 2003/02/25 15:53:27 sturm Exp $
 
 #ifndef BALL_MATHS_VECTOR2_H
 #define BALL_MATHS_VECTOR2_H
@@ -23,6 +23,9 @@
 
 namespace BALL 
 {
+    /** \ingroup Primitives
+     *  @{
+     */
 	/**	@name	Two-dimensional vectors.
 			@memo Representation of points and vectors in two-dimensional space:
 						class  \link TVector2 TVector2 \endlink  and class  \link Vector2 Vector2 \endlink .
@@ -844,7 +847,7 @@ namespace BALL
 	}
 
 	//@}
-		
+  /** @} */
 }// namespace BALL
 
 #endif // BALL_MATHS_VECTOR2_H

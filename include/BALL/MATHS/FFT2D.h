@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.4 2003/02/21 16:03:41 anhi Exp $
+// $Id: FFT2D.h,v 1.5 2003/02/25 15:53:20 sturm Exp $
 
 #ifndef BALL_MATHS_FFT2D_H
 #define BALL_MATHS_FFT2D_H
@@ -27,7 +27,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup FFT
+     *  @{
+     */
 	/** A class to perform Fast Fourier Transforms and inverse Fast Fourier Transforms
 			on regularly spaced two dimensional data.  \par
 			This class makes use of the freely available library <b>FFTW</b>, which can be
@@ -249,7 +251,7 @@ namespace BALL
 			fftwnd_plan planForward_;
 			fftwnd_plan planBackward_;
 	};
-
+  /** @} */
 }
 			 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: findGeometricObject.h,v 1.11 2003/02/21 16:04:56 anhi Exp $
+// $Id: findGeometricObject.h,v 1.12 2003/02/25 15:53:35 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
 #define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
@@ -32,7 +32,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-		
+    /** \ingroup MolviewFunctorsHelper
+     *  @{
+     */		
 		/** FindGeometricObjects class.
 				The class FindGeometricObjects is derived from  \link UnaryProcessor UnaryProcessor \endlink  and
 				 \link ExtendedPropertyManager ExtendedPropertyManager \endlink . It contains therefore the processor interface
@@ -291,7 +293,7 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.iC>
 #			endif
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

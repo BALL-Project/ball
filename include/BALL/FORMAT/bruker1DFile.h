@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.16 2003/02/21 16:02:59 anhi Exp $
+// $Id: bruker1DFile.h,v 1.17 2003/02/25 15:53:06 sturm Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -30,7 +30,9 @@
 
 namespace BALL
 {
-	//????
+    /** \ingroup NMRFileFormats
+     *  @{
+     */
 	/**	Bruker 1D spectrum format.
 			A class for handling Bruker one-dimensional NMR spectra.
 			 \par
@@ -100,6 +102,7 @@ namespace BALL
 
 		RegularData1D spectrum_;
 	};
+  /** @} */
 }
 
 #endif // BALL_FORMAT_BRUKER1DFILE_H

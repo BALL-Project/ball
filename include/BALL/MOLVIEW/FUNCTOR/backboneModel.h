@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.8 2003/02/21 16:04:51 anhi Exp $
+// $Id: backboneModel.h,v 1.9 2003/02/25 15:53:33 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
@@ -30,6 +30,9 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
+    /** \ingroup MolviewFunctorsModels
+     *  @{
+     */
 		/** AddBackboneModel class.
 				The class AddBackboneModel is a model processor that creates a backbone model
 				through the {\em CA}-atoms of the processed  \link Composite Composite \endlink  object.
@@ -211,7 +214,7 @@ namespace BALL
 
 			//_ list of colors correlating to the atoms saved in atoms_.
 			List<ColorRGBA> atoms_color_;
-
+  /** @} */
 		};
 
 	} // namespace MOLVIEW

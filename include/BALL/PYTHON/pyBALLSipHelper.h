@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBALLSipHelper.h,v 1.2 2002/02/27 12:19:34 sturm Exp $
+// $Id: pyBALLSipHelper.h,v 1.3 2003/02/25 15:53:47 sturm Exp $
 
 #ifndef BALL_PYTHON_PYBALLSIPHELPER_H
 #define BALL_PYTHON_PYBALLSIPHELPER_H
@@ -12,9 +12,13 @@
 
 namespace BALL 
 {
+  /** \ingroup PythonExtensions
+   *  @{
+   */
 	/**	Virtual mapping of BALL objects to their true class.
 	*/
 	PyObject* pyMapBALLObjectToSip(Composite& object);
+   /** @} */
 } // namespace BALL
 
 #endif // BALL_PYTHON_PYBALLSIPHELPER_H

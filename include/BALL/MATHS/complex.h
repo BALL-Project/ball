@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.14 2003/02/21 16:03:48 anhi Exp $
+// $Id: complex.h,v 1.15 2003/02/25 15:53:23 sturm Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -20,6 +20,9 @@
 
 namespace BALL 
 {
+    /** \ingroup Mathematics
+     *  @{
+     */
 	/**	@name	Complex numbers.
 	*/
 	//@{
@@ -617,7 +620,7 @@ namespace BALL
 	std::ostream& operator << (std::ostream& s, const FFTW_COMPLEX& cpx)
 		throw();
 #endif
-	
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_COMPLEX_H

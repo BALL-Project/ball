@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.h,v 1.15 2003/02/21 16:05:34 anhi Exp $
+// $Id: EFShiftProcessor.h,v 1.16 2003/02/25 15:53:42 sturm Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -16,7 +16,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup ShiftModulesNMR
+     *  @{
+     */		
 	class Atom;
 		
 	/**	Shift assignment processor implementing the electric field effect. 
@@ -174,7 +176,7 @@ namespace BALL
 		float										cut_off2_;
 		
  	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_NMR_EFSHIFTPROCESSOR_H

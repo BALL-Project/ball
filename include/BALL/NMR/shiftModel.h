@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.h,v 1.9 2003/02/21 16:05:46 anhi Exp $
+// $Id: shiftModel.h,v 1.10 2003/02/25 15:53:46 sturm Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H
@@ -20,7 +20,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup ShiftModel
+     *  @{
+     */
 	/**	A class representing a complete parameterized NMR shift model.
 			The model consists of a set of single contributions (e.g. ring curent,
 			magnetic anisotropy, etc.). Each of these contributions is calculated
@@ -231,7 +233,7 @@ namespace BALL
 		*/
 		bool valid_;
 	};
-
+  /** @} */
 } // namespace BALL
 
 #endif // BALL_NMR_SHIFTMODEL_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.1 2003/01/09 13:52:14 amoll Exp $
+// $Id: representation.h,v 1.2 2003/02/25 15:53:40 sturm Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_REPRESENTATION_H
 #define BALL_MOLVIEW_KERNEL_REPRESENTATION_H
@@ -20,6 +20,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
+    /** \ingroup MolviewKernel
+     *  @{
+     */
 		/** Representation
 		*/
 		class Representation
@@ -81,7 +84,7 @@ namespace BALL
 			HashSet<Composite*> composites_;
 
 		};
-
+  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL
