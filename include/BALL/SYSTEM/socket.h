@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.13 2000/01/24 20:30:35 oliver Exp $
+// $Id: socket.h,v 1.14 2000/10/20 14:54:13 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -31,10 +31,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-#ifndef _G_config_h
-	// non libg++ or g++ compilation
-#	define _S_NOLIBGXX
-
+#ifndef BALL_HAS_ANSI_IOSTREAM
 #	define _S_USER_BUF		0x0001
 # define _S_UNBUFFERED	0x0002
 # define _S_NO_READS		0x0004
@@ -275,7 +272,7 @@ namespace BALL
 		virtual int	doallocate();
 		int flush_output();
 
-#	ifdef _S_NOLIBGXX
+#	ifdef BALL_HAS_ANSI_IOSTREAM
 		int	x_flags; // port to USL iostream
 
 		int xflags() const 
@@ -311,7 +308,7 @@ namespace BALL
 			return x_flags & _S_LINE_BUF; 
 		}
 
-#	endif // _S_NOLIBGXX
+#	endif // BALL_HAS_ANSI_IOSTREAM
 			
 		public:
 
