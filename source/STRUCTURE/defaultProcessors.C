@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.2 1999/09/17 13:47:09 oliver Exp $
+// $Id: defaultProcessors.C,v 1.3 1999/09/22 17:45:44 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -78,6 +78,7 @@ namespace BALL
 			res_name = "";
 		}
 		atom_name = atom.getName().trim();
+		String original_res_name = res_name;
 
 		if (RTTI<Residue>::isKindOf(*atom.getFragment()))
 		{
@@ -115,15 +116,17 @@ namespace BALL
 			atom.setRadius(radius);
 		} else {
 			// first try the unmodified residue
-			name = res_name + ":" + atom_name;
-			if (table_.has(name.c_str())){
+			name = original_res_name + ":" + atom_name;
+			if (table_.has(name.c_str()))
+			{
 				number_of_assignments_++;
 				radius = (*table_.find(name.c_str())).second;
 				atom.setRadius(radius);
 			} else {
 				// try wildcard matching
 				name = "*:" + atom_name;
-				if (table_.has(name.c_str())){
+				if (table_.has(name.c_str()))
+				{
 					number_of_assignments_++;
 					radius = (*table_.find(name.c_str())).second;
 					atom.setRadius(radius);
@@ -221,6 +224,7 @@ namespace BALL
 			res_name = "";
 		}
 		atom_name = atom.getName().trim();
+		String original_res_name = res_name;
 
 		if (RTTI<Residue>::isKindOf(*atom.getFragment()))
 		{
@@ -252,7 +256,7 @@ namespace BALL
 		name = res_name + ":" + atom_name;
 
 
-		if (table_.has(name.c_str()))
+		if (table_.has(name))
 		{
 			number_of_assignments_++;
 			charge = (*table_.find(name)).second;
@@ -260,9 +264,7 @@ namespace BALL
 			total_charge_ += charge;
 		} else {
 			// first try the unmodified residue
-			name = res_name;
-			name.append(":");
-			name.append(atom_name);
+			name = original_res_name + ":" + atom_name;
 			
 			if (table_.has(name))
 			{
