@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.1 1999/10/30 12:53:39 oliver Exp $
+// $Id: ResourceFile_test.C,v 1.2 1999/11/01 15:35:07 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.1 1999/10/30 12:53:39 oliver Exp $")
+START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.2 1999/11/01 15:35:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -335,9 +335,6 @@ RESULT
 
 CHECK(ResourceFile::applyChildren(UnaryProcessor<Entry>&))
 RESULT
-
-
-
 		
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
