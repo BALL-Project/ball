@@ -1,4 +1,4 @@
-// $Id: glVanDerWaalsModel.C,v 1.4.4.1 2002/10/18 14:48:27 amoll Exp $
+// $Id: glVanDerWaalsModel.C,v 1.4.4.2 2002/11/04 18:15:30 amoll Exp $
 
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
@@ -28,7 +28,7 @@ namespace BALL
  		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-			 << " of class " << getBallClass().getName() << endl;
+			 << " of class " << RTTI::getName<AddGLVanDerWaalsModel>() << endl;
 			#endif 
 
 			AddVanDerWaalsModel::destroy();

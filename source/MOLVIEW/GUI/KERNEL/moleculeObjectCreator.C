@@ -1,4 +1,4 @@
-// $Id: moleculeObjectCreator.C,v 1.3.4.4 2002/10/26 19:01:36 amoll Exp $
+// $Id: moleculeObjectCreator.C,v 1.3.4.5 2002/11/04 18:15:33 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
 
@@ -19,7 +19,7 @@ namespace BALL
 		MoleculeObjectCreator::~MoleculeObjectCreator()
 			throw()
 		{
-			#ifdef BALL_MOLVIEW_DEBUG
+			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<MoleculeObjectCreator>() << endl;
 			#endif 

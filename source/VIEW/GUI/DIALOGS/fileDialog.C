@@ -1,4 +1,4 @@
-// $Id: fileDialog.C,v 1.5 2002/01/16 02:59:38 oliver Exp $
+// $Id: fileDialog.C,v 1.5.4.1 2002/11/04 18:14:44 amoll Exp $
 
 #include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
  
@@ -29,7 +29,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				std::cout << "Destructing object " << (void *)this 
-									<< " of class " << RTTI::getName<FileDialog>() << std::endl;
+									<< " of class FileDialog" << std::endl; //<< RTTI::getName<FileDialog>() << std::endl;
 			#endif 
 
 			destroy();

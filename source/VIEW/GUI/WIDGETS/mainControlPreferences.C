@@ -1,6 +1,7 @@
 // $Id: 
 
 #include <BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h>
+#include <BALL/COMMON/rtti.h>
 
 #include <qwidget.h>
 #include <qplatinumstyle.h>

@@ -2,6 +2,7 @@
 
 #include <BALL/VIEW/GUI/WIDGETS/serverPreferences.h>
 #include <BALL/VIEW/COMMON/global.h>
+#include <BALL/COMMON/rtti.h>
 
 #include <qpixmap.h>
 #include <qlayout.h>

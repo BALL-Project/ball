@@ -1,4 +1,4 @@
-// $Id: glTwoColoredTube.C,v 1.5.4.1 2002/10/18 14:48:29 amoll Exp $
+// $Id: glTwoColoredTube.C,v 1.5.4.2 2002/11/04 18:15:36 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h>
 
@@ -40,7 +40,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLTwoColordTube>() << endl;
+					<< " of class " << RTTI::getName<GLTwoColoredTube>() << endl;
 			#endif 
 
 			destroy();

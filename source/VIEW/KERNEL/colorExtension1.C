@@ -1,6 +1,7 @@
-// $Id: colorExtension1.C,v 1.6 2001/05/13 14:28:37 hekl Exp $
+// $Id: colorExtension1.C,v 1.6.4.1 2002/11/04 18:14:48 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension1.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 

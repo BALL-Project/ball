@@ -1,4 +1,4 @@
-// $Id: events.C,v 1.2 2001/05/13 14:26:25 hekl Exp $
+// $Id: events.C,v 1.2.4.1 2002/11/04 18:14:46 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/events.h>
 
@@ -237,8 +237,8 @@ namespace BALL
 			 ShiftKeyPressed,
 			 MouseRightButtonReleasedShiftKeyPressedControlKeyPressed)
 
-			/*
 		Events::Events()
+			throw()		
 			:	ShiftKeyPressed(this),
 				ShiftKeyPressedMouseMoved(this),
 				ControlKeyPressed(this),
@@ -294,7 +294,6 @@ namespace BALL
 				scene_(0)
 		{
 		}
-			*/
 
 		Events::Events(Scene* scene)
 			throw()

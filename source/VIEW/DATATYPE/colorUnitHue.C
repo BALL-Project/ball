@@ -1,7 +1,7 @@
-// $Id: colorUnitHue.C,v 1.6 2001/05/13 14:28:35 hekl Exp $
+// $Id: colorUnitHue.C,v 1.6.4.1 2002/11/04 18:14:40 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
-#include <stdio.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 
@@ -139,7 +139,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColHUnit>() << endl;
+				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColorUnitHue>() << endl;
 			#endif 
 
 			destroy();

@@ -1,6 +1,7 @@
-// $Id: colorTable.C,v 1.4.4.4 2002/10/18 14:47:37 amoll Exp $
+// $Id: colorTable.C,v 1.4.4.5 2002/11/04 18:14:39 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 

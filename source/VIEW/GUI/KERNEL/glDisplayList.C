@@ -1,8 +1,9 @@
-// $Id: glDisplayList.C,v 1.5 2001/07/29 17:38:09 oliver Exp $
+// $Id: glDisplayList.C,v 1.5.4.1 2002/11/04 18:14:45 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 

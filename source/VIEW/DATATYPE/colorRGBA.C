@@ -1,7 +1,8 @@
-// $Id: colorRGBA.C,v 1.2 2001/05/13 14:28:35 hekl Exp $
+// $Id: colorRGBA.C,v 1.2.4.1 2002/11/04 18:14:39 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
+#include <BALL/COMMON/rtti.h>
 using namespace std;
 
 namespace BALL

@@ -1,6 +1,7 @@
-// $Id: message.C,v 1.4 2001/05/13 14:28:38 hekl Exp $
+// $Id: message.C,v 1.4.4.1 2002/11/04 18:14:49 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 
@@ -127,7 +128,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<ChangedompositeMessage>() << endl;
+					<< " of class " << RTTI::getName<ChangedCompositeMessage>() << endl;
 			#endif 
 		}
 		/*

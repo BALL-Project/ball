@@ -1,7 +1,8 @@
-// $Id: glEntityDescriptor.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
+// $Id: glEntityDescriptor.C,v 1.4.4.1 2002/11/04 18:14:45 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h>
 #include <BALL/COMMON/exception.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 

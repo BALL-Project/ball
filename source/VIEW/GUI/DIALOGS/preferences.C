@@ -1,6 +1,7 @@
 // $Id: 
 
 #include <BALL/VIEW/GUI/DIALOGS/preferences.h>
+#include <BALL/COMMON/rtti.h>
 
 namespace BALL
 {

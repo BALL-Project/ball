@@ -1,6 +1,7 @@
-// $Id: glpoint.C,v 1.6.4.1 2002/10/18 14:47:56 amoll Exp $
+// $Id: glpoint.C,v 1.6.4.2 2002/11/04 18:14:46 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glpoint.h>
+#include <BALL/COMMON/rtti.h>
 #include <GL/gl.h>
 
 namespace BALL
@@ -36,7 +37,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTIT<GLPoint>::getName() << endl;
+					<< " of class " << RTTI::getName<GLPoint>() << endl;
 			#endif 
 
 			destroy();

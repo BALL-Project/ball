@@ -1,7 +1,8 @@
-// $Id: colorHSV.C,v 1.2 2001/05/13 14:28:34 hekl Exp $
+// $Id: colorHSV.C,v 1.2.4.1 2002/11/04 18:14:39 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#include <BALL/COMMON/rtti.h>
 using namespace std;
 
 namespace BALL
@@ -59,8 +60,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-			cout << "Destructing object " << (void *)this << " of class " 
-					 << RTTI::getName<ColorHSV>() << endl;
+			cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColorHSV>() << endl;
 			#endif 
 
 			destroy();

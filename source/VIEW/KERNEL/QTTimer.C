@@ -1,10 +1,10 @@
-// $Id: QTTimer.C,v 1.12 2001/07/29 17:38:09 oliver Exp $
+// $Id: QTTimer.C,v 1.12.4.1 2002/11/04 18:14:47 amoll Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
-#include <stdio.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 
@@ -44,7 +44,7 @@ namespace BALL
 				throw()
 		{
 #ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
+				Log.info() << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<QTTimer>() << endl;
 #endif 
 
