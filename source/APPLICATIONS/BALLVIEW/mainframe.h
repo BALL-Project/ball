@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.12 2005/01/20 23:30:01 amoll Exp $
+// $Id: mainframe.h,v 1.13 2005/02/28 17:40:48 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -21,10 +21,6 @@
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
 # include <BALL/VIEW/WIDGETS/datasetControl.h>
-#endif
-
-#ifndef BALL_VIEW_DIALOGS_CONTOURSURFACEDIALOG_H
-# include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
