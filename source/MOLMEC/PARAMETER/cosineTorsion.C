@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.C,v 1.6 2001/05/17 01:30:55 oliver Exp $
+// $Id: cosineTorsion.C,v 1.7 2001/12/14 01:18:12 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
@@ -118,7 +118,9 @@ namespace BALL
 					{
 						Log.error() << "CosineTorsion::extractSection: wrong number of torsion of torsion terms for "
 							<< key << ": " << n << endl;
-					} else {
+					} 
+					else 
+					{
 
 						// create a new torsion and store 
 						// it in the vector of torsions
@@ -150,7 +152,9 @@ namespace BALL
 						torsion_hash_map_.insert(pair<Size, Size>(index, array_idx));
 					}
 				}
-			} else {
+			} 
+			else 
+			{
 				Log.error() << "CosineTorsion::extractSection: could not interpret key " << key << endl;
 			}
 		}

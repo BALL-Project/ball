@@ -1,4 +1,4 @@
-// $Id: potential1210.C,v 1.7 2000/10/18 10:40:07 anker Exp $
+// $Id: potential1210.C,v 1.8 2001/12/14 01:18:12 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/potential1210.h>
@@ -137,7 +137,9 @@ namespace BALL
 			if (options["unit_A"] == "kcal/mol*A^12")
 			{
 				factor_A = Constants::JOULE_PER_CAL;
-			} else {
+			} 
+			else 
+			{
 				Log.level(LogStream::WARNING) << "unknown unit for parameter A: " << options["unit_A"] << endl;
 			}
 		}	
@@ -147,7 +149,9 @@ namespace BALL
 			if (options["unit_B"] == "kcal/mol*A^10")
 			{
 				factor_B = Constants::JOULE_PER_CAL;
-			} else {
+			} 
+			else 
+			{
 				Log.level(LogStream::WARNING) << "unknown unit for parameter B: " << options["unit_B"] << endl;
 			}
 		}	

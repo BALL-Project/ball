@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.C,v 1.10 2001/05/17 01:30:56 oliver Exp $
+// $Id: quadraticAngleBend.C,v 1.11 2001/12/14 01:18:12 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
@@ -148,10 +148,14 @@ namespace BALL
 					values.theta0 = getValue(i, index_theta0).toFloat() * factor_theta0;
 					values_.push_back(values);
 
-				} else {
+				} 
+				else 
+				{
 					Log.error() << "QuadraticAngleBend::extractSection: could not identify atom types for key " << key << endl;
 				}
-			} else {
+			} 
+			else 
+			{
 				Log.error() << "QuadraticAngleBend::extractSection: wrong number of fields in the key: " << key << endl;
 			}
 		}

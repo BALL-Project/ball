@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.11 2000/10/18 12:51:51 oliver Exp $
+// $Id: lennardJones.C,v 1.12 2001/12/14 01:18:12 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -234,13 +234,17 @@ namespace BALL
 					{
 						Log.warn() << "LennardJones::extractSection: VdW parameter may not be negative: type = " << atom_type << " (" << key << "), eps = " << A 
 											 << ", r = " << B << endl;
-					} else {
+					} 
+					else 
+					{
 						Log.warn() << "LennardJones::extractSection: VdW parameter may not be negative: type = " << atom_type << " (" << key << "), A = " << A 
 											 << ", B = " << B << endl;
 					}
 				}
 
-			} else {
+			} 
+			else	
+			{
 
 				Log.warn() << "LennardJones::extractSection: unknown atom type in Lennard Jones parameters: " << key << "   i = " << i << endl;
 			}
@@ -267,7 +271,9 @@ namespace BALL
 						double epsilon = sqrt(A_[i] * A_[j]);
 						Aij_[index] = epsilon * R6 * R6;
 						Bij_[index] = 2.0 * epsilon * R6;
-					} else {
+					} 
+					else 
+					{
 						// compute and assign Aij/Bij:
 						// Aij = Ai * Aj, Aji = Aij
 						// Bij = Bi * Bj, Bji = Bij
@@ -276,7 +282,9 @@ namespace BALL
 					}
 					Aij_[sym_index] = Aij_[index];
 					Bij_[sym_index] = Bij_[index];
-				} else {
+				} 
+				else	
+				{
 					Aij_[index] = 0.0;
 					Bij_[index] = 0.0;
 					Aij_[sym_index] = 0.0;

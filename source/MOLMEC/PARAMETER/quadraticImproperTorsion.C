@@ -1,4 +1,4 @@
-// $Id: quadraticImproperTorsion.C,v 1.6 2001/05/17 01:30:56 oliver Exp $
+// $Id: quadraticImproperTorsion.C,v 1.7 2001/12/14 01:18:12 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h>
@@ -172,7 +172,9 @@ namespace BALL
 									 + type_K * number_of_atom_types_ * number_of_atom_types_ 
 									 + type_L * number_of_atom_types_ * number_of_atom_types_ * number_of_atom_types_;
 				torsion_hash_map_.insert(pair<Size, Size>(index, array_idx));
-			} else {
+			} 
+			else 
+			{
 				Log.level(LogStream::ERROR) << "Could not interpret key " << key << endl;
 			}
 		}

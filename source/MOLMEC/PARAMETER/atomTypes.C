@@ -1,4 +1,4 @@
-// $Id: atomTypes.C,v 1.9 2001/05/17 01:30:55 oliver Exp $
+// $Id: atomTypes.C,v 1.10 2001/12/14 01:18:11 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
@@ -100,7 +100,9 @@ namespace BALL
 		if (it != type_map_.end())
 		{
 			return it->second;
-		} else {
+		} 
+		else 
+		{
 			return Atom::UNKNOWN_TYPE;
 		}
 	}

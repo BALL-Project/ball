@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.12 2001/08/01 23:43:41 oliver Exp $
+// $Id: templates.C,v 1.13 2001/12/14 01:18:13 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -96,7 +96,9 @@ namespace BALL
 		if (charges_.has(name)) 
 		{
 			return (*charges_.find(name)).second;
-		} else {
+		} 
+		else 
+		{
 			return 0.0;
 		}
 	}
@@ -106,7 +108,9 @@ namespace BALL
 		if (type_names_.has(name)) 
 		{
 			return (*type_names_.find(name)).second;
-		} else {
+		} 
+		else 
+		{
 			return "";
 		}
 	}
@@ -247,14 +251,18 @@ namespace BALL
 				{	
 					// assign the type name
 					it->setCharge(charges_[name]);
-				} else {
+				} 
+				else 
+				{
 					// try the residue name without variant extension
 					name = it->getFullName(Atom::NO_VARIANT_EXTENSIONS);
 					if (charges_.has(name))
 					{	
 						// assign the type name
 						it->setCharge(charges_[name]);
-					} else {
+					} 
+					else 
+					{
 						// try a final wildcard match
 						name = "*:" + it->getName();
 						name.trim();
@@ -262,7 +270,9 @@ namespace BALL
 						{
 							// assign it
 							it->setCharge(charges_[name]);
-						} else {
+						} 
+						else 
+						{
 							Log.warn() << "Templates::assignCharges: cannot assign charge for atom " << it->getFullName() << endl;
 						}
 					}
