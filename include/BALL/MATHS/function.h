@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.2 2000/12/18 12:20:17 anker Exp $
+// $Id: function.h,v 1.3 2000/12/19 13:27:37 anker Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -788,7 +788,7 @@ namespace BALL
 		/** get the function argument of the reciprocal
 				@return a const reference to the function argument
 		*/
-		const Function& getFunction()
+		const Function& getFunction() const
 			throw()
 		{
 			return function_;
@@ -898,7 +898,7 @@ namespace BALL
 		/** get the function argument of the square
 				@return a const reference to the function argument
 		*/
-		const Function& getFunction()
+		const Function& getFunction() const
 			throw()
 		{
 			return function_;
@@ -1008,7 +1008,7 @@ namespace BALL
 		/** get the function argument of the cubic
 				@return a const reference to the function argument
 		*/
-		const Function& getFunction()
+		const Function& getFunction() const
 			throw()
 		{
 			return function_;
@@ -1117,12 +1117,23 @@ namespace BALL
 		/** get the function argument of the power
 				@return a const reference to the function argument
 		*/
-		const Function& getFunction()
+		const Function& getFunction() const
 			throw()
 		{
 			return function_;
 		}
 	
+		/** set the exponent of the power function
+				@param exp the exponent
+		*/
+		void setExponent(DataType exp)
+			throw();
+
+		/** get the exponent of the power function
+				@return the exponent of this
+		*/
+		DataType getExponent() const
+			throw();
 		//@}
 
 
@@ -1529,6 +1540,22 @@ namespace BALL
 	{
 		return ((exponent_ == power.exponent_)
 			&& (function_ == power.function_));
+	}
+
+	template <typename Function, typename DataType>
+	BALL_INLINE
+	DataType MutablePower<Function, DataType>::getExponent() const
+		throw()
+	{
+		return exponent_;
+	}
+
+	template <typename Function, typename DataType>
+	BALL_INLINE
+	void MutablePower<Function, DataType>::setExponent(DataType exp)
+		throw()
+	{
+		exponent_ = exp;
 	}
 
 } // namespace BALL
