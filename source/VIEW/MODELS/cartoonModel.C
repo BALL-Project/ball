@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.35 2005/01/28 14:54:42 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.36 2005/02/01 14:27:29 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -47,7 +47,8 @@ AddCartoonModel::AddCartoonModel()
 		ribbon_radius_(0.1),
 		draw_DNA_as_ladder_(false),
 		draw_ribbon_(true),
-		use_two_colors_(true)
+		use_two_colors_(true),
+		no_ss_(false)
 {
 }
 
@@ -65,7 +66,8 @@ AddCartoonModel::AddCartoonModel(const AddCartoonModel& cartoon)
 		ribbon_radius_(cartoon.ribbon_radius_),
 		draw_DNA_as_ladder_(cartoon.draw_DNA_as_ladder_),
 		draw_ribbon_(cartoon.draw_ribbon_),
-		use_two_colors_(true)
+		use_two_colors_(true),
+		no_ss_(false)
 {
 }
 
@@ -98,7 +100,21 @@ void AddCartoonModel::collectAtoms_(Chain& chain)
 {
 	clear_();
 	last_chain_ = &chain;
+
+	if (chain.countSecondaryStructures() == 0)
+	{
+		ResidueIterator rit = chain.beginResidue();
+		for (; +rit; ++rit)
+		{
+			AddBackboneModel::collectAtoms_(*rit);
+		}
+		
+		no_ss_ = true;
+		return;
+	}
 	
+	no_ss_ = false;
+
 	SecondaryStructureIterator sit = chain.beginSecondaryStructure();
 	for (; +sit; ++sit)
 	{
@@ -558,6 +574,9 @@ void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
 // -------------------------------------------------------------------	
 Processor::Result AddCartoonModel::operator() (Composite& composite)
 {
+	// speedup, save some RTTI calls
+	if (RTTI::isKindOf<Atom>(composite)) return Processor::CONTINUE;
+
 	if (RTTI::isKindOf<Protein>(composite))
 	{
 		calculateComplementaryBases_(composite);
@@ -568,6 +587,22 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 	{
 		collectAtoms_(*dynamic_cast<Chain*>(&composite));
 		computeSpline_();
+		return Processor::CONTINUE;
+	}
+
+	// if we have a chain without SecondaryStructures, build a Backbone model for it
+	if (no_ss_)
+	{
+		const Residue* const residue = dynamic_cast<Residue*>(&composite);
+		if (residue == 0) return Processor::CONTINUE;
+
+		if (checkBuildBackboneNow_(*residue))
+		{
+			buildGraphicalRepresentation_();
+			clear_();
+		}
+
+		last_parent_ = residue->getParent()->getParent();
 		return Processor::CONTINUE;
 	}
 

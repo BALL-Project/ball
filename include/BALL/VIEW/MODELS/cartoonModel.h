@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.26.2.10 2005/01/24 13:29:24 amoll Exp $
+// $Id: cartoonModel.h,v 1.26.2.11 2005/02/01 14:27:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -230,6 +230,8 @@ namespace BALL
 			HashMap<Residue*, Residue*> complementary_bases_;
 			HashMap<SecondaryStructure*, Position> ss_to_spline_start_;
 			HashMap<SecondaryStructure*, Position> ss_nr_splines_;
+
+			bool no_ss_;
 	};
 
 	} // namespace VIEW

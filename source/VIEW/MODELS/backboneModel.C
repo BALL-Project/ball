@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.40 2005/01/21 01:33:58 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.41 2005/02/01 14:27:34 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -90,12 +90,8 @@ namespace BALL
 			clear_();
 		}
 
-		Processor::Result AddBackboneModel::operator() (Composite& composite)
+		bool AddBackboneModel::checkBuildBackboneNow_(const Residue& residue)
 		{
-			if (!RTTI::isKindOf<Residue>(composite))  return Processor::CONTINUE;
-			Residue& residue(*RTTI::castTo<Residue>(composite));
-			if (!residue.isAminoAcid()) return Processor::CONTINUE;
-			
 			// if have already visited some residues and this reside was not in the same
 			// chain, build the backbone for the last chain
 			// this prevents building backbones between different chains
@@ -126,25 +122,35 @@ namespace BALL
 				}
 			}
 
-			if (build)
+			return build;
+		}
+
+		Processor::Result AddBackboneModel::operator() (Composite& composite)
+		{
+			const Residue* const residue = dynamic_cast<Residue*>(&composite);
+			if (residue == 0 || !residue->isAminoAcid()) 
+			{
+				return Processor::CONTINUE;
+			}
+
+			if (checkBuildBackboneNow_(*residue))
 			{
 				createBackbone_();
 				clear_();
 			}
-			
-			last_parent_ = residue.getParent()->getParent();
-			collectAtoms_(residue);
 
+			last_parent_ = residue->getParent()->getParent();
+			collectAtoms_(*residue);
 			return Processor::CONTINUE;
 		}
 
-		void AddBackboneModel::collectAtoms_(Residue& residue)
+		void AddBackboneModel::collectAtoms_(const Residue& residue)
 			throw()
 		{
 			String full_name = residue.getFullName();
 			String 			name = residue.getName();
 
-			AtomIterator it;
+			AtomConstIterator it;
 
 			// we collect P atoms in nucleotides
 			if (name.size() == 1 && (name == "C" || name == "G" || name == "T" || name == "A"))

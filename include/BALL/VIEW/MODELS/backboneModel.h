@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.14.2.9 2005/01/19 16:30:59 amoll Exp $
+// $Id: backboneModel.h,v 1.14.2.10 2005/02/01 14:27:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -155,7 +155,7 @@ namespace BALL
 				throw(Exception::OutOfMemory);
 
 			//_ collect the atoms, for which the spline points will be calculated
-			virtual void collectAtoms_(Residue& residue)
+			virtual void collectAtoms_(const Residue& residue)
 				throw();
 
 			//_
@@ -165,6 +165,8 @@ namespace BALL
 			virtual void clear_()
 				throw();
 
+			bool checkBuildBackboneNow_(const Residue& residue);
+
 			//_
 			vector<SplinePoint> spline_vector_;
 			//_
@@ -172,7 +174,7 @@ namespace BALL
 			//_
 			vector<const Atom*> atoms_of_spline_points_;
 			//_ Pointer to the parent of the last processed composite
-			Composite* last_parent_;
+			const Composite* last_parent_;
 			//_
 			float tube_radius_;
 
