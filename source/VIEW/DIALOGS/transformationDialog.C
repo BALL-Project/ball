@@ -42,7 +42,6 @@ bool TransformationDialog::translate(float x, float y, float z)
 		Vector3 n(rep_->getProperty("AX").getDouble(),
 							rep_->getProperty("BY").getDouble(),
 							rep_->getProperty("CZ").getDouble());
-Log.error() << "#~~#   3 " << n << " "   << __FILE__ << "  " << __LINE__<< std::endl;
 		rep_->setProperty("D", rep_->getProperty("D").getDouble() + t*n);
 
 		return true;
@@ -67,7 +66,6 @@ bool TransformationDialog::rotateX(float angle, bool radian)
 		float d = rep_->getProperty("D").getDouble();
 		matrix_.setIdentity();
 		angle_.set(angle, radian);
-//	 	matrix_.setTranslation(d*n);
 		matrix_.setRotationX(angle_);
 		n = matrix_ * n;
 		
@@ -110,7 +108,6 @@ bool TransformationDialog::rotateY(float angle, bool radian)
 		float d = rep_->getProperty("D").getDouble();
 		matrix_.setIdentity();
 		angle_.set(angle, radian);
-//		matrix_.s etTranslation(d*n);
 		matrix_.setRotationY(angle_);
 		n = matrix_ * n;
 		
@@ -153,7 +150,6 @@ bool TransformationDialog::rotateZ(float angle, bool radian)
 		float d = rep_->getProperty("D").getDouble();
 		matrix_.setIdentity();
 		angle_.set(angle, radian);
-// 		matrix_.setTranslation(d*n);
 		matrix_.setRotationZ(angle_);
 		n = matrix_ * n;
 		
