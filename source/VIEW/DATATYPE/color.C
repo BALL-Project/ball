@@ -1,4 +1,4 @@
-// $Id: color.C,v 1.4 1999/12/30 18:05:43 oliver Exp $
+// $Id: color.C,v 1.5 2000/01/13 22:31:55 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/color.h>
 using namespace std;
@@ -76,7 +76,7 @@ namespace BALL
 		{
 			char temp[10];
 
-			sprintf(&temp[0], "%x%x%x%x",
+			sprintf(&temp[0], "%02x%02x%02x%02x",
 				(unsigned char)red_, (unsigned char)green_,
 				(unsigned char)blue_, (unsigned char)alpha_);
 
