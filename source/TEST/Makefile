@@ -25,7 +25,6 @@ EXECUTABLES = \
 	Box3_test\
 	CharmmFF_test\
 	ClassTest_test\
-	Common_test\
 	Composite_test\
 	DefaultProcessors_test\
 	EnergyMinimizer_test\
@@ -38,6 +37,7 @@ EXECUTABLES = \
 	Limits_test\
 	Line3_test\
 	List_test\
+	MathsCommon_test\
 	Matrix44_test\
 	NumericalSAS_test\
 	Options_test\
@@ -107,9 +107,6 @@ Circle3_test:	Circle3_test.o
 ClassTest_test:	ClassTest_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-Common_test:	Common_test.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
 Composite_test:	Composite_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -144,6 +141,9 @@ Line3_test:	Line3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 List_test:	List_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+MathsCommon_test:	MathsCommon_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Matrix44_test:	Matrix44_test.o

@@ -1,4 +1,4 @@
-// $Id: Common_test.C,v 1.1 2000/04/02 15:48:04 amoll Exp $
+// $Id: MathsCommon_test.C,v 1.1 2000/04/03 07:18:34 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Common_test.C,v 1.1 2000/04/02 15:48:04 amoll Exp $")
+START_TEST(class_name, "$Id: MathsCommon_test.C,v 1.1 2000/04/03 07:18:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -168,9 +168,9 @@ RESULT
 
 
 CHECK(compare(const T1& a, const T2& b))
-	TEST_REAL_EQUAL(Maths::compare(-0.1, -0.1), 0)
-	TEST_REAL_EQUAL(Maths::compare(-0.11, -0.1), -1)
-	TEST_REAL_EQUAL(Maths::compare(-0.11, -0.12), 1)
+	TEST_EQUAL(Maths::compare(-0.1, -0.1), 0)
+	TEST_EQUAL(Maths::compare(-0.11, -0.1), -1)
+	TEST_EQUAL(Maths::compare(-0.11, -0.12), 1)
 RESULT
 
 
