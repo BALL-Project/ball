@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.35.4.3 2002/05/31 22:52:35 oliver Exp $
+// $Id: atom.C,v 1.35.4.4 2002/06/01 21:22:42 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -40,6 +40,7 @@ namespace BALL
 	{
 		// set the static attributes to their default values
 		static_attributes_[index_].clear();
+		static_attributes_[index_].ptr = this;
 	}
 		
 	Atom::Atom(const Atom& atom, bool deep)
@@ -55,6 +56,7 @@ namespace BALL
 	{
 		// copy the static attributes
 		static_attributes_[index_] = atom.static_attributes_[atom.index_];
+		static_attributes_[index_].ptr = this;
 	}
 
 	Atom::Atom
@@ -77,6 +79,7 @@ namespace BALL
 		static_attributes_[index_].force = force;
 		static_attributes_[index_].velocity = velocity;
 		static_attributes_[index_].position = position;
+		static_attributes_[index_].ptr = this;
 	}
 		
 	Atom::~Atom()
