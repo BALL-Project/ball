@@ -1,4 +1,4 @@
-// $Id: glBackbone.h,v 1.4 2001/05/27 10:29:28 hekl Exp $
+// $Id: glBackbone.h,v 1.5 2001/07/06 14:49:30 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -37,18 +37,18 @@ namespace BALL
 		/** GlBackbone class.
 				{\bf Framework:} BALL/MOLVIEW/GUI/PRIMITIV\\
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h}\\ \\
-				An instance of GlBackbone represents an instance of the geometric
+				An instance of GLBackbone represents an instance of the geometric
 				visualization of a \Ref{Backbone}.
-				The class GlBackbone is derived from the classes \Ref{Backbone} and
-				\Ref{GLObject}. Therefore the class glBackbone is the graphical extension
+				The class GLBackbone is derived from the classes \Ref{Backbone} and
+				\Ref{GLObject}. Therefore the class GLBackbone is the graphical extension
 				of the geometrical definition of the class backbone.
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				backbone. OpenGL code is used for the visualization.
 				See these classes for further information.
 				@memo    GlBackbone class (BALL MOLVIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/27 10:29:28 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/06 14:49:30 $
 		*/
 		class GLBackbone
 			: public Backbone,
@@ -61,7 +61,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new glBackbone.
+					Constructs new glBackbone.
 					@return      GlBackbone new constructed glBackbone
 					@see         Backbone
 					@see         GLObject
@@ -70,7 +70,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor with cloning facility.
-					Construct new glBackbone by copying the glBackbone 
+					Constructs new glBackbone by copying the glBackbone 
 					{\em GL_two_colored_tube}.
 					The copy is either deep (default) or shallow.
 					@param       tube the tube to be copied (cloned)
@@ -83,7 +83,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor from geometricObject.
-					Construct new glBackbone by copying the internal values from
+					Constructs new glBackbone by copying the internal values from
 					\Ref{GeometricObject} {\em geometric_object}.
 					@param       geometric_object the \Ref{GeometricObject} which internal value should be copied
 					@return      GlBackbone new constructed glBackbone initialized from {\em geometric_object}
@@ -133,7 +133,7 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the glBackbone {\em glbackbone} to {\em *this}
+					Assigns the glBackbone {\em glbackbone} to {\em *this}
 					glBackbone.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} glBackbone is initialized to the value of 
@@ -152,7 +152,7 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the glBackbone {\em glbackbone} to {\em *this}
+					Assigns the glBackbone {\em glbackbone} to {\em *this}
 					glBackbone.	The copy is deep.
 					This method does not copy the structure of {\em glbackbone} into {\em *this}
 					glBackbone. 
@@ -170,7 +170,7 @@ namespace BALL
 				throw();
 
 			/** Copying with cloning facility.
-					Copy {\em *this} glBackbone to the glBackbone {\em glbackbone}.
+					Copies {\em *this} glBackbone to the glBackbone {\em glbackbone}.
 					The copy is either deep (default) or shallow.
 					This method does not copy the structure of {\em *this} glBackbone into
 					{\em glbackbone}. 
@@ -188,7 +188,7 @@ namespace BALL
 				throw();
 
 			/** Swapping of glBackbone's.
-					Swap the value of {\em *this} glBackbone with the glBackbone
+					Swaps the value of {\em *this} glBackbone with the glBackbone
 					{\em glbackbone}.
 					This method does not swap the structure of {\em glbackbone} with {\em *this}
 					glBackbone. 
@@ -212,7 +212,7 @@ namespace BALL
 			/** Creation of the graphical representation.
 					Overridden method from \Ref{GLObject}. Uses the geometrical properties
 					defined in class \Ref{Backbone} to create the graphical representation
-					of the backbone. This method is used internally from the render engine
+					of the backbone. This method is used internally by the render engine
 					of the \Ref{Scene}. Predefined shapes of tube objects from the class
 					\Ref{GLPrimitiveManager} are used for the variable drawing resolutions.
 					The parameter {\em with_names} indicates whether the openGL command 
