@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.16 2005/01/17 17:20:57 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.17 2005/01/17 21:32:34 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -49,19 +49,12 @@ namespace BALL
 				object_to_name_(),
 				all_names_(0),
 				last_color_(&dummy_color_),
-				screen_buffer_(0),
 				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED),
- 				use_vertex_buffer_(false),
- 				use_pixel_buffer_(false)
+ 				use_vertex_buffer_(false)
 		{
 #ifdef GL_ARB_vertex_buffer_object
 			use_vertex_buffer_ = true;
-#endif
-
-#ifdef GL_EXT_pixel_buffer_object
-logString(String("#~~#   2 ") + String( )                        + "             " + __FILE__ + "  " + String(__LINE__));
-			use_pixel_buffer_ = true;
 #endif
 		}
 
@@ -1515,56 +1508,6 @@ Log.error() << "drawvertex" << std::endl;
 Log.error() << "drawlislistt" << std::endl;
 
 		dit->second->draw();
-	}
-
-
-	bool GLRenderer::storeScreenToBuffer()
-	{
-		#ifndef GL_EXT_pixel_buffer_object
-			return false;
-		#else
-			if (use_pixel_buffer_ == false) return false;
-Log.error() << __LINE__ << std::endl;
-			if (screen_buffer_ != 0)
-			{
-				glDeleteBuffersARB(1, &screen_buffer_);
-			}
-Log.error() << __LINE__ << std::endl;
-			glGenBuffersARB(1, &screen_buffer_);
-Log.error() << __LINE__ << std::endl;
-			Size size = (Size)(width_ * height_ * 4);
-			glReadBuffer(GL_FRONT);
-Log.error() << __LINE__ << std::endl;
-			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_EXT, screen_buffer_);
-Log.error() << __LINE__ << std::endl;
-			glReadPixels(0, 0, (Size)width_, (Size)height_, GL_BGRA, GL_UNSIGNED_BYTE, 0);
-Log.error() << __LINE__ << std::endl;
-			glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_EXT, size, NULL, GL_STATIC_READ);
-Log.error() << __LINE__ << std::endl;
-		#endif
-
-		return true;
-	}
-
-	bool GLRenderer::restoreScreenFromBuffer()
-	{
-		#ifndef GL_EXT_pixel_buffer_object
-			return false;
-		#else
-			if (use_pixel_buffer_ == false) return false;
-
-			if (screen_buffer_ == 0) return false;
-
-Log.error() << __LINE__ << std::endl;
-			glDrawBuffer(GL_FRONT);
-Log.error() << __LINE__ << std::endl;
-			glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_EXT, screen_buffer_);
-Log.error() << __LINE__ << std::endl;
-			glDrawPixels((Size)width_, (Size)height_, GL_BGRA, GL_UNSIGNED_BYTE, 0);
-Log.error() << __LINE__ << std::endl;
-		#endif
-
-		return true;
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

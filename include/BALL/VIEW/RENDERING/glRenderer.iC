@@ -146,8 +146,3 @@ bool GLRenderer::vertexBuffersEnabled() const
 	return use_vertex_buffer_;
 }
 
-BALL_INLINE
-bool GLRenderer::pixelBuffersEnabled() const
-{
-	return use_pixel_buffer_;
-}
