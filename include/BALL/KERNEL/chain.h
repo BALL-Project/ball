@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.13 2000/05/09 16:12:12 amoll Exp $
+// $Id: chain.h,v 1.14 2000/05/15 12:07:56 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -105,7 +105,7 @@ namespace BALL
 		*/
 		void get(Chain& chain, bool deep = true) const;
 
-		/** Swapping of chain.
+		/** Swapping of chains.
 				Swap the states of {\em *this} with the chain {\em chain}.
 				@param  chain the chain {\em *this} is being swapped with
 		*/
@@ -130,41 +130,40 @@ namespace BALL
 		*/
 		const Protein* getProtein() const;
 
-		/** Get a pointer to a subaltern SecondaryStructure at a given position.
+		/** Get a pointer to a child SecondaryStructure at a given position.
 				The reference is 0 if {\em *this} does not have a SecondaryStructure at this position.
-				@param   position the position of the subaltern SecondaryStructure
+				@param   position the position of the child SecondaryStructure
 				@return  SecondaryStructure* -
-								 mutable reference to the subaltern SecondaryStructure at {\em position} of {\em *this},
+								 mutable reference to the child SecondaryStructure at {\em position} of {\em *this},
 		*/
 		SecondaryStructure* getSecondaryStructure(Position position);
 	
-		/** Get a constant pointer to a subaltern SecondaryStructure at a given position.
+		/** Get a constant pointer to a child SecondaryStructure at a given position.
 				The reference is 0 if {\em *this} does not have a SecondaryStructure at this position.
-				@param   position the position of the subaltern SecondaryStructure
+				@param   position the position of the child SecondaryStructure
 				@return  SecondaryStructure* -
-								 constant reference to the subaltern SecondaryStructure at {\em position} of {\em *this},
+								 constant reference to the child SecondaryStructure at {\em position} of {\em *this},
 		*/
 		const SecondaryStructure* getSecondaryStructure(Position position) const;
 	
-		/** Get a pointer to a subaltern Residue at a given position.
+		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at this position.
-				@param   position the position of the subaltern Residue
+				@param   position the position of the child Residue
 				@return  Residue* -
-								 mutable reference to the subaltern Residue at {\em position} of {\em *this},
+								 mutable reference to the child Residue at {\em position} of {\em *this},
 		*/
 		Residue* getResidue(Position position);
 	
-		/** Get a pointer to a subaltern Residue at a given position.
+		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at this position.
-				@param   position the position of the subaltern Residue
+				@param   position the position of the child Residue
 				@return  Residue* -
-								 constant reference to the subaltern Residue at {\em position} of {\em *this},
+								 constant reference to the child Residue at {\em position} of {\em *this},
 		*/
 		const Residue* getResidue(Position position) const;
 	
 		/** Get a pointer to the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a Residue at this position.
-
 				@return  Residue* -
 								 mutable reference to the N-terminal Residue
 		*/
@@ -172,7 +171,6 @@ namespace BALL
 	
 		/** Get a constant pointer to the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a Residue at this position.
-
 				@return  Residue* -
 								 constant reference to the N-terminal Residue
 		*/
@@ -180,7 +178,6 @@ namespace BALL
 
 		/** Get a pointer to the C-terminal Residue.
 				The reference is 0 if {\em *this} does not have a Residue at this position.
-
 				@return  Residue* -
 								 mutable reference to the C-terminal Residue
 		*/
@@ -188,25 +185,24 @@ namespace BALL
 	
 		/** Get a constant pointer to the C-terminal Residue.
 				The reference is 0 if {\em *this} does not have a Residue at this position.
-
 				@return  Residue* -
 								 constant reference to the C-terminal Residue
 		*/
 		const Residue* getCTerminal() const;
 
-		/** Get a pointer to a subaltern PDBAtom at a given position.
+		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} does not have a PDBAtom at this position.
-				@param   position the position of the subaltern PDBAtom
+				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
-								 mutable reference to the subaltern PDBAtom at {\em position} of {\em *this},
+								 mutable reference to the child PDBAtom at {\em position} of {\em *this},
 		*/
 		PDBAtom* getPDBAtom(Position position);
 	
-		/** Get a pointer to a subaltern PDBAtom at a given position.
+		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} does not have a PDBAtom at this position.
-				@param   position the position of the subaltern PDBAtom
+				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
-								 constant reference to the subaltern PDBAtom at {\em position} of {\em *this},
+								 constant reference to the child PDBAtom at {\em position} of {\em *this},
 		*/
 		const PDBAtom* getPDBAtom(Position position) const;
 	
@@ -311,7 +307,6 @@ namespace BALL
 		
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
-	
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/

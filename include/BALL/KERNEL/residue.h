@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.14 2000/05/09 23:10:35 amoll Exp $
+// $Id: residue.h,v 1.15 2000/05/15 12:07:57 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -99,10 +99,10 @@ namespace BALL
 		/// Destructor
 		virtual ~Residue();
 
-		/// Clears the residues contents.
+		/// Clears the contents of this instance.
 		virtual void clear();
 	
-		/// Clears the residues contents and removes it from all composite structures.
+		/// Clears the contents of this instance and removes it from all composite structures.
 		virtual void destroy();
 	
 		//@}
@@ -134,7 +134,7 @@ namespace BALL
 		/**	Assign a Residue object from another instance.*/
 		void get(Residue& residue, bool deep = true) const;
 
-		/**	Swap the contents of two NucleicAcid objects. */
+		/**	Swap the contents of two Residue objects. */
 		void swap(Residue& residue);
 	
 		//@}
@@ -151,24 +151,28 @@ namespace BALL
 					\item {\tt -M} is added for individual amino acids (C and N terminal)
 				\end{itemize}
 			@param	type if type is set to {\tt NO_VARIANT_EXTENSIONS},
-				the variant extension ({\tt -XX}) is omitted.
+							the variant extension ({\tt -XX}) is omitted.
 			@return String the full fragment name
 		*/
 		String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const;
 		
 		/**	Check whether the torsion angle phi is defined.
+				@return bool
 		*/
 		bool hasTorsionPhi() const;
 	
 		/**	Calculate the torsion angle phi.
+				@return Angle - the torsion angle phi
 		*/
 		Angle getTorsionPhi() const;
 		
 		/**	Check whether the torsion angle psi is defined.
+				@return bool
 		*/
 		bool hasTorsionPsi() const;
 	
 		/**	Calculate the torsion angle psi.
+				@return Angle - the torsion angle phi
 		*/
 		Angle getTorsionPsi() const;		
 
@@ -236,40 +240,40 @@ namespace BALL
 		*/
 		char getInsertionCode() const;
 
-		/**	Count the child PDB-Atoms of {\em *this} instance.
-				@return  Size the number of PDB-Atoms
+		/**	Count the child PDBAtoms of {\em *this} instance.
+				@return  Size the number of PDBAtoms
 		*/
 		Size countPDBAtoms() const;
 
-		/** Prepend a PDB-Atom at position 0.
-				@param atom, the PDB-Atom to prepend
+		/** Prepend a PDBAtom at position 0.
+				@param atom, the PDBAtom to prepend
 		*/
 		void prepend(PDBAtom& atom);
 
-		/** Append a PDB-Atom at the last position.
-				@param atom, the PDB-Atom to append
+		/** Append a PDBAtom at the last position.
+				@param atom, the PDBAtom to append
 		*/
 		void append(PDBAtom& atom);
 
-		/** Insert a PDB-Atom at the last position.
-				@param atom, the PDB-Atom to append
+		/** Insert a PDBAtom at the last position.
+				@param atom, the PDBAtom to append
 		*/
 		void insert(PDBAtom& atom);
 
-		/** Insert a PDB-Atom before a given {\em Comosite} object.
-				@param atom, the PDB-Atom to insert
+		/** Insert a PDBAtom before a given {\em Comosite} object.
+				@param atom, the PDBAtom to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
 		void insertBefore(PDBAtom& atom, Composite& before);
 
-		/** Insert a PDB-Atom after a given {\em Comosite} object.
-				@param atom, the PDB-Atom to insert
+		/** Insert a PDBAtom after a given {\em Comosite} object.
+				@param atom, the PDBAtom to insert
 				@param after, the {\em Comosite} object to insert after
 		*/
 		void insertAfter(PDBAtom& atom, Composite& after);
 
-		/** Remove a PDB-Atom.
-				@param atom, the PDB-Atom to remove
+		/** Remove a PDBAtom.
+				@param atom, the PDBAtom to remove
 		*/
 		bool remove(PDBAtom& atom);
 
@@ -284,9 +288,7 @@ namespace BALL
 		void spliceAfter(Residue& residue);
 
 		/**	Move the children of {\tt residue} into {\em *this}.
-				The children of {\tt residue} are inserted at its position if
-				it is a child of {\tt this}.
-				Otherwise the children are inserted using \Ref{spliceBefore}.
+				The children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(Residue& residue);
 
@@ -296,27 +298,28 @@ namespace BALL
 		//@{
 
 		/** Test if this residue is an amino acid.
+				Returns true, if this instance has the property "PROPERTY__AMINO_ACID".
 				return bool
 		*/
 		bool isAminoAcid() const;
 	
 		/** Test if this residue is terminal.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
-				and is the first or last Residue in a parent chain.
+				and is the first or last amino acid residue	in its parent chain.
 				return bool
 		*/
 		bool isTerminal() const;
 	
 		/** Test if this residue is N-terminal.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
-				and is the first Residue in a parent chain.
+				and is the first amino acid residue	in its parent chain.
 				return bool
 		*/
 		bool isNTerminal() const;
 	
 		/** Test if this residue is C-terminal.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
-				and is the last Residue in a parent chain.
+				and is the last amino acid residue in its parent chain.
 				return bool
 		*/
 		bool isCTerminal() const;

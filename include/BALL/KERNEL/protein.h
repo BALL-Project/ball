@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.8 2000/05/02 14:03:50 amoll Exp $ 
+// $Id: protein.h,v 1.9 2000/05/15 12:07:57 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -38,9 +38,9 @@ namespace BALL
 {
 
 	/**	Kernel Protein Class.
-			This class is used to represent Proteins.
+			This class is used to represent proteins.
 			A protein may contain several \Ref{Chains}, \Ref{SecondaryStructure}s,
-			and \Ref{Residues}.\\
+			and \Ref{Residue}s.\\
 			{\bf Definition:}\URL{BALL/KERNEL/protein.h}
 	*/
 	class Protein
@@ -123,7 +123,7 @@ namespace BALL
 				Copy {\em *this} to {\em protein}.
 				The assignment is either deep or shallow (default).
 				@param  protein the Protein to be assigned to
-				@see     Protein::set
+				@see    Protein::set
 		*/
 		void get(Protein& protein, bool deep = true) const;
 	

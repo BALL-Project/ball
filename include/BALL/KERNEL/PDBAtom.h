@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.9 2000/05/09 16:12:31 amoll Exp $
+// $Id: PDBAtom.h,v 1.10 2000/05/15 12:07:56 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -133,31 +133,31 @@ namespace BALL
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the PDB-atom {\em pdb_atom} to {\em *this}.
+				Assign the PDBAtom {\em pdb_atom} to {\em *this}.
 				The assignment is either deep or shallow (default).
-				@param  pdb_atom the PDB-atom to be copied (cloned)
+				@param  pdb_atom the PDBAtom to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em pdb_atom}
 		*/
 		void set(const PDBAtom& pdb_atom, bool deep = true);
 
 		/** Assignment operator.
-				Assign the PDB-atom {\em pdb_atom} to {\em *this}.
+				Assign the PDBAtom {\em pdb_atom} to {\em *this}.
 				The assignment is either deep or shallow (default).
-				@param   pdb_atom the PDB-atom to be copied (cloned)
-				@return  pdb_atom& - {\em *this} PDB-atom
+				@param   pdb_atom the PDBAtom to be copied (cloned)
+				@return  pdb_atom& - {\em *this} PDBAtom
 		*/
 		PDBAtom& operator = (const PDBAtom& pdb_atom);
 
 		/** Copying with cloning facility.
-				Copy {\em *this} PDB-atom to {\em pdb_atom}.
+				Copy {\em *this} PDBAtom to {\em pdb_atom}.
 				The assignment is either deep or shallow (default).
-				@param  pdb_atom the PDB-atom to be assigned to
+				@param  pdb_atom the PDBAtom to be assigned to
 		*/
 		void get(PDBAtom& pdb_atom, bool deep = true) const;
 
-		/** Swapping of PDB-atom.
-				Swap the states of {\em *this} PDB-atom with the {\em pdb_atom}.
-				@param  pdb_atom the PDB-atom {\em *this} PDB-atom is being swapped with
+		/** Swapping of PDBAtoms.
+				Swap the states of {\em *this} PDBAtom with {\em pdb_atom}.
+				@param  pdb_atom the PDBAtom {\em *this} is being swapped with
 		*/
 		void swap(PDBAtom& pdb_atom);
 		
@@ -167,93 +167,93 @@ namespace BALL
 		//@{
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} PDB-atom does not have a parent protein.
+				The reference is 0 if {\em *this} PDBAtom does not have a parent protein.
 				@return  Protein* -
-								 mutable reference to the parent protein of {\em *this} PDB-atom,
+								 mutable reference to the parent protein of {\em *this} PDBAtom,
 		*/
 		Protein* getProtein();
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} PDB-atom does not have a parent protein.
+				The reference is 0 if {\em *this} PDBAtom does not have a parent protein.
 				@return  Protein* -
-								 constant reference to the parent protein of {\em *this} PDB-atom,
+								 constant reference to the parent protein of {\em *this} PDBAtom,
 		*/
 		const Protein* getProtein() const;
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} PDB-atom does not have a parent chain.
+				The reference is 0 if {\em *this} PDBAtom does not have a parent chain.
 				@return  Chain* -
-								 mutable reference to the parent chain of {\em *this} PDB-atom,
+								 mutable reference to the parent chain of {\em *this} PDBAtom,
 		*/
 		Chain* getChain();
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} PDB-atom does not have a parent chain.
+				The reference is 0 if {\em *this} PDBAtom does not have a parent chain.
 				@return  Chain* -
-								 constant reference to the parent chain of {\em *this} PDB-atom,
+								 constant reference to the parent chain of {\em *this} PDBAtom,
 		*/
 		const Chain* getChain() const;
 
 		/** Get a pointer to the parent residue.
-				The reference is 0 if {\em *this} PDB-atom does not have a parent residue.
+				The reference is 0 if {\em *this} PDBAtom does not have a parent residue.
 				@return  Residue* -
-								 mutable reference to the parent residue of {\em *this} PDB-atom,
+								 mutable reference to the parent residue of {\em *this} PDBAtom,
 		*/
 		Residue* getResidue();
 
 		/** Get a pointer to the parent residue.
-				The reference is 0 if {\em *this} PDB-atom does not have a parent residue.
+				The reference is 0 if {\em *this} PDBAtom does not have a parent residue.
 				@return  Residue* -
-								 constant reference to the parent residue of {\em *this} PDB-atom,
+								 constant reference to the parent residue of {\em *this} PDBAtom,
 		*/
 		const Residue* getResidue() const;
 
-		/** Set the branch designator of this PDB-atom.
+		/** Set the branch designator of this PDBAtom.
 				@param branch_designator the branch designator
 		*/
 		void setBranchDesignator(char branch_designator);
 
-		/** Get the branch designator of this PDB-atom.
+		/** Get the branch designator of this PDBAtom.
 				@return char the branch designator
 		*/
 		char getBranchDesignator() const;
 
-		/** Set the remoteness indicator of this PDB-atom.
+		/** Set the remoteness indicator of this PDBAtom.
 				@param remoteness_indicator the remoteness indicator
 		*/
 		void setRemotenessIndicator(char remoteness_indicator);
 
-		/** Get the remoteness indicator of this PDB-atom.
+		/** Get the remoteness indicator of this PDBAtom.
 				@return char the remoteness indicator
 		*/
 		char getRemotenessIndicator() const;
 
-		/** Set the alternate location indicator of this PDB-atom.
+		/** Set the alternate location indicator of this PDBAtom.
 				@param alternate_location_indicator the alternate location indicator
 		*/
 		void setAlternateLocationIndicator(char alternate_location_indicator);
 
-		/** Get the alternate location indicator of this PDB-atom.
+		/** Get the alternate location indicator of this PDBAtom.
 				@return char the alternate location indicator
 		*/
 		char getAlternateLocationIndicator() const;
 
-		/** Set the occupancy of this PDB-atom.
+		/** Set the occupancy of this PDBAtom.
 				@param occupancy the occupancy
 		*/
 		void setOccupancy(float occupancy);
 
-		/** Get the occupancy of this PDB-atom.
+		/** Get the occupancy of this PDBAtom.
 				@return float occupancy the occupancy
 		*/
 		float getOccupancy() const;
 
-		/** Set the temperature factor of this PDB-atom.
+		/** Set the temperature factor of this PDBAtom.
 				@param temperature_factor the temperature factor
 		*/
 		void setTemperatureFactor(float temperature_factor);
 
-		/** Get the temperature factor of this PDB-atom.
+		/** Get the temperature factor of this PDBAtom.
 				@return float the temperature factor
 		*/
 		float getTemperatureFactor() const;
@@ -266,7 +266,7 @@ namespace BALL
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to the 
 				output ostream {\em s} with dumping depth {\em depth}.
-				@param	s output stream where to output the internal state of {\em *this} PDB-atom
+				@param	s output stream where to output the internal state of {\em *this} PDBAtom
 				@param  depth the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
@@ -281,7 +281,7 @@ namespace BALL
 				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this} PDB-atom
+				@param  s input stream from where to restore the internal state of {\em *this} PDBAtom
 		*/
 		virtual void read(std::istream& s);
 
@@ -289,7 +289,7 @@ namespace BALL
 				Write persistent bond data to the output stream {\em s} and store the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.	
-				@param  s input stream from where to restore the internal state of {\em *this} PDB-atom
+				@param  s input stream from where to restore the internal state of {\em *this} PDBAtom
 		*/
 		virtual void write(std::ostream& s) const;
 		//@}

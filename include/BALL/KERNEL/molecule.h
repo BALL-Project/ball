@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.11 2000/05/04 13:32:02 oliver Exp $
+// $Id: molecule.h,v 1.12 2000/05/15 12:07:56 amoll Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -82,26 +82,26 @@ namespace BALL
 		/**	@name	Assignment */
 		//@{
 
-		/**	Assign from an other Molecule.
+		/**	Assign from another Molecule.
 				@param molecule	the Molecule object to assign from
-				@param deep deep copy if {\bf true}
+				@param deep
 		*/
 		void set(const Molecule& molecule, bool deep = true);
 
 		/**	Assignment operator.
-				Assign the components from an other Molecule.
+				Assign the components from another Molecule.
 				@param molecule the Molecule to assign from
 		**/
 		Molecule& operator = (const Molecule& molecule);
 
 		/**	Assign to another Molecule.
-				Assigns the components to an other Molecule.
+				Assigns the components to another Molecule.
 				@param molecule	the Molecule to be assigned to
-				@param deep deep copy if {\bf true}
+				@param deep
 		*/
 		void get(Molecule& molecule, bool deep = true) const;
 
-		/**	Swap the contents of two Molecules.
+		/**	Swap the contents of two molecules.
 				@param	molecule the Molecule to swap contents with
 		*/
 		void swap(Molecule& molecule);
@@ -112,27 +112,27 @@ namespace BALL
 		/**	@name	Accessors */
 		//@{
 
-		/**	Access the superior System.
-				@return	System* pointer to the superior System
+		/**	Access the parent System.
+				@return	System* pointer to the parent System
 		*/
 		System* getSystem();
 
-		/**	Get a const pointer to the superior System.
-				@return	System* pointer to the superior System
+		/**	Get a const pointer to the parent System.
+				@return	System* pointer to the parent System
 		*/
 		const System* getSystem() const;
 
-		/** Insert an atom as the first child of the instance.
+		/** Insert an atom as the first child of {\em *this} instance.
 				@param atom the atom to add
 		*/
 		void prepend(Atom& atom);
 
-		/** Insert an atom as the last child of the instance.
+		/** Insert an atom as the last child of {\em *this} instance.
 				@param atom the atom to add
 		*/
 		void append(Atom& atom);
 
-		/** Insert an atom as the last child of the instance.
+		/** Insert an atom as the last child of {\em *this} instance.
 				@param atom the atom to add
 		*/
 		void insert(Atom& atom);
@@ -154,17 +154,17 @@ namespace BALL
 		*/
 		bool remove(Atom& atom);
 
-		/** Insert a BaseFragment as the first child of the instance.
+		/** Insert a BaseFragment as the first child of {\em *this} instance.
 				@param base_fragment the BaseFragment to add
 		*/
 		void prepend(BaseFragment& base_fragment);
 
-		/** Append a BaseFragment as the last child of the instance.
+		/** Append a BaseFragment as the last child of {\em *this} instance.
 				@param base_fragment the BaseFragment to add
 		*/
 		void append(BaseFragment& base_fragment);
 
-		/** Insert a BaseFragment as the last child of the instance.
+		/** Insert a BaseFragment as the last child of {\em *this} instance.
 				@param base_fragment the BaseFragment to add
 		*/
 		void insert(BaseFragment& base_fragment);
@@ -224,11 +224,15 @@ namespace BALL
 		//@{
 
 		/**	Read the components of a molecule from an instream.
+				\\
+				{\bf Note:} Not yet implemented.	
 				@param s the instream
 		*/
 		virtual void read(std::istream& s);
 
 		/**	Write the components of a molecule to an outstream.
+				\\
+				{\bf Note:} Not yet implemented.	
 				@param s the outstream
 		*/
 		virtual void write(std::ostream& s) const;

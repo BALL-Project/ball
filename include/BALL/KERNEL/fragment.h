@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.6 2000/05/07 11:55:47 amoll Exp $
+// $Id: fragment.h,v 1.7 2000/05/15 12:07:56 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -63,10 +63,10 @@ namespace BALL
 		/** @name Persistence */
 		//@{
 
-		/// Persistent writing
+		/// Persistent writing.
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		/// Persistent reading
+		/// Persistent reading.
 		void persistentRead(PersistenceManager& pm);
 
 		//@}
@@ -75,9 +75,9 @@ namespace BALL
 		//@{
 
 		/** Assignment operator.
-				Assign {\em fragment} to {\em *this} fragment.
+				Assign {\em fragment} to {\em *this} instance.
 				@param   fragment the Fragment to be copied (cloned)
-				@return  Fragment& - {\em *this} Fragment
+				@return  Fragment& - {\em *this} instance
 		*/
 		Fragment& operator = (const Fragment& fragment);
 

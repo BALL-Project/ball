@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.11 2000/05/02 14:03:51 amoll Exp $
+// $Id: secondaryStructure.h,v 1.12 2000/05/15 12:07:57 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -69,10 +69,10 @@ namespace BALL
 		///	Destructor
 		virtual ~SecondaryStructure();
 
-		/// Clears the contents of the secondary structure
+		/// Clears the contents of the secondary structure.
 		virtual void clear();
 	
-		/// Clears the contents of the secondary structure and removes it from all composite structures
+		/// Clears the contents of the secondary structure and removes it from all composite structures.
 		virtual void destroy();
 	
 		//@}
@@ -173,28 +173,28 @@ namespace BALL
 		const Residue* getResidue(Position position) const;
 
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} does not have a N-terminal Residue.
+				The reference is 0 if {\em *this} does not have a Residue.
 				@return  Residue* -
 								 mutable reference to the N-terminal Residue
 		*/
 		Residue* getNTerminal();
 	
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} does not have a N-terminal Residue.
+				The reference is 0 if {\em *this} does not have a Residue.
 				@return  Residue* -
 								 constant reference to the N-terminal Residue
 		*/
 		const Residue* getNTerminal() const;
 
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} does not have a C-terminal Residue.
+				The reference is 0 if {\em *this} does not have a Residue.
 				@return  Residue* -
 								 mutable reference to the C-terminal Residue
 		*/
 		Residue* getCTerminal();
 	
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} does not have a C-terminal Residue.
+				The reference is 0 if {\em *this} does not have a Residue.
 				@return  Residue* -
 								 constant reference to the C-terminal Residue
 		*/
@@ -271,9 +271,7 @@ namespace BALL
 		void spliceAfter(SecondaryStructure& secondary_structure);
 
 		/**	Move the children of {\tt secondary_structure} into {\em *this}.
-				The children of {\tt secondary_structure} are inserted at the position of 
-				{\tt secondary_structure} if it is a child of {\tt this}.
-				Otherwise the children are inserted using \Ref{spliceBefore}.
+				The children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(SecondaryStructure& secondary_structure);
 		//@}
