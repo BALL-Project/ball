@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.12 2001/04/21 20:30:09 amoll Exp $
+// $Id: INIFile_test.C,v 1.13 2001/04/22 18:10:58 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.12 2001/04/21 20:30:09 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.13 2001/04/22 18:10:58 amoll Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -42,16 +42,13 @@ CHECK(INIFile::getFilename() const )
 	TEST_EQUAL(ini1->getFilename(), "")
 RESULT
 
-
 CHECK(INIFile::isValid() const )
 	TEST_EQUAL(ini1->isValid(), false)
 RESULT
 
-
 CHECK(INIFile::~INIFile())
   delete ini1;
 RESULT
-
 
 String filename;
 NEW_TMP_FILE(filename)
@@ -59,7 +56,6 @@ CHECK(INIFile::INIFile(const String& filename))
 	INIFile ini(filename);
 	TEST_EQUAL(ini.getFilename(), filename)
 RESULT
-
 
 CHECK(INIFile::setFilename(const String& filename))
 	INIFile ini;
@@ -69,14 +65,12 @@ CHECK(INIFile::setFilename(const String& filename))
 	TEST_EQUAL(ini.getFilename(), "")
 RESULT
 
-
 CHECK(INIFile::destroy())
 	INIFile ini;
 	ini.setFilename("TEST");
 	ini.destroy();
 	TEST_EQUAL(ini.getFilename(), "")
 RESULT
-
 
 CHECK(INIFile::clear())
 	INIFile ini;
@@ -85,11 +79,8 @@ CHECK(INIFile::clear())
 	TEST_EQUAL(ini.getFilename(), "TEST")
 RESULT
 
-
 INIFile ini;
 
-
-// BAUSTELLE mit header, nur header
 CHECK(INIFile::read())
 	ini.setFilename("data/INIFile_test.ini");
 	TEST_EQUAL(ini.read(), true)
@@ -97,7 +88,6 @@ CHECK(INIFile::read())
 	INIFile ini2("data/empty_file.txt");
 	TEST_EQUAL(ini2.read(), true)
 RESULT
-
 
 CHECK(INIFile::getLine(Size line_number))
 	for (int i = 0; i < 10; i++)
@@ -116,8 +106,10 @@ CHECK(INIFile::getLine(Size line_number))
   TEST_EQUAL(*(ini.getLine(8)), "test3 = c")
   TEST_EQUAL(*(ini.getLine(9)), "[Section4]")
   TEST_EQUAL(+ini.getLine(10), false)
-RESULT
 
+	INIFile emptyFile;
+  TEST_EQUAL(+emptyFile.getLine(0), false)
+RESULT
 
 CHECK(INIFile::setLine(LineIterator line_it, const String& line))
 	INIFile ini("data/INIFile_test.ini");
@@ -132,8 +124,11 @@ CHECK(INIFile::setLine(LineIterator line_it, const String& line))
 
 	it = ini.getLine(4);
   TEST_EQUAL(ini.setLine(it, "test"), false)
-RESULT
 
+	INIFile emptyFile;
+	it = emptyFile.getLine(0);
+  TEST_EQUAL(emptyFile.setLine(it, "test"), false)
+RESULT
 
 CHECK(INIFile::deleteLine)
 	INIFile ini("data/INIFile_test.ini");
@@ -154,8 +149,11 @@ CHECK(INIFile::deleteLine)
 
 	it = ini.getLine(4);
 	TEST_EQUAL(ini.deleteLine(it), false)
-RESULT
 
+	INIFile emptyFile;
+	it = emptyFile.getLine(0);
+  TEST_EQUAL(emptyFile.deleteLine(it), false)
+RESULT
 
 CHECK(INIFile::insertLine(LineIterator line_it, const String& line))
 	INIFile ini("data/INIFile_test.ini");
@@ -186,8 +184,11 @@ CHECK(INIFile::insertLine(LineIterator line_it, const String& line))
   TEST_EQUAL(*ini.getLine(0), "[Section1]")
   TEST_EQUAL(*ini.getLine(1), "insertTest3")
   TEST_EQUAL(ini.getValue("Section1", "insertTest3"), ini.UNDEFINED)
-RESULT
 
+	INIFile emptyFile;
+	it = emptyFile.getLine(0);
+  TEST_EQUAL(emptyFile.insertLine(it, "test"), false)
+RESULT
 
 CHECK(INIFile::appendLine(const String& section_name, const String& line))
 	INIFile ini("data/INIFile_test.ini");
@@ -203,16 +204,22 @@ CHECK(INIFile::appendLine(const String& section_name, const String& line))
 	TEST_EQUAL(ini.getSectionLength("Section3"), 6)
 	TEST_EQUAL(ini.hasEntry("Section3", "insert1"), true)
 	TEST_EQUAL(ini.getValue("Section3", "insert1"), "ok")
-RESULT
 
+	INIFile emptyFile;
+	TEST_EQUAL(emptyFile.appendLine(emptyFile.HEADER, "insert"), true)
+	TEST_EQUAL(+emptyFile.getLine(0), true)
+	TEST_EQUAL(*emptyFile.getLine(0), "insert")
+RESULT
 
 CHECK(INIFile::getNumberOfLines() const )
 	INIFile ini2("data/amber91.ini");
 	TEST_EQUAL(ini2.read(), true)
 	TEST_EQUAL(ini2.getNumberOfLines(), 1379)
   TEST_EQUAL(ini.getNumberOfLines(), 10)
-RESULT
 
+	INIFile emptyFile;
+  TEST_EQUAL(emptyFile.getNumberOfLines(), 0)
+RESULT
 
 CHECK(INIFile::hasSection(const String& section_name) const )
   TEST_EQUAL(ini.hasSection("replace test"), false)
@@ -221,6 +228,9 @@ CHECK(INIFile::hasSection(const String& section_name) const )
   TEST_EQUAL(ini.hasSection("Section2"), true)  
   TEST_EQUAL(ini.hasSection("Section3"), true)  
   TEST_EQUAL(ini.hasSection("Section4"), true)  
+
+	INIFile emptyFile;
+  TEST_EQUAL(emptyFile.hasSection(emptyFile.HEADER), true)
 RESULT
 
 CHECK(INIFile::getSection(const String& section_name) const )
@@ -230,6 +240,10 @@ CHECK(INIFile::getSection(const String& section_name) const )
   TEST_EQUAL(ini.getSection("Section2")->getName(), "Section2")
   TEST_EQUAL(ini.getSection("Section3")->getName(), "Section3")
   TEST_EQUAL(ini.getSection("Section4")->getName(), "Section4")
+
+	INIFile emptyFile;
+  TEST_EQUAL(emptyFile.isValid(emptyFile.getSection(emptyFile.HEADER)), true)
+  TEST_EQUAL(emptyFile.getSection(emptyFile.HEADER)->getName(), ini.HEADER)
 RESULT
 
 CHECK(INIFile::getSection(Position pos) const )
@@ -239,17 +253,20 @@ CHECK(INIFile::getSection(Position pos) const )
   TEST_EQUAL(ini.getSection(3)->getName(), "Section3")
   TEST_EQUAL(ini.getSection(4)->getName(), "Section4")
   TEST_EQUAL(ini.isValid(ini.getSection(5)), false)
+
+	INIFile emptyFile;
+  TEST_EQUAL(emptyFile.getSection(0)->getName(), ini.HEADER)
 RESULT
 
 CHECK(INIFile::getNumberOfSections() const )
   TEST_EQUAL(ini.getNumberOfSections(), 4)
-	INIFile ini2;
-  TEST_EQUAL(ini2.getNumberOfSections(), 0)
+
+	INIFile emptyFile;
+  TEST_EQUAL(emptyFile.getNumberOfSections(), 0)
 RESULT
 
 CHECK(INIFile::getSectionFirstLine(const String& section_name) const )
 	INIFile::LineIterator it;
-  TEST_EQUAL(ini.getSectionFirstLine(ini.HEADER) == it, 0)//BAUSTELLE
   TEST_EQUAL(+ini.getSectionFirstLine(ini.HEADER), false)
   TEST_EQUAL(+ini.getSectionFirstLine("Section1"), true)
   TEST_EQUAL(*ini.getSectionFirstLine("Section1"), "[Section1]")
@@ -260,19 +277,22 @@ CHECK(INIFile::getSectionFirstLine(const String& section_name) const )
   TEST_EQUAL(*ini.getSectionFirstLine("Section3"), "[Section3]")
   TEST_EQUAL(*ini.getSectionFirstLine("Section4"), "[Section4]")
   TEST_EQUAL(+ini.getSectionFirstLine(""), false)
-RESULT
 
+	INIFile emptyFile;
+  TEST_EQUAL(+emptyFile.getSectionFirstLine(ini.HEADER), false)
+RESULT
 
 CHECK(INIFile::getSectionLastLine(const String& section_name) const )
   TEST_EQUAL(+ini.getSectionLastLine(ini.HEADER), false)
-//BAUSTELLE
   TEST_EQUAL(*ini.getSectionLastLine("Section1"), "[Section1]")
   TEST_EQUAL(*ini.getSectionLastLine("Section2"), "! even more comment")
   TEST_EQUAL(*ini.getSectionLastLine("Section3"), "test3 = c")
   TEST_EQUAL(*ini.getSectionLastLine("Section4"), "[Section4]")
   TEST_EQUAL(+ini.getSectionLastLine(""), false)
-RESULT
 
+	INIFile emptyFile;
+  TEST_EQUAL(+emptyFile.getSectionLastLine(ini.HEADER), false)
+RESULT
 
 CHECK(INIFile::getSectionLength(const String& section_name) const )
   TEST_EQUAL(ini.getSectionLength(ini.HEADER), 0)
@@ -281,8 +301,10 @@ CHECK(INIFile::getSectionLength(const String& section_name) const )
   TEST_EQUAL(ini.getSectionLength("Section3"), 5)
   TEST_EQUAL(ini.getSectionLength("Section4"), 1)
   TEST_EQUAL(ini.getSectionLength("Section5"), INVALID_SIZE)
-RESULT
 
+	INIFile emptyFile;
+  TEST_EQUAL(+emptyFile.getSectionLength(ini.HEADER), 0)
+RESULT
 
 CHECK(INIFile::hasEntry(const String& section, const String& key) const )
   TEST_EQUAL(ini.hasEntry(ini.HEADER, "test"), false)
@@ -293,8 +315,10 @@ CHECK(INIFile::hasEntry(const String& section, const String& key) const )
   TEST_EQUAL(ini.hasEntry("Section3", "test2"), true)
   TEST_EQUAL(ini.hasEntry("Section3", "test3"), true)
   TEST_EQUAL(ini.hasEntry("Section4", ""), false)
-RESULT
 
+	INIFile emptyFile;
+  TEST_EQUAL(emptyFile.hasEntry(ini.HEADER, "test"), false)
+RESULT
 
 CHECK(INIFile::getValue(const String& section, const String& key) const )
   TEST_EQUAL(ini.getValue(ini.HEADER, "test"), ini.UNDEFINED)
@@ -305,8 +329,10 @@ CHECK(INIFile::getValue(const String& section, const String& key) const )
   TEST_EQUAL(ini.getValue("Section3", "test2"), "b")
   TEST_EQUAL(ini.getValue("Section3", "test3"), "c")
   TEST_EQUAL(ini.getValue("Section4", ""), ini.UNDEFINED)
-RESULT
 
+	INIFile emptyFile;
+  TEST_EQUAL(emptyFile.getValue(emptyFile.HEADER, "test"), ini.UNDEFINED)
+RESULT
 
 CHECK(INIFile::setValue(const String& section, const String& key, const String& value))
   TEST_EQUAL(ini.setValue(ini.HEADER, "test", "setValue_test"), false)
@@ -325,8 +351,12 @@ CHECK(INIFile::write())
 	ini.setFilename(filename);
 	TEST_EQUAL(ini.write(), true)
 	TEST_FILE("data/INIFile_test2.ini", filename.c_str(), false)
-RESULT
 
+	NEW_TMP_FILE(filename)
+	INIFile emptyFile;
+	emptyFile.setFilename(filename);
+	TEST_EQUAL(emptyFile.write(), true)
+RESULT
 
 CHECK(INIFile::deleteSection(const String& section_name))
 	INIFile ini("data/INIFile_test.ini");
@@ -342,6 +372,11 @@ CHECK(INIFile::deleteSection(const String& section_name))
 	TEST_EQUAL(ini.deleteSection("Section2"), true)
   TEST_EQUAL(ini.getNumberOfLines(), 6)
 	TEST_EQUAL(ini.hasSection("Section2"), false)
+
+	INIFile emptyFile;
+	TEST_EQUAL(emptyFile.deleteSection(emptyFile.HEADER), true)
+	TEST_EQUAL(emptyFile.hasSection(emptyFile.HEADER), true)
+	TEST_EQUAL(emptyFile.deleteSection("asd"), false)
 RESULT
 
 CHECK(INIFile::appendSection(const String& section_name))
@@ -359,6 +394,11 @@ CHECK(INIFile::appendSection(const String& section_name))
   TEST_EQUAL(ini.getNumberOfLines(), 11)
 	TEST_EQUAL(ini.hasSection("Section5"), true)
   TEST_EQUAL(*ini.getLine(10), "[Section5]")
+
+	INIFile emptyFile;
+	TEST_EQUAL(emptyFile.appendSection(emptyFile.HEADER), false)
+	TEST_EQUAL(emptyFile.hasSection(emptyFile.HEADER), true)
+	TEST_EQUAL(emptyFile.appendSection("asd"), true)
 RESULT
 
 CHECK(apply(UnaryProcessor<LineIterator>& processor))
@@ -374,6 +414,9 @@ CHECK(apply(UnaryProcessor<LineIterator>& processor))
 	it = myproc.list2.end();
 	it--;
 	TEST_EQUAL(*it, "[Section4]")
+
+	INIFile emptyFile;
+	TEST_EQUAL(emptyFile.apply(myproc), true)
 RESULT
 
 CHECK(INIFile::operator ==)
@@ -384,6 +427,9 @@ CHECK(INIFile::operator ==)
 	TEST_EQUAL(ini == ini2, true)
 	ini.deleteLine(ini.getLine(2));
 	TEST_EQUAL(ini == ini2, false)
+
+	INIFile emptyFile;
+	TEST_EQUAL(emptyFile == emptyFile, true)
 RESULT
 
 CHECK(INIFile::isValid(Line_iterator))
