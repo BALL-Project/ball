@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.h,v 1.8 2001/05/14 19:21:03 amoll Exp $
+// $Id: trajectoryFile.h,v 1.9 2001/09/11 12:29:13 anker Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -110,8 +110,9 @@ namespace BALL
 		virtual bool writeHeader()
 			throw();
 
-		/** Append a list of SnapShots to an existing file.
-				@param buffer the list os SnapShots we want to save
+		/** Append a SnapShot to an existing file. {\bf Note} that this method
+				does {\bf note} update the header.
+				@param snapshot the SnapShot we want to save
 				@return true, if writing was successful
 		*/
 		virtual bool append(const SnapShot& snapshot)
