@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.1 2000/06/19 14:11:40 anker Exp $
+// $Id: Enumerator_test.C,v 1.2 2000/06/22 18:07:35 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.1 2000/06/19 14:11:40 anker Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.2 2000/06/22 18:07:35 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ it++;
 enumerator.addVariants(it, variants);
 
 CHECK(countVariants())
-  TEST_EQUAL(enumerator.countVariants(), 0);
+  TEST_EQUAL(enumerator.countVariants(), 1e5);
 RESULT
 
 String S;
