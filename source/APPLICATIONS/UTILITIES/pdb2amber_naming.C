@@ -1,4 +1,4 @@
-// $Id: pdb2amber_naming.C,v 1.1.2.1 2003/01/21 11:07:07 anker Exp $
+// $Id: pdb2amber_naming.C,v 1.1.2.2 2003/01/21 16:20:35 anker Exp $
 //
 // A little helper program that takes standard PDB files and converts them
 // to PDB files which use the AMBER naming scheme.
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 	system.apply(db.normalize_names);
 
 	Size cyx_couter = 0;
-	Size hie_counter = 0;
+	Size hip_counter = 0;
 
 	ResidueIterator it = system.beginResidue();
 	for (; +it; ++it)
@@ -50,8 +50,8 @@ int main(int argc, char** argv)
 		}
 		if (it->getFullName() == "HIS")
 		{
-			it->setName("HIE");
-			hie_counter++;
+			it->setName("HIP");
+			hip_counter++;
 		}
 	}
 
@@ -61,9 +61,9 @@ int main(int argc, char** argv)
 			<< endl;
 	}
 
-	if (hie_counter > 0)
+	if (hip_counter > 0)
 	{
-		Log.info() << "Renamed " << hie_counter << " residues from HIS to HIE"
+		Log.info() << "Renamed " << hip_counter << " residues from HIS to HIP"
 			<< endl;
 	}
 

@@ -1,11 +1,11 @@
-# $Id: Makefile,v 1.1.2.1 2003/01/21 11:07:06 anker Exp $
+# $Id: Makefile,v 1.1.2.2 2003/01/21 16:20:35 anker Exp $
 # Makefile for BALL utilities
 
 DIRECTORY=APPLICATIONS/UTILITIES
 
 EXECUTABLES = \
-	pdb2amber_naming\
-	dcd2dcd
+	dcd2dcd\
+	pdb2amber_naming
 
 # default target
 all:	$(EXECUTABLES)

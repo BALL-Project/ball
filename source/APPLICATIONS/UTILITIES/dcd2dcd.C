@@ -1,3 +1,9 @@
+// $Id: dcd2dcd.C,v 1.1.2.2 2003/01/21 16:20:35 anker Exp $
+//
+// a little helper program converting unreadable CHARMm DCD files to
+// simpler but usable X-PLOR DCD files.
+
+#include <BALL/common.h>
 #include <BALL/FORMAT/DCDFile.h>
 
 using namespace BALL;
@@ -5,6 +11,12 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+
+	if (argc != 3)
+	{
+		Log.error() << "Need two filenames, aborting!" << endl;
+		return(1);
+	}
 
 	SnapShot snapshot;
 	DCDFile in_file(argv[1], ios::in | ios::binary);
