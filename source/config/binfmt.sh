@@ -1,9 +1,9 @@
 #!/bin/sh
 
 ############################################################
-# source directory shadow builder for multiplatform builds #
+# OS and architecture detection script                     #
 ############################################################
-# $Id: binfmt.sh,v 1.9 2000/01/28 17:56:44 oliver Exp $
+# $Id: binfmt.sh,v 1.10 2000/03/27 20:05:17 oliver Exp $    #
 ############################################################
 
 UNAME=uname
@@ -62,7 +62,7 @@ if test $OS = IRIX ; then
 	BINFMT=IRIX-${OSREV}
 fi
 
-if test "$OS" != Linux && test "$OS" != Solaris && test "$OS" != IRIX ; then
+if test "$OS" != Linux && test "$OS" != Solaris && test "$OS" != IRIX && test "$OS" != OSF1 && test "$OS" != FreeBSD ; then
 	echo "Sorry - your OS is currently not supported..." >&2
 	exit
 fi
@@ -78,6 +78,12 @@ if test "$OS" = Solaris ; then
 fi
 if test "$OS" = IRIX ; then
 	IRIX=IRIX
+fi
+if test "$OS" = OSF1 ; then
+	OSF1=OSF1
+fi
+if test "$OS" = FreeBSD ; then
+	FreeBSD=FreeBSD
 fi
 
 #
