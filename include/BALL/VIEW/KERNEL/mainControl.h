@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.17 2003/11/17 17:37:26 amoll Exp $
+// $Id: mainControl.h,v 1.18 2003/11/18 14:45:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -268,6 +268,29 @@ namespace BALL
 			bool remove(Composite& composite)
 				throw();
 
+			/** Update a Representation
+			 		A RepresentationMessage with type UPDATE is send.
+					\return false if the PrimitiveManager doesnt contain the Representation
+			*/
+			bool update(Representation& rep)
+				throw();
+
+			/** Insert a Representation
+			 		The Representation must be created on the heap!!!
+			 		A RepresentationMessage with type NEW is send.
+					\return false if the PrimitiveManager contains the Representation
+			*/
+			bool insert(Representation& rep)
+				throw();
+
+			/** Remove a Representation
+			 		A RepresentationMessage with type REMOVE is send.
+					\return false if the PrimitiveManager doesnt contain the Representation
+			*/
+			bool remove(Representation& rep)
+				throw();
+
+				
 			/** Mutable inspection of the preferences dialog.
 					\return   Preferences* a pointer to the Preferences dialog, (<tt> 0</tt> if not present)
 			*/
