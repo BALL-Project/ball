@@ -47,6 +47,7 @@ def runTest(name, model):
 	result += model_result
 
 clearRepresentations()
+m.getPrimitiveManager().setMultithreadingMode(0)
 dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
 dp.setSurfaceDrawingPrecision(6.5)
@@ -67,3 +68,4 @@ result = 1 / result
 #scale results to the graphics_benchmark.py script
 result /= 5
 print "Result: "+str(result)+" BALLView OpenGL stones"
+m.getPrimitiveManager().setMultithreadingMode(1)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.17 2004/11/14 22:42:02 amoll Exp $
+// $Id: primitiveManager.h,v 1.18 2004/11/15 02:07:14 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -197,6 +197,14 @@ namespace BALL
 					(Only used in Multithreaded code.)
 			*/
 			bool updatePending() { return update_pending_;}
+
+			///
+			void setMultithreadingMode(bool state)
+				throw() { multi_threading_mode_ = state;}
+
+			///
+			bool usesMultithreading()
+				throw();
 			
 			protected:
 
@@ -236,6 +244,7 @@ namespace BALL
 			MainControl* 	main_control_;
 			bool 					update_running_;
 			bool 					update_pending_;
+			bool 					multi_threading_mode_;
 		};
 
 	} // namespace VIEW

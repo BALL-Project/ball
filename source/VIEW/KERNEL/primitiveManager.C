@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.27 2004/11/14 23:44:12 amoll Exp $
+// $Id: primitiveManager.C,v 1.28 2004/11/15 02:07:04 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -26,7 +26,8 @@ PrimitiveManager::PrimitiveManager(MainControl* mc)
 	: Object(),
 		main_control_(mc),
 		update_running_(false),
-		update_pending_(false)
+		update_pending_(false),
+		multi_threading_mode_(false)
 {
 }
 
@@ -244,6 +245,14 @@ void PrimitiveManager::update_(Representation& rep)
 		return;
 	}
 
+	if (!multi_threading_mode_)
+	{
+		rep.update_();
+		RepresentationMessage* msg = new RepresentationMessage(rep, 
+																	RepresentationMessage::UPDATE);
+		main_control_->notify_(*msg);
+		return;
+	}
 
 	representations_to_be_updated_.push_back(&rep);
 
@@ -366,5 +375,14 @@ bool PrimitiveManager::willBeUpdated(const Representation& rep) const
 	return false;
 }
 
+bool PrimitiveManager::usesMultithreading()
+	throw() 
+{ 
+#ifndef BALL_QT_HAS_THREADS
+	return false;
+#endif
+	return multi_threading_mode_;
+}
+			
 
 } } // namespaces

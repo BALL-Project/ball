@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.43 2004/11/14 16:46:29 amoll Exp $
+// $Id: pyWidget.C,v 1.44 2004/11/15 02:07:04 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -20,7 +20,7 @@
 #include <qapplication.h>
 
 // currently doesnt work right
-#undef BALL_QT_HAS_THREADS
+//#undef BALL_QT_HAS_THREADS
 
 
 namespace BALL

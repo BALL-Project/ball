@@ -32,6 +32,7 @@ def runTest(name, model):
 	result += model_result
 
 clearRepresentations()
+m.getPrimitiveManager().setMultithreadingMode(0)
 dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
 dp.setSurfaceDrawingPrecision(6.5)
@@ -50,3 +51,4 @@ print "Result: "+str(result)+" seconds"
 result /= nr_runs
 result = 1 / result
 print "Result: "+str(result)+" BALLView stones"
+m.getPrimitiveManager().setMultithreadingMode(1)
