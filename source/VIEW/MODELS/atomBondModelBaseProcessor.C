@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.6 2003/12/15 01:08:50 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.7 2004/01/27 16:25:56 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #include <BALL/KERNEL/forEach.h>
@@ -69,9 +69,14 @@ namespace BALL
 
 		bool AtomBondModelBaseProcessor::start()
 		{
+			return ModelProcessor::start();
+		}
+
+		void AtomBondModelBaseProcessor::clearComposites()
+			throw()
+		{
 			atom_set_.clear();
 			used_atoms_.clear();
-			return ModelProcessor::start();
 		}
 				
 		bool AtomBondModelBaseProcessor::finish()
@@ -123,7 +128,7 @@ namespace BALL
 					// or
 					// second atom not a used atom, but smaller as the first atom
 					// process bond between them		
-					if (**atom_it < *second_atom_ptr || !getAtomSet_().has(second_atom_ptr))
+					if (**atom_it < *second_atom_ptr && getAtomSet_().has(second_atom_ptr))
 					{
 						visualiseBond_(*bond_it);
 					}
