@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.17 2003/04/01 16:26:38 amoll Exp $
+// $Id: pyWidget.C,v 1.18 2003/04/12 10:03:10 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
@@ -117,13 +117,6 @@ void PyWidget::retrieveHistoryLine_(Position index)
 
 	// update the history position
 	history_position_ = index;
-}
-
-
-void PyWidget::mousePressEvent(QMouseEvent* /* m */) 
-{
-	// we ignore the mouse events! 
-	// they might place the cursor anywhere!
 }
 
 
