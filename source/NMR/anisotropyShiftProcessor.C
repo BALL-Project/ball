@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: anisotropyShiftProcessor.C,v 1.11 2002/02/27 12:23:52 sturm Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.12 2002/12/22 15:56:24 oliver Exp $
 
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 
@@ -251,7 +251,7 @@ namespace BALL
 					const Vector3 v2 = v1 % vy;
 					const Vector3 v3 = v2 % vx;
 
-					const float& distance = v1.getLength();
+					const float distance = v1.getLength();
 					const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
 					const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
 					float calc1, calc2;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.h,v 1.15 2002/02/27 12:18:22 sturm Exp $
+// $Id: XDRPersistenceManager.h,v 1.16 2002/12/22 15:56:23 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -79,14 +79,14 @@ namespace BALL
 				This method stores \Ref{OBJECT_HEADER} as an int value to mark the
 				start of an object (using {\tt xdr_int}).
 		*/
-		virtual void writeHeader(const char* type_name, const char* name, PointerSizeInt ptr)
+		virtual void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr)
       throw();
 
 		/**	Check for an object header.
 				This method reads an int form the input stream (using {\tt xdr_int}) and
 				returns {\bf true} if the value read equals \Ref{OBJECT_HEADER}.
 		*/
-		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr)
+		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr)
       throw();
 
 		/** Write an object trailer.
@@ -125,7 +125,7 @@ namespace BALL
 
 		/**	Get an (unknown) object header.
 		*/
-		virtual bool getObjectHeader(String& type_name, PointerSizeInt& ptr)
+		virtual bool getObjectHeader(String& type_name, PointerSizeUInt& ptr)
       throw();
 
 		/**	Write a variable/member name.
@@ -292,7 +292,7 @@ namespace BALL
 
 		/**	Write a pointer to the output.
 		*/
-		virtual void put(const PointerSizeInt p)
+		virtual void put(const PointerSizeUInt p)
       throw();
 		//@}
 
@@ -342,7 +342,7 @@ namespace BALL
 
 		/**	Read a pointer from the input stream.
 		*/
-		virtual void get(PointerSizeInt& p)
+		virtual void get(PointerSizeUInt& p)
       throw();
 		//@}
 
