@@ -1,19 +1,19 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>PythonSettingsData</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>Form1</cstring>
+        <cstring>PythonSettings</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
             <width>440</width>
-            <height>273</height>
+            <height>276</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Form1</string>
+        <string>PythonSettings</string>
     </property>
     <widget class="QLabel">
         <property name="name">
@@ -87,13 +87,13 @@
     <connection>
         <sender>choose_button</sender>
         <signal>pressed()</signal>
-        <receiver>Form1</receiver>
+        <receiver>PythonSettings</receiver>
         <slot>fileSelected()</slot>
     </connection>
     <connection>
         <sender>clear_button</sender>
         <signal>pressed()</signal>
-        <receiver>Form1</receiver>
+        <receiver>PythonSettings</receiver>
         <slot>clearSelected()</slot>
     </connection>
 </connections>
