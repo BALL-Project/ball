@@ -19,13 +19,40 @@ namespace BALL
 	namespace VIEW
 	{
 
+		FetchHTMLThread::FetchHTMLThread()
+			throw()
+			: QThread()
+		{
+		}
+
+		void FetchHTMLThread::setURL(const String& url)
+			throw()
+		{
+			url_ = url;
+		}
+
+		const String& FetchHTMLThread::getFilename() const
+			throw()
+		{
+			return filename_;
+		}
+
+		void FetchHTMLThread::run()
+		{
+			if (url_ == "") return;
+			File::createTemporaryFilename(filename_);
+			File f(url_);
+			f.copyTo(filename_);
+		}
+
+		// ==========================================
+		
 		UpdateRepresentationThread::UpdateRepresentationThread()
 			throw() 
 			: QThread(),
 				rep_(0)
 		{
 		}
-
 
 		void UpdateRepresentationThread::run()
 		{

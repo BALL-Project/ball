@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.4 2004/02/26 08:41:33 anhi Exp $
+// $Id: downloadPDBFile.h,v 1.5 2004/04/28 15:33:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -19,6 +19,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+ 		class FetchHTMLThread;
+
 		/** Dialog to search for and download structure files from the PDB data bank
 				\ingroup ViewDialogs
 		*/
@@ -72,12 +75,20 @@ namespace BALL
 				///
 				void idChanged();
 
+				/// 
+				virtual void abort();
+
 				///
 				virtual void checkMenuEntries()
 					throw();
 
 			protected:
+
+				void threadedDownload_(const String& url);
+				
 				QTextBrowser *qb_;
+				FetchHTMLThread * thread_;
+				bool aborted_;
 		};
 
 	} 

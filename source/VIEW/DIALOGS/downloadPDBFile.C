@@ -8,7 +8,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/KERNEL/system.h>
-
+#include <BALL/VIEW/KERNEL/threads.h>
 
 #include <qcombobox.h> 
 #include <qlineedit.h> 
@@ -19,6 +19,7 @@
 #include <qcheckbox.h>
 #include <qimage.h>
 #include <qpushbutton.h>
+#include <qapplication.h>
 
 namespace BALL
 {
@@ -28,7 +29,9 @@ namespace BALL
 		DownloadPDBFile::DownloadPDBFile( QWidget* parent, const char* name, bool modal, WFlags fl )
 			throw()
 			: DownloadPDBFileData(parent, name, modal, fl),
-				ModularWidget(name)
+				ModularWidget(name),
+				thread_(0),
+				aborted_(false)
 		{
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DownloadPDBFile" << this << std::endl;
@@ -37,6 +40,10 @@ namespace BALL
 			registerWidget(this);
 			hide();
 			connect(results, SIGNAL(activated(const QString&)), this, SLOT(slotNewId(const QString&)));
+
+#ifdef BALL_QT_HAS_THREADS
+			thread_ = new FetchHTMLThread();
+#endif
 		}
 
 		DownloadPDBFile::~DownloadPDBFile()
@@ -46,6 +53,10 @@ namespace BALL
 			Log.info() << "Destructing object " << (void *)this 
 								 << " of class DownloadPDBFile" << std::endl; 
 #endif 
+
+#ifdef BALL_QT_HAS_THREADS
+			if (thread_ != 0) delete thread_;
+#endif
 		}
 
 		void DownloadPDBFile::initializeWidget(MainControl& main_control)
@@ -92,7 +103,21 @@ namespace BALL
 			
 
 			try {
-				LineBasedFile search_result(filename.latin1());
+				LineBasedFile search_result;
+#ifndef BALL_QT_HAS_THREADS
+				search_result = LineBasedFile(filename.latin1());
+#else   // =============================
+				thread_->setURL(filename.latin1());
+				thread_->start();
+				while (thread_->running())
+				{
+					qApp->wakeUpGuiThread();
+					qApp->processEvents(500);
+					thread_->wait(50);
+				}
+
+				search_result = LineBasedFile(thread_->getFilename());
+#endif
 
 				vector<String> result;
 				String tmp;
@@ -120,6 +145,32 @@ namespace BALL
 			{ }
 		}
 
+		void DownloadPDBFile::threadedDownload_(const String& url)
+		{
+#ifdef BALL_QT_HAS_THREADS
+			aborted_ = false;
+			setStatusbarText("Started download, please wait...");
+			button_abort->setEnabled(true);
+			download->setEnabled(false);
+			thread_->setURL(url);
+			thread_->start();
+			while (thread_->running())
+			{
+				qApp->processEvents(100);
+				try
+				{
+					setStatusbarText("Downloaded: " + String(File::getSize(thread_->getFilename())));
+				}
+				catch(...)
+				{}
+				thread_->wait(10);
+			}
+
+			button_abort->setEnabled(false);
+			download->setEnabled(true);
+#endif
+		}
+
 		void DownloadPDBFile::slotDownload()
 		{
 			System *system = new System();
@@ -131,10 +182,35 @@ namespace BALL
 				filename += ".pdb?format=PDB&pdbId=";
 				filename += pdbId->text().latin1();
 				filename +="&compression=None"; 
+				PDBFile* pdb_file = 0;
+#ifndef BALL_QT_HAS_THREADS
+				pdb_file = new PDBFile(filename);
+#else   // =============================
+				threadedDownload_(filename);
 
-				PDBFile pdb_file(filename);
-				pdb_file >> *system;
-				pdb_file.close();
+				if (aborted_) 
+				{
+					File::remove(thread_->getFilename());
+					delete system;
+					return;
+				}
+
+				setStatusbarText("Finished downloading, please wait...");
+				download->setEnabled(true);
+				pdb_file = new PDBFile(thread_->getFilename());
+#endif
+
+				(*pdb_file) >> *system;
+				(*pdb_file).close();
+				delete pdb_file;
+
+#ifdef BALL_QT_HAS_THREADS
+				try
+				{
+					File::remove(thread_->getFilename());
+				}
+				catch(...) {}
+#endif
 
 				Log.info() << "> read " << system->countAtoms() << " atoms from URL \"" << filename<< "\"" << std::endl;
 				if (system->countAtoms() == 0)
@@ -161,6 +237,7 @@ namespace BALL
 
 		void DownloadPDBFile::slotShowDetail()
 		{
+			setStatusbarText("Downloading information, please wait...");
 			QString filename = "http://www.rcsb.org/pdb/cgi/explore.cgi?job=summary&pdbId=";
 			filename += pdbId->text();
 			filename += "&page=";
@@ -177,8 +254,6 @@ namespace BALL
 		{
 			try
 			{
-				qb_ = new QTextBrowser();
-
 				QString filename;
 
 				if (url.find("http://") == -1)
@@ -188,8 +263,26 @@ namespace BALL
 
 				Log.info() << "Reading " << filename << std::endl;
 
-				LineBasedFile search_result(filename.latin1());
+				LineBasedFile search_result;
+#ifndef BALL_QT_HAS_THREADS
+				search_result = LineBasedFile(filename.latin1());
+#else
+				threadedDownload_(filename.ascii());
+				if (aborted_)
+				{
+					try
+					{
+						File::remove(thread_->getFilename());
+						return;
+					}
+					catch(...){}
+				}
+#endif
 
+				setStatusbarText("Please wait, while loading images...");
+
+				if (qb_ != 0) delete qb_;
+				qb_ = new QTextBrowser();
 				String result;
 
 				HashMap<String, QImage> hm;
@@ -214,7 +307,7 @@ namespace BALL
 						String img_url = current_line.substr(pos_1+5, pos_2 - (pos_1+5));
 						if (!hm.has(img_url))
 						{
-							LineBasedFile img("http://www.rcsb.org/"+img_url);
+							File img("http://www.rcsb.org/"+img_url);
 							String tmp_filename;
 
 							File::createTemporaryFilename(tmp_filename);
@@ -223,8 +316,7 @@ namespace BALL
 							QImage qi;
 							qi.load(tmp_filename.c_str());
 
-							File temp(tmp_filename);
-							temp.remove();
+							File::remove(tmp_filename);
 
 							hm[img_url] = qi;
 						}
@@ -241,6 +333,7 @@ namespace BALL
 
 				connect(qb_, SIGNAL(linkClicked(const QString&)), this, SLOT(displayHTML(const QString&)));
 
+				qb_->showMaximized();
 				qb_->show();
 			}
 			catch (...)
@@ -251,6 +344,20 @@ namespace BALL
 		void DownloadPDBFile::idChanged()
 		{
 			download->setEnabled(pdbId->text() != "");
+		}
+
+		void DownloadPDBFile::abort()
+		{
+#ifdef BALL_QT_HAS_THREADS
+			if (thread_ != 0)
+			{
+				thread_->terminate();
+			}
+			button_abort->setEnabled(false);
+			download->setEnabled(true);
+			setStatusbarText("Aborted download");
+			aborted_ = true;
+#endif
 		}
 
 	}

@@ -29,6 +29,31 @@ namespace VIEW
 	class MainControl;
 
 	///
+	class FetchHTMLThread
+		: public QThread
+	{
+		public:
+			///
+			FetchHTMLThread()
+				throw();
+
+			///
+			void setURL(const String& text)
+				throw();
+
+			///
+			const String& getFilename() const
+				throw();
+
+			///
+			virtual void run();
+
+			protected:
+			String filename_;
+			String url_;
+	};
+
+	///
 	class UpdateRepresentationThread
 		: public QThread
 	{
