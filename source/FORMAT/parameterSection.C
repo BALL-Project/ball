@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.15 2001/03/11 21:02:11 anker Exp $
+// $Id: parameterSection.C,v 1.16 2001/03/12 00:50:35 amoll Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -266,9 +266,8 @@ namespace BALL
 			}
 
 			// now split the line...
-			char* c = "\"'";
-			number_of_fields = line.splitQuoted(f,String::CHARACTER_CLASS__WHITESPACE, c);
-			
+			number_of_fields = line.splitQuoted(f,String::CHARACTER_CLASS__WHITESPACE, "\"'");
+
 			// assemble the keys
 			String key;
 			for (Size j = 0; j < number_of_keys; j++) 
