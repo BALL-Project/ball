@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Surface_test.C,v 1.7 2003/06/10 13:32:47 amoll Exp $
+// $Id: Surface_test.C,v 1.8 2003/06/12 18:03:18 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Surface, "$Id: Surface_test.C,v 1.7 2003/06/10 13:32:47 amoll Exp $")
+START_TEST(Surface, "$Id: Surface_test.C,v 1.8 2003/06/12 18:03:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -554,7 +554,7 @@ CHECK(BALL_CREATE(TSurface))
 	TEST_EQUAL(v_ptr->getNumberOfVertices(), 0)
 	delete v_ptr;
 	v_ptr = (Surface*)s.create();
-	TEST_REAL_EQUAL(v_ptr->getNumberOfVertices(), 4)
+	TEST_EQUAL(v_ptr->getNumberOfVertices(), 4)
 	delete v_ptr;
 RESULT
 

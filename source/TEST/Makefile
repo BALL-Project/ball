@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.193 2003/06/12 05:56:55 oliver Exp $
+# $Id: Makefile,v 1.194 2003/06/12 18:03:18 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -7,15 +7,16 @@ DIRECTORY=TEST
 XDR_DEPENDENT_EXECUTABLES=\
 	XDRPersistenceManager_test
 
-VIEW_EXECUTABLES=\
+VIEW_EXECUTABLES=
 
-EXECUTABLES_BASIC = \
+EXECUTABLES_BASIC =	\
 	ClassTest_test\
 	RegularExpression_test\
 	GlobalTypes_test\
 	Limits_test\
 	VersionInfo_test\
 	RTTI_test
+
 
 EXECUTABLES_MATHS = \
 	MathsCommon_test\
@@ -114,8 +115,7 @@ EXECUTABLES_KERNEL = \
 	ForEach_test\
 	GlobalKernel_test\
 	BaseIterator_test\
-	ConstForwardIterator_test\
-
+	ConstForwardIterator_test
 
 EXECUTABLE_ITERATORS = \
 	ForwardIterator_test\
@@ -234,6 +234,7 @@ EXECUTABLES = \
 	$(EXECUTABLES_STRUCTURE)\
 	$(EXECUTABLES_QSAR)\
 	$(EXECUTABLES_SOLVATION)
+
 
 # default target
 all:	$(EXECUTABLES)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeptideBuilder_test.C,v 1.5 2003/06/12 15:27:21 oliver Exp $
+// $Id: PeptideBuilder_test.C,v 1.6 2003/06/12 18:03:18 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.5 2003/06/12 15:27:21 oliver Exp $")
+START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.6 2003/06/12 18:03:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ CHECK(PeptideBuilder(const std::vector<AminoAcidDescriptor>& sequence))
   std::vector<AminoAcidDescriptor> v;
   v.push_back(*aad);
 	v.push_back(*aad2);
-  pb3=new PeptideBuilder(v);
+  pb3 = new PeptideBuilder(v);
   TEST_NOT_EQUAL(pb3, 0)
 RESULT
 
@@ -157,54 +157,54 @@ CHECK(construct())
   resIt = prot->beginResidue();
 
 	TEST_EQUAL(resIt->getName(), "LEU")
-	TEST_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
-  TEST_EQUAL(resIt->getTorsionPsi(), Angle(-58.,false));
+	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
+  TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(-58.,false));
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "SER")
-  TEST_EQUAL(resIt->getTorsionPhi().isEquivalent(Angle(M_PI)), true)
-	TEST_EQUAL(resIt->getTorsionPsi().isEquivalent(Angle(M_PI)), true)
+	PRECISION(1e-3)
+  TEST_REAL_EQUAL(fabs(resIt->getTorsionPhi().toRadian()), M_PI)
+	TEST_REAL_EQUAL(fabs(resIt->getTorsionPsi().toRadian()), M_PI)
   ++resIt;
+	PRECISION(2E-2)
 	TEST_EQUAL(resIt->getName(), "GLY")
-	TEST_EQUAL(resIt->getTorsionPhi().isEquivalent(Angle(-47, false)), true)
-	PRECISION(1E-2)
+	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(-47, false))
   TEST_REAL_EQUAL(resIt->getTorsionPsi(), -1.01);
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "VAL")
-  TEST_EQUAL(resIt->getTorsionPhi(), Angle(-77., false));
-	TEST_EQUAL(resIt->getTorsionPsi(), Angle(0, false));
+  TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(-77., false));
+	TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(0, false));
 	
-	prot=pb3->construct();
+	prot = pb3->construct();
   resIt = prot->beginResidue();
 		
 	TEST_EQUAL(resIt->getName(), "GLY")
-	TEST_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
-  TEST_EQUAL(resIt->getTorsionPsi(), Angle(-58.,false));
+	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
+  TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(-58.,false));
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "VAL")
-  TEST_EQUAL(resIt->getTorsionPhi(), Angle(-77.,false));
-	TEST_EQUAL(resIt->getTorsionPsi(), Angle(0,false));
+  TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(-77.,false));
+	TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(0,false));
 
 	PeptideBuilder pb4;
 	pb4.addAminoAcid("PRO");
 	pb4.addAminoAcid("PRO", Angle(-12., false), Angle(42, false));
 	pb4.addAminoAcid("PRO", Angle(28, false), Angle(33, false));
 
-	prot=pb4.construct();
+	prot = pb4.construct();
 	
   resIt = prot->beginResidue();
 
 	TEST_EQUAL(resIt->getName(), "PRO")
-	TEST_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
-  TEST_EQUAL(resIt->getTorsionPsi(), Angle(-80.,false));
+	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
+  TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(-80.,false));
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "PRO")
-  TEST_EQUAL(resIt->getTorsionPhi(), Angle(-12, false));
-	TEST_EQUAL(resIt->getTorsionPsi(), Angle(-80, false));
+  TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(-12, false));
+	TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(-80, false));
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "PRO")
-	TEST_EQUAL(resIt->getTorsionPhi(), Angle(28,false));
+	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(28,false));
   TEST_EQUAL(resIt->getTorsionPsi(), 0);
-
 RESULT
 
 //empty sequence
@@ -219,11 +219,8 @@ CHECK(PeptideBuilder())
 	TEST_NOT_EQUAL(pb, 0)
 RESULT
 
-//Prolin as first residue 
-
-
-
-CHECK(~PeptideBuilder())
+// Proline as first residue 
+CHECK(~PeptideBuilder() throw())
 	delete pb;
 	pb = 0;
 	delete pb2;
@@ -234,7 +231,7 @@ CHECK(~PeptideBuilder())
   pb4= 0; 
 RESULT
 
-CHECK(~AminoAcidDescriptor())
+CHECK(~AminoAcidDescriptor() throw())
 	delete aad;
   aad = 0; 
 	delete aad2;
