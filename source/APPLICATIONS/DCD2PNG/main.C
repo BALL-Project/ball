@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.11 2004/07/21 13:58:14 amoll Exp $
+// $Id: main.C,v 1.12 2004/07/25 21:26:15 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 	if (project_file == "")
 	{
 		DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
- 		DisplayProperties::getInstance(0)->applyButtonClicked();
+ 		DisplayProperties::getInstance(0)->apply();
 	}
 
 	Size width = 720;
