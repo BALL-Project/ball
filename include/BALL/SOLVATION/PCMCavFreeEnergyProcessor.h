@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.10 2002/12/12 09:48:54 oliver Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.11 2002/12/22 11:45:24 sturm Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -26,7 +26,7 @@ namespace BALL
 			modification for non-spherical solutes by Huron/Claverie, J. Phys.
 			Chem. 76(15):2123-2133, 1972.	\\
 			The energy value is returned in units of kJ/mol. \\
-			{\bf Definition:} \URL{BALL/.../PCMCavFreeEnergyProcessor.h}
+			{\bf Definition:} \URL{BALL/SOLVATION/PCMCavFreeEnergyProcessor.h}
 	 */
 	class PCMCavFreeEnergyProcessor
 		:	public EnergyProcessor

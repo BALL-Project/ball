@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.19 2002/12/16 14:23:58 anker Exp $ 
+// $Id: poissonBoltzmann.h,v 1.20 2002/12/22 11:45:26 sturm Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -30,7 +30,7 @@ namespace BALL
 {
 
 	/** Finite Difference Poisson Boltzmann Solver.
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/poissonBoltzmann.h}
+			{\bf Definition:} \URL{BALL/SOLVATION/poissonBoltzmann.h}
 	*/			
 	class FDPB 
 	{

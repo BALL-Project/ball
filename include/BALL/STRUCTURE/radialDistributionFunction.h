@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: radialDistributionFunction.h,v 1.12 2002/12/12 09:48:55 oliver Exp $
+// $Id: radialDistributionFunction.h,v 1.13 2002/12/22 11:45:27 sturm Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -19,7 +19,7 @@ namespace BALL
 			in a real fluid from the ideal (isotropic) case. The representation of
 			such a function is a piecewise polynomial obtained by smoothing spline
 			fit from molecular dynamics simulation.	\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/RadialDistributionFunction.h}
+			{\bf Definition:} \URL{BALL/STRUCTURE/radialDistributionFunction.h}
 	*/
 	class RadialDistributionFunction 
 	{

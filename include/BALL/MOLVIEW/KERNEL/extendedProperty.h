@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extendedProperty.h,v 1.8 2002/12/12 09:48:52 oliver Exp $
+// $Id: extendedProperty.h,v 1.9 2002/12/22 11:45:23 sturm Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
@@ -25,7 +25,7 @@ namespace BALL
 				will clear the one previously set).
 				This class will be used by the class \Ref{BaseModelProcessor}, so that all
 				derived processors can make use of the properties. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/extendedPropertyManager.h}
+				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/extendedProperty.h}
 		*/
 		class ExtendedPropertyManager: public PropertyManager
 		{

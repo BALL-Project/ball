@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.29 2002/12/12 09:48:46 oliver Exp $
+// $Id: circle3.h,v 1.30 2002/12/22 11:45:21 sturm Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -40,7 +40,7 @@ namespace BALL
 		throw();
 
 	/**	Generic Circle in Three-Dimensional Space.
-			{\bf Definition:} \URL{BALL/MATHS/.h}
+			{\bf Definition:} \URL{BALL/MATHS/circle3.h}
 	*/
 	template <typename T>
 	class TCircle3

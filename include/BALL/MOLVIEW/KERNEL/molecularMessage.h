@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularMessage.h,v 1.7 2002/12/12 09:48:53 oliver Exp $
+// $Id: molecularMessage.h,v 1.8 2002/12/22 11:45:24 sturm Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -86,7 +86,7 @@ namespace BALL
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class \Ref{RemovedCompositeMessage}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}
+				{\bf Definition:} \URL{BALL/KERNEL/message.h}
 		*/
 		class RemovedMolecularMessage: public RemovedCompositeMessage
 		{
@@ -143,7 +143,7 @@ namespace BALL
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class \Ref{ChangedCompositeMessage}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}\
+				{\bf Definition:} \URL{BALL/KERNEL/message.h}\
 		*/
 		class ChangedMolecularMessage: public ChangedCompositeMessage
 		{
@@ -200,7 +200,7 @@ namespace BALL
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class \Ref{SelectionMessage}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}
+				{\bf Definition:} \URL{BALL/KERNEL/message.h}
 		*/
 		class MolecularSelectionMessage: public SelectionMessage
 		{

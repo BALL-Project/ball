@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile.h,v 1.18 2002/02/27 12:18:39 sturm Exp $
+// $Id: NMRStarFile.h,v 1.19 2002/12/22 11:45:18 sturm Exp $
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -20,7 +20,7 @@ namespace BALL
 {
 	/** @name Data classes and structures.
 			These classes represent the data extracted from NMR-Star-Files.
-			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
+			{\bf Definition:} \URL{BALL/FORMAT/NMRStarFile.h}
 	*/
 	//@{
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.8 2002/12/12 09:48:46 oliver Exp $
+// $Id: vector2.h,v 1.9 2002/12/22 11:45:21 sturm Exp $
 
 #ifndef BALL_MATHS_VECTOR2_H
 #define BALL_MATHS_VECTOR2_H
@@ -59,7 +59,7 @@ namespace BALL
 	//@}
 
 	/** Generic Two-Dimensional Vector.
-      {\bf Definition:} \URL{BALL/MATHS/Vector2.h}
+      {\bf Definition:} \URL{BALL/MATHS/vector2.h}
       \\
 	*/
 	template <typename T>

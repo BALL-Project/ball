@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventParameter.h,v 1.8 2002/02/27 12:19:40 sturm Exp $
+// $Id: solventParameter.h,v 1.9 2002/12/22 11:45:26 sturm Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
 #define BALL_SOLVATION_SOLVENTPARAMETER_H
@@ -27,7 +27,7 @@ namespace BALL
 	/** Parameter section for the solvent description.
 			This class provides parameter file interface for the SolventDescriptor
 			class (\Ref{SolventDescriptor}).  \\
-			{\bf Definition:} \URL{BALL/SOLVATION/SolventParameter.h}
+			{\bf Definition:} \URL{BALL/SOLVATION/solventParameter.h}
 	 */
 	class SolventParameter
 		:	public ParameterSection

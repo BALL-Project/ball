@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reissCavFreeEnergyProcessor.h,v 1.10 2002/02/27 12:19:39 sturm Exp $
+// $Id: reissCavFreeEnergyProcessor.h,v 1.11 2002/12/22 11:45:26 sturm Exp $
 
 #ifndef BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
@@ -26,7 +26,7 @@ namespace BALL
 			non-spherical solutes by Huron/Claverie, J. Phys. Chem.
 			76(15):2123-2133, 1972. \\ 
 			Energies are returned in units of kJ/mol.	\\
-			{\bf Definition:} \URL{BALL/SOLVATION/ReissCavFreeEnergyProcessor.h}
+			{\bf Definition:} \URL{BALL/SOLVATION/reissCavFreeEnergyProcessor.h}
 	 */
 	class ReissCavFreeEnergyProcessor
 		:	public EnergyProcessor
