@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.47 2003/05/09 12:55:16 anker Exp $
+// $Id: standardPredicates.C,v 1.48 2003/05/22 21:58:21 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -1006,7 +1006,7 @@ namespace BALL
 									if (numbers.has(input[position]))
 									{
 										char n = input[position];
-										Size N = atoi(&n);
+										Size N((Size)n - (Size)'0');
 										CTPNode* parent = current->getParent();
 										if (parent == 0)
 										{
@@ -1275,7 +1275,6 @@ namespace BALL
 		argument_ = argument;
 		if (tree_ != 0)
 		{
-
 			delete tree_;
 		}
 		tree_ = parse_(argument_);
