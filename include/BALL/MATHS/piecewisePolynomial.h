@@ -1,4 +1,4 @@
-// $Id: piecewisePolynomial.h,v 1.5 2001/02/16 00:06:52 amoll Exp $
+// $Id: piecewisePolynomial.h,v 1.6 2001/02/23 22:02:41 amoll Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -8,22 +8,21 @@
 #endif
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
-//#include <BALL/MATHS/piecewiseFunction.h>
-#include "piecewiseFunction.h"
+#include <BALL/MATHS/piecewiseFunction.h
 #endif
 
 namespace BALL 
 {
 
 	/** Piecewise polynomial curve object.
-		This class provides a trivial implementation of piecewise polynomial
-		curves. More useful spline/B-spline implementations might follow in the
-		future. The PPCurves are of the form 
-		$\sum_{i=0}^{d} a_i^{(k)} (x - x_0^{(k)})^i$, where $k$ is the index of
-		the interval and $d$ is the overall degree of the PPCurve. Note that
-		there is no warranty that the defined curve is continuously
-		differentiable or even continuous.
-		{\bf Definition:} \URL{BALL/MATHS/pPolynomial.h}
+			This class provides a trivial implementation of piecewise polynomial
+			curves. More useful spline/B-spline implementations might follow in the
+			future. The PPCurves are of the form 
+			$\sum_{i=0}^{d} a_i^{(k)} (x - x_0^{(k)})^i$, where $k$ is the index of
+			the interval and $d$ is the overall degree of the PPCurve. Note that
+			there is no warranty that the defined curve is continuously
+			differentiable or even continuous.
+			{\bf Definition:} \URL{BALL/MATHS/piecewisePolynomial.h}
 	 */
 
 	class PiecewisePolynomial
@@ -37,42 +36,45 @@ namespace BALL
 		*/
 		//@{
 
-		/** Default constructor */
+		/** Default constructor 
+		*/
 		PiecewisePolynomial() throw();
 
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		PiecewisePolynomial(const PiecewisePolynomial& polynomial) throw();
 
 		/** Detailed Constructor.
-			This constructor does {\bf not} check sanity of the arguments 
+				This constructor does {\bf not} check sanity of the arguments 
 		 */
 		PiecewisePolynomial(Size degree, const std::vector<Interval>& intervals,
 				const std::vector<Coefficients>& coefficients) throw();
 
-		/** Destructor */
+		/** Destructor 
+		*/
 		virtual ~PiecewisePolynomial() throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const PiecewisePolynomial& operator = (const PiecewisePolynomial& poly)
 			throw();
 
-		/** Clear method */
+		/** Clear method 
+		*/
 		virtual void clear() throw();
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
-		/** Set the instance manually */
+		/** Set the instance manually 
+		*/
 		void set(Size degree, const std::vector<Interval>& intervals,
 			const std::vector<Coefficients>& coeffs) throw();
 
@@ -86,21 +88,21 @@ namespace BALL
 		virtual double operator() (double x) const throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const PiecewisePolynomial& poly) const throw();
 
 		//@}
-
-
-		/** @name Debugging and Diagnostics */
+		/** @name Debugging and Diagnostics 
+		*/
 		//@{
 
-		/** 	Dumps the whole content of the object */
+		/** Dumps the whole content of the object 
+		*/
 		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const
 			throw();
 
@@ -108,7 +110,8 @@ namespace BALL
 
 		protected:
 
-		/*_ The degree of the polynomial */
+		/*_ The degree of the polynomial 
+		*/
 		Size degree_;
 
 	};
