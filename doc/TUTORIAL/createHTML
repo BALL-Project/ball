@@ -3,7 +3,7 @@ echo WARNING: latex2html version 1.71 or higher is needed
 rm -rf HTML
 rm -rf TEMP
 mkdir TEMP 
-cp * TEMP
+cp * TEMP 2>/dev/null
 cd TEMP
 sed -i "s/lstlisting}{}/verbatim}/g" *.tex
 sed -i "s/lstlisting}/verbatim}/g" *.tex
