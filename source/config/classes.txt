@@ -64,10 +64,10 @@ Substring                           D           /
       InvalidSubstring
 StringHashMap                       /           /
 TContour                            DE          Z
-TContourLine                        E            Z
+TContourLine                        E           Z
 ------------------------CONCEPT---------------------------------------------
 BaseIterator                        DI          Z       clear fehlt, BALL_CREATE_DEEP
-ConstBaseIterator                   I,          Z
+ConstBaseIterator                   DI          Z
 BidirectionalIterator               I           Z
 ConstBidirectionalIterator          I           Z
 ForwardIterator                     DIX,        /
