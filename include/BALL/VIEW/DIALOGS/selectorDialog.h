@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectorDialog.h,v 1.1 2003/12/20 15:28:08 amoll Exp $
+// $Id: selectorDialog.h,v 1.2 2003/12/20 19:45:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SELECTORDIALOG_H
@@ -29,6 +29,7 @@ namespace BALL
 			public slots:
 				void accept();
 				void clearSelection();
+				void showHelp();
 		};
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.56 2003/12/20 15:57:38 amoll Exp $
+// $Id: displayProperties.C,v 1.57 2003/12/20 19:46:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -577,7 +577,7 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 	if (rep_ == 0) 
 	{	
 #ifndef BALL_QT_HAS_THREADS
- 		pm.insert(*rep);
+ 		getMainControl()->getPrimitiveManager().insert(*rep);
 #endif
 		
 		List<Composite*>::ConstIterator it = composites.begin();
