@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.10 2000/08/30 19:58:12 oliver Exp $
+// $Id: standardPredicates.h,v 1.11 2000/10/29 11:27:17 oliver Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -48,7 +48,8 @@ namespace BALL
 				@param atom the atom to test
 				@return true - always
 				*/
-			virtual bool operator () (const Atom& atom) const;
+			virtual bool operator () (const Atom& atom) const
+				throw();
 	};
 
 
@@ -64,7 +65,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true - always
 			*/
-			virtual bool operator () (const Atom& atom) const;
+			virtual bool operator () (const Atom& atom) const
+				throw();
 	};
 
 
@@ -79,7 +81,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -93,7 +96,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -107,7 +111,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -121,7 +126,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -135,7 +141,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -149,7 +156,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -163,7 +171,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -177,7 +186,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -191,7 +201,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -205,7 +216,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -219,7 +231,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 
@@ -234,7 +247,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/**
@@ -248,7 +262,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/** Predicate for atoms being included in rings of a certain number.
@@ -266,7 +281,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 
 			private:
 				bool dfs(const Atom& atom, const Atom& first_atom, 
@@ -286,7 +302,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 
 			protected:
 				bool testPredicate_(const Atom& atom, Bond::Order order) const;
@@ -307,7 +324,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/** Predicate class for atoms bearing triple bonds.
@@ -325,7 +343,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/** Predicate class for atoms bearing aromatic bonds.
@@ -339,7 +358,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/** Predicate class for atoms bearing a certain number of bonds.
@@ -353,7 +373,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/** Predicate class for atoms being connected to a constellation defined
@@ -385,7 +406,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 			
 			private:
 				bool parse(const String& group, 
@@ -409,7 +431,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/** Predicate class for atoms being sp2 hybridized
@@ -423,7 +446,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	/** Predicate class for atoms being sp3 hybridized
@@ -437,7 +461,8 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 					*/
-				virtual bool operator () (const Atom& atom) const;
+				virtual bool operator () (const Atom& atom) const
+					throw();
 		};
 
 	//@}	

@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.7 2000/10/26 14:41:48 anker Exp $
+// $Id: expression.h,v 1.8 2000/10/29 11:26:34 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -52,11 +52,13 @@ namespace BALL
 				Construct an ExpressionPredicate with a string.
 				@param argument the argument to use for this predicate
 		*/
-		ExpressionPredicate(const String& argument) throw();
+		ExpressionPredicate(const String& argument) 
+			throw();
 
 		/** Destructor
 		*/
-		virtual ~ExpressionPredicate() throw();
+		virtual ~ExpressionPredicate() 
+			throw();
 
 		//@}
 
@@ -65,8 +67,8 @@ namespace BALL
 		//@{
 
 		/** Assignment operator */
-		const ExpressionPredicate& operator = 
-			(const ExpressionPredicate& predicate) throw();
+		const ExpressionPredicate& operator = (const ExpressionPredicate& predicate) 
+			throw();
 
 		/** Clear method */
 		virtual void clear() throw();
@@ -78,7 +80,8 @@ namespace BALL
 		//@{
 
 		/** Equality operator */
-		bool operator == (const ExpressionPredicate& predicate) const throw();
+		bool operator == (const ExpressionPredicate& predicate) const 
+			throw();
 
 		//@}
 
@@ -91,17 +94,20 @@ namespace BALL
 				the selected predicate of atom.
 				@param atom the atom to compare with
 		*/
-		virtual bool operator () (const Atom& atom) const throw();
+		virtual bool operator () (const Atom& atom) const 
+			throw();
 
 		/** set the Argument of this ExpressionPredicate
 				@param argument the string to use for this predicate
 		*/
-		virtual void setArgument(const String& argument) throw();
+		virtual void setArgument(const String& argument) 
+			throw();
 
 		/** Get the argument of an ExpressionPredicate i
 				@return the argument of the expression
 		 */
-		const String& getArgument() const throw();
+		const String& getArgument() const 
+			throw();
 
 		//@}
 		
@@ -125,8 +131,7 @@ namespace BALL
 	{
 		public:
 
-		// BAUSTELLE
-		// BALL_CREATE(ExpressionTree)
+		BALL_CREATE(ExpressionTree)
 
 		/**	@name	Type Definitions
 		*/
@@ -156,10 +161,12 @@ namespace BALL
 				{\tt negate_} is set to {\bf false}, the internal predicate is set
 				to 0, and the list of children is empty.
 		*/
-		ExpressionTree() throw();
+		ExpressionTree() 
+			throw();
 			
 		/** Copy constructor */
-		ExpressionTree(const ExpressionTree& tree) throw();
+		ExpressionTree(const ExpressionTree& tree) 
+			throw();
 
 		/**	Detailed constructor.
 				Create an expression node representing a leaf, i.e., a 
@@ -172,12 +179,13 @@ namespace BALL
 
 		/**
 		*/
-		ExpressionTree(Type type, list<ExpressionTree*> children, 
-				bool negate = false) throw();
+		ExpressionTree(Type type, list<ExpressionTree*> children, bool negate = false) 
+			throw();
 
 		/**	Destructor
 		*/
-		virtual ~ExpressionTree() throw();
+		virtual ~ExpressionTree() 
+			throw();
 
 		//@}
 
@@ -188,10 +196,12 @@ namespace BALL
 		
 		/** Evaluate the (sub)expression.
 		*/
-		virtual bool operator () (const Atom& atom) const throw();
+		virtual bool operator () (const Atom& atom) const 
+			throw();
 
 		/** Equality operator */
-		bool operator == (const ExpressionTree& tree) const throw();
+		bool operator == (const ExpressionTree& tree) const 
+			throw();
 
 		//@}
 
@@ -202,28 +212,35 @@ namespace BALL
 
 		/**	Set the expression node's type.
 		*/
-		void setType(Type type) throw();
+		void setType(Type type) 
+			throw();
 
 		/** Get the expression node's type */
-		Type getType() const throw();
+		Type getType() const 
+			throw();
 		
 		/**	Set the expression node's negation mode.
 		*/
-		void setNegate(bool negate) throw();
+		void setNegate(bool negate) 
+			throw();
 
 		/** Get the expression node's negation mode. */
-		bool getNegate() const throw();
+		bool getNegate() const 
+			throw();
 
 		/**	Set the predicate.
 		*/
-		void setPredicate(ExpressionPredicate* predicate) throw();
+		void setPredicate(ExpressionPredicate* predicate) 
+			throw();
 
 		/**	Get the predicate. */
-		ExpressionPredicate* getPredicate() const throw();
+		ExpressionPredicate* getPredicate() const 
+			throw();
 
 		/**	Append a child to the tree.
 		*/
-		void appendChild(ExpressionTree* child) throw();
+		void appendChild(ExpressionTree* child) 
+			throw();
 
 		//@}
 
@@ -232,10 +249,12 @@ namespace BALL
 		//@{
 
 		/** Asignment operator */
-		const ExpressionTree& operator = (const ExpressionTree& tree) throw();
+		const ExpressionTree& operator = (const ExpressionTree& tree) 
+			throw();
 
 		/** Clear method */
-		virtual void clear() throw();
+		virtual void clear() 
+			throw();
 
 		//@}
 
@@ -256,8 +275,7 @@ namespace BALL
 	{
 		public:
 		
-		// BAUSTELLE
-		// BALL_CREATE(SyntaxTree)
+		BALL_CREATE(SyntaxTree)
 
 		/**	@name	Type Definitions
 		*/

@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.20 2000/09/01 10:18:05 anker Exp $
+// $Id: standardPredicates.C,v 1.21 2000/10/29 11:26:56 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -21,6 +21,7 @@ namespace BALL
 	// True predicate
 
 	bool TruePredicate::operator () (const Atom& /* atom */) const
+		throw()
 	{
     return true;
  	}
@@ -28,6 +29,7 @@ namespace BALL
 	// selected predicate
 
 	bool SelectedPredicate::operator () (const Atom& atom) const
+		throw()
 	{
     return atom.isSelected();
  	}
@@ -35,6 +37,7 @@ namespace BALL
 	// Atom name predicate
 
 	bool AtomNamePredicate::operator () (const Atom& atom) const
+		throw()
 	{
     return (atom.getName() == argument_);
  	}
@@ -42,6 +45,7 @@ namespace BALL
 	// Atom type predicate
 
 	bool AtomTypePredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		return (atom.getTypeName() == argument_);
  	}
@@ -50,6 +54,7 @@ namespace BALL
 	// element predicate
 
 	bool ElementPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		return (atom.getElement().getSymbol() == argument_);
 	}
@@ -57,6 +62,7 @@ namespace BALL
 	// residue predicate
 
 	bool ResiduePredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		const Residue*	res = atom.getAncestor(RTTI::getDefault<Residue>());
 		if (res != 0)
@@ -70,6 +76,7 @@ namespace BALL
 	// residue ID predicate
 
 	bool ResidueIDPredicate::operator () (const Atom& atom) const
+		throw()
 	{
     const Residue*	res = atom.getAncestor(RTTI::getDefault<Residue>());
 		if (res != 0)
@@ -83,6 +90,7 @@ namespace BALL
 	// protein predicate
 
 	bool ProteinPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		const Protein* protein = atom.getAncestor(RTTI::getDefault<Protein>());
 		if (protein != 0)
@@ -96,6 +104,7 @@ namespace BALL
 	// chain predicate
 
 	bool ChainPredicate::operator () (const Atom& atom) const
+		throw()
 	{
  		const Chain* chain = atom.getAncestor(RTTI::getDefault<Chain>());
 		if (chain != 0)
@@ -109,6 +118,7 @@ namespace BALL
 	// secondary structure predicate
 
 	bool SecondaryStructurePredicate::operator () (const Atom& atom) const
+		throw()
 	{
  		const SecondaryStructure* sec_struct = atom.getAncestor(RTTI::getDefault<SecondaryStructure>());
 		if (sec_struct != 0)
@@ -122,6 +132,7 @@ namespace BALL
 	// solvent predicate
 
 	bool SolventPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		const Molecule* molecule = atom.getMolecule();
 		return ((molecule != 0) && (molecule->hasProperty(Molecule::IS_SOLVENT)));
@@ -130,6 +141,7 @@ namespace BALL
 	// backbone predicate
 
 	bool BackBonePredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		if (atom.hasAncestor(RTTI::getDefault<Residue>()))
 		{
@@ -146,6 +158,7 @@ namespace BALL
 	// nucleotide predicate
 
 	bool NucleotidePredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		return RTTI::isKindOf<Nucleotide>(atom);
 	}
@@ -199,6 +212,7 @@ namespace BALL
 
 
 	bool InRingPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		int n;
 		if (argument_.size() == 1)
@@ -240,6 +254,7 @@ namespace BALL
 	}
 
 	bool DoubleBondsPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__DOUBLE);
 	}
@@ -324,21 +339,25 @@ namespace BALL
 	}
 	
 	bool SingleBondsPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__SINGLE);
 	}
 	
 	bool TripleBondsPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__TRIPLE);
 	}
 	
 	bool AromaticBondsPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__AROMATIC);
 	}
 
 	bool NumberOfBondsPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		String s = argument_;
 		s.trim();
@@ -809,6 +828,7 @@ namespace BALL
 	} 
 
 	bool ConnectedToPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		//BAUSTELLE
 		if (find(argument_, atom, 0))
@@ -822,6 +842,7 @@ namespace BALL
 	}
 
 	bool SpHybridizedPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		int dcount = 0;
 		int tcount = 0;
@@ -848,6 +869,7 @@ namespace BALL
 	}
 
 	bool Sp2HybridizedPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		int dcount = 0;
 		int acount = 0;
@@ -874,6 +896,7 @@ namespace BALL
 	}
 
 	bool Sp3HybridizedPredicate::operator () (const Atom& atom) const
+		throw()
 	{
 		Size i;
 		if (atom.countBonds() != 4)
