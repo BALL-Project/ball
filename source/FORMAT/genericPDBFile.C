@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.9 2000/10/25 19:28:47 oliver Exp $
+// $Id: genericPDBFile.C,v 1.10 2000/10/26 15:40:43 anker Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -102,7 +102,7 @@ namespace BALL
 	{
 		// If the element_symbol entry is valid, it has precedence
 		if (((element_symbol[0] == ' ') && (element_symbol[1] == ' '))
-				|| (element_symbol[0] == '\0') || (element_symbol[0] == '\0'))
+				|| (element_symbol[0] == '\0') || (element_symbol[1] == '\0'))
 		{
 			// Otherwise, we try to reconstruct the element
 			// from the atom name (which is dangerous if non-PDB names are
@@ -995,6 +995,12 @@ namespace BALL
 				{
 					return true;
 				}
+
+				record_ATOM.element_symbol[0] = '\0';
+				record_ATOM.occupancy = 1.0;
+				record_ATOM.temperature_factor = 0.0;
+				record_ATOM.segment_ID[0] = '\0';
+				record_ATOM.charge[0] = '\0';
 
 				parseLine
 					(line,
