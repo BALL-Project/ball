@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Selector_test.C,v 1.13 2003/07/01 13:51:08 amoll Exp $
+// $Id: Selector_test.C,v 1.14 2003/08/28 18:07:32 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(Selector, "$Id: Selector_test.C,v 1.13 2003/07/01 13:51:08 amoll Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.14 2003/08/28 18:07:32 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -65,15 +66,15 @@ CHECK(Processor::Result operator () (Composite& composite) throw())
 	file.close();
 
 	HashMap<String, Size> test_expressions;
-	test_expressions.insert(pair<String, Size>("true()", 6));
-	test_expressions.insert(pair<String, Size>("connectedTo((-H))", 2));
-	test_expressions.insert(pair<String, Size>("element(H)", 4));
-	test_expressions.insert(pair<String, Size>("(element(H))", 4));
-	test_expressions.insert(pair<String, Size>("!element(H)", 2));
-	test_expressions.insert(pair<String, Size>("!(element(H))", 2));
-	test_expressions.insert(pair<String, Size>("element(O)", 1));
-	test_expressions.insert(pair<String, Size>("element(C)", 1));
-	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
+	test_expressions.insert(std::pair<String, Size>("true()", 6));
+	test_expressions.insert(std::pair<String, Size>("connectedTo((-H))", 2));
+	test_expressions.insert(std::pair<String, Size>("element(H)", 4));
+	test_expressions.insert(std::pair<String, Size>("(element(H))", 4));
+	test_expressions.insert(std::pair<String, Size>("!element(H)", 2));
+	test_expressions.insert(std::pair<String, Size>("!(element(H))", 2));
+	test_expressions.insert(std::pair<String, Size>("element(O)", 1));
+	test_expressions.insert(std::pair<String, Size>("element(C)", 1));
+	test_expressions.insert(std::pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
 
 	Selector s;
 	TEST_EQUAL(s.getNumberOfSelectedAtoms(), 0)
@@ -112,17 +113,17 @@ CHECK(Size getNumberOfSelectedAtoms() const throw())
 	file.close();
 
 	HashMap<String, Size> test_expressions;
-	test_expressions.insert(pair<String, Size>("true()", 6));
-	test_expressions.insert(pair<String, Size>("connectedTo((-H))", 2));
-	test_expressions.insert(pair<String, Size>("element(H)", 4));
-	test_expressions.insert(pair<String, Size>("!element(H)", 2));
-	test_expressions.insert(pair<String, Size>("(element(H))", 4));
-	test_expressions.insert(pair<String, Size>("!(element(H))", 2));
-	test_expressions.insert(pair<String, Size>("(!(element(H)))", 2));
-	test_expressions.insert(pair<String, Size>("!(!(element(H)))", 4));
-	test_expressions.insert(pair<String, Size>("element(O)", 1));
-	test_expressions.insert(pair<String, Size>("element(C)", 1));
-	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
+	test_expressions.insert(std::pair<String, Size>("true()", 6));
+	test_expressions.insert(std::pair<String, Size>("connectedTo((-H))", 2));
+	test_expressions.insert(std::pair<String, Size>("element(H)", 4));
+	test_expressions.insert(std::pair<String, Size>("!element(H)", 2));
+	test_expressions.insert(std::pair<String, Size>("(element(H))", 4));
+	test_expressions.insert(std::pair<String, Size>("!(element(H))", 2));
+	test_expressions.insert(std::pair<String, Size>("(!(element(H)))", 2));
+	test_expressions.insert(std::pair<String, Size>("!(!(element(H)))", 4));
+	test_expressions.insert(std::pair<String, Size>("element(O)", 1));
+	test_expressions.insert(std::pair<String, Size>("element(C)", 1));
+	test_expressions.insert(std::pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
 
 	Selector s;
 	TEST_EQUAL(s.getNumberOfSelectedAtoms(), 0)

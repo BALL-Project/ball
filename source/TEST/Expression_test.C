@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Expression_test.C,v 1.37 2003/06/26 14:34:57 amoll Exp $
+// $Id: Expression_test.C,v 1.38 2003/08/28 18:07:32 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -21,7 +22,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.37 2003/06/26 14:34:57 amoll Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.38 2003/08/28 18:07:32 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -110,25 +111,25 @@ CHECK(bool operator () (const Atom& atom) const throw())
 	file >> S;
 	HashMap<String, Size> test_expressions;
 	
-	test_expressions.insert(pair<String, Size>("true()", 76));
-	test_expressions.insert(pair<String, Size>("false()", 0));
-	test_expressions.insert(pair<String, Size>("element(H) AND connectedTo((C))", 24));
-	test_expressions.insert(pair<String, Size>("element(N) AND connectedTo((C)) AND connectedTo((H))", 10));
-	test_expressions.insert(pair<String, Size>("connectedTo((H))", 24));
-	test_expressions.insert(pair<String, Size>("connectedTo((O))", 6));
-	test_expressions.insert(pair<String, Size>("connectedTo((H)(H))", 14));
-	test_expressions.insert(pair<String, Size>("connectedTo(C(H)(H)(H))", 0));
-	test_expressions.insert(pair<String, Size>("element(H)", 38));
-	test_expressions.insert(pair<String, Size>("!element(H)", 38));
-	test_expressions.insert(pair<String, Size>("element(O)", 6));
-	test_expressions.insert(pair<String, Size>("element(C)", 22));
-	test_expressions.insert(pair<String, Size>("!element(C)", 54));
-	test_expressions.insert(pair<String, Size>("((element(C)))", 22));
-	test_expressions.insert(pair<String, Size>("!(element(C))", 54));
-	test_expressions.insert(pair<String, Size>("(!element(C))", 54));
-	test_expressions.insert(pair<String, Size>("!(!element(C))", 22));
-	test_expressions.insert(pair<String, Size>("element(H) OR (name(CA) AND chain(A))", 40));
-	test_expressions.insert(pair<String, Size>("inRing()", 10));
+	test_expressions.insert(std::pair<String, Size>("true()", 76));
+	test_expressions.insert(std::pair<String, Size>("false()", 0));
+	test_expressions.insert(std::pair<String, Size>("element(H) AND connectedTo((C))", 24));
+	test_expressions.insert(std::pair<String, Size>("element(N) AND connectedTo((C)) AND connectedTo((H))", 10));
+	test_expressions.insert(std::pair<String, Size>("connectedTo((H))", 24));
+	test_expressions.insert(std::pair<String, Size>("connectedTo((O))", 6));
+	test_expressions.insert(std::pair<String, Size>("connectedTo((H)(H))", 14));
+	test_expressions.insert(std::pair<String, Size>("connectedTo(C(H)(H)(H))", 0));
+	test_expressions.insert(std::pair<String, Size>("element(H)", 38));
+	test_expressions.insert(std::pair<String, Size>("!element(H)", 38));
+	test_expressions.insert(std::pair<String, Size>("element(O)", 6));
+	test_expressions.insert(std::pair<String, Size>("element(C)", 22));
+	test_expressions.insert(std::pair<String, Size>("!element(C)", 54));
+	test_expressions.insert(std::pair<String, Size>("((element(C)))", 22));
+	test_expressions.insert(std::pair<String, Size>("!(element(C))", 54));
+	test_expressions.insert(std::pair<String, Size>("(!element(C))", 54));
+	test_expressions.insert(std::pair<String, Size>("!(!element(C))", 22));
+	test_expressions.insert(std::pair<String, Size>("element(H) OR (name(CA) AND chain(A))", 40));
+	test_expressions.insert(std::pair<String, Size>("inRing()", 10));
 
 	Expression e;
 	Size counter;
