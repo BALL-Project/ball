@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.40.4.2 2002/05/24 10:48:17 oliver Exp $
+// $Id: string.C,v 1.40.4.3 2002/05/31 22:51:47 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -200,8 +200,7 @@ namespace BALL
 		throw()
 		: string("")
 	{
-		s << ends;
-		assign(s.str());
+		s >> (*this);
 	}
 
 #	define BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(type, format_string) \
