@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.C,v 1.4 2000/08/01 12:36:06 amoll Exp $
+// $Id: binarySearchTree.C,v 1.5 2000/08/06 18:02:10 amoll Exp $
 
 #include <BALL/DATATYPE/binarySearchTree.h>
 
@@ -295,60 +295,39 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-
-	#ifdef OLD
-
-	BSTreeItem*	BSTreeItem::rotateRight()
-	{
-		BSTreeItem *item = this;
-
-		if (item->left_ != 0) 
-		{
-			BSTreeItem *p = item;
-			item = item->left_;
-			p->left_ = item->right_;
-			item->right_ = p;
-		}
-
-		return item;
-	}
-
-	BSTreeItem* BSTreeItem::rotateLeft()
-	{
-		BSTreeItem *item = this;
-
-		if (item->right_ != 0) 
-		{
-			BSTreeItem *p = item;
-			item = item->right_;
-			p->right_ = item->left_;
-			item->left_ = p;
-		}
-
-		return item;
-	}
-
-	#else
-
 	BSTreeItem* BSTreeItem::rotateRight()
 	{	// PRECONDITION left child of p exists.
-		BSTreeItem *p = this;
-		BSTreeItem *item = p->left_;
-		p->left_ = item->right_;
-		item->right_ = p;
-		return item;
+		if (left_ == 0) 
+		{
+			return 0;
+		}
+ 
+		BSTreeItem* item = this; // x
+		BSTreeItem* l = left_;  // y
+
+		left_ = l->right_;
+		l->right_ = item;
+		item = l;
+
+		return l;
 	}
 
 	BSTreeItem*	BSTreeItem::rotateLeft()
 	{	// PRECONDITION right child of p exists.
-		BSTreeItem *p = this;
-		BSTreeItem *item = p->right_;
-		p->right_ = item->left_;
-		item->left_ = p;
-		return item;
-	}
+		if (right_ == 0) 
+		{
+			return 0;
+		}
+ 
+		BSTreeItem* item = this; // x
+		BSTreeItem* r = right_;  // y
 
-	#endif
+		right_ = r->left_;
+		r->left_ = item;
+		item = r;
+
+		return r;
+	}
 
 	const BSTreeItem*	BSTreeItem::getMinimum() const
 	{
@@ -376,8 +355,8 @@ namespace BALL
 
 	BSTreeItem* BSTreeItem::getParentOfMinimum()
 	{
-		BSTreeItem *item = this;
-		BSTreeItem *p = 0;
+		BSTreeItem* item = this;
+		BSTreeItem* p = 0;
 
 		while(item->left_) 
 		{
@@ -390,8 +369,8 @@ namespace BALL
 
 	BSTreeItem* BSTreeItem::getParentOfMaximum()
 	{
-		BSTreeItem *item = this;
-		BSTreeItem *p = 0;
+		BSTreeItem* item = this;
+		BSTreeItem* p = 0;
 
 		while(item->right_) 
 		{
@@ -402,17 +381,15 @@ namespace BALL
 		return p;
 	}
 
+	// Predecessor is the right child of node returned, unless item 
+	// itself is the parent. Then the left child is the predecessor. 
+	// If this is a leaf, 0 is returned. ASSUMES item isn't null!
 	BSTreeItem* BSTreeItem::getParentOfPredecessor()
-	// Returns parent of predecessor of item, assumed to be 
-	// a binary search tree. Predecessor is the right child
-	// of node returned, unless item itself is the parent. Then 
-	// the left child is the predecessor. If t is a leaf, a 
-	// 0 is returned. ASSUMES item isn't null.
 	{
-		BSTreeItem *item = this;
-		BSTreeItem *p = 0;
+		BSTreeItem* item = this;
+		BSTreeItem* p = 0;
 		// Go left, then all the way right
-		BSTreeItem *q = item->left_;
+		BSTreeItem* q = item->left_;
 
 		if (q) 
 		{
@@ -427,12 +404,10 @@ namespace BALL
 		return p;
 	}
 
+	// Successor is the left child of node returned, unless item 
+	// itself is the parent. Then the right child is the successor. 
+	// If item is a leaf, 0 is returned. ASSUMES item isn't null.
 	BSTreeItem* BSTreeItem::getParentOfSuccessor()
-	// Returns parent of successor of item, assumed to be 
-	// a binary search tree. Successor is the left child
-	// of node returned, unless item itself is the parent.
-	// Then the right child is the successor. If item is a 
-	// leaf, a 0 is returned. ASSUMES t isn't null.
 	{
 		BSTreeItem *item = this;
 		BSTreeItem *p = 0;
@@ -458,59 +433,59 @@ namespace BALL
 	// accordingly. Redundantly returns the pointer item. May
 	// have to update root pointer.
 	BSTreeItem* BSTreeItem::detachNode
-		(BSTreeItem*& root, BSTreeItem* t, 
+		(BSTreeItem*& root, BSTreeItem* t,
 		 BSTreeItem* p, bool right_side)
 	{
 		BSTreeItem* psucc = 0;
 		BSTreeItem* replacement = 0;
 
-		if (t != 0)	
+		if (t == 0)	
 		{
-			if (t->left_ == 0 || t->right_ == 0) 
-			{
-				// At least one child is null, so use the other 
-				// as the replacement. (It may be null too.)
-				replacement = (t->left_) ? t->left_ : t->right_;
+			return 0;
+		}
+
+		if (t->left_ == 0 || t->right_ == 0) 
+		{
+			// At least one child is null, so use the other 
+			// as the replacement. (It may be null too.)
+			replacement = (t->left_) ? t->left_ : t->right_;
+		}
+		else 
+		{	// Neither child is null
+			psucc = t->getParentOfSuccessor(); // guaranteed not null
+			if (psucc == t) 
+			{ // Immediate successor
+				replacement = psucc->right_;
 			}
 			else 
-			{	// Neither child is null
-				psucc = t->getParentOfSuccessor(); // guaranteed not null
-				if (psucc == t) 
-				{ // Immediate successor
-					replacement = psucc->right_;
-				}
-				else 
-				{ 
-					// Detach replacement from where it is and relocate
-					// it to where t used to be.
-					replacement = psucc->left_;
-					psucc->left_ = psucc->left_->right_;
-					replacement->right_ = t->right_;
-				}
-				// Finish relocating replacement to go where t used to.
-				replacement->left_ = t->left_;
+			{ // Detach replacement from where it is and relocate
+				// it to where t used to be.
+				replacement = psucc->left_;
+				psucc->left_ = psucc->left_->right_;
+				replacement->right_ = t->right_;
 			}
-			if (p != 0) 
-			{ // Fixup parent of t to point to replacement
-				if (right_side) 
-				{
-					p->right_ = replacement; 
-				}
-				else 
-				{
-					p->left_ = replacement;
-				}
-			}
-			else
+			// Finish relocating replacement to go where t used to.
+			replacement->left_ = t->left_;
+		}
+
+		if (p != 0) 
+		{ // Fixup parent of t to point to replacement
+			if (right_side) 
 			{
-				// No parent, so t was the root
-				root = replacement; 
+				p->right_ = replacement; 
 			}
+			else 
+			{
+				p->left_ = replacement;
+			}
+		}
+		else
+		{	// No parent, so t was the root
+			root = replacement; 
 		}
 
 		return t;
 	}
-
 
 
 	#define T  (pp.t)
@@ -523,14 +498,15 @@ namespace BALL
 	#define M  (pp.m)
 	#define PM (pp.pm)
 
-	BSTreeItem* BSTreeItem::insertBalance
-		(BSTreeItem* root, BSTreeItem::Pack& pp)
+
 	// Balance adjusting for top down insertions. Eliminates
 	// both p and t from being red by doing rotations and
 	// color changes. g, p, t ASSUMED not null coming in. 
 	// gg may be null. At the end of this routine, only t 
 	// and p will be valid wrt each other. g and gg will 
 	// not reflect the proper ordering.
+	BSTreeItem* BSTreeItem::insertBalance
+		(BSTreeItem* root, BSTreeItem::Pack& pp)
 	{
 		BSTreeItem* cofgg = 0; // New child of great-grandparent
 		bool side = (bool)(GG && GG->right_ == G);
