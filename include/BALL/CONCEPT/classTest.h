@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.3 1999/11/26 16:45:39 oliver Exp $
+// $Id: classTest.h,v 1.4 1999/11/30 19:46:01 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -79,8 +79,8 @@ namespace TEST {\
 	char*					version_string = version;\
 	bool					newline = false;\
 	list<string>	tmp_file_list;\
-	ifstream			infile;\
-	ifstream			templatefile;\
+	std::ifstream	infile;\
+	std::ifstream	templatefile;\
 	bool					equal_files;\
 }\
 \
@@ -430,8 +430,8 @@ int main(int argc, char **argv)\
 */
 #define TEST_FILE(filename, templatename, use_regexps) \
 	TEST::equal_files = true;\
-	TEST::infile.open(filename);\
-	TEST::templatefile.open(templatename);\
+	TEST::infile.open(filename, std::ios::in);\
+	TEST::templatefile.open(templatename, std::ios::in);\
 	\
 	if (TEST::infile.good() && TEST::templatefile.good())\
 	{\
@@ -448,8 +448,34 @@ int main(int argc, char **argv)\
 				RegularExpression expression(template_line(1));\
 				bool match = expression.match(line);\
 				TEST::equal_files &= match;\
+				if (!match)\
+				{\
+					if (TEST::verbose > 0)\
+					{\
+						if (!TEST::newline)\
+						{\
+							TEST::newline = true;\
+							std::cout << std::endl;\
+						}\
+						\
+						std::cout << "   TEST_FILE: regexp mismatch: " << line << " did not match " << template_line << "." << std::endl;\
+					}\
+				}\
 			} else {\
 				TEST::equal_files &= (template_line == line);\
+				if (template_line != line)\
+				{\
+					if (TEST::verbose > 0)\
+					{\
+						if (!TEST::newline)\
+						{\
+							TEST::newline = true;\
+							std::cout << std::endl;\
+						}\
+						\
+						std::cout << "   TEST_FILE: line mismatch: " << line << " differs from " << template_line << "." << std::endl;\
+					}\
+				}\
 			}\
 		}\
 	} else {\
@@ -471,13 +497,13 @@ int main(int argc, char **argv)\
 				std::cout << "false";\
 			}\
 			std::cout << ") : " << " cannot open file: ";\
-			if (TEST::infile.bad())\
+			if (!TEST::infile.good())\
 			{\
-				std::cout << #filename << " ";\
+				std::cout << #filename << " (input file) ";\
 			}\
-			if (TEST::templatefile.bad())\
+			if (!TEST::templatefile.good())\
 			{\
-				std::cout << #templatename << " ";\
+				std::cout << #templatename << " (template file) ";\
 			}\
 			std::cout << std::endl;\
 			\
@@ -485,6 +511,8 @@ int main(int argc, char **argv)\
 	}\
 	TEST::infile.close();\
 	TEST::templatefile.close();\
+	TEST::infile.clear();\
+	TEST::templatefile.clear();\
 	\
 	TEST::this_test = TEST::equal_files;\
 	TEST::test = TEST::test && TEST::this_test;\
@@ -495,7 +523,13 @@ int main(int argc, char **argv)\
 			TEST::newline = true;\
 			std::cout << std::endl;\
 		}\
- 		std::cout << "    (line " << __LINE__ << ": TEST_FILE("<< #filename << ", " << #templatename << "): ";\
+ 		std::cout << "    (line " << __LINE__ << ": TEST_FILE("<< #filename << ", " << #templatename << ", ";\
+		if (use_regexps)\
+		{\
+			std::cout << "true): ";\
+		} else {\
+			std::cout << "false): ";\
+		}\
 		if (TEST::this_test)\
 		{\
 			std::cout << "true";\
