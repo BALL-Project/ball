@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.4 1999/12/28 17:50:06 oliver Exp $
+// $Id: support.C,v 1.5 2000/01/07 21:58:42 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -42,7 +42,7 @@ namespace BALL
 			float period_y;
 			float period_z;
 
-			// Are atoms stored in atom_?
+			// Are atoms stored in atom_vector?
 
 			if (atom_vector.size() == 0)
 			{
