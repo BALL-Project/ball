@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile_test.C,v 1.31 2004/03/17 11:15:30 amoll Exp $
+// $Id: HINFile_test.C,v 1.32 2005/01/19 13:36:07 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.31 2004/03/17 11:15:30 amoll Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.32 2005/01/19 13:36:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ CHECK([EXTRA]HINFile::HINFile& operator << (const System& system))
 	NEW_TMP_FILE(filename)
 	system.beginAtom()->setName("NAME TEST");
 	HINFile hin3(filename, std::ios::out);
-	CAPTURE_OUTPUT_LEVEL(LogStream::WARNING)
+	CAPTURE_OUTPUT_LEVEL(LogStream::WARNING_LEVEL)
 		hin3 << system;
 	COMPARE_OUTPUT("HINFile::write: truncated atom name 'NAME TEST' to 'NAME'.\n")
 	TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test3.hin")
