@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.12 2000/09/28 17:20:46 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.13 2000/11/06 18:07:37 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -13,7 +13,7 @@ namespace BALL
 	const int PairExpRDFIntegrator::Default::VERBOSITY = 0;
 	const int PairExpRDFIntegrator::Default::SAMPLES = 30;
 
-	PairExpRDFIntegrator::PairExpRDFIntegrator()
+	PairExpRDFIntegrator::PairExpRDFIntegrator() throw()
 		:	RDFIntegrator(),
 			alpha_(0.0),
 			C1_(0.0),
@@ -28,7 +28,7 @@ namespace BALL
 
 
 	PairExpRDFIntegrator::PairExpRDFIntegrator
-			(const PairExpRDFIntegrator& integrator)
+			(const PairExpRDFIntegrator& integrator) throw()
 		:	RDFIntegrator(integrator),
 			options(integrator.options),
 			alpha_(integrator.alpha_),
@@ -43,7 +43,7 @@ namespace BALL
 
 	PairExpRDFIntegrator::PairExpRDFIntegrator(double alpha, double C1,
 			double C2, double R_ij_o, double k1, double k2, 
-			const RadialDistributionFunction& rdf)
+			const RadialDistributionFunction& rdf) throw()
 		:	RDFIntegrator(rdf),
 			alpha_(alpha),
 			C1_(C1),
@@ -57,19 +57,15 @@ namespace BALL
 	}
 
 
-	PairExpRDFIntegrator::~PairExpRDFIntegrator()
-	{
-		destroy();
-	}
-
-
-	void PairExpRDFIntegrator::destroy()
+	PairExpRDFIntegrator::~PairExpRDFIntegrator() throw()
 	{
 		clear();
+
+		valid_ = false;
 	}
 
 
-	void PairExpRDFIntegrator::clear()
+	void PairExpRDFIntegrator::clear() throw()
 	{
 		alpha_ = 0.0;
 		C1_ = 0.0;
@@ -77,11 +73,13 @@ namespace BALL
 		R_ij_o_ = 0.0;
 		k1_ = 0.0;
 		k2_ = 0.0;
+		// BAUSTELLE: options.clear() ?
 		RDFIntegrator::clear();
 	}
 
 
-	void PairExpRDFIntegrator::set(const PairExpRDFIntegrator& integrator)
+	const PairExpRDFIntegrator& PairExpRDFIntegrator::operator = 
+		(const PairExpRDFIntegrator& integrator) throw()
 	{
 		alpha_ = integrator.alpha_;
 		C1_ = integrator.C1_;
@@ -90,20 +88,14 @@ namespace BALL
 		k1_ = integrator.k1_;
 		k2_ = integrator.k2_;
 		options = integrator.options;
-		RDFIntegrator::set(integrator);
-	}
-
-
-	const PairExpRDFIntegrator& PairExpRDFIntegrator::operator = 
-		(const PairExpRDFIntegrator& integrator)
-	{
-		set(integrator);
+		RDFIntegrator::operator = (integrator);
+		
 		return *this;
 	}
 
 
 	void PairExpRDFIntegrator::setConstants(double alpha, double C1, double C2, 
-			double R_ij_o, double k1, double k2)
+			double R_ij_o, double k1, double k2) throw()
 	{
 		alpha_ = alpha;
 		C1_ = C1;
@@ -114,7 +106,7 @@ namespace BALL
 	}
 
 
-	double PairExpRDFIntegrator::integrateToInf(double from) const
+	double PairExpRDFIntegrator::integrateToInf(double from) const throw()
 	{
 
 		PiecewisePolynomial poly = getRDF().getRepresentation();
@@ -122,6 +114,8 @@ namespace BALL
 		double FROM;
 		double val = 0.0;
 
+		// In order to get the right interval and coefficients we have to
+		// project limits 
 		FROM = project(from);
 
 		Size k = poly.getIntervalIndex(FROM);
@@ -131,6 +125,7 @@ namespace BALL
 			return 0.0;
 		}
 
+		// now build the interval we want to integrate
 		Size number_of_intervals = poly.getIntervals().size();
 		interval = poly.getInterval(number_of_intervals - 1);
 
@@ -142,17 +137,23 @@ namespace BALL
 			getRDF().dump();
 			return 0.0;
 		}
-		double lower_inf = interval.first;
 
-		// the point from where the integration to inf will start.
-		if (FROM < interval.first)
+		// the point from where the integration to inf will start. As interval
+		// is an interval of the RDF we have to project it to the integration
+		// beam
+		double lower_inf = unproject(interval.first);
+
+		// if the integration starts below the lower bound of the last
+		// interval, we have to integrate the whole thing to that point.
+		if (from < lower_inf)
 		{
-			interval = Interval(from, unproject(lower_inf));
+			interval = Interval(from, lower_inf);
 			val = numericallyIntegrateInterval(interval);
 		}
 
-		// only for readibility
+		// now compute the rest of the integral, i. e. the term to infinity.
 
+		// only for readibility
 		double a = poly.getCoefficients(number_of_intervals - 1)[0];
 		double r = lower_inf;
 		double b = alpha_ / R_ij_o_;
@@ -172,7 +173,7 @@ namespace BALL
 
 
 	double PairExpRDFIntegrator::integrateToInf(double from, double alpha, 
-			double C1, double C2, double R_ij_o, double k1, double k2)
+			double C1, double C2, double R_ij_o, double k1, double k2) throw()
 	{
 		setConstants(alpha, C1, C2, R_ij_o, k1, k2);
 		return integrateToInf(from);
@@ -180,6 +181,7 @@ namespace BALL
 
 
 	double PairExpRDFIntegrator::integrate(double from, double to) const
+		throw()
 	{
 		Interval interval(from, to);
 		return numericallyIntegrateInterval(interval);
@@ -187,7 +189,7 @@ namespace BALL
 
 
 	double PairExpRDFIntegrator::integrate(double from, double to, double alpha, 
-			double C1, double C2, double R_ij_o, double k1, double k2)
+			double C1, double C2, double R_ij_o, double k1, double k2) throw()
 	{
 		setConstants(alpha, C1, C2, R_ij_o, k1, k2);
 		// DEBUG
@@ -201,17 +203,16 @@ namespace BALL
 	}
 
 
-	double PairExpRDFIntegrator::operator () (double x) const
+	double PairExpRDFIntegrator::operator () (double x) const throw()
 	{
 		return integrateToInf(x);
 	}
 
 
 	double PairExpRDFIntegrator::numericallyIntegrateInterval(Interval interval) 
-		const
+		const throw()
 	{
 
-		// BAUSTELLE
 		int samples = (int) options.getInteger(Option::SAMPLES);
 		int verbosity = (int) options.getInteger(Option::VERBOSITY);
 
@@ -220,17 +221,15 @@ namespace BALL
 		double b = alpha_/R_ij_o_;
 		double R_ij_o_6 = pow(R_ij_o_, 6);
 
-		// DEBUG
-		/*
-		Log.info() << "r = " << r << endl;
-		Log.info() << "R = " << R << endl;
-		Log.info() << "b = " << b << endl;
-		Log.info() << "R_ij_o_6 = " << R_ij_o_6 << endl;
-		Log.info() << "a[0] = " << a[0] << " a[1] = " << a[1] 
-			<< " a[2] = " << a[2] << " a[3] = " << a[3] << endl;
-		Log.info() << "k1 = " << k1_ << endl;
-		Log.info() << "k2 = " << k2_ << endl;
-		*/
+		if (verbosity > 9)
+		{
+			Log.info() << "r = " << r << endl;
+			Log.info() << "R = " << R << endl;
+			Log.info() << "b = " << b << endl;
+			Log.info() << "R_ij_o_6 = " << R_ij_o_6 << endl;
+			Log.info() << "k1 = " << k1_ << endl;
+			Log.info() << "k2 = " << k2_ << endl;
+		}
 
 
 		// this is the case where we have to consider the geometry of the
@@ -238,7 +237,7 @@ namespace BALL
 		// numerically. The method we use is the trapezium method.
 
 		double area = 0;
-		if (verbosity > 2)
+		if (verbosity > 9)
 		{
 			Log.info() << "Using " << samples 
 				<< " sample points for numerical integration" << endl;
@@ -271,12 +270,12 @@ namespace BALL
 			--n;
 		}
 
-		//Log.info() << "Ergebnis der numerischen Integration: " << area << endl;
 		return area;
 	}
 
 
 	void PairExpRDFIntegrator::dump(ostream& stream, Size /* depth */) const
+		throw()
 	{
 		stream << "[PairExpRDFIntegrator:]" << endl;
 		stream << "alpha_ = " << alpha_ << endl;
@@ -289,15 +288,30 @@ namespace BALL
 	}
 
 
-	double PairExpRDFIntegrator::project(double x) const 
+	double PairExpRDFIntegrator::project(double x) const throw()
 	{
 		return sqrt(x*x + k1_ * x + k2_);
 	}
 
 
-	double PairExpRDFIntegrator::unproject(double x) const 
+	double PairExpRDFIntegrator::unproject(double x) const throw()
 	{
 		return sqrt(x*x - k1_*k1_ / 4 - k2_) - k1_ / 2;
+	}
+
+
+	bool PairExpRDFIntegrator::operator == 
+		(const PairExpRDFIntegrator& integrator) const throw()
+	{
+		// return (RDFIntegrator::operator == (integrator)
+		//	&& (alpha_ == integrator.alpha_)
+		return ((alpha_ == integrator.alpha_)
+			&& (C1_ == integrator.C1_)
+			&& (C2_ == integrator.C2_)
+			&& (R_ij_o_ == integrator.R_ij_o_)
+			&& (k1_ == integrator.k1_)
+			&& (k2_ == integrator.k2_)
+			&& (options == integrator.options));
 	}
 
 } // namespace BALL
