@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.9 2004/06/02 14:24:20 amoll Exp $
+// $Id: stage.h,v 1.10 2004/06/10 12:57:30 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -439,6 +439,14 @@ namespace BALL
 			/// Get the focal distance for the stereo view
 			float getFocalDistance() const
 				throw() { return focal_distance_;}
+
+			/// Settings for side by side stereo side swapping
+			void setSwapSideBySideStereo(bool state)
+				throw() { swap_side_by_side_stereo_ = state;}
+
+			/// Get settings for side by side stereo side swapping
+			bool swapSideBySideStereo() const
+				throw() { return swap_side_by_side_stereo_;}
 			
 			//@}
 			/**	@name Predicates
@@ -479,6 +487,9 @@ namespace BALL
 			
 			//_
 			float 							focal_distance_;
+
+			//_
+			bool 								swap_side_by_side_stereo_;
 		};
 
 

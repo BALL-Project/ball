@@ -60,6 +60,8 @@ void StageSettings::apply()
 
 	stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
 	stage_->setFocalDistance((float)(eye_distance_slider->value()));
+
+	stage_->setSwapSideBySideStereo(swap_sss_button->isChecked());
 }
 
 
@@ -73,6 +75,7 @@ void StageSettings::setDefaultValues()
 
 	eye_distance_slider->setValue(20);
 	focal_distance_slider->setValue(40);
+	swap_sss_button->setChecked(false);
 }
 
 void StageSettings::eyeDistanceChanged()

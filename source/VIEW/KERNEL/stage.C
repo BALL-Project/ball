@@ -171,7 +171,8 @@ Stage::Stage()
 		camera_(),
 		show_coordinate_system_(false),
 		eye_distance_(2.0),
-		focal_distance_(40)
+		focal_distance_(40),
+		swap_side_by_side_stereo_(false)
 {}
 
 Stage::Stage(const Stage& stage)
@@ -181,7 +182,8 @@ Stage::Stage(const Stage& stage)
 		camera_(stage.camera_),
 		show_coordinate_system_(false),
 		eye_distance_(stage.eye_distance_),
-		focal_distance_(stage.focal_distance_)
+		focal_distance_(stage.focal_distance_),
+		swap_side_by_side_stereo_(stage.swap_side_by_side_stereo_)
 {
 }
 
@@ -194,6 +196,7 @@ void Stage::clear()
 	show_coordinate_system_ = false;
 	eye_distance_ = 2.0;
 	focal_distance_ = 40;
+	swap_side_by_side_stereo_ = false;
 }
 
 void Stage::removeLightSource(const LightSource& light_source)
@@ -218,7 +221,8 @@ bool Stage::operator == (const Stage& stage) const
 				 background_color_ 				== stage.background_color_ &&
 				 show_coordinate_system_ 	== stage.show_coordinate_system_ &&
 				 eye_distance_ 						== stage.eye_distance_ &&
-				 focal_distance_ 						== stage.focal_distance_;
+				 focal_distance_ 					== stage.focal_distance_ &&
+				 swap_side_by_side_stereo_== stage.swap_side_by_side_stereo_;
 }
 
 
@@ -255,6 +259,9 @@ void Stage::dump(std::ostream& s, Size depth) const
 
 	BALL_DUMP_DEPTH(s, depth);
 	s << "Focal width:  " << focal_distance_<< endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "Swap side by side:  " << swap_side_by_side_stereo_ << endl;
 
 	BALL_DUMP_STREAM_SUFFIX(s);
 }
@@ -303,7 +310,6 @@ void Stage::moveCameraTo(const Camera& camera)
 			it->setDirection(camera_.getLookAtPosition());
 		}
 	}
-	
 }
 
 } } // namespaces

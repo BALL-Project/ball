@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.72 2004/06/07 13:30:29 amoll Exp $
+// $Id: scene.C,v 1.73 2004/06/10 12:59:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -340,6 +340,11 @@ namespace BALL
 								 2.0 * gl_renderer_.getYScale(),
 								nearf,farf);
 				glViewport(0, 0, width() / 2, height());
+
+				if (stage_->swapSideBySideStereo())
+				{
+					diff *= -1;
+				}
 		  }
 			else
 			{
@@ -349,8 +354,6 @@ namespace BALL
 									 2.0 * gl_renderer_.getYScale(),
 									nearf,farf);
 			}
-
-	
 
 			// draw models
       glMatrixMode(GL_MODELVIEW);
