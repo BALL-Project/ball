@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.11 2001/01/24 12:24:12 amoll Exp $
+// $Id: molecularDynamics.h,v 1.12 2001/01/24 12:25:50 amoll Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -7,7 +7,7 @@
 
 
 // Include all necessary BALL headers 
-#ifndef _BALL_COMMON_H
+#ifndef BALL_COMMON_H
 # include <BALL/common.h>
 #endif
 
