@@ -1,0 +1,40 @@
+<h2>GeometricControl</h2>
+The GeometricControl enables the user to create and manage Representations.
+A Representation is a set of geometric objects, which can be visualised in the 
+<a href="scene.html">Scene</a>.<br><br>
+
+<img src="images/geometricControl.png" width=342 height=133 border=0><br><br>
+The list view shows the name of the model, the name of the molecular entities, for which the
+Representation was created, the coloring method. The numbers at the right are the number 
+of molecular entities, which were used to create the Representation (here one System) and the 
+number of geometric objects. All at the left side, there is a checkbox to switch the Representation on and off.
+The GeometricControl has its own context menu:<br><br>
+<img src="images/geometricControl_cm.png" width=166 height=128 border=0>
+
+<H3>Coloring of surfaces</H3>
+To color a surface, it has to be selected and the context menu entry "Color Surface" must be clicked. Then a new dialog appears.
+BALLView provides two possibilities to color surfaces:<br>
+
+<H4>Coloring by grids</H4>
+<img src="images/color_surface1.png" width=506 height=286 border=0><br><br>
+Informations on how to create and manage data grids can be found <a href="datasetControl.html#data_grids">here</a>.<br>
+At the top of the dialog, the user can select the grid, which he wants to use for coloring.
+At every point of the surface, the value in the three-dimensional data grid is interpolated to a color,
+which is then used to color the surface. The colors, which are used come next.
+The min, mid and max colors are the colors between which is interpolated. They 
+correspond to the values, between which is interpolated.
+The min min and max max colors are used for points in the data grid, which are outside 
+of this range.
+If the autoscale button is pressed, the min, mid and max values are taken from the grid,
+but the user can also change the values freely. The number of levels corresonds to the number of 
+colors, which are used for interpolation. <br>
+If the user wants to have a transparent surface, the must select "alpha-blending" at the lower left corner.
+Then he can change the alpha values (opacity) for any color.
+<br><br>
+An example for the settings above:<br>
+<img src="images/distance_grid.png" width=362 height=209 border=0><br>
+
+<H4>Coloring by custom color</H4>
+<img src="images/color_surface2.png" width=506 height=285 border=0><br>
+
+<H3>Usage of cutting planes</H3>
