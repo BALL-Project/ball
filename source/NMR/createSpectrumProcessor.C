@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.13 2001/08/16 00:58:49 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.14 2001/08/18 22:54:58 oliver Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -86,7 +86,7 @@ namespace BALL
 		equivalency_atoms_.clear();
 		line = infile.getSectionFirstLine(AVERAGE_SECTION_NAME);
 		last_line = infile.getSectionLastLine(AVERAGE_SECTION_NAME);
-		for (; line != last_line; ++line)
+		for (; +line; ++line)
 		{
 			String atoms = (*line).after(" ");
 			String residue = (*line).before(" ");
