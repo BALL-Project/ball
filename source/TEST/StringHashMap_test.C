@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StringHashMap_test.C,v 1.4 2003/06/23 14:11:13 amoll Exp $
+// $Id: StringHashMap_test.C,v 1.5 2003/06/25 10:18:25 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -33,7 +33,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.4 2003/06/23 14:11:13 amoll Exp $")
+START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.5 2003/06/25 10:18:25 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ CHECK(Size getSize() const throw())
 	TEST_EQUAL(hm.getSize(), 0)
 RESULT
 
-CHECK(std::pair<Iterator, bool> insert(const ValueType& obj) throw())
+CHECK((std::pair<Iterator, bool> insert(const ValueType& obj) throw()))
 	StringHashMap<int> hm;
 	TEST_EQUAL(hm.getSize(), 0)
 	pair<String, int> p("a", 0);
@@ -68,7 +68,7 @@ CHECK(std::pair<Iterator, bool> insert(const ValueType& obj) throw())
 	TEST_EQUAL(hm.has("b"), true)
 RESULT
 
-CHECK(::std::pair<Iterator, bool> insert(const String& key, const Value& value) throw())
+CHECK((::std::pair<Iterator, bool> insert(const String& key, const Value& value) throw()))
 	StringHashMap<int> hm;
 	TEST_EQUAL(hm.getSize(), 0)
 	hm.insert("a", 0);
@@ -277,8 +277,9 @@ CHECK(BALL_CREATE_DEEP(StringHashMap))
 	StringHashMap<int> p = *(StringHashMap<int>*) hm.create(false, false);
 	StringHashMap<int> empty;
 	TEST_EQUAL(p == empty, true)
-	p = hm.create();
-	TEST_EQUAL(p == hm, true)
+	p = *(StringHashMap<int>*)hm.create();
+	bool test = (p == hm);
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(bool remove(const String& key) throw())
