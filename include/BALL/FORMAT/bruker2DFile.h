@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.h,v 1.5 2000/11/10 17:14:45 anhi Exp $
+// $Id: bruker2DFile.h,v 1.6 2000/11/24 16:32:12 anhi Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
@@ -8,21 +8,14 @@
 
 #include <list.h>
 
-<<<<<<< bruker2DFile.h
-#ifndef BALL_SYSTEM_FILE_H
-#       include <BALL/SYSTEM/file.h>
-#endif
-=======
 #include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/JCAMPFile.h>
->>>>>>> 1.3
 
 #ifndef BALL_DATATYPE_STRING_H
 #       include <BALL/DATATYPE/string.h>
 #endif
 
-<<<<<<< bruker2DFile.h
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #       include <BALL/FORMAT/JCAMPFile.h>
 #endif
@@ -32,33 +25,16 @@
 #endif
 
 namespace BALL
-=======
-class Bruker2D
-	: public File
->>>>>>> 1.3
 {
 
 class Bruker2D 
       : public File
 {
  public:
-<<<<<<< bruker2DFile.h
-  /**
-   * Konstruktor. Wichtig: name ist hier der Name des Bruker-*Verzeichnisses*
-   */
-  Bruker2D( const String& name, OpenMode open_mode = IN|BINARY );
 
-  /**
-   * Copy-Konstruktor.
+  /**   Default constructor.
    */
-  Bruker2D( const Bruker2D& file );
-
   Bruker2D();
-
-  /**
-   * Destruktor.
-   */
-=======
 
   /**	Constructor.
 			@param name important: name of the Bruker-*directory*
@@ -71,10 +47,8 @@ class Bruker2D
 
   /**	Destructor.
   */
->>>>>>> 1.3
   ~Bruker2D();
 
-<<<<<<< bruker2DFile.h
   /**
    * Read a spectrum.
    */
@@ -83,6 +57,10 @@ class Bruker2D
   /** Read a spectrum. It will be stored in spectrum_;
    */
   void read();
+
+  /** Read a spectrum from "name". It will be stored in spectrum_;
+   */
+  void read(const String &name);
 
   /** Return a reference to the spectrum.
    */
@@ -119,17 +97,6 @@ class Bruker2D
    * spectrum.
    */
   JCAMPFile *parsf1_, *parsf2_;
-=======
-  /** Read a spectrum.
-  */
-  void read(vector<double>& dat);
-
-  /**	These classes give access to the parameters used in processing the
-			spectrum.
-  */
-  BrukerParameter* parsf1_;
-	BrukerParameter* parsf2_;
->>>>>>> 1.3
 
  protected:
   Size minx_;

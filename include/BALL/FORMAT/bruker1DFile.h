@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.h,v 1.5 2000/11/10 17:15:04 anhi Exp $
+// $Id: bruker1DFile.h,v 1.8 2000/11/28 17:25:22 anhi Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -65,18 +65,11 @@ namespace BALL
 
 		protected:
 
-<<<<<<< bruker1DFile.h
 		/**
 		 * This class gives access to the parameters used in
 		 * acquiring this spectrum.
 		 */
 		JCAMPFile* pars_;
-=======
-		/**	This class gives access to the parameters 
-				used in acquiring this spectrum.
-		*/
-		BrukerParameter* pars_;
->>>>>>> 1.3
 		
 		Size min_;
 		Size max_;
