@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.18 2000/11/30 22:57:06 amoll Exp $ 
+// $Id: options.C,v 1.19 2000/12/01 13:01:53 anker Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -109,7 +109,7 @@ namespace BALL
 		}			
 		
 		// check wheter it is an integer
-		long_value long_value = ::atol(get(key).c_str());
+		long long_value = ::atol(get(key).c_str());
 		double double_value   = ::atof(get(key).c_str());
 
 		// check if it is an integer (cutoff is 1e-7)
@@ -441,9 +441,10 @@ namespace BALL
 	 throw()
 	{
 		*this = Options(options);
+		return *this;
 	}
 
-	bool Options::operator == (const Options::& option) const 
+	bool Options::operator == (const Options& option) const 
 		throw()
 	{
 		if (this->name_ != option.name_)
@@ -454,7 +455,7 @@ namespace BALL
 		return StringHashMap<String>::operator == (option);
 	}
 
-	bool Options::operator != (const Options::& option) const 
+	bool Options::operator != (const Options& option) const 
 		throw()
 	{
 		return !(*this == option);
