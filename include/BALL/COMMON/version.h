@@ -1,7 +1,11 @@
-// $Id: version.h,v 1.5 2000/06/28 20:27:09 oliver Exp $
+// $Id: version.h,v 1.6 2000/11/13 01:49:31 amoll Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
+
+#ifndef BALL_COMMON_EXCEPTION_H
+#	include <BALL/COMMON/exception.h>
+#endif
 
 //
 //  master data for all revisions is stored in this define!
@@ -26,7 +30,8 @@ namespace BALL
 	class VersionInfo
 	{
 		public:
-		/**
+
+		/** Enumeration of all possible release types.
 		*/
 		enum Type
 		{
@@ -37,23 +42,29 @@ namespace BALL
 			UNKNOWN
 		};
 
-		/**
+		/** Return the version number, which is defined in
+				BALL_RELEASE_STRING in \URL{BALL/COMMON/version.h}
 		*/
-		static const char* getVersion();
+		static const char* getVersion() throw();
 
-		/**
+		/** Return the major revision number.
+				(The part of the release number before the point)
 		*/
-		static int getMajorRevision();
+		static int getMajorRevision() throw(Exception::InvalidFormat);
 
-		/**
+		/** Return the minor revision number.
+				(The part of the release number after the point)
 		*/
-		static int getMinorRevision();
+		static int getMinorRevision() throw(Exception::InvalidFormat);
 
-		/**
+		/** Return the type of release:
+				ALPHA, BETA, NONPUPLIC, STABLE, UNKNOWN.
 		*/
-		static Type getType();
+		static Type getType() throw();
 		
+
 		protected:
+
 		static const char* RELEASE_DATE_AND_TIME;
 	  static const char* RELEASE_WHAT_STRING;
 	};
