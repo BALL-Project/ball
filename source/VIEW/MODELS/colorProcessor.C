@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.22 2003/11/10 16:36:50 amoll Exp $
+// $Id: colorProcessor.C,v 1.23 2003/11/11 12:11:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -285,8 +285,9 @@ namespace BALL
 							for (;hit != box_ptr->endData(); hit++)
 							{
 								// this is not 
-								float radius = (*hit)->getRadius();
-								if (radius <= 0.0) radius = 0.4;
+								float radius = (*hit)->getElement().getVanDerWaalsRadius();
+								if (radius <= 0.0) radius = 1;
+								// avoid calculation of the square roots
 								float new_dist = ((*hit)->getPosition() - point).getSquareLength() - radius * radius;
 								if (new_dist < distance)
 								{
