@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.63 2004/06/02 15:57:35 amoll Exp $
+// $Id: scene.C,v 1.64 2004/06/03 14:05:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -188,7 +188,6 @@ namespace BALL
 				renderView_(DISPLAY_LISTS_RENDERING);
 			}
 
-			updateGL();
 			update_running_ = false;
 		}
 
@@ -280,16 +279,12 @@ namespace BALL
 
 		void Scene::paintGL()
 		{
-			makeCurrent();
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 			// cannot call update here, because it calls updateGL
 			renderView_(DISPLAY_LISTS_RENDERING);
 		}
 
 		void Scene::resizeGL(int width, int height)
 		{
-			makeCurrent();
 			gl_renderer_.setSize(width, height);
 			gl_renderer_.updateCamera();
 			updateGL();
@@ -299,6 +294,8 @@ namespace BALL
 		void Scene::renderView_(RenderMode mode)
 			throw()
 		{
+			makeCurrent();
+
 			//abort if GL was not yet initialised
 			if (!gl_renderer_.hasStage()) return;
 
@@ -323,17 +320,19 @@ namespace BALL
 			float farf = 300;
 
 			float ndfl    = nearf / stage_->getFocalDistance();
-			float eye_distance = stage_->getEyeDistance();
 
+      float left  = -2.0 *gl_renderer_.getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
+      float right =  2.0 *gl_renderer_.getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
+
+			//================== draw first buffer =============
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      float left  = -2.0 *gl_renderer_.getXScale() - 0.5 * eye_distance * ndfl;
-      float right =  2.0 *gl_renderer_.getXScale() - 0.5 * eye_distance * ndfl;
 			glFrustum(left,right,
 								-2.0 * gl_renderer_.getYScale(), 
 								 2.0 * gl_renderer_.getYScale(),
 								nearf,farf);
 
+			// draw models
       glMatrixMode(GL_MODELVIEW);
       glDrawBuffer(GL_BACK_RIGHT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -345,10 +344,11 @@ namespace BALL
 			renderRepresentations_(mode);
 			glPopMatrix();
 
+			//================== draw second buffer =============
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      left  = -2.0 *gl_renderer_.getXScale() + 0.5 * eye_distance * ndfl;
-      right =  2.0 *gl_renderer_.getXScale() + 0.5 * eye_distance * ndfl;
+      left  = -2.0 *gl_renderer_.getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
+      right =  2.0 *gl_renderer_.getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
 	
 			glFrustum(left,right,
 								-2.0 * gl_renderer_.getYScale(), 
@@ -366,6 +366,7 @@ namespace BALL
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
 
+			//================== reset camera values =============
 			stage_->getCamera().setViewPoint(old_view_point);
 			stage_->getCamera().setLookAtPosition(old_look_at);
 
@@ -637,7 +638,8 @@ namespace BALL
 
 			stage_->setEyeDistance(new_distance);
 			stage_settings_->updateFromStage();
-			update();
+
+			renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
 		void Scene::changeFocalDistance_(Scene* scene)
@@ -647,11 +649,12 @@ namespace BALL
 			float new_distance = stage_->getFocalDistance() + (delta_x / 10.0);
 			
 			// prevent strange values
-			if (new_distance < 0 || new_distance > 100) return;
+			if (new_distance < 7 || new_distance > 100) return;
 
 			stage_->setFocalDistance(new_distance);
 			stage_settings_->updateFromStage();
-			update();
+
+			renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
 		void Scene::setViewPoint_()
@@ -660,7 +663,7 @@ namespace BALL
 			SetCamera set_camera(this);
 			set_camera.exec();
 			gl_renderer_.updateCamera();
-			updateGL();
+			renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
 
@@ -700,7 +703,7 @@ namespace BALL
 			gl_renderer_.updateCamera();
 			gl_renderer_.setLights();
 			light_settings_->updateFromStage();
-			updateGL();
+			renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
 
@@ -717,10 +720,11 @@ namespace BALL
 			light.setType(LightSource::POSITIONAL);
 			stage_->addLightSource(light);
 			gl_renderer_.setLights();
-			if (update_GL) updateGL();
 			light_settings_->update();
 			light_settings_->getDefaultLights();
 			light_settings_->updateFromStage();
+
+			if (update_GL) renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
 
@@ -836,6 +840,7 @@ namespace BALL
 				"," + String((Index)stage_->getBackgroundColor().getAlpha()) + ")";
 
 			inifile.insertValue("STAGE", "EyeDistance", String(stage_->getEyeDistance()));
+			inifile.insertValue("STAGE", "FocalDistance", String(stage_->getFocalDistance()));
 			inifile.insertValue("STAGE", "BackgroundColor", String(data));
 			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
 			writeLights_(inifile);
@@ -858,6 +863,11 @@ namespace BALL
 			if (inifile.hasEntry("STAGE", "EyeDistance"))
 			{
 				stage_->setEyeDistance(inifile.getValue("STAGE", "EyeDistance").toFloat());
+			}
+
+			if (inifile.hasEntry("STAGE", "FocalDistance"))
+			{
+				stage_->setFocalDistance(inifile.getValue("STAGE", "FocalDistance").toFloat());
 			}
 
 			if (inifile.hasEntry("STAGE", "BackgroundColor"))
@@ -935,21 +945,24 @@ namespace BALL
 			if (showed_coordinate && !stage_->coordinateSystemEnabled())
 			{
 				PrimitiveManager::RepresentationsIterator it = pm.begin();
-				List<Representation*> reps;
+				Representation* coordinate_rep = 0;
 				for (; it != pm.end(); ++it)
 				{
 					if ((*it)->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 					{
-						reps.push_back(*it);
+						coordinate_rep = *it;
+					}
+					else
+					{
+						(*it)->update(true);
 					}
 				}
-
-				it = reps.begin();
-				for (; it != reps.end(); it++)
+				if (coordinate_rep != 0)
 				{
-					pm.remove(**it);
-					RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::REMOVE);
+					pm.remove(coordinate_rep);
+					RepresentationMessage* message = new RepresentationMessage(*coordinate_rep, RepresentationMessage::REMOVE);
 					notify_(message);
+					break;
 				}
 			}
 			else if (!showed_coordinate && stage_->coordinateSystemEnabled()) 
@@ -957,8 +970,7 @@ namespace BALL
 				createCoordinateSystem_();
 			}
 			gl_renderer_.updateBackgroundColor(); 
-			renderView_(DISPLAY_LISTS_RENDERING);
-			updateGL();
+			renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
 
@@ -1152,7 +1164,7 @@ namespace BALL
 
 		//##########################EVENTS#################################
 
-		void Scene::mouseMoveEvent(QMouseEvent *e)
+		void Scene::mouseMoveEvent(QMouseEvent* e)
 		{
 			makeCurrent();
 
@@ -1170,52 +1182,14 @@ namespace BALL
 				{
 					selectionPressedMoved_();
 				}
-
-				x_window_pos_old_ = x_window_pos_new_;
-				y_window_pos_old_ = y_window_pos_new_;
-				return;
 			}
 
-			// ============ rotate mode ================
-			if(current_mode_ == ROTATE__MODE)
-			{	
-				switch (e->state())
-				{
-					case Qt::RightButton:
-						translateSystem_(this);
-						break;
-					case Qt::MidButton:
-						zoomSystem_(this);
-						break;
+			processRotateModeMouseEvents_(e);
 
-					case (Qt::ShiftButton | Qt::LeftButton): 
-						zoomSystem_(this);
-						break;
-
-					case (Qt::ControlButton | Qt::LeftButton):
-						translateSystem_(this);
-						break;
-
-					case (Qt::AltButton | Qt::ShiftButton | Qt::LeftButton): 
-						changeFocalDistance_(this);
-						break;
-
-					case (Qt::AltButton | Qt::LeftButton): 
-						changeEyeDistance_(this);
-						break;
-
-					case Qt::LeftButton:
-						rotateSystem_(this);
-						break;
-
-					default:
-						break;
-				}
-
-				x_window_pos_old_ = x_window_pos_new_;
-				y_window_pos_old_ = y_window_pos_new_;
-			}
+			x_window_pos_old_ = x_window_pos_new_;
+			y_window_pos_old_ = y_window_pos_new_;
 		}
+
 
 		void Scene::mousePressEvent(QMouseEvent* e)
 		{
@@ -1228,6 +1202,7 @@ namespace BALL
 			{
 				return;
 			}
+
 			if(current_mode_ == PICKING__MODE)
 			{	
 				if (e->button() == Qt::LeftButton ||
@@ -1239,7 +1214,47 @@ namespace BALL
 		}
 
 
-		void Scene::mouseReleaseEvent(QMouseEvent *e)
+		void Scene::processRotateModeMouseEvents_(QMouseEvent* e)
+		{
+			if(current_mode_ != ROTATE__MODE) return;
+
+			switch (e->state())
+			{
+				case (Qt::AltButton | Qt::ShiftButton | Qt::LeftButton): 
+					changeFocalDistance_(this);
+					break;
+
+				case (Qt::AltButton | Qt::LeftButton): 
+					changeEyeDistance_(this);
+					break;
+
+				case (Qt::ShiftButton | Qt::LeftButton): 
+					zoomSystem_(this);
+					break;
+
+				case (Qt::ControlButton | Qt::LeftButton):
+					translateSystem_(this);
+					break;
+
+				case Qt::MidButton:
+					zoomSystem_(this);
+					break;
+
+				case Qt::RightButton:
+					translateSystem_(this);
+					break;
+
+				case Qt::LeftButton:
+					rotateSystem_(this);
+					break;
+
+				default:
+					break;
+			}
+		}
+
+
+		void Scene::mouseReleaseEvent(QMouseEvent* e)
 		{
 			makeCurrent();
 
@@ -1248,44 +1263,24 @@ namespace BALL
 			{
 				switch (e->state())
 				{
+					case (Qt::LeftButton | Qt::ShiftButton):
+						deselectionReleased_();
+						break;
+
 					case Qt::LeftButton:
 						selectionReleased_();
 						break;
 
 					case Qt::RightButton:
 						deselectionReleased_();
-
-					case (Qt::LeftButton | Qt::ShiftButton):
-						deselectionReleased_();
-
-					default:
-						break;
-				}
-
-				return;
-			}
-
-			// ============ rotate mode ================
-			if(current_mode_ == ROTATE__MODE)
-			{	
-				switch (e->state())
-				{
-					case (Qt::ShiftButton | Qt::LeftButton):
-						zoomSystem_(this);
-						break;
-
-					case (Qt::ControlButton | Qt::LeftButton):
-						translateSystem_(this);
-						break;
-
-					case Qt::LeftButton:
-						rotateSystem_(this);
 						break;
 
 					default:
 						break;
 				}
 			}
+
+			processRotateModeMouseEvents_(e);
 
 			if (need_update_)
 			{
@@ -1293,6 +1288,7 @@ namespace BALL
 				need_update_ = false;
 			}
 		}
+
 
 #ifndef QT_NO_WHEELEVENT
 		void Scene::wheelEvent(QWheelEvent *qmouse_event)
@@ -1466,7 +1462,7 @@ namespace BALL
 				glMatrixMode(GL_MODELVIEW);
 
 				hide();
-				showNormal();
+// 				showNormal();
 				reparent((QWidget*)getMainControl(), getWFlags() & ~WType_Mask, last_pos_, false);
 				((QMainWindow*)getMainControl())->setCentralWidget(this);
 				show();
@@ -1476,10 +1472,10 @@ namespace BALL
 			{
 				last_pos_ = pos();
 				hide();
-				showNormal();
+// 				showNormal();
 				reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
-				showFullScreen();
-				setGeometry(qApp->desktop()->screenGeometry());
+// 				showFullScreen();
+ 				setGeometry(qApp->desktop()->screenGeometry());
 				stereo = true;
 				show();
 			}
