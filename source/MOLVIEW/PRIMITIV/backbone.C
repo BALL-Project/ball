@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backbone.C,v 1.8 2002/12/16 09:08:28 oliver Exp $
+// $Id: backbone.C,v 1.9 2002/12/16 12:23:02 sturm Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/backbone.h>
 
@@ -142,16 +142,6 @@ namespace BALL
 			GeometricObject::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void Backbone::read(istream & /* s */)
-			throw()
-		{
-		}
-
-		void Backbone::write(ostream & /* s */) const
-			throw()
-		{
 		}
 
 		bool Backbone::extract()

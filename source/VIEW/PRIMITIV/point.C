@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.C,v 1.10 2002/12/12 11:43:28 oliver Exp $
+// $Id: point.C,v 1.11 2002/12/16 12:23:15 sturm Exp $
 
 #include <BALL/VIEW/PRIMITIV/point.h>
 
@@ -114,18 +114,6 @@ namespace BALL
 			Vertex::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void Point::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Point::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Point::extract()

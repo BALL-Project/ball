@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.C,v 1.14 2002/12/12 11:43:26 oliver Exp $
+// $Id: QTTimer.C,v 1.15 2002/12/16 12:23:10 sturm Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
@@ -153,18 +153,6 @@ namespace BALL
 					 << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void QTTimer::read(istream & /* s */)
-				throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void QTTimer::write(ostream & /* s */) const
-				throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

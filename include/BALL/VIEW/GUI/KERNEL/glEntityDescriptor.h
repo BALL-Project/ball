@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glEntityDescriptor.h,v 1.11 2002/12/12 09:35:12 oliver Exp $
+// $Id: glEntityDescriptor.h,v 1.12 2002/12/16 12:22:48 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
@@ -301,29 +301,6 @@ namespace BALL
 					@param   depth the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-
-			//@}
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent glEntityDescriptor data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} glEntityDescriptor
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent glEntityDescriptor data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} glEntityDescriptor
-			*/
-			virtual void write(std::ostream& s) const
 				throw();
 
 			//@}

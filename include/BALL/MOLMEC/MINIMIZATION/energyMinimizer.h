@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.24 2002/12/12 09:48:47 oliver Exp $
+// $Id: energyMinimizer.h,v 1.25 2002/12/16 12:22:43 sturm Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -229,20 +229,6 @@ namespace BALL
     */
     virtual bool isConverged() const;
 
-    /** Calculate the next step.
-				This method is implemented in each minimizer class and 
-				tries to determine the next step to be taken.
-				It typically performs a line search.
-        @return bool {\bf true} if an acceptable solution was found
-    */
-    virtual bool findStep();
-
-
-    /** Update the search direction.
-				This method is implemented by the derived classes to implement a 
-				method to determine a new search direction.
-    */
-    virtual void updateDirection();
 
     /** Update energy.
 				This method calls {\tt force_field_->updateEnergy()} and stores
@@ -386,19 +372,6 @@ namespace BALL
 		/**	Return the force field of the energy minimizer
 		*/
 		ForceField*	getForceField();
-
-		/**	Minimize the energy of the system bound to the force field.	
-				If a number of steps is given, the minimization is aborted after
-				that number of steps, regardless of the number of steps given in 
-				the options ({\tt MAX_STEPS}). Together with the {\tt restart} option
-				this feature is used to extract properties or visualize the results
-				in the course of the minimization. If restart is set to {\bf true},
-				the minimization continues with the former step width.	
-				@param		steps maximum number of steps to be taken
-				@param		restart {\bf true} if the minimization is to be continued
-				@return		bool - {\bf true} if the minimization is terminated
-		*/
-		virtual bool	minimize(Size steps = 0, bool restart = false);
 
 		//@}
 		/**	@name	Public Attributes

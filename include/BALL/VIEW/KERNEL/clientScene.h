@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clientScene.h,v 1.8 2002/12/12 09:39:48 oliver Exp $
+// $Id: clientScene.h,v 1.9 2002/12/16 12:22:52 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
 #define BALL_VIEW_KERNEL_CLIENTSCENE_H
@@ -125,16 +125,6 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
-			//@}
-
-			/**	@name	Storers
-			*/
-			//@{
-
-			virtual void read(std::istream& s);
-
-			virtual void write(std::ostream& s) const;
-
 			//@}
 			
 			private:

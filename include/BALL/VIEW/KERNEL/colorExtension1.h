@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension1.h,v 1.8 2002/02/27 12:20:12 sturm Exp $
+// $Id: colorExtension1.h,v 1.9 2002/12/16 12:22:52 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION1_H
@@ -233,29 +233,6 @@ namespace BALL
 					@see     ColorRGBA::operator <<
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-			//@}
-
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			 Read persistent colorExtension data from the input stream {\em s} and 
-				 restore the state of {\em *this}.\\
-				 {\bf Note:} Not yet implemented.
-				 @param       s input stream from where to restore the internal state of {\em *this} colorExtension
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			 Write persistent colorExtension data to the output stream {\em s} and 
-				 store the state of {\em *this}.\\
-				 {\bf Note:} Not yet implemented.
-				 @param       s output stream to where to store the internal state of {\em *this} colorExtension
-			*/
-			virtual void write(std::ostream& s) const
 				throw();
 			//@}
 

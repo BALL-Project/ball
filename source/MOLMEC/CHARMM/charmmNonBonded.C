@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.17 2002/12/12 10:41:03 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.18 2002/12/16 12:22:59 sturm Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -207,7 +207,6 @@ namespace BALL
 	bool CharmmNonBonded::operator == (const CharmmNonBonded& /* cnb */)
 		throw(Exception::NotImplemented)
 	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	// This function determines the most efficient way to calculate all

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.C,v 1.4 2002/12/12 11:43:19 oliver Exp $
+// $Id: colorHSV.C,v 1.5 2002/12/16 12:23:04 sturm Exp $
 
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -212,18 +212,6 @@ namespace BALL
 			value_.dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);  
-		}
-
-		void ColorHSV::read(istream& /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorHSV::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		istream& operator >> (istream& s, ColorHSV& color_HSV)

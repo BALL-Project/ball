@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glmesh.C,v 1.7 2002/12/12 11:43:25 oliver Exp $
+// $Id: glmesh.C,v 1.8 2002/12/16 12:23:08 sturm Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 
@@ -335,12 +335,6 @@ namespace BALL
 			glPopMatrix();
 
 			return true;
-		}
-
-		bool GLMesh::drawUserDefined()
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool GLMesh::extract()

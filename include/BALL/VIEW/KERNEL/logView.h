@@ -108,26 +108,6 @@ namespace BALL
 
 			/**	@name	Storers
 			*/	
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent logView data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-					@param       s input stream from where to restore the internal state of {\em *this} logView
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent logView data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-  				@param       s output stream to where to store the internal state of {\em *this} logView
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-			//@}
 
 			protected:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.14 2002/12/12 11:43:26 oliver Exp $
+// $Id: geometricObject.C,v 1.15 2002/12/16 12:23:13 sturm Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -230,18 +230,6 @@ namespace BALL
 					 << (isSelected() ? "yes" : "no") << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-				
-		void GeometricObject::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void GeometricObject::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 				
 		bool GeometricObject::extract()

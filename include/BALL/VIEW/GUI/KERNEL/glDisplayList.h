@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.8 2002/12/12 09:35:12 oliver Exp $
+// $Id: glDisplayList.h,v 1.9 2002/12/16 12:22:47 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
@@ -252,29 +252,6 @@ namespace BALL
 					@param   depth the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-
-			//@}
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent glDisplayList data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} glDisplayList
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent glDisplayList data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} glDisplayList
-			*/
-			virtual void write(std::ostream& s) const
 				throw();
 
 			//@}

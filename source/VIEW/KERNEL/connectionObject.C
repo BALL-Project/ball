@@ -215,18 +215,6 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
-				
-		void ConnectionObject::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ConnectionObject::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
 
 		void ConnectionObject::notify_(Message *message)
 			throw()

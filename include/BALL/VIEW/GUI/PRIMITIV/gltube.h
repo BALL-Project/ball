@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gltube.h,v 1.9 2002/12/12 09:36:47 oliver Exp $
+// $Id: gltube.h,v 1.10 2002/12/16 12:22:51 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
@@ -186,12 +186,6 @@ namespace BALL
 					@see       GLPrimitiveManager
 			*/
 			virtual bool draw(bool with_names = false)
-				throw();
-
-			/** Experimental method.
-					Please avoid using this method.
-			*/
-			virtual bool drawUserDefined()
 				throw();
 
 			/** Export method.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.22 2002/12/12 09:35:13 oliver Exp $
+// $Id: mainControl.h,v 1.23 2002/12/16 12:22:49 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -829,28 +829,6 @@ namespace BALL
 			void selectComposites_(GeometricObjectSelectionMessage& message)
 				throw();
 
-			//@}
-			/**	@name	Storers
-			*/
-			//@{
-			/** Persistent stream output and state restorage.
-  			  Read persistent mainControl data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} mainControl
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent mainControl data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} mainControl
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-							
 			//@}
 			
 			void selectCompositeRecursive(Composite* composite, bool state)

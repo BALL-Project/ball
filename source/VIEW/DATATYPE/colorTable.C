@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorTable.C,v 1.6 2002/12/12 11:43:19 oliver Exp $
+// $Id: colorTable.C,v 1.7 2002/12/16 12:23:05 sturm Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/COMMON/rtti.h>
@@ -282,16 +282,6 @@ namespace BALL
 			{
 				s << operator[](i) << endl;
 			}
-		}
-
-		void ColorTable::read(istream & /*s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorTable::write(ostream & /*s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 	} // namespace VIEW

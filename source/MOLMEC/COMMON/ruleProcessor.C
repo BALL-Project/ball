@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ruleProcessor.C,v 1.7 2002/02/27 12:21:35 sturm Exp $
+// $Id: ruleProcessor.C,v 1.8 2002/12/16 12:23:00 sturm Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleProcessor.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -67,11 +67,6 @@ namespace BALL
 	bool RuleProcessor::finish()
 	{
 		return true;
-	}
-
-	Processor::Result RuleProcessor::operator () (Atom& /* atom */)
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	String RuleProcessor::evaluate(const Atom& atom)

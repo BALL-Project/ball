@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gltube.C,v 1.7 2002/12/12 11:43:25 oliver Exp $
+// $Id: gltube.C,v 1.8 2002/12/16 12:23:09 sturm Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gltube.h>
 
@@ -146,12 +146,6 @@ namespace BALL
 			glPopMatrix();
 
 			return true;
-		}
-
-		bool GLTube::drawUserDefined()
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool GLTube::extract()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.8 2002/12/12 11:43:24 oliver Exp $
+// $Id: server.C,v 1.9 2002/12/16 12:23:08 sturm Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
 
@@ -264,18 +264,6 @@ namespace BALL
 			ConnectionObject::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void Server::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Server::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		// main event loop

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.C,v 1.11 2002/12/12 11:43:28 oliver Exp $
+// $Id: sphere.C,v 1.12 2002/12/16 12:23:16 sturm Exp $
 
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 
@@ -122,18 +122,6 @@ namespace BALL
 			s << "radius : " << radius_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void Sphere::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Sphere::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Sphere::extract()

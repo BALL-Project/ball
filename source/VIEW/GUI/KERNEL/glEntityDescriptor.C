@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glEntityDescriptor.C,v 1.6 2002/12/12 11:43:24 oliver Exp $
+// $Id: glEntityDescriptor.C,v 1.7 2002/12/16 12:23:06 sturm Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h>
 #include <BALL/COMMON/exception.h>
@@ -93,18 +93,6 @@ namespace BALL
 			transparent_always_front_display_list_.dump(s, depth + 1);
 			
 			BALL_DUMP_STREAM_SUFFIX(s);     
-		}
-
-		void GLEntityDescriptor::read(istream &/* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void GLEntityDescriptor::write(ostream &/*s*/) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.C,v 1.4 2002/12/12 11:43:25 oliver Exp $
+// $Id: events.C,v 1.5 2002/12/16 12:23:10 sturm Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/events.h>
 
@@ -355,13 +355,6 @@ namespace BALL
 				scene_(scene)
 		{
 		}
-
-		/*			
-		Events::Events(const Events&  events, bool deep)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-	  */
 
 		Events::~Events()
 			throw()

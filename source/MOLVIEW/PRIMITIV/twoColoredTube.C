@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.C,v 1.11 2002/12/12 10:57:48 oliver Exp $
+// $Id: twoColoredTube.C,v 1.12 2002/12/16 12:23:02 sturm Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 
@@ -122,18 +122,6 @@ namespace BALL
 			s << "radius : " << radius_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void TwoColoredTube::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void TwoColoredTube::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool TwoColoredTube::extract()

@@ -63,18 +63,6 @@ namespace BALL
 		{
 		}
 
-		void LogView::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void LogView::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
 	  bool LogView::onNotify(LogStreamNotifier& /* source */)
 			throw()
 		{

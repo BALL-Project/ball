@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.7 2002/12/12 09:29:51 oliver Exp $
+// $Id: colorRGBA.h,v 1.8 2002/12/16 12:22:45 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -553,22 +553,6 @@ namespace BALL
 			/**	@name	Storers
 			*/
 			//@{
-
-			/** Persistent stream input and color restorage.
-					Reads persistent colorRGBA data from the input stream {\em s} and restores the color of {\em *this}.\\
-					{\bf Note:} Not yet implemented.
-					@param  s input stream from where to restore the color of {\em *this} colorRGBA
-			*/
-			void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and color storage.
-					Writes persistent colorRGBA data to the output stream {\em s} and stores the color of {\em *this}.\\
-					{\bf Note:} Not yet implemented.
-					@param  s output stream to where the color of {\em *this} colorRGBA will be stored
-			*/
-			void write(std::ostream& s) const
-				throw();
 
 			/** Friendly stream input.
 					Reads colorRGBA data from the input stream {\em s} and restore the color of {\em *this}.

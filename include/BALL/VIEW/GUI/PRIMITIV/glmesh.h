@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glmesh.h,v 1.9 2002/12/12 09:36:46 oliver Exp $
+// $Id: glmesh.h,v 1.10 2002/12/16 12:22:50 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLMESH_H
 #define BALL_VIEW_GUI_PRIMITIV_GLMESH_H
@@ -178,12 +178,6 @@ namespace BALL
 					@see       GLObject::draw
 			*/
 			virtual bool draw(bool with_names = false)
-				throw();
-
-			/** Experimental method.
-					Please avoid using this method.
-			*/
-			virtual bool drawUserDefined()
 				throw();
 
 			/** Export method.

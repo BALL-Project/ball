@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.C,v 1.8 2002/12/12 11:43:19 oliver Exp $
+// $Id: colorUnitHue.C,v 1.9 2002/12/16 12:23:05 sturm Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
 #include <BALL/COMMON/rtti.h>
@@ -473,18 +473,6 @@ namespace BALL
 			s << "hunit : " << (int)(value_ * 360.0) << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void ColorUnitHue::read(istream& /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorUnitHue::write(ostream& /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		istream& operator >> (istream& s, ColorUnitHue& color_h_unit)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.C,v 1.8 2002/12/12 11:43:28 oliver Exp $
+// $Id: simpleBox.C,v 1.9 2002/12/16 12:23:15 sturm Exp $
 
 #include <BALL/VIEW/PRIMITIV/simpleBox.h>
 
@@ -113,18 +113,6 @@ namespace BALL
 			Vertex2::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void SimpleBox::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void SimpleBox::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool SimpleBox::extract()

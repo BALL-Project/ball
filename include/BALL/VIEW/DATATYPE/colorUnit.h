@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.12 2002/12/12 09:29:52 oliver Exp $
+// $Id: colorUnit.h,v 1.13 2002/12/16 12:22:46 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -803,22 +803,6 @@ namespace BALL
 			/**	@name	Storers
 			*/
 			//@{
-
-			/** Persistent stream input and value restorage.
-					Reads persistent colorUnit data from the input stream {\em s} and restores the value of {\em *this}.\\
-					{\bf Note:} Not yet implemented.
-					@param  s input stream from where to restore the value of {\em *this} colorUnit
-			*/
-			void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and value storage.
-					Writes persistent colorUnit data to the output stream {\em s} and stores the value of {\em *this}.\\
-					{\bf Note:} Not yet implemented.
-					@param  s output stream to where the value of {\em *this} colorUnit will be stored
-			*/
-			void write(std::ostream& s) const
-				throw();
 
 			/** Friendly stream input.
 					Reads colorUnit data from the input stream {\em s} and restore the value of {\em *this}.

@@ -193,12 +193,6 @@ namespace BALL
 			composite_descriptor.set(*this, deep);
 		}
 
-		void CompositeDescriptor::swap(CompositeDescriptor&  /* composite_descriptor */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
 		void CompositeDescriptor::update()
 			throw()
 		{
@@ -635,18 +629,6 @@ namespace BALL
 					 << (void *)parent_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);     
-		}
-
-		void CompositeDescriptor::read(istream &/* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void CompositeDescriptor::write(ostream &/*s*/) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.C,v 1.11 2002/02/27 12:25:25 sturm Exp $
+// $Id: vertex1.C,v 1.12 2002/12/16 12:23:13 sturm Exp $
 
 #include <BALL/VIEW/KERNEL/vertex1.h>
 
@@ -119,18 +119,6 @@ namespace BALL
 			s << "*vertex1 : " << (*vertex1_ptr_) << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void Vertex::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Vertex::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

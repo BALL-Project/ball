@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.C,v 1.5 2002/12/12 11:43:24 oliver Exp $
+// $Id: objectCreator.C,v 1.6 2002/12/16 12:23:08 sturm Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
 
@@ -71,18 +71,6 @@ namespace BALL
 			// convert the object
 			return convertObject(*po);
     }
-
-		void ObjectCreator::read(istream & /* s */)
-				throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ObjectCreator::write(ostream & /* s */) const
-				throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
 
 	} // namespace VIEW
 

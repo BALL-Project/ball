@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.C,v 1.7 2002/12/12 11:43:24 oliver Exp $
+// $Id: glQuadricObject.C,v 1.8 2002/12/16 12:23:07 sturm Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
 #include <BALL/COMMON/exception.h>
@@ -310,18 +310,6 @@ namespace BALL
 					 << endl;; 
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void GLQuadricObject::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-		 
-		void GLQuadricObject::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void GLQuadricObject::create_()

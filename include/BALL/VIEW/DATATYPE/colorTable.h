@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorTable.h,v 1.5 2002/12/12 09:29:51 oliver Exp $
+// $Id: colorTable.h,v 1.6 2002/12/16 12:22:46 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -137,15 +137,6 @@ namespace BALL
 			/**	
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
-			//@}
-
-			/**	@name	Storers
-			*/
-			//@{
-
-			virtual void read(std::istream& s);
-
-			virtual void write(std::ostream& s) const;
 			//@}
 
 			protected:

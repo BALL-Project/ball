@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.22 2002/12/12 10:40:11 oliver Exp $
+// $Id: amberNonBonded.C,v 1.23 2002/12/16 12:22:59 sturm Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -178,7 +178,7 @@ namespace BALL
 	bool AmberNonBonded::operator == (const AmberNonBonded& /* anb */)
 		throw(Exception::NotImplemented)
 	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
+
 	}
 
 	// This function determines the most efficient way to calculate all

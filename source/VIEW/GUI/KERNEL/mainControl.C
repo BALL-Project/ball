@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.27 2002/12/14 23:05:23 amoll Exp $
+// $Id: mainControl.C,v 1.28 2002/12/16 12:23:07 sturm Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -575,18 +575,6 @@ namespace BALL
 			}
 
 			BALL_DUMP_STREAM_SUFFIX(s);     
-		}
-
-		void MainControl::read(istream &/* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void MainControl::write(ostream &/*s*/) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		CompositeDescriptor*  MainControl::insert_(const Composite& composite, const String& s, const Vector3& v)

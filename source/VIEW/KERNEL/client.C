@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.C,v 1.11 2002/12/12 11:43:26 oliver Exp $
+// $Id: client.C,v 1.12 2002/12/16 12:23:11 sturm Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -192,18 +192,6 @@ namespace BALL
 			s << "port: " << port_ << endl;
 			
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void Client::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Client::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 	} // namespace VIEW

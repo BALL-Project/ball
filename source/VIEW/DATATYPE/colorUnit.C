@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.C,v 1.8 2002/12/12 11:43:19 oliver Exp $
+// $Id: colorUnit.C,v 1.9 2002/12/16 12:23:05 sturm Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
@@ -502,18 +502,6 @@ namespace BALL
 			s << "unit : " << (int)(value_ * 255.0) << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void ColorUnit::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorUnit::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		istream& operator >> (std::istream& s, ColorUnit& color)
