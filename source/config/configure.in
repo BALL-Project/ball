@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.25 2000/01/03 22:21:55 oliver Exp $
+dnl    $Id: configure.in,v 1.26 2000/01/04 00:24:18 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1248,16 +1248,6 @@ AC_DEFINE_UNQUOTED(BALL_SIZE_TYPE, ${BALL_SIZE_TYPE})
 AC_DEFINE_UNQUOTED(BALL_INDEX_TYPE, ${BALL_INDEX_TYPE})
 	
 
-dnl
-dnl 	check whether strerror is known - define it otherwise
-dnl 	in defines.h
-dnl
-
-AC_CHECK_FUNCS(strerror,HAVE_STRERROR=1)
-if test "${HAVE_STRERROR}" != 1 ; then
-	AC_DEFINE(BALL_DEFINE_STRERROR)
-fi
-
 dnl   
 dnl   check for some network stuff needed for socket class
 dnl   this test tries to identify the neccessary libraries
@@ -1382,26 +1372,18 @@ fi
 AC_DEFINE_UNQUOTED(BALL_SOCKLEN_TYPE, ${BALL_SOCKLEN_TYPE})
 
 
-
-
-AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(assert.h ctype.h dirent.h errno.h fstream.h)
+dnl
+dnl   check whether ieeefp.h does really exist
+dnl
 if test "$INCLUDE_IEEEFP" = true ; then
 	AC_CHECK_HEADERS(ieeefp.h)
 	AC_DEFINE(INCLUDE_IEEEFP,)
 fi
-AC_CHECK_HEADERS(limits.h math.h values.h new.h pwd.h regex.h signal.h)
-AC_CHECK_HEADERS(stdarg.h stdio.h stdlib.h string.h strstream.h)
-AC_CHECK_HEADERS(sys/stat.h sys/time.h sys/times.h sys/types.h)
-AC_CHECK_HEADERS(time.h unistd.h)
 
 
 dnl
 dnl		Checks for library functions
 dnl
-
-AC_FUNC_MEMCMP
-AC_CHECK_FUNCS(gettimeofday strdup strstr)
 
 dnl
 dnl		BallVIEW

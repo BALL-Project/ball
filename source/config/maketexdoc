@@ -10,3 +10,5 @@ cd ../../doc/tex
 latex BALL
 latex BALL
 dvips BALL
+ps2pdf BALL.ps BALL.pdf
+mv BALL.ps BALL.pdf ..
