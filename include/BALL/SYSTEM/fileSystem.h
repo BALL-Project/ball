@@ -1,4 +1,4 @@
-// $Id: fileSystem.h,v 1.3 2001/05/10 13:47:30 oliver Exp $
+// $Id: fileSystem.h,v 1.4 2001/07/31 00:45:05 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H
@@ -27,6 +27,11 @@ namespace BALL
 {
 
 	/**	File System Class
+			This class is a wrapper around some very basic properties
+			of the machine's file system properties.
+			The method (\Ref{canonizePath}) is mainly used
+			by \Ref{File} to obtain a unique and unambiguous representation
+			of a path.
 	*/
 	class FileSystem
 	{
@@ -36,15 +41,18 @@ namespace BALL
 		*/
 		//@{
 
-		/**	
+		/**	The character separating directories in a path.
+				This is usually {\tt '/'}.
 		*/
 		static const char PATH_SEPARATOR;
 
-		/**	
+		/**	The string used to indicate the current directory.
+				This is usually {\tt '.'}
 		*/
 		static const char* const CURRENT_DIRECTORY;
 
-		/**	
+		/**	The string indicating the parent directory.
+				This is usually {\tt '..'}
 		*/
 		static const char* const PARENT_DIRECTORY;
 		//@}
@@ -53,30 +61,34 @@ namespace BALL
 		*/
 		enum
 		{
-			/**
+			/** The maximum length of a filename.
 			*/
 			MAX_FILENAME_LENGTH = 256, // NAME_MAX seems to be too restrictive for modern Unixes
-			/**
+			/** The maximum length for a full path.
 			*/
 			MAX_PATH_LENGTH = BALL_PATH_MAX
 		};
 
-		/**	@name Miscellaneous 
+		/**	@name Static methods 
 		*/
 		//@{
 
-		/**
+		/** Convert a given filename to a canonical name.
+				This method creates a unique and unambiguous representation
+				of any absolute or relative path.
+				It expands the user's homedirectory ({\tt '\~'}) and
+				duplicate or redundant separators, e.g.
+        '//' is reduced to /'/' and '/./' is removed.
 		*/
-		static String& canonizePath(String& path);
+		static void canonizePath(String& path)
+			throw();
 
 		//@}
 
-		protected:
-
 		private:
 
-		static String& expandTilde_(String& path);
-
+		static void expandTilde_(String& path)
+			throw();
 	};
 
 } // namespace BALL
