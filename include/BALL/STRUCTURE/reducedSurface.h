@@ -1,13 +1,13 @@
-// $Id: reducedSurface.h,v 1.28 2001/12/30 13:28:43 sturm Exp $
+// $Id: reducedSurface.h,v 1.29 2002/01/14 22:16:29 strobel Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
 
 //#define print_rs_debug_info
-//#define debug_surface_processor
+#define debug_surface_processor
 #ifdef debug_surface_processor
 #	define debug_surface_processor_verbose
-#	define debug_surface_processor_print
+//#	define debug_surface_processor_print
 #endif
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
@@ -1585,6 +1585,8 @@ namespace BALL
 				std::cout << "computing ...\n";
 				HALT = 0;
 				#endif
+		double epsilon = Constants::EPSILON;
+		Constants::EPSILON = 1e-4;
 				//RStimer.start();
 				//std::cout << "starte ... " << RStimer.getUserTime() << "\n";
 		// find the neighbours of the atoms
@@ -1619,6 +1621,7 @@ namespace BALL
 			}
 		}
 		clean();
+		Constants::EPSILON = epsilon;
 				//std::cout << "fertig ... " << RStimer.getUserTime() << "\n";
 	}
 
@@ -1814,7 +1817,6 @@ namespace BALL
 			faces_.push_back(new_face);
 			number_of_faces_++;
 					#ifdef print_rs_debug_info
-					if (number_of_faces_ == 2365) HALT = 0;
 					std::cout << "Face und Edges geupdatet:\n";
 					std::cout << *new_face << "\n";
 					std::cout << *edge << "\n";
@@ -3710,10 +3712,22 @@ namespace BALL
 			TVector3<T> c1((T)p1.x,(T)p1.y,(T)p1.z);
 			TVector3<T> c2((T)p2.x,(T)p2.y,(T)p2.z);
 			ProbePosition* position = probe_positions_[a1][a2][a3];
-			position->status[0] = STATUS_NOT_TESTED;
-			position->status[1] = STATUS_NOT_TESTED;
-			position->point[0] = c1;
-			position->point[1] = c2;
+			if (position == NULL)
+			{
+				probe_positions_[a1][a2][a3] = new ProbePosition;
+				position = probe_positions_[a1][a2][a3];
+				position->status.push_back(STATUS_NOT_TESTED);
+				position->status.push_back(STATUS_NOT_TESTED);
+				position->point.push_back(c1);
+				position->point.push_back(c2);
+			}
+			else
+			{
+				position->status[0] = STATUS_NOT_TESTED;
+				position->status[1] = STATUS_NOT_TESTED;
+				position->point[0] = c1;
+				position->point[1] = c2;
+			}
 		}
 		else
 		{
