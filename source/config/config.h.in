@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.28 2001/08/02 01:10:35 oliver Exp $ 
+// $Id: config.h.in,v 1.29 2002/08/12 11:23:57 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -168,6 +168,12 @@
 // either something like std::basic_ios<char> etc., or ios, istream etc.
 #undef BALL_HAS_ANSI_IOSTREAM
 
+// Define the precision for the BALL Complex type (has to be consistent
+// with the FFTW precision, if included).
+#define BALL_COMPLEX_PRECISION float
+
+// Define whether the FFTW library may be included.
+#undef BALL_HAS_FFTW
 
 // Define whether to use the ARM style or ANSI style access modifications
 //   ARM style:   BaseClass::foo;
