@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.2 2005/03/22 15:41:11 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.3 2005/03/22 18:27:25 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -38,47 +38,20 @@ namespace BALL
 		return *this;
 	}
 
+	void MMFF94BondStretchParameters::getOptionalSBMBParameters(const Bond& bond, float& kb, float& r0) const
+	{
+		StretchMap::ConstIterator it = 
+		      parameters_optional_sbmb_.find(getIndex_(bond.getFirstAtom()->getType(),
+																									 bond.getSecondAtom()->getType()));
+		kb = it->second.first;
+		r0 = it->second.second;
+	}
+
 	bool MMFF94BondStretchParameters::getParameters(const Bond& bond, float& kb, float& r0) const
 	{
-		const Atom& atom1 = *bond.getFirstAtom();
-		const Atom& atom2 = *bond.getSecondAtom();
-		Position atom_type1(atom1.getType());
-		Position atom_type2(atom2.getType());
-
-		// make sure atom_type1 is smaller or equal atom_type2
-		// because the parameters are not mirrored
-		if (atom_type2 < atom_type1)
-		{
-			Position temp(atom_type1);
-			atom_type1 = atom_type2;
-			atom_type2 = temp;
-		}
-
-		const Position index(getIndex_(atom_type1, atom_type2));
-
-		// take the sbmb value if :
-
-		// is there an optional sbmb value ?
-		// is the bond order == 1 ?
-		// are both atoms sp or sp2 hypridised?
-		StretchMap::ConstIterator it = parameters_optional_sbmb_.find(index);
-
-		const bool get_sbmb = 
-			it != parameters_optional_sbmb_.end() 	&&
-			bond.getOrder() == 1   									&&
-			(isSp_(atom1) || isSp2_(atom1)) 				&&
-			(isSp_(atom2) || isSp2_(atom2));
-
-		if (get_sbmb)
-		{
-			kb = it->second.first;
-			r0 = it->second.second;
-			return true;
-		}
-
 		// take the standard value
-
-		it = parameters_.find(index);
+		StretchMap::ConstIterator it = parameters_.find(getIndex_(bond.getFirstAtom()->getType(),
+																							 							  bond.getSecondAtom()->getType()));
 		if (it == parameters_.end()) return false;
 
 		kb = it->second.first;
@@ -90,6 +63,9 @@ namespace BALL
 	bool MMFF94BondStretchParameters::readParameters(const String& filename)
 		throw(Exception::FileNotFound)
 	{
+		parameters_.clear();
+		parameters_optional_sbmb_.clear();
+
 		LineBasedFile infile(filename);
 		vector<String> fields;
 
@@ -147,5 +123,20 @@ namespace BALL
 		is_initialized_ = true;
 		return true;
 	}
-		
+
+	Position MMFF94BondStretchParameters::getIndex_(Position atom_type1, Position atom_type2) const
+	{ 
+		// make sure atom_type1 is smaller or equal atom_type2
+		// because the parameters are not mirrored
+		if (atom_type2 < atom_type1)
+		{
+			Position temp(atom_type1);
+			atom_type1 = atom_type2;
+			atom_type2 = temp;
+		}
+
+		return atom_type1 * nr_of_atom_types_ + atom_type2;
+	}
+
+	
 } // namespace BALL

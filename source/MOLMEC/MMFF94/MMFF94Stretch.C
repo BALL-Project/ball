@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.5 2005/03/22 15:41:11 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.6 2005/03/22 18:27:25 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -9,6 +9,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #define BALL_DEBUG_MMFF
 
@@ -71,6 +72,24 @@ namespace BALL
 		}
 
 		stretch_.clear();
+		rings_.clear();
+
+		RingPerceptionProcessor rpp;
+		vector< vector<Atom*> > rings;
+		rpp.calculateSSSR(rings, *getForceField()->getSystem());
+
+		for (Position pos = 0; pos < rings.size(); pos++)
+		{
+			if (rings[pos].size() >= 5 && rings[pos].size() <= 6)
+			{
+				rings_.push_back(HashSet<Atom*>());
+				Position ring_pos = rings_.size() - 1;
+				for (Position atom_pos = 0; atom_pos < rings[pos].size(); atom_pos++)
+				{
+					rings_[ring_pos].insert(rings[pos][atom_pos]);
+				}
+			}
+		}
 
 		bool use_selection = getForceField()->getUseSelection();
 
@@ -96,13 +115,29 @@ namespace BALL
 			  Atom& atom2(*(Atom*)bond.getSecondAtom());
 
 				const bool make_it = !use_selection || (use_selection && atom1.isSelected() && atom2.isSelected());
+				if (!make_it) continue;
 
 				const Atom::Type atom_type_A = atom1.getType();
 				const Atom::Type atom_type_B = atom2.getType();
 
-				if (!make_it) continue;
- 
-				if (!parameters_.getParameters(bond, dummy_stretch.kb, dummy_stretch.r0))
+				// take the sbmb value if :
+
+				// is there an optional sbmb value ?
+				// is the bond order == 1 ?
+				// are both atoms sp or sp2 hypridised?
+				const bool get_sbmb = 
+					parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B) &&
+					bond.getOrder() == 1   									&&
+					(isSp_(atom1) || isSp2_(atom1)) 				&&
+					(isSp_(atom2) || isSp2_(atom2))					&&
+					!isInOneRing_(bond);
+
+				if (get_sbmb)
+				{
+					parameters_.getOptionalSBMBParameters(bond, dummy_stretch.kb, dummy_stretch.r0);
+				}
+
+				else if (!parameters_.getParameters(bond, dummy_stretch.kb, dummy_stretch.r0))
 				{
 					getForceField()->error() << "cannot find stretch parameters for atom types " 
 							<< atom_type_A << " " << atom_type_B 
@@ -131,6 +166,22 @@ namespace BALL
 		return true;
 	}
 
+	bool MMFF94Stretch::isInOneRing_(const Bond& bond)
+	{
+		Atom* atom1 = (Atom*) bond.getFirstAtom();
+		Atom* atom2 = (Atom*) bond.getSecondAtom();
+		for (Position pos = 0; pos < rings_.size(); pos++)
+		{
+			if (rings_[pos].has(atom1) &&
+					rings_[pos].has(atom2))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
 	// update bond lists if the selection has changed
 	void MMFF94Stretch::update()
 		throw(Exception::TooManyErrors)
@@ -157,8 +208,8 @@ namespace BALL
 #ifdef BALL_DEBUG_MMFF
 			Log.info() << stretch_[i].atom1->getFullName() << " -> " 
 								 << stretch_[i].atom2->getFullName() 
-								 << "r0: " << stretch_[i].r0
-								 << "D: " << delta << " | E: " << eb_ij << std::endl;
+								 << "   r0: " << stretch_[i].r0
+								 << "   D: " << delta << "   E: " << eb_ij << std::endl;
 #endif
 
 			energy_ += eb_ij;

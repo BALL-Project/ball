@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.3 2005/03/22 16:32:53 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.4 2005/03/22 18:27:12 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -120,7 +120,7 @@ int runtests(const vector<String>& filenames, const String& dir)
 
 		float stretch_diff = std::fabs(mmff.getEnergy() - results[1]);
 
-		if (std::fabs(results[1] / stretch_diff) > 4.0 / 1000.0)
+		if (std::fabs(stretch_diff / results[1]) > 1.0 / 10.0 && stretch_diff > 0.001)
 		{
 			Log.error() << filenames[pos] << "   " << results[1] << "  " << mmff.getEnergy() << std::endl;
 		}
@@ -146,6 +146,8 @@ vector<String> getTestFiles(const String& dir)
 		results.push_back(infile.getLine());
 	}
 
+	results.pop_back();
+
 	return results;
 }
 
@@ -158,7 +160,9 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	vector<String> files = getTestFiles(argv[1]);
+	vector<String> files;
+	//files.push_back("VAJFAN");
+	files = getTestFiles(argv[1]);
 
 	return runtests(files, argv[1]);
 }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.h,v 1.1.2.4 2005/03/22 15:41:17 amoll Exp $ 
+// $Id: MMFF94Stretch.h,v 1.1.2.5 2005/03/22 18:27:30 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -23,6 +23,10 @@
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
 #	include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
+#endif
+
+#ifndef BALL_KERNEL_STANDARDPREDICATES_H
+# include <BALL/KERNEL/standardPredicates.h>
 #endif
 
 namespace BALL 
@@ -106,10 +110,14 @@ namespace BALL
 		///
 		MMFF94BondStretchParameters getParameters() { return parameters_;}
 
+		const vector<Stretch>& getStretches() { return stretch_;}
+
 		//@} 
 
 		private:
 
+		bool isInOneRing_(const Bond& bond);
+		
 		/*_	@name	Private Attributes	
 		*/
 		//_@{
@@ -117,6 +125,10 @@ namespace BALL
 		
 		vector<Stretch> stretch_;
 
+		vector< HashSet<Atom*> > rings_;
+
+		Sp2HybridizedPredicate isSp2_;
+		SpHybridizedPredicate  isSp_;
 		//_@}
 		
 	};

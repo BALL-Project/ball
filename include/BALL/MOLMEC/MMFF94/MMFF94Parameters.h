@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.2 2005/03/22 15:41:17 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.3 2005/03/22 18:27:30 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -17,10 +17,9 @@
 # include <BALL/DATATYPE/hashMap.h>
 #endif 
 
-#ifndef BALL_KERNEL_STANDARDPREDICATES_H
-# include <BALL/KERNEL/standardPredicates.h>
+#ifndef BALL_KERNEL_BOND_H
+# include <BALL/KERNEL/bond.h>
 #endif
-
 using namespace std;
 
 namespace BALL 
@@ -71,17 +70,22 @@ namespace BALL
 		bool getParameters(const Bond& bond, float& kb, float& r0) const;
 
 		///
+		void getOptionalSBMBParameters(const Bond& bond, float& kb, float& r0) const;
+
+		///
 		bool readParameters(const String& filename)
 			throw(Exception::FileNotFound);
 		
+		bool hasOptionalSBMBParameter(Position atom_type1, Position atom_type2)
+		{
+			return parameters_optional_sbmb_.has(getIndex_(atom_type1, atom_type2));
+		}
+
 		//@}
 
 		protected:
 
-		Position getIndex_(const Position& atom_type1, const Position& atom_type2) const
-		{ 
-			return atom_type1 * nr_of_atom_types_ + atom_type2;
-		}
+		Position getIndex_(Position atom_type1, Position atom_type2) const;
 
 		/// standard parameters 
 		StretchMap parameters_;
@@ -92,9 +96,6 @@ namespace BALL
 		bool is_initialized_;
 
 		Size nr_of_atom_types_;
-
-		Sp2HybridizedPredicate isSp2_;
-		SpHybridizedPredicate  isSp_;
 	};
 } // namespace BALL
 
