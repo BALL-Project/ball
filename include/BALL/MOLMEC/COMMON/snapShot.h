@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.12 2000/12/19 18:34:45 anker Exp $
+// $Id: snapShot.h,v 1.13 2001/01/16 17:18:43 anker Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -388,13 +388,15 @@ namespace BALL
 				@param number the number of snapshots to take before flushing to
 				disk
     */
-    void setFlushToDiskFrequency(Size number); 
+    void setFlushToDiskFrequency(Size number)
+			throw();
 
     /** Get the current frequency for doing saves to hard disk
 				@return the number of snapshots to take befor flushing them to
 				disk
     */
-    Size getFlushToDiskFrequency() const; 
+    Size getFlushToDiskFrequency() const
+			throw();
 
     /** This method takes a snapshot of the system's current state and stores
 				it in main memory. If there is not sufficient space, the snapshots
