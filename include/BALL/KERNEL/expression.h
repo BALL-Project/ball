@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.1 2000/05/19 12:23:11 anker Exp $
+// $Id: expression.h,v 1.2 2000/05/19 12:49:19 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -182,7 +182,7 @@ namespace BALL
 
 		/** Default constructor
 		*/
-		SyntaxTree::SyntaxTree();
+		SyntaxTree();
 
 		/** Detailed constructor
 		*/
@@ -287,7 +287,7 @@ namespace BALL
 		/** Evaluate the expression of {\tt atom}
 				@param atom
 		*/
-		virtual bool operator () (const Atom& atom);
+		virtual bool operator () (const Atom& atom) const;
 
 		/**	Create a new predicate according to the name.
 				If the predicate is not known, return 0.
