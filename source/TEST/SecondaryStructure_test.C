@@ -1,4 +1,4 @@
-// $Id: SecondaryStructure_test.C,v 1.6 2001/06/26 19:34:57 amoll Exp $
+// $Id: SecondaryStructure_test.C,v 1.7 2001/06/27 10:46:01 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: SecondaryStructure_test.C,v 1.6 2001/06/26 19:34:57 amoll Exp $")
+START_TEST(class_name, "$Id: SecondaryStructure_test.C,v 1.7 2001/06/27 10:46:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -388,7 +388,7 @@ CHECK(SecondaryStructure::dump(std::ostream& s = std::cout, Size depth = 0) cons
 	TEST_FILE(filename.c_str(), "data/SecondaryStructure_test.txt", true)
 RESULT
 
-extPersistenceManager pm;
+TextPersistenceManager pm;
 using namespace RTTI;
 pm.registerClass(getStreamName<SecondaryStructure>(), SecondaryStructure::createDefault);
 pm.registerClass(getStreamName<Residue>(), Residue::createDefault);

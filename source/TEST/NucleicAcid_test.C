@@ -1,4 +1,4 @@
-// $Id: NucleicAcid_test.C,v 1.9 2001/06/26 19:34:56 amoll Exp $
+// $Id: NucleicAcid_test.C,v 1.10 2001/06/27 10:46:00 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.9 2001/06/26 19:34:56 amoll Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.10 2001/06/27 10:46:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -226,7 +226,7 @@ CHECK(NucleicAcid::dump(ostream&, Size))
 	TEST_FILE(filename.c_str(), "data/NucleicAcid_test.txt", true)
 RESULT
 
-extPersistenceManager pm;
+TextPersistenceManager pm;
 using namespace RTTI;
 pm.registerClass(getStreamName<Nucleotide>(), Nucleotide::createDefault);
 pm.registerClass(getStreamName<NucleicAcid>(), NucleicAcid::createDefault);

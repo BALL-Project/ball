@@ -1,4 +1,4 @@
-// $Id: Chain_test.C,v 1.10 2001/06/26 19:34:56 amoll Exp $
+// $Id: Chain_test.C,v 1.11 2001/06/27 10:46:00 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.10 2001/06/26 19:34:56 amoll Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.11 2001/06/27 10:46:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -504,7 +504,7 @@ CHECK(Chain::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE(filename.c_str(), "data/Chain_test.txt", true)
 RESULT
 
-extPersistenceManager pm;
+TextPersistenceManager pm;
 using namespace RTTI;
 pm.registerClass(getStreamName<Chain>(), Chain::createDefault);
 pm.registerClass(getStreamName<Residue>(), Residue::createDefault);
