@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.52 2003/12/17 15:10:38 amoll Exp $
+// $Id: displayProperties.C,v 1.53 2003/12/18 02:44:01 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -601,7 +601,11 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 	}
 
 	rep->setColoringMethod((ColoringMethod)coloring_method_combobox->currentItem());
+
+	apply_button->setEnabled(false);
 	rep->update(rebuild_representation);
+	apply_button->setEnabled(true);
+	setStatusbarText("Done.");
 
 	// no refocus, if a representation already exists
 	bool focus = (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1 && rep_ == 0);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.17 2003/12/18 02:43:45 amoll Exp $
+// $Id: representation.C,v 1.18 2003/12/18 02:47:20 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -283,8 +283,9 @@ namespace BALL
 					dots = "...";
 				}
 				
+				if (MainControl::getInstance(0) == 0) return;
 				MainControl::getInstance(0)->setStatusbarText("Creating Model " + dots);
-				usleep(1000);
+				usleep(1500);
 			}
 			
 			thread_->wait(); 
