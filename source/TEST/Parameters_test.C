@@ -1,4 +1,4 @@
-// $Id: Parameters_test.C,v 1.3 2000/10/07 12:01:39 oliver Exp $
+// $Id: Parameters_test.C,v 1.4 2001/08/27 09:06:00 aubertin Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: Parameters_test.C,v 1.3 2000/10/07 12:01:39 oliver Exp $")
+START_TEST(Parameters, "$Id: Parameters_test.C,v 1.4 2001/08/27 09:06:00 aubertin Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ Parameters* pointer;
 
 CHECK(Parameters::Parameters())
   pointer = new Parameters;
-	TEST_NOT_EQUAL(pointer, 0)
+  TEST_NOT_EQUAL(pointer, 0)
 RESULT
 
 
@@ -31,58 +31,73 @@ RESULT
 
 
 CHECK(Parameters::Parameters(const String& filename))
-	String filename("data/Parameters_test.ini");
+  String filename("data/Parameters_test.ini");
   Parameters para(filename);
-	TEST_EQUAL(para.getFilename(), filename)
+  TEST_EQUAL(para.getFilename(), filename)
 RESULT
 
 
 CHECK(Parameters::Parameters(const Parameters& parameter))
-	String filename("data/Parameters_test.ini");
+  String filename("data/Parameters_test.ini");
   Parameters para(filename);
-	TEST_EQUAL(para.getFilename(), filename)
-	Parameters para2(para);
-	TEST_EQUAL(para.getFilename(), filename)
+  TEST_EQUAL(para.getFilename(), filename)
+  Parameters para2(para);
+  TEST_EQUAL(para.getFilename(), filename)
 RESULT
 
 
 CHECK(Parameters::clear())
-  //BAUSTELLE
+  String filename("data/Parameters_test.ini");
+  Parameters para(filename);
+  INIFile* inif = &para.getParameterFile();
+  para.clear();
+  TEST_EQUAL(para.isValid(),false)
+  TEST_EQUAL( "", para.getFilename())
+    TEST_EQUAL(inif->getDuplicateKeyCheck(),false)
+    TEST_EQUAL(inif->isValid(),false)
 RESULT
 
 
 CHECK(Parameters::Parameters& operator = (const Parameters& parameters))
-  //BAUSTELLE
+  String filename("data/Parameters_test.ini");
+  Parameters para(filename);
+  Parameters para2;
+  para2 = para;
+TEST_EQUAL(para2.getFilename(),"data/Parameters_test.ini")
+TEST_EQUAL(para2 == para, true)
 RESULT
 
 
-CHECK(Parameters::setFilename(const String& filename))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(Parameters::getFilename() const )
-  //BAUSTELLE
-RESULT
-
-
-CHECK(Parameters::getParameterFile())
-  //BAUSTELLE
+CHECK(Parameters::setFilename(const String& filename) + Parameters::getFilename() const + Parameters::getParameterFile())
+   Parameters para;
+   para.setFilename("data/Parameters_test.ini");
+   TEST_EQUAL(para.getFilename(),"data/Parameters_test.ini")
+   INIFile* inif = &para.getParameterFile();
+TEST_NOT_EQUAL(inif,0)
 RESULT
 
 
 CHECK(Parameters::init())
-  //BAUSTELLE
+  Parameters para;
+  para.setFilename("data/Parameters_test.ini");
+  bool test = para.init();
+  TEST_EQUAL(test,true)
 RESULT
 
 
 CHECK(Parameters::isValid() const )
-  //BAUSTELLE
+   String filename("data/Parameters_test.ini");
+   Parameters para(filename);
+   TEST_EQUAL(para.isValid(),true)
 RESULT
 
 
-CHECK(bool Parameters::operator = (const Parameters& parameters))
-  //BAUSTELLE
+CHECK(bool Parameters::operator == (const Parameters& parameters))
+  String filename("data/Parameters_test.ini");
+  Parameters para(filename);
+  Parameters para2(para);  
+  bool test = (para == para2);
+  TEST_EQUAL(test,true)
 RESULT
 
 
