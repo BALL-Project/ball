@@ -62,22 +62,22 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     qtarch_model_groupbox->setTitle( tr( "model" ) );
     qtarch_model_groupbox->setAlignment( AlignHCenter );
 
-    QPushButton *qtarch_apply_button = new QPushButton(this, "apply_button");
-    qtarch_apply_button->setGeometry(10, 250, 110, 30);
-    qtarch_apply_button->setMinimumSize(0, 0);
-    qtarch_apply_button->setMaximumSize(32767, 32767);
-    qtarch_apply_button->setFocusPolicy(QWidget::TabFocus);
-    qtarch_apply_button->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_apply_button->setFontPropagation(QWidget::SameFont);
-    qtarch_apply_button->setPalettePropagation(QWidget::SameFont);
-    qtarch_apply_button->setText( tr( "&Apply" ) );
-    qtarch_apply_button->setAutoRepeat( FALSE );
-    qtarch_apply_button->setAutoResize( FALSE );
-    qtarch_apply_button->setToggleButton( FALSE );
-    qtarch_apply_button->setDefault( FALSE );
-    qtarch_apply_button->setAutoDefault( TRUE );
-    qtarch_apply_button->setIsMenuButton( FALSE );
-    connect(qtarch_apply_button, SIGNAL(clicked()), SLOT(applyButtonClicked()));
+    apply_button_ = new QPushButton(this, "apply_button");
+    apply_button_->setGeometry(10, 250, 110, 30);
+    apply_button_->setMinimumSize(0, 0);
+    apply_button_->setMaximumSize(32767, 32767);
+    apply_button_->setFocusPolicy(QWidget::TabFocus);
+    apply_button_->setBackgroundMode(QWidget::PaletteButton);
+    apply_button_->setFontPropagation(QWidget::SameFont);
+    apply_button_->setPalettePropagation(QWidget::SameFont);
+    apply_button_->setText( tr( "&Apply" ) );
+    apply_button_->setAutoRepeat( FALSE );
+    apply_button_->setAutoResize( FALSE );
+    apply_button_->setToggleButton( FALSE );
+    apply_button_->setDefault( FALSE );
+    apply_button_->setAutoDefault( TRUE );
+    apply_button_->setIsMenuButton( FALSE );
+    connect(apply_button_, SIGNAL(clicked()), SLOT(applyButtonClicked()));
 
     QPushButton *qtarch_close_button = new QPushButton(this, "close_button");
     qtarch_close_button->setGeometry(130, 250, 107, 30);

@@ -144,14 +144,15 @@ void DisplayProperties::onNotify(Message *message)
 		object_processor_->applyOn(*(composite_message->getComposite()));
 
 		// notify tree of the changes
-		ChangedMolecularMessage *changed_message 
-			= new ChangedMolecularMessage(*composite_message);
-
+		ChangedMolecularMessage *changed_message = new ChangedMolecularMessage(*composite_message);
+		changed_message->setDeletable(true);
 		notify_(changed_message);
 
 		// calculate center of the new composite
 		Composite *composite = composite_message->getComposite();
 		SceneMessage *scene_message = new SceneMessage;
+		scene_message->setDeletable(true);
+
 		GeometricCenterProcessor center;
 		composite->apply(center);        
 		
@@ -170,6 +171,16 @@ void DisplayProperties::onNotify(Message *message)
 		MolecularSelectionMessage *selection = RTTI::castTo<MolecularSelectionMessage>(*message);
 
 		selection_ = selection->getSelection();
+	}
+
+	// disabled apply button, if selection is empty
+	if (selection_.empty())
+	{
+		apply_button_->setEnabled(false);
+	}
+	else
+	{
+		apply_button_->setEnabled(true);
 	}
 }
 
