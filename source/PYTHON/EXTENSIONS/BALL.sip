@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.20 2003/11/25 01:30:05 amoll Exp $
+// $Id: BALL.sip,v 1.21 2003/11/27 21:06:08 oliver Exp $
 //
 //
 //
@@ -282,7 +282,7 @@
 %Include client.sip
 %Include representation.sip
 %Include geometricObject.sip
-//%Include view-common.sip
+%Include view-common.sip
 
 // VIEW/DATATYPE
 %Include colorUnit.sip

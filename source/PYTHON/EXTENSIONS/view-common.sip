@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.1 2003/11/25 01:23:12 amoll Exp $
+// $Id: view-common.sip,v 1.2 2003/11/27 21:06:08 oliver Exp $
 //
 
-%TypeHeaderCode 
+%ModuleHeaderCode 
 	#include <BALL/VIEW/KERNEL/common.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
