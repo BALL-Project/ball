@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.8 2000/03/20 02:18:17 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.9 2000/03/21 12:43:21 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -1046,7 +1046,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& a, const TLine3<T>& b)
 	{
-		return isZero(GetDistance(a, b));
+		return Maths::isZero(GetDistance(a, b));
 	}
 
 	/**	Test if a point is intersecting a plane.
