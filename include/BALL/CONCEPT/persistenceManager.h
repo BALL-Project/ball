@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.20 2000/12/12 16:18:08 oliver Exp $
+// $Id: persistenceManager.h,v 1.21 2000/12/18 08:43:46 anker Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -660,7 +660,7 @@ namespace BALL
 		*/
 		virtual void put(const string& s) = 0;
 
-		/**	Write a pointer to the output.
+		/**	Write a pointer to the output.
 		*/
 		virtual void put(const PointerSizeInt p) = 0;
 
