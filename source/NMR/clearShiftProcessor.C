@@ -1,25 +1,19 @@
-// $Id: clearShiftProcessor.C,v 1.4 2000/09/18 17:09:43 oliver Exp $
+// $Id: clearShiftProcessor.C,v 1.5 2000/09/20 13:51:17 amoll Exp $
 
 #include<BALL/NMR/clearShiftProcessor.h>
-
-using namespace std;
 
 namespace BALL
 {
 
-	// default ctor
 	ClearShiftProcessor::ClearShiftProcessor()
 		throw()
 	{
 	}
 
-		
-	// destructor
 	ClearShiftProcessor::~ClearShiftProcessor()
 		throw()
 	{
 	}
-
 
 	Processor::Result ClearShiftProcessor::operator () (Composite& composite)
 		throw()
@@ -39,4 +33,3 @@ namespace BALL
 	}
 
 } //namespace BALL
-

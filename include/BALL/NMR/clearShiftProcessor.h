@@ -1,4 +1,4 @@
-// $Id: clearShiftProcessor.h,v 1.2 2000/09/18 16:26:29 oliver Exp $
+// $Id: clearShiftProcessor.h,v 1.3 2000/09/20 13:51:08 amoll Exp $
 
 #ifndef BALL_NMR_CLEARSHIFTPROCESSOR_H
 #define BALL_NMR_CLEARSHIFTPROCESSOR_H
@@ -33,7 +33,6 @@ namespace BALL
 		
 		//@}
 
-		
 		/**@name	Processor specific functions.
 		*/
 		//@{
@@ -47,6 +46,5 @@ namespace BALL
 	};
 
 } // namespace BALL
-
 
 #endif // BALL_NMR_CLEARSHIFTPROCESSOR_H
