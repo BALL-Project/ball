@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6.4.14 2002/12/09 16:59:38 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.15 2002/12/09 21:08:28 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -129,8 +129,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 	}
 	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
 	{
-		setSelection_();
-		update = true;
+		setSelection_(true);
 	}
 
 	return update;
