@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.1 2005/03/17 15:42:59 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.2 2005/03/17 15:57:36 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -59,10 +59,15 @@ int main(int argc, char** argv)
 	LineBasedFile infile(argv[1]);
 	while (infile.readLine())
 	{
-		if (infile.getLine().hasSubstring("Structure Name:"))
+		if (infile.getLine().hasSubstring("Structure Name:") ||
+				infile.getLine().hasSubstring("New Structure Name"))
 		{
 			file_name = infile.getLine().after(": ");
-			infile.skipLines(9);
+			while (!infile.getLine().hasSubstring("ATOM NAME"))
+			{
+				infile.readLine();
+			}
+
 			vector<String> atoms, names, types, symbols, charges, fcharges;
 
 			while (infile.readLine())
