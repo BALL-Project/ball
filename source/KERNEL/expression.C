@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.29 2001/07/17 00:52:48 oliver Exp $
+// $Id: expression.C,v 1.30 2001/07/17 02:36:52 oliver Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -177,10 +177,6 @@ namespace BALL
 		// create a temporary tree from which the expression_tree_ can be built
 		SyntaxTree tree(expression_string);
 		tree.parse();
-		// DEBUG
-		Log.info() << endl << endl;
-		tree.dump();
-		Log.info() << endl << endl;
 
 		// construct the tree
 		expression_tree_ = constructExpressionTree_(tree);
