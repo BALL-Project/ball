@@ -1,4 +1,4 @@
-// $Id: shiftModel.h,v 1.6 2001/05/16 09:57:45 amoll Exp $
+// $Id: shiftModel.h,v 1.7 2001/05/16 13:25:15 amoll Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H
@@ -24,7 +24,7 @@ namespace BALL
 			by a separate \Ref{ShiftModule} object. ShiftModel contains a list of 
 			these processors and is also derived from ShiftModul. Hence, it can
 			be applied to arbitrary kernel objects in the same fashion as \Ref{ShiftModule}s.	\\
-			{\bf Definition:}\URL{BALL/NMR/shiftModel.h}
+			{\bf Definition:} \URL{BALL/NMR/shiftModel.h}
 	*/
 	class ShiftModel 
 		: public ShiftModule		
