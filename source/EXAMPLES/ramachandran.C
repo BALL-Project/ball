@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ramachandran.C,v 1.7 2002/02/27 12:21:15 sturm Exp $
+// $Id: ramachandran.C,v 1.8 2004/05/10 11:59:07 amoll Exp $
 
 //============================================================================
 // BALL - Ramachandran plot example
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 	// normalize the atom names (torsion angles are identified
 	// via the atom names)
 	Log.info() << "normalizing names..." << endl;
-	FragmentDB db;
+	FragmentDB db("");
 	S.apply(db.normalize_names);
 	
 	// now, iterate over all residues

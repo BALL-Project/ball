@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDB2discover.C,v 1.7 2002/02/27 12:21:14 sturm Exp $
+// $Id: PDB2discover.C,v 1.8 2004/05/10 11:59:06 amoll Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 	in_file.close();
 
 	Log << "opening fragment database" << endl;
-	FragmentDB	db;
+	FragmentDB	db("");
 
 	Log << "adding hydrogens..." << endl;
 	S.apply(db.add_hydrogens);

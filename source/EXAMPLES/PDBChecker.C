@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBChecker.C,v 1.4 2002/02/27 12:21:14 sturm Exp $
+// $Id: PDBChecker.C,v 1.5 2004/05/10 11:59:06 amoll Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 	// create a fragment database
 	// The fragment database contains information on
 	// all amino acids: structure, names, bond distances, and so on.
-	FragmentDB db;
+	FragmentDB db("");
 
 	// normalize the names
 	// This processor converts the atom names from several naming
