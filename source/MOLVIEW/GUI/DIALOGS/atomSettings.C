@@ -1,5 +1,7 @@
 #include <BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h>
 #include <qlineedit.h>
+#include <qpushbutton.h>
+
 namespace BALL
 {
 	namespace MOLVIEW
@@ -13,7 +15,6 @@ namespace BALL
  */
 AtomSettings::AtomSettings( Atom* atom, QWidget* parent,  const char* name, bool modal, WFlags fl )
     : AtomSettingsData( parent, name, modal, fl ),
-			changed_(false),
 			atom_(atom)
 {
 	name_edit->setText(atom_->getName().c_str());
@@ -28,6 +29,10 @@ AtomSettings::AtomSettings( Atom* atom, QWidget* parent,  const char* name, bool
 	velocity_edit_1->setText(String(atom_->getVelocity().x).c_str());
 	velocity_edit_2->setText(String(atom_->getVelocity().y).c_str());
 	velocity_edit_3->setText(String(atom_->getVelocity().z).c_str());
+
+	apply_button->setEnabled(false);
+	show();
+	raise();
 }
 
 /*  
@@ -43,7 +48,7 @@ AtomSettings::~AtomSettings()
  */
 void AtomSettings::changed( const QString & )
 {
-	changed_ = true;
+	apply_button->setEnabled(true);
 }
 
 /* 
@@ -70,6 +75,7 @@ void AtomSettings::applyClicked()
 		velo.x = String(velocity_edit_1->text()).toFloat();
 		velo.y = String(velocity_edit_2->text()).toFloat();
 		velo.z = String(velocity_edit_3->text()).toFloat();
+		atom_->setVelocity(velo);
 	}
 	catch(Exception::InvalidFormat)
 	{

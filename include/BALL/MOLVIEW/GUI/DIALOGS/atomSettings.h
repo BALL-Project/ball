@@ -25,7 +25,6 @@ public slots:
 	void closeClicked();
 
 private:
-	bool changed_;
 	Atom* atom_;
 };
 
