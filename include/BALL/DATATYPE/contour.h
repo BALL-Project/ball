@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contour.h,v 1.14 2003/03/26 13:56:16 anhi Exp $
+// $Id: contour.h,v 1.15 2003/06/19 13:09:08 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H
@@ -56,7 +57,7 @@ namespace BALL
 		//@{
 			
 		/// Assignment operator
-		const TContour& operator = (const TContour& assigTContour);
+		TContour& operator = (const TContour& rhs);
 
 		/**		
 		*/
@@ -109,13 +110,13 @@ namespace BALL
 	}
 
 	template <typename T>
-	const TContour<T>& TContour<T>::operator = (const TContour& assigTContour)
+	TContour<T>& TContour<T>::operator = (const TContour& rhs)
 	{
-		start_     = assigTContour.start_;
-		end_       = assigTContour.end_;
-		data_      = assigTContour.data_;
-		num_lines_ = assigTContour.num_lines_;
-		it_        = assigTContour.it_;
+		start_     = rhs.start_;
+		end_       = rhs.end_;
+		data_      = rhs.data_;
+		num_lines_ = rhs.num_lines_;
+		it_        = rhs.it_;
 	}
 
 	template <typename T>

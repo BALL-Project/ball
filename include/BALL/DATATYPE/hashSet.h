@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashSet.h,v 1.40 2003/06/12 15:42:22 oliver Exp $ 
+// $Id: hashSet.h,v 1.41 2003/06/19 13:09:08 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_HASHSET_H
@@ -76,13 +76,13 @@ namespace BALL
 
 		typedef Node* IteratorPosition;
 	
-		class IteratorTraits_
+		class IteratorTraits
 		{
 
 			friend class HashSet<Key>;
 			public:
 
-			IteratorTraits_()
+			IteratorTraits()
 				throw()
 				:	bound_(0),
 					position_(0),
@@ -90,21 +90,21 @@ namespace BALL
 			{
 			}
 			
-			IteratorTraits_(const HashSet& hash_set)	throw()
+			IteratorTraits(const HashSet& hash_set)	throw()
 				:	bound_(const_cast<HashSet*>(&hash_set)),
 					position_(0),
 					bucket_(0)
 			{
 			}
 			
-			IteratorTraits_(const IteratorTraits_& traits)	throw()
+			IteratorTraits(const IteratorTraits& traits)	throw()
 				:	bound_(traits.bound_),
 					position_(traits.position_),
 					bucket_(traits.bucket_)
 			{
 			}
 			
-			IteratorTraits_& operator = (const IteratorTraits_& traits)	throw()
+			IteratorTraits& operator = (const IteratorTraits& traits)	throw()
 			{
 				bound_ = traits.bound_;
 				position_ = traits.position_;
@@ -138,12 +138,12 @@ namespace BALL
 				return position_;
 			}
 
-			bool operator == (const IteratorTraits_& traits) const	throw()
+			bool operator == (const IteratorTraits& traits) const	throw()
 			{
 				return (position_ == traits.position_);
 			}
 
-			bool operator != (const IteratorTraits_& traits) const	throw()
+			bool operator != (const IteratorTraits& traits) const	throw()
 			{
 				return (position_ != traits.position_);
 			}
@@ -240,7 +240,7 @@ namespace BALL
 			IteratorPosition		position_;
 			Position						bucket_;
 		};
-		friend class IteratorTraits_;
+		friend class IteratorTraits;
 
 		/**	@name	Enums
 		*/
@@ -279,32 +279,33 @@ namespace BALL
 		/**	@name	Type definitions
 		*/
 		//@{
-
 			
-		/**
-		*/
-		typedef 
-				ForwardIterator<HashSet<Key>, ValueType, PointerType, IteratorTraits_>
-			Iterator;
+		///
+		typedef ForwardIterator<HashSet<Key>, ValueType, PointerType, IteratorTraits> Iterator;
 
-
-		/**
-		*/
-		typedef 
-				ConstForwardIterator <HashSet<Key>, ValueType, PointerType, IteratorTraits_>
-			ConstIterator;
+		///
+		typedef ConstForwardIterator <HashSet<Key>, ValueType, PointerType, IteratorTraits>	ConstIterator;
 
 		// STL compatibility stuff
+		///
 		typedef Iterator iterator;
+		///
 		typedef ConstIterator const_iterator;
-
+		///
 		typedef Key					value_type;
+		///
 		typedef Key					key_type;
+		///
 		typedef Key*				pointer;
+		///
 		typedef const Key*	const_pointer;
+		///
 		typedef Key&				reference;
+		///
 		typedef const Key&	const_reference;
+		///
 		typedef Size				size_type;
+		///
 		typedef Index				difference_type;			
 		//@}
 
