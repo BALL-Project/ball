@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.10 2000/01/09 23:51:44 oliver Exp $
+// $Id: fragmentDB.C,v 1.11 2000/01/11 07:30:48 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -78,7 +78,6 @@ namespace BALL
 					
 				ResourceEntry*	parent = root_entry.getParent();
 				ResourceEntry* entry;
-				assert(parent != 0);
 				parent->removeChild(key, 0);
 
 				ResourceFile*	file;
