@@ -1,4 +1,4 @@
-// $Id: PDBAtom_test.C,v 1.2 2001/06/24 22:10:38 amoll Exp $
+// $Id: PDBAtom_test.C,v 1.3 2001/06/24 22:46:12 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -29,7 +29,7 @@ bool testEqual(const PDBAtom& a, const PDBAtom& b)
 				 a.getTemperatureFactor() == b.getTemperatureFactor();
 }
 
-START_TEST(class_name, "$Id: PDBAtom_test.C,v 1.2 2001/06/24 22:10:38 amoll Exp $")
+START_TEST(class_name, "$Id: PDBAtom_test.C,v 1.3 2001/06/24 22:46:12 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -63,6 +63,7 @@ PDBAtom pdba;
 String filename;
 TextPersistenceManager  pm;
 using std::ofstream;
+using std::ifstream;
 using std::ios;
 using namespace RTTI;
 
