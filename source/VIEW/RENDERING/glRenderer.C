@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.6 2003/10/24 18:22:27 amoll Exp $
+// $Id: glRenderer.C,v 1.7 2003/10/24 22:34:46 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1372,37 +1372,16 @@ namespace BALL
 		}
 
 
-		void GLRenderer::setTranslationAndRotation(const Vector3& origin, const Quaternion& quaternion)
-			throw()
-		{
-			// translate to the turning point
-			glTranslatef(origin.x, origin.y, origin.z);
-
-			// rotate the system
-			Matrix4x4 m;
-			GLfloat matrix[4][4];
-
-			// calculate system rotation
-			quaternion.getRotationMatrix(m);
-
-			// convert Matrix
-			for (int i = 0; i < 4; ++i)
-			{
-				for (int j = 0; j < 4; ++j)
-				{
-					matrix[i][j] = m(i, j);
-				}
-			} 
-			
-			// reverse translation
-			glTranslatef(-origin.x, -origin.y, -origin.z);
-		}
-
 		void GLRenderer::setStereoMode(bool on)
 			throw()
 		{
 			if (on == stereo_) return;
 			stereo_ = on;
+
+			glDrawBuffer(GL_BACK_LEFT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glDrawBuffer(GL_BACK_RIGHT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
 } } // namespaces
