@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.1 2000/09/12 21:22:10 oliver Exp $
+// $Id: regularData1D.h,v 1.2 2000/09/13 06:30:27 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -80,12 +80,12 @@ namespace BALL
 		*/
 		//@{	
 			
-		/**
+		/**	Constant random access operator.
 				@exception IndexOverflow if {\tt index} is out of range
 		*/	
 		const T& operator [] (Position index) const;
 			
-		/**
+		/**	Mutable random access operator.
 				@exception IndexOverflow if {\tt index} is out of range
 		*/	
 		T& operator [] (Position index);
@@ -101,6 +101,14 @@ namespace BALL
 		/**	Return the upper bound
 		*/
 		double getUpper() const;
+
+		/**	Set the upper bound
+		*/
+		void setUpper();
+
+		/**	Set the lower bound
+		*/
+		void setLower();
 
 		/**	Resize the data.
 				If {\tt new_size} is larger than the current size, the data {\tt vector}

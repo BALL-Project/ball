@@ -1,4 +1,4 @@
-/* $Id: datatype.doc,v 1.4 2000/01/11 13:56:51 oliver Exp $ */
+/* $Id: datatype.doc,v 1.5 2000/09/13 06:30:27 oliver Exp $ */
 
 /**@name	General datastructures
 		This section contains all relevant information on 
@@ -6,21 +6,25 @@
 */
 //@{
 
-	/**	@name	Grid Datastructures
+	/**	@name Generic Datastructures for Regularly Spaced Data
 	*/
 	//@{
-		//@Include: hashGrid.h
+		//@Include: regularData1D.h
+		//@Include: regularData2D.h
 		//@Include: pointGrid.h
 	//@}
+
 	/**	@name	Generic Hash Associative Containers
 	*/
 	//@{
 		//@Include: hashMap.h
 		//@Include: hashSet.h
+		//@Include: hashGrid.h
 		//@Include: stringHashMap.h
 		//@Include: stringHashSet.h
 		//@Include: options.h 
 	//@}
+
 	/**	@name	Tree Datastructures
 	*/
 	//@{
