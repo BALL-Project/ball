@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.4 2003/09/20 09:15:57 oliver Exp $
+// $Id: datasetControl.C,v 1.5 2003/09/20 15:35:56 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -165,7 +165,8 @@ void DatasetControl::onNotify(Message *message)
     Composite* composite = (Composite *)composite_message->getComposite();
 		if (!composite_to_items_.has(composite)) return;
 
-		HashSet<QListViewItem*>& to_delete = composite_to_items_[composite];
+		// create a copy of the hashset, because it changes
+		HashSet<QListViewItem*> to_delete = composite_to_items_[composite];
 
 		HashSet<QListViewItem*>::Iterator lit = to_delete.begin();
 		for (;lit != to_delete.end(); lit++)
@@ -185,8 +186,8 @@ void DatasetControl::onNotify(Message *message)
 
 void DatasetControl::deleteTrajectory_()
 {
+	if (!item_to_trajectory_.has(context_item_)) return;
 	SnapShotManager* ssm = item_to_trajectory_[context_item_];
-	if (!ssm) return;
 	delete ssm;
 	deleteItem_(context_item_);
 	setStatusbarText("deleted trajectory");
@@ -206,8 +207,9 @@ void DatasetControl::deleteItem_(QListViewItem* item)
 
 void DatasetControl::deleteGrid_()
 {
+	if (!item_to_grid_.has(context_item_)) return;
+
 	RegularData3D* ssm = item_to_grid_[context_item_];
-	if (!ssm) return;
 	delete ssm;
 	deleteItem_(context_item_);
 	setStatusbarText("deleted 3D grid");
