@@ -1,4 +1,4 @@
-// $Id: Chain_test.C,v 1.12 2002/01/26 22:01:26 oliver Exp $
+// $Id: Chain_test.C,v 1.12.4.1 2002/12/06 14:18:10 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.12 2002/01/26 22:01:26 oliver Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.12.4.1 2002/12/06 14:18:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -498,7 +498,7 @@ CHECK(Chain::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Chain c1("c1");
 	Residue r1("r1");
 	c1.insert(r1);
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	c1.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Chain_test.txt")
@@ -510,7 +510,7 @@ pm.registerClass(getStreamName<Chain>(), Chain::createDefault);
 pm.registerClass(getStreamName<Residue>(), Residue::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), File::OUT);
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Chain* f1 = new Chain("name1");
 	Residue* f2 = new Residue("name2");
 	Residue* f3 = new Residue("name3");
