@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.8 2001/07/14 12:58:39 amoll Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.8.4.1 2002/09/02 09:29:29 anhi Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -70,7 +70,7 @@ namespace BALL
 			static const char* PROBE_RADIUS;
 		};
 
-		/** Default values for cavitation free anergy calculations.
+		/** Default values for cavitation free energy calculations.
 				These values represent the default settings for the calculations of the
 				cavitation free energy.
 		 */
