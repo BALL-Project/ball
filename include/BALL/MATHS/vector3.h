@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.39 2000/05/04 18:27:15 oliver Exp $
+// $Id: vector3.h,v 1.40 2000/05/04 20:49:05 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -213,11 +213,13 @@ namespace BALL
 				The radius describes the distance of the point from the origin.\\
 				{\tt phi}	ranges from 0 to $2 \pi$, {\tt theta} ranges from 0 (north pole, positive z-axis)
 				to $\pi$ (south pole, negative z-axis).\\
-				Coordinates are calculated according to the following formulas:\\
+				Coordinates are calculated according to the following formulae:\\
 				\[
+					\begin{aligned}
 					x & = & r \sin \theta \cos \phi\\
 					y & = & r \sin \theta \sin \phi\\
 					z & = & r \cos \theta
+					\end{aligned}
 				\]
 				@param	r the radius
 				@param	phi the azimuth

@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.27 2000/05/03 08:04:37 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.28 2000/05/04 20:49:05 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -165,11 +165,29 @@ namespace BALL
 						- m01 * m10 * m22); 
 	}
 
-	/**	Solve a system of equations of a given size in the form
-		  $a_1 x_1 + b_1 x_2 + .. + N_1 x_n = c_1$.
+	/**	Solve a system of linear equations.
+		  Given a system of linear equations
+			\[
+				\begin{aligned}
+				 a_{1,1} x_1 &+& a_{1,2} x_2 &+& \ldots &+& a_{1,n} x_n &=& a_{1,(n+1)}\\
+				 a_{2,1} x_1 &+& a_{2,2} x_2 &+& \ldots &+& a_{2,n} x_n &=& a_{2,(n+1)}\\
+							\cdots &&  \cdots    &&   \ldots &&    \ddots &&   \cdots\\
+				 a_{n,1} x_1 &+& a_{n,2} x_2 &+& \ldots &+& a_{n,n} x_n &=& a_{n,(n+1)}\\
+				\end{aligned}
+			\]
+			in matrix form, identify the solution $x = (x_1, x_2,\ldots x_N)$.
+			{\tt m} should point to a C-style array containing the $n\times(n+1)$ matrix {\bf A}.
+			The elements of {\bf A} are row-ordered, i.e., they are ordered like this:
+			\[
+					a_{1,1}, a_{1,2},\cdot,a_{1,(n+1)},a_{2,1},\ldots a_{n,(n+1)}
+			\}
+			{\tt x} points to a C-style array that will contain the solution vector {\bf x} 
+			upon successful termination of the function.
+			If there is no solution or the system is under-determined, return {\bf false}.
+			
 			@param	m pointer to the factors in the equations
 			@param	x pointer in which the results are stored
-			@param  dim the size of the equation system (number of variables)
+			@param  dim the dimension of the equation system (number of variables)
 			@return bool {\tt true} if a solution is found
 	*/
 	template <typename T>
