@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.16 2003/04/01 21:15:01 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.17 2003/04/16 21:15:27 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -345,14 +345,22 @@ AC_DEFUN(CF_DETECT_OS,[
 		fi
 	fi
 
+	if test "${OS}" = Darwin ; then
+		BINFMT="Darwin-${OSREV}"
+		PROCESSOR=`${UNAME} -p`
+		ARCHITECTURE=`${UNAME} -m`
+	fi
+
 	if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
 		OS="CYGWIN"
 		BALL_NO_XDR=true
 		USE_BALLVIEW=false
 	fi
 
-	if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX -a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" ; then
-		AC_MSG_RESULT(Sorry - your OS is currently not supported...)
+	if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX \
+		-a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" \
+		-a "${OS}" != Darwin ; then
+		AC_MSG_RESULT(Sorry - your OS ($OS) is currently not supported...)
 		AC_MSG_ERROR(aborted)
 	fi
 
@@ -586,9 +594,19 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 	dnl			to get the name demangling done.
 	dnl
 	if test "${CXX_VERSION_1}" -ge 3 ; then
-		LIBS="${LIBS} -liberty"
 		AC_MSG_CHECKING(whether libiberty is required)
 		AC_MSG_RESULT(yes)
+		AC_MSG_CHECKING(whether libiberty is available)
+		SAVE_LIBS="${LIBS}"
+		LIBS="${LIBS} -liberty"
+		HAS_LIBIBERTY=false
+		AC_TRY_LINK([],[], HAS_LIBIBERTY=true)
+		if test "${HAS_LIBIBERTY}" != true ; then
+			LIBS="${SAVE_LIBS}"
+			AC_MSG_RESULT(no)
+		else
+			AC_MSG_RESULT(yes)
+		fi
 	fi
 
 
