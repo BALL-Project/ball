@@ -1,4 +1,4 @@
-// $Id: notification.h,v 1.9 2001/06/24 14:15:32 oliver Exp $
+// $Id: notification.h,v 1.10 2001/06/25 13:51:53 amoll Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -18,7 +18,7 @@
 namespace BALL 
 {
 
-	/**	@name	Notification Management
+	/**	@name	Notification Management.
 			Using the notification management, objects may exchange data and notify
 			each other of events.\\
 			{\bf Definition:} \URL{BALL/CONCEPT/notification.h}
