@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.h,v 1.1.2.1 2005/03/17 13:48:49 amoll Exp $ 
+// $Id: MMFF94Stretch.h,v 1.1.2.2 2005/03/21 16:42:37 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -21,6 +21,10 @@
 #	include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
+#ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
+#	include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
+#endif
+
 namespace BALL 
 {
 	/**	MMFF94 bond stretch component
@@ -35,6 +39,17 @@ namespace BALL
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{
+		
+		#define CUBIC_STRENGTH_CONSTANT -2
+
+		///
+		struct Stretch
+		{
+			Atom* atom1;
+			Atom* atom2;
+			float kb;
+			float r0;
+		};
 
 		BALL_CREATE(MMFF94Stretch)
 
@@ -82,6 +97,9 @@ namespace BALL
 		virtual void update()
 			throw(Exception::TooManyErrors);
 
+		///
+		MMFF94BondStretchParameters getParameters() { return parameters_;}
+
 		//@} 
 
 		private:
@@ -89,6 +107,9 @@ namespace BALL
 		/*_	@name	Private Attributes	
 		*/
 		//_@{
+		MMFF94BondStretchParameters parameters_;
+		
+		vector<Stretch> stretch_;
 
 		//_@}
 		

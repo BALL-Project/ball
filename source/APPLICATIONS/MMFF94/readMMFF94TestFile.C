@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.1 2005/03/21 16:05:41 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.2 2005/03/21 16:43:01 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -16,6 +16,7 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94.h>
 
 
 using namespace std;
@@ -68,7 +69,7 @@ System* readTestFile(String filename)
 		}
 
 		Position pos = name_to_pos[ait->getName()];
-		ait->setTypeName(String(types[pos]));
+		ait->setType(types[pos]);
 		ait->setCharge(charges[pos]);
 	}
 
@@ -85,6 +86,17 @@ int main(int argc, char** argv)
 
 	System* system = readTestFile(argv[1]);
 	if (system == 0) return -1;
+
+	MMFF94 mmff;
+	if (!mmff.setup(*system))
+	{
+		Log.error() << "Setup failed for " << argv[1] << std::endl;
+		return -1;
+	}
+
+	mmff.updateEnergy();
+
+	Log.info () << "Energy for " << argv[1] << " : " << mmff.getEnergy() << std::endl;
 
 	delete system;
 
