@@ -1,4 +1,4 @@
-// $Id: atom.iC,v 1.3 2000/04/17 15:37:13 amoll Exp $
+// $Id: atom.iC,v 1.4 2000/04/17 19:36:39 oliver Exp $
 
 	BALL_INLINE
   void Atom::setElement(Element &element)
@@ -36,6 +36,36 @@
     return name_;
 	}
 
+	BALL_INLINE
+  Molecule* Atom::getMolecule()
+  {
+    return Composite::getAncestor(RTTI::getDefault<Molecule>());
+	}
+
+	BALL_INLINE
+  const Molecule* Atom::getMolecule() const
+  {
+    return ((Atom *)this)->getMolecule();
+	}
+
+	BALL_INLINE
+  Fragment* Atom::getFragment()
+  {
+    return Composite::getAncestor(RTTI::getDefault<Fragment>());
+	}
+
+	BALL_INLINE
+  const Fragment *Atom::getFragment() const
+  {
+    return ((Atom *)this)->getFragment();
+	}
+
+	BALL_INLINE
+  void Atom::setName(const String &name)
+  {
+    name_ = name;
+	}
+ 
 	BALL_INLINE
   void Atom::setPosition(const Vector3 &position)
   {
