@@ -1,4 +1,4 @@
-// $Id: rules.C,v 1.2 2000/05/19 12:47:19 oliver Exp $
+// $Id: rules.C,v 1.3 2000/05/19 15:35:09 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/rules.h>
 #include <BALL/KERNEL/PTE.h>
@@ -44,7 +44,7 @@ namespace BALL
 	void RuleEvaluator::clear()
 	{
 		valid_ = false;
-		prefix_.clear();
+		prefix_ = "";
 		rule_map_.clear();
 	}
 	
