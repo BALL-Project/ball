@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.10 2003/10/19 18:26:39 amoll Exp $
+// $Id: colorProcessor.h,v 1.11 2003/10/20 21:52:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -180,6 +180,53 @@ namespace BALL
 			//@}
 		};
 
+		
+		/// Base class for ColorProcessors, that interpolate between two values
+		class InterpolateColorProcessor
+			: public ColorProcessor
+		{
+			public: 
+
+			///
+			InterpolateColorProcessor();
+
+			///
+			void setMinColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setMaxColor(const ColorRGBA& color)
+				throw();
+
+			///
+			const ColorRGBA& getMinColor() const
+				throw();
+			
+			///
+			const ColorRGBA& getMaxColor() const
+				throw();
+
+			///
+			void setMaxValue(float value)
+				throw();
+
+			///
+			float getMaxValue() const
+				throw();
+
+			///
+			virtual ColorRGBA interpolateColor(float value);
+
+			protected:
+
+			ColorRGBA min_color_;
+			ColorRGBA max_color_;
+			float 		max_value_;
+			float 		min_value_;
+		};
+
+
+		
 } } // namespaces
 
 #endif // BALL_VIEW_MODELS_COLORPROCESSOR_H

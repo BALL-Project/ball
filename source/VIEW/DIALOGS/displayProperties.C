@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.21 2003/10/20 15:42:24 amoll Exp $
+// $Id: displayProperties.C,v 1.22 2003/10/20 21:51:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -417,6 +417,11 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		case COLORING_TEMPERATURE_FACTOR:
 			color_processor = new TemperatureFactorColorProcessor;
 			break;
+
+		case COLORING_OCCUPANCY:
+			color_processor = new OccupancyColorProcessor;
+			break;
+
 
 		default:
 			throw(InvalidOption(__FILE__, __LINE__, coloring_method_));

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.10 2003/10/20 16:12:22 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.11 2003/10/20 21:52:26 amoll Exp $
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -170,7 +170,7 @@ ColorRGBA ElementColorProcessor::getColor(const Composite* composite)
 	}
 }
 
-
+////////////////////////////////////////////////////////////////////
 ResidueNameColorProcessor::ResidueNameColorProcessor()
 	throw()
 	: ColorProcessor()
@@ -290,6 +290,7 @@ ColorRGBA ResidueNumberColorProcessor::getColor(const Composite* composite)
 	}
 }
 
+////////////////////////////////////////////////////////////////////
 AtomChargeColorProcessor::AtomChargeColorProcessor()
 	throw()
 	:	ColorProcessor(),
@@ -349,7 +350,7 @@ ColorRGBA AtomChargeColorProcessor::getColor(const Composite* composite)
 									 blue1 * charge + (1.0 - charge) * blue2);
 }
 
-
+////////////////////////////////////////////////////////////////////
 AtomDistanceColorProcessor::AtomDistanceColorProcessor()
 	throw()
 	: ColorProcessor(),
@@ -503,6 +504,7 @@ Processor::Result AtomDistanceColorProcessor::operator() (GeometricObject*& obje
 	return Processor::CONTINUE;
 }
 	
+////////////////////////////////////////////////////////////////////
 void CustomColorProcessor::colorMeshFromGrid_(Mesh& mesh)
 	throw()
 {
@@ -510,14 +512,14 @@ void CustomColorProcessor::colorMeshFromGrid_(Mesh& mesh)
 	mesh.colorList.push_back(default_color_);
 }
 
-
+////////////////////////////////////////////////////////////////////
 TemperatureFactorColorProcessor::TemperatureFactorColorProcessor()
-	: ColorProcessor(),
-		min_color_(ColorRGBA(0,0,1.0)),
-		max_color_(ColorRGBA(1.0,1.0,0)),
-		max_value_(50)
+	: InterpolateColorProcessor()
 {
 	default_color_ = ColorRGBA(1.0,1.0,1.0);
+	min_color_.set(0,0,1.0),
+	max_color_.set(1.0,1.0,0),
+	max_value_ = 50;
 }
 
 ColorRGBA TemperatureFactorColorProcessor::getColor(const Composite* composite)
@@ -527,59 +529,27 @@ ColorRGBA TemperatureFactorColorProcessor::getColor(const Composite* composite)
 		return default_color_;
 	}
 
-	float value = (dynamic_cast<const PDBAtom*>(composite))->getTemperatureFactor();
-
-	if (value == 0.0) return ColorRGBA(1.0,1.0,1.0);
-	if (value > max_value_) value = max_value_;
-
-	float red1   = min_color_.getRed();
-	float green1 = min_color_.getGreen();
-	float blue1  = min_color_.getBlue();
-
-	float red2   = max_color_.getRed();
-	float green2 = max_color_.getGreen();
-	float blue2  = max_color_.getBlue();
-
-	return ColorRGBA(red1 + (value * (red2 - red1)) 			/ max_value_,
-									 green1 + (value * (green2 - green1))	/ max_value_,
-									 blue1 + (value * (blue2 - blue1)) 		/ max_value_);
+	return interpolateColor((dynamic_cast<const PDBAtom*>(composite))->getTemperatureFactor());
 }
 
-
-void TemperatureFactorColorProcessor::setMinColor(const ColorRGBA& color)
-	throw()
+////////////////////////////////////////////////////////////////////
+OccupancyColorProcessor::OccupancyColorProcessor()
+	: InterpolateColorProcessor()
 {
-	min_color_ = color;
+	default_color_ = ColorRGBA(1.0,1.0,1.0);
+	min_color_.set(0,0,1.0),
+	max_color_.set(1.0,1.0,0),
+	max_value_ = 1;
 }
 
-void TemperatureFactorColorProcessor::setMaxColor(const ColorRGBA& color)
-	throw()
+ColorRGBA OccupancyColorProcessor::getColor(const Composite* composite)
 {
-	max_color_ = color;
-}
+	if (!RTTI::isKindOf<PDBAtom>(*composite))
+	{
+		return default_color_;
+	}
 
-const ColorRGBA& TemperatureFactorColorProcessor::getMinColor() const
-	throw()
-{
-	return min_color_;
-}
-
-const ColorRGBA& TemperatureFactorColorProcessor::getMaxColor() const
-	throw()
-{
-	return max_color_;
-}
-
-float TemperatureFactorColorProcessor::getMaxValue() const
-	throw()
-{
-	return max_value_;
-}
-
-void TemperatureFactorColorProcessor::setMaxValue(float value)
-	throw()
-{
-	max_value_ = value;
+	return interpolateColor((dynamic_cast<const PDBAtom*>(composite))->getOccupancy());
 }
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.9 2003/10/20 15:42:01 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.10 2003/10/20 21:52:44 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -356,44 +356,31 @@ namespace BALL
 		};
 
 
+		/// Coloring by the temperature factor of atoms from a PDBFile
 		class TemperatureFactorColorProcessor
-			: public ColorProcessor
+			: public InterpolateColorProcessor
 		{
 			public:
-				TemperatureFactorColorProcessor();
 
-			///	Operator ().
+			///
+			TemperatureFactorColorProcessor();
+
+			///	Operator ()
 			virtual ColorRGBA getColor(const Composite* composite);
+		};
+
+		
+		/// Coloring by the occupancy of atoms from a PDBFile
+		class OccupancyColorProcessor
+			: public InterpolateColorProcessor
+		{
+			public:
 
 			///
-			void setMinColor(const ColorRGBA& color)
-				throw();
+			OccupancyColorProcessor();
 
-			///
-			void setMaxColor(const ColorRGBA& color)
-				throw();
-
-			///
-			const ColorRGBA& getMinColor() const
-				throw();
-			
-			///
-			const ColorRGBA& getMaxColor() const
-				throw();
-
-			///
-			void setMaxValue(float value)
-				throw();
-
-			///
-			float getMaxValue() const
-				throw();
-
-			protected:
-
-			ColorRGBA min_color_;
-			ColorRGBA max_color_;
-			float 		max_value_;
+			///	Operator ()
+			virtual ColorRGBA getColor(const Composite* composite);
 		};
 
 				

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.10 2003/10/20 15:42:17 amoll Exp $
+// $Id: common.h,v 1.11 2003/10/20 21:51:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -165,6 +165,9 @@ enum ColoringMethod
 
 	///
 	COLORING_TEMPERATURE_FACTOR,
+
+	///
+	COLORING_OCCUPANCY,
 
 	///
 	COLORING_CUSTOM,
