@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.11 2000/01/15 18:55:36 oliver Exp $
+// $Id: socket.h,v 1.12 2000/01/16 22:36:18 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -62,12 +62,24 @@
 // linux leaves these things out. We define it for compatitbility
 // not for their use.
 #ifdef BALL_OS_LINUX
-#	define SO_ACCEPTCONN	0x0002
-#	define SO_USELOOPBACK	0x0040
-#	define SO_SNDLOWAT	0x1003
-#	define SO_RCVLOWAT	0x1004
-#	define SO_SNDTIMEO	0x1005
-#	define SO_RCVTIMEO	0x1006
+# ifndef SO_ACCEPTCONN
+#		define SO_ACCEPTCONN	0x0002
+# endif
+# ifndef SO_USELOOPBACK
+#		define SO_USELOOPBACK	0x0040
+#	endif
+#	ifndef SO_SNDLOWAT
+#		define SO_SNDLOWAT	0x1003
+#	endif
+#	ifndef SO_RCVLOWAT
+#		define SO_RCVLOWAT	0x1004
+#	endif
+#	ifndef SO_SNDTIMEO
+#		define SO_SNDTIMEO	0x1005
+#	endif
+#	ifndef SO_RCVTIMEO
+#		define SO_RCVTIMEO	0x1006
+#	endif
 #	define MSG_MAXIOVLEN	16
 #	ifndef SOMAXCONN
 #		define SOMAXCONN	5

@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.5 2000/01/16 17:26:51 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.6 2000/01/16 22:36:20 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -424,6 +424,8 @@ namespace BALL
 	BALL_DEFINE_NUMBER_PUT(unsigned int)
 	BALL_DEFINE_NUMBER_PUT(long)
 	BALL_DEFINE_NUMBER_PUT(unsigned long)
+	BALL_DEFINE_NUMBER_PUT(long long)
+	BALL_DEFINE_NUMBER_PUT(unsigned long long)
 	BALL_DEFINE_NUMBER_PUT(float)
 	BALL_DEFINE_NUMBER_PUT(double)
 
@@ -442,12 +444,6 @@ namespace BALL
 	void TextPersistenceManager::put(const void* p)
 	{
 		*os << ' ' << dec << (PointerInt)p << ' ';
-	}
-
-	
-	void TextPersistenceManager::put(const LongPointerType& p)
-	{
-		*os << ' ' << dec << p << ' ';
 	}
 
 	
@@ -503,11 +499,6 @@ namespace BALL
 		p = (void*)i;
 	}
 
-	void TextPersistenceManager::get(LongPointerType& p)
-	{
-		*is >> p;
-	}
-
 #define BALL_DEFINE_NUMBER_GET(type)\
 	void TextPersistenceManager::get(type& i)\
 	{\
@@ -521,6 +512,8 @@ namespace BALL
 	BALL_DEFINE_NUMBER_GET(unsigned int)
 	BALL_DEFINE_NUMBER_GET(long)
 	BALL_DEFINE_NUMBER_GET(unsigned long)
+	BALL_DEFINE_NUMBER_GET(long long)
+	BALL_DEFINE_NUMBER_GET(unsigned long long)
 	BALL_DEFINE_NUMBER_GET(float)
 	BALL_DEFINE_NUMBER_GET(double)
 

@@ -10,3 +10,10 @@ cat config/configure.in | gawk '
 			print " " line
 		}
 	}'
+# find missing closing ']' in AC_MSG_RESULT expressions
+cat config/configure.in |\
+	 grep -n "^.*AC_MSG_RESULT(\\[[^\\[]*$"|\
+	 grep -v "\])" |\
+	 cut -d: -f1 |\
+	 sed "s/^/missing closing square bracket in line /g"
+

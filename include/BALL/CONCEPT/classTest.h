@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.6 2000/01/14 20:39:21 oliver Exp $
+// $Id: classTest.h,v 1.7 2000/01/16 22:36:14 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -222,10 +222,16 @@ int main(int argc, char **argv)\
 		STATUS("just calculated x = " << setprecision(10) << x)
 		\end{verbatim}
 */
-#define STATUS(message)  \
-	TEST::newline = true;\
+#define STATUS(message)\
+	if (!TEST::newline) \
+	{\
+		TEST::newline = true;\
+		std::cout << std::endl;\
+	}\
 	if (TEST::verbose > 0)\
+	{\
 		std::cout << "  status: " << message << std::endl;\
+	}\
 
 /**	Check subtest result.
 		Each elementary test macro updates an internal variable ({\bf TEST}, defined by 

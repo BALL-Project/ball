@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.7 2000/01/16 17:26:48 oliver Exp $
+// $Id: persistenceManager.h,v 1.8 2000/01/16 22:36:15 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -606,6 +606,14 @@ namespace BALL
 		*/
 		virtual void put(const unsigned long s) = 0;
 
+		/**	Write a signed long long to the output stream.
+		*/
+		virtual void put(const long long s) = 0;
+
+		/**	Write an unsigned long long to the output stream.
+		*/
+		virtual void put(const unsigned long long s) = 0;
+
 		/**	Write a boolean value to the output stream.
 		*/
 		virtual void put(const bool b) = 0;
@@ -626,9 +634,6 @@ namespace BALL
 		*/
 		virtual void put(const void* p) = 0;
 
-		/**	Write a 64bit pointer to the output.
-		*/
-		virtual void put(const LongPointerType& p) = 0;
 		//@}
 
 		/**	@name	Get methods for primitive data types.
@@ -667,6 +672,14 @@ namespace BALL
 		*/
 		virtual void get(unsigned long& s) = 0;
 
+		/**	Read a signed long from the input stream.
+		*/
+		virtual void get(long long& s) = 0;
+
+		/**	Read an unsigned long from the input stream.
+		*/
+		virtual void get(unsigned long long& s) = 0;
+
 		/**	Read a boolean value from the input stream.
 		*/
 		virtual void get(bool& b) = 0;
@@ -686,11 +699,6 @@ namespace BALL
 		/**	Read a pointer from the input stream.
 		*/
 		virtual void get(void*& p) = 0;
-
-		/**	Read a 64bit pointer from the input stream.
-		*/
-		virtual void get(LongPointerType& p) = 0;
-
 		//@}
 
 

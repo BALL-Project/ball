@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.40 2000/01/16 17:31:43 oliver Exp $
+dnl    $Id: configure.in,v 1.41 2000/01/16 22:36:21 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -30,6 +30,7 @@ AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ c
 AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
+AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
@@ -86,6 +87,12 @@ if test "$with_mesa" != "yes" ; then
 	BALLVIEW_PLATFORM=OpenGL
 else
  	BALLVIEW_PLATFORM=Mesa
+fi
+
+if test "$with_moc" != "" ; then	
+	MOC=$with_moc
+else
+ 	MOC=moc
 fi
 
 if test "$with_libxnet" != "no" ; then	
@@ -241,7 +248,7 @@ dnl    syntax: AC_FIND_LIB(<PATH_VAR>,<libXXX>,<additional dirnames>)
 dnl    
 dnl        PATH_VAR will be set to the library path or to empty string (if not found)
 dnl        libXXX is the header file name (e.g. libGLUT, libGL) .a, .so etc. should be omitted
-dnl        additional dirnames ar included in searches these should be absolute names!
+dnl        additional dirnames are included in searches these should be absolute names!
 dnl 
 
 AC_DEFUN(AC_FIND_LIB,[
@@ -253,7 +260,7 @@ AC_DEFUN(AC_FIND_LIB,[
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/lib /opt/lib $3 ; do
+		for i in $3 /usr/lib /opt/lib ; do
 			for j in $i/$2.* ; do
 				if test -f "$j" && test "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -658,7 +665,7 @@ if test "${IS_GXX}" = "true" ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(egcs won't compile BALL due to several internal compiler errors.)
 		AC_MSG_RESULT(Please upgrade to a more recent version of GNU g++ (e.g. 2.95.2).)
-		AC_MSG_RESULT(If you have alreadyinstalled a different compiler, you may)
+		AC_MSG_RESULT(If you have already installed a different compiler, you may)
 		AC_MSG_RESULT(specify the path to this compiler by passing the option)
 		AC_MSG_RESULT( --with-compiler=<compiler> to configure.)
 		AC_MSG_RESULT()
@@ -1445,9 +1452,6 @@ if test "${USE_BALLVIEW}" = true ; then
 
 
 	if test "${USE_BALLVIEW}" = true ; then
-		AC_MSG_CHECKING(for OpenGL/Mesa)
-		AC_MSG_RESULT($BALLVIEW_PLATFORM)
-
 		if test "${BALLVIEW_PLATFORM}" = Mesa ; then
 			AC_MSG_CHECKING(for Mesa includes)
 			AC_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCPATH} ${X11_INCPATH})
@@ -1540,7 +1544,7 @@ if test "${USE_BALLVIEW}" = true ; then
 			AC_MSG_RESULT((${QT_INCPATH}))	
 		fi
 
-		AC_MSG_CHECKING(for QT library)
+		AC_MSG_CHECKING(for libqt)
 		if test "${QTDIR}" != "" ; then
 			AC_FIND_LIB(QT_LIBPATH,libqt,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
 		else
@@ -1550,15 +1554,47 @@ if test "${USE_BALLVIEW}" = true ; then
 		if test "${QT_LIBPATH}" = "" ; then
 			AC_MSG_RESULT((not found!))
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(The QT library could not be found. Please specify the path to libqt)
-			AC_MSG_RESULT(by passing the option --with-qt-libs=DIR to configure.)
-			AC_MSG_RESULT(You may also set the environment variable QTDIR to the correct)
-			AC_MSG_RESULT(path - configure will recognize this, too.)
-			AC_MSG_RESULT(The QT package can be found under the following URL:)
+			AC_MSG_RESULT([The QT library could not be found. Please specify the path to libqt])
+			AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
+			AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+			AC_MSG_RESULT([path - configure will recognize this, too.])
+			AC_MSG_RESULT([The QT package can be found under the following URL:])
 			AC_MSG_RESULT(  http://www.troll.no/qt)
-			AC_MSG_ERROR(Building of the visualization component BALLVIEW was disabled!)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
 		else
 			AC_MSG_RESULT((${QT_LIBPATH}))	
+		fi
+
+		QGL_LIBPATH=${QT_LIBPATH}
+		AC_MSG_CHECKING(for libqgl)
+		if test "${QTDIR}" != "" ; then
+			AC_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+		else
+			AC_FIND_LIB(QGL_LIBPATH,libqgl,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+		fi
+
+		if test "${QGL_LIBPATH}" = "" ; then
+			AC_MSG_RESULT((not found!))
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
+			AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
+			AC_MSG_RESULT([to configure.])
+			AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+			AC_MSG_RESULT([path - configure will recognize this, too.])
+			AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
+			AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([The complete QT package can be found under the following URL:])
+			AC_MSG_RESULT([  http://www.troll.no/q])
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
+		else
+			AC_MSG_RESULT((${QT_LIBPATH}))	
+		fi
+		if test "${QGL_PATH}" != "${QT_PATH}" ; then
+			QT_PATH=${QGL_PATH}
+			AC_MSG_RESULT(using ${QT_PATH} to look for liqt.so and libqgl.s)
 		fi
 
 		if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
@@ -1660,6 +1696,46 @@ if test "${USE_BALLVIEW}" = true ; then
 fi
 
 if test "${USE_BALLVIEW}" = true ; then
+	if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
+		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
+			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
+		else
+			OPENGL_LIBPATH=""
+			OPENGL_LIBOPTS="-lGLU -lGL"
+		fi
+
+		dnl make sure we have OpenGL libs and no Mesa libs!
+		dnl
+		SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS="${LIBS} ${X11_LIBOPTS}"
+		if test "${OPENGL_LIBPATH}" != "" ; then
+			LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
+		fi
+		AC_CHECK_LIB(GL, XMesaGarbageCollect, BALLVIEW_PLATFORM=Mesa)
+		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${BALLVIEW_PLATFORM}" != Mesa ; then
+			AC_MSG_CHECKING(linking against OpenGL libraries)
+			SAVE_LIBS=${LIBS}
+			LIBS="${OPENGL_LIBOPTS} ${LIBS}"
+			AC_TRY_LINK([],[],OPENGL_LINKING_OK=1)
+			LIBS=${SAVE_LIBS}
+			if test "${OPENGL_LINKING_OK+set}" != set ; then
+				AC_MSG_RESULT(no)
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(Cannot link against libGL/GLU - disabling visualization support!)
+				AC_MSG_RESULT(Please specify the path to OpenGL libraries using --with-opengl-libs=DIR)
+				AC_MSG_RESULT()
+				USE_BALLVIEW=false
+			else
+				AC_MSG_RESULT(yes)
+			fi
+		fi
+	fi
+fi
+
+if test "${USE_BALLVIEW}" = true ; then
 	if test "${BALLVIEW_PLATFORM}" = Mesa ; then
 		dnl
 		dnl  strip default path
@@ -1711,32 +1787,6 @@ if test "${USE_BALLVIEW}" = true ; then
 		fi
 	fi
 fi
-if test "${USE_BALLVIEW}" = true ; then
-	if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
-		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
-			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
-		else
-			OPENGL_LIBPATH=""
-			OPENGL_LIBOPTS="-lGLU -lGL"
-		fi
-		AC_MSG_CHECKING(linking against OpenGL libraries)
-		SAVE_LIBS=${LIBS}
-		LIBS="${OPENGL_LIBOPTS} ${LIBS}"
-		AC_TRY_LINK([],[],OPENGL_LINKING_OK=1)
-		LIBS=${SAVE_LIBS}
-		if test "${OPENGL_LINKING_OK+set}" != set ; then
-			AC_MSG_RESULT(no)
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(Cannot link against libGL/GLU - disabling visualization support!)
-			AC_MSG_RESULT(Please specify the path to OpenGL libraries using --with-opengl-libs=DIR)
-			AC_MSG_RESULT()
-			USE_BALLVIEW=false
-		else
-			AC_MSG_RESULT(yes)
-		fi
-	fi
-fi
-	
 if test "${USE_BALLVIEW}" = true ; then
 	if test "${QT_LIBPATH}" != "/usr/lib" ; then
 		QT_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt"
@@ -1811,7 +1861,7 @@ if test "${USE_BALLVIEW}" = true ; then
 
 			dnl
 			dnl  test whether this version is the right one
-			dnl  (2.x.y and at lease 2.0.2
+			dnl  (2.x.y and at least 2.0.2
 			dnl
 			rm qt.version 2>/dev/null
 			QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
@@ -1845,6 +1895,32 @@ if test "${USE_BALLVIEW}" = true ; then
 				fi
 			fi
 		fi
+	fi
+fi
+
+dnl
+dnl	try to find the MOC (QT meta object compiler)
+dnl It is usually installed in ${QTDIR}/bin/moc
+dnl
+if test "${USE_BALLVIEW}" = true ; then
+	if test "${MOC}" = moc ; then
+		if test "${QTDIR}" != "" ; then
+			MOC=${QTDIR}/bin/moc
+		fi
+	fi
+
+	dnl
+	dnl  try to find that damned moc
+	dnl
+	AC_PATH_PROG(MOC,moc,moc)
+	if test "${MOC}" = moc ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Could not find the QT Meta Object Compiler (moc)!])
+		AC_MSG_RESULT([You might run into trouble if you want to compile MolVIEW.])
+		AC_MSG_RESULT([Please include the correct path to moc into your])
+		AC_MSG_RESULT([PATH environment variable or specify the path to moc])
+		AC_MSG_RESULT([using the option --with-moc=PATH to rerun configure.])
+		AC_MSG_RESULT()
 	fi
 fi
 
@@ -1989,6 +2065,7 @@ AC_SUBST(OPENGL_LIBOPTS)    dnl compiler options for OpenGL libs (-Lxxx -lGLU -l
 AC_SUBST(OPENGL_LIBPATH)    dnl path to OpenGL libs (without -L)
 AC_SUBST(QT_LIBOPTS)        dnl copiler options for QT libs (-Lxxx -lqgl -lqt)
 AC_SUBST(QT_LIBPATH)        dnl path to QT libs (without -L)
+AC_SUBST(MOC)        				dnl path to QT meta object compiler
 AC_SUBST(X11_LIBOPTS)       dnl compiler options for X11 libs (-Lxx -lXmu -lXt -lX11 [-lSM -lICE])
 AC_SUBST(X11_LIBPATH)       dnl path to X11 libs (without -L)
 AC_SUBST(X11_LIBS)          dnl the X11 libraries only (-lXmu -lXt...)

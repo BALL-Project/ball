@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.3 2000/01/16 17:26:47 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.4 2000/01/16 22:36:14 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -197,6 +197,14 @@ namespace BALL
 		*/
 		virtual void put(const unsigned long s);
 
+		/**	Write a signed long long to the output stream.
+		*/
+		virtual void put(const long long s);
+
+		/**	Write an unsigned long long to the output stream.
+		*/
+		virtual void put(const unsigned long long s);
+
 		/**	Write a boolean value to the output stream.
 		*/
 		virtual void put(const bool b);
@@ -216,11 +224,6 @@ namespace BALL
 		/**	Write a pointer to the output.
 		*/
 		virtual void put(const void* p);
-
-		/**	Write a 64 bit pointer to the output.
-		*/
-		virtual void put(const LongPointerType& p);
-
 		//@}
 
 		/**	@name	Get methods for primitive data types.
@@ -259,6 +262,14 @@ namespace BALL
 		*/
 		virtual void get(unsigned long& s);
 
+		/**	Read a signed long long from the input stream.
+		*/
+		virtual void get(long long& s);
+
+		/**	Read an unsigned long long from the input stream.
+		*/
+		virtual void get(unsigned long long& s);
+
 		/**	Read a boolean value from the input stream.
 		*/
 		virtual void get(bool& b);
@@ -278,11 +289,6 @@ namespace BALL
 		/**	Read a pointer from the input stream.
 		*/
 		virtual void get(void*& p);
-
-		/**	Read a 64 bit pointer from the input stream.
-		*/
-		virtual void get(LongPointerType& p);
-
 		//@}
 	};
 
