@@ -1,4 +1,4 @@
-1.0: 24.05.2004
+1.0: 01.06.2004
 ---------------
 Changed:
   - molview has been renamed to BALLView in order to avoid
@@ -7,6 +7,10 @@ Changed:
     fragment database. If you want the same behavior as before, simply
     call FragmentDB::init() or use the other constructor with an empty
     string as an argument (e.g. 'FragmentDB db("");').
+ -  The meaning of the selection in a force field has changed slightly. 
+    In normal cases, you should not notice the difference. Check your
+    energies, if you are often calculating energies of partially selected
+    systems.
 
 Added + improved:
   - MOLFile and SDFile are now more robust with respect to slight errors in the
@@ -24,6 +28,12 @@ Installation:
   - Support for G++ 3.4
   - Windows installer for BALLView and BALL
   - Debian and RPM packages for several Linux distributions
+  - Simplified installation debugging: configure now creates an archive 
+    (*conf.diag.tar*) containing all relevant files created by configure we 
+    might need to debug your installation problems. If you experience any 
+    trouble, please include this archive in your bug report.
+
+
 
 1.0pre2: 20.02.2004
 -------------------
