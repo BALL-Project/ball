@@ -520,11 +520,14 @@ AC_DEFUN(CF_DIGEST_CXX_VERSION,[
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
+	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MAJOR, ${CXX_VERSION_1})
+	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MINOR, ${CXX_VERSION_2})
+	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MINOR_MINOR, ${CXX_VERSION_3})
 	])
 
 dnl
 dnl		Check whether CXX is a GNU compiler and retrieve its
-dnl			version number
+dnl			version number.
 dnl
 AC_DEFUN(CF_IDENTIFY_GXX,[
 	AC_MSG_CHECKING(for GNU compiler)
@@ -542,12 +545,18 @@ EOF
 		HAS_GPLUSPLUS=true
 		CXX_NAME="g++"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for G++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_GXX, )
+		AC_DEFINE(BALL_COMPILER, GXX)
 	else
 		AC_MSG_RESULT(no)
 		HAS_GPLUSPLUS=false
 	fi
 	${RM} /tmp/$$.conftest.c
-
+	
 ])
 
 AC_DEFUN(CF_GXX_OPTIONS, [
@@ -641,6 +650,12 @@ AC_DEFUN(CF_IDENTIFY_KAI, [
 		AC_MSG_RESULT(yes)
 		CXX_NAME="KAI"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for KAI C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_KAI, )
+		AC_DEFINE(BALL_COMPILER, KAI)
 	else
 		IS_KCC=false
 		AC_MSG_RESULT(no)
@@ -729,11 +744,16 @@ AC_DEFUN(CF_IDENTIFY_INTEL, [
 		CXX_NAME="Intel"
 		CXX_IDENTIFIED=true
 
+
+		dnl 
+		dnl 	Define a symbol for Intel C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_INTEL, )
+		AC_DEFINE(BALL_COMPILER, INTEL)
 	else
 		IS_INTELCC=false
 		AC_MSG_RESULT(no)
 	fi
-
 ])
 
 
@@ -786,6 +806,12 @@ AC_DEFUN(CF_IDENTIFY_COMPAQ,[
 		AC_MSG_RESULT(yes)
 		CXX_NAME="Compaq"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for Compaq C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_COMPAQ, )
+		AC_DEFINE(BALL_COMPILER, COMPAQ)
 	else
 		IS_DIGITALCXX=false
 		AC_MSG_RESULT(no)
@@ -853,11 +879,16 @@ AC_DEFUN(CF_IDENTIFY_SGI, [
 		AC_MSG_RESULT(yes)
 		CXX_NAME="MIPSpro"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for SGI C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_MIPSPRO, )
+		AC_DEFINE(BALL_COMPILER, MIPSPRO)
 	else
 		IS_MIPSPRO=false
 		AC_MSG_RESULT(no)
 	fi
-
 ])
 
 AC_DEFUN(CF_MIPSPRO_OPTIONS, [
@@ -966,11 +997,16 @@ AC_DEFUN(CF_IDENTIFY_SUN, [
 		AC_MSG_RESULT(yes)
 		CXX_NAME="SunCC"
 		CXX_IDENTIFIED=true
+
+		dnl 
+		dnl 	Define a symbol for SUNPro C++.
+		dnl
+		AC_DEFINE(BALL_COMPILER_SUNPRO)
+		AC_DEFINE(BALL_COMPILER, SUNPRO)
 	else
 		IS_SUNCC=false
 		AC_MSG_RESULT(no)
 	fi
-
 ])
 
 AC_DEFUN(CF_SUNCC_OPTIONS, [

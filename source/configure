@@ -2960,6 +2960,15 @@ echo "${ECHO_T}yes" >&6
 		HAS_GPLUSPLUS=true
 		CXX_NAME="g++"
 		CXX_IDENTIFIED=true
+
+								cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER_GXX
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER GXX
+_ACEOF
+
 	else
 		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
@@ -2978,6 +2987,15 @@ echo $ECHO_N "checking for KAI C++ compiler... $ECHO_C" >&6
 echo "${ECHO_T}yes" >&6
 		CXX_NAME="KAI"
 		CXX_IDENTIFIED=true
+
+								cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER_KAI
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER KAI
+_ACEOF
+
 	else
 		IS_KCC=false
 		echo "$as_me:$LINENO: result: no" >&5
@@ -2995,12 +3013,20 @@ echo $ECHO_N "checking for SUN WorkShop/Forte C++ compiler... $ECHO_C" >&6
 echo "${ECHO_T}yes" >&6
 		CXX_NAME="SunCC"
 		CXX_IDENTIFIED=true
+
+								cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER_SUNPRO 1
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER SUNPRO
+_ACEOF
+
 	else
 		IS_SUNCC=false
 		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 	fi
-
  fi
 if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for SGI/MipsPro C++ compiler" >&5
@@ -3012,12 +3038,20 @@ echo $ECHO_N "checking for SGI/MipsPro C++ compiler... $ECHO_C" >&6
 echo "${ECHO_T}yes" >&6
 		CXX_NAME="MIPSpro"
 		CXX_IDENTIFIED=true
+
+								cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER_MIPSPRO
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER MIPSPRO
+_ACEOF
+
 	else
 		IS_MIPSPRO=false
 		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 	fi
-
  fi
 if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for Digital/Compaq C++ compiler" >&5
@@ -3029,6 +3063,15 @@ echo $ECHO_N "checking for Digital/Compaq C++ compiler... $ECHO_C" >&6
 echo "${ECHO_T}yes" >&6
 		CXX_NAME="Compaq"
 		CXX_IDENTIFIED=true
+
+								cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER_COMPAQ
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER COMPAQ
+_ACEOF
+
 	else
 		IS_DIGITALCXX=false
 		echo "$as_me:$LINENO: result: no" >&5
@@ -3047,12 +3090,20 @@ echo "${ECHO_T}yes" >&6
 		CXX_NAME="Intel"
 		CXX_IDENTIFIED=true
 
+
+								cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER_INTEL
+_ACEOF
+
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_COMPILER INTEL
+_ACEOF
+
 	else
 		IS_INTELCC=false
 		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 	fi
-
  fi
 
 CXX_MAKEDEPEND="makedepend"
@@ -3090,6 +3141,18 @@ echo "${ECHO_T}${VERSION_OUTPUT}" >&6
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MAJOR ${CXX_VERSION_1}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR ${CXX_VERSION_2}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR_MINOR ${CXX_VERSION_3}
+_ACEOF
+
 
 
 	if test "${CXX_VERSION_1}" -lt 2 \
@@ -3171,6 +3234,18 @@ echo "${ECHO_T}${VERSION_OUTPUT}" >&6
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MAJOR ${CXX_VERSION_1}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR ${CXX_VERSION_2}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR_MINOR ${CXX_VERSION_3}
+_ACEOF
+
 
 
         TEMPLATE_DIR="ti_files"
@@ -3233,6 +3308,18 @@ echo "${ECHO_T}${VERSION_OUTPUT}" >&6
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MAJOR ${CXX_VERSION_1}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR ${CXX_VERSION_2}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR_MINOR ${CXX_VERSION_3}
+_ACEOF
+
 
 
 	        TEMPLATE_DIR=""
@@ -3274,6 +3361,18 @@ echo "${ECHO_T}${VERSION_OUTPUT}" >&6
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MAJOR ${CXX_VERSION_1}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR ${CXX_VERSION_2}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR_MINOR ${CXX_VERSION_3}
+_ACEOF
+
 
 
 		if test "${CXX_VERSION_1}" -lt 6 -o "${CXX_VERSION_1}" -eq 6 -a "${CXX_VERSION_2}" -lt 2 ; then
@@ -3352,6 +3451,18 @@ echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MAJOR ${CXX_VERSION_1}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR ${CXX_VERSION_2}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR_MINOR ${CXX_VERSION_3}
+_ACEOF
+
 
 		echo "$as_me:$LINENO: result: ${CXX_VERSION_OUTPUT}" >&5
 echo "${ECHO_T}${CXX_VERSION_OUTPUT}" >&6
@@ -3477,6 +3588,18 @@ echo $ECHO_N "checking compiler version for Sun C++... $ECHO_C" >&6
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MAJOR ${CXX_VERSION_1}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR ${CXX_VERSION_2}
+_ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_COMPILER_VERSION_MINOR_MINOR ${CXX_VERSION_3}
+_ACEOF
+
 
 		fi
 		echo "$as_me:$LINENO: result: ${CXX_VERSION_OUTPUT}" >&5
