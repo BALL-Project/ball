@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.3 2000/01/10 21:48:27 oliver Exp $
+// $Id: nucleotide.h,v 1.4 2000/01/11 20:12:18 oliver Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -25,7 +25,7 @@ namespace BALL
 	class NucleicAcid;
 	class Protein;
 
-	/**
+	/**	Kernel class representing a nucleotide.
 	*/
 	class Nucleotide
 		: public Fragment
@@ -96,7 +96,7 @@ namespace BALL
 		void set(const Nucleotide& nucleotide, bool deep = true);
 
 		///	
-		Nucleotide &operator = (const Nucleotide& nucleotide);
+		Nucleotide& operator = (const Nucleotide& nucleotide);
 
 		///	
 		void get(Nucleotide& nucleotide, bool deep = true) const;
@@ -165,7 +165,6 @@ namespace BALL
 
 		//@}
 
-
 	
 		/**	@name	Predicates */
 		//@{
@@ -178,7 +177,6 @@ namespace BALL
 	
 		///
 		bool is5Prime() const;
-
 		//@}
 
 	
@@ -247,7 +245,9 @@ namespace BALL
   {
 		NucleotideConstIterator res_it;
     for ( res_it = nucleotide_container.beginNucleotide(); !res_it.isEnd(); ++res_it)
+		{
 			return &(*res_it);
+		}
 
     return 0;
   }
@@ -256,7 +256,9 @@ namespace BALL
   const Nucleotide* get3Prime(const NucleotideContainerType& nucleotide_container)
   {
     for (NucleotideConstIterator res_it = nucleotide_container.rbeginNucleotide(); !res_it.isREnd(); ++res_it)
+		{
 			return &(*res_it);
+		}
 
     return 0;
   }
