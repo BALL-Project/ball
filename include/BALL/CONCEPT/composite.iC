@@ -1,4 +1,4 @@
-// $Id: composite.iC,v 1.8 2000/08/24 11:58:50 amoll Exp $
+// $Id: composite.iC,v 1.9 2000/08/28 09:57:01 oliver Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
@@ -153,6 +153,18 @@ BALL_INLINE
 const Composite* Composite::getLastChild() const
 {
   return last_child_;
+}
+
+BALL_INLINE 
+const Time& Composite::getModificationTime() const throw ()
+{
+  return modification_stamp_.getTime();
+}
+
+BALL_INLINE 
+const Time& Composite::getSelectionTime() const throw()
+{
+  return selection_stamp_.getTime();
 }
 
 BALL_INLINE 
