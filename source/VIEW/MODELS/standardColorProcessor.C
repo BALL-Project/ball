@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.16 2003/11/08 16:19:03 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.17 2003/11/10 16:51:47 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -227,23 +227,38 @@ namespace BALL
 		{
 			if (composite->isSelected()) return BALL_SELECTED_COLOR;
 
-			if (composite->getParent() == 0 ||
-					 !RTTI::isKindOf<Residue>(*composite->getParent()))
+			Residue residue;
+			if (!RTTI::isKindOf<Residue>(*composite) &&
+					composite->getAncestor(residue) == 0)
 			{
 				return default_color_;
-			} 
+			}
 			
-			String name = ((Residue*) composite->getParent())->getName();
+			String name; 
+			if (RTTI::isKindOf<Residue>(*composite))
+			{
+				name = ((const Residue*) composite)->getName();
+			}
+			else
+			{
+				try
+				{
+					name = ((const Residue*)(composite->getAncestor(residue)))->getName();
+				}
+				catch(...)
+				{
+					return default_color_;
+				}
+			}
+
 			if (color_map_.has(name))
 			{
 				ColorRGBA color = color_map_[name];
 				color.setAlpha(255 - transparency_);
 				return color;
 			}
-			else
-			{
-				return default_color_;
-			}
+
+			return default_color_;
 		}
 
 		ResidueNumberColorProcessor::ResidueNumberColorProcessor()
@@ -279,27 +294,34 @@ namespace BALL
 		{
 			if (composite->isSelected()) return BALL_SELECTED_COLOR;
 
-			if (composite->getParent() == 0 ||
-					!RTTI::isKindOf<Residue>(*composite->getParent()))
+			Residue residue;
+			if (!RTTI::isKindOf<Residue>(*composite) &&
+					composite->getAncestor(residue) == 0)
 			{
 				return default_color_;
 			}
+
+			Position pos;
+
+			if (RTTI::isKindOf<Residue>(*composite))
+			{
+				pos = ((const Residue*)composite)->getID().toUnsignedShort();
+			}
 			else
 			{
-				Position pos;
 				try
 				{
-					pos = ((const Residue*)(composite->getParent()))->getID().toUnsignedShort();
+					pos = ((const Residue*)(composite->getAncestor(residue)))->getID().toUnsignedShort();
 				}
 				catch(...)
 				{
 					return default_color_;
 				}
-				while (pos > max_) pos = pos - max_;
-				ColorRGBA color = colors_[pos];
-				color.setAlpha(255 - transparency_);
-				return color;
 			}
+			while (pos > max_) pos = pos - max_;
+			ColorRGBA color = colors_[pos];
+			color.setAlpha(255 - transparency_);
+			return color;
 		}
 
 		////////////////////////////////////////////////////////////////////
