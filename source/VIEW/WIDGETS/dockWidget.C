@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.13 2003/09/17 22:16:40 amoll Exp $
+// $Id: dockWidget.C,v 1.14 2003/09/20 16:49:06 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -21,7 +21,7 @@ DockWidget::DockWidget(QWidget* parent, const char* name)
 	ModularWidget(name),
 	guest_(0)
 {
-	layout_ = new QVBoxLayout(this);
+	layout_ = new QVBoxLayout();
   caption_label_ = new QLabel(this, "caption_label");
 	caption_label_->resize(90, 12);
   caption_label_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
@@ -34,7 +34,7 @@ DockWidget::DockWidget(QWidget* parent, const char* name)
   caption_label_->setAlignment(QLabel::AlignCenter);
 	layout_->addWidget(caption_label_);
 	Log.remove(std::cerr);
-	boxLayout()->addItem(layout_);
+	boxLayout()->addLayout(layout_);
 	Log.insert(std::cerr);
 
 	setOrientation(Qt::Vertical);
