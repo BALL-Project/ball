@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Circle3_test.C,v 1.12 2003/06/09 22:40:52 oliver Exp $
+// $Id: Circle3_test.C,v 1.13 2003/06/10 11:57:00 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(Circle3, "$Id: Circle3_test.C,v 1.12 2003/06/09 22:40:52 oliver Exp $")
+START_TEST(Circle3, "$Id: Circle3_test.C,v 1.13 2003/06/10 11:57:00 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -179,15 +179,28 @@ CHECK(std::ostream& operator << (std::ostream& s, const TCircle3& circle))
 RESULT
 
 CHECK(TCircle3& operator = (const TCircle3& circle) throw())
-  // ???
+	Circle3 c(v1, v2, 5);
+	Circle3 test = c;
+	TEST_EQUAL(c.p, v1)
+	TEST_EQUAL(c.n, v2)
+	TEST_EQUAL(c.radius, 5)
 RESULT
 
 CHECK(void clear() throw())
-  // ???
+	Circle3 c(v1, v2, 5);
+	c.clear();
+	Circle3 c2;
+	TEST_EQUAL(c, c2)
 RESULT
 
 CHECK(void get(TVector3<T>& point, TVector3<T>& normal, T& rhs) const throw())
-  // ???
+	Circle3 c(v1, v2, 5);
+	Vector3 p, n;
+	float radius;
+	c.get(p, n, radius);
+	TEST_EQUAL(p, v1)
+	TEST_EQUAL(n, v2)
+	TEST_EQUAL(radius, 5)
 RESULT
 
 /////////////////////////////////////////////////////////////
