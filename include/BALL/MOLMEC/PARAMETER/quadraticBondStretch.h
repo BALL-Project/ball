@@ -1,6 +1,4 @@
-// $Id: quadraticBondStretch.h,v 1.8 2001/03/02 22:10:27 amoll Exp $
-// Molecular Mechanics Parameter: class describing the parameters
-// required for a harmonic stretch potential
+// $Id: quadraticBondStretch.h,v 1.9 2001/06/21 21:29:53 amoll Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
@@ -16,8 +14,10 @@
 namespace BALL 
 {
 		
-	/** QuadraticBondStretch.\\
-			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/quadraticBondStretch.h}	
+	/** QuadraticBondStretch.
+			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/quadraticBondStretch.h}	\\
+			Molecular Mechanics Parameter: class describing the parameters
+			required for a harmonic stretch potential.
 	*/
 	class QuadraticBondStretch 
 		:	public ParameterSection

@@ -1,4 +1,4 @@
-// $Id: randomCoilShiftProcessor.h,v 1.7 2001/03/02 22:19:33 amoll Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.8 2001/06/21 21:36:11 amoll Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
@@ -11,7 +11,7 @@
 namespace BALL 
 {
 
-	/**	Random coil shift assignment processor. \\
+	/**	Random coil shift assignment processor.
 			{\bf Definition}\URL{BALL/NMR/randomCoilShiftProcessor.h}
 	*/
 	class RandomCoilShiftProcessor
@@ -84,7 +84,7 @@ namespace BALL
 
 		protected:
 
-		/**	The hash map containing the atom names and the random coil shifts.
+		/*_	The hash map containing the atom names and the random coil shifts.
 		*/
 		StringHashMap<float>		shift_map_;
 	};

@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.h,v 1.12 2001/05/16 10:04:33 amoll Exp $
+// $Id: assignShiftProcessor.h,v 1.13 2001/06/21 21:35:05 amoll Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -20,7 +20,7 @@
 namespace BALL 
 {
                
-	/**	Set a property called chemical_shift. \\
+	/**	Set a property called chemical_shift.
 			{\bf Definition}\URL{BALL/NMR/assignShiftProcessor.h}
 	*/
 	class AssignShiftProcessor

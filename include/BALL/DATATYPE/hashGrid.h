@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.18 2001/06/08 14:38:18 anker Exp $
+// $Id: hashGrid.h,v 1.19 2001/06/21 21:25:10 amoll Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -1055,7 +1055,7 @@ namespace BALL
 	}
 
 
-	/**	Three-dimensional Hash Grid Class.\\
+	/**	Three-dimensional Hash Grid Class.
 			BAUSTELLE\\
 			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
 	*/

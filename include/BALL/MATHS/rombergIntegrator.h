@@ -1,4 +1,4 @@
-// $Id: rombergIntegrator.h,v 1.3 2001/06/09 11:31:43 amoll Exp $
+// $Id: rombergIntegrator.h,v 1.4 2001/06/21 21:28:10 amoll Exp $
 
 #ifndef BALL_MATHS_ROMBERGINTEGRATOR_H
 #define BALL_MATHS_ROMBERGINTEGRATOR_H
@@ -7,8 +7,7 @@
 
 namespace BALL
 {
-	/** This class performs a numerical integration of a
-		  BALL-Function using a Romberg integration scheme. \\
+	/** A numerical integration of a BALL-Function using a Romberg integration scheme. 
 			{\bf Definition:} \URL{BALL/MATHS/rombergIntegrator.h}
 	*/
 	template <typename Function, typename DataType>
@@ -35,8 +34,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/// @name Assignment
 		//@{
 
@@ -52,45 +49,39 @@ namespace BALL
 		void setEpsilon(float eps)
 			throw();
 
-		/// Set the maximum number of steps we want to use in
-		//  computation
+		/// Set the maximum number of steps we want to use in computation
 		void setMaxNumSteps(Size mns)
 			throw();
 
 		//@}
-		
-
 		/// @name Predicates
 		//@{
 		
-
 		/// Equality operator
 		bool operator == (const RombergIntegrator& romint) const
 			throw();
 
 		//@}
-		
-
 		/// @name Accessors
 		//@{
 		
-		/** integrate the function numerically
-		 					@param from lower limit of the integration
-							@param to upper limit of the integration
-							@return the value of the integral
+		/** Integrate the function numerically.
+		 		@param from lower limit of the integration
+				@param to upper limit of the integration
+			  @return the value of the integral
 		*/
 		DataType integrate(DataType from, DataType to)
 			throw();
 		
 
-		/** integrate the function numerically using a simple trapezoid integration \\
+		/** Integrate the function numerically using a simple trapezoid integration.
 		 		This function is intended as a helper function for the computation of
 				the romberg integration, but it can be used as a regular integrator as
 				well, if speed is more important than reliability.
-						  @param h gives the width of each step
-							@param from lower limit of the integration
-							@param to upper limit of the integration
-							@return the value of the integral
+				@param h gives the width of each step
+				@param from lower limit of the integration
+				@param to upper limit of the integration
+				@return the value of the integral
 		*/
 		DataType trapezoid(DataType h, DataType from, DataType to)
 			throw();

@@ -1,5 +1,4 @@
-// $Id: conjugateGradient.h,v 1.8 2001/03/02 22:10:27 amoll Exp $ 
-// A conjugate gradient minimizer for geometry optimisation
+// $Id: conjugateGradient.h,v 1.9 2001/06/21 21:28:47 amoll Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -52,8 +51,9 @@
 namespace BALL 
 { 
 
-	/**	Conjugate gradient (CG) minimizer. \\
-			{\bf Definition:}\URL{BALL/MOLMEC/MINIMIZATION/conjugateGradient.h}
+	/**	Conjugate gradient (CG) minimizer. 
+			{\bf Definition:}\URL{BALL/MOLMEC/MINIMIZATION/conjugateGradient.h} \\
+			A conjugate gradient minimizer for geometry optimisation.
 	*/
   class ConjugateGradientMinimizer 
 		: public EnergyMinimizer
@@ -223,7 +223,7 @@ namespace BALL
 
 		Size number_of_atoms_;
 
-    /** The step length used in the line search 
+    /*_ The step length used in the line search 
     */
     double step_; 
 
@@ -231,11 +231,11 @@ namespace BALL
     */
     double lambda_; 
 
-    //_@}
-
-		/**	The update method used for the CG
+		/*_	The update method used for the CG
 		*/
 		UpdateMethod method_;
+
+    //_@}
 
 	};
 

@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.h,v 1.10 2001/03/07 22:19:47 amoll Exp $
+// $Id: EFShiftProcessor.h,v 1.11 2001/06/21 21:34:03 amoll Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -34,8 +34,8 @@ namespace BALL
 				@see ShiftModule::PROPERTY__SHIFT
 		*/
 		static const char* PROPERTY__EF_SHIFT;
-		//@}
 		
+		//@}
 		/** @name	Constructors and Destructors.
 		*/
 		//@{
@@ -122,52 +122,54 @@ namespace BALL
 		*/
 		virtual bool finish()
 			throw();
+			
 		//@}
 
 		protected:
 	
-		/**	The list of bonds collected by {\tt operator ()}.
+		/*_	The list of bonds collected by {\tt operator ()}.
 		*/
 		std::list<Bond*>				bond_list_;
 
-		/**	The list of charged atoms (effectors).
+		/*_	The list of charged atoms (effectors).
 		*/
 		std::list<Atom*>				effector_list_;
 
-		/**	The expressions describing the first atom of a bond.
+		/*_	The expressions describing the first atom of a bond.
 		*/
 		std::vector<Expression>	first_atom_expressions_;
 
-		/**	The expressions describing the first atom of a bond.
+		/*_	The expressions describing the first atom of a bond.
 		*/
 		std::vector<Expression>	second_atom_expressions_;
 
-		/**	The parameter $\varepsilon_1$.
+		/*_	The parameter $\varepsilon_1$.
 		*/
 		std::vector<float>			epsilon1_;
 
-		/**	The parameter $\varepsilon_2$.
+		/*_	The parameter $\varepsilon_2$.
 		*/
 		std::vector<float>			epsilon2_;
 
-		/**	The charge assignment map.
+		/*_	The charge assignment map.
 		*/
 		StringHashMap<float>		charge_map_;
 
-		/**	A flag indicating whether effectors in the same residues are to be considered.
+		/*_	A flag indicating whether effectors in the same residues are to be considered.
 				Set this flag by specifying the option {\tt exclude_residue_field = true} in 
 				the ElectricFieldShift section of the parameter file.
 				Default is false.
 		*/
 		bool										exclude_residue_field_;
 
-		/**	A cut off value for the electric field effect.
+		/*_	A cut off value for the electric field effect.
 				Any effector that is further away than this cut off is ignored.
 				The distance is read from the option {\tt cut_off} in the 
 				section {\tt ElectricFieldEffect} from the parameter file.
 				This member contains the squared value(!) of the distance.
 		*/
 		float										cut_off2_;
+		
  	};
 
 } // namespace BALL

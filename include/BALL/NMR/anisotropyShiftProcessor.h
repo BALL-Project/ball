@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.h,v 1.8 2001/03/02 22:19:33 amoll Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.9 2001/06/21 21:34:52 amoll Exp $
 
 #ifndef BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
 #define BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
@@ -20,7 +20,7 @@
 namespace BALL 
 {
 		
-	/**	Shift assignment processor implementing Anisotropy. \\
+	/**	Shift assignment processor implementing Anisotropy.
 			{\bf Definition}\URL{BALL/NMR/anisotropyShiftProcessor.h}
 	*/
 	class AnisotropyShiftProcessor
@@ -38,9 +38,9 @@ namespace BALL
         @see ShiftModule::PROPERTY__SHIFT
     */
     static const char* PROPERTY__ANISOTROPY_SHIFT;
+		
     //@}
- 
-		/** @name	Constructors and Destructors
+ 		/** @name	Constructors and Destructors
 		*/
 		//@{
 

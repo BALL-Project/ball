@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.h,v 1.7 2001/03/02 22:19:33 amoll Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.8 2001/06/21 21:35:28 amoll Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -17,7 +17,7 @@
 namespace BALL 
 {
 		
-	/**	Shift assignment processor implementing Haigh Mallion theory. \\
+	/**	Shift assignment processor implementing Haigh Mallion theory. 
 			{\bf Definition}\URL{BALL/NMR/haighMallionShiftProcessor.h}
 	*/
 	class HaighMallionShiftProcessor
@@ -35,9 +35,9 @@ namespace BALL
         @see ShiftModule::PROPERTY__SHIFT
     */
     static const char* PROPERTY__RING_CURRENT_SHIFT;
+		
     //@}
- 
-		/** @name	Constructors and Destructors
+ 		/** @name	Constructors and Destructors
 		*/
 		//@{
 

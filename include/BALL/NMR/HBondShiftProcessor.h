@@ -1,4 +1,4 @@
-// $Id: HBondShiftProcessor.h,v 1.3 2001/03/02 22:19:33 amoll Exp $
+// $Id: HBondShiftProcessor.h,v 1.4 2001/06/21 21:34:34 amoll Exp $
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H
 #define BALL_NMR_HBONDSHIFTPROCESSOR_H
@@ -26,7 +26,7 @@
 namespace BALL
 {
 
-  /** Shift assignment processor implementing the effect of hydrogen bonds. \\
+  /** Shift assignment processor implementing the effect of hydrogen bonds. 
 			{\bf Definition}\URL{BALL/NMR/HBondShiftProcessor.h}
   */
   class HBondShiftProcessor

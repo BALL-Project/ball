@@ -1,6 +1,4 @@
-// $Id: cosineTorsion.h,v 1.8 2001/03/02 22:10:27 amoll Exp $
-// Molecular Mechanics Parameter: class describing the parameter
-// section required for torsions using a cosine type potential function
+// $Id: cosineTorsion.h,v 1.9 2001/06/21 21:29:12 amoll Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
 #define BALL_MOLMEC_PARAMETER_COSINETORSION_H
@@ -16,8 +14,10 @@
 namespace BALL 
 {
 		
-	/** Cosine Torsion. \\
-			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/cosineTorsion.h}
+	/** Cosine Torsion. 
+			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/cosineTorsion.h} \\
+			Molecular Mechanics Parameter: class describing the parameter
+			section required for torsions using a cosine type potential function.
 	*/
 	class CosineTorsion 
 		:	public ParameterSection

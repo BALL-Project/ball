@@ -1,5 +1,4 @@
-// $Id: periodicBoundary.h,v 1.11 2001/03/02 00:34:15 amoll Exp $
-// Molecular Mechanics: class representing periodic boundary conditions
+// $Id: periodicBoundary.h,v 1.12 2001/06/21 21:28:27 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
 #define BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -23,8 +22,9 @@ namespace BALL
 
 	class PeriodicBoundary;
 
-	/**	Periodic boundary class for force field simulations. \\
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/periodicBoundary.h}
+	/**	Periodic boundary class for force field simulations. 
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/periodicBoundary.h} \\
+			Molecular Mechanics: class representing periodic boundary conditions.
 	*/
 	class PeriodicBoundary
 	{
@@ -246,16 +246,16 @@ namespace BALL
 		*/
 		//_@{
 
-		/// Pointer to the force field of the periodic boundary 
+		//_ Pointer to the force field of the periodic boundary 
 		ForceField*	force_field_;
 
-		/// Indicates if periodic boundary is enabled or not 
+		//_ Indicates if periodic boundary is enabled or not 
 		bool		enabled_;
 
-		/// The box of the periodic boundary 
+		//_ The box of the periodic boundary 
 		Box3		box_;
 
-		/// An pair vector with the start and end indices of all molecules (atoms of the molecules)
+		//_ An pair vector with the start and end indices of all molecules (atoms of the molecules)
 		AtomIndexArray	molecules_;
 
 		//_@}
