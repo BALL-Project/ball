@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.19 2001/06/19 21:13:50 strobel Exp $
+// $Id: triangulation.h,v 1.20 2001/06/20 09:02:57 amoll Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -2073,58 +2073,102 @@ namespace BALL
 	{
 		std::list<TTrianglePoint<T>*> sphere;
 		TTrianglePoint<T>* point;
-		point = new TTrianglePoint<T>; point->p.set(0,0,1);													point->n.set(0,0,1);												 sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1000;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(0.894427,0,0.447213);           point->n.set(0.894427,0,0.447213);           sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1001;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(0.276393,0.850651,0.447213);    point->n.set(0.276393,0.850651,0.447213);    sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1002;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(-0.723607,0.525731,0.447213);   point->n.set(-0.723607,0.525731,0.447213);   sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1003;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(-0.723607,-0.525731,0.447213);  point->n.set(-0.723607,-0.525731,0.447213);  sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1004;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(0.276393,-0.850651,0.447213);   point->n.set(0.276393,-0.850651,0.447213);   sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1005;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(0.723607,0.525731,-0.447213);   point->n.set(0.723607,0.525731,-0.447213);   sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1006;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(-0.276393,0.850651,-0.447213);  point->n.set(-0.276393,0.850651,-0.447213);  sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1007;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(-0.894427,0,-0.447213);         point->n.set(-0.894427,0,-0.447213);         sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1008;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(-0.276393,-0.850651,-0.447213); point->n.set(-0.276393,-0.850651,-0.447213); sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1009;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(0.723607,-0.525731,-0.447213);  point->n.set(0.723607,-0.525731,-0.447213);  sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1010;
-									#endif
-		point = new TTrianglePoint<T>; point->p.set(0,0,-1);                        point->n.set(0,0,-1);                        sphere.push_back(point);
-									#ifdef with_indices
-									point->index = 1011;
-									#endif
+		point = new TTrianglePoint<T>; point->p.set(0,0,1);													
+		point->n.set(0,0,1);
+		sphere.push_back(point);		
+		#ifdef with_indices
+			point->index = 1000;
+		#endif
+		
+		point = new TTrianglePoint<T>; point->p.set(0.894427,0,0.447213);
+		point->n.set(0.894427,0,0.447213);
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1001;
+		#endif
+		
+		point = new TTrianglePoint<T>; point->p.set(0.276393,0.850651,0.447213);
+		point->n.set(0.276393,0.850651,0.447213);
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1002;
+		#endif
+		
+		point = new TTrianglePoint<T>; point->p.set(-0.723607,0.525731,0.447213);
+		point->n.set(-0.723607,0.525731,0.447213);
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1003;
+		#endif
+
+		point = new TTrianglePoint<T>;
+		point->p.set(-0.723607,-0.525731,0.447213);
+		point->n.set(-0.723607,-0.525731,0.447213);
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1004;
+		#endif
+		
+		point = new TTrianglePoint<T>; 
+		point->p.set(0.276393,-0.850651,0.447213);   
+		point->n.set(0.276393,-0.850651,0.447213);   
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1005;
+		#endif
+		
+		point = new TTrianglePoint<T>; 
+		point->p.set(0.723607,0.525731,-0.447213);   
+		point->n.set(0.723607,0.525731,-0.447213);   
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1006;
+		#endif
+		
+		point = new TTrianglePoint<T>; 
+		point->p.set(-0.276393,0.850651,-0.447213);  
+		point->n.set(-0.276393,0.850651,-0.447213);  
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1007;
+		#endif
+		
+		point = new TTrianglePoint<T>; 
+		point->p.set(-0.894427,0,-0.447213);         
+		point->n.set(-0.894427,0,-0.447213);         
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1008;
+		#endif
+		
+		point = new TTrianglePoint<T>; 
+		point->p.set(-0.276393,-0.850651,-0.447213); 
+		point->n.set(-0.276393,-0.850651,-0.447213); 
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1009;
+		#endif
+		
+		point = new TTrianglePoint<T>; 
+		point->p.set(0.723607,-0.525731,-0.447213);  
+		point->n.set(0.723607,-0.525731,-0.447213);  
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1010;
+		#endif
+		
+		point = new TTrianglePoint<T>; 
+		point->p.set(0,0,-1);
+		point->n.set(0,0,-1);
+		sphere.push_back(point);
+		#ifdef with_indices
+			point->index = 1011;
+		#endif
+		
 		points[0] = sphere;
 		sphere.clear();
 
-		ifstream input;
+		std::ifstream input;
 		input.open("sphere1.pnt");
 		TVector3<T> p;
 		for (Position i = 0; i < 42; i++)
@@ -2132,9 +2176,9 @@ namespace BALL
 			point = new TTrianglePoint<T>;
 			input >> p;
 			point->p.set(p); point->n.set(p);
-									#ifdef with_indices
-									point->index = i+1000;
-									#endif
+			#ifdef with_indices
+				point->index = i+1000;
+			#endif
 			sphere.push_back(point);
 		}
 		input.close();
@@ -2147,9 +2191,9 @@ namespace BALL
 			point = new TTrianglePoint<T>;
 			input >> p;
 			point->p.set(p); point->n.set(p);
-									#ifdef with_indices
-									point->index = i+1000;
-									#endif
+			#ifdef with_indices
+				point->index = i+1000;
+			#endif
 			sphere.push_back(point);
 		}
 		input.close();
