@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.21 2000/08/28 15:50:29 oliver Exp $
+// $Id: composite.C,v 1.22 2000/08/28 21:12:23 amoll Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -101,7 +101,6 @@ namespace BALL
 		pm.readStorableObject(modification_stamp_, "modification_stamp_");
 	}
  
-
 	Size Composite::getPathLength(const Composite& composite) const
 	{
 		// if composite equals *this - return 0
@@ -1094,13 +1093,13 @@ namespace BALL
 		}
 		if (composite.parent_ != 0)
 		{
-			if (composite.parent_->first_child_ == this)
+			if (composite.parent_->first_child_ == &composite)
 			{
-				composite.parent_->first_child_ = &composite;
+				composite.parent_->first_child_ = this;
 			} 
-			if (composite.parent_->last_child_ == this) 
+			if (composite.parent_->last_child_ == &composite) 
 			{
-				composite.parent_->last_child_ = &composite;
+				composite.parent_->last_child_ = this;
 			}
 		}
 		std::swap(parent_, composite.parent_);
@@ -1114,6 +1113,7 @@ namespace BALL
 		{
 			next_->previous_ = &composite;
 		}
+
 		if (composite.previous_ != 0)
 		{
 			composite.previous_->next_ = this;
@@ -1141,13 +1141,17 @@ namespace BALL
 		std::swap(last_child_, composite.last_child_);
 
 		// swap all other attributes
-		std::swap(number_of_children_, composite.number_of_children_);
 		std::swap(number_of_selected_children_, composite.number_of_selected_children_);
 		std::swap(number_of_children_containing_selection_, composite.number_of_children_containing_selection_);
 		std::swap(contains_selection_, composite.contains_selection_);
 		std::swap(properties_, composite.properties_);
 		Selectable::swap(composite);
 
+
+//-------------------------------------------------------->	TimeStamp swapen ?????
+
+		this->modification_stamp_.stamp();
+		composite.modification_stamp_.stamp();
 		// if the two parents are different, we have to update
 		// the selection information
 		if (parent_ != 0)
@@ -1187,13 +1191,12 @@ namespace BALL
 		}
 
 		Composite* ptr_a = first_child_;
-
-		Composite *ptr_b = composite.first_child_;
+		Composite* ptr_b = composite.first_child_;
 
 		for (; ptr_a != 0 && ptr_b != 0;
 				 ptr_a = ptr_a->next_, ptr_b = ptr_b->next_)
 		{
-			if (*ptr_a != *ptr_b)
+			if (!ptr_a->isHomomorph(*ptr_b))
 			{
 				return false;
 			}
