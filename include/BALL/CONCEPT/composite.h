@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.24 2000/10/18 12:39:57 oliver Exp $
+// $Id: composite.h,v 1.25 2000/11/24 12:03:57 anker Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -1813,10 +1813,14 @@ namespace BALL
 			if (result <= Processor::BREAK)
 			{
 				return_value = (result == Processor::BREAK);
-			} else {
+			} 
+			else 
+			{
 				return_value =  applyDescendantPreorderNostart_(processor);
 			}
-		} else {
+		} 
+		else 
+		{
 			return_value =  applyDescendantPreorderNostart_(processor);
 		}
 		
