@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.4 2000/04/27 15:09:45 amoll Exp $
+// $Id: PTE.h,v 1.5 2000/05/18 22:02:11 amoll Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -357,66 +357,104 @@ namespace BALL
 			*/
 			//@{
 		
-			/**
+			/** Set the name.
+					@param name the new name
 			*/
 			void setName(const String& name);
 
-			/**
+			/** Get the name.
+					@return String - the name
 			*/
 			const String& getName() const;
 
-			///
+			/** Set the atomic symbol.
+					@param symbol the new symbol
+			*/
 			void setSymbol(const String& symbol);
 
-			///
+			/** Get the atomic symbol.
+					@return String the symbol
+			*/
 			const String& getSymbol() const;
 
-			///
+			/** Set the atomic group.
+					@param group (short) the new group
+			*/
 			void setGroup(Group group);
 
-			///
+			/** Get the atomic group.
+					@return Group (short) - the group
+			*/
 			Group getGroup() const;
 
-			///
+			/** Set the atomic period.
+					@param period (short) the new period
+			*/
 			void setPeriod(Period period);
 
-			///
+			/** Get the atomic period.
+					@return Period (short) the period
+			*/
 			Period getPeriod() const;
 
-			///
+			/** Set the atomic number.
+					@param atomic_number the new atomic number
+			*/
 			void setAtomicNumber(AtomicNumber atomic_number);
 
-			///
+			/** Get the atomic period.
+					@return AtomicNumber (short) - the atomic number
+			*/
 			AtomicNumber getAtomicNumber() const;
 
-			///
+			/** Set the atomic weight.
+					@param atomic_weight the new atomic weight
+			*/
 			void setAtomicWeight(float atomic_weight);
 
-			///
+			/** Get the atomic weight.
+					@return float - the atomic weight
+			*/
 			float getAtomicWeight() const;
 
-			///
+			/** Set the atomic radius.
+					@param atomic_radius the new atomic radius (in Angstrom)
+			*/
 			void setAtomicRadius(float atomic_radius);
 
-			///
+			/** Get the atomic radius.
+					@return float the atomic radius (in Angstrom)
+			*/
 			float getAtomicRadius() const;
 
-			///
+			/** Set the covalent radius.
+					@param covalent_radius the new covalent radius (in Angstrom)
+			*/
 			void setCovalentRadius(float covalent_radius);
 
-			///
+			/** Get the covalent radius.
+					@return float the covalent radius (in Angstrom)
+			*/
 			float getCovalentRadius() const;
 
-			///
+			/** Set the VanDerWaals radius.
+					@param van_der_waals_radius the new VanDerWaals radius (in Angstrom)
+			*/
 			void setVanDerWaalsRadius(float van_der_waals_radius);
 
-			///
+			/** Get the VanDerWaals radius.
+					@return float the VanDerWaals radius (in Angstrom)
+			*/
 			float getVanDerWaalsRadius() const;
 
-			///
+			/** Set the electronegativity.
+					@param electronegativity the new electronegativity (according to the Pauling scale)
+			*/
 			void setElectronegativity(float electronegativity);
 
-			///
+			/** Get the electronegativity.
+					@return float the electronegativity (according to the Pauling scale)
+			*/
 			float getElectronegativity() const;
 
 			//@}
@@ -425,25 +463,55 @@ namespace BALL
 			*/
 			//@{
 
-			///
+			/** Equality operator.
+					Tests if the atomic number of two elements are equal.
+					@param element, the Element to compare with
+					@return bool
+			*/
 			bool operator ==(const Element& element) const;
 
-			///
+			/** Inequality operator.
+					Tests if the atomic number of two elements are inequal.
+					@param element, the Element to compare with
+					@return bool
+			*/
 			bool operator !=(const Element& element) const;
 
-			///
+			/** Less operator.
+					Tests if the atomic number of this instance is less
+					compared with {\em element}.
+					@param element, the Element to compare with
+					@return bool
+			*/
 			bool operator <(const Element& element) const;
 
-			///
+			/** Less or equal operator.
+					Tests if the atomic number of this instance is less
+					or equal compared with {\em element}.
+					@param element, the Element to compare with
+					@return bool
+			*/
 			bool operator <=(const Element& element) const;
 
-			///
+			/** More or equal operator.
+					Tests if the atomic number of this instance is more
+					or equal compared with {\em element}.
+					@param element, the Element to compare with
+					@return bool
+			*/
 			bool operator >=(const Element& element) const;
 
-			///
+			/** More operator.
+					Tests if the atomic number of this instance is more
+					compared with {\em element}.
+					@param element, the Element to compare with
+					@return bool
+			*/
 			bool operator >(const Element& element) const;
 
-			///
+			/**	Output- Operator
+					Prints {\em this} instance of Element.
+			*/
 			friend std::ostream &operator << (std::ostream& s, const Element& element);
 
 			//@}
@@ -452,12 +520,18 @@ namespace BALL
 			*/
 			//@{
 
-			///
+			/** Test if this intance is unknown.
+					Returns true if instance is equal the static Element UNKNOWN
+					(The default constructor returns such an element).
+					@return bool
+			*/
 			bool isUnknown() const;
 
 			//@}
 
-			///		
+			/** Standard element.
+					(The default constructor returns such an element).					
+			*/
 			static Element UNKNOWN;
 
 
@@ -577,11 +651,14 @@ namespace BALL
 			*/
 			//@{
 
-			/**
+			/** Return the element at a given position in the PTE.
+					The position is equal to the atomic number.
+					@return Element the static Element at the position {\em position}
 			*/
 			static Element& getElement(Position position);
 		
-			/**
+			/** Return the element with a given symbol.
+					@return Element the static Element with the symbol {\em symbol}
 			*/
 			static Element& getElement(const String& symbol);
 
@@ -591,35 +668,43 @@ namespace BALL
 			*/
 			//@{
 		
-			/**
+			/** Access operator with a given symbol.
+					@return Element the Element with the symbol {\em symbol}
 			*/
 			Element &operator [](const String& symbol);
 
-			/**
+			/** Access operator with a given symbol.
+					@return Element the const Element with the symbol {\em symbol}
 			*/
 			const Element &operator [](const String& symbol) const;
 
-			/**
+			/** Access operator with a given name.
+					@return Element the Element with the name {\em name}
 			*/
 			Element &operator [](Element::Name name);
 
-			/**
+			/** Access operator with a given name.
+					@return Element the const Element with the name {\em name}
 			*/
 			const Element &operator [](Element::Name name) const;
 
-			/**
+			/** Access operator with a given Element::Symbol.
+					@return Element the Element with the symbol {\em symbol}
 			*/
 			Element &operator [](Element::Symbol symbol);
 
-			/**
+			/** Access operator with a given Element::Symbol.
+					@return Element the const Element with the symbol {\em symbol}
 			*/
 			const Element &operator [](Element::Symbol symbol) const;
 
-			/**
+			/** Access operator with a given position.
+					@return Element the Element with the position {\em position}
 			*/
 			Element &operator [](Position position);
 
-			/**
+			/** Access operator with a given position.
+					@return Element the const Element with the position {\em position}
 			*/
 			const Element &operator [](Position position) const;
 
