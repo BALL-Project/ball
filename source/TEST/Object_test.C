@@ -1,4 +1,4 @@
-// $Id: Object_test.C,v 1.3 2001/07/05 17:55:51 oliver Exp $
+// $Id: Object_test.C,v 1.4 2001/07/06 10:37:59 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Object_test.C,v 1.3 2001/07/05 17:55:51 oliver Exp $")
+START_TEST(class_name, "$Id: Object_test.C,v 1.4 2001/07/06 10:37:59 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -42,32 +42,47 @@ RESULT
 
 
 CHECK(Object::clear() throw())
-  // BAUSTELLE
-	// clear() doesn't do anything.
-RESULT
-
-
-CHECK(Object::Object& operator = (const Object& /* object */) throw())
-  // BAUSTELLE
-	// operator () doesn't do anything.
+	Object o;
+	o.clear();
 RESULT
 
 
 CHECK(Object::getHandle() const  throw())
-	Object object3;
-	TEST_EQUAL(object3.getHandle(), 3)
+	Object o1;
+	Object o2;
+	Object o3;
+	// check for correct incrementation of handles
+	TEST_NOT_EQUAL(o1.getHandle(), 0)
+	TEST_NOT_EQUAL(o1.getHandle(), o2.getHandle())
+	TEST_NOT_EQUAL(o1.getHandle(), o3.getHandle())
+	TEST_NOT_EQUAL(o2.getHandle(), o3.getHandle())
+RESULT
+
+
+CHECK(Object::Object& operator = (const Object& /* object */) throw())
+	Object o1;
+	Object o2;
+	Handle handle1 = o1.getHandle();
+	Handle handle2 = o2.getHandle();
+	o2 = o1;
+	// handles shouldn't change!
+	TEST_NOT_EQUAL(o1.getHandle(), handle1)
+	TEST_NOT_EQUAL(o2.getHandle(), handle2)
 RESULT
 
 
 CHECK(Object::getNextHandle() throw())
-	Object object4;
-	TEST_EQUAL(object4.getNextHandle(), 5)
+	Object o;
+	TEST_EQUAL(Object::getNextHandle(), o.getHandle() + 1)
 RESULT
 
 
 CHECK(Object::getNewHandle() throw())
-	Object object5;
-	TEST_EQUAL(object5.getNewHandle(), 6)
+	Object o;
+	Handle h = Object::getNewHandle();
+	TEST_EQUAL(h, o.getHandle() + 1)
+	Handle h2 = Object::getNewHandle();
+	TEST_EQUAL(h2, h + 1)
 RESULT
 
 
@@ -149,30 +164,6 @@ CHECK(Object::compare(const Object& object) const  throw())
 	TEST_EQUAL(test, 1)
 	test = (object19.compare(object20));
 	TEST_EQUAL(test, -1)
-RESULT
-
-
-CHECK(Object::read(::std::istream& s) throw())
-  // BAUSTELLE
-	// not implemented yet
-RESULT
-
-
-CHECK(Object::write(::std::ostream& s) const  throw())
-  // BAUSTELLE
-	// not implemented yet
-RESULT
-
-
-CHECK(Object::friend::std::istream& operator >> (::std::istream& s, Object& object) throw())
-  // BAUSTELLE
-	// read() not implemented yet
-RESULT
-
-
-CHECK(Object::friend::std::ostream& operator << (::std::ostream& s, const Object& object) throw())
-  // BAUSTELLE
-	// write() not implemented yet
 RESULT
 
 
