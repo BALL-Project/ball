@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.9 2001/03/21 16:22:14 anker Exp $
+// $Id: DCDFile.C,v 1.10 2001/03/21 18:14:04 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -297,20 +297,6 @@ namespace BALL
 	}
 
 
-	bool DCDFile::read(SnapShotManager& /* manager */)
-		throw(Exception::NotImplemented)
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-
-	bool DCDFile::write(const SnapShotManager& /* manager */)
-		throw(Exception::NotImplemented)
-	{
-		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-
 	bool DCDFile::append(const SnapShot& snapshot)
 		throw()
 	{
@@ -355,6 +341,13 @@ namespace BALL
 		// thinking of reading correct information
 
 		Size expected_noa = getNumberOfAtoms();
+		if (expected_noa == 0)
+		{
+			Log.error() << "DCDFile::read(): "
+				<< "DCDFile does not contain any atoms. Did you call readHeader()?" 
+				<< endl;
+			return false;
+		}
 		snapshot.setNumberOfAtoms(expected_noa);
 		Size expected_size = 4 * expected_noa;
 
@@ -375,7 +368,8 @@ namespace BALL
 		if (tmp != expected_size)
 		{
 			Log.error() << "DCDFile::read(): "
-				<< "expected " << expected_size << " but got " << tmp << endl;
+				<< "X block header: expected " << expected_size << " but got " 
+				<< tmp << endl;
 			return false;
 		}
 
@@ -389,7 +383,8 @@ namespace BALL
 		if (tmp != expected_size)
 		{
 			Log.error() << "DCDFile::read(): "
-				<< "expected " << expected_size << " but got " << tmp << endl;
+				<< "X block footer: expected " << expected_size << " but got " 
+				<< tmp << endl;
 			return false;
 		}
 
@@ -401,7 +396,8 @@ namespace BALL
 		if (tmp != expected_size)
 		{
 			Log.error() << "DCDFile::read(): "
-				<< "expected " << expected_size << " but got " << tmp << endl;
+				<< "Y block header: expected " << expected_size << " but got " 
+				<< tmp << endl;
 			return false;
 		}
 		// data
@@ -415,7 +411,8 @@ namespace BALL
 		if (tmp != expected_size)
 		{
 			Log.error() << "DCDFile::read(): "
-				<< "expected " << expected_size << " but got " << tmp << endl;
+				<< "Y block footer: expected " << expected_size << " but got " 
+				<< tmp << endl;
 			return false;
 		}
 
@@ -427,7 +424,8 @@ namespace BALL
 		if (tmp != expected_size)
 		{
 			Log.error() << "DCDFile::read(): "
-				<< "expected " << expected_size << " but got " << tmp << endl;
+				<< "Z block header: expected " << expected_size << " but got " 
+				<< tmp << endl;
 			return false;
 		}
 		// data
@@ -441,14 +439,8 @@ namespace BALL
 		if (tmp != expected_size)
 		{
 			Log.error() << "DCDFile::read(): "
-				<< "expected " << expected_size << " but got " << tmp << endl;
-			return false;
-		}
-
-		if (positions.size() == 0)
-		{
-			Log.error() << "DCDFile::read(): "
-				<< "No atom positions available" << endl;
+				<< "Z block footer: expected " << expected_size << " but got " 
+				<< tmp << endl;
 			return false;
 		}
 
