@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.81 2003/09/18 12:51:42 amoll Exp $
+// $Id: mainframe.C,v 1.82 2003/09/19 18:43:22 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -50,7 +50,6 @@
 
 namespace BALL
 {
-
 	using namespace std;
 	using namespace BALL::VIEW;
 
@@ -58,7 +57,7 @@ namespace BALL
 		:	MainControl(parent, name, ".molview"),
 			scene_(0),
 			control_(0),
-			trajectory_control_(0),
+			dataset_control_(0),
 			geometric_control_(0),
 			display_properties_(0),
 			minimization_dialog_(0),
@@ -71,6 +70,9 @@ namespace BALL
 			fullscreen_(false),
 			stop_simulation_(false)
 	{
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "new Mainframe " << this << std::endl;
+#endif
 		// ---------------------
 		// setup main window
 		// ---------------------
@@ -89,8 +91,8 @@ namespace BALL
 	  geometric_control_ = new GeometricControl(this, "Representations");
 		CHECK_PTR(geometric_control_);
 
-		trajectory_control_ = new TrajectoryControl(this, "Datasets");
-		CHECK_PTR(trajectory_control_);
+		dataset_control_ = new DatasetControl(this, "Datasets");
+		CHECK_PTR(dataset_control_);
 
 		scene_ = new Scene(this, "3D View");
 		CHECK_PTR(scene_);
@@ -208,7 +210,18 @@ namespace BALL
 	Mainframe::~Mainframe()
 		throw()
 	{
-		stopSimulation();
+#ifdef QT_THREAD_SUPPORT
+		stop_simulation_ = true;
+		if (simulation_thread_ != 0)
+		{
+			if (simulation_thread_->running()) simulation_thread_->wait();
+			delete simulation_thread_;
+			simulation_thread_ = 0;
+		}
+#endif
+
+		delete minimization_dialog_;
+		delete md_dialog_;
 	}
 
 	void Mainframe::onNotify(Message *message)

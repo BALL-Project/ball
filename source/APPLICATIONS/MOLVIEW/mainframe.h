@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.51 2003/09/18 09:17:48 amoll Exp $
+// $Id: mainframe.h,v 1.52 2003/09/19 18:43:22 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -35,8 +35,8 @@
 # include <BALL/VIEW/WIDGETS/molecularControl.h>
 #endif
 
-#ifndef BALL_VIEW_WIDGETS_TRAJECTORY_CONTROL_H
-# include <BALL/VIEW/WIDGETS/trajectoryControl.h>
+#ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
+# include <BALL/VIEW/WIDGETS/datasetControl.h>
 #endif
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -185,7 +185,7 @@ namespace BALL
 
 		Scene*										scene_;
 		MolecularControl*					control_;
-		TrajectoryControl*				trajectory_control_;
+		DatasetControl* 					dataset_control_;
 		GeometricControl*					geometric_control_;
 		DisplayProperties*    		display_properties_;
 		AmberMinimizationDialog*	minimization_dialog_;
@@ -202,9 +202,8 @@ namespace BALL
 		
 		bool 											fullscreen_;
 		bool 											stop_simulation_;
-		QString s;
 	};
 
-}
+} // namespace BALL
 
 #endif // BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
