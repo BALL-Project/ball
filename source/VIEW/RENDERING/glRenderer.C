@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.47 2004/09/15 12:46:43 amoll Exp $
+// $Id: glRenderer.C,v 1.48 2004/10/21 12:57:00 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -63,6 +63,17 @@ namespace BALL
 			name_to_object_.clear();
 			object_to_name_.clear();
 			all_names_ = 0;
+
+			if (GL_spheres_list_ != 0) delete[] GL_spheres_list_;
+			if (GL_boxes_list_   != 0) delete[] GL_boxes_list_;
+			if (GL_tubes_list_   != 0) delete[] GL_tubes_list_;
+			
+			DisplayListHashMap::Iterator it = display_lists_.begin();
+			for (; it != display_lists_.end(); it++)
+			{
+				delete it->second;
+			}
+			display_lists_.clear();
 		}
 
 		bool GLRenderer::init(const Stage& stage, float width, float height)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.59 2004/10/18 10:56:40 amoll Exp $
+// $Id: molecularStructure.C,v 1.60 2004/10/21 13:06:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -101,11 +101,11 @@ namespace BALL
 			hint = "Use Amber Force Field";
 			amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, SLOT(chooseAmberFF()),0,-1,hint);
 			menuBar()->setItemChecked(amber_ff_id_, true);
-			menuBar()->setItemChecked(charmm_ff_id_, true);
 			
 			hint = "Use Charmm Force Field";
 			charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, 
 												SLOT(chooseCharmmFF()),0,-1, hint);
+			menuBar()->setItemChecked(charmm_ff_id_, true);
 
 			hint = "Configure the force field";
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 

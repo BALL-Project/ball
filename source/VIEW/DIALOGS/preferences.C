@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.14 2004/10/18 14:41:28 amoll Exp $
+// $Id: preferences.C,v 1.15 2004/10/21 13:00:04 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -35,6 +35,14 @@ namespace BALL
 				Log.info() << "Destructing object " << (void *)this 
 									 << " of class Preferences" << std::endl;
 			#endif 
+
+			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
+			for (; it != entries_.end(); it++)
+			{
+				delete *it;
+			}
+			
+			entries_.clear();
 		}
 
 		bool Preferences::hasPages()

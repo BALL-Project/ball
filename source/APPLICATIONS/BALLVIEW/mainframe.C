@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.34 2004/10/18 12:47:32 amoll Exp $
+// $Id: mainframe.C,v 1.35 2004/10/21 13:01:39 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -59,7 +59,7 @@ namespace BALL
 		// setup main window
 		// ---------------------
 		setCaption("BALLView");
-		setIcon(*new QPixmap(bucky_64x64_xpm));
+		setIcon(QPixmap(bucky_64x64_xpm));
 		resize(640,400);
 		// make sure submenus are the first 
 		initPopupMenu(FILE_OPEN);
