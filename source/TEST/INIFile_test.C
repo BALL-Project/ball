@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile_test.C,v 1.19 2002/12/12 11:34:41 oliver Exp $
+// $Id: INIFile_test.C,v 1.20 2002/12/23 08:24:14 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -29,7 +29,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.19 2002/12/12 11:34:41 oliver Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.20 2002/12/23 08:24:14 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -366,8 +366,6 @@ CHECK(INIFile::insertValue(const String& section, const String& key, const Strin
 	TEST_EQUAL(ini.getValue("Section1", "test"), "insertValue_test")
 	TEST_EQUAL(*(ini.getLine(1)), "test=insertValue_test")
 	TEST_EQUAL(ini.insertValue("Section1", "test", "setValue_test"), false)
-	ini.setFilename("asdasd");
-	TEST_EQUAL(ini.write(), true)
 RESULT
 
 CHECK(INIFile::write())

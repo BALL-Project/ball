@@ -1,9 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.C,v 1.10 2002/12/12 10:03:19 oliver Exp $
+// $Id: rtti.C,v 1.11 2002/12/23 08:26:13 oliver Exp $
 
+#include <BALL/COMMON/global.h>
 #include <BALL/COMMON/rtti.h>
+
 #include <typeinfo>
 #include <ctype.h>
 

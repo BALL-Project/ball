@@ -1,12 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.24 2002/12/23 08:16:56 oliver Exp $
+// $Id: TCPTransfer.C,v 1.25 2002/12/23 08:26:14 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
 
-#define DEBUG
+// stupid workaround for Intel C++ 7.0/Linux w/ optimization enabled -- OK / 23.12.2002
+#ifdef __OPTIMIZE__
+# undef __OPTIMIZE__
+#endif
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>

@@ -1,25 +1,31 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkTest.h,v 1.6 2002/12/12 11:34:46 oliver Exp $
+// $Id: networkTest.h,v 1.7 2002/12/23 08:26:15 oliver Exp $
+
+// ugly workaround for Intel C++ 7.0/Linux w/ optimization
+#ifdef __OPTIMIZE__
+# undef __OPTIMIZE__
+#endif
 
 // workaround for Solaris -- this should be caught by configure -- OK
 #define BSD_COMP 
+
 #ifdef BALL_USE_WINSOCK
-#include <windows.h>
-#include<winsock.h>
+#	include <windows.h>
+#	include <winsock.h>
 #endif
 #ifdef BALL_HAS_SYS_SOCKET_H
-#include <sys/socket.h>	  // socket
+#	include <sys/socket.h>	  // socket
 #endif
 #ifdef BALL_HAS_NETDB_H
-#include <netdb.h>	  // gethostbyname
+#	include <netdb.h>	  // gethostbyname
 #endif
 #ifdef BALL_HAS_NETINET_IN_H
-#include <netinet/in.h>	  // sockaddr_in
+#	include <netinet/in.h>	  // sockaddr_in
 #endif
+
 #include <unistd.h>	  // close
-//#include <sys/ioctl.h>
 #include <iostream>	  // cout, endl
 
 class NetworkTest
