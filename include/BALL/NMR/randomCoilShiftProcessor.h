@@ -1,4 +1,4 @@
-// $Id: randomCoilShiftProcessor.h,v 1.4 2000/09/21 22:46:31 amoll Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.5 2000/09/25 19:09:35 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
@@ -28,7 +28,7 @@ namespace BALL
     /** A symbolic name for the random coil contribution to the chemical shift
         @see ShiftModule::PROPERTY__SHIFT
     */
-    static const char* PROPERTY__RANDOMCOIL_SHIFT;
+    static const char* PROPERTY__RANDOM_COIL_SHIFT;
     //@}
  
 		/**@name	Constructors and Destructors
