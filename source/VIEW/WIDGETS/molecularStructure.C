@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.41 2004/04/23 13:07:32 amoll Exp $
+// $Id: molecularStructure.C,v 1.42 2004/04/27 16:44:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -68,7 +68,7 @@ namespace BALL
 // 		assign_charges_id_ = insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()),
 // 										CTRL+Key_G, -1 , hint);
 
-		build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, 
+		build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "B&uild Peptide", this, SLOT(buildPeptide()), ALT+Key_U, 
 										-1, "Build a peptide from selected amino acids.");
 
 		hint = "Add missing bonds to a selected structure.";
