@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.159 2005/02/07 19:46:04 amoll Exp $
+// $Id: scene.C,v 1.160 2005/02/10 22:35:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1240,15 +1240,19 @@ namespace BALL
 			{
 				const LightSource& light = *it;
 
-				data = "(" + String(light.getPosition().x) +
-					"," + String(light.getPosition().y) +
-					"," + String(light.getPosition().z) + ")";
-				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Position", data);
+				Vector3 dir = light.getDirection();
+				Vector3 pos = light.getPosition();
 
-				data = "(" + String(light.getDirection().x) +
-					"," + String(light.getDirection().y) +
-					"," + String(light.getDirection().z) + ")";
-				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Direction", data);
+				if (light.isRelativeToCamera())
+				{
+					const Vector3 dest(dir + pos);
+					pos = stage_->calculateRelativeCoordinates(pos);
+					dir = stage_->calculateRelativeCoordinates(dest);
+				}
+
+				data = vector3ToString(pos);
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Position",  vector3ToString(pos));
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Direction", vector3ToString(dir));
 
 				data = String(light.getAngle().toRadian());
 				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Angle", data);
@@ -1279,6 +1283,7 @@ namespace BALL
 				stage_->clearLightSources();
 				String data;
 				vector<String> strings;
+
 				try
 				{
 					Position nr = 0;
@@ -1286,17 +1291,32 @@ namespace BALL
 					{
 						LightSource light;
 
+						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Relative");
+						light.setRelativeToCamera(data.toUnsignedInt());
+
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Position");
 						data.split(strings, "(,)");
-						light.setPosition(Vector3(strings[0].toFloat(),
-									strings[1].toFloat(),
-									strings[2].toFloat()));
+						Vector3 pos(strings[0].toFloat(), strings[1].toFloat(), strings[2].toFloat());
 
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Direction");
 						data.split(strings, "(,)");
-						light.setDirection(Vector3(strings[0].toFloat(),
-									strings[1].toFloat(),
-									strings[2].toFloat()));
+						Vector3 dir(strings[0].toFloat(), strings[1].toFloat(), strings[2].toFloat());
+
+
+						if (light.isRelativeToCamera())
+						{
+							// set position of lightsource from up, right and view vector
+							light.setPosition(stage_->calculateAbsoluteCoordinates(pos));
+
+							// set direction of lightsource from up, right and view vector
+							dir = stage_->calculateAbsoluteCoordinates(dir);
+							light.setDirection(dir - light.getPosition());
+						}
+						else
+						{
+							light.setPosition(pos);
+							light.setDirection(dir);
+						}
 
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Angle");
 						light.setAngle(Angle(data.toFloat()));
@@ -1315,8 +1335,6 @@ namespace BALL
 						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Type");
 						light.setType((LightSource::Types)data.toUnsignedInt());
 
-						data = inifile.getValue("LIGHTING", "Light_" + String(nr) + "_Relative");
-						light.setRelativeToCamera(data.toUnsignedInt());
 						stage_->addLightSource(light);
 
 						nr++;

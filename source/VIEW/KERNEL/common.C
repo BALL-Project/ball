@@ -191,11 +191,9 @@ GeometricObjectType getGeometricObjectType(const GeometricObject& object)
 String vector3ToString(const Vector3& v)
 	throw()
 {
-	String out;
-	out += String("(") + String(v.x) + "," + 
+	return String("(") + String(v.x) + "," + 
 											 String(v.y) + "," +
 											 String(v.z) + ") ";
-	return out;
 }
 
 
