@@ -4,7 +4,7 @@
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
 #   Using Macroscopic Solvent Models, J. Phys. Chem, (1994), 98, 1978-1988
 #
-# $Id: PARSE.rul,v 1.5.2.2 2003/02/05 15:31:01 anker Exp $
+# $Id: PARSE.rul,v 1.5.2.3 2003/02/07 14:25:41 anker Exp $
 #
 
 
@@ -18,6 +18,7 @@
  0.125 = connectedTo((-C(-N(-*)(-*))(=N(-C(-*)(=*))))) OR connectedTo((-C(=*)(-N(=C(-*)(-N(-*)(-*))))))
  0.125 = connectedTo((-C(~N(-*)(-*))(~N(~C(-*)(~*))))) OR connectedTo((-C(~*)(~N(~C(-*)(~N(-*)(~*))))))
 ; -C-NH-C+(NH2)2 (guanidinium)
+ 0.125 = connectedTo(-C(-N=C(H)-N(H))(=CCH2)) OR connectedTo(-C(-N(H)-C(H)=N)(=CCH2))
  0.45  = connectedTo((-N(-C(-*))(-C(~N(-H)(-H))(~N(-H)(-H)))))
  0.40  = connectedTo((-N(-H)(~C(~N(-H)(-H))(-N(-H)(-C(-*)))))) 
 ; carboxylic acid groups
@@ -37,7 +38,8 @@
 ; secondary carboxylic acid amides (CONHR)
  0.40  = connectedTo((-N(-*)(-C(=O)))) OR connectedTo((-N(.*)(.C(~O))))
 ; guanidine hydrogens: R-N=C(NH2)2
- 0.375 = connectedTo((-N(-H)(-C(-N(-H)(-H))(=N(-C)))))
+ 0.375 = connectedTo(N(H)(C(N(H)CH2)(H)(NH2)))
+ 0.0   = connectedTo(N(CH2)(C(H)(NH2)NH2))
 ; hydrogens connected to aromatic carbons ~CH~
  0.125 = connectedTo((-C(~*)(~*)))
 ; methyl groups at aromatic rings (e.g. methylbenzene)
@@ -65,12 +67,13 @@
 ; -NH-CH=N-CH= (imidazole)
  0.155 = true(imidazole) AND (connectedTo((-N(-H)(-*))(-H)(=N(-C(-H)(=*)))) OR connectedTo((=*)(-H)(-N(=C(-H)(-N(-H)(-*))))))
  0.155 = true(imidazole) AND (connectedTo((~N(-H)(~*))(-H)(~N(~C(-H)(~*)))) OR connectedTo((~*)(-H)(~N(~C(-H)(~N(-H)(~*))))))
+; special cases of non-mesomer HIS
+ 0.155 = connectedTo((H)(-N(H)-C(H)=N)(=CCH2)) OR connectedTo((H)(-N(H)-C(H))(=N-CCH2)) OR connectedTo((H)(-N=C(H)-N(H))(=CCH2)) OR connectedTo((H)(=N-C(H))(-N(H)-CCH2))
 ; -C-NH-C+(NH2)2 (guanidinium)
  0.35  = connectedTo((-*)(-N(-H)(-C(~N(-H)(-H))(~N(-H)(-H)))))
  0.35  = connectedTo((~N(-H)(-H))(~N(-H)(-H))(-N(-H)(-C)))
 ; guanidine (e.g. ARG) -C-N=C(NH2)2
-; 0.28  = connectedTo((-*)(-N(=C(-N(-H)(-H))(-N(-H)(-H))))) OR connectedTo((=N(-C(-*)))(-N(-H)(-H))(-N(-H)(-H)))
- 0.28  = connectedTo(N(H)C(H)(NH2)2)
+ 0.28  = connectedTo((H2)(N(H)C(H)(NH2)(NH2))) OR connectedTo((N(H)CH2)(H)(NH2)(NH2))
 ; dialkylsulfide (MET) (CHn is a united atom group -> RadiusRule)
 ; 0.265  = connectedTo((-S(-C))) AND sp3Hybridized()
  0.265  = connectedTo((-S(-C(-H)(-H)(-*))))
@@ -87,16 +90,38 @@
 ; aliphatic carbons neighbouring aromatic carbons (e.g. CH3 of methylbenzene)
 ; they are considered to be united atoms
  0.125  = sp3Hybridized() AND connectedTo((-C(~*)(~*))) AND !connectedTo((-C(.O)(.O)))
+; the same for the special cases TRP and HIS which might be given as
+; non-aromatic structures
+; CB in TRP
+; ????? sp3Hybridized() is missing.
+ 0.125 = connectedTo(-C(=C)(-C(H)=N(H))) OR connectedTo(-C(-C)(=C(H)-N(H))) 
+; CB in HIS
+; ????? sp3Hybridized() is missing.
+ 0.125 = connectedTo(-C=C(H)-N=C(H)-N(H)) OR connectedTo(-C=C(H)-N(H)-C(H)=N)
 ; carbons at the hydroxyl group in aromatic rings (e.g. TYR:CZ)
  0.055 = connectedTo((~*)(~*)(O(H)))
 ; sulfur bridge (e. g. CYS-CYS)
  0.29  = connectedTo((-S(-S(-C))))
-; carbons at the fusion points of condensed aromatic and heteroaromatic rings do not bear any charge
+; carbons connected to S which do not build sulphur bridges
+ 0.00  = sp3Hybridized() AND connectedTo(SH)
+-0.08  = sp3Hybridized() AND connectedTo(S)
+; carbons at the fusion points of condensed aromatic and heteroaromatic
+; rings do not bear any charge
 0.000   = sp2Hybridized() AND (connectedTo((~C)(~C)(~C)) OR connectedTo((~C)(~N)(~C)) OR connectedTo((~C)(~N)(~N)))
+; carbons in TYR ring
+-0.125 = inRing(6) AND connectedTo(~C(H)~C(H)~C(OH))
+-0.125 = inRing(6) AND connectedTo((~C(H)~C(OH))~C)
+-0.125 = inRing(6) AND connectedTo((~C(OH))(~C(H)~C))
+-0.055 = inRing(6) AND connectedTo((OH)(~C(H))(~C(H)))
+; carbons in TYR(-) ring
+-0.195 = inRing(6) AND connectedTo(~C(H)~C(H)~C(O))
+-0.195 = inRing(6) AND connectedTo((~C(H)~C(O))~C)
+-0.195 = inRing(6) AND connectedTo((~C(O))(~C(H)~C))
+-0.150 = inRing(6) AND connectedTo((O)(~C(H))(~C(H)))
 ; carbons in aromatic rings are assigned a negative charge
--0.125  = sp2Hybridized() AND inRing(4)
--0.125  = sp2Hybridized() AND inRing(5) 
--0.125  = sp2Hybridized() AND inRing(6) 
+-0.125 = sp2Hybridized() AND inRing(4)
+-0.125 = sp2Hybridized() AND inRing(5) 
+-0.125 = sp2Hybridized() AND inRing(6) 
 ; PRO:CA/CD
  0.28  = inRing(5) AND connectedTo((-*)(-*)(-*)(-N(-C(-*)(-*)(-*))))
 ; aliphatic CHn groups are neutral
@@ -127,9 +152,9 @@
 : ARG
 -0.40   = connectedTo((-H)(-C(-H)(-C(~O))))
 ; guanidine 
--0.56   = connectedTo((-C(-*))(=C(-N(-H)(-H))(-N(-H)(-H))))
+-0.56   = connectedTo((CH2)(C(H)(NH2)(NH2)))
 ; guanidine: amino N
--0.75   = connectedTo((-H)(-H)(-C(=N(-C))(-N(-H)(-H))))
+-0.75   = connectedTo((H2)(C(N(H)CH2)(H)(NH2)))
 ; indole N
 -0.40   = connectedTo((~*)(~*)(-H))
 ; pyridine N
@@ -158,15 +183,17 @@
 ; carboxylate oxygens (three different possibilities for bond description)
 -0.55   = connectedTo((~C(~O))) OR connectedTo((=C(-O))) OR connectedTo((-C(=O)))
 ; carbonyl oxygens
--0.55   = connectedTo((=C))
+-0.550 = connectedTo((=C))
 ; hydroxyl oxygen
--0.49   = numberOfBonds(=2) AND connectedTo((-H))
+-0.490 = numberOfBonds(=2) AND connectedTo((-H))
 ; amide 
--0.55   = connectedTo((=C(-N(-H)(-H)))) OR connectedTo((~C(.N(-H)(-H))))
+-0.550 = connectedTo((=C(-N(-H)(-H)))) OR connectedTo((~C(.N(-H)(-H))))
 ; N-substituted amide / protein backbone (peptide group)
--0.55   = connectedTo((=C(-N(-*)(-*)))) OR connectedTo((~C(.N(-*)(-*))))
+-0.550 = connectedTo((=C(-N(-*)(-*)))) OR connectedTo((~C(.N(-*)(-*))))
 ; phenol
--0.49   = connectedTo((-C(~*)(~*))(-H)) OR connectedTo((-C(=*)(-*))(-H))
+-0.490 = connectedTo((-C(~*)(~*))(-H)) OR connectedTo((-C(=*)(-*))(-H))
+; TYR(-)
+-0.500 = connectedTo(C(~C(H))(~C(H)))
 
 
 [ChargeRules:S]
