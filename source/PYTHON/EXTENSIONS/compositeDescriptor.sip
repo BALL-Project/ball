@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
+// $Id: compositeDescriptor.sip,v 1.3 2001/12/23 22:03:59 oliver Exp $
 
 class CompositeDescriptor
 {
@@ -32,9 +32,6 @@ class CompositeDescriptor
   Composite* getComposite();
 %MemberCode
   sipThisType *sipThis;
-
-  if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
-    return NULL;
 
   if (sipParseArgs(&sipArgsParsed,sipArgs,""))
   {
