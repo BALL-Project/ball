@@ -1,3 +1,4 @@
+% $Id: docxx.sty,v 1.3 2001/07/03 15:20:36 amoll Exp $
 %  docxx.sty
 %
 %  Copyright (c) 1996 Roland Wunderling, Malte Zoeckler
@@ -22,8 +23,38 @@
 %
 % Switch off special characters except {}\ for the rest of the text.
 %
+%
+% Modified version for use with the BALL library. Modifications by
+% Sebastian Marius Kirsch <skirsch@moebius.inka.de>
+% Look for SMK to find the mods.
+%
+% Work continued by Christoph Clodo <chcl@mpi-sb.mpg.de>.
+% No special marker for my changes because we use CVS.
+%
+% SMK: Identify ourselves like a proper LaTeX2e package.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{docxx}[2001/04/01 modified version for BALL, contact amoll@mpi-sb.mpg.de]
+
+\RequirePackage{ifthen}
+% Debugging aid:
+\errorcontextlines=\maxdimen
+% /SMK
+
+%CC damit machen wir die cxxitems evtl. schoener
+% brauchen wir (wohl) nicht wirklich
+%\RequirePackage{tabularx}
+\RequirePackage{longtable}
+\RequirePackage{times}
+
+% Papierbreite besser ausnutzen
+% zieht den (linken) Rand rueber
+\global\advance\oddsidemargin-2.5cm
+%\global\advance\hsize+5cm
+% verbreitert Text
+\advance\textwidth+5cm
+
 \def\cxxtilde{{\tt\~\relax}}
-\addtolength{\parskip}{6pt}
+%\addtolength{\parskip}{6pt}
 
 \catcode`\,=\active%
 \def,{\char`\,\penalty-8\ }
@@ -67,13 +98,13 @@
 {\obeyspaces\gdef {\ }}
 
 \def\ccverbatim{\strut\begingroup
-	    \catcode`\\=12 \catcode`\{=12
-	    \catcode`\}=12 \catcode`\$=12
-	    \catcode`\&=12 \catcode`\#=12
-	    \catcode`\%=12 \catcode`\~=12
-	    \catcode`\_=12 \catcode`\^=12
-	    \catcode`\|=12 \catcode`\/=12
-	    \obeyspaces\tt}
+            \catcode`\\=12 \catcode`\{=12
+            \catcode`\}=12 \catcode`\$=12
+            \catcode`\&=12 \catcode`\#=12
+            \catcode`\%=12 \catcode`\~=12
+            \catcode`\_=12 \catcode`\^=12
+            \catcode`\|=12 \catcode`\/=12
+            \obeyspaces\tt}
 \def{\let\par=\endgraf \ccverbatim \parskip=0pt \ccfinish}
 {\catcode`\=0 catcode`\=12
 gdefccfinish#1{#1endgroup}}
@@ -91,9 +122,9 @@
    \def\name{#1}%
    \def\empty{}%
    \ifx\name\empty%
-	{\tt #2}%
+        {\tt #2}%
    \else%
-	#1 ({\tt #2})%
+        #1 ({\tt #2})%
    \fi%
 }
 
@@ -142,97 +173,27 @@
 % 3: args
 % 4: memo
 % 5: id
-\def\cxxitem#1#2#3#4#5{\noindent{%
-    \setbox5\hbox{#5 }%
-    \ifdim\wd5>\cxxIdWidth%
-	\setbox5\hbox{\hbox to \cxxIdWidth{\hss#5}}%
-    \else
-	\setbox5\hbox{\hbox to \cxxIdWidth{#5\hss}}%
-    \fi%
-    \setbox1\hbox{{%
-	\catcode`\&=4%
-	\catcode`\_=8%
-	\def{\ccverbatim \ccfinish}#1%
-    }}%
-    \setbox2\hbox{{%
-	\catcode`\&=4%
-	\catcode`\_=8%
-	\def{\ccverbatim \ccfinish}\textbf{#2} #3%
-    }}%
-    \setbox4\hbox{\parbox[t]{\cxxMemoWidth}{{%
-	\raggedright\sloppy%
-	\catcode`\&=4%
-	\catcode`\_=8%
-	\def{\ccverbatim \ccfinish}{\em #4}
-	\cxxStrut%
-	\def\page{#5}%
-	\ifx\page\empty%
-	    \hss%
-	\else%
-	    \ \dotfill%
-	    \hbox to 0pt{\hbox to \cxxPageWidth{\hss%
-		\pageref{cxx.#5}%
-	    }\hss}%
-	\fi%
-    }}}%
-    %
-    \ifdim\wd1>\cxxTypeWidth%
-	\hbox to \hsize{\unhbox5\hbox to \cxxTypeWidth{\unhbox1\hss}\hss}\\\nopagebreak%
-	\setbox5\hbox{\hskip\cxxIdWidth}%
-	\setbox1\hbox{\hskip\cxxTypeWidth}%
-    \else%
-	\setbox1\hbox{\hbox to \cxxTypeWidth{\unhbox1\hss}}%
-    \fi%
-    \ifdim\wd2>\cxxProtoWidth%
-	\ifdim\wd2<\cxxProtoMemoWidth%
-	    \def\tmp{#4}%
-	    \ifx\tmp\empty%
-		\def\tmp{#5}%
-		\ifx\tmp\empty%
-		    \hbox to \hsize{\unhbox5\unhbox1\unhbox2\hss\cxxStrut}\\%
-		\else%
-		    \hbox to \hsize{\unhbox5\unhbox1\unhbox2
-			\dotfill\hbox to \cxxPageWidth{\hss\pageref{cxx.#5}}%
-			\cxxStrut}\\%
-		\fi%
-	    \else%
-		\hbox to \hsize{\unhbox5\unhbox1\unhbox2\hss}\\\nopagebreak%
-		\hbox to \hsize{%
-		    \hskip\cxxIdWidth%
-		    \hskip\cxxTypeWidth%
-		    \hskip\cxxProtoWidth%
-		    \unhbox4\hss%
-		}\\%
-	    \fi%
-	\else%
-	    \hbox to \hsize{%
-		\unhbox5%
-		\unhbox1%
-		\parbox[t]{\cxxProtoMemoWidth}{%
-		    \setbox255\hbox{\textbf{#2} (}%
-		    \hangindent=\wd255\hangafter=1%
-		    \raggedright\sloppy%
-		    {\catcode`\&=4\catcode`\_=8%
-			\def{\ccverbatim \ccfinish}\textbf{#2} #3\strut}%
-		}\hss%
-	    }\\\nopagebreak%
-	    \hbox to \hsize{%
-		\hskip\cxxIdWidth%
-		\hskip\cxxTypeWidth%
-		\hskip\cxxProtoWidth%
-		\unhbox4\hss%
-	    }\\%
-	\fi%
-    \else%
-	\hbox to \hsize{%
-	    \unhbox5%
-	    \unhbox1%
-	    \hbox to \cxxProtoWidth{\unhbox2\hss}%
-	    \unhbox4\hss%
-	}\\%
-    \fi%
-}}
-
+\def\cxxitem#1#2#3#4#5{
+    % only four entries, #4: memo is obsolete for BALL
+% #5
+\cxxlist@items@add{#5&}
+% #1
+\setbox0=\hbox{#1}
+\ifdim\wd0>\cxxAWidth
+\cxxlist@items@add{\dotfill\parbox[t]{\cxxAWidth}{\raggedleft#1}&}
+\else
+\cxxlist@items@add{\dotfill#1&}
+\fi
+% #2 #3
+\setbox0=\hbox{\textbf{#2} #3}
+\ifdim\wd0>\cxxBWidth
+\cxxlist@items@add{\parbox[t]{.6\cxxBWidth}{\textbf{#2} #3}\dotfill&}
+\else
+\cxxlist@items@add{\textbf{#2} #3\dotfill&}
+\fi
+% pageref #5
+\cxxlist@items@add{\pageref{cxx.#5}\\}
+}
 
 \newdimen\cxxtypestart
 \cxxtypestart=0.05\textwidth
@@ -254,11 +215,30 @@
 \cxxmemostart=\cxxargsstart
 \advance\cxxmemostart by 0.12\textwidth
 
+
+%CC
+\newdimen\cxxAWidth
+\newdimen\cxxBWidth
+\newtoks\cxxlist@items
+\def\cxxlist@items@add#1{\cxxlist@items\expandafter{\the\cxxlist@items#1}}
+
 \newenvironment{cxxlist}[1]{
+\cxxAWidth=0.30\textwidth
+\cxxBWidth=0.65\textwidth
 \begingroup
 \catcode`\,=\active%
 \paragraph{#1}\strut\smallskip\\
+\footnotesize
+\small
+%\normalsize
+%\begin{tabular}[h]{lrlr}
+%CC nix fest, s.o.
+%\begin{tabular}[h]{lp{.25\textwidth}p{.6\textwidth}r}
 }{
+\begin{longtable}[l]{lrlr}
+\the\cxxlist@items
+\end{longtable}\ \\
+\normalsize
 \endgroup
 }
 
@@ -269,7 +249,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%	Numbered Frame box
+%       Numbered Frame box
 %
 \newlength{\cxxBoxLen}%
 \newlength{\cxxBoxHt}%
@@ -393,7 +373,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%	Pagestyle for documentation.
+%       Pagestyle for documentation.
 %
 \newsavebox{\cxxHeadName}
 \newcommand{\ps@docxx}{%
@@ -404,31 +384,31 @@
 }
 \newcommand{\makeHeadLine}[2]{
     \global\sbox{\cxxHeadName}{\vbox to 0pt{\vss%
-	\hbox to \textwidth{%
-	    \hbox to 0pt{\strut\hbox to 1cm{\hss}\quad#1\hss}%
-	    \hfil#2\hfil%
-	}%
-	\vskip 1pt%
-	\hbox to \textwidth{\hrulefill}%
+        \hbox to \textwidth{%
+            \hbox to 0pt{\strut\hbox to 1cm{\hss}\quad#1\hss}%
+            \hfil#2\hfil%
+        }%
+        \vskip 1pt%
+        \hbox to \textwidth{\hrulefill}%
     }}%
 }
 \newcommand{\headlinetext}{\usebox{\cxxHeadName}}
 \providecommand{\cxxCopyright}{%
     \vtop{%
-	\hbox to \textwidth{{
-	    \tiny\sf This page was generated with the help of DOC++
-	\hss}}%
-	\vskip -20pt
-	\hbox to \textwidth{
-	    \hbox{{\tiny\sf http://www.linuxsupportline.com/{\cxxtilde}doc++ }}
-	\hss}%
+        \hbox to \textwidth{{
+            \tiny\sf This page was generated with the help of DOC++
+        \hss}}%
+        \vskip -20pt
+        \hbox to \textwidth{
+            \hbox{{\tiny\sf http://www.linuxsupportline.com/{\cxxtilde}doc++ }}
+        \hss}%
     }%
 }
 \def\footlinetext{\hbox to \textwidth{
     \vtop{%
-	\hbox to \textwidth{\hrulefill}%
-	\vskip -20pt%
-	\cxxCopyright%
+        \hbox to \textwidth{\hrulefill}%
+        \vskip -20pt%
+        \cxxCopyright%
     }%
     \hss\vtop{\vskip 10pt\hbox{\today\hspace*{3cm}\textrm{\thepage} }}
 }}
@@ -450,11 +430,11 @@
     \end{center}
     \if\cxxVersionStr\empty%
     \else%
-	\begin{center}
-	\small\sf
-	--- Version \cxxVersionStr\ ---
-	\end{center}
-	\global\def\cxxVersionStr{}
+        \begin{center}
+        \small\sf
+        --- Version \cxxVersionStr\ ---
+        \end{center}
+        \global\def\cxxVersionStr{}
     \fi
     \vfill
     \large
@@ -465,11 +445,11 @@
     \vfill
     \if\cxxAuthorStr\empty%
     \else%
-	\begin{center}
-	\sf\cxxAuthorStr
-	\end{center}
-	\global\def\cxxAuthorStr{}
-	\vfill
+        \begin{center}
+        \sf\cxxAuthorStr
+        \end{center}
+        \global\def\cxxAuthorStr{}
+        \vfill
     \fi
     \pagebreak
     \makeHeadLine{}{#2}
@@ -477,12 +457,23 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%	environment for contents
+%       environment for contents
 %
+% SMK: Maximum depth of table of contents can be set using the counter
+% cxxMaxContentsDepth; it defaults to 3.
+%
+% If \ifcxxContentsVerbose is true, short descriptions will be included
+%        in the table of contents.
+% 
+
 \newcounter{cxxContentsDepth}
 \setcounter{cxxContentsDepth}{0}
+\newcounter{cxxMaxContentsDepth}
+\setcounter{cxxMaxContentsDepth}{3}
+\newif\ifcxxContentsVerbose\cxxContentsVerbosefalse
+\newcommand{\cxxContentsNumberWidth}{10pt}
 \newdimen\cxxContentsLengthIncr
-\cxxContentsLengthIncr=18pt
+\cxxContentsLengthIncr=14pt
 \newdimen\cxxContentsLength
 \cxxContentsLength=\textwidth
 \advance\cxxContentsLength by -\cxxContentsLengthIncr
@@ -490,51 +481,83 @@
 \makeHeadLine{}{Contents}
 
 \newenvironment{cxxContents}{
-    \ifcase \value{cxxContentsDepth}
-	\vskip 40pt
-	\hbox to \hsize{\hskip 8pt\hskip\cxxContentsLengthIncr\Huge\bf Contents\hss}
-	\vskip 40pt
-	\bf
-    \else					% >1
-	\rm
-    \fi
-    \begingroup
+    % in jedem Fall zaehlen wir die aktuelle Tiefe mit :)))
     \addtocounter{cxxContentsDepth}{1}
+    %CC die Kapitel werden fett gesetzt
+    \ifcase \value{cxxContentsDepth}
+    % 0, jibbet eigentlich nicht
+    \or
+    %1 die Kapitel
+        \vskip 40pt
+        \hbox to \hsize{\hskip 8pt\hskip\cxxContentsLengthIncr\Huge\bf Contents\hss}
+        \vskip 40pt
+        \bf
+    \else
+    % >=2
+        \rm
+    \fi
+    %CC checken, ob wir zu tief kaemen, wenn ja, dann nix tun
+    % current<=max <=> current<max+1
+    \@tempcnta=\value{cxxMaxContentsDepth}
+    \advance\@tempcnta by 1
+    \ifnum\value{cxxContentsDepth}<\@tempcnta
+    \begingroup
     \advance\cxxContentsLengthIncr by  8pt
     \advance\cxxContentsLength     by -\cxxContentsLengthIncr
+    \fi
 }{
-    \addtocounter{cxxContentsDepth}{-1}
+    %CC checken, ob wir zu tief sind, wenn ja, dann nix tun
+    % current<=max <=> current<max+1
+    \@tempcnta=\value{cxxMaxContentsDepth}
+    \advance\@tempcnta by 1
+    \ifnum\value{cxxContentsDepth}<\@tempcnta
     \advance\cxxContentsLength     by  \cxxContentsLengthIncr
     \advance\cxxContentsLengthIncr by  -8pt
     \ifcase \value{cxxContentsDepth}
-	\vskip 12pt
-    \or	
-	\vskip 9pt
+    %0
+        \vskip 12pt
+    \or 
+    %1
+        \vskip 9pt
     \else
-	\vskip 3pt
+    %>=2
+        \vskip 3pt
     \fi
     \endgroup
+    \fi
+    % aber in jedem Fall zaehlen wir wieder mit :)))
+    \addtocounter{cxxContentsDepth}{-1}
 }
 
 \newcommand{\cxxContentsEntry}[3]{{
-    \def\emtpty{}
+    % current<=max <=> current<max+1
+    \@tempcnta=\value{cxxMaxContentsDepth}
+    \advance\@tempcnta by 1
+    \ifnum\value{cxxContentsDepth}<\@tempcnta
+    \def\empty{}
     \def\memo{#3}
-    \ifx\memo\empty
-	\setbox0\hbox{\parbox[t]{\cxxContentsLength}{\strut#2 \dotfill }}
-    \else
-	\setbox0\hbox{\parbox[t]{\cxxContentsLength}{\strut#2 --- {\em #3} \dotfill }}
-    \fi
+    \ifcxxContentsVerbose
+      \ifx\memo\empty
+        \setbox0\hbox{\parbox[t]{\cxxContentsLength}{\strut#2 \dotfill }}
+      \else %    \ifx\memo\empty
+        \setbox0\hbox{\parbox[t]{\cxxContentsLength}{\strut#2 --- {\em #3} \dotfill }}
+      \fi %    \ifx\memo\empty
+    \else %    \ifcxxContentsVerbose
+      \setbox0\hbox{\parbox[t]{\cxxContentsLength}{\strut#2 \dotfill }}
+    \fi %    \ifcxxContentsVerbose
     \setbox1\hbox{\vtop{\vskip\dp0\vskip-\ht0\vskip-1.5pt\hbox to 20pt{\hss\rm \pageref{cxx.#1}}}}
     \hbox to \textwidth{%
-	\hss\hbox to \cxxContentsLengthIncr{#1\hss}%
-	\unhbox0\unhbox1%
+        \hss\hbox to \cxxContentsLengthIncr{#1\hss}%
+        \unhbox0\unhbox1%
     }
-}}
-
+\fi
+  }
+}
+% /SMK
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%	environment for class graph
+%       environment for class graph
 %
 \newdimen\cxxClassGraphShift
 \newdimen\cxxClassGraphLength
@@ -554,65 +577,65 @@
     \par\medskip
     \begingroup
     \newcommand{\cxxCGSpace}[1]{%
-	\vtop to \cxxClassGraphTotV{\hbox to \cxxClassGraphShift{%
-	    \vrule width0pt height \cxxClassGraphHeight depth \cxxClassGraphDepth%
-	##1}}%
+        \vtop to \cxxClassGraphTotV{\hbox to \cxxClassGraphShift{%
+            \vrule width0pt height \cxxClassGraphHeight depth \cxxClassGraphDepth%
+        ##1}}%
     }
     \newcommand{\cxxSlashHline}{%
-	\vrule width 0.1\cxxClassGraphShift height 3.5pt depth -3pt%
-	\vrule width 0.1\cxxClassGraphShift height 0pt depth 0pt%
-	\vrule width 0.1\cxxClassGraphShift height 3.5pt depth -3pt%
-	\vrule width 0.1\cxxClassGraphShift height 0pt depth 0pt%
-	\vrule width 0.1\cxxClassGraphShift height 3.5pt depth -3pt%
+        \vrule width 0.1\cxxClassGraphShift height 3.5pt depth -3pt%
+        \vrule width 0.1\cxxClassGraphShift height 0pt depth 0pt%
+        \vrule width 0.1\cxxClassGraphShift height 3.5pt depth -3pt%
+        \vrule width 0.1\cxxClassGraphShift height 0pt depth 0pt%
+        \vrule width 0.1\cxxClassGraphShift height 3.5pt depth -3pt%
     }
     \newcommand{\cxxDotHline}{%
-	\vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
-	\vrule width 0.05\cxxClassGraphShift height 0pt depth 0pt%
-	\vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
-	\vrule width 0.05\cxxClassGraphShift height 0pt depth 0pt%
-	\vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
-	\vrule width 0.05\cxxClassGraphShift height 0pt depth 0pt%
-	\vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
-	\vrule width 0.05\cxxClassGraphShift height 0pt depth 0pt%
-	\vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
+        \vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
+        \vrule width 0.05\cxxClassGraphShift height 0pt depth 0pt%
+        \vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
+        \vrule width 0.05\cxxClassGraphShift height 0pt depth 0pt%
+        \vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
+        \vrule width 0.05\cxxClassGraphShift height 0pt depth 0pt%
+        \vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
+        \vrule width 0.05\cxxClassGraphShift height 0pt depth 0pt%
+        \vrule width 0.06\cxxClassGraphShift height 3.5pt depth -3pt%
     }
     \newcommand{\cxxHline}{%
-	\vrule width 0.5\cxxClassGraphShift height 3.5pt depth -3pt%
+        \vrule width 0.5\cxxClassGraphShift height 3.5pt depth -3pt%
     }
     \newcommand{\cxxVup}{\hbox to 0pt{\hss%
-	\vrule width 0.5pt height \cxxClassGraphHeight depth -3pt%
+        \vrule width 0.5pt height \cxxClassGraphHeight depth -3pt%
     \hss}}
     \newcommand{\cxxVlow}{\hbox to 0pt{\hss%
-	\vtop to 0pt{\vskip-3pt%
-	    \hbox{\vrule width 0.5pt height 13pt depth \cxxClassGraphDepth}%
-	\vss}%
+        \vtop to 0pt{\vskip-3pt%
+            \hbox{\vrule width 0.5pt height 13pt depth \cxxClassGraphDepth}%
+        \vss}%
     \hss}}
     \newcommand{\cxxLinkUp}{\hbox to 0pt{\hss\hskip 0.5\cxxClassGraphShift%
-	\raise0.7\cxxClassGraphHeight\hbox to 0pt{\hss\textbf{\symbol{94}}\hss}}}%
+        \raise0.7\cxxClassGraphHeight\hbox to 0pt{\hss\textbf{\symbol{94}}\hss}}}%
     \newcommand{\cxxLinkDown}{\hbox to 0pt{\hss\hskip 0.5\cxxClassGraphShift%
-	\raise-0.6\cxxClassGraphHeight\vbox to 0pt{%
-	    \hbox to 0pt{\hss\textbf{$\lor$}\hss}\vss}}}%
+        \raise-0.6\cxxClassGraphHeight\vbox to 0pt{%
+            \hbox to 0pt{\hss\textbf{$\lor$}\hss}\vss}}}%
     \newcommand{\cxxLinkLeft}{\hbox to 0pt{\hss\hskip 0.0\cxxClassGraphShift%
-	\raise0.0\cxxClassGraphHeight\hbox to 0pt{\textbf{\tt\<}\hss}}}%
+        \raise0.0\cxxClassGraphHeight\hbox to 0pt{\textbf{\tt\<}\hss}}}%
     \newcommand{\cxxLinkRight}{\hbox to 0pt{\hss\hskip 1.0\cxxClassGraphShift%
-	\raise0.0\cxxClassGraphHeight\hbox to 0pt{\hss\textbf{\tt\>}}}}%
+        \raise0.0\cxxClassGraphHeight\hbox to 0pt{\hss\textbf{\tt\>}}}}%
     \newcommand{\cxxInheritanceEntry}[5][]{
-	\hbox to \hsize{\hss%
-	    \vrule width0pt height \cxxClassGraphHeight depth \cxxClassGraphDepth%
-	    ##2%
-	    \def\tmp{##1}%
-	    \ifx\tmp\empty%
-		\def\tmp{##5}%
-		\ifx\tmp\empty%
-		    \rBox[1pt]{##3}{##4}{0.24\hsize}%
-		\else%
-		    \lBox[1pt]{##3}{##4}{0.24\hsize}%
-		\fi%
-	    \else%
-		\cBox[2pt]{##3}{##4}{0.24\hsize}%
-	    \fi%
-	    ##5\hfill%
-	}\vskip-1pt
+        \hbox to \hsize{\hss%
+            \vrule width0pt height \cxxClassGraphHeight depth \cxxClassGraphDepth%
+            ##2%
+            \def\tmp{##1}%
+            \ifx\tmp\empty%
+                \def\tmp{##5}%
+                \ifx\tmp\empty%
+                    \rBox[1pt]{##3}{##4}{0.24\hsize}%
+                \else%
+                    \lBox[1pt]{##3}{##4}{0.24\hsize}%
+                \fi%
+            \else%
+                \cBox[2pt]{##3}{##4}{0.24\hsize}%
+            \fi%
+            ##5\hfill%
+        }\vskip-1pt
     }
     \newcommand{\cxxNone}{\cxxCGSpace{\hss}}
     \newcommand{\cxxLong}{\cxxCGSpace{\hss\cxxVup\cxxVlow\hss}}
@@ -624,22 +647,22 @@
     \newcommand{\cxxProleft}{\cxxCGSpace{\cxxSlashHline\cxxVlow\hss}}
     \newcommand{\cxxPrileft}{\cxxCGSpace{\cxxDotHline\cxxVlow\hss}}
     \newcommand{\cxxLastPubLeft}{\cxxCGSpace{\cxxHline%
-    		    	\cxxVup\cxxLinkDown\cxxVlow\hss}}
+                        \cxxVup\cxxLinkDown\cxxVlow\hss}}
     \newcommand{\cxxLastProLeft}{\cxxCGSpace{\cxxSlashHline%
-    		    	\cxxVup\cxxLinkDown\cxxVlow\hss}}
+                        \cxxVup\cxxLinkDown\cxxVlow\hss}}
     \newcommand{\cxxLastPriLeft}{\cxxCGSpace{\cxxDotHline%
-    		    	\cxxVup\cxxLinkDown\cxxVlow\hss}}
+                        \cxxVup\cxxLinkDown\cxxVlow\hss}}
     \newcommand{\cxxLastPubleft}{\cxxCGSpace{\cxxHline%
-    		    	\cxxVlow\cxxLinkDown\hss}}
+                        \cxxVlow\cxxLinkDown\hss}}
     \newcommand{\cxxLastProleft}{\cxxCGSpace{\cxxSlashHline%
-    		    	\cxxVlow\cxxLinkDown\hss}}
+                        \cxxVlow\cxxLinkDown\hss}}
     \newcommand{\cxxLastPrileft}{\cxxCGSpace{\cxxDotHline%
-    				\cxxVlow\cxxLinkDown\hss}}
+                                \cxxVlow\cxxLinkDown\hss}}
     \newcommand{\cxxLinkPubLeft}{\cxxCGSpace{\cxxLinkLeft\cxxHline\cxxVup\cxxVlow\hss}}
     \newcommand{\cxxLinkProLeft}{\cxxCGSpace{\cxxLinkLeft\cxxSlashHline%
-    				\cxxVup\cxxVlow\hss}}
+                                \cxxVup\cxxVlow\hss}}
     \newcommand{\cxxLinkPriLeft}{\cxxCGSpace{\cxxLinkLeft\cxxDotHline%
-    				\cxxVup\cxxVlow\hss}}
+                                \cxxVup\cxxVlow\hss}}
     \newcommand{\cxxLinkPubleft}{\cxxCGSpace{\cxxLinkLeft\cxxHline\cxxVlow\hss}}
     \newcommand{\cxxLinkProleft}{\cxxCGSpace{\cxxLinkLeft\cxxSlashHline\cxxVlow\hss}}
     \newcommand{\cxxLinkPrileft}{\cxxCGSpace{\cxxLinkLeft\cxxDotHline\cxxVlow\hss}}
@@ -653,16 +676,16 @@
 
     \newcommand{\cxxLinkPubRight}{\cxxCGSpace{\hss\cxxVup\cxxVlow\cxxHline\cxxLinkRight}}
     \newcommand{\cxxLinkProRight}{\cxxCGSpace{\hss\cxxVup\cxxVlow%
-    				   \cxxSlashHline\cxxLinkRight}}
+                                   \cxxSlashHline\cxxLinkRight}}
     \newcommand{\cxxLinkPriRight}{\cxxCGSpace{\hss\cxxVup\cxxVlow%
-				   \cxxDotHline\cxxLinkRight}}
+                                   \cxxDotHline\cxxLinkRight}}
     \newcommand{\cxxLinkPubright}{\cxxCGSpace{\hss\cxxVup\cxxHline\cxxLinkRight}}
     \newcommand{\cxxLinkProright}{\cxxCGSpace{\hss\cxxVup\cxxSlashHline\cxxLinkRight}}
     \newcommand{\cxxLinkPriright}{\cxxCGSpace{\hss\cxxVup\cxxDotHline\cxxLinkRight}}
 
     \newcommand{\cxxFirstPubRight}{\cxxCGSpace{\hss\cxxVup\cxxLinkUp\cxxVlow\cxxHline}}
     \newcommand{\cxxFirstProRight}{\cxxCGSpace{\hss\cxxVup\cxxLinkUp\cxxVlow%
-    				   \cxxSlashHline}}
+                                   \cxxSlashHline}}
     \newcommand{\cxxFirstPriRight}{\cxxCGSpace{\hss\cxxVup\cxxLinkUp\cxxVlow\cxxDotHline}}
     \newcommand{\cxxFirstPubright}{\cxxCGSpace{\hss\cxxVup\cxxLinkUp\cxxHline}}
     \newcommand{\cxxFirstProright}{\cxxCGSpace{\hss\cxxVup\cxxLinkUp\cxxSlashHline}}
@@ -674,25 +697,25 @@
 \newenvironment{cxxClassGraph}{
     \begin{cxxInheritance}
     \newcommand{\cxxClassGraphEntry}[4]{
-	\hbox to \hsize{\hss%
-	    \vrule width0pt height \cxxClassGraphHeight depth \cxxClassGraphDepth%
-	    ##1%
-	    \def\tmp{##4}%
-	    \rBox[1pt]{##2}{##3}{0.24\hsize}%
-	    ##4%
-	    \hskip\cxxClassGraphShift\dotfill%
-	    \hbox to \cxxClassGraphShift{\hss\pageref{cxx.##2}}%
-	}\vskip-1pt
+        \hbox to \hsize{\hss%
+            \vrule width0pt height \cxxClassGraphHeight depth \cxxClassGraphDepth%
+            ##1%
+            \def\tmp{##4}%
+            \rBox[1pt]{##2}{##3}{0.24\hsize}%
+            ##4%
+            \hskip\cxxClassGraphShift\dotfill%
+            \hbox to \cxxClassGraphShift{\hss\pageref{cxx.##2}}%
+        }\vskip-1pt
     }
     \newcommand{\cxxClassGraphEntryUnknownPackage}[3]{
-	\hbox to \hsize{\hss%
-	    \vrule width0pt height \cxxClassGraphHeight depth \cxxClassGraphDepth%
-	    ##1%
-	    \def\tmp{##3}%
-	    \rBox[1pt]{}{##2}{0.24\hsize}%
-	    ##3%
-	    \hskip\cxxClassGraphShift\hfill%
-	}\vskip-1pt
+        \hbox to \hsize{\hss%
+            \vrule width0pt height \cxxClassGraphHeight depth \cxxClassGraphDepth%
+            ##1%
+            \def\tmp{##3}%
+            \rBox[1pt]{}{##2}{0.24\hsize}%
+            ##3%
+            \hskip\cxxClassGraphShift\hfill%
+        }\vskip-1pt
     }
     \clearpage
     \pagebreak\strut
@@ -709,11 +732,11 @@
 %
 % environment for generic manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newdimen\cxxgenericstart
 \cxxgenericstart=\labelwidth
@@ -728,31 +751,32 @@
 \newlength{\cxxSize}
 \newenvironment{cxxgeneric}[5]{
 %
-%	some local definitions
+%       some local definitions
 %
-    \def\empty{}
-    \def\type{#1}
-    \def\args{#3}
-    \def\memo{#4}
-    \def\id  {#5}
+    \def\empty{}%
+    \def\type{#1}%
+    \def\args{#3}%
+    \def\memo{#4}%
+    \def\id  {#5}%
 %
-%	pagebreak ?
+%       pagebreak ?
 %
-\ifcase \value{cxxDepth}
-	\clearpage			%  0
-	\pagebreak
-	\makeHeadLine{#5}{#2}
-	\setlength{\cxxSize}{2pt}
-\or					%  1
-	\strut\bigskip\bigskip\goodbreak%
-	\setlength{\cxxSize}{1pt}
-\else					% >2
-	\strut\bigskip\bigskip\goodbreak%
-	\setlength{\cxxSize}{0.5pt}
-\fi
-\addtocounter{cxxDepth}{1}
+\ifcase \value{cxxDepth}%
+        \clearpage                      %  0
+        \pagebreak%
+        \makeHeadLine{#5}{#2}%
+        \setlength{\cxxSize}{2pt}%
+\or                                     %  1
+% SMK: Beschissen grosse Abst"ande
+        \strut\vskip1ex\goodbreak%
+        \setlength{\cxxSize}{1pt}%
+\else                                   % >2
+        \strut\vskip1ex\goodbreak%
+        \setlength{\cxxSize}{0.5pt}%
+\fi%
+\addtocounter{cxxDepth}{1}%
 %
-%	write synopsis
+%       write synopsis
 %
 \setbox0\hbox{ }%
 \setbox1\hbox{\strut\large #1 {\bf#2} }%
@@ -765,87 +789,98 @@
 \addtolength{\cxxSideLen}{-2\wd0}%
 \setlength{\cxxTitleLen}{\cxxSideLen}%
 \addtolength{\cxxTitleLen}{-8\wd0}%
-\hbox{\aBox[\cxxSize]{\id}{\vbox{\vskip 1.5\parskip%
-    \hbox to \cxxSideLen{\strut%
-	\hbox to 4\wd0{}%
-	\ifdim\wd3<\cxxTitleLen%
-	    \parbox[b]{\cxxTitleLen}{%
-		\begin{raggedright}
-		\noindent\large #1 {\bf#2} #3
-		\end{raggedright}
-	    }
-	\else%
-	    \ifdim\wd1>0.7\cxxTitleLen%
-		\parbox[b]{\cxxTitleLen}{%
-		    \begin{raggedright}
-		    \noindent\large #1 {\bf#2} #3
-		    \end{raggedright}
-		}
-	    \else%
-		\addtolength{\cxxTitleLen}{-\wd1}%
-		\unhbox1%
-		\parbox[t]{\cxxTitleLen}{%
-		    \advance\lineskip 7pt%
-		    \begin{raggedright}
-		    \noindent\large\strut #3
-		    \end{raggedright}
-		}
-	    \fi%
-	\fi%
-	\hss\strut%
-    }\vskip\parskip}%
-}}
+%\hbox{%\aBox[\cxxSize]{\id}{\vbox{\vskip 1.5\parskip%
+%    \hbox to \cxxSideLen{\strut%
+%        \hbox to 4\wd0{}%
+%        \ifdim\wd3<\cxxTitleLen%
+%            \parbox[b]{\cxxTitleLen}{%
+%                \begin{raggedright}
+%                \noindent\large #1 {\bf#2} #3
+%                \end{raggedright}
+%            }
+%        \else%
+%            \ifdim\wd1>0.7\cxxTitleLen%
+%                \parbox[b]{\cxxTitleLen}{%
+%                    \begin{raggedright}
+%                    \noindent\large #1 {\bf#2} #3
+%                    \end{raggedright}
+%                }
+%            \else%
+%                \addtolength{\cxxTitleLen}{-\wd1}%
+%                \unhbox1%
+%                \parbox[t]{\cxxTitleLen}{%
+%                    \advance\lineskip 7pt%
+%                    \begin{raggedright}
+%                    \noindent\large\strut #3
+%                    \end{raggedright}
+%                }
+%            \fi%
+%        \fi%
+%        \hss\strut%
+%    }\vskip\parskip}%
+%}
+%  \begin{raggedright}
+{\flushleft
+    \noindent\sffamily%
+    \ifcase\value{cxxDepth}\Huge\or\Huge\or\Large\else\large\fi%
+    \strut\llap{\id\hglue1ex}\parbox[t]{\textwidth}{\tolerance=10000%
+      #1 \textbf{#2} #3\hss}}
+%  \end{raggedright}
+%}
 % \parbox[b]{\cxxSideLen}{\begingroup
-% 	\catcode`\&=12%
-% 	\catcode`\_=12%
-% 	\begin{flushleft}
-% 	    \quad\large%
-% 	    \ifx\type\empty
-% 		\ifx\args\empty
-% 		    \strut{\bf #2}\\
-% 		\else
-% 		    \strut{\bf #2}\ \args
-% 		\fi
-% 	    \else
-% 		\strut\type\ {\bf #2}\ \args
-% 	    \fi
-% 	\end{flushleft}
+%       \catcode`\&=12%
+%       \catcode`\_=12%
+%       \begin{flushleft}
+%           \quad\large%
+%           \ifx\type\empty
+%               \ifx\args\empty
+%                   \strut{\bf #2}\\
+%               \else
+%                   \strut{\bf #2}\ \args
+%               \fi
+%           \else
+%               \strut\type\ {\bf #2}\ \args
+%           \fi
+%       \end{flushleft}
 % \endgroup}}}%
-\ifx\memo\empty\else
-    \vskip 10pt
-    \begin{flushright}
-	\it\memo
-    \end{flushright}
-\fi
-\label{cxx.\id}
-\begingroup
-\def\cxxExceptionsStr{}
-\def\cxxParameterStr{}
-\def\cxxReturnStr{}
-\def\cxxInvariantsStr{}
-\def\cxxPreconditionsStr{}
-\def\cxxPostconditionsStr{}
-\def\cxxSeeStr{}
-\def\cxxAuthorStr{}
-\def\cxxVersionStr{}
-\def\cxxDeprecatedStr{}
-\def\cxxSinceStr{}
-\def\cxxFileStr{}
-\def\cxxExceptions##1{\def\cxxExceptionsStr{##1}}
-\def\cxxParameter##1{\def\cxxParameterStr{##1}}
-\def\cxxReturn##1{\def\cxxReturnStr{##1}}
-\def\cxxInvariants##1{\def\cxxInvariantsStr{##1}}
-\def\cxxPreconditions##1{\def\cxxPreconditionsStr{##1}}
-\def\cxxPostconditions##1{\def\cxxPostconditionsStr{##1}}
-\def\cxxSee##1{\def\cxxSeeStr{##1}}
-\def\cxxAuthor##1{\def\cxxAuthorStr{##1}}
-\def\cxxVersion##1{\def\cxxVersionStr{##1}}
-\def\cxxDeprecated##1{\def\cxxDeprecatedStr{##1}}
-\def\cxxSince##1{\def\cxxSinceStr{##1}}
-\def\cxxFile##1{\def\cxxFileStr{##1}}
-}{
-\endgroup
-\addtocounter{cxxDepth}{-1}
+
+% SMK: The way it is used in the BALL library, the memo is useless
+% because it is repeated in the main description.
+%\ifx\memo\empty\else
+%    \vskip 10pt
+%    \begin{flushright}
+%        \it\memo
+%    \end{flushright}
+%\fi
+\label{cxx.\id}%
+\begingroup%
+\def\cxxExceptionsStr{}%
+\def\cxxParameterStr{}%
+\def\cxxReturnStr{}%
+\def\cxxInvariantsStr{}%
+\def\cxxPreconditionsStr{}%
+\def\cxxPostconditionsStr{}%
+\def\cxxSeeStr{}%
+\def\cxxAuthorStr{}%
+\def\cxxVersionStr{}%
+\def\cxxDeprecatedStr{}%
+\def\cxxSinceStr{}%
+\def\cxxFileStr{}%
+\def\cxxExceptions##1{\def\cxxExceptionsStr{##1}}%
+\def\cxxParameter##1{\def\cxxParameterStr{##1}}%
+\def\cxxReturn##1{\def\cxxReturnStr{##1}}%
+\def\cxxInvariants##1{\def\cxxInvariantsStr{##1}}%
+\def\cxxPreconditions##1{\def\cxxPreconditionsStr{##1}}%
+\def\cxxPostconditions##1{\def\cxxPostconditionsStr{##1}}%
+\def\cxxSee##1{\def\cxxSeeStr{##1}}%
+\def\cxxAuthor##1{\def\cxxAuthorStr{##1}}%
+\def\cxxVersion##1{\def\cxxVersionStr{##1}}%
+\def\cxxDeprecated##1{\def\cxxDeprecatedStr{##1}}%
+\def\cxxSince##1{\def\cxxSinceStr{##1}}%
+\def\cxxFile##1{\def\cxxFileStr{##1}}%
+}{%
+\endgroup%
+\addtocounter{cxxDepth}{-1}%
 }
 
 
@@ -853,11 +888,11 @@
 %
 % environment for function manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newenvironment{cxxfunction}[5]{
 \begin{cxxgeneric}{#1}{#2}{#3}{#4}{#5}
@@ -870,11 +905,11 @@
 %
 % environment for manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newenvironment{cxxentry}[5]{
 \begin{cxxgeneric}{#1}{#2}{#3}{#4}{#5}}{\end{cxxgeneric}}
@@ -883,11 +918,11 @@
 %
 % environment for union manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newenvironment{cxxunion}[5]{
 \begin{cxxgeneric}{#1}{#2}{#3}{#4}{#5}
@@ -900,11 +935,11 @@
 %
 % environment for typedef manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newenvironment{cxxtypedef}[5]{
 \begin{cxxgeneric}{#1}{#2}{}{#4}{#5}
@@ -917,11 +952,11 @@
 %
 % environment for macro manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newenvironment{cxxmacro}[5]{
 \begin{cxxgeneric}{\#define}{#2}{#3}{#4}{#5}}{\end{cxxgeneric}}
@@ -930,11 +965,11 @@
 %
 % environment for class manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newenvironment{cxxclass}[5]{
 \begin{cxxgeneric}{#1}{#2}{#3}{#4}{#5}}{\end{cxxgeneric}}
@@ -943,11 +978,11 @@
 %
 % environment for namespace manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newenvironment{cxxnamespace}[5]{
 \begin{cxxgeneric}{#1}{#2}{#3}{#4}{#5}}{\end{cxxgeneric}}
@@ -956,11 +991,11 @@
 %
 % environment for interface manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newenvironment{cxxinterface}[5]{
 \begin{cxxgeneric}{#1}{#2}{#3}{#4}{#5}}{\end{cxxgeneric}}
@@ -969,11 +1004,11 @@
 %
 % environment for variable manual entries
 % arguments are:
-%	#1	type
-%	#2	name
-%	#3	args
-%	#4	memo
-%	#5	number
+%       #1      type
+%       #2      name
+%       #3      args
+%       #4      memo
+%       #5      number
 %
 \newenvironment{cxxvariable}[5]{
 \begin{cxxgeneric}{#1}{#2}{#3}{#4}{#5}
@@ -998,6 +1033,31 @@
 \endgroup
 }
 
+% SMK: Ever thought about i18n? If not, this might be a good occasion.
+
+\newcommand*{\cxxReturnName}{Return Value}
+\newcommand*{\cxxParameterName}{Parameters}
+\newcommand*{\cxxExceptionsName}{Exceptions}
+\newcommand*{\cxxInvariantsName}{Invariants}
+\newcommand*{\cxxPreconditionsName}{Preconditions}
+\newcommand*{\cxxPostconditionsName}{Postconditions}
+\newcommand*{\cxxSeeName}{See Also}
+\newcommand*{\cxxAuthorName}{Author}
+\newcommand*{\cxxVersionName}{Version}
+\newcommand*{\cxxDeprecatedName}{Deprecated}
+\newcommand*{\cxxSinceName}{Since}
+\newcommand*{\cxxFileName}{File}
+
+% \cxxDocEntry{Entry Name}{Entry contents}
+\newcommand*{\cxxDocEntry}[2]{%
+\@tempdima=\textwidth
+\advance\@tempdima by -20pt
+\ifx\@empty#2\else%
+\noindent\textbf{#1}\\%
+\hglue20pt\parbox[t]{\@tempdima}{#2}\\
+\fi%
+}
+
 \newenvironment{cxxdoc}{
 %
 % switch on special characters for documentation section
@@ -1006,55 +1066,18 @@
 \strut\\\noindent%
 }{
 \smallskip
-\def\empty{}%
-\ifx\cxxReturnStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf Return Value:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxReturnStr}\\
-\fi
-\ifx\cxxParameterStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf Parameters:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxParameterStr}\\
-\fi
-\ifx\cxxExceptionsStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf Exceptions:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxExceptionsStr}\\
-\fi
-\ifx\cxxInvariantsStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf Invariants:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxInvariantsStr}\\
-\fi
-\ifx\cxxPreconditionsStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf Preconditions:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxPreconditionsStr}\\
-\fi
-\ifx\cxxPostconditionsStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf Postconditions:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxPostconditionsStr}\\
-\fi
-\ifx\cxxSeeStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf See Also:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxSeeStr}\\
-\fi
-\ifx\cxxAuthorStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf Author:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxAuthorStr}\\
-\fi
-\ifx\cxxVersionStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf Version:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxVersionStr}\\
-\fi
-\ifx\cxxDeprecatedStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf\it Deprecated:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxDeprecatedStr}\\
-\fi
-\ifx\cxxSinceStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf Since:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxSinceStr}\\
-\fi
-\ifx\cxxFileStr\empty\else
-    \noindent\hbox to 0.3\textwidth{{\bf File:}\hss}%
-    \parbox[t]{0.7\textwidth}{\cxxFileStr}\\
-\fi
+\cxxDocEntry{\cxxReturnName}{\cxxReturnStr}
+\cxxDocEntry{\cxxParameterName}{\cxxParameterStr}
+\cxxDocEntry{\cxxExceptionsName}{\cxxExceptionsStr}%
+\cxxDocEntry{\cxxInvariantsName}{\cxxInvariantsStr}%
+\cxxDocEntry{\cxxPreconditionsName}{\cxxPreconditionsStr}%
+\cxxDocEntry{\cxxPostconditionsName}{\cxxPostconditionsStr}%
+\cxxDocEntry{\cxxSeeName}{\cxxSeeStr}%
+\cxxDocEntry{\cxxAuthorName}{\cxxAuthorStr}%
+\cxxDocEntry{\cxxVersionName}{\cxxVersionStr}%
+\cxxDocEntry{\cxxDeprecatedName}{\cxxDeprecatedStr}%
+\cxxDocEntry{\cxxSinceName}{\cxxSinceStr}%
+\cxxDocEntry{\cxxFileName}{\cxxFileStr}%
 \end{cxxdocumentation}
 }
 
@@ -1063,7 +1086,7 @@
 %
 % environment for commented listing
 % arguments are:
-%	#1	Section title
+%       #1      Section title
 %
 \newenvironment{cxximplementation}[1]{
 \goodbreak
@@ -1080,4 +1103,4 @@
 \ccverbatim \parskip=0pt \cxxCodeFinish}
 {\catcode`\=0 catcode`\=12
 gdefcxxCodeFinish#1{hbox{#1}endgroup}}
-
+
