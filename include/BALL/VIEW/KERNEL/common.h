@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.14 2003/11/23 16:40:59 amoll Exp $
+// $Id: common.h,v 1.15 2003/11/23 22:55:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -100,7 +100,7 @@ enum DrawingPrecision
 
 
 /** This properties define the available models.
-		Add new model entries before MODEL_LABEL if you want them to show up 
+		Add new model entries directly before MODEL_LABEL if you want them to show up 
 		in the DisplayProperties dialog!
 */
 enum ModelType
