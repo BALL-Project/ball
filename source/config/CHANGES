@@ -59,6 +59,7 @@ Fixed:
  - from deleting molecular entities while simulation was running
 
 Changed:
+- improved focus camera on molecular structures
 - Layout of Preferences 
 - inside of surfaces gets now correctly drawn
 - increased OpenGL performance 

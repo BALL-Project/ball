@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.20 2004/09/03 13:25:57 amoll Exp $
+// $Id: molecularStructure.h,v 1.21 2004/10/15 14:09:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -261,8 +261,6 @@ namespace BALL
 			
 			private:
 
-			virtual void calculateCenter_(Composite& composite);
-
 			virtual void addComposite_(Composite& composite, const String& name)
 				throw();
 
@@ -287,8 +285,6 @@ namespace BALL
 			
 			bool use_amber_;
 
-			Vector3 										view_center_vector_;
-			float 											view_distance_;
 			AmberFF 										amber_;
 			CharmmFF										charmm_;
 			AmberConfigurationDialog    amber_dialog_;

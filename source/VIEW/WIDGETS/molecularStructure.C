@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.57 2004/10/15 14:09:15 amoll Exp $
+// $Id: molecularStructure.C,v 1.58 2004/10/15 14:11:15 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -455,7 +455,7 @@ namespace BALL
 
 			if (!Maths::isZero(view_vector.getSquareLength())) view_vector.normalize();
 
-			float distance = max_distance_vector.getLength() / tan(Angle(30, false).toRadian());
+			float distance = max_distance_vector.getLength() / tan(Angle(33, false).toRadian());
 			if (distance < 4) 	distance = 4;
 			if (distance > 100) distance = 100;
 
