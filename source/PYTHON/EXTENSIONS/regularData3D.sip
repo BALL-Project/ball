@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.sip,v 1.7 2003/08/26 09:18:22 oliver Exp $
+// $Id: regularData3D.sip,v 1.8 2003/10/29 22:54:45 oliver Exp $
 //
 
 class RegularData3D 
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/DATATYPE/regularData3D.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -16,7 +16,7 @@ class RegularData3D
 %End
 	class IndexType
 	{
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/DATATYPE/regularData3D.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -57,14 +57,10 @@ class RegularData3D
   // size_type size() const throw();
   // size_type max_size() const throw();
   void swap(RegularData3D& /grid/);
-  float getData(const IndexType& /index/) const
-	 	throw(OutOfGrid);
-	float getData(const IndexType& /index/)
-		throw(OutOfGrid);
-	float getData(Position /index/) const
-		throw(OutOfGrid);
-	float getData(Position /index/)
-		throw(OutOfGrid);
+  float getData(const IndexType& /index/) const	throw(OutOfGrid);
+	// float getData(const IndexType& /index/)	throw(OutOfGrid);
+	float getData(Position /index/) const	throw(OutOfGrid);
+	// float getData(Position /index/)	throw(OutOfGrid);
 	//	/local/anker/BALL/include/BALL/DATATYPE/regularData3D.h: In member function 
 	//		 `ValueType& BALL::TRegularData3D<ValueType>::getClosestValue(const 
 	//		 BALL::TVector3<float>&) [with ValueType = float]':
@@ -81,18 +77,13 @@ class RegularData3D
 	// float operator [] (const IndexType& /index/) const throw();
 	// float operator [] (const IndexType& /index/) throw();
 	float operator [] (Position /index/) const throw();
-	float operator [] (Position /index/) throw();
+	// float operator [] (Position /index/) throw();
 	float operator () (const Vector3& /x/) const throw();
-	float getInterpolatedValue(const Vector3& /x/) const
-		throw(OutOfGrid);
-	float getClosestValue(const Vector3& /x/) const
-		throw(OutOfGrid);
-	float getClosestValue(const Vector3& /x/) 
-		throw(OutOfGrid);
-	IndexType getClosestIndex(const Vector3& /v/) const
-		throw(OutOfGrid);
-	IndexType getLowerIndex(const Vector3& /v/) const
-		throw(OutOfGrid);
+	float getInterpolatedValue(const Vector3& /x/) const throw(OutOfGrid);
+	float getClosestValue(const Vector3& /x/) const throw(OutOfGrid);
+	// float getClosestValue(const Vector3& /x/) throw(OutOfGrid);
+	IndexType getClosestIndex(const Vector3& /v/) const	throw(OutOfGrid);
+	IndexType getLowerIndex(const Vector3& /v/) const	throw(OutOfGrid);
 	const IndexType& getSize() const throw();
 	const Vector3& getOrigin() const throw();
 	const Vector3& getSpacing() const throw();

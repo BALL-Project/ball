@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.sip,v 1.3 2003/08/26 09:18:21 oliver Exp $
+// $Id: pyResidueList.sip,v 1.4 2003/10/29 22:54:45 oliver Exp $
 //
 
 %MappedType PyResidueList
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/PYTHON/pyResidueList.h>
 	#include "sipBALLResidue.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>

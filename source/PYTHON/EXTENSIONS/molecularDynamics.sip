@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.sip,v 1.3 2003/08/26 09:18:18 oliver Exp $
+// $Id: molecularDynamics.sip,v 1.4 2003/10/29 22:54:41 oliver Exp $
 //
 
 class MolecularDynamics
 {
-%HeaderCode
+%TypeHeaderCode
   #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
   using namespace BALL;
 %End                                                                                                                                                            

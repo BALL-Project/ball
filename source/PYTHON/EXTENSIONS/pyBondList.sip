@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBondList.sip,v 1.3 2003/08/26 09:18:20 oliver Exp $
+// $Id: pyBondList.sip,v 1.4 2003/10/29 22:54:43 oliver Exp $
 //
 
 %MappedType PyBondList
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/PYTHON/pyBondList.h>
 	#include "sipBALLBond.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>

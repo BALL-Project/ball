@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.sip,v 1.9 2003/08/26 09:18:10 oliver Exp $
+// $Id: HINFile.sip,v 1.10 2003/10/29 22:54:34 oliver Exp $
 //
 
 class HINFile
 	: GenericMolFile
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/FORMAT/HINFile.h>
 	using namespace BALL;
 %End

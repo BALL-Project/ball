@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.sip,v 1.6 2003/08/26 09:18:22 oliver Exp $
+// $Id: regularData2D.sip,v 1.7 2003/10/29 22:54:45 oliver Exp $
 //
 
 typedef float GridDataType;
 class RegularData2D
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/DATATYPE/regularData2D.h>
 	#include "sipBALLOutOfMemory.h"
 	#include "sipBALLOutOfGrid.h"
@@ -17,7 +17,7 @@ class RegularData2D
 %End
 	class IndexType
 	{
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/DATATYPE/regularData2D.h>
 	#include "sipBALLOutOfMemory.h"
 	#include "sipBALLOutOfGrid.h"
@@ -56,17 +56,17 @@ class RegularData2D
   // size_type max_size() const throw();
   void swap(RegularData2D& /data/) throw();
   float getData(const IndexType& /index/) const throw(OutOfGrid);
-  float getData(const IndexType& /index/) throw(OutOfGrid);
-  float getData(Position /index/) const throw(OutOfGrid);
-  float getData(Position /index/) throw(OutOfGrid);
+  // float getData(const IndexType& /index/) throw(OutOfGrid);
+  // float getData(Position /index/) const throw(OutOfGrid);
+	// float getData(Position /index/) throw(OutOfGrid);
   // float operator [] (const IndexType& /index/) const throw();
   // float operator [] (const IndexType& /index/) throw();
   float operator [] (Position /index/) const throw();
-  float operator [] (Position /index/) throw();
+  // float operator [] (Position /index/) throw();
   float operator () (const Vector2& /x/) const throw();
   float getInterpolatedValue(const Vector2& /x/) const throw(OutOfGrid);
   float getClosestValue(const Vector2& /x/) const throw(OutOfGrid);
-  float getClosestValue(const Vector2& /x/) throw(OutOfGrid);
+  // float getClosestValue(const Vector2& /x/) throw(OutOfGrid);
   IndexType getLowerIndex(const Vector2& /v/) const throw(OutOfGrid);
   IndexType getClosestIndex(const Vector2& /v/) const throw(OutOfGrid);
   const IndexType& getSize() const throw();

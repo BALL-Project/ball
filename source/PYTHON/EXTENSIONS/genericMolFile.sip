@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.sip,v 1.6 2003/08/26 09:18:16 oliver Exp $
+// $Id: genericMolFile.sip,v 1.7 2003/10/29 22:54:40 oliver Exp $
 //
 
 class GenericMolFile
 	: LineBasedFile
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/FORMAT/genericMolFile.h>
 	using namespace BALL;
 	using namespace BALL::Exception;

@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.20 2003/09/09 18:57:05 oliver Exp $
+# $Id: Makefile,v 1.21 2003/10/29 22:54:35 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -16,7 +16,7 @@ all:	libBALLc.so
 include ../../common.mak
 include Makefile.inc
 
-SIP_OPTS=-c SIP -e -s ".C" -m "Makefile.inc"
+SIP_OPTS=-c SIP -e -s ".C"
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
  

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.sip,v 1.6 2003/08/26 09:18:10 oliver Exp $
+// $Id: MOL2File.sip,v 1.7 2003/10/29 22:54:34 oliver Exp $
 //
 
 class MOL2File
   : File
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/FORMAT/MOL2File.h>
 	using namespace BALL;
 	using namespace BALL::Exception;

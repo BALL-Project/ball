@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.sip,v 1.5 2003/08/26 09:18:23 oliver Exp $
+// $Id: smilesParser.sip,v 1.6 2003/10/29 22:54:47 oliver Exp $
 //
 
 class SmilesParser
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/STRUCTURE/smilesParser.h>
 	#include <BALL/KERNEL/atom.h>
 	using namespace BALL;

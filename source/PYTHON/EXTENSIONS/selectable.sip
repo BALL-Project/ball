@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.sip,v 1.2 2003/08/26 09:18:23 oliver Exp $
+// $Id: selectable.sip,v 1.3 2003/10/29 22:54:46 oliver Exp $
 //
 
 class Selectable
 {
-%HeaderCode
+%TypeHeaderCode
 #include <BALL/CONCEPT/selectable.h>
 using namespace BALL;
 %End

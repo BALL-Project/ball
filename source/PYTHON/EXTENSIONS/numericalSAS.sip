@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.sip,v 1.6 2003/08/26 09:18:18 oliver Exp $
+// $Id: numericalSAS.sip,v 1.7 2003/10/29 22:54:42 oliver Exp $
 //
 
-%HeaderCode
+%ModuleHeaderCode
 	#include <BALL/STRUCTURE/numericalSAS.h>
 	using namespace BALL;
 %End
@@ -15,7 +15,7 @@ float calculateSASVolume
      (const AtomContainer& /fragment/, float /probe_radius/ = 1.5, Size /number_of_dots/ = 400); 
 PyAtomDict& calculateSASAtomAreas
      (const AtomContainer& /fragment/, float /probe_radius/ = 1.5, Size /number_of_dots/ = 400);
-%MemberCode
+%MethodCode
 	const AtomContainer *a0;
 	float a1 = 1.5;
 	Size a2 = 400;
@@ -36,7 +36,7 @@ PyAtomDict& calculateSASAtomAreas
 
 Surface& calculateSASPoints
      (const AtomContainer& /fragment/, float /probe_radius/ = 1.5, Size /number_of_dots/ = 400);
-%MemberCode
+%MethodCode
 	const AtomContainer *a0;
 	float a1 = 1.5;
 	Size a2 = 400;

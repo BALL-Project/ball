@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.sip,v 1.7 2003/08/26 09:18:24 oliver Exp $
+// $Id: timeStamp.sip,v 1.8 2003/10/29 22:54:47 oliver Exp $
 //
 
 class PreciseTime
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <time.h>
 	#include <BALL/CONCEPT/timeStamp.h>
 	using namespace BALL;
@@ -29,8 +29,8 @@ class PreciseTime
   //  void write(PersistenceManager& pm)const;
   //  bool read(PersistenceManager& pm);
 
-  char* __str__() /NonLazy/;
-%MemberCode
+  SIP_PYOBJECT __str__();
+%MethodCode
   PreciseTime* ptr;
 
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_PreciseTime,&ptr))
@@ -50,7 +50,7 @@ class PreciseTime
 
 class TimeStamp
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/CONCEPT/timeStamp.h>
 	using namespace BALL;
 %End
@@ -68,7 +68,7 @@ class TimeStamp
   //  bool read(PersistenceManager& pm);
 
   char *__str__() /NonLazy/;
-%MemberCode
+%MethodCode
   TimeStamp* ptr;
 
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_TimeStamp,&ptr))

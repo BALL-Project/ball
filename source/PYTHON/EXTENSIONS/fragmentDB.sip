@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.sip,v 1.4 2003/09/09 18:57:06 oliver Exp $
+// $Id: fragmentDB.sip,v 1.5 2003/10/29 22:54:40 oliver Exp $
 //
 
 class FragmentDB 
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	#include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
 	using namespace BALL;
@@ -57,7 +57,7 @@ class FragmentDB
 //class NoFragmentNode
 // : GeneralException
 //{
-//%HeaderCode
+//%TypeHeaderCode
 //	#using <BALL/STRUCTURE/fragmentDB.h>
 //	using namespace BALL;
 //%End
@@ -69,7 +69,7 @@ class NormalizeNamesProcessor
 //  : public UnaryProcessor<Fragment>
 	: FragmentProcessor
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	typedef FragmentDB::NormalizeNamesProcessor NormalizeNamesProcessor;
 	using namespace BALL;
@@ -93,7 +93,7 @@ class BuildBondsProcessor
 // : public UnaryProcessor<Fragment> 
 	: FragmentProcessor
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	typedef FragmentDB::BuildBondsProcessor BuildBondsProcessor;
 	using namespace BALL;

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.sip,v 1.3 2003/08/26 09:18:15 oliver Exp $
+// $Id: energyMinimizer.sip,v 1.4 2003/10/29 22:54:39 oliver Exp $
 //
 
 class EnergyMinimizer
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 	using namespace BALL;
 %End

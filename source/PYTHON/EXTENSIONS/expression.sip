@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.sip,v 1.3 2003/09/09 18:57:06 oliver Exp $
+// $Id: expression.sip,v 1.4 2003/10/29 22:54:39 oliver Exp $
 //
 
 class ExpressionPredicate
 //  : public UnaryPredicate<Atom>
 	: UnaryAtomPredicate
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/expression.h>
 	using namespace BALL;
 %End
@@ -74,7 +74,7 @@ class ExpressionPredicate
 //};
 class Expression
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/expression.h>
 	using namespace BALL;
 %End

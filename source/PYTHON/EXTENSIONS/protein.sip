@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.sip,v 1.5 2003/08/26 09:18:19 oliver Exp $
+// $Id: protein.sip,v 1.6 2003/10/29 22:54:43 oliver Exp $
 //
 
 class Protein
   : Molecule
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/protein.h>
 	using namespace BALL;
 %End
@@ -49,7 +49,7 @@ class Protein
 
 
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
 	  Protein* ptr;
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Protein,&ptr))

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.11 2003/08/26 09:18:10 oliver Exp $
+// $Id: BALL.sip,v 1.12 2003/10/29 22:54:34 oliver Exp $
 //
 //
 //
@@ -283,5 +283,3 @@
 // VIEW/GUI/WIDGETS
 %Include modularWidget.sip
 %Include pyWidget.sip
-
-%Include Makefile.sip

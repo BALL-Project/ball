@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.sip,v 1.6 2003/09/09 18:57:05 oliver Exp $
+// $Id: PDBFile.sip,v 1.7 2003/10/29 22:54:35 oliver Exp $
 //
 
 class PDBFile
 	:	GenericPDBFile
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/FORMAT/PDBFile.h>
 	using namespace BALL;
 %End

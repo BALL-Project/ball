@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.sip,v 1.4 2003/10/29 22:08:39 oliver Exp $
+// $Id: global.sip,v 1.5 2003/10/29 22:54:40 oliver Exp $
 //
 
 %MappedType Index
@@ -50,7 +50,7 @@ typedef double DoubleReal;
 // {
 // 	public:
 // 	operator const char* ();
-// %MemberCode
+// %MethodCode
 // 	Size* ptr;
 //   if ((ptr = (Size*)sipGetCppPtr((sipThisType*)a0,sipClass_Size)) == NULL)
 //     return NULL;

@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.sip,v 1.4 2003/09/09 18:57:08 oliver Exp $
+// $Id: reconstructFragmentProcessor.sip,v 1.5 2003/10/29 22:54:45 oliver Exp $
 //
 
 class ReconstructFragmentProcessor 
 //  : public UnaryProcessor<Fragment> 
 	: FragmentProcessor
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	using namespace BALL;

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.sip,v 1.5 2003/08/26 09:18:23 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.6 2003/10/29 22:54:46 oliver Exp $
 //
 
 class SecondaryStructure
   : AtomContainer
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/secondaryStructure.h>
 	using namespace BALL;
 %End
@@ -62,7 +62,7 @@ class SecondaryStructure
 
 
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
 	  SecondaryStructure* ptr;
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Residue,&ptr))

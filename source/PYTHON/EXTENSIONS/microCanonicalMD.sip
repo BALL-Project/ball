@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.sip,v 1.2 2003/08/26 09:18:17 oliver Exp $
+// $Id: microCanonicalMD.sip,v 1.3 2003/10/29 22:54:41 oliver Exp $
 //
 
 class MicroCanonicalMD 
 	: MolecularDynamics
 {
-%HeaderCode
+%TypeHeaderCode
   #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
   using namespace BALL;
 %End                                                                                                                                                            

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.sip,v 1.4 2003/08/26 09:18:23 oliver Exp $
+// $Id: sphere3.sip,v 1.5 2003/10/29 22:54:47 oliver Exp $
 //
 
 class Sphere3
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/sphere3.h>
 	using namespace BALL;
 %End

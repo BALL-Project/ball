@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.sip,v 1.3 2003/08/26 09:18:14 oliver Exp $
+// $Id: circle3.sip,v 1.4 2003/10/29 22:54:38 oliver Exp $
 //
 
 class Circle3
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/circle3.h>
 	using namespace BALL;
 %End

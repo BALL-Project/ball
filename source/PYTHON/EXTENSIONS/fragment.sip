@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.sip,v 1.5 2003/08/26 09:18:16 oliver Exp $
+// $Id: fragment.sip,v 1.6 2003/10/29 22:54:40 oliver Exp $
 //
 
 class Fragment
   : AtomContainer
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/fragment.h>
 	using namespace BALL;
 %End
@@ -30,7 +30,7 @@ class Fragment
 
 
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
   Fragment* ptr;
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Fragment,&ptr))

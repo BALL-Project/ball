@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.sip,v 1.5 2003/08/26 09:18:13 oliver Exp $
+// $Id: bond.sip,v 1.6 2003/10/29 22:54:37 oliver Exp $
 //
 
 class Bond
 	: Composite,
     PropertyManager
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/bond.h>
 	#include <BALL/KERNEL/atom.h>
 	using namespace BALL;
@@ -73,7 +73,7 @@ class Bond
   void setType(Type /bond_type/);
   Type getType() const;
   float getLength() const;
-  const Atom* getBoundAtom(const Atom& /atom/);
+  // const Atom* getBoundAtom(const Atom& /atom/);
   const Atom* getBoundAtom(const Atom& /atom/) const;
   bool isBondOf(const Atom& /atom/) const;
   bool isBound() const;
@@ -89,7 +89,7 @@ class Bond
 
 
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
   Bond* ptr;
 
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Bond,&ptr))

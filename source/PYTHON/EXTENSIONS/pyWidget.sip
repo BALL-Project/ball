@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.sip,v 1.4 2003/08/26 09:18:21 oliver Exp $
+// $Id: pyWidget.sip,v 1.5 2003/10/29 22:54:45 oliver Exp $
 //
 
 class PyWidget
   // : public QMultiLineEdit,
   : ModularWidget
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 	using namespace BALL;
 	using namespace VIEW;

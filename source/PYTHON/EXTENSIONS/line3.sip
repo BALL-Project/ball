@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.sip,v 1.4 2003/08/26 09:18:17 oliver Exp $
+// $Id: line3.sip,v 1.5 2003/10/29 22:54:41 oliver Exp $
 //
 
 class Line3
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/line3.h>
 	using namespace BALL;
 %End

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.sip,v 1.5 2003/08/26 09:18:22 oliver Exp $
+// $Id: residue.sip,v 1.6 2003/10/29 22:54:46 oliver Exp $
 //
 
 class Residue
   : Fragment
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/residue.h>
 	using namespace BALL;
 %End
@@ -77,7 +77,7 @@ class Residue
   // BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
 
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
 	  Residue* ptr;
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Residue,&ptr))

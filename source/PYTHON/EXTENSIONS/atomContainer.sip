@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.sip,v 1.5 2003/08/26 09:18:12 oliver Exp $
+// $Id: atomContainer.sip,v 1.6 2003/10/29 22:54:36 oliver Exp $
 //
 
 class AtomContainer
   : Composite, 
 		PropertyManager
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/atomContainer.h>
 	using namespace BALL;
 %End
@@ -76,7 +76,7 @@ class AtomContainer
 
 	
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
   AtomContainer* ptr;
 
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_AtomContainer,&ptr))

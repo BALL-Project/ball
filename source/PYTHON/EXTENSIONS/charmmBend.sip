@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmBend.sip,v 1.3 2003/08/26 09:18:13 oliver Exp $
+// $Id: charmmBend.sip,v 1.4 2003/10/29 22:54:38 oliver Exp $
 //
 
 class CharmmBend 
   : ForceFieldComponent
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MOLMEC/CHARMM/charmmBend.h>
 	using namespace BALL;
 %End

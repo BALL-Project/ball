@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.sip,v 1.7 2003/09/09 18:57:05 oliver Exp $
+// $Id: angle.sip,v 1.8 2003/10/29 22:54:36 oliver Exp $
 //
 
 class Angle
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/angle.h>
 	using namespace BALL;
 %End
@@ -61,7 +61,7 @@ class Angle
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
   char *__str__() /NonLazy/;
-%MemberCode
+%MethodCode
   Angle* ptr;
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Angle,&ptr))
   {

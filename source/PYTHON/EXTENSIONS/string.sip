@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.sip,v 1.11 2003/08/26 09:18:24 oliver Exp $
+// $Id: string.sip,v 1.12 2003/10/29 22:54:47 oliver Exp $
 //
 
 class Substring
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/DATATYPE/string.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -246,7 +246,7 @@ class String
 
 
   char *__str__() /NonLazy/;
-%MemberCode
+%MethodCode
     String *ptr;
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_String,&ptr))

@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.sip,v 1.2 2003/08/26 09:18:14 oliver Exp $
+// $Id: common.sip,v 1.3 2003/10/29 22:54:38 oliver Exp $
 //
 
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/common.h>
 	using namespace BALL::Maths;
 %End

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.sip,v 1.3 2003/08/26 09:18:15 oliver Exp $
+// $Id: conjugateGradient.sip,v 1.4 2003/10/29 22:54:39 oliver Exp $
 //
 
 class ConjugateGradientMinimizer 
   : EnergyMinimizer
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 	using namespace BALL;
 %End

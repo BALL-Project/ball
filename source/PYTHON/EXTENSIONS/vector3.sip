@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.sip,v 1.7 2003/09/09 18:57:08 oliver Exp $
+// $Id: vector3.sip,v 1.8 2003/10/29 22:54:48 oliver Exp $
 //
 
 class Vector3
@@ -37,7 +37,7 @@ class Vector3
   static const Vector3& getZero();
   static const Vector3& getUnit();
   float operator [] (Index /index/);
-  float operator [] (Index /index/) const;
+  // float operator [] (Index /index/) const;
   // ???? const Vector3& operator + () const;
   // ???? Vector3 operator - () const;
   Vector3& operator += (const Vector3& /vector/);
@@ -72,7 +72,7 @@ class Vector3
 
 
   char *__str__() /NonLazy/;
-%MemberCode
+%MethodCode
   Vector3* ptr;
 
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Atom,&ptr))

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.sip,v 1.2 2003/08/26 09:18:10 oliver Exp $
+// $Id: INIFile.sip,v 1.3 2003/10/29 22:54:34 oliver Exp $
 //
 
 
 class INIFile
 {
-%HeaderCode
+%TypeHeaderCode
   #include <BALL/FORMAT/INIFile.h>
   using namespace BALL;
 %End

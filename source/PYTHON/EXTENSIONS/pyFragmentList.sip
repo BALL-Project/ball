@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyFragmentList.sip,v 1.3 2003/08/26 09:18:20 oliver Exp $
+// $Id: pyFragmentList.sip,v 1.4 2003/10/29 22:54:44 oliver Exp $
 //
 
 %MappedType PyFragmentList
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/PYTHON/pyFragmentList.h>
 	#include "sipBALLFragment.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>

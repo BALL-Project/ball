@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.sip,v 1.7 2003/08/26 09:18:24 oliver Exp $
+// $Id: system.sip,v 1.8 2003/10/29 22:54:47 oliver Exp $
 //
 
 class System
   : AtomContainer,
   	PropertyManager
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/system.h>
 	using namespace BALL;
 %End
@@ -49,7 +49,7 @@ class System
 	//  bool apply(UnaryProcessor<T>& processor)
 
 	char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
     System *ptr;
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_System,&ptr))

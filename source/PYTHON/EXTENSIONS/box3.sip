@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.sip,v 1.6 2003/08/26 09:18:13 oliver Exp $
+// $Id: box3.sip,v 1.7 2003/10/29 22:54:37 oliver Exp $
 //
 
 class Box3
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/box3.h>
 	using namespace BALL;
 %End
@@ -43,7 +43,7 @@ class Box3
 
 
   char *__str__() /NonLazy/;
-%MemberCode
+%MethodCode
 	Box3* ptr;
 
 	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Box3,&ptr))

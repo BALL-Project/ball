@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: radiusRuleProcessor.sip,v 1.3 2003/09/09 18:57:07 oliver Exp $
+// $Id: radiusRuleProcessor.sip,v 1.4 2003/10/29 22:54:45 oliver Exp $
 //
 
 class RadiusRuleProcessor
   : RuleProcessor
 {
-%HeaderCode	
+%TypeHeaderCode	
 	#include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
 %End
   public:

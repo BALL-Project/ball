@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyNucleotideList.sip,v 1.3 2003/08/26 09:18:21 oliver Exp $
+// $Id: pyNucleotideList.sip,v 1.4 2003/10/29 22:54:44 oliver Exp $
 //
 
 %MappedType PyNucleotideList
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/PYTHON/pyNucleotideList.h>
 	#include "sipBALLNucleotide.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>

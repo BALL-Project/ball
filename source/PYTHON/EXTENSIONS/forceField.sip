@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.sip,v 1.2 2003/08/26 09:18:16 oliver Exp $
+// $Id: forceField.sip,v 1.3 2003/10/29 22:54:40 oliver Exp $
 //
 
 class ForceField
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MOLMEC/COMMON/forceField.h>
 	using namespace BALL;
 %End

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.3 2003/08/26 09:18:17 oliver Exp $
+// $Id: mainControl.sip,v 1.4 2003/10/29 22:54:41 oliver Exp $
 //
 
 class MainControl
@@ -9,7 +9,7 @@ class MainControl
 //    public ConnectionObject
 	: Embeddable
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;

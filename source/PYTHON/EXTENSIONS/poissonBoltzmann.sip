@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.sip,v 1.2 2003/08/26 09:18:19 oliver Exp $
+// $Id: poissonBoltzmann.sip,v 1.3 2003/10/29 22:54:42 oliver Exp $
 //
 
 class FDPB
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End
@@ -46,7 +46,7 @@ class FDPB
 	};
 	class Option
 	{
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End
@@ -77,7 +77,7 @@ class FDPB
 	};
 	class Boundary
 	{
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End
@@ -91,7 +91,7 @@ class FDPB
 	};
 	class ChargeDistribution
 	{
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End
@@ -101,7 +101,7 @@ class FDPB
 	};
 	class DielectricSmoothing
 	{
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End
@@ -114,7 +114,7 @@ class FDPB
 	};
 	class Default
 	{
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End
@@ -140,7 +140,7 @@ class FDPB
 
 	class FastAtomStruct
 	{
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
 	using namespace BALL;
 %End

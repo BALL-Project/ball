@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.sip,v 1.6 2003/08/26 09:18:12 oliver Exp $
+// $Id: atom.sip,v 1.7 2003/10/29 22:54:36 oliver Exp $
 //
 
 class Atom
   : Composite,
     PropertyManager
 {
-%HeaderCode 
+%TypeHeaderCode 
 	#include <BALL/KERNEL/atom.h>
 	using namespace BALL;
 	typedef Atom::Type AtomType;
@@ -60,7 +60,7 @@ class Atom
    Fragment* getFragment();
    const Fragment* getFragment() const;
    void setName(const String& /name/);
-   const String& getName();
+   // const String& getName();
    const String& getName() const;
    String getFullName(FullNameType /type/ = ADD_VARIANT_EXTENSIONS) const;
    void setPosition(const Vector3& /position/);
@@ -100,7 +100,7 @@ class Atom
 	
 	// convert the atom to a string representation
 	char *__str__() /NonLazy/;
-%MemberCode
+%MethodCode
     Atom *ptr;
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Atom,&ptr))
@@ -117,7 +117,7 @@ class Atom
  
 class AtomType
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/atom.h>
 	using namespace BALL;
 	typedef Atom::Type AtomType;
@@ -137,7 +137,7 @@ class AtomType
 %End
 
 	char *__str__() /NonLazy/;
-%MemberCode
+%MethodCode
 	Atom::Type* ptr;
 
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_String,&ptr))

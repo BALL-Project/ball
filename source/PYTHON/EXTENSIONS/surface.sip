@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.sip,v 1.6 2003/08/26 09:18:24 oliver Exp $
+// $Id: surface.sip,v 1.7 2003/10/29 22:54:47 oliver Exp $
 //
 
 class Surface
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/surface.h>
 	using namespace BALL;
 %End

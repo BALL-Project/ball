@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricTransformations.sip,v 1.3 2003/09/09 18:57:06 oliver Exp $
+// $Id: geometricTransformations.sip,v 1.4 2003/10/29 22:54:40 oliver Exp $
 //
 
 class TranslationProcessor
 //  : public UnaryProcessor<Atom> 
 	: AtomProcessor
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/STRUCTURE/geometricTransformations.h>
 	using namespace BALL;
 	typedef UnaryProcessor<Atom> AtomProcessor;
@@ -25,7 +25,7 @@ class TransformationProcessor
 //  :public UnaryProcessor<Atom> 
 	: AtomProcessor
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/STRUCTURE/geometricTransformations.h>
 	using namespace BALL;
 	typedef UnaryProcessor<Atom> AtomProcessor;

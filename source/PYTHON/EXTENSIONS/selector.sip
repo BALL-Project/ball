@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.sip,v 1.3 2003/09/09 18:57:08 oliver Exp $
+// $Id: selector.sip,v 1.4 2003/10/29 22:54:46 oliver Exp $
 //
 class Selector
 //  : UnaryProcessor<Composite>
 	: CompositeProcessor
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/selector.h>
 	using namespace BALL;
 	typedef UnaryProcessor<Composite> CompositeProcessor;

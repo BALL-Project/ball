@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.sip,v 1.2 2003/08/26 09:18:23 oliver Exp $
+// $Id: resourceFile.sip,v 1.3 2003/10/29 22:54:46 oliver Exp $
 //
 
 class ResourceEntry
 	// : AutoDeletable
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/FORMAT/resourceFile.h>
 	using namespace BALL;
 %End
@@ -72,7 +72,7 @@ class ResourceEntry
 class ResourceFile
  :  File
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/FORMAT/resourceFile.h>
 	using namespace BALL;
 %End

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.sip,v 1.5 2003/09/09 18:57:06 oliver Exp $
+// $Id: matrix44.sip,v 1.6 2003/10/29 22:54:41 oliver Exp $
 //
 
 class Matrix4x4
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/matrix44.h>
 	using namespace BALL;
 %End
@@ -64,8 +64,8 @@ class Matrix4x4
   bool isEqual(const Matrix4x4& /m/) const;
   Vector4 getDiagonal() const;
   float operator () (Position /row/, Position /col/);
-  float operator () (Position /row/, Position /col/) const;
-  float operator [] (Position /index/) const;
+  // float operator () (Position /row/, Position /col/) const;
+  // float operator [] (Position /index/) const;
   float operator [] (Position /index/);
   // ???? Matrix4x4 operator + () const;
   // ???? Matrix4x4 operator - () const;

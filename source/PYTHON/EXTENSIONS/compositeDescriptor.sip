@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeDescriptor.sip,v 1.6 2003/08/26 09:18:14 oliver Exp $
+// $Id: compositeDescriptor.sip,v 1.7 2003/10/29 22:54:38 oliver Exp $
 //
 
 class CompositeDescriptor
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/VIEW/GUI/KERNEL/compositeDescriptor.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h> 
 	using namespace BALL;
@@ -34,7 +34,7 @@ class CompositeDescriptor
   Quaternion& getQuaternion();
   const Quaternion& getQuaternion() const;
   Composite* getComposite();
-%MemberCode
+%MethodCode
   sipThisType *sipThis;
 
   if (sipParseArgs(&sipArgsParsed,sipArgs,""))
@@ -65,7 +65,7 @@ class CompositeDescriptor
   // virtual void write(std::ostream& s) const;
 
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
   CompositeDescriptor* ptr;
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_CompositeDescriptor,&ptr))

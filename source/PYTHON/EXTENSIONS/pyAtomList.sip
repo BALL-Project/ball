@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.sip,v 1.3 2003/08/26 09:18:20 oliver Exp $
+// $Id: pyAtomList.sip,v 1.4 2003/10/29 22:54:43 oliver Exp $
 //
 
 %MappedType PyAtomList
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/PYTHON/pyAtomList.h>
 	#include "sipBALLAtom.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.sip,v 1.7 2003/09/09 18:57:08 oliver Exp $
+// $Id: vector2.sip,v 1.8 2003/10/29 22:54:48 oliver Exp $
 //
 
 //Vector2 operator * (float scalar, const Vector2& vector)
@@ -16,7 +16,7 @@
 class Vector2
 	:  PersistentObject
 {
-%HeaderCode
+%TypeHeaderCode
         #include <BALL/MATHS/vector2.h>
         using namespace BALL;
         using namespace BALL::Exception;
@@ -102,7 +102,7 @@ class Vector2
 	float y;
 
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
   Vector2* ptr;
  
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Vector3,&ptr))

@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: distanceCoulomb.sip,v 1.2 2003/08/26 09:18:15 oliver Exp $
+// $Id: distanceCoulomb.sip,v 1.3 2003/10/29 22:54:39 oliver Exp $
 //
 
-%HeaderCode
+%ModuleHeaderCode
 	#include <BALL/ENERGY/distanceCoulomb.h>
 	using namespace BALL;
 %End

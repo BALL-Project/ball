@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.12 2003/08/26 09:18:16 oliver Exp $
+// $Id: file.sip,v 1.13 2003/10/29 22:54:39 oliver Exp $
 //
 
 class std__openmode
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
 	typedef std::ios::openmode std__openmode;
@@ -16,7 +16,7 @@ class std__openmode
 
 class File
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
 	const File::OpenMode BALL_File__IN = File::IN;
@@ -72,7 +72,7 @@ class File
 
 class OpenMode
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
 	typedef File::OpenMode OpenMode;
@@ -80,7 +80,7 @@ class OpenMode
   public:
 
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
   OpenMode* ptr;
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_OpenMode,&ptr))
   {

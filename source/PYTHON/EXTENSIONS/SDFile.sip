@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.sip,v 1.6 2003/08/26 09:18:11 oliver Exp $
+// $Id: SDFile.sip,v 1.7 2003/10/29 22:54:35 oliver Exp $
 //
 
 class SDFile
 	: GenericMolFile
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/FORMAT/SDFile.h>
 	using namespace BALL;
 %End

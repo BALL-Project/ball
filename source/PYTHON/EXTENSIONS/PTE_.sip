@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE_.sip,v 1.3 2003/08/26 09:18:11 oliver Exp $
+// $Id: PTE_.sip,v 1.4 2003/10/29 22:54:35 oliver Exp $
 //
 
 class Element
   : PropertyManager
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/PTE.h>
 	using namespace BALL;
 %End

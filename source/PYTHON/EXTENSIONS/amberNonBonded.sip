@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.sip,v 1.3 2003/08/26 09:18:12 oliver Exp $
+// $Id: amberNonBonded.sip,v 1.4 2003/10/29 22:54:36 oliver Exp $
 //
 
 class AmberNonBonded 
   : ForceFieldComponent
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 	using namespace BALL;
 %End

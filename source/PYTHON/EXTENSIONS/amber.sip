@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.sip,v 1.2 2003/08/26 09:18:11 oliver Exp $
+// $Id: amber.sip,v 1.3 2003/10/29 22:54:35 oliver Exp $
 //
 
 class AmberFF 
  : ForceField
 {
-%HeaderCode
+%TypeHeaderCode
 #include <BALL/MOLMEC/AMBER/amber.h>
 using namespace BALL;
 %End

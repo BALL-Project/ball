@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.sip,v 1.5 2003/09/09 18:57:07 oliver Exp $
+// $Id: quaternion.sip,v 1.6 2003/10/29 22:54:45 oliver Exp $
 //
 
 class Quaternion
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/quaternion.h>
 	using namespace BALL;
 %End

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.sip,v 1.2 2003/08/26 09:18:23 oliver Exp $
+// $Id: snapShotManager.sip,v 1.3 2003/10/29 22:54:47 oliver Exp $
 //
 
 class SnapShotManager
 {
-%HeaderCode
+%TypeHeaderCode
   #include <BALL/CONCEPT/processor.h>
 	#include <BALL/MOLMEC/COMMON/snapShotManager.h>
   using namespace BALL;

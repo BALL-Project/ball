@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.sip,v 1.9 2003/08/26 09:18:17 oliver Exp $
+// $Id: lineBasedFile.sip,v 1.10 2003/10/29 22:54:41 oliver Exp $
 //
 
 class LineBasedFile
 	:  File
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/FORMAT/lineBasedFile.h>	
 	using namespace BALL;
 	using namespace BALL::Exception;

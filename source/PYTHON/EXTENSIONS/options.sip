@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.sip,v 1.5 2003/08/26 09:18:18 oliver Exp $
+// $Id: options.sip,v 1.6 2003/10/29 22:54:42 oliver Exp $
 //
 
 class IllegalKey
 	:	GeneralException
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
 	typedef StringHashMap<String>::IllegalKey IllegalKey;
 	using namespace BALL;
@@ -19,7 +19,7 @@ class IllegalKey
 class Options
   // : public StringHashMap<String> 
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/DATATYPE/options.h>
 	using namespace BALL;
 %End
@@ -58,7 +58,7 @@ class Options
 		throw(IllegalKey);
 
   char* __str__() /NonLazy/;
-%MemberCode
+%MethodCode
 	  Options* ptr;
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Options,&ptr))

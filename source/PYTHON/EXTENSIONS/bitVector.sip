@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.sip,v 1.5 2003/08/26 09:18:13 oliver Exp $
+// $Id: bitVector.sip,v 1.6 2003/10/29 22:54:37 oliver Exp $
 //
 class Bit
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/DATATYPE/bitVector.h>
 	using namespace BALL;
 %End
@@ -32,7 +32,7 @@ class Bit
 
 class BitVector
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/DATATYPE/bitVector.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
@@ -70,8 +70,6 @@ class BitVector
 	bool operator [] (Index /index/) const
 		throw(IndexUnderflow, IndexOverflow);
 	void setBit(Index /index/, bool /value/ = true)
-		throw(IndexUnderflow, OutOfMemory);
-	bool getBit(Index /index/)
 		throw(IndexUnderflow, OutOfMemory);
 	bool getBit(Index /index/) const
 		throw(IndexUnderflow, IndexOverflow);

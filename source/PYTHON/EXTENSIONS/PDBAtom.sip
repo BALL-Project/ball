@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.sip,v 1.5 2003/08/26 09:18:11 oliver Exp $
+// $Id: PDBAtom.sip,v 1.6 2003/10/29 22:54:35 oliver Exp $
 //
 
 class PDBAtom
   : Atom
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/KERNEL/PDBAtom.h>
 	using namespace BALL;
 %End
@@ -59,7 +59,7 @@ class PDBAtom
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
   char *__str__() /NonLazy/;
-%MemberCode
+%MethodCode
   PDBAtom* ptr;
 
   if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_PDBAtom,&ptr))

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chargeRuleProcessor.sip,v 1.3 2003/09/09 18:57:05 oliver Exp $
+// $Id: chargeRuleProcessor.sip,v 1.4 2003/10/29 22:54:37 oliver Exp $
 //
 
 class ChargeRuleProcessor
   : RuleProcessor
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
 %End
   public:

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.sip,v 1.4 2003/09/09 18:57:08 oliver Exp $
+// $Id: vector4.sip,v 1.5 2003/10/29 22:54:48 oliver Exp $
 //
 
 class Vector4
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/MATHS/vector4.h>
 	using namespace BALL;
 %End
@@ -34,7 +34,7 @@ class Vector4
   static const Vector4& getUnit();
   void set(float /value/ = 1);
   float operator [] (Index /index/);
-  float operator [] (Index /index/) const;
+  // float operator [] (Index /index/) const;
   // ???? Vector4 operator + () const;
   // ???? Vector4 operator - () const;
   Vector4& operator += (const Vector4& /vector/);
