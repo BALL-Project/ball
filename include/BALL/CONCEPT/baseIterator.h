@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.11 2001/06/06 19:35:45 amoll Exp $
+// $Id: baseIterator.h,v 1.12 2001/06/07 12:44:27 anker Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -83,7 +83,7 @@ namespace BALL
 
 		/**
 		*/
-		typedef std::bidirectional_iterator_tag iterator_category;
+		typedef ::std::bidirectional_iterator_tag iterator_category;
 
 		//@}
 		/**	@name	Constructors and Destructors 
