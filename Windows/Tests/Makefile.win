@@ -4,7 +4,7 @@
 #---------------------------------------------------------------
 
 CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR -DBALL_PATH="\"$(BALL_PATH)\"" 
-LD = cl -nologo -MDd 
+LD = cl -nologo -MTd 
 
 
 

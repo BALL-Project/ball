@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.31.4.1 2002/11/29 23:07:37 oliver Exp $
+// $Id: exception.C,v 1.31.4.2 2002/12/08 17:01:31 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -294,7 +294,7 @@ namespace BALL
 			}
 
 			void GlobalExceptionHandler::newHandler()
-				throw()
+				throw(Exception::OutOfMemory)
 			{
 				throw Exception::OutOfMemory(__FILE__, __LINE__);
 			}

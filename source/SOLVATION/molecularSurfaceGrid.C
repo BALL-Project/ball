@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.C,v 1.10.4.1 2002/10/11 14:45:00 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.10.4.2 2002/12/08 17:01:31 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -217,7 +217,9 @@ namespace BALL
 		unsigned long q;
 
 		for (s = 1; s < grid->getMaxZIndex(); s++)
+		{
 			for (t = 1; t < grid->getMaxYIndex(); t++)
+			{
 				for (q = 1; q < grid->getMaxXIndex(); q++)
 				{
 					// calculate the absolute grid index the hard way (faster!)
@@ -241,14 +243,19 @@ namespace BALL
 							grid_pointer = (long)&(grid->data[idx]);
 							fast_sphere_end = &(fast_sphere_relative[relative_count - 1]);
 
-							for (sphere_pointer = fast_sphere_relative; sphere_pointer <= fast_sphere_end; sphere_pointer++){
+							for (sphere_pointer = fast_sphere_relative; sphere_pointer <= fast_sphere_end; sphere_pointer++)
+							{
 								grid_pointer += *sphere_pointer;
 								if ((grid_pointer <= grid_end) && (grid_pointer >= grid_begin))
+								{
 									*((char*)grid_pointer) |= CCONN__INSIDE_PROBE;
+								}
 							}
 						}
 					}
 				}
+			}
+		}
 
 		delete [] fast_sphere_relative;
 

@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.25.4.3 2002/11/30 11:18:14 oliver Exp $
+// $Id: socket.C,v 1.25.4.4 2002/12/08 17:01:31 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -1261,7 +1261,7 @@ namespace BALL
 	}
 
 	IOStreamSocket::IOStreamSocket(SocketBuf::type ty, int proto)
-		throw()
+		throw(Exception::NullPointer)
 		:	IOSockStream(new SockInetBuf(ty, proto))
 	{
 		if (rdbuf() == 0)
@@ -1271,7 +1271,7 @@ namespace BALL
 	}
 
 	IOStreamSocket::IOStreamSocket(const SocketBuf& sb)
-		throw()
+		throw(Exception::NullPointer)
 		: IOSockStream(new SockInetBuf(sb))
 	{
 		if (rdbuf() == 0)

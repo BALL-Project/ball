@@ -1,4 +1,4 @@
-// $Id: TRRFile.C,v 1.2.4.1 2002/12/01 21:45:23 oliver Exp $
+// $Id: TRRFile.C,v 1.2.4.2 2002/12/08 17:01:31 oliver Exp $
 
 #include <BALL/FORMAT/TRRFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -308,9 +308,10 @@ namespace BALL
 		header_.number_of_atoms = noa;
 
 		header_.bounding_box_data_size = 
-			                     (box1_.y == box1_.z == 
-				                    box2_.x == box2_.z ==
-				                    box3_.x == box3_.y == 0.0) ? 3*precision_ : 9*precision_;
+			                     (((box1_.y == 0.0) && (box1_.z == 0.0)  
+				                    && (box2_.x == 0.0) && (box2_.z == 0.0)
+				                    && (box3_.x == 0.0) && (box3_.y == 0.0)) 
+															? (3 * precision_) : (9 * precision_));
 
 		header_.position_data_size = precision_ * noa;
 		header_.velocity_data_size = (has_velocities_) ? precision_ * noa : 0;

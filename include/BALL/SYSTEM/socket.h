@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.24.4.3 2002/12/03 21:43:32 oliver Exp $
+// $Id: socket.h,v 1.24.4.4 2002/12/08 17:01:31 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -998,11 +998,11 @@ namespace BALL
 
 		///
 		IOStreamSocket(const SocketBuf& sb)	
-			throw();
+			throw(Exception::NullPointer);
 				
 		///
 		IOStreamSocket(SocketBuf::type ty=SocketBuf::sock_stream, int proto = 0)
-			throw();
+			throw(Exception::NullPointer);
 		
 		/// Destructor 
 		virtual ~IOStreamSocket()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.31.4.3 2002/12/03 10:08:48 oliver Exp $
+// $Id: reducedSurface.h,v 1.31.4.4 2002/12/08 17:01:31 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -783,7 +783,7 @@ namespace BALL
 				Index atom1,
 				Index atom2,
 				Index atom3)
-			throw();
+				throw(Exception::GeneralException);
 
 		/*_
 		*/
@@ -3634,7 +3634,7 @@ namespace BALL
 			Index atom1,
 			Index atom2,
 			Index atom3)
-		throw()
+			throw(Exception::GeneralException)
 	{
 				#ifdef print_rs_debug_info
 				std::cout << "check probe sphere " << probe << " with atom ...\n";

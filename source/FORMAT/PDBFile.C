@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.26.4.1 2002/08/16 15:36:30 anhi Exp $
+// $Id: PDBFile.C,v 1.26.4.2 2002/12/08 17:01:31 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -340,7 +340,7 @@ namespace BALL
 		
 		new_sheet_secstruc_list_.push_back(sec_struc);
 		sec_struc->setProperty(SecondaryStructure::PROPERTY__STRAND);
-		sec_struc->setProperty("STRAND_SENSE", (void *)sense_of_strand);
+		sec_struc->setProperty("STRAND_SENSE", (void*)sense_of_strand);
 		
 		sheet_list_.push_back(partner_residue);
 		

@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.h,v 1.13.4.1 2002/12/01 21:45:23 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.13.4.2 2002/12/08 17:01:31 oliver Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -89,7 +89,7 @@ namespace BALL
 				@exception ParseError if the contents of the file could not be parsed
 		*/
 		virtual void init(const String& filename = "NMR/StandardSpectrum.ini")
-			throw();
+			throw(Exception::FileNotFound, Exception::ParseError);
 
 		/**	Start method.
 		*/

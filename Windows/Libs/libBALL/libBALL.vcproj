@@ -27,11 +27,11 @@
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				WarningLevel="0"
+				WarningLevel="1"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="2"
-				DisableSpecificWarnings="4311"/>
+				DisableSpecificWarnings="4311;4129;4355"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool

@@ -1,4 +1,4 @@
-// $Id: TRRFile.h,v 1.2.4.1 2002/12/06 10:20:09 oliver Exp $
+// $Id: TRRFile.h,v 1.2.4.2 2002/12/08 17:01:31 oliver Exp $
 
 #ifndef BALL_FORMAT_TRRFILE_H
 #define BALL_FORMAT_TRRFILE_H
@@ -273,7 +273,7 @@ namespace BALL
 			throw();
 
 		///
-		bool setPrecision(const Size newprecision)
+		bool setPrecision(const Size precision)
 			throw();
 
 		///

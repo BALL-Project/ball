@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.19.4.7 2002/11/26 19:36:36 oliver Exp $
+// $Id: enumerator.h,v 1.19.4.8 2002/12/08 17:01:31 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -419,7 +419,7 @@ namespace BALL
 		    @param index the number of the combination to be created
 		 */
 		void createCombination(const Position index)
-			throw();
+			throw(Exception::IndexOverflow);
 
 		/** Create a combination denoted by an instance of EnumeratorIndex.
 				@param index the instance of EnumeratorIndex that describes the
@@ -672,7 +672,7 @@ namespace BALL
 	
 	template <typename Container, typename SiteIterator, typename Variant>
 	void Enumerator<Container, SiteIterator, Variant>::createCombination(const Position index)
-		throw()
+		throw(Exception::IndexOverflow)
 	{
 		try
 		{
