@@ -1,0 +1,13 @@
+// $Id: fileDialog.iC,v 1.1 2000/09/23 12:49:22 hekl Exp $
+
+BALL_INLINE
+const string& FileDialog::getPathName() const
+{
+	return dir_path_;
+}
+
+BALL_INLINE
+const string& FileDialog::getFileName() const
+{
+	return filename_;
+}
