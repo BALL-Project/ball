@@ -1,0 +1,20 @@
+// $Id: charmmImproperTorsion.sip,v 1.1 2000/07/18 17:02:15 oliver Exp $
+
+class CharmmImproperTorsion 
+  : ForceFieldComponent
+{
+%HeaderCode
+	#include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
+	using namespace BALL;
+%End
+  public:
+  // BALL_CREATE(CharmmImproperTorsion)
+  CharmmImproperTorsion();
+  CharmmImproperTorsion(ForceField& /force_field/);
+  CharmmImproperTorsion(const CharmmImproperTorsion& /charmm_stretch/, bool /clone_deep/ = true);
+  ~CharmmImproperTorsion();
+  virtual bool setup();
+  virtual double updateEnergy();
+  virtual void updateForces();
+};
+  

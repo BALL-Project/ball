@@ -1,0 +1,107 @@
+#include "sipBALLDeclBALL.h"
+#include "sipBALLPyFragmentList.h"
+
+
+
+PyObject *sipConvertFrom_PyFragmentList(const PyFragmentList *sipCpp)
+{
+	if (sipCpp == NULL)
+	{
+		Py_INCREF(Py_None);
+		return Py_None;
+	}
+
+#line 12 "pyFragmentList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+		return NULL;
+
+	// Convert the list.
+
+	for (PyFragmentList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		Fragment& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 40 "./sipBALLPyFragmentList.cpp"
+}
+
+PyObject *sipClass_PyFragmentList;
+
+int sipCanConvertTo_PyFragmentList(PyObject *sipPy)
+{
+#line 35 "pyFragmentList.sip"
+	return PyList_Check(sipPy);
+#line 49 "./sipBALLPyFragmentList.cpp"
+}
+
+int sipConvertTo_PyFragmentList(PyObject *sipPy,PyFragmentList **sipCppPtr,int sipNoNull,int *sipIsErr)
+{
+	if (*sipIsErr || sipPy == NULL)
+		return false;
+
+	if (sipPy == Py_None)
+	{
+		if (sipNoNull)
+			sipNullArgument(sipName_BALL_PyFragmentList);
+		else
+			*sipCppPtr = NULL;
+
+		return false;
+	}
+
+#line 39 "pyFragmentList.sip"
+	// Convert a Python list of Fragment instances to an FragmentList object on the
+	// heap.
+ 
+	PyFragmentList *fragment_list = new PyFragmentList;
+ 
+	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
+	{
+		Fragment* fragment;
+ 
+		fragment = sipForceConvertTo_Fragment(PyList_GET_ITEM(sipPy,i),sipIsErr);
+ 
+		if (*sipIsErr)
+		{
+			delete fragment_list;
+			return 0;
+		}
+ 
+		fragment_list -> push_back(fragment);
+	}
+ 
+	*sipCppPtr = fragment_list;
+
+	return 1;
+#line 91 "./sipBALLPyFragmentList.cpp"
+}
+
+PyFragmentList *sipForceConvertTo_PyFragmentList(PyObject *valobj,int *iserrp)
+{
+	if (*iserrp || valobj == NULL || valobj == Py_None)
+		return NULL;
+
+	if (sipCanConvertTo_PyFragmentList(valobj))
+	{
+		PyFragmentList *val;
+
+		sipConvertTo_PyFragmentList(valobj,&val,0,iserrp);
+
+		return val;
+	}
+
+	sipBadClass(sipName_BALL_PyFragmentList);
+	*iserrp = 1;
+
+	return NULL;
+}

@@ -1,0 +1,109 @@
+#include "sipBALLDeclBALL.h"
+#include "sipBALLPyResidueList.h"
+
+
+
+PyObject *sipConvertFrom_PyResidueList(const PyResidueList *sipCpp)
+{
+	if (sipCpp == NULL)
+	{
+		Py_INCREF(Py_None);
+		return Py_None;
+	}
+
+#line 12 "pyResidueList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyResidueList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		Residue& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 42 "./sipBALLPyResidueList.cpp"
+}
+
+PyObject *sipClass_PyResidueList;
+
+int sipCanConvertTo_PyResidueList(PyObject *sipPy)
+{
+#line 37 "pyResidueList.sip"
+	return PyList_Check(sipPy);
+#line 51 "./sipBALLPyResidueList.cpp"
+}
+
+int sipConvertTo_PyResidueList(PyObject *sipPy,PyResidueList **sipCppPtr,int sipNoNull,int *sipIsErr)
+{
+	if (*sipIsErr || sipPy == NULL)
+		return false;
+
+	if (sipPy == Py_None)
+	{
+		if (sipNoNull)
+			sipNullArgument(sipName_BALL_PyResidueList);
+		else
+			*sipCppPtr = NULL;
+
+		return false;
+	}
+
+#line 41 "pyResidueList.sip"
+	// Convert a Python list of Residue instances to an ResidueList object on the
+	// heap.
+ 
+	PyResidueList *residue_list = new PyResidueList;
+ 
+	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
+	{
+		Residue* residue;
+ 
+		residue = sipForceConvertTo_Residue(PyList_GET_ITEM(sipPy,i),sipIsErr);
+ 
+		if (*sipIsErr)
+		{
+			delete residue_list;
+			return 0;
+		}
+ 
+		residue_list -> push_back(residue);
+	}
+ 
+	*sipCppPtr = residue_list;
+
+	return 1;
+#line 93 "./sipBALLPyResidueList.cpp"
+}
+
+PyResidueList *sipForceConvertTo_PyResidueList(PyObject *valobj,int *iserrp)
+{
+	if (*iserrp || valobj == NULL || valobj == Py_None)
+		return NULL;
+
+	if (sipCanConvertTo_PyResidueList(valobj))
+	{
+		PyResidueList *val;
+
+		sipConvertTo_PyResidueList(valobj,&val,0,iserrp);
+
+		return val;
+	}
+
+	sipBadClass(sipName_BALL_PyResidueList);
+	*iserrp = 1;
+
+	return NULL;
+}

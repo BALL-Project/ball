@@ -1,0 +1,390 @@
+#include "sipBALLDeclBALL.h"
+#include "sipBALLXYZFile.h"
+
+
+
+PyObject *sipClass_XYZFile;
+
+static void sipDealloc_XYZFile(sipThisType *);
+
+static PyTypeObject sipType_XYZFile = {
+	PyObject_HEAD_INIT(&PyType_Type)
+	0,
+	sipName_BALL_XYZFile,
+	sizeof (sipThisType),
+	0,
+	(destructor)sipDealloc_XYZFile,
+	0,
+	0,
+	0,
+	0,
+	0,
+};
+
+sipXYZFile::sipXYZFile(): XYZFile()
+{
+	sipCommonCtor(sipPyMethods,2);
+}
+
+sipXYZFile::sipXYZFile(const String& a0,OpenMode a1): XYZFile(a0,a1)
+{
+	sipCommonCtor(sipPyMethods,2);
+}
+
+sipXYZFile::sipXYZFile(const XYZFile& a0): XYZFile(a0)
+{
+	sipCommonCtor(sipPyMethods,2);
+}
+
+sipXYZFile::~sipXYZFile()
+{
+	sipCommonDtor(sipPyThis);
+}
+void sipXYZFile::write(const System& a0)
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_write,&relLock))
+		sipXYZFile::sipVH_write(&sipPyMethods[0],sipPyThis,relLock,a0);
+	else
+		XYZFile::write(a0);
+}
+void sipXYZFile::read(System& a0)
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_read,&relLock))
+		sipXYZFile::sipVH_read(&sipPyMethods[1],sipPyThis,relLock,a0);
+	else
+		XYZFile::read(a0);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipXYZFile::sipVH_write(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const System& a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+	PyObject *a0obj;
+
+	a0obj = sipMapCppToSelf(&a0,sipClass_System);
+
+	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
+
+	Py_XDECREF(a0obj);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_XYZFile,sipName_BALL_write);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipXYZFile::sipVH_read(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,System& a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+	PyObject *a0obj;
+
+	a0obj = sipMapCppToSelf(&a0,sipClass_System);
+
+	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
+
+	Py_XDECREF(a0obj);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_XYZFile,sipName_BALL_read);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+static PyObject *sipDo_XYZFile_write(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_XYZFile)) == NULL)
+		return NULL;
+
+	{
+		const System *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		{
+			XYZFile *ptr;
+
+			if ((ptr = (XYZFile *)sipGetCppPtr(sipThis,sipClass_XYZFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_System(a0obj,(System **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			ptr -> XYZFile::write(* a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_XYZFile,sipName_BALL_write);
+
+	return NULL;
+}
+
+static PyObject *sipDo_XYZFile_read(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_XYZFile)) == NULL)
+		return NULL;
+
+	{
+		System *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		{
+			XYZFile *ptr;
+
+			if ((ptr = (XYZFile *)sipGetCppPtr(sipThis,sipClass_XYZFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_System(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			ptr -> XYZFile::read(* a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_XYZFile,sipName_BALL_read);
+
+	return NULL;
+}
+
+// Cast a pointer to a type somewhere in its superclass hierachy.
+
+const void *sipCast_XYZFile(const void *ptr,PyObject *targetClass)
+{
+	const void *res;
+
+	if (targetClass == sipClass_XYZFile)
+		return ptr;
+
+	if ((res = sipCast_File((File *)(XYZFile *)ptr,targetClass)) != NULL)
+		return res;
+
+	return NULL;
+}
+
+static void sipDealloc_XYZFile(sipThisType *sipThis)
+{
+	if (sipThis -> u.cppPtr != NULL)
+	{
+		if (!sipIsSimple(sipThis))
+			((sipXYZFile *)sipThis -> u.cppPtr) -> sipPyThis = NULL;
+
+		if (sipIsPyOwned(sipThis))
+			if (sipIsSimple(sipThis))
+				delete (XYZFile *)sipThis -> u.cppPtr;
+			else
+				delete (sipXYZFile *)sipThis -> u.cppPtr;
+	}
+
+	sipDeleteThis(sipThis);
+}
+
+PyObject *sipNew_XYZFile(PyObject *sipSelf,PyObject *sipArgs)
+{
+	static sipExtraType et = {
+		sipCast_XYZFile
+	};
+
+	sipThisType *sipThis = NULL;
+	const void *sipNew = NULL;
+	int sipFlags = SIP_PY_OWNED;
+
+	// See if there is something pending.
+
+	sipNew = sipGetPending(&sipFlags);
+
+	if (sipNew == NULL)
+	{
+		if (sipParseArgs(sipArgs,"-"))
+		{
+			sipNew = new sipXYZFile();
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		const String *a0;
+		PyObject *a0obj;
+		OpenMode *a1 = (OpenMode *)&File::IN;
+		PyObject *a1obj = NULL;
+
+		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_OpenMode,&a1obj))
+		{
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+			int istemp1 = sipConvertTo_OpenMode(a1obj,&a1,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			sipNew = new sipXYZFile(* a0,* a1);
+
+			if (istemp0)
+				delete a0;
+
+			if (istemp1)
+				delete a1;
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		const XYZFile *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_XYZFile,&a0obj))
+		{
+			int iserr = 0;
+
+			sipConvertTo_XYZFile(a0obj,(XYZFile **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			sipNew = new sipXYZFile(* a0);
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		sipNoCtor(sipName_BALL_XYZFile);
+		return NULL;
+	}
+
+	// Wrap the object.
+
+	if ((sipThis = sipCreateThis(sipSelf,sipNew,&sipType_XYZFile,sipFlags,&et)) == NULL)
+	{
+		if (sipFlags & SIP_PY_OWNED)
+			if (sipFlags & SIP_SIMPLE)
+				delete (XYZFile *)sipNew;
+			else
+				delete (sipXYZFile *)sipNew;
+
+		return NULL;
+	}
+
+	if (!(sipFlags & SIP_SIMPLE))
+		((sipXYZFile *)sipNew) -> sipPyThis = sipThis;
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+PyMethodDef sipClassAttrTab_XYZFile[] = {
+	{sipName_BALL_write, sipDo_XYZFile_write, METH_VARARGS, NULL},
+	{sipName_BALL_read, sipDo_XYZFile_read, METH_VARARGS, NULL},
+	{NULL}
+};
+
+int sipCanConvertTo_XYZFile(PyObject *sipPy)
+{
+	return sipIsSubClassInstance(sipPy,sipClass_XYZFile);
+}
+
+void sipConvertTo_XYZFile(PyObject *sipPy,XYZFile **sipCppPtr,int sipNoNull,int *sipIsErr)
+{
+	if (*sipIsErr || sipPy == NULL)
+		return;
+
+	if (sipPy == Py_None)
+	{
+		if (sipNoNull)
+			sipNullArgument(sipName_BALL_XYZFile);
+		else
+			*sipCppPtr = NULL;
+
+		return;
+	}
+
+	*sipCppPtr = (XYZFile *)sipConvertToCpp(sipPy,sipClass_XYZFile,sipIsErr);
+}
+
+XYZFile *sipForceConvertTo_XYZFile(PyObject *valobj,int *iserrp)
+{
+	if (*iserrp || valobj == NULL || valobj == Py_None)
+		return NULL;
+
+	if (sipCanConvertTo_XYZFile(valobj))
+	{
+		XYZFile *val;
+
+		sipConvertTo_XYZFile(valobj,&val,0,iserrp);
+
+		return val;
+	}
+
+	sipBadClass(sipName_BALL_XYZFile);
+	*iserrp = 1;
+
+	return NULL;
+}

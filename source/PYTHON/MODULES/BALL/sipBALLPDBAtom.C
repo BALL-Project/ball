@@ -1,0 +1,979 @@
+#include "sipBALLDeclBALL.h"
+#include "sipBALLPDBAtom.h"
+
+
+
+PyObject *sipClass_PDBAtom;
+
+static void sipDealloc_PDBAtom(sipThisType *);
+static PyObject *sipPyInternalRepr_PDBAtom(sipThisType *);
+
+static PyTypeObject sipType_PDBAtom = {
+	PyObject_HEAD_INIT(&PyType_Type)
+	0,
+	sipName_BALL_PDBAtom,
+	sizeof (sipThisType),
+	0,
+	(destructor)sipDealloc_PDBAtom,
+	0,
+	0,
+	0,
+	0,
+	(reprfunc)sipPyInternalRepr_PDBAtom,
+};
+
+sipPDBAtom::sipPDBAtom(): PDBAtom()
+{
+	sipCommonCtor(sipPyMethods,5);
+}
+
+sipPDBAtom::sipPDBAtom(const PDBAtom& a0,bool a1): PDBAtom(a0,a1)
+{
+	sipCommonCtor(sipPyMethods,5);
+}
+
+sipPDBAtom::sipPDBAtom(Element& a0,const String& a1,const String& a2,AtomType a3,const Vector3& a4,const Vector3& a5,const Vector3& a6,float a7,float a8,char a9,char a10,char a11,float a12,float a13): PDBAtom(a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
+{
+	sipCommonCtor(sipPyMethods,5);
+}
+
+sipPDBAtom::sipPDBAtom(const PDBAtom& a0): PDBAtom(a0)
+{
+	sipCommonCtor(sipPyMethods,5);
+}
+
+sipPDBAtom::~sipPDBAtom()
+{
+	sipCommonDtor(sipPyThis);
+}
+void sipPDBAtom::select()
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_select,&relLock))
+		sipSelectable::sipVH_select(&sipPyMethods[0],sipPyThis,relLock);
+	else
+		Composite::select();
+}
+void sipPDBAtom::deselect()
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
+		sipSelectable::sipVH_deselect(&sipPyMethods[1],sipPyThis,relLock);
+	else
+		Composite::deselect();
+}
+void sipPDBAtom::clear()
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipObject::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
+	else
+		PDBAtom::clear();
+}
+void sipPDBAtom::destroy()
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_destroy,&relLock))
+		sipObject::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
+	else
+		PDBAtom::destroy();
+}
+bool sipPDBAtom::isValid() const
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipObject::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
+		PDBAtom::isValid();
+}
+
+static PyObject *sipDo_PDBAtom_clear(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			ptr -> PDBAtom::clear();
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_clear);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			ptr -> PDBAtom::destroy();
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_destroy);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		const PDBAtom *a0;
+		PyObject *a0obj;
+		long a1 = true;
+
+		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_PDBAtom,&a0obj,&a1))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_PDBAtom(a0obj,(PDBAtom **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			ptr -> PDBAtom::set(* a0, (bool)a1);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_set);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		PDBAtom *a0;
+		PyObject *a0obj;
+		long a1 = true;
+
+		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_PDBAtom,&a0obj,&a1))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_PDBAtom(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			ptr -> PDBAtom::get(* a0, (bool)a1);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_get);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		PDBAtom *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_PDBAtom(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			ptr -> PDBAtom::swap(* a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_swap);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			Protein *res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getProtein();
+
+			return sipMapCppToSelf(res,sipClass_Protein);
+		}
+	}
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			const Protein *res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getProtein();
+
+			return sipMapCppToSelf(res,sipClass_Protein);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getProtein);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			Chain *res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getChain();
+
+			return sipMapCppToSelf(res,sipClass_Chain);
+		}
+	}
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			const Chain *res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getChain();
+
+			return sipMapCppToSelf(res,sipClass_Chain);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getChain);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			Residue *res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getResidue();
+
+			return sipMapCppToSelf(res,sipClass_Residue);
+		}
+	}
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			const Residue *res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getResidue();
+
+			return sipMapCppToSelf(res,sipClass_Residue);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getResidue);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_setBranchDesignator(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		char a0;
+
+		if (sipParseArgs(sipArgs,"c",&a0))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			ptr -> PDBAtom::setBranchDesignator( a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setBranchDesignator);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_getBranchDesignator(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			char res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getBranchDesignator();
+
+			return PyString_FromStringAndSize(&res,1);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getBranchDesignator);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_setRemotenessIndicator(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		char a0;
+
+		if (sipParseArgs(sipArgs,"c",&a0))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			ptr -> PDBAtom::setRemotenessIndicator( a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setRemotenessIndicator);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_getRemotenessIndicator(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			char res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getRemotenessIndicator();
+
+			return PyString_FromStringAndSize(&res,1);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getRemotenessIndicator);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_setAlternateLocationIndicator(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		char a0;
+
+		if (sipParseArgs(sipArgs,"c",&a0))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			ptr -> PDBAtom::setAlternateLocationIndicator( a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setAlternateLocationIndicator);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_getAlternateLocationIndicator(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			char res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getAlternateLocationIndicator();
+
+			return PyString_FromStringAndSize(&res,1);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getAlternateLocationIndicator);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_setOccupancy(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		float a0;
+
+		if (sipParseArgs(sipArgs,"f",&a0))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			ptr -> PDBAtom::setOccupancy( a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setOccupancy);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_getOccupancy(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			float res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getOccupancy();
+
+			return PyFloat_FromDouble((double)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getOccupancy);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_setTemperatureFactor(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		float a0;
+
+		if (sipParseArgs(sipArgs,"f",&a0))
+		{
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			ptr -> PDBAtom::setTemperatureFactor( a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setTemperatureFactor);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_getTemperatureFactor(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			float res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::getTemperatureFactor();
+
+			return PyFloat_FromDouble((double)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getTemperatureFactor);
+
+	return NULL;
+}
+
+static PyObject *sipDo_PDBAtom_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			bool res;
+			PDBAtom *ptr;
+
+			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+				return NULL;
+
+			res = ptr -> PDBAtom::isValid();
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_isValid);
+
+	return NULL;
+}
+
+// Cast a pointer to a type somewhere in its superclass hierachy.
+
+const void *sipCast_PDBAtom(const void *ptr,PyObject *targetClass)
+{
+	const void *res;
+
+	if (targetClass == sipClass_PDBAtom)
+		return ptr;
+
+	if ((res = sipCast_Atom((Atom *)(PDBAtom *)ptr,targetClass)) != NULL)
+		return res;
+
+	return NULL;
+}
+
+static void sipDealloc_PDBAtom(sipThisType *sipThis)
+{
+	if (sipThis -> u.cppPtr != NULL)
+	{
+		if (!sipIsSimple(sipThis))
+			((sipPDBAtom *)sipThis -> u.cppPtr) -> sipPyThis = NULL;
+
+		if (sipIsPyOwned(sipThis))
+			if (sipIsSimple(sipThis))
+				delete (PDBAtom *)sipThis -> u.cppPtr;
+			else
+				delete (sipPDBAtom *)sipThis -> u.cppPtr;
+	}
+
+	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_PDBAtom(sipThisType *sipThis)
+{
+#line 59 "PDBAtom.sip"
+  PDBAtom* ptr;
+  if ((ptr = (PDBAtom*)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("PDBAtom ") + ptr->getName()
+        + " { " + ptr->getElement().getSymbol() + " @ ("
+        + String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " "
+        + String(ptr->getPosition().z) + " }").c_str());
+#line 780 "./sipBALLPDBAtom.cpp"
+}
+
+PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
+{
+	static sipExtraType et = {
+		sipCast_PDBAtom
+	};
+
+	sipThisType *sipThis = NULL;
+	const void *sipNew = NULL;
+	int sipFlags = SIP_PY_OWNED;
+
+	// See if there is something pending.
+
+	sipNew = sipGetPending(&sipFlags);
+
+	if (sipNew == NULL)
+	{
+		if (sipParseArgs(sipArgs,"-"))
+		{
+			sipNew = new sipPDBAtom();
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		const PDBAtom *a0;
+		PyObject *a0obj;
+		long a1 = true;
+
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_PDBAtom,&a0obj,&a1))
+		{
+			int iserr = 0;
+
+			sipConvertTo_PDBAtom(a0obj,(PDBAtom **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			sipNew = new sipPDBAtom(* a0, (bool)a1);
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		Element *a0;
+		PyObject *a0obj;
+		const String *a1;
+		PyObject *a1obj;
+		const String *a2;
+		PyObject *a2obj;
+		AtomType *a3;
+		PyObject *a3obj;
+		const Vector3 *a4;
+		PyObject *a4obj;
+		const Vector3 *a5;
+		PyObject *a5obj;
+		const Vector3 *a6;
+		PyObject *a6obj;
+		float a7;
+		float a8;
+		char a9;
+		char a10;
+		char a11;
+		float a12;
+		float a13;
+
+		if (sipParseArgs(sipArgs,"-IIIIIIIffcccff",sipCanConvertTo_Element,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_String,&a2obj,sipCanConvertTo_AtomType,&a3obj,sipCanConvertTo_Vector3,&a4obj,sipCanConvertTo_Vector3,&a5obj,sipCanConvertTo_Vector3,&a6obj,&a7,&a8,&a9,&a10,&a11,&a12,&a13))
+		{
+			int iserr = 0;
+
+			sipConvertTo_Element(a0obj,&a0,1,&iserr);
+			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
+			int istemp2 = sipConvertTo_String(a2obj,(String **)&a2,1,&iserr);
+			int istemp3 = sipConvertTo_AtomType(a3obj,&a3,1,&iserr);
+			sipConvertTo_Vector3(a4obj,(Vector3 **)&a4,1,&iserr);
+			sipConvertTo_Vector3(a5obj,(Vector3 **)&a5,1,&iserr);
+			sipConvertTo_Vector3(a6obj,(Vector3 **)&a6,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			sipNew = new sipPDBAtom(* a0,* a1,* a2,* a3,* a4,* a5,* a6, a7, a8, a9, a10, a11, a12, a13);
+
+			if (istemp1)
+				delete a1;
+
+			if (istemp2)
+				delete a2;
+
+			if (istemp3)
+				delete a3;
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		const PDBAtom *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PDBAtom,&a0obj))
+		{
+			int iserr = 0;
+
+			sipConvertTo_PDBAtom(a0obj,(PDBAtom **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			sipNew = new sipPDBAtom(* a0);
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		sipNoCtor(sipName_BALL_PDBAtom);
+		return NULL;
+	}
+
+	// Wrap the object.
+
+	if ((sipThis = sipCreateThis(sipSelf,sipNew,&sipType_PDBAtom,sipFlags,&et)) == NULL)
+	{
+		if (sipFlags & SIP_PY_OWNED)
+			if (sipFlags & SIP_SIMPLE)
+				delete (PDBAtom *)sipNew;
+			else
+				delete (sipPDBAtom *)sipNew;
+
+		return NULL;
+	}
+
+	if (!(sipFlags & SIP_SIMPLE))
+		((sipPDBAtom *)sipNew) -> sipPyThis = sipThis;
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+PyMethodDef sipClassAttrTab_PDBAtom[] = {
+	{sipName_BALL_clear, sipDo_PDBAtom_clear, METH_VARARGS, NULL},
+	{sipName_BALL_destroy, sipDo_PDBAtom_destroy, METH_VARARGS, NULL},
+	{sipName_BALL_set, sipDo_PDBAtom_set, METH_VARARGS, NULL},
+	{sipName_BALL_get, sipDo_PDBAtom_get, METH_VARARGS, NULL},
+	{sipName_BALL_swap, sipDo_PDBAtom_swap, METH_VARARGS, NULL},
+	{sipName_BALL_getProtein, sipDo_PDBAtom_getProtein, METH_VARARGS, NULL},
+	{sipName_BALL_getChain, sipDo_PDBAtom_getChain, METH_VARARGS, NULL},
+	{sipName_BALL_getResidue, sipDo_PDBAtom_getResidue, METH_VARARGS, NULL},
+	{sipName_BALL_setBranchDesignator, sipDo_PDBAtom_setBranchDesignator, METH_VARARGS, NULL},
+	{sipName_BALL_getBranchDesignator, sipDo_PDBAtom_getBranchDesignator, METH_VARARGS, NULL},
+	{sipName_BALL_setRemotenessIndicator, sipDo_PDBAtom_setRemotenessIndicator, METH_VARARGS, NULL},
+	{sipName_BALL_getRemotenessIndicator, sipDo_PDBAtom_getRemotenessIndicator, METH_VARARGS, NULL},
+	{sipName_BALL_setAlternateLocationIndicator, sipDo_PDBAtom_setAlternateLocationIndicator, METH_VARARGS, NULL},
+	{sipName_BALL_getAlternateLocationIndicator, sipDo_PDBAtom_getAlternateLocationIndicator, METH_VARARGS, NULL},
+	{sipName_BALL_setOccupancy, sipDo_PDBAtom_setOccupancy, METH_VARARGS, NULL},
+	{sipName_BALL_getOccupancy, sipDo_PDBAtom_getOccupancy, METH_VARARGS, NULL},
+	{sipName_BALL_setTemperatureFactor, sipDo_PDBAtom_setTemperatureFactor, METH_VARARGS, NULL},
+	{sipName_BALL_getTemperatureFactor, sipDo_PDBAtom_getTemperatureFactor, METH_VARARGS, NULL},
+	{sipName_BALL_isValid, sipDo_PDBAtom_isValid, METH_VARARGS, NULL},
+	{NULL}
+};
+
+int sipCanConvertTo_PDBAtom(PyObject *sipPy)
+{
+	return sipIsSubClassInstance(sipPy,sipClass_PDBAtom);
+}
+
+void sipConvertTo_PDBAtom(PyObject *sipPy,PDBAtom **sipCppPtr,int sipNoNull,int *sipIsErr)
+{
+	if (*sipIsErr || sipPy == NULL)
+		return;
+
+	if (sipPy == Py_None)
+	{
+		if (sipNoNull)
+			sipNullArgument(sipName_BALL_PDBAtom);
+		else
+			*sipCppPtr = NULL;
+
+		return;
+	}
+
+	*sipCppPtr = (PDBAtom *)sipConvertToCpp(sipPy,sipClass_PDBAtom,sipIsErr);
+}
+
+PDBAtom *sipForceConvertTo_PDBAtom(PyObject *valobj,int *iserrp)
+{
+	if (*iserrp || valobj == NULL || valobj == Py_None)
+		return NULL;
+
+	if (sipCanConvertTo_PDBAtom(valobj))
+	{
+		PDBAtom *val;
+
+		sipConvertTo_PDBAtom(valobj,&val,0,iserrp);
+
+		return val;
+	}
+
+	sipBadClass(sipName_BALL_PDBAtom);
+	*iserrp = 1;
+
+	return NULL;
+}

@@ -1,0 +1,166 @@
+#include "sipBALLDeclBALL.h"
+#include "sipBALLBit.h"
+
+
+
+PyObject *sipClass_Bit;
+
+static void sipDealloc_Bit(sipThisType *);
+
+static PyTypeObject sipType_Bit = {
+	PyObject_HEAD_INIT(&PyType_Type)
+	0,
+	sipName_BALL_Bit,
+	sizeof (sipThisType),
+	0,
+	(destructor)sipDealloc_Bit,
+	0,
+	0,
+	0,
+	0,
+	0,
+};
+
+// Cast a pointer to a type somewhere in its superclass hierachy.
+
+const void *sipCast_Bit(const void *ptr,PyObject *targetClass)
+{
+	if (targetClass == sipClass_Bit)
+		return ptr;
+
+	return NULL;
+}
+
+static void sipDealloc_Bit(sipThisType *sipThis)
+{
+	if (sipThis -> u.cppPtr != NULL)
+	{
+		if (sipIsPyOwned(sipThis))
+			delete (Bit *)sipThis -> u.cppPtr;
+	}
+
+	sipDeleteThis(sipThis);
+}
+
+PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
+{
+	static sipExtraType et = {
+		sipCast_Bit
+	};
+
+	sipThisType *sipThis = NULL;
+	const void *sipNew = NULL;
+	int sipFlags = SIP_PY_OWNED;
+
+	// See if there is something pending.
+
+	sipNew = sipGetPending(&sipFlags);
+
+	if (sipNew == NULL)
+	{
+		const BitVector *a0;
+		PyObject *a0obj;
+		Index *a1 = NULL;
+		PyObject *a1obj = NULL;
+
+		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_BitVector,&a0obj,sipCanConvertTo_Index,&a1obj))
+		{
+			int iserr = 0;
+
+			sipConvertTo_BitVector(a0obj,(BitVector **)&a0,1,&iserr);
+			int istemp1 = sipConvertTo_Index(a1obj,&a1,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			sipNew = new Bit(* a0,* a1);
+
+			if (istemp1)
+				delete a1;
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		const Bit *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Bit,&a0obj))
+		{
+			int iserr = 0;
+
+			sipConvertTo_Bit(a0obj,(Bit **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			sipNew = new Bit(* a0);
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		sipNoCtor(sipName_BALL_Bit);
+		return NULL;
+	}
+
+	// Wrap the object.
+
+	if ((sipThis = sipCreateThis(sipSelf,sipNew,&sipType_Bit,sipFlags,&et)) == NULL)
+	{
+		if (sipFlags & SIP_PY_OWNED)
+			delete (Bit *)sipNew;
+
+		return NULL;
+	}
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+PyMethodDef sipClassAttrTab_Bit[] = {
+	{NULL}
+};
+
+int sipCanConvertTo_Bit(PyObject *sipPy)
+{
+	return sipIsSubClassInstance(sipPy,sipClass_Bit);
+}
+
+void sipConvertTo_Bit(PyObject *sipPy,Bit **sipCppPtr,int sipNoNull,int *sipIsErr)
+{
+	if (*sipIsErr || sipPy == NULL)
+		return;
+
+	if (sipPy == Py_None)
+	{
+		if (sipNoNull)
+			sipNullArgument(sipName_BALL_Bit);
+		else
+			*sipCppPtr = NULL;
+
+		return;
+	}
+
+	*sipCppPtr = (Bit *)sipConvertToCpp(sipPy,sipClass_Bit,sipIsErr);
+}
+
+Bit *sipForceConvertTo_Bit(PyObject *valobj,int *iserrp)
+{
+	if (*iserrp || valobj == NULL || valobj == Py_None)
+		return NULL;
+
+	if (sipCanConvertTo_Bit(valobj))
+	{
+		Bit *val;
+
+		sipConvertTo_Bit(valobj,&val,0,iserrp);
+
+		return val;
+	}
+
+	sipBadClass(sipName_BALL_Bit);
+	*iserrp = 1;
+
+	return NULL;
+}
