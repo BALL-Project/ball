@@ -27,7 +27,7 @@
 			<A HREF="INTRO.html"> introduction</A>
 		</td>
 		<td width=33% align=center>
-			<A HREF="aindex.html"> alphabetic index</A>
+			<A HREF="index.html"> index</A>
 		</td>
 		<td width=33% align=center>
 			<A HREF="HIER.html"> hierarchy of classes</A>
