@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.3 1999/12/28 17:50:06 oliver Exp $
+// $Id: snapShot.C,v 1.4 2000/01/08 12:22:28 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h> 
@@ -91,14 +91,12 @@ namespace BALL
   // It the file is already existent, the header will read in and compared
   // with the given system. They must match. Subsequent snapshots will
   // be appended to the file.
-  SnapShotManager::SnapShotManager(System &my_system,
-                                   ForceField &my_forcefield,
-                                   char  *my_snapshot_file) 
-    {
-    // create empty options and call the setup method
-    Options options; 
-    valid_ = setup(my_system,my_forcefield,my_snapshot_file,options);
-    }
+  SnapShotManager::SnapShotManager
+		(System& my_system, ForceField& my_forcefield, char* my_snapshot_file) 
+  {
+    // call the setup method
+    valid_ = setup(my_system, my_forcefield, my_snapshot_file, options);
+  }
 
 
   // The constructor of the SnapshotManager.
