@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.33 2001/05/10 22:53:18 oliver Exp $
+// $Id: string.iC,v 1.34 2001/05/12 12:30:29 amoll Exp $
 
 BALL_INLINE 
 String::String()
@@ -108,48 +108,6 @@ bool Substring::operator != (const String& s) const
   return (s.compare(bound_->c_str() + from_, 0, to_ - from_ + 1) != 0);
 }
 
-BALL_INLINE 
-bool Substring::operator == (const char* char_ptr) const
-	throw(Substring::UnboundSubstring, Exception::NullPointer)
-{
-	if (bound_ == 0)
-	{
-		throw UnboundSubstring(__FILE__, __LINE__);
-	}
-
-	if (char_ptr == 0)
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-
-	// to prevent compiler warning:
-	if ((signed)strlen(char_ptr) != (to_ - from_ +1))
-	{
-		return false;
-	}
-  return (bound_->compare(char_ptr, from_, to_ - from_ + 1) == 0);
-}
-
-BALL_INLINE 
-bool Substring::operator != (const char* char_ptr) const
-	throw(Substring::UnboundSubstring, Exception::NullPointer)
-{
-	if (bound_ == 0)
-	{
-		throw UnboundSubstring(__FILE__, __LINE__);
-	}
-	if (char_ptr == 0)
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-	// to prevent compiler warning:
-	if ((signed)strlen(char_ptr) != (to_ - from_ +1))
-	{
-		return true;
-	}
-  return (bound_->compare(char_ptr, from_, to_ - from_ + 1) != 0);
-}
-
 BALL_INLINE
 Size Substring::size() const
 	throw()
@@ -227,20 +185,6 @@ Substring& Substring::bind(const String& s, Index from, Size len)
 }
 
 BALL_INLINE 
-Substring& Substring::bind(const Substring& s, Index from, Size len)
-	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
-{
-	s.validateRange_(from, len);
-
-  bound_ = s.bound_;
-  from 	+= s.from_;
-  to_ 	 = s.from_ + (Index)len - 1;
-  from_  = from;
-
-  return *this;
-}
-
-BALL_INLINE 
 void Substring::set(const String& s)
 	throw(Substring::UnboundSubstring)
 {
@@ -262,33 +206,6 @@ void Substring::set(const Substring& s)
 	}
 
   bound_->replace(from_, to_ - from_ + 1, s.bound_->c_str() + s.from_, s.size());
-}
-
-BALL_INLINE 
-void Substring::set(const char* char_ptr, Size size)
-	throw(Substring::UnboundSubstring, Exception::NullPointer, Exception::SizeUnderflow)
-{
-	if (bound_ == 0)
-	{
-		throw UnboundSubstring(__FILE__, __LINE__);
-	}
-	if (char_ptr == 0)
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-	if (size == 0)
-	{
-		throw Exception::SizeUnderflow(__FILE__, __LINE__);
-	}
-
-	if (size == String::EndPos)
-	{
-		bound_->replace(from_, to_ - from_ + 1, string(char_ptr));
-	}
-	else
-	{
-		bound_->replace(from_, to_ - from_ + 1, char_ptr, size);
-	}
 }
 
 BALL_INLINE 
@@ -429,35 +346,6 @@ int String::compare(char c, Index from) const
 	return (c_str()[from] - c);
 }
 
-BALL_INLINE 
-bool Substring::operator == (const Substring& s) const
-	throw(Substring::UnboundSubstring)
-{
-  if (bound_ == 0 || s.bound_ == 0)
-  {
-    throw UnboundSubstring(__FILE__, __LINE__);
-	}
-	if ((s.to_ - s.from_) != (to_ - from_))
-	{
-		return false;
-	}
-  return (bound_->compare(s.c_str() + from_, from_, to_ - from_ + 1) == 0);
-}
-
-BALL_INLINE 
-bool Substring::operator != (const Substring& s) const
-	throw(Substring::UnboundSubstring)
-{
-  if (bound_ == 0 || s.bound_ == 0)
-  {
-    throw UnboundSubstring(__FILE__, __LINE__);
-	} 
-	if ((s.to_ - s.from_) != (to_ - from_))
-	{
-		return true;
-	}
-  return (bound_->compare(s.c_str() + from_, from_, to_ - from_ + 1) != 0);
-}
 
 BALL_INLINE 
 bool Substring::operator == (char c) const
@@ -512,9 +400,6 @@ Substring& Substring::toUpper()
 	(*bound_).toUpper(from_, to_ - from_);
   return *this;
 }
-
-
-
 
 BALL_INLINE 
 const String& String::operator = (const String& s)
@@ -606,80 +491,6 @@ Substring String::operator () (Index from, Size len) const
 }
 
 BALL_INLINE 
-Substring String::before(const String& s, Index from) const
-	throw()
-{
-	string::size_type found = string::npos;
-	if (s != "")
-	{
-		found = find(s, from);
-	}
-
-	if (found == 0 || found == string::npos) 
-	{
-		return Substring(*this, 0, 0);
-	}
-
-	return getSubstring(0, found);
-}
-
-BALL_INLINE 
-Substring String::through (const String& s, Index from) const
-	throw()
-{
-	string::size_type found = string::npos;
-	if (s != "")
-	{
-		found = find(s, from); 
-	}
-
-	if (found == string::npos) 
-	{
-		return Substring(*this, 0, 0);
-	}
-
-  return getSubstring(0, (Size)found + (Size)s.size());
-}
-
-BALL_INLINE 
-Substring String::from(const String& s, Index from) const
-	throw()
-{
-	if (s == "")
-	{
-		return getSubstring(0);
-	}
-
-  string::size_type found = find(s, from); 
-
-	if (found == string::npos)
-	{
-		return Substring(*this, -1, 0);
-	}
-	
-	return getSubstring((Index)found);
-}
-
-BALL_INLINE 
-Substring String::after(const String& s, Index from) const
-	throw()
-{
-	if (s == "")
-	{
-		return getSubstring(0);
-	}
-
-  string::size_type found = find(s, from); 
-
-	if ((found == string::npos) || ((Size)found + s.size() >= size()))
-	{
-		return Substring(*this, -1, 0);
-	}
-
-  return getSubstring((Index)found + (Index)s.size());
-}
-
-BALL_INLINE 
 String& String::trim(const char* trimmed)
 	throw()
 {
@@ -712,44 +523,12 @@ Substring String::left(Size len) const
 }
 
 BALL_INLINE 
-Substring String::right(Size len) const
-	throw()
-{
-	// to save calls to size()
-	Size s = (Size)size();
-	if (len > s) 
-	{
-		len = s;
-	}
-
-	Index from = (Index)s - (Index)len;
-
-	if (len > 0) 
-	{
-	  from = (Index)s - (Index)len;
-	}
-	else 
-	{
-		if (s > 0)
-		{
-			from = (Index)s - 1;
-		} 
-		else 
-		{
-			from = 0;
-		}
-	}
-	
-	return Substring(*this, from, len);
-}
-
-BALL_INLINE 
 Substring String::instr(const String& patterns, Index from) const
 	throw()
 {
-  string::size_type found = find(patterns, from); 
+  Size found = (Size)find(patterns, from); 
 
-  return (found == string::npos)
+  return (found == EndPos)
          ? Substring(*this, 0, 0)
          : Substring(*this, (Index)found, (Size)patterns.size());
 }
@@ -799,7 +578,7 @@ BALL_INLINE
 bool String::has(char c) const
 	throw()
 {
-  return ((c != 0) && (find(c, 0) != string::npos));
+  return ((c != 0) && (find(c, 0) != EndPos));
 }
 
 BALL_INLINE 
@@ -811,7 +590,7 @@ bool String::hasSubstring(const String& s, Index from) const
 		return true;
 	}
 
-  return (find(s, from) != string::npos);
+  return (find(s, from) != EndPos);
 }
 
 BALL_INLINE 
