@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.82 2003/09/19 18:43:22 amoll Exp $
+// $Id: mainframe.C,v 1.83 2003/09/20 15:46:01 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -355,7 +355,7 @@ namespace BALL
 		rep->insert(*mesh);
 		rep->setModelType(4); // Setting Representation type to Surface
 
-		RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
+		RepresentationMessage* message = new RepresentationMessage(rep, RepresentationMessage::ADD);
 		notify_(message);
 	}
 

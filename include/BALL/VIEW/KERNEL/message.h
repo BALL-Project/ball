@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.30 2003/09/19 18:41:57 amoll Exp $
+// $Id: message.h,v 1.31 2003/09/20 15:45:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -491,7 +491,7 @@ class RepresentationMessage: public Message
 		throw();
 
 	///
-	RepresentationMessage(const Representation& rep, Type type)
+	RepresentationMessage(Representation* rep, Type type)
 		throw();
 
 	///
