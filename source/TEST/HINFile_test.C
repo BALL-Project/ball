@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.15 2001/12/20 01:14:19 oliver Exp $
+// $Id: HINFile_test.C,v 1.16 2001/12/21 11:47:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.15 2001/12/20 01:14:19 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.16 2001/12/21 11:47:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,6 +53,7 @@ CHECK(HINFile::read(System& system))
   TEST_EQUAL(hin.isValid(), true)
   TEST_EQUAL(system.countAtoms(), 648)
   TEST_EQUAL(system.countMolecules(), 216)
+	ABORT_IF(system.countAtoms() == 0)
 	TEST_EQUAL(system.getAtom(0)->getName(), "O")
   TEST_EQUAL(system.getAtom(0)->getElement(), PTE["O"])
 	TEST_REAL_EQUAL(system.getAtom(0)->getCharge(), -0.834)

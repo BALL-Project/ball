@@ -1,4 +1,4 @@
-// $Id: HINFile.sip,v 1.3 2001/12/20 01:20:41 oliver Exp $
+// $Id: HINFile.sip,v 1.4 2001/12/21 11:47:04 oliver Exp $
 
 class HINFile
 	: GenericMolFile
@@ -18,9 +18,10 @@ class HINFile
   virtual void write(System&);
   virtual bool read(System&)
 		throw(ParseError);
-  virtual HINFile& operator >> (System& /system/)
+	virtual void write(const Molecule& /molecule);
+	virtual Molecule* read()
 		throw(ParseError);
-  virtual HINFile& operator << (const System& /system/);
+
   bool hasPeriodicBoundary() const;
   Box3 getPeriodicBoundary() const;
   float getTemperature() const;

@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.sip,v 1.3 2001/12/20 11:49:35 oliver Exp $
+// $Id: lineBasedFile.sip,v 1.4 2001/12/21 11:47:04 oliver Exp $
 
 
 class LineBasedFile
@@ -42,7 +42,7 @@ class LineBasedFile
 				bool search(const String& /text/, const String& /stop/, 
 										bool /return_to_point/ = false)
 								throw(ParseError);
-				bool goooLine(Position /line_number/)
+				bool gotoLine(Position /line_number/)
 								throw(ParseError);
 				void rewind()
 								throw(ParseError);

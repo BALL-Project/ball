@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.20 2001/12/20 02:35:35 oliver Exp $
+// $Id: lineBasedFile.C,v 1.21 2001/12/21 11:47:04 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -132,7 +132,7 @@ namespace BALL
 
 		line_.getline(getFileStream());
 		++line_number_;
-		return eof();
+		return !eof();
 	}
 
 	bool LineBasedFile::skipLines(Size number)

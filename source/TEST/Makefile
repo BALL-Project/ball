@@ -261,5 +261,5 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
  
-MOLFile_test: MOLFile_test.o ../FORMAT/MOLFile.o ../FORMAT/lineBasedFile.o
-	$(CXX) $(CXXFLAGS) MOLFile_test.o ../FORMAT/MOLFile.o ../FORMAT/lineBasedFile.o $(LDFLAGS) -o $@ $(LIBS)
+HINFile_test: HINFile_test.o ../FORMAT/HINFile.o ../FORMAT/lineBasedFile.o
+	$(CXX) $(CXXFLAGS) HINFile_test.o ../FORMAT/HINFile.o ../FORMAT/lineBasedFile.o $(LDFLAGS) -o $@ $(LIBS)

@@ -1,4 +1,4 @@
-// $Id: genericMolFile.h,v 1.8 2001/12/20 02:56:23 oliver Exp $
+// $Id: genericMolFile.h,v 1.9 2001/12/21 11:47:04 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -148,24 +148,24 @@ namespace BALL
 		/** Stream operator for reading a system.
 				Calls \Ref{read(System&)}.
 		*/
-		GenericMolFile& operator >> (System& system)
+		virtual GenericMolFile& operator >> (System& system)
 			throw(Exception::ParseError);
 		
 		/**	Stream operator for writing a system of molecules.
 				Calls \Ref{write(const System& system) const}.
 		*/
-		GenericMolFile& operator << (const System& system);
+		virtual GenericMolFile& operator << (const System& system);
 
 		/** Stream operator for reading a molecule.
 				Calls \Ref{read()}
 		*/
-		GenericMolFile& operator >> (Molecule& molecule)
+		virtual GenericMolFile& operator >> (Molecule& molecule)
 			throw(Exception::ParseError);
 		
 		/**	Stream operator for writing a system of molecules.
 				Calls \Ref{write()}
 		*/
-		GenericMolFile& operator << (const Molecule& molecule);
+		virtual GenericMolFile& operator << (const Molecule& molecule);
 		//@}
 	};
 
