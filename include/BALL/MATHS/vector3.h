@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.21 2000/02/28 01:27:54 oliver Exp $
+// $Id: vector3.h,v 1.22 2000/03/01 21:25:23 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -432,7 +432,7 @@ namespace BALL
 				@param TVector3& d 4. vector
 				@return static TAngle the torsion angle
 		*/
-		static TAngle<T> getTorsionTAngle
+		static TAngle<T> getTorsionAngle
 			(const TVector3& a, const TVector3& b,
 			 const TVector3& c, const TVector3& d);
 
@@ -513,9 +513,12 @@ namespace BALL
 				angle += Constants::PI;
 			}
 
-			if (Maths::isLess(angle.value, 0)) {
-				return (angle.value += 2 * Constants::PI);
-			} else {
+			if (Maths::isLess(angle.value, 0)) 
+			{
+				return (Angle)(angle.value += 2.0 * Constants::PI);
+			} 
+			else 
+			{
 				return angle;
 			}
 		}
@@ -646,7 +649,7 @@ namespace BALL
 	void TVector3<T>::get(T& r, TAngle<T>& phi, TAngle<T>& theta) const
 	{
 		r 		= sqrt(x * x + y * y + z * z);
-		phi 	= getAngle_(x, y);
+		phi 	= (Angle)getAngle_(x, y);
 		theta = getAngle_(z, sqrt(x * x + y * y));
 	}
 
@@ -879,10 +882,12 @@ namespace BALL
 	{
 		T length_product = getSquareLength() * vector.getSquareLength();
 
-		if (length_product == (T)0)
+		if (length_product == (T)0)	
+		{
 			throw Exception::DivisionByZero(__FILE__, __LINE__);
+		}
 		
-		return acos(((*this) * vector) / sqrt(length_product));
+		return (Angle)(T)acos(((*this) * vector) / sqrt(length_product));
 	}
 
 	template <typename T>
@@ -906,7 +911,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T> TVector3<T>::getTorsionTAngle
+	TAngle<T> TVector3<T>::getTorsionAngle
 		(const TVector3<T> &a, const TVector3<T> &b, 
 		 const TVector3<T> &c, const TVector3<T> &d)
 	{
