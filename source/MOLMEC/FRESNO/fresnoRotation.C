@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.7 2002/04/07 17:45:40 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.8 2002/04/08 16:39:28 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -166,19 +166,34 @@ namespace BALL
 		Size n_heavy_atoms = 0;
 		for (; +atom_it; ++atom_it)
 		{
-			if ((atom_it->getElement().getSymbol() != "H")
-//				&& ((*fresno_types_)[&*atom_it] != FresnoFF::LIPOPHILIC)
-				 )
+			if (atom_it->getElement().getSymbol() != "H")
 			{
 				n_heavy_atoms++;
 			}
 		}
+		// DEBUG
+		cout << "fount " << n_heavy_atoms << " heavy_atoms" << endl;
+		atom_it = ligand->beginAtom();
+		Size tmp_count = 0;
+		for (; +atom_it; ++atom_it)
+		{
+			if ((atom_it->getElement().getSymbol() != "H")
+				&& ((*fresno_types_)[&*atom_it] != FresnoFF::LIPOPHILIC)
+				 )
+			{
+				tmp_count++;
+			}
+		}
+		cout << "fount " << tmp_count << " nonlipophilic heavy_atoms" << endl;
+		// /DEBUG
+
 
 		StringHashMap< pair<float, float> > bondlengths;
 
 		// ????
 		// This is not nice
 		pair<float, float> tmp;
+		// we need shorter bondlenghts for C-C and C-N
 		// tmp = pair<float, float>(1.54, 1.55);
 		tmp = pair<float, float>(1.52, 1.55);
 		bondlengths["C"] = tmp;
@@ -187,8 +202,9 @@ namespace BALL
 		bondlengths["N"] = tmp;
 		tmp = pair<float, float>(1.43, 1.47);
 		bondlengths["O"] = tmp;
-		tmp = pair<float, float>(1.80, 1.84);
-		bondlengths["S"] = tmp;
+		// S is not taken into account by the original paper.
+		// tmp = pair<float, float>(1.80, 1.84);
+		// bondlengths["S"] = tmp;
 
 		Size guessed_bonds = 0;
 
@@ -216,6 +232,7 @@ namespace BALL
 		// initialize the data structures for another dfs and count the heavy
 		// atoms in the system 
 		int heavy_atom_count = 0;
+		int nonlip_heavy_atom_count = 0;
 		HashSet<const Bond*>::ConstIterator tree_it = tree.begin();
 
 		Sp2HybridizedPredicate isSp2;
@@ -260,18 +277,18 @@ namespace BALL
 			{
 
 				// DEBUG
-				cout << atom1->getFullName() << "---" << atom2->getFullName()
-					<< endl;
-				cout << "hasH3Group(*atom1) " << hasH3Group(*atom1) << endl;
-				cout << "hasH2Group(*atom1) " << hasH2Group(*atom1) << endl;
-				cout << "hasF3Group(*atom1) " << hasF3Group(*atom1) << endl;
-				cout << "isCarbon(*atom1) " << isCarbon(*atom1) << endl;
-				cout << "isNitrogen(*atom1) " << isNitrogen(*atom1) << endl;
-				cout << "hasH3Group(*atom2) " << hasH3Group(*atom2) << endl;
-				cout << "hasH2Group(*atom2) " << hasH2Group(*atom2) << endl;
-				cout << "hasF3Group(*atom2) " << hasF3Group(*atom2) << endl;
-				cout << "isCarbon(*atom2) " << isCarbon(*atom2) << endl;
-				cout << "isNitrogen(*atom2) " << isNitrogen(*atom2) << endl;
+				// cout << atom1->getFullName() << "---" << atom2->getFullName()
+				//	<< endl;
+				// cout << "hasH3Group(*atom1) " << hasH3Group(*atom1) << endl;
+				// cout << "hasH2Group(*atom1) " << hasH2Group(*atom1) << endl;
+				// cout << "hasF3Group(*atom1) " << hasF3Group(*atom1) << endl;
+				// cout << "isCarbon(*atom1) " << isCarbon(*atom1) << endl;
+				// cout << "isNitrogen(*atom1) " << isNitrogen(*atom1) << endl;
+				// cout << "hasH3Group(*atom2) " << hasH3Group(*atom2) << endl;
+				// cout << "hasH2Group(*atom2) " << hasH2Group(*atom2) << endl;
+				// cout << "hasF3Group(*atom2) " << hasF3Group(*atom2) << endl;
+				// cout << "isCarbon(*atom2) " << isCarbon(*atom2) << endl;
+				// cout << "isNitrogen(*atom2) " << isNitrogen(*atom2) << endl;
 				// /DEBUG
 				if (!((hasH3Group(*atom1) & (isCarbon(*atom1) | isNitrogen(*atom1)))
 							| (hasH2Group(*atom1) & isNitrogen(*atom1))
@@ -353,12 +370,12 @@ namespace BALL
 							B_CO = (isCarbon(*atom2) & hasAromaticBondedOxygen(*atom2));
 
 							// DEBUG
-							cout << "A SP2: " << A_sp2 << endl;
-							cout << "A SP3: " << A_sp3 << endl;
-							cout << "B SP2: " << B_sp2 << endl;
-							cout << "B SP3: " << B_sp3 << endl;
-							cout << "A CO: " << A_CO << endl;
-							cout << "B CO: " << B_CO << endl;
+							// cout << "A SP2: " << A_sp2 << endl;
+							// cout << "A SP3: " << A_sp3 << endl;
+							// cout << "B SP2: " << B_sp2 << endl;
+							// cout << "B SP3: " << B_sp3 << endl;
+							// cout << "A CO: " << A_CO << endl;
+							// cout << "B CO: " << B_CO << endl;
 							// /DEBUG
 
 							if (((A_sp2 & B_sp3) | (B_sp2 & A_sp3) | (A_sp3 & B_sp3))
@@ -366,9 +383,9 @@ namespace BALL
 										| (A_sp3 & B_CO & isCarbon(*atom1))) == true)
 							{
 								// DEBUG
-								cout << "found possible rotatable bond: " 
-									<< atom1->getFullName() << "---" << atom2->getFullName()
-									<< endl;
+								// cout << "found possible rotatable bond: " 
+								// 	<< atom1->getFullName() << "---" << atom2->getFullName()
+								// 	<< endl;
 								// /DEBUG
 								found_rotatable_bond = true;
 							}
@@ -387,11 +404,18 @@ namespace BALL
 				rotatable_bonds_.push_back(*tree_it);
 				visited.clear();
 				heavy_atom_count = 0;
-				// tmp.clear();
+				nonlip_heavy_atom_count = 0;
 				heavyAtomsDFS_(atom1, &**tree_it, visited,
-						heavy_atom_count); 
-				double first_fraction = (double) heavy_atom_count / (double) n_heavy_atoms;
-				double second_fraction = 1.0 - first_fraction;
+						heavy_atom_count, nonlip_heavy_atom_count);
+				double first_fraction = (double) nonlip_heavy_atom_count / (double) heavy_atom_count;
+
+				visited.clear();
+				heavy_atom_count = 0;
+				nonlip_heavy_atom_count = 0;
+				heavyAtomsDFS_(atom2, &**tree_it, visited,
+						heavy_atom_count, nonlip_heavy_atom_count);
+				double second_fraction = (double) nonlip_heavy_atom_count / (double) heavy_atom_count;
+
 				heavy_atom_fractions_.push_back
 					(pair<double, double>(first_fraction, second_fraction));
 
@@ -592,7 +616,7 @@ namespace BALL
 
 	void FresnoRotation::heavyAtomsDFS_(const Atom* atom, const Bond* bond,
 			HashSet<const Atom*>& visited,
-			int& heavy_atom_count)
+			int& heavy_atom_count, int& nonlip_heavy_atom_count)
 		throw()
 	{
 
@@ -600,10 +624,14 @@ namespace BALL
 		visited.insert(atom);
 
 		// if this is a heavy atom, count it
-		if ((atom->getElement().getSymbol() != "H") 
-				&& ((*fresno_types_)[atom] != FresnoFF::LIPOPHILIC))
+		if (atom->getElement().getSymbol() != "H") 
 		{
 			heavy_atom_count++;
+
+			if ((*fresno_types_)[atom] != FresnoFF::LIPOPHILIC)
+			{
+				nonlip_heavy_atom_count++;
+			}
 		}
 
 		// now iterate over all bonds of this atom (i. e. this node)
@@ -619,7 +647,7 @@ namespace BALL
 				{
 					// apply dfs() to the partner atom
 					heavyAtomsDFS_(partner, bond, visited,
-							heavy_atom_count); // , atoms_on_this_side);
+							heavy_atom_count, nonlip_heavy_atom_count); 
 				}
 			}
 		}
