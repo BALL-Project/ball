@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.18.2.2 2003/01/21 10:36:41 anker Exp $
+// $Id: DCDFile.C,v 1.18.2.3 2003/01/27 15:58:41 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -126,17 +126,29 @@ namespace BALL
 	}
 
 
-	/* ????
 	bool DCDFile::open(const String& name, File::OpenMode open_mode)
 		throw()
 	{
-		if ((open_mode & File::OUT) == 1)
+
+		if (TrajectoryFile::open(name, open_mode) == true)
 		{
-			// if this file is to be overwritten, write a default header.
-			writeHeader();
+
+			if ((open_mode & std::ios::out) != 0)
+			{
+				// if this file is to be overwritten, write a default header.
+				writeHeader();
+			}
+			else
+			{
+				readHeader();
+			}
+
+			return(true);
+
 		}
+		else return(false);
+		
 	}
-	*/
 
 
 	bool DCDFile::hasVelocities() const

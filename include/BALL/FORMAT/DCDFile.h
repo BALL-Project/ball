@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.15.2.2 2003/01/20 10:46:19 anker Exp $
+// $Id: DCDFile.h,v 1.15.2.3 2003/01/27 15:58:52 anker Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -96,11 +96,9 @@ namespace BALL
 		// ?????
 		/** open a DCDFile
 		*/
-		/*
 		virtual bool open(const String& name,
-				File::OpenMode open_mode = File::OUT)
+				File::OpenMode open_mode = std::ios::in)
 			throw();
-		*/
 
 		/** Initialize this instance, i. e. read the header and update members
 		*/
