@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.10 2000/10/18 10:57:45 oliver Exp $
+// $Id: forceFieldParameters.h,v 1.11 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -21,6 +21,7 @@ namespace BALL
 	class AtomTypes;
 	
 	/**	Force field parameter class.
+			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/forceFieldParameters.h}
 	*/
 	class ForceFieldParameters
 		:	public Parameters
@@ -31,7 +32,8 @@ namespace BALL
 
 		friend class ForceField;
 
-		/**@name	Constructors and destructor	*/
+		/**@name	Constructors and destructor	
+		*/
 		//@{
 
 		/**	Default constructor.
@@ -52,22 +54,22 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/** Clear method */
+		/** Clear method 
+		*/
 		virtual void clear()
 			throw();
 
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const ForceFieldParameters& operator = (const ForceFieldParameters& param);
 		
 		//@}
-
-
-		/**@name	Accessors 	*/
+		/**@name	Accessors 	
+		*/
 		//@{
 
 		/**	Return a reference to the atom type parameter section
@@ -77,8 +79,8 @@ namespace BALL
 		/**	Read the contents of the INI file and interpret them.
 		*/
 		virtual bool init();
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -91,15 +93,16 @@ namespace BALL
 		*/
 		virtual bool isValid() const;
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const ForceFieldParameters& param) const;
 
 		//@}
 
-
 		protected:
 
-		/*_@name	Protected Members */
+		/*_@name	Protected Members 
+		*/
 		//_@{ 
 
 		/*_	the atom types section

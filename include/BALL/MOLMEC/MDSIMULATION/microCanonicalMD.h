@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.h,v 1.9 2001/02/02 13:03:26 amoll Exp $
+// $Id: microCanonicalMD.h,v 1.10 2001/03/02 22:10:23 amoll Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -138,7 +138,7 @@ namespace BALL
     */
     virtual void setTimeStep(double step); 
 
-    /**  This method does the actual simulation stuff
+    /**  This method does the actual simulation stuff.
          It runs for getMaximalNumberOfIterations() iterations. 
          restart = true means that the counting of iterations is
                    continued from the previous run. 

@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.h,v 1.7 2000/10/18 10:40:03 anker Exp $
+// $Id: cosineTorsion.h,v 1.8 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing the parameter
 // section required for torsions using a cosine type potential function
  
@@ -16,7 +16,8 @@
 namespace BALL 
 {
 		
-	/**
+	/** Cosine Torsion. \\
+			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/cosineTorsion.h}
 	*/
 	class CosineTorsion 
 		:	public ParameterSection
@@ -112,37 +113,48 @@ namespace BALL
 
 		struct SingleData
 		{
-			Atom*					atom1;
-			Atom*					atom2;
-			Atom*					atom3;
-			Atom*					atom4;
+			Atom*			atom1;
+			Atom*			atom2;
+			Atom*			atom3;
+			Atom*			atom4;
 
 			SingleValues	values;
 		};
 
-		/**	@name	Constructors and Destructors */	
+		/**	@name	Constructors and Destructors 
+		*/	
 		//@{
 
-		/**	Default constructor.  */
+		/**	Default constructor.  
+		*/
 		CosineTorsion();
 		
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		CosineTorsion(const CosineTorsion& cosine_torsion);
 
-		/**	Destructor.  */
+		/**	Destructor.  
+		*/
 		virtual ~CosineTorsion() throw();
+
+		/**	Clear method.  
+		*/
+		virtual void clear() throw();
 
 		//@}
 		
 		/**	@name	 Accessors
 		*/
 		//@{
+
 		/**	Reads a parameter section from an INI file.
-				This method reads the section given in section\_name from ini\_file,
+				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+
+		///
 		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/** Queries whether a parameter set is defined for the given atom types.
@@ -157,29 +169,28 @@ namespace BALL
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(CosineTorsion::Values& parameters, Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
-		//@}
+		bool assignParameters(CosineTorsion::Values& parameters, Atom::Type I, 
+													Atom::Type J, Atom::Type K, Atom::Type L) const;
 
-		/** @name Assignment */
+		//@}
+		/** @name Assignment 
+		*/
 		//@{
 
-		/**	Clear method.  */
-		virtual void clear() throw();
-
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const CosineTorsion& operator = (const CosineTorsion& cosine_torsion);
 		
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const CosineTorsion& cosine_torsion) const;
 
 		//@}
-
 
 		protected:
 

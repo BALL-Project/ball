@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.h,v 1.8 2000/10/18 10:40:03 anker Exp $
+// $Id: quadraticAngleBend.h,v 1.9 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing the parameters required to
 // implement a harmonic potential describing angles
  
@@ -16,7 +16,8 @@
 namespace BALL 
 {
 		
-	/**
+	/** QuadraticAngleBend.\\
+			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/quadraticAngleBend.h}	
 	*/
 	class QuadraticAngleBend 
 		:	public ParameterSection
@@ -51,8 +52,12 @@ namespace BALL
 		*/
 		virtual ~QuadraticAngleBend() throw();
 
+		/**	Clear method. 
+		*/
+		virtual void clear() throw();
+
 		/**	Reads a parameter section from an INI file.
-				This method reads the section given in section\_name from ini\_file,
+				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
@@ -75,16 +80,6 @@ namespace BALL
 		bool assignParameters
 			(QuadraticAngleBend::Values& parameters, 
 			 Atom::Type I, Atom::Type J, Atom::Type K) const;
-
-
-		/** @name Assignment */
-		//@{
-
-		/**	Clear method. */
-		virtual void clear() throw();
-
-		//@}
-
 		
 		protected:
 

@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.h,v 1.7 2000/10/05 22:29:42 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.8 2001/03/02 22:10:27 amoll Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -52,18 +52,18 @@
 namespace BALL 
 { 
 
-	/**	Conjugate gradient (CG) minimizer.
-			\\
+	/**	Conjugate gradient (CG) minimizer. \\
 			{\bf Definition:}\URL{BALL/MOLMEC/MINIMIZATION/conjugateGradient.h}
-			\\
 	*/
   class ConjugateGradientMinimizer 
 		: public EnergyMinimizer
 	{
     public:
+
 		/**	@name	Enums	
 		*/
 		//@{
+
 		/**	The different conjugate gradient methods implemented.
 				@see	updateDirection for details on the implementation and references
 		*/
@@ -81,8 +81,8 @@ namespace BALL
 			*/
 			SHANNO
 		};
-		//@}
-			
+
+		//@}	
     /**	@name	Options and Defaults
     */
     //@{
@@ -143,8 +143,6 @@ namespace BALL
     virtual ~ConjugateGradientMinimizer();
 
     //@}
-
-
     /**	@name	Assignments 
     */
     //@{
@@ -154,7 +152,6 @@ namespace BALL
     ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& rhs);
 
     //@}
-
     /**	@name	Setup methods. They do all necessary preparations. 
     */
     //@{
@@ -164,11 +161,10 @@ namespace BALL
     virtual bool specificSetup();
 
     //@}
-
-
     /**	@name	Accessors 
     */
     //@{
+
     /** Set explicitly the value for control parameter step_length_
     */
     void setStepLength(double  value);
@@ -203,25 +199,26 @@ namespace BALL
 				This method executes at most {\tt iterations} minimization steps.
 				If the number of iterations is not given, the number specified in the
 				options is taken.
-				
 				@param	iterations the maximum number of iterations
 				@param	restart {\bf true} if the minimization is restarted
 				@see		EnergyMinimizer::minimize
     */
     virtual bool minimize(Size iterations = 0, bool restart = false); 
-    //@}
 
+    //@}
     /**	@name	Public Attributes
     */
     //@{
-    /**	Options Force field options
+
+    /**	Force field options
     */
     Options	options;
     //@}
 
     protected:
 
-    /**	@name	Protected Attributes */
+    /**	@name	Protected Attributes 
+		*/
     //*@{
 
 		Size number_of_atoms_;
@@ -233,6 +230,7 @@ namespace BALL
     /*_ The optimal lambda in the last line search 
     */
     double lambda_; 
+
     //_@}
 
 		/**	The update method used for the CG
@@ -242,7 +240,5 @@ namespace BALL
 	};
 
 } // end of namespace BALL
-
-
 
 #endif // BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 

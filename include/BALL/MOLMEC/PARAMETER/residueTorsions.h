@@ -1,4 +1,4 @@
-// $Id: residueTorsions.h,v 1.8 2000/10/18 10:40:04 anker Exp $
+// $Id: residueTorsions.h,v 1.9 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -18,14 +18,13 @@ namespace BALL
 	/**	Parameter class containing all proper torsions occuring in a residue.
 			Several force fields (e.g. CHARMM) do not necessarily consider or
 			parametrize all occurring torsions but explicitly list the torsions
-			for each residue. This parameter section is used to represetn this list.
+			for each residue. This parameter section is used to represent this list.
 			The class AMBER and CHARMM torsions components check for the presence of
-			the parameter section [ResidueTorsions] and the decide whether they have
+			the parameter section [ResidueTorsions] and then decide whether they have
 			to generate the torsions by itself (creating all torsions and
 			complaining about missing parameters) or whether they have to read them
 			from this section.\\
 			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/residueTorsions.h}
-			\\
 	*/
 	class ResidueTorsions 
 		:	public ParameterSection
@@ -64,8 +63,8 @@ namespace BALL
 			{
 			}
 		};
-		//@}
 
+		//@}
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -78,17 +77,23 @@ namespace BALL
 		*/
 		virtual ~ResidueTorsions() throw();
 
+		/**	Clear method.  
+		*/
+		virtual void clear() throw();
+
 		//@}
-		
 		/**	@name	Accessors
 		*/
 		//@{
+
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+
+		///
 		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/**	Return the number of torsions for this residue.
@@ -108,17 +113,8 @@ namespace BALL
 		bool hasTorsion
 			(const String& residue, const String& atom_A, const String& atom_B,
 			 const String& atom_C, const String& atom_D) const;
-		//@}
-
-
-		/** @name Assignment */
-		//@{
-
-		/**	Clear method.  */
-		virtual void clear() throw();
 
 		//@}
-
 
 		protected:
 

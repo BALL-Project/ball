@@ -1,4 +1,4 @@
-// $Id: potential1210.h,v 1.7 2000/10/18 10:40:03 anker Exp $
+// $Id: potential1210.h,v 1.8 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing the parameters required
 // for a 12-10 (hydrogen bond) potential
  
@@ -16,7 +16,8 @@
 namespace BALL 
 {
 		
-	/**	
+	/**	Potential1210. \\
+			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/potential1210.h}	
 	*/
 	class Potential1210 
 		:	public ParameterSection
@@ -42,33 +43,40 @@ namespace BALL
 		};
 
 
-		/** @name Constructors and Destructor. */
+		/** @name Constructors and Destructor. 
+		*/
 		//@{
 
 		/**	Default constructor.
 		*/
 		Potential1210() throw();
 
-		/** Copy constructor. */
+		/** Copy constructor. 
+		*/
 		Potential1210(const Potential1210& pot1210) throw();
 
 		/**	Destructor.
 		*/
 		virtual ~Potential1210() throw();
 		
+		/**	Clear method. 
+		*/
+		virtual void clear() throw();
+
 		//@}
-
-
-		/** @name Parameter extraction */
+		/** @name Parameter extraction 
+		*/
 		//@{
 
 		/**	Reads a parameter section from an INI file.
-				This method reads the section given in section\_name from ini\_file,
+				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, 
 				const String& section_name) throw();
+
+		///
 		virtual bool extractSection(Parameters& parameters, 
 				const String& section_name) throw();
 
@@ -90,28 +98,24 @@ namespace BALL
 			 Atom::Type I, Atom::Type J) const throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const Potential1210& operator = (const Potential1210& pot1210) throw();
 
-		/**	Clear method. */
-		virtual void clear() throw();
-
 		//@}
-
-		
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const Potential1210& pot1210) const throw();
 
 		//@}
-
 
 		protected:
 

@@ -1,4 +1,4 @@
-// $Id: quadraticImproperTorsion.h,v 1.5 2000/10/18 10:40:03 anker Exp $
+// $Id: quadraticImproperTorsion.h,v 1.6 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing the parameters required to
 // describe a harmonic improper torsion (out-of-plane) potential
  
@@ -16,8 +16,7 @@
 namespace BALL 
 {
 		
-	/** missing documentation for QuadraticImproperTorsion
-			\\
+	/** QuadraticImproperTorsion.	\\
 			{\bf Definition:} \URL{include/BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h}
 	*/
 	class QuadraticImproperTorsion 
@@ -59,14 +58,16 @@ namespace BALL
 
 		BALL_CREATE(QuadraticImproperTorsion)
 
-		/** @name Constructors and destructor */
+		/** @name Constructors and destructor 
+		*/
 		//@{
 
 		/**	Default constructor.
 		*/
 		QuadraticImproperTorsion() throw();
 
-		/** Copy constructor. */
+		/** Copy constructor. 
+		*/
 		QuadraticImproperTorsion(const QuadraticImproperTorsion& torsion)
 			throw();
 
@@ -74,10 +75,13 @@ namespace BALL
 		*/
 		virtual ~QuadraticImproperTorsion() throw();
 
+		/**	Clear method. 
+		*/
+		virtual void clear() throw();
+
 		//@}
-
-
-		/** @name Parameter extraction */
+		/** @name Parameter extraction 
+		*/
 		//@{
 
 		/**	Reads a parameter section from an INI file.
@@ -88,11 +92,12 @@ namespace BALL
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters,
 				const String& section_name) throw();
+
+		///
 		virtual bool extractSection(Parameters& parameters,
 				const String& section_name) throw();
 
 		//@}
-
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
@@ -112,29 +117,26 @@ namespace BALL
 				Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const
 			throw();
 
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/**	Clear method. */
-		virtual void clear() throw();
-
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const QuadraticImproperTorsion& operator = 
 			(const QuadraticImproperTorsion& torsion) throw();
 
 		//@}
-		
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const QuadraticImproperTorsion& torsion) const
 			throw();
 
 		//@}
-
 
 		protected:
 

@@ -1,4 +1,4 @@
-// $Id: quadraticBondStretch.h,v 1.7 2000/10/18 10:40:03 anker Exp $
+// $Id: quadraticBondStretch.h,v 1.8 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing the parameters
 // required for a harmonic stretch potential
  
@@ -16,7 +16,8 @@
 namespace BALL 
 {
 		
-	/**
+	/** QuadraticBondStretch.\\
+			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/quadraticBondStretch.h}	
 	*/
 	class QuadraticBondStretch 
 		:	public ParameterSection
@@ -50,12 +51,18 @@ namespace BALL
 		*/
 		virtual ~QuadraticBondStretch() throw();
 
+		/**	Clear method  
+		*/
+		virtual void clear() throw();
+
 		/**	Reads a parameter section from an INI file.
-				This method reads the section given in section\_name from ini\_file,
+				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+
+		///
 		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/** Queries whether a parameter set is defined for the given atom types.
@@ -73,17 +80,7 @@ namespace BALL
 		*/
 		bool assignParameters
 			(QuadraticBondStretch::Values& parameters, 
-			 Atom::Type I, Atom::Type J) const;
-
-
-		/** @name Assignment */
-		//@{
-
-		/**	Clear method  */
-		virtual void clear() throw();
-
-		//@}
-		
+			 Atom::Type I, Atom::Type J) const;		
 
 		protected:
 

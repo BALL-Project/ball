@@ -1,4 +1,4 @@
-// $Id: atomTypes.h,v 1.5 2000/10/18 10:40:03 anker Exp $
+// $Id: atomTypes.h,v 1.6 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -20,10 +20,8 @@ namespace BALL
 		
 	class ForceFieldParameters;
 
-	/**	Force Field Atom Type Class.	
-			\\
+	/**	Force Field Atom Type Class. \\
 			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/atomTypes.h}
-			\\
 	*/
 	class AtomTypes
 		:	public ParameterSection
@@ -46,14 +44,17 @@ namespace BALL
 		*/
 		virtual ~AtomTypes() throw();
 
+		/** Clear method 
+		*/
+		virtual void clear() throw();
+
 		//@}
-		
 		/**	Parameter extraction
 		*/
 		//@{
 
 		/**	Reads a parameter section from an INI file.
-				This method reads the section given in section\_name from ini\_file,
+				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
@@ -75,34 +76,27 @@ namespace BALL
 		/**	
 		*/
 		Size getNumberOfTypes() const throw();
-		//@}
 
+		//@}
 		/**	@name	Assignment
 		*/
 		//@{
 
-		/** Clear method */
-		virtual void clear() throw();
-
 		/**	Assignment operator.
-				copy the contents of {\tt atom\_types} into {\tt this}
-				atom types object.
 				@param	atom_types the atom types object to be copied
 		*/
 		AtomTypes& operator = (const AtomTypes& atom_types) throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const AtomTypes& atom_types) const throw();
 
 		//@}
-
-
 
 		protected:
 		

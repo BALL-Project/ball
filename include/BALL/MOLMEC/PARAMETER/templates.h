@@ -1,4 +1,4 @@
-// $Id: templates.h,v 1.5 2000/10/18 10:40:04 anker Exp $
+// $Id: templates.h,v 1.6 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_TEMPLATES_H
@@ -17,7 +17,6 @@ namespace BALL
 
 	/**	Force Field Residue Template Class.	
 			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/templates.h}
-			\\
 	*/
 	class Templates 
 		:	public ParameterSection
@@ -40,14 +39,17 @@ namespace BALL
 		*/
 		virtual ~Templates() throw();
 
+		/**	Clear method. 
+		*/
+		virtual void clear() throw();
+
 		//@}
-		
 		/**	Parameter extraction
 		*/
 		//@{
 
 		/**	Reads a parameter section from an INI file.
-				This method reads the section given in section\_name from ini\_file,
+				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 				The section is typically entitled {\bf ChargesAndTypeNames}.
@@ -68,7 +70,8 @@ namespace BALL
 
 		/**	Assign charges and type names
 		*/
-		void assign(System& system, bool overwrite_existing_typenames = true, bool overwrite_non_zero_charges = true) const;
+		void assign(System& system, bool overwrite_existing_typenames = true, 
+								bool overwrite_non_zero_charges = true) const;
 
 		/**	Assign charges and type names
 		*/
@@ -79,23 +82,17 @@ namespace BALL
 		void assignTypeNames(System& system, bool overwrite_existing_typenames = true) const;
 
 		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
 
-		/**	Clear method. */
-		virtual void clear() throw();
-
 		/**	Assignment operator.
-				copy the contents of {\tt templates} into {\tt this}
-				residue template object.
+				Copy the contents of {\tt templates} into {\tt this} residue template object.
 				@param	templates the residue template object to be copied
 		*/
 		Templates& operator = (const Templates& templates);
 
 		//@}
-
 
 		protected:
 		

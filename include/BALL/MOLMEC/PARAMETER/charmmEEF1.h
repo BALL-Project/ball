@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.h,v 1.7 2000/10/18 10:40:03 anker Exp $
+// $Id: charmmEEF1.h,v 1.8 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing parameters needed 
 // for the EEF1 solvation component in the CHARMM force field
  
@@ -17,8 +17,9 @@ namespace BALL
 {
 
 	/**	Force Field Parameter Section for CHARMM EEF1.
-			This class reads and administers a aparameter set of solvation
-			parameters for the CHARMM/EEF1 force field (Lazaridis, Karplus, ???).
+			This class reads and administers a parameter set of solvation
+			parameters for the CHARMM/EEF1 force field (Lazaridis, Karplus, ???). \\
+			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/charmmEEF1.h}
 	*/
 	class CharmmEEF1 
 		:	public ParameterSection
@@ -47,27 +48,37 @@ namespace BALL
 		};
 
 
-		/** @name Constructors and Destructor */
+		/** @name Constructors and Destructor 
+		*/
 		//@{
 
-		/**	Default constructor.  */
+		/**	Default constructor.  
+		*/
 		CharmmEEF1() throw();
 
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		CharmmEEF1(const CharmmEEF1& charmm_EEF1) throw();
 
-		/**	Destructor.  */
+		/**	Destructor.  
+		*/
 		virtual ~CharmmEEF1() throw();
+
+		/**	Clear method.  
+		*/
+		virtual void clear() throw();
 
 		//@}
 
 		/**	Reads a parameter section from an INI file.
-				This method reads the section given in section\_name from ini\_file,
+				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, 
 				const String& section_name) throw();
+
+		///
 		virtual bool extractSection(Parameters& parameters, 
 				const String& section_name) throw();
 
@@ -86,47 +97,44 @@ namespace BALL
 		bool assignParameters(CharmmEEF1::Values& parameters, Atom::Type I)
 			const throw();
 
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/**	Clear method.  */
-		virtual void clear() throw();
-
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const CharmmEEF1& operator = (const CharmmEEF1& charmm_EEF1) throw();
 
 		//@}
-		
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const CharmmEEF1& charmm_EEF1) const throw();
 
 		//@}
 
-
 		protected:
 
-		Size									number_of_atom_types_;
+		Size					number_of_atom_types_;
 
-		float*								V_;
+		float*				V_;
 		
-		float*								dG_ref_;
+		float*				dG_ref_;
 		
-		float*								dG_free_;
+		float*				dG_free_;
 
-		float*								dH_ref_;
+		float*				dH_ref_;
 
-		float*								Cp_ref_;
+		float*				Cp_ref_;
 
-		float*								sig_w_;
+		float*				sig_w_;
 
-		float*								R_min_;
+		float*				R_min_;
 		
-		bool*									is_defined_;
+		bool*					is_defined_;
 	};
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.14 2001/03/02 00:35:00 amoll Exp $
+// $Id: molecularDynamics.h,v 1.15 2001/03/02 22:10:23 amoll Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -60,7 +60,7 @@ namespace BALL
 	/**	Molecular Dynamics base class.
 			This class is the base class for classical molecular dynamics
 			simulations. Actual MD classes must be derived from this class.
-			{\bf Definition:}\URL{BALL/MOLMEC/MDSIMULATION/molecularDynamics.h}\\
+			{\bf Definition:}\URL{BALL/MOLMEC/MDSIMULATION/molecularDynamics.h}
 	*/
 	class MolecularDynamics
 	{
@@ -237,7 +237,7 @@ namespace BALL
 		*/
     void setMaximalSimulationTime(double time);    
 
-		/**  Set the time step in ps
+		/**  Set the time step in ps.
 		     Note that this will change the maximum simulation time.
 		*/
 		virtual void setTimeStep(double step);
@@ -327,7 +327,7 @@ namespace BALL
 		*/
 		//@{
 
-		/*   The options for this class
+		/**   The options for this class
 		*/
 		Options options;
 

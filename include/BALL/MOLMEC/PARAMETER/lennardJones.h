@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.14 2000/10/18 10:40:03 anker Exp $
+// $Id: lennardJones.h,v 1.15 2001/03/02 22:10:27 amoll Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -16,15 +16,14 @@ namespace BALL
 {
 		
 	/**	Lennard Jones parameter section.
-			This section read parameters for a Lennard Jones potental (usually a
-			6-12 Potential). Parameters may we given in three different formats
+			This section reads parameters for a Lennard Jones potental (usually a
+			6-12 Potential). Parameters may be given in three different formats
 			(no mixing of formats is allowed).
 			\begin{itemize}
 				\item {\em A} and {\em B} are given directly (\Ref{A_B_FORMAT})
 				\item well depth and minimum radii (\Ref{EPSILON_R_FORMAT})
 				\item Slater-Kirkwood parameters (\Ref{SLATER_KIRKWOOD_FORMAT})
 			\end{itemize}
-
 			If the Slater-Kirkwood format is used, the values for $A_{ij}$ and $B_{ij}$ are calculated
 			as follows (see e.g. Brooks et al., J. Comput. Chem, 4(2):187-217 (1983))
 			\[
@@ -36,17 +35,16 @@ namespace BALL
 			\]
 			\\
 			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/lennardJones.h}	
-			\\
 	*/
 	class LennardJones 
 		:	public ParameterSection
 	{
 		public:
-
-		
+	
 		/**	@name	Enums
 		*/
 		//@{
+
 		enum FormatType
 		{
 			A_B_FORMAT,
@@ -54,7 +52,6 @@ namespace BALL
 			SLATER_KIRKWOOD_FORMAT
 		};
 		//@}
-
 		/**	@name	Type definitions
 		*/
 		//@{
@@ -73,8 +70,8 @@ namespace BALL
 			Atom*		atom2;
 			Values	values;
 		};
-		//@}
 
+		//@}
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -83,12 +80,17 @@ namespace BALL
 		*/
 		LennardJones() throw();
 
-		/** Copy constructor. */
+		/** Copy constructor. 
+		*/
 		LennardJones(const LennardJones& lj) throw();
 
 		/**	Destructor.
 		*/
 		virtual ~LennardJones() throw();
+
+		/**	Clear method. 
+		*/
+		virtual void clear() throw();
 
 		//@}
 		
@@ -100,6 +102,8 @@ namespace BALL
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, 
 				const String& section_name) throw();
+
+		///
 		virtual bool extractSection(Parameters& parameters, 
 				const String& section_name) throw();
 
@@ -118,26 +122,24 @@ namespace BALL
 		bool assignParameters(Values& parameters, Atom::Type I, Atom::Type J)
 			const throw();
 
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/**	Clear method. */
-		virtual void clear() throw();
-
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const LennardJones& operator = (const LennardJones& lj) throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const LennardJones& lj) const throw();
 
 		//@}
-
 
 		protected:
 
