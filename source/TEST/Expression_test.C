@@ -1,15 +1,17 @@
-// $Id: Expression_test.C,v 1.4 2001/07/10 16:34:28 anker Exp $
+// $Id: Expression_test.C,v 1.5 2001/07/11 17:06:20 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 // insert includes here
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/expression.h>
 #include <list>
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Expression_test.C,v 1.4 2001/07/10 16:34:28 anker Exp $")
+START_TEST(class_name, "$Id: Expression_test.C,v 1.5 2001/07/11 17:06:20 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,6 +26,22 @@ using namespace BALL;
 CHECK(ExpressionPredicate::ExpressionPredicate() throw())
   //BAUSTELLE
 RESULT
+
+// Predicate for testing
+
+class MickeyPredicate
+	: public  ExpressionPredicate
+{
+	public:
+
+	BALL_CREATE(MickeyPredicate)
+	virtual bool operator () (const Atom& atom) const
+	{
+		return (atom.getElement().getSymbol() == "H");
+	}
+};
+
+String mickey_predicate_string("isMickeyMouse");
 
 ExpressionPredicate* ep_ptr;
 
@@ -41,7 +59,7 @@ RESULT
 
 CHECK(ExpressionPredicate::ExpressionPredicate(const String& argument) throw())
 	// BAUSTELLE: registerStandardPredicates_()
-	String argument("bla");
+	String argument("H");
 	ExpressionPredicate ep1;
 	TEST_NOT_EQUAL(ep1.getArgument(), argument)
 	ExpressionPredicate ep2(argument);
@@ -88,8 +106,9 @@ RESULT
 
 
 CHECK(ExpressionPredicate::bool operator () (const Atom& atom) const  throw())
+	Atom atom;
 	ExpressionPredicate ep;
-	// BAUSTELLE
+	TEST_EQUAL(ep.operator()(atom), true)
 RESULT
 
 
@@ -572,7 +591,7 @@ RESULT
 
 
 CHECK(Expression::Expression(const String& expression_string) throw())
-	Expression e("bla");
+	Expression e("(H)");
 	StringHashMap<Expression::CreationMethod> test_map;
 	bool test = (test_map == e.getCreationMethods());
 	TEST_EQUAL(test, true)
@@ -580,12 +599,26 @@ RESULT
 
 
 CHECK(Expression::hasPredicate(const String& name) const  throw())
-	
+	Expression e;
+	e.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
+	TEST_EQUAL(e.hasPredicate("You don't have this predicate"), false)
+	TEST_EQUAL(e.hasPredicate(mickey_predicate_string), true)
 RESULT
 
 
 CHECK(Expression::bool operator == (const Expression& expression) const  throw())
-  //BAUSTELLE
+	Expression e1;
+	Expression e2;
+	bool test = (e1 == e2);
+	TEST_EQUAL(test, true)
+
+	e1.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
+	test = (e1 == e2);
+	TEST_NOT_EQUAL(test, true)
+
+	e2.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
+	test = (e1 == e2);
+	TEST_EQUAL(test, true)
 RESULT
 
 
@@ -595,32 +628,63 @@ RESULT
 
 
 CHECK(Expression::getPredicate(const String& name, const String& args = "") const  throw())
-  //BAUSTELLE
+	Expression e;
+	e.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
+	ExpressionPredicate* ep = e.getPredicate(mickey_predicate_string);
+	bool test = (ep == MickeyPredicate::createDefault());
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(Expression::registerPredicate(const String& name, CreationMethod creation_method) throw())
-  //BAUSTELLE
+	Expression e;
+	e.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
+	ExpressionPredicate* ep = e.getPredicate(mickey_predicate_string);
+	bool test = (ep == MickeyPredicate::createDefault());
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(Expression::setExpression(const String& expression) throw())
-  //BAUSTELLE
+	Expression e;
+	e.setExpression("connectedTo(H)");
+	// BAUSTELLE
 RESULT
 
 
-CHECK(Expression::getExpression() const  throw())
-  //BAUSTELLE
+CHECK(Expression::getExpressionString() const  throw())
+	Expression e("connectedTo(H)");
+	TEST_EQUAL("connectedTo(H)", e.getExpressionString())
+RESULT
+
+
+CHECK(Expression::getExpressionTree() const  throw())
+	Expression e("connectedTo(H)");
+	// BAUSTELLE
 RESULT
 
 
 CHECK(Expression::Expression& operator = (const Expression& expression) throw())
-  //BAUSTELLE
+	Expression e1("connectedTo(H)");
+	Expression e2;
+	bool test = (e1 == e2);
+	TEST_NOT_EQUAL(test, true)
+
+	e2 = e1;
+	test = (e1 == e2);
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(Expression::clear() throw())
-  //BAUSTELLE
+	Expression empty;
+	Expression nonempty("connectedTo(H)");
+	bool test = (empty == nonempty);
+	TEST_NOT_EQUAL(test, true)
+
+	nonempty.clear();
+	test = (empty == nonempty);
+	TEST_EQUAL(test, true)
 RESULT
 
 
