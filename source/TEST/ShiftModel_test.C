@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ShiftModel_test.C,v 1.8 2002/02/27 12:24:54 sturm Exp $
+// $Id: ShiftModel_test.C,v 1.9 2003/08/20 21:34:49 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -16,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.8 2002/02/27 12:24:54 sturm Exp $")
+START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.9 2003/08/20 21:34:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -133,7 +135,6 @@ CHECK(ShiftModel::clear() throw())
   ShiftModel sm("data/ShiftModel_test.ini");
 	sm.clear();
 	TEST_EQUAL(sm.isValid(), false)
-	TEST_EQUAL(sm.getFilename(), "")
 	TEST_EQUAL(sm.getModuleList().size(), 0)
 RESULT
 

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.209 2003/08/19 20:07:49 oliver Exp $
+# $Id: Makefile,v 1.210 2003/08/20 21:34:49 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -31,6 +31,9 @@ EXECUTABLES = \
 
 # default target
 all:	$(EXECUTABLES)
+
+echo:
+	echo $(EXECUTABLES)
 
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:=.C)
