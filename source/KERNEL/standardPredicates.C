@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.36 2002/12/20 06:36:16 oliver Exp $
+// $Id: standardPredicates.C,v 1.37 2002/12/20 16:32:45 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -472,7 +472,7 @@ namespace BALL
 			parent_(0),
 			finished_(false),
 			linked_(false),
-			link_list_()
+			link_set_()
 	{
 	}
 
@@ -484,7 +484,7 @@ namespace BALL
 			parent_(node.parent_),
 			finished_(node.finished_),
 			linked_(node.linked_),
-			link_list_(node.link_list_)
+			link_set_(node.link_set_)
 	{
 	}
 
@@ -499,9 +499,21 @@ namespace BALL
 	{
 		for (Iterator it = begin(); it != end(); ++it) 
 		{
-			(*it)->destroy();
-			delete &*it;
+			if (!link_set_.has(*it))
+			{
+				// DEBUG
+				// Log.info() << "about to delete " << *it << endl;
+				// /DEBUG
+				delete *it;
+			}
+			// DEBUG
+			// else
+			// {
+			//	Log.info() << "won't delete cross edged " << *it << endl;
+			// }
+			// /DEBUG
 		}
+		children_.clear();
 	}
 
 	void ConnectedToPredicate::CTPNode::clear()
@@ -513,7 +525,7 @@ namespace BALL
 		parent_ = 0;
 		finished_ = false;
 		linked_ = false;
-		link_list_.clear();
+		link_set_.clear();
 	}
 
 	void ConnectedToPredicate::CTPNode::setParent(ConnectedToPredicate::CTPNode* parent)
@@ -721,7 +733,7 @@ namespace BALL
 		return linked_;
 	}
 
-	void ConnectedToPredicate::CTPNode::linkWith(const ConnectedToPredicate::CTPNode* partner)
+	void ConnectedToPredicate::CTPNode::linkWith(ConnectedToPredicate::CTPNode* partner)
 		throw()
 	{
 		if (partner == 0)
@@ -730,13 +742,18 @@ namespace BALL
 				<< "Trying to link with NULL. Ignoring." << std::endl;
 			return;
 		}
-		link_list_.push_back(partner);
+		// DEBUG
+		//Log.info() << "Linking " << this << " with " << partner << endl;
+		// /DEBUG
+		partner->link_set_.insert(this);
+		partner->addChild(this);
+		setLinked();
 	}
 
-	const std::list<const ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getLinkList() const
+	const HashSet<const ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getLinkSet() const
 		throw()
 	{
-		return link_list_;
+		return link_set_;
 	}
 
 	ConnectedToPredicate::ConnectedToPredicate()
@@ -779,11 +796,14 @@ namespace BALL
 
 		child->setParent(node);
 		node->addChild(child);
+
+		// if there is a link mark between this node an its child, create an
+		// entry in the link map and mark the child as linked. The link partner
+		// is still unknown.
 		if (link_mark_ != 0)
 		{
 			pair<CTPNode*, CTPNode*> tmp(child, 0);
 			link_map_.insert(pair<char, pair<CTPNode*, CTPNode*> >(link_mark_, tmp));
-			child->setLinked();
 			link_mark_ = 0;
 		}
 		return child;
@@ -975,6 +995,7 @@ namespace BALL
 											}
 											link_map_[link_mark_].second = current;
 											CTPNode* first = link_map_[link_mark_].first;
+											if (first == 0) first = root;
 											current->linkWith(first);
 										}
 									}
@@ -1023,6 +1044,8 @@ namespace BALL
 			}
 		}
 
+		// check for errors
+
 		if (bracket_count > 0)
 		{
 			Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
@@ -1035,25 +1058,6 @@ namespace BALL
 			Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
 				<< "\tparse error: Too many closing brackets." << std::endl;
 			return(0);
-		}
-
-		HashMap<char, pair<CTPNode*, CTPNode*> >::Iterator it = link_map_.begin();
-		for (; +it; ++it)
-		{
-			if (it->second.first == 0)
-			{
-				it->second.first = root;
-			}
-
-			if (it->second.second == 0)
-			{
-				Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
-					<< "unresolved mark: " << it->first << std::endl;
-				return(0);
-			}
-
-			it->second.first->addChild(it->second.second);
-
 		}
 
 		std::list<CTPNode*>::iterator sort_it = all_nodes.begin();
@@ -1080,7 +1084,7 @@ namespace BALL
 				}
 			}
 
-			if (stars.size() > 1)
+			if (stars.size() > 0)
 			{
 				children.clear();
 
@@ -1101,12 +1105,15 @@ namespace BALL
 				copy(non_stars.begin(), non_stars.end(), it);
 				copy(stars.begin(), stars.end(), it);
 				*/
+
 			}
 
 		}
 
 		tree_ = root;
+
 		return(root);
+
 	}
 
 	bool ConnectedToPredicate::bondOrderMatch_(const Bond& bond, const ConnectedToPredicate::CTPNode& node) const
@@ -1236,24 +1243,27 @@ namespace BALL
 			return;
 		}
 		// DEBUG
-		Log.info() << "CTPNode address: " << current << std::endl;
+		// Log.info() << "CTPNode address: " << current << std::endl;
 		// /DEBUG
 		if (current->isLinked())
 		{
 			Log.info() << "@{" << current << "}";
 		}
 		Log.info() << current->getBondTypeChar() << current->getSymbol() << flush;
-		list<const CTPNode*>::const_iterator it = current->getLinkList().begin();
-		for(; it != current->getLinkList().end(); ++it)
+		HashSet<const CTPNode*>::ConstIterator it = current->getLinkSet().begin();
+		for(; it != current->getLinkSet().end(); ++it)
 		{
 			Log.info() << "@[" << *it << "]";
 		}
 		CTPNode::ConstIterator child_it = current->begin();
 		for (; child_it != current->end(); ++child_it)
 		{
-			Log.info() << "(" << flush;
-			dump(*child_it);
-			Log.info() << ")" << flush;
+			if (!current->getLinkSet().has(*child_it))
+			{
+				Log.info() << "(" << flush;
+				dump(*child_it);
+				Log.info() << ")" << flush;
+			}
 		}
 	}
 
@@ -1263,7 +1273,7 @@ namespace BALL
 		argument_ = argument;
 		if (tree_ != 0)
 		{
-			tree_->destroy();
+			delete tree_;
 		}
 		tree_ = parse_(argument_);
 		link_map_.clear();

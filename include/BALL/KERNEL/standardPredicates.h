@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.25 2002/12/20 06:36:16 oliver Exp $
+// $Id: standardPredicates.h,v 1.26 2002/12/20 16:32:45 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -12,6 +12,10 @@
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
+#endif
+
+#ifndef BALL_DATATYPE_HASHSET_H
+#	include <BALL/DATATYPE/hashSet.h>
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -615,12 +619,12 @@ namespace BALL
 
 					/**
 					 */
-					void linkWith(const CTPNode* partner)
+					void linkWith(CTPNode* partner)
 						throw();
 
 					/**
 					 */
-					const std::list<const CTPNode*>& getLinkList() const
+					const HashSet<const CTPNode*>& getLinkSet() const
 						throw();
 
 
@@ -652,7 +656,7 @@ namespace BALL
 
 					/*_
 					 */
-					list<const CTPNode*> link_list_;
+					HashSet<const CTPNode*> link_set_;
 
 					/*_
 					*/
