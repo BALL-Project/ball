@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.13 2000/09/06 19:36:15 oliver Exp $
+# $Id: Makefile,v 1.14 2001/01/31 05:47:27 oliver Exp $
 #========================
 # BALL/EXAMPLES Makefile
 #========================
@@ -37,5 +37,8 @@ ramachandran:	ramachandran.o
 PDBChecker:	PDBChecker.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-addHydrogens:	addHydrogens.o 
+addHydrogens:	addHydrogens.o ../STRUCTURE/fragmentDB.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o ../STRUCTURE/fragmentDB.o $(LIBS)
+
+SASAreas:	SASAreas.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
