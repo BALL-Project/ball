@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.6 2000/05/23 16:27:19 hekl Exp $
+// $Id: standardColorCalculator.h,v 1.7 2000/10/05 22:32:15 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -59,6 +59,7 @@ namespace BALL
 
 			/**	@name Accessors
 			*/
+			//@{
 
 			/**
 			*/

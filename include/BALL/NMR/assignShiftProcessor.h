@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.h,v 1.9 2000/10/03 02:03:58 amoll Exp $
+// $Id: assignShiftProcessor.h,v 1.10 2000/10/05 22:26:12 oliver Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -84,8 +84,6 @@ namespace BALL
 		const Molecule*										molecule_;
 		Position													number_of_fragment_;
 	};
-
-	//@}
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/NMR/assignShiftProcessor.iC>

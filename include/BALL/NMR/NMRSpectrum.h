@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.h,v 1.9 2000/09/30 16:36:12 oliver Exp $
+// $Id: NMRSpectrum.h,v 1.10 2000/10/05 22:24:41 oliver Exp $
 
 #ifndef BALL_NMR_NMRSPECTRUM_H
 #define BALL_NMR_NMRSPECTRUM_H
@@ -16,9 +16,6 @@
 #endif
 
 #include <list>
-
-
-///////////////////////////////////////////////////////////////////////////
 
 namespace BALL 
 {
@@ -144,8 +141,6 @@ namespace BALL
 		bool										is_sorted_;
 	};
 
-//@}
-	
 } // namespace BALL
 
 #endif // BALL_NMR_NMRSPECTRUM_H

@@ -1,4 +1,4 @@
-/* $Id: datatype.doc,v 1.5 2000/09/13 06:30:27 oliver Exp $ */
+/* $Id: datatype.doc,v 1.6 2000/10/05 22:28:46 oliver Exp $ */
 
 /**@name	General datastructures
 		This section contains all relevant information on 
@@ -10,15 +10,14 @@
 	*/
 	//@{
 		//@Include: regularData1D.h
-		//@Include: regularData2D.h
 		//@Include: pointGrid.h
 	//@}
 
 	/**	@name	Generic Hash Associative Containers
 	*/
 	//@{
-		//@Include: hashMap.h
-		//@Include: hashSet.h
+		// @Include: hashMap.h
+		// @Include: hashSet.h
 		//@Include: hashGrid.h
 		//@Include: stringHashMap.h
 		//@Include: stringHashSet.h
@@ -35,11 +34,11 @@
 	/**	@name	Miscellaneous
 	*/
 	//@{
-		//@Include: bitVector.h	
+		// @Include: bitVector.h	
 		//@Include: forEach.h	
 		//@Include: quadruple.h
 		//@Include: regExp.h
-		//@Include:	string.h
+		//@Include: string.h
 	//@}
 
 //@}

@@ -1,4 +1,4 @@
-// $Id: information.h,v 1.1 2000/05/04 17:25:36 hekl Exp $
+// $Id: information.h,v 1.2 2000/10/05 22:30:50 oliver Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -73,6 +73,7 @@ namespace BALL
 				TYPE__GEOMETRIC_OBJECT     = 20,
 				TYPE__COMPOSITE            = 21
 			};
+			//@}
 
 			/**	@name	Type definitions
 			*/

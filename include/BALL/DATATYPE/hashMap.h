@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.16 2000/09/14 11:24:31 oliver Exp $ 
+// $Id: hashMap.h,v 1.17 2000/10/05 22:28:47 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -44,11 +44,18 @@ namespace BALL
 	{
 		public:
 
+		/**	@name	 Enums and Constants
+		*/
+		//@{
 		enum
 		{
+			/// Initial capacity of the empty hash map
 			INITIAL_CAPACITY          = 4,
+
+			/// Initial number of buckets of the empty hash map
 			INITIAL_NUMBER_OF_BUCKETS = 3
 		};
+		//@}
 
 		/**	@name	Exceptions
 		*/
@@ -265,24 +272,15 @@ namespace BALL
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
-		// --- STORERS
-
-		/*
-		friend istream& operator >> (istream& s, HashMap& hash_map);
-
-		friend ostream& operator << (ostream& s, const HashMap& hash_map);
-
-		void read(istream &s);
-
-		void write(ostream &s) const;
-		*/      
-
-		// --- INTERNAL ITERATORS
+		/**	@name	Iternal iterators
+		*/
+		//@{
 
 		/** Apply a processor to the hashmap.
 				@return true if the processor could be applied.
 		*/
 		bool apply(UnaryProcessor<ValueType>& processor);
+		//@}
 
 		// --- EXTERNAL ITERATORS
 		struct Node
@@ -494,9 +492,6 @@ namespace BALL
 
 		virtual void rehash();
 
-
-		private:
-
 		PointerType find_(const Key& key, HashIndex& index);
 			
 		PointerType find_(const Key& key, HashIndex& index) const;
@@ -507,14 +502,20 @@ namespace BALL
 
 		void rehash_();
 
-		// --- ATTRIBUTES
-
-		Size					size_;
-		Size					capacity_;
-
-		/*_	Buckets are stored as a vector of linked lists of Nodes 
+		/**	@name Attributes
 		*/
-		vector<Node*>							bucket_;
+		//@{
+		/**	The number of entries in the map
+		*/
+		Size size_;
+		/**	The maximum number of entries before a resize operation is required
+		*/
+		Size capacity_;
+
+		/**	Buckets are stored as a vector of linked lists of Nodes 
+		*/
+		vector<Node*> bucket_;
+		//@}
 	};
 
 	template <class Key, class T>

@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.16 2000/08/30 19:58:20 oliver Exp $
+// $Id: energyMinimizer.h,v 1.17 2000/10/05 22:29:53 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -510,7 +510,7 @@ namespace BALL
        Measure for the speed of minimization 
     */
     int energy_update_counter_; 
-		//_@}
+		//@}
 	};
 
 } // namespace Ball

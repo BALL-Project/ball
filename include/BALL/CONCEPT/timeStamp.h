@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.4 2000/09/27 10:33:42 oliver Exp $
+// $Id: timeStamp.h,v 1.5 2000/10/05 22:27:45 oliver Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -63,6 +63,7 @@ namespace BALL
 
 		/**	@name Assignment
 		*/
+		//@{
 		/** 
 		*/
 		void set(long secs, long usecs) throw();
