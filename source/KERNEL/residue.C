@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.12 2000/05/15 19:25:32 oliver Exp $
+// $Id: residue.C,v 1.13 2000/05/16 21:38:43 amoll Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -103,6 +103,16 @@ namespace BALL
 
 	bool Residue::hasTorsionPsi() const
 	{
+		// instance must have a parent chain
+		if (getChain() == 0)
+		{
+			return false;
+		}
+		// at least 2 residues are needed to create an angle
+		if (getChain()->countResidues() < 2)
+		{
+			return false;
+		}
 		// the torsion angle psi is not defined for
 		// the C-terminus
 		return !isCTerminal();
@@ -157,8 +167,18 @@ namespace BALL
 
 	bool Residue::hasTorsionPhi() const
 	{
+		// instance must have a parent chain
+		if (getChain() == 0)
+		{
+			return false;
+		}
+		// at least 2 residues are needed to create an angle
+		if (getChain()->countResidues() < 2)
+		{
+			return false;
+		}
 		// the torsion angle phi is not defined for
-		// the C-terminus
+		// the N-terminus
 		return !isNTerminal();
 	}
 	
@@ -355,7 +375,7 @@ namespace BALL
 
 	bool Residue::isNTerminal() const
 	{
-		if ((isAminoAcid() == true) && !hasProperty(Residue::PROPERTY__CYCLIC))
+		if (isAminoAcid() == true)
 		{
 			const Chain* chain = getChain();
 
@@ -373,7 +393,7 @@ namespace BALL
 		
 	bool Residue::isCTerminal() const
 	{
-		if ((isAminoAcid() == true) && !hasProperty(Residue::PROPERTY__CYCLIC))
+		if (isAminoAcid() == true)
 		{
 			const Chain* chain = getChain();
 
