@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.53 2003/05/08 20:36:59 oliver Exp $
+// $Id: HINFile.C,v 1.54 2003/05/08 20:55:35 oliver Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -195,7 +195,7 @@ namespace BALL
 			if (start_index < atom_vector.size())
 			{
 				// create a stack containing all atoms to be axamined for this component
-				stack<Size>	atom_stack;
+				std::stack<Size> atom_stack;
 				
 				// our start atom is the first to be considered and is marked, too
 				atom_stack.push(start_index);
