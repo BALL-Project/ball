@@ -1,4 +1,4 @@
-// $Id: kernel.h,v 1.1 2000/01/03 15:17:33 oliver Exp $
+// $Id: kernel.h,v 1.2 2000/03/28 15:26:18 oliver Exp $
 // BALL collective kernel header file
 // includes all kernel headers
 #ifndef BALL_KERNEL_H
@@ -56,8 +56,8 @@
 #	include <BALL/KERNEL/protein.h>
 #endif
 
-#ifndef BALL_KERNEL_PSE_H
-#	include <BALL/KERNEL/PSE.h>
+#ifndef BALL_KERNEL_PTE_H
+#	include <BALL/KERNEL/PTE.h>
 #endif
 
 #ifndef BALL_KERNEL_RESIDUE_H
