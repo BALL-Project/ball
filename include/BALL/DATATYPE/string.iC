@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.8 2000/05/24 07:48:57 oliver Exp $
+// $Id: string.iC,v 1.9 2000/05/24 16:11:52 oliver Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -629,7 +629,7 @@ Substring String::after(const String& s, Index from) const
 
   Position found = find(s, from); 
 
-	if (found == npos)
+	if ((found == npos) || (found + s.size() >= size()))
 	{
 		return Substring(*this, -1, 0);
 	}
