@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.24 2002/12/20 20:20:36 anhi Exp $
+// $Id: displayProperties.C,v 1.25 2003/02/19 13:17:28 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -479,9 +479,28 @@ namespace BALL
 			ccm->setDeletable(false);
 			const HashSet<Composite*>& picked_objects = MainControl::getMainControl(this)->getSelection();
 			List<Composite*>::Iterator updates_it = updates.begin();
+
 			for (; updates_it != updates.end(); updates_it++)
 			{
-				applyOn_(**updates_it);
+				applyOn_(**updates_it, true);
+
+				// if we have to calculate a surface, do it at the first round for all selected composites
+				// this prevents distinct seperated surfaces for all single selected atoms
+				if (updates_it == updates.begin())
+				{
+					if (RTTI::isKindOf<AddGLSurfaceModel>(*dynamic_base_model_pointer_))
+					{
+						updates.apply(remove_model_dynamic_);
+						updates.apply(surface_model_dynamic_);
+					}
+
+					if (RTTI::isKindOf<AddGLSurfaceModel>(*static_base_model_pointer_))
+					{
+						Log.error() << "apply in DP" << std::endl;
+						updates.apply(remove_model_static_);
+						updates.apply(surface_model_static_);
+					}
+				}
 
 				// reselect geometric objects, this is workaround
 				if (picked_objects.has(*updates_it))   (*updates_it)->apply(selector);
@@ -489,10 +508,8 @@ namespace BALL
 				// perform update of the composites
 				ccm->setComposite(*updates_it);
 				notify_(ccm);
-			
-						
 			}
-				
+
 			// update scene
 			SceneMessage scene_message;
 			scene_message.updateOnly();
@@ -552,11 +569,22 @@ namespace BALL
 		// Model Processor methods
 		// ------------------------------------------------------------------------
 
-		void DisplayProperties::applyOn_(Composite& composite)
+		void DisplayProperties::applyOn_(Composite& composite, bool ignore_surface_processor)
 		{
 			// apply static visualization processor
-			if (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_SURFACE) composite.apply(remove_model_static_);
-			composite.apply(*static_base_model_pointer_);
+			if (!ignore_surface_processor)
+			{
+				if (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_SURFACE) 
+				{
+					composite.apply(*(BaseModelProcessor*)&remove_model_static_);
+				}
+				composite.apply(*static_base_model_pointer_);
+			}
+
+			if (!RTTI::isKindOf<AddGLSurfaceModel>(*static_base_model_pointer_))
+			{
+				composite.apply(*static_base_model_pointer_);
+			}
 			
 			// this is a workaround to ensure that if we have a dynamic and a static surface, both appear in the list
 			if ( (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_SURFACE) &&
@@ -568,9 +596,20 @@ namespace BALL
 				ccm->setComposite(composite);
 				notify_(ccm);
 			}	
-			
-			if (getValue_(ADDRESS__DYNAMIC_MODEL) == VALUE__MODEL_SURFACE) composite.apply(remove_model_dynamic_);
-			composite.apply(*dynamic_base_model_pointer_);
+
+			if (!ignore_surface_processor)
+			{
+				if (getValue_(ADDRESS__DYNAMIC_MODEL) == VALUE__MODEL_SURFACE) 
+				{
+					composite.apply(*(BaseModelProcessor*)&remove_model_dynamic_);
+				}
+				composite.apply(*dynamic_base_model_pointer_);
+			}
+
+			if (!RTTI::isKindOf<AddGLSurfaceModel>(*dynamic_base_model_pointer_))
+			{
+				composite.apply(*dynamic_base_model_pointer_);
+			}
 		}
 
 

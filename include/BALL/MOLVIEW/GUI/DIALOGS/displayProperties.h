@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.21 2003/01/06 17:42:36 amoll Exp $
+// $Id: displayProperties.h,v 1.22 2003/02/19 13:17:24 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -428,7 +428,7 @@ namespace BALL
 			void setValue_(int address, int value);
 			bool hasValue_(int address, int value);
 
-			virtual void applyOn_(Composite& composite);
+			virtual void applyOn_(Composite& composite, bool ignore_surface_processor = false);
 			virtual void setColorCalculator_(ColorCalculatorValues values, const ColorRGBA &first_color = ColorRGBA(),
 																			 const ColorRGBA &second_color = ColorRGBA(), const ColorRGBA &third_color = ColorRGBA())
 																			 throw(InvalidOption);
