@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.6 2001/06/05 15:51:12 anker Exp $
+// $Id: atomContainer.C,v 1.7 2001/06/14 00:30:42 oliver Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -93,7 +93,7 @@ namespace BALL
     clone_bonds = false;
 
 		Composite::set(atom_container, deep);
-		PropertyManager::set(atom_container, deep);
+		PropertyManager::set(atom_container);
 		name_ = atom_container.name_;
 
 		// clone the bonds only of we are the outmost set method

@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.20 2001/06/13 14:04:30 anker Exp $
+// $Id: bond.C,v 1.21 2001/06/14 00:30:42 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -36,7 +36,7 @@ namespace BALL
 	Bond::Bond(const Bond& bond, bool deep)
 		throw()
 		: Composite(bond, deep),
-			PropertyManager(bond, deep),
+			PropertyManager(bond),
 			first_(bond.first_),
 			second_(bond.second_),
 			name_(bond.name_),
