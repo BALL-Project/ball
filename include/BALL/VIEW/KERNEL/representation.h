@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.6 2003/10/24 23:04:33 amoll Exp $
+// $Id: representation.h,v 1.7 2003/10/27 16:55:44 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -131,6 +131,14 @@ namespace BALL
 				throw() { return drawing_precision_;}
 
 			///
+			float getSurfaceDrawingPrecision() const
+				throw() { return surface_drawing_precision_;}
+
+			///
+			void setSurfaceDrawingPrecision(float precision)
+				throw();
+
+			///
 			void setDrawingMode(Index mode)
 				throw() { drawing_mode_ = mode;}
 
@@ -242,6 +250,9 @@ namespace BALL
 
 			//_
 			Index 							drawing_precision_;
+
+			//_
+			float 							surface_drawing_precision_;
 
 			//_
 			Index 							model_type_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.C,v 1.5 2003/10/17 16:17:37 amoll Exp $
+// $Id: modelProcessor.C,v 1.6 2003/10/27 16:55:45 amoll Exp $
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -17,7 +17,8 @@ ModelProcessor::ModelProcessor()
 	throw()
 	: UnaryProcessor<Composite>(),
 		PropertyManager(),
-		drawing_precision_(DRAWING_PRECISION_HIGH)
+		drawing_precision_(DRAWING_PRECISION_HIGH),
+		surface_drawing_precision_(-1)
 {
 }
 
@@ -25,7 +26,8 @@ ModelProcessor::ModelProcessor(const ModelProcessor& model_processor)
 	throw()
 	: UnaryProcessor<Composite>(model_processor),
 		PropertyManager(model_processor),
-		drawing_precision_(model_processor.drawing_precision_)
+		drawing_precision_(model_processor.drawing_precision_),
+		surface_drawing_precision_(-1)
 {}
 
 ModelProcessor::~ModelProcessor()
@@ -40,6 +42,7 @@ void ModelProcessor::clear()
 	PropertyManager::clear();
 	geometric_objects_.clear();
 	drawing_precision_ = DRAWING_PRECISION_HIGH;
+	surface_drawing_precision_ = -1;
 }
 
 bool ModelProcessor::start()

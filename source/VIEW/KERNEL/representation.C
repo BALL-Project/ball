@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.8 2003/10/21 15:36:26 amoll Exp $
+// $Id: representation.C,v 1.9 2003/10/27 16:55:45 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -273,6 +273,14 @@ namespace BALL
 			drawing_precision_ = precision;
 			if (model_processor_ != 0) model_processor_->setDrawingPrecision(drawing_precision_);
 		}
+
+		void Representation::setSurfaceDrawingPrecision(float precision)
+			throw() 
+		{
+			surface_drawing_precision_ = precision;
+			if (model_processor_ != 0) model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
+		}
+
 
 	} // namespace VIEW
 } // namespace BALL

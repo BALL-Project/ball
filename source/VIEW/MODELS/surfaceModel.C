@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.5 2003/09/07 17:24:01 oliver Exp $
+// $Id: surfaceModel.C,v 1.6 2003/10/27 16:55:45 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -78,22 +78,29 @@ namespace BALL
 			SurfaceProcessor sp;
 			sp.setType(getType());
 
-			switch (getDrawingPrecision())
+			if (getSurfaceDrawingPrecision() != -1)
 			{
-				case VIEW::DRAWING_PRECISION_LOW:
-					sp.setDensity(1.5);
-					break;
+				sp.setDensity(getSurfaceDrawingPrecision());
+			}
+			else
+			{
+				switch (getDrawingPrecision())
+				{
+					case VIEW::DRAWING_PRECISION_LOW:
+						sp.setDensity(1.5);
+						break;
 
-				case VIEW::DRAWING_PRECISION_MEDIUM:
-					sp.setDensity(3.5);
-					break;
+					case VIEW::DRAWING_PRECISION_MEDIUM:
+						sp.setDensity(3.5);
+						break;
 
-				case VIEW::DRAWING_PRECISION_HIGH:
-					sp.setDensity(6.0);
-					break;
+					case VIEW::DRAWING_PRECISION_HIGH:
+						sp.setDensity(6.0);
+						break;
 
-				default:
-					Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
+					default:
+						Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
+				}
 			}
 
 			try 

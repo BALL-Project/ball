@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.6 2003/10/17 16:17:23 amoll Exp $
+// $Id: modelProcessor.h,v 1.7 2003/10/27 16:55:44 amoll Exp $
 //
 
 #ifndef BALL_VIEW_GUI_MODELS_ModelProcessor_H
@@ -82,6 +82,14 @@ namespace BALL
 				///
 				Index getDrawingPrecision() const
 					throw() { return drawing_precision_;}
+
+				///
+				void setSurfaceDrawingPrecision(float precision)
+					throw() { surface_drawing_precision_ = precision;}
+
+				///
+				float getSurfaceDrawingPrecision() const
+					throw() { return surface_drawing_precision_;}
 				
 				protected:
 				
@@ -90,6 +98,9 @@ namespace BALL
 
 				//_
 				Index drawing_precision_;
+
+				//_
+				float surface_drawing_precision_;
 	};
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.26 2003/10/27 16:26:45 amoll Exp $
+// $Id: displayProperties.C,v 1.27 2003/10/27 16:54:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -282,6 +282,10 @@ void DisplayProperties::onNotify(Message *message)
 		{
 			case RepresentationMessage::SELECTED:
 			{
+				if (((RepresentationMessage*) message)->getRepresentation()->getModelType() >= MODEL_LABEL)
+				{
+					return;
+				}
 				rep_ = ((RepresentationMessage*) message)->getRepresentation();
 				modifyRepresentationMode();
 				return;
