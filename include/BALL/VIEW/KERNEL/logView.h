@@ -10,7 +10,7 @@
 #	include <BALL/common.h>
 #endif
 
-#include <strstream>
+#include <sstream>
 
 #ifndef QAPPLICATION_H
 #	include <qapplication.h>
@@ -59,7 +59,7 @@ namespace BALL
 			/** Default Constructor.
 					Construct new logView.
 					The text of {\em *this} logView is empty. The contructor connects the own
-					{\em strstream} with the \Ref{Log} object. If a string is written into
+					{\em stringstream} with the \Ref{Log} object. If a string is written into
 					\Ref{Log} {\em *this} will be notified and the string will be displayed
 					by {\em *this} logView. 
 					@return      LogView new constructed logView
@@ -148,14 +148,8 @@ namespace BALL
 			*/
 			QString history_string_;
 
-			std::strstream strstream_;
+			std::stringstream strstream_;
 		};
-
-
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/logView.iC>
-#		endif
 
 	}// namespace VIEW
 		

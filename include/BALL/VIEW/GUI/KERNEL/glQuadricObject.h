@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.8 2002/02/27 12:20:02 sturm Exp $
+// $Id: glQuadricObject.h,v 1.9 2002/12/12 09:35:12 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
@@ -10,12 +10,10 @@
 #	include <BALL/common.h>
 #endif
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <qgl.h>
 
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 		
@@ -25,8 +23,8 @@ namespace BALL
 				and create quadric objects. Further this class hides the handling
 				of OpenGL quadric objects and defines an easy interface for creating those
 				quadric objects.
-				See the documentation of th OpenGL graphical library for information
-				concerning quadric objects.
+				See the documentation of the OpenGL graphical library for information
+				concerning quadric objects.\\
 				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glQuadricObject.h}
 		*/
 		class GLQuadricObject
@@ -94,7 +92,6 @@ namespace BALL
 			};
 
 			//@}
-
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -129,7 +126,6 @@ namespace BALL
 				throw();
 		
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -155,8 +151,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -172,8 +168,7 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the glQuadricObject {\em GL_quadric_object} to {\em *this}
-					glQuadricObject.
+					Assign the glQuadricObject {\em GL_quadric_object} to {\em *this} glQuadricObject.
 					The state of {\em *this} glQuadricObject is initialized to the state
 					of the glQuadricObject {\em GL_quadric_object}
 					Calls \Ref{set}.
@@ -185,8 +180,7 @@ namespace BALL
 				throw();
 
 			/** Copying.
-					Copy {\em *this} glQuadricObject to the glQuadricObject 
-					{\em GL_quadric_object}.
+					Copy {\em *this} glQuadricObject to the glQuadricObject {\em GL_quadric_object}.
 					The state of {\em *this} glQuadricObject is initialized to the state
 					of the glQuadricObject {\em GL_quadric_object}
 					Calls \Ref{set}.
@@ -197,14 +191,13 @@ namespace BALL
 				throw();
 
 			/** Swapping of glQuadricObjects.
-					Swap the state of {\em *this} glQuadricObject with the state of the
-					glQuadricObject	{\em GL_quadric_object}.
+					Swap the state of {\em *this} glQuadricObject with the state of {\em GL_quadric_object}.
 					@param       GL_quadric_object the glQuadricObject being swapped with {\em *this} glQuadricObject 
 			*/
 			void swap(GLQuadricObject& GL_quadric_object)
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -212,8 +205,7 @@ namespace BALL
 			/** Change the drawing style.
 					Change the drawing style of {\em *this} glQuadricObject to the value
 					represented by the parameter {\em style}.
-					See the documentation of the OpenGL	graphical library for drawing
-					styles of quadric objects.
+					See the documentation of the OpenGL	graphical library for drawing styles of quadric objects.
 					@param       style the new drawing style of {\em *this} glQuadricObject
 					@see         getDrawStyle
 					@exception   WrongDrawingStyle thrown whenever the drawing style is not allowed.
@@ -258,7 +250,8 @@ namespace BALL
 					off according to the value represented by the parameter {\em generate}.
 					See the documentation of the OpenGL	graphical library for information
 					concerning texture coordinate generation of quadric objects.
-					@param       generate if set to {\tt true} the texture coordinate generation of {\em *this} glQuadricObject will be turned on; turned off if set to {\tt false}
+					@param       generate if set to {\tt true} the texture coordinate generation of {\em *this} glQuadricObject will be turned on; 
+											 turned off if set to {\tt false}
 					@see         getTextureCoordinateGeneration
 			*/
 			void setTextureCoordinateGeneration(bool generate)
@@ -268,7 +261,7 @@ namespace BALL
 					Is the texture coordinate generation of {\em *this} glQuadricObject
 					turned on {\tt true}, or turned off {\tt false}.
 					@return    bool {\tt true} if the texture coordinate generation of {\em *this} glQuadricObject will be turned on, {\tt false} otherwise
-					@see         setTextureCoordinateGeneration
+					@see       setTextureCoordinateGeneration
 			*/
 			bool getTextureCoordinateGeneration() const
 				throw();
@@ -335,9 +328,7 @@ namespace BALL
 					@param    rings the number of rings the disk has
 					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
 			*/
-			void drawDisk
-				(GLdouble inner_radius, GLdouble outer_radius,
-				 int slices, int rings)
+			void drawDisk (GLdouble inner_radius, GLdouble outer_radius, int slices, int rings)
 				throw(NoQuadricObjectAvailable);
 
 			/** Draw a cylinder.
@@ -354,15 +345,12 @@ namespace BALL
 					@param    stacks the number of stacks the cylinder has
 					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
 			*/
-			void drawCylinder
-				(GLdouble base_radius, GLdouble top_radius, GLdouble height,
-				 int slices, int stacks)
+			void drawCylinder (GLdouble base_radius, GLdouble top_radius, GLdouble height, int slices, int stacks)
 				throw(NoQuadricObjectAvailable);
 
 			/** Draw a sphere.
 					This method draws a sphere with the given parameter.
-					It uses the properties of {\em *this} glQuadricObject for drawing
-					the sphere.
+					It uses the properties of {\em *this} glQuadricObject for drawing the sphere.
 					This method is a wrapper method for the OpenGL function {\em gluSphere}.
 					See documentation of the OpenGL graphical library for information
 					on the function {\em gluSphere} in the quadric object section.
@@ -375,10 +363,10 @@ namespace BALL
 				throw(NoQuadricObjectAvailable);
 
 			//@}
-			
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+			
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure 
 					consistencies	of {\em *this} glQuadricObject.
@@ -401,11 +389,12 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Storers
 			*/
 			//@{
+			
 			/** Persistent stream output and state restorage.
   			  Read persistent glQuadricObject data from the input stream {\em s} and 
 				  restore the state of {\em *this}.\\
@@ -423,20 +412,20 @@ namespace BALL
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
+
 			//@}
 
-			
 			private:
 
 			void create_()
 				throw(NoQuadricObjectAvailable);
 
-			int draw_style_;
-			int normals_;
-			int orientation_;
-			bool generate_texture_coordinates_;
+			int 						draw_style_;
+			int 						normals_;
+			int 						orientation_;
+			bool 						generate_texture_coordinates_;
 
-			GLUquadricObj* GLU_quadric_obj_;
+			GLUquadricObj* 	GLU_quadric_obj_;
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
@@ -444,7 +433,6 @@ namespace BALL
 #		endif
 		
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H

@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.9 2002/02/27 12:20:14 sturm Exp $
+// $Id: connectionObject.h,v 1.10 2002/12/12 09:39:49 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -35,7 +31,6 @@
 #include <typeinfo>
 
 using std::string;
-//using namespace BALL;
 
 namespace BALL
 {

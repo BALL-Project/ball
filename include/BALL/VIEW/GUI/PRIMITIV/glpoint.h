@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glpoint.h,v 1.10 2002/02/27 12:20:06 sturm Exp $
+// $Id: glpoint.h,v 1.11 2002/12/12 09:36:47 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
 #define BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
@@ -194,10 +194,6 @@ namespace BALL
 				throw();
 			//@}
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glpoint.iC>
-#		endif
 
 	} // namespace VIEW
 

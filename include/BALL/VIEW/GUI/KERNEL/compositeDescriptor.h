@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeDescriptor.h,v 1.10 2002/02/27 12:19:59 sturm Exp $
+// $Id: compositeDescriptor.h,v 1.11 2002/12/12 09:35:12 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -20,10 +16,6 @@
 
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -50,10 +42,8 @@
 #	include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 

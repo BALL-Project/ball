@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glline.h,v 1.8 2002/02/27 12:20:05 sturm Exp $
+// $Id: glline.h,v 1.9 2002/12/12 09:36:46 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLINE_H
@@ -196,10 +196,6 @@ namespace BALL
 			//@}
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glline.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

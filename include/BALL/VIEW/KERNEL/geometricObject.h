@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.20 2002/02/27 12:20:15 sturm Exp $
+// $Id: geometricObject.h,v 1.21 2002/12/12 09:39:49 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -18,36 +14,17 @@
 #	include <BALL/CONCEPT/property.h>
 #endif
 
-#ifndef BALL_CONCEPT_SELECTABLE_H
-#	include <BALL/CONCEPT/selectable.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_MATHS_VECTOR3_H
-#	include <BALL/MATHS/vector3.h>
-#endif
-
 #ifndef BALL_VIEW_DATATYPE_COLOR_H
 #	include <BALL/VIEW/DATATYPE/color.h>
 #endif
-
 
 #define BALL_VIEW_PRINT_PROPERTY(property) \
 	(hasProperty(property) ? "yes" : "no")
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
-
-		/* forward */
-		class GLObject;
-		class Scene;
-
 		/** GeometricObject class.
 				The class GeometricObject is the most important base class for a
 				geometric primitive.  All geometric primitives must be derived from
@@ -67,20 +44,8 @@ namespace BALL
 			: public Composite,
 				public PropertyManager
 		{
-			/** @name Class friends
-
-					\begin{itemize}
-						\item class GLObject
-						\item class Scene
-					\end{itemize}
-			*/
-
-			friend class GLObject;
-			friend class Scene;
-
 			public:
 
-			
 			/** @name Deep cloning facility.
 			*/
 			//@{
@@ -119,7 +84,8 @@ namespace BALL
 			enum Property
 			{
 				// general properties
-				/// the object is visible only in the static render mode (Default). This property turns off the dynamic property. (*)
+				/// the object is visible only in the static render mode (Default). 
+				/// This property turns off the dynamic property. (*)
 				PROPERTY__OBJECT_STATIC                    = 0,     // Default
 
 				/// the object is visible only in the dynamic render mode. This property turns off the static property. (*)
@@ -140,7 +106,8 @@ namespace BALL
 				/// the object is hidden. This property turns off the visible property. (*)
 				PROPERTY__OBJECT_HIDDEN,                    
 
-				/// the object has not a closed surface (eg. a tube without caps is open). This property turns off the close property.
+				/// the object has not a closed surface (eg. a tube without caps is open). 
+				/// This property turns off the close property.
 				PROPERTY__OBJECT_OPENED,                    
 
 				/// the object has a closed surface (eg. a tube with caps is closed). This property turns off the opened property.
@@ -173,7 +140,6 @@ namespace BALL
 			};
 		
 			//@}
-
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -206,8 +172,7 @@ namespace BALL
 			/** Copy constructor.
 					Construct new geometricObject by copying the geometricObject {\em object}.
 					The copy is either deep (default) or shallow.
-					The state of {\em *this} geometricObject is initialized to the state of the geometricObject {\em object}.\\
-
+					The state of {\em *this} geometricObject is initialized to the state of the geometricObject {\em object}.
 					@param       object the geometricObject to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em object}
 					@return      GeometricObject new constructed geometricObject cloned from {\em object}
@@ -219,7 +184,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors */
 			//@{
 
@@ -262,8 +226,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+							
 			//@}
-
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -313,14 +277,13 @@ namespace BALL
 			*/
 			void swap(GeometricObject& object)
 				throw();
+							
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
-			/** Change the property of {\em *this} geometricObject.
-					Change the property of {\em *this} geometricObject to the property
+			/** Change the property of {\em *this} geometricObject to the property
 					represented by the parameter {\em property}. 
 					See predefined properties for allowed	properties.
 					This method overrides the method {\em setProperty} from the class
@@ -335,84 +298,6 @@ namespace BALL
 			void setProperty(Property property)
 				throw();
 
-			/** Change the selected color of {\em *this} geometricObject.
-					If the geometric object is selected not its own color will be used but
-					the color given with this method.
-					In a newly created geometricObject the selected color will be set to the default
-					color yellow (1.0, 1.0, 0.0, 1.0).
-					@param       color the new select color of {\em *this} geometricObject
-					@see         getSelectedColor
-					@see         ColorRGBA
-			*/
-			void setSelectedColor(const ColorRGBA& color)
-				throw();
-			
-			/** Change the selected color of {\em *this} geometricObject.
-					If the geometric object is selected not its own color will be used but
-					the color given with this method.
-					In a newly created geometricObject the selected color will be set to the default
-					color yellow (1.0, 1.0, 0.0, 1.0).
-					@param       red the new red component of the selected color of {\em *this} geometricObject
-					@param       green the new green component of the selected color of {\em *this} geometricObject
-					@param       blue the new blue component of the selected color of {\em *this} geometricObject
-					@param       alpha the new alpha component of the selected color of {\em *this} geometricObject (Default=255)
-					@see         getSelectedColor
-					@see         ColorRGBA
-					@see         ColorUnit
-			*/
-			void setSelectedColor
-				(const ColorUnit& red, const ColorUnit& green,
-				 const ColorUnit& blue, const ColorUnit& alpha = 255)
-				throw();
-			
-			/** Non-mutable inspection of the selected color.
-					Access the constant reference of the selected color of {\em *this} geometricObject.
-					See \Ref{ColorRGBA} for further information concerning the color.
-					@return      ColorRGBA& constant reference to the selected color of {\em *this} geometricObject
-					@see         getSelectedColor
-					@see         ColorRGBA
-			*/
-			const ColorRGBA& getSelectedColor() const
-				throw();
-
-			/** Inspection of the selected color.
-					Access the selected color of {\em *this} geometricObject by using \Ref{ColorRGBA}.
-					@param       color the colorRGBA receiving the selected color of {\em *this} geometricObject.
-					@see         setSelectedColor
-					@see         ColorRGBA
-			*/
-			void getSelectedColor(ColorRGBA& color) const
-				throw();
-
-			/** Inspection of the selected color components including the alpha component.
-					Access the red, green, blue and alpha components of the selected color
-					of {\em *this} geometricObject by using \Ref{ColorUnit}'s.
-					@param      red the colorUnit receiving the red component of the selected color of {\em *this} geometricObject
-					@param      green the colorUnit receiving the green component of the selected color of {\em *this} geometricObject
-					@param      blue the colorUnit receiving the blue component of the selected color of {\em *this} geometricObject
-					@param      alpha the colorUnit receiving the alpha component of the selected color of {\em *this} geometricObject
-					@see        setSelectedColor
-					@see        ColorUnit
-			*/
-			void getSelectedColor
-				(ColorUnit& red, ColorUnit& green,
-				 ColorUnit& blue, ColorUnit& alpha) const
-				throw();
-
-			/** Inspection of the selected color components without the alpha component.
-					Access only the red, green and blue components of the selected color
-					of {\em *this} geometricObject by using \Ref{ColorUnit}'s.
-					@param      red the colorUnit receiving the red component of the selected color of {\em *this} geometricObject
-					@param      green the colorUnit receiving the green component of the selected color of {\em *this} geometricObject
-					@param      blue the colorUnit receiving the blue component of the selected color of {\em *this} geometricObject
-					@param      alpha the colorUnit receiving the alpha component of the selected color of {\em *this} geometricObject
-					@see        setSelectedColor
-					@see        ColorUnit
-			*/
-			void getSelectedColor
-				(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
-				throw();
-			
 			/** Change the name of {\em *this} geometricObject.
 					Change the name of {\em *this} geometricObject to the name
 					represented by the parameter {\em name}.
@@ -457,11 +342,12 @@ namespace BALL
 			*/
 			virtual String getTypeName() const
 				throw();
+							
 			//@}
-		
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} geometricObject.
@@ -469,8 +355,7 @@ namespace BALL
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {Composite::isValid}.
 					Calls {PropertyManager::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} geometricObject is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} geometricObject is correct
 					@see        Composite::isValid
 					@see        PropertyManager::isValid
 			*/
@@ -488,8 +373,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Storers
 			*/
 			//@{
@@ -511,25 +396,23 @@ namespace BALL
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
-			//@}
 
-			
 			protected:
 
-			/** @name Internal protected members.
+			//@}
+			/*_ @name Internal protected members.
 			*/
 			//@{
 			
-			/** Export method.
-					This method handles the export of {\em *this} geometricObject into another
-					format (eg. POVRAY, VRML).\\
+			/*_ Export method.
+					This method handles the export of {\em *this} geometricObject into another format (eg. POVRAY, VRML).\\
 				  {\bf Note:} Not yet implemented.
 					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
 				throw();
 
-			/** Inspection of the drawing mode and drawing precision.
+			/*_ Inspection of the drawing mode and drawing precision.
 					Access the drawing mode and the drawing precision as integers. The properties
 					will be converted into integers. See predefined properties for further
 					information converning allowed properties and integer range.
@@ -546,9 +429,6 @@ namespace BALL
 			void clear_()
 				throw();
 		
-			/* color of the selected object */
-			ColorRGBA selected_color_;
-
 			/* name of the geometric object */
 			String name_;
 		};
@@ -558,7 +438,6 @@ namespace BALL
 #		endif
 		
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_GEOMETIRCOBJECT_H

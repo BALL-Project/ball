@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.h,v 1.25 2002/02/27 12:19:53 sturm Exp $
+// $Id: socket.h,v 1.26 2002/12/12 09:27:23 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -30,9 +30,21 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <sys/uio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+
+#ifdef BALL_HAS_UIO_H
+#	include <sys/uio.h>
+#endif
+#ifdef BALL_HAS_SYS_SOCKET_H
+#	include <sys/socket.h>
+#endif
+#ifdef BALL_HAS_NETINET_IN_H
+#	include <netinet/in.h>
+#endif
+#ifdef BALL_USE_WINSOCK
+#	include <winsock.h>
+#endif
+
+
 
 #ifdef BALL_HAS_ANSI_IOSTREAM
 #	ifndef _S_USER_BUF
@@ -989,11 +1001,11 @@ namespace BALL
 
 		///
 		IOStreamSocket(const SocketBuf& sb)	
-			throw();
+			throw(Exception::NullPointer);
 				
 		///
 		IOStreamSocket(SocketBuf::type ty=SocketBuf::sock_stream, int proto = 0)
-			throw();
+			throw(Exception::NullPointer);
 		
 		/// Destructor 
 		virtual ~IOStreamSocket()

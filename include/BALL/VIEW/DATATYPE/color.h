@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: color.h,v 1.8 2002/02/27 12:19:54 sturm Exp $
+// $Id: color.h,v 1.9 2002/12/12 09:29:51 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLOR_H
 #define BALL_VIEW_DATATYPE_COLOR_H
@@ -14,4 +14,4 @@
 #	include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
-#endif // <BALL/VIEW_DATATYPE_COLOR_H
+#endif // BALL/VIEW_DATATYPE_COLOR_H

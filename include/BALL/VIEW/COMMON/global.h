@@ -1,6 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: global.h,v 1.9 2002/12/12 09:28:35 oliver Exp $
+
 #ifndef BALL_VIEW_COMMON_GLOBAL_H
 #define BALL_VIEW_COMMON_GLOBAL_H
 
@@ -62,6 +64,22 @@ namespace BALL
 		};	
 		//@}
 
+
+		/** MainControlMissing exception class.
+				This exception is thrown if {\em *this} scene is not inserted into a
+				\Ref{MainControl} object.
+				@see GeneralException
+		*/
+ 		class MainControlMissing: public Exception::GeneralException
+		{
+ 			public:
+   			MainControlMissing(const char* file, int line, const string data = "")
+					throw()
+					: Exception::GeneralException(file, line, string("MainControlMissing"), data)
+				{
+    		}
+		};
+    
 	} // namespace VIEW
 
 } // namespace BALL

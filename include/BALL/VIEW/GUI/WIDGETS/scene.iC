@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.iC,v 1.8 2002/02/27 12:20:10 sturm Exp $
+// $Id: scene.iC,v 1.9 2002/12/12 09:37:46 oliver Exp $
 
 BALL_INLINE
 void Scene::setRenderMode_(RenderMode mode)
@@ -73,6 +73,29 @@ void Scene::setLookAtPosition(const Real x, const Real y, const Real z, bool set
 	throw()
 {
 	setCameraPosition_(Vector3(x, y, z), position_, set_origin);  
+}
+
+BALL_INLINE
+const Vector3& Scene::getUpVector() const
+	throw()
+{
+	return up_;
+}
+
+BALL_INLINE
+const Vector3& Scene::getRightVector() const
+	throw()
+{
+	return right_;
+}
+
+BALL_INLINE
+void Scene::getScalingFactor(Vector3& scaling) const
+	throw()
+{
+	scaling.x = x_scale_;
+	scaling.y = y_scale_;
+	scaling.z = 1.;
 }
 
 BALL_INLINE
@@ -175,5 +198,17 @@ bool Scene::hasDefaultGLObjectCollector() const
 	throw()
 {
   return (GL_object_collector_ == (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>());
+}
+
+BALL_INLINE
+void Scene::deselectionPressed_(Scene* /* scene */)
+{
+	selectionPressed_(this);
+}
+
+BALL_INLINE
+void Scene::deselectionPressedMoved_(Scene* /* scene */)
+{
+	selectionPressedMoved_(this);
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.h,v 1.6 2002/02/27 12:19:52 sturm Exp $
+// $Id: fileSystem.h,v 1.7 2002/12/12 09:27:23 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H
@@ -11,7 +11,9 @@
 #endif
 
 #include <limits.h>
-#include <sys/param.h>
+#ifdef BALL_HAS_SYS_PARAM_H
+#	include <sys/param.h>
+#endif
 
 // if PATH_MAX is undefined (which sometimes happens on systems
 // where there is no unambiguous value defined due to severel differing

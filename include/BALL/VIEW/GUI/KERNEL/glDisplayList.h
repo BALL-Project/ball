@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.7 2002/02/27 12:20:00 sturm Exp $
+// $Id: glDisplayList.h,v 1.8 2002/12/12 09:35:12 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
@@ -10,11 +10,10 @@
 #	include <BALL/common.h>
 #endif
 
-#include <GL/gl.h>
+#include <qgl.h>
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -33,7 +32,6 @@ namespace BALL
 		{
 			public:
 
-
 			/**	@name	Type Definitions.
 			*/
 			//@{
@@ -43,8 +41,8 @@ namespace BALL
 					that represents such a display list.
 			*/
 			typedef unsigned long GLList;
-			//@}
 
+			//@}
 			/** @name Predefined static values.
 			*/
 			//@{
@@ -54,8 +52,8 @@ namespace BALL
 					{\em DISPLAYLIST_NOT_DEFINED}.
 			*/
 			static const GLList DISPLAYLIST_NOT_DEFINED;
-			//@}
 
+			//@}
 			/**	@name	Exceptions
 			*/
 			//@{
@@ -98,8 +96,8 @@ namespace BALL
 				DisplayListRedeclaration(const char* file, int line)
 					throw();
 			};
-			//@}
 
+			//@}
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -119,7 +117,6 @@ namespace BALL
 					throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -147,7 +144,6 @@ namespace BALL
 			virtual void destroy()
 					throw();
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -159,7 +155,8 @@ namespace BALL
 					this method will be compiled into {\em *this} glDisplayList.
 					@exception   NestedDisplayList thrown whenever a nested display list definition is tried.
 					@exception   NoDisplayListAvailable thrown whenever no memory for the display list is available.
-					@exception   DisplayListRedeclaration thrown whenever {\em *this} glDisplayList is tried to be redefined before \Ref{destroy} is called.
+					@exception   DisplayListRedeclaration thrown whenever {\em *this} glDisplayList is tried to be redefined before 
+										   \Ref{destroy} is called.
 					@see         endDefinition
 			*/
 			void startDefinition()
@@ -209,8 +206,8 @@ namespace BALL
 			*/
 			void useCompileAndExecuteMode()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Predicates
 			*/
 			//@{
@@ -230,8 +227,8 @@ namespace BALL
 			*/
 			bool isCompileAndExecuteMode() const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -256,8 +253,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Storers
 			*/
 			//@{
@@ -279,9 +276,9 @@ namespace BALL
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
+
 			//@}
 
-			
 			private:
 
 			/* compile switch */

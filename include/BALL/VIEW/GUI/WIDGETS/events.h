@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.8 2002/02/27 12:20:08 sturm Exp $
+// $Id: events.h,v 1.9 2002/12/12 09:37:45 oliver Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -967,6 +967,8 @@ namespace BALL
 			/**	@name	Constructors
 			*/	
 			//@{
+			Events()
+				throw();
 
 			/** Default Constructor.
 					Construct new events.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.12 2002/02/27 12:20:20 sturm Exp $
+// $Id: sphere.h,v 1.13 2002/12/12 09:41:06 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -26,11 +26,6 @@
 #	include <BALL/VIEW/KERNEL/vertex1.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_RADIUS_H
-#	include <BALL/VIEW/KERNEL/radius.h>
-#endif
-
-
 namespace BALL
 {
 	
@@ -53,8 +48,7 @@ namespace BALL
 		class Sphere
 			: public GeometricObject,
 				public ColorExtension,
-				public Vertex,
-				public Radius
+				public Vertex
 		{
 			public:
 
@@ -252,6 +246,16 @@ namespace BALL
 			virtual void write(std::ostream& s) const
 				throw();
 
+			/**	Get the radius.
+			 */
+			Real getRadius() const
+				throw();
+
+			/** Set the radius.
+			 */
+			void setRadius(Real radius)
+				throw();
+
 			//@}
 
 			protected:
@@ -264,11 +268,15 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
+			private:
+
+			Real radius_;
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/sphere.iC>
-#		endif
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/PRIMITIV/sphere.iC>
+#	endif
 		
 	} // namespace VIEW
 

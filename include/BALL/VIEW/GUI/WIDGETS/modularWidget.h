@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.11 2002/02/27 12:20:09 sturm Exp $
+// $Id: modularWidget.h,v 1.12 2002/12/12 09:37:46 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -56,7 +56,9 @@ namespace BALL
 				@see PyInterpreter
 				@see PyWidget
 		*/
-		class ModularWidget: public Embeddable,	public ConnectionObject
+		class ModularWidget
+			: public Embeddable,	
+				public ConnectionObject
 		{
 		  public:
 			
@@ -155,8 +157,7 @@ namespace BALL
 			/**	Menu checking method.
 					This method is called by the method \Ref{checkMenus} from the
 					\Ref{MainControl} object before a popup menu is shown.
-					It should be used to update the state of menu entries (e.g. disable or enable
-					entries).
+					It should be used to update the state of menu entries (e.g. disable or enable entries).
 					@param main_control the \Ref{MainControl} object whose menus should be checked
 					@see   initializeWidget
 					@see   finalizeWidget
@@ -182,8 +183,7 @@ namespace BALL
 			
 			/**	Remove the preferences tab.
 					This method can remove a preferences widget (if created in 
-					\Ref{initializePreferencesTab})	from the \Ref{Preferences} dialog of 
-					the \Ref{MainControl}.
+					\Ref{initializePreferencesTab})	from the \Ref{Preferences} dialog of the \Ref{MainControl}.
 					This method is called automatically by the method \Ref{aboutToExit} from the
 					\Ref{MainControl} object at the end of the application.
 					@param  preferences the \Ref{Preferences} dialog of the \Ref{MainControl}
@@ -242,6 +242,10 @@ namespace BALL
 			virtual void writePreferences(INIFile& inifile)
 				throw();
 
+			/** Set the text of the statusbar.
+			 */
+			virtual void setStatusbarText(String text)
+				throw();
 			//@}			
 		}; 
 

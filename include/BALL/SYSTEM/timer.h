@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.h,v 1.7 2002/02/27 12:19:53 sturm Exp $
+// $Id: timer.h,v 1.8 2002/12/12 09:27:23 oliver Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -10,7 +10,15 @@
 #	include <BALL/common.h>
 #endif
 
-#include <sys/time.h>
+#ifdef BALL_HAS_SYS_TIME_H
+#	include <sys/time.h>
+#endif
+#ifdef BALL_HAS_TIME_H
+#	include <time.h>
+#endif
+
+
+
 #include <iostream>
 
 namespace BALL
@@ -191,8 +199,11 @@ namespace BALL
 
 		private:
 
-		// CPU speed for times() call 
 		static long cpu_speed_;
+
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			static long clock_speed_;
+		#endif
 
 		// state of timer, either true(on) or false(off) 
 		bool is_running_;

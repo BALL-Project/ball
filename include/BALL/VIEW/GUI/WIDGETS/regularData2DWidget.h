@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.18 2002/02/27 12:20:10 sturm Exp $
+// $Id: regularData2DWidget.h,v 1.19 2002/12/12 09:37:46 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -55,8 +55,9 @@
 #endif
 
 #ifndef BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H
-# include <BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlay.h>
+# include <BALL/VIEW/GUI/DIALOGS/dlgMoveOverlay.h>
 #endif
+
 using namespace BALL;
 using namespace BALL::VIEW;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clientScene.h,v 1.7 2002/02/27 12:20:12 sturm Exp $
+// $Id: clientScene.h,v 1.8 2002/12/12 09:39:48 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
 #define BALL_VIEW_KERNEL_CLIENTSCENE_H
@@ -145,11 +145,6 @@ namespace BALL
 			TextPersistenceManager pm_;
 		};
 
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/clientScene.iC>
-#		endif
-		
 	} // namespace VIEW
 	
 } // namespace BALL

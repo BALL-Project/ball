@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.11 2002/02/27 12:20:20 sturm Exp $
+// $Id: point.h,v 1.12 2002/12/12 09:41:05 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H
@@ -250,10 +250,6 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/point.iC>
-#		endif
 
 	} // namespace VIEW
 

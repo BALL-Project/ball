@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.h,v 1.8 2002/02/27 12:20:01 sturm Exp $
+// $Id: glPrimitiveManager.h,v 1.9 2002/12/12 09:35:12 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
@@ -22,18 +18,10 @@
 #	include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
-#	include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
-#endif
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
 #define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE 12
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 		/**	GLDisplayListObject_ class.
@@ -46,15 +34,6 @@ namespace BALL
 		*/
 		class GLDisplayListObject_
 		{
-			/** @name Class friends
-
-					\begin{itemize}
-						\item class GeometricObject
-					\end{itemize}
-			*/
-			
-			friend class GeometricObject;
-
 			public:
 
 			/**	@name	Exceptions
@@ -88,8 +67,8 @@ namespace BALL
 				WrongModes(const char* file, int line)
 					throw();
 			};
-			//@}
 
+			//@}
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -102,7 +81,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -112,22 +90,20 @@ namespace BALL
 			*/
 			virtual ~GLDisplayListObject_()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
 			/** Return a glDisplayList (Pure virtual method).
-					This method must be overridden from the derived classes. They must implement
-					this method. 
+					This method must be overridden from the derived classes. They must implement this method. 
 					@param   drawing_mode the drawing mode the \Ref{GLDisplayList} should have
 					@param   drawing_precision the drawing precision the \Ref{GLDisplayList} should have
 					@return  GLDisplayList& a reference to a \Ref{GLDisplayList}
 					@see     getDrawingModeAndPrecision
 			*/
-			virtual GLDisplayList& operator ()
-				(unsigned int drawing_mode, unsigned int drawing_precision)
+			virtual GLDisplayList& operator () (unsigned int drawing_mode, unsigned int drawing_precision)
 				throw(WrongModes) = 0;
 			
 			/** Return a glDisplayList.
@@ -137,8 +113,7 @@ namespace BALL
 					@return  const GLDisplayList& a constant reference to a \Ref{GLDisplayList}
 					@see     getDrawingModeAndPrecision
 			*/
-			const GLDisplayList& operator ()
-				(unsigned int drawing_mode, unsigned int drawing_precision) const
+			const GLDisplayList& operator () (unsigned int drawing_mode, unsigned int drawing_precision) const
 				throw(WrongModes);
 			//@}
 		};
@@ -169,8 +144,8 @@ namespace BALL
 			*/
  			GLSphereDisplayLists_()
 				throw();
-			//@}
 
+			//@}
 			/** @name Destructors 
 			*/
 			//@{
@@ -190,8 +165,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -201,7 +176,8 @@ namespace BALL
 					the graphical representation of the geometric primitive "sphere" in various
 					resolutions and drawing modes.\\
 					{\bf Note:} this method will be called by the class \Ref{GLPrimitiveManager}.
-					@exception  NoGLDisplayListsAvailable thrown if the memory allocation for the needed \Ref{GLDisplayList} objects failed
+					@exception  NoGLDisplayListsAvailable thrown if the memory allocation for the needed \Ref{GLDisplayList} 
+					  					objects failed
 					@see GLDisplayList
 			*/
 			void init()
@@ -218,19 +194,19 @@ namespace BALL
 			*/
 			GLDisplayList& operator () (unsigned int drawing_mode, unsigned int drawing_precision)
 				throw(WrongModes);
-			//@}
 
+			//@}
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} glSphereDisplayLists_.
 					If all allocated \Ref{GLDisplayList} objects for {\em *this}
 					glSphereDisplayLists_ are valid	{\tt true} is returned, {\tt false} otherwise. 
 					Calls {GLDisplayList::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} glSphereDisplayLists_ is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} glSphereDisplayLists_ is correct 
 					@see        GLDisplayList::isValid
 			*/
 			virtual bool isValid() const
@@ -247,8 +223,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+							
 			//@}
-
 
 			private:
 
@@ -264,11 +240,12 @@ namespace BALL
 				throw();
 
 			/* help functions for sphere dots */
-			void subdivideTriangle_
-				(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
+			void subdivideTriangle_(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
 				throw();
 
-			/* the display lists */
+			/* the BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE (12) display lists
+			 	 (drawing_mode[3] * drawing_precision[4] = 12)
+			*/
 			GLDisplayList* GL_display_list_;
 
 			/* static array of vertices for sphere dots */
@@ -302,8 +279,8 @@ namespace BALL
 			*/
 			GLTubeDisplayLists_()
 				throw();
-			//@}
 
+			//@}
 			/** @name Destructors 
 			*/
 			//@{
@@ -323,8 +300,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -334,7 +311,8 @@ namespace BALL
 					the graphical representation of the geometric primitive "tube" in various
 					resolutions and drawing modes.\\
 					{\bf Note:} this method will be called by the class \Ref{GLPrimitiveManager}.
-					@exception  NoGLDisplayListsAvailable thrown if the memory allocation for the needed \Ref{GLDisplayList} objects failed
+					@exception  NoGLDisplayListsAvailable thrown if the memory allocation for the needed \Ref{GLDisplayList} 
+					  					objects failed
 					@see GLDisplayList
 			*/
 			void init()
@@ -349,22 +327,21 @@ namespace BALL
 					@exception WrongModes thrown if the {\em drawing_mode} or {\em drawing_precision} are not allowed
 					@see     getDrawingModeAndPrecision
 			*/
-			GLDisplayList& operator () 
-				(unsigned int drawing_mode, unsigned int drawing_precision)
+			GLDisplayList& operator () (unsigned int drawing_mode, unsigned int drawing_precision)
 				throw(WrongModes);
+							
 			//@}
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} glTubeDisplayLists_.
 					If all allocated \Ref{GLDisplayList} objects for {\em *this}
 					glTubeDisplayLists_ are valid	{\tt true} is returned, {\tt false} otherwise. 
 					Calls {GLDisplayList::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} glTubeDisplayLists_ is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} glTubeDisplayLists_ is correct
 					@see        GLDisplayList::isValid
 			*/
 			virtual bool isValid() const
@@ -381,6 +358,7 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+							
 			//@}
 
 
@@ -421,7 +399,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -441,8 +418,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -452,7 +429,8 @@ namespace BALL
 					the graphical representation of the geometric primitive "simpleBox" in various
 					resolutions and drawing modes.\\
 					{\bf Note:} this method will be called by the class \Ref{GLPrimitiveManager}.
-					@exception  NoGLDisplayListsAvailable thrown if the memory allocation for the needed \Ref{GLDisplayList} objects failed
+					@exception  NoGLDisplayListsAvailable thrown if the memory allocation for the needed \Ref{GLDisplayList} 
+						  				objects failed
 					@see GLDisplayList
 			*/
 			void init()
@@ -470,19 +448,19 @@ namespace BALL
 			GLDisplayList& operator ()
 				(unsigned int drawing_mode, unsigned int drawing_precision)
 				throw(WrongModes);
+							
 			//@}
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} glSimpleBoxDisplayLists_.
 					If all allocated \Ref{GLDisplayList} objects for {\em *this}
 					glSimpleBoxDisplayLists_ are valid	{\tt true} is returned, {\tt false} otherwise. 
 					Calls {GLDisplayList::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} glSimpleBoxDisplayLists_ is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} glSimpleBoxDisplayLists_ is correct
 					@see        GLDisplayList::isValid
 			*/
 			virtual bool isValid() const
@@ -499,8 +477,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+							
 			//@}
-
 
 			private:
 
@@ -536,8 +514,8 @@ namespace BALL
 			*/
 			//@{
 			typedef unsigned int Name;
-			//@}
 
+			//@}
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -559,7 +537,6 @@ namespace BALL
 				throw();
 			
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -583,8 +560,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+
 			//@}
-		
 			/**	@name	Accessors
 			*/
 			//@{
@@ -628,13 +605,14 @@ namespace BALL
 					the parameter {\em name}.
 					If {\em name} has no associated \Ref{GeometricObject} {\tt 0} will be returned.
 					@param   Name a name for a \Ref{GeometricObject}
-					@return  GeometricObject* the \Ref{GeometricObject} that is found with the parameter {\em name} ({\tt 0} is returned if no such \Ref{GeometricObject} exists)
+					@return  GeometricObject* the \Ref{GeometricObject} that is found with the parameter {\em name} 
+										({\tt 0} is returned if no such \Ref{GeometricObject} exists)
 					@see    getName
 			*/
 			GeometricObject* getObject(Name name) const
 				throw();
-			//@}
 
+			//@}
 			/** @name Predefined display lists.
 			*/		
 			//@{
@@ -657,8 +635,8 @@ namespace BALL
 					@see  GLSimpleBoxDisplayLists_
 			*/
 			GLSimpleBoxDisplayLists_ SimpleBox;
-			//@}
 
+			//@}
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -668,8 +646,7 @@ namespace BALL
 					Calls \Ref{GLSphereDisplayLists_::isValid}
 					Calls \Ref{GLTubeDisplayLists_::isValid}
 					Calls \Ref{GLSimpleBoxDisplayLists_::isValid}
-					@return			bool {\tt true} if the internal state of {\em *this} glPrimitiveManager is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} glPrimitiveManager is correct
 					@see     GLSphereDisplayLists_::isValid
 					@see     GLTubeDisplayLists_::isValid
 					@see     GLSimpleBoxDisplayLists_::isValid
@@ -691,8 +668,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Storers
 			*/
 			//@{
@@ -721,16 +698,16 @@ namespace BALL
 			typedef HashMap<GeometricObject*, Name> NameHashMap;
 			typedef HashMap<Name, GeometricObject*> GeometricObjectHashMap;
 
-			GeometricObjectHashMap name_to_object_;
-			NameHashMap object_to_name_;
+			GeometricObjectHashMap	name_to_object_;
+			NameHashMap							object_to_name_;
 
 			Name all_names_;
 		};
 
-
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.iC>
-#		endif
+#		endif 
+
 
 	} // namespace VIEW
 

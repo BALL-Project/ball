@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.11 2002/02/27 12:20:19 sturm Exp $
+// $Id: mesh.h,v 1.12 2002/12/12 09:41:05 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -205,6 +205,17 @@ namespace BALL
 				throw();
 
 			//@}
+			/** @name Attributes
+			 */
+			//@{
+			
+			/** The colors belonging to each vertex. If this list has *less* entries than
+					there are vertices in this mesh, we take the first element to color the whole
+					mesh. If it is *empty*, we use the color white.
+			 */
+			vector<ColorRGBA> colorList;
+			//@}
+			
 			/**	@name	Storers
 			*/
 			//@{
@@ -241,10 +252,6 @@ namespace BALL
 				throw();
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/mesh.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

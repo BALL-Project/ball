@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.10 2002/03/16 11:42:49 amoll Exp $
+// $Id: TCPTransfer.h,v 1.11 2002/12/12 09:27:23 oliver Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -41,7 +41,7 @@ namespace BALL
 			*/
 			enum Status
 			{
-				NO_ERROR 								= 0,
+				OK  							= 0,
 				GETHOSTBYNAME_ERROR 		= 1,
 				SOCKET_ERROR 						= 2,
 				CONNECT_ERROR 					= 3,
@@ -252,6 +252,13 @@ namespace BALL
 				Status	getHTTP_()
 					throw();
 
+				/*_ Read a complete status message form a FTP server
+				    Return false if timeout of 20 seconds is exceeded or an other than the given message
+						is received.
+				*/						
+				bool getFTPMessage_(Index status)
+					throw();				
+				
 				//_ Compute the status of a ftp server from its response
 				Status	getFTPStatus_()
 					throw();

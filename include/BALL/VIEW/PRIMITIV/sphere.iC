@@ -1,4 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.iC,v 1.3 2002/02/27 12:20:21 sturm Exp $
+// $Id: sphere.iC,v 1.4 2002/12/12 09:41:06 oliver Exp $
+
+BALL_INLINE
+void Sphere::setRadius(Real radius)
+	throw()
+{
+	radius_ = radius;
+}
+
+BALL_INLINE
+Real Sphere::getRadius() const
+	throw()
+{
+	return radius_;
+}
+>>>>>>> 1.2.4.3

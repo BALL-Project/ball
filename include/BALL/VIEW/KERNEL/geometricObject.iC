@@ -1,53 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.iC,v 1.7 2002/02/27 12:20:15 sturm Exp $ 
-
-BALL_INLINE 
-void GeometricObject::setSelectedColor(const ColorRGBA& color)
-	throw()
-{
-  selected_color_ = color;
-}
-
-BALL_INLINE 
-void GeometricObject::setSelectedColor
-  (const ColorUnit& red, const ColorUnit& green,
-   const ColorUnit& blue, const ColorUnit& alpha)
-	throw()
-{
-  selected_color_.set(red, green, blue, alpha);
-}
-
-BALL_INLINE 
-const ColorRGBA& GeometricObject::getSelectedColor() const
-	throw()
-{
-  return selected_color_;
-}
-
-BALL_INLINE 
-void GeometricObject::getSelectedColor(ColorRGBA& color) const
-	throw()
-{
- color = selected_color_;
-}
-
-BALL_INLINE 
-void GeometricObject::getSelectedColor
-  (ColorUnit& red, ColorUnit& green,
-   ColorUnit& blue, ColorUnit& alpha) const
-	throw()
-{
-  selected_color_.get(red, green, blue, alpha);
-}
-
-BALL_INLINE 
-void GeometricObject::getSelectedColor(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
-	throw()
-{
-  selected_color_.get(red, green, blue);
-}
+// $Id: geometricObject.iC,v 1.8 2002/12/12 09:39:49 oliver Exp $ 
 
 BALL_INLINE 
 void GeometricObject::setName(const String& name)

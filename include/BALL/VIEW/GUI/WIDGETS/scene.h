@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.9 2002/02/27 12:20:10 sturm Exp $
+// $Id: scene.h,v 1.10 2002/12/12 09:37:46 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -21,7 +21,6 @@
 #	include <BALL/CONCEPT/composite.h>
 #endif
 
-
 #ifndef BALL_MATHS_MATRIX44_H
 #	include <BALL/MATHS/matrix44.h>
 #endif
@@ -30,16 +29,8 @@
 #	include <BALL/MATHS/quaternion.h>
 #endif
 
-#ifndef BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
-#	include <BALL/VIEW/FUNCTOR/geometricCollector.h>
-#endif
-
 #ifndef BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
 #	include <BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h>
-#endif
-
-#ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
-#	include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_EVENTS_H
@@ -58,11 +49,17 @@
 #	include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #endif
 
+#ifndef BALL_VIEW_COMMON_GLOBAL_H
+# include <BALL/VIEW/COMMON/global.h>
+#endif 
+
 namespace BALL
 {
-
 	namespace VIEW
 	{
+
+		// necessary forward declaration
+		class ExternalRenderer;
 
 		/**	The Scene class.
 				The class Scene is the main visualization widget that shows that graphical
@@ -80,7 +77,8 @@ namespace BALL
 				be assigned to a scene.
 				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/scene.h}
 		*/
-		class Scene: public QGLWidget, public ModularWidget
+		class Scene
+			: public QGLWidget, public ModularWidget
 		{
 			Q_OBJECT
 
@@ -114,6 +112,9 @@ namespace BALL
 			*/	
 			//@{
 
+			Scene()
+				throw();
+
 			/** Default Constructor.
 					Construct new scene.
 					Initialize the width and height of {\em *this} scene to {\tt 600} and sets
@@ -131,17 +132,15 @@ namespace BALL
 					Register a default \Ref{GLObjectCollector}.
 					A \Ref{GLPrimitiveManager} is initialized for {\em *this} scene.
 					Calls \Ref{registerWidget}.
-					@param      parent_widget the parent widget of {\em *this} scene (See documentation of QT-library for information concerning widgets)
-					@param      name the name of {\em *this} scene (See documentation of QT-library for information concerning widgets)
-					@param      flags the flags the scene widget should have (See documentation of QT-library for information concerning widget flags) 
+					@param      parent_widget the parent widget of {\em *this} scene 
+					@param      name the name of {\em *this} scene 
+					@param      flags the flags the scene widget should have 
+											(See documentation of QT-library for information concerning widget flags) 
 					@return     Scene new constructed scene
 					@see        QGLwidget
 					@see        ModularWidget
 			*/
-			Scene
-				(QWidget* parent_widget,
-				 const char* name = NULL,
-				 WFlags w_flags = 0)
+			Scene(QWidget* parent_widget, const char* name = NULL, WFlags w_flags = 0)
 				throw();
 
 			/** Copy constructor.
@@ -158,22 +157,17 @@ namespace BALL
 					A \Ref{GLPrimitiveManager} is initialized for {\em *this} scene.
 					Calls \Ref{registerWidget}.
 					@param  scene the scene to be copied
-					@param  parent_widget the parent widget of {\em *this} scene (See documentation of QT-library for information concerning widgets)
+					@param  parent_widget the parent widget of {\em *this} scene 
 					@param  name the name of {\em *this} scene (See documentation of QT-library for information concerning widgets)
-					@param  flags the flags the scene widget should have (See documentation of QT-library for information concerning widget flags) 
+					@param  flags the flags the scene widget should have 
 					@return Scene new constructed scene copied from {\em scene}
-					@see        QGLwidget
-					@see        ModularWidget
+					@see    QGLwidget
+					@see    ModularWidget
 			 */
-			Scene
-				(const Scene& scene,
-				 QWidget* parent_widget = NULL,
-				 const char* name = NULL,
-				 WFlags wflags = 0)
+			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -204,24 +198,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
-		
-			/**	@name Exceptions
-			*/
-			//@{
-			/** MainControlMissing exception class.
-					This exception is thrown if {\em *this} scene is not inserted into a
-					\Ref{MainControl} object.
-					@see GeneralException
-			*/
- 			class MainControlMissing: public Exception::GeneralException
-			{
-  			public:
-	   			MainControlMissing(const char* file, int line, const string& data)
-					throw();
-			};
-			//@}
 
+			//@}
 			/**	@name	Assignment
 			*/
 			//@{
@@ -255,8 +233,8 @@ namespace BALL
 			*/
 			void get(Scene& scene) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -265,7 +243,8 @@ namespace BALL
 					Change the camera position of {\em *this} scene.
 					@param look_at the look at position of the camera
 					@param view_point the view point of the camera
-					@param set_origin if set to {\tt true} than the {\em look_at} vector will be used as the system origin. otherwise the system origin will not be changed
+					@param set_origin if set to {\tt true} than the {\em look_at} vector will be used as the system origin. 
+								 otherwise the system origin will not be changed
 					@see   setViewPointPosition
 					@see   Vector3
 			*/
@@ -323,9 +302,12 @@ namespace BALL
 			/** Inspection of the view point position of the camera (coordinate version).
 					Access the view point position of the camera of {\em *this} scene by using 
 					\Ref{Real}.
-					@param  x reference to the x coordinate receiving the x coordinate of the view point position of the camera of {\em *this} scene
-					@param  y reference to the y coordinate receiving the x coordinate of the view point position of the camera of {\em *this} scene
-					@param  z reference to the z coordinate receiving the x coordinate of the view point position of the camera of {\em *this} scene
+					@param  x reference to the x coordinate receiving the x coordinate of the view point 
+									position of the camera of {\em *this} scene
+					@param  y reference to the y coordinate receiving the x coordinate of the view point 
+									position of the camera of {\em *this} scene
+					@param  z reference to the z coordinate receiving the x coordinate of the view point 
+									position of the camera of {\em *this} scene
 					@see    setViewPointPosition 
 					@see    setCamera
 					@see    Real
@@ -337,13 +319,35 @@ namespace BALL
 					Change the look at position of the camera of {\em *this} scene. The system origin
 					can either be set to the new look at position {\em v} (Default) or not.
 					@param v the new look at position
-					@param set_origin if set to {\tt true} than {\em v} is also the new system origin of {\em *this} scene, if set to {\tt false} the system origin is not changed
+					@param set_origin if set to {\tt true} than {\em v} is also the new system origin of {\em *this} scene, 
+								 if set to {\tt false} the system origin is not changed
 					@see   setViewPointPosition
 					@see   getLookAtPosition
 					@see   setCamera
 					@see   Vector3
 			*/
 			void setLookAtPosition(const Vector3& v, bool set_origin = true)
+				throw();
+			
+			/** Non-mutable inspection of the up vector.
+					@return Vector3& a constant reference to the up vector of
+					        {\em *this} scene
+					@see		Vector3
+			*/
+			const Vector3& getUpVector() const
+				throw();
+			
+			/** Non-mutable inspection of the right vector.
+					@return Vector3& a constant reference to the right vector of
+					                 {\em *this} scene
+					@see	Vector3
+			*/
+			const Vector3& getRightVector() const
+				throw();
+
+			/** Inspection of the scaling factor of {\em *this} scene.
+			 */
+			void getScalingFactor(Vector3& scaling) const
 				throw();
 			
 			/** Non-mutable inspection of the look at position of the camera.
@@ -364,7 +368,8 @@ namespace BALL
 					@param x the x coordinate of the new look at position
 					@param y the y coordinate of the new look at position
 					@param z the z coordinate of the new look at position
-					@param set_origin if set to {\tt true} than the vector consisting of {\em x}, {\em y}, and {\em z} is also the new system origin of {\em *this} scene, if set to {\tt false} the system origin is not changed
+					@param set_origin if set to {\tt true} than the vector consisting of {\em x}, {\em y}, and {\em z} is also the 
+								 new system origin of {\em *this} scene, if set to {\tt false} the system origin is not changed
 					@see   getLookAtPosition
 					@see   setCamera
 					@see   Real
@@ -386,9 +391,12 @@ namespace BALL
 			/** Inspection of the look at position of the camera (coordinate version).
 					Access the look at position of the camera of {\em *this} scene by using 
 					\Ref{Real}.
-					@param  x reference to the x coordinate receiving the x coordinate of the look at position of the camera of {\em *this} scene
-					@param  y reference to the y coordinate receiving the x coordinate of the look at position of the camera of {\em *this} scene
-					@param  z reference to the z coordinate receiving the x coordinate of the look at position of the camera of {\em *this} scene
+					@param  x reference to the x coordinate receiving the x coordinate of the look at 
+									position of the camera of {\em *this} scene
+					@param  y reference to the y coordinate receiving the x coordinate of the look at 
+									position of the camera of {\em *this} scene
+					@param  z reference to the z coordinate receiving the x coordinate of the look at 
+									position of the camera of {\em *this} scene
 					@see    setLookAtPosition 
 					@see    setCamera
 					@see    Real
@@ -396,15 +404,7 @@ namespace BALL
 			void getLookAtPosition(Real& x, Real& y, Real& z) const
 				throw();
 
-			/*			
-			Real getDistance() const
-				throw();
-			void getDistance(Real& distance) const
-				throw();
-			*/
-
-			/** Register a glObjectCollector.
-					Register a \Ref{GLObjectCollector} for {\em *this} scene.
+			/** Register a \Ref{GLObjectCollector} for {\em *this} scene.
 					Initially a default \Ref{GLObjectCollector} is already registered.
 					A \Ref{GLObjectCollector} is responsible for collecting all \Ref{GLObject} objects
 					from the \Ref{Composite} object that is inserted into the \Ref{MainControl}.
@@ -420,8 +420,7 @@ namespace BALL
 			void registerGLObjectCollector(const GLObjectCollector& globject_collector)
 				throw();
 
-			/** Unregister a glObjectCollector.
-					Unregister a \Ref{GLObjectCollector} for {\em *this} scene.
+			/** Unregister a \Ref{GLObjectCollector} for {\em *this} scene.
 					If this method is called a default \Ref{GLObjectCollector} will be registered.
 					@see   registerGLObjectCollector
 					@see   getGLObjectCollector
@@ -430,8 +429,7 @@ namespace BALL
 			void unregisterGLObjectCollector()
 				throw();
 
-			/** Non-mutable inspection of the glObjectCollector.
-					Access a constant pointer to the \Ref{GLObjectCollector} of {\em *this} scene.
+			/** Access a constant pointer to the \Ref{GLObjectCollector} of {\em *this} scene.
 					@return GLObjectCollector* a constant pointer to the registered \Ref{GLObjectCollector} of {\em *this} scene
 					@see   registerGLObjectCollector
 					@see   unregisterGLObjectCollector
@@ -440,9 +438,9 @@ namespace BALL
 			const GLObjectCollector *getGLObjectCollector() const
 				throw();
 
-			/** Update the visualization.
-					Update the visualization of {\em *this} scene.
-					@param  rebuild_displaylists is set to {\tt true} than all the \Ref{GLDisplayList} objects are updated. If set to {\tt false} only the display is redrawed.
+			/** Update the visualization of {\em *this} scene.
+					@param  rebuild_displaylists is set to {\tt true} than all the \Ref{GLDisplayList} objects are updated. 
+									If set to {\tt false} only the display is redrawed.
 					@see    GLDisplayList
 					@see    GLEntityDescriptor
 					@see    CompositeDescriptor
@@ -451,10 +449,8 @@ namespace BALL
 			void update(bool rebuild_displaylists = false)
 				throw(MainControlMissing);
 
-			/** Message handling method.
-					Handles messages sent by other registered \Ref{ConnectionObject} objects.
-					Filters for \Ref{SceneMessage} and sets the camera appropriate or updates
-					the visualization. 
+			/** Handles messages sent by other registered \Ref{ConnectionObject} objects.
+					Filters for \Ref{SceneMessage} and sets the camera appropriate or updates the visualization. 
 					Calls \Ref{update} with {\tt false} as parameter.
 					@param message the pointer to the message that should be processed
 					@see   ConnectionObject
@@ -463,26 +459,28 @@ namespace BALL
 			virtual void onNotify(Message *message)
 				throw();
 
+			/** This method prepares an ExternalRenderer for a later export of this scene.
+			*/
+			virtual void exportScene(BALL::VIEW::ExternalRenderer &er) const
+				throw();
+
 			//@}			
-
-
 			/** @name Event class
 			*/
 			//@{
-			/** Event class.
-					This object contains all possible events {\em *this} scene can sent via
-					the \Ref{Notification} mechanism of BALL
+			
+			/** This object contains all possible events {\em *this} scene can sent via the 
+					\Ref{Notification} mechanism of BALL
 					@see  Events
 			*/
 			Events events;
-			//@}	
 
-			
+			//@}	
 			/**	ModularWidget methods.
 			*/
 			//@{
-			/**	Initialize the widget.
-					Initialize the popup menu {\em Display} and the menus of {\em *this} scene:
+			
+			/**	Initialize the popup menu {\em Display} and the menus of {\em *this} scene:
 					\begin{itemize}
 					  \item the {\em rotate mode} (all mouse actions are attached to rotating, translating and zooming the scene)
 					  \item the {\em picking mode} (all mouse actions are attached to picking objects from the scene)
@@ -500,10 +498,8 @@ namespace BALL
 				throw();
 		
 			/**	Remove the widget.
-					Reverse all actions performed in \Ref{initializeWidget}
-					(remove menu entries of {\em *this} scene).
-					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
-					object.
+					Reverse all actions performed in \Ref{initializeWidget} (remove menu entries of {\em *this} scene).
+					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl} object.
 					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} scene
 					@see   initializeWidget
 					@see   checkMenu
@@ -526,26 +522,24 @@ namespace BALL
 			*/
 			virtual void checkMenu(MainControl& main_control)
 				throw();
+			
 			//@}
-
 			/**	@name	Predicates
 			*/
 			//@{
+
 			/** Test if default glObjectCollector is registered.
-					Test if a default \Ref{GLObjectCollector} is registered for {\em *this} scene.
-					@return bool {\tt true} if a default \Ref{GLObjectCollector} is registered for {\em *this} scene, {\tt false} otherwise
+					@return bool {\tt true} if a default \Ref{GLObjectCollector} is registered for {\em *this} scene
 			*/
 			bool hasDefaultGLObjectCollector() const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Debugging and Diagnostics
 			*/
 			//@{
 
 			/** Internal state and consistency self-validation.
-					Initiate self-validation of the internal state and data structure consistencies
-					of {\em *this} scene.
 					If the internal state of {\em *this} scene is correct 
 					(self-validated) and consistent {\tt true} is returned, {\tt false} otherwise. 
 					{\em *this} scene is valid if:
@@ -570,7 +564,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	@name	Storers
 			*/
 			//@{
@@ -592,58 +585,15 @@ namespace BALL
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
-			//@}
-
-
-/*
-			signals:
-
-			// must be updated => new event handler
-
-			void clickedButton
-				(Scene::MouseButton,
-				 Scene::Event);
-
-			void clickedMouseButtonOne
-				(Scene::Event);
-
-			void clickedMouseButtonTwo
-				(Scene::Event);
-
-			void clickedMouseButtonThree
-				(Scene::Event);
-
-			void releasedButton
-				(Scene::MouseButton,
-				 Scene::Event);
-
-			void releasedMouseButtonOne
-				(Scene::Event);
-
-			void releasedMouseButtonTwo
-				(Scene::Event);
-
-			void releasedMouseButtonThree
-				(Scene::Event);
-*/
 
 			protected:
 
-			/*
-			const Vector3& getLastLookAtPosition_() const
-				throw();
-			void getLastLookAtPosition_(Vector3& v) const
-				throw();
-			void getLastLookAtPosition_(Real& x, Real& y, Real& z) const
-				throw();
-			*/
-
+			//@}
 			/** @name Protected members
 			*/
 			//@{
 
 			/** Non-mutable inspection of the zoom vector.
-					Access the constant reference to the zoom vector of {\em *this} scene.
 					The zoom vector is the translation vector from the view point position to the
 					look at position of the camera.
 					This vector is internally needed for calculating rotation, translation and zoom
@@ -658,11 +608,8 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the up vector.
-					Access the constant reference to the up vector of {\em *this} scene.
-					The up vector is the vector that defines the y-coordinate axis of {\em *this}
-					scene.
-					This vector is internally needed for calculating rotation, translation and zoom
-					of {\em *this} scene.
+					The up vector is the vector that defines the y-coordinate axis of {\em *this} scene.
+					This vector is internally needed for calculating rotation, translation and zoom of {\em *this} scene.
 					This vector will be calculated anew if the position of the camera changes.
 					@return  Vector3& constant reference to the up vector of {\em *this} scene
 					@see     setLookAtPosition
@@ -673,11 +620,8 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the right vector.
-					Access the constant reference to the right vector of {\em *this} scene.
-					The right vector is the vector that defines the x-coordinate axis of {\em *this}
-					scene.
-					This vector is internally needed for calculating rotation, translation and zoom
-					of {\em *this} scene.
+					The right vector is the vector that defines the x-coordinate axis of {\em *this} scene.
+					This vector is internally needed for calculating rotation, translation and zoom of {\em *this} scene.
 					This vector will be calculated anew if the position of the camera changes.
 					@return  Vector3& constant reference to the right vector of {\em *this} scene
 					@see     setLookAtPosition
@@ -688,11 +632,9 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the look up vector.
-					Access the constant reference to the look up vector of {\em *this} scene.
 					The look up vector is a vector that helps define the y- and the x-coordinate axis
 					of {\em *this} scene (see \Ref{getUpVector} and \Ref{getRightVector}).
-					This vector is internally needed for calculating rotation, translation and zoom
-					of {\em *this} scene.
+					This vector is internally needed for calculating rotation, translation and zoom of {\em *this} scene.
 					This vector will be calculated anew if the position of the camera changes.
 					@return  Vector3& constant reference to the look up vector of {\em *this} scene
 					@see     getUpVector
@@ -703,16 +645,16 @@ namespace BALL
 			*/
 			const Vector3& getLookUpVector_() const
 				throw();
-			//@}
 
+			//@}
 			/** @name Protected QT overridden virtual methods
 			*/
 			//@{
+
 			/** Initialize the OpenGL context.
 					Overriden qt method for initializing the OpenGL context of {\em *this} scene.
 					This method will be called automatically before any call to \Ref{paintGL} or \Ref{resizeGL}.
-					See QT-library for information concerning the qglwidget.
-					events.
+					See QT-library for information concerning the qglwidget events.
 					@see  paintGL
 					@see  resizeGL
 			*/
@@ -721,8 +663,7 @@ namespace BALL
 			/** Render the visualization.
 					Overriden qt method for rendering the visualization of {\em *this} scene.
 					This method will be called automatically every time an update is necessary.
-					See QT-library for information concerning qglwidgets and paintGL methods and 
-					events.
+					See QT-library for information concerning qglwidgets and paintGL methods and events.
 					@see  MainControl
 					@see  CompositeDescriptor
 					@see  GLDisplayList
@@ -733,8 +674,7 @@ namespace BALL
 			/** Resize the widget.
 					Overridden qt method for resizing {\em *this} scene. 
 					This method will be called automatically every time a rezize event is handled.
-					See QT-library for information concerning qglwidgets and resizeGL methods and
-					events.
+					See QT-library for information concerning qglwidgets and resizeGL methods and events.
 					@param  width the new width of {\em *this} scene
 					@param  height the new height of {\em *this} scene
 			*/
@@ -798,14 +738,14 @@ namespace BALL
 					@see    Events
 			*/
 			virtual void mouseReleaseEvent(QMouseEvent* qmouse_event);
-			//@}
-
 
 			protected slots:
 
+			//@}
 			/** @name Protected slots
 			*/
 			//@{
+
 			/** Switch to rotate mode.
 					If this method is called the mouse actions of {\em *this} scene will
 					perform rotation, translation and zooming the visualization.
@@ -864,7 +804,6 @@ namespace BALL
 				MOUSE_BUTTON__THREE = 3
 			};
 
-
 			void setRenderMode_(RenderMode mode)
 				throw();
 
@@ -909,7 +848,7 @@ namespace BALL
 			
 			bool rotate_mode_;
 
-			GLObjectCollector *GL_object_collector_;
+			GLObjectCollector* GL_object_collector_;
 			GLPrimitiveManager GL_primitive_manager_;
 
 			Vector3 system_origin_;
