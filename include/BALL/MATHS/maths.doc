@@ -2,11 +2,20 @@
 
 /**@name	Mathematics
 		This chapter contains all relevant information on 
-		mathematical tools provided by BALL.
-		@nonames
+		mathematical classes provided by BALL.
 */
 //@{
 
-	//@Include: *.h
-
+	//@Include: angle.h
+	//@Include: box3.h
+	//@Include: circle3.h
+	//@Include: common.h
+	//@Include: line3.h
+	//@Include: matrix44.h
+	//@Include: plane3.h
+	//@Include: quaternion.h
+	//@Include: sphere3.h
+	//@Include: surface.h
+	//@Include: vector3.h
+	//@Include: vector4.h
 //@}
