@@ -14,6 +14,8 @@
 #include <BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
+#include <BALL/DATATYPE/regularData3D.h>
+#include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 
 #ifdef BALL_PYTHON_SUPPORT
