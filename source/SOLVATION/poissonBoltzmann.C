@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.9 1999/12/29 00:48:51 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.10 2000/03/14 12:22:40 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -1076,15 +1076,25 @@ namespace BALL
 		if (options[Option::BOUNDARY] == FDPB::Boundary::DEBYE) 
 		{
 			boundary_condition = 1;
-		} else if (options[Option::BOUNDARY] == FDPB::Boundary::ZERO) {
+		} 
+		else if (options[Option::BOUNDARY] == FDPB::Boundary::ZERO) 
+		{
 			boundary_condition = 0;
-		} else if (options[Option::BOUNDARY] == FDPB::Boundary::DIPOLE) {
+		} 
+		else if (options[Option::BOUNDARY] == FDPB::Boundary::DIPOLE) 
+		{
 			boundary_condition = 2;
-		}	else if (options[Option::BOUNDARY] == FDPB::Boundary::COULOMB) {
+		}	
+		else if (options[Option::BOUNDARY] == FDPB::Boundary::COULOMB) 
+		{
 			boundary_condition = 3;
-		}	else if (options[Option::BOUNDARY] == FDPB::Boundary::FOCUSING) {
+		}	
+		else if (options[Option::BOUNDARY] == FDPB::Boundary::FOCUSING) 
+		{
 			boundary_condition = 4;
-		} else {
+		} 
+		else 
+		{
 			Log.error() << "FDPB::setupBoundary: unknown boundary condition type: " << options[Option::BOUNDARY]
 							    << " (possible types: " << FDPB::Boundary::DEBYE << " " 
 									<< FDPB::Boundary::ZERO << " "
@@ -1115,10 +1125,17 @@ namespace BALL
 		//			\varepsilon_0:		vacuum dielectric constant
 		//			k:								Boltzmann constant
 		//			T:								temperature 
-
 		using namespace Constants;
-		beta = 1.0 / sqrt((2.0 * NA * e0 * e0 * ionic_strength)
+		if (ionic_strength != 0.0)
+		{
+			beta = 1.0 / sqrt((2.0 * NA * e0 * e0 * ionic_strength)
 											 / (VACUUM_PERMITTIVITY * solvent_dielectric_constant * k * temperature));
+		}
+		else 
+		{
+			// if the ionic strength equals zero, set beta to zero as well
+			beta = 0.0;
+		}
 													
 
 		// variable to hold the calculated grid index
