@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.50 2004/01/13 22:06:20 amoll Exp $
+// $Id: mainControl.C,v 1.51 2004/01/14 14:55:33 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -461,7 +461,10 @@ void MainControl::onNotify(Message *message)
 				}
 				printSelectionInfos();
 
-				updateRepresentationsOf(*cmessage->getComposite(), false);
+			// faster, but doesnt always work correctly:
+			//updateRepresentationsOf(*cmessage->getComposite(), false);
+			 
+				updateRepresentationsOf(*cmessage->getComposite(), true, true);
 
 				NewSelectionMessage* nws_message = new NewSelectionMessage;					
 				notify_(nws_message); // send to MolecularControl
