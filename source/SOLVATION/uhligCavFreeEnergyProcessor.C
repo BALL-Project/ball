@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.C,v 1.6 2000/10/23 10:24:52 anker Exp $
+// $Id: uhligCavFreeEnergyProcessor.C,v 1.7 2001/09/19 11:05:20 aubertin Exp $
 
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -53,6 +53,36 @@ namespace BALL
 		valid_ = true;
 	}
 
+        const UhligCavFreeEnergyProcessor& UhligCavFreeEnergyProcessor::operator = (const UhligCavFreeEnergyProcessor& proc) throw()     
+        {
+	         valid_=proc.valid_;
+                 energy_=proc.energy_;
+                 fragment_=proc.fragment_;  
+                 return *this;
+        }
+
+        bool UhligCavFreeEnergyProcessor::operator == (const UhligCavFreeEnergyProcessor& proc) const throw()
+        {
+          bool result;
+		if ((fragment_ == 0) && (proc.fragment_ == 0))
+		{
+			result = ((energy_ == proc.energy_) && (valid_ == proc.valid_));
+		}
+		else
+		{
+			if ((fragment_ == 0) || (proc.fragment_ == 0))
+			{
+				result = false;
+			}
+			else
+			{
+				result = ((*fragment_ == *proc.fragment_) 
+						&& (energy_ 	 == proc.energy_)
+						&& (valid_ 	 == proc.valid_));
+			}
+		}
+		return result;
+	}
 
 	bool UhligCavFreeEnergyProcessor::finish() throw()
 	{
