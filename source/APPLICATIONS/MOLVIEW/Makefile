@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.43 2003/08/28 20:56:30 oliver Exp $
+# $Id: Makefile,v 1.44 2003/08/29 10:57:16 amoll Exp $
 #
 
 EXECUTABLE=molview
@@ -38,21 +38,19 @@ UIC_SOURCES=\
 molview:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) -DQT_THREAD_SUPPORT
 
-depend: $(UIC_SOURCES) $(MOC_SOURCES)
+aboutDialog.h: aboutDialog.ui
+	$(UIC) aboutDialog.ui > aboutDialog.h
+				
+aboutDialog_moc.C: aboutDialog.h
+	$(MOC) aboutDialog.h -o $@
+
+mainframe_moc.C:	mainframe.h
+	$(MOC) mainframe.h -o $@
 
 $(UIC_SOURCES): $(UIC_HDR)
 
 depend: $(UIC_SOURCES) $(MOC_SOURCES)
 #
-#aboutDialog_moc.C: aboutDialog.h
-#	$(MOC) aboutDialog.h -o $@
-#
-#mainframe_moc.C:	mainframe.h
-#	$(MOC) mainframe.h -o $@
-#
-#aboutDialog.h: aboutDialog.ui
-#	$(UIC) aboutDialog.ui > aboutDialog.h
-#				
 #aboutDialog.C: aboutDialog.h
 #	$(UIC) -impl aboutDialog.h aboutDialog.ui > aboutDialog.C
 #				
