@@ -64,22 +64,24 @@
 			ConfigurationType="1"
 			CharacterSet="2"
 			ManagedExtensions="TRUE"
-			WholeProgramOptimization="FALSE">
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="3"
 				GlobalOptimizations="TRUE"
-				InlineFunctionExpansion="1"
+				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
+				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="1"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="0"
@@ -88,12 +90,67 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt307.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libmolview.lib libview.lib libball.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt330.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
 				OutputFile="$(OutDir)/molview.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..\..\..\lib\&quot;"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="FALSE"
+				TerminalServerAware="1"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+		</Configuration>
+		<Configuration
+			Name="Python|Win32"
+			OutputDirectory="Python"
+			IntermediateDirectory="Python"
+			ConfigurationType="1"
+			CharacterSet="2"
+			ManagedExtensions="TRUE"
+			WholeProgramOptimization="TRUE">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="3"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
+				OptimizeForProcessor="2"
+				OptimizeForWindowsApplication="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="0"
+				Detect64BitPortabilityProblems="TRUE"
+				DebugInformationFormat="0"
+				CompileAsManaged="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt330.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
+				OutputFile="$(OutDir)/molview.exe"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..\..\..\lib\&quot;"
+				GenerateDebugInformation="FALSE"
 				TerminalServerAware="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -116,125 +173,77 @@
 			Name="Quelldateien"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAbout.C">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
-						CompileAs="2"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\aboutDialog.C">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAboutData.C">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
 						CompileAs="2"/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Python|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAmberMinimization.C">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAmberMinimizationData.C">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\icons.C">
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
+						CompileAs="2"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\main.C">
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
-						PreprocessorDefinitions="QT_DLL"
-						CompileAs="2"
-						ForcedIncludeFiles=""/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
-						PreprocessorDefinitions="QT_DLL"
-						CompileAs="2"
-						ForcedIncludeFiles=""/>
+						CompileAs="2"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\mainframe.C">
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
 						CompileAs="2"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\threads.C">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
+						CompileAs="2"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
@@ -243,87 +252,24 @@
 			Name="Headerdateien"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAbout.h">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\aboutDialog.h">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;
 "
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
+						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAboutData.h">
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Python|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;
 "
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAmberMinimization.h">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAmberMinimizationData.h">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
+						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -332,83 +278,41 @@
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\mainframe.h">
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running MOC on $(InputFileName)"
-						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;
 "
-						Outputs="$(InputDir)$(InputName)_moc.C"/>
+						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running MOC on $(InputFileName)"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;
+"
+						Outputs="$(InputDir)\$(InputName)_moc.C"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\threads.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="MOC Files"
 			Filter="">
 			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAboutData_moc.C">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\aboutDialog_moc.C">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAbout_moc.C">
 				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAmberMinimizationData_moc.C">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAmberMinimization_moc.C">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
+					Name="Python|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>
@@ -417,16 +321,43 @@
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\mainframe_moc.C">
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Python|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Ressourcendateien"
+			Filter="">
+			<File
+				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\aboutDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName).h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName).C&quot; -impl &quot;$(InputDir)\$(InputName).h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\$(InputName).h&quot;;&quot;$(InputDir)\$(InputName).C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName).h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName).C&quot; -impl &quot;$(InputDir)\$(InputName).h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\$(InputName).h&quot;;&quot;$(InputDir)\$(InputName).C&quot;"/>
 				</FileConfiguration>
 			</File>
 		</Filter>

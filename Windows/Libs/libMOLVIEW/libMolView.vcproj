@@ -53,7 +53,8 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="4"
-			CharacterSet="2">
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
@@ -68,10 +69,10 @@
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="1"
+				RuntimeLibrary="0"
 				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="0"
@@ -448,7 +449,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -468,7 +470,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -488,7 +491,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -508,7 +512,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -528,7 +533,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -548,7 +554,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -568,7 +575,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -588,7 +596,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -608,7 +617,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -628,7 +638,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -648,7 +659,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -668,7 +680,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -688,7 +701,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>

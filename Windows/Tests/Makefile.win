@@ -33,7 +33,7 @@ e = .exe
 	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB) $(LDOPTS)
 
 
-!include ..\..\source\TEST\Makefile.lst
+include ..\..\source\TEST\Makefile.lst
 
 EXECUTABLES = \
 	$(EXECUTABLES_BASIC)\
