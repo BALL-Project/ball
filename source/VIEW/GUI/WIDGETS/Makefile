@@ -6,10 +6,10 @@ CPP_SOURCES=\
 	control.C\
 	mainControlPreferences.C\
 	modularWidget.C\
-	scene.C\
 	regularData1DWidget.C\
-	serverPreferences.C\
-	regularData2DWidget.C
+	regularData2DWidget.C\
+	scene.C\
+	serverPreferences.C
 
 PYTHON_CPP_SOURCES=\
 	pyWidget.C
