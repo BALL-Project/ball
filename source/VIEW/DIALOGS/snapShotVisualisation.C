@@ -99,7 +99,7 @@ void SnapshotVisualisationDialog::animateClicked()
 			if (!snap_shot_manager_->applyNextSnapShot()) return;
 		}
 
-		setCaption("CurrentSnapshot: " + String(i));
+		setCaption((String("CurrentSnapshot: ") + String(i)).c_str());
 		update_();
 		if (export_PNG->isChecked())
 		{
