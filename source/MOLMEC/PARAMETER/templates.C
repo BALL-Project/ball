@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.1 1999/09/21 11:54:09 oliver Exp $
+// $Id: templates.C,v 1.2 1999/09/21 15:19:21 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -160,7 +160,7 @@ namespace BALL
 			}
 
 			String name(parent_name + it->getName().trim());
-			if ((overwrite_non_zero_charges || (it->getCharge() == 0.0)))
+			if (overwrite_non_zero_charges || (it->getCharge() == 0.0))
 			{
 				if (charges_.has(name))
 				{
@@ -169,7 +169,7 @@ namespace BALL
 					Log.warn() << "FFPSTemplates::assign: cannot assign charge for atom " << name << endl;
 				}
 			}
-			if ((overwrite_existing_type_names || (it->getTypeName() == "")))
+			if (overwrite_existing_type_names || (it->getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME))
 			{
 				if (type_names_.has(name))
 				{
@@ -232,7 +232,7 @@ namespace BALL
 			}
 
 			String name(parent_name + it->getName().trim());
-			if ((overwrite_existing_type_names || (it->getTypeName() == "")))
+			if ((overwrite_existing_type_names || (it->getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME)))
 			{
 				if (type_names_.has(name))
 				{
