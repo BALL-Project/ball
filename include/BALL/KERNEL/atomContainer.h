@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.9 2001/07/03 20:49:09 anker Exp $
+// $Id: atomContainer.h,v 1.10 2001/07/04 00:13:14 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -58,7 +58,11 @@ namespace BALL
 		*/
 		//@{
 
+<<<<<<< atomContainer.h
+		/// The number of predefined properties for AtomContainer
+=======
 		/// BAUSTELLE
+>>>>>>> 1.9
 		enum Property
 		{	
 			/// BAUSTELLE
@@ -66,6 +70,8 @@ namespace BALL
 		};
 
 		//@}
+
+
 		/**	@name Constructors and Destructors 
 		*/
 		//@{
@@ -93,7 +99,18 @@ namespace BALL
 		virtual ~AtomContainer()
 			throw();
 
+<<<<<<< atomContainer.h
+		/** Clear the contents of this instance of AtomContainer.
+				This methods clears the base fragment's name, destroys all its children
+				(as in \Ref{Composite::clear}), but does not remove it from its parent composite structures.
+		*/
+		virtual void clear()
+			throw();
+	
+		/** Clear the contents of this instance of AtomContainer and removes it from parent composite structures.
+=======
 		/** Clears the contents of this instance of AtomContainer and removes it from parent composite structures.
+>>>>>>> 1.9
 				This methods clears the base fragment's name, destroys all its children
 				(as in \Ref{Composite::destroy}), and removes it from its parent composite structures.
 		*/
@@ -101,31 +118,33 @@ namespace BALL
 			throw();
 
 		//@}
+
 		/**	@name	Persistence 
 		*/
 		//@{
 
-		/**	Writes an AtomContainer object to a persistent stream.
+		/**	Write an AtomContainer object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Reads an AtomContainer object from a persistent stream.
+		/**	Read an AtomContainer object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		virtual void persistentRead(PersistenceManager& pm)
 			throw();
-
 		//@}			
+
 		/**	@name	Assignment 
 		*/
 		//@{
 
-		/** Assignment with cloning facility.
-				The assignment is either deep or shallow (default).
+		/** Assign the contents of an AtomContainer
+				The assignment is either deep or shallow (default is deep).
 				@param  atom_container the atom_container to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@see Composite::set
 		*/
 		void set(const AtomContainer& atom_container, bool deep = true)
 			throw();
@@ -139,16 +158,16 @@ namespace BALL
 		const AtomContainer& operator = (const AtomContainer& atom_container)
 			throw();
 
-		/** Copy this instance to {\em atom_container}.
-				The assignment is either deep or shallow (default).
+		/** Copy to another instance of AtomContainer.
+				The assignment is either deep or shallow (default is deep).
 				@param  atom_container the AtomContainer to be assigned to
-				@see    AtomContainer::set
+				@see    Composite::get
 		*/
 		void get(AtomContainer& atom_container, bool deep = true) const
 			throw();
 
-		/** Swapping of AtomContainers.
-				@param  atom_container the AtomContainer this instance is being swapped with
+		/** Swap the contents of two AtomContainers.
+				@param  atom_container the AtomContainer this instance is being swapped with.
 		*/
 		void swap(AtomContainer& atom_container)
 			throw();
@@ -167,65 +186,34 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				Two instance of AtomContainer are equal if they have the same handle.
-				@see Object::operator ==
+				Two instances of AtomContainer are equal if they have the same handle.
 		*/
 		bool operator == (const AtomContainer& atom_container) const
 			throw();
 
-		/**	Inequality operator
+		/**	Inequality operator.
 				@see operator ==
 		*/
 		bool operator != (const AtomContainer& atom_container) const
 			throw();
+		//@}
 
 		//@}
+
 		/**	@name	Accessors 
 		*/
 		//@{
 
-		/** Change the AtomContainer's name.
+		/** Set the name.
 				@param  name the new name
-				@see    AtomContainer::getName
 		*/
 		void setName(const String& name)
 			throw();
 
-    /** Mutable inspection of the name.
-				@return  String& - mutable reference to the name
-				@see     AtomContainer::setName
-		*/
-		String& getName()
-			throw();
-
-		/** Constant inspection of the name.
+		/** Return the name.
 				@return  String& - constant reference to the name of this instance
-				@see     AtomContainer::setName
 		*/
 		const String& getName() const
-			throw();
-
-		/** Mutable inspection of the parent molecule.
-				The pointer is 0 if this instance does not have a parent molecule.
-				\\
-				{\bf Note:} No corresponding mutator AtomContainer::setMolecule
-				exists to consider design of contract - an AtomContainer may not
-				insert into a molecule, it must be inserted via the molecule.
-				@return  Molecule* - mutable pointer to the parent molecule
-		*/
-		Molecule* getMolecule()
-			throw();
-
-		/** Constant inspection of the parent molecule.
-				The pointer is 0 if this instance AtomContainer does not have a
-				parent molecule.
-				\\
-				{\bf Note:} No corresponding mutator AtomContainer::setMolecule
-				exists to consider design of contract - an AtomContainer may not
-				insert into a molecule, it must be inserted via the molecule.
-				@return  Molecule* - constant pointer to the parent molecule
-		*/
-		const Molecule* getMolecule() const
 			throw();
 
 		/** Get a mutable pointer to the parent AtomContainer.
