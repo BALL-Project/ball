@@ -70,7 +70,7 @@ namespace BALL
 			is_motif_style->setFocusPolicy(QWidget::TabFocus);
 			is_motif_style->setBackgroundMode(QWidget::PaletteBackground);
 			is_motif_style->setFontPropagation(QWidget::SameFont);
-			is_motif_style->setPalettePropagation(QWidget::SameFont);
+			is_motif_style->setPalettePropagation(QWidget::SamePalette);
 			is_motif_style->setText( tr( "Motif" ) );
 			is_motif_style->setAutoRepeat( FALSE );
 			is_motif_style->setAutoResize( TRUE );
