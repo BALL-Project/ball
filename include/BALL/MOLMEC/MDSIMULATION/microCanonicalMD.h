@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.h,v 1.23 2004/04/20 11:40:28 amoll Exp $
+// $Id: microCanonicalMD.h,v 1.24 2005/01/24 16:57:41 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -106,7 +106,7 @@ namespace BALL
          restart = true means that the counting of iterations is
                    continued from the previous run. 
     */
-    virtual void simulateIterations(Size number, bool restart = false);
+    virtual bool simulateIterations(Size number, bool restart = false);
 
     //@}
 

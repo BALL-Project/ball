@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.h,v 1.30 2005/01/24 16:05:01 amoll Exp $
+// $Id: molecularDynamics.h,v 1.31 2005/01/24 16:57:41 amoll Exp $
 //
 
 // MolecularDynamics: A base class for molecular dynamics simulations    
@@ -291,23 +291,26 @@ namespace BALL
 				This method calls  \link simulateIterations simulateIterations \endlink  with the maximum 
 				number of iterations.
 				@see setMaximumNumberOfIterations
+				@return false if an error occured, e.g. the energy was too high
 		*/
-		void simulate(bool restart = false);
+		bool simulate(bool restart = false);
 
 		/**  Simulate a given time interval.
 				 This method determines the number of steps necessary
 				 to simulate a given time interval and executes a
 				 simulation for that interval by calling  \link simulateIterations simulateIterations \endlink .
+				 @return false if an error occured, e.g. the energy was too high
 		*/
-		void simulateTime(double simulation_time, bool restart = false);
+		bool simulateTime(double simulation_time, bool restart = false);
 
 		/**  Start the molecular dynamics simulation and carry out
 		     the given number of iterations. 
 				 This is the proper simulation method, which is implemented in 
 				 the derived classes only. The implementation provided
 				 by  \link MolecularDynamics MolecularDynamics \endlink  is simply empty.
+				 @return false if an error occured, e.g. the energy was too high
 		*/
-		virtual void simulateIterations(Size number, bool restart = false);
+		virtual bool simulateIterations(Size number, bool restart = false);
 
 		/** Specify if the MDSimulation aborts if the Energy is greater than abort_energy_
 		*/

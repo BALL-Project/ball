@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.40 2004/04/20 11:40:31 amoll Exp $
+// $Id: energyMinimizer.h,v 1.41 2005/01/24 16:57:45 amoll Exp $
 //
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
@@ -418,6 +418,19 @@ namespace BALL
 		*/
 		virtual bool	minimize(Size steps = 0, bool resume = false);
 
+		/** Specify if the MDSimulation aborts if the Energy is greater than abort_energy_
+		*/
+		void enableEnergyAbortCondition(bool state);
+
+		/// Query if the MDSimulation aborts if the Energy is greater than abort_energy_
+		bool energyAbortConditionEnabled() const;
+
+		///
+		void setEnergyToAbort(float value);
+		
+		///
+		float getEnergyToAbort() const;
+		
 		//@}
 
 		/**	@name	Public Attributes
@@ -525,6 +538,13 @@ namespace BALL
        	Measure for the speed of minimization.
     */
     Size energy_update_counter_; 
+
+		//_ 
+		bool abort_by_energy_enabled_;
+		
+		//_ 
+		float abort_energy_;
+
 		//_@}
 	};
 } // namespace Ball

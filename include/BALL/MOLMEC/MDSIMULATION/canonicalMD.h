@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.h,v 1.25 2004/04/20 11:40:28 amoll Exp $
+// $Id: canonicalMD.h,v 1.26 2005/01/24 16:57:41 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -132,7 +132,7 @@ namespace BALL
 				 @param number the number of iterations that have to be simulated 
 				 @param restart flag for restarting the simulation
     */
-    virtual void simulateIterations(Size number, bool restart = false) throw();
+    virtual bool simulateIterations(Size number, bool restart = false) throw();
 
     //@}
 
