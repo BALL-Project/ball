@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.3 1999/12/30 20:30:32 oliver Exp $
+// $Id: rtti.h,v 1.4 2000/01/13 22:16:32 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -35,7 +35,7 @@ namespace BALL
 	*/ 
 	string streamClassName(const std::type_info& t);
 
-	/**	Simplified RunTime Type Identification.
+	/**	@name Simplified RunTime Type Identification.
 			ANSI C++ provides support for runtime type identification (RTTI). However, the support
 			is very basic. The template functions of the RTTI namespace  provide a more 
 			readable support for RTTI. It defines
@@ -55,6 +55,8 @@ namespace BALL
 	}
 \end{verbatim}
 	*/
+	//@{
+
 	namespace RTTI
 	{
 
@@ -92,7 +94,15 @@ namespace BALL
 			return typeid(getDefault<T>()).name();
 		}
 
-		/**
+		/**	Return the demangled class name.
+				The class name is demangled (as far as possible) and in the
+				resulting string blanks are substituted by underscores, so the
+				name can be read from a stream as one string.
+				The typical usage is something like
+				\begin{verbatim}
+					String class_name = RTTI::getStreamName<Residue>();
+					...
+				\end{verbatim}
 		*/
 		template <typename T>
 		const char* getStreamName()
@@ -109,18 +119,15 @@ namespace BALL
 			return s.c_str();
 		}
 
-		/**
-		*/
-		template <typename T, typename U>
-		bool isBaseOf(const U& u) 
-		{
-			static T t;
-			T*	pt	= &t;
-			U* U_ptr = dynamic_cast<U*>(pt);
-			return (U_ptr != (U*)(&t)) && (U_ptr != 0);
-		}
+		/**	Return true if {\tt u} is a kind of T.
+				If {\tt u} is an instance of a class derived from T,
+				this predicate returns true:\\
+				\begin{verbatim}
+					Protein p;
 
-		/**
+					// return true, since Protein is derived from Molecule
+					bool is_molecule = RTTI::isKindOf<Molecule>(p);
+				\end{verbatim}
 		*/
 		template <typename T, typename U>
 		bool isKindOf(const U&  u)
@@ -128,7 +135,22 @@ namespace BALL
 			return (0 != dynamic_cast<const T*>(&u));
 		}
 
-		/**
+		/**	Cast an object to a specialized class.
+				{\bf Example:}\\
+				\begin{verbatim}
+					Composite* composite = ...;
+					...
+				
+					// check whether the composite is also an atom
+					if (RTTI::isKindOf<Atom>(composite))
+					{
+						// perform some atom specific actions
+						Atom* atom = RTTI::castTo<Atom>(*composite);
+						...
+						atom->setCharge(0);
+						...
+					}
+				\end{verbatim}
 		*/
 		template <typename T, typename U>
 		T* castTo(const U& u)
@@ -136,7 +158,10 @@ namespace BALL
 			return const_cast<T*>(dynamic_cast<const T*>(&u));
 		}
 
-		/**
+		/**	Return {\bf true} if a given object is an instance of a given class.
+				If {\tt u} is an instance of {\tt T}, this predicate returns {\bf true}.
+				If {\tt u} is an instance of a class that is derived from {\tt T} or
+				a base class of {\tt T}, it returns false.
 		*/
 		template <typename T, typename U>
 		bool isInstanceOf(const U& u)
@@ -150,14 +175,7 @@ namespace BALL
 			
 			return false;
 		}
-
-		/**
-		*/
-		template <typename T, typename U>
-		bool isDerivedFrom(const U& u)
-		{
-			return (isKindOf<T>(u) && !isInstanceOf<T>(u));
-		}
+	//@}
 
 	} // namespace RTTI
 
