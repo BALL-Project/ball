@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.19 2000/08/28 10:00:13 oliver Exp $
+// $Id: composite.C,v 1.20 2000/08/28 14:15:58 amoll Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -99,45 +99,45 @@ namespace BALL
 	}
  
 
-	Size Composite::getPathLength(const Composite& a, const Composite& b)
+	Size Composite::getPathLength(const Composite& composite) const
 	{
-		// if A equals B - return 0
-		if (&a == &b)
+		// if composite equals *this - return 0
+		if (&composite == this)
 		{
 			return 0;
 		}
 
-		// first, try to walk upwards from A
+		// first, try to walk upwards from composite
 		Size path_size = 1;
-		Composite* composite_ptr = a.parent_;
+		Composite* composite_ptr = composite.parent_;
 		for (; composite_ptr != 0; composite_ptr = composite_ptr->parent_, ++path_size)
 		{
-			if (composite_ptr == &b)
+			if (composite_ptr == this)
 			{	
-				// if we found a path from A to B - return its length
+				// if we found a path from composite to *this - return its length
 				return path_size;
 			}
 		}
 		
-		// if this didn't help, try to walk upwards from B
-		for (composite_ptr = b.parent_, path_size = 1; composite_ptr != 0; composite_ptr = composite_ptr->parent_,  ++path_size)
+		// if this didn't help, try to walk upwards from *this
+		for (composite_ptr = parent_, path_size = 1; composite_ptr != 0; composite_ptr = composite_ptr->parent_,  ++path_size)
 		{
-			if (composite_ptr == &a)
+			if (composite_ptr == &composite)
 			{
-				// if we found a path to A - return
+				// if we found a path to composite - return
 				return path_size;
 			}
 		}
 		
-		// no path from A to B exists
+		// no path from *this to composite exists
 		return INVALID_SIZE;
 	}
 
-	Size Composite::getDepth(const Composite& composite)
+	Size Composite::getDepth() const
 	{
 		// walk up to the root (if possible)
 		Size size = 0;
-		for (Composite* composite_ptr = composite.parent_;
+		for (Composite* composite_ptr = parent_;
 				 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
 		{
 			++size;
