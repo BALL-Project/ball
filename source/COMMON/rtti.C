@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.C,v 1.12 2003/01/14 21:36:59 oliver Exp $
+// $Id: rtti.C,v 1.13 2003/01/27 14:29:55 sneumann Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/rtti.h>
@@ -43,7 +43,7 @@ namespace BALL
       s = GNUDemangling::demangle(s);
     #else
 			char buf[BALL_MAX_LINE_LENGTH];
-			unsigned int length = BALL_MAX_LINE_LENGTH - 1;
+			std::size_t length = BALL_MAX_LINE_LENGTH - 1;
 			int status = 0;
       string s("_Z");
       s += t.name();
