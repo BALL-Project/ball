@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.15 2000/08/02 18:12:40 oliver Exp $
+// $Id: BitVector_test.C,v 1.16 2000/08/24 11:55:14 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.15 2000/08/02 18:12:40 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.16 2000/08/24 11:55:14 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,10 +28,16 @@ RESULT
 
 CHECK(BitVector::getSize() const)
 	BitVector bv;
-	TEST_EQUAL(bv.getSize(), BitVector::BlockSize)
+//	TEST_EQUAL(bv.getSize(), BitVector::BlockSize)
+	TEST_EQUAL(bv.getSize(), 0)
+	TEST_EQUAL(bv.getBit(0), false)
 RESULT
 
 CHECK(BitVector::BitVector(Size))
+	BitVector bv0((Size)0);
+	TEST_EQUAL(bv0.getSize(), 0)
+	TEST_EQUAL(bv0.getBit(0), false)
+
 	BitVector bv1(1);
 	TEST_EQUAL(bv1.getSize(), 1)
 	BitVector bv2(2);
@@ -42,7 +48,6 @@ CHECK(BitVector::BitVector(Size))
 	TEST_EQUAL(bv129.getSize(), 129)
 	BitVector bv20000(20000);
 	TEST_EQUAL(bv20000.getSize(), 20000)
-	TEST_EXCEPTION(Exception::InvalidRange,BitVector bv0((Size)0);)
 RESULT
 
 BitVector bv9(9);
@@ -188,7 +193,6 @@ CHECK(BitVector::operator [] (Index))
 	TEST_EQUAL(bv3[3], false)
 	TEST_EQUAL(bv3.getSize(), 4)
 RESULT
-
 CHECK(BitVector::operator [] (Index) const)
 	const BitVector bv10_2(bv10);
 	TEST_EQUAL(bv10_2[0], false)
@@ -536,6 +540,8 @@ CHECK(BitVector::setSize())
 	TEST_EQUAL(b.getSize(), 24)
 	b.setSize(24, false);
 	TEST_EQUAL(b.getSize(), 24)
+	b.setSize(0, false);
+	TEST_EQUAL(b.getSize(), 0)
 RESULT
 
 ///////////////////////////////////////////////////
