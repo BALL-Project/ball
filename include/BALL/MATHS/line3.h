@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.8 2000/02/16 17:25:30 oliver Exp $
+// $Id: line3.h,v 1.9 2000/02/20 02:43:06 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -36,7 +36,10 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/** form of parameter to describe the line:
+				{\tt 0} one Point and one Vector
+				{\tt 1} two Points
+		*/
 		enum Form
 		{
 			FORM__PARAMETER  = 0,
@@ -48,14 +51,20 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Default constructor.
+				This method creates a new TLine3 object..
+		*/
 		TLine3()
 			:	p(),
 				d()
 		{
 		}
 
-		///
+		/**	Copy constructor.
+				Create a new TVector4 object from another.
+				@param TLine3 the TLine3 object to be copied
+				@param bool ignored - just for interface consistency
+		*/	
 		TLine3(const TLine3& line,
 					 bool /* deep */ = true)
 			:	p(line.p),
@@ -65,7 +74,12 @@ namespace BALL
 
 		// form: PARAMETER (default) or TWO_POINTS
 
-		/**
+		/**	Detailled constructor.
+				Create a new TLine3 object from a point and a vector
+				of from two points, dependent from Form.
+				@param	point assigned to {\tt p}
+				@param	vector assigned to {\tt d}
+				@param	form assigns form of parameter
 		*/
 		TLine3(const TVector3<T>& point, const TVector3<T>& vector, 
 					 Form form = FORM__PARAMETER)
@@ -76,7 +90,10 @@ namespace BALL
 		{
 		}
 
-		///
+		/**	Destructor.	
+				Destructs the TLine3 object. As there are no dynamic
+				data structures, nothing happens.
+		*/
 		virtual ~TLine3()
 		{
 		}
@@ -86,7 +103,9 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Swap the contents of two lines.
+				@param	line the TLine3 to swap contents with
+		*/
 		void swap(TLine3& line)
 		{
 			TVector3<T> temp_point(p);
@@ -98,14 +117,22 @@ namespace BALL
 			line.d = temp_vector;
 		}
 
-		///
+		/**	Assign from another TLine3.
+				@param line	the TLine3 object to assign from
+				@param deep ignored
+		*/
 		void set(const TLine3& line, bool /* deep */ = true)
 		{
 			p = line.p;
 			d = line.d;
 		}
 
-		///
+		/**	Assign from one point and a vector
+				of from two points, dependent from form.
+				@param	point assigned to {\tt p}
+				@param	vector assigned to {\tt d}
+				@param	form assigns form of parameter
+		*/
 		void set(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
 		{
 			p = point;
@@ -117,7 +144,10 @@ namespace BALL
 			}
 		}
 
-		///
+		/**	Assignment operator.
+				Assign the components from another line.
+				@param line the vector to assign from
+		**/
 		TLine3& operator = (const TLine3& line)
 		{
 			p = line.p;
@@ -126,14 +156,25 @@ namespace BALL
 			return *this;
 		}
 
-		///
+		/**	Assign to another TLine3.
+				Assigns the vector components to another vector.
+				@param line	the line to be asigned to
+				@param deep ignored
+		*/
 		void get(TLine3& line, bool /* deep */ = true) const
 		{
 			line.p = p;
 			line.d = d;
 		}
 
-		///
+		/**	Assign to two {\tt TVector3}.
+				art of componenents depends of form:
+				{\tt 0} two points
+				{\tt 1} one point and the vector component
+				@param	point the first point
+				@param	vector the second point or the vector component
+				@param	rh the h component
+		*/
 		void get(TVector3<T>& point,TVector3<T>& vector,
 						 Form form = FORM__PARAMETER) const
 		{
@@ -152,7 +193,11 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Normalize the vector- component.
+				The vector is scaled with its length:
+				$\{x|y|z|} *= \sqrt{x^2 + y^2 + z^2}$.
+				@exception DivisionByZero if the length of the vector is 0
+		*//???
 		void normalize()
 		{
 			d.normalize();
@@ -163,19 +208,25 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Equality operator.
+				@return bool, {\bf true} if both components are equal, {\bf false} otherwise
+		*/
 		bool operator ==(const TLine3& line) const
 		{
 			return (bool)(p == line.p && d == line.d);
 		}
 
-		///
+		/**	Inequality operator.
+				@return bool, {\bf true} if the two lines differ in at least on component, {\bf false} otherwise
+		*/
 		bool operator != (const TLine3& line) const
 		{
 			return (bool)(p != line.p || d != line.d);
 		}
 
-		///
+		/**	Test if a given point is a member of the line.
+				@return bool, {\bf true} or {\bf false}
+		*/
 		bool has(const TVector3<T>& point) const
 		{
 			if (Maths::isNotZero(d.x))
@@ -205,7 +256,10 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Test if instance is valid.
+				always returns true
+				@return bool {\bf true}
+		*/
 		bool isValid() const
 		{
 			return true;
@@ -233,13 +287,17 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Input- Operator
+				reads in two {\bf TVector3}
+		*/
 		friend std::istream& operator >> (std::istream &s, TLine3& line)
 		{
 			return (s >> line.p >> line.d);
 		}
 
-		///
+		/**	Output- Operator
+				gives two {\bf TVector3} out: a pointer and a vector
+		*/
 		friend std::ostream& operator << (std::ostream& s, const TLine3& line)
 		{
 			return (s << line.p << line.d);
@@ -251,15 +309,18 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Point- Component
+		*/
 		TVector3<T> p;
 
-		///
+		/**	Vector- Component
+		*/
 		TVector3<T> d;
 		//@}
 	};
 
-	///
+	/**	Default line of type {\bf float}
+	*/
 	typedef TLine3<float> Line3;
 
 } // namespace BALL
