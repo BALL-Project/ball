@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.38 2001/08/18 14:27:00 oliver Exp $
+// $Id: string.h,v 1.39 2001/09/13 15:08:05 amoll Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -721,7 +721,22 @@ namespace BALL
 		*/
 		static bool isWhitespace(char c)
 			throw();
+		
+		//@}
+		/** @name Base64 String methods
+		*/
+		//@{
+		
+		/// Convert a string to a base 64 string
+		String encodeBase64()
+			throw();
 
+		/** Decode a base 64 string.
+				Returns an empty string, if base64 string is not right encoded. 
+		*/
+		String decodeBase64()
+			throw();
+		
 		//@}
 		/**	@name	Comparators 
 		*/
@@ -925,6 +940,10 @@ namespace BALL
 			throw();
 
 		static CompareMode compare_mode_;
+
+		static char B64Chars_[64];
+
+		static int Index_64_[128];
 	};
 
 	/**	A substring class.

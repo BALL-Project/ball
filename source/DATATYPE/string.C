@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.38 2001/08/18 14:27:00 oliver Exp $
+// $Id: string.C,v 1.39 2001/09/13 15:08:12 amoll Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -1731,6 +1731,125 @@ namespace BALL
 		
 		return Substring(*this, from, len);
 	}
+
+
+// ================================================== Base64 methods
+	
+char String::B64Chars_[64] = {
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+  'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
+  'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+  't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
+  '8', '9', '+', '/'
+};
+
+int String::Index_64_[128] = {
+			-1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+			-1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
+			-1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,62, -1,-1,-1,63,
+			52,53,54,55, 56,57,58,59, 60,61,-1,-1, -1,-1,-1,-1,
+			-1, 0, 1, 2,  3, 4, 5, 6,  7, 8, 9,10, 11,12,13,14,
+			15,16,17,18, 19,20,21,22, 23,24,25,-1, -1,-1,-1,-1,
+			-1,26,27,28, 29,30,31,32, 33,34,35,36, 37,38,39,40,
+			41,42,43,44, 45,46,47,48, 49,50,51,-1, -1,-1,-1,-1
+};
+
+#define base64val_(c) Index_64_[(unsigned int)(c)]
+
+String String::encodeBase64()
+	throw()
+{
+	Size in_lenght(this->size());
+	const char* in = this->c_str();
+	char* out = new char[in_lenght * 2];
+	char* out_pos = out;
+
+  while (in_lenght >= 3)
+  {
+    *out++ = B64Chars_[in[0] >> 2];
+    *out++ = B64Chars_[((in[0] << 4) & 0x30) | (in[1] >> 4)];
+    *out++ = B64Chars_[((in[1] << 2) & 0x3c) | (in[2] >> 6)];
+    *out++ = B64Chars_[in[2] & 0x3f];
+    in_lenght   -= 3;
+    in    			+= 3;
+  }
+
+  if (in_lenght > 0)
+  {
+    unsigned char fragment;
+
+    *out++ = B64Chars_[in[0] >> 2];
+    fragment = (in[0] << 4) & 0x30;
+    if (in_lenght > 1)
+		{
+      fragment |= in[1] >> 4;
+		}
+		*out++ = B64Chars_[fragment];
+    *out++ = (in_lenght < 2) ? '=' : B64Chars_[(in[1] << 2) & 0x3c];
+    *out++ = '=';
+  }
+  *out = '\0';
+
+	return String(out_pos);
+}
+
+String String::decodeBase64()
+	throw()
+{
+	char* out = new char[this->size() * 2];
+	char* out_pos = out;
+	const char* in = this->c_str();
+	
+  int len = 0;
+  unsigned char digit1, digit2, digit3, digit4;
+
+  do
+  {
+    digit1 = in[0];
+    if (digit1 > 127 || base64val_ (digit1) == -1) //-1 == BAD
+		{
+			return "";
+		}
+		
+		digit2 = in[1];
+    if (digit2 > 127 || base64val_ (digit2) == -1)
+		{
+			return "";
+		}
+		
+		digit3 = in[2];
+    if (digit3 > 127 || ((digit3 != '=') && (base64val_ (digit3) == -1)))
+		{
+			return "";
+		}
+		
+		digit4 = in[3];
+    if (digit4 > 127 || ((digit4 != '=') && (base64val_ (digit4) == -1)))
+		{
+			return "";
+		}
+		
+		in += 4;
+
+    // digits are already sanity-checked
+    *out++ = (base64val_(digit1) << 2) | (base64val_(digit2) >> 4);
+    len++;
+    if (digit3 != '=')
+    {
+      *out++ = ((base64val_(digit2) << 4) & 0xf0) | (base64val_(digit3) >> 2);
+      len++;
+      if (digit4 != '=')
+      {
+				*out++ = ((base64val_(digit3) << 6) & 0xc0) | base64val_(digit4);
+				len++;
+      }
+    }
+  }
+  while (*in && digit4 != '=');
+
+  return String(out_pos);
+}
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/string.iC>
