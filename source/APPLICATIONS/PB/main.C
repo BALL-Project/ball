@@ -1,4 +1,4 @@
-// $Id: main.C,v 1.9.4.2 2002/12/05 17:32:51 anker Exp $
+// $Id: main.C,v 1.9.4.3 2002/12/08 22:28:42 anker Exp $
 
 #include <iomanip>
 
@@ -327,6 +327,7 @@ int main(int argc, char** argv)
 			Log.info() << "Calculating the solvation free energy." << endl;
 			Log.info() << "first calculation step: solvent dielectric constant = " 
 								 << fdpb.options[FDPB::Option::SOLVENT_DC] << endl;
+		/*
 		}
 
 		T.start();
@@ -338,6 +339,7 @@ int main(int argc, char** argv)
 
 		if (calculate_solvation_energy)
 		{
+		*/
 			Log.info() << "second calculation step: solvent dielectric constant = 1.0 (vacuum)"  << endl;
 
 			// store the old energies
