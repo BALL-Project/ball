@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.22 2001/08/01 01:04:15 oliver Exp $
+// $Id: resourceFile.C,v 1.23 2001/09/24 15:12:39 amoll Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -70,9 +70,9 @@ namespace BALL
 
 		if (number_children_ != 0)
 		{
-			register ResourceEntry** cloned_child = cloned->child_ = newEntryArray(number_children_);
+			ResourceEntry** cloned_child = cloned->child_ = newEntryArray(number_children_);
 
-			for (register Index index = 0; index < (Index)number_children_; ++index)
+			for (Index index = 0; index < (Index)number_children_; ++index)
 			{
 				*cloned_child++ = child_[index]->clone_(cloned);
 			}
@@ -83,7 +83,7 @@ namespace BALL
 
 	ResourceEntry& ResourceEntry::getRoot()
 	{
-		register ResourceEntry* entry = this;
+		ResourceEntry* entry = this;
 		
 		for (; entry->parent_ != 0; entry = entry->parent_);
 
@@ -94,7 +94,7 @@ namespace BALL
 	{
 		char old = 0;
 		const char* key = ((String &)key_path).c_str();
-		register ResourceEntry* entry = this;
+		ResourceEntry* entry = this;
 
 		if (*key == ResourceFile::SEPARATOR)
 		{
@@ -132,7 +132,7 @@ namespace BALL
 	{
 		String path(key_);
 
-		for (register const ResourceEntry* parent = parent_;
+		for (const ResourceEntry* parent = parent_;
 				 parent != 0; parent = parent->parent_)
 		{
 			path = parent->getKey() + ResourceFile::SEPARATOR + path;
@@ -147,7 +147,7 @@ namespace BALL
 	{
 		Size size = number_children_;
 		
-		for (register Index index = 0; index < (Index)number_children_; ++index)
+		for (Index index = 0; index < (Index)number_children_; ++index)
 		{
 			if (child_[index]->number_children_ > 0)
 			{
@@ -162,7 +162,7 @@ namespace BALL
 	{
 		Size depth = 0;
 
-		for (register const ResourceEntry* entry = parent_;
+		for (const ResourceEntry* entry = parent_;
 				 entry != 0; entry = entry->parent_)
 		{
 			++depth;
@@ -198,7 +198,7 @@ namespace BALL
 			
 			entry = newEntry(key, value, this);
 			
-			for (register Index new_index = 0, old_index = 0;
+			for (Index new_index = 0, old_index = 0;
 					 new_index < (Index)number_children_; ++new_index, ++old_index)
 			{
 				if (key < child_[old_index]->key_)
@@ -280,7 +280,7 @@ namespace BALL
 			
 			entry_ptr = &entry;
 			
-			for (register Index new_index = 0, old_index = 0;
+			for (Index new_index = 0, old_index = 0;
 					 new_index < (Index)number_children_;	++new_index, ++old_index)
 			{
 				if (key < child_[old_index]->key_)
@@ -320,7 +320,7 @@ namespace BALL
 		char oldc = 0;
 		const char *key = ((String &)key_path).c_str();
 		ResourceEntry *child_entry = 0;
-		register ResourceEntry *entry = this;
+		ResourceEntry *entry = this;
 		
 		if (*key == ResourceFile::SEPARATOR)
 		{
@@ -380,7 +380,7 @@ namespace BALL
 				*removed = child_[found];
 			}
 			
-			for (register Index index = found + 1; index < (Index)number_children_; ++index)
+			for (Index index = found + 1; index < (Index)number_children_; ++index)
 			{
 				child_[index - 1] = child_[index];
 			}
@@ -404,7 +404,7 @@ namespace BALL
 	{
 		char oldc = 0;
 		const char *key = ((String &)key_path).c_str();
-		register ResourceEntry *entry = this;
+		ResourceEntry *entry = this;
 
 		if (*key == ResourceFile::SEPARATOR)
 		{
@@ -433,7 +433,7 @@ namespace BALL
 
 	void ResourceEntry::clear()
 	{
-		for (register Index index = 0; index < (Index)number_children_; ++index)
+		for (Index index = 0; index < (Index)number_children_; ++index)
 		{
 			deleteEntry(child_[index]);
 		}
@@ -447,9 +447,9 @@ namespace BALL
 
 	ResourceEntry* ResourceEntry::findDescendant(const String& key)
 	{
-		register ResourceEntry *entry = 0;
+		ResourceEntry *entry = 0;
 		
-		for (register Index index = 0; index < (Index)number_children_; ++index)
+		for (Index index = 0; index < (Index)number_children_; ++index)
 		{
 			entry = child_[index];
 			
@@ -474,7 +474,7 @@ namespace BALL
 
 	bool ResourceEntry::isAncestorOf(const ResourceEntry& resource_entry) const
 	{
-		for (register const ResourceEntry* entry = resource_entry.parent_; entry != 0; entry = entry->parent_)
+		for (const ResourceEntry* entry = resource_entry.parent_; entry != 0; entry = entry->parent_)
 		{
 			if (entry == this)
 			{
@@ -501,7 +501,7 @@ namespace BALL
 				return false;
 			}
 
-			for (register Index index = 0; index < (Index)number_children_; ++index)
+			for (Index index = 0; index < (Index)number_children_; ++index)
 			{
 				if (child_[index]->isValid() == false)
 				{
@@ -532,7 +532,7 @@ namespace BALL
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  size: " << number_children_ << endl;
 		
-		for (register Index index = 0; index < (Index)number_children_; ++index)
+		for (Index index = 0; index < (Index)number_children_; ++index)
 		{
 			child_[index]->dump(s, depth + 1);
 		}
@@ -547,10 +547,10 @@ namespace BALL
 	
 	bool ResourceEntry::applyNostart_(UnaryProcessor<ResourceEntry>& processor)
 	{
-		register Processor::Result result = Processor::ABORT;
-		register ResourceEntry *entry = 0;
+		Processor::Result result = Processor::ABORT;
+		ResourceEntry *entry = 0;
 		
-		for (register Index index = 0; index < (Index)number_children_; ++index)
+		for (Index index = 0; index < (Index)number_children_; ++index)
 		{
 			entry = child_[index];
 			result = processor(*entry);
@@ -576,9 +576,9 @@ namespace BALL
 			return false;
 		}
 
-		register Processor::Result result = Processor::ABORT;
+		Processor::Result result = Processor::ABORT;
 		
-		for (register Index index = 0; index < (Index)number_children_; ++index)
+		for (Index index = 0; index < (Index)number_children_; ++index)
 		{
 			result = processor(*child_[index]);
 			
@@ -593,9 +593,9 @@ namespace BALL
 
 	bool  ResourceEntry::findGreaterOrEqual_(const String& key, Index& found) const
 	{
-		register Index lower_index = 0L;
-		register Index upper_index = (Index)number_children_ - 1;
-		register Index median_index;
+		Index lower_index = 0L;
+		Index upper_index = (Index)number_children_ - 1;
+		Index median_index;
 		
 		while (upper_index > lower_index)
 		{
@@ -856,14 +856,14 @@ namespace BALL
 		return s;
 	}
 
-	void ResourceFile::save_(File& file, register const Entry* entry, Size& depth)
+	void ResourceFile::save_(File& file, const Entry* entry, Size& depth)
 	{
 		Size l = 0;
 		const Entry* child_entry = 0;
 		
 		++depth;
 		
-		for (register Index index = 0; index < (Index)entry->countChildren(); ++index)
+		for (Index index = 0; index < (Index)entry->countChildren(); ++index)
 		{
 			child_entry = entry->getChild(index);
 			
