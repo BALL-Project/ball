@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.20.4.7 2002/12/08 23:25:33 amoll Exp $
+// $Id: mainControl.h,v 1.20.4.8 2002/12/09 18:17:26 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -820,16 +820,8 @@ namespace BALL
 			System* getSelectedSystem()
 				throw();
 
-			/** Insert a single Composite to the selection or removes it.
-			 		Dont use this function! 
-					Its only purpose is in Control to accelerate the selection of composites. 
-					Composites which are added with this function are not updated in the scene.
-			*/					
-			void selectComposite(Composite* composite, bool state = true)
-				throw();			
-
 			/** Select the composite parents of the geometric objects.
-			 		The message is sent by the Scene.
+			 		The GeometricObjectSelectionMessage is sent by the Scene.
 			 */
 			void selectComposites_(GeometricObjectSelectionMessage& message)
 				throw();
