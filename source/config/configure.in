@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.30 2000/01/06 20:51:47 oliver Exp $
+dnl    $Id: configure.in,v 1.31 2000/01/06 21:20:43 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1045,10 +1045,6 @@ dnl 	check for standard C headers
 dnl 	and how to run the preprocessor
 AC_HEADER_STDC
 
-
-
-
-
 dnl		check for limits header (class numeric limits, to be precise)
 dnl
 dnl
@@ -1380,13 +1376,12 @@ if test "$INCLUDE_IEEEFP" = true ; then
 	AC_DEFINE(INCLUDE_IEEEFP,)
 fi
 
-
 dnl
 dnl		Checks for library functions
 dnl
 
 dnl
-dnl		BallVIEW
+dnl		BALLVIEW
 dnl
 if test "${USE_BALLVIEW}" = "" ; then
 	USE_BALLVIEW=true
@@ -1408,35 +1403,30 @@ fi
 dnl
 dnl    search for X-libs and includes and BALLView (OpenGL/MESA) stuff
 dnl 
-
-if test ${USE_BALLVIEW} = true ; then
+if test "${USE_BALLVIEW}" = true ; then
 	AC_PATH_X
 
-	AC_MSG_CHECKING(for BALLView libraries)
 	if test "${no_x}" = "yes" ; then
 		USE_BALLVIEW=false
-		AC_MSG_RESULT(Can't find X libraries and includes. BALLVIEW cannot be built.)
-	else
-		AC_MSG_RESULT(X libraries available)
 	fi
 
-	if test ${USE_BALLVIEW} = true ; then
+	if test "${USE_BALLVIEW}" = true ; then
 		AC_MSG_CHECKING(for OpenGL/Mesa)
 		AC_MSG_RESULT($BALLVIEW_PLATFORM)
 
-		if test ${BALLVIEW_PLATFORM} = Mesa ; then
+		if test "${BALLVIEW_PLATFORM}" = Mesa ; then
 			AC_MSG_CHECKING(for Mesa includes)
 			AC_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCLUDES} ${X11_PATH})
 			if test "${MESA_INCLUDES}" = "" ; then
 				AC_MSG_RESULT((not found!))
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(No Mesa headers found! Please specify the path to the directory)
-				AC_MSG_RESULT(containing the Mesa headers using "--with-opengl-incl=DIR".
+				AC_MSG_RESULT(containing the Mesa headers using --with-opengl-incl=DIR.)
 				AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
 				AC_MSG_RESULT(Disabling support for visualization component BALLVIEW)
 				USE_BALLVIEW=false
 			else
-				AC_MSG_RESULT((${MESA_INCLUDES}))
+				AC_MSG_RESULT(${MESA_INCLUDES})
 			fi
 
 			if test "${USE_BALLVIEW}" = true ; then
@@ -1916,7 +1906,7 @@ dnl	    BALLVIEW
 AC_SUBST(USE_BALLVIEW)				dnl bool: use ballview (default=true)
 AC_SUBST(BALLVIEW)						dnl if USE_BALLVIEW=true, BALLVIEW. "" otherwise. Used in config.mak
 AC_SUBST(BALLVIEW_PLATFORM)		dnl Mesa or OpenGL
-AC_SUBST(BALLVIEW_INCLUDES)		dnl BallVIEW includes
+AC_SUBST(BALLVIEW_INCLUDES)		dnl BALLVIEW includes
 AC_SUBST(LIBBALLVIEW)					dnl static library name
 
 
