@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.14 2003/10/31 23:15:47 oliver Exp $
+// $Id: mainControl.h,v 1.15 2003/11/03 16:50:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -229,9 +229,10 @@ namespace BALL
 					If you changed a composite in MainControl or a derived class, the MainControl doesnt get notified,
 					from the CompositeChangedMessage, it sends. So you have to call this function instead of sending the message.
 					\param  composite the Composite that should be updated
+					\param  rebuild if set to true, the model is rebuilded, otherwise just the coloring is updated
 					\return bool <tt>true</tt> if <b>composite</b> was successfully marked for update, <tt>false</tt> otherwise
 			*/
-			bool update(const Composite& composite)
+			bool update(const Composite& composite, bool rebuild = true)
 				throw();
 
 			/** Redraws all inserted objects.
