@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.13 2004/12/22 15:12:59 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.14 2004/12/25 18:41:28 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -311,23 +311,25 @@ namespace BALL
 
 			
 			// initialise a first set of points in a circle around the start position
-			vector<Vector3> points;
+			vector<Vector3> points1, points2;
 			Matrix4x4 m;
 			m.setRotation(slides_angle, n % r);
 			Vector3 x = r;
-			points.push_back(x);
-			for (Position p = 0; p < slides; p++)
+			points1.push_back(x);
+			for (Position p = 0; p < slides - 1; p++)
 			{
 				x = m * x;
-				points.push_back(x);
+				points1.push_back(x);
 			}
 			// add also a dummy for closing of ring
-			points.push_back(points[0]);
+			points1.push_back(points1[0]);
+			points2.resize(points1.size());
 
 			// same data structures for faster access
 			Mesh::Triangle t;
-			vector<Vector3> new_points;
-			new_points.resize(points.size());
+			vector<Vector3>*  new_points = &points2;
+			vector<Vector3>* last_points = &points1;
+			vector<Vector3>* dummy = 0;
 				
 			//------------------------------------------------------>
 			// iterate over all spline_points_
@@ -350,29 +352,36 @@ namespace BALL
 				// rotate all points of the circle according to new normal
 				m.setRotation(slides_angle, dir_new);
 				x = r_new;
-				new_points[0] = x;
-				for (Position i = 0; i < slides; i++)
+				(*new_points)[0] = x;
+				const Position middle = (Position)(slides / 2.0);
+				for (Position i= 1; i < middle; i++)
 				{
 					x = m * x;
-					new_points[i + 1] = x;
+					(*new_points)[i] = x;
 				}
-				// dont forget the dummy for closing of ring
-				new_points[new_points.size() - 1] = new_points[0];
+
+				// second part of points can be calculated by negating first points
+				for (Position i = middle; i < slides; i++)
+				{
+					(*new_points)[i] = - (*new_points)[i - middle];
+				}
+
+				// dont forget the dummy for closing the ring
+ 				(*new_points)[new_points->size() - 1] = (*new_points)[0];
 
 				Mesh* mesh = new Mesh();
-			
 
-				for (Position point_pos = 0; point_pos < points.size() - 1; point_pos++)
+				for (Position point_pos = 0; point_pos < slides; point_pos++)
 				{
-					mesh->vertex.push_back(last_point_ + 		 points[point_pos]);
-					mesh->vertex.push_back(			point  + new_points[point_pos]);
-					mesh->vertex.push_back(last_point_ + 		 points[point_pos + 1]);
-					mesh->vertex.push_back(     point  + new_points[point_pos + 1]);
+					mesh->vertex.push_back(last_point_ + (*last_points)[point_pos]);
+					mesh->vertex.push_back(			point  + (* new_points)[point_pos]);
+					mesh->vertex.push_back(last_point_ + (*last_points)[point_pos + 1]);
+					mesh->vertex.push_back(     point  + (* new_points)[point_pos + 1]);
 
-					mesh->normal.push_back(points[point_pos]);
-					mesh->normal.push_back(new_points[point_pos]);
-					mesh->normal.push_back(points[point_pos + 1]);
-					mesh->normal.push_back(new_points[point_pos + 1]);
+					mesh->normal.push_back((*last_points)[point_pos]);
+					mesh->normal.push_back((*new_points)[point_pos]);
+					mesh->normal.push_back((*last_points)[point_pos + 1]);
+					mesh->normal.push_back((*new_points)[point_pos + 1]);
 
 					Size s = mesh->vertex.size() -1;
 					t.v1 = s - 3;
@@ -389,13 +398,13 @@ namespace BALL
 				mesh->setComposite(atoms_of_spline_points_[p]);
 				geometric_objects_.push_back(mesh);
 
+				// swap between the two point vectors
+				dummy = new_points;
+				new_points  = last_points;
+				last_points = dummy;
+
 				r = r_new;
 				last_point_ = point;
-
-				for (Position p = 0; p < points.size(); p++)
-				{
-					points[p] = new_points[p];
-				}
 			}
 
 			have_start_point_ = true;
