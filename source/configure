@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.85 2000/03/27 18:40:30 oliver Exp $
+#  $Id: configure,v 1.86 2000/03/27 19:43:43 oliver Exp $
 
 
 ##################################################
@@ -1979,13 +1979,13 @@ if test "${IS_DIGITALCXX}" = true ; then
 echo "configure:1879: checking compiler version" >&5
 	echo "int main(){}" > conftest.C
 	CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
-	CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1 | ${SED} "s/A-Za-z//g"` 
+	CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1` 
 	VERSION_OUTPUT="${CXX_NAME} C++ ${CXX_VERSION}"
 	CXX_COMPILER_NAME="Digital"
 	
 	echo "$ac_t""${VERSION_OUTPUT}" 1>&6
 
-	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1 | tr -d "A-Za-z"`
 	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/^.-//g" | wc -c`
 	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
 		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2 | ${CUT} -d- -f1`
