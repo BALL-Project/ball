@@ -1,10 +1,11 @@
-// $Id: amberEnergy.C,v 1.2 2000/01/06 21:33:38 oliver Exp $
+// $Id: amberEnergy.C,v 1.3 2000/01/07 22:01:57 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
 
 using namespace BALL;
+using namespace std;
 
 int main(int argc, char** argv)
 {

@@ -1,14 +1,15 @@
-// $Id: PDB2discover.C,v 1.2 1999/09/17 11:17:24 oliver Exp $
+// $Id: PDB2discover.C,v 1.3 2000/01/07 22:01:57 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
 
+using namespace BALL;
+using namespace std;
+
 int main(int argc, char** argv) 
 {
 
-	using namespace BALL;
-	
 	if (argc < 2)
 	{
 		cerr << "filename required" << endl;
