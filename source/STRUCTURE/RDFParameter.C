@@ -1,4 +1,4 @@
-// $Id: RDFParameter.C,v 1.6 2000/10/30 00:19:58 amoll Exp $
+// $Id: RDFParameter.C,v 1.7 2001/05/15 17:56:16 anker Exp $
 
 #include <BALL/STRUCTURE/RDFParameter.h>
 #include <BALL/STRUCTURE/RDFSection.h>
@@ -155,7 +155,7 @@ namespace BALL
 
 		ParameterSection::extractSection(parameters, section_name);
 
-		Size index_name = getColumnIndex("RDF");
+		Size index_name = getColumnIndex("name");
 		String key;
 		String type_name_i;
 		String type_name_j;
