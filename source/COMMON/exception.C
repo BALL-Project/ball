@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.24 2001/07/10 16:29:40 anker Exp $
+// $Id: exception.C,v 1.25 2001/07/11 17:06:01 anker Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -182,11 +182,15 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 
-			ParseError::ParseError(const char* file, int line, const char* expression)
+			ParseError::ParseError(const char* file, int line, 
+					const char* expression, const char* message)
 				throw()
-				: GeneralException(file, line, "Parse Error:", "")
+				: GeneralException(file, line, "Parse Error", "")
 			{
-				message_ = expression;
+
+				message_ += message;
+				message_ += " in ";
+				message_ += expression;
 				globalHandler.setMessage(message_);
 			}
 

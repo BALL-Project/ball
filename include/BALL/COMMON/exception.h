@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.24 2001/07/10 16:29:38 anker Exp $
+// $Id: exception.h,v 1.25 2001/07/11 17:05:34 anker Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -378,7 +378,8 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			ParseError(const char* file, int line, const char* expression)
+			ParseError(const char* file, int line, const char* expression,
+					const char* message)
 				throw();
 		};
 
