@@ -51,7 +51,6 @@ Mainframe::Mainframe
 		logview_(0),
 		vboxlayout_(0),
 		popup_menus_(),
-		selection_(),
 		tool_box_(0)
 {
 	// ---------------------
@@ -170,14 +169,10 @@ Mainframe::Mainframe
 Mainframe::~Mainframe()
 	throw()
 {
-	//
 	// clean up
-	//
-	List<QPopupMenu *>::Iterator list_it;
+	List<QPopupMenu *>::Iterator list_it = popup_menus_.begin();
 
-	for (list_it = popup_menus_.begin();
-			 list_it != popup_menus_.end();
-			 ++list_it)
+	for (; list_it != popup_menus_.end(); ++list_it)
 	{
 		delete *list_it;
 	}
@@ -193,14 +188,6 @@ void Mainframe::onNotify(Message *message)
 		return;
 	}
 
-	// selection => store last selection for later processing
-	if (RTTI::isKindOf<SelectionMessage>(*message))
-	{
-		SelectionMessage *selection = RTTI::castTo<SelectionMessage>(*message);
-
-		selection_ = selection->getSelection();
-	}
- 
 	MainControl::onNotify(message);
 }
 
@@ -209,7 +196,7 @@ void Mainframe::checkMenuEntries()
 	bool selected;
 	int number_of_selected_objects = 0;
 
-	if (selection_.empty())
+	if (selection_.size() == 0)
 	{
 		selected = false;
 	}
@@ -261,7 +248,7 @@ void Mainframe::checkResidue()
 
 	ResidueChecker res_check(fragment_db_);
 	bool okay = true;
-	List<Composite*>::ConstIterator list_it = selection_.begin();	
+	HashSet<Composite*>::ConstIterator list_it = selection_.begin();	
 	for (; list_it != selection_.end(); ++list_it)
 	{	
 		(*list_it)->apply(res_check);
@@ -287,18 +274,14 @@ void Mainframe::assignCharges()
 
 void Mainframe::calculateAmberEnergy()
 {
-	if (selection_.size() != 1)
+	if (!isSystemSelected())
 	{
-		return;
-	}
-
-	if (!RTTI::isKindOf<System>(*selection_.front()))
-	{
+		statusBar()->message("to calculate AMBER energies, one system has to be selected");
 		return;
 	}
 
 	// retrieve the system from the selection
-	System& system = *RTTI::castTo<System>(*selection_.front());
+	System& system = *RTTI::castTo<System>(**selection_.begin()); 
 
 	// set up the AMBER force field
 	statusBar()->message("setting up force field...");
@@ -414,8 +397,9 @@ void Mainframe::amberMinimization()
 		return;
 	}
 
+	if (!isSystemSelected()) return;
 	// retrieve the system from the selection
-	System& system = *RTTI::castTo<System>(*selection_.front());
+	System& system = *RTTI::castTo<System>(**selection_.begin());
 
 
 	// execute the minimization dialog
@@ -523,13 +507,13 @@ void Mainframe::amberMinimization()
 
 void Mainframe::amberMDSimulation()
 {
-	if (selection_.size() == 0)
+	if (!isSystemSelected())
 	{
 		return;
 	}
 
 	// retrieve the system from the selection
-	System& system = *RTTI::castTo<System>(*selection_.front());
+	System& system = *RTTI::castTo<System>(**selection_.begin()); 
 
 
 	// execute the MD simulation dialog
