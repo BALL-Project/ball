@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.27.2.3 2005/01/12 22:27:52 amoll Exp $
+// $Id: colorProcessor.h,v 1.27.2.4 2005/01/14 13:11:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -121,6 +121,16 @@ class BALL_EXPORT ColorProcessor
 	/**	@name	Accessors */ 
 	//@{
 
+	/** Some coloring processors need only to be applied to a Representation if the hierarchy of
+			the Representations Composite is changed, or the Composites Names or Type (like SecondaryStructure::Type)
+			is changed. As this is seldom the case, we can speedup the call to Representation::update() in most cases.
+			This method defines if a ColoringMethod needs to be applied in all cases.
+			The default value is false. 
+			Initialise the member update_always_needed_ to true in derived classes, if the derived ColorProcessor shall
+			always be applied.
+	*/
+	bool updateAlwaysNeeded() { return update_always_needed_}
+
 	/** Change the default color.
 	*/
 	void setDefaultColor(const ColorRGBA& color)
@@ -212,6 +222,7 @@ class BALL_EXPORT ColorProcessor
 	const Atom* getClosestItem_(const Vector3& v) const
 		throw();
 
+	bool  			update_always_needed_;
 	//_ a color that will be used if no other color can be calculated.
 	ColorRGBA		default_color_;
 	//_ for speedup, we dont have to set transparency each time we color a geometric object
