@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.15 2001/06/22 11:03:23 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.16 2001/07/15 17:03:25 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -548,8 +548,9 @@ namespace BALL
 	};
 
 
-	/**	Input- Operator.
+	/**	Input operator.
 			Reads in a SolventExcludedSurface
+			@exception NotImplemented
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSolventExcludedSurface<T>& ses)

@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.15 2001/06/28 19:12:36 amoll Exp $
+// $Id: RSFace.h,v 1.16 2001/07/15 17:03:24 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -309,6 +309,7 @@ namespace BALL
 	//@{
 
 	/**	Input- Operator
+			@exception NotImplemented
 	*/
 
 	template <typename T>

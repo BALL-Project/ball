@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.13 2001/06/28 19:12:37 amoll Exp $
+// $Id: RSVertex.h,v 1.14 2001/07/15 17:03:24 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -260,6 +260,7 @@ namespace BALL
 
 	/**	Input- Operator
 			reads in a rsvertex
+			@exception NotImplemented
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TRSVertex<T>& rsvertex)

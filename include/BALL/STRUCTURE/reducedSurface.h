@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.19 2001/06/28 17:10:08 strobel Exp $
+// $Id: reducedSurface.h,v 1.20 2001/07/15 17:03:24 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -294,7 +294,7 @@ namespace BALL
 				HashSet<Index>&															 indices,
 				HashSet<TRSVertex<T>*>&											 new_vertices,
 				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
-			throw();
+			throw(Exception::GeneralException);
 
 		/*_ Check all new created vertices for extensions
 			@param	indices				a HashSet of the indices of all atoms wich are not
@@ -323,7 +323,7 @@ namespace BALL
 				TRSFace<T>*		face,
 				TSphere3<T>&	probe,
 				TAngle<T>&		phi)
-			throw();
+			throw(Exception::GeneralException);
 
 		//@}
 		/*_ @name Finding a start position
@@ -468,7 +468,7 @@ namespace BALL
 			 (Index									atom1,
 				Index									atom2,
 				const HashSet<Index>& third)
-			throw();
+			throw(Exception::GeneralException);
 
 		//@}
 		/*_ @name Some utilities
@@ -675,8 +675,9 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator.
-			Reads in a ReducedSurface
+	/**	Input operator.
+			Read a ReducedSurface from an {\tt istream}
+			@exception NotImplemented
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TReducedSurface<T>& rs)
@@ -685,8 +686,8 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	/**	Output- Operator.
-			Prints out a ReducedSurface
+	/**	Output operator.
+			Print a ReducedSurface to an {\tt ostream}
 	*/
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, TReducedSurface<T>& rs)
@@ -1213,7 +1214,7 @@ namespace BALL
 			HashSet<Index>&															 indices,
 			HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		// find third atom
 		TAngle<T> phi;
@@ -1473,7 +1474,7 @@ namespace BALL
 			TRSFace<T>*		face,
 			TSphere3<T>&	probe,
 			TAngle<T>&		phi)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		Index atom1(vertex1->getAtom());
 		Index atom2(vertex2->getAtom());
@@ -1543,6 +1544,7 @@ namespace BALL
 				}
 			}
 		}
+
 		return back;
 	}
 
@@ -1861,7 +1863,7 @@ namespace BALL
 		 (Index									atom1,
 			Index									atom2,
 			const HashSet<Index>& third)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		list< pair< Index,TSphere3<T> > > back;
 		if (third.size() == 0)

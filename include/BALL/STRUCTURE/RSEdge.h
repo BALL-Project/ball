@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.15 2001/07/10 16:36:47 anker Exp $
+// $Id: RSEdge.h,v 1.16 2001/07/15 17:03:24 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -398,6 +398,7 @@ namespace BALL
 	//@{
 
 	/**	Input- Operator
+			@exception NotImplemented
 	*/
 
 	template <typename T>

@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.11 2001/07/14 12:58:22 amoll Exp $
+// $Id: singularities.h,v 1.12 2001/07/15 17:03:25 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -95,7 +95,8 @@ namespace BALL
 			}
 			else
 			{
-				throw;
+				// BAUSTELLE: add documentation for that fucking exception
+				throw Exception::GeneralException(__FILE__, __LINE__, "undocumented exception in TreatSingularities!");
 			}
 		}				
 		TreatSecondCathegory(ses,radius_of_probe);
