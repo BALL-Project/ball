@@ -1,4 +1,4 @@
-// $Id: SESVertex.h,v 1.3 2000/12/07 15:01:55 strobel Exp $
+// $Id: SESVertex.h,v 1.4 2001/01/29 00:32:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -151,32 +151,24 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
-			reads in a TVector3 and a {\bf T} value : p, radius
+	/**	Input- Operator.
+			reads in a TVector3 and a {\bf T} value : p, radius.
 	*/
-/*
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
+	std::istream& operator >> (std::istream& s, TSESVertex<T>& sesvertex)
 	{
-		char c;
-		for (int i=0; i<7 ; i++)
-		{
-			s >> c;
-		}
-		s >> sphere3.p >> sphere3.radius >> c;
+		// BAUSTELLE
 		return s;
 	}
-*/
 
 	/**	Output- Operator
 	*/
-
-		template <typename T>
-		std::ostream& operator << (std::ostream& s, const TSESVertex<T>& sesvertex)
-		{
-			return (s << "SESVERTEX" << sesvertex.index << "(" << sesvertex.p << ' ' //<< sesvertex.n << ' '
-															 << sesvertex.atom << ")");
-		}
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TSESVertex<T>& sesvertex)
+	{
+		return (s << "SESVERTEX" << sesvertex.index << "(" << sesvertex.p << ' ' //<< sesvertex.n << ' '
+														 << sesvertex.atom << ")");
+	}
 
 	//@}
 

@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum1DWidget.h,v 1.2 2000/12/08 16:10:21 anhi Exp $
+// $Id: NMRSpectrum1DWidget.h,v 1.3 2001/01/29 00:33:25 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_NMRSPECTRUM1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_NMRSPECTRUM1DWIDGET_H
@@ -7,130 +7,137 @@
 #include <qpixmap.h>
 
 #ifndef BALL_COMMON_H
-#       include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
-#       include <BALL/DATATYPE/string.h>
+# include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-#       include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
-#       include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+# include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #endif
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
-#       include <BALL/FORMAT/bruker1DFile.h>
+# include <BALL/FORMAT/bruker1DFile.h>
 #endif
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
-#       include <BALL/FORMAT/JCAMPFile.h>
+# include <BALL/FORMAT/JCAMPFile.h>
 #endif
-
 
 // This is needed because of PixWid...
 #ifndef BALL_VIEW_GUI_WIDGETS_REGULARDATA2DWIDGET_H
-#       include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
+# include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 #endif
-
 
 using namespace BALL;
 
-/**      Widget used to display 1-dimensional NMR-spectra.
+/** Widget used to display 1-dimensional NMR-spectra.
  */
 class NMRSpectrum1DWidget
   : public QScrollView,
     public ModularWidget
 {
   Q_OBJECT
+
  public:
-  // macro for create method
-  BALL_CREATE(NMRSpectrum1DWidget);
+
+	BALL_CREATE(NMRSpectrum1DWidget);
 
   /** Constructors and Destructors
    */
   //@{
-      /// Default constructor
-      NMRSpectrum1DWidget()
-	throw();
 
-      /// Copy constructor
-      NMRSpectrum1DWidget(const NMRSpectrum1DWidget& widget)
-	throw();
+	/// Default constructor
+	NMRSpectrum1DWidget()
+		throw();
 
-      /// Detailed constructor
-      NMRSpectrum1DWidget(vector<double> &d, Size l = 0, Size min = 0, Size max = 0, QWidget *parent = 0)
-	throw();
+	/// Copy constructor
+	NMRSpectrum1DWidget(const NMRSpectrum1DWidget& widget)
+		throw();
 
-      /// Destructor
-      virtual ~NMRSpectrum1DWidget()
-	throw();
-  //@}
+	/// Detailed constructor
+	NMRSpectrum1DWidget(vector<double> &d, Size l = 0, Size min = 0, Size max = 0, QWidget* parent = 0)
+		throw();
 
-  /** Assignment
-   */
-  //@{
-      /// Assignment operator
-      const NMRSpectrum1DWidget& operator = (const NMRSpectrum1DWidget &widget)
-	throw();
+	/// Destructor
+	virtual ~NMRSpectrum1DWidget()
+		throw();
 
-      /// Clear method
-      virtual void clear()
-	throw();
-  //@}
+	//@}
+	/** Assignment
+	 */
+	//@{
 
-  /** Predicates
-   */
-  //@{
+	/// Assignment operator
+	const NMRSpectrum1DWidget& operator = (const NMRSpectrum1DWidget &widget)
+		throw();
 
-      /// Equality operator. Two spectra are equal by definition if they point to the same data and have the same lenght, min and max.
-      bool operator == (const NMRSpectrum1DWidget &widget) const
-	throw();
+	/// Clear method
+	virtual void clear()
+		throw();
 
-  //@}
+	//@}
+	/** Predicates
+	 */
+	//@{
 
-  /**    @name Accessors
-   */
-  //@{
-  /**    Return the length of the spectrum
-   */
-  const Size getLength() const
-    throw();
+	/** Equality operator. Two spectra are equal by definition if they point to
+			the same data and have the same lenght, min and max.
+	*/
+	bool operator == (const NMRSpectrum1DWidget &widget) const
+		throw();
 
-  /**    Return the minimum value
-   */
-  const Size getMin() const
-    throw();
+	//@}
+	/**    @name Accessors
+	 */
+	//@{
 
-  /**    Return the maximum value
-   */
-  const Size getMax() const
-    throw();
+	/** Return the length of the spectrum.
+	 */
+	const Size getLength() const
+		throw();
 
-  /**    Return the spectrum itself
-   */
-  const vector<double>& getData() const
-    throw();
-  //@}
+	/** Return the minimum value.
+	 */
+	const Size getMin() const
+		throw();
 
-  /** Tries to load a spectrum from bruker-directory "dirName". Hopefully the directory's structure is like this in general.
-   */
-  bool readSpec( String dirName );
+	/** Return the maximum value.
+	 */
+	const Size getMax() const
+		throw();
+
+	/** Return the spectrum itself.
+	 */
+	const vector<double>& getData() const
+		throw();
+
+	//@}
+
+	/** Tries to load a spectrum from bruker-directory "dirName". 
+			Hopefully the directory's structure is like this in general.
+	 */
+	bool readSpec(String dirName);
 
  public slots:
-  /**    @name    ModularWidget related methods
+
+  /** @name ModularWidget related methods
    */
   //@{
-  /**    Setup the menu entries.
-	 NMRSpectrum1DWidget creates an entry in Tools|NMRSpectrum1DWidget and connects
-	 the entry to createPlot()
+
+  /** Setup the menu entries.
+		  NMRSpectrum1DWidget creates an entry in Tools|NMRSpectrum1DWidget and connects
+			the entry to createPlot().
   */
   virtual void initializeWidget(MainControl& main_control);
 
-  /**    Remove menu entries.
+  /** Remove menu entries.
    */
   virtual void finalizeWidget(MainControl& main_control);
   //@}
@@ -142,13 +149,14 @@ class NMRSpectrum1DWidget
   void resizeEvent(QResizeEvent *e);
     
  protected:
-      QPixmap pm_;
-      Size length_;
-      vector<double> data_;
-      Size min_;
-      Size max_;
-      Bruker1D *spectrum_;
-      PixWid *pixWid_;
+
+	QPixmap pm_;
+	Size length_;
+	vector<double> data_;
+	Size min_;
+	Size max_;
+	Bruker1D *spectrum_;
+	PixWid *pixWid_;
 };
 
 #endif // BALL_VIEW_GUI_WIDGET_NMRSPECTRUM1DWIDGET_H

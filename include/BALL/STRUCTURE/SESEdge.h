@@ -1,4 +1,4 @@
-// $Id: SESEdge.h,v 1.3 2001/01/10 14:55:00 strobel Exp $
+// $Id: SESEdge.h,v 1.4 2001/01/29 00:32:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -210,10 +210,9 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
-			reads in a TVector3 and a {\bf T} value : p, radius
+	/**	Input- Operator.
+			reads in a TVector3 and a {\bf T} value : p, radius.
 	*/
-/*
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TRSEdge<T>& rsedge)
 	{
@@ -225,7 +224,6 @@ namespace BALL
 		s >> rsedge.p >> rsedge.radius >> c;
 		return s;
 	}
-*/
 
 	/**	Output- Operator
 	*/

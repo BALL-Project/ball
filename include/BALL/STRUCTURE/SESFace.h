@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.5 2001/01/10 14:55:15 strobel Exp $
+// $Id: SESFace.h,v 1.6 2001/01/29 00:32:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -331,25 +331,18 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
-			reads in a TVector3 and a {\bf T} value : p, radius
+	/**	Input- Operator.
+			reads in a TVector3 and a {\bf T} value : p, radius.
 	*/
-/*
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
+	std::istream& operator >> (std::istream& s, TSESFace<T>& sesface)
 	{
-		char c;
-		for (int i=0; i<7 ; i++)
-		{
-			s >> c;
-		}
-		s >> sphere3.p >> sphere3.radius >> c;
+		// BAUSTELLE
 		return s;
 	}
-*/
 
-	/**	Output- Operator
-	*/
+		/**	Output- Operator
+		*/
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, const TSESFace<T>& sesface)
 		{
