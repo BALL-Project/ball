@@ -1,4 +1,4 @@
-; $Id: PB.options,v 1.1.2.1 2002/12/05 14:18:09 anker Exp $
+; $Id: PB.options,v 1.1.2.2 2002/12/05 17:33:16 anker Exp $
 ; Example options file for the PB application
 ;
 ; all options are commented out
@@ -61,7 +61,7 @@
 
 ; define a spatial offset for the calculation
 ; you can displace the whole grid by defining this offset vector
-;offset (
+;offset (1.0 1.0 1.0)
 
 ; set the rms criterion for termination of the solver iterations
 ; if the root mean sqaure deviation of the equation system is below this
@@ -85,4 +85,14 @@
 ; solver
 ;max_iterations 1000
 
+; set the lower corner of the grid
+;lower (0.0 0.0 0.0)
 
+; set the upper corner of the grid
+;upper (0.0 0.0 0.0)
+
+; set the lower corner of the bounding box of the molecule(s)
+;bounding_box_lower (0.0 0.0 0.0)
+
+; set the upper corner of the bounding box of the molecule(s)
+;bounding_box_upper (0.0 0.0 0.0)
