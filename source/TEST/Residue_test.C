@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.7 2000/05/17 16:45:39 amoll Exp $
+// $Id: Residue_test.C,v 1.8 2000/05/18 07:55:22 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,12 +12,14 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.7 2000/05/17 16:45:39 amoll Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.8 2000/05/18 07:55:22 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
+
 String filename;
 NEW_TMP_FILE(filename)
 
