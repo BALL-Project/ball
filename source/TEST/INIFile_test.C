@@ -1,18 +1,33 @@
-// $Id: INIFile_test.C,v 1.8 2001/04/09 11:28:30 amoll Exp $
+// $Id: INIFile_test.C,v 1.9 2001/04/09 23:03:11 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/INIFile.h>
 #include "ItemCollector.h"
 ///////////////////////////
-
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.8 2001/04/09 11:28:30 amoll Exp $")
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-
 #include <iostream>
 using namespace std;
+
+template<typename DataType>
+class MyItemCollector	
+: public ItemCollector<DataType>
+{
+	public:
+
+	Processor::Result operator () (DataType& item)
+	{	//cout << *item << endl;
+		list_.push_back(&item);
+		list2.push_back(*item);
+		return Processor::CONTINUE;
+	}
+
+	List<String> list2;
+};
+
+
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.9 2001/04/09 23:03:11 amoll Exp $")
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
@@ -104,6 +119,86 @@ CHECK(INIFile::getLine(Size line_number))
 RESULT
 
 
+CHECK(INIFile::setLine(LineIterator line_it, const String& line))
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+	INIFile::LineIterator it(ini.getLine(6));
+  TEST_EQUAL(ini.setLine(it, "test2=b"), true)
+  TEST_EQUAL(ini.setLine(it, "test2=cc"), true)
+  TEST_EQUAL(ini.getValue("Section3", "test2"), "cc")
+  TEST_EQUAL(ini.setLine(it, "testx=ff"), true)
+  TEST_EQUAL(ini.getValue("Section3", "test2"), ini.UNDEFINED)
+  TEST_EQUAL(ini.getValue("Section3", "testx"), "ff")
+
+	it = ini.getLine(4);
+  TEST_EQUAL(ini.setLine(it, "test"), false)
+RESULT
+
+
+CHECK(INIFile::deleteLine)
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+
+	INIFile::LineIterator it;
+	TEST_EQUAL(ini.deleteLine(it), false)
+	
+	it = ini.getSectionFirstLine("Section3");
+  ++it;	++it;
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(*it, "test2=b")
+	TEST_EQUAL(ini.deleteLine(it), true)
+
+	TEST_EQUAL(ini.hasEntry("Section3", "test2"), false)
+  TEST_EQUAL(ini.getValue("Section3", "test2"), ini.UNDEFINED)
+  TEST_EQUAL(ini.getSectionLength("Section3"), 4)
+
+	it = ini.getLine(4);
+	TEST_EQUAL(ini.deleteLine(it), false)
+RESULT
+
+
+CHECK(INIFile::insertLine(LineIterator line_it, const String& line))
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+	INIFile::LineIterator it(ini.getLine(5));
+  TEST_EQUAL(ini.insertLine(it, "insertTest = QQQ"), true)
+  TEST_EQUAL(*ini.getLine(6), "insertTest = QQQ")
+  TEST_EQUAL(ini.getValue("Section3", "insertTest"), "QQQ")
+
+	it = ini.getLine(10);
+  TEST_EQUAL(ini.insertLine(it, "insertTest = ZZZ"), true)
+  TEST_EQUAL(*ini.getLine(11), "insertTest = ZZZ")
+  TEST_EQUAL(ini.getValue("Section4", "insertTest"), "ZZZ")
+
+	it = ini.getLine(0);
+  TEST_EQUAL(ini.insertLine(it, "insertTest2 = XXX"), true)
+  TEST_EQUAL(*ini.getLine(1), "insertTest2 = XXX")
+  TEST_EQUAL(ini.getValue("Section1", "insertTest2"), "XXX")
+
+	it = ini.getLine(0);
+  TEST_EQUAL(ini.insertLine(it, "insertTest3"), true)
+  TEST_EQUAL(*ini.getLine(1), "insertTest3")
+  TEST_EQUAL(ini.getValue("Section1", "insertTest3"), ini.UNDEFINED)
+RESULT
+
+
+CHECK(INIFile::appendLine(const String& section_name, const String& line))
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+	
+	TEST_EQUAL(ini.appendLine("Section9", "GAU"), false)	
+	TEST_EQUAL(ini.appendLine("Section2", "[AU"), false)	
+	TEST_EQUAL(ini.appendLine("Section3", "test1 = 123"), false)	
+	TEST_EQUAL(ini.getNumberOfLines(), 10)
+
+	TEST_EQUAL(ini.appendLine("Section3", "insert1=ok"), true)
+	TEST_EQUAL(ini.getNumberOfLines(), 11)
+	TEST_EQUAL(ini.getSectionLength("Section3"), 6)
+	TEST_EQUAL(ini.hasEntry("Section3", "insert1"), true)
+	TEST_EQUAL(ini.getValue("Section3", "insert1"), "ok")
+RESULT
+
+
 CHECK(INIFile::getNumberOfLines() const )
 	INIFile ini2("data/amber91.ini");
 	ini2.read();
@@ -131,11 +226,6 @@ CHECK(INIFile::getSection(const String& section_name) const )
   TEST_EQUAL(ini.getSection("Section4")->getName(), "Section4")
 RESULT
 
-CHECK(INIFile::getNumberOfSections() const )
-  TEST_EQUAL(ini.getNumberOfSections(), 4)
-RESULT
-
-
 CHECK(INIFile::getSection(Position pos) const )
   TEST_EQUAL(ini.getSection(0)->getName(), ini.HEADER)
   TEST_EQUAL(ini.getSection(1)->getName(), "Section1")
@@ -145,6 +235,11 @@ CHECK(INIFile::getSection(Position pos) const )
   TEST_EQUAL(ini.getSection(5) == 0, true)
 RESULT
 
+CHECK(INIFile::getNumberOfSections() const )
+  TEST_EQUAL(ini.getNumberOfSections(), 4)
+	INIFile ini2;
+  TEST_EQUAL(ini2.getNumberOfSections(), 0)
+RESULT
 
 CHECK(INIFile::getSectionFirstLine(const String& section_name) const )
 	INIFile::LineIterator it;
@@ -226,105 +321,80 @@ CHECK(INIFile::write())
 	TEST_FILE("data/INIFile_test2.ini", filename.c_str(), false)
 RESULT
 
-// ok basic tests work
-// now we are testing insert/delete/set etc...
-CHECK(INIFile::deleteLine)
-	INIFile ini("data/INIFile_test.ini");
-	ini.read();
 
-	INIFile::LineIterator it;
-	TEST_EQUAL(ini.deleteLine(it), false)
-	
-	it = ini.getSectionFirstLine("Section3");
-  ++it;
-	++it;
-	TEST_EQUAL(+it, true)
-	TEST_EQUAL(*it, "test2=b")
-	TEST_EQUAL(ini.deleteLine(it), true)
-
-	TEST_EQUAL(ini.hasEntry("Section3", "test2"), false)
-  TEST_EQUAL(ini.getValue("Section3", "test2"), ini.UNDEFINED)
-  TEST_EQUAL(ini.getSectionLength("Section3"), 4)
-RESULT
-
-
-CHECK(INIFile::appendLine(const String& section_name, const String& line))
+CHECK(INIFile::deleteSection(const String& section_name))
 	INIFile ini("data/INIFile_test.ini");
 	ini.read();
 	
-	TEST_EQUAL(ini.appendLine("Section9", "GAU"), false)	
-	TEST_EQUAL(ini.appendLine("Section2", "[AU"), false)	
-	TEST_EQUAL(ini.appendLine("Section3", "test1 = 123"), false)	
-	TEST_EQUAL(ini.getNumberOfLines(), 10)
+	TEST_EQUAL(ini.deleteSection(ini.HEADER), true)
+  TEST_EQUAL(ini.getNumberOfLines(), 10)
 
-	TEST_EQUAL(ini.appendLine("Section3", "insert1=ok"), true)
-	TEST_EQUAL(ini.getNumberOfLines(), 11)
-	TEST_EQUAL(ini.getSectionLength("Section3"), 6)
-	TEST_EQUAL(ini.hasEntry("Section3", "insert1"), true)
-	TEST_EQUAL(ini.getValue("Section3", "insert1"), "ok")
+	TEST_EQUAL(ini.deleteSection("Section1"), true)
+  TEST_EQUAL(ini.getNumberOfLines(), 9)
+	TEST_EQUAL(ini.hasSection("Section1"), false)
+
+	TEST_EQUAL(ini.deleteSection("Section2"), true)
+  TEST_EQUAL(ini.getNumberOfLines(), 6)
+	TEST_EQUAL(ini.hasSection("Section2"), false)
 RESULT
-/*
-CHECK(test)
+
+CHECK(INIFile::appendSection(const String& section_name))
 	INIFile ini("data/INIFile_test.ini");
 	ini.read();
+	TEST_EQUAL(ini.hasSection(ini.HEADER), true)
+	TEST_EQUAL(ini.appendSection(ini.HEADER), false)
+  TEST_EQUAL(ini.getNumberOfLines(), 10)
 
-	INIFile::LineIterator line_it(ini.getLine(0));
-	++line_it;
-	cout << line_it.getLine() << endl;
-	TEST_EQUAL(+line_it, true)
-	// iterate over all lines and write them
-	for (; +line_it; ++line_it)
-	{
-		cout << line_it.getLine() << endl;
-	}
-RESULT*/
+	TEST_EQUAL(ini.appendSection("Section1"), false)
+  TEST_EQUAL(ini.getNumberOfLines(), 10)
+	TEST_EQUAL(ini.hasSection("Section1"), true)
 
+	TEST_EQUAL(ini.appendSection("Section5"), true)
+  TEST_EQUAL(ini.getNumberOfLines(), 11)
+	TEST_EQUAL(ini.hasSection("Section5"), true)
+  TEST_EQUAL(*ini.getLine(10), "[Section5]")
+RESULT
 
 CHECK(apply(UnaryProcessor<LineIterator>& processor))
-	ItemCollector<INIFile::LineIterator> myproc;
+	MyItemCollector<INIFile::LineIterator> myproc;
 	INIFile ini("data/INIFile_test.ini");
 	ini.read();
 
 	TEST_EQUAL(ini.apply(myproc), true)
-/*
-	TEST_EQUAL(+ini.getSectionLastLine("Section1"), true)
-	TEST_EQUAL(+ini.getSectionLastLine("Section3"), true)
-	TEST_EQUAL(+ini.getLine(0), true)*/
+	TEST_EQUAL(myproc.getSize(), 10)
+	TEST_EQUAL(myproc.list2.getSize(), 10)
+	List<String>::Iterator it(myproc.list2.begin());
+	TEST_EQUAL(*it, "[Section1]")
+	it = myproc.list2.end();
+	it--;
+	TEST_EQUAL(*it, "[Section4]")
+RESULT
 
+CHECK(INIFile::operator ==)
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+	INIFile ini2("data/INIFile_test.ini");
+	ini2.read();
+	TEST_EQUAL(ini == ini2, true)
+	ini.deleteLine(ini.getLine(2));
+	TEST_EQUAL(ini == ini2, false)
+RESULT
 
-	//TEST_EQUAL(myproc.getSize(), 11)
-/*
-	TEST_EQUAL(*myproc.getPointer(), 1) myproc.forward();
-	TEST_EQUAL(*myproc.getPointer(), 2) myproc.forward();
-	TEST_EQUAL(*myproc.getPointer(), 3) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), 0)*/
+CHECK(INIFile::isValid(LineIterator))
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+
+	INIFile::LineIterator it;
+	TEST_EQUAL(ini.isValid(it), false)
+
+	it = ini.getLine(9);
+	TEST_EQUAL(ini.isValid(it), true)
+	it = ini.getLine(10);
+	TEST_EQUAL(ini.isValid(it), false)
 RESULT
 
 
-/*
-	StringHashMap<Size>::Iterator it = ini.section_key_map_.begin();
-	TEST_EQUAL((*it).first, "");
-	TEST_EQUAL((*it).second, 0);
-	++it;
-	TEST_EQUAL((*it).first, "");
-	TEST_EQUAL((*it).second, 0);
-	++it;
-	TEST_EQUAL((*it).first, "");
-	TEST_EQUAL((*it).second, 0);
-*/
 
-/*
-	for (int i = 0; i < ini.section_names_.size() ; i++)
-	{ 
-		cout << endl<< ini.section_names_[i] << endl;
-		cout << ini.line_section_index_[i] << endl;
-		cout << ini.section_start_[i] << endl;
-		cout << ini.section_end_[i] << endl;
-		cout << ini.section_key_map_[i] << endl;
-		cout << ini.section_index_[i] << endl;
-		cout << endl;
-	}
-*/
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
