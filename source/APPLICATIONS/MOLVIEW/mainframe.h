@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.44 2003/09/01 22:34:01 amoll Exp $
+// $Id: mainframe.h,v 1.45 2003/09/02 15:36:59 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -74,12 +74,12 @@
 #include <qwidget.h>
 #include <qsplitter.h>
 
-class QThread;
 
 namespace BALL
 {
 	using namespace BALL::VIEW;
 	class AmberFF;
+	class SimulationThread;
 
 class Mainframe	
 	: public BALL::VIEW::MainControl
@@ -200,7 +200,7 @@ class Mainframe
 	QSplitter*								vert_splitter2_;
 	QSplitter*								vert_splitter3_;
 	LogView*									logview_;
-	QThread* 									simulation_thread_;
+	SimulationThread* 				simulation_thread_;
 	
 	bool 											fullscreen_;
 	bool 											stop_simulation_;

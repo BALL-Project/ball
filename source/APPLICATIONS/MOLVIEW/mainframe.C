@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.69 2003/09/02 14:20:01 amoll Exp $
+// $Id: mainframe.C,v 1.70 2003/09/02 15:36:58 amoll Exp $
 
 #include "mainframe.h"
 #include "icons.h"
@@ -38,7 +38,7 @@
 #include <qlabel.h>
 #include <qaccel.h> 
 
-#undef QT_THREAD_SUPPORT
+//#undef QT_THREAD_SUPPORT
 #ifdef QT_THREAD_SUPPORT
  #include "threads.h"
 #endif
@@ -574,11 +574,18 @@ void Mainframe::amberMDSimulation()
 	// clean up
 	delete mds;
 
-	NewTrajectoryMessage* message = new NewTrajectoryMessage;
-	message->setComposite(amber->getSystem());
-	message->setTrajectoryFile(dcd);
-	message->setDeletable(true);
-	notify_(message);
+	if (dcd)
+	{
+		dcd->close();
+		delete dcd;
+		dcd = new DCDFile(md_dialog_->getDCDFile(), File::IN);
+
+		NewTrajectoryMessage* message = new NewTrajectoryMessage;
+		message->setComposite(amber->getSystem());
+		message->setTrajectoryFile(dcd);
+		message->setDeletable(true);
+		notify_(message);
+	}
 
 	delete amber;
 #endif
@@ -713,41 +720,11 @@ void Mainframe::toggleFullScreen()
 		showFullScreen();
 		setGeometry(qApp->desktop()->screenGeometry());
 
-		// disabled after widgets were able to be switched of manualy:
-		/*
-		List<ModularWidget*>::Iterator it = modular_widgets_.begin();
-		for( ; it != modular_widgets_.end(); it++)
-		{
-			if (!RTTI::isKindOf<QWidget>(**it) ||
-					!dynamic_cast<QWidget*>(*it)->isVisible()) 
-			{
-				continue;
-			}
-
-			dynamic_cast<QWidget*>(*it)->hide();
-		}
-		scene_->show();
-		*/
 		fullscreen_ = true;
 		return;
 	}
 
 	showNormal();
-
-	// disabled after widgets were able to be switched of manualy:
-	/*
-	List<ModularWidget*>::Iterator it = modular_widgets_.begin();
-	for( ; it != modular_widgets_.end(); it++)
-	{
-		if (!RTTI::isKindOf<Scene>(**it) &&
-				 RTTI::isKindOf<QWidget>(**it) &&
-				!RTTI::isKindOf<QDialog>(**it))
-		{	
-			dynamic_cast<QWidget*>(*it)->show();
-		}
-	}
-	*/
-	
 	fullscreen_ = false;
 }
 
@@ -784,13 +761,16 @@ void Mainframe::stopSimulation()
 	{
 		if (simulation_thread_->running()) simulation_thread_->wait();
 
-		if (simulation_thread_->getDCDFile())
+		DCDFile* file = simulation_thread_->getDCDFile();
+		if (file)
 		{
-			simulation_thread_->getDCDFile()->flushToDisk();
+			file->close();
+			String filename = file->getName();
+			delete file;
+			file = new DCDFile(filename, File::IN);
 			NewTrajectoryMessage* message = new NewTrajectoryMessage;
 			message->setComposite(simulation_thread_->getComposite());
-			message->setTrajectoryFile(simulation_thread_->getDCDFile());
-	Log.error() << "#~~#   5 " << message->getTrajectoryFile()<< std::endl;
+			message->setTrajectoryFile(file);
 			message->setDeletable(true);
 			notify_(message);
 		}

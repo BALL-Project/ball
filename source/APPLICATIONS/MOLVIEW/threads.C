@@ -142,7 +142,7 @@ namespace BALL
 											amber.getRMSGradient());
 			output_(message.ascii());
 			
-			msleep(90);
+			//msleep(90);
 			
 			if (save_images_) 
 			{
@@ -153,10 +153,7 @@ namespace BALL
 			if (dcd_file_) manager.takeSnapShot();
 		}
 
-		if (dcd_file_) 
-		{
-			manager.flushToDisk();
-		}
+		if (dcd_file_) manager.flushToDisk();
 
 		outputAmberResult_(*(AmberFF*)md_->getForceField());
 		output_("final RMS gadient    : " + String(amber.getRMSGradient()) + " kJ/(mol A)   after " 

@@ -23,6 +23,7 @@ namespace BALL
 	class MolecularDynamics;
 	class Mainframe;
 	class AmberFF;
+	class Composite;
 
 	/** Baseclass for threads in molview.
 	 		To use multithreading in molview, there are several problems arising from
