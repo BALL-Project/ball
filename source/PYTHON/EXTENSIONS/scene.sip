@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.sip,v 1.1 2004/02/12 16:18:11 amoll Exp $
+// $Id: scene.sip,v 1.2 2004/06/08 15:29:10 amoll Exp $
 //
 
 class Scene 
@@ -35,7 +35,6 @@ static Scene* getInstance(Position /index/);
 //  void clear() throw();
 //  void defaultPreferences(Preferences&) throw();
 		void exportPNG();
-		void switchStereo();
   	void exportScene(Renderer&) const throw();
 //  void fetchPreferences(INIFile&) throw();
 //  void finalizePreferencesTab(Preferences &preferences) throw();
@@ -46,6 +45,9 @@ static Scene* getInstance(Position /index/);
 //  void set(const Scene&) throw();
   void setDefaultLighting(bool);
   void update(bool);
+	void enterDualStereo();
+	void enterActiveStereo();
+	void exitStereo();
 //  void writePreferences(INIFile&) throw();
   ~Scene() throw();
 };
