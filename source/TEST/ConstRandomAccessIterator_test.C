@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConstRandomAccessIterator_test.C,v 1.4 2003/06/30 19:09:21 oliver Exp $
+// $Id: ConstRandomAccessIterator_test.C,v 1.5 2003/06/30 20:15:54 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -334,7 +334,7 @@ class VectorIteratorTraits_
 typedef ConstRandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 typedef reverse_iterator<ConstRandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > > MyReverseIterator;
 
-START_TEST(ConstRandomAccessIterator, "$Id: ConstRandomAccessIterator_test.C,v 1.4 2003/06/30 19:09:21 oliver Exp $")
+START_TEST(ConstRandomAccessIterator, "$Id: ConstRandomAccessIterator_test.C,v 1.5 2003/06/30 20:15:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -554,7 +554,6 @@ RESULT
 CHECK(static ConstRandomAccessIterator rend(const Container& container) throw(Exception::InvalidIterator))
   MyReverseIterator m1(MyIterator::rend(v));
 	STATUS("Copy ctor successful")
-  TEST_EXCEPTION(Exception::InvalidIterator, ++m1);
 RESULT
 
 END_TEST

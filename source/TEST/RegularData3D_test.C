@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.16 2003/06/30 19:09:22 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.17 2003/06/30 20:15:55 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.16 2003/06/30 19:09:22 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.17 2003/06/30 20:15:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -584,14 +584,31 @@ RESULT
 
 CHECK(void rescale(const IndexType& new_size) throw(Exception::OutOfMemory))
   RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(2, 2, 2));
-	g[RegularData3D::IndexType(0,0,1)] = 1;
-	g[RegularData3D::IndexType(0,1,1)] = 1;
-	g[RegularData3D::IndexType(1,0,1)] = 1;
-	g[RegularData3D::IndexType(1,1,1)] = 1;
-	g[RegularData3D::IndexType(0,0,0)] = 0;
-	g[RegularData3D::IndexType(0,1,0)] = 0;
-	g[RegularData3D::IndexType(1,0,0)] = 0;
-	g[RegularData3D::IndexType(1,1,0)] = 0;
+	g[RegularData3D::IndexType(0, 0, 0)] = 0.0;
+	g[RegularData3D::IndexType(1, 0, 0)] = 0.0;
+	g[RegularData3D::IndexType(0, 1, 0)] = 0.0;
+	g[RegularData3D::IndexType(1, 1, 0)] = 0.0;
+	g[RegularData3D::IndexType(0, 0, 1)] = 1.0;
+	g[RegularData3D::IndexType(1, 0, 1)] = 1.0;
+	g[RegularData3D::IndexType(0, 1, 1)] = 1.0;
+	g[RegularData3D::IndexType(1, 1, 1)] = 1.0;
+	STATUS(g.getSize().x << " x " << g.getSize().y << " x " << g.getSize().z)
+	STATUS(g.getData(0))
+	STATUS(g.getData(1))
+	STATUS(g.getData(2))
+	STATUS(g.getData(3))
+	STATUS(g.getData(4))
+	STATUS(g.getData(5))
+	STATUS(g.getData(6))
+	STATUS(g.getData(7))
+	STATUS(g.getData(RegularData3D::IndexType(0, 0, 0)))
+	STATUS(g.getData(RegularData3D::IndexType(1, 0, 0)))
+	STATUS(g.getData(RegularData3D::IndexType(0, 1, 0)))
+	STATUS(g.getData(RegularData3D::IndexType(1, 1, 0)))
+	STATUS(g.getData(RegularData3D::IndexType(0, 0, 1)))
+	STATUS(g.getData(RegularData3D::IndexType(1, 0, 1)))
+	STATUS(g.getData(RegularData3D::IndexType(0, 1, 1)))
+	STATUS(g.getData(RegularData3D::IndexType(1, 1, 1)))
 	g.rescale(RegularData3D::IndexType(3, 3, 3));
 	STATUS(g.getSize().x << " x " << g.getSize().y << " x " << g.getSize().z)
 	STATUS(g.getData(RegularData3D::IndexType(0, 0, 0)))
@@ -624,11 +641,35 @@ CHECK(void rescale(const IndexType& new_size) throw(Exception::OutOfMemory))
 	STATUS(g.getData(RegularData3D::IndexType(1, 2, 2)))
 	STATUS(g.getData(RegularData3D::IndexType(2, 2, 2)))
 
-	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0,0,2)), 0)
-	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0,2,2)), 0)
-	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2,0,2)), 0)
-	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2,2,2)), 0)
-	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0,0,1)), 0.5)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0, 0, 0)), 0.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1, 0, 0)), 0.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2, 0, 0)), 0.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0, 1, 0)), 0.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1, 1, 0)), 0.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2, 1, 0)), 0.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0, 2, 0)), 0.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1, 2, 0)), 0.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2, 2, 0)), 0.0)
+
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0, 0, 1)), 0.5)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1, 0, 1)), 0.5)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2, 0, 1)), 0.5)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0, 1, 1)), 0.5)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1, 1, 1)), 0.5)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2, 1, 1)), 0.5)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0, 2, 1)), 0.5)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1, 2, 1)), 0.5)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2, 2, 1)), 0.5)
+
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0, 0, 2)), 1.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1, 0, 2)), 1.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2, 0, 2)), 1.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0, 1, 2)), 1.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1, 1, 2)), 1.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2, 1, 2)), 1.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0, 2, 2)), 1.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1, 2, 2)), 1.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(2, 2, 2)), 1.0)
 RESULT
 
 CHECK(void setDimension(const CoordinateType& dimension) throw())

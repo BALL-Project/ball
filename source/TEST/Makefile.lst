@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.2 2003/06/30 19:29:00 oliver Exp $
+# $Id: Makefile.lst,v 1.3 2003/06/30 20:15:54 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -79,7 +79,6 @@ EXECUTABLES_DATATYPES = \
 	ContourSurface_test$(EXEEXT)
 
 EXECUTABLES_CONCEPTS = \
-	$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	LogStream_test$(EXEEXT)\
 	AutoDeletable_test$(EXEEXT)\
 	Factory_test$(EXEEXT)\
