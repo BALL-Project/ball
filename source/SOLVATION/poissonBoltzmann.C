@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.4 1999/09/26 17:19:02 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.5 1999/10/01 12:53:09 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -38,6 +38,7 @@ namespace BALL
 	const char* FDPB::Boundary::DEBYE = "Debye";
 	const char* FDPB::Boundary::COULOMB = "Coulomb";
 	const char* FDPB::Boundary::DIPOLE = "dipole";
+	const char* FDPB::Boundary::FOCUSING = "focusing";
 
 	const char* FDPB::ChargeDistribution::TRILINEAR = "trilinear";
 	const char* FDPB::ChargeDistribution::UNIFORM = "uniform";
@@ -1077,6 +1078,8 @@ namespace BALL
 			boundary_condition = 2;
 		}	else if (options[Option::BOUNDARY] == FDPB::Boundary::COULOMB) {
 			boundary_condition = 3;
+		}	else if (options[Option::BOUNDARY] == FDPB::Boundary::FOCUSING) {
+			boundary_condition = 4;
 		} else {
 			error_code_ = FDPB::ERROR__UNKNOWN_BOUNDARY_CONDITION_TYPE;
 			return false;
@@ -1133,11 +1136,14 @@ namespace BALL
 		float charge;
 		Vector3	position;
 					
-		switch (boundary_condition) {
+		switch (boundary_condition) 
+		{	
 			case 1:  // Debye approximation for the potential
 
 				if (verbosity > 3)
+				{
 					Log.info(4) << "setting up xy-planes..." << endl;
+				}
 
 				// first, calculate the values for the first and last
 				// xy-plane of the grid
@@ -1181,7 +1187,9 @@ namespace BALL
 						}
 		
 				if (verbosity > 3)
+				{
 				 	Log.info(4) << "setting up xz-planes..." << endl;
+				}
 
 				// second, calculate the values for the first and last
 				// xz-plane of the grid, 
@@ -1206,8 +1214,9 @@ namespace BALL
 						}
 
 				if (verbosity > 3)
+				{
 					Log.info(4) << "setting up yz-planes..." << endl;
-
+				}	
 
 				// last, calculate the values for the first and last
 				// yz-plane of the grid, 
@@ -1339,7 +1348,9 @@ namespace BALL
 						}
 		
 				if (verbosity > 3)
+				{
 					Log.info(4) << "setting up xz-planes..." << endl;
+				}
 
 				// second, calculate the values for the first and last
 				// xz-plane of the grid, 
@@ -1367,8 +1378,9 @@ namespace BALL
 						}
 
 				if (verbosity > 3)
+				{
 					Log.info(4) << "setting up yz-planes..." << endl;
-
+				}
 
 				// last, calculate the values for the first and last
 				// yz-plane of the grid, 
@@ -1396,6 +1408,82 @@ namespace BALL
 						}
 					break;
 
+			case 4:	// use focusing: solve FDPB on a grid with spacing x 4 and dimension x 2
+				
+				if (boundary_condition == 4)
+				{
+					// create a FDPB object with double the size (in each direction)
+					// and four times the spacing
+					FDPB	focusing_grid;
+					focusing_grid.options = options;
+					focusing_grid.options[Option::BOUNDARY] = Boundary::DIPOLE;
+					Vector3 focusing_lower = lower_;
+					Vector3 focusing_upper = upper_;
+					focusing_lower -= (upper_ - lower_) * 0.5;
+					focusing_upper += (upper_ - lower_) * 0.5;
+					focusing_grid.options.setVector(Option::LOWER, focusing_lower);
+					focusing_grid.options.setVector(Option::UPPER, focusing_upper);
+					focusing_grid.options[Option::SPACING] = spacing_ * 2.0;
+
+					System S;
+					Protein P;
+					Chain C;
+					Residue R;
+					S.insert(P);
+					P.insert(C);
+					C.insert(R);
+					vector<FDPB::FastAtom>::iterator atom_array_it= atom_array->begin();
+					for (; atom_array_it != atom_array->end(); ++atom_array_it)
+					{
+						PDBAtom* atom = new PDBAtom;
+						R.insert(*atom);
+						atom->setPosition(Vector3(atom_array_it->x, atom_array_it->y, atom_array_it->z));
+						atom->setCharge(atom_array_it->q);
+						atom->setRadius(atom_array_it->r);
+					}
+
+					if (verbosity > 1)
+					{
+						Log.info() << "setting up focusing grid." << endl;
+					}
+					// setup the focusing grid
+					focusing_grid.setup(S);
+
+					// solve the FDPB 
+					if (verbosity > 1)
+					{
+						Log.info() << "solving equations for focusing grid." << endl;
+					}
+					focusing_grid.solve();
+					
+					// now iterate over all points of the final grid an assign their 
+					// potential from the focusing grid
+					if (verbosity > 1)
+					{
+						Log.info() << "copying focusing grid to final grid" << endl;
+					}
+					
+					for (z = 0; z < Nz; z++)
+					{
+						for (y = 0; y < Ny; y++)
+						{
+							for (x = 0; x < Nx; x++)
+							{
+								// calculate the current grid point`s index
+								idx = x + y * Nx + z * Nxy;
+
+								// assign the interpolated value to the focusing grid
+								(*phi_grid)[idx] = focusing_grid.phi_grid->getInterpolatedValue(phi_grid->getGridCoordinates(idx));
+							}
+						}
+					}
+
+					// remove all unnedded data structure now!
+					focusing_grid.destroy();
+				}
+				break;
+				
+
 			case 0: // set boundary to a potential of zero 
 							// (phi is already set to zero everywhere - so simply do nothing)
 					;
@@ -1403,7 +1491,9 @@ namespace BALL
 
 		step_timer.stop();
 		if (print_timing && (verbosity > 1))
+		{
 			Log.info(2) << "setupBoundary: " << step_timer.getCPUTime() << endl;
+		}
 
 		return true;
 	}

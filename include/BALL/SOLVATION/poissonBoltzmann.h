@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.1 1999/08/26 07:53:20 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.2 1999/10/01 12:52:51 oliver Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -34,7 +34,7 @@ namespace BALL
 			\\
 			This class implements ....\\		
 
-			@see	BALLFDPB
+			@see	FDPB
 	*/
 	class FDPB 
 	{
@@ -175,34 +175,34 @@ namespace BALL
 			/**	The specified method to smooth the dielectric constant grid 
 					is not allowed.
 					FDPB::setupEpsGrid() sets this error code, if it cannot
-					identify the method given in BALLFDPB::Option::dielectric\_smoothing.\\
+					identify the method given in FDPB::Option::dielectric\_smoothing.\\
 					Solution: specify a valid smoothing method in FDPB::options
-					@see	BALLFDPB::Option::dielectric_smoothing
-					@see	BALLFDPB::DielectricSmoothing
+					@see	FDPB::Option::dielectric_smoothing
+					@see	FDPB::DielectricSmoothing
 			*/
 			ERROR__UNKNOWN_DIELECTRIC_SMOOTHING_METHOD,
 		
 			/**	The specified charge distribution is not allowed.
 					FDPB::setupQGrid() sets this error code, if it cannot
-					identify the method given in BALLFDPB::Option::charge\_distribution.\\
+					identify the method given in FDPB::Option::charge\_distribution.\\
 					Solution: specify a valid charge distribution method in FDPB::options
-					@see	BALLFDPB::Option::charge_distribution
-					@see	BALLFDPB::ChargeDistribution
+					@see	FDPB::Option::charge_distribution
+					@see	FDPB::ChargeDistribution
 			*/
 			ERROR__UNKNOWN_CHARGE_DISTRIBUTION_METHOD,
 
 			/**	The specified boundary condition type is not allowed.
 					FDPB::setupBoundary() sets this error code, if it cannot
-					identify the boundary condition given in BALLFDPB::Option::boundary.\\
+					identify the boundary condition given in FDPB::Option::boundary.\\
 					Solution: specify a valid boundary condition in FDPB::options
-					@see	BALLFDPB::Option::boundary
-					@see	BALLFDPB::Boundary
+					@see	FDPB::Option::boundary
+					@see	FDPB::Boundary
 			*/
 			ERROR__UNKNOWN_BOUNDARY_CONDITION_TYPE,
 
 			/**	Upper or lower grid coordinates were specified in an incorrect format.
 					This error code is set by FDPB::setupEpsGrid() if the string
-					given in FDPB::options (key BALLFDPB::Option::lower or BALLFDPB::Option::upper)
+					given in FDPB::options (key FDPB::Option::LOWER or FDPB::Option::UPPER)
 					were not in vector format.\\
 					Solution: specify upper/lower coordinates in the correct format
 					@see	Options::isVector
@@ -211,7 +211,7 @@ namespace BALL
 
 			/**	Lower and upper corner of the grid were set to wrong values.
 					Lower and upper corners of the grid given in FDPB::options
-					(key BALLFDPB::Option::lower and BALLFDPB::Option::upper)
+					(key FDPB::Option::LOWER and FDPB::Option::UPPER)
 					must fulfill just one condition: every coordinate of lower
 					hast to be less (not equal!) to the corresponding coordinate of
 					upper.\\
@@ -321,6 +321,14 @@ namespace BALL
 			/**	Boundary condition Dipole: potential is estimated via dipole potentials
 			*/
 			static const char* DIPOLE;
+
+			/**	Boundary condition Focusing: potential is via a larger but coarser grid.
+					Focusing calculates a larger grid (double extension in each direction)
+					centered on the final grid with a four times the spacing of the final grid.
+					Focusing also assigns an estimate of the electrostatic potential to
+					each grid point in the final grid, thus acceleratingthe convergence.
+			*/
+			static const char* FOCUSING;
 		};
 		
 		/**	Constants to define  the charge distribution methods.
@@ -748,12 +756,12 @@ namespace BALL
 				The (relative) dielectric constant is unitless.
 				@see	setupEpsGrid
 		*/
-		PointGrid<float>	*eps_grid;
+		PointGrid<float>*	eps_grid;
 
 		/**	The grid containing the modified Debye Hueckel parameter.
 				@see	setupKappaGrid
 		*/
-		PointGrid<float>	*kappa_grid;
+		PointGrid<float>*	kappa_grid;
 
 		/**	The grid containing the atom charges (distributed).
 				Each atom's charge is distributed on the grid by setupQGrid, according
@@ -763,7 +771,7 @@ namespace BALL
 				@see	BALL\_ELEMENTARY\_CHARGE
 				@see	setupQGrid
 		*/
-		PointGrid<float>	*q_grid;
+		PointGrid<float>*	q_grid;
 
 		/**	The grid containing the electrostatic potential.
 				Before a calculation this is grid is initialized with
@@ -774,20 +782,20 @@ namespace BALL
 				@see		setupBoundary()
 				@see		solve()
 		*/
-		PointGrid<float>	*phi_grid;
+		PointGrid<float>*	phi_grid;
 
 		/**	The grid describing the solvent excluded surface of the system.
 		*/
-		PointGrid<char>	*SES_grid;
+		PointGrid<char>*	SES_grid;
 
 		/**	The grid describing the solvent accessible surface of the system.
 		*/
-		PointGrid<char>	*SAS_grid;
+		PointGrid<char>*	SAS_grid;
 
 		/**	An array containing a fast represenetation of all atoms in the system.
 				@see		FastAtom
 		*/
-		vector<FDPB::FastAtom>	*atom_array;
+		vector<FDPB::FastAtom>*	atom_array;
 		
 		//@}
 
