@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.10 2000/05/24 07:48:24 oliver Exp $
+// $Id: String_test.C,v 1.11 2000/05/24 16:10:11 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.10 2000/05/24 07:48:24 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.11 2000/05/24 16:10:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -708,6 +708,7 @@ res = s4.after("c", 3);
 TEST_EQUAL(res, "abcdefghi")
 res = s4.after("K");
 TEST_EQUAL(res, "")
+TEST_EQUAL(s4.after("i").isValid(), false)
 res = s4.after("");
 TEST_EQUAL(res, s4)
 RESULT
