@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.30 2002/12/12 09:48:45 oliver Exp $
+// $Id: bond.h,v 1.31 2003/02/08 16:12:27 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -85,6 +85,8 @@ namespace BALL
 		{
 			public:
 			TooManyBonds(const char* file, int line)
+				throw();
+			TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2)
 				throw();
 		};
 
