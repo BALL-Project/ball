@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.13 2001/05/14 19:20:44 amoll Exp $
+// $Id: parameterSection.h,v 1.14 2001/08/14 20:47:15 sturm Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -82,7 +82,7 @@ namespace BALL
 				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces to the data.
-				@param	ini_file the inifile to be read from
+				@param	parameters the parameters defining the inifile to be read from
 				@param	section_name the name of the section to be read (without the squared brackets)
 				@return bool - {\bf true} if the section could be read, {\bf false} otherwise
 		*/
