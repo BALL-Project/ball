@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.11 2000/07/25 12:32:12 amoll Exp $
+// $Id: BitVector_test.C,v 1.12 2000/07/25 13:34:34 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.11 2000/07/25 12:32:12 amoll Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.12 2000/07/25 13:34:34 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -165,6 +165,8 @@ CHECK(BitVector::getBitSet())
 	TEST_EQUAL(bv[0], true)
 	TEST_EQUAL(bv[1], false)
 	TEST_EQUAL(bv[2], false)
+	bv.setBit(1);
+	TEST_EQUAL((int)*bt, 3)
 RESULT
 
 CHECK(BitVector::getBitSet() const)
@@ -172,9 +174,9 @@ CHECK(BitVector::getBitSet() const)
 	TEST_EQUAL(bv10_2.getBit(0), false)
 	TEST_EQUAL(bv10_2.getBit(1), true)
 	const unsigned char* bt = bv10_2.getBitSet();
-	TEST_NOT_EQUAL(bt, 0)/*
-	TEST_EQUAL(*bt, 0)
-	TEST_EQUAL(*(bt + 1), 1)*/	//???
+	TEST_NOT_EQUAL(bt, 0)
+	TEST_EQUAL((int)*bt, 22)
+	TEST_EQUAL((int)*(bt + 1), 2)
 RESULT
 
 CHECK(BitVector::operator [] (Index))
@@ -190,7 +192,7 @@ CHECK(BitVector::operator [] (Index) const)
 	const BitVector bv10_2(bv10);
 	TEST_EQUAL(bv10_2[0], false)
 	TEST_EQUAL(bv10_2[1], true)
-	TEST_EQUAL(bv10_2[1111], false)
+	TEST_EXCEPTION(Exception::IndexOverflow, bv10_2[1111])
 	TEST_EQUAL(bv10_2.getSize(), 10)
 RESULT
 
@@ -205,7 +207,7 @@ CHECK(BitVector::setBit/getBit(Index, bool))
 	TEST_EQUAL(bv9.getSize(), 100)
 
 	const BitVector const_bv(8);
-	const_bv.getBit(11);
+	TEST_EXCEPTION(Exception::IndexOverflow, const_bv.getBit(11))
 	TEST_EQUAL(const_bv.getSize(), 8)
 RESULT
 
@@ -233,35 +235,37 @@ CHECK(BitVector::toggle(Index, Index))
 	TEST_EQUAL(bv4.getBit(3), false)
 RESULT
 
-/*
-CHECK(BitVector::setUnsignedChar(unsigned char))
-	// BAUSTELLE
+CHECK(BitVector::setUnsignedChar(unsigned char)/getUnsignedChar)
+	BitVector bv8(8);
+	bv8.setUnsignedChar(1);
+	TEST_EQUAL(bv8.getBit(0), true)
+	TEST_EQUAL(bv8.getBit(1), false)
+	TEST_EQUAL(bv8.getUnsignedChar(), 1)
 RESULT
 
-CHECK(BitVector::getUnsignedChar() const)
-	//TEST_EQUAL(bv4.getUnsignedChar(), 0)
-RESULT
-
-CHECK(BitVector::setUnsignedShort(unsigned short))
-	// BAUSTELLE
+CHECK(BitVector::setUnsignedShort(unsigned short)/setUnsignedShort)
+	BitVector bv8(8);
+	bv8.setUnsignedShort(1);
+	TEST_EQUAL(bv8.getBit(0), true)
+	TEST_EQUAL(bv8.getBit(1), false)
+	TEST_EQUAL(bv8.getUnsignedShort(), 1)
 RESULT
  
-CHECK(BitVector::setUnsignedInt(unsigned int bit_pattern))
-//
+CHECK(BitVector::setUnsignedInt(unsigned int)/setUnsignedInt)
+	BitVector bv8(8);
+	bv8.setUnsignedInt(1);
+	TEST_EQUAL(bv8.getBit(0), true)
+	TEST_EQUAL(bv8.getBit(1), false)
+	TEST_EQUAL(bv8.getUnsignedInt(), 1)
 RESULT
 
-CHECK(BitVector::getUnsignedInt() const)
-	//TEST_EQUAL(bv4.getUnsignedInt(), 0)
+CHECK(BitVector::setUnsignedLong(unsigned long)/getUnsignedLong)
+	BitVector bv8(8);
+	bv8.setUnsignedLong(1);
+	TEST_EQUAL(bv8.getBit(0), true)
+	TEST_EQUAL(bv8.getBit(1), false)
+	TEST_EQUAL(bv8.getUnsignedLong(), 1)
 RESULT
-
-CHECK(BitVector::setUnsignedLong(unsigned long))
-	// BAUSTELLE
-RESULT
-
-CHECK(BitVector::getUnsignedLong() const)
-	//TEST_EQUAL(bv4.getUnsignedLong(), 0)
-RESULT
-*/
 
 BitVector b4(4);	// **_* b4
 BitVector b3(3);	// *__  b3
@@ -272,15 +276,33 @@ b3.setBit(0);
 BitVector erg;
 
 CHECK(BitVector::bitwiseOr(const BitVector&))
-	// BAUSTELLE
+	erg = b4;
+	erg.bitwiseOr(b3);
+	TEST_EQUAL(erg.getBit(0), true)
+	TEST_EQUAL(erg.getBit(1), true)
+	TEST_EQUAL(erg.getBit(2), false)
+	TEST_EQUAL(erg.getBit(3), true)
+	TEST_EQUAL(erg.getSize(), 4)
 RESULT
 
 CHECK(BitVector::bitwiseXor(const BitVector&))
-	// BAUSTELLE
+	erg = b4;
+	erg.bitwiseXor(b3);
+	TEST_EQUAL(erg.getBit(0), false)
+	TEST_EQUAL(erg.getBit(1), true)
+	TEST_EQUAL(erg.getBit(2), false)
+	TEST_EQUAL(erg.getBit(3), true)
+	TEST_EQUAL(erg.getSize(), 4)
 RESULT
 
 CHECK(BitVector::bitwiseAnd(const BitVector&))
-	// BAUSTELLE
+	erg = b4;
+	erg.bitwiseAnd(b3);
+	TEST_EQUAL(erg.getBit(0), true)
+	TEST_EQUAL(erg.getBit(1), false)
+	TEST_EQUAL(erg.getBit(2), false)
+	TEST_EQUAL(erg.getBit(3), false)
+	TEST_EQUAL(erg.getSize(), 4)
 RESULT
 
 CHECK(BitVector::operator | (const BitVector&))
