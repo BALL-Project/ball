@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.22 2004/09/02 15:04:06 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.23 2004/09/10 15:10:58 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -24,6 +24,7 @@
 #include <qlabel.h>
 #include <qlistbox.h>
 #include <qwidgetstack.h>
+#include <qradiobutton.h>
 
 namespace BALL
 {
@@ -72,6 +73,7 @@ namespace BALL
 				cartoon_helix_radius_slider->setValue(20);
 				cartoon_arrow_width_slider->setValue(20);
 				cartoon_arrow_height_slider->setValue(4);
+				cartoon_dna_wac->setChecked(true);
 			}
 			
 			if (all || list_box->currentItem() == 6)
@@ -140,6 +142,10 @@ namespace BALL
 			writePreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
 			writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
 			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
+			if (cartoon_dna_wac->isChecked())
+			{
+				file.insertValue("MODEL_OPTIONS", "cartoon_dna_wac", true);
+			}
 			
 			writePreference_(file, "force_scaling", *force_scaling_slider);
 			writePreference_(file, "force_max_length", *force_max_length_slider);
@@ -164,6 +170,8 @@ namespace BALL
 			fetchPreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
 			fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
 			fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
+			cartoon_dna_wac->setChecked(
+				(file.hasEntry("MODEL_OPTIONS", "cartoon_dna_wac")));
 
 			fetchPreference_(file, "force_max_length", *force_max_length_slider);
 			fetchPreference_(file, "force_scaling", *force_scaling_slider);
@@ -234,6 +242,7 @@ namespace BALL
 				((AddCartoonModel*) &mp)->setHelixRadius(getCartoonHelixRadius());
 				((AddCartoonModel*) &mp)->setArrowWidth(getCartoonArrowWidth());
 				((AddCartoonModel*) &mp)->setArrowHeight(getCartoonArrowHeight());
+				((AddCartoonModel*) &mp)->setDrawDNAAsLadderModel(cartoon_dna_ladder->isChecked());
 				return;
 			}
 					
@@ -356,6 +365,7 @@ namespace BALL
 				setCartoonHelixRadius(((AddCartoonModel*) &mp)->getHelixRadius());
 				setCartoonArrowWidth(((AddCartoonModel*) &mp)->getArrowWidth());
 				setCartoonArrowHeight(((AddCartoonModel*) &mp)->getArrowHeight());
+				cartoon_dna_ladder->setChecked(((AddCartoonModel*) &mp)->drawDNAAsLadderModel());
 				return;
 			}
 					

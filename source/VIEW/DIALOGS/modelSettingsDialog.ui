@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ModelSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -1513,6 +1513,69 @@
                     </property>
                     <property name="tickInterval">
                         <number>25</number>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>buttonGroup1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>12</x>
+                        <y>179</y>
+                        <width>244</width>
+                        <height>70</height>
+                    </rect>
+                </property>
+                <property name="title">
+                    <string>draw DNA as</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <property name="checkable">
+                    <bool>false</bool>
+                </property>
+                <property name="exclusive">
+                    <bool>true</bool>
+                </property>
+                <property name="selectedId" stdset="0">
+                    <number>0</number>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>cartoon_dna_ladder</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>6</x>
+                            <y>18</y>
+                            <width>156</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>ladder</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>cartoon_dna_wac</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>6</x>
+                            <y>41</y>
+                            <width>232</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Watson and Crick model</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
                     </property>
                 </widget>
             </widget>
