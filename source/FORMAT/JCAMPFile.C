@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.12 2003/07/03 11:49:17 amoll Exp $
+// $Id: JCAMPFile.C,v 1.13 2003/07/03 13:30:36 oliver Exp $
 //
 
 #include <BALL/FORMAT/JCAMPFile.h>
 #include <BALL/DATATYPE/regularExpression.h>
-//#include <iterator> // debugging only
+
+#include <iterator> 
 
 namespace BALL
 {

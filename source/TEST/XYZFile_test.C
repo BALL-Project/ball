@@ -1,18 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile_test.C,v 1.6 2002/12/12 11:34:46 oliver Exp $
+// $Id: XYZFile_test.C,v 1.7 2003/07/03 13:30:41 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/FORMAT/XYZFile.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/PTE.h>
 
 ///////////////////////////
 
-START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.6 2002/12/12 11:34:46 oliver Exp $")
+START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.7 2003/07/03 13:30:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

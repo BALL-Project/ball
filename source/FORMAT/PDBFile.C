@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.39 2003/07/03 11:49:18 amoll Exp $
+// $Id: PDBFile.C,v 1.40 2003/07/03 13:30:36 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/DATATYPE/regularExpression.h>
 
 #include <time.h> // time, asctime
 

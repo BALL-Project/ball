@@ -1,9 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.19 2003/07/03 11:49:18 amoll Exp $
+// $Id: MOL2File.C,v 1.20 2003/07/03 13:30:36 oliver Exp $
+//
 
 #include <BALL/FORMAT/MOL2File.h>
+
+#include <BALL/DATATYPE/string.h>
+#include <BALL/DATATYPE/regularExpression.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/system.h>
@@ -11,8 +15,6 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
-
-#include <BALL/DATATYPE/regularExpression.h>
 
 using namespace std;
 

@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ClassTest_test.C,v 1.10 2003/01/22 17:16:57 anker Exp $
+// $Id: ClassTest_test.C,v 1.11 2003/07/03 13:30:38 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 using namespace BALL;
 
-START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.10 2003/01/22 17:16:57 anker Exp $")
+START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.11 2003/07/03 13:30:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
