@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.38 2004/12/27 17:06:15 amoll Exp $
+// $Id: forceField.C,v 1.39 2005/01/18 12:01:11 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -33,7 +33,8 @@ namespace BALL
 			update_time_stamp_(),
 			setup_time_stamp_(),
 			unassigned_atoms_(),
-			max_number_of_errors_(Limits<Size>::max())
+			max_number_of_errors_(Limits<Size>::max()),
+			number_of_errors_(0)
 	{
 	}
 
@@ -67,6 +68,7 @@ namespace BALL
 
 		unassigned_atoms_.clear();
 		max_number_of_errors_= Limits<Size>::max();
+		number_of_errors_ = 0;
 	}
 
 	// copy constructor 
@@ -84,7 +86,8 @@ namespace BALL
 			selection_enabled_(force_field.selection_enabled_),
 			update_time_stamp_(force_field.update_time_stamp_),
 			setup_time_stamp_(force_field.setup_time_stamp_),
-			max_number_of_errors_(force_field.max_number_of_errors_)
+			max_number_of_errors_(force_field.max_number_of_errors_),
+			number_of_errors_(0)
 	{
 		// Copy the component vector and its components.
 		for (Size i = 0; i < force_field.components_.size(); i++) 
@@ -113,6 +116,7 @@ namespace BALL
 			selection_enabled_ = force_field.selection_enabled_;
 			valid_ = force_field.valid_;
 			max_number_of_errors_= force_field.max_number_of_errors_;
+			number_of_errors_ = 0;
 
 			Size i;
 			for (i = 0; i < components_.size(); i++) 
@@ -146,7 +150,8 @@ namespace BALL
 			update_time_stamp_(),
 			setup_time_stamp_(),
 			unassigned_atoms_(),
-			max_number_of_errors_(Limits<Size>::max())
+			max_number_of_errors_(Limits<Size>::max()),
+			number_of_errors_(0)
 	{
 		bool result = setup(system);
 
@@ -173,7 +178,8 @@ namespace BALL
 			update_time_stamp_(),
 			setup_time_stamp_(),
 			unassigned_atoms_(),
-			max_number_of_errors_(Limits<Size>::max())
+			max_number_of_errors_(Limits<Size>::max()),
+			number_of_errors_(0)
 	{
 		bool result = setup(system, new_options);
 
@@ -203,6 +209,7 @@ namespace BALL
 	bool ForceField::setup(System& system)
 	{
 		unassigned_atoms_.clear();
+		number_of_errors_ = 0;
 
 		// store the specified system
 		system_ = &system;
