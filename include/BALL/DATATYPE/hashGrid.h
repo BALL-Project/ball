@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.36 2003/10/19 18:26:01 amoll Exp $
+// $Id: hashGrid.h,v 1.37 2003/10/27 06:45:26 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -1895,7 +1895,7 @@ namespace BALL
 					const HashGridBox3<Item>* box_ptr = getBox(x+xi, y+yi, z+zi);	
 					if (box_ptr != 0 && !box_ptr->isEmpty())
 					{
-						HashGridBox3<Item>::ConstDataIterator hit = box_ptr->beginData();
+						typename HashGridBox3<Item>::ConstDataIterator hit = box_ptr->beginData();
 						for (;hit != box_ptr->endData(); hit++)
 						{
 							float new_dist = ((*hit)->getPosition() - point).getSquareLength();
