@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.52 2004/10/22 21:26:08 amoll Exp $
+// $Id: cartoonModel.C,v 1.53 2004/10/23 18:33:57 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -39,12 +39,12 @@ namespace BALL
 			: AddBackboneModel(),
 				last_chain_(0),
 				spline_vector_position_(-1),
-				helix_radius_((float)2.4),
-				arrow_width_((float)2),
-				arrow_height_((float)0.4),
-				DNA_helix_radius_((float)1.0),
-				DNA_ladder_radius_((float)0.8),
-				DNA_base_radius_((float)0.2),
+				helix_radius_(2.4),
+				arrow_width_(2),
+				arrow_height_(0.4),
+				DNA_helix_radius_(1.0),
+				DNA_ladder_radius_(0.8),
+				DNA_base_radius_(0.2),
 				draw_DNA_as_ladder_(false)
 		{
 		}
@@ -170,7 +170,7 @@ namespace BALL
 						atom_name = "C6";
 					}
 					else if (r->getName() == "C") atom_name = "C4";
-					else if (r->getName() == "T" || r->getName() == "U") atom_name = "N3";
+					else if (r->getName() == "T") atom_name = "N3";
 						
 					Atom* end_atom = 0;
 					BALL_FOREACH_ATOM(*r, ait)
@@ -229,42 +229,31 @@ namespace BALL
 					}
 				}
 
-				Vector3 d = base_atom->getPosition() - partner_base->getPosition();
-				Vector3 pos1, pos2;
-				String name = ((Residue*)base_atom->getParent())->getName();
-				if (name == "A" || name == "G")
-				{
-					pos1 = base_atom->getPosition() - d * (float) (6./11.);
-					pos2 = partner_base->getPosition() + d * (float) (4./11.0);
-				}
-				else
-				{
-					pos1 = base_atom->getPosition() - d * (float) (4./11.);
-					pos2 = partner_base->getPosition() + d * (float) (6./11.0);
-				}
+				Vector3 v = base_atom->getPosition() - partner_base->getPosition();
+				v /= 2.5;
 
 				Tube* tube = new Tube;
 				tube->setVertex1(base_atom->getPosition());
-				tube->setVertex2(pos1);
+				tube->setVertex2(base_atom->getPosition() - v);
 				tube->setComposite(r);
 				tube->setRadius(DNA_ladder_radius_);
 				geometric_objects_.push_back(tube);
 
 				Sphere* sphere1 = new Sphere;
-				sphere1->setPosition(pos1);
+				sphere1->setPosition(base_atom->getPosition() -v);
 				sphere1->setRadius(DNA_ladder_radius_);
 				sphere1->setComposite(r);
 				geometric_objects_.push_back(sphere1);
 
 				Tube* tube2 = new Tube;
 				tube2->setVertex1(partner_base->getPosition());
-				tube2->setVertex2(pos2);
+				tube2->setVertex2(partner_base->getPosition() + v);
 				tube2->setComposite(partner);
 				tube2->setRadius(DNA_ladder_radius_);
 				geometric_objects_.push_back(tube2);
 
 				Sphere* sphere2 = new Sphere;
-				sphere2->setPosition(pos2);
+				sphere2->setPosition(partner_base->getPosition() + v);
 				sphere2->setRadius(DNA_ladder_radius_);
 				sphere2->setComposite(partner);
 				geometric_objects_.push_back(sphere2);
@@ -424,8 +413,7 @@ namespace BALL
 				Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
 				if ((current <= (float)Constants::PI*3./2.)&&(current >= (float)Constants::PI/2.))
 				{
-					Vector3 rotaxis = peptide_normals[i]%peptide_normals[i+1];
-					if (!Maths::isZero(rotaxis.getSquareLength())) rotaxis.normalize();
+					Vector3 rotaxis = (peptide_normals[i]%peptide_normals[i+1]).normalize();
 					Matrix4x4 rotmat;
 					rotmat.rotate(Angle(M_PI), rotaxis);
 					peptide_normals[i+1] = rotmat * peptide_normals[i+1];
@@ -444,7 +432,7 @@ namespace BALL
 				if (rotaxis.getSquareLength() > 1e-2)
 				{
 					Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
-					Angle new_angle = Angle((float)(2./3.)*current);
+					Angle new_angle = Angle(2./3.*current);
 
 					Angle diff_angle = new_angle - current;
 					Matrix4x4 rotmat;
@@ -545,8 +533,8 @@ namespace BALL
 				{
 					right  = spline_[res*9+j+1] - spline_[res*9+j];
 
-					normal =   peptide_normals[res  ] * (float)(((double)1-j) * 0.9/8.) 
-									 + peptide_normals[res+1] * (float)((double)j * 0.9/8.);
+					normal =   peptide_normals[res  ] *(1-j * 0.9/8.) 
+									 + peptide_normals[res+1] *   j * 0.9/8.;
 
 					drawStrand_(spline_[res*9+j], normal, right, arrow_width_, last_vertices, *mesh);
 				}
@@ -559,7 +547,7 @@ namespace BALL
 			for (Index j=-1; j<=6; j++)
 			{
 				// interpolate the depth of the box
-				float new_arrow_width = (float)(2*((double)(1-j*0.95/6.)))*arrow_width_; 
+				float new_arrow_width = 2*(1-j*0.95/6.)*arrow_width_; 
 				
 				right  = spline_[res*9+j+1] - spline_[res*9+j];
 
@@ -613,7 +601,7 @@ namespace BALL
 
 			// calcluate slices for the helix cylinder according to the C-atoms
 			Vector3 last_pos = first->getPosition();
-			Vector3 diff = (normal / (float)(catoms.size() ));
+			Vector3 diff = (normal / (catoms.size() ));
 
 			for (Position p = 0; p < catoms.size() -1; p++)
 			{
@@ -855,20 +843,20 @@ namespace BALL
 
 				Vector3 new_vector;
 
-				new_vector.x = (float)(h1 * a.getVector().x) + 
-												(float)(h2 * b.getVector().x) + 
-												(float)(h3 * a.getTangentialVector().x) + 
-												(float)((float)h4 * b.getTangentialVector().x);
+				new_vector.x = (h1 * a.getVector().x) + 
+											 (h2 * b.getVector().x) + 
+											 (h3 * a.getTangentialVector().x) + 
+											 (h4 * b.getTangentialVector().x);
 
-				new_vector.y = (float)(h1 * a.getVector().y) + 
-												(float)(h2 * b.getVector().y) + 
-												(float)(h3 * a.getTangentialVector().y) + 
-												(float)((float)h4 * b.getTangentialVector().y);
+				new_vector.y = (h1 * a.getVector().y) + 
+											 (h2 * b.getVector().y) + 
+											 (h3 * a.getTangentialVector().y) + 
+											 (h4 * b.getTangentialVector().y);
 
-				new_vector.z = (float)(h1 * a.getVector().z) + 
-												(float)(h2 * b.getVector().z) + 
-												(float)(h3 * a.getTangentialVector().z) +  
-												(float)((float)h4 * b.getTangentialVector().z);
+				new_vector.z = (h1 * a.getVector().z) + 
+											 (h2 * b.getVector().z) + 
+											 (h3 * a.getTangentialVector().z) + 
+											 (h4 * b.getTangentialVector().z);
 
 				spline_.push_back(new_vector);
 			}
@@ -960,8 +948,7 @@ namespace BALL
 						((*rit).getName() != "A" &&
 						 (*rit).getName() != "C" &&
 						 (*rit).getName() != "G" &&
-						 (*rit).getName() != "T" &&
-						 (*rit).getName() != "U"))
+						 (*rit).getName() != "T"))
 				{
 					continue;
 				}
@@ -993,7 +980,7 @@ namespace BALL
 				for (; rit2 != chain2_residues.end(); rit2++)
 				{
 					if (((*rit1).getName() == "A" && 
-								((**rit2).getName() != "T" && (**rit2).getName() != "U")) ||
+								((**rit2).getName() != "T" || (**rit2).getName() != "U")) ||
 							((*rit1).getName() == "C" && (**rit2).getName() != "G") ||
 							((*rit1).getName() == "G" && (**rit2).getName() != "C") ||
 							((*rit1).getName() == "T" && (**rit2).getName() != "A") ||
@@ -1313,4 +1300,5 @@ namespace BALL
 		}
 
 	} // namespace VIEW
+
 } // namespace BALL
