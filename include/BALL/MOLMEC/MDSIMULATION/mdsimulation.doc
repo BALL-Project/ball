@@ -1,10 +1,13 @@
-// $Id: mdsimulation.doc,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: mdsimulation.doc,v 1.2 1999/12/30 10:00:28 pmueller Exp $
 
 /**	@name	Molecular Dynamics Simulation
 		@nonames
 */
 //@{
 
-	// @Include: *.h
+        //@Include: molecularDynamics.h
+        //@Include: microCanonicalMD.h
+        //@Include: canonicalMD.h
+
 
 //@}
