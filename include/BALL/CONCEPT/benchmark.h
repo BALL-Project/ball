@@ -1,4 +1,4 @@
-// $Id: benchmark.h,v 1.1 2001/04/10 16:23:19 oliver Exp $
+// $Id: benchmark.h,v 1.2 2001/04/10 17:51:17 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/timer.h>
@@ -13,10 +13,12 @@
 //@{
 
 /**	Start a new benchmark section.
+		The argument weight determines the weighting factor of the section.
 */
-#define START_SECTION(name) \
+#define START_SECTION(name, weight) \
 	BENCHMARK::section_time = BENCHMARK::timer.getCPUTime();\
 	BENCHMARK::section_name = #name;\
+	BENCHMARK::section_weight = weight;
 
 
 /**	End of a benchmark section.
@@ -26,9 +28,11 @@
 	BENCHMARK::section_time = BENCHMARK::timer.getCPUTime() - BENCHMARK::section_time;\
 	if (BENCHMARK::verbose > 0)\
 	{\
-		std::cout << BENCHMARK::section_name << ": " << BENCHMARK::section_time << " s" << std::endl;\
+		std::cout << BENCHMARK::section_name << ": " \
+		  << BENCHMARK::section_time << " s"\
+			<< " (weight = " << BENCHMARK::section_weight << ")" << std::endl;\
 	}\
-	BENCHMARK::total_time += BENCHMARK::section_time;\
+	BENCHMARK::total_time += BENCHMARK::section_time * BENCHMARK::section_weight;\
 
 
 /**	Start the timer.
@@ -52,7 +56,11 @@
 #define STOP_TIMER \
 	BENCHMARK::timer.stop();
 
-#define START_BENCHMARK(class_name, version)\
+/**	Program body for the benchmark.
+		The parameter {\tt weight} determines the overall weight of
+		this test in the accumulated benchmark (BALLStones).
+*/
+#define START_BENCHMARK(class_name, overall_weight, version)\
 /* define a special namespace for all internal variables */\
 /* to avoid potential collisions                         */\
 namespace BENCHMARK {\
@@ -62,6 +70,8 @@ namespace BENCHMARK {\
 	string				exception_name = "";\
 	char*					version_string = version;\
 	string				section_name = "";\
+	float					section_weight = 1.0;\
+	float					weight = overall_weight;\
 	float					total_time;\
 	float					section_time;\
 	BALL::Timer		timer;\
@@ -78,6 +88,7 @@ int main(int argc, char **argv)\
 \
 	if ((argc > 2) || ((argc == 2) && (BENCHMARK::verbose == 0))) {\
 		std::cerr << "Execute a benchmark for the " #class_name " class." << std::endl;\
+		std::cerr << "Overall weight of the test: " << BENCHMARK::weight << std::endl;\
 \
 		std::cerr << "On successful operation, the total CPU time (in seconds)," << std::endl;\
 		std::cerr << "is printed." << std::endl;\
@@ -91,7 +102,8 @@ int main(int argc, char **argv)\
 \
 	try {\
 
-
+/**	End of the test program
+*/
 #define END_BENCHMARK \
 	/* global try block */\
 	}\
@@ -139,10 +151,10 @@ int main(int argc, char **argv)\
 	/* check for exit code */\
 	if (!BENCHMARK::all_tests)\
 	{\
-		std::cout << "(" << BENCHMARK::total_time << ")" << std::endl;\
+		std::cout << "(" << BENCHMARK::weight * BENCHMARK::total_time << ")" << std::endl;\
 		return 1;\
 	} else {\
-		std::cout << BENCHMARK::total_time << std::endl;\
+		std::cout << BENCHMARK::weight * BENCHMARK::total_time << std::endl;\
 		return 0;\
 	}\
 }\
