@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.2 2004/07/12 19:49:46 amoll Exp $
+// $Id: ringPerceptionProcessor.C,v 1.3 2004/09/02 13:12:51 amoll Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -19,7 +19,6 @@ using std::endl;
 #include <vector>
 using std::vector;
 #include <utility>
-using std::make_pair;
 #include <queue>
 using std::priority_queue;
 using std::deque;
@@ -65,7 +64,7 @@ namespace BALL
 		AtomIterator copy = AtomContainer.beginAtom();
 		for (;orig!=ac.endAtom();++orig,++copy)
 		{
-			copy_to_orig.insert(make_pair(&(*copy),&(*orig)));
+			copy_to_orig.insert(std::make_pair(&(*copy),&(*orig)));
 		}
 		
 		HashSet<Atom*> full_set; // herein are all nodes (atoms)
@@ -221,13 +220,13 @@ namespace BALL
 	Size RingPerceptionProcessor::getRing_(Atom* n, HashSet<Atom*>& ring_set)
 	{
 		deque<std::pair<Atom*, Atom*> > the_q; // double ended queue with node and its ancestor
-		the_q.push_back(make_pair(n,n));
+		the_q.push_back(std::make_pair(n,n));
 		
 		Atom::BondIterator bond_it;
 		HashMap<Atom*, HashSet<Atom*> > paths;
 		HashSet<Atom*> tmp;
 		tmp.insert(n);
-		paths.insert(make_pair(n, tmp));
+		paths.insert(std::make_pair(n, tmp));
 
 		while (!the_q.empty())
 		{
@@ -244,7 +243,7 @@ namespace BALL
 					{
 						HashSet<Atom*> path_atom = paths[atom];
 						path_atom.insert(bound_atom);
-						paths.insert(make_pair(bound_atom, path_atom));
+						paths.insert(std::make_pair(bound_atom, path_atom));
 					}
 					else 
 					{
@@ -270,7 +269,7 @@ namespace BALL
 							return merge.size();
 						}
 					}
-					the_q.push_back(make_pair(bound_atom, atom));
+					the_q.push_back(std::make_pair(bound_atom, atom));
 				}
 			}
 		}
@@ -301,8 +300,8 @@ namespace BALL
 				AtomIterator orig = ac.beginAtom();
 				for (;orig!=ac.endAtom();++copy, ++orig)
 				{
-					copy_to_orig.insert(make_pair(&(*copy),&(*orig)));
-					orig_to_copy.insert(make_pair(&(*orig),&(*copy)));
+					copy_to_orig.insert(std::make_pair(&(*copy),&(*orig)));
+					orig_to_copy.insert(std::make_pair(&(*orig),&(*copy)));
 				}
 				
 				orig_to_copy[*iter]->destroy();

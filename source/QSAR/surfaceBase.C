@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceBase.C,v 1.1 2004/05/11 07:28:22 oliver Exp $
+// $Id: surfaceBase.C,v 1.2 2004/09/02 13:12:51 amoll Exp $
 //
 
 #include <BALL/QSAR/surfaceBase.h>
@@ -76,7 +76,7 @@ namespace BALL
 		}
 		else
 		{
-			mod_times.insert(make_pair(mol_handle, last_mod));
+			mod_times.insert(std::make_pair(mol_handle, last_mod));
 			#ifdef BALL_QSAR_SURFACEBASE_DEBUG
 			cerr << ">> SurfaceBase::isValid: molecule not valid, first call!" << endl;
 			#endif

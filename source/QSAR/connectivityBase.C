@@ -18,7 +18,6 @@
 using std::vector;
 #include <queue>
 using std::priority_queue;
-using std::make_pair;
 #include <numeric>
 using std::accumulate;
 #include <utility>
@@ -85,7 +84,7 @@ namespace BALL
 		}
 		else
 		{
-			mod_times.insert(make_pair(mol_handle, last_mod));
+			mod_times.insert(std::make_pair(mol_handle, last_mod));
 			#ifdef BALL_QSAR_CONNECTIVITYBASE_DEBUG
 			cerr << ">> ConnectivityBase::isValid: molecule not valid, first call!" << endl;
 			#endif
@@ -113,7 +112,7 @@ namespace BALL
 		{
 			if (atom_it->getElement() != PTE[Element::H])
 			{
-				index_map.insert(make_pair(&(*atom_it),num_heavy_atoms++));
+				index_map.insert(std::make_pair(&(*atom_it),num_heavy_atoms++));
 			}
 		}
 
@@ -180,7 +179,7 @@ namespace BALL
 			{
 				Size bound_idx = index_map[it->getBoundAtom(*source)];
 				dists[bound_idx] = bond_value[it->getOrder()];
-				todo_pq.push(make_pair(dists[bound_idx], it->getBoundAtom(*source)));
+				todo_pq.push(std::make_pair(dists[bound_idx], it->getBoundAtom(*source)));
 			}
 		}
 	
@@ -205,7 +204,7 @@ namespace BALL
 					if (dists[bound_idx] > dists[min_idx] + bond_value[bond_it->getOrder()])
 					{
 						dists[bound_idx] = dists[min_idx] + bond_value[bond_it->getOrder()];
-						todo_pq.push(make_pair(dists[bound_idx], bond_it->getBoundAtom(*min_atom)));
+						todo_pq.push(std::make_pair(dists[bound_idx], bond_it->getBoundAtom(*min_atom)));
 					}
 				}
 			}

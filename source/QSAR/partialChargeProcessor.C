@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: partialChargeProcessor.C,v 1.1 2004/05/11 07:28:21 oliver Exp $
+// $Id: partialChargeProcessor.C,v 1.2 2004/09/02 13:12:51 amoll Exp $
 //
 
 #include <BALL/QSAR/partialChargeProcessor.h>
@@ -65,8 +65,8 @@ namespace BALL
 		// through all atoms in the hashmaps
 		for (;atom_it!=molecule.endAtom();atom_it++)
 		{
-			charges.insert(make_pair(&(*atom_it), 0.0));
-			former_charges.insert(make_pair(&(*atom_it), 0.0));
+			charges.insert(std::make_pair(&(*atom_it), 0.0));
+			former_charges.insert(std::make_pair(&(*atom_it), 0.0));
 		}
 	
 		// quick hack to avoid this damn repeats of warnings from logstream!
@@ -222,7 +222,7 @@ namespace BALL
 			ie_file >> ie_second;
 			second_ies.push_back(ie_second);			
 		}
-		return make_pair(first_ies, second_ies);
+		return std::make_pair(first_ies, second_ies);
 	}
 
 	float PartialChargeProcessor::getIonizationEnergy_(Element::AtomicNumber atomic_number, Size charge)
