@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.23 2001/03/07 17:32:17 anker Exp $
+// $Id: file.h,v 1.24 2001/03/11 18:23:44 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -191,7 +191,7 @@ namespace BALL
 				The standard constructor uses this method.
 				@param name the name of the file
 				@param open_mode the open mode, default is IN
-				@return bool true if the file could be opend
+				@return bool true if the file could be opened
 		*/
 		bool open(const String& name, OpenMode open_mode = IN)
 			throw (Exception::FileNotFound);
