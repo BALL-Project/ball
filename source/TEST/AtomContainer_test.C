@@ -1,20 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomContainer_test.C,v 1.9 2003/06/19 10:45:50 oliver Exp $
+// $Id: AtomContainer_test.C,v 1.10 2003/06/24 15:08:27 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/atomContainer.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
 #include <algorithm>
+#include "ItemCollector.h"
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.9 2003/06/19 10:45:50 oliver Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.10 2003/06/24 15:08:27 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -777,16 +779,20 @@ CHECK(bool operator != (const AtomContainer& atom_container) const throw())
 	TEST_EQUAL(c2 != c2, false)
 RESULT
 
-CHECK([EXTRA] beginAtom()/endAtom())
-	AtomContainer ac1;
-	Atom a1;
-	a1.setName("A1");
-	Atom a2;
-	a2.setName("A2");
-	ac1.append(a1);
-	ac1.append(a2);
-	vector<Atom> vec(20);
+AtomContainer ac1;
+ac1.setName("ac1");
+Atom a1;
+a1.setName("A1");
+Atom a2;
+a2.setName("A2");
+ac1.append(a1);
+ac1.append(a2);
+Atom a3;
+Bond b1("b1", a1, a2, 1, 1);
+Bond b2("b2", a1, a3, 1, 1);
 
+CHECK([EXTRA] beginAtom()/endAtom())
+	vector<Atom> vec(20);
 	std::copy(ac1.beginAtom(), ac1.endAtom(), vec.begin());
 	TEST_EQUAL(vec[0].getName(), "A1")
 	TEST_EQUAL(vec[1].getName(), "A2")
@@ -794,7 +800,13 @@ CHECK([EXTRA] beginAtom()/endAtom())
 RESULT
 
 CHECK(BALL_CREATE_DEEP(AtomContainer))
-  // ???
+	AtomContainer a = *(AtomContainer*) ac1.create(false, false);
+	AtomContainer empty;
+	TEST_EQUAL(a.countAtoms(), 0)
+	TEST_EQUAL(a.getName(), "ac1")
+	a = *(AtomContainer*) ac1.create();
+	TEST_EQUAL(a.countAtoms(), 2)
+	TEST_EQUAL(a.getName(), "ac1")
 RESULT
 
 CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS (Atom)(AtomContainer))
@@ -802,15 +814,33 @@ CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS (Atom)(AtomContainer))
 RESULT
 
 CHECK(bool applyInterBond(UnaryProcessor<Bond>& processor) throw())
-  // ???
+	ItemCollector<Bond> myproc;
+	ac1.applyInterBond(myproc);
+	TEST_EQUAL(myproc.getList().size(), 1)
+	TEST_EQUAL(*myproc.getList().begin(), &b2)
 RESULT
 
 CHECK(bool applyIntraBond(UnaryProcessor<Bond>& processor) throw())
-  // ???
+	ItemCollector<Bond> myproc;
+	ac1.applyIntraBond(myproc);
+	TEST_EQUAL(myproc.getList().size(), 1)
+	TEST_EQUAL(*myproc.getList().begin(), &b1)
 RESULT
 
 CHECK(const Atom* getAtom(const String& name) const throw())
-  // ???
+	const AtomContainer& ac2 = ac1;
+	TEST_EQUAL(ac2.getAtom("A1"), &a1)
+	TEST_EQUAL(ac2.getAtom("A2"), &a2)
+	TEST_EQUAL(ac2.getAtom(""), 0)
+	Atom a2_2;
+	a2_2.setName("A2");
+	ac1.append(a2_2);
+	TEST_EQUAL(ac2.getAtom("A2"), &a2)
+RESULT
+
+CHECK(Atom* getAtom(const String& name) throw())
+	ac1.getAtom("A1")->setPosition(Vector3(1,2,4));
+	TEST_EQUAL(a1.getPosition(), Vector3(1,2,4))
 RESULT
 
 /////////////////////////////////////////////////////////////
