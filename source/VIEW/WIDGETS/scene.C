@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.5 2003/09/02 16:06:23 amoll Exp $
+// $Id: scene.C,v 1.6 2003/09/11 16:41:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -765,6 +765,7 @@ namespace BALL
 		void Scene::writePreferences(INIFile& inifile)
 			throw()
 		{
+			ModularWidget::writePreferences(inifile);
 			// write mouse sensitivity
 			inifile.insertValue("WINDOWS", "Main::mouseSensitivity", String(mouse_sensitivity_));
 			inifile.appendSection("STAGE");
@@ -786,6 +787,7 @@ namespace BALL
 		void Scene::fetchPreferences(INIFile& inifile)
 			throw()
 		{
+			ModularWidget::fetchPreferences(inifile);
 			if (inifile.hasEntry("WINDOWS", "Main::mouseSensitivity"))
 			{
 				mouse_sensitivity_= inifile.getValue("WINDOWS", "Main::mouseSensitivity").toFloat();
@@ -806,12 +808,6 @@ namespace BALL
 			readLights_(inifile);
 			light_settings_->updateFromStage();
 			stage_settings_->updateFromStage();
-
-			if (!inifile.hasEntry("WINDOWS", "Scene::on")) return;
-			if (inifile.getValue("WINDOWS", "Scene::on").toUnsignedInt() == 0) 
-			{
-				switchShowWidget();
-			}
 
 			// building of coordinate system doesnt work at this point,
 			// so no reading of this option from the inifile
@@ -1042,7 +1038,7 @@ namespace BALL
 				MainControl::FILE, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);
 
 			window_menu_entry_id_ = 
-				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(callSwitchShowWidget()));
 			getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
 
 			setCursor(QCursor(Qt::SizeAllCursor));
@@ -1058,7 +1054,7 @@ namespace BALL
 			main_control.removeMenuEntry(MainControl::DISPLAY, "Set Viewpoi&nt", this, SLOT(setViewPoint()_), CTRL+Key_N);		
 			main_control.removeMenuEntry(MainControl::DISPLAY, "Rese&t Camera", this, SLOT(resetCamera()_), CTRL+Key_T);		
 			main_control.removeMenuEntry(MainControl::FILE, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);		
-			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(callSwitchShowWidget()));
 		}
 
 		void Scene::checkMenu(MainControl& main_control)
@@ -1469,25 +1465,8 @@ namespace BALL
 			}
 		}
 
-		void Scene::switchShowWidget()
-			throw()
-		{
-			QMenuBar* menu = getMainControl()->menuBar();
-			if (menu->isItemChecked(window_menu_entry_id_))
-			{
-				hide();
-				menu->setItemChecked(window_menu_entry_id_, false);
-			}
-			else
-			{
-				show();
-				menu->setItemChecked(window_menu_entry_id_, true);
-			}
-		}
-
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/WIDGETS/scene.iC>
 #	endif
 
-	} // namespace VIEW
-} // namespace BALL
+} }// namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.4 2003/09/11 09:54:26 amoll Exp $
+// $Id: logView.h,v 1.5 2003/09/11 16:41:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -115,20 +115,11 @@ namespace BALL
 			*/
 			virtual void finalizeWidget(MainControl& main_control);
 				
-			///
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
-			
-			///
-			virtual void writePreferences(INIFile& inifile)
-				throw();
-
-		
 			public slots:
 
 			///	Show or hide widget (Called by menu entry in "WINDOWS")
-			void switchShowWidget()
-				throw();
+			void callSwitchShowWidget()
+				throw() { switchShowWidget();}
 
 			protected:
 
@@ -151,7 +142,6 @@ namespace BALL
 			bool output_running_;
 		};
   	
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_WIDGETS_LOGVIEW_H

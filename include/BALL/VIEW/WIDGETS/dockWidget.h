@@ -60,10 +60,8 @@ class DockWidget
 	public slots:
 
 	/// Show or hide widget (Called by menu entry in "WINDOWS")
-	void switchShowWidget()
+	void callSwitchShowWidget()
 		throw();
-
-	void close();
 
 	//@} 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.6 2003/09/10 01:43:27 amoll Exp $
+// $Id: dockWidget.C,v 1.7 2003/09/11 16:41:04 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -17,8 +17,7 @@ namespace BALL
 		
 DockWidget::DockWidget(QWidget* parent, const char* name)
 : QDockWindow(QDockWindow::InDock, parent),
-	ModularWidget(name),
-	default_visible_(true)
+	ModularWidget(name)
 {
 	layout_ = new QVBoxLayout(this);
   caption_label_ = new QLabel(this, "caption_label");
@@ -67,7 +66,7 @@ void DockWidget::initializeWidget(MainControl& main_control)
 	throw()
 {
 	window_menu_entry_id_ = 
-		main_control.insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
+		main_control.insertMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(callSwitchShowWidget()));
 	getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
 }
 
@@ -75,36 +74,20 @@ void DockWidget::initializeWidget(MainControl& main_control)
 void DockWidget::finalizeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.removeMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(switchShowWidget()));
+	main_control.removeMenuEntry(MainControl::WINDOWS, getIdentifier(), this, SLOT(callSwitchShowWidget()));
 }
 
 
-void DockWidget::switchShowWidget()
+void DockWidget::callSwitchShowWidget()
 	throw()
 {
-	QMenuBar* menu = getMainControl()->menuBar();
-	if (menu->isItemChecked(window_menu_entry_id_))
-	{
-		hide();
-		menu->setItemChecked(window_menu_entry_id_, false);
-	}
-	else
-	{
-		show();
-		menu->setItemChecked(window_menu_entry_id_, true);
-	}
+	switchShowWidget();
 }
 
 void DockWidget::writePreferences(INIFile& inifile)
 	throw()
 {
-	inifile.insertValue("WINDOWS", getIdentifier() + "::on", 
-		String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
-
-	inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(x()));
-	inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(y()));
-	inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(width()));
-	inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(height()));
+	ModularWidget::writePreferences(inifile);
 
 	inifile.insertValue("WINDOWS", getIdentifier() + "::docked", String(place()));
 }
@@ -119,20 +102,7 @@ void DockWidget::fetchPreferences(INIFile & inifile)
 		show();
 	}
 
-	if (	 (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
-				  inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt() == 0)
-		  || (!default_visible_))
-	{
-		switchShowWidget();
-	}
-
-	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::x"))
-	{
-		setGeometry(inifile.getValue("WINDOWS", getIdentifier() + "::x").toUnsignedInt(),
-		            inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt(),
-		            inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
-		            inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
-	}
+	ModularWidget::fetchPreferences(inifile);
 }
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.4 2003/09/04 23:14:16 amoll Exp $
+// $Id: scene.h,v 1.5 2003/09/11 16:41:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -438,8 +438,8 @@ namespace BALL
 			void exportPNG();
 
 			/// Show or hide widget (Called by menu entry in "WINDOWS")
-			void switchShowWidget()
-				throw();
+			void callSwitchShowWidget()
+				throw() { switchShowWidget();}
 
 			protected slots:
 

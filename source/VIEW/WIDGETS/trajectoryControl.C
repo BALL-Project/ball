@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.C,v 1.7 2003/09/08 02:06:55 amoll Exp $
+// $Id: trajectoryControl.C,v 1.8 2003/09/11 16:41:05 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -32,6 +32,7 @@ TrajectoryControl::TrajectoryControl(QWidget* parent, const char* name)
 	listview->addColumn("from");
 	listview->setColumnWidth(0, 120);
 	listview->setColumnWidth(1, 60);
+	default_visible_ = false;
 }
 
 

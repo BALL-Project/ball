@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.2 2003/08/26 16:07:03 amoll Exp $
+// $Id: pyWidget.C,v 1.3 2003/09/11 16:41:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -49,7 +49,7 @@ namespace BALL
 			main_control.insertMenuEntry(MainControl::TOOLS, "Export History", this, SLOT(exportHistory()));
 
 			window_menu_entry_id_ = 
-				main_control.insertMenuEntry(MainControl::WINDOWS, "Python Widget", this, SLOT(switchShowWidget()));
+				main_control.insertMenuEntry(MainControl::WINDOWS, "Python Widget", this, SLOT(callSwitchShowWidget()));
 			main_control.menuBar()->setItemChecked(window_menu_entry_id_, true);
 		}
 
@@ -59,7 +59,7 @@ namespace BALL
 			main_control.removeMenuEntry(MainControl::TOOLS, "Restart Python", this, SLOT(startInterpreter()));
 			main_control.removeMenuEntry(MainControl::TOOLS, "Run Python Script", this, SLOT(scriptDialog()));
 			main_control.removeMenuEntry(MainControl::TOOLS, "Export History", this, SLOT(exportHistory()));
-			main_control.removeMenuEntry(MainControl::WINDOWS, "Python Widget", this, SLOT(switchShowWidget()));
+			main_control.removeMenuEntry(MainControl::WINDOWS, "Python Widget", this, SLOT(callSwitchShowWidget()));
 		}
 
 
@@ -396,11 +396,7 @@ namespace BALL
 			python_settings_->setFilename(startup_script_);
 			if (startup_script_ != "") runFile(startup_script_);
 
-			if (!inifile.hasEntry("WINDOWS", "PyWidget::on")) return;
-			if (inifile.getValue("WINDOWS", "PyWidget::on").toUnsignedInt() == 0) 
-			{
-				switchShowWidget();
-			}
+			ModularWidget::fetchPreferences(inifile);
 		}
 
 
@@ -410,8 +406,7 @@ namespace BALL
 			inifile.appendSection("PYTHON");
 			inifile.insertValue("PYTHON", "StartupScript", startup_script_);
 
-			inifile.insertValue("WINDOWS", "PyWidget::on", 
-				String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
+			ModularWidget::writePreferences(inifile);
 		}
 
 
@@ -485,22 +480,4 @@ namespace BALL
 			file.close();
 		}
 
-
-		void PyWidget::switchShowWidget()
-			throw()
-		{
-			QMenuBar* menu = getMainControl()->menuBar();
-			if (menu->isItemChecked(window_menu_entry_id_))
-			{
-				hide();
-				menu->setItemChecked(window_menu_entry_id_, false);
-			}
-			else
-			{
-				show();
-				menu->setItemChecked(window_menu_entry_id_, true);
-			}
-		}
-
-  } // namespace VIEW
-} // namespace BALL
+} } // namespaces

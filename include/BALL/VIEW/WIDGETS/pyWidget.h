@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.3 2003/09/04 23:14:15 amoll Exp $
+// $Id: pyWidget.h,v 1.4 2003/09/11 16:41:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -135,7 +135,7 @@ namespace BALL
 				throw();
 
 			/// Show or hide widget (Called by menu entry in "WINDOWS")
-			void switchShowWidget()
+			void callSwitchShowWidget()
 				throw();
 
 			public:
