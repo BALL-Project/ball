@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.8.4.4 2002/12/10 18:46:53 anker Exp $ 
+// $Id: regularData3D.h,v 1.8.4.5 2002/12/11 10:10:41 anker Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -160,64 +160,77 @@ namespace BALL
 
 		/**	Returns the largest possible x coordinate for the box.
 		*/
-		float getMaxX() const throw();
+		float getMaxX() const 
+			throw();
 
 		/**	Returns the largest possible y coordinate for the box.
 		*/
-		float getMaxY() const throw();
+		float getMaxY() const 
+			throw();
 
 		/**	Returns the largest possible z coordinate for the box.
 		*/
-		float getMaxZ() const throw();
+		float getMaxZ() const 
+			throw();
 
 		/**	Returns the x coordinate of the grid origin.
 		*/
-		float getMinX() const throw();
+		float getMinX() const 
+			throw();
 
 		/**	Returns the y coordinate of the grid origin.
 		*/
-		float getMinY() const throw();
+		float getMinY() const 
+			throw();
 
 		/**	Returns the z coordinate of the grid origin.
 		*/
-		float getMinZ() const throw();
+		float getMinZ() const 
+			throw();
 
 		/**	Return the largest grid position for the x direction.
 				This method returns the maximum position allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
 				method returns the number of points in X direction minus one.
 		*/
-		Size getMaxXIndex() const throw();
+		Size getMaxXIndex() const 
+			throw();
 
 		/**	Return the largest grid position for the y direction.
 				This method returns the maximum position allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
 				method returns the number of points in Y direction minus one.
 		*/
-		Size getMaxYIndex() const throw();
+		Size getMaxYIndex() const 
+			throw();
 
 		/**	Return the largest grid position for the z direction.
 				This method returns the maximum position allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
 				method returns the number of points in Z direction minus one.
 		*/
-		Size getMaxZIndex() const throw();
+		Size getMaxZIndex() const 
+			throw();
 
 		/**	Returns the total number of grid points.
 		*/
-		Size getSize() const throw();
+		Size getSize() const 
+			throw();
 
 		/**	Returns the grid spacing in x direction.
 		*/	
-		float getXSpacing() const throw();
+		float getXSpacing() const 
+			throw();
 
 		/**	Returns the grid spacing in y direction.
 		*/	
-		float getYSpacing() const throw();
+		float getYSpacing() const 
+			throw();
 
 		/**	Returns the grid spacing in z direction.
 		*/	
-		float getZSpacing() const throw();
+		float getZSpacing() const 
+			throw();
 
 		/**	Returns the position of the grid point closest to the given vector.
 				If there are multiple grid points with equal distance, the
@@ -225,9 +238,11 @@ namespace BALL
 				returned.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridIndex getIndex(const Vector3&) const throw(Exception::OutOfGrid);
+		GridIndex getIndex(const Vector3&) const 
+			throw(Exception::OutOfGrid);
 
-		/**	Returns the position of the grid point closest to three given coordinates.
+		/**	Returns the position of the grid point closest to three given
+				coordinates.
 				If there are multiple grid points with equal distance, the
 				grid point with the lowest indices in x, y, and z direction is
 				returned.
@@ -236,7 +251,8 @@ namespace BALL
 		GridIndex getIndex(float x, float y, float z) const
 			throw(Exception::OutOfGrid);
 		
-		/**	Returns a pointer to the grid contents determined by the three indices.
+		/**	Returns a pointer to the grid contents determined by the three 
+				indices.
 				@exception OutOfGrid if the point is outside the grid
 		*/
 		GridDataType* getData(Position i, Position j, Position k)
@@ -246,12 +262,14 @@ namespace BALL
 				Determination of the selected grid point is made via getPosition.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(const Vector3& r) throw(Exception::OutOfGrid);
+		GridDataType* getData(const Vector3& r) 
+			throw(Exception::OutOfGrid);
 
 		/**	Returns a pointer to the grid contents determined by the position.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(Position position) throw(Exception::OutOfGrid);
+		GridDataType* getData(Position position) 
+			throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
 				Returns the data of the grid point specified by its {\tt position}.
@@ -419,9 +437,9 @@ namespace BALL
 			const throw(Exception::OutOfGrid);
 		
 		/** Equality operator.
-				Two point grids are equal if they have the same number of points in all three
-				dimensions, same origin, spacing  and the data fields are equal.
-				Both grids have to be valid or false is returned.
+				Two point grids are equal if they have the same number of points in
+				all three dimensions, same origin, spacing and the data fields are
+				equal. Both grids have to be valid or false is returned.
 		*/
 		bool operator == (const TRegularData3D<GridDataType>& grid) const
 			throw();
@@ -491,9 +509,13 @@ namespace BALL
 	std::ostream& operator << (std::ostream& os, const TRegularData3D<T>& grid) 
 		throw()
 	{
-		os << grid.getMinX() << " " << grid.getMinY() << " " << grid.getMinZ() << std::endl;
-		os << grid.getMaxX() << " " << grid.getMaxY() << " " << grid.getMaxZ() << std::endl;
-		os << grid.getMaxXIndex() << " " << grid.getMaxYIndex() << " " << grid.getMaxZIndex() << std::endl;
+		os << grid.getMinX() << " " << grid.getMinY() << " " << grid.getMinZ() 
+			<< std::endl
+			<< grid.getMaxX() << " " << grid.getMaxY() << " " << grid.getMaxZ() 
+			<< std::endl
+			<< grid.getMaxXIndex() << " " << grid.getMaxYIndex() << " " << grid.getMaxZIndex() 
+			<< std::endl;
+
 		for (Position i = 0; i < grid.getSize(); i++)	
 		{
 			os << grid.data[i] << std::endl;
@@ -514,7 +536,8 @@ namespace BALL
 		is >> number_of_grid_points.x >> number_of_grid_points.y 
 			>> number_of_grid_points.z;
 
-		grid.resize(lower, upper, number_of_grid_points.x + 1, number_of_grid_points.y + 1, number_of_grid_points.z + 1);
+		grid.resize(lower, upper, number_of_grid_points.x + 1, 
+				number_of_grid_points.y + 1, number_of_grid_points.z + 1);
 
 		for (Position i = 0; i < grid.getSize(); i++)
 		{
@@ -662,7 +685,8 @@ namespace BALL
 		(const TRegularData3D<GridDataType>& grid)
 		throw(Exception::OutOfMemory)
 	{
-		resize(grid.origin_, grid.upper_, grid.number_of_points_x_, grid.number_of_points_y_, grid.number_of_points_z_);
+		resize(grid.origin_, grid.upper_, grid.number_of_points_x_,
+				grid.number_of_points_y_, grid.number_of_points_z_);
 		if (valid_)
 		{
 			for (Position i = 0; i < number_of_grid_points_; i++)
@@ -987,14 +1011,16 @@ namespace BALL
 		(Position i, Position j, Position k) 
 		throw(Exception::OutOfGrid)
 	{
-		if (i > number_of_points_x_ ||	j > number_of_points_y_ ||	k > number_of_points_z_
-				|| !valid_)
+		if (i > number_of_points_x_ 
+			|| j > number_of_points_y_ 
+			|| k > number_of_points_z_
+			|| !valid_)
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}		
 
-		return &(data[i + j * number_of_points_x_ + k 
-												* number_of_points_x_ 
+		return &(data[i + j * number_of_points_x_ 
+				            + k * number_of_points_x_ 
 												* number_of_points_y_]);
 	}
 
@@ -1020,7 +1046,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	GridDataType& TRegularData3D<GridDataType>::operator[] (Position position)
+	GridDataType& TRegularData3D<GridDataType>::operator [] (Position position)
 		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
@@ -1031,7 +1057,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	GridDataType& TRegularData3D<GridDataType>::operator[](const Vector3& v)
+	GridDataType& TRegularData3D<GridDataType>::operator [] (const Vector3& v)
 		throw(Exception::OutOfGrid)
 	{
 		return *(getData(v));
