@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.62 2004/11/07 14:44:15 oliver Exp $
+// $Id: fragmentDB.C,v 1.63 2005/02/21 16:45:30 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -66,29 +66,23 @@ namespace BALL
 		throw(Exception::FileNotFound)
 	{
 		String key = root_entry.getKey();
-		String value = root_entry.getValue();
-		String key_fields[2], value_fields[2];
+		vector<String> key_fields;
 
-		if (key.countFields(":") != 2)
+		if (key.split(key_fields, ":") != 2)
 		{
-			// if the include directive is invalid,
-			// remove the entry
+			// if the include directive is invalid, remove the entry
 			Log.error() << "FragmentDB: illegal #include directive: " << key << endl;
 			root_entry.getParent()->removeChild(key, 0);
-
 			return false;
 		} 
 		else 
 		{
-			key.split(key_fields, 2, ":");
+			String value_fields[2];
+			String value = root_entry.getValue();
 			value.split(value_fields, 2, ":");
 				
 			ResourceEntry*	parent = root_entry.getParent();
-			ResourceEntry* entry;
 			parent->removeChild(key, 0);
-
-			ResourceFile*	file;
-			ResourceEntry* tree_entry;
 
 			// search in the standard fragment DB file
 			Path path;
@@ -98,25 +92,23 @@ namespace BALL
 				throw Exception::FileNotFound(__FILE__, __LINE__, value_fields[0]);
 			}
 
-			file = new ResourceFile(filename);
-			if (!file->isValid())
+			ResourceFile file(filename);
+			if (!file.isValid())
 			{
 				Log.error() << "FragmentDB: cannot open include file " << value_fields[0] << endl;
-				delete file;
 				return false;
 			}
 				
-			tree_entry = file->getRoot().getEntry(value_fields[1]);
+			ResourceEntry* tree_entry = file.getRoot().getEntry(value_fields[1]);
 			if (tree_entry == 0)
 			{
 				Log.error() << "FragmentDB: cannot find node " << value_fields[1] << " in file " << value_fields[0] << endl;
 			} 
 			else 
 			{
-				entry = parent->insertChild(key_fields[1], tree_entry->getValue());
+				ResourceEntry* entry = parent->insertChild(key_fields[1], tree_entry->getValue());
 				entry->mergeChildrenOf(*tree_entry);
 			}
-			delete file;
 		}
 
 		return true;
@@ -153,10 +145,6 @@ namespace BALL
 		}
 
 		init();
-
-		normalize_names.setFragmentDB(*this);
-		add_hydrogens.setFragmentDB(*this);
-		build_bonds.setFragmentDB(*this);
 	}
 
 	FragmentDB::FragmentDB(const FragmentDB& db, bool /* deep */)
