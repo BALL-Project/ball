@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.5 2005/01/03 13:41:03 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.6 2005/01/13 18:24:24 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -20,12 +20,16 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
+#include <BALL/SYSTEM/timer.h>
+
 #include <qfont.h>
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qimage.h>
 
 using namespace std;
+
+#define BALL_BENCHMARKING
 
 namespace BALL
 {
@@ -314,6 +318,10 @@ namespace BALL
 				return false;
 			}
 
+#ifdef BALL_BENCHMARKING
+	Timer t;
+	t.start();
+#endif
 			drawing_precision_  = representation.getDrawingPrecision();
 			drawing_mode_ 		  = representation.getDrawingMode();
 
@@ -336,6 +344,10 @@ namespace BALL
 			}
 
 			glFlush();
+#ifdef BALL_BENCHMARKING
+	t.stop();
+	logString("OpenGL rendering time: " + String(t.getCPUTime()));
+#endif
 
 			return true;
 		}
