@@ -1,4 +1,4 @@
-// $Id: Circle3_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $
+// $Id: Circle3_test.C,v 1.7 2001/07/15 21:05:00 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Circle3, "$Id: Circle3_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $")
+START_TEST(Circle3, "$Id: Circle3_test.C,v 1.7 2001/07/15 21:05:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -121,7 +121,7 @@ RESULT
 
 CHECK(bool operator != (const TCircle3& circle) const )
 	c = Circle3(p, n, radian);
-	c2 = Circle3(22.2, n, radian);
+	c2 = Circle3(Vector3(22.2), n, radian);
 	TEST_EQUAL(c != c2, true)
 	c2 = Circle3(p, n, radian);
 	TEST_EQUAL(c != c2, false)
