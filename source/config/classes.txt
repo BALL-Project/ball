@@ -1,4 +1,4 @@
-// $Id: classes.txt,v 1.27 2002/01/16 00:06:45 oliver Exp $
+// $Id: classes.txt,v 1.27.4.1 2002/10/24 21:37:11 amoll Exp $
 
 D documentation deficiencies
 E exception qualifier
@@ -293,8 +293,6 @@ QuadraticImproperTorsion            /           Z
 LennardJones                        X           Z       ::extractSection
 Potential1210                       (/)         Z
 ------------------------MOLVIEW---------------------------------------------
-                        -----COLORS-------
-ElementColor                        EIX         Z
                         -----COMMON-------
 Common                              /           Z
                         -----FUNCTOR------
@@ -315,41 +313,33 @@ StandardColorCalculator             I           Z
   AtomChargeColorCalculator
   AtomDistanceColorCalculator 
 FindGeometricObjects                I           Z
-GeometricObjectSelector             I           Z
 MolecularFilter                     I           Z
 MolecularInformation                I           Z
 RemoveModel                         I           Z
                         -------GUI-------
 LabelProperties                     /           Z
+LabelPropertiesData                 EI          Z
 DisplayProperties                   /           Z
 DisplayPropertiesData               EI          Z
-LabelPropertiesData                 EI          Z
 OpenHINFile                         I           Z
 OpenPDBFile                         I           Z
 OpenBruker1DFile                    /?          Z
 OpenBruker2DFile                    /?          Z
 OpenMOL2File                        /?          Z
-DlgmoveOverlay                      /?          Z
 AddGLSurfaceModel                   /           Z
 AddGLBallAndStickModel              /           Z
 AddGLLineModel                      /           Z
 AddGLVanDerWaalsModel               /           Z
 GLAtomBondModelConnector            /           Z
 MoleculeGLObjectCollector           X           Z       ::finish()   
-MoleculeObjectProcessor             I           Z
-            AllocationFailure       
-MoleculeObjectCreator               /           Z
 GLTwoColoredLine                    EI          Z
 GLTwoColoredTube                    EI          Z
 Control                             EI          Z
 MolecularControl                    I           Z
 MolecularProperties                 /           Z
 GLBackbone                          X           Z
-ExtendedGLObjectCollector           EIX         Z       ::finish()
                         -----KERNEL------
 ExtendedPropertyManager             E           Z
-GeometricConvertor                  EI          Z
-WindowEventTimer                    E           Z
 NewMolecularMessage                 E           Z
   RemovedMolecularMessage
   ChangedMolecularMessage
@@ -505,7 +495,7 @@ GLTube                              E           Z
 FileDialog                          /           Z
 Preferences                         /           Z
 
-ObjectProcessor                     EI          Z
+DlgmoveOverlay                      /?          Z
 GLObjectCollector                   E           Z
 GLDisplayList                       /           Z
 CompositeDescriptor                 EX          Z
@@ -528,7 +518,6 @@ Sphere                              EI          Z
 Events                              E           Z
 PyWidget                            /           Z
 Control                             E           Z
-nmr                                 EIX         Z
 MainControlPreferences              /           Z
 ModularWidget                       /           Z
 RegularData1DWidget                 /           Z
