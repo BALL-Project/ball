@@ -1,6 +1,11 @@
-// $Id: shiftModel.C,v 1.2 2000/09/18 11:03:17 oliver Exp $
+// $Id: shiftModel.C,v 1.3 2000/09/18 12:12:18 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
+#include <BALL/FORMAT/parameterSection.h>
+#include <BALL/NMR/johnsonBovey.h>
+#include <BALL/NMR/haighMallion.h>
+#include <BALL/NMR/LEF.h>
+#include <BALL/NMR/anisotropy.h>
 
 namespace BALL
 {
@@ -119,10 +124,102 @@ namespace BALL
 		// inivalidate object
 		valid_ = false;
 
-		// BAUSTELLE
+		if (parameters_.isValid() && parameters_.getParameterFile().hasSection(MODULE_LIST_SECTION))
+		{
+			ParameterSection module_section;
+			module_section.extractSection(parameters_, MODULE_LIST_SECTION);
+
+			if (module_section.hasVariable("name") && module_section.hasVariable("type"))
+			{
+				// the section contains the columns "name" and "type", let's construct
+				// the corresponding modules 
+				Position type_col = module_section.getColumnIndex("type");
+				for (Position i = 0; i < module_section.getNumberOfKeys(); i++)
+				{
+					String name = module_section.getKey(i);
+					String type = module_section.getValue(i, type_col);
+
+					if (registered_modules_.has(type))
+					{
+						// call the corresponding create method to construct the ShiftModule
+						ShiftModule* module = createModule_(type, name);
+
+						// and insert the pointer into the module list
+						modules_.push_back(module);
+					}
+					else
+					{
+						// complain!
+						Log.error() << "ShiftModel::init_: could not create module of type " 
+												<< type << " for module " << name << " for shift model " 
+												<< parameters_.getFilename() << ". Please use the registerModule method"
+												<< " to associate a create method for this module type!" 
+												<< endl;
+					}
+				}
+			}
+
+			// if we created shift modules, everything is valid
+			if (modules_.size() > 0)
+			{
+				valid_ = true;
+			}
+		}
 
 		// return the current state
 		return valid_;
 	}
 	
+
+	void ShiftModel::registerModule(const String& name, CreateMethod create_method)
+		throw(Exception::NullPointer)
+	{	
+		// check that we did not get something strange
+		if (create_method == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+
+		// insert the module into the map
+		registered_modules_[name] = create_method;
+	}
+
+	void ShiftModel::unregisterModule(const String& name)
+		throw()
+	{
+		registered_modules_.erase(name);
+	}
+
+	ShiftModule* ShiftModel::createModule_(const String& type, const String& name) const
+		throw()
+	{
+		ShiftModule* module = 0;
+		if (registered_modules_.has(type))
+		{
+			// if the name is registered, call the
+			// corresponding create method from the hash map
+			module = (ShiftModule*)(registered_modules_[type])();
+			if (module != 0)
+			{
+				// if we constructed a module, set its name and the parameters
+				module->setParameters(const_cast<Parameters&>(parameters_));
+				module->setName(name);
+			}
+		}
+
+		return module;
+	}
+
+	void ShiftModel::registerStandardModules_()
+		throw()
+	{
+		using RTTI::getNew;
+		CreateMethod m = (CreateMethod)getNew<JohnsonBoveyShift>;
+		registerModule("JohnsonBovey", m);
+		registerModule("HaighMallion", m);
+		registerModule("ElectricField", m);
+		registerModule("Anisotropy", m);
+	}
 }
+
+

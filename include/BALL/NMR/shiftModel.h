@@ -1,4 +1,4 @@
-// $Id: shiftModel.h,v 1.1 2000/09/18 10:32:15 oliver Exp $
+// $Id: shiftModel.h,v 1.2 2000/09/18 12:11:55 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H
@@ -42,6 +42,27 @@ namespace BALL
 		/**	The module list type
 		*/
 		typedef List<ShiftModule*> ModuleList;
+
+		/**	The creation method type.
+				This type describes a method that can construct an object
+				of type ShiftModule.
+		*/
+		typedef void * (*CreateMethod) ();
+
+		/**	The creation method hash map type.
+				This type is used internally to store the creation
+				method corresponding to a certaion symbolic name
+				(usually the class name).
+		*/
+		typedef StringHashMap<CreateMethod>	CreateMethodMap;
+		//@}
+
+		/**	@name Constants
+		*/
+		//@{
+		/**	The name of the section containing the module types and names of the model
+		*/
+		static const char* MODULE_LIST_SECTION;
 		//@}
 
 		/**	@name	Constructors and Destructors
@@ -102,6 +123,16 @@ namespace BALL
 		const String& getFilename() const
 			throw();
 		
+		/**	Register a new module type.
+				Add the 
+		*/
+		void registerModule(const String& name, CreateMethod method) 
+			throw(Exception::NullPointer);
+
+		/**	Unregister a module type.
+		*/
+		void unregisterModule(const String& name) 
+			throw();
 		//@}
 
 		/**	@name	Predicates
@@ -111,6 +142,11 @@ namespace BALL
 		/**	Validity flag
 		*/
 		bool isValid() const
+			throw();
+
+		/**	Check whether a module of this name is registered
+		*/
+		bool isRegistered(const String& name) const
 			throw();
 		//@}
 
@@ -141,13 +177,42 @@ namespace BALL
 
 		protected:
 
+		/**	Initialize the model from the parameter file.
+				This method assumes that object has a valid
+				parameter file assigned. It sets {\tt valid_} 
+				to {\bf true} if it could create a shfit model 
+				from the contents of the parameter file.
+		*/
 		bool init_()
 			throw();
+
+		/**	Create a ShiftModule from a symbolic name.
+				This method create a shift module from the symbolic
+				name if this name is contained in the hash map \Ref{registered_modules_}.
+		*/
+		ShiftModule* createModule_(const String& type, const String& name) const
+			throw();
+
+		/**	Register the standard modules.
+		*/
+		void registerStandardModules_()
+			throw();
 		
-		Parameters	parameters_;
+		/**	The parameters object
+		*/
+		Parameters				parameters_;
 
-		ModuleList	modules_;
+		/**	The list of shift modules of this model
+		*/
+		ModuleList				modules_;
 
+		/**	A hash map containing all registered module types and their creation methods.
+		*/
+		CreateMethodMap	registered_modules_;
+
+		/**	The validity flag.
+				Set to {\bf true} if the object was initialized correctly.
+		*/
 		bool valid_;
 	};
 
