@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.4 2003/09/04 23:14:15 amoll Exp $
+// $Id: geometricControl.h,v 1.5 2003/09/08 00:15:25 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -10,8 +10,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
-#	include <BALL/VIEW/KERNEL/modularWidget.h>
+#ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
+#	include <BALL/VIEW/WIDGETS/genericControl.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -22,10 +22,9 @@
 #	include <BALL/VIEW/KERNEL/molecularInformation.h>
 #endif
 
-#include <qlistview.h>
-#include <qmessagebox.h>
 #include <qpoint.h>
 #include <qpopupmenu.h>
+#include <qlistview.h>
 
 namespace BALL
 {
@@ -44,8 +43,7 @@ namespace BALL
 				\ingroup ViewWidgets
 		*/
 		class GeometricControl
-			: public QListView, 
-				public ModularWidget
+			: public GenericControl
 		{
 			Q_OBJECT
 
@@ -177,24 +175,6 @@ namespace BALL
 																  const char* slot = 0, int entry_ID = -1, int accel = 0)
 				throw();
 
-			/**	Setup the menu entries.
-					PyWidget creates an entry in Tools|Restart Python and connects
-					the entry to startInterpreter().
-			*/
-			virtual void initializeWidget(MainControl& main_control);
-
-			/**	Remove menu entries.
-			*/
-			virtual void finalizeWidget(MainControl& main_control);
-
-			///
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
-			
-			///
-			virtual void writePreferences(INIFile& inifile)
-				throw();
-
 			public slots:
 				
 			//@}			/** @name Public slots */ //@{
@@ -216,10 +196,6 @@ namespace BALL
 
 			///
 			virtual void updateSelection();
-
-			///	Show or hide widget (Called by menu entry in "WINDOWS")
-			void switchShowWidget()
-				throw();
 
 		  protected slots:
 			
