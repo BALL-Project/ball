@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.17 2003/11/13 19:30:32 amoll Exp $
+// $Id: displayProperties.h,v 1.18 2003/11/13 21:46:02 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -261,6 +261,10 @@ namespace BALL
 
 			//_ Read a inifile entry and set the accoring attribut and ComboBox.
 			virtual void getEntry_(INIFile& inifile, const String& key, QComboBox& box);
+
+			//_
+			virtual void getAdvancedOptions_()
+				throw();
 
 			// --------------------------------------------------------------------------------
 			// attributs

@@ -2,9 +2,6 @@
 // vi: set ts=2:
 //
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
-#include <BALL/DATATYPE/string.h>
-
-#include <qlineedit.h>
 
 namespace BALL
 {

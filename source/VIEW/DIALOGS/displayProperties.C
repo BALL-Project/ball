@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.36 2003/11/13 19:30:23 amoll Exp $
+// $Id: displayProperties.C,v 1.37 2003/11/13 21:45:31 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -237,6 +237,7 @@ void DisplayProperties::modifyRepresentationMode()
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
 
 	checkDrawingPrecision_();
+	getAdvancedOptions_();
 
 	apply_button->setEnabled(true);
 }
@@ -415,7 +416,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 			
 		case MODEL_VDW:
 			model_processor = new AddVanDerWaalsModel;
-//			((AddVanDerWaalsModel*) model_processor)->setVDWRadiusFactor(model_settings_->getVDWRadiusFactor());
+			((AddVanDerWaalsModel*) model_processor)->setVDWRadiusFactor(model_settings_->getVDWRadiusFactor());
 			break;
 
 		case MODEL_BACKBONE:
@@ -680,6 +681,63 @@ void DisplayProperties::checkDrawingPrecision_()
 		}
 	}
 }
+
+void DisplayProperties::getAdvancedOptions_()
+	throw()
+{
+	if (rep_ == 0) return;
+	
+	ModelProcessor* mp = rep_->getModelProcessor();
+
+	if (mp == 0) return;
+	
+	switch (model_type_combobox->currentItem())
+	{
+		case MODEL_LINES:
+			break;
+			
+		case MODEL_STICK:
+			model_settings_->setStickStickRadius(((AddBallAndStickModel*)mp)->getStickRadius());
+			break;
+			
+		case MODEL_BALL_AND_STICK:
+			model_settings_->setBallAndStickStickRadius(((AddBallAndStickModel*)mp)->getStickRadius());
+			model_settings_->setBallRadius(((AddBallAndStickModel*)mp)->getBallRadius());
+			break;
+			
+		case MODEL_SE_SURFACE:
+			{
+				model_settings_->setSurfaceProbeRadius(((AddSurfaceModel*)mp)->getProbeRadius());
+			}
+			break;
+			
+		case MODEL_SA_SURFACE:
+			{
+				model_settings_->setSurfaceProbeRadius(((AddSurfaceModel*)mp)->getProbeRadius());
+			}
+			break;
+			
+		case MODEL_VDW:
+			model_settings_->setVDWRadiusFactor(((AddVanDerWaalsModel*) mp)->getVDWRadiusFactor());
+			break;
+
+		case MODEL_BACKBONE:
+			model_settings_->setTubeRadius(((AddBackboneModel*) mp)->getTubeRadius());
+			break;
+
+		case MODEL_CARTOON:
+			model_settings_->setCartoonTubeRadius(((AddCartoonModel*) mp)->getTubeRadius());
+			model_settings_->setCartoonSphereRadius(((AddCartoonModel*) mp)->getHelixRadius());
+			model_settings_->setCartoonArrowWidth(((AddCartoonModel*) mp)->getArrowWidth());
+			model_settings_->setCartoonArrowHeight(((AddCartoonModel*) mp)->getArrowHeight());
+			break;
+			
+		case MODEL_HBONDS:
+    	model_settings_->setHBondRadius(((HBondModelProcessor*) mp)->getRadius());
+			break;
+	}
+}
+			
 
 
 } } // namespaces
