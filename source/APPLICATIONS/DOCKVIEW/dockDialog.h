@@ -55,7 +55,7 @@
 
 #include "dockResultDialog.h"
 #include "dockDialogData.h"
-#include "dockResults.h"
+#include "dockResult.h"
 
 namespace BALL
 {
@@ -92,8 +92,21 @@ namespace BALL
 				
 				/**  Assignment operator
 				*/
-				const DockDialog& operator =(const DockDialog& dock_dialog);
+				const DockDialog& operator =(const DockDialog& dock_dialog)
+					throw();
+				
+				// add docking algorithm to HashMap and ComboBox
+				void addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
+					throw();
 					
+				// add scoring function to HashMap and ComboBox
+				void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
+					throw();
+					
+					// Set the systems for docking
+				void setSystem(System* system1, System* system2)
+					throw();
+				
 				/**	Initializes the popup menu <b>  Molecular Mechanics </b> with its checkable submenu <b>  Docking </b>; 
 						This method is called automatically	immediately before the main application is started. 
 						@param main_control the  MainControl object to be initialized 
@@ -126,22 +139,6 @@ namespace BALL
 
 				// dock the two systems
 				bool calculate()
-					throw();
-				
-				// Set the systems for docking
-				void setSystem(System* system1, System* system2)
-					throw() 
-				{
-					docking_partner1_ = system1;
-					docking_partner2_ = system2;
-				}
-				
-				// add docking algorithm to HashMap and ComboBox
-				void addAlgorithm(QString name, int algorithm, QDialog* dialog)
-					throw();
-					
-				// add scoring function to HashMap and ComboBox
-				void addScoringFunction(QString name, int score_func, QDialog* dialog=0)
 					throw();
 					
 					

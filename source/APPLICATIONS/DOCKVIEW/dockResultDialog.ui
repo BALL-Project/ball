@@ -227,10 +227,8 @@
                 <property name="text">
                     <string>snapshot</string>
                 </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>score</string>
+                <property name="pixmap">
+                    <pixmap></pixmap>
                 </property>
             </column>
             <property name="name">
@@ -269,7 +267,7 @@
                 <number>0</number>
             </property>
             <property name="numCols">
-                <number>2</number>
+                <number>1</number>
             </property>
             <property name="rowMovingEnabled">
                 <bool>true</bool>

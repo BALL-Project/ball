@@ -27,8 +27,8 @@ namespace BALL
 					throw();
 					
 				// Constructor
-				DockResult(QString docking_algorithm, ConformationSet& conformation_set,
-										Options& docking_options, String DCD_file)
+				DockResult(const QString& docking_algorithm, const ConformationSet& conformation_set,
+										const Options& docking_options, const String& DCD_file)
 					throw();
 				
 				// Destructor
@@ -37,7 +37,11 @@ namespace BALL
 					
 				/** Assignment operator
 				*/
-				const DockResult& operator =(const DockResult& dock_res);
+				const DockResult& operator =(const DockResult& dock_res)
+					throw();
+				
+				void setConformationSet(const ConformationSet& conformation_set)
+					throw();
 					
 				const QString& getDockingAlgorithm() const
 					throw();
@@ -63,9 +67,14 @@ namespace BALL
 					
 				const String& getDCDFile() const
 					throw();
+					
+				//
+				Size numberOfScorings() const
+					throw();
 				
-				// 
-				void addScoring(QString name, Options options, vector<float> scores);
+				// add new Scoring_ to vector scorings_
+				void addScoring(const QString& name, const Options& options, const vector<float>& scores)
+					throw();
 				
 			protected:
 				
@@ -81,14 +90,15 @@ namespace BALL
 						Scoring_() throw();
 						
 						//Constructor
-						Scoring_(QString name, Options& options, vector<float>& scores) throw();
+						Scoring_(const QString& name, const Options& options, const vector<float>& scores) throw();
 						
 						//Destructor
 						~Scoring_() throw();
 						
 						/**  Assignment operator
 						*/
-						const Scoring_& operator =(const Scoring_& scoring);
+						const Scoring_& operator =(const Scoring_& scoring)
+							throw();
 						
 						QString name_;
 						Options options_;

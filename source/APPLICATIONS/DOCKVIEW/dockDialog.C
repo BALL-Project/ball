@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.15 2005/04/01 14:29:12 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.16 2005/04/04 15:59:53 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -81,8 +81,6 @@ namespace BALL
 			//build HashMap for scoring function advanced option dialogs
 			addScoringFunction("Default", DEFAULT);
 			addScoringFunction("Random", RANDOM);
-	
-			result_dialog_ = 0;
 			
 			hide(); 
 		}
@@ -99,12 +97,12 @@ namespace BALL
 		/** Assignment operator
 		*/
 		const DockDialog& DockDialog::operator =(const DockDialog& dock_dialog)
+			throw()
 		{
 			if (&dock_dialog != this)
 			{
 				algorithm_dialogs_ = dock_dialog.algorithm_dialogs_;
 				scoring_dialogs_ = dock_dialog.scoring_dialogs_;
-				result_dialog_ = dock_dialog.result_dialog_;
 				docking_partner1_ = dock_dialog.docking_partner1_;
 				docking_partner2_ = dock_dialog.docking_partner2_;
 				options_ = dock_dialog.options_;
@@ -121,7 +119,7 @@ namespace BALL
 		// --------------------------------------------------------------------------------
 
 		// add docking algorithm to HashMap and ComboBox
-		void DockDialog::addAlgorithm(QString name, int algorithm, QDialog* dialog)
+		void DockDialog::addAlgorithm(const QString& name, const int algorithm, QDialog* dialog)
 			throw()
 		{
 			algorithm_dialogs_[algorithm] = dialog;
@@ -129,7 +127,7 @@ namespace BALL
 		}
 		
 		// add scoring function to HashMap and ComboBox
-		void DockDialog::addScoringFunction(QString name, int score_func, QDialog* dialog)
+		void DockDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
 			throw()
 		{
 			if(dialog)
@@ -137,6 +135,14 @@ namespace BALL
 				scoring_dialogs_[score_func] = dialog;
 			}
 			scoring_functions->insertItem(name, score_func);
+		}
+		
+		// Set the systems for docking
+		void DockDialog::setSystem(System* system1, System* system2)
+			throw() 
+		{
+			docking_partner1_ = system1;
+			docking_partner2_ = system2;
 		}
 		
 		//
@@ -190,86 +196,6 @@ namespace BALL
 
 			//no systems loaded, disable menu entry "Docking"
 			menuBar()->setItemEnabled(id_, num_systems);
-		}
-		
-		// if the user has selected one or two systems,  
-		// they should be the current items in the comboboxes
-		void DockDialog::show()
-		{
-			MainControl* main_control = getMainControl();
-
-			//get the composites
-			CompositeManager& composite_manager = main_control->getCompositeManager();
-			
-			//iterate over all composites; add systems to list
-			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
-			
-			//selection lists for systems should be empty
-			systems1->clear();
-			systems2->clear();
-			
-			//pointer to selected systems
-			docking_partner1_ = NULL;
-			docking_partner2_ = NULL;
-			
-			QStringList current_system_list;
-			
-			//fill current system list and check if user has already selected two systems
-			for(; +composite_it; ++composite_it)
-			{
-				System* system = dynamic_cast<System*>(*composite_it);
-				if (system == 0) continue;
-
-				current_system_list.append(system->getName());
-				
-				//test if the user has selected one or two systems
-				//more than 2 selected systems -> error
-				if (system->isSelected())
-				{
-					if (docking_partner1_ == NULL)
-					{
-						docking_partner1_ = system;
-					}
-					else
-					{
-						if (docking_partner2_ == NULL)
-						{
-							docking_partner2_ = system;
-						}
-						else
-						{
-							//if more than 2 systems are selected => Error message!
-							#ifdef BALL_VIEW_DEBUG
-								Log.error() << "DockDialog: " << " More than two systems selected! " << std::endl;
-							#endif
-				
-							QMessageBox error_message(0,0);
-							error_message.warning(0,"Error","More than two systems selected!", QMessageBox::Ok, QMessageBox::NoButton);
-							return;
-						}
-					}
-				}
-			}
-			//put <select> in list as the first element
-			current_system_list.prepend("<select>");
-			
-			//set selection lists of dialog
-			systems1->insertStringList(current_system_list);
-			systems2->insertStringList(current_system_list);
-		
-			if(docking_partner1_ != NULL)
-			{
-				systems1->setCurrentText(docking_partner1_->getName());
-			}
-			if(docking_partner2_ != NULL)
-			{
-				systems2->setCurrentText(docking_partner2_->getName());
-			}
-			
-			tab_pages->setCurrentPage(0);
-			
-			//show dialog to user
-			DockDialogData::show();
 		}
 		
 		/// Reset the dialog to the standard values
@@ -383,32 +309,25 @@ namespace BALL
 					break;
 			}
 			
-			// score the results of the docking algorithm
+			// apply scoring function; set new scores in the conformation set
 			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set);
 			conformation_set.setScoring(ranked_conformations);
 
+			// store docking information and result in a DockResult object
 			QString docking_alg = algorithms->currentText();
-			vector<DockResults::Scoring_> scoring_vec;
 			vector<float> scores;
 			for(unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{
 				scores.push_back(ranked_conformations[i].second);
 			}
-			DockResults::Scoring_ scoring_obj = DockResults::Scoring_(scoring_functions->currentText(), options_, scores); /// falsche Options!!!
-			scoring_vec.push_back(scoring_obj);
 
-			DockResults* dock_res = new DockResults(docking_alg,
+			DockResult* dock_res = new DockResult(docking_alg,
 																							conformation_set,
 																							options_,
-																							scoring_vec,
 																							"");
+																							
+			dock_res->addScoring(scoring_functions->currentText(), options_, scores);
 
-			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
-			dock_res_m->setDockResults(*dock_res);
-			dock_res_m->setComposite(conformation_set.getSystem());
-			notify_(dock_res_m);
-
-			
 			// add docked system to BALLView structures 
 			SnapShot best_result = conformation_set[0];
 			
@@ -416,6 +335,14 @@ namespace BALL
 			best_result.applySnapShot(*docked_system);
 			
 			getMainControl()->insert(*docked_system);
+			
+			// send a DockResultMessage
+			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
+			dock_res_m->setDockResult(*dock_res);
+			//dock_res_m->setComposite(conformation_set.getSystem());
+			dock_res_m->setComposite(*docked_system);
+			notify_(dock_res_m);
+			
 			
 			delete dock_alg;
 			delete scoring;
@@ -551,6 +478,86 @@ namespace BALL
 		// -------------------------------- SLOTS ------------------------------------------------
 		// ---------------------------------------------------------------------------------------
 
+		// if the user has selected one or two systems,  
+		// they should be the current items in the comboboxes
+		void DockDialog::show()
+		{
+			MainControl* main_control = getMainControl();
+
+			//get the composites
+			CompositeManager& composite_manager = main_control->getCompositeManager();
+			
+			//iterate over all composites; add systems to list
+			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
+			
+			//selection lists for systems should be empty
+			systems1->clear();
+			systems2->clear();
+			
+			//pointer to selected systems
+			docking_partner1_ = NULL;
+			docking_partner2_ = NULL;
+			
+			QStringList current_system_list;
+			
+			//fill current system list and check if user has already selected two systems
+			for(; +composite_it; ++composite_it)
+			{
+				System* system = dynamic_cast<System*>(*composite_it);
+				if (system == 0) continue;
+
+				current_system_list.append(system->getName());
+				
+				//test if the user has selected one or two systems
+				//more than 2 selected systems -> error
+				if (system->isSelected())
+				{
+					if (docking_partner1_ == NULL)
+					{
+						docking_partner1_ = system;
+					}
+					else
+					{
+						if (docking_partner2_ == NULL)
+						{
+							docking_partner2_ = system;
+						}
+						else
+						{
+							//if more than 2 systems are selected => Error message!
+							#ifdef BALL_VIEW_DEBUG
+								Log.error() << "DockDialog: " << " More than two systems selected! " << std::endl;
+							#endif
+				
+							QMessageBox error_message(0,0);
+							error_message.warning(0,"Error","More than two systems selected!", QMessageBox::Ok, QMessageBox::NoButton);
+							return;
+						}
+					}
+				}
+			}
+			//put <select> in list as the first element
+			current_system_list.prepend("<select>");
+			
+			//set selection lists of dialog
+			systems1->insertStringList(current_system_list);
+			systems2->insertStringList(current_system_list);
+		
+			if(docking_partner1_ != NULL)
+			{
+				systems1->setCurrentText(docking_partner1_->getName());
+			}
+			if(docking_partner2_ != NULL)
+			{
+				systems2->setCurrentText(docking_partner2_->getName());
+			}
+			
+			tab_pages->setCurrentPage(0);
+			
+			//show dialog to user
+			DockDialogData::show();
+		}
+		
 		// advanced button for algorithm options pressed
 		void DockDialog::algAdvancedPressed()
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.1 2005/04/01 14:30:22 haid Exp $
+// $Id: dockResult.C,v 1.1.2.2 2005/04/04 15:59:53 haid Exp $
 //
 
 #include "dockResult.h"
@@ -16,8 +16,8 @@ namespace BALL
 		{}
 		
 		// Constructor
-		DockResult::DockResult(QString docking_algorithm, ConformationSet& conformation_set,
-															Options& docking_options, String DCD_file)
+		DockResult::DockResult(const QString& docking_algorithm, const ConformationSet& conformation_set,
+														const Options& docking_options, const String& DCD_file)
 			throw()
 		{
 			docking_algorithm_ = docking_algorithm;
@@ -34,6 +34,7 @@ namespace BALL
 		/** Assignment operator
 		*/
 		const DockResult& DockResult::operator =(const DockResult& dock_res)
+			throw()
 		{
 			if (&dock_res != this)
 			{
@@ -44,6 +45,12 @@ namespace BALL
 				DCD_file_ = dock_res.DCD_file_;
 			}
 			return *this;
+		}
+		
+		void DockResult::setConformationSet(const ConformationSet& conformation_set)
+			throw()
+		{
+			conformation_set_ = conformation_set;
 		}
 		
 		const QString& DockResult::getDockingAlgorithm() const
@@ -65,22 +72,30 @@ namespace BALL
 		// returns scores of scoring_ i
 		const vector<float>& DockResult::getScores(int i) const
 			throw()
-		{return scoring_[i].scores_;}
+		{return scorings_[i].scores_;}
 					
 		const QString& DockResult::getScoringName(int i) const
 			throw()
-		{return scoring_[i].name_;}
+		{return scorings_[i].name_;}
 					
 		const Options& DockResult::getScoringOptions(int i) const
 			throw()
-		{return scoring_[i].options_}
+		{return scorings_[i].options_;}
 			
 		const String& DockResult::getDCDFile() const
 			throw()
 		{return DCD_file_;}
 		
-		// add a Scoring_ to vector scorings_
-		void DockResult::addScoring(QString name, Options options, vector<float> scores)
+		//
+		Size DockResult::numberOfScorings() const
+			throw()
+		{
+			return scorings_.size();
+		}
+		
+		// add new Scoring_ to vector scorings_
+		void DockResult::addScoring(const QString& name, const Options& options, const vector<float>& scores)
+			throw()
 		{
 			Scoring_ scoring = Scoring_(name, options, scores);
 			scorings_.push_back(scoring);
@@ -98,7 +113,7 @@ namespace BALL
 		/** Scoring_ class
 				Constructor
 		*/
-		DockResult::Scoring_::Scoring_(QString name, Options& options, vector<float>& scores) throw()
+		DockResult::Scoring_::Scoring_(const QString& name, const Options& options, const vector<float>& scores) throw()
 		{
 			name_ = name;
 			options_ = options;
@@ -115,6 +130,7 @@ namespace BALL
 				Assignment operator
 		*/
 		const DockResult::Scoring_& DockResult::Scoring_::operator =(const Scoring_& scoring)
+			throw()
 		{
 			if (&scoring != this)
 			{

@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.10 2005/04/01 14:29:13 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.11 2005/04/04 15:59:54 haid Exp $
 //
 
 #include <qtable.h>
@@ -15,6 +15,11 @@
 # include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #endif
 
+#ifndef BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
+# include <BALL/STRUCTURE/DOCKING/geometricFit.h>
+#endif
+
+
 namespace BALL
 {
 	namespace VIEW
@@ -26,6 +31,8 @@ namespace BALL
 			: DockResultDialogData(parent, name, modal, fl),
 				ModularWidget(name)
 		{
+			//setWFlags(Qt::WStyle_MinMax | Qt::WStyle_SysMenu);
+		
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
 			
@@ -52,17 +59,27 @@ namespace BALL
 		/** Assignment operator
 		*/
 		const DockResultDialog& DockResultDialog::operator =(const DockResultDialog& res_dialog)
+			throw()
 		{
 			if (&res_dialog != this)
 			{
 				dock_res_ = res_dialog.dock_res_;
+				docked_system_ = res_dialog.docked_system_;
 				scoring_dialogs_ = res_dialog.scoring_dialogs_;
 			}
 			return *this;
 		}
 		
+		void DockResultDialog::setDockResult(DockResult* dock_res)
+			throw()
+		{dock_res_ = dock_res;}
+		
+		void DockResultDialog::setDockedSystem(System* system)
+			throw()
+		{docked_system_ = system;}
+		
 		// add scoring function to ComboBox and its options dialog to HashMap
-		void DockResultDialog::addScoringFunction(QString name, int score_func, QDialog* dialog)
+		void DockResultDialog::addScoringFunction(const QString& name, const int score_func, QDialog* dialog)
 			throw()
 		{
 			if(dialog)
@@ -80,6 +97,41 @@ namespace BALL
 		// Show and raise result dialog
 		void DockResultDialog::show()
 		{
+			// get the number of conformations, to know how many rows the table needs
+			Options dock_options = dock_res_->getDockingOptions();
+			int conformation_num = dock_options.getInteger(GeometricFit::Option::BEST_NUM);
+			// insert rows in table
+			result_table->insertRows(0,conformation_num);
+			
+			// fill the first column with snapshot numbers
+			for(int i=0; i < conformation_num; i++)
+			{
+				QString s;
+				result_table->setText(i,0,s.setNum(i));
+			}
+			
+			// fill table with scores
+			// 
+			for(unsigned int i = 0; i < dock_res_->numberOfScorings(); i++)
+			{
+				// insert new score column in table; i+1, because first column contains snapshot number
+				result_table->insertColumns(i+1, 1);
+				
+				// set the scoring function name as label of the column
+				result_table->horizontalHeader()->setLabel(i+1, dock_res_->getScoringName(i));
+				
+				/* the scores in the vector are sorted by snapshot number!
+					 the score with snapshot number i is at position i in the vector
+				*/
+				vector<float> scores = dock_res_->getScores(i);
+				for(unsigned int j = 0; j < scores.size(); j++)
+				{
+					QString s;
+					result_table->setText(j, i+1, s.setNum(scores[j]));
+				}
+			}
+			
+			/*
 			// get the conformations (= pair<Index, float> = Snapshot number & energy value) for the result dialog
 			std::vector<ConformationSet::Conformation> conformations = conformation_set_.getScoring();
 			
@@ -95,13 +147,14 @@ namespace BALL
 			}
 			// set the scoring function name as label of the column
 			result_table->horizontalHeader()->setLabel(1, scoring_name_);
+			*/
 			
 			// adjust column width
 			for(int j = 0; j < result_table->numCols() ; j++)
 			{
 				result_table->adjustColumn(j);
 			}
-			// sort by score column
+			// sort by first score column
 			sortTable(1);
 			
 			// adjust table/dialog size
@@ -120,10 +173,11 @@ namespace BALL
 			// get snapshot number
 			int snapshot = (result_table->text(selected_row,0)).toInt();
 			// apply snapshot
-			SnapShot selected_conformation = conformation_set_[snapshot];
-			System& s = conformation_set_.getSystem();
-			selected_conformation.applySnapShot(s);
-			getMainControl()->update(s, true);
+			ConformationSet conformation_set = dock_res_->getConformationSet();
+			SnapShot selected_conformation = conformation_set[snapshot];
+			//System& s = conformation_set.getSystem();
+			selected_conformation.applySnapShot(*docked_system_);
+			getMainControl()->update(*docked_system_, true);
 		}
 		
 		// selects and shows the entry above the current selected entry
@@ -175,38 +229,56 @@ namespace BALL
 					break;
 			}
 			
-			// score the results of the docking algorithm
-			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set_);
-			conformation_set_.setScoring(ranked_conformations);
+			// apply scoring function; set new scores in the conformation set
+			ConformationSet conformation_set = dock_res_->getConformationSet();
+			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set);
+			conformation_set.setScoring(ranked_conformations);
+			dock_res_->setConformationSet(conformation_set);
 			
-			// add new score column to score vector scores_
-			vector<float> score;
+			// to add a new scoring to dock_res_ we need the name, options and score vector of the scoring function
+			vector<float> scores;
 			for (unsigned int i = 0; i < ranked_conformations.size(); i++)
 			{
-				score.push_back(ranked_conformations[i].second);
+				scores.push_back(ranked_conformations[i].second);
 			}
-			addScore(score);
+			Options options; ////////// !!!!!!!!!!!!!
+			dock_res_->addScoring(scoring_functions->currentText(), options, scores);
 			
+			/*
 			// before filling the table clear it
 			result_table->setSelectionMode(QTable::Multi);
 			result_table->selectCells(0,0,result_table->numRows()-1, result_table->numCols()-1);
 			result_table->clearSelection();
 			result_table->setSelectionMode(QTable::SingleRow);
+			*/
+			
+			// before filling the table with a new score column, sort table by snapshot number
+			// because the scores in the vector are also sorted by them
+			sortTable(0);
 			
 			// add new column to the table of the result dialog, where the new scores are shown
 			int num_column = result_table->numCols();
 			result_table->insertColumns(num_column,1);
-			result_table->horizontalHeader()->setLabel(num_column, scoring_functions->currentText());			
+			result_table->horizontalHeader()->setLabel(num_column, scoring_functions->currentText());
 			
+			/*
 			// fill table
 			for(int row = 0 ; row < result_table->numRows(); row++)
 			{
 				QString s;
 				result_table->setText(row,0,s.setNum(row));
-				for(unsigned int column = 0; column < scores_.size(); column++)
+				for(unsigned int column = 0; column < scores.size(); column++)
 				{
 				 result_table->setText(row,column+1,s.setNum(scores_[column][row]));
 				}
+			}
+			*/
+			
+			// fill new column
+			for(unsigned int i = 0; i < scores.size(); i++)
+			{
+				QString s;
+				result_table->setText(i, num_column, s.setNum(scores[i]));
 			}
 			
 			// sort by new column
@@ -268,5 +340,23 @@ namespace BALL
 			}
 		}
 		
+		/*implementation of nested class Compare_		
+		*/
+		// default constructor
+		DockResultDialog::Compare_::Compare_() throw()
+		{}
+		
+		// constructor
+		DockResultDialog::Compare_::Compare_(int index) throw()
+		{ index_ = index; }
+		
+		// destructor
+		DockResultDialog::Compare_::~Compare_() throw()
+		{}
+			
+		// operator ()
+		bool DockResultDialog::Compare_::operator() (const vector<float>& a, const vector<float>& b) const
+			throw()
+		{ return a[index_] < b[index_]; }
 	}
 }

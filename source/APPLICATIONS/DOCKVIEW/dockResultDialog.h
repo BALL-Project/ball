@@ -47,13 +47,17 @@ namespace BALL
 					
 					/**  Assignment operator
 					*/
-					const DockResultDialog& operator =(const DockResultDialog& res_dialog);
+					const DockResultDialog& operator =(const DockResultDialog& res_dialog)
+						throw();
 						
 					void setDockResult(DockResult* dock_res)
-						throw() {dock_res_ = dock_res;}
+						throw();
+						
+					void setDockedSystem(System* system)
+						throw();
 						
 					// add scoring function to ComboBox and its options dialog to HashMap
-					void addScoringFunction(QString name, int score_func, QDialog* dialog=0)
+					void addScoringFunction(const QString& name, const int score_func, QDialog* dialog=0)
 						throw();
 					
 				public slots:
@@ -94,20 +98,17 @@ namespace BALL
 						public:
 
 							// default constructor
-							Compare_() throw()
-							{}
+							Compare_() throw();
 							
 							// constructor
-							Compare_(int index) throw()
-							{ index_ = index; }
+							Compare_(int index) throw();
 		
 							// destructor
-							~Compare_() throw()
-							{}
+							~Compare_() throw();
 					
 							// operator ()
-							bool operator() (const vector<float> a, const vector<float> b) const
-								{ return a[index_] < b[index_]; }
+							bool operator() (const vector<float>& a, const vector<float>& b) const
+								throw();
 					
 							int index_;
 					};
@@ -116,11 +117,7 @@ namespace BALL
 				
 					DockResult* dock_res_;
 					
-					//QString scoring_name_;
-					
-					
-					// vector contains scores of different scoring functions
-					//vector<vector<float> > scores_;
+					System* docked_system_;
 					
 					// key: ScoringFunction(enum), value: advanced options dialog
 					HashMap<int, QDialog*> scoring_dialogs_;
