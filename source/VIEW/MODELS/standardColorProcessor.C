@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.43 2004/09/16 11:19:52 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.44 2004/09/27 21:40:39 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -184,7 +184,7 @@ namespace BALL
 			throw()
 			: ColorProcessor()
 		{
-#define BALL_NR_RESIDUES 25
+#define BALL_NR_RESIDUES 26
 
 			const unsigned char color_values[BALL_NR_RESIDUES][3] =
 			{
@@ -213,7 +213,8 @@ namespace BALL
 				{255, 255 , 0}, // A
 				{255, 0, 0},   	// C
 				{0, 255, 0},  	// G
-				{0, 0, 255}    	// T
+				{0, 0, 255},   	// T
+				{50, 50, 255}  	// U
 			};                                       
 
 			const char* residue_names[BALL_NR_RESIDUES] = 
@@ -222,7 +223,8 @@ namespace BALL
 				"ILE", "SER", "THR", "CYS", "MET",
 				"PRO", "ASP", "ASN", "GLU", "GLN",
 				"LYS", "ARG", "HIS", "PHE", "TYR",
-				"TRP", "A",   "C",   "G",   "T"
+				"TRP", "A",   "C",   "G",   "T",
+				"U"
 			};
 			
 			for (Size i = 0; i < BALL_NR_RESIDUES; i++)

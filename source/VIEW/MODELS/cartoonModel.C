@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.48 2004/09/27 14:24:03 oliver Exp $
+// $Id: cartoonModel.C,v 1.49 2004/09/27 21:43:46 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -229,31 +229,42 @@ namespace BALL
 					}
 				}
 
-				Vector3 v = base_atom->getPosition() - partner_base->getPosition();
-				v /= 2.5;
+				Vector3 d = base_atom->getPosition() - partner_base->getPosition();
+				Vector3 pos1, pos2;
+				String name = ((Residue*)base_atom->getParent())->getName();
+				if (name == "A" || name == "G")
+				{
+					pos1 = base_atom->getPosition() - d * (6./11.);
+					pos2 = partner_base->getPosition() + d * (4./11.0);
+				}
+				else
+				{
+					pos1 = base_atom->getPosition() - d * (4./11.);
+					pos2 = partner_base->getPosition() + d * (6./11.0);
+				}
 
 				Tube* tube = new Tube;
 				tube->setVertex1(base_atom->getPosition());
-				tube->setVertex2(base_atom->getPosition() - v);
+				tube->setVertex2(pos1);
 				tube->setComposite(r);
 				tube->setRadius(DNA_ladder_radius_);
 				geometric_objects_.push_back(tube);
 
 				Sphere* sphere1 = new Sphere;
-				sphere1->setPosition(base_atom->getPosition() -v);
+				sphere1->setPosition(pos1);
 				sphere1->setRadius(DNA_ladder_radius_);
 				sphere1->setComposite(r);
 				geometric_objects_.push_back(sphere1);
 
 				Tube* tube2 = new Tube;
 				tube2->setVertex1(partner_base->getPosition());
-				tube2->setVertex2(partner_base->getPosition() + v);
+				tube2->setVertex2(pos2);
 				tube2->setComposite(partner);
 				tube2->setRadius(DNA_ladder_radius_);
 				geometric_objects_.push_back(tube2);
 
 				Sphere* sphere2 = new Sphere;
-				sphere2->setPosition(partner_base->getPosition() + v);
+				sphere2->setPosition(pos2);
 				sphere2->setRadius(DNA_ladder_radius_);
 				sphere2->setComposite(partner);
 				geometric_objects_.push_back(sphere2);
