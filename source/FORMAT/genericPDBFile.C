@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.14 2001/07/31 00:31:51 oliver Exp $
+// $Id: genericPDBFile.C,v 1.15 2001/08/23 10:29:34 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -79,6 +79,24 @@ namespace BALL
 
 	GenericPDBFile::GenericPDBFile()
 		:	current_model_(INVALID_INDEX),
+			selected_model_(0),
+			current_record_(INVALID_INDEX),
+			record_fields_(0),
+			current_record_type_(PDB::RECORD_TYPE__UNKNOWN)
+	{
+		compare_record_type_format_.record_type = PDB::RECORD_TYPE__UNKNOWN;
+		memcpy(const_cast<char*>(compare_record_type_format_.string), const_cast<char*>("      "), 7);
+		compare_record_type_format_.format_string = "";
+
+		memset(line_buffer_, 0, sizeof(line_buffer_));
+		memset(&record_UNKNOWN, 0, sizeof(PDB::RecordUNKNOWN));
+	}
+
+	GenericPDBFile::GenericPDBFile(const GenericPDBFile& file)
+		throw()
+		:	File(),
+			PropertyManager(file),
+			current_model_(INVALID_INDEX),
 			selected_model_(0),
 			current_record_(INVALID_INDEX),
 			record_fields_(0),

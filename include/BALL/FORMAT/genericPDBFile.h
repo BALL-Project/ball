@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.12 2001/05/11 02:13:48 oliver Exp $
+// $Id: genericPDBFile.h,v 1.13 2001/08/23 10:29:34 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -814,6 +814,9 @@ namespace BALL
 
 		GenericPDBFile();
 
+		GenericPDBFile(const GenericPDBFile& file)
+			throw();
+		
 		virtual ~GenericPDBFile()
 			throw();
 
