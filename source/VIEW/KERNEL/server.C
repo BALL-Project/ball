@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.5 2003/09/22 11:26:03 amoll Exp $
+// $Id: server.C,v 1.6 2003/10/15 13:37:30 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -223,8 +223,6 @@ namespace BALL
 				server_icon_->hide();
 				QToolTip::add(server_icon_, "VIEW Server disabled");
 			}
-
-			setStatusbarText("");
 		}
 		
 		void Server::fetchPreferences(INIFile &inifile)
