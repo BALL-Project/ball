@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.2 2000/10/11 09:38:07 oliver Exp $
+// $Id: BSDTree.h,v 1.3 2000/10/17 10:10:47 oliver Exp $
 
 #ifndef BALL_STRUCTURE_BSDTREE_H
 #define BALL_STRUCTURE_BSDTREE_H
@@ -60,6 +60,8 @@ namespace BALL
 		{
 		}
 
+
+		// BAUSTELLE: should honor the deep flag!
 		/**	Copy constructor.
 				Create a new BSDTree object from another.
 				@param bsd_tree the BSDTree object to be copied
@@ -71,7 +73,7 @@ namespace BALL
 		}
 
 		/**	Detailed constructor.
-				Create a new BSDTree object from a vector of TVector3, a list of int, a Direction and two
+				Create a new BSDTree object from a vector of TVector3, a list of Index, a Direction and two
 				pointers to BSDTrees.
 				@param	p assigned to the points
 				@param	prt assigned to the indices of this part of the tree
@@ -80,19 +82,20 @@ namespace BALL
 				@param	l assigned to the left child
 				@param	r assigned to the right child
 		*/
-		TBSDTree(const vector< TVector3<T> >& p, const list<int>& prt, const Direction& d,
+		TBSDTree(const vector<TVector3<T> >& p, const list<Index>& prt, 
+						 const Direction& d,
 						 const TBox3<T>& bb, TBSDTree<T>* l, TBSDTree<T>* r)
 			: point(p), part(prt), division(d), bounding_box(bb), left(l), right(r)
 		{
 		}
 
 		/**	Detailed constructor.
-				Create a new BSDTree object from a vector of TVector3, a list of int, a Direction and two
+				Create a new BSDTree object from a vector of TVector3, a list of Index, a Direction and two
 				pointers to BSDTrees.
 				@param	p assigned to the points
 				@param	prt assigned to the indices of this part of the tree
 		*/
-		TBSDTree(const vector< TVector3<T> >& p, const list<int>& prt, const string& pr, const string& s)
+		TBSDTree(const vector< TVector3<T> >& p, const list<Index>& prt, const string& pr, const string& s)
 		{
 			point = p;
 			part = prt;
@@ -147,52 +150,52 @@ namespace BALL
 		//@{
 		T getMin(Direction direction)
 		{
-			int d;
+			Index d;
 			switch (direction)
-				{
-					case TBSDTree<T>::DIRECTION_X :	d = 0; break;
-					case TBSDTree<T>::DIRECTION_Y :	d = 1; break;
-					case TBSDTree<T>::DIRECTION_Z :	d = 2; break;
-					default												:	d = 0;
-				}
+			{
+				case TBSDTree<T>::DIRECTION_X :	d = 0; break;
+				case TBSDTree<T>::DIRECTION_Y :	d = 1; break;
+				case TBSDTree<T>::DIRECTION_Z :	d = 2; break;
+				default												:	d = 0;
+			}
 			if (part.size() == 0)
-				{
-					throw Exception::SizeUnderflow(__FILE__, __LINE__);
-				}
-				else
-				{
-					T min = point[*part.begin()][d];
-					for (list<int>::iterator i = part.begin(); i != part.end(); i++)
-						{
-							min = Maths::min(point[*i][d],min);
-						}
-					return min;
-				}
+			{
+				throw Exception::SizeUnderflow(__FILE__, __LINE__);
+			}
+			else
+			{
+				T min = point[*part.begin()][d];
+				for (list<Index>::iterator i = part.begin(); i != part.end(); i++)
+					{
+						min = Maths::min(point[*i][d],min);
+					}
+				return min;
+			}
 		}
 
 		T getMax(Direction direction)
 		{
-			int d;
+			Index d;
 			switch (direction)
-				{
-					case TBSDTree<T>::DIRECTION_X :	d = 0; break;
-					case TBSDTree<T>::DIRECTION_Y :	d = 1; break;
-					case TBSDTree<T>::DIRECTION_Z :	d = 2; break;
-					default												:	d = 0;
-				}
+			{
+				case TBSDTree<T>::DIRECTION_X :	d = 0; break;
+				case TBSDTree<T>::DIRECTION_Y :	d = 1; break;
+				case TBSDTree<T>::DIRECTION_Z :	d = 2; break;
+				default												:	d = 0;
+			}
 			if (part.size() == 0)
-				{
-					throw Exception::SizeUnderflow(__FILE__, __LINE__);
-				}
-				else
-				{
-					T max = point[*part.begin()][d];
-					for (list<int>::iterator i = part.begin(); i != part.end(); i++)
-						{
-							max = Maths::max(point[*i][d],max);
-						}
-					return max;
-				}
+			{
+				throw Exception::SizeUnderflow(__FILE__, __LINE__);
+			}
+			else
+			{
+				T max = point[*part.begin()][d];
+				for (list<Index>::iterator i = part.begin(); i != part.end(); i++)
+					{
+						max = Maths::max(point[*i][d],max);
+					}
+				return max;
+			}
 		}
 
 		void build()
@@ -234,16 +237,16 @@ namespace BALL
 											middle = (x_max+x_min)/2;
 										}
 								}
-							int d;
+							Index d;
 							switch (division)
 								{
 									case TBSDTree<T>::DIRECTION_X :	d = 0; break;
 									case TBSDTree<T>::DIRECTION_Y :	d = 1; break;
 									case TBSDTree<T>::DIRECTION_Z :	d = 2; break;
 								}
-							list<int> left_part;
-							list<int> right_part;
-							for (list<int>::iterator i = part.begin(); i != part.end(); i++)
+							list<Index> left_part;
+							list<Index> right_part;
+							for (list<Index>::iterator i = part.begin(); i != part.end(); i++)
 								{
 									if (Maths::isLess(point[*i][d],middle))
 										{
@@ -267,7 +270,7 @@ namespace BALL
 				}
 		}
 
-		list<int> get(const TVector3<T>& p, const T& length)
+		list<Index> get(const TVector3<T>& p, const T& length)
 		{
 			TBox3<T> test_box(TVector3<T>(p.x-length,p.y-length,p.z-length),
 												TVector3<T>(p.x+length,p.y+length,p.z+length));
@@ -275,14 +278,14 @@ namespace BALL
 				{
 					if (bounding_box.isIntersecting(test_box))
 						{
-							list<int> temp1 = left->get(p,length);
-							list<int> temp2 = right->get(p,length);
+							list<Index> temp1 = left->get(p,length);
+							list<Index> temp2 = right->get(p,length);
 							temp1.merge(temp2);
 							return temp1;
 						}
 						else
 						{
-							list<int> empty;
+							list<Index> empty;
 							empty.erase(empty.begin(),empty.end());
 							return empty;
 						}
@@ -295,7 +298,7 @@ namespace BALL
 						}
 						else
 						{
-							list<int> empty;
+							list<Index> empty;
 							empty.erase(empty.begin(),empty.end());
 							return empty;
 						}
@@ -303,7 +306,7 @@ namespace BALL
 		}
 
 
-		void remove(int i)
+		void remove(Index i)
 		{
 			part.remove(i);
 			if (left != NULL)
@@ -330,11 +333,11 @@ namespace BALL
 
 		/**	The points stored in the tree.
 		*/
-		vector< TVector3<T> > point;
+		vector<TVector3<T> > point;
 
 		/** The points stored in this part of the tree.
 		*/
-		list<int> part;
+		list<Index> part;
 		
 		/** The direction of division.
 		*/
@@ -378,8 +381,8 @@ namespace BALL
 				case TBSDTree<T>::DIRECTION_Z :	s << "z "; break;
 			}
 		s << bsd_tree.bounding_box << "[";
-		list<int> liste = bsd_tree.part;
-		for (list<int>::iterator i = liste.begin(); i != liste.end(); i++)
+		list<Index> liste = bsd_tree.part;
+		for (list<Index>::iterator i = liste.begin(); i != liste.end(); i++)
 			{
 				s << *i << " ";
 			}
