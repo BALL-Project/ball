@@ -1,4 +1,4 @@
-// $Id: sphere.C,v 1.9.4.2 2002/12/07 02:19:53 amoll Exp $
+// $Id: sphere.C,v 1.9.4.3 2002/12/08 16:50:04 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 
@@ -138,10 +138,6 @@ namespace BALL
 		{
 			return true;  
 		}
-
-#	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/PRIMITIV/sphere.iC>
-#	endif
 		
 	} // namespace VIEW
 
