@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.h,v 1.17 2002/12/13 12:44:07 anker Exp $
+// $Id: genericPDBFile.h,v 1.18 2002/12/13 13:30:58 anker Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -38,8 +38,7 @@ namespace BALL
 		{
 			SIZE_OF_PDB_RECORD_LINE      = 80,
 			SIZE_OF_PDB_LINE_BUFFER      = 256,   
-			SIZE_OF_FORMAT_STRING_BUFFER = 256,
-			FIRST_MODEL                  = -1
+			SIZE_OF_FORMAT_STRING_BUFFER = 256
 		};
 
 		// ?????
