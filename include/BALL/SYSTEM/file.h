@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.18 2000/12/19 00:57:00 amoll Exp $
+// $Id: file.h,v 1.19 2000/12/19 13:28:06 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -204,6 +204,14 @@ namespace BALL
 				@return bool true if the file could be reopend
 		*/
 		bool reopen()
+			throw (Exception::FileNotFound);
+
+		/**	Reopen the file with a different mode.
+				The file is closed and reopend.
+				@param open_mode the new mode
+				@return bool true if the file could be reopend
+		*/
+		bool reopen(File::OpenMode open_mode)
 			throw (Exception::FileNotFound);
 
 		/**	Close the file.
