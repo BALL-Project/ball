@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.80.2.1 2004/05/06 12:57:53 amoll Exp $
+// $Id: mainControl.C,v 1.80.2.2 2004/06/03 16:31:17 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -528,9 +528,11 @@ namespace BALL
 						rep->update(false);
 					}
 				}
-				
+		
+			#ifndef BALL_QT_HAS_THREADS
 				RepresentationMessage* ur_message = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
 				notify_(ur_message);
+			#endif
 			}
 
 			return true;
