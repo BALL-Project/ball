@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.5 2000/12/04 16:09:13 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.6 2000/12/04 21:05:28 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -196,13 +196,13 @@ class RegularData2DWidget
   void slotOverlayMove(int i);
 
  protected:
-  QPixmap *pm, *legendMap, *bufferMap;
-  PixWid *pixWid;
-  Size legendLastX, legendLastY;
+  QPixmap *pm_, *legend_map_, *buffer_map_;
+  PixWid *pix_wid_;
+  Size legend_last_x_, legend_last_y_;
   /* Length of original data. */
-  Size lengthx, lengthy;
+  Size lengthx_, lengthy_;
   /* Length of field (after interpolation). */
-  Size fullLengthx, fullLengthy;
+  Size full_length_x_, full_length_y_;
   /* Range. */
   double min_, max_;
   /* Flag that decides whether to plot mousepos or not. */
@@ -231,5 +231,5 @@ class RegularData2DWidget
   DlgMoveOverlay* mvover_;
   Position ind_side_, ind_updown_;
 };
-  
+
 #endif

@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.8 2000/12/04 21:01:21 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.9 2000/12/04 21:10:18 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -534,18 +534,18 @@ void RegularData2DWidget::drawContents( QPainter *paint, int clipx, int clipy, i
 
     // Zeichnen der Bildlegende.
     if (legend_map_) {
-      bitBlt( pix_wid_, legendLastX, legendLastY, buffer_map_ );
+      bitBlt( pix_wid_, legend_last_x_, legend_last_y_, buffer_map_ );
 
-      legendLastX = contentsX() + visibleWidth() - legend_map_->width() - 12;
-      legendLastY = contentsY() + 8;
+      legend_last_x_ = contentsX() + visibleWidth() - legend_map_->width() - 12;
+      legend_last_y_ = contentsY() + 8;
       
-      bitBlt( buffer_map_, 0, 0, pix_wid_, legendLastX, legendLastY );
+      bitBlt( buffer_map_, 0, 0, pix_wid_, legend_last_x_, legend_last_y_ );
       
       paint->setPen( QColor( black ) );
-      paint->drawRect( legendLastX, legendLastY, legend_map_->width() + 4, legend_map_->height() + 4 );
+      paint->drawRect( legend_last_x_, legend_last_y_, legend_map_->width() + 4, legend_map_->height() + 4 );
       paint->setPen( QColor( white ) );
-      paint->drawRect( legendLastX + 1, legendLastY + 1, legend_map_->width() + 2, legend_map_->height() + 2 );
-      paint->drawPixmap( legendLastX + 2, legendLastY + 2, *legend_map_ );
+      paint->drawRect( legend_last_x_ + 1, legend_last_y_ + 1, legend_map_->width() + 2, legend_map_->height() + 2 );
+      paint->drawPixmap( legend_last_x_ + 2, legend_last_y_ + 2, *legend_map_ );
     };
   };
 }
@@ -559,16 +559,16 @@ void RegularData2DWidget::paintEvent( QPaintEvent *e )
 
     // draw the legend.
     if (legend_map_) {
-      legendLastX = contentsX() + visibleWidth() - legend_map_->width() - 12;
-      legendLastY = contentsY() + 8;
+      legend_last_x_ = contentsX() + visibleWidth() - legend_map_->width() - 12;
+      legend_last_y_ = contentsY() + 8;
 
       bitBlt( buffer_map_, 0, 0, pix_wid_, contentsX() + visibleWidth() - legend_map_->width() - 12, contentsY() + 8, legend_map_->width() + 4, legend_map_->height() + 4 );
 
       paint.setPen( QColor( black ) );
-      paint.drawRect( legendLastX, legendLastY, legend_map_->width() + 4, legend_map_->height() + 4 );
+      paint.drawRect( legend_last_x_, legend_last_y_, legend_map_->width() + 4, legend_map_->height() + 4 );
       paint.setPen( QColor( white ) );
-      paint.drawRect( legendLastX + 1, legendLastY + 1, legend_map_->width() + 2, legend_map_->height() + 2 );
-      paint.drawPixmap( legendLastX + 2, legendLastY + 2, *legend_map_ );
+      paint.drawRect( legend_last_x_ + 1, legend_last_y_ + 1, legend_map_->width() + 2, legend_map_->height() + 2 );
+      paint.drawPixmap( legend_last_x_ + 2, legend_last_y_ + 2, *legend_map_ );
     };
   };
 }
