@@ -1,4 +1,4 @@
-// $Id: colorCalculator.h,v 1.3 1999/12/28 18:38:06 oliver Exp $
+// $Id: colorCalculator.h,v 1.4 2000/01/11 20:11:34 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -41,7 +41,7 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-
+		
 		/**
 		*/
 		class ColorCalculator
@@ -49,6 +49,15 @@ namespace BALL
 				public Visitor<Composite>
 		{
 			public:
+			
+			/**	@name	Type definitions
+			*/
+			//@{
+				
+			/**	ColorMap type
+			*/
+			typedef StringHashMap<ColorRGBA>	ColorMap;
+			//@}
 
 			/**	@name	Constructors and Destructors
 			*/
@@ -88,17 +97,21 @@ namespace BALL
 			*/
 			//@{
 
-			void setColorTable(const ColorTable& color_table);
+			void setDefaultColor(const ColorRGBA& color);
 
-			void resetColorTable();
-
-			const ColorTable* getColorTable() const;
+			const ColorRGBA& getDefaultColor() const;
 
 			const ColorRGBA& getColor() const;
+
+			void setColorMap(const ColorMap& color_map);
+
+			const ColorMap& getColorMap() const;				
 
 			virtual void visit(Atom& atom);
 
 			virtual void visit(Composite& composite);
+
+			virtual const String& calculateKey(const Atom& atom) const;
 			//@}
 			
 
@@ -112,13 +125,11 @@ namespace BALL
 				(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
-
-				
-			private:  
-
-			ColorRGBA color_;
-
-			ColorTable* color_table_;
+			protected:
+			
+			ColorMap		color_map_;
+			ColorRGBA		default_color_;
+			ColorRGBA		color_;
 		};
 
 			
