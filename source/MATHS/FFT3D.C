@@ -1,4 +1,4 @@
-// $Id: FFT3D.C,v 1.2 2002/10/30 10:57:07 anhi Exp $
+// $Id: FFT3D.C,v 1.3 2003/01/13 20:53:43 anhi Exp $
 
 #include <BALL/MATHS/FFT3D.h>
 
@@ -715,7 +715,7 @@ namespace BALL
 				newGrid[x + (y + z*lengthY)*lengthZ] = dataOut*normalization;
 			}
 
-			to.set(newGrid);
+			to = newGrid;
 
 			return to;
 		}
@@ -784,7 +784,7 @@ namespace BALL
 				newGrid[x + (y + z*lengthY)*lengthZ] = dataOut*normalization*from.phase(r);
 			}
 
-			to.set(newGrid);
+			to = newGrid;
 
 			return to;
 		}
@@ -829,7 +829,7 @@ namespace BALL
 				newGrid[x + (y + z*lengthY)*lengthZ] = dataOut.re*normalization;
 			}
 
-			to.set(newGrid);
+			to = newGrid;
 
 			return to;
 		}
@@ -929,7 +929,7 @@ namespace BALL
 				newGrid[x + (y + z*lengthY)*lengthZ] = (dataOut*normalization*from.phase(r)).re;
 			}
 
-			to.set(newGrid);
+			to = newGrid;
 
 			return to;
 		}
