@@ -1,4 +1,4 @@
-// $Id: solventParameter.C,v 1.3 2000/10/17 17:20:45 anker Exp $
+// $Id: solventParameter.C,v 1.4 2000/10/20 15:20:44 anker Exp $
 
 #include <BALL/SOLVATION/solventParameter.h>
 
@@ -145,11 +145,5 @@ namespace BALL
 					solvent_atoms_);
 			return true;
 		}
-		// control flow should not reach this point
-		Log.error() << "SolventParameter::extractSection(): "
-			<< "reached unreachable part of program" << endl;
-		return false;
-
 	}
-
 }
