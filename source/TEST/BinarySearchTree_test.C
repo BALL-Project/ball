@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.14 2000/08/21 18:30:09 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.15 2000/08/22 16:59:55 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -42,7 +42,7 @@ void initialize_()
 	rrrightitem_ = TBSTreeItem<int>(8, 0, 0, (char) BSTreeItem::BLACK);
 }
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.14 2000/08/21 18:30:09 amoll Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.15 2000/08/22 16:59:55 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -562,15 +562,51 @@ CHECK(applyPreorder)
 RESULT
 
 CHECK(applyInorder)
-  //BAUSTELLE
+	myproc.start();
+	item_.applyInorder(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(*(myproc.getPointer()), 3) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 2) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 1) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 6) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 5) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 4) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 3) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 7) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyPostorder)
-  //BAUSTELLE
+	myproc.start();
+	item_.applyPostorder(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(*(myproc.getPointer()), 3) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 2) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 6) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 5) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 8) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 7) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 4) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 1) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyLevelorder)
-  //BAUSTELLE
+	myproc.start();
+	item_.applyLevelorder(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(*(myproc.getPointer()), 1) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 2) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 4) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 3) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 5) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 7) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 6) myproc.forward();
+	TEST_EQUAL(*(myproc.getPointer()), 8) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyPreorderFlat)
@@ -660,7 +696,7 @@ CHECK(BSTreeItem::bool operator == (const BSTreeIterator& iterator) const )
 	TEST_EQUAL(*it == it2, true)
 	it2 = BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__LEVELORDER);
 	TEST_EQUAL(*it == it2, false)
-	BSTreeIterator* it3;
+//	BSTreeIterator* it3;
 //	it3 = new BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__INORDER); // Segfault ???
 /*	TEST_EQUAL(it->forward(), &leftitem)
 	it2 = BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__LEVELORDER);
