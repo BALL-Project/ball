@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.13 2000/06/03 00:09:25 amoll Exp $
+// $Id: secondaryStructure.h,v 1.14 2000/06/03 00:12:04 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -304,7 +304,7 @@ namespace BALL
 		/** @name STORERS */
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
@@ -312,7 +312,7 @@ namespace BALL
 		virtual void read(std::istream& s);
 
 		/* Persistent stream output and state storage.
-				Write persistent bond data to the output stream {\em s} and store the state of {\em *this}.
+				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this}

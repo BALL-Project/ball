@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.8 2000/06/03 00:09:24 amoll Exp $
+// $Id: fragment.h,v 1.9 2000/06/03 00:12:03 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -107,7 +107,7 @@ namespace BALL
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
@@ -115,7 +115,7 @@ namespace BALL
 		virtual void read(std::istream& s);
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}

@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.19 2000/05/07 11:55:46 amoll Exp $
+// $Id: baseFragment.h,v 1.20 2000/06/03 00:12:02 amoll Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -97,10 +97,16 @@ namespace BALL
 		/**	@name	Persistence */
 		//@{
 
-		/// Writes a persistent copy of the object
+		/**	Persistent writing.
+				Writes a BaseFragment object to a persistent stream.
+				@param pm the persistence manager
+		*/
 		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
-		/// Reads a persistent object
+		/**	Persistent reading.
+				Reads a BaseFragment object from a persistent stream.
+				@param pm the persistence manager
+		*/
 		virtual void persistentRead(PersistenceManager& pm);
 
 		//@}			
@@ -411,7 +417,7 @@ namespace BALL
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
@@ -419,7 +425,7 @@ namespace BALL
 		virtual void read(std::istream& s);
 
 		/* Persistent stream output and state storage.
-				Write persistent bond data to the output stream {\em s} and store the state of {\em *this}.
+				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this}
