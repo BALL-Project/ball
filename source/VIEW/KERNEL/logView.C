@@ -23,7 +23,7 @@ namespace BALL
 			setAutoUpdate(TRUE);
 		}
 
-		LogView::LogView(const LogView& view, bool /* deep */)
+		LogView::LogView(const LogView& view)
 			:	NotificationTarget<LogStreamNotifier>(),
 			  QMultiLineEdit(),
 				history_string_(view.history_string_),
@@ -44,26 +44,15 @@ namespace BALL
 
 			Log.remove(strstream_);
 
-			clear();
+			destroy();
 		}
-
+		
 		void LogView::clear()
 		{
 		}
 
-		bool LogView::isValid() const
+		void LogView::destroy()
 		{
-			return true;
-		}
-
-		void LogView::dump(ostream& s, Size depth) const
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-			
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
 		void LogView::read(istream & /* s */)

@@ -1,4 +1,4 @@
-// $Id: mesh.C,v 1.5 2000/12/21 17:03:46 amoll Exp $
+// $Id: mesh.C,v 1.6 2001/02/04 16:14:28 hekl Exp $
 
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 
@@ -21,7 +21,7 @@ namespace BALL
 		Mesh::Mesh(const Mesh& mesh, bool deep)
 			throw()
 			:	GeometricObject(mesh, deep),
-				ColorExtension(mesh, deep),
+				ColorExtension(mesh),
 				Surface(mesh)
 		{
 		}
@@ -63,7 +63,7 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::set(mesh, deep);
-			ColorExtension::set(mesh, deep);
+			ColorExtension::set(mesh);
 			//			Surface::set(mesh);
 		}
 
@@ -91,8 +91,7 @@ namespace BALL
 		bool Mesh::isValid() const
 			throw()
 		{
-			return (GeometricObject::isValid()
-										&& ColorExtension::isValid());
+			return (GeometricObject::isValid());
 										//										&& Surface::isValid());
 		}
 

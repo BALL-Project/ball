@@ -1,4 +1,4 @@
-// $Id: colorExtension1.C,v 1.4 1999/12/30 18:05:45 oliver Exp $
+// $Id: colorExtension1.C,v 1.5 2001/02/04 16:14:27 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension1.h>
 
@@ -16,8 +16,8 @@ namespace BALL
 		}
 
 		ColorExtension::ColorExtension
-			(const ColorExtension& color_extension, bool deep)
-			:	color_(color_extension.color_, deep)
+			(const ColorExtension& color_extension)
+			:	color_(color_extension.color_)
 		{
 		}
 
@@ -38,13 +38,12 @@ namespace BALL
 
 		void ColorExtension::destroy()
 		{
-			clear();
 		}
 
 		void ColorExtension::set
-			(const ColorExtension& color_extension, bool deep)
+			(const ColorExtension& color_extension)
 		{
-			color_.set(color_extension.color_, deep);
+			color_.set(color_extension.color_);
 		}
 
 		ColorExtension& ColorExtension::operator =
@@ -56,19 +55,14 @@ namespace BALL
 		}
 
 		void ColorExtension::get
-			(ColorExtension& color_extension, bool deep) const
+			(ColorExtension& color_extension) const
 		{
-			color_extension.set(*this, deep);
+			color_extension.set(*this);
 		}
 
 		void ColorExtension::swap(ColorExtension& color_extension)
 		{
 			color_.swap(color_extension.color_);
-		}
-
-		bool ColorExtension::isValid() const
-		{
-			return color_.isValid();
 		}
 
 		void ColorExtension::dump

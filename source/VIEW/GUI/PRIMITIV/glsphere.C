@@ -1,4 +1,4 @@
-// $Id: glsphere.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
+// $Id: glsphere.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsphere.h>
 #include <GL/gl.h>
@@ -18,7 +18,7 @@ namespace BALL
 
 		GLSphere::GLSphere(const GLSphere& GL_sphere, bool deep)
 			:	Sphere(GL_sphere, deep),
-				GLObject(GL_sphere, deep)
+				GLObject(GL_sphere)
 		{
 		}
 
@@ -29,7 +29,6 @@ namespace BALL
 		}
 
 		GLSphere::~GLSphere()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -40,14 +39,12 @@ namespace BALL
 		}
 
 		void GLSphere::clear()
-			throw()
 		{
 			Sphere::clear();
 			GLObject::clear();
 		}
 
 		void GLSphere::destroy()
-			throw()
 		{
 			Sphere::destroy();
 			GLObject::destroy();
@@ -90,13 +87,6 @@ namespace BALL
 							 (GLfloat)getRadius(),
 							 (GLfloat)getRadius());
 
-			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED))
-			{
-				drawUserDefined();
-				glPopMatrix();
-				return true;
-			}
-
 			unsigned int precision;
 			unsigned int mode;
 
@@ -115,7 +105,6 @@ namespace BALL
 		}
 
 		bool GLSphere::extract()
-			throw()
 		{
 			return Sphere::extract();
 		}

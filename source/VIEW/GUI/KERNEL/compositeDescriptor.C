@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
+// $Id: compositeDescriptor.C,v 1.3 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/compositeDescriptor.h>
 
@@ -74,8 +74,6 @@ namespace BALL
 
 		void CompositeDescriptor::clear()
 		{
-			list<CompositeDescriptor*>::iterator it = shallow_copies_.begin();
-
 			// clear all entities
 			HashMap<GLPrimitiveManager *, GLEntityDescriptor *>::Iterator entity_iterator;
 			for (entity_iterator = entities_.begin();
@@ -85,13 +83,35 @@ namespace BALL
 				(entity_iterator->second)->clear();
 			}
 
+			// reset internal values
 			object_collector_ = 0;
 			primitive_manager_ = 0;
 
+			/*
 			name_ptr_ = &name_;
 			center_ptr_ = &center_;
 			quaternion_ptr_ = &quaternion_;
+			*/
+		}
+			
+		void CompositeDescriptor::destroy()
+		{
+			clear();
 
+			// destroys all entities
+			HashMap<GLPrimitiveManager *, GLEntityDescriptor *>::Iterator entity_iterator;
+			for (entity_iterator = entities_.begin();
+					 entity_iterator != entities_.end();
+					 ++entity_iterator)
+			{
+				delete (entity_iterator->second);
+			}
+
+			entities_.clear();
+
+			list<CompositeDescriptor*>::iterator it = shallow_copies_.begin();
+
+			// destruction of shallow copies
 			for (;it != shallow_copies_.end();++it)
 			{
 				#ifdef BALL_VIEW_DEBUG
@@ -103,6 +123,9 @@ namespace BALL
 				delete *it;
 			}  
 
+			shallow_copies_.clear();
+
+			// destruction of composites
 			if (shallow_copy_ == false)
 			{
 				#ifdef BALL_VIEW_DEBUG
@@ -125,34 +148,10 @@ namespace BALL
 			}
 		}
 			
-		void CompositeDescriptor::destroy()
-		{
-			clear();
-
-			// destroys all entities
-			HashMap<GLPrimitiveManager *, GLEntityDescriptor *>::Iterator entity_iterator;
-			for (entity_iterator = entities_.begin();
-					 entity_iterator != entities_.end();
-					 ++entity_iterator)
-			{
-				delete (entity_iterator->second);
-			}
-		}
-			
 		void CompositeDescriptor::set
 			(CompositeDescriptor& composite_descriptor, bool deep)
 		{
-			clear();
-
-			// update entities
-			HashMap<GLPrimitiveManager *, GLEntityDescriptor *>::Iterator entity_it;
-
-			for (entity_it = entities_.begin();
-					 entity_it != entities_.end();
-					 ++entity_it)
-			{
-				entity_it->second->update();
-			}
+			destroy();
 
 			name_ = composite_descriptor.name_;
 			center_ = composite_descriptor.center_;

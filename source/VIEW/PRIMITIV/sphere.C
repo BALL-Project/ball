@@ -1,4 +1,4 @@
-// $Id: sphere.C,v 1.8 2000/12/22 19:12:18 amoll Exp $
+// $Id: sphere.C,v 1.9 2001/02/04 16:14:28 hekl Exp $
 
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 
@@ -22,9 +22,9 @@ namespace BALL
 		Sphere::Sphere(const Sphere& sphere, bool deep)
 			throw()
 			:	GeometricObject(sphere, deep),
-				ColorExtension(sphere, deep),
-				Vertex(sphere, deep),
-				Radius(sphere, deep)
+				ColorExtension(sphere),
+				Vertex(sphere),
+				Radius(sphere)
 		{
 		}
 
@@ -70,9 +70,9 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::set(sphere, deep);
-			ColorExtension::set(sphere, deep);
-			Vertex::set(sphere, deep);
-			Radius::set(sphere, deep);
+			ColorExtension::set(sphere);
+			Vertex::set(sphere);
+			Radius::set(sphere);
 		}
 
 		const Sphere& Sphere::operator = (const Sphere& sphere)
@@ -101,9 +101,7 @@ namespace BALL
 			throw()
 		{
 			return (GeometricObject::isValid() && 
-							 ColorExtension::isValid() && 
-											 Vertex::isValid() &&
-										   Radius::isValid());
+											 Vertex::isValid());
 		}
 
 		void Sphere::dump(ostream& s, Size depth) const

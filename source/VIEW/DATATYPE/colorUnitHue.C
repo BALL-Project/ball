@@ -1,4 +1,4 @@
-// $Id: colorUnitHue.C,v 1.4 1999/12/30 18:05:44 oliver Exp $
+// $Id: colorUnitHue.C,v 1.5 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
@@ -18,7 +18,7 @@ namespace BALL
 		}
 
 		ColorUnitHue::ColorUnitHue
-			(const ColorUnitHue& color_h_unit, bool /* deep */)
+			(const ColorUnitHue& color_h_unit)
 			:	value_(color_h_unit.value_)
 		{
 		}
@@ -175,11 +175,10 @@ namespace BALL
 
 		void ColorUnitHue::destroy()
 		{
-			clear();
 		}
 
 		void ColorUnitHue::set
-			(const ColorUnitHue& color_h_unit, bool /* deep */)
+			(const ColorUnitHue& color_h_unit)
 		{
 			value_ = color_h_unit.value_;
 		}
@@ -193,9 +192,9 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get
-			(ColorUnitHue& color_h_unit, bool deep) const
+			(ColorUnitHue& color_h_unit) const
 		{
-			color_h_unit.set(*this, deep);
+			color_h_unit.set(*this);
 		}
 
 		void ColorUnitHue::set(const char* char_ptr)
@@ -478,11 +477,6 @@ namespace BALL
 			color_h_unit.value_ = temp;
 		}
 
-		bool ColorUnitHue::isValid() const
-		{
-			return true;
-		}
-
 		void ColorUnitHue::dump
 			(ostream& s, Size depth) const
 		{
@@ -604,6 +598,14 @@ namespace BALL
 				if (c >= '0' && c <= '8')
 				{
 					number += (c - 48);
+				}
+				else if (c >= 'a' && c <= 'f' && char_ptr[1] < '6')
+				{
+					number += (c - 97) + 10;
+				}
+				else if (c >= 'A' && c <= 'F' && char_ptr[1] < '6')
+				{
+					number += (c - 65) + 10;
 				}
 				else
 				{

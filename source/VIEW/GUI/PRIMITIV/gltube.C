@@ -1,4 +1,4 @@
-// $Id: gltube.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
+// $Id: gltube.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gltube.h>
 #include <GL/gl.h>
@@ -17,7 +17,7 @@ namespace BALL
 
 		GLTube::GLTube(const GLTube& GL_tube, bool deep)
 			:	Tube(GL_tube, deep),
-				GLObject(GL_tube, deep)
+				GLObject(GL_tube)
 		{
 		}
 
@@ -103,13 +103,6 @@ namespace BALL
 			glScalef((GLfloat)getRadius(),
 							 (GLfloat)getRadius(),
 							 (GLfloat)getLength());
-
-			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED))
-			{
-				drawUserDefined();
-				glPopMatrix();
-				return true;
-			}
 
 			unsigned int precision;
 			unsigned int mode;

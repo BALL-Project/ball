@@ -1,4 +1,4 @@
-// $Id: server.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
+// $Id: server.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
 #include <BALL/COMMON/logStream.h>
@@ -101,7 +101,7 @@ namespace BALL
 			sock_inet_buf_->listen();
 
 			// check once per second
-			setIntervall(1000);
+			setInterval(1000);
 			startTimer();
 		}
 
@@ -226,7 +226,7 @@ namespace BALL
 		bool Server::isValid() const
 			throw()
 		{
-			return (QTTimer::isValid() && ConnectionObject::isValid());
+			return (ConnectionObject::isValid());
 		}
 
 		void Server::dump(ostream& s, Size depth) const

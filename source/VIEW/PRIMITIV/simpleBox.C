@@ -1,4 +1,4 @@
-// $Id: simpleBox.C,v 1.5 2000/12/22 19:12:18 amoll Exp $
+// $Id: simpleBox.C,v 1.6 2001/02/04 16:14:28 hekl Exp $
 
 #include <BALL/VIEW/PRIMITIV/simpleBox.h>
 
@@ -18,11 +18,11 @@ namespace BALL
 		{
 		}
 
-		SimpleBox::SimpleBox(const SimpleBox& SimpleBox, bool deep)
+		SimpleBox::SimpleBox(const SimpleBox& simpleBox, bool deep)
 			throw()
-			:	GeometricObject(SimpleBox, deep),
-				ColorExtension(SimpleBox, deep),
-				Vertex2(SimpleBox, deep)
+			:	GeometricObject(simpleBox, deep),
+				ColorExtension(simpleBox),
+				Vertex2(simpleBox)
 		{
 		}
 
@@ -61,40 +61,39 @@ namespace BALL
 			Vertex2::destroy();
 		}
 
-		void SimpleBox::set(const SimpleBox& SimpleBox, bool deep)
+		void SimpleBox::set(const SimpleBox& simpleBox, bool deep)
 			throw()
 		{
-			GeometricObject::set(SimpleBox, deep);
-			ColorExtension::set(SimpleBox, deep);
-			Vertex2::set(SimpleBox, deep);
+			GeometricObject::set(simpleBox, deep);
+			ColorExtension::set(simpleBox);
+			Vertex2::set(simpleBox);
 		}
 
-		const SimpleBox& SimpleBox::operator = (const SimpleBox& SimpleBox)
+		const SimpleBox& SimpleBox::operator = (const SimpleBox& simpleBox)
 			throw()
 		{
-			set(SimpleBox);
+			set(simpleBox);
 			return *this;
 		}
 
-		void SimpleBox::get(SimpleBox& SimpleBox, bool deep) const
+		void SimpleBox::get(SimpleBox& simpleBox, bool deep) const
 			throw()
 		{
-			SimpleBox.set(*this, deep);
+			simpleBox.set(*this, deep);
 		}
 
-		void SimpleBox::swap(SimpleBox& SimpleBox)
+		void SimpleBox::swap(SimpleBox& simpleBox)
 			throw()
 		{
-			GeometricObject::swap(SimpleBox);
-			ColorExtension::swap(SimpleBox);
-			Vertex2::swap(SimpleBox);
+			GeometricObject::swap(simpleBox);
+			ColorExtension::swap(simpleBox);
+			Vertex2::swap(simpleBox);
 		}
 
 		bool SimpleBox::isValid() const
 			throw()
 		{
 			return (GeometricObject::isValid() && 
-							 ColorExtension::isValid() && 
 							        Vertex2::isValid());
 		}
 

@@ -1,4 +1,4 @@
-// $Id: colorExtension3.C,v 1.5 2001/01/26 01:37:42 amoll Exp $
+// $Id: colorExtension3.C,v 1.6 2001/02/04 16:14:27 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension3.h>
 
@@ -18,9 +18,9 @@ namespace BALL
 		}
 
 		ColorExtension3::ColorExtension3
-			(const ColorExtension3& color_extension, bool deep)
-			:	ColorExtension2(color_extension, deep),
-				color3_(color_extension.color3_, deep)
+			(const ColorExtension3& color_extension)
+			:	ColorExtension2(color_extension),
+				color3_(color_extension.color3_)
 		{
 		}
 
@@ -42,14 +42,14 @@ namespace BALL
 
 		void ColorExtension3::destroy()
 		{
-			clear();
 		}
 
-		void ColorExtension3::set(const ColorExtension3& color_extension, bool deep)
+		void ColorExtension3::set
+			(const ColorExtension3& color_extension)
 		{
-			ColorExtension2::set(color_extension, deep);
+			ColorExtension2::set(color_extension);
 
-			color3_.set(color_extension.color3_, deep);
+			color3_.set(color_extension.color3_);
 		}
 
 		ColorExtension3& ColorExtension3::operator = (const ColorExtension3& color_extension)
@@ -59,9 +59,10 @@ namespace BALL
 			return *this;
 		}
 
-		void ColorExtension3::get(ColorExtension3& color_extension, bool deep) const
+		void ColorExtension3::get
+			(ColorExtension3& color_extension) const
 		{
-			color_extension.set(*this, deep);
+			color_extension.set(*this);
 		}
 
 		void ColorExtension3::swap(ColorExtension3& color_extension)
@@ -69,12 +70,6 @@ namespace BALL
 			ColorExtension2::swap(color_extension);
 
 			color3_.swap(color_extension.color3_);
-		}
-
-		bool ColorExtension3::isValid() const
-		{
-			return (ColorExtension2::isValid() &&
-							color3_.isValid());
 		}
 
 		void ColorExtension3::dump(ostream& s, Size depth) const

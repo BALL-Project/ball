@@ -3,7 +3,8 @@ DIRECTORY=VIEW/DATATYPE
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	color.C\
+	colorHSV.C\
+	colorRGBA.C\
 	colorTable.C\
 	colorUnit.C\
 	colorUnitHue.C

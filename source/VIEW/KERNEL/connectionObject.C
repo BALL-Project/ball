@@ -18,16 +18,6 @@ namespace BALL
 		{
 		}
 
-		ConnectionObject::ConnectionObject
-		  (const ConnectionObject& /* geometric_object */, bool /* deep */)
-			:
-			processing_message_queue_(false),
-			message_queue_(),
-			parent_(0),
-			children_connection_objects_()
-		{
-		}
-
 		ConnectionObject::~ConnectionObject()
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -157,18 +147,6 @@ namespace BALL
 			}
 
 			return object;
-    }
-
-		Options *ConnectionObject::getOptions()
-    {
-			ConnectionObject *object = getRoot();
-
-			if (object != this)
-			{
-				return object->getOptions();
-			}
-
-			return 0;
     }
 
 	  void ConnectionObject::onNotify(Message * /* message */)

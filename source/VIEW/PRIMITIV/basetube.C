@@ -1,4 +1,4 @@
-// $Id: basetube.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
+// $Id: basetube.C,v 1.8 2001/02/04 16:14:28 hekl Exp $
 
 #include <BALL/VIEW/PRIMITIV/basetube.h>
 
@@ -21,8 +21,8 @@ namespace BALL
 		BaseTube::BaseTube(const BaseTube& base_tube, bool deep)
 			throw()
 			:	GeometricObject(base_tube, deep),
-				Radius(base_tube, deep),
-				Vertex2(base_tube, deep)
+				Radius(base_tube),
+				Vertex2(base_tube)
 		{
 		}
 
@@ -65,8 +65,8 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::set(base_tube, deep);
-			Vertex2::set(base_tube, deep);
-			Radius::set(base_tube, deep);
+			Vertex2::set(base_tube);
+			Radius::set(base_tube);
 		}
 
 		const BaseTube& BaseTube::operator = (const BaseTube& base_tube)
@@ -94,8 +94,7 @@ namespace BALL
 			throw()
 		{
 			return (GeometricObject::isValid() &&
-										  Vertex2::isValid() && 
-										   Radius::isValid());
+										  Vertex2::isValid());
 		}
 
 		void BaseTube::dump(ostream& s, Size depth) const

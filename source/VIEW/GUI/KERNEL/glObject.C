@@ -1,4 +1,4 @@
-// $Id: glObject.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
+// $Id: glObject.C,v 1.3 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glObject.h>
 
@@ -15,7 +15,7 @@ namespace BALL
 		{
 		}
 
-		GLObject::GLObject(const GLObject& GL_object, bool /* deep */)
+		GLObject::GLObject(const GLObject& GL_object)
 			:	GL_primitive_manager_(GL_object.GL_primitive_manager_)
 		{
 		}
@@ -37,10 +37,9 @@ namespace BALL
 
 		void GLObject::destroy()
 		{
-			clear();
 		}
 
-		void GLObject::set(const GLObject& GL_object, bool /* deep */)
+		void GLObject::set(const GLObject& GL_object)
 		{
 			GL_primitive_manager_ = GL_object.GL_primitive_manager_;
 		}
@@ -52,9 +51,9 @@ namespace BALL
 			return *this;
 		}
 
-		void GLObject::get(GLObject& GL_object, bool deep) const
+		void GLObject::get(GLObject& GL_object) const
 		{
-			GL_object.set(*this, deep);
+			GL_object.set(*this);
 		}
 
 		void GLObject::swap(GLObject& GL_object)

@@ -1,4 +1,4 @@
-// $Id: glline.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
+// $Id: glline.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glline.h>
 #include <GL/gl.h>
@@ -19,11 +19,12 @@ namespace BALL
 		GLLine::GLLine(const GLLine& GL_line, bool deep)
 			throw()
 			:	Line(GL_line, deep),
-				GLObject(GL_line, deep)
+				GLObject(GL_line)
 		{
 		}
 
 		GLLine::GLLine(const GeometricObject& geometric_object)
+			throw()
 			:	Line(geometric_object),
 				GLObject()
 		{

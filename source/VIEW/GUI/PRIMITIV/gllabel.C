@@ -1,4 +1,4 @@
-// $Id: gllabel.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
+// $Id: gllabel.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <GL/gl.h>
@@ -25,13 +25,13 @@ namespace BALL
 			setProperty(PROPERTY__DRAWING_MODE_WIREFRAME);
 		}
 
-		GLLabel::GLLabel(const GLLabel& GL_Label, bool deep)
-			:	Label(GL_Label, deep),
-				GLObject(GL_Label, deep),
-				actual_font_(GL_Label.actual_font_),
-				old_font_(GL_Label.old_font_),
-				width_(GL_Label.width_),
-				height_(GL_Label.height_)
+		GLLabel::GLLabel(const GLLabel& label, bool deep)
+			:	Label(label, deep),
+				GLObject(label),
+				actual_font_(label.actual_font_),
+				old_font_(label.old_font_),
+				width_(label.width_),
+				height_(label.height_)
 		{
 			if (text_array_ != 0)
 			{
@@ -91,8 +91,6 @@ namespace BALL
 			Label::destroy();
 			GLObject::destroy();
 
-			actual_font_.setFamily("helvetica");
-
 			width_ = 0;
 			height_ = 0;
 
@@ -102,6 +100,39 @@ namespace BALL
 
 				text_array_ = 0;
 			}
+		}
+
+		void GLLabel::set(const GLLabel& label, bool deep)
+			throw()
+		{
+			Label::set(label, deep);
+			GLObject::set(label);
+
+			actual_font_ = label.actual_font_;
+		}
+
+		const GLLabel& GLLabel::operator = (const GLLabel& label)
+			throw()
+		{
+			set(label);
+			return *this;
+		}
+
+		void GLLabel::get(GLLabel& label, bool deep) const
+			throw()
+		{
+			label.set(*this, deep);
+		}
+
+		void GLLabel::swap(GLLabel& label)
+			throw()
+		{
+			Label::swap(label);
+			GLObject::swap(label);
+
+			QFont temp = actual_font_;
+			actual_font_ = label.actual_font_;
+			label.actual_font_ = actual_font_;
 		}
 
 		bool GLLabel::draw(bool with_names)

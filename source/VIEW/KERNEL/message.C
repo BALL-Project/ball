@@ -1,4 +1,4 @@
-// $Id: message.C,v 1.2 2000/05/16 15:46:57 hekl Exp $
+// $Id: message.C,v 1.3 2001/02/04 16:14:27 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 
@@ -17,7 +17,7 @@ namespace BALL
 		{
 		}
 
-		Message::Message(const Message& message, bool /* deep */)
+		Message::Message(const Message& message)
 			:
 			connection_object_(message.connection_object_),
 		  deletable_(message.deletable_)
@@ -40,7 +40,7 @@ namespace BALL
 		{
 		}
 
-		CompositeMessage::CompositeMessage(const CompositeMessage& message, bool /* deep */)
+		CompositeMessage::CompositeMessage(const CompositeMessage& message)
 			:
 			Message(message),
 			composite_(message.composite_),
@@ -62,7 +62,7 @@ namespace BALL
 		{
 		}
 
-		NewCompositeMessage::NewCompositeMessage(const CompositeMessage& message, bool /* deep */)
+		NewCompositeMessage::NewCompositeMessage(const CompositeMessage& message)
 			:
 			CompositeMessage(message)
 		{
@@ -82,7 +82,7 @@ namespace BALL
 		{
 		}
 
-		RemovedCompositeMessage::RemovedCompositeMessage(const CompositeMessage& message, bool /* deep */)
+		RemovedCompositeMessage::RemovedCompositeMessage(const CompositeMessage& message)
 			:
 			CompositeMessage(message)
 		{
@@ -102,7 +102,7 @@ namespace BALL
 		{
 		}
 
-	  ChangedCompositeMessage::ChangedCompositeMessage(const CompositeMessage& message, bool /* deep */)
+	  ChangedCompositeMessage::ChangedCompositeMessage(const CompositeMessage& message)
 			:
 			CompositeMessage(message)
 		{
@@ -115,14 +115,14 @@ namespace BALL
 					<< " of class " << RTTI::getName<ChangedompositeMessage>() << endl;
 			#endif 
 		}
-
+		/*
 		DisplayMessage::DisplayMessage()
 			:
 			CompositeMessage()
 		{
 		}
 
-		DisplayMessage::DisplayMessage(const DisplayMessage& message, bool /* deep */)
+		DisplayMessage::DisplayMessage(const DisplayMessage& message)
 			:
 			CompositeMessage(message)
 		{
@@ -135,7 +135,7 @@ namespace BALL
 					<< " of class " << RTTI::getName<DisplayMessage>() << endl;
 			#endif 
 		}
-
+		*/
 		SceneMessage::SceneMessage()
 			:
 			Message(),
@@ -145,7 +145,7 @@ namespace BALL
 		{
 		}
 
-		SceneMessage::SceneMessage(const SceneMessage& message, bool /* deep */)
+		SceneMessage::SceneMessage(const SceneMessage& message)
 			:
 			Message(message),
 			update_only_(message.update_only_),
@@ -169,7 +169,7 @@ namespace BALL
 		{
 		}
 
-		WindowMessage::WindowMessage(const WindowMessage& message, bool /* deep */)
+		WindowMessage::WindowMessage(const WindowMessage& message)
 			:
 			Message(message),
 			status_bar_(message.status_bar_)
@@ -191,7 +191,7 @@ namespace BALL
 		{
 		}
 
-		SelectionMessage::SelectionMessage(const SelectionMessage& message, bool /* deep */)
+		SelectionMessage::SelectionMessage(const SelectionMessage& message)
 			:
 			Message(message),
 			selection_(message.selection_)
@@ -213,7 +213,7 @@ namespace BALL
 		{
 		}
 
-		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage(const SelectionMessage& message, bool /* deep */)
+		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage(const SelectionMessage& message)
 			:
 			SelectionMessage(message)
 		{

@@ -1,4 +1,4 @@
-// $Id: label.C,v 1.5 2000/12/21 17:03:46 amoll Exp $
+// $Id: label.C,v 1.6 2001/02/04 16:14:28 hekl Exp $
 
 #include <BALL/VIEW/PRIMITIV/label.h>
 
@@ -13,7 +13,8 @@ namespace BALL
 		Label::Label()
 			throw()
 			:	GeometricObject(),
-				ColorExtension()
+				ColorExtension(),
+				Vertex()
 		{
 			PropertyManager::setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			PropertyManager::setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
@@ -23,8 +24,8 @@ namespace BALL
 		Label::Label(const Label& label, bool deep)
 			throw()
 			:	GeometricObject(label, deep),
-				ColorExtension(label, deep),
-				Vertex(label, deep)
+				ColorExtension(label),
+				Vertex(label)
 		{
 			PropertyManager::setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			PropertyManager::setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
@@ -34,7 +35,8 @@ namespace BALL
 		Label::Label(const GeometricObject& geometric_object)
 			throw()
 			:	GeometricObject(geometric_object),
-				ColorExtension()
+				ColorExtension(),
+				Vertex()
 		{
 			PropertyManager::setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			PropertyManager::setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
@@ -57,6 +59,7 @@ namespace BALL
 		{
 			GeometricObject::clear();
 			ColorExtension::clear();
+			Vertex::clear();
 		}
 
 		void Label::destroy()
@@ -64,33 +67,36 @@ namespace BALL
 		{ 
 			GeometricObject::destroy();
 			ColorExtension::destroy();
+			Vertex::destroy();
 		}
 
-		void Label::set(const Label& Label, bool deep)
+		void Label::set(const Label& label, bool deep)
 			throw()
 		{
-			GeometricObject::set(Label, deep);
-			ColorExtension::set(Label, deep);
+			GeometricObject::set(label, deep);
+			ColorExtension::set(label);
+			Vertex::set(label);
 		}
 
-		const Label& Label::operator = (const Label& Label)
+		const Label& Label::operator = (const Label& label)
 			throw()
 		{
-			set(Label);
+			set(label);
 			return *this;
 		}
 
-		void Label::get(Label& Label, bool deep) const
+		void Label::get(Label& label, bool deep) const
 			throw()
 		{
-			Label.set(*this, deep);
+			label.set(*this, deep);
 		}
 
-		void Label::swap(Label& Label)
+		void Label::swap(Label& label)
 			throw()
 		{
-			GeometricObject::swap(Label);
-			ColorExtension::swap(Label);
+			GeometricObject::swap(label);
+			ColorExtension::swap(label);
+			Vertex::swap(label);
 		}
 
 	  String Label::getTypeName() const
@@ -102,7 +108,8 @@ namespace BALL
 		bool Label::isValid() const
 			throw()
 		{
-			return (GeometricObject::isValid() && ColorExtension::isValid());
+			return (GeometricObject::isValid() &&
+							Vertex::isValid());
 		}
 
 		void Label::dump(ostream& s, Size depth) const
@@ -118,6 +125,7 @@ namespace BALL
 
 			GeometricObject::dump(s, depth + 1);
 			ColorExtension::dump(s, depth + 1);
+			Vertex::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}

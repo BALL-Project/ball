@@ -1,4 +1,4 @@
-// $Id: line.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
+// $Id: line.C,v 1.8 2001/02/04 16:14:28 hekl Exp $
 
 #include <BALL/VIEW/PRIMITIV/line.h>
 
@@ -21,8 +21,8 @@ namespace BALL
 		Line::Line(const Line& line, bool deep)
 			throw()
 			:	GeometricObject(line, deep),
-				ColorExtension(line, deep),
-				Vertex2(line, deep)
+				ColorExtension(line),
+				Vertex2(line)
 		{
 		}
 
@@ -65,8 +65,8 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::set(line, deep);
-			ColorExtension::set(line, deep);
-			Vertex2::set(line, deep);
+			ColorExtension::set(line);
+			Vertex2::set(line);
 		}
 
 		const Line& Line::operator = (const Line& line)
@@ -93,8 +93,7 @@ namespace BALL
 		bool Line::isValid() const
 			throw()
 		{
-			return (GeometricObject::isValid() && 
-							 ColorExtension::isValid() &&
+			return (GeometricObject::isValid() &&
 										  Vertex2::isValid());
 		}
 

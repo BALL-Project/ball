@@ -1,4 +1,4 @@
-// $Id: colorUnit.C,v 1.4 1999/12/30 18:05:44 oliver Exp $
+// $Id: colorUnit.C,v 1.5 2001/02/04 16:14:25 hekl Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
@@ -21,7 +21,7 @@ namespace BALL
 		{
 		}
 
-		ColorUnit::ColorUnit(const ColorUnit& color, bool /* deep */)
+		ColorUnit::ColorUnit(const ColorUnit& color)
 			:	value_(color.value_)
 		{
 		}
@@ -171,7 +171,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " 
-					<< RTTI::getName<ColorUnit>() << endl;
+						 << RTTI::getName<ColorUnit>() << endl;
 			#endif 
 
 			destroy();
@@ -184,10 +184,9 @@ namespace BALL
 
 		void ColorUnit::destroy()
 		{
-			clear();
 		}
 
-		void ColorUnit::set(const ColorUnit& color,bool /* deep */)
+		void ColorUnit::set(const ColorUnit& color)
 		{
 			value_ = color.value_;
 		}
@@ -199,9 +198,9 @@ namespace BALL
 			return *this;
 		}
 
-		void ColorUnit::get(ColorUnit& color, bool deep) const
+		void ColorUnit::get(ColorUnit& color) const
 		{
-			color.set(*this, deep);
+			color.set(*this);
 		}
 
 		void ColorUnit::set(const char* char_ptr)
@@ -498,11 +497,6 @@ namespace BALL
 			float temp = value_;
 			value_ = color.value_;
 			color.value_ = temp;
-		}
-
-		bool ColorUnit::isValid() const
-		{
-			return true;
 		}
 
 		void ColorUnit::dump

@@ -1,4 +1,4 @@
-// $Id: glpoint.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
+// $Id: glpoint.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glpoint.h>
 #include <GL/gl.h>
@@ -18,7 +18,7 @@ namespace BALL
 
 		GLPoint::GLPoint(const GLPoint& GL_point, bool deep)
 			:	Point(GL_point, deep),
-				GLObject(GL_point, deep)
+				GLObject(GL_point)
 		{
 		}
 
@@ -29,7 +29,6 @@ namespace BALL
 		}
 
 		GLPoint::~GLPoint()
-			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -40,14 +39,12 @@ namespace BALL
 		}
 
 		void GLPoint::clear()
-			throw()
 		{
 			Point::clear();
 			GLObject::clear();
 		}
 
 		void GLPoint::destroy()
-			throw()
 		{
 			Point::destroy();
 			GLObject::destroy();
@@ -94,7 +91,6 @@ namespace BALL
 		}
 
 		bool GLPoint::extract()
-			throw()
 		{
 			return Point::extract();
 		}

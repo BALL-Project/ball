@@ -1,4 +1,4 @@
-// $Id: normal.C,v 1.4 1999/12/30 18:05:46 oliver Exp $
+// $Id: normal.C,v 1.5 2001/02/04 16:14:27 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/normal.h>
 
@@ -15,7 +15,7 @@ namespace BALL
 		{
 		}
 
-		NormalVector::NormalVector(const NormalVector& n, bool /* deep */)
+		NormalVector::NormalVector(const NormalVector& n)
 			:	normal_(n.normal_)
 		{
 		}
@@ -37,10 +37,9 @@ namespace BALL
 
 		void NormalVector::destroy()
 		{
-			clear();
 		}
 
-		void NormalVector::set(const NormalVector& n, bool /* deep */)
+		void NormalVector::set(const NormalVector& n)
 		{
 			normal_ = n.normal_;
 		}
@@ -52,9 +51,9 @@ namespace BALL
 			return *this;
 		}
 
-		void NormalVector::get(NormalVector& n, bool deep) const
+		void NormalVector::get(NormalVector& n) const
 		{
-			n.set(*this, deep);
+			n.set(*this);
 		}
 
 		void NormalVector::swap(NormalVector& n)

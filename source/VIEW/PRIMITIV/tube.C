@@ -1,4 +1,4 @@
-// $Id: tube.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
+// $Id: tube.C,v 1.8 2001/02/04 16:14:28 hekl Exp $
 
 #include <BALL/VIEW/PRIMITIV/tube.h>
 
@@ -12,22 +12,28 @@ namespace BALL
 
 		Tube::Tube()
 			throw()
-			:	BaseTube(),
-				ColorExtension()
+			: GeometricObject(),
+				Radius(),
+			  ColorExtension(),
+   			Vertex2()
 		{
 		}
 
 		Tube::Tube(const Tube& tube, bool deep)
 			throw()
-			:	BaseTube(tube, deep),
-				ColorExtension(tube, deep)
+			: GeometricObject(tube, deep),
+				Radius(tube),
+			  ColorExtension(tube),
+   			Vertex2(tube)
 		{
 		}
 
 		Tube::Tube(const GeometricObject& geometric_object)
 			throw()
-			:	BaseTube(geometric_object),
-				ColorExtension()
+			: GeometricObject(geometric_object),
+				Radius(),
+			  ColorExtension(),
+   			Vertex2()
 		{
 		}
 
@@ -45,22 +51,28 @@ namespace BALL
 		void Tube::clear()
 			throw()
 		{
-			BaseTube::clear();
+			GeometricObject::clear();
+			Radius::clear();
 			ColorExtension::clear();
+			Vertex2::clear();
 		}
 
 		void Tube::destroy()
 			throw()
 		{
-			BaseTube::destroy();
+			GeometricObject::destroy();
+			Radius::destroy();
 			ColorExtension::destroy();
+			Vertex2::destroy();
 		}
 
 		void Tube::set(const Tube& tube, bool deep)
 			throw()
 		{
-			BaseTube::set(tube, deep);
-			ColorExtension::set(tube, deep);
+			GeometricObject::set(tube, deep);
+			Radius::set(tube);
+			ColorExtension::set(tube);
+			Vertex2::set(tube);
 		}
 
 		const Tube& Tube::operator = (const Tube& tube)
@@ -79,14 +91,17 @@ namespace BALL
 		void Tube::swap(Tube& tube)
 			throw()
 		{
-			BaseTube::swap(tube);
+			GeometricObject::swap(tube);
+			Radius::swap(tube);
 			ColorExtension::swap(tube);
+			Vertex2::swap(tube);
 		}
 
 		bool Tube::isValid() const
 			throw()
 		{
-			return (BaseTube::isValid()	&& ColorExtension::isValid());
+			return (GeometricObject::isValid()	
+							&& Vertex2::isValid());
 		}
 
 		void Tube::dump(ostream& s, Size depth) const
@@ -97,8 +112,10 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			BaseTube::dump(s, depth + 1);
+			GeometricObject::dump(s, depth + 1);
+			Radius::dump(s, depth + 1);
 			ColorExtension::dump(s, depth + 1);
+			Vertex2::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}

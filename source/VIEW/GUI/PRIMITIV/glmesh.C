@@ -1,4 +1,4 @@
-// $Id: glmesh.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
+// $Id: glmesh.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 #include <GL/gl.h>
@@ -16,9 +16,9 @@ namespace BALL
 		{
 		}
 
-		GLMesh::GLMesh(const GLMesh& GL_mesh, bool deep)
-			:	Mesh(GL_mesh, deep),
-				GLObject(GL_mesh, deep)
+		GLMesh::GLMesh(const GLMesh& mesh, bool deep)
+			:	Mesh(mesh, deep),
+				GLObject(mesh)
 		{
 		}
 
@@ -104,15 +104,6 @@ namespace BALL
 					v = vertex[t.v1];
 					
 					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					/*
-					v = vertex[t.v2];
-					
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					v = vertex[t.v3];
-
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					*/
 				}
 
 				glEnd();

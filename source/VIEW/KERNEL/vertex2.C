@@ -1,4 +1,4 @@
-// $Id: vertex2.C,v 1.7 2001/01/26 01:37:42 amoll Exp $
+// $Id: vertex2.C,v 1.8 2001/02/04 16:14:28 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/vertex2.h>
 
@@ -18,20 +18,12 @@ namespace BALL
 		{
 		}
 
-		Vertex2::Vertex2(const Vertex2& v, bool deep)
+		Vertex2::Vertex2(const Vertex2& v)
 			:	vertex1_(v.vertex1_),
 				vertex2_(v.vertex2_)
 		{
-			if (deep == true)
-			{
-				vertex1_ptr_ = v.vertex1_ptr_;
-				vertex2_ptr_ = v.vertex2_ptr_;
-			}
-			else
-			{
-				vertex1_ptr_ = &vertex1_;
-				vertex2_ptr_ = &vertex2_;
-			}
+			vertex1_ptr_ = v.vertex1_ptr_;
+			vertex2_ptr_ = v.vertex2_ptr_;
 		}
 
 		Vertex2::~Vertex2()
@@ -54,24 +46,15 @@ namespace BALL
 
 		void Vertex2::destroy()
 		{
-			clear();
 		}
 
-		void Vertex2::set(const Vertex2& v, bool deep)
+		void Vertex2::set(const Vertex2& v)
 		{
 			vertex1_.set(v.vertex1_);
 			vertex2_.set(v.vertex2_);
 			
-			if (deep == true)
-			{
-				vertex1_ptr_ = v.vertex1_ptr_;
-				vertex2_ptr_ = v.vertex2_ptr_;
-			}
-			else
-			{
-				vertex1_ptr_ = &vertex1_;
-				vertex2_ptr_ = &vertex2_;
-			}
+			vertex1_ptr_ = v.vertex1_ptr_;
+			vertex2_ptr_ = v.vertex2_ptr_;
 		}
 
 		Vertex2& Vertex2::operator = (const Vertex2& v)
@@ -81,14 +64,14 @@ namespace BALL
 			return *this;
 		}
 
-		void Vertex2::get(Vertex2& v, bool deep) const
+		void Vertex2::get(Vertex2& v) const
 		{
-			v.set(*this, deep);
+			v.set(*this);
 		}
 
 		void Vertex2::swap(Vertex2& v)
 		{
-			Vector3 *temp_vector_ptr = vertex2_ptr_;
+			Vector3 *temp_vector_ptr = vertex1_ptr_;
 
 			if (v.vertex1_ptr_ != &v.vertex1_)
 			{
@@ -109,6 +92,8 @@ namespace BALL
 				
 				vertex1_ptr_  = &v.vertex1_;
 			}  
+
+			temp_vector_ptr = vertex2_ptr_;
 
 			if (v.vertex2_ptr_ != &v.vertex2_)
 			{

@@ -1,8 +1,9 @@
-// $Id: QTTimer.C,v 1.8 2000/11/12 15:23:15 hekl Exp $
+// $Id: QTTimer.C,v 1.9 2001/02/04 16:14:27 hekl Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
 #include <BALL/COMMON/exception.h>
+#include <stdio.h>
 
 using namespace std;
 
@@ -12,10 +13,24 @@ namespace BALL
 	namespace VIEW
 	{
 
+		QTTimer::NoValidInterval::NoValidInterval(const char* file, int line, const string& data)
+			:	Exception::GeneralException(file, line, string("NoValidInterval"), string("not a valid interval: ") + data)
+		{
+		}
+
 		QTTimer::QTTimer(QObject* parent, const char* name)
 			:	QObject(parent, name),
 			  timer_id_(0),
-				intervall_(100),
+				interval_(100),
+				timer_enabled_(false),
+				timer_running_(false)
+		{
+		}
+
+		QTTimer::QTTimer(const QTTimer &timer, QObject* parent, const char* name)
+			:	QObject(parent, name),
+			  timer_id_(0),
+				interval_(timer.interval_),
 				timer_enabled_(false),
 				timer_running_(false)
 		{
@@ -36,20 +51,20 @@ namespace BALL
 			stopTimer();
 
 			timer_running_ = false;
-			intervall_ = 100;
+			interval_ = 100;
 		}
 
 		void QTTimer::destroy()
 		{
-			clear();
+			stopTimer();
 		}
 
-		void QTTimer::set(const QTTimer& timer, bool /* deep */)
+		void QTTimer::set(const QTTimer& timer)
 		{
 			stopTimer();
 
 			timer_running_ = false;
-			intervall_ = timer.intervall_;
+			interval_ = timer.interval_;
 		}
 
 		QTTimer& QTTimer::operator =(const QTTimer& timer)
@@ -59,9 +74,9 @@ namespace BALL
 			return *this;
 		}
 
-		void QTTimer::get(QTTimer& timer, bool deep) const
+		void QTTimer::get(QTTimer& timer) const
 		{
-			timer.set(*this, deep);
+			timer.set(*this);
 		}
 
 		void QTTimer::swap(QTTimer& timer)
@@ -69,19 +84,22 @@ namespace BALL
 			stopTimer();
 			timer.stopTimer();
 
-			int i = intervall_;
-			intervall_ = timer.intervall_;
-			timer.intervall_ = i;
+			int i = interval_;
+			interval_ = timer.interval_;
+			timer.interval_ = i;
 		}
 
-		void QTTimer::setIntervall(int intervall)
+		void QTTimer::setInterval(int interval)
 		{
-			BALL_PRECONDITION
-				(intervall >= 0,
-				 BALL_VIEW_TIMER_ERROR_HANDLER
-				 (QTTimer::ERROR__INTERVALL_CANNOT_BE_LOWER_THAN_ZERO));
+			if (interval <= 0)
+			{
+				char temp[20];
 
-			intervall_ = intervall;
+				sprintf(&temp[0], "%d", interval);
+				throw NoValidInterval(__FILE__, __LINE__, temp);
+			}
+
+			interval_ = interval;
 		}
 
 		void QTTimer::timer()
@@ -102,11 +120,6 @@ namespace BALL
 			}
 		}
 
-		bool QTTimer::isValid() const
-		{
-			return true;
-		}
-
 		void QTTimer::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -115,7 +128,7 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "intervall: " << intervall_ << endl;
+			s << "interval: " << interval_ << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "timer running: " 

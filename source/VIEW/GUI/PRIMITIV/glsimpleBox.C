@@ -1,4 +1,4 @@
-// $Id: glsimpleBox.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
+// $Id: glsimpleBox.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
 #include <GL/gl.h>
@@ -16,9 +16,9 @@ namespace BALL
 		{
 		}
 
-		GLSimpleBox::GLSimpleBox(const GLSimpleBox& GL_SimpleBox, bool deep)
-			:	SimpleBox(GL_SimpleBox, deep),
-				GLObject(GL_SimpleBox, deep)
+		GLSimpleBox::GLSimpleBox(const GLSimpleBox& simpleBox, bool deep)
+			:	SimpleBox(simpleBox, deep),
+				GLObject(simpleBox)
 		{
 		}
 
@@ -89,13 +89,6 @@ namespace BALL
 			glScalef((GLfloat)(getVertex2().x - getVertex1().x),
 							 (GLfloat)(getVertex2().y - getVertex1().y),
 							 (GLfloat)(getVertex2().z - getVertex1().z));
-
-			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED))
-			{
-				drawUserDefined();
-				glPopMatrix();
-				return true;
-			}
 
 			unsigned int precision;
 			unsigned int mode;

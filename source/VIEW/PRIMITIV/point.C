@@ -1,4 +1,4 @@
-// $Id: point.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
+// $Id: point.C,v 1.8 2001/02/04 16:14:28 hekl Exp $
 
 #include <BALL/VIEW/PRIMITIV/point.h>
 
@@ -22,8 +22,8 @@ namespace BALL
 		Point::Point(const Point& point, bool deep)
 			throw()
 			:	GeometricObject(point, deep),
-				ColorExtension(point, deep),
-				Vertex(point, deep)
+				ColorExtension(point),
+				Vertex(point)
 		{
 		}
 
@@ -66,8 +66,8 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::set(point, deep);
-			ColorExtension::set(point, deep);
-			Vertex::set(point, deep);
+			ColorExtension::set(point);
+			Vertex::set(point);
 		}
 
 		const Point& Point::operator =(const Point& point)
@@ -94,8 +94,7 @@ namespace BALL
 		bool Point::isValid() const
 			throw()
 		{
-			return (GeometricObject::isValid() && 
-							 ColorExtension::isValid() &&
+			return (GeometricObject::isValid() &&
 											 Vertex::isValid() );
 		}
 

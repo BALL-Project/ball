@@ -1,4 +1,4 @@
-// $Id: radius.C,v 1.5 2000/06/06 13:19:06 oliver Exp $
+// $Id: radius.C,v 1.6 2001/02/04 16:14:27 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/radius.h>
 #include <BALL/COMMON/exception.h>
@@ -16,7 +16,7 @@ namespace BALL
 		}
 
 		Radius::Radius
-			(const Radius& radius, bool /* deep */)
+			(const Radius& radius)
 			:	radius_(radius.radius_)
 		{
 		}
@@ -38,10 +38,9 @@ namespace BALL
 
 		void Radius::destroy()
 		{
-			clear();
 		}
 
-		void Radius::set(const Radius& radius, bool /* deep */)
+		void Radius::set(const Radius& radius)
 		{
 			radius_ = radius.radius_;
 		}
@@ -53,9 +52,9 @@ namespace BALL
 			return *this;
 		}
 
-		void Radius::get(Radius& radius, bool deep) const
+		void Radius::get(Radius& radius) const
 		{
-			radius.set(*this, deep);
+			radius.set(*this);
 		}
 
 		void Radius::swap(Radius& radius)
@@ -65,11 +64,6 @@ namespace BALL
 			radius_ = radius.radius_;
 
 			radius.radius_ = temp;
-		}
-
-		bool Radius::isValid() const
-		{
-			return true;
 		}
 
 		void Radius::dump(ostream& s, Size depth) const

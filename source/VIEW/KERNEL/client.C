@@ -1,4 +1,4 @@
-// $Id: client.C,v 1.7 2001/01/26 01:37:42 amoll Exp $
+// $Id: client.C,v 1.8 2001/02/04 16:14:27 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -12,14 +12,6 @@ namespace BALL
 
 
 		Client::Client()
-			:	host_(),
-				port_(VIEW_DEFAULT_PORT),
-				pm_()
-		{
-		}
-
-		Client::Client
-			(const Client&  /* client */, bool /* deep */)
 			:	host_(),
 				port_(VIEW_DEFAULT_PORT),
 				pm_()
@@ -48,7 +40,6 @@ namespace BALL
 
 		void Client::destroy()
 		{
-			clear();
 		}
 
 		void Client::connect(const String& host, int port)
@@ -85,6 +76,7 @@ namespace BALL
 			iostream_socket->close();
     }
 
+		/*
 		void Client::setCreatorValue(int address, int value)
     {
 			#ifdef BALL_VIEW_DEBUG
@@ -158,7 +150,7 @@ namespace BALL
 
 			return has_value;
 		}
-
+		*/
 
 		bool Client::isValid() const
 		{
@@ -172,6 +164,12 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
+			BALL_DUMP_DEPTH(s, depth);
+			s << "host: " << host_ << endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "port: " << port_ << endl;
+			
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
