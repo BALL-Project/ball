@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.59 2004/01/18 21:55:36 oliver Exp $
+// $Id: mainframe.h,v 1.60 2004/01/20 17:17:38 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -178,9 +178,6 @@ namespace BALL
 		
 		bool stopedSimulation() { return stop_simulation_;}
 
-		void printAmberResults(const AmberFF& amber)
-			throw();
-				
 		public slots:
 		// active the menu entries
 		// (connected to aboutToShow())
