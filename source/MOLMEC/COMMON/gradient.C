@@ -1,4 +1,4 @@
-// $Id: gradient.C,v 1.4 2001/05/17 01:30:53 oliver Exp $
+// $Id: gradient.C,v 1.5 2001/07/05 17:52:34 oliver Exp $
 // Atom gradient class: this class represents the gradient (i.e. the negative forces)
 // for a given system as a vector<Vector3>. THe gradient is stored in units of kJ/(mol A)
 
@@ -53,7 +53,7 @@ namespace BALL
 			norm += (*it) * (*it);
 		}
 
-		// calculate the norm and its invers
+		// calculate the norm and its inverse
 		norm = sqrt(norm);
 		inv_norm = 1.0 / norm;
 		if (max_index > 0)
