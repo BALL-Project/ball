@@ -100,7 +100,7 @@ void StageSettings::focalDistanceChanged()
 	}
 
 	String text(focal_distance_slider->value());
-	while(text[text.size() -1] == '.' || text[text.size() -1] == '0')
+	while(text.has('.'))
 	{
 		text.truncate(text.size() - 1);
 	}
