@@ -2,12 +2,11 @@ default:	all
 
 DIRECTORY=TEST
 
-# do not optimize tests (for faster compilation)
-CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
-
-
 include ../common.mak
 include .Dependencies
+
+# do not optimize tests (reduces compile time drastically)
+CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 
 EXECUTABLES = \
 	AmberFF_test\
