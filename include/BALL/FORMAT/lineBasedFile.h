@@ -136,7 +136,7 @@ namespace BALL
 
 		/** Function to get a field surrounded by delimiter
 		*/
-		String getField(Position pos = 0, const String& quotes = "",
+		String getField(Index pos = 0, const String& quotes = "",
 										const String& delimiters = String::CHARACTER_CLASS__WHITESPACE)
 			const	throw(Exception::IndexUnderflow);
 

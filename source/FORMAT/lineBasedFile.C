@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.12 2000/10/20 15:58:02 amoll Exp $
+// $Id: lineBasedFile.C,v 1.13 2000/10/21 17:19:30 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -233,15 +233,15 @@ namespace BALL
 		}
 	}
 
-	String LineBasedFile::getField(Position pos, const String& quotes, const String& delimiters)
+	String LineBasedFile::getField(Index pos, const String& quotes, const String& delimiters)
 		const	throw(Exception::IndexUnderflow)
 	{
 		if (quotes == "")
 		{
-			return line_.getField((Index) pos, delimiters.c_str());
+			return line_.getField(pos, delimiters.c_str());
 		}
 
-		return line_.getFieldQuoted((Index) pos, delimiters.c_str(), quotes.c_str());
+		return line_.getFieldQuoted(pos, delimiters.c_str(), quotes.c_str());
 	}
 
 	Index LineBasedFile::switchString(const vector<String>& data)
