@@ -1,4 +1,4 @@
-// $Id: peak.h,v 1.8 2001/06/24 14:18:13 oliver Exp $
+// $Id: peak.h,v 1.9 2001/07/10 10:37:23 oliver Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -226,20 +226,20 @@ namespace BALL
 	{
 		return ((position_ == peak.position_)
 						&& (width_ == peak.width_)
-						&& (intensity_ = peak.intensity_)
-						&& (atom_ = peak.atom_));
+						&& (intensity_ == peak.intensity_)
+						&& (atom_ == peak.atom_));
 	}
 
 	template <typename PositionType>
 	bool Peak<PositionType>::operator < (const Peak<PositionType>& peak) const
 	{
-		return (position_ < peak.position);
+		return (position_ < peak.position_);
 	}
 
 	template <typename PositionType>
 	bool Peak<PositionType>::operator > (const Peak<PositionType>& peak) const
 	{
-		return (position_ > peak.position);
+		return (position_ > peak.position_);
 	}
 
 	/**	Output operator
