@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.4 2000/08/19 20:26:29 amoll Exp $
+// $Id: PropertyManager_test.C,v 1.5 2000/08/20 15:07:06 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.4 2000/08/19 20:26:29 amoll Exp $")
+START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.5 2000/08/20 15:07:06 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -275,39 +275,59 @@ CHECK(PropertyManager::swap(PropertyManager& property_manager))
 RESULT
 
 CHECK(PropertyManager::getBitVector())
-  //BAUSTELLE
+  TEST_EQUAL(m.getBitVector().getBit(0), false)
+	m.getBitVector().setBit(0, true);
+  TEST_EQUAL(m.getBitVector().getBit(0), true)
 RESULT
 
 CHECK(PropertyManager::getBitVector() const )
-  //BAUSTELLE
+  const PropertyManager m2;
+  TEST_EQUAL(m2.getBitVector().getBit(0), false)
 RESULT
 
 CHECK(PropertyManager:: operator BitVector& ())
-  //BAUSTELLE
+	BitVector b = (BitVector) m;
+  TEST_EQUAL(b.getBit(0), true)
 RESULT
 
 CHECK(PropertyManager::setProperty(Property property))
-  //BAUSTELLE
+  m.setProperty(1);
+  TEST_EQUAL(m.getBitVector().getBit(1), true)
 RESULT
 
 CHECK(PropertyManager::clearProperty(Property property))
-  //BAUSTELLE
+  m.clearProperty(1);
+  TEST_EQUAL(m.getBitVector().getBit(1), false)
 RESULT
 
 CHECK(PropertyManager::toggleProperty(Property property))
-  //BAUSTELLE
+  m.toggleProperty(1);
+  TEST_EQUAL(m.getBitVector().getBit(1), true)
+  m.toggleProperty(1);
+  TEST_EQUAL(m.getBitVector().getBit(1), false)
 RESULT
 
 CHECK(PropertyManager::countProperties() const )
-  //BAUSTELLE
+  TEST_EQUAL(m.countProperties(), 2) //???
+	m.clear();
+  TEST_EQUAL(m.countProperties(), 0) // ???
 RESULT
 
 CHECK(PropertyManager::setProperty(const NamedProperty& property))
-  //BAUSTELLE
+	NamedProperty x("test", 1);
+	PropertyManager m;
+	m.setProperty(x);
+	TEST_EQUAL(m.hasProperty("test"), true)
+	TEST_EQUAL(m.getProperty("test").getInt(), 1)
+	TEST_EQUAL(m.getProperty("test").getType(), NamedProperty::INT)
 RESULT
 
 CHECK(PropertyManager::setProperty(const string& name))
-  //BAUSTELLE
+	PropertyManager m;
+	m.setProperty("TEST_PROP");
+	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
+	TEST_EQUAL(m.getProperty("TEST_PROP").getBool(), false)
+	TEST_EQUAL(m.getProperty("TEST_PROP").getType(), NamedProperty::NONE)
 RESULT
 
 CHECK(PropertyManager::setProperty(const string& name, bool value))
@@ -361,25 +381,57 @@ CHECK(PropertyManager::setProperty(const string& name, const PersistentObject& v
 RESULT
 
 CHECK(PropertyManager::getProperty(const string& name) const )
-  //BAUSTELLE
+	PropertyManager m;
+	PersistentObject po;
+	TEST_EQUAL(m.getProperty("TEST_PROP").getObject(), 0)
+	TEST_EQUAL(m.getProperty("TEST_PROP").getType(), NamedProperty::NONE)
+	m.setProperty("TEST_PROP", po);
+	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
+	TEST_EQUAL(m.getProperty("TEST_PROP").getObject(), &po)
 RESULT
 
 CHECK(PropertyManager::clearProperty(const string& name))
-  //BAUSTELLE
+	PropertyManager m;
+	PersistentObject po;
+	m.setProperty("TEST_PROP", po);
+	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
+	m.clearProperty("");
+	m.clearProperty("TEST_PROP");
+	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
 RESULT
 
 CHECK(PropertyManager::countNamedProperties() const )
-  //BAUSTELLE
+	PropertyManager m;
+	TEST_EQUAL(m.countNamedProperties(), 0)
+	m.setProperty("TEST_PROP1", 0);
+	TEST_EQUAL(m.countNamedProperties(), 1)
+	m.setProperty("TEST_PROP2", "ASD");
+	TEST_EQUAL(m.countNamedProperties(), 2)
+	m.clearProperty("TEST_PROP2");
+	TEST_EQUAL(m.countNamedProperties(), 1)
+	m.setProperty("TEST_PROP1", "");
+	TEST_EQUAL(m.countNamedProperties(), 1)
 RESULT
 
 CHECK(PropertyManager::hasProperty(Property property) const )
-  //BAUSTELLE
+	PropertyManager m;
+	TEST_EQUAL(m.hasProperty(1), false)
+	TEST_EQUAL(m.hasProperty(0), false)
+	m.setProperty("TEST_PROP", 0);
+	//TEST_EQUAL(m.hasProperty(0), true) ???
+	m.clearProperty("TEST_PROP");
+	TEST_EQUAL(m.hasProperty(0), false)
 RESULT
 
 CHECK(PropertyManager::hasProperty(const string& name) const )
-  //BAUSTELLE
+	PropertyManager m;
+	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
+	TEST_EQUAL(m.hasProperty(""), false)
+	m.setProperty("TEST_PROP", 0);
+	m.clearProperty("TEST_PROP");
+	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
 RESULT
-/*
+
 CHECK(PropertyManager::std::ostream& operator << (std::ostream& s, const PropertyManager& property_manager))
 	PropertyManager m;
 	std::ifstream instr("data/PropertyManager_test.txt");
@@ -387,14 +439,39 @@ CHECK(PropertyManager::std::ostream& operator << (std::ostream& s, const Propert
 	instr.close();
 	TEST_EQUAL(m.hasProperty("PROP1"), true)
 	TEST_EQUAL(m.hasProperty("PROP2"), true)
+	TEST_EQUAL(m.hasProperty("PROP3"), true)
+	TEST_EQUAL(m.hasProperty("PROP4"), true)
+	TEST_EQUAL(m.hasProperty("PROP5"), true)
+	TEST_EQUAL(m.hasProperty("PROP6"), true)
+	TEST_EQUAL(m.hasProperty("PROP7"), true)
+	TEST_EQUAL(m.hasProperty("PROP8"), true)
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
-	TEST_EQUAL(m.getProperty("PROP1").getFloat(), 4.56)	
-	TEST_EQUAL(m.getProperty("PROP2").getString(), "test")
+	TEST_EQUAL(m.getProperty("PROP1").getBool(), true)	
+	TEST_EQUAL(m.getProperty("PROP2").getInt(), -12345)
+	TEST_EQUAL(m.getProperty("PROP3").getUnsignedInt(), 12345)
+	TEST_EQUAL(m.getProperty("PROP4").getFloat(), 1.2345)
+	TEST_EQUAL(m.getProperty("PROP5").getDouble(), 2.345)
+	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")
+	TEST_NOT_EQUAL(m.getProperty("PROP7").getObject(), 0)
+	TEST_EQUAL(m.countNamedProperties(), 7);
+	TEST_EQUAL(m.getBitVector().getBit(0), true)
+	TEST_EQUAL(m.getBitVector().getBit(1), false)
+	TEST_EQUAL(m.getBitVector().getBit(2), true)
 RESULT
 
 CHECK(PropertyManager::std::istream& operator >> (std::istream& s, PropertyManager& property_manager))
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), File::OUT);
+	PersistentObject ob;
+	m.setProperty("PROP1", true);
+	m.setProperty("PROP2", -12345);
+	m.setProperty("PROP3", (unsigned int)12345);
+	m.setProperty("PROP4", 1.2345);
+	m.setProperty("PROP5", (double) 2.345);
+	m.setProperty("PROP6", "test");
+	m.setProperty("PROP7", ob);
+	m.setProperty(0);
+	m.setProperty(2);
 	outstr << m;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/PropertyManager_test.txt", false)
@@ -417,9 +494,24 @@ CHECK(PropertyManager::read(PersistenceManager& pm))
 	TEST_EQUAL(m.read(pm), true)
 	TEST_EQUAL(m.hasProperty("PROP1"), true)
 	TEST_EQUAL(m.hasProperty("PROP2"), true)
+	TEST_EQUAL(m.hasProperty("PROP3"), true)
+	TEST_EQUAL(m.hasProperty("PROP4"), true)
+	TEST_EQUAL(m.hasProperty("PROP5"), true)
+	TEST_EQUAL(m.hasProperty("PROP6"), true)
+	TEST_EQUAL(m.hasProperty("PROP7"), true)
+	TEST_EQUAL(m.hasProperty("PROP8"), true)
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
-	TEST_EQUAL(m.getProperty("PROP1").getFloat(), 4.56)	
-	TEST_EQUAL(m.getProperty("PROP2").getString(), "test")
+	TEST_EQUAL(m.getProperty("PROP1").getBool(), true)	
+	TEST_EQUAL(m.getProperty("PROP2").getInt(), -12345)
+	TEST_EQUAL(m.getProperty("PROP3").getUnsignedInt(), 12345)
+	TEST_EQUAL(m.getProperty("PROP4").getFloat(), 1.2345)
+	TEST_EQUAL(m.getProperty("PROP5").getDouble(), 2.345)
+	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")
+	TEST_NOT_EQUAL(m.getProperty("PROP7").getObject(), 0)
+	TEST_EQUAL(m.countNamedProperties(), 7);
+	TEST_EQUAL(m.getBitVector().getBit(0), true)
+	TEST_EQUAL(m.getBitVector().getBit(1), false)
+	TEST_EQUAL(m.getBitVector().getBit(2), true)
 	ifile.close();
 RESULT
 
@@ -431,9 +523,9 @@ CHECK(PropertyManager::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	m.dump(outstr);
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test3.txt", false)
+	TEST_FILE(filename.c_str(), "data/PropertyManager_test3.txt", true)
 RESULT
-*/
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
