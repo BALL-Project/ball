@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.4 2000/01/13 22:16:32 oliver Exp $
+// $Id: rtti.h,v 1.5 2000/01/13 22:48:44 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -167,13 +167,7 @@ namespace BALL
 		bool isInstanceOf(const U& u)
 		{
 			T		t;
-			U* 	U_ptr = const_cast<U*>(&u);
-			if ((dynamic_cast<T*>(U_ptr) != 0) && (dynamic_cast<U*>(&t) != 0))
-			{
-				return true;
-			}
-			
-			return false;
+			return (typeid(u) == typeid(t));
 		}
 	//@}
 
