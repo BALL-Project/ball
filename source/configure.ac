@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.16 2002/12/05 16:02:26 anhi Exp $
+dnl    $Id: configure.ac,v 1.1.2.17 2002/12/08 13:40:37 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -373,7 +373,7 @@ AM_CONDITIONAL(BALL_HAS_XDR, test x$BALL_NO_XDR = xfalse)
 dnl
 dnl		We need Flex and Bison for a couple of parsers hideen in BALL (SMILES, Expression, ParsedFct)
 dnl
-AC_PROG_LEX
+AM_PROG_LEX
 AC_PROG_YACC
 if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
 	BALL_HAS_FLEX_YACC=false

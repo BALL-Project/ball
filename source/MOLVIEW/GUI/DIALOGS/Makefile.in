@@ -177,7 +177,8 @@ MOC_SOURCES = \
 	labelPropertiesData_moc.C\
 	contourSurfaceDialog_moc.C\
 	atomSettings_moc.C\
-	atomSettingsData_moc.C
+	atomSettingsData_moc.C\
+	molecularFileDialog_moc.C
 
 
 BUILT_SOURCES = $(MOC_SOURCES)
@@ -196,6 +197,7 @@ CURRENTDIR_SOURCES = \
 	contourSurfaceDialog.C\
 	atomSettings.C\
 	atomSettingsData.C\
+	molecularFileDialog.C\
 	$(MOC_SOURCES)
 
 subdir = MOLVIEW/GUI/DIALOGS
@@ -208,7 +210,8 @@ am__objects_1 = displayProperties_moc.$(OBJEXT) \
 	displayPropertiesData_moc.$(OBJEXT) \
 	labelProperties_moc.$(OBJEXT) labelPropertiesData_moc.$(OBJEXT) \
 	contourSurfaceDialog_moc.$(OBJEXT) atomSettings_moc.$(OBJEXT) \
-	atomSettingsData_moc.$(OBJEXT)
+	atomSettingsData_moc.$(OBJEXT) \
+	molecularFileDialog_moc.$(OBJEXT)
 am__objects_2 = displayProperties.$(OBJEXT) \
 	displayPropertiesData.$(OBJEXT) labelProperties.$(OBJEXT) \
 	labelPropertiesData.$(OBJEXT) openHINFile.$(OBJEXT) \
@@ -216,7 +219,7 @@ am__objects_2 = displayProperties.$(OBJEXT) \
 	openPDBFile.$(OBJEXT) openBruker1DFile.$(OBJEXT) \
 	openBruker2DFile.$(OBJEXT) contourSurfaceDialog.$(OBJEXT) \
 	atomSettings.$(OBJEXT) atomSettingsData.$(OBJEXT) \
-	$(am__objects_1)
+	molecularFileDialog.$(OBJEXT) $(am__objects_1)
 am__objects_OBJECTS = $(am__objects_2)
 _objects_OBJECTS = $(am__objects_OBJECTS)
 _objects_DEPENDENCIES =
@@ -227,7 +230,7 @@ am_CURRENTDIR_OBJECTS = displayProperties.$(OBJEXT) \
 	openPDBFile.$(OBJEXT) openBruker1DFile.$(OBJEXT) \
 	openBruker2DFile.$(OBJEXT) contourSurfaceDialog.$(OBJEXT) \
 	atomSettings.$(OBJEXT) atomSettingsData.$(OBJEXT) \
-	$(am__objects_1)
+	molecularFileDialog.$(OBJEXT) $(am__objects_1)
 CURRENTDIR_OBJECTS = $(am_CURRENTDIR_OBJECTS)
 CURRENTDIR_DEPENDENCIES =
 
@@ -250,6 +253,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/labelPropertiesData.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/labelPropertiesData_moc.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/labelProperties_moc.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/molecularFileDialog.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/molecularFileDialog_moc.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/openBruker1DFile.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/openBruker2DFile.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/openHINFile.Po \
@@ -337,6 +342,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/labelPropertiesData.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/labelPropertiesData_moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/labelProperties_moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/molecularFileDialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/molecularFileDialog_moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openBruker1DFile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openBruker2DFile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openHINFile.Po@am__quote@
@@ -616,6 +623,9 @@ atomSettings_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h
 
 atomSettingsData_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettingsData.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettingsData.h -o atomSettingsData_moc.C
+
+molecularFileDialog_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h -o molecularFileDialog_moc.C
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

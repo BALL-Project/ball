@@ -248,7 +248,10 @@ EXECUTABLES_DATATYPES = \
 	HashSet_test\
 	HashGrid3_test\
 	Options_test\
-	String_test\
+	String_test1\
+	String_test2\
+	String_test3\
+	String_test4\
 	Substring_test\
 	Triple_test\
 	Quadruple_test\
@@ -265,7 +268,10 @@ StringHashMap_test_SOURCES = StringHashMap_test.C
 HashSet_test_SOURCES = HashSet_test.C
 HashGrid3_test_SOURCES = HashGrid3_test.C
 Options_test_SOURCES = Options_test.C
-String_test_SOURCES = String_test.C
+String_test1_SOURCES = String_test1.C
+String_test2_SOURCES = String_test2.C
+String_test3_SOURCES = String_test3.C
+String_test4_SOURCES = String_test4.C
 Substring_test_SOURCES = Substring_test.C
 Triple_test_SOURCES = Triple_test.C
 Quadruple_test_SOURCES = Quadruple_test.C
@@ -283,7 +289,8 @@ EXECUTABLES_CONCEPTS = \
 	TextPersistenceManager_test\
 	Selectable_test\
 	PropertyManager_test\
-	Composite_test\
+	Composite_test1\
+	Composite_test2\
 	Embeddable_test\
 	RandomAccessIterator_test\
 	$(XDR_DEPENDENT_EXECUTABLES)
@@ -298,7 +305,8 @@ PersistenceManager_test_SOURCES = PersistenceManager_test.C
 TextPersistenceManager_test_SOURCES = TextPersistenceManager_test.C
 Selectable_test_SOURCES = Selectable_test.C
 PropertyManager_test_SOURCES = PropertyManager_test.C
-Composite_test_SOURCES = Composite_test.C
+Composite_test1_SOURCES = Composite_test1.C
+Composite_test2_SOURCES = Composite_test2.C
 Embeddable_test_SOURCES = Embeddable_test.C
 RandomAccessIterator_test_SOURCES = RandomAccessIterator_test.C
 
@@ -562,17 +570,19 @@ bin_PROGRAMS = ClassTest_test$(EXEEXT) RegularExpression_test$(EXEEXT) \
 	List_test$(EXEEXT) Hash_test$(EXEEXT) HashMap_test$(EXEEXT) \
 	StringHashMap_test$(EXEEXT) HashSet_test$(EXEEXT) \
 	HashGrid3_test$(EXEEXT) Options_test$(EXEEXT) \
-	String_test$(EXEEXT) Substring_test$(EXEEXT) \
-	Triple_test$(EXEEXT) Quadruple_test$(EXEEXT) \
-	RegularData1D_test$(EXEEXT) RegularData2D_test$(EXEEXT) \
-	RegularData3D_test$(EXEEXT) Enumerator_test$(EXEEXT) \
-	LogStream_test$(EXEEXT) AutoDeletable_test$(EXEEXT) \
-	Object_test$(EXEEXT) PersistentObject_test$(EXEEXT) \
-	PersistenceManager_test$(EXEEXT) \
+	String_test1$(EXEEXT) String_test2$(EXEEXT) \
+	String_test3$(EXEEXT) String_test4$(EXEEXT) \
+	Substring_test$(EXEEXT) Triple_test$(EXEEXT) \
+	Quadruple_test$(EXEEXT) RegularData1D_test$(EXEEXT) \
+	RegularData2D_test$(EXEEXT) RegularData3D_test$(EXEEXT) \
+	Enumerator_test$(EXEEXT) LogStream_test$(EXEEXT) \
+	AutoDeletable_test$(EXEEXT) Object_test$(EXEEXT) \
+	PersistentObject_test$(EXEEXT) PersistenceManager_test$(EXEEXT) \
 	TextPersistenceManager_test$(EXEEXT) Selectable_test$(EXEEXT) \
-	PropertyManager_test$(EXEEXT) Composite_test$(EXEEXT) \
-	Embeddable_test$(EXEEXT) RandomAccessIterator_test$(EXEEXT) \
-	PTE_test$(EXEEXT) Atom_test$(EXEEXT) AtomIterator_test$(EXEEXT) \
+	PropertyManager_test$(EXEEXT) Composite_test1$(EXEEXT) \
+	Composite_test2$(EXEEXT) Embeddable_test$(EXEEXT) \
+	RandomAccessIterator_test$(EXEEXT) PTE_test$(EXEEXT) \
+	Atom_test$(EXEEXT) AtomIterator_test$(EXEEXT) \
 	Bond_test$(EXEEXT) AtomContainer_test$(EXEEXT) \
 	Fragment_test$(EXEEXT) Chain_test$(EXEEXT) \
 	Molecule_test$(EXEEXT) SecondaryStructure_test$(EXEEXT) \
@@ -754,11 +764,16 @@ ComposedEnergyProcessor_test_OBJECTS = \
 ComposedEnergyProcessor_test_LDADD = $(LDADD)
 ComposedEnergyProcessor_test_DEPENDENCIES =
 ComposedEnergyProcessor_test_LDFLAGS =
-am_Composite_test_OBJECTS = Composite_test.$(OBJEXT)
-Composite_test_OBJECTS = $(am_Composite_test_OBJECTS)
-Composite_test_LDADD = $(LDADD)
-Composite_test_DEPENDENCIES =
-Composite_test_LDFLAGS =
+am_Composite_test1_OBJECTS = Composite_test1.$(OBJEXT)
+Composite_test1_OBJECTS = $(am_Composite_test1_OBJECTS)
+Composite_test1_LDADD = $(LDADD)
+Composite_test1_DEPENDENCIES =
+Composite_test1_LDFLAGS =
+am_Composite_test2_OBJECTS = Composite_test2.$(OBJEXT)
+Composite_test2_OBJECTS = $(am_Composite_test2_OBJECTS)
+Composite_test2_LDADD = $(LDADD)
+Composite_test2_DEPENDENCIES =
+Composite_test2_LDFLAGS =
 am_CreateSpectrumProcessor_test_OBJECTS = \
 	CreateSpectrumProcessor_test.$(OBJEXT)
 CreateSpectrumProcessor_test_OBJECTS = \
@@ -1337,11 +1352,26 @@ StringHashMap_test_OBJECTS = $(am_StringHashMap_test_OBJECTS)
 StringHashMap_test_LDADD = $(LDADD)
 StringHashMap_test_DEPENDENCIES =
 StringHashMap_test_LDFLAGS =
-am_String_test_OBJECTS = String_test.$(OBJEXT)
-String_test_OBJECTS = $(am_String_test_OBJECTS)
-String_test_LDADD = $(LDADD)
-String_test_DEPENDENCIES =
-String_test_LDFLAGS =
+am_String_test1_OBJECTS = String_test1.$(OBJEXT)
+String_test1_OBJECTS = $(am_String_test1_OBJECTS)
+String_test1_LDADD = $(LDADD)
+String_test1_DEPENDENCIES =
+String_test1_LDFLAGS =
+am_String_test2_OBJECTS = String_test2.$(OBJEXT)
+String_test2_OBJECTS = $(am_String_test2_OBJECTS)
+String_test2_LDADD = $(LDADD)
+String_test2_DEPENDENCIES =
+String_test2_LDFLAGS =
+am_String_test3_OBJECTS = String_test3.$(OBJEXT)
+String_test3_OBJECTS = $(am_String_test3_OBJECTS)
+String_test3_LDADD = $(LDADD)
+String_test3_DEPENDENCIES =
+String_test3_LDFLAGS =
+am_String_test4_OBJECTS = String_test4.$(OBJEXT)
+String_test4_OBJECTS = $(am_String_test4_OBJECTS)
+String_test4_LDADD = $(LDADD)
+String_test4_DEPENDENCIES =
+String_test4_LDFLAGS =
 am_StructureMapper_test_OBJECTS = StructureMapper_test.$(OBJEXT)
 StructureMapper_test_OBJECTS = $(am_StructureMapper_test_OBJECTS)
 StructureMapper_test_LDADD = $(LDADD)
@@ -1482,7 +1512,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/ClaverieParameter_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/ClearShiftProcessor_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/ComposedEnergyProcessor_test.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/Composite_test.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/Composite_test1.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/Composite_test2.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/CreateSpectrumProcessor_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/DCDFile_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/DefaultProcessors_test.Po \
@@ -1592,7 +1623,10 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/Sphere3_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/StandardPredicates_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/StringHashMap_test.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/String_test.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/String_test1.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/String_test2.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/String_test3.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/String_test4.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/StructureMapper_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/Substring_test.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/Surface_test.Po \
@@ -1633,7 +1667,7 @@ DIST_SOURCES = $(AmberFF_test_SOURCES) \
 	$(ClassTest_test_SOURCES) $(ClaverieParameter_test_SOURCES) \
 	$(ClearShiftProcessor_test_SOURCES) \
 	$(ComposedEnergyProcessor_test_SOURCES) \
-	$(Composite_test_SOURCES) \
+	$(Composite_test1_SOURCES) $(Composite_test2_SOURCES) \
 	$(CreateSpectrumProcessor_test_SOURCES) $(DCDFile_test_SOURCES) \
 	$(DefaultProcessors_test_SOURCES) $(Descriptor_test_SOURCES) \
 	$(Directory_test_SOURCES) $(EFShiftProcessor_test_SOURCES) \
@@ -1699,10 +1733,11 @@ DIST_SOURCES = $(AmberFF_test_SOURCES) \
 	$(SolventDescriptor_test_SOURCES) \
 	$(SolventParameter_test_SOURCES) $(Spectrum_test_SOURCES) \
 	$(Sphere3_test_SOURCES) $(StandardPredicates_test_SOURCES) \
-	$(StringHashMap_test_SOURCES) $(String_test_SOURCES) \
-	$(StructureMapper_test_SOURCES) $(Substring_test_SOURCES) \
-	$(Surface_test_SOURCES) $(System_test_SOURCES) \
-	$(TCPTransfer_test_SOURCES) \
+	$(StringHashMap_test_SOURCES) $(String_test1_SOURCES) \
+	$(String_test2_SOURCES) $(String_test3_SOURCES) \
+	$(String_test4_SOURCES) $(StructureMapper_test_SOURCES) \
+	$(Substring_test_SOURCES) $(Surface_test_SOURCES) \
+	$(System_test_SOURCES) $(TCPTransfer_test_SOURCES) \
 	$(TextPersistenceManager_test_SOURCES) \
 	$(TimeStamp_test_SOURCES) $(Timer_test_SOURCES) \
 	$(TrajectoryFile_test_SOURCES) \
@@ -1720,7 +1755,7 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
 DIST_COMMON = Makefile.am Makefile.in
 DIST_SUBDIRS = $(SUBDIRS)
-SOURCES = $(AmberFF_test_SOURCES) $(AnalyticalGeometry_test_SOURCES) $(AnalyticalSES_test_SOURCES) $(Angle_test_SOURCES) $(AnisotropyShiftProcessor_test_SOURCES) $(AssignShiftProcessor_test_SOURCES) $(AtomContainer_test_SOURCES) $(AtomIterator_test_SOURCES) $(AtomVector_test_SOURCES) $(Atom_test_SOURCES) $(AtomicContactEnergy_test_SOURCES) $(AutoDeletable_test_SOURCES) $(BinaryFileAdaptor_test_SOURCES) $(BitVector_test_SOURCES) $(Bond_test_SOURCES) $(Box3_test_SOURCES) $(Chain_test_SOURCES) $(CharmmFF_test_SOURCES) $(Circle3_test_SOURCES) $(ClassTest_test_SOURCES) $(ClaverieParameter_test_SOURCES) $(ClearShiftProcessor_test_SOURCES) $(ComposedEnergyProcessor_test_SOURCES) $(Composite_test_SOURCES) $(CreateSpectrumProcessor_test_SOURCES) $(DCDFile_test_SOURCES) $(DefaultProcessors_test_SOURCES) $(Descriptor_test_SOURCES) $(Directory_test_SOURCES) $(EFShiftProcessor_test_SOURCES) $(Embeddable_test_SOURCES) $(EnergyMinimizer_test_SOURCES) $(EnergyProcessor_test_SOURCES) $(Enumerator_test_SOURCES) $(ExpressionParser_test_SOURCES) $(Expression_test_SOURCES) $(FileSystem_test_SOURCES) $(File_test_SOURCES) $(ForEach_test_SOURCES) $(FragmentDB_test_SOURCES) $(Fragment_test_SOURCES) $(Function_test_SOURCES) $(GenericMolFile_test_SOURCES) $(GlobalKernel_test_SOURCES) $(GlobalTypes_test_SOURCES) $(Gradient_test_SOURCES) $(HINFile_test_SOURCES) $(HaighMallionShiftProcessor_test_SOURCES) $(HashGrid3_test_SOURCES) $(HashMap_test_SOURCES) $(HashSet_test_SOURCES) $(Hash_test_SOURCES) $(INIFile_test_SOURCES) $(JohnsonBoveyShiftProcessor_test_SOURCES) $(KernelPredicate_test_SOURCES) $(Limits_test_SOURCES) $(Line3_test_SOURCES) $(LineBasedFile_test_SOURCES) $(List_test_SOURCES) $(LogStream_test_SOURCES) $(MOL2File_test_SOURCES) $(MOLFile_test_SOURCES) $(MathsCommon_test_SOURCES) $(Matrix44_test_SOURCES) $(MolecularGraph_test_SOURCES) $(Molecule_test_SOURCES) $(MolmecSupport_test_SOURCES) $(NMRStarFile_test_SOURCES) $(NucleicAcid_test_SOURCES) $(Nucleotide_test_SOURCES) $(NumericalIntegrator_test_SOURCES) $(NumericalSAS_test_SOURCES) $(Object_test_SOURCES) $(OoiEnergy_test_SOURCES) $(Options_test_SOURCES) $(PCMCavFreeEnergyProcessor_test_SOURCES) $(PDBAtom_test_SOURCES) $(PDBFile_test_SOURCES) $(PTE_test_SOURCES) $(Pair6_12InteractionEnergyProcessor_test_SOURCES) $(Pair6_12RDFIntegrator_test_SOURCES) $(PairExpInteractionEnergyProcessor_test_SOURCES) $(PairExpRDFIntegrator_test_SOURCES) $(ParameterSection_test_SOURCES) $(Parameters_test_SOURCES) $(Path_test_SOURCES) $(PeakList_test_SOURCES) $(Peak_test_SOURCES) $(Peptides_test_SOURCES) $(PersistenceManager_test_SOURCES) $(PersistentObject_test_SOURCES) $(PiecewiseFunction_test_SOURCES) $(PiecewisePolynomial_test_SOURCES) $(PierottiCavFreeEnergyProcessor_test_SOURCES) $(Plane3_test_SOURCES) $(PoissonBoltzmann_test_SOURCES) $(PreciseTime_test_SOURCES) $(PropertyManager_test_SOURCES) $(Protein_test_SOURCES) $(Quadruple_test_SOURCES) $(Quaternion_test_SOURCES) $(RDFIntegrator_test_SOURCES) $(RDFParameter_test_SOURCES) $(RDFSection_test_SOURCES) $(RTTI_test_SOURCES) $(RadialDistributionFunction_test_SOURCES) $(RandomAccessIterator_test_SOURCES) $(RandomCoilShiftProcessor_test_SOURCES) $(ReconstructFragmentProcessor_test_SOURCES) $(RegularData1D_test_SOURCES) $(RegularData2D_test_SOURCES) $(RegularData3D_test_SOURCES) $(RegularExpression_test_SOURCES) $(ReissCavFreeEnergyProcessor_test_SOURCES) $(Residue_test_SOURCES) $(ResourceFile_test_SOURCES) $(RuleEvaluator_test_SOURCES) $(SDFile_test_SOURCES) $(SecondaryStructure_test_SOURCES) $(Selectable_test_SOURCES) $(Selector_test_SOURCES) $(ShiftModel_test_SOURCES) $(ShiftModule_test_SOURCES) $(SimpleDescriptors_test_SOURCES) $(SmilesParser_test_SOURCES) $(SnapShotManager_test_SOURCES) $(SnapShot_test_SOURCES) $(Socket_test_SOURCES) $(SolventDescriptor_test_SOURCES) $(SolventParameter_test_SOURCES) $(Spectrum_test_SOURCES) $(Sphere3_test_SOURCES) $(StandardPredicates_test_SOURCES) $(StringHashMap_test_SOURCES) $(String_test_SOURCES) $(StructureMapper_test_SOURCES) $(Substring_test_SOURCES) $(Surface_test_SOURCES) $(System_test_SOURCES) $(TCPTransfer_test_SOURCES) $(TextPersistenceManager_test_SOURCES) $(TimeStamp_test_SOURCES) $(Timer_test_SOURCES) $(TrajectoryFile_test_SOURCES) $(TransformationApplicator_test_SOURCES) $(TransformationManager_test_SOURCES) $(TranslationApplicator_test_SOURCES) $(Triple_test_SOURCES) $(UhligCavFreeEnergyProcessor_test_SOURCES) $(Vector2_test_SOURCES) $(Vector3_test_SOURCES) $(Vector4_test_SOURCES) $(VersionInfo_test_SOURCES) $(XDRPersistenceManager_test_SOURCES) $(XYZFile_test_SOURCES)
+SOURCES = $(AmberFF_test_SOURCES) $(AnalyticalGeometry_test_SOURCES) $(AnalyticalSES_test_SOURCES) $(Angle_test_SOURCES) $(AnisotropyShiftProcessor_test_SOURCES) $(AssignShiftProcessor_test_SOURCES) $(AtomContainer_test_SOURCES) $(AtomIterator_test_SOURCES) $(AtomVector_test_SOURCES) $(Atom_test_SOURCES) $(AtomicContactEnergy_test_SOURCES) $(AutoDeletable_test_SOURCES) $(BinaryFileAdaptor_test_SOURCES) $(BitVector_test_SOURCES) $(Bond_test_SOURCES) $(Box3_test_SOURCES) $(Chain_test_SOURCES) $(CharmmFF_test_SOURCES) $(Circle3_test_SOURCES) $(ClassTest_test_SOURCES) $(ClaverieParameter_test_SOURCES) $(ClearShiftProcessor_test_SOURCES) $(ComposedEnergyProcessor_test_SOURCES) $(Composite_test1_SOURCES) $(Composite_test2_SOURCES) $(CreateSpectrumProcessor_test_SOURCES) $(DCDFile_test_SOURCES) $(DefaultProcessors_test_SOURCES) $(Descriptor_test_SOURCES) $(Directory_test_SOURCES) $(EFShiftProcessor_test_SOURCES) $(Embeddable_test_SOURCES) $(EnergyMinimizer_test_SOURCES) $(EnergyProcessor_test_SOURCES) $(Enumerator_test_SOURCES) $(ExpressionParser_test_SOURCES) $(Expression_test_SOURCES) $(FileSystem_test_SOURCES) $(File_test_SOURCES) $(ForEach_test_SOURCES) $(FragmentDB_test_SOURCES) $(Fragment_test_SOURCES) $(Function_test_SOURCES) $(GenericMolFile_test_SOURCES) $(GlobalKernel_test_SOURCES) $(GlobalTypes_test_SOURCES) $(Gradient_test_SOURCES) $(HINFile_test_SOURCES) $(HaighMallionShiftProcessor_test_SOURCES) $(HashGrid3_test_SOURCES) $(HashMap_test_SOURCES) $(HashSet_test_SOURCES) $(Hash_test_SOURCES) $(INIFile_test_SOURCES) $(JohnsonBoveyShiftProcessor_test_SOURCES) $(KernelPredicate_test_SOURCES) $(Limits_test_SOURCES) $(Line3_test_SOURCES) $(LineBasedFile_test_SOURCES) $(List_test_SOURCES) $(LogStream_test_SOURCES) $(MOL2File_test_SOURCES) $(MOLFile_test_SOURCES) $(MathsCommon_test_SOURCES) $(Matrix44_test_SOURCES) $(MolecularGraph_test_SOURCES) $(Molecule_test_SOURCES) $(MolmecSupport_test_SOURCES) $(NMRStarFile_test_SOURCES) $(NucleicAcid_test_SOURCES) $(Nucleotide_test_SOURCES) $(NumericalIntegrator_test_SOURCES) $(NumericalSAS_test_SOURCES) $(Object_test_SOURCES) $(OoiEnergy_test_SOURCES) $(Options_test_SOURCES) $(PCMCavFreeEnergyProcessor_test_SOURCES) $(PDBAtom_test_SOURCES) $(PDBFile_test_SOURCES) $(PTE_test_SOURCES) $(Pair6_12InteractionEnergyProcessor_test_SOURCES) $(Pair6_12RDFIntegrator_test_SOURCES) $(PairExpInteractionEnergyProcessor_test_SOURCES) $(PairExpRDFIntegrator_test_SOURCES) $(ParameterSection_test_SOURCES) $(Parameters_test_SOURCES) $(Path_test_SOURCES) $(PeakList_test_SOURCES) $(Peak_test_SOURCES) $(Peptides_test_SOURCES) $(PersistenceManager_test_SOURCES) $(PersistentObject_test_SOURCES) $(PiecewiseFunction_test_SOURCES) $(PiecewisePolynomial_test_SOURCES) $(PierottiCavFreeEnergyProcessor_test_SOURCES) $(Plane3_test_SOURCES) $(PoissonBoltzmann_test_SOURCES) $(PreciseTime_test_SOURCES) $(PropertyManager_test_SOURCES) $(Protein_test_SOURCES) $(Quadruple_test_SOURCES) $(Quaternion_test_SOURCES) $(RDFIntegrator_test_SOURCES) $(RDFParameter_test_SOURCES) $(RDFSection_test_SOURCES) $(RTTI_test_SOURCES) $(RadialDistributionFunction_test_SOURCES) $(RandomAccessIterator_test_SOURCES) $(RandomCoilShiftProcessor_test_SOURCES) $(ReconstructFragmentProcessor_test_SOURCES) $(RegularData1D_test_SOURCES) $(RegularData2D_test_SOURCES) $(RegularData3D_test_SOURCES) $(RegularExpression_test_SOURCES) $(ReissCavFreeEnergyProcessor_test_SOURCES) $(Residue_test_SOURCES) $(ResourceFile_test_SOURCES) $(RuleEvaluator_test_SOURCES) $(SDFile_test_SOURCES) $(SecondaryStructure_test_SOURCES) $(Selectable_test_SOURCES) $(Selector_test_SOURCES) $(ShiftModel_test_SOURCES) $(ShiftModule_test_SOURCES) $(SimpleDescriptors_test_SOURCES) $(SmilesParser_test_SOURCES) $(SnapShotManager_test_SOURCES) $(SnapShot_test_SOURCES) $(Socket_test_SOURCES) $(SolventDescriptor_test_SOURCES) $(SolventParameter_test_SOURCES) $(Spectrum_test_SOURCES) $(Sphere3_test_SOURCES) $(StandardPredicates_test_SOURCES) $(StringHashMap_test_SOURCES) $(String_test1_SOURCES) $(String_test2_SOURCES) $(String_test3_SOURCES) $(String_test4_SOURCES) $(StructureMapper_test_SOURCES) $(Substring_test_SOURCES) $(Surface_test_SOURCES) $(System_test_SOURCES) $(TCPTransfer_test_SOURCES) $(TextPersistenceManager_test_SOURCES) $(TimeStamp_test_SOURCES) $(Timer_test_SOURCES) $(TrajectoryFile_test_SOURCES) $(TransformationApplicator_test_SOURCES) $(TransformationManager_test_SOURCES) $(TranslationApplicator_test_SOURCES) $(Triple_test_SOURCES) $(UhligCavFreeEnergyProcessor_test_SOURCES) $(Vector2_test_SOURCES) $(Vector3_test_SOURCES) $(Vector4_test_SOURCES) $(VersionInfo_test_SOURCES) $(XDRPersistenceManager_test_SOURCES) $(XYZFile_test_SOURCES)
 
 all: all-recursive
 
@@ -1824,9 +1859,12 @@ ClearShiftProcessor_test$(EXEEXT): $(ClearShiftProcessor_test_OBJECTS) $(ClearSh
 ComposedEnergyProcessor_test$(EXEEXT): $(ComposedEnergyProcessor_test_OBJECTS) $(ComposedEnergyProcessor_test_DEPENDENCIES) 
 	@rm -f ComposedEnergyProcessor_test$(EXEEXT)
 	$(CXXLINK) $(ComposedEnergyProcessor_test_LDFLAGS) $(ComposedEnergyProcessor_test_OBJECTS) $(ComposedEnergyProcessor_test_LDADD) $(LIBS)
-Composite_test$(EXEEXT): $(Composite_test_OBJECTS) $(Composite_test_DEPENDENCIES) 
-	@rm -f Composite_test$(EXEEXT)
-	$(CXXLINK) $(Composite_test_LDFLAGS) $(Composite_test_OBJECTS) $(Composite_test_LDADD) $(LIBS)
+Composite_test1$(EXEEXT): $(Composite_test1_OBJECTS) $(Composite_test1_DEPENDENCIES) 
+	@rm -f Composite_test1$(EXEEXT)
+	$(CXXLINK) $(Composite_test1_LDFLAGS) $(Composite_test1_OBJECTS) $(Composite_test1_LDADD) $(LIBS)
+Composite_test2$(EXEEXT): $(Composite_test2_OBJECTS) $(Composite_test2_DEPENDENCIES) 
+	@rm -f Composite_test2$(EXEEXT)
+	$(CXXLINK) $(Composite_test2_LDFLAGS) $(Composite_test2_OBJECTS) $(Composite_test2_LDADD) $(LIBS)
 CreateSpectrumProcessor_test$(EXEEXT): $(CreateSpectrumProcessor_test_OBJECTS) $(CreateSpectrumProcessor_test_DEPENDENCIES) 
 	@rm -f CreateSpectrumProcessor_test$(EXEEXT)
 	$(CXXLINK) $(CreateSpectrumProcessor_test_LDFLAGS) $(CreateSpectrumProcessor_test_OBJECTS) $(CreateSpectrumProcessor_test_LDADD) $(LIBS)
@@ -2157,9 +2195,18 @@ StandardPredicates_test$(EXEEXT): $(StandardPredicates_test_OBJECTS) $(StandardP
 StringHashMap_test$(EXEEXT): $(StringHashMap_test_OBJECTS) $(StringHashMap_test_DEPENDENCIES) 
 	@rm -f StringHashMap_test$(EXEEXT)
 	$(CXXLINK) $(StringHashMap_test_LDFLAGS) $(StringHashMap_test_OBJECTS) $(StringHashMap_test_LDADD) $(LIBS)
-String_test$(EXEEXT): $(String_test_OBJECTS) $(String_test_DEPENDENCIES) 
-	@rm -f String_test$(EXEEXT)
-	$(CXXLINK) $(String_test_LDFLAGS) $(String_test_OBJECTS) $(String_test_LDADD) $(LIBS)
+String_test1$(EXEEXT): $(String_test1_OBJECTS) $(String_test1_DEPENDENCIES) 
+	@rm -f String_test1$(EXEEXT)
+	$(CXXLINK) $(String_test1_LDFLAGS) $(String_test1_OBJECTS) $(String_test1_LDADD) $(LIBS)
+String_test2$(EXEEXT): $(String_test2_OBJECTS) $(String_test2_DEPENDENCIES) 
+	@rm -f String_test2$(EXEEXT)
+	$(CXXLINK) $(String_test2_LDFLAGS) $(String_test2_OBJECTS) $(String_test2_LDADD) $(LIBS)
+String_test3$(EXEEXT): $(String_test3_OBJECTS) $(String_test3_DEPENDENCIES) 
+	@rm -f String_test3$(EXEEXT)
+	$(CXXLINK) $(String_test3_LDFLAGS) $(String_test3_OBJECTS) $(String_test3_LDADD) $(LIBS)
+String_test4$(EXEEXT): $(String_test4_OBJECTS) $(String_test4_DEPENDENCIES) 
+	@rm -f String_test4$(EXEEXT)
+	$(CXXLINK) $(String_test4_LDFLAGS) $(String_test4_OBJECTS) $(String_test4_LDADD) $(LIBS)
 StructureMapper_test$(EXEEXT): $(StructureMapper_test_OBJECTS) $(StructureMapper_test_DEPENDENCIES) 
 	@rm -f StructureMapper_test$(EXEEXT)
 	$(CXXLINK) $(StructureMapper_test_LDFLAGS) $(StructureMapper_test_OBJECTS) $(StructureMapper_test_LDADD) $(LIBS)
@@ -2250,7 +2297,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ClaverieParameter_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ClearShiftProcessor_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ComposedEnergyProcessor_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Composite_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Composite_test1.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Composite_test2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CreateSpectrumProcessor_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DCDFile_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DefaultProcessors_test.Po@am__quote@
@@ -2361,7 +2409,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Sphere3_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StandardPredicates_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StringHashMap_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/String_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/String_test1.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/String_test2.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/String_test3.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/String_test4.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StructureMapper_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Substring_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Surface_test.Po@am__quote@

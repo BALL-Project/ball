@@ -13177,6 +13177,9 @@ _ACEOF
 fi
 
 fi
+if test "$LEX" = :; then
+  LEX=${am_missing_run}flex
+fi
 for ac_prog in 'bison -y' byacc
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.

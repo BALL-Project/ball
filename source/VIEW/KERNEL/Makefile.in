@@ -180,9 +180,7 @@ CURRENTDIR_SOURCES = \
 	connectionObject.C\
 	geometricObject.C\
 	message.C\
-	normal.C\
 	QTTimer.C\
-	radius.C\
 	logView.C\
 	vertex1.C\
 	vertex2.C
@@ -197,9 +195,8 @@ am__objects_1 = client.$(OBJEXT) colorExtension1.$(OBJEXT) \
 	colorExtension2.$(OBJEXT) colorExtension3.$(OBJEXT) \
 	colorExtension4.$(OBJEXT) colorExtension5.$(OBJEXT) \
 	connectionObject.$(OBJEXT) geometricObject.$(OBJEXT) \
-	message.$(OBJEXT) normal.$(OBJEXT) QTTimer.$(OBJEXT) \
-	radius.$(OBJEXT) logView.$(OBJEXT) vertex1.$(OBJEXT) \
-	vertex2.$(OBJEXT)
+	message.$(OBJEXT) QTTimer.$(OBJEXT) logView.$(OBJEXT) \
+	vertex1.$(OBJEXT) vertex2.$(OBJEXT)
 am__objects_OBJECTS = $(am__objects_1)
 _objects_OBJECTS = $(am__objects_OBJECTS)
 _objects_DEPENDENCIES =
@@ -207,9 +204,8 @@ am_CURRENTDIR_OBJECTS = client.$(OBJEXT) colorExtension1.$(OBJEXT) \
 	colorExtension2.$(OBJEXT) colorExtension3.$(OBJEXT) \
 	colorExtension4.$(OBJEXT) colorExtension5.$(OBJEXT) \
 	connectionObject.$(OBJEXT) geometricObject.$(OBJEXT) \
-	message.$(OBJEXT) normal.$(OBJEXT) QTTimer.$(OBJEXT) \
-	radius.$(OBJEXT) logView.$(OBJEXT) vertex1.$(OBJEXT) \
-	vertex2.$(OBJEXT)
+	message.$(OBJEXT) QTTimer.$(OBJEXT) logView.$(OBJEXT) \
+	vertex1.$(OBJEXT) vertex2.$(OBJEXT)
 CURRENTDIR_OBJECTS = $(am_CURRENTDIR_OBJECTS)
 CURRENTDIR_DEPENDENCIES =
 
@@ -227,7 +223,6 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/connectionObject.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/geometricObject.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/logView.Po ./$(DEPDIR)/message.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/normal.Po ./$(DEPDIR)/radius.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/vertex1.Po ./$(DEPDIR)/vertex2.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -306,8 +301,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/geometricObject.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/logView.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/message.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/normal.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/radius.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vertex1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vertex2.Po@am__quote@
 
