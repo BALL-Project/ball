@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.23 2001/07/15 16:14:23 oliver Exp $
+// $Id: secondaryStructure.h,v 1.24 2001/08/16 00:39:28 oliver Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -46,9 +46,9 @@ namespace BALL
 		enum Property
 		{
 			PROPERTY__HELIX       = Fragment::NUMBER_OF_PROPERTIES + 1,
-			PROPERTY__RANDOM_COIL = Fragment::NUMBER_OF_PROPERTIES,
-			PROPERTY__STRAND      = Fragment::NUMBER_OF_PROPERTIES,
-			PROPERTY__TURN        = Fragment::NUMBER_OF_PROPERTIES,
+			PROPERTY__RANDOM_COIL = Fragment::NUMBER_OF_PROPERTIES + 2,
+			PROPERTY__STRAND      = Fragment::NUMBER_OF_PROPERTIES + 3,
+			PROPERTY__TURN        = Fragment::NUMBER_OF_PROPERTIES + 4,
 
 			NUMBER_OF_PROPERTIES
 		};
