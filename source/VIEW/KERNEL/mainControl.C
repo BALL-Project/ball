@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.146 2004/11/29 13:51:19 amoll Exp $
+// $Id: mainControl.C,v 1.147 2004/11/29 19:52:41 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -881,7 +881,6 @@ namespace BALL
 		void MainControl::writePreferences(INIFile &inifile)
 			throw()
 		{
-Log.error() << "#~~#   1 "  << inifile.getFilename()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// the main window position
 			inifile.insertValue("WINDOWS", "Main::x", String(x()));
 			inifile.insertValue("WINDOWS", "Main::y", String(y()));
@@ -908,9 +907,7 @@ Log.error() << "#~~#   1 "  << inifile.getFilename()           << " "  << __FILE
 			}
 			inifile.insertValue("WINDOWS", "Main::dockwidgets", mys);
 
-Log.error() << "#~~#   2 "   <<
-			inifile.write()
-          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+			inifile.write();
 		}
 
 		void MainControl::addModularWidget(ModularWidget* widget)
