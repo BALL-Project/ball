@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.3 2004/09/02 13:12:51 amoll Exp $
+// $Id: ringPerceptionProcessor.C,v 1.4 2004/09/07 13:17:36 amoll Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -237,7 +237,8 @@ namespace BALL
 			for (bond_it=atom->beginBond();bond_it!=atom->endBond();++bond_it)
 			{
 				Atom* bound_atom =  bond_it->getPartner(*atom);
-				if (bound_atom != ancestor)
+				if (bound_atom != 0 &&
+						bound_atom != ancestor)
 				{
 					if (!paths.has(bound_atom))
 					{
