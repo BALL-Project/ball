@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.10 2001/05/22 20:26:54 amoll Exp $
+// $Id: HINFile_test.C,v 1.11 2001/07/15 22:40:37 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.10 2001/05/22 20:26:54 amoll Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.11 2001/07/15 22:40:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -29,6 +29,10 @@ CHECK(HINFile::~HINFile())
 RESULT
 
 HINFile hin;
+
+CHECK(HINFile::getTemperature() const )
+  TEST_REAL_EQUAL(hin.getTemperature(), 0.0)
+RESULT
 
 CHECK(HINFile::HINFile(const String& filename, File::OpenMode open_mode = File::IN))
   hin = HINFile("data/HINFile_test.hin");
@@ -51,6 +55,9 @@ CHECK(HINFile::read(System& system))
   TEST_EQUAL(system.getAtom(0)->countBonds(), 2) 
 
   TEST_NOT_EQUAL(system.getAtom(1)->getRadius(), 0)
+	PRECISION(0.001)
+	TEST_REAL_EQUAL(hin.getTemperature(), 297.5626)
+	PRECISION(1e-5)
 RESULT
 
 CHECK(HINFile::write(const System& system))
@@ -87,10 +94,6 @@ CHECK(HINFile::getPeriodicBoundary() const )
 	TEST_EQUAL(hin.getPeriodicBoundary(), box3)
 RESULT
 
-
-CHECK(HINFile::getTemperature() const )
-  //BAUSTELLE
-RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
