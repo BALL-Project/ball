@@ -1,7 +1,6 @@
-// $Id: molecularSurfaceGrid.C,v 1.8 2001/06/05 15:53:28 anker Exp $
+// $Id: molecularSurfaceGrid.C,v 1.9 2001/07/15 18:59:12 amoll Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
-
 #include <BALL/KERNEL/forEach.h>
 
 namespace BALL 
@@ -20,8 +19,8 @@ namespace BALL
 	{
 
 		// points in the grid marked with
-		//   CCONN__OUTSIDE are outside of the molecule (default)
-		//   CCONN__INSIDE are sure inside the molecule
+		// CCONN__OUTSIDE are outside of the molecule (default)
+		// CCONN__INSIDE are sure inside the molecule
 
 		#define CCONN__OUTSIDE 1
 		#define CCONN__INSIDE  0
@@ -50,42 +49,29 @@ namespace BALL
 		float x, y, z;
 		float origin_x, origin_y, origin_z;
 
-
 		// indices used in between to calculated the bounding boxes of spheres in the grid
-		
 		RegularData3D<char>::GridIndex upper_index, lower_index;
-
 
 		// pointer to grid data
 		char *grid_value;
 		
-					
 		// vector, describing the atom's coordinates
 		Vector3 r0;
 
 		// Here we go...
-		//
-		//
-
 		// First, create the grid...
-
 		grid = new RegularData3D<char>(lower, upper, spacing);
 		
 		if ((grid == 0) || (!grid->isValid()))
 		{
 			return 0;
 		}
-				
 
 		// ..then, calculate the grid's diagonal length
-
 		d2 = spacing * spacing * spacing;
-
 		d = sqrt(d2);
 
 		// calculate some constants used for FAST access to the grid.
-		//
-
 		origin_x = grid->getMinX();
 		origin_y = grid->getMinY();
 		origin_z = grid->getMinZ();
@@ -106,7 +92,6 @@ namespace BALL
 		// of a sphere on the grid relative to the sphere's origin
 		
 		unsigned long count, relative_count;
-
 
 		// the probe_radius (squared) in squared grid units
 		unsigned short grid_radius;
@@ -165,55 +150,48 @@ namespace BALL
 
 		// for each atom do...
 		AtomConstIterator	atom_iterator;
-		BALL_FOREACH_ATOM(system, atom_iterator){
-					
-				atom_radius = (*atom_iterator).getRadius();	
+		BALL_FOREACH_ATOM(system, atom_iterator)
+		{
+			atom_radius = (*atom_iterator).getRadius();	
 
-				// consider the atom only if it`s radius is large
-				// against grid spacing
-				if (atom_radius > spacing / 100){
+			// consider the atom only if it`s radius is large
+			// against grid spacing
+			if (atom_radius > spacing / 100)
+			{
+				R_b = atom_radius + probe_radius;
+				R_b2 = R_b * R_b;
+				
+				r0 = (*atom_iterator).getPosition();
+				lower_index = grid->getIndex(r0.x - R_b - d, 
+																		 r0.y - R_b - d, 
+																		 r0.z - R_b - d);
 
-					R_b = atom_radius + probe_radius;
-					R_b2 = R_b * R_b;
+				upper_index = grid->getIndex(r0.x + R_b + d, 
+																		 r0.y + R_b + d, 
+																		 r0.z + R_b + d);
 
+				for(k = lower_index.z; k <= upper_index.z; k++)
+					for(j = lower_index.y; j <= upper_index.y; j++)
+						for(i = lower_index.x; i <= upper_index.x; i++){
+							x = (float)i * spacing + origin_x;
+							y = (float)j * spacing + origin_y;
+							z = (float)k * spacing + origin_z;
 
+							grid_value = &(grid->data[i + Nx * j + Nxy * k]);
+															
+								
+							if (*grid_value != CCONN__INSIDE){
+								squared_distance =  (r0.x - x) * (r0.x - x)
+																 +  (r0.y - y) * (r0.y - y)
+																 +  (r0.z - z) * (r0.z - z);
 
-
-
-					r0 = (*atom_iterator).getPosition();
-					lower_index = grid->getIndex(r0.x - R_b - d, 
-																			 r0.y - R_b - d, 
-																			 r0.z - R_b - d);
-
-					upper_index = grid->getIndex(r0.x + R_b + d, 
-																			 r0.y + R_b + d, 
-																			 r0.z + R_b + d);
-
-
-
-					for(k = lower_index.z; k <= upper_index.z; k++)
-						for(j = lower_index.y; j <= upper_index.y; j++)
-							for(i = lower_index.x; i <= upper_index.x; i++){
-								x = (float)i * spacing + origin_x;
-								y = (float)j * spacing + origin_y;
-								z = (float)k * spacing + origin_z;
-
-								grid_value = &(grid->data[i + Nx * j + Nxy * k]);
-																
-									
-								if (*grid_value != CCONN__INSIDE){
-									squared_distance =  (r0.x - x) * (r0.x - x)
-																	 +  (r0.y - y) * (r0.y - y)
-																	 +  (r0.z - z) * (r0.z - z);
-
-									if (squared_distance <= R_b2){
-										*grid_value = CCONN__INSIDE;
-									}
+								if (squared_distance <= R_b2){
+									*grid_value = CCONN__INSIDE;
 								}
 							}
-				}
+						}
 			}
-
+		}
 
 		// now check for all points in the grid area that has been changed
 		// for points marked as BORDER 
@@ -221,13 +199,10 @@ namespace BALL
 		// which are less then probe_radius apart from the border point
 		// (actually this means to "roll" the probe sphere along the border
 		// and just retain points which haven't been touched by the probe sphere)
-
-
-	 
-		register unsigned long idx;
-		register long grid_pointer, grid_begin, grid_end;
-		register long* fast_sphere_end;
-		register long* sphere_pointer;
+		unsigned long idx;
+		long grid_pointer, grid_begin, grid_end;
+		long* fast_sphere_end;
+		long* sphere_pointer;
 
 		unsigned short border;
 
@@ -245,12 +220,11 @@ namespace BALL
 			for (t = 1; t < grid->getMaxYIndex(); t++)
 				for (q = 1; q < grid->getMaxXIndex(); q++)
 				{
-
 					// calculate the absolute grid index the hard way (faster!)
 					idx = q + Nx * t + s * Nxy;
 
-					if ((grid->data[idx] & 127) == CCONN__OUTSIDE){
-									
+					if ((grid->data[idx] & 127) == CCONN__OUTSIDE)
+					{
 						border	= grid->data[idx - 1]
 										+ grid->data[idx + 1]
 										+ grid->data[idx - Nx]
@@ -287,7 +261,8 @@ namespace BALL
 		grid_value = grid->getData(0);
 		unsigned long l;
 
-		for (l = 0; l < grid->getSize(); l++){
+		for (l = 0; l < grid->getSize(); l++)
+		{
 			*grid_value = (*grid_value == 0);
 			grid_value++;
 		}
@@ -304,8 +279,8 @@ namespace BALL
 	{
 
 		// points in the grid marked with
-		//   CCONN__OUTSIDE are outside of the molecule (default)
-		//   CCONN__INSIDE are sure inside the molecule
+		// CCONN__OUTSIDE are outside of the molecule (default)
+		// CCONN__INSIDE are sure inside the molecule
 
 		#define CCONN__OUTSIDE 1
 		#define CCONN__INSIDE  0
@@ -331,19 +306,13 @@ namespace BALL
 		// indices used in between to calculated the bounding boxes of spheres in the grid
 		RegularData3D<char>::GridIndex upper_index, lower_index;
 
-
 		// pointer to grid data
 		char *grid_value;
-		
 					
 		// vector, describing the atom's coordinates
 		Vector3 r0;
-
 					
 		// Here we go...
-		//
-		//
-
 		// First, create the grid...
 
 		grid = new RegularData3D<char>(lower, upper, spacing);
@@ -353,17 +322,11 @@ namespace BALL
 			throw Exception::OutOfMemory(__FILE__, __LINE__);
 		}
 				
-		
-
 		// ..then, calculate the grid's diagonal length
-
 		d2 = spacing * spacing * spacing;
-
 		d = sqrt(d2);
 
 		// calculate some constants used for FAST access to the grid.
-		//
-
 		origin_x = grid->getMinX();
 		origin_y = grid->getMinY();
 		origin_z = grid->getMinZ();
@@ -386,54 +349,49 @@ namespace BALL
 
 		// for each atom do...
 		AtomConstIterator	atom_iterator;
-		BALL_FOREACH_ATOM(system, atom_iterator){
-					
-				atom_radius = (*atom_iterator).getRadius();	
+		BALL_FOREACH_ATOM(system, atom_iterator)
+		{
+			atom_radius = (*atom_iterator).getRadius();	
 
-				// consider the atom only if it`s radius is large
-				// against grid spacing
-				if (atom_radius > spacing / 100){
+			// consider the atom only if it`s radius is large
+			// against grid spacing
+			if (atom_radius > spacing / 100)
+			{
+				R_b = atom_radius + probe_radius;
+				R_b2 = R_b * R_b;
 
-					R_b = atom_radius + probe_radius;
-					R_b2 = R_b * R_b;
+				r0 = (*atom_iterator).getPosition();
+				lower_index = grid->getIndex(r0.x - R_b - d, 
+																		 r0.y - R_b - d, 
+																		 r0.z - R_b - d);
 
+				upper_index = grid->getIndex(r0.x + R_b + d, 
+																		 r0.y + R_b + d, 
+																		 r0.z + R_b + d);
 
+				for(unsigned long k = lower_index.z; k <= upper_index.z; k++)
+					for(unsigned long j = lower_index.y; j <= upper_index.y; j++)
+						for(unsigned long i = lower_index.x; i <= upper_index.x; i++){
+							x = (float)i * spacing + origin_x;
+							y = (float)j * spacing + origin_y;
+							z = (float)k * spacing + origin_z;
 
+							grid_value = &(grid->data[i + Nx * j + Nxy * k]);
+															
+							if (*grid_value != CCONN__INSIDE)
+							{
+								squared_distance =  (r0.x - x) * (r0.x - x)
+																 +  (r0.y - y) * (r0.y - y)
+																 +  (r0.z - z) * (r0.z - z);
 
-
-					r0 = (*atom_iterator).getPosition();
-					lower_index = grid->getIndex(r0.x - R_b - d, 
-																			 r0.y - R_b - d, 
-																			 r0.z - R_b - d);
-
-					upper_index = grid->getIndex(r0.x + R_b + d, 
-																			 r0.y + R_b + d, 
-																			 r0.z + R_b + d);
-
-
-
-					for(unsigned long k = lower_index.z; k <= upper_index.z; k++)
-						for(unsigned long j = lower_index.y; j <= upper_index.y; j++)
-							for(unsigned long i = lower_index.x; i <= upper_index.x; i++){
-								x = (float)i * spacing + origin_x;
-								y = (float)j * spacing + origin_y;
-								z = (float)k * spacing + origin_z;
-
-								grid_value = &(grid->data[i + Nx * j + Nxy * k]);
-																
-									
-								if (*grid_value != CCONN__INSIDE){
-									squared_distance =  (r0.x - x) * (r0.x - x)
-																	 +  (r0.y - y) * (r0.y - y)
-																	 +  (r0.z - z) * (r0.z - z);
-
-									if (squared_distance <= R_b2){
-										*grid_value = CCONN__INSIDE;
-									}
+								if (squared_distance <= R_b2)
+								{
+									*grid_value = CCONN__INSIDE;
 								}
 							}
-				}
+						}
 			}
+		}
 
 		return &(*grid);
 	}
