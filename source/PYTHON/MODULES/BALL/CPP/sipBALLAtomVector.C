@@ -2,7 +2,6 @@
 #include "sipBALLAtomVector.h"
 
 
-
 PyObject *sipClass_AtomVector;
 
 static void sipDealloc_AtomVector(sipThisType *);
@@ -50,7 +49,15 @@ static PyObject *sipDo_AtomVector_clear(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (AtomVector *)sipGetCppPtr(sipThis,sipClass_AtomVector)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomVector::clear();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -73,7 +80,7 @@ static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const AtomVector *a0;
+		const AtomVector * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomVector,&a0obj))
@@ -90,7 +97,15 @@ static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomVector::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -98,7 +113,7 @@ static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 		long a1;
 
@@ -116,7 +131,15 @@ static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomVector::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -147,7 +170,15 @@ static PyObject *sipDo_AtomVector_size(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (AtomVector *)sipGetCppPtr(sipThis,sipClass_AtomVector)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomVector::size();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -176,7 +207,15 @@ static PyObject *sipDo_AtomVector_savePositions(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (AtomVector *)sipGetCppPtr(sipThis,sipClass_AtomVector)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomVector::savePositions();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -206,7 +245,15 @@ static PyObject *sipDo_AtomVector_resetPositions(PyObject *sipThisObj,PyObject *
 			if ((ptr = (AtomVector *)sipGetCppPtr(sipThis,sipClass_AtomVector)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomVector::resetPositions();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -229,7 +276,7 @@ static PyObject *sipDo_AtomVector_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Gradient *a0;
+		const Gradient * a0;
 		PyObject *a0obj;
 		float a1;
 
@@ -247,7 +294,15 @@ static PyObject *sipDo_AtomVector_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomVector::moveTo(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -270,7 +325,7 @@ static PyObject *sipDo_AtomVector_push_back(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -287,7 +342,15 @@ static PyObject *sipDo_AtomVector_push_back(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomVector::push_back( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -319,7 +382,15 @@ static PyObject *sipDo_AtomVector_resize(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (AtomVector *)sipGetCppPtr(sipThis,sipClass_AtomVector)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomVector::resize( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -373,13 +444,21 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new AtomVector();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 		long a1;
 
@@ -392,13 +471,21 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new AtomVector(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		AtomVector *a0;
+		AtomVector * a0;
 		PyObject *a0obj;
 		long a1;
 
@@ -411,13 +498,21 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new AtomVector(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AtomVector *a0;
+		const AtomVector * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomVector,&a0obj))
@@ -429,7 +524,15 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new AtomVector(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -501,6 +604,7 @@ AtomVector *sipForceConvertTo_AtomVector(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_AtomVector);
+
 	*iserrp = 1;
 
 	return NULL;

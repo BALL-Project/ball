@@ -2,7 +2,6 @@
 #include "sipBALLMolecularDynamics.h"
 
 
-
 PyObject *sipClass_MolecularDynamics;
 
 static void sipDealloc_MolecularDynamics(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_MolecularDynamics = {
 };
 
 sipMolecularDynamics::sipMolecularDynamics()
-    : MolecularDynamics()
+   : MolecularDynamics()
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMolecularDynamics::sipMolecularDynamics(ForceField& a0)
-    : MolecularDynamics(a0)
+   : MolecularDynamics(a0)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMolecularDynamics::sipMolecularDynamics(const MolecularDynamics& a0,bool a1)
-    : MolecularDynamics(a0,a1)
+   : MolecularDynamics(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMolecularDynamics::sipMolecularDynamics(const MolecularDynamics& a0)
-    : MolecularDynamics(a0)
+   : MolecularDynamics(a0)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMolecularDynamics::~sipMolecularDynamics()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -333,13 +332,7 @@ bool sipMolecularDynamics::sipVH_setup(const sipMethodCache *pymc,sipThisType *s
 
 	a2obj = sipMapCppToSelf(&a2,sipClass_Options);
 
-	sipArgs = Py_BuildValue("(OOOO)",sipThis -> sipSelf,a0obj,a1obj,a2obj);
-
-	Py_XDECREF(a0obj);
-
-	Py_XDECREF(a1obj);
-
-	Py_XDECREF(a2obj);
+	sipArgs = Py_BuildValue("(ONNN)",sipThis -> sipSelf,a0obj,a1obj,a2obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -386,11 +379,7 @@ bool sipMolecularDynamics::sipVH_setup(const sipMethodCache *pymc,sipThisType *s
 
 	a1obj = sipMapCppToSelf(a1,sipClass_SnapShotManager);
 
-	sipArgs = Py_BuildValue("(OOO)",sipThis -> sipSelf,a0obj,a1obj);
-
-	Py_XDECREF(a0obj);
-
-	Py_XDECREF(a1obj);
+	sipArgs = Py_BuildValue("(ONN)",sipThis -> sipSelf,a0obj,a1obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -431,7 +420,7 @@ static PyObject *sipDo_MolecularDynamics_set(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const MolecularDynamics *a0;
+		const MolecularDynamics * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_MolecularDynamics,&a0obj))
@@ -448,7 +437,15 @@ static PyObject *sipDo_MolecularDynamics_set(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -479,7 +476,15 @@ static PyObject *sipDo_MolecularDynamics_isValid(PyObject *sipThisObj,PyObject *
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -501,9 +506,9 @@ static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
@@ -522,18 +527,26 @@ static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::setup(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
-		const Options *a2;
+		const Options * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
@@ -553,7 +566,15 @@ static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::setup(* a0, a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -583,7 +604,15 @@ static PyObject *sipDo_MolecularDynamics_specificSetup(PyObject *sipThisObj,PyOb
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::specificSetup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -614,7 +643,15 @@ static PyObject *sipDo_MolecularDynamics_setNumberOfIteration(PyObject *sipThisO
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::setNumberOfIteration( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -646,7 +683,15 @@ static PyObject *sipDo_MolecularDynamics_setMaximalNumberOfIterations(PyObject *
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::setMaximalNumberOfIterations( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -678,7 +723,15 @@ static PyObject *sipDo_MolecularDynamics_setMaximalSimulationTime(PyObject *sipT
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::setMaximalSimulationTime( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -710,7 +763,15 @@ static PyObject *sipDo_MolecularDynamics_setTimeStep(PyObject *sipThisObj,PyObje
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::setTimeStep( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -742,7 +803,15 @@ static PyObject *sipDo_MolecularDynamics_setReferenceTemperature(PyObject *sipTh
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::setReferenceTemperature( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -774,7 +843,15 @@ static PyObject *sipDo_MolecularDynamics_setCurrentTime(PyObject *sipThisObj,PyO
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::setCurrentTime( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -806,7 +883,15 @@ static PyObject *sipDo_MolecularDynamics_setEnergyOutputFrequency(PyObject *sipT
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::setEnergyOutputFrequency( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -838,7 +923,15 @@ static PyObject *sipDo_MolecularDynamics_setSnapShotFrequency(PyObject *sipThisO
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::setSnapShotFrequency( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -869,7 +962,15 @@ static PyObject *sipDo_MolecularDynamics_getEnergyOutputFrequency(PyObject *sipT
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getEnergyOutputFrequency();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -899,7 +1000,15 @@ static PyObject *sipDo_MolecularDynamics_getNumberOfIteration(PyObject *sipThisO
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getNumberOfIteration();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -929,7 +1038,15 @@ static PyObject *sipDo_MolecularDynamics_getMaximalNumberOfIterations(PyObject *
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getMaximalNumberOfIterations();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -959,7 +1076,15 @@ static PyObject *sipDo_MolecularDynamics_getMaximalSimulationTime(PyObject *sipT
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getMaximalSimulationTime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -989,7 +1114,15 @@ static PyObject *sipDo_MolecularDynamics_getTimeStep(PyObject *sipThisObj,PyObje
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getTimeStep();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -1019,7 +1152,15 @@ static PyObject *sipDo_MolecularDynamics_getSnapShotFrequency(PyObject *sipThisO
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getSnapShotFrequency();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -1049,7 +1190,15 @@ static PyObject *sipDo_MolecularDynamics_getTemperature(PyObject *sipThisObj,PyO
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getTemperature();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -1079,7 +1228,15 @@ static PyObject *sipDo_MolecularDynamics_getTime(PyObject *sipThisObj,PyObject *
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getTime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -1109,7 +1266,15 @@ static PyObject *sipDo_MolecularDynamics_getTotalEnergy(PyObject *sipThisObj,PyO
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getTotalEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -1139,7 +1304,15 @@ static PyObject *sipDo_MolecularDynamics_getPotentialEnergy(PyObject *sipThisObj
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getPotentialEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -1169,7 +1342,15 @@ static PyObject *sipDo_MolecularDynamics_getKineticEnergy(PyObject *sipThisObj,P
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getKineticEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -1199,7 +1380,15 @@ static PyObject *sipDo_MolecularDynamics_getForceField(PyObject *sipThisObj,PyOb
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MolecularDynamics::getForceField();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_ForceField);
 		}
@@ -1230,7 +1419,15 @@ static PyObject *sipDo_MolecularDynamics_simulate(PyObject *sipThisObj,PyObject 
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::simulate( (bool)a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1263,7 +1460,15 @@ static PyObject *sipDo_MolecularDynamics_simulateIterations(PyObject *sipThisObj
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::simulateIterations( a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1296,7 +1501,15 @@ static PyObject *sipDo_MolecularDynamics_simulateTime(PyObject *sipThisObj,PyObj
 			if ((ptr = (MolecularDynamics *)sipGetCppPtr(sipThis,sipClass_MolecularDynamics)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MolecularDynamics::simulateTime( a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1356,13 +1569,21 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipMolecularDynamics();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -1374,13 +1595,21 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMolecularDynamics(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const MolecularDynamics *a0;
+		const MolecularDynamics * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -1393,13 +1622,21 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMolecularDynamics(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const MolecularDynamics *a0;
+		const MolecularDynamics * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_MolecularDynamics,&a0obj))
@@ -1411,7 +1648,15 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMolecularDynamics(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1550,6 +1795,7 @@ MolecularDynamics *sipForceConvertTo_MolecularDynamics(PyObject *valobj,int *ise
 	}
 
 	sipBadClass(sipName_BALL_MolecularDynamics);
+
 	*iserrp = 1;
 
 	return NULL;

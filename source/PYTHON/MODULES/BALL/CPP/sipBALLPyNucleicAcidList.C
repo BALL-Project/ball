@@ -2,48 +2,11 @@
 #include "sipBALLPyNucleicAcidList.h"
 
 
-
-PyObject *sipConvertFrom_PyNucleicAcidList(const PyNucleicAcidList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pyNucleicAcidList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyNucleicAcidList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		NucleicAcid& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyNucleicAcidList.cpp"
-}
-
-PyObject *sipClass_PyNucleicAcidList;
-
 int sipCanConvertTo_PyNucleicAcidList(PyObject *sipPy)
 {
 #line 37 "pyNucleicAcidList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyNucleicAcidList.cpp"
+#line 14 "sipBALLPyNucleicAcidList.cpp"
 }
 
 int sipConvertTo_PyNucleicAcidList(PyObject *sipPy,PyNucleicAcidList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PyNucleicAcidList(PyObject *sipPy,PyNucleicAcidList **sipCppPtr
 	*sipCppPtr = nucleic_acid_list;
 
 	return 1;
-#line 83 "sipBALLPyNucleicAcidList.cpp"
+#line 46 "sipBALLPyNucleicAcidList.cpp"
 }
 
 PyNucleicAcidList *sipForceConvertTo_PyNucleicAcidList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyNucleicAcidList *sipForceConvertTo_PyNucleicAcidList(PyObject *valobj,int *ise
 	}
 
 	sipBadClass(sipName_BALL_PyNucleicAcidList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyNucleicAcidList(const PyNucleicAcidList *sipCpp)
+{
+#line 12 "pyNucleicAcidList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyNucleicAcidList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		NucleicAcid& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyNucleicAcidList.cpp"
 }

@@ -2,7 +2,6 @@
 #include "sipBALLCharmmStretch.h"
 
 
-
 PyObject *sipClass_CharmmStretch;
 
 static void sipDealloc_CharmmStretch(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_CharmmStretch = {
 };
 
 sipCharmmStretch::sipCharmmStretch()
-    : CharmmStretch()
+   : CharmmStretch()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmStretch::sipCharmmStretch(ForceField& a0)
-    : CharmmStretch(a0)
+   : CharmmStretch(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmStretch::sipCharmmStretch(const CharmmStretch& a0,bool a1)
-    : CharmmStretch(a0,a1)
+   : CharmmStretch(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmStretch::sipCharmmStretch(const CharmmStretch& a0)
-    : CharmmStretch(a0)
+   : CharmmStretch(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmStretch::~sipCharmmStretch()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -122,7 +121,15 @@ static PyObject *sipDo_CharmmStretch_setup(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (CharmmStretch *)sipGetCppPtr(sipThis,sipClass_CharmmStretch)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmStretch::setup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -152,7 +159,15 @@ static PyObject *sipDo_CharmmStretch_updateEnergy(PyObject *sipThisObj,PyObject 
 			if ((ptr = (CharmmStretch *)sipGetCppPtr(sipThis,sipClass_CharmmStretch)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmStretch::updateEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -181,7 +196,15 @@ static PyObject *sipDo_CharmmStretch_updateForces(PyObject *sipThisObj,PyObject 
 			if ((ptr = (CharmmStretch *)sipGetCppPtr(sipThis,sipClass_CharmmStretch)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> CharmmStretch::updateForces();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -246,13 +269,21 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipCharmmStretch();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -264,13 +295,21 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmStretch(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CharmmStretch *a0;
+		const CharmmStretch * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -283,13 +322,21 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmStretch(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CharmmStretch *a0;
+		const CharmmStretch * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CharmmStretch,&a0obj))
@@ -301,7 +348,15 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmStretch(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -374,6 +429,7 @@ CharmmStretch *sipForceConvertTo_CharmmStretch(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_CharmmStretch);
+
 	*iserrp = 1;
 
 	return NULL;

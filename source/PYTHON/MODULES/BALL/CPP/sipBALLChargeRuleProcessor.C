@@ -2,7 +2,6 @@
 #include "sipBALLChargeRuleProcessor.h"
 
 
-
 PyObject *sipClass_ChargeRuleProcessor;
 
 static void sipDealloc_ChargeRuleProcessor(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_ChargeRuleProcessor = {
 };
 
 sipChargeRuleProcessor::sipChargeRuleProcessor()
-    : ChargeRuleProcessor()
+   : ChargeRuleProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipChargeRuleProcessor::sipChargeRuleProcessor(INIFile& a0,const String& a1)
-    : ChargeRuleProcessor(a0,a1)
+   : ChargeRuleProcessor(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipChargeRuleProcessor::sipChargeRuleProcessor(const ChargeRuleProcessor& a0)
-    : ChargeRuleProcessor(a0)
+   : ChargeRuleProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipChargeRuleProcessor::~sipChargeRuleProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -78,17 +77,17 @@ bool sipChargeRuleProcessor::start()
 		RuleProcessor::start();
 }
 
-Processor::Result sipChargeRuleProcessor::operator ()(Atom& a0)
+Processor::Result sipChargeRuleProcessor::operator()(Atom& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[2],sipPyThis,relLock,a0) :
-		ChargeRuleProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipAtomProcessor::sipVH_CallOp(&sipPyMethods[2],sipPyThis,relLock,a0) :
+		ChargeRuleProcessor::operator()(a0);
 }
 
-static PyObject *sipDo_ChargeRuleProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_ChargeRuleProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -97,7 +96,7 @@ static PyObject *sipDo_ChargeRuleProcessor___call__(PyObject *sipThisObj,PyObjec
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -115,7 +114,15 @@ static PyObject *sipDo_ChargeRuleProcessor___call__(PyObject *sipThisObj,PyObjec
 			if (iserr)
 				return NULL;
 
-			res = ptr -> ChargeRuleProcessor::operator ()(* a0);
+   try
+   {
+			res = ptr -> ChargeRuleProcessor::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -123,7 +130,7 @@ static PyObject *sipDo_ChargeRuleProcessor___call__(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_ChargeRuleProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ChargeRuleProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -179,15 +186,23 @@ PyObject *sipNew_ChargeRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipChargeRuleProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		INIFile *a0;
+		INIFile * a0;
 		PyObject *a0obj;
-		const String *a1 = NULL;
+		const String * a1 = NULL;
 		PyObject *a1obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -200,7 +215,15 @@ PyObject *sipNew_ChargeRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipChargeRuleProcessor(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -209,7 +232,7 @@ PyObject *sipNew_ChargeRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const ChargeRuleProcessor *a0;
+		const ChargeRuleProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ChargeRuleProcessor,&a0obj))
@@ -221,7 +244,15 @@ PyObject *sipNew_ChargeRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipChargeRuleProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -252,7 +283,7 @@ PyObject *sipNew_ChargeRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 }
 
 PyMethodDef sipClassAttrTab_ChargeRuleProcessor[] = {
-	{sipName_BALL___call__, sipDo_ChargeRuleProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_ChargeRuleProcessor_CallOp, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -292,6 +323,7 @@ ChargeRuleProcessor *sipForceConvertTo_ChargeRuleProcessor(PyObject *valobj,int 
 	}
 
 	sipBadClass(sipName_BALL_ChargeRuleProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

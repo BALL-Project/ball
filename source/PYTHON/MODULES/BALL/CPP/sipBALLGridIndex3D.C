@@ -2,7 +2,6 @@
 #include "sipBALLGridIndex3D.h"
 
 
-
 PyObject *sipClass_GridIndex3D;
 
 static void sipDealloc_GridIndex3D(sipThisType *);
@@ -74,13 +73,21 @@ PyObject *sipNew_GridIndex3D(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new GridIndex3D();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const GridIndex3D *a0;
+		const GridIndex3D * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_GridIndex3D,&a0obj))
@@ -92,7 +99,15 @@ PyObject *sipNew_GridIndex3D(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new GridIndex3D(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -129,7 +144,7 @@ static PyObject *sipGetSetVar_GridIndex3D_z(PyObject *sipThisObj,PyObject *valob
 	{
 		val = &ptr -> z;
 
-		valobj = sipMapCppToSelf(val,sipClass_Position);
+		valobj = sipConvertFrom_Position(val);
 
 		return valobj;
 	}
@@ -161,7 +176,7 @@ static PyObject *sipGetSetVar_GridIndex3D_y(PyObject *sipThisObj,PyObject *valob
 	{
 		val = &ptr -> y;
 
-		valobj = sipMapCppToSelf(val,sipClass_Position);
+		valobj = sipConvertFrom_Position(val);
 
 		return valobj;
 	}
@@ -193,7 +208,7 @@ static PyObject *sipGetSetVar_GridIndex3D_x(PyObject *sipThisObj,PyObject *valob
 	{
 		val = &ptr -> x;
 
-		valobj = sipMapCppToSelf(val,sipClass_Position);
+		valobj = sipConvertFrom_Position(val);
 
 		return valobj;
 	}
@@ -264,6 +279,7 @@ GridIndex3D *sipForceConvertTo_GridIndex3D(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_GridIndex3D);
+
 	*iserrp = 1;
 
 	return NULL;

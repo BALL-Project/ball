@@ -2,7 +2,6 @@
 #include "sipBALLTrajectoryFile.h"
 
 
-
 PyObject *sipClass_TrajectoryFile;
 
 static void sipDealloc_TrajectoryFile(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_TrajectoryFile = {
 };
 
 sipTrajectoryFile::sipTrajectoryFile()
-   throw()  : TrajectoryFile()
+   throw() : TrajectoryFile()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipTrajectoryFile::sipTrajectoryFile(const TrajectoryFile& a0)
-   throw()  : TrajectoryFile(a0)
+   throw() : TrajectoryFile(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipTrajectoryFile::sipTrajectoryFile(const String& a0,std__openmode a1)
-   throw()  : TrajectoryFile(a0,a1)
+   throw() : TrajectoryFile(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipTrajectoryFile::~sipTrajectoryFile()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -121,9 +120,7 @@ bool sipTrajectoryFile::sipVH_read(const sipMethodCache *pymc,sipThisType *sipTh
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_SnapShot);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -167,9 +164,7 @@ bool sipTrajectoryFile::sipVH_append(const sipMethodCache *pymc,sipThisType *sip
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_SnapShot);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -347,7 +342,7 @@ static PyObject *sipDo_TrajectoryFile_clear(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_TrajectoryFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_TrajectoryFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -356,7 +351,7 @@ static PyObject *sipDo_TrajectoryFile___cmp__(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const TrajectoryFile *a0;
+		const TrajectoryFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_TrajectoryFile,&a0obj))
@@ -374,7 +369,7 @@ static PyObject *sipDo_TrajectoryFile___cmp__(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
-			res = ptr -> TrajectoryFile::operator ==(* a0);
+			res = ptr -> TrajectoryFile::operator==(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -382,7 +377,7 @@ static PyObject *sipDo_TrajectoryFile___cmp__(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL___cmp__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL_CmpOp);
 
 	return NULL;
 }
@@ -516,7 +511,7 @@ static PyObject *sipDo_TrajectoryFile_append(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const SnapShot *a0;
+		const SnapShot * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
@@ -556,7 +551,7 @@ static PyObject *sipDo_TrajectoryFile_read(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		SnapShot *a0;
+		SnapShot * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
@@ -644,7 +639,7 @@ PyObject *sipNew_TrajectoryFile(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const TrajectoryFile *a0;
+		const TrajectoryFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_TrajectoryFile,&a0obj))
@@ -662,9 +657,9 @@ PyObject *sipNew_TrajectoryFile(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		std__openmode *a1 = (std__openmode *)&File::IN;
+		std__openmode * a1 = (std__openmode *)&File::IN;
 		PyObject *a1obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_std__openmode,&a1obj))
@@ -712,7 +707,7 @@ PyObject *sipNew_TrajectoryFile(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_TrajectoryFile[] = {
 	{sipName_BALL_clear, sipDo_TrajectoryFile_clear, METH_VARARGS, NULL},
-	{sipName_BALL___cmp__, sipDo_TrajectoryFile___cmp__, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_TrajectoryFile_CmpOp, METH_VARARGS, NULL},
 	{sipName_BALL_getNumberOfSnapShots, sipDo_TrajectoryFile_getNumberOfSnapShots, METH_VARARGS, NULL},
 	{sipName_BALL_getNumberOfAtoms, sipDo_TrajectoryFile_getNumberOfAtoms, METH_VARARGS, NULL},
 	{sipName_BALL_readHeader, sipDo_TrajectoryFile_readHeader, METH_VARARGS, NULL},
@@ -758,6 +753,7 @@ TrajectoryFile *sipForceConvertTo_TrajectoryFile(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_TrajectoryFile);
+
 	*iserrp = 1;
 
 	return NULL;

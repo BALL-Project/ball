@@ -2,18 +2,18 @@ class NamedProperty
   : PersistentObject
 {
 %HeaderCode
-#include <BALL/CONCEPT/property.h>
-using namespace BALL;
+	#include <BALL/CONCEPT/property.h>
+	using namespace BALL;
 %End
   public:
   NamedProperty(String&);
   NamedProperty(String&, bool);
-  NamedProperty(String&, int);
-  NamedProperty(String&, float);
+  //NamedProperty(String&, int);
+  //NamedProperty(String&, float);
   NamedProperty(String&, String&);
   NamedProperty(String&, PersistentObject&);
   NamedProperty(NamedProperty&);
-//  ~NamedProperty();
+  ~NamedProperty();
 //    virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const;
 //    virtual void persistentRead(PersistenceManager& pm);
   int getType() const;
@@ -31,7 +31,7 @@ using namespace BALL;
   public:
    PropertyManager();
    PropertyManager(const PropertyManager&);
-//   virtual ~PropertyManager();
+	 ~PropertyManager();
    void clear();
    void destroy();
    void set(const PropertyManager&);
@@ -47,8 +47,8 @@ using namespace BALL;
    int countProperties() const;
    void setProperty(NamedProperty&);
    void setProperty(const String&);
-   void setProperty(const String&, bool);
-   void setProperty(const String&, int);
+   //void setProperty(const String&, bool);
+   //void setProperty(const String&, int);
 //   void setProperty(const String&, unsigned int);
    void setProperty(const String&, float);
    void setProperty(const String&, String&);

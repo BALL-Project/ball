@@ -2,48 +2,11 @@
 #include "sipBALLPyBondList.h"
 
 
-
-PyObject *sipConvertFrom_PyBondList(const PyBondList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pyBondList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyBondList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		Bond& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyBondList.cpp"
-}
-
-PyObject *sipClass_PyBondList;
-
 int sipCanConvertTo_PyBondList(PyObject *sipPy)
 {
 #line 37 "pyBondList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyBondList.cpp"
+#line 14 "sipBALLPyBondList.cpp"
 }
 
 int sipConvertTo_PyBondList(PyObject *sipPy,PyBondList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PyBondList(PyObject *sipPy,PyBondList **sipCppPtr,int sipWillDe
 	*sipCppPtr = bond_list;
 
 	return 1;
-#line 83 "sipBALLPyBondList.cpp"
+#line 46 "sipBALLPyBondList.cpp"
 }
 
 PyBondList *sipForceConvertTo_PyBondList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyBondList *sipForceConvertTo_PyBondList(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PyBondList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyBondList(const PyBondList *sipCpp)
+{
+#line 12 "pyBondList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyBondList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		Bond& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyBondList.cpp"
 }

@@ -2,7 +2,6 @@
 #include "sipBALLCharmmBend.h"
 
 
-
 PyObject *sipClass_CharmmBend;
 
 static void sipDealloc_CharmmBend(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_CharmmBend = {
 };
 
 sipCharmmBend::sipCharmmBend()
-    : CharmmBend()
+   : CharmmBend()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmBend::sipCharmmBend(ForceField& a0)
-    : CharmmBend(a0)
+   : CharmmBend(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmBend::sipCharmmBend(const CharmmBend& a0,bool a1)
-    : CharmmBend(a0,a1)
+   : CharmmBend(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmBend::sipCharmmBend(const CharmmBend& a0)
-    : CharmmBend(a0)
+   : CharmmBend(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmBend::~sipCharmmBend()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -122,7 +121,15 @@ static PyObject *sipDo_CharmmBend_setup(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (CharmmBend *)sipGetCppPtr(sipThis,sipClass_CharmmBend)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmBend::setup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -152,7 +159,15 @@ static PyObject *sipDo_CharmmBend_updateEnergy(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (CharmmBend *)sipGetCppPtr(sipThis,sipClass_CharmmBend)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmBend::updateEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -181,7 +196,15 @@ static PyObject *sipDo_CharmmBend_updateForces(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (CharmmBend *)sipGetCppPtr(sipThis,sipClass_CharmmBend)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> CharmmBend::updateForces();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -246,13 +269,21 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipCharmmBend();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -264,13 +295,21 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmBend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CharmmBend *a0;
+		const CharmmBend * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -283,13 +322,21 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmBend(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CharmmBend *a0;
+		const CharmmBend * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CharmmBend,&a0obj))
@@ -301,7 +348,15 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmBend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -374,6 +429,7 @@ CharmmBend *sipForceConvertTo_CharmmBend(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_CharmmBend);
+
 	*iserrp = 1;
 
 	return NULL;

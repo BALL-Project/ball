@@ -2,7 +2,6 @@
 #include "sipBALLAngle.h"
 
 
-
 PyObject *sipClass_Angle;
 
 static void sipDealloc_Angle(sipThisType *);
@@ -44,7 +43,7 @@ static PyObject *sipDo_Angle_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Angle *a0;
+		Angle * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
@@ -61,7 +60,15 @@ static PyObject *sipDo_Angle_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Angle::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -94,7 +101,15 @@ static PyObject *sipDo_Angle_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Angle::set( a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -102,7 +117,7 @@ static PyObject *sipDo_Angle_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const Angle *a0;
+		const Angle * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
@@ -119,7 +134,15 @@ static PyObject *sipDo_Angle_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Angle::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -150,7 +173,15 @@ static PyObject *sipDo_Angle_toRadian(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Angle::toRadian();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -180,7 +211,15 @@ static PyObject *sipDo_Angle_toDegree(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Angle::toDegree();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -211,7 +250,15 @@ static PyObject *sipDo_Angle_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Angle::normalize( (Angle::Range)a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -241,7 +288,15 @@ static PyObject *sipDo_Angle_negate(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Angle::negate();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -255,7 +310,7 @@ static PyObject *sipDo_Angle_negate(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Angle___pos__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -264,67 +319,7 @@ static PyObject *sipDo_Angle___pos__(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
-		{
-			Angle *res;
-			Angle *ptr;
-
-			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
-				return NULL;
-
-			res = new Angle(ptr -> Angle::operator +());
-
-			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___pos__);
-
-	return NULL;
-}
-
-static PyObject *sipDo_Angle___neg__(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-	int sipArgsParsed = 0;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
-		{
-			Angle *res;
-			Angle *ptr;
-
-			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
-				return NULL;
-
-			res = new Angle(ptr -> Angle::operator -());
-
-			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___neg__);
-
-	return NULL;
-}
-
-static PyObject *sipDo_Angle___add__(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-	int sipArgsParsed = 0;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
-		return NULL;
-
-	{
-		const Angle *a0;
+		const Angle * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
@@ -342,7 +337,15 @@ static PyObject *sipDo_Angle___add__(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = new Angle(ptr -> Angle::operator +(* a0));
+   try
+   {
+			res = new Angle(ptr -> Angle::operator+(* a0));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -350,12 +353,12 @@ static PyObject *sipDo_Angle___add__(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___add__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_AddOp);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Angle___sub__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -364,7 +367,7 @@ static PyObject *sipDo_Angle___sub__(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Angle *a0;
+		const Angle * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
@@ -382,7 +385,15 @@ static PyObject *sipDo_Angle___sub__(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = new Angle(ptr -> Angle::operator -(* a0));
+   try
+   {
+			res = new Angle(ptr -> Angle::operator-(* a0));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -390,12 +401,12 @@ static PyObject *sipDo_Angle___sub__(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___sub__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_SubOp);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Angle___div__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -404,7 +415,7 @@ static PyObject *sipDo_Angle___div__(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Angle *a0;
+		const Angle * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
@@ -422,7 +433,15 @@ static PyObject *sipDo_Angle___div__(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = new Angle(ptr -> Angle::operator /(* a0));
+   try
+   {
+			res = new Angle(ptr -> Angle::operator/(* a0));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -430,12 +449,12 @@ static PyObject *sipDo_Angle___div__(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___div__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_DivOp);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Angle___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -444,7 +463,7 @@ static PyObject *sipDo_Angle___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Angle *a0;
+		const Angle * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
@@ -462,7 +481,15 @@ static PyObject *sipDo_Angle___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = ptr -> Angle::operator ==(* a0);
+   try
+   {
+			res = ptr -> Angle::operator==(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -470,7 +497,7 @@ static PyObject *sipDo_Angle___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___cmp__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_CmpOp);
 
 	return NULL;
 }
@@ -484,7 +511,7 @@ static PyObject *sipDo_Angle_isEquivalent(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		Angle *a0;
+		Angle * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
@@ -502,7 +529,15 @@ static PyObject *sipDo_Angle_isEquivalent(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Angle::isEquivalent(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -532,7 +567,15 @@ static PyObject *sipDo_Angle_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Angle::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -573,7 +616,7 @@ static PyObject * sip__str__Angle(PyObject *a0)
     return NULL;
 
   return PyString_FromString(String(ptr->toRadian()).c_str());
-#line 581 "sipBALLAngle.cpp"
+#line 624 "sipBALLAngle.cpp"
 }
 
 PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
@@ -595,13 +638,21 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Angle();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Angle *a0;
+		const Angle * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Angle,&a0obj))
@@ -613,7 +664,15 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Angle(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -624,7 +683,15 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-f|l",&a0,&a1))
 		{
+   try
+   {
 			sipNew = new Angle( a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -655,12 +722,10 @@ PyMethodDef sipClassAttrTab_Angle[] = {
 	{sipName_BALL_toDegree, sipDo_Angle_toDegree, METH_VARARGS, NULL},
 	{sipName_BALL_normalize, sipDo_Angle_normalize, METH_VARARGS, NULL},
 	{sipName_BALL_negate, sipDo_Angle_negate, METH_VARARGS, NULL},
-	{sipName_BALL___pos__, sipDo_Angle___pos__, METH_VARARGS, NULL},
-	{sipName_BALL___neg__, sipDo_Angle___neg__, METH_VARARGS, NULL},
-	{sipName_BALL___add__, sipDo_Angle___add__, METH_VARARGS, NULL},
-	{sipName_BALL___sub__, sipDo_Angle___sub__, METH_VARARGS, NULL},
-	{sipName_BALL___div__, sipDo_Angle___div__, METH_VARARGS, NULL},
-	{sipName_BALL___cmp__, sipDo_Angle___cmp__, METH_VARARGS, NULL},
+	{sipName_BALL_AddOp, sipDo_Angle_AddOp, METH_VARARGS, NULL},
+	{sipName_BALL_SubOp, sipDo_Angle_SubOp, METH_VARARGS, NULL},
+	{sipName_BALL_DivOp, sipDo_Angle_DivOp, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_Angle_CmpOp, METH_VARARGS, NULL},
 	{sipName_BALL_isEquivalent, sipDo_Angle_isEquivalent, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_Angle_isValid, METH_VARARGS, NULL},
 	{NULL}
@@ -702,6 +767,7 @@ Angle *sipForceConvertTo_Angle(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Angle);
+
 	*iserrp = 1;
 
 	return NULL;

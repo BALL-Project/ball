@@ -2,7 +2,6 @@
 #include "sipBALLFragmentDistanceCollector.h"
 
 
-
 PyObject *sipClass_FragmentDistanceCollector;
 
 static void sipDealloc_FragmentDistanceCollector(sipThisType *);
@@ -35,43 +34,43 @@ static PyTypeObject sipType_FragmentDistanceCollector = {
 };
 
 sipFragmentDistanceCollector::sipFragmentDistanceCollector()
-    : FragmentDistanceCollector()
+   : FragmentDistanceCollector()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipFragmentDistanceCollector::sipFragmentDistanceCollector(const Composite& a0)
-    : FragmentDistanceCollector(a0)
+   : FragmentDistanceCollector(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipFragmentDistanceCollector::sipFragmentDistanceCollector(const Composite& a0,float a1)
-    : FragmentDistanceCollector(a0,a1)
+   : FragmentDistanceCollector(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipFragmentDistanceCollector::sipFragmentDistanceCollector(const FragmentDistanceCollector& a0)
-    : FragmentDistanceCollector(a0)
+   : FragmentDistanceCollector(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipFragmentDistanceCollector::~sipFragmentDistanceCollector()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipFragmentDistanceCollector::operator ()(Composite& a0)
+Processor::Result sipFragmentDistanceCollector::operator()(Composite& a0)
  throw()
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipCompositeProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		FragmentDistanceCollector::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipCompositeProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		FragmentDistanceCollector::operator()(a0);
 }
 
 bool sipFragmentDistanceCollector::finish()
@@ -236,7 +235,7 @@ static PyObject *sipDo_FragmentDistanceCollector_finish(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_FragmentDistanceCollector___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_FragmentDistanceCollector_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -245,7 +244,7 @@ static PyObject *sipDo_FragmentDistanceCollector___call__(PyObject *sipThisObj,P
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -263,7 +262,7 @@ static PyObject *sipDo_FragmentDistanceCollector___call__(PyObject *sipThisObj,P
 			if (iserr)
 				return NULL;
 
-			res = ptr -> FragmentDistanceCollector::operator ()(* a0);
+			res = ptr -> FragmentDistanceCollector::operator()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -271,7 +270,7 @@ static PyObject *sipDo_FragmentDistanceCollector___call__(PyObject *sipThisObj,P
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_FragmentDistanceCollector,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_FragmentDistanceCollector,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -293,7 +292,15 @@ static PyObject *sipDo_FragmentDistanceCollector_getNumberOfFragments(PyObject *
 			if ((ptr = (FragmentDistanceCollector *)sipGetCppPtr(sipThis,sipClass_FragmentDistanceCollector)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDistanceCollector::getNumberOfFragments();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -315,7 +322,7 @@ static PyObject *sipDo_FragmentDistanceCollector_setComposite(PyObject *sipThisO
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -332,7 +339,15 @@ static PyObject *sipDo_FragmentDistanceCollector_setComposite(PyObject *sipThisO
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> FragmentDistanceCollector::setComposite(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -363,7 +378,15 @@ static PyObject *sipDo_FragmentDistanceCollector_getComposite(PyObject *sipThisO
 			if ((ptr = (FragmentDistanceCollector *)sipGetCppPtr(sipThis,sipClass_FragmentDistanceCollector)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDistanceCollector::getComposite();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -393,7 +416,15 @@ static PyObject *sipDo_FragmentDistanceCollector_getDistance(PyObject *sipThisOb
 			if ((ptr = (FragmentDistanceCollector *)sipGetCppPtr(sipThis,sipClass_FragmentDistanceCollector)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDistanceCollector::getDistance();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -424,7 +455,15 @@ static PyObject *sipDo_FragmentDistanceCollector_setDistance(PyObject *sipThisOb
 			if ((ptr = (FragmentDistanceCollector *)sipGetCppPtr(sipThis,sipClass_FragmentDistanceCollector)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> FragmentDistanceCollector::setDistance( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -489,13 +528,21 @@ PyObject *sipNew_FragmentDistanceCollector(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipFragmentDistanceCollector();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Composite,&a0obj))
@@ -507,13 +554,21 @@ PyObject *sipNew_FragmentDistanceCollector(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFragmentDistanceCollector(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 		float a1;
 
@@ -526,13 +581,21 @@ PyObject *sipNew_FragmentDistanceCollector(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFragmentDistanceCollector(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const FragmentDistanceCollector *a0;
+		const FragmentDistanceCollector * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_FragmentDistanceCollector,&a0obj))
@@ -544,7 +607,15 @@ PyObject *sipNew_FragmentDistanceCollector(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFragmentDistanceCollector(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -577,7 +648,7 @@ PyObject *sipNew_FragmentDistanceCollector(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_FragmentDistanceCollector[] = {
 	{sipName_BALL_start, sipDo_FragmentDistanceCollector_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_FragmentDistanceCollector_finish, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_FragmentDistanceCollector___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_FragmentDistanceCollector_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_getNumberOfFragments, sipDo_FragmentDistanceCollector_getNumberOfFragments, METH_VARARGS, NULL},
 	{sipName_BALL_setComposite, sipDo_FragmentDistanceCollector_setComposite, METH_VARARGS, NULL},
 	{sipName_BALL_getComposite, sipDo_FragmentDistanceCollector_getComposite, METH_VARARGS, NULL},
@@ -622,6 +693,7 @@ FragmentDistanceCollector *sipForceConvertTo_FragmentDistanceCollector(PyObject 
 	}
 
 	sipBadClass(sipName_BALL_FragmentDistanceCollector);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLPDBAtom.h"
 
 
-
 PyObject *sipClass_PDBAtom;
 
 static void sipDealloc_PDBAtom(sipThisType *);
@@ -36,31 +35,31 @@ static PyTypeObject sipType_PDBAtom = {
 };
 
 sipPDBAtom::sipPDBAtom()
-    : PDBAtom()
+   : PDBAtom()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipPDBAtom::sipPDBAtom(const PDBAtom& a0,bool a1)
-    : PDBAtom(a0,a1)
+   : PDBAtom(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipPDBAtom::sipPDBAtom(Element& a0,const String& a1,const String& a2,AtomType a3,const Vector3& a4,const Vector3& a5,const Vector3& a6,float a7,float a8,char a9,char a10,char a11,float a12,float a13)
-    : PDBAtom(a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
+   : PDBAtom(a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipPDBAtom::sipPDBAtom(const PDBAtom& a0)
-    : PDBAtom(a0)
+   : PDBAtom(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipPDBAtom::~sipPDBAtom()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -188,7 +187,7 @@ static PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const PDBAtom *a0;
+		const PDBAtom * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -206,7 +205,15 @@ static PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBAtom::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -229,7 +236,7 @@ static PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		PDBAtom *a0;
+		PDBAtom * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -247,7 +254,15 @@ static PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBAtom::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -270,7 +285,7 @@ static PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		PDBAtom *a0;
+		PDBAtom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
@@ -287,7 +302,15 @@ static PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBAtom::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -318,7 +341,15 @@ static PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getProtein();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Protein);
 		}
@@ -333,7 +364,15 @@ static PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getProtein();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Protein);
 		}
@@ -363,7 +402,15 @@ static PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getChain();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Chain);
 		}
@@ -378,7 +425,15 @@ static PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getChain();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Chain);
 		}
@@ -408,7 +463,15 @@ static PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getResidue();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -423,7 +486,15 @@ static PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getResidue();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -454,7 +525,15 @@ static PyObject *sipDo_PDBAtom_setBranchDesignator(PyObject *sipThisObj,PyObject
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBAtom::setBranchDesignator( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -485,7 +564,15 @@ static PyObject *sipDo_PDBAtom_getBranchDesignator(PyObject *sipThisObj,PyObject
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getBranchDesignator();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyString_FromStringAndSize(&res,1);
 		}
@@ -516,7 +603,15 @@ static PyObject *sipDo_PDBAtom_setRemotenessIndicator(PyObject *sipThisObj,PyObj
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBAtom::setRemotenessIndicator( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -547,7 +642,15 @@ static PyObject *sipDo_PDBAtom_getRemotenessIndicator(PyObject *sipThisObj,PyObj
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getRemotenessIndicator();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyString_FromStringAndSize(&res,1);
 		}
@@ -578,7 +681,15 @@ static PyObject *sipDo_PDBAtom_setAlternateLocationIndicator(PyObject *sipThisOb
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBAtom::setAlternateLocationIndicator( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -609,7 +720,15 @@ static PyObject *sipDo_PDBAtom_getAlternateLocationIndicator(PyObject *sipThisOb
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getAlternateLocationIndicator();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyString_FromStringAndSize(&res,1);
 		}
@@ -640,7 +759,15 @@ static PyObject *sipDo_PDBAtom_setOccupancy(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBAtom::setOccupancy( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -671,7 +798,15 @@ static PyObject *sipDo_PDBAtom_getOccupancy(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getOccupancy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -702,7 +837,15 @@ static PyObject *sipDo_PDBAtom_setTemperatureFactor(PyObject *sipThisObj,PyObjec
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBAtom::setTemperatureFactor( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -733,7 +876,15 @@ static PyObject *sipDo_PDBAtom_getTemperatureFactor(PyObject *sipThisObj,PyObjec
 			if ((ptr = (PDBAtom *)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PDBAtom::getTemperatureFactor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -818,7 +969,7 @@ static PyObject * sip__str__PDBAtom(PyObject *a0)
         + " { " + ptr->getElement().getSymbol() + " @ ("
         + String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " "
         + String(ptr->getPosition().z) + " }").c_str());
-#line 826 "sipBALLPDBAtom.cpp"
+#line 977 "sipBALLPDBAtom.cpp"
 }
 
 PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
@@ -840,13 +991,21 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipPDBAtom();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const PDBAtom *a0;
+		const PDBAtom * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -859,25 +1018,33 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipPDBAtom(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		Element *a0;
+		Element * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
-		const String *a2;
+		const String * a2;
 		PyObject *a2obj;
-		AtomType *a3;
+		AtomType * a3;
 		PyObject *a3obj;
-		const Vector3 *a4;
+		const Vector3 * a4;
 		PyObject *a4obj;
-		const Vector3 *a5;
+		const Vector3 * a5;
 		PyObject *a5obj;
-		const Vector3 *a6;
+		const Vector3 * a6;
 		PyObject *a6obj;
 		float a7;
 		float a8;
@@ -902,7 +1069,15 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipPDBAtom(* a0,* a1,* a2,* a3,* a4,* a5,* a6, a7, a8, a9, a10, a11, a12, a13);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -917,7 +1092,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const PDBAtom *a0;
+		const PDBAtom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PDBAtom,&a0obj))
@@ -929,7 +1104,15 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipPDBAtom(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1018,6 +1201,7 @@ PDBAtom *sipForceConvertTo_PDBAtom(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PDBAtom);
+
 	*iserrp = 1;
 
 	return NULL;

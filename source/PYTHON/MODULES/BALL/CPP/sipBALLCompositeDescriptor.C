@@ -2,7 +2,6 @@
 #include "sipBALLCompositeDescriptor.h"
 
 
-
 PyObject *sipClass_CompositeDescriptor;
 
 static void sipDealloc_CompositeDescriptor(sipThisType *);
@@ -36,25 +35,25 @@ static PyTypeObject sipType_CompositeDescriptor = {
 };
 
 sipCompositeDescriptor::sipCompositeDescriptor()
-    : CompositeDescriptor()
+   : CompositeDescriptor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipCompositeDescriptor::sipCompositeDescriptor(const CompositeDescriptor& a0,bool a1)
-    : CompositeDescriptor(a0,a1)
+   : CompositeDescriptor(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipCompositeDescriptor::sipCompositeDescriptor(const CompositeDescriptor& a0)
-    : CompositeDescriptor(a0)
+   : CompositeDescriptor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipCompositeDescriptor::~sipCompositeDescriptor()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -269,7 +268,7 @@ static PyObject *sipDo_CompositeDescriptor_set(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		CompositeDescriptor *a0;
+		CompositeDescriptor * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -287,7 +286,15 @@ static PyObject *sipDo_CompositeDescriptor_set(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> CompositeDescriptor::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -310,7 +317,7 @@ static PyObject *sipDo_CompositeDescriptor_swap(PyObject *sipThisObj,PyObject *s
 		return NULL;
 
 	{
-		CompositeDescriptor *a0;
+		CompositeDescriptor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_CompositeDescriptor,&a0obj))
@@ -327,7 +334,15 @@ static PyObject *sipDo_CompositeDescriptor_swap(PyObject *sipThisObj,PyObject *s
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> CompositeDescriptor::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -350,7 +365,7 @@ static PyObject *sipDo_CompositeDescriptor_setName(PyObject *sipThisObj,PyObject
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -367,7 +382,15 @@ static PyObject *sipDo_CompositeDescriptor_setName(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> CompositeDescriptor::setName(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -401,7 +424,15 @@ static PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject
 			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> CompositeDescriptor::getName();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -416,7 +447,15 @@ static PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject
 			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> CompositeDescriptor::getName();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -438,7 +477,7 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 		return NULL;
 
 	{
-		const Quaternion *a0;
+		const Quaternion * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
@@ -455,7 +494,15 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> CompositeDescriptor::setQuaternion(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -463,7 +510,7 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 		float a1;
 
@@ -481,7 +528,15 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> CompositeDescriptor::setQuaternion(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -489,9 +544,9 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Angle *a1;
+		const Angle * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Angle,&a1obj))
@@ -509,7 +564,15 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> CompositeDescriptor::setQuaternion(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -540,7 +603,15 @@ static PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,Py
 			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> CompositeDescriptor::getQuaternion();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Quaternion);
 		}
@@ -555,7 +626,15 @@ static PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,Py
 			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> CompositeDescriptor::getQuaternion();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Quaternion);
 		}
@@ -595,7 +674,7 @@ static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyO
     return pyMapBALLObjectToSip(*res);
   }
 	return NULL;
-#line 603 "sipBALLCompositeDescriptor.cpp"
+#line 682 "sipBALLCompositeDescriptor.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -621,7 +700,15 @@ static PyObject *sipDo_CompositeDescriptor_update(PyObject *sipThisObj,PyObject 
 			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> CompositeDescriptor::update();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -653,7 +740,15 @@ static PyObject *sipDo_CompositeDescriptor_drawEntity(PyObject *sipThisObj,PyObj
 			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> CompositeDescriptor::drawEntity( (bool)a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -686,7 +781,15 @@ static PyObject *sipDo_CompositeDescriptor_drawDirect(PyObject *sipThisObj,PyObj
 			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> CompositeDescriptor::drawDirect( (bool)a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -717,7 +820,15 @@ static PyObject *sipDo_CompositeDescriptor_isShallowCopy(PyObject *sipThisObj,Py
 			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CompositeDescriptor::isShallowCopy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -747,7 +858,15 @@ static PyObject *sipDo_CompositeDescriptor_isDeepCopy(PyObject *sipThisObj,PyObj
 			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CompositeDescriptor::isDeepCopy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -825,7 +944,7 @@ static PyObject * sip__str__CompositeDescriptor(PyObject *a0)
 
 	String tmp = String("CompositeDescriptor { ") + ptr->getName() + " }";
   return PyString_FromString(tmp.c_str());
-#line 833 "sipBALLCompositeDescriptor.cpp"
+#line 952 "sipBALLCompositeDescriptor.cpp"
 }
 
 PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
@@ -847,13 +966,21 @@ PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipCompositeDescriptor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CompositeDescriptor *a0;
+		const CompositeDescriptor * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -866,13 +993,21 @@ PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCompositeDescriptor(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CompositeDescriptor *a0;
+		const CompositeDescriptor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CompositeDescriptor,&a0obj))
@@ -884,7 +1019,15 @@ PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCompositeDescriptor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -969,6 +1112,7 @@ CompositeDescriptor *sipForceConvertTo_CompositeDescriptor(PyObject *valobj,int 
 	}
 
 	sipBadClass(sipName_BALL_CompositeDescriptor);
+
 	*iserrp = 1;
 
 	return NULL;

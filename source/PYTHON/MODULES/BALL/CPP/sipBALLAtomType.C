@@ -2,7 +2,6 @@
 #include "sipBALLAtomType.h"
 
 
-
 PyObject *sipClass_AtomType;
 
 static void sipDealloc_AtomType(sipThisType *);
@@ -63,7 +62,7 @@ static PyObject * sip__str__AtomType(PyObject *a0)
     return NULL;
 
   return PyString_FromString(String(*ptr).c_str());
-#line 71 "sipBALLAtomType.cpp"
+#line 70 "sipBALLAtomType.cpp"
 }
 
 PyObject *sipNew_AtomType(PyObject *sipSelf,PyObject *sipArgs)
@@ -85,13 +84,21 @@ PyObject *sipNew_AtomType(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new AtomType();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AtomType *a0;
+		const AtomType * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomType,&a0obj))
@@ -103,7 +110,15 @@ PyObject *sipNew_AtomType(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new AtomType(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -139,7 +154,7 @@ int sipCanConvertTo_AtomType(PyObject *sipPy)
 #line 121 "atom.sip"
 	// automatic conversion of Py integers to Position 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_AtomType));
-#line 147 "sipBALLAtomType.cpp"
+#line 162 "sipBALLAtomType.cpp"
 }
 
 int sipConvertTo_AtomType(PyObject *sipPy,AtomType **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -158,7 +173,7 @@ int sipConvertTo_AtomType(PyObject *sipPy,AtomType **sipCppPtr,int sipWillDeref,
 	*sipCppPtr = (AtomType*)sipConvertToCpp(sipPy, sipClass_AtomType, sipIsErr);
 
 	return 0;
-#line 166 "sipBALLAtomType.cpp"
+#line 181 "sipBALLAtomType.cpp"
 }
 
 AtomType *sipForceConvertTo_AtomType(PyObject *valobj,int *iserrp)
@@ -176,6 +191,7 @@ AtomType *sipForceConvertTo_AtomType(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_AtomType);
+
 	*iserrp = 1;
 
 	return NULL;

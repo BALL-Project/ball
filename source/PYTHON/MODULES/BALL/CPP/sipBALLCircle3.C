@@ -2,7 +2,6 @@
 #include "sipBALLCircle3.h"
 
 
-
 PyObject *sipClass_Circle3;
 
 static void sipDealloc_Circle3(sipThisType *);
@@ -43,7 +42,7 @@ static PyObject *sipDo_Circle3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Circle3 *a0;
+		Circle3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Circle3,&a0obj))
@@ -60,7 +59,15 @@ static PyObject *sipDo_Circle3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Circle3::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -83,7 +90,7 @@ static PyObject *sipDo_Circle3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Circle3 *a0;
+		const Circle3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Circle3,&a0obj))
@@ -100,7 +107,15 @@ static PyObject *sipDo_Circle3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Circle3::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -108,9 +123,9 @@ static PyObject *sipDo_Circle3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 		float a2;
 
@@ -129,7 +144,15 @@ static PyObject *sipDo_Circle3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Circle3::set(* a0,* a1, a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -152,7 +175,7 @@ static PyObject *sipDo_Circle3_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Circle3 *a0;
+		Circle3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Circle3,&a0obj))
@@ -169,7 +192,15 @@ static PyObject *sipDo_Circle3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Circle3::get(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -177,9 +208,9 @@ static PyObject *sipDo_Circle3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Vector3 *a0;
+		Vector3 * a0;
 		PyObject *a0obj;
-		Vector3 *a1;
+		Vector3 * a1;
 		PyObject *a1obj;
 		float a2;
 
@@ -198,7 +229,15 @@ static PyObject *sipDo_Circle3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Circle3::get(* a0,* a1, a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -221,7 +260,7 @@ static PyObject *sipDo_Circle3_has(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -240,7 +279,15 @@ static PyObject *sipDo_Circle3_has(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Circle3::has(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -270,7 +317,15 @@ static PyObject *sipDo_Circle3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Circle3 *)sipGetCppPtr(sipThis,sipClass_Circle3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Circle3::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -323,13 +378,21 @@ PyObject *sipNew_Circle3(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Circle3();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Circle3 *a0;
+		const Circle3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Circle3,&a0obj))
@@ -341,15 +404,23 @@ PyObject *sipNew_Circle3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Circle3(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 		float a2;
 
@@ -363,7 +434,15 @@ PyObject *sipNew_Circle3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Circle3(* a0,* a1, a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -432,6 +511,7 @@ Circle3 *sipForceConvertTo_Circle3(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Circle3);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,48 +2,11 @@
 #include "sipBALLPySecondaryStructureList.h"
 
 
-
-PyObject *sipConvertFrom_PySecondaryStructureList(const PySecondaryStructureList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pySecondaryStructureList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PySecondaryStructureList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		SecondaryStructure& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPySecondaryStructureList.cpp"
-}
-
-PyObject *sipClass_PySecondaryStructureList;
-
 int sipCanConvertTo_PySecondaryStructureList(PyObject *sipPy)
 {
 #line 37 "pySecondaryStructureList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPySecondaryStructureList.cpp"
+#line 14 "sipBALLPySecondaryStructureList.cpp"
 }
 
 int sipConvertTo_PySecondaryStructureList(PyObject *sipPy,PySecondaryStructureList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PySecondaryStructureList(PyObject *sipPy,PySecondaryStructureLi
 	*sipCppPtr = sec_struc_list;
 
 	return 1;
-#line 83 "sipBALLPySecondaryStructureList.cpp"
+#line 46 "sipBALLPySecondaryStructureList.cpp"
 }
 
 PySecondaryStructureList *sipForceConvertTo_PySecondaryStructureList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PySecondaryStructureList *sipForceConvertTo_PySecondaryStructureList(PyObject *v
 	}
 
 	sipBadClass(sipName_BALL_PySecondaryStructureList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PySecondaryStructureList(const PySecondaryStructureList *sipCpp)
+{
+#line 12 "pySecondaryStructureList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PySecondaryStructureList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		SecondaryStructure& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPySecondaryStructureList.cpp"
 }

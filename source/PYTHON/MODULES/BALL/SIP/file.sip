@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.2 2001/07/25 11:32:33 oliver Exp $
+// $Id: file.sip,v 1.3 2001/07/29 17:31:16 oliver Exp $
 
 class std__openmode
 {
@@ -121,11 +121,11 @@ class OpenMode
 
   return PyString_FromString(mode_string.c_str());
 %End
-%CanConvertToClassCode
+%CanConvertToTypeCode
   // automatic conversion of Py integers to Position
   return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_OpenMode));
 %End
-%ConvertToClassCode
+%ConvertToTypeCode
   if (PyInt_Check(sipPy))
   {
 		int mode = PyInt_AS_LONG(sipPy);

@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.12 2001/07/25 11:34:51 oliver Exp $
+# $Id: Makefile,v 1.13 2001/07/29 17:30:53 oliver Exp $
 #
 
 all: libBALLc.so
@@ -9,7 +9,24 @@ all: libBALLc.so
 SIP_SOURCES_COMMON=\
 	sipBALLIndex.C\
 	sipBALLPosition.C\
-	sipBALLVersionInfo.C
+	sipBALLVersionInfo.C\
+	sipBALLGlobalExceptionHandler.C\
+	sipBALLGeneralException.C\
+	sipBALLIndexOverflow.C\
+	sipBALLIndexUnderflow.C\
+	sipBALLNullPointer.C\
+	sipBALLOutOfMemory.C\
+	sipBALLOutOfGrid.C\
+	sipBALLFileNotFound.C\
+	sipBALLBufferOverflow.C\
+	sipBALLDivisionByZero.C\
+	sipBALLIllegalSelfOperation.C\
+	sipBALLIncompatibleIterators.C\
+	sipBALLInvalidFormat.C\
+	sipBALLInvalidIterator.C\
+	sipBALLInvalidRange.C\
+	sipBALLNotImplemented.C\
+	sipBALLSizeUnderflow.C
 
 SIP_SOURCES_CONCEPT=\
 	sipBALLAtomProcessor.C\
@@ -118,7 +135,6 @@ SIP_SOURCES_MOLMEC_MINIMIZATION=\
 SIP_SOURCES_MOLMEC_COMMON=\
 	sipBALLAtomVector.C\
 	sipBALLChargeRuleProcessor.C\
-	sipBALLConstant.C\
 	sipBALLForceField.C\
 	sipBALLForceFieldComponent.C\
 	sipBALLGradient.C\

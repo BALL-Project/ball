@@ -2,7 +2,6 @@
 #include "sipBALLSelectable.h"
 
 
-
 PyObject *sipClass_Selectable;
 
 static void sipDealloc_Selectable(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_Selectable = {
 };
 
 sipSelectable::sipSelectable()
-   throw()  : Selectable()
+   throw() : Selectable()
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipSelectable::sipSelectable(const Selectable& a0,bool a1)
-   throw()  : Selectable(a0,a1)
+   throw() : Selectable(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipSelectable::sipSelectable(const Selectable& a0)
-    : Selectable(a0)
+   : Selectable(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipSelectable::~sipSelectable()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -217,7 +216,7 @@ static PyObject *sipDo_Selectable_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Selectable *a0;
+		const Selectable * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -258,7 +257,7 @@ static PyObject *sipDo_Selectable_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Selectable *a0;
+		Selectable * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -299,7 +298,7 @@ static PyObject *sipDo_Selectable_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Selectable *a0;
+		Selectable * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Selectable,&a0obj))
@@ -472,7 +471,7 @@ PyObject *sipNew_Selectable(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Selectable *a0;
+		const Selectable * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -491,7 +490,7 @@ PyObject *sipNew_Selectable(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Selectable *a0;
+		const Selectable * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Selectable,&a0obj))
@@ -503,7 +502,15 @@ PyObject *sipNew_Selectable(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipSelectable(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -581,6 +588,7 @@ Selectable *sipForceConvertTo_Selectable(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Selectable);
+
 	*iserrp = 1;
 
 	return NULL;

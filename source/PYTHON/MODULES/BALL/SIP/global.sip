@@ -1,22 +1,17 @@
-// $Id: global.sip,v 1.4 2001/07/25 11:32:33 oliver Exp $
+// $Id: global.sip,v 1.5 2001/07/29 17:31:16 oliver Exp $
 
-class Index
+%MappedType Index
 {
-	public:
-	PyMethods:
-	__str__
-%MemberCode
-	Index* ptr;
-  if ((ptr = (Index*)sipGetCppPtr((sipThisType*)a0,sipClass_Index)) == NULL)
-    return NULL;
+%HeaderCode
+	#include <BALL/COMMON/global.h>
+	#include "sipBALLIndex.h"
+%End
 
-  return PyString_FromString(String(*ptr).c_str());
-%End
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	// automatic conversion of Py integers to Position 
-	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Index));
+	return PyInt_Check(sipPy);
 %End
-%ConvertToClassCode
+%ConvertToTypeCode
 	if (PyInt_Check(sipPy))
 	{
 		*sipCppPtr = new Index(PyInt_AS_LONG(sipPy));
@@ -24,29 +19,20 @@ class Index
 		return 1;
 	}
 	
-	*sipCppPtr = (Index*)sipConvertToCpp(sipPy, sipClass_Index, sipIsErr);
-
 	return 0;
+%End
+%ConvertFromTypeCode
+	return NULL;
 %End
 };
 
-class Position
+%MappedType Position
 {
-	public:
-	PyMethods:
-	__str__
-%MemberCode
-	Position* ptr;
-  if ((ptr = (Position*)sipGetCppPtr((sipThisType*)a0,sipClass_Position)) == NULL)
-    return NULL;
-
-  return PyString_FromString(String(*ptr).c_str());
-%End
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	// automatic conversion of Py integers to Position 
-	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Position));
+	return PyInt_Check(sipPy);
 %End
-%ConvertToClassCode
+%ConvertToTypeCode
 	if (PyInt_Check(sipPy))
 	{
 		*sipCppPtr = new Position(PyInt_AS_LONG(sipPy));
@@ -54,9 +40,10 @@ class Position
 		return 1;
 	}
 	
-	*sipCppPtr = (Position*)sipConvertToCpp(sipPy, sipClass_Position, sipIsErr);
-
 	return 0;
+%End
+%ConvertFromTypeCode
+	return NULL;
 %End
 };
 

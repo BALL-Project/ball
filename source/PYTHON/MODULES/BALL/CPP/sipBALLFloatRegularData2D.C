@@ -2,7 +2,6 @@
 #include "sipBALLFloatRegularData2D.h"
 
 
-
 PyObject *sipClass_FloatRegularData2D;
 
 static void sipDealloc_FloatRegularData2D(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_FloatRegularData2D = {
 };
 
 sipFloatRegularData2D::sipFloatRegularData2D()
-   throw()  : FloatRegularData2D()
+   throw() : FloatRegularData2D()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipFloatRegularData2D::sipFloatRegularData2D(const FloatRegularData2D& a0)
-   throw(OutOfMemory)  : FloatRegularData2D(a0)
+   throw(OutOfMemory) : FloatRegularData2D(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipFloatRegularData2D::sipFloatRegularData2D(float a0,float a1,float a2,float a3,int a4,int a5)
-   throw(OutOfMemory)  : FloatRegularData2D(a0,a1,a2,a3,a4,a5)
+   throw(OutOfMemory) : FloatRegularData2D(a0,a1,a2,a3,a4,a5)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipFloatRegularData2D::sipFloatRegularData2D(const Vector2& a0,const Vector2& a1,int a2,int a3)
-   throw(OutOfMemory)  : FloatRegularData2D(a0,a1,a2,a3)
+   throw(OutOfMemory) : FloatRegularData2D(a0,a1,a2,a3)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipFloatRegularData2D::sipFloatRegularData2D(const Vector2& a0,const Vector2& a1,float a2)
-   throw(OutOfMemory)  : FloatRegularData2D(a0,a1,a2)
+   throw(OutOfMemory) : FloatRegularData2D(a0,a1,a2)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipFloatRegularData2D::~sipFloatRegularData2D()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -154,7 +153,7 @@ static PyObject *sipDo_FloatRegularData2D_set(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const FloatRegularData2D *a0;
+		const FloatRegularData2D * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_FloatRegularData2D,&a0obj))
@@ -171,7 +170,16 @@ static PyObject *sipDo_FloatRegularData2D_set(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> FloatRegularData2D::set(* a0);
+   }
+   catch (OutOfMemory e)
+   {
+      OutOfMemory *my_exception = new OutOfMemory(e);
+      PyErr_SetObject(sipClass_OutOfMemory, sipNewCppToSelf(my_exception,sipClass_OutOfMemory,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -494,7 +502,7 @@ static PyObject *sipDo_FloatRegularData2D_getIndex(PyObject *sipThisObj,PyObject
 		return NULL;
 
 	{
-		const Vector2 *a0;
+		const Vector2 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector2,&a0obj))
@@ -512,7 +520,16 @@ static PyObject *sipDo_FloatRegularData2D_getIndex(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = new GridIndex2D(ptr -> FloatRegularData2D::getIndex(* a0));
+   }
+   catch (OutOfGrid e)
+   {
+      OutOfGrid *my_exception = new OutOfGrid(e);
+      PyErr_SetObject(sipClass_OutOfGrid, sipNewCppToSelf(my_exception,sipClass_OutOfGrid,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_GridIndex2D,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -530,7 +547,16 @@ static PyObject *sipDo_FloatRegularData2D_getIndex(PyObject *sipThisObj,PyObject
 			if ((ptr = (FloatRegularData2D *)sipGetCppPtr(sipThis,sipClass_FloatRegularData2D)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new GridIndex2D(ptr -> FloatRegularData2D::getIndex( a0, a1));
+   }
+   catch (OutOfGrid e)
+   {
+      OutOfGrid *my_exception = new OutOfGrid(e);
+      PyErr_SetObject(sipClass_OutOfGrid, sipNewCppToSelf(my_exception,sipClass_OutOfGrid,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_GridIndex2D,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -543,7 +569,7 @@ static PyObject *sipDo_FloatRegularData2D_getIndex(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_FloatRegularData2D___getitem__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_FloatRegularData2D_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -552,35 +578,7 @@ static PyObject *sipDo_FloatRegularData2D___getitem__(PyObject *sipThisObj,PyObj
 		return NULL;
 
 	{
-		const Position *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
-		{
-			float res;
-			FloatRegularData2D *ptr;
-
-			if ((ptr = (FloatRegularData2D *)sipGetCppPtr(sipThis,sipClass_FloatRegularData2D)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_Position(a0obj,(Position **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> FloatRegularData2D::operator [](* a0);
-
-			if (istemp0)
-				delete a0;
-
-			return PyFloat_FromDouble((double)res);
-		}
-	}
-
-	{
-		const Vector2 *a0;
+		const Vector2 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector2,&a0obj))
@@ -598,7 +596,16 @@ static PyObject *sipDo_FloatRegularData2D___getitem__(PyObject *sipThisObj,PyObj
 			if (iserr)
 				return NULL;
 
-			res = ptr -> FloatRegularData2D::operator [](* a0);
+   try
+   {
+			res = ptr -> FloatRegularData2D::operator[](* a0);
+   }
+   catch (OutOfGrid e)
+   {
+      OutOfGrid *my_exception = new OutOfGrid(e);
+      PyErr_SetObject(sipClass_OutOfGrid, sipNewCppToSelf(my_exception,sipClass_OutOfGrid,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -606,7 +613,7 @@ static PyObject *sipDo_FloatRegularData2D___getitem__(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_FloatRegularData2D,sipName_BALL___getitem__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_FloatRegularData2D,sipName_BALL_GetItemOp);
 
 	return NULL;
 }
@@ -620,9 +627,9 @@ static PyObject *sipDo_FloatRegularData2D_getGridCoordinates(PyObject *sipThisOb
 		return NULL;
 
 	{
-		const Position *a0;
+		const Position * a0;
 		PyObject *a0obj;
-		const Position *a1;
+		const Position * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Position,&a0obj,sipCanConvertTo_Position,&a1obj))
@@ -641,7 +648,16 @@ static PyObject *sipDo_FloatRegularData2D_getGridCoordinates(PyObject *sipThisOb
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = new Vector2(ptr -> FloatRegularData2D::getGridCoordinates(* a0,* a1));
+   }
+   catch (OutOfGrid e)
+   {
+      OutOfGrid *my_exception = new OutOfGrid(e);
+      PyErr_SetObject(sipClass_OutOfGrid, sipNewCppToSelf(my_exception,sipClass_OutOfGrid,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -654,7 +670,7 @@ static PyObject *sipDo_FloatRegularData2D_getGridCoordinates(PyObject *sipThisOb
 	}
 
 	{
-		const Position *a0;
+		const Position * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
@@ -672,7 +688,16 @@ static PyObject *sipDo_FloatRegularData2D_getGridCoordinates(PyObject *sipThisOb
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = new Vector2(ptr -> FloatRegularData2D::getGridCoordinates(* a0));
+   }
+   catch (OutOfGrid e)
+   {
+      OutOfGrid *my_exception = new OutOfGrid(e);
+      PyErr_SetObject(sipClass_OutOfGrid, sipNewCppToSelf(my_exception,sipClass_OutOfGrid,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -742,7 +767,7 @@ static PyObject *sipDo_FloatRegularData2D_setOrigin(PyObject *sipThisObj,PyObjec
 		return NULL;
 
 	{
-		const Vector2 *a0;
+		const Vector2 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector2,&a0obj))
@@ -845,7 +870,7 @@ static PyObject *sipDo_FloatRegularData2D_has(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const Vector2 *a0;
+		const Vector2 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector2,&a0obj))
@@ -903,7 +928,7 @@ static PyObject *sipDo_FloatRegularData2D_getInterpolatedValue(PyObject *sipThis
 		return NULL;
 
 	{
-		const Vector2 *a0;
+		const Vector2 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector2,&a0obj))
@@ -921,7 +946,16 @@ static PyObject *sipDo_FloatRegularData2D_getInterpolatedValue(PyObject *sipThis
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FloatRegularData2D::getInterpolatedValue(* a0);
+   }
+   catch (OutOfGrid e)
+   {
+      OutOfGrid *my_exception = new OutOfGrid(e);
+      PyErr_SetObject(sipClass_OutOfGrid, sipNewCppToSelf(my_exception,sipClass_OutOfGrid,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -1027,7 +1061,7 @@ static PyObject *sipDo_FloatRegularData2D_rescale(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_FloatRegularData2D___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_FloatRegularData2D_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1036,7 +1070,7 @@ static PyObject *sipDo_FloatRegularData2D___cmp__(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		const FloatRegularData2D *a0;
+		const FloatRegularData2D * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_FloatRegularData2D,&a0obj))
@@ -1054,7 +1088,7 @@ static PyObject *sipDo_FloatRegularData2D___cmp__(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
-			res = ptr -> FloatRegularData2D::operator ==(* a0);
+			res = ptr -> FloatRegularData2D::operator==(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1062,7 +1096,7 @@ static PyObject *sipDo_FloatRegularData2D___cmp__(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_FloatRegularData2D,sipName_BALL___cmp__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_FloatRegularData2D,sipName_BALL_CmpOp);
 
 	return NULL;
 }
@@ -1071,8 +1105,43 @@ static PyObject *sipDo_FloatRegularData2D___cmp__(PyObject *sipThisObj,PyObject 
 
 const void *sipCast_FloatRegularData2D(const void *ptr,PyObject *targetClass)
 {
+	const void *res;
+
 	if (targetClass == sipClass_FloatRegularData2D)
 		return ptr;
+
+	if ((res = sipCast_OutOfMemory((OutOfMemory *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfMemory((OutOfMemory *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfMemory((OutOfMemory *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfMemory((OutOfMemory *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfMemory((OutOfMemory *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfGrid((OutOfGrid *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfGrid((OutOfGrid *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfGrid((OutOfGrid *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfGrid((OutOfGrid *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfGrid((OutOfGrid *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfGrid((OutOfGrid *)(FloatRegularData2D *)ptr,targetClass)) != NULL)
+		return res;
 
 	return NULL;
 }
@@ -1119,7 +1188,7 @@ PyObject *sipNew_FloatRegularData2D(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const FloatRegularData2D *a0;
+		const FloatRegularData2D * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_FloatRegularData2D,&a0obj))
@@ -1131,7 +1200,16 @@ PyObject *sipNew_FloatRegularData2D(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFloatRegularData2D(* a0);
+   }
+   catch (OutOfMemory e)
+   {
+      OutOfMemory *my_exception = new OutOfMemory(e);
+      PyErr_SetObject(sipClass_OutOfMemory, sipNewCppToSelf(my_exception,sipClass_OutOfMemory,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 		}
 	}
 
@@ -1146,15 +1224,24 @@ PyObject *sipNew_FloatRegularData2D(PyObject *sipSelf,PyObject *sipArgs)
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-ffffii",&a0,&a1,&a2,&a3,&a4,&a5))
 		{
+   try
+   {
 			sipNew = new sipFloatRegularData2D( a0, a1, a2, a3, a4, a5);
+   }
+   catch (OutOfMemory e)
+   {
+      OutOfMemory *my_exception = new OutOfMemory(e);
+      PyErr_SetObject(sipClass_OutOfMemory, sipNewCppToSelf(my_exception,sipClass_OutOfMemory,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Vector2 *a0;
+		const Vector2 * a0;
 		PyObject *a0obj;
-		const Vector2 *a1;
+		const Vector2 * a1;
 		PyObject *a1obj;
 		int a2;
 		int a3;
@@ -1169,15 +1256,24 @@ PyObject *sipNew_FloatRegularData2D(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFloatRegularData2D(* a0,* a1, a2, a3);
+   }
+   catch (OutOfMemory e)
+   {
+      OutOfMemory *my_exception = new OutOfMemory(e);
+      PyErr_SetObject(sipClass_OutOfMemory, sipNewCppToSelf(my_exception,sipClass_OutOfMemory,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Vector2 *a0;
+		const Vector2 * a0;
 		PyObject *a0obj;
-		const Vector2 *a1;
+		const Vector2 * a1;
 		PyObject *a1obj;
 		float a2;
 
@@ -1191,7 +1287,16 @@ PyObject *sipNew_FloatRegularData2D(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFloatRegularData2D(* a0,* a1, a2);
+   }
+   catch (OutOfMemory e)
+   {
+      OutOfMemory *my_exception = new OutOfMemory(e);
+      PyErr_SetObject(sipClass_OutOfMemory, sipNewCppToSelf(my_exception,sipClass_OutOfMemory,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 		}
 	}
 
@@ -1235,7 +1340,7 @@ PyMethodDef sipClassAttrTab_FloatRegularData2D[] = {
 	{sipName_BALL_getXSpacing, sipDo_FloatRegularData2D_getXSpacing, METH_VARARGS, NULL},
 	{sipName_BALL_getYSpacing, sipDo_FloatRegularData2D_getYSpacing, METH_VARARGS, NULL},
 	{sipName_BALL_getIndex, sipDo_FloatRegularData2D_getIndex, METH_VARARGS, NULL},
-	{sipName_BALL___getitem__, sipDo_FloatRegularData2D___getitem__, METH_VARARGS, NULL},
+	{sipName_BALL_GetItemOp, sipDo_FloatRegularData2D_GetItemOp, METH_VARARGS, NULL},
 	{sipName_BALL_getGridCoordinates, sipDo_FloatRegularData2D_getGridCoordinates, METH_VARARGS, NULL},
 	{sipName_BALL_getOrigin, sipDo_FloatRegularData2D_getOrigin, METH_VARARGS, NULL},
 	{sipName_BALL_setOrigin, sipDo_FloatRegularData2D_setOrigin, METH_VARARGS, NULL},
@@ -1245,7 +1350,7 @@ PyMethodDef sipClassAttrTab_FloatRegularData2D[] = {
 	{sipName_BALL_getMaxValue, sipDo_FloatRegularData2D_getMaxValue, METH_VARARGS, NULL},
 	{sipName_BALL_getMinValue, sipDo_FloatRegularData2D_getMinValue, METH_VARARGS, NULL},
 	{sipName_BALL_rescale, sipDo_FloatRegularData2D_rescale, METH_VARARGS, NULL},
-	{sipName_BALL___cmp__, sipDo_FloatRegularData2D___cmp__, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_FloatRegularData2D_CmpOp, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -1285,6 +1390,7 @@ FloatRegularData2D *sipForceConvertTo_FloatRegularData2D(PyObject *valobj,int *i
 	}
 
 	sipBadClass(sipName_BALL_FloatRegularData2D);
+
 	*iserrp = 1;
 
 	return NULL;

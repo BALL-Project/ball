@@ -2,7 +2,6 @@
 #include "sipBALLCharmmFF.h"
 
 
-
 PyObject *sipClass_CharmmFF;
 
 static void sipDealloc_CharmmFF(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_CharmmFF = {
 };
 
 sipCharmmFF::sipCharmmFF()
-    : CharmmFF()
+   : CharmmFF()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipCharmmFF::sipCharmmFF(System& a0)
-    : CharmmFF(a0)
+   : CharmmFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipCharmmFF::sipCharmmFF(System& a0,const Options& a1)
-    : CharmmFF(a0,a1)
+   : CharmmFF(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipCharmmFF::sipCharmmFF(const CharmmFF& a0)
-    : CharmmFF(a0)
+   : CharmmFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipCharmmFF::~sipCharmmFF()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -91,7 +90,15 @@ static PyObject *sipDo_CharmmFF_specificSetup(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::specificSetup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -121,7 +128,15 @@ static PyObject *sipDo_CharmmFF_getStretchEnergy(PyObject *sipThisObj,PyObject *
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::getStretchEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -151,7 +166,15 @@ static PyObject *sipDo_CharmmFF_getBendEnergy(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::getBendEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -181,7 +204,15 @@ static PyObject *sipDo_CharmmFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::getTorsionEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -211,7 +242,15 @@ static PyObject *sipDo_CharmmFF_getImproperTorsionEnergy(PyObject *sipThisObj,Py
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::getImproperTorsionEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -241,7 +280,15 @@ static PyObject *sipDo_CharmmFF_getProperTorsionEnergy(PyObject *sipThisObj,PyOb
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::getProperTorsionEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -271,7 +318,15 @@ static PyObject *sipDo_CharmmFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::getNonbondedEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -301,7 +356,15 @@ static PyObject *sipDo_CharmmFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::getVdWEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -331,7 +394,15 @@ static PyObject *sipDo_CharmmFF_getESEnergy(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::getESEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -361,7 +432,15 @@ static PyObject *sipDo_CharmmFF_getSolvationEnergy(PyObject *sipThisObj,PyObject
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::getSolvationEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -391,7 +470,15 @@ static PyObject *sipDo_CharmmFF_hasInitializedParameters(PyObject *sipThisObj,Py
 			if ((ptr = (CharmmFF *)sipGetCppPtr(sipThis,sipClass_CharmmFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmFF::hasInitializedParameters();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -455,13 +542,21 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipCharmmFF();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_System,&a0obj))
@@ -473,15 +568,23 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmFF(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
-		const Options *a1;
+		const Options * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
@@ -494,13 +597,21 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmFF(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CharmmFF *a0;
+		const CharmmFF * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CharmmFF,&a0obj))
@@ -512,7 +623,15 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmFF(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -593,6 +712,7 @@ CharmmFF *sipForceConvertTo_CharmmFF(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_CharmmFF);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLMainControl.h"
 
 
-
 PyObject *sipClass_MainControl;
 
 static void sipDealloc_MainControl(sipThisType *);
@@ -35,13 +34,13 @@ static PyTypeObject sipType_MainControl = {
 };
 
 sipMainControl::sipMainControl(const MainControl& a0)
-   throw()  : MainControl(a0)
+   throw() : MainControl(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipMainControl::~sipMainControl()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -267,12 +266,12 @@ static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
-		const String *a1 = NULL;
+		const String * a1 = NULL;
 		PyObject *a1obj = NULL;
-		Vector3 a2def = Vector3(0,0,0);
-		const Vector3 *a2 = &a2def;
+		const Vector3& a2def = Vector3(0,0,0);
+		const Vector3 * a2 = &a2def;
 		PyObject *a2obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_Vector3,&a2obj))
@@ -292,7 +291,15 @@ static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::insert(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -317,7 +324,7 @@ static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -335,14 +342,22 @@ static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const CompositeDescriptor *a0;
+		const CompositeDescriptor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_CompositeDescriptor,&a0obj))
@@ -360,7 +375,15 @@ static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -390,7 +413,15 @@ static PyObject *sipDo_MainControl_getDescriptorList(PyObject *sipThisObj,PyObje
 			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new PyCompositeDescriptorList(ptr -> MainControl::getDescriptorList());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyCompositeDescriptorList(res);
 			delete res;
@@ -415,9 +446,9 @@ static PyObject *sipDo_MainControl_setName(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -436,7 +467,15 @@ static PyObject *sipDo_MainControl_setName(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::setName(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -461,7 +500,7 @@ static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -479,14 +518,22 @@ static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::getName(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
 	}
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -504,7 +551,15 @@ static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::getName(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -526,7 +581,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -544,7 +599,15 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::getDescriptor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -554,7 +617,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -572,7 +635,15 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::getDescriptor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -582,7 +653,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
@@ -600,14 +671,22 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::getDescriptor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
 		}
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
@@ -625,7 +704,15 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::getDescriptor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
 		}
@@ -647,9 +734,9 @@ static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -668,7 +755,15 @@ static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::setCenter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -690,7 +785,7 @@ static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -708,14 +803,22 @@ static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::getCenter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Vector3);
 		}
 	}
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -733,7 +836,15 @@ static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::getCenter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Vector3);
 		}
@@ -755,7 +866,7 @@ static PyObject *sipDo_MainControl_update(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -773,7 +884,15 @@ static PyObject *sipDo_MainControl_update(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::update(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -802,7 +921,15 @@ static PyObject *sipDo_MainControl_updateAll(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MainControl::updateAll();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -825,7 +952,7 @@ static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -843,14 +970,22 @@ static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::isInserted(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const CompositeDescriptor *a0;
+		const CompositeDescriptor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_CompositeDescriptor,&a0obj))
@@ -868,7 +1003,15 @@ static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MainControl::isInserted(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -920,7 +1063,15 @@ static PyObject *sipDo_MainControl_countInstances(PyObject *,PyObject *sipArgs)
 		{
 			int res;
 
+   try
+   {
 			res = MainControl::countInstances();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -938,7 +1089,7 @@ static PyObject *sipDo_MainControl_getInstance(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		Position *a0;
+		Position * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Position,&a0obj))
@@ -952,7 +1103,15 @@ static PyObject *sipDo_MainControl_getInstance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = MainControl::getInstance(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -1017,7 +1176,7 @@ PyObject *sipNew_MainControl(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const MainControl *a0;
+		const MainControl * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_MainControl,&a0obj))
@@ -1115,6 +1274,7 @@ MainControl *sipForceConvertTo_MainControl(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_MainControl);
+
 	*iserrp = 1;
 
 	return NULL;

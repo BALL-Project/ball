@@ -2,7 +2,6 @@
 #include "sipBALLPTE_.h"
 
 
-
 PyObject *sipClass_PTE_;
 
 static void sipDealloc_PTE_(sipThisType *);
@@ -45,14 +44,22 @@ static PyObject *sipDo_PTE__getElement(PyObject *,PyObject *sipArgs)
 		{
 			Element *res;
 
+   try
+   {
 			res = &PTE_::getElement( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Element);
 		}
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -66,7 +73,15 @@ static PyObject *sipDo_PTE__getElement(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = &PTE_::getElement(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -127,13 +142,21 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new PTE_();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const PTE_ *a0;
+		const PTE_ * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PTE_,&a0obj))
@@ -145,7 +168,15 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new PTE_(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -210,6 +241,7 @@ PTE_ *sipForceConvertTo_PTE_(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PTE_);
+
 	*iserrp = 1;
 
 	return NULL;

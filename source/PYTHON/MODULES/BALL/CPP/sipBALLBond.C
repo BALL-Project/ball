@@ -2,7 +2,6 @@
 #include "sipBALLBond.h"
 
 
-
 PyObject *sipClass_Bond;
 
 static void sipDealloc_Bond(sipThisType *);
@@ -36,31 +35,31 @@ static PyTypeObject sipType_Bond = {
 };
 
 sipBond::sipBond()
-    : Bond()
+   : Bond()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipBond::sipBond(const Bond& a0,bool a1)
-    : Bond(a0,a1)
+   : Bond(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipBond::sipBond(const String& a0,Atom& a1,Atom& a2,short a3,short a4)
-    : Bond(a0,a1,a2,a3,a4)
+   : Bond(a0,a1,a2,a3,a4)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipBond::sipBond(const Bond& a0)
-    : Bond(a0)
+   : Bond(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipBond::~sipBond()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -124,11 +123,11 @@ static PyObject *sipDo_Bond_createBond(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		Bond *a0;
+		Bond * a0;
 		PyObject *a0obj;
-		Atom *a1;
+		Atom * a1;
 		PyObject *a1obj;
-		Atom *a2;
+		Atom * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Bond,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj))
@@ -144,7 +143,15 @@ static PyObject *sipDo_Bond_createBond(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = Bond::createBond(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Bond);
 		}
@@ -233,7 +240,15 @@ static PyObject *sipDo_Bond_finalize(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Bond::finalize();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -256,7 +271,7 @@ static PyObject *sipDo_Bond_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Bond *a0;
+		Bond * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Bond,&a0obj))
@@ -273,7 +288,15 @@ static PyObject *sipDo_Bond_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Bond::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -296,7 +319,7 @@ static PyObject *sipDo_Bond_setFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -313,7 +336,15 @@ static PyObject *sipDo_Bond_setFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Bond::setFirstAtom( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -344,7 +375,15 @@ static PyObject *sipDo_Bond_getFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::getFirstAtom();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Atom);
 		}
@@ -366,7 +405,7 @@ static PyObject *sipDo_Bond_getPartner(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -384,7 +423,15 @@ static PyObject *sipDo_Bond_getPartner(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::getPartner(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Atom);
 		}
@@ -406,7 +453,7 @@ static PyObject *sipDo_Bond_setSecondAtom(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -423,7 +470,15 @@ static PyObject *sipDo_Bond_setSecondAtom(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Bond::setSecondAtom( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -454,7 +509,15 @@ static PyObject *sipDo_Bond_getSecondAtom(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::getSecondAtom();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Atom);
 		}
@@ -476,7 +539,7 @@ static PyObject *sipDo_Bond_setName(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -493,7 +556,15 @@ static PyObject *sipDo_Bond_setName(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Bond::setName(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -527,7 +598,15 @@ static PyObject *sipDo_Bond_getName(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> Bond::getName();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -558,7 +637,15 @@ static PyObject *sipDo_Bond_setOrder(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Bond::setOrder( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -589,7 +676,15 @@ static PyObject *sipDo_Bond_getOrder(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::getOrder();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -620,7 +715,15 @@ static PyObject *sipDo_Bond_setType(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Bond::setType( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -651,7 +754,15 @@ static PyObject *sipDo_Bond_getType(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::getType();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -681,7 +792,15 @@ static PyObject *sipDo_Bond_getLength(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::getLength();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -703,7 +822,7 @@ static PyObject *sipDo_Bond_getBoundAtom(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -721,14 +840,22 @@ static PyObject *sipDo_Bond_getBoundAtom(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::getBoundAtom(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Atom);
 		}
 	}
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -746,7 +873,15 @@ static PyObject *sipDo_Bond_getBoundAtom(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::getBoundAtom(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Atom);
 		}
@@ -768,7 +903,7 @@ static PyObject *sipDo_Bond_isBondOf(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -786,7 +921,15 @@ static PyObject *sipDo_Bond_isBondOf(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::isBondOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -816,7 +959,15 @@ static PyObject *sipDo_Bond_isBound(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::isBound();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -846,7 +997,15 @@ static PyObject *sipDo_Bond_isInterBond(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::isInterBond();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -868,7 +1027,7 @@ static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -886,14 +1045,22 @@ static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::isInterBondOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -911,7 +1078,15 @@ static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::isInterBondOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -941,7 +1116,15 @@ static PyObject *sipDo_Bond_isIntraBond(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::isIntraBond();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -963,7 +1146,7 @@ static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -981,14 +1164,22 @@ static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::isIntraBondOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -1006,7 +1197,15 @@ static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Bond::isIntraBondOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1121,7 +1320,7 @@ static PyObject * sip__str__Bond(PyObject *a0)
 		tmp += " }";
 	}
   return PyString_FromString(tmp.c_str());
-#line 1129 "sipBALLBond.cpp"
+#line 1328 "sipBALLBond.cpp"
 }
 
 PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
@@ -1143,13 +1342,21 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipBond();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Bond *a0;
+		const Bond * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -1162,17 +1369,25 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipBond(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		Atom *a1;
+		Atom * a1;
 		PyObject *a1obj;
-		Atom *a2;
+		Atom * a2;
 		PyObject *a2obj;
 		short a3 = Bond::ORDER__UNKNOWN;
 		short a4 = Bond::TYPE__UNKNOWN;
@@ -1188,7 +1403,15 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipBond(* a0,* a1,* a2, a3, a4);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -1197,7 +1420,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Bond *a0;
+		const Bond * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Bond,&a0obj))
@@ -1209,7 +1432,15 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipBond(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1304,6 +1535,7 @@ Bond *sipForceConvertTo_Bond(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Bond);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLResidueChecker.h"
 
 
-
 PyObject *sipClass_ResidueChecker;
 
 static void sipDealloc_ResidueChecker(sipThisType *);
@@ -35,43 +34,43 @@ static PyTypeObject sipType_ResidueChecker = {
 };
 
 sipResidueChecker::sipResidueChecker()
-    : ResidueChecker()
+   : ResidueChecker()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipResidueChecker::sipResidueChecker(FragmentDB& a0)
-    : ResidueChecker(a0)
+   : ResidueChecker(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipResidueChecker::sipResidueChecker(const ResidueChecker& a0,bool a1)
-    : ResidueChecker(a0,a1)
+   : ResidueChecker(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipResidueChecker::sipResidueChecker(const ResidueChecker& a0)
-    : ResidueChecker(a0)
+   : ResidueChecker(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipResidueChecker::~sipResidueChecker()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipResidueChecker::operator ()(Residue& a0)
+Processor::Result sipResidueChecker::operator()(Residue& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipResidueProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		ResidueChecker::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipResidueProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		ResidueChecker::operator()(a0);
 }
 
 static PyObject *sipDo_ResidueChecker_getStatus(PyObject *sipThisObj,PyObject *sipArgs)
@@ -91,7 +90,15 @@ static PyObject *sipDo_ResidueChecker_getStatus(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (ResidueChecker *)sipGetCppPtr(sipThis,sipClass_ResidueChecker)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResidueChecker::getStatus();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -104,7 +111,7 @@ static PyObject *sipDo_ResidueChecker_getStatus(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_ResidueChecker___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_ResidueChecker_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -113,7 +120,7 @@ static PyObject *sipDo_ResidueChecker___call__(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
@@ -131,7 +138,15 @@ static PyObject *sipDo_ResidueChecker___call__(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
-			res = ptr -> ResidueChecker::operator ()(* a0);
+   try
+   {
+			res = ptr -> ResidueChecker::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -139,7 +154,7 @@ static PyObject *sipDo_ResidueChecker___call__(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_ResidueChecker,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ResidueChecker,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -161,7 +176,15 @@ static PyObject *sipDo_ResidueChecker_start(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (ResidueChecker *)sipGetCppPtr(sipThis,sipClass_ResidueChecker)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResidueChecker::start();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -191,7 +214,15 @@ static PyObject *sipDo_ResidueChecker_finish(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (ResidueChecker *)sipGetCppPtr(sipThis,sipClass_ResidueChecker)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResidueChecker::finish();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -255,13 +286,21 @@ PyObject *sipNew_ResidueChecker(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipResidueChecker();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		FragmentDB *a0;
+		FragmentDB * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_FragmentDB,&a0obj))
@@ -273,13 +312,21 @@ PyObject *sipNew_ResidueChecker(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipResidueChecker(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const ResidueChecker *a0;
+		const ResidueChecker * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -292,13 +339,21 @@ PyObject *sipNew_ResidueChecker(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipResidueChecker(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const ResidueChecker *a0;
+		const ResidueChecker * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ResidueChecker,&a0obj))
@@ -310,7 +365,15 @@ PyObject *sipNew_ResidueChecker(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipResidueChecker(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -342,7 +405,7 @@ PyObject *sipNew_ResidueChecker(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_ResidueChecker[] = {
 	{sipName_BALL_getStatus, sipDo_ResidueChecker_getStatus, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_ResidueChecker___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_ResidueChecker_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_start, sipDo_ResidueChecker_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_ResidueChecker_finish, METH_VARARGS, NULL},
 	{NULL}
@@ -384,6 +447,7 @@ ResidueChecker *sipForceConvertTo_ResidueChecker(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_ResidueChecker);
+
 	*iserrp = 1;
 
 	return NULL;

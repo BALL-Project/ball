@@ -2,7 +2,6 @@
 #include "sipBALLVersionInfo.h"
 
 
-
 PyObject *sipClass_VersionInfo;
 
 static void sipDealloc_VersionInfo(sipThisType *);
@@ -44,7 +43,15 @@ static PyObject *sipDo_VersionInfo_getVersion(PyObject *,PyObject *sipArgs)
 		{
 			const char *res;
 
+   try
+   {
 			res = VersionInfo::getVersion();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (res == NULL)
 			{
@@ -72,7 +79,15 @@ static PyObject *sipDo_VersionInfo_getMajorRevision(PyObject *,PyObject *sipArgs
 		{
 			int res;
 
+   try
+   {
 			res = VersionInfo::getMajorRevision();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -94,7 +109,15 @@ static PyObject *sipDo_VersionInfo_getMinorRevision(PyObject *,PyObject *sipArgs
 		{
 			int res;
 
+   try
+   {
 			res = VersionInfo::getMinorRevision();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -116,7 +139,15 @@ static PyObject *sipDo_VersionInfo_getType(PyObject *,PyObject *sipArgs)
 		{
 			VersionInfo::Type res;
 
+   try
+   {
 			res = VersionInfo::getType();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -153,7 +184,7 @@ static PyObject * sip__str__VersionInfo(PyObject *a0)
 {
 #line 26 "version.sip"
   return PyString_FromString(VersionInfo::getVersion());  	
-#line 161 "sipBALLVersionInfo.cpp"
+#line 192 "sipBALLVersionInfo.cpp"
 }
 
 PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
@@ -175,13 +206,21 @@ PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new VersionInfo();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const VersionInfo *a0;
+		const VersionInfo * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_VersionInfo,&a0obj))
@@ -193,7 +232,15 @@ PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new VersionInfo(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -261,6 +308,7 @@ VersionInfo *sipForceConvertTo_VersionInfo(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_VersionInfo);
+
 	*iserrp = 1;
 
 	return NULL;

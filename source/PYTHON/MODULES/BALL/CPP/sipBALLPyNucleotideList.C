@@ -2,48 +2,11 @@
 #include "sipBALLPyNucleotideList.h"
 
 
-
-PyObject *sipConvertFrom_PyNucleotideList(const PyNucleotideList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pyNucleotideList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyNucleotideList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		Nucleotide& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyNucleotideList.cpp"
-}
-
-PyObject *sipClass_PyNucleotideList;
-
 int sipCanConvertTo_PyNucleotideList(PyObject *sipPy)
 {
 #line 37 "pyNucleotideList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyNucleotideList.cpp"
+#line 14 "sipBALLPyNucleotideList.cpp"
 }
 
 int sipConvertTo_PyNucleotideList(PyObject *sipPy,PyNucleotideList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PyNucleotideList(PyObject *sipPy,PyNucleotideList **sipCppPtr,i
 	*sipCppPtr = nucleotide_list;
 
 	return 1;
-#line 83 "sipBALLPyNucleotideList.cpp"
+#line 46 "sipBALLPyNucleotideList.cpp"
 }
 
 PyNucleotideList *sipForceConvertTo_PyNucleotideList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyNucleotideList *sipForceConvertTo_PyNucleotideList(PyObject *valobj,int *iserr
 	}
 
 	sipBadClass(sipName_BALL_PyNucleotideList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyNucleotideList(const PyNucleotideList *sipCpp)
+{
+#line 12 "pyNucleotideList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyNucleotideList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		Nucleotide& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyNucleotideList.cpp"
 }

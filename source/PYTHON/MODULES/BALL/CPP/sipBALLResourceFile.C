@@ -2,7 +2,6 @@
 #include "sipBALLResourceFile.h"
 
 
-
 PyObject *sipClass_ResourceFile;
 
 static void sipDealloc_ResourceFile(sipThisType *);
@@ -50,7 +49,15 @@ static PyObject *sipDo_ResourceFile_destroy(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (ResourceFile *)sipGetCppPtr(sipThis,sipClass_ResourceFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> ResourceFile::destroy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -73,7 +80,7 @@ static PyObject *sipDo_ResourceFile_open(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -91,7 +98,15 @@ static PyObject *sipDo_ResourceFile_open(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::open(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -123,7 +138,15 @@ static PyObject *sipDo_ResourceFile_close(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (ResourceFile *)sipGetCppPtr(sipThis,sipClass_ResourceFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> ResourceFile::close();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -146,7 +169,7 @@ static PyObject *sipDo_ResourceFile_saveAs(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -163,7 +186,15 @@ static PyObject *sipDo_ResourceFile_saveAs(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> ResourceFile::saveAs(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -189,7 +220,7 @@ static PyObject *sipDo_ResourceFile_save(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const ResourceEntry *a0;
+		const ResourceEntry * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ResourceEntry,&a0obj))
@@ -206,7 +237,15 @@ static PyObject *sipDo_ResourceFile_save(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> ResourceFile::save(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -221,7 +260,15 @@ static PyObject *sipDo_ResourceFile_save(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (ResourceFile *)sipGetCppPtr(sipThis,sipClass_ResourceFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> ResourceFile::save();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -252,7 +299,15 @@ static PyObject *sipDo_ResourceFile_getSize(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (ResourceFile *)sipGetCppPtr(sipThis,sipClass_ResourceFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::getSize();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -282,7 +337,15 @@ static PyObject *sipDo_ResourceFile_getRoot(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (ResourceFile *)sipGetCppPtr(sipThis,sipClass_ResourceFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> ResourceFile::getRoot();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_ResourceEntry);
 		}
@@ -304,7 +367,7 @@ static PyObject *sipDo_ResourceFile_getEntry(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -322,7 +385,15 @@ static PyObject *sipDo_ResourceFile_getEntry(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::getEntry(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -332,7 +403,7 @@ static PyObject *sipDo_ResourceFile_getEntry(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -350,7 +421,15 @@ static PyObject *sipDo_ResourceFile_getEntry(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::getEntry(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -375,7 +454,7 @@ static PyObject *sipDo_ResourceFile_getValue(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -393,7 +472,15 @@ static PyObject *sipDo_ResourceFile_getValue(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::getValue(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -403,7 +490,7 @@ static PyObject *sipDo_ResourceFile_getValue(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -421,7 +508,15 @@ static PyObject *sipDo_ResourceFile_getValue(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::getValue(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -446,9 +541,9 @@ static PyObject *sipDo_ResourceFile_insert(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -467,7 +562,15 @@ static PyObject *sipDo_ResourceFile_insert(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::insert(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -495,7 +598,7 @@ static PyObject *sipDo_ResourceFile_removeKey(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -513,7 +616,15 @@ static PyObject *sipDo_ResourceFile_removeKey(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::removeKey(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -538,7 +649,7 @@ static PyObject *sipDo_ResourceFile_hasKey(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -556,7 +667,15 @@ static PyObject *sipDo_ResourceFile_hasKey(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::hasKey(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -589,7 +708,15 @@ static PyObject *sipDo_ResourceFile_isEmpty(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (ResourceFile *)sipGetCppPtr(sipThis,sipClass_ResourceFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::isEmpty();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -619,7 +746,15 @@ static PyObject *sipDo_ResourceFile_isValid(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (ResourceFile *)sipGetCppPtr(sipThis,sipClass_ResourceFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ResourceFile::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -677,13 +812,21 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new ResourceFile();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -695,7 +838,15 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new ResourceFile(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -704,7 +855,7 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const ResourceFile *a0;
+		const ResourceFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ResourceFile,&a0obj))
@@ -716,7 +867,15 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new ResourceFile(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -794,6 +953,7 @@ ResourceFile *sipForceConvertTo_ResourceFile(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_ResourceFile);
+
 	*iserrp = 1;
 
 	return NULL;

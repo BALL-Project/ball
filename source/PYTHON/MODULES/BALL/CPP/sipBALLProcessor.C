@@ -2,7 +2,6 @@
 #include "sipBALLProcessor.h"
 
 
-
 PyObject *sipClass_Processor;
 
 static void sipDealloc_Processor(sipThisType *);
@@ -74,13 +73,21 @@ PyObject *sipNew_Processor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Processor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Processor *a0;
+		const Processor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Processor,&a0obj))
@@ -92,7 +99,15 @@ PyObject *sipNew_Processor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Processor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -156,6 +171,7 @@ Processor *sipForceConvertTo_Processor(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Processor);
+
 	*iserrp = 1;
 
 	return NULL;

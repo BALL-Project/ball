@@ -2,7 +2,6 @@
 #include "sipBALLQuaternion.h"
 
 
-
 PyObject *sipClass_Quaternion;
 
 static void sipDealloc_Quaternion(sipThisType *);
@@ -43,7 +42,7 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Quaternion *a0;
+		const Quaternion * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
@@ -60,7 +59,15 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Quaternion::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -68,7 +75,7 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 		float a1;
 
@@ -86,7 +93,15 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Quaternion::set(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -106,7 +121,15 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Quaternion *)sipGetCppPtr(sipThis,sipClass_Quaternion)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Quaternion::set( a0, a1, a2, a3);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -129,7 +152,7 @@ static PyObject *sipDo_Quaternion_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Quaternion *a0;
+		Quaternion * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
@@ -146,7 +169,15 @@ static PyObject *sipDo_Quaternion_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Quaternion::get(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -176,7 +207,15 @@ static PyObject *sipDo_Quaternion_setIdentity(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (Quaternion *)sipGetCppPtr(sipThis,sipClass_Quaternion)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Quaternion::setIdentity();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -199,7 +238,7 @@ static PyObject *sipDo_Quaternion_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Quaternion *a0;
+		Quaternion * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
@@ -216,7 +255,15 @@ static PyObject *sipDo_Quaternion_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Quaternion::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -247,7 +294,15 @@ static PyObject *sipDo_Quaternion_getAngle(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Quaternion *)sipGetCppPtr(sipThis,sipClass_Quaternion)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Quaternion::getAngle();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -277,7 +332,15 @@ static PyObject *sipDo_Quaternion_getAxis(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Quaternion *)sipGetCppPtr(sipThis,sipClass_Quaternion)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new Vector3(ptr -> Quaternion::getAxis());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Vector3,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -299,7 +362,7 @@ static PyObject *sipDo_Quaternion_getRotationMatrix(PyObject *sipThisObj,PyObjec
 		return NULL;
 
 	{
-		Matrix4x4 *a0;
+		Matrix4x4 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
@@ -317,7 +380,15 @@ static PyObject *sipDo_Quaternion_getRotationMatrix(PyObject *sipThisObj,PyObjec
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> Quaternion::getRotationMatrix(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Matrix4x4);
 		}
@@ -347,7 +418,15 @@ static PyObject *sipDo_Quaternion_getInverse(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Quaternion *)sipGetCppPtr(sipThis,sipClass_Quaternion)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new Quaternion(ptr -> Quaternion::getInverse());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Quaternion,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -377,7 +456,15 @@ static PyObject *sipDo_Quaternion_getConjugate(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (Quaternion *)sipGetCppPtr(sipThis,sipClass_Quaternion)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new Quaternion(ptr -> Quaternion::getConjugate());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Quaternion,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -430,13 +517,21 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Quaternion();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Quaternion *a0;
+		const Quaternion * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Quaternion,&a0obj))
@@ -448,13 +543,21 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Quaternion(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 		float a1;
 
@@ -467,7 +570,15 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Quaternion(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -480,7 +591,15 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-ffff",&a0,&a1,&a2,&a3))
 		{
+   try
+   {
 			sipNew = new Quaternion( a0, a1, a2, a3);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -690,6 +809,7 @@ Quaternion *sipForceConvertTo_Quaternion(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Quaternion);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLAmberNonBonded.h"
 
 
-
 PyObject *sipClass_AmberNonBonded;
 
 static void sipDealloc_AmberNonBonded(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_AmberNonBonded = {
 };
 
 sipAmberNonBonded::sipAmberNonBonded()
-    : AmberNonBonded()
+   : AmberNonBonded()
 {
 	sipCommonCtor(sipPyMethods,6);
 }
 
 sipAmberNonBonded::sipAmberNonBonded(ForceField& a0)
-    : AmberNonBonded(a0)
+   : AmberNonBonded(a0)
 {
 	sipCommonCtor(sipPyMethods,6);
 }
 
 sipAmberNonBonded::sipAmberNonBonded(const AmberNonBonded& a0,bool a1)
-    : AmberNonBonded(a0,a1)
+   : AmberNonBonded(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,6);
 }
 
 sipAmberNonBonded::sipAmberNonBonded(const AmberNonBonded& a0)
-    : AmberNonBonded(a0)
+   : AmberNonBonded(a0)
 {
 	sipCommonCtor(sipPyMethods,6);
 }
 
 sipAmberNonBonded::~sipAmberNonBonded()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -408,13 +407,21 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipAmberNonBonded();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -426,13 +433,21 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberNonBonded(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AmberNonBonded *a0;
+		const AmberNonBonded * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -445,13 +460,21 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberNonBonded(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AmberNonBonded *a0;
+		const AmberNonBonded * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AmberNonBonded,&a0obj))
@@ -463,7 +486,15 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberNonBonded(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -538,6 +569,7 @@ AmberNonBonded *sipForceConvertTo_AmberNonBonded(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_AmberNonBonded);
+
 	*iserrp = 1;
 
 	return NULL;

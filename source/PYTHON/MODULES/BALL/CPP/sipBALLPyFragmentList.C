@@ -2,46 +2,11 @@
 #include "sipBALLPyFragmentList.h"
 
 
-
-PyObject *sipConvertFrom_PyFragmentList(const PyFragmentList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pyFragmentList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-		return NULL;
-
-	// Convert the list.
-
-	for (PyFragmentList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		Fragment& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 40 "sipBALLPyFragmentList.cpp"
-}
-
-PyObject *sipClass_PyFragmentList;
-
 int sipCanConvertTo_PyFragmentList(PyObject *sipPy)
 {
 #line 35 "pyFragmentList.sip"
 	return PyList_Check(sipPy);
-#line 49 "sipBALLPyFragmentList.cpp"
+#line 14 "sipBALLPyFragmentList.cpp"
 }
 
 int sipConvertTo_PyFragmentList(PyObject *sipPy,PyFragmentList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -73,7 +38,7 @@ int sipConvertTo_PyFragmentList(PyObject *sipPy,PyFragmentList **sipCppPtr,int s
 	*sipCppPtr = fragment_list;
 
 	return 1;
-#line 81 "sipBALLPyFragmentList.cpp"
+#line 46 "sipBALLPyFragmentList.cpp"
 }
 
 PyFragmentList *sipForceConvertTo_PyFragmentList(PyObject *valobj,int *iserrp)
@@ -91,7 +56,34 @@ PyFragmentList *sipForceConvertTo_PyFragmentList(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PyFragmentList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyFragmentList(const PyFragmentList *sipCpp)
+{
+#line 12 "pyFragmentList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+		return NULL;
+
+	// Convert the list.
+
+	for (PyFragmentList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		Fragment& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 93 "sipBALLPyFragmentList.cpp"
 }

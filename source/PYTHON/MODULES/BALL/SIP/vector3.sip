@@ -1,4 +1,4 @@
-// $Id: vector3.sip,v 1.2 2001/07/25 11:32:37 oliver Exp $
+// $Id: vector3.sip,v 1.3 2001/07/29 17:31:18 oliver Exp $
 
 class Vector3
  : PersistentObject
@@ -39,10 +39,10 @@ class Vector3
   Vector3& operator += (const Vector3& /vector/);
   Vector3& operator -= (const Vector3& /vector/);
   Vector3& operator *= (float /scalar/);
-  Vector3& operator /= (float /lambda/);
+  Vector3& operator /= (float /lambda/) throw(DivisionByZero);
   // Vector3& operator %= (const Vector3& /vector/);
   Vector3 operator * (float /scalar/);
-  Vector3 operator / (float /lambda/);
+  Vector3 operator / (float /lambda/) throw(DvivisionByZero);
   float operator * (const Vector3& /vector/) const;
   Vector3 operator % (const Vector3& /vector/) const;
   float getDistance(const Vector3& /vector/) const;

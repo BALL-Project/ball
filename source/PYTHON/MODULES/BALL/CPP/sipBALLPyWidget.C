@@ -2,7 +2,6 @@
 #include "sipBALLPyWidget.h"
 
 
-
 PyObject *sipClass_PyWidget;
 
 static void sipDealloc_PyWidget(sipThisType *);
@@ -35,13 +34,13 @@ static PyTypeObject sipType_PyWidget = {
 };
 
 sipPyWidget::sipPyWidget(const PyWidget& a0)
-    : PyWidget(a0)
+   : PyWidget(a0)
 {
 	sipCommonCtor(sipPyMethods,12);
 }
 
 sipPyWidget::~sipPyWidget()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -459,7 +458,15 @@ static PyObject *sipDo_PyWidget_countInstances(PyObject *,PyObject *sipArgs)
 		{
 			int res;
 
+   try
+   {
 			res = PyWidget::countInstances();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -477,7 +484,7 @@ static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -491,7 +498,15 @@ static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = PyWidget::getInstance(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -501,7 +516,7 @@ static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 	}
 
 	{
-		Position *a0;
+		Position * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Position,&a0obj))
@@ -515,7 +530,15 @@ static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = PyWidget::getInstance(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -547,7 +570,15 @@ static PyObject *sipDo_PyWidget_startInterpreter(PyObject *sipThisObj,PyObject *
 			if ((ptr = (PyWidget *)sipGetCppPtr(sipThis,sipClass_PyWidget)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::startInterpreter();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -577,7 +608,15 @@ static PyObject *sipDo_PyWidget_stopInterpreter(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (PyWidget *)sipGetCppPtr(sipThis,sipClass_PyWidget)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::stopInterpreter();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -600,7 +639,7 @@ static PyObject *sipDo_PyWidget_initializeWidget(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		MainControl *a0;
+		MainControl * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_MainControl,&a0obj))
@@ -617,7 +656,15 @@ static PyObject *sipDo_PyWidget_initializeWidget(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::initializeWidget(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -640,7 +687,7 @@ static PyObject *sipDo_PyWidget_finalizeWidget(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		MainControl *a0;
+		MainControl * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_MainControl,&a0obj))
@@ -657,7 +704,15 @@ static PyObject *sipDo_PyWidget_finalizeWidget(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::finalizeWidget(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -689,7 +744,15 @@ static PyObject *sipDo_PyWidget_cursorUp(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (PyWidget *)sipGetCppPtr(sipThis,sipClass_PyWidget)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::cursorUp( (bool)a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -721,7 +784,15 @@ static PyObject *sipDo_PyWidget_cursorDown(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (PyWidget *)sipGetCppPtr(sipThis,sipClass_PyWidget)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::cursorDown( (bool)a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -751,7 +822,15 @@ static PyObject *sipDo_PyWidget_newLine(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (PyWidget *)sipGetCppPtr(sipThis,sipClass_PyWidget)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::newLine();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -784,7 +863,15 @@ static PyObject *sipDo_PyWidget_cursorLeft(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (PyWidget *)sipGetCppPtr(sipThis,sipClass_PyWidget)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::cursorLeft( (bool)a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -814,7 +901,15 @@ static PyObject *sipDo_PyWidget_backspace(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (PyWidget *)sipGetCppPtr(sipThis,sipClass_PyWidget)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::backspace();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -847,7 +942,15 @@ static PyObject *sipDo_PyWidget_cursorRight(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (PyWidget *)sipGetCppPtr(sipThis,sipClass_PyWidget)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PyWidget::cursorRight( (bool)a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -910,7 +1013,7 @@ PyObject *sipNew_PyWidget(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const PyWidget *a0;
+		const PyWidget * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PyWidget,&a0obj))
@@ -922,7 +1025,15 @@ PyObject *sipNew_PyWidget(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipPyWidget(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1004,6 +1115,7 @@ PyWidget *sipForceConvertTo_PyWidget(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PyWidget);
+
 	*iserrp = 1;
 
 	return NULL;

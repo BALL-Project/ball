@@ -2,7 +2,6 @@
 #include "sipBALLPlane3.h"
 
 
-
 PyObject *sipClass_Plane3;
 
 static void sipDealloc_Plane3(sipThisType *);
@@ -43,7 +42,7 @@ static PyObject *sipDo_Plane3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Plane3 *a0;
+		Plane3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Plane3,&a0obj))
@@ -60,7 +59,15 @@ static PyObject *sipDo_Plane3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Plane3::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -83,7 +90,7 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Plane3,&a0obj))
@@ -100,7 +107,15 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Plane3::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -108,9 +123,9 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -128,7 +143,15 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Plane3::set(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -136,11 +159,11 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
-		const Vector3 *a2;
+		const Vector3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
@@ -159,7 +182,15 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Plane3::set(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -182,7 +213,7 @@ static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Plane3 *a0;
+		Plane3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Plane3,&a0obj))
@@ -199,7 +230,15 @@ static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Plane3::get(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -207,9 +246,9 @@ static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Vector3 *a0;
+		Vector3 * a0;
 		PyObject *a0obj;
-		Vector3 *a1;
+		Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -227,7 +266,15 @@ static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Plane3::get(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -257,7 +304,15 @@ static PyObject *sipDo_Plane3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Plane3 *)sipGetCppPtr(sipThis,sipClass_Plane3)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Plane3::normalize();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -287,7 +342,15 @@ static PyObject *sipDo_Plane3_hessify(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Plane3 *)sipGetCppPtr(sipThis,sipClass_Plane3)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Plane3::hessify();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -310,7 +373,7 @@ static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
@@ -328,14 +391,22 @@ static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Plane3::has(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Line3,&a0obj))
@@ -353,7 +424,15 @@ static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Plane3::has(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -383,7 +462,15 @@ static PyObject *sipDo_Plane3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Plane3 *)sipGetCppPtr(sipThis,sipClass_Plane3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Plane3::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -436,13 +523,21 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Plane3();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Plane3,&a0obj))
@@ -454,15 +549,23 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Plane3(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -475,17 +578,25 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Plane3(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
-		const Vector3 *a2;
+		const Vector3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
@@ -499,7 +610,15 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Plane3(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -512,7 +631,15 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-ffff",&a0,&a1,&a2,&a3))
 		{
+   try
+   {
 			sipNew = new Plane3( a0, a1, a2, a3);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -583,6 +710,7 @@ Plane3 *sipForceConvertTo_Plane3(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Plane3);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLSnapShot.h"
 
 
-
 PyObject *sipClass_SnapShot;
 
 static void sipDealloc_SnapShot(sipThisType *);
@@ -35,19 +34,19 @@ static PyTypeObject sipType_SnapShot = {
 };
 
 sipSnapShot::sipSnapShot()
-   throw()  : SnapShot()
+   throw() : SnapShot()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipSnapShot::sipSnapShot(const SnapShot& a0)
-   throw()  : SnapShot(a0)
+   throw() : SnapShot(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipSnapShot::~sipSnapShot()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -414,7 +413,7 @@ static PyObject *sipDo_SnapShot_takeSnapShot(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -431,7 +430,16 @@ static PyObject *sipDo_SnapShot_takeSnapShot(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> SnapShot::takeSnapShot(* a0);
+   }
+   catch (OutOfMemory e)
+   {
+      OutOfMemory *my_exception = new OutOfMemory(e);
+      PyErr_SetObject(sipClass_OutOfMemory, sipNewCppToSelf(my_exception,sipClass_OutOfMemory,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -454,7 +462,7 @@ static PyObject *sipDo_SnapShot_applySnapShot(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -494,7 +502,7 @@ static PyObject *sipDo_SnapShot_getAtomPositions(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -511,7 +519,16 @@ static PyObject *sipDo_SnapShot_getAtomPositions(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> SnapShot::getAtomPositions(* a0);
+   }
+   catch (OutOfMemory e)
+   {
+      OutOfMemory *my_exception = new OutOfMemory(e);
+      PyErr_SetObject(sipClass_OutOfMemory, sipNewCppToSelf(my_exception,sipClass_OutOfMemory,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -534,7 +551,7 @@ static PyObject *sipDo_SnapShot_setAtomPositions(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -574,7 +591,7 @@ static PyObject *sipDo_SnapShot_getAtomVelocities(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -591,7 +608,16 @@ static PyObject *sipDo_SnapShot_getAtomVelocities(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> SnapShot::getAtomVelocities(* a0);
+   }
+   catch (OutOfMemory e)
+   {
+      OutOfMemory *my_exception = new OutOfMemory(e);
+      PyErr_SetObject(sipClass_OutOfMemory, sipNewCppToSelf(my_exception,sipClass_OutOfMemory,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -614,7 +640,7 @@ static PyObject *sipDo_SnapShot_setAtomVelocitites(PyObject *sipThisObj,PyObject
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -654,7 +680,7 @@ static PyObject *sipDo_SnapShot_getAtomForces(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -671,7 +697,16 @@ static PyObject *sipDo_SnapShot_getAtomForces(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> SnapShot::getAtomForces(* a0);
+   }
+   catch (OutOfMemory e)
+   {
+      OutOfMemory *my_exception = new OutOfMemory(e);
+      PyErr_SetObject(sipClass_OutOfMemory, sipNewCppToSelf(my_exception,sipClass_OutOfMemory,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -694,7 +729,7 @@ static PyObject *sipDo_SnapShot_setAtomForces(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -729,8 +764,22 @@ static PyObject *sipDo_SnapShot_setAtomForces(PyObject *sipThisObj,PyObject *sip
 
 const void *sipCast_SnapShot(const void *ptr,PyObject *targetClass)
 {
+	const void *res;
+
 	if (targetClass == sipClass_SnapShot)
 		return ptr;
+
+	if ((res = sipCast_OutOfMemory((OutOfMemory *)(SnapShot *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfMemory((OutOfMemory *)(SnapShot *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfMemory((OutOfMemory *)(SnapShot *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_OutOfMemory((OutOfMemory *)(SnapShot *)ptr,targetClass)) != NULL)
+		return res;
 
 	return NULL;
 }
@@ -777,7 +826,7 @@ PyObject *sipNew_SnapShot(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const SnapShot *a0;
+		const SnapShot * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_SnapShot,&a0obj))
@@ -877,6 +926,7 @@ SnapShot *sipForceConvertTo_SnapShot(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_SnapShot);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLEnergyMinimizer.h"
 
 
-
 PyObject *sipClass_EnergyMinimizer;
 
 static void sipDealloc_EnergyMinimizer(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_EnergyMinimizer = {
 };
 
 sipEnergyMinimizer::sipEnergyMinimizer()
-    : EnergyMinimizer()
+   : EnergyMinimizer()
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipEnergyMinimizer::sipEnergyMinimizer(ForceField& a0)
-    : EnergyMinimizer(a0)
+   : EnergyMinimizer(a0)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipEnergyMinimizer::sipEnergyMinimizer(ForceField& a0,Options& a1)
-    : EnergyMinimizer(a0,a1)
+   : EnergyMinimizer(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipEnergyMinimizer::sipEnergyMinimizer(const EnergyMinimizer& a0,bool a1)
-    : EnergyMinimizer(a0,a1)
+   : EnergyMinimizer(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipEnergyMinimizer::sipEnergyMinimizer(const EnergyMinimizer& a0)
-    : EnergyMinimizer(a0)
+   : EnergyMinimizer(a0)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipEnergyMinimizer::~sipEnergyMinimizer()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -567,7 +566,15 @@ static PyObject *sipDo_EnergyMinimizer_isValid(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -589,7 +596,7 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ForceField,&a0obj))
@@ -607,16 +614,24 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::setup(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
@@ -635,18 +650,26 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::setup(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
-		Options *a2;
+		Options * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
@@ -666,16 +689,24 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::setup(* a0, a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		Options *a1;
+		Options * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_Options,&a1obj))
@@ -694,7 +725,15 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::setup(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -724,7 +763,15 @@ static PyObject *sipDo_EnergyMinimizer_specificSetup(PyObject *sipThisObj,PyObje
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::specificSetup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -754,7 +801,15 @@ static PyObject *sipDo_EnergyMinimizer_isConverged(PyObject *sipThisObj,PyObject
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::isConverged();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -784,7 +839,15 @@ static PyObject *sipDo_EnergyMinimizer_findStep(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::findStep();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -813,7 +876,15 @@ static PyObject *sipDo_EnergyMinimizer_updateDirection(PyObject *sipThisObj,PyOb
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::updateDirection();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -844,7 +915,15 @@ static PyObject *sipDo_EnergyMinimizer_updateEnergy(PyObject *sipThisObj,PyObjec
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::updateEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -873,7 +952,15 @@ static PyObject *sipDo_EnergyMinimizer_updateForces(PyObject *sipThisObj,PyObjec
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::updateForces();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -903,7 +990,15 @@ static PyObject *sipDo_EnergyMinimizer_printEnergy(PyObject *sipThisObj,PyObject
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::printEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -933,7 +1028,15 @@ static PyObject *sipDo_EnergyMinimizer_takeSnapShot(PyObject *sipThisObj,PyObjec
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::takeSnapShot();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -963,7 +1066,15 @@ static PyObject *sipDo_EnergyMinimizer_finishIteration(PyObject *sipThisObj,PyOb
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::finishIteration();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -994,7 +1105,15 @@ static PyObject *sipDo_EnergyMinimizer_getNumberOfIteration(PyObject *sipThisObj
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getNumberOfIteration();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -1024,7 +1143,15 @@ static PyObject *sipDo_EnergyMinimizer_getDirection(PyObject *sipThisObj,PyObjec
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> EnergyMinimizer::getDirection();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Gradient);
 		}
@@ -1054,7 +1181,15 @@ static PyObject *sipDo_EnergyMinimizer_getGradient(PyObject *sipThisObj,PyObject
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> EnergyMinimizer::getGradient();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Gradient);
 		}
@@ -1084,7 +1219,15 @@ static PyObject *sipDo_EnergyMinimizer_getInitialGradient(PyObject *sipThisObj,P
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> EnergyMinimizer::getInitialGradient();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Gradient);
 		}
@@ -1114,7 +1257,15 @@ static PyObject *sipDo_EnergyMinimizer_getEnergy(PyObject *sipThisObj,PyObject *
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -1144,7 +1295,15 @@ static PyObject *sipDo_EnergyMinimizer_getInitialEnergy(PyObject *sipThisObj,PyO
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getInitialEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -1175,7 +1334,15 @@ static PyObject *sipDo_EnergyMinimizer_setNumberOfIteration(PyObject *sipThisObj
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::setNumberOfIteration( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1206,7 +1373,15 @@ static PyObject *sipDo_EnergyMinimizer_getMaximalNumberOfIterations(PyObject *si
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getMaximalNumberOfIterations();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -1237,7 +1412,15 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalNumberOfIterations(PyObject *si
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::setMaximalNumberOfIterations( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1269,7 +1452,15 @@ static PyObject *sipDo_EnergyMinimizer_setMaxSameEnergy(PyObject *sipThisObj,PyO
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::setMaxSameEnergy( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1300,7 +1491,15 @@ static PyObject *sipDo_EnergyMinimizer_getMaxSameEnergy(PyObject *sipThisObj,PyO
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getMaxSameEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -1331,7 +1530,15 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyOutputFrequency(PyObject *sipThi
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::setEnergyOutputFrequency( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1362,7 +1569,15 @@ static PyObject *sipDo_EnergyMinimizer_getEnergyOutputFrequency(PyObject *sipThi
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getEnergyOutputFrequency();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -1393,7 +1608,15 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyDifferenceBound(PyObject *sipThi
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::setEnergyDifferenceBound( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1424,7 +1647,15 @@ static PyObject *sipDo_EnergyMinimizer_getEnergyDifferenceBound(PyObject *sipThi
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getEnergyDifferenceBound();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -1455,7 +1686,15 @@ static PyObject *sipDo_EnergyMinimizer_setMaxGradient(PyObject *sipThisObj,PyObj
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::setMaxGradient( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1486,7 +1725,15 @@ static PyObject *sipDo_EnergyMinimizer_getMaxGradient(PyObject *sipThisObj,PyObj
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getMaxGradient();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -1517,7 +1764,15 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalShift(PyObject *sipThisObj,PyOb
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::setMaximalShift( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1548,7 +1803,15 @@ static PyObject *sipDo_EnergyMinimizer_getMaximalShift(PyObject *sipThisObj,PyOb
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getMaximalShift();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -1579,7 +1842,15 @@ static PyObject *sipDo_EnergyMinimizer_setSnapShotFrequency(PyObject *sipThisObj
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> EnergyMinimizer::setSnapShotFrequency( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1610,7 +1881,15 @@ static PyObject *sipDo_EnergyMinimizer_getSnapShotFrequency(PyObject *sipThisObj
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getSnapShotFrequency();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -1640,7 +1919,15 @@ static PyObject *sipDo_EnergyMinimizer_getForceField(PyObject *sipThisObj,PyObje
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::getForceField();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_ForceField);
 		}
@@ -1673,7 +1960,15 @@ static PyObject *sipDo_EnergyMinimizer_minimize(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (EnergyMinimizer *)sipGetCppPtr(sipThis,sipClass_EnergyMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> EnergyMinimizer::minimize( a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1732,13 +2027,21 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipEnergyMinimizer();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -1750,15 +2053,23 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipEnergyMinimizer(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		Options *a1;
+		Options * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_Options,&a1obj))
@@ -1771,13 +2082,21 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipEnergyMinimizer(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const EnergyMinimizer *a0;
+		const EnergyMinimizer * a0;
 		PyObject *a0obj;
 		long a1;
 
@@ -1790,13 +2109,21 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipEnergyMinimizer(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const EnergyMinimizer *a0;
+		const EnergyMinimizer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_EnergyMinimizer,&a0obj))
@@ -1808,7 +2135,15 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipEnergyMinimizer(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1954,6 +2289,7 @@ EnergyMinimizer *sipForceConvertTo_EnergyMinimizer(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_EnergyMinimizer);
+
 	*iserrp = 1;
 
 	return NULL;

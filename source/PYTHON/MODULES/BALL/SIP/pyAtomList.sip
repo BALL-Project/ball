@@ -1,17 +1,13 @@
-// $Id: pyAtomList.sip,v 1.2 2001/07/25 11:32:35 oliver Exp $
+// $Id: pyAtomList.sip,v 1.3 2001/07/29 17:31:17 oliver Exp $
 
-class PyAtomList
+%MappedType PyAtomList
 {
 %HeaderCode
 	#include <BALL/PYTHON/pyAtomList.h>
 	#include "sipBALLAtom.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
-	public:
-
-	// dummy definition to get the throw specifier right
-	~PyAtomList() throw();
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -36,11 +32,11 @@ class PyAtomList
 	return pl;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	return PyList_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python list of Atom instances to an AtomList object on the
 	// heap.
  

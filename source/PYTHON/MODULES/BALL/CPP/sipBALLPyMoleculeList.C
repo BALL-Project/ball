@@ -2,48 +2,11 @@
 #include "sipBALLPyMoleculeList.h"
 
 
-
-PyObject *sipConvertFrom_PyMoleculeList(const PyMoleculeList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pyMoleculeList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyMoleculeList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		Molecule& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyMoleculeList.cpp"
-}
-
-PyObject *sipClass_PyMoleculeList;
-
 int sipCanConvertTo_PyMoleculeList(PyObject *sipPy)
 {
 #line 37 "pyMoleculeList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyMoleculeList.cpp"
+#line 14 "sipBALLPyMoleculeList.cpp"
 }
 
 int sipConvertTo_PyMoleculeList(PyObject *sipPy,PyMoleculeList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PyMoleculeList(PyObject *sipPy,PyMoleculeList **sipCppPtr,int s
 	*sipCppPtr = molecule_list;
 
 	return 1;
-#line 83 "sipBALLPyMoleculeList.cpp"
+#line 46 "sipBALLPyMoleculeList.cpp"
 }
 
 PyMoleculeList *sipForceConvertTo_PyMoleculeList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyMoleculeList *sipForceConvertTo_PyMoleculeList(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PyMoleculeList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyMoleculeList(const PyMoleculeList *sipCpp)
+{
+#line 12 "pyMoleculeList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyMoleculeList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		Molecule& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyMoleculeList.cpp"
 }

@@ -2,7 +2,6 @@
 #include "sipBALLCompositeProcessor.h"
 
 
-
 PyObject *sipClass_CompositeProcessor;
 
 static void sipDealloc_CompositeProcessor(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_CompositeProcessor = {
 };
 
 sipCompositeProcessor::sipCompositeProcessor()
-    : CompositeProcessor()
+   : CompositeProcessor()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipCompositeProcessor::sipCompositeProcessor(const CompositeProcessor& a0)
-    : CompositeProcessor(a0)
+   : CompositeProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipCompositeProcessor::~sipCompositeProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipCompositeProcessor::operator ()(Composite& a0)
+Processor::Result sipCompositeProcessor::operator()(Composite& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipCompositeProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		CompositeProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipCompositeProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		CompositeProcessor::operator()(a0);
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-Processor::Result sipCompositeProcessor::sipVH_CallOperator(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Composite& a0)
+Processor::Result sipCompositeProcessor::sipVH_CallOp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Composite& a0)
 {
 	Processor::Result res;
 	PyObject *resobj;
@@ -74,9 +73,7 @@ Processor::Result sipCompositeProcessor::sipVH_CallOperator(const sipMethodCache
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_Composite);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -96,7 +93,7 @@ Processor::Result sipCompositeProcessor::sipVH_CallOperator(const sipMethodCache
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_CompositeProcessor,sipName_BALL___call__);
+		sipBadVirtualResultType(sipName_BALL_CompositeProcessor,sipName_BALL_CallOp);
 	}
 
 reportError:
@@ -125,7 +122,15 @@ static PyObject *sipDo_CompositeProcessor_start(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (CompositeProcessor *)sipGetCppPtr(sipThis,sipClass_CompositeProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CompositeProcessor::start();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -155,7 +160,15 @@ static PyObject *sipDo_CompositeProcessor_finish(PyObject *sipThisObj,PyObject *
 			if ((ptr = (CompositeProcessor *)sipGetCppPtr(sipThis,sipClass_CompositeProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CompositeProcessor::finish();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -168,7 +181,7 @@ static PyObject *sipDo_CompositeProcessor_finish(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_CompositeProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -177,7 +190,7 @@ static PyObject *sipDo_CompositeProcessor___call__(PyObject *sipThisObj,PyObject
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -195,7 +208,15 @@ static PyObject *sipDo_CompositeProcessor___call__(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
-			res = ptr -> CompositeProcessor::operator ()(* a0);
+   try
+   {
+			res = ptr -> CompositeProcessor::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -203,7 +224,7 @@ static PyObject *sipDo_CompositeProcessor___call__(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -254,13 +275,21 @@ PyObject *sipNew_CompositeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipCompositeProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CompositeProcessor *a0;
+		const CompositeProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CompositeProcessor,&a0obj))
@@ -272,7 +301,15 @@ PyObject *sipNew_CompositeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCompositeProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -305,7 +342,7 @@ PyObject *sipNew_CompositeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_CompositeProcessor[] = {
 	{sipName_BALL_start, sipDo_CompositeProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_CompositeProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_CompositeProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_CompositeProcessor_CallOp, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -345,6 +382,7 @@ CompositeProcessor *sipForceConvertTo_CompositeProcessor(PyObject *valobj,int *i
 	}
 
 	sipBadClass(sipName_BALL_CompositeProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

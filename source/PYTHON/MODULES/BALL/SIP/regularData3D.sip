@@ -17,6 +17,8 @@ class FloatRegularData3D
 %HeaderCode
 	#include <BALL/DATATYPE/regularData3D.h>
 	#include <BALL/COMMON/exception.h>
+	#include "sipBALLOutOfMemory.h"
+	#include "sipBALLOutOfGrid.h"
 	using namespace BALL;
 	using namespace BALL::Exception;
 	typedef BALL::RegularData3D<float> FloatRegularData3D;

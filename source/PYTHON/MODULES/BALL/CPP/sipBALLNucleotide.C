@@ -2,7 +2,6 @@
 #include "sipBALLNucleotide.h"
 
 
-
 PyObject *sipClass_Nucleotide;
 
 static void sipDealloc_Nucleotide(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_Nucleotide = {
 };
 
 sipNucleotide::sipNucleotide()
-    : Nucleotide()
+   : Nucleotide()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipNucleotide::sipNucleotide(const Nucleotide& a0,bool a1)
-    : Nucleotide(a0,a1)
+   : Nucleotide(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipNucleotide::sipNucleotide(const String& a0,const String& a1,char a2)
-    : Nucleotide(a0,a1,a2)
+   : Nucleotide(a0,a1,a2)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipNucleotide::sipNucleotide(const Nucleotide& a0)
-    : Nucleotide(a0)
+   : Nucleotide(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipNucleotide::~sipNucleotide()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -187,7 +186,7 @@ static PyObject *sipDo_Nucleotide_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Nucleotide *a0;
+		const Nucleotide * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -205,7 +204,15 @@ static PyObject *sipDo_Nucleotide_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -228,7 +235,7 @@ static PyObject *sipDo_Nucleotide_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Nucleotide *a0;
+		Nucleotide * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -246,7 +253,15 @@ static PyObject *sipDo_Nucleotide_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -269,7 +284,7 @@ static PyObject *sipDo_Nucleotide_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Nucleotide *a0;
+		Nucleotide * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Nucleotide,&a0obj))
@@ -286,7 +301,15 @@ static PyObject *sipDo_Nucleotide_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -317,7 +340,15 @@ static PyObject *sipDo_Nucleotide_getNucleicAcid(PyObject *sipThisObj,PyObject *
 			if ((ptr = (Nucleotide *)sipGetCppPtr(sipThis,sipClass_Nucleotide)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Nucleotide::getNucleicAcid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_NucleicAcid);
 		}
@@ -332,7 +363,15 @@ static PyObject *sipDo_Nucleotide_getNucleicAcid(PyObject *sipThisObj,PyObject *
 			if ((ptr = (Nucleotide *)sipGetCppPtr(sipThis,sipClass_Nucleotide)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Nucleotide::getNucleicAcid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_NucleicAcid);
 		}
@@ -354,7 +393,7 @@ static PyObject *sipDo_Nucleotide_setID(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -371,7 +410,15 @@ static PyObject *sipDo_Nucleotide_setID(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::setID(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -405,7 +452,15 @@ static PyObject *sipDo_Nucleotide_getID(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Nucleotide *)sipGetCppPtr(sipThis,sipClass_Nucleotide)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> Nucleotide::getID();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -436,7 +491,15 @@ static PyObject *sipDo_Nucleotide_setInsertionCode(PyObject *sipThisObj,PyObject
 			if ((ptr = (Nucleotide *)sipGetCppPtr(sipThis,sipClass_Nucleotide)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::setInsertionCode( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -467,7 +530,15 @@ static PyObject *sipDo_Nucleotide_getInsertionCode(PyObject *sipThisObj,PyObject
 			if ((ptr = (Nucleotide *)sipGetCppPtr(sipThis,sipClass_Nucleotide)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Nucleotide::getInsertionCode();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyString_FromStringAndSize(&res,1);
 		}
@@ -489,7 +560,7 @@ static PyObject *sipDo_Nucleotide_prepend(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -506,7 +577,15 @@ static PyObject *sipDo_Nucleotide_prepend(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::prepend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -529,7 +608,7 @@ static PyObject *sipDo_Nucleotide_append(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -546,7 +625,15 @@ static PyObject *sipDo_Nucleotide_append(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::append(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -569,7 +656,7 @@ static PyObject *sipDo_Nucleotide_insert(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -586,7 +673,15 @@ static PyObject *sipDo_Nucleotide_insert(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::insert(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -609,9 +704,9 @@ static PyObject *sipDo_Nucleotide_insertBefore(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -629,7 +724,15 @@ static PyObject *sipDo_Nucleotide_insertBefore(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::insertBefore(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -652,9 +755,9 @@ static PyObject *sipDo_Nucleotide_insertAfter(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -672,7 +775,15 @@ static PyObject *sipDo_Nucleotide_insertAfter(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::insertAfter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -695,7 +806,7 @@ static PyObject *sipDo_Nucleotide_remove(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -713,7 +824,15 @@ static PyObject *sipDo_Nucleotide_remove(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Nucleotide::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -735,7 +854,7 @@ static PyObject *sipDo_Nucleotide_spliceBefore(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		Nucleotide *a0;
+		Nucleotide * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Nucleotide,&a0obj))
@@ -752,7 +871,15 @@ static PyObject *sipDo_Nucleotide_spliceBefore(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::spliceBefore(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -775,7 +902,7 @@ static PyObject *sipDo_Nucleotide_spliceAfter(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		Nucleotide *a0;
+		Nucleotide * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Nucleotide,&a0obj))
@@ -792,7 +919,15 @@ static PyObject *sipDo_Nucleotide_spliceAfter(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::spliceAfter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -815,7 +950,7 @@ static PyObject *sipDo_Nucleotide_splice(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Nucleotide *a0;
+		Nucleotide * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Nucleotide,&a0obj))
@@ -832,7 +967,15 @@ static PyObject *sipDo_Nucleotide_splice(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Nucleotide::splice(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -863,7 +1006,15 @@ static PyObject *sipDo_Nucleotide_isTerminal(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Nucleotide *)sipGetCppPtr(sipThis,sipClass_Nucleotide)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Nucleotide::isTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -893,7 +1044,15 @@ static PyObject *sipDo_Nucleotide_is3Prime(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Nucleotide *)sipGetCppPtr(sipThis,sipClass_Nucleotide)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Nucleotide::is3Prime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -923,7 +1082,15 @@ static PyObject *sipDo_Nucleotide_is5Prime(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Nucleotide *)sipGetCppPtr(sipThis,sipClass_Nucleotide)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Nucleotide::is5Prime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1017,13 +1184,21 @@ PyObject *sipNew_Nucleotide(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipNucleotide();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Nucleotide *a0;
+		const Nucleotide * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -1036,15 +1211,23 @@ PyObject *sipNew_Nucleotide(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipNucleotide(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		const String *a1 = NULL;
+		const String * a1 = NULL;
 		PyObject *a1obj = NULL;
 		char a2 = ' ';
 
@@ -1058,7 +1241,15 @@ PyObject *sipNew_Nucleotide(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipNucleotide(* a0,* a1, a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -1070,7 +1261,7 @@ PyObject *sipNew_Nucleotide(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Nucleotide *a0;
+		const Nucleotide * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Nucleotide,&a0obj))
@@ -1082,7 +1273,15 @@ PyObject *sipNew_Nucleotide(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipNucleotide(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1175,6 +1374,7 @@ Nucleotide *sipForceConvertTo_Nucleotide(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Nucleotide);
+
 	*iserrp = 1;
 
 	return NULL;

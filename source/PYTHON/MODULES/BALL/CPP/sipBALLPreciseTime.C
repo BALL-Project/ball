@@ -2,7 +2,6 @@
 #include "sipBALLPreciseTime.h"
 
 
-
 PyObject *sipClass_PreciseTime;
 
 static void sipDealloc_PreciseTime(sipThisType *);
@@ -62,7 +61,7 @@ static PyObject *sipDo_PreciseTime_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const PreciseTime *a0;
+		const PreciseTime * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
@@ -211,7 +210,7 @@ static PyObject * sip__str__PreciseTime(PyObject *a0)
 	time_str.append(usec_str.after("."));
 
   return PyString_FromString(time_str.c_str());
-#line 219 "sipBALLPreciseTime.cpp"
+#line 218 "sipBALLPreciseTime.cpp"
 }
 
 PyObject *sipNew_PreciseTime(PyObject *sipSelf,PyObject *sipArgs)
@@ -233,13 +232,21 @@ PyObject *sipNew_PreciseTime(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new PreciseTime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const PreciseTime *a0;
+		const PreciseTime * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PreciseTime,&a0obj))
@@ -251,7 +258,15 @@ PyObject *sipNew_PreciseTime(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new PreciseTime(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -319,6 +334,7 @@ PreciseTime *sipForceConvertTo_PreciseTime(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PreciseTime);
+
 	*iserrp = 1;
 
 	return NULL;

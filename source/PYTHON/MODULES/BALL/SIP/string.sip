@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.3 2001/07/25 11:32:36 oliver Exp $
+// $Id: string.sip,v 1.4 2001/07/29 17:31:17 oliver Exp $
 
 class Substring
 {
@@ -100,13 +100,13 @@ class String
   // String(std::strstream& s);
   // String(char /c/, Size /size/ = 1);
   // String(const unsigned char uc);
-  String(short /s/);
+  //String(short /s/);
   // String(unsigned short us);
-  String(int /i/);
+  //String(int /i/);
   // String(unsigned int ui);
-  String(long /l/);
+  //String(long /l/);
   // String(unsigned long );
-  String(float /f/);
+  //String(float /f/);
   String(double /d/);
   ~String();
   void destroy();
@@ -116,14 +116,14 @@ class String
   // void set(std::strstream& s);
   // void set(char /c/, Size /len/ = 1);
   // void set(unsigned char uc);
-  void set(short /s/);
+  //void set(short /s/);
   // void set(unsigned short us);
-  void set(int /i/);
+  //void set(int /i/);
   // void set(unsigned int ui);
   void set(long /l/);
   // void set(unsigned long ul);
-  void set(float /f/);
-  void set(double /d/);
+  //void set(float /f/);
+  //void set(double /d/);
   // void get(char* char_ptr, Index from = 0, Size len = string::npos) const;
   // String& operator = (const String& s);
   // String& operator = (const char* pc);
@@ -171,7 +171,7 @@ class String
   Substring instr(const String& /pattern/, Index /from/ = 0) const;
   // String operator + (const string& /string/) const;
   String operator + (const char* /char_ptr/) const;
-  String operator + (char /c/) const;
+  //String operator + (char /c/) const;
   // friend String operator + (const char* char_ptr, const String& s);
   // friend String operator + (char c, const String& s);
   void swap(String& /s/);
@@ -252,11 +252,11 @@ class String
 %End
 
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	// automatic conversion of Py-Strings to Strings
 	return (PyString_Check(sipPy) || sipIsSubClassInstance(sipPy,sipClass_String));
 %End
-%ConvertToClassCode
+%ConvertToTypeCode
   if (PyString_Check(sipPy))
   {
     *sipCppPtr = new String(PyString_AS_STRING(sipPy));

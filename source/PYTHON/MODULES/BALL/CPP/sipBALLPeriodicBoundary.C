@@ -2,7 +2,6 @@
 #include "sipBALLPeriodicBoundary.h"
 
 
-
 PyObject *sipClass_PeriodicBoundary;
 
 static void sipDealloc_PeriodicBoundary(sipThisType *);
@@ -51,7 +50,15 @@ static PyObject *sipDo_PeriodicBoundary_setup(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (PeriodicBoundary *)sipGetCppPtr(sipThis,sipClass_PeriodicBoundary)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PeriodicBoundary::setup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -81,7 +88,15 @@ static PyObject *sipDo_PeriodicBoundary_generateMoleculesVector(PyObject *sipThi
 			if ((ptr = (PeriodicBoundary *)sipGetCppPtr(sipThis,sipClass_PeriodicBoundary)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PeriodicBoundary::generateMoleculesVector();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -110,7 +125,15 @@ static PyObject *sipDo_PeriodicBoundary_enable(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (PeriodicBoundary *)sipGetCppPtr(sipThis,sipClass_PeriodicBoundary)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PeriodicBoundary::enable();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -140,7 +163,15 @@ static PyObject *sipDo_PeriodicBoundary_disable(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (PeriodicBoundary *)sipGetCppPtr(sipThis,sipClass_PeriodicBoundary)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PeriodicBoundary::disable();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -171,7 +202,15 @@ static PyObject *sipDo_PeriodicBoundary_getBox(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (PeriodicBoundary *)sipGetCppPtr(sipThis,sipClass_PeriodicBoundary)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new Box3(ptr -> PeriodicBoundary::getBox());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Box3,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -193,7 +232,7 @@ static PyObject *sipDo_PeriodicBoundary_setBox(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		const Box3 *a0;
+		const Box3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
@@ -210,7 +249,15 @@ static PyObject *sipDo_PeriodicBoundary_setBox(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PeriodicBoundary::setBox(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -233,7 +280,7 @@ static PyObject *sipDo_PeriodicBoundary_addSolvent(PyObject *sipThisObj,PyObject
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -251,7 +298,15 @@ static PyObject *sipDo_PeriodicBoundary_addSolvent(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PeriodicBoundary::addSolvent(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -284,7 +339,15 @@ static PyObject *sipDo_PeriodicBoundary_removeSolvent(PyObject *sipThisObj,PyObj
 			if ((ptr = (PeriodicBoundary *)sipGetCppPtr(sipThis,sipClass_PeriodicBoundary)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PeriodicBoundary::removeSolvent();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -314,7 +377,15 @@ static PyObject *sipDo_PeriodicBoundary_isEnabled(PyObject *sipThisObj,PyObject 
 			if ((ptr = (PeriodicBoundary *)sipGetCppPtr(sipThis,sipClass_PeriodicBoundary)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PeriodicBoundary::isEnabled();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -343,7 +414,15 @@ static PyObject *sipDo_PeriodicBoundary_updateMolecules(PyObject *sipThisObj,PyO
 			if ((ptr = (PeriodicBoundary *)sipGetCppPtr(sipThis,sipClass_PeriodicBoundary)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PeriodicBoundary::updateMolecules();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -397,13 +476,21 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new PeriodicBoundary();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const ForceField *a0;
+		const ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -415,13 +502,21 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new PeriodicBoundary(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const PeriodicBoundary *a0;
+		const PeriodicBoundary * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PeriodicBoundary,&a0obj))
@@ -433,7 +528,15 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new PeriodicBoundary(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -549,6 +652,7 @@ PeriodicBoundary *sipForceConvertTo_PeriodicBoundary(PyObject *valobj,int *iserr
 	}
 
 	sipBadClass(sipName_BALL_PeriodicBoundary);
+
 	*iserrp = 1;
 
 	return NULL;

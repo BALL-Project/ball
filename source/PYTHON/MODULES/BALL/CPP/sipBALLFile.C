@@ -2,7 +2,6 @@
 #include "sipBALLFile.h"
 
 
-
 PyObject *sipClass_File;
 
 static void sipDealloc_File(sipThisType *);
@@ -76,7 +75,7 @@ static PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
 
       return sipConvertFromBool((int)res);
     }
-#line 84 "sipBALLFile.cpp"
+#line 83 "sipBALLFile.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -103,7 +102,15 @@ static PyObject *sipDo_File_reopen(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::reopen();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -132,7 +139,15 @@ static PyObject *sipDo_File_close(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> File::close();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -163,7 +178,15 @@ static PyObject *sipDo_File_getName(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> File::getName();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -193,7 +216,15 @@ static PyObject *sipDo_File_getSize(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::getSize();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -223,7 +254,15 @@ static PyObject *sipDo_File_getOpenMode(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new std__openmode(ptr -> File::getOpenMode());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_std__openmode,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -245,7 +284,7 @@ static PyObject *sipDo_File_copyTo(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -263,7 +302,15 @@ static PyObject *sipDo_File_copyTo(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::copyTo(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -288,7 +335,7 @@ static PyObject *sipDo_File_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -306,7 +353,15 @@ static PyObject *sipDo_File_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::moveTo(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -339,7 +394,15 @@ static PyObject *sipDo_File_remove(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::remove();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -361,7 +424,7 @@ static PyObject *sipDo_File_renameTo(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -379,7 +442,15 @@ static PyObject *sipDo_File_renameTo(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::renameTo(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -414,7 +485,15 @@ static PyObject *sipDo_File_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::truncate( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -444,7 +523,15 @@ static PyObject *sipDo_File_isOpen(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::isOpen();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -474,7 +561,15 @@ static PyObject *sipDo_File_isClosed(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::isClosed();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -504,7 +599,15 @@ static PyObject *sipDo_File_isAccessible(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::isAccessible();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -534,7 +637,15 @@ static PyObject *sipDo_File_isCanonized(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::isCanonized();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -564,7 +675,15 @@ static PyObject *sipDo_File_isReadable(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::isReadable();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -594,7 +713,15 @@ static PyObject *sipDo_File_isWritable(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::isWritable();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -624,7 +751,15 @@ static PyObject *sipDo_File_isExecutable(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::isExecutable();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -654,7 +789,15 @@ static PyObject *sipDo_File_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> File::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -707,15 +850,23 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new File();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		std__openmode *a1 = (std__openmode *)&File::IN;
+		std__openmode * a1 = (std__openmode *)&File::IN;
 		PyObject *a1obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_std__openmode,&a1obj))
@@ -728,7 +879,15 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new File(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -737,7 +896,7 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const File *a0;
+		const File * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_File,&a0obj))
@@ -749,7 +908,15 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new File(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -832,6 +999,7 @@ File *sipForceConvertTo_File(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_File);
+
 	*iserrp = 1;
 
 	return NULL;

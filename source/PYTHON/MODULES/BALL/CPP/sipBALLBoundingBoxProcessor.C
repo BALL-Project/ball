@@ -2,7 +2,6 @@
 #include "sipBALLBoundingBoxProcessor.h"
 
 
-
 PyObject *sipClass_BoundingBoxProcessor;
 
 static void sipDealloc_BoundingBoxProcessor(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_BoundingBoxProcessor = {
 };
 
 sipBoundingBoxProcessor::sipBoundingBoxProcessor()
-    : BoundingBoxProcessor()
+   : BoundingBoxProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipBoundingBoxProcessor::sipBoundingBoxProcessor(const BoundingBoxProcessor& a0)
-    : BoundingBoxProcessor(a0)
+   : BoundingBoxProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipBoundingBoxProcessor::~sipBoundingBoxProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipBoundingBoxProcessor::operator ()(Atom& a0)
+Processor::Result sipBoundingBoxProcessor::operator()(Atom& a0)
  throw()
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		BoundingBoxProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipAtomProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		BoundingBoxProcessor::operator()(a0);
 }
 
 bool sipBoundingBoxProcessor::finish()
@@ -224,7 +223,7 @@ static PyObject *sipDo_BoundingBoxProcessor_finish(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_BoundingBoxProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_BoundingBoxProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -233,7 +232,7 @@ static PyObject *sipDo_BoundingBoxProcessor___call__(PyObject *sipThisObj,PyObje
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -251,7 +250,7 @@ static PyObject *sipDo_BoundingBoxProcessor___call__(PyObject *sipThisObj,PyObje
 			if (iserr)
 				return NULL;
 
-			res = ptr -> BoundingBoxProcessor::operator ()(* a0);
+			res = ptr -> BoundingBoxProcessor::operator()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -259,7 +258,7 @@ static PyObject *sipDo_BoundingBoxProcessor___call__(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_BoundingBoxProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_BoundingBoxProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -281,7 +280,15 @@ static PyObject *sipDo_BoundingBoxProcessor_getBox(PyObject *sipThisObj,PyObject
 			if ((ptr = (BoundingBoxProcessor *)sipGetCppPtr(sipThis,sipClass_BoundingBoxProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new Box3(ptr -> BoundingBoxProcessor::getBox());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Box3,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -311,7 +318,15 @@ static PyObject *sipDo_BoundingBoxProcessor_getLower(PyObject *sipThisObj,PyObje
 			if ((ptr = (BoundingBoxProcessor *)sipGetCppPtr(sipThis,sipClass_BoundingBoxProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> BoundingBoxProcessor::getLower();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Vector3);
 		}
@@ -341,7 +356,15 @@ static PyObject *sipDo_BoundingBoxProcessor_getUpper(PyObject *sipThisObj,PyObje
 			if ((ptr = (BoundingBoxProcessor *)sipGetCppPtr(sipThis,sipClass_BoundingBoxProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> BoundingBoxProcessor::getUpper();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Vector3);
 		}
@@ -405,13 +428,21 @@ PyObject *sipNew_BoundingBoxProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipBoundingBoxProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const BoundingBoxProcessor *a0;
+		const BoundingBoxProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_BoundingBoxProcessor,&a0obj))
@@ -423,7 +454,15 @@ PyObject *sipNew_BoundingBoxProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipBoundingBoxProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -456,7 +495,7 @@ PyObject *sipNew_BoundingBoxProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_BoundingBoxProcessor[] = {
 	{sipName_BALL_start, sipDo_BoundingBoxProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_BoundingBoxProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_BoundingBoxProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_BoundingBoxProcessor_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_getBox, sipDo_BoundingBoxProcessor_getBox, METH_VARARGS, NULL},
 	{sipName_BALL_getLower, sipDo_BoundingBoxProcessor_getLower, METH_VARARGS, NULL},
 	{sipName_BALL_getUpper, sipDo_BoundingBoxProcessor_getUpper, METH_VARARGS, NULL},
@@ -499,6 +538,7 @@ BoundingBoxProcessor *sipForceConvertTo_BoundingBoxProcessor(PyObject *valobj,in
 	}
 
 	sipBadClass(sipName_BALL_BoundingBoxProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

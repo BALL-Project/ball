@@ -2,7 +2,6 @@
 #include "sipBALLAddHydrogensProcessor.h"
 
 
-
 PyObject *sipClass_AddHydrogensProcessor;
 
 static void sipDealloc_AddHydrogensProcessor(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_AddHydrogensProcessor = {
 };
 
 sipAddHydrogensProcessor::sipAddHydrogensProcessor()
-    : AddHydrogensProcessor()
+   : AddHydrogensProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipAddHydrogensProcessor::sipAddHydrogensProcessor(const FragmentDB& a0)
-    : AddHydrogensProcessor(a0)
+   : AddHydrogensProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipAddHydrogensProcessor::sipAddHydrogensProcessor(const AddHydrogensProcessor& a0)
-    : AddHydrogensProcessor(a0)
+   : AddHydrogensProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipAddHydrogensProcessor::~sipAddHydrogensProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipAddHydrogensProcessor::operator ()(Fragment& a0)
+Processor::Result sipAddHydrogensProcessor::operator()(Fragment& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipFragmentProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		AddHydrogensProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipFragmentProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		AddHydrogensProcessor::operator()(a0);
 }
 
 bool sipAddHydrogensProcessor::finish()
@@ -187,7 +186,15 @@ static PyObject *sipDo_AddHydrogensProcessor_start(PyObject *sipThisObj,PyObject
 			if ((ptr = (AddHydrogensProcessor *)sipGetCppPtr(sipThis,sipClass_AddHydrogensProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AddHydrogensProcessor::start();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -217,7 +224,15 @@ static PyObject *sipDo_AddHydrogensProcessor_finish(PyObject *sipThisObj,PyObjec
 			if ((ptr = (AddHydrogensProcessor *)sipGetCppPtr(sipThis,sipClass_AddHydrogensProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AddHydrogensProcessor::finish();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -230,7 +245,7 @@ static PyObject *sipDo_AddHydrogensProcessor_finish(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_AddHydrogensProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_AddHydrogensProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -239,7 +254,7 @@ static PyObject *sipDo_AddHydrogensProcessor___call__(PyObject *sipThisObj,PyObj
 		return NULL;
 
 	{
-		Fragment *a0;
+		Fragment * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Fragment,&a0obj))
@@ -257,7 +272,15 @@ static PyObject *sipDo_AddHydrogensProcessor___call__(PyObject *sipThisObj,PyObj
 			if (iserr)
 				return NULL;
 
-			res = ptr -> AddHydrogensProcessor::operator ()(* a0);
+   try
+   {
+			res = ptr -> AddHydrogensProcessor::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -265,7 +288,7 @@ static PyObject *sipDo_AddHydrogensProcessor___call__(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_AddHydrogensProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AddHydrogensProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -287,7 +310,15 @@ static PyObject *sipDo_AddHydrogensProcessor_getNumberOfInsertedHydrogens(PyObje
 			if ((ptr = (AddHydrogensProcessor *)sipGetCppPtr(sipThis,sipClass_AddHydrogensProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AddHydrogensProcessor::getNumberOfInsertedHydrogens();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -309,7 +340,7 @@ static PyObject *sipDo_AddHydrogensProcessor_setFragmentDB(PyObject *sipThisObj,
 		return NULL;
 
 	{
-		const FragmentDB *a0;
+		const FragmentDB * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_FragmentDB,&a0obj))
@@ -326,7 +357,15 @@ static PyObject *sipDo_AddHydrogensProcessor_setFragmentDB(PyObject *sipThisObj,
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AddHydrogensProcessor::setFragmentDB(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -391,13 +430,21 @@ PyObject *sipNew_AddHydrogensProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipAddHydrogensProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const FragmentDB *a0;
+		const FragmentDB * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_FragmentDB,&a0obj))
@@ -409,13 +456,21 @@ PyObject *sipNew_AddHydrogensProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAddHydrogensProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AddHydrogensProcessor *a0;
+		const AddHydrogensProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AddHydrogensProcessor,&a0obj))
@@ -427,7 +482,15 @@ PyObject *sipNew_AddHydrogensProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAddHydrogensProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -460,7 +523,7 @@ PyObject *sipNew_AddHydrogensProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_AddHydrogensProcessor[] = {
 	{sipName_BALL_start, sipDo_AddHydrogensProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_AddHydrogensProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_AddHydrogensProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_AddHydrogensProcessor_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_getNumberOfInsertedHydrogens, sipDo_AddHydrogensProcessor_getNumberOfInsertedHydrogens, METH_VARARGS, NULL},
 	{sipName_BALL_setFragmentDB, sipDo_AddHydrogensProcessor_setFragmentDB, METH_VARARGS, NULL},
 	{NULL}
@@ -502,6 +565,7 @@ AddHydrogensProcessor *sipForceConvertTo_AddHydrogensProcessor(PyObject *valobj,
 	}
 
 	sipBadClass(sipName_BALL_AddHydrogensProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

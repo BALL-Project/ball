@@ -2,7 +2,6 @@
 #include "sipBALLFragmentDB.h"
 
 
-
 PyObject *sipClass_FragmentDB;
 
 static void sipDealloc_FragmentDB(sipThisType *);
@@ -50,7 +49,15 @@ static PyObject *sipDo_FragmentDB_destroy(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (FragmentDB *)sipGetCppPtr(sipThis,sipClass_FragmentDB)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> FragmentDB::destroy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -80,7 +87,15 @@ static PyObject *sipDo_FragmentDB_init(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (FragmentDB *)sipGetCppPtr(sipThis,sipClass_FragmentDB)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> FragmentDB::init();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -103,7 +118,7 @@ static PyObject *sipDo_FragmentDB_setFilename(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -120,7 +135,15 @@ static PyObject *sipDo_FragmentDB_setFilename(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> FragmentDB::setFilename(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -154,7 +177,15 @@ static PyObject *sipDo_FragmentDB_getFilename(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (FragmentDB *)sipGetCppPtr(sipThis,sipClass_FragmentDB)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> FragmentDB::getFilename();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -176,7 +207,7 @@ static PyObject *sipDo_FragmentDB_has(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -194,7 +225,15 @@ static PyObject *sipDo_FragmentDB_has(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDB::has(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -219,7 +258,7 @@ static PyObject *sipDo_FragmentDB_getFragmentType(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -237,7 +276,15 @@ static PyObject *sipDo_FragmentDB_getFragmentType(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDB::getFragmentType(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -262,7 +309,7 @@ static PyObject *sipDo_FragmentDB_getFragment(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -280,7 +327,15 @@ static PyObject *sipDo_FragmentDB_getFragment(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDB::getFragment(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -305,7 +360,7 @@ static PyObject *sipDo_FragmentDB_getReferenceFragment(PyObject *sipThisObj,PyOb
 		return NULL;
 
 	{
-		const Fragment *a0;
+		const Fragment * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Fragment,&a0obj))
@@ -323,7 +378,15 @@ static PyObject *sipDo_FragmentDB_getReferenceFragment(PyObject *sipThisObj,PyOb
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDB::getReferenceFragment(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Fragment);
 		}
@@ -345,7 +408,7 @@ static PyObject *sipDo_FragmentDB_getResidue(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -363,7 +426,15 @@ static PyObject *sipDo_FragmentDB_getResidue(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDB::getResidue(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -388,7 +459,7 @@ static PyObject *sipDo_FragmentDB_getFragmentCopy(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -406,7 +477,15 @@ static PyObject *sipDo_FragmentDB_getFragmentCopy(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDB::getFragmentCopy(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -431,7 +510,7 @@ static PyObject *sipDo_FragmentDB_getMoleculeCopy(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -449,7 +528,15 @@ static PyObject *sipDo_FragmentDB_getMoleculeCopy(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDB::getMoleculeCopy(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -474,7 +561,7 @@ static PyObject *sipDo_FragmentDB_getResidueCopy(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -492,7 +579,15 @@ static PyObject *sipDo_FragmentDB_getResidueCopy(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDB::getResidueCopy(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -525,7 +620,15 @@ static PyObject *sipDo_FragmentDB_getDefaultNamingStandard(PyObject *sipThisObj,
 			if ((ptr = (FragmentDB *)sipGetCppPtr(sipThis,sipClass_FragmentDB)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> FragmentDB::getDefaultNamingStandard();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -555,7 +658,15 @@ static PyObject *sipDo_FragmentDB_isValid(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (FragmentDB *)sipGetCppPtr(sipThis,sipClass_FragmentDB)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentDB::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -608,13 +719,21 @@ PyObject *sipNew_FragmentDB(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new FragmentDB();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -626,7 +745,15 @@ PyObject *sipNew_FragmentDB(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new FragmentDB(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -635,7 +762,7 @@ PyObject *sipNew_FragmentDB(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const FragmentDB *a0;
+		const FragmentDB * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -648,13 +775,21 @@ PyObject *sipNew_FragmentDB(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new FragmentDB(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const FragmentDB *a0;
+		const FragmentDB * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_FragmentDB,&a0obj))
@@ -666,7 +801,15 @@ PyObject *sipNew_FragmentDB(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new FragmentDB(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -885,6 +1028,7 @@ FragmentDB *sipForceConvertTo_FragmentDB(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_FragmentDB);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLAssignRadiusProcessor.h"
 
 
-
 PyObject *sipClass_AssignRadiusProcessor;
 
 static void sipDealloc_AssignRadiusProcessor(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_AssignRadiusProcessor = {
 };
 
 sipAssignRadiusProcessor::sipAssignRadiusProcessor()
-    : AssignRadiusProcessor()
+   : AssignRadiusProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipAssignRadiusProcessor::sipAssignRadiusProcessor(const String& a0)
-    : AssignRadiusProcessor(a0)
+   : AssignRadiusProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipAssignRadiusProcessor::sipAssignRadiusProcessor(const AssignRadiusProcessor& a0)
-    : AssignRadiusProcessor(a0)
+   : AssignRadiusProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipAssignRadiusProcessor::~sipAssignRadiusProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipAssignRadiusProcessor::operator ()(Atom& a0)
+Processor::Result sipAssignRadiusProcessor::operator()(Atom& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		AssignRadiusProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipAtomProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		AssignRadiusProcessor::operator()(a0);
 }
 
 bool sipAssignRadiusProcessor::finish()
@@ -187,7 +186,15 @@ static PyObject *sipDo_AssignRadiusProcessor_start(PyObject *sipThisObj,PyObject
 			if ((ptr = (AssignRadiusProcessor *)sipGetCppPtr(sipThis,sipClass_AssignRadiusProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AssignRadiusProcessor::start();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -217,7 +224,15 @@ static PyObject *sipDo_AssignRadiusProcessor_finish(PyObject *sipThisObj,PyObjec
 			if ((ptr = (AssignRadiusProcessor *)sipGetCppPtr(sipThis,sipClass_AssignRadiusProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AssignRadiusProcessor::finish();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -230,7 +245,7 @@ static PyObject *sipDo_AssignRadiusProcessor_finish(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_AssignRadiusProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_AssignRadiusProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -239,7 +254,7 @@ static PyObject *sipDo_AssignRadiusProcessor___call__(PyObject *sipThisObj,PyObj
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -257,7 +272,15 @@ static PyObject *sipDo_AssignRadiusProcessor___call__(PyObject *sipThisObj,PyObj
 			if (iserr)
 				return NULL;
 
-			res = ptr -> AssignRadiusProcessor::operator ()(* a0);
+   try
+   {
+			res = ptr -> AssignRadiusProcessor::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -265,7 +288,7 @@ static PyObject *sipDo_AssignRadiusProcessor___call__(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_AssignRadiusProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AssignRadiusProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -279,7 +302,7 @@ static PyObject *sipDo_AssignRadiusProcessor_setFilename(PyObject *sipThisObj,Py
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -296,7 +319,15 @@ static PyObject *sipDo_AssignRadiusProcessor_setFilename(PyObject *sipThisObj,Py
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AssignRadiusProcessor::setFilename(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -330,7 +361,15 @@ static PyObject *sipDo_AssignRadiusProcessor_getFilename(PyObject *sipThisObj,Py
 			if ((ptr = (AssignRadiusProcessor *)sipGetCppPtr(sipThis,sipClass_AssignRadiusProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> AssignRadiusProcessor::getFilename();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -360,7 +399,15 @@ static PyObject *sipDo_AssignRadiusProcessor_getNumberOfAssignments(PyObject *si
 			if ((ptr = (AssignRadiusProcessor *)sipGetCppPtr(sipThis,sipClass_AssignRadiusProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AssignRadiusProcessor::getNumberOfAssignments();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -390,7 +437,15 @@ static PyObject *sipDo_AssignRadiusProcessor_getNumberOfErrors(PyObject *sipThis
 			if ((ptr = (AssignRadiusProcessor *)sipGetCppPtr(sipThis,sipClass_AssignRadiusProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AssignRadiusProcessor::getNumberOfErrors();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -454,13 +509,21 @@ PyObject *sipNew_AssignRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipAssignRadiusProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -472,7 +535,15 @@ PyObject *sipNew_AssignRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAssignRadiusProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -481,7 +552,7 @@ PyObject *sipNew_AssignRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const AssignRadiusProcessor *a0;
+		const AssignRadiusProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AssignRadiusProcessor,&a0obj))
@@ -493,7 +564,15 @@ PyObject *sipNew_AssignRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAssignRadiusProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -526,7 +605,7 @@ PyObject *sipNew_AssignRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_AssignRadiusProcessor[] = {
 	{sipName_BALL_start, sipDo_AssignRadiusProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_AssignRadiusProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_AssignRadiusProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_AssignRadiusProcessor_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_setFilename, sipDo_AssignRadiusProcessor_setFilename, METH_VARARGS, NULL},
 	{sipName_BALL_getFilename, sipDo_AssignRadiusProcessor_getFilename, METH_VARARGS, NULL},
 	{sipName_BALL_getNumberOfAssignments, sipDo_AssignRadiusProcessor_getNumberOfAssignments, METH_VARARGS, NULL},
@@ -570,6 +649,7 @@ AssignRadiusProcessor *sipForceConvertTo_AssignRadiusProcessor(PyObject *valobj,
 	}
 
 	sipBadClass(sipName_BALL_AssignRadiusProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

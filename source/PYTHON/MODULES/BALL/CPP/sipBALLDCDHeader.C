@@ -2,7 +2,6 @@
 #include "sipBALLDCDHeader.h"
 
 
-
 PyObject *sipClass_DCDHeader;
 
 static void sipDealloc_DCDHeader(sipThisType *);
@@ -80,7 +79,7 @@ PyObject *sipNew_DCDHeader(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const DCDHeader *a0;
+		const DCDHeader * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_DCDHeader,&a0obj))
@@ -92,7 +91,15 @@ PyObject *sipNew_DCDHeader(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new DCDHeader(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -581,6 +588,7 @@ DCDHeader *sipForceConvertTo_DCDHeader(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_DCDHeader);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLSnapShotManager.h"
 
 
-
 PyObject *sipClass_SnapShotManager;
 
 static void sipDealloc_SnapShotManager(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_SnapShotManager = {
 };
 
 sipSnapShotManager::sipSnapShotManager()
-   throw()  : SnapShotManager()
+   throw() : SnapShotManager()
 {
 	sipCommonCtor(sipPyMethods,9);
 }
 
 sipSnapShotManager::sipSnapShotManager(System * a0,const ForceField * a1,TrajectoryFile * a2,bool a3)
-   throw()  : SnapShotManager(a0,a1,a2,a3)
+   throw() : SnapShotManager(a0,a1,a2,a3)
 {
 	sipCommonCtor(sipPyMethods,9);
 }
 
 sipSnapShotManager::sipSnapShotManager(System * a0,const ForceField * a1,const Options& a2,TrajectoryFile * a3,bool a4)
-   throw()  : SnapShotManager(a0,a1,a2,a3,a4)
+   throw() : SnapShotManager(a0,a1,a2,a3,a4)
 {
 	sipCommonCtor(sipPyMethods,9);
 }
 
 sipSnapShotManager::sipSnapShotManager(const SnapShotManager& a0)
-   throw()  : SnapShotManager(a0)
+   throw() : SnapShotManager(a0)
 {
 	sipCommonCtor(sipPyMethods,9);
 }
 
 sipSnapShotManager::~sipSnapShotManager()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -514,11 +513,11 @@ static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
-		const ForceField *a1;
+		const ForceField * a1;
 		PyObject *a1obj;
-		TrajectoryFile *a2;
+		TrajectoryFile * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_TrajectoryFile,&a2obj))
@@ -635,7 +634,7 @@ static PyObject *sipDo_SnapShotManager_setSystem(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -705,7 +704,7 @@ static PyObject *sipDo_SnapShotManager_setForceField(PyObject *sipThisObj,PyObje
 		return NULL;
 
 	{
-		const ForceField *a0;
+		const ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ForceField,&a0obj))
@@ -775,7 +774,7 @@ static PyObject *sipDo_SnapShotManager_setTrajectoryFile(PyObject *sipThisObj,Py
 		return NULL;
 
 	{
-		TrajectoryFile *a0;
+		TrajectoryFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_TrajectoryFile,&a0obj))
@@ -1132,11 +1131,11 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
-		const ForceField *a1;
+		const ForceField * a1;
 		PyObject *a1obj;
-		TrajectoryFile *a2;
+		TrajectoryFile * a2;
 		PyObject *a2obj;
 		long a3 = true;
 
@@ -1157,13 +1156,13 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
-		const ForceField *a1;
+		const ForceField * a1;
 		PyObject *a1obj;
-		const Options *a2;
+		const Options * a2;
 		PyObject *a2obj;
-		TrajectoryFile *a3;
+		TrajectoryFile * a3;
 		PyObject *a3obj;
 		long a4 = true;
 
@@ -1185,7 +1184,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const SnapShotManager *a0;
+		const SnapShotManager * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_SnapShotManager,&a0obj))
@@ -1326,6 +1325,7 @@ SnapShotManager *sipForceConvertTo_SnapShotManager(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_SnapShotManager);
+
 	*iserrp = 1;
 
 	return NULL;

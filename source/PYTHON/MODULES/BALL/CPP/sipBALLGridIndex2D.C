@@ -2,7 +2,6 @@
 #include "sipBALLGridIndex2D.h"
 
 
-
 PyObject *sipClass_GridIndex2D;
 
 static void sipDealloc_GridIndex2D(sipThisType *);
@@ -74,13 +73,21 @@ PyObject *sipNew_GridIndex2D(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new GridIndex2D();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const GridIndex2D *a0;
+		const GridIndex2D * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_GridIndex2D,&a0obj))
@@ -92,7 +99,15 @@ PyObject *sipNew_GridIndex2D(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new GridIndex2D(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -129,7 +144,7 @@ static PyObject *sipGetSetVar_GridIndex2D_y(PyObject *sipThisObj,PyObject *valob
 	{
 		val = &ptr -> y;
 
-		valobj = sipMapCppToSelf(val,sipClass_Position);
+		valobj = sipConvertFrom_Position(val);
 
 		return valobj;
 	}
@@ -161,7 +176,7 @@ static PyObject *sipGetSetVar_GridIndex2D_x(PyObject *sipThisObj,PyObject *valob
 	{
 		val = &ptr -> x;
 
-		valobj = sipMapCppToSelf(val,sipClass_Position);
+		valobj = sipConvertFrom_Position(val);
 
 		return valobj;
 	}
@@ -231,6 +246,7 @@ GridIndex2D *sipForceConvertTo_GridIndex2D(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_GridIndex2D);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -1,4 +1,4 @@
-// $Id: atom.sip,v 1.3 2001/07/25 11:32:31 oliver Exp $
+// $Id: atom.sip,v 1.4 2001/07/29 17:31:16 oliver Exp $
 
 class Atom
   : Composite,
@@ -117,11 +117,11 @@ class AtomType
 	typedef Atom::Type AtomType;
 %End
 	public:
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	// automatic conversion of Py integers to Position 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_AtomType));
 %End
-%ConvertToClassCode
+%ConvertToTypeCode
 	if (PyInt_Check(sipPy))
 	{
 		*sipCppPtr = new AtomType(PyInt_AS_LONG(sipPy));

@@ -2,7 +2,6 @@
 #include "sipBALLSphere3.h"
 
 
-
 PyObject *sipClass_Sphere3;
 
 static void sipDealloc_Sphere3(sipThisType *);
@@ -43,7 +42,7 @@ static PyObject *sipDo_Sphere3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Sphere3 *a0;
+		Sphere3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Sphere3,&a0obj))
@@ -60,7 +59,15 @@ static PyObject *sipDo_Sphere3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Sphere3::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -83,7 +90,7 @@ static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Sphere3 *a0;
+		const Sphere3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Sphere3,&a0obj))
@@ -100,7 +107,15 @@ static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Sphere3::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -108,7 +123,7 @@ static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 		float a1;
 
@@ -126,7 +141,15 @@ static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Sphere3::set(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -149,7 +172,7 @@ static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Sphere3 *a0;
+		Sphere3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Sphere3,&a0obj))
@@ -166,7 +189,15 @@ static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Sphere3::get(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -174,7 +205,7 @@ static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Vector3 *a0;
+		Vector3 * a0;
 		PyObject *a0obj;
 		float a1;
 
@@ -192,7 +223,15 @@ static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Sphere3::get(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -215,7 +254,7 @@ static PyObject *sipDo_Sphere3_has(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -234,7 +273,15 @@ static PyObject *sipDo_Sphere3_has(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Sphere3::has(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -264,7 +311,15 @@ static PyObject *sipDo_Sphere3_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Sphere3 *)sipGetCppPtr(sipThis,sipClass_Sphere3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Sphere3::isEmpty();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -294,7 +349,15 @@ static PyObject *sipDo_Sphere3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Sphere3 *)sipGetCppPtr(sipThis,sipClass_Sphere3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Sphere3::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -347,13 +410,21 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Sphere3();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Sphere3 *a0;
+		const Sphere3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Sphere3,&a0obj))
@@ -365,13 +436,21 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Sphere3(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 		float a1;
 
@@ -384,7 +463,15 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Sphere3(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -528,6 +615,7 @@ Sphere3 *sipForceConvertTo_Sphere3(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Sphere3);
+
 	*iserrp = 1;
 
 	return NULL;

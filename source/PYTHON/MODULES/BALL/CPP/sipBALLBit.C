@@ -2,7 +2,6 @@
 #include "sipBALLBit.h"
 
 
-
 PyObject *sipClass_Bit;
 
 static void sipDealloc_Bit(sipThisType *);
@@ -35,19 +34,19 @@ static PyTypeObject sipType_Bit = {
 };
 
 sipBit::sipBit()
-   throw()  : Bit()
+   throw() : Bit()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipBit::sipBit(const Bit& a0)
-   throw()  : Bit(a0)
+   throw() : Bit(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipBit::~sipBit()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -179,7 +178,7 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Bit *a0;
+		const Bit * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Bit,&a0obj))
@@ -262,6 +261,7 @@ Bit *sipForceConvertTo_Bit(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Bit);
+
 	*iserrp = 1;
 
 	return NULL;

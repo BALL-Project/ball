@@ -2,7 +2,6 @@
 #include "sipBALLSurface.h"
 
 
-
 PyObject *sipClass_Surface;
 
 static void sipDealloc_Surface(sipThisType *);
@@ -50,7 +49,15 @@ static PyObject *sipDo_Surface_clear(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Surface *)sipGetCppPtr(sipThis,sipClass_Surface)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Surface::clear();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -73,7 +80,7 @@ static PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Surface *a0;
+		const Surface * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Surface,&a0obj))
@@ -90,7 +97,15 @@ static PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Surface::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -113,7 +128,7 @@ static PyObject *sipDo_Surface_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Surface *a0;
+		Surface * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Surface,&a0obj))
@@ -130,7 +145,15 @@ static PyObject *sipDo_Surface_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Surface::get(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -153,9 +176,9 @@ static PyObject *sipDo_Surface_readMSMSFile(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -173,7 +196,15 @@ static PyObject *sipDo_Surface_readMSMSFile(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Surface::readMSMSFile(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -210,7 +241,15 @@ static PyObject *sipDo_Surface_getArea(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Surface *)sipGetCppPtr(sipThis,sipClass_Surface)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Surface::getArea();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -240,7 +279,15 @@ static PyObject *sipDo_Surface_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Surface *)sipGetCppPtr(sipThis,sipClass_Surface)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Surface::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -293,13 +340,21 @@ PyObject *sipNew_Surface(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Surface();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Surface *a0;
+		const Surface * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Surface,&a0obj))
@@ -311,7 +366,15 @@ PyObject *sipNew_Surface(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Surface(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -381,6 +444,7 @@ Surface *sipForceConvertTo_Surface(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Surface);
+
 	*iserrp = 1;
 
 	return NULL;

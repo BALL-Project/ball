@@ -2,7 +2,6 @@
 #include "sipBALLRuleProcessor.h"
 
 
-
 PyObject *sipClass_RuleProcessor;
 
 static void sipDealloc_RuleProcessor(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_RuleProcessor = {
 };
 
 sipRuleProcessor::sipRuleProcessor()
-    : RuleProcessor()
+   : RuleProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipRuleProcessor::sipRuleProcessor(INIFile& a0,const String& a1)
-    : RuleProcessor(a0,a1)
+   : RuleProcessor(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipRuleProcessor::sipRuleProcessor(const RuleProcessor& a0)
-    : RuleProcessor(a0)
+   : RuleProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipRuleProcessor::~sipRuleProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipRuleProcessor::operator ()(Atom& a0)
+Processor::Result sipRuleProcessor::operator()(Atom& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		RuleProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipAtomProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		RuleProcessor::operator()(a0);
 }
 
 bool sipRuleProcessor::finish()
@@ -186,7 +185,15 @@ static PyObject *sipDo_RuleProcessor_clear(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (RuleProcessor *)sipGetCppPtr(sipThis,sipClass_RuleProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> RuleProcessor::clear();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -216,7 +223,15 @@ static PyObject *sipDo_RuleProcessor_destroy(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (RuleProcessor *)sipGetCppPtr(sipThis,sipClass_RuleProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> RuleProcessor::destroy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -239,9 +254,9 @@ static PyObject *sipDo_RuleProcessor_initialize(PyObject *sipThisObj,PyObject *s
 		return NULL;
 
 	{
-		INIFile *a0;
+		INIFile * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -260,7 +275,15 @@ static PyObject *sipDo_RuleProcessor_initialize(PyObject *sipThisObj,PyObject *s
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> RuleProcessor::initialize(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -285,7 +308,7 @@ static PyObject *sipDo_RuleProcessor_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const RuleProcessor *a0;
+		const RuleProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_RuleProcessor,&a0obj))
@@ -302,7 +325,15 @@ static PyObject *sipDo_RuleProcessor_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> RuleProcessor::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -333,7 +364,15 @@ static PyObject *sipDo_RuleProcessor_start(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (RuleProcessor *)sipGetCppPtr(sipThis,sipClass_RuleProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> RuleProcessor::start();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -363,7 +402,15 @@ static PyObject *sipDo_RuleProcessor_finish(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (RuleProcessor *)sipGetCppPtr(sipThis,sipClass_RuleProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> RuleProcessor::finish();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -376,7 +423,7 @@ static PyObject *sipDo_RuleProcessor_finish(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_RuleProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -385,7 +432,7 @@ static PyObject *sipDo_RuleProcessor___call__(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -403,7 +450,15 @@ static PyObject *sipDo_RuleProcessor___call__(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
-			res = ptr -> RuleProcessor::operator ()(* a0);
+   try
+   {
+			res = ptr -> RuleProcessor::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -411,7 +466,7 @@ static PyObject *sipDo_RuleProcessor___call__(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -425,7 +480,7 @@ static PyObject *sipDo_RuleProcessor_evaluate(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -443,7 +498,15 @@ static PyObject *sipDo_RuleProcessor_evaluate(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = new String(ptr -> RuleProcessor::evaluate(* a0));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -473,7 +536,15 @@ static PyObject *sipDo_RuleProcessor_isValid(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (RuleProcessor *)sipGetCppPtr(sipThis,sipClass_RuleProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> RuleProcessor::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -537,15 +608,23 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipRuleProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		INIFile *a0;
+		INIFile * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -558,7 +637,15 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipRuleProcessor(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -567,7 +654,7 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const RuleProcessor *a0;
+		const RuleProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_RuleProcessor,&a0obj))
@@ -579,7 +666,15 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipRuleProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -616,7 +711,7 @@ PyMethodDef sipClassAttrTab_RuleProcessor[] = {
 	{sipName_BALL_set, sipDo_RuleProcessor_set, METH_VARARGS, NULL},
 	{sipName_BALL_start, sipDo_RuleProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_RuleProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_RuleProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_RuleProcessor_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_evaluate, sipDo_RuleProcessor_evaluate, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_RuleProcessor_isValid, METH_VARARGS, NULL},
 	{NULL}
@@ -658,6 +753,7 @@ RuleProcessor *sipForceConvertTo_RuleProcessor(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_RuleProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

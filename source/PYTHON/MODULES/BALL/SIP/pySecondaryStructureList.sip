@@ -1,6 +1,6 @@
-// $Id: pySecondaryStructureList.sip,v 1.1 2000/07/18 21:28:18 oliver Exp $
+// $Id: pySecondaryStructureList.sip,v 1.2 2001/07/29 17:31:17 oliver Exp $
 
-class PySecondaryStructureList
+%MappedType PySecondaryStructureList
 {
 %HeaderCode
 	#include <BALL/PYTHON/pySecondaryStructureList.h>
@@ -8,7 +8,7 @@ class PySecondaryStructureList
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -33,11 +33,11 @@ class PySecondaryStructureList
 	return pl;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	return PyList_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python list of SecondaryStructure instances to an SecondaryStructureList object on the
 	// heap.
  

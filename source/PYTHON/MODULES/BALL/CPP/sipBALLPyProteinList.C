@@ -2,48 +2,11 @@
 #include "sipBALLPyProteinList.h"
 
 
-
-PyObject *sipConvertFrom_PyProteinList(const PyProteinList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pyProteinList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyProteinList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		Protein& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyProteinList.cpp"
-}
-
-PyObject *sipClass_PyProteinList;
-
 int sipCanConvertTo_PyProteinList(PyObject *sipPy)
 {
 #line 37 "pyProteinList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyProteinList.cpp"
+#line 14 "sipBALLPyProteinList.cpp"
 }
 
 int sipConvertTo_PyProteinList(PyObject *sipPy,PyProteinList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PyProteinList(PyObject *sipPy,PyProteinList **sipCppPtr,int sip
 	*sipCppPtr = protein_list;
 
 	return 1;
-#line 83 "sipBALLPyProteinList.cpp"
+#line 46 "sipBALLPyProteinList.cpp"
 }
 
 PyProteinList *sipForceConvertTo_PyProteinList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyProteinList *sipForceConvertTo_PyProteinList(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PyProteinList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyProteinList(const PyProteinList *sipCpp)
+{
+#line 12 "pyProteinList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyProteinList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		Protein& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyProteinList.cpp"
 }

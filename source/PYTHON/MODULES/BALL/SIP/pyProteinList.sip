@@ -1,6 +1,6 @@
-// $Id: pyProteinList.sip,v 1.1 2000/07/18 21:28:17 oliver Exp $
+// $Id: pyProteinList.sip,v 1.2 2001/07/29 17:31:17 oliver Exp $
 
-class PyProteinList
+%MappedType PyProteinList
 {
 %HeaderCode
 	#include <BALL/PYTHON/pyProteinList.h>
@@ -8,7 +8,7 @@ class PyProteinList
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -33,11 +33,11 @@ class PyProteinList
 	return pl;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	return PyList_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python list of Protein instances to an ProteinList object on the
 	// heap.
  

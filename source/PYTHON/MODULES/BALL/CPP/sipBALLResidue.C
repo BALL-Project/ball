@@ -2,7 +2,6 @@
 #include "sipBALLResidue.h"
 
 
-
 PyObject *sipClass_Residue;
 
 static void sipDealloc_Residue(sipThisType *);
@@ -36,31 +35,31 @@ static PyTypeObject sipType_Residue = {
 };
 
 sipResidue::sipResidue()
-    : Residue()
+   : Residue()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipResidue::sipResidue(const Residue& a0,bool a1)
-    : Residue(a0,a1)
+   : Residue(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipResidue::sipResidue(const String& a0,const String& a1,char a2)
-    : Residue(a0,a1,a2)
+   : Residue(a0,a1,a2)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipResidue::sipResidue(const Residue& a0)
-    : Residue(a0)
+   : Residue(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipResidue::~sipResidue()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -188,7 +187,7 @@ static PyObject *sipDo_Residue_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Residue *a0;
+		const Residue * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -206,7 +205,15 @@ static PyObject *sipDo_Residue_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -229,7 +236,7 @@ static PyObject *sipDo_Residue_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -247,7 +254,15 @@ static PyObject *sipDo_Residue_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -270,7 +285,7 @@ static PyObject *sipDo_Residue_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
@@ -287,7 +302,15 @@ static PyObject *sipDo_Residue_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -320,7 +343,15 @@ static PyObject *sipDo_Residue_getFullName(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new String(ptr -> Residue::getFullName( (Residue::FullNameType)a0));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -350,7 +381,15 @@ static PyObject *sipDo_Residue_hasTorsionPhi(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::hasTorsionPhi();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -380,7 +419,15 @@ static PyObject *sipDo_Residue_getTorsionPhi(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new Angle(ptr -> Residue::getTorsionPhi());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -410,7 +457,15 @@ static PyObject *sipDo_Residue_hasTorsionPsi(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::hasTorsionPsi();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -440,7 +495,15 @@ static PyObject *sipDo_Residue_getTorsionPsi(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new Angle(ptr -> Residue::getTorsionPsi());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -470,7 +533,15 @@ static PyObject *sipDo_Residue_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::getProtein();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Protein);
 		}
@@ -485,7 +556,15 @@ static PyObject *sipDo_Residue_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::getProtein();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Protein);
 		}
@@ -515,7 +594,15 @@ static PyObject *sipDo_Residue_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::getChain();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Chain);
 		}
@@ -530,7 +617,15 @@ static PyObject *sipDo_Residue_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::getChain();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Chain);
 		}
@@ -552,7 +647,7 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		Position *a0;
+		Position * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
@@ -570,7 +665,15 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::getPDBAtom(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -580,7 +683,7 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 	}
 
 	{
-		Position *a0;
+		Position * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
@@ -598,7 +701,15 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::getPDBAtom(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -623,7 +734,7 @@ static PyObject *sipDo_Residue_setID(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -640,7 +751,15 @@ static PyObject *sipDo_Residue_setID(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::setID(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -674,7 +793,15 @@ static PyObject *sipDo_Residue_getID(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> Residue::getID();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -705,7 +832,15 @@ static PyObject *sipDo_Residue_setInsertionCode(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::setInsertionCode( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -736,7 +871,15 @@ static PyObject *sipDo_Residue_getInsertionCode(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::getInsertionCode();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyString_FromStringAndSize(&res,1);
 		}
@@ -766,7 +909,15 @@ static PyObject *sipDo_Residue_countPDBAtoms(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::countPDBAtoms();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -788,7 +939,7 @@ static PyObject *sipDo_Residue_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		PDBAtom *a0;
+		PDBAtom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
@@ -805,7 +956,15 @@ static PyObject *sipDo_Residue_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::prepend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -828,7 +987,7 @@ static PyObject *sipDo_Residue_append(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		PDBAtom *a0;
+		PDBAtom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
@@ -845,7 +1004,15 @@ static PyObject *sipDo_Residue_append(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::append(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -868,7 +1035,7 @@ static PyObject *sipDo_Residue_insert(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		PDBAtom *a0;
+		PDBAtom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
@@ -885,7 +1052,15 @@ static PyObject *sipDo_Residue_insert(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::insert(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -908,9 +1083,9 @@ static PyObject *sipDo_Residue_insertBefore(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		PDBAtom *a0;
+		PDBAtom * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_PDBAtom,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -928,7 +1103,15 @@ static PyObject *sipDo_Residue_insertBefore(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::insertBefore(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -951,9 +1134,9 @@ static PyObject *sipDo_Residue_insertAfter(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		PDBAtom *a0;
+		PDBAtom * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_PDBAtom,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -971,7 +1154,15 @@ static PyObject *sipDo_Residue_insertAfter(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::insertAfter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -994,7 +1185,7 @@ static PyObject *sipDo_Residue_remove(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		PDBAtom *a0;
+		PDBAtom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
@@ -1012,7 +1203,15 @@ static PyObject *sipDo_Residue_remove(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1034,7 +1233,7 @@ static PyObject *sipDo_Residue_spliceBefore(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
@@ -1051,7 +1250,15 @@ static PyObject *sipDo_Residue_spliceBefore(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::spliceBefore(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1074,7 +1281,7 @@ static PyObject *sipDo_Residue_spliceAfter(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
@@ -1091,7 +1298,15 @@ static PyObject *sipDo_Residue_spliceAfter(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::spliceAfter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1114,7 +1329,7 @@ static PyObject *sipDo_Residue_splice(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
@@ -1131,7 +1346,15 @@ static PyObject *sipDo_Residue_splice(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Residue::splice(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1162,7 +1385,15 @@ static PyObject *sipDo_Residue_isAminoAcid(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::isAminoAcid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1192,7 +1423,15 @@ static PyObject *sipDo_Residue_isTerminal(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::isTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1222,7 +1461,15 @@ static PyObject *sipDo_Residue_isNTerminal(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::isNTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1252,7 +1499,15 @@ static PyObject *sipDo_Residue_isCTerminal(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Residue *)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Residue::isCTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1335,7 +1590,7 @@ static PyObject * sip__str__Residue(PyObject *a0)
 
   return PyString_FromString(String(String("Residue ") + ptr->getName() + ptr->getID()
         + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-#line 1343 "sipBALLResidue.cpp"
+#line 1598 "sipBALLResidue.cpp"
 }
 
 PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
@@ -1357,13 +1612,21 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipResidue();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Residue *a0;
+		const Residue * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -1376,15 +1639,23 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipResidue(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		const String *a1 = NULL;
+		const String * a1 = NULL;
 		PyObject *a1obj = NULL;
 		char a2 = ' ';
 
@@ -1398,7 +1669,15 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipResidue(* a0,* a1, a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -1410,7 +1689,7 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Residue *a0;
+		const Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Residue,&a0obj))
@@ -1422,7 +1701,15 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipResidue(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1524,6 +1811,7 @@ Residue *sipForceConvertTo_Residue(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Residue);
+
 	*iserrp = 1;
 
 	return NULL;

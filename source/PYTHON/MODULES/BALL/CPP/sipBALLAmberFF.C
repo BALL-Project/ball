@@ -2,7 +2,6 @@
 #include "sipBALLAmberFF.h"
 
 
-
 PyObject *sipClass_AmberFF;
 
 static void sipDealloc_AmberFF(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_AmberFF = {
 };
 
 sipAmberFF::sipAmberFF()
-    : AmberFF()
+   : AmberFF()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipAmberFF::sipAmberFF(System& a0)
-    : AmberFF(a0)
+   : AmberFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipAmberFF::sipAmberFF(System& a0,Options& a1)
-    : AmberFF(a0,a1)
+   : AmberFF(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipAmberFF::sipAmberFF(AmberFF& a0)
-    : AmberFF(a0)
+   : AmberFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipAmberFF::~sipAmberFF()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -91,7 +90,15 @@ static PyObject *sipDo_AmberFF_specificSetup(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (AmberFF *)sipGetCppPtr(sipThis,sipClass_AmberFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberFF::specificSetup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -121,7 +128,15 @@ static PyObject *sipDo_AmberFF_getStretchEnergy(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (AmberFF *)sipGetCppPtr(sipThis,sipClass_AmberFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberFF::getStretchEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -151,7 +166,15 @@ static PyObject *sipDo_AmberFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (AmberFF *)sipGetCppPtr(sipThis,sipClass_AmberFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberFF::getBendEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -181,7 +204,15 @@ static PyObject *sipDo_AmberFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (AmberFF *)sipGetCppPtr(sipThis,sipClass_AmberFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberFF::getTorsionEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -211,7 +242,15 @@ static PyObject *sipDo_AmberFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject 
 			if ((ptr = (AmberFF *)sipGetCppPtr(sipThis,sipClass_AmberFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberFF::getNonbondedEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -241,7 +280,15 @@ static PyObject *sipDo_AmberFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (AmberFF *)sipGetCppPtr(sipThis,sipClass_AmberFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberFF::getESEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -271,7 +318,15 @@ static PyObject *sipDo_AmberFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (AmberFF *)sipGetCppPtr(sipThis,sipClass_AmberFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberFF::getVdWEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -301,7 +356,15 @@ static PyObject *sipDo_AmberFF_hasInitializedParameters(PyObject *sipThisObj,PyO
 			if ((ptr = (AmberFF *)sipGetCppPtr(sipThis,sipClass_AmberFF)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberFF::hasInitializedParameters();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -365,13 +428,21 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipAmberFF();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_System,&a0obj))
@@ -383,15 +454,23 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberFF(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
-		Options *a1;
+		Options * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
@@ -404,13 +483,21 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberFF(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		AmberFF *a0;
+		AmberFF * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AmberFF,&a0obj))
@@ -422,7 +509,15 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberFF(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -500,6 +595,7 @@ AmberFF *sipForceConvertTo_AmberFF(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_AmberFF);
+
 	*iserrp = 1;
 
 	return NULL;

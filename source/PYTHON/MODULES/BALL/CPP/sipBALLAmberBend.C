@@ -2,7 +2,6 @@
 #include "sipBALLAmberBend.h"
 
 
-
 PyObject *sipClass_AmberBend;
 
 static void sipDealloc_AmberBend(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_AmberBend = {
 };
 
 sipAmberBend::sipAmberBend()
-    : AmberBend()
+   : AmberBend()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberBend::sipAmberBend(ForceField& a0)
-    : AmberBend(a0)
+   : AmberBend(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberBend::sipAmberBend(const AmberBend& a0,bool a1)
-    : AmberBend(a0,a1)
+   : AmberBend(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberBend::sipAmberBend(const AmberBend& a0)
-    : AmberBend(a0)
+   : AmberBend(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberBend::~sipAmberBend()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -122,7 +121,15 @@ static PyObject *sipDo_AmberBend_setup(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (AmberBend *)sipGetCppPtr(sipThis,sipClass_AmberBend)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberBend::setup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -152,7 +159,15 @@ static PyObject *sipDo_AmberBend_updateEnergy(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (AmberBend *)sipGetCppPtr(sipThis,sipClass_AmberBend)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberBend::updateEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -181,7 +196,15 @@ static PyObject *sipDo_AmberBend_updateForces(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (AmberBend *)sipGetCppPtr(sipThis,sipClass_AmberBend)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> AmberBend::updateForces();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -246,13 +269,21 @@ PyObject *sipNew_AmberBend(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipAmberBend();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -264,13 +295,21 @@ PyObject *sipNew_AmberBend(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberBend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AmberBend *a0;
+		const AmberBend * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -283,13 +322,21 @@ PyObject *sipNew_AmberBend(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberBend(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AmberBend *a0;
+		const AmberBend * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AmberBend,&a0obj))
@@ -301,7 +348,15 @@ PyObject *sipNew_AmberBend(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberBend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -374,6 +429,7 @@ AmberBend *sipForceConvertTo_AmberBend(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_AmberBend);
+
 	*iserrp = 1;
 
 	return NULL;

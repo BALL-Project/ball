@@ -1,4 +1,4 @@
-// $Id: regularData2D.sip,v 1.2 2001/07/25 11:32:35 oliver Exp $
+// $Id: regularData2D.sip,v 1.3 2001/07/29 17:31:17 oliver Exp $
 
 // dummy class to emulate nested classes
 class GridIndex2D
@@ -19,6 +19,8 @@ class FloatRegularData2D
 {
 %HeaderCode
 	#include <BALL/DATATYPE/regularData2D.h>
+	#include "sipBALLOutOfMemory.h"
+	#include "sipBALLOutOfGrid.h"
 	typedef BALL::RegularData2D<float> FloatRegularData2D;
 	typedef BALL::RegularData2D<float>::GridIndex GridIndex2D;
 	using namespace BALL::Exception;
@@ -72,8 +74,8 @@ class FloatRegularData2D
 	//	throw(OutOfGrid);
 	//GridDataType getData(const Position /position/) 
 	//	throw(OutOfGrid);
-	GridDataType operator [] (const Position /position/) 
-		throw(OutOfGrid);
+	//GridDataType operator [] (const Position /position/) 
+	//	throw(OutOfGrid);
 
 	GridDataType operator [] (const Vector2& /vector/) 
 		throw(OutOfGrid);

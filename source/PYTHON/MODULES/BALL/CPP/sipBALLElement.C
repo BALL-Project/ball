@@ -2,7 +2,6 @@
 #include "sipBALLElement.h"
 
 
-
 PyObject *sipClass_Element;
 
 static void sipDealloc_Element(sipThisType *);
@@ -43,7 +42,7 @@ static PyObject *sipDo_Element_setName(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -60,7 +59,15 @@ static PyObject *sipDo_Element_setName(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setName(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -94,7 +101,15 @@ static PyObject *sipDo_Element_getName(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> Element::getName();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -116,7 +131,7 @@ static PyObject *sipDo_Element_setSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -133,7 +148,15 @@ static PyObject *sipDo_Element_setSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setSymbol(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -167,7 +190,15 @@ static PyObject *sipDo_Element_getSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> Element::getSymbol();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -198,7 +229,15 @@ static PyObject *sipDo_Element_setGroup(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setGroup( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -229,7 +268,15 @@ static PyObject *sipDo_Element_getGroup(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Element::getGroup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -260,7 +307,15 @@ static PyObject *sipDo_Element_setPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setPeriod( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -291,7 +346,15 @@ static PyObject *sipDo_Element_getPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Element::getPeriod();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -322,7 +385,15 @@ static PyObject *sipDo_Element_setAtomicNumber(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setAtomicNumber( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -353,7 +424,15 @@ static PyObject *sipDo_Element_getAtomicNumber(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Element::getAtomicNumber();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -384,7 +463,15 @@ static PyObject *sipDo_Element_setAtomicWeight(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setAtomicWeight( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -415,7 +502,15 @@ static PyObject *sipDo_Element_getAtomicWeight(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Element::getAtomicWeight();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -446,7 +541,15 @@ static PyObject *sipDo_Element_setAtomicRadius(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setAtomicRadius( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -477,7 +580,15 @@ static PyObject *sipDo_Element_getAtomicRadius(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Element::getAtomicRadius();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -508,7 +619,15 @@ static PyObject *sipDo_Element_setCovalentRadius(PyObject *sipThisObj,PyObject *
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setCovalentRadius( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -539,7 +658,15 @@ static PyObject *sipDo_Element_getCovalentRadius(PyObject *sipThisObj,PyObject *
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Element::getCovalentRadius();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -570,7 +697,15 @@ static PyObject *sipDo_Element_setVanDerWaalsRadius(PyObject *sipThisObj,PyObjec
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setVanDerWaalsRadius( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -601,7 +736,15 @@ static PyObject *sipDo_Element_getVanDerWaalsRadius(PyObject *sipThisObj,PyObjec
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Element::getVanDerWaalsRadius();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -632,7 +775,15 @@ static PyObject *sipDo_Element_setElectronegativity(PyObject *sipThisObj,PyObjec
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Element::setElectronegativity( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -663,7 +814,15 @@ static PyObject *sipDo_Element_getElectronegativity(PyObject *sipThisObj,PyObjec
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Element::getElectronegativity();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -693,7 +852,15 @@ static PyObject *sipDo_Element_isUnknown(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Element::isUnknown();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -751,13 +918,21 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Element();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Element *a0;
+		const Element * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Element,&a0obj))
@@ -769,7 +944,15 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Element(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -854,6 +1037,7 @@ Element *sipForceConvertTo_Element(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Element);
+
 	*iserrp = 1;
 
 	return NULL;

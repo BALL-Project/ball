@@ -1,6 +1,6 @@
-// $Id: pyCompositeDescriptorList.sip,v 1.2 2000/10/05 22:33:36 oliver Exp $
+// $Id: pyCompositeDescriptorList.sip,v 1.3 2001/07/29 17:31:17 oliver Exp $
 
-class PyCompositeDescriptorList
+%MappedType PyCompositeDescriptorList
 {
 %HeaderCode
 	#include <BALL/DATATYPE/list.h>
@@ -10,7 +10,7 @@ class PyCompositeDescriptorList
 	typedef List<CompositeDescriptor*> PyCompositeDescriptorList;
 %End
 
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -35,11 +35,11 @@ class PyCompositeDescriptorList
 	return pl;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	return PyList_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python list of CompositeDescriptor instances to an CompositeDescriptorList object on the
 	// heap.
  

@@ -1,6 +1,6 @@
-// $Id: pyFragmentList.sip,v 1.1 2000/07/18 21:28:10 oliver Exp $
+// $Id: pyFragmentList.sip,v 1.2 2001/07/29 17:31:17 oliver Exp $
 
-class PyFragmentList
+%MappedType PyFragmentList
 {
 %HeaderCode
 	#include <BALL/PYTHON/pyFragmentList.h>
@@ -8,7 +8,7 @@ class PyFragmentList
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -31,11 +31,11 @@ class PyFragmentList
 	return pl;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	return PyList_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python list of Fragment instances to an FragmentList object on the
 	// heap.
  

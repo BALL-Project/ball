@@ -2,7 +2,6 @@
 #include "sipBALLTranslationProcessor.h"
 
 
-
 PyObject *sipClass_TranslationProcessor;
 
 static void sipDealloc_TranslationProcessor(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_TranslationProcessor = {
 };
 
 sipTranslationProcessor::sipTranslationProcessor()
-    : TranslationProcessor()
+   : TranslationProcessor()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipTranslationProcessor::sipTranslationProcessor(const Vector3& a0)
-    : TranslationProcessor(a0)
+   : TranslationProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipTranslationProcessor::sipTranslationProcessor(const TranslationProcessor& a0)
-    : TranslationProcessor(a0)
+   : TranslationProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipTranslationProcessor::~sipTranslationProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipTranslationProcessor::operator ()(Atom& a0)
+Processor::Result sipTranslationProcessor::operator()(Atom& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		TranslationProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipAtomProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		TranslationProcessor::operator()(a0);
 }
 
 static PyObject *sipDo_TranslationProcessor_setTranslation(PyObject *sipThisObj,PyObject *sipArgs)
@@ -77,7 +76,7 @@ static PyObject *sipDo_TranslationProcessor_setTranslation(PyObject *sipThisObj,
 		return NULL;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
@@ -94,7 +93,15 @@ static PyObject *sipDo_TranslationProcessor_setTranslation(PyObject *sipThisObj,
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> TranslationProcessor::setTranslation(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -125,7 +132,15 @@ static PyObject *sipDo_TranslationProcessor_getTranslation(PyObject *sipThisObj,
 			if ((ptr = (TranslationProcessor *)sipGetCppPtr(sipThis,sipClass_TranslationProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> TranslationProcessor::getTranslation();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Vector3);
 		}
@@ -138,7 +153,7 @@ static PyObject *sipDo_TranslationProcessor_getTranslation(PyObject *sipThisObj,
 	return NULL;
 }
 
-static PyObject *sipDo_TranslationProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_TranslationProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -147,7 +162,7 @@ static PyObject *sipDo_TranslationProcessor___call__(PyObject *sipThisObj,PyObje
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -165,7 +180,15 @@ static PyObject *sipDo_TranslationProcessor___call__(PyObject *sipThisObj,PyObje
 			if (iserr)
 				return NULL;
 
-			res = ptr -> TranslationProcessor::operator ()(* a0);
+   try
+   {
+			res = ptr -> TranslationProcessor::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -173,7 +196,7 @@ static PyObject *sipDo_TranslationProcessor___call__(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_TranslationProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TranslationProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -229,13 +252,21 @@ PyObject *sipNew_TranslationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipTranslationProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Vector3,&a0obj))
@@ -247,13 +278,21 @@ PyObject *sipNew_TranslationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipTranslationProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const TranslationProcessor *a0;
+		const TranslationProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_TranslationProcessor,&a0obj))
@@ -265,7 +304,15 @@ PyObject *sipNew_TranslationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipTranslationProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -298,7 +345,7 @@ PyObject *sipNew_TranslationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_TranslationProcessor[] = {
 	{sipName_BALL_setTranslation, sipDo_TranslationProcessor_setTranslation, METH_VARARGS, NULL},
 	{sipName_BALL_getTranslation, sipDo_TranslationProcessor_getTranslation, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_TranslationProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_TranslationProcessor_CallOp, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -338,6 +385,7 @@ TranslationProcessor *sipForceConvertTo_TranslationProcessor(PyObject *valobj,in
 	}
 
 	sipBadClass(sipName_BALL_TranslationProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

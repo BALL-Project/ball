@@ -2,7 +2,6 @@
 #include "sipBALLBox3.h"
 
 
-
 PyObject *sipClass_Box3;
 
 static void sipDealloc_Box3(sipThisType *);
@@ -44,7 +43,7 @@ static PyObject *sipDo_Box3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Box3 *a0;
+		Box3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
@@ -61,7 +60,15 @@ static PyObject *sipDo_Box3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Box3::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -69,9 +76,9 @@ static PyObject *sipDo_Box3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Vector3 *a0;
+		Vector3 * a0;
 		PyObject *a0obj;
-		Vector3 *a1;
+		Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -89,7 +96,15 @@ static PyObject *sipDo_Box3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Box3::set(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -111,7 +126,15 @@ static PyObject *sipDo_Box3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Box3 *)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Box3::set( a0, a1, a2, a3, a4, a5);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -134,7 +157,7 @@ static PyObject *sipDo_Box3_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Box3 *a0;
+		Box3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
@@ -151,7 +174,15 @@ static PyObject *sipDo_Box3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Box3::get(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -159,9 +190,9 @@ static PyObject *sipDo_Box3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Vector3 *a0;
+		Vector3 * a0;
 		PyObject *a0obj;
-		Vector3 *a1;
+		Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -179,7 +210,15 @@ static PyObject *sipDo_Box3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Box3::get(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -201,7 +240,15 @@ static PyObject *sipDo_Box3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Box3 *)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Box3::get( a0, a1, a2, a3, a4, a5);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -224,7 +271,7 @@ static PyObject *sipDo_Box3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Box3 *a0;
+		Box3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
@@ -241,7 +288,15 @@ static PyObject *sipDo_Box3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Box3::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -272,7 +327,15 @@ static PyObject *sipDo_Box3_getSurface(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Box3 *)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Box3::getSurface();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -302,7 +365,15 @@ static PyObject *sipDo_Box3_getVolume(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Box3 *)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Box3::getVolume();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -332,7 +403,15 @@ static PyObject *sipDo_Box3_getWidth(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Box3 *)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Box3::getWidth();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -362,7 +441,15 @@ static PyObject *sipDo_Box3_getHeight(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Box3 *)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Box3::getHeight();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -392,7 +479,15 @@ static PyObject *sipDo_Box3_getDepth(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Box3 *)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Box3::getDepth();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -414,7 +509,7 @@ static PyObject *sipDo_Box3_join(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Box3 *a0;
+		Box3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
@@ -431,7 +526,15 @@ static PyObject *sipDo_Box3_join(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Box3::join(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -462,7 +565,15 @@ static PyObject *sipDo_Box3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Box3 *)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Box3::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -511,7 +622,7 @@ static PyObject * sip__str__Box3(PyObject *a0)
    tmp += String(ptr->b.y) + " ";
    tmp += String(ptr->b.z) + ") }";
    return PyString_FromString(tmp.c_str());
-#line 519 "sipBALLBox3.cpp"
+#line 630 "sipBALLBox3.cpp"
 }
 
 PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
@@ -533,13 +644,21 @@ PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Box3();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		Box3 *a0;
+		Box3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Box3,&a0obj))
@@ -551,15 +670,23 @@ PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Box3(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		Vector3 *a0;
+		Vector3 * a0;
 		PyObject *a0obj;
-		Vector3 *a1;
+		Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -572,7 +699,15 @@ PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Box3(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -587,7 +722,15 @@ PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-ffffff",&a0,&a1,&a2,&a3,&a4,&a5))
 		{
+   try
+   {
 			sipNew = new Box3( a0, a1, a2, a3, a4, a5);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -736,6 +879,7 @@ Box3 *sipForceConvertTo_Box3(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Box3);
+
 	*iserrp = 1;
 
 	return NULL;

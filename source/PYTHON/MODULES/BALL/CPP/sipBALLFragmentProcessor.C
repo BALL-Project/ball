@@ -2,7 +2,6 @@
 #include "sipBALLFragmentProcessor.h"
 
 
-
 PyObject *sipClass_FragmentProcessor;
 
 static void sipDealloc_FragmentProcessor(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_FragmentProcessor = {
 };
 
 sipFragmentProcessor::sipFragmentProcessor()
-    : FragmentProcessor()
+   : FragmentProcessor()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipFragmentProcessor::sipFragmentProcessor(const FragmentProcessor& a0)
-    : FragmentProcessor(a0)
+   : FragmentProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipFragmentProcessor::~sipFragmentProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipFragmentProcessor::operator ()(Fragment& a0)
+Processor::Result sipFragmentProcessor::operator()(Fragment& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipFragmentProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		FragmentProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipFragmentProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		FragmentProcessor::operator()(a0);
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-Processor::Result sipFragmentProcessor::sipVH_CallOperator(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Fragment& a0)
+Processor::Result sipFragmentProcessor::sipVH_CallOp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Fragment& a0)
 {
 	Processor::Result res;
 	PyObject *resobj;
@@ -74,9 +73,7 @@ Processor::Result sipFragmentProcessor::sipVH_CallOperator(const sipMethodCache 
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_Fragment);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -96,7 +93,7 @@ Processor::Result sipFragmentProcessor::sipVH_CallOperator(const sipMethodCache 
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_FragmentProcessor,sipName_BALL___call__);
+		sipBadVirtualResultType(sipName_BALL_FragmentProcessor,sipName_BALL_CallOp);
 	}
 
 reportError:
@@ -125,7 +122,15 @@ static PyObject *sipDo_FragmentProcessor_start(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (FragmentProcessor *)sipGetCppPtr(sipThis,sipClass_FragmentProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentProcessor::start();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -155,7 +160,15 @@ static PyObject *sipDo_FragmentProcessor_finish(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (FragmentProcessor *)sipGetCppPtr(sipThis,sipClass_FragmentProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> FragmentProcessor::finish();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -168,7 +181,7 @@ static PyObject *sipDo_FragmentProcessor_finish(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_FragmentProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_FragmentProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -177,7 +190,7 @@ static PyObject *sipDo_FragmentProcessor___call__(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		Fragment *a0;
+		Fragment * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Fragment,&a0obj))
@@ -195,7 +208,15 @@ static PyObject *sipDo_FragmentProcessor___call__(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
-			res = ptr -> FragmentProcessor::operator ()(* a0);
+   try
+   {
+			res = ptr -> FragmentProcessor::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -203,7 +224,7 @@ static PyObject *sipDo_FragmentProcessor___call__(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_FragmentProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_FragmentProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -254,13 +275,21 @@ PyObject *sipNew_FragmentProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipFragmentProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const FragmentProcessor *a0;
+		const FragmentProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_FragmentProcessor,&a0obj))
@@ -272,7 +301,15 @@ PyObject *sipNew_FragmentProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFragmentProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -305,7 +342,7 @@ PyObject *sipNew_FragmentProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_FragmentProcessor[] = {
 	{sipName_BALL_start, sipDo_FragmentProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_FragmentProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_FragmentProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_FragmentProcessor_CallOp, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -345,6 +382,7 @@ FragmentProcessor *sipForceConvertTo_FragmentProcessor(PyObject *valobj,int *ise
 	}
 
 	sipBadClass(sipName_BALL_FragmentProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

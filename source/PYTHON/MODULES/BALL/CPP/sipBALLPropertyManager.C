@@ -2,7 +2,6 @@
 #include "sipBALLPropertyManager.h"
 
 
-
 PyObject *sipClass_PropertyManager;
 
 static void sipDealloc_PropertyManager(sipThisType *);
@@ -50,7 +49,15 @@ static PyObject *sipDo_PropertyManager_clear(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::clear();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -80,7 +87,15 @@ static PyObject *sipDo_PropertyManager_destroy(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::destroy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -103,7 +118,7 @@ static PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		const PropertyManager *a0;
+		const PropertyManager * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PropertyManager,&a0obj))
@@ -120,7 +135,15 @@ static PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -143,7 +166,7 @@ static PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		PropertyManager *a0;
+		PropertyManager * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PropertyManager,&a0obj))
@@ -160,7 +183,15 @@ static PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::get(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -183,7 +214,7 @@ static PyObject *sipDo_PropertyManager_swap(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		PropertyManager *a0;
+		PropertyManager * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PropertyManager,&a0obj))
@@ -200,7 +231,15 @@ static PyObject *sipDo_PropertyManager_swap(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -232,7 +271,15 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::setProperty( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -240,7 +287,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 	}
 
 	{
-		NamedProperty *a0;
+		NamedProperty * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_NamedProperty,&a0obj))
@@ -257,7 +304,15 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::setProperty(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -265,7 +320,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -282,7 +337,15 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::setProperty(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -293,65 +356,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 	}
 
 	{
-		const String *a0;
-		PyObject *a0obj;
-		long a1;
-
-		if (sipParseArgs(&sipArgsParsed,sipArgs,"Il",sipCanConvertTo_String,&a0obj,&a1))
-		{
-			PropertyManager *ptr;
-
-			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> PropertyManager::setProperty(* a0, (bool)a1);
-
-			if (istemp0)
-				delete a0;
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	{
-		const String *a0;
-		PyObject *a0obj;
-		int a1;
-
-		if (sipParseArgs(&sipArgsParsed,sipArgs,"Ii",sipCanConvertTo_String,&a0obj,&a1))
-		{
-			PropertyManager *ptr;
-
-			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> PropertyManager::setProperty(* a0, a1);
-
-			if (istemp0)
-				delete a0;
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 		float a1;
 
@@ -369,7 +374,15 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::setProperty(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -380,9 +393,9 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		String *a1;
+		String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -400,7 +413,15 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::setProperty(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -414,9 +435,9 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		PersistentObject *a1;
+		PersistentObject * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_PersistentObject,&a1obj))
@@ -434,7 +455,15 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::setProperty(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -469,7 +498,15 @@ static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObje
 			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::clearProperty( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -477,7 +514,7 @@ static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObje
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -494,7 +531,15 @@ static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObje
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::clearProperty(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -529,7 +574,15 @@ static PyObject *sipDo_PropertyManager_toggleProperty(PyObject *sipThisObj,PyObj
 			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> PropertyManager::toggleProperty( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -560,7 +613,15 @@ static PyObject *sipDo_PropertyManager_countProperties(PyObject *sipThisObj,PyOb
 			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PropertyManager::countProperties();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -582,7 +643,7 @@ static PyObject *sipDo_PropertyManager_getProperty(PyObject *sipThisObj,PyObject
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -600,7 +661,15 @@ static PyObject *sipDo_PropertyManager_getProperty(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> PropertyManager::getProperty(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -633,7 +702,15 @@ static PyObject *sipDo_PropertyManager_countNamedProperties(PyObject *sipThisObj
 			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PropertyManager::countNamedProperties();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -665,14 +742,22 @@ static PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject
 			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PropertyManager::hasProperty( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -690,7 +775,15 @@ static PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PropertyManager::hasProperty(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -723,7 +816,15 @@ static PyObject *sipDo_PropertyManager_isValid(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (PropertyManager *)sipGetCppPtr(sipThis,sipClass_PropertyManager)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> PropertyManager::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -776,13 +877,21 @@ PyObject *sipNew_PropertyManager(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new PropertyManager();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const PropertyManager *a0;
+		const PropertyManager * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PropertyManager,&a0obj))
@@ -794,7 +903,15 @@ PyObject *sipNew_PropertyManager(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new PropertyManager(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -871,6 +988,7 @@ PropertyManager *sipForceConvertTo_PropertyManager(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PropertyManager);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLPersistentObject.h"
 
 
-
 PyObject *sipClass_PersistentObject;
 
 static void sipDealloc_PersistentObject(sipThisType *);
@@ -74,13 +73,21 @@ PyObject *sipNew_PersistentObject(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new PersistentObject();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const PersistentObject *a0;
+		const PersistentObject * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PersistentObject,&a0obj))
@@ -92,7 +99,15 @@ PyObject *sipNew_PersistentObject(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new PersistentObject(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -156,6 +171,7 @@ PersistentObject *sipForceConvertTo_PersistentObject(PyObject *valobj,int *iserr
 	}
 
 	sipBadClass(sipName_BALL_PersistentObject);
+
 	*iserrp = 1;
 
 	return NULL;

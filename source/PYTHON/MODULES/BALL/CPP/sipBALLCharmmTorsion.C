@@ -2,7 +2,6 @@
 #include "sipBALLCharmmTorsion.h"
 
 
-
 PyObject *sipClass_CharmmTorsion;
 
 static void sipDealloc_CharmmTorsion(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_CharmmTorsion = {
 };
 
 sipCharmmTorsion::sipCharmmTorsion()
-    : CharmmTorsion()
+   : CharmmTorsion()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmTorsion::sipCharmmTorsion(ForceField& a0)
-    : CharmmTorsion(a0)
+   : CharmmTorsion(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmTorsion::sipCharmmTorsion(const CharmmTorsion& a0,bool a1)
-    : CharmmTorsion(a0,a1)
+   : CharmmTorsion(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmTorsion::sipCharmmTorsion(const CharmmTorsion& a0)
-    : CharmmTorsion(a0)
+   : CharmmTorsion(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmTorsion::~sipCharmmTorsion()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -122,7 +121,15 @@ static PyObject *sipDo_CharmmTorsion_setup(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (CharmmTorsion *)sipGetCppPtr(sipThis,sipClass_CharmmTorsion)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmTorsion::setup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -152,7 +159,15 @@ static PyObject *sipDo_CharmmTorsion_updateEnergy(PyObject *sipThisObj,PyObject 
 			if ((ptr = (CharmmTorsion *)sipGetCppPtr(sipThis,sipClass_CharmmTorsion)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CharmmTorsion::updateEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -181,7 +196,15 @@ static PyObject *sipDo_CharmmTorsion_updateForces(PyObject *sipThisObj,PyObject 
 			if ((ptr = (CharmmTorsion *)sipGetCppPtr(sipThis,sipClass_CharmmTorsion)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> CharmmTorsion::updateForces();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -246,13 +269,21 @@ PyObject *sipNew_CharmmTorsion(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipCharmmTorsion();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -264,13 +295,21 @@ PyObject *sipNew_CharmmTorsion(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmTorsion(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CharmmTorsion *a0;
+		const CharmmTorsion * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -283,13 +322,21 @@ PyObject *sipNew_CharmmTorsion(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmTorsion(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CharmmTorsion *a0;
+		const CharmmTorsion * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CharmmTorsion,&a0obj))
@@ -301,7 +348,15 @@ PyObject *sipNew_CharmmTorsion(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCharmmTorsion(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -374,6 +429,7 @@ CharmmTorsion *sipForceConvertTo_CharmmTorsion(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_CharmmTorsion);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLXYZFile.h"
 
 
-
 PyObject *sipClass_XYZFile;
 
 static void sipDealloc_XYZFile(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_XYZFile = {
 };
 
 sipXYZFile::sipXYZFile()
-    : XYZFile()
+   : XYZFile()
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipXYZFile::sipXYZFile(const String& a0,std__openmode a1)
-    : XYZFile(a0,a1)
+   : XYZFile(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipXYZFile::sipXYZFile(const XYZFile& a0)
-    : XYZFile(a0)
+   : XYZFile(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipXYZFile::~sipXYZFile()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -91,9 +90,7 @@ void sipXYZFile::sipVH_read(const sipMethodCache *pymc,sipThisType *sipThis,int 
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_System);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -130,9 +127,7 @@ void sipXYZFile::sipVH_write(const sipMethodCache *pymc,sipThisType *sipThis,int
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_System);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -167,7 +162,7 @@ static PyObject *sipDo_XYZFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -184,7 +179,15 @@ static PyObject *sipDo_XYZFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> XYZFile::write(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -207,7 +210,7 @@ static PyObject *sipDo_XYZFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -224,7 +227,15 @@ static PyObject *sipDo_XYZFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> XYZFile::read(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -289,15 +300,23 @@ PyObject *sipNew_XYZFile(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipXYZFile();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		std__openmode *a1 = (std__openmode *)&File::IN;
+		std__openmode * a1 = (std__openmode *)&File::IN;
 		PyObject *a1obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_std__openmode,&a1obj))
@@ -310,7 +329,15 @@ PyObject *sipNew_XYZFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipXYZFile(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -319,7 +346,7 @@ PyObject *sipNew_XYZFile(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const XYZFile *a0;
+		const XYZFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_XYZFile,&a0obj))
@@ -331,7 +358,15 @@ PyObject *sipNew_XYZFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipXYZFile(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -403,6 +438,7 @@ XYZFile *sipForceConvertTo_XYZFile(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_XYZFile);
+
 	*iserrp = 1;
 
 	return NULL;

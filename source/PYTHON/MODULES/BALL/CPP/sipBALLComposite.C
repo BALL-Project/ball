@@ -2,7 +2,6 @@
 #include "sipBALLComposite.h"
 
 
-
 PyObject *sipClass_Composite;
 
 static void sipDealloc_Composite(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_Composite = {
 };
 
 sipComposite::sipComposite()
-    : Composite()
+   : Composite()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipComposite::sipComposite(const Composite& a0,bool a1)
-    : Composite(a0,a1)
+   : Composite(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipComposite::sipComposite(const Composite& a0)
-    : Composite(a0)
+   : Composite(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipComposite::~sipComposite()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -209,7 +208,15 @@ static PyObject *sipDo_Composite_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::destroy( (bool)a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -232,7 +239,7 @@ static PyObject *sipDo_Composite_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -250,7 +257,15 @@ static PyObject *sipDo_Composite_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -273,7 +288,7 @@ static PyObject *sipDo_Composite_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -291,7 +306,15 @@ static PyObject *sipDo_Composite_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -322,7 +345,15 @@ static PyObject *sipDo_Composite_getDegree(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getDegree();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -352,7 +383,15 @@ static PyObject *sipDo_Composite_countDescendants(PyObject *sipThisObj,PyObject 
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::countDescendants();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -374,7 +413,7 @@ static PyObject *sipDo_Composite_getPathLength(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -392,7 +431,15 @@ static PyObject *sipDo_Composite_getPathLength(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getPathLength(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -422,7 +469,15 @@ static PyObject *sipDo_Composite_getDepth(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getDepth();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -452,7 +507,15 @@ static PyObject *sipDo_Composite_getHeight(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getHeight();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -482,7 +545,15 @@ static PyObject *sipDo_Composite_getRoot(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> Composite::getRoot();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -497,7 +568,15 @@ static PyObject *sipDo_Composite_getRoot(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> Composite::getRoot();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -519,7 +598,7 @@ static PyObject *sipDo_Composite_getLowestCommonAncestor(PyObject *sipThisObj,Py
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -537,14 +616,22 @@ static PyObject *sipDo_Composite_getLowestCommonAncestor(PyObject *sipThisObj,Py
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getLowestCommonAncestor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
 	}
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -562,7 +649,15 @@ static PyObject *sipDo_Composite_getLowestCommonAncestor(PyObject *sipThisObj,Py
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getLowestCommonAncestor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -592,7 +687,15 @@ static PyObject *sipDo_Composite_getParent(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getParent();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -607,7 +710,15 @@ static PyObject *sipDo_Composite_getParent(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getParent();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -629,7 +740,7 @@ static PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		Index *a0;
+		Index * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Index,&a0obj))
@@ -647,7 +758,15 @@ static PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getChild(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -657,7 +776,7 @@ static PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs
 	}
 
 	{
-		Index *a0;
+		Index * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Index,&a0obj))
@@ -675,7 +794,15 @@ static PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getChild(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -700,7 +827,7 @@ static PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		Index *a0;
+		Index * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Index,&a0obj))
@@ -718,7 +845,15 @@ static PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getSibling(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -728,7 +863,7 @@ static PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipAr
 	}
 
 	{
-		Index *a0;
+		Index * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Index,&a0obj))
@@ -746,7 +881,15 @@ static PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getSibling(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -779,7 +922,15 @@ static PyObject *sipDo_Composite_getFirstChild(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getFirstChild();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -794,7 +945,15 @@ static PyObject *sipDo_Composite_getFirstChild(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getFirstChild();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -824,7 +983,15 @@ static PyObject *sipDo_Composite_getLastChild(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getLastChild();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -839,7 +1006,15 @@ static PyObject *sipDo_Composite_getLastChild(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::getLastChild();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Composite);
 		}
@@ -928,7 +1103,15 @@ static PyObject *sipDo_Composite_expand(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::expand();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -958,7 +1141,15 @@ static PyObject *sipDo_Composite_collapse(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::collapse();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -981,7 +1172,7 @@ static PyObject *sipDo_Composite_prependChild(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -998,7 +1189,15 @@ static PyObject *sipDo_Composite_prependChild(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::prependChild(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1021,7 +1220,7 @@ static PyObject *sipDo_Composite_appendChild(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1038,7 +1237,15 @@ static PyObject *sipDo_Composite_appendChild(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::appendChild(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1057,11 +1264,11 @@ static PyObject *sipDo_Composite_insertParent(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
-		Composite *a2;
+		Composite * a2;
 		PyObject *a2obj;
 		long a3 = true;
 
@@ -1078,7 +1285,15 @@ static PyObject *sipDo_Composite_insertParent(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = Composite::insertParent(* a0,* a1,* a2, (bool)a3);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1100,7 +1315,7 @@ static PyObject *sipDo_Composite_insertBefore(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1117,7 +1332,15 @@ static PyObject *sipDo_Composite_insertBefore(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::insertBefore(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1140,7 +1363,7 @@ static PyObject *sipDo_Composite_insertAfter(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1157,7 +1380,15 @@ static PyObject *sipDo_Composite_insertAfter(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::insertAfter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1180,7 +1411,7 @@ static PyObject *sipDo_Composite_spliceBefore(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1197,7 +1428,15 @@ static PyObject *sipDo_Composite_spliceBefore(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::spliceBefore(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1220,7 +1459,7 @@ static PyObject *sipDo_Composite_spliceAfter(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1237,7 +1476,15 @@ static PyObject *sipDo_Composite_spliceAfter(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::spliceAfter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1260,7 +1507,7 @@ static PyObject *sipDo_Composite_splice(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1277,7 +1524,15 @@ static PyObject *sipDo_Composite_splice(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::splice(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1300,7 +1555,7 @@ static PyObject *sipDo_Composite_removeChild(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1318,7 +1573,15 @@ static PyObject *sipDo_Composite_removeChild(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::removeChild(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1340,7 +1603,7 @@ static PyObject *sipDo_Composite_replace(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1357,7 +1620,15 @@ static PyObject *sipDo_Composite_replace(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::replace(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1380,7 +1651,7 @@ static PyObject *sipDo_Composite_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1397,7 +1668,15 @@ static PyObject *sipDo_Composite_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Composite::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1488,7 +1767,15 @@ static PyObject *sipDo_Composite_isExpanded(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isExpanded();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1518,7 +1805,15 @@ static PyObject *sipDo_Composite_isCollapsed(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isCollapsed();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1548,7 +1843,15 @@ static PyObject *sipDo_Composite_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isEmpty();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1578,7 +1881,15 @@ static PyObject *sipDo_Composite_isRoot(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isRoot();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1600,7 +1911,7 @@ static PyObject *sipDo_Composite_isRootOf(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1618,7 +1929,15 @@ static PyObject *sipDo_Composite_isRootOf(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isRootOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1648,7 +1967,15 @@ static PyObject *sipDo_Composite_isInterior(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isInterior();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1678,7 +2005,15 @@ static PyObject *sipDo_Composite_hasChild(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::hasChild();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1700,7 +2035,7 @@ static PyObject *sipDo_Composite_isChildOf(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1718,7 +2053,15 @@ static PyObject *sipDo_Composite_isChildOf(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isChildOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1748,7 +2091,15 @@ static PyObject *sipDo_Composite_isFirstChild(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isFirstChild();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1770,7 +2121,7 @@ static PyObject *sipDo_Composite_isFirstChildOf(PyObject *sipThisObj,PyObject *s
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1788,7 +2139,15 @@ static PyObject *sipDo_Composite_isFirstChildOf(PyObject *sipThisObj,PyObject *s
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isFirstChildOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1818,7 +2177,15 @@ static PyObject *sipDo_Composite_isLastChild(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isLastChild();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1840,7 +2207,7 @@ static PyObject *sipDo_Composite_isLastChildOf(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1858,7 +2225,15 @@ static PyObject *sipDo_Composite_isLastChildOf(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isLastChildOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1888,7 +2263,15 @@ static PyObject *sipDo_Composite_hasParent(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::hasParent();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1910,7 +2293,7 @@ static PyObject *sipDo_Composite_isParentOf(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1928,7 +2311,15 @@ static PyObject *sipDo_Composite_isParentOf(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isParentOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1958,7 +2349,15 @@ static PyObject *sipDo_Composite_hasSibling(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::hasSibling();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1980,7 +2379,7 @@ static PyObject *sipDo_Composite_isSiblingOf(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -1998,7 +2397,15 @@ static PyObject *sipDo_Composite_isSiblingOf(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isSiblingOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2028,7 +2435,15 @@ static PyObject *sipDo_Composite_hasPreviousSibling(PyObject *sipThisObj,PyObjec
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::hasPreviousSibling();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2050,7 +2465,7 @@ static PyObject *sipDo_Composite_isPreviousSiblingOf(PyObject *sipThisObj,PyObje
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -2068,7 +2483,15 @@ static PyObject *sipDo_Composite_isPreviousSiblingOf(PyObject *sipThisObj,PyObje
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isPreviousSiblingOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2098,7 +2521,15 @@ static PyObject *sipDo_Composite_hasNextSibling(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::hasNextSibling();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2120,7 +2551,7 @@ static PyObject *sipDo_Composite_isNextSiblingOf(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -2138,7 +2569,15 @@ static PyObject *sipDo_Composite_isNextSiblingOf(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isNextSiblingOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2160,7 +2599,7 @@ static PyObject *sipDo_Composite_isDescendantOf(PyObject *sipThisObj,PyObject *s
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -2178,7 +2617,15 @@ static PyObject *sipDo_Composite_isDescendantOf(PyObject *sipThisObj,PyObject *s
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isDescendantOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2200,7 +2647,7 @@ static PyObject *sipDo_Composite_isAncestorOf(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -2218,7 +2665,15 @@ static PyObject *sipDo_Composite_isAncestorOf(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isAncestorOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2240,7 +2695,7 @@ static PyObject *sipDo_Composite_isRelatedWith(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -2258,7 +2713,15 @@ static PyObject *sipDo_Composite_isRelatedWith(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isRelatedWith(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2280,7 +2743,7 @@ static PyObject *sipDo_Composite_isHomomorph(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -2298,7 +2761,15 @@ static PyObject *sipDo_Composite_isHomomorph(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::isHomomorph(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2328,7 +2799,15 @@ static PyObject *sipDo_Composite_containsSelection(PyObject *sipThisObj,PyObject
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Composite::containsSelection();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2428,13 +2907,21 @@ PyObject *sipNew_Composite(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipComposite();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -2447,13 +2934,21 @@ PyObject *sipNew_Composite(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipComposite(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Composite *a0;
+		const Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Composite,&a0obj))
@@ -2465,7 +2960,15 @@ PyObject *sipNew_Composite(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipComposite(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -2594,6 +3097,7 @@ Composite *sipForceConvertTo_Composite(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Composite);
+
 	*iserrp = 1;
 
 	return NULL;

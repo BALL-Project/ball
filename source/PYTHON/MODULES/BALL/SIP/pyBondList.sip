@@ -1,6 +1,6 @@
-// $Id: pyBondList.sip,v 1.1 2000/07/18 21:28:06 oliver Exp $
+// $Id: pyBondList.sip,v 1.2 2001/07/29 17:31:17 oliver Exp $
 
-class PyBondList
+%MappedType PyBondList
 {
 %HeaderCode
 	#include <BALL/PYTHON/pyBondList.h>
@@ -8,7 +8,7 @@ class PyBondList
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -33,11 +33,11 @@ class PyBondList
 	return pl;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	return PyList_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python list of Bond instances to an BondList object on the
 	// heap.
  

@@ -2,7 +2,6 @@
 #include "sipBALLObject.h"
 
 
-
 PyObject *sipClass_Object;
 
 static void sipDealloc_Object(sipThisType *);
@@ -35,19 +34,19 @@ static PyTypeObject sipType_Object = {
 };
 
 sipObject::sipObject()
-   throw()  : Object()
+   throw() : Object()
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipObject::sipObject(const Object& a0)
-   throw()  : Object(a0)
+   throw() : Object(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipObject::~sipObject()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -261,7 +260,7 @@ static PyObject *sipDo_Object_compare(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Object *a0;
+		const Object * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Object,&a0obj))
@@ -279,7 +278,15 @@ static PyObject *sipDo_Object_compare(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Object::compare(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -374,7 +381,7 @@ PyObject *sipNew_Object(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Object *a0;
+		const Object * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Object,&a0obj))
@@ -462,6 +469,7 @@ Object *sipForceConvertTo_Object(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Object);
+
 	*iserrp = 1;
 
 	return NULL;

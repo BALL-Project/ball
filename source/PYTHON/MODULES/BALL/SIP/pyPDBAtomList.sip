@@ -1,6 +1,6 @@
-// $Id: pyPDBAtomList.sip,v 1.1 2000/07/18 21:28:15 oliver Exp $
+// $Id: pyPDBAtomList.sip,v 1.2 2001/07/29 17:31:17 oliver Exp $
 
-class PyPDBAtomList
+%MappedType PyPDBAtomList
 {
 %HeaderCode
 	#include <BALL/PYTHON/pyPDBAtomList.h>
@@ -8,7 +8,7 @@ class PyPDBAtomList
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -33,11 +33,11 @@ class PyPDBAtomList
 	return pl;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	return PyList_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python list of PDBAtom instances to an PDBAtomList object on the
 	// heap.
  

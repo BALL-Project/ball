@@ -2,7 +2,6 @@
 #include "sipBALLEmbeddable.h"
 
 
-
 PyObject *sipClass_Embeddable;
 
 static void sipDealloc_Embeddable(sipThisType *);
@@ -35,19 +34,19 @@ static PyTypeObject sipType_Embeddable = {
 };
 
 sipEmbeddable::sipEmbeddable()
-    : Embeddable()
+   : Embeddable()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipEmbeddable::sipEmbeddable(const Embeddable& a0)
-    : Embeddable(a0)
+   : Embeddable(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipEmbeddable::~sipEmbeddable()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -203,13 +202,21 @@ PyObject *sipNew_Embeddable(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipEmbeddable();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Embeddable *a0;
+		const Embeddable * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Embeddable,&a0obj))
@@ -221,7 +228,15 @@ PyObject *sipNew_Embeddable(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipEmbeddable(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -293,6 +308,7 @@ Embeddable *sipForceConvertTo_Embeddable(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Embeddable);
+
 	*iserrp = 1;
 
 	return NULL;

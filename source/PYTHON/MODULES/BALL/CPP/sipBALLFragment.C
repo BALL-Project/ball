@@ -2,7 +2,6 @@
 #include "sipBALLFragment.h"
 
 
-
 PyObject *sipClass_Fragment;
 
 static void sipDealloc_Fragment(sipThisType *);
@@ -36,31 +35,31 @@ static PyTypeObject sipType_Fragment = {
 };
 
 sipFragment::sipFragment()
-    : Fragment()
+   : Fragment()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipFragment::sipFragment(const Fragment& a0,bool a1)
-    : Fragment(a0,a1)
+   : Fragment(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipFragment::sipFragment(const String& a0)
-    : Fragment(a0)
+   : Fragment(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipFragment::sipFragment(const Fragment& a0)
-    : Fragment(a0)
+   : Fragment(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipFragment::~sipFragment()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -159,7 +158,7 @@ static PyObject * sip__str__Fragment(PyObject *a0)
 
   return PyString_FromString(String(String("Fragment ") + ptr->getName()
         + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-#line 167 "sipBALLFragment.cpp"
+#line 166 "sipBALLFragment.cpp"
 }
 
 PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
@@ -181,13 +180,21 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipFragment();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Fragment *a0;
+		const Fragment * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -200,13 +207,21 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFragment(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -218,7 +233,15 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFragment(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -227,7 +250,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Fragment *a0;
+		const Fragment * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Fragment,&a0obj))
@@ -239,7 +262,15 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipFragment(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -309,6 +340,7 @@ Fragment *sipForceConvertTo_Fragment(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Fragment);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLRuleEvaluator.h"
 
 
-
 PyObject *sipClass_RuleEvaluator;
 
 static void sipDealloc_RuleEvaluator(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_RuleEvaluator = {
 };
 
 sipRuleEvaluator::sipRuleEvaluator()
-   throw()  : RuleEvaluator()
+   throw() : RuleEvaluator()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipRuleEvaluator::sipRuleEvaluator(INIFile& a0,const String& a1)
-   throw()  : RuleEvaluator(a0,a1)
+   throw() : RuleEvaluator(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipRuleEvaluator::sipRuleEvaluator(const RuleEvaluator& a0)
-   throw()  : RuleEvaluator(a0)
+   throw() : RuleEvaluator(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipRuleEvaluator::~sipRuleEvaluator()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -112,9 +111,9 @@ static PyObject *sipDo_RuleEvaluator_initialize(PyObject *sipThisObj,PyObject *s
 		return NULL;
 
 	{
-		INIFile *a0;
+		INIFile * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -188,7 +187,7 @@ static PyObject *sipDo_RuleEvaluator_setPrefix(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -252,7 +251,7 @@ static PyObject *sipDo_RuleEvaluator_clear(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_RuleEvaluator___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_RuleEvaluator_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -261,7 +260,7 @@ static PyObject *sipDo_RuleEvaluator___call__(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -279,7 +278,15 @@ static PyObject *sipDo_RuleEvaluator___call__(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
-			res = new String(ptr -> RuleEvaluator::operator ()(* a0));
+   try
+   {
+			res = new String(ptr -> RuleEvaluator::operator()(* a0));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -287,12 +294,12 @@ static PyObject *sipDo_RuleEvaluator___call__(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_RuleEvaluator,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleEvaluator,sipName_BALL_CallOp);
 
 	return NULL;
 }
 
-static PyObject *sipDo_RuleEvaluator___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_RuleEvaluator_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -301,7 +308,7 @@ static PyObject *sipDo_RuleEvaluator___cmp__(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const RuleEvaluator *a0;
+		const RuleEvaluator * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_RuleEvaluator,&a0obj))
@@ -319,7 +326,15 @@ static PyObject *sipDo_RuleEvaluator___cmp__(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
-			res = ptr -> RuleEvaluator::operator ==(* a0);
+   try
+   {
+			res = ptr -> RuleEvaluator::operator==(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -327,7 +342,7 @@ static PyObject *sipDo_RuleEvaluator___cmp__(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_RuleEvaluator,sipName_BALL___cmp__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleEvaluator,sipName_BALL_CmpOp);
 
 	return NULL;
 }
@@ -414,9 +429,9 @@ PyObject *sipNew_RuleEvaluator(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		INIFile *a0;
+		INIFile * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -438,7 +453,7 @@ PyObject *sipNew_RuleEvaluator(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const RuleEvaluator *a0;
+		const RuleEvaluator * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_RuleEvaluator,&a0obj))
@@ -485,8 +500,8 @@ PyMethodDef sipClassAttrTab_RuleEvaluator[] = {
 	{sipName_BALL_getPrefix, sipDo_RuleEvaluator_getPrefix, METH_VARARGS, NULL},
 	{sipName_BALL_setPrefix, sipDo_RuleEvaluator_setPrefix, METH_VARARGS, NULL},
 	{sipName_BALL_clear, sipDo_RuleEvaluator_clear, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_RuleEvaluator___call__, METH_VARARGS, NULL},
-	{sipName_BALL___cmp__, sipDo_RuleEvaluator___cmp__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_RuleEvaluator_CallOp, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_RuleEvaluator_CmpOp, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_RuleEvaluator_isValid, METH_VARARGS, NULL},
 	{NULL}
 };
@@ -527,6 +542,7 @@ RuleEvaluator *sipForceConvertTo_RuleEvaluator(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_RuleEvaluator);
+
 	*iserrp = 1;
 
 	return NULL;

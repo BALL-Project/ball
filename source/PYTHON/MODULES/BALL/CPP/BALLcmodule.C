@@ -1,6 +1,23 @@
 #include "sipBALLDeclBALL.h"
 
 #include "sipBALLConstant.h"
+#include "sipBALLGeneralException.h"
+#include "sipBALLIndexUnderflow.h"
+#include "sipBALLSizeUnderflow.h"
+#include "sipBALLIndexOverflow.h"
+#include "sipBALLInvalidRange.h"
+#include "sipBALLInvalidFormat.h"
+#include "sipBALLIllegalSelfOperation.h"
+#include "sipBALLNullPointer.h"
+#include "sipBALLInvalidIterator.h"
+#include "sipBALLIncompatibleIterators.h"
+#include "sipBALLNotImplemented.h"
+#include "sipBALLOutOfMemory.h"
+#include "sipBALLOutOfGrid.h"
+#include "sipBALLBufferOverflow.h"
+#include "sipBALLDivisionByZero.h"
+#include "sipBALLFileNotFound.h"
+#include "sipBALLGlobalExceptionHandler.h"
 #include "sipBALLIndex.h"
 #include "sipBALLPosition.h"
 #include "sipBALLVersionInfo.h"
@@ -430,16 +447,16 @@ char sipName_BALL_Vector4[] = "Vector4";
 char sipName_BALL_getTripleProduct[] = "getTripleProduct";
 char sipName_BALL_getPerpendicularNormalization[] = "getPerpendicularNormalization";
 char sipName_BALL_getOrthogonalProjection[] = "getOrthogonalProjection";
-char sipName_BALL___mod__[] = "__mod__";
+char sipName_BALL_ModOp[] = "__mod__";
 char sipName_BALL_Vector3[] = "Vector3";
 char sipName_BALL_isOrthogonalTo[] = "isOrthogonalTo";
 char sipName_BALL_isZero[] = "isZero";
 char sipName_BALL_getSquareDistance[] = "getSquareDistance";
 char sipName_BALL_getDistance[] = "getDistance";
-char sipName_BALL___idiv__[] = "__idiv__";
-char sipName_BALL___imul__[] = "__imul__";
-char sipName_BALL___isub__[] = "__isub__";
-char sipName_BALL___iadd__[] = "__iadd__";
+char sipName_BALL_IDivOp[] = "__idiv__";
+char sipName_BALL_IMultOp[] = "__imul__";
+char sipName_BALL_ISubOp[] = "__isub__";
+char sipName_BALL_IAddOp[] = "__iadd__";
 char sipName_BALL_getUnit[] = "getUnit";
 char sipName_BALL_getSquareLength[] = "getSquareLength";
 char sipName_BALL_Vector2[] = "Vector2";
@@ -496,7 +513,7 @@ char sipName_BALL_setTranslation[] = "setTranslation";
 char sipName_BALL_translate[] = "translate";
 char sipName_BALL_getDeterminant[] = "getDeterminant";
 char sipName_BALL_invert[] = "invert";
-char sipName_BALL___mul__[] = "__mul__";
+char sipName_BALL_MultOp[] = "__mul__";
 char sipName_BALL_getDiagonal[] = "getDiagonal";
 char sipName_BALL_isEqual[] = "isEqual";
 char sipName_BALL_setColumn[] = "setColumn";
@@ -523,10 +540,8 @@ char sipName_BALL_getVolume[] = "getVolume";
 char sipName_BALL_getSurface[] = "getSurface";
 char sipName_BALL_Box3[] = "Box3";
 char sipName_BALL_isEquivalent[] = "isEquivalent";
-char sipName_BALL___div__[] = "__div__";
-char sipName_BALL___sub__[] = "__sub__";
-char sipName_BALL___neg__[] = "__neg__";
-char sipName_BALL___pos__[] = "__pos__";
+char sipName_BALL_DivOp[] = "__div__";
+char sipName_BALL_SubOp[] = "__sub__";
 char sipName_BALL_negate[] = "negate";
 char sipName_BALL_normalize[] = "normalize";
 char sipName_BALL_toDegree[] = "toDegree";
@@ -782,7 +797,6 @@ char sipName_BALL_getNumberOfSections[] = "getNumberOfSections";
 char sipName_BALL_hasSection[] = "hasSection";
 char sipName_BALL_getNumberOfLines[] = "getNumberOfLines";
 char sipName_BALL_setFilename[] = "setFilename";
-char sipName_BALL_getFilename[] = "getFilename";
 char sipName_BALL_HEADER[] = "HEADER";
 char sipName_BALL_UNDEFINED[] = "UNDEFINED";
 char sipName_BALL_MAX_LINE_LENGTH[] = "MAX_LINE_LENGTH";
@@ -807,7 +821,7 @@ char sipName_BALL_hasPrefix[] = "hasPrefix";
 char sipName_BALL_hasSubstring[] = "hasSubstring";
 char sipName_BALL_substitute[] = "substitute";
 char sipName_BALL_reverse[] = "reverse";
-char sipName_BALL___add__[] = "__add__";
+char sipName_BALL_AddOp[] = "__add__";
 char sipName_BALL_instr[] = "instr";
 char sipName_BALL_right[] = "right";
 char sipName_BALL_left[] = "left";
@@ -871,7 +885,7 @@ char sipName_BALL_getMaxZ[] = "getMaxZ";
 char sipName_BALL_FloatRegularData3D[] = "FloatRegularData3D";
 char sipName_BALL_z[] = "z";
 char sipName_BALL_GridIndex3D[] = "GridIndex3D";
-char sipName_BALL___cmp__[] = "__cmp__";
+char sipName_BALL_CmpOp[] = "__cmp__";
 char sipName_BALL_rescale[] = "rescale";
 char sipName_BALL_getMinValue[] = "getMinValue";
 char sipName_BALL_getMaxValue[] = "getMaxValue";
@@ -881,7 +895,7 @@ char sipName_BALL_getDimension[] = "getDimension";
 char sipName_BALL_setOrigin[] = "setOrigin";
 char sipName_BALL_getOrigin[] = "getOrigin";
 char sipName_BALL_getGridCoordinates[] = "getGridCoordinates";
-char sipName_BALL___getitem__[] = "__getitem__";
+char sipName_BALL_GetItemOp[] = "__getitem__";
 char sipName_BALL_getIndex[] = "getIndex";
 char sipName_BALL_getYSpacing[] = "getYSpacing";
 char sipName_BALL_getXSpacing[] = "getXSpacing";
@@ -911,7 +925,6 @@ char sipName_BALL_setReal[] = "setReal";
 char sipName_BALL_getInteger[] = "getInteger";
 char sipName_BALL_getVector[] = "getVector";
 char sipName_BALL_getReal[] = "getReal";
-char sipName_BALL_setName[] = "setName";
 char sipName_BALL_isSet[] = "isSet";
 char sipName_BALL_isVector[] = "isVector";
 char sipName_BALL_isReal[] = "isReal";
@@ -965,14 +978,13 @@ char sipName_BALL_getUnsignedInt[] = "getUnsignedInt";
 char sipName_BALL_getFloat[] = "getFloat";
 char sipName_BALL_getInt[] = "getInt";
 char sipName_BALL_getBool[] = "getBool";
-char sipName_BALL_getName[] = "getName";
 char sipName_BALL_NamedProperty[] = "NamedProperty";
 char sipName_BALL_CONTINUE[] = "CONTINUE";
 char sipName_BALL_BREAK[] = "BREAK";
 char sipName_BALL_ABORT[] = "ABORT";
 char sipName_BALL_Processor[] = "Processor";
 char sipName_BALL_UnaryAtomPredicate[] = "UnaryAtomPredicate";
-char sipName_BALL___call__[] = "__call__";
+char sipName_BALL_CallOp[] = "__call__";
 char sipName_BALL_UnaryCompositePredicate[] = "UnaryCompositePredicate";
 char sipName_BALL_compare[] = "compare";
 char sipName_BALL_getNewHandle[] = "getNewHandle";
@@ -1037,7 +1049,6 @@ char sipName_BALL_getPathLength[] = "getPathLength";
 char sipName_BALL_countDescendants[] = "countDescendants";
 char sipName_BALL_getDegree[] = "getDegree";
 char sipName_BALL_get[] = "get";
-char sipName_BALL_set[] = "set";
 char sipName_BALL_destroy[] = "destroy";
 char sipName_BALL_clear[] = "clear";
 char sipName_BALL_Selectable[] = "Selectable";
@@ -1056,6 +1067,34 @@ char sipName_BALL_STABLE[] = "STABLE";
 char sipName_BALL_VersionInfo[] = "VersionInfo";
 char sipName_BALL_Position[] = "Position";
 char sipName_BALL_Index[] = "Index";
+char sipName_BALL_globalHandler[] = "globalHandler";
+char sipName_BALL_set[] = "set";
+char sipName_BALL_setFile[] = "setFile";
+char sipName_BALL_setLine[] = "setLine";
+char sipName_BALL_setMessage[] = "setMessage";
+char sipName_BALL_setName[] = "setName";
+char sipName_BALL_GlobalExceptionHandler[] = "GlobalExceptionHandler";
+char sipName_BALL_getFilename[] = "getFilename";
+char sipName_BALL_FileNotFound[] = "FileNotFound";
+char sipName_BALL_DivisionByZero[] = "DivisionByZero";
+char sipName_BALL_BufferOverflow[] = "BufferOverflow";
+char sipName_BALL_OutOfGrid[] = "OutOfGrid";
+char sipName_BALL_OutOfMemory[] = "OutOfMemory";
+char sipName_BALL_NotImplemented[] = "NotImplemented";
+char sipName_BALL_IncompatibleIterators[] = "IncompatibleIterators";
+char sipName_BALL_InvalidIterator[] = "InvalidIterator";
+char sipName_BALL_NullPointer[] = "NullPointer";
+char sipName_BALL_IllegalSelfOperation[] = "IllegalSelfOperation";
+char sipName_BALL_InvalidFormat[] = "InvalidFormat";
+char sipName_BALL_InvalidRange[] = "InvalidRange";
+char sipName_BALL_IndexOverflow[] = "IndexOverflow";
+char sipName_BALL_SizeUnderflow[] = "SizeUnderflow";
+char sipName_BALL_IndexUnderflow[] = "IndexUnderflow";
+char sipName_BALL_getFile[] = "getFile";
+char sipName_BALL_getLine[] = "getLine";
+char sipName_BALL_getMessage[] = "getMessage";
+char sipName_BALL_getName[] = "getName";
+char sipName_BALL_GeneralException[] = "GeneralException";
 char sipName_BALL_CAL_PER_JOULE[] = "CAL_PER_JOULE";
 char sipName_BALL_JOULE_PER_CAL[] = "JOULE_PER_CAL";
 char sipName_BALL_M_PER_FOOT[] = "M_PER_FOOT";
@@ -1092,6 +1131,10 @@ char sipName_BALL_PI[] = "PI";
 char sipName_BALL_Constant[] = "Constant";
 char sipName_BALL_BALL[] = "BALL";
 
+// Class objects for namespaces.
+
+PyObject *sipClass_Constant;
+
 static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
@@ -1118,7 +1161,7 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 1126 "BALLcmodule.cpp"
+#line 1169 "BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -1158,7 +1201,7 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 		return resobj;
 	}
-#line 1166 "BALLcmodule.cpp"
+#line 1209 "BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -1173,7 +1216,7 @@ static PyObject *sipDo_calculateSASVolume(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		float a1 = 1.5;
 		int a2 = 400;
@@ -1189,7 +1232,15 @@ static PyObject *sipDo_calculateSASVolume(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = calculateSASVolume(* a0, a1, a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -1207,7 +1258,7 @@ static PyObject *sipDo_calculateSASArea(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		float a1 = 1.5;
 		int a2 = 400;
@@ -1223,7 +1274,15 @@ static PyObject *sipDo_calculateSASArea(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = calculateSASArea(* a0, a1, a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -1241,11 +1300,11 @@ static PyObject *sipDo_calculateBondAngle(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
-		const Atom *a1;
+		const Atom * a1;
 		PyObject *a1obj;
-		const Atom *a2;
+		const Atom * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj))
@@ -1261,7 +1320,15 @@ static PyObject *sipDo_calculateBondAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = new Angle(calculateBondAngle(* a0,* a1,* a2));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -1279,13 +1346,13 @@ static PyObject *sipDo_calculateTorsionAngle(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
-		const Atom *a1;
+		const Atom * a1;
 		PyObject *a1obj;
-		const Atom *a2;
+		const Atom * a2;
 		PyObject *a2obj;
-		const Atom *a3;
+		const Atom * a3;
 		PyObject *a3obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-IIII",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj,sipCanConvertTo_Atom,&a3obj))
@@ -1302,7 +1369,15 @@ static PyObject *sipDo_calculateTorsionAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = new Angle(calculateTorsionAngle(* a0,* a1,* a2,* a3));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -1320,7 +1395,7 @@ static PyObject *sipDo_nucleicAcids(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1335,7 +1410,15 @@ static PyObject *sipDo_nucleicAcids(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = nucleicAcids(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyNucleicAcidList(res);
 
@@ -1355,7 +1438,7 @@ static PyObject *sipDo_nucleotides(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1370,7 +1453,15 @@ static PyObject *sipDo_nucleotides(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = nucleotides(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyNucleotideList(res);
 
@@ -1390,7 +1481,7 @@ static PyObject *sipDo_proteins(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1405,7 +1496,15 @@ static PyObject *sipDo_proteins(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = proteins(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyProteinList(res);
 
@@ -1425,7 +1524,7 @@ static PyObject *sipDo_chains(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1440,7 +1539,15 @@ static PyObject *sipDo_chains(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = chains(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyChainList(res);
 
@@ -1460,7 +1567,7 @@ static PyObject *sipDo_secondaryStructures(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1475,7 +1582,15 @@ static PyObject *sipDo_secondaryStructures(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = secondaryStructures(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PySecondaryStructureList(res);
 
@@ -1495,7 +1610,7 @@ static PyObject *sipDo_residues(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1510,7 +1625,15 @@ static PyObject *sipDo_residues(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = residues(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyResidueList(res);
 
@@ -1530,7 +1653,7 @@ static PyObject *sipDo_molecules(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1545,7 +1668,15 @@ static PyObject *sipDo_molecules(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = molecules(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyMoleculeList(res);
 
@@ -1565,7 +1696,7 @@ static PyObject *sipDo_fragments(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1580,7 +1711,15 @@ static PyObject *sipDo_fragments(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = fragments(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyFragmentList(res);
 
@@ -1600,7 +1739,7 @@ static PyObject *sipDo_atomContainers(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1615,7 +1754,15 @@ static PyObject *sipDo_atomContainers(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = atomContainers(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyAtomContainerList(res);
 
@@ -1635,7 +1782,7 @@ static PyObject *sipDo_bonds(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = false;
 
@@ -1650,7 +1797,15 @@ static PyObject *sipDo_bonds(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = bonds(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyBondList(res);
 
@@ -1659,7 +1814,7 @@ static PyObject *sipDo_bonds(PyObject *,PyObject *sipArgs)
 	}
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Atom,&a0obj))
@@ -1673,7 +1828,15 @@ static PyObject *sipDo_bonds(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = bonds(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyBondList(res);
 
@@ -1693,9 +1856,9 @@ static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -1710,7 +1873,15 @@ static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = PDBAtoms(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -1722,7 +1893,7 @@ static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 	}
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -1736,7 +1907,15 @@ static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = PDBAtoms(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyPDBAtomList(res);
 
@@ -1756,9 +1935,9 @@ static PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -1773,7 +1952,15 @@ static PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = atoms(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp1)
 				delete a1;
@@ -1785,7 +1972,7 @@ static PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 	}
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -1799,7 +1986,15 @@ static PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = atoms(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			PyObject *resobj = sipConvertFrom_PyAtomList(res);
 
@@ -1836,7 +2031,15 @@ static PyObject *sipDo_getTorsionAngle(PyObject *,PyObject *sipArgs)
 		{
 			Angle *res;
 
+   try
+   {
 			res = new Angle(getTorsionAngle( a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -1854,9 +2057,9 @@ static PyObject *sipDo_isParallel(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -1871,16 +2074,24 @@ static PyObject *sipDo_isParallel(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isParallel(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Line3,&a1obj))
@@ -1895,16 +2106,24 @@ static PyObject *sipDo_isParallel(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isParallel(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -1919,7 +2138,15 @@ static PyObject *sipDo_isParallel(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isParallel(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1937,9 +2164,9 @@ static PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Line3,&a1obj))
@@ -1954,16 +2181,24 @@ static PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isIntersecting(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -1978,16 +2213,24 @@ static PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isIntersecting(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Line3,&a1obj))
@@ -2002,16 +2245,24 @@ static PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isIntersecting(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -2026,16 +2277,24 @@ static PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isIntersecting(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -2050,16 +2309,24 @@ static PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isIntersecting(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -2074,16 +2341,24 @@ static PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isIntersecting(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Line3,&a1obj))
@@ -2098,16 +2373,24 @@ static PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isIntersecting(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -2122,7 +2405,15 @@ static PyObject *sipDo_isIntersecting(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isIntersecting(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2140,9 +2431,9 @@ static PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -2157,16 +2448,24 @@ static PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isOrthogonal(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Line3,&a1obj))
@@ -2181,16 +2480,24 @@ static PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isOrthogonal(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -2205,16 +2512,24 @@ static PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isOrthogonal(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Line3,&a1obj))
@@ -2229,16 +2544,24 @@ static PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isOrthogonal(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -2253,16 +2576,24 @@ static PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isOrthogonal(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -2277,16 +2608,24 @@ static PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isOrthogonal(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -2301,7 +2640,15 @@ static PyObject *sipDo_isOrthogonal(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isOrthogonal(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2319,11 +2666,11 @@ static PyObject *sipDo_isComplanar(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
-		const Vector3 *a2;
+		const Vector3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
@@ -2339,20 +2686,28 @@ static PyObject *sipDo_isComplanar(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isComplanar(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
-		const Vector3 *a2;
+		const Vector3 * a2;
 		PyObject *a2obj;
-		const Vector3 *a3;
+		const Vector3 * a3;
 		PyObject *a3obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-IIII",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Vector3,&a2obj,sipCanConvertTo_Vector3,&a3obj))
@@ -2369,7 +2724,15 @@ static PyObject *sipDo_isComplanar(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isComplanar(* a0,* a1,* a2,* a3);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2387,9 +2750,9 @@ static PyObject *sipDo_isCollinear(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -2404,7 +2767,15 @@ static PyObject *sipDo_isCollinear(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = isCollinear(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2422,11 +2793,11 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
-		Vector3 *a2;
+		Vector3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Line3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
@@ -2442,18 +2813,26 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetIntersection(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
-		Vector3 *a2;
+		Vector3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Line3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
@@ -2469,18 +2848,26 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetIntersection(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
-		Vector3 *a2;
+		Vector3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Plane3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
@@ -2496,18 +2883,26 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetIntersection(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
-		Line3 *a2;
+		Line3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Plane3,&a1obj,sipCanConvertTo_Line3,&a2obj))
@@ -2523,20 +2918,28 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetIntersection(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Sphere3 *a0;
+		const Sphere3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
-		Vector3 *a2;
+		Vector3 * a2;
 		PyObject *a2obj;
-		Vector3 *a3;
+		Vector3 * a3;
 		PyObject *a3obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-IIII",sipCanConvertTo_Sphere3,&a0obj,sipCanConvertTo_Line3,&a1obj,sipCanConvertTo_Vector3,&a2obj,sipCanConvertTo_Vector3,&a3obj))
@@ -2553,20 +2956,28 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetIntersection(* a0,* a1,* a2,* a3);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Sphere3 *a1;
+		const Sphere3 * a1;
 		PyObject *a1obj;
-		Vector3 *a2;
+		Vector3 * a2;
 		PyObject *a2obj;
-		Vector3 *a3;
+		Vector3 * a3;
 		PyObject *a3obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-IIII",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Sphere3,&a1obj,sipCanConvertTo_Vector3,&a2obj,sipCanConvertTo_Vector3,&a3obj))
@@ -2583,18 +2994,26 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetIntersection(* a0,* a1,* a2,* a3);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Sphere3 *a0;
+		const Sphere3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
-		Circle3 *a2;
+		Circle3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Sphere3,&a0obj,sipCanConvertTo_Plane3,&a1obj,sipCanConvertTo_Circle3,&a2obj))
@@ -2610,18 +3029,26 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetIntersection(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Sphere3 *a1;
+		const Sphere3 * a1;
 		PyObject *a1obj;
-		Circle3 *a2;
+		Circle3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Sphere3,&a1obj,sipCanConvertTo_Circle3,&a2obj))
@@ -2637,18 +3064,26 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetIntersection(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Sphere3 *a0;
+		const Sphere3 * a0;
 		PyObject *a0obj;
-		const Sphere3 *a1;
+		const Sphere3 * a1;
 		PyObject *a1obj;
-		Circle3 *a2;
+		Circle3 * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Sphere3,&a0obj,sipCanConvertTo_Sphere3,&a1obj,sipCanConvertTo_Circle3,&a2obj))
@@ -2664,7 +3099,15 @@ static PyObject *sipDo_GetIntersection(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetIntersection(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2682,11 +3125,11 @@ static PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
-		Angle *a2;
+		Angle * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Angle,&a2obj))
@@ -2702,18 +3145,26 @@ static PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetAngle(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
-		Angle *a2;
+		Angle * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Line3,&a1obj,sipCanConvertTo_Angle,&a2obj))
@@ -2729,18 +3180,26 @@ static PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetAngle(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
-		Angle *a2;
+		Angle * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Angle,&a2obj))
@@ -2756,18 +3215,26 @@ static PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetAngle(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
-		Angle *a2;
+		Angle * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Plane3,&a1obj,sipCanConvertTo_Angle,&a2obj))
@@ -2783,18 +3250,26 @@ static PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetAngle(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
-		Angle *a2;
+		Angle * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Line3,&a1obj,sipCanConvertTo_Angle,&a2obj))
@@ -2810,18 +3285,26 @@ static PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetAngle(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
-		Angle *a2;
+		Angle * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Plane3,&a1obj,sipCanConvertTo_Angle,&a2obj))
@@ -2837,18 +3320,26 @@ static PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetAngle(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
-		Angle *a2;
+		Angle * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Plane3,&a1obj,sipCanConvertTo_Angle,&a2obj))
@@ -2864,7 +3355,15 @@ static PyObject *sipDo_GetAngle(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetAngle(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -2882,9 +3381,9 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -2899,16 +3398,24 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetDistance(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -2923,16 +3430,24 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetDistance(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Line3,&a1obj))
@@ -2947,16 +3462,24 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetDistance(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Line3,&a1obj))
@@ -2971,16 +3494,24 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetDistance(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -2995,16 +3526,24 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetDistance(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
@@ -3019,16 +3558,24 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetDistance(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
 	}
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Line3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -3043,16 +3590,24 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetDistance(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Line3 *a1;
+		const Line3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Line3,&a1obj))
@@ -3067,16 +3622,24 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetDistance(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
 	}
 
 	{
-		const Plane3 *a0;
+		const Plane3 * a0;
 		PyObject *a0obj;
-		const Plane3 *a1;
+		const Plane3 * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Plane3,&a0obj,sipCanConvertTo_Plane3,&a1obj))
@@ -3091,7 +3654,15 @@ static PyObject *sipDo_GetDistance(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = GetDistance(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -3109,7 +3680,7 @@ static PyObject *sipDo_calculateDistanceCoulomb(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -3123,7 +3694,15 @@ static PyObject *sipDo_calculateDistanceCoulomb(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = calculateDistanceCoulomb(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -3141,7 +3720,7 @@ static PyObject *sipDo_calculateCoulomb(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -3155,7 +3734,15 @@ static PyObject *sipDo_calculateCoulomb(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = calculateCoulomb(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -3173,7 +3760,7 @@ static PyObject *sipDo_calculateACE(PyObject *,PyObject *sipArgs)
 	int sipArgsParsed = 0;
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -3187,7 +3774,15 @@ static PyObject *sipDo_calculateACE(PyObject *,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = calculateACE(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -3201,145 +3796,146 @@ static PyObject *sipDo_calculateACE(PyObject *,PyObject *sipArgs)
 }
 
 static sipClassDef classesTable[] = {
-	{sipName_BALL_PyWidget, sipNew_PyWidget, &sipClass_PyWidget, sipClassAttrTab_PyWidget, NULL},
-	{sipName_BALL_ModularWidget, sipNew_ModularWidget, &sipClass_ModularWidget, sipClassAttrTab_ModularWidget, NULL},
-	{sipName_BALL_CompositeDescriptor, sipNew_CompositeDescriptor, &sipClass_CompositeDescriptor, sipClassAttrTab_CompositeDescriptor, NULL},
-	{sipName_BALL_MainControl, sipNew_MainControl, &sipClass_MainControl, sipClassAttrTab_MainControl, NULL},
-	{sipName_BALL_OpenMode, sipNew_OpenMode, &sipClass_OpenMode, sipClassAttrTab_OpenMode, NULL},
-	{sipName_BALL_std__openmode, sipNew_std__openmode, &sipClass_std__openmode, sipClassAttrTab_std__openmode, NULL},
-	{sipName_BALL_ResidueChecker, sipNew_ResidueChecker, &sipClass_ResidueChecker, sipClassAttrTab_ResidueChecker, NULL},
-	{sipName_BALL_TransformationProcessor, sipNew_TransformationProcessor, &sipClass_TransformationProcessor, sipClassAttrTab_TransformationProcessor, NULL},
-	{sipName_BALL_TranslationProcessor, sipNew_TranslationProcessor, &sipClass_TranslationProcessor, sipClassAttrTab_TranslationProcessor, NULL},
-	{sipName_BALL_FragmentDistanceCollector, sipNew_FragmentDistanceCollector, &sipClass_FragmentDistanceCollector, sipClassAttrTab_FragmentDistanceCollector, NULL},
-	{sipName_BALL_GeometricCenterProcessor, sipNew_GeometricCenterProcessor, &sipClass_GeometricCenterProcessor, sipClassAttrTab_GeometricCenterProcessor, NULL},
-	{sipName_BALL_BoundingBoxProcessor, sipNew_BoundingBoxProcessor, &sipClass_BoundingBoxProcessor, sipClassAttrTab_BoundingBoxProcessor, NULL},
-	{sipName_BALL_BuildBondsProcessor, sipNew_BuildBondsProcessor, &sipClass_BuildBondsProcessor, sipClassAttrTab_BuildBondsProcessor, NULL},
-	{sipName_BALL_AddHydrogensProcessor, sipNew_AddHydrogensProcessor, &sipClass_AddHydrogensProcessor, sipClassAttrTab_AddHydrogensProcessor, NULL},
-	{sipName_BALL_NormalizeNamesProcessor, sipNew_NormalizeNamesProcessor, &sipClass_NormalizeNamesProcessor, sipClassAttrTab_NormalizeNamesProcessor, NULL},
-	{sipName_BALL_FragmentDB, sipNew_FragmentDB, &sipClass_FragmentDB, sipClassAttrTab_FragmentDB, sipClassVarHierTab_FragmentDB},
-	{sipName_BALL_AssignChargeProcessor, sipNew_AssignChargeProcessor, &sipClass_AssignChargeProcessor, sipClassAttrTab_AssignChargeProcessor, NULL},
-	{sipName_BALL_AssignRadiusProcessor, sipNew_AssignRadiusProcessor, &sipClass_AssignRadiusProcessor, sipClassAttrTab_AssignRadiusProcessor, NULL},
-	{sipName_BALL_ClearRadiusProcessor, sipNew_ClearRadiusProcessor, &sipClass_ClearRadiusProcessor, sipClassAttrTab_ClearRadiusProcessor, NULL},
-	{sipName_BALL_ClearChargeProcessor, sipNew_ClearChargeProcessor, &sipClass_ClearChargeProcessor, sipClassAttrTab_ClearChargeProcessor, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{sipName_BALL_ResidueProcessor, sipNew_ResidueProcessor, &sipClass_ResidueProcessor, sipClassAttrTab_ResidueProcessor, NULL},
-	{sipName_BALL_FragmentProcessor, sipNew_FragmentProcessor, &sipClass_FragmentProcessor, sipClassAttrTab_FragmentProcessor, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL},
-	{sipName_BALL_EnergyMinimizer, sipNew_EnergyMinimizer, &sipClass_EnergyMinimizer, sipClassAttrTab_EnergyMinimizer, sipClassVarHierTab_EnergyMinimizer},
-	{sipName_BALL_ConjugateGradientMinimizer, sipNew_ConjugateGradientMinimizer, &sipClass_ConjugateGradientMinimizer, sipClassAttrTab_ConjugateGradientMinimizer, sipClassVarHierTab_ConjugateGradientMinimizer},
-	{sipName_BALL_MicroCanonicalMD, sipNew_MicroCanonicalMD, &sipClass_MicroCanonicalMD, sipClassAttrTab_MicroCanonicalMD, NULL},
-	{sipName_BALL_MolecularDynamics, sipNew_MolecularDynamics, &sipClass_MolecularDynamics, sipClassAttrTab_MolecularDynamics, sipClassVarHierTab_MolecularDynamics},
-	{sipName_BALL_CanonicalMD, sipNew_CanonicalMD, &sipClass_CanonicalMD, sipClassAttrTab_CanonicalMD, NULL},
-	{sipName_BALL_SnapShotManager, sipNew_SnapShotManager, &sipClass_SnapShotManager, sipClassAttrTab_SnapShotManager, sipClassVarHierTab_SnapShotManager},
-	{sipName_BALL_SnapShot, sipNew_SnapShot, &sipClass_SnapShot, sipClassAttrTab_SnapShot, NULL},
-	{sipName_BALL_AtomProcessor, sipNew_AtomProcessor, &sipClass_AtomProcessor, sipClassAttrTab_AtomProcessor, NULL},
-	{sipName_BALL_RuleEvaluator, sipNew_RuleEvaluator, &sipClass_RuleEvaluator, sipClassAttrTab_RuleEvaluator, NULL},
-	{sipName_BALL_RadiusRuleProcessor, sipNew_RadiusRuleProcessor, &sipClass_RadiusRuleProcessor, sipClassAttrTab_RadiusRuleProcessor, NULL},
-	{sipName_BALL_PeriodicBoundary, sipNew_PeriodicBoundary, &sipClass_PeriodicBoundary, sipClassAttrTab_PeriodicBoundary, sipClassVarHierTab_PeriodicBoundary},
-	{sipName_BALL_Gradient, sipNew_Gradient, &sipClass_Gradient, sipClassAttrTab_Gradient, sipClassVarHierTab_Gradient},
-	{sipName_BALL_RuleProcessor, sipNew_RuleProcessor, &sipClass_RuleProcessor, sipClassAttrTab_RuleProcessor, NULL},
-	{sipName_BALL_ChargeRuleProcessor, sipNew_ChargeRuleProcessor, &sipClass_ChargeRuleProcessor, sipClassAttrTab_ChargeRuleProcessor, NULL},
-	{sipName_BALL_AtomVector, sipNew_AtomVector, &sipClass_AtomVector, sipClassAttrTab_AtomVector, NULL},
-	{sipName_BALL_CharmmTorsion, sipNew_CharmmTorsion, &sipClass_CharmmTorsion, sipClassAttrTab_CharmmTorsion, NULL},
-	{sipName_BALL_CharmmStretch, sipNew_CharmmStretch, &sipClass_CharmmStretch, sipClassAttrTab_CharmmStretch, NULL},
-	{sipName_BALL_CharmmNonBonded, sipNew_CharmmNonBonded, &sipClass_CharmmNonBonded, sipClassAttrTab_CharmmNonBonded, NULL},
-	{sipName_BALL_CharmmImproperTorsion, sipNew_CharmmImproperTorsion, &sipClass_CharmmImproperTorsion, sipClassAttrTab_CharmmImproperTorsion, NULL},
-	{sipName_BALL_CharmmBend, sipNew_CharmmBend, &sipClass_CharmmBend, sipClassAttrTab_CharmmBend, NULL},
-	{sipName_BALL_CharmmFF, sipNew_CharmmFF, &sipClass_CharmmFF, sipClassAttrTab_CharmmFF, NULL},
-	{sipName_BALL_AmberTorsion, sipNew_AmberTorsion, &sipClass_AmberTorsion, sipClassAttrTab_AmberTorsion, NULL},
-	{sipName_BALL_AmberStretch, sipNew_AmberStretch, &sipClass_AmberStretch, sipClassAttrTab_AmberStretch, NULL},
-	{sipName_BALL_AmberNonBonded, sipNew_AmberNonBonded, &sipClass_AmberNonBonded, sipClassAttrTab_AmberNonBonded, NULL},
-	{sipName_BALL_ForceFieldComponent, sipNew_ForceFieldComponent, &sipClass_ForceFieldComponent, sipClassAttrTab_ForceFieldComponent, NULL},
-	{sipName_BALL_AmberBend, sipNew_AmberBend, &sipClass_AmberBend, sipClassAttrTab_AmberBend, NULL},
-	{sipName_BALL_ForceField, sipNew_ForceField, &sipClass_ForceField, sipClassAttrTab_ForceField, sipClassVarHierTab_ForceField},
-	{sipName_BALL_AmberFF, sipNew_AmberFF, &sipClass_AmberFF, sipClassAttrTab_AmberFF, NULL},
-	{sipName_BALL_Vector4, sipNew_Vector4, &sipClass_Vector4, sipClassAttrTab_Vector4, sipClassVarHierTab_Vector4},
-	{sipName_BALL_Vector3, sipNew_Vector3, &sipClass_Vector3, sipClassAttrTab_Vector3, sipClassVarHierTab_Vector3},
-	{sipName_BALL_Vector2, sipNew_Vector2, &sipClass_Vector2, sipClassAttrTab_Vector2, sipClassVarHierTab_Vector2},
-	{sipName_BALL_Surface, sipNew_Surface, &sipClass_Surface, sipClassAttrTab_Surface, NULL},
-	{sipName_BALL_Sphere3, sipNew_Sphere3, &sipClass_Sphere3, sipClassAttrTab_Sphere3, sipClassVarHierTab_Sphere3},
-	{sipName_BALL_Quaternion, sipNew_Quaternion, &sipClass_Quaternion, sipClassAttrTab_Quaternion, sipClassVarHierTab_Quaternion},
-	{sipName_BALL_Plane3, sipNew_Plane3, &sipClass_Plane3, sipClassAttrTab_Plane3, NULL},
-	{sipName_BALL_Matrix4x4, sipNew_Matrix4x4, &sipClass_Matrix4x4, sipClassAttrTab_Matrix4x4, sipClassVarHierTab_Matrix4x4},
-	{sipName_BALL_Line3, sipNew_Line3, &sipClass_Line3, sipClassAttrTab_Line3, sipClassVarHierTab_Line3},
-	{sipName_BALL_Circle3, sipNew_Circle3, &sipClass_Circle3, sipClassAttrTab_Circle3, NULL},
-	{sipName_BALL_Box3, sipNew_Box3, &sipClass_Box3, sipClassAttrTab_Box3, sipClassVarHierTab_Box3},
-	{sipName_BALL_Angle, sipNew_Angle, &sipClass_Angle, sipClassAttrTab_Angle, NULL},
-	{sipName_BALL_System, sipNew_System, &sipClass_System, sipClassAttrTab_System, NULL},
-	{sipName_BALL_CompositeProcessor, sipNew_CompositeProcessor, &sipClass_CompositeProcessor, sipClassAttrTab_CompositeProcessor, NULL},
-	{sipName_BALL_Selector, sipNew_Selector, &sipClass_Selector, sipClassAttrTab_Selector, NULL},
-	{sipName_BALL_SecondaryStructure, sipNew_SecondaryStructure, &sipClass_SecondaryStructure, sipClassAttrTab_SecondaryStructure, NULL},
-	{sipName_BALL_Residue, sipNew_Residue, &sipClass_Residue, sipClassAttrTab_Residue, NULL},
-	{sipName_BALL_Protein, sipNew_Protein, &sipClass_Protein, sipClassAttrTab_Protein, NULL},
-	{sipName_BALL_Nucleotide, sipNew_Nucleotide, &sipClass_Nucleotide, sipClassAttrTab_Nucleotide, NULL},
-	{sipName_BALL_NucleicAcid, sipNew_NucleicAcid, &sipClass_NucleicAcid, sipClassAttrTab_NucleicAcid, NULL},
-	{sipName_BALL_Molecule, sipNew_Molecule, &sipClass_Molecule, sipClassAttrTab_Molecule, NULL},
-	{sipName_BALL_Fragment, sipNew_Fragment, &sipClass_Fragment, sipClassAttrTab_Fragment, NULL},
-	{sipName_BALL_Expression, sipNew_Expression, &sipClass_Expression, sipClassAttrTab_Expression, NULL},
-	{sipName_BALL_ExpressionPredicate, sipNew_ExpressionPredicate, &sipClass_ExpressionPredicate, sipClassAttrTab_ExpressionPredicate, NULL},
-	{sipName_BALL_Chain, sipNew_Chain, &sipClass_Chain, sipClassAttrTab_Chain, NULL},
-	{sipName_BALL_Bond, sipNew_Bond, &sipClass_Bond, sipClassAttrTab_Bond, NULL},
-	{sipName_BALL_PTE_, sipNew_PTE_, &sipClass_PTE_, sipClassAttrTab_PTE_, NULL},
-	{sipName_BALL_Element, sipNew_Element, &sipClass_Element, sipClassAttrTab_Element, NULL},
-	{sipName_BALL_PDBAtom, sipNew_PDBAtom, &sipClass_PDBAtom, sipClassAttrTab_PDBAtom, NULL},
-	{sipName_BALL_AtomContainer, sipNew_AtomContainer, &sipClass_AtomContainer, sipClassAttrTab_AtomContainer, NULL},
-	{sipName_BALL_AtomType, sipNew_AtomType, &sipClass_AtomType, sipClassAttrTab_AtomType, NULL},
-	{sipName_BALL_Atom, sipNew_Atom, &sipClass_Atom, sipClassAttrTab_Atom, NULL},
-	{sipName_BALL_DCDFile, sipNew_DCDFile, &sipClass_DCDFile, sipClassAttrTab_DCDFile, NULL},
-	{sipName_BALL_DCDHeader, sipNew_DCDHeader, &sipClass_DCDHeader, sipClassAttrTab_DCDHeader, sipClassVarHierTab_DCDHeader},
-	{sipName_BALL_TrajectoryFile, sipNew_TrajectoryFile, &sipClass_TrajectoryFile, sipClassAttrTab_TrajectoryFile, NULL},
-	{sipName_BALL_ResourceFile, sipNew_ResourceFile, &sipClass_ResourceFile, sipClassAttrTab_ResourceFile, NULL},
-	{sipName_BALL_ResourceEntry, sipNew_ResourceEntry, &sipClass_ResourceEntry, sipClassAttrTab_ResourceEntry, NULL},
-	{sipName_BALL_XYZFile, sipNew_XYZFile, &sipClass_XYZFile, sipClassAttrTab_XYZFile, NULL},
-	{sipName_BALL_PDBFile, sipNew_PDBFile, &sipClass_PDBFile, sipClassAttrTab_PDBFile, NULL},
-	{sipName_BALL_MOL2File, sipNew_MOL2File, &sipClass_MOL2File, sipClassAttrTab_MOL2File, NULL},
-	{sipName_BALL_INIFile, sipNew_INIFile, &sipClass_INIFile, sipClassAttrTab_INIFile, NULL},
-	{sipName_BALL_File, sipNew_File, &sipClass_File, sipClassAttrTab_File, NULL},
-	{sipName_BALL_HINFile, sipNew_HINFile, &sipClass_HINFile, sipClassAttrTab_HINFile, NULL},
-	{sipName_BALL_String, sipNew_String, &sipClass_String, sipClassAttrTab_String, NULL},
-	{sipName_BALL_Substring, sipNew_Substring, &sipClass_Substring, sipClassAttrTab_Substring, NULL},
-	{sipName_BALL_RegularExpression, sipNew_RegularExpression, &sipClass_RegularExpression, sipClassAttrTab_RegularExpression, NULL},
-	{sipName_BALL_FloatRegularData3D, sipNew_FloatRegularData3D, &sipClass_FloatRegularData3D, sipClassAttrTab_FloatRegularData3D, NULL},
-	{sipName_BALL_GridIndex3D, sipNew_GridIndex3D, &sipClass_GridIndex3D, sipClassAttrTab_GridIndex3D, sipClassVarHierTab_GridIndex3D},
-	{sipName_BALL_FloatRegularData2D, sipNew_FloatRegularData2D, &sipClass_FloatRegularData2D, sipClassAttrTab_FloatRegularData2D, NULL},
-	{sipName_BALL_GridIndex2D, sipNew_GridIndex2D, &sipClass_GridIndex2D, sipClassAttrTab_GridIndex2D, sipClassVarHierTab_GridIndex2D},
-	{sipName_BALL_FloatRegularData1D, sipNew_FloatRegularData1D, &sipClass_FloatRegularData1D, sipClassAttrTab_FloatRegularData1D, NULL},
-	{sipName_BALL_Options, sipNew_Options, &sipClass_Options, sipClassAttrTab_Options, NULL},
-	{sipName_BALL_BitVector, sipNew_BitVector, &sipClass_BitVector, sipClassAttrTab_BitVector, NULL},
-	{sipName_BALL_Bit, sipNew_Bit, &sipClass_Bit, sipClassAttrTab_Bit, NULL},
-	{sipName_BALL_TimeStamp, sipNew_TimeStamp, &sipClass_TimeStamp, sipClassAttrTab_TimeStamp, NULL},
-	{sipName_BALL_PreciseTime, sipNew_PreciseTime, &sipClass_PreciseTime, sipClassAttrTab_PreciseTime, NULL},
-	{sipName_BALL_PropertyManager, sipNew_PropertyManager, &sipClass_PropertyManager, sipClassAttrTab_PropertyManager, NULL},
-	{sipName_BALL_NamedProperty, sipNew_NamedProperty, &sipClass_NamedProperty, sipClassAttrTab_NamedProperty, NULL},
-	{sipName_BALL_Processor, sipNew_Processor, &sipClass_Processor, sipClassAttrTab_Processor, NULL},
-	{sipName_BALL_UnaryAtomPredicate, sipNew_UnaryAtomPredicate, &sipClass_UnaryAtomPredicate, sipClassAttrTab_UnaryAtomPredicate, NULL},
-	{sipName_BALL_UnaryCompositePredicate, sipNew_UnaryCompositePredicate, &sipClass_UnaryCompositePredicate, sipClassAttrTab_UnaryCompositePredicate, NULL},
-	{sipName_BALL_Embeddable, sipNew_Embeddable, &sipClass_Embeddable, sipClassAttrTab_Embeddable, NULL},
-	{sipName_BALL_Selectable, sipNew_Selectable, &sipClass_Selectable, sipClassAttrTab_Selectable, NULL},
-	{sipName_BALL_Object, sipNew_Object, &sipClass_Object, sipClassAttrTab_Object, NULL},
-	{sipName_BALL_PersistentObject, sipNew_PersistentObject, &sipClass_PersistentObject, sipClassAttrTab_PersistentObject, NULL},
-	{sipName_BALL_Composite, sipNew_Composite, &sipClass_Composite, sipClassAttrTab_Composite, NULL},
-	{sipName_BALL_VersionInfo, sipNew_VersionInfo, &sipClass_VersionInfo, sipClassAttrTab_VersionInfo, NULL},
-	{sipName_BALL_Position, sipNew_Position, &sipClass_Position, sipClassAttrTab_Position, NULL},
-	{sipName_BALL_Index, sipNew_Index, &sipClass_Index, sipClassAttrTab_Index, NULL},
-	{sipName_BALL_Constant, sipNew_Constant, &sipClass_Constant, sipClassAttrTab_Constant, NULL},
+	{sipName_BALL_PyWidget, sipNew_PyWidget, &sipClass_PyWidget, sipClassAttrTab_PyWidget, NULL, -1},
+	{sipName_BALL_ModularWidget, sipNew_ModularWidget, &sipClass_ModularWidget, sipClassAttrTab_ModularWidget, NULL, -1},
+	{sipName_BALL_CompositeDescriptor, sipNew_CompositeDescriptor, &sipClass_CompositeDescriptor, sipClassAttrTab_CompositeDescriptor, NULL, -1},
+	{sipName_BALL_MainControl, sipNew_MainControl, &sipClass_MainControl, sipClassAttrTab_MainControl, NULL, -1},
+	{sipName_BALL_OpenMode, sipNew_OpenMode, &sipClass_OpenMode, sipClassAttrTab_OpenMode, NULL, -1},
+	{sipName_BALL_std__openmode, sipNew_std__openmode, &sipClass_std__openmode, sipClassAttrTab_std__openmode, NULL, -1},
+	{sipName_BALL_ResidueChecker, sipNew_ResidueChecker, &sipClass_ResidueChecker, sipClassAttrTab_ResidueChecker, NULL, -1},
+	{sipName_BALL_TransformationProcessor, sipNew_TransformationProcessor, &sipClass_TransformationProcessor, sipClassAttrTab_TransformationProcessor, NULL, -1},
+	{sipName_BALL_TranslationProcessor, sipNew_TranslationProcessor, &sipClass_TranslationProcessor, sipClassAttrTab_TranslationProcessor, NULL, -1},
+	{sipName_BALL_FragmentDistanceCollector, sipNew_FragmentDistanceCollector, &sipClass_FragmentDistanceCollector, sipClassAttrTab_FragmentDistanceCollector, NULL, -1},
+	{sipName_BALL_GeometricCenterProcessor, sipNew_GeometricCenterProcessor, &sipClass_GeometricCenterProcessor, sipClassAttrTab_GeometricCenterProcessor, NULL, -1},
+	{sipName_BALL_BoundingBoxProcessor, sipNew_BoundingBoxProcessor, &sipClass_BoundingBoxProcessor, sipClassAttrTab_BoundingBoxProcessor, NULL, -1},
+	{sipName_BALL_BuildBondsProcessor, sipNew_BuildBondsProcessor, &sipClass_BuildBondsProcessor, sipClassAttrTab_BuildBondsProcessor, NULL, -1},
+	{sipName_BALL_AddHydrogensProcessor, sipNew_AddHydrogensProcessor, &sipClass_AddHydrogensProcessor, sipClassAttrTab_AddHydrogensProcessor, NULL, -1},
+	{sipName_BALL_NormalizeNamesProcessor, sipNew_NormalizeNamesProcessor, &sipClass_NormalizeNamesProcessor, sipClassAttrTab_NormalizeNamesProcessor, NULL, -1},
+	{sipName_BALL_FragmentDB, sipNew_FragmentDB, &sipClass_FragmentDB, sipClassAttrTab_FragmentDB, sipClassVarHierTab_FragmentDB, -1},
+	{sipName_BALL_AssignChargeProcessor, sipNew_AssignChargeProcessor, &sipClass_AssignChargeProcessor, sipClassAttrTab_AssignChargeProcessor, NULL, -1},
+	{sipName_BALL_AssignRadiusProcessor, sipNew_AssignRadiusProcessor, &sipClass_AssignRadiusProcessor, sipClassAttrTab_AssignRadiusProcessor, NULL, -1},
+	{sipName_BALL_ClearRadiusProcessor, sipNew_ClearRadiusProcessor, &sipClass_ClearRadiusProcessor, sipClassAttrTab_ClearRadiusProcessor, NULL, -1},
+	{sipName_BALL_ClearChargeProcessor, sipNew_ClearChargeProcessor, &sipClass_ClearChargeProcessor, sipClassAttrTab_ClearChargeProcessor, NULL, -1},
+	{sipName_BALL_ResidueProcessor, sipNew_ResidueProcessor, &sipClass_ResidueProcessor, sipClassAttrTab_ResidueProcessor, NULL, -1},
+	{sipName_BALL_FragmentProcessor, sipNew_FragmentProcessor, &sipClass_FragmentProcessor, sipClassAttrTab_FragmentProcessor, NULL, -1},
+	{sipName_BALL_EnergyMinimizer, sipNew_EnergyMinimizer, &sipClass_EnergyMinimizer, sipClassAttrTab_EnergyMinimizer, sipClassVarHierTab_EnergyMinimizer, -1},
+	{sipName_BALL_ConjugateGradientMinimizer, sipNew_ConjugateGradientMinimizer, &sipClass_ConjugateGradientMinimizer, sipClassAttrTab_ConjugateGradientMinimizer, sipClassVarHierTab_ConjugateGradientMinimizer, -1},
+	{sipName_BALL_MicroCanonicalMD, sipNew_MicroCanonicalMD, &sipClass_MicroCanonicalMD, sipClassAttrTab_MicroCanonicalMD, NULL, -1},
+	{sipName_BALL_MolecularDynamics, sipNew_MolecularDynamics, &sipClass_MolecularDynamics, sipClassAttrTab_MolecularDynamics, sipClassVarHierTab_MolecularDynamics, -1},
+	{sipName_BALL_CanonicalMD, sipNew_CanonicalMD, &sipClass_CanonicalMD, sipClassAttrTab_CanonicalMD, NULL, -1},
+	{sipName_BALL_SnapShotManager, sipNew_SnapShotManager, &sipClass_SnapShotManager, sipClassAttrTab_SnapShotManager, sipClassVarHierTab_SnapShotManager, -1},
+	{sipName_BALL_SnapShot, sipNew_SnapShot, &sipClass_SnapShot, sipClassAttrTab_SnapShot, NULL, -1},
+	{sipName_BALL_AtomProcessor, sipNew_AtomProcessor, &sipClass_AtomProcessor, sipClassAttrTab_AtomProcessor, NULL, -1},
+	{sipName_BALL_RuleEvaluator, sipNew_RuleEvaluator, &sipClass_RuleEvaluator, sipClassAttrTab_RuleEvaluator, NULL, -1},
+	{sipName_BALL_RadiusRuleProcessor, sipNew_RadiusRuleProcessor, &sipClass_RadiusRuleProcessor, sipClassAttrTab_RadiusRuleProcessor, NULL, -1},
+	{sipName_BALL_PeriodicBoundary, sipNew_PeriodicBoundary, &sipClass_PeriodicBoundary, sipClassAttrTab_PeriodicBoundary, sipClassVarHierTab_PeriodicBoundary, -1},
+	{sipName_BALL_Gradient, sipNew_Gradient, &sipClass_Gradient, sipClassAttrTab_Gradient, sipClassVarHierTab_Gradient, -1},
+	{sipName_BALL_RuleProcessor, sipNew_RuleProcessor, &sipClass_RuleProcessor, sipClassAttrTab_RuleProcessor, NULL, -1},
+	{sipName_BALL_ChargeRuleProcessor, sipNew_ChargeRuleProcessor, &sipClass_ChargeRuleProcessor, sipClassAttrTab_ChargeRuleProcessor, NULL, -1},
+	{sipName_BALL_AtomVector, sipNew_AtomVector, &sipClass_AtomVector, sipClassAttrTab_AtomVector, NULL, -1},
+	{sipName_BALL_CharmmTorsion, sipNew_CharmmTorsion, &sipClass_CharmmTorsion, sipClassAttrTab_CharmmTorsion, NULL, -1},
+	{sipName_BALL_CharmmStretch, sipNew_CharmmStretch, &sipClass_CharmmStretch, sipClassAttrTab_CharmmStretch, NULL, -1},
+	{sipName_BALL_CharmmNonBonded, sipNew_CharmmNonBonded, &sipClass_CharmmNonBonded, sipClassAttrTab_CharmmNonBonded, NULL, -1},
+	{sipName_BALL_CharmmImproperTorsion, sipNew_CharmmImproperTorsion, &sipClass_CharmmImproperTorsion, sipClassAttrTab_CharmmImproperTorsion, NULL, -1},
+	{sipName_BALL_CharmmBend, sipNew_CharmmBend, &sipClass_CharmmBend, sipClassAttrTab_CharmmBend, NULL, -1},
+	{sipName_BALL_CharmmFF, sipNew_CharmmFF, &sipClass_CharmmFF, sipClassAttrTab_CharmmFF, NULL, -1},
+	{sipName_BALL_AmberTorsion, sipNew_AmberTorsion, &sipClass_AmberTorsion, sipClassAttrTab_AmberTorsion, NULL, -1},
+	{sipName_BALL_AmberStretch, sipNew_AmberStretch, &sipClass_AmberStretch, sipClassAttrTab_AmberStretch, NULL, -1},
+	{sipName_BALL_AmberNonBonded, sipNew_AmberNonBonded, &sipClass_AmberNonBonded, sipClassAttrTab_AmberNonBonded, NULL, -1},
+	{sipName_BALL_ForceFieldComponent, sipNew_ForceFieldComponent, &sipClass_ForceFieldComponent, sipClassAttrTab_ForceFieldComponent, NULL, -1},
+	{sipName_BALL_AmberBend, sipNew_AmberBend, &sipClass_AmberBend, sipClassAttrTab_AmberBend, NULL, -1},
+	{sipName_BALL_ForceField, sipNew_ForceField, &sipClass_ForceField, sipClassAttrTab_ForceField, sipClassVarHierTab_ForceField, -1},
+	{sipName_BALL_AmberFF, sipNew_AmberFF, &sipClass_AmberFF, sipClassAttrTab_AmberFF, NULL, -1},
+	{sipName_BALL_Vector4, sipNew_Vector4, &sipClass_Vector4, sipClassAttrTab_Vector4, sipClassVarHierTab_Vector4, -1},
+	{sipName_BALL_Vector3, sipNew_Vector3, &sipClass_Vector3, sipClassAttrTab_Vector3, sipClassVarHierTab_Vector3, -1},
+	{sipName_BALL_Vector2, sipNew_Vector2, &sipClass_Vector2, sipClassAttrTab_Vector2, sipClassVarHierTab_Vector2, -1},
+	{sipName_BALL_Surface, sipNew_Surface, &sipClass_Surface, sipClassAttrTab_Surface, NULL, -1},
+	{sipName_BALL_Sphere3, sipNew_Sphere3, &sipClass_Sphere3, sipClassAttrTab_Sphere3, sipClassVarHierTab_Sphere3, -1},
+	{sipName_BALL_Quaternion, sipNew_Quaternion, &sipClass_Quaternion, sipClassAttrTab_Quaternion, sipClassVarHierTab_Quaternion, -1},
+	{sipName_BALL_Plane3, sipNew_Plane3, &sipClass_Plane3, sipClassAttrTab_Plane3, NULL, -1},
+	{sipName_BALL_Matrix4x4, sipNew_Matrix4x4, &sipClass_Matrix4x4, sipClassAttrTab_Matrix4x4, sipClassVarHierTab_Matrix4x4, -1},
+	{sipName_BALL_Line3, sipNew_Line3, &sipClass_Line3, sipClassAttrTab_Line3, sipClassVarHierTab_Line3, -1},
+	{sipName_BALL_Circle3, sipNew_Circle3, &sipClass_Circle3, sipClassAttrTab_Circle3, NULL, -1},
+	{sipName_BALL_Box3, sipNew_Box3, &sipClass_Box3, sipClassAttrTab_Box3, sipClassVarHierTab_Box3, -1},
+	{sipName_BALL_Angle, sipNew_Angle, &sipClass_Angle, sipClassAttrTab_Angle, NULL, -1},
+	{sipName_BALL_System, sipNew_System, &sipClass_System, sipClassAttrTab_System, NULL, -1},
+	{sipName_BALL_CompositeProcessor, sipNew_CompositeProcessor, &sipClass_CompositeProcessor, sipClassAttrTab_CompositeProcessor, NULL, -1},
+	{sipName_BALL_Selector, sipNew_Selector, &sipClass_Selector, sipClassAttrTab_Selector, NULL, -1},
+	{sipName_BALL_SecondaryStructure, sipNew_SecondaryStructure, &sipClass_SecondaryStructure, sipClassAttrTab_SecondaryStructure, NULL, -1},
+	{sipName_BALL_Residue, sipNew_Residue, &sipClass_Residue, sipClassAttrTab_Residue, NULL, -1},
+	{sipName_BALL_Protein, sipNew_Protein, &sipClass_Protein, sipClassAttrTab_Protein, NULL, -1},
+	{sipName_BALL_Nucleotide, sipNew_Nucleotide, &sipClass_Nucleotide, sipClassAttrTab_Nucleotide, NULL, -1},
+	{sipName_BALL_NucleicAcid, sipNew_NucleicAcid, &sipClass_NucleicAcid, sipClassAttrTab_NucleicAcid, NULL, -1},
+	{sipName_BALL_Molecule, sipNew_Molecule, &sipClass_Molecule, sipClassAttrTab_Molecule, NULL, -1},
+	{sipName_BALL_Fragment, sipNew_Fragment, &sipClass_Fragment, sipClassAttrTab_Fragment, NULL, -1},
+	{sipName_BALL_Expression, sipNew_Expression, &sipClass_Expression, sipClassAttrTab_Expression, NULL, -1},
+	{sipName_BALL_ExpressionPredicate, sipNew_ExpressionPredicate, &sipClass_ExpressionPredicate, sipClassAttrTab_ExpressionPredicate, NULL, -1},
+	{sipName_BALL_Chain, sipNew_Chain, &sipClass_Chain, sipClassAttrTab_Chain, NULL, -1},
+	{sipName_BALL_Bond, sipNew_Bond, &sipClass_Bond, sipClassAttrTab_Bond, NULL, -1},
+	{sipName_BALL_PTE_, sipNew_PTE_, &sipClass_PTE_, sipClassAttrTab_PTE_, NULL, -1},
+	{sipName_BALL_Element, sipNew_Element, &sipClass_Element, sipClassAttrTab_Element, NULL, -1},
+	{sipName_BALL_PDBAtom, sipNew_PDBAtom, &sipClass_PDBAtom, sipClassAttrTab_PDBAtom, NULL, -1},
+	{sipName_BALL_AtomContainer, sipNew_AtomContainer, &sipClass_AtomContainer, sipClassAttrTab_AtomContainer, NULL, -1},
+	{sipName_BALL_AtomType, sipNew_AtomType, &sipClass_AtomType, sipClassAttrTab_AtomType, NULL, -1},
+	{sipName_BALL_Atom, sipNew_Atom, &sipClass_Atom, sipClassAttrTab_Atom, NULL, -1},
+	{sipName_BALL_DCDFile, sipNew_DCDFile, &sipClass_DCDFile, sipClassAttrTab_DCDFile, NULL, -1},
+	{sipName_BALL_DCDHeader, sipNew_DCDHeader, &sipClass_DCDHeader, sipClassAttrTab_DCDHeader, sipClassVarHierTab_DCDHeader, -1},
+	{sipName_BALL_TrajectoryFile, sipNew_TrajectoryFile, &sipClass_TrajectoryFile, sipClassAttrTab_TrajectoryFile, NULL, -1},
+	{sipName_BALL_ResourceFile, sipNew_ResourceFile, &sipClass_ResourceFile, sipClassAttrTab_ResourceFile, NULL, -1},
+	{sipName_BALL_ResourceEntry, sipNew_ResourceEntry, &sipClass_ResourceEntry, sipClassAttrTab_ResourceEntry, NULL, -1},
+	{sipName_BALL_XYZFile, sipNew_XYZFile, &sipClass_XYZFile, sipClassAttrTab_XYZFile, NULL, -1},
+	{sipName_BALL_PDBFile, sipNew_PDBFile, &sipClass_PDBFile, sipClassAttrTab_PDBFile, NULL, -1},
+	{sipName_BALL_MOL2File, sipNew_MOL2File, &sipClass_MOL2File, sipClassAttrTab_MOL2File, NULL, -1},
+	{sipName_BALL_INIFile, sipNew_INIFile, &sipClass_INIFile, sipClassAttrTab_INIFile, NULL, -1},
+	{sipName_BALL_File, sipNew_File, &sipClass_File, sipClassAttrTab_File, NULL, -1},
+	{sipName_BALL_HINFile, sipNew_HINFile, &sipClass_HINFile, sipClassAttrTab_HINFile, NULL, -1},
+	{sipName_BALL_String, sipNew_String, &sipClass_String, sipClassAttrTab_String, NULL, -1},
+	{sipName_BALL_Substring, sipNew_Substring, &sipClass_Substring, sipClassAttrTab_Substring, NULL, -1},
+	{sipName_BALL_RegularExpression, sipNew_RegularExpression, &sipClass_RegularExpression, sipClassAttrTab_RegularExpression, NULL, -1},
+	{sipName_BALL_FloatRegularData3D, sipNew_FloatRegularData3D, &sipClass_FloatRegularData3D, sipClassAttrTab_FloatRegularData3D, NULL, -1},
+	{sipName_BALL_GridIndex3D, sipNew_GridIndex3D, &sipClass_GridIndex3D, sipClassAttrTab_GridIndex3D, sipClassVarHierTab_GridIndex3D, -1},
+	{sipName_BALL_FloatRegularData2D, sipNew_FloatRegularData2D, &sipClass_FloatRegularData2D, sipClassAttrTab_FloatRegularData2D, NULL, -1},
+	{sipName_BALL_GridIndex2D, sipNew_GridIndex2D, &sipClass_GridIndex2D, sipClassAttrTab_GridIndex2D, sipClassVarHierTab_GridIndex2D, -1},
+	{sipName_BALL_FloatRegularData1D, sipNew_FloatRegularData1D, &sipClass_FloatRegularData1D, sipClassAttrTab_FloatRegularData1D, NULL, -1},
+	{sipName_BALL_Options, sipNew_Options, &sipClass_Options, sipClassAttrTab_Options, NULL, -1},
+	{sipName_BALL_BitVector, sipNew_BitVector, &sipClass_BitVector, sipClassAttrTab_BitVector, NULL, -1},
+	{sipName_BALL_Bit, sipNew_Bit, &sipClass_Bit, sipClassAttrTab_Bit, NULL, -1},
+	{sipName_BALL_TimeStamp, sipNew_TimeStamp, &sipClass_TimeStamp, sipClassAttrTab_TimeStamp, NULL, -1},
+	{sipName_BALL_PreciseTime, sipNew_PreciseTime, &sipClass_PreciseTime, sipClassAttrTab_PreciseTime, NULL, -1},
+	{sipName_BALL_PropertyManager, sipNew_PropertyManager, &sipClass_PropertyManager, sipClassAttrTab_PropertyManager, NULL, -1},
+	{sipName_BALL_NamedProperty, sipNew_NamedProperty, &sipClass_NamedProperty, sipClassAttrTab_NamedProperty, NULL, -1},
+	{sipName_BALL_Processor, sipNew_Processor, &sipClass_Processor, sipClassAttrTab_Processor, NULL, -1},
+	{sipName_BALL_UnaryAtomPredicate, sipNew_UnaryAtomPredicate, &sipClass_UnaryAtomPredicate, sipClassAttrTab_UnaryAtomPredicate, NULL, -1},
+	{sipName_BALL_UnaryCompositePredicate, sipNew_UnaryCompositePredicate, &sipClass_UnaryCompositePredicate, sipClassAttrTab_UnaryCompositePredicate, NULL, -1},
+	{sipName_BALL_Embeddable, sipNew_Embeddable, &sipClass_Embeddable, sipClassAttrTab_Embeddable, NULL, -1},
+	{sipName_BALL_Selectable, sipNew_Selectable, &sipClass_Selectable, sipClassAttrTab_Selectable, NULL, -1},
+	{sipName_BALL_Object, sipNew_Object, &sipClass_Object, sipClassAttrTab_Object, NULL, -1},
+	{sipName_BALL_PersistentObject, sipNew_PersistentObject, &sipClass_PersistentObject, sipClassAttrTab_PersistentObject, NULL, -1},
+	{sipName_BALL_Composite, sipNew_Composite, &sipClass_Composite, sipClassAttrTab_Composite, NULL, -1},
+	{sipName_BALL_VersionInfo, sipNew_VersionInfo, &sipClass_VersionInfo, sipClassAttrTab_VersionInfo, NULL, -1},
+	{sipName_BALL_GlobalExceptionHandler, sipNew_GlobalExceptionHandler, &sipClass_GlobalExceptionHandler, sipClassAttrTab_GlobalExceptionHandler, NULL, -1},
+	{sipName_BALL_FileNotFound, sipNew_FileNotFound, &sipClass_FileNotFound, sipClassAttrTab_FileNotFound, NULL, -1},
+	{sipName_BALL_DivisionByZero, sipNew_DivisionByZero, &sipClass_DivisionByZero, sipClassAttrTab_DivisionByZero, NULL, -1},
+	{sipName_BALL_BufferOverflow, sipNew_BufferOverflow, &sipClass_BufferOverflow, sipClassAttrTab_BufferOverflow, NULL, -1},
+	{sipName_BALL_OutOfGrid, sipNew_OutOfGrid, &sipClass_OutOfGrid, sipClassAttrTab_OutOfGrid, NULL, -1},
+	{sipName_BALL_OutOfMemory, sipNew_OutOfMemory, &sipClass_OutOfMemory, sipClassAttrTab_OutOfMemory, NULL, -1},
+	{sipName_BALL_NotImplemented, sipNew_NotImplemented, &sipClass_NotImplemented, sipClassAttrTab_NotImplemented, NULL, -1},
+	{sipName_BALL_IncompatibleIterators, sipNew_IncompatibleIterators, &sipClass_IncompatibleIterators, sipClassAttrTab_IncompatibleIterators, NULL, -1},
+	{sipName_BALL_InvalidIterator, sipNew_InvalidIterator, &sipClass_InvalidIterator, sipClassAttrTab_InvalidIterator, NULL, -1},
+	{sipName_BALL_NullPointer, sipNew_NullPointer, &sipClass_NullPointer, sipClassAttrTab_NullPointer, NULL, -1},
+	{sipName_BALL_IllegalSelfOperation, sipNew_IllegalSelfOperation, &sipClass_IllegalSelfOperation, sipClassAttrTab_IllegalSelfOperation, NULL, -1},
+	{sipName_BALL_InvalidFormat, sipNew_InvalidFormat, &sipClass_InvalidFormat, sipClassAttrTab_InvalidFormat, NULL, -1},
+	{sipName_BALL_InvalidRange, sipNew_InvalidRange, &sipClass_InvalidRange, sipClassAttrTab_InvalidRange, NULL, -1},
+	{sipName_BALL_IndexOverflow, sipNew_IndexOverflow, &sipClass_IndexOverflow, sipClassAttrTab_IndexOverflow, NULL, -1},
+	{sipName_BALL_SizeUnderflow, sipNew_SizeUnderflow, &sipClass_SizeUnderflow, sipClassAttrTab_SizeUnderflow, NULL, -1},
+	{sipName_BALL_IndexUnderflow, sipNew_IndexUnderflow, &sipClass_IndexUnderflow, sipClassAttrTab_IndexUnderflow, NULL, -1},
+	{sipName_BALL_GeneralException, sipNew_GeneralException, &sipClass_GeneralException, sipClassAttrTab_GeneralException, NULL, -1},
+	{sipName_BALL_Constant, NULL, &sipClass_Constant, NULL, NULL, -1},
 };
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	134,
+	135,
 	classesTable
 };
 
@@ -3421,9 +4017,19 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 	if (sipRegisterClasses(&sipModule,-1) < 0)
 		return NULL;
 
-	// Add the enums to the dictionary.
+	// Add the class instances to the module dictionary.
 
-	static sipEnumValueInstanceDef MainControlenumValues[] = {
+	static sipClassInstanceDef classInstances[] = {
+		{sipName_BALL_globalHandler, &globalHandler, sipClass_GlobalExceptionHandler, SIP_SIMPLE},
+		NULL
+	};
+
+	if (sipAddClassInstances(sipModule.md_dict,classInstances) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef MainControl_enumValues[] = {
 		{sipName_BALL_FILE, MainControl::FILE},
 		{sipName_BALL_EDIT, MainControl::EDIT},
 		{sipName_BALL_BUILD, MainControl::BUILD},
@@ -3434,171 +4040,12 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 		{NULL}
 	};
 
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_MainControl) -> cl_dict,MainControlenumValues) < 0)
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_MainControl) -> cl_dict,MainControl_enumValues) < 0)
 		return NULL;
 
-	// Add the enums to the dictionary.
+	// Add the class instances to the class dictionary.
 
-	static sipEnumValueInstanceDef FragmentDBenumValues[] = {
-		{sipName_BALL_TYPE__UNKNOWN, FragmentDB::TYPE__UNKNOWN},
-		{sipName_BALL_TYPE__FRAGMENT, FragmentDB::TYPE__FRAGMENT},
-		{sipName_BALL_TYPE__RESIDUE, FragmentDB::TYPE__RESIDUE},
-		{sipName_BALL_TYPE__MOLECULE, FragmentDB::TYPE__MOLECULE},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_FragmentDB) -> cl_dict,FragmentDBenumValues) < 0)
-		return NULL;
-
-	// Add the enums to the dictionary.
-
-	static sipEnumValueInstanceDef ConjugateGradientMinimizerenumValues[] = {
-		{sipName_BALL_POLAK_RIBIERE, ConjugateGradientMinimizer::POLAK_RIBIERE},
-		{sipName_BALL_FLETCHER_REEVES, ConjugateGradientMinimizer::FLETCHER_REEVES},
-		{sipName_BALL_SHANNO, ConjugateGradientMinimizer::SHANNO},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_ConjugateGradientMinimizer) -> cl_dict,ConjugateGradientMinimizerenumValues) < 0)
-		return NULL;
-
-	// Add the enums to the dictionary.
-
-	static sipEnumValueInstanceDef Line3enumValues[] = {
-		{sipName_BALL_FORM__PARAMETER, Line3::FORM__PARAMETER},
-		{sipName_BALL_FORM__TWO_POINTS, Line3::FORM__TWO_POINTS},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_Line3) -> cl_dict,Line3enumValues) < 0)
-		return NULL;
-
-	// Add the enums to the dictionary.
-
-	static sipEnumValueInstanceDef AngleenumValues[] = {
-		{sipName_BALL_RANGE__UNLIMITED, Angle::RANGE__UNLIMITED},
-		{sipName_BALL_RANGE__UNSIGNED, Angle::RANGE__UNSIGNED},
-		{sipName_BALL_RANGE__SIGNED, Angle::RANGE__SIGNED},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_Angle) -> cl_dict,AngleenumValues) < 0)
-		return NULL;
-
-	// Add the enums to the dictionary.
-
-	static sipEnumValueInstanceDef ResidueenumValues[] = {
-		{sipName_BALL_PROPERTY__NON_STANDARD, Residue::PROPERTY__NON_STANDARD},
-		{sipName_BALL_PROPERTY__AMINO_ACID, Residue::PROPERTY__AMINO_ACID},
-		{sipName_BALL_PROPERTY__WATER, Residue::PROPERTY__WATER},
-		{sipName_BALL_PROPERTY__HAS_SSBOND, Residue::PROPERTY__HAS_SSBOND},
-		{sipName_BALL_PROPERTY__C_TERMINAL, Residue::PROPERTY__C_TERMINAL},
-		{sipName_BALL_PROPERTY__N_TERMINAL, Residue::PROPERTY__N_TERMINAL},
-		{sipName_BALL_PROPERTY__CYCLIC, Residue::PROPERTY__CYCLIC},
-		{sipName_BALL_NUMBER_OF_PROPERTIES, Residue::NUMBER_OF_PROPERTIES},
-		{sipName_BALL_NO_VARIANT_EXTENSIONS, Residue::NO_VARIANT_EXTENSIONS},
-		{sipName_BALL_ADD_VARIANT_EXTENSIONS, Residue::ADD_VARIANT_EXTENSIONS},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_Residue) -> cl_dict,ResidueenumValues) < 0)
-		return NULL;
-
-	// Add the enums to the dictionary.
-
-	static sipEnumValueInstanceDef FragmentenumValues[] = {
-		{sipName_BALL_NUMBER_OF_PROPERTIES, Fragment::NUMBER_OF_PROPERTIES},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_Fragment) -> cl_dict,FragmentenumValues) < 0)
-		return NULL;
-
-	// Add the enums to the dictionary.
-
-	static sipEnumValueInstanceDef BondenumValues[] = {
-		{sipName_BALL_ORDER__UNKNOWN, Bond::ORDER__UNKNOWN},
-		{sipName_BALL_ORDER__SINGLE, Bond::ORDER__SINGLE},
-		{sipName_BALL_ORDER__DOUBLE, Bond::ORDER__DOUBLE},
-		{sipName_BALL_ORDER__TRIPLE, Bond::ORDER__TRIPLE},
-		{sipName_BALL_ORDER__QUADRUPLE, Bond::ORDER__QUADRUPLE},
-		{sipName_BALL_ORDER__AROMATIC, Bond::ORDER__AROMATIC},
-		{sipName_BALL_NUMBER_OF_BOND_ORDERS, Bond::NUMBER_OF_BOND_ORDERS},
-		{sipName_BALL_TYPE__UNKNOWN, Bond::TYPE__UNKNOWN},
-		{sipName_BALL_TYPE__COVALENT, Bond::TYPE__COVALENT},
-		{sipName_BALL_TYPE__HYDROGEN, Bond::TYPE__HYDROGEN},
-		{sipName_BALL_TYPE__DISULPHIDE_BRIDGE, Bond::TYPE__DISULPHIDE_BRIDGE},
-		{sipName_BALL_TYPE__SALT_BRIDGE, Bond::TYPE__SALT_BRIDGE},
-		{sipName_BALL_TYPE__PEPTIDE, Bond::TYPE__PEPTIDE},
-		{sipName_BALL_NUMBER_OF_BOND_TYPES, Bond::NUMBER_OF_BOND_TYPES},
-		{sipName_BALL_NUMBER_OF_PROPERTIES, Bond::NUMBER_OF_PROPERTIES},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_Bond) -> cl_dict,BondenumValues) < 0)
-		return NULL;
-
-	// Add the enums to the dictionary.
-
-	static sipEnumValueInstanceDef AtomContainerenumValues[] = {
-		{sipName_BALL_NUMBER_OF_PROPERTIES, AtomContainer::NUMBER_OF_PROPERTIES},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_AtomContainer) -> cl_dict,AtomContainerenumValues) < 0)
-		return NULL;
-
-	// Add the enums to the dictionary.
-
-	static sipEnumValueInstanceDef AtomenumValues[] = {
-		{sipName_BALL_UNKNOWN_TYPE, Atom::UNKNOWN_TYPE},
-		{sipName_BALL_ANY_TYPE, Atom::ANY_TYPE},
-		{sipName_BALL_MAX_NUMBER_OF_BONDS, Atom::MAX_NUMBER_OF_BONDS},
-		{sipName_BALL_NUMBER_OF_PROPERTIES, Atom::NUMBER_OF_PROPERTIES},
-		{sipName_BALL_NO_VARIANT_EXTENSIONS, Atom::NO_VARIANT_EXTENSIONS},
-		{sipName_BALL_ADD_VARIANT_EXTENSIONS, Atom::ADD_VARIANT_EXTENSIONS},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_Atom) -> cl_dict,AtomenumValues) < 0)
-		return NULL;
-
-	// Add the chars to the dictionary.
-
-	static sipCharInstanceDef ResourceFilecharInstances[] = {
-		{sipName_BALL_SEPARATOR, ResourceFile::SEPARATOR},
-		{sipName_BALL_ENTRY_END, ResourceFile::ENTRY_END},
-		{sipName_BALL_ENTRY_BEGIN, ResourceFile::ENTRY_BEGIN},
-		{NULL}
-	};
-
-	if (sipAddCharInstances(((PyClassObject *)sipClass_ResourceFile) -> cl_dict,ResourceFilecharInstances) < 0)
-		return NULL;
-
-	// Add the enums to the dictionary.
-
-	static sipEnumValueInstanceDef INIFileenumValues[] = {
-		{sipName_BALL_MAX_LINE_LENGTH, INIFile::MAX_LINE_LENGTH},
-		{NULL}
-	};
-
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_INIFile) -> cl_dict,INIFileenumValues) < 0)
-		return NULL;
-
-	// Add the class instances to the dictionary.
-
-	static sipClassInstanceDef INIFileclassInstances[] = {
-		{sipName_BALL_HEADER, &INIFile::HEADER, sipClass_String, SIP_SIMPLE},
-		{sipName_BALL_UNDEFINED, &INIFile::UNDEFINED, sipClass_String, SIP_SIMPLE},
-		NULL
-	};
-
-	if (sipAddClassInstances(((PyClassObject *)sipClass_INIFile) -> cl_dict,INIFileclassInstances) < 0)
-		return NULL;
-
-	// Add the class instances to the dictionary.
-
-	static sipClassInstanceDef FileclassInstances[] = {
+	static sipClassInstanceDef File_classInstances[] = {
 		{sipName_BALL_TRUNC, &File::TRUNC, sipClass_std__openmode, SIP_SIMPLE},
 		{sipName_BALL_ATE, &File::ATE, sipClass_std__openmode, SIP_SIMPLE},
 		{sipName_BALL_BINARY, &File::BINARY, sipClass_std__openmode, SIP_SIMPLE},
@@ -3608,23 +4055,182 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 		NULL
 	};
 
-	if (sipAddClassInstances(((PyClassObject *)sipClass_File) -> cl_dict,FileclassInstances) < 0)
+	if (sipAddClassInstances(((PyClassObject *)sipClass_File) -> cl_dict,File_classInstances) < 0)
 		return NULL;
 
-	// Add the enums to the dictionary.
+	// Add the enums to the class dictionary.
 
-	static sipEnumValueInstanceDef StringenumValues[] = {
+	static sipEnumValueInstanceDef FragmentDB_enumValues[] = {
+		{sipName_BALL_TYPE__UNKNOWN, FragmentDB::TYPE__UNKNOWN},
+		{sipName_BALL_TYPE__FRAGMENT, FragmentDB::TYPE__FRAGMENT},
+		{sipName_BALL_TYPE__RESIDUE, FragmentDB::TYPE__RESIDUE},
+		{sipName_BALL_TYPE__MOLECULE, FragmentDB::TYPE__MOLECULE},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_FragmentDB) -> cl_dict,FragmentDB_enumValues) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef ConjugateGradientMinimizer_enumValues[] = {
+		{sipName_BALL_POLAK_RIBIERE, ConjugateGradientMinimizer::POLAK_RIBIERE},
+		{sipName_BALL_FLETCHER_REEVES, ConjugateGradientMinimizer::FLETCHER_REEVES},
+		{sipName_BALL_SHANNO, ConjugateGradientMinimizer::SHANNO},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_ConjugateGradientMinimizer) -> cl_dict,ConjugateGradientMinimizer_enumValues) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef Line3_enumValues[] = {
+		{sipName_BALL_FORM__PARAMETER, Line3::FORM__PARAMETER},
+		{sipName_BALL_FORM__TWO_POINTS, Line3::FORM__TWO_POINTS},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_Line3) -> cl_dict,Line3_enumValues) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef Angle_enumValues[] = {
+		{sipName_BALL_RANGE__UNLIMITED, Angle::RANGE__UNLIMITED},
+		{sipName_BALL_RANGE__UNSIGNED, Angle::RANGE__UNSIGNED},
+		{sipName_BALL_RANGE__SIGNED, Angle::RANGE__SIGNED},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_Angle) -> cl_dict,Angle_enumValues) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef Residue_enumValues[] = {
+		{sipName_BALL_NO_VARIANT_EXTENSIONS, Residue::NO_VARIANT_EXTENSIONS},
+		{sipName_BALL_ADD_VARIANT_EXTENSIONS, Residue::ADD_VARIANT_EXTENSIONS},
+		{sipName_BALL_PROPERTY__NON_STANDARD, Residue::PROPERTY__NON_STANDARD},
+		{sipName_BALL_PROPERTY__AMINO_ACID, Residue::PROPERTY__AMINO_ACID},
+		{sipName_BALL_PROPERTY__WATER, Residue::PROPERTY__WATER},
+		{sipName_BALL_PROPERTY__HAS_SSBOND, Residue::PROPERTY__HAS_SSBOND},
+		{sipName_BALL_PROPERTY__C_TERMINAL, Residue::PROPERTY__C_TERMINAL},
+		{sipName_BALL_PROPERTY__N_TERMINAL, Residue::PROPERTY__N_TERMINAL},
+		{sipName_BALL_PROPERTY__CYCLIC, Residue::PROPERTY__CYCLIC},
+		{sipName_BALL_NUMBER_OF_PROPERTIES, Residue::NUMBER_OF_PROPERTIES},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_Residue) -> cl_dict,Residue_enumValues) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef Fragment_enumValues[] = {
+		{sipName_BALL_NUMBER_OF_PROPERTIES, Fragment::NUMBER_OF_PROPERTIES},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_Fragment) -> cl_dict,Fragment_enumValues) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef Bond_enumValues[] = {
+		{sipName_BALL_NUMBER_OF_PROPERTIES, Bond::NUMBER_OF_PROPERTIES},
+		{sipName_BALL_TYPE__UNKNOWN, Bond::TYPE__UNKNOWN},
+		{sipName_BALL_TYPE__COVALENT, Bond::TYPE__COVALENT},
+		{sipName_BALL_TYPE__HYDROGEN, Bond::TYPE__HYDROGEN},
+		{sipName_BALL_TYPE__DISULPHIDE_BRIDGE, Bond::TYPE__DISULPHIDE_BRIDGE},
+		{sipName_BALL_TYPE__SALT_BRIDGE, Bond::TYPE__SALT_BRIDGE},
+		{sipName_BALL_TYPE__PEPTIDE, Bond::TYPE__PEPTIDE},
+		{sipName_BALL_NUMBER_OF_BOND_TYPES, Bond::NUMBER_OF_BOND_TYPES},
+		{sipName_BALL_ORDER__UNKNOWN, Bond::ORDER__UNKNOWN},
+		{sipName_BALL_ORDER__SINGLE, Bond::ORDER__SINGLE},
+		{sipName_BALL_ORDER__DOUBLE, Bond::ORDER__DOUBLE},
+		{sipName_BALL_ORDER__TRIPLE, Bond::ORDER__TRIPLE},
+		{sipName_BALL_ORDER__QUADRUPLE, Bond::ORDER__QUADRUPLE},
+		{sipName_BALL_ORDER__AROMATIC, Bond::ORDER__AROMATIC},
+		{sipName_BALL_NUMBER_OF_BOND_ORDERS, Bond::NUMBER_OF_BOND_ORDERS},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_Bond) -> cl_dict,Bond_enumValues) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef AtomContainer_enumValues[] = {
+		{sipName_BALL_NUMBER_OF_PROPERTIES, AtomContainer::NUMBER_OF_PROPERTIES},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_AtomContainer) -> cl_dict,AtomContainer_enumValues) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef Atom_enumValues[] = {
+		{sipName_BALL_NO_VARIANT_EXTENSIONS, Atom::NO_VARIANT_EXTENSIONS},
+		{sipName_BALL_ADD_VARIANT_EXTENSIONS, Atom::ADD_VARIANT_EXTENSIONS},
+		{sipName_BALL_NUMBER_OF_PROPERTIES, Atom::NUMBER_OF_PROPERTIES},
+		{sipName_BALL_UNKNOWN_TYPE, Atom::UNKNOWN_TYPE},
+		{sipName_BALL_ANY_TYPE, Atom::ANY_TYPE},
+		{sipName_BALL_MAX_NUMBER_OF_BONDS, Atom::MAX_NUMBER_OF_BONDS},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_Atom) -> cl_dict,Atom_enumValues) < 0)
+		return NULL;
+
+	// Add the chars to the class dictionary.
+
+	static sipCharInstanceDef ResourceFile_charInstances[] = {
+		{sipName_BALL_SEPARATOR, ResourceFile::SEPARATOR},
+		{sipName_BALL_ENTRY_END, ResourceFile::ENTRY_END},
+		{sipName_BALL_ENTRY_BEGIN, ResourceFile::ENTRY_BEGIN},
+		{NULL}
+	};
+
+	if (sipAddCharInstances(((PyClassObject *)sipClass_ResourceFile) -> cl_dict,ResourceFile_charInstances) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef INIFile_enumValues[] = {
+		{sipName_BALL_MAX_LINE_LENGTH, INIFile::MAX_LINE_LENGTH},
+		{NULL}
+	};
+
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_INIFile) -> cl_dict,INIFile_enumValues) < 0)
+		return NULL;
+
+	// Add the class instances to the class dictionary.
+
+	static sipClassInstanceDef INIFile_classInstances[] = {
+		{sipName_BALL_HEADER, &INIFile::HEADER, sipClass_String, SIP_SIMPLE},
+		{sipName_BALL_UNDEFINED, &INIFile::UNDEFINED, sipClass_String, SIP_SIMPLE},
+		NULL
+	};
+
+	if (sipAddClassInstances(((PyClassObject *)sipClass_INIFile) -> cl_dict,INIFile_classInstances) < 0)
+		return NULL;
+
+	// Add the enums to the class dictionary.
+
+	static sipEnumValueInstanceDef String_enumValues[] = {
 		{sipName_BALL_CASE_SENSITIVE, String::CASE_SENSITIVE},
 		{sipName_BALL_CASE_INSENSITIVE, String::CASE_INSENSITIVE},
 		{NULL}
 	};
 
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_String) -> cl_dict,StringenumValues) < 0)
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_String) -> cl_dict,String_enumValues) < 0)
 		return NULL;
 
-	// Add the class instances to the dictionary.
+	// Add the class instances to the class dictionary.
 
-	static sipClassInstanceDef RegularExpressionclassInstances[] = {
+	static sipClassInstanceDef RegularExpression_classInstances[] = {
 		{sipName_BALL_WHITESPACE, &RegularExpression::WHITESPACE, sipClass_String, SIP_SIMPLE},
 		{sipName_BALL_UPPERCASE, &RegularExpression::UPPERCASE, sipClass_String, SIP_SIMPLE},
 		{sipName_BALL_NON_WHITESPACE, &RegularExpression::NON_WHITESPACE, sipClass_String, SIP_SIMPLE},
@@ -3641,44 +4247,44 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 		NULL
 	};
 
-	if (sipAddClassInstances(((PyClassObject *)sipClass_RegularExpression) -> cl_dict,RegularExpressionclassInstances) < 0)
+	if (sipAddClassInstances(((PyClassObject *)sipClass_RegularExpression) -> cl_dict,RegularExpression_classInstances) < 0)
 		return NULL;
 
-	// Add the longs to the dictionary.
+	// Add the longs to the class dictionary.
 
-	static sipLongInstanceDef OptionslongInstances[] = {
+	static sipLongInstanceDef Options_longInstances[] = {
 		{sipName_BALL_MAX_ENTRY_LENGTH, Options::MAX_ENTRY_LENGTH},
 		{NULL}
 	};
 
-	if (sipAddLongInstances(((PyClassObject *)sipClass_Options) -> cl_dict,OptionslongInstances) < 0)
+	if (sipAddLongInstances(((PyClassObject *)sipClass_Options) -> cl_dict,Options_longInstances) < 0)
 		return NULL;
 
-	// Add the class instances to the dictionary.
+	// Add the class instances to the class dictionary.
 
-	static sipClassInstanceDef PreciseTimeclassInstances[] = {
+	static sipClassInstanceDef PreciseTime_classInstances[] = {
 		{sipName_BALL_ZERO, &PreciseTime::ZERO, sipClass_PreciseTime, SIP_SIMPLE},
 		NULL
 	};
 
-	if (sipAddClassInstances(((PyClassObject *)sipClass_PreciseTime) -> cl_dict,PreciseTimeclassInstances) < 0)
+	if (sipAddClassInstances(((PyClassObject *)sipClass_PreciseTime) -> cl_dict,PreciseTime_classInstances) < 0)
 		return NULL;
 
-	// Add the enums to the dictionary.
+	// Add the enums to the class dictionary.
 
-	static sipEnumValueInstanceDef ProcessorenumValues[] = {
+	static sipEnumValueInstanceDef Processor_enumValues[] = {
 		{sipName_BALL_ABORT, Processor::ABORT},
 		{sipName_BALL_BREAK, Processor::BREAK},
 		{sipName_BALL_CONTINUE, Processor::CONTINUE},
 		{NULL}
 	};
 
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_Processor) -> cl_dict,ProcessorenumValues) < 0)
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_Processor) -> cl_dict,Processor_enumValues) < 0)
 		return NULL;
 
-	// Add the enums to the dictionary.
+	// Add the enums to the class dictionary.
 
-	static sipEnumValueInstanceDef VersionInfoenumValues[] = {
+	static sipEnumValueInstanceDef VersionInfo_enumValues[] = {
 		{sipName_BALL_STABLE, VersionInfo::STABLE},
 		{sipName_BALL_ALPHA, VersionInfo::ALPHA},
 		{sipName_BALL_BETA, VersionInfo::BETA},
@@ -3687,49 +4293,7 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 		{NULL}
 	};
 
-	if (sipAddEnumInstances(((PyClassObject *)sipClass_VersionInfo) -> cl_dict,VersionInfoenumValues) < 0)
-		return NULL;
-
-	// Add the doubles to the dictionary.
-
-	static sipDoubleInstanceDef ConstantdoubleInstances[] = {
-		{sipName_BALL_CAL_PER_JOULE, Constant::CAL_PER_JOULE},
-		{sipName_BALL_JOULE_PER_CAL, Constant::JOULE_PER_CAL},
-		{sipName_BALL_M_PER_FOOT, Constant::M_PER_FOOT},
-		{sipName_BALL_MM_PER_INCH, Constant::MM_PER_INCH},
-		{sipName_BALL_RAD_PER_DEG, Constant::RAD_PER_DEG},
-		{sipName_BALL_DEG_PER_RAD, Constant::DEG_PER_RAD},
-		{sipName_BALL_FINE_STRUCTURE_CONSTANT, Constant::FINE_STRUCTURE_CONSTANT},
-		{sipName_BALL_GRAVITATIONAL_CONSTANT, Constant::GRAVITATIONAL_CONSTANT},
-		{sipName_BALL_c, Constant::c},
-		{sipName_BALL_SPEED_OF_LIGHT, Constant::SPEED_OF_LIGHT},
-		{sipName_BALL_VACUUM_PERMEABILITY, Constant::VACUUM_PERMEABILITY},
-		{sipName_BALL_VACUUM_PERMITTIVITY, Constant::VACUUM_PERMITTIVITY},
-		{sipName_BALL_a0, Constant::a0},
-		{sipName_BALL_BOHR_RADIUS, Constant::BOHR_RADIUS},
-		{sipName_BALL_F, Constant::F},
-		{sipName_BALL_FARADAY, Constant::FARADAY},
-		{sipName_BALL_R, Constant::R},
-		{sipName_BALL_GAS_CONSTANT, Constant::GAS_CONSTANT},
-		{sipName_BALL_h, Constant::h},
-		{sipName_BALL_PLANCK, Constant::PLANCK},
-		{sipName_BALL_k, Constant::k},
-		{sipName_BALL_BOLTZMANN, Constant::BOLTZMANN},
-		{sipName_BALL_MOL, Constant::MOL},
-		{sipName_BALL_NA, Constant::NA},
-		{sipName_BALL_AVOGADRO, Constant::AVOGADRO},
-		{sipName_BALL_NEUTRON_MASS, Constant::NEUTRON_MASS},
-		{sipName_BALL_PROTON_MASS, Constant::PROTON_MASS},
-		{sipName_BALL_ELECTRON_MASS, Constant::ELECTRON_MASS},
-		{sipName_BALL_e0, Constant::e0},
-		{sipName_BALL_ELEMENTARY_CHARGE, Constant::ELEMENTARY_CHARGE},
-		{sipName_BALL_EPSILON, Constant::EPSILON},
-		{sipName_BALL_E, Constant::E},
-		{sipName_BALL_PI, Constant::PI},
-		{NULL}
-	};
-
-	if (sipAddDoubleInstances(((PyClassObject *)sipClass_Constant) -> cl_dict,ConstantdoubleInstances) < 0)
+	if (sipAddEnumInstances(((PyClassObject *)sipClass_VersionInfo) -> cl_dict,VersionInfo_enumValues) < 0)
 		return NULL;
 
 	Py_INCREF(Py_None);

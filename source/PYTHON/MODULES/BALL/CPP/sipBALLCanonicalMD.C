@@ -2,7 +2,6 @@
 #include "sipBALLCanonicalMD.h"
 
 
-
 PyObject *sipClass_CanonicalMD;
 
 static void sipDealloc_CanonicalMD(sipThisType *);
@@ -35,43 +34,43 @@ static PyTypeObject sipType_CanonicalMD = {
 };
 
 sipCanonicalMD::sipCanonicalMD()
-    : CanonicalMD()
+   : CanonicalMD()
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipCanonicalMD::sipCanonicalMD(ForceField& a0)
-    : CanonicalMD(a0)
+   : CanonicalMD(a0)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipCanonicalMD::sipCanonicalMD(ForceField& a0,SnapShotManager * a1)
-    : CanonicalMD(a0,a1)
+   : CanonicalMD(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipCanonicalMD::sipCanonicalMD(ForceField& a0,SnapShotManager * a1,const Options& a2)
-    : CanonicalMD(a0,a1,a2)
+   : CanonicalMD(a0,a1,a2)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipCanonicalMD::sipCanonicalMD(const CanonicalMD& a0,bool a1)
-    : CanonicalMD(a0,a1)
+   : CanonicalMD(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipCanonicalMD::sipCanonicalMD(const CanonicalMD& a0)
-    : CanonicalMD(a0)
+   : CanonicalMD(a0)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipCanonicalMD::~sipCanonicalMD()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -168,7 +167,15 @@ static PyObject *sipDo_CanonicalMD_setBathRelaxationTime(PyObject *sipThisObj,Py
 			if ((ptr = (CanonicalMD *)sipGetCppPtr(sipThis,sipClass_CanonicalMD)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> CanonicalMD::setBathRelaxationTime( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -199,7 +206,15 @@ static PyObject *sipDo_CanonicalMD_getBathRelaxationTime(PyObject *sipThisObj,Py
 			if ((ptr = (CanonicalMD *)sipGetCppPtr(sipThis,sipClass_CanonicalMD)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> CanonicalMD::getBathRelaxationTime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -221,9 +236,9 @@ static PyObject *sipDo_CanonicalMD_setup(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
@@ -249,11 +264,11 @@ static PyObject *sipDo_CanonicalMD_setup(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
-		const Options *a2;
+		const Options * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
@@ -497,13 +512,21 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipCanonicalMD();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -515,15 +538,23 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCanonicalMD(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
@@ -536,17 +567,25 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCanonicalMD(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
-		const Options *a2;
+		const Options * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
@@ -560,13 +599,21 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCanonicalMD(* a0, a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CanonicalMD *a0;
+		const CanonicalMD * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -579,13 +626,21 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCanonicalMD(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const CanonicalMD *a0;
+		const CanonicalMD * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CanonicalMD,&a0obj))
@@ -597,7 +652,15 @@ PyObject *sipNew_CanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipCanonicalMD(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -675,6 +738,7 @@ CanonicalMD *sipForceConvertTo_CanonicalMD(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_CanonicalMD);
+
 	*iserrp = 1;
 
 	return NULL;

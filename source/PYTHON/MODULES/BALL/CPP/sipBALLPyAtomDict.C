@@ -2,50 +2,12 @@
 #include "sipBALLPyAtomDict.h"
 
 
-
-PyObject *sipConvertFrom_PyAtomDict(const PyAtomDict *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 13 "pyAtomDict.sip"
-	std::cerr << "convert from" << std::endl;
-	PyObject* dict = PyDict_New();
-
-	if (dict == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the hash map to a dictionary.
-
-	for (PyAtomDict::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		PyObject* key = pyMapBALLObjectToSip(const_cast<Atom&>(*(it->first)));
-		PyObject* value = PyFloat_FromDouble(it->second);
-
-		if ((key == NULL) || (value == NULL) || PyDict_SetItem(dict,key,value) < 0)
-		{
-			Py_DECREF(dict);
-			return NULL;
-		}
-	}
-
-	return dict;
-#line 43 "sipBALLPyAtomDict.cpp"
-}
-
-PyObject *sipClass_PyAtomDict;
-
 int sipCanConvertTo_PyAtomDict(PyObject *sipPy)
 {
 #line 39 "pyAtomDict.sip"
 	std::cerr << "can convert to" << std::endl;
 	return PyDict_Check(sipPy);
-#line 53 "sipBALLPyAtomDict.cpp"
+#line 15 "sipBALLPyAtomDict.cpp"
 }
 
 int sipConvertTo_PyAtomDict(PyObject *sipPy,PyAtomDict **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -96,7 +58,7 @@ int sipConvertTo_PyAtomDict(PyObject *sipPy,PyAtomDict **sipCppPtr,int sipWillDe
 	*sipCppPtr = atom_dict;
 
 	return 1;
-#line 104 "sipBALLPyAtomDict.cpp"
+#line 66 "sipBALLPyAtomDict.cpp"
 }
 
 PyAtomDict *sipForceConvertTo_PyAtomDict(PyObject *valobj,int *iserrp)
@@ -114,7 +76,37 @@ PyAtomDict *sipForceConvertTo_PyAtomDict(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PyAtomDict);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyAtomDict(const PyAtomDict *sipCpp)
+{
+#line 13 "pyAtomDict.sip"
+	std::cerr << "convert from" << std::endl;
+	PyObject* dict = PyDict_New();
+
+	if (dict == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the hash map to a dictionary.
+
+	for (PyAtomDict::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		PyObject* key = pyMapBALLObjectToSip(const_cast<Atom&>(*(it->first)));
+		PyObject* value = PyFloat_FromDouble(it->second);
+
+		if ((key == NULL) || (value == NULL) || PyDict_SetItem(dict,key,value) < 0)
+		{
+			Py_DECREF(dict);
+			return NULL;
+		}
+	}
+
+	return dict;
+#line 116 "sipBALLPyAtomDict.cpp"
 }

@@ -2,7 +2,6 @@
 #include "sipBALLProtein.h"
 
 
-
 PyObject *sipClass_Protein;
 
 static void sipDealloc_Protein(sipThisType *);
@@ -36,31 +35,31 @@ static PyTypeObject sipType_Protein = {
 };
 
 sipProtein::sipProtein()
-    : Protein()
+   : Protein()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipProtein::sipProtein(const Protein& a0,bool a1)
-    : Protein(a0,a1)
+   : Protein(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipProtein::sipProtein(const String& a0,const String& a1)
-    : Protein(a0,a1)
+   : Protein(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipProtein::sipProtein(const Protein& a0)
-    : Protein(a0)
+   : Protein(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipProtein::~sipProtein()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -188,7 +187,7 @@ static PyObject *sipDo_Protein_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Protein *a0;
+		const Protein * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -206,7 +205,15 @@ static PyObject *sipDo_Protein_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Protein::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -229,7 +236,7 @@ static PyObject *sipDo_Protein_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Protein *a0;
+		Protein * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -247,7 +254,15 @@ static PyObject *sipDo_Protein_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Protein::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -270,7 +285,7 @@ static PyObject *sipDo_Protein_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Protein *a0;
+		Protein * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Protein,&a0obj))
@@ -287,7 +302,15 @@ static PyObject *sipDo_Protein_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Protein::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -320,7 +343,15 @@ static PyObject *sipDo_Protein_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getChain( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Chain);
 		}
@@ -337,7 +368,15 @@ static PyObject *sipDo_Protein_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getChain( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Chain);
 		}
@@ -369,7 +408,15 @@ static PyObject *sipDo_Protein_getSecondaryStructure(PyObject *sipThisObj,PyObje
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getSecondaryStructure( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_SecondaryStructure);
 		}
@@ -386,7 +433,15 @@ static PyObject *sipDo_Protein_getSecondaryStructure(PyObject *sipThisObj,PyObje
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getSecondaryStructure( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_SecondaryStructure);
 		}
@@ -418,7 +473,15 @@ static PyObject *sipDo_Protein_getResidue(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getResidue( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -435,7 +498,15 @@ static PyObject *sipDo_Protein_getResidue(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getResidue( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -465,7 +536,15 @@ static PyObject *sipDo_Protein_getNTerminal(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getNTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -480,7 +559,15 @@ static PyObject *sipDo_Protein_getNTerminal(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getNTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -510,7 +597,15 @@ static PyObject *sipDo_Protein_getCTerminal(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getCTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -525,7 +620,15 @@ static PyObject *sipDo_Protein_getCTerminal(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getCTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -557,7 +660,15 @@ static PyObject *sipDo_Protein_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getPDBAtom( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_PDBAtom);
 		}
@@ -574,7 +685,15 @@ static PyObject *sipDo_Protein_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::getPDBAtom( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_PDBAtom);
 		}
@@ -596,7 +715,7 @@ static PyObject *sipDo_Protein_setID(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -613,7 +732,15 @@ static PyObject *sipDo_Protein_setID(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Protein::setID(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -647,7 +774,15 @@ static PyObject *sipDo_Protein_getID(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> Protein::getID();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -677,7 +812,15 @@ static PyObject *sipDo_Protein_countChains(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::countChains();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -707,7 +850,15 @@ static PyObject *sipDo_Protein_countSecondaryStructures(PyObject *sipThisObj,PyO
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::countSecondaryStructures();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -737,7 +888,15 @@ static PyObject *sipDo_Protein_countResidues(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::countResidues();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -767,7 +926,15 @@ static PyObject *sipDo_Protein_countPDBAtoms(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Protein *)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Protein::countPDBAtoms();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -850,7 +1017,7 @@ static PyObject * sip__str__Protein(PyObject *a0)
 
   return PyString_FromString(String(String("Protein ") + ptr->getName() 
 				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
-#line 858 "sipBALLProtein.cpp"
+#line 1025 "sipBALLProtein.cpp"
 }
 
 PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
@@ -872,13 +1039,21 @@ PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipProtein();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Protein *a0;
+		const Protein * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -891,15 +1066,23 @@ PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipProtein(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		const String *a1 = NULL;
+		const String * a1 = NULL;
 		PyObject *a1obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -912,7 +1095,15 @@ PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipProtein(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -924,7 +1115,7 @@ PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Protein *a0;
+		const Protein * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Protein,&a0obj))
@@ -936,7 +1127,15 @@ PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipProtein(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1024,6 +1223,7 @@ Protein *sipForceConvertTo_Protein(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Protein);
+
 	*iserrp = 1;
 
 	return NULL;

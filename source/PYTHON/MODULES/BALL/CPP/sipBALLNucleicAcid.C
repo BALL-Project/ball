@@ -2,7 +2,6 @@
 #include "sipBALLNucleicAcid.h"
 
 
-
 PyObject *sipClass_NucleicAcid;
 
 static void sipDealloc_NucleicAcid(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_NucleicAcid = {
 };
 
 sipNucleicAcid::sipNucleicAcid()
-    : NucleicAcid()
+   : NucleicAcid()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipNucleicAcid::sipNucleicAcid(const NucleicAcid& a0,bool a1)
-    : NucleicAcid(a0,a1)
+   : NucleicAcid(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipNucleicAcid::sipNucleicAcid(const String& a0,const String& a1)
-    : NucleicAcid(a0,a1)
+   : NucleicAcid(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipNucleicAcid::sipNucleicAcid(const NucleicAcid& a0)
-    : NucleicAcid(a0)
+   : NucleicAcid(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipNucleicAcid::~sipNucleicAcid()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -187,7 +186,7 @@ static PyObject *sipDo_NucleicAcid_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const NucleicAcid *a0;
+		const NucleicAcid * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -205,7 +204,15 @@ static PyObject *sipDo_NucleicAcid_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> NucleicAcid::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -228,7 +235,7 @@ static PyObject *sipDo_NucleicAcid_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		NucleicAcid *a0;
+		NucleicAcid * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -246,7 +253,15 @@ static PyObject *sipDo_NucleicAcid_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> NucleicAcid::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -269,7 +284,7 @@ static PyObject *sipDo_NucleicAcid_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		NucleicAcid *a0;
+		NucleicAcid * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_NucleicAcid,&a0obj))
@@ -286,7 +301,15 @@ static PyObject *sipDo_NucleicAcid_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> NucleicAcid::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -319,7 +342,15 @@ static PyObject *sipDo_NucleicAcid_getNucleotide(PyObject *sipThisObj,PyObject *
 			if ((ptr = (NucleicAcid *)sipGetCppPtr(sipThis,sipClass_NucleicAcid)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NucleicAcid::getNucleotide( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Nucleotide);
 		}
@@ -336,7 +367,15 @@ static PyObject *sipDo_NucleicAcid_getNucleotide(PyObject *sipThisObj,PyObject *
 			if ((ptr = (NucleicAcid *)sipGetCppPtr(sipThis,sipClass_NucleicAcid)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NucleicAcid::getNucleotide( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Nucleotide);
 		}
@@ -366,7 +405,15 @@ static PyObject *sipDo_NucleicAcid_get3Prime(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (NucleicAcid *)sipGetCppPtr(sipThis,sipClass_NucleicAcid)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NucleicAcid::get3Prime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Nucleotide);
 		}
@@ -381,7 +428,15 @@ static PyObject *sipDo_NucleicAcid_get3Prime(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (NucleicAcid *)sipGetCppPtr(sipThis,sipClass_NucleicAcid)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NucleicAcid::get3Prime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Nucleotide);
 		}
@@ -411,7 +466,15 @@ static PyObject *sipDo_NucleicAcid_get5Prime(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (NucleicAcid *)sipGetCppPtr(sipThis,sipClass_NucleicAcid)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NucleicAcid::get5Prime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Nucleotide);
 		}
@@ -426,7 +489,15 @@ static PyObject *sipDo_NucleicAcid_get5Prime(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (NucleicAcid *)sipGetCppPtr(sipThis,sipClass_NucleicAcid)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NucleicAcid::get5Prime();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Nucleotide);
 		}
@@ -448,7 +519,7 @@ static PyObject *sipDo_NucleicAcid_setID(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -465,7 +536,15 @@ static PyObject *sipDo_NucleicAcid_setID(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> NucleicAcid::setID(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -499,7 +578,15 @@ static PyObject *sipDo_NucleicAcid_getID(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (NucleicAcid *)sipGetCppPtr(sipThis,sipClass_NucleicAcid)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> NucleicAcid::getID();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -529,7 +616,15 @@ static PyObject *sipDo_NucleicAcid_countNucleotides(PyObject *sipThisObj,PyObjec
 			if ((ptr = (NucleicAcid *)sipGetCppPtr(sipThis,sipClass_NucleicAcid)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NucleicAcid::countNucleotides();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -623,13 +718,21 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipNucleicAcid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const NucleicAcid *a0;
+		const NucleicAcid * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -642,15 +745,23 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipNucleicAcid(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		const String *a1 = NULL;
+		const String * a1 = NULL;
 		PyObject *a1obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -663,7 +774,15 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipNucleicAcid(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -675,7 +794,7 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const NucleicAcid *a0;
+		const NucleicAcid * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_NucleicAcid,&a0obj))
@@ -687,7 +806,15 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipNucleicAcid(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -769,6 +896,7 @@ NucleicAcid *sipForceConvertTo_NucleicAcid(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_NucleicAcid);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLClearRadiusProcessor.h"
 
 
-
 PyObject *sipClass_ClearRadiusProcessor;
 
 static void sipDealloc_ClearRadiusProcessor(sipThisType *);
@@ -35,34 +34,34 @@ static PyTypeObject sipType_ClearRadiusProcessor = {
 };
 
 sipClearRadiusProcessor::sipClearRadiusProcessor()
-    : ClearRadiusProcessor()
+   : ClearRadiusProcessor()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipClearRadiusProcessor::sipClearRadiusProcessor(const ClearRadiusProcessor& a0)
-    : ClearRadiusProcessor(a0)
+   : ClearRadiusProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipClearRadiusProcessor::~sipClearRadiusProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipClearRadiusProcessor::operator ()(Atom& a0)
+Processor::Result sipClearRadiusProcessor::operator()(Atom& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		ClearRadiusProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipAtomProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		ClearRadiusProcessor::operator()(a0);
 }
 
-static PyObject *sipDo_ClearRadiusProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_ClearRadiusProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -74,12 +73,12 @@ static PyObject *sipDo_ClearRadiusProcessor___call__(PyObject *sipThisObj,PyObje
 #line 26 "defaultProcessors.sip"
 	printf("TEST\n");
 	return 0;
-#line 82 "sipBALLClearRadiusProcessor.cpp"
+#line 81 "sipBALLClearRadiusProcessor.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_ClearRadiusProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ClearRadiusProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -135,13 +134,21 @@ PyObject *sipNew_ClearRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipClearRadiusProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const ClearRadiusProcessor *a0;
+		const ClearRadiusProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ClearRadiusProcessor,&a0obj))
@@ -153,7 +160,15 @@ PyObject *sipNew_ClearRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipClearRadiusProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -184,7 +199,7 @@ PyObject *sipNew_ClearRadiusProcessor(PyObject *sipSelf,PyObject *sipArgs)
 }
 
 PyMethodDef sipClassAttrTab_ClearRadiusProcessor[] = {
-	{sipName_BALL___call__, sipDo_ClearRadiusProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_ClearRadiusProcessor_CallOp, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -224,6 +239,7 @@ ClearRadiusProcessor *sipForceConvertTo_ClearRadiusProcessor(PyObject *valobj,in
 	}
 
 	sipBadClass(sipName_BALL_ClearRadiusProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

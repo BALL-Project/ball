@@ -2,7 +2,6 @@
 #include "sipBALLTimeStamp.h"
 
 
-
 PyObject *sipClass_TimeStamp;
 
 static void sipDealloc_TimeStamp(sipThisType *);
@@ -36,19 +35,19 @@ static PyTypeObject sipType_TimeStamp = {
 };
 
 sipTimeStamp::sipTimeStamp()
-   throw()  : TimeStamp()
+   throw() : TimeStamp()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipTimeStamp::sipTimeStamp(const TimeStamp& a0)
-    : TimeStamp(a0)
+   : TimeStamp(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipTimeStamp::~sipTimeStamp()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -75,9 +74,7 @@ void sipTimeStamp::sipVH_stamp(const sipMethodCache *pymc,sipThisType *sipThis,i
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_PreciseTime);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -112,7 +109,7 @@ static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const PreciseTime *a0;
+		const PreciseTime * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
@@ -137,7 +134,7 @@ static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		const TimeStamp *a0;
+		const TimeStamp * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_TimeStamp,&a0obj))
@@ -177,7 +174,7 @@ static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const PreciseTime *a0;
+		const PreciseTime * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
@@ -202,7 +199,7 @@ static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		const TimeStamp *a0;
+		const TimeStamp * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_TimeStamp,&a0obj))
@@ -242,7 +239,7 @@ static PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const PreciseTime *a0 = &PreciseTime::ZERO;
+		const PreciseTime * a0 = &PreciseTime::ZERO;
 		PyObject *a0obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"|I",sipCanConvertTo_PreciseTime,&a0obj))
@@ -345,7 +342,7 @@ static PyObject * sip__str__TimeStamp(PyObject *a0)
 	time_str.append(usec_str.after("."));
 
   return PyString_FromString(time_str.c_str());
-#line 353 "sipBALLTimeStamp.cpp"
+#line 350 "sipBALLTimeStamp.cpp"
 }
 
 PyObject *sipNew_TimeStamp(PyObject *sipSelf,PyObject *sipArgs)
@@ -373,7 +370,7 @@ PyObject *sipNew_TimeStamp(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const TimeStamp *a0;
+		const TimeStamp * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_TimeStamp,&a0obj))
@@ -385,7 +382,15 @@ PyObject *sipNew_TimeStamp(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipTimeStamp(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -459,6 +464,7 @@ TimeStamp *sipForceConvertTo_TimeStamp(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_TimeStamp);
+
 	*iserrp = 1;
 
 	return NULL;

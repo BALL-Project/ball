@@ -2,7 +2,6 @@
 #include "sipBALLExpressionPredicate.h"
 
 
-
 PyObject *sipClass_ExpressionPredicate;
 
 static void sipDealloc_ExpressionPredicate(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_ExpressionPredicate = {
 };
 
 sipExpressionPredicate::sipExpressionPredicate()
-    : ExpressionPredicate()
+   : ExpressionPredicate()
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipExpressionPredicate::sipExpressionPredicate(const String& a0)
-    : ExpressionPredicate(a0)
+   : ExpressionPredicate(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipExpressionPredicate::sipExpressionPredicate(const ExpressionPredicate& a0)
-    : ExpressionPredicate(a0)
+   : ExpressionPredicate(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipExpressionPredicate::~sipExpressionPredicate()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -69,14 +68,14 @@ void sipExpressionPredicate::setArgument(const String& a0)
 		ExpressionPredicate::setArgument(a0);
 }
 
-bool sipExpressionPredicate::operator ()(const Atom& a0) const
+bool sipExpressionPredicate::operator()(const Atom& a0) const
  throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[1],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipUnaryAtomPredicate::sipVH_CallOperator(&sipPyMethods[1],sipPyThis,relLock,a0) :
-		ExpressionPredicate::operator ()(a0);
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipUnaryAtomPredicate::sipVH_CallOp(&sipPyMethods[1],sipPyThis,relLock,a0) :
+		ExpressionPredicate::operator()(a0);
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -90,9 +89,7 @@ void sipExpressionPredicate::sipVH_setArgument(const sipMethodCache *pymc,sipThi
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_String);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -118,7 +115,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_ExpressionPredicate___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_ExpressionPredicate_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -127,7 +124,7 @@ static PyObject *sipDo_ExpressionPredicate___call__(PyObject *sipThisObj,PyObjec
 		return NULL;
 
 	{
-		const Atom *a0;
+		const Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -145,7 +142,7 @@ static PyObject *sipDo_ExpressionPredicate___call__(PyObject *sipThisObj,PyObjec
 			if (iserr)
 				return NULL;
 
-			res = ptr -> ExpressionPredicate::operator ()(* a0);
+			res = ptr -> ExpressionPredicate::operator()(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -153,7 +150,7 @@ static PyObject *sipDo_ExpressionPredicate___call__(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_ExpressionPredicate,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ExpressionPredicate,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -167,7 +164,7 @@ static PyObject *sipDo_ExpressionPredicate_setArgument(PyObject *sipThisObj,PyOb
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -252,13 +249,21 @@ PyObject *sipNew_ExpressionPredicate(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipExpressionPredicate();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -270,7 +275,15 @@ PyObject *sipNew_ExpressionPredicate(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipExpressionPredicate(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -279,7 +292,7 @@ PyObject *sipNew_ExpressionPredicate(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const ExpressionPredicate *a0;
+		const ExpressionPredicate * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ExpressionPredicate,&a0obj))
@@ -291,7 +304,15 @@ PyObject *sipNew_ExpressionPredicate(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipExpressionPredicate(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -322,7 +343,7 @@ PyObject *sipNew_ExpressionPredicate(PyObject *sipSelf,PyObject *sipArgs)
 }
 
 PyMethodDef sipClassAttrTab_ExpressionPredicate[] = {
-	{sipName_BALL___call__, sipDo_ExpressionPredicate___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_ExpressionPredicate_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_setArgument, sipDo_ExpressionPredicate_setArgument, METH_VARARGS, NULL},
 	{NULL}
 };
@@ -363,6 +384,7 @@ ExpressionPredicate *sipForceConvertTo_ExpressionPredicate(PyObject *valobj,int 
 	}
 
 	sipBadClass(sipName_BALL_ExpressionPredicate);
+
 	*iserrp = 1;
 
 	return NULL;

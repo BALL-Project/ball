@@ -2,48 +2,11 @@
 #include "sipBALLPyAtomContainerList.h"
 
 
-
-PyObject *sipConvertFrom_PyAtomContainerList(const PyAtomContainerList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pyAtomContainerList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyAtomContainerList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		AtomContainer& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyAtomContainerList.cpp"
-}
-
-PyObject *sipClass_PyAtomContainerList;
-
 int sipCanConvertTo_PyAtomContainerList(PyObject *sipPy)
 {
 #line 37 "pyAtomContainerList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyAtomContainerList.cpp"
+#line 14 "sipBALLPyAtomContainerList.cpp"
 }
 
 int sipConvertTo_PyAtomContainerList(PyObject *sipPy,PyAtomContainerList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PyAtomContainerList(PyObject *sipPy,PyAtomContainerList **sipCp
 	*sipCppPtr = atom_container_list;
 
 	return 1;
-#line 83 "sipBALLPyAtomContainerList.cpp"
+#line 46 "sipBALLPyAtomContainerList.cpp"
 }
 
 PyAtomContainerList *sipForceConvertTo_PyAtomContainerList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyAtomContainerList *sipForceConvertTo_PyAtomContainerList(PyObject *valobj,int 
 	}
 
 	sipBadClass(sipName_BALL_PyAtomContainerList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyAtomContainerList(const PyAtomContainerList *sipCpp)
+{
+#line 12 "pyAtomContainerList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyAtomContainerList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		AtomContainer& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyAtomContainerList.cpp"
 }

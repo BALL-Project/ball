@@ -2,7 +2,6 @@
 #include "sipBALLOpenMode.h"
 
 
-
 PyObject *sipClass_OpenMode;
 
 static void sipDealloc_OpenMode(sipThisType *);
@@ -75,7 +74,7 @@ static PyObject * sip__str__OpenMode(PyObject *a0)
 	}
 
   return PyString_FromString(mode_string.c_str());
-#line 83 "sipBALLOpenMode.cpp"
+#line 82 "sipBALLOpenMode.cpp"
 }
 
 PyObject *sipNew_OpenMode(PyObject *sipSelf,PyObject *sipArgs)
@@ -97,13 +96,21 @@ PyObject *sipNew_OpenMode(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new OpenMode();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const OpenMode *a0;
+		const OpenMode * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_OpenMode,&a0obj))
@@ -115,7 +122,15 @@ PyObject *sipNew_OpenMode(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new OpenMode(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -151,7 +166,7 @@ int sipCanConvertTo_OpenMode(PyObject *sipPy)
 #line 125 "file.sip"
   // automatic conversion of Py integers to Position
   return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_OpenMode));
-#line 159 "sipBALLOpenMode.cpp"
+#line 174 "sipBALLOpenMode.cpp"
 }
 
 int sipConvertTo_OpenMode(PyObject *sipPy,OpenMode **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -183,7 +198,7 @@ int sipConvertTo_OpenMode(PyObject *sipPy,OpenMode **sipCppPtr,int sipWillDeref,
   *sipCppPtr = (OpenMode*)sipConvertToCpp(sipPy, sipClass_OpenMode, sipIsErr);
 
   return 0;
-#line 191 "sipBALLOpenMode.cpp"
+#line 206 "sipBALLOpenMode.cpp"
 }
 
 OpenMode *sipForceConvertTo_OpenMode(PyObject *valobj,int *iserrp)
@@ -201,6 +216,7 @@ OpenMode *sipForceConvertTo_OpenMode(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_OpenMode);
+
 	*iserrp = 1;
 
 	return NULL;

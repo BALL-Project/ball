@@ -2,48 +2,11 @@
 #include "sipBALLPyChainList.h"
 
 
-
-PyObject *sipConvertFrom_PyChainList(const PyChainList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pyChainList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyChainList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		Chain& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyChainList.cpp"
-}
-
-PyObject *sipClass_PyChainList;
-
 int sipCanConvertTo_PyChainList(PyObject *sipPy)
 {
 #line 37 "pyChainList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyChainList.cpp"
+#line 14 "sipBALLPyChainList.cpp"
 }
 
 int sipConvertTo_PyChainList(PyObject *sipPy,PyChainList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PyChainList(PyObject *sipPy,PyChainList **sipCppPtr,int sipWill
 	*sipCppPtr = chain_list;
 
 	return 1;
-#line 83 "sipBALLPyChainList.cpp"
+#line 46 "sipBALLPyChainList.cpp"
 }
 
 PyChainList *sipForceConvertTo_PyChainList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyChainList *sipForceConvertTo_PyChainList(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PyChainList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyChainList(const PyChainList *sipCpp)
+{
+#line 12 "pyChainList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyChainList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		Chain& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyChainList.cpp"
 }

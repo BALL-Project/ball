@@ -2,7 +2,6 @@
 #include "sipBALLPDBFile.h"
 
 
-
 PyObject *sipClass_PDBFile;
 
 static void sipDealloc_PDBFile(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_PDBFile = {
 };
 
 sipPDBFile::sipPDBFile()
-    : PDBFile()
+   : PDBFile()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipPDBFile::sipPDBFile(const String& a0,std__openmode a1)
-    : PDBFile(a0,a1)
+   : PDBFile(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipPDBFile::sipPDBFile(const PDBFile& a0)
-    : PDBFile(a0)
+   : PDBFile(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipPDBFile::~sipPDBFile()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -113,9 +112,7 @@ void sipPDBFile::sipVH_write(const sipMethodCache *pymc,sipThisType *sipThis,int
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_System);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -152,9 +149,7 @@ void sipPDBFile::sipVH_write(const sipMethodCache *pymc,sipThisType *sipThis,int
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_Protein);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -191,9 +186,7 @@ void sipPDBFile::sipVH_read(const sipMethodCache *pymc,sipThisType *sipThis,int 
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_System);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -230,9 +223,7 @@ void sipPDBFile::sipVH_read(const sipMethodCache *pymc,sipThisType *sipThis,int 
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_Protein);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -267,7 +258,7 @@ static PyObject *sipDo_PDBFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Protein *a0;
+		Protein * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Protein,&a0obj))
@@ -284,7 +275,15 @@ static PyObject *sipDo_PDBFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBFile::read(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -292,7 +291,7 @@ static PyObject *sipDo_PDBFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -309,7 +308,15 @@ static PyObject *sipDo_PDBFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBFile::read(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -332,7 +339,7 @@ static PyObject *sipDo_PDBFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Protein *a0;
+		const Protein * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Protein,&a0obj))
@@ -349,7 +356,15 @@ static PyObject *sipDo_PDBFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBFile::write(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -357,7 +372,7 @@ static PyObject *sipDo_PDBFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -374,7 +389,15 @@ static PyObject *sipDo_PDBFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> PDBFile::write(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -434,15 +457,23 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipPDBFile();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		std__openmode *a1 = (std__openmode *)&File::IN;
+		std__openmode * a1 = (std__openmode *)&File::IN;
 		PyObject *a1obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_std__openmode,&a1obj))
@@ -455,7 +486,15 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipPDBFile(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -464,7 +503,7 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const PDBFile *a0;
+		const PDBFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PDBFile,&a0obj))
@@ -476,7 +515,15 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipPDBFile(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -548,6 +595,7 @@ PDBFile *sipForceConvertTo_PDBFile(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PDBFile);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,48 +2,11 @@
 #include "sipBALLPyCompositeDescriptorList.h"
 
 
-
-PyObject *sipConvertFrom_PyCompositeDescriptorList(const PyCompositeDescriptorList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 14 "pyCompositeDescriptorList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyCompositeDescriptorList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		CompositeDescriptor* obj = *it;
-		PyObject *inst;
-
-		if ((inst = sipMapCppToSelf(obj,sipClass_CompositeDescriptor)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyCompositeDescriptorList.cpp"
-}
-
-PyObject *sipClass_PyCompositeDescriptorList;
-
 int sipCanConvertTo_PyCompositeDescriptorList(PyObject *sipPy)
 {
 #line 39 "pyCompositeDescriptorList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyCompositeDescriptorList.cpp"
+#line 14 "sipBALLPyCompositeDescriptorList.cpp"
 }
 
 int sipConvertTo_PyCompositeDescriptorList(PyObject *sipPy,PyCompositeDescriptorList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PyCompositeDescriptorList(PyObject *sipPy,PyCompositeDescriptor
 	*sipCppPtr = atom_list;
 
 	return 1;
-#line 83 "sipBALLPyCompositeDescriptorList.cpp"
+#line 46 "sipBALLPyCompositeDescriptorList.cpp"
 }
 
 PyCompositeDescriptorList *sipForceConvertTo_PyCompositeDescriptorList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyCompositeDescriptorList *sipForceConvertTo_PyCompositeDescriptorList(PyObject 
 	}
 
 	sipBadClass(sipName_BALL_PyCompositeDescriptorList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyCompositeDescriptorList(const PyCompositeDescriptorList *sipCpp)
+{
+#line 14 "pyCompositeDescriptorList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyCompositeDescriptorList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		CompositeDescriptor* obj = *it;
+		PyObject *inst;
+
+		if ((inst = sipMapCppToSelf(obj,sipClass_CompositeDescriptor)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyCompositeDescriptorList.cpp"
 }

@@ -2,7 +2,6 @@
 #include "sipBALLSystem.h"
 
 
-
 PyObject *sipClass_System;
 
 static void sipDealloc_System(sipThisType *);
@@ -36,31 +35,31 @@ static PyTypeObject sipType_System = {
 };
 
 sipSystem::sipSystem()
-    : System()
+   : System()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipSystem::sipSystem(const System& a0,bool a1)
-    : System(a0,a1)
+   : System(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipSystem::sipSystem(const String& a0)
-    : System(a0)
+   : System(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipSystem::sipSystem(const System& a0)
-    : System(a0)
+   : System(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipSystem::~sipSystem()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -188,7 +187,7 @@ static PyObject *sipDo_System_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -206,7 +205,15 @@ static PyObject *sipDo_System_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -229,7 +236,7 @@ static PyObject *sipDo_System_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -247,7 +254,15 @@ static PyObject *sipDo_System_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -270,7 +285,7 @@ static PyObject *sipDo_System_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -287,7 +302,15 @@ static PyObject *sipDo_System_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -310,7 +333,7 @@ static PyObject *sipDo_System_setName(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -327,7 +350,15 @@ static PyObject *sipDo_System_setName(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::setName(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -361,7 +392,15 @@ static PyObject *sipDo_System_getName(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (System *)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> System::getName();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -391,7 +430,15 @@ static PyObject *sipDo_System_countMolecules(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (System *)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> System::countMolecules();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -421,7 +468,15 @@ static PyObject *sipDo_System_countFragments(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (System *)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> System::countFragments();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -451,7 +506,15 @@ static PyObject *sipDo_System_countAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (System *)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> System::countAtoms();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -473,7 +536,7 @@ static PyObject *sipDo_System_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Molecule *a0;
+		Molecule * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Molecule,&a0obj))
@@ -490,7 +553,15 @@ static PyObject *sipDo_System_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::prepend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -513,7 +584,7 @@ static PyObject *sipDo_System_append(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Molecule *a0;
+		Molecule * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Molecule,&a0obj))
@@ -530,7 +601,15 @@ static PyObject *sipDo_System_append(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::append(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -553,7 +632,7 @@ static PyObject *sipDo_System_insert(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Molecule *a0;
+		Molecule * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Molecule,&a0obj))
@@ -570,7 +649,15 @@ static PyObject *sipDo_System_insert(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::insert(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -593,9 +680,9 @@ static PyObject *sipDo_System_insertBefore(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		Molecule *a0;
+		Molecule * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Molecule,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -613,7 +700,15 @@ static PyObject *sipDo_System_insertBefore(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::insertBefore(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -636,9 +731,9 @@ static PyObject *sipDo_System_insertAfter(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		Molecule *a0;
+		Molecule * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Molecule,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -656,7 +751,15 @@ static PyObject *sipDo_System_insertAfter(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::insertAfter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -679,7 +782,7 @@ static PyObject *sipDo_System_remove(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Molecule *a0;
+		Molecule * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Molecule,&a0obj))
@@ -697,7 +800,15 @@ static PyObject *sipDo_System_remove(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> System::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -719,7 +830,7 @@ static PyObject *sipDo_System_spliceBefore(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -736,7 +847,15 @@ static PyObject *sipDo_System_spliceBefore(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::spliceBefore(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -759,7 +878,7 @@ static PyObject *sipDo_System_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -776,7 +895,15 @@ static PyObject *sipDo_System_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::spliceAfter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -799,7 +926,7 @@ static PyObject *sipDo_System_splice(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -816,7 +943,15 @@ static PyObject *sipDo_System_splice(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> System::splice(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -846,7 +981,15 @@ static PyObject *sipDo_System_destroyBonds(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (System *)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> System::destroyBonds();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -934,7 +1077,7 @@ static PyObject * sip__str__System(PyObject *a0)
   return PyString_FromString(String(String("System ") + ptr->getName() 
 					+ " { " + String(ptr->countMolecules()) + " molecules,  " 
 					+ String(ptr->countAtoms()) + " atoms }").c_str());
-#line 942 "sipBALLSystem.cpp"
+#line 1085 "sipBALLSystem.cpp"
 }
 
 PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
@@ -956,13 +1099,21 @@ PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipSystem();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -975,13 +1126,21 @@ PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipSystem(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -993,7 +1152,15 @@ PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipSystem(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -1002,7 +1169,7 @@ PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const System *a0;
+		const System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_System,&a0obj))
@@ -1014,7 +1181,15 @@ PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipSystem(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1105,6 +1280,7 @@ System *sipForceConvertTo_System(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_System);
+
 	*iserrp = 1;
 
 	return NULL;

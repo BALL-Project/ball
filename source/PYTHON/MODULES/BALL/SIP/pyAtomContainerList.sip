@@ -1,6 +1,6 @@
-// $Id: pyAtomContainerList.sip,v 1.1 2000/08/30 19:59:10 oliver Exp $
+// $Id: pyAtomContainerList.sip,v 1.2 2001/07/29 17:31:16 oliver Exp $
 
-class PyAtomContainerList
+%MappedType PyAtomContainerList
 {
 %HeaderCode
 	#include <BALL/PYTHON/pyAtomContainerList.h>
@@ -8,7 +8,7 @@ class PyAtomContainerList
 	#include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -33,11 +33,11 @@ class PyAtomContainerList
 	return pl;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	return PyList_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python list of AtomContainer instances to an AtomContainerList object on the
 	// heap.
  

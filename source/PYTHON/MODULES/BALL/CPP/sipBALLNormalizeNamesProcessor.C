@@ -2,7 +2,6 @@
 #include "sipBALLNormalizeNamesProcessor.h"
 
 
-
 PyObject *sipClass_NormalizeNamesProcessor;
 
 static void sipDealloc_NormalizeNamesProcessor(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_NormalizeNamesProcessor = {
 };
 
 sipNormalizeNamesProcessor::sipNormalizeNamesProcessor()
-    : NormalizeNamesProcessor()
+   : NormalizeNamesProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipNormalizeNamesProcessor::sipNormalizeNamesProcessor(FragmentDB& a0)
-    : NormalizeNamesProcessor(a0)
+   : NormalizeNamesProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipNormalizeNamesProcessor::sipNormalizeNamesProcessor(const NormalizeNamesProcessor& a0)
-    : NormalizeNamesProcessor(a0)
+   : NormalizeNamesProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipNormalizeNamesProcessor::~sipNormalizeNamesProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipNormalizeNamesProcessor::operator ()(Fragment& a0)
+Processor::Result sipNormalizeNamesProcessor::operator()(Fragment& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipFragmentProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		NormalizeNamesProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipFragmentProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		NormalizeNamesProcessor::operator()(a0);
 }
 
 bool sipNormalizeNamesProcessor::finish()
@@ -179,7 +178,7 @@ static PyObject *sipDo_NormalizeNamesProcessor_setFragmentDB(PyObject *sipThisOb
 		return NULL;
 
 	{
-		FragmentDB *a0;
+		FragmentDB * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_FragmentDB,&a0obj))
@@ -196,7 +195,15 @@ static PyObject *sipDo_NormalizeNamesProcessor_setFragmentDB(PyObject *sipThisOb
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> NormalizeNamesProcessor::setFragmentDB(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -219,7 +226,7 @@ static PyObject *sipDo_NormalizeNamesProcessor_setNamingStandard(PyObject *sipTh
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -236,7 +243,15 @@ static PyObject *sipDo_NormalizeNamesProcessor_setNamingStandard(PyObject *sipTh
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> NormalizeNamesProcessor::setNamingStandard(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -270,7 +285,15 @@ static PyObject *sipDo_NormalizeNamesProcessor_getNamingStandard(PyObject *sipTh
 			if ((ptr = (NormalizeNamesProcessor *)sipGetCppPtr(sipThis,sipClass_NormalizeNamesProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> NormalizeNamesProcessor::getNamingStandard();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -300,7 +323,15 @@ static PyObject *sipDo_NormalizeNamesProcessor_start(PyObject *sipThisObj,PyObje
 			if ((ptr = (NormalizeNamesProcessor *)sipGetCppPtr(sipThis,sipClass_NormalizeNamesProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NormalizeNamesProcessor::start();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -330,7 +361,15 @@ static PyObject *sipDo_NormalizeNamesProcessor_finish(PyObject *sipThisObj,PyObj
 			if ((ptr = (NormalizeNamesProcessor *)sipGetCppPtr(sipThis,sipClass_NormalizeNamesProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NormalizeNamesProcessor::finish();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -343,7 +382,7 @@ static PyObject *sipDo_NormalizeNamesProcessor_finish(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_NormalizeNamesProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_NormalizeNamesProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -352,7 +391,7 @@ static PyObject *sipDo_NormalizeNamesProcessor___call__(PyObject *sipThisObj,PyO
 		return NULL;
 
 	{
-		Fragment *a0;
+		Fragment * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Fragment,&a0obj))
@@ -370,7 +409,15 @@ static PyObject *sipDo_NormalizeNamesProcessor___call__(PyObject *sipThisObj,PyO
 			if (iserr)
 				return NULL;
 
-			res = ptr -> NormalizeNamesProcessor::operator ()(* a0);
+   try
+   {
+			res = ptr -> NormalizeNamesProcessor::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -378,7 +425,7 @@ static PyObject *sipDo_NormalizeNamesProcessor___call__(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_NormalizeNamesProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NormalizeNamesProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -434,13 +481,21 @@ PyObject *sipNew_NormalizeNamesProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipNormalizeNamesProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		FragmentDB *a0;
+		FragmentDB * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_FragmentDB,&a0obj))
@@ -452,13 +507,21 @@ PyObject *sipNew_NormalizeNamesProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipNormalizeNamesProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const NormalizeNamesProcessor *a0;
+		const NormalizeNamesProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_NormalizeNamesProcessor,&a0obj))
@@ -470,7 +533,15 @@ PyObject *sipNew_NormalizeNamesProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipNormalizeNamesProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -506,7 +577,7 @@ PyMethodDef sipClassAttrTab_NormalizeNamesProcessor[] = {
 	{sipName_BALL_getNamingStandard, sipDo_NormalizeNamesProcessor_getNamingStandard, METH_VARARGS, NULL},
 	{sipName_BALL_start, sipDo_NormalizeNamesProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_NormalizeNamesProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_NormalizeNamesProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_NormalizeNamesProcessor_CallOp, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -546,6 +617,7 @@ NormalizeNamesProcessor *sipForceConvertTo_NormalizeNamesProcessor(PyObject *val
 	}
 
 	sipBadClass(sipName_BALL_NormalizeNamesProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLFloatRegularData1D.h"
 
 
-
 PyObject *sipClass_FloatRegularData1D;
 
 static void sipDealloc_FloatRegularData1D(sipThisType *);
@@ -35,19 +34,19 @@ static PyTypeObject sipType_FloatRegularData1D = {
 };
 
 sipFloatRegularData1D::sipFloatRegularData1D()
-   throw()  : FloatRegularData1D()
+   throw() : FloatRegularData1D()
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipFloatRegularData1D::sipFloatRegularData1D(const FloatRegularData1D& a0)
-   throw()  : FloatRegularData1D(a0)
+   throw() : FloatRegularData1D(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipFloatRegularData1D::~sipFloatRegularData1D()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -377,7 +376,7 @@ PyObject *sipNew_FloatRegularData1D(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const FloatRegularData1D *a0;
+		const FloatRegularData1D * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_FloatRegularData1D,&a0obj))
@@ -465,6 +464,7 @@ FloatRegularData1D *sipForceConvertTo_FloatRegularData1D(PyObject *valobj,int *i
 	}
 
 	sipBadClass(sipName_BALL_FloatRegularData1D);
+
 	*iserrp = 1;
 
 	return NULL;

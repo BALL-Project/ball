@@ -1,6 +1,6 @@
-// $Id: pyAtomDict.sip,v 1.2 2001/07/25 11:32:35 oliver Exp $
+// $Id: pyAtomDict.sip,v 1.3 2001/07/29 17:31:16 oliver Exp $
 
-class PyAtomDict
+%MappedType PyAtomDict
 {
 %HeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
@@ -9,7 +9,7 @@ class PyAtomDict
 	typedef HashMap<const Atom*, float> PyAtomDict;
 %End
 
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	std::cerr << "convert from" << std::endl;
 	PyObject* dict = PyDict_New();
 
@@ -35,12 +35,12 @@ class PyAtomDict
 	return dict;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	std::cerr << "can convert to" << std::endl;
 	return PyDict_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python dictionary to a PyAtomDict object on the
 	// heap.
  

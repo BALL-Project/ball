@@ -2,7 +2,6 @@
 #include "sipBALLForceField.h"
 
 
-
 PyObject *sipClass_ForceField;
 
 static void sipDealloc_ForceField(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_ForceField = {
 };
 
 sipForceField::sipForceField()
-    : ForceField()
+   : ForceField()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipForceField::sipForceField(System& a0)
-    : ForceField(a0)
+   : ForceField(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipForceField::sipForceField(System& a0,Options& a1)
-    : ForceField(a0,a1)
+   : ForceField(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipForceField::sipForceField(const ForceField& a0)
-    : ForceField(a0)
+   : ForceField(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipForceField::~sipForceField()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -132,7 +131,15 @@ static PyObject *sipDo_ForceField_isValid(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -154,7 +161,7 @@ static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
@@ -172,16 +179,25 @@ static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::setup(* a0);
+   }
+   catch (FileNotFound e)
+   {
+      FileNotFound *my_exception = new FileNotFound(e);
+      PyErr_SetObject(sipClass_FileNotFound, sipNewCppToSelf(my_exception,sipClass_FileNotFound,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
-		Options *a1;
+		Options * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
@@ -200,7 +216,16 @@ static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::setup(* a0,* a1);
+   }
+   catch (FileNotFound e)
+   {
+      FileNotFound *my_exception = new FileNotFound(e);
+      PyErr_SetObject(sipClass_FileNotFound, sipNewCppToSelf(my_exception,sipClass_FileNotFound,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -230,7 +255,15 @@ static PyObject *sipDo_ForceField_specificSetup(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::specificSetup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -252,7 +285,7 @@ static PyObject *sipDo_ForceField_setName(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -269,7 +302,15 @@ static PyObject *sipDo_ForceField_setName(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> ForceField::setName(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -303,7 +344,15 @@ static PyObject *sipDo_ForceField_getName(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new String(ptr -> ForceField::getName());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -333,7 +382,15 @@ static PyObject *sipDo_ForceField_getNumberOfAtoms(PyObject *sipThisObj,PyObject
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::getNumberOfAtoms();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -363,7 +420,15 @@ static PyObject *sipDo_ForceField_getNumberOfMovableAtoms(PyObject *sipThisObj,P
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::getNumberOfMovableAtoms();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -393,7 +458,15 @@ static PyObject *sipDo_ForceField_getAtoms(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> ForceField::getAtoms();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_AtomVector);
 		}
@@ -423,7 +496,15 @@ static PyObject *sipDo_ForceField_getSystem(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::getSystem();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_System);
 		}
@@ -453,7 +534,15 @@ static PyObject *sipDo_ForceField_getUseSelection(PyObject *sipThisObj,PyObject 
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::getUseSelection();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -484,7 +573,15 @@ static PyObject *sipDo_ForceField_setUseSelection(PyObject *sipThisObj,PyObject 
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> ForceField::setUseSelection( (bool)a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -515,7 +612,15 @@ static PyObject *sipDo_ForceField_countComponents(PyObject *sipThisObj,PyObject 
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::countComponents();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -537,7 +642,7 @@ static PyObject *sipDo_ForceField_insertComponent(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		ForceFieldComponent *a0;
+		ForceFieldComponent * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ForceFieldComponent,&a0obj))
@@ -554,7 +659,15 @@ static PyObject *sipDo_ForceField_insertComponent(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> ForceField::insertComponent( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -577,7 +690,7 @@ static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		const ForceFieldComponent *a0;
+		const ForceFieldComponent * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ForceFieldComponent,&a0obj))
@@ -594,7 +707,15 @@ static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> ForceField::removeComponent( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -602,7 +723,7 @@ static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject 
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -619,7 +740,15 @@ static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> ForceField::removeComponent(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -655,14 +784,22 @@ static PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::getComponent( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_ForceFieldComponent);
 		}
 	}
 
 	{
-		String *a0;
+		String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -680,7 +817,15 @@ static PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *si
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::getComponent(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -713,7 +858,15 @@ static PyObject *sipDo_ForceField_getEnergy(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::getEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -743,7 +896,15 @@ static PyObject *sipDo_ForceField_updateEnergy(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::updateEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -772,7 +933,15 @@ static PyObject *sipDo_ForceField_updateForces(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> ForceField::updateForces();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -803,7 +972,15 @@ static PyObject *sipDo_ForceField_getRMSGradient(PyObject *sipThisObj,PyObject *
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::getRMSGradient();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -833,7 +1010,15 @@ static PyObject *sipDo_ForceField_getUpdateFrequency(PyObject *sipThisObj,PyObje
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ForceField::getUpdateFrequency();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -862,7 +1047,15 @@ static PyObject *sipDo_ForceField_update(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (ForceField *)sipGetCppPtr(sipThis,sipClass_ForceField)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> ForceField::update();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -880,8 +1073,16 @@ static PyObject *sipDo_ForceField_update(PyObject *sipThisObj,PyObject *sipArgs)
 
 const void *sipCast_ForceField(const void *ptr,PyObject *targetClass)
 {
+	const void *res;
+
 	if (targetClass == sipClass_ForceField)
 		return ptr;
+
+	if ((res = sipCast_FileNotFound((FileNotFound *)(ForceField *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_FileNotFound((FileNotFound *)(ForceField *)ptr,targetClass)) != NULL)
+		return res;
 
 	return NULL;
 }
@@ -922,13 +1123,21 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipForceField();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_System,&a0obj))
@@ -940,15 +1149,23 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipForceField(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		System *a0;
+		System * a0;
 		PyObject *a0obj;
-		Options *a1;
+		Options * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
@@ -961,13 +1178,21 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipForceField(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const ForceField *a0;
+		const ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -979,7 +1204,15 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipForceField(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1145,6 +1378,7 @@ ForceField *sipForceConvertTo_ForceField(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_ForceField);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLMolecule.h"
 
 
-
 PyObject *sipClass_Molecule;
 
 static void sipDealloc_Molecule(sipThisType *);
@@ -36,31 +35,31 @@ static PyTypeObject sipType_Molecule = {
 };
 
 sipMolecule::sipMolecule()
-    : Molecule()
+   : Molecule()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipMolecule::sipMolecule(const Molecule& a0,bool a1)
-    : Molecule(a0,a1)
+   : Molecule(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipMolecule::sipMolecule(const String& a0)
-    : Molecule(a0)
+   : Molecule(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipMolecule::sipMolecule(const Molecule& a0)
-    : Molecule(a0)
+   : Molecule(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipMolecule::~sipMolecule()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -188,7 +187,7 @@ static PyObject *sipDo_Molecule_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Molecule *a0;
+		const Molecule * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -206,7 +205,15 @@ static PyObject *sipDo_Molecule_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -229,7 +236,7 @@ static PyObject *sipDo_Molecule_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Molecule *a0;
+		Molecule * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -247,7 +254,15 @@ static PyObject *sipDo_Molecule_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -270,7 +285,7 @@ static PyObject *sipDo_Molecule_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Molecule *a0;
+		Molecule * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Molecule,&a0obj))
@@ -287,7 +302,15 @@ static PyObject *sipDo_Molecule_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -318,7 +341,15 @@ static PyObject *sipDo_Molecule_getSystem(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Molecule *)sipGetCppPtr(sipThis,sipClass_Molecule)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Molecule::getSystem();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_System);
 		}
@@ -333,7 +364,15 @@ static PyObject *sipDo_Molecule_getSystem(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Molecule *)sipGetCppPtr(sipThis,sipClass_Molecule)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Molecule::getSystem();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_System);
 		}
@@ -355,7 +394,7 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -372,7 +411,15 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::prepend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -380,7 +427,7 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -397,7 +444,15 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::prepend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -420,7 +475,7 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -437,7 +492,15 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::append(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -445,7 +508,7 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -462,7 +525,15 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::append(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -485,7 +556,7 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -502,7 +573,15 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::insert(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -510,7 +589,7 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -527,7 +606,15 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::insert(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -550,9 +637,9 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -570,7 +657,15 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::insertBefore(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -578,9 +673,9 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -598,7 +693,15 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::insertBefore(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -621,9 +724,9 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -641,7 +744,15 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::insertAfter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -649,9 +760,9 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -669,7 +780,15 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::insertAfter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -692,7 +811,7 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -710,14 +829,22 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Molecule::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -735,7 +862,15 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Molecule::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -757,7 +892,7 @@ static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -774,7 +909,15 @@ static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::spliceBefore(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -797,7 +940,7 @@ static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -814,7 +957,15 @@ static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::spliceAfter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -837,7 +988,7 @@ static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -854,7 +1005,15 @@ static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Molecule::splice(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -938,7 +1097,7 @@ static PyObject * sip__str__Molecule(PyObject *a0)
 
   return PyString_FromString(String(String("Molecule ") + ptr->getName() 
 				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-#line 946 "sipBALLMolecule.cpp"
+#line 1105 "sipBALLMolecule.cpp"
 }
 
 PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
@@ -960,13 +1119,21 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipMolecule();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Molecule *a0;
+		const Molecule * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -979,13 +1146,21 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMolecule(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -997,7 +1172,15 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMolecule(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -1006,7 +1189,7 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Molecule *a0;
+		const Molecule * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Molecule,&a0obj))
@@ -1018,7 +1201,15 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMolecule(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1104,6 +1295,7 @@ Molecule *sipForceConvertTo_Molecule(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Molecule);
+
 	*iserrp = 1;
 
 	return NULL;

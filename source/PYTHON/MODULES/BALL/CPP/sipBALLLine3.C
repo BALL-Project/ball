@@ -2,7 +2,6 @@
 #include "sipBALLLine3.h"
 
 
-
 PyObject *sipClass_Line3;
 
 static void sipDealloc_Line3(sipThisType *);
@@ -43,7 +42,7 @@ static PyObject *sipDo_Line3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Line3 *a0;
+		Line3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Line3,&a0obj))
@@ -60,7 +59,15 @@ static PyObject *sipDo_Line3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Line3::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -83,7 +90,7 @@ static PyObject *sipDo_Line3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Line3,&a0obj))
@@ -100,7 +107,15 @@ static PyObject *sipDo_Line3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Line3::set(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -108,9 +123,9 @@ static PyObject *sipDo_Line3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 		long a2 = Line3::FORM__PARAMETER;
 
@@ -129,7 +144,15 @@ static PyObject *sipDo_Line3_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Line3::set(* a0,* a1, (Line3::Form)a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -152,7 +175,7 @@ static PyObject *sipDo_Line3_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Line3 *a0;
+		Line3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Line3,&a0obj))
@@ -169,7 +192,15 @@ static PyObject *sipDo_Line3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Line3::get(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -177,9 +208,9 @@ static PyObject *sipDo_Line3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Vector3 *a0;
+		Vector3 * a0;
 		PyObject *a0obj;
-		Vector3 *a1;
+		Vector3 * a1;
 		PyObject *a1obj;
 		long a2 = Line3::FORM__PARAMETER;
 
@@ -198,7 +229,15 @@ static PyObject *sipDo_Line3_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Line3::get(* a0,* a1, (Line3::Form)a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -228,7 +267,15 @@ static PyObject *sipDo_Line3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Line3 *)sipGetCppPtr(sipThis,sipClass_Line3)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> Line3::normalize();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -251,7 +298,7 @@ static PyObject *sipDo_Line3_has(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
@@ -269,7 +316,15 @@ static PyObject *sipDo_Line3_has(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Line3::has(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -299,7 +354,15 @@ static PyObject *sipDo_Line3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Line3 *)sipGetCppPtr(sipThis,sipClass_Line3)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Line3::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -352,13 +415,21 @@ PyObject *sipNew_Line3(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new Line3();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Line3 *a0;
+		const Line3 * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Line3,&a0obj))
@@ -370,15 +441,23 @@ PyObject *sipNew_Line3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Line3(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Vector3 *a0;
+		const Vector3 * a0;
 		PyObject *a0obj;
-		const Vector3 *a1;
+		const Vector3 * a1;
 		PyObject *a1obj;
 		long a2 = Line3::FORM__PARAMETER;
 
@@ -392,7 +471,15 @@ PyObject *sipNew_Line3(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new Line3(* a0,* a1, (Line3::Form)a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -537,6 +624,7 @@ Line3 *sipForceConvertTo_Line3(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Line3);
+
 	*iserrp = 1;
 
 	return NULL;

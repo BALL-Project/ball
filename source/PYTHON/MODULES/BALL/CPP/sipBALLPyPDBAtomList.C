@@ -2,48 +2,11 @@
 #include "sipBALLPyPDBAtomList.h"
 
 
-
-PyObject *sipConvertFrom_PyPDBAtomList(const PyPDBAtomList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 12 "pyPDBAtomList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyPDBAtomList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		PDBAtom& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyPDBAtomList.cpp"
-}
-
-PyObject *sipClass_PyPDBAtomList;
-
 int sipCanConvertTo_PyPDBAtomList(PyObject *sipPy)
 {
 #line 37 "pyPDBAtomList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyPDBAtomList.cpp"
+#line 14 "sipBALLPyPDBAtomList.cpp"
 }
 
 int sipConvertTo_PyPDBAtomList(PyObject *sipPy,PyPDBAtomList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -75,7 +38,7 @@ int sipConvertTo_PyPDBAtomList(PyObject *sipPy,PyPDBAtomList **sipCppPtr,int sip
 	*sipCppPtr = PDB_atom_list;
 
 	return 1;
-#line 83 "sipBALLPyPDBAtomList.cpp"
+#line 46 "sipBALLPyPDBAtomList.cpp"
 }
 
 PyPDBAtomList *sipForceConvertTo_PyPDBAtomList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyPDBAtomList *sipForceConvertTo_PyPDBAtomList(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PyPDBAtomList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyPDBAtomList(const PyPDBAtomList *sipCpp)
+{
+#line 12 "pyPDBAtomList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyPDBAtomList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		PDBAtom& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyPDBAtomList.cpp"
 }

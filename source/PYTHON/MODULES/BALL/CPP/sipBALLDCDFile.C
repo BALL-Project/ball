@@ -2,7 +2,6 @@
 #include "sipBALLDCDFile.h"
 
 
-
 PyObject *sipClass_DCDFile;
 
 static void sipDealloc_DCDFile(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_DCDFile = {
 };
 
 sipDCDFile::sipDCDFile()
-   throw()  : DCDFile()
+   throw() : DCDFile()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipDCDFile::sipDCDFile(const DCDFile& a0)
-   throw(FileNotFound)  : DCDFile(a0)
+   throw(FileNotFound) : DCDFile(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipDCDFile::sipDCDFile(const String& a0,std__openmode a1)
-   throw()  : DCDFile(a0,a1)
+   throw() : DCDFile(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipDCDFile::~sipDCDFile()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -139,7 +138,7 @@ static PyObject *sipDo_DCDFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_DCDFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -148,7 +147,7 @@ static PyObject *sipDo_DCDFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const DCDFile *a0;
+		const DCDFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_DCDFile,&a0obj))
@@ -166,7 +165,7 @@ static PyObject *sipDo_DCDFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = ptr -> DCDFile::operator ==(* a0);
+			res = ptr -> DCDFile::operator==(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -174,7 +173,7 @@ static PyObject *sipDo_DCDFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL___cmp__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_CmpOp);
 
 	return NULL;
 }
@@ -338,7 +337,7 @@ static PyObject *sipDo_DCDFile_append(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const SnapShot *a0;
+		const SnapShot * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
@@ -378,7 +377,7 @@ static PyObject *sipDo_DCDFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		SnapShot *a0;
+		SnapShot * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
@@ -448,7 +447,7 @@ static PyObject *sipDo_DCDFile_setHeader(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const DCDHeader *a0;
+		const DCDHeader * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_DCDHeader,&a0obj))
@@ -551,6 +550,9 @@ const void *sipCast_DCDFile(const void *ptr,PyObject *targetClass)
 	if ((res = sipCast_TrajectoryFile((TrajectoryFile *)(DCDFile *)ptr,targetClass)) != NULL)
 		return res;
 
+	if ((res = sipCast_FileNotFound((FileNotFound *)(DCDFile *)ptr,targetClass)) != NULL)
+		return res;
+
 	return NULL;
 }
 
@@ -596,7 +598,7 @@ PyObject *sipNew_DCDFile(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const DCDFile *a0;
+		const DCDFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_DCDFile,&a0obj))
@@ -608,15 +610,24 @@ PyObject *sipNew_DCDFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipDCDFile(* a0);
+   }
+   catch (FileNotFound e)
+   {
+      FileNotFound *my_exception = new FileNotFound(e);
+      PyErr_SetObject(sipClass_FileNotFound, sipNewCppToSelf(my_exception,sipClass_FileNotFound,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		std__openmode *a1 = (std__openmode *)&File::IN;
+		std__openmode * a1 = (std__openmode *)&File::IN;
 		PyObject *a1obj = NULL;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_std__openmode,&a1obj))
@@ -664,7 +675,7 @@ PyObject *sipNew_DCDFile(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_DCDFile[] = {
 	{sipName_BALL_clear, sipDo_DCDFile_clear, METH_VARARGS, NULL},
-	{sipName_BALL___cmp__, sipDo_DCDFile___cmp__, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_DCDFile_CmpOp, METH_VARARGS, NULL},
 	{sipName_BALL_isSwappingBytes, sipDo_DCDFile_isSwappingBytes, METH_VARARGS, NULL},
 	{sipName_BALL_hasVelocities, sipDo_DCDFile_hasVelocities, METH_VARARGS, NULL},
 	{sipName_BALL_init, sipDo_DCDFile_init, METH_VARARGS, NULL},
@@ -715,6 +726,7 @@ DCDFile *sipForceConvertTo_DCDFile(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_DCDFile);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLChain.h"
 
 
-
 PyObject *sipClass_Chain;
 
 static void sipDealloc_Chain(sipThisType *);
@@ -36,31 +35,31 @@ static PyTypeObject sipType_Chain = {
 };
 
 sipChain::sipChain()
-    : Chain()
+   : Chain()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipChain::sipChain(const Chain& a0,bool a1)
-    : Chain(a0,a1)
+   : Chain(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipChain::sipChain(const String& a0)
-    : Chain(a0)
+   : Chain(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipChain::sipChain(const Chain& a0)
-    : Chain(a0)
+   : Chain(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipChain::~sipChain()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -188,7 +187,7 @@ static PyObject *sipDo_Chain_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Chain *a0;
+		const Chain * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -206,7 +205,15 @@ static PyObject *sipDo_Chain_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -229,7 +236,7 @@ static PyObject *sipDo_Chain_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Chain *a0;
+		Chain * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -247,7 +254,15 @@ static PyObject *sipDo_Chain_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -270,7 +285,7 @@ static PyObject *sipDo_Chain_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Chain *a0;
+		Chain * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Chain,&a0obj))
@@ -287,7 +302,15 @@ static PyObject *sipDo_Chain_swap(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -318,7 +341,15 @@ static PyObject *sipDo_Chain_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getProtein();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Protein);
 		}
@@ -333,7 +364,15 @@ static PyObject *sipDo_Chain_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getProtein();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Protein);
 		}
@@ -365,7 +404,15 @@ static PyObject *sipDo_Chain_getSecondaryStructure(PyObject *sipThisObj,PyObject
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getSecondaryStructure( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_SecondaryStructure);
 		}
@@ -382,7 +429,15 @@ static PyObject *sipDo_Chain_getSecondaryStructure(PyObject *sipThisObj,PyObject
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getSecondaryStructure( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_SecondaryStructure);
 		}
@@ -414,7 +469,15 @@ static PyObject *sipDo_Chain_getResidue(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getResidue( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -431,7 +494,15 @@ static PyObject *sipDo_Chain_getResidue(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getResidue( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -461,7 +532,15 @@ static PyObject *sipDo_Chain_getNTerminal(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getNTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -476,7 +555,15 @@ static PyObject *sipDo_Chain_getNTerminal(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getNTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -506,7 +593,15 @@ static PyObject *sipDo_Chain_getCTerminal(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getCTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -521,7 +616,15 @@ static PyObject *sipDo_Chain_getCTerminal(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getCTerminal();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Residue);
 		}
@@ -553,7 +656,15 @@ static PyObject *sipDo_Chain_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getPDBAtom( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_PDBAtom);
 		}
@@ -570,7 +681,15 @@ static PyObject *sipDo_Chain_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::getPDBAtom( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_PDBAtom);
 		}
@@ -600,7 +719,15 @@ static PyObject *sipDo_Chain_countSecondaryStructures(PyObject *sipThisObj,PyObj
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::countSecondaryStructures();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -630,7 +757,15 @@ static PyObject *sipDo_Chain_countResidues(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::countResidues();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -660,7 +795,15 @@ static PyObject *sipDo_Chain_countPDBAtoms(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (Chain *)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::countPDBAtoms();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -682,7 +825,7 @@ static PyObject *sipDo_Chain_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		SecondaryStructure *a0;
+		SecondaryStructure * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
@@ -699,7 +842,15 @@ static PyObject *sipDo_Chain_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::prepend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -707,7 +858,7 @@ static PyObject *sipDo_Chain_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
@@ -724,7 +875,15 @@ static PyObject *sipDo_Chain_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::prepend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -747,7 +906,7 @@ static PyObject *sipDo_Chain_append(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		SecondaryStructure *a0;
+		SecondaryStructure * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
@@ -764,7 +923,15 @@ static PyObject *sipDo_Chain_append(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::append(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -772,7 +939,7 @@ static PyObject *sipDo_Chain_append(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
@@ -789,7 +956,15 @@ static PyObject *sipDo_Chain_append(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::append(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -812,7 +987,7 @@ static PyObject *sipDo_Chain_insert(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		SecondaryStructure *a0;
+		SecondaryStructure * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
@@ -829,7 +1004,15 @@ static PyObject *sipDo_Chain_insert(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::insert(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -837,7 +1020,7 @@ static PyObject *sipDo_Chain_insert(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
@@ -854,7 +1037,15 @@ static PyObject *sipDo_Chain_insert(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::insert(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -877,9 +1068,9 @@ static PyObject *sipDo_Chain_insertBefore(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		SecondaryStructure *a0;
+		SecondaryStructure * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_SecondaryStructure,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -897,7 +1088,15 @@ static PyObject *sipDo_Chain_insertBefore(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::insertBefore(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -905,9 +1104,9 @@ static PyObject *sipDo_Chain_insertBefore(PyObject *sipThisObj,PyObject *sipArgs
 	}
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Residue,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -925,7 +1124,15 @@ static PyObject *sipDo_Chain_insertBefore(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::insertBefore(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -948,9 +1155,9 @@ static PyObject *sipDo_Chain_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		SecondaryStructure *a0;
+		SecondaryStructure * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_SecondaryStructure,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -968,7 +1175,15 @@ static PyObject *sipDo_Chain_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::insertAfter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -976,9 +1191,9 @@ static PyObject *sipDo_Chain_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Residue,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -996,7 +1211,15 @@ static PyObject *sipDo_Chain_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::insertAfter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1019,7 +1242,7 @@ static PyObject *sipDo_Chain_remove(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		SecondaryStructure *a0;
+		SecondaryStructure * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
@@ -1037,14 +1260,22 @@ static PyObject *sipDo_Chain_remove(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		Residue *a0;
+		Residue * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
@@ -1062,7 +1293,15 @@ static PyObject *sipDo_Chain_remove(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Chain::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1084,7 +1323,7 @@ static PyObject *sipDo_Chain_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		Chain *a0;
+		Chain * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Chain,&a0obj))
@@ -1101,7 +1340,15 @@ static PyObject *sipDo_Chain_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::spliceBefore(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1124,7 +1371,7 @@ static PyObject *sipDo_Chain_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Chain *a0;
+		Chain * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Chain,&a0obj))
@@ -1141,7 +1388,15 @@ static PyObject *sipDo_Chain_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::spliceAfter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1164,7 +1419,7 @@ static PyObject *sipDo_Chain_splice(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Chain *a0;
+		Chain * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Chain,&a0obj))
@@ -1181,7 +1436,15 @@ static PyObject *sipDo_Chain_splice(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> Chain::splice(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1265,7 +1528,7 @@ static PyObject * sip__str__Chain(PyObject *a0)
 
   return PyString_FromString(String(String("Chain ") + ptr->getName()
 				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
-#line 1273 "sipBALLChain.cpp"
+#line 1536 "sipBALLChain.cpp"
 }
 
 PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
@@ -1287,13 +1550,21 @@ PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipChain();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Chain *a0;
+		const Chain * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -1306,13 +1577,21 @@ PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipChain(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -1324,7 +1603,15 @@ PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipChain(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -1333,7 +1620,7 @@ PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const Chain *a0;
+		const Chain * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Chain,&a0obj))
@@ -1345,7 +1632,15 @@ PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipChain(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1439,6 +1734,7 @@ Chain *sipForceConvertTo_Chain(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Chain);
+
 	*iserrp = 1;
 
 	return NULL;

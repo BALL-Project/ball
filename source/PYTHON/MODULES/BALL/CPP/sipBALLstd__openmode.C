@@ -2,7 +2,6 @@
 #include "sipBALLstd__openmode.h"
 
 
-
 PyObject *sipClass_std__openmode;
 
 static void sipDealloc_std__openmode(sipThisType *);
@@ -74,13 +73,21 @@ PyObject *sipNew_std__openmode(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new std__openmode();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const std__openmode *a0;
+		const std__openmode * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_std__openmode,&a0obj))
@@ -92,7 +99,15 @@ PyObject *sipNew_std__openmode(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new std__openmode(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -156,6 +171,7 @@ std__openmode *sipForceConvertTo_std__openmode(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_std__openmode);
+
 	*iserrp = 1;
 
 	return NULL;

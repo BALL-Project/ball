@@ -1,42 +1,41 @@
-// $Id: constants.sip,v 1.2 2000/10/05 22:33:36 oliver Exp $
-class Constant
-{
+// $Id: constants.sip,v 1.3 2001/07/29 17:31:16 oliver Exp $
 %HeaderCode
 	#include <BALL/PYTHON/pyConstant.h>
 	using namespace BALL;
 %End
-	public:
-  static double PI;
-  static double E;
-  static double EPSILON;
-  static double ELEMENTARY_CHARGE;     
-  static double e0;
-  static double ELECTRON_MASS;      
-  static double PROTON_MASS;      
-  static double NEUTRON_MASS;      
-  static double AVOGADRO;
-  static double NA;
-  static double MOL;
-  static double BOLTZMANN;
-  static double k;
-  static double PLANCK;
-  static double h;
-  static double GAS_CONSTANT;
-  static double R;
-  static double FARADAY;
-  static double F;
-  static double BOHR_RADIUS;
-  static double a0;
-  static double VACUUM_PERMITTIVITY;
-  static double VACUUM_PERMEABILITY;
-  static double SPEED_OF_LIGHT;
-  static double c;
-  static double GRAVITATIONAL_CONSTANT;
-  static double FINE_STRUCTURE_CONSTANT;
-  static double DEG_PER_RAD;
-  static double RAD_PER_DEG;
-  static double MM_PER_INCH;
-  static double M_PER_FOOT;
-  static double JOULE_PER_CAL;
-  static double CAL_PER_JOULE;
+namespace Constant
+{
+  const double PI;
+  const double E;
+  const double EPSILON;
+  const double ELEMENTARY_CHARGE;     
+  const double e0;
+  const double ELECTRON_MASS;      
+  const double PROTON_MASS;      
+  const double NEUTRON_MASS;      
+  const double AVOGADRO;
+  const double NA;
+  const double MOL;
+  const double BOLTZMANN;
+  const double k;
+  const double PLANCK;
+  const double h;
+  const double GAS_CONSTANT;
+  const double R;
+  const double FARADAY;
+  const double F;
+  const double BOHR_RADIUS;
+  const double a0;
+  const double VACUUM_PERMITTIVITY;
+  const double VACUUM_PERMEABILITY;
+  const double SPEED_OF_LIGHT;
+  const double c;
+  const double GRAVITATIONAL_CONSTANT;
+  const double FINE_STRUCTURE_CONSTANT;
+  const double DEG_PER_RAD;
+  const double RAD_PER_DEG;
+  const double MM_PER_INCH;
+  const double M_PER_FOOT;
+  const double JOULE_PER_CAL;
+  const double CAL_PER_JOULE;
 };

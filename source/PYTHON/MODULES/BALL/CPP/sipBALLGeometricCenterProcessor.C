@@ -2,7 +2,6 @@
 #include "sipBALLGeometricCenterProcessor.h"
 
 
-
 PyObject *sipClass_GeometricCenterProcessor;
 
 static void sipDealloc_GeometricCenterProcessor(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_GeometricCenterProcessor = {
 };
 
 sipGeometricCenterProcessor::sipGeometricCenterProcessor()
-    : GeometricCenterProcessor()
+   : GeometricCenterProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipGeometricCenterProcessor::sipGeometricCenterProcessor(const GeometricCenterProcessor& a0)
-    : GeometricCenterProcessor(a0)
+   : GeometricCenterProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipGeometricCenterProcessor::~sipGeometricCenterProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipGeometricCenterProcessor::operator ()(Atom& a0)
+Processor::Result sipGeometricCenterProcessor::operator()(Atom& a0)
  throw()
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		GeometricCenterProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipAtomProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		GeometricCenterProcessor::operator()(a0);
 }
 
 bool sipGeometricCenterProcessor::finish()
@@ -224,7 +223,7 @@ static PyObject *sipDo_GeometricCenterProcessor_finish(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_GeometricCenterProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_GeometricCenterProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -233,7 +232,7 @@ static PyObject *sipDo_GeometricCenterProcessor___call__(PyObject *sipThisObj,Py
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -251,7 +250,7 @@ static PyObject *sipDo_GeometricCenterProcessor___call__(PyObject *sipThisObj,Py
 			if (iserr)
 				return NULL;
 
-			res = ptr -> GeometricCenterProcessor::operator ()(* a0);
+			res = ptr -> GeometricCenterProcessor::operator()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -259,7 +258,7 @@ static PyObject *sipDo_GeometricCenterProcessor___call__(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_GeometricCenterProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_GeometricCenterProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -281,7 +280,15 @@ static PyObject *sipDo_GeometricCenterProcessor_getCenter(PyObject *sipThisObj,P
 			if ((ptr = (GeometricCenterProcessor *)sipGetCppPtr(sipThis,sipClass_GeometricCenterProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> GeometricCenterProcessor::getCenter();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_Vector3);
 		}
@@ -345,13 +352,21 @@ PyObject *sipNew_GeometricCenterProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipGeometricCenterProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const GeometricCenterProcessor *a0;
+		const GeometricCenterProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_GeometricCenterProcessor,&a0obj))
@@ -363,7 +378,15 @@ PyObject *sipNew_GeometricCenterProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipGeometricCenterProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -396,7 +419,7 @@ PyObject *sipNew_GeometricCenterProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_GeometricCenterProcessor[] = {
 	{sipName_BALL_start, sipDo_GeometricCenterProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_GeometricCenterProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_GeometricCenterProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_GeometricCenterProcessor_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_getCenter, sipDo_GeometricCenterProcessor_getCenter, METH_VARARGS, NULL},
 	{NULL}
 };
@@ -437,6 +460,7 @@ GeometricCenterProcessor *sipForceConvertTo_GeometricCenterProcessor(PyObject *v
 	}
 
 	sipBadClass(sipName_BALL_GeometricCenterProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

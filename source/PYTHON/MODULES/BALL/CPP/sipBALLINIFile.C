@@ -2,7 +2,6 @@
 #include "sipBALLINIFile.h"
 
 
-
 PyObject *sipClass_INIFile;
 
 static void sipDealloc_INIFile(sipThisType *);
@@ -50,7 +49,15 @@ static PyObject *sipDo_INIFile_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> INIFile::destroy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -80,7 +87,15 @@ static PyObject *sipDo_INIFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> INIFile::clear();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -111,7 +126,15 @@ static PyObject *sipDo_INIFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::read();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -141,7 +164,15 @@ static PyObject *sipDo_INIFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::write();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -171,7 +202,15 @@ static PyObject *sipDo_INIFile_getFilename(PyObject *sipThisObj,PyObject *sipArg
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> INIFile::getFilename();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -193,7 +232,7 @@ static PyObject *sipDo_INIFile_setFilename(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -210,7 +249,15 @@ static PyObject *sipDo_INIFile_setFilename(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> INIFile::setFilename(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -244,7 +291,15 @@ static PyObject *sipDo_INIFile_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::isValid();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -274,7 +329,15 @@ static PyObject *sipDo_INIFile_getNumberOfLines(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::getNumberOfLines();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -296,7 +359,7 @@ static PyObject *sipDo_INIFile_hasSection(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -314,7 +377,15 @@ static PyObject *sipDo_INIFile_hasSection(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::hasSection(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -347,7 +418,15 @@ static PyObject *sipDo_INIFile_getNumberOfSections(PyObject *sipThisObj,PyObject
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::getNumberOfSections();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -369,7 +448,7 @@ static PyObject *sipDo_INIFile_getSectionLength(PyObject *sipThisObj,PyObject *s
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -387,7 +466,15 @@ static PyObject *sipDo_INIFile_getSectionLength(PyObject *sipThisObj,PyObject *s
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::getSectionLength(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -412,7 +499,7 @@ static PyObject *sipDo_INIFile_deleteSection(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -430,7 +517,15 @@ static PyObject *sipDo_INIFile_deleteSection(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::deleteSection(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -455,7 +550,7 @@ static PyObject *sipDo_INIFile_appendSection(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -473,7 +568,15 @@ static PyObject *sipDo_INIFile_appendSection(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::appendSection(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -498,9 +601,9 @@ static PyObject *sipDo_INIFile_hasEntry(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -519,7 +622,15 @@ static PyObject *sipDo_INIFile_hasEntry(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::hasEntry(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -547,9 +658,9 @@ static PyObject *sipDo_INIFile_getValue(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -568,7 +679,15 @@ static PyObject *sipDo_INIFile_getValue(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = new String(ptr -> INIFile::getValue(* a0,* a1));
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -596,11 +715,11 @@ static PyObject *sipDo_INIFile_setValue(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
-		const String *a1;
+		const String * a1;
 		PyObject *a1obj;
-		const String *a2;
+		const String * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_String,&a2obj))
@@ -620,7 +739,15 @@ static PyObject *sipDo_INIFile_setValue(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::setValue(* a0,* a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -642,7 +769,7 @@ static PyObject *sipDo_INIFile_setValue(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_INIFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -651,7 +778,7 @@ static PyObject *sipDo_INIFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const INIFile *a0;
+		const INIFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_INIFile,&a0obj))
@@ -669,7 +796,15 @@ static PyObject *sipDo_INIFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = ptr -> INIFile::operator ==(* a0);
+   try
+   {
+			res = ptr -> INIFile::operator==(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -677,7 +812,7 @@ static PyObject *sipDo_INIFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_INIFile,sipName_BALL___cmp__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_INIFile,sipName_BALL_CmpOp);
 
 	return NULL;
 }
@@ -700,7 +835,15 @@ static PyObject *sipDo_INIFile_setDuplicateKeyCheck(PyObject *sipThisObj,PyObjec
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> INIFile::setDuplicateKeyCheck( (bool)a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -731,7 +874,15 @@ static PyObject *sipDo_INIFile_getDuplicateKeyCheck(PyObject *sipThisObj,PyObjec
 			if ((ptr = (INIFile *)sipGetCppPtr(sipThis,sipClass_INIFile)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> INIFile::getDuplicateKeyCheck();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -784,13 +935,21 @@ PyObject *sipNew_INIFile(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new INIFile();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -802,7 +961,15 @@ PyObject *sipNew_INIFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new INIFile(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -811,7 +978,7 @@ PyObject *sipNew_INIFile(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const INIFile *a0;
+		const INIFile * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_INIFile,&a0obj))
@@ -823,7 +990,15 @@ PyObject *sipNew_INIFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new INIFile(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -864,7 +1039,7 @@ PyMethodDef sipClassAttrTab_INIFile[] = {
 	{sipName_BALL_hasEntry, sipDo_INIFile_hasEntry, METH_VARARGS, NULL},
 	{sipName_BALL_getValue, sipDo_INIFile_getValue, METH_VARARGS, NULL},
 	{sipName_BALL_setValue, sipDo_INIFile_setValue, METH_VARARGS, NULL},
-	{sipName_BALL___cmp__, sipDo_INIFile___cmp__, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_INIFile_CmpOp, METH_VARARGS, NULL},
 	{sipName_BALL_setDuplicateKeyCheck, sipDo_INIFile_setDuplicateKeyCheck, METH_VARARGS, NULL},
 	{sipName_BALL_getDuplicateKeyCheck, sipDo_INIFile_getDuplicateKeyCheck, METH_VARARGS, NULL},
 	{NULL}
@@ -906,6 +1081,7 @@ INIFile *sipForceConvertTo_INIFile(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_INIFile);
+
 	*iserrp = 1;
 
 	return NULL;

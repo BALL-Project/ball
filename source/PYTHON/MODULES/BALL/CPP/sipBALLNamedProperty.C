@@ -2,7 +2,6 @@
 #include "sipBALLNamedProperty.h"
 
 
-
 PyObject *sipClass_NamedProperty;
 
 static void sipDealloc_NamedProperty(sipThisType *);
@@ -51,7 +50,15 @@ static PyObject *sipDo_NamedProperty_getType(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (NamedProperty *)sipGetCppPtr(sipThis,sipClass_NamedProperty)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NamedProperty::getType();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -81,7 +88,15 @@ static PyObject *sipDo_NamedProperty_getName(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (NamedProperty *)sipGetCppPtr(sipThis,sipClass_NamedProperty)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new String(ptr -> NamedProperty::getName());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -111,7 +126,15 @@ static PyObject *sipDo_NamedProperty_getBool(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (NamedProperty *)sipGetCppPtr(sipThis,sipClass_NamedProperty)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NamedProperty::getBool();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -141,7 +164,15 @@ static PyObject *sipDo_NamedProperty_getInt(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (NamedProperty *)sipGetCppPtr(sipThis,sipClass_NamedProperty)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NamedProperty::getInt();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -171,7 +202,15 @@ static PyObject *sipDo_NamedProperty_getFloat(PyObject *sipThisObj,PyObject *sip
 			if ((ptr = (NamedProperty *)sipGetCppPtr(sipThis,sipClass_NamedProperty)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NamedProperty::getFloat();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble((double)res);
 		}
@@ -201,7 +240,15 @@ static PyObject *sipDo_NamedProperty_getUnsignedInt(PyObject *sipThisObj,PyObjec
 			if ((ptr = (NamedProperty *)sipGetCppPtr(sipThis,sipClass_NamedProperty)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NamedProperty::getUnsignedInt();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -231,7 +278,15 @@ static PyObject *sipDo_NamedProperty_getObject(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (NamedProperty *)sipGetCppPtr(sipThis,sipClass_NamedProperty)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> NamedProperty::getObject();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_PersistentObject);
 		}
@@ -261,7 +316,15 @@ static PyObject *sipDo_NamedProperty_getString(PyObject *sipThisObj,PyObject *si
 			if ((ptr = (NamedProperty *)sipGetCppPtr(sipThis,sipClass_NamedProperty)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = new String(ptr -> NamedProperty::getString());
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -317,7 +380,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		String *a0;
+		String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -329,7 +392,15 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new NamedProperty(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -338,7 +409,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		String *a0;
+		String * a0;
 		PyObject *a0obj;
 		long a1;
 
@@ -351,7 +422,15 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new NamedProperty(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -360,53 +439,9 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		String *a0;
+		String * a0;
 		PyObject *a0obj;
-		int a1;
-
-		if (sipParseArgs(&sipArgsParsed,sipArgs,"-Ii",sipCanConvertTo_String,&a0obj,&a1))
-		{
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new NamedProperty(* a0, a1);
-
-			if (istemp0)
-				delete a0;
-		}
-	}
-
-	if (sipNew == NULL)
-	{
-		String *a0;
-		PyObject *a0obj;
-		float a1;
-
-		if (sipParseArgs(&sipArgsParsed,sipArgs,"-If",sipCanConvertTo_String,&a0obj,&a1))
-		{
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new NamedProperty(* a0, a1);
-
-			if (istemp0)
-				delete a0;
-		}
-	}
-
-	if (sipNew == NULL)
-	{
-		String *a0;
-		PyObject *a0obj;
-		String *a1;
+		String * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
@@ -419,7 +454,15 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new NamedProperty(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -431,9 +474,9 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		String *a0;
+		String * a0;
 		PyObject *a0obj;
-		PersistentObject *a1;
+		PersistentObject * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_PersistentObject,&a1obj))
@@ -446,7 +489,15 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new NamedProperty(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -455,7 +506,7 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		NamedProperty *a0;
+		NamedProperty * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_NamedProperty,&a0obj))
@@ -467,7 +518,15 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new NamedProperty(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -475,7 +534,15 @@ PyObject *sipNew_NamedProperty(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new NamedProperty();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -547,6 +614,7 @@ NamedProperty *sipForceConvertTo_NamedProperty(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_NamedProperty);
+
 	*iserrp = 1;
 
 	return NULL;

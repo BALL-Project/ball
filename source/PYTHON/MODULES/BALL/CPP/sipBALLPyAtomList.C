@@ -2,48 +2,11 @@
 #include "sipBALLPyAtomList.h"
 
 
-
-PyObject *sipConvertFrom_PyAtomList(const PyAtomList *sipCpp)
-{
-	if (sipCpp == NULL)
-	{
-		Py_INCREF(Py_None);
-		return Py_None;
-	}
-
-#line 15 "pyAtomList.sip"
-	PyObject *pl;
-
-	if ((pl = PyList_New(0)) == NULL)
-	{
-		return NULL;
-	}
-
-	// Convert the list.
-
-	for (PyAtomList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
-	{
-		Atom& obj = **it;
-		PyObject *inst;
-
-		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
-		{
-			Py_DECREF(pl);
-			return NULL;
-		}
-	}
-
-	return pl;
-#line 42 "sipBALLPyAtomList.cpp"
-}
-
-PyObject *sipClass_PyAtomList;
-
 int sipCanConvertTo_PyAtomList(PyObject *sipPy)
 {
-#line 40 "pyAtomList.sip"
+#line 36 "pyAtomList.sip"
 	return PyList_Check(sipPy);
-#line 51 "sipBALLPyAtomList.cpp"
+#line 14 "sipBALLPyAtomList.cpp"
 }
 
 int sipConvertTo_PyAtomList(PyObject *sipPy,PyAtomList **sipCppPtr,int sipWillDeref,int *sipIsErr)
@@ -51,7 +14,7 @@ int sipConvertTo_PyAtomList(PyObject *sipPy,PyAtomList **sipCppPtr,int sipWillDe
 	if (*sipIsErr || sipPy == NULL)
 		return 0;
 
-#line 44 "pyAtomList.sip"
+#line 40 "pyAtomList.sip"
 	// Convert a Python list of Atom instances to an AtomList object on the
 	// heap.
  
@@ -75,7 +38,7 @@ int sipConvertTo_PyAtomList(PyObject *sipPy,PyAtomList **sipCppPtr,int sipWillDe
 	*sipCppPtr = atom_list;
 
 	return 1;
-#line 83 "sipBALLPyAtomList.cpp"
+#line 46 "sipBALLPyAtomList.cpp"
 }
 
 PyAtomList *sipForceConvertTo_PyAtomList(PyObject *valobj,int *iserrp)
@@ -93,7 +56,36 @@ PyAtomList *sipForceConvertTo_PyAtomList(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_PyAtomList);
+
 	*iserrp = 1;
 
 	return NULL;
+}
+
+PyObject *sipConvertFrom_PyAtomList(const PyAtomList *sipCpp)
+{
+#line 11 "pyAtomList.sip"
+	PyObject *pl;
+
+	if ((pl = PyList_New(0)) == NULL)
+	{
+		return NULL;
+	}
+
+	// Convert the list.
+
+	for (PyAtomList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	{
+		Atom& obj = **it;
+		PyObject *inst;
+
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
+		{
+			Py_DECREF(pl);
+			return NULL;
+		}
+	}
+
+	return pl;
+#line 95 "sipBALLPyAtomList.cpp"
 }

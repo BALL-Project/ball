@@ -2,7 +2,6 @@
 #include "sipBALLBuildBondsProcessor.h"
 
 
-
 PyObject *sipClass_BuildBondsProcessor;
 
 static void sipDealloc_BuildBondsProcessor(sipThisType *);
@@ -35,37 +34,37 @@ static PyTypeObject sipType_BuildBondsProcessor = {
 };
 
 sipBuildBondsProcessor::sipBuildBondsProcessor()
-    : BuildBondsProcessor()
+   : BuildBondsProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipBuildBondsProcessor::sipBuildBondsProcessor(const FragmentDB& a0)
-    : BuildBondsProcessor(a0)
+   : BuildBondsProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipBuildBondsProcessor::sipBuildBondsProcessor(const BuildBondsProcessor& a0)
-    : BuildBondsProcessor(a0)
+   : BuildBondsProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipBuildBondsProcessor::~sipBuildBondsProcessor()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
 
-Processor::Result sipBuildBondsProcessor::operator ()(Fragment& a0)
+Processor::Result sipBuildBondsProcessor::operator()(Fragment& a0)
 
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipFragmentProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		BuildBondsProcessor::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipFragmentProcessor::sipVH_CallOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		BuildBondsProcessor::operator()(a0);
 }
 
 bool sipBuildBondsProcessor::start()
@@ -187,7 +186,15 @@ static PyObject *sipDo_BuildBondsProcessor_finish(PyObject *sipThisObj,PyObject 
 			if ((ptr = (BuildBondsProcessor *)sipGetCppPtr(sipThis,sipClass_BuildBondsProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> BuildBondsProcessor::finish();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -217,7 +224,15 @@ static PyObject *sipDo_BuildBondsProcessor_start(PyObject *sipThisObj,PyObject *
 			if ((ptr = (BuildBondsProcessor *)sipGetCppPtr(sipThis,sipClass_BuildBondsProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> BuildBondsProcessor::start();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -230,7 +245,7 @@ static PyObject *sipDo_BuildBondsProcessor_start(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_BuildBondsProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_BuildBondsProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -239,7 +254,7 @@ static PyObject *sipDo_BuildBondsProcessor___call__(PyObject *sipThisObj,PyObjec
 		return NULL;
 
 	{
-		Fragment *a0;
+		Fragment * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Fragment,&a0obj))
@@ -257,7 +272,15 @@ static PyObject *sipDo_BuildBondsProcessor___call__(PyObject *sipThisObj,PyObjec
 			if (iserr)
 				return NULL;
 
-			res = ptr -> BuildBondsProcessor::operator ()(* a0);
+   try
+   {
+			res = ptr -> BuildBondsProcessor::operator()(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -265,7 +288,7 @@ static PyObject *sipDo_BuildBondsProcessor___call__(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_BuildBondsProcessor,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_BuildBondsProcessor,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -287,7 +310,15 @@ static PyObject *sipDo_BuildBondsProcessor_getNumberOfBondsBuilt(PyObject *sipTh
 			if ((ptr = (BuildBondsProcessor *)sipGetCppPtr(sipThis,sipClass_BuildBondsProcessor)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> BuildBondsProcessor::getNumberOfBondsBuilt();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -309,7 +340,7 @@ static PyObject *sipDo_BuildBondsProcessor_setFragmentDB(PyObject *sipThisObj,Py
 		return NULL;
 
 	{
-		const FragmentDB *a0;
+		const FragmentDB * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_FragmentDB,&a0obj))
@@ -326,7 +357,15 @@ static PyObject *sipDo_BuildBondsProcessor_setFragmentDB(PyObject *sipThisObj,Py
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> BuildBondsProcessor::setFragmentDB(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -349,7 +388,7 @@ static PyObject *sipDo_BuildBondsProcessor_buildFragmentBonds(PyObject *sipThisO
 		return NULL;
 
 	{
-		Fragment *a0;
+		Fragment * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Fragment,&a0obj))
@@ -367,7 +406,15 @@ static PyObject *sipDo_BuildBondsProcessor_buildFragmentBonds(PyObject *sipThisO
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> BuildBondsProcessor::buildFragmentBonds(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -389,9 +436,9 @@ static PyObject *sipDo_BuildBondsProcessor_buildInterFragmentBonds(PyObject *sip
 		return NULL;
 
 	{
-		Fragment *a0;
+		Fragment * a0;
 		PyObject *a0obj;
-		Fragment *a1;
+		Fragment * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Fragment,&a0obj,sipCanConvertTo_Fragment,&a1obj))
@@ -410,7 +457,15 @@ static PyObject *sipDo_BuildBondsProcessor_buildInterFragmentBonds(PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> BuildBondsProcessor::buildInterFragmentBonds(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -474,13 +529,21 @@ PyObject *sipNew_BuildBondsProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipBuildBondsProcessor();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const FragmentDB *a0;
+		const FragmentDB * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_FragmentDB,&a0obj))
@@ -492,13 +555,21 @@ PyObject *sipNew_BuildBondsProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipBuildBondsProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const BuildBondsProcessor *a0;
+		const BuildBondsProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_BuildBondsProcessor,&a0obj))
@@ -510,7 +581,15 @@ PyObject *sipNew_BuildBondsProcessor(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipBuildBondsProcessor(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -543,7 +622,7 @@ PyObject *sipNew_BuildBondsProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_BuildBondsProcessor[] = {
 	{sipName_BALL_finish, sipDo_BuildBondsProcessor_finish, METH_VARARGS, NULL},
 	{sipName_BALL_start, sipDo_BuildBondsProcessor_start, METH_VARARGS, NULL},
-	{sipName_BALL___call__, sipDo_BuildBondsProcessor___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_BuildBondsProcessor_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_getNumberOfBondsBuilt, sipDo_BuildBondsProcessor_getNumberOfBondsBuilt, METH_VARARGS, NULL},
 	{sipName_BALL_setFragmentDB, sipDo_BuildBondsProcessor_setFragmentDB, METH_VARARGS, NULL},
 	{sipName_BALL_buildFragmentBonds, sipDo_BuildBondsProcessor_buildFragmentBonds, METH_VARARGS, NULL},
@@ -587,6 +666,7 @@ BuildBondsProcessor *sipForceConvertTo_BuildBondsProcessor(PyObject *valobj,int 
 	}
 
 	sipBadClass(sipName_BALL_BuildBondsProcessor);
+
 	*iserrp = 1;
 
 	return NULL;

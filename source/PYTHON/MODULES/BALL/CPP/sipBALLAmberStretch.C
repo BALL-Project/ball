@@ -2,7 +2,6 @@
 #include "sipBALLAmberStretch.h"
 
 
-
 PyObject *sipClass_AmberStretch;
 
 static void sipDealloc_AmberStretch(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_AmberStretch = {
 };
 
 sipAmberStretch::sipAmberStretch()
-    : AmberStretch()
+   : AmberStretch()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberStretch::sipAmberStretch(ForceField& a0)
-    : AmberStretch(a0)
+   : AmberStretch(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberStretch::sipAmberStretch(const AmberStretch& a0,bool a1)
-    : AmberStretch(a0,a1)
+   : AmberStretch(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberStretch::sipAmberStretch(const AmberStretch& a0)
-    : AmberStretch(a0)
+   : AmberStretch(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberStretch::~sipAmberStretch()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -122,7 +121,15 @@ static PyObject *sipDo_AmberStretch_setup(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (AmberStretch *)sipGetCppPtr(sipThis,sipClass_AmberStretch)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberStretch::setup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -152,7 +159,15 @@ static PyObject *sipDo_AmberStretch_updateEnergy(PyObject *sipThisObj,PyObject *
 			if ((ptr = (AmberStretch *)sipGetCppPtr(sipThis,sipClass_AmberStretch)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberStretch::updateEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -181,7 +196,15 @@ static PyObject *sipDo_AmberStretch_updateForces(PyObject *sipThisObj,PyObject *
 			if ((ptr = (AmberStretch *)sipGetCppPtr(sipThis,sipClass_AmberStretch)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> AmberStretch::updateForces();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -246,13 +269,21 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipAmberStretch();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -264,13 +295,21 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberStretch(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AmberStretch *a0;
+		const AmberStretch * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -283,13 +322,21 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberStretch(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AmberStretch *a0;
+		const AmberStretch * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AmberStretch,&a0obj))
@@ -301,7 +348,15 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberStretch(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -374,6 +429,7 @@ AmberStretch *sipForceConvertTo_AmberStretch(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_AmberStretch);
+
 	*iserrp = 1;
 
 	return NULL;

@@ -2,7 +2,6 @@
 #include "sipBALLAmberTorsion.h"
 
 
-
 PyObject *sipClass_AmberTorsion;
 
 static void sipDealloc_AmberTorsion(sipThisType *);
@@ -35,31 +34,31 @@ static PyTypeObject sipType_AmberTorsion = {
 };
 
 sipAmberTorsion::sipAmberTorsion()
-    : AmberTorsion()
+   : AmberTorsion()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberTorsion::sipAmberTorsion(ForceField& a0)
-    : AmberTorsion(a0)
+   : AmberTorsion(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberTorsion::sipAmberTorsion(const AmberTorsion& a0,bool a1)
-    : AmberTorsion(a0,a1)
+   : AmberTorsion(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberTorsion::sipAmberTorsion(const AmberTorsion& a0)
-    : AmberTorsion(a0)
+   : AmberTorsion(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberTorsion::~sipAmberTorsion()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -122,7 +121,15 @@ static PyObject *sipDo_AmberTorsion_setup(PyObject *sipThisObj,PyObject *sipArgs
 			if ((ptr = (AmberTorsion *)sipGetCppPtr(sipThis,sipClass_AmberTorsion)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberTorsion::setup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -152,7 +159,15 @@ static PyObject *sipDo_AmberTorsion_updateEnergy(PyObject *sipThisObj,PyObject *
 			if ((ptr = (AmberTorsion *)sipGetCppPtr(sipThis,sipClass_AmberTorsion)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AmberTorsion::updateEnergy();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -181,7 +196,15 @@ static PyObject *sipDo_AmberTorsion_updateForces(PyObject *sipThisObj,PyObject *
 			if ((ptr = (AmberTorsion *)sipGetCppPtr(sipThis,sipClass_AmberTorsion)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> AmberTorsion::updateForces();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -246,13 +269,21 @@ PyObject *sipNew_AmberTorsion(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipAmberTorsion();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -264,13 +295,21 @@ PyObject *sipNew_AmberTorsion(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberTorsion(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AmberTorsion *a0;
+		const AmberTorsion * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -283,13 +322,21 @@ PyObject *sipNew_AmberTorsion(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberTorsion(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AmberTorsion *a0;
+		const AmberTorsion * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AmberTorsion,&a0obj))
@@ -301,7 +348,15 @@ PyObject *sipNew_AmberTorsion(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAmberTorsion(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -374,6 +429,7 @@ AmberTorsion *sipForceConvertTo_AmberTorsion(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_AmberTorsion);
+
 	*iserrp = 1;
 
 	return NULL;

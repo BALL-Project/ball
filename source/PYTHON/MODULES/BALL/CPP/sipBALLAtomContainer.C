@@ -2,7 +2,6 @@
 #include "sipBALLAtomContainer.h"
 
 
-
 PyObject *sipClass_AtomContainer;
 
 static void sipDealloc_AtomContainer(sipThisType *);
@@ -36,31 +35,31 @@ static PyTypeObject sipType_AtomContainer = {
 };
 
 sipAtomContainer::sipAtomContainer()
-    : AtomContainer()
+   : AtomContainer()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipAtomContainer::sipAtomContainer(const AtomContainer& a0,bool a1)
-    : AtomContainer(a0,a1)
+   : AtomContainer(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipAtomContainer::sipAtomContainer(const String& a0)
-    : AtomContainer(a0)
+   : AtomContainer(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipAtomContainer::sipAtomContainer(const AtomContainer& a0)
-    : AtomContainer(a0)
+   : AtomContainer(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipAtomContainer::~sipAtomContainer()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -188,7 +187,7 @@ static PyObject *sipDo_AtomContainer_set(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -206,7 +205,15 @@ static PyObject *sipDo_AtomContainer_set(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::set(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -229,7 +236,7 @@ static PyObject *sipDo_AtomContainer_get(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -247,7 +254,15 @@ static PyObject *sipDo_AtomContainer_get(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::get(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -270,7 +285,7 @@ static PyObject *sipDo_AtomContainer_swap(PyObject *sipThisObj,PyObject *sipArgs
 		return NULL;
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -287,7 +302,15 @@ static PyObject *sipDo_AtomContainer_swap(PyObject *sipThisObj,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::swap(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -310,7 +333,7 @@ static PyObject *sipDo_AtomContainer_setName(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -327,7 +350,15 @@ static PyObject *sipDo_AtomContainer_setName(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::setName(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -361,7 +392,15 @@ static PyObject *sipDo_AtomContainer_getName(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (AtomContainer *)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> AtomContainer::getName();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -391,7 +430,15 @@ static PyObject *sipDo_AtomContainer_getSuperAtomContainer(PyObject *sipThisObj,
 			if ((ptr = (AtomContainer *)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::getSuperAtomContainer();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_AtomContainer);
 		}
@@ -406,7 +453,15 @@ static PyObject *sipDo_AtomContainer_getSuperAtomContainer(PyObject *sipThisObj,
 			if ((ptr = (AtomContainer *)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::getSuperAtomContainer();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_AtomContainer);
 		}
@@ -428,7 +483,7 @@ static PyObject *sipDo_AtomContainer_getAtomContainer(PyObject *sipThisObj,PyObj
 		return NULL;
 
 	{
-		Position *a0;
+		Position * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
@@ -446,7 +501,15 @@ static PyObject *sipDo_AtomContainer_getAtomContainer(PyObject *sipThisObj,PyObj
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::getAtomContainer(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -456,7 +519,7 @@ static PyObject *sipDo_AtomContainer_getAtomContainer(PyObject *sipThisObj,PyObj
 	}
 
 	{
-		Position *a0;
+		Position * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
@@ -474,7 +537,15 @@ static PyObject *sipDo_AtomContainer_getAtomContainer(PyObject *sipThisObj,PyObj
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::getAtomContainer(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -499,7 +570,7 @@ static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		Position *a0;
+		Position * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
@@ -517,7 +588,15 @@ static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::getAtom(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -527,7 +606,7 @@ static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		Position *a0;
+		Position * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
@@ -545,7 +624,15 @@ static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::getAtom(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -555,7 +642,7 @@ static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -573,7 +660,15 @@ static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::getAtom(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -583,7 +678,7 @@ static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -601,7 +696,15 @@ static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::getAtom(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -634,7 +737,15 @@ static PyObject *sipDo_AtomContainer_countAtomContainers(PyObject *sipThisObj,Py
 			if ((ptr = (AtomContainer *)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::countAtomContainers();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -664,7 +775,15 @@ static PyObject *sipDo_AtomContainer_countAtoms(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (AtomContainer *)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::countAtoms();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -694,7 +813,15 @@ static PyObject *sipDo_AtomContainer_countBonds(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (AtomContainer *)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::countBonds();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -724,7 +851,15 @@ static PyObject *sipDo_AtomContainer_countInterBonds(PyObject *sipThisObj,PyObje
 			if ((ptr = (AtomContainer *)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::countInterBonds();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -754,7 +889,15 @@ static PyObject *sipDo_AtomContainer_countIntraBonds(PyObject *sipThisObj,PyObje
 			if ((ptr = (AtomContainer *)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::countIntraBonds();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -776,7 +919,7 @@ static PyObject *sipDo_AtomContainer_prepend(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -793,7 +936,15 @@ static PyObject *sipDo_AtomContainer_prepend(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::prepend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -801,7 +952,7 @@ static PyObject *sipDo_AtomContainer_prepend(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -818,7 +969,15 @@ static PyObject *sipDo_AtomContainer_prepend(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::prepend(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -841,7 +1000,7 @@ static PyObject *sipDo_AtomContainer_append(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -858,7 +1017,15 @@ static PyObject *sipDo_AtomContainer_append(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::append(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -866,7 +1033,7 @@ static PyObject *sipDo_AtomContainer_append(PyObject *sipThisObj,PyObject *sipAr
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -883,7 +1050,15 @@ static PyObject *sipDo_AtomContainer_append(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::append(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -906,7 +1081,7 @@ static PyObject *sipDo_AtomContainer_insert(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -923,7 +1098,15 @@ static PyObject *sipDo_AtomContainer_insert(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::insert(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -931,7 +1114,7 @@ static PyObject *sipDo_AtomContainer_insert(PyObject *sipThisObj,PyObject *sipAr
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -948,7 +1131,15 @@ static PyObject *sipDo_AtomContainer_insert(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::insert(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -971,9 +1162,9 @@ static PyObject *sipDo_AtomContainer_insertBefore(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -991,7 +1182,15 @@ static PyObject *sipDo_AtomContainer_insertBefore(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::insertBefore(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -999,9 +1198,9 @@ static PyObject *sipDo_AtomContainer_insertBefore(PyObject *sipThisObj,PyObject 
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -1019,7 +1218,15 @@ static PyObject *sipDo_AtomContainer_insertBefore(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::insertBefore(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1042,9 +1249,9 @@ static PyObject *sipDo_AtomContainer_insertAfter(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -1062,7 +1269,15 @@ static PyObject *sipDo_AtomContainer_insertAfter(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::insertAfter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1070,9 +1285,9 @@ static PyObject *sipDo_AtomContainer_insertAfter(PyObject *sipThisObj,PyObject *
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
-		Composite *a1;
+		Composite * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
@@ -1090,7 +1305,15 @@ static PyObject *sipDo_AtomContainer_insertAfter(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::insertAfter(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1113,7 +1336,7 @@ static PyObject *sipDo_AtomContainer_remove(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		Atom *a0;
+		Atom * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
@@ -1131,14 +1354,22 @@ static PyObject *sipDo_AtomContainer_remove(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -1156,7 +1387,15 @@ static PyObject *sipDo_AtomContainer_remove(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::remove(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1178,7 +1417,7 @@ static PyObject *sipDo_AtomContainer_spliceBefore(PyObject *sipThisObj,PyObject 
 		return NULL;
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -1195,7 +1434,15 @@ static PyObject *sipDo_AtomContainer_spliceBefore(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::spliceBefore(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1218,7 +1465,7 @@ static PyObject *sipDo_AtomContainer_spliceAfter(PyObject *sipThisObj,PyObject *
 		return NULL;
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -1235,7 +1482,15 @@ static PyObject *sipDo_AtomContainer_spliceAfter(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::spliceAfter(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1258,7 +1513,7 @@ static PyObject *sipDo_AtomContainer_splice(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		AtomContainer *a0;
+		AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -1275,7 +1530,15 @@ static PyObject *sipDo_AtomContainer_splice(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::splice(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1305,7 +1568,15 @@ static PyObject *sipDo_AtomContainer_destroyBonds(PyObject *sipThisObj,PyObject 
 			if ((ptr = (AtomContainer *)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> AtomContainer::destroyBonds();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -1328,7 +1599,7 @@ static PyObject *sipDo_AtomContainer_isSubAtomContainerOf(PyObject *sipThisObj,P
 		return NULL;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -1346,7 +1617,15 @@ static PyObject *sipDo_AtomContainer_isSubAtomContainerOf(PyObject *sipThisObj,P
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::isSubAtomContainerOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1368,7 +1647,7 @@ static PyObject *sipDo_AtomContainer_isSuperAtomContainerOf(PyObject *sipThisObj
 		return NULL;
 
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -1386,7 +1665,15 @@ static PyObject *sipDo_AtomContainer_isSuperAtomContainerOf(PyObject *sipThisObj
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::isSuperAtomContainerOf(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1438,7 +1725,7 @@ static PyObject *sipDo_AtomContainer_apply(PyObject *sipThisObj,PyObject *sipArg
 		return NULL;
 
 	{
-		AtomProcessor *a0;
+		AtomProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomProcessor,&a0obj))
@@ -1456,14 +1743,22 @@ static PyObject *sipDo_AtomContainer_apply(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::apply(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		CompositeProcessor *a0;
+		CompositeProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_CompositeProcessor,&a0obj))
@@ -1481,14 +1776,22 @@ static PyObject *sipDo_AtomContainer_apply(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::apply(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		FragmentProcessor *a0;
+		FragmentProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_FragmentProcessor,&a0obj))
@@ -1506,14 +1809,22 @@ static PyObject *sipDo_AtomContainer_apply(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::apply(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		ResidueProcessor *a0;
+		ResidueProcessor * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ResidueProcessor,&a0obj))
@@ -1531,7 +1842,15 @@ static PyObject *sipDo_AtomContainer_apply(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> AtomContainer::apply(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1587,7 +1906,7 @@ static PyObject * sip__str__AtomContainer(PyObject *a0)
 
   return PyString_FromString(String(String("AtomContainer ") + ptr->getName() 
 						+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-#line 1595 "sipBALLAtomContainer.cpp"
+#line 1914 "sipBALLAtomContainer.cpp"
 }
 
 PyObject *sipNew_AtomContainer(PyObject *sipSelf,PyObject *sipArgs)
@@ -1609,13 +1928,21 @@ PyObject *sipNew_AtomContainer(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipAtomContainer();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -1628,13 +1955,21 @@ PyObject *sipNew_AtomContainer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAtomContainer(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -1646,7 +1981,15 @@ PyObject *sipNew_AtomContainer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAtomContainer(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -1655,7 +1998,7 @@ PyObject *sipNew_AtomContainer(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const AtomContainer *a0;
+		const AtomContainer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomContainer,&a0obj))
@@ -1667,7 +2010,15 @@ PyObject *sipNew_AtomContainer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipAtomContainer(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -1766,6 +2117,7 @@ AtomContainer *sipForceConvertTo_AtomContainer(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_AtomContainer);
+
 	*iserrp = 1;
 
 	return NULL;

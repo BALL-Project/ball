@@ -2,7 +2,6 @@
 #include "sipBALLModularWidget.h"
 
 
-
 PyObject *sipClass_ModularWidget;
 
 static void sipDealloc_ModularWidget(sipThisType *);
@@ -35,19 +34,19 @@ static PyTypeObject sipType_ModularWidget = {
 };
 
 sipModularWidget::sipModularWidget()
-    : ModularWidget()
+   : ModularWidget()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipModularWidget::sipModularWidget(const ModularWidget& a0)
-    : ModularWidget(a0)
+   : ModularWidget(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipModularWidget::~sipModularWidget()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -107,9 +106,7 @@ void sipModularWidget::sipVH_checkMenu(const sipMethodCache *pymc,sipThisType *s
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_MainControl);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -146,9 +143,7 @@ void sipModularWidget::sipVH_finalizeWidget(const sipMethodCache *pymc,sipThisTy
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_MainControl);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -185,9 +180,7 @@ void sipModularWidget::sipVH_initializeWidget(const sipMethodCache *pymc,sipThis
 
 	a0obj = sipMapCppToSelf(&a0,sipClass_MainControl);
 
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
 
 	if (sipArgs == NULL)
 		goto reportError;
@@ -282,7 +275,7 @@ static PyObject *sipDo_ModularWidget_setIdentifier(PyObject *sipThisObj,PyObject
 		return NULL;
 
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
@@ -299,7 +292,15 @@ static PyObject *sipDo_ModularWidget_setIdentifier(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> ModularWidget::setIdentifier(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -333,7 +334,15 @@ static PyObject *sipDo_ModularWidget_getIdentifier(PyObject *sipThisObj,PyObject
 			if ((ptr = (ModularWidget *)sipGetCppPtr(sipThis,sipClass_ModularWidget)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = &ptr -> ModularWidget::getIdentifier();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -351,7 +360,7 @@ static PyObject *sipDo_ModularWidget_registerWidget(PyObject *,PyObject *sipArgs
 	int sipArgsParsed = 0;
 
 	{
-		ModularWidget *a0;
+		ModularWidget * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ModularWidget,&a0obj))
@@ -364,7 +373,15 @@ static PyObject *sipDo_ModularWidget_registerWidget(PyObject *,PyObject *sipArgs
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ModularWidget::registerWidget( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -387,7 +404,7 @@ static PyObject *sipDo_ModularWidget_initializeWidget(PyObject *sipThisObj,PyObj
 		return NULL;
 
 	{
-		MainControl *a0;
+		MainControl * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_MainControl,&a0obj))
@@ -404,7 +421,15 @@ static PyObject *sipDo_ModularWidget_initializeWidget(PyObject *sipThisObj,PyObj
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> ModularWidget::initializeWidget(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -427,7 +452,7 @@ static PyObject *sipDo_ModularWidget_finalizeWidget(PyObject *sipThisObj,PyObjec
 		return NULL;
 
 	{
-		MainControl *a0;
+		MainControl * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_MainControl,&a0obj))
@@ -444,7 +469,15 @@ static PyObject *sipDo_ModularWidget_finalizeWidget(PyObject *sipThisObj,PyObjec
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			ptr -> ModularWidget::finalizeWidget(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -467,7 +500,7 @@ static PyObject *sipDo_ModularWidget_checkMenu(PyObject *sipThisObj,PyObject *si
 		return NULL;
 
 	{
-		MainControl *a0;
+		MainControl * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_MainControl,&a0obj))
@@ -549,13 +582,21 @@ PyObject *sipNew_ModularWidget(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipModularWidget();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const ModularWidget *a0;
+		const ModularWidget * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ModularWidget,&a0obj))
@@ -567,7 +608,15 @@ PyObject *sipNew_ModularWidget(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipModularWidget(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -645,6 +694,7 @@ ModularWidget *sipForceConvertTo_ModularWidget(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_ModularWidget);
+
 	*iserrp = 1;
 
 	return NULL;

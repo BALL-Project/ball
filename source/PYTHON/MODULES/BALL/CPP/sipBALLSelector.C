@@ -2,7 +2,6 @@
 #include "sipBALLSelector.h"
 
 
-
 PyObject *sipClass_Selector;
 
 static void sipDealloc_Selector(sipThisType *);
@@ -35,25 +34,25 @@ static PyTypeObject sipType_Selector = {
 };
 
 sipSelector::sipSelector()
-    : Selector()
+   : Selector()
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipSelector::sipSelector(const Selector& a0)
-    : Selector(a0)
+   : Selector(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipSelector::sipSelector(const String& a0)
-    : Selector(a0)
+   : Selector(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipSelector::~sipSelector()
-  throw()
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -68,14 +67,14 @@ bool sipSelector::start()
 		Selector::start();
 }
 
-Processor::Result sipSelector::operator ()(Composite& a0)
+Processor::Result sipSelector::operator()(Composite& a0)
  throw()
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
-		sipCompositeProcessor::sipVH_CallOperator(&sipPyMethods[1],sipPyThis,relLock,a0) :
-		Selector::operator ()(a0);
+	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_CallOp,&relLock) ?
+		sipCompositeProcessor::sipVH_CallOp(&sipPyMethods[1],sipPyThis,relLock,a0) :
+		Selector::operator()(a0);
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -119,7 +118,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_Selector___call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Selector_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -128,7 +127,7 @@ static PyObject *sipDo_Selector___call__(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		Composite *a0;
+		Composite * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
@@ -146,7 +145,7 @@ static PyObject *sipDo_Selector___call__(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = ptr -> Selector::operator ()(* a0);
+			res = ptr -> Selector::operator()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -154,7 +153,7 @@ static PyObject *sipDo_Selector___call__(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipArgsParsed,sipName_BALL_Selector,sipName_BALL___call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Selector,sipName_BALL_CallOp);
 
 	return NULL;
 }
@@ -206,7 +205,15 @@ static PyObject *sipDo_Selector_getNumberOfSelectedAtoms(PyObject *sipThisObj,Py
 			if ((ptr = (Selector *)sipGetCppPtr(sipThis,sipClass_Selector)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> Selector::getNumberOfSelectedAtoms();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyInt_FromLong((long)res);
 		}
@@ -270,13 +277,21 @@ PyObject *sipNew_Selector(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipSelector();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const Selector *a0;
+		const Selector * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Selector,&a0obj))
@@ -288,13 +303,21 @@ PyObject *sipNew_Selector(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipSelector(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const String *a0;
+		const String * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
@@ -306,7 +329,15 @@ PyObject *sipNew_Selector(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipSelector(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			if (istemp0)
 				delete a0;
@@ -340,7 +371,7 @@ PyObject *sipNew_Selector(PyObject *sipSelf,PyObject *sipArgs)
 }
 
 PyMethodDef sipClassAttrTab_Selector[] = {
-	{sipName_BALL___call__, sipDo_Selector___call__, METH_VARARGS, NULL},
+	{sipName_BALL_CallOp, sipDo_Selector_CallOp, METH_VARARGS, NULL},
 	{sipName_BALL_start, sipDo_Selector_start, METH_VARARGS, NULL},
 	{sipName_BALL_getNumberOfSelectedAtoms, sipDo_Selector_getNumberOfSelectedAtoms, METH_VARARGS, NULL},
 	{NULL}
@@ -382,6 +413,7 @@ Selector *sipForceConvertTo_Selector(PyObject *valobj,int *iserrp)
 	}
 
 	sipBadClass(sipName_BALL_Selector);
+
 	*iserrp = 1;
 
 	return NULL;

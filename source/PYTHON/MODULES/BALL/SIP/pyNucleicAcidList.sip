@@ -1,6 +1,6 @@
-// $Id: pyNucleicAcidList.sip,v 1.1 2000/07/18 21:28:13 oliver Exp $
+// $Id: pyNucleicAcidList.sip,v 1.2 2001/07/29 17:31:17 oliver Exp $
 
-class PyNucleicAcidList
+%MappedType PyNucleicAcidList
 {
 %HeaderCode
 	#include <BALL/PYTHON/pyNucleicAcidList.h>
@@ -8,7 +8,7 @@ class PyNucleicAcidList
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
-%ConvertFromClassCode
+%ConvertFromTypeCode
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -33,11 +33,11 @@ class PyNucleicAcidList
 	return pl;
 %End
  
-%CanConvertToClassCode
+%CanConvertToTypeCode
 	return PyList_Check(sipPy);
 %End
  
-%ConvertToClassCode
+%ConvertToTypeCode
 	// Convert a Python list of NucleicAcid instances to an NucleicAcidList object on the
 	// heap.
  

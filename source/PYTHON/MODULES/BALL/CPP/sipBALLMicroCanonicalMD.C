@@ -2,7 +2,6 @@
 #include "sipBALLMicroCanonicalMD.h"
 
 
-
 PyObject *sipClass_MicroCanonicalMD;
 
 static void sipDealloc_MicroCanonicalMD(sipThisType *);
@@ -35,43 +34,43 @@ static PyTypeObject sipType_MicroCanonicalMD = {
 };
 
 sipMicroCanonicalMD::sipMicroCanonicalMD()
-    : MicroCanonicalMD()
+   : MicroCanonicalMD()
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMicroCanonicalMD::sipMicroCanonicalMD(ForceField& a0)
-    : MicroCanonicalMD(a0)
+   : MicroCanonicalMD(a0)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMicroCanonicalMD::sipMicroCanonicalMD(ForceField& a0,SnapShotManager * a1)
-    : MicroCanonicalMD(a0,a1)
+   : MicroCanonicalMD(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMicroCanonicalMD::sipMicroCanonicalMD(ForceField& a0,SnapShotManager * a1,const Options& a2)
-    : MicroCanonicalMD(a0,a1,a2)
+   : MicroCanonicalMD(a0,a1,a2)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMicroCanonicalMD::sipMicroCanonicalMD(const MicroCanonicalMD& a0,bool a1)
-    : MicroCanonicalMD(a0,a1)
+   : MicroCanonicalMD(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMicroCanonicalMD::sipMicroCanonicalMD(const MicroCanonicalMD& a0)
-    : MicroCanonicalMD(a0)
+   : MicroCanonicalMD(a0)
 {
 	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMicroCanonicalMD::~sipMicroCanonicalMD()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -159,9 +158,9 @@ static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sip
 		return NULL;
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
@@ -180,18 +179,26 @@ static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MicroCanonicalMD::setup(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
 	}
 
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
-		const Options *a2;
+		const Options * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
@@ -211,7 +218,15 @@ static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MicroCanonicalMD::setup(* a0, a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -241,7 +256,15 @@ static PyObject *sipDo_MicroCanonicalMD_specificSetup(PyObject *sipThisObj,PyObj
 			if ((ptr = (MicroCanonicalMD *)sipGetCppPtr(sipThis,sipClass_MicroCanonicalMD)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> MicroCanonicalMD::specificSetup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -272,7 +295,15 @@ static PyObject *sipDo_MicroCanonicalMD_setTimeStep(PyObject *sipThisObj,PyObjec
 			if ((ptr = (MicroCanonicalMD *)sipGetCppPtr(sipThis,sipClass_MicroCanonicalMD)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MicroCanonicalMD::setTimeStep( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -304,7 +335,15 @@ static PyObject *sipDo_MicroCanonicalMD_simulate(PyObject *sipThisObj,PyObject *
 			if ((ptr = (MicroCanonicalMD *)sipGetCppPtr(sipThis,sipClass_MicroCanonicalMD)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MicroCanonicalMD::simulate( (bool)a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -337,7 +376,15 @@ static PyObject *sipDo_MicroCanonicalMD_simulateIterations(PyObject *sipThisObj,
 			if ((ptr = (MicroCanonicalMD *)sipGetCppPtr(sipThis,sipClass_MicroCanonicalMD)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MicroCanonicalMD::simulateIterations( a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -370,7 +417,15 @@ static PyObject *sipDo_MicroCanonicalMD_simulateTime(PyObject *sipThisObj,PyObje
 			if ((ptr = (MicroCanonicalMD *)sipGetCppPtr(sipThis,sipClass_MicroCanonicalMD)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> MicroCanonicalMD::simulateTime( a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -435,13 +490,21 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipMicroCanonicalMD();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -453,15 +516,23 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMicroCanonicalMD(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
@@ -474,17 +545,25 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMicroCanonicalMD(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
-		const Options *a2;
+		const Options * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
@@ -498,13 +577,21 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMicroCanonicalMD(* a0, a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const MicroCanonicalMD *a0;
+		const MicroCanonicalMD * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -517,13 +604,21 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMicroCanonicalMD(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const MicroCanonicalMD *a0;
+		const MicroCanonicalMD * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_MicroCanonicalMD,&a0obj))
@@ -535,7 +630,15 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipMicroCanonicalMD(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -611,6 +714,7 @@ MicroCanonicalMD *sipForceConvertTo_MicroCanonicalMD(PyObject *valobj,int *iserr
 	}
 
 	sipBadClass(sipName_BALL_MicroCanonicalMD);
+
 	*iserrp = 1;
 
 	return NULL;

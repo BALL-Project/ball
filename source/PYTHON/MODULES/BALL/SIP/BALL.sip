@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.10 2001/07/25 11:32:31 oliver Exp $
+// $Id: BALL.sip,v 1.11 2001/07/29 17:31:16 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -11,7 +11,7 @@
 %Include constants.sip
 // %Include create.sip
 // debug.sip // not needed
-// %Include exception.sip
+%Include exception.sip
 %Include global.sip
 // %Include hash.sip // ??
 // %Include limits.sip // ??

@@ -2,7 +2,6 @@
 #include "sipBALLConjugateGradientMinimizer.h"
 
 
-
 PyObject *sipClass_ConjugateGradientMinimizer;
 
 static void sipDealloc_ConjugateGradientMinimizer(sipThisType *);
@@ -35,49 +34,49 @@ static PyTypeObject sipType_ConjugateGradientMinimizer = {
 };
 
 sipConjugateGradientMinimizer::sipConjugateGradientMinimizer()
-    : ConjugateGradientMinimizer()
+   : ConjugateGradientMinimizer()
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipConjugateGradientMinimizer::sipConjugateGradientMinimizer(ForceField& a0)
-    : ConjugateGradientMinimizer(a0)
+   : ConjugateGradientMinimizer(a0)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipConjugateGradientMinimizer::sipConjugateGradientMinimizer(ForceField& a0,SnapShotManager * a1)
-    : ConjugateGradientMinimizer(a0,a1)
+   : ConjugateGradientMinimizer(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipConjugateGradientMinimizer::sipConjugateGradientMinimizer(ForceField& a0,SnapShotManager * a1,const Options& a2)
-    : ConjugateGradientMinimizer(a0,a1,a2)
+   : ConjugateGradientMinimizer(a0,a1,a2)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipConjugateGradientMinimizer::sipConjugateGradientMinimizer(ForceField& a0,const Options& a1)
-    : ConjugateGradientMinimizer(a0,a1)
+   : ConjugateGradientMinimizer(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipConjugateGradientMinimizer::sipConjugateGradientMinimizer(const ConjugateGradientMinimizer& a0,bool a1)
-    : ConjugateGradientMinimizer(a0,a1)
+   : ConjugateGradientMinimizer(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipConjugateGradientMinimizer::sipConjugateGradientMinimizer(const ConjugateGradientMinimizer& a0)
-    : ConjugateGradientMinimizer(a0)
+   : ConjugateGradientMinimizer(a0)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipConjugateGradientMinimizer::~sipConjugateGradientMinimizer()
- 
+
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -204,7 +203,15 @@ static PyObject *sipDo_ConjugateGradientMinimizer_specificSetup(PyObject *sipThi
 			if ((ptr = (ConjugateGradientMinimizer *)sipGetCppPtr(sipThis,sipClass_ConjugateGradientMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ConjugateGradientMinimizer::specificSetup();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -235,7 +242,15 @@ static PyObject *sipDo_ConjugateGradientMinimizer_setStepLength(PyObject *sipThi
 			if ((ptr = (ConjugateGradientMinimizer *)sipGetCppPtr(sipThis,sipClass_ConjugateGradientMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> ConjugateGradientMinimizer::setStepLength( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -266,7 +281,15 @@ static PyObject *sipDo_ConjugateGradientMinimizer_getStepLength(PyObject *sipThi
 			if ((ptr = (ConjugateGradientMinimizer *)sipGetCppPtr(sipThis,sipClass_ConjugateGradientMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ConjugateGradientMinimizer::getStepLength();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return PyFloat_FromDouble(res);
 		}
@@ -296,7 +319,15 @@ static PyObject *sipDo_ConjugateGradientMinimizer_findStep(PyObject *sipThisObj,
 			if ((ptr = (ConjugateGradientMinimizer *)sipGetCppPtr(sipThis,sipClass_ConjugateGradientMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ConjugateGradientMinimizer::findStep();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -325,7 +356,15 @@ static PyObject *sipDo_ConjugateGradientMinimizer_updateDirection(PyObject *sipT
 			if ((ptr = (ConjugateGradientMinimizer *)sipGetCppPtr(sipThis,sipClass_ConjugateGradientMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			ptr -> ConjugateGradientMinimizer::updateDirection();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -359,7 +398,15 @@ static PyObject *sipDo_ConjugateGradientMinimizer_minimize(PyObject *sipThisObj,
 			if ((ptr = (ConjugateGradientMinimizer *)sipGetCppPtr(sipThis,sipClass_ConjugateGradientMinimizer)) == NULL)
 				return NULL;
 
+   try
+   {
 			res = ptr -> ConjugateGradientMinimizer::minimize( a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -423,13 +470,21 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
+   try
+   {
 			sipNew = new sipConjugateGradientMinimizer();
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
@@ -441,15 +496,23 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipConjugateGradientMinimizer(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
@@ -462,17 +525,25 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipConjugateGradientMinimizer(* a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		SnapShotManager *a1;
+		SnapShotManager * a1;
 		PyObject *a1obj;
-		const Options *a2;
+		const Options * a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
@@ -486,15 +557,23 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipConjugateGradientMinimizer(* a0, a1,* a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		ForceField *a0;
+		ForceField * a0;
 		PyObject *a0obj;
-		const Options *a1;
+		const Options * a1;
 		PyObject *a1obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_Options,&a1obj))
@@ -507,13 +586,21 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipConjugateGradientMinimizer(* a0,* a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const ConjugateGradientMinimizer *a0;
+		const ConjugateGradientMinimizer * a0;
 		PyObject *a0obj;
 		long a1 = true;
 
@@ -526,13 +613,21 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipConjugateGradientMinimizer(* a0, (bool)a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
 	if (sipNew == NULL)
 	{
-		const ConjugateGradientMinimizer *a0;
+		const ConjugateGradientMinimizer * a0;
 		PyObject *a0obj;
 
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ConjugateGradientMinimizer,&a0obj))
@@ -544,7 +639,15 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
+   try
+   {
 			sipNew = new sipConjugateGradientMinimizer(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
 		}
 	}
 
@@ -663,6 +766,7 @@ ConjugateGradientMinimizer *sipForceConvertTo_ConjugateGradientMinimizer(PyObjec
 	}
 
 	sipBadClass(sipName_BALL_ConjugateGradientMinimizer);
+
 	*iserrp = 1;
 
 	return NULL;
