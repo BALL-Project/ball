@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.36 2003/06/11 15:42:30 amoll Exp $
+// $Id: mainframe.h,v 1.37 2003/07/21 07:54:01 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -54,22 +54,31 @@
 # include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 #endif
 
+#ifndef BALL_MOLVIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
+# include <BALL/MOLVIEW/GUI/DIALOGS/amberMinimizationDialog.h>
+#endif
+
+#ifndef BALL_MOLVIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
+# include <BALL/MOLVIEW/GUI/DIALOGS/molecularDynamicsDialog.h>
+#endif
+
 #ifndef BALL_VIEW_GUI_DIALOGS_FDPBDIALOG_H
 # include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
 #endif
-
-#include "DIALOGS/DlgAmberMinimization.h"
 
 class QWidget;
 class QSplitter;
 class QVBoxLayout;
 class QPopupMenu;
 class QLabel;
+class QThread;
 
-using namespace BALL;
-using namespace BALL::VIEW;
-using namespace BALL::MOLVIEW;
+namespace BALL
+{
+	class AmberFF;
 
+using namespace VIEW;
+using namespace MOLVIEW;
 
 class Mainframe	
 	: public BALL::VIEW::MainControl
@@ -78,9 +87,37 @@ class Mainframe
 
 	public:
 
+	/** This class is only intended for usage with multithreading.
+			It notifies the Mainframe, that the thread for simulations has finished and can be deleted.
+			This should only be used internaly.
+	*/
+	class SimulationThreadFinished: public QCustomEvent
+	{
+		public:
+			SimulationThreadFinished()
+				: QCustomEvent( 65431 ){}
+	};
+
+	class SimulationOutput: public QCustomEvent
+	{
+		public:
+			SimulationOutput()
+				: QCustomEvent( 65430 ){}
+
+			void setMessage(const String& msg) {message_ = msg;}
+
+			String getMessage() {return message_;}
+
+		protected:
+			String message_;
+	};
+
+
 	enum MenuKey
 	{
 		MENU__FILE_EXPORT_POVRAYFILE,
+
+		MENU__DISPLAY_FULLSCREEN,
 		
 		MENU__EDIT_CUT,
 		MENU__EDIT_COPY,
@@ -94,6 +131,7 @@ class Mainframe
 		MENU__BUILD_AMBER_ENERGY,
 		MENU__BUILD_AMBER_MINIMIZATION,
 		MENU__BUILD_AMBER_MDSIMULATION,
+		MENU__BUILD_STOPSIMULATION,
 
 		MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG,
     MENU__DISPLAY_OPEN_SURFACE_DIALOG,
@@ -121,7 +159,11 @@ class Mainframe
 	virtual void onNotify(Message *message)
 	throw();
 	
+	bool stopedSimulation() { return stop_simulation_;}
 
+	void printAmberResults(const AmberFF& amber)
+		throw();
+			
 	public slots:
 	// active the menu entries
 	// (connected to aboutToShow())
@@ -136,6 +178,16 @@ class Mainframe
 	void amberMDSimulation();
   void computeSurface();
 	void buildPeptide();
+	void stopSimulation();
+	void toggleFullScreen();
+
+	virtual void customEvent( QCustomEvent * e );
+
+	/** Open a file.
+	 		Calls MolecularFileDialog::openFile
+	*/
+	void openFile(const String& file)
+		throw();
 
 	// Help menu
 	void about();
@@ -145,7 +197,8 @@ class Mainframe
 	Scene*								scene_;
 	MolecularControl*			control_;
 	DisplayProperties*    display_properties_;
-	DlgAmberMinimization*	minimization_dialog_;
+	AmberMinimizationDialog*	minimization_dialog_;
+	MolecularDynamicsDialog*	md_dialog_;
   ContourSurfaceDialog* surface_dialog_;
 	LabelProperties*	    label_properties_;
 	MolecularProperties*  molecular_properties_;
@@ -165,10 +218,17 @@ class Mainframe
 	List<QPopupMenu*> popup_menus_;
 
 	QLabel*						tool_box_;
+
+	QThread* 							simulation_thread_;
+	
+	bool 									fullscreen_;
+	bool 									stop_simulation_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include "mainframe.iC"
 #		endif
+
+}
 
 #endif // BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H

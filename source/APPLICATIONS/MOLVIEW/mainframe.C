@@ -7,6 +7,7 @@
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
+#include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -30,8 +31,14 @@
 #include <qstatusbar.h>
 #include <qlabel.h>
 
+#ifdef QT_THREAD_SUPPORT
+	 #include "threads.h"
+#endif
 
 using namespace std;
+
+namespace BALL
+{
 
 using BALL::MOLVIEW::PeptideDialog;
 
@@ -52,7 +59,10 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 		logview_(0),
 		vboxlayout_(0),
 		popup_menus_(),
-		tool_box_(0)
+		tool_box_(0),
+		simulation_thread_(0),
+		fullscreen_(false),
+		stop_simulation_(false)
 {
 	// ---------------------
 	// setup main window
@@ -90,8 +100,11 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	display_properties_ = new DisplayProperties(this);
 	CHECK_PTR(display_properties_);
 
-	minimization_dialog_ = new DlgAmberMinimization(this);
+	minimization_dialog_ = new AmberMinimizationDialog(this);
 	CHECK_PTR(minimization_dialog_);
+
+	md_dialog_ = new MolecularDynamicsDialog(this);
+	CHECK_PTR(md_dialog_);
 
 	surface_dialog_ = new ContourSurfaceDialog(this);
 	CHECK_PTR(surface_dialog_);
@@ -131,6 +144,9 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	insertMenuEntry(MainControl::FILE, "Export POVRay &file", this, SLOT(exportPOVRay()), 
 									CTRL+Key_F, MENU__FILE_EXPORT_POVRAYFILE);
 
+	// DISPLAY Menu
+	insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
+									ALT+Key_X, MENU__DISPLAY_FULLSCREEN);
 	// Build Menu -------------------------------------------------------------------
 	insertMenuEntry(MainControl::BUILD, "Assign &Charges", this, SLOT(assignCharges()), 
 									CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
@@ -140,6 +156,10 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 									CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
 	insertMenuEntry(MainControl::BUILD, "Perform MD &Simulation", this, SLOT(amberMDSimulation()), 
 									CTRL+Key_S, MENU__BUILD_AMBER_MDSIMULATION);
+
+#ifdef QT_THREAD_SUPPORT
+	insertMenuEntry(MainControl::BUILD, "Stop simulation", this, SLOT(stopSimulation()),ALT+Key_C, MENU__BUILD_STOPSIMULATION);
+#endif
   insertMenuEntry(MainControl::DISPLAY, "Contour Surface", this,  SLOT(computeSurface()), 
 									CTRL+Key_S,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
 	insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()));
@@ -190,6 +210,8 @@ void Mainframe::onNotify(Message *message)
 
 void Mainframe::checkMenuEntries()
 {
+	setCompositesMuteable(!simulation_thread_);
+
 	bool selected;
 	int number_of_selected_objects = 0;
 
@@ -203,7 +225,7 @@ void Mainframe::checkMenuEntries()
 		selected = (number_of_selected_objects > 0);
 	}
 
-	bool all_systems = (number_of_selected_objects > 0);
+	bool all_systems = (number_of_selected_objects > 0 && composites_muteable_);
 
 	menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, selected);
 
@@ -216,6 +238,9 @@ void Mainframe::checkMenuEntries()
 
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MDSIMULATION, 
 														(all_systems && (number_of_selected_objects == 1)));
+
+	// enable stopSimulation if simulation is running
+	menuBar()->setItemEnabled(MENU__BUILD_STOPSIMULATION, !composites_muteable_);
 }
 
 void Mainframe::exportPOVRay()
@@ -345,31 +370,46 @@ void Mainframe::computeSurface()
 
 void Mainframe::amberMinimization()
 {
+	if (simulation_thread_ != 0)
+	{
+		Log.error() << "Simulation already running!" << std::endl;
+		return;
+	}
 	// retrieve the system from the selection
 	System* system = getSelectedSystem();
 	if (system == 0) return;
 
 	// execute the minimization dialog
 	// and abort if cancel is clicked
-	int result = minimization_dialog_->exec();
-	if (result == 0)
+	if (!minimization_dialog_->exec() ||
+	    minimization_dialog_->getMaxGradient() == 0 ||
+			minimization_dialog_->getEnergyDifference() == 0)
 	{
 		return;
 	}
 	
+	String filename(minimization_dialog_->getFilename());
+	Path path;
+	filename = path.find(filename);
+	if (filename == "")
+	{
+		Log.error() << "Invalid filename for amber options" << std::endl;
+		return;
+	}
+
 	// set up the AMBER force field
 	setStatusbarText("setting up force field...");
 
-	AmberFF amber;
-  amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
-  amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
-  amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
-  amber.options[AmberFF::Option::OVERWRITE_CHARGES] = "false";
-  amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
-	amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
-	amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
+	AmberFF* amber = new AmberFF;
+  amber->options[AmberFF::Option::ASSIGN_TYPES] = "true";
+  amber->options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+  amber->options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+  amber->options[AmberFF::Option::OVERWRITE_CHARGES] = "false";
+  amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+	amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
+	amber->options[AmberFF::Option::FILENAME] = filename;
 
- 	if (!amber.setup(*system))
+	if (!amber->setup(*system))
 	{
 		Log.error() << "Setup of AMBER force field failed." << endl;
 		return;
@@ -378,101 +418,102 @@ void Mainframe::amberMinimization()
 	// calculate the energy
 	setStatusbarText("starting minimization...");
 
-	amber.updateEnergy();
+	amber->updateEnergy();
 
 	EnergyMinimizer* minimizer;
-	if (minimization_dialog_->getUseConjugateGradient())
-	{
-		// create a new CG minimizer object
-		minimizer = new ConjugateGradientMinimizer;
-	} 
-	else 
-	{
-		// create a new SD minimizer object
-		minimizer = new SteepestDescentMinimizer;
-	}
+	if (minimization_dialog_->getUseConjugateGradient())	 minimizer = new ConjugateGradientMinimizer;
+	else 																									 minimizer = new SteepestDescentMinimizer;
 	
 	// set the minimizer options
 	minimizer->options[EnergyMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS] = minimization_dialog_->getMaxIterations();
 	minimizer->options[EnergyMinimizer::Option::MAX_GRADIENT] = minimization_dialog_->getMaxGradient();
 	minimizer->options[EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND] = minimization_dialog_->getEnergyDifference();
-	minimizer->options[EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY] = minimization_dialog_->getRefresh();
-	minimizer->setup(amber);
-	
-	
+	minimizer->options[EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY] = 999999999;
+	minimizer->setup(*amber);
+	minimizer->setMaxNumberOfIterations(minimization_dialog_->getMaxIterations());
+
 	// perform an initial step (no restart step)
 	minimizer->minimize(1, false);
 
-	// we update everything every so and so steps
-	Size steps = minimization_dialog_->getRefresh();
+	// ============================= WITH MULTITHREADING ==============================================
+#ifdef QT_THREAD_SUPPORT
+	EnergyMinimizerThread* thread = new EnergyMinimizerThread;
+	simulation_thread_ = thread;
+	checkMenuEntries();
 
+	thread->setEnergyMinimizer(minimizer);
+	thread->setNumberOfStepsBetweenUpdates(minimization_dialog_->getRefresh());
+	thread->setMainframe(this);
+	thread->start();
+
+#else
+	// ============================= WITHOUT MULTITHREADING ===========================================
 	// iterate until done and refresh the screen every "steps" iterations
-	while (!minimizer->minimize(steps, true))
+	while (!minimizer->minimize(minimization_dialog_->getRefresh(), true) &&
+					minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
 	{
     MainControl::update(system->getRoot());
 
-		// update scene
-		SceneMessage scene_message;
-		scene_message.updateOnly();
-		notify_(scene_message);
-
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-										minimizer->getNumberOfIterations(),
-										amber.getEnergy(),
-										amber.getRMSGradient());
-
-		setStatusbarText(String(message.latin1()));
+										minimizer->getNumberOfIterations(), amber->getEnergy(), amber->getRMSGradient());
+		setStatusbarText(String(message.ascii()));
  	}
 
 	Log.info() << endl << "minimization terminated." << endl << endl;
-
-	// print the result
-	Log.info() << "AMBER Energy:" << endl;
-	Log.info() << " - electrostatic     : " << amber.getESEnergy() << " kJ/mol" << endl;
-	Log.info() << " - van der Waals     : " << amber.getVdWEnergy() << " kJ/mol" << endl;
-	Log.info() << " - bond stretch      : " << amber.getStretchEnergy() << " kJ/mol" << endl;
-	Log.info() << " - angle bend        : " << amber.getBendEnergy() << " kJ/mol" << endl;
-	Log.info() << " - torsion           : " << amber.getTorsionEnergy() << " kJ/mol" << endl;
-	Log.info() << "---------------------------------------" << endl;
-	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
-	Log.info() << endl;
-	Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
-		<< minimizer->getNumberOfIterations() << " iterations" << endl;
+	printAmberResults(*amber);
+	Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after " 
+						 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
+	setStatusbarText("Total AMBER energy: " + String(amber->getEnergy()) + " kJ/mol.");
 	
 	// clean up
 	delete minimizer;
-
-	setStatusbarText("Total AMBER energy: %f kJ/mol." + String(amber.getEnergy()));
+	delete amber;
+#endif
 }
 
 void Mainframe::amberMDSimulation()
 {
+	if (simulation_thread_ != 0)
+	{
+		Log.error() << "Simulation already running!" << std::endl;
+		return;
+	}
 	// retrieve the system from the selection
 	System* system = getSelectedSystem();
-	if (system == 0) return;
 
 	// execute the MD simulation dialog
 	// and abort if cancel is clicked
-	//int result = minimization_dialog_->exec();
-	//if (result == 0)
-	//{
-	//	return;
-	//}
-	
+	if (system == 0 || 
+			!md_dialog_->exec() ||
+			md_dialog_->getSimulationTime() == 0 ||
+			md_dialog_->getTemperature() == 0)
+	{
+		return;
+	}
+
+	String filename(md_dialog_->getFilename());
+	Path path;
+	filename = path.find(filename);
+	if (filename == "")
+	{
+		Log.error() << "Invalid filename for amber options" << std::endl;
+		return;
+	}
+
 	// set up the AMBER force field
 	setStatusbarText("setting up force field...");
 
-	AmberFF amber;
-  amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
-  amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
-  amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
-  amber.options[AmberFF::Option::OVERWRITE_CHARGES] = "false";
-  amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
-	// amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
-	// amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
+	AmberFF* amber = new AmberFF;
+  amber->options[AmberFF::Option::ASSIGN_TYPES] = "true";
+  amber->options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+  amber->options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+  amber->options[AmberFF::Option::OVERWRITE_CHARGES] = "false";
+  amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+	amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(md_dialog_->getUseDistanceDependentDC());
+	amber->options[AmberFF::Option::FILENAME] = filename;
 
- 	if (!amber.setup(*system))
+ 	if (!amber->setup(*system))
 	{
 		Log.error() << "Setup of AMBER force field failed." << endl;
 		return;
@@ -481,17 +522,19 @@ void Mainframe::amberMDSimulation()
 	// calculate the energy
 	setStatusbarText("starting simulation...");
 
-	amber.updateEnergy();
+	amber->updateEnergy();
 
-	MolecularDynamics* mds = new CanonicalMD;
+	MolecularDynamics* mds = 0;
+	if (md_dialog_->useMicroCanonical()) mds = new CanonicalMD;
+	else 																 mds = new MicroCanonicalMD;
 	
 	// set the options for the MDS	
 	Options options;
-	options[MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY] = 100;
-	options[MolecularDynamics::Option::TIME_STEP] = 0.001;
+	options[MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY] = 99999999;
+	options[MolecularDynamics::Option::TIME_STEP] = md_dialog_->getTimeStep();
 
 	// setup the simulation
-	mds->setup(amber, 0, options);
+	mds->setup(*amber, 0, options);
 	if (!mds->isValid())
 	{
 		Log.error() << "Setup for MD simulation failed!" << std::endl;
@@ -504,46 +547,50 @@ void Mainframe::amberMDSimulation()
 	// we update everything every so and so steps
 	Size steps = 2;
 
-	//
+	// ============================= WITH MULTITHREADING ==============================================
+#ifdef QT_THREAD_SUPPORT
+	MDSimulationThread* thread = new MDSimulationThread;
+	simulation_thread_ = thread;
+	checkMenuEntries();
+
+	thread->setMolecularDynamics(mds);
+	thread->setNumberOfSteps(md_dialog_->getNumberOfSteps());
+	thread->setNumberOfStepsBetweenUpdates(steps);
+	thread->setMainframe(this);
+	thread->setSaveImages(md_dialog_->saveImages());
+	thread->start();
+
+#else
+	// ============================= WITHOUT MULTITHREADING ===========================================
 	// iterate until done and refresh the screen every "steps" iterations
-	// 
-	while (mds->getNumberOfIterations() < 500)
+	while (mds->getNumberOfIterations() < md_dialog_->getNumberOfSteps())
 	{
 		mds->simulateIterations(steps, true);
     MainControl::update(system->getRoot());
-
-		// update scene
-		SceneMessage scene_message;
-		scene_message.updateOnly();
-		notify_(scene_message);
+		if (md_dialog_->saveImages()) 
+		{
+			Scene* scene= (Scene*) Scene::getInstance(0);
+			scene->exportPNG();
+		}
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-										mds->getNumberOfIterations(),
-										amber.getEnergy(),
-										amber.getRMSGradient());
-		setStatusbarText(String(message.latin1()));
+										mds->getNumberOfIterations(), amber->getEnergy(), amber->getRMSGradient());
+		setStatusbarText(String(message.ascii()));
  	}
-	Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 
-	// print the result
-	Log.info() << "AMBER Energy:" << endl;
-	Log.info() << " - electrostatic     : " << amber.getESEnergy() << " kJ/mol" << endl;
-	Log.info() << " - van der Waals     : " << amber.getVdWEnergy() << " kJ/mol" << endl;
-	Log.info() << " - bond stretch      : " << amber.getStretchEnergy() << " kJ/mol" << endl;
-	Log.info() << " - angle bend        : " << amber.getBendEnergy() << " kJ/mol" << endl;
-	Log.info() << " - torsion           : " << amber.getTorsionEnergy() << " kJ/mol" << endl;
-	Log.info() << "---------------------------------------" << endl;
-	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
-	Log.info() << endl;
-	Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
-						 << mds->getNumberOfIterations() << " iterations" << endl;
+	Log.info() << std::endl << "simulation terminated." << std::endl << endl;
+	printAmberResults(*amber);
+	Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after " 
+						 << mds->getNumberOfIterations() << " iterations" << endl << endl;
+	setStatusbarText("Total AMBER energy: " + String(amber->getEnergy()) + " kJ/mol.");
 
 	// clean up
 	delete mds;
-
-	setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kj/mol.");
+	delete amber;
+#endif
 }
+
 
 void Mainframe::about()
 {
@@ -632,6 +679,109 @@ void Mainframe::buildPeptide()
 	}
 }
 
+void Mainframe::toggleFullScreen()
+{
+	if (!fullscreen_)
+	{
+		// This call is needed because showFullScreen won't work
+		// correctly if the widget already considers itself to be fullscreen.
+		showNormal();	
+		showFullScreen();
+		setGeometry(qApp->desktop()->screenGeometry());
+
+		logview_->hide();
+
+		List<ModularWidget*>::Iterator it = modular_widgets_.begin();
+		for( ; it != modular_widgets_.end(); it++)
+		{
+			if (!RTTI::isKindOf<QWidget>(**it))
+			{
+				continue;
+			}
+
+			dynamic_cast<QWidget*>(*it)->hide();
+		}
+		scene_->show();
+	
+		fullscreen_ = true;
+		return;
+	}
+
+	showNormal();
+
+	List<ModularWidget*>::Iterator it = modular_widgets_.begin();
+	for( ; it != modular_widgets_.end(); it++)
+	{
+		if (!RTTI::isKindOf<Scene>(**it) &&
+				 RTTI::isKindOf<QWidget>(**it) &&
+				!RTTI::isKindOf<QDialog>(**it))
+		{	
+			dynamic_cast<QWidget*>(*it)->show();
+		}
+	}
+	
+	logview_->show();
+	fullscreen_ = false;
+}
+
+
+void Mainframe::stopSimulation() 
+{
+#ifdef QT_THREAD_SUPPORT
+	stop_simulation_ = true;
+	if (simulation_thread_ != 0)
+	{
+		if (simulation_thread_->running()) simulation_thread_->wait();
+		delete simulation_thread_;
+		simulation_thread_ = 0;
+	}
+
+	Log.insert(std::cout);
+	Log.insert(std::cerr);
+//	setStatusbarText("Simulation finished.");
+	stop_simulation_ = false;
+	checkMenuEntries();
+#endif
+}
+
+void Mainframe::printAmberResults(const AmberFF& amber)
+	throw()
+{
+	Log.info() << endl;
+	Log.info() << "AMBER Energy:" << endl;
+	Log.info() << " - electrostatic     : " << amber.getESEnergy() << " kJ/mol" << endl;
+	Log.info() << " - van der Waals     : " << amber.getVdWEnergy() << " kJ/mol" << endl;
+	Log.info() << " - bond stretch      : " << amber.getStretchEnergy() << " kJ/mol" << endl;
+	Log.info() << " - angle bend        : " << amber.getBendEnergy() << " kJ/mol" << endl;
+	Log.info() << " - torsion           : " << amber.getTorsionEnergy() << " kJ/mol" << endl;
+	Log.info() << "---------------------------------------" << endl;
+	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
+}
+
+void Mainframe::customEvent( QCustomEvent * e )
+{
+	if ( e->type() == 65431 )   // It must be a SimulationThreadFinished
+	{
+		stopSimulation();
+		return;
+	}
+	if ( e->type() == 65430 )   // It must be a SimulationThreadFinished
+	{
+		SimulationOutput* so = (SimulationOutput*) e;
+		Log.info() << so->getMessage() << std::endl;
+		return;
+	}
+}
+
+void Mainframe::openFile(const String& file)
+	throw()
+{
+	file_dialog_->openFile(file);
+}
+
+
 #ifdef BALL_NO_INLINE_FUNCTIONS
 #	include "mainframe.iC"
 #endif
+
+} // namespace

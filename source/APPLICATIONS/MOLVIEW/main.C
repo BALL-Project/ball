@@ -1,21 +1,26 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/common.h>
-
+// order of includes is important:
 #include <qapplication.h>
-
-
 #include "mainframe.h"
-
+#include <BALL/common.h>
+#ifdef Q_WS_X11
+# include <X11/Xlib.h>
+#endif
 
 
 int main(int argc, char **argv)
 {
+	#ifdef Q_WS_X11
+		XInitThreads();
+		//BALL::Log.error() << "Enabling multi threads in Xlib" << std::endl;
+	#endif
+		
   QApplication application(argc, argv);
 
 	// creating Mainframe
-	Mainframe mainframe;
+	BALL::Mainframe mainframe;
 	application.setMainWidget(&mainframe);
 
 	#ifdef BALL_PYTHON_SUPPORT
@@ -26,5 +31,10 @@ int main(int argc, char **argv)
 
 	// start the application
 	mainframe.show();
+	for (BALL::Index i = 1; i<argc;i++)
+	{
+		mainframe.openFile(argv[i]);
+	}
   return application.exec();
+	
 }

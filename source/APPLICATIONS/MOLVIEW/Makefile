@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.35 2002/12/16 18:01:36 oliver Exp $
+# $Id: Makefile,v 1.36 2003/07/21 07:54:00 amoll Exp $
 
 EXECUTABLE=molview
 DIRECTORY=APPLICATIONS/MOLVIEW
@@ -12,31 +12,28 @@ include .Dependencies
 
 # replace library-specific flags by application-
 # specific compiler flags
-LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
+LIB_CXXFLAGS=$(NONLIB_CXXFLAGS) -DQT_THREAD_SUPPORT
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 CPP_SOURCES=\
 	DIALOGS/DlgAbout.C\
 	DIALOGS/DlgAboutData.C\
-	DIALOGS/DlgAmberMinimization.C\
-	DIALOGS/DlgAmberMinimizationData.C\
 	icons.C\
 	main.C\
 	mainframe.C\
+	threads.C
 
 MOC_SOURCES=\
 	DIALOGS/DlgAbout_moc.C\
 	DIALOGS/DlgAboutData_moc.C\
-	DIALOGS/DlgAmberMinimization_moc.C\
-	DIALOGS/DlgAmberMinimizationData_moc.C\
 	mainframe_moc.C
 
 
 SPECIAL_OBJECTS=
 
 molview:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS) -DQT_THREAD_SUPPORT
 
 example: example02.o 
 	$(CXX)	$(LDFLAGS) -o example example02.o $(BALLVIEW_LIBS) $(PYTHON_LIBS)
@@ -46,12 +43,6 @@ DIALOGS/DlgAbout_moc.C:     DIALOGS/DlgAbout.h
 
 DIALOGS/DlgAboutData_moc.C: DIALOGS/DlgAboutData.h
 				$(MOC) DIALOGS/DlgAboutData.h -o $@
-
-DIALOGS/DlgAmberMinimization_moc.C:     DIALOGS/DlgAmberMinimization.h
-				$(MOC) DIALOGS/DlgAmberMinimization.h -o $@
-
-DIALOGS/DlgAmberMinimizationData_moc.C: DIALOGS/DlgAmberMinimizationData.h
-				$(MOC) DIALOGS/DlgAmberMinimizationData.h -o $@
 
 mainframe_moc.C:	mainframe.h
 					$(MOC) mainframe.h -o $@
