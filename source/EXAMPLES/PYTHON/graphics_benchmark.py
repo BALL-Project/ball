@@ -31,6 +31,7 @@ def runTest(name, model):
 	print name+" "+str(model_result)+" seconds"
 	result += model_result
 
+clearRepresentations()
 dp.enableCreationForNewMolecules(0)
 dp.setDrawingPrecision(DRAWING_PRECISION_HIGH)
 dp.selectMode(DRAWING_MODE_SOLID)
