@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.22 2003/12/23 13:09:40 amoll Exp $
+// $Id: representation.C,v 1.23 2004/01/13 14:37:30 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -252,7 +252,7 @@ namespace BALL
 			thread_->setRebuild(rebuild);
 			thread_->start();
 
-			bool mc_was_muteable = mc->compositesAreMuteable();
+			//bool mc_was_muteable = mc->compositesAreMuteable();
 			mc->setCompositesMuteable(false);
 			
 			Position pos = 3;
