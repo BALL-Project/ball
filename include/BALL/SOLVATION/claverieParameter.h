@@ -1,4 +1,4 @@
-// $Id: claverieParameter.h,v 1.1 2000/08/31 17:56:14 anker Exp $
+// $Id: claverieParameter.h,v 1.2 2000/09/28 13:37:17 anker Exp $
 
 #ifndef BALL_SOLVATION_CLAVERIEPARAMETER_H
 #define BALL_SOLVATION_CLAVERIEPARAMETER_H
@@ -75,6 +75,9 @@ namespace BALL
 		/** */
 		std::pair<float, float> getParameters(Atom::Type solvent_type,
 				Atom::Type solute_type) const;
+
+		/** */
+		std::pair<float, float> getParameters(Atom::Type type) const;
 
 		//@}
 
