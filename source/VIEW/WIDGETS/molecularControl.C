@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.7 2003/09/19 23:55:34 amoll Exp $
+// $Id: molecularControl.C,v 1.8 2003/10/04 15:42:07 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -300,7 +300,6 @@ void MolecularControl::updateSelection()
 	// sent new selection through tree
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	message->setSelection(selected_);
-	message->setDeletable(true);
 	notify_(message);
 }
 
@@ -432,7 +431,9 @@ void MolecularControl::addComposite(Composite& composite, QString* own_name)
 	generateListViewItem_(0, composite, &name);
 
 	// update the view
-	listview->triggerUpdate();
+	invalidateSelection();
+	composite_to_item_[&composite]->setSelected(true);
+	updateSelection();
 }
 
 
