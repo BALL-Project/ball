@@ -1473,12 +1473,12 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 	dnl  define 64 bit signed/unsigned type
 	if test "${SIZEOF_ULONG}" = "8" ; then
 		BALL_ULONG64_TYPE="unsigned long"
-		BALL_LONG64_TYPE="unsigned long"
+		BALL_LONG64_TYPE="long"
 		AC_DEFINE(BALL_64BIT_ARCHITECTURE)
 	else
 		if test "${SIZEOF_ULONGLONG}" = "8" ; then
 			BALL_ULONG64_TYPE="unsigned long long"
-			BALL_LONG64_TYPE="unsigned long long"			
+			BALL_LONG64_TYPE="long long"			
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find unsigned 64bit type.)
