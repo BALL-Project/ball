@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeptideBuilder_test.C,v 1.4 2003/06/06 14:21:46 anne Exp $
+// $Id: PeptideBuilder_test.C,v 1.5 2003/06/12 15:27:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.4 2003/06/06 14:21:46 anne Exp $")
+START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.5 2003/06/12 15:27:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -161,17 +161,17 @@ CHECK(construct())
   TEST_EQUAL(resIt->getTorsionPsi(), Angle(-58.,false));
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "SER")
-  TEST_EQUAL(resIt->getTorsionPhi(), Angle(M_PI));
-	TEST_EQUAL(resIt->getTorsionPsi(), Angle(M_PI));
+  TEST_EQUAL(resIt->getTorsionPhi().isEquivalent(Angle(M_PI)), true)
+	TEST_EQUAL(resIt->getTorsionPsi().isEquivalent(Angle(M_PI)), true)
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "GLY")
-	TEST_EQUAL(resIt->getTorsionPhi(), Angle(-47,false));
+	TEST_EQUAL(resIt->getTorsionPhi().isEquivalent(Angle(-47, false)), true)
 	PRECISION(1E-2)
   TEST_REAL_EQUAL(resIt->getTorsionPsi(), -1.01);
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "VAL")
-  TEST_EQUAL(resIt->getTorsionPhi(), Angle(-77.,false));
-	TEST_EQUAL(resIt->getTorsionPsi(), Angle(0,false));
+  TEST_EQUAL(resIt->getTorsionPhi(), Angle(-77., false));
+	TEST_EQUAL(resIt->getTorsionPsi(), Angle(0, false));
 	
 	prot=pb3->construct();
   resIt = prot->beginResidue();
