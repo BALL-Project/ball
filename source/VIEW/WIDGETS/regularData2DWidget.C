@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.7 2004/06/10 17:06:09 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.8 2004/06/10 17:59:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
@@ -11,6 +11,8 @@
 #include <qpointarray.h>
 #include <qpainter.h>
 #include <qlayout.h>
+#include <qpopupmenu.h>
+#include <qapplication.h>
 
 namespace BALL
 {
@@ -157,6 +159,68 @@ void RegularData2DWidget::onNotify(Message *message)
       if ( *it ) delete *it;
     }
 	}
+}
+
+
+// ==========================================
+
+DockableRegularData2DWidget::DockableRegularData2DWidget(const RegularData2D* data, QWidget *parent)
+	: DockWidget(parent,"Dockable RegularData2D Widget"),
+		canWidget_(data, this)
+{
+	QSizePolicy sizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);		
+	setSizePolicy(sizePolicy);
+	setMinimumSize(sizeHint());
+	setGuest(canWidget_);  
+	canWidget_.createPlot();
+	canWidget_.resize(size()); 
+}
+
+
+DockableRegularData2DWidget::~DockableRegularData2DWidget()
+	throw()
+{
+}
+
+void DockableRegularData2DWidget::plot()
+	throw()
+{
+	canWidget_.showObjects();
+	show();
+	canWidget_.zoomToFit();
+}
+
+void DockableRegularData2DWidget::contextMenuEvent(QContextMenuEvent* e)
+{
+	QPopupMenu context_menu;
+	context_menu.insertItem("ZoomToFit", this, SLOT(zoomToFit()));
+	context_menu.insertItem("ZoomIn", this, SLOT(zoomIn()));
+	context_menu.insertItem("ZoomOut", this, SLOT(zoomOut()));
+	QPoint pos = e->reason() == QContextMenuEvent::Mouse ? e->globalPos() :
+		mapToGlobal( QPoint(e->pos().x(), 0) ) + QPoint( width() / 2, height() / 2 );
+ 	context_menu.exec(pos);
+	e->accept();
+}
+
+void DockableRegularData2DWidget::zoomToFit()
+{
+	canWidget_.zoomToFit();
+}
+
+void DockableRegularData2DWidget::zoomIn()
+{
+	canWidget_.zoomIn();
+}
+
+void DockableRegularData2DWidget::zoomOut()
+{
+	canWidget_.zoomOut();
+}
+
+//we need this for SizePolicy
+QSize DockableRegularData2DWidget::sizeHint() const
+{
+	return QSize((int)(qApp->mainWidget()->width()/3.)+55, (int)(qApp->mainWidget()->height()/3.)+55);
 }
 
 	}//end of namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.9 2004/06/10 17:06:01 amoll Exp $
+// $Id: regularData2DWidget.h,v 1.10 2004/06/10 17:59:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
@@ -14,6 +14,10 @@
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 # include <BALL/DATATYPE/regularData2D.h>
+#endif
+
+#ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
+# include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
 #include <qcolor.h>
@@ -66,5 +70,46 @@ namespace BALL
 			QColor axis_color_;
 		}; 
 
+
+		///
+    class BALL_EXPORT DockableRegularData2DWidget
+      : public DockWidget
+    {
+ 	    Q_OBJECT 
+
+			public:
+
+			///
+      DockableRegularData2DWidget(const RegularData2D* data, QWidget *parent=0 );
+
+			///
+      ~DockableRegularData2DWidget()
+				throw();
+
+			///
+      void plot()
+				throw();
+  
+		public slots:
+		
+			///
+			virtual void zoomToFit();
+		
+			///
+			virtual void zoomIn();
+
+			///
+			virtual void zoomOut();
+
+		protected slots:
+			virtual void contextMenuEvent(QContextMenuEvent* e);
+
+    protected:
+      DockableRegularData2DWidget(const DockableRegularData2DWidget& dockcanwid);
+			QSize sizeHint() const;
+
+      RegularData2DWidget canWidget_;
+    };
+    
 	} //end of namespace VIEW	
 }//end of namespace BALL
