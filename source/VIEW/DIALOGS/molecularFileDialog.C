@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.27 2004/12/07 15:46:14 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.27.2.1 2005/01/20 23:11:48 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -180,6 +180,8 @@ namespace BALL
 				filter = filter.after(FileSystem::PATH_SEPARATOR);
 			}
 
+			String filename_without_path = filter;
+
 			while (filter.has('.'))
 			{
 				filter = filter.after(".");
@@ -208,8 +210,16 @@ namespace BALL
 			}
 			else
 			{
-				setStatusbarText("Unknown file format, please set the file extension accordingly to type, aborting...", true);
-				return false;
+				if (filter == filename_without_path)
+				{
+					filename += ".pdb";
+					result = writePDBFile(filename, system);
+				}
+				else
+				{
+					setStatusbarText("Unknown file format, please set the file extension accordingly to type, aborting...", true);
+					return false;
+				}
 			}
 
 			if (!result) 
