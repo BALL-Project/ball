@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.9 2002/04/08 16:37:16 anker Exp $
+// $Id: fresno.C,v 1.1.2.10 2002/04/24 09:19:53 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -15,6 +15,7 @@
 #include <BALL/MOLMEC/FRESNO/fresnoLipophilic.h>
 #include <BALL/MOLMEC/FRESNO/fresnoRotation.h>
 #include <BALL/MOLMEC/FRESNO/fresnoDesolvation.h>
+#include <BALL/MOLMEC/FRESNO/chemScoreMetal.h>
 
 using namespace std;
 
@@ -28,6 +29,7 @@ namespace BALL
 	const char* FresnoFF::Option::ROT = "rot";
 	const char* FresnoFF::Option::BP = "bp";
 	const char* FresnoFF::Option::DESOLV = "desolv";
+	const char* FresnoFF::Option::METAL = "metal";
 	const char* FresnoFF::Option::HB_IDEAL_LENGTH = "hb_ideal_length";
 	const char* FresnoFF::Option::HB_IDEAL_ANGLE = "hb_ideal_angle";
 	const char* FresnoFF::Option::HB_DIST_LOWER = "hb_dist_lower";
@@ -41,6 +43,8 @@ namespace BALL
 	const char* FresnoFF::Option::ROT_BIND_OFFSET = "rot_bind_offset";
 	const char* FresnoFF::Option::ROT_GRID_SPACING = "rot_grid_spacing";
 	const char* FresnoFF::Option::ROT_ALGORITHM = "rot_algorithm";
+	const char* FresnoFF::Option::METAL_R1 = "metal_r1";
+	const char* FresnoFF::Option::METAL_R2 = "metal_r2";
 
 	const float FresnoFF::Default::CONST = -33.614;
 	const float FresnoFF::Default::HB = -0.014;
@@ -48,6 +52,7 @@ namespace BALL
 	const float FresnoFF::Default::ROT = 0.017;
 	const float FresnoFF::Default::BP = 0.021;
 	const float FresnoFF::Default::DESOLV = 0.026;
+	const float FresnoFF::Default::METAL = -6.03;
 	const float FresnoFF::Default::HB_IDEAL_LENGTH = 1.85;
 	const float FresnoFF::Default::HB_IDEAL_ANGLE = 180;
 	const float FresnoFF::Default::HB_DIST_LOWER = 0.25;
@@ -61,7 +66,9 @@ namespace BALL
 	const float FresnoFF::Default::ROT_BIND_OFFSET = 0.5;
 	const float FresnoFF::Default::ROT_GRID_SPACING = 5.0;
 	const Size FresnoFF::Default::ROT_ALGORITHM =
-		FresnoRotation::ALGORITHM__DATABASE;
+		FresnoRotation::ALGORITHM__GUESS;
+	const float FresnoFF::Default::METAL_R1 = 2.2;
+	const float FresnoFF::Default::METAL_R2 = 2.6;
 
 	void FresnoFF::registerComponents_()
 		throw()
@@ -73,6 +80,7 @@ namespace BALL
 		insertComponent(new FresnoLipophilic(*this));
 		insertComponent(new FresnoRotation(*this));
 		insertComponent(new FresnoDesolvation(*this));
+		insertComponent(new ChemScoreMetal(*this));
 	}
 
 
@@ -184,6 +192,7 @@ namespace BALL
 		Size acc_counter = 0;
 		Size polar_counter = 0;
 		Size hyd_counter = 0;
+		Size metal_counter = 0;
 
 		// STEP 1
 		// ======
@@ -191,10 +200,28 @@ namespace BALL
 
 		Size assignment_type = FresnoFF::ASSIGNMENT__ELDRIDGE;
 
+		// set up a hashset containing metal symbols
+		HashSet<String> metals;
+		// ?????
+		// For the moment just take those metals we want to use in our
+		// calculations
+		metals.insert("Ca");
+		metals.insert("Mg");
+		metals.insert("Mn");
+		metals.insert("Zn");
+		metals.insert("Fe");
+
 		for (; +it; ++it)
 		{
 			atom = it->first;
 			symbol = atom->getElement().getSymbol();
+
+			// first assign the metals.
+			if (metals.has(symbol))
+			{
+				it->second = FresnoFF::METAL;
+				++metal_counter;
+			}
 
 			if (symbol == "N")
 			{
@@ -381,9 +408,11 @@ namespace BALL
 		cout << "h bond donors:           " << donor_counter << endl;
 		cout << "h bond hydrogens:        " << hyd_counter << endl;
 		cout << "polar atoms:             " << polar_counter << endl;
+		cout << "metal atoms:             " << metal_counter << endl;
 		cout << "remaining atoms:         " 
-			<< getSystem()->countAtoms() - lipo_counter - acc_counter -
-			   acc_don_counter - donor_counter - polar_counter - hyd_counter
+			<< getSystem()->countAtoms() - lipo_counter - acc_counter 
+			- acc_don_counter - donor_counter - polar_counter - hyd_counter
+			- metal_counter
 			<< endl << endl;
 		// /DEBUG
 
@@ -529,9 +558,11 @@ namespace BALL
 		cout << "h bond donors:           " << donor_counter << endl;
 		cout << "h bond hydrogens:        " << hyd_counter << endl;
 		cout << "polar atoms:             " << polar_counter << endl;
+		cout << "metal atoms:             " << metal_counter << endl;
 		cout << "remaining atoms:         " 
-			<< getSystem()->countAtoms() - lipo_counter - acc_counter -
-			   acc_don_counter - donor_counter - polar_counter - hyd_counter
+			<< getSystem()->countAtoms() - lipo_counter - acc_counter 
+			- acc_don_counter - donor_counter - polar_counter - hyd_counter
+			- metal_counter
 			<< endl << endl;
 		// /DEBUG
 
@@ -601,9 +632,11 @@ namespace BALL
 		cout << "h bond donors:           " << donor_counter << endl;
 		cout << "h bond hydrogens:        " << hyd_counter << endl;
 		cout << "polar atoms:             " << polar_counter << endl;
+		cout << "metal atoms:             " << metal_counter << endl;
 		cout << "remaining atoms:         " 
-			<< getSystem()->countAtoms() - lipo_counter - acc_counter -
-			   acc_don_counter - donor_counter - polar_counter - hyd_counter
+			<< getSystem()->countAtoms() - lipo_counter - acc_counter 
+			- acc_don_counter - donor_counter - polar_counter - hyd_counter
+			- metal_counter
 			<< endl << endl;
 		// /DEBUG
 
