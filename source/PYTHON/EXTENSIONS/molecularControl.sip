@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.6 2004/09/22 21:07:05 oliver Exp $
+// $Id: molecularControl.sip,v 1.7 2004/10/23 19:16:53 amoll Exp $
 //
 
 class MolecularControl
@@ -50,7 +50,6 @@ class MolecularControl
   void move();
   //void onNotify(Message *message) throw();
   void paste();
-  void removeComposite(Composite&) throw();
   void select();
   void showFilename();
   void showSelectorHelp();
