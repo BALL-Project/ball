@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.5 2000/09/16 11:19:36 oliver Exp $
+// $Id: parameterSection.C,v 1.6 2000/09/19 16:02:20 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -111,11 +111,11 @@ namespace BALL
 		// interpret the format line
 		//
 	
-		// f contains the field resulting from a split format line
-		String	f[ParameterSection::MAX_FIELDS];
-		Size number_of_fields = format_line_.split(f, ParameterSection::MAX_FIELDS, String::CHARACTER_CLASS__WHITESPACE);
+		// f contains the fields resulting from a splitQuoted of the format line
+		vector<String> f;
+		Size number_of_fields = format_line_.split(f, String::CHARACTER_CLASS__WHITESPACE);
 
-		if ((number_of_fields == 0) || (number_of_fields > ParameterSection::MAX_FIELDS))
+		if (number_of_fields == 0)
 		{
 			Log.error() << "ParameterSection::extractSection: error reading section " << section_name 
 				<< " of file " << ini_file.getFilename() << ": wrong number of fields in the format line: " << number_of_fields << endl;
@@ -174,7 +174,7 @@ namespace BALL
 		// store for faster access
 		number_of_variables_ = variable_names_.size();
 		
-		if ((number_of_keys == 0) || (number_of_keys == ParameterSection::MAX_FIELDS))
+		if (number_of_keys == 0)
 		{
 			return false;
 		}
@@ -202,7 +202,7 @@ namespace BALL
 					if (number_of_lines > 0) 
 					{
 						// now split the line...
-						number_of_fields = line.split(f, ParameterSection::MAX_FIELDS, String::CHARACTER_CLASS__WHITESPACE);
+						number_of_fields = line.splitQuoted(f);
 						
 						// assemble the keys
 						Size	j;	// loop variable
