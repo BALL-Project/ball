@@ -1,8 +1,8 @@
-// $Id: XDRPersistenceManager.C,v 1.13 2000/12/12 16:21:32 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.14 2000/12/13 19:02:26 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
-#define BALL_DEBUG_PERSISTENCE
+// #define BALL_DEBUG_PERSISTENCE
 
 using namespace std;
 
@@ -28,7 +28,9 @@ namespace BALL
 		}
 		number_read = is.gcount() - number_read;
 
-		Log.info() << "read " << number_read << " bytes." << endl;
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: read " << number_read << " bytes." << endl;
+#endif
 
 		return (int)number_read;
 	}
@@ -51,7 +53,10 @@ namespace BALL
 			os.write(buffer_ptr, number);
 		}
 
-		Log.info() << "wrote " << number << " bytes." << endl;
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: wrote " << number << " bytes." << endl;
+#endif
+
 		return number;
 	}
 
@@ -97,7 +102,10 @@ namespace BALL
 
   void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, PointerSizeInt ptr)
   {
-		Log.info() << "writing header for " << name << "/" << type_name << endl;
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: writing header for " << name << "/" << type_name << endl;
+#endif
+
     if ((name != 0) && (!strcmp(name, "")))
     {
 			put(String(type_name));
@@ -121,7 +129,9 @@ namespace BALL
 		xdr_out_.x_op = XDR_ENCODE;
 		put(STREAM_HEADER);
 
-		Log.info() << "wrote stream header" << endl;
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: wrote stream header" << endl;
+#endif
 	}
 
 	void XDRPersistenceManager::initializeOutputStream()
@@ -134,7 +144,10 @@ namespace BALL
 		const caddr_t ostr_ptr = (caddr_t)ostr_;
 		xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
 		xdr_out_.x_op = XDR_ENCODE;
-		Log.info() << "initialized output stream." << endl;
+
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: initialized output stream." << endl;
+#endif
 	}
 
 	void XDRPersistenceManager::initializeInputStream()
@@ -147,27 +160,34 @@ namespace BALL
 		const caddr_t istr_ptr = (caddr_t)istr_;
 		xdrrec_create(&xdr_in_, 0, 0, istr_ptr, XDRReadStream_, XDRError_);
 		xdr_in_.x_op = XDR_DECODE;
-		Log.info() << "initialized input stream." << endl;
+
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: initialized input stream." << endl;
+#endif
 	}
 
 	void XDRPersistenceManager::finalizeOutputStream()
 	{
 		// destroy the XDR stream
 		xdr_destroy(&xdr_out_);
-		Log.info() << "finalized output stream." << endl;
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: finalized output stream." << endl;
+#endif
 	}
 
 	void XDRPersistenceManager::finalizeInputStream()
 	{
 		// destroy the XDR stream 
 		// xdr_destroy(&xdr_in_); //BAUSTELLE
-		Log.info() << "finalized input stream." << endl;
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: finalized input stream." << endl;
+#endif
 	}
 
 	bool XDRPersistenceManager::checkStreamHeader()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkStreamHeader()" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkStreamHeader()" << endl;
 #		endif
 
 		// skip to the next/first XDR record
@@ -178,8 +198,9 @@ namespace BALL
 
 		bool result = (header == STREAM_HEADER);
 
-		//Log.info() << "checkStreamHeader = " << result << " (" << hex << header << "/" << STREAM_HEADER << ")" << endl;
-		Log.info() << "BAEH!" << endl;
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: checkStreamHeader = " << result << " (" << hex << header << "/" << STREAM_HEADER << ")" << endl;
+#endif
 
 		return result;
 	}
@@ -190,13 +211,15 @@ namespace BALL
 		put(STREAM_TRAILER);
 		xdrrec_endofrecord(&xdr_out_, 1);
 
-		Log.info() << "wrote stream trailer" << endl;
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: wrote stream trailer" << endl;
+#endif
 	}
 
 	bool XDRPersistenceManager::checkStreamTrailer()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkStreamTrailer()" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkStreamTrailer()" << endl;
 #		endif
 
 		// check for the correct trailer
@@ -206,7 +229,9 @@ namespace BALL
 		// destroy the XDR stream
 		xdr_destroy(&xdr_in_);
 
-		Log.info() << "checkStreamTrailer = " << (trailer == STREAM_TRAILER) << endl;
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: checkStreamTrailer = " << (trailer == STREAM_TRAILER) << endl;
+#endif
 
 		return (trailer == STREAM_TRAILER);		
 	}
@@ -220,11 +245,11 @@ namespace BALL
 #		ifdef BALL_DEBUG_PERSISTENCE
 			if (name != 0)
 			{
-				Log.info() << "entering checkTrailer(" << name << ")" << endl;
+				Log.info() << "XDRPersistenceManager: entering checkTrailer(" << name << ")" << endl;
 			}
 			else
 			{
-				Log.info() << "entering checkTrailer()" << endl;	
+				Log.info() << "XDRPersistenceManager: entering checkTrailer()" << endl;	
 			}
 #		endif
 		return true;
@@ -233,7 +258,7 @@ namespace BALL
 	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkHeader(" << type_name << ", " << name << ")" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkHeader(" << type_name << ", " << name << ")" << endl;
 #		endif
     if ((name != 0) && (!strcmp(name, "")))
 		{
@@ -259,13 +284,13 @@ namespace BALL
 	bool XDRPersistenceManager::getObjectHeader(String& type_name, PointerSizeInt& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering getObjectHeader()" << endl;
+			Log.info() << "XDRPersistenceManager: entering getObjectHeader()" << endl;
 #		endif
 
 		get(type_name);
 
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "read type name: " << type_name << endl;
+			Log.info() << "XDRPersistenceManager: read type name: " << type_name << endl;
 #		endif
 
 		get(ptr);
@@ -281,7 +306,7 @@ namespace BALL
 #		ifdef BALL_DEBUG_PERSISTENCE
 		else 
 		{
-			Log.info() << "Read pointer: " << ptr << endl;
+			Log.info() << "XDRPersistenceManager: read pointer: " << ptr << endl;
 		}
 #		endif
 
@@ -295,7 +320,7 @@ namespace BALL
 	bool XDRPersistenceManager::checkName(const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkName()" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkName()" << endl;
 #		endif
 
 		return true;
@@ -303,13 +328,16 @@ namespace BALL
 
 	void XDRPersistenceManager::writeStorableHeader(const char* /* type_name */, const char* /* name */)
 	{
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: writeStorableHeader" << endl;
+#endif
 	}
 
 	bool XDRPersistenceManager::checkStorableHeader
 		(const char* /* type_name */, const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkStorableHeader()" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkStorableHeader()" << endl;
 #		endif
 
 		return true;
@@ -317,12 +345,15 @@ namespace BALL
 
 	void XDRPersistenceManager::writeStorableTrailer()
 	{
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: writeStorableTrailer" << endl;
+#endif
 	}
 
 	bool XDRPersistenceManager::checkStorableTrailer()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkStorableTrailer()" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkStorableTrailer()" << endl;
 #		endif
 
 		return true;
@@ -331,25 +362,32 @@ namespace BALL
 	void XDRPersistenceManager::writePrimitiveHeader
 		(const char* /* type_name */, const char* /* name */)
 	{
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: writePrimitiveHeader" << endl;
+#endif
 	}
 
 	bool XDRPersistenceManager::checkPrimitiveHeader
 		(const char* /* type_name */, const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkPrimitiveHeader()" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkPrimitiveHeader()" << endl;
 #		endif
+
 		return true;
 	}
 
 	void XDRPersistenceManager::writePrimitiveTrailer()
 	{
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: writePrimitiveTrailer" << endl;
+#endif
 	}
 
 	bool XDRPersistenceManager::checkPrimitiveTrailer()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkPrimitiveTrailer()" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkPrimitiveTrailer()" << endl;
 #		endif
 
 		return true;
@@ -358,13 +396,16 @@ namespace BALL
 	void XDRPersistenceManager::writeObjectPointerHeader
 		(const char* /* type_name */, const char* /* name */)
 	{
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: writeObjectPointerHeader" << endl;
+#endif
 	}
 	
 	bool XDRPersistenceManager::checkObjectPointerHeader
 		(const char* /* type_name */, const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkObjectPointerHeader()" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkObjectPointerHeader()" << endl;
 #		endif
 
 		return true;
@@ -373,13 +414,16 @@ namespace BALL
 	void XDRPersistenceManager::writeObjectReferenceHeader
 		(const char* /* type_name */, const char* /* name */)
 	{
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: writeObjectReferenceHeader" << endl;
+#endif
 	}
 	
 	bool XDRPersistenceManager::checkObjectReferenceHeader
 		(const char* /* type_name */, const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "entering checkObjectReferenceHeader()" << endl;
+			Log.info() << "XDRPersistenceManager: entering checkObjectReferenceHeader()" << endl;
 #		endif
 
 		return true;
@@ -389,21 +433,36 @@ namespace BALL
 		(const char* /* type_name */, const char* /* name */, Size size)
 	{
 		put(size);
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: writeObjectPointerArrayHeader (size = " << size << ")" << endl;
+#endif
 	}
 
 	bool XDRPersistenceManager::checkObjectPointerArrayHeader
 		(const char* /* type_name */, const char* /* name */, Size& size)
 	{
 		get(size);
+
+#ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: checkObjectPointerArrayHeader (size = " << size << ")" << endl;
+#endif
+
 		return true;
 	}
 	
 	void XDRPersistenceManager::writeObjectPointerArrayTrailer()
 	{
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: entering writeObjectPointerArrayTrailer()" << endl;
+#		endif
 	}
 			
 	bool XDRPersistenceManager::checkObjectPointerArrayTrailer()
 	{
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: entering checkObjectPointerArrayTrailer()" << endl;
+#		endif
+
 		return true;
 	}
 
@@ -412,66 +471,108 @@ namespace BALL
 	{
 		char* char_ptr = const_cast<char*>(&c);
 		xdr_char(&xdr_out_, char_ptr);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: put(char = " << (int)c << ")" << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::put(const Byte b)
 	{
 		unsigned char* char_ptr = const_cast<unsigned char*>(&b);
 		xdr_u_char(&xdr_out_, char_ptr);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: put(Byte = " << b << ")" << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::put(const bool b)
 	{		
 		char c = b ? (char)1 : (char)0;
 		xdr_char(&xdr_out_, &c);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: put(bool = " << b << ")" << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::put(const Index i)
 	{
 		Index* index_ptr = const_cast<Index*>(&i);
 		xdr_int(&xdr_out_, index_ptr);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: put(Index = " << i << ")" << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::put(const Size s)
 	{
 		Size* size_ptr = const_cast<Size*>(&s);
 		xdr_u_int(&xdr_out_, size_ptr);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: put(Size = " << s << ")" << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::put(const Real x)
 	{
 		Real* real_ptr = const_cast<Real*>(&x);
 		xdr_float(&xdr_out_, real_ptr);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: put(Real = " << x << ")" << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::put(const DoubleReal x)
 	{
 		DoubleReal* double_ptr = const_cast<DoubleReal*>(&x);
 		xdr_double(&xdr_out_, double_ptr);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: put(DoubleReal = " << x << ")" << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::put(const PointerSizeInt ptr)
 	{
 		u_long ptr_ptr = ptr;
 		xdr_u_long(&xdr_out_, &ptr_ptr);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: put(PointerSizeInt = " << ptr << ")" << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::put(const string& s)
 	{
 		char* ptr = const_cast<char*>(s.c_str());
 		xdr_string(&xdr_out_, &ptr, s.size());
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+			Log.info() << "XDRPersistenceManager: put(string = `" << s << "')" << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::get(char& c)
 	{
 		xdr_char(&xdr_in_, &c);
-		Log.info() << "read char: " << c << endl;
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: read char: " << c << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::get(Byte& c)
 	{
 		xdr_u_char(&xdr_in_, &c);
-		Log.info() << "read Byte: " << c << endl;
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: read Byte: " << c << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::get(bool& b)
@@ -479,7 +580,10 @@ namespace BALL
 		char c;
 		xdr_char(&xdr_in_, &c);
 		b = (c == (char)1);
-		Log.info() << "read bool: " << b << endl;
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: read bool: " << b << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::get(string& s)
@@ -488,36 +592,55 @@ namespace BALL
 		char* ptr = &(buf[0]);
 		xdr_string(&xdr_in_, &ptr, 65535);
 		s = ptr;
-		Log.info() << "read string: " << s << endl;
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: read string: " << s << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::get(Index& i)
 	{
 		xdr_int(&xdr_in_, &i);
-		Log.info() << "read int: " << i << endl;
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: read int: " << i << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::get(Size& s)
 	{
 		xdr_u_int(&xdr_in_, &s);
-		Log.info() << "read unsigned int: " << s << "/" << hex << s << endl;
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: read unsigned int: " << s << "/" << hex << s << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::get(Real& x)
 	{
 		xdr_float(&xdr_in_, &x);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: read Real: " << x << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::get(DoubleReal& x)
 	{
 		xdr_double(&xdr_in_, &x);
+
+#		ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: read DoubleReal: " << x << endl;
+#		endif		
 	}
 
 	void XDRPersistenceManager::get(PointerSizeInt& ptr)
 	{
-		xdr_long(&xdr_in_, &ptr);
+		xdr_u_long(&xdr_in_, (u_long*)&ptr);
 
-		Log.info() << "get ptr: " << hex << ptr << endl;
+#		ifdef BALL_DEBUG_PERSISTENCE
+		Log.info() << "XDRPersistenceManager: get ptr: " << hex << ptr << endl;
+#		endif		
 	}
 
 } // namespace BALL
