@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.C,v 1.6 2000/02/14 22:42:46 oliver Exp $
+// $Id: quadraticAngleBend.C,v 1.7 2000/02/15 18:12:19 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
@@ -11,9 +11,7 @@ namespace BALL
 
 	QuadraticAngleBend::QuadraticAngleBend()
 		:	ParameterSection(),
-			k_(0),
-			theta0_(0),
-			is_defined_(0)
+			number_of_atom_types_(0)
 	{
 	}
 
@@ -25,9 +23,8 @@ namespace BALL
 	void QuadraticAngleBend::destroy() 
 	{
 		// clear allocatd parameter fields
-		delete [] k_;
-		delete [] theta0_;
-		delete [] is_defined_;
+		values_.clear();
+		value_index_.clear();
 
 		ParameterSection::destroy();
 	}
@@ -63,15 +60,16 @@ namespace BALL
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		Size number_of_entries = number_of_atom_types_ * number_of_atom_types_ * number_of_atom_types_;
 		
-		// allocate two one-dimensional fields for the two parameters
-		k_  = new float[number_of_entries];
-		theta0_ = new float[number_of_entries];
-		is_defined_ = new bool[number_of_entries];
+		// clear internal data structures
+		values_.clear();
+		value_index_.clear();
+		value_index_.resize(number_of_entries);
 
+		// set the value_index_ array to -1 (= parameter undefined)
 		Size	i;
 		for (i = 0; i < number_of_entries; i++) 
 		{
-			is_defined_[i] = false;
+			value_index_[i] = -1;
 		}
 
 		// try to determine the factors to convert the units
@@ -117,12 +115,11 @@ namespace BALL
 		Size index_theta0	= getColumnIndex("theta0");
 
 		String	fields[4];
-
-		// start with line 1: skip the format line!
+		Values	values;
+		// retrieve all keys from the section and interpret their values
 		for (i = 0; i < getNumberOfKeys(); i++)
 		{
 			key = getKey(i);
-			Log.info() << "Key: " << key << endl;
 
 			// split the key into the three type names
 			if (key.split(fields, 3) == 3)
@@ -137,18 +134,20 @@ namespace BALL
 					type_J = atom_types.getType(fields[1]);
 					type_K = atom_types.getType(fields[2]);
 
-					// calculate the indices in the parameter array
+					// calculate the index in the in value_index_ array
 					index = (Index)(type_I + number_of_atom_types_ * type_J + number_of_atom_types_ * number_of_atom_types_ * type_K);
 					sym_index = (Index)(type_K + number_of_atom_types_ * type_J + number_of_atom_types_ * number_of_atom_types_ * type_I);
 
-					// set the values
-					is_defined_[index] = true;
-					k_[index] = getValue(i, index_k).toFloat() * factor_k;
-					theta0_[index] = getValue(i, index_theta0).toFloat() * factor_theta0;
 
-					is_defined_[sym_index] = true;
-					k_[sym_index] = getValue(i, index_k).toFloat() * factor_k;
-					theta0_[sym_index] = getValue(i, index_theta0).toFloat() * factor_theta0;
+					// set the indices
+					value_index_[index] = values_.size();
+					value_index_[sym_index] = values_.size();
+
+					// store the values 
+					values.k = getValue(i, index_k).toFloat() * factor_k;
+					values.theta0 = getValue(i, index_theta0).toFloat() * factor_theta0;
+					values_.push_back(values);
+
 				} else {
 					Log.error() << "QuadraticAngleBend::extractSection: could not identify atom types for key " << key << endl;
 				}
@@ -163,22 +162,14 @@ namespace BALL
 
 	bool QuadraticAngleBend::hasParameters(Atom::Type I, Atom::Type J, Atom::Type K) const 
 	{
-		if ((I < 0) || ((Size)I >= number_of_atom_types_))
-		{
-			return false;
-		}
-
-		if ((J < 0) || ((Size)J >= number_of_atom_types_))
-		{
-			return false;
-		}
-
-		if ((K < 0) || ((Size)K >= number_of_atom_types_))
-		{
-			return false;
-		}
-
-		return is_defined_[I + number_of_atom_types_ * J + number_of_atom_types_ * number_of_atom_types_ * K];
+		return 
+			// check the indices
+			(((I >= 0) || ((Size)I < number_of_atom_types_))
+			 && ((J >= 0) || ((Size)J < number_of_atom_types_))
+			 && ((K >= 0) || ((Size)K < number_of_atom_types_))
+			// and the availability of parameters
+			 && (value_index_[I + number_of_atom_types_ * J 
+											+ number_of_atom_types_ * number_of_atom_types_ * K] >= 0));
 	}
 
 
@@ -197,14 +188,10 @@ namespace BALL
 	{
 		// check whether the parameters are defined
 		Index index = (Index)(I + number_of_atom_types_ * J + number_of_atom_types_ * number_of_atom_types_ * K);
-		if (is_defined_[index]) 
+		if (value_index_[index] >= 0) 
 		{	
-			// assign the parameters
-			parameters.k = k_[index];
-			parameters.theta0 = theta0_[index];
-
-			Log.info() << "Assigned: " << I << "-" << J << "-" << K << " :  k = " 
-				<< parameters.k << "  theta0 = " << parameters.theta0 << endl;
+			// retrieve and assign the parameters
+			parameters = values_[value_index_[index]];
 
 			return true;
 		}
