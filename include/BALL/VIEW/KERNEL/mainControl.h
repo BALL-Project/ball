@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.33 2004/02/05 17:02:44 amoll Exp $
+// $Id: mainControl.h,v 1.34 2004/02/11 12:52:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -678,7 +678,15 @@ namespace BALL
 			///
 			SimulationThread* getSimulationThread()
 				throw();
+
+			///
+			void enableDeleteEntry()
+				throw();
 	
+			///
+			void insertDeleteEntry()
+				throw();
+			
 			//@}
 			/**	@name	Debugging and Diagnostics
 			*/
@@ -695,6 +703,11 @@ namespace BALL
 					
 			//@}
 			
+			protected slots:
+
+			// Connected to the delete entry
+			virtual void deleteClicked();
+
 			protected:
 
 			/*_ Remove a composite.
@@ -751,6 +764,7 @@ namespace BALL
 			MainControlPreferences* 		main_control_preferences_;
 			Preferences*								preferences_dialog_;
 			int 			 									preferences_id_;
+			int 			 									delete_id_;
 			INIFile		 									preferences_;
 			
 			static int 									current_id_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.62 2004/02/10 15:52:26 amoll Exp $
+// $Id: mainControl.C,v 1.63 2004/02/11 12:52:07 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -79,6 +79,7 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 		main_control_preferences_(0),
 		preferences_dialog_(new Preferences(this, "Molview Preferences")),
 		preferences_id_(-1),
+		delete_id_(0),
 		composites_muteable_(true),
 		stop_simulation_(false),
 		simulation_thread_(0),
@@ -127,6 +128,7 @@ MainControl::MainControl(const MainControl& main_control)
 		main_control_preferences_(0),
 		preferences_dialog_(new Preferences(this, "Molview Preferences")),
 		preferences_id_(-1),
+		delete_id_(0),
 		composites_muteable_(main_control.composites_muteable_)
 {
 	setup_();
@@ -303,7 +305,7 @@ void MainControl::show()
 	insertPopupMenuSeparator(MainControl::FILE);
 	insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), CTRL+Key_Q);	
 	insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(whatsThis()));	
-	
+
 	// if the preferences dialog has any tabs then show it
 	if (preferences_dialog_->hasPages())
 	{
@@ -327,6 +329,9 @@ void MainControl::checkMenus()
 	{
 		menuBar()->setItemChecked(preferences_id_, preferences_dialog_->isVisible());			
 	}
+
+	// overridden in Controls
+	if (delete_id_ != 0) menuBar()->setItemEnabled(delete_id_, false);
 
 	// checks all modular widgets 
 	List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
@@ -1194,6 +1199,32 @@ void MainControl::clearSelection()
 	sendMessage(*nm);
 }
 
+void MainControl::deleteClicked()
+{
+	List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+	for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+	{
+		if (RTTI::isKindOf<GenericControl>(**it))
+		{
+			((GenericControl*) (*it))->deleteCurrentItems();
+		}
+	}
+}
+
+void MainControl::insertDeleteEntry()
+	throw()
+{
+	if (delete_id_ == 0) 
+	{
+		delete_id_ = insertMenuEntry(MainControl::EDIT, "Delete", this, SLOT(deleteClicked()));	
+	}
+}
+
+void MainControl::enableDeleteEntry()
+	throw()
+{
+	menuBar()->setItemEnabled(delete_id_, true);
+}
 
 void MainControl::setCompositesMuteable(bool state) 
 {
