@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.14 2000/09/26 02:00:20 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.15 2000/09/26 10:58:56 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 #include<BALL/KERNEL/PDBAtom.h>
@@ -20,16 +20,17 @@ namespace BALL
 			return false;
 		}
 
-		// BAUSTELLE: this could be done in a more general manner
+		// ----------transforming the names from STAR-FILE-STANDARD to PDB------
 		FragmentDB frag_db;
 		StringHashMap<String>* map = 0;
-		if (frag_db.getNamingStandards().has("XPLORE-PDB"))
+		if (frag_db.getNamingStandards().has("XPLOR-PDB"))
 		{
-			map = frag_db.getNamingStandards()["XPLORE-PDB"];
+			map = frag_db.getNamingStandards()["XPLOR-PDB"];
 		}
 		else 
 		{
-			 Log.warn() << "AssignShiftProcessor::start:  no appropriate map found for name conversion" << endl;
+			 Log.warn() << "AssignShiftProcessor::start: "
+									<< "no appropriate map found for name conversion" << endl;
 		}
 
 		// ---------------------read translate table ------------------------
@@ -50,12 +51,10 @@ namespace BALL
 			tableFile >> name;
 			tableFile >> entry;
 			transformTable[name] = entry;
-cout << name << " " << entry << endl;
 		}
 		while (name != "END");
 
 		tableFile.close();
-cout << endl << endl;
 
 		// ----------------------read the shiftdata ------------------------
 		for (Position atompos = 0; atompos < atom_data_.size() ; atompos++)
@@ -103,7 +102,7 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 
 			std::vector<String> tokens;
 			Size size = transformTable[entry].split(tokens, "/");
-			for (Position wordpos = 0; wordpos < size ; wordpos++ )
+			for (Position wordpos = 0; wordpos < size ; wordpos++)
 			{
 				String fullName(atom_data_[atompos]->residueSeqCode);
 				fullName += tokens[wordpos];
@@ -156,16 +155,20 @@ cout << "kein PDBAtom" << endl;
 		fullName += ":";
 		fullName += patom_->getName();
 
-		patom_->clearProperty(ShiftModule::PROPERTY__SHIFT);
+		if (patom_->hasProperty(ShiftModule::PROPERTY__SHIFT))
+		{
+			Log.error() << "AssignShiftProcessor: atom contains already shift data: " << fullName << endl;   
+			patom_->clearProperty(ShiftModule::PROPERTY__SHIFT);
+		}
 		if (shift_table_.has(fullName))
 		{
 			patom_->setProperty(ShiftModule::PROPERTY__SHIFT, shift_table_[fullName]);
 cout << "atom found " << fullName << endl;
 		}
-else 
-{
-	Log.error() << "AssignShiftProcessor: entry not found: " << fullName << endl;   
-}               
+		else 
+		{
+			Log.info() << "AssignShiftProcessor: entry not found: " << fullName << endl;   
+		}               
 
 		return Processor::CONTINUE;
 	}
