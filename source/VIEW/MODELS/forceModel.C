@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.6 2004/09/01 14:14:04 amoll Exp $
+// $Id: forceModel.C,v 1.7 2004/09/02 15:04:06 amoll Exp $
 
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -48,9 +48,9 @@ namespace BALL
 			}
 			Atom* atom = (Atom*) &composite;
 
-			Vector3 force = atom->getForce();
+			Vector3 force = atom->getForce() * pow((float)10.0, 12);
 			if (force.getSquareLength() == 0) return Processor::CONTINUE;
-			float forcev = log(force.getLength() * pow((float)10.0, scaling_)); 
+			float forcev = log(force.getLength()) * scaling_; 
 
 			if (forcev < 0) return Processor::CONTINUE;
 			if (forcev > max_length_)
@@ -74,5 +74,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.15 2004/09/02 12:57:07 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.16 2004/09/02 15:04:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -74,6 +74,9 @@ namespace BALL
 			void getSettings(const ModelProcessor& mp)
 				throw();
 
+			///
+			void showPage(ModelType type)
+				throw();
 
 			///
 			float getStickStickRadius() const

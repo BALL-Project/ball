@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.81 2004/09/01 15:02:09 amoll Exp $
+// $Id: displayProperties.C,v 1.82 2004/09/02 15:04:06 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -567,49 +567,7 @@ void DisplayProperties::coloringOptionsPressed()
 	if (preferences_ == 0) return;
 
 	preferences_->showPage(coloring_settings_);
-
-	switch (coloring_method_combobox->currentItem())
-	{
-		case COLORING_ELEMENT:
-			coloring_settings_->list_box->setCurrentItem(0);
-			break;
-
-		case COLORING_RESIDUE_NAME:
-			coloring_settings_->list_box->setCurrentItem(2);
-			break;
-
-		case COLORING_RESIDUE_INDEX:
-			coloring_settings_->list_box->setCurrentItem(1);
-			break;
-
-		case COLORING_SECONDARY_STRUCTURE:
-			coloring_settings_->list_box->setCurrentItem(7);
-			break;
-
-		case COLORING_ATOM_CHARGE:
-			coloring_settings_->list_box->setCurrentItem(3);
-			break;
-
-		case COLORING_CUSTOM:
-			break;
-
-		case COLORING_DISTANCE:
-			coloring_settings_->list_box->setCurrentItem(4);
-			break;
-
-		case COLORING_TEMPERATURE_FACTOR:
-			coloring_settings_->list_box->setCurrentItem(5);
-			break;
-
-		case COLORING_OCCUPANCY:
-			coloring_settings_->list_box->setCurrentItem(6);
-			break;
-
-		case COLORING_FORCES:
-			coloring_settings_->list_box->setCurrentItem(7);
-			break;
-	}
-
+	coloring_settings_->showPage(coloring_method_combobox->currentItem());
 	preferences_->show();
 }
 
@@ -619,44 +577,7 @@ void DisplayProperties::modelOptionsPressed()
 
 	preferences_->showPage(model_settings_);
 
-	switch (model_type_combobox->currentItem())
-	{
-		case MODEL_LINES:
-			break;
-			
-		case MODEL_STICK:
-			model_settings_->showPage(0);
-			break;
-			
-		case MODEL_BALL_AND_STICK:
-			model_settings_->showPage(1);
-			break;
-			
-		case MODEL_SE_SURFACE:
-		case MODEL_SA_SURFACE:
-			model_settings_->showPage(3);
-			break;
-			
-		case MODEL_VDW:
-			model_settings_->showPage(2);
-			break;
-
-		case MODEL_BACKBONE:
-			model_settings_->showPage(4);
-			break;
-
-		case MODEL_CARTOON:
-			model_settings_->showPage(5);
-			break;
-			
-		case MODEL_HBONDS:
-			model_settings_->showPage(6);
-			break;
-
-		case MODEL_FORCES:
-			model_settings_->showPage(7);
-			break;
-	}
+	model_settings_->showPage(model_type_combobox->currentItem());
 
 	preferences_->show();
 }

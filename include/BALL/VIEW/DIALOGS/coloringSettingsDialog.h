@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.14 2004/09/02 12:57:06 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.15 2004/09/02 15:04:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -129,12 +129,18 @@ namespace BALL
 				throw();
 
 			///
+			void showPage(ColoringMethod method)
+				throw();
+
+			///
 			vector<ColorRGBA> getElementColors() const
 				throw();
 
 			///
 			vector<ColorRGBA> getResidueColors() const
 				throw();
+
+			public slots:
 
 			///
 			void showPage(int nr);

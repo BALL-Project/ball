@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.21 2004/09/02 12:56:51 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.22 2004/09/02 15:04:06 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -371,7 +371,52 @@ namespace BALL
 				setForceMaxLenght(((ForceModel*) &mp)->getMaxLength());
 				return;
 			}
+		}
 
+		void ModelSettingsDialog::showPage(ModelType type)
+			throw()
+		{
+			switch (type)
+			{
+				case MODEL_LINES:
+					break;
+					
+				case MODEL_STICK:
+					showPage(0);
+					break;
+					
+				case MODEL_BALL_AND_STICK:
+					showPage(1);
+					break;
+					
+				case MODEL_SE_SURFACE:
+				case MODEL_SA_SURFACE:
+					showPage(3);
+					break;
+					
+				case MODEL_VDW:
+					showPage(2);
+					break;
+
+				case MODEL_BACKBONE:
+					showPage(4);
+					break;
+
+				case MODEL_CARTOON:
+					showPage(5);
+					break;
+					
+				case MODEL_HBONDS:
+					showPage(6);
+					break;
+
+				case MODEL_FORCES:
+					showPage(7);
+					break;
+
+				default:
+					break;
+			}
 		}
 
 	} // namespace VIEW

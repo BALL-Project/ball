@@ -675,20 +675,6 @@ void ColoringSettingsDialog::setDefaultValues()
 }
 
 
-void ColoringSettingsDialog::showPage(int nr)
-{
-	if (widget_stack->widget(nr) == 0)
-	{
-		return;
-	}
-
-	if (list_box->currentItem() != nr)
-	{
-		list_box->setCurrentItem(nr);
-	}
-	widget_stack->raiseWidget(nr);
-}
-
 ColorProcessor* ColoringSettingsDialog::createColorProcessor(ColoringMethod method) const
 	throw(Exception::InvalidOption)
 {
@@ -826,6 +812,68 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 
 	setLabelColorsFromValues_();
 }
+
+void ColoringSettingsDialog::showPage(int nr)
+{
+	if (widget_stack->widget(nr) == 0)
+	{
+		return;
+	}
+
+	if (list_box->currentItem() != nr)
+	{
+		list_box->setCurrentItem(nr);
+	}
+	widget_stack->raiseWidget(nr);
+}
+
+
+void ColoringSettingsDialog::showPage(ColoringMethod method)
+	throw()
+{
+	switch (method)
+	{
+		case COLORING_ELEMENT:
+			showPage(0);
+			break;
+
+		case COLORING_RESIDUE_NAME:
+			showPage(2);
+			break;
+
+		case COLORING_RESIDUE_INDEX:
+			showPage(1);
+			break;
+
+		case COLORING_SECONDARY_STRUCTURE:
+			showPage(7);
+			break;
+
+		case COLORING_ATOM_CHARGE:
+			showPage(3);
+			break;
+
+		case COLORING_DISTANCE:
+			showPage(4);
+			break;
+
+		case COLORING_TEMPERATURE_FACTOR:
+			showPage(5);
+			break;
+
+		case COLORING_OCCUPANCY:
+			showPage(6);
+			break;
+
+		case COLORING_FORCES:
+			showPage(7);
+			break;
+
+		default:
+			break;
+	}
+}
+
 	
 
 } } // NAMESPACE
