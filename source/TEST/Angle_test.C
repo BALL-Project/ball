@@ -1,4 +1,4 @@
-// $Id: Angle_test.C,v 1.8 2000/03/03 10:14:38 amoll Exp $
+// $Id: Angle_test.C,v 1.9 2000/03/08 23:36:22 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.8 2000/03/03 10:14:38 amoll Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.9 2000/03/08 23:36:22 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -460,6 +460,27 @@ CHECK(std::ostream& operator << (std::ostream& s, const TAngle<T>& angle))
 	TEST_FILE(filename.c_str(), "data/Angle_test2.txt", false)
 RESULT
 */
+
+//line 
+CHECK(std::istream& operator >> (std::istream& s, TAngle<T>& angle))
+	std::ifstream instr("data/Angle_test2.txt");
+	Angle a = Angle();
+	instr >> a;
+	instr.close();
+	TEST_REAL_EQUAL(a.value, 1.0)
+RESULT
+
+
+//line 
+NEW_TMP_FILE(filename)
+CHECK(std::ostream& operator << (std::ostream& s, const TAngle<T>&
+vector))
+	Angle a(1.0);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
+	outstr << a;
+	outstr.close();
+	TEST_FILE(filename.c_str(), "data/Angle_test2.txt", false)
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
