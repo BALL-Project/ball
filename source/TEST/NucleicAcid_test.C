@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NucleicAcid_test.C,v 1.13 2002/12/12 11:34:42 oliver Exp $
+// $Id: NucleicAcid_test.C,v 1.14 2003/06/30 15:06:43 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.13 2002/12/12 11:34:42 oliver Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.14 2003/06/30 15:06:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,18 +19,17 @@ START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.13 2002/12/12 11:34:42 oliv
 using namespace BALL;
 String filename;
 
-
 NucleicAcid*	r;
-CHECK(NucleicAcid())
+CHECK(NucleicAcid() throw())
 	r = new NucleicAcid;
 	TEST_NOT_EQUAL(r, 0)
 RESULT
 
-CHECK(~NucleicAcid())
+CHECK(~NucleicAcid() throw())
 	delete r;
 RESULT
 
-CHECK(NucleicAcid(NucleicAcid&, bool))
+CHECK(NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true) throw())
 	NucleicAcid* na1 = new NucleicAcid;
 	na1->setName("testname");
 	Nucleotide a("a");
@@ -53,8 +52,7 @@ CHECK(NucleicAcid(NucleicAcid&, bool))
 	delete na1;
 RESULT
 
-CHECK(NucleicAcid(const String& name,
-			  			const String& id = BALL_NUCLEICACID_DEFAULT_ID))
+CHECK(NucleicAcid(const String& name, const String& id = BALL_NUCLEICACID_DEFAULT_ID) throw())
 	NucleicAcid* na1 = new NucleicAcid("na1", "id");
 	TEST_NOT_EQUAL(na1, 0)
 	if (na1 != 0)
@@ -73,7 +71,7 @@ CHECK(NucleicAcid(const String& name,
 	}
 RESULT
 
-CHECK(NucleicAcid::clear())
+CHECK(void clear() throw())
 	NucleicAcid na("na1", "id");
 	Nucleotide a("a");
 	na.insert(a);
@@ -82,7 +80,7 @@ CHECK(NucleicAcid::clear())
 	TEST_EQUAL(na.getID(), "")
 RESULT
 
-CHECK(NucleicAcid::destroy())
+CHECK(void destroy() throw())
 	NucleicAcid na("na1", "id");
 	Nucleotide a("a");
 	na.insert(a);
@@ -91,7 +89,7 @@ CHECK(NucleicAcid::destroy())
 	TEST_EQUAL(na.getID(), "")
 RESULT
 
-CHECK(NucleicAcid::set(const NucleicAcid& NucleicAcid, bool deep = true))
+CHECK(void set(const NucleicAcid& nucleic_acid, bool deep = true) throw())
 	NucleicAcid na1("na1");
 	Nucleotide a("a");
 	na1.insert(a);
@@ -105,7 +103,7 @@ CHECK(NucleicAcid::set(const NucleicAcid& NucleicAcid, bool deep = true))
 	TEST_EQUAL(na2.countNucleotides(), 1)
 RESULT
 
-CHECK(NucleicAcid::NucleicAcid& operator = (const NucleicAcid& NucleicAcid))
+CHECK(NucleicAcid& operator = (const NucleicAcid& nucleic_acid) throw())
 	NucleicAcid na1("na1");
 	Nucleotide a("a");
 	na1.insert(a);
@@ -115,7 +113,7 @@ CHECK(NucleicAcid::NucleicAcid& operator = (const NucleicAcid& NucleicAcid))
 	TEST_EQUAL(na2.countNucleotides(), 1)
 RESULT
 
-CHECK(NucleicAcid::get(NucleicAcid& NucleicAcid, bool deep = true) const )
+CHECK(void get(NucleicAcid& nucleic_acid, bool deep = true) const throw())
 	NucleicAcid na1("na1");
 	Nucleotide a("a");
 	na1.insert(a);
@@ -129,7 +127,7 @@ CHECK(NucleicAcid::get(NucleicAcid& NucleicAcid, bool deep = true) const )
 	TEST_EQUAL(na2.countNucleotides(), 1)
 RESULT
 
-CHECK(NucleicAcid::swap(NucleicAcid&))
+CHECK(void swap(NucleicAcid& nucleic_acid) throw())
 	NucleicAcid na1("na1");
 	NucleicAcid na2("na2");
 	Nucleotide n1("n1");
@@ -143,7 +141,7 @@ CHECK(NucleicAcid::swap(NucleicAcid&))
 	TEST_EQUAL(na2.getNucleotide(0), &n1)
 RESULT
 
-CHECK(NucleicAcid::get3Prime())
+CHECK(Nucleotide* get3Prime() throw())
 	NucleicAcid na1("na1");
 	Nucleotide n1("n1");
 	na1.insert(n1);
@@ -151,7 +149,7 @@ CHECK(NucleicAcid::get3Prime())
 	TEST_EQUAL(na1.get3Prime()->getName(), "X")
 RESULT
 
-CHECK(NucleicAcid::get3Prime() const)
+CHECK(const Nucleotide* get3Prime() const throw())
 	NucleicAcid na1("na1");
 	TEST_EQUAL(na1.get3Prime(), 0)
 	Nucleotide n1("n1");
@@ -165,7 +163,7 @@ CHECK(NucleicAcid::get3Prime() const)
 	TEST_EQUAL(na1.get3Prime(), &n3)
 RESULT
 
-CHECK(NucleicAcid::get5Prime())
+CHECK(Nucleotide* get5Prime() throw())
 	NucleicAcid na1("na1");
 	Nucleotide n1("n1");
 	na1.insert(n1);
@@ -173,7 +171,7 @@ CHECK(NucleicAcid::get5Prime())
 	TEST_EQUAL(na1.get5Prime()->getName(), "X")
 RESULT
 
-CHECK(NucleicAcid::get5Prime() const)
+CHECK(const Nucleotide* get5Prime() const throw())
 	NucleicAcid na1("na1");
 	TEST_EQUAL(na1.get5Prime(), 0)
 	Nucleotide n1("n1");
@@ -187,14 +185,14 @@ CHECK(NucleicAcid::get5Prime() const)
 	TEST_EQUAL(na1.get5Prime(), &n3)
 RESULT
 
-CHECK(NucleicAcid::getID() const)
+CHECK(const String& getID() const throw())
 	NucleicAcid na1("na1");
 	TEST_EQUAL(na1.getID(), BALL_NUCLEICACID_DEFAULT_ID)
 	na1.setID("X");
 	TEST_EQUAL(na1.getID(), "X")
 RESULT
 
-CHECK(NucleicAcid::setID(const String&))
+CHECK(void setID(const String& id) throw())
 	NucleicAcid na1("na1");
 	na1.setID("");
 	TEST_EQUAL(na1.getID(), BALL_NUCLEICACID_DEFAULT_ID)
@@ -202,7 +200,7 @@ CHECK(NucleicAcid::setID(const String&))
 	TEST_EQUAL(na1.getID(), "X")
 RESULT
 
-CHECK(NucleicAcid::countNucleotides())
+CHECK(Size countNucleotides() const throw())
 	NucleicAcid na1("na1");
 	TEST_EQUAL(na1.countNucleotides(), 0)
 	Nucleotide n1("n1");
@@ -235,7 +233,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<Nucleotide>(), Nucleotide::createDefault);
 pm.registerClass(getStreamName<NucleicAcid>(), NucleicAcid::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	NucleicAcid* f1 = new NucleicAcid("name1");
 	Nucleotide* f2= new Nucleotide("name2");
@@ -248,7 +246,7 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -269,12 +267,50 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const NucleicAcid& nucleic_acid) const throw())
 	NucleicAcid b1;
 	NucleicAcid b2;
 	TEST_EQUAL(b1 == b2, false)
 	b1 = b2;
 	TEST_EQUAL(b1 == b1, true)
+RESULT
+
+CHECK(bool operator != (const NucleicAcid& nucleic_acid) const throw())
+	NucleicAcid b1;
+	NucleicAcid b2;
+	TEST_EQUAL(b1 != b2, true)
+	b1 = b2;
+	TEST_EQUAL(b1 != b1, false)
+RESULT
+
+NucleicAcid na1("na1");
+Nucleotide n1("n1");
+Nucleotide n2("n2");
+na1.insert(n1);
+na1.insert(n2);
+
+CHECK(BALL_CREATE_DEEP(NucleicAcid))
+	NucleicAcid* na2 = (NucleicAcid*) na1.create(false, true);
+	TEST_EQUAL(na2->getName(), "")
+	TEST_EQUAL(na2->countNucleotides(), 0)
+	delete na2;
+	na2 = (NucleicAcid*) na1.create(true, false);
+	TEST_EQUAL(na2->getName(), "na1")
+	TEST_EQUAL(na2->countNucleotides(), 2)
+RESULT
+
+CHECK(Nucleotide* getNucleotide(Position position) throw())
+	na1.getNucleotide(0)->setName("na1");
+	na1.getNucleotide(1)->setName("na2");
+	TEST_EQUAL(n1.getName(), "na1")
+	TEST_EQUAL(n2.getName(), "na2")
+RESULT
+
+CHECK(const Nucleotide* getNucleotide(Position position) const throw())
+	const NucleicAcid& na = na1;
+	TEST_EQUAL(na.getNucleotide(0)->getName(), "na1")
+	TEST_EQUAL(na.getNucleotide(1)->getName(), "na2")
+	TEST_EQUAL(na.getNucleotide(2), 0)
 RESULT
 
 /////////////////////////////////////////////////////////////
