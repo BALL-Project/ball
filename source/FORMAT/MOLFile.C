@@ -1,4 +1,4 @@
-// $Id: MOLFile.C,v 1.11 2002/01/17 00:46:32 oliver Exp $
+// $Id: MOLFile.C,v 1.11.4.1 2002/03/10 01:34:21 oliver Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -22,7 +22,7 @@ namespace BALL
 	const String MOLFile::counts_format_ = "%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d%6s\n";
 
 	// the format definition for the atom block
-	const String MOLFile::atom_format_ = "%10.4f%10.4f%10.4f %3s%2d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d\n";
+	const String MOLFile::atom_format_ = "%10.4f%10.4f%10.4f %-3s%2d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d\n";
 
 	// the format definition for the bond block
 	const String MOLFile::bond_format_ = "%3d%3d%3d%3d%3d%3d%3d\n";
