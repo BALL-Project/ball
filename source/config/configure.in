@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.138 2001/06/14 00:28:31 oliver Exp $
+dnl    $Id: configure.in,v 1.139 2001/06/21 02:37:58 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -979,7 +979,7 @@ dnl
 if test "${HAS_GPLUSPLUS}" = "true" ; then
 	CXX_MAKEDEPEND="${CXX}"
 	MAKEDEP_CXX_OPTS="-M"
-	CXXFLAGS_D="${CXXFLAGS_D} -Wall -W"
+	CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 	CXXFLAGS_O="${CXXFLAGS_O} -O2"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
@@ -1564,6 +1564,24 @@ AC_DEFINE_UNQUOTED(BALL_64BIT_UINT_TYPE, ${BALL_64BIT_UINT})
 
 dnl
 dnl	define a 32 bit type for Size and Index
+dnl
+if test "${BALL_INT_SIZE}" = "${BALL_POINTER_SIZE}" ; then
+	BALL_POINTER_TYPE="unsigned int"
+else 
+	if test "${BALL_LONG_SIZE}" = "${BALL_POINTER_SIZE}" ; then
+		BALL_POINTER_TYPE="unsigned long"
+	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(cannot find appropriate integer type of same size as void*)
+		AC_MSG_ERROR(abort)
+	fi
+fi
+AC_DEFINE_UNQUOTED(BALL_POINTERSIZEINT_TYPE, ${BALL_POINTER_TYPE})
+
+dnl
+dnl	define a (true) pointer size int for several conversion issues
+dnl (e.g. PersistenceManager) - just a define, no real typedef
+dnl since for internal use only!
 dnl
 if test "${SIZEOF_INT}" = 4 ; then
 	BALL_INDEX_TYPE="int"

@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.24 2001/05/14 00:08:18 oliver Exp $ 
+// $Id: config.h.in,v 1.25 2001/06/21 02:37:59 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -153,6 +153,9 @@
 
 // Defines a signed type that has the same length as size_t
 #define BALL_INDEX_TYPE int
+
+// Defines an unsigned integer type of the same size as void*
+#define BALL_POINTERSIZEINT_TYPE int
 
 // Define the template argument for friends of template classes:
 // either "" or "<>"
