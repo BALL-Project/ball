@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.3 1999/08/27 14:02:16 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.4 1999/08/27 15:47:58 len Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -95,7 +95,7 @@ namespace BALL
 		*/
 		ResidueRotamerSet(const ResidueRotamerSet& rotamer_set, bool deep = true);
 
-		/**	Detailled constructor
+		/**	Detailed constructor
 		*/
 		ResidueRotamerSet(const Residue& residue);
 
@@ -117,6 +117,30 @@ namespace BALL
 		ConstIterator end() const;
 		//@}
 		
+		/**	@name	Assignment Operator
+		*/
+		//@{
+
+		/**	The assignment operator
+		*/
+		ResidueRotamerSet&	operator=(const ResidueRotamerSet& residue_rotamer_set);
+
+		//@}
+
+		/** @name Accessors
+		*/
+		//{
+		/** get the name of the ResidueRotamerSet 
+		*/
+		const String & getName() const; 
+
+		Residue &getResidue() ; 
+
+		/** find out if the class instance is valid
+		*/
+		bool isValid() const; 
+
+		//}
 
 		/**	@name	Rotamer Assignment
 		*/
@@ -124,7 +148,11 @@ namespace BALL
 
 		/**	Assign a specific rotamer.
 		*/
-		bool setRotamer(Residue& residue, const Rotamer& rotamer) const;
+		bool setRotamer(Residue& residue, const Rotamer& rotamer) ;
+
+		/**  assign a new name
+		*/
+		void setName(String &name); 
 
 		/**	
 		*/
@@ -132,35 +160,60 @@ namespace BALL
 
 		/**	Build a copy of a specified rotamer
 		*/
-		Residue* buildRotamer(const Rotamer& rotamer) const;
+		Residue* buildRotamer(const Rotamer& rotamer) ;
 		//@}
 		
 		protected:
+		/*_ @name Protected attributes 
+		*/
+		//@{
 
-		// name of the variant (NOT the residue name, but the variant name
-		// obtained from the template DB)
+
+		/*_ indicates whether the instance is valid 
+		*/ 
+		bool valid_; 
+
+
+		/*_ name of the variant (NOT the residue name, but the variant name
+		    obtained from the template DB)
+      		*/ 
 		String								name_;
 		
-		// contains the residue (side chain and backbone)
+		/*_ contains the residue (side chain and backbone)
+		*/
 		Residue								side_chain_;
 
-		// hash map containing all atom names of the variant
-		// and pointers to the corresponding atoms in residue_
+		/*_ hash map containing all atom names of the variant
+		    and pointers to the corresponding atoms in residue_
+		*/
 		StringHashMap<Atom*>	atom_name_map_;
 
-		// the three anchor atoms (backbone atoms)
-		// used to determine the primary transformation
+		/*_ the three anchor atoms (backbone atoms)
+		    used to determine the primary transformation
+		*/
 		Atom*									anchor_atoms_[3];
 
-		// array containing all rotamers
+		/*_ array containing all rotamers
+		*/
 		vector<Rotamer>				rotamers_;
 
-		// names of the movable atoms (names) for each of the
-		// torsions
+		/*_ names of the movable atoms (names) for each of the
+		    torsions
+		*/
 		vector<String>				moveable_atoms_chi1_;
 		vector<String>				moveable_atoms_chi2_;
 		vector<String>				moveable_atoms_chi3_;
 		vector<String>				moveable_atoms_chi4_;
+
+		/*_ determines all movable atoms 
+		*/
+		void addMoveable_(vector<String>& moveable, Atom& a); 
+
+		/*_ set the torsion angles
+		*/
+		void setTorsionAngle_(const vector<String>& moveable, Angle angle); 
+
+		//@}
 	};
 
 	/**
@@ -179,7 +232,7 @@ namespace BALL
 		*/
 		RotamerLibrary();
 
-		/**	Detailled constructor
+		/**	Detailed constructor
 		*/
 		RotamerLibrary(const String& filename);
 
@@ -195,9 +248,9 @@ namespace BALL
 
 		bool readSQWRLLibraryFile(const String& filename, const FragmentDB& fragment_db);
 
-		ResidueRotamerSet& getRotamerSet(const Residue& residue);
+		ResidueRotamerSet* getRotamerSet(const Residue& residue);
 
-		ResidueRotamerSet& getRotamerSet(const String& name);
+		ResidueRotamerSet* getRotamerSet(const String& name);
 
 		Size getNumberOfVariants() const;
 
@@ -205,9 +258,18 @@ namespace BALL
 
 		protected:
 
+		/*_ @name Protected Attributes
+		*/
+		//@{
+
+		/*_ Contains the available variants 
+		*/ 
 		vector<ResidueRotamerSet>	variants_;
-		
+
+		/*_ Indicates whether the instance is valid 
+		*/ 
 		bool valid_;
+		//@}
 	};
 
 #ifndef BALL_NO_INLINE_FUNCTIONS
