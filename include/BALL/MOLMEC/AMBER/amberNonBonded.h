@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.17 2002/02/14 16:47:19 anker Exp $
+// $Id: amberNonBonded.h,v 1.17.4.1 2002/02/28 01:24:49 oliver Exp $
 // Molecular Mechanics: Amber force field, non-bonded component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -179,7 +179,7 @@ namespace BALL
     /*_ Vector of flags deciding whether the pair forms a hydrogen bond or a
 				standard VdW interaction.
     */
-    vector<bool>  is_hydrogen_bond_;
+    vector<char> is_hydrogen_bond_;
  
 		/*_	Number of 1-4 interactions in the vector non_bonded
 		*/

@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.15.4.2 2002/02/27 01:24:54 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.15.4.3 2002/02/28 01:24:50 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -731,8 +731,8 @@ namespace BALL
 			// Calculate the solvation energy contribution
 			if (use_solvation		
 					&& (distance_2 <= cut_off_solvation_2)
-					&& it->atom1->ptr->getElement() !=  PTE[Element::H] 
-					&& it->atom2->ptr->getElement() !=  PTE[Element::H])
+					&& (it->atom1->ptr->getElement() != PTE[Element::H]) 
+					&& (it->atom2->ptr->getElement() != PTE[Element::H]))
 			{
 				CharmmEEF1::Values a1 = solvation[it->atom1->type];
 				CharmmEEF1::Values a2 = solvation[it->atom2->type];
@@ -927,8 +927,8 @@ namespace BALL
 			// ignore all hydrogen atoms (they are not considered in EEF1)
 			if (use_solvation 
 					&& (distance_2 <= cut_off_solvation_2) 
-					&& it->atom1->ptr->getElement() !=  PTE[Element::H] 
-					&& it->atom2->ptr->getElement() !=  PTE[Element::H])
+					&& (it->atom1->ptr->getElement() != PTE[Element::H]) 
+					&& (it->atom2->ptr->getElement() != PTE[Element::H]))
 			{
 				CharmmEEF1::Values a1 = solvation[it->atom1->type];
 				CharmmEEF1::Values a2 = solvation[it->atom2->type];

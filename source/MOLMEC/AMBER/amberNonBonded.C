@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.2 2002/02/27 01:24:54 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.3 2002/02/28 01:24:50 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -32,8 +32,7 @@ namespace BALL
 			scaling_vdw_1_4_(0.0),
 			scaling_electrostatic_1_4_(0.0),
 			use_dist_depend_dielectric_(false),
-			// ?????
-			// algorithm_type_(),
+			algorithm_type_(MolmecSupport::HASH_GRID),
 			van_der_waals_(),
 			hydrogen_bond_()
 	{	
@@ -61,8 +60,7 @@ namespace BALL
 			scaling_vdw_1_4_(0.0),
 			scaling_electrostatic_1_4_(0.0),
 			use_dist_depend_dielectric_(false),
-			// ?????
-			// algorithm_type_(),
+			algorithm_type_(MolmecSupport::HASH_GRID),
 			van_der_waals_(),
 			hydrogen_bond_()
 	{
@@ -157,8 +155,7 @@ namespace BALL
 		scaling_vdw_1_4_ = 0.0;
 		scaling_electrostatic_1_4_ = 0.0;
 		use_dist_depend_dielectric_ = false;
-		// ?????
-		// algorithm_type_ = anb.algorithm_type_;
+		algorithm_type_ = MolmecSupport::HASH_GRID;
 		van_der_waals_.clear();
 		hydrogen_bond_.clear();
 
@@ -413,21 +410,14 @@ namespace BALL
 			// reserve the required size plus 20% 
 			// to avoid frequent resizing)
 			non_bonded_.reserve((Size)((double)atom_vector.size() * 1.2));
+			is_hydrogen_bond_.reserve(non_bonded_.capacity());
 		}
-
-		// bool vector for storing torsion information
-		vector<bool> is_torsion;
-		is_torsion.reserve(atom_vector.size());
 
 		// Iterate over all atom pairs in atom_vector and test if the atoms
-		// build a torsion
-		vector< pair<Atom*, Atom*> >::const_iterator pair_it = atom_vector.begin();
-		for (; pair_it != atom_vector.end(); ++pair_it) 
-		{
-			is_torsion.push_back(pair_it->first->isVicinal(*pair_it->second));
-		}
+		// are part of a torsion
+		vector<Position> non_torsions;
+		non_torsions.reserve(atom_vector.size());
 
-		vector<bool>::iterator bool_it = is_torsion.begin(); 
 		LennardJones::Data tmp;
 		Atom*	atom1;
 		Atom* atom2;
@@ -436,13 +426,18 @@ namespace BALL
 
 		// Iterate and search torsions, fill the atom pairs that have a torsion
 		// in non_bonded_
-		for (pair_it = atom_vector.begin(); pair_it != atom_vector.end(); 
-				++pair_it, ++bool_it) 
+		for (Position i = 0; i < (Size)atom_vector.size(); ++i) 
 		{
-			if (*bool_it) 
+			atom1 = atom_vector[i].first;
+			atom2 = atom_vector[i].second;
+			if (!atom1->isVicinal(*atom2)) 
 			{
-				atom1 = pair_it->first;
-				atom2 = pair_it->second;
+				// store the non-torsions for later appending in the non_torsions
+				// vector
+				non_torsions.push_back(i);
+			}
+			else
+			{
 				type_atom1 = atom1->getType();
 				type_atom2 = atom2->getType();
 				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
@@ -470,42 +465,35 @@ namespace BALL
 		number_of_1_4_ = (Size)non_bonded_.size();
 
 		// Iterate and search non torsions, fill them in the vector non_bonded_
-		bool_it = is_torsion.begin();
- 
-		for (pair_it = atom_vector.begin(); pair_it != atom_vector.end();
-				++pair_it, ++bool_it) 
+		for (Position i = 0; i < (Size)non_torsions.size(); ++i) 
 		{
+			atom1 = atom_vector[non_torsions[i]].first;
+			atom2 = atom_vector[non_torsions[i]].second;
 
-			if (!(*bool_it)) 
+			type_atom1 = atom1->getType();
+			type_atom2 = atom2->getType();
+			tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
+			tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
+
+			if (lennard_jones.hasParameters(type_atom1, type_atom2)) 
 			{
-				atom1 = pair_it->first;
-				atom2 = pair_it->second;
-
-				type_atom1 = atom1->getType();
-				type_atom2 = atom2->getType();
+				lennard_jones.assignParameters(tmp.values, type_atom1, type_atom2);
+			} 
+			else 
+			{
+				Log.error() << "AmberNonBonded::setup(): "
+					<< "cannot find Lennard Jones parameters for types "
+					<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom1) 
+					<< "-"
+					<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom2) 
+					<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")"
+					<< endl;
 				tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
 				tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
-
-				if (lennard_jones.hasParameters(type_atom1, type_atom2)) 
-				{
-					lennard_jones.assignParameters(tmp.values, type_atom1, type_atom2);
-				} 
-				else 
-				{
-					Log.error() << "AmberNonBonded::setup(): "
-						<< "cannot find Lennard Jones parameters for types "
-						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom1) 
-						<< "-"
-						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom2) 
-						<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")"
-						<< endl;
-					tmp.atom1 = &(Atom::getAttributes()[atom1->getIndex()]);
-					tmp.atom2 = &(Atom::getAttributes()[atom2->getIndex()]);
-					tmp.values.A = 0;
-					tmp.values.B = 0;
-				}
-				non_bonded_.push_back(tmp);
+				tmp.values.A = 0;
+				tmp.values.B = 0;
 			}
+			non_bonded_.push_back(tmp);
 		}
 
 		// now check for hydrogen bonds
@@ -513,12 +501,12 @@ namespace BALL
 		// and the two atoms are not vicinal (1-4)
 		Size count = 0;
 		Potential1210::Values values;
-		for (Size i = number_of_1_4_; i < non_bonded_.size(); i++)
+		for (Size i = number_of_1_4_; i < non_bonded_.size(); ++i)
 		{
 			type_atom1 = non_bonded_[i].atom1->type;
 			type_atom2 = non_bonded_[i].atom2->type;
-			is_hydrogen_bond_.push_back(hydrogen_bond.hasParameters(type_atom1,	type_atom2));
-			if (is_hydrogen_bond_.back() == true)
+			is_hydrogen_bond_.push_back((char)hydrogen_bond.hasParameters(type_atom1,	type_atom2));
+			if (is_hydrogen_bond_.back() == (char)true)
 			{
 				hydrogen_bond.assignParameters(values, type_atom1, type_atom2);
 				non_bonded_[i].values.A = values.A;
@@ -673,6 +661,60 @@ namespace BALL
 		}
 	}	// end  of function AMBERcalculateNBEnergy() 
 
+	struct NBStruct
+	{
+		Atom::StaticAtomAttributes* atom1;
+		Atom::StaticAtomAttributes* atom2;
+		double charge_product;
+		double A;
+		double B;
+	};
+		
+	inline double nonperiodic_inverse_square_distance(const Vector3& a, const Vector3& b)
+	{
+		return SQR(a.x - b.x) + SQR(a.y - b.y) + SQR(a.z - b.z);
+	}
+
+	inline double coulomb(double inverse_square_distance, double charge_product)
+	{
+		return charge_product * inverse_square_distance;
+	}
+
+	inline double vdw_6_12(double inverse_square_distance, double A, double B)
+	{
+		register double inv_dist_6(inverse_square_distance * inverse_square_distance * inverse_square_distance);
+		return (inv_dist_6 * (inv_dist_6 * A - B)); 
+	}
+
+	typedef double (*SquareAtomDistanceFunction) (const Vector3&, const Vector3&);
+	typedef double (*ESEnergyFunction) (double square_dist, double q1_q2);
+	typedef double (*VdWEnergyFunction) (double square_dist, double A, double B);
+
+	
+	template <ESEnergyFunction es_energy_fct, 
+						VdWEnergyFunction vdw_energy_fct, 
+						SquareAtomDistanceFunction distance_fct>
+	inline
+	void AmberNBEnergy(NBStruct* ptr, NBStruct* end_ptr, double& es_energy, double& vdw_energy)
+	{
+		// iterate over all pairs
+		for (; ptr != end_ptr; ++ptr)
+		{
+			// compute the square distance and correct for periodic boundary if necessary
+			double inverse_square_distance = distance_fct(ptr->atom1->position, ptr->atom2->position);
+			es_energy += es_energy_fct(inverse_square_distance, ptr->charge_product);
+			vdw_energy += vdw_energy_fct(inverse_square_distance, ptr->A, ptr->B);
+		}
+	}
+
+	void tmp()
+	{
+		NBStruct field[10];
+
+		double es_energy;
+		double vdw_energy;
+		AmberNBEnergy<coulomb, vdw_6_12, nonperiodic_inverse_square_distance>(&field[0], &field[10], es_energy, vdw_energy);
+	}
 
 	// This  function AMBERcalculates the force vector
 	// resulting from non-bonded interactions between two atoms 
@@ -900,7 +942,7 @@ namespace BALL
 		Size i;                                                                                       
 
 		bool use_periodic_boundary = force_field_->periodic_boundary.isEnabled(); 
-		
+
 		// calculate energies arising from 1-4 interaction pairs 
 		// and remaining non-bonded interaction pairs 
 		if (use_periodic_boundary && use_dist_depend_dielectric_)
@@ -926,7 +968,7 @@ namespace BALL
 				AMBERcalculateNBEnergy
 					(*it, ENERGY_PARAMETERS, 
 					 vdw_energy, electrostatic_energy, 
-					 is_hydrogen_bond_[i], true, true);
+					 (bool)is_hydrogen_bond_[i], true, true);
 			}
 		}
 		else	
@@ -953,7 +995,7 @@ namespace BALL
 					AMBERcalculateNBEnergy
 						(*it, ENERGY_PARAMETERS,
 						 vdw_energy, electrostatic_energy, 
-						 is_hydrogen_bond_[i], true, false);            
+						 (bool)is_hydrogen_bond_[i], true, false);            
 				}
 			}
 			else
@@ -979,7 +1021,7 @@ namespace BALL
 						AMBERcalculateNBEnergy
 							(*it, ENERGY_PARAMETERS,
 							 vdw_energy, electrostatic_energy, 
-							 is_hydrogen_bond_[i], false, true);
+							 (bool)is_hydrogen_bond_[i], false, true);
 					}
 				}
 				else
@@ -1001,7 +1043,7 @@ namespace BALL
 						AMBERcalculateNBEnergy
 							(*it, ENERGY_PARAMETERS, 
 							 vdw_energy, electrostatic_energy, 
-							 is_hydrogen_bond_[i], false, false);
+							 (bool)is_hydrogen_bond_[i], false, false);
 					}
 				}
 			}
@@ -1096,7 +1138,7 @@ namespace BALL
 			{
 				AMBERcalculateNBForce
 					(*it, FORCE_PARAMETERS, e_scaling_factor, 
-					 vdw_scaling_factor, is_hydrogen_bond_[i], true, true, use_selection);
+					 vdw_scaling_factor, (bool)is_hydrogen_bond_[i], true, true, use_selection);
 			}
 		}
 		else
@@ -1125,7 +1167,7 @@ namespace BALL
 				{
 					AMBERcalculateNBForce
 						(*it, FORCE_PARAMETERS, e_scaling_factor, 
-						 vdw_scaling_factor, is_hydrogen_bond_[i], true, false, use_selection);
+						 vdw_scaling_factor, (bool)is_hydrogen_bond_[i], true, false, use_selection);
 				}
 			}
 			else
@@ -1150,7 +1192,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(*it, FORCE_PARAMETERS, e_scaling_factor, 
-							 vdw_scaling_factor, is_hydrogen_bond_[i], false, true, use_selection);
+							 vdw_scaling_factor, (bool)is_hydrogen_bond_[i], false, true, use_selection);
 					}
 				}
 				else
@@ -1171,7 +1213,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(*it, FORCE_PARAMETERS, e_scaling_factor, 
-							 vdw_scaling_factor, is_hydrogen_bond_[i], false, false, use_selection);
+							 vdw_scaling_factor, (bool)is_hydrogen_bond_[i], false, false, use_selection);
 					}
 				}
 			}

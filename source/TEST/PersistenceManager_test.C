@@ -1,4 +1,4 @@
-// $Id: PersistenceManager_test.C,v 1.6 2002/01/12 01:59:49 oliver Exp $
+// $Id: PersistenceManager_test.C,v 1.6.4.1 2002/02/28 01:24:51 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -243,7 +243,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.6 2002/01/12 01:59:49 oliver Exp $")
+START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.6.4.1 2002/02/28 01:24:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -310,7 +310,7 @@ RESULT
 CHECK(PersistenceManager::getNumberOfClasses() const  throw())
 	PersistenceTest tpm;
 	Size noc = tpm.getNumberOfClasses();
-	TEST_EQUAL(noc, 16);
+	TEST_EQUAL(noc, 15);
 RESULT
 
 

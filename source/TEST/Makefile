@@ -16,7 +16,6 @@ EXECUTABLES_MATHS = \
 	AnalyticalGeometry_test\
 	Angle_test\
 	Vector2_test\
-	Vector3_test\
 	Vector4_test\
 	Quaternion_test\
 	Matrix44_test\
@@ -265,3 +264,5 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
 
+CharmmFF_test: CharmmFF_test.o ../MOLMEC/CHARMM/charmmNonBonded.o
+	$(CXX) $(CXXFLAGS) CharmmFF_test.o ../MOLMEC/CHARMM/charmmNonBonded.o $(LDFLAGS) -o $@ $(LIBS)
