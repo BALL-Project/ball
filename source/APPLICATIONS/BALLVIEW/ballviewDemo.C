@@ -156,7 +156,7 @@ void BALLViewDemo::accept()
 
 	if (id < MODEL_HBONDS - 1)
 	{
-		if (((ModelType)id) >= MODEL_SE_SURFACE) id ++;
+		if (((ModelType)id) >= MODEL_SE_SURFACE -1) id ++;
  		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, (ModelType) id, COLORING_ELEMENT);
 //   CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
