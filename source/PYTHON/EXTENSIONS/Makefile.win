@@ -18,7 +18,7 @@ BALL_LIB = ..\..\lib\libBall.lib
 #XLIB = user32.lib gdi32.lib comdlg32.lib shell32.lib advapi32.lib wsock32.lib 
 XLIB = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib ..\..\Windows\Contrib\ONC_RPC\librpc\oncrpc.lib
 
-INCL = -I ..\..\Windows\include -I ..\..\include -I ..\..\Windows\Contrib\regex-0.12 -I ..\..\Windows\Contrib\ONC_RPC -I ..\..\..\include -I ..\..\..\Windows\include -I $(PYTHON_DIR)\include -I $(QTDIR)\include -I ..\
+INCL = -I ..\..\..\Windows\include -I ..\..\..\include -I ..\..\..\Windows\Contrib\regex-0.12 -I ..\..\..\Windows\Contrib\ONC_RPC -I $(PYTHON_DIR)\include -I $(QTDIR)\include -I ..\
 
 SIP_OPTS=-c SIP -e -s ".C" -b BALL.sbf
 
