@@ -1,0 +1,209 @@
+// $Id: expressionParser.h,v 1.1 2002/01/26 21:53:53 oliver Exp $
+
+#ifndef BALL_KERNEL_EXPRESSION_PARSER_H
+#define BALL_KERNEL_EXPRESSION_PARSER_H
+
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
+
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atom.h>
+#endif
+
+#ifndef BALL_KERNEL_BOND_H
+#	include <BALL/KERNEL/bond.h>
+#endif
+
+#ifndef BALL_KERNEL_SYSTEM_H
+#	include <BALL/KERNEL/system.h>
+#endif
+
+#ifndef BALL_KERNEL_EXPRESSION_TREE_H
+	#include <BALL/KERNEL/expressionTree.h>
+#endif
+
+namespace BALL 
+{
+
+	/** @name	Expression Parser.
+			A simple parser for BALL kernel expressions. It reads a string and constructs
+			a syntax tree from the boolean expressions contained therein.
+			\\
+			{\bf Definition:} \URL{BALL/STRUCTURE/expressionParser.h}
+	*/
+	class ExpressionParser
+	{
+		public:
+
+		/** SyntaxTree.
+				This internal class should be used in the implementation
+				of \Ref{ExpressionParser} only.
+				\\
+				{\bf Definition} \URL{BALL/KERNEL/syntaxTree.h}
+		*/
+		class SyntaxTree
+		{
+			public:
+			
+			/**	@name	Type Definitions
+			*/
+			//@{
+
+			/// An iterator for the children of a given node
+			typedef	list<SyntaxTree*>::iterator				Iterator;
+
+			/// A const iterator for the children of a given node
+			typedef	list<SyntaxTree*>::const_iterator	ConstIterator;
+			
+			//@}
+
+			/**	@name	Constructors and Destructors	
+			*/
+			//@{
+
+			/** Default constructor.
+			*/
+			SyntaxTree()
+				throw();
+
+			/** Detailed constructor.
+			*/
+			SyntaxTree(const char* predicate_name, const char* args)
+				throw();
+				
+			/**	Detailed constructor
+			*/
+			SyntaxTree(SyntaxTree* left, SyntaxTree* right, ExpressionTree::Type type)
+				throw();
+
+			/** Destructor.
+			*/
+			virtual ~SyntaxTree()
+				throw();
+			
+			//@}
+			/** @name Assignment
+			*/
+			//@{
+
+			/** Clear method. This method brings this instance to the state after
+					default construction. {\bf Note} that the list of children will be
+					cleared but the childrem themselves will \emph{not} be deleted.
+			*/
+			virtual void clear()
+				throw();
+
+			//@}
+
+			/**	@name	Accessors
+			*/
+			//@{
+
+			/** Return a mutable iterator pointing to the first child.
+			*/
+			Iterator begin()
+				throw();
+
+			/** Return a mutable iterator pointing to the last child.
+			*/
+			Iterator end()
+				throw();
+
+			/** Return a constant iterator pointing to the first child.
+			*/
+			ConstIterator begin() const
+				throw();
+
+			/** Return a constant iterator pointing to the last child.
+			*/
+			ConstIterator end() const
+				throw();	
+
+			//@}
+
+			/**	@name Debugging
+			*/
+			//@{
+			void dump(std::ostream& is = std::cout, Size depth = 0) const
+				throw();
+			//@}
+
+			/** @name Public attributes
+			*/
+			//@{
+			/**
+			*/
+			String								expression;
+
+			/** ?????
+			*/
+			String								predicate;
+
+			/** ?????
+			*/
+			String								argument;
+
+			/** ?????
+			*/
+			bool									evaluated;
+
+			/** ?????
+			*/
+			bool									negate;
+
+			/** ?????
+			*/
+			ExpressionTree::Type	type;
+
+			/** ?????
+			*/
+			list<SyntaxTree*>			children;
+			//@}			
+		};
+
+
+		/**	@name Constructors and Destructors
+		*/
+		//@{
+
+		///
+		ExpressionParser();
+			
+		///
+		ExpressionParser(const ExpressionParser& parser);
+
+		///
+		~ExpressionParser();
+		//@}
+		
+		/**	@name	Parsing
+		*/
+		//@{
+		/**	Parse an expression.
+		*/
+		void parse(const String& s)
+			throw(Exception::ParseError);
+
+		/**	Return the parsed system
+		*/
+		const SyntaxTree& getSyntaxTree() const;
+		//@}
+		
+		struct State
+		{
+			Size							char_count;
+			ExpressionParser*	current_parser;
+			const char*				buffer;
+		};
+		
+		static State state;
+
+		protected:
+		SyntaxTree								syntax_tree_;
+		static ExpressionParser*	current_parser_;
+	};
+
+} // namespace BALL
+
+#endif // BALL_KERNEL_EXPRESSION_PARSER_H
