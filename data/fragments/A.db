@@ -6,26 +6,26 @@
 	</node>
 	<node>Atoms
 		<node>P<value>P -1.843 -4.264 51.961</value></node>
-		<node>O1P<value>O1P -2.274 -2.918 52.418</value></node>
-		<node>O2P<value>O2P -0.499 -4.784 52.294</value></node>
-		<node>O5*<value>O5* -2.066 -4.342 50.386</value></node>
-		<node>C5*<value>C5* -1.674 -5.443 49.571</value></node>
-		<node>C4*<value>C4* -1.779 -5.009 48.131</value></node>
-		<node>O4*<value>O4* -3.134 -4.672 47.773</value></node>
-		<node>C3*<value>C3* -0.942 -3.744 47.986</value></node>
-		<node>O3*<value>O3* -0.036 -3.847 46.896</value></node>
-		<node>C2*<value>C2* -1.930 -2.653 47.711</value></node>
-		<node>C1*<value>C1* -3.195 -3.329 47.263</value></node>
-		<node>N9<value>N9 -4.315 -2.577 47.844</value></node>
-		<node>C8<value>C8 -4.615 -2.364 49.161</value></node>
-		<node>N7<value>N7 -5.691 -1.659 49.350</value></node>
-		<node>C5<value>C5 -6.134 -1.384 48.065</value></node>
-		<node>C6<value>C6 -7.233 -0.673 47.585</value></node>
-		<node>N6<value>N6 -8.145 -0.134 48.386</value></node>
-		<node>N1<value>N1 -7.361 -0.588 46.254</value></node>
-		<node>C2<value>C2 -6.475 -1.169 45.457</value></node>
-		<node>N3<value>N3 -5.406 -1.873 45.782</value></node>
-		<node>C4<value>C4 -5.299 -1.937 47.133</value></node>
+		<node>O1P<value>O -2.274 -2.918 52.418</value></node>
+		<node>O2P<value>O -0.499 -4.784 52.294</value></node>
+		<node>O5*<value>O -2.066 -4.342 50.386</value></node>
+		<node>C5*<value>C -1.674 -5.443 49.571</value></node>
+		<node>C4*<value>C -1.779 -5.009 48.131</value></node>
+		<node>O4*<value>O -3.134 -4.672 47.773</value></node>
+		<node>C3*<value>C -0.942 -3.744 47.986</value></node>
+		<node>O3*<value>O -0.036 -3.847 46.896</value></node>
+		<node>C2*<value>C -1.930 -2.653 47.711</value></node>
+		<node>C1*<value>C -3.195 -3.329 47.263</value></node>
+		<node>N9<value>N -4.315 -2.577 47.844</value></node>
+		<node>C8<value>C -4.615 -2.364 49.161</value></node>
+		<node>N7<value>N -5.691 -1.659 49.350</value></node>
+		<node>C5<value>C -6.134 -1.384 48.065</value></node>
+		<node>C6<value>C -7.233 -0.673 47.585</value></node>
+		<node>N6<value>N -8.145 -0.134 48.386</value></node>
+		<node>N1<value>N -7.361 -0.588 46.254</value></node>
+		<node>C2<value>C -6.475 -1.169 45.457</value></node>
+		<node>N3<value>N -5.406 -1.873 45.782</value></node>
+		<node>C4<value>C -5.299 -1.937 47.133</value></node>
 	</node>
 	<node>Bonds
 		<node>1<value>P O1P s</value></node>
@@ -38,7 +38,6 @@
 		<node>8<value>C3* O3* a</value></node>
 		<node>9<value>C3* C2* a</value></node>
 		<node>10<value>C2* C1* a</value></node>
-		<node>11<value>C1* O1P a</value></node>
 		<node>12<value>C1* O4* a</value></node>
 		<node>13<value>C1* N9 a</value></node>
 		<node>14<value>N9 C8 a</value></node>
@@ -54,8 +53,8 @@
 		<node>24<value>N3 C4 a</value></node>
  	</node>
 	<node>Connections
-		<node>5-term<value></value></node>
-		<node>3-term<value></value></node>
+		<node>5-term<value>P 3-term s 1.62 0.5</value></node>
+		<node>3-term<value>O3* 5-term s 1.62 0.5</value></node>
 	</node>
 	<node>Properties
 		<node>NUCLEOTIDE</node>
@@ -69,6 +68,16 @@
     </node>
     <node>Default
       <node>Properties
+      </node>
+    </node>
+    <node>A-3
+      <node>Properties
+        <node>3_PRIME</node>
+      </node>
+    </node>
+    <node>A-5
+      <node>Properties
+        <node>5_PRIME</node>
       </node>
     </node>
  	</node>

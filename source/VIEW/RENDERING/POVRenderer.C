@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.9 2004/02/13 15:48:05 anhi Exp $
+// $Id: POVRenderer.C,v 1.10 2004/03/06 13:52:59 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -76,25 +76,25 @@ namespace BALL
 		String POVRenderer::POVColorRGBA(const ColorRGBA& input)
 			throw()
 		{
-			float colorVal;
+			float color_val;
 			
 			String output = "rgbft <";
-			input.getRed().get(colorVal);
-			output+=String(colorVal/255.);
-			output+=", ";
-			input.getGreen().get(colorVal);
-			output+=String(colorVal/255.);
-			output+=", ";
-			input.getBlue().get(colorVal);
-			output+=String(colorVal/255.);
-			output+=", ";
+			input.getRed().get(color_val);
+			output += String(color_val / 255.);
+			output += ", ";
+			input.getGreen().get(color_val);
+			output += String(color_val / 255.);
+			output += ", ";
+			input.getBlue().get(color_val);
+			output += String(color_val / 255.);
+			output += ", ";
 			// TODO: sensible parameter for "filter"
-			output+="0.00";
-			output+=", ";
+			output += "0.00";
+			output += ", ";
 			// TODO: transmit seems not to be linear in alpha
-			input.getAlpha().get(colorVal);
-			output+=String(1.-colorVal/255.);
-			output+=">";
+			input.getAlpha().get(color_val);
+			output += String(1. - color_val / 255.);
+			output += ">";
 
 			return output;
 		}
@@ -105,13 +105,17 @@ namespace BALL
 			String output = "finish { BALLFinish";
 			output += object;
 
-			float colorVal;
-			input.getAlpha().get(colorVal);
+			float color_val;
+			input.getAlpha().get(color_val);
 
-			if (colorVal >= 255)
+			if (color_val  >= 255)
+			{
 				output += "Solid";
+			}
 			else
+			{
 				output += "Transp";
+			}
 
 			output += " }";
 
@@ -121,14 +125,13 @@ namespace BALL
 		String POVRenderer::POVVector3(Vector3 input)
 			throw()
 		{
-			String output = "";
-			output+="<";
-			output+=String(input.x);
-			output+=", ";
-			output+=String(input.y);
-			output+=", ";
-			output+=String(input.z);
-			output+=">";
+			String output = "<";
+			output += String(input.x);
+			output += ", ";
+			output += String(input.y);
+			output += ", ";
+			output += String(input.z);
+			output += ">";
 
 			return output;
 		}
@@ -145,41 +148,48 @@ namespace BALL
 			if (!Renderer::init(stage, width, height)) return false;
 
 			outfile_	<< "// POVRay file created by the BALL POVRenderer" 
-								<< std::endl 
-								<< std::endl;
+								<< std::endl << std::endl;
 
 			outfile_ << "// Width of the original scene: " << width_ << std::endl;
 			outfile_ << "// Height of the original scene: " << height_ << std::endl;
-			outfile_ << "camera {" << std::endl;
+			outfile_ << "// To render this scene, call povray (available from www.povray.org) like this:\n//" << std::endl;
+			outfile_ << "// povray +I" << outfile_.getName() 
+							 << " +FN +Otest.png +QR +W" << width_ << " +H" << height_ << " -UV\n//" << std::endl;
+			outfile_ << "camera {" << setprecision(12) << std::endl;
 			outfile_ << "\tperspective" << std::endl;
-			outfile_ << "\tdirection <0,0,-1>" << std::endl;
-			outfile_ << "\tright " << width_ / height_ << "*x" << std::endl;
-			outfile_ << "\tangle 90.000000" << std::endl;
+			outfile_ << "\tdirection <0.0, 0.0, -1.0>" << std::endl;
+			outfile_ << "\tright " << (double)width_ / (double)height_ << " * x" << std::endl;
+			outfile_ << "\tangle 83.0" << std::endl;
 			outfile_ << "\ttransform {" << std::endl;
 			outfile_ << "\t\tmatrix <" << std::endl;
 
 			GLdouble m[16];	
-			glGetDoublev(GL_MODELVIEW_MATRIX,m);
+			glGetDoublev(GL_MODELVIEW_MATRIX, m);
 			
-			double norm = sqrt(m[0]*m[0] + m[1]*m[1] + m[2]*m[2]);
-			outfile_ << "\t\t" << m[0]/norm << ",  " << m[1]/norm << ", " << m[2]/norm << "," << std::endl;
-			norm = sqrt(m[4]*m[4] + m[5]*m[5] + m[6]*m[6]);
-			outfile_ << "\t\t" << m[4]/norm << ",  " << m[5]/norm << ", " << m[6]/norm << "," << std::endl;
-			norm = sqrt(m[8]*m[8] + m[9]*m[9] + m[10]*m[10]);
-			outfile_ << "\t\t" << m[8]/norm << ",  " << m[9]/norm << ", " << m[10]/norm << "," << std::endl;
+			double norm = sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
+			outfile_ << "\t\t" 
+							 << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << std::endl;
+			norm = sqrt(m[4] * m[4] + m[5] * m[5] + m[6] * m[6]);
+			outfile_ << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << std::endl;
+			norm = sqrt(m[8] * m[8] + m[9] * m[9] + m[10] * m[10]);
+			outfile_ << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << std::endl;
 			outfile_ << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << std::endl;
 		  outfile_ << "\t\t>" << std::endl;
 			outfile_ << "\tinverse }" << std::endl;
-			outfile_ << "}" << std::endl << std::endl;
+			outfile_ << "}" << setprecision(6) << std::endl << std::endl;
+				
+			//
+			outfile_ << "// look up: " << stage.getCamera().getLookUpVector() << std::endl;
+			outfile_ << "// look at: " << stage.getCamera().getLookAtPosition() << std::endl;
 
 			// Set the light sources
 			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
-			for (; it!=stage_->getLightSources().end(); it++)
+			for (; it!=stage_->getLightSources().end(); ++it)
 			{
 				// first, set up the color of the light source
 				float light_rgba[4];
 
-				light_rgba[0] = ((float)it->getColor().getRed())   * it->getIntensity();
+				light_rgba[0] = ((float)it->getColor().getRed()) * it->getIntensity();
 				light_rgba[1] = ((float)it->getColor().getGreen()) * it->getIntensity();
 				light_rgba[2] = ((float)it->getColor().getBlue())  * it->getIntensity();
 				light_rgba[3] = ((float)it->getColor().getAlpha());
@@ -271,27 +281,21 @@ namespace BALL
 				color = disc.getColor();
 			}
 
-			// then, find out its radius
+			// then, find out its radius, its normal, and its position
 			float radius;
-
-			// its normal
 			Vector3 normal;
-			// and finally, its position
 			Vector3 position;
-
 			disc.getCircle().get(position, normal, radius);
-		//Log.error() << normal << std::endl;
 			normal -= origin_;
 
 			// now write the information into the outfile_
-			outfile_ << "\tdisc {" << endl << "\t\t";
+			outfile_ << "\tdisc {" << std::endl << "\t\t";
 			outfile_ << POVVector3(position) << ", ";
 			outfile_ << POVVector3(normal) << ", ";
-			outfile_ << radius << endl;
-			//outfile_ <<"\t\ttexture {" << endl;
-			outfile_ << "\tpigment { " << POVColorRGBA(color) << " } " << endl;
+			outfile_ << radius << std::endl;
+			outfile_ << "\tpigment { " << POVColorRGBA(color) << " } " << std::endl;
 			outfile_ << "\t" << POVFinish("Tube", color) << endl; // We use the same finish as for tubes -> helices
-			outfile_ << "\t} " << endl << endl;
+			outfile_ << "\t} " << std::endl << std::endl;
 		}
 
 		void POVRenderer::renderTube_(const Tube& tube)
@@ -319,10 +323,10 @@ namespace BALL
 			outfile_ << "\tcylinder {" << endl;
 			outfile_ << "\t\t" << POVVector3(base_point) << ", ";
 			outfile_           << POVVector3( cap_point) << ", ";
-			outfile_           <<                 radius << endl;
-			outfile_ << "\tpigment { " << POVColorRGBA(color) << " } " << endl;
-			outfile_ << "\t" << POVFinish("Tube", color) << endl; 
-			outfile_ << "\t} " << endl;
+			outfile_           <<                 radius << std::endl;
+			outfile_ << "\tpigment { " << POVColorRGBA(color) << " } " << std::endl;
+			outfile_ << "\t" << POVFinish("Tube", color) << std::endl; 
+			outfile_ << "\t} " << std::endl;
 		}	
 
 		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
@@ -382,39 +386,39 @@ namespace BALL
 
 			// first, find out if we have a different color for each
 			// point
-			if (mesh.colorList.size()<mesh.vertex.size())
+			if (mesh.colorList.size() < mesh.vertex.size())
 			{
 				// nope. we don't...
-				if (mesh.colorList.size()==0)
+				if (mesh.colorList.empty())
 				{
-					c1 = ColorRGBA(255,255,255,255);
+					c1 = ColorRGBA(255, 255, 255, 255);
 				}
 				else
 				{
 					c1 = mesh.colorList[0];
 				}
 
-				for (Position i=0; i<mesh.triangle.size(); i++)
+				for (Position i = 0; i < mesh.triangle.size(); i++)
 				{
 					t = mesh.triangle[i];
 
 					v1 = mesh.vertex[t.v1];
-					n1 = mesh.normal[t.v1]-origin_;
+					n1 = mesh.normal[t.v1] - origin_;
 					v2 = mesh.vertex[t.v2];
-					n2 = mesh.normal[t.v2]-origin_;
+					n2 = mesh.normal[t.v2] - origin_;
 					v3 = mesh.vertex[t.v3];
-					n3 = mesh.normal[t.v3]-origin_;
+					n3 = mesh.normal[t.v3] - origin_;
 
 					outfile_ << "\t\tsmooth_triangle {" << endl;
 					outfile_ << "\t\t\t#local BALLColor = texture { pigment { " << POVColorRGBA(c1) << " } }" << endl;
 
 
 					outfile_ << "\t\t\t" << POVVector3(v1) << ", ";
-					outfile_             << POVVector3(n1) << ", " << endl;
+					outfile_             << POVVector3(n1) << ", " << std::endl;
 					outfile_ << "\t\t\t" << POVVector3(v2) << ", ";
-					outfile_             << POVVector3(n2) << ", " << endl;
+					outfile_             << POVVector3(n2) << ", " << std::endl;
 					outfile_ << "\t\t\t" << POVVector3(v3) << ", ";
-					outfile_             << POVVector3(n3) << endl << endl;
+					outfile_             << POVVector3(n3) << std::endl << std::endl;
 					
 
 					// And now the color. This is easy here, because we
@@ -426,43 +430,46 @@ namespace BALL
 			else
 			{
 				// we have a color for each of the vertices
-				for (Position i=0; i<mesh.triangle.size(); i++)
+				for (Position i = 0; i < mesh.triangle.size(); i++)
 				{
 					t = mesh.triangle[i];
 
 					v1 = mesh.vertex[t.v1];
-					n1 = mesh.normal[t.v1]-origin_;
+					n1 = mesh.normal[t.v1] - origin_;
 					c1 = mesh.colorList[t.v1];
 					v2 = mesh.vertex[t.v2];
-					n2 = mesh.normal[t.v2]-origin_;
+					n2 = mesh.normal[t.v2] - origin_;
 					c2 = mesh.colorList[t.v2];
 					v3 = mesh.vertex[t.v3];
-					n3 = mesh.normal[t.v3]-origin_;
+					n3 = mesh.normal[t.v3] - origin_;
 					c3 = mesh.colorList[t.v3];
 
-					outfile_ << "\t\tsmooth_triangle {" << endl;
-					outfile_ << "\t\t\t#local BALLColor1 = texture { pigment { " << POVColorRGBA(c1) << " } finish { BALLFinishMesh } }" << endl;
-					outfile_ << "\t\t\t#local BALLColor2 = texture { pigment { " << POVColorRGBA(c2) << " } finish { BALLFinishMesh } }" << endl;
-					outfile_ << "\t\t\t#local BALLColor3 = texture { pigment { " << POVColorRGBA(c3) << " } finish { BALLFinishMesh } }" << endl << endl;
+					outfile_ << "\t\tsmooth_triangle {" << std::endl;
+					outfile_ << "\t\t\t#local BALLColor1 = texture { pigment { " 
+									 << POVColorRGBA(c1) << " } finish { BALLFinishMesh } }" << std::endl;
+					outfile_ << "\t\t\t#local BALLColor2 = texture { pigment { " 
+									 << POVColorRGBA(c2) << " } finish { BALLFinishMesh } }" << std::endl;
+					outfile_ << "\t\t\t#local BALLColor3 = texture { pigment { " 
+									 << POVColorRGBA(c3) << " } finish { BALLFinishMesh } }" << std::endl << std::endl;
 
 					outfile_ << "\t\t\t" << POVVector3(v1) << ", ";
-					outfile_             << POVVector3(n1) << ", " << endl;
+					outfile_             << POVVector3(n1) << ", " << std::endl;
 					outfile_ << "\t\t\t" << POVVector3(v2) << ", ";
-					outfile_             << POVVector3(n2) << ", " << endl;
+					outfile_             << POVVector3(n2) << ", " << std::endl;
 					outfile_ << "\t\t\t" << POVVector3(v3) << ", ";
-					outfile_             << POVVector3(n3) << endl << endl;
+					outfile_             << POVVector3(n3) << std::endl << std::endl;
 
 					// And now the colors.
-					outfile_ <<"\t\t\ttexture_list {" << endl;
-					outfile_ << "\t\t\t\t\tBALLColor1 BALLColor2 BALLColor3" << endl;
-					outfile_ << "\t\t\t}" << endl;
-					outfile_ << "\t\t}" << endl << endl;
+					outfile_ <<"\t\t\ttexture_list {" << std::endl;
+					outfile_ << "\t\t\t\t\tBALLColor1 BALLColor2 BALLColor3" << std::endl;
+					outfile_ << "\t\t\t}" << std::endl;
+					outfile_ << "\t\t}" << std::endl << std::endl;
 				}
 			}
 
 			// now close the mesh
-			outfile_ << "\t\t finish { BALLFinishMesh }" << endl;
-			outfile_ << "\t}" << endl << endl;
+			outfile_ << "\t\t finish { BALLFinishMesh }" << std::endl;
+			outfile_ << "\t}" << std::endl << std::endl;
 		}
 	}
 }
