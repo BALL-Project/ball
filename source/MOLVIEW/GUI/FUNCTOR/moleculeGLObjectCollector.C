@@ -1,4 +1,4 @@
-// $Id: moleculeGLObjectCollector.C,v 1.1 2000/09/23 15:39:14 hekl Exp $
+// $Id: moleculeGLObjectCollector.C,v 1.2 2000/12/12 16:19:34 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
 
@@ -20,7 +20,8 @@ namespace BALL
 		}
 
 		MoleculeGLObjectCollector::~MoleculeGLObjectCollector()
-		{
+      throw()
+ 		{
 			#ifdef BALL_MOLVIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<MoleculeGLObjectCollector>() << endl;

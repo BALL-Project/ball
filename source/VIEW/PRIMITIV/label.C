@@ -1,4 +1,4 @@
-// $Id: label.C,v 1.2 2000/07/18 08:30:07 oliver Exp $
+// $Id: label.C,v 1.3 2000/12/12 16:18:46 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/label.h>
 
@@ -39,6 +39,7 @@ namespace BALL
 		}
 
 		Label::~Label()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -49,12 +50,14 @@ namespace BALL
 		}
 
 		void Label::clear()
+			throw()
 		{
 			GeometricObject::clear();
 			ColorExtension::clear();
 		}
 
 		void Label::destroy()
+			throw()
 		{ 
 			GeometricObject::destroy();
 			ColorExtension::destroy();
@@ -97,6 +100,7 @@ namespace BALL
 
 		void Label::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

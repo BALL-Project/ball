@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.7 2000/06/25 19:06:36 hekl Exp $
+// $Id: lineModel.C,v 1.8 2000/12/12 16:19:24 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -26,8 +26,8 @@ namespace BALL
 		{
 		}
 
-		AddLineModel::~AddLineModel
-			()
+		AddLineModel::~AddLineModel()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -37,16 +37,14 @@ namespace BALL
 			destroy();
 		}
 
-		void 
-		AddLineModel::clear
-			()
+		void AddLineModel::clear()
+			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
 		}
 
-		void 
-		AddLineModel::destroy
-			()
+		void AddLineModel::destroy()
+			throw()
 		{
 			AtomBondModelBaseProcessor::destroy();
 		}
@@ -146,9 +144,9 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void 
-		AddLineModel::dump
+		void AddLineModel::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: geometricObjectSelector.C,v 1.4 2000/06/25 19:07:18 hekl Exp $
+// $Id: geometricObjectSelector.C,v 1.5 2000/12/12 16:19:24 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/geometricObjectSelector.h>
 
@@ -29,8 +29,8 @@ namespace BALL
 		{
 		}
 
-		GeometricObjectSelector::~GeometricObjectSelector
-			()
+		GeometricObjectSelector::~GeometricObjectSelector()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -40,16 +40,14 @@ namespace BALL
 			destroy();
 		}
 
-		void 
-		GeometricObjectSelector::clear
-			()
+		void GeometricObjectSelector::clear()
+			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
 		}
 
-		void 
-		GeometricObjectSelector::destroy
-			()
+		void GeometricObjectSelector::destroy()
+			throw()
 		{
 			AtomBondModelBaseProcessor::destroy();
 
@@ -188,10 +186,9 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void 
-		GeometricObjectSelector::dump
-			(ostream& s,
-			 Size depth) const
+		void GeometricObjectSelector::dump
+			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

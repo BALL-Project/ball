@@ -1,4 +1,4 @@
-// $Id: point.C,v 1.4 1999/12/30 18:05:51 oliver Exp $
+// $Id: point.C,v 1.5 2000/12/12 16:18:46 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/point.h>
 
@@ -33,6 +33,7 @@ namespace BALL
 		}
 
 		Point::~Point()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -43,6 +44,7 @@ namespace BALL
 		}
 
 		void Point::clear()
+			throw()
 		{
 			GeometricObject::clear();
 			ColorExtension::clear();
@@ -50,6 +52,7 @@ namespace BALL
 		}
 
 		void Point::destroy()
+			throw()
 		{
 			GeometricObject::destroy();
 			ColorExtension::destroy();
@@ -91,6 +94,7 @@ namespace BALL
 
 		void Point::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: gltube.C,v 1.1 2000/09/23 13:28:37 hekl Exp $
+// $Id: gltube.C,v 1.2 2000/12/12 16:18:45 oliver Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gltube.h>
 #include <GL/gl.h>
@@ -28,6 +28,7 @@ namespace BALL
 		}
 
 		GLTube::~GLTube()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -38,12 +39,14 @@ namespace BALL
 		}
 
 		void GLTube::clear()
+			throw()
 		{
 			Tube::clear();
 			GLObject::clear();
 		}
 
 		void GLTube::destroy()
+			throw()
 		{
 			Tube::destroy();
 			GLObject::destroy();

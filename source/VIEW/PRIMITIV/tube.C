@@ -1,4 +1,4 @@
-// $Id: tube.C,v 1.4 1999/12/30 18:05:52 oliver Exp $
+// $Id: tube.C,v 1.5 2000/12/12 16:18:46 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/tube.h>
 
@@ -29,6 +29,7 @@ namespace BALL
 		}
 
 		Tube::~Tube()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -39,12 +40,14 @@ namespace BALL
 		}
 
 		void Tube::clear()
+			throw()
 		{
 			BaseTube::clear();
 			ColorExtension::clear();
 		}
 
 		void Tube::destroy()
+			throw()
 		{
 			BaseTube::destroy();
 			ColorExtension::destroy();
@@ -82,6 +85,7 @@ namespace BALL
 
 		void Tube::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

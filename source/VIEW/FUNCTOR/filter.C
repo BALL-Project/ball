@@ -1,4 +1,4 @@
-// $Id: filter.C,v 1.1 2000/05/16 21:08:59 hekl Exp $
+// $Id: filter.C,v 1.2 2000/12/12 16:18:42 oliver Exp $
 
 #include <BALL/VIEW/FUNCTOR/filter.h>
 
@@ -17,6 +17,7 @@ namespace BALL
 		}
 
 		Filter::~Filter()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -27,11 +28,13 @@ namespace BALL
 		}
 
 		void Filter::clear()
+			throw()
 		{
 				object_passed_ = false;
 		}
 
 		void Filter::destroy()
+			throw()
 		{
 			clear();
 		}
@@ -48,6 +51,7 @@ namespace BALL
 
 		void Filter::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: atomBondModelConnector.C,v 1.1 2000/06/25 19:05:03 hekl Exp $
+// $Id: atomBondModelConnector.C,v 1.2 2000/12/12 16:19:24 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h>
 
@@ -34,6 +34,7 @@ namespace BALL
 		}
 
 		AtomBondModelConnector::~AtomBondModelConnector()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 

@@ -1,4 +1,4 @@
-// $Id: simpleBox.C,v 1.1 2000/04/30 15:12:57 hekl Exp $
+// $Id: simpleBox.C,v 1.2 2000/12/12 16:18:46 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/simpleBox.h>
 
@@ -32,6 +32,7 @@ namespace BALL
 		}
 
 		SimpleBox::~SimpleBox()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -42,6 +43,7 @@ namespace BALL
 		}
 
 		void SimpleBox::clear()
+			throw()
 		{
 			GeometricObject::clear();
 			ColorExtension::clear();
@@ -49,6 +51,7 @@ namespace BALL
 		}
 
 		void SimpleBox::destroy()
+			throw()
 		{
 			GeometricObject::destroy();
 			ColorExtension::destroy();
@@ -90,6 +93,7 @@ namespace BALL
 
 		void SimpleBox::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

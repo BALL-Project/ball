@@ -1,4 +1,4 @@
-// $Id: extendedProperty.C,v 1.4 2000/06/18 16:35:19 hekl Exp $
+// $Id: extendedProperty.C,v 1.5 2000/12/12 16:19:35 oliver Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 
@@ -9,6 +9,8 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
+
+		// BAUSTELLE: Wofuer braucht man diese Klasse? [O.K.]
 		ExtendedPropertyManager::ExtendedPropertyManager
 			()
 				:
@@ -24,13 +26,12 @@ namespace BALL
 		{
 		}
 
-		ExtendedPropertyManager::~ExtendedPropertyManager
-			()
+		ExtendedPropertyManager::~ExtendedPropertyManager()
+			throw()
 		{
 		}
 
-		void 
-		ExtendedPropertyManager::setProperty
+		void ExtendedPropertyManager::setProperty
 			(Property __Property)
 		{
 			if (__Property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 

@@ -1,4 +1,4 @@
-// $Id: mesh.C,v 1.2 2000/04/30 15:13:25 hekl Exp $
+// $Id: mesh.C,v 1.3 2000/12/12 16:18:46 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 
@@ -32,6 +32,7 @@ namespace BALL
 		}
 
 		Mesh::~Mesh()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -42,12 +43,14 @@ namespace BALL
 		}
 
 		void Mesh::clear()
+			throw()
 		{
 			GeometricObject::clear();
 			ColorExtension::clear();
 		}
 
 		void Mesh::destroy()
+			throw()
 		{ 
 			GeometricObject::destroy();
 			ColorExtension::destroy();
@@ -88,6 +91,7 @@ namespace BALL
 
 		void Mesh::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

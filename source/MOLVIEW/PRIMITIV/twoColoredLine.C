@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.C,v 1.4 1999/12/30 18:05:39 oliver Exp $
+// $Id: twoColoredLine.C,v 1.5 2000/12/12 16:19:35 oliver Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.h>
 
@@ -34,6 +34,7 @@ namespace BALL
 		}
 
 		TwoColoredLine::~TwoColoredLine()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -44,6 +45,7 @@ namespace BALL
 		}
 
 		void TwoColoredLine::clear()
+			throw()
 		{
 			VIEW::GeometricObject::clear();
 			ColorExtension2::clear();
@@ -51,6 +53,7 @@ namespace BALL
 		}
 
 		void TwoColoredLine::destroy()
+			throw()
 		{
 			VIEW::GeometricObject::destroy();
 			ColorExtension2::destroy();
@@ -96,6 +99,7 @@ namespace BALL
 
 		void TwoColoredLine::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

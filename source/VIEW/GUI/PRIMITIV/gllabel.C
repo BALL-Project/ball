@@ -1,4 +1,4 @@
-// $Id: gllabel.C,v 1.1 2000/09/23 13:28:36 hekl Exp $
+// $Id: gllabel.C,v 1.2 2000/12/12 16:18:44 oliver Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <GL/gl.h>
@@ -56,6 +56,7 @@ namespace BALL
 		}
 
 		GLLabel::~GLLabel()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -66,6 +67,7 @@ namespace BALL
 		}
 
 		void GLLabel::clear()
+			throw()
 		{
 			Label::clear();
 			GLObject::clear();
@@ -84,6 +86,7 @@ namespace BALL
 		}
 
 		void GLLabel::destroy()
+			throw()
 		{
 			Label::destroy();
 			GLObject::destroy();

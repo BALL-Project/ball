@@ -1,4 +1,4 @@
-// $Id: glsimpleBox.C,v 1.1 2000/09/23 13:28:37 hekl Exp $
+// $Id: glsimpleBox.C,v 1.2 2000/12/12 16:18:45 oliver Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
 #include <GL/gl.h>
@@ -29,6 +29,7 @@ namespace BALL
 		}
 
 		GLSimpleBox::~GLSimpleBox()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -39,12 +40,14 @@ namespace BALL
 		}
 
 		void GLSimpleBox::clear()
+			throw()
 		{
 			SimpleBox::clear();
 			GLObject::clear();
 		}
 
 		void GLSimpleBox::destroy()
+			throw()
 		{
 			SimpleBox::destroy();
 			GLObject::destroy();

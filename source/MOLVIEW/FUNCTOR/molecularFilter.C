@@ -1,4 +1,4 @@
-// $Id: molecularFilter.C,v 1.2 2000/08/30 19:58:33 oliver Exp $
+// $Id: molecularFilter.C,v 1.3 2000/12/12 16:19:25 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
 
@@ -16,6 +16,7 @@ namespace BALL
 		}
 
 		MolecularFilter::~MolecularFilter()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 

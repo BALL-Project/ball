@@ -1,4 +1,4 @@
-// $Id: glBallAndStickModel.C,v 1.1 2000/09/23 15:39:13 hekl Exp $
+// $Id: glBallAndStickModel.C,v 1.2 2000/12/12 16:19:34 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h>
 
@@ -28,7 +28,8 @@ namespace BALL
 		}
 
 		AddGLBallAndStickModel::~AddGLBallAndStickModel()
-		{
+      throw()
+ 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<AddGLBallAndStickModel>() << endl;

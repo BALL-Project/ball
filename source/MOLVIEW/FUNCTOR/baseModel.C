@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.8 2000/06/25 19:05:50 hekl Exp $
+// $Id: baseModel.C,v 1.9 2000/12/12 16:19:24 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -31,6 +31,7 @@ namespace BALL
 		}
 
 		BaseModelProcessor::~BaseModelProcessor()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -41,6 +42,7 @@ namespace BALL
 		}
 
 		void BaseModelProcessor::clear()
+			throw()
 		{
 			ExtendedPropertyManager::clear();
 			find_geometric_object_.clear();
@@ -51,6 +53,7 @@ namespace BALL
 		}
 
 		void BaseModelProcessor::destroy()
+			throw()
 		{
 			clear();
 		}
@@ -138,6 +141,7 @@ namespace BALL
 
 		void BaseModelProcessor::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

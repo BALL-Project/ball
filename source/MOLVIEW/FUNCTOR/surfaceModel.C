@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.5 2000/10/26 10:49:12 oliver Exp $
+// $Id: surfaceModel.C,v 1.6 2000/12/12 16:19:25 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -28,6 +28,7 @@ namespace BALL
 		}
 
 		AddSurfaceModel::~AddSurfaceModel()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -38,6 +39,7 @@ namespace BALL
 		}
 
 		void AddSurfaceModel::clear()
+			throw()
 		{
 			BaseModelProcessor::clear();
 			get_composite_ = true;
@@ -45,6 +47,7 @@ namespace BALL
 		}
 
 		void AddSurfaceModel::destroy()
+			throw()
 		{
 			BaseModelProcessor::destroy();
 			get_composite_ = true;
@@ -145,9 +148,9 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void 
-		AddSurfaceModel::dump
+		void AddSurfaceModel::dump
 			(std::ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

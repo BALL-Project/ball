@@ -1,4 +1,4 @@
-// $Id: geoprim.C,v 1.1 2000/09/23 13:28:35 hekl Exp $
+// $Id: geoprim.C,v 1.2 2000/12/12 16:18:44 oliver Exp $
 
 #include <BALL/VIEW/geoprim.h>
 #include <GL/gl.h>
@@ -50,10 +50,12 @@ namespace BALL
 		}
 
 		Sphere::~Sphere()
+			throw()
 		{
 		}
 
 		void Sphere::dump(ostream& s) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: colorCalculator.C,v 1.6 2000/07/18 08:29:57 oliver Exp $
+// $Id: colorCalculator.C,v 1.7 2000/12/12 16:19:24 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/colorCalculator.h>
 
@@ -27,6 +27,7 @@ namespace BALL
 		}
 
 		ColorCalculator::~ColorCalculator()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -37,6 +38,7 @@ namespace BALL
 		}
 
 		void ColorCalculator::clear()
+			throw()
 		{
 			color_.set("FF0000FF");
 			default_color_.set("FF0000FF");
@@ -44,6 +46,7 @@ namespace BALL
 		}
 
 		void ColorCalculator::destroy()
+			throw()
 		{
 			clear();
 		}
@@ -111,6 +114,7 @@ namespace BALL
 
 		void ColorCalculator::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

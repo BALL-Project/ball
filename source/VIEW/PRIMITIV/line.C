@@ -1,4 +1,4 @@
-// $Id: line.C,v 1.4 1999/12/30 18:05:51 oliver Exp $
+// $Id: line.C,v 1.5 2000/12/12 16:18:46 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/line.h>
 
@@ -32,6 +32,7 @@ namespace BALL
 		}
 
 		Line::~Line()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -42,6 +43,7 @@ namespace BALL
 		}
 
 		void Line::clear()
+			throw()
 		{
 			GeometricObject::clear();
 			ColorExtension::clear();
@@ -49,6 +51,7 @@ namespace BALL
 		}
 
 		void Line::destroy()
+			throw()
 		{
 			GeometricObject::destroy();
 			ColorExtension::destroy();
@@ -90,6 +93,7 @@ namespace BALL
 
 		void Line::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: glmesh.C,v 1.1 2000/09/23 13:28:36 hekl Exp $
+// $Id: glmesh.C,v 1.2 2000/12/12 16:18:45 oliver Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 #include <GL/gl.h>
@@ -29,6 +29,7 @@ namespace BALL
 		}
 
 		GLMesh::~GLMesh()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -39,12 +40,14 @@ namespace BALL
 		}
 
 		void GLMesh::clear()
+			throw()
 		{
 			Mesh::clear();
 			GLObject::clear();
 		}
 
 		void GLMesh::destroy()
+			throw()
 		{
 			Mesh::destroy();
 			GLObject::destroy();

@@ -1,4 +1,4 @@
-// $Id: glline.C,v 1.1 2000/09/23 13:28:36 hekl Exp $
+// $Id: glline.C,v 1.2 2000/12/12 16:18:44 oliver Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glline.h>
 #include <GL/gl.h>
@@ -28,6 +28,7 @@ namespace BALL
 		}
 
 		GLLine::~GLLine()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -38,12 +39,14 @@ namespace BALL
 		}
 
 		void GLLine::clear()
+			throw()
 		{
 			Line::clear();
 			GLObject::clear();
 		}
 
 		void GLLine::destroy()
+			throw()
 		{
 			Line::destroy();
 			GLObject::destroy();

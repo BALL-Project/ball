@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.7 2000/06/18 16:34:50 hekl Exp $
+// $Id: findGeometricObject.C,v 1.8 2000/12/12 16:19:24 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -26,8 +26,8 @@ namespace BALL
 		{
 		}
 
-		FindGeometricObjects::~FindGeometricObjects
-			()
+		FindGeometricObjects::~FindGeometricObjects()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -37,17 +37,15 @@ namespace BALL
 			destroy();
 		}
 
-		void 
-		FindGeometricObjects::clear
-			()
+		void FindGeometricObjects::clear()
+			throw()
 		{
 			ExtendedPropertyManager::clear();
 			geometric_objects_.clear();
 		}
 
-		void 
-		FindGeometricObjects::destroy
-			()
+		void FindGeometricObjects::destroy()
+			throw()
 		{
 			clear();
 		}
@@ -135,9 +133,9 @@ namespace BALL
 			return true;
 		}
 
-		void 
-		FindGeometricObjects::dump
+		void FindGeometricObjects::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

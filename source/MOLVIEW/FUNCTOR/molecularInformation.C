@@ -1,4 +1,4 @@
-// $Id: molecularInformation.C,v 1.3 2000/08/30 19:58:34 oliver Exp $
+// $Id: molecularInformation.C,v 1.4 2000/12/12 16:19:25 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
@@ -23,6 +23,7 @@ namespace BALL
 		}
 
 		MolecularInformation::~MolecularInformation()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -33,12 +34,14 @@ namespace BALL
 		}
 
 		void MolecularInformation::clear()
+			throw()
 		{
 			Information::clear();
 			type_ = TYPE__UNKNOWN;
 		}
 
 		void MolecularInformation::destroy()
+			throw()
 		{
 			clear();
 		}
@@ -98,6 +101,7 @@ namespace BALL
 
 		void MolecularInformation::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

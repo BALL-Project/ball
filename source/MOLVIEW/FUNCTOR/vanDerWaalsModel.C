@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.C,v 1.6 2000/06/25 19:06:36 hekl Exp $
+// $Id: vanDerWaalsModel.C,v 1.7 2000/12/12 16:19:25 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -25,8 +25,8 @@ namespace BALL
 		{
 		}
 
-		AddVanDerWaalsModel::~AddVanDerWaalsModel
-			()
+		AddVanDerWaalsModel::~AddVanDerWaalsModel()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -36,18 +36,16 @@ namespace BALL
 			destroy();
 		}
 
-		void 
-		AddVanDerWaalsModel::clear
-			()
+		void AddVanDerWaalsModel::clear()
+			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
 
 			setProperty(GeometricObject::PROPERTY__MODEL_VDW);
 		}
 
-		void 
-		AddVanDerWaalsModel::destroy
-			()
+		void AddVanDerWaalsModel::destroy()
+			throw()
 		{
 			AtomBondModelBaseProcessor::destroy();
 		}
@@ -112,9 +110,9 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void 
-		AddVanDerWaalsModel::dump
+		void AddVanDerWaalsModel::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

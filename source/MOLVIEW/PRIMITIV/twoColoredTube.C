@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.C,v 1.4 1999/12/30 18:05:40 oliver Exp $
+// $Id: twoColoredTube.C,v 1.5 2000/12/12 16:19:35 oliver Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 
@@ -31,6 +31,7 @@ namespace BALL
 		}
 
 		TwoColoredTube::~TwoColoredTube()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -41,12 +42,14 @@ namespace BALL
 		}
 
 		void TwoColoredTube::clear()
+			throw()
 		{
 			BaseTube::clear();
 			ColorExtension2::clear();
 		}
 
 		void TwoColoredTube::destroy()
+			throw()
 		{
 			BaseTube::destroy();
 			ColorExtension2::destroy();
@@ -88,6 +91,7 @@ namespace BALL
 
 		void TwoColoredTube::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.C,v 1.1 2000/06/25 19:03:58 hekl Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.2 2000/12/12 16:19:24 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 
@@ -26,6 +26,7 @@ namespace BALL
 		}
 
 		AtomBondModelBaseProcessor::~AtomBondModelBaseProcessor()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -36,12 +37,14 @@ namespace BALL
 		}
 
 		void AtomBondModelBaseProcessor::clear()
+			throw()
 		{
 			BaseModelProcessor::clear();
 			clearUsedAtoms_();
 		}
 
 		void AtomBondModelBaseProcessor::destroy()
+			throw()
 		{
 			BaseModelProcessor::destroy();
 			clearUsedAtoms_();
@@ -99,6 +102,7 @@ namespace BALL
 
 		void AtomBondModelBaseProcessor::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

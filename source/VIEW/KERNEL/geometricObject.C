@@ -1,4 +1,4 @@
-// $Id: geometricObject.C,v 1.6 2000/06/13 18:16:21 hekl Exp $
+// $Id: geometricObject.C,v 1.7 2000/12/12 16:18:45 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -29,6 +29,7 @@ namespace BALL
 		}
 
 		GeometricObject::~GeometricObject()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -39,6 +40,7 @@ namespace BALL
 		}
 
 		void GeometricObject::clear()
+			throw()
 		{
 			Composite::clear();
 			PropertyManager::clear();
@@ -49,6 +51,7 @@ namespace BALL
 		}
 
 		void GeometricObject::destroy()
+			throw()
 		{
 			Composite::destroy();
 			PropertyManager::destroy();
@@ -143,6 +146,7 @@ namespace BALL
 
 		void GeometricObject::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.8 2000/06/25 19:06:35 hekl Exp $
+// $Id: ballAndStickModel.C,v 1.9 2000/12/12 16:19:24 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -10,10 +10,8 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-		AddBallAndStickModel::AddBallAndStickModel
-			()
-				: 
-				AtomBondModelBaseProcessor(),
+		AddBallAndStickModel::AddBallAndStickModel()
+			: AtomBondModelBaseProcessor(),
 				ball_radius_((Real)0.4),
 				stick_radius_((Real)0.2),
 				ball_and_stick_(true)
@@ -31,8 +29,8 @@ namespace BALL
 		{
 		}
 
-		AddBallAndStickModel::~AddBallAndStickModel
-			()
+		AddBallAndStickModel::~AddBallAndStickModel()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -42,9 +40,8 @@ namespace BALL
 			destroy();
 		}
 
-		void 
-		AddBallAndStickModel::clear
-			()
+		void AddBallAndStickModel::clear()
+			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
 
@@ -53,9 +50,8 @@ namespace BALL
 			ball_and_stick_ = true;
 		}
 
-		void 
-		AddBallAndStickModel::destroy
-			()
+		void AddBallAndStickModel::destroy()
+			throw()
 		{
 			AtomBondModelBaseProcessor::destroy();
 
@@ -210,9 +206,9 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void 
-		AddBallAndStickModel::dump
+		void AddBallAndStickModel::dump
 			(std::ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

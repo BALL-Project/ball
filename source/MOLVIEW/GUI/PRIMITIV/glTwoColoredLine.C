@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.C,v 1.1 2000/09/23 15:39:16 hekl Exp $
+// $Id: glTwoColoredLine.C,v 1.2 2000/12/12 16:19:35 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h>
 
@@ -31,6 +31,7 @@ namespace BALL
 		}
 
 		GLTwoColoredLine::~GLTwoColoredLine()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -41,12 +42,14 @@ namespace BALL
 		}
 
 		void GLTwoColoredLine::clear()
+			throw()
 		{
 			TwoColoredLine::clear();
 			GLObject::clear();
 		}
 
 		void GLTwoColoredLine::destroy()
+			throw()
 		{
 			TwoColoredLine::destroy();
 			GLObject::destroy();

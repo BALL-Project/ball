@@ -1,4 +1,4 @@
-// $Id: information.C,v 1.1 2000/05/04 17:22:07 hekl Exp $
+// $Id: information.C,v 1.2 2000/12/12 16:18:42 oliver Exp $
 
 #include <BALL/VIEW/FUNCTOR/information.h>
 
@@ -25,6 +25,7 @@ namespace BALL
 		}
 
 		Information::~Information()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -35,6 +36,7 @@ namespace BALL
 		}
 
 		void Information::clear()
+			throw()
 		{
 				name_ = "unkown";
 				type_name_ = "unkown type";
@@ -42,6 +44,7 @@ namespace BALL
 		}
 
 		void Information::destroy()
+			throw()
 		{
 			clear();
 		}
@@ -94,6 +97,7 @@ namespace BALL
 
 		void Information::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

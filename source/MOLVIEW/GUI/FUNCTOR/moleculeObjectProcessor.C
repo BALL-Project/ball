@@ -1,4 +1,4 @@
-// $Id: moleculeObjectProcessor.C,v 1.1 2000/09/23 15:39:14 hekl Exp $
+// $Id: moleculeObjectProcessor.C,v 1.2 2000/12/12 16:19:34 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeObjectProcessor.h>
 
@@ -28,7 +28,8 @@ namespace BALL
 		}
 
 		MoleculeObjectProcessor::~MoleculeObjectProcessor()
-		{
+      throw()
+ 		{
 			#ifdef BALL_MOLVIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<MoleculeObjectProcessor>() << endl;

@@ -1,4 +1,4 @@
-// $Id: glTwoColoredTube.C,v 1.1 2000/09/23 15:39:16 hekl Exp $
+// $Id: glTwoColoredTube.C,v 1.2 2000/12/12 16:19:35 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h>
 
@@ -33,6 +33,7 @@ namespace BALL
 		}
 
 		GLTwoColoredTube::~GLTwoColoredTube()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -43,12 +44,14 @@ namespace BALL
 		}
 
 		void GLTwoColoredTube::clear()
+			throw()
 		{
 			TwoColoredTube::clear();
 			GLObject::clear();
 		}
 
 		void GLTwoColoredTube::destroy()
+			throw()
 		{
 			TwoColoredTube::destroy();
 			GLObject::destroy();

@@ -1,4 +1,4 @@
-// $Id: basesphere.C,v 1.4 1999/12/30 18:05:51 oliver Exp $
+// $Id: basesphere.C,v 1.5 2000/12/12 16:18:46 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/basesphere.h>
 
@@ -33,6 +33,7 @@ namespace BALL
 		}
 
 		BaseSphere::~BaseSphere()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " 
@@ -43,6 +44,7 @@ namespace BALL
 		}
 
 		void BaseSphere::clear()
+			throw()
 		{
 			GeometricObject::clear();
 			ColorExtension::clear();
@@ -51,6 +53,7 @@ namespace BALL
 		}
 
 		void BaseSphere::destroy()
+			throw()
 		{
 			GeometricObject::destroy();
 			ColorExtension::destroy();
@@ -96,6 +99,7 @@ namespace BALL
 
 		void BaseSphere::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

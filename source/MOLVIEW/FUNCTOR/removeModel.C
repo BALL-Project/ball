@@ -1,4 +1,4 @@
-// $Id: removeModel.C,v 1.6 2000/06/25 19:06:36 hekl Exp $
+// $Id: removeModel.C,v 1.7 2000/12/12 16:19:25 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 
@@ -25,8 +25,8 @@ namespace BALL
 		{
 		}
 
-		RemoveModel::~RemoveModel
-			()
+		RemoveModel::~RemoveModel()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -36,16 +36,14 @@ namespace BALL
 			destroy();
 		}
 
-		void 
-		RemoveModel::clear
-			()
+		void 	RemoveModel::clear()
+			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
 		}
 
-		void 
-		RemoveModel::destroy
-			()
+		void RemoveModel::destroy()
+			throw()
 		{
 			AtomBondModelBaseProcessor::destroy();
 		}
@@ -157,9 +155,9 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void 
-		RemoveModel::dump
+		void RemoveModel::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
