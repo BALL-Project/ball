@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.14 2002/12/08 23:19:06 amoll Exp $
+// $Id: control.C,v 1.7.4.15 2002/12/09 16:56:57 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -215,7 +215,7 @@ void Control::onNotify(Message *message)
 	{
 		// if message makes an update of the control necessary
 		// sent new selection through tree
-		sentSelection();
+		updateSelection();
 	}
 }
 
@@ -352,7 +352,7 @@ bool Control::recurseUpdate_(QListViewItem* item, Composite* composite)
 	return tree_updated;
 }
 
-void Control::filterSelection_(Filter& filter)
+void Control::filterSelection_(Filter& /*filter*/)
 	throw()
 {
 	selected_.clear();
@@ -363,9 +363,6 @@ void Control::filterSelection_(Filter& filter)
 		if (it.current()->isSelected())
 		{
 			Composite* composite = getCompositeAddress_(it.current());
-			
-		//	if (composite == 0) Log.error() << "0 in Control" << std::endl;
-
 			selected_.push_back(composite);
 		}
 	}
@@ -393,6 +390,7 @@ bool Control::reactToMessages_(Message* message)
 	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
 	{
 		setSelection_();
+		update = true;
 	}
 
 	return update;
