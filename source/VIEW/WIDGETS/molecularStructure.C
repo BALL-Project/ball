@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.61 2004/11/05 14:55:05 amoll Exp $
+// $Id: molecularStructure.C,v 1.62 2004/11/08 14:16:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -450,6 +450,11 @@ namespace BALL
 			{
 				up_vector = Vector3(0,0,1);
 				view_vector = up_vector % max_distance_vector;
+			}
+
+			if (Maths::isZero(view_vector.getSquareLength()))
+			{
+				view_vector = Vector3(1,0,0);
 			}
 
 			if (!Maths::isZero(view_vector.getSquareLength())) view_vector.normalize();
