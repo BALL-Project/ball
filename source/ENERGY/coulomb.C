@@ -1,4 +1,4 @@
-// $Id: coulomb.C,v 1.1 2000/09/05 14:29:16 oliver Exp $
+// $Id: coulomb.C,v 1.2 2001/06/05 15:49:48 anker Exp $
 
 #include <BALL/ENERGY/coulomb.h>
 #include <BALL/KERNEL/forEach.h>
@@ -15,8 +15,8 @@ namespace BALL
 		// set the total energy to zero
 		E = 0;
 
-		AtomIterator	atom_it1;
-		AtomIterator	atom_it2;
+		AtomConstIterator	atom_it1;
+		AtomConstIterator	atom_it2;
 		BALL_FOREACH_ATOM_PAIR(atoms, atom_it1, atom_it2)
 		{
 			E += atom_it1->getCharge() * atom_it2->getCharge()

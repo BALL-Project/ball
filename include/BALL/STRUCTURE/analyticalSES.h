@@ -1,4 +1,4 @@
-// $Id: analyticalSES.h,v 1.7 2001/03/06 00:12:23 amoll Exp $
+// $Id: analyticalSES.h,v 1.8 2001/06/05 15:47:36 anker Exp $
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
 #define BALL_STRUCTURE_ANALYTICALSES_H
@@ -23,7 +23,7 @@ namespace BALL
 			@return the SES area in $\AA^2$
 	*/
 	float calculateSESAtomAreas
-		(const AtomContainer& fragment, HashMap<Atom*,float>& atom_areas, float probe_radius = 1.5);
+		(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas, float probe_radius = 1.5);
 	
 	/**	Calculate the solvent excluded surface area analytically.
 			This method uses the algorithm by Michael L. Connolly.

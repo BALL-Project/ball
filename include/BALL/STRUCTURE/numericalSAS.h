@@ -1,4 +1,4 @@
-// $Id: numericalSAS.h,v 1.17 2001/03/07 22:04:10 amoll Exp $
+// $Id: numericalSAS.h,v 1.18 2001/06/05 15:47:57 anker Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -64,7 +64,7 @@ namespace BALL
 			@param	number_of_dots the number of dots used per atom
 			@return the total SAS area in $ A^2$
 	*/
-	float calculateSASAtomAreas(const AtomContainer& fragment, HashMap<Atom*,float>& atom_areas,
+	float calculateSASAtomAreas(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas,
 															float probe_radius = 1.5, Size number_of_dots = 400);
 	
 	/**	Calculate a point set on the Solvent Accessible Surface.

@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.29 2001/02/06 13:18:25 amoll Exp $
+// $Id: composite.C,v 1.30 2001/06/05 15:48:56 anker Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -1611,7 +1611,7 @@ namespace BALL
 		// iterate over the node itself and all its descendants
 		// and count hits of the predicate
 		Size hits = 0;
-		SubcompositeIterator	sub_it = beginSubcomposite();
+		SubcompositeConstIterator	sub_it = beginSubcomposite();
 		for (; sub_it != endSubcomposite(); ++sub_it)
 		{
 			if (predicate(*sub_it))
