@@ -1,4 +1,4 @@
-// $Id: expressionPredicate.h,v 1.2 2001/12/30 13:28:38 sturm Exp $
+// $Id: expressionPredicate.h,v 1.3 2002/01/09 01:14:50 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPREDICATE_H
 #define BALL_KERNEL_EXPRESSIONPREDICATE_H
@@ -11,13 +11,12 @@ namespace BALL
 {
 
 	/** ExpressionPredicate. 
-			A class that provides a predicate for expressions that can be used on
-			atoms. 
+			The base class for all kernel predicates (defined in \URL{BALL/KERNEL/standardPredicates.h})
+			and used by \Ref{Expression}. You have to derive your own predicate classes from 
+			this class if you want to use (and register) them with \Ref{Expression}.
 			\\
-			There are standard predicates that are predefined for
-			convenient use (\Ref{?????}) when building an expression.
-			\\
-			{\bf Definition} \URL{BALL/KERNEL/expression.h}
+			@see Expression
+			{\bf Definition} \URL{BALL/KERNEL/expressionPredicate.h}
 	*/
 	class ExpressionPredicate
 		:	public UnaryPredicate<Atom>

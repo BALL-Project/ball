@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.19 2001/07/17 00:28:48 oliver Exp $
+// $Id: standardPredicates.h,v 1.20 2002/01/09 01:14:50 oliver Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -230,21 +230,26 @@ namespace BALL
 				throw();
 	};
 
-	/** Predicate indicating solvent atoms. Returns {\tt true}, if the atom
-			belongs to a solvent molecule. 
+	/** Predicate indicating solvent atoms. 
+			Returns {\tt true}, if the atom
+			belongs to a solvent molecule. This predicate is {\bf true} if the 
+			atom is contained in a molecule with the property \Ref{Molecule::IS_SOLVENT}
+			set. This is usually the case for solvents added automatically by a
+			force field.
+			@see PeriodicBoundary::addSolvent
 	 */
 	class SolventPredicate
 		:	public	ExpressionPredicate
 	{
 		public:
-			BALL_CREATE(SolventPredicate)
+		BALL_CREATE(SolventPredicate)
 
-			/** Evaluate the predicate for the atom {\tt atom}.
-					@param atom the atom to test
-					@return true, if the predicate is true, false otherwise
-			*/
-			virtual bool operator () (const Atom& atom) const
-				throw();
+		/** Evaluate the predicate for the atom {\tt atom}.
+				@param atom the atom to test
+				@return true, if the predicate is true, false otherwise
+		*/
+		virtual bool operator () (const Atom& atom) const
+			throw();
 	};
 
 	/** Predicate for matching molecules. Returns {\tt true}, if the atom

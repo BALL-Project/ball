@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.18 2001/12/30 13:28:38 sturm Exp $
+// $Id: expression.h,v 1.19 2002/01/09 01:14:50 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -160,13 +160,14 @@ namespace BALL
 		*/
 		//@{
 
-		/*_ ?????
+		/*_ Construct the expression tree from the SyntaxTree
 		*/
 		ExpressionTree*	constructExpressionTree_(const SyntaxTree& tree)
 			
 			throw();
 
-		/*_ ?????
+		/*_ Register the predicates defined by default.
+				See also: \URL{BALL/KERNEL/standardPredicates.h}
 		*/
 		void registerStandardPredicates_() 
 			throw();
@@ -176,15 +177,16 @@ namespace BALL
 		*/
 		//@{
 
-		/*_ ?????
+		/*_ The methods to create the ExpressionPredicate instances
 		*/
 		StringHashMap<CreationMethod> create_methods_;
 
-		/*_ ?????
+		/*_	The ExpressionTree constructed from the string.
+				This tree contains the instances of the predicates.
 		*/
 		ExpressionTree*								expression_tree_;
 
-		/*_ ?????
+		/*_ The string describing the expression.
 		*/
 		String												expression_string_;
 
