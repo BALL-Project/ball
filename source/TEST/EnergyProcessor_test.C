@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EnergyProcessor_test.C,v 1.9 2003/05/23 06:47:51 oliver Exp $
+// $Id: EnergyProcessor_test.C,v 1.10 2003/06/27 11:26:49 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/ENERGY/energyProcessor.h>
 ///////////////////////////
 
-START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.9 2003/05/23 06:47:51 oliver Exp $")
+START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.10 2003/06/27 11:26:49 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,7 +22,10 @@ using namespace BALL;
 
 /** Test class.
  * 	The energy is calculated as:
- * 	(fragment_.countAtomContainers() + 1 + change) * fragment_.countAtoms()
+ * 	(fragment_.countAtomContainers() + 1) * fragment_.countAtoms()
+ * 	The additive 1 comes from the fact that countAtomContainers() does not
+ * 	count the container from which it was called while operator () () runs
+ * 	over *all* containers including the System which it was applied to.
  */
  class MyEnergyProcessor
 	: public EnergyProcessor
@@ -30,85 +33,100 @@ using namespace BALL;
 	public:
 		
 	MyEnergyProcessor()
-		: change(0)
-	{}
+		: count(0)
+	{
+	}
 		
+	virtual bool start() throw()
+	{
+		count = 0;
+		return true;
+	}
+
 	virtual Processor::Result operator () (AtomContainer& fragment) throw()
 	{
-		change += 1;
+		count++;
 		EnergyProcessor::operator() (fragment);
 		return BALL::Processor::CONTINUE;
 	}
 	
 	virtual bool finish() throw()
 	{
-		energy_ = fragment_->countAtoms() * change;
+		energy_ = fragment_->countAtoms() * count;
 		return true;
 	}
 
-	float change;
+	Size count;
 };
 
 HINFile f("data/AnisotropyShiftProcessor_test.hin");
 System S;
 f >> S;
 
-
 EnergyProcessor* ep_ptr = 0;
+
 CHECK(EnergyProcessor::EnergyProcessor())
 	ep_ptr = new EnergyProcessor;
 	TEST_NOT_EQUAL(ep_ptr, 0)
 	TEST_EQUAL(ep_ptr->isValid(), true)
 	TEST_REAL_EQUAL(ep_ptr->getEnergy(), 0)
+RESULT
+
+CHECK(EnergyProcessor::~EnergyProcessor())
 	delete ep_ptr;
 RESULT
 
-EnergyProcessor ep;
+bool test = false;
 
 CHECK(EnergyProcessor::EnergyProcessor(const EnergyProcessor& proc))
+	EnergyProcessor ep;
 	EnergyProcessor ep2(ep);
+	test = (ep == ep2);
+	TEST_EQUAL(test, true)
 RESULT
-
-
-CHECK(EnergyProcessor::~EnergyProcessor())
-	EnergyProcessor* ep = new EnergyProcessor;
-	delete ep;
-RESULT
-
 
 CHECK(EnergyProcessor::clear())
-  ep.clear();
+	EnergyProcessor ep1;
+  ep1.clear();
+	EnergyProcessor ep2;
+	test = (ep1 == ep2);
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(EnergyProcessor::EnergyProcessor& operator = (const EnergyProcessor& proc))
-	EnergyProcessor ep2;
-	ep2 = ep;
+	Fragment fragment;
+	EnergyProcessor ep1;
+	EnergyProcessor ep2 = ep1;
+	test = (ep1 == ep2);
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(EnergyProcessor::start())
+	EnergyProcessor ep;
 	TEST_EQUAL(ep.start(), true)
 RESULT
 
 
 CHECK(EnergyProcessor::Processor::Result operator () (BaseFragment& fragment))
+	EnergyProcessor ep;
   TEST_EQUAL(S.apply(ep), true)
 RESULT
 
 
 CHECK(EnergyProcessor::getEnergy() const )
+	EnergyProcessor ep;
   TEST_REAL_EQUAL(ep.getEnergy(), 0)
 RESULT
 
 
 CHECK(apply)
 	MyEnergyProcessor mep;
-	mep.change = 2.0;
 	TEST_EQUAL(S.apply(mep), true)
 	TEST_EQUAL(S.countAtoms(), 31)
 	TEST_EQUAL(S.countAtomContainers(), 5)
-	TEST_REAL_EQUAL(mep.getEnergy(), S.countAtoms() * (S.countAtomContainers() + 2 + 1 ))
+	TEST_REAL_EQUAL(mep.getEnergy(), S.countAtoms() * (S.countAtomContainers() + 1))
 RESULT
 
 /////////////////////////////////////////////////////////////
