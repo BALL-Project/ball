@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.101 2000/05/17 15:04:34 oliver Exp $
+#  $Id: configure,v 1.102 2000/05/25 11:03:35 oliver Exp $
 
 
 ##################################################
@@ -6147,16 +6147,16 @@ else
 fi
 
 LIBS="${LIBS} -lm"
-BALLVIEW_LIBS="${BALLVIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} -lm"
+BALLVIEW_LIBS="${BALLVIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
-BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL"
+BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_BALLVIEW}" = true ; then
 	BALLVIEW_INCLUDES="${BALL_INCLUDES} ${BALLVIEW_INCLUDES}"
 	BALLVIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lMOLVIEW -lVIEW -lBALL ${BALLVIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
-LIBS="$BALL_LIBS $LIBS"
+LIBS="$BALL_LIBS"
 
 
 CXXFLAGS="$CXXFLAGS $DEFINES"
