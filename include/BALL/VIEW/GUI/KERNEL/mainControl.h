@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.9 2000/11/12 15:30:39 hekl Exp $
+// $Id: mainControl.h,v 1.10 2000/11/15 20:25:41 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -150,6 +150,10 @@ namespace BALL
 					@return	MainControl - new constructed MainControl				
 			*/
 			MainControl(QWidget* parent = 0, const char* name = 0 , String inifile = ".BALL.preferences");
+
+			/**	Copy constructor
+			*/
+			MainControl(const MainControl& main_control);
 
 			/** Destructor
 					Default destruction of {\em *this} MainControl.

@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.7 2000/11/12 15:20:17 hekl Exp $
+// $Id: mainControl.C,v 1.8 2000/11/15 20:28:07 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -48,6 +48,17 @@ namespace BALL
 							SIGNAL(aboutToQuit()),
 							this,
 							SLOT(aboutToExit()));
+		}
+		
+		MainControl::MainControl(const MainControl& main_control)
+			:	QMainWindow((QWidget*)main_control.parent(), 0, 0),
+				composite_map_(),
+				descriptor_map_(),
+				descriptors_(),
+				main_control_preferences_(0),
+				preferences_dialog_(0),
+				preferences_id_(-1)
+		{
 		}
 		
 		MainControl::~MainControl()
