@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.51 2004/02/16 16:11:25 oliver Exp $
+// $Id: fragmentDB.C,v 1.52 2004/02/26 18:12:09 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -10,6 +10,7 @@
 #include <vector>
 
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/nucleotide.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/bond.h>
@@ -22,7 +23,6 @@
 /*			Things still missing (among others)
 				===================================
 				- check for unique atom names
-				- saving of fragment databases
 				- dynamic import of databases
 */
 
@@ -453,9 +453,9 @@ namespace BALL
 		{
 			if ((*entry_iterator).getDepth() == entry.getDepth() + 1)
 			{
-				// check for the most important properties: all those defined
-				// in Residue::properties
-				property = (*entry_iterator).getKey();
+				// Check for the most important properties: all those defined
+				// in Residue::PROPERTIES
+				property = entry_iterator->getKey();
 				property.toUpper();
 				if (property[0] == '!')
 				{
@@ -493,8 +493,9 @@ namespace BALL
 				{
 					prop = Residue::PROPERTY__N_TERMINAL;
 				}
-				else 
+				else if (property == "NUCLEOTIDE")
 				{
+					prop = Nucleotide::PROPERTY__NUCLEOTIDE;
 				}
 
 				if (prop == Limits<Property>::max())
@@ -569,14 +570,12 @@ namespace BALL
 		for (frag_entry_iterator = ++(tree->getEntry("/Fragments")->begin()); 
 				 +frag_entry_iterator; ++frag_entry_iterator)
 		{
-			if ((*frag_entry_iterator).getDepth() == 2)
+			if (frag_entry_iterator->getDepth() == 2)
 			{
 				// create a new fragment and assign its name
 				// 
-				Residue*				fragment;
-
-				fragment = new Residue;
-				fragment->setName((*frag_entry_iterator).getKey());
+				Residue* fragment = new Residue;
+				fragment->setName(frag_entry_iterator->getKey());
 
 				String fragment_name = (*frag_entry_iterator).getKey();
 						
@@ -585,7 +584,7 @@ namespace BALL
 				name_to_path_[fragment_name] = "/Fragments/" + fragment_name;
 		
 				// if there are no atoms in the database, something went wrong
-				entry = (*frag_entry_iterator).getEntry("Atoms");
+				entry = frag_entry_iterator->getEntry("Atoms");
 				if (entry == 0)
 				{
 					Log.error() << "FragmentDB: cannot find Atoms entry for " 
@@ -600,7 +599,7 @@ namespace BALL
 				// now find all the bonds for the fragment and create them
 				// Fragments without bonds are legal, so we don`t complain but
 				// continue
-				entry = (*frag_entry_iterator).getEntry("Bonds");
+				entry = frag_entry_iterator->getEntry("Bonds");
 				if (entry != 0)
 				{
 					parseBonds_(*entry, *fragment);
@@ -611,7 +610,7 @@ namespace BALL
 				// Each variant entry may also contain additional properties
 				// or reset properties by specifying a "!" in front of the property
 				// name
-				entry = (*frag_entry_iterator).getEntry("Properties");
+				entry = frag_entry_iterator->getEntry("Properties");
 				if (entry != 0)
 				{
 					parseProperties_(*entry, *dynamic_cast<PropertyManager*>(fragment));
@@ -619,10 +618,8 @@ namespace BALL
 
 				// check for all aliases (given in the Names section of the db-file)
 				// and insert them into the corresponding hash maps
-
-				ResourceEntry::Iterator			entry_iterator;
-
-				entry = (*frag_entry_iterator).getEntry("Names");
+				ResourceEntry::Iterator entry_iterator;
+				entry = frag_entry_iterator->getEntry("Names");
 				if (entry != 0)
 				{
 					String path = "/Fragments/" + fragment_name;
@@ -635,11 +632,10 @@ namespace BALL
 
 				// check for possible variants of this residue type
 				// (keyword Variants)
-				entry = (*frag_entry_iterator).getEntry("Variants");
+				entry = frag_entry_iterator->getEntry("Variants");
 				if (entry != 0)
 				{
 					ResourceEntry::Iterator variant_iterator;
-
 					Residue* original_fragment = new Residue(*fragment);
 
 					for (variant_iterator = ++entry->begin(); +variant_iterator; ++variant_iterator)
@@ -672,10 +668,10 @@ namespace BALL
 									+ fragment_name + "/Variants/" + variant_name;
 							}
 
-							// remember all variants of a certain fragment in a list
-							// This list is accessed via a hash map. It is needed to 
+							// Remember all variants of a certain fragment in a list.
+							// This list is accessed via a hash map. It is required to 
 							// determine the correct variant from given properties
-							// (see getReferenceFragment(Fragment&), parseProperties_)
+							// (see getReferenceFragment(Fragment&), parseProperties_).
 							for (entry_iterator = (*variant_iterator).begin(); +entry_iterator; ++entry_iterator)
 							{
 								if ((*entry_iterator).getDepth() == entry->getDepth() + 2)
@@ -684,19 +680,19 @@ namespace BALL
 									{
 										parseAtoms_(*entry_iterator, *variant);
 									}
-									if ((*entry_iterator).getKey() == "Bonds")
+									else if ((*entry_iterator).getKey() == "Bonds")
 									{
 										parseBonds_(*entry_iterator, *variant);
 									}
-									if ((*entry_iterator).getKey() == "Rename")
+									else if ((*entry_iterator).getKey() == "Rename")
 									{
 										parseRename_(*entry_iterator, *variant);
 									}
-									if ((*entry_iterator).getKey() == "Delete")
+									else if ((*entry_iterator).getKey() == "Delete")
 									{
 										parseDelete_(*entry_iterator, *variant);
 									}
-									if ((*entry_iterator).getKey() == "Properties")
+									else if ((*entry_iterator).getKey() == "Properties")
 									{
 										parseProperties_(*entry_iterator, *dynamic_cast<PropertyManager*>(variant));
 									}
@@ -714,20 +710,20 @@ namespace BALL
 		{
 			for (entry_iterator = ++entry->begin(); +entry_iterator; ++entry_iterator)
 			{
-				if ((*entry_iterator).getDepth() == 2)
+				if (entry_iterator->getDepth() == 2)
 				{
-					StringHashMap<String>*	name_map_to;
-					StringHashMap<String>*	name_map_from;
+					StringHashMap<String>* name_map_to;
+					StringHashMap<String>* name_map_from;
 					name_map_to = new StringHashMap<String>;
 					name_map_from = new StringHashMap<String>;
 					standards_[(*entry_iterator).getKey() + "-" + (*entry_iterator).getValue()] = name_map_to;
 					standards_[(*entry_iterator).getValue() + "-" + (*entry_iterator).getKey()] = name_map_from;
 					
 					ResourceEntry::Iterator	alias_iterator;
-					for (alias_iterator = ++(*entry_iterator).begin(); +alias_iterator; ++alias_iterator)
+					for (alias_iterator = ++entry_iterator->begin(); +alias_iterator; ++alias_iterator)
 					{
-						(*name_map_to)[(*alias_iterator).getKey()] = (*alias_iterator).getValue();
-						(*name_map_from)[(*alias_iterator).getValue()] = (*alias_iterator).getKey();
+						(*name_map_to)[alias_iterator->getKey()] = alias_iterator->getValue();
+						(*name_map_from)[alias_iterator->getValue()] = alias_iterator->getKey();
 					}
 				}
 			}
@@ -822,7 +818,7 @@ namespace BALL
 		{
 			return 0;
 		}
-		if (name_to_variants_[fragment.getName()].size() < 2)
+		if (name_to_variants_[fragment.getName()].size() == 1)
 		{
 			return getFragment(s);
 		}
@@ -833,7 +829,7 @@ namespace BALL
 		// cystein variants without thiol hydrogen if the
 		// disulphide bond property is set
 		
-		// first, check for two special properties of amino acids:
+		// First, check for two special properties of amino acids:
 		// C_TERMINAL and N_TERMINAL 
 		// They are usually not set, so set them here
 		// As the fragment should be const, we store the properties
@@ -851,25 +847,40 @@ namespace BALL
 				additional_properties.setBit(Residue::PROPERTY__N_TERMINAL);
 			}
 		}
-#ifdef DEBUG
 		else
 		{
-			Log.info() << " not a residue!" << std::endl;
-		}
+			const Nucleotide* nucleotide = dynamic_cast<const Nucleotide*>(&fragment);
+			if (nucleotide != 0)
+			{
+				if (nucleotide->is3Prime())
+				{
+					additional_properties.setBit(Nucleotide::PROPERTY__3_PRIME);
+				}
+				if (nucleotide->is5Prime())
+				{
+					additional_properties.setBit(Nucleotide::PROPERTY__5_PRIME);
+				}
+			}
+#ifdef DEBUG
+			else
+			{
+				Log.info() << " neither residue nor nucleotide!" << std::endl;
+			}
 #endif
+		}
 	
 		Fragment* variant = 0;
 		// the number of properties that matched.
 		// the fragment with the largest number of matched
 		// properties is returned
-		int number_of_properties = -1;
-		int property_difference = -1;
-		int best_number_of_properties = -1;
-		int best_property_difference = 10000;
+		Index number_of_properties = -1;
+		Index property_difference = -1;
+		Index best_number_of_properties = -1;
+		Index best_property_difference = 10000;
 
 		// iterate over all variants and compare properties
-		list<Residue*> variant_list = name_to_variants_[fragment.getName()];
-		list<Residue*>::const_iterator it = variant_list.begin();
+		std::list<Residue*> variant_list = name_to_variants_[fragment.getName()];
+		std::list<Residue*>::const_iterator it = variant_list.begin();
 		for (; it != variant_list.end(); ++it)
 		{
 			// determine how many properties both have in common

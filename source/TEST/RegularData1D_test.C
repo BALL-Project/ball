@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData1D_test.C,v 1.18 2004/02/25 17:18:50 oliver Exp $
+// $Id: RegularData1D_test.C,v 1.19 2004/02/26 18:12:09 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.18 2004/02/25 17:18:50 oliver Exp $")
+START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.19 2004/02/26 18:12:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -454,7 +454,7 @@ CHECK(const ValueType& getClosestValue(const CoordinateType& x) const throw(Exce
 RESULT
 
 CHECK(bool empty() const throw())
-	RegularData1D rd(0.0, 0.0, 0.1);
+	RegularData1D rd(0.0, 0.0, 0.0);
 
 	TEST_EQUAL(rd.empty(), true);
 RESULT

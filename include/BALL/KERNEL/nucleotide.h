@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.32 2003/08/26 08:04:18 oliver Exp $
+// $Id: nucleotide.h,v 1.33 2004/02/26 18:12:09 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #	include <BALL/KERNEL/fragment.h>
+#endif
+
+#ifndef BALL_KERNEL_RESIDUE_H
+#	include <BALL/KERNEL/residue.h>
 #endif
 
 #ifndef BALL_KERNEL_NUCLEOTIDEITERATOR_H
@@ -45,9 +49,11 @@ namespace BALL
 		enum Property
 		{
 			///
-			PROPERTY__5_PRIME = Fragment::NUMBER_OF_PROPERTIES + 1,
+			PROPERTY__5_PRIME = Residue::NUMBER_OF_PROPERTIES + 1,
 			///
 			PROPERTY__3_PRIME,
+			/// 
+			PROPERTY__NUCLEOTIDE,
 
 			///
 			NUMBER_OF_PROPERTIES

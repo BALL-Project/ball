@@ -1,0 +1,67 @@
+<node>G
+	<node>Names
+		<node>Guanine</node>
+		<node>Guanin</node>	 
+	</node>
+	<node>Atoms
+		<node>P<value>P 15.423 21.293 39.836</value></node>    
+		<node>O1P<value>O1P 14.088 21.259 39.198</value></node>     
+		<node>O2P<value>O2P 16.625 21.003 39.027</value></node>      
+		<node>O5*<value>O5* 15.378 20.305 41.102</value></node>      
+		<node>C5*<value>C5* 16.556 19.955 41.810</value></node>      
+		<node>C4*<value>C4* 16.219 19.057 42.989</value></node>      
+		<node>O4*<value>O4* 15.464 19.769 43.966</value></node>     
+		<node>C3*<value>C3* 15.378 17.876 42.528</value></node>      
+		<node>O3*<value>O3* 16.094 16.717 42.945</value></node>     
+		<node>C2*<value>C2* 14.049 18.070 43.266</value></node>      
+		<node>C1*<value>C1* 14.427 18.926 44.452 </value></node> 
+		<node>N9<value>N9 13.386 19.842 44.918</value></node>      
+		<node>C8<value>C8 12.478 20.571 44.193</value></node>      
+		<node>N7<value>N7 11.716 21.317 44.931</value></node>      
+		<node>C5<value>C5 12.138 21.069 46.232</value></node>      
+		<node>C6<value>C6 11.661 21.583 47.466</value></node>       
+		<node>O6<value>O6 10.733 22.360 47.661</value></node>       
+		<node>N1<value>N1 12.358 21.059 48.541</value></node>      
+		<node>C2<value>C2 13.381 20.150 48.436 </value></node>    
+		<node>N2<value>N2 13.929 19.729 49.568 </value></node>     
+		<node>N3<value>N3 13.831 19.663 47.279 </value></node>   
+		<node>C4<value>C4 13.161 20.168 46.225</value></node>
+	</node>  
+	<node>Bonds
+		<node>1<value>P O1P s</value></node>
+		<node>2<value>P O2P s</value></node>
+		<node>3<value>P O5* s</value></node>		
+		<node>4<value>O5* C5* s</value></node>
+		<node>5<value>C5* C4* a</value></node>
+		<node>6<value>C4* O4* a</value></node>	
+		<node>7<value>C4* C3* a</value></node>
+		<node>8<value>C3* O3* a</value></node>
+		<node>9<value>C3* C2* a</value></node>
+		<node>10<value>C2* C1* a</value></node>
+		<node>11<value>C1* O1P a</value></node>
+		<node>12<value>C1* O4* a</value></node>
+		<node>13<value>C1* N9 a</value></node>
+		<node>14<value>N9 C8 a</value></node>
+		<node>15<value>C8 N7 a</value></node>
+		<node>16<value>N7 C5 a</value></node>
+		<node>17<value>C5 C4 a</value></node>
+		<node>18<value>C4 N9 a</value></node>
+		<node>19<value>C5 C6 a</value></node>
+		<node>20<value>C6 O6 s</value></node>
+		<node>21<value>C6 N1 a</value></node>
+		<node>22<value>N1 C2 a</value></node>
+		<node>23<value>C2 N2 s</value></node>
+		<node>24<value>C2 N3 a</value></node>
+		<node>25<value>N3 C4 a</value></node>
+ 	</node>
+	<node>Connections
+		<node>5-term<value></value></node>
+		<node>3-term<value></value></node>
+	</node>
+	<node>Properties
+		<node>NUCLEIC_ACID</node>
+	</node>
+	<node>Variants
+	</node>
+
+</node>
