@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum_test.C,v 1.5 2001/05/06 23:11:35 oliver Exp $
+// $Id: NMRSpectrum_test.C,v 1.6 2001/05/07 00:36:52 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(NMRSpectrum, "$Id: NMRSpectrum_test.C,v 1.5 2001/05/06 23:11:35 oliver Exp $")
+START_TEST(NMRSpectrum, "$Id: NMRSpectrum_test.C,v 1.6 2001/05/07 00:36:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ CHECK(NMRSpectrum::setDensity(Size density)/getDensity())
 	spectrum.setDensity(100);
 RESULT
 
-ShiftModel sm("data/ShiftModel_test.ini");
+ShiftModel sm("data/NMRSpectrum_test.ini");
 CHECK(NMRSpectrum::setShiftModel(const ShiftModel& model))
 	NMRSpectrum spectrum;
 	spectrum.setShiftModel(sm);
