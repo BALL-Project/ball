@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.41 2004/11/25 01:10:42 amoll Exp $
+// $Id: molecularControl.h,v 1.42 2004/12/13 23:14:33 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -405,19 +405,6 @@ namespace BALL
 					\see     onNotify
 			*/
 			virtual bool reactToMessages_(Message* message)
-				throw();
-			
-			/** Mutable inspection of the copy list.
-					In this list all copied or cutted Composite objects are stored until
-					the method clearClipboard() is called.
-			*/
-			List<Composite*>& getCopyList_()
-				throw();
-			
-			/** Non-mutable inspection of the copy list.
-					For further information see getCopyList_().
-			*/
-			const List<Composite*>& getCopyList_() const
 				throw();
 
 			/** Generate a new SelectableListViewItem for the given Composite.

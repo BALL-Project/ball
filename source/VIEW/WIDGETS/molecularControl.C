@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.84 2004/12/13 22:44:02 amoll Exp $
+// $Id: molecularControl.C,v 1.85 2004/12/13 23:14:12 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -172,6 +172,14 @@ MolecularControl::~MolecularControl()
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "Destroying MolecularControl " << this << std::endl;
 #endif
+
+	List<Composite*>::ConstIterator list_it = copy_list_.begin();	
+	for (; list_it != copy_list_.end(); ++list_it)
+	{
+		delete *list_it;
+	}
+
+	copy_list_.clear();
 }
 
 void MolecularControl::checkMenu(MainControl& main_control)
@@ -185,13 +193,13 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// 																			no simulation running &&
 	// 																			it makes sense
 	bool allow_paste = getSelection().size() <= 1 &&
-										 getCopyList_().size() > 0 &&
+										 copy_list_.size() > 0 &&
 										 !main_control.compositesAreLocked();
 	if (allow_paste)
 	{
 		hint = "Paste a copied or cuted object into current selected object.";
-		List<Composite*>::Iterator it = getCopyList_().begin();
-		for (; it != getCopyList_().end(); it++)
+		List<Composite*>::Iterator it = copy_list_.begin();
+		for (; it != copy_list_.end(); it++)
 		{
 			if (!pasteAllowedFor_(**it)) 
 			{
@@ -205,7 +213,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	{
 		if (getSelection().size() != 1)
 			hint = "One item must be selected to paste into.";
-		else if (getCopyList_().size() == 0)
+		else if (copy_list_.size() == 0)
 			hint = "No copied/cuted object.";
 		else if (main_control.compositesAreLocked())
 			hint = "Simulation running, cant copy meanwhile";
@@ -216,7 +224,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// ------------------------------------------------------------------
 	// clearClipboard
 	// enable only if copy_list_ not empty
-	bool copy_list_filled = (getCopyList_().size() > 0);
+	bool copy_list_filled = (copy_list_.size() > 0);
 	menuBar()->setItemEnabled(clipboard_id_, copy_list_filled && 
 																					 !main_control.compositesAreLocked());
 	if (!menuBar()->isItemEnabled(clipboard_id_))
@@ -999,18 +1007,6 @@ const List<Composite*>& MolecularControl::getSelection() const
 	throw()
 {
 	return selected_;
-}
-
-List<Composite*>& MolecularControl::getCopyList_()
-	throw()
-{
-	return copy_list_;
-}
-			
-const List<Composite*>& MolecularControl::getCopyList_() const
-	throw()
-{
-	return copy_list_;
 }
 
 void MolecularControl::createRepresentation() 
