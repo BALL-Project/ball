@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.43 2003/08/28 13:38:51 amoll Exp $
+// $Id: mainframe.h,v 1.44 2003/09/01 22:34:01 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -33,6 +33,10 @@
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 # include <BALL/VIEW/WIDGETS/molecularControl.h>
+#endif
+
+#ifndef BALL_VIEW_WIDGETS_TRAJECTORY_CONTROL_H
+# include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #endif
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -113,7 +117,6 @@ class Mainframe
 	enum MenuKey
 	{
 		MENU__FILE_EXPORT_POVRAYFILE = 20000,
-		MENU__FILE_VISUALISE_DCD,
 		
 		MENU__BUILD_ASSIGN_CHARGES,
 		MENU__BUILD_AMBER_ENERGY,
@@ -163,7 +166,6 @@ class Mainframe
   void computeSurface();
 	void buildPeptide();
 	void stopSimulation();
-	void visualiseDCDFile();
 
 	void toggleFullScreen();
 	// Help menu
@@ -181,6 +183,7 @@ class Mainframe
 
 	Scene*										scene_;
 	MolecularControl*					control_;
+	TrajectoryControl*				trajectory_control_;
 	GeometricControl*					geometric_control_;
 	DisplayProperties*    		display_properties_;
 	AmberMinimizationDialog*	minimization_dialog_;

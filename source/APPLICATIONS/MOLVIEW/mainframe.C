@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.66 2003/08/28 14:27:50 amoll Exp $
+// $Id: mainframe.C,v 1.67 2003/09/01 22:34:00 amoll Exp $
 
 #include "mainframe.h"
 #include "icons.h"
@@ -18,7 +18,6 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
-#include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/STRUCTURE/residueChecker.h>
@@ -57,6 +56,7 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	:	MainControl(parent, name, ".molview"),
 		scene_(0),
 		control_(0),
+		trajectory_control_(0),
 		geometric_control_(0),
 		display_properties_(0),
 		minimization_dialog_(0),
@@ -106,6 +106,10 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	geometric_control_ = new GeometricControl(vert_splitter2_);
 	CHECK_PTR(geometric_control_);
 	geometric_control_->setMinimumSize(10, 10);
+
+	trajectory_control_ = new TrajectoryControl(vert_splitter2_);
+	CHECK_PTR(trajectory_control_);
+	trajectory_control_->setMinimumSize(10,10);
 
 	scene_ = new Scene(hor_splitter_);
 	CHECK_PTR(scene_);
@@ -158,9 +162,6 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	// File Menu
 	insertMenuEntry(MainControl::FILE, "Export POVRa&y file", this, SLOT(exportPOVRay()), 
 									CTRL+Key_Y, MENU__FILE_EXPORT_POVRAYFILE);
-
-	insertMenuEntry(MainControl::FILE, "Visualise DCD file", this, SLOT(visualiseDCDFile()), 
-									CTRL+Key_2, MENU__FILE_VISUALISE_DCD);
 
 	// Display Menu
 	insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
@@ -236,8 +237,6 @@ void Mainframe::checkMenuEntries()
 	// disable simulation entries, if a simulation is already running
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MINIMIZATION, one_item && composites_muteable_);
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MDSIMULATION, one_item && composites_muteable_);
-	menuBar()->setItemEnabled(MENU__FILE_VISUALISE_DCD, 
-			getSelectedSystem() && composites_muteable_);
 	menuBar()->setItemEnabled(MENU__BUILD_PEPTIDE, composites_muteable_);
 	// enable stopSimulation if simulation is running
 	menuBar()->setItemEnabled(MENU__BUILD_STOPSIMULATION, !composites_muteable_);
@@ -814,35 +813,6 @@ void Mainframe::customEvent( QCustomEvent * e )
 		Log.info() << so->getMessage() << std::endl;
 		return;
 	}
-}
-
-
-void Mainframe::visualiseDCDFile()
-{
-	if (!getSelectedSystem()) return;
-	QFileDialog *fd = new QFileDialog(this, "", true);
-	fd->setMode(QFileDialog::ExistingFile);
-	fd->setFilter("DCD files(*.dcd)");
-	fd->setCaption("Select a DCD file");
-	fd->setViewMode(QFileDialog::Detail);
-
-	if (!fd->exec()== QDialog::Accepted) return;
-
-	String filename(fd->selectedFile().ascii());
-	delete fd;
-
-	// construct a name for the system(the filename without the dir path)
-	DCDFile* dcd = new DCDFile(filename, File::IN);
-	if (dcd->getNumberOfAtoms() != getSelectedSystem()->countAtoms())
-	{
-		setStatusbarText("Number of atoms do not match. Aborting...");
-		delete dcd;
-		return;
-	}
-	SnapShotManager* manager = new SnapShotManager(getSelectedSystem(), 0, dcd);
-	SnapshotVisualisationDialog* dialog = new SnapshotVisualisationDialog(this);
-	dialog->setSnapShotManager(manager);
-	dialog->show();
 }
 
 } 
