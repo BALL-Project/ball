@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.54 2001/06/26 02:34:01 oliver Exp $
+// $Id: vector3.h,v 1.55 2001/07/10 16:31:38 anker Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -36,27 +36,38 @@ namespace BALL
 	template <typename T>
 	class TVector3;
 
+	/**	@name	Global binary operator functions for three-dimensional vectors.
+	*/
+	//@{
+
+	/** Multiply a vector with a scalar. The symmetric case is a member of the
+			vector class.
+	*/
 	template <typename T>
 	BALL_INLINE 
-	TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b)
+	TVector3<T> operator * (const TVector3<T>& a, const TVector3<T>& b)
 		throw();
 
-	template <typename T>
-	BALL_INLINE 
-	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b)
-		throw();
-
+	/**	Input operator.
+			Reads the values of {\tt three} vector components of type {\em T}
+			from an istream. The components are read in the order of x, y, z.
+	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector3<T>& vector)
 		throw();
 
+	/**	Output operator.
+			Writes the values of {\tt three} vector components of type {\em T}
+			to an ostream. The components are writen in the order of x, y, z.
+	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector3<T>& vector)
 		throw();
 
+	//@}
+
 	/** Generic Three-Dimensional Vector.
       {\bf Definition:} \URL{BALL/MATHS/vector3.h}
-      \\
 	*/
 	template <typename T>
 	class TVector3
@@ -75,13 +86,7 @@ namespace BALL
 				are initialized to {\tt (T)0}.
 		*/
 		TVector3()
-			throw()
-			:	PersistentObject(),
-				x(0),
-				y(0),
-				z(0)
-		{
-		}
+			throw();
 
 		/**	Array constructor.
 				This constructor creates a TVector3 object from the first
@@ -90,18 +95,7 @@ namespace BALL
 				@exception NullPointer if {\tt ptr == 0}
 		*/
 		TVector3(const T* ptr)
-			throw(Exception::NullPointer)
-			:	PersistentObject()
-		{
-			if (ptr == 0) 
-			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
-
-			x = *ptr++;
-			y = *ptr++;
-			z = *ptr;
-		}
+			throw(Exception::NullPointer);
 
 		/**	Scalar constructor.
 				Create a new vector with all components set
@@ -109,13 +103,7 @@ namespace BALL
 				@param	value the value of all components
 		*/
 		TVector3(const T& value)
-			throw()
-			:	PersistentObject(),	
-				x(value),
-				y(value),
-				z(value)
-		{
-		}
+			throw();
 
 		/**	Detailed constructor.
 				Create a new TVector3 object from three variables of type {\tt T}.
@@ -124,26 +112,14 @@ namespace BALL
 				@param	vz assigned to {\tt z}
 		*/
 		TVector3(const T& vx, const T& vy, const T& vz)
-			throw()
-			:	PersistentObject(),
-				x(vx),
-				y(vy),
-				z(vz)
-		{
-		}
+			throw();
 
 		/**	Copy constructor.
 				Create a new TVector3 object from another.
 				@param vector the TVector3 object to be copied
 		*/	
 		TVector3(const TVector3& vector)
-			throw()
-			:	PersistentObject(),
-				x(vector.x),
-				y(vector.y),
-				z(vector.z)
-		{
-		}
+			throw();
 
 		/**	Spherical polar coordinate constructor.
 				Create a TVector3 object and set its coordinates to 
@@ -155,31 +131,20 @@ namespace BALL
 				@param theta the co-latitude
 		*/
 		TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
-			throw()
-			:	PersistentObject(),
-				x(r * cos(phi) * sin(theta)),
-				y(r * sin(phi) * sin(theta)),
-				z(r * cos(theta))
-		{
-		}
+			throw();
 
 		/**	Destructor.	
 				Destructs the TVector3 object. As there are no dynamic
 				data structures, nothing happens.
 		*/	
 		virtual ~TVector3()
-			throw()
-		{
-		}
+			throw();
 
 		/** Clear method
 				The values are set to 0.
 		*/
 		virtual void clear()
-			throw()
-		{
-			x = y = z = (T)0;
-		}
+			throw();
 
 		//@}
 
@@ -386,6 +351,16 @@ namespace BALL
 		/**	Negative sign.
 		*/
 		TVector3 operator - () const
+			throw();
+
+		/** Addition.
+		*/
+		TVector3 operator + (const TVector3& b) const
+			throw();
+
+		/** Subtraction.
+		*/
+		TVector3 operator - (const TVector3& b) const
 			throw();
 
 		/**	Add a vector to this vector.
@@ -614,6 +589,84 @@ namespace BALL
 		}
 	};
 
+
+	template <typename T>
+	TVector3<T>::TVector3()
+		throw()
+		:	PersistentObject(),
+			x(0),
+			y(0),
+			z(0)
+	{
+	}
+
+	template <typename T>
+	TVector3<T>::TVector3(const T* ptr)
+		throw(Exception::NullPointer)
+		:	PersistentObject()
+	{
+		if (ptr == 0) 
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+
+		x = *ptr++;
+		y = *ptr++;
+		z = *ptr;
+	}
+
+	template <typename T>
+	TVector3<T>::TVector3(const T& value)
+		throw()
+		:	PersistentObject(),	
+			x(value),
+			y(value),
+			z(value)
+	{
+	}
+
+	template <typename T>
+	TVector3<T>::TVector3(const T& vx, const T& vy, const T& vz)
+		throw()
+		:	PersistentObject(),
+			x(vx),
+			y(vy),
+			z(vz)
+	{
+	}
+
+	template <typename T>
+	TVector3<T>::TVector3(const TVector3& vector)
+		throw()
+		:	PersistentObject(),
+			x(vector.x),
+			y(vector.y),
+			z(vector.z)
+	{
+	}
+
+	template <typename T>
+	TVector3<T>::TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
+		throw()
+		:	PersistentObject(),
+			x(r * cos(phi) * sin(theta)),
+			y(r * sin(phi) * sin(theta)),
+			z(r * cos(theta))
+	{
+	}
+
+	template <typename T>
+	TVector3<T>::~TVector3()
+		throw()
+	{
+	}
+
+	template <typename T>
+	void TVector3<T>::clear()
+		throw()
+	{
+		x = y = z = (T)0;
+	}
 
 	template <typename T>
   void TVector3<T>::persistentWrite(PersistenceManager& pm, const char* name) const
@@ -1140,34 +1193,22 @@ namespace BALL
 	*/
 	typedef TVector3<float> Vector3;
 
-	/**	Operators
-	*/
-	//@{
-	/** Addition operator for two vectors
-  		@return TVector3 - the new vector
-	*/
 	template <typename T>
 	BALL_INLINE 
-	TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b)
+	TVector3<T> TVector3<T>::operator + (const TVector3<T>& b) const
 		throw()
 	{
-		return TVector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
+		return TVector3<T>(x + b.x, y + b.y, z + b.z);
 	}
 	
-	/** Subtraction operator of two vectors
-  		@return TVector3 the new vector
-	*/
 	template <typename T>
 	BALL_INLINE
-	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b)
+	TVector3<T> TVector3<T>::operator - (const TVector3<T>& b) const
 		throw()
 	{
-		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
+		return TVector3<T>(x - b.x, y - b.y, z - b.z);
 	}
 
-	/**	Multiplication operator for a scalar and a vector
-  		@return TVector3 - the new vector
-	*/
 	template <typename T>
 	BALL_INLINE 
 	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector)
@@ -1176,10 +1217,6 @@ namespace BALL
 		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 	}
 
-	/**	Input operator.
-			Reads the values of {\tt three} vector components of type {\em T}
-			from an istream. The components are read in the order of x, y, z.
-	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector3<T>& v)
 		throw()
@@ -1190,10 +1227,6 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output operator.
-			Writes the values of {\tt three} vector components of type {\em T}
-			to an ostream. The components are writen in the order of x, y, z.
-	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector3<T>& v)
 		throw()
@@ -1203,7 +1236,6 @@ namespace BALL
 		return s;
 	}
 
-	//@}
 	//@}
 		
 }// namespace BALL
