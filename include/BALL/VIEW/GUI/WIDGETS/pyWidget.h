@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.14 2003/03/28 19:29:49 amoll Exp $
+// $Id: pyWidget.h,v 1.15 2003/03/28 19:37:03 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -135,7 +135,7 @@ class PyWidget
 
 	void parseLine_();
 
-	void appendToHistory_(const QString& line);
+	void appendToHistory_(const String& line);
 	
 	/**	Print prompt.
 			Determine the correct type of prompt and append it 

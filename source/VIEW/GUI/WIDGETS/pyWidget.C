@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.12 2003/03/28 19:27:40 amoll Exp $
+// $Id: pyWidget.C,v 1.13 2003/03/28 19:36:07 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
@@ -207,7 +207,7 @@ void PyWidget::parseLine_()
 	{
 		if (!line.isEmpty())
 		{
-			appendToHistory_(line.c_str());
+			appendToHistory_(line);
 			multi_line_text_ += line + "\n";
 			newPrompt_();
 			return;
@@ -224,9 +224,9 @@ void PyWidget::parseLine_()
 	newPrompt_();
 }
 
-void PyWidget::appendToHistory_(const QString& line)
+void PyWidget::appendToHistory_(const String& line)
 {
-	history_.push_back(String(line.ascii()));
+	history_.push_back(line);
 	history_position_ = history_.size();
 }
 
