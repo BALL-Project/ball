@@ -18,6 +18,7 @@ EXECUTABLES = \
 	CharmmFF_test\
 	ClassTest_test\
 	Composite_test\
+	Directory_test\
 	DefaultProcessors_test\
 	EnergyMinimizer_test\
 	Expression_test\
@@ -63,6 +64,7 @@ EXECUTABLES = \
 	StandardPredicates_test\
 	String_test\
 	StructureMapper_test\
+	Timer_test\
 	TransformationApplicator_test\
 	TranslationApplicator_test\
 	Vector3_test\
