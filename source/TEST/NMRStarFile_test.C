@@ -1,4 +1,4 @@
-// $Id: NMRStarFile_test.C,v 1.5 2000/09/24 14:52:02 oliver Exp $
+// $Id: NMRStarFile_test.C,v 1.6 2000/10/03 02:00:37 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,9 +6,8 @@
 ///////////////////////////
 
 using namespace BALL;
-using namespace std;
 
-START_TEST(String,"$Id: NMRStarFile_test.C,v 1.5 2000/09/24 14:52:02 oliver Exp $")
+START_TEST(String,"$Id: NMRStarFile_test.C,v 1.6 2000/10/03 02:00:37 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,14 +18,15 @@ CHECK(NMRStarFile::NMRStarFile(filename))
 	TEST_EQUAL(rs.getNumberOfAtoms(), 1914)
 	if (rs.getData().size() == 1 && rs.getNumberOfAtoms() == 1914)
 	{
-		TEST_EQUAL(rs.getData()[0]->atomData[1913]->atomName, "N")
+		TEST_EQUAL(rs.getData()[0]->atom_data[1913]->atom_name, "N")
 	}
 
-	for (int i = 0;  i < rs.getData()[0]->atomData.size(); i++)
+	/*
+	for (Position i = 0;  i < rs.getData()[0]->atom_data.size(); i++)
 	{
-		cout << *(rs.getData()[0]->atomData[i]) << endl;
+		cout << *(rs.getData()[0]->atom_data[i]) << endl;
 	}
-
+	*/
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <BALL/NMR/assignShiftProcessor.h>
 #include <BALL/NMR/NMRSpectrum.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -6,51 +5,62 @@
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/NMRStarFile.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/CONCEPT/classTest.h>
+
+START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.8 2000/10/03 02:00:37 amoll Exp $")
 
 using namespace BALL;
 using namespace std;
 
-int main()
-{
+System s;
+//AssignShiftProcessor asp;
+
+CHECK(preparations)
 	HINFile f;
 	f.open("data/AssignShiftProcessor_test.hin");
 	Path path;
 
-	System system;
-	f >> system;
+	f >> s;
 	FragmentDB frag_db;
 	ResidueChecker rc(frag_db);
-	system.apply(rc);
-	
+	s.apply(rc);
+RESULT
 
+CHECK(AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)/apply())
 	NMRStarFile rs("data/bmr4789.str");
-	cout << "Size: " << rs.getData()[0]->atomData.size() << endl;
-	cout << "number of atoms: " << rs.getNumberOfAtoms() << endl;
+	TEST_EQUAL(rs.getData()[0]->atom_data.size(), 797)
+	TEST_EQUAL(rs.getNumberOfAtoms(), 797)
+	TEST_EQUAL(s.countAtoms(), 1944)
 
-	Log.info() << "System: #atoms = " << system.countAtoms() << endl;
-	AssignShiftProcessor asp(rs.getData()[0]->atomData);
-	system.apply(asp);
+	AssignShiftProcessor asp(rs.getData()[0]->atom_data);
+	s.apply(asp);
+RESULT
 
-	int numberOfShiftAtoms = 0;
-	AtomIterator atom_it = system.beginAtom();
+CHECK(results)
+	int number_of_shiftatoms = 0;
+	AtomIterator atom_it = s.beginAtom();
 	for (; +atom_it; ++atom_it)
 	{
 		if (atom_it->hasProperty(ShiftModule::PROPERTY__SHIFT))
 		{
-			numberOfShiftAtoms++;
+			number_of_shiftatoms++;
 		}
 		else
 		{
-			Log.info() << atom_it->getFullName() << " " << atom_it->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat() << endl;
+			//Log.info() << atom_it->getFullName() << " has no shift property." << endl;
 		}
 	}
- 	cout << "numberOfShiftAtoms " << numberOfShiftAtoms << endl;
+	TEST_EQUAL(number_of_shiftatoms, 940)
 
 	NMRSpectrum spectrum;
-	spectrum.setSystem(&system);
+	spectrum.setSystem(&s);
 	spectrum.setDensity(32768);
 	spectrum.createSpectrum();
-	Log.info() << " Number of peaks in spectrum: " << spectrum.getPeakList().size() << endl;
+
+	TEST_EQUAL(spectrum.getPeakList().size(), 581)
+
 	spectrum.plotSpectrum("parv_synth.dat");
 	spectrum.writePeaks("parv_synth.peaks");
-}
+RESULT
+
+END_TEST
