@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.8 2000/02/16 19:20:10 oliver Exp $
+// $Id: templates.C,v 1.9 2000/07/06 14:44:25 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -128,7 +128,9 @@ namespace BALL
 				if (charges_.has(name))
 				{
 					it->setCharge(charges_[name]);
-				} else {
+				} 
+				else 
+				{
 					Log.warn() << "Templates::assign: cannot assign charge for atom " << name << endl;
 				}
 			}
