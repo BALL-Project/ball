@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.20 2002/01/17 18:17:15 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.21 2002/01/17 20:02:47 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -137,8 +137,7 @@ DIRS	= @SUBDIRS@
 
 #	C++ sources use suffix .C, .y for BISON, .l for FLEX
 #
-.SUFFIXES:
-.SUFFIXES: .C .y .l .o .h
+.SUFFIXES: .C .y .l .o
 
 # Rule to create .o files from .C files
 #

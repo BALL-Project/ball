@@ -48,6 +48,9 @@ default_clean:	clean_flex_bison
 clean_flex_bison:
 	@-$(RM) smilesParserParser.C smilesParserLexer.C smilesParserParser.h
 
-smilesParserParser.o: smilesParserParser.C
+smilesParserParser.C smilesParserParser.h: smilesParserParser.y
 
-smilesParserLexer.o: smilesParserLexer.C
+smilesParserLexer.o: ;
+
+smilesParserParser.o:	;
+
