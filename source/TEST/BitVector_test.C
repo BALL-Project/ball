@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.14 2000/07/26 16:44:34 amoll Exp $
+// $Id: BitVector_test.C,v 1.15 2000/08/02 18:12:40 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.14 2000/07/26 16:44:34 amoll Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.15 2000/08/02 18:12:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -238,10 +238,36 @@ RESULT
 
 CHECK(BitVector::setUnsignedChar(unsigned char)/getUnsignedChar)
 	BitVector bv8(8);
-	bv8.setUnsignedChar(1);
-	TEST_EQUAL(bv8.getBit(0), true)
+	bv8.setUnsignedChar((char)0xaa);
+	TEST_EQUAL(bv8.getBit(0), false)
+	TEST_EQUAL(bv8.getBit(1), true)
+	TEST_EQUAL(bv8.getBit(2), false)
+	TEST_EQUAL(bv8.getBit(3), true)
+	TEST_EQUAL(bv8.getBit(4), false)
+	TEST_EQUAL(bv8.getBit(5), true)
+	TEST_EQUAL(bv8.getBit(6), false)
+	TEST_EQUAL(bv8.getBit(7), true)
+	TEST_EQUAL((int)bv8.getUnsignedChar(), (int)0xaa)
+	bv8.setUnsignedChar((char)0);
+	TEST_EQUAL(bv8.getBit(0), false)
 	TEST_EQUAL(bv8.getBit(1), false)
-	TEST_EQUAL((int)bv8.getUnsignedChar(), 1)
+	TEST_EQUAL(bv8.getBit(2), false)
+	TEST_EQUAL(bv8.getBit(3), false)
+	TEST_EQUAL(bv8.getBit(4), false)
+	TEST_EQUAL(bv8.getBit(5), false)
+	TEST_EQUAL(bv8.getBit(6), false)
+	TEST_EQUAL(bv8.getBit(7), false)
+	TEST_EQUAL((int)bv8.getUnsignedChar(), (int)0x0)
+	bv8.setUnsignedChar((char)2);
+	TEST_EQUAL(bv8.getBit(0), false)
+	TEST_EQUAL(bv8.getBit(1), true)
+	TEST_EQUAL(bv8.getBit(2), false)
+	TEST_EQUAL(bv8.getBit(3), false)
+	TEST_EQUAL(bv8.getBit(4), false)
+	TEST_EQUAL(bv8.getBit(5), false)
+	TEST_EQUAL(bv8.getBit(6), false)
+	TEST_EQUAL(bv8.getBit(7), false)
+	TEST_EQUAL((int)bv8.getUnsignedChar(), (int)0x2)
 RESULT
 
 CHECK(BitVector::setUnsignedShort(unsigned short)/getUnsignedShort)
@@ -249,6 +275,12 @@ CHECK(BitVector::setUnsignedShort(unsigned short)/getUnsignedShort)
 	bv8.setUnsignedShort(1);
 	TEST_EQUAL(bv8.getBit(0), true)
 	TEST_EQUAL(bv8.getBit(1), false)
+	TEST_EQUAL(bv8.getBit(2), false)
+	TEST_EQUAL(bv8.getBit(3), false)
+	TEST_EQUAL(bv8.getBit(4), false)
+	TEST_EQUAL(bv8.getBit(5), false)
+	TEST_EQUAL(bv8.getBit(6), false)
+	TEST_EQUAL(bv8.getBit(7), false)
 	TEST_EQUAL(bv8.getUnsignedShort(), 1)
 RESULT
  
