@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.10 2000/09/23 17:48:38 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.11 2000/09/24 13:36:20 oliver Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 #include<BALL/KERNEL/PDBAtom.h>
@@ -6,6 +6,8 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/SYSTEM/path.h>
+
+using namespace std;
 
 namespace BALL
 {
