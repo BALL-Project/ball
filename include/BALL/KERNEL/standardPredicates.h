@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.12 2001/02/04 10:29:05 amoll Exp $
+// $Id: standardPredicates.h,v 1.13 2001/02/05 16:56:48 amoll Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -388,19 +388,19 @@ namespace BALL
 
 	/** Predicate class for atoms being connected to a constellation defined
 			by an expression. Syntax:
-			\begin{tabular}{cl}
-				Bonds \\
-				{\tt -}  & single \\
-				{\tt =}  & double \\
-				{\tt \#} & triple \\
-				{\tt \~} & aromatic \\
-				{\tt .}  & any \\
-				Elements \\
-				{\tt symbol} & the desired element \\
-				{\tt *} & any element \\
-				Groups \\
-				{\tt ( )} & symbols enlosed by brackets denote groups \\
-			\end{tabular}
+      \begin{tabular}{cl}
+        Bonds \\
+        {\tt -}            & single \\   
+        {\tt =}            & double \\   
+        {\tt \#}           & triple \\     
+        {\tt \symbol{126}} & aromatic \\     
+        {\tt .}            & any \\   
+        Elements           & \\
+        {\tt symbol}       & the desired element \\   
+        {\tt *}            & any element \\   
+        Groups             & \\
+        {\tt ( )}          & symbols enlosed by brackets denote groups \\   
+      \end{tabular}
 	*/
 	class ConnectedToPredicate
 		:	public	ExpressionPredicate
