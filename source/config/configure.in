@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.70 2000/03/21 13:32:47 oliver Exp $
+dnl    $Id: configure.in,v 1.71 2000/03/21 14:09:12 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -8,6 +8,7 @@ dnl
 define([AC_CACHE_LOAD], )dnl
 define([AC_CACHE_SAVE], )dnl
 
+
 dnl 
 dnl    some initialization stuff...
 dnl 
@@ -16,6 +17,26 @@ AC_CONFIG_HEADER([
 	config.h:config/config.h.in
 ])
 AC_LANG_CPLUSPLUS
+
+dnl
+dnl		display the license and abort if not accepted
+dnl		we create the file config.lic if the license was
+dnl		accepted and do not show the license the second time
+dnl
+if test ! -f config.lic ; then
+	more LICENSE
+	echo " "
+	echo "Do you accept this license (y/n)?"
+	answer=""
+	while test "$answer" != "y" -a "$answer" != "n" ; do
+		read answer 
+	done
+	if test "$answer" = "n" ; then	
+		exit
+	else
+		echo "accepted" > config.lic
+	fi
+fi
 
 dnl		
 dnl    define command line arguments for QT, Mesa, and OpenGL
