@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.4 2000/02/17 00:30:44 oliver Exp $
+// $Id: support.h,v 1.5 2000/03/26 12:43:54 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #	include <BALL/MOLMEC/COMMON/forceField.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H
+#	include <BALL/MOLMEC/COMMON/atomVector.h>
 #endif
 
 #include <vector>
@@ -62,8 +66,8 @@ namespace BALL
 		*/
 		BALL::Size calculateNonBondedAtomPairs
 			(ForceField::PairVector& pair_vector, 
-			 const vector<Atom*>& atom_vector, const TBox3<Real>& box, 
-			 float distance,	bool periodic_boundary_enabled, 
+			 const AtomVector& atom_vector, const Box3& box, 
+			 double distance,	bool periodic_boundary_enabled, 
 			 PairListAlgorithmType type);
 
 		/**	Merge the non-overlapping molecules of a system into another system.
@@ -80,7 +84,7 @@ namespace BALL
 		*/
 		BALL::Size addNonOverlappingMolecules
 			(System&  system_A, const System& system_B,
-			 const TBox3<Real>& box, float distance);
+			 const Box3& box, double distance);
 
 		//@}
 
