@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.20 2001/01/26 00:54:45 amoll Exp $
+// $Id: resourceFile.C,v 1.21 2001/01/26 00:55:20 amoll Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -676,7 +676,7 @@ namespace BALL
 			::std::fstream::clear(rdstate() | ios::failbit);
 		}
 
-		return (bool)good();
+		return good();
 	}
 
 	
