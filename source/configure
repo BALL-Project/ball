@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.72 2000/03/06 14:56:41 oliver Exp $
+#  $Id: configure,v 1.73 2000/03/07 09:18:28 oliver Exp $
 
 
 ##################################################
@@ -4564,7 +4564,7 @@ echo "configure:4457: checking for Mesa includes" >&5
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/include /opt/include ${OPENGL_INCPATH} ${X11_INCPATH} ; do
-			if test -f "$i/GL/gl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/GL/gl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -4572,7 +4572,7 @@ echo "configure:4457: checking for Mesa includes" >&5
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/*/include /opt/*/include ; do
-			if test -f "$i/GL/gl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/GL/gl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -4580,13 +4580,13 @@ echo "configure:4457: checking for Mesa includes" >&5
 	
 	if test "${_INCLUDES}" = "" ; then
 		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
-			if test -f "$i/GL/gl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/GL/gl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
 	fi
 
-	if test "${_INCLUDES}" = "" -a test "${FIND}" != "-" ; then
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
 		if test "${FIND_KNOWS_PATH}" = false ; then
 			FIND_OPT="-name"
 			_TMP_FIND_NAME="GL/gl.h"
@@ -4617,7 +4617,7 @@ echo "configure:4457: checking for Mesa includes" >&5
 			done
 		fi
 
-		if test "${_INCLUDES}" = "" -a test "${OPENGL_INCPATH} ${X11_INCPATH}" != ""; then
+		if test "${_INCLUDES}" = "" -a "${OPENGL_INCPATH} ${X11_INCPATH}" != ""; then
 			for i in ${OPENGL_INCPATH} ${X11_INCPATH} /dev/null ; do
 				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
 				for j in ${_TMP} ; do
@@ -4656,7 +4656,7 @@ echo "configure:4548: checking for Mesa library" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} /usr/lib /opt/lib ; do
 			for j in $i/libMesaGL.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -4666,7 +4666,7 @@ echo "configure:4548: checking for Mesa library" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/*/lib /opt/*/lib ; do
 			for j in $i/libMesaGL.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -4676,15 +4676,15 @@ echo "configure:4548: checking for Mesa library" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
 			for j in $i/libMesaGL.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
 		done
 	fi
 
-	if test "${_LIBS}" = "" -a test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" -a test "${OPENGL_LIBPATH} ${X11_LIBPATH}" != ""; then
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "${OPENGL_LIBPATH} ${X11_LIBPATH}" != ""; then
 			for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "libMesaGL*" -print 2>/dev/null`
@@ -4730,7 +4730,7 @@ echo "configure:4548: checking for Mesa library" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} /usr/lib /opt/lib ; do
 			for j in $i/libGL.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -4740,7 +4740,7 @@ echo "configure:4548: checking for Mesa library" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/*/lib /opt/*/lib ; do
 			for j in $i/libGL.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -4750,15 +4750,15 @@ echo "configure:4548: checking for Mesa library" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
 			for j in $i/libGL.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
 		done
 	fi
 
-	if test "${_LIBS}" = "" -a test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" -a test "${OPENGL_LIBPATH} ${X11_LIBPATH}" != ""; then
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "${OPENGL_LIBPATH} ${X11_LIBPATH}" != ""; then
 			for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "libGL*" -print 2>/dev/null`
@@ -4807,7 +4807,7 @@ echo "configure:4548: checking for Mesa library" >&5
 				fi
 			fi
 			
-									if test "${MESA_INCLUDES}" != /usr/include -a test "${MESA_INCLUDES}" != "" ; then
+									if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
 				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${MESA_INCLUDES}"
 			fi
 		fi
@@ -4824,7 +4824,7 @@ echo "configure:4717: checking for OpenGL includes" >&5
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/include /opt/include  ; do
-			if test -f "$i/GL/gl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/GL/gl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -4832,7 +4832,7 @@ echo "configure:4717: checking for OpenGL includes" >&5
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/*/include /opt/*/include ; do
-			if test -f "$i/GL/gl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/GL/gl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -4840,13 +4840,13 @@ echo "configure:4717: checking for OpenGL includes" >&5
 	
 	if test "${_INCLUDES}" = "" ; then
 		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
-			if test -f "$i/GL/gl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/GL/gl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
 	fi
 
-	if test "${_INCLUDES}" = "" -a test "${FIND}" != "-" ; then
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
 		if test "${FIND_KNOWS_PATH}" = false ; then
 			FIND_OPT="-name"
 			_TMP_FIND_NAME="GL/gl.h"
@@ -4877,7 +4877,7 @@ echo "configure:4717: checking for OpenGL includes" >&5
 			done
 		fi
 
-		if test "${_INCLUDES}" = "" -a test "" != ""; then
+		if test "${_INCLUDES}" = "" -a "" != ""; then
 			for i in  /dev/null ; do
 				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
 				for j in ${_TMP} ; do
@@ -4913,7 +4913,7 @@ echo "configure:4805: checking for OpenGL library" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in  /usr/lib /opt/lib ; do
 			for j in $i/libGL.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -4923,7 +4923,7 @@ echo "configure:4805: checking for OpenGL library" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/*/lib /opt/*/lib ; do
 			for j in $i/libGL.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -4933,15 +4933,15 @@ echo "configure:4805: checking for OpenGL library" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
 			for j in $i/libGL.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
 		done
 	fi
 
-	if test "${_LIBS}" = "" -a test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" -a test "" != ""; then
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "" != ""; then
 			for i in  /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "libGL*" -print 2>/dev/null`
@@ -5003,7 +5003,7 @@ echo "configure:4895: checking for QT headers" >&5
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/include /opt/include ${QTDIR}/include ${BALL_PATH}/contrib/qt/include ; do
-			if test -f "$i/qgl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/qgl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -5011,7 +5011,7 @@ echo "configure:4895: checking for QT headers" >&5
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/*/include /opt/*/include ; do
-			if test -f "$i/qgl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/qgl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -5019,13 +5019,13 @@ echo "configure:4895: checking for QT headers" >&5
 	
 	if test "${_INCLUDES}" = "" ; then
 		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
-			if test -f "$i/qgl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/qgl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
 	fi
 
-	if test "${_INCLUDES}" = "" -a test "${FIND}" != "-" ; then
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
 		if test "${FIND_KNOWS_PATH}" = false ; then
 			FIND_OPT="-name"
 			_TMP_FIND_NAME="qgl.h"
@@ -5056,7 +5056,7 @@ echo "configure:4895: checking for QT headers" >&5
 			done
 		fi
 
-		if test "${_INCLUDES}" = "" -a test "${QTDIR}/include ${BALL_PATH}/contrib/qt/include" != ""; then
+		if test "${_INCLUDES}" = "" -a "${QTDIR}/include ${BALL_PATH}/contrib/qt/include" != ""; then
 			for i in ${QTDIR}/include ${BALL_PATH}/contrib/qt/include /dev/null ; do
 				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
 				for j in ${_TMP} ; do
@@ -5080,7 +5080,7 @@ echo "configure:4895: checking for QT headers" >&5
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/include /opt/include ${BALL_PATH}/contrib/qt/include ; do
-			if test -f "$i/qgl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/qgl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -5088,7 +5088,7 @@ echo "configure:4895: checking for QT headers" >&5
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/*/include /opt/*/include ; do
-			if test -f "$i/qgl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/qgl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -5096,13 +5096,13 @@ echo "configure:4895: checking for QT headers" >&5
 	
 	if test "${_INCLUDES}" = "" ; then
 		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
-			if test -f "$i/qgl.h" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/qgl.h" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
 	fi
 
-	if test "${_INCLUDES}" = "" -a test "${FIND}" != "-" ; then
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
 		if test "${FIND_KNOWS_PATH}" = false ; then
 			FIND_OPT="-name"
 			_TMP_FIND_NAME="qgl.h"
@@ -5133,7 +5133,7 @@ echo "configure:4895: checking for QT headers" >&5
 			done
 		fi
 
-		if test "${_INCLUDES}" = "" -a test "${BALL_PATH}/contrib/qt/include" != ""; then
+		if test "${_INCLUDES}" = "" -a "${BALL_PATH}/contrib/qt/include" != ""; then
 			for i in ${BALL_PATH}/contrib/qt/include /dev/null ; do
 				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
 				for j in ${_TMP} ; do
@@ -5176,7 +5176,7 @@ echo "configure:5067: checking for libqt" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include /usr/lib /opt/lib ; do
 			for j in $i/libqt.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -5186,7 +5186,7 @@ echo "configure:5067: checking for libqt" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/*/lib /opt/*/lib ; do
 			for j in $i/libqt.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -5196,15 +5196,15 @@ echo "configure:5067: checking for libqt" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
 			for j in $i/libqt.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
 		done
 	fi
 
-	if test "${_LIBS}" = "" -a test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" -a test "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" != ""; then
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" != ""; then
 			for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "libqt*" -print 2>/dev/null`
@@ -5250,7 +5250,7 @@ echo "configure:5067: checking for libqt" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} /usr/lib /opt/lib ; do
 			for j in $i/libqt.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -5260,7 +5260,7 @@ echo "configure:5067: checking for libqt" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/*/lib /opt/*/lib ; do
 			for j in $i/libqt.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -5270,15 +5270,15 @@ echo "configure:5067: checking for libqt" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
 			for j in $i/libqt.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
 		done
 	fi
 
-	if test "${_LIBS}" = "" -a test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" -a test "${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}" != ""; then
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}" != ""; then
 			for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "libqt*" -print 2>/dev/null`
@@ -5344,7 +5344,7 @@ echo "configure:5235: checking for libqgl" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include /usr/lib /opt/lib ; do
 			for j in $i/libqgl.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -5354,7 +5354,7 @@ echo "configure:5235: checking for libqgl" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/*/lib /opt/*/lib ; do
 			for j in $i/libqgl.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -5364,15 +5364,15 @@ echo "configure:5235: checking for libqgl" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
 			for j in $i/libqgl.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
 		done
 	fi
 
-	if test "${_LIBS}" = "" -a test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" -a test "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" != ""; then
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" != ""; then
 			for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "libqgl*" -print 2>/dev/null`
@@ -5418,7 +5418,7 @@ echo "configure:5235: checking for libqgl" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} /usr/lib /opt/lib ; do
 			for j in $i/libqgl.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -5428,7 +5428,7 @@ echo "configure:5235: checking for libqgl" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/*/lib /opt/*/lib ; do
 			for j in $i/libqgl.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -5438,15 +5438,15 @@ echo "configure:5235: checking for libqgl" >&5
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
 			for j in $i/libqgl.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
 		done
 	fi
 
-	if test "${_LIBS}" = "" -a test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" -a test "${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}" != ""; then
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}" != ""; then
 			for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "libqgl*" -print 2>/dev/null`

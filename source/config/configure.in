@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.63 2000/03/06 14:56:38 oliver Exp $
+dnl    $Id: configure.in,v 1.64 2000/03/07 09:18:25 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -180,7 +180,7 @@ AC_DEFUN(AC_FIND_HEADER,[
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/include /opt/include $3 ; do
-			if test -f "$i/$2" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -188,7 +188,7 @@ AC_DEFUN(AC_FIND_HEADER,[
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/*/include /opt/*/include ; do
-			if test -f "$i/$2" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -196,13 +196,13 @@ AC_DEFUN(AC_FIND_HEADER,[
 	
 	if test "${_INCLUDES}" = "" ; then
 		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
-			if test -f "$i/$2" -a test "${_INCLUDES}" = ""; then
+			if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
 	fi
 
-	if test "${_INCLUDES}" = "" -a test "${FIND}" != "-" ; then
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
 		if test "${FIND_KNOWS_PATH}" = false ; then
 			FIND_OPT="-name"
 			_TMP_FIND_NAME="$2"
@@ -233,7 +233,7 @@ AC_DEFUN(AC_FIND_HEADER,[
 			done
 		fi
 
-		if test "${_INCLUDES}" = "" -a test "$3" != ""; then
+		if test "${_INCLUDES}" = "" -a "$3" != ""; then
 			for i in $3 /dev/null ; do
 				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
 				for j in ${_TMP} ; do
@@ -272,7 +272,7 @@ AC_DEFUN(AC_FIND_LIB,[
 	if test "${_LIBS}" = "" ; then
 		for i in $3 /usr/lib /opt/lib ; do
 			for j in $i/$2.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -282,7 +282,7 @@ AC_DEFUN(AC_FIND_LIB,[
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/*/lib /opt/*/lib ; do
 			for j in $i/$2.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -292,15 +292,15 @@ AC_DEFUN(AC_FIND_LIB,[
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
 			for j in $i/$2.* ; do
-				if test -f "$j" -a test "${_LIBS}" = ""; then
+				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
 		done
 	fi
 
-	if test "${_LIBS}" = "" -a test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" -a test "$3" != ""; then
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "$3" != ""; then
 			for i in $3 /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "$2*" -print 2>/dev/null`
@@ -1724,7 +1724,7 @@ if test "${USE_BALLVIEW}" = true ; then
 			
 			dnl prevent the use of -L/usr/lib - this may lead to problems with different
 			dnl binary formats (e.g. SGI O32/N32 format)
-			if test "${MESA_INCLUDES}" != /usr/include -a test "${MESA_INCLUDES}" != "" ; then
+			if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
 				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${MESA_INCLUDES}"
 			fi
 		fi
