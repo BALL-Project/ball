@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.11 2002/12/18 19:40:13 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.12 2002/12/20 19:12:58 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -164,8 +164,7 @@ namespace BALL
 
 			const System& system = *(const System*) (*selection.begin());
 
-			bool result;
-
+			bool result = false;
 			if (filter.hasSubstring("PDB"))
 			{
 				result = writePDBFile(filename, system);
@@ -183,10 +182,12 @@ namespace BALL
 				result = writeMOL2File(filename, system);
 			}
 
-			if (!result) return false;
+			if (!result) 
+			{
+				return false;
+			}
 		
-			Log.info() << "> written " << system.countAtoms() << " atoms to file \"" << filename << "\"" << std::endl;
-
+			Log.info() << "> " << system.countAtoms() << " atoms written to file \"" << filename << "\"" << std::endl;
 			setStatusbarText("");
 
 			return true;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.C,v 1.16 2002/12/16 09:08:28 oliver Exp $
+// $Id: shiftModel.C,v 1.17 2002/12/20 19:12:58 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/CONCEPT/factory.h>
@@ -267,7 +267,7 @@ namespace BALL
 		}
 			
 		// ...call operator () for every module.
-		Processor::Result result;
+		Processor::Result result = Processor::CONTINUE;
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)
 		{
@@ -287,7 +287,7 @@ namespace BALL
 		throw()
 	{
 		// call every module
-		bool result;
+		bool result = Processor::CONTINUE;
 
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)
@@ -307,7 +307,7 @@ namespace BALL
 		throw()
 	{
 		// call every module
-		bool result;
+		bool result = Processor::CONTINUE;
 
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)

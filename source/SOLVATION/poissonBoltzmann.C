@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.33 2002/12/17 14:03:47 anker Exp $ 
+// $Id: poissonBoltzmann.C,v 1.34 2002/12/20 19:12:58 oliver Exp $ 
 
 // FDPB: Finite Difference Poisson Solver
 
@@ -1902,7 +1902,7 @@ namespace BALL
 
 		// some generally used loop variables
 		Size	i;
-		Size	j, k, l;
+		Size	j, k, l = 0;
 
 		// retrieve some basic grid properties and set the 
 		// corresponding variables

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.C,v 1.10 2002/12/20 17:21:36 anker Exp $
+// $Id: version.C,v 1.11 2002/12/20 19:12:57 oliver Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
@@ -38,11 +38,11 @@ namespace BALL
 	VersionInfo::Type VersionInfo::getType() throw()
 	{
 		StringHashMap<VersionInfo::Type> type_mapper;
-		type_mapper.insert(pair<String, VersionInfo::Type>("alpha", ALPHA));
-		type_mapper.insert(pair<String, VersionInfo::Type>("beta", BETA));
-		type_mapper.insert(pair<String, VersionInfo::Type>("nonpublic", NONPUBLIC));
-		type_mapper.insert(pair<String, VersionInfo::Type>("pre", PRERELEASE));
-		type_mapper.insert(pair<String, VersionInfo::Type>("patch", PATCHLEVEL));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("alpha", ALPHA));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("beta", BETA));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("nonpublic", NONPUBLIC));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("pre", PRERELEASE));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("patch", PATCHLEVEL));
 
 		static String release(BALL_RELEASE_STRING);
 		

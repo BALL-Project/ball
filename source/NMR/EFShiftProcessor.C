@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EFShiftProcessor.C,v 1.13 2002/02/27 12:23:51 sturm Exp $
+// $Id: EFShiftProcessor.C,v 1.14 2002/12/20 19:12:58 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -175,8 +175,8 @@ namespace BALL
 		for (; bond_it != bond_list_.end(); ++bond_it)
 		{
 			Position bond_type = INVALID_POSITION;
-			Atom*	first_atom;
-			Atom* second_atom;
+			Atom*	first_atom = 0;
+			Atom* second_atom = 0;
 
 			// Iterate over all expressions and try to match them
 			// with the bond's atoms.
