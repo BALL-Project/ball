@@ -1,4 +1,4 @@
-// $Id: structureMapper.h,v 1.6 2000/06/29 11:07:37 len Exp $
+// $Id: structureMapper.h,v 1.7 2000/10/30 00:19:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -98,62 +98,36 @@ namespace BALL
 
 		/**	Calculates a bijection to map two arrays of fragments onto each other.
 		*/
-		StructureMapper::AtomBijection& calculateFragmentBijection
-			(const vector<Fragment*> &A,
-			 const vector<Fragment*> &B);
-		
+		StructureMapper::AtomBijection& calculateFragmentBijection(const vector<Fragment*> &A,
+																															 const vector<Fragment*> &B);
 
 		/**	Maps two fragments onto each other
 		*/
-		bool mapFragments
-			(const vector<Fragment*>& A, 
-			const vector<Fragment*>& B, 
-			Matrix4x4* transformation,
-			double upper_bound = 8.0,
-			double lower_bound = 2.5);
+		bool mapFragments(const vector<Fragment*>& A, const vector<Fragment*>& B, 
+											Matrix4x4* transformation,
+											double upper_bound = 8.0,	double lower_bound = 2.5);
 
-		Matrix4x4 matchPoints_
-			(const Vector3& w1,
-			const Vector3& w2,
-			const Vector3& w3,
-			const Vector3& v1,
-			const Vector3& v2,
-			const Vector3& v3);
+		Matrix4x4 matchPoints_(const Vector3& w1,	const Vector3& w2, const Vector3& w3,	
+													 const Vector3& v1,	const Vector3& v2, const Vector3& v3);
 
-		Matrix4x4 matchPointsOptimally_
-			(const Vector3& w1,
-			const Vector3& w2,
-			const Vector3& w3,
-			const Vector3& v1,
-			const Vector3& v2,
-			const Vector3& v3);
+		Matrix4x4 matchPointsOptimally_(const Vector3& w1, const Vector3& w2, const Vector3& w3,
+																		const Vector3& v1, const Vector3& v2,	const Vector3& v3);
 
-		Matrix4x4 matchBackboneAtoms
-			(const Residue* r1,
-			 const Residue* r2);
+		Matrix4x4 matchBackboneAtoms(const Residue* r1, const Residue* r2);
 
-		int mapResidues
-			(const list<Residue*>& l1,
-			 const list<Residue*>& l2);
+		int mapResidues(const list<Residue*>& l1, const list<Residue*>& l2);
 	 
-		vector<vector<Fragment*> >& 
-		searchPattern_
-			 (vector<Fragment*> &pattern,
-				Composite &composite,
-				double max_rmsd = 4.0,
-				double max_center_tolerance = 2.0,
-				double upper_bound = 8.0,
-				double lower_bound = 4.0);
+		vector<vector<Fragment*> >& searchPattern_(vector<Fragment*> &pattern, Composite &composite,
+																				 			 double max_rmsd = 4.0,	   double max_center_tolerance = 2.0,
+																				  		 double upper_bound = 8.0, double lower_bound = 4.0);
 
-		Matrix4x4 mapProteins_
-			 ( Protein &P1,
-				 Protein &P2,
-				 map<String, int>&	type_map,
-				 int&					no_matched_ca,
-				 double&				rmsd,
-				 double        upper_bound = 8.0,
-				 double        lower_bound = 4.0,
-				 double        tolerance = 0.6);
+		Matrix4x4 mapProteins_(Protein& P1, Protein& P2, 
+													 map<String, int>&	type_map,
+													 int&								no_matched_ca,
+													 double&						rmsd,
+													 double							upper_bound = 8.0,
+													 double							lower_bound = 4.0,
+													 double							tolerance = 0.6);
 
 		protected:
 			
@@ -171,11 +145,6 @@ namespace BALL
 		
 		/*_	The rmsd of the last mapping executed */
 		double	rmsd_;
-
-
-		private:
-				
-
 	};
 
 #	ifndef	BALL_NO_INLINE_FUNCTIONS

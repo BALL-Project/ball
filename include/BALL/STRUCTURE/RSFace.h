@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.2 2000/10/19 14:24:51 strobel Exp $
+// $Id: RSFace.h,v 1.3 2000/10/30 00:19:26 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -432,20 +432,20 @@ namespace BALL
 		Index thirdVertexIndex(const Index v1, const Index v2)
 		{
 			if ((vertex0_ == v1) || (vertex0_ == v2))
-				{
-					if ((vertex1_ == v1) || (vertex1_ == v2))
-						{
-							return vertex2_;
-						}
-						else
-						{
-							return vertex1_;
-						}
-				}
-				else
-				{
-					return vertex0_;
-				}
+			{
+				if ((vertex1_ == v1) || (vertex1_ == v2))
+					{
+						return vertex2_;
+					}
+					else
+					{
+						return vertex1_;
+					}
+			}
+			else
+			{
+				return vertex0_;
+			}
 		}
 
 		//@}

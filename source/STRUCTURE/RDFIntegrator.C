@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator.C,v 1.5 2000/09/25 16:32:33 anker Exp $
+// $Id: RDFIntegrator.C,v 1.6 2000/10/30 00:19:58 amoll Exp $
 
 #include <BALL/STRUCTURE/RDFIntegrator.h>
 
@@ -60,8 +60,7 @@ namespace BALL
 	}
 
 
-	const RDFIntegrator& RDFIntegrator::operator = 
-		(const RDFIntegrator& integrator)
+	const RDFIntegrator& RDFIntegrator::operator = (const RDFIntegrator& integrator)
 	{
 		set(integrator);
 		return *this;
@@ -71,7 +70,7 @@ namespace BALL
 	double RDFIntegrator::operator () (double /* x */) const
 	{
 		Log.error() << "RDFIntegrator::operator () (double): "
-			<< "This method should not be called!" << endl;
+								<< "This method should not be called!" << endl;
 		return 0.0;
 	}
 }

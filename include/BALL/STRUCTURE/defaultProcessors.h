@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.h,v 1.3 2000/02/15 21:10:05 oliver Exp $
+// $Id: defaultProcessors.h,v 1.4 2000/10/30 00:19:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -51,6 +51,7 @@ namespace BALL
 		:	public UnaryProcessor<Atom>
 	{
 		public:
+
 		virtual Processor::Result operator()(Atom& atom);
 	};
 
@@ -64,7 +65,6 @@ namespace BALL
 	class AssignRadiusProcessor
 		:	public UnaryProcessor<Atom> 
 	{
-
 		public:
 
 		AssignRadiusProcessor();
@@ -96,12 +96,9 @@ namespace BALL
 
 		protected:
 
-		bool buildTable_();
-
+		bool										buildTable_();
 		String									filename_;
-
 		StringHashMap<float>		table_;
-
 		unsigned long						number_of_errors_;
 		unsigned long						number_of_assignments_;
 	};
@@ -116,8 +113,8 @@ namespace BALL
 	class AssignChargeProcessor
 		: public AssignRadiusProcessor 
 	{
-
 		public:
+
 		AssignChargeProcessor();
 
 		AssignChargeProcessor(const String& filename);

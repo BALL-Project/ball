@@ -1,4 +1,4 @@
-// $Id: RDFSection.h,v 1.4 2000/10/18 13:53:19 anker Exp $
+// $Id: RDFSection.h,v 1.5 2000/10/30 00:19:26 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RDFSECTION_H
 #define BALL_STRUCTURE_RDFSECTION_H
@@ -21,7 +21,6 @@ namespace BALL
 	class RDFSection
 		:	public ParameterSection
 	{
-
 		public:
 
 		BALL_CREATE(RDFSection)
@@ -68,8 +67,8 @@ namespace BALL
 		//@{
 
 		/** */
-		virtual bool extractSection(Parameters& parameters,
-				const String& section_name) throw();
+		virtual bool extractSection(Parameters& parameters,	const String& section_name) 
+			throw();
 		
 		//@}
 		
@@ -91,12 +90,10 @@ namespace BALL
 
 		//@}
 
-
 		protected:
 
 		/*_ The RDF that is to be read from a section*/
 		RadialDistributionFunction rdf_;
-
 	
 	};
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.3 2000/10/17 10:10:47 oliver Exp $
+// $Id: BSDTree.h,v 1.4 2000/10/30 00:19:26 amoll Exp $
 
 #ifndef BALL_STRUCTURE_BSDTREE_H
 #define BALL_STRUCTURE_BSDTREE_H
@@ -120,13 +120,13 @@ namespace BALL
 		virtual ~TBSDTree()
 		{
 			if (left != NULL)
-				{
-					delete left;
-				}
+			{
+				delete left;
+			}
 			if (right != NULL)
-				{
-					delete right;
-				}
+			{
+				delete right;
+			}
 		}
 		//@}
 
@@ -166,9 +166,9 @@ namespace BALL
 			{
 				T min = point[*part.begin()][d];
 				for (list<Index>::iterator i = part.begin(); i != part.end(); i++)
-					{
-						min = Maths::min(point[*i][d],min);
-					}
+				{
+					min = Maths::min(point[*i][d],min);
+				}
 				return min;
 			}
 		}
@@ -191,9 +191,9 @@ namespace BALL
 			{
 				T max = point[*part.begin()][d];
 				for (list<Index>::iterator i = part.begin(); i != part.end(); i++)
-					{
-						max = Maths::max(point[*i][d],max);
-					}
+				{
+					max = Maths::max(point[*i][d],max);
+				}
 				return max;
 			}
 		}
@@ -212,51 +212,51 @@ namespace BALL
 							T z_max = getMax(TBSDTree<T>::DIRECTION_Z);
 							T middle;
 							if (Maths::isLess(x_max-x_min,y_max-y_min))
+							{
+								if (Maths::isLess(y_max-y_min,z_max-z_min))
 								{
-									if (Maths::isLess(y_max-y_min,z_max-z_min))
-										{
-											division = TBSDTree<T>::DIRECTION_Z;
-											middle = (z_max+z_min)/2;
-										}
-										else
-										{
-											division = TBSDTree<T>::DIRECTION_Y;
-											middle = (y_max+y_min)/2;
-										}
+									division = TBSDTree<T>::DIRECTION_Z;
+									middle = (z_max+z_min)/2;
 								}
 								else
 								{
-									if (Maths::isLess(x_max-x_min,z_max-z_min))
-										{
-											division = TBSDTree<T>::DIRECTION_Z;
-											middle = (z_max+z_min)/2;
-										}
-										else
-										{
-											division = TBSDTree<T>::DIRECTION_X;
-											middle = (x_max+x_min)/2;
-										}
+									division = TBSDTree<T>::DIRECTION_Y;
+									middle = (y_max+y_min)/2;
 								}
+							}
+							else
+							{
+								if (Maths::isLess(x_max-x_min,z_max-z_min))
+								{
+									division = TBSDTree<T>::DIRECTION_Z;
+									middle = (z_max+z_min)/2;
+								}
+								else
+								{
+									division = TBSDTree<T>::DIRECTION_X;
+									middle = (x_max+x_min)/2;
+								}
+							}
 							Index d;
 							switch (division)
-								{
-									case TBSDTree<T>::DIRECTION_X :	d = 0; break;
-									case TBSDTree<T>::DIRECTION_Y :	d = 1; break;
-									case TBSDTree<T>::DIRECTION_Z :	d = 2; break;
-								}
+							{
+								case TBSDTree<T>::DIRECTION_X :	d = 0; break;
+								case TBSDTree<T>::DIRECTION_Y :	d = 1; break;
+								case TBSDTree<T>::DIRECTION_Z :	d = 2; break;
+							}
 							list<Index> left_part;
 							list<Index> right_part;
 							for (list<Index>::iterator i = part.begin(); i != part.end(); i++)
+							{
+								if (Maths::isLess(point[*i][d],middle))
 								{
-									if (Maths::isLess(point[*i][d],middle))
-										{
-											left_part.push_back(*i);
-										}
-										else
-										{
-											right_part.push_back(*i);
-										}
+									left_part.push_back(*i);
 								}
+								else
+								{
+									right_part.push_back(*i);
+								}
+							}
 							left = new TBSDTree<T>(point,left_part,pre+"  ","l");
 							right = new TBSDTree<T>(point,right_part,pre+"  ","r");
 							left->build();
@@ -275,36 +275,35 @@ namespace BALL
 			TBox3<T> test_box(TVector3<T>(p.x-length,p.y-length,p.z-length),
 												TVector3<T>(p.x+length,p.y+length,p.z+length));
 			if (left != NULL)
+			{
+				if (bounding_box.isIntersecting(test_box))
 				{
-					if (bounding_box.isIntersecting(test_box))
-						{
-							list<Index> temp1 = left->get(p,length);
-							list<Index> temp2 = right->get(p,length);
-							temp1.merge(temp2);
-							return temp1;
-						}
-						else
-						{
-							list<Index> empty;
-							empty.erase(empty.begin(),empty.end());
-							return empty;
-						}
+					list<Index> temp1 = left->get(p,length);
+					list<Index> temp2 = right->get(p,length);
+					temp1.merge(temp2);
+					return temp1;
 				}
 				else
 				{
-					if (bounding_box.isIntersecting(test_box))
-						{
-							return part;
-						}
-						else
-						{
-							list<Index> empty;
-							empty.erase(empty.begin(),empty.end());
-							return empty;
-						}
+					list<Index> empty;
+					empty.erase(empty.begin(),empty.end());
+					return empty;
 				}
+			}
+			else
+			{
+				if (bounding_box.isIntersecting(test_box))
+				{
+					return part;
+				}
+				else
+				{
+					list<Index> empty;
+					empty.erase(empty.begin(),empty.end());
+					return empty;
+				}
+			}
 		}
-
 
 		void remove(Index i)
 		{
@@ -375,34 +374,34 @@ namespace BALL
 	{
 		s << bsd_tree.pre << bsd_tree.side << ": ";
 		switch (bsd_tree.division)
-			{
-				case TBSDTree<T>::DIRECTION_X :	s << "x "; break;
-				case TBSDTree<T>::DIRECTION_Y :	s << "y "; break;
-				case TBSDTree<T>::DIRECTION_Z :	s << "z "; break;
-			}
+		{
+			case TBSDTree<T>::DIRECTION_X :	s << "x "; break;
+			case TBSDTree<T>::DIRECTION_Y :	s << "y "; break;
+			case TBSDTree<T>::DIRECTION_Z :	s << "z "; break;
+		}
 		s << bsd_tree.bounding_box << "[";
 		list<Index> liste = bsd_tree.part;
 		for (list<Index>::iterator i = liste.begin(); i != liste.end(); i++)
-			{
-				s << *i << " ";
-			}
+		{
+			s << *i << " ";
+		}
 		s << "]\n";
 		if (bsd_tree.left != NULL)
-			{
-				s << *(bsd_tree.left);
-			}
-			else
-			{
-				s << bsd_tree.pre << "  l: --\n";
-			}
+		{
+			s << *(bsd_tree.left);
+		}
+		else
+		{
+			s << bsd_tree.pre << "  l: --\n";
+		}
 		if (bsd_tree.right != NULL)
-			{
-				s << *(bsd_tree.right);
-			}
-			else
-			{
-				s << bsd_tree.pre << "  r: --\n";
-			}
+		{
+			s << *(bsd_tree.right);
+		}
+		else
+		{
+			s << bsd_tree.pre << "  r: --\n";
+		}
 		return s;
 	}
 	//@}

@@ -1,4 +1,4 @@
-// $Id: RDFParameter.C,v 1.5 2000/10/17 17:19:50 anker Exp $
+// $Id: RDFParameter.C,v 1.6 2000/10/30 00:19:58 amoll Exp $
 
 #include <BALL/STRUCTURE/RDFParameter.h>
 #include <BALL/STRUCTURE/RDFSection.h>
@@ -28,7 +28,6 @@ namespace BALL
 	RDFParameter::~RDFParameter() throw()
 	{
 		clear();
-
 		valid_ = false;
 	}
 
@@ -49,7 +48,6 @@ namespace BALL
 		ParameterSection::clear();
 		rdf_list_.clear();
 		rdf_indices_.clear();
-		
 		valid_ = false;
 	}
 
@@ -106,7 +104,7 @@ namespace BALL
 		else
 		{
 			Log.error() << "RDFParameter::getRDF(): "
-				<< "Index out of range." <<endl;
+									<< "Index out of range." <<endl;
 			return RTTI::getDefault<RadialDistributionFunction>();
 		}
 	}
@@ -125,17 +123,17 @@ namespace BALL
 			else
 			{
 				Log.error() << "RDFParameter::getRDF(): "
-					<< "RDf for type combination  (" << type_i << "," << type_j 
-					<< ") could not be found." << endl 
-					<< "Something went terribly wrong." << endl;
+										<< "RDf for type combination  (" << type_i << "," << type_j 
+										<< ") could not be found." << endl 
+										<< "Something went terribly wrong." << endl;
 				return RTTI::getDefault<RadialDistributionFunction>();
 			}
 		}
 		else
 		{
 			Log.error() << "RDFParameter::getRDF(): "
-				<< "no RDf defined for type combination  (" << type_i << "," 
-				<< type_j << ")" << endl;
+									<< "no RDf defined for type combination  (" << type_i << "," 
+									<< type_j << ")" << endl;
 			return RTTI::getDefault<RadialDistributionFunction>();
 		}
 	}
@@ -199,7 +197,7 @@ namespace BALL
 							if (it->second.has(type_j))
 							{
 								Log.error() << "RDFParameter::extractSection(): "
-									<< "Trying to overwrite existing definition." << endl;
+														<< "Trying to overwrite existing definition." << endl;
 								return false;
 							}
 							else
@@ -213,20 +211,20 @@ namespace BALL
 							HashMap<Atom::Type, Position> tmp;
 							tmp[type_j] = index;
 							rdf_indices_.insert(std::pair<Atom::Type,
-									HashMap<Atom::Type, Position> >(type_i, tmp));
+							HashMap<Atom::Type, Position> >(type_i, tmp));
 						}
 					}
 					else
 					{
 						Log.error() << "RDFParameter::extractSection(): "
-							<< "Cannot read RDF section" << endl;
+												<< "Cannot read RDF section" << endl;
 						return false;
 					}
 				}
 				else
 				{
 					Log.error() << "RDFParameter::extractSection(): "
-						<< "cannot assign atom types."<< endl;
+											<< "cannot assign atom types."<< endl;
 					return false;
 				}
 			}

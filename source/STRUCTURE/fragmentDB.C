@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.28 2000/10/20 14:38:01 oliver Exp $
+// $Id: fragmentDB.C,v 1.29 2000/10/30 00:19:59 amoll Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -538,10 +538,7 @@ namespace BALL
 
 		// copy the contents of the resource file into a tree
 		tree = new ResourceEntry();			
-					
-
-		tree->mergeChildrenOf(resource_db->getRoot());
-					
+		tree->mergeChildrenOf(resource_db->getRoot());				
 
 		// close the main resource file
 		resource_db->close();
@@ -586,7 +583,7 @@ namespace BALL
 				if (entry == 0)
 				{
 					Log.error() << "FragmentDB: cannot find Atoms entry for " 
-						<< fragment_name << endl;
+											<< fragment_name << endl;
 					return;
 				} 
 				else	
@@ -655,7 +652,7 @@ namespace BALL
 								name_to_variants_[fragment_name].push_front(variant);
 								name_to_frag_pointer_[fragment_name] = variant;
 								name_to_path_[fragment_name] = "/Fragments/" 
-									+ fragment_name + "/Variants/" + variant_name;
+																		+ fragment_name + "/Variants/" + variant_name;
 							} 
 							else 
 							{
@@ -707,8 +704,10 @@ namespace BALL
 
 		// check for entries concerning naming standards
 		entry = tree->getEntry("/Names");
-		if (entry != 0){
-			for (entry_iterator = ++entry->begin(); +entry_iterator; ++entry_iterator){
+		if (entry != 0)
+		{
+			for (entry_iterator = ++entry->begin(); +entry_iterator; ++entry_iterator)
+			{
 				if ((*entry_iterator).getDepth() == 2)
 				{
 					StringHashMap<String>*	name_map_to;
@@ -865,12 +864,14 @@ namespace BALL
 			// by ANDing both bitvectors and counting ones
 			BitVector props = fragment.getBitVector();
 			props |= additional_properties;
-			property_difference = (int)abs((int)props.countValue(true) - (int)(*it)->getBitVector().countValue(true));
+			property_difference = (int)abs((int)props.countValue(true) 
+													- (int)(*it)->getBitVector().countValue(true));
 			props &= (*it)->getBitVector();
 			number_of_properties = (int)props.countValue(true);
 
 			if ((number_of_properties > best_number_of_properties)
-					|| ((number_of_properties == best_number_of_properties) && (property_difference < best_property_difference)))
+					|| ((number_of_properties == best_number_of_properties) 
+							&& (property_difference < best_property_difference)))
 			{
 				variant = (*it);
 				best_number_of_properties = number_of_properties;
@@ -942,7 +943,6 @@ namespace BALL
 		fragments_.clear();
 		return true;
 	}
-
 
 
 	// match an RES/ATOM pair in a map
@@ -1220,7 +1220,6 @@ namespace BALL
 	/////////////////////////////////////////////////////////////////
 	//		FragmentDB::AddHydrogensProcessor												 //
 	/////////////////////////////////////////////////////////////////	
-
 	void FragmentDB::AddHydrogensProcessor::setFragmentDB(const FragmentDB& db)
 	{
 		fragment_db_ = &const_cast<FragmentDB&>(db);
@@ -1292,13 +1291,13 @@ namespace BALL
 
 		// moving first point to coordinate center
 		// actual residue 
-		Vector3 b_a = b-a;	
-		Vector3 c_a = c-a;
-		Vector3 d_a = d-a;
+		Vector3 b_a = b - a;	
+		Vector3 c_a = c - a;
+		Vector3 d_a = d - a;
 		// residue prototype    
-		Vector3 xb_a = xb-xa;
-		Vector3 xc_a = xc-xa;
-		Vector3 xd_a = xd-xa;
+		Vector3 xb_a = xb - xa;
+		Vector3 xc_a = xc - xa;
+		Vector3 xd_a = xd - xa;
 		// hydrogen to be added
 		Vector3 xtarget_a = xtarget-xa;      
 
@@ -1308,14 +1307,14 @@ namespace BALL
 		// checking turn direction
 		if (b_a.y > 0)
 		{
-			alpha =-alpha; 
+			alpha = -alpha; 
 		}
 		
-		turn_x1_(b_a,alpha);	
+		turn_x1_(b_a, alpha);	
 		// residue prototype
 		float xalpha = winkelx1_x2_(xb_a);
 		// checking turn direction
-		if (xb_a.y>0) 
+		if (xb_a.y > 0) 
 		{
 			xalpha=-xalpha; 
 		}
@@ -1328,17 +1327,17 @@ namespace BALL
 		float beta = winkelx1_x3_(b_a);
 		if (b_a.x>0)
 		{
-			beta=-beta; 
+			beta = -beta; 
 		}
-		turn_x3_(b_a,beta);	
+		turn_x3_(b_a, beta);	
 
 		// residue prototype    
 		float xbeta = winkelx1_x3_(xb_a);
 		if (xb_a.x > 0)
 		{
-			xbeta=-xbeta; 
+			xbeta = -xbeta; 
 		}
-		turn_x3_(xb_a,xbeta);	
+		turn_x3_(xb_a, xbeta);	
 		
 		// turning third point with alpha and beta			
 		// turning third point onto x1_x2 plane
@@ -1346,20 +1345,20 @@ namespace BALL
 		turn_x1_(c_a, alpha);
 		turn_x3_(c_a, beta);	
 		float gamma = winkelx1_x2_(c_a);
-		if (c_a.y>0) 
+		if (c_a.y > 0) 
 		{
-			gamma=-gamma; 
+			gamma = -gamma; 
 		}
-		turn_x1_(c_a,gamma);
+		turn_x1_(c_a, gamma);
 
 		// residue prototype
-		turn_x1_(xc_a,xalpha);
-		turn_x3_(xc_a,xbeta);	       
+		turn_x1_(xc_a, xalpha);
+		turn_x3_(xc_a, xbeta);	       
 
 		float xgamma = winkelx1_x2_(xc_a);
-		if(xc_a.y>0) 
+		if(xc_a.y > 0) 
 		{
-			xgamma=-xgamma; 
+			xgamma = -xgamma; 
 		}
 		turn_x1_(xc_a,xgamma);	
 
@@ -1368,23 +1367,23 @@ namespace BALL
 		// actual residue
 		if (c_a.x<0) 
 		{
-			spiegel1=1;
+			spiegel1 = 1;
 		}
 	
 		if (c_a.y<0)
 		{
-			spiegel2=1;
+			spiegel2 = 1;
 		}
 
 		// residue prototype
-		if (xc_a.x<0)
+		if (xc_a.x < 0)
 		{
-			xspiegel1=1;
+			xspiegel1 = 1;
 		}
 
-		if (xc_a.y<0)
+		if (xc_a.y < 0)
 		{
-			xspiegel2=1;
+			xspiegel2 = 1;
 		}
 			
 		// using mirrors
@@ -1412,9 +1411,7 @@ namespace BALL
 		}
 
 		// error distance of both points on plane is corrected
-		float w;
-		float n,z;
-		float abstand1, abstand2;
+		float w, n, z, abstand1, abstand2;
 		Vector3 test1, test2;
 					
 		z = c_a*xc_a;
@@ -1424,7 +1421,7 @@ namespace BALL
 		{
 			w = -(acos(z / n)) / 2;
 											 
-			test1=c_a - xc_a;
+			test1 = c_a - xc_a;
 			abstand1 = test1.getLength();
 
 			turn_x3_(xb_a, w);                     
@@ -1437,7 +1434,8 @@ namespace BALL
 				turn_x3_(xc_a, 2 * w);
 				turn_x2_(xb_a, 2 * w);
 			}
-		} else 
+		} 
+		else 
 		{
 			w = 0;
 		}
@@ -1531,7 +1529,8 @@ namespace BALL
 		catch (Bond::TooManyBonds)
 		{
 			Log.error() << "FragmentDB: cannot create bond between "
-				<< atom_name << " and " << bond_atom->getName() << ": too many bonds!" << endl;
+									<< atom_name << " and " << bond_atom->getName() 
+									<< ": too many bonds!" << endl;
 		}
 
 		residue_->insert(atom);
@@ -1617,7 +1616,8 @@ namespace BALL
 			const Fragment* tmp = fragment_db_->getReferenceFragment(*residue_);
 			if (tmp == 0)
 			{
-				Log.warn() << "FragmentDB::AddHydrogensProcesor: couldn't find reference fragment for " << residue_->getName() << endl;
+				Log.warn() << "FragmentDB::AddHydrogensProcesor: couldn't find reference fragment for " 
+									 << residue_->getName() << endl;
 				return Processor::CONTINUE;
 			}
 			if (tmp != 0)
@@ -1647,18 +1647,19 @@ namespace BALL
 					h_atoms_=new String[h_zaehler+1];
 					zaehler1=0;
 					for (atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
-						{
+					{
 						if ((*atom_iter).getElement()==PTE[Element::H])
-							{
-							atom_name=(*atom_iter).getName();
-							atom_name.append(":");
-							atom_name.append(variant_name);
-							h_atoms_[zaehler1]=atom_name;
-							zaehler1++;
-							}
+						{
+						atom_name=(*atom_iter).getName();
+						atom_name.append(":");
+						atom_name.append(variant_name);
+						h_atoms_[zaehler1]=atom_name;
+						zaehler1++;
 						}
-						h_atoms_[zaehler1]="NULL";
-						h_table_[variant_name]=h_atoms_;
+					}
+
+					h_atoms_[zaehler1]="NULL";
+					h_table_[variant_name]=h_atoms_;
 				}
 				
 				// iterating the hydrogens		
@@ -1668,7 +1669,7 @@ namespace BALL
 					// test wethe hydrogen is already inserted
 					for (atom_iter = residue_->beginAtom(); +atom_iter; ++atom_iter)
 					{
-						atom_name = (*atom_iter).getName();
+						atom_name = atom_iter->getName();
 						atom_name.append(":");
 						atom_name.append(variant_name);
 
@@ -1693,67 +1694,72 @@ namespace BALL
 						else 
 						{
 							// constructing hashtable entry
-							atoms_=new String[5];
+							atoms_ = new String[5];
 							// searching prototype for h_atoms_[k] 
 							for(atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
-								{
-								atom_name=(*atom_iter).getName();
+							{
+								atom_name = atom_iter->getName();
 								atom_name.append(":");
 								atom_name.append(variant_name);
-								if (atom_name==h_atoms_[k]) 
-									{
+								if (atom_name == h_atoms_[k]) 
+								{
 									 atom=&(*atom_iter);
-									 }
-								}
+							  }
+							}
 							// access hydrogen bound and get first reference atom
 							atom=atom->getBond(0)->getBoundAtom(*atom);
-							atom_feld[0]=atom;
-							zaehler1=0;
-							zaehler2=1;
-							bond_zaehler=0;
+							atom_feld[0] = atom;
+							zaehler1 = 0;
+							zaehler2 = 1;
+							bond_zaehler = 0;
 							
 							// searching for more reference atoms
 							// if the actual atom has no more bonds start over with next
 							// atom stored in atom_feld
 							
-							while (zaehler2<4)
-								{
+							while (zaehler2 < 4)
+							{
 								atom=atom_feld[zaehler1];
 								if (atom->getBond(bond_zaehler))
-									{
+								{
 									atom=atom->getBond(bond_zaehler)->getBoundAtom(*atom);
 									if (atom->getElement()!=PTE[Element::H])
-										{
-										test_zaehler=0;
-										inserted=0;
+									{
+										test_zaehler = 0;
+										inserted = 0;
 										while (test_zaehler < zaehler2)
+										{
+											if (atom_feld[test_zaehler]==atom) 
 											{
-											if (atom_feld[test_zaehler]==atom) inserted=1; 
-											test_zaehler++;
+												inserted=1;
 											}
+											test_zaehler++;
+										}
 										// next reference atom found and stored in atom_feld	
 										if (!inserted)
-											{
-											atom_feld[zaehler2]=atom;
+										{
+											atom_feld[zaehler2] = atom;
 											zaehler2++;
-											}
 										}
-									bond_zaehler++;
+										bond_zaehler++;
 									}
-									else {  
+									else 
+									{  
 										zaehler1++;
 										bond_zaehler=0;
-										}
+									}
 								}
-							zaehler1=0;
-							while (zaehler1<4)
-								{
+							}
+
+							zaehler1 = 0;
+							while (zaehler1 < 4)
+							{
 								atom_name=atom_feld[zaehler1]->getName();
 								atom_name.append(":");
 								atom_name.append(variant_name);
 								atoms_[zaehler1]=atom_name;
 								zaehler1++;
-								}
+							}
 							atoms_[4]="NULL";
 							ini_table_[h_atoms_[k] ]=atoms_;
 						}
@@ -1809,19 +1815,17 @@ namespace BALL
 								}
 							}
 		
-						// xtarget is calculated
+							// xtarget is calculated
 							calculate_(h_atoms_[k], &bond_atom,
 												 x[0], x[1], x[2], x[3],
 												 xx[0], xx[1], xx[2], xx[3], 
 												 xtarget); 
 							
 							k++;
-		
 					}
 				}
 			}
 		}
-		
 
 		return Processor::CONTINUE;
 	}

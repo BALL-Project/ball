@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.8 2000/07/04 23:08:40 oliver Exp $
+// $Id: geometricProperties.C,v 1.9 2000/10/30 00:19:59 amoll Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -37,22 +37,34 @@ namespace BALL
 	{
 
 		if (lower_.x > atom.getPosition().x) 
+		{
 			lower_.x = atom.getPosition().x;
+		}
 
 		if (lower_.y > atom.getPosition().y) 
+		{
 			lower_.y = atom.getPosition().y;
+		}
 
 		if (lower_.z > atom.getPosition().z) 
-				lower_.z = atom.getPosition().z;
+		{
+			lower_.z = atom.getPosition().z;
+		}
 
 		if (upper_.x < atom.getPosition().x) 
+		{
 			upper_.x = atom.getPosition().x;
+		}
 
 		if (upper_.y < atom.getPosition().y) 
+		{
 			upper_.y = atom.getPosition().y;
+		}
 
 		if (upper_.z < atom.getPosition().z) 
+		{
 			upper_.z = atom.getPosition().z;
+		}
 
 		return Processor::CONTINUE;
 	}
@@ -126,7 +138,6 @@ namespace BALL
 	{
 	}
 
-
 	bool FragmentDistanceCollector::start()
 	{
 		// clear the array containing the collected fragments
@@ -134,7 +145,9 @@ namespace BALL
 
 		// if no reference fragment is set, return immediately
 		if (reference_composite_ == 0)
+		{
 			return false;
+		}
 
 		// Go for it...
 		return true;
@@ -163,11 +176,12 @@ namespace BALL
 		float                               fragment_radius;
 		float                               difference;
 
-		Size                                i,j;
+		Size                                i, j;
 		Size																size;
 
 
-		for (composite_it = reference_composite_->beginSubcomposite(); composite_it != reference_composite_->endSubcomposite(); ++composite_it) 
+		for (composite_it = reference_composite_->beginSubcomposite(); 
+				 composite_it != reference_composite_->endSubcomposite(); ++composite_it) 
 		{
 			if (RTTI::isKindOf<Atom>(*composite_it))
 			{
@@ -187,15 +201,16 @@ namespace BALL
 		{
 			mol_fragment = all_fragments_[i]; 
 			mol_fragment->apply(center_processor);
-
 			center = center_processor.getCenter();
-
 			fragment_radius = 0;
 
 			for (atom_iterator2 = mol_fragment->beginAtom(); +atom_iterator2; ++ atom_iterator2)
+			{
 				if ((difference = (*atom_iterator2).getPosition().getSquareDistance(center)) > fragment_radius)
+				{
 					fragment_radius = difference;        
-
+				}
+			}
 			fragment_radius = sqrt(fragment_radius);
 
 			for ( j=0 , collect_it = false ; j < number_of_atoms && (collect_it == false) ; j++) 
@@ -203,12 +218,17 @@ namespace BALL
 				atom_position = reference_atoms[j]->getPosition();
 				 
 				if (atom_position.getDistance(center) <= (distance + fragment_radius)) 
-					for (atom_iterator2 = mol_fragment->beginAtom(); +atom_iterator2 && (collect_it == false); ++ atom_iterator2)
+				{
+					for (atom_iterator2 = mol_fragment->beginAtom(); 
+							 +atom_iterator2 && (collect_it == false); ++ atom_iterator2)
+					{
 						if ((*atom_iterator2).getPosition().getSquareDistance(atom_position) < squared_distance_) 
 						{
 							fragments.push_back(mol_fragment);
 							collect_it = true;
 						}
+					}
+				}
 			}
 		}
 
@@ -257,9 +277,8 @@ namespace BALL
 
 		Vector3 cross_n12_n34(n12 % n34);
 		float direction = cross_n12_n34 * a23;
-		
-
 		float scalar_product = n12 * n34;
+
 		if (scalar_product > 1.0)
 		{
 			scalar_product = 1.0;

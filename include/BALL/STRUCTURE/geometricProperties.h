@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.8 2000/07/04 23:08:36 oliver Exp $
+// $Id: geometricProperties.h,v 1.9 2000/10/30 00:19:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -262,11 +262,9 @@ namespace BALL
 
 		protected:
 
-		vector<Fragment*>	all_fragments_;
-
-		const Composite*	reference_composite_;
-		
-		float	squared_distance_;
+			vector<Fragment*>	all_fragments_;
+			const Composite*	reference_composite_;
+			float							squared_distance_;
 	};
 
 

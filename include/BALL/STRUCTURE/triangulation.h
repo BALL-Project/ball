@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.6 2000/10/19 17:03:21 oliver Exp $
+// $Id: triangulation.h,v 1.7 2000/10/30 00:19:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -56,7 +56,7 @@ namespace BALL
 	{
 		TTriangulatedSurface<T>* surface = new TTriangulatedSurface<T>();
 		T radius_of_probe(rs->getProbeRadius());
-		HashMap< T,TTriangulatedSurface<T> > spheres;
+		HashMap<T, TTriangulatedSurface<T> > spheres;
 		TTriangulatedSurface<T>* probe_sphere(NULL);
 		std::vector< TTriangulatedSurface<T>* > triangulated_toric_faces(ses->toric_faces.size(),NULL);
 		std::vector< TTriangulatedSurface<T>* >	triangulated_contact_faces;
@@ -71,22 +71,22 @@ namespace BALL
 			if (ses->toric_faces[i] != NULL)
 			{
 				triangulated_toric_faces[i] = new TTriangulatedSurface<T>();
-				TriangulateToricFace(ses->toric_faces[i],ses,radius_of_probe,size,
-														 *triangulated_toric_faces[i],toric_borders);
+				TriangulateToricFace(ses->toric_faces[i], ses, radius_of_probe,size,
+														 *triangulated_toric_faces[i], toric_borders);
 				*surface += (*triangulated_toric_faces[i]);
 			}
 		}
 		for (Position i = 0; i < ses->contact_faces.size(); i++)
 		{
 			TSphere3<T> atom(rs->getSphere(ses->contact_faces[i]->rsvertex->getAtom()));
-			TriangulateContactFace(ses->contact_faces[i],atom,size,
-														 spheres,triangulated_contact_faces,contact_borders,contact_contours);
+			TriangulateContactFace(ses->contact_faces[i], atom,size,
+														 spheres, triangulated_contact_faces, contact_borders, contact_contours);
 		}
 		for (Position i = 0; i < ses->spheric_faces.size(); i++)
 		{
-			TSphere3<T> probe(ses->spheric_faces[i]->rsface->getCenter(),radius_of_probe);
+			TSphere3<T> probe(ses->spheric_faces[i]->rsface->getCenter(), radius_of_probe);
 			TriangulateSphericFace(ses->spheric_faces[i],probe,size,
-														 probe_sphere,triangulated_spheric_faces,spheric_borders,spheric_contours);
+														 probe_sphere,triangulated_spheric_faces, spheric_borders, spheric_contours);
 		}
 #ifdef debug_tri
 surface->setIndices();
@@ -94,12 +94,12 @@ surface->setIndices();
 		for (Position i = 0; i < triangulated_contact_faces.size(); i++)
 		{
 			*surface += (*triangulated_contact_faces[i]);
-			Sew(contact_borders[i],contact_contours[i],toric_borders,surface);
+			Sew(contact_borders[i], contact_contours[i], toric_borders, surface);
 		}
 		for (Position i = 0; i < triangulated_spheric_faces.size(); i++)
 		{
 			*surface += (*triangulated_spheric_faces[i]);
-			Sew(spheric_borders[i],spheric_contours[i],toric_borders,surface);
+			Sew(spheric_borders[i], spheric_contours[i], toric_borders,surface);
 		}
 		return surface;
 	}
@@ -400,8 +400,6 @@ surface->setIndices();
 	}
 
 
-
-
 	template <class T>
 	vector< TVector3<T> > PartitionOfCircle(const TCircle3<T>& circle_, const TVector3<T>& p0,
 																					const TAngle<T>& phi, const Size number_of_segments)
@@ -642,9 +640,9 @@ surface->setIndices();
 		for (l = test_points.begin(); l != test_points.end(); l++)
 		{
 			if (Maths::isLess(norm*(*l)->p,test_value))
-				{
-					counter++;
-				}
+			{
+				counter++;
+			}
 		}
 		if ((counter == 0) || (counter == test_points.size()))
 		{

@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.12 2000/10/02 19:06:48 amoll Exp $
+// $Id: residueChecker.C,v 1.13 2000/10/30 00:19:59 amoll Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -71,13 +71,15 @@ namespace BALL
 		// check for very large absolute charges
 		if (total_charge < -2.0)
 		{
-			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " << total_charge << " is too negative." << endl;
+			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " 
+								 << total_charge << " is too negative." << endl;
 			status_ = false;
 		}
 
 		if (total_charge > 2.0)
 		{
-			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " << total_charge << " is too positive." << endl;
+			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " 
+								 << total_charge << " is too positive." << endl;
 			status_ = false;
 		}
 
@@ -85,7 +87,8 @@ namespace BALL
 		float tmp = fabs(fabs(total_charge) - (float)((int)(fabs(total_charge) + 0.5)));
 		if (tmp > 0.05)
 		{
-			Log.warn() << "ResidueChecker: in residue " << res_name << ": residue total charge of " << total_charge << " is not integral." << endl;
+			Log.warn() << "ResidueChecker: in residue " << res_name << ": residue total charge of " 
+								 << total_charge << " is not integral." << endl;
 			status_ = false;
 		}
 
@@ -116,7 +119,8 @@ namespace BALL
 					} 
 					else 
 					{
-						Log.warn() << "ResidueChecker: did not find atom " << atom_it->getName() << " of " << res_name  << " in the reference residue " << reference->getName() << endl;
+						Log.warn() << "ResidueChecker: did not find atom " << atom_it->getName() << " of " 
+											 << res_name  << " in the reference residue " << reference->getName() << endl;
 						status_ = false;
 					}
 				}
@@ -184,7 +188,6 @@ namespace BALL
 						}
 					}
 				}
-														
 			}
 		}
 

@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.2 2000/10/19 14:24:51 strobel Exp $
+// $Id: RSVertex.h,v 1.3 2000/10/30 00:19:26 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -233,12 +233,12 @@ namespace BALL
 		{
 			std::list<TRSEdge<T>*>::iterator i;
 			for (i = edges_.begin(); i != edges_.end(); i++)
-				{
-					if (*(*i) == *e)
-						{
-							return true;
-						}
-				}
+			{
+				if (*(*i) == *e)
+					{
+						return true;
+					}
+			}
 			return false;
 		}
 

@@ -1,4 +1,4 @@
-// $Id: geometricTransformations.h,v 1.4 2000/03/27 21:30:21 oliver Exp $
+// $Id: geometricTransformations.h,v 1.5 2000/10/30 00:19:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
 #define BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -50,7 +50,6 @@ namespace BALL
 				is set to (0, 0, 0).
 		*/
 		TranslationProcessor();
-			
 		
 		/**	Constructor.
 				Creates a new instance of a TranslationProcessor and sets
@@ -58,7 +57,6 @@ namespace BALL
 				@param	translation the new translation vector
 		*/
 		TranslationProcessor(const Vector3&	translation);
-
 
 		/**	Sets a new translation
 				@param	translation the new translation vector
@@ -68,8 +66,7 @@ namespace BALL
 		/**	Returns the translation vector
 				@return	the current translation vector
 		*/
-		const Vector3& getTranslation() const;
-		
+		const Vector3& getTranslation() const;	
 		
 		//----------------  applicator methods ----------------
 		virtual Processor::Result operator()(Atom& atom);
@@ -108,8 +105,7 @@ namespace BALL
 					\right)
 				\]
 		*/
-		TransformationProcessor();
-			
+		TransformationProcessor();		
 		
 		/**	Constructor.
 				Creates a new instance of a TransformationProcessor and sets
@@ -117,7 +113,6 @@ namespace BALL
 				@param	transformation the new transformation matrix
 		*/
 		TransformationProcessor(const Matrix4x4&	transformation);
-
 
 		/**	Sets a new transformation
 				@param	transformation the new transformation matrix
@@ -128,7 +123,6 @@ namespace BALL
 				@return	the current transformation matrix
 		*/
 		const Matrix4x4& getTransformation() const;
-		
 		
 		//----------------  applicator methods ----------------
 		virtual Processor::Result operator()(Atom& atom);

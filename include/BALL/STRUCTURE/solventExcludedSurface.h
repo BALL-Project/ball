@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.4 2000/10/19 14:24:52 strobel Exp $
+// $Id: solventExcludedSurface.h,v 1.5 2000/10/30 00:19:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -431,19 +431,19 @@ namespace BALL
 			singular_edges.push_back(new_edge4);
 // update the neighbour faces
 			for (j = 0; j < neighbour0->edge.size(); j++)
+			{
+				if (neighbour0->edge[j] == edge0)
 				{
-					if (neighbour0->edge[j] == edge0)
-						{
-							neighbour0->edge[j] = NULL;
-						}
+					neighbour0->edge[j] = NULL;
 				}
+			}
 			for (j = 0; j < neighbour2->edge.size(); j++)
+			{
+				if (neighbour2->edge[j] == edge2)
 				{
-					if (neighbour2->edge[j] == edge2)
-						{
-							neighbour2->edge[j] = NULL;
-						}
+					neighbour2->edge[j] = NULL;
 				}
+			}
 			neighbour0->edge.push_back(new_edge0);
 			neighbour0->edge.push_back(new_edge1);
 			neighbour0->edge.push_back(new_edge4);
@@ -460,15 +460,15 @@ namespace BALL
 			neighbour2->orientation.push_back(0);
 			if (Maths::isGreater(new_edge4->circle.n*neighbour0->rsface->getCenter(),
 													 new_edge4->circle.n*new_edge4->circle.p))
-				{
-					neighbour0->orientation.push_back(0);
-					neighbour2->orientation.push_back(1);
-				}
-				else
-				{
-					neighbour0->orientation.push_back(1);
-					neighbour2->orientation.push_back(0);
-				}
+			{
+				neighbour0->orientation.push_back(0);
+				neighbour2->orientation.push_back(1);
+			}
+			else
+			{
+				neighbour0->orientation.push_back(1);
+				neighbour2->orientation.push_back(0);
+			}
 // update the toric face
 			vector< TSESVertex<T>* > face_vertices(6);
 			vector< TSESEdge<T>* > face_edges(6);
@@ -521,7 +521,6 @@ namespace BALL
 //cout << *neighbour2 << "\n";
 //			face->index = singular_toric_faces.size();
 //			singular_toric_faces.push_back(face);
-
 		}
 
 		void createFreeToricFace(Position i)
@@ -567,11 +566,6 @@ namespace BALL
 			diff *= dist;
 			return p1+diff;
 		}
-
-
-
-
-
 
 
 		void write()

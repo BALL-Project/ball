@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.h,v 1.5 2000/10/18 13:55:49 anker Exp $
+// $Id: radialDistributionFunction.h,v 1.6 2000/10/30 00:19:27 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -21,9 +21,7 @@ namespace BALL
 	 */
 	class RadialDistributionFunction 
 	{
-
 		public:
-
 		
 		BALL_CREATE(RadialDistributionFunction)
 
@@ -47,19 +45,17 @@ namespace BALL
 
 		//@}
 
-
 		/** @name Assignment */
 		//@{
 
 		/** Assignment operator */
-		const RadialDistributionFunction& operator = 
-			(const RadialDistributionFunction& rdf) throw();
+		const RadialDistributionFunction& operator = (const RadialDistributionFunction& rdf)
+			throw();
 
 		/// Clear function
 		virtual void clear() throw();
 
 		//@}
-
 
 		/** @name Accessors
 		 */
@@ -79,7 +75,6 @@ namespace BALL
 
 		//@}
 
-
 		/** @name Predicates */
 		//@{
 
@@ -94,13 +89,11 @@ namespace BALL
 
 		//@}
 
-
 		/** Debugging and Diagnostics */
 		//@{
 
 		/** 	Dumps the whole content of the object */
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const throw();
 
 		//@}
 
@@ -109,8 +102,9 @@ namespace BALL
 
 		/*_ The representation of the RDF */
 		PiecewisePolynomial representation_;
+
 		/*_ The valid flag */
-		bool valid_;
+		bool								valid_;
 
 	};
 

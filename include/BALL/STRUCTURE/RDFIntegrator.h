@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator.h,v 1.5 2000/09/25 16:29:10 anker Exp $
+// $Id: RDFIntegrator.h,v 1.6 2000/10/30 00:19:26 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
 #define BALL_STRUCTURE_RDFINTEGRATOR_H
@@ -18,9 +18,7 @@ namespace BALL
 
 	class RDFIntegrator
 	{
-
 		public:
-
 
 		BALL_CREATE(RDFIntegrator)
 
@@ -71,10 +69,7 @@ namespace BALL
 
 		protected:
 
-
 		RadialDistributionFunction rdf_;
-
-
 
 	};
 }

@@ -1,4 +1,4 @@
-// $Id: RDFParameter.h,v 1.3 2000/10/17 17:15:13 anker Exp $
+// $Id: RDFParameter.h,v 1.4 2000/10/30 00:19:26 amoll Exp $
 
 #ifndef BALL__RDFPARAMETER_H
 #define BALL__RDFPARAMETER_H
@@ -30,7 +30,6 @@ namespace BALL
 	class RDFParameter
 		:	public ParameterSection
 	{
-
 		public:
 
 		BALL_CREATE(RDFParameter)
@@ -55,7 +54,7 @@ namespace BALL
 
 		/** Assignment operator */
 		const RDFParameter& operator = (const RDFParameter& rdf_parameter)
-		throw();
+			throw();
 
 		/** Clear method */
 		virtual void clear() throw();
@@ -70,8 +69,8 @@ namespace BALL
 		Position getIndex(Atom::Type type_i, Atom::Type type_j) const throw();
 
 		/** Return a radial distribution function determined by type */
-		const RadialDistributionFunction& getRDF(Atom::Type type_i, 
-				Atom::Type type_j) const throw();
+		const RadialDistributionFunction& getRDF(Atom::Type type_i, Atom::Type type_j) 
+			const throw();
 
 		/** Return a radial distribution function determined by index */
 		const RadialDistributionFunction& getRDF(Position index) const throw();
@@ -80,18 +79,18 @@ namespace BALL
 
 		/** */
 		virtual bool extractSection(ForceFieldParameters& parameters,
-				const String& section_name) throw();
+			const String& section_name) throw();
 
 		/** @name Predicates */
 		//@{
 
 		/** */
-		bool hasRDF(Atom::Type solvent_atom_type,
-				Atom::Type solute_atom_type) const throw();
+		bool hasRDF(Atom::Type solvent_atom_type,	Atom::Type solute_atom_type) 
+			const throw();
 
 		/** @see hasRDF */
-		bool hasParameters(Atom::Type solvent_atom_type,
-				Atom::Type solute_atom_type) const throw();
+		bool hasParameters(Atom::Type solvent_atom_type, Atom::Type solute_atom_type) 
+			const throw();
 
 		//@}
 

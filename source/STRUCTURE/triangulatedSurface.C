@@ -1,6 +1,3 @@
-// $Id: triangulatedSurface.C,v 1.1 2000/10/10 14:26:26 oliver Exp $
+// $Id: triangulatedSurface.C,v 1.2 2000/10/30 00:20:00 amoll Exp $
 
 #include <BALL/STRUCTURE/triangulatedSurface.h>
-
-
-

@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.12 2000/06/21 14:16:14 amoll Exp $
+// $Id: rotamerLibrary.C,v 1.13 2000/10/30 00:20:00 amoll Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -15,10 +15,6 @@ using namespace std;
 
 namespace BALL
 {
-
-	/// Rotamer
-
-	// default constructor
 	Rotamer::Rotamer()
 		: P(0.0),
 			chi1(0.0),
@@ -28,7 +24,6 @@ namespace BALL
 	{
 	}
 
-	//	Copy constructor
 	Rotamer::Rotamer(const Rotamer& rotamer)
 		:	P(rotamer.P),
 			chi1(rotamer.chi1),
@@ -38,7 +33,6 @@ namespace BALL
 	{
 	}
 
-	//	Detailed constructor
 	Rotamer::Rotamer(float new_P, float new_chi1, float new_chi2, float new_chi3, float new_chi4)
 		: P(new_P),
 			chi1(new_chi1),
@@ -48,15 +42,12 @@ namespace BALL
 	{
 	}
 
-	// the default constructor 
 	RotamerLibrary::RotamerLibrary()
 		:	variants_(),
 			valid_(true)
 	{
 	}
 
-	
-	// the detailed constructor
 	RotamerLibrary::RotamerLibrary(const String& filename, const FragmentDB& fragment_db)
 		:	variants_(),
 			valid_(false)
@@ -64,14 +55,12 @@ namespace BALL
 		readSQWRLLibraryFile(filename, fragment_db);
 	}
 
-	// the Copy constructor
 	RotamerLibrary::RotamerLibrary(const RotamerLibrary& library, bool /* deep */)
 		:	variants_(library.variants_),
 			valid_(library.valid_)
 	{
 	}
 
-	// the destructor
 	RotamerLibrary::~RotamerLibrary()
 	{
 	}
@@ -82,7 +71,7 @@ namespace BALL
 
 		for(; it != variants_.end(); ++it)
 		{
-			if( name == it->getName())
+			if(name == it->getName())
 			{
 				return &(*it);  
 			}
@@ -91,7 +80,6 @@ namespace BALL
 		// the for-loop search was not successful 
 		return  0; 
 	}
-
 
 	Size RotamerLibrary::getNumberOfVariants() const 
 	{
@@ -109,7 +97,6 @@ namespace BALL
 
 		return number;
 	}
-
 
 	bool RotamerLibrary::readSQWRLLibraryFile(const String& filename, const FragmentDB& fragment_db)
 	{
@@ -198,7 +185,9 @@ namespace BALL
 							rs.addRotamer(Rotamer(P, chi1, chi2, chi3, chi4));
 							variants_.push_back(rs);
 							created = true;
-						} else {
+						}
+						else 
+						{
 							variants_[variants_.size() - 1].addRotamer(Rotamer(P, chi1, chi2, chi3, chi4));
 						}
 					}
@@ -207,7 +196,6 @@ namespace BALL
 		}
 
 		valid_ = true;
-			
 		return true;
 	}
 
@@ -224,10 +212,8 @@ namespace BALL
 			number_of_torsions_(0)
 	{
 	}
-
         
 	// constructor  for ResidueRotamerSet
-
 	ResidueRotamerSet::ResidueRotamerSet(const Residue& residue, Size number_of_torsions)
 	{
 		// Test if there are some atoms
@@ -241,8 +227,7 @@ namespace BALL
 
 		name_ = residue.getName();
 		side_chain_ = residue;
-		number_of_torsions_ = number_of_torsions;
-			
+		number_of_torsions_ = number_of_torsions;		
 
 		// build hash map and store the original atom coordinates
 		AtomIterator atom_it = side_chain_.beginAtom();
@@ -253,7 +238,7 @@ namespace BALL
 		}
 
 		// identify anchor_atoms
-		if ( atom_name_map_.has("CA")  && atom_name_map_.has("C") && atom_name_map_.has("N")) 
+		if (atom_name_map_.has("CA")  && atom_name_map_.has("C") && atom_name_map_.has("N")) 
 		{
 			anchor_atoms_[0] = atom_name_map_["CA"];
 			anchor_atoms_[1] = atom_name_map_["C"];
@@ -267,7 +252,6 @@ namespace BALL
 		// identify atoms for chi1-4
 		// and store them in movable_atoms_chi1-4 (first four entries)
 
-
 		// Determine the atoms for chi1 and the set of movable atoms
 		if (atom_name_map_.has("N") && atom_name_map_.has("CA") && atom_name_map_.has("CB") && (number_of_torsions_ > 0))
 		{
@@ -275,14 +259,14 @@ namespace BALL
 			moveable_atoms_chi1_.push_back("CA");
 			moveable_atoms_chi1_.push_back("CB");
 
-			if ( atom_name_map_.has("CG") )  moveable_atoms_chi1_.push_back("CG");
-			if ( atom_name_map_.has("CG1") ) moveable_atoms_chi1_.push_back("CG1");
-			if ( atom_name_map_.has("OG") )  moveable_atoms_chi1_.push_back("OG");
-			if ( atom_name_map_.has("OG1") ) moveable_atoms_chi1_.push_back("OG1"); 
-			if ( atom_name_map_.has("NG") )  moveable_atoms_chi1_.push_back("NG");
-			if ( atom_name_map_.has("NG1") ) moveable_atoms_chi1_.push_back("NG1"); 
-			if ( atom_name_map_.has("SG") )  moveable_atoms_chi1_.push_back("SG");
-			if ( atom_name_map_.has("SG1") ) moveable_atoms_chi1_.push_back("SG1"); 
+			if (atom_name_map_.has("CG"))  moveable_atoms_chi1_.push_back("CG");
+			if (atom_name_map_.has("CG1")) moveable_atoms_chi1_.push_back("CG1");
+			if (atom_name_map_.has("OG"))  moveable_atoms_chi1_.push_back("OG");
+			if (atom_name_map_.has("OG1")) moveable_atoms_chi1_.push_back("OG1"); 
+			if (atom_name_map_.has("NG"))  moveable_atoms_chi1_.push_back("NG");
+			if (atom_name_map_.has("NG1")) moveable_atoms_chi1_.push_back("NG1"); 
+			if (atom_name_map_.has("SG"))  moveable_atoms_chi1_.push_back("SG");
+			if (atom_name_map_.has("SG1")) moveable_atoms_chi1_.push_back("SG1"); 
 
 			if (moveable_atoms_chi1_.size() > 3)
 			{
@@ -297,14 +281,14 @@ namespace BALL
 			moveable_atoms_chi2_.push_back(moveable_atoms_chi1_[2]);
 			moveable_atoms_chi2_.push_back(moveable_atoms_chi1_[3]);
 
-			if ( atom_name_map_.has("CD") )  moveable_atoms_chi2_.push_back("CD");
-			if ( atom_name_map_.has("CD1") ) moveable_atoms_chi2_.push_back("CD1");
-			if ( atom_name_map_.has("OD") )  moveable_atoms_chi2_.push_back("OD");
-			if ( atom_name_map_.has("OD1") ) moveable_atoms_chi2_.push_back("OD1"); 
-			if ( atom_name_map_.has("ND") )  moveable_atoms_chi2_.push_back("ND");
-			if ( atom_name_map_.has("ND1") ) moveable_atoms_chi2_.push_back("ND1"); 
-			if ( atom_name_map_.has("SD") )  moveable_atoms_chi2_.push_back("SD");
-			if ( atom_name_map_.has("SD1") ) moveable_atoms_chi2_.push_back("SD1"); 
+			if (atom_name_map_.has("CD"))  moveable_atoms_chi2_.push_back("CD");
+			if (atom_name_map_.has("CD1")) moveable_atoms_chi2_.push_back("CD1");
+			if (atom_name_map_.has("OD"))  moveable_atoms_chi2_.push_back("OD");
+			if (atom_name_map_.has("OD1")) moveable_atoms_chi2_.push_back("OD1"); 
+			if (atom_name_map_.has("ND"))  moveable_atoms_chi2_.push_back("ND");
+			if (atom_name_map_.has("ND1")) moveable_atoms_chi2_.push_back("ND1"); 
+			if (atom_name_map_.has("SD"))  moveable_atoms_chi2_.push_back("SD");
+			if (atom_name_map_.has("SD1")) moveable_atoms_chi2_.push_back("SD1"); 
 
 			if (moveable_atoms_chi2_.size() > 3)
 			{
@@ -319,14 +303,14 @@ namespace BALL
 			moveable_atoms_chi3_.push_back(moveable_atoms_chi2_[2]);
 			moveable_atoms_chi3_.push_back(moveable_atoms_chi2_[3]);
 
-			if ( atom_name_map_.has("CE") )  moveable_atoms_chi3_.push_back("CE");
-			if ( atom_name_map_.has("CE1") ) moveable_atoms_chi3_.push_back("CE1");
-			if ( atom_name_map_.has("OE") )  moveable_atoms_chi3_.push_back("OE");
-			if ( atom_name_map_.has("OE1") ) moveable_atoms_chi3_.push_back("OE1"); 
-			if ( atom_name_map_.has("NE") )  moveable_atoms_chi3_.push_back("NE");
-			if ( atom_name_map_.has("NE1") ) moveable_atoms_chi3_.push_back("NE1"); 
-			if ( atom_name_map_.has("SE") )  moveable_atoms_chi3_.push_back("SE");
-			if ( atom_name_map_.has("SE1") ) moveable_atoms_chi3_.push_back("SE1"); 
+			if (atom_name_map_.has("CE"))  moveable_atoms_chi3_.push_back("CE");
+			if (atom_name_map_.has("CE1")) moveable_atoms_chi3_.push_back("CE1");
+			if (atom_name_map_.has("OE"))  moveable_atoms_chi3_.push_back("OE");
+			if (atom_name_map_.has("OE1")) moveable_atoms_chi3_.push_back("OE1"); 
+			if (atom_name_map_.has("NE"))  moveable_atoms_chi3_.push_back("NE");
+			if (atom_name_map_.has("NE1")) moveable_atoms_chi3_.push_back("NE1"); 
+			if (atom_name_map_.has("SE"))  moveable_atoms_chi3_.push_back("SE");
+			if (atom_name_map_.has("SE1")) moveable_atoms_chi3_.push_back("SE1"); 
 
 			if (moveable_atoms_chi3_.size() > 3)
 			{
@@ -341,10 +325,10 @@ namespace BALL
 			moveable_atoms_chi4_.push_back(moveable_atoms_chi3_[2]);
 			moveable_atoms_chi4_.push_back(moveable_atoms_chi3_[3]);
 
-			if ( atom_name_map_.has("CZ") )  moveable_atoms_chi4_.push_back("CZ");
-			if ( atom_name_map_.has("OZ") )  moveable_atoms_chi4_.push_back("OZ");
-			if ( atom_name_map_.has("NZ") )  moveable_atoms_chi4_.push_back("NZ");
-			if ( atom_name_map_.has("SZ") )  moveable_atoms_chi4_.push_back("SZ");
+			if (atom_name_map_.has("CZ"))  moveable_atoms_chi4_.push_back("CZ");
+			if (atom_name_map_.has("OZ"))  moveable_atoms_chi4_.push_back("OZ");
+			if (atom_name_map_.has("NZ"))  moveable_atoms_chi4_.push_back("NZ");
+			if (atom_name_map_.has("SZ"))  moveable_atoms_chi4_.push_back("SZ");
 
 			if (moveable_atoms_chi4_.size() > 3)
 			{
@@ -354,7 +338,6 @@ namespace BALL
 		}
 
 		valid_ = true;
-
 	}
 
 
@@ -377,24 +360,24 @@ namespace BALL
 		}
 
 		// identify anchor_atoms
-		if ( atom_name_map_.has("CA")  && atom_name_map_.has("C") && atom_name_map_.has("N")) 
+		if (atom_name_map_.has("CA")  && atom_name_map_.has("C") && atom_name_map_.has("N")) 
 		{
 			anchor_atoms_[0] = atom_name_map_["CA"];
 			anchor_atoms_[1] = atom_name_map_["C"];
 			anchor_atoms_[2] = atom_name_map_["N"];
-		} else {
+		} 
+		else 
+		{
 			Log.error() << " ResidueRotamerSet: An anchor atom is missing. " << endl;
 			valid_ = false;
 			return;
 		}
 	}
 
-	// Destructor
 	ResidueRotamerSet::~ResidueRotamerSet()
 	{
 	}
 
-	// Assignment Operator
 	ResidueRotamerSet& ResidueRotamerSet::operator = (const ResidueRotamerSet& residue_rotamer_set)
 	{
 		if (this != &residue_rotamer_set)
@@ -410,12 +393,14 @@ namespace BALL
 			}
 
 			// identify anchor_atoms
-			if ( atom_name_map_.has("CA")  && atom_name_map_.has("C") && atom_name_map_.has("N")) 
+			if (atom_name_map_.has("CA")  && atom_name_map_.has("C") && atom_name_map_.has("N")) 
 			{
 				anchor_atoms_[0] = atom_name_map_["CA"];
 				anchor_atoms_[1] = atom_name_map_["C"];
 				anchor_atoms_[2] = atom_name_map_["N"];
-			} else {
+			}
+			else 
+			{
 				Log.error() << " ResidueRotamerSet: An anchor atom is missing. " << endl;
 				valid_ = false;
 				return (*this);
@@ -507,24 +492,22 @@ namespace BALL
 		
 		return side_chain_;
 	}
-
 	
 	// Function for filling the vectors of movable atoms
 	void ResidueRotamerSet::addMoveable_(vector<String>& moveable, Atom& a)
 	{
 		Atom::BondIterator bond_it = a.beginBond();
 		
-		for ( ; bond_it != a.endBond(); ++bond_it)
+		for (; bond_it != a.endBond(); ++bond_it)
 		{
 			Atom* b = (*bond_it).getPartner(a);
 			String pattern = b->getName();
 
-			if ( find(moveable.begin(), moveable.end(), pattern) == moveable.end())
+			if (find(moveable.begin(), moveable.end(), pattern) == moveable.end())
 			{
 				moveable.push_back(pattern);
 				addMoveable_(moveable, *b);
 			}
-
 		}
 	}
 
@@ -573,25 +556,24 @@ namespace BALL
 			// Normalize the projection of a4
 			proj_a4 /= length_proj_a4;
 			
-
 			// Compute cos and sin of the torsion angle 
-
 			float cos_angle = cos(angle);
 			float sin_angle = sin(angle);
 
 			// Calculate rotation matrix
-
 			if (proj_a4.y != 0.0)
 			{
 				R.m23 = (cos_angle * proj_a4.z / proj_a4.y - sin_angle) / (proj_a4.y + proj_a4.z * proj_a4.z / proj_a4.y); 
 				R.m22 = (cos_angle - R.m23 * proj_a4.z) / proj_a4.y;	
-			} else {
+			}
+			else 
+			{
 				R.m23 = cos_angle / proj_a4.z;
 				R.m22 = sin_angle / proj_a4.z;
-				
 			}
+
 			R.m32 = -R.m23;
-			R.m33 = R.m22;
+			R.m33 =  R.m22;
 
 			// Rotate all atoms with index larger equal 3
 			for (Size i = 3; i < moveable.size(); i++)
@@ -677,8 +659,11 @@ namespace BALL
 			a1 = atom_name_map_["CB"]->getPosition();
 			a2 = atom_name_map_["CA"]->getPosition();
 			a3 = atom_name_map_["N"]->getPosition();
-		} else {
-			Log.error() << " template of " << side_chain_.getName() << " does not contain all backbone atoms " << endl;
+		}
+		else 
+		{
+			Log.error() << " template of " << side_chain_.getName() 
+									<< " does not contain all backbone atoms " << endl;
 			return false;
 		}
 
@@ -695,7 +680,6 @@ namespace BALL
 		proc.setTransformation(M);
 		side_chain_.apply(proc);
 
-
 		// Change the coordinates of residue
 		for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 		{
@@ -709,13 +693,14 @@ namespace BALL
 						break;
 					}
 				}
-			} else {
+			}
+			else 
+			{
 				Log.error() << " missing template atom " << atom_it->getName() << endl;
 				return false;
 			}
 		}
 
-		// Everything ok
 		return true;
 	}
 
@@ -725,10 +710,10 @@ namespace BALL
 		Rotamer r;
 		r.P = 1.0;
 
-		Atom* a1;
-		Atom* a2;
-		Atom* a3;
-		Atom* a4;
+		Atom* a1 = 0;
+		Atom* a2 = 0;
+		Atom* a3 = 0;
+		Atom* a4 = 0;
 
 		AtomIterator atom_it;
 		Size count;

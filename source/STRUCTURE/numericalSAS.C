@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.18 2000/08/31 21:11:29 oliver Exp $
+// $Id: numericalSAS.C,v 1.19 2000/10/30 00:19:59 amoll Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -440,7 +440,6 @@ namespace BALL
 			free(internal_atom_dots);
 		}
 
-
 		// free the input fields
 		delete [] coordinates;
 		delete [] radii;
@@ -671,7 +670,7 @@ int          last_cubus=0;
 		int i, j, k, tl, tl2, tn, tess;
 		double a, d, x, y, z, x2, y2, z2, x3, y3, z3;
 		double xij, yij, zij, xji, yji, zji, xik, yik, zik, xki, yki, zki,
-			xjk, yjk, zjk, xkj, ykj, zkj;
+					 xjk, yjk, zjk, xkj, ykj, zkj;
 		point_double xus=NULL;
 
 		/* calculate tessalation level */
@@ -681,7 +680,7 @@ int          last_cubus=0;
 		if (n_dot < densit) 
 		{
 			NSC_ERROR << "ico_dot_arc: error in formula for tessalation level (" << tess 
-				<< "->" << n_dot << ", " << densit << ")" << endl;
+								<< "->" << n_dot << ", " << densit << ")" << endl;
 		}
 
 		xus = (double *) CALLOC(3*n_dot, sizeof(double));
@@ -711,7 +710,7 @@ int          last_cubus=0;
 						divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 									 xus[3*j], xus[1+3*j], xus[2+3*j],
 									 tl, tess, &xus[3*tn], &xus[1+3*tn], &xus[2+3*tn]);
-							tn++;
+						tn++;
 					}
 				}
 			}
@@ -831,12 +830,18 @@ int          last_cubus=0;
 					y = xus[1+3*i]-xus[1+3*k]; 
 					z = xus[2+3*i]-xus[2+3*k];
 					d = x*x+y*y+z*z;
-					if (fabs(a-d) > DP_TOL) continue;
+					if (fabs(a-d) > DP_TOL) 
+					{	
+						continue;
+					}
 					x = xus[3*j]-xus[3*k];
 					y = xus[1+3*j]-xus[1+3*k]; 
 					z = xus[2+3*j]-xus[2+3*k];
 					d = x*x+y*y+z*z;
-					if (fabs(a-d) > DP_TOL) continue;
+					if (fabs(a-d) > DP_TOL)
+					{
+						continue;
+					}
 					x = xus[  3*i]+xus[  3*j]+xus[  3*k];
 					y = xus[1+3*i]+xus[1+3*j]+xus[1+3*k];
 					z = xus[2+3*i]+xus[2+3*j]+xus[2+3*k];
@@ -869,7 +874,10 @@ int          last_cubus=0;
 					y = xus[1+3*i]-xus[1+3*j]; 
 					z = xus[2+3*i]-xus[2+3*j];
 					d = x*x+y*y+z*z;
-					if (fabs(a-d) > DP_TOL) continue;
+					if (fabs(a-d) > DP_TOL)
+					{
+						continue;
+					}
 					for (tl=1; tl<tess; tl++) 
 					{
 						if (tn >= n_dot) 
@@ -892,7 +900,10 @@ int          last_cubus=0;
 					y = xus[1+3*i]-xus[1+3*j]; 
 					z = xus[2+3*i]-xus[2+3*j];
 					d = x*x+y*y+z*z;
-					if (fabs(ai_d-d) > DP_TOL) continue;
+					if (fabs(ai_d-d) > DP_TOL)
+					{
+						continue;
+					}
 
 					for (k=j+1; k < 32; k++) 
 					{
@@ -900,12 +911,18 @@ int          last_cubus=0;
 						y = xus[1+3*i]-xus[1+3*k]; 
 						z = xus[2+3*i]-xus[2+3*k];
 						d = x*x+y*y+z*z;
-						if (fabs(ai_d-d) > DP_TOL) continue;
+						if (fabs(ai_d-d) > DP_TOL)
+						{
+							continue;
+						}
 						x = xus[3*j]-xus[3*k];
 						y = xus[1+3*j]-xus[1+3*k]; 
 						z = xus[2+3*j]-xus[2+3*k];
 						d = x*x+y*y+z*z;
-						if (fabs(adod-d) > DP_TOL) continue;
+						if (fabs(adod-d) > DP_TOL)
+						{
+							continue;
+						}
 						for (tl=1; tl<tess-1; tl++) 
 						{
 							divarc(xus[3*j], xus[1+3*j], xus[2+3*j],
@@ -1012,7 +1029,8 @@ int          last_cubus=0;
 		del_cube=2./((double)ico_cube);
 		work = (int *) CALLOC(ndot, sizeof(int));
 		xus = xpunsp;
-		for (l=0; l<ndot; l++) {
+		for (l=0; l<ndot; l++) 
+		{
 			i = MAXIMUM((int) floor((1.+xus[3*l])/del_cube), 0);
 			if (i>=ico_cube) i = ico_cube-1;
 			j = MAXIMUM((int) floor((1.+xus[1+3*l])/del_cube), 0);
@@ -1021,32 +1039,46 @@ int          last_cubus=0;
 			if (k>=ico_cube) k = ico_cube-1;
 			ijk = i+j*ico_cube+k*ico_cube*ico_cube;
 			work[l] = ijk;
-			}
+		}
 
 		ico_wk = (int *) CALLOC(2*ico_cube_cb+1, sizeof(int));
 		ico_pt = ico_wk+ico_cube_cb;
-		for (l=0; l<ndot; l++) {
+		for (l=0; l<ndot; l++) 
+		{
 			ico_wk[work[l]]++;   /* dots per elementary cube */
-			}
+		}
 
 	/* reordering of the coordinate array in accordance with box number */
 		tn=0;
-		for (i = 0; i < ico_cube; i++) {
-			for (j = 0; j < ico_cube; j++) {
-				for (k=0; k < ico_cube; k++) {
+		for (i = 0; i < ico_cube; i++)
+		{
+			for (j = 0; j < ico_cube; j++) 
+			{
+				for (k=0; k < ico_cube; k++) 
+				{
 					tl=0;
 					tl2 = tn;
 					ijk = i+ico_cube*j+ico_cube*ico_cube*k;
 					*(ico_pt+ijk) = tn;
-					for (l=tl2; l<ndot; l++) {
-						if (ijk == work[l]) {
-							x = xus[3*l]; y = xus[1+3*l]; z = xus[2+3*l];
+					for (l=tl2; l<ndot; l++)
+					{
+						if (ijk == work[l])
+						{
+							x = xus[3*l]; 
+							y = xus[1+3*l]; 
+							z = xus[2+3*l];
 							xus[3*l] = xus[3*tn];
-							xus[1+3*l] = xus[1+3*tn]; xus[2+3*l] = xus[2+3*tn];
-							xus[3*tn] = x; xus[1+3*tn] = y; xus[2+3*tn] = z;
-							ijk = work[l]; work[l]=work[tn]; work[tn]=ijk;
-							tn++; tl++;
-							}
+							xus[1+3*l] = xus[1+3*tn]; 
+							xus[2+3*l] = xus[2+3*tn];
+							xus[3*tn] = x; 
+							xus[1+3*tn] = y; 
+							xus[2+3*tn] = z;
+							ijk = work[l]; 
+							work[l]=work[tn]; 
+							work[tn]=ijk;
+							tn++;
+							tl++;
+						}
 						}
 					*(ico_wk+ijk) = tl;
 					}		/* cycle k */

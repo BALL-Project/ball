@@ -1,4 +1,4 @@
-// $Id: RDFSection.C,v 1.6 2000/10/18 13:54:36 anker Exp $
+// $Id: RDFSection.C,v 1.7 2000/10/30 00:19:58 amoll Exp $
 
 #include <BALL/STRUCTURE/RDFSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -25,7 +25,6 @@ namespace BALL
 	RDFSection::~RDFSection() throw()
 	{
 		clear();
-
 		valid_ = false;
 	}
 
@@ -57,7 +56,7 @@ namespace BALL
 	bool RDFSection::operator == (const RDFSection& section) const throw()
 	{
 		return (ParameterSection::operator == (section)
-			&& (rdf_ == section.rdf_));
+						&& (rdf_ == section.rdf_));
 	}
 
 
@@ -115,7 +114,7 @@ namespace BALL
 				else
 				{
 					Log.warn() << "RDFSection::extractSection(): "
-						<< "No degree given, assuming 4." << endl;
+										 << "No degree given, assuming 4." << endl;
 					degree = 4;
 				}
 				coeffs.resize(degree);
@@ -149,10 +148,9 @@ namespace BALL
 				rdf_ = RadialDistributionFunction(poly);
 				return true;
 
-			default:
-				
+			default:		
 				Log.error() << "RDFSection::extractSection(): "
-					<< "Unknown type." << endl;
+										<< "Unknown type." << endl;
 				return false;
 		}
 
