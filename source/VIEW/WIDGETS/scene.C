@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.86 2004/06/25 14:37:08 amoll Exp $
+// $Id: scene.C,v 1.88 2004/06/25 15:51:13 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -269,10 +269,6 @@ namespace BALL
 
 				case SceneMessage::EXPORT_POVRAY:
 					exportPOVRay();
-					return;
-
-				case SceneMessage::UPDATE_CLIPPING_PLANES:
-					update(false);
 					return;
 
 				case SceneMessage::UNDEFINED:
