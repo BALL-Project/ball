@@ -1,9 +1,7 @@
-// $Id: glPrimitiveManager.C,v 1.7.4.3 2002/10/25 23:32:45 amoll Exp $
+// $Id: glPrimitiveManager.C,v 1.7.4.4 2002/11/07 19:22:20 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
-
-#include <math.h>
 
 using std::endl;
 using std::ostream;
@@ -36,16 +34,6 @@ namespace BALL
 			throw()
 		{
 		}
-
-		const GLDisplayList& 
-		GLDisplayListObject_::operator ()
-			(unsigned int drawing_mode, unsigned int drawing_precision) const
-			throw(WrongModes)
-		{
-			return ((GLDisplayListObject_ *)this)->operator()
-								(drawing_mode, drawing_precision);
-		}
-
 
 
 #		define BALL_VIEW_DISPLAY_LIST_MANAGER__X .525731112119133606
@@ -102,7 +90,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLSphereDisplayLists_>() << endl;
+						 << " of class " << RTTI::getName<GLSphereDisplayLists_>() << endl;
 			#endif 
 
 			destroy();
@@ -139,8 +127,7 @@ namespace BALL
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 			throw(WrongModes)
 		{
-			if (drawing_mode >= 3
-					|| drawing_precision >= 4)
+			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
 				throw WrongModes(__FILE__, __LINE__);
 			}
@@ -151,24 +138,20 @@ namespace BALL
 		bool GLSphereDisplayLists_::isValid() const
 			throw()
 		{
-			if (GL_display_list_ != 0)
-			{
-				for (int i = 0; i < BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE; ++i)
-				{
-					if (GL_display_list_[i].isValid() == false)
-					{
-						return false;
-					}
-				}
-
-				return true;
-			}
+			if (GL_display_list_ == 0) return false;
 			
-			return false;
+			for (int i = 0; i < BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE; ++i)
+			{
+				if (!GL_display_list_[i].isValid())
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
-		void GLSphereDisplayLists_::dump
-			(ostream& s, Size depth) const
+		void GLSphereDisplayLists_::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -189,7 +172,7 @@ namespace BALL
 		{
 			// building point display list
 			GL_display_list_[0 * 4 + 0].startDefinition();
-			buildDottedSphere_(1);
+			buildDottedSphere_(1); // Precision 0 is far too evil here
 			GL_display_list_[0 * 4 + 0].endDefinition();
 
 			GL_display_list_[0 * 4 + 1].startDefinition();
@@ -229,8 +212,6 @@ namespace BALL
 			GL_display_list_[1 * 4 + 3].endDefinition();
 			
 			GL_quadric_object.setDrawStyle(GLU_FILL);
-			GL_quadric_object.setNormals(GLU_SMOOTH);
-			GL_quadric_object.setOrientation(GLU_OUTSIDE);
 
 			// building solid display list
 			GL_display_list_[2 * 4 + 0].startDefinition();
@@ -250,7 +231,7 @@ namespace BALL
 			GL_display_list_[2 * 4 + 3].endDefinition();
 		}
 
-		void GLSphereDisplayLists_::buildDottedSphere_(int precisioni)
+		void GLSphereDisplayLists_::buildDottedSphere_(int precision)
 			throw()
 		{
 			Vector3 v1;
@@ -259,7 +240,7 @@ namespace BALL
 
 			glBegin(GL_POINTS);
 
-			for (register int i = 0; i < 20; ++i)
+			for (int i = 0; i < 20; ++i)
 			{
 				v1.set(vertices_[indices_[i][0]][0],
 							 vertices_[indices_[i][0]][1],
@@ -273,31 +254,18 @@ namespace BALL
 							 vertices_[indices_[i][2]][1],
 							 vertices_[indices_[i][2]][2]);
 				
-				subdivideTriangle_(v1, v2, v3, precisioni);
+				subdivideTriangle_(v1, v2, v3, precision);
 			}
 
 			glEnd();
 		}
 
-		void GLSphereDisplayLists_::drawPoint_
-			(Vector3& v)
-			throw()
-		{
-			/*
-			glNormal3f((GLfloat)v[0], (GLfloat)v[1], (GLfloat)v[2]);
-			*/
-			glVertex3f((GLfloat)v[0], (GLfloat)v[1], (GLfloat)v[2]);
-		}
-
-		void GLSphereDisplayLists_::subdivideTriangle_
-			(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
+		void GLSphereDisplayLists_::subdivideTriangle_(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
 			throw()
 		{
 			if (precision == 0)
 			{
-				Vector3 result;
-
-				result = v1 + v2 + v3;
+				Vector3 result = v1 + v2 + v3;
 				result.normalize();
 
 				drawPoint_(result);
@@ -305,24 +273,17 @@ namespace BALL
 				return;
 			}
 
-			Vector3 v12;
-			Vector3 v23;
-			Vector3 v31;
-
-			v12 = v1 + v2;
-			v23 = v2 + v3;
-			v31 = v3 + v1;
+			Vector3 v12 = v1 + v2;
+			Vector3 v23 = v2 + v3;
+			Vector3 v31 = v3 + v1;
 			
 			v12.normalize();
 			v23.normalize();
 			v31.normalize();
 
 			subdivideTriangle_(v1, v12, v31, precision - 1);
-
 			subdivideTriangle_(v2, v23, v12, precision - 1);
-
 			subdivideTriangle_(v3, v31, v23, precision - 1);
-
 			subdivideTriangle_(v12, v23, v31, precision - 1);
 		}
 
@@ -339,7 +300,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLTubeDisplayLists_>() << endl;
+						 << " of class " << RTTI::getName<GLTubeDisplayLists_>() << endl;
 			#endif 
 
 			destroy();
@@ -361,8 +322,7 @@ namespace BALL
 		{
 			if (GL_display_list_ == 0)
 			{
-				GL_display_list_ 
-					= new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
+				GL_display_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 
 				if (GL_display_list_ == 0)
 				{
@@ -377,8 +337,7 @@ namespace BALL
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 			throw(WrongModes)
 		{
-			if (drawing_mode >= 3
-					|| drawing_precision >= 4)
+			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
 				throw WrongModes(__FILE__, __LINE__);
 			}
@@ -393,7 +352,7 @@ namespace BALL
 			{
 				for (int i = 0; i < BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE; ++i)
 				{
-					if (GL_display_list_[i].isValid() == false)
+					if (!GL_display_list_[i].isValid())
 					{
 						return false;
 					}
@@ -405,8 +364,7 @@ namespace BALL
 			return false;
 		}
 
-		void GLTubeDisplayLists_::dump
-			(ostream& s, Size depth) const
+		void GLTubeDisplayLists_::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -525,8 +483,7 @@ namespace BALL
 		{
 			if (GL_display_list_ == 0)
 			{
-				GL_display_list_ 
-					= new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
+				GL_display_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 
 				if (GL_display_list_ == 0)
 				{
@@ -541,8 +498,7 @@ namespace BALL
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 			throw(WrongModes)
 		{
-			if (drawing_mode >= 3
-					|| drawing_precision >= 4)
+			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
 				throw WrongModes(__FILE__, __LINE__);
 			}
@@ -557,7 +513,7 @@ namespace BALL
 			{
 				for (int i = 0; i < BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE; ++i)
 				{
-					if (GL_display_list_[i].isValid() == false)
+					if (!GL_display_list_[i].isValid())
 					{
 						return false;
 					}
@@ -756,7 +712,6 @@ namespace BALL
 
 
 
-
 		GLPrimitiveManager::GLPrimitiveManager()
 			throw()
 			:	Sphere(),
@@ -773,7 +728,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLPrimitiveManager>() << endl;
+					   << " of class " << RTTI::getName<GLPrimitiveManager>() << endl;
 			#endif 
 
 			destroy();
@@ -787,23 +742,6 @@ namespace BALL
 			SimpleBox.destroy();
 
 			clearNames();
-		}
-
-		void GLPrimitiveManager::init()
-			throw()
-		{
-			Sphere.init();
-			Tube.init();
-			SimpleBox.init();
-		}
-		
-		void GLPrimitiveManager::clearNames()
-			throw()
-		{
-			name_to_object_.clear();
-			object_to_name_.clear();
-
-			all_names_ = 0;
 		}
 
 		GLPrimitiveManager::Name GLPrimitiveManager::getName(const GeometricObject& object)
@@ -839,14 +777,6 @@ namespace BALL
 			return it->second;
 		}
 
-		bool GLPrimitiveManager::isValid() const
-			throw()
-		{
-			return (Sphere.isValid() &&
-					    Tube.isValid()   &&
-							SimpleBox.isValid());
-		}
-
 		void GLPrimitiveManager::dump(ostream& s, Size depth) const
 			throw()
 		{
@@ -874,6 +804,10 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
+
+#ifdef BALL_NO_INLINE_FUNCTIONS
+#	include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.iC>
+#	endif 
 
 	} // namespace VIEW
 
