@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.7 2003/10/24 22:34:46 amoll Exp $
+// $Id: glRenderer.C,v 1.8 2003/11/05 22:03:12 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1235,18 +1235,9 @@ namespace BALL
 			// prepare camera
 			glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 300);
 			
-			const Camera& camera = stage_->getCamera();
-			gluLookAt((GLfloat)(camera.getViewPoint().x), 
-								(GLfloat)(camera.getViewPoint().y),
-								(GLfloat)(camera.getViewPoint().z),
-								(GLfloat)(camera.getLookAtPosition().x), 
-								(GLfloat)(camera.getLookAtPosition().y),
-								(GLfloat)(camera.getLookAtPosition().z),
-								(GLfloat)(camera.getLookUpVector().x),
-								(GLfloat)(camera.getLookUpVector().y),
-								(GLfloat)(camera.getLookUpVector().z));
-
 			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			updateCamera();
 		}			
 
 
@@ -1256,9 +1247,11 @@ namespace BALL
 			glPopMatrix();
 			glFlush();
 
+			glMatrixMode(GL_PROJECTION);
 			// get number of hits
 			int number_of_hits = glRenderMode(GL_RENDER);
-			
+			glPopMatrix();	
+			glMatrixMode(GL_MODELVIEW);
 			// return if no objects are picked
 			if (number_of_hits == 0)
 			{
@@ -1266,15 +1259,15 @@ namespace BALL
 				return;
 			}
 			
-			unsigned int minimum_z_coord = UINT_MAX;
-			unsigned int names;
+			Position minimum_z_coord = UINT_MAX;
+			Position names;
 			Name nearest_name = 0;
-			unsigned int* object_buffer_ptr = (unsigned int*) object_buffer_;
+			Position* object_buffer_ptr = (Position*) object_buffer_;
 
 			// collect only the nearest Object
 			if (width <= 3 && height <= 3) 
 			{
-				unsigned int z_coord;
+				Position z_coord;
 				
 				// find minimum z-coord
 				for (int index = 0; index < number_of_hits; ++index)
