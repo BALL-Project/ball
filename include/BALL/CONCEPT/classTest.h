@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.10 2000/03/16 11:58:32 oliver Exp $
+// $Id: classTest.h,v 1.11 2000/04/24 17:55:45 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -472,7 +472,7 @@ int main(int argc, char **argv)\
 			TEST_FILE__template_line.getline(TEST::templatefile);\
 			TEST_FILE__line.getline(TEST::infile);\
 			\
-			if ((use_regexps) && (TEST_FILE__template_line[0] == '/') && (TEST_FILE__template_line[1] != '/'))\
+			if ((use_regexps) && (TEST_FILE__template_line.size() > 0) && (TEST_FILE__template_line[0] == '/') && (TEST_FILE__template_line[1] != '/'))\
 			{\
 				RegularExpression expression(TEST_FILE__template_line(1));\
 				bool match = expression.match(TEST_FILE__line);\
