@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.3 2004/04/21 12:58:54 amoll Exp $
+// $Id: mainframe.C,v 1.4 2004/05/03 12:04:42 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -74,6 +74,7 @@ namespace BALL
 		// ---------------------
 		Log.remove(std::cout);
 		Log.remove(std::cerr);
+		setLoggingFilename("BALLView.log");
 
 		control_ = new MolecularControl(this, "Structures");
 		CHECK_PTR(control_);
