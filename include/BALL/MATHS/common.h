@@ -1,10 +1,16 @@
-// $Id: common.h,v 1.5 2000/04/02 15:48:26 amoll Exp $
+// $Id: common.h,v 1.6 2000/04/02 16:39:42 amoll Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
 
 #ifndef BALL_CONFIG_CONFIG_H
 #	include <BALL/CONFIG/config.h>
+#endif
+
+#include <math.h>
+
+#ifdef BALL_INCLUDE_IEEEFP
+# include <ieeefp.h>
 #endif
 
 namespace BALL 
