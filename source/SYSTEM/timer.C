@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.7.4.2 2002/11/30 10:32:02 oliver Exp $
+// $Id: timer.C,v 1.7.4.3 2002/11/30 10:52:42 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -30,6 +30,8 @@ using std::ostream;
 
 namespace BALL 
 {
+
+	long Timer::cpu_speed_ = 0L;
 
 	Timer::Timer()
 	{
