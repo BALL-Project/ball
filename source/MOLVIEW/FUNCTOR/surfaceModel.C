@@ -1,6 +1,7 @@
-// $Id: surfaceModel.C,v 1.3 2000/05/09 16:40:32 hekl Exp $
+// $Id: surfaceModel.C,v 1.4 2000/10/11 10:19:59 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
+#include <BALL/STRUCTURE/surfaceProcessor.h>
 
 using namespace std;
 
@@ -10,27 +11,23 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-		AddSurfaceModel::AddSurfaceModel
-			()
-				: 
-				BaseModelProcessor(),
+		AddSurfaceModel::AddSurfaceModel()
+			: BaseModelProcessor(),
 				get_composite_(true),
 				start_composite_(0)
 		{
 		}
 
 		AddSurfaceModel::AddSurfaceModel
-			(const AddSurfaceModel &add_surface,
+			(const AddSurfaceModel& add_surface,
 			 bool deep)
-				:
-				BaseModelProcessor(add_surface, deep),
+			:	BaseModelProcessor(add_surface, deep),
 				get_composite_(true),
 				start_composite_(0)
 		{
 		}
 
-		AddSurfaceModel::~AddSurfaceModel
-			()
+		AddSurfaceModel::~AddSurfaceModel()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -40,27 +37,22 @@ namespace BALL
 			destroy();
 		}
 
-		void 
-		AddSurfaceModel::clear
-			()
+		void AddSurfaceModel::clear()
 		{
 			BaseModelProcessor::clear();
 			get_composite_ = true;
 			start_composite_ = 0;
 		}
 
-		void 
-		AddSurfaceModel::destroy
-			()
+		void AddSurfaceModel::destroy()
 		{
 			BaseModelProcessor::destroy();
 			get_composite_ = true;
 			start_composite_ = 0;
 		}
 
-		void 
-		AddSurfaceModel::set
-			(const AddSurfaceModel &add_surface,
+		void AddSurfaceModel::set
+			(const AddSurfaceModel& add_surface,
 			 bool deep)
 		{
 			BaseModelProcessor::set(add_surface, deep);
@@ -68,42 +60,35 @@ namespace BALL
 			start_composite_ = 0;
 		}
 
-		AddSurfaceModel &
-		AddSurfaceModel::operator =
-			(const AddSurfaceModel &add_surface)
+		AddSurfaceModel& AddSurfaceModel::operator =
+			(const AddSurfaceModel& add_surface)
 		{
 			set(add_surface);
 
 			return *this;
 		}
 
-		void 
-		AddSurfaceModel::get
-			(AddSurfaceModel &add_surface,
+		void AddSurfaceModel::get
+			(AddSurfaceModel& add_surface,
 			 bool deep) const
 		{
 			add_surface.set(*this, deep);
 		}
 
-		void 
-		AddSurfaceModel::swap
-			(AddSurfaceModel &add_surface)
+		void AddSurfaceModel::swap
+			(AddSurfaceModel& add_surface)
 		{
 			BaseModelProcessor::swap(add_surface);
 			get_composite_ = true;
 			start_composite_ = 0;
 		}
 
-		bool 
-		AddSurfaceModel::start
-			()
+		bool AddSurfaceModel::start()
 		{
 			return BaseModelProcessor::start();
 		}
 				
-		bool 
-		AddSurfaceModel::finish
-			()
+		bool AddSurfaceModel::finish()
 		{
 			// insert surface only if a composite exist
 			if (start_composite_ != 0)
@@ -118,12 +103,27 @@ namespace BALL
 				start_composite_->host(molecular_information);
 
 				mesh->PropertyManager::set(*this);
-				mesh->readMSMSFile("/KM/usr/oliver/test.surf.vert.large", "/KM/usr/oliver/test.surf.face.large");
+				// mesh->readMSMSFile("/KM/usr/oliver/test.surf.vert.large", "/KM/usr/oliver/test.surf.face.large");
+
+				System* system = dynamic_cast<System*>(start_composite_);
+				if (system != 0)
+				{
+					cerr << "number of atoms in system:" << system->countAtoms() << endl;
+				}
+
+				SurfaceProcessor sp;
+				cerr << "applying SurfaceProcessor..." << endl;
+				start_composite_->apply(sp);
+				cerr << "assigning surface..." << endl;
+				sp.getSurface(*mesh);
+				cerr << "setting mesh name..." << endl;
+
 				mesh->setName(String("Surface of ")
 											+ molecular_information.getTypeName() 
 											+ String(" (")
 											+ molecular_information.getName()
 											+ String(")"));
+
 
 				start_composite_->getRoot().appendChild(*mesh);
 			}
