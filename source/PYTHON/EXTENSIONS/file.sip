@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.9 2003/04/22 21:16:58 oliver Exp $
+// $Id: file.sip,v 1.10 2003/04/28 15:41:12 oliver Exp $
 
 class std__openmode
 {
@@ -20,7 +20,7 @@ class File
 	typedef std__openmode OpenMode;
 	static const OpenMode IN;
 	static const OpenMode OUT;
-	static const OpenMode app;
+	static const OpenMode APP;
 	static const OpenMode BINARY;
 	static const OpenMode ATE;
 	static const OpenMode TRUNC;
