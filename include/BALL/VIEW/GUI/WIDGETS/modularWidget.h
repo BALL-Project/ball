@@ -1,4 +1,4 @@
-// $Id: modularWidget.h,v 1.10.4.1 2002/10/29 13:21:18 amoll Exp $
+// $Id: modularWidget.h,v 1.10.4.2 2002/12/08 22:33:53 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -53,7 +53,9 @@ namespace BALL
 				@see PyInterpreter
 				@see PyWidget
 		*/
-		class ModularWidget: public Embeddable,	public ConnectionObject
+		class ModularWidget
+			: public Embeddable,	
+				public ConnectionObject
 		{
 		  public:
 			
@@ -237,6 +239,10 @@ namespace BALL
 			virtual void writePreferences(INIFile& inifile)
 				throw();
 
+			/** Set the text of the statusbar.
+			 */
+			virtual void setStatusbarText(String text)
+				throw();
 			//@}			
 		}; 
 
