@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.8 2000/01/07 22:00:46 oliver Exp $
+// $Id: fragmentDB.C,v 1.9 2000/01/09 23:29:13 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -38,6 +38,8 @@ namespace BALL
 
 	bool FragmentDB::expandFirst_(ResourceEntry& root_entry, int depth)
 	{
+		cerr << "expandFirst(root_entry[" << root_entry.getKey() << "/" 
+		     << root_entry.getValue() << "], depth[" << depth <<"])" << endl;
 		if (!root_entry.getKey().hasPrefix(FRAGMENT_DB_INCLUDE_TAG))
 		{
 			ResourceEntry::Iterator	entry_iterator;
@@ -67,7 +69,7 @@ namespace BALL
 			{
 				// if the include directive is invalid,
 				// remove the entry
-				Log.error() << "illegal #include directive: " << key << endl;
+				Log.error() << "FragmentDB: illegal #include directive: " << key << endl;
 				root_entry.getParent()->removeChild(key, 0);
 
 				return false;
@@ -79,28 +81,42 @@ namespace BALL
 					
 				ResourceEntry*	parent = root_entry.getParent();
 				ResourceEntry* entry;
+				assert(parent != 0);
 				parent->removeChild(key, 0);
 
 				ResourceFile*	file;
 				ResourceEntry* tree_entry;
 					
 				file = new ResourceFile(value_fields[0]);
-				if ((file == 0) || !file->isValid())
+				if (!file->isValid())
 				{
-					Log.error() << "error opening include file: " << value_fields[0] << endl;
-					delete file;
-					return false;
-				} else {
-					tree_entry = file->getRoot().getEntry(value_fields[1]);
-					if (tree_entry == 0){
-						Log.error() << "cannot find node " << value_fields[1] << " in file " << value_fields[0] << endl;
-					} else {
-						entry = parent->insertChild(key_fields[1], tree_entry->getValue());
-						entry->mergeChildrenOf(*tree_entry);
+					// search in the standard fragment DB file
+					Path path;
+					String filename = path.find(filename);
+
+					if (filename == "")
+					{
+						throw Exception::FileNotFound(__FILE__, __LINE__, value_fields[0]);
 					}
-					delete file;
+
+					file = new ResourceFile(value_fields[0]);
+					if (!file->isValid())
+					{
+						Log.error() << "FragmentDB: cannot open include file " << value_fields[0] << endl;
+						delete file;
+						return false;
+					}
+				} 
 					
+				tree_entry = file->getRoot().getEntry(value_fields[1]);
+				if (tree_entry == 0)
+				{
+					Log.error() << "FragmentDB: cannot find node " << value_fields[1] << " in file " << value_fields[0] << endl;
+				} else {
+					entry = parent->insertChild(key_fields[1], tree_entry->getValue());
+					entry->mergeChildrenOf(*tree_entry);
 				}
+				delete file;
 			}
 		}
 
