@@ -1,7 +1,7 @@
 % -*- Mode: C++; tab-width: 2; -*-
 % vi: set ts=2:
 %
-% $Id: coding_style.tex,v 1.5 2004/02/23 11:09:06 oliver Exp $
+% $Id: coding_style.tex,v 1.6 2004/02/23 13:45:30 oliver Exp $
 %
                                                                                                                                                              
 \documentclass[a4paper,10pt]{article}
@@ -11,7 +11,7 @@
 \title{BALL coding conventions}
 \author{Oliver Kohlbacher}
 
-\date{$ $Revision: 1.5 $ $}
+\date{$ $Revision: 1.6 $ $}
 
 \newtheorem{example}{Example}
 
@@ -72,7 +72,7 @@ is performed to enforce this rule.
 
 \section{Class requirements}
 
-Each Ball class has to provide the following minimal interface:
+Each BALL class has to provide the following minimal interface:
 \begin{verbatim}
 	/** Class documentation... 
 	*/
@@ -236,7 +236,7 @@ or source file should start with this header:
   // -*- Mode: C++; tab-width: 2; -*-
   // vi: set ts=2:
   //
-  // $Id: coding_style.tex,v 1.5 2004/02/23 11:09:06 oliver Exp $
+  // $Id: coding_style.tex,v 1.6 2004/02/23 13:45:30 oliver Exp $
   //                                                                                                                                                             
 \end{verbatim}
 In non-C++ files (Makefiles, TeX-Files, etc.) the C++ comments are replaced
@@ -304,20 +304,11 @@ which they are read and created) but prevents the double occurance of the same
 handle. Whether static variables have to be read/written or not has to be
 decided  on a case-by-case basis.
 
-{\em Multiple inheritance} is the most serious problem. Again, the kernel
-classes contain a good example. {\tt Atom} is derived (among others) from
-{\tt Composite} and {\tt PropertyManager}. {\tt Composite} is a {\tt
-PersistentObject}. Hence, an atom inherits the methods {\tt persistentWrite}
-and {\tt persistentRead}. It would be quite easy to implement object
-persistence for an atom, if {\tt PropertyManager} was a {\tt
-PersistentObejct}, too. This is not possible since {\tt Atom} could not decide
-which {\tt persistentWrite} method is meant with {\tt Atom::persistenWrite}:
-either {\tt Composite::persistentWrite} or {\tt
-PropertyManager::persistentWrite}. 
+{\em Multiple inheritance} is the most serious problem. 
 All persistent object have to be derived from exactly {\em one} persistent
 object - in this case {\tt Composite}. The support classes like {\tt
 PropertyManager} or {\tt Selectable} are not derived from {\tt
-PersistentObject} but are a {\em model of storable}. 
+PersistentObject}, but are a {\em model of storable}. 
 This requires the definition of two methods in the storable class' interface:
 {\tt read(PersistenceManager\& pm)} and {\tt write(PersistenceManager\& pm)}.
 These methods are quite alike to {\tt persistenWrite} and {\tt
@@ -381,24 +372,70 @@ each method of the class. The test programs reside in the directory
 {\tt BALL/source/TEST}. To create a new test program, rename a copy of the file
 {\tt Skeleton\_test.C} to the new class test name (usually {\tt
 <classname>\_test.C}). The test program has to be coded using the class test
-macros as described in the BALL online reference (see below). Special care should be taken
+macros as described in the BALL online reference (see below, these macros are
+defined in {\tt CONCEPT/classTest.h}). Special care should be taken
 to cover all special cases (e.g. what happens, if a method is called with
 empty strings, negative values, zero, null pointers etc.). 
 
 \subsection{Macros to start, finish and evaluate tests}
 \begin{itemize}
-	\item {\tt START\_TEST(class\_name, version)}
-	\item {\tt END\_TEST}
-	\item {\tt CHECK(name)}
-	\item {\tt RESULT}
+	\item {\tt START\_TEST(class\_name, version)}\\
+	\item {\tt END\_TEST}\\
+		Start the tests for class {\tt class\_name}. This should occur just
+		\emph{once} in a test program, as it contains the definition of the {\tt main}
+		function. Similarly, {\tt END\_TEST} defines the terminal section of the test program.
+	
+	\item {\tt CHECK(name)}\\
+	\item {\tt RESULT}\\
+		The {\tt CHECK} macro starts a subtest for a specific method of the class. The full
+		signature of the class should be given as {\tt name}.
+		Variables defined after this macro are scoped and valid until the next
+		{\tt RESULT} only, which also evaluats success or failure of the test.
+
+	\item {\tt ABORT\_IF(condition)}\\
+		This macro aborts the subtest, i.e. it jumps forward to the next {\tt
+		RESULT} macro and marks the subtest as failed. This macro usually employed
+		to prevent the execution of certain tests, if a necessary precondition was
+		not met and the execution would hence result in a crash.
+
+	\item {\tt STATUS(...)}\\
+		This macro can be used to print the current status from within a subtest
+		and useful for debugging tests. The macro will print its argument to the
+		console, if the test is run with "-V" as an argument and stay silent
+		otherwise. Example: {\tt STATUS("result: " << result)}.
+
 \end{itemize}
 
 \subsection{Comparison macros}
 \begin{itemize}
-	\item {\tt TEST\_EQUAL(a, b)}
-	\item {\tt TEST\_NOT\_EQUAL(a, b)}
+	\item {\tt TEST\_EQUAL(a, b)}\\
+		Check that {\tt a} and {\tt b} are equal (using an appropriate {\tt operator ==}).
+
+	\item {\tt TEST\_NOT\_EQUAL(a, b)}\\
+		Check that {\tt a} and {\tt b} are \emph{not} equal (again, using an
+		appropriate {\tt operator ==}, not the {\tt operator !=}). This is helpful, if
+		you know what a method returns upon \emph{unsuccessful} execution, e.g.,
+		if you want to make sure it did not return a NULL pointer.
+
 	\item {\tt TEST\_REAL\_EQUAL(a, b)}
-	\item {\tt TEST\_EXCEPTION(exception\_type, expression)}	
+	\item{\tt PRECISION(delta)}\\
+		Check that {\tt a} and {\tt b} are equal within a tolerance {\tt delta},
+		defined. {\tt a} and {\tt b} have to be convertible to double.
+
+	\item{\tt NEW\_TMPFILE(filename)}\\
+	\item{\tt TEST\_FILE()}\\
+	\item{\tt TEST\_FILE\_REGEX()}\\
+		{\tt NEW\_TMPFILE} creates a new temporary filename, which is then assigned
+		to {\tt filename}. Using these temporary filenames is recommended, as they
+		are deleted after running the test (except if run in verbose mode).
+		After writing something to a file (e.g. while testing output methods), the
+		contents of this file can be compared to a template file using the {\tt
+		TEST\_FILE} and {\tt TEST\_FILE\_REGEX} macros.
+
+	\item {\tt TEST\_EXCEPTION(exception\_type, expression)}\\
+		Tests whether an expression throws the exception it is supposed to throw.
+	
+	
 \end{itemize}
 
 
