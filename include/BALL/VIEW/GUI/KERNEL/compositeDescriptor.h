@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.h,v 1.7 2001/06/28 20:02:25 sturm Exp $
+// $Id: compositeDescriptor.h,v 1.8 2001/07/09 18:33:18 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -81,8 +81,8 @@ namespace BALL
 				will work automatically.
 				@memo    CompositeDescriptor class (BALL VIEW gui kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/06/28 20:02:25 $
+				@version $Revision: 1.8 $
+				@date    $Date: 2001/07/09 18:33:18 $
 		*/
 		class CompositeDescriptor
 		{
@@ -257,9 +257,7 @@ namespace BALL
 				throw();
 
 			/** Constant inspection of the name.
-					Access a constant reference of the name of {\em *this} compositeDescriptor.
-					@return  String& constant reference of the name of {\em *this} compositeDescriptor
-					@see     setName
+					For further information see \Ref{getName}.
 			*/
 			const String& getName() const
 				throw();
@@ -286,11 +284,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the center vector.
-					Access a constant reference of the center vector of {\em *this}
-					compositeDescriptor.
-					@return  Vector3& constant reference to the center vector of {\em *this} compositeDescriptor
-					@see     setCenter
-					@see     Vector3
+					For further information see \Ref{getCenter}.
 			*/
 			const Vector3& getCenter() const
 				throw();
@@ -345,11 +339,7 @@ namespace BALL
 				throw();
 
 			/** Constant inspection of the quaternion.
-					Access a constant reference of the \Ref{Quaternion} of {\em *this}.
-
-					@return  Quaternion& constant reference of the \Ref{Quaternion} of {\em *this} compositeDescriptor
-					@see     setQuaternion
-					@see     Quaternion
+					For further information see \Ref{getQuaternion}.
 			*/
 			const Quaternion& getQuaternion() const
 				throw();
@@ -374,11 +364,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the composite.
-					Access a constant pointer of the \Ref{Composite} of {\em *this}
-					compositeDescriptor.
-					@return  Composite* constant pointer of the \Ref{Composite} of {\em *this} compositeDescriptor
-					@see     setComposite
-					@see     Composite
+					For further information see \Ref{getComposite}.
 			*/
 			const Composite* getComposite() const
 				throw();
