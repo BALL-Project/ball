@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.15 2001/02/20 11:36:32 amoll Exp $
+// $Id: hashGrid.h,v 1.16 2001/03/06 14:02:10 anker Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -37,7 +37,8 @@ namespace BALL
 	/**	Grid Box Class.
 			These boxes represent the buckets of a threedimensional hash grid.
 			Every such box contains a linear list of the objects that are
-			contained in this box. This list is accessible through 
+			contained in this box. This list is accessible through a
+			DataIterator.\\
 			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
 	*/
 	template <class Item>
@@ -1055,8 +1056,7 @@ namespace BALL
 
 
 	/**	Three-dimensional Hash Grid Class.\\
-			BAUTELLE
-			\\
+			BAUSTELLE\\
 			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
 	*/
 	template <class Item>
