@@ -211,7 +211,7 @@ float TransformationDialog::getMaxRotation() const
 
 void TransformationDialog::update_()
 {
-	CompositeMessage* message = new CompositeMessage(composite_, 
+	CompositeMessage* message = new CompositeMessage(*composite_, 
 													CompositeMessage::CHANGED_COMPOSITE);
 	notify_(message);
 }
