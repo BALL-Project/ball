@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.13 2002/12/12 10:57:43 oliver Exp $
+// $Id: vanDerWaalsModel.C,v 1.14 2003/02/04 17:27:56 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -89,6 +89,10 @@ namespace BALL
 			sphere_ptr->PropertyManager::set(*this);
 			sphere_ptr->PropertyManager::setProperty(PROPERTY__MODEL_VDW);
 			sphere_ptr->setRadius((atom->getElement()).getVanDerWaalsRadius());
+			
+			// setting default value for vanDerWaalsRadius if none is defined in the PTE
+			if (sphere_ptr->getRadius() == 0) sphere_ptr->setRadius(1.5);
+			
 			sphere_ptr->setVertexAddress(atom->getPosition());
 
 			atom->host(*getColorCalculator());
