@@ -55,6 +55,8 @@ DownloadPDBFile::~DownloadPDBFile()
 	Log.info() << "Destructing object " << this << " of class DownloadPDBFile" << std::endl; 
 #endif 
 
+	if (qb_ != 0) delete qb_;
+
 #ifdef BALL_QT_HAS_THREADS
 	if (thread_ != 0) 
 	{
@@ -289,8 +291,6 @@ void DownloadPDBFile::displayHTML(const QString& url)
 
 		setStatusbarText("Please wait, while loading images...", true);
 
-//   		if (qb_ != 0) delete qb_;
-//   		qb_ = new QTextBrowser();
  		if (qb_ == 0) qb_ = new QTextBrowser();
 
 		String result;
