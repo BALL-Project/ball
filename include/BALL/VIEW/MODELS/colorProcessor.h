@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.14 2003/10/28 00:23:16 amoll Exp $
+// $Id: colorProcessor.h,v 1.15 2003/11/03 00:23:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -137,7 +137,7 @@ namespace BALL
 
 			///
 			void setTransparency(Size value)
-				throw() { transparency_ = value;}
+				throw();
 
 			/** Set the pointer to the CompositeSet.
 			 		This method is called by Representation::setColorProcessor and Representation::update.
@@ -202,6 +202,9 @@ namespace BALL
 
 			///
 			InterpolateColorProcessor();
+
+			///
+			virtual bool start();
 
 			///
 			void setMinColor(const ColorRGBA& color)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.18 2003/11/02 21:20:38 amoll Exp $
+// $Id: colorProcessor.C,v 1.19 2003/11/03 00:23:30 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -239,6 +239,12 @@ namespace BALL
 			default_color_.setAlpha(255 - transparency_);
 		}
 
+		void ColorProcessor::setTransparency(Size value)
+			throw() 
+		{ 
+			transparency_ = value;
+			default_color_.setAlpha(255 - value);
+		}
 		//////////////////////////////////////////////////////////////////////
 		InterpolateColorProcessor::InterpolateColorProcessor()
 			: ColorProcessor(),
@@ -331,6 +337,16 @@ namespace BALL
 			throw()
 		{
 			return max_max_color_;
+		}
+
+		bool InterpolateColorProcessor::start()
+		{
+			min_min_color_.setAlpha(255 - transparency_);
+			min_color_.setAlpha(255 - transparency_);
+			max_max_color_.setAlpha(255 - transparency_);
+			max_color_.setAlpha(255 - transparency_);
+			default_color_.setAlpha(255 - transparency_);
+			return true;
 		}
 
 	} // namespace VIEW
