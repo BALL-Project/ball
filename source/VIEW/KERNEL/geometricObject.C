@@ -1,4 +1,4 @@
-// $Id: geometricObject.C,v 1.4 1999/12/30 18:05:46 oliver Exp $
+// $Id: geometricObject.C,v 1.5 2000/05/04 17:23:19 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -14,7 +14,7 @@ namespace BALL
 			:	Composite(),
 				PropertyManager(),
 				selected_color_(255, 255, 0, 255),
-				name_("unkown")
+				name_("unknown")
 		{
 			clear_();
 		}
@@ -42,6 +42,8 @@ namespace BALL
 		{
 			Composite::clear();
 			PropertyManager::clear();
+
+			name_ = "unknown";
 
 			clear_();
 		}
@@ -134,6 +136,11 @@ namespace BALL
 			PropertyManager::setProperty(property);
 		}
 
+		String GeometricObject::getTypeName() const
+    {
+			return String("GeometricObject");
+    }
+
 		bool GeometricObject::isValid() const
 		{
 			return (bool)(Composite::isValid() == true
@@ -152,6 +159,9 @@ namespace BALL
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "name           : " << name_ << endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "type name      : " << getTypeName() << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "selected color : " << selected_color_ << endl;
