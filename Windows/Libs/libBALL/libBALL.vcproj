@@ -77,7 +77,7 @@
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;LIBBALL_EXPORTS;YY_NEVER_INTERACTIVE"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;LIBBALL_EXPORTS;YY_NEVER_INTERACTIVE;BALL_PLATFORM_WINDOWS"
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
@@ -2282,6 +2282,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\SYSTEM\socket.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\System\sysinfo.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\SYSTEM\TCPTransfer.C">

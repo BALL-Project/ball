@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.5 2005/01/25 16:03:55 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.6 2005/01/25 16:35:11 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -9,9 +9,11 @@
 
 #include <BALL/SYSTEM/sysinfo.h>
 
+#include <BALL/COMMON/limits.h>
+
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.5 2005/01/25 16:03:55 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.6 2005/01/25 16:35:11 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,18 +24,18 @@ using namespace BALL::SysInfo;
 	
 CHECK(getFreeMemory())
 	TEST_EQUAL(getFreeMemory() > 0.0, true)
-// 	Log.error() <<getFre eMemory() << std::endl;
+//  	Log.error() <<getFreeMemory() << std::endl;
 RESULT		
 
 CHECK(getAvailableMemory())
 	TEST_EQUAL(getAvailableMemory() > 0.0, true)
-//  	Log.error() <<getAvailableMemory() << std::endl;
+//   	Log.error() <<getAvailableMemory() << std::endl;
 RESULT		
 
 
 CHECK(getTotalMemory())
 	TEST_EQUAL(getTotalMemory() > 0, true)
-	TEST_EQUAL(getTotalMemory(), getTotalMemory())
+	TEST_REAL_EQUAL(getTotalMemory(), getTotalMemory())
 // 	Log.error() <<getTotalMemory() << std::endl;
 RESULT		
 
@@ -76,12 +78,11 @@ RESULT
 */
 
 CHECK(Extra1)
-	Index i1 = getAvailableMemory();
+	float i1 = getAvailableMemory();
 	i1 *= 0.9;
 	char* c = new char[i1];
 	delete[] c;
 RESULT
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
