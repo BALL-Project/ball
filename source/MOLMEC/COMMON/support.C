@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.44 2005/01/26 21:32:59 amoll Exp $
+// $Id: support.C,v 1.45 2005/01/27 00:48:12 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
@@ -13,6 +13,13 @@
 #include <BALL/SYSTEM/sysinfo.h>
 
 #include <math.h>
+
+//   #define BALL_BENCHMARK
+
+#ifdef BALL_BENCHMARK
+ #include <BALL/SYSTEM/timer.h>
+#endif 
+
 
 using namespace std;
 
@@ -43,6 +50,10 @@ namespace BALL
 			 PairListAlgorithmType type)
 			throw(Exception::OutOfMemory)
 		{
+#ifdef BALL_BENCHMARK
+	Timer t;
+	t.start();
+#endif
 
 			// determine lower and upper corner of the hash grid that contains
 			// the box plus "distance" many units on each side
@@ -179,17 +190,17 @@ namespace BALL
 			// periodic boundary not enabled
 			else 
 			{
+				// Check what kind of algorithm should be used for calculating the
+				// neighbours
 				if (type != BRUTE_FORCE)
 				{
 					float memory = SysInfo::getAvailableMemory() * 0.7;
 					float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing(memory, 
-																												upper - lower + Vector3(1));
+																												upper - lower + Vector3(0.2F));
 					if (min_spacing > distance) type = BRUTE_FORCE;
 				}
 
-				// Check what kind of algorithm should be used for calculating the
-				// neighbours
-				if (type == BRUTE_FORCE) 
+       	if (type == BRUTE_FORCE)
 				{
 					// Brute force algorithm
 					for (Position i = 0; i < (atom_vector.size() - 1); ++i) 
@@ -212,24 +223,98 @@ namespace BALL
 					//
 					// Use a hash grid with box length "distance" to determine all
 					// neighboring atom pairs
-					//
+					
 					// we enlarge the box by some constant to be sure not to run into
 					// numerical problems
-					HashGrid3<Atom*> grid(lower - Vector3(0.1F),
-							upper - lower + Vector3(0.2F), distance);
+ 					HashGrid3<Atom*> grid(lower - Vector3(0.1F), upper - lower + Vector3(0.2F), 
+																distance + 0.1F);
 
-					// Iterators and hash box pointer for the grid search
+					
+					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end(); ++atom_it) 
+					{
+						grid.insert((*atom_it)->getPosition(), *atom_it); // insert atom into grid
+					}
+
+					// iterate over all boxes
+					HashGrid3<Atom*>::BoxIterator box_it = grid.beginBox();
+					for (; box_it != grid.endBox(); ++box_it) 
+					{
+						Position x, y, z;
+						grid.getIndices(*box_it, x, y, z);
+
+						// look in the same box for near atoms
+						HashGridBox3<Atom*>::ConstDataIterator bit = box_it->beginData(); 
+						for (; +bit; bit++)
+						{
+							const Vector3& bit_pos = (*bit)->getPosition();
+							// iterate over all atoms after bit
+ 							HashGridBox3<Atom*>::ConstDataIterator tit = bit; 
+ 							tit++;
+							for (; +tit; tit++)
+							{
+								if (bit_pos.getSquareDistance((*tit)->getPosition()) < squared_distance 
+										&& !(*tit)->isBoundTo(**bit)
+										&& !(*tit)->isGeminal(**bit))
+								{
+									pair_vector.push_back(pair<Atom*,Atom*>(*bit, *tit));
+								}
+							}
+						}
+
+						// iterator over neighbour boxes
+						for (Index xi = -1; xi <= 1; xi++)
+						{
+							const Position nx = x + xi;
+							for (Index yi = -1; yi <= 1; yi++)
+							{
+								const Position ny = y + yi;
+								for (Index zi = -1; zi <= 1; zi++)
+								{
+ 									if ((xi == 0) && (yi == 0) && (zi == 0)) continue;
+
+									HashGridBox3<Atom*>* bbox = grid.getBox(nx, ny, z+zi);
+									// smaller operator also checks for 0 !
+									if (bbox < &*box_it || bbox->isEmpty()) 
+									{
+										continue;
+									}
+
+									// iterate over all atoms of current box
+									HashGridBox3<Atom*>::ConstDataIterator tit = box_it->beginData();
+									for (;+tit; tit++)
+									{
+										const Vector3& atom_pos = (*tit)->getPosition();
+										// iterate over all atoms of neighbour boxes
+										HashGridBox3<Atom*>::ConstDataIterator bit = bbox->beginData(); 
+										for (; +bit; bit++)
+										{
+											if (((*bit)->getPosition().getSquareDistance(atom_pos) < squared_distance) 
+													&& !(*tit)->isBoundTo(**bit)
+													&& !(*tit)->isGeminal(**bit))
+											{
+												pair_vector.push_back(pair<Atom*,Atom*>(*bit, *tit));
+											}
+										}
+									}
+									
+								} // zi
+							} // yi
+						}  // xi
+					} // for all boxes
+
+
+// old version slower and scales worser ???? to be removed?
+/*
+					HashGrid3<Atom*> grid(lower - Vector3(0.1F), upper - lower + Vector3(0.2F), distance);
 					HashGridBox3<Atom*>* hbox;
 					HashGridBox3<Atom*>::BoxIterator box_it;
 					HashGridBox3<Atom*>::DataIterator data_it;
 
-					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
-							++atom_it) 
+					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end(); ++atom_it) 
 					{
 						position = (*atom_it)->getPosition();
 
-						// Search all neighbor atoms of "atom_it" that are stored in
-						// the hash grid
+						// Search all neighbor atoms of "atom_it" that are stored in the hash grid
 
 						hbox = grid.getBox(position);
 						if (hbox != 0)
@@ -238,7 +323,7 @@ namespace BALL
 							{
 								for (data_it = (*box_it).beginData(); +data_it; ++data_it) 
 								{
-									if (((position.getSquareDistance((*data_it)->getPosition())) <= squared_distance) 
+									if (((position.getSquareDistance((*data_it)->getPosition())) < squared_distance) 
 											&& !(*data_it)->isBoundTo(**atom_it)
 											&& !(*data_it)->isGeminal(**atom_it))
 									{
@@ -252,13 +337,17 @@ namespace BALL
 							Log.warn() << "calculateNonBondedAtomPairs: hbox = 0 for position " << position
 								<< " (grid dimensions: " << grid.getOrigin() << ")" << endl;
 						}
-
 						// Insert the new atom into the hash grid
 						grid.insert(position, (*atom_it));
 					}
+*/
+					
 				}
 			}
-
+#ifdef BALL_BENCHMARK
+t.stop();
+Log.error() << "calculateNonBondedAtomPairs time: " << String(t.getClockTime()) << std::endl;
+#endif
 			// Return the number of pairs *added* to the vector.
 			return (pair_vector.size() - number_of_pairs);
 		}
@@ -676,5 +765,4 @@ namespace BALL
 		}
 
 	}	// namespace MolmecSupport
-
 } // namespace BALL
