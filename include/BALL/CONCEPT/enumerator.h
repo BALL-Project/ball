@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.10 2001/02/05 17:43:57 amoll Exp $
+// $Id: enumerator.h,v 1.11 2001/06/22 10:49:20 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -73,7 +73,7 @@ namespace BALL
 			// compute the base multipliers for later usage 
 			Index i;
 			Size multiplier = 1;
-			std::list<std::pair<VariantIterator, std::vector<Variant> > >::const_iterator list_it = variant_list.begin();
+			typename std::list<std::pair<VariantIterator, std::vector<Variant> > >::const_iterator list_it = variant_list.begin();
 			for (i = size() - 1; i >= 0; i--, list_it++)
 			{
 				operator[](i) = 0;
@@ -301,7 +301,7 @@ namespace BALL
 			throw()
 		{
 			Size total = 1;
-			SiteList::iterator it;
+			typename SiteList::iterator it;
 			for (it = variant_sites_.begin(); it != variant_sites_.end(); ++it)
 			{
 				total *= it->second.size();
@@ -341,7 +341,7 @@ namespace BALL
 				throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
 			}
 
-			SiteList::iterator it = variant_sites_.begin();
+			typename SiteList::iterator it = variant_sites_.begin();
 			Position i = index.size() - 1;
 			for (; it != variant_sites_.end(); ++it, --i)
 			{
