@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.h,v 1.16 2002/02/27 12:19:43 sturm Exp $
+// $Id: SESFace.h,v 1.17 2002/04/18 18:25:30 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -129,7 +129,7 @@ namespace BALL
 				TRSFace<T>* rsface,
 				const ::std::vector<TSESVertex<T>*>& vertex,
 				const ::std::vector<TSESEdge<T>*> edge,
-				const ::std::vector<bool> orientation,
+				//const ::std::vector<bool> orientation,
 				Index index)
 			throw();
 
@@ -210,22 +210,22 @@ namespace BALL
 														than the current number of orientations, an exception is thrown
 				@param	orientation	a pointer to the new vertex
 		*/
-		void setOrientation(Position i, bool orientation)
-			throw(Exception::IndexOverflow);
+		//void setOrientation(Position i, bool orientation)
+		//	throw(Exception::IndexOverflow);
 
 		/** Return one of the orientations of the SESFace.
 				@param	i			the relative index of the orientation which should be given back. If i is greater	
 											than the current number of orientation, an exception is thrown
 				@return	bool	the asked orientation
 		*/
-		bool getOrientation(Position i) const
-			throw(Exception::IndexOverflow);
+		//bool getOrientation(Position i) const
+		//	throw(Exception::IndexOverflow);
 
 		/** Push an new value to the vector of orientations of the SESFace.
 				@param	bool	the new orientation value
 		*/
-		void pushOrientation(bool orientation)
-			throw();
+		//void pushOrientation(bool orientation)
+		//	throw();
 		
 
 		//@}
@@ -259,6 +259,9 @@ namespace BALL
 		bool isFree() const
 			throw();
 
+		bool hasSingularEdges() const
+			throw();
+
 		//@}
 
 		//protected:
@@ -281,7 +284,7 @@ namespace BALL
 		TRSFace<T>* rsface_;
 		/*_	A vector of booleans to indicate the orientation of each sesedge.
 		*/
-		::std::vector<bool> orientation_;
+		//::std::vector<bool> orientation_;
 
 		//@}
 	};
@@ -338,7 +341,7 @@ namespace BALL
 				s << sesface.getEdge(i)->getIndex() << ' ';
 			}
 		}
-		s << "] [";
+		//s << "] [";
 		//for (Position i = 0; i < sesface.orientation_.size(); i++)
 		//{
 		//	s << sesface.orientation_[i] << ' ';
@@ -363,8 +366,8 @@ namespace BALL
 			type_(TSESFace<T>::TYPE_SPHERIC),
 			rsvertex_(NULL),
 			rsedge_(NULL),
-			rsface_(NULL),
-			orientation_()
+			rsface_(NULL)
+			//orientation_()
 	{
 	}
 
@@ -376,15 +379,15 @@ namespace BALL
 			type_(sesface.type_),
 			rsvertex_(NULL),
 			rsedge_(NULL),
-			rsface_(NULL),
-			orientation_()
+			rsface_(NULL)
+			//orientation_()
 	{
 		if (deep)
 		{
 			rsvertex_  = sesface.rsvertex_;
 			rsedge_ =  sesface.rsedge_;
 			rsface_ =  sesface.rsface_;
-			orientation_ = sesface.orientation_;
+			//orientation_ = sesface.orientation_;
 		}
 	}
 
@@ -396,15 +399,15 @@ namespace BALL
 			TRSFace<T>* rsface,
 			const ::std::vector<TSESVertex<T>*>& vertex,
 			const ::std::vector<TSESEdge<T>*> edge,
-			const ::std::vector<bool> orientation,
+			//const ::std::vector<bool> orientation,
 			Index index)
 		throw()
 		: GraphFace< TSESVertex<T>,TSESEdge<T> >(vertex,edge,index),
 			type_(type),
 			rsvertex_(rsvertex),
 			rsedge_(rsedge),
-			rsface_(rsface),
-			orientation_(orientation)
+			rsface_(rsface)
+			//orientation_(orientation)
 	{
 	}
 
@@ -419,8 +422,8 @@ namespace BALL
 			type_(type),
 			rsvertex_(rsvertex),
 			rsedge_(rsedge),
-			rsface_(rsface),
-			orientation_()
+			rsface_(rsface)
+			//orientation_()
 	{
 	}
 
@@ -496,7 +499,7 @@ namespace BALL
 	}
 
 
-	template <class T>
+	/*template <class T>
 	bool TSESFace<T>::getOrientation(Position i) const
 		throw(Exception::IndexOverflow)
 	{
@@ -533,7 +536,7 @@ namespace BALL
 		throw()
 	{
 		orientation_.push_back(orientation);
-	}
+	}*/
 
 
 	template <class T>
@@ -551,6 +554,11 @@ namespace BALL
 		}
 		if (singular == false)
 		{
+			HashSet<TSESVertex<T>*> points;
+			points.insert(vertex_[0]);
+			points.insert(vertex_[1]);
+			points.insert(vertex_[2]);
+			points.insert(vertex_[3]);
 			TSESEdge<T>* edge0;
 			TSESEdge<T>* edge1;
 			TSESEdge<T>* edge2;
@@ -573,23 +581,41 @@ namespace BALL
 			edge2 = edge_[i];								// edge2 = second concave edge
 			p0 = edge0->vertex_[0];
 			p1 = edge0->vertex_[1];
-			TSESEdge<T>* e;
-			if (getEdge(p1,edge2->vertex_[0],e))
+			Size number_of_vertices = points.size();
+			if (number_of_vertices == 4)
 			{
-				edge1 = e;
-				p2 = edge2->vertex_[0];
-				p3 = edge2->vertex_[1];
+				TSESEdge<T>* e;
+				if (getEdge(p1,edge2->vertex_[0],e))
+				{
+					edge1 = e;
+					p2 = edge2->vertex_[0];
+					p3 = edge2->vertex_[1];
+				}
+				else																					//	  	____e3____
+				{																							//     /          \			x
+					getEdge(p1,edge2->vertex_[1],e);						//  p0 \          /p3
+					edge1 = e;																	//      \        /
+					p2 = edge2->vertex_[1];											//    e0|        |e2
+					p3 = edge2->vertex_[0];											//      |        |
+				}																							//      /________\			x
+				getEdge(p0,p3,edge3);													//   p1/   e1     \p2
 			}
 			else
 			{
-				getEdge(p1,edge2->vertex_[1],e);							//	  	____e3____
-				edge1 = e;																		//     /          \			x
-				p2 = edge2->vertex_[1];												//  p0 \          /p3
-				p3 = edge2->vertex_[0];												//      \        /
-			}																								//    e0|        |e2
-			getEdge(p0,p3,e);																//      |        |
-			edge3 = e;																			//      /________\			x
-			edge_[0] = edge0;																//   p1/   e1     \p2
+				if ((p0 == edge2->vertex_[0]) || (p1 == edge2->vertex_[1]))
+				{
+					p2 = edge2->vertex_[1];
+					p3 = edge2->vertex_[0];
+				}
+				else
+				{
+					p2 = edge2->vertex_[0];
+					p3 = edge2->vertex_[1];
+				}
+				getEdge(p1,p2,edge1);
+				getEdge(p0,p3,edge3);
+			}
+			edge_[0] = edge0;
 			edge_[1] = edge1;
 			edge_[2] = edge2;
 			edge_[3] = edge3;
@@ -612,7 +638,7 @@ namespace BALL
 			TSESVertex<T>* p3;
 			TSESVertex<T>* p4;
 			TSESVertex<T>* p5;
-			Position i = 0;
+			Index i = 0;
 			while (edge_[i]->type_ != TSESEdge<T>::TYPE_CONVEX)
 			{
 				i++;
@@ -628,7 +654,7 @@ namespace BALL
 			edge3 = edge_[i];								// edge3 = second convex edge
 			p3 = edge3->vertex_[0];
 			p5 = edge3->vertex_[1];
-			for (i = 0; i < edge_.size(); i++)
+			for (i = 0; i < (Index)edge_.size(); i++)
 			{
 				if ((edge_[i]->vertex_[0] == p0) && (edge_[i] != edge0))
 				{
@@ -637,14 +663,14 @@ namespace BALL
 				}
 				else
 				{
-					if (edge_[i]->vertex_[1] == p0)
+					if ((edge_[i]->vertex_[1] == p0) && (edge_[i] != edge0))
 					{
 						edge1 = edge_[i];
 						p1 = edge1->vertex_[0];
 					}
 				}
 			}
-			for (i = 0; i < edge_.size(); i++)
+			for (i = (Index)edge_.size()-1; i >= 0; i--)
 			{
 				if (((edge_[i]->vertex_[0] == p1) && (edge_[i]->vertex_[1] == p2)) ||
 						((edge_[i]->vertex_[1] == p1) && (edge_[i]->vertex_[0] == p2))		)
@@ -652,7 +678,7 @@ namespace BALL
 					edge2 = edge_[i];
 				}
 			}
-			for (i = 0; i < edge_.size(); i++)
+			for (i = 0; i < (Index)edge_.size(); i++)
 			{
 				if ((edge_[i]->vertex_[0] == p3) && (edge_[i] != edge3))
 				{
@@ -661,14 +687,14 @@ namespace BALL
 				}
 				else
 				{
-					if (edge_[i]->vertex_[1] == p3)
+					if ((edge_[i]->vertex_[1] == p3) && (edge_[i] != edge3))
 					{
 						edge4 = edge_[i];
 						p4 = edge4->vertex_[0];
 					}
 				}
 			}
-			for (i = 0; i < edge_.size(); i++)
+			for (i = (Index)edge_.size()-1; i >= 0; i--)
 			{
 				if (((edge_[i]->vertex_[0] == p5) && (edge_[i]->vertex_[1] == p4)) ||
 						((edge_[i]->vertex_[1] == p5) && (edge_[i]->vertex_[0] == p4))		)
@@ -732,6 +758,24 @@ namespace BALL
 			return false;
 		}
 		return rsedge_->isFree();
+	}
+
+
+	template <class T>
+	bool TSESFace<T>::hasSingularEdges() const
+		throw()
+	{
+		for (Position i = 0; i < edge_.size(); i++)
+		{
+			if (edge_[i] != NULL)
+			{
+				if (edge_[i]->type_ == TSESEdge<T>::TYPE_SINGULAR)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 
