@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.13 2004/07/02 14:02:05 amoll Exp $
+// $Id: stage.h,v 1.14 2004/07/04 13:29:16 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -288,6 +288,14 @@ namespace BALL
 			/// Reset Camera to standard values
 			virtual void clear()
 				throw() { *this = Camera();}
+
+			///
+			String toString() const
+				throw();
+
+			///
+			bool readFromString(const String& data)
+				throw();
 
 			//@}
 			/**	@name Predicates
