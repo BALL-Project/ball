@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.9 2001/02/27 01:58:47 amoll Exp $
+// $Id: INIFile.h,v 1.10 2001/03/01 13:43:10 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -39,6 +39,8 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
+				The state of valid_ is set to false.
+				An instance is valid if it is read or writen succesfully.
 		*/
 		INIFile();
 
@@ -78,6 +80,7 @@ namespace BALL
 				are built (hash tables containing the section names).\\
 				Line starting with '!', ';', or '\#' are treated as comment
 				lines and are stored, but not interpreted.
+				If the file could not be read, valid_ is set to false, ow true.
 				@return	bool \begin{itemize}
 												\item {\bf true} if the file could be opened and read
 												\item {\bf false} otherwise
@@ -86,6 +89,7 @@ namespace BALL
 		bool read();
 
 		/**	Writes the buffer contents to a file.
+				If the file could not be writen, valid_ is set to false, ow true.
 				Not yet implemented!
 				@return	bool - \begin{itemize}
 												\item {\bf true} if the file could be succesfully written
@@ -100,6 +104,7 @@ namespace BALL
 		const String& getFilename() const;
 
 		/**	Sets a new filename.
+				The state of valid_ is set to false.
 				@param	filename String - the new filename
 		*/	
 		void setFilename(const String& filename);
@@ -110,6 +115,7 @@ namespace BALL
 		//@{
 
 		/**	Returns the current state of the instance of INIFile.
+				An instance is valid if it is read or writen succesfully.
 		*/	
 		bool isValid() const;
 
