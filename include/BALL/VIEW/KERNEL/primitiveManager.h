@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.3 2003/09/04 23:14:12 amoll Exp $
+// $Id: primitiveManager.h,v 1.4 2003/12/05 23:53:53 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -135,13 +135,11 @@ namespace BALL
 			List<Representation*> removedComposite(const Composite& composite)
 				throw();
 
-			/** Update after changed composite.
+			/** Get a list of Representation, which were build for a Composite.
 			 		Method is called in MainControl, after receiving CompositeChangedMessage.
-					It will update all representations, which contain the Composite.\par
-					Calls Representation::update()
-					\return a list with the pointers of all changed representations.
+					\return a list with the pointers of representations, which are to be updated.
 			*/
-			List<Representation*> changedComposite(const Composite& composite)
+			List<Representation*> getRepresentationsOf(const Composite& composite)
 				throw();
 
 			protected:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.6 2003/12/02 02:37:36 amoll Exp $
+// $Id: glRenderer.h,v 1.7 2003/12/05 23:53:53 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -147,15 +147,15 @@ namespace BALL
 				throw();
 			
 			///
-			void addRepresentation(const Representation& rep)
+			void buildDisplayListFor(const Representation& rep)
 				throw();
 
 			///
-			void removeRepresentation(const Representation& rep)
+			void removeDisplayListFor(const Representation& rep)
 				throw();
 
 			///
-			void updateRepresentation(const Representation& rep)
+			void rebuildDisplayListFor(const Representation& rep)
 				throw();
 
 			///

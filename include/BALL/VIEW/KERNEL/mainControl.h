@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.19 2003/11/21 01:22:22 amoll Exp $
+// $Id: mainControl.h,v 1.20 2003/12/05 23:53:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -223,11 +223,12 @@ namespace BALL
 			/** Redraws all Representation objects for a Composite.
 					If the Composite is not inserted into this MainControl <tt>false</b> will be returned.
 					updateRepresentationsOf() is called after receiving a CompositeChangedMessage in onNotify().
-					It sends a RepresentationChangedMessage for every Representation, which was build for the Composite.
-					After this a SceneMessage is send to redraw the Scene.
+					It sends a RepresentationChangedMessage for every Representation, which was build for the 
+					Composite.  After this a SceneMessage is send to redraw the Scene.
 					Remember:
-					If you changed a composite in MainControl or a derived class, the MainControl doesnt get notified,
-					from the CompositeChangedMessage, it sends. So you have to call this function instead of sending the message.
+					If you changed a composite in MainControl or a derived class, the MainControl doesnt get 
+					notified, from the CompositeChangedMessage, it sends. So you have to call this function instead 
+					of sending the message.
 					\param  composite the Composite that should be updated
 					\param  rebuild if set to true, the model is rebuilded, otherwise just the coloring is updated
 					\return false if the CompositeManager doesnt contain the Composite

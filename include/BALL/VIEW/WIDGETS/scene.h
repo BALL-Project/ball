@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.12 2003/11/24 23:57:51 amoll Exp $
+// $Id: scene.h,v 1.13 2003/12/05 23:53:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -105,7 +105,6 @@ namespace BALL
 				throw();
 
 			/** Default Constructor.
-					Construct new scene.
 					Initialize the width and height of this scene to <tt> 600</tt> and sets
 					the camera position to:
 					  - camera position set to <tt> Vector(1,0,0)</tt>
@@ -122,9 +121,6 @@ namespace BALL
 					\param      name the name of this scene 
 					\param      flags the flags the scene widget should have 
 											(See documentation of QT-library for information concerning widget flags) 
-					\return     Scene new constructed scene
-					\see        QGLwidget
-					\see        ModularWidget
 			*/
 			Scene(QWidget* parent_widget, const char* name = NULL, WFlags w_flags = 0)
 				throw();
@@ -139,15 +135,17 @@ namespace BALL
 					Calls registerWidget.
 					\param  scene the scene to be copied
 					\param  parent_widget the parent widget of this scene 
-					\param  name the name of this scene (See documentation of QT-library for information concerning widgets)
+					\param  name the name of this scene 
 					\param  flags the flags the scene widget should have 
-					\see    QGLwidget
-					\see    ModularWidget
+									(See documentation of QT-library for information concerning widget flags) 
 			 */
 			Scene (const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
 				throw();
 
-			//@} /** @name Destructors */ //@{
+			//@} 
+			/** @name Destructors 
+			*/ 
+			//@{
 
 			/** Destructor.
 			*/
@@ -165,7 +163,10 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			//@} /**	@name	Assignment */ //@{
+			//@} 
+			/**	@name	Assignment 
+			*/ 
+			//@{
 
 			/** Assignment.
 					Initialize the width, height and camera position.
@@ -185,9 +186,9 @@ namespace BALL
 			*/
 			//@{
 
-			/** Update the visualization of this scene.
-					\param  rebuild_displaylists is set to <tt> true than all the GLDisplayList objects are updated. 
-									If set to <tt> false</tt> only the display is redrawed.
+			/** Update the visualization.
+					\param  rebuild_displaylists is set to true than all GLDisplayList are updated. 
+									If set to false, the display is only redrawed.
 					\see    GLDisplayList
 			*/
 			void update(bool rebuild_displaylists = false)
@@ -225,17 +226,16 @@ namespace BALL
 			//@{
 			
 			/**	Initialize the popup menu <b> Display</b> and the menus of this scene:
-					  - the <b> rotate mode</b> (all mouse actions are attached to rotating, translating and zooming the scene)
+					  - the <b> rotate mode</b> (all mouse actions are attached to rotating, 
+							translating and zooming the scene)
 					  - the <b> picking mode</b> (all mouse actions are attached to picking objects from the scene)
 					\par
-					This method is called automatically	immediately before the main application 
-					is started. 
-					This method will be called by show from the MainControl object.
+					This method is called automatically	immediately before the main application is started 
+					by MainControl::show().
 					\param main_control the MainControl object to be initialized with this scene
 					\see   finalizeWidget
 					\see   insertMenuEntry
 					\see   checkMenu
-					\see   show
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
@@ -280,13 +280,7 @@ namespace BALL
 			//@{
 
 			/** Internal state and consistency self-validation.
-					If the internal state of this scene is correct 
-					(self-validated) and consistent <tt> true</tt> is returned, <tt> false</tt> otherwise. 
-					this scene is valid if:
-						- this scene has a parent
-					\par
-					\return			bool <tt> true</tt> if the internal state of this scene is correct (self-validated) and consistent,
-					 						<tt> false</tt> otherwise
+					A Scene is valid if it has a parent.
 			*/
 			virtual bool isValid() const
 				throw();
@@ -344,7 +338,7 @@ namespace BALL
 			GLRenderer& getGLRenderer_()
 				throw() { return gl_renderer_;}
 			
-//			protected:
+			protected:
 
 			//@}
 			/** @name Protected QT overridden virtual methods
