@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.23 2000/08/29 15:50:58 oliver Exp $
+// $Id: composite.C,v 1.24 2000/08/30 11:20:44 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -770,8 +770,14 @@ namespace BALL
 		}
 
 		// update modification time stamps
-		previous_->stamp(MODIFICATION);
-		next_->stamp(MODIFICATION);
+		if (previous_ != 0)
+		{
+			previous_->stamp(MODIFICATION);
+		}
+		if (next_ != 0)
+		{
+			next_->stamp(MODIFICATION);
+		}
 		stamp(MODIFICATION);
 	}
 
@@ -824,8 +830,14 @@ namespace BALL
 		}
 
 		// update modification time stamps
-		previous_->stamp(MODIFICATION);
-		next_->stamp(MODIFICATION);
+		if (previous_ != 0)
+		{
+			previous_->stamp(MODIFICATION);
+		}
+		if (next_ != 0)
+		{
+			next_->stamp(MODIFICATION);
+		}
 		stamp(MODIFICATION);
 	}
 
