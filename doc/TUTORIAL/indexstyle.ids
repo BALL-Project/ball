@@ -1,0 +1,48 @@
+%%
+%% This is file `bbind.ist',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% bbidxglo.dtx  (with options: `idx')
+%% This file is part of the babel package, version 3.6
+%% ---------------------------------------------------
+%% 
+%% Copyright (C) 1997 Johannes Braams. All rights reserved.
+%% 
+%% This file is a style file for the MakeIndex program
+%% 
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%actual '='
+%quote '!'
+%%level '>'
+%page_compositor "."
+%preamble
+%"\n \\begin{theindex} \n "
+%postamble
+%"\n\n \\end{theindex}\n"
+%item_x1   "\\efill \n \\subitem "
+%item_x2   "\\efill \n \\subsubitem "
+delim_0   "\\dotfill "
+delim_1   "\\dotfill "
+delim_2   "\\dotfill "
+heading_prefix   "{\\graybox{\\hspace{-3pt}\\makebox[\\linewidth][c]{\\bfseries "
+heading_suffix   "}}\\hspace{-3pt}}\\nopagebreak\n"
+headings_flag       1
+%% 
+%%
+%% End of file `bbind.ist'.

@@ -1,0 +1,53 @@
+\documentclass[12pt,twoside]{report}
+
+\author{Oliver Kohlbacher}
+\title{
+	\begin{center}
+		\includegraphics[width=10cm]{logo.eps}
+	\end{center}
+	\Huge How to BALL\\ 
+	\Large A Tutorial
+}
+
+\include{macros}
+\pagestyle{fancyplain}
+\sloppy
+\makeindex
+
+\begin{document}
+\maketitle
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\tableofcontents
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\chapter{Introduction}
+\label{chapter:introduction}
+\include{introduction}
+
+\chapter{Getting Started}
+\label{chapter:getting-started}
+\include{installation}
+\include{testing}
+
+
+\chapter{First Steps With BALL}
+\label{chapter:first-steps}
+\include{example1}
+\include{example2}
+
+
+\chapter{FAQ}
+\label{chapter:faq}
+\include{faq}
+
+
+\newpage
+\addtocontents{toc}{\protect\contentsline{chapter}{Index}{\thepage}}
+\printindex
+\include{bib/bibliography}
+
+
+\end{document}

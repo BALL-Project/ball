@@ -1,0 +1,183 @@
+\section{System Requirements}
+
+\paragraph{Compiler}
+\index{compiler}
+  BALL requires an ANSI compliant \CPP compiler or GNU gcc
+  (version above 2.95 or above).
+  It has been successfully built and tested on the following platforms:
+	\begin{itemize}	
+    \item Linux 2.0 using g++ 2.95.1 and 2.95.2
+    \item Solaris 2.6 and 7/SPARC using g++ 2.95.2
+    \item Solaris 7/SPARC using Kuck \& Associate (KAI) \CPP 3.4g
+    \item Solaris 7/x86 using g++ 2.95.2
+    \item IRIX 6.5 using CC 7.3.1.1m 
+	\end{itemize}
+
+\paragraph{External software and libraries}
+The compilation of the visualization component BALLVIEW also requires
+the QT library (version 2.x) which is available from
+\URL{http://www.troll.no/qt}.
+
+If QT was not installed in one of the standard library paths or the
+QT header files were not installed in one of the compiler's default
+include directories, use "\option{--with-qt-libs}{\tt{}=DIR}" and
+"\option{--with-qt-incl}{\tt{}=DIR}" as
+options to configure (see Section \ref{section:building-ball}) to specify the paths
+QT was installed to.\index{QT}
+Please remember to compile also \file{libqgl.a}, which is one of the QT extensions
+(to build \file{libqgl.a}, cd to {\tt\nobreak{\$QTDIR/extensions/opengl/src}} and type {\tt
+make}).
+
+QT also requires OpenGL. On platforms that do not provide OpenGL, MESA can
+be used (e.g. Linux). Mesa is a 3-D graphics library with an API which is 
+very similar to that of OpenGL. It can be obtained from \URL{http://www.mesa3d.org}.
+\index{MESA}
+If MESA is used, please call configure with the option "\option{--with-mesa}"
+
+\section{Installation}
+\label{section:building-ball}
+
+Building BALL is very easy, but please read through this section carefully to
+avoid any problems.  If all requirements stated above are met, BALL is built
+by issuing the following commands in the directory {\tt BALL/source}:
+
+\begin{lstlisting}{}
+  ./configure
+  make
+\end{lstlisting}
+
+The following sections give further details on the configuration of the library,
+on the library files created, how to test the library, and how to build BALL 
+applications.
+
+\subsection{Configuring BALL}
+\index{configure!usage}
+
+"{\tt configure}" tries to gather as much information on your system as possible and 
+then creates the necessary configuration files (\file{config.h},
+\file{config.mak}, \file{common.mak}, and \file{Makefile}).
+The configuration of BALL may be adapted to your needs and to your system
+configuration from the command line by adding one or more of the options from
+Table \ref{table:options}.
+An overview of these options can also be obtained by executing "{\tt configure
+--help}"
+
+\begin{table}
+\begin{center}
+\begin{tabular}{lp{7cm}}\hline
+  \option{--x-includes}{\tt{}=DIR}&        X include files are in DIR\\\vspace{3mm}
+
+  \option{--x-libraries}{\tt{}=DIR}&       X library files are in DIR\\\vspace{3mm}
+
+  \option{--enable-optimization}& optimize the library for speed. Remove debug info\\\vspace{3mm}
+
+  \option{--disable-debuginfo}& remove -g from the compiler flags (omit debug information)\\\vspace{3mm}
+
+  \option{--disable-BALLVIEW}& disable the compilation of BALLVIEW, the visualization
+												component\\\vspace{3mm}
+
+  \option{--enable-64}&             build 64 bit objects (currently only supported for IRIX MipsPro 
+                          compiler and SUNPro compiler)\\\vspace{3mm}
+
+  \option{--with-compiler}{\tt{}=CXX}&     use CXX to compile BALL\\\vspace{3mm}
+
+  \option{--with-cxxflags}{\tt{}=FLAGS}&   add \CPP compiler FLAGS to compile BALL\\\vspace{3mm}
+
+  \option{--with-ldflags}{\tt{}=FLAGS}&    add FLAGS to the linker flags used to link the library and
+        									                 applications\\\vspace{3mm}
+
+  \option{--with-qt-incl}{\tt{}=DIR}&      QT header files are in DIR\\\vspace{3mm}
+
+  \option{--with-qt-libs}{\tt{}=DIR}&      QT libraries are in DIR\\\vspace{3mm}
+
+  \option{--with-opengl-incl}{\tt{}=DIR}&  OpenGL/Mesa header files are in DIR/GL\\\vspace{3mm}
+
+  \option{--with-opengl-libs}{\tt{}=DIR}&  	OpenGL/Mesa libraries are in DIR/GL\\\vspace{3mm}
+
+  \option{--with-mesa}&    				         	use MESA instead of OpenGL
+								                  	       	If this option is specified, configure looks for libMesaGLU/libMesaGL.
+									                         	If no libraries with these names are found, configure looks for
+                  									       	libGLU and libGL.
+									                         	This switch also add X11 libraries when trying to link agains the Mesa
+									                         	libraries.\\\vspace{3mm}
+
+  \option{--without-libxnet}&							 	use \Index{libsocket}/\Index{libnsl} for linking
+										  										 	rather than \Index{libxnet}
+							  	                         	this option is useful if some of your libraries (e.g. X11 libs)
+									                         	were linked against libsocket/libnsl
+																					 	\\\vspace{3mm}
+
+  \option{--help}&                  display help information\\\hline
+\end{tabular}
+\end{center}
+\caption{options for {\tt configure}}
+\label{table:options}
+\end{table}
+
+For example, to compile BALL without the visualization component BALLVIEW,
+specify 
+\begin{lstlisting}{}
+  configure --without-BALLVIEW
+\end{lstlisting}
+
+To include BALLVIEW using the QT installation in /opt/qt/lib and /opt/qt/include, specify
+
+\begin{lstlisting}{}
+  configure --with-qt-libs=/opt/qt/lib 
+		--with-qt-incl=/opt/qt/include
+\end{lstlisting}
+
+If Mesa should be used (when compiling under Linux), the correct options might look
+like this:
+
+\begin{lstlisting}{}	
+  configure --with-qt-libs=/opt/qt/lib 
+		--with-qt-incl=/opt/qt/include --without-opengl
+    --with-opengl-libs=/opt/mesa/lib 
+		--with-opengl-incl=/opt/mesa/include}
+\end{lstlisting}
+
+\subsection{Building the Libraries}
+
+After the successful termination of configure, "make" builds the shared libraries.
+There exist three different libraries:
+\begin{center}
+	\begin{tabular}{ll}
+  	\file{libBALL.so}&     the main BALL library\\
+  	\file{libVIEW.so}&     the visualization component BALLVIEW\\
+	  \file{libMOLVIEW.so}&  the molecule--related stuff of BALLVIEW\\
+	\end{tabular}
+\end{center}
+
+The latter two libraries are not built if "\option{--without-BALLVIEW}" is specified or configure
+cannot find X libraries, OpenGL libraries, or QT libraries (and the respective headers).
+
+It is also possible (although not recommended) to build the corresponding static libraries
+\file{libBALL.a}, \file{libVIEW.a}, and \file{libMOLVIEW.a} using "{\tt make
+staticlibs}".
+
+\subsection{Installing the Libraries}
+
+After compiling the libraries, they are installed in {\tt BALL/lib/\${BINFMT}/}
+when calling "{\tt make install}" where {\tt \${BINFMT}} is the binary format
+as determined by {\tt configure}.  Currently, the only way to install the
+libraries somewhere else is by moving them by hand to the desired destination.
+Wherever you install the shared libraries, please make sure to include their
+location in the \Index{{\tt LD\_LIBRARY\_PATH}} environment variable.
+
+If you are using \Index{csh}, \Index{tcsh}, or similar shells, use the command
+\begin{lstlisting}{}
+   setenv LD_LIBRARY_PATH DIR
+\end{lstlisting}
+
+\noindent to set the library path. If you are using \Index{sh}, \Index{bash},
+or related shells, try
+
+\begin{lstlisting}{}   
+   LD_LIBRARY_PATH=DIR
+   export LD_LIBRARY_PATH
+\end{lstlisting}
+
+If you installed the shared libraries in a directory that the dynamic linker
+\Index{ld} searches by default, it is not necessary to set {\tt
+LD\_LIBRARY\_PATH}.

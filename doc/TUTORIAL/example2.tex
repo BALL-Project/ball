@@ -1,0 +1,95 @@
+\section{Handling proteins}
+
+In the second example we take a step towards real world applications. Instead
+of constructing our own molecules, we now read a protein from a \newterm{PDB
+file}. The PDB format~\cite{PDB} is a standardized file format for molecular structure
+data. In our case, we will read BPTI (bovine pancreatic trypsin inhibitor), a
+small protein:
+
+\begin{lstlisting}{}
+	PDBFile infile("bpti.pdb");
+	System S;
+	infile >> S;
+	infile.close();
+\end{lstlisting}
+
+\noindent
+In the first line, we create a \class{PDBFile} object and assign it to a file
+named {\tt bpti.pdb}. Then we create an empty system {\tt S} and read the
+contents of the PDB file into the system using the stream operator {\tt <<}.
+The use of the stream operators is common to all file formats in BALL (see
+also the first example). So you can easily replace the different file formats
+by changing just the type of the {\tt infile} object (\eg replace it by
+\class{HINFile} to read HyperChem files).
+
+We can now verify whether the file was correctly read. BPTI should have 594
+atoms. The number of atoms in any kernel object that might contain atoms (\ie
+all classes that are derived from \class{BaseFragment}) is obtained by calling
+\method{countAtoms}:
+
+\begin{lstlisting}{}
+	cout << "# of atoms in BPTI: " << S.countAtoms() << endl;
+\end{lstlisting}
+
+Now, we are interested in the sequence of BPTI. Since BPTI contains only a
+single chain, we might just traverse all residues of this chain and write
+their names to {\tt cout}. This is done by \newterm{iterators}. Iterators are
+objects that can be used to traverse container objects (\eg lists, arrays, or
+-- in our case -- proteins). Iterators ``point'' to an element of a container
+object. They may be incremented to get the next element and they may be
+derferenced similar to pointers by using {\tt *} or {\tt ->}. In fact,
+C pointers can be thought of as iterators.
+The use of iterators in BALL is similar to the
+use of iterators in the \newterm{Standard Template Library} (\Index{STL}).
+But there is a significant difference. STL containers usually contain objects of
+one single type (\eg a list of strings). In BALL kernel objects, this is
+different. A system may contain atoms, proteins, molecules, residues, etc.
+This leads to a difference in the interface. A typical for loop using STL
+iterators to access all elements of a list looks as follows:
+
+\begin{lstlisting}{}
+	list<string> string_list = ...;
+	list<string>::iterator list_it;
+	
+	for (list_it = string_list.begin(); 
+			 list_it != string_list.end();
+			 ++list_it)
+	{
+		cout << *list_it << endl;
+	}
+\end{lstlisting}
+
+\noindent
+Here, we use a list iterator ({\tt list\_it}) to traverse the whole list ({\tt
+string\_list}). The method {\tt begin()} returns an iterator that points to the
+first element of the list. In the {\tt for} loop we increment the iterator
+until it equals the iterator returned by {\tt end()}. This method returns a
+past--the--end iterator, \ie the value an iterator assumes that is incremented
+while pointing to the last element of the container. In the body of the {\tt
+for} loop, we access the list element the iterator points to using the {\tt *}
+operator.
+
+Traversing a BALL kernel data structure is as simple as traversing a list with
+STL. But unlike STL containers, the kernel objects may contain a variety of
+different objects. SO we have to define over which objets we want to iterate.
+For example iterating over all residues of our system requires a
+\class{ResidueIterator}. Clearly, we also need different {\tt begin()} and
+{\tt end()} methods for all data types. Hence, the loop that prints the
+sequence of our protein reads as follows:
+
+\begin{lstlisting}{}
+	ResidueIterator res_it;
+	for (res_it = S.beginResidue(); 
+			 res_it != S.endResidue();
+			 ++res_it)
+	{
+		cout << res_it->getName() << endl;
+	}
+\end{lstlisting}
+
+\noindent
+This loop iterates over all residues in {\tt S} and uses the method {\tt
+Residue::}\method{getName()} to access the residues name. All proteins and
+residues are traversed in the order in which they appear in the PDB file.
+Since the PDB format requires the residues to start with the N-terminus,
+the sequence is printed  in the correct order (N-terminus to C-terminus).

@@ -1,0 +1,238 @@
+\section{Building molecules}
+
+Since BALL is intended for Molecular Modeling, the classes representing atoms,
+bonds, and molecules are of central importance. In this first example, we will
+construct a water molecule ``by hand'' to illustrate the use of these classes.
+Typical applications would read molecular structures from a file. This will be
+shown in the second example.
+
+\noindent
+To start the construction of a water molecule, we first create an (empty)
+\Index{atom}. Atoms are represented by the class \class{Atom}.
+
+\begin{lstlisting}{}
+	Atom* oxygen = new Atom;
+\end{lstlisting}
+	
+\noindent
+Atoms have a number of attributes. These attributes are set to their defaults
+for our new atom. The following table lists the attributes of an atom along
+with its \newtermdef{accessors} (methods to access or modify and attribute) and default values.
+\begin{center}
+	\begin{tabular}{llc}
+	attribute		&	accessors     		& default\\
+	\hline
+	name				& set/getName				& {\tt ""}\\
+	element			& set/getElement    & {\tt Element::UNKNOWN}\\
+	charge			& set/getCharge			& 0.0\\
+	radius			& set/getRadius			& 0.0\\
+	type name   & set/getTypeName   & {\tt ""}\\
+	type        & set/getType       & {\tt Atom::INVALID\_TYPE}\\
+	position    & set/getPosition   & (0, 0, 0)\\
+	velocity    & set/getVelocity   & (0, 0, 0)\\
+	force		    & set/getForce		  & (0, 0, 0)
+	\end{tabular}
+\end{center}
+
+\noindent
+For example, we can assign the \Index{element} for our new atom:
+
+\begin{lstlisting}{}
+	oxygen->setElement(PSE[Element::O]);
+\end{lstlisting}
+
+
+\noindent
+The expression {\tt PSE[\class{Element}::O]} returns an instance of class
+\class{Element}. It is assigned to our atom using the \method{setElement}
+method. We leave our it at the default position (0, 0, 0) and create two hydrogen atoms:
+
+\begin{lstlisting}{}
+	Atom* hydrogen1 = new Atom;
+	Atom* hydrogen2 = new Atom;
+	hydrogen1->setElement(PSE[Element::H]);
+	hydrogen2->setElement(PSE[Element::H]);
+\end{lstlisting}
+	
+\noindent
+Now we have to assign the correct coordinates to the two hydrogen atoms.
+the method \method{setPosition} takes an instance of \class{Vector3} as an
+argument. This class is used to represent coordinates and vectors in
+three--dimensional space. We can assign the coordinates as follows:
+ 
+\begin{lstlisting}{}
+ 	hydrogen1->setPosition(Vector3(-0.95, 0.00, 0.0));
+ 	hydrogen2->setPosition(Vector3( 0.25, 0.87, 0.0));
+\end{lstlisting}
+
+\noindent
+The \method{setPosition} method takes an objects of type \class{Vector3} as an
+argument. This class is used throughout BALL to represent coordinates and
+vectors. As shown in this example, an object of type \class{Vector3} can be
+constructed from three floating point numbers which represent the x, y, and z
+coordinates.
+
+Now, our three atoms are of the right type and at the right positions. However, we
+do not yet have a molecule, so let's create one:\\
+
+\begin{lstlisting}{}
+	Molecule* water = new Molecule;
+\end{lstlisting}
+
+\noindent
+Molecules are representd by the \class{Molecule} class. Each instance of this
+class may contain an arbitrary number of atoms. Using the \method{insert}
+method, we can construct a molecule from our atoms:
+
+\begin{lstlisting}{}
+	water->insert(*oxygen);
+	water->insert(*hydrogen1);
+	water->insert(*hydrogen2);
+\end{lstlisting}
+
+\noindent
+For a complete water molecule, we still need two \index{bonds}. This can be
+achieved with the method \method{createBond}:
+	
+\begin{lstlisting}{}
+	oxygen->createBond(*hydrogen1);
+	oxygen->createBond(*hydrogen2);
+\end{lstlisting}
+
+\noindent
+To verify that everything worked as expected, we might print the number of
+atoms in the molecule or the number of bonds for each atom:
+	
+\begin{lstlisting}{}
+	cout << "# of atoms in water: " 
+ 			 << water->countAtoms() << endl;
+	cout << "# of bonds in O: " 
+			 << oxygen->countBonds() << endl;
+	cout << "# of atoms in H1: " 
+		   << hydrogen1->countBonds() << endl;
+	cout << "# of atoms in H2: " 
+			 << hydrogen2->countBonds() << endl;
+\end{lstlisting}
+
+\noindent
+The method \method{countAtoms} is available for all kernel classes and returns
+the total number of atoms for this object. The method \method{countBonds}
+returns the number of bonds the atom shares. An atom can have at most eight
+bonds.
+
+We can also verify the bond distances:
+\begin{lstlisting}{}
+	Vector3 bond_vector = oxygen->getPosition() 
+										    - hydrogen1->getPosition();
+
+	cout << "bond distance: " 
+			 << bond_vector.getLength() << endl;
+\end{lstlisting}
+	
+\noindent
+\method{getPosition} is the complementary method of \method{setPosition}: it
+returns the current position of an atom. The return value is again of type
+\class{Vector3}.
+The vector class provides a powerful functionality. Due to operator overloading
+the syntax is very readable. The length of a vector is returned by the
+\method{getLength} method. 
+
+Water molecules seldom occur alone, so we are going to create further water.
+All BALL kernel classes are container classes and support \newterm{deep
+copying}, \ie when assigned or copy constructed their contents are copied as
+well. So, we can easily create a new water molecule:
+
+\begin{lstlisting}{}
+	Molecule* water2 = new Molecule(*water);
+\end{lstlisting}
+	
+\noindent
+This molecule is an exact copy of our original water molecule. Especially, the
+atoms have the same position as in the original. So we want to shift the whole
+molecule to another position.  In principle, we could access all atoms in the
+copy and add a constant translation vector to their position. However, there
+is a simpler way. BALL provides so--called \newterm{processors}. These
+processors may be applied to any of the kernel objects and perform an
+operation on any objects they encounter. For example the
+\class{TranslationProcessor} performs a simple translation on every atom it
+finds. The use of the processors is very simple.  All kernel classes define an
+\method{apply} method wich takes a processor as an argument. In order to
+translate our second water molecule by a certain distance, we first create a
+\class{TranslationProcessor}:
+
+\begin{lstlisting}{}
+	TranslationProcessor translation(Vector3(5, 0, 0));
+\end{lstlisting}
+	
+\noindent
+The translation vector is specified as the argument of the constructor. Now we
+may translate the atoms of our water molecule by a simple call to \method{apply}
+
+\begin{lstlisting}{}
+	water2->apply(translation);
+\end{lstlisting}
+
+\noindent
+Another important kernel class besides atoms and molecules is \class{System}.
+A system is a collection of atoms, molecules, or any other kernel objects. For
+example, we can store our two water molecules in a system object:
+
+\begin{lstlisting}{}
+	System S;
+	S.insert(*water);
+	S.insert(*water2);
+\end{lstlisting}
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\textwidth]{tut1_screenshot}
+	\caption{Screenshot of MolVIEW showing the result of the first example
+					 ({\tt tutorial1.C})}
+	\label{fig:tut1-screenshot}
+\end{figure}
+\noindent
+We can now manipulate the two water molecules simultaneously. For example a
+further application of the translation processor to the system would apply
+the translation to both molecules.
+But now we would like to have a look at what we built. So we might write our
+system to a file and inspect it with a molecule viewer (\eg MolVIEW).
+BALL supports a variety of file formats. For example we could write the system
+to a HyperChem HIN file~\cite{HyperChem}:
+\begin{lstlisting}{}
+	HINFile outfile("water.hin", ios::out);
+	outfile << S;
+	outfile.close();
+\end{lstlisting}
+\noindent
+These three lines of code create a \class{HINFile} object which is used to
+read and write HyperChem files. The first line opens a file named {\tt
+water.hin} for output ({\tt ios::out}, if the second argument is omitted the
+file is opened for reading).
+The second line uses the stream operator {\tt <<} to write the contents
+of system {\tt S} to this file. Finally, the file is closed in the third line.
+
+Finally, we have to delete all the objects we created. This is very simple:
+
+\begin{lstlisting}{}
+	delete S;
+\end{lstlisting}
+
+\noindent 
+As all molecules and atoms we created are inside the system, they are deleted
+automatically as soon as the system is deleted.
+
+If this short program is run (the complete source is in {\tt
+tutorial1.C}) it creates the following output:
+
+\begin{lstlisting}[frameround=]{}
+	# of atoms in water: 3
+	# of bonds in O: 2
+	# of atoms in H1: 1
+	# of atoms in H2: 1
+	bond distance: 0.95
+\end{lstlisting}
+
+\noindent
+It also creates a file named {\tt water.hin} which contains the two water
+molecules. Fig.~\ref{fig:tut1-screenshot} shows the contents of this file
+in the MolVIEW viewer.

@@ -1,0 +1,314 @@
+%-----------------------------------------
+% used packages
+%-----------------------------------------
+\usepackage{a4}
+% use A4 paper
+
+%\usepackage[draft]{graphicx}
+\usepackage{graphicx}
+% use graphics pacakge
+
+\usepackage{times}
+% use postscript fonts
+
+\newcommand{\sbseries}{\fontseries{sb}}
+% semibold: bold is TOO fat in the index
+
+
+\usepackage{psboxit}
+\newcommand{\graybox}[1]{\psboxit{box .85 setgray fill}{\fbox{#1}}}
+% display gray shaded boxes using postscript commands
+%
+
+
+%-----------------------------------------
+% quote environment for quatations
+%-----------------------------------------
+% in part stolen from LaTeX companion
+\usepackage{ifthen}
+\newsavebox{\QuoteNameBox}
+\newenvironment{Quote}[1]%
+	{%
+		\sbox{\QuoteNameBox}{{\it #1}}%
+		\begin{list}{}{%
+			\setlength{\rightmargin}{\leftmargin}}%
+				\item[]``\ignorespaces}%
+	{\unskip''\hfill \usebox{\QuoteNameBox}\end{list}}
+
+
+\usepackage{changebar}
+% This package defines the two commands \cbstart and \cbend. It then displays a
+% bar between the start and the end command
+
+\usepackage{color}
+% This package allows the coloring of text (e.g. in an ipe minipage)
+
+\usepackage{float}
+% the float package allows a better placement of all floats (figures,tables) or
+% even new floats it allows the following kinds of boxes:
+% \shadowbox, \doublebox, \ovalbox, \Ovalbox
+
+\makeatletter
+	\renewcommand{\@makecaption}[2]{
+		\vspace{3pt}
+		\noindent{\color{blue}\rule{\textwidth}{1pt}}\par
+		\noindent{\small{\sffamily #1:}\hspace{5pt}\itshape #2\par}
+		\vspace{5pt}
+	}
+\makeatother
+% 
+%  create a fancy float caption: 
+%    - blue rule under the float
+%    - the figure text set in sans serif
+%    - the caption text in italics
+
+\setcounter{topnumber}{1}
+\setcounter{bottomnumber}{1}
+%
+%  	some settings for the floats: just on float at the
+%		top of a page and on at the bottom
+
+	
+%-----------------------------------------
+% Font definitions 
+%-----------------------------------------
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+
+%-----------------------------------------
+% Textlayout 
+%-----------------------------------------
+
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
+
+%\usepackage{a4wide}
+\setlength{\textheight}{21cm}
+\setlength{\textwidth}{14.5cm}
+\setlength{\oddsidemargin}{10mm}
+\setlength{\evensidemargin}{2mm}
+\setlength{\topmargin}{0mm}
+%\setlength{\marginparsep}{5mm}
+%\setlength{\marginparwidth}{2cm}
+%\renewcommand{\baselinestretch}{1.21}
+\large\normalsize
+
+%-----------------------------------------
+% some shorthands
+%-----------------------------------------
+
+\providecommand{\R}{\mathbb R}
+\providecommand{\Q}{\mathbb Q}
+\providecommand{\N}{\mathbb N}
+\providecommand{\Z}{\mathbb Z}
+
+%-----------------------------------------
+% redefinitions of sectioning comands
+%-----------------------------------------
+
+\usepackage{fancyheadings}
+% allows you an easy adaption of the headings
+
+\usepackage{fancybox}
+% you can use shaded boxes e.g. for figures it allows the following kinds of boxes:
+% \shadowbox, \doublebox, \ovalbox, \Ovalbox
+
+\addtolength{\headrulewidth}{0.2pt}
+\addtolength{\footrulewidth}{0.6pt}
+\addtolength{\headwidth}{1cm}
+\addtolength{\footskip}{10mm}
+\addtolength{\headsep}{5mm}
+\addtocounter{secnumdepth}{2}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\renewcommand{\chaptermark}[1]{\hfill\markboth{#1}{}\hfill}
+\renewcommand{\sectionmark}[1]{\hfill\markright{\thesection\ #1}\hfill}
+\lhead{}
+\rhead{}
+\chead[\fancyplain{}{\textrm{\leftmark}}]%
+      {\fancyplain{}{\textrm{\rightmark}}}
+\cfoot{}
+\rfoot[\fancyplain{}{}]{\fancyplain{}{\bfseries\thepage}}
+\lfoot[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{}}
+
+
+% the \chapter ...
+\makeatletter
+%\renewcommand\thesection 			{{\sffamily\thechapter.\@arabic\c@section}}
+%\renewcommand\thesubsection   {{\sffamily\thesection.\@arabic\c@subsection}}
+%\renewcommand\thesubsubsection{{\sffamily\thesubsection.\@arabic\c@subsubsection}}
+\renewcommand{\@chapapp}{\sffamily}
+%\renewcommand\section{\@startsection {section}{1}{\z@}%
+%	{-3.5ex \@plus -1ex \@minus -.2ex}%
+%	{2.3ex\@plus.2ex}%
+%	{\normalfont\Large\sffamily\bfseries}
+%}
+%\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+%	{-3.25ex\@plus-1ex \@minus -.2ex}%
+%	{1.5ex \@plus .2ex}%
+%	{\normalfont\large\sffamily\bfseries}
+%}
+%\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+%	{-3.25ex\@plus-1ex \@minus -.2ex}%
+%	{1.5ex \@plus .2ex}%
+%	{\normalfont\normalsize\sffamily\bfseries}
+%}
+\makeatother
+
+%-----------------------------------------
+% macro for missing pieces
+%-----------------------------------------
+\usepackage{changebar}
+\newcommand{\missing}[1]{
+	\cbstart  % add a gray bar at the side of the page
+	\message{^^JMISSING: #1^^J}
+	\par\noindent\fbox{{\bf MISSING:} #1}\par
+	\cbend
+}
+
+%-----------------------------------------
+% rules for figures
+%-----------------------------------------
+
+\topfigrule
+\botfigrule
+\setlength{\shadowsize}{2pt}
+
+%-----------------------------------------
+% some shorthands
+%-----------------------------------------
+
+\usepackage{xspace}
+% you should use \xspace in defining shorthands 
+% e.g. \newcommand{\eg}{e.g., \xspace} \@ is for the correct spacing after punctuation
+
+\newcommand{\eg}{{\it e.g.}\xspace}
+\newcommand{\ie}{{\it i.e.}\xspace}
+\newcommand{\ea}{{\it et al.}\xspace}
+\newcommand{\etc}{{\it etc.}\xspace}
+\def\CPP{C\raise.08ex\hbox{\tt ++}\xspace}
+
+
+%-----------------------------------------
+% the index
+%-----------------------------------------
+\usepackage{makeidx}
+
+\newcommand{\Index}[1]{#1\index{#1}}
+% prints the term and creates an index entry
+
+\newcommand{\class}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
+(BALL~class)}\index{BALL!classes!#1@{\ttfamily\sbseries{#1}}}}
+% BALL class names are typeset in typewriter bold and indexed automatically:
+%  - first with their class name
+%  - then under BALL!classes!<classname>
+
+\newcommand{\STLclass}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
+(STL~class)}\index{STL!#1 class@{\ttfamily\sbseries{#1}}}}
+% STL class names are typeset in typewriter bold and indexed automatically:
+%  - first with their class name
+%  - then under STL!<classname> class
+
+\newcommand{\function}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
+(BALL~function)}\index{BALL!functions!#1@{\ttfamily\sbseries{#1}}}}
+% BALL function names are typeset in typewriter bold and indexed automatically:
+%  - first with their name
+%  - then under BALL!functions!<function name>
+
+\newcommand{\method}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
+(method)}\index{BALL!functions!#1@{\ttfamily\sbseries{#1}}}}
+% method names are typeset in typewriter bold and indexed automatically:
+%  - first with their name
+%  - then under BALL!methods!<function name>
+
+\newcommand{\attribute}[2]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#2}}
+({\ttfamily\sbseries #1} attribute)}\index{BALL!!#1!#2@{\ttfamily\sbseries{#1}}}}
+% attribute names are typeset in typewriter bold and indexed automatically:
+%  - first with their name and (<class> attribute)
+%  - then under BALL!<class>!<attribute>
+
+\newcommand{\macro}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
+(BALL~macro)}\index{BALL!macros!#1@{\ttfamily\sbseries{#1}}}}
+% BALL macros names are typeset in typewriter bold and indexed automatically:
+%  - first with their name
+%  - then under BALL!macros!<macro name>
+
+\newcommand{\namespace}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
+(BALL~namespace)}\index{BALL!namespaces!#1@{\ttfamily\sbseries{#1}}}}
+% BALL macros names are typeset in typewriter bold and indexed automatically:
+%  - first with their name
+%  - then under BALL!namespaces!<name>
+
+\newcommand{\type}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
+(BALL~type)}\index{BALL!types!#1@{\ttfamily\sbseries{#1}}}}
+% BALL macros names are typeset in typewriter bold and indexed automatically:
+%  - first with their name
+%  - then under BALL!types!<macro name>
+
+\newcommand{\file}[1]{
+	{\ttfamily\sbseries{#1}}
+	\index{#1@{\ttfamily\sbseries{#1}} (file)}
+}
+% BALL file names are typeset in typewriter bold and indexed automatically:
+% with their name and "(file)" appended
+
+\newcommand{\option}[1]{
+	{\ttfamily\sbseries{#1}}
+	\index{configure!options!#1@{\ttfamily\sbseries{#1}}}
+}
+% BALL file names are typeset in typewriter bold and indexed automatically:
+% as configure/options/<name>"
+
+\newcommand{\exception}[1]{{\ttfamily\sbseries{#1}}\index{#1@{\ttfamily\sbseries{#1}}
+(BALL~class)}\index{BALL!exceptions!#1@{\ttfamily\sbseries{#1}}}}
+% BALL exceptions names are typeset in typewriter bold and indexed automatically:
+%  - first with their name
+%  - then under BALL!exceptions!<exception name>
+
+\newcommand{\newtermdef}[1]{{\em #1}\index{#1!definition}}
+% prints the term in italics and includes creates an index entry
+% with the subentry "definition"
+
+\newcommand{\newterm}[1]{{\em #1}\index{#1}}
+% prints the term in italics and creates an index entry
+
+\newcommand{\URL}[1]{{\bfseries\ttfamily\nobreak{#1}}}
+\newcommand{\email}[1]{{\bfseries\ttfamily\nobreak{#1}}}
+
+%--------------------------------------------
+%  the style of embedded listings
+%--------------------------------------------
+\usepackage{listings}
+% formatting of the listings
+\lstset{
+	%% we use ANSI C++
+	language=[ANSI]C++,
+%
+	%% our tabs are always expanded to 2 blanks
+	tabsize=2,
+%
+	%% the font size of the listing
+	basicstyle=\small\ttfamily,
+%
+	%% make the listing as wide as \textwidth
+	spread=-0.3cm,
+%
+	%% draw a line at the left of the listing
+	frame=tlrb,
+%
+	%% captions appear at the bottom of the listing
+	%captionpos=b,
+%
+	%% and make the corners of the frame round
+	frameround=tttt,
+%
+	%% the label font
+	labelstyle=\sffamily,
+%
+	%% line numbers for each line
+	labelstep=0
+}
+\newcommand{\linelisting}{\lstinline[frame=,basicstyle=\small]}

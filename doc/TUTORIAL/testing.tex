@@ -1,0 +1,31 @@
+\section{Testing the Library}
+\index{testing}
+\index{test programs}
+
+BALL provides an extensive suite of test programs to ensure the correctness of
+the code on all platforms. This test suite requires a lot of patience since
+the compilation takes quite some time. However, we recommend to run these
+tests to ensure that the library is fully operational. At the moment, the test
+suite does not yet cover all functionality of BALL, but only some chosen
+classes.  The test programs are located in the directory {\tt
+BALL/source/TEST}.  To compile and run the test suite, use "{\tt make test}".
+Please make sure that {\tt LD\_LIBRARY\_PATH} is correctly set, otherwise the
+execution of the test programs will fail.
+
+Each of the test programs tests one or more classes of BALL. When a test
+program (\eg~{\tt Atom\_test}) is run, the program prints either "OK" (if all
+tests passed) or "FAILED" if any of the tests failed. "{\tt make test}" runs
+all tests and complains if a certain test fails.  If this happens, please let
+us know by mailing the files specified in the output of "{\tt make test}" to
+one of the developers - this helps us to improve the library.  The mail
+address for bug reports is:
+\begin{enumerate}
+	\item{} \email{ball-bugs@mpi-sb.mpg.de}
+\end{enumerate}
+
+\noindent
+For all bug reports, please include your system configuration, the file
+\file{config.log} (which contains the results of tests configure performed),
+and the file \file{BALL/include/BALL/config.h} (which contains the compiler
+defines used by BALL).
+
