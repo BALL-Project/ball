@@ -1,10 +1,14 @@
-// $Id: predicate.h,v 1.4 2000/04/26 13:05:42 amoll Exp $
+// $Id: predicate.h,v 1.5 2000/06/07 22:19:46 oliver Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifndef BALL_COMMON_RTTI_H
+#	include <BALL/COMMON/rtti.h>
 #endif
 
 #ifndef BALL_CONCEPT_PREDICATE_H
