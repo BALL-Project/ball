@@ -1,4 +1,4 @@
-// $Id: common.doc,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: common.doc,v 1.2 1999/12/17 18:32:24 pmueller Exp $
 
 /**	@name	General Force Field Classes.
 		@nonames
@@ -7,7 +7,8 @@
 
 	//@Include: forceField.h
 	//@Include: forceFieldComponent.h
-	//@Include:	periodicBoundary.h
+	//@Include: periodicBoundary.h
 	//@Include: support.h
+	//@Include: snapShot.h
 
 //@}
