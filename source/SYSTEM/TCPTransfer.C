@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.15 2002/01/16 03:47:44 oliver Exp $
+// $Id: TCPTransfer.C,v 1.16 2002/01/17 03:29:56 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -26,8 +26,8 @@ TCPTransfer::TransferFailed::TransferFailed(const char* file, int line, Index er
 
 TCPTransfer::TCPTransfer(std::ofstream& file, const String& address)
 	throw(TransferFailed) 
+	:	buffer_(new char[BUFFER_SIZE + 1])
 {
-	buffer_ = new char[BUFFER_SIZE];
 	if (!set(file, address))
 	{
 		return; 
@@ -49,7 +49,7 @@ TCPTransfer::~TCPTransfer()
 		socket_ = 0;
 	}
 
-	delete[] buffer_;
+	delete [] buffer_;
 }
 			
 TCPTransfer::TCPTransfer()
@@ -62,11 +62,10 @@ TCPTransfer::TCPTransfer()
 	status_(UNINITIALIZED_ERROR),
 	received_bytes_(0),
 	protocol_(UNKNOWN_PROTOCOL),
-	buffer_(0),
+	buffer_(new char[BUFFER_SIZE + 1]),
 	socket_(0),
 	fstream_(0)
 {	
-	buffer_ = new char[BUFFER_SIZE];
 }
 
 void TCPTransfer::set(std::ofstream&  file, 
@@ -761,7 +760,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	if (temp != "150")
 	{ 
 		close(socket2);
-		return (Status) temp.toUnsignedInt();
+		return (Status)temp.toUnsignedInt();
 	}
 	
 	// ----------------------------------- receive the file
