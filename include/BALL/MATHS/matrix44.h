@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.4 1999/12/28 18:49:18 oliver Exp $
+// $Id: matrix44.h,v 1.5 2000/01/07 21:50:47 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -73,7 +73,9 @@ namespace BALL
 			 const T& m41, const T& m42, const T& m43, const T& m44);
 
 		///
-		virtual ~TMatrix4x4();
+		virtual ~TMatrix4x4()
+		{
+		}
 		//@}
 
 		/**	@name	Assignment
@@ -580,11 +582,6 @@ namespace BALL
 			m21(m21), m22(m22), m23(m23), m24(m24), 
 			m31(m31), m32(m32), m33(m33), m34(m34), 
 			m41(m41), m42(m42), m43(m43), m44(m44)
-	{
-	}
-
-	template <class T>
-	TMatrix4x4<T>::~TMatrix4x4()
 	{
 	}
 

@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.5 1999/12/28 18:47:34 oliver Exp $
+// $Id: angle.h,v 1.6 2000/01/07 21:50:46 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -68,7 +68,9 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~TAngle();
+		virtual ~TAngle()
+		{
+		}
 		//@}
 
 
@@ -301,11 +303,6 @@ namespace BALL
 		:	value((radian == true)
 			 ? (T)new_value 
 			 : (T)BALL_ANGLE_DEGREE_TO_RADIAN((double)new_value))
-	{
-	}
-
-	template <typename T>
-	TAngle<T>::~TAngle()
 	{
 	}
 

@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.3 1999/12/28 18:47:56 oliver Exp $
+// $Id: box3.h,v 1.4 2000/01/07 21:50:47 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -47,7 +47,9 @@ namespace BALL
 			 const T& bx, const T& by, const T& bz);
 
 		///
-		virtual ~TBox3();
+		virtual ~TBox3()
+		{
+		}
 		//@}
 
 		/**	@name	Assignment
@@ -164,11 +166,6 @@ namespace BALL
 		 const T& bx, const T& by, const T& bz)
 		:	a(ax, ay, az),
 			b(bx, by, bz)
-	{
-	}
-
-	template <class T>
-	TBox3<T>::~TBox3()
 	{
 	}
 
