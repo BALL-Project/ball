@@ -1,4 +1,4 @@
-// $Id: object.iC,v 1.8 2001/01/22 20:50:25 amoll Exp $
+// $Id: object.iC,v 1.9 2001/05/28 11:51:15 anker Exp $
 
 BALL_INLINE 
 Handle Object::getHandle () const
@@ -27,12 +27,6 @@ void Object::clear()
 {
 }
 
-BALL_INLINE 
-void Object::destroy()
-	throw()
-{
-}
-  
 BALL_INLINE 
 bool Object::operator == (const Object &object) const
 	throw()
@@ -86,6 +80,7 @@ BALL_INLINE
 void Object::read(::std::istream& /* s */)
 	throw()
 {
+	// BAUSTELLE
 	throw Exception::NotImplemented(__FILE__, __LINE__);
 }
 
@@ -93,6 +88,7 @@ BALL_INLINE
 void Object::write(::std::ostream& /* s */) const
 	throw()
 {
+	// BAUSTELLE
   throw Exception::NotImplemented(__FILE__, __LINE__);
 }
 
