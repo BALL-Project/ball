@@ -226,6 +226,16 @@ namespace BALL
 			children_(children)
 	{
 	}
+
+
+	ExpressionTree::ExpressionTree(ExpressionPredicate* predicate, bool negate)
+		throw()
+		:	type_(INVALID),
+			negate_(negate),
+			predicate_(predicate),
+			children_()
+	{
+	}
 	
 
 	// BAUSTELLE: 
