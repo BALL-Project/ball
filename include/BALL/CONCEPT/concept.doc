@@ -1,4 +1,4 @@
-// $Id: concept.doc,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: concept.doc,v 1.2 2000/01/03 15:15:33 oliver Exp $
 
 /**@name	Concepts
 	This chapter contains all relevant information on 
@@ -17,18 +17,12 @@
 	/**	@name Iterators
 	*/
 	//@{
-
 		//@Include: baseIterator.h
 		//@Include: forwardIterator.h
-		//@Include: forwardCirculator.h
-		//@Include: forwardManipulator.h
-		//@Include: reverseBidirectionalIterator.h
-		//@Include: reverseRandomAccessIterator.h
 		//@Include: bidirectionalIterator.h
-		//@Include: bidirectionalManipulator.h
-		//@Include: bidirectionalCirculator.h
+		//@Include: reverseBidirectionalIterator.h
 		//@Include: randomAccessIterator.h
-
+		//@Include: reverseRandomAccessIterator.h
 	//@}
 
 	//@Include: notification.h

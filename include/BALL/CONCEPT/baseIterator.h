@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.2 1999/12/04 18:34:10 oliver Exp $
+// $Id: baseIterator.h,v 1.3 2000/01/03 15:15:31 oliver Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -19,7 +19,8 @@
 #	include <BALL/COMMON/exception.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Generic Iterator Class.
 			This template class implements the basic behaviour of 
@@ -33,29 +34,6 @@ namespace BALL {
 
 		BALL_CREATE(BaseIterator)
 
-		/**	@name Enums 
-		*/
-		//@{
-			
-		/**
-		*/
-		enum Manipulation
-		{
-			/**	
-			*/
-			STAY       = 0,
-			/**	
-			*/
-			INVALIDATE = 1,
-			/**	
-			*/
-			BACKWARD   = 2,
-			/**	
-			*/
-			FORWARD    = 3
-		};
-		//@}
-	
 		/**	@name	Constructors and Destructors 
 		*/
 		//@{
