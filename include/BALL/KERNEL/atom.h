@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.32 2001/02/16 00:07:18 amoll Exp $
+// $Id: atom.h,v 1.33 2001/02/24 01:20:11 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -51,13 +51,10 @@ namespace BALL
 	class Molecule;
 
 	/** Atom class.
-		
 			{\bf Framework:} BALL/KERNEL\\
-			{\bf Definition:} \URL{BALL/KERNEL/atom.h}
-			\\
+			{\bf Definition:} \URL{BALL/KERNEL/atom.h}\\
 			{\bf Category:} \Ref{Bond} container\\
 			{\bf Concept:} composite design pattern\\
-			
 			An instance of Atom represents an instance of a chemical element ("atom").
 			During each runtime instance of a program an atom is unique and identified by a \Ref{Object::Handle}.
 			Atom equality is defined as atom identity.
@@ -80,36 +77,29 @@ namespace BALL
 				\item "velocity"
 				\item "force"
 				\item "bonds"
-			\end{itemize}
-			
-			@memo    Atom class (BALL kernel framework)
-			@author  $Author: amoll $
-			@version $Revision: 1.32 $
-			@date    $Date: 2001/02/16 00:07:18 $
+			\end{itemize}	
 	*/
 	class Atom
 		: public Composite,
 			public PropertyManager
 	{
 		public:
-			/** @name Class friends
 
+			/** @name Class friends
 					\begin{itemize}
 						\item class Bond
 					\end{itemize}
 			*/
-
 			friend class Bond;
 
 			BALL_CREATE_DEEP(Atom)
 
-
 			/** Atom type.
 			*/
 			typedef short Type;
-
-		
-			/** @name Enumerations */
+	
+			/** @name Enumerations 
+			*/
 			//@{
 		
 			/** Anonymous enumeration.
@@ -142,14 +132,14 @@ namespace BALL
 				NO_VARIANT_EXTENSIONS,
 				ADD_VARIANT_EXTENSIONS
 			};
-			//@}  
 
-			/** @name Constructors */
+			//@}  
+			/** @name Constructors 
+			*/
 			//@{
 
 			/** Default constructor.
-					Construct new atom.
-					The state of {\em *this} atom is:
+					The state of this instance is:
 					\begin{itemize}
 						\item element type is unknown (Element::UNKNOWN)
 						\item charge is 0
@@ -162,131 +152,87 @@ namespace BALL
 						\item force is \Ref{Vector3}(0,0,0)
 						\item bond table is empty (atom has no bonds)
 					\end{itemize}
-
-					@return      Atom - new constructed atom
-					@see         Composite::Composite
-					@see         PropertyManager::PropertyManager
+					@return  Atom - new constructed atom
+					@see     Composite::Composite
+					@see     PropertyManager::PropertyManager
 			*/
 			Atom()
 				throw();
 		
 			/** Copy constructor.
-					Construct new atom by copying the atom {\em atom}.
 					The copy is either deep or shallow (default).
-					The state of {\em *this} bond is initialized to the state of the atom {\em atom}.\\
+					The state of this bond is initialized to the state of {\em atom}.\\
 					{\bf Note:} Deep copying of atoms does not include bond cloning.
-
-					@param       atom the atom to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
-					@return      Atom - new constructed atom cloned from {\em atom}
-					@see         Composite::Composite
-					@see         PropertyManager::PropertyManager
+					@param   atom the atom to be copied (cloned)
+					@param   deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
+					@return  Atom - new constructed atom cloned from {\em atom}
+					@see     Composite::Composite
+					@see     PropertyManager::PropertyManager
 			*/
 			Atom(const Atom& atom, bool deep = true)
 				throw();
 		
 			/** Detailed state initializing constructor.
-					Construct new atom.
-					The state of {\em *this} atom is:
-					\begin{itemize}
-						\item element type is {\em element}
-						\item charge is {\em charge}
-						\item name is {\em name}
-						\item tpye name is {\em type_name}
-						\item position is {\em position}
-						\item radius is {\em radius}
-						\item type {\em atom_type}
-						\item velocity is {\em velocity}
-						\item force is {\em force}
-						\item bond table is empty (atom has no bonds)
-					\end{itemize}
-
-					@param       element element type of the constructed atom
-					@param       name name of the constructed atom
-					@param       type_name type name name of the constructed atom
-					@param       atom_type type of the constructed atom
-					@param       position position of the constructed atom
-					@param       velocity velocity of the constructed atom
-					@param       force force acting upon the constructed atom
-					@param       charge charge of the constructed atom
-					@param       radius radius of the constructed atom
-					@param       auto_deletable the constructed atom is auto-deletable (={\tt true}) or not (={\tt false})
-					@return      Atom - new constructed atom
-					@see         Composite::Composite
-					@see         PropertyManager::PropertyManager
+					The item bond table is empty (atom has no bonds).
+					@param   element element type of the constructed atom
+					@param   name name of the constructed atom
+					@param   type_name type name name of the constructed atom
+					@param   atom_type type of the constructed atom
+					@param   position position of the constructed atom
+					@param   velocity velocity of the constructed atom
+					@param   force force acting upon the constructed atom
+					@param   charge charge of the constructed atom
+					@param   radius radius of the constructed atom
+					@return  Atom - new constructed atom
+					@see     Composite::Composite
+					@see     PropertyManager::PropertyManager
 			*/
 			Atom(Element& element,
-				 const String& name, const String& type_name = BALL_ATOM_DEFAULT_TYPE_NAME,
-				 Type atom_type = BALL_ATOM_DEFAULT_TYPE,
-				 const Vector3& position = Vector3(BALL_ATOM_DEFAULT_POSITION),
-				 const Vector3& velocity = Vector3(BALL_ATOM_DEFAULT_VELOCITY),
-				 const Vector3& force = Vector3(BALL_ATOM_DEFAULT_FORCE),
-				 float charge = BALL_ATOM_DEFAULT_CHARGE,
-				 float radius = BALL_ATOM_DEFAULT_RADIUS)	
+					 const String& name, const String& type_name = BALL_ATOM_DEFAULT_TYPE_NAME,
+					 Type atom_type = BALL_ATOM_DEFAULT_TYPE,
+					 const Vector3& position = Vector3(BALL_ATOM_DEFAULT_POSITION),
+					 const Vector3& velocity = Vector3(BALL_ATOM_DEFAULT_VELOCITY),
+					 const Vector3& force = Vector3(BALL_ATOM_DEFAULT_FORCE),
+					 float charge = BALL_ATOM_DEFAULT_CHARGE,
+					 float radius = BALL_ATOM_DEFAULT_RADIUS)	
 				throw();
 
 			//@}
-
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
-					Default destruction of {\em *this} atom.
 					If the atom has bonds in common with an other atom that atom is disconnected and
 					the associated \Ref{Bond} instance is destroyed.
 					Calls \Ref{Atom::destroy}.
-					@see         Atom::destroy
+					@see  Atom::destroy
 			*/
 			virtual ~Atom()
 				throw();
 
 			/** Explicit default initialization.
-					Set the state of {\em *this} atom to the default values.
+					Set the state of this instance to the default values.
 					Calls {Composite::clear}.
-					The state of {\em *this} atom is:
-						\begin{itemize}
-							\item element type is unknown (Element::UNKNOWN)
-							\item charge is 0
-							\item name is empty string
-							\item type name is "?"
-							\item position is \Ref{Vector3}(0,0,0)
-							\item radius is 0
-							\item type \Ref{INVALID_TYPE}
-							\item velocity is \Ref{Vector3}(0,0,0)
-							\item force is \Ref{Vector3}(0,0,0)
-							\item bond table is empty (atom has no bonds)
-						\end{itemize}
-						@see	Composite::clear
+					@see	Composite::clear
+					@see	Atom
 			*/
 			virtual void clear()
 				throw();
 		
 			/** Explicit destructor.
-					Destroy {\em *this} atom explicitly without releasing its heap memory thus {\em *this} atom may exist further.
-					Calls \Ref{Composite::destroy}.
-					Set the state of {\em *this} atom to the default values. 
-					The state of {\em *this} atom is:
-					\begin{itemize}
-						\item element type is unknown (Element::UNKNOWN)
-						\item charge is 0
-						\item name is empty string
-						\item type name is "?"
-						\item position is \Ref{Vector3}(0,0,0)
-						\item radius is 0
-						\item type \Ref{INVALID_TYPE}
-						\item velocity is \Ref{Vector3}(0,0,0)
-						\item force is \Ref{Vector3}(0,0,0)
-						\item bond table is empty (atom has no bonds)
-					\end{itemize}
-
-					@see         Composite::destroy
+					Destroy this instance explicitly without releasing its heap 
+					memory thus this instance may exist further. Calls \Ref{Composite::destroy}.
+					Set the state of this instance to the default values. 
+					@see  Composite::destroy
+					@see  Atom
 			*/
 			virtual void destroy()
 				throw();
 
 			//@}
-			
-			/**	@name	Persistence */
+			/**	@name	Persistence 
+			*/
 			//@{
 	
 			/**	Persistent writing.
@@ -302,57 +248,47 @@ namespace BALL
 			*/
 			virtual void persistentRead(PersistenceManager& pm)
 				throw();
-			//@}
 
-			/** @name Assignment methods */
+			//@}
+			/** @name Assignment methods 
+			*/
 			//@{
 
       /** Assignment with cloning facility.
-          Assign the atom {\em atom} to {\em *this} atom.
           The assignment is either deep or shallow (default).
-          The state of {\em *this} atom is initialized to the state of the atom {\em atom}.\\
-          \\
+          The state of this instance is initialized to the state of {\em atom}.\\
           {\bf Note:} Deep copying of bonds is not supported.
-
-          @param       atom the atom to be copied (cloned)
-          @param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
+          @param   atom the atom to be copied (cloned)
+          @param   deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
       */
       void set(const Atom& atom, bool deep = true)
         throw();
 
       /** Copying with cloning facility.
-          Copy {\em *this} atom to the atom {\em atom}.
-          The assignment is either deep or shallow (default).
-          Calls \Ref{Atom::set}.
-          The state of the atom {\em atom} is initialized to the state of {\em *this} atom.\\
-          \\
+          The assignment is either deep or shallow (default). Calls \Ref{Atom::set}.
+          The state of {\em atom} is initialized to the state of this instance.\\
           {\bf Note:} Deep copying of bonds is not supported.
-
           @param  atom the atom to be assigned to
-          @see         Atom::set
+          @see    Atom::set
       */
       void get(Atom& atom, bool deep = true) const
         throw();
 
 			/** Assignment operator.
-					Assign the atom {\em atom} to {\em *this} atom.
-					The assignment is deep.
-					Calls \Ref{Atom::set}.
-					The state of {\em *this} atom is initialized to the state of the atom {\em atom}.\\
-					\\
+					The assignment is deep.	Calls \Ref{Atom::set}.
+					The state of this instance is initialized to the state of {\em atom}.\\
 					{\bf Note:} Deep copying of bonds is not supported.
-
-					@param       atom the atom to be copied (cloned)
-					@return      Atom& - {\em *this} atom
-					@see         Atom::set
+					@param   atom the atom to be copied (cloned)
+					@return  Atom& - this instance
+					@see     Atom::set
 			*/
 			const Atom& operator = (const Atom& atom)
 				throw();
 
 			/** Swapping of atoms.
-					Swap the states of {\em *this} atom with the atom {\em atom}.
-					@param       atom the atom being swapped with {\em *this} atom 
-					@see         Atom::Atom
+					Swap the states of this instance with {\em atom}.
+					@param   atom the atom being swapped with this instance 
+					@see     Atom::Atom
 			*/
 			void swap(Atom& atom)
 				throw();
@@ -372,147 +308,124 @@ namespace BALL
 			bool operator != (const Atom& atom) const
 				throw();
 
-			/** @name Accessors: inspectors and mutators */
+			/** @name Accessors: inspectors and mutators 
+			*/
 			//@{ 
 
-			/** Change of the atom element type.
-					Change the element type of {\em *this} atom to {\em element}.
-					@param       element the new element type of {\em *this} atom
-					@see         Atom::getElement
+			/** Change the atom element type.
+					@param   element the new element type of this instance
+					@see     Atom::getElement
 			*/
 			void setElement(const Element& element)
 				throw();
 				
 			/** Constant inspection of the atom element type.
-					Access a constant reference to the element type of {\em *this} atom.
-					@return      String& - constant reference to the element type of {\em *this} atom
-					@see         Atom::setElement
+					@return  Element& - constant reference to the element type of this instance
+					@see     Atom::setElement
 			*/
 			const Element& getElement() const
 				throw();
 
-			/** Change of the atom's charge.
-					Change the charge of {\em *this} atom to {\em charge}.
-					@param       charge the new charge of {\em *this} atom
-					@see         Atom::getCharge
+			/** Change the atom's charge.
+					@param   charge the new charge of this instance
+					@see     Atom::getCharge
 			*/
 			void setCharge(float charge)
 				throw();
 
 			/** Constant inspection of the atom's charge.
-					Access the charge of {\em *this} atom.
-					@return      float - copy of the charge of {\em *this} atom
-					@see         Atom::setCharge
+					@return  float - copy of the charge of this instance
+					@see     Atom::setCharge
 			*/
 			float getCharge() const
 				throw();
 
 			/** Mutable inspection of the atom's parent molecule.
-					Access a mutable reference to the parent molecule of {\em *this} atom.
-					The reference is 0 if {\em *this} atom does not have a parent molecule.\\
-					\\
+					The reference is 0 if this instance does not have a parent molecule.\\
 					{\bf Note:} No corresponding mutator Atom::setMolecule exists to
 					consider design of contract - an atom may not insert into a molecule,
 					it must be inserted via the molecule.
-
-					@return      Molecule* -
-											 mutable reference to the parent molecule of {\em *this} atom,
-											 0 if {\em *this} atom does not have a parent molecule
+					@return  Molecule* - mutable pointer to the parent molecule of this instance,
+									 0 if no parent molecule exists
 			*/
 			Molecule *getMolecule()
 				throw();
 
-			/** Mutable inspection of the atom's parent molecule.
-					Access a constant reference to the parent molecule of {\em *this} atom.
-					The reference is 0 if {\em *this} atom does not have a parent molecule.\\
-					\\
+			/** Constant inspection of the atom's parent molecule.
+					The reference is 0 if this instance does not have a parent molecule.\\
 					{\bf Note:} No corresponding mutator Atom::setMolecule exists to
 					consider design of contract - an atom may not insert into a molecule,
 					it must be inserted via the molecule.
-
-					@return      Molecule* -
-											 constant reference to the parent molecule of {\em *this} atom,
-											 0 if {\em *this} atom does not have a parent molecule
+					@return  Molecule* - constant pointer to the parent molecule of this instance,
+									 0 if this instance does not have a parent molecule
 			*/
-			const Molecule *getMolecule() const
+			const Molecule* getMolecule() const
 				throw();
 
 			/** Mutable inspection of the atom's parent fragment.
-					Access a mutable reference to the parent fragment of {\em *this} atom.
-					The reference is 0 if {\em *this} atom does not have a parent fragment.\\
-					\\
+					The reference is 0 if this instance does not have a parent fragment.\\
 					{\bf Note:} No corresponding mutator Atom::setFragment exists to
 					consider design of contract - an atom may not insert into a fragment,
 					it must be inserted via the fragment.
-					@return      Fragment* -
-											 mutable reference to the parent fragment of {\em *this} atom,
-											 0 if {\em *this} atom does not have a parent fragment
+					@return   Fragment* - mutable pointer to the parent fragment of this instance,
+										0 if this instance does not have a parent fragment
 			*/
 			Fragment* getFragment()
 				throw();
 
-			/** Non-mutable inspection of the atom's parent fragment.
-					Access a constant reference to the parent fragment of {\em *this} atom.
-					The reference is 0 if {\em *this} atom does not have a parent fragment.\\
-					\\
+			/** Constant inspection of the atom's parent fragment.
+					The reference is 0 if this instance does not have a parent fragment.\\
 					{\bf Note:} No corresponding mutator Atom::setFragment exists to
 					consider design of contract - an atom may not insert into a fragment,
 					it must be inserted via the fragment.
-
-					@return      Fragment* -
-											 constant reference to the parent fragment of {\em *this} atom,
-											 0 if {\em *this} atom does not have a parent fragment
+					@return   Fragment* -	constant pointer to the parent fragment of this instance,
+										0 if this instance does not have a parent fragment
 			*/
 			const Fragment* getFragment() const
 				throw();
 
-			/** Non-mutable inspection of the atom's parent residue.
-					Access a constant reference to the parent residue of {\em *this} atom.
-					The reference is 0 if {\em *this} atom does does not have a parent residue.\\
-					\\
-
-					@return      Residue* -
-											 constant reference to the parent residue of {\em *this} atom,
-											 0 if {\em *this} atom does not have a parent residue
+			/** Constant inspection of the atom's parent residue.
+					The reference is 0 if this instance does does not have a parent residue.\\
+					@return  Residue* - constant pointer to the parent residue of this instance,
+									 0 if this instance does not have a parent residue
 			*/
 			const Residue* getResidue() const
 				throw();
 
-			/** Change of the atom's name.
-					Change the name of {\em *this} atom to {\em name}.
-					@param       name the new name of {\em *this} atom
-					@see         Atom::getName
+			/** Change the atom's name.
+					@param   name the new name of this instance
+					@see     Atom::getName
 			*/
 			void setName(const String& name)
 				throw();
 
 			/** Mutable inspection of the atom's name.
-			Access a mutable reference to the name of {\em *this} atom.
-			@return  String& - mutable reference to the name of {\em *this} atom
-			@see     Atom::setName
+					@return  String& - mutable reference to the name of this instance
+					@see     Atom::setName
 			*/
 			String& getName()
 				throw();
 
-
 			/** Constant inspection of the atom's name.
-					Access a constant reference to the name of {\em *this} atom.
-					@return      String& - constant reference to the name of {\em *this} atom
-					@see         Atom::setName
+					@return  String& - constant reference to the name of this instance
+					@see     Atom::setName
 			*/
 			const String& getName() const
 				throw();
 
 			/** Assemble a fully specified atom name.
-					This method returns at fully specified atom name as used for charge and type assignments.
-					The name consists of the name of the residue the atom is contained in, a colon, and the atom name.
-					Blanks are removed from both names. For example, for the alpha carbon atom of isoleucine {\tt getFullName} 
+					This method returns at fully specified atom name as used for charge and 
+					type assignments.	The name consists of the name of the residue the atom is 
+					contained in, a colon, and the atom name.	Blanks are removed from both names. 
+					For example, for the alpha carbon atom of isoleucine {\tt getFullName} 
 					will return the name {\tt ILE:CA}. 
-					For N terminal residues, {\tt -N} is appended to the residue name, for C terminal residues {\tt -C}.
-					If the residue is a CYS involved in a disulphide bridge, an additional {\tt -S} or {\tt S} (for terminal residue)
+					For N terminal residues, {\tt -N} is appended to the residue name, for C 
+					terminal residues {\tt -C}.	If the residue is a CYS involved in a disulphide
+					bridge, an additional {\tt -S} or {\tt S} (for terminal residue)
 					is appended. For single amino acids (C and N terminal) {\tt -M} is added.\\
 					If the atom is not contained in a residue, the name of the parent fragment 
-					is taken instead of	the residue name. If there is no parent fragment, the name of the parent molecule is taken.
+					is taken instead of	the residue name. If there is no parent fragment, the name 
+					of the parent molecule is taken.
 					If the atom is not contained in any superstructure, getFullname returns getName.\\
 					Overview of the returned strings:
 					\begin{itemize}
@@ -525,70 +438,62 @@ namespace BALL
 						\item <fragment>:atom -- for atoms contained in a fragment, but not in a residue
 						\item <molecule>:atom -- for atoms contained in a molecule, but not in a fragment
 					\end{itemize}				
-					@param	type if type is set to {\tt Atom::NO_VARIANT_EXTENSIONS}, the variant extension ({\tt -XX}) is omitted
+					@param	type if type is set to {\tt Atom::NO_VARIANT_EXTENSIONS}, 
+									the variant extension ({\tt -XX}) is omitted
 					@return	String the full name
 			*/
 			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const
 				throw();
 
-			/** Change of the atom's position vector.
-					Change the position vector of {\em *this} atom to {\em position}.
-					@param       position the new position vector of {\em *this} atom
-					@see         Atom::getPosition
+			/** Change the atom's position vector.
+					@param   position the new position vector of this instance
+					@see     Atom::getPosition
 			*/
 			void setPosition(const Vector3& position)
 				throw();
 
 			/** Mutable inspection of the atom's position vector.
-					Access a muteable reference to the position vector of {\em *this} atom.
-					@return      Vector3& - muteable reference to the position vector of {\em *this} atom
-					@see         Atom::setPosition
+					@return  Vector3& - muteable reference to the position vector of this instance
+					@see     Atom::setPosition
 			*/
 			Vector3& getPosition()
 				throw();
 
 			/** Constant inspection of the atom's position vector.
-					Access a constant reference to the position vector of {\em *this} atom.
-					@return      Vector3& - constant reference to the position vector of {\em *this} atom
-					@see         Atom::setPosition
+					@return  Vector3& - constant reference to the position vector of this instance
+					@see     Atom::setPosition
 			*/
 			const Vector3& getPosition() const
 				throw();
 
-			/** Change of the atom's radius.
-					Change the radius of {\em *this} atom to {\em radius}.
-					@param       radius the new radius of {\em *this} atom
-					@see         Atom::getRadius
+			/** Change the atom's radius.
+					@param   radius the new radius of this instance
+					@see     Atom::getRadius
 			*/
 			void setRadius(float radius)
 				throw();
 				
-
 			/** Constant inspection of the atom's radius.
-					Access the radius of {\em *this} atom.
-					@return      float - copy of the radius of {\em *this} atom
-					@see         Atom::setRadius
+					@return  float - copy of the radius of this instance
+					@see     Atom::setRadius
 			*/
 			float getRadius() const
 				throw();
 
-			/** Change of the atom's type.
-					Change the type of {\em *this} atom to the type {\em atom_type}.
-					@param       atom_type the new type of {\em *this} atom
-					@see         Atom::getType
+			/** Change the atom's type.
+					@param   atom_type the new type of this instance
+					@see     Atom::getType
 			*/
 			void setType(Type atom_type)
 				throw();
 		
 			/** Constant inspection of the atom's type.
-					Access the type of {\em *this} atom.
-					@return      Type - copy of the type of {\em *this} atom
-					@see         Atom::setType
+					@return  Type - copy of the type of this instance
+					@see     Atom::setType
 			*/
 			Type getType() const
 				throw();
 		
-
 			/**	Get the type name of the atom.
 			*/
 			String getTypeName() const
@@ -599,224 +504,197 @@ namespace BALL
 			void setTypeName(const String& name)
 				throw();
 
-			/** Change of the atom's velocity vector.
-					Change the velocity vector of {\em *this} atom to {\em velocity}.
-					@param       velocity the new velocity vector of {\em *this} atom
-					@see         Atom::getVelocity
+			/** Change the atom's velocity vector.
+					@param   velocity the new velocity vector of this instance
+					@see     Atom::getVelocity
 			*/
 			void setVelocity(const Vector3& velocity)
 				throw();
 
 			/** Constant inspection of the atom's velocity vector.
-					Access a constant reference to the velocity vector of {\em *this} atom.
 					BALL uses units of \TeX{\AA}/ps for the velocity.
-					@return      Vector3& - constant reference to the velocity vector of {\em *this} atom
-					@see         Atom::setVelocity
+					@return  Vector3& - constant reference to the velocity vector of this instance
+					@see     Atom::setVelocity
 			*/
 			const Vector3& getVelocity() const
 				throw();
 
-			/** Change of the atom's force vector.
-					Change the force vector of {\em *this} atom to {\em force}.
+			/** Change the atom's force vector.
 					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
-					@param       force the new force vector of {\em *this} atom
-					@see         Atom::getForce
+					@param   force the new force vector of this instance
+					@see     Atom::getForce
 			*/
 			void setForce(const Vector3& force)
 				throw();
 
 			/** Mutable inspection of the atom's force vector.
-					Access a mutable reference to the force vector of {\em *this} atom.
 					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
-					@return      Vector3& - mutable reference to the force vector of {\em *this} atom
-					@see         Atom::setForce
+					@return  Vector3& - mutable reference to the force vector of this instance
+					@see     Atom::setForce
 			*/
 			Vector3& getForce()
 				throw();
 
 			/** Constant inspection of the atom's force vector.
-					Access a constant reference to the force vector of {\em *this} atom.
 					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
-					@return      Vector3& - constant reference to the force vector of {\em *this} atom
-					@see         Atom::setForce
+					@return  Vector3& - constant reference to the force vector of this instance
+					@see     Atom::setForce
 			*/
 			const Vector3& getForce() const
 				throw();
 
 			/** Constant inspection of the atom's number of bonds.
-					Access the number of bonds of {\em *this} atom.
-					@return	Size - copy of number of bonds of {\em *this} atom
+					@return	Size - copy of number of bonds of this instance
 			*/
 			Size countBonds() const
 				throw();
 
 			/** Mutable inspection of an atom's indexed bond.
-					Access a mutable reference to the bond with index {\em index} in {\em *this} atom's bond table.
-					The reference is 0 if {\em *this} atom does not have a bond with index {\em index}.\\
-					\\
+					The reference is 0 if this instance does not have a bond with index {\em index}.\\
 					{\bf Note:} No corresponding mutator Atom::setBond exists to
 					consider design of contract - an atom may not insert a bond in its bond table at a given index.
 					The atom's bond table is an implementation detail that is not relevant to and should not be relied
 					on by the client programmer. A bond must always be created via \Ref{Bond::Bond} or
 					\Ref{Atom::createBond}.
-					@param       index the index of the bond to be accessed to
+					@param   index the index of the bond to be accessed to
+					@return  Bond* - mutable pointer to the bond that is indexed in this instance's bond table,
+									 0 if this instance does not have a bond with index {\em index}
 					@exception   IndexOverflow if {\tt index > MAX_NUMBER_OF_BONDS}
-					@return      Bond* -
-											 mutable reference to the bond that is indexed in {\em *this} atom's bond table,
-											 0 if {\em *this} atom does not have a bond with index {\em index}
 			*/
 			Bond* getBond(Position index)
 				throw(Exception::IndexOverflow);
 
 			/** Constant inspection of an atom's indexed bond.
-					Access a constant reference to the bond with index {\em index} in {\em *this} atom's bond table.
-					The reference is 0 if {\em *this} atom does not have a bond with index {\em index}.\\
-					\\
+					The reference is 0 if this instance does not have a bond with index {\em index}.\\
 					{\bf Note:} No corresponding mutator Atom::setBond exists to
 					consider design of contract - an atom may not insert a bond in its bond table at a given index.
 					The atom's bond table is an implementation detail that is not relevant to and should not be relied
 					on by the client programmer. A bond must always be created via \Ref{Bond::Bond} or
 					\Ref{Atom::createBond}.
-
-					@param       index the index of the bond to be accessed to
+					@param   index the index of the bond to be accessed to
+					@return  Bond* - constant pointer to the bond that is indexed in this instance's bond table,
+									 0 if this instance does not have a bond with index {\em index}
 					@exception   IndexOverflow if {\tt index > MAX_NUMBER_OF_BONDS}
-					@return      Bond* -
-											 constant reference to the bond that is indexed in {\em *this} atom's bond table,
-											 0 if {\em *this} atom does not have a bond with index {\em index}
 			*/
 			const Bond* getBond(Position index) const
 				throw(Exception::IndexOverflow);
 
 			/** Mutable inspection of an atom's bond with another atom.
-					Access a mutable reference to the bond that connects the atom {\em atom} with {\em *this} atom.
-					The reference is 0 if {\em *this} atom does not have a bond with the atom {\em atom}.
-					@param       atom the atom that is considered to have a bond with {\em *this} atom
-					@return      Bond* -
-											 mutable reference to the bond that connects {\tt atom}  with {\em *this} atom,
-											 0 if {\em *this} atom does not have a bond with the atom {\em atom}
-					@see         Atom::createBond	     
+					The reference is 0 if this instance does not have a bond with {\em atom}.
+					@param   atom the atom that is considered to have a bond with this instance
+					@return  Bond* - mutable pointer to the bond that connects {\tt atom}  with this instance,
+									 0 if this instance does not have a bond with {\em atom}
+					@see     Atom::createBond	     
 			*/
 			Bond* getBond(const Atom& atom)
 				throw();
 
 			/** Constant inspection of an atom's bond with another atom.
-					Access a constant reference to the bond that connects the atom {\em atom} with {\em *this} atom.
-					The reference is 0 if {\em *this} atom does not have a bond with the atom {\em atom}.
-					@param       atom the atom that is considered to have a bond with {\em *this} atom
-					@return      Bond* -
-											 mutable reference to the bond that connects the atom {\em atom} with {\em *this} atom,
-											 0 if {\em *this} atom does not have a bond with the atom {\em atom}
-					@see         Atom::createBond	     
+					The reference is 0 if this instance does not have a bond with {\em atom}.
+					@param   atom the atom that is considered to have a bond with this instance
+					@return  Bond* - constant pointer to the bond that connects {\em atom} with 
+									 this instance, 0 if this instance does not have a bond with {\em atom}
+					@see     Atom::createBond	     
 			*/
-			const Bond *getBond(const Atom& atom) const
+			const Bond* getBond(const Atom& atom) const
 				throw();
 
 			//@}
-
-			/** @name Miscellaneous */
+			/** @name Miscellaneous 
+			*/
 			//@{ 
 
 			/** Bond creation.
-					Create a new instance of \Ref{Bond} connecting {\em *this} atom to the atom {\em atom}.
+					Create a new instance of \Ref{Bond} connecting this instance to {\em atom}.
 					Calls \Ref{Bond::createBond}.
-					The state of the bond is initialzed to the default values.
-					@return        Bond* - default initialized Bond instance that connects {\em *this} atom to {\em atom}
-					@see           Bond::createBond
+					The state of the bond is initialized to the default values.
+					@return  Bond* - default initialized Bond instance that connects this instance to {\em atom}
+					@see     Bond::createBond
 			*/
-			Bond *createBond(Atom& atom)
+			Bond* createBond(Atom& atom)
 				throw();
 
 			/** Extended bond creation.
-					Initialize the bond {\em bond} to connect {\em *this} atom to the atom {\em atom}.
+					Initialize the bond {\em bond} to connect this instance to {\em atom}.
 					Calls \Ref{Bond::createBond}.
 					The state of the bond is initialzed to the default values.\\
-					\\
 					{\bf Note:} This method is recommended for use if a subclass of the \Ref{Bond}
-									is to be used as the new bond. This permits extensibility of bonds to the framework client.
-
-					@return        Bond* - default initialized bond {\em bond} that connects {\em *this} atom to {\em atom}
-					@see           Bond::createBond
+									 is to be used as the new bond. This permits extensibility of bonds to the framework client.
+					@return  Bond* - default initialized bond {\em bond} that connects this instance to {\em atom}
+					@see     Bond::createBond
 			*/
-			Bond *createBond(Bond& bond, Atom& atom)
+			Bond* createBond(Bond& bond, Atom& atom)
 				throw();
 
 			// UNDOCUMENTED, yet
-			Bond *cloneBond(Bond& bond, Atom& atom)
+			Bond* cloneBond(Bond& bond, Atom& atom)
 				throw();
 
 			/** Explicit bond destruction.
-					Destroy the bond connecting {\em *this atom} and the atom {\em atom} explicitly.
-					If the bond is auto-deletable the default destructor is called otherwise \Ref{Bond::destroy}.\\
-					\\
+					Destroy the bond connecting {\em *this atom} and {\em atom} explicitly.
+					If the bond is auto-deletable the default destructor is called 
+					otherwise \Ref{Bond::destroy}.\\
 					{\bf Note:} This method is recommended to destroy a bond of an atom explicitly
 					instead of using the keyword {\tt delete}.
 					This is due to erroneous explicit destruction of statically allocated bonds.
-					@param         atom the atom that should be disconnected from {\em *this} atom
-					@see           AutoDeletable
-					@see           Bond::destroy
+					@param   atom the atom that should be disconnected from this instance
+					@see     AutoDeletable
+					@see     Bond::destroy
 			*/
 			bool destroyBond(const Atom& atom)
 				throw();
 
 			/** Explicit bond table destruction.
 					Destroy all the bonds connecting {\em *this atom} with another atom explicitly.
-					If the bonds are auto-deletable the default destructors are called otherwise \Ref{Bond::destroy}.\\
-					\\
+					If the bonds are auto-deletable the default destructors are called 
+					otherwise \Ref{Bond::destroy}.\\
 					{\bf Note:} This method is recommended to destroy all bonds of an atom explicitly
 					instead of using the keyword {\tt delete}.
 					This is due to erroneous explicit destruction of statically allocated bonds.
-					@param         atom the atom that should be disconnected from {\em *this} atom
-					@see           AutoDeletable
-					@see           Bond::destroy
+					@param     atom the atom that should be disconnected from this instance
+					@see       AutoDeletable
+					@see       Bond::destroy
 			*/
 			void destroyBonds()
 				throw();
 
 			//@}
-
-			/** @name Predicates */
+			/** @name Predicates 
+			*/
 			//@{ 
 
 			/** Determine whether the atom takes part in a certain bond.
-					If such a bond exists {\tt true} is returned, {\tt false} otherwise. 
-					@param       bond the bond in question
-					@return      bool 
-											 {\tt true} if the bond {\em bond} connects {\em *this} atom with another atom,
-											 {\tt false} otherwise
-					@see         Atom::hasBond
+					@param   bond the bond in question
+					@return  bool {\tt true} if the bond {\em bond} connects this instance with another atom,
+										    {\tt false} otherwise
+					@see     Atom::hasBond
 			*/
 			bool hasBond(const Bond& bond) const
 				throw();
 
 			/** Determine whether the atom is bound to another.
-					Query, if {\em *this} atom is bound to {\tt atom}.
-					If such a bond exists {\tt true} is returned, {\tt false} otherwise.\\
 					Calls \Ref{Atom::getBond}.
-					@param       atom the atom in question
-					@return      bool -
-											 {\tt true} if bond connects the atom {\em atom} with {\em *this atom},
-											 {\tt false} otherwise
-					@see         Atom::getBond
+					@param   atom the atom in question
+					@return  bool - {\tt true} if bond connects {\em atom} with {\em *this atom},
+													{\tt false} otherwise
+					@see     Atom::getBond
 			*/
 			bool isBoundTo(const Atom& atom) const
 				throw();
 
 			/** Determine whether the atom has any bond.
-					If the atoms shares a bond with any other atom {\tt true} is returned, {\tt false} otherwise. 
-					@return      bool -
-											 {\tt true} if an atom is bound to {\em *this} atom,
-											 {\tt false} otherwise
-					@see         Atom::hasBond
+					@return  bool - {\tt true} if an atom is bound to this instance,
+													{\tt false} otherwise
+					@see     Atom::hasBond
 			*/
 			bool isBound() const
 				throw();
 
 			/**	True if the two atoms are geminal.
-					Two atoms are geminal if they do not share a common bond but
-					both have a bond to a third atom. For example the two hydrogen atoms
-					in water are geminal. 
+					Two atoms are geminal if they do not share a common bond but both have a
+					bond to a third atom. For example the two hydrogen atoms in water are geminal. 
 					@param	atom the second atom
-					@return bool - {\bf true} if {\tt atom} is geminal to {\tt this} atom
+					@return bool - {\bf true} if {\tt atom} is geminal to this instance
 			*/
 			bool isGeminal(const Atom& atom) const
 				throw();
@@ -824,87 +702,74 @@ namespace BALL
 			/**	True if the two atoms are vicinal.
 					Two atoms are vicinal if they are separated by three bonds (1-4 position).
 					@param	atom the second atom
-					@return bool - {\bf true} if {\tt atom} is vicinal to {\tt this} atom
+					@return bool - {\bf true} if {\tt atom} is vicinal to this instance
 			*/
 			bool isVicinal(const Atom& atom) const
 				throw();
 
 			//@}
-
-			/** @name Debuggers and diagnostics */
+			/** @name Debuggers and diagnostics 
+			*/
 			//@{ 
 
 			/** Internal state and consistency self-validation.
-					Initiate self-validation of the internal state and data structure consistencies
-					of {\em *this} atom.
-					If the internal state of {\em *this} atom is correct (self-validated) and 
-					consistent {\tt true} is returned, {\tt false} otherwise. 
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} atom is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return	bool - {\tt true} if the internal state of this 
+									instance is correct (self-validated) and consistent, {\tt false} otherwise
 			*/
 			virtual bool isValid() const
 				throw();
 
 			/** Internal state dump.
-					Dump the current internal state of {\em *this} atom to 
+					Dump the current internal state of this instance to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					@param   s - output stream where to output the internal state of {\em *this} atom
+					@param   s - output stream where to output the internal state of this instance
 					@param   depth - the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
 			//@}
-
-			/** @name Storers */
+			/** @name Storers 
+			*/
 			//@{ 
 
 			/* Persistent stream input and state restorage.
-				 Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
+				 Read persistent bond data from the input stream {\em s} and restore the state of this instance.
 				 Virtually called by \Ref{Object::operator >>}.\\
-				 \\
 				 {\bf Note:} Not yet implemented.
-
-				 @param  s input stream from where to restore the internal state of {\em *this} atom
+				 @param  s input stream from where to restore the internal state of this instance
 				 @see    Object::operator >>
 			*/
 			virtual void read(std::istream& s)
 				throw();
 
 			/* Persistent stream output and state storage.
-  			 Write persistent bond data to the output stream {\em s} and store the state of {\em *this}.
+  			 Write persistent bond data to the output stream {\em s} and store the state of this instance.
 				 Virtually called by \Ref{Object::operator <<}.\\
-				 \\
 				 {\bf Note:} Not yet implemented.
-		 
-				 @param  s input stream from where to restore the internal state of {\em *this} atom
-				 @see         Object::operator <<
+				 @param  s input stream from where to restore the internal state of this instance
+				 @see    Object::operator <<
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
 
 			//@}  
-
-			/** @name Internal iterators */
+			/** @name Internal iterators 
+			*/
 			//@{
 
 			/** Application of an unary processor on every contained bond.
-					Apply the typed unary processor {\em processor} on all incident bonds of {\em *this} atom.
-
 					@param  processor a typed unary processor for \Ref{Bond} instances
-					@return      bool -
-											 {\tt true} if application has been terminated successfully,
-											 {\tt false} otherwise
+					@return  bool - {\tt true} if application has been terminated successfully,
+													{\tt false} otherwise
 			*/
 			bool applyBonds(UnaryProcessor<Bond>& processor)
 				throw();
 
 			//@}
-
-			/** @name External iterators */
+			/** @name External iterators 
+			*/
 			//@{
-
 			typedef Index BondIteratorPosition_;
 
 			class BondIteratorTraits_
@@ -1132,14 +997,13 @@ namespace BALL
 				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits_>
 				BondIterator;
 			
-			/** \Ref{Atom::BondIterator} builder.
+			/** BondIterator builder.
 					Build a \Ref{Atom::BondIterator} instance for traversing
-					{\em *this} atom and iterating over its bonds.
-					The built \Ref{Atom::BondIterator} instance is positioned at
-					{\em *this} atom's first bond.
-
-					@return      Atom::BondIterator - a copy of a \Ref{Atom::BondIterator} instance 
-												of {\em *this} atom positioned at its first bond
+					this instance and iterating over its bonds.
+					The built instance is positioned at this 
+					atom's first bond.
+					@return   Atom::BondIterator - a copy of a Atom::BondIterator instance 
+										of this instance positioned at its first bond
 			*/
 			BondIterator beginBond()
 				throw()
@@ -1148,14 +1012,12 @@ namespace BALL
 			}
 
 			/** Past-the-end \Ref{Atom::BondIterator} builder.
-					Build a past-the-end \Ref{Atom::BondIterator} instance for {\em *this} atom.
 					The built \Ref{Atom::BondIterator} instance is positioned past the last
-					valid forward reachable bond of {\em *this}.\\
-					\\
-					{\bf Note:} A past-the-end \Ref{Atom::BondIterator} instance is used as a sentinel for the
-					finish of a forward iteration over {\em *this}.
-					@return      Atom::BondIterator - a copy of a past-the-end \Ref{Atom::BondIterator}
-					instance of {\em *this} atom positioned past its last forward reachable bond
+					valid forward reachable bond of this instance.\\
+					{\bf Note:} A past-the-end BondIterator instance is used as a sentinel for the
+					finish of a forward iteration over this instance.
+					@return   Atom::BondIterator - a copy of a past-the-end Atom::BondIterator
+										instance of this instance positioned past its last forward reachable bond
 			*/
 			BondIterator endBond()
 				throw()
@@ -1169,14 +1031,11 @@ namespace BALL
 				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits_>
 				BondConstIterator;
 
-			/** \Ref{Atom::BondConstIterator} builder.
-					Build a \Ref{Atom::BondConstIterator} instance for traversing
-					{\em *this} constant atom and iterating over its constant bonds.
-					The built \Ref{Atom::BondConstIterator} instance is positioned at
-					{\em *this} atom's first constant bond.
-
-					@return      Atom::BondConstIterator - a copy of a \Ref{Atom::BondIterator} instance of {\em *this}
-												constant atom positioned at its first constant bond
+			/** BondConstIterator builder.
+					The built instance is positioned at
+					this instance's first constant bond.
+					@return  Atom::BondConstIterator - a copy of a BondIterator
+									 instance of this constant atom positioned at its first constant bond
 			*/
 			BondConstIterator beginBond() const
 				throw()
@@ -1184,16 +1043,13 @@ namespace BALL
 				return BondConstIterator::begin(*this);
 			}
 
-			/** Past-the-end \Ref{Atom::BondConstIterator} builder.
-					Build a past-the-end \Ref{Atom::BondConstIterator} instance for {\em *this} constant atom.
+			/** Past-the-end BondConstIterator builder.
 					The built \Ref{Atom::BondConstIterator} instance is positioned past the last valid forward 
-					reachable constant bond of {\em *this} atom.\\
-					\\
-					{\bf Note:} A past-the-end \Ref{Atom::BondConstIterator} instance is used as a
-					sentinel for the finish of a forward iteration over {\em *this} constant atom.
-
-					@return      Atom::BondConstIterator - a copy of a past-the-end \Ref{Atom::BondIterator}
-												instance of {\em *this} atom positioned past its last forward reachable constant bond
+					reachable constant bond of this instance.\\
+					{\bf Note:} A past-the-end BondConstIterator instance is used as a
+					sentinel for the finish of a forward iteration over this constant atom.
+					@return   Atom::BondConstIterator - a copy of a past-the-end Atom::BondIterator
+										instance of this instance positioned past its last forward reachable constant bond
 			*/
 			BondConstIterator endBond() const
 				throw()
