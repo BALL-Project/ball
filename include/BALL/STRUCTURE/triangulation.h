@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.3 2000/10/14 13:02:34 oliver Exp $
+// $Id: triangulation.h,v 1.4 2000/10/17 19:33:53 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -445,7 +445,7 @@ print << "Dreieck[" << triangle->index << "] gelöscht\n";
 		edge2 = face->edge[i];								// edge2 = second concave edge
 		p0 = edge0->vertex1;
 		p1 = edge0->vertex2;
-		int e;
+		Index e;
 		if (face->getEdge(p1->index,edge2->vertex1->index,e))
 			{
 				edge1 = ses->edges[e];
@@ -857,7 +857,7 @@ for (Position j = 0; j < centers.size(); j++)
 		TVector3<T> p2(circle2.p+(orth*circle2.radius));
 		TVector3<T> p3(circle3.p+(orth*circle3.radius));
 		Size number_of_points = (int)Maths::round(2*Constants::PI*circle1.radius/size);
-		TAngle<T> phi(2*Constants::PI/number_of_points,true);
+		TAngle<T> phi(2.0 * Constants::PI / (T)number_of_points, true);
 		vector< TVector3<T> > points1;
 		vector< TVector3<T> > points2;
 		vector< TVector3<T> > centers;

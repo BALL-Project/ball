@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.1 2000/10/10 14:24:57 oliver Exp $
+// $Id: singularities.h,v 1.2 2000/10/17 19:33:53 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -111,7 +111,7 @@ namespace BALL
 	{
 		vector< TSESFace<T>* > faces;
 		vector< TVector3<T> > points;
-		list<int> indices;
+		list<Index> indices;
 		for (Position i = 0; i != ses->spheric_faces.size(); i++)
 			{
 				faces.push_back(ses->spheric_faces[i]);
@@ -331,7 +331,7 @@ namespace BALL
 												 TSolventExcludedSurface<T>* ses, const T& radius_of_probe)
 	{
 //cout << *edge << "\n";
-		list<int> candidates = tree->get(edge->circle.p,edge->circle.radius+radius_of_probe);
+		list<Index> candidates = tree->get(edge->circle.p,edge->circle.radius+radius_of_probe);
 		if (candidates.size() == 0)
 			{
 				return;
@@ -348,7 +348,7 @@ namespace BALL
 		TSphere3<T> max_probe;
 		Position min = -1;
 		Position max = -1;
-		list<int>::iterator i;
+		list<Index>::iterator i;
 		for (i = candidates.begin(); i != candidates.end(); i++)
 			{
 //cout << *i << ": ";
@@ -677,14 +677,14 @@ namespace BALL
 /*	
 	void ThreeCuts(TSESFace<T>* face1, TSESFace<T>* face2, const TReducedSurface<T>& rs)
 	{
-		vector<int> atom(3,-1);
+		vector<Index> atom(3,-1);
 		for (Position i = 0; i < 3; i++)
 			{
 				atom[i] = face1->vertex[i]->atom;
 			}
 		vector< TRSEdge<T>* > face1_edges(3);
 		vector< TRSEdge<T>* > face2_edges(3);
-		int edge_index;
+		Index edge_index;
 		TRSFace<T>* rsface1(face1->rsface);
 		TRSFace<T>* rsface2(face2->rsface);
 		rsface1->getEdge(atom[0],atom[1],edge_index);
@@ -699,7 +699,7 @@ namespace BALL
 		face1_edges[2] = rs->edges[edge_index];
 		rsface2->getEdge(atom[2],atom[0],edge_index);
 		face2_edges[2] = rs->edges[edge_index];
-		for (int i = 0; i < 3; i++)
+		for (Index i = 0; i < 3; i++)
 			{
 				if (face1_edges[i] == face2_edges[i])
 					{
