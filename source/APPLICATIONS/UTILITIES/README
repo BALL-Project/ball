@@ -1,0 +1,27 @@
+$Id: README,v 1.2 2003/01/29 10:21:46 anker Exp $
+
+BALL Utilities
+==============
+
+This directory contains some little utilities which are handy for everyday
+use in molecular modeling:
+
+add_hydrogens:
+
+	Add missing hydrogens to PDB files and minimizes them while fixing all
+	other atoms.
+
+dcd2dcd:
+
+	Converts CHARMm "enhanced" DCD trajectory files to simpler X-PLOR type
+	DCD files. Use this program if some DCD reader does not know how to
+	handle your (AMBER-generated) DCD file. It might help.
+
+pdb2amber_naming:
+
+	Converts standard PDB files to PDB files which are conform to the AMBER
+	naming scheme, i. e. usable for AMBER calculations. The resulting files
+	will not necessarily be correct since there are some ambiguous cases
+	which will not be resolved by this program. Instead a standard case will
+	be assumed (like CYX for CYS residues which built a sulphur bridge).
+
