@@ -23,8 +23,6 @@ LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
     qtarch_GroupBox_11->setMaximumSize(32767, 32767);
     qtarch_GroupBox_11->setFocusPolicy(QWidget::NoFocus);
     qtarch_GroupBox_11->setBackgroundMode(QWidget::PaletteBackground);
-    qtarch_GroupBox_11->setFontPropagation(QWidget::SameFont);
-    qtarch_GroupBox_11->setPalettePropagation(QWidget::SameFont);
     qtarch_GroupBox_11->setFrameStyle( 50 );
     qtarch_GroupBox_11->setLineWidth( 1 );
     qtarch_GroupBox_11->setMidLineWidth( 0 );
@@ -38,8 +36,6 @@ LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
     qtarch_GroupBox_12->setMaximumSize(32767, 32767);
     qtarch_GroupBox_12->setFocusPolicy(QWidget::NoFocus);
     qtarch_GroupBox_12->setBackgroundMode(QWidget::PaletteBackground);
-    qtarch_GroupBox_12->setFontPropagation(QWidget::SameFont);
-    qtarch_GroupBox_12->setPalettePropagation(QWidget::SameFont);
     qtarch_GroupBox_12->setFrameStyle( 50 );
     qtarch_GroupBox_12->setLineWidth( 1 );
     qtarch_GroupBox_12->setMidLineWidth( 0 );
@@ -53,8 +49,6 @@ LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
     label_edit_->setMaximumSize(170, 30);
     label_edit_->setFocusPolicy(QWidget::StrongFocus);
     label_edit_->setBackgroundMode(QWidget::PaletteBase);
-    label_edit_->setFontPropagation(QWidget::SameFont);
-    label_edit_->setPalettePropagation(QWidget::SameFont);
     label_edit_->setText( "" );
     label_edit_->setMaxLength( 32767 );
     label_edit_->setFrame( QLineEdit::Normal );
@@ -67,8 +61,6 @@ LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
     qtarch_Label_4->setMaximumSize(32767, 32767);
     qtarch_Label_4->setFocusPolicy(QWidget::NoFocus);
     qtarch_Label_4->setBackgroundMode(QWidget::PaletteBackground);
-    qtarch_Label_4->setFontPropagation(QWidget::SameFont);
-    qtarch_Label_4->setPalettePropagation(QWidget::SameFont);
     qtarch_Label_4->setFrameStyle( 0 );
     qtarch_Label_4->setLineWidth( 1 );
     qtarch_Label_4->setMidLineWidth( 0 );
@@ -132,8 +124,6 @@ LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
     }
     color_sample_->setFocusPolicy(QWidget::NoFocus);
     color_sample_->setBackgroundMode(QWidget::PaletteBackground);
-    color_sample_->setFontPropagation(QWidget::SameFont);
-    color_sample_->setPalettePropagation(QWidget::SameFont);
     color_sample_->setFrameStyle( 0 );
     color_sample_->setLineWidth( 1 );
     color_sample_->setMidLineWidth( 0 );
@@ -148,8 +138,6 @@ LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
     qtarch_PushButton_4->setMaximumSize(32767, 32767);
     qtarch_PushButton_4->setFocusPolicy(QWidget::TabFocus);
     qtarch_PushButton_4->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_PushButton_4->setFontPropagation(QWidget::SameFont);
-    qtarch_PushButton_4->setPalettePropagation(QWidget::SameFont);
     qtarch_PushButton_4->setText( "Edit" );
     qtarch_PushButton_4->setAutoRepeat( FALSE );
     qtarch_PushButton_4->setAutoResize( FALSE );
@@ -165,8 +153,6 @@ LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
     apply_button_->setMaximumSize(32767, 32767);
     apply_button_->setFocusPolicy(QWidget::TabFocus);
     apply_button_->setBackgroundMode(QWidget::PaletteButton);
-    apply_button_->setFontPropagation(QWidget::SameFont);
-    apply_button_->setPalettePropagation(QWidget::SameFont);
     apply_button_->setText( "&Apply" );
     apply_button_->setAutoRepeat( FALSE );
     apply_button_->setAutoResize( FALSE );
@@ -182,8 +168,6 @@ LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
     qtarch_close_button->setMaximumSize(32767, 32767);
     qtarch_close_button->setFocusPolicy(QWidget::TabFocus);
     qtarch_close_button->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_close_button->setFontPropagation(QWidget::SameFont);
-    qtarch_close_button->setPalettePropagation(QWidget::SameFont);
     qtarch_close_button->setText( "&Close" );
     qtarch_close_button->setAutoRepeat( FALSE );
     qtarch_close_button->setAutoResize( FALSE );

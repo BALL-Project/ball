@@ -70,6 +70,11 @@ void ColorMeshDialog::colorMesh()
 				Log.error() << "Error! There is a point contained in the surface that is not inside the grid! Aborting the coloring..." << endl;
 				return;
 			}
+/*		ChangedCompositeMessage *changed_message = new ChangedCompositeMessage;
+		changed_message->setComposite(comp->getRoot());
+		changed_message->setDeletable(true);
+		notify_(changed_message);
+*/
 	}
 }
 

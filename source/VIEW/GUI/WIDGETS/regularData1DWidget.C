@@ -1,6 +1,9 @@
-// $Id: regularData1DWidget.C,v 1.8 2001/12/30 13:29:04 sturm Exp $
+// $Id: regularData1DWidget.C,v 1.8.4.1 2002/10/12 17:07:03 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
+#include <qpointarray.h>
+#include <qpainter.h>
+#include <qwmatrix.h>
 
 using std::endl;
 using std::cout;

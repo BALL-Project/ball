@@ -1,4 +1,4 @@
-// $Id: colorTable.C,v 1.4.4.2 2002/09/02 09:44:39 anhi Exp $
+// $Id: colorTable.C,v 1.4.4.3 2002/10/12 17:07:01 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 
@@ -138,7 +138,7 @@ namespace BALL
 			}
 		
 			// how many colors do we have to put between two of the old ones?
-			Size numInterpolSteps = (Size) floor((color_number_ - old_colNum)/(old_colNum-1));
+			Size numInterpolSteps = (Size)floor((double)(color_number_ - old_colNum) / (old_colNum - 1));
 	
 			// adjust the number of colors so that there are no remainders after the interpolation
 			if (color_number_ != (old_colNum + numInterpolSteps*(old_colNum-1)))  

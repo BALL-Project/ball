@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'colormeshdialog.ui'
 **
-** Created: Tue Sep 24 17:27:55 2002
+** Created: Tue Sep 24 19:06:56 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -18,30 +18,32 @@ class QFrame;
 class QLabel;
 class QLineEdit;
 class QPushButton;
+class QSpinBox;
 
-namespace BALL
-{
-	namespace VIEW
-	{
+class colorMeshDialogData : public QDialog
+{ 
+    Q_OBJECT
 
-		class colorMeshDialogData : public QDialog
-		{ 
-			Q_OBJECT
+public:
+    colorMeshDialogData( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    ~colorMeshDialogData();
 
-			public:
-				colorMeshDialogData( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-				~colorMeshDialogData();
+    QPushButton* Compute_;
+    QPushButton* Cancel_;
+    QFrame* Line3;
+    QLabel* TextLabel1;
+    QLineEdit* Loadfile_;
+    QPushButton* Browseload;
+    QLabel* TextLabel2;
+    QSpinBox* numberOfColors;
+    QLabel* TextLabel3;
+    QLabel* TextLabel3_2;
+    QLineEdit* MinVal;
+    QLineEdit* MaxVal;
 
-				QLabel* TextLabel1;
-				QLineEdit* Loadfile_;
-				QPushButton* Browseload;
-				QPushButton* Compute_;
-				QPushButton* Cancel_;
-				QFrame* Line3;
 
+protected:
+    QHBoxLayout* Layout2;
+};
 
-		};
-
-	}
-}
 #endif // COLORMESHDIALOGDATA_H

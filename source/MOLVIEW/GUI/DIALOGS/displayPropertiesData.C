@@ -23,8 +23,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     qtarch_color_groupbox->setMaximumSize(32767, 32767);
     qtarch_color_groupbox->setFocusPolicy(QWidget::NoFocus);
     qtarch_color_groupbox->setBackgroundMode(QWidget::PaletteBackground);
-    qtarch_color_groupbox->setFontPropagation(QWidget::SameFont);
-    qtarch_color_groupbox->setPalettePropagation(QWidget::SameFont);
     qtarch_color_groupbox->setFrameStyle( 51 );
     qtarch_color_groupbox->setLineWidth( 2 );
     qtarch_color_groupbox->setMidLineWidth( 0 );
@@ -38,8 +36,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     qtarch_GroupBox_9->setMaximumSize(32767, 32767);
     qtarch_GroupBox_9->setFocusPolicy(QWidget::NoFocus);
     qtarch_GroupBox_9->setBackgroundMode(QWidget::PaletteBackground);
-    qtarch_GroupBox_9->setFontPropagation(QWidget::SameFont);
-    qtarch_GroupBox_9->setPalettePropagation(QWidget::SameFont);
     qtarch_GroupBox_9->setFrameStyle( 51 );
     qtarch_GroupBox_9->setLineWidth( 2 );
     qtarch_GroupBox_9->setMidLineWidth( 0 );
@@ -53,8 +49,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     qtarch_model_groupbox->setMaximumSize(32767, 32767);
     qtarch_model_groupbox->setFocusPolicy(QWidget::NoFocus);
     qtarch_model_groupbox->setBackgroundMode(QWidget::PaletteBackground);
-    qtarch_model_groupbox->setFontPropagation(QWidget::SameFont);
-    qtarch_model_groupbox->setPalettePropagation(QWidget::SameFont);
     qtarch_model_groupbox->setFrameStyle( 51 );
     qtarch_model_groupbox->setLineWidth( 2 );
     qtarch_model_groupbox->setMidLineWidth( 0 );
@@ -68,8 +62,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     apply_button_->setMaximumSize(32767, 32767);
     apply_button_->setFocusPolicy(QWidget::TabFocus);
     apply_button_->setBackgroundMode(QWidget::PaletteButton);
-    apply_button_->setFontPropagation(QWidget::SameFont);
-    apply_button_->setPalettePropagation(QWidget::SameFont);
     apply_button_->setText( tr( "&Apply" ) );
     apply_button_->setAutoRepeat( FALSE );
     apply_button_->setAutoResize( FALSE );
@@ -85,8 +77,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     qtarch_close_button->setMaximumSize(32767, 32767);
     qtarch_close_button->setFocusPolicy(QWidget::TabFocus);
     qtarch_close_button->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_close_button->setFontPropagation(QWidget::SameFont);
-    qtarch_close_button->setPalettePropagation(QWidget::SameFont);
     qtarch_close_button->setText( tr( "&Close" ) );
     qtarch_close_button->setAutoRepeat( FALSE );
     qtarch_close_button->setAutoResize( FALSE );
@@ -102,8 +92,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     coloring_type_combobox_->setMaximumSize(210, 24);
     coloring_type_combobox_->setFocusPolicy(QWidget::StrongFocus);
     coloring_type_combobox_->setBackgroundMode(QWidget::NoBackground);
-    coloring_type_combobox_->setFontPropagation(QWidget::AllChildren);
-    coloring_type_combobox_->setPalettePropagation(QWidget::AllChildren);
     coloring_type_combobox_->setSizeLimit( 10 );
     coloring_type_combobox_->setAutoResize( FALSE );
     coloring_type_combobox_->insertItem( tr( "by element" ) );
@@ -122,8 +110,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     qtarch_model_resolution_label->setMaximumSize(32767, 32767);
     qtarch_model_resolution_label->setFocusPolicy(QWidget::NoFocus);
     qtarch_model_resolution_label->setBackgroundMode(QWidget::PaletteBackground);
-    qtarch_model_resolution_label->setFontPropagation(QWidget::SameFont);
-    qtarch_model_resolution_label->setPalettePropagation(QWidget::SameFont);
     qtarch_model_resolution_label->setFrameStyle( 0 );
     qtarch_model_resolution_label->setLineWidth( 1 );
     qtarch_model_resolution_label->setMidLineWidth( 0 );
@@ -138,8 +124,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     qtarch_model_type_label->setMaximumSize(32767, 32767);
     qtarch_model_type_label->setFocusPolicy(QWidget::NoFocus);
     qtarch_model_type_label->setBackgroundMode(QWidget::PaletteBackground);
-    qtarch_model_type_label->setFontPropagation(QWidget::SameFont);
-    qtarch_model_type_label->setPalettePropagation(QWidget::SameFont);
     qtarch_model_type_label->setFrameStyle( 0 );
     qtarch_model_type_label->setLineWidth( 1 );
     qtarch_model_type_label->setMidLineWidth( 0 );
@@ -154,8 +138,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     model_type_combobox_->setMaximumSize(140, 24);
     model_type_combobox_->setFocusPolicy(QWidget::StrongFocus);
     model_type_combobox_->setBackgroundMode(QWidget::NoBackground);
-    model_type_combobox_->setFontPropagation(QWidget::AllChildren);
-    model_type_combobox_->setPalettePropagation(QWidget::AllChildren);
     model_type_combobox_->setSizeLimit( 10 );
     model_type_combobox_->setAutoResize( FALSE );
     model_type_combobox_->insertItem( tr( "none" ) );
@@ -175,8 +157,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     mode_resolution_combobox_->setMaximumSize(140, 24);
     mode_resolution_combobox_->setFocusPolicy(QWidget::StrongFocus);
     mode_resolution_combobox_->setBackgroundMode(QWidget::NoBackground);
-    mode_resolution_combobox_->setFontPropagation(QWidget::AllChildren);
-    mode_resolution_combobox_->setPalettePropagation(QWidget::AllChildren);
     mode_resolution_combobox_->setSizeLimit( 10 );
     mode_resolution_combobox_->setAutoResize( FALSE );
     mode_resolution_combobox_->insertItem( tr( "low" ) );
@@ -193,8 +173,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     qtarch_edit_button->setMaximumSize(80, 30);
     qtarch_edit_button->setFocusPolicy(QWidget::TabFocus);
     qtarch_edit_button->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_edit_button->setFontPropagation(QWidget::SameFont);
-    qtarch_edit_button->setPalettePropagation(QWidget::SameFont);
     qtarch_edit_button->setText( tr( "&Edit" ) );
     qtarch_edit_button->setAutoRepeat( FALSE );
     qtarch_edit_button->setAutoResize( FALSE );
@@ -259,8 +237,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     }
     color_sample->setFocusPolicy(QWidget::NoFocus);
     color_sample->setBackgroundMode(QWidget::PaletteBackground);
-    color_sample->setFontPropagation(QWidget::SameFont);
-    color_sample->setPalettePropagation(QWidget::SameFont);
     color_sample->setFrameStyle( 50 );
     color_sample->setLineWidth( 1 );
     color_sample->setMidLineWidth( 0 );

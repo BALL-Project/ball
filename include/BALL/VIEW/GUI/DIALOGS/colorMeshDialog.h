@@ -20,7 +20,7 @@ namespace BALL
 				~ColorMeshDialog();
 
 				Mesh *mesh;
-
+				Composite *comp;
 			public slots:
 				/** @name Public slots
 				 */

@@ -1,4 +1,4 @@
-// $Id: elementColor.h,v 1.5 2001/12/30 13:28:40 sturm Exp $
+// $Id: elementColor.h,v 1.5.4.1 2002/10/12 17:06:52 oliver Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
 #define BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
@@ -47,7 +47,8 @@ namespace BALL
 			ElementColor
 				(const ColorRGBA* array, Size array_size);
 
-			virtual ~ElementColor();
+			virtual ~ElementColor()
+				throw();
 			//@}
 
 
