@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.h,v 1.1.2.1 2002/02/14 17:02:48 anker Exp $
+// $Id: fresnoHydrogenBond.h,v 1.1.2.2 2002/03/05 22:41:52 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOHYDROGENBOND_H
@@ -98,9 +98,21 @@ namespace BALL
 
 		private:
 
-		/*_
+		/*_ This vector contains all possible hydrogen bonds. It is created
+		 * during the setup process. Pairs are always of the form (hydrogen,
+		 * acceptor). The donor can be found easily by following the only bond
+		 * of the hydrogen.
 		*/
 		::vector< pair<const Atom*, const Atom*> > possible_hydrogen_bonds_;
+
+		/*_ A hash map containing all hydrogens and bools indicating whether
+		 * this hydrigen was already used for scoring a hydrogen bond. At the
+		 * moment we use the first hydrogen bond we find and hope that this
+		 * will indeed be the only one contributing to the energy score. This
+		 * HashMap will only be used by updateEnergy() but we build it in
+		 * setup().
+		*/
+		HashMap<const Atom*, bool> already_used_;
 
 		/*_
 		*/
