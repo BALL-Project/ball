@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.11 2003/09/30 15:12:04 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.12 2003/11/11 09:13:54 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -127,7 +127,7 @@ namespace BALL
 
 		/*_ All possible rotatable bonds.
 		*/
-		::vector<const Bond*> rotatable_bonds_;
+		std::vector<const Bond*> rotatable_bonds_;
 
 		/*_ All glycosidic bonds.
 		*/
@@ -140,7 +140,7 @@ namespace BALL
 		/*_ A vector of bool indicating which of rotatable bond was frozen upon
 		 * binding.
 		*/
-		::vector<bool> is_frozen_;
+		std::vector<bool> is_frozen_;
 
 		/* A flag defining which algorithm should be used for finding
 		 * rotatable bonds
