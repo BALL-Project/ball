@@ -1,4 +1,4 @@
-// $Id: notification.C,v 1.5 2000/12/19 12:51:05 amoll Exp $
+// $Id: notification.C,v 1.6 2001/06/24 14:15:32 oliver Exp $
 
 #include <BALL/CONCEPT/notification.h>
 
@@ -114,6 +114,8 @@ namespace BALL
 		:	first_(0)
 	{
 	}
+
+	const Size NotificationManager_::INITIAL_NUMBER_OF_SLOTS = 4;
 
 	NotificationManager_::NotificationManager_()
 		throw()

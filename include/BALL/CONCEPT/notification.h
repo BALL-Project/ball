@@ -1,4 +1,4 @@
-// $Id: notification.h,v 1.8 2000/12/19 12:50:49 amoll Exp $
+// $Id: notification.h,v 1.9 2001/06/24 14:15:32 oliver Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -122,10 +122,7 @@ namespace BALL
 
 		public:
 
-		enum
-		{
-			INITIAL_NUMBER_OF_SLOTS = 4
-		};
+		static const Size INITIAL_NUMBER_OF_SLOTS;
 
 		~NotificationManager_()
 			throw();
