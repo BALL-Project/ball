@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.7 2000/02/17 00:30:37 oliver Exp $
+// $Id: rtti.h,v 1.8 2000/03/05 11:20:10 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -80,7 +80,7 @@ namespace BALL
 		template <typename T>
 		void* getNew()
 		{
-			return (void*)new T;
+			return static_cast<void*>(new T);
 		}
 
 		/**	Return the name of the class.

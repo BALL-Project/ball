@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.4 2000/01/16 22:36:14 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.5 2000/03/05 11:20:10 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -6,6 +6,9 @@
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #	include <BALL/CONCEPT/persistenceManager.h>
 #endif
+
+#include <rpc/types.h>
+#include <rpc/xdr.h>
 
 namespace BALL 
 {
@@ -290,6 +293,32 @@ namespace BALL
 		*/
 		virtual void get(void*& p);
 		//@}
+
+		private:
+		
+		void checkReadBuffer_();
+
+		void checkWriteBuffer_();
+
+		void writeBuffer_();
+		
+		void readBuffer_();
+
+		/**	The XDR struct used to read from
+		*/
+		XDR		xdr_read_struct_;
+		
+		/**	The XDR read buffer
+		*/
+		char	read_buffer_[];
+
+		/**	The XDR struct used to write to
+		*/
+		XDR		xdr_write_struct_;
+		
+		/**	The XDR write buffer
+		*/
+		char	write_buffer_[];
 	};
 
 } // namespace BALL
