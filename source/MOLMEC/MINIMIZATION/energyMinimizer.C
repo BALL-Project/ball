@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.C,v 1.6 1999/12/30 20:37:18 oliver Exp $
+// $Id: energyMinimizer.C,v 1.7 2000/02/12 18:07:15 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/COMMON/limits.h>
@@ -31,10 +31,10 @@ namespace BALL
 	Size EnergyMinimizer::Default::MAXIMAL_NUMBER_OF_ITERATIONS = 1000;
 	Size EnergyMinimizer::Default::ENERGY_OUTPUT_FREQUENCY = 50;
 	Size EnergyMinimizer::Default::SNAPSHOT_FREQUENCY = Limits<Size>::max();
+  Size EnergyMinimizer::Default::MAX_SAME_ENERGY = 5; 
 	Size EnergyMinimizer::Default::NUMBER_OF_ITERATION = 0;              // start number 
-  Size EnergyMinimizer::Default::MAX_SAME_ENERGY = 20; 
-	float EnergyMinimizer::Default::ENERGY_DIFFERENCE_BOUND = 1e-4;      // in kJ/mol
-  float EnergyMinimizer::Default::MAX_GRADIENT = 0.0001;               // in kJ/(mol A) 
+	float EnergyMinimizer::Default::ENERGY_DIFFERENCE_BOUND = 1e-2;      // in kJ/mol
+  float EnergyMinimizer::Default::MAX_GRADIENT = 0.01;                 // in kJ/(mol A) 
 	float EnergyMinimizer::Default::MAXIMAL_SHIFT = 0.4;                 // Angstrom
 
 	// default constructor
