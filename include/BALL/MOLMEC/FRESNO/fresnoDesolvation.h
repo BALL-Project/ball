@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.h,v 1.1.2.7 2003/05/07 16:10:39 anker Exp $
+// $Id: fresnoDesolvation.h,v 1.1.2.8 2004/04/28 15:37:49 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
 #define BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
@@ -41,7 +41,11 @@ namespace BALL
 
 			/**
 			*/
-			CALCULATION__KEKSE,
+			CALCULATION__FULL_CYCLE_FOCUSED,
+
+			/**
+			*/
+			CALCULATION__COULOMB,
 
 			/**
 			*/
