@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.9 2004/05/27 19:49:50 oliver Exp $
+// $Id: label.h,v 1.10 2004/07/14 16:38:19 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -111,23 +111,15 @@ namespace BALL
 			/**	@name	Inspectors, Mutators, Accessors */
 			//@{
 
-			/** Change the name of the label.
-					Change the name of this label represented by the parameter <b> text</b>.
-					Calls GeometricObject::setName
-					\param       text the new text of this label
-					\see         GeometricObject::setName
+			/** Change the text of the label.
 			*/
 			void setText(const String& text)
-				throw() {setName(text);}
+				throw() {text_ = text;}
 
-			/** Inspection of the name of the label.
-					Access the name of this label.
-					Calls GeometricObject::getName
-					\return   String the name of this label
-					\see      GeometricObject::getName
+			/** Inspection of the text of the label.
 			*/
 			String getText() const
-				throw() { return getName();}
+				throw() { return text_;}
 
 			//@}
 			/**	@name	debuggers and diagnostics */
@@ -161,11 +153,13 @@ namespace BALL
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
 
+			protected:
+				String text_;
+
 			//@}
 		};
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_PRIMITIV_LABEL_H
