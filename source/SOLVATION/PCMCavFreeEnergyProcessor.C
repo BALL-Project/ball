@@ -1,0 +1,102 @@
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.1 2000/08/31 18:48:35 anker Exp $
+
+#include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
+#include <BALL/STRUCTURE/numericalSAS.h>
+#include <BALL/STRUCTURE/analyticalSES.h>
+
+namespace BALL
+{
+
+	const char* PCMCavFreeEnergyProcessor::Option::VERBOSITY = "verbosity";
+	const char* PCMCavFreeEnergyProcessor::Option::SOLVENT_NUMBER_DENSITY 
+		= "solvent_number_density";
+	const char* PCMCavFreeEnergyProcessor::Option::ABSOLUTE_TEMPERATURE 
+		= "absolute_temperature";
+	const char* PCMCavFreeEnergyProcessor::Option::PROBE_RADIUS 
+		= "probe_radius";
+	
+	const int PCMCavFreeEnergyProcessor::Default::VERBOSITY = 0;
+	const float PCMCavFreeEnergyProcessor::Default::SOLVENT_NUMBER_DENSITY 
+		= 3.33253e-2;
+	const float PCMCavFreeEnergyProcessor::Default::ABSOLUTE_TEMPERATURE 
+		= 298.0;
+	const float PCMCavFreeEnergyProcessor::Default::PROBE_RADIUS = 1.385;
+
+	PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor()
+	{
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 
+				Default::SOLVENT_NUMBER_DENSITY);
+		options.setDefaultReal(Option::ABSOLUTE_TEMPERATURE,
+				Default::ABSOLUTE_TEMPERATURE);
+		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
+	}
+
+	PCMCavFreeEnergyProcessor::~PCMCavFreeEnergyProcessor()
+	{
+	}
+
+	bool PCMCavFreeEnergyProcessor::finish()
+	{
+		// first check for user settings
+
+		int verbosity = (int) options.getInteger(Option::VERBOSITY);
+		// rho is the number density of the solvent (i. e. water) [1/m^3]
+		double rho = options.getReal(Option::SOLVENT_NUMBER_DENSITY) * 1e30;
+		// the temperature [ K ]
+		double T = options.getReal(Option::ABSOLUTE_TEMPERATURE);
+		// the solvent radius [ A ]
+		double solvent_radius = options.getReal(Option::PROBE_RADIUS);
+		
+		// now compute some constant terms (names as in Pierotti, Chem. Rev.
+		// 76(6):717--726, 1976)
+
+		double sigma1 = 2 * solvent_radius * 1e-10; // [ m ]
+		double sigma1_3 = sigma1 * sigma1 * sigma1; // [ m^3 ]
+		double y = Constants::PI * sigma1_3 * (rho/6);	// [ 1 ]
+		double y_frac = y/(1-y); // [ 1 ]
+		double y_frac_2 = y_frac * y_frac; // [ 1 ]
+		double NkT = Constants::AVOGADRO * Constants::BOLTZMANN * T; // [ J/mol ]
+		if (verbosity > 0)
+		{
+			Log.info() << "y = " << y << endl;
+			Log.info() << "y_frac = " << y_frac << endl;
+		}
+		
+		HashMap<Atom*,float> atom_areas;
+		calculateSASAtomAreas(*fragment_, atom_areas, solvent_radius);
+		HashMap<Atom*,float> atom_areas_reduced;
+		calculateSESAtomAreas(*fragment_, atom_areas_reduced, 0.0);
+		
+		// R is two times ( atom radius + probe radius ) [ m ]
+		double R; 
+		// S is atom radius + probe radius;
+		double S; // [ 1 ]
+		// deltaGspher is the cavitatonal energy of a spherical solute [ J/mol ]
+		double deltaGspher; 
+		// deltaGcav is the cavitatonal energy of the molecule [ J/mol ]
+		double deltaGcav = 0; 
+
+		HashMap<Atom*,float>::Iterator it = atom_areas.begin();
+		HashMap<Atom*,float>::Iterator it_red = atom_areas_reduced.begin();
+
+		for (; +it; ++it, ++it_red)
+		{
+			// R = 2 * it->first->getRadius() * 1e-10 / sigma1;
+			S = it->first->getRadius() * 1e-10 + sigma1 / 2.0;
+			R = 2 * S;
+
+			deltaGspher =	
+					- log(1.0 - y) + 4.5 * y_frac_2
+					- ( ( 6.0 * y_frac + 18 * y_frac_2 ) / sigma1 ) * S
+					+ ( ( 12.0 * y_frac + 18 * y_frac_2 ) / (sigma1 * sigma1) ) * S * S;
+			deltaGspher *= NkT;
+
+			R = it->first->getRadius() * 1e-10;
+			deltaGcav += it_red->second * 1e-20 / 
+				( 4 * Constants::PI * R * R ) * deltaGspher;
+		}
+		energy_ = deltaGcav;
+		return 1;
+	}
+} // namespace BALL
