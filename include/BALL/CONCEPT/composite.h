@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.9 2000/01/11 20:11:34 oliver Exp $
+// $Id: composite.h,v 1.10 2000/01/13 22:17:55 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -253,13 +253,15 @@ namespace BALL
 								matching composite was found up to the root of the tree
 		*/
 		template <typename T>
-		T* getAncestor()
+		T* getAncestor(const T& /* dummy */)
 		{
 			T* T_ptr = 0;
+			
 			for (Composite* composite_ptr = parent_;
 					 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
 			{
-				if ((T_ptr = dynamic_cast<T*>(composite_ptr)) != 0)
+				T_ptr = dynamic_cast<T*>(composite_ptr);
+				if (T_ptr != 0)
 				{
 					break;
 				}	
@@ -274,7 +276,7 @@ namespace BALL
 								matching composite was found to the root of the tree
 		*/
 		template <class T>
-		const T* getAncestor() const
+		const T* getAncestor(const T& /* dummy */) const
 		{
 			T* T_ptr = 0;
 			for (Composite* composite_ptr = parent_;
@@ -520,10 +522,10 @@ namespace BALL
 		bool hasAnyAncestor() const;
 
 		///
-		template <class T>
-		bool hasAncestor() const 
+		template <typename T>
+		bool hasAncestor(const T& dummy ) const 
 		{
-			return (getAncestor<T>() != 0);	
+			return (getAncestor(dummy) != 0);	
 		}
 
 		///
