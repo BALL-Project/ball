@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.sip,v 1.1 2003/12/11 16:05:39 amoll Exp $
+// $Id: ballAndStickModel.sip,v 1.2 2003/12/12 17:52:44 amoll Exp $
 //
 
 class AddBallAndStickModel  
@@ -18,10 +18,8 @@ class AddBallAndStickModel
   AddBallAndStickModel() throw();
   AddBallAndStickModel(const AddBallAndStickModel&) throw();
   //Processor::Result operator() (Composite&);
-  bool finish();
   bool isBallAndStickModel() const throw();
   bool isStickModel() const throw();
-  bool start();
   float getBallRadius() const throw();
   float getStickRadius() const throw();
   void clear() throw();

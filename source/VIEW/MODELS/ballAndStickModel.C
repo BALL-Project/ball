@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.7 2003/12/12 15:11:48 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.8 2003/12/12 17:52:19 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -114,12 +114,6 @@ void AddBallAndStickModel::setStickRadius(const float radius)
 	stick_radius_ = radius;
 }
 
-bool AddBallAndStickModel::finish()
-{
-	buildBondModels_();
-	return true;
-}
-		
 Processor::Result AddBallAndStickModel::operator() (Composite& composite)
 {
 	// composite is an atom ?

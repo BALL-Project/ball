@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.7 2003/12/12 17:49:01 amoll Exp $
+// $Id: lineModel.C,v 1.8 2003/12/12 17:51:51 amoll Exp $
 
 #include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -37,12 +37,6 @@ AddLineModel::~AddLineModel()
 	#endif 
 }
 
-bool AddLineModel::finish()
-{
-	buildBondModels_();
-	return true;
-}
-		
 Processor::Result AddLineModel::operator() (Composite &composite)
 {
 	if (!RTTI::isKindOf<Atom>(composite))

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.sip,v 1.2 2003/12/12 17:50:25 amoll Exp $
+// $Id: lineModel.sip,v 1.3 2003/12/12 17:51:56 amoll Exp $
 //
 
 class AddLineModel 
@@ -17,6 +17,5 @@ class AddLineModel
   AddLineModel() throw();
   AddLineModel(const AddLineModel&) throw();
  // Processor::Result operator() (Composite&);
-  bool finish();
   ~AddLineModel() throw();
 };

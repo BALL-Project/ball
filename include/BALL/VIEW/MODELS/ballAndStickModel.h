@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.7 2003/12/12 15:12:02 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.8 2003/12/12 17:52:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -145,16 +145,6 @@ namespace BALL
 			*/ 
 			//@{
 
-			/** Finish method.
-					This method will be internally called from the processor mechanism if the processor
-					has finished processing the Composite tree.
-					All previously inserted Atom objects (inserted with the method insertAtom_())
-					will be processed with the method buildBondModels_() to create the graphical 
-					representation of the Bond objects.
-					\return bool true if the finish was successful
-			*/
-			virtual bool finish();
-			
 			/**	Operator method.
 					This method iterates over each Composite object reachable in the 
 					Composite tree. If the composite is of kind Atom than a Sphere
