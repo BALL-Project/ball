@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.16 2000/03/15 22:15:55 oliver Exp $
+// $Id: angle.h,v 1.17 2000/03/17 14:24:26 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -184,28 +184,12 @@ namespace BALL
 		*/
 		static T toDegree(const T& radian);
 
-		/**	Return the torsion angle of four vectors to eachother.
-				@param TVector3& ax 1. vector x component
-				@param TVector3& ay 1. vector y component
-				@param TVector3& az 1. vector z component
-				@param TVector3& bx 2. vector x component
-				@param TVector3& by 2. vector y component
-				@param TVector3& bz 2. vector z component
-				@param TVector3& cx 3. vector x component
-				@param TVector3& cy 3. vector y component
-				@param TVector3& cz 3. vector z component
-				@param TVector3& dx 4. vector x component
-				@param TVector3& dy 4. vector y component
-				@param TVector3& dz 4. vector z component
-				@return static TAngle the torsion angle
-		*/
-		static TAngle getTorsionAngle
-			(const T& ax, const T& ay, const T& az,
-			 const T& bx, const T& by, const T& bz,
-			 const T& cx, const T& cy, const T& cz, 
-			 const T& dx, const T& dy, const T& dz);
-
-		/**  */
+		/**	Normalize the angle.
+				@param range :
+				{\tt RANGE__UNLIMITED = 0} no limitations
+				{\tt RANGE__UNSIGNED  = 1} 0° <= angle <= 360°, 0 <= angle <= PI * 2
+				{\tt RANGE__SIGNED    = 2} -180° <= angle <= 180°, -PI <= angle <= PI
+		*/		
 		void normalize(Range range);
 
 		/**  Negate the angle
@@ -476,77 +460,6 @@ namespace BALL
 	T TAngle<T>::toDegree(const T& radian)
 	{
 		return BALL_ANGLE_RADIAN_TO_DEGREE(radian);
-	}
-
-	template <typename T>
-	TAngle<T> TAngle<T>::getTorsionAngle
-		(const T& ax, const T& ay, const T& az,
-		 const T& bx, const T& by, const T& bz,
-		 const T& cx, const T& cy, const T& cz, 
-		 const T& dx, const T& dy, const T& dz)
-	{
-		T abx = ax - bx;
-		T aby = ay - by;
-		T abz = az - bz;
-
-		T cbx = cx - bx;
-		T cby = cy - by;
-		T cbz = cz - bz;
-
-		T cdx = cx - dx;
-		T cdy = cy - dy;
-		T cdz = cz - dz;
-
-		// Calculate the normals to the two planes n1 and n2
-		// this is given as the cross products:
-		//		 AB x BC
-		//		--------- = n1
-		//		|AB x BC|
-		//
-		//		 BC x CD
-		// 	  --------- = n2
-		// 	  |BC x CD|
-
-		// Normal to plane 1 
-		T ndax = aby * cbz - abz * cby; 
-		T nday = abz * cbx - abx * cbz;
-		T ndaz = abx * cby - aby * cbx;
-
-		// Normal to plane 2 
-		T neax = cbz * cdy - cby * cdz; 
-		T neay = cbx * cdz - cbz * cdx;
-		T neaz = cby * cdx - cbx * cdy;
-
-		// Calculate the length of the two normals 
-		T bl = sqrt((double)ndax * ndax + nday * nday + ndaz * ndaz);
-		T el = sqrt((double)neax * neax + neay * neay + neaz * neaz);
-		T bel = ndax * neax + nday * neay + ndaz * neaz;
-		
-		bel /= (bl * el);
-		if (bel > 1.0) 
-		{
-			bel = 1;
-		} 
-		else if (bel < -1.0) 
-		{
-			bel = -1;
-		}
-
-		T acosbel = acos(bel);
-
-		if ((cbx * (ndaz * neay - nday * neaz) 
-				 + cby * (ndax * neaz - ndaz * neax) 
-				 + cbz * (nday * neax - ndax * neay))
-				< 0)
-		{
-			acosbel = -acosbel;
-		}
-		
-		acosbel = (acosbel > 0.0) 
-			? Constants::PI - acosbel 
-			: -(Constants::PI + acosbel);
-		
-		return TAngle(acosbel);
 	}
 
 	template <typename T>
