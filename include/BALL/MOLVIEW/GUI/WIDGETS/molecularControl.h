@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.7.4.1 2002/10/18 14:48:20 amoll Exp $
+// $Id: molecularControl.h,v 1.7.4.2 2002/10/18 18:50:37 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -27,11 +27,7 @@
 #	include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 #endif
 
-
-//using namespace BALL;
 using namespace BALL::VIEW;
-//using namespace BALL::MOLVIEW;
-
 
 namespace BALL
 {
@@ -61,8 +57,8 @@ namespace BALL
 
 			/** Default Constructor.
 					Constructs new molecularControl.
-					@param      parent the parent widget of {\em *this} molecularControl (See documentation of QT-library for information concerning widgets)
-					@param      name the name of {\em *this} molecularControl (See documentation of QT-library for information concerning widgets)
+					@param      parent the parent widget of {\em *this} molecularControl 
+					@param      name the name of {\em *this} molecularControl 
 					@return     MolecularControl new constructed molecularControl
 					@see        Control
 			*/
