@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.C,v 1.2 2003/08/26 18:35:38 amoll Exp $
+// $Id: glDisplayList.C,v 1.2.2.1 2004/05/11 20:38:34 amoll Exp $
 
 #include <BALL/VIEW/RENDERING/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
@@ -84,7 +84,7 @@ void GLDisplayList::startDefinition()
 		throw DisplayListRedeclaration(__FILE__, __LINE__);
 	}
 
-	int current_index = 99;
+	GLint current_index = 99;
 
 	glGetIntegerv(GL_LIST_INDEX, &current_index);
 

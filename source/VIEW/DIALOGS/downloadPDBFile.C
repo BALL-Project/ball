@@ -150,6 +150,9 @@ namespace BALL
 
 		void DownloadPDBFile::threadedDownload_(const String& url)
 		{
+			// prevent compiler warnings
+			url.isValid();
+			
 #ifdef BALL_QT_HAS_THREADS
 			downloadStarted_();
 			thread_->setURL(url);
