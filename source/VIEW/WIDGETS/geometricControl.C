@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.34 2004/03/13 12:11:33 amoll Exp $
+// $Id: geometricControl.C,v 1.35 2004/03/13 12:13:03 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -122,6 +122,7 @@ void GeometricControl::updateRepresentation(Representation& rep)
 	QListViewItem* item = representation_to_item_[&rep]; 
 	if (item == 0) return;
 
+	// prevent flickering in GeometricControl, e.g. while a simulation is running
 	bool changed_content = false;
 	String new_text;
 
