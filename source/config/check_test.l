@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.3 2003/06/11 08:10:06 oliver Exp $
+	// $Id: check_test.l,v 1.4 2003/06/11 15:51:39 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 
@@ -392,8 +392,8 @@
 			{
 				args.erase(args.length() - 1, 1);
 			}
-								 
 			test_set.insert(name + args + ")");
+			
 		}
 		else	
 		{
@@ -494,6 +494,7 @@
 	}
 
 <FindMembers>[ \t]*"inline"[ \t\n]+	
+<FindMembers>[ \t]*"BALL_INLINE"[ \t\n]+	
 <FindMembers>[ \t]*"explicit"[ \t\n]+ 
 <FindMembers>[ \t]*"auto"[ \t\n]+ 
 <FindMembers>[ \t]*"register"[ \t\n]+
@@ -1092,6 +1093,11 @@ void parseTestFile(const char* filename)
 		{
 			line.erase(0, 6);
 			line.erase(line.length() - 1, 1);
+
+			if (tests_found.count(line) > 0)
+			{
+				cout << "WARNING: duplicate test for " << line << " of " << filename << endl;
+			}
 			tests_found.insert(line);
 		}
 	}
@@ -1214,6 +1220,28 @@ int main(int argc, char** argv)
 		else	
 		{
 			cout << "  '" << esc(*it) << "'" << endl;
+		}
+	}
+
+  if (!print_all_methods)
+  {
+    missing.clear();
+    set_difference(tests_found.begin(), tests_found.end(),
+                   test_set.begin(), test_set.end(),
+                   inserter(missing, missing.begin()));
+
+    if (!missing.empty() && (argc > 2))
+    {
+      cout << "Unknown methods in " << argv[2] << endl;
+      set<string>::iterator it(missing.begin());
+      for (; it != missing.end(); ++it)
+      {
+				// Don't print tests with an "[EXTRA]" at their start
+				if (it->find("[EXTRA]") != 0)
+				{
+					cout << "- '" << esc(*it) << "'" << endl;
+				}
+			}
 		}
 	}
 
