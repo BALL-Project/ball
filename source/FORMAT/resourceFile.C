@@ -1,18 +1,21 @@
-// $Id: resourceFile.C,v 1.6 2000/01/10 15:51:12 oliver Exp $
+// $Id: resourceFile.C,v 1.7 2000/03/01 00:08:22 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
+
+#include <stack>
 
 using std::istream;
 using std::ostream;
 using std::endl;
 using std::ios;
 using std::streampos;
+using std::stack;
 
 namespace BALL 
 {
 
-	char ResourceFile::ENTRY_BEGIN = '(';
-	char ResourceFile::ENTRY_END = ')';
+	char ResourceFile::ENTRY_BEGIN = '<';
+	char ResourceFile::ENTRY_END = '>';
 	char ResourceFile::SEPARATOR = '/';
 
 	ResourceEntry::ResourceEntry()
@@ -624,18 +627,6 @@ namespace BALL
 
 	bool ResourceFile::open(const String& name)
 	{
-		// close the file after validateSyntax again
-		// since some iostream implementations do not 
-		// allow a seek to the beginning after EOF
-		File::open(name.c_str(), ios::in);
-		bool valid_syntax = validateSyntax_();
-		File::close();
-
-		if (!valid_syntax)
-		{
-			return false;
-		}
-	
 		if (File::open(name.c_str(), ios::in) && good())
 		{
 			*this >> *this;
@@ -659,7 +650,9 @@ namespace BALL
 		Size depth = 0;
 		
 		if (entry.isEmpty() == false)
+		{
 			save_(file, &entry, depth);
+		}
 
 		file.close();
 	}
@@ -684,76 +677,139 @@ namespace BALL
 	{
 		resource_file.destroy();
 		
-		char key[1000];
-		char value[1000];
 		char c = 0;
-		Index index = 0;
 		ResourceFile::Entry* entry = &(resource_file.root_);
+
+		stack<String>	tag_stack;
+		String tmp;
+		String tag;
+		String last_string;
+		String last_node_tag;
+		String key;
+		String value;
+		bool key_set = false;
+		bool value_set = false;
+		
 
 		while (s.good())
 		{
-			resource_file.skipWhitespaces_();
-
 			s.get(c);
 
 			if (c == ResourceFile::ENTRY_BEGIN)
 			{
+				// remember the last string
+				last_string = tmp;
+				last_string.trim();
+
+				tmp = "";
 				resource_file.skipWhitespaces_();
 
-				if (c == ResourceFile::ENTRY_END)
-				{
-					continue;
+				s.get(c);
+				while (!String::isSpace(c) && c != ResourceFile::ENTRY_END && s.good())
+				{	
+					tmp += c;
+					s.get(c);
 				}
-
 				if (!s.good())
 				{
+					Log.error() << "ResourceFile:: error reading tag " << tmp << endl;
 					return s;
 				}
+				tag = tmp;
 
-				s.get(c);
-				for (index = 0; 
-						 (c != ResourceFile::ENTRY_END) && !isspace(c) && s.good()
-								&& c != ResourceFile::ENTRY_BEGIN && c != ResourceFile::ENTRY_END;
-						 ++index, s.get(c))
+				if (tag.size() == 0)
 				{
-					key[index] = c;
-				}
-				key[index] = 0;
-
-				if (!s.putback(c))
-				{
-					return s;
-				}
-
-				resource_file.skipWhitespaces_();
-				
-				if (!s.good())
-				{
-					return s;
-				} 
-				
-				s.get(c);
-
-				for (index = 0; 
-						 c != ResourceFile::ENTRY_END  && c != '\v' && s.good()
-							 && c != '\n'  && c != '\r'  && c != ResourceFile::ENTRY_BEGIN;
-						 ++index, s.get(c))
-				{
-					value[index] = c;
-				}
-				value[index] = 0;
-				
-				if (!s.putback(c))
-				{
+					Log.error() << "ResourceFile: empty tag. " << endl;
 					return s;
 				}
 				
-				entry = entry->insertChild(key, value);
-
+				if (tag[0] == '/')
+				{
+					// closing tag -- check the stack
+					if (tag_stack.size() == 0)
+					{
+						Log.error() << "ResourceFile: no opening tag for " << tag << endl;
+						return s;
+					}
+					tmp = tag_stack.top();
+					tag_stack.pop();
+					if ("/" + tmp != tag)
+					{
+						Log.error() << "ResourceFile: tag " << tmp << " closed with " << tag << endl;
+						return s;
+					}
+					
+					if (tag == "/node")
+					{
+						if (last_node_tag == "node")
+						{
+							// create new entry	and stay on this level
+							if (!value_set)
+							{
+								key = last_string;
+								value = "";
+							}
+							entry = entry->insertChild(key, value);
+							entry = entry->getParent();
+							key_set = false;
+							value_set = false;
+						}
+						if (last_node_tag == "/node")
+						{
+							entry = entry->getParent();
+						}
+						last_node_tag = "/node";
+					}
+					else if (tag == "/value")
+					{
+						value = last_string;
+						value_set = true;
+					} else
+					{
+						Log.error() << "ResourceFile: unknown tag " << tag << endl;
+					}
+				} else {
+					if (tag == "node")
+					{
+						if (last_node_tag == "node")
+						{
+							// create new entry				
+							if (!value_set)
+							{
+								key = last_string;
+								value = "";
+							}
+							entry = entry->insertChild(key, value);
+							key_set = false;
+							value_set = false;
+						}
+						last_node_tag = "node";
+					}
+					else if (tag == "value")
+					{
+						key = last_string;
+						key_set = true;
+					} else
+					{
+						Log.error() << "ResourceFile: unknown tag " << tag << endl;
+					}
+					// opening tag - push it on the stack
+					tag_stack.push(tag);
+				}
+			
+				while (c != ResourceFile::ENTRY_END && s.good())
+				{
+					s.get(c);
+				}
+				tmp = "";
 			}
 			else if (c == ResourceFile::ENTRY_END) 
 			{
-				entry = entry->getParent();
+				Log.error() << "ResourceFile: read '>' without opening '<'" << endl;
+			}
+			else 
+			{
+				tmp += c;
 			}
 		}
 		
@@ -763,7 +819,7 @@ namespace BALL
 	void ResourceFile::save_(File& file, register const Entry* entry, Size& depth)
 	{
 		Size l = 0;
-		const Entry *child_entry = 0;
+		const Entry* child_entry = 0;
 		
 		++depth;
 		
@@ -772,10 +828,15 @@ namespace BALL
 			child_entry = entry->getChild(index);
 			
 			for (l = 1; l < depth; l++)
+			{
 				file << "  ";
+			}
 
-			file	<< ENTRY_BEGIN << child_entry->getKey()
-						<< ' ' << child_entry->getValue();
+			file	<< "<node>" << child_entry->getKey();
+			if (child_entry->getValue() != "")
+			{
+				file << "<value>" << child_entry->getValue() << "</value>";
+			}
 			
 			if (child_entry->countChildren() > 0)
 			{
@@ -784,64 +845,15 @@ namespace BALL
 				save_(file, child_entry, depth);
 				
 				for (l = 1; l < depth; l++)
+				{
 					file << "  ";
+				}
 			}
 			
-			file << ENTRY_END << endl;
+			file << "</node>" << endl;
 		}
 
 		--depth;
-	}
-
-	bool ResourceFile::validateSyntax_()
-	{
-		if (!good())
-		{
-			return false;
-		}
-		
-		char c = 0;
-		Size count_open_par = 0;
-		streampos old_pos = tellg();
-
-		while (good())
-		{
-			get(c);
-			if (c == ENTRY_BEGIN)
-			{
-				++count_open_par;
-			}
-			else if (c == ENTRY_END)
-			{
-				if (count_open_par == 0)
-				{
-					clear(File::rdstate() | ios::failbit | ios::badbit);
-		
-					return false;
-				}
-				--count_open_par;
-			}
-		}
-				
-		if (count_open_par > 0)
-		{
-			clear(File::rdstate() | ios::failbit | ios::badbit);
-			
-			return false;
-		}
-
-		if (!bad())
-		{
-			clear();
-			
-			seekg(old_pos);
-
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
