@@ -1,4 +1,4 @@
-// $Id: Parameters_test.C,v 1.2 2000/10/05 17:16:57 anker Exp $
+// $Id: Parameters_test.C,v 1.3 2000/10/07 12:01:39 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: Parameters_test.C,v 1.2 2000/10/05 17:16:57 anker Exp $")
+START_TEST(Parameters, "$Id: Parameters_test.C,v 1.3 2000/10/07 12:01:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,19 +31,18 @@ RESULT
 
 
 CHECK(Parameters::Parameters(const String& filename))
-	String filename("bla.file");
+	String filename("data/Parameters_test.ini");
   Parameters para(filename);
-	bool result = (para.getFilename() == filename);
-	TEST_EQUAL(result, true)
+	TEST_EQUAL(para.getFilename(), filename)
 RESULT
 
 
 CHECK(Parameters::Parameters(const Parameters& parameter))
-	Parameters para;
-
-	Parameters PARA(para);
-	
-  //BAUSTELLE
+	String filename("data/Parameters_test.ini");
+  Parameters para(filename);
+	TEST_EQUAL(para.getFilename(), filename)
+	Parameters para2(para);
+	TEST_EQUAL(para.getFilename(), filename)
 RESULT
 
 
