@@ -16,7 +16,6 @@
 #endif
 
 #include <qthread.h>
-#include <qmutex.h>
 #include <qevent.h>
 
 namespace BALL
@@ -70,9 +69,10 @@ namespace VIEW
 			4. At the end of the run() method, always call finish_() to notify the 
 				 main thread to delete the simulation thread, otherwise there will be 
 				 a memory leak.
+			5. After updating the visualisations, call SimulationThread::setUpdateRunning(false)
+				 from the MainControl.
 			If you dont pay attention to these rules, dont wonder if molview freezes
 			or crashes!
-			This class already has a mutex as member, so use it.
 	*/
 	class BALL_EXPORT SimulationThread
 		: public QThread
@@ -104,8 +104,10 @@ namespace VIEW
 			///
 			Composite* getComposite() throw() { return composite_;}
 
-			///
-			QMutex& getMutex() throw() { return mutex_;}
+			/** Notify the thread, that about the state of the visualisation update.
+			 		(The SimulationThread will wait for this call.)
+			*/
+			void setUpdateRunning(bool state) { update_vis_running_ = state;}
 
 			protected:
 
@@ -118,120 +120,120 @@ namespace VIEW
 			/// Notifies the main thread to delete the simulating thread
 			void finish_();
 
-			QMutex mutex_;
 
-			Size steps_between_updates_;
-			MainControl* main_control_;
-			DCDFile* dcd_file_;
-			Composite* composite_;
+			Size 					steps_between_updates_;
+			MainControl* 	main_control_;
+			DCDFile*   		dcd_file_;
+			Composite* 		composite_;
+			bool       		update_vis_running_;
 		};
 
 
-	/// Thread for EnergyMinimization
-	class BALL_EXPORT EnergyMinimizerThread
-		: public SimulationThread
-	{
-		public:
+		/// Thread for EnergyMinimization
+		class BALL_EXPORT EnergyMinimizerThread
+			: public SimulationThread
+		{
+			public:
 
-			///
-			EnergyMinimizerThread();
-			
-			///
-			~EnergyMinimizerThread();
-			
-			///
-			virtual void run();
+				///
+				EnergyMinimizerThread();
+				
+				///
+				~EnergyMinimizerThread();
+				
+				///
+				virtual void run();
 
-			///
-			void setEnergyMinimizer(EnergyMinimizer* minimizer);
+				///
+				void setEnergyMinimizer(EnergyMinimizer* minimizer);
 
-		protected:
-			EnergyMinimizer* minimizer_;
-	};
-
-
-	/// Thread for MDSimulation
-	class BALL_EXPORT MDSimulationThread
-		: public SimulationThread
-	{
-		public:
-
-			///
-			MDSimulationThread();
-			
-			///
-			~MDSimulationThread();
-			
-			///
-			virtual void run()
-				throw(Exception::NullPointer);
-
-			///
-			void setMolecularDynamics(MolecularDynamics* md);
-
-			///
-			void setNumberOfSteps(Size steps) { steps_ = steps;}
-
-			///
-			void setSaveImages(bool state) { save_images_ = state;}
-
-		protected:
-			MolecularDynamics* md_;
-			Size steps_;
-			bool save_images_;
-	};
+			protected:
+				EnergyMinimizer* minimizer_;
+		};
 
 
-	/** This class is only intended for usage with multithreading.
-			It notifies the MainControl, that the thread for simulations has finished and can be deleted.
-			This should only be used internaly.
-	*/
-	class BALL_EXPORT SimulationThreadFinished
-		: public QCustomEvent
-	{
-		public:
-			SimulationThreadFinished()
-				: QCustomEvent( SIMULATION_THREAD_FINISHED_EVENT ){}
-	};
+		/// Thread for MDSimulation
+		class BALL_EXPORT MDSimulationThread
+			: public SimulationThread
+		{
+			public:
 
-	///
-	class BALL_EXPORT SimulationOutput
-		: public QCustomEvent
-	{
-		public:
-			///
-			SimulationOutput()
-				: QCustomEvent( SIMULATION_OUTPUT_EVENT ){}
+				///
+				MDSimulationThread();
+				
+				///
+				~MDSimulationThread();
+				
+				///
+				virtual void run()
+					throw(Exception::NullPointer);
 
-			///
-			void setMessage(const String& msg) {message_ = msg;}
+				///
+				void setMolecularDynamics(MolecularDynamics* md);
 
-			///
-			String getMessage() {return message_;}
+				///
+				void setNumberOfSteps(Size steps) { steps_ = steps;}
 
-		protected:
-			String message_;
-	};
+				///
+				void setSaveImages(bool state) { save_images_ = state;}
 
-	///
-	class BALL_EXPORT UpdateCompositeEvent
-		: public QCustomEvent
-	{
-		public:
-			///
-			UpdateCompositeEvent()
-				:QCustomEvent(UPDATE_COMPOSITE_EVENT),
-				 composite_(0){}
+			protected:
+				MolecularDynamics* md_;
+				Size steps_;
+				bool save_images_;
+		};
 
-			///
-			void setComposite(const Composite* composite) { composite_ = composite;}
-			
-			///
-			const Composite* getComposite() const { return composite_;}
 
-		protected:
-			const Composite* composite_;
-	};
+		/** This class is only intended for usage with multithreading.
+				It notifies the MainControl, that the thread for simulations has finished and can be deleted.
+				This should only be used internaly.
+		*/
+		class BALL_EXPORT SimulationThreadFinished
+			: public QCustomEvent
+		{
+			public:
+				SimulationThreadFinished()
+					: QCustomEvent( SIMULATION_THREAD_FINISHED_EVENT ){}
+		};
+
+		///
+		class BALL_EXPORT SimulationOutput
+			: public QCustomEvent
+		{
+			public:
+				///
+				SimulationOutput()
+					: QCustomEvent( SIMULATION_OUTPUT_EVENT ){}
+
+				///
+				void setMessage(const String& msg) {message_ = msg;}
+
+				///
+				String getMessage() {return message_;}
+
+			protected:
+				String message_;
+		};
+
+		///
+		class BALL_EXPORT UpdateCompositeEvent
+			: public QCustomEvent
+		{
+			public:
+				///
+				UpdateCompositeEvent()
+					:QCustomEvent(UPDATE_COMPOSITE_EVENT),
+					 composite_(0){}
+
+				///
+				void setComposite(const Composite* composite) { composite_ = composite;}
+				
+				///
+				const Composite* getComposite() const { return composite_;}
+
+			protected:
+				const Composite* composite_;
+		};
 
 
 	}

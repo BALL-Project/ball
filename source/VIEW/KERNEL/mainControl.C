@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.72 2004/03/16 19:27:56 amoll Exp $
+// $Id: mainControl.C,v 1.73 2004/03/16 23:57:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1283,7 +1283,6 @@ void MainControl::stopSimulation()
 	{
 		if (simulation_thread_->running()) 
 		{
-			simulation_thread_->getMutex().unlock();
 			simulation_thread_->wait();
 		}
 
@@ -1300,9 +1299,6 @@ void MainControl::stopSimulation()
 			notify_(message);
 		}
 		
-		// needed to prevent warning
-		simulation_thread_->getMutex().unlock();
- 
 		delete simulation_thread_;
 		simulation_thread_ = 0;
 	}
@@ -1357,7 +1353,7 @@ void MainControl::customEvent( QCustomEvent * e )
 		}
 
 		// ok, continue simulation
-		simulation_thread_->getMutex().unlock();
+		simulation_thread_->setUpdateRunning(false);
 		return;
 	}
 #endif

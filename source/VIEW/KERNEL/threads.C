@@ -37,7 +37,8 @@ namespace BALL
 			: QThread(),
 				main_control_(0),
 				dcd_file_(0),
-				composite_(0)
+				composite_(0),
+				update_vis_running_(false)
 		{
 		}
 
@@ -48,15 +49,17 @@ namespace BALL
 
 		void SimulationThread::updateScene_()
 		{
-			if (main_control_->stopedSimulation()) return;
+			if (main_control_->stopedSimulation()) 
+			{
+				update_vis_running_ = false;
+				return;
+			}
 
+			update_vis_running_ = true;
 			// notify MainControl to update all Representations for the Composite
 			UpdateCompositeEvent* se = new UpdateCompositeEvent;
 			se->setComposite(composite_);
 			qApp->postEvent(main_control_, se);
-
-			// wait until MainControl tell us we can continue
-			mutex_.lock();
 		}
 
 		void SimulationThread::output_(const String& string)
@@ -99,6 +102,9 @@ namespace BALL
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(message.ascii());
+
+					// prevent continuation of simulation, before update of visualisation has finished
+					while (update_vis_running_ && !main_control_->stopedSimulation()) msleep(10);
 				}
 
 				output_(ff.getResults());
@@ -160,6 +166,9 @@ namespace BALL
 				while (md_->getNumberOfIterations() < steps_ &&
 							 !main_control_->stopedSimulation())
 				{
+					// prevent continuation of simulation, before update of visualisation has finished
+					while (update_vis_running_ && !main_control_->stopedSimulation()) msleep(10);
+
 					md_->simulateIterations(steps_between_updates_, true);
 					updateScene_();
 
@@ -222,7 +231,6 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif //Thread support
