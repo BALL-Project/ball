@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.7 2002/08/20 09:15:50 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.8 2002/10/12 11:42:57 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2665,41 +2665,42 @@ if test "${USE_BALLVIEW}" = true ; then
 			fi			
 	
 			dnl
-			dnl  QT libraries befor release 2.0 contained the OGL support in a separate
+			dnl  QT libraries before release 2.0 contained the OGL support in a separate
 			dnl   librarie: libqgl.a, so we hav to look for that one as well....
 			dnl
-			if test "${QT_VERSION}" -lt 200 ; then
-				QGL_LIBPATH=${QT_LIBPATH}
-				AC_MSG_CHECKING(for libqgl)
-				if test "${QTDIR}" != "" ; then
-					AC_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
-				else
-					AC_FIND_LIB(QGL_LIBPATH,libqgl,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
-				fi
+			if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
+				if test "${QT_VERSION}" -lt 200 ; then
+					QGL_LIBPATH=${QT_LIBPATH}
+					AC_MSG_CHECKING(for libqgl)
+					if test "${QTDIR}" != "" ; then
+						AC_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+					else
+						AC_FIND_LIB(QGL_LIBPATH,libqgl,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+					fi
 
-				if test "${QGL_LIBPATH}" = "" ; then
-					AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
-					AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
-					AC_MSG_RESULT([to configure.])
-					AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
-					AC_MSG_RESULT([path - configure will recognize this, too.])
-					AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
-					AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
-					AC_MSG_RESULT()
-					AC_MSG_RESULT([The complete QT package can be found under the following URL:])
-					AC_MSG_RESULT([  http://www.troll.no/qt])
-					AC_MSG_RESULT()
-					AC_MSG_ERROR(Aborted.)
-				else
-					AC_MSG_RESULT((${QT_LIBPATH}))	
+					if test "${QGL_LIBPATH}" = "" ; then
+						AC_MSG_RESULT((not found!))
+						AC_MSG_RESULT()
+						AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
+						AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
+						AC_MSG_RESULT([to configure.])
+						AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+						AC_MSG_RESULT([path - configure will recognize this, too.])
+						AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
+						AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
+						AC_MSG_RESULT()
+						AC_MSG_RESULT([The complete QT package can be found under the following URL:])
+						AC_MSG_RESULT([  http://www.troll.no/qt])
+						AC_MSG_RESULT()
+						AC_MSG_ERROR(Aborted.)
+					else
+						AC_MSG_RESULT((${QT_LIBPATH}))	
+					fi
+					if test "${QGL_PATH}" != "${QT_PATH}" ; then
+						QT_PATH=${QGL_PATH}
+						AC_MSG_RESULT(using ${QT_PATH} to look for liqt.so and libqgl.s)
+					fi
 				fi
-				if test "${QGL_PATH}" != "${QT_PATH}" ; then
-					QT_PATH=${QGL_PATH}
-					AC_MSG_RESULT(using ${QT_PATH} to look for liqt.so and libqgl.s)
-				fi
-
 			fi
 
 			if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
@@ -2897,6 +2898,7 @@ if test "${USE_BALLVIEW}" = true ; then
 		fi
 	fi
 fi
+
 if test "${USE_BALLVIEW}" = true ; then
 	if test "${QT_LIBPATH}" != "/usr/lib" ; then
 		QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
@@ -2907,23 +2909,22 @@ if test "${USE_BALLVIEW}" = true ; then
 		QT_LIBOPTS="-lqt${QT_MT_SUFFIX}"
 	fi
 fi
+
 if test "${USE_BALLVIEW}" = true ; then
 	AC_MSG_CHECKING(linking against QT libraries)
 
-
 	SAVE_LIBS=${LIBS}
-	LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-	AC_TRY_LINK([const char* qGLVersion();], [qGLVersion();], QT_LINKING_OK=1)
+	LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${BALLVIEW_INCLUDES}"
+	AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
 	LIBS=${SAVE_LIBS}
-
 
 	if test "${QT_LINKING_OK+set}" != set ; then
 		SAVE_LIBS=${LIBS}
-		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-		AC_TRY_LINK([const char* qGLVersion();], [qGLVersion();], QT_LINKING_OK=1)
+		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${BALLVIEW_INCLUDES}"
+		AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
 		LIBS=${SAVE_LIBS}
 	else
-		dnl link agains qgl as well (for qt <= 2.0)
+		dnl link against qgl as well (for qt <= 2.0)
 		QT_LIBOPTS="${QTQGL_LIBOPTS}"
 	fi
 
@@ -2991,7 +2992,7 @@ if test "${USE_BALLVIEW}" = true ; then
 			dnl
 			${RM} qt.version 2>/dev/null
 			QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
-			if test "${QT_MAJOR}" != 2 ; then
+			if test "${QT_MAJOR}" -lt 2 ; then
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(QT version 2.x is required.)
 				AC_MSG_RESULT(Please install version QT Version 2 (at least 2.0.2))
