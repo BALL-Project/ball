@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomicContactEnergy.h,v 1.12 2003/03/26 16:11:54 anhi Exp $
+// $Id: atomicContactEnergy.h,v 1.13 2003/05/08 11:29:24 oliver Exp $
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
 #define BALL_ENERGY_ATOMICCONTACTENERGY_H
@@ -16,17 +16,23 @@ namespace BALL
 
 	/** Calculate the atomic contact energy.
 			Calculates the atomic contact energy (ACE) after
-			Zhang et al. (J. Mol. Biol., 267, 707-726 (1997))
-			The energy is returned in units of kJ/mol
-			Unparametrized Atoms are simply ignored, this leads to
-			unreasonable values.  \par
+			Zhang et al. (J. Mol. Biol., 267, 707-726 (1997)).
+			The energy is returned in units of kJ/mol.
+			Unparametrized Atoms are simply ignored, this may lead to unreasonable values.  
+			However, a warning is being printed in this case.
+			\par
 			<b>Files:</b>  \par
-			Types are taken from <tt>data/energy/ACE\_types.dat</tt>  \par
-			Values for contact energies are in <tt>data/energy/AtomicContactEnergy.dat</tt>  \par
-			
+			The two files given as default parameters contain the original parameters from
+			the JMB publication (ACE_parameters.dat) as a 18x18 matrix. ACE_types.dat contains
+			the mapping of residue/atom names to theses types for standard amino acid residues.
+
     	\ingroup EnergyMiscellaneous 
 	*/ 
-	double calculateACE(AtomContainer& atoms);
+  double calculateACE
+    (const AtomContainer& atom_container,
+     const string& type_filename = "energy/ACE_types.dat", 
+		 const string& parameter_filename = "energy/ACE_parameters.dat");
+
 } // namespace BALL
 
 #endif
