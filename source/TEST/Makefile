@@ -68,6 +68,8 @@ EXECUTABLES = \
 	StandardPredicates_test\
 	String_test\
 	StructureMapper_test\
+	Time_test\
+	TimeStamp_test\
 	TransformationApplicator_test\
 	TranslationApplicator_test\
 	Vector3_test\
