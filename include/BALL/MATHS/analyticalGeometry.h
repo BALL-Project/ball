@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.38 2000/09/10 21:52:21 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.39 2000/09/10 21:59:46 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -932,7 +932,7 @@ namespace BALL
 		}
 
 		T radius1_square = a.radius * a.radius;
-		T radius2_square = b.radius * b.radius);
+		T radius2_square = b.radius * b.radius;
 		T u = radius1_square - radius2_square + square_dist;
 		T length = u / (2 * square_dist);
 		intersection_circle.p = a.p + (norm * length);
