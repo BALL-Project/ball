@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.21 2005/01/30 14:02:23 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.22 2005/02/10 10:47:09 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -472,6 +472,7 @@ namespace BALL
 						if (result == false) return false;
 
 						// DEBUG
+						/*
 						Log.info() << "DEBUG: " << tmp_energy << endl;
 						result = computeFullCycle_(cut_system, cut_protein, cut_ligand, 
 								tmp_energy);
@@ -481,10 +482,10 @@ namespace BALL
 								tmp_energy);
 						if (result == false) return false;
 						Log.info() << "DEBUG: " << tmp_energy << endl;
+						*/
 						// /DEBUG
 
 						energy_ = tmp_energy;
-
 
 					}
 					else
@@ -695,25 +696,31 @@ namespace BALL
 
 		for (; +atom_it; ++atom_it)
 		{
-			float potential;
-			if (use_gb_ == true)
+			float charge = atom_it->getCharge();
+			
+			if (charge != 0.0f)
 			{
-				potential = p_hash[&*atom_it];
+				float potential;
+				if (use_gb_ == true)
+				{
+					potential = p_hash[&*atom_it];
+				}
+				else
+				{
+					potential 
+						= fdpb_.phi_grid->getInterpolatedValue(atom_it->getPosition());
+
+					potential *= Constants::NA * 1e-3;
+				}
+
+				// DEBUG
+				std::cout << "phi(" << atom_it->getFullName() << ") = " << potential 
+					<< " charge  = " << atom_it->getCharge() 
+					<< " dg = " << charge * potential << std::endl;
+				// /DEBUG
+
+				dGint += charge * potential;
 			}
-			else
-			{
-				potential 
-					= fdpb_.phi_grid->getInterpolatedValue(atom_it->getPosition());
-
-				potential *= Constants::NA * 1e-3;
-			}
-
-			// DEBUG
-			std::cout << "phi(" << atom_it->getFullName() << ") = " << potential 
-				<< " charge  = " << atom_it->getCharge() << std::endl;
-			// /DEBUG
-
-			dGint += atom_it->getCharge() * potential;
 		}
 
 		return(Constants::e0 * dGint);
@@ -897,7 +904,7 @@ namespace BALL
 		float ddGsolv = dGes_B_cav_A - dGes_B + dGes_A_cav_B - dGes_A;
 		float dGele = ddGsolv + ((dGint_AB + dGint_BA) / 2.0);
 
-		if (verbosity_ > 8)
+		if (verbosity_ > 0)
 		{
 			Log.info() << "dGes_A = " << dGes_A << endl;
 			Log.info() << "dGes_B = " << dGes_B << endl;
