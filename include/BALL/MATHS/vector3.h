@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.18 2000/02/21 17:06:18 oliver Exp $
+// $Id: vector3.h,v 1.19 2000/02/21 18:09:03 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -416,12 +416,11 @@ namespace BALL
 		*/
 		TVector3 getOrthogonalProjection(const TVector3& direction) const;
 
-		///BAUSTELLE
-		/**	Return 
+		/**	Return the perpendicular normalization of the vector
 				@param TVector3& a 1. vector
 				@param TVector3& b 2. vector
 				@param TVector3& c 3. vector
-				@return static TVector3
+				@return static TVector3 the perpendicular normalization
 		*/
 		static TVector3 getPerpendicularNormalization
 			(const TVector3& a, const TVector3& b, const TVector3& c);
@@ -507,7 +506,7 @@ namespace BALL
 			if (Maths::isNotZero(x)){
 				angle = atan(y / x);
 			} else {
-				angle = BALLSgn(y) * Constants::PI / 2;
+				angle = BALL_SGN(y) * Constants::PI / 2;
 			}
 
 			if (Maths::isLess(x, 0)) {
