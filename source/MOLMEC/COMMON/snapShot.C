@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.C,v 1.29 2003/07/24 10:42:44 amoll Exp $
+// $Id: snapShot.C,v 1.30 2003/08/21 20:36:02 amoll Exp $
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
+#include <BALL/KERNEL/system.h>
 
 using namespace std;
 
