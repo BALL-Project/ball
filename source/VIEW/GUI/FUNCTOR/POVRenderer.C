@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.3 2002/12/18 16:00:42 sturm Exp $
+// $Id: POVRenderer.C,v 1.4 2002/12/20 14:58:27 anhi Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/VIEW/PRIMITIV/point.h>
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 #include <BALL/VIEW/PRIMITIV/mesh.h>
@@ -125,14 +126,14 @@ namespace BALL
 
 			// Set the light sources
 			// TODO: get them from the Scene!
-			outfile_ << "light_source { <0, 0, 100> color red 1.0 green 1.0 blue 1.0 }" << endl << endl;
+			outfile_ << "light_source { <-50, 70, 100> color red 1.0 green 1.0 blue 1.0 }" << endl << endl;
 			
 			// Set black background
 			outfile_ << "background { color red 0.0 green 0.0 blue 0.0 }" << endl << endl;
 
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
-			outfile_ << "#declare BALLFinish = finish { specular 1.0  brilliance 50.0 diffuse 1.0 ambient 1.0 }" << endl << endl; 
+			outfile_ << "#declare BALLFinish = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl << endl; 
 			
 			// now begin the CSG union containing all the geometric objects
 			outfile_ << "union {" << endl;
@@ -158,28 +159,117 @@ namespace BALL
 				// We have found an atom. This may contain bonds, and
 				// these might know if we should render them...
 				Atom::BondIterator b;
-				
-/*				for (b=a->beginBond(); +b; ++b)
+			//Log.info() << "Atom found!" << endl;	
+				for (b=a->beginBond(); +b; ++b)
 				{
-					Log.info() << "Hallo!" <<  " " << b << endl;
+					//Log.info() << "Bond found!" <<  " " << b << endl;
 					// now we should try to get the Tube, which is appended as
 					// a child to this Composite Bond
 			
-					Composite *c
+					Composite *c;
 					Position j=0;
+					
 					do {
-						if (c!=0)
+						c=b->getChild(j);
+						j++;
+						
+						if (c!=0)  
 						{
-							Log.info() << streamClassName(typeid(*c)) << endl;
-						}
-						c=b->getChild(++j);
-					} while (c!=end);
+							GeometricObject *geometric_object = (GeometricObject*)RTTI::castTo<GeometricObject>(*c);
+							
+							if ((geometric_object!=0) && !(geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC)))
+							{
+								if (RTTI::isKindOf<MOLVIEW::TwoColoredTube>(*c))
+								{
+									// we have found a two colored tube
+									MOLVIEW::TwoColoredTube *t = (MOLVIEW::TwoColoredTube*)RTTI::castTo<MOLVIEW::TwoColoredTube>(*geometric_object);
 
-					if (RTTI::isKindOf<Tube>(*c) || RTTI::isKindOf<MOLVIEW::TwoColoredTube>(*c))
-					{
-						Log.info() << "Tube found!!!" << endl;
-					}
-				} */
+									ColorRGBA color1, color2;
+									
+									// first, find out its color
+									if (!(t->isSelected()))
+									{
+										color1 = t->getColor1();
+										color2 = t->getColor2();
+									}
+									else
+									{
+										color1 = BALL_SELECTED_COLOR;
+										color2 = BALL_SELECTED_COLOR;
+									}
+
+									// then, find out its radius
+									float radius = t->getRadius();
+
+									// and finally, the base and the cap
+									Vector3 base_point = t->getVertex1();
+									Vector3  cap_point = t->getVertex2();
+									Vector3  mid_point = t->getMiddleVertex();
+
+									// now write the information into the outfile_
+									outfile_ << "\tcylinder {" << endl;
+									outfile_ << "\t\t" << POVVector3(base_point) << ", ";
+									outfile_           << POVVector3( mid_point) << ", ";
+									outfile_           <<                 radius << endl;
+									outfile_ <<"\t\ttexture {" << endl;
+									outfile_ << "\t\t\t\tpigment { " << POVColorRGBA(color1);
+									outfile_ << " } " << endl;
+									outfile_ << "\t\t\t\tfinish  { BALLFinish } " << endl;
+									outfile_ << "\t\t}" << endl;
+									outfile_ << "\t}" << endl << endl;
+						
+									outfile_ << "\tcylinder {" << endl;
+									outfile_ << "\t\t" << POVVector3(mid_point) << ", ";
+									outfile_           << POVVector3(cap_point) << ", ";
+									outfile_           <<                 radius << endl;
+									outfile_ <<"\t\ttexture {" << endl;
+									outfile_ << "\t\t\t\tpigment { " << POVColorRGBA(color2);
+									outfile_ << " } " << endl;
+									outfile_ << "\t\t\t\tfinish  { BALLFinish } " << endl;
+									outfile_ << "\t\t}" << endl;
+									outfile_ << "\t}" << endl << endl;
+								}
+								else if (RTTI::isKindOf<Tube>(*c))
+								{
+									// we have found a tube
+									Tube *t = (Tube*)RTTI::castTo<Tube>(*geometric_object);
+
+									ColorRGBA color;
+									// first, find out its color
+									if (!(t->isSelected()))
+									{
+										color = t->getColor();
+									}
+									else
+									{
+										color = BALL_SELECTED_COLOR;
+									}
+
+									// then, find out its radius
+									float radius = t->getRadius();
+
+									// and finally, the base and the cap
+									Vector3 base_point = t->getVertex1();
+									Vector3  cap_point = t->getVertex2();
+
+									// now write the information into the outfile_
+									outfile_ << "\tcylinder {" << endl;
+									outfile_ << "\t\t" << POVVector3(base_point) << ", ";
+									outfile_           << POVVector3( cap_point) << ", ";
+									outfile_           <<                 radius << endl;
+									outfile_ <<"\t\ttexture {" << endl;
+									outfile_ << "\t\t\t\tpigment { " << POVColorRGBA(color);
+									outfile_ << " } " << endl;
+									outfile_ << "\t\t\t\tfinish  { BALLFinish } " << endl;
+									outfile_ << "\t\t}" << endl;
+									outfile_ << "\t}" << endl << endl;
+								} 
+							}
+						}
+
+					} while (c!=b->getLastChild());
+
+				} 
 			}
 	
 			if (RTTI::isKindOf<GLObject>(composite) == false)
@@ -204,12 +294,12 @@ namespace BALL
 			// now find out the type of the geometric object and export it accordingly
 			if (RTTI::isKindOf<Point>(*geometric_object))
 			{
-				Log.error() << "Point encountered! These are ignored during export!" << endl;
+		//		Log.error() << "Point encountered! These are ignored during export!" << endl;
 				return Processor::CONTINUE;
 			}
 			if (RTTI::isKindOf<Sphere>(*geometric_object))
 			{
-				Log.info() << "Extracting a sphere..." << endl;
+		//		Log.info() << "Extracting a sphere..." << endl;
 				// we have found a sphere
 				Sphere *s = (Sphere*)RTTI::castTo<Sphere>(*geometric_object);
 				
@@ -243,11 +333,57 @@ namespace BALL
 			}
 			if (RTTI::isKindOf<MOLVIEW::TwoColoredTube>(*geometric_object))
 			{
-				Log.info() << "Extracting a two-colored tube..." << endl;
+				// we have found a two colored tube
+				MOLVIEW::TwoColoredTube *t = (MOLVIEW::TwoColoredTube*)RTTI::castTo<MOLVIEW::TwoColoredTube>(*geometric_object);
+
+				ColorRGBA color1, color2;
+
+				// first, find out its color
+				if (!(t->isSelected()))
+				{
+					color1 = t->getColor1();
+					color2 = t->getColor2();
+				}
+				else
+				{
+					color1 = BALL_SELECTED_COLOR;
+					color2 = BALL_SELECTED_COLOR;
+				}
+
+				// then, find out its radius
+				float radius = t->getRadius();
+
+				// and finally, the base and the cap
+				Vector3 base_point = t->getVertex1();
+				Vector3  cap_point = t->getVertex2();
+				Vector3  mid_point = t->getMiddleVertex();
+
+				// now write the information into the outfile_
+				outfile_ << "\tcylinder {" << endl;
+				outfile_ << "\t\t" << POVVector3(base_point) << ", ";
+				outfile_           << POVVector3( mid_point) << ", ";
+				outfile_           <<                 radius << endl;
+				outfile_ <<"\t\ttexture {" << endl;
+				outfile_ << "\t\t\t\tpigment { " << POVColorRGBA(color1);
+				outfile_ << " } " << endl;
+				outfile_ << "\t\t\t\tfinish  { BALLFinish } " << endl;
+				outfile_ << "\t\t}" << endl;
+				outfile_ << "\t}" << endl << endl;
+
+				outfile_ << "\tcylinder {" << endl;
+				outfile_ << "\t\t" << POVVector3(mid_point) << ", ";
+				outfile_           << POVVector3(cap_point) << ", ";
+				outfile_           <<                 radius << endl;
+				outfile_ <<"\t\ttexture {" << endl;
+				outfile_ << "\t\t\t\tpigment { " << POVColorRGBA(color2);
+				outfile_ << " } " << endl;
+				outfile_ << "\t\t\t\tfinish  { BALLFinish } " << endl;
+				outfile_ << "\t\t}" << endl;
+				outfile_ << "\t}" << endl << endl;
 			}
 			if (RTTI::isKindOf<Tube>(*geometric_object))
 			{
-				Log.info() << "Extracting a tube..." << endl;
+			//	Log.info() << "Extracting a tube..." << endl;
 				// we have found a tube
 				Tube *t = (Tube*)RTTI::castTo<Tube>(*geometric_object);
 
@@ -283,7 +419,7 @@ namespace BALL
 			}	
 			if (RTTI::isKindOf<Mesh>(*geometric_object))
 			{
-				Log.info() << "Extracting a mesh..." << endl;
+				//Log.info() << "Extracting a mesh..." << endl;
 				// we have found a mesh
 				Mesh *m = (Mesh*)RTTI::castTo<Mesh>(*geometric_object);
 
@@ -382,8 +518,7 @@ namespace BALL
 			}
 			else
 			{
-				Log.error() << "Error! Export of " << streamClassName(typeid(composite)) << " " <<streamClassName(typeid(geometric_object)) << " is not yet implemented!!!" << endl;
-				Log.error() << RTTI::castTo<Tube> (*geometric_object) << " " << RTTI::castTo<MOLVIEW::TwoColoredTube>(*geometric_object) << endl;
+//				Log.error() << "Error! Export of " << streamClassName(typeid(composite)) << " " <<streamClassName(typeid(geometric_object)) << " is not yet implemented!!!" << endl;
 			}
 
 			return Processor::CONTINUE;
