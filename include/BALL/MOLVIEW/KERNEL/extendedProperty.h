@@ -1,4 +1,4 @@
-// $Id: extendedProperty.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
+// $Id: extendedProperty.h,v 1.6.4.1 2002/10/18 07:49:42 amoll Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
@@ -97,11 +97,6 @@ namespace BALL
 				throw();
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/KERNEL/extendedProperty.iC>
-#			endif
-
 
 	} // namespace MOLVIEW
 

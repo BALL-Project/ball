@@ -1,4 +1,4 @@
-// $Id: molecularMessage.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
+// $Id: molecularMessage.h,v 1.5.4.1 2002/10/18 07:49:42 amoll Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -247,10 +247,6 @@ namespace BALL
 		};
 
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/KERNEL/molecularMessage.iC>
-#		endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL
