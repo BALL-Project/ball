@@ -1,7 +1,6 @@
-// $Id: autoDeletable.C,v 1.7 2000/12/09 20:54:12 amoll Exp $
+// $Id: autoDeletable.C,v 1.8 2000/12/10 19:46:05 oliver Exp $
 
 #include <BALL/CONCEPT/autoDeletable.h>
-#include <new>
 
 namespace BALL 
 {	
