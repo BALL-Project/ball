@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.29 2003/08/26 08:05:07 oliver Exp $
+// $Id: geometricObject.h,v 1.30 2003/08/29 11:00:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -28,10 +28,10 @@ namespace BALL
 		{
 			public:
 
-			/** @name Deep cloning facility.
+			/** @name cloning facility.
 			*/
 			//@{
-			BALL_CREATE_DEEP(GeometricObject)
+			BALL_CREATE(GeometricObject)
 
 			//@} /**	@name	Constructors and Destructors*/	//@{
 
@@ -48,12 +48,9 @@ namespace BALL
 				throw();
 				
 			/** Copy constructor.
-					The copy is either deep (default) or shallow.
 					\param       object the geometricObject to be copied (cloned)
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> object</b>
-					\return      GeometricObject new constructed geometricObject cloned from <b> object</b>
 			*/
-			GeometricObject(const GeometricObject& object, bool deep = true)
+			GeometricObject(const GeometricObject& object)
 				throw();
 
 			/** Destructor.
@@ -72,15 +69,13 @@ namespace BALL
 				throw();
 
 			//@} 
-
-			/**	@name	Assignment methods */ 
+			/**	@name	Assignment methods 
+			 */ 
 			//@{
 
-			/** Assignment with cloning facility.
-					The assignment is either deep (default) or shallow.
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> object</b>
+			/** Assignment 
 			*/
-			void set(const GeometricObject& object, bool deep = true)
+			void set(const GeometricObject& object)
 				throw();
 
 			/** Assignment operator.
@@ -89,14 +84,14 @@ namespace BALL
 			GeometricObject& operator = (const GeometricObject& object)
 				throw();
 
-			/** Copying with cloning facility.
+			/** Copying 
 					Calls set.
 					The state of the geometricObject <b> object</b> is initialized to the
 					state of this geometricObject.\par
 					\param       object the geometricObject to be assigned to
 					\see         set
 			*/
-			void get(GeometricObject& object, bool deep = true) const
+			void get(GeometricObject& object) const
 				throw();
 
 			/** Swapping of geometricObjects.
@@ -105,7 +100,10 @@ namespace BALL
 			void swap(GeometricObject& object)
 				throw();
 							
-			//@} /**	@name	Accessors: inspectors and mutators */ //@{
+			//@} 
+			/**	@name	Accessors: inspectors and mutators 
+			*/ 
+			//@{
 
 			///
 			void setComposite(const Composite* composite)
