@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.12 2002/12/06 18:24:15 amoll Exp $
+// $Id: control.h,v 1.10.4.13 2002/12/08 22:38:44 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -76,10 +76,12 @@ namespace BALL
 			{
 				public:
 
-				SelectableListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+				SelectableListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, 
+															 VIEW::Control& control)
 					throw();
 
-				SelectableListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+				SelectableListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, 
+															 VIEW::Control& control)
 					throw();
 
 				Composite* getComposite() { return composite_;};
