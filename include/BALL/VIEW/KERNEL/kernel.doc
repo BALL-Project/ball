@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.12 2003/12/15 01:35:35 amoll Exp $
+// $Id: kernel.doc,v 1.13 2003/12/15 02:12:11 amoll Exp $
 
 /** \defgroup ViewKernel Kernel classes
 		\ingroup Visualisation
@@ -29,6 +29,12 @@
 		 The class \link Message Message \endlink and the various derived classes define
 		 some useful messages for special events.
  */
+
+	/**  \defgroup ViewKernelConnectivityMessages Messages
+			 \ingroup ViewKernelConnectivity
+				Message classes will be sent through the ConnectionObject tree for
+				the purpose of communication between several ConnectionObject classes.
+	*/
 
 /**  \defgroup ViewKernelGeometricPrimitives Geometric primitives and their management
 		 \ingroup ViewKernel

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.35 2003/12/10 17:17:09 amoll Exp $
+// $Id: message.h,v 1.36 2003/12/15 02:11:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -29,13 +29,13 @@ namespace BALL
 		// class forward
 		class GeometricObject;
 
-/** @addtogroup ViewKernelConnectivity */
+/** @addtogroup ViewKernelConnectivityMessages */
 //@{
 
 /** General Message class.
 		Message is the base class of all message classes and provides a base interface.
 		Message classes will be sent through the ConnectionObject tree for
-		the purpose of communication between several connectionObject classes.
+		the purpose of communication between several ConnectionObject classes.
 		Each ConnectionObject handels in its <b>onNotify() method messages
 		that are relevant for that class by means of RTTI. 
 		This class can be given a sender object that is a pointer to the 
