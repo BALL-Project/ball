@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.53 2001/03/14 15:58:25 oliver Exp $
+// $Id: vector3.h,v 1.54 2001/06/26 02:34:01 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -261,6 +261,13 @@ namespace BALL
 				@param v the vector to assign from
 		**/
 		const TVector3& operator = (const TVector3& v)
+			throw();
+
+		/**	Assignment operator.
+				Assign a constant value to all three vector components.
+				@param value the constant to assign to x, y, z
+		**/
+		const TVector3& operator = (T value)
 			throw();
 
 		/**	Array assignment operator.
@@ -704,6 +711,16 @@ namespace BALL
 		x = vector.x;
 		y = vector.y;
 		z = vector.z;
+
+		return *this;
+	}
+
+	template <typename T>
+	BALL_INLINE 
+	const TVector3<T>& TVector3<T>::operator = (T value)
+		throw()
+	{
+		x = y = z = value;
 
 		return *this;
 	}
