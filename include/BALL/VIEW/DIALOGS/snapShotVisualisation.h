@@ -71,7 +71,7 @@ class BALL_EXPORT SnapshotVisualisationDialog
 	
 	///Function to select the analogous Snapshot
 	virtual void animateClicked();
-;
+
 	///
 	virtual void close();
 	

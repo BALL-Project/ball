@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.39 2004/04/16 15:25:36 amoll Exp $
+// $Id: molecularStructure.C,v 1.40 2004/04/22 10:08:20 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
-#	include <BALL/VIEW/KERNEL/molecularInformation.h>
+#include <BALL/VIEW/KERNEL/molecularInformation.h>
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -25,8 +25,7 @@
 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
-#include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
-#include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
+#include <BALL/MOLMEC/COMMON/snapShotManager.h>
 
 #ifdef BALL_QT_HAS_THREADS
 #	include <BALL/VIEW/KERNEL/threads.h>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: list.h,v 1.22 2003/08/26 08:04:11 oliver Exp $
+// $Id: list.h,v 1.23 2004/04/22 10:08:19 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_LIST_H
@@ -218,8 +218,8 @@ namespace BALL
 				return false;
 			}
 
-			List<Value>::ConstIterator this_it = std::list<Value>::begin();
-			List<Value>::ConstIterator list_it = list.begin();
+			typename List<Value>::ConstIterator this_it = std::list<Value>::begin();
+			typename List<Value>::ConstIterator list_it = list.begin();
 
 			for (; this_it != std::list<Value>::end(); ++this_it)
 			{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.44 2004/03/07 01:06:06 amoll Exp $
+// $Id: regularData1D.h,v 1.45 2004/04/22 10:08:20 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -763,7 +763,10 @@ namespace BALL
 		throw(Exception::FileNotFound)
 	{
 		File outfile(filename, std::ios::out|std::ios::binary);
-		if (!outfile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		if (!outfile.isValid()) 
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		}
 
 		BinaryFileAdaptor<BlockValueType> adapt_block;
 		BinaryFileAdaptor<ValueType>			adapt_single;
@@ -784,22 +787,17 @@ namespace BALL
 		adapt_coordinate.setData(spacing_);
 		outfile << adapt_coordinate;
 
-		BinaryFileAdaptor<IndexType> adapt_index;
-		adapt_index.setData(size_);
-		outfile << adapt_index;
-	
 		// we slide a window of size 1024 over our data
 		Index window_pos = 0;
-		
-		while ( ((int)data_.size() - (1024 + window_pos)) >= 0 )
+		while (((int)data_.size() - (1024 + window_pos)) >= 0 )
 		{
-			adapt_block.setData(* (BlockValueType*)&(data_[window_pos]));
+			adapt_block.setData(*(BlockValueType*)&(data_[window_pos]));
 			outfile << adapt_block;
-			window_pos+=1024;
+			window_pos += 1024;
 		}
 
 		// now we have to write the remaining data one by one
-		for (Size i=window_pos; i<data_.size(); i++)
+		for (Size i = window_pos; i < data_.size(); i++)
 		{
 			adapt_single.setData(data_[i]);
 			outfile << adapt_single;
@@ -835,10 +833,6 @@ namespace BALL
 		infile >> adapt_coordinate;
 		spacing_ = adapt_coordinate.getData();
 
-		BinaryFileAdaptor<IndexType> adapt_index;
-		infile >> adapt_index;
-		size_ =  adapt_index.getData();
-	
 		data_.resize(new_size);
 
 		// we slide a window of size 1024 over our data

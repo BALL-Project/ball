@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashSet.h,v 1.42 2003/08/26 08:04:10 oliver Exp $ 
+// $Id: hashSet.h,v 1.43 2004/04/22 10:08:19 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_HASHSET_H
@@ -823,7 +823,7 @@ namespace BALL
 		else
 		{
 			// erase all elements which are contained in this and hash_set 
-			HashSet<Key>::ConstIterator it = hash_set.begin();
+			typename HashSet<Key>::ConstIterator it = hash_set.begin();
 			for (; it != hash_set.end(); ++it)
 			{
 				if (has(*it))

@@ -1,20 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LogStream_test.C,v 1.19 2003/05/23 06:47:51 oliver Exp $
+// $Id: LogStream_test.C,v 1.20 2004/04/22 10:08:20 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
+
 #include <BALL/COMMON/logStream.h>
 #ifdef BALL_HAS_SYS_TIME_H
-#include <sys/time.h>
+#	include <sys/time.h>
 #endif
 #include <BALL/MATHS/common.h>
 #include <BALL/CONCEPT/notification.h>
+
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.19 2003/05/23 06:47:51 oliver Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.20 2004/04/22 10:08:20 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
