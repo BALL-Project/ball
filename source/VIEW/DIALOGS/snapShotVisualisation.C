@@ -280,6 +280,8 @@ void SnapshotVisualisationDialog::update_()
 void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_manager)  
 {
 	snap_shot_manager_ = snapshot_manager;
+	if (snapshot_manager == 0) return;
+
   tmp_.setNum(snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
 	numberOfSnapshots->setText(tmp_);
 	endSnapshot->setText(tmp_);
@@ -288,6 +290,13 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 	tmp_.setNum(1);
   currentSnapshot->setText(tmp_);
 	startSnapshot->setText(tmp_);
+	if (snap_shot_manager_->getNumberOfSnapShotsInBuffer() == 0)
+	{
+		if (!snap_shot_manager_->readFromFile())
+		{
+			snap_shot_manager_->clearBuffer();
+		}
+	}
 }
 
 void SnapshotVisualisationDialog::snapShotInputTest()
