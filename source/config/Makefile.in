@@ -1,17 +1,8 @@
 #
-# $Id: Makefile.in,v 1.19 2000/06/10 11:24:59 oliver Exp $
+# $Id: Makefile.in,v 1.20 2000/06/21 08:51:45 oliver Exp $
 #
 
 include config.mak
-
-#	options for library generation
-AROPTS	= @AROPTS@
-
-# options for shared library generation
-DYNAROPTS = @DYNAROPTS@
-
-# suffix of shared library filenames
-SHARED_LIB_SUFFIX = @SHARED_LIB_SUFFIX@
 
 # 	library version number
 LIB_VERSION	= 0
