@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.27 2003/06/23 14:49:04 amoll Exp $ 
+// $Id: regularData3D.h,v 1.28 2003/06/30 20:15:45 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -657,27 +657,20 @@ namespace BALL
       // Create a new temporary array.
       TRegularData3D<ValueType> old_data(*this);
 
-      // Resize the data to its new size.
+      // Resize the data array to its new size.
       data_.resize(new_size);
       spacing_.x = dimension_.x / (double)(size.x - 1);
       spacing_.y = dimension_.y / (double)(size.y - 1);
       spacing_.z = dimension_.z / (double)(size.z - 1);
 
+      // Correct the grid dimension. Origin and dimension remain constant.
+      size_ = size;
+
       // Walk over the new grid and copy the (interpolated) old stuff back.
-      CoordinateType v;
       for (size_type i = 0; i < new_size; i++)
       {
-        Position x = i % size.x;
-        Position y = (i % (size.x * size.y)) / size.x;
-				Position z = i / (size.x * size.y);
-        v.x = origin_.x + x * spacing_.x;
-        v.y = origin_.y + y * spacing_.y;
-        v.y = origin_.z + z * spacing_.z;
-        data_[i] = old_data(v);
+        data_[i] = old_data.getInterpolatedValue(getCoordinates(i));
 			}
-
-      // Correct the grid dimension. Origin and spacing remain constant.
-      size_ = size;
 		}
     catch (std::bad_alloc& e)
     {
@@ -702,7 +695,7 @@ namespace BALL
     (const typename TRegularData3D<ValueType>::IndexType& index) const
     throw(Exception::OutOfGrid)
   {
-    size_type pos = index.x + index.x * size_.x + index.y * size_.x * size_.y;
+    size_type pos = index.x + index.y * size_.x + index.z * size_.x * size_.y;
     if (pos >= data_.size())
     {
       throw Exception::OutOfGrid(__FILE__, __LINE__);
@@ -717,7 +710,7 @@ namespace BALL
     (const typename TRegularData3D<ValueType>::IndexType& index)
     throw(Exception::OutOfGrid)
   {
-    size_type pos = index.x + index.x * size_.x + index.y * size_.x * size_.y;
+    size_type pos = index.x + index.y * size_.x + index.z * size_.x * size_.y;
     if (pos >= data_.size())
     {
       throw Exception::OutOfGrid(__FILE__, __LINE__);
