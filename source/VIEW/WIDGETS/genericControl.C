@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.8 2004/01/13 00:44:47 amoll Exp $
+// $Id: genericControl.C,v 1.9 2004/02/06 16:44:05 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -15,6 +15,20 @@ namespace BALL
 	namespace VIEW
 	{
 
+
+void MyListView::keyPressEvent(QKeyEvent * e)
+{
+	if (e->key() != Key_Delete ||
+			parentWidget() == 0 ||
+			!RTTI::isKindOf<GenericControl>(*parentWidget())) 
+	{
+		QListView::keyPressEvent(e);
+		return;
+	}
+
+	((GenericControl*)parentWidget())->deleteCurrentItems();
+}
+
 void GenericControl::onContextMenu_(QListViewItem* /*item*/, const QPoint& /*point*/, int /*column*/)
 {}
 
@@ -22,7 +36,7 @@ GenericControl::GenericControl(QWidget* parent, const char* name)
 	throw()
 		:	DockWidget(parent, name),
 			context_item_(0),
-			listview(new QListView(this))
+			listview(new MyListView(this))
 {
 	// appearance
 	listview->setRootIsDecorated(true);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.10 2004/02/05 15:41:20 amoll Exp $
+// $Id: geometricControl.h,v 1.11 2004/02/06 16:44:17 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -165,9 +165,17 @@ namespace BALL
 																  const char* slot = 0, int entry_ID = -1, int accel = 0)
 				throw();
 
+			
+			/// Overloaded from GenericControl, calls deleteRepresentation_()
+			virtual void deleteCurrentItems()
+				throw() {deleteRepresentation_();}
+
 			public slots:
 				
-			//@}			/** @name Public slots */ //@{
+			//@}
+			/** @name Public slots 
+			*/ 
+			//@{
 
 			/// 
 			virtual void selectedRepresentation(Representation& representation, bool state);
@@ -199,7 +207,7 @@ namespace BALL
 			
 			/// Delete a Representation.
 			virtual void deleteRepresentation_();
-			
+
 			//@}
 
 		  protected:

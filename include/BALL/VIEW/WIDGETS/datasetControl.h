@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.5 2004/01/18 21:55:34 oliver Exp $
+// $Id: datasetControl.h,v 1.6 2004/02/06 16:44:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -120,6 +120,10 @@ namespace BALL
 
 			List<std::pair<RegularData3D*, String> > getGrids()
 				throw();
+
+			/// Overloaded from GenericControl, calls cut
+			virtual void deleteCurrentItems()
+				throw() {deleteItems_();}
 
 			//@} 
 			/** @name Protected members 

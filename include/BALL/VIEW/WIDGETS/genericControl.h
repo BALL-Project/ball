@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.8 2004/01/18 21:55:34 oliver Exp $
+// $Id: genericControl.h,v 1.9 2004/02/06 16:44:17 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -16,6 +16,23 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		/** Overloaded QListView, which notifies it parent GenericControl,
+		 		that a entry has to be deleted, after "del" was pressed.
+		*/
+		class MyListView
+			: public QListView
+		{
+			public:
+
+				///
+				MyListView(QWidget* parent)
+					: QListView(parent) {}
+
+				///
+ 				void keyPressEvent(QKeyEvent * e);
+		};
+		
+		
 		/**	GenericControl is a widget to display the structure of Composite objects. 
 		 		It uses the datastructure QListView from the QT-libary.
 				There are two columns. The <b>Name</b> column and the
@@ -86,6 +103,10 @@ namespace BALL
 
 			//@}
 			
+			/// Called by MyListView, if del is pressed
+			virtual void deleteCurrentItems()
+				throw() {};
+			
 		  protected slots:
 			
 			virtual void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
@@ -100,7 +121,7 @@ namespace BALL
 		  protected:
 
 			QListViewItem* 								context_item_;
-			QListView* 										listview;
+			MyListView* 										listview;
 		};
 		
 } } // namespaces

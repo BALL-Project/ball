@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.17 2004/02/06 15:09:37 amoll Exp $
+// $Id: molecularControl.h,v 1.18 2004/02/06 16:44:18 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -326,6 +326,10 @@ namespace BALL
 
 			/// Show a help dialog for the Selector 
 			void showSelectorHelp();
+
+			/// Overloaded from GenericControl, calls cut
+			virtual void deleteCurrentItems()
+				throw() {cut();}
 
 			//@} 
 			/** @name Protected members 
