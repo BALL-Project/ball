@@ -1,7 +1,9 @@
-// $Id: smilesParser.C,v 1.1 2002/01/08 00:46:36 oliver Exp $
+// $Id: smilesParser.C,v 1.2 2002/01/08 03:14:37 oliver Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
+
+#include <algorithm>
 
 // defined in the lexer (smilesParserLexer.l)
 extern void initBuffer(const char* buf);
@@ -86,7 +88,7 @@ namespace BALL
 
 		// setup all connections
 		connections_.resize(MAX_CONNECTIONS);
-		fill(connections_.begin(), connections_.end(), (SPAtom*)0);
+		std::fill(connections_.begin(), connections_.end(), (SPAtom*)0);
 
 		// make the internals of this parser available for all
 		state.current_parser = this;
