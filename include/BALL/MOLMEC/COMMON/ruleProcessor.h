@@ -1,4 +1,4 @@
-// $Id: ruleProcessor.h,v 1.7 2001/03/02 00:34:15 amoll Exp $
+// $Id: ruleProcessor.h,v 1.8 2001/07/11 23:07:56 amoll Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEPROCESSOR_H
@@ -17,7 +17,6 @@ namespace BALL
 
 	/**	Rule Processor class.
 			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/ruleProcessor.h}
-
 	*/
 	class RuleProcessor
 		:	public UnaryProcessor<Atom>
@@ -102,17 +101,20 @@ namespace BALL
 		*/
 		//@{
 
+		///
 		bool isValid() const;
+		
+		///
 		void dump(std::ostream& s = std::cout) const;
 
 		//@}
 
 		protected:
 
-		///
+		//_
 		RuleEvaluator	evaluator_;
 
-		/// 
+		//_ 
 		bool					valid_;
 	};
 

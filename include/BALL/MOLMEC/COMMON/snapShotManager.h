@@ -1,4 +1,4 @@
-// $Id: snapShotManager.h,v 1.3 2001/05/14 19:22:09 amoll Exp $
+// $Id: snapShotManager.h,v 1.4 2001/07/11 23:05:10 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -123,10 +123,8 @@ namespace BALL
 		*/
     //@{
 
-		/** This setup method sets all necessary members and calls @see setup
-				afterwards.
-				@param my_system the System to which we want to bind this
-				SnapShotManager
+		/** This setup method sets all necessary members and calls setup afterwards.
+				@param my_system the System to which we want to bind this SnapShotManager
 				@param my_force_field the respective forcefield
 				@param my_snapshot_file the trajectory file we want to use
 				@return true, if the setup was succesful, false ow.

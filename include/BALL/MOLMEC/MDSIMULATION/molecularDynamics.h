@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.16 2001/03/11 21:04:54 anker Exp $
+// $Id: molecularDynamics.h,v 1.17 2001/07/11 23:11:19 amoll Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -374,7 +374,7 @@ namespace BALL
 		*/
 		Size number_of_iteration_;
 
-		/**  The maximal number of iterations to be simulated when
+		/*_  The maximal number of iterations to be simulated when
 				 calling the simulate() method. 
 		*/
 		Size maximal_number_of_iterations_;
@@ -416,6 +416,7 @@ namespace BALL
 		SnapShotManager *snapshot_manager_ptr_;
 
 		//@}
+		//
 	};	// end of class MolecularDynamics 
 
 }	 // end of namespace Ball

@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.h,v 1.10 2001/03/02 22:10:23 amoll Exp $
+// $Id: microCanonicalMD.h,v 1.11 2001/07/11 23:13:13 amoll Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -177,7 +177,7 @@ namespace BALL
     */
     //@{
 
-    /**  This vector contains special, precomputed factors 
+    /*_  This vector contains special, precomputed factors 
     */
     vector<Aux_Factors> mass_factor_; 
 
