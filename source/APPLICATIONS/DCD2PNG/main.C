@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.3 2004/07/15 17:29:11 amoll Exp $
+// $Id: main.C,v 1.4 2004/07/15 17:31:05 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -193,12 +193,14 @@ int main(int argc, char **argv)
 	SnapShotManager sm(system, 0, &dcdfile, false);
 	POVRenderer pov;
 	pov.setFileName("mytemp");
+	Position nr2 = 0;
 	sm.applyFirstSnapShot();
 	while(sm.applyNextSnapShot())
 	{
 		String pov_arg = povray_options + String(nr) + ".png" ;
  		Scene::getInstance(0)->exportScene(pov);
 		nr++;
+		nr2++;
 
 		if ( (childpid = fork()) < 0) 
 		{
@@ -221,7 +223,7 @@ int main(int argc, char **argv)
 
 	}
 
-	std::cout << "asdasa2 " << std::endl;
+	std::cout << "Written " + String(nr2) + " images." << std::endl;
 
 // 	mainframe.show();
 //   return application.exec();
