@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.17 2002/12/12 10:19:12 oliver Exp $
+// $Id: MOL2File.C,v 1.18 2003/03/03 09:27:36 anhi Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -711,7 +711,7 @@ namespace BALL
 				{
 					bond->setOrder(Bond::ORDER__DOUBLE);
 				}
-				else if (bonds_[i].type == "1")
+				else if (bonds_[i].type == "3")
 				{
 					bond->setOrder(Bond::ORDER__TRIPLE);
 				}
