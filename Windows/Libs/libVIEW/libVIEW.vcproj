@@ -871,9 +871,10 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"
-						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\colorMeshDialogData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h"/>
+						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h;$(InputDir)colorMeshDialogData.C"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">

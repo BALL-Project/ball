@@ -748,7 +748,7 @@
 						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h"/>
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h;$(InputDir)atomPropertiesData.C"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
@@ -758,7 +758,7 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\
 						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h"/>
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h;$(InputDir)atomPropertiesData.C"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -771,7 +771,7 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\
 						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\displayPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h"/>
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h;$(InputDir)displayPropertiesData.C"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
@@ -781,7 +781,7 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\displayPropertiesData.C&quot; -impl &quot;
 						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\displayPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h"/>
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h;$(InputDir)displayPropertiesData.C"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
