@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.2 2000/05/04 17:17:19 hekl Exp $
+// $Id: surfaceModel.C,v 1.3 2000/05/09 16:40:32 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 
@@ -117,7 +117,8 @@ namespace BALL
 				MolecularInformation molecular_information;
 				start_composite_->host(molecular_information);
 
-
+				mesh->PropertyManager::set(*this);
+				mesh->readMSMSFile("/KM/usr/oliver/test.surf.vert.large", "/KM/usr/oliver/test.surf.face.large");
 				mesh->setName(String("Surface of ")
 											+ molecular_information.getTypeName() 
 											+ String(" (")
