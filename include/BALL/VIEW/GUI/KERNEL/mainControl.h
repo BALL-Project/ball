@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.26 2002/12/17 13:34:27 amoll Exp $
+// $Id: mainControl.h,v 1.27 2002/12/18 23:18:52 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -832,6 +832,17 @@ namespace BALL
 			void selectCompositeRecursive(Composite* composite, bool state)
 				throw();
 
+			/** Print some informations for the selection.
+			 		Called by selectComposites_.
+					If one atom is selected, its position is printed.
+					If two atoms are selected, their distance,
+					for three atoms their angle and
+					for four atoms their torsion angle.
+					Else the number of items is printed.
+			*/
+			void printSelectionInfos()
+				throw();
+			
 			/** Sets the text in the statusbar.
 			 		The statusbar has a label, whose text is set to the given argument
 			*/
