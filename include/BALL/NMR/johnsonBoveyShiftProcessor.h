@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.h,v 1.16 2004/11/07 19:54:58 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.17 2004/11/18 19:34:14 oliver Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -49,10 +49,10 @@ namespace BALL
 		///
 		struct Ring
     {
-			double						radius;
-			double						intensity;
-			Size						electrons;
-			vector<String>	atom_names;
+			double							radius;
+			double							intensity;
+			Size								electrons;
+			std::vector<String>	atom_names;
 		} ;
   
 		//@}
@@ -64,9 +64,10 @@ namespace BALL
     /** A symbolic name for the ring current contribution to the chemical shift
         @see ShiftModule::PROPERTY__SHIFT
     */
-    static const char* PROPERTY__RING_CURRENT_SHIFT;
-		
+    static const char* PROPERTY__RING_CURRENT_SHIFT;		
     //@}
+
+
  		/** @name	Constructors and Destructors
 		*/
 		//@{
@@ -114,7 +115,7 @@ namespace BALL
 		std::list<Residue*>			aromat_list_;
 		StringHashMap<Ring>			rings_;
 		StringHashMap<Position>	residues_with_rings_;
-		vector<Expression>			expressions_;
+		std::vector<Expression>	expressions_;
 		
 		double carlsonEllipticalIntegral1_(double, double, double);	// Carlson elliptical Integral of 1st kind
 		double carlsonEllipticalIntegral2_(double, double, double);	// Carlson elliptical Integral of 2nd kind

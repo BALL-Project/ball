@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.42 2004/11/18 13:47:33 oliver Exp $
+// $Id: regularData2D.h,v 1.43 2004/11/18 19:34:14 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -1025,10 +1025,10 @@ namespace BALL
 		outfile << adapt_index;
 	
 		// we slide a window of BLOCK_SIZE over our data.
-		const size_t BLOCK_SIZE = 1024;
+		const int BLOCK_SIZE = 1024;
 		Index window_pos = 0;
 		
-		while (((size_t)data_.size() - (BLOCK_SIZE + window_pos)) >= 0)
+		while (((int)data_.size() - (BLOCK_SIZE + window_pos)) >= 0)
 		{
 			adapt_block.setData(* (BlockValueType*)&(data_[window_pos]));
 			outfile << adapt_block;

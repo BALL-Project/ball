@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.C,v 1.17 2004/11/07 19:54:59 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.18 2004/11/18 19:34:14 oliver Exp $
 //
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
@@ -231,7 +231,6 @@ namespace BALL
 			residue_name = parameter_section.getValue(key, residue_name_column);
 			
 			Size number;
-
 			if (residues_with_rings_.has(residue_name)) 
 			{
 				number = residues_with_rings_[residue_name] + 1;
@@ -255,16 +254,12 @@ namespace BALL
 			catch (Exception::InvalidFormat)
 			{
 				Log.error() << "JohnsonBoveyShiftProcessor::init: error interpreting parameter line with key "
-									  << key << endl;
+									  << key << std::endl;
 				return;
 			}
+			name_list.split(new_ring.atom_names, ",");
 
-			vector<String> names;
-			name_list.split(names, ",");
-			
-			new_ring.atom_names = names;
-			
-			rings_[ring_entry] = new_ring;
+			rings_.insert(make_pair(ring_entry, new_ring));
 		}
 		
 		// einlesen der shift Atome und liste von expressions aufbauen

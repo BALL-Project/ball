@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.39 2003/08/28 20:56:29 oliver Exp $ 
+// $Id: hashMap.h,v 1.40 2004/11/18 19:34:14 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_HASHMAP_H
@@ -783,7 +783,7 @@ namespace BALL
 		if (it == end())
 		{
 			T value;
-			::std::pair<Iterator, bool> result = insert(ValueType(key, value));
+			std::pair<Iterator, bool> result = insert(ValueType(key, value));
 			it = result.first;
 		} 
 		
