@@ -15,12 +15,11 @@ Added:
 	- possibility to abort force field calculations if the assignment of values fails for a given number of atoms
   - BALLView
   	- Documentation for BALLView in the folder BALL/doc/BALLView  
+		- Tutorial and demo under Help-menu
     - new models for rendering nucleic acids and for visualizing forces
 		- ribbons for Cartoon model
-		- usage of OpenGL vertex buffer objects to accelerate display of
-			triangluated surfaces up to 5 fold
-		- atoms for which the setup of a force field fails can now become highlighted
-  	- calculation of Ramachandran plots for proteins
+		- usage of OpenGL vertex buffer objects to accelerate display of triangluated surfaces 
+		- ability to highlight atoms for which the setup of a force field fails
 		- improved ball&stick model now renders double-, triple- and aromatic bonds
 		- ability to create animations, either as on-screen presentations or for movies
 		- OpenGL rendering now allows for depth cueing, material paramters may be adjusted
@@ -31,6 +30,7 @@ Added:
 		- possibility to highlight the selected molecular items
   	- new move mode for (partial) structures (also much less CPU consumption)
   	- Esc key now switches to last used mode in Scene
+  	- calculation of Ramachandran plots for proteins
   	- Python scripting
   		- Hotkey support for starting any (BALL-)Python command from BALLView
 	  	- support to quit program from Python interpreter
@@ -42,14 +42,17 @@ Fixed:
   - CygWin support was temporarily broken
   - fixed the Python support to work with an official SIP release (4.1.1)  
   - BALLView
+		- improved support for MacOS
 		- drasticaly increased performance for coloring of models
+		- (hopefully) no more crashes from MDSimulations and minimizations, when strange energies occur
+		- handling of light sources positions
 	  - selection in MolecularControl with CTRL and SHIFT modifier
-	  - several problems in Cartoon model
+	  - several problems in Cartoon and Backbone model
+		- several problems with POVRay export
 	  - creation of models for several selected items
 	  - overall cleanup of RegularDataWidgets
   	- export of PNGs could result in strange problems e.g. with empty images
 	  - its now possible to create transparent wireframe and dot models
-  	- AtomDistanceColorProcessor [???WAS???]
   	- PeptideDialog: deletion of sequence in entry field
   	- increased performance of SnapShot visualisation, especially for large numbers of SnapShots
   	- A click on the "default" button in Preferences now only works on currently selected page
@@ -64,6 +67,7 @@ Fixed:
 		- several memory leaks, e.g. in OpenGL renderer
 		- problem with linking of C runtime library under windows
 		- HBondModel: showed only first H-bond of an atom and had a problem with the normals of the discs
+		- many other smaller bug fixes...
 
 
 Changed:
