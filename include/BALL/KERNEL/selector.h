@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.5 2000/02/12 19:29:14 oliver Exp $
+// $Id: selector.h,v 1.6 2000/02/13 17:02:06 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -25,7 +25,7 @@ namespace BALL
 	/**
 	*/
 	class ExpressionPredicate
-		:	public UnaryPredicate<Composite>
+		:	public UnaryPredicate<Atom>
 	{
 		public:
 
