@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.26 2001/06/28 21:03:47 amoll Exp $
+// $Id: bond.h,v 1.27 2001/06/29 19:31:18 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
+#endif
+
+#ifndef BALL_CONCEPT_ATOMCONTAINER_H
+#	include <BALL/KERNEL/atomContainer.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -31,7 +35,6 @@ namespace BALL
 {
 
 	class Atom;
-	class AtomContainer;
 	class Fragment;
 	class System;
 
