@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.9 2000/10/18 12:37:22 oliver Exp $
+// $Id: LogStream_test.C,v 1.10 2000/10/18 19:23:34 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.9 2000/10/18 12:37:22 oliver Exp $")
+START_TEST(class_name, "$Id: LogStream_test.C,v 1.10 2000/10/18 19:23:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ CHECK(warn(int n = 0))
 	TEST_EQUAL(l1.getLineLevel(1), LogStream::WARNING + 1)
 RESULT
 
-CHECK(insert(std::ostream& s, int min_level = INT_MIN, int max_level = INT_MAX))
+CHECK(insert(std::ostream& s, int min_level = LogStreamBuf::MIN_LEVEL, int max_level = LogStreamBuf::MAX_LEVEL))
 	NEW_TMP_FILE(filename)
 	LogStream l1;
 	ofstream s(filename.c_str(), File::OUT);
@@ -198,7 +198,7 @@ CHECK(clear())
 	TEST_EQUAL(l1.getNumberOfLines(), 0)
 RESULT
 
-CHECK(getNumberOfLines(int min_level = INT_MIN, int max_level = INT_MAX))
+CHECK(getNumberOfLines(int min_level = LogStreamBuf::MIN_LEVEL, int max_level = LogStreamBuf::MAX_LEVEL))
 	LogStream l1;
 	TEST_EQUAL(l1.getNumberOfLines(), 0)
 	l1.error() << "TEST" <<endl;
@@ -226,8 +226,8 @@ CHECK(getLineLevel(Index index))
 	TEST_EQUAL(l1.getLineLevel(0), 99)
 RESULT
 
-CHECK(filterLines(const int min_level = INT_MIN, const int max_level = INT_MAX,
-									const Time earliest = 0, const Time latest = Limits<Time>::max(), const string& s = ""))
+CHECK(filterLines(const int min_level = LogStreamBuf::MIN_LEVEL, const int max_level = LogStreamBuf::MAX_LEVEL,
+									const Time earliest = 0, const Time latest = LogStreamBuf::MAX_TIME, const string& s = ""))
 	LogStream l1;
   using std::list;													
 	list<int>	liste;
@@ -246,19 +246,19 @@ CHECK(filterLines(const int min_level = INT_MIN, const int max_level = INT_MAX,
 	l1.level(4) << "TEST4" << endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 5)
 
-	liste = l1.filterLines(1, 2, 0, Limits<Time>::max(), "" );
+	liste = l1.filterLines(1, 2, 0, LogStreamBuf::MAX_TIME, "" );
 	TEST_EQUAL(liste.size(), 2)
 	TEST_EQUAL(liste.front(), 1)
 	liste.pop_front();
 	TEST_EQUAL(liste.front(), 2)
 	liste.clear();
 
-	liste = l1.filterLines(1, 2, 0, Limits<Time>::max(), "XXXXX" );
+	liste = l1.filterLines(1, 2, 0, LogStreamBuf::MAX_TIME, "XXXXX" );
 	TEST_EQUAL(liste.size(), 1)
 	TEST_EQUAL(liste.front(), 2)
 	liste.clear();
 
-	liste = l1.filterLines(3, 3, timer, Limits<Time>::max(), "XXXXX");
+	liste = l1.filterLines(3, 3, timer, LogStreamBuf::MAX_TIME, "XXXXX");
 	TEST_EQUAL(liste.size(), 1)
 	TEST_EQUAL(liste.front(), 3)
 	liste.clear();	
