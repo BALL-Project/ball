@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.21 2004/02/24 11:34:57 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.22 2004/02/26 16:44:44 oliver Exp $
 //
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
@@ -12,9 +12,9 @@ namespace BALL
 
 	// needed for quicksort (below)
 	extern "C" int 
-#ifdef BALL_COMPILER_MSVC
+	#ifdef BALL_COMPILER_MSVC
 	__cdecl 
-#endif
+	#endif
 	comparePointerSizeIntPtr_(const void* a, const void* b)
 	{
 		return (int)(*(BALL_POINTERSIZEINT_TYPE*)a - *(BALL_POINTERSIZEINT_TYPE*)b);

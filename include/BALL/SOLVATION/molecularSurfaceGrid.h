@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.h,v 1.13 2003/08/26 08:04:48 oliver Exp $
+// $Id: molecularSurfaceGrid.h,v 1.14 2004/02/26 16:44:43 oliver Exp $
 //
 
 #ifndef BALL_SOLVATION_MOLECULARSURFACEGRID_H
@@ -34,18 +34,16 @@ namespace BALL
 	/** calculateSESGrid
 	\ingroup Solvation
 	*/
-	TRegularData3D<char>* calculateSESGrid(const Vector3& lower, const Vector3& upper, 
-														const float spacing, 
-														const System& system, 
-														const float probe_radius);
+	TRegularData3D<char>* calculateSESGrid
+		(const Vector3& lower, const Vector3& upper, 
+		 float spacing, const System& system, float probe_radius);
 
 	/** calculateSASGrid
 	\ingroup Solvation
 	*/
-	TRegularData3D<char>* calculateSASGrid(const Vector3& lower, const Vector3& upper, 
-														const float spacing, 
-														const System& system, 
-														const float probe_radius);
+	TRegularData3D<char>* calculateSASGrid
+		(const Vector3& lower, const Vector3& upper, 
+		 float spacing, const System& system, float probe_radius);
 
    
 } // namespace BALL
