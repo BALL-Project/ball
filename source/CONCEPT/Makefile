@@ -15,6 +15,7 @@ CPP_SOURCES=\
 	property.C\
 	selectable.C\
 	singleton.C\
+	timeStamp.C\
 	textPersistenceManager.C\
 	visitor.C\
 	XDRPersistenceManager.C
