@@ -182,7 +182,7 @@
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D &quot;BALL_QT_HAS_THREADS&quot;"
+				AdditionalOptions="/D &quot;BALL_QT_HAS_THREADS&quot; /win32icon:ballview.ico"
 				Optimization="3"
 				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
@@ -390,6 +390,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="resource.h">
+			</File>
+			<File
+				RelativePath="resource1.h">
+			</File>
+			<File
+				RelativePath="resource2.h">
+			</File>
+			<File
+				RelativePath="resource3.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\threads.h">
 			</File>
 		</Filter>
@@ -443,6 +455,9 @@
 			Name="Ressourcendateien"
 			Filter="">
 			<File
+				RelativePath="BALLView.rc">
+			</File>
+			<File
 				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\aboutDialog.ui">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -476,6 +491,12 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName).C&quot; -impl &quot;$(InputDi
 				</FileConfiguration>
 			</File>
 		</Filter>
+		<File
+			RelativePath="ballview.ico">
+		</File>
+		<File
+			RelativePath="icon1.ico">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

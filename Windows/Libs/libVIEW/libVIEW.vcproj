@@ -187,8 +187,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(SIPDir)\libs\python23.lib imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt323.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libball.lib"
-				OutputFile="C:\molview\$(ProjectName).dll"
-				AdditionalLibraryDirectories="&quot;$(SIPDIR)\libs&quot;;&quot;$(QTDIR)\lib&quot;;C:\molview"/>
+				OutputFile="C:\BALLView\$(ProjectName).dll"
+				AdditionalLibraryDirectories="&quot;$(SIPDIR)\libs&quot;;&quot;$(QTDIR)\lib&quot;;C:\BALLView"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool

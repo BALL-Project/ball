@@ -197,7 +197,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="c:\molview\$(ProjectName).lib"/>
+				OutputFile="c:\BALLView\$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
