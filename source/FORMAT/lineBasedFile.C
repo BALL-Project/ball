@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.11 2000/10/19 20:06:23 amoll Exp $
+// $Id: lineBasedFile.C,v 1.12 2000/10/20 15:58:02 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -59,7 +59,7 @@ namespace BALL
 	const LineBasedFile& LineBasedFile::operator = (const LineBasedFile& f)
 		throw()
 	{
-		open(f.name_, f.getOpenMode());
+		open(f.getName(), f.getOpenMode());
 		line_number_ = 0;
 		skipLines(f.line_number_ - 1);
 		return *this;
@@ -71,7 +71,7 @@ namespace BALL
 		if (!isOpen() || getOpenMode() != IN)
 		{
 			throw LineBasedFileError(__FILE__, __LINE__, this, 
-							"File " + name_ +" is not opend for read access or at all.");
+							"File " + getName() +" is not opend for read access or at all.");
 		}
 
 		Position start_point = line_number_;
@@ -96,7 +96,7 @@ namespace BALL
 		if (!isOpen() || getOpenMode() != IN)
 		{
 			throw LineBasedFileError(__FILE__, __LINE__, this, 
-							"File " + name_ +" is not opend for read access or at all.");
+							"File " + getName() +" is not opend for read access or at all.");
 		}
 
 		Position start_point = line_number_;
@@ -133,7 +133,7 @@ namespace BALL
 		if (!isOpen() || getOpenMode() != IN)
 		{
 			throw LineBasedFileError(__FILE__, __LINE__, this, 
-							"File " + name_ +" is not opend for read access or at all.");
+							"File " + getName() +" is not opend for read access or at all.");
 		}
 
 		if (eof())
@@ -168,7 +168,7 @@ namespace BALL
 		if (!isOpen())
 		{
 			throw LineBasedFileError(__FILE__, __LINE__, this, 
-							"File " + name_ +" is not opend.");
+							"File " + getName() +" is not opend.");
 		}
 		File::reopen();
 		line_number_ = 0;
@@ -181,7 +181,7 @@ namespace BALL
 		if (!isOpen())
 		{
 			throw LineBasedFileError(__FILE__, __LINE__, this, 
-							"File " + name_ +" is not opend.");
+							"File " + getName() +" is not opend.");
 		}
 
 		if (line_number == line_number_)
@@ -209,8 +209,7 @@ namespace BALL
 	{
 		line_ = "";
 		line_number_ = 0;
-		close();
-		name_ = "";
+		File::clear();
 	}
 
 	Position LineBasedFile::getLineNumber() 

@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.16 2000/10/20 14:05:16 oliver Exp $
+// $Id: PDBFile.C,v 1.17 2000/10/20 15:58:02 amoll Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -56,7 +56,7 @@ namespace BALL
 			residue_sequence_number_(-1),
 			insertion_code_(0)
 	{
-		name_ = PDB_file.getName();
+		setName(PDB_file.getName());
 	}
 
 	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)
