@@ -26,7 +26,7 @@ Added:
   	- storing and loading of BALLView project files
   	- support for drag and drop of molecular files
 		- possibility to highlight the selected molecular items
-  	- new move mode for (partial) structures
+  	- new move mode for (partial) structures (also much less CPU consumption)
   	- Esc key now switches to last used mode in Scene
   	- Python scripting
   		- Hotkey support for starting any (BALL-)Python command from BALLView
@@ -39,6 +39,7 @@ Fixed:
   - CygWin support was temporarily broken
   - fixed the Python support to work with an official SIP release (4.1.1)  
   - BALLView
+		- drasticaly increased performance for coloring of models
 	  - selection in MolecularControl with CTRL and SHIFT modifier
 	  - several problems in Cartoon model
 	  - creation of models for several selected items
