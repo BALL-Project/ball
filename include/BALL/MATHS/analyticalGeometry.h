@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.26 2000/05/01 08:20:50 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.27 2000/05/03 08:04:37 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -435,7 +435,7 @@ namespace BALL
 		} 
 		else 
 		{
-			T spat_product = TVector3<T>::getSpatProduct(a.d, b.d, b.p - a.p);
+			T spat_product = TVector3<T>::getTripleProduct(a.d, b.d, b.p - a.p);
 
 			if (Maths::isNotZero(spat_product))
 			{ // invariant: windschiefe lines
@@ -958,7 +958,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
 	{
-		return Maths::isZero(TVector3<T>::getSpatProduct(a, b, c));
+		return Maths::isZero(TVector3<T>::getTripleProduct(a, b, c));
 	}
 
 	/**	Test if four vector3 are complanar

@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.36 2000/05/02 07:09:08 oliver Exp $
+// $Id: vector3.h,v 1.37 2000/05/03 08:04:38 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -429,13 +429,14 @@ namespace BALL
 		static TVector3 getPerpendicularNormalization
 			(const TVector3& a, const TVector3& b, const TVector3& c);
 
-		/**	Spat Product of three vectors.
+		/**	Triple product of three vectors.
+				Calculate the parallelepipedal product of three vectors.
 				@param a first vector
 				@param b second vector
 				@param v third vector
-				@return T the spat product
+				@return T the triple product
 		*/
-		static T getSpatProduct (const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c);
+		static T getTripleProduct (const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c);
 
 		//@}
 	
@@ -924,7 +925,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	T TVector3<T>::getSpatProduct
+	T TVector3<T>::getTripleProduct
 		(const TVector3<T>& a,
 		 const TVector3<T>& b,
 		 const TVector3<T>& c)
