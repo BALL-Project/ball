@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.h,v 1.3 2003/09/04 23:14:10 amoll Exp $
+// $Id: compositeManager.h,v 1.4 2003/11/16 20:40:20 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #define BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -99,7 +99,7 @@ namespace BALL
 
 			/** Return the number of inserted Composites
 			 */
-			Size getNumberOfComposite() const
+			Size getNumberOfComposites() const
 				throw() { return composite_set_.size();}
 
 			//@}
@@ -122,6 +122,14 @@ namespace BALL
 			///
 			CompositeConstIterator end() const
 				throw() { return  composite_set_.end();}
+
+			///
+			HashSet<Composite*>& getComposites()
+				throw() { return composite_set_;}
+
+			///
+			const HashSet<Composite*>& getComposites() const
+				throw() { return composite_set_;}
 
 			/** Internal value dump.
 					Dumps the current state to a output ostream <b> s</b> with dumping depth <b> depth</b>.
