@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.32 2004/04/21 12:03:28 amoll Exp $
+// $Id: scene.h,v 1.33 2004/05/21 12:07:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -34,15 +34,44 @@ namespace BALL
 		class LightSettings;
 		class StageSettings;
 
-		/**	The Scene class.
-				The class Scene is the main visualization widget that shows the graphical
-				representation of the inserted Composite 's, that are stored
-				in the MainControl.
+		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
 				Because the MainControl is also the main application object
 				a Scene must be created with the pointer to the MainControl 
-				as parent widget.
-				It is also possible to connect Scenes together with the Notification
+				as parent widget. <br>
+				Scene is capable of stereo 3D view with shutter glasses and CRT monitors. This only works, if the 
+				OpenGL-driver supports this. NVIDIA cards need a Quad buffer, like they are used in the "Quad" cards.
+				For other NVIDIA cards, you can try the tool <a href="http://www.guru3d.com/rivatuner">"Rivatuner"</a>, 
+				which tries to enable this feature for cards, which natively dont support this. To enter
+				and leave the stereo mode, press ALT-Y. If your OpenGL doesnt support the stereo view, you will see an
+				error message in the message bar at the bottom of the main window.
+				<br>
+				<br>
+				The Scene has tree different mouse modi: <br>
+				- Picking Mode: To select Composite 's, e.g. Molecules
+				- Rotate Mode: Transform your view point in the threedimensional room, e.g. rotate or zoom
+				- Eye Distance: Change the eye distance for stereo view
+					
+				To change between the first two modi, there is a menu entry with checkboxes in the main
+				menu bar of the application. 
+				<br>
+				In Picking mode, left mouse button selects composites and right mouse button deselects.
+				There are two ways to (de-)select: Either click on single items, or draw a selection rectangle
+				by keeping the mouse button pressed and moving the mouse.
+				Users with only one mouse button can use the SHIFT button, while pressing the mouse button
+				to deselect. 
+				<br>
+				In Rotate mode, left mouse button rotates, mid mouse button zooms in and out and right button
+				moves the view.
+				Users with only one mouse button can use the SHIFT / CONTROL button, while pressing the mouse button.
+				<br>
+				The eye distance change mode is only available in the stereo view mode. Here a user can press the
+				ALT-button and move the mouse left or right to adjust the eye distance to their desired value.
+				<br>
+				Its possible to add new modi, to do so, derive a new class from Scene and overload the mouse*Event methods.
+				<br>
+				<br>
+				It is possible to connect Scenes together with the Notification
 				mechanism of BALL. Connecting two or more Scenes together means that that
 				mouse action performed in one Scene are also transfered to all other connected
 				Scenes. These other Scenes can have different Camera angles or other properties.
@@ -481,6 +510,8 @@ namespace BALL
 			void render_(const Representation& rep, RenderMode mode)
 				throw();
 
+
+			void changeEyeDistance_(Scene* scene);
 
 			void rotateSystem_(Scene* scene);
 			void translateSystem_(Scene* scene);

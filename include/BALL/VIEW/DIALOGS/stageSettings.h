@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.6 2004/05/18 15:04:10 amoll Exp $
+// $Id: stageSettings.h,v 1.8 2004/05/27 19:49:48 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -59,6 +59,9 @@ namespace BALL
 			void colorPressed();
 
 			private:
+
+			///
+			void eyeDistanceChanged();
 
 			//_ apply values to a Stage
 			void saveSettingsToStage_()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.57 2004/04/21 13:59:42 amoll Exp $
+// $Id: scene.C,v 1.58 2004/05/21 12:07:46 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -316,7 +316,8 @@ namespace BALL
 				view_point = stage_->getCamera().getViewPoint();
 				diff = stage_->getCamera().getRightVector();
 				diff.normalize();
-				diff *= 2;  // half the distance between the eyepoints
+				// distance between the eyepoints
+				diff = diff * stage_->getEyeDistance();  
 				stage_->getCamera().setViewPoint(view_point - diff);
 				gl_renderer_.updateCamera();
 			}
@@ -571,6 +572,22 @@ namespace BALL
 			renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
+		void Scene::changeEyeDistance_(Scene* scene)
+		{
+			// Differences between the old and new x and y positions in the window
+			float delta_x = scene->x_window_pos_new_ - scene->x_window_pos_old_;
+//		 	float delta_y = scene->y_window_pos_new_ - scene->y_window_pos_old_;
+			float new_distance = stage_->getEyeDistance() + (delta_x / 250.0);
+			
+			// prevent strange values
+			if (new_distance < 0 || new_distance > 4) return;
+
+			stage_->setEyeDistance(new_distance);
+			stage_settings_->updateFromStage();
+			update();
+		}
+
+
 
 		void Scene::setViewPoint_()
 			throw()
@@ -753,6 +770,7 @@ namespace BALL
 				"," + String((Index)stage_->getBackgroundColor().getBlue()) +
 				"," + String((Index)stage_->getBackgroundColor().getAlpha()) + ")";
 
+			inifile.insertValue("STAGE", "EyeDistance", String(stage_->getEyeDistance()));
 			inifile.insertValue("STAGE", "BackgroundColor", String(data));
 			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
 			writeLights_(inifile);
@@ -772,6 +790,10 @@ namespace BALL
 				mouse_wheel_sensitivity_= inifile.getValue("WINDOWS", "Main::mouseWheelSensitivity").toFloat();
 			}
 
+			if (inifile.hasEntry("STAGE", "EyeDistance"))
+			{
+				stage_->setEyeDistance(inifile.getValue("STAGE", "EyeDistance").toFloat());
+			}
 
 			if (inifile.hasEntry("STAGE", "BackgroundColor"))
 			{
@@ -1109,6 +1131,10 @@ namespace BALL
 						translateSystem_(this);
 						break;
 
+					case (Qt::AltButton | Qt::LeftButton): 
+						changeEyeDistance_(this);
+						break;
+
 					case Qt::LeftButton:
 						rotateSystem_(this);
 						break;
@@ -1212,9 +1238,14 @@ namespace BALL
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
-			if (e->key() == Key_Y && e->state() == AltButton)
+			QMenuBar* menu = getMainControl()->menuBar();
+			if (menu->isItemChecked(stereo_id_))
 			{
-				switchStereo();
+				if ((e->key() == Key_Y && e->state() == AltButton) ||
+						 e->key() == Key_Escape)
+				{
+					switchStereo();
+				}
 			}
 		}
 
@@ -1341,7 +1372,6 @@ namespace BALL
 		void Scene::switchStereo()
 			throw()
 		{
-			/*
 			GLboolean enabled = false;
 			glGetBooleanv(GL_STEREO, &enabled);
 			if (!enabled)
@@ -1350,7 +1380,7 @@ namespace BALL
 				setStatusbarText("No Stereo mode capability in driver");
 				return;
 			}
-			*/
+			
 			QMenuBar* menu = getMainControl()->menuBar();
 			bool stereo;
 			if (menu->isItemChecked(stereo_id_))
