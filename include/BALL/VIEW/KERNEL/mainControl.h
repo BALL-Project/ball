@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.20 2003/12/05 23:53:52 amoll Exp $
+// $Id: mainControl.h,v 1.21 2003/12/09 15:09:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -82,12 +82,16 @@ namespace BALL
 				QLabel* label_;
 		};
 
-		/**	MainControl is the main adminstration unit for a program and must be
+		/**	MainControl is the main administration unit for a program and must be
 				used by all	applications.
-				It is a storage facility for both Composite objects, the graphical
+				It is a storage facility for Composite objects, the graphical
 				Representation and the inserted ModularWidget.
+				The interface for the Composite administration is implemented in CompositeManager, and for
+				the Representation 's in PrimitiveManager.
+				\par
 				This class is also the root ConnectionObject. 
-				Therefore all messages will be handled from this class. \par
+				Therefore all messages will be handled from this class. 
+				\par
 				It is also derived from the QT::QMainWindow and therefore the main
 				widget of an application must be derived from this class. Further it has the
 				necessary interface methods to create and update the menus of the main application.
@@ -97,7 +101,7 @@ namespace BALL
 				The preferences of the application are stored in an INIFile.
 				The default name of this file is ".molview".
 				<b>Caveat:</b> Due to a peculiarity of the QT Meta Object Compiler (MOC)
-				you have to specify the full namsespace qualified name of this classes when deriving from it. \par
+				you have to specify the full namespace qualified name of this class when deriving from it. \par
 				So don't use\par 
 				<tt> class foo : public MainControl </tt>; but \par
 				<tt> class foo : public BALL::VIEW::MainControl </tt> instead. 
@@ -173,9 +177,10 @@ namespace BALL
 
 			/** Default Constructor.
 					Reads the the INIFile <tt>inifile</tt> and connects the qt signal 
-					<b> aboutToQuit </b>with the slot aboutToExit().
+					<b> aboutToQuit </b> with the slot aboutToExit().
 					The state of the MainControl is:
 						-  no Composite objects stored
+						-  no Representation objects stored
 						-  no general Preferences dialog added
 						-  no MainControlPreferences dialog added
 					\par
@@ -222,12 +227,12 @@ namespace BALL
 			
 			/** Redraws all Representation objects for a Composite.
 					If the Composite is not inserted into this MainControl <tt>false</b> will be returned.
-					updateRepresentationsOf() is called after receiving a CompositeChangedMessage in onNotify().
-					It sends a RepresentationChangedMessage for every Representation, which was build for the 
+					updateRepresentationsOf() is called after receiving a CompositeMessage with type CHANGED_COMPOSITE in onNotify().
+					It sends a RepresentationMessage with type UPDATE for every Representation, which was build for the 
 					Composite.  After this a SceneMessage is send to redraw the Scene.
 					Remember:
-					If you changed a composite in MainControl or a derived class, the MainControl doesnt get 
-					notified, from the CompositeChangedMessage, it sends. So you have to call this function instead 
+					If you changed a Composite in MainControl or a derived class, the MainControl doesnt get 
+					notified, from the CompositeMessage it sends. So you have to call this function instead 
 					of sending the message.
 					\param  composite the Composite that should be updated
 					\param  rebuild if set to true, the model is rebuilded, otherwise just the coloring is updated
@@ -236,8 +241,8 @@ namespace BALL
 			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true)
 				throw();
 
-			/** Redraws all inserted objects.
-					Same as update but all Representation objects are redrawn.
+			/** Redraws all inserted Representation.
+					Same as updateRepresentationsOf but all Representation objects are redrawn.
 					\param rebuild_display_lists set to true lets the Scene rebuild the GLDisplayList objects.
 					\see update
 			*/
@@ -270,7 +275,7 @@ namespace BALL
 				throw();
 
 			/** Update a Representation
-			 		A RepresentationMessage with type UPDATE is send.
+			 		A RepresentationMessage with type UPDATE and a SceneMessage is send.
 					\return false if the PrimitiveManager doesnt contain the Representation
 			*/
 			bool update(Representation& rep)
@@ -314,6 +319,7 @@ namespace BALL
 					Take care to call this function in your own ModularWidget.
 					There is no need to call this function, because it will be called from the 
 					message handling mechanism.
+					<b>Remember:</b> A ModularWidget is not notified by the Messages it sends itself!
 					\param message the pointer to the message that should be processed
 					\see   ModularWidget
 					\see   Message
@@ -471,8 +477,7 @@ namespace BALL
 			void insertPopupMenuSeparator(int ID)
 				throw();
 
-			/** Initialize a preferences tab for the MainControl.
-					This method creates the preferences tab MainControlPreferences for
+			/** Create the preferences tab MainControlPreferences for
 					the MainControl and inserts it into the Preferences dialog.
 					It is called automatically by the show method at the
 					start of the application. This method is used in the same manner as the
@@ -488,8 +493,7 @@ namespace BALL
 			virtual void initializePreferencesTab(Preferences &preferences)
 				throw();
 			
-			/**	Remove the preferences tab.
-					This method removes the MainControlPreferences tab from the 
+			/**	Remove the MainControlPreferences tab from the 
 					Preferences dialog of the MainControl.
 					This method is called automatically by aboutToExit()
 					at the end of the application. It is used in the same manner as the
@@ -530,16 +534,14 @@ namespace BALL
 				throw();
 			
 			/** Writes the widgets preferences to the INIFile.
-					This method writes the general Preferences of this MainControl and
-					the preferences of MainControlPreferences to the <tt>inifile</tt>.\par
-					<b>Note:</b> if this method is overridden, call this method at the end of the
+					<b>Note:</b> If this method is overridden, call this method at the end of the
 					overriden method to make sure that the general preferences are written.
 					\param  inifile the INIFile that contains the needed values
 			*/
 			virtual void writePreferences(INIFile &inifile)
 				throw();
 			
-			/// Restore the positions of all DockWindows from the INIFile
+			/// Restore the positions of all DockWindow's from the INIFile
 			virtual void restoreWindows()
 				throw();
 			
@@ -550,7 +552,7 @@ namespace BALL
 			void addModularWidget(ModularWidget* widget)
 				throw();
 
-			/** Remove a new ModularWidget from the MainControl.
+			/** Remove a ModularWidget from the MainControl.
 					This method will be called internally by the ModularWidget registration process.
 					\param  widget the ModularWidget to be removed
 			*/
@@ -566,7 +568,7 @@ namespace BALL
 			const HashSet<Composite*>& getSelection() const
 				throw();
 
-			/// Get the selection of the MolecularControl (not the selection with checkboxes).
+			/// Get the selection (highlighted items) of the MolecularControl (not the selection with checkboxes).
 			List<Composite*>& getControlSelection()
 				throw();
 
@@ -574,11 +576,11 @@ namespace BALL
 			System* getSelectedSystem()
 				throw();
 
-			///	Select a Composite recursive and add all Atom and Atomcontainer objects to the selection.
+			///	Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
 			void selectCompositeRecursive(Composite* composite, bool first_call=false)
 				throw();
 
-			/// Select a Composite recursive and add all Atom and Atomcontainer objects to the selection.
+			/// Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
 			void deselectCompositeRecursive(Composite* composite, bool first_call=false)
 				throw();
 
@@ -586,8 +588,8 @@ namespace BALL
 					Called by selectComposites_().
 					If one Atom is selected, its position is printed.
 					If two Atom objects are selected, their distance,
-					for three Atom their angle and
-					for four Atom their torsion angle.
+					for three Atom 's their angle and
+					for four Atom 's their torsion angle.
 					Else the number of items is printed.
 			*/
 			void printSelectionInfos()
@@ -599,19 +601,19 @@ namespace BALL
 			void setStatusbarText(const String& text)
 				throw();
 
-			///
+			/// Set a hint for a menu entry
 			void setMenuHint(Index id, const String& hint)
 				throw();
 
-			///
+			/// Get the hint for a menu entry
 			const String& getMenuHint(Index id) const
 				throw();
 			
-			///
+			/// Get a const reference for the fragment database
 			const FragmentDB& getFragmentDB() const
 				throw() { return fragment_db_;}
 
-			/** Set a properties, which defines, if the stored composites can be changed at the moment.
+			/** Set a property, which defines, if the stored composites can be changed at the moment.
 			 		This is used e.g. to prevent changes in the composite hierarchy while a simulation is running.
 					@see compositesAreMuteable
 			*/
@@ -696,7 +698,7 @@ namespace BALL
 			bool 												composites_muteable_;
 
 			// used to acces the global instance of MainControl
-			static MainControl* 				theMainControl_;
+//			static MainControl* 				 theMainControl_;
 
 			/*_	A list containing all modular widgets.
 					This list is modified by addModularWidget and
