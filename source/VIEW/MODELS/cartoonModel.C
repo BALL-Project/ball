@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.44 2004/09/14 13:31:17 amoll Exp $
+// $Id: cartoonModel.C,v 1.45 2004/09/16 13:35:20 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -41,6 +41,9 @@ namespace BALL
 				helix_radius_(2.4),
 				arrow_width_(2),
 				arrow_height_(0.4),
+				DNA_helix_radius_(1.1),
+				DNA_ladder_radius_(0.8),
+				DNA_base_radius_(0.1),
 				draw_DNA_as_ladder_(false)
 		{
 		}
@@ -53,6 +56,9 @@ namespace BALL
 				helix_radius_(cartoon.helix_radius_),
 				arrow_width_(cartoon.arrow_width_),
 				arrow_height_(cartoon.arrow_height_),
+				DNA_helix_radius_(cartoon.DNA_helix_radius_),
+				DNA_ladder_radius_(cartoon.DNA_ladder_radius_),
+				DNA_base_radius_(cartoon.DNA_base_radius_),
 				draw_DNA_as_ladder_(cartoon.draw_DNA_as_ladder_)
 		{
 		}
@@ -127,7 +133,10 @@ namespace BALL
 				}
 			}
 
+			float temp = helix_radius_;
+			helix_radius_ = DNA_helix_radius_;
 			createBackbone_();
+			helix_radius_  = temp;
 
 			if (!draw_DNA_as_ladder_)
 			{
@@ -180,12 +189,12 @@ namespace BALL
 					tube->setVertex1(base_atom->getPosition());
 					tube->setVertex2(end_atom->getPosition());
 					tube->setComposite(r);
-					tube->setRadius(tube_radius_);
+					tube->setRadius(DNA_ladder_radius_);
 					geometric_objects_.push_back(tube);
 
 					Sphere* sphere1 = new Sphere;
 					sphere1->setPosition(end_atom->getPosition());
-					sphere1->setRadius(tube_radius_);
+					sphere1->setRadius(DNA_ladder_radius_);
 					sphere1->setComposite(r);
 					geometric_objects_.push_back(sphere1);
 
@@ -228,12 +237,12 @@ namespace BALL
 				tube->setVertex1(base_atom->getPosition());
 				tube->setVertex2(base_atom->getPosition() - v);
 				tube->setComposite(r);
-				tube->setRadius(tube_radius_);
+				tube->setRadius(DNA_ladder_radius_);
 				geometric_objects_.push_back(tube);
 
 				Sphere* sphere1 = new Sphere;
 				sphere1->setPosition(base_atom->getPosition() -v);
-				sphere1->setRadius(tube_radius_);
+				sphere1->setRadius(DNA_ladder_radius_);
 				sphere1->setComposite(r);
 				geometric_objects_.push_back(sphere1);
 
@@ -241,12 +250,12 @@ namespace BALL
 				tube2->setVertex1(partner_base->getPosition());
 				tube2->setVertex2(partner_base->getPosition() + v);
 				tube2->setComposite(partner);
-				tube2->setRadius(tube_radius_);
+				tube2->setRadius(DNA_ladder_radius_);
 				geometric_objects_.push_back(tube2);
 
 				Sphere* sphere2 = new Sphere;
 				sphere2->setPosition(partner_base->getPosition() + v);
-				sphere2->setRadius(tube_radius_);
+				sphere2->setRadius(DNA_ladder_radius_);
 				sphere2->setComposite(partner);
 				geometric_objects_.push_back(sphere2);
 			}
@@ -1009,13 +1018,11 @@ namespace BALL
 			Vector3 p2 = a2.getPosition();
 			Vector3 p3 = a3.getPosition();
 
-			float d = 0.1;
-
 			Vector3 v1 = p1 - p2;
 			Vector3 v2 = p3 - p2;
 			Vector3 normal = v1 % v2;
 			normal.normalize();
-			normal *= -d;
+			normal *= -DNA_base_radius_;
 
 			vertices.push_back(p1 + normal);
 			vertices.push_back(p2 + normal);
@@ -1056,19 +1063,19 @@ namespace BALL
 				tube->setVertex1(sa2->getPosition());
 				tube->setVertex2(sa1->getPosition());
 			}
-			tube->setRadius(0.1);
+			tube->setRadius(DNA_base_radius_);
 			tube->setComposite(sa1->getBond(*sa2));
 			geometric_objects_.push_back(tube);
 
 			Sphere* s1 = new Sphere;
 			s1->setPosition(sa1->getPosition());
-			s1->setRadius(0.1);
+			s1->setRadius(DNA_base_radius_);
 			s1->setComposite(sa1);
 			geometric_objects_.push_back(s1);
 
 			s1 = new Sphere;
 			s1->setPosition(sa2->getPosition());
-			s1->setRadius(0.1);
+			s1->setRadius(DNA_base_radius_);
 			s1->setComposite(sa2);
 			geometric_objects_.push_back(s1);
 
@@ -1085,7 +1092,7 @@ namespace BALL
 				tube->setVertex1(sa3->getPosition());
 				tube->setVertex2(sa2->getPosition());
 			}
-			tube->setRadius(0.1);
+			tube->setRadius(DNA_base_radius_);
 			tube->setComposite(sa2->getBond(*sa3));
 			geometric_objects_.push_back(tube);
 		}
@@ -1141,7 +1148,7 @@ namespace BALL
 
 					Sphere* s = new Sphere;
 					s->setComposite(atoms[8]);
-					s->setRadius(0.1);
+					s->setRadius(DNA_base_radius_);
 					s->setPosition(atoms[8]->getPosition());
 					geometric_objects_.push_back(s);
 				}
@@ -1203,7 +1210,7 @@ namespace BALL
 					tube->setComposite(r);
 					tube->setVertex1(connection_point);
 					tube->setVertex2(*old_spline_point);
-					tube->setRadius(0.1);
+					tube->setRadius(DNA_base_radius_);
 					geometric_objects_.push_back(tube);
 				}
 
@@ -1234,13 +1241,13 @@ namespace BALL
 							Sphere* s = new Sphere;
 							s->setComposite(a1);
 							s->setPosition(a1->getPosition());
-							s->setRadius(0.1);
+							s->setRadius(DNA_base_radius_);
 							geometric_objects_.push_back(s);
 
 							TwoColoredTube* tube= new TwoColoredTube;
 							tube->setVertex2(a1->getPosition());
 							tube->setVertex1(a2->getPosition());
-							tube->setRadius(0.1);
+							tube->setRadius(DNA_base_radius_);
 							tube->setComposite(&*bit);
 							geometric_objects_.push_back(tube);
 						}

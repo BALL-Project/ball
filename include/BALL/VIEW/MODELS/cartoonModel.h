@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.22 2004/09/13 17:12:38 amoll Exp $
+// $Id: cartoonModel.h,v 1.23 2004/09/16 13:35:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -178,6 +178,10 @@ namespace BALL
 			float helix_radius_;
 			float arrow_width_;
 			float arrow_height_;
+			float DNA_helix_radius_;
+			float DNA_ladder_radius_;
+			float DNA_base_radius_;
+
 			bool  draw_DNA_as_ladder_;
 
 			HashMap<Residue*, Residue*> complementary_bases_;
