@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.28.4.1 2002/05/01 10:52:33 oliver Exp $
+// $Id: Expression_test.C,v 1.28.4.2 2002/05/17 11:01:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +17,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.28.4.1 2002/05/01 10:52:33 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.28.4.2 2002/05/17 11:01:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -410,7 +410,7 @@ Expression* e_ptr = 0;
 CHECK(Expression::Expression() throw())
 	e_ptr = new Expression;
 	TEST_NOT_EQUAL(e_ptr, 0)
-	TEST_EQUAL(e_ptr->getCreationMethods().size(), 23)
+	TEST_EQUAL(e_ptr->getCreationMethods().size(), 24)
 RESULT
 
 
@@ -435,7 +435,7 @@ RESULT
 
 CHECK(Expression::Expression(const String& expression_string) throw())
 	Expression e("true()");
-	TEST_EQUAL(e.getCreationMethods().size(), 23)
+	TEST_EQUAL(e.getCreationMethods().size(), 24)
 	TEST_EQUAL(e(Atom()), true)
 RESULT
 
