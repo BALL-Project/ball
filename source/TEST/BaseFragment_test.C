@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.8 2000/04/12 17:28:38 amoll Exp $
+// $Id: BaseFragment_test.C,v 1.9 2000/04/17 11:18:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,12 +9,13 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.8 2000/04/12 17:28:38 amoll Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.9 2000/04/17 11:18:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 String filename;
 NEW_TMP_FILE(filename)
 
@@ -217,7 +218,7 @@ pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 String filename;
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	ofstream	ofile(filename.c_str(), ios::out);
 	BaseFragment* bf1 = new BaseFragment("name1");
 	BaseFragment* bf2 = new BaseFragment("name2");
 	bf1->insert(*bf2);
@@ -229,7 +230,7 @@ RESULT
 */
 /*
 CHECK(persistentRead(PersistenceManager&))
-	std::ifstream	ifile(filename.c_str());
+	ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
 	TEST_NOT_EQUAL(ptr, 0)
@@ -708,14 +709,14 @@ CHECK(dump(ostream&, Size))
 	Atom a1;
 	a1.setName("A1");
 	bf2.append(a1);
-	std::ofstream outfile(filename.c_str(), ios::out);
+	ofstream outfile(filename.c_str(), ios::out);
 	bf1.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Base_Fragment.txt", true)
 RESULT
 
 CHECK(read(istream&)) // NotImplemented
-/*	std::ifstream instr("data/Base_Fragment.txt2.txt");
+/*	ifstream instr("data/Base_Fragment.txt2.txt");
 	BaseFragment bf3;
 	bf3.read(instr);
 	instr.close();
@@ -733,7 +734,7 @@ CHECK(write(ostream&)) // NotImplemented
 	bf2.append(a1);
 	bf1.setName("BF1");
 	bf2.setName("BF2");
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	ofstream outstr(filename.c_str(), ios::out);
 	bf1.write(outstr);
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Base_Fragment.txt2", false)*/
