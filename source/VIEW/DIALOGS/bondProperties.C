@@ -18,6 +18,11 @@ BondProperties::BondProperties( Atom* atom, QWidget* parent,  const char* name, 
   : BondPropertiesData( parent, name, modal, fl ),
 		atom_(atom)
 {
+	if (atom->countBonds() == 0)
+	{
+		((ModularWidget*)parent)->setStatusbarText("Atom has no bonds");
+		return;
+	}
 	parent_ = parent;
 	String text;
 	if (atom_->getParent() != 0 &&

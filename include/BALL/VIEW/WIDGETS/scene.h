@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.26 2004/03/31 10:01:24 anne Exp $
+// $Id: scene.h,v 1.27 2004/04/01 11:13:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -475,10 +475,10 @@ namespace BALL
 			void translateSystem_(Scene* scene);
 			void zoomSystem_(Scene* scene);
 
-			void selectionPressed_(Scene* scene);
-			void selectionReleased_(Scene* scene);
-			void selectionPressedMoved_(Scene* scene);
-			void deselectionReleased_(Scene* scene);
+			void selectionPressed_();
+			void selectionReleased_();
+			void selectionPressedMoved_();
+			void deselectionReleased_();
 
 			void calculateQuaternion_(Quaternion& quaternion, const Quaternion* rotate = 0);
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.48 2004/03/31 12:31:07 amoll Exp $
+// $Id: scene.C,v 1.49 2004/04/01 11:13:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1072,7 +1072,7 @@ namespace BALL
 						e->state() == Qt::RightButton ||
 						e->state() == (Qt::LeftButton | Qt::ShiftButton))
 				{
-					selectionPressedMoved_(this);
+					selectionPressedMoved_();
 				}
 
 				x_window_pos_old_ = x_window_pos_new_;
@@ -1129,7 +1129,7 @@ namespace BALL
 				if (e->button() == Qt::LeftButton ||
 						e->button() == Qt::RightButton)
 				{
-					selectionPressed_(this);
+					selectionPressed_();
 				}
 			}
 		}
@@ -1145,14 +1145,14 @@ namespace BALL
 				switch (e->state())
 				{
 					case Qt::LeftButton:
-						selectionReleased_(this);
+						selectionReleased_();
 						break;
 
 					case Qt::RightButton:
-						deselectionReleased_(this);
+						deselectionReleased_();
 
 					case (Qt::LeftButton | Qt::ShiftButton):
-						deselectionReleased_(this);
+						deselectionReleased_();
 
 					default:
 						break;
@@ -1216,7 +1216,7 @@ namespace BALL
 		}
 
 
-		void Scene::selectionPressed_(Scene* /* scene */)
+		void Scene::selectionPressed_()
 		{
 			x_window_pick_pos_first_ = x_window_pos_old_;
 			y_window_pick_pos_first_ = y_window_pos_old_;
@@ -1224,14 +1224,14 @@ namespace BALL
 			y_window_pick_pos_second_ = y_window_pos_old_;
 		}
 
-		void Scene::selectionReleased_(Scene* /* scene */)
+		void Scene::selectionReleased_()
 		{
 			selectObjects_(true);
 			need_update_ = true;
 			updateGL();
 		}
 
-		void Scene::deselectionReleased_(Scene* /* scene */)
+		void Scene::deselectionReleased_()
 		{
 			selectObjects_(false);
 			need_update_ = true;
@@ -1239,7 +1239,7 @@ namespace BALL
 		}
 
 
-		void Scene::selectionPressedMoved_(Scene* /* scene */)
+		void Scene::selectionPressedMoved_()
 		{
 			x_window_pick_pos_second_ = x_window_pos_new_;
 			y_window_pick_pos_second_ = y_window_pos_new_;
