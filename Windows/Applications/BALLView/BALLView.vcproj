@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="BALLView"
 	ProjectGUID="{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}"
+	RootNamespace="BALLView"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -98,7 +99,7 @@
 				OutputFile="$(OutDir)/BALLView.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..\..\..\lib\&quot;"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..\..\Libs\libView\$(OutDir)&quot;;&quot;$(ProjectDir)..\..\..\lib\&quot;"
 				GenerateDebugInformation="FALSE"
 				TerminalServerAware="1"/>
 			<Tool
