@@ -1,4 +1,4 @@
-// $Id: FFParameterSection.C,v 1.5 2000/02/11 18:18:17 oliver Exp $
+// $Id: FFParameterSection.C,v 1.6 2000/02/12 16:30:58 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
@@ -308,7 +308,9 @@ namespace BALL
 		static const String undefined("(undefined)");
 		
 		// check whether the entry exists
-		if ((key_index < number_of_entries_) && (variable_index < number_of_variables_))
+		if ((key_index <= number_of_entries_) 
+				&& (variable_index < number_of_variables_) 
+				&& (key_index > 0))
 		{
 			return entries_[key_index * number_of_variables_ + variable_index];
 		} else {
