@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3_test.C,v 1.13 2003/05/23 06:47:51 oliver Exp $
+// $Id: HashGrid3_test.C,v 1.14 2003/06/17 12:25:22 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.13 2003/05/23 06:47:51 oliver Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.14 2003/06/17 12:25:22 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,35 +22,35 @@ using namespace BALL;
 
 HashGridBox3<int>* hbox3;
 
-CHECK(HashGridBox3::HashGridBox3() throw())
+CHECK(HashGrid3() throw())
 	hbox3 = new HashGridBox3<int>;
 	TEST_NOT_EQUAL(hbox3, 0)
 RESULT
 
 
-CHECK(HashGridBox3::HashGridBox3(const HashGridBox3& grid_box, bool deep = true) throw())
+CHECK(HashGrid3(const HashGrid3& grid, bool deep = true) throw())
   // ?????
 	// uses set(), which isn't implemented
 RESULT
 
 
-CHECK(HashGridBox3::~HashGridBox3() throw())
+CHECK(~HashGridBox3() throw())
 	delete hbox3;
 RESULT
 
 
-CHECK(HashGridBox3::clear() throw())
+CHECK(void clear() throw())
 	HashGridBox3<int> hbox;
 	for (int i = 0; i < 5; ++i)
 	{
 		hbox.insert(i);
 	}
 	hbox.clear();
-	// TODO: did it really clear?
+	TEST_EQUAL(hbox.getSize(), 0)
 RESULT
 
 
-CHECK(HashGridBox3::destroy() throw())
+CHECK(void destroy() throw())
 	HashGridBox3<int> hbox;
 	for (int i = 0; i < 5; ++i)
 	{
@@ -61,22 +61,7 @@ CHECK(HashGridBox3::destroy() throw())
 RESULT
 
 
-CHECK(HashGridBox3::set(const HashGridBox3& box, bool /* deep */ = true) throw())
-  //?????
-RESULT
-
-
-CHECK(HashGridBox3::HashGridBox3& operator = (const HashGridBox3& box) throw())
-  //?????
-RESULT
-
-
-CHECK(HashGridBox3::get(HashGridBox3& box, bool deep = true) const  throw())
-  //?????
-RESULT
-
-
-CHECK(HashGridBox3::find(const Item &item) throw())
+CHECK(Item* find(const Item &item) throw())
 	HashGridBox3<int> hbox;
 	for (int i = 0; i < 5; ++i)
 	{
@@ -91,7 +76,7 @@ CHECK(HashGridBox3::find(const Item &item) throw())
 RESULT
 
 
-CHECK(HashGridBox3::find(const Item& item) const  throw())
+CHECK(const Item* find(const Item& item) const throw())
 	HashGridBox3<int> hbox;
 	for (int i = 0; i < 5; ++i)
 	{
@@ -106,7 +91,7 @@ CHECK(HashGridBox3::find(const Item& item) const  throw())
 RESULT
 
 
-CHECK(HashGridBox3::getSize() const  throw())
+CHECK(Size getSize() const throw())
 	HashGridBox3<int> hbox;
 	int size = hbox.getSize();
 	TEST_EQUAL(size, 0)
@@ -117,7 +102,7 @@ CHECK(HashGridBox3::getSize() const  throw())
 RESULT
 
 
-CHECK(HashGridBox3::insert(const Item& item) throw())
+CHECK(void insert(const Item& item) throw())
 	HashGridBox3<int> hbox;
 	hbox.insert(567);
 	bool test = (*hbox.find(567) == 567);
@@ -125,7 +110,7 @@ CHECK(HashGridBox3::insert(const Item& item) throw())
 RESULT
 
 
-CHECK(HashGridBox3::remove(const Item& item) throw())
+CHECK(bool remove(const Item& item) throw())
 	HashGridBox3<int> hbox;
 	for (int i = 0; i < 5; i++)
 	{
@@ -134,12 +119,11 @@ CHECK(HashGridBox3::remove(const Item& item) throw())
 	hbox.remove(3);
 	int size = hbox.getSize();
 	TEST_EQUAL(size, 4)
-	// TODO:
-	// check if really the item "3" was removed.
+	TEST_EQUAL(hbox.find(3), 0)
 RESULT
 
 
-CHECK(HashGridBox3::removeAll(const Item& item) throw())
+CHECK(bool removeAll(const Item& item) throw())
 	HashGridBox3<int> hbox;
 	for (int i = 0; i < 5; i++)
 	{
@@ -156,12 +140,12 @@ CHECK(HashGridBox3::removeAll(const Item& item) throw())
 RESULT
 
 
-CHECK(HashGridBox3::host(Visitor<HashGridBox3> &visitor) throw())
+CHECK(void host(Visitor<HashGrid3>& visitor) throw())
   //?????
 RESULT
 
 
-CHECK(HashGridBox3::bool operator == (const HashGridBox3& box) const  throw())
+CHECK(bool operator == (const HashGridBox3& box) const throw())
 	HashGridBox3<int> hbox1;
 	for (int i = 0; i < 5; i++)
 	{
@@ -179,7 +163,7 @@ CHECK(HashGridBox3::bool operator == (const HashGridBox3& box) const  throw())
 RESULT
 
 
-CHECK(HashGridBox3::bool operator != (const HashGridBox3& box) const  throw())
+CHECK(bool operator != (const HashGridBox3& box) const throw())
 	HashGridBox3<int> hbox1;
 	for (int i = 0; i < 5; i++)
 	{
@@ -197,7 +181,7 @@ CHECK(HashGridBox3::bool operator != (const HashGridBox3& box) const  throw())
 RESULT
 
 
-CHECK(HashGridBox3::has(const Item& item) const  throw())
+CHECK(bool has(const Item& item) const throw())
 	HashGridBox3<int> hbox;
 	for (int i = 0; i < 5; i++)
 	{
@@ -214,7 +198,7 @@ CHECK(HashGridBox3::has(const Item& item) const  throw())
 RESULT
 
 
-CHECK(HashGridBox3::isEmpty() const  throw())
+CHECK(bool isEmpty() const throw())
 	HashGridBox3<int> hbox;
 	bool test = hbox.isEmpty();
 	TEST_EQUAL(test, true)
@@ -227,7 +211,7 @@ CHECK(HashGridBox3::isEmpty() const  throw())
 RESULT
 
 
-CHECK(HashGridBox3::isValid() const  throw())
+CHECK(bool isValid() const throw())
 	HashGridBox3<int> hbox;
 	for (int i = 0; i < 5; i++)
 	{
@@ -238,7 +222,7 @@ CHECK(HashGridBox3::isValid() const  throw())
 RESULT
 
 
-CHECK(HashGridBox3::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	HashGridBox3<int> hbox;
 	for (int i = 0; i < 5; i++)
 	{
@@ -255,7 +239,7 @@ CHECK(HashGridBox3::dump(std::ostream& s = std::cout, Size depth = 0) const  thr
 RESULT
 
 
-CHECK(HashGridBox3::apply(UnaryProcessor<Item>& processor) throw())
+CHECK(bool apply(UnaryProcessor<Item>& processor) throw())
 	TestProcessor proc;
 	HashGridBox3<int> hbox;
 	hbox.insert(5);
@@ -267,151 +251,47 @@ CHECK(HashGridBox3::apply(UnaryProcessor<Item>& processor) throw())
 RESULT
 
 
-CHECK(HashGridBox3::apply(UnaryProcessor< HashGridBox3<Item> >& processor) throw())
+CHECK(bool apply(UnaryProcessor< HashGridBox3<Item> >& processor) throw())
 	// ?????
 RESULT
 
-
-// tests for class HashGridBox3::BoxIteratorTraits_::
-
-HashGridBox3<int>::BoxIteratorTraits_* it_tr_ptr = 0;
-CHECK(HashGridBox3::BoxIteratorTraits_::BoxIteratorTraits_() throw())
-	it_tr_ptr = new HashGridBox3<int>::BoxIteratorTraits_;
-	TEST_NOT_EQUAL(it_tr_ptr, 0)
+CHECK(HashGridBox3(const HashGridBox3& grid_box, bool deep = true) throw())
+  // ??? Not implemented
 RESULT
 
-CHECK(HashGridBox3::BoxIteratorTraits_::~BoxIteratorTraits_() throw())
-	delete it_tr_ptr;
+CHECK(HashGridBox3* getContainer() throw())
+  // ???
 RESULT
 
-
-CHECK(HashGridBox3::BoxIteratorTraits_::BoxIteratorTraits_(const HashGridBox3& box) throw())
-  //?????
+CHECK(HashGridBox3<Item>& getData() throw())
+  // ???
 RESULT
 
-
-CHECK(HashGridBox3::BoxIteratorTraits_::BoxIteratorTraits_(const BoxIteratorTraits_& traits, bool /* deep */ = true) throw())
-  //?????
+CHECK(HashGridBox3<Item>* getBox(Position x, Position y, Position z) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGridBox3::BoxIteratorTraits_::BoxIteratorTraits_& operator = (const BoxIteratorTraits_& traits) throw())
-  //?????
+CHECK(HashGridBox3<Item>* getBox(const Vector3& vector) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGridBox3::BoxIteratorTraits_::getContainer() const  throw())
-  //?????
+CHECK(Item& getData() throw())
+  // ???
 RESULT
 
-
-CHECK(HashGridBox3::BoxIteratorTraits_::getPosition() throw())
-  //?????
-RESULT
-
-
-CHECK(HashGridBox3::BoxIteratorTraits_::bool operator == (const BoxIteratorTraits_& traits) const  throw())
-  //?????
-RESULT
-
-
-CHECK(HashGridBox3::BoxIteratorTraits_::isValid() const  throw())
-  //?????
-RESULT
-
-
-CHECK(HashGridBox3::BoxIteratorTraits_::toBegin() throw())
-  //?????
-RESULT
-
-
-CHECK(HashGridBox3::BoxIteratorTraits_::toEnd() throw())
-  //?????
-RESULT
-
-
-CHECK(HashGridBox3::BoxIteratorTraits_::getData() throw())
-  //?????
-RESULT
-
-
-CHECK(HashGridBox3::BoxIteratorTraits_::forward() throw())
-  //?????
-RESULT
-
-
-// tests for class DataIteratorTraits_::
-
-CHECK(DataIteratorTraits_::(DataIteratorTraits_)() throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::DataIteratorTraits_(const HashGridBox3& box) throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::DataIteratorTraits_(const DataIteratorTraits_& traits, bool /* deep */ = true) throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::DataIteratorTraits_& operator = (const DataIteratorTraits_ &traits) throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::getContainer() const  throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::getPosition() throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::bool operator == (const DataIteratorTraits_ &traits) const  throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::isValid() const  throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::toBegin() throw())
-RESULT
-
-
-CHECK(DataIteratorTraits_::toEnd() throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::getData() throw())
-  //?????
-RESULT
-
-
-CHECK(DataIteratorTraits_::forward() throw())
-  //?????
-RESULT
 
 
 // tests for class HashGrid3::
 
 HashGrid3<int>* hg_ptr;
 
-CHECK(HashGrid3::HashGrid3() throw())
+CHECK(HashGridBox3() throw())
 	hg_ptr = new HashGrid3<int>;
 	TEST_NOT_EQUAL(hg_ptr, 0)
 RESULT
 
 
-CHECK(HashGrid3::HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, Size dimension_z, float spacing_x, float spacing_y, float spacing_z) throw())
+CHECK(HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, Size dimension_z, float spacing_x, float spacing_y, float spacing_z) throw())
 	Vector3 origin(1.0, 2.0, 3.0);
 	Size dimension_x = 1;
 	Size dimension_y = 4;
@@ -428,7 +308,7 @@ CHECK(HashGrid3::HashGrid3(const Vector3& origin, Size dimension_x, Size dimensi
 RESULT
 
 
-CHECK(HashGrid3::HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, Size dimension_z, float spacing) throw())
+CHECK(HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, Size dimension_z, float spacing) throw())
 	Vector3 origin(1.0, 2.0, 3.0);
 	Size dimension_x = 1;
 	Size dimension_y = 4;
@@ -442,7 +322,7 @@ CHECK(HashGrid3::HashGrid3(const Vector3& origin, Size dimension_x, Size dimensi
 RESULT
 
 
-CHECK(HashGrid3::HashGrid3(const Vector3& origin, const Vector3& size, float spacing) throw())
+CHECK(HashGrid3(const Vector3& origin, const Vector3& size, float spacing) throw())
 	Vector3 origin(1.0, 2.0, 3.0);
 	Vector3 size(4.0, 5.0, 6.0);
 	float spacing = 3.14;
@@ -454,207 +334,282 @@ CHECK(HashGrid3::HashGrid3(const Vector3& origin, const Vector3& size, float spa
 RESULT
 
 
-CHECK(HashGrid3::HashGrid3(const HashGrid3& grid, bool deep = true) throw())
-  //?????
+CHECK(HashGrid3* getContainer() throw())
+  // ???
+RESULT
+
+CHECK(BALL_CREATE(HashGrid3))
+  // ???
+RESULT
+
+// tests for class HashGridBox3::BoxIteratorTraits_::
+
+HashGridBox3<int>::BoxIteratorTraits_* it_tr_ptr = 0;
+CHECK(BoxIteratorTraits_() throw())
+	it_tr_ptr = new HashGridBox3<int>::BoxIteratorTraits_;
+	TEST_NOT_EQUAL(it_tr_ptr, 0)
+RESULT
+
+CHECK([EXTRA]~BoxIteratorTraits_() throw())
+	delete it_tr_ptr;
 RESULT
 
 
-CHECK(HashGrid3::~HashGrid3() throw())
-	delete hg_ptr;
+CHECK(BALL_CREATE_DEEP(BoxIteratorTraits_))
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::countNonEmptyBoxes() const  throw())
-  //?????
+CHECK(BoxIteratorPosition& getPosition() throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getSize() const  throw())
-  //?????
+CHECK(BoxIteratorTraits_(const BoxIteratorTraits_& traits, bool /* deep */ = true) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getOrigin() throw())
-  //?????
+CHECK(BoxIteratorTraits_(const HashGrid3 &grid) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getOrigin() const  throw())
-  //?????
+CHECK(BoxIteratorTraits_(const HashGridBox3& box) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getUnit() throw())
-  //?????
+CHECK(DataItem_(const Item& item, DataItem_* next) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getUnit() const  throw())
-  //?????
+CHECK(DataIteratorPosition& getPosition() throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getSizeX() const  throw())
-  //?????
+CHECK(DataIteratorTraits_() throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getSizeY() const  throw())
-  //?????
+CHECK(DataIteratorTraits_(const DataIteratorTraits_& traits, bool /* deep */ = true) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getSizeZ() const  throw())
-  //?????
+CHECK(DataIteratorTraits_(const HashGridBox3& box) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getBox(Position x, Position y, Position z) throw())
-  //?????
+CHECK(BALL_CREATE_DEEP(DataIteratorTraits_))
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getBox(Position x, Position y, Position z) const  throw())
-  //?????
+CHECK(NeighbourBoxItem_(HashGridBox3* box, NeighbourBoxItem_* next) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getBox(const Vector3& vector) throw())
-  //?????
+CHECK(Size countNonEmptyBoxes() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getBox(const Vector3 &vector) const  throw())
-  //?????
+CHECK(Size getSizeX() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::getIndices(const HashGridBox3<Item>& box, Position& x, Position& y, Position& z) const  throw())
-  //?????
+CHECK(Size getSizeY() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::insert(Position x, Position y, Position z, const Item& item) throw())
-  //?????
+CHECK(Size getSizeZ() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::insert(const Vector3& vector, const Item& item) throw())
-  //?????
+CHECK(Vector3& getOrigin() throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::remove(Position x, Position y, Position z, const Item& item) throw())
-  //?????
+CHECK(Vector3& getUnit() throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::remove(const Vector3& vector, const Item& item) throw())
-  //?????
+CHECK(bool apply(UnaryProcessor< HashGridBox3<Item> > &processor) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::host(Visitor<HashGrid3>& visitor) throw())
-  //?????
+CHECK(bool apply(UnaryProcessor<Item> &processor) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::bool operator == (const HashGrid3& grid) const  throw())
-  //?????
+CHECK(bool getIndices(const HashGridBox3<Item>& box, Position& x, Position& y, Position& z) const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::bool operator != (const HashGrid3& grid) const  throw())
-  //?????
+CHECK(bool isBegin() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::isEmpty() const  throw())
-  //?????
+CHECK(bool isEnd() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::isValid() const  throw())
-  //?????
+CHECK(bool isSingular() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
-  //?????
+CHECK(bool operator != (const BoxIteratorTraits_& traits) const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::apply(UnaryProcessor<Item> &processor) throw())
-  //?????
+CHECK(bool operator != (const DataIteratorTraits_ &traits) const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::apply(UnaryProcessor< HashGridBox3<Item> > &processor) throw())
-  //?????
+CHECK(bool operator != (const HashGrid3& grid) const throw())
+  // ???
 RESULT
 
-
-// tests for class HashGrid3::BoxIteratorTraits_::
-
-CHECK(HashGrid3::BoxIteratorTraits_::(BoxIteratorTraits_)() throw())
-  //?????
+CHECK(bool operator == (const BoxIteratorTraits_& traits) const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::BoxIteratorTraits_(const HashGrid3 &grid) throw())
-  //?????
+CHECK(bool operator == (const DataIteratorTraits_ &traits) const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::BoxIteratorTraits_(const BoxIteratorTraits_& traits, bool /* deep */ = true) throw())
-  //?????
+CHECK(bool operator == (const HashGrid3& grid) const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::BoxIteratorTraits_& operator = (const BoxIteratorTraits_& traits) throw())
-  //?????
+CHECK(bool remove(Position x, Position y, Position z, const Item& item) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::getContainer() const  throw())
-  //?????
+CHECK(bool remove(const Vector3& vector, const Item& item) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::getPosition() throw())
-  //?????
+CHECK(const BoxIteratorPosition& getPosition() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::bool operator == (const BoxIteratorTraits_& traits) const  throw())
-  //?????
+CHECK(const BoxIteratorTraits_& operator = (const BoxIteratorTraits_& traits) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::isValid() const  throw())
-  //?????
+CHECK(const DataIteratorPosition& getPosition() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::toBegin() throw())
-  //?????
+CHECK(const DataIteratorTraits_& operator = (const DataIteratorTraits_ &traits) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::toEnd() throw())
-  //?????
+CHECK(const HashGrid3& operator = (const HashGrid3& grid) throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::getData() throw())
-  //?????
+CHECK(const HashGrid3* getContainer() const throw())
+  // ???
 RESULT
 
-
-CHECK(HashGrid3::BoxIteratorTraits_::forward() throw())
-  //?????
+CHECK(const HashGridBox3& operator = (const HashGridBox3& box) throw(Exception::NotImplemented))
+  // ???
 RESULT
 
+CHECK(const HashGridBox3* getContainer() const throw())
+  // ???
+RESULT
+
+CHECK(const HashGridBox3<Item>& getData() const throw())
+  // ???
+RESULT
+
+CHECK(const HashGridBox3<Item>* getBox(Position x, Position y, Position z) const throw())
+  // ???
+RESULT
+
+CHECK(const HashGridBox3<Item>* getBox(const Vector3 &vector) const throw())
+  // ???
+RESULT
+
+CHECK(const Item& getData() const throw())
+  // ???
+RESULT
+
+CHECK(const Vector3& getOrigin() const throw())
+  // ???
+RESULT
+
+CHECK(const Vector3& getUnit() const throw())
+  // ???
+RESULT
+
+CHECK(void clear(Position x, Position y, Position z) throw())
+  // ???
+RESULT
+
+CHECK(void clear(const Vector3 &vector) throw())
+  // ???
+RESULT
+
+CHECK(void destroy(Position x, Position y, Position z) throw())
+  // ???
+RESULT
+
+CHECK(void destroy(const Vector3& vector) throw())
+  // ???
+RESULT
+
+CHECK(void forward() throw())
+  // ???
+RESULT
+
+CHECK(void get(HashGrid3& grid, bool deep = true) const throw())
+  // ???
+RESULT
+
+CHECK(void get(Vector3& origin, Vector3& unit, Size& dimension_x, Size& dimension_y, Size& dimension_z) const throw())
+  // ???
+RESULT
+
+CHECK(void host(Visitor<HashGridBox3> &visitor) throw())
+  // ???
+RESULT
+
+CHECK(void insert(Position x, Position y, Position z, const Item& item) throw())
+  // ???
+RESULT
+
+CHECK(void insert(const Vector3& vector, const Item& item) throw())
+  // ???
+RESULT
+
+CHECK(void invalidate() throw())
+  // ???
+RESULT
+
+CHECK(void set(const HashGrid3& grid, bool deep = true) throw())
+  // ???
+RESULT
+
+CHECK(void set(const HashGridBox3& box, bool /* deep */ = true) throw(Exception::NotImplemented))
+  // ???
+RESULT
+
+CHECK(void set(const Vector3& origin, const Vector3& unit, Size dimension_x, Size dimension_y, Size dimension_z) throw())
+  // ???
+RESULT
+
+CHECK(void set(const Vector3& origin, float unit, Size size) throw())
+  // ???
+RESULT
+
+CHECK(void toBegin() throw())
+  // ???
+RESULT
+
+CHECK(void toEnd() throw())
+  // ???
+RESULT
+
+CHECK(~HashGrid3() throw())
+  // ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
