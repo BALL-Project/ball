@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.18 2000/09/05 09:23:42 oliver Exp $ 
+// $Id: hashSet.h,v 1.19 2000/09/05 09:36:01 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -777,7 +777,7 @@ namespace BALL
 			}
 			else 
 			{
-				throw Execption::InvalidIterator(__FILE__, __LINE__);
+				throw Exception::InvalidIterator(__FILE__, __LINE__);
 			}
 		}
 
