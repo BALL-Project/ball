@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.7 2000/03/03 08:04:36 oliver Exp $
+// $Id: system.C,v 1.8 2000/05/02 14:03:34 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -46,16 +46,6 @@ namespace BALL
 	{
 		destroy();
 	}
-
-	void System::clear()
-	{
-		BaseFragment::clear();
-	}
-		
-	void System::destroy()
-	{
-		BaseFragment::destroy();
-	}
 		
 	void System::set(const System& system, bool deep)
 	{
@@ -74,11 +64,6 @@ namespace BALL
 		system.set(*this, deep);
 	}
 			
-	void System::swap(System& system)
-	{
-		BaseFragment::swap(system);
-	}
-
 	Size System::countMolecules() const
 	{
 		Size size = 0;
@@ -166,16 +151,6 @@ namespace BALL
 		{
 			atom_it->destroyBonds();
 		}
-	}
-
-	bool System::isValid() const
-	{ 
-		return BaseFragment::isValid();
-	}
-
-	void System::dump(ostream& s, Size depth) const
-	{
-		BaseFragment::dump(s, depth);
 	}
 
 	void System::read(istream& /* s */)
