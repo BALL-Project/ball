@@ -1,13 +1,13 @@
-// $Id: selectable.iC,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: selectable.iC,v 1.2 1999/09/18 19:07:18 oliver Exp $
 
 BALL_INLINE 
-void Selectable::clear(void)
+void Selectable::clear()
 {
   selected_ = false;
 }
 
 BALL_INLINE 
-void Selectable::destroy(void)
+void Selectable::destroy()
 {
   clear();
 }
@@ -19,7 +19,7 @@ void Selectable::set(const Selectable& selectable, bool /* deep */)
 }
 
 BALL_INLINE 
-Selectable& Selectable::operator =(const Selectable &selectable)
+Selectable& Selectable::operator = (const Selectable& selectable)
 {
   set(selectable);
 
@@ -27,25 +27,25 @@ Selectable& Selectable::operator =(const Selectable &selectable)
 }
     
 BALL_INLINE 
-void Selectable::get(Selectable &selectable, bool deep) const
+void Selectable::get(Selectable& selectable, bool deep) const
 {
   selectable.set(*this, deep);
 }
 
 BALL_INLINE 
-void Selectable::deselect(void)
+void Selectable::deselect()
 {
   selected_ = false;
 }
 
 BALL_INLINE 
-void Selectable::select(void)
+void Selectable::select()
 {
   selected_ = true;
 }
 
 BALL_INLINE 
-void Selectable::swap(Selectable &selectable)
+void Selectable::swap(Selectable& selectable)
 {
   bool temp = selected_;
   selected_ = selectable.selected_;
@@ -53,7 +53,7 @@ void Selectable::swap(Selectable &selectable)
 }
 
 BALL_INLINE 
-bool Selectable::isSelected(void) const
+bool Selectable::isSelected() const
 {
   return selected_;
 }
