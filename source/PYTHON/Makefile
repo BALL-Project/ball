@@ -21,6 +21,7 @@ SIPSOURCES=\
 	sipBALLConjugateGradientMinimizer.C\
 	sipBALLElement.C\
 	sipBALLEnergyMinimizer.C\
+	sipBALLFile.C\
 	sipBALLFragment.C\
 	sipBALLForceField.C\
 	sipBALLForceFieldComponent.C\
@@ -31,6 +32,7 @@ SIPSOURCES=\
 	sipBALLOptions.C\
 	sipBALLPDBAtom.C\
 	sipBALLPDBFile.C\
+	sipBALLHINFile.C\
 	sipBALLProtein.C\
 	sipBALLPTE_.C\
 	sipBALLPersistentObject.C\

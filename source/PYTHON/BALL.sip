@@ -20,8 +20,10 @@
 %Include chain.sip
 %Include secondaryStructure.sip
 %Include residue.sip
+%Include file.sip
 %Include PDBAtom.sip
 %Include PDBFile.sip
+%Include HINFile.sip
 %Include amber.sip
 %Include forceField.sip
 %Include forceFieldComponent.sip

@@ -1,5 +1,4 @@
-
- class PDBFile
+class PDBFile
  {
 %HeaderCode
 #include <BALL/FORMAT/PDBFile.h>
