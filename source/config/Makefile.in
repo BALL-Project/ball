@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile.in,v 1.31 2003/08/26 09:18:51 oliver Exp $
+# $Id: Makefile.in,v 1.32 2003/08/26 13:14:50 oliver Exp $
 #
 
 include config.mak
@@ -56,11 +56,6 @@ libBALL.objects:
 	@-rm -f *.objects
 	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=collectlib LIBNAME=$(LIBNAME)
 	
-libMOLVIEW.objects:	
-	@$(ECHO) "Collecting object files for libraries..."
-	@-rm -f *.objects
-	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=collectlib LIBNAME=$(LIBNAME)
-	
 libVIEW.objects:
 	@$(ECHO) "Collecting object files for libraries..."
 	@-rm -f *.objects
@@ -75,10 +70,6 @@ libBALL.@SHARED_LIB_SUFFIX@: libBALL.objects
 
 libVIEW.@SHARED_LIB_SUFFIX@: libVIEW.objects libBALL.@SHARED_LIB_SUFFIX@
 	$(DYNAR) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) $(X11_LIBOPTS) -lm
-
-libMOLVIEW.@SHARED_LIB_SUFFIX@: libMOLVIEW.objects libVIEW.@SHARED_LIB_SUFFIX@
-	$(DYNAR) $(DYNAROPTS) libMOLVIEW.@SHARED_LIB_SUFFIX@ `cat libMOLVIEW.objects` -L. -lVIEW -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) -lm
-
 
 .objects.a:	
 	@$(ECHO) "Creating library $@ ..."

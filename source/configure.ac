@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.11 2003/08/26 09:17:35 oliver Exp $
+dnl $Id: configure.ac,v 1.12 2003/08/26 13:14:41 oliver Exp $
 dnl
 dnl
 
@@ -131,9 +131,9 @@ if test "$with_opengl_libs" != "" ; then
 fi
 
 if test "$with_mesa" != "yes" ; then	
-	BALLVIEW_PLATFORM=OpenGL
+	VIEW_PLATFORM=OpenGL
 else
- 	BALLVIEW_PLATFORM=Mesa
+ 	VIEW_PLATFORM=Mesa
 fi
 
 if test "$with_moc" != "" ; then	
@@ -155,10 +155,10 @@ else
 fi
 
 if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
-	USE_BALLVIEW=false
+	USE_VIEW=false
 	BALL_HAS_VIEW=""
 else	
-	USE_BALLVIEW=true
+	USE_VIEW=true
 	BALL_HAS_VIEW=true
 fi
 
@@ -445,9 +445,9 @@ dnl
 CF_CHECK_FFTW_SUPPORT
 
 dnl
-dnl		BALLVIEW
+dnl		VIEW
 dnl
-CF_BALLVIEW
+CF_VIEW
 
 dnl
 dnl		Python extension support
@@ -471,12 +471,12 @@ BINFMT="${BINFMT}-${CXX_NAME}"
 BINFMT_INDEX=""
 
 LIBS="${LIBS} -lm"
-BALLVIEW_LIBS="${BALLVIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
-if test "${USE_BALLVIEW}" = true ; then
-	BALLVIEW_INCLUDES="${BALL_INCLUDES} ${BALLVIEW_INCLUDES}"
-	BALLVIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lMOLVIEW -lVIEW -lBALL ${BALLVIEW_LIBS}"
+if test "${USE_VIEW}" = true ; then
+	VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
+	VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
@@ -550,7 +550,7 @@ AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - pa
 
 dnl         LINKER
 
-AC_SUBST(BALLVIEW_LIBS)     dnl BALLVIEW libs
+AC_SUBST(VIEW_LIBS)     dnl VIEW libs
 AC_SUBST(OPENGL_LIBOPTS)    dnl compiler options for OpenGL libs (-Lxxx -lGLU -lGL)
 AC_SUBST(OPENGL_LIBPATH)    dnl path to OpenGL libs (without -L)
 AC_SUBST(QT_LIBOPTS)        dnl copiler options for QT libs (-Lxxx -lqgl -lqt)
@@ -599,19 +599,19 @@ dnl 	the library has been built.
 dnl   Any hints concerning a special OS/compiler combination 
 dnl   might want to print some information here (as is the
 dnl   case for the IRIX LD_LBRARY_PATH/LD_LIBRARY64_PATH/LD_LIBRARYN32_PATH)
-dnl   If BALLVIEW is to be built, we add a hint for MolVIEW.
+dnl   If VIEW is to be built, we add a hint for MolVIEW.
 if test "${ADDITIONAL_COMMENTS}" = "" ; then
 	ADDITIONAL_COMMENTS=""
 fi
 AC_SUBST(ADDITIONAL_COMMENTS)
 
-dnl	    BALLVIEW
+dnl	    VIEW
 
-AC_SUBST(USE_BALLVIEW)				dnl bool: use ballview (default=true)
+AC_SUBST(USE_VIEW)				dnl bool: use ballview (default=true)
 AC_SUBST(BALL_HAS_VIEW)				dnl true if VIEW is enabled, "" otherwise
-AC_SUBST(BALLVIEW_PLATFORM)		dnl Mesa or OpenGL
-AC_SUBST(BALLVIEW_INCLUDES)		dnl BALLVIEW includes
-AC_SUBST(LIBBALLVIEW)					dnl static library name
+AC_SUBST(VIEW_PLATFORM)		dnl Mesa or OpenGL
+AC_SUBST(VIEW_INCLUDES)		dnl VIEW includes
+AC_SUBST(LIBVIEW)					dnl static library name
 
 
 dnl    	define the standard installation path
@@ -643,7 +643,7 @@ dnl
 dnl    create files
 dnl
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON}"
 AC_SUBST(SUBDIRS)
 BINFMT_PATH=""
 

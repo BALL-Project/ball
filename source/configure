@@ -310,7 +310,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=`cd ..; pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX BALLVIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS ADDITIONAL_COMMENTS USE_BALLVIEW BALL_HAS_VIEW BALLVIEW_PLATFORM BALLVIEW_INCLUDES LIBBALLVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX VIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS ADDITIONAL_COMMENTS USE_VIEW BALL_HAS_VIEW VIEW_PLATFORM VIEW_INCLUDES LIBVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1628,9 +1628,9 @@ if test "$with_opengl_libs" != "" ; then
 fi
 
 if test "$with_mesa" != "yes" ; then
-	BALLVIEW_PLATFORM=OpenGL
+	VIEW_PLATFORM=OpenGL
 else
- 	BALLVIEW_PLATFORM=Mesa
+ 	VIEW_PLATFORM=Mesa
 fi
 
 if test "$with_moc" != "" ; then
@@ -1652,10 +1652,10 @@ else
 fi
 
 if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
-	USE_BALLVIEW=false
+	USE_VIEW=false
 	BALL_HAS_VIEW=""
 else
-	USE_BALLVIEW=true
+	USE_VIEW=true
 	BALL_HAS_VIEW=true
 fi
 
@@ -2714,7 +2714,7 @@ echo "$as_me: error: aborted" >&2;}
 	if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
 		OS="CYGWIN"
 		BALL_NO_XDR=true
-		USE_BALLVIEW=false
+		USE_VIEW=false
 	fi
 
 	if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX \
@@ -15069,7 +15069,7 @@ _ACEOF
 
 
 
-				if test "${USE_BALLVIEW}" = true ; then
+				if test "${USE_VIEW}" = true ; then
 		echo "$as_me:$LINENO: checking for X" >&5
 echo $ECHO_N "checking for X... $ECHO_C" >&6
 
@@ -15298,10 +15298,10 @@ fi
 		X11_LIBPATH=${x_libraries}
 
 		if test "${no_x}" = "yes" ; then
-			USE_BALLVIEW=false
+			USE_VIEW=false
 		fi
 
-		if test "${USE_BALLVIEW}" = true ; then
+		if test "${USE_VIEW}" = true ; then
 			if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
 				X11_LIBPATH=""
 				X11_LIBPATHOPT=""
@@ -15310,8 +15310,8 @@ fi
 			fi
 		fi
 
-		if test "${USE_BALLVIEW}" = true ; then
-			if test "${BALLVIEW_PLATFORM}" = Mesa ; then
+		if test "${USE_VIEW}" = true ; then
+			if test "${VIEW_PLATFORM}" = Mesa ; then
 				echo "$as_me:$LINENO: checking for Mesa includes" >&5
 echo $ECHO_N "checking for Mesa includes... $ECHO_C" >&6
 
@@ -15408,7 +15408,7 @@ echo "$as_me: error: Aborted." >&2;}
 echo "${ECHO_T}${MESA_INCLUDES}" >&6
 				fi
 
-				if test "${USE_BALLVIEW}" = true ; then
+				if test "${USE_VIEW}" = true ; then
 					echo "$as_me:$LINENO: checking for Mesa library" >&5
 echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 
@@ -15593,11 +15593,11 @@ echo "${ECHO_T}(${MESA_LIBS})" >&6
 				fi
 
 												if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
-					BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${MESA_INCLUDES}"
+					VIEW_INCLUDES="${VIEW_INCLUDES} -I${MESA_INCLUDES}"
 				fi
 			fi
 
-			if test ${BALLVIEW_PLATFORM} = OpenGL ; then
+			if test ${VIEW_PLATFORM} = OpenGL ; then
 				echo "$as_me:$LINENO: checking for OpenGL includes" >&5
 echo $ECHO_N "checking for OpenGL includes... $ECHO_C" >&6
 
@@ -15792,11 +15792,11 @@ echo "${ECHO_T}(${OPENGL_LIBPATH})" >&6
 				fi
 
 				if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
-					BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${OPENGL_INCPATH}"
+					VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
 				fi
 			fi
 
-			if test "${USE_BALLVIEW}" = true ; then
+			if test "${USE_VIEW}" = true ; then
 				echo "$as_me:$LINENO: checking for QT headers" >&5
 echo $ECHO_N "checking for QT headers... $ECHO_C" >&6
 				if test "${QTDIR}" != "" ; then
@@ -16518,7 +16518,7 @@ echo "${ECHO_T}using ${QT_PATH} to look for libqt.so and libqgl.s" >&6
 				fi
 
 				if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
-					BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCPATH}"
+					VIEW_INCLUDES="${VIEW_INCLUDES} -I${QT_INCPATH}"
 				fi
 			fi
 		fi
@@ -16526,7 +16526,7 @@ echo "${ECHO_T}using ${QT_PATH} to look for libqt.so and libqgl.s" >&6
 
 
 
-	if test "${USE_BALLVIEW}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 
 		echo "$as_me:$LINENO: checking linking against X11 libraries" >&5
 echo $ECHO_N "checking linking against X11 libraries... $ECHO_C" >&6
@@ -16757,18 +16757,18 @@ echo "${ECHO_T}environment variable X11_LIBS" >&6
 echo "${ECHO_T}If you are running Solaris 2.x you might also try the option --without-libxnet" >&6
 			echo "$as_me:$LINENO: result: if your X libraries were linked against libsocket and libnsl instead of libxnet." >&5
 echo "${ECHO_T}if your X libraries were linked against libsocket and libnsl instead of libxnet." >&6
-			echo "$as_me:$LINENO: result: Built of visualization component BALLVIEW disabled." >&5
-echo "${ECHO_T}Built of visualization component BALLVIEW disabled." >&6
+			echo "$as_me:$LINENO: result: Built of visualization component VIEW disabled." >&5
+echo "${ECHO_T}Built of visualization component VIEW disabled." >&6
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-			USE_BALLVIEW=false
+			USE_VIEW=false
 		fi
 
 								X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
 	fi
 
-	if test "${USE_BALLVIEW}" = true ; then
-		if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
+	if test "${USE_VIEW}" = true ; then
+		if test "${VIEW_PLATFORM}" = OpenGL ; then
 			if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
 				OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
 			else
@@ -16837,12 +16837,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_GL_XMesaGarbageCollect" >&5
 echo "${ECHO_T}$ac_cv_lib_GL_XMesaGarbageCollect" >&6
 if test $ac_cv_lib_GL_XMesaGarbageCollect = yes; then
-  BALLVIEW_PLATFORM=Mesa
+  VIEW_PLATFORM=Mesa
 fi
 
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${BALLVIEW_PLATFORM}" != Mesa ; then
+			if test "${VIEW_PLATFORM}" != Mesa ; then
 				echo "$as_me:$LINENO: checking linking against OpenGL libraries" >&5
 echo $ECHO_N "checking linking against OpenGL libraries... $ECHO_C" >&6
 				SAVE_LIBS=${LIBS}
@@ -16905,8 +16905,8 @@ echo "${ECHO_T}yes" >&6
 		fi
 	fi
 
-	if test "${USE_BALLVIEW}" = true ; then
-		if test "${BALLVIEW_PLATFORM}" = Mesa ; then
+	if test "${USE_VIEW}" = true ; then
+		if test "${VIEW_PLATFORM}" = Mesa ; then
 
 			if test "${MESA_LIBS}" = "" ; then
 				MESA_LIBS=${OPENGL_LIBPATH}
@@ -17026,7 +17026,7 @@ echo "${ECHO_T}yes" >&6
 		fi
 	fi
 
-	if test "${USE_BALLVIEW}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
 			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
 			QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
@@ -17037,12 +17037,12 @@ echo "${ECHO_T}yes" >&6
 		fi
 	fi
 
-	if test "${USE_BALLVIEW}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		echo "$as_me:$LINENO: checking linking against QT libraries" >&5
 echo $ECHO_N "checking linking against QT libraries... $ECHO_C" >&6
 
 		SAVE_LIBS=${LIBS}
-		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${BALLVIEW_INCLUDES}"
+		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 		cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
@@ -17082,7 +17082,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${BALLVIEW_INCLUDES}"
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
@@ -17126,7 +17126,7 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
 			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${BALLVIEW_INCLUDES}"
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
@@ -17291,7 +17291,7 @@ echo "$as_me: error: Aborted" >&2;}
 		fi
 	fi
 
-					if test "${USE_BALLVIEW}" = true ; then
+					if test "${USE_VIEW}" = true ; then
 		if test "${MOC}" = moc ; then
 			if test "${QTDIR}" != "" ; then
 				MOC=${QTDIR}/bin/moc
@@ -17408,7 +17408,7 @@ echo "$as_me: error: Aborted." >&2;}
 		fi
 	fi
 
-					if test "${USE_BALLVIEW}" = true ; then
+					if test "${USE_VIEW}" = true ; then
 		if test "${UIC}" = uic ; then
 			if test "${QTDIR}" != "" ; then
 				UIC=${QTDIR}/bin/uic
@@ -17527,11 +17527,11 @@ echo "$as_me: error: Aborted." >&2;}
 	fi
 
 
-	if test "${USE_BALLVIEW}" = "true" ; then
-		LIBBALLVIEW="libVIEW.a libMOLVIEW.a"
-		BALLVIEW="VIEW MOLVIEW"
+	if test "${USE_VIEW}" = "true" ; then
+		LIBVIEW="libVIEW.a"
+		VIEW="VIEW"
 	else
-		BALLVIEW=
+		VIEW=
 	fi
 
 
@@ -17544,13 +17544,13 @@ echo "$as_me: error: Aborted." >&2;}
 
 
 	if test "${PYTHON_SUPPORT}" = true ; then
-										if test "${USE_BALLVIEW}" = false ; then
+										if test "${USE_VIEW}" = false ; then
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
 			echo "$as_me:$LINENO: result: BALL Python support requires the visualization component" >&5
 echo "${ECHO_T}BALL Python support requires the visualization component" >&6
-			echo "$as_me:$LINENO: result: BALLVIEW. Please reconfigure without --without-BALLVIEW." >&5
-echo "${ECHO_T}BALLVIEW. Please reconfigure without --without-BALLVIEW." >&6
+			echo "$as_me:$LINENO: result: VIEW. Please reconfigure without --without-VIEW." >&5
+echo "${ECHO_T}VIEW. Please reconfigure without --without-VIEW." >&6
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
 			{ { echo "$as_me:$LINENO: error: Aborted" >&5
@@ -18110,12 +18110,12 @@ BINFMT="${BINFMT}-${CXX_NAME}"
 BINFMT_INDEX=""
 
 LIBS="${LIBS} -lm"
-BALLVIEW_LIBS="${BALLVIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
-if test "${USE_BALLVIEW}" = true ; then
-	BALLVIEW_INCLUDES="${BALL_INCLUDES} ${BALLVIEW_INCLUDES}"
-	BALLVIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lMOLVIEW -lVIEW -lBALL ${BALLVIEW_LIBS}"
+if test "${USE_VIEW}" = true ; then
+	VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
+	VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
@@ -18209,7 +18209,7 @@ fi
 
 
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON}"
 
 BINFMT_PATH=""
 
@@ -18948,7 +18948,7 @@ s,@STD_CPP_INCLUDES@,$STD_CPP_INCLUDES,;t t
 s,@MAKEDEP_OPTS@,$MAKEDEP_OPTS,;t t
 s,@BALL_TYPENAME@,$BALL_TYPENAME,;t t
 s,@BINFMT_INDEX@,$BINFMT_INDEX,;t t
-s,@BALLVIEW_LIBS@,$BALLVIEW_LIBS,;t t
+s,@VIEW_LIBS@,$VIEW_LIBS,;t t
 s,@OPENGL_LIBOPTS@,$OPENGL_LIBOPTS,;t t
 s,@OPENGL_LIBPATH@,$OPENGL_LIBPATH,;t t
 s,@QT_LIBOPTS@,$QT_LIBOPTS,;t t
@@ -18966,11 +18966,11 @@ s,@AROPTS@,$AROPTS,;t t
 s,@DYNAR@,$DYNAR,;t t
 s,@DYNAROPTS@,$DYNAROPTS,;t t
 s,@ADDITIONAL_COMMENTS@,$ADDITIONAL_COMMENTS,;t t
-s,@USE_BALLVIEW@,$USE_BALLVIEW,;t t
+s,@USE_VIEW@,$USE_VIEW,;t t
 s,@BALL_HAS_VIEW@,$BALL_HAS_VIEW,;t t
-s,@BALLVIEW_PLATFORM@,$BALLVIEW_PLATFORM,;t t
-s,@BALLVIEW_INCLUDES@,$BALLVIEW_INCLUDES,;t t
-s,@LIBBALLVIEW@,$LIBBALLVIEW,;t t
+s,@VIEW_PLATFORM@,$VIEW_PLATFORM,;t t
+s,@VIEW_INCLUDES@,$VIEW_INCLUDES,;t t
+s,@LIBVIEW@,$LIBVIEW,;t t
 s,@TEMPLATE_DIR@,$TEMPLATE_DIR,;t t
 s,@SUBDIRS@,$SUBDIRS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t

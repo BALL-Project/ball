@@ -133,16 +133,14 @@ might look like this:
 After the successful termination of configure, "make" builds the shared
 libraries. There exist three different libraries:
   libBALL.so:     the BALL library
-  libVIEW.so:     the visualization component BALLVIEW
-  libMOLVIEW.so:  a library used by the standalone molecule viewer molview
+  libVIEW.so:     the visualization component of BALL
 
-The latter two libraries are not built if "--without-BALLVIEW" is specified
+The latter two libraries are not built if "--without-VIEW" is specified
 or configure cannot find X libraries, OpenGL libraries, or QT libraries
 (and the respective headers).
 
 It is also possible (although not recommended) to build the corresponding
-static libraries libBALL.a, libVIEW.a, and libMOLVIEW.a using "make
-staticlibs".
+static libraries libBALL.a and libVIEW.a using "make staticlibs".
 
 
 2.3) Installing the libraries
@@ -200,9 +198,9 @@ examples, simply change to the BALL/source/EXAMPLES directory and type
 "make".  Similarly, the viewer molview is build by changing to
 BALL/source/MOLVIEW/APPLICATION and calling "make". When running molview,
 please make sure that all required shared libraries are included in the
-LD_LIBRARY_PATH. molview needs the BALL libraries (libBALL.so, libVIEW.so,
-and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the
-OpenGL/Mesa libraries (libGL.so, libGLU.so).
+LD_LIBRARY_PATH. molview needs the BALL libraries (libBALL.so and libVIEW.so),
+the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa libraries 
+(libGL.so, libGLU.so).
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.12 2003/08/26 09:17:29 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.13 2003/08/26 13:14:36 oliver Exp $

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.1 2003/08/26 12:11:01 oliver Exp $
+// $Id: vertex2.h,v 1.2 2003/08/26 13:14:32 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
@@ -284,14 +284,6 @@ namespace BALL
 			void getVertex2(Vector3& v) const
 				throw();
 
-			/** Inspection of the components of the second vector of this vertex2.
-					Access the components of the second vector of this vertex2 
-					by using Real.
-					\param       x the x component of the second vector of this vertex2
-					\param       y the y component of the second vector of this vertex2
-					\param       z the z component of the second vector of this vertex2
-					\see         setVertex2
-					\see         Real
 			/** Inspection of the first and second vector of this vertex2.
 					Access the first and second vector of this vertex 
 					by using Vector3.

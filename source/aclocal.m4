@@ -2,7 +2,7 @@ dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
 dnl
-dnl		$Id: aclocal.m4,v 1.33 2003/08/26 09:17:30 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.34 2003/08/26 13:14:36 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -365,7 +365,7 @@ AC_DEFUN(CF_DETECT_OS,[
 	if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
 		OS="CYGWIN"
 		BALL_NO_XDR=true
-		USE_BALLVIEW=false
+		USE_VIEW=false
 	fi
 
 	if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX \
@@ -2533,22 +2533,22 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 ])
 
 dnl
-dnl		BALLVIEW support
+dnl		VIEW support
 dnl
-AC_DEFUN(CF_BALLVIEW, [
+AC_DEFUN(CF_VIEW, [
 	dnl
 	dnl    search for X-libs and includes and BALLView (OpenGL/MESA) stuff
 	dnl 
-	if test "${USE_BALLVIEW}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		AC_PATH_X
 		X11_INCPATH=${x_includes}
 		X11_LIBPATH=${x_libraries}
 
 		if test "${no_x}" = "yes" ; then
-			USE_BALLVIEW=false
+			USE_VIEW=false
 		fi
 
-		if test "${USE_BALLVIEW}" = true ; then
+		if test "${USE_VIEW}" = true ; then
 			if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
 				X11_LIBPATH=""
 				X11_LIBPATHOPT=""
@@ -2557,8 +2557,8 @@ AC_DEFUN(CF_BALLVIEW, [
 			fi
 		fi
 
-		if test "${USE_BALLVIEW}" = true ; then
-			if test "${BALLVIEW_PLATFORM}" = Mesa ; then
+		if test "${USE_VIEW}" = true ; then
+			if test "${VIEW_PLATFORM}" = Mesa ; then
 				AC_MSG_CHECKING(for Mesa includes)
 				CF_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCPATH} ${X11_INCPATH})
 				if test "${MESA_INCLUDES}" = "" ; then
@@ -2572,7 +2572,7 @@ AC_DEFUN(CF_BALLVIEW, [
 					AC_MSG_RESULT(${MESA_INCLUDES})
 				fi
 
-				if test "${USE_BALLVIEW}" = true ; then
+				if test "${USE_VIEW}" = true ; then
 					AC_MSG_CHECKING(for Mesa library)
 					CF_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
 					if test "${MESA_LIBS}" = "" ; then
@@ -2593,11 +2593,11 @@ AC_DEFUN(CF_BALLVIEW, [
 				dnl prevent the use of -L/usr/lib - this may lead to problems with different
 				dnl binary formats (e.g. SGI O32/N32 format)
 				if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
-					BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${MESA_INCLUDES}"
+					VIEW_INCLUDES="${VIEW_INCLUDES} -I${MESA_INCLUDES}"
 				fi
 			fi
 
-			if test ${BALLVIEW_PLATFORM} = OpenGL ; then
+			if test ${VIEW_PLATFORM} = OpenGL ; then
 				AC_MSG_CHECKING(for OpenGL includes)
 				CF_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
 				if test "${OPENGL_INCPATH}" = "" ; then
@@ -2623,11 +2623,11 @@ AC_DEFUN(CF_BALLVIEW, [
 				fi
 				
 				if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
-					BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${OPENGL_INCPATH}"
+					VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
 				fi
 			fi
 
-			if test "${USE_BALLVIEW}" = true ; then
+			if test "${USE_VIEW}" = true ; then
 				AC_MSG_CHECKING(for QT headers)
 				if test "${QTDIR}" != "" ; then
 					CF_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${BALL_PATH}/contrib/qt/include)
@@ -2755,7 +2755,7 @@ AC_DEFUN(CF_BALLVIEW, [
 				fi
 
 				if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
-					BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCPATH}"
+					VIEW_INCLUDES="${VIEW_INCLUDES} -I${QT_INCPATH}"
 				fi	
 			fi
 		fi
@@ -2763,11 +2763,11 @@ AC_DEFUN(CF_BALLVIEW, [
 
 
 	dnl
-	dnl   verify libraries needed for BALLVIEW
+	dnl   verify libraries needed for VIEW
 	dnl   (X, QT, Mesa/OpenGL)
 	dnl
 
-	if test "${USE_BALLVIEW}" = true ; then		
+	if test "${USE_VIEW}" = true ; then		
 		dnl  
 		dnl
 		dnl  identify the X11 libraries needed to link agains
@@ -2842,19 +2842,19 @@ AC_DEFUN(CF_BALLVIEW, [
 			AC_MSG_RESULT(environment variable X11_LIBS)
 			AC_MSG_RESULT(If you are running Solaris 2.x you might also try the option --without-libxnet)
 			AC_MSG_RESULT(if your X libraries were linked against libsocket and libnsl instead of libxnet.)
-			AC_MSG_RESULT(Built of visualization component BALLVIEW disabled.)
+			AC_MSG_RESULT(Built of visualization component VIEW disabled.)
 			AC_MSG_RESULT()
-			USE_BALLVIEW=false
+			USE_VIEW=false
 		fi
 
 		dnl		
-		dnl  define some variables: X11_LIBOPTS and BALLVIEW_LIBS
+		dnl  define some variables: X11_LIBOPTS and VIEW_LIBS
 		dnl
 		X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
 	fi
 
-	if test "${USE_BALLVIEW}" = true ; then
-		if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
+	if test "${USE_VIEW}" = true ; then
+		if test "${VIEW_PLATFORM}" = OpenGL ; then
 			if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
 				OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
 			else
@@ -2870,10 +2870,10 @@ AC_DEFUN(CF_BALLVIEW, [
 			if test "${OPENGL_LIBPATH}" != "" ; then
 				LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
 			fi
-			AC_CHECK_LIB(GL, XMesaGarbageCollect, BALLVIEW_PLATFORM=Mesa)
+			AC_CHECK_LIB(GL, XMesaGarbageCollect, VIEW_PLATFORM=Mesa)
 			LIBS=${SAVE_LIBS}
 			LDFLAGS=${SAVE_LDFLAGS}
-			if test "${BALLVIEW_PLATFORM}" != Mesa ; then
+			if test "${VIEW_PLATFORM}" != Mesa ; then
 				AC_MSG_CHECKING(linking against OpenGL libraries)
 				SAVE_LIBS=${LIBS}
 				LIBS="${OPENGL_LIBOPTS} ${LIBS}"
@@ -2893,8 +2893,8 @@ AC_DEFUN(CF_BALLVIEW, [
 		fi
 	fi
 
-	if test "${USE_BALLVIEW}" = true ; then
-		if test "${BALLVIEW_PLATFORM}" = Mesa ; then
+	if test "${USE_VIEW}" = true ; then
+		if test "${VIEW_PLATFORM}" = Mesa ; then
 			dnl
 			dnl  strip default path
 			dnl
@@ -2950,7 +2950,7 @@ AC_DEFUN(CF_BALLVIEW, [
 		fi
 	fi
 
-	if test "${USE_BALLVIEW}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		if test "${QT_LIBPATH}" != "/usr/lib" ; then
 			QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
 			QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
@@ -2961,17 +2961,17 @@ AC_DEFUN(CF_BALLVIEW, [
 		fi
 	fi
 
-	if test "${USE_BALLVIEW}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		AC_MSG_CHECKING(linking against QT libraries)
 
 		SAVE_LIBS=${LIBS}
-		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${BALLVIEW_INCLUDES}"
+		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 		AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
 		LIBS=${SAVE_LIBS}
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${BALLVIEW_INCLUDES}"
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 		else
@@ -2982,7 +2982,7 @@ AC_DEFUN(CF_BALLVIEW, [
 		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
 			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${BALLVIEW_INCLUDES}"
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
 			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
 		fi
@@ -3068,7 +3068,7 @@ AC_DEFUN(CF_BALLVIEW, [
 	dnl	try to find the MOC (QT meta object compiler)
 	dnl It is usually installed in ${QTDIR}/bin/moc
 	dnl
-	if test "${USE_BALLVIEW}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		if test "${MOC}" = moc ; then
 			if test "${QTDIR}" != "" ; then
 				MOC=${QTDIR}/bin/moc
@@ -3125,7 +3125,7 @@ AC_DEFUN(CF_BALLVIEW, [
 	dnl	try to find the UIC (QT user interface compiler)
 	dnl It is usually installed in ${QTDIR}/bin/uic
 	dnl
-	if test "${USE_BALLVIEW}" = true ; then
+	if test "${USE_VIEW}" = true ; then
 		if test "${UIC}" = uic ; then
 			if test "${QTDIR}" != "" ; then
 				UIC=${QTDIR}/bin/uic
@@ -3180,11 +3180,11 @@ AC_DEFUN(CF_BALLVIEW, [
 	fi
     
 
-	if test "${USE_BALLVIEW}" = "true" ; then
-		LIBBALLVIEW="libVIEW.a libMOLVIEW.a"
-		BALLVIEW="VIEW MOLVIEW"
+	if test "${USE_VIEW}" = "true" ; then
+		LIBVIEW="libVIEW.a"
+		VIEW="VIEW"
 	else
-		BALLVIEW=
+		VIEW=
 	fi
 ])
 
@@ -3206,13 +3206,13 @@ AC_DEFUN(CF_PYTHON, [
 
 	if test "${PYTHON_SUPPORT}" = true ; then
 		dnl
-		dnl Python support won't work without BALLVIEW!
+		dnl Python support won't work without VIEW!
 		dnl (at least for the moment...)
 		dnl
-		if test "${USE_BALLVIEW}" = false ; then
+		if test "${USE_VIEW}" = false ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(BALL Python support requires the visualization component)
-			AC_MSG_RESULT(BALLVIEW. Please reconfigure without --without-BALLVIEW.)
+			AC_MSG_RESULT(VIEW. Please reconfigure without --without-VIEW.)
 			AC_MSG_RESULT()
 			AC_MSG_ERROR(Aborted)
 		fi
