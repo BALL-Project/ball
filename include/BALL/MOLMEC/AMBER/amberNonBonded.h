@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.2 1999/09/17 13:16:12 pmueller Exp $
+// $Id: amberNonBonded.h,v 1.3 1999/09/21 09:25:39 pmueller Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -88,25 +88,9 @@ namespace BALL
 		*/
 		virtual float updateEnergy(void);
 
-		/**	Calculates and returns the vdw energy.
-		*/
-		virtual float updateVdWEnergy(void);
-
-		/**	Calculates and returns the electrostatic energy.
-		*/
-		virtual float updateElectrostaticEnergy(void);
-
 		/**	Calculates and returns the component's forces.
 		*/
 		virtual void updateForces(void);
-
-		/**	Calculates and returns the vdw forces.
-		*/
-		virtual void updateVdWForces(void) const;
-
-		/**	Calculates and returns the electrostatic forces.
-		*/
-		virtual void updateElectrostaticForces(void) const;
 
 		/**	Return the electrostatic energy.
 		*/
