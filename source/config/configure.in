@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.143 2001/07/13 21:01:50 oliver Exp $
+dnl    $Id: configure.in,v 1.144 2001/07/16 13:12:53 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1088,7 +1088,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 
 	CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
 	LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
-	CXXFLAGS_O="${CXXFLAGS_O} -O5"
+	CXXFLAGS_O="${CXXFLAGS_O} -O1"
 	
 	CXXFLAGS_D="${CXXFLAGS_D}"
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
