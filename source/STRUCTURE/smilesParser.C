@@ -1,4 +1,4 @@
-// $Id: smilesParser.C,v 1.5 2002/02/10 08:39:25 oliver Exp $
+// $Id: smilesParser.C,v 1.6 2002/02/12 14:42:53 amoll Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -27,6 +27,7 @@ namespace BALL
 	}
 	
 	SmilesParser::SPAtom::~SPAtom()
+		throw()
 	{
 	}
 
