@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.h,v 1.1 2001/09/09 23:51:06 amoll Exp $
+// $Id: TCPTransfer.h,v 1.2 2001/09/10 12:49:28 amoll Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -18,7 +18,7 @@
 
 #include <sys/ioctl.h>
 #include <fstream>
-#include <stdio.h>
+//#include <stdio.h>
 
 #define BUFFER_SIZE 1024
 
@@ -163,6 +163,38 @@ namespace BALL
 				return protocol_;
 			}
 			
+			/// Return the login.
+			const String& getLogin() const
+				throw()
+			{
+				return login_;
+			}
+
+			/// Return the password.
+			const String& getPassword() const
+				throw()
+			{
+				return password_;
+			}
+
+			/// Get a pointer to the stream.
+			const ofstream* getStream() const
+				throw()
+			{
+				return fstream_;
+			}
+					
+			/** Return a pointer to the buffer.
+			 		Remember that the buffer may contain NULL-chars.
+					The length of the buffer is less than BUFFER_LENGTH.
+					This method should only be used for debuging.
+			*/
+			const char* getBuffer() const
+				throw()
+			{
+				return buffer_;
+			}
+
 			/** Transfer method.
 					If the address is specified, the file can be transfered
 					whith this method.
