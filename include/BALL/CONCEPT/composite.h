@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.28 2000/12/15 20:19:02 amoll Exp $
+// $Id: composite.h,v 1.29 2001/01/08 10:03:27 anker Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -485,7 +485,9 @@ namespace BALL
 			throw();
 
 		/**	Insert a composite as the last child of this composite.
-				Updates the modification time stamp.
+				Updates the modification time stamp. {\bf Note} that this method
+				alters the composite tree from which {\tt composite} is taken,
+				if there is such a tree.
 				@see stamp
 				@param	composite the composite to be inserted
 		*/
