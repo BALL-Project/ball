@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.C,v 1.3 2000/02/10 10:46:40 oliver Exp $
+// $Id: charmmImproperTorsion.C,v 1.4 2000/02/10 14:47:35 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -434,10 +434,17 @@ namespace BALL
 					( getForceField()->getUseSelection() == true &&
 					(it->atom1->isSelected() || it->atom2->isSelected() || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
+
+				// A is the central atom
+				// phi is the angle between the two plane defined by ABC and BCD
+
+				// we define the difference vectors ba, bc, and bd
 				ba = it->atom2->getPosition() - it->atom1->getPosition();
 				bc = it->atom2->getPosition() - it->atom3->getPosition();
 				bd = it->atom2->getPosition() - it->atom4->getPosition();
 
+				// calculate the cross products
+				// (plane normals)
 				bcxba = bc % ba;
 				bcxbd = bc % bd; 
 
@@ -447,13 +454,17 @@ namespace BALL
 
 				if (length_bcxba != 0 && length_bcxbd != 0) 
 				{
+					// normalize the plane normals
 					float ilength_bcxba = 1/length_bcxba;
 					float ilength_bcxbd = 1/length_bcxbd;
 					bcxba *= ilength_bcxba;
 					bcxbd *= ilength_bcxbd;
 
+					// cos(phi) is the scalar product of
+					// the normalized plane normals
 					cosphi = bcxba * bcxbd;
 
+					// to avoid problems with floating point accuracy
 					if (cosphi > 1.0)
 					{
 						cosphi = 1.0;
@@ -462,23 +473,24 @@ namespace BALL
 					{
 						cosphi = -1.0;
 					}
+					
 					float cosphi2 = cosphi * cosphi;
-					float tmp;
-
+					float sinphi;
 					if (cosphi2 <= 1.0)
 					{
-						tmp = sqrt(1 - cosphi2);
+						sinphi = sqrt(1 - cosphi2);
 					} else {
-						tmp = -2;	
+						sinphi = -2;	
 					}
 
-					if (tmp > 0)
+					if (sinphi > 0)
 					{
 						// conversion from kJ/mol -> J (forces are returned in units of 1N = 1 J/m)
 						//   1e10			: Angstrom->m
 						//   1e3			: kJ -> j
 						//   AVOGADRO : mol -> 1
-						float factor = -2.0 * (1e13 / Constants::AVOGADRO) * it->values.k * (acos(cosphi) - it->values.phase) /tmp;
+						float factor = -2.0 * (1e13 / Constants::AVOGADRO) 
+														* it->values.k * (acos(cosphi) - it->values.phase) / sinphi;
 
 						float ilength_bcxba_2 = ilength_bcxba * ilength_bcxba;
 						float ilength_bcxbd_2 = ilength_bcxbd * ilength_bcxbd;
@@ -489,14 +501,15 @@ namespace BALL
 						float bc2  = bc * bc;
 						float bd2  = bd * bd;
 
-						Vector3 dcosphi_dbc = cosphi * (ilength_bcxbd_2 *(bcbd * bd - bd2 * bc) +   
-																			 (ilength_bcxba_2 *(bcba * ba - ba2 * bc)) +							
-														 ((ilength_bcxba * ilength_bcxbd) * ((2 * babd) * bc - bcba * bd - bcbd * ba)));
-						Vector3 dcosphi_dbd = cosphi * ((ilength_bcxbd_2) *(bcbd * bc - bc2 * bd) +   
-														 ((ilength_bcxba * ilength_bcxbd) * (bc2 * ba - bcba * bc)));
-						Vector3 dcosphi_dba = cosphi * ((ilength_bcxba_2) *(bcba * bc - bc2 * ba) +   
-														 ((ilength_bcxba * ilength_bcxbd) * (bc2 * bd - bcbd * bc)));
+						Vector3 dcosphi_dbc = cosphi * (ilength_bcxbd_2 * (bcbd * bd - bd2 * bc) 
+																						+ (ilength_bcxba_2 *(bcba * ba - ba2 * bc)))
+																	+	((ilength_bcxba * ilength_bcxbd) * ((2 * babd) * bc - bcba * bd - bcbd * ba));
+						Vector3 dcosphi_dbd = (cosphi * (ilength_bcxbd_2) * (bcbd * bc - bc2 * bd) 
+																	 + ((ilength_bcxba * ilength_bcxbd) * (bc2 * ba - bcba * bc)));
+						Vector3 dcosphi_dba = (cosphi * (ilength_bcxba_2) * (bcba * bc - bc2 * ba) 
+																	 +	((ilength_bcxba * ilength_bcxbd) * (bc2 * bd - bcbd * bc)));
 
+						// add the forces to the atoms' force vectors
 						if (getForceField()->getUseSelection() == false)
 						{
 							it->atom1->getForce() += factor * dcosphi_dba;
