@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PoissonBoltzmann_test.C,v 1.9 2002/02/27 12:24:47 sturm Exp $
+// $Id: PoissonBoltzmann_test.C,v 1.10 2004/11/07 08:25:38 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 
-START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.9 2002/02/27 12:24:47 sturm Exp $")
+START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.10 2004/11/07 08:25:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -85,6 +87,7 @@ CHECK(energy - reaction field energy - and numerical accuracy)
 	TEST_REAL_EQUAL(E_RF_vacuum, 0.0)
 	delete fdpb;
 RESULT
+delete system;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

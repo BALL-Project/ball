@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Chain_test.C,v 1.18 2004/02/25 10:40:28 oliver Exp $
+// $Id: Chain_test.C,v 1.19 2004/11/07 08:25:37 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.18 2004/02/25 10:40:28 oliver Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.19 2004/11/07 08:25:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -113,6 +113,7 @@ CHECK(void get(Chain& chain, bool deep = true) const throw())
 	TEST_EQUAL(c3->getName(), "testname")
 	TEST_EQUAL(c3->countResidues(), 0)
 	delete c3;
+	delete c2;
 	delete c1;
 RESULT
 
@@ -513,8 +514,6 @@ RESULT
 
 TextPersistenceManager pm;
 using namespace RTTI;
-pm.registerClass(getStreamName<Chain>(), Chain::createDefault);
-pm.registerClass(getStreamName<Residue>(), Residue::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
@@ -581,6 +580,7 @@ CHECK(BALL_CREATE_DEEP(Chain))
 	delete c2;
 	c2 = (Chain*) c1.create(true, false);
 	TEST_EQUAL(c2->countResidues(), 1)
+	delete c2;
 RESULT
 
 CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(SecondaryStructure) (Residue)(PDBAtom))

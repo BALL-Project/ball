@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom_test.C,v 1.12 2003/07/01 11:53:48 amoll Exp $
+// $Id: PDBAtom_test.C,v 1.13 2004/11/07 08:25:37 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -33,7 +34,7 @@ bool testEqual(const PDBAtom& a, const PDBAtom& b)
 				 a.getTemperatureFactor() == b.getTemperatureFactor();
 }
 
-START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.12 2003/07/01 11:53:48 amoll Exp $")
+START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.13 2004/11/07 08:25:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -98,10 +99,11 @@ RESULT
 
 CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), std::ios::out);
+	ofstream ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	pm.registerClass(getStreamName<PDBAtom>(), PDBAtom::createDefault);
 	pdba >> pm;
+	ofile.close();
 RESULT
 
 
@@ -120,6 +122,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 			PDBAtom* p2 = castTo<PDBAtom>(*ptr);
 			TEST_EQUAL(testEqual(*p2, pdba), true)
 		}
+		delete ptr;
 	}
 RESULT
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.C,v 1.4 2004/10/30 09:42:54 amoll Exp $
+// $Id: UCK.C,v 1.5 2004/11/07 08:25:36 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/UCK.h>
@@ -81,21 +81,35 @@ namespace BALL
 			for(Size j = 0; j != bond_matrix->size(); ++j)
 			{
 				if (i == j) // distance from a node to itself = 0
+				{
 					line->push_back(0);
+				}
 				else if((*bond_matrix)[i][j] == 1)	// if an edge exists between node i and j,
+				{
 					line->push_back(1);								// the distance between them is 1
+				}
 				else
-						line->push_back(Limits<Index>::max()); // otherwise the distance is set to infinity
+				{
+					line->push_back(Limits<Index>::max()); // otherwise the distance is set to infinity
+				}
 			}
 			sp.push_back(*line);
 		}
 		
 		// Floyd's Algorithm
 		for(Size i = 0; i != sp.size(); ++i)
+		{
 			for(Size j = 0; j != sp.size(); ++j)
+			{
 				for(Size k = 0; k != sp.size(); k++)
+				{
 					if(sp[j][k] > (sp[j][i] + sp[i][k]))
+					{
 						sp[j][k] = (sp[j][i] + sp[i][k]);
+					}
+				}
+			}
+		}
 		
 		delete bond_matrix;
 		delete line;
@@ -202,14 +216,17 @@ namespace BALL
 	
 	void UCK::createFinalString(const vector<String>& pairs)
 	{
-		String uckstr = "";
-		uck_str_ = formula_;
-		uck_str_ += "-";
-		for(Size i = 0; i != pairs.size(); ++i)
+		uck_str_ = formula_ + "-";
+		for (Size i = 0; i != pairs.size(); ++i)
+		{
 			uck_str_ += pairs[i];
-			
+		}	
 		uck_str_ += "\n";
-		uck_str_ = MD5String((char*) uck_str_.c_str()); // RSA Data Security, Inc. MD5 Message-Digest Algorithm
+
+		// RSA Data Security, Inc. MD5 Message-Digest Algorithm
+		char* md5_char_ptr = MD5String(const_cast<char*>(uck_str_.c_str()));
+		uck_str_ = md5_char_ptr; 
+		free(md5_char_ptr); // free the memory allocated by MD5String.
 		return;
 	}
 	

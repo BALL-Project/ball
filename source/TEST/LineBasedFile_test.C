@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LineBasedFile_test.C,v 1.18 2004/02/17 16:07:19 oliver Exp $
+// $Id: LineBasedFile_test.C,v 1.19 2004/11/07 08:25:37 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,7 +10,7 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.18 2004/02/17 16:07:19 oliver Exp $")
+START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.19 2004/11/07 08:25:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,6 +34,7 @@ CHECK(BALL_CREATE(LineBasedFile))
 	LineBasedFile c;
 	LineBasedFile* ptr = (LineBasedFile*)c.create(false, true);
 	TEST_NOT_EQUAL(ptr, 0)
+	delete ptr;
 RESULT
 
 CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in)

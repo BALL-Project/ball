@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bond_test.C,v 1.33 2004/02/25 10:40:28 oliver Exp $
+// $Id: Bond_test.C,v 1.34 2004/11/07 08:25:37 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.33 2004/02/25 10:40:28 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.34 2004/11/07 08:25:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -455,7 +455,12 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 			TEST_EQUAL(f1->getSecondAtom()->getName(), "a1")
 		}
 		TEST_EQUAL(f1->getName(), "name1")
-		delete f1;
+		const Atom* a1 = f1->getFirstAtom();
+		const Atom* a2 = f1->getSecondAtom();
+		const_cast<Atom*>(a1)->destroyBonds();
+		delete a1;
+		delete a2;
+		// delete f1;
 		ptr = 0;
 		f1 = 0;
 	} 

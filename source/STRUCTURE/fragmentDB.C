@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.60 2004/05/27 19:50:00 oliver Exp $
+// $Id: fragmentDB.C,v 1.61 2004/11/07 08:25:36 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -176,6 +176,16 @@ namespace BALL
 
 		name_to_path_.destroy();
 		name_to_frag_pointer_.destroy();
+		for (StringHashMap<list<Residue*> >::Iterator hm_it = name_to_variants_.begin();
+				 +hm_it; ++hm_it)
+		{
+			for (list<Residue*>::iterator it = hm_it->second.begin();
+					 it != hm_it->second.end(); ++it)
+			{
+				delete *it;
+				*it = 0;
+			}
+		}
 		name_to_variants_.destroy();
 		fragments_.clear();
 		
@@ -269,19 +279,16 @@ namespace BALL
 				else 
 				{
 					// create a new atom...
-					Atom*	 atom;
-					atom = new Atom;
+					Atom*	atom = new Atom;
 								
 					// ...set its name and insert it into the fragment.
-					atom->setName((*entry_iterator).getKey());
+					atom->setName(entry_iterator->getKey());
 					fragment.insert(*atom);
 		
-					// now extract element and position (x, y, z) from the string
+					// Now extract element and position (x, y, z) from the string.
 					String		s[4];
-					(*entry_iterator).getValue().split(s, BALL_SIZEOF_ARRAY(s), " ");
-		
-					Vector3				r;										
-					r.set(s[1].toFloat(), s[2].toFloat(), s[3].toFloat());
+					entry_iterator->getValue().split(s, BALL_SIZEOF_ARRAY(s), " ");
+					Vector3	r(s[1].toFloat(), s[2].toFloat(), s[3].toFloat());
 		
 					// and assign its values to the atom
 					atom->setPosition(r);

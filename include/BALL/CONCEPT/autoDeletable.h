@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: autoDeletable.h,v 1.23 2004/02/23 15:19:56 anhi Exp $
+// $Id: autoDeletable.h,v 1.24 2004/11/07 08:25:35 oliver Exp $
 //
 
 
@@ -120,6 +120,11 @@ namespace BALL
 		void setAutoDeletable(bool enable)
 			throw();
 
+		/* This is required for cleaning up in case we want to
+			 valgrind our stuff -- otherwise we get "still reachable"
+       blocks through this ptr.
+		*/
+		static void clearLastPtr() { last_ptr_ = 0; }
 		//@}
 
 		/**	@name	Predicates

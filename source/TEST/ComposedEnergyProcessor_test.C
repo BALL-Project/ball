@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ComposedEnergyProcessor_test.C,v 1.8 2003/06/19 10:45:50 oliver Exp $
+// $Id: ComposedEnergyProcessor_test.C,v 1.9 2004/11/07 08:25:37 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(ComposedEnergyProcessor_test, "$Id: ComposedEnergyProcessor_test.C,v 1.8 2003/06/19 10:45:50 oliver Exp $")
+START_TEST(ComposedEnergyProcessor_test, "$Id: ComposedEnergyProcessor_test.C,v 1.9 2004/11/07 08:25:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -159,6 +159,8 @@ CHECK(ComposedEnergyProcessor::ComposedEnergyProcessor(const ComposedEnergyProce
 	S.apply(cep2);
 	TEST_REAL_EQUAL(cep2.getEnergy(), result)
 RESULT
+delete pep1;
+delete pep2;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NamedProperty_test.C,v 1.1 2003/06/27 09:29:08 anker Exp $
+// $Id: NamedProperty_test.C,v 1.2 2004/11/07 08:25:37 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,10 +12,9 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/protein.h>
 #include <fstream>
-
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: NamedProperty_test.C,v 1.1 2003/06/27 09:29:08 anker Exp $")
+START_TEST(PropertyManager, "$Id: NamedProperty_test.C,v 1.2 2004/11/07 08:25:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -147,7 +147,6 @@ using std::ofstream;
 using std::ios;
 using namespace RTTI;
 TextPersistenceManager pm;
-pm.registerClass(getStreamName<NamedProperty>(), getNew<NamedProperty>);
 
 CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const throw(Exception::GeneralException))
 	NEW_TMP_FILE(filename)
@@ -226,7 +225,6 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 			TEST_EQUAL(pers_a->getType(), NamedProperty::OBJECT)
 			TEST_EQUAL(pers_a->getName(), "test2")
 			TEST_NOT_EQUAL(pers_a->getObject(), 0)
-			ABORT_IF(pers_a->getObject())
 			delete pers_a->getObject();
 		}
 		delete ptr;

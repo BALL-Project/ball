@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK_test.C,v 1.4 2004/10/28 15:54:57 amoll Exp $
+// $Id: UCK_test.C,v 1.5 2004/11/07 08:25:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -27,42 +27,48 @@ UCK *u1;
 UCK *u2;
 UCK *u3;
 
-START_TEST(UCK, "$Id: UCK_test.C,v 1.4 2004/10/28 15:54:57 amoll Exp $")
+START_TEST(UCK, "$Id: UCK_test.C,v 1.5 2004/11/07 08:25:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 SDFile f("benzoic_acid.sdf");
-Molecule *m = f.read();
-f.close();
-UCK *u1 = new UCK(*m, 2);
-UCK *u2 = new UCK(*m);
-UCK *u3 = new UCK(*u1);
+Molecule* m = 0;
+CHECK([Extra] Structure initialization)
+	m = f.read();
+	f.close();
+	TEST_NOT_EQUAL(m, 0)
+RESULT
+	
 
-CHECK(bencoic_acid_custom_depth)
-	TEST_EQUAL(u1->getUCK().trim(), "39bf9b334b172e4e71e76b93c830b47e")
-	ABORT_IF(u1->getUCK().trim() != "39bf9b334b172e4e71e76b93c830b47e")
+UCK u1(*m, 2);
+UCK u2(*m);
+UCK u3(u1);
+
+CHECK([Extra] bencoic_acid_custom_depth)
+	TEST_EQUAL(u1.getUCK().trim(), "39bf9b334b172e4e71e76b93c830b47e")
+	ABORT_IF(u1.getUCK().trim() != "39bf9b334b172e4e71e76b93c830b47e")
 RESULT											
 
-CHECK(bencoic_acid_default_depth)
-	TEST_EQUAL(u2->getUCK().trim(), "09bdbf9a8c581a33e5cbd70697eadbdd")
-	ABORT_IF(u2->getUCK().trim() != "09bdbf9a8c581a33e5cbd70697eadbdd")
+CHECK([Extra] bencoic_acid_default_depth)
+	TEST_EQUAL(u2.getUCK().trim(), "09bdbf9a8c581a33e5cbd70697eadbdd")
+	ABORT_IF(u2.getUCK().trim() != "09bdbf9a8c581a33e5cbd70697eadbdd")
 RESULT											
 
 CHECK(cpconstructor)
-	TEST_EQUAL(u3->getUCK().trim(), "39bf9b334b172e4e71e76b93c830b47e")
-	ABORT_IF(u3->getUCK().trim() != "39bf9b334b172e4e71e76b93c830b47e")
+	TEST_EQUAL(u3.getUCK().trim(), "39bf9b334b172e4e71e76b93c830b47e")
+	ABORT_IF(u3.getUCK().trim() != "39bf9b334b172e4e71e76b93c830b47e")
 RESULT
 
 CHECK(output functions)
-	TEST_EQUAL(u1->getDepth(), 2);
-	TEST_EQUAL(u2->getDepth(), 3);
-	TEST_EQUAL(u3->getDepth(), 2);
-	TEST_EQUAL(u1->getId().trim(), "NSC88938 benzoic acid")
-	TEST_EQUAL(u1->getFormula().trim(), "C7H6O2")
-	TEST_EQUAL(String(u1->getWeight()), "122.123642")
+	TEST_EQUAL(u1.getDepth(), 2);
+	TEST_EQUAL(u2.getDepth(), 3);
+	TEST_EQUAL(u3.getDepth(), 2);
+	TEST_EQUAL(u1.getId().trim(), "NSC88938 benzoic acid")
+	TEST_EQUAL(u1.getFormula().trim(), "C7H6O2")
+	TEST_EQUAL(String(u1.getWeight()), "122.123642")
 RESULT
-
+delete m;
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 

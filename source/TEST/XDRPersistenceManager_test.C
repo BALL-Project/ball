@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.19 2004/11/05 11:47:40 amoll Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.20 2004/11/07 08:25:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.19 2004/11/05 11:47:40 amoll Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.20 2004/11/07 08:25:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -436,8 +436,6 @@ CHECK([Extra] full_test0)
 	XDRPersistenceManager pm2(is);
 
 	PersistentObject* po =  0;
-	STATUS("Before initializeInputStream.")
-	pm2.initializeInputStream();
 	STATUS("Before readObject...")
 	po = pm2.readObject();
 	STATUS("After readObject...")

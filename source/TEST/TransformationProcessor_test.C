@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TransformationProcessor_test.C,v 1.1 2003/05/23 15:39:23 oliver Exp $
+// $Id: TransformationProcessor_test.C,v 1.2 2004/11/07 08:25:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/fragment.h>
 
-START_TEST(TransformationApplictor, "$Id: TransformationProcessor_test.C,v 1.1 2003/05/23 15:39:23 oliver Exp $")
+START_TEST(TransformationApplictor, "$Id: TransformationProcessor_test.C,v 1.2 2004/11/07 08:25:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -58,7 +58,9 @@ CHECK(operator ())
 	frag->apply(*app);
 	TEST_EQUAL(atom2->getPosition(), Vector3(2,2,2))
 	TEST_EQUAL(atom1->getPosition(), Vector3(1,0,-1))
+	delete frag;
 RESULT
+delete app;
 
 
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.10 2004/04/17 19:56:10 anhi Exp $
+// $Id: StructureMapper_test.C,v 1.11 2004/11/07 08:25:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.10 2004/04/17 19:56:10 anhi Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.11 2004/11/07 08:25:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -408,6 +408,9 @@ CHECK(RSMD for two bptis)
 	STATUS("Number of atoms in s2: " << s2.countAtoms())
 	TEST_REAL_EQUAL(sm.calculateRMSD(), 0.0)
 RESULT
+delete frag1;
+delete frag2;
+delete m;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

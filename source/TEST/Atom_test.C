@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.23 2004/02/25 10:40:28 oliver Exp $
+// $Id: Atom_test.C,v 1.24 2004/11/07 08:25:36 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -18,7 +18,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.23 2004/02/25 10:40:28 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.24 2004/11/07 08:25:36 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -422,7 +422,7 @@ CHECK(bool isValid() const throw())
 	TEST_EQUAL(atom->isValid(), true)
 RESULT
 
-TextPersistenceManager	pm;
+TextPersistenceManager pm;
 atom->setForce(Vector3(1.0, 2.0, 3.0));
 atom->setPosition(Vector3(2.0, 3.0, 4.0));
 atom->setVelocity(Vector3(3.0, 4.0, 5.0));
@@ -437,9 +437,6 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const t
 	ofstream	ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	using namespace RTTI;
-	pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
-	pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
-	pm.registerClass(getStreamName<Bond>(), Bond::createDefault);
 	*atom >> pm;
 	ofile.close();
 RESULT
@@ -450,9 +447,11 @@ using namespace RTTI;
 CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
-	PersistentObject*	ptr;
+	PersistentObject*	ptr = 0;
 	ptr = pm.readObject();
 	ifile.close();
+	STATUS("PO ptr = " << (void*)ptr)
+
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
@@ -469,7 +468,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 			TEST_EQUAL(pers_atom->getType(), atom->getType())
 			TEST_EQUAL(pers_atom->countBonds(), atom->countBonds())
 			TEST_NOT_EQUAL(pers_atom->getHandle(), atom->getHandle())
-			pers_atom = 0;
+			delete pers_atom->getBond(0)->getPartner(*pers_atom);
 		}
 		delete ptr;
 		ptr = 0;

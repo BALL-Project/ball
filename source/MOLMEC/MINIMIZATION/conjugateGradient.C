@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.33 2004/04/20 11:40:44 amoll Exp $
+// $Id: conjugateGradient.C,v 1.34 2004/11/07 08:25:36 oliver Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -37,6 +37,14 @@ namespace BALL
 			number_of_atoms_(0),
 			method_(DEFAULT_METHOD),
 			first_call_(true),
+			a_i_(0),
+			b_i_(0),
+			p_t_(0),
+			y_t_(0),
+			p_i_(0),
+			y_i_(0),
+			D_1_(0),
+			D_4_(0),
 			restart_frequency_(1)
 	{
 	}
@@ -49,6 +57,14 @@ namespace BALL
 			number_of_atoms_(0),
 			method_(DEFAULT_METHOD),
 			first_call_(true),
+			a_i_(0),
+			b_i_(0),
+			p_t_(0),
+			y_t_(0),
+			p_i_(0),
+			y_i_(0),
+			D_1_(0),
+			D_4_(0),
 			restart_frequency_(1)
 	{
 		valid_ = setup(force_field);
@@ -68,6 +84,14 @@ namespace BALL
 			number_of_atoms_(0),
 			method_(DEFAULT_METHOD),
 			first_call_(true),
+			a_i_(0),
+			b_i_(0),
+			p_t_(0),
+			y_t_(0),
+			p_i_(0),
+			y_i_(0),
+			D_1_(0),
+			D_4_(0),
 			restart_frequency_(1)
 	{
 		valid_ = setup(force_field, ssm);
@@ -88,6 +112,14 @@ namespace BALL
 			number_of_atoms_(0),
 			method_(DEFAULT_METHOD),
 			first_call_(true),
+			a_i_(0),
+			b_i_(0),
+			p_t_(0),
+			y_t_(0),
+			p_i_(0),
+			y_i_(0),
+			D_1_(0),
+			D_4_(0),
 			restart_frequency_(1)
 	{
 		// The actual work is done in setup 
@@ -108,6 +140,14 @@ namespace BALL
 			number_of_atoms_(0),
 			method_(DEFAULT_METHOD),
 			first_call_(true),
+			a_i_(0),
+			b_i_(0),
+			p_t_(0),
+			y_t_(0),
+			p_i_(0),
+			y_i_(0),
+			D_1_(0),
+			D_4_(0),
 			restart_frequency_(1)
 	{
 		// The actual work is done in setup 

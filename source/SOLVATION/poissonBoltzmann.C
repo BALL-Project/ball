@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.40 2003/10/31 23:15:50 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.41 2004/11/07 08:25:36 oliver Exp $ 
 //
 
 // FDPB: Finite Difference Poisson Solver
@@ -2278,29 +2278,30 @@ namespace BALL
 				lambda = 1 - omega;
 			}
 
-
 			// calculate the gradient every check_after_iterations
 			if ((iteration % check_after_iterations) == 0)
 			{
-					
-				max_residual = 0;
-				residual_norm2 = 0;
+				if (iteration > 0)
+				{
+					max_residual = 0;
+					residual_norm2 = 0;
 
-				// sum up all squared changes in the phi array since
-				// the last iteration
-				for (i = 1; i < N - 1; i++)
-				{
-					residual = BALL_ABS(tmp_phi[i] - phi[i]);
-					max_residual = BALL_MAX(residual, max_residual);
-					residual_norm2 += residual * residual;
-				}
+					// sum up all squared changes in the phi array since
+					// the last iteration
+					for (i = 1; i < N - 1; i++)
+					{
+						residual = fabs(tmp_phi[i] - phi[i]);
+						max_residual = std::max(residual, max_residual);
+						residual_norm2 += residual * residual;
+					}
+						
+					rms_change = sqrt(residual_norm2 / (float)N);
 					
-				rms_change = sqrt(residual_norm2 / (float)N);
-				
-				if (verbosity > 0)
-				{
-					Log.info(1) << "Iteration " << iteration << " RMS: " 
-						<< rms_change << "   MAX: " << max_residual << endl;
+					if (verbosity > 0)
+					{
+						Log.info(1) << "Iteration " << iteration << " RMS: " 
+							<< rms_change << "   MAX: " << max_residual << endl;
+					}
 				}
 			}
 

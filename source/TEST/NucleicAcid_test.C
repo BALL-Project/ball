@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NucleicAcid_test.C,v 1.15 2003/07/03 13:20:04 amoll Exp $
+// $Id: NucleicAcid_test.C,v 1.16 2004/11/07 08:25:37 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +12,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.15 2003/07/03 13:20:04 amoll Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.16 2004/11/07 08:25:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -230,8 +231,6 @@ RESULT
 
 TextPersistenceManager pm;
 using namespace RTTI;
-pm.registerClass(getStreamName<Nucleotide>(), Nucleotide::createDefault);
-pm.registerClass(getStreamName<NucleicAcid>(), NucleicAcid::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
@@ -254,7 +253,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	if (ptr != 0)
 	{
 		TEST_EQUAL(isKindOf<NucleicAcid>(*ptr), true)
-		NucleicAcid*	f1 = castTo<NucleicAcid>(*ptr);
+		NucleicAcid* f1 = castTo<NucleicAcid>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
 		TEST_EQUAL(f1->countNucleotides(), 2)
 		TEST_EQUAL(f1->getNucleotide(0)->getName(), "name2")
@@ -297,6 +296,7 @@ CHECK(BALL_CREATE_DEEP(NucleicAcid))
 	na2 = (NucleicAcid*) na1.create(true, false);
 	TEST_EQUAL(na2->getName(), "na1")
 	TEST_EQUAL(na2->countNucleotides(), 2)
+	delete na2;
 RESULT
 
 CHECK(Nucleotide* getNucleotide(Position position) throw())

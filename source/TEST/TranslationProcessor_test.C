@@ -1,14 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TranslationProcessor_test.C,v 1.1 2003/05/23 15:39:23 oliver Exp $
+// $Id: TranslationProcessor_test.C,v 1.2 2004/11/07 08:25:38 oliver Exp $
+//
+
 
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/fragment.h>
 
-START_TEST(TranslationApplictor, "$Id: TranslationProcessor_test.C,v 1.1 2003/05/23 15:39:23 oliver Exp $")
+START_TEST(TranslationApplictor, "$Id: TranslationProcessor_test.C,v 1.2 2004/11/07 08:25:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,6 +55,7 @@ CHECK(operator ())
 	TEST_EQUAL(atom2->getPosition(), t)
 	t *= 2;
 	TEST_EQUAL(atom1->getPosition(), t)
+	delete frag;
 RESULT
 delete app;
 

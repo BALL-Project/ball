@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Matrix44_test.C,v 1.21 2003/06/10 21:49:48 amoll Exp $
+// $Id: Matrix44_test.C,v 1.22 2004/11/07 08:25:37 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,7 +15,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.21 2003/06/10 21:49:48 amoll Exp $")
+START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.22 2004/11/07 08:25:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -69,16 +69,14 @@ CHECK(BALL_CREATE(TMatrix4x4))
 	delete m_ptr;
 RESULT
 
+Matrix4x4* m_ptr = 0;
 CHECK(TMatrix4x4() throw())
-  Matrix4x4* m;
-	m = new Matrix4x4();
-	TEST_NOT_EQUAL(m, 0)
+	m_ptr = new Matrix4x4();
+	TEST_NOT_EQUAL(m_ptr, 0)
 RESULT
 
 CHECK(~TMatrix4x4() throw())
-  Matrix4x4* m;
-	m = new Matrix4x4();
-	delete m;
+	delete m_ptr;
 RESULT		
 
 CHECK(TMatrix4x4(const T& m11, const T& m12, const T& m13, const T& m14, const T& m21, const T& m22, const T& m23, const T& m24, const T& m31, const T& m32, const T& m33, const T& m34, const T& m41, const T& m42, const T& m43, const T& m44) throw())

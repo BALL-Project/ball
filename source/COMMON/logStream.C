@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.36 2004/05/27 19:49:57 oliver Exp $
+// $Id: logStream.C,v 1.37 2004/11/07 08:25:35 oliver Exp $
 //
 
 #include <limits>
@@ -64,7 +64,6 @@ namespace BALL
 		static char buf[BUFFER_LENGTH];
 
 		// sync our streambuffer...
-
 		if (pptr() != pbase()) 
 		{
 				

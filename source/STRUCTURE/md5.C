@@ -95,7 +95,6 @@ char* MD5String(char* szString)
 	alg.Finalize();
 
 	return PrintMD5(alg.Digest());
-
 }
 
 // MD5File: Performs the MD5 algorithm on a file (binar or text),

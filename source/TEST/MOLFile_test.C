@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile_test.C,v 1.12 2004/03/29 17:12:23 oliver Exp $
+// $Id: MOLFile_test.C,v 1.13 2004/11/07 08:25:37 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.12 2004/03/29 17:12:23 oliver Exp $")
+START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.13 2004/11/07 08:25:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -194,6 +194,7 @@ CHECK(BALL_CREATE(MOLFile))
   MOLFile f("data/MOLFile_test1.mol");
 	MOLFile* f_ptr = (MOLFile*) f.create();
 	TEST_EQUAL(f_ptr->getName(), "data/MOLFile_test1.mol")
+	delete f_ptr;
 RESULT
 
 CHECK(MOLFile(const MOLFile& file) throw(Exception::FileNotFound))

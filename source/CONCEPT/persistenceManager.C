@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.C,v 1.20 2004/11/05 10:04:39 oliver Exp $
+// $Id: persistenceManager.C,v 1.21 2004/11/07 08:25:36 oliver Exp $
 //
 
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -166,7 +166,6 @@ namespace BALL
 
 			DEBUG("PersistenceManager: created object of type" << signature)
 			return method();
-			
 		} 
 		else 
 		{

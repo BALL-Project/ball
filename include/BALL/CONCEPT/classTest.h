@@ -1,8 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.55 2004/05/27 19:49:37 oliver Exp $
+// $Id: classTest.h,v 1.56 2004/11/07 08:25:35 oliver Exp $
 //
+
+#ifndef BALL_CONCEPT_AUTODELETABLE_H
+# include <BALL/CONCEPT/autoDeletable.h>
+#endif
 
 #ifndef BALL_SYSTEM_H
 # include <BALL/SYSTEM/file.h>
@@ -180,7 +184,12 @@ int main(int argc, char **argv)\
 		std::cout << "PASSED" << std::endl;\
 		return 0;\
 	}\
+	/* Finally, clean up pointers still pointing to */\
+	/* AutoDeletable objects, as this might lead to strange */\
+	/* warnings (still reachable) when using valgrind. */\
+	BALL::AutoDeletable::clearLastPtr(); \
 }\
+
 
 /**	Declare subtest name.
 		This macro is used to declare the name of a subtest.
