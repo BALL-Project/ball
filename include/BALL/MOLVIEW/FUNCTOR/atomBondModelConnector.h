@@ -1,27 +1,7 @@
-// $Id: atomBondModelConnector.h,v 1.5.4.1 2002/10/18 14:48:11 amoll Exp $
+// $Id: atomBondModelConnector.h,v 1.5.4.2 2002/10/23 20:05:00 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLOR_H
-#	include <BALL/VIEW/DATATYPE/color.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #	include <BALL/VIEW/PRIMITIV/line.h>
@@ -29,10 +9,6 @@
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #	include <BALL/VIEW/PRIMITIV/tube.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
@@ -47,8 +23,12 @@
 #	include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 #endif
 
-using namespace BALL::VIEW;
- 
+using BALL::VIEW::Line;
+using BALL::VIEW::Tube;
+
+class Atom;
+class Bond;
+
 namespace BALL
 {
 	namespace MOLVIEW

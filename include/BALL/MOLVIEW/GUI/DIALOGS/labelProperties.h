@@ -11,10 +11,6 @@
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
-//#	include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
-#endif
-
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 # include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 #endif

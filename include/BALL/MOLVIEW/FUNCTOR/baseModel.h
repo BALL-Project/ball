@@ -1,4 +1,4 @@
-// $Id: baseModel.h,v 1.11.4.1 2002/10/23 14:25:02 amoll Exp $
+// $Id: baseModel.h,v 1.11.4.2 2002/10/23 20:05:00 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -342,7 +342,6 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 
 			//@}
-				
 			/**	@name	Predicates
 			*/
 			//@{
@@ -374,7 +373,7 @@ namespace BALL
 			/** Test if creation of dynamic models is enabled.
 					Test if the property {\tt PROPERTY__OBJECT_DYNAMIC} is set for {\em *this} baseModelProcessor.
 					See \Ref{GeometricObject} for information about this property.
-					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should be created, {\tt false} otherwise
+					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should be created
 					@see     enableDynamicModel
 					@see     disableDynamicModel
 					@see     GeometricObject
@@ -386,7 +385,7 @@ namespace BALL
 			/** Test if creation of dynamic models is disabled.
 					Test if the property {\tt PROPERTY__OBJECT_DYNAMIC} is not set for {\em *this} baseModelProcessor.
 					See \Ref{GeometricObject} for information about this property.
-					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should not be created, {\tt false} otherwise
+					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should not be created
 					@see     enableDynamicModel
 					@see     disableDynamicModel
 					@see     GeometricObject
@@ -423,7 +422,7 @@ namespace BALL
 					Calls \Ref{ExentedPropertyManager::isValid}.
 					Calls \Ref{BaseModelConnector::isValid}.
 					Calls \Ref{FindGeometricObjects::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this}atomBondModelConnector is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this}atomBondModelConnector is correct
 					@see       ExentedPropertyManager
 					@see       BaseModelConnector
 					@see       FindGeometricObjects
@@ -453,7 +452,7 @@ namespace BALL
 					atomBondModelConnector.
 					This object is used to search for specific \Ref{GeometricObject} objects that
 					have certain properties.
-					@return  FindGeometricObjects& a mutable reference to the \Ref{FindGeometricObjects} of {\em *this} atomBondModelConnector
+					@return  FindGeometricObjects& a mutable reference to the \Ref{FindGeometricObjects} 
 					@see     FindGeometricObjects
 			*/
 			FindGeometricObjects& getSearcher_()
@@ -484,7 +483,7 @@ namespace BALL
 					objects are removed that have a model property (determined with the method \Ref{isModel_}).
 					All found \Ref{GeometricObject} objects are deleted.
 					@param  composite the \Ref{Composite} object that should be search for \Ref{GeometricObject} objects
-					@param  only_models if set to {\tt true} only \Ref{GeometricObject} objects are searched that have a model property
+					@param  only_models if set to {\tt true} \Ref{GeometricObject} objects are searched that have a model property
 					@see    isModel_
 					@see    GeometricObject
 					@see    Composite
@@ -508,13 +507,12 @@ namespace BALL
 			*/
 			void clear_()
 				throw();
+							
 			//@}
-
 			
 			private:
 
-			void dump_
-				(std::ostream& s, Size depth) const;
+			void dump_(std::ostream& s, Size depth) const;
 
 
 			/* search processor */ 
