@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.1 2003/11/15 10:59:08 oliver Exp $
+// $Id: representation.sip,v 1.2 2003/11/18 16:54:55 amoll Exp $
 //
 
 class Representation
+  : PropertyManager
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/representation.h>
