@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.C,v 1.29 2002/12/12 10:05:40 oliver Exp $
+// $Id: property.C,v 1.30 2003/05/23 10:26:02 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -63,6 +63,12 @@ namespace BALL
 	void NamedProperty::persistentRead(PersistenceManager& pm)
 		throw(Exception::GeneralException)
 	{
+		// Clear potentially allocated strings.
+		if (type_ == STRING)
+		{
+			delete data_.s;
+		}
+
 		int type;
 		pm.readPrimitive(type, "type_");
 		type_ = (Type)type;

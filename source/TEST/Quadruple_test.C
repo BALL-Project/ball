@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Quadruple_test.C,v 1.5 2002/02/27 12:24:48 sturm Exp $
+// $Id: Quadruple_test.C,v 1.6 2003/05/23 10:26:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/DATATYPE/quadruple.h>
 ///////////////////////////
 
-START_TEST(Quadruple, "$Id: Quadruple_test.C,v 1.5 2002/02/27 12:24:48 sturm Exp $")
+START_TEST(Quadruple, "$Id: Quadruple_test.C,v 1.6 2003/05/23 10:26:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,12 +37,17 @@ CHECK(Quadruple::Quadruple() throw())
 RESULT
 
 CHECK(Quadruple::~Quadruple() throw())
-	Quadruple<int, int, int, int>* q = new Quadruple<int, int, int, int>;
 	delete q;
 RESULT
 
+Quadruple<int, int, int, int> my_q;
+my_q.first = 1;
+my_q.second = 2;
+my_q.third = 3;
+my_q.fourth = 4;
+
 CHECK(Quadruple::Quadruple(const Quadruple& quadruple, bool deep = true) throw())
-	Quadruple<int, int, int, int> q1 = *q;
+	Quadruple<int, int, int, int> q1(my_q);
 	TEST_EQUAL(q1.first, 1)
 	TEST_EQUAL(q1.second, 2)
 	TEST_EQUAL(q1.third, 3)

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.29 2003/05/23 06:52:45 oliver Exp $
+// $Id: logStream.C,v 1.30 2003/05/23 10:26:01 oliver Exp $
+//
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
@@ -38,8 +39,11 @@ namespace BALL
 
 	LogStreamBuf::LogStreamBuf() 
 		: streambuf(),
+			pbuf_(0),
+			loglines_(),
 			level_(0),
 			tmp_level_(0),
+			stream_list_(),
 			incomplete_line_()
 	{
 		pbuf_ = new char [BUFFER_LENGTH];

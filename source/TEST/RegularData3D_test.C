@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.11 2003/05/04 20:15:49 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.12 2003/05/23 10:26:04 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.11 2003/05/04 20:15:49 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.12 2003/05/23 10:26:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -259,6 +259,8 @@ CHECK(operator !=)
 	grid2[5] = (*grid)[5];
 	TEST_EQUAL(*grid != grid2, false)
 RESULT
+delete grid;
+
 
 CHECK(isInside()1/1)
 	RegularData3D g(RegularData3D::IndexType(11, 11, 11), Vector3(0.0, 0.0, 0.0), Vector3(10.0, 10.0, 10.0));

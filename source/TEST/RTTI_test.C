@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RTTI_test.C,v 1.11 2003/05/22 21:57:21 oliver Exp $
+// $Id: RTTI_test.C,v 1.12 2003/05/23 10:26:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ class TC
 {
 };
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.11 2003/05/22 21:57:21 oliver Exp $")
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.12 2003/05/23 10:26:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -60,8 +60,10 @@ CHECK(RTTI::isKindOf<>())
 	TEST_EQUAL(isKindOf<AtomContainer>(*b_ptr), true)
 	TEST_EQUAL(isKindOf<Residue>(*b_ptr), false)
 
-	System*				s_ptr = new System;
+	System*	s_ptr = new System;
 	TEST_EQUAL(isKindOf<System>(*s_ptr), true)
+	delete s_ptr;
+
 	s_ptr = 0;
 	TEST_EQUAL(isKindOf<System>(*s_ptr), false)
 RESULT											
@@ -124,6 +126,7 @@ CHECK(RTTI::isInstanceOf<>())
 	delete na_ptr;
 	delete nu_ptr;
 	delete c_ptr;
+	delete ss_ptr;
 RESULT											
 
 CHECK(getDefault<>())
@@ -158,30 +161,55 @@ RESULT
 CHECK(getNew<>())
 	Protein* p = (Protein*)getNew<Protein>();
 	TEST_NOT_EQUAL(p, 0)
+	delete p;
+
 	Atom* a = (Atom*)getNew<Atom>();
 	TEST_NOT_EQUAL(a, 0)
+	delete a;
+
 	System* s = (System*)getNew<System>();
 	TEST_NOT_EQUAL(s, 0)
+	delete s;
+
 	PDBAtom* pa = (PDBAtom*)getNew<PDBAtom>();
 	TEST_NOT_EQUAL(pa, 0)
+	delete pa;
+	
 	Bond* b = (Bond*)getNew<Bond>();
 	TEST_NOT_EQUAL(b, 0)
+	delete b;
+
 	NucleicAcid* na = (NucleicAcid*)getNew<NucleicAcid>();
 	TEST_NOT_EQUAL(na, 0)
+	delete na;
+
 	Nucleotide* n = (Nucleotide*)getNew<Nucleotide>();
 	TEST_NOT_EQUAL(n, 0)
+	delete n;
+
 	SecondaryStructure* ss = (SecondaryStructure*)getNew<SecondaryStructure>();
 	TEST_NOT_EQUAL(ss, 0)
+	delete ss;
+
 	Residue* r = (Residue*)getNew<Residue>();
 	TEST_NOT_EQUAL(r, 0)
+	delete r;
+
 	Chain* c = (Chain*)getNew<Chain>();
 	TEST_NOT_EQUAL(c, 0)
+	delete c;
+
 	Molecule* m = (Molecule*)getNew<Molecule>();
 	TEST_NOT_EQUAL(m, 0)
+	delete m;
+
 	AtomContainer* bf = (AtomContainer*)getNew<AtomContainer>();
 	TEST_NOT_EQUAL(bf, 0)
+	delete bf;
+
 	Fragment* f = (Fragment*)getNew<Fragment>();
 	TEST_NOT_EQUAL(f, 0)
+	delete f;
 RESULT
 
 CHECK(getName<>())

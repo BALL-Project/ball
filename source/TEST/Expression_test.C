@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Expression_test.C,v 1.33 2003/04/02 12:01:11 anker Exp $
+// $Id: Expression_test.C,v 1.34 2003/05/23 10:26:03 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.33 2003/04/02 12:01:11 anker Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.34 2003/05/23 10:26:03 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -559,6 +559,8 @@ CHECK(Expression::getPredicate(const String& name, const String& args = "") cons
 		= (ExpressionPredicate*)MickeyPredicate::createDefault();
 	bool test = (*ep1 == *ep2);
 	TEST_EQUAL(test, true)
+	delete ep1;
+	delete ep2;
 RESULT
 
 
@@ -570,6 +572,8 @@ CHECK(Expression::registerPredicate(const String& name, CreationMethod creation_
 		= (ExpressionPredicate*)MickeyPredicate::createDefault();
 	bool test = (*ep1 == *ep2);
 	TEST_EQUAL(test, true)
+	delete ep1;
+	delete ep2;
 RESULT
 
 

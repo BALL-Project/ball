@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.iC,v 1.12 2002/12/20 19:10:22 oliver Exp $
+// $Id: directory.iC,v 1.13 2003/05/23 10:26:01 oliver Exp $
 
 BALL_INLINE
 void Directory::synchronize_()
@@ -41,11 +41,15 @@ bool Directory::desynchronize_(bool result1)
 BALL_INLINE 
 void Directory::clear()
 {
-	#ifdef BALL_COMPILER_MSVC
+	#ifdef BALL_PLATFORM_WINDOWS
 		CloseHandle(dir_);
 		FindClose(dirent_);
 	#else
-		dir_ = 0;   
+		if (dir_ != 0)
+		{
+			::closedir(dir_);
+		}
+		dir_ = 0;		
 		dirent_ = 0;
 	#endif
   directory_path_ = "";
@@ -60,8 +64,7 @@ void Directory::destroy()
 BALL_INLINE
 void Directory::set(const Directory& directory)
 {
-  dir_ = 0;
-  dirent_ = 0;
+	clear();
   directory_path_ = directory.directory_path_;
   backup_path_ = "";
 }
@@ -98,7 +101,7 @@ BALL_INLINE
 bool Directory::setCurrent(String directory_path)
 {
   FileSystem::canonizePath(directory_path);
-	#ifdef BALL_COMPILER_MSVC
+	#ifdef BALL_PLATFORM_WINDOWS
 		return (::_chdir(directory_path.data()) == 0);
 	#else
 		return (::chdir(directory_path.data()) == 0);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.38 2003/04/01 14:36:15 anker Exp $
+// $Id: expression.C,v 1.39 2003/05/23 10:26:02 oliver Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/expressionParser.h>
@@ -216,7 +216,7 @@ namespace BALL
   ExpressionTree* Expression::constructExpressionTree_(const ExpressionParser::SyntaxTree& t)
 		throw()
   {
-    ExpressionTree* root = new ExpressionTree();
+    ExpressionTree* root = new ExpressionTree;
     root->setType(t.type);
     root->setNegate(t.negate);
 

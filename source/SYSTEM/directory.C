@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.20 2002/12/20 19:10:23 oliver Exp $
+// $Id: directory.C,v 1.21 2003/05/23 10:26:03 oliver Exp $
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -69,7 +69,7 @@ namespace BALL
 		{
 			directory_path_ = "";
 		}
-/*		
+		
 		#ifdef BALL_PLATFORM_WINDOWS
 			dir_= INVALID_HANDLE_VALUE;
 			dirent_ = INVALID_HANDLE_VALUE;
@@ -84,7 +84,7 @@ namespace BALL
 		
 
 		#endif
-*/
+
 	}
 
 	Directory::Directory(const Directory& directory)
@@ -151,9 +151,15 @@ namespace BALL
 
 	#else
 		synchronize_();
-		if (dir_ != 0) ::closedir(dir_);
+		if (dir_ != 0) 
+		{
+			::closedir(dir_);
+		}
 		dir_ = ::opendir(directory_path_.data());
-		if (dir_ == 0) return desynchronize_(false);
+		if (dir_ == 0) 
+		{
+			return desynchronize_(false);	
+		}
 		dirent_ = ::readdir(dir_);
 		if (dirent_ == 0)
 		{
@@ -230,8 +236,14 @@ namespace BALL
 
 #else
 		synchronize_();
-		if (dir_ == 0) dir_ = ::opendir(directory_path_.data());
-		if (dir_ == 0) return desynchronize_(false);
+		if (dir_ == 0) 
+		{
+			dir_ = ::opendir(directory_path_.data());
+		}
+		if (dir_ == 0) 
+		{
+			return desynchronize_(false);	
+		}
 
 		dirent_ = ::readdir(dir_);
 		if (dirent_ == 0)
@@ -250,7 +262,7 @@ namespace BALL
 #ifdef BALL_COMPILER_MSVC
 		synchronize_();
 		Size size =0;
-		if(dir_==INVALID_HANDLE_VALUE)
+		if (dir_ == INVALID_HANDLE_VALUE)
 		{
 			dir_ = CreateFile(directory_path_.data(),
 												FILE_LIST_DIRECTORY,                
@@ -413,7 +425,7 @@ namespace BALL
 		struct stat stats;
 		Size size = 0;
 		dirent* myDirent;
-		DIR *dir = ::opendir(directory_path_.data());
+		DIR* dir = ::opendir(directory_path_.data());
 		if (dir == 0)	
 		{	
 			desynchronize_();
@@ -444,25 +456,17 @@ namespace BALL
 
 	bool Directory::has(const String& item) //const
 	{	
-#ifdef BALL_COMPILER_MSVC
 		synchronize_();
 		String entry;
-		getFirstEntry(entry);
-		if(entry==item) return desynchronize_(true);
-	while (getNextEntry(entry))
-		{
-			if (entry == item) return desynchronize_(true);
-		}
-		return desynchronize_(false);
-#else
-		synchronize_();
-		String entry;
+		#ifdef BALL_COMPILER_MSVC
+			getFirstEntry(entry);
+			if (entry==item) return desynchronize_(true);
+		#endif
 		while (getNextEntry(entry))
 		{
 			if (entry == item) return desynchronize_(true);
 		}
 		return desynchronize_(false);
-#endif
 	}
 
 	bool Directory::find(const String& item, String& filepath)
@@ -522,7 +526,10 @@ namespace BALL
 		Directory directory;
 		String s;
 		DIR* dir = ::opendir(FileSystem::CURRENT_DIRECTORY);
-		if (dir == 0)	return desynchronize_(false);
+		if (dir == 0)	
+		{
+			return desynchronize_(false);
+		}
 
 		while((myDirent = ::readdir(dir)) != 0)
 		{
@@ -663,7 +670,20 @@ namespace BALL
 				return true;
 			}
 		#else
-			return (::opendir(directory_path_.data()) != NULL && directory_path_ != "");
+			if (directory_path_ == "")
+			{
+				return false;
+			}
+			DIR* dir = ::opendir(directory_path_.data());
+			if (dir == 0)
+			{
+				return false;
+			}
+			else
+			{
+				::closedir(dir);
+				return true;
+			}
 		#endif
 	}
 

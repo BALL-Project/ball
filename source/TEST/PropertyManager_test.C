@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PropertyManager_test.C,v 1.22 2002/12/12 16:28:37 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.23 2003/05/23 10:26:04 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.22 2002/12/12 16:28:37 oliver Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.23 2003/05/23 10:26:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,6 +37,7 @@ CHECK(NamedProperty::NamedProperty(const string& name))
 	np = new NamedProperty("name");
 	TEST_NOT_EQUAL(np, 0)
 	TEST_EQUAL(np->getName(), "name")
+	delete np;
 RESULT
 
 CHECK(NamedProperty::NamedProperty(const string& name, bool value))
@@ -54,6 +55,7 @@ CHECK(NamedProperty::BALL_CREATE(NamedProperty) const  const )
 	TEST_EQUAL(np2->getName(), "test")
 	TEST_EQUAL(np2->getBool(), true)
 	delete np;
+	delete np2;
 RESULT
 
 CHECK(NamedProperty::NamedProperty(const string& name, int value))
@@ -160,6 +162,7 @@ CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = 
 	*np >> pm;
 	ofile.close();	
 	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Object11.txt")
+	delete np;
 
 	np = new NamedProperty("test3");
 	NEW_TMP_FILE(filename)
@@ -168,6 +171,7 @@ CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = 
 	*np >> pm;
 	ofile.close();	
 	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_None11.txt")
+	delete np;
 
 	string s("titel");
 	np = new NamedProperty("test4", s);
@@ -177,6 +181,7 @@ CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = 
 	*np >> pm;
 	ofile.close();	
 	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_String11.txt")
+	delete np;
 RESULT
 
 CHECK(NamedProperty::persistentRead(PersistenceManager& pm))
@@ -198,6 +203,7 @@ CHECK(NamedProperty::persistentRead(PersistenceManager& pm))
 			TEST_EQUAL(pers_a->getName(), "test")
 			TEST_REAL_EQUAL(pers_a->getFloat(), (float)-99.9)
 		}
+		delete ptr;
 	}
 
 	// due to some problems in the IRIX/CC fstream implementation....
@@ -216,7 +222,10 @@ CHECK(NamedProperty::persistentRead(PersistenceManager& pm))
 			TEST_EQUAL(pers_a->getType(), NamedProperty::OBJECT)
 			TEST_EQUAL(pers_a->getName(), "test2")
 			TEST_NOT_EQUAL(pers_a->getObject(), 0)
+			ABORT_IF(pers_a->getObject())
+			delete pers_a->getObject();
 		}
+		delete ptr;
 	}
 	
 	// due to some problems in the IRIX/CC fstream implementation....
@@ -234,6 +243,7 @@ CHECK(NamedProperty::persistentRead(PersistenceManager& pm))
 			TEST_EQUAL(pers_a->getType(), NamedProperty::NONE)
 			TEST_EQUAL(pers_a->getName(), "test3")
 		}
+		delete ptr;
 	}
 
 	// due to some problems in the IRIX/CC fstream implementation....
@@ -253,6 +263,7 @@ CHECK(NamedProperty::persistentRead(PersistenceManager& pm))
 			TEST_EQUAL(pers_a->getString(), "titel")
 			TEST_EQUAL(pers_a->getName(), "test4")
 		}
+		delete ptr;
 	}
 RESULT
 
@@ -320,6 +331,7 @@ CHECK(PropertyManager::PropertyManager(const PropertyManager& property_manager, 
 	TEST_NOT_EQUAL(p2, 0)
 	TEST_EQUAL(p2->hasProperty("TEST_PROP"), true)
 	TEST_EQUAL(p2->getProperty("TEST_PROP").getUnsignedInt(), 123456)	
+	delete p2;
 RESULT
 
 CHECK(PropertyManager::clear())

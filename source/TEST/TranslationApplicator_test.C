@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TranslationApplicator_test.C,v 1.3 2002/12/12 11:34:46 oliver Exp $
+// $Id: TranslationApplicator_test.C,v 1.4 2003/05/23 10:26:05 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/fragment.h>
 
-START_TEST(TranslationApplictor, "$Id: TranslationApplicator_test.C,v 1.3 2002/12/12 11:34:46 oliver Exp $")
+START_TEST(TranslationApplictor, "$Id: TranslationApplicator_test.C,v 1.4 2003/05/23 10:26:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,6 +34,7 @@ CHECK(destructor/constructor)
 	app = new TranslationProcessor(t);
 	TEST_NOT_EQUAL(app, 0)
 	TEST_EQUAL(app->getTranslation(), t)
+	delete app;
 RESULT
 
 CHECK(operator ())

@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PiecewisePolynomial_test.C,v 1.8 2002/02/27 12:24:46 sturm Exp $
+// $Id: PiecewisePolynomial_test.C,v 1.9 2003/05/23 10:26:04 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(PiecewisePolynomial, "$Id: PiecewisePolynomial_test.C,v 1.8 2002/02/27 12:24:46 sturm Exp $")
+START_TEST(PiecewisePolynomial, "$Id: PiecewisePolynomial_test.C,v 1.9 2003/05/23 10:26:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -64,7 +66,7 @@ CHECK(PiecewisePolynomial::PiecewisePolynomial(const PiecewisePolynomial& functi
 	TEST_EQUAL(test, true)
 	test = (poly2.getCoefficients() == poly->getCoefficients());
 	TEST_EQUAL(test, true)
-	// ?????: Spezialfälle
+	delete poly;
 RESULT
 
 CHECK(PiecewisePolynomial::PiecewisePolynomial(Size degree, const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs))

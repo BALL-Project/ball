@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.46 2003/03/04 14:42:50 anker Exp $
+// $Id: fragmentDB.C,v 1.47 2003/05/23 10:26:03 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -168,7 +168,14 @@ namespace BALL
 		name_to_frag_pointer_.destroy();
 		name_to_variants_.destroy();
 		fragments_.clear();
-		standards_.destroy();
+		
+		// Delete the individual hash maps created in init()
+		StringHashMap<StringHashMap<String>*>::Iterator it(standards_.begin());
+		for (; it != standards_.end(); ++it)
+		{
+			delete it->second;
+		}
+		standards_.clear();
 	}
 
 	void FragmentDB::setFilename(const String& filename)

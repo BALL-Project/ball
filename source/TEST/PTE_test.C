@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE_test.C,v 1.10 2002/12/12 11:34:43 oliver Exp $
+// $Id: PTE_test.C,v 1.11 2003/05/23 10:26:04 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.10 2002/12/12 11:34:43 oliver Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.11 2003/05/23 10:26:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,6 +37,7 @@ CHECK(Element(Element& element))
 		TEST_EQUAL(e2->getName(), "testname")
 		delete e2;
 	}
+	delete e1;
 RESULT
 
 
@@ -94,6 +95,7 @@ CHECK(Element(const String& name,
 		TEST_EQUAL(e2->getElectronegativity(), 5.0)
 		delete e2;
 	}
+	delete e1;
 RESULT
 
 Element e1;

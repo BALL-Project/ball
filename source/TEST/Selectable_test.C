@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Selectable_test.C,v 1.7 2002/12/12 11:34:44 oliver Exp $
+// $Id: Selectable_test.C,v 1.8 2003/05/23 10:26:05 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(Selectable, "$Id: Selectable_test.C,v 1.7 2002/12/12 11:34:44 oliver Exp $")
+START_TEST(Selectable, "$Id: Selectable_test.C,v 1.8 2003/05/23 10:26:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,6 +37,7 @@ CHECK(Selectable::Selectable(const Selectable& selectable, bool deep = true))
 	se.select();
 	Selectable* s2 = new Selectable(se) ;
 	TEST_EQUAL(s2->isSelected(), true)
+	delete s2;
 RESULT
 
 CHECK(Selectable::clear())
