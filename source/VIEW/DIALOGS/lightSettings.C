@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.15 2005/02/11 17:06:51 amoll Exp $
+// $Id: lightSettings.C,v 1.16 2005/02/11 17:28:12 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -241,8 +241,18 @@ void LightSettings::getValues_()
 
 	color_sample->setBackgroundColor(light.getColor().getQColor());
 
-	setPosition_(light.getPosition());
-	setDirection_(light.getDirection());
+	Vector3 pos = light.getPosition();
+	Vector3 dir = light.getDirection();
+
+	if (light.isRelativeToCamera())
+	{
+		Vector3 diff = dir - pos;
+		pos = stage_->calculateRelativeCoordinates(pos);
+		dir = stage_->calculateRelativeCoordinates(diff);
+	}
+
+	setPosition_(pos);
+	setDirection_(dir);
 
 	bool is_ambient = (light.getType() == LightSource::AMBIENT);
 	
