@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.9 2000/03/02 17:40:13 amoll Exp $
+// $Id: circle3.h,v 1.10 2000/03/02 18:07:42 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -170,13 +170,13 @@ namespace BALL
 		/**	Assign to two variables of type TVector3 and one {\tt T} value.
 				@param	point
 				@param	normal
-				@param	radius
+				@param	rhs the radius
 		*/
 		void get(TVector3<T>& point, TVector3<T>& normal, T& rhs) const
 		{
 			point = p;
 			normal = n;
-			radius = rhs;
+			rhs = radius;
 		}
 		//@}
 
@@ -289,7 +289,14 @@ namespace BALL
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
 	{
-			return (s >> circle.p >> circle.n  >> circle.radius);
+		  char c;
+			for(int i=0; i<7; i++)
+			{
+				s >> c;
+			}
+			s >> circle.p >> circle.n >> circle.radius;
+			s >> c;
+			return s;
 	}
 
 	/**	Output- Operator
@@ -299,8 +306,8 @@ namespace BALL
 	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
 	{
 			return (s << "CIRCLE(" << circle.p 
-								<< ", " << circle.n
-								<< ", " << circle.radius << ")");
+								<< " " << circle.n
+								<< " " << circle.radius << ")");
 	}
 	//@}
 
