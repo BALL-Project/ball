@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.13 2001/07/15 18:58:21 amoll Exp $
+// $Id: singularities.h,v 1.14 2001/07/15 21:03:05 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -164,7 +164,6 @@ namespace BALL
 									throw Exception::GeneralException(__FILE__,__LINE__,
 																										"SingularBreak",
 																										"reduced surface modified");
-									break;
 			}
 		}
 	}
