@@ -18,6 +18,7 @@ CPP_SOURCES=\
 	PDBFile.C\
 	resourceFile.C\
 	trajectoryFile.C\
+	TRRFile.C\
 	XYZFile.C
 
 include ../common.mak
