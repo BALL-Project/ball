@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.10 2000/07/02 23:48:03 amoll Exp $
+// $Id: exception.C,v 1.11 2000/07/17 13:45:48 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -164,13 +164,18 @@ namespace BALL
 			}
 		
 
+			InvalidFormat::InvalidFormat(const char* file, int line, const string& s)
+				:	GeneralException(file, line, "InvalidFormat", ""),
+					format_(s)
+			{
+				message_ = "problem converting " + s + " to a number.";
+				globalHandler.setMessage(message_);
+			}
+		
+
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")
 
 			DEF_EXCEPTION(InvalidRange, "the range of the operation was invalid")
-
-			DEF_EXCEPTION(InvalidFormat, "a conversion from a string to a numeric value failed")
-
-			DEF_EXCEPTION(IllegalSelfOperation, "this operation may not be performed with the same object as argument")
 
 			DEF_EXCEPTION(NullPointer, "a null pointer was specified")
 
