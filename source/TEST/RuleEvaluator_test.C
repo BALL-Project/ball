@@ -1,4 +1,4 @@
-// $Id: RuleEvaluator_test.C,v 1.1 2000/05/24 16:10:59 oliver Exp $
+// $Id: RuleEvaluator_test.C,v 1.2 2000/05/24 18:37:40 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(RuleEvaluator, "$Id: RuleEvaluator_test.C,v 1.1 2000/05/24 16:10:59 oliver Exp $")
+START_TEST(RuleEvaluator, "$Id: RuleEvaluator_test.C,v 1.2 2000/05/24 18:37:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -90,23 +90,14 @@ CHECK(RuleEvaluator::String operator () (const Atom& atom) const )
 	TEST_EQUAL(S.countAtoms(), 5)
 	
 	AtomIterator it = S.beginAtom();
-	STATUS("before")
 	TEST_EQUAL(eval.operator()(*it), "F-def")
-	STATUS("after")	
 	++it;
-	STATUS("before")
 	TEST_EQUAL(eval.operator()(*it), "CT")
-	STATUS("after")	
 	++it;
-	STATUS("before")
 	TEST_EQUAL(eval.operator()(*it), "")
-	STATUS("after")	
 	++it;
-	STATUS("before")
 	TEST_EQUAL(eval.operator()(*it), "")
-	STATUS("after")	
 	++it;
-	STATUS("before")
 	TEST_EQUAL(eval.operator()(*it), "")
 RESULT
 
