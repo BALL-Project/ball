@@ -1,8 +1,10 @@
-// $Id: bitVector.C,v 1.5 1999/12/19 17:13:44 oliver Exp $
+// $Id: bitVector.C,v 1.6 1999/12/28 18:24:34 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
 #include <algorithm>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -272,7 +274,7 @@ namespace BALL
 		return *((unsigned long *)bitset_);
 	}
 
-	void BitVector::xor(const BitVector& bit_vector)
+	void BitVector::bitwiseXor(const BitVector& bit_vector)
 	{
 		register BALL::Size block_size = block_size_;
 
@@ -303,7 +305,7 @@ namespace BALL
 	}
 
 
-	void BitVector::or(const BitVector& bit_vector)
+	void BitVector::bitwiseOr(const BitVector& bit_vector)
 	{
 		register BALL::Size block_size = block_size_;
 
@@ -334,7 +336,7 @@ namespace BALL
 	}
 
 
-	void BitVector::and(const BitVector& bit_vector)
+	void BitVector::bitwiseAnd(const BitVector& bit_vector)
 	{
 		register BALL::Size block_size = block_size_;
 
