@@ -7,6 +7,7 @@
 #include <BALL/KERNEL/selector.h>
 
 #include <qlineedit.h> 
+#include <qmessagebox.h> 
 
 namespace BALL
 {
@@ -65,6 +66,44 @@ void SelectorDialog::clearSelection()
 	if (mc == 0) return;
 	
 	mc->clearSelection();
+}
+
+
+void SelectorDialog::showHelp()
+{
+	QMessageBox::information( this, "molview",
+			String(
+			String("Possible predicates: \n")+
+			"true() \n" +
+			"false() \n" +
+			"selected() \n" +
+			"name(string) \n" +
+			"type(string) \n" +
+			"element(char) \n" +
+			"residue(string) \n" +
+			"residueID(int) \n" +
+ 			"protein() \n" +
+ 			"secondaryStruct() \n" +
+			"solvent() \n" +
+			"backbone() \n" +
+ 			"chain() \n" +
+ 			"nucleotide() \n" +
+			"inRing() \n" +
+			"doubleBonds() \n" +
+ 			"tripleBonds() \n" +
+ 			"aromaticBonds() \n" +
+ 			"numberOfBonds(int) \n" +
+			"connectedTo(char) \n" +
+			"sp3Hybridized() \n" +
+			"sp2Hybridized() \n" +
+			"spHybridized() \n" +
+			"charge() \n" +
+			"isAxial() \n" +
+			"is4C1() \n\n" +
+			"They can be connected with\n" +
+			"AND and OR\n"
+			).c_str(),
+			"&OK");
 }
 
 // NAMESPACE
