@@ -1,4 +1,4 @@
-// $Id: RegularExpression_test.C,v 1.8 2000/12/02 19:39:36 amoll Exp $
+// $Id: RegularExpression_test.C,v 1.9 2001/05/17 18:20:39 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.8 2000/12/02 19:39:36 amoll Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.9 2001/05/17 18:20:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ CHECK(RegularExpression::match(const Substring& text, Index from = 0, int execut
 RESULT
 
 CHECK(RegularExpression::match(const char* text, int execute_flags = 0) const )
-	char* s = "abbcbbd";
+	const char* s = "abbcbbd";
 	TEST_EQUAL(re2.match(s), true)
 RESULT
 
