@@ -1,7 +1,20 @@
-// $Id: glBackbone.C,v 1.4.4.1 2002/10/18 14:48:28 amoll Exp $
+// $Id: glBackbone.C,v 1.4.4.2 2002/12/03 19:31:02 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h>
+
+#ifdef BALL_COMPILER_MSVC
+#define APIENTRY    __stdcall
+#define CALLBACK __stdcall
+#define WINGDIAPI __declspec(dllimport)
+#endif
+
 #include <GL/gl.h>
+
+#ifdef BALL_COMPILER_MSVC
+#undef APIENTRY
+#undef CALLBACK
+#undef WINGDIAPI
+#endif
 
 
 namespace BALL

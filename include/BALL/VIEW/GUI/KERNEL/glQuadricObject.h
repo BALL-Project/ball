@@ -1,4 +1,4 @@
-// $Id: glQuadricObject.h,v 1.7.4.1 2002/11/05 15:38:55 amoll Exp $
+// $Id: glQuadricObject.h,v 1.7.4.2 2002/12/03 19:30:57 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
@@ -7,7 +7,19 @@
 #	include <BALL/common.h>
 #endif
 
+#ifdef BALL_COMPILER_MSVC
+#define APIENTRY    __stdcall
+#define CALLBACK __stdcall
+#define WINGDIAPI __declspec(dllimport)
+#endif
+
 #include <GL/glu.h>
+
+#ifdef BALL_COMPILER_MSVC
+#undef APIENTRY
+#undef CALLBACK
+#undef WINGDIAPI
+#endif
 
 namespace BALL
 {

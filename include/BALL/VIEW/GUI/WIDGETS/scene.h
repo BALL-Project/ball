@@ -1,16 +1,10 @@
-// $Id: scene.h,v 1.8.4.8 2002/12/03 10:08:49 oliver Exp $
+// $Id: scene.h,v 1.8.4.9 2002/12/03 19:31:02 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
-#endif
-
-#ifdef BALL_COMPILER_MSVC
-#define APIENTRY    __stdcall
-#define CALLBACK __stdcall
-#define WINGDIAPI __declspec(dllimport) 
 #endif
 
 #include <qgl.h>
