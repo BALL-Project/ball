@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.27 2004/02/27 23:29:29 amoll Exp $
+// $Id: molecularControl.h,v 1.28 2004/02/28 14:21:48 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -53,7 +53,7 @@ namespace BALL
 				/// Center camera on one Composite (done in MolecularProperites)
 				CAMERA__CENTER,
 				/// Show a dialog with the atom properties
-				ATOM__PROPERTIES,
+				COMPOSITE__PROPERTIES,
 				///
 				COUNT__ITEMS,
 				/// Show a dialog with the bond properties
@@ -61,11 +61,7 @@ namespace BALL
 				/// Collapse all QListViewItem
 				COLLAPSE_ALL,
 				/// Expand all QListViewItem
-				EXPAND_ALL,
-				/// Rename a Composite
-				RENAME,
-				/// Change the ID of a Residue
-				CHANGEID
+				EXPAND_ALL
 			};
 
 			Q_OBJECT
@@ -230,8 +226,8 @@ namespace BALL
 			/// Create a Representation with the DisplayProperties Dialog
 			void createRepresentation();
 
-			/// Atom properties dialog requested
-			void atomProperties();
+			/// Composite properties dialog requested
+			void compositeProperties();
 		
 			/// Bond properties dialog requested
 			void bondProperties();
@@ -308,12 +304,6 @@ namespace BALL
 
 			/// Expand all QListViewItem
 			void expandAll();
-
-			/// Rename a Composite
-			void rename();
-
-			/// Change the ID of a Residue
-			void changeID();
 
 			/// Apply the regular expression from the QLineEdit
 			void applySelector();

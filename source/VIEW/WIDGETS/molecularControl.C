@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.46 2004/02/28 14:11:00 amoll Exp $
+// $Id: molecularControl.C,v 1.47 2004/02/28 14:21:25 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -12,7 +12,6 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 #include <qmenubar.h>
-#include <qinputdialog.h>
 #include <qlineedit.h> 
 #include <qpushbutton.h> 
 #include <qmessagebox.h> 
@@ -1047,71 +1046,6 @@ void MolecularControl::countItems()
 	s+=String(ac.countBonds()) + " Bonds";
 	setStatusbarText(s);
 }
-
-
-void MolecularControl::rename()
-{
-	if (selected_.size() == 0) return;
-
-	String old_name;
-	Composite* c = *selected_.begin();
-	if (RTTI::isKindOf<AtomContainer>(*c))
-	{
-		old_name = ((AtomContainer*) c)->getName();
-	}
-	else if (RTTI::isKindOf<Atom>(*c))
-	{
-		old_name = ((Atom*)c)->getName();
-	}
-	else
-	{
-		return;
-	}
-
-	bool ok;
-	String result = QInputDialog::getText("Rename dialog", "Set a new name", QLineEdit::Normal, 
-																				old_name.c_str(), &ok, this).ascii();
-	if (!ok) return;
-
-	if (RTTI::isKindOf<AtomContainer>(*c))
-	{
-		((AtomContainer*)c)->setName(result);
-	}
-	else if (RTTI::isKindOf<Atom>(*c))
-	{
-		((Atom*)c)->setName(result);
-	}
-	
-	c->host(getInformationVisitor_());
-	QString text = getInformationVisitor_().getName().c_str();
-
-	context_item_->setText(0, text);
-	CompositeMessage* msg = new CompositeMessage(*c, CompositeMessage::CHANGED_COMPOSITE);
-	notify_(msg);
-}
-
-void MolecularControl::changeID()
-{
-	if (selected_.size() == 0) return;
-	Residue* r = (Residue*) *selected_.begin();
-
-	String id = r->getID();
-
-	bool ok;
-	id = QInputDialog::getText("Set new ID dialog", "Set a new ID", QLineEdit::Normal, 
-															id.c_str(), &ok, this).ascii();
-	if (!ok) return;
-
-	r->setID(id);
-
-	r->host(getInformationVisitor_());
-	QString text = getInformationVisitor_().getName().c_str();
-
-	context_item_->setText(0, text);
-	CompositeMessage* msg = new CompositeMessage(*r, CompositeMessage::CHANGED_COMPOSITE);
-	notify_(msg);
-}
-
 
 void MolecularControl::applySelector()
 {
