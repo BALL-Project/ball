@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.30.4.8 2002/11/29 01:06:48 amoll Exp $
+// $Id: mainframe.h,v 1.30.4.9 2002/12/11 14:05:27 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -50,6 +50,10 @@
 # include <BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h>
 #endif
 
+#ifndef BALL_VIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
+# include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
+#endif
+
 #include "DIALOGS/DlgAmberMinimization.h"
 
 class QWidget;
@@ -72,9 +76,6 @@ class Mainframe
 
 	enum MenuKey
 	{
-		MENU__OPEN_FILE_PDB,
-		MENU__OPEN_FILE_HIN,
-		MENU__OPEN_FILE_MOL2,
 		MENU__FILE_EXPORT_POVRAYFILE,
 		
 		MENU__EDIT_CUT,
@@ -107,8 +108,7 @@ class Mainframe
 	};
 
 
-	Mainframe
-		(QWidget* parent = 0, const char* name = 0);
+	Mainframe(QWidget* parent = 0, const char* name = 0);
 
 	virtual ~Mainframe()
 		throw();
@@ -150,6 +150,7 @@ class Mainframe
   ContourSurfaceDialog* surface_dialog_;
 	LabelProperties*	    label_properties_;
 	MolecularProperties*  molecular_properties_;
+	MolecularFileDialog*  file_dialog_;
 	Server*   						server_;
 
 	MoleculeGLObjectCollector		GL_object_collector_;
@@ -171,5 +172,3 @@ class Mainframe
 #		endif
 
 #endif // BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
-
-

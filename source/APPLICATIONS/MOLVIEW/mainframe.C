@@ -11,10 +11,7 @@
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 
-#include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
-#include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
-#include <BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h>
-#include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
+#include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/DATATYPE/contourSurface.h>
@@ -44,6 +41,7 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 		minimization_dialog_(0),
 		label_properties_(0),
 		molecular_properties_(0),
+		file_dialog_(0),
 		server_(0),
 		GL_object_collector_(),
 		fragment_db_(),
@@ -96,10 +94,8 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	label_properties_ = new LabelProperties(this);
 	CHECK_PTR(label_properties_);
 	
-	CHECK_PTR(new MolecularFileDialog(this));
-	CHECK_PTR(new OpenPDBFile(this));
-	CHECK_PTR(new OpenMOL2File(this));
-	CHECK_PTR(new OpenHINFile(this));
+	file_dialog_ = new MolecularFileDialog(this);
+	CHECK_PTR(file_dialog_);
 
 	molecular_properties_ = new MolecularProperties(this);
 	CHECK_PTR(molecular_properties_);
