@@ -1,9 +1,17 @@
-dnl    $Id: configure.ac,v 1.2 2002/12/23 13:51:56 oliver Exp $
+dnl    $Id: configure.ac,v 1.3 2003/01/21 10:50:11 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
+dnl
+dnl    Disable caching in MULTI_BUILD mode - just to be sure
+dnl
+if test "${MULTI_BUILD}" = "true" ; then
+	${RM} config.cache
+fi
+
+
 dnl 
-dnl    some initialization stuff...
+dnl    Some initialization stuff...
 dnl 
 AC_INIT(BALL, 1.0, ball-bugs@bioinf.uni-sb.de)
 AC_CONFIG_HEADER([
@@ -600,49 +608,33 @@ SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLV
 AC_SUBST(SUBDIRS)
 BINFMT_PATH=""
 
-dnl keep that for now for compatibility
-AC_OUTPUT([
- 	config.mak:config/config.mak.in 
-	common.mak:config/common.mak.in 
-])
-
-AC_OUTPUT([Makefile:config/Makefile.in])
- 
-dnl AC_PREFIX_DEFAULT(${BALL_PATH})
 AC_PREFIX_DEFAULT(`cd ..; pwd`)
 
 dnl
-dnl    copy config.h to the includes directory
-dnl    remove obsolete dependency file
+dnl   Check for multi-platform build.
 dnl
-
-dnl	
-dnl move that damned file only if it differs from the previous
-dnl version. Otherwise we have to rebuild _everything_ after each configure
-dnl
-if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
-	if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
-		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
-	fi
-else 
-	dnl
-	dnl  create the directory BALL/include/CONFIG
-	dnl  and move config.h to that directory
-	dnl
-	mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
-	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
-fi
-	
-
+CF_CHECK_MULTI_BUILD
 
 dnl
-dnl		make sure the dependencies and object lists are (re)built
+dnl 	Create output files. Move them to temporary location
+dnl		only, because some of them will require additional
+dnl		modification (in MULTI_BUILD mode).
 dnl
-${RM}  .Dependencies 2>/dev/null
-${RM}  lib*.objects 2>/dev/null
+AC_OUTPUT([
+ 	config.mak.tmp:config/config.mak.in 
+	common.mak.tmp:config/common.mak.in 
+	Makefile.tmp:config/Makefile.in
+])
+CF_MULTI_BUILD_SHADOW
+CF_MOVE_CONFIG_FILES
 
 dnl
-dnl Just give another helpful message and exit
+dnl		Make sure the dependencies and object lists are (re)built.
+dnl
+CF_CLEAR_DEP_FILES
+
+dnl
+dnl Just give another helpful message and exit.
 dnl
 
 AC_MSG_RESULT()
