@@ -130,11 +130,12 @@ void DlgLabelProperties::applyButtonClicked()
 		center /= number_of_objects;
 	}
 
-	center.x += 0.05;
-
 	// create Label and attach it to the first object in the selection
 	GLLabel* label = new GLLabel;
-	
+
+	label->setProperty(VIEW::GeometricObject::PROPERTY__OBJECT_STATIC);
+	label->setProperty(VIEW::GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+	label->setProperty(VIEW::GeometricObject::PROPERTY__OBJECT_ALWAYS_FRONT);
 	label->setText(label_edit_->text().ascii());
 	label->setColor(custom_color_);
 	label->setVertex(center);
