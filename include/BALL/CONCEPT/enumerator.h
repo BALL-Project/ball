@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.8 2000/12/19 12:50:48 amoll Exp $
+// $Id: enumerator.h,v 1.9 2001/02/05 17:13:36 amoll Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -26,8 +26,8 @@ namespace BALL
 
 	/** Enumerator Class.
 			The Enumerator class provides means for enumerating all possible
-			permutations of the variants given in a list (@see BAUSTELLE). Each
-			permutation thus can be denoted by an integer.
+			permutations of the variants given in a list (@see BAUSTELLE). 
+			Each permutation thus can be denoted by an integer.
 			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
 	*/
 	class EnumeratorIndex
@@ -38,11 +38,10 @@ namespace BALL
 		/** @name Nested Classes
 		 */
 		//@{
-		/** Exception for reporting incompatible EnumeratorIndex instances, i.
-		 * e. instances with different moduli. {\bf Definition:}
-		 * \URL{BALL/CONCEPT/enumerator.h}
-		 */
-		 
+		/** Exception for reporting incompatible EnumeratorIndex instances, 
+				i.e. instances with different moduli. {\bf Definition:}
+				\URL{BALL/CONCEPT/enumerator.h}
+		*/	 
 		class IncompatibleIndex
 			: public Exception::GeneralException
 		{
@@ -50,8 +49,8 @@ namespace BALL
 				IncompatibleIndex(const char* file, int line)
 					throw();
 		};
-		//@}
 
+		//@}
 		/** @name Constructors and Destructors
 		 */
 		//@{    
@@ -62,7 +61,7 @@ namespace BALL
 			throw();
 
 		/** Detailed Constructor
-		 *  @param variant_list the list of variants to be applied
+			  @param variant_list the list of variants to be applied
 		 */
 		template <typename Variant, typename VariantIterator>
 		EnumeratorIndex(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
@@ -89,9 +88,8 @@ namespace BALL
 		 */
 		~EnumeratorIndex()
 			throw();
-		//@}
 
-		
+		//@}
 		/** @name Accessors
 		 */
 		//@{
@@ -102,29 +100,28 @@ namespace BALL
 			throw();
 
 		/** increment an instance of EnumeratorIndex. Increment the least
-		 * significant component and apply any overflow to more signficant
-		 * components.
+			  significant component and apply any overflow to more signficant components.
 		 */
 		EnumeratorIndex& operator ++ ()
 			throw(Exception::IndexOverflow);
 
 		/** decrement an instance of EnumeratorIndex. Decrement the least
-		 * significant component and apply any underflow to more signficant
-		 * components.
+			  significant component and apply any underflow to more signficant components.
 		 */
 		EnumeratorIndex& operator -- ()
 			throw(Exception::IndexUnderflow);
+
 		/** Set an instance of EnumeratorIndex to the value corresponding to
-		 * the number {\tt index}.
-		 * @param index the number of the permutation to which the instance
-		 * should be set
+			  the number {\tt index}.
+			  @param index the number of the permutation to which the instance
+			  should be set
 		 */
 		void set(Position index)
 			throw();
 
 		/** Assign from a number. 
-		 * @param index the number to assign from
-		 * @see EnumeratorIndex::set
+				@param index the number to assign from
+			  @see EnumeratorIndex::set
 		 */
 		const EnumeratorIndex& operator = (Position index)
 			throw()
@@ -137,13 +134,13 @@ namespace BALL
 
 		private:
 		/* The EnumeratorIndex class is derived from vector and additionally
-		 * contains two vectors of the same size which hold the modulus and the
-		 * base for each cell. The values of the EnumeratorIndex vector itself
-		 * are interpreted as an inhomogenous number consisting of figures
-		 * that have different bases. The bases are the numbers of
-		 * possibilities for each variant in the list. Most significant
-		 * component is operator[](0), so incrementing starts with
-		 * operator[](size())
+       contains two vectors of the same size which hold the modulus and the
+       base for each cell. The values of the EnumeratorIndex vector itself
+       are interpreted as an inhomogenous number consisting of figures
+       that have different bases. The bases are the numbers of
+       possibilities for each variant in the list. Most significant
+       component is operator[](0), so incrementing starts with
+       operator[](size())
 		*/
 		std::vector<Size>		 modulus_;
 		std::vector<Size>		 base_multipliers_;
@@ -152,34 +149,35 @@ namespace BALL
 	/** @name Predicates for EnumeratorIndex class
 	 */
 	//@{
+
 	/** Equality of two instances of EnumeratorIndex.
-	 * @param x
-	 * @param y
-	 * @return true, if the instances are equal, false ow.
+			@param x
+			@param y
+			@return true, if the instances are equal, false ow.
 	 */
 	bool operator == (const EnumeratorIndex& x, const EnumeratorIndex& y)
 		throw(EnumeratorIndex::IncompatibleIndex);
 
 	/** Inequality of two instances of EnumeratorIndex.
-	 * @param x
-	 * @param y
-	 * @return true, if the instances are not equal, false ow.
+			@param x
+			@param y
+			@return true, if the instances are not equal, false ow.
 	 */
 	bool operator != (const EnumeratorIndex& x, const EnumeratorIndex& y)
 		throw(EnumeratorIndex::IncompatibleIndex);
 
 	/** Test whether instance {\tt x} is less than {\tt y}
-	 * @param x
-	 * @param y
-	 * @return true, if {\tt x} is less than {\tt y}
+			@param x
+			@param y
+			@return true, if {\tt x} is less than {\tt y}
 	 */
 	bool operator < (const EnumeratorIndex& x, const EnumeratorIndex& y)
 		throw(EnumeratorIndex::IncompatibleIndex);
 
 	/** Test whether instance {\tt x} is greater than {\tt y}
-	 * @param x
-	 * @param y
-	 * @return true, if {\tt x} is greater than {\tt y}
+			@param x
+			@param y
+			@return true, if {\tt x} is greater than {\tt y}
 	 */
 	bool operator > (const EnumeratorIndex& x, const EnumeratorIndex& y)
 		throw(EnumeratorIndex::IncompatibleIndex);
@@ -244,10 +242,10 @@ namespace BALL
 			ConstIterator;
 
 		//@}
-
 		/** @name Constructors and Destructors
 		*/
 		//@{
+
 		/** Default Constructor
 		*/
 		Enumerator()
@@ -258,8 +256,8 @@ namespace BALL
 		}
 		
 		/** Detailed Constructor
-		 * @param container a Container class to be mutated
-		 * @param mutator the function defining the mutations to be applied
+				@param container a Container class to be mutated
+				@param mutator the function defining the mutations to be applied
 		 */
 		Enumerator(Container& container, MutatorFunction mutator)
 			throw()
@@ -276,10 +274,10 @@ namespace BALL
 		}
 		
 		//@}
-
 		/** @name Accessors
 		 */
 		//@{
+
 		/** Add variants to the list of variants
 		 */
 		void addVariants(const VariantIterator& it, const VariantVector& variants)
@@ -297,7 +295,7 @@ namespace BALL
 		}
 
 		/** Count all variants.
-		 * @return the number of all possible variants
+       @return the number of all possible variants
 		 */
 		Size countVariants()
 			throw()
@@ -312,7 +310,7 @@ namespace BALL
 		}
 
 		/** Access the current content
-		 * @return a reference to the container class of this enumerator
+       @return a reference to the container class of this enumerator
 		 */
 		Container& getCurrent()
 			throw()
@@ -321,7 +319,7 @@ namespace BALL
 		}
 
 		/** Create a permuatation denoted by its number.
-		 * @param index the number of the permutation to be created
+		    @param index the number of the permutation to be created
 		 */
 		void createPermutation(const Position index)
 			throw()
@@ -332,8 +330,8 @@ namespace BALL
 		}
 
 		/** Create a permutation denoted by an instance of EnumeratorIndex.
-		 * @param index the instance of EnumeratorIndex that describes the
-		 * permutation to be created
+				@param index the instance of EnumeratorIndex that describes the
+				permutation to be created
 		 */
 		void createPermutation(const EnumeratorIndex& index)
 			throw(EnumeratorIndex::IncompatibleIndex)
