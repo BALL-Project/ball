@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.3 2000/09/13 06:53:25 oliver Exp $
+// $Id: regularData1D.h,v 1.4 2000/09/27 18:03:30 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -213,8 +213,8 @@ namespace BALL
 						&& (data_ == data.data_));
 	}
 	
-	BALL_INLINE
 	template <typename T>
+	BALL_INLINE
 	const T& TRegularData1D<T>::operator [] (Position index) const
 	{
 		if (index >= data_.size)
@@ -225,8 +225,8 @@ namespace BALL
 		return data[index];
 	}	
 	
-	BALL_INLINE
 	template <typename T>
+	BALL_INLINE
 	T& TRegularData1D<T>::operator [] (Position index)
 	{
 		if (index >= data_.size)
@@ -237,36 +237,36 @@ namespace BALL
 		return data[index];
 	}	
 
-	BALL_INLINE
 	template <typename T>
+	BALL_INLINE
 	Size TRegularData1D<T>::getSize() const
 	{
 		return data_.size();
 	}
 	
-	BALL_INLINE
 	template <typename T>
+	BALL_INLINE
 	double TRegularData1D<T>::getLower() const
 	{
 		return lower_;
 	}
 	
-	BALL_INLINE
 	template <typename T>
+	BALL_INLINE
 	double TRegularData1D<T>::getUpper() const
 	{
 		return upper_;
 	}
 
-	BALL_INLINE
 	template <typename T>
+	BALL_INLINE
 	void TRegularData1D<T>::setLower(double lower)
 	{
 		lower_ = lower;
 	}
 	
-	BALL_INLINE
 	template <typename T>
+	BALL_INLINE
 	void TRegularData1D<T>::setUpper(double lower)
 	{
 		upper_ = upper;

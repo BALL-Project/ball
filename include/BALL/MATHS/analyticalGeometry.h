@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.39 2000/09/10 21:59:46 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.40 2000/09/27 18:03:53 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -48,8 +48,8 @@ namespace BALL
 			@param	m pointer to matrix
 			@param	dim dimension of the matrix
 	*/
-	BALL_INLINE
 	template <typename T>
+	BALL_INLINE
 	T getDeterminant_(const T* m, Size dim)
 	{
 		T determinant = 0;
