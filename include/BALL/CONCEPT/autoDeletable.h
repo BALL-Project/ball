@@ -1,4 +1,4 @@
-// $Id: autoDeletable.h,v 1.5 2000/07/04 14:34:34 oliver Exp $
+// $Id: autoDeletable.h,v 1.6 2000/08/20 15:16:01 amoll Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -36,7 +36,7 @@ namespace BALL
 			the object has been created using the new operator and so it is safe to 
 			delete it automatically. If the adresses do not match, the object is either
 			part of an array or static and should not be deleted automatically.\\
-			The state of each obejct may be changed after it is constructed by a call
+			The state of each object may be changed after it is constructed by a call
 			to \Ref{setAutoDeletable}. This might be useful to protect certain instances
 			of objects, however usually this should not be neccessary.\\
 			{\bf Definition:} \URL{BALL/CONCEPT/autoDeletable.h}
@@ -83,7 +83,7 @@ namespace BALL
 	
 		/**	Mark the object as auto-deletable.
 				Objects can be marked as deletable or not deletable by this method.
-				Use this method to protect obejcts from automatic deletion.
+				Use this method to protect objects from automatic deletion.
 				You should never set static objects to autodeletable, as 
 				invoking {\bf delete} on a static object may result in a crash.
 		*/
