@@ -1,18 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.3 2003/08/27 08:59:28 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 
-
-#ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+# include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_COMMON_GLOBAL_H
-# include <BALL/VIEW/COMMON/global.h>
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 #include <qfiledialog.h>
@@ -33,7 +32,7 @@ namespace BALL
 		 */
 		class MolecularFileDialog
 			: public QWidget,
-				public VIEW::ModularWidget
+				public ModularWidget
 		{
 			Q_OBJECT
 			public:

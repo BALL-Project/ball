@@ -10,25 +10,18 @@
 #	include <BALL/FORMAT/INIFile.h>
 #endif
 
-#ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+# include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_MOLECULARMESSAGE_H
-# include <BALL/VIEW/KERNEL/molecularMessage.h>
+#ifndef BALL_VIEW_KERNEL_MESSAGE_H
+# include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOGS_LABELPROPERTIESDATA_H
-# include <BALL/VIEW/DIALOGS/labelPropertiesData.h>
-#endif
+#include <BALL/VIEW/UIC/labelPropertiesData.h>
 
 namespace BALL
 {
-	using VIEW::ModularWidget;
-	using VIEW::MainControl;
-	using VIEW::Message;
-	using VIEW::ColorRGBA;
-
 	namespace VIEW
 	{
 		/**	The LabelProperties class.
@@ -223,8 +216,8 @@ namespace BALL
 			ColorRGBA custom_color_;
 			List<Composite*> selection_;
 		};
-	} // namespace VIEW
 
+	} // namespace VIEW
 } // namespace BALL
 
 #endif // BALL_VIEW_DIALOGS_LABELPROPERTIES_H
