@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.C,v 1.2 2004/06/24 16:03:26 bender Exp $
+// $Id: UCK.C,v 1.3 2004/06/26 20:17:16 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/UCK.h>
 #include <BALL/STRUCTURE/md5.h>
+#include <BALL/COMMON/limits.h>
 
 #include <iostream>
 #include <fstream>

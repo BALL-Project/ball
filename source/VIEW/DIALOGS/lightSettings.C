@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.8 2004/06/26 08:53:59 oliver Exp $
+// $Id: lightSettings.C,v 1.9 2004/06/26 20:17:16 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -20,7 +20,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
 LightSettings::LightSettings( QWidget* parent,  const char* name, WFlags fl )
     : LightSettingsData( parent, name, fl )
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.3 2004/06/26 08:52:58 oliver Exp $
+// $Id: materialSettings.C,v 1.4 2004/06/26 20:17:16 oliver Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -114,12 +114,12 @@ namespace BALL
 			if (text.hasSuffix(".")) text += "0";
 				
 			label.setText(text.c_str());
-			material_values_[material_group->selectedId()][pos] = slider.value() / 10.0;
+			material_values_[material_group->id(material_group->selected())][pos] = slider.value() / 10.0;
 		}
 
 		void MaterialSettings::setValues_()
 		{
-			materialSelected(material_group->selectedId());
+			materialSelected(material_group->id(material_group->selected()));
 			shininess_slider->setValue((int)shininess_);
 			shininessChanged();
 			redChanged();

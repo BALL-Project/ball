@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.32 2004/02/25 11:22:40 oliver Exp $
+# $Id: Makefile,v 1.33 2004/06/26 20:17:15 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -95,4 +95,4 @@ clean:
 
 depend: sip  Makefile.inc .Dependencies
 
-include .Dependencies
+-include .Dependencies

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.sip,v 1.11 2004/02/25 12:04:41 oliver Exp $
+// $Id: vector3.sip,v 1.12 2004/06/26 20:17:16 oliver Exp $
 //
 
 class Vector3
@@ -52,12 +52,12 @@ class Vector3
   // ???? Vector3 operator - () const;
   Vector3& operator += (const Vector3& /vector/);
   Vector3& operator -= (const Vector3& /vector/);
-  Vector3& operator *= (float /scalar/);
+ //???? Vector3& operator *= (float /scalar/);
   Vector3& operator /= (float /lambda/) throw(DivisionByZero);
   // Vector3& operator %= (const Vector3& /vector/);
-  Vector3 operator * (float /scalar/);
+  // ???? Vector3 operator * (float /scalar/);
   Vector3 operator / (float /lambda/) throw(DivisionByZero);
-  float operator * (const Vector3& /vector/) const;
+  // ???? float operator * (const Vector3& /vector/) const;
   Vector3 operator % (const Vector3& /vector/) const;
   float getDistance(const Vector3& /vector/) const;
   float getSquareDistance(const Vector3& /vector/) const;
