@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.150 2004/12/03 00:22:27 amoll Exp $
+// $Id: mainControl.C,v 1.151 2004/12/06 15:01:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1536,7 +1536,7 @@ namespace BALL
 
 			#else
 				// prevent warning
-				thread != 0;
+				if (thread != 0) return true;
 			#endif
 
 			return true;
@@ -1690,7 +1690,9 @@ namespace BALL
 		bool MainControl::lockCompositesFor(ModularWidget* widget)
 			throw()
 		{
+#ifdef BALL_QT_HAS_THREADS
 			if (!composites_locked_mutex_.tryLock()) return false;
+#endif
 
 			locking_widget_ = widget;
 			composites_locked_ = true;
@@ -1702,8 +1704,10 @@ namespace BALL
 			throw()
 		{
 			if (locking_widget_ != widget) return false;
+#ifdef BALL_QT_HAS_THREADS
 			composites_locked_mutex_.unlock();
 			composites_locked_wait_condition_.wakeAll();
+#endif
 			composites_locked_ = false;
 			setBusyMode_(false);
 			return true;
