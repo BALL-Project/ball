@@ -11,13 +11,13 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 EXECUTABLES = \
 	AmberFF_test\
 	AnalyticalSES_test\
-  Angle_test\
+	Angle_test\
 	Atom_test\
 	AtomicContactEnergy_test\
 	BitVector_test\
 	Bond_test\
 	BaseFragment_test\
-  Box3_test\
+	Box3_test\
 	CharmmFF_test\
 	ClassTest_test\
 	Composite_test\
@@ -29,13 +29,13 @@ EXECUTABLES = \
 	HashSet_test\
 	KernelPredicate_test\
 	Limits_test\
-  Line3_test\
+	Line3_test\
 	List_test\
 	Matrix44_test\
 	NumericalSAS_test\
 	Options_test\
 	PDBFile_test\
-  Plane3_test\
+	Plane3_test\
 	PointGrid_test\
 	PoissonBoltzmann_test\
 	PropertyManager_test\
