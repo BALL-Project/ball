@@ -1,4 +1,4 @@
-// $Id: PiecewisePolynomial_test.C,v 1.2 2000/08/31 12:33:26 anker Exp $
+// $Id: PiecewisePolynomial_test.C,v 1.3 2000/09/22 09:32:01 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PiecewisePolynomial_test.C,v 1.2 2000/08/31 12:33:26 anker Exp $")
+START_TEST(class_name, "$Id: PiecewisePolynomial_test.C,v 1.3 2000/09/22 09:32:01 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ CHECK(PiecewisePolynomial::~PiecewisePolynomial())
 RESULT
 
 CHECK(PiecewisePolynomial::PiecewisePolynomial(const PiecewisePolynomial& function))
-	poly->set(4, intervals, coefs);
+	poly = new PiecewisePolynomial(4, intervals, coefs);
 	PiecewisePolynomial poly2(*poly);
 	TEST_EQUAL(poly2.getDegree(), poly->getDegree())
 	bool test = (poly2.getIntervals() == poly->getIntervals());
