@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.1 2000/04/25 15:17:02 hekl Exp $
+// $Id: surfaceModel.C,v 1.2 2000/05/04 17:17:19 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 
@@ -113,9 +113,18 @@ namespace BALL
 				// create mesh
 				// ...
 
-				mesh->setName("Surface");
+				// get info from the start composite
+				MolecularInformation molecular_information;
+				start_composite_->host(molecular_information);
 
-				start_composite_->appendChild(*mesh);
+
+				mesh->setName(String("Surface of ")
+											+ molecular_information.getTypeName() 
+											+ String(" (")
+											+ molecular_information.getName()
+											+ String(")"));
+
+				start_composite_->getRoot().appendChild(*mesh);
 			}
 
 			return true;
