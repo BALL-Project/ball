@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 	// fragment database. However the hydrogen positions 
 	// created in this way are only good estimates
 	Log << "adding hydrogens..." << endl;
-	bool res = S.apply(fragment_db.add_hydrogens);	
+	S.apply(fragment_db.add_hydrogens);	
 	Log << "added " << fragment_db.add_hydrogens.getNumberOfInsertedHydrogens() 
 			<< " hydrogen atoms" << endl;
 
