@@ -157,6 +157,7 @@ EXECUTABLES_SOLVATION = \
 	SolventDescriptor_test\
 	SolventParameter_test\
 	ClaverieParameter_test\
+	ReissCavFreeEnergyProcessor_test\
 	Pair6_12RDFIntegrator_test\
 	Pair6_12InteractionEnergyProcessor_test\
 	PairExpInteractionEnergyProcessor_test\
