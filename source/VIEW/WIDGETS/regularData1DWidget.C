@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.16 2004/06/10 21:02:40 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.17 2004/06/11 11:51:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
@@ -49,6 +49,8 @@ void RegularData1DWidget::createPlot()
 	float dif_min = min;
 	float old = min; //last point
 
+	if (dif_min == 0) dif_min = 1;
+
 	for (int i=0; i<(int)data_->size(); i++)
 	{
 		if ((*data_)[i] >= max) max = (*data_)[i];
@@ -82,19 +84,28 @@ void RegularData1DWidget::createPlot()
 	int y_old = height_+5 - (int)((((*data_)[0]-min)/dif_min)*5);
 	QCanvasLine *ql;
 
-	for (int i=1; i<(int)data_->size(); i++)
+	try
 	{
-		x_new = 5*(i+1);
-		y_new = height_+5 - (int)((((*data_)[i]-min)/dif_min)*5);
-		
-		ql = new QCanvasLine(&canvas_);
-		ql->setPen(diagram_color_);
-		ql->setPoints(x_old, y_old, x_new, y_new);
-		objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
-		ql->show();
+		for (int i=0; i<(int)data_->size(); i++)
+		{
+			x_new = 5*(i+1);
+			y_new = height_+5 - (int)(((data_->getData(i)-min)/dif_min)*5);
+			
+			ql = new QCanvasLine(&canvas_);
+			ql->setPen(diagram_color_);
+			ql->show();
+			ql->setPoints(x_old, y_old, x_new, y_new);
+			objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
 
-		x_old = x_new;
-		y_old = y_new;
+			x_old = x_new;
+			y_old = y_new;
+		}
+	}
+	catch(...)
+	{
+		setStatusbarText("Error: Point in dataset out of grid!");
+		Log.error() << "Error: Point in dataset out of grid!" << std::endl;
+		return;
 	}
 
 	//add the x-axis
