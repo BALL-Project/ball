@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.3 2004/07/26 21:54:01 amoll Exp $
+// $Id: molecularControl.sip,v 1.4 2004/07/26 21:58:21 amoll Exp $
 //
 
 class MolecularControl
@@ -27,6 +27,7 @@ class MolecularControl
   void createRepresentation();
   //void addComposite(Composite&, QString*);
   void applySelector();
+  void applySelector(const String&) throw();
   void bondProperties();
   void buildBonds();
   void buildContextMenu(Composite&) throw();
