@@ -262,6 +262,3 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
- 
-File_test: File_test.o ../SYSTEM/file.o
-	$(CXX) $(CXXFLAGS) File_test.o ../SYSTEM/file.o $(LDFLAGS) -o $@ $(LIBS)
