@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.10 2003/05/25 21:38:10 oliver Exp $
+// $Id: Directory_test.C,v 1.11 2003/07/02 12:06:13 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.10 2003/05/25 21:38:10 oliver Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.11 2003/07/02 12:06:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ using namespace BALL;
 String PS = FileSystem::PATH_SEPARATOR;
 Directory* dd;
 String test_dir;
-CHECK(prerequisites)
+CHECK([EXTRA]prerequisites)
 	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
 	test_dir = ptr;
 	free(ptr);
@@ -42,7 +42,7 @@ CHECK(prerequisites)
 	free(ptr);
 RESULT
 
-CHECK(Directory::Directory())
+CHECK(Directory())
 	dd = new Directory();
 	TEST_NOT_EQUAL(dd, 0)
 	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
@@ -51,12 +51,12 @@ CHECK(Directory::Directory())
 	TEST_EQUAL(dd->isCurrent(), true)
 RESULT
 
-CHECK(Directory::~Directory())
+CHECK(~Directory())
 	delete dd;
 RESULT
 
 
-CHECK(Directory::setCurrent(const String& path))
+CHECK(bool setCurrent(String directory_path))
 	Directory d;
 	bool result = d.setCurrent(test_dir);
 	TEST_EQUAL(result, true);
@@ -79,7 +79,7 @@ CHECK(Directory::setCurrent(const String& path))
 	TEST_EQUAL(path, test_dir + PS+ "dir_a")
 RESULT
 
-CHECK(Directory::Directory(const String& directory_path, bool set_current = false))
+CHECK(Directory(const String& directory_path, bool set_current = false))
 	::chdir(test_dir.c_str());
 	Directory d("dir_a");
 	TEST_EQUAL(d.isValid(), true)
@@ -106,27 +106,27 @@ CHECK(Directory::Directory(const String& directory_path, bool set_current = fals
 	TEST_EQUAL(d5.isValid(), false)
 RESULT
 
-CHECK(Directory::Directory(const Directory& directory))
+CHECK(Directory(const Directory& directory))
 
 	Directory d("dir_a"+PS);
 	Directory d1(d);
 	TEST_EQUAL(d1 == d, true)
 RESULT
 
-CHECK(Directory::clear())
+CHECK(void clear())
 
 	Directory d("dir_a"+PS);
 	d.clear();
 	TEST_EQUAL(d.getPath(), "")
 RESULT
 
-CHECK(Directory::destroy())
+CHECK(void destroy())
 	Directory d1("dir_a"+PS);
 
 	d1.destroy();
 RESULT
 
-CHECK(Directory::set(const String& directory_path, bool set_current = false))
+CHECK(bool set(const String& directory_path, bool set_current = false))
 	Directory d;
 	d.set("dir_a" + PS + "dir_c" + PS);
 	TEST_EQUAL(d.getPath(), test_dir + PS + "dir_a" + PS + "dir_c")
@@ -136,35 +136,35 @@ CHECK(Directory::set(const String& directory_path, bool set_current = false))
 	d.setCurrent(test_dir);
 RESULT
 
-CHECK(Directory::set(const Directory& directory))
+CHECK(void set(const Directory& directory))
 	Directory d("dir_a" + PS);
 	Directory d1;
 	d1.set(d);
 	TEST_EQUAL(d1.getPath(), test_dir + PS + "dir_a")
 RESULT
 
-CHECK(Directory::Directory& operator = (const Directory& directory))
+CHECK(Directory& operator = (const Directory& directory))
 	Directory d("dir_a" + PS);
 	Directory d1;
 	d1 = d;
 	TEST_EQUAL(d1.getPath(), test_dir + PS + "dir_a")	
 RESULT
 
-CHECK(Directory::getPath() const )
+CHECK(const String& getPath() const)
 	STATUS("Creating directory")
 	Directory d1("dir_a" + PS);
 	STATUS("Done.")
 	TEST_EQUAL(d1.getPath(), test_dir + PS + "dir_a")
 RESULT
 
-CHECK(Directory::get(Directory& directory) const )
+CHECK(void get(Directory& directory) const)
 	Directory d("dir_a" + PS);
 	Directory d1;
 	d.get(d1);
 	TEST_EQUAL(d1.getPath(), test_dir + PS + "dir_a")
 RESULT
 
-CHECK(Directory::create(String& path, mode_t mode = 0777))
+CHECK(bool create(String path, const mode_t& mode = 0777))
 	Directory d;
 	::chdir(test_dir.c_str());
 	Directory d1("dir_a" + PS + "dir_c"+ PS, true);
@@ -187,7 +187,7 @@ CHECK(Directory::create(String& path, mode_t mode = 0777))
 	d3.remove(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
 RESULT
 
-CHECK(Directory::getNextEntry(String& entry))
+CHECK(bool getNextEntry(String& entry))
 	::chdir(String(test_dir + PS + "dir_a" + PS + "dir_c").c_str());
 	Directory d1(".", true);
 	TEST_EQUAL(d1.isValid(), true)
@@ -215,7 +215,7 @@ RESULT
 
 
 
-CHECK(Directory::countItems() const)
+CHECK(Size countItems())
 	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
 	d0.create("test1");
 	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
@@ -226,12 +226,12 @@ CHECK(Directory::countItems() const)
 	TEST_EQUAL(d1.countItems(), 4)
 RESULT
 
-CHECK(Directory::countFiles() const)
+CHECK(Size countFiles())
 	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
 	TEST_EQUAL(d1.countFiles(), 0)
 RESULT
 
-CHECK(Directory::countDirectories() const )
+CHECK(Size countDirectories())
 	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
 	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
 	TEST_EQUAL(d1.countDirectories(), 4)d1.remove("test1");
@@ -243,7 +243,7 @@ RESULT
 
 
 
-CHECK(Directory::remove(String old_path))
+CHECK(bool remove(String old_path))
 	Directory d;
 	::chdir(test_dir.c_str());
 	Directory d1("dir_a" + PS + "dir_c" + PS, true);
@@ -256,7 +256,7 @@ CHECK(Directory::remove(String old_path))
 	d.setCurrent(test_dir);
 RESULT
 
-CHECK(Directory::rename(String old_path, String new_path))
+CHECK(bool rename(String old_path, String new_path))
 	Directory d;
 	Directory d1("dir_a" + PS + "dir_c", true);
 	TEST_EQUAL(d1.isValid(), true)
@@ -272,7 +272,7 @@ CHECK(Directory::rename(String old_path, String new_path))
 	d.setCurrent(test_dir);
 RESULT
 
-CHECK(Directory::renameTo(const String& new_path))
+CHECK(bool renameTo(String new_path))
 	Directory d;
 	Directory d1("dir_a" + PS + "dir_c");
 	bool result = d1.create("test1");
@@ -287,7 +287,7 @@ CHECK(Directory::renameTo(const String& new_path))
 	d.setCurrent(test_dir);
 RESULT
 
-CHECK(Directory::getFirstEntry(String& entry) const )
+CHECK(bool getFirstEntry(String& entry))
 	String s;
 	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
 
@@ -300,7 +300,7 @@ CHECK(Directory::getFirstEntry(String& entry) const )
 	d0.remove("test1");
 RESULT
 
-CHECK(Directory::find(const String& filename, String& filepath))
+CHECK(bool find(const String& filename, String& filepath))
 	Directory d1(test_dir + PS + "dir_a");
 	String s;
 	bool result = d1.find("dir_c", s);
@@ -314,13 +314,13 @@ CHECK(Directory::find(const String& filename, String& filepath))
 	TEST_EQUAL(result, false)
 RESULT
 
-CHECK(Directory::has(const String& filename, bool recursive = false) const )
+CHECK(bool has(const String& item))
 	Directory d1("dir_a" + PS + "dir_c"+ PS);
 	TEST_EQUAL(d1.has("a"), true)
 	TEST_EQUAL(d1.has("x"), false)
 RESULT
 
-CHECK(Directory::isCurrent() const )
+CHECK(bool isCurrent() const)
 	Directory d;
 	Directory d1("dir_a" + PS + "dir_c"+ PS);
 	TEST_EQUAL(d1.isCurrent(), false)
@@ -329,7 +329,7 @@ CHECK(Directory::isCurrent() const )
 	d.setCurrent(test_dir);
 RESULT
 
-CHECK(Directory::isEmpty() const )
+CHECK(bool isEmpty())
 	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c");
 	d1.create("xxx");
 	Directory d2(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "xxx");
@@ -338,7 +338,7 @@ CHECK(Directory::isEmpty() const )
 	TEST_EQUAL(d1.isEmpty(), false)
 RESULT
 
-CHECK(Directory::bool operator == (const Directory& directory) const )
+CHECK(bool operator == (const Directory& directory) const)
 	Directory d("data" + PS);
 	Directory d1(d);
 	TEST_EQUAL(d == d1, true)
@@ -346,13 +346,38 @@ CHECK(Directory::bool operator == (const Directory& directory) const )
 	TEST_EQUAL(d == d1, false)
 RESULT
 
-CHECK(Directory::bool operator != (const Directory& directory) const )
+CHECK(bool operator != (const Directory& directory) const)
 	Directory d("data" + PS);
 	Directory d1(d);
 	TEST_EQUAL(d != d1, false)
 	d1.set("dir_a" + PS + "dir_c" + PS);
 	TEST_EQUAL(d != d1, true)
 RESULT
+
+CHECK(bool isValid() const)
+	Directory d("this_directory_should_not_exist");
+	TEST_EQUAL(d.isValid(), false)
+	Directory a(test_dir + PS);
+	TEST_EQUAL(a.isValid(), true)
+RESULT
+
+CHECK(bool remove())
+	Directory d(test_dir + PS); 
+	TEST_EQUAL(d.create("dir_x"), true)
+	d.set(test_dir + PS + "dir_x");
+	TEST_EQUAL(d.isValid(), true)
+	TEST_EQUAL(d.remove(), true)
+	d.set("this_directory_should_not_exist");
+	TEST_EQUAL(d.remove(), false)
+RESULT
+
+CHECK(bool setCurrent())
+	Directory d(test_dir);
+	TEST_EQUAL(d.setCurrent(), true)
+	d.set("this_directory_should_not_exist");
+	TEST_EQUAL(d.setCurrent(), false)
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
