@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TextPersistenceManager_test.C,v 1.11 2004/02/18 09:56:41 oliver Exp $
+// $Id: TextPersistenceManager_test.C,v 1.12 2004/11/02 14:03:04 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,10 +10,11 @@
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/CONCEPT/composite.h>
+#include <BALL/FORMAT/PDBFile.h>
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.11 2004/02/18 09:56:41 oliver Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.12 2004/11/02 14:03:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -633,6 +634,28 @@ RESULT
 pm.checkStreamTrailer();
 pm.finalizeInputStream();
 infile.close();
+
+CHECK([EXTRA] full_test)
+	String filename;
+	PDBFile in("data/bpti.pdb");
+	System s;
+	in >> s;
+
+	NEW_TMP_FILE(filename);
+	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
+	TextPersistenceManager pm(os);
+	s >> pm;
+	os.close();
+
+	ifstream is(filename.c_str(), std::ios::in);
+	TextPersistenceManager pm2(is);
+	System* s2 = (System*) pm2.readObject();
+	is.close();
+
+	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
+	delete s2;
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
