@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.12 2003/08/25 17:07:06 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.13 2004/04/28 16:05:04 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -257,7 +257,7 @@ namespace BALL
 					{
 						// calculate g1
 
-						val = FresnoFF::calculateBaseFunction(distance,
+						val = ((FresnoFF*)getForceField())->base_function->calculate(distance,
 								h_bond_distance_lower_, h_bond_distance_upper_);
 
 						// calculate the angle of the hbond. It is necessary to find out
@@ -288,7 +288,7 @@ namespace BALL
 						// if angle is too large, skip the rest
 						if (angle <= h_bond_angle_upper_)
 						{
-							val *= FresnoFF::calculateBaseFunction(angle,
+							val *= ((FresnoFF*)getForceField())->base_function->calculate(angle,
 									h_bond_angle_lower_, h_bond_angle_upper_);
 							if (already_used_.has(hydrogen))
 							{
@@ -302,11 +302,27 @@ namespace BALL
 							}
 							// /PARANOIA
 
-							if (verbosity >= 90)
+							// Print all single energy cotributions
+							if (verbosity >= 0)
 							{
-								Log.info() << "HB: adding score of " << val 
-									<< "(distance " << distance
-									<< ", angle " << angle << ")"
+								Atom* donor = it->first->getBond(0)->getPartner(*it->first);
+								Log.info() << "HB: " << val << " " 
+									<< donor->getFullName() << "-"
+									<< it->first->getFullName();
+								if (it->first->getResidue() != 0)
+								{
+									Log.info() << "[" << it->first->getResidue()->getID()
+										<< "]";
+								}
+								Log.info() << "..."
+									<< it->second->getFullName();
+								if (it->second->getResidue() != 0)
+								{
+									Log.info() << "[" << it->second->getResidue()->getID()
+										<< "]";
+								}
+								Log.info() << " (delta d " << distance
+									<< ", delta phi " << angle << ")"
 									<< endl;
 							}
 							energy_ += val;

@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.11 2003/08/25 17:07:21 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.12 2004/04/28 16:05:33 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -190,13 +190,24 @@ namespace BALL
 			{
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
-				val = FresnoFF::calculateBaseFunction(distance, R1, R2);
-				if (verbosity >= 90)
+				val = ((FresnoFF*)getForceField())->base_function->calculate(distance, R1, R2);
+				if (verbosity >= 0)
 				{
-					Log.info() << "LIPO: adding score of " << val << ": "
-						<< atom1->getFullName() << "..." << atom2->getFullName()
-						<< " (distance " << distance << ", R1 " << R1 << ", R2 " 
-						<< R2 << ")" << endl;
+					Log.info() << "LI: " << val << " "
+						<< atom1->getFullName() << " " 
+						<< ((FresnoFF*)getForceField())->getFresnoTypeString(atom1);
+					if (atom1->getResidue() != 0)
+					{
+						Log.info() << "[" << atom1->getResidue()->getID() << "]";
+					}
+					Log.info() << "..." << atom2->getFullName() << " "
+						<< ((FresnoFF*)getForceField())->getFresnoTypeString(atom2);
+					if (atom2->getResidue() != 0)
+					{
+						Log.info() << "[" << atom2->getResidue()->getID() << "]";
+					}
+					Log.info() << " (d " << distance << ", R1 " << R1 
+						<< ", R2 " << R2 << ")" << endl;
 				}
 				
 				energy_ += val;
