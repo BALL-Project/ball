@@ -1,4 +1,4 @@
-// $Id: rules.h,v 1.1 2000/05/19 11:12:25 oliver Exp $
+// $Id: rules.h,v 1.2 2000/05/19 12:05:34 oliver Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULES_H
@@ -34,9 +34,12 @@ namespace BALL
 		/**	Type Definitions
 		*/
 		//@{
+		/** Type definition for a list containing rules.
+		*/
+		typedef std::list<std::pair<Expression, String> > RuleList;
 		/**	Type definition for a hashmap containing the lists of rules.
 		*/
-		typedef StringHashMap<std::list<std::pair<Expression, String> > > RuleMap;
+		typedef StringHashMap<RuleList> RuleMap;
 		//@}
 
 		/**	Constructors and Destructors
@@ -94,14 +97,34 @@ namespace BALL
 		void set(const RuleEvaluator& evaluator);
 		//@}
 
+		/**	@name Predicates
+		*/
+		//@{
+			
+		/**	Rule evaluation.
+				Evaluate all matching rules (in the correct order) and return
+				the corresponding value. If no rule matches, an empty string i
+				returned.
+		*/
+		String operator () (const Atom& atom) const;
+		//@}
+
 		/**	@name Debugging and Diagnostics
 		*/
 		//@{
+		/**	
+		*/
 		bool isValid() const;
-		void dump(std::ostream& s = std::cout) const;
+
+		/**	
+		*/
+		void dump(std::ostream& s = std::cout, Size indent_depth = 0) const;
 		//@}
 
 		protected:
+
+		/// parse the section with name predicate_ + ":" + symbol of file
+		void extractSection_(INIFile& file, const String& symbol);
 
 		/// The INI file section prefix
 		String		prefix_;
