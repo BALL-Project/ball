@@ -3,7 +3,6 @@
  		<node>Water</node>
 	</node>
 	<node>Atoms
-		<node>CA<value>Ca 0.0 0.0 0.0</value></node>
 		<node>O <value>O  15.118 9.944 8.582</value></node>
 		<node>1H<value>H  15.211 9.386 7.809</value></node>
 		<node>2H<value>H  14.173 9.992 8.730</value></node>
