@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.21 2000/08/29 15:50:38 oliver Exp $
+// $Id: composite.h,v 1.22 2000/08/29 20:00:14 amoll Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -1591,7 +1591,7 @@ namespace BALL
 		void select_(bool update_parent = true);
 		void deselect_(bool update_parent = true);
 
-		// priotected attributes
+		// private attributes
 		
 		Size 						number_of_children_;
 		Composite*			parent_;
@@ -1744,6 +1744,20 @@ namespace BALL
 	}
 
 	template <typename T>
+	bool Composite::applyPostorder(UnaryProcessor<T>& processor)
+	{
+		bool return_value = processor.start() && applyDescendantPostorderNostart_(processor);
+
+		T* t_ptr = dynamic_cast<T*>(this);
+		if (t_ptr != 0)
+		{
+			return_value &= (processor(*t_ptr) < Processor::BREAK) && processor.finish();
+		} 
+		
+		return return_value;
+	}
+
+	template <typename T>
   bool Composite::applyLevel(UnaryProcessor<T>& processor, long level)
   {
     return processor.start() && applyLevelNostart_(processor, level) && processor.finish();
@@ -1817,23 +1831,6 @@ namespace BALL
 	bool Composite::applyPreorder(UnaryProcessor<T>& processor)
 	{
 		return processor.start() && applyPreorderNostart_(processor) && processor.finish();
-	}
-
-	template <typename T>
-	bool Composite::applyPostorder(UnaryProcessor<T>& processor)
-	{
-		bool return_value = false;
-		if (processor.start() != false)
-		{
-			return_value = applyDescendantPostorderNostart_(processor);
-			T* t_ptr = dynamic_cast<T*>(this);
-			if (!return_value && (t_ptr != 0))
-			{
-				return_value = (processor(*t_ptr) < Processor::BREAK) && processor.finish();
-			} 
-		}
-		
-		return return_value;
 	}
 
 	template <typename T>
