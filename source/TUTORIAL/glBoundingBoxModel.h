@@ -1,8 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBoundingBoxModel.h,v 1.3 2004/02/19 10:50:19 oliver Exp $
-// molview tutorial example
+// $Id: glBoundingBoxModel.h,v 1.4 2004/04/16 11:49:30 amoll Exp $
+// BALLView tutorial example
 // ------------------------
 // create a processor that computes the bounding box of a molecular structure
 
