@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.29 2004/09/04 01:50:37 amoll Exp $
+// $Id: cartoonModel.C,v 1.30 2004/09/04 11:54:48 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/residue.h>
@@ -88,89 +89,67 @@ namespace BALL
 
 			createBackbone_();
 
-			/*
-			A: N6
-			C: N4
-		 	G: N1
-			T: O4
-			*/
-
 			Position nr_of_residues = ss.countResidues();
 			for (Position pos = 0; pos < nr_of_residues; pos++)
 			{
-				Atom* atom = 0;
+				Atom* base_atom = 0;
+				Atom* atom2 = 0;
+				Atom* atom3 = 0;
 				Residue* r = ss.getResidue(pos);
 				if (r->getName() == "A")
 				{
 					BALL_FOREACH_ATOM(*r, it)
 					{
-						if (it->getName() == "N6") 
-						{
-							atom = &*it;
-							break;
-						}
+						if 			(it->getName() == "P") 	base_atom = &*it;
+						else if (it->getName() == "C2") atom2 = &*it;
+						else if (it->getName() == "N6") atom3 = &*it;
 					}
 				}
 				else if (r->getName() == "C")
 				{
 					BALL_FOREACH_ATOM(*r, it)
 					{
-						if (it->getName() == "N4") 
-						{
-							atom = &*it;
-							break;
-						}
+						if 			(it->getName() == "P") 	base_atom = &*it;
+						else if (it->getName() == "N4") atom2 = &*it;
+						else if (it->getName() == "O2") atom3 = &*it;
 					}
 				}
 				else if (r->getName() == "G")
 				{
 					BALL_FOREACH_ATOM(*r, it)
 					{
-						if (it->getName() == "N1") 
-						{
-							atom = &*it;
-							break;
-						}
+						if 			(it->getName() == "P") 	base_atom = &*it;
+						else if (it->getName() == "O6") atom2 = &*it;
+						else if (it->getName() == "N2") atom3 = &*it;
 					}
 				}
 				else if (r->getName() == "T")
 				{
 					BALL_FOREACH_ATOM(*r, it)
 					{
-						if (it->getName() == "O4") 
-						{
-							atom = &*it;
-							break;
-						}
+						if 			(it->getName() == "P") 	base_atom = &*it;
+						else if (it->getName() == "C5M") atom2 = &*it;
+						else if (it->getName() == "O2") atom3 = &*it;
 					}
 				}
 
-				// did we find an atom to create the connection?
-				if (atom== 0) continue;
-
-
-				float distance = 999;
-				Vector3 nearest_position;
-				for (Position j = 0; j < 9; j++)
+				// did we find all needed atoms?
+				if (base_atom == 0 ||
+						atom2   	== 0 ||
+						atom3   	== 0)
 				{
-					Vector3 splinep = spline_[pos*9 + j];
-					float d = (splinep - atom->getPosition()).getSquareLength();
-					if (d < distance)
-					{
-						nearest_position = splinep;
-						distance = d;
-					}
+					continue;
 				}
 
-				// draw the connection
-				Tube* tube = new Tube;
-				if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
-				
-				tube->setRadius(tube_radius_);
-				tube->setVertex1(atom->getPosition());
-				tube->setVertex2(nearest_position);
-				tube->setComposite(atom);
-				geometric_objects_.push_back(tube);
+				Box* box = new Box(
+							atom2->getPosition(),
+							base_atom->getPosition() - atom2->getPosition(),
+							atom3->getPosition() - atom2->getPosition(),
+							0.3);
+				box->setComposite(r);
+
+				geometric_objects_.push_back(box);
+
 			}
 
 			have_start_point_ = false;
