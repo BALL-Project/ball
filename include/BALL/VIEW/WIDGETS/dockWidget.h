@@ -15,6 +15,9 @@ namespace BALL
 	namespace VIEW
 	{
 
+/** Class for ModularWidget, which can be docked in the MainApplication window.
+ 		Insert the widget with the main content as member with setGuest().
+*/
 class DockWidget
   : public QDockWindow,
 		public ModularWidget
@@ -27,31 +30,33 @@ class DockWidget
 
   DockWidget(QWidget* parent, const char* title = 0);
 
+	/** Insert a widget with the content of the window.
+	 */
 	void setGuest(QWidget& guest);
 	
 	/**	Initialize the widget.
+	 		@see ModularWidget::initializeWidget
 	*/
 	virtual void initializeWidget(MainControl& main_control)
 		throw();
 
 	/**	Remove the widget.
-			Reverse all actions performed in initializeWidget
-			(remove menu entries of this GenericControl).
-			This method will be called by MainGenericControl::aboutToExit.
-			\param main_GenericControl the MainTrajectoryControl object to be finalized with this TrajectoryControl
+	 		@see ModularWidget::finalizeWidget
 	*/
 	virtual void finalizeWidget(MainControl& main_control)
 		throw();
 
-	///
+	/** Load settings from an INIFile
+	 		@see ModularWidget::fetchPreferences
+	*/
 	virtual void fetchPreferences(INIFile& inifile)
 		throw();
 	
-	///
+	/** Write settings to an INIFile
+	 		@see ModularWidget::writePreferences
+	*/
 	virtual void writePreferences(INIFile& inifile)
 		throw();
-
-	QVBoxLayout* getLayout() { return layout_;}
 
 	//@}
 	/** @name Public slots 
@@ -64,8 +69,11 @@ class DockWidget
 	*/
 	virtual void switchShowWidget()
 		throw();
-
-	void mytest(bool asd);
+		
+	/** Set the MenuEntry in "WINDOWS" after closing a DockWindow with the Close button.
+	 		Connected to the signal visibilityChanged().
+	*/
+	void setWindowsMenuEntry(bool state);
 
 	//@} 
 
@@ -73,6 +81,7 @@ class DockWidget
 
 	protected:
 
+	QWidget* guest_;
   QLabel* caption_label_;
   QVBoxLayout* layout_;
 };
