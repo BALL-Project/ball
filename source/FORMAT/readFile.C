@@ -195,7 +195,7 @@ namespace BALL
 	{
 		if (condition == false)
 		{
-			Log.error() << msg;
+			Log.warn() << msg;
 			throw ReadFileError();
 		}
 	}
