@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.26 2004/02/13 14:49:08 amoll Exp $
+// $Id: representation.C,v 1.27 2004/02/13 16:27:43 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -279,7 +279,11 @@ namespace BALL
 			mc->setCompositesMuteable(true);
 			
  			if (mc->getPrimitiveManager().has(*this))
+			{
+				RepresentationMessage* msg = new RepresentationMessage(*this, RepresentationMessage::UPDATE);
+				mc->sendMessage(*msg);
 				return;
+			}
 
  			mc->getPrimitiveManager().insert(*this);
 
