@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.9 2000/11/28 17:31:25 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.10 2001/03/12 00:45:49 amoll Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -164,7 +164,8 @@ namespace BALL
 	}
 
 
-	bool Pair6_12InteractionEnergyProcessor::finish() throw()
+	bool Pair6_12InteractionEnergyProcessor::finish() 
+		throw(Exception::DivisionByZero)
 	{
 
 		// how loud will we cry?
@@ -455,6 +456,11 @@ namespace BALL
 								// have to flip the sign. Therefore we have to subtract the
 								// values via -= instead of summing them up.
 
+								if (r_k == 0)
+								{
+									throw Exception::DivisionByZero(__FILE__, __LINE__);
+								}
+
 								e_ij -= rho * rdf_integrator_(r_k)
 									* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
 
@@ -567,7 +573,7 @@ namespace BALL
 			vector< pair<Vector3, Surface> >& surface_map, 
 			const char* surface_file) throw()
 	{
-		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRÜFT!!!
+		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRšFT!!!
 		surface_map.clear();
 
 		String tag;
