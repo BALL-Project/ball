@@ -59,10 +59,10 @@ int main(int argc, char** argv)
 	// the data on the hydrogen positions stems from the
 	// fragment database. However the hydrogen positions 
 	// created in this way are only good estimates
-	Log << "adding hydrogens..." << endl;
+	Log << "creating missing atoms..." << endl;
 	S.apply(fragment_db.add_hydrogens);	
 	Log << "added " << fragment_db.add_hydrogens.getNumberOfInsertedAtoms() 
-			<< " hydrogen atoms" << endl;
+			<< " atoms" << endl;
 
 	// now we check whether the model we built is consistent
 	// The ResidueChecker checks for charges, bond lengths,
@@ -78,9 +78,9 @@ int main(int argc, char** argv)
 	// we then select all hydrogens (element(H))
 	// using a specialized processor (Selector)
 	S.deselect();
+	FF.setup(S);
 	Selector selector("element(H)");
 	S.apply(selector);
-	FF.setup(S);
 	
 	// just for curiosity: check how many atoms we are going
 	// to optimize
@@ -90,18 +90,15 @@ int main(int argc, char** argv)
 	// gradient algorithm to optimize the atom positions
 	ConjugateGradientMinimizer minimizer;
 
-	// we only want to optimize the positions of the selected
-	// atoms (hydrogens) - everything else remains in place!
-	FF.setUseSelection(true);
-
 	// calculate the total energy of the system
 	float initial_energy = FF.updateEnergy();
+	Log << "initial energy: " << initial_energy << " kJ/mol" << endl;
 
 	// initialize the minimizer and perform (up to)
 	// 1000 optimization steps
 	minimizer.setup(FF);
 	minimizer.setEnergyOutputFrequency(1);
-	minimizer.minimize(1000);
+	minimizer.minimize(20);
 
 	// calculate the terminal energy and print it
 	float terminal_energy = FF.getEnergy();
