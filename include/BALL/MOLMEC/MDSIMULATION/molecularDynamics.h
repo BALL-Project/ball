@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.13 2001/01/26 02:26:42 amoll Exp $
+// $Id: molecularDynamics.h,v 1.14 2001/03/02 00:35:00 amoll Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -26,7 +26,6 @@
 #ifndef BALL_MATHS_VECTOR3_H
 # include <BALL/MATHS/vector3.h>
 #endif
-
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 # include <BALL/DATATYPE/options.h>
@@ -60,15 +59,16 @@ namespace BALL
 {
 	/**	Molecular Dynamics base class.
 			This class is the base class for classical molecular dynamics
-			simulations. Actual MD classes must be derived from this class  
+			simulations. Actual MD classes must be derived from this class.
+			{\bf Definition:}\URL{BALL/MOLMEC/MDSIMULATION/molecularDynamics.h}\\
 	*/
 	class MolecularDynamics
 	{
 		public:
 		
 		/** Local classes for option names and default option values 
-		 *  for all MD(sub)classes 
-		 */
+				for all MD(sub)classes.
+		*/
 		struct Option
 		{
 
@@ -144,7 +144,6 @@ namespace BALL
 			 */
 			static const double REFERENCE_TEMPERATURE;
 
-
 			/** The parameter for heat bath coupling in picoseconds. Default = 0.2 ps
 			 */
 			static const double BATH_RELAXATION_TIME;
@@ -155,7 +154,7 @@ namespace BALL
 			static const double CURRENT_TIME;
 		};
 
-		/**  @name Constructors and Destructors  
+		/** @name Constructors and Destructors  
 		 */
 		//@{
 
@@ -169,7 +168,6 @@ namespace BALL
 		*/
 		MolecularDynamics(ForceField & myforcefield);
 
-
 		/**  Copy constructor
 		*/
 		MolecularDynamics(const MolecularDynamics & rhs, bool deep = true);
@@ -179,8 +177,6 @@ namespace BALL
 		virtual ~MolecularDynamics();
 
 		//@}
-
-
 		/**  @name Assignments 
 		*/
 		//@{
@@ -194,10 +190,8 @@ namespace BALL
 		void set(const MolecularDynamics& rhs);
 			
 		//@}
-
 		/**  @name Debugging and Diagnostics 
 		*/
-
 		//@{
 
 		/**  Has the molecular dynamics class been successfully set up?
@@ -205,7 +199,6 @@ namespace BALL
 		bool isValid() const;
 
 		//@}
-
 		/**  @name Setup methods 
 		*/
 		//@{
@@ -224,8 +217,6 @@ namespace BALL
 		virtual bool specificSetup();
 
 		//@}
-
-
 		/**  @name Accessors 
 		 */
 		//@{
@@ -332,8 +323,6 @@ namespace BALL
 		virtual void simulateTime(double simulation_time, bool restart = false);
 
 		//@}
-
-
 		/**  @name Public Attributes
 		*/
 		//@{
@@ -346,7 +335,7 @@ namespace BALL
 
 		protected:
 
-		/*_  @name Protected Methods 
+		/*_ @name Protected Methods 
 		*/
 		//@{
 
@@ -354,9 +343,9 @@ namespace BALL
 		    current temperature in the system
 		*/
 		void updateInstantaneousTemperature();
-		//@}
 
-		/*_  @name Protected Attributes
+		//@}
+		/*_ @name Protected Attributes
 		*/
 		//@{
 
@@ -364,7 +353,6 @@ namespace BALL
 		     molecular dynamics has been successful 
 		*/
 		bool valid_;
-
 
 		/*_  The force field the MD class is bound to          
 		*/
@@ -387,11 +375,11 @@ namespace BALL
 		*/
 		Size maximal_number_of_iterations_;
 
-		/*_  the time step in picoseconds                  
+		/*_  The time step in picoseconds                  
 		*/
 		double time_step_;
 
-		/*_  The reference temperature  in Kelvin 
+		/*_  The reference temperature in Kelvin 
 		*/
 		double reference_temperature_;
 
@@ -422,6 +410,7 @@ namespace BALL
 		/*_  The Snapshot Manager that is used for taking snapshots
 		*/
 		SnapShotManager *snapshot_manager_ptr_;
+
 		//@}
 	};	// end of class MolecularDynamics 
 
