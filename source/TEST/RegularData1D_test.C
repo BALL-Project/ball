@@ -1,4 +1,4 @@
-// $Id: RegularData1D_test.C,v 1.7 2001/07/10 17:50:11 amoll Exp $
+// $Id: RegularData1D_test.C,v 1.8 2001/07/10 17:58:30 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RegularData1D_test.C,v 1.7 2001/07/10 17:50:11 amoll Exp $")
+START_TEST(class_name, "$Id: RegularData1D_test.C,v 1.8 2001/07/10 17:58:30 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -63,6 +63,11 @@ CHECK(TRegularData1D(const VectorType& data, double lower, double upper))
 	TEST_REAL_EQUAL(rd3.getLowerBound(), 0.0)
 	TEST_REAL_EQUAL(rd3.getUpperBound(), 0.0)
 	TEST_EQUAL(rd3.getSize(), 4)
+
+	RegularData1D rd4(v, 2.0, 1.0);
+	TEST_REAL_EQUAL(rd4.getLowerBound(), 1.0)
+	TEST_REAL_EQUAL(rd4.getUpperBound(), 2.0)
+	TEST_EQUAL(rd4.getSize(), 4)
 RESULT
 
 
