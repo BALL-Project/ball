@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.8 2002/12/15 14:03:19 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.9 2002/12/17 16:08:44 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -23,6 +23,7 @@ namespace BALL
 		{
 			// register the widget with the MainControl
 			registerWidget(this);
+			hide();
 		}
 
 		MolecularFileDialog::~MolecularFileDialog()
