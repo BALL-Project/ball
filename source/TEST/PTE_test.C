@@ -1,4 +1,4 @@
-// $Id: PTE_test.C,v 1.2 2000/05/29 23:47:03 amoll Exp $
+// $Id: PTE_test.C,v 1.3 2000/05/31 00:59:50 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -6,7 +6,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.2 2000/05/29 23:47:03 amoll Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.3 2000/05/31 00:59:50 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -59,7 +59,6 @@ CHECK(Element(const String& name,
 		TEST_EQUAL(e1->getCovalentRadius(), 3.0)
 		TEST_EQUAL(e1->getVanDerWaalsRadius(), 4.0)
 		TEST_EQUAL(e1->getElectronegativity(), 5.0)
-		delete e1;
 	}
 	Element* e2 = new Element(*e1);
 	TEST_NOT_EQUAL(e2, 0)
