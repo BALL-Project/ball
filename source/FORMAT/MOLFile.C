@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.20 2004/04/23 17:40:06 amoll Exp $
+// $Id: MOLFile.C,v 1.21 2004/05/06 19:59:50 oliver Exp $
 //
 
 
@@ -279,7 +279,6 @@ namespace BALL
 				// assign the charge (overridden by M CHG lines below)
 				switch (atom_struct.charge)
 				{
-					case 0: break; // charge 0
 					case 1:	atom->setCharge(3.0); break;
 					case 2:	atom->setCharge(2.0); break;
 					case 3:	atom->setCharge(1.0); break;
@@ -287,9 +286,10 @@ namespace BALL
 					case 5: atom->setCharge(-1.0); break;
 					case 6: atom->setCharge(-2.0); break;
 					case 7: atom->setCharge(-3.0); break;
+
+					case 0: // charge 0 or
 					default:
-						throw Exception::ParseError(__FILE__, __LINE__, String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
-																				String("Illegal charge flag: ") + String(atom_struct.charge));
+						break;
 				}
 				
 				// store the remaining information as named properties
@@ -324,6 +324,12 @@ namespace BALL
 				
 				// create the bond
 				Bond* bond = atom_map[bond_struct.first_atom - 1]->createBond(*(atom_map[bond_struct.second_atom - 1]));
+				if (bond == 0)
+				{
+					throw Exception::ParseError(__FILE__, __LINE__, 
+							String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
+							String("Cannot create bond: ") + String(bond_struct.second_atom) + "-" + String(bond_struct.first_atom)) ;
+				}
 				
 				// translate the bond type
 				switch (bond_struct.type)
@@ -457,6 +463,7 @@ namespace BALL
 			// clean up: delete all atoms we just constructed
 			delete molecule;
 			molecule = 0;
+			
 			throw e;
 		}
 		
@@ -478,12 +485,19 @@ namespace BALL
 		}
 		catch (Exception::ParseError& e)
 		{
+			#ifdef DEBUG
+				Log.info() << "MOLFile::read(System&): caught exception while parsing line " << getLineNumber() << ": " << e << std::endl;
+			#endif
+
 			// clean up and rethrow
 			delete molecule;
 			throw e;
 		}
 
-		if (!molecule) return false;
+		if (molecule == 0) 
+		{
+			return false;
+		}
 
 		// add the molecule to the system
 		system.append(*molecule);
@@ -533,27 +547,29 @@ namespace BALL
 		counts.number_of_bonds = 0;
 		ok &= parseColumnFormat("%3d", 3, 3, (void*)&counts.number_of_bonds);
 
+		// We do not assume that anything except the number of atoms
+		// and bonds (first two fields) *has* to be specified.
+		Size len = getLine().size();
 		counts.number_of_atom_lists = 0;
-		ok &= parseColumnFormat("%3d", 6, 3, (void*)&counts.number_of_atom_lists);
-
-		Size chiral = 0;
-		ok &= parseColumnFormat("%3d", 12, 3, (void*)&chiral);
-		counts.chiral = (chiral == 0);
-		
+		counts.chiral = false;
 		counts.number_of_stext_entries = 0;
-		ok &= parseColumnFormat("%3d", 15, 3, (void*)&counts.number_of_stext_entries);
-
 		counts.number_of_reaction_components = 0;
-		parseColumnFormat("%3d", 18, 3, (void*)&counts.number_of_reaction_components);
-
 		counts.number_of_reactants = 0;
-		parseColumnFormat("%3d", 21, 3, (void*)&counts.number_of_reactants);
-
 		counts.number_of_products = 0;
-		parseColumnFormat("%3d", 24, 3, (void*)&counts.number_of_products);
-
 		counts.number_of_intermediates = 0;
-		parseColumnFormat("%3d", 27, 3, (void*)&counts.number_of_intermediates);
+
+		if (len >= 9) parseColumnFormat("%3d", 6, 3, (void*)&counts.number_of_atom_lists);
+		if (len >= 15)
+		{
+			Size chiral = 0;
+			parseColumnFormat("%3d", 12, 3, (void*)&chiral);
+			counts.chiral = (chiral == 0);
+		}		
+		if (len >= 18) parseColumnFormat("%3d", 15, 3, (void*)&counts.number_of_stext_entries);
+		if (len >= 21) parseColumnFormat("%3d", 18, 3, (void*)&counts.number_of_reaction_components);
+		if (len >= 24) parseColumnFormat("%3d", 21, 3, (void*)&counts.number_of_reactants);
+		if (len >= 27) parseColumnFormat("%3d", 24, 3, (void*)&counts.number_of_products);
+		if (len >= 30) parseColumnFormat("%3d", 27, 3, (void*)&counts.number_of_intermediates);
 
 		return ok;
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.C,v 1.8 2003/08/26 09:17:47 oliver Exp $
+// $Id: SDFile.C,v 1.9 2004/05/06 19:59:51 oliver Exp $
 //
 
 #include <BALL/FORMAT/SDFile.h>
@@ -54,7 +54,10 @@ namespace BALL
 		MoleculeConstIterator molecule = system.beginMolecule();
 		for (; +molecule; ++molecule)
 		{
-			if (!write(*molecule)) return false;
+			if (!write(*molecule)) 
+			{	
+				return false;
+			}
 		}
 
 		return true;
@@ -63,27 +66,53 @@ namespace BALL
 	bool SDFile::write(const Molecule& molecule)
 		throw(File::CannotWrite)
 	{
-		if (!MOLFile::write(molecule)) return false;
+		if (!MOLFile::write(molecule)) 
+		{
+			return false;
+		}
 		writePropertyBlock_(molecule);
+
 		return true;
 	}
 
 	Molecule* SDFile::read()
 		throw(Exception::ParseError)
 	{
-		// read the molecule (MOLFile = Header + CTAB + props)
-		Molecule* molecule = MOLFile::read();
-
-		// read the property block and assign these
-		// properties a s named properties to the molecule
-		if (molecule != 0)
+		Molecule* molecule = 0;
+		// Catch any parse errors. This allows to recover 
+		// and continue with the next molecule if something 
+		// broken was hidden in the middle of the file.
+		try
 		{
-			if (!read_atoms_)
+			// read the molecule (MOLFile = Header + CTAB + props)
+			molecule = MOLFile::read();
+
+			// read the property block and assign these
+			// properties a s named properties to the molecule
+			if (molecule != 0)
 			{
-				// destroy those atoms and bonds if they are not desired 
-				molecule->clear();
+				if (!read_atoms_)
+				{
+					// destroy those atoms and bonds if they are not desired 
+					molecule->clear();
+				}
+				readPropertyBlock_(*molecule);
 			}
-			readPropertyBlock_(*molecule);
+		}
+		catch (Exception::ParseError& e)
+		{
+			// Read through to the end of the MOLFile (marked by $$$)
+			while (readLine() && !getLine().hasPrefix("$$$$"));
+
+			// Keep the memory tidy.
+			if (molecule != 0)
+			{
+				molecule->destroy();
+				delete molecule;
+			}
+
+			// Rethrow the exception.
+			throw e;
 		}
 
 		return molecule;
