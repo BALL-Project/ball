@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.6 2000/08/29 10:35:17 oliver Exp $
+// $Id: list.h,v 1.7 2000/10/05 08:26:10 oliver Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -106,7 +106,7 @@ namespace BALL
 			return *this;
 		}
 			
-		/// Assigns the content of a list to another
+		/// Assign the content of a list to another
     void get(List& list, bool deep = true) const
 		{
 			list.set(*this, deep);
@@ -177,7 +177,7 @@ namespace BALL
 		*/
 		void host(Visitor<List<Value> >& visitor)
 		{
-			//BAUSTELLE
+			visitor.visit(*this);
 		}
   			
 		//@}
@@ -191,7 +191,27 @@ namespace BALL
 		*/
 		bool apply(UnaryProcessor<List<Value> >& processor)
 		{
-			// BAUSTELLE
+			if (processor.start() == false)
+			{
+				return false;
+			}
+
+			Processor::Result result;
+			Iterator it(begin());
+			for (; it != end(); ++it)
+			{
+				result = processor.operator () (*it);
+				if (result != Processor::CONTINUE)
+				{
+					break;
+				}
+			}
+			if (result == Processor::ABORT)
+			{
+				return false;
+			}
+
+			return processor.finish();
 		}
 		//@}
 
