@@ -16,22 +16,20 @@ Iin our case, we can open a file (e.g. a PDB file using the \class{PDBFile}
 class) that is not stored locally on a disc, but in the internet:
 
 \begin{lstlisting}{}
-	PDBFile infile("ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/4pti.brk");
+	PDBFile
+	infile("ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/pdb4pti.ent");
 	System S;
 	infile >> S;
 	infile.close();
 \end{lstlisting}
 
 \noindent
-This command retrieves the file {\tt 4pti.brk} from its location at the RCSB
+This command retrieves the file {\tt pdb4pti.ent} from its location at the RCSB
 site using the FTP protocol and reads the contents of that file into a
 \class{System}. The retrieval and the expansion of the URL into something
 meaningful is performed by the classes \class{TransformationManager} and
-\class{TCPTransfer}. The transformation manager also allows you to define 
-external programs that can act as a filter for reading files. For example,
-you might want to store compressed files (using GNU gzip) of the PDB
-instead of the uncompressed files. This is easily achieved by the simple
-method call 
+\class{TCPTransfer}. Any filename is first handed to the static instance of
+\class{TransformationManager} \class{File} possesses and all 
 
 \begin{lstlisting}{}
 	File::registerTransformation(".*\.gz", "exec:/usr/local/bin/gunzip -c %s");

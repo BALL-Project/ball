@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.29 2002/01/02 02:34:41 oliver Exp $
+// $Id: File_test.C,v 1.30 2002/01/03 01:24:42 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,14 +7,16 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(File, "$Id: File_test.C,v 1.29 2002/01/02 02:34:41 oliver Exp $")
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-
 using namespace BALL;
 using namespace std;
 	
+#include "networkTest.h"
+
+START_TEST(File, "$Id: File_test.C,v 1.30 2002/01/03 01:24:42 oliver Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
 File* f1;
 
 CHECK(File())
@@ -375,7 +377,10 @@ CHECK(isClosed())
 	TEST_EQUAL(f2.isClosed(), true)	
 RESULT
 
-CHECK(TCPTransfer)
+CHECK(TCPTransfer/1)
+	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
+	STATUS("network status of www.mpi-sb.mpg.de: " << (network ? "up" : "down"))
+	ABORT_IF(!network)
 	File f("http://www.mpi-sb.mpg.de/BALL/test/http_test.txt");
 	String filename;
 	NEW_TMP_FILE(filename)
@@ -384,29 +389,86 @@ CHECK(TCPTransfer)
 RESULT
 
 CHECK(TCPTransfer/2)
-	File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/ftp_test.txt");
+	// just repeat test to make sure we didn't mess up ports or stuff...
+	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
+	STATUS("network status of www.mpi-sb.mpg.de: " << (network ? "up" : "down"))
+	ABORT_IF(!network)
+	File f("http://www.mpi-sb.mpg.de/BALL/test/http_test.txt");
+	String filename;
+	NEW_TMP_FILE(filename)
+	f.copyTo(filename);
+	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
+RESULT
+
+CHECK(TCPTransfer/3)
+	// just repeat test to make sure we didn't mess up ports or stuff...
+	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
+	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
+	ABORT_IF(!network)
+	File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
 RESULT	
 
-CHECK(TCPTransfer/3)
-	File::registerTransformation("ftp_test://", "ftp://ftp.mpi-sb.mpg.de/pub/outgoing/%b.txt");
-	File f("ftp_test://ftp_test");
+CHECK(TCPTransfer/4)
+	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
+	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
+	ABORT_IF(!network)
+	File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
-RESULT
+RESULT	
 
-CHECK(TCPTransfer/4)
-	File::registerTransformation("http_test://", "http://www.mpi-sb.mpg.de/BALL/test/%b.txt");
-	File f("http_test://http_test");
+CHECK(TCPTransfer/5)
+	// just repeat test to make sure that FTP transfers don't upset HTTP transfers
+	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
+	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
+	ABORT_IF(!network)
+	File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
+	String filename;
+	NEW_TMP_FILE(filename)
+	f.copyTo(filename);
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+RESULT	
+
+CHECK(TCPTransfer/6)
+	// ... and the other way round
+	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
+	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
+	ABORT_IF(!network)
+	File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
+	String filename;
+	NEW_TMP_FILE(filename)
+	f.copyTo(filename);
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+RESULT	
+
+CHECK(TCPTransfer/7)
+	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
+	STATUS("network status of www.mpi-sb.mpg.de: " << (network ? "up" : "down"))
+	ABORT_IF(!network)
+	File::registerTransformation("BALLhttp://", "http://www.mpi-sb.mpg.de/BALL/test/%b.txt");
+	File f("BALLhttp://http_test");
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
 	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
+RESULT
+
+CHECK(TCPTransfer/8)
+	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
+	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
+	ABORT_IF(!network)
+	File::registerTransformation("BALLftp://", "ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/%b.txt");
+	File f("BALLftp://ftp_test");
+	String filename;
+	NEW_TMP_FILE(filename)
+	f.copyTo(filename);
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
 RESULT
 
 /////////////////////////////////////////////////////////////

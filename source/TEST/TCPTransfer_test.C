@@ -1,100 +1,27 @@
-// $Id: TCPTransfer_test.C,v 1.10 2001/12/30 13:29:02 sturm Exp $
+// $Id: TCPTransfer_test.C,v 1.11 2002/01/03 01:24:42 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
+
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/file.h>
+
 ///////////////////////////
-
-#include <sys/socket.h>		// socket
-#include <netdb.h>				// gethostbyname
-#include <netinet/in.h> 	// sockaddr_in
-#include <unistd.h>  			// close
-#include <iostream.h> 		// cout, endl
-
-#if defined(__hpux__) || defined(__linux__)
-# include <sys/ioctl.h>		//ioctl, FIONBIO
-#else
-# include <sys/filio.h>		//ioctl, FIONBIO
-#endif
 
 using namespace BALL;
 using namespace std;
 
-//test if networking is available
-bool testNetwork()
-{
-	typedef int Socket;
-	Socket socket_;
-	//first we will test if we get http access to the ZBI
-	struct hostent* ht = gethostbyname("www.zbi-saar.de");
-	if (ht == NULL)
-	{
-		return 0;
-	}  
+// include a helper class testing for network availability
+// (or more precisely: the ability to perform HTTP or FTP transfers)
 
-	socket_ = socket(AF_INET, SOCK_STREAM, 0); 
-	if (socket_ == -1)
-	{
-		return 0;
-	}  
+#include "networkTest.h"
 
-	struct sockaddr_in host;  
-	host.sin_family = AF_INET;
-	host.sin_port	  = htons(80);
-	host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
-	
-	if(connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
-	{
-		close(socket_);
-		return 0;
-	}
-	close(socket_);
-
-	// now testing if we get FTP access to the MPI
-	ht = gethostbyname("ftp.mpi-sb.mpg.de");
-	if (ht == NULL)
-	{
-		return 0;
-	}  
-
-	socket_ = socket(AF_INET, SOCK_STREAM, 0); 
-	if (socket_ == -1)
-	{
-		socket_ = 0;
-		return 0;
-	}  
-
-	host.sin_family = AF_INET;
-	host.sin_port	  = htons(21);
-	host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
-	
-	if(connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
-	{
-		close(socket_);
-		return 0;
-	}
-	close(socket_);
-
-	return true;
-}
-
-
-
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.10 2001/12/30 13:29:02 sturm Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.11 2002/01/03 01:24:42 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-
-bool network = false;
-CHECK(network)
-	network = testNetwork();
-	// if no network-connection available, stop test
-	ABORT_IF(!network)
-RESULT	
-
 
 TCPTransfer* tcp_ptr;
 CHECK(cstr)
@@ -108,12 +35,12 @@ CHECK(~TCPTransfer_test)
 RESULT
 
 CHECK(set(ofstream& file, const String& address))
-	ABORT_IF(!network)
+	ABORT_IF(!NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP))
 	TCPTransfer tcp_t;
 	ofstream out;
-	tcp_t.set(out, "http://postino.mpi-sb.mpg.de/index.html");
-	TEST_EQUAL(tcp_t.getHostAddress(), "postino.mpi-sb.mpg.de")
-	TEST_EQUAL(tcp_t.getFileAddress(), "/index.html")
+	tcp_t.set(out, "http://www.mpi-sb.mpg.de/BALL/test/http_test.txt");
+	TEST_EQUAL(tcp_t.getHostAddress(), "www.mpi-sb.mpg.de")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/BALL/test/http_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
 	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 0)
@@ -122,29 +49,31 @@ CHECK(set(ofstream& file, const String& address))
 	TEST_EQUAL(tcp_t.getStream(), &out)
 RESULT
 
-CHECK(http)
-	ABORT_IF(!network)
+CHECK(http/no login)
+	ABORT_IF(!NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP))
 	String filename;
 	File::createTemporaryFilename(filename);
-	ofstream out(filename.c_str(), ::std::ios::out);
+	ofstream out(filename.c_str(), std::ios::out);
 	
-	TCPTransfer tcp_t(out ,"http://www.zbi.uni-saarland.de/zbi/BALL/test/TCPTransferTest.txt" , false);
-	TEST_EQUAL(tcp_t.getHostAddress(), "www.zbi.uni-saarland.de")
-	TEST_EQUAL(tcp_t.getFileAddress(), "/zbi/BALL/test/TCPTransferTest.txt")
+	TCPTransfer tcp_t(out ,"http://www.mpi-sb.mpg.de/BALL/test/http_test.txt" , false);
+	TEST_EQUAL(tcp_t.getHostAddress(), "www.mpi-sb.mpg.de")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/BALL/test/http_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
 	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
-	TEST_EQUAL(tcp_t.getReceivedBytes(), 3665)
+	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
 	TEST_EQUAL(tcp_t.getLogin(), "")
 	TEST_EQUAL(tcp_t.getPassword(), "")
 	out.close();
 	
-	File f(filename);
-	TEST_EQUAL(f.getSize(), 3665)
-	f.close();
+	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
+RESULT
 
+CHECK(http/login)
+	ABORT_IF(!NetworkTest::test("www.www.mpi-sb.mpg.de", NetworkTest::HTTP))
+	String filename;
 	File::createTemporaryFilename(filename);
-	ofstream out2(filename.c_str(), ::std::ios::out);
-	TCPTransfer tcp_t2(out2 ,"http://BALL:test@www.mpi-sb.mpg.de/BALL/INTERNAL/internal.html", true);
+	ofstream out(filename.c_str(), std::ios::out);
+	TCPTransfer tcp_t2(out ,"http://BALL:test@www.mpi-sb.mpg.de/BALL/INTERNAL/internal.html", true);
 	TEST_EQUAL(tcp_t2.getHostAddress(), "www.mpi-sb.mpg.de")
 	TEST_EQUAL(tcp_t2.getFileAddress(), "/BALL/INTERNAL/internal.html")
 	TEST_EQUAL(tcp_t2.getPort(), 80)
@@ -153,28 +82,26 @@ CHECK(http)
 	//TEST_EQUAL(tcp_t2.getReceivedBytes(), 11908)
 	TEST_EQUAL(tcp_t2.getLogin(), "BALL")
 	TEST_EQUAL(tcp_t2.getPassword(), "test")
-	out2.close();
+	out.close();
 RESULT
 
 CHECK(ftp)
-	ABORT_IF(!network)
+	ABORT_IF(!NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP))
   String filename;
 	File::createTemporaryFilename(filename);
-	ofstream out(filename.c_str(), ::std::ios::out);
-	TCPTransfer tcp_t(out, "ftp://ftp.vim.org/pub/vim/pc/vim60w32.zip");
-	TEST_EQUAL(tcp_t.getHostAddress(), "ftp.vim.org")
-	TEST_EQUAL(tcp_t.getFileAddress(), "/pub/vim/pc/vim60w32.zip")
+	ofstream out(filename.c_str(), std::ios::out);
+	TCPTransfer tcp_t(out, "ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
+	TEST_EQUAL(tcp_t.getHostAddress(), "ftp.mpi-sb.mpg.de")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/pub/outgoing/BALL/ftp_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 21)
 	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
-	TEST_EQUAL(tcp_t.getReceivedBytes(), 591521)
+	TEST_EQUAL(tcp_t.getReceivedBytes(), 2312)
 	TEST_EQUAL(tcp_t.getLogin(), "")
 	TEST_EQUAL(tcp_t.getPassword(), "")
 	TEST_EQUAL(tcp_t.getStream(), &out)
 	out.close();
 
-	File f(filename);
-	TEST_EQUAL(f.getSize(), 591521)
-	f.close();
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
 RESULT
 
 /////////////////////////////////////////////////////////////
