@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.62 2004/11/10 15:41:37 amoll Exp $
+// $Id: mainControl.h,v 1.63 2004/11/10 16:07:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -48,6 +48,10 @@
 #endif
 
 #include <qmainwindow.h>
+#include <qapplication.h>
+#include <qlabel.h>			 // statusbar
+#include <qmenubar.h>    // menus
+
 
 class QLabel;
 

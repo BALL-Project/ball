@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.126 2004/11/10 15:42:46 amoll Exp $
+// $Id: mainControl.C,v 1.127 2004/11/10 16:08:02 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -31,11 +31,8 @@
 #	include <BALL/VIEW/KERNEL/threads.h>
 #endif
 
-#include <qapplication.h>
-#include <qmenubar.h>    // menus
 #include <qpopupmenu.h>	 // menus
 #include <qstatusbar.h>  // statusbar
-#include <qlabel.h>			 // statusbar
 #include <qtooltip.h>
 #include <qpushbutton.h> // needed for preferences
 #include <qcursor.h>     // wait cursor
