@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.105 2004/07/14 16:56:20 amoll Exp $
+// $Id: scene.C,v 1.106 2004/07/14 18:05:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -51,7 +51,7 @@ namespace BALL
 		#define  ROTATE_FACTOR    22
 		#define  TRANSLATE_FACTOR 10
 
-	  QGLFormat Scene::gl_format_(QGL::DepthBuffer | QGL::StereoBuffers);
+	  QGLFormat Scene::gl_format_(QGL::DepthBuffer | QGL::StereoBuffers | QGL::DoubleBuffer);
 
 		Scene::Scene()
 			throw()
@@ -165,9 +165,9 @@ namespace BALL
 
 		bool Scene::isValid() const
 			throw()
-			{
-				return (getParent() != 0 && system_origin_.isValid());
-			}
+		{
+			return (getParent() != 0);
+		}
 
 		void Scene::dump(std::ostream& s, Size depth) const
 			throw()
