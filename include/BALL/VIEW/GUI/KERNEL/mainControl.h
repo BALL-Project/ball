@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.20.4.4 2002/12/02 20:56:11 amoll Exp $
+// $Id: mainControl.h,v 1.20.4.5 2002/12/03 15:54:13 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -45,6 +45,10 @@
 
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
+#endif
+
+#ifndef BALL_KERNEL_SYSTEM_H
+# include <BALL/KERNEL/system.h>
 #endif
 
 #include <qobject.h>
@@ -808,7 +812,7 @@ namespace BALL
 
 			/** Return true if exact one system is selected and nothing else
 			 */
-			bool isSystemSelected()
+			System* getSelectedSystem()
 				throw();
 
 			/** Insert a single Composite to the selection or removes it.
