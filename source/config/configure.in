@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.97 2000/06/27 13:27:23 oliver Exp $
+dnl    $Id: configure.in,v 1.98 2000/07/13 15:44:23 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2553,8 +2553,9 @@ AC_SUBST(LIBBALLVIEW)					dnl static library name
 
 
 dnl    	define the standard installation path
+dnl     and the binary format string
 AC_DEFINE_UNQUOTED(BALL_PATH, "${BALL_PATH}")
-
+AC_DEFINE_UNQUOTED(BALL_BINFMT, "${BINFMT}")
 
 dnl			define BALL_NULL_TEMPLATE_ARGS
 AC_DEFINE_UNQUOTED(BALL_NULL_TEMPLATE_ARGS, ${BALL_NULL_TEMPLATE_ARGS})

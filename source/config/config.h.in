@@ -37,6 +37,8 @@
 
 // the path to the directory where BALL is installed
 #define BALL_PATH "BALL"
+// the string describing the binary format
+#define BALL_BINFMT "(unknown)"
 
 // used in COMMON/namespace.h to cause the inclusion of COMMON/memory.h
 #undef BALL_LOG_MEMORY

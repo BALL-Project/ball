@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.106 2000/06/27 13:27:28 oliver Exp $
+#  $Id: configure,v 1.107 2000/07/13 15:44:27 oliver Exp $
 
 
 ##################################################
@@ -6500,6 +6500,9 @@ cat >> confdefs.h <<EOF
 #define BALL_PATH "${BALL_PATH}"
 EOF
 
+cat >> confdefs.h <<EOF
+#define BALL_BINFMT "${BINFMT}"
+EOF
 
 
 cat >> confdefs.h <<EOF
