@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>439</width>
-            <height>276</height>
+            <height>279</height>
         </rect>
     </property>
     <property name="maximumSize">
@@ -19,7 +19,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>Form1</string>
+        <string>LightSettings</string>
     </property>
     <widget class="QLabel">
         <property name="name">

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>StageSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,11 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>435</width>
-            <height>277</height>
+            <height>280</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Form1</string>
+        <string>StageSettings</string>
     </property>
     <widget class="QFrame">
         <property name="name">
