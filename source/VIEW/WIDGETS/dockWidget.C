@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.21 2004/07/04 15:28:36 amoll Exp $
+// $Id: dockWidget.C,v 1.22 2004/07/26 11:27:21 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -94,41 +94,25 @@ namespace BALL
 			throw()
 		{
 			ModularWidget::writePreferences(inifile);
-
-			inifile.insertValue("WINDOWS", getIdentifier() + "::docked", String(area() != 0));
 		}
 
 		void DockWidget::fetchPreferences(INIFile & inifile)
 			throw()
 		{
 			ModularWidget::fetchPreferences(inifile);
-			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::height"))
+
+			// if the INIFile does not have the information to restore the state of the dockwidgets,
+			// make only the default widgets visible
+			if (!inifile.hasEntry("WINDOWS", "Main::dockwidgets") &&
+				  !default_visible_)
 			{
-				Index width = inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt();
-				Index height = inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt();
-
-				if (guest_)
-				{
-					guest_->resize(width, height);
-				}
+				switchShowWidget();
 			}
 
-			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
-			{	
-				if (!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
-				{
-					switchShowWidget();
-				}
-			}
-			else 
+			if (!BALL_VIEW_DOCKWINDOWS_SHOW_LABELS)
 			{
-				if (!default_visible_)
-				{
-					switchShowWidget();
-				}
+				caption_label_->hide();
 			}
-
-			if (!BALL_VIEW_DOCKWINDOWS_SHOW_LABELS) caption_label_->hide();
 		}
 
 		void DockWidget::switchShowWidget()
