@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.11 2000/05/16 15:17:42 amoll Exp $
+// $Id: system.h,v 1.12 2000/05/22 17:41:11 anker Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -124,7 +124,7 @@ namespace BALL
 				The reference is 0 if {\em *this} does not have a Molecule at this position.
 				@param   position the position of the child molecule
 				@return  Molecule* -
-								 mutable reference to the child molecule at {\em position} of {\em *this},
+								 mutable reference to the child molecule at {\em position} of {\em *this}
 		*/
 		Molecule* getMolecule(Position position);
 
@@ -132,7 +132,7 @@ namespace BALL
 				The reference is 0 if {\em *this} does not have a Molecule at this position.
 				@param   position the position of the child molecule
 				@return  Molecule* -
-								 constant reference to the child molecule at {\em position} of {\em *this},
+								 constant reference to the child molecule at {\em position} of {\em *this}
 		*/
 		const Molecule* getMolecule(Position position) const;
 

@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.1 2000/05/19 12:23:12 anker Exp $
+// $Id: standardPredicates.h,v 1.2 2000/05/22 17:41:11 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -24,17 +24,22 @@ namespace BALL
 {
 
 	/**	@name	Predefined Predicates
+		@see ExpressionPredicate
 	 */
 	//@{
 
-	/**
+	/** Predicate for atom names
 	 */
 	class AtomNamePredicate
 		:	public	ExpressionPredicate
 		{
 			public:
 				BALL_CREATE_NODEEP(AtomNamePredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -44,7 +49,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(AtomTypePredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -54,7 +63,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(ElementPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -64,7 +77,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(ResiduePredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -74,7 +91,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(ResidueIDPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -84,7 +105,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(ProteinPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -94,7 +119,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(ChainPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -104,7 +133,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(SecondaryStructurePredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -114,7 +147,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(SolventPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -124,7 +161,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(MoleculePredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -134,7 +175,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(BackBonePredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 
@@ -145,7 +190,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(NucleicAcidPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/**
@@ -155,17 +204,33 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(NucleotidePredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/** Predicate for atoms being included in rings of a certain number.
 	 */
-	class inRingPredicate
+	class InRingPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(inRingPredicate)
-					virtual bool operator () (const Atom& atom) const;
+
+				BALL_CREATE_NODEEP(InRingPredicate)
+
+				InRingPredicate();
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
+
+			private:
+				static Size limitcount;
+				bool dfs(const Atom* atom, const Atom* first_atom, 
+					const int limit) const;
 		};
 
 	/** Predicate for bearing double bonds. Arguments of this class are
@@ -177,7 +242,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(doubleBondsPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/** Predicate class for atoms bearing triple bonds.
@@ -187,7 +256,15 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(tripleBondsPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/** Predicate class for atoms bearing aromatic bonds.
@@ -197,7 +274,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(aromaticBondsPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/** Predicate class for atoms bearing a certain number of bonds.
@@ -207,18 +288,45 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(numberOfBondsPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/** Predicate class for atoms being connected to a constellation defined
-			by an expression
+			by an expression. Syntax:
+			\begin{tabular}{cl}
+				Bonds \\
+				{\tt -} & single \\
+				{\tt =} & double \\
+				{\tt \#} & triple \\
+				{\tt ~} & aromatic \\
+				{\tt .} & any \\
+				\hline
+				Elements \\
+				{\tt symbol} & the desired element \\
+				{\tt *} & any element \\
+				Groups \\
+				{\tt ( )} & symbols enlosed by brackets denote groups \\
+			\end{tabular}
+
 	 */
 	class connectedToPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
 				BALL_CREATE_NODEEP(connectedToPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
+			
+			private:
+				bool parse(const String& group, list<String>* subs) const;
+				bool find(const String& group, HashSet<Bond*>* found) const;
 		};
 
 	/** Predicate class for atoms being sp hybridized ...
@@ -228,7 +336,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(spHybridizedPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/** Predicate class for atoms being sp2 hybridized
@@ -238,7 +350,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(sp2HybridizedPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	/** Predicate class for atoms being sp3 hybridized
@@ -248,7 +364,11 @@ namespace BALL
 		{
 			public:
 				BALL_CREATE_NODEEP(sp3HybridizedPredicate)
-					virtual bool operator () (const Atom& atom) const;
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true, if the predicate is true, false otherwise
+					*/
+				virtual bool operator () (const Atom& atom) const;
 		};
 
 	//@}	
