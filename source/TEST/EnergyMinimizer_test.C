@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EnergyMinimizer_test.C,v 1.3 2002/02/27 12:24:29 sturm Exp $
+// $Id: EnergyMinimizer_test.C,v 1.4 2002/12/17 18:36:13 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/DATATYPE/options.h>
 ///////////////////////////
 
-START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.3 2002/02/27 12:24:29 sturm Exp $")
+START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.4 2002/12/17 18:36:13 anker Exp $")
 
 using namespace BALL;
 
@@ -52,11 +52,26 @@ delete em;
 RESULT
 
 CHECK(EnergyMinimizer::EnergyMinimizer(const EnergyMinimizer&, bool))
-//?????
+	EnergyMinimizer em1;
+	EnergyMinimizer em2(em1);
+	bool test = (em1 == em2);
+	TEST_EQUAL(test, true)
+	em1.setup(FF);
+	EnergyMinimizer em3(em1);
+	test = (em1 == em3);
+	TEST_EQUAL(test, true)
+	em1.setup(FF);
 RESULT
 
 CHECK(EnergyMinimizer::operator = (const EnergyMinimizer&))
-//?????
+	EnergyMinimizer em1;
+	EnergyMinimizer em2 = em1;
+	bool test = (em1 == em2);
+	TEST_EQUAL(test, true)
+	em1.setup(FF);
+	EnergyMinimizer em3 = em1;
+	test = (em1 == em3);
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(EnergyMinimizer::isValid() const)
@@ -69,11 +84,22 @@ delete em;
 RESULT
 
 CHECK(EnergyMinimizer::setup(ForceField&))
-//?????
+	EnergyMinimizer e_min(FF);
+	TEST_EQUAL(e_min.getForceUpdateCounter(), 0)
+	TEST_EQUAL(e_min.getEnergyUpdateCounter(), 0)
+	bool test = (e_min.getForceField() == &FF);
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(EnergyMinimizer::setup(ForceField&, const Options&))
-//?????
+	Options options;
+	options.setInteger(EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY, 3456);
+	EnergyMinimizer e_min(FF, options);
+	TEST_EQUAL(e_min.getForceUpdateCounter(), 0)
+	TEST_EQUAL(e_min.getEnergyUpdateCounter(), 0)
+	bool test = (e_min.getForceField() == &FF);
+	TEST_EQUAL(test, true)
+	TEST_EQUAL(e_min.getEnergyOutputFrequency(), 3456)
 RESULT
 
 CHECK(EnergyMinimizer::specificSetup())
@@ -81,59 +107,58 @@ CHECK(EnergyMinimizer::specificSetup())
 RESULT
 
 CHECK(EnergyMinimizer::getNumberOfIteration() const)
-//?????
+	EnergyMinimizer e_min;
+	TEST_EQUAL(e_min.getNumberOfIteration(), 0)
 RESULT
 
 CHECK(EnergyMinimizer::setNumberOfIteration(Size))
-//?????
+	EnergyMinimizer e_min;
+	e_min.setNumberOfIteration(4);
+	TEST_EQUAL(e_min.getNumberOfIteration(), 4)
 RESULT
 
 CHECK(EnergyMinimizer::getMaximalNumberOfIterations())
-//?????
+	EnergyMinimizer e_min;
+	TEST_EQUAL(e_min.getMaximalNumberOfIterations(), 0)
 RESULT
 
 CHECK(EnergyMinimizer::setMaximalNumberOfIterations(Size))
-//?????
-RESULT
-
-CHECK(EnergyMinimizer::getSnapshot())
-//?????
-RESULT
-
-CHECK(EnergyMinimizer::setSnapshot(Snapshot&))
-//?????
+	EnergyMinimizer e_min;
+	e_min.setMaximalNumberOfIterations(2000);
+	TEST_EQUAL(e_min.getMaximalNumberOfIterations(), 2000)
 RESULT
 
 CHECK(EnergyMinimizer::getEnergyOutputFrequency() const)
-//?????
+	EnergyMinimizer e_min2;
+	TEST_EQUAL(e_min2.getEnergyOutputFrequency(), 0)
 RESULT
 
 CHECK(EnergyMinimizer::setEnergyOutputFrequency(Size))
-//?????
+	EnergyMinimizer e_min;
+	e_min.setEnergyOutputFrequency(8);
+	TEST_EQUAL(e_min.getEnergyOutputFrequency(), 8)
 RESULT
 
 CHECK(EnergyMinimizer::getEnergyDifferenceBound() const)
-//?????
+	EnergyMinimizer e_min;
+	TEST_EQUAL(e_min.getEnergyDifferenceBound(), 0.0)
 RESULT
 
 CHECK(EnergyMinimizer::setEnergyDifferenceBound(float))
-//?????
+	EnergyMinimizer e_min;
+	e_min.setEnergyDifferenceBound(9.0);
+	TEST_EQUAL(e_min.getEnergyDifferenceBound(), 9.0)
 RESULT
 
 CHECK(EnergyMinimizer::getMaximalShift() const)
-//?????
+	EnergyMinimizer e_min;
+	TEST_EQUAL(e_min.getMaximalShift(), 0.0)
 RESULT
 
 CHECK(EnergyMinimizer::setMaximalShift(float))
-//?????
-RESULT
-
-CHECK(SnapshotMinimizer::getSnapshotOutputFrequency() const)
-//?????
-RESULT
-
-CHECK(SnapshotMinimizer::setSnapshotOutputFrequency(Size))
-//?????
+	EnergyMinimizer e_min;
+	e_min.setMaximalShift(56.0);
+	TEST_EQUAL(e_min.getMaximalShift(), 56.0)
 RESULT
 
 CHECK(EnergyMinimizer::minimize(Size, bool))
