@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.21 2003/05/23 10:26:03 oliver Exp $
+// $Id: directory.C,v 1.22 2003/05/24 05:51:21 oliver Exp $
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -88,6 +88,8 @@ namespace BALL
 	}
 
 	Directory::Directory(const Directory& directory)
+		:	dir_(0),
+			dirent_(0)
 	{
 		set(directory);
 	}
