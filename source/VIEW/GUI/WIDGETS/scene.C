@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.6.4.5 2002/11/03 15:36:44 amoll Exp $
+// $Id: scene.C,v 1.6.4.6 2002/11/04 18:14:23 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
@@ -26,8 +26,6 @@ namespace BALL
 		// --------------------------------------------------------------------------
 		// ---- Scene Constructors --------------------------------------------------
 		// --------------------------------------------------------------------------
-		// ????????		
-		/*
 		Scene::Scene()
 			throw()
 			:	QGLWidget(),
@@ -56,7 +54,6 @@ namespace BALL
 				up_()
 		{
 		}
-		*/
 
 		Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
 			throw()
@@ -1269,11 +1266,6 @@ namespace BALL
 			{
 				CompositeDescriptor *composite_descriptor = *descriptor_iterator;
 				composite_descriptor->getComposite()->apply(collector);
-
-				// mark composite for update
-				ChangedCompositeMessage change_message;
-				change_message.setComposite(composite_descriptor->getComposite());
-				notify_(change_message);
 			}			
 
 			message->setSelection(collector.getCollection());
