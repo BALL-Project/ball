@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.11 2000/01/11 07:30:48 oliver Exp $
+// $Id: fragmentDB.C,v 1.12 2000/01/14 20:33:25 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1718,18 +1718,31 @@ namespace BALL
 	//	BuildBondsProcessor
 
 	FragmentDB::BuildBondsProcessor::BuildBondsProcessor()
-		:	fragment_db_(0)
+		:	fragment_db_(0),
+			bonds_built_(0)
 	{
 	}
 
 	FragmentDB::BuildBondsProcessor::BuildBondsProcessor(const FragmentDB& db)
-		: fragment_db_(const_cast<FragmentDB*>(&db))
+		: fragment_db_(const_cast<FragmentDB*>(&db)),
+			bonds_built_(0)
 	{
 	}
 
 	FragmentDB::BuildBondsProcessor::~BuildBondsProcessor()
 	{
 		fragment_db_ = 0;
+	}
+
+	bool FragmentDB::BuildBondsProcessor::start()
+	{
+		bonds_built_ = 0;
+		return true;
+	}
+
+	Size FragmentDB::BuildBondsProcessor::getNumberOfBondsBuilt()
+	{
+		return bonds_built_;
 	}
 
 	bool FragmentDB::BuildBondsProcessor::finish()
@@ -1744,7 +1757,7 @@ namespace BALL
 			list<Fragment*>::iterator it2 = it1;
 			for (++it2 ; it2 != fragment_list_.end(); ++it1, ++it2)
 			{
-				buildInterFragmentBonds(**it1, **it2);
+				bonds_built_ += buildInterFragmentBonds(**it1, **it2);
 			}
 		}
 
@@ -1757,7 +1770,7 @@ namespace BALL
 	Processor::Result FragmentDB::BuildBondsProcessor::operator () (Fragment& fragment)
 	{
 		// build all bonds in the fragment
-		buildFragmentBonds(fragment);
+		bonds_built_ += buildFragmentBonds(fragment);
 		
 		// store a pointer to the fragment in a list
 		// to build all inter-fragment bonds in the finish method
@@ -1766,22 +1779,23 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	void FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment) const
+	Size FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment) const
 	{
 		// abort immediately if no fragment DB is known
 		if (fragment_db_ == 0)
-			return;
+		{
+			return 0;
+		}
 
 		// get the fragment`s name
 		String	name = fragment.getName();
 
 		
-		
 		// check whether our DB knows the fragment and retrieve the template
 		const Fragment* tplate = fragment_db_->getReferenceFragment(fragment);
 		if (tplate == 0) 
 		{
-			return;
+			return 0;
 		}
 
 		Size bond_count = 0;
@@ -1791,11 +1805,15 @@ namespace BALL
 		{
 			bond_count++;
 		}
+
 		// iterate over all atoms in the tplate
 		AtomIterator				tplate_atom_it;
 		AtomIterator				frag_atom_it;
 		Atom::BondIterator	tplate_bond_it;
 		Atom*								partner;
+
+		// count the counds we build...
+		Size bonds_built = 0;
 
 		// iterate over all template atoms 
 		for (tplate_atom_it = tplate->beginAtom(); +tplate_atom_it; ++tplate_atom_it) 
@@ -1820,6 +1838,7 @@ namespace BALL
 								if ((*second_frag_it).getName().trim() == name) 
 								{
 									(*frag_atom_it).createBond(*second_frag_it);
+									bonds_built++;
 									break;
 								}
 							}
@@ -1829,13 +1848,16 @@ namespace BALL
 				}
 			}
 		}
+
+		return bonds_built;
 	}
 
-	void FragmentDB::BuildBondsProcessor::buildInterFragmentBonds(Fragment& first, Fragment& second) const
+	Size FragmentDB::BuildBondsProcessor::buildInterFragmentBonds
+		(Fragment& first, Fragment& second) const
 	{
 		if (fragment_db_ == 0)
 		{
-			return;
+			return 0;
 		}
 
 		String first_name(first.getName());
@@ -1844,15 +1866,17 @@ namespace BALL
 		ResourceEntry*	first_entry = fragment_db_->tree->getEntry("/Fragments/" + first_name + "/Connections");
 		if (first_entry == 0)
 		{
-			return;
+			return 0;
 		}
 
 		ResourceEntry* second_entry = fragment_db_->tree->getEntry("/Fragments/" + second_name + "/Connections");
 		if (second_entry == 0)
 		{
-			return;
+			return 0;
 		}
 
+		// count the bonds we build
+		Size bonds_built = 0;
 
 		String	s1[5];
 		String	s2[5];
@@ -1897,11 +1921,14 @@ namespace BALL
 						{
 							// create the bond
 							a1->createBond(*a2);
+							bonds_built++;
 						}
 					}
 				}
 			}
 		}
+		
+		return bonds_built;
 	}
 
 	list<String> FragmentDB::getVariantNames(const String& name) const
