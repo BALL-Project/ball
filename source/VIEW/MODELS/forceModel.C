@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.4 2004/07/13 07:14:43 oliver Exp $
+// $Id: forceModel.C,v 1.5 2004/08/07 19:51:26 oliver Exp $
 
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 
@@ -46,7 +46,7 @@ namespace BALL
 
 			Vector3 force = atom->getForce();
 			if (force.getSquareLength() == 0) return Processor::CONTINUE;
-			float forcev = std::log(force.getLength() * 10000000000.0); 
+			float forcev = log(force.getLength() * 10000000000.0); 
 
 			if (forcev < 0) return Processor::CONTINUE;
 			if (forcev > 10)

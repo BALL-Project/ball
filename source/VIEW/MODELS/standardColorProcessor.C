@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.29 2004/07/12 13:22:53 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.30 2004/08/07 19:51:26 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -660,7 +660,7 @@ namespace BALL
 			if (force.getSquareLength() == 0) return min_color_;
 			force *= 100000000000.0;
 
-			float forcev = std::log(force.getLength());
+			float forcev = log(force.getLength());
 			if (forcev < 0) return min_color_;
 			if (forcev > 50)
 			{
