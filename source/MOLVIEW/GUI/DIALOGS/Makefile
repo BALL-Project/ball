@@ -12,7 +12,8 @@ CPP_SOURCES=\
 	openMOL2File.C\
 	openPDBFile.C\
 	openBruker1DFile.C\
-	openBruker2DFile.C
+	openBruker2DFile.C\
+	contourSurfaceDialog.C
 
 MOC_SOURCES=\
 	displayProperties_moc.C\
