@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.10 2000/10/23 23:31:08 amoll Exp $
+// $Id: INIFile.C,v 1.11 2001/03/01 13:42:43 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
@@ -11,14 +11,14 @@ namespace BALL
 
 	// Default constructor
 	INIFile::INIFile()
-		: valid_(true),
+		: valid_(false),
 			filename_(""),
 			original_number_of_lines_(0)
 	{	
 	}
 
 	INIFile::INIFile(const String& filename)
-		: valid_(true),
+		: valid_(false),
 			filename_(filename),
 			original_number_of_lines_(0)
 	{
@@ -42,6 +42,7 @@ namespace BALL
 		section_end_.clear();
 		section_key_map_.destroy();
 		section_index_.destroy();
+		valid_ = false;
 	}
 
 	INIFile::~INIFile()
@@ -58,6 +59,7 @@ namespace BALL
 	void INIFile::setFilename(const String& filename)
 	{
 		filename_ = filename;
+		valid_ = false;
 	}
 
 
@@ -76,7 +78,10 @@ namespace BALL
 		ifstream infile(filename_.c_str());
 
 		// if we couldn't open the file: abort
-		if (!infile) return false;
+		if (!infile)
+		{
+			return false;
+		}
 
 		// the section zero is named ""
 		String section_name("");
@@ -253,7 +258,8 @@ namespace BALL
 			current_section_index++;
 		}
 		out.close();
-		
+
+		valid_ = true;
 		return true;
 	}
 
