@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.9 2000/03/05 15:40:26 amoll Exp $
+// $Id: quaternion.h,v 1.10 2000/03/07 10:20:31 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -530,16 +530,16 @@ namespace BALL
 		BALL_DUMP_HEADER(s, this, this);
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  angle (real): " << angle << endl;
+		s << "  angle (real): " << angle << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "    i: " << i << endl;
+		s << "    i: " << i << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "    j: " << j << endl;
+		s << "    j: " << j << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "    k: " << k << endl;
+		s << "    k: " << k << std::endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
