@@ -1,11 +1,13 @@
-// $Id: System_test.C,v 1.3 2000/05/16 15:16:00 amoll Exp $
+// $Id: System_test.C,v 1.4 2000/05/24 09:17:01 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/atom.h>
-START_TEST(System, "$Id: System_test.C,v 1.3 2000/05/16 15:16:00 amoll Exp $")
+#include <BALL/CONCEPT/textPersistenceManager.h>
+
+START_TEST(System, "$Id: System_test.C,v 1.4 2000/05/24 09:17:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -446,26 +448,24 @@ CHECK(destroyBonds())
 	TEST_EQUAL(a3.countBonds(), 1)	
 RESULT
 
-/*
+
 TextPersistenceManager pm;
 using namespace RTTI;
 pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
 pm.registerClass(getStreamName<System>(), System::createDefault);
 pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
-String filename;
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	System* f1 = new System("name1");
-	System* f2 = new System("name2");
+	Molecule* f2 = new Molecule("name2");
 	f1->insert(*f2);
 	pm.setOstream(ofile);
 	*f1 >> pm;
 	ofile.close();
 	delete f1;
 RESULT
-*/
-/*
+
 CHECK(persistentRead(PersistenceManager&))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
@@ -476,14 +476,16 @@ CHECK(persistentRead(PersistenceManager&))
 		TEST_EQUAL(isKindOf<System>(*ptr), true)
 		System*	f1 = castTo<System>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1-> ystems(), 1)
-		TEST_EQUAL(f1->getSystem(0)->getName(), "name2")
+		TEST_EQUAL(f1->countMolecules(), 1)
+		TEST_EQUAL(f1->getMolecule(0)->getName(), "name2")
 		delete f1;
-	} else {
+	} 
+	else 
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 RESULT
-*/
+
 
 
 /////////////////////////////////////////////////////////////
