@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.165 2005/02/24 15:54:01 amoll Exp $
+// $Id: mainControl.C,v 1.166 2005/02/27 17:55:45 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1899,7 +1899,17 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 	void MainControl::loadBALLViewProjectFile(const String& filename)
 		throw()
 	{
-		File file(filename, std::ios::in);
+		File file;
+		try
+		{
+			file.open(filename, std::ios::in);
+		}
+		catch(...)
+		{
+			setStatusbarText("Could not open project file, it doesnt seem to exist.", true);
+			return;
+		}
+
 		Size nr_lines, nr_composites;
 		file >> nr_lines;
 		file >> nr_composites;
