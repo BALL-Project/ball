@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.9 2000/03/04 10:49:20 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.10 2000/06/21 08:52:22 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -18,6 +18,15 @@ AR	=@AR@
 # dynamic archiver (to create shared libraries)
 DYNAR = @DYNAR@
 
+# options for library generation
+AROPTS  = @AROPTS@
+
+# options for shared library generation
+DYNAROPTS = @DYNAROPTS@
+
+# suffix of shared library filenames
+SHARED_LIB_SUFFIX = @SHARED_LIB_SUFFIX@
+ 
 # C++ compiler
 CXX	=@CXX@
 # unix command rm, used to remove obsolete files (target clean)
@@ -62,6 +71,11 @@ MOC                 = @MOC@
 X11_LIBPATH         = @X11_LIBPATH@
 X11_LIBOPTS         = @X11_LIBOPTS@
 X11_LIBS            = @X11_LIBS@
+SIP            			= @SIP@
+SIP_LIB        			= @SIP_LIB@
+SIP_INCLUDES   			= @SIP_INCLUDES@
+PYTHON_INCLUDES			= @PYTHON_INCLUDES@
+ 
 
 # These are standard flags. CXXFLAGS to compile, LDFLAGS to link programs
 # DEFINES and DEBUG are both part of CXXFLAGS
