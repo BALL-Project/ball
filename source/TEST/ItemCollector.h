@@ -1,13 +1,62 @@
 #include <BALL/CONCEPT/comparator.h>
 #include <BALL/DATATYPE/list.h>
 
+#include <iostream>
+
 using namespace BALL;
 
-// helper class: a processor counting items in a list
+/** Helper class: a processor counting items.
+		The items addresses are stored in a list.
+		This class is used in several tests for container::apply() methods.
+*/
 template<typename DataType>
 class ItemCollector	: public UnaryProcessor<DataType>
 {
 	public:
+
+	/// Get the list of pointers.
+	list<DataType*>& getList()
+	{
+		return list_;
+	}
+	
+	/// Get the pointer assigned by the iterator.
+	const DataType* getPointer()
+	{
+		if (list_it_ == list_.end())
+		{
+			return 0;
+		}
+		return *list_it_;
+	}
+
+	/** Forward the iterator.
+	*/
+	void forward()
+	{	
+		list_it_++;
+	}
+
+	/// get the size of the list
+	Size getSize()
+	{	
+		return list_.size();
+	}
+	
+	/** Reset the iterator to the first element of the list.
+	*/
+	void reset()
+	{ // 
+		list_it_ = list_.begin();
+	}
+
+
+	private:
+
+	/** Start the processor.
+			This method is called by the apply()-method
+			of the container-classes to be tested.
+	*/
 	bool start()
 	{
 		// clear the item list
@@ -16,49 +65,26 @@ class ItemCollector	: public UnaryProcessor<DataType>
 		return true;
 	}
 
+	/** Finish the processor.
+			This method is called by the apply()-method
+			of the container-classes to be tested.
+	*/
 	bool finish()
 	{
+		list_it_ = list_.begin();
 		return true;
 	}
 
+	/** Store the item.
+			This method is called by the apply()-method
+			of the container-classes to be tested.
+	*/
 	Processor::Result operator () (DataType& item)
-	{	// store the item
+	{
 		list_.push_back(&item);
 		return Processor::CONTINUE;
 	}
 
-	list<DataType*> getList()
-	{ // get a pointer to the list
-		return list_;
-	}
-	
-	DataType* getPointer()
-	{	// get a pointer to the first element in the list
-		if (list_it_ == list_.end())
-		{
-			return 0;
-		}
-		DataType* temp = *list_it_;
-		return temp;
-	}
-
-	void forward()
-	{	
-		list_it_++;
-	}
-
-
-	Size getSize()
-	{	// get the size of the list
-		return list_.size();
-	}
-	
-	void reset()
-	{ // reset the iterator to the first element of the list
-		list_it_ = list_.begin();
-	}
-
-	private:
-	List<DataType*>	list_;
-	typename List<DataType*>::iterator list_it_;
+	List<DataType*>											list_;
+	typename List<DataType*>::iterator	list_it_;
 };
