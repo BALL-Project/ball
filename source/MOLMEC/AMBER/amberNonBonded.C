@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.19 2001/12/14 01:19:39 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20 2001/12/30 13:28:47 sturm Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -32,7 +32,7 @@ namespace BALL
 			scaling_vdw_1_4_(0.0),
 			scaling_electrostatic_1_4_(0.0),
 			use_dist_depend_dielectric_(false),
-			// BAUSTELLE
+			// ?????
 			// algorithm_type_(),
 			van_der_waals_(),
 			hydrogen_bond_()
@@ -61,7 +61,7 @@ namespace BALL
 			scaling_vdw_1_4_(0.0),
 			scaling_electrostatic_1_4_(0.0),
 			use_dist_depend_dielectric_(false),
-			// BAUSTELLE
+			// ?????
 			// algorithm_type_(),
 			van_der_waals_(),
 			hydrogen_bond_()
@@ -157,12 +157,12 @@ namespace BALL
 		scaling_vdw_1_4_ = 0.0;
 		scaling_electrostatic_1_4_ = 0.0;
 		use_dist_depend_dielectric_ = false;
-		// BAUSTELLE
+		// ?????
 		// algorithm_type_ = anb.algorithm_type_;
 		van_der_waals_.clear();
 		hydrogen_bond_.clear();
 
-		// BAUSTELLE: missing OCI
+		// ?????: missing OCI
 		// ForceFieldComponent::clear();
 	}
 

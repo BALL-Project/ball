@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.h,v 1.10 2001/07/14 12:58:39 amoll Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.11 2001/12/30 13:28:41 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -19,7 +19,7 @@
 # include <BALL/DATATYPE/options.h>
 #endif
 
-// BAUSTELLE: DOCU ... documentation for constants
+// ?????: DOCU ... documentation for constants
 
 namespace BALL
 {

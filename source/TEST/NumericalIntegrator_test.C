@@ -1,4 +1,4 @@
-// $Id: NumericalIntegrator_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $
+// $Id: NumericalIntegrator_test.C,v 1.5 2001/12/30 13:28:58 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(NumericalIntegrator, "$Id: NumericalIntegrator_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(NumericalIntegrator, "$Id: NumericalIntegrator_test.C,v 1.5 2001/12/30 13:28:58 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ RESULT
 
 
 CHECK(NumericalIntegrator::clear() throw())
-	// BAUSTELLE:
+	// ?????:
 	// see <BALL/MATHS/numericalIntegrator.h>
 RESULT
 
@@ -149,7 +149,7 @@ CHECK(NumericalIntegrator::integrate(from, to))
 	TEST_REAL_EQUAL(result, test_constant)
 	result = ni.integrate(0.0, 2.0);
 	TEST_REAL_EQUAL(result, 2.0 * test_constant)
-	// BAUSTELLE:
+	// ?????:
 	// a more complicated function
 RESULT
 

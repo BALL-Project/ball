@@ -1,4 +1,4 @@
-// $Id: PersistenceManager_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $
+// $Id: PersistenceManager_test.C,v 1.5 2001/12/30 13:29:00 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -244,7 +244,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.5 2001/12/30 13:29:00 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -264,7 +264,7 @@ RESULT
 
 
 CHECK(PersistenceManager::PersistenceManager(::std::istream& is) throw())
-	// BAUSTELLE:
+	// ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_
 	// no, we don't We just have to create an intermediate derived class
@@ -273,14 +273,14 @@ RESULT
 
 
 CHECK(PersistenceManager::PersistenceManager(::std::ostream& os) throw())
-  // BAUSTELLE:
+  // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to ostr_
 RESULT
 
 
 CHECK(PersistenceManager::PersistenceManager(::std::istream& is, ::std::ostream& os) throw())
-  // BAUSTELLE:
+  // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_, ostr_
 RESULT
@@ -292,7 +292,7 @@ RESULT
 
 
 CHECK(PersistenceManager::registerClass(String signature, const CreateMethod m) throw())
-  //BAUSTELLE
+  //?????
 	// We need additional accessors to be able to test this method
 RESULT
 
@@ -300,7 +300,7 @@ RESULT
 CHECK(PersistenceManager::createObject(String signature) const  throw())
 	// some RTTI check here 
 	PersistenceTest pm;
-	// BAUSTELLE
+	// ?????
 	// String sig = RTTI::getStreamName<Atom>();
 	// Atom* atom = (Atom*) pm.createObject(sig);
 	// bool test = RTTI::isKindOf<Atom>(atom);
@@ -316,105 +316,105 @@ RESULT
 
 
 CHECK(PersistenceManager::setOstream(::std::ostream& s) throw())
-  // BAUSTELLE:
+  // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to ostr_
 RESULT
 
 
 CHECK(PersistenceManager::setIstream(::std::istream& s) throw())
-  // BAUSTELLE:
+  // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_
 RESULT
 
 
 CHECK(PersistenceManager::startOutput() throw())
-  // BAUSTELLE:
+  // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to object_out_ and object_out_needed_
 RESULT
 
 
 CHECK(PersistenceManager::endOutput() throw())
-  // BAUSTELLE:
+  // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to object_out_ and object_out_needed_
 RESULT
 
 
 CHECK(PersistenceManager::readObject() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::PersistenceManager& operator << (const PersistentObject& object) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::PersistenceManager& operator >> (PersistentObject*& object_ptr) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::checkObjectHeader(const T& /* object */, const char* name = 0) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::checkObjectHeader(const char* type_name) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::writeObjectTrailer(const char* name = 0) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::writePrimitive(const T& t, const char* name) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::readPrimitive(T& t, const char* name) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::readStorableObject(T& t, const char* name) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::readObjectPointer(T*& object, const char* name) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::readObjectReference(T& object, const char* name) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::writeObjectArray(const T* array, const char* name, Size size) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::readObjectArray(const T* array, const char* name, Size& size) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::writeObjectPointerArray(T** arr, const char* name, const Size size) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PersistenceManager::readObjectPointerArray(T** array, const char* name, Size& size) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 

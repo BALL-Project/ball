@@ -1,4 +1,4 @@
-// $Id: spectrum.h,v 1.5 2001/08/16 00:45:33 oliver Exp $
+// $Id: spectrum.h,v 1.6 2001/12/30 13:28:41 sturm Exp $
 
 #ifndef BALL_NMR_SPECTRUM_H
 #define BALL_NMR_SPECTRUM_H
@@ -51,9 +51,9 @@ namespace BALL
 		/**	Constructors and Destructor
 		*/	
 		//@{
-			// BAUSTELLE
+			// ?????
 		Spectrum() {}
-			// BAUSTELLE
+			// ?????
 		virtual ~Spectrum() {}
 		//@}
 
@@ -87,7 +87,7 @@ namespace BALL
 	template <typename DataT, typename PeakT, typename PositionT>
 	void Spectrum<DataT, PeakT, PositionT>::clear()
 	{
-		// BAUSTELLE
+		// ?????
 	}
 
 	/**	Calculate the difference between two spectra.
@@ -95,7 +95,7 @@ namespace BALL
 	template <typename DataT, typename PeakT, typename PositionT>
 	double Spectrum<DataT, PeakT, PositionT>::difference(const Spectrum<DataT, PeakT, PositionT>& /* spectrum */) const
 	{
-		// BAUSTELLE
+		// ?????
 		return 0.0;
 	}
 

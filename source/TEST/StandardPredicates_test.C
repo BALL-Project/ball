@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.15 2001/05/28 12:00:05 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.16 2001/12/30 13:29:02 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.15 2001/05/28 12:00:05 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.16 2001/12/30 13:29:02 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -195,7 +195,7 @@ RESULT
 // tests for class SolventPredicate::
 
 CHECK(SolventPredicate::operator () (const Atom& atom) const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 // tests for class MoleculePredicate::

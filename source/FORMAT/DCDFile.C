@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.17 2001/09/11 12:28:28 anker Exp $
+// $Id: DCDFile.C,v 1.18 2001/12/30 13:28:45 sturm Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -83,7 +83,7 @@ namespace BALL
 	bool DCDFile::operator == (const DCDFile& file) const
 		throw()
 	{
-		// BAUSTELLE: Header vergleichen. Was heißt gleich eigentlich in diesem
+		// ?????: Header vergleichen. Was heißt gleich eigentlich in diesem
 		// Fall?
 		return (TrajectoryFile::operator == (file));
 	}
@@ -159,7 +159,7 @@ namespace BALL
 		}
 
 		// read the number of coordinate sets contained in this file
-		// BAUSTELLE:
+		// ?????:
 		// storing that number in this instance AND in header_ might not be too
 		// clever.
 		*this >> adapt_Size;
@@ -252,7 +252,7 @@ namespace BALL
 		header_.number_of_comments = number_of_comments;
 
 		// read the comment blocks
-		// BAUSTELLE: for now just skip them
+		// ?????: for now just skip them
 		for (Size i = 0; i < number_of_comments; i++)
 		{
 			for (Size j = 0; j < 80; j++)
@@ -439,7 +439,7 @@ namespace BALL
 
 		// read the block "header"...
 
-		// BAUSTELLE
+		// ?????
 		// *this >> BinaryFileAdaptor<Size>(tmp);
 
 		*this >> adapt_Size; 
@@ -552,7 +552,7 @@ namespace BALL
 
 			// read the block "header"...
 
-			// BAUSTELLE
+			// ?????
 			// *this >> BinaryFileAdaptor<Size>(tmp);
 
 			*this >> adapt_Size; 
@@ -668,7 +668,7 @@ namespace BALL
 
 		// adjust the number of snapshots 
 		header_.number_of_coordinate_sets += buffer.size();
-		// BAUSTELLE:
+		// ?????:
 		// this is not quite the place to do this. it should be done when the
 		// snapshot manager is set up or at some similar place. the question is
 		// how much information has to be replicated at which place in the
@@ -687,7 +687,7 @@ namespace BALL
 			append(*it);
 		}
 
-		// BAUSTELLE
+		// ?????
 		// no error handling/reporting at the moment
 		return true;
 	}
@@ -709,7 +709,7 @@ namespace BALL
 				<< "Size of double is not equal to 4 on this machine." << endl;
 			return false;
 		}
-		// BAUSTELLE
+		// ?????
 		// return readHeader();
 		return true;
 	}

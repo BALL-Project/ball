@@ -1,4 +1,4 @@
-// $Id: PiecewisePolynomial_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $
+// $Id: PiecewisePolynomial_test.C,v 1.7 2001/12/30 13:29:00 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(PiecewisePolynomial, "$Id: PiecewisePolynomial_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(PiecewisePolynomial, "$Id: PiecewisePolynomial_test.C,v 1.7 2001/12/30 13:29:00 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ CHECK(PiecewisePolynomial::PiecewisePolynomial(const PiecewisePolynomial& functi
 	TEST_EQUAL(test, true)
 	test = (poly2.getCoefficients() == poly->getCoefficients());
 	TEST_EQUAL(test, true)
-	// BAUSTELLE: Spezialfälle
+	// ?????: Spezialfälle
 RESULT
 
 CHECK(PiecewisePolynomial::PiecewisePolynomial(Size degree, const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs))
@@ -74,7 +74,7 @@ CHECK(PiecewisePolynomial::PiecewisePolynomial(Size degree, const std::vector<In
 	std::vector<Coefficients> naught;
 	test = (poly2.getCoefficients() == naught);
 	TEST_EQUAL(test, false)
-	// BAUSTELLE: Spezialfälle
+	// ?????: Spezialfälle
 RESULT
 
 
@@ -89,7 +89,7 @@ CHECK(PiecewisePolynomial::clear())
 	std::vector<Coefficients> c3;
 	test = (c2 == c3);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Spezialfälle
+	// ?????: Spezialfälle
 RESULT
 
 
@@ -104,7 +104,7 @@ CHECK(PiecewisePolynomial::destroy())
 	std::vector<Coefficients> c3;
 	test = (c2 == c3);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Spezialfälle
+	// ?????: Spezialfälle
 RESULT
 
 
@@ -119,7 +119,7 @@ CHECK(PiecewisePolynomial::set(Size degree, const std::vector<Interval>& interva
 	std::vector<Coefficients> naught;
 	test = (poly2.getCoefficients() == naught);
 	TEST_EQUAL(test, false)
-	// BAUSTELLE: Spezialfälle
+	// ?????: Spezialfälle
 RESULT
 
 
@@ -195,7 +195,7 @@ CHECK(PiecewisePolynomial::setCoefficients(const vector<Coefficients>& coefficie
 	poly2.setCoefficients(coefs);
 	bool test = (poly2.getCoefficients() == coefs);
 	TEST_EQUAL(test, true)
-	// BAUSTELLE: false
+	// ?????: false
 RESULT
 
 
@@ -206,7 +206,7 @@ CHECK(PiecewisePolynomial::getCoefficients(double x) const )
 	poly2.setIntervals(intervals);
 	bool test = (poly2.getCoefficients(0.5) == coefs[0]);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: false
+	// ?????: false
 RESULT
 
 
@@ -216,12 +216,12 @@ CHECK(PiecewisePolynomial::getCoefficients(Position index) const )
 	Position index = 0;
 	bool test = (poly2.getCoefficients(index) == coefs[0]);
 	TEST_EQUAL(test, true)
-	// BAUSTELLE: false
+	// ?????: false
 RESULT
 
 
 CHECK(PiecewisePolynomial::double operator () (double x) const )
-  //BAUSTELLE
+  //?????
 	PiecewisePolynomial poly2(4, intervals, coefs);
 	TEST_REAL_EQUAL(poly2(0.5), 0.0)
 	TEST_REAL_EQUAL(poly2(1.0), 3.0)

@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.19 2001/12/08 17:08:18 strobel Exp $
+// $Id: solventExcludedSurface.h,v 1.20 2001/12/30 13:28:43 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -389,7 +389,7 @@ namespace BALL
 			number_of_spheric_faces_(ses.spheric_faces_.size()),
 			spheric_faces_(number_of_spheric_faces_),
 			reduced_surface_(NULL)
-	{				// BAUSTELLE !!!
+	{				// ????? !!!
 		//for (Position i = 0; i < number_of_vertices_; i++)
 		//{
 		//	vertices_[i] = new TSESVertex<T>(*ses.vertices_[i],false);

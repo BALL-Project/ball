@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.13 2001/02/11 23:05:07 amoll Exp $
+// $Id: regExp.h,v 1.14 2001/12/30 13:28:36 sturm Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -108,7 +108,7 @@ namespace BALL
 
 		/**	Detailled constructor	
 				@param pattern the string to create the pattern from
-				@param wildcard_pattern BAUSTELLE
+				@param wildcard_pattern ?????
 		*/
 		RegularExpression(const String& pattern, bool wildcard_pattern = false)
 			throw();
@@ -141,7 +141,7 @@ namespace BALL
 		void set(const RegularExpression& regular_expression, bool deep = true) throw();
 
 		/**	Assign from a string.
-				@param wildcard_pattern BAUSTELLE
+				@param wildcard_pattern ?????
 		*/
 		void set(const String& pattern, bool wildcard_pattern = false) throw();
 
@@ -166,8 +166,8 @@ namespace BALL
 		/**	Match a text with a given pattern.
 				@param text to process
 				@param pattern to compare with
-				@param compile_flags BAUSTELLE
-				@param execute_flags BAUSTELLE
+				@param compile_flags ?????
+				@param execute_flags ?????
 				@exception NullPointer if {\tt text} or {\tt pattern} are NULL
 		*/
 		static bool match(const char* text, const char* pattern,
@@ -177,7 +177,7 @@ namespace BALL
 		/**	Match a text with this regular expression.
 				@param text to process
 				@param from index in the string to start the matching
-				@param execute_flags BAUSTELLE
+				@param execute_flags ?????
 		*/
 		bool match(const String& text, Index from = 0, int execute_flags = 0 ) const
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
@@ -185,14 +185,14 @@ namespace BALL
 		/**	Match a substring with this regular expression.
 				@param text to process
 				@param from index in the substring to start the matching
-				@param execute_flags BAUSTELLE
+				@param execute_flags ?????
 		*/
 		bool match(const Substring& text, Index from = 0, int execute_flags = 0) const
 			throw(Substring::InvalidSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/**	Match a C-String with this regular expression.
 				@param text to process
-				@param execute_flags BAUSTELLE
+				@param execute_flags ?????
 		*/
 		bool match(const char* text, int execute_flags = 0) const
 			throw(Exception::NullPointer);
@@ -200,7 +200,7 @@ namespace BALL
 		/**	Find this expression in a string
 				@param from index in the string to start the matching
 				@param found the result is stored as a substring here
-				@param execute_flags BAUSTELLE
+				@param execute_flags ?????
 		*/
 		bool find(const String& text, Substring& found,
 							Index from = 0, int execute_flags = 0) const
@@ -210,7 +210,7 @@ namespace BALL
 				@param text to process
 				@param subexpressions the results are stored here
 				@param from index in the string to start the matching		
-				@param execute_flags BAUSTELLE
+				@param execute_flags ?????
 		*/
 		bool find(const String& text, vector<Substring>& subexpressions,
 							Index from = 0, int execute_flags = 0) const

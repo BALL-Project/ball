@@ -1,4 +1,4 @@
-// $Id: DCDFile_test.C,v 1.7 2001/12/17 01:28:53 oliver Exp $
+// $Id: DCDFile_test.C,v 1.8 2001/12/30 13:28:57 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.7 2001/12/17 01:28:53 oliver Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.8 2001/12/30 13:28:57 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ RESULT
 
 
 CHECK(DCDFile::DCDFile(const String& name, File::OpenMode open_mode) throw())
-  //BAUSTELLE
+  //?????
   DCDFile test_file(dcd_test_file, File::IN);
 	TEST_EQUAL(test_file.isOpen(), true)
 	TEST_EQUAL(test_file.getOpenMode(), File::IN)
@@ -106,7 +106,7 @@ RESULT
 
 
 CHECK(DCDFile::writeHeader() throw())
-	// BAUSTELLE:
+	// ?????:
 	// Oh, how did this temporary file thing work again?
 	// DCDFile one(temporary, File::OUT);
 	// one.writeHeader();
@@ -118,7 +118,7 @@ RESULT
 
 
 CHECK(DCDFile::append(const SnapShot& snapshot) throw())
-  // BAUSTELLE
+  // ?????
 	// SnapShot snap;
 	// DCDFile one(temporary, File::out);
 	// one.append(snap);
@@ -133,12 +133,12 @@ RESULT
 
 
 CHECK(DCDFile::read(SnapShot& snapshot) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(DCDFile::flushToDisk(const ::std::vector<SnapShot> buffer) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 /////////////////////////////////////////////////////////////

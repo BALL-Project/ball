@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator_test.C,v 1.4 2001/07/15 17:32:41 amoll Exp $
+// $Id: RDFIntegrator_test.C,v 1.5 2001/12/30 13:29:00 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(RDFIntegrator, "$Id: RDFIntegrator_test.C,v 1.4 2001/07/15 17:32:41 amoll Exp $")
+START_TEST(RDFIntegrator, "$Id: RDFIntegrator_test.C,v 1.5 2001/12/30 13:29:00 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ RESULT
 
 
 CHECK(RDFIntegrator::RDFIntegrator& operator = (const RDFIntegrator& integrator))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
@@ -112,7 +112,7 @@ CHECK(bool RDFIntegrator::operator == (const RDFIntegrator& integrator))
 	int2.setRDF(rdf);
 	test = (int1 == int2);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE
+	// ?????
 RESULT
 
 
@@ -128,7 +128,7 @@ RESULT
 CHECK(RDFIntegrator::double operator () (double x) const )
 	RDFIntegrator int1;
 	TEST_REAL_EQUAL(int1.operator()(1.5), 0.0);
-  //BAUSTELLE
+  //?????
 RESULT
 
 
@@ -138,7 +138,7 @@ CHECK(RDFIntegrator::setRDF(const RadialDistributionFunction& rdf))
 	RDFIntegrator int2(rdf);
 	bool test = (int1 == int2);
 	TEST_EQUAL(test, true);
-  //BAUSTELLE
+  //?????
 RESULT
 
 

@@ -1,4 +1,4 @@
-// $Id: PeakList_test.C,v 1.3 2001/07/15 17:32:40 amoll Exp $
+// $Id: PeakList_test.C,v 1.4 2001/12/30 13:29:00 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(PeakList, "$Id: PeakList_test.C,v 1.3 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(PeakList, "$Id: PeakList_test.C,v 1.4 2001/12/30 13:29:00 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -17,37 +17,37 @@ using namespace BALL;
 // tests for class PeakList::
 
 CHECK(PeakList::BALL_CREATE(PeakList<PT>))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PeakList::scale(float x))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PeakList::getMaxIntensity() const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PeakList::getMinIntensity() const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PeakList::getMinPosition() const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PeakList::getMaxPosition() const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PeakList::PeakList::PeakList())
-  //BAUSTELLE
+  //?????
 RESULT
 
 

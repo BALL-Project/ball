@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.21 2001/07/13 19:58:07 oliver Exp $
+// $Id: hashGrid.h,v 1.22 2001/12/30 13:28:36 sturm Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -705,7 +705,7 @@ namespace BALL
 	template<typename Item>  
 	void HashGridBox3<Item>::set(const HashGridBox3<Item>& box,  bool deep)
 		throw()
-  { // BAUSTELLE - not implemented
+  { // ????? - not implemented
     throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
  
@@ -1056,7 +1056,7 @@ namespace BALL
 
 
 	/**	Three-dimensional Hash Grid Class.
-			BAUSTELLE\\
+			?????\\
 			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
 	*/
 	template <typename Item>
@@ -1178,7 +1178,7 @@ namespace BALL
 		Size countNonEmptyBoxes() const
 			throw();
 		
-		/// Returns the size of a grid, i. e. BAUSTELLE
+		/// Returns the size of a grid, i. e. ?????
 		Size getSize() const
 			throw();
 

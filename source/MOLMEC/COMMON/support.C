@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.28 2001/06/06 08:34:53 anker Exp $
+// $Id: support.C,v 1.29 2001/12/30 13:28:49 sturm Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -62,7 +62,7 @@ namespace BALL
 				period_x = box.getWidth();
 				period_y = box.getHeight();
 				period_z = box.getDepth(); 
-				// BAUSTELLE
+				// ?????
 				// period = Vector3(period_x, period_y, period_z);
 			
 				// ... and add at least distance to each coordinate to gain a box
@@ -168,10 +168,10 @@ namespace BALL
 						{
 							new_position = position;
 							difference = position - (*atom_it2)->getPosition();
-							// BAUSTELLE
+							// ?????
 							// calculateMinimumImage(difference, period);
 
-							// BAUSTELLE: should it be < or <= ? We have to define what
+							// ?????: should it be < or <= ? We have to define what
 							// should happen when an antom sits on the border
 							// (numerically quite improbable, of course)
 							if (difference.x < -half_period_x) 
@@ -785,7 +785,7 @@ namespace BALL
 		}
 
 
-		// BAUSTELLE: This will lead to an unnecessary temporary
+		// ?????: This will lead to an unnecessary temporary
 		void calculateMinimumImage(Vector3& distance,
 				const Vector3& period)
 		{

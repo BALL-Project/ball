@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.9 2001/12/30 00:09:43 oliver Exp $
+// $Id: TCPTransfer_test.C,v 1.10 2001/12/30 13:29:02 sturm Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -82,7 +82,7 @@ bool testNetwork()
 
 
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.9 2001/12/30 00:09:43 oliver Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.10 2001/12/30 13:29:02 sturm Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ CHECK(http)
 	TEST_EQUAL(tcp_t2.getFileAddress(), "/BALL/INTERNAL/internal.html")
 	TEST_EQUAL(tcp_t2.getPort(), 80)
 	TEST_EQUAL(tcp_t2.getStatusCode(), TCPTransfer::NO_ERROR)
-	//BAUSTELLE, waiting for www-server config
+	//?????, waiting for www-server config
 	//TEST_EQUAL(tcp_t2.getReceivedBytes(), 11908)
 	TEST_EQUAL(tcp_t2.getLogin(), "BALL")
 	TEST_EQUAL(tcp_t2.getPassword(), "test")

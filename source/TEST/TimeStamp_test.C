@@ -1,4 +1,4 @@
-// $Id: TimeStamp_test.C,v 1.8 2001/07/16 02:09:16 oliver Exp $
+// $Id: TimeStamp_test.C,v 1.9 2001/12/30 13:29:03 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.8 2001/07/16 02:09:16 oliver Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.9 2001/12/30 13:29:03 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -135,16 +135,16 @@ RESULT
 
 
 CHECK(TimeStamp::write(PersistenceManager& pm) const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TimeStamp::read(PersistenceManager& pm))
-  //BAUSTELLE
+  //?????
 RESULT
 
 CHECK(TimeStamp::operator << (std::ostream& os, const TimeStamp& ts))
-	//BAUSTELLE
+	//?????
 RESULT
 
 /////////////////////////////////////////////////////////////

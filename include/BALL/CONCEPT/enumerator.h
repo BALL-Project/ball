@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.14 2001/07/15 16:36:45 oliver Exp $
+// $Id: enumerator.h,v 1.15 2001/12/30 13:28:35 sturm Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -66,7 +66,7 @@ namespace BALL
 		EnumeratorIndex()
 			throw();
 
-		// BAUSTELLE:
+		// ?????:
 		// this implementation should vanish (see below)
 		/** Detailed Constructor
 			  @param variant_list the list of variants to be applied
@@ -157,7 +157,7 @@ namespace BALL
 	};
 
 
-	/*	BAUSTELLE:
+	/*	?????:
 			This should be the place where this method shoulf be implemented, but
 			I still get nasty error messages...
 
@@ -328,7 +328,7 @@ namespace BALL
 		void deleteVariants(const VariantIterator& it, const VariantVector& variants)
 			throw()
 		{
-			// BAUSTELLE
+			// ?????
 		}
 
 		/** Count all variants.

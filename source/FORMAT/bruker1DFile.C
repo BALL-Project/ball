@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.C,v 1.12 2001/08/01 01:04:14 oliver Exp $
+// $Id: bruker1DFile.C,v 1.13 2001/12/30 13:28:45 sturm Exp $
 
 #include <BALL/FORMAT/bruker1DFile.h>
 
@@ -78,7 +78,7 @@ namespace BALL
 		{
 		  if (!f.good())
 		  {
-				// BAUSTELLE: here should be a warning or exception
+				// ?????: here should be a warning or exception
 				return;
 			}
 			

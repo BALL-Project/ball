@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.20 2001/12/17 11:29:17 oliver Exp $
+// $Id: periodicBoundary.C,v 1.21 2001/12/30 13:28:48 sturm Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -208,7 +208,7 @@ namespace BALL
 			{
 				for (Size i = it->first; i < it->second; i++) 
 				{
-					// BAUSTELLE: debugging code
+					// ?????: debugging code
 					Log.info() << "PerBound: translating molecule " 
 						<< atom[i]->getFullName() << "/" << i << " by " 
 						<< translation << endl;

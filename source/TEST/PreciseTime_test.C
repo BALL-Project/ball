@@ -1,4 +1,4 @@
-// $Id: PreciseTime_test.C,v 1.3 2001/07/16 02:09:16 oliver Exp $
+// $Id: PreciseTime_test.C,v 1.4 2001/12/30 13:29:00 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.3 2001/07/16 02:09:16 oliver Exp $")
+START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.4 2001/12/30 13:29:00 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -155,16 +155,16 @@ RESULT
 
 
 CHECK(PreciseTime::write(PersistenceManager& pm) const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PreciseTime::read(PersistenceManager& pm))
-  //BAUSTELLE
+  //?????
 RESULT
 
 CHECK(ostream& operator << (ostream& os, const PreciseTime& time))
-	// BAUSTELLE
+	// ?????
 RESULT
 
 /////////////////////////////////////////////////////////////

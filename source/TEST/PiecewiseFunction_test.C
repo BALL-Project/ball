@@ -1,4 +1,4 @@
-// $Id: PiecewiseFunction_test.C,v 1.5 2001/07/15 17:32:40 amoll Exp $
+// $Id: PiecewiseFunction_test.C,v 1.6 2001/12/30 13:29:00 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.5 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.6 2001/12/30 13:29:00 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ CHECK(PiecewiseFunction::~PiecewiseFunction())
 RESULT
 
 CHECK(PiecewiseFunction::PiecewiseFunction(const PiecewiseFunction& function))
-	// BAUSTELLE
+	// ?????
 	PiecewiseFunction PWF;
 	PWF.setIntervals(intervals);
 	PiecewiseFunction PWF2(PWF);
@@ -153,7 +153,7 @@ CHECK(PiecewiseFunction::setCoefficients(const vector<Coefficients>& coefficient
 	PWF2.setCoefficients(coefs);
 	bool test = (PWF2.getCoefficients() == coefs);
 	TEST_EQUAL(test, true)
-	// BAUSTELLE: false
+	// ?????: false
 RESULT
 
 
@@ -165,7 +165,7 @@ CHECK(PiecewiseFunction::getCoefficients(double x) const )
 	TEST_EQUAL(test, true)
 	PWF2.setIntervals(intervals);
 	test = (PWF2.getCoefficients(0.5) == coefs[0]);
-	// BAUSTELLE: false
+	// ?????: false
 	*/
 RESULT
 
@@ -176,12 +176,12 @@ CHECK(PiecewiseFunction::getCoefficients(Position index) const )
 	Position index = 0;
 	bool test = (PWF2.getCoefficients(index) == coefs[0]);
 	TEST_EQUAL(test, true)
-	// BAUSTELLE: false
+	// ?????: false
 RESULT
 
 
 CHECK(PiecewiseFunction::double operator () (double x) const )
-  //BAUSTELLE: Quasi abstrakt.
+  //?????: Quasi abstrakt.
 RESULT
 
 

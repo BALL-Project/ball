@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.14 2001/08/18 22:54:58 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.15 2001/12/30 13:28:52 sturm Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -233,7 +233,7 @@ namespace BALL
 	const RegularData1D& operator << (RegularData1D& data, const PeakList1D& peak_list)
 		throw()
 	{
-		// BAUSTELLE
+		// ?????
 
 		return data;
 	}

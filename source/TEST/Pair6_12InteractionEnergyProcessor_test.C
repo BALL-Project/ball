@@ -1,4 +1,4 @@
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.11 2001/07/17 12:10:15 anker Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.12 2001/12/30 13:28:59 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Pair6_12InteractionEnergyProcessor, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.11 2001/07/17 12:10:15 anker Exp $")
+START_TEST(Pair6_12InteractionEnergyProcessor, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.12 2001/12/30 13:28:59 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ RESULT
 CHECK(Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor(const Pair6_12InteractionEnergyProcessor& proc))
 	Pair6_12InteractionEnergyProcessor proc1;
 	Pair6_12InteractionEnergyProcessor proc2(proc1);
-	// BAUSTELLE
+	// ?????
 RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::setSolventDescriptor())
@@ -129,7 +129,7 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	val = proc.getEnergy();
 	TEST_REAL_EQUAL(val, -7.62216)
 
-	// BAUSTELLE: USE_RDF=true geht trotz nicht gesetzten Dateinamens!!!
+	// ?????: USE_RDF=true geht trotz nicht gesetzten Dateinamens!!!
 	// Was ist mit dem default? Exception?
 RESULT
 
@@ -137,7 +137,7 @@ CHECK(Pair6_12InteractionEnergyProcessor::isValid())
 	Pair6_12InteractionEnergyProcessor proc;
 	TEST_EQUAL(proc.isValid(), true)
 
-	// BAUSTELLE
+	// ?????
 RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::operator == ())

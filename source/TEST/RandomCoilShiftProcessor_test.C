@@ -1,4 +1,4 @@
-// $Id: RandomCoilShiftProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $
+// $Id: RandomCoilShiftProcessor_test.C,v 1.4 2001/12/30 13:29:01 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(RandomCoilShiftProcessor, "$Id: RandomCoilShiftProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $")
+START_TEST(RandomCoilShiftProcessor, "$Id: RandomCoilShiftProcessor_test.C,v 1.4 2001/12/30 13:29:01 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,27 +30,27 @@ RESULT
 
 
 CHECK(RandomCoilShiftProcessor::RandomCoilShiftProcessor(const RandomCoilShiftProcessor& processor) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RandomCoilShiftProcessor::init() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RandomCoilShiftProcessor::start() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RandomCoilShiftProcessor::Processor::Result operator () (Composite& composite) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RandomCoilShiftProcessor::finish() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 HINFile f("data/RandomCoilShiftProcessor_test.hin");

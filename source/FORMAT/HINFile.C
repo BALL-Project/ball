@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.41 2001/12/20 01:12:14 oliver Exp $
+// $Id: HINFile.C,v 1.42 2001/12/30 13:28:45 sturm Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -233,11 +233,11 @@ namespace BALL
 		getFileStream() << ";" << endl;
 		getFileStream() << "forcefield AMBER" << endl;
 
-		// BAUSTELLE: 
+		// ?????: 
 		// insert system temperature here
 		getFileStream() << "sys 0" << endl;
 
-		// BAUSTELLE:
+		// ?????:
 		// insert the periodic box size (if any)
 		
 		Size atom_count = 0;
@@ -900,7 +900,7 @@ namespace BALL
 		}
 
 		// if desired, try to remove the lone pairs from old AMBER HC-Files 
-		if (molecule != 0 && true) // BAUSTELLE
+		if (molecule != 0 && true) // ?????
 		{
 			// a list to hold the lone pairs (for deletion)
 			list<Atom*> del_list;

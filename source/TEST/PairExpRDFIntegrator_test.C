@@ -1,4 +1,4 @@
-// $Id: PairExpRDFIntegrator_test.C,v 1.9 2001/07/15 17:32:40 amoll Exp $
+// $Id: PairExpRDFIntegrator_test.C,v 1.10 2001/12/30 13:28:59 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(PairExpRDFIntegrator, "$Id: PairExpRDFIntegrator_test.C,v 1.9 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(PairExpRDFIntegrator, "$Id: PairExpRDFIntegrator_test.C,v 1.10 2001/12/30 13:28:59 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -82,8 +82,8 @@ CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator(const PairExpRDFIntegrator& int
 	TEST_EQUAL(test, true);
 	test = (int2.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
+	// ?????: Konstanten
+	// ?????: false, Spezialfälle
 RESULT
 
 
@@ -93,8 +93,8 @@ CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator(double alpha, double C1, double
 	TEST_EQUAL(test, true);
 	test = (integrator.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
+	// ?????: Konstanten
+	// ?????: false, Spezialfälle
 RESULT
 
 
@@ -107,8 +107,8 @@ CHECK(PairExpRDFIntegrator::clear())
 	vector<Coefficients> naught;
 	test = (integrator.getRDF().getRepresentation().getCoefficients() == naught);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
+	// ?????: Konstanten
+	// ?????: false, Spezialfälle
 RESULT
 
 
@@ -123,13 +123,13 @@ CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator& operator =
 	TEST_EQUAL(test, true);
 	test = (int2.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
+	// ?????: Konstanten
+	// ?????: false, Spezialfälle
 RESULT
 
 
 CHECK(PairExpRDFIntegrator::setConstants(double alpha, double C1, double C2, double R_ij_o, double k1, double k2))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
@@ -151,13 +151,13 @@ CHECK(PairExpRDFIntegrator::integrateToInf(double from) const )
 	val = integrator.integrateToInf(2);
 	rel_err = fabs((val - (-2.09822)) / -2.09822);
 	TEST_REAL_EQUAL(rel_err, 0.01);
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(PairExpRDFIntegrator::integrateToInf(double from, double alpha, double C1, double C2, double R_ij_o, double k1, double k2))
 	PairExpRDFIntegrator integrator(1, 1, 1, 1, 0, 0, rdf);
-  //BAUSTELLE
+  //?????
 RESULT
 
 
@@ -290,7 +290,7 @@ CHECK(PairExpRDFIntegrator::double operator () (double x) const )
 	val = integrator(2);
 	rel_err = fabs((val - (-2.09822)) / -2.09822);
 	TEST_REAL_EQUAL(rel_err, 0.01);
-  //BAUSTELLE
+  //?????
 RESULT
 
 

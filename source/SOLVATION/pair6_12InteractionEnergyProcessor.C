@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.13 2001/07/17 12:09:43 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.14 2001/12/30 13:28:53 sturm Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -360,7 +360,7 @@ namespace BALL
 					++solute_iterator)
 			{
 
-				// BAUSTELLE: Warum geht das net?
+				// ?????: Warum geht das net?
 				// type_j = solute_iterator->getType();
 				type_j = ffparam.getAtomTypes().getType(solute_iterator->getTypeName());
 				atom_center = solute_iterator->getPosition();
@@ -571,7 +571,7 @@ namespace BALL
 	}
 
 
-	// BAUSTELLE: sollte nicht hier stehen.
+	// ?????: sollte nicht hier stehen.
 	void Pair6_12InteractionEnergyProcessor::getExternalSurface_(
 			vector< pair<Vector3, Surface> >& surface_map, 
 			const char* surface_file) throw()

@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.h,v 1.12 2001/08/01 01:06:28 oliver Exp $
+// $Id: bruker1DFile.h,v 1.13 2001/12/30 13:28:37 sturm Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -31,7 +31,7 @@ namespace BALL
 			This class....	\\
 			{\bf Definition:}\URL{BALL/FORMAT/bruker1DFile.h}
 	*/
-	// BAUSTELLE
+	// ?????
 	class Bruker1D 
 		: public File
 	{

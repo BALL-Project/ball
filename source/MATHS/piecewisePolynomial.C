@@ -1,4 +1,4 @@
-// $Id: piecewisePolynomial.C,v 1.5 2000/10/18 13:55:51 anker Exp $
+// $Id: piecewisePolynomial.C,v 1.6 2001/12/30 13:28:47 sturm Exp $
 
 #include <BALL/MATHS/piecewisePolynomial.h>
 
@@ -78,7 +78,7 @@ namespace BALL
 
 	double PiecewisePolynomial::operator () (double x) const throw()
 	{
-		// BAUSTELLE
+		// ?????
 		if (!isInRange(x))
 		{
 			Log.error() << "PiecewisePolynomial::operator () (): x is not in range" 

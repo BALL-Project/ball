@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.C,v 1.10 2001/06/26 02:46:14 oliver Exp $
+// $Id: energyMinimizer.C,v 1.11 2001/12/30 13:28:50 sturm Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
@@ -54,7 +54,7 @@ namespace BALL
 		force_field_										= energy_minimizer.force_field_;
 		options													= energy_minimizer.options;
 		valid_													= energy_minimizer.valid_;
-// BAUSTELLE
+// ?????
 //		snapshot_												= energy_minimizer.snapshot_;
 		number_of_iteration_						= energy_minimizer.number_of_iteration_;
 		maximal_number_of_iterations_		= energy_minimizer.maximal_number_of_iterations_ ;
@@ -79,7 +79,7 @@ namespace BALL
 			force_field_									= energy_minimizer.force_field_;
 			options												= energy_minimizer.options;
 			valid_												= energy_minimizer.valid_;
-// BAUSTELLE
+// ?????
 //			snapshot_											= energy_minimizer.snapshot_;
 			number_of_iteration_						= energy_minimizer.number_of_iteration_;
 			maximal_number_of_iterations_		= energy_minimizer.maximal_number_of_iterations_ ;
@@ -178,7 +178,7 @@ namespace BALL
 		return valid_;
 	}
 /*
-BAUSTELLE 
+????? 
 	// Return the trajectory of the minimization procedure
 	Snapshot& EnergyMinimizer::getSnapShot() const
 	{

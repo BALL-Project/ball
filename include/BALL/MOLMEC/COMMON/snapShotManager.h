@@ -1,4 +1,4 @@
-// $Id: snapShotManager.h,v 1.5 2001/07/11 23:59:32 amoll Exp $
+// $Id: snapShotManager.h,v 1.6 2001/12/30 13:28:39 sturm Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -263,7 +263,7 @@ namespace BALL
     //_ @name Protected Attributes
     //_@{
 
-		// BAUSTELLE: this was a const ptr before, but applySnapShot needs a
+		// ?????: this was a const ptr before, but applySnapShot needs a
 		// mutable System. is that reasonable
     //_ The system to which the SnapshotManager is bound
     System* system_ptr_; 

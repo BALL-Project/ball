@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.18 2001/12/19 02:40:25 oliver Exp $
+// $Id: Expression_test.C,v 1.19 2001/12/30 13:28:57 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.18 2001/12/19 02:40:25 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.19 2001/12/30 13:28:57 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -458,7 +458,7 @@ CHECK(SyntaxTree::begin() throw())
 	bool test = (test_it == children.begin());
 	TEST_NOT_EQUAL(test, true)
 
-	// BAUSTELLE
+	// ?????
 	// this leads to an illegal instruction (SIGILL), I don't know why. (the
 	// same happens for the next three tests.)
 	// st.children = children;
@@ -598,7 +598,7 @@ CHECK(SyntaxTree::parse() throw())
 	TEST_EQUAL(child.type, ExpressionTree::LEAF)
 	TEST_EQUAL(child.children.size(), 0)
 
-  // BAUSTELLE
+  // ?????
 	// a slightly more complicated example ;)
 RESULT
 
@@ -678,7 +678,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
-	// BAUSTELLE: this expression still doesn't work correctly! The expression in brackets
+	// ?????: this expression still doesn't work correctly! The expression in brackets
 	// is not interpreted correctly... Instead, "element(H) OR name(OXT) AND chain(A)" 
 	// behaves as expected. Anyway, the used test case (Expression_test.hin) does not
 	// allow to successfully test thoses predicates, since it does not contain a chain A!

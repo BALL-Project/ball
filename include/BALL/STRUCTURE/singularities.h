@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.17 2001/12/20 01:08:06 oliver Exp $
+// $Id: singularities.h,v 1.18 2001/12/30 13:28:43 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -106,7 +106,7 @@ namespace BALL
 			}
 			else
 			{
-				// BAUSTELLE: add documentation for that fucking exception
+				// ?????: add documentation for that fucking exception
 				throw Exception::GeneralException(__FILE__, __LINE__, "undocumented exception in TreatSingularities!", "");
 			}
 		}				

@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.15 2001/09/01 16:09:26 oliver Exp $
+// $Id: canonicalMD.C,v 1.16 2001/12/30 13:28:50 sturm Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -165,7 +165,7 @@ namespace BALL
 			item.factor2 = Constants::AVOGADRO / 1e23 * 1e12 * 0.5 * time_step_ 
 				/ atom_ptr->getElement().getAtomicWeight();
 			item.factor1 = item.factor2 * time_step_;
-			// BAUSTELLE: use op[] and resize instead of push_back
+			// ?????: use op[] and resize instead of push_back
 			mass_factor_[index] = item;
 		}
 	}	// end of 'calculateFactors' 

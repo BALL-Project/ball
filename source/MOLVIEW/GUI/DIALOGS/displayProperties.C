@@ -1112,7 +1112,7 @@ namespace BALL
 						}
 					}
 			}
-			// BAUSTELLE
+			// ?????
 			catch (Exception::GeneralException e)
 			{	Log << e << std::endl;}
 		}

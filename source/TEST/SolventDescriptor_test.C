@@ -1,11 +1,11 @@
-// $Id: SolventDescriptor_test.C,v 1.5 2001/07/16 21:15:02 amoll Exp $
+// $Id: SolventDescriptor_test.C,v 1.6 2001/12/30 13:29:02 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
  
 ///////////////////////////
 #include <BALL/SOLVATION/solventDescriptor.h>
 ///////////////////////////
 	  
-START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.5 2001/07/16 21:15:02 amoll Exp $")
+START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.6 2001/12/30 13:29:02 sturm Exp $")
 		 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ CHECK(SolventDescriptor::bool operator == (const SolventDescriptor& descriptor) 
 	TEST_EQUAL(*s_ptr==*s_ptr2, false)
 RESULT
 
-//BAUSTELLE: after changes in class: need to test const and muteable methdos
+//?????: after changes in class: need to test const and muteable methdos
 
 ///////////////////////////////
 END_TEST

@@ -1,4 +1,4 @@
-// $Id: syntaxTree.C,v 1.6 2001/07/17 10:52:27 anker Exp $
+// $Id: syntaxTree.C,v 1.7 2001/12/30 13:28:46 sturm Exp $
 
 #include <BALL/KERNEL/syntaxTree.h>
 
@@ -146,7 +146,7 @@ namespace BALL
 		// bear any children, the expression is not parseable.
     if ((expression == "AND" || expression == "OR") && children.size() == 0)
     {
-			// BAUSTELLE
+			// ?????
 			// Why is it correct, if we arrive here?
 			// throw Exception::ParseError(__FILE__, __LINE__, expression.c_str(),
 			//		"conjunction without children");
@@ -205,7 +205,7 @@ namespace BALL
 		// closing bracket (see for() {} above)
     ey = i;
 
-		// BAUSTELLE: I think ey >= s.size() cannot happen, because the for()
+		// ?????: I think ey >= s.size() cannot happen, because the for()
 		// statement above runs at most to s.size() - 1.
     if (ey >= s.size())
     {
@@ -340,7 +340,7 @@ namespace BALL
 		// if we have less than 3 children, we cannot collapse anything.
     if (children.size() < 3)
     {
-			// BAUSTELLE
+			// ?????
 			// Maybe we should check here whether this node is a conjunction or not.
 			// If it is, throw() a ParseError.
       return;

@@ -1,4 +1,4 @@
-// $Id: RDFParameter.h,v 1.7 2001/07/14 12:58:22 amoll Exp $
+// $Id: RDFParameter.h,v 1.8 2001/12/30 13:28:42 sturm Exp $
 
 #ifndef BALL__RDFPARAMETER_H
 #define BALL__RDFPARAMETER_H
@@ -23,7 +23,7 @@ namespace BALL
 {
 
 	/** Parametersection for radial distribution function
-		BAUSTELLE
+		?????
 		{\bf Definition:} \URL{BALL/STRUCTURE/RDFParameter.h}
 	 */
 	

@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.C,v 1.7 2001/06/27 10:41:51 oliver Exp $
+// $Id: charmmTorsion.C,v 1.8 2001/12/30 13:28:48 sturm Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -356,7 +356,7 @@ namespace BALL
 					// 
 					//  E = V (1 + cos(f * phi - phase) 
 					//
-					// BAUSTELLE: des geht schneller fuer phase = 0|PI
+					// ?????: des geht schneller fuer phase = 0|PI
 					energy_ += it->V * (1 + cos(it->f * acos(cosphi) - it->phase));
 				}
 			}

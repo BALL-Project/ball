@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.39 2001/09/13 15:08:05 amoll Exp $
+// $Id: string.h,v 1.40 2001/12/30 13:28:37 sturm Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -561,7 +561,7 @@ namespace BALL
 		String& trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE)
 			throw();
 
-		// BAUSTELLE
+		// ?????
 		/**	Strips all characters in {\bf trimmed} from both sides of the string.
 				trim calls {\tt trimRight(trimmed).trimLeft(trimmed)}.
 		*/

@@ -1,4 +1,4 @@
-// $Id: experiment.h,v 1.1 2001/06/14 11:45:04 oliver Exp $
+// $Id: experiment.h,v 1.2 2001/12/30 13:28:41 sturm Exp $
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H
@@ -132,7 +132,7 @@ namespace BALL
 
 	/**	2D NMR experiment
 	*/
-	// BAUSTELLE
+	// ?????
 	//typedef Experiment<PeakList2D>	Experiment2D;
 
 	/**	3D NMR experiment

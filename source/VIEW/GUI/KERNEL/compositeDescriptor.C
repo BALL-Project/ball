@@ -658,7 +658,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "shallow copy:          " << shallow_copy_ << endl;
 
-			// BAUSTELLE: keine dump-Methode fuer STL-Listen!
+			// ?????: keine dump-Methode fuer STL-Listen!
 			//shallow_copies_.dump(s, depth);
 
 			BALL_DUMP_DEPTH(s, depth);

@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.20 2001/12/26 03:35:53 oliver Exp $
+// $Id: mainControl.C,v 1.21 2001/12/30 13:29:04 sturm Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -144,7 +144,7 @@ namespace BALL
 			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
 			for (; it != descriptors_.end(); ++it)
 			{
-				// BAUSTELLE:
+				// ?????:
 				// Segmentation Fault nach Beenden des Programms, obwohl ueberhaupt
 				// keine Descriptoren angelegt wurden
 
@@ -466,7 +466,7 @@ namespace BALL
 			}
 
 			
-			// BAUSTELLE!!
+			// ?????!!
 			// update scene
 			SceneMessage *scene_message = new SceneMessage;
 			scene_message->updateOnly();
@@ -750,7 +750,7 @@ namespace BALL
 			 int /* accel */, int /* entry_ID */)
 			throw()
 		{
-			// BAUSTELLE
+			// ?????
 		}
 
 		void MainControl::initializePreferencesTab(Preferences &preferences)

@@ -1,4 +1,4 @@
-// $Id: Pair6_12RDFIntegrator_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $
+// $Id: Pair6_12RDFIntegrator_test.C,v 1.7 2001/12/30 13:28:59 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Pair6_12RDFIntegrator, "$Id: Pair6_12RDFIntegrator_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(Pair6_12RDFIntegrator, "$Id: Pair6_12RDFIntegrator_test.C,v 1.7 2001/12/30 13:28:59 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -78,8 +78,8 @@ CHECK(Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(const Pair6_12RDFIntegrator& 
 	int2.getConstants(a, b, c, d);
 	test = ((a == A) && (b == B) && (c == C) && (d == D));
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
+	// ?????: Konstanten
+	// ?????: false, Spezialfälle
 RESULT
 
 
@@ -113,7 +113,7 @@ CHECK(Pair6_12RDFIntegrator::clear())
 	integrator.getConstants(a, b, c, d);
 	test = ((a == 0.0) && (b == 0.0) && (c == 0.0) && (d == 0.0));
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: false, Spezialfälle
+	// ?????: false, Spezialfälle
 RESULT
 
 
@@ -132,7 +132,7 @@ CHECK(Pair6_12RDFIntegrator::Pair6_12RDFIntegrator& operator =
 	int2.getConstants(a, b, c, d);
 	test = ((a == 1.0) && (b == 2.0) && (c == 3.0) && (d == 4.0));
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: false, Spezialfälle
+	// ?????: false, Spezialfälle
 RESULT
 
 
@@ -175,13 +175,13 @@ CHECK(Pair6_12RDFIntegrator::integrateToInf(double from) const )
 	val = integrator.integrateToInf(2);
 	rel_err = fabs((val - (-0.074634517)) / -0.074634517);
 	TEST_REAL_EQUAL(rel_err, 0.01);
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(Pair6_12RDFIntegrator::integrateToInf(double from, double alpha, double C1, double C2, double R_ij_o, double k1, double k2))
 	Pair6_12RDFIntegrator integrator(1, 1, 0, 0, rdf);
-  //BAUSTELLE
+  //?????
 RESULT
 
 
@@ -374,7 +374,7 @@ CHECK(Pair6_12RDFIntegrator::double operator () (double x) const )
 	val = integrator(2);
 	rel_err = fabs((val - (-2.09822)) / -2.09822);
 	TEST_REAL_EQUAL(rel_err, 0.01);
-  //BAUSTELLE
+  //?????
 RESULT
 */
 

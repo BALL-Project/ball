@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.5 2001/07/14 20:12:54 oliver Exp $
+// $Id: Enumerator_test.C,v 1.6 2001/12/30 13:28:57 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.5 2001/07/14 20:12:54 oliver Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.6 2001/12/30 13:28:57 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -58,59 +58,59 @@ RESULT
 
 
 CHECK(EnumeratorIndex& operator ++ ())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(EnumeratorIndex& operator -- ())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(set(Position index))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(EnumeratorIndex& operator = (Position index))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(bool operator == (const EnumeratorIndex& x, const EnumeratorIndex& y))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(bool operator != (const EnumeratorIndex& x, const EnumeratorIndex& y))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(bool operator < (const EnumeratorIndex& x, const EnumeratorIndex& y))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(bool operator > (const EnumeratorIndex& x, const EnumeratorIndex& y))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(bool operator <= (const EnumeratorIndex& x, const EnumeratorIndex& y))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(bool operator >= (const EnumeratorIndex& x, const EnumeratorIndex& y))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 // tests for class Enumerator::
 
 CHECK(Enumerator::(*MutatorFunction)(Variant&, Variant&))
-  //BAUSTELLE
+  //?????
 RESULT
 
 Enumerator<string, string::iterator, char>* enumerator_ptr;
@@ -168,67 +168,67 @@ RESULT
 // tests for class IteratorTraits_::
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::IteratorTraits_())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::IteratorTraits_(const ContainerType& enumerator))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::IteratorTraits_(const IteratorTraits_& traits))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::IteratorTraits_& operator = (const IteratorTraits_& traits))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::getContainer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::getPosition())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::bool operator == (const IteratorTraits_& traits) const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::isValid() const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::toBegin())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::toEnd())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::getData())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::forward())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(IteratorTraits_::Enumerator::mutate_(VariantIterator& it, Variant& v))
-  //BAUSTELLE
+  //?????
 RESULT
 
 

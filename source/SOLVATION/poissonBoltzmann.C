@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.27 2001/08/31 09:23:52 amoll Exp $ 
+// $Id: poissonBoltzmann.C,v 1.28 2001/12/30 13:28:54 sturm Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -773,7 +773,7 @@ namespace BALL
 		SAS_grid = 0;
 			
 		float ionic_strength = options.getReal(Option::IONIC_STRENGTH);
-		// BAUSTELLE: Ionenstaerke fehlt noch!
+		// ?????: Ionenstaerke fehlt noch!
 		float ion_radius = options.getReal(Option::ION_RADIUS);
 
 		if (ionic_strength == 0.0)
@@ -1888,7 +1888,7 @@ namespace BALL
 			throw Exception::OutOfMemory(__FILE__, __LINE__, 6 * N * (Size)sizeof(float));
 		}
 
-		// T[i] = 0   BAUSTELLE: muss das sein?
+		// T[i] = 0   ?????: muss das sein?
 		for (i = 0; i < (6 * N); T[i++] = 0.0);
 
 		using namespace Constants;

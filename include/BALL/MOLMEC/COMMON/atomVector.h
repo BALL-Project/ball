@@ -1,4 +1,4 @@
-// $Id: atomVector.h,v 1.13 2001/07/16 11:18:11 amoll Exp $
+// $Id: atomVector.h,v 1.14 2001/12/30 13:28:39 sturm Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -109,7 +109,7 @@ namespace BALL
 		using ::std::vector<Atom*>::size;
 
 		/// Random access operator
-		// BAUSTELLE: problem with GCC3 using std::vector<Atom*>::operator [];
+		// ?????: problem with GCC3 using std::vector<Atom*>::operator [];
 		Atom*       & operator [] (int i)       { return ::std::vector<Atom*>::operator [] (i); }
 		Atom* const & operator [] (int i) const { return ::std::vector<Atom*>::operator [] (i); }
 		
@@ -153,13 +153,13 @@ namespace BALL
 
 		/**	Return an iterator, pointing to the first atom pointer.
 		*/
-		//BAUSTELLE: GCC3 using std::vector<Atom*>::begin;
+		//?????: GCC3 using std::vector<Atom*>::begin;
 					iterator begin()			 { return ::std::vector<Atom*>::begin(); }
 		const_iterator begin() const { return ::std::vector<Atom*>::begin(); }
 
 		/**	Return an iterator, pointing behind the last atom pointer.
 		*/
-		//BAUSTELLE: GCC3 using std::vector<Atom*>::end;
+		//?????: GCC3 using std::vector<Atom*>::end;
 					iterator end()			 { return ::std::vector<Atom*>::end(); }
 		const_iterator end() const { return ::std::vector<Atom*>::end(); }
 

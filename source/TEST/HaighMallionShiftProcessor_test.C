@@ -1,4 +1,4 @@
-// $Id: HaighMallionShiftProcessor_test.C,v 1.6 2001/12/20 01:14:19 oliver Exp $
+// $Id: HaighMallionShiftProcessor_test.C,v 1.7 2001/12/30 13:28:58 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.6 2001/12/20 01:14:19 oliver Exp $")
+START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.7 2001/12/30 13:28:58 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ f.close();
 
 
 CHECK(HaighMallionShiftProcessor::HaighMallionShiftProcessor(const HaighMallionShiftProcessor& processor) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 CHECK(HaighMallionShiftProcessor::init() throw())
@@ -60,12 +60,12 @@ RESULT
 
 
 CHECK(HaighMallionShiftProcessor::finish() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(HaighMallionShiftProcessor::Processor::Result operator () (Composite& composite) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 PRECISION(0.002)

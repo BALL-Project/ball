@@ -1,4 +1,4 @@
-// $Id: Object_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $
+// $Id: Object_test.C,v 1.7 2001/12/30 13:28:58 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Object, "$Id: Object_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(Object, "$Id: Object_test.C,v 1.7 2001/12/30 13:28:58 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -174,7 +174,7 @@ RESULT
 
 
 CHECK(Object::dump(::std::ostream& s = std::cout, Size depth = 0) const  throw())
-  // BAUSTELLE
+  // ?????
 RESULT
 
 /////////////////////////////////////////////////////////////

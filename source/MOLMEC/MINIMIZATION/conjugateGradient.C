@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.C,v 1.11 2001/05/17 01:30:55 oliver Exp $
+// $Id: conjugateGradient.C,v 1.12 2001/12/30 13:28:50 sturm Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -101,7 +101,7 @@ namespace BALL
 		: EnergyMinimizer(rhs),
 			method_(rhs.method_)
 	{
-		// BAUSTELLE
+		// ?????
 	}
 
   // The assignment operator
@@ -110,7 +110,7 @@ namespace BALL
 	{
     EnergyMinimizer::operator = (rhs);
 
-		// BAUSTELLE
+		// ?????
 
     return *this;
 	}

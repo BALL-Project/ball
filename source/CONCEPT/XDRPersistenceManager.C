@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.19 2001/07/15 21:07:03 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.20 2001/12/30 13:28:44 sturm Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -228,7 +228,7 @@ namespace BALL
 		throw()
 	{
 		// destroy the XDR stream 
-		// xdr_destroy(&xdr_in_); //BAUSTELLE
+		// xdr_destroy(&xdr_in_); //?????
 #ifdef BALL_DEBUG_PERSISTENCE
 		Log.info() << "XDRPersistenceManager: finalized input stream." << endl;
 #endif

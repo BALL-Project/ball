@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.11 2001/07/14 12:58:39 amoll Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.12 2001/12/30 13:28:41 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -48,7 +48,7 @@ namespace BALL
 
 		public:
 
-		// BAUSTELLE: Doku.
+		// ?????: Doku.
 		enum SurfaceType
 		{
 			SURFACE__UNKNOWN = 0,

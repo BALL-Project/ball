@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.14 2001/09/03 20:13:40 oliver Exp $
+// $Id: structureMapper.C,v 1.15 2001/12/30 13:28:55 sturm Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -124,7 +124,7 @@ namespace BALL
 			fragment_A = A[i];
 			fragment_B = B[i];
 
-			// BAUSTELLE: Atomnamen sollten auf Eindeutigkeit geprueft werden!
+			// ?????: Atomnamen sollten auf Eindeutigkeit geprueft werden!
 
 			//iterate over all atoms of A and compare names with atoms of B
 			for(AtomIterator atom_iterator1 = fragment_A->beginAtom(); +atom_iterator1; ++atom_iterator1)
@@ -929,7 +929,7 @@ namespace BALL
 					if (j == indices_CF[i].size())
 					{
 						i--;
-						// BAUSTELLE: change top + pop to pop
+						// ?????: change top + pop to pop
 						j =(Size) index_stack.top() + 1;
 						index_stack.pop();
 					}

@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.14 2000/12/01 15:13:30 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.15 2001/12/30 13:28:54 sturm Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -73,7 +73,7 @@ namespace BALL
 		R_ij_o_ = 0.0;
 		k1_ = 0.0;
 		k2_ = 0.0;
-		// BAUSTELLE: options.clear() ?
+		// ?????: options.clear() ?
 		RDFIntegrator::clear();
 	}
 

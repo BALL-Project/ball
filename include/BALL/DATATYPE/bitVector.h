@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.29 2001/12/12 11:30:21 oliver Exp $
+// $Id: bitVector.h,v 1.30 2001/12/30 13:28:36 sturm Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -266,7 +266,7 @@ namespace BALL
 
 		/** Set the size of this instance.
 				@param size the new size
-				@param keep BAUSTELLE
+				@param keep ?????
 		*/
 		void setSize(Size size, bool keep = true)
 		  throw(Exception::OutOfMemory);

@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.33 2001/07/16 00:33:32 amoll Exp $
+// $Id: persistenceManager.h,v 1.34 2001/12/30 13:28:35 sturm Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -441,7 +441,7 @@ namespace BALL
 				PointerSizeInt& ptr) = 0;
 
 		/** Write the trailer for an object. 
-				BAUSTELLE.
+				?????.
 				@param name the name of the object
 		*/
 		virtual void writeTrailer(const char* name = 0) = 0;

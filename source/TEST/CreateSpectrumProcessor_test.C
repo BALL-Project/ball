@@ -1,4 +1,4 @@
-// $Id: CreateSpectrumProcessor_test.C,v 1.6 2001/08/16 01:00:39 oliver Exp $
+// $Id: CreateSpectrumProcessor_test.C,v 1.7 2001/12/30 13:28:56 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(CreateSpectrumProcessor, "$Id: CreateSpectrumProcessor_test.C,v 1.6 2001/08/16 01:00:39 oliver Exp $")
+START_TEST(CreateSpectrumProcessor, "$Id: CreateSpectrumProcessor_test.C,v 1.7 2001/12/30 13:28:56 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -104,16 +104,16 @@ RESULT
 
 CHECK(CreateSpectrumProcessor::operator () (Atom& atom) throw())
 	CreateSpectrumProcessor csp;
-	// BAUSTELLE
+	// ?????
 RESULT
 
 CHECK(CreateSpectrumProcessor::init(const String& filename) throw(Exception::FileNotFound))
 	CreateSpectrumProcessor csp;
-	// BAUSTELLE
+	// ?????
 RESULT
 
 CHECK(CreateSpectrumProcessor::finish() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 CHECK(PeakList<Peak1D>& getPeakList())

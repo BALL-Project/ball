@@ -1,4 +1,4 @@
-// $Id: ruleProcessor.C,v 1.5 2000/07/18 08:29:56 oliver Exp $
+// $Id: ruleProcessor.C,v 1.6 2001/12/30 13:28:49 sturm Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleProcessor.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -53,7 +53,7 @@ namespace BALL
 
   void RuleProcessor::set(const RuleProcessor& /* rule_processor */)
 	{
-		// BAUSTELLE
+		// ?????
 	}
 
 	bool RuleProcessor::start()
@@ -83,6 +83,6 @@ namespace BALL
 
 	void RuleProcessor::dump(std::ostream& /* s */) const
 	{
-		//BAUSTELLE
+		//?????
 	}
 }

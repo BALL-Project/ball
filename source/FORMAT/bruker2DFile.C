@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.C,v 1.17 2001/08/01 01:04:15 oliver Exp $
+// $Id: bruker2DFile.C,v 1.18 2001/12/30 13:28:45 sturm Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -237,7 +237,7 @@ namespace BALL
     bfreqf2_ = bfreqf2;
     spointnumf1_ = (Size) spointnumf1;
     spointnumf2_ = (Size) spointnumf2;
-		// BAUSTELLE
+		// ?????
 		/*
     spectrum_.setXSize(spointnumf2_);
     spectrum_.setYSize(spointnumf1_);

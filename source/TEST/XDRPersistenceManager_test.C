@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager_test.C,v 1.5 2001/07/14 20:12:54 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.6 2001/12/30 13:29:03 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.5 2001/07/14 20:12:54 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.6 2001/12/30 13:29:03 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -48,142 +48,142 @@ RESULT
 
 
 CHECK(XDRPersistenceManager::XDRPersistenceManager(std::istream& is, std::ostream& os))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeHeader(const char* type_name, const char* name, LongPointerType ptr))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeTrailer(const char* name = 0))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkTrailer(const char* name = 0))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeStreamHeader())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeStreamTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkStreamHeader())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkStreamTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeName(const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkName(const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeStorableHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkStorableHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writePrimitiveHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkPrimitiveHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeStorableTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkStorableTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writePrimitiveTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkPrimitiveTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeObjectPointerHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkObjectPointerHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeObjectReferenceHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkObjectReferenceHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeObjectPointerArrayHeader(const char* type_name, const char* name, Size size))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkObjectPointerArrayHeader(const char* type_name, const char* name, Size& size))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::writeObjectPointerArrayTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(XDRPersistenceManager::checkObjectPointerArrayTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 

@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.13 2001/05/29 16:40:22 anker Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.14 2001/12/30 13:28:54 sturm Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
@@ -8,7 +8,7 @@ using namespace std;
 namespace BALL
 {
 
-	// BAUSTELLE
+	// ?????
 	float MIN_DISTANCE = 1e-6;
 
 	const char* Pair6_12RDFIntegrator::Option::VERBOSITY = "verbosity";
@@ -72,7 +72,7 @@ namespace BALL
 		B_ = 0.0;
 		k1_ = 0.0;
 		k2_ = 0.0;
-		// BAUSTELLE: options.clear() ?
+		// ?????: options.clear() ?
 		options.clear(); 
 		RDFIntegrator::clear();
 	}
@@ -137,7 +137,7 @@ namespace BALL
 		Size number_of_intervals = poly.getIntervals().size();
 		if (number_of_intervals < 1)
 		{ 
-			// BAUSTELLE: Sollte hier eine Exception geworfen werden?
+			// ?????: Sollte hier eine Exception geworfen werden?
 			Log.error() << "Pair6_12RDFIntegrator::integrateToInf(): "
 				<< "No intervals defined" << endl;
 			getRDF().dump();
@@ -148,7 +148,7 @@ namespace BALL
 		// the last interval has to be defined to infinity
 		if (interval.second != INFINITY)
 		{
-			// BAUSTELLE: Sollte hier eine Exception geworfen werden?
+			// ?????: Sollte hier eine Exception geworfen werden?
 			Log.error() << "Pair6_12RDFIntegrator::integrateToInf(): "
 				<< "Last interval must have infinity as upper limit." << endl;
 			getRDF().dump();

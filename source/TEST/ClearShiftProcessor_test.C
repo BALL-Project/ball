@@ -1,4 +1,4 @@
-// $Id: ClearShiftProcessor_test.C,v 1.3 2000/09/22 11:46:06 oliver Exp $
+// $Id: ClearShiftProcessor_test.C,v 1.4 2001/12/30 13:28:56 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(ClearShiftProcessor, "$Id: ClearShiftProcessor_test.C,v 1.3 2000/09/22 11:46:06 oliver Exp $")
+START_TEST(ClearShiftProcessor, "$Id: ClearShiftProcessor_test.C,v 1.4 2001/12/30 13:28:56 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ CHECK(shift assignment)
 RESULT
 
 CHECK(ClearShiftProcessor::Processor::Result operator () (Composite& composite) throw())
-	// BAUSTELLE
+	// ?????
 RESULT
 
 CHECK(apply)

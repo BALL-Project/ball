@@ -1,4 +1,4 @@
-// $Id: snapShotManager.C,v 1.7 2001/06/05 15:51:15 anker Exp $
+// $Id: snapShotManager.C,v 1.8 2001/12/30 13:28:49 sturm Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -140,7 +140,7 @@ namespace BALL
 	void SnapShotManager::clear()
 		throw()
 	{
-		// BAUSTELLE
+		// ?????
 		flushToDisk();
 
 		// now bring the instance to initial state
@@ -424,7 +424,7 @@ namespace BALL
 			// write all snapshots to disk in order to prevent memory overflow
 			flushToDisk();
 			snapshot_buffer_.clear();
-			// BAUSTELLE is that REALLY necessary?
+			// ????? is that REALLY necessary?
 			// snapshot_buffer_.resize(flush_to_disk_frequency_);
 			buffer_counter_ = 0;
 		}
@@ -472,7 +472,7 @@ namespace BALL
 	{
 		SnapShot buffer;
 
-		// BAUSTELLE:
+		// ?????:
 		// We should check for file validity here
 
 		trajectory_file_ptr_->reopen();

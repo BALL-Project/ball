@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $
+// $Id: EFShiftProcessor_test.C,v 1.4 2001/12/30 13:28:57 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(EFShiftProcessor, "$Id: EFShiftProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $")
+START_TEST(EFShiftProcessor, "$Id: EFShiftProcessor_test.C,v 1.4 2001/12/30 13:28:57 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,27 +30,27 @@ RESULT
 
 
 CHECK(EFShiftProcessor::EFShiftProcessor(const EFShiftProcessor& processor) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(EFShiftProcessor::init() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(EFShiftProcessor::start() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(EFShiftProcessor::Processor::Result operator () (Composite& composite) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(EFShiftProcessor::finish() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 HINFile f("data/EFShiftProcessor_test.hin");

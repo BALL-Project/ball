@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.23 2001/06/07 20:13:53 anker Exp $
+// $Id: socket.h,v 1.24 2001/12/30 13:28:44 sturm Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -271,7 +271,7 @@ namespace BALL
 			int	l_onoff;	
 			/// linger time
 			int	l_linger;	
-			/// BAUSTELLE
+			/// ?????
 			socklinger (int a, int b)
 				: l_onoff (a), 
 					l_linger (b)
@@ -333,7 +333,7 @@ namespace BALL
 		//_ port to USL iostream
 		int	x_flags; 
 
-		// BAUSTELLE:
+		// ?????:
 		// The following names don't follow our naming convention!
 
 		//_
@@ -576,7 +576,7 @@ namespace BALL
 	class ISockStream
 		: public std::istream 
 	{
-		// BAUSTELLE:
+		// ?????:
 		// should this really be protected here?
 		protected:
 
@@ -589,7 +589,7 @@ namespace BALL
 
 		public:
 
-		// BAUSTELLE
+		// ?????
 		// /KM/usr1/anker/BALL/include/BALL/SYSTEM/socket.h: In method
 		// `BALL::ISockStream::ISockStream(const BALL::ISockStream &)':
 		// /opt/gnu/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/streambuf.h:128:
@@ -611,7 +611,7 @@ namespace BALL
 			throw();
 							
 		//@}
-		/** @name BAUSTELLE: Accessors 
+		/** @name ?????: Accessors 
 		*/
 		//@{
 
@@ -634,7 +634,7 @@ namespace BALL
 	class OSockStream
 		: public std::ostream 
 	{
-		// BAUSTELLE:
+		// ?????:
 		// see above
 		protected:
 
@@ -646,7 +646,7 @@ namespace BALL
 
 		public:
 
-		// BAUSTELLE
+		// ?????
 		// see above
 		// BALL_CREATE(OSockStream)
 

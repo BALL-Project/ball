@@ -1,4 +1,4 @@
-// $Id: EnergyMinimizer_test.C,v 1.1 1999/11/30 19:43:58 oliver Exp $
+// $Id: EnergyMinimizer_test.C,v 1.2 2001/12/30 13:28:57 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/DATATYPE/options.h>
 ///////////////////////////
 
-START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.1 1999/11/30 19:43:58 oliver Exp $")
+START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.2 2001/12/30 13:28:57 sturm Exp $")
 
 using namespace BALL;
 
@@ -49,11 +49,11 @@ delete em;
 RESULT
 
 CHECK(EnergyMinimizer::EnergyMinimizer(const EnergyMinimizer&, bool))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::operator = (const EnergyMinimizer&))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::isValid() const)
@@ -66,75 +66,75 @@ delete em;
 RESULT
 
 CHECK(EnergyMinimizer::setup(ForceField&))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::setup(ForceField&, const Options&))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::specificSetup())
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::getNumberOfIteration() const)
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::setNumberOfIteration(Size))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::getMaximalNumberOfIterations())
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::setMaximalNumberOfIterations(Size))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::getSnapshot())
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::setSnapshot(Snapshot&))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::getEnergyOutputFrequency() const)
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::setEnergyOutputFrequency(Size))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::getEnergyDifferenceBound() const)
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::setEnergyDifferenceBound(float))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::getMaximalShift() const)
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::setMaximalShift(float))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(SnapshotMinimizer::getSnapshotOutputFrequency() const)
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(SnapshotMinimizer::setSnapshotOutputFrequency(Size))
-//BAUSTELLE
+//?????
 RESULT
 
 CHECK(EnergyMinimizer::minimize(Size, bool))
-//BAUSTELLE
+//?????
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: RDFSection_test.C,v 1.3 2001/07/15 17:32:41 amoll Exp $
+// $Id: RDFSection_test.C,v 1.4 2001/12/30 13:29:01 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(RDFSection, "$Id: RDFSection_test.C,v 1.3 2001/07/15 17:32:41 amoll Exp $")
+START_TEST(RDFSection, "$Id: RDFSection_test.C,v 1.4 2001/12/30 13:29:01 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -32,37 +32,37 @@ RESULT
 
 
 CHECK(RDFSection::RDFSection(const RDFSection& rdf_section))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RDFSection::destroy())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RDFSection::clear())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RDFSection::set(const RDFSection& rdf_section))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RDFSection::RDFSection& operator = (const RDFSection& rdf_section))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RDFSection::extractSection(Parameters& parameters, const String& section_name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RDFSection::getRDF() const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 

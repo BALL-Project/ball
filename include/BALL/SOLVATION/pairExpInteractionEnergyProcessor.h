@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.10 2001/07/14 12:58:39 amoll Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.11 2001/12/30 13:28:42 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -35,7 +35,7 @@
 # include <BALL/SOLVATION/solventDescriptor.h>
 #endif
 
-// BAUSTELLE: Die Konstanten alpha, C1 und C2 bzw die K_ij müssen noch in
+// ?????: Die Konstanten alpha, C1 und C2 bzw die K_ij müssen noch in
 // sinnvoller Form eingebettet werden.
 
 namespace BALL
@@ -56,7 +56,7 @@ namespace BALL
 
 		BALL_CREATE(PairExpInteractionEnergyProcessor)
 
-		// BAUSTELLE: Doku.
+		// ?????: Doku.
 		enum SurfaceType
 		{
 			/// Unknown surface.

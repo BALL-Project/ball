@@ -1,4 +1,4 @@
-// $Id: expressionPredicate.h,v 1.1 2001/07/16 19:38:42 anker Exp $
+// $Id: expressionPredicate.h,v 1.2 2001/12/30 13:28:38 sturm Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPREDICATE_H
 #define BALL_KERNEL_EXPRESSIONPREDICATE_H
@@ -15,7 +15,7 @@ namespace BALL
 			atoms. 
 			\\
 			There are standard predicates that are predefined for
-			convenient use (\Ref{BAUSTELLE}) when building an expression.
+			convenient use (\Ref{?????}) when building an expression.
 			\\
 			{\bf Definition} \URL{BALL/KERNEL/expression.h}
 	*/

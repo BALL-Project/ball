@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.9 2001/09/24 07:37:34 aubertin Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.10 2001/12/30 13:28:53 sturm Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -124,7 +124,7 @@ namespace BALL
 		HashMap<const Atom*,float> atom_areas;
 		calculateSASAtomAreas(*fragment_, atom_areas, solvent_radius);
 		HashMap<const Atom*,float> atom_areas_reduced;
-		// BAUSTELLE: Hier stand vorher SES? Warum?
+		// ?????: Hier stand vorher SES? Warum?
 		calculateSASAtomAreas(*fragment_, atom_areas_reduced, 0.0);
 		
 		// R is two times ( atom radius + probe radius ) [ m ]

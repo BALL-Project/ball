@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.14 2001/09/19 17:56:58 strobel Exp $
+// $Id: BSDTree.h,v 1.15 2001/12/30 13:28:42 sturm Exp $
 
 #ifndef BALL_STRUCTURE_BSDTREE_H
 #define BALL_STRUCTURE_BSDTREE_H
@@ -64,7 +64,7 @@ namespace BALL
 		TBSDTree()
 			throw();
 
-		// BAUSTELLE: should honor the deep flag!
+		// ?????: should honor the deep flag!
 		/**	Copy constructor.
 				Create a new BSDTree object from another.
 				@param bsd_tree the BSDTree object to be copied

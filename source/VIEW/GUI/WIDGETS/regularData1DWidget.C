@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.C,v 1.7 2001/07/17 00:40:02 oliver Exp $
+// $Id: regularData1DWidget.C,v 1.8 2001/12/30 13:29:04 sturm Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
 
@@ -47,7 +47,7 @@ RegularData1DWidget::RegularData1DWidget(const RegularData1DWidget& /* widget */
     ModularWidget("RegularData1DWidget"),
     spec_(0)
 {
-	// BAUSTELLE
+	// ?????
 }
 
 RegularData1DWidget::~RegularData1DWidget()
@@ -162,7 +162,7 @@ void RegularData1DWidget::createPlot()
   p.setPen(QColor(red));
   p.drawPolyline(fdummy);
 
-	// BAUSTELLE: remove debugging code!
+	// ?????: remove debugging code!
 	p.drawText(length_/2, (int)((*spec_)[length_/2]), "Hallo!");
 	cout << (*spec_)[length_/2] << endl; 
   p.drawLine(0,0,length_, (int)max_el);
@@ -186,7 +186,7 @@ void RegularData1DWidget::paintEvent(QPaintEvent* /* e */)
   {
     QPainter paint(viewport());
 
-		// BAUSTELLE: remove debugging code
+		// ?????: remove debugging code
     pm_.save("abc.ppm", "PPMRAW");
     
     paint.setClipRect(contentsX(), contentsY(), contentsWidth(), contentsHeight());

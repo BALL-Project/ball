@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.26 2001/06/05 15:51:15 anker Exp $
+// $Id: snapShot.C,v 1.27 2001/12/30 13:28:49 sturm Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -396,7 +396,7 @@ namespace BALL
 
 	::std::istream& operator >> (::std::istream& is, SnapShot& ss)
 	{
-		// BAUSTELLE:
+		// ?????:
 		// this istream does not check anything!
 
 		Size number;

@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.16 2001/08/16 00:48:11 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.17 2001/12/30 13:28:42 sturm Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -611,7 +611,7 @@ namespace BALL
 		bool setupEpsGrid(System& system);
 
 					
-		// BAUSTELLE
+		// ?????
 		/**	Setup the ion accessible grid.
 				Not yet implemented!
 		*/

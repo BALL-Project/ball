@@ -1,11 +1,11 @@
-// $Id: SolventParameter_test.C,v 1.11 2001/08/22 11:14:15 sturm Exp $
+// $Id: SolventParameter_test.C,v 1.12 2001/12/30 13:29:02 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.11 2001/08/22 11:14:15 sturm Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.12 2001/12/30 13:29:02 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ CHECK(~SolventParameter())
 RESULT
 
 CHECK(extractSection(ForceFieldParameters& parameters, const String& section_name))
-	//BAUSTELLE , da BAUSTELLE in SolventParameter.C
+	//????? , da ????? in SolventParameter.C
  	bool result;
 	SolventParameter s_ptr;
 
@@ -134,7 +134,7 @@ RESULT
 
 
 CHECK(operator == (const SolventParameter& param) const)
-	//BAUSTELLE , da Baustelle in Quellcode
+	//????? , da ????? in Quellcode
 RESULT
 
 

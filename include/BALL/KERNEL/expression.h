@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.17 2001/07/17 09:40:59 amoll Exp $
+// $Id: expression.h,v 1.18 2001/12/30 13:28:38 sturm Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -160,13 +160,13 @@ namespace BALL
 		*/
 		//@{
 
-		/*_ BAUSTELLE
+		/*_ ?????
 		*/
 		ExpressionTree*	constructExpressionTree_(const SyntaxTree& tree)
 			
 			throw();
 
-		/*_ BAUSTELLE
+		/*_ ?????
 		*/
 		void registerStandardPredicates_() 
 			throw();
@@ -176,15 +176,15 @@ namespace BALL
 		*/
 		//@{
 
-		/*_ BAUSTELLE
+		/*_ ?????
 		*/
 		StringHashMap<CreationMethod> create_methods_;
 
-		/*_ BAUSTELLE
+		/*_ ?????
 		*/
 		ExpressionTree*								expression_tree_;
 
-		/*_ BAUSTELLE
+		/*_ ?????
 		*/
 		String												expression_string_;
 

@@ -1,4 +1,4 @@
-// $Id: RuleEvaluator_test.C,v 1.4 2001/07/14 20:12:54 oliver Exp $
+// $Id: RuleEvaluator_test.C,v 1.5 2001/12/30 13:29:01 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(RuleEvaluator, "$Id: RuleEvaluator_test.C,v 1.4 2001/07/14 20:12:54 oliver Exp $")
+START_TEST(RuleEvaluator, "$Id: RuleEvaluator_test.C,v 1.5 2001/12/30 13:29:01 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ RESULT
 
 
 CHECK(RuleEvaluator::initialize(INIFile& file, const String& prefix))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
@@ -74,12 +74,12 @@ RESULT
 
 
 CHECK(RuleEvaluator::RuleEvaluator& operator = (const RuleEvaluator& evaluator))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RuleEvaluator::set(const RuleEvaluator& evaluator))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
@@ -105,12 +105,12 @@ RESULT
 
 
 CHECK(RuleEvaluator::isValid() const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(RuleEvaluator::dump(std::ostream& s = std::cout, Size indent_depth = 0) const )
-  //BAUSTELLE
+  //?????
 RESULT
 
 

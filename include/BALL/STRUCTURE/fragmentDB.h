@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.13 2001/07/25 11:28:49 oliver Exp $
+// $Id: fragmentDB.h,v 1.14 2001/12/30 13:28:43 sturm Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -460,7 +460,7 @@ namespace BALL
 				(const Vector3& w1, const Vector3& w2, const Vector3& w3,
 				 const Vector3& v1, const Vector3& v2, const Vector3& v3);
 
-			// BAUSTELLE: bull shit
+			// ?????: bull shit
 			/*_ Calculates position of hydrogen to be inserted based on geometric comparison.
 					Creates a new PDBAtom which is added to the atom list of the current residue.
 					Creates a new bond between inserted hydrogen and passed Bindungsatom.

@@ -1,4 +1,4 @@
- // $Id: peakList.h,v 1.4 2001/08/16 00:44:49 oliver Exp $
+ // $Id: peakList.h,v 1.5 2001/12/30 13:28:41 sturm Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -167,7 +167,7 @@ namespace BALL
 	template <typename PT>
 	PeakList<PT>::Position PeakList<PT>::getMinPosition() const
 	{
-		// BAUSTELLE
+		// ?????
 		Position pos;
 		return pos;
 	}
@@ -175,7 +175,7 @@ namespace BALL
 	template <typename PT>
 	PeakList<PT>::Position PeakList<PT>::getMaxPosition() const
 	{
-		// BAUSTELLE
+		// ?????
 		Position pos;
 		return pos;
 	}

@@ -1,4 +1,4 @@
-// $Id: expressionPredicate.C,v 1.1 2001/07/16 19:38:38 anker Exp $
+// $Id: expressionPredicate.C,v 1.2 2001/12/30 13:28:46 sturm Exp $
 
 #include <BALL/KERNEL/expressionPredicate.h>
 
@@ -52,7 +52,7 @@ namespace BALL
 		throw()
 	{
 		argument_ = "";
-		// BAUSTELLE
+		// ?????
 		// UnaryPredicate does not implement the OCI
 		// UnaryPredicate<Atom>::clear();
 	}
@@ -61,7 +61,7 @@ namespace BALL
 	bool ExpressionPredicate::operator == (const ExpressionPredicate& predicate) const 
 		throw()
 	{
-		// BAUSTELLE
+		// ?????
 		// UnaryPredicate does not implement the OCI
 		// return (UnaryPredicate<Atom>::operator == (predicate)
 		//	&& (argument_ == predicate.argument_));

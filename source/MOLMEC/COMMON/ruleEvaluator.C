@@ -1,5 +1,5 @@
 
-// $Id: ruleEvaluator.C,v 1.10 2001/07/11 00:12:56 oliver Exp $
+// $Id: ruleEvaluator.C,v 1.11 2001/12/30 13:28:49 sturm Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -232,6 +232,6 @@ namespace BALL
 	void RuleEvaluator::dump(std::ostream& /* s */, Size /* indent_depth */)
 		const throw()
 	{
-		// BAUSTELLE
+		// ?????
 	}
 }

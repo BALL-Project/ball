@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.h,v 1.9 2001/09/25 11:43:47 anker Exp $
+// $Id: charmmEEF1.h,v 1.10 2001/12/30 13:28:40 sturm Exp $
 // Molecular Mechanics Parameter: class describing parameters needed 
 // for the EEF1 solvation component in the CHARMM force field
  
@@ -26,33 +26,33 @@ namespace BALL
 	{
 		public:
 
-		/**	BAUSTELLE
+		/**	?????
 		*/
 		struct Values 
 		{
-			/// BAUSTELLE
+			/// ?????
 			float V;
-			/// BAUSTELLE
+			/// ?????
 			float dG_ref;
-			/// BAUSTELLE
+			/// ?????
 			float dG_free;
-			/// BAUSTELLE
+			/// ?????
 			float r_min;
-			/// BAUSTELLE
+			/// ?????
 			float sig_w;
-			/// BAUSTELLE
+			/// ?????
 			float dH_ref;
-			/// BAUSTELLE
+			/// ?????
 			float Cp_ref;
 		};
 
-		/** BAUSTELLE
+		/** ?????
 		*/
 		struct Data
 		{
-			/// BAUSTELLE
+			/// ?????
 			Atom*		atom;
-			/// BAUSTELLE
+			/// ?????
 			Values	values;
 		};
 
@@ -88,7 +88,7 @@ namespace BALL
 		virtual bool extractSection(ForceFieldParameters& parameters, 
 				const String& section_name) throw();
 
-		/** BAUSTELLE
+		/** ?????
 		*/
 		virtual bool extractSection(Parameters& parameters, 
 				const String& section_name) throw();
@@ -129,31 +129,31 @@ namespace BALL
 
 		protected:
 
-		//_ BAUSTELLE
+		//_ ?????
 		Size					number_of_atom_types_;
 
-		//_ BAUSTELLE
+		//_ ?????
 		float*				V_;
 		
-		//_ BAUSTELLE
+		//_ ?????
 		float*				dG_ref_;
 		
-		//_ BAUSTELLE
+		//_ ?????
 		float*				dG_free_;
 
-		//_ BAUSTELLE
+		//_ ?????
 		float*				dH_ref_;
 
-		//_ BAUSTELLE
+		//_ ?????
 		float*				Cp_ref_;
 
-		//_ BAUSTELLE
+		//_ ?????
 		float*				sig_w_;
 
-		//_ BAUSTELLE
+		//_ ?????
 		float*				R_min_;
 		
-		//_ BAUSTELLE
+		//_ ?????
 		bool*					is_defined_;
 	};
 

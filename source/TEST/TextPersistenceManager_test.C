@@ -1,4 +1,4 @@
-// $Id: TextPersistenceManager_test.C,v 1.2 2001/06/05 02:38:07 oliver Exp $
+// $Id: TextPersistenceManager_test.C,v 1.3 2001/12/30 13:29:03 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.2 2001/06/05 02:38:07 oliver Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.3 2001/12/30 13:29:03 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using namespace BALL;
 using namespace std;
 
 CHECK(TextPersistenceManager::TextPersistenceManager())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
@@ -45,142 +45,142 @@ RESULT
 
 
 CHECK(TextPersistenceManager::TextPersistenceManager(std::istream& is, std::ostream& os))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeHeader(const char* type_name, const char* name, LongPointerType ptr))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeTrailer(const char* name = 0))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkTrailer(const char* name = 0))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeStreamHeader())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeStreamTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkStreamHeader())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkStreamTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeName(const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkName(const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeStorableHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkStorableHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writePrimitiveHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkPrimitiveHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeStorableTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkStorableTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writePrimitiveTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkPrimitiveTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeObjectPointerHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkObjectPointerHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeObjectReferenceHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkObjectReferenceHeader(const char* type_name, const char* name))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeObjectPointerArrayHeader(const char* type_name, const char* name, Size size))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkObjectPointerArrayHeader(const char* type_name, const char* name, Size& size))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::writeObjectPointerArrayTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(TextPersistenceManager::checkObjectPointerArrayTrailer())
-  //BAUSTELLE
+  //?????
 RESULT
 
 

@@ -1,4 +1,4 @@
-// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.8 2001/12/20 01:14:19 oliver Exp $
+// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.9 2001/12/30 13:28:58 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.8 2001/12/20 01:14:19 oliver Exp $")
+START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.9 2001/12/30 13:28:58 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ f.close();
 
 
 CHECK(JohnsonBoveyShiftProcessor::JohnsonBoveyShiftProcessor(const JohnsonBoveyShiftProcessor& processor) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
@@ -60,12 +60,12 @@ RESULT
 
 
 CHECK(JohnsonBoveyShiftProcessor::finish() throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(JohnsonBoveyShiftProcessor::Processor::Result operator () (Composite& composite) throw())
-  //BAUSTELLE
+  //?????
 RESULT
 
 

@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.39 2001/12/26 03:35:53 oliver Exp $
+// $Id: fragmentDB.C,v 1.40 2001/12/30 13:28:55 sturm Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1767,7 +1767,7 @@ namespace BALL
 					if ((inter_fragment_bonds > 0) && (res1 != 0) && (res2 != 0)
 							&& res1->isTerminal() && res2->isTerminal())
 					{
-						// BAUSTELLE: wie sieht es bei terminal CYS-verbrueckten 
+						// ?????: wie sieht es bei terminal CYS-verbrueckten 
 						//   Peptiden aus?
 						// assign them the CYCLIC property and thus prevent
 						// getNTerminal/getCTerminal to recognize them

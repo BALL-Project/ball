@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.27 2001/07/17 00:51:54 oliver Exp $
+// $Id: standardPredicates.C,v 1.28 2001/12/30 13:28:46 sturm Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -465,7 +465,7 @@ namespace BALL
 			std::list<std::pair<String,String> >& subs) const
 		throw()
 	{
-		// BAUSTELLE
+		// ?????
 		// EIGENTLICH müssen hier Symbolfolgen erzeugt werden, keine Strings.
 
 		int depth = 0;
@@ -561,7 +561,7 @@ namespace BALL
 						}
 						if (group[position-1] == ')')
 						{
-							// BAUSTELLE
+							// ?????
 						}
 						else
 						{
@@ -654,7 +654,7 @@ namespace BALL
 			const Bond* source) const
 		throw()
 	{
-		// BAUSTELLE
+		// ?????
 
 		// ANNAHME: Nur Elemente mit EINEM Buchstaben. Der Rest muss nuch
 		// irgendwie gefummelt werden. Wahrscheinlich über Symbolfolgen, die
@@ -870,7 +870,7 @@ namespace BALL
 	bool ConnectedToPredicate::operator () (const Atom& atom) const
 		throw()
 	{
-		// BAUSTELLE
+		// ?????
 		if (find_(argument_, atom, 0))
 		{
 			return true;

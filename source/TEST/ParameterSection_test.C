@@ -1,4 +1,4 @@
-// $Id: ParameterSection_test.C,v 1.10 2001/05/10 22:12:10 amoll Exp $
+// $Id: ParameterSection_test.C,v 1.11 2001/12/30 13:28:59 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.10 2001/05/10 22:12:10 amoll Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.11 2001/12/30 13:28:59 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -162,12 +162,12 @@ RESULT
 
 
 CHECK(const ParameterSection& ParameterSection::operator = (const ParameterSection& parameter_section))
-  //BAUSTELLE
+  //?????
 RESULT
 
 
 CHECK(bool ParameterSection::operator == (const ParameterSection& parameter_section))
-  //BAUSTELLE
+  //?????
 RESULT
 
 

@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.24 2001/07/25 11:39:43 oliver Exp $
+// $Id: regularData2DWidget.C,v 1.25 2001/12/30 13:29:04 sturm Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -73,7 +73,7 @@ NewRegularData2DMessage::~NewRegularData2DMessage()
   #endif
 }
 
-// BAUSTELLE
+// ?????
 // WRepaintNoErase seems to dependent on a different QT version.
 
 RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) 

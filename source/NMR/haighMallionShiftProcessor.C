@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.C,v 1.11 2001/06/05 15:53:26 anker Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.12 2001/12/30 13:28:52 sturm Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -34,10 +34,10 @@ namespace BALL
 
 		ParameterSection parameter_section;
 		parameter_section.extractSection(*parameters_, "HaighMallionRingCurrent");
-		// BAUSTELLE: ALLE Parameter muessen eingelesen werden!
+		// ?????: ALLE Parameter muessen eingelesen werden!
 
 
-		// BAUSTELLE: diese C-Arrays verschwinden! 
+		// ?????: diese C-Arrays verschwinden! 
 		//		Und END-Marker wird es auch nicht mehr geben, 
 		//		geschweigenn denn "NULL" Strings!
 		asrings_ = new String*[4];
@@ -189,7 +189,7 @@ namespace BALL
 						}
 					}
 				
-					// BAUSTELLE: check for missing ring atoms!
+					// ?????: check for missing ring atoms!
 					if (number_of_ring_atoms < 5)
 					{
 						Log.error() << "HMSP:finish: could not identify all ring atoms for " 
@@ -305,7 +305,7 @@ namespace BALL
 		Atom* atom = dynamic_cast<Atom*>(&composite);
 		if (atom != 0)
 		{
-			// BAUSTELLE: should be parameterizable
+			// ?????: should be parameterizable
 			if (atom->getElement() == PTE[Element::H])
 			{
 				proton_list_.push_back(atom);

@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.12 2001/12/14 01:18:12 oliver Exp $
+// $Id: lennardJones.C,v 1.13 2001/12/30 13:28:51 sturm Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -120,7 +120,7 @@ namespace BALL
 			}		
 			else if (hasVariable("alpha") && hasVariable("N") && hasVariable("R"))
 			{
-				// BAUSTELLE
+				// ?????
 				format_ = SLATER_KIRKWOOD_FORMAT;
 				Log.error() << "LennardJones::extractSection: Slater Kirkwood format not yet supported!" << endl;
 
@@ -174,7 +174,7 @@ namespace BALL
 		if (format_ == A_B_FORMAT)
 		{
 			if (options.has("unit_A"))
-			{ //BAUSTELLE
+			{ //?????
 			}
 		}
 		// in EPSILON_R_FORMAT epsilon is in A and R is in B

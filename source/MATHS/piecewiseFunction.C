@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.C,v 1.9 2000/10/29 21:27:04 anker Exp $
+// $Id: piecewiseFunction.C,v 1.10 2001/12/30 13:28:47 sturm Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 
@@ -189,7 +189,7 @@ namespace BALL
 	bool PiecewiseFunction::isValid() const throw()
 	{
 
-		// BAUSTELLE: ist das vollständig?
+		// ?????: ist das vollständig?
 		if ((coefficients_.size() == 0) || (intervals_.size() == 0))
 		{
 			Log.error() << "PiecewiseFunction::isValid(): "

@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.19 2001/06/24 21:25:19 oliver Exp $
+// $Id: amber.C,v 1.20 2001/12/30 13:28:47 sturm Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -144,7 +144,7 @@ namespace BALL
 		return *this;
 	}
 
-	// force field specific setup method BAUSTELLE
+	// force field specific setup method ?????
 	bool AmberFF::specificSetup()
 	{
 		// check whether the system is assigned
@@ -188,7 +188,7 @@ namespace BALL
 			// retrieve global force field options
 			ParameterSection global_options;
 			global_options.extractSection(parameters_, "Options");
-			// BAUSTELLE: Iterator ueber global_options.options
+			// ?????: Iterator ueber global_options.options
 			if (global_options.options.has(Option::NONBONDED_CUTOFF))
 			{
 				options.setDefault(Option::NONBONDED_CUTOFF, global_options.options[Option::NONBONDED_CUTOFF]);

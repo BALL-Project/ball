@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.C,v 1.8 2000/09/30 16:42:54 oliver Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.9 2001/12/30 13:28:52 sturm Exp $
 
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 
@@ -171,7 +171,7 @@ namespace BALL
 						}
 
 						float shift = (calc1 + calc2) / (3.0 * distance * distance * distance);
-						// BAUSTELLE
+						// ?????
 						// check whether effector and nucleus are in the same chain
 						if ((ignore_other_chain_) && ((*proton_iter)->getResidue() != 0) && (c_atom->getResidue() != 0))
 						{
@@ -249,7 +249,7 @@ namespace BALL
 						calc2 = ndX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
 					}
 
-					// BAUSTELLE
+					// ?????
 					float shift = (calc1 + calc2) / (3.0 * distance * distance * distance);	
 					// check whether effector and nucleus are in the same chain
 					if (ignore_other_chain_ && ((*proton_iter)->getResidue() != 0) && (c_atom->getResidue() != 0))

@@ -1,4 +1,4 @@
-// $Id: numericalIntegrator.h,v 1.5 2001/07/14 12:56:14 amoll Exp $
+// $Id: numericalIntegrator.h,v 1.6 2001/12/30 13:28:39 sturm Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -154,7 +154,7 @@ namespace BALL
 	void NumericalIntegrator<Function, DataType>::clear()
 		throw()
 	{
-		// BAUSTELLE: 
+		// ?????: 
 		// Depending on the template there doesn't exist a clear() method, so I
 		// commented it out. Any reasonable strategy?
 		// function_.clear();
@@ -215,7 +215,7 @@ namespace BALL
 			const DataType& from, const DataType& to) const
 		throw()
 	{
-		// BAUSTELLE
+		// ?????
 		// the number of samples has to be user configurable
 		Size samples = 30;
 		Size n = samples;

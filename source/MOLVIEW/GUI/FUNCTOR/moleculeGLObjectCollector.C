@@ -1,4 +1,4 @@
-// $Id: moleculeGLObjectCollector.C,v 1.3 2001/05/13 15:02:41 hekl Exp $
+// $Id: moleculeGLObjectCollector.C,v 1.4 2001/12/30 13:28:51 sturm Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
 
@@ -40,7 +40,7 @@ namespace BALL
 
 			BALL_FOREACH_INTRABOND(*molecule, atom_it, bond_it)
 			{
-				// BAUSTELLE: Applicator durch Processor ersetzt fuerht zu unendl. Rek.
+				// ?????: Applicator durch Processor ersetzt fuerht zu unendl. Rek.
 				Composite::SubcompositeIterator	subcomp_it = bond_it->beginSubcomposite();
 				for (; subcomp_it != bond_it->endSubcomposite(); ++subcomp_it)
 				{

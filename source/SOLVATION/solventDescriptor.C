@@ -1,4 +1,4 @@
-// $Id: solventDescriptor.C,v 1.6 2001/07/16 23:59:10 amoll Exp $
+// $Id: solventDescriptor.C,v 1.7 2001/12/30 13:28:55 sturm Exp $
 
 #include <BALL/SOLVATION/solventDescriptor.h>
 
@@ -30,7 +30,7 @@ namespace BALL
 			number_density_(number_density),
 			solvent_atoms_(atom_list)
 	{
-		// BAUSTELLE: Definieren, wann ein Solvent-Descriptor gültig ist.
+		// ?????: Definieren, wann ein Solvent-Descriptor gültig ist.
 		valid_ = true;
 	}
 

@@ -1,4 +1,4 @@
-// $Id: syntaxTree.h,v 1.2 2001/07/17 09:31:03 anker Exp $
+// $Id: syntaxTree.h,v 1.3 2001/12/30 13:28:38 sturm Exp $
 
 #ifndef BALL_KERNEL_SYNTAXTREE_H
 #define BALL_KERNEL_SYNTAXTREE_H
@@ -101,7 +101,7 @@ namespace BALL
 
 		/** Parse the tree. This method expands brackets and collapses all
 				conjunctions and disjunctions. The result is a tree that consists
-				of BAUSTELLE.
+				of ?????.
 		*/
 		void parse()
 			throw(Exception::ParseError);
@@ -117,27 +117,27 @@ namespace BALL
 		/** @name Public attributes
 		*/
 		//@{
-		/** BAUSTELLE
+		/** ?????
 		*/
 		String								expression;
 
-		/** BAUSTELLE
+		/** ?????
 		*/
 		String								argument;
 
-		/** BAUSTELLE
+		/** ?????
 		*/
 		bool									evaluated;
 
-		/** BAUSTELLE
+		/** ?????
 		*/
 		bool									negate;
 
-		/** BAUSTELLE
+		/** ?????
 		*/
 		ExpressionTree::Type	type;
 
-		/** BAUSTELLE
+		/** ?????
 		*/
 		list<SyntaxTree*>			children;
 
@@ -145,7 +145,7 @@ namespace BALL
 			
 		protected:
 		
-		/*_ BAUSTELLE
+		/*_ ?????
 		*/
 		void expandBrackets_()
 			throw(Exception::ParseError);
@@ -155,12 +155,12 @@ namespace BALL
 		void collapse_(ExpressionTree::Type type, const String& string)
 			throw(Exception::ParseError);
 
-		/*_ BAUSTELLE
+		/*_ ?????
 		*/
 		void collapseANDs_()
 			throw(Exception::ParseError);
 		
-		/*_ BAUSTELLE
+		/*_ ?????
 		*/
 		void collapseORs_()
 			throw(Exception::ParseError);

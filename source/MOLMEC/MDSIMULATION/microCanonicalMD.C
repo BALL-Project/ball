@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.C,v 1.8 2001/09/01 16:09:26 oliver Exp $
+// $Id: microCanonicalMD.C,v 1.9 2001/12/30 13:28:50 sturm Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
@@ -244,7 +244,7 @@ namespace BALL
 					<< kinetic_energy_ << " kJ/mol at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;
 
         
-         /* BAUSTELLE  Temperatur ausgeben? 
+         /* ?????  Temperatur ausgeben? 
 				Log.info()
 					<< "MicroCanonical MD simulation System has temperature  "
 					<< current_temperature_ << " K at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;

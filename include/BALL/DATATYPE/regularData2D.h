@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.15 2001/07/25 11:26:51 oliver Exp $
+// $Id: regularData2D.h,v 1.16 2001/12/30 13:28:36 sturm Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -336,7 +336,7 @@ namespace BALL
 		*/
 		bool has(float x, float y) const throw();
 
-		//BAUSTELLE
+		//?????
 		/**	Returns the linear interpolation of the eight surrounding grid points.
 				This method calculates the corresponding rectangle to a Vector2 and linearly.
 				Then, it calculates the position of this Vector2 in rectangle coordinates dx, dy

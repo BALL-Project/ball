@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.27 2001/12/08 17:07:23 strobel Exp $
+// $Id: reducedSurface.h,v 1.28 2001/12/30 13:28:43 sturm Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -848,7 +848,7 @@ namespace BALL
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TReducedSurface<T>& rs)
 	{
-		// BAUSTELLE
+		// ?????
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
@@ -950,7 +950,7 @@ namespace BALL
 			number_of_vertices_(reduced_surface.number_of_vertices_),
 			number_of_edges_(reduced_surface.number_of_edges_),
 			number_of_faces_(reduced_surface.number_of_faces_)
-	{			// BAUSTELLE !!! probe_positions_ !!!
+	{			// ????? !!! probe_positions_ !!!
 		for (Position i = 0; i < number_of_vertices_; i++)
 		{
 			if (reduced_surface.vertices_[i] != NULL)
@@ -1110,7 +1110,7 @@ namespace BALL
 	template <typename T>
 	void TReducedSurface<T>::operator=(const TReducedSurface<T>& reduced_surface)
 		throw(Exception::GeneralException)
-	{		//	BAUSTELLE !!!  probe_positions_ !!!
+	{		//	????? !!!  probe_positions_ !!!
 		number_of_atoms_ = reduced_surface.number_of_atoms_;
 		atom_status_ = reduced_surface.atom_status_;
 		neighbours_of_two_ = reduced_surface.neighbours_of_two_;

@@ -1,4 +1,4 @@
-// $Id: solventParameter.C,v 1.7 2001/08/22 10:30:31 sturm Exp $
+// $Id: solventParameter.C,v 1.8 2001/12/30 13:28:55 sturm Exp $
 
 #include <BALL/SOLVATION/solventParameter.h>
 
@@ -60,7 +60,7 @@ namespace BALL
 	bool SolventParameter::operator == (const SolventParameter& param) const
 		throw()
 	{
-		// BAUSTELLE
+		// ?????
 		return ((ParameterSection::operator == (param))
 			&& (name_ == param.name_)
 			&& (number_density_ == param.number_density_));
@@ -97,7 +97,7 @@ namespace BALL
 	bool SolventParameter::extractSection(ForceFieldParameters& parameters,
 			const String& section_name) throw()
 	{
-		// BAUSTELLE
+		// ?????
 		if (!parameters.isValid())
 		{
 			return false;

@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.13 2001/09/11 12:28:31 anker Exp $
+// $Id: DCDFile.h,v 1.14 2001/12/30 13:28:37 sturm Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -126,12 +126,12 @@ namespace BALL
 					number_of_atoms(0),
 					end_atomnumber_block(4)
 			{
-				// BAUSTELLE: What about using c_str() for initializing CORD?
+				// ?????: What about using c_str() for initializing CORD?
 				CORD[0] = 'C';
 				CORD[1] = 'O';
 				CORD[2] = 'R';
 				CORD[3] = 'D';
-				// BAUSTELLE: This is more than ugly
+				// ?????: This is more than ugly
 				Size argh;
 				for (argh = 0; argh < 6; ++argh)
 				{
@@ -145,7 +145,7 @@ namespace BALL
 				{
 					title[argh] = ' ';
 				}
-				// BAUSTELLE: this only works with <cstdio> which does not seem to
+				// ?????: this only works with <cstdio> which does not seem to
 				// be available under IRIX
 				// sprintf(title, "BALL DCD export file");
 				// sprintf(title+80, "Here should be the date");
@@ -211,7 +211,7 @@ namespace BALL
 		/// @name Public methods for file handling
 		//@{
 
-		// BAUSTELLE
+		// ?????
 		/** open a DCDFile
 		*/
 		/*
@@ -237,7 +237,7 @@ namespace BALL
 		virtual bool writeHeader()
 			throw();
 
-		// BAUSTELLE:
+		// ?????:
 		// should append() also write the header? what is more intuitive?
 		/** Append a SnapShot to an existing file. {\bf Note} that this method
 				does {\bf not} update the header. 
