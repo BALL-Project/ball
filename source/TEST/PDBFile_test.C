@@ -1,18 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.10 2002/12/13 14:00:43 anker Exp $
+// $Id: PDBFile_test.C,v 1.11 2002/12/16 12:00:00 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.10 2002/12/13 14:00:43 anker Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.11 2002/12/16 12:00:00 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -151,8 +152,16 @@ CHECK(writing of Systems containing Atoms instead of PDBAtoms)
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/PDBFile_test3.txt")
 
-	delete chain;
-	delete protein;
+	HINFile methane("data/methane.hin");
+	system->clear();
+	methane.read(*system);
+	TEST_EQUAL(system->countAtoms(), 5)
+	NEW_TMP_FILE(filename)
+	outfile.open(filename, std::ios::out);
+	outfile << *system;
+	outfile.close();
+	TEST_FILE_REGEXP(filename.c_str(), "data/PDBFile_test_write_methane.txt")
+
 	delete system;
 RESULT
 
