@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_bench.C,v 1.5 2002/12/22 13:19:19 oliver Exp $
+// $Id: CharmmFF_bench.C,v 1.6 2002/12/22 14:30:11 anker Exp $
 
 #include <BALL/CONCEPT/benchmark.h>
 
@@ -12,12 +12,13 @@
 #include <BALL/MOLMEC/CHARMM/charmm.h>
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 
 ///////////////////////////
 
 using namespace BALL;
 
-START_BENCHMARK(CharmmFF, 1.0, "$Id: CharmmFF_bench.C,v 1.5 2002/12/22 13:19:19 oliver Exp $")
+START_BENCHMARK(CharmmFF, 1.0, "$Id: CharmmFF_bench.C,v 1.6 2002/12/22 14:30:11 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -26,7 +27,17 @@ PDBFile pdb("data/AmberFF_bench.pdb");
 System S;
 pdb >> S;
 
+FragmentDB db;
+S.apply(db.normalize_names);
+S.apply(db.build_bonds);
+S.apply(db.add_hydrogens);
+
 CharmmFF charmm;
+charmm.options[CharmmFF::Option::ASSIGN_CHARGES] = "true";
+charmm.options[CharmmFF::Option::ASSIGN_TYPENAMES] = "true";
+charmm.options[CharmmFF::Option::ASSIGN_TYPES] = "true";
+charmm.options[CharmmFF::Option::FILENAME] = "CHARMM/EEF1/param19_eef1.ini";
+
 START_SECTION(20x setup, 0.05)
 	START_TIMER
 		for (int i = 0; i < 20; i++)
@@ -65,7 +76,7 @@ END_SECTION
 
 ForceFieldComponent* component;
 START_SECTION(100x nonbonded energy calculation w/o selection, 0.1)
-	component = charmm.getComponent("Charmm NonBonded");
+	component = charmm.getComponent("CHARMM NonBonded");
 	STATUS("Component pointer: " << (void*)component)
 	if (component != 0)
 	{
@@ -79,7 +90,7 @@ START_SECTION(100x nonbonded energy calculation w/o selection, 0.1)
 END_SECTION
 
 START_SECTION(5000x stretch energy calculation w/o selection, 0.1)
-	component = charmm.getComponent("Charmm Stretch");
+	component = charmm.getComponent("CHARMM Stretch");
 	START_TIMER
 		for (Size i = 0; i < 5000; i++)
 		{
@@ -89,7 +100,7 @@ START_SECTION(5000x stretch energy calculation w/o selection, 0.1)
 END_SECTION
 
 START_SECTION(5000x bend energy calculation w/o selection, 0.1)
-	component = charmm.getComponent("Charmm Bend");
+	component = charmm.getComponent("CHARMM Bend");
 	START_TIMER
 		for (Size i = 0; i < 5000; i++)
 		{
@@ -99,7 +110,7 @@ START_SECTION(5000x bend energy calculation w/o selection, 0.1)
 END_SECTION
 
 START_SECTION(5000x torsion energy calculation w/o selection, 0.1)
-	component = charmm.getComponent("Charmm Torsion");
+	component = charmm.getComponent("CHARMM Torsion");
 	START_TIMER
 		for (Size i = 0; i < 5000; i++)
 		{
@@ -137,7 +148,7 @@ START_SECTION(200x force calculation w/ selection, 0.2)
 END_SECTION
 
 START_SECTION(1000x nonbonded energy calculation w/ selection, 0.1)
-	component = charmm.getComponent("Charmm NonBonded");
+	component = charmm.getComponent("CHARMM NonBonded");
 	START_TIMER
 		for (Size i = 0; i < 1000; i++)
 		{
@@ -147,7 +158,7 @@ START_SECTION(1000x nonbonded energy calculation w/ selection, 0.1)
 END_SECTION
 
 START_SECTION(10000x stretch energy calculation w/ selection, 0.1)
-	component = charmm.getComponent("Charmm Stretch");
+	component = charmm.getComponent("CHARMM Stretch");
 	START_TIMER
 		for (Size i = 0; i < 10000; i++)
 		{
@@ -157,7 +168,7 @@ START_SECTION(10000x stretch energy calculation w/ selection, 0.1)
 END_SECTION
 
 START_SECTION(10000x bend energy calculation w/ selection, 0.1)
-	component = charmm.getComponent("Charmm Bend");
+	component = charmm.getComponent("CHARMM Bend");
 	START_TIMER
 		for (Size i = 0; i < 10000; i++)
 		{
@@ -167,7 +178,7 @@ START_SECTION(10000x bend energy calculation w/ selection, 0.1)
 END_SECTION
 
 START_SECTION(10000x torsion energy calculation w/ selection, 0.1)
-	component = charmm.getComponent("Charmm Torsion");
+	component = charmm.getComponent("CHARMM Torsion");
 	START_TIMER
 		for (Size i = 0; i < 10000; i++)
 		{
