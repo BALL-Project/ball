@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.30 2002/01/16 00:01:49 oliver Exp $
+// $Id: classTest.h,v 1.31 2002/01/26 21:35:06 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -493,11 +493,11 @@ int main(int argc, char **argv)\
 
 /**	File comparison macro.
 		This macro is used to test file operations. It compares the file with name {\tt filename} 
-		against a template file {\tt templatename}. If {\tt use_regexps} is {\bf true}, 
-		each line of the template file starting with {\tt ``/''} is considered to contain a regular
-		expression. 
+		against a template file {\tt templatename}. Corresponding lines of the two files
+		have to be identical. 
+		@see TEST_FILE_REGEXP for more sophisticated comparisons
 */
-#define TEST_FILE(filename, templatename, use_regexps) \
+#define TEST_FILE(filename, templatename) \
 	{\
 		TEST::equal_files = true;\
 		TEST::infile.open(filename, std::ios::in);\
@@ -513,38 +513,18 @@ int main(int argc, char **argv)\
 				TEST_FILE__template_line.getline(TEST::templatefile);\
 				TEST_FILE__line.getline(TEST::infile);\
 				\
-				if ((use_regexps) && (TEST_FILE__template_line.size() > 0) && (TEST_FILE__template_line[0] == '/') && (TEST_FILE__template_line[1] != '/'))\
+				TEST::equal_files &= (TEST_FILE__template_line == TEST_FILE__line);\
+				if (TEST_FILE__template_line != TEST_FILE__line)\
 				{\
-					RegularExpression expression(TEST_FILE__template_line(1));\
-					bool match = expression.match(TEST_FILE__line);\
-					TEST::equal_files &= match;\
-					if (!match)\
+					if (TEST::verbose > 0)\
 					{\
-						if (TEST::verbose > 0)\
+						if (!TEST::newline)\
 						{\
-							if (!TEST::newline)\
-							{\
-								TEST::newline = true;\
-								std::cout << std::endl;\
-							}\
-							\
-							std::cout << "   TEST_FILE: regexp mismatch: " << TEST_FILE__line << " did not match " << TEST_FILE__template_line(1) << "." << std::endl;\
+							TEST::newline = true;\
+							std::cout << std::endl;\
 						}\
-					}\
-				} else {\
-					TEST::equal_files &= (TEST_FILE__template_line == TEST_FILE__line);\
-					if (TEST_FILE__template_line != TEST_FILE__line)\
-					{\
-						if (TEST::verbose > 0)\
-						{\
-							if (!TEST::newline)\
-							{\
-								TEST::newline = true;\
-								std::cout << std::endl;\
-							}\
-							\
-							std::cout << "   TEST_FILE: line mismatch: " << TEST_FILE__line << " differs from " << TEST_FILE__template_line << "." << std::endl;\
-						}\
+						\
+						std::cout << "   TEST_FILE: line mismatch: " << TEST_FILE__line << " differs from " << TEST_FILE__template_line << "." << std::endl;\
 					}\
 				}\
 			}\
@@ -559,13 +539,7 @@ int main(int argc, char **argv)\
 					std::cout << std::endl;\
 				}\
 				\
-				std::cout << "    (line " << __LINE__ << ": TEST_FILE(" << #filename << ", " << #templatename << ", ";\
-				if (use_regexps)\
-				{\
-					std::cout << "true";\
-				} else {\
-					std::cout << "false";\
-				}\
+				std::cout << "    (line " << __LINE__ << ": TEST_FILE(" << #filename << ", " << #templatename ;\
 				std::cout << ") : " << " cannot open file: \"";\
 				if (!TEST::infile.good())\
 				{\
@@ -593,13 +567,122 @@ int main(int argc, char **argv)\
 				TEST::newline = true;\
 				std::cout << std::endl;\
 			}\
-			std::cout << "    (line " << __LINE__ << ": TEST_FILE("<< #filename << ", " << #templatename << ", ";\
-			if (use_regexps)\
+			std::cout << "    (line " << __LINE__ << ": TEST_FILE("<< #filename << ", " << #templatename << "): ";\
+			if (TEST::this_test)\
 			{\
-				std::cout << "true): ";\
+				std::cout << "true";\
 			} else {\
-				std::cout << "false): ";\
+				std::cout << "false";\
 			}\
+			\
+			if (TEST::this_test)\
+			{\
+				std::cout << " + " << std::endl;\
+			} else {\
+				std::cout << " - " << std::endl;\
+			}\
+		}\
+	}
+
+
+/**	Regular expression file comparison macro.
+		This macro is used to test file operations. It compares the file with name {\tt filename} 
+		against a template file {\tt templatename}. 
+		Each line of the template file starting with {\tt ``/''} is considered to contain a regular
+		expression, which has to match the corresponding line in the input file. All other lines
+		of the input and the template file have to be identical.
+*/
+#define TEST_FILE_REGEXP(filename, templatename) \
+	{\
+		TEST::equal_files = true;\
+		TEST::infile.open(filename, std::ios::in);\
+		TEST::templatefile.open(templatename, std::ios::in);\
+		\
+		if (TEST::infile.good() && TEST::templatefile.good())\
+		{\
+			String TEST_FILE__template_line;\
+			String TEST_FILE__line;\
+			\
+			while (TEST::infile.good() && TEST::templatefile.good())\
+			{\
+				TEST_FILE__template_line.getline(TEST::templatefile);\
+				TEST_FILE__line.getline(TEST::infile);\
+				\
+				if ((TEST_FILE__template_line.size() > 0) && (TEST_FILE__template_line[0] == '/') && (TEST_FILE__template_line[1] != '/'))\
+				{\
+					RegularExpression expression(TEST_FILE__template_line(1));\
+					bool match = expression.match(TEST_FILE__line);\
+					TEST::equal_files &= match;\
+					if (!match)\
+					{\
+						if (TEST::verbose > 0)\
+						{\
+							if (!TEST::newline)\
+							{\
+								TEST::newline = true;\
+								std::cout << std::endl;\
+							}\
+							\
+							std::cout << "   TEST_FILE_REGEXP: regexp mismatch: " << TEST_FILE__line << " did not match " << TEST_FILE__template_line(1) << "." << std::endl;\
+						}\
+					}\
+				} else {\
+					TEST::equal_files &= (TEST_FILE__template_line == TEST_FILE__line);\
+					if (TEST_FILE__template_line != TEST_FILE__line)\
+					{\
+						if (TEST::verbose > 0)\
+						{\
+							if (!TEST::newline)\
+							{\
+								TEST::newline = true;\
+								std::cout << std::endl;\
+							}\
+							\
+							std::cout << "   TEST_FILE_REGEXP: line mismatch: " << TEST_FILE__line << " differs from " << TEST_FILE__template_line << "." << std::endl;\
+						}\
+					}\
+				}\
+			}\
+		} else {\
+			TEST::equal_files = false;\
+			\
+			if (TEST::verbose > 0)\
+			{\
+				if (!TEST::newline)\
+				{\
+					TEST::newline = true;\
+					std::cout << std::endl;\
+				}\
+				\
+				std::cout << "    (line " << __LINE__ << ": TEST_FILE_REGEXP(" << #filename << ", " << #templatename ;\
+				std::cout << ") : " << " cannot open file: \"";\
+				if (!TEST::infile.good())\
+				{\
+					std::cout << filename << "\" (input file) ";\
+				}\
+				if (!TEST::templatefile.good())\
+				{\
+					std::cout << templatename << "\" (template file) ";\
+				}\
+				std::cout << std::endl;\
+				\
+			}\
+		}\
+		TEST::infile.close();\
+		TEST::templatefile.close();\
+		TEST::infile.clear();\
+		TEST::templatefile.clear();\
+		\
+		TEST::this_test = TEST::equal_files;\
+		TEST::test = TEST::test && TEST::this_test;\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+			if (!TEST::newline)\
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			std::cout << "    (line " << __LINE__ << ": TEST_FILE_REGEXP("<< #filename << ", " << #templatename << "): ";\
 			if (TEST::this_test)\
 			{\
 				std::cout << "true";\
