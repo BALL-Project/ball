@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistentObject.sip,v 1.2 2003/08/26 09:18:18 oliver Exp $
+// $Id: persistentObject.sip,v 1.3 2003/10/29 22:08:39 oliver Exp $
 //
 
 class PersistentObject
 { 
-%HeaderCode
+%TypeHeaderCode
 #include <BALL/CONCEPT/persistentObject.h>
 using namespace BALL;
 %End

@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.13 2002/02/27 12:24:43 sturm Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.14 2003/10/29 22:08:40 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -15,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(Pair6_12InteractionEnergyProcessor, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.13 2002/02/27 12:24:43 sturm Exp $")
+START_TEST(Pair6_12InteractionEnergyProcessor, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.14 2003/10/29 22:08:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,9 +24,6 @@ START_TEST(Pair6_12InteractionEnergyProcessor, "$Id: Pair6_12InteractionEnergyPr
 using namespace BALL;
 using namespace std;
 
-///  insert tests for each member function here         
-///
-	
 Pair6_12InteractionEnergyProcessor* pointer;
 
 CHECK(Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor())
@@ -149,6 +147,8 @@ CHECK(Pair6_12InteractionEnergyProcessor::operator == ())
 	bool test = (proc == proc2);
 	TEST_EQUAL(test, true)
 RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
 END_TEST

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicateConcept.sip,v 1.5 2003/08/26 09:18:19 oliver Exp $
+// $Id: predicateConcept.sip,v 1.6 2003/10/29 22:08:39 oliver Exp $
 //
 
 class UnaryCompositePredicate 
 //  : public unary_function<T, bool> 
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/CONCEPT/predicate.h>
 	using namespace BALL;
 	typedef UnaryPredicate<Composite> UnaryCompositePredicate;
@@ -22,7 +22,7 @@ class UnaryCompositePredicate
 class UnaryAtomPredicate 
 //  : public unary_function<T, bool> 
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/CONCEPT/predicate.h>
 	using namespace BALL;
 	typedef UnaryPredicate<Atom> UnaryAtomPredicate;

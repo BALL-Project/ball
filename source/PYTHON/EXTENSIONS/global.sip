@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.sip,v 1.3 2003/08/26 09:18:17 oliver Exp $
+// $Id: global.sip,v 1.4 2003/10/29 22:08:39 oliver Exp $
 //
 
 %MappedType Index
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/COMMON/global.h>
 	#include "sipBALLIndex.h"
 %End

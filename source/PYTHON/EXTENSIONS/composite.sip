@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.sip,v 1.3 2003/08/26 09:18:14 oliver Exp $
+// $Id: composite.sip,v 1.4 2003/10/29 22:08:39 oliver Exp $
 //
 
 class Composite
@@ -9,7 +9,7 @@ class Composite
    	 Object,
    	 Selectable
 {
-%HeaderCode	
+%TypeHeaderCode	
 	#include <BALL/CONCEPT/composite.h>
 	using namespace BALL;
 %End

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.sip,v 1.4 2003/08/26 09:18:25 oliver Exp $
+// $Id: version.sip,v 1.5 2003/10/29 22:08:40 oliver Exp $
 //
 
 class VersionInfo
 {
-%HeaderCode
+%TypeHeaderCode
 	#include <BALL/COMMON/version.h>
 	using namespace BALL;
 %End
@@ -24,8 +24,8 @@ class VersionInfo
   static int getMinorRevision();
   static Type getType();
 	// __str__ method: just call getVersion
-	char *__str__() /NonLazy/;
-%MemberCode
+	SIP_PYOBJECT __str__();
+%MethodCode
   return PyString_FromString(VersionInfo::getVersion());  	
 %End 
 };

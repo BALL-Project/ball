@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: object.sip,v 1.5 2003/09/09 18:57:07 oliver Exp $
+// $Id: object.sip,v 1.6 2003/10/29 22:08:39 oliver Exp $
 //
 
 class Object
 {
-%HeaderCode
+%TypeHeaderCode
 #include <BALL/CONCEPT/object.h>
 using namespace BALL;
 %End

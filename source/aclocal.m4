@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.37 2003/10/26 17:52:23 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.38 2003/10/29 22:08:33 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -3322,30 +3322,6 @@ AC_DEFUN(CF_PYTHON, [
 			CF_ERROR
 		fi
 
-		dnl
-		dnl libsip.so 
-		dnl
-		AC_MSG_CHECKING(libsip.so)
-		if test -r "${SIP_LIBPATH}/libsip.so" ; then
-			SIP_LIB=" -L${SIP_LIBPATH} -lsip"
-			AC_MSG_RESULT(${SIP_LIB})
-		else
-			SIP_LIB_LOCATION=`${FIND} "${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/site-packages" -name libsip.so 2>/dev/null`
-			if test "${SIP_LIB_LOCATION}" != "" ; then
-				SIP_LIB=" -L`AS_DIRNAME("${SIP_LIB_LOCATION}")` -lsip"
-				AC_MSG_RESULT(${SIP_LIB})			
-			else
-				AC_MSG_RESULT(not found in ${SIP_LIBPATH})
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(Please specify the path to the directory that contains)
-				AC_MSG_RESULT(libsip.so using the option --with-sip-lib=DIR.)
-				AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
-				AC_MSG_RESULT(from)
-				AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
-				CF_ERROR
-			fi
-		fi
-		
 		dnl
 		dnl	SIP header file (sip.h)
 		dnl
