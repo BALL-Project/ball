@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileGeneral.C,v 1.4 2005/02/15 19:18:41 oliver Exp $
+// $Id: PDBFileGeneral.C,v 1.5 2005/02/16 14:09:40 oliver Exp $
 //
 
 // This file contains the more or less "general" portion of PDBFile.
@@ -612,6 +612,9 @@ namespace BALL
 			case PDB::RECORD_TYPE__HETNAM:
 				return parseRecordHETNAM(line, size);
 
+			case PDB::RECORD_TYPE__HETSYN:
+				return parseRecordHETSYN(line, size);
+
 			case PDB::RECORD_TYPE__HYDBND:
 				return parseRecordHYDBND(line, size);
 
@@ -669,6 +672,9 @@ namespace BALL
 			case PDB::RECORD_TYPE__SCALE3:
 				return parseRecordSCALE3(line, size);
 
+			case PDB::RECORD_TYPE__SEQADV:
+				return parseRecordSEQADV(line, size);
+
 			case PDB::RECORD_TYPE__SEQRES:
 				return parseRecordSEQRES(line, size);
 
@@ -689,6 +695,9 @@ namespace BALL
 
 			case PDB::RECORD_TYPE__SOURCE:
 				return parseRecordSOURCE(line, size);
+
+			case PDB::RECORD_TYPE__SPRSDE:
+				return parseRecordSPRSDE(line, size);
 
 			case PDB::RECORD_TYPE__SSBOND:
 				return parseRecordSSBOND(line, size);
@@ -1006,6 +1015,23 @@ namespace BALL
 	}
 
 	bool PDBFile::interpretRecord(const PDB::RecordHETNAM& /* record */)
+	{
+		return true;
+	}
+		
+	bool PDBFile::parseRecordHETSYN(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordHETSYN& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_HETSYN,
+										 record.record_name, &record.continuation,
+										 record.het_ID, record.het_synonyms);
+	}
+
+	bool PDBFile::interpretRecord(const PDB::RecordHETSYN& /* record */)
 	{
 		return true;
 	}
@@ -1362,6 +1388,27 @@ namespace BALL
 	}
 
 
+	bool PDBFile::parseRecordSEQADV(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSEQADV& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SEQADV,
+										 record.record_name,	
+										 record.residue.name, record.residue.chain_ID,
+										 record.residue.sequence_number, record.residue.insertion_code,
+										 record.database, record.db_id_code,
+										 record.db_res, record.db_seq, record.comment);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSEQADV& /* record */)
+	{
+		return true;
+	}
+
+
 	bool PDBFile::parseRecordSEQRES(const char* /* line */, Size /* size */)
 	{
 		return skipCurrentRecord();
@@ -1508,6 +1555,27 @@ namespace BALL
 	}
 
 
+	bool PDBFile::parseRecordSPRSDE(const char* /* line */, Size /* size */)
+	{
+		return skipCurrentRecord();
+	}
+
+	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordSPRSDE& record)
+	{
+		return parseLine(line, size, PDB::FORMAT_SPRSDE,
+										 record.record_name, &record.continuation, record.id_code,
+										 record.old_codes[0], record.old_codes[1],
+										 record.old_codes[2], record.old_codes[3],
+										 record.old_codes[4], record.old_codes[5],
+										 record.old_codes[6], record.old_codes[7]);
+	}
+	
+	bool PDBFile::interpretRecord(const PDB::RecordSPRSDE& /* record */)
+	{
+		return true;
+	}
+
+
 	bool PDBFile::parseRecordTITLE(const char* /* line */, Size /* size */)
 	{
 		return skipCurrentRecord();
@@ -1551,10 +1619,6 @@ namespace BALL
 
 		va_list args;
 		va_start(args, tag);
-
-		//???????????????????
-		//vsnprintf(line_buffer, PDB::SIZE_OF_PDB_LINE_BUFFER, format, args);
-		// -> windows has no vsnprintf
 		vsprintf(line_buffer, format, args);
 		va_end(args);
 
@@ -1622,11 +1686,7 @@ namespace BALL
 		va_list var_args;
 		va_start(var_args, record);		
     static char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
-		// ???????????????????
-		//vsnprintf(line_buffer, PDB::SIZE_OF_PDB_LINE_BUFFER, PDB::RECORD_TYPE_FORMAT[record].format_string, var_args);
-		// -> windows has no vsnprintf
 		vsprintf(line_buffer, PDB::RECORD_TYPE_FORMAT[record].format_string, var_args);
-
 		va_end(var_args);
 
     // Terminate each line with a line break and a zero to indicate
@@ -1645,6 +1705,58 @@ namespace BALL
 		{
 			File::getFileStream() << info.getSkippedRecords()[*it] << '\n';
 		}
+
+		// Update book keeping records.
+		Size number = all_lines.size();
+		switch (type)
+		{
+			case PDB::RECORD_TYPE__REMARK:
+				book_keeping_.remark_records += number; break;
+
+			case PDB::RECORD_TYPE__HET:
+				book_keeping_.het_records += number; break;
+
+			case PDB::RECORD_TYPE__HELIX:
+				book_keeping_.helix_records += number; break;
+
+			case PDB::RECORD_TYPE__SHEET:
+				book_keeping_.sheet_records += number; break;
+
+			case PDB::RECORD_TYPE__TURN:
+				book_keeping_.turn_records += number; break;
+
+			case PDB::RECORD_TYPE__SITE:
+				book_keeping_.site_records += number; break;
+
+			case PDB::RECORD_TYPE__ORIGX1:
+			case PDB::RECORD_TYPE__ORIGX2:
+			case PDB::RECORD_TYPE__ORIGX3:
+			case PDB::RECORD_TYPE__SCALE1:
+			case PDB::RECORD_TYPE__SCALE2:
+			case PDB::RECORD_TYPE__SCALE3:
+			case PDB::RECORD_TYPE__MTRIX1:
+			case PDB::RECORD_TYPE__MTRIX2:
+			case PDB::RECORD_TYPE__MTRIX3:
+				book_keeping_.coordinate_transformation_records += number; break;
+
+			case PDB::RECORD_TYPE__ATOM:
+			case PDB::RECORD_TYPE__HETATM:
+				book_keeping_.atomic_coordinate_records += number; break;
+
+			case PDB::RECORD_TYPE__TER:
+				book_keeping_.ter_records += number; break;
+
+			case PDB::RECORD_TYPE__CONECT:
+				book_keeping_.conect_records += number; break;
+
+			case PDB::RECORD_TYPE__SEQRES:
+				book_keeping_.seqres_records += number; break;
+
+			default:
+				//  no need to account for the remaining records...
+				break;
+		}
+
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.6 2005/02/15 23:45:40 oliver Exp $
+// $Id: PDBFileDetails.C,v 1.7 2005/02/16 14:09:40 oliver Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -465,27 +465,15 @@ namespace BALL
 		
 	bool PDBFile::fillRecord(const char* line, Size size, PDB::RecordCONECT& record)
 	{
-		record.bonded_atom_serial_number[0] = 0;
-		record.bonded_atom_serial_number[1] = 0;
-		record.bonded_atom_serial_number[2] = 0;
-		record.bonded_atom_serial_number[3] = 0;
-		record.hydrogen_bonded_atom_serial_number[0] = 0;
-		record.hydrogen_bonded_atom_serial_number[1] = 0;
-		record.hydrogen_bonded_atom_serial_number[2] = 0;
-		record.hydrogen_bonded_atom_serial_number[3] = 0;
-		record.salt_bridged_atom_serial_number[0] = 0;
-		record.salt_bridged_atom_serial_number[1] = 0;
-
+		record.clear();
 		return parseLine(line, size, PDB::FORMAT_CONECT,
 					 record.record_name, &record.atom_serial_number,
-					 &record.bonded_atom_serial_number[0], &record.bonded_atom_serial_number[1],
-					 &record.bonded_atom_serial_number[2], &record.bonded_atom_serial_number[3],
-					 &record.hydrogen_bonded_atom_serial_number[0],
-					 &record.hydrogen_bonded_atom_serial_number[1],
-					 &record.salt_bridged_atom_serial_number[0],
-					 &record.hydrogen_bonded_atom_serial_number[2],
-					 &record.hydrogen_bonded_atom_serial_number[3],
-					 &record.salt_bridged_atom_serial_number[1]);
+					 &record.bond_atom[0], &record.bond_atom[1],
+					 &record.bond_atom[2], &record.bond_atom[3],
+					 &record.hbond_atom[0],&record.hbond_atom[1],
+					 &record.salt_bridge_atom[0],
+					 &record.hbond_atom[2], &record.hbond_atom[3],
+					 &record.salt_bridge_atom[1]);
 	}
 
 	bool PDBFile::interpretRecord(const PDB::RecordCONECT& record)
@@ -508,10 +496,10 @@ namespace BALL
 		// read the entries for the bonds
 		for (i = 0; i < 4; ++i)
 		{
-			if (record.bonded_atom_serial_number[i] != 0)
+			if (record.bond_atom[i] != 0)
 			{
 				// retrieve the second atom via the hash table
-				atom_map_it = PDB_atom_map_.find(record.bonded_atom_serial_number[i]);				
+				atom_map_it = PDB_atom_map_.find(record.bond_atom[i]);				
 				if (atom_map_it != PDB_atom_map_.end())
 				{
 					// create the new bond
@@ -528,9 +516,9 @@ namespace BALL
 				
 		for (i = 0; i < 4; ++i)
 		{
-			if (record.hydrogen_bonded_atom_serial_number[i] != 0)
+			if (record.hbond_atom[i] != 0)
 			{
-				atom_map_it = PDB_atom_map_.find(record.hydrogen_bonded_atom_serial_number[i]);
+				atom_map_it = PDB_atom_map_.find(record.hbond_atom[i]);
 				if (atom_map_it != PDB_atom_map_.end())
 				{
 					bond = PDB_atom->createBond(*atom_map_it->second);
@@ -546,9 +534,9 @@ namespace BALL
 		
 		for (i = 0; i < 2; ++i)
 		{
-			if (record.salt_bridged_atom_serial_number[i] != 0)
+			if (record.salt_bridge_atom[i] != 0)
 			{
-				atom_map_it = PDB_atom_map_.find(record.salt_bridged_atom_serial_number[i]);
+				atom_map_it = PDB_atom_map_.find(record.salt_bridge_atom[i]);
 				if (atom_map_it != PDB_atom_map_.end())
 				{
 					bond = PDB_atom->createBond(*atom_map_it->second);
@@ -950,12 +938,18 @@ namespace BALL
 		return true;
 	}
 
-	bool PDBFile::read(Molecule& /* molecule */)
+	bool PDBFile::read(Molecule& molecule)
 		throw(Exception::ParseError)
 	{
-		// ????
+		Protein* protein = new Protein;
+		bool result = read(*protein);
+		if (result == true)
+		{
+			molecule = *protein;
+		}
+		delete protein;
 		
-		return true;
+		return result;
 	}
 
 	bool PDBFile::read(System& system)
@@ -975,14 +969,14 @@ namespace BALL
 		return result;
 	}
 
-	bool PDBFile::write(const System& system)
+	bool PDBFile::write(const System& system, const PDBInfo& info)
 		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
-		write_(system);
+		write_(system, info);
 		
 		return true;
 	}
@@ -1071,6 +1065,12 @@ namespace BALL
 		const SecondaryStructure* ss = 0;
 		for (Position i = 0; i < structure.atoms.size(); ++i)
 		{
+			// Ignore all hetero residues.
+			if ((structure.atoms[i].residue == 0) || (structure.atoms[i].residue->hasProperty(Residue::PROPERTY__NON_STANDARD)))
+			{
+				continue;
+			}
+
 			// If the residue pointer changes, we have reached the end of a residue
 			// and the (potential) start of a new one. We remember the residue and its
 			// chain ID in a vector to extract its sequence afterwards (SEQRES).
@@ -1228,7 +1228,8 @@ namespace BALL
 		(const PDB::Structure& structure, const PDBInfo& /* info */)
 	{
 		// --- MODEL ---
-		writeRecord_(PDB::RECORD_TYPE__MODEL, 1L);
+		// We write single model files only at this time!
+		// writeRecord_(PDB::RECORD_TYPE__MODEL, 1L);
 
 		// --- ATOM/HETATM/TER ---
 		PDB::AdditionalAtomInfo atom_info;
@@ -1237,8 +1238,8 @@ namespace BALL
 		for (Position index = 0; index < structure.atoms.size(); ++index)
 		{
 			// --- ATOM/HETATM ---
-			writeAtom_(structure.atoms[index], atom_info, isHeteroAtom_(*structure.atoms[index].atom));
 			atom_map_[structure.atoms[index].atom] = atom_info.number;
+			writeAtom_(structure.atoms[index], atom_info, isHeteroAtom_(*structure.atoms[index].atom));
 	
 			// --- TER ---
 			// Is this the last atom of the structure or the last atom of a chain?
@@ -1252,7 +1253,7 @@ namespace BALL
 		}
 
 		// --- ENDMDL ---
-		writeRecord_(PDB::RECORD_TYPE__ENDMDL);	
+		// writeRecord_(PDB::RECORD_TYPE__ENDMDL);	
   }
 
 	bool atomPairSortPred(const std::pair<Position, const Atom*>& left, const std::pair<Position, const Atom*>& right)
@@ -1265,14 +1266,13 @@ namespace BALL
 	{
 		// --- CONECT ---
 		// Extract the atoms w/ relevant bonds from structure and sort them by their index.
-		std::vector<std::pair<Index, const Atom*> > relevant_atoms(structure.conect_atoms.size());
+		std::vector<std::pair<Index, const Atom*> > relevant_atoms;
 		for (HashSet<const Atom*>::ConstIterator it = structure.conect_atoms.begin();
 				 +it; ++it)
 		{
 			relevant_atoms.push_back(std::make_pair(atom_map_[*it], *it));
 		}
 		std::sort(relevant_atoms.begin(), relevant_atoms.end(), atomPairSortPred);;
-		Log.info() << " # of relevant atoms: " << relevant_atoms.size() << std::endl;
 
 		// Walk over all relevant atoms and create the CONECT records.
 		PDB::Structure::ConectAtomList cl;
@@ -1296,13 +1296,11 @@ namespace BALL
 							cl.hbonds.push_back(pos);
 							break;
 
-						case Bond::TYPE__COVALENT:
-						case Bond::TYPE__UNKNOWN:
 						case Bond::TYPE__DISULPHIDE_BRIDGE:
-							if (isHeteroAtom_(atom) || isHeteroAtom_(*atom2))
-							{
-								cl.bonds.push_back(pos);
-							}
+						case Bond::TYPE__COVALENT:
+						case Bond::TYPE__PEPTIDE:
+						case Bond::TYPE__UNKNOWN:
+							cl.bonds.push_back(pos);
 							break;
 
 						default:
@@ -1328,7 +1326,8 @@ namespace BALL
 						date + 8, toupper(date[4]), toupper(date[5]),
 						toupper(date[6]), date + 22);
 		writeRecord_(PDB::RECORD_TYPE__HEADER, info.getName().c_str(),
-								 PDB_date_format,info.getID().c_str());
+								 PDB_date_format, info.getID().c_str());
+
 		// --- OBSLTE ---
 		addAllRecords_(info, PDB::RECORD_TYPE__OBSLTE);
 		// --- TITLE  ---
@@ -1348,7 +1347,7 @@ namespace BALL
 		// --- REVDAT ---
 		addAllRecords_(info, PDB::RECORD_TYPE__REVDAT);
 		// --- SPRSDE ---
-		// ???? addAllRecords_(info, PDB::RECORD_TYPE__SPRSDE);	
+		addAllRecords_(info, PDB::RECORD_TYPE__SPRSDE);	
 		// --- JRNL   ---
 		addAllRecords_(info, PDB::RECORD_TYPE__JRNL);
 		// --- REMARK ---
@@ -1390,6 +1389,8 @@ namespace BALL
 		{
 			sr.number_of_residues_in_chain = 0;
 		}
+
+		
 		for (Position i = 0; i < chain_residues.size(); ++i)
 		{
 			// Just some shorthands...
@@ -1637,7 +1638,7 @@ namespace BALL
 		// --- DBREF  ---
 		addAllRecords_(info, PDB::RECORD_TYPE__DBREF);
 		// --- SEQADV ---
-		// ????
+		addAllRecords_(info, PDB::RECORD_TYPE__SEQADV);		
 		// --- SEQRES ---
 		writeSEQRESSection_(structure.chain_residue_names);
 		// --- MODRES ---
@@ -1658,7 +1659,7 @@ namespace BALL
 		// --- HETNAM ---
 		addAllRecords_(info, PDB::RECORD_TYPE__HETNAM);
 		// --- HETSYN ---
-		// ???? addAllRecords_(info, PDB::RECORD_TYPE__HETSYN);
+		addAllRecords_(info, PDB::RECORD_TYPE__HETSYN);
 		// --- FORMUL ---
 		addAllRecords_(info, PDB::RECORD_TYPE__FORMUL);
 	}
@@ -1746,32 +1747,31 @@ namespace BALL
 
 	void PDBFile::writeCONECTRecords_(PDB::Structure::ConectAtomList& cl)
 	{
-		Log.info() << " writeCONECTRecords " << cl.serial_number << std::endl;
 		cl.saltbridges.sort();
 		cl.bonds.sort();
 		cl.hbonds.sort();
 
 		while (!cl.saltbridges.empty() || !cl.hbonds.empty() || !cl.bonds.empty())
 		{
-			Log.info() << " write record for " << cl.serial_number << std::endl;
 			PDB::RecordCONECT cr;
+			cr.clear();
 			cr.atom_serial_number = cl.serial_number;
 			Size i = 0;
 			while (!cl.bonds.empty() && (i < 4))
 			{
-				cr.bonded_atom_serial_number[i++] = cl.bonds.front();
+				cr.bond_atom[i++] = cl.bonds.front();
 				cl.bonds.pop_front();
 			}
 			i = 0;
-			while (!cl.hbonds.empty() && (i < 2))
+			while (!cl.hbonds.empty() && (i < 4))
 			{
-				cr.hydrogen_bonded_atom_serial_number[i++] = cl.hbonds.front();
+				cr.hbond_atom[i++] = cl.hbonds.front();
 				cl.hbonds.pop_front();
 			}
 			i = 0;
 			while (!cl.saltbridges.empty() && (i < 2))
 			{
-				cr.salt_bridged_atom_serial_number[i++] = cl.saltbridges.front();
+				cr.salt_bridge_atom[i++] = cl.saltbridges.front();
 				cl.saltbridges.pop_front();
 			}
 			writeRecord_(cr);
@@ -1780,17 +1780,15 @@ namespace BALL
 
 	void PDBFile::writeRecord_(const PDB::RecordCONECT& cr)
 	{
-		Log.info() << " writing CONECT " << std::endl;
+		// ???? We should not write undefined atom numbers as 0 but as "" instead! // OK
 		writeRecord_(PDB::RECORD_TYPE__CONECT,
 								 cr.atom_serial_number,
-								 cr.bonded_atom_serial_number[0], cr.bonded_atom_serial_number[1],
-								 cr.bonded_atom_serial_number[2], cr.bonded_atom_serial_number[3],
-								 cr.hydrogen_bonded_atom_serial_number[0],
-								 cr.hydrogen_bonded_atom_serial_number[1],
-								 cr.salt_bridged_atom_serial_number[0],
-								 cr.hydrogen_bonded_atom_serial_number[2],
-								 cr.hydrogen_bonded_atom_serial_number[3],
-								 cr.salt_bridged_atom_serial_number[1]);
+								 cr.bond_atom[0], cr.bond_atom[1],
+								 cr.bond_atom[2], cr.bond_atom[3],
+								 cr.hbond_atom[0], cr.hbond_atom[1],
+								 cr.salt_bridge_atom[0],
+								 cr.hbond_atom[2], cr.hbond_atom[3],
+								 cr.salt_bridge_atom[1]);
 	}
 
 } // namespace BALL

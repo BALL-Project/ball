@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBInfo.C,v 1.2 2005/02/13 22:38:49 oliver Exp $
+// $Id: PDBInfo.C,v 1.3 2005/02/16 14:09:40 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBInfo.h>
@@ -13,6 +13,7 @@ namespace BALL
 			invalid_records_(),
 			filename_(""),
 			id_(""),
+			name_(""),
 			number_of_records_(0),
 			number_of_models_(0),
 			model_read_(0),
@@ -26,6 +27,7 @@ namespace BALL
 			invalid_records_(pdbi.invalid_records_),
 			filename_(pdbi.filename_),
 			id_(pdbi.id_),
+			name_(pdbi.name_),
 			number_of_records_(pdbi.number_of_records_),
 			number_of_models_(pdbi.number_of_models_),
 			model_read_(pdbi.model_read_),
@@ -40,6 +42,7 @@ namespace BALL
 		invalid_records_ = pdbi.invalid_records_;
 		filename_ = pdbi.filename_;
 		id_ = pdbi.id_;
+		name_ = pdbi.name_;
 		number_of_records_ = pdbi.number_of_records_;
 		number_of_models_ = pdbi.number_of_models_;
 		model_read_ = pdbi.model_read_;
@@ -55,6 +58,7 @@ namespace BALL
 			&& (invalid_records_ == rhs.invalid_records_)
 			&& (filename_ == rhs.filename_)
 			&& (id_ == rhs.id_)
+			&& (name_ == rhs.name_)
 			&& (number_of_records_ == rhs.number_of_records_)
 			&& (number_of_models_ == rhs.number_of_models_)
 			&& (model_read_ == rhs.model_read_)
@@ -78,6 +82,7 @@ namespace BALL
 		invalid_records_.clear();
 		filename_.clear();
 		id_.clear();
+		name_.clear();
 		number_of_records_ = 0;
 		number_of_models_ = 0;
 		model_read_ = 0;

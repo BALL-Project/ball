@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.33 2005/02/15 23:45:40 oliver Exp $
+// $Id: PDBFile.h,v 1.34 2005/02/16 14:09:40 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBFILE_H
@@ -403,6 +403,11 @@ namespace BALL
 		virtual bool fillRecord(const char* line, Size size, PDB::RecordHETNAM& record);
 		virtual bool parseRecordHETNAM(const char* line, Size size);
 
+		/// Reads a record defining synonyms of a non-standard group.
+		virtual bool interpretRecord(const PDB::RecordHETSYN& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordHETSYN& record);
+		virtual bool parseRecordHETSYN(const char* line, Size size);
+
 		/// Reads a record defining a hydrogen bond.
 		virtual bool interpretRecord(const PDB::RecordHYDBND& record);
 		virtual bool fillRecord(const char* line, Size size, PDB::RecordHYDBND& record);
@@ -514,6 +519,11 @@ namespace BALL
 		virtual bool fillRecord(const char* line, Size size, PDB::RecordSCALE3& record);
 		virtual bool parseRecordSCALE3(const char* line, Size size);
 
+		/// Sequence information conflicts between atom records and dbref content
+		virtual bool interpretRecord(const PDB::RecordSEQADV& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSEQADV& record);
+		virtual bool parseRecordSEQADV(const char* line, Size size);
+
 		/// Reads a record containing the sequence of residues.
 		virtual bool interpretRecord(const PDB::RecordSEQRES& record);
 		virtual bool fillRecord(const char* line, Size size, PDB::RecordSEQRES& record);
@@ -552,6 +562,11 @@ namespace BALL
 		virtual bool interpretRecord(const PDB::RecordSOURCE& record);
 		virtual bool fillRecord(const char* line, Size size, PDB::RecordSOURCE& record);
 		virtual bool parseRecordSOURCE(const char* line, Size size);
+
+		/// List of entries this file supersedes
+		virtual bool interpretRecord(const PDB::RecordSPRSDE& record);
+		virtual bool fillRecord(const char* line, Size size, PDB::RecordSPRSDE& record);
+		virtual bool parseRecordSPRSDE(const char* line, Size size);
 
 		/// Reads a record specifying a disulfide bond.
 		virtual bool interpretRecord(const PDB::RecordSSBOND& record);
@@ -616,7 +631,7 @@ namespace BALL
 		///
 		bool write(const Molecule& molecule) throw(File::CannotWrite);
 		///
-		bool write(const System& system) throw(File::CannotWrite);
+		bool write(const System& system, const PDBInfo& info = PDBInfo()) throw(File::CannotWrite);
 		//@}
 
 		protected:

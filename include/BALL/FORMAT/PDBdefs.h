@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.h,v 1.4 2005/02/15 23:45:40 oliver Exp $
+// $Id: PDBdefs.h,v 1.5 2005/02/16 14:09:40 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBDEFS_H
@@ -75,6 +75,7 @@ namespace BALL
 			RECORD_TYPE__HET,
 			RECORD_TYPE__HETATM,
 			RECORD_TYPE__HETNAM,
+			RECORD_TYPE__HETSYN,
 			RECORD_TYPE__HYDBND,
 			RECORD_TYPE__JRNL,
 			RECORD_TYPE__KEYWDS,
@@ -94,6 +95,7 @@ namespace BALL
 			RECORD_TYPE__SCALE1,
 			RECORD_TYPE__SCALE2,
 			RECORD_TYPE__SCALE3,
+			RECORD_TYPE__SEQADV,
 			RECORD_TYPE__SEQRES,
 			RECORD_TYPE__SHEET,
 			RECORD_TYPE__SIGATM,
@@ -101,6 +103,7 @@ namespace BALL
 			RECORD_TYPE__SITE,
 			RECORD_TYPE__SLTBRG,
 			RECORD_TYPE__SOURCE,
+			RECORD_TYPE__SPRSDE,
 			RECORD_TYPE__SSBOND,
 			RECORD_TYPE__TER,
 			RECORD_TYPE__TITLE,
@@ -135,6 +138,7 @@ namespace BALL
 		extern const char* FORMAT_HET;
 		extern const char* FORMAT_HETATM;
 		extern const char* FORMAT_HETNAM;
+		extern const char* FORMAT_HETSYN;
 		extern const char* FORMAT_HYDBND;
 		extern const char* FORMAT_JRNL;
 		extern const char* FORMAT_KEYWDS;
@@ -154,6 +158,7 @@ namespace BALL
 		extern const char* FORMAT_SCALE1;
 		extern const char* FORMAT_SCALE2;
 		extern const char* FORMAT_SCALE3;
+		extern const char* FORMAT_SEQADV;
 		extern const char* FORMAT_SEQRES;
 		extern const char* FORMAT_SHEET;
 		extern const char* FORMAT_SIGATM;
@@ -161,6 +166,7 @@ namespace BALL
 		extern const char* FORMAT_SITE;
 		extern const char* FORMAT_SLTBRG;
 		extern const char* FORMAT_SOURCE;
+		extern const char* FORMAT_SPRSDE;
 		extern const char* FORMAT_SSBOND;
 		extern const char* FORMAT_TER;
 		extern const char* FORMAT_TITLE;
@@ -189,6 +195,7 @@ namespace BALL
 		extern const char* RECORD_TAG_HET;
 		extern const char* RECORD_TAG_HETATM;
 		extern const char* RECORD_TAG_HETNAM;
+		extern const char* RECORD_TAG_HETSYN;
 		extern const char* RECORD_TAG_HYDBND;
 		extern const char* RECORD_TAG_JRNL;
 		extern const char* RECORD_TAG_KEYWDS;
@@ -208,6 +215,7 @@ namespace BALL
 		extern const char* RECORD_TAG_SCALE1;
 		extern const char* RECORD_TAG_SCALE2;
 		extern const char* RECORD_TAG_SCALE3;
+		extern const char* RECORD_TAG_SEQADV;
 		extern const char* RECORD_TAG_SEQRES;
 		extern const char* RECORD_TAG_SHEET;
 		extern const char* RECORD_TAG_SIGATM;
@@ -215,6 +223,7 @@ namespace BALL
 		extern const char* RECORD_TAG_SITE;
 		extern const char* RECORD_TAG_SLTBRG;
 		extern const char* RECORD_TAG_SOURCE;
+		extern const char* RECORD_TAG_SPRSDE;
 		extern const char* RECORD_TAG_SSBOND;
 		extern const char* RECORD_TAG_TER;
 		extern const char* RECORD_TAG_TITLE;
@@ -267,6 +276,8 @@ namespace BALL
 		typedef char   LString12[13];
 		///
 		typedef char   LString13[14];
+		///
+		typedef char   LString21[22];
 		///
 		typedef double Real;
 		///
@@ -433,9 +444,19 @@ namespace BALL
 			RecordType record_type;
 			RecordName record_name;
 			Integer    atom_serial_number;
-			Integer    bonded_atom_serial_number[4];
-			Integer    hydrogen_bonded_atom_serial_number[4];
-			Integer    salt_bridged_atom_serial_number[2];
+			Integer    bond_atom[4];
+			Integer    hbond_atom[4];
+			Integer    salt_bridge_atom[2];
+			
+			void clear()
+			{
+				record_type = PDB::RECORD_TYPE__CONECT;
+				record_name[0] = '\0';
+				atom_serial_number = 0;
+				bond_atom[0] = bond_atom[1] = bond_atom[2] = bond_atom[3] = 0;
+				hbond_atom[0] = hbond_atom[1] = hbond_atom[2] = hbond_atom[3] = 0;
+				salt_bridge_atom[0] = salt_bridge_atom[1] = 0;
+			}
 		};
 
 		/**
@@ -612,6 +633,16 @@ namespace BALL
 			Continuation continuation;
 			LString3     het_ID;
 			PDBString    chemical_name;
+		};
+		
+		///
+		struct RecordHETSYN
+		{
+			RecordType   record_type;
+			RecordName   record_name;
+			Continuation continuation;
+			LString3     het_ID;
+			SList				 het_synonyms;
 		};
 		
 		///
@@ -806,6 +837,20 @@ namespace BALL
 		};
 
 		///
+		struct RecordSEQADV
+		{
+			RecordType	record_type;
+			RecordName	record_name;
+			IDcode			id_code;
+			Residue			residue;
+			LString4		database;
+			LString9		db_id_code;
+			LString3		db_res;
+			Integer			db_seq;
+			LString21		comment;
+		};
+
+		///
 		struct RecordSEQRES
 		{
 			RecordType  record_type;
@@ -948,6 +993,17 @@ namespace BALL
 			RecordName        record_name;
 			Continuation      continuation;
 			SpecificationList sources;
+		};
+
+		///
+		struct RecordSPRSDE
+		{
+			RecordType        record_type;
+			RecordName        record_name;
+			Continuation      continuation;
+			Date							date;
+			IDcode						id_code;
+			IDcode						old_codes[8];
 		};
 
 		///

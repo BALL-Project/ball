@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.C,v 1.3 2005/02/13 22:38:49 oliver Exp $
+// $Id: PDBdefs.C,v 1.4 2005/02/16 14:09:40 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBdefs.h>
@@ -33,6 +33,7 @@ namespace BALL
 		const char* FORMAT_HET     = " %3.3s  %c%4ld%c  %5ld  %43.43s";
 		const char* FORMAT_HETATM  = "%5ld %-4.4s%c%3.3s %c%4ld%c   %8.3f%8.3f%8.3f%6.2f%6.2f      %4.4s%2.2s%2.2s";
 		const char* FORMAT_HETNAM  = "  %2ld %3.3s %55.55s";
+		const char* FORMAT_HETSYN  = "  %2ld %3.3s %55.55s";
 		const char* FORMAT_HYDBND  = "      %4.4s%c%3.3s %c%5ld%c %4.4s%c %c%5ld%c %4.4s%c%3.3s %c%5ld%c%6ld %6ld";
 		const char* FORMAT_JRNL    = "      %58.58s";
 		const char* FORMAT_KEYWDS  = "  %2ld%60.60s";
@@ -52,6 +53,7 @@ namespace BALL
 		const char* FORMAT_SCALE1  = "    %10f%10f%10f     %10f";
 		const char* FORMAT_SCALE2  = "    %10f%10f%10f     %10f";
 		const char* FORMAT_SCALE3  = "    %10f%10f%10f     %10f";
+		const char* FORMAT_SEQADV  = " %4.4s %4.4s %c %4ld%c %4.4s %9.9s %3.3s %5ld %21.21s";
 		const char* FORMAT_SEQRES  = "  %2ld %c %4ld  %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s %3.3s";
 		const char* FORMAT_SHEET   = " %3ld %3.3s%2ld %3.3s %c%4ld%c %3.3s %c%4ld%c%2ld %-4.4s%3.3s %c%4ld%c %-4.4s%3.3s %c%4ld%c";
 		const char* FORMAT_SIGATM  = "%5ld %4.4s%c%3.3s %c%4ld%c   %8f%8f%8f%6f%6f      %4.4s%2.2s%2.2s";
@@ -59,6 +61,7 @@ namespace BALL
 		const char* FORMAT_SITE    = " %3ld %3.3s %2ld %3.3s %c%4ld%c %3.3s %c%4ld%c %3.3s %c%4ld%c %3.3s %c%4ld%c";
 		const char* FORMAT_SLTBRG  = "      %4.4s%c%3.3s %c%4ld%c               %4.4s%c%3.3s %c%4ld%c  %6ld%6ld";
 		const char* FORMAT_SOURCE  = "  %2ld%-60.60s";
+		const char* FORMAT_SPRSDE  = "  %2ld %9.9s %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s %4.4s ";
 		const char* FORMAT_SSBOND  = " %3ld %3.3s %c %4ld%c   %3.3s %c %4ld%c                       %6ld %6ld";
 		const char* FORMAT_TER     = "%5ld      %3.3s %c%4ld%c";
 		const char* FORMAT_TITLE   = "  %2ld%60.60s";
@@ -84,6 +87,7 @@ namespace BALL
 		const char* RECORD_TAG_HET    = "HET   ";
 		const char* RECORD_TAG_HETATM = "HETATM";
 		const char* RECORD_TAG_HETNAM = "HETNAM";
+		const char* RECORD_TAG_HETSYN = "HETSYN";
 		const char* RECORD_TAG_HYDBND = "HYDBND";
 		const char* RECORD_TAG_JRNL   = "JRNL  ";
 		const char* RECORD_TAG_KEYWDS = "KEYWDS";
@@ -103,6 +107,7 @@ namespace BALL
 		const char* RECORD_TAG_SCALE1 = "SCALE1";
 		const char* RECORD_TAG_SCALE2 = "SCALE2";
 		const char* RECORD_TAG_SCALE3 = "SCALE3";
+		const char* RECORD_TAG_SEQADV = "SEQADV";
 		const char* RECORD_TAG_SEQRES = "SEQRES";
 		const char* RECORD_TAG_SHEET  = "SHEET ";
 		const char* RECORD_TAG_SIGATM = "SIGATM";
@@ -110,6 +115,7 @@ namespace BALL
 		const char* RECORD_TAG_SITE   = "SITE  ";
 		const char* RECORD_TAG_SLTBRG = "SLTBRG";
 		const char* RECORD_TAG_SOURCE = "SOURCE";
+		const char* RECORD_TAG_SPRSDE = "SPRSDE";
 		const char* RECORD_TAG_SSBOND = "SSBOND";
 		const char* RECORD_TAG_TER    = "TER   ";
 		const char* RECORD_TAG_TITLE  = "TITLE ";
@@ -138,6 +144,7 @@ namespace BALL
 			{ RECORD_TYPE__HET,    "HET   ", FORMAT_HET    },
 			{ RECORD_TYPE__HETATM, "HETATM", FORMAT_HETATM },
 			{ RECORD_TYPE__HETNAM, "HETNAM", FORMAT_HETNAM },
+			{ RECORD_TYPE__HETSYN, "HETSYN", FORMAT_HETSYN },
 			{ RECORD_TYPE__HYDBND, "HYDBND", FORMAT_HYDBND },
 			{ RECORD_TYPE__JRNL,   "JRNL  ", FORMAT_JRNL   },
 			{ RECORD_TYPE__KEYWDS, "KEYWDS", FORMAT_KEYWDS },
@@ -157,6 +164,7 @@ namespace BALL
 			{ RECORD_TYPE__SCALE1, "SCALE1", FORMAT_SCALE1 },
 			{ RECORD_TYPE__SCALE2, "SCALE2", FORMAT_SCALE2 },
 			{ RECORD_TYPE__SCALE3, "SCALE3", FORMAT_SCALE3 },
+			{ RECORD_TYPE__SEQADV, "SEQADV", FORMAT_SEQADV },
 			{ RECORD_TYPE__SEQRES, "SEQRES", FORMAT_SEQRES },
 			{ RECORD_TYPE__SHEET,  "SHEET ", FORMAT_SHEET },
 			{ RECORD_TYPE__SIGATM, "SIGATM", FORMAT_SIGATM },
@@ -164,6 +172,7 @@ namespace BALL
 			{ RECORD_TYPE__SITE,   "SITE  ", FORMAT_SITE },
 			{ RECORD_TYPE__SLTBRG, "SLTBRG", FORMAT_SLTBRG },
 			{ RECORD_TYPE__SOURCE, "SOURCE", FORMAT_SOURCE },
+			{ RECORD_TYPE__SPRSDE, "SPRSDE", FORMAT_SPRSDE },
 			{ RECORD_TYPE__SSBOND, "SSBOND", FORMAT_SSBOND },
 			{ RECORD_TYPE__TER,    "TER   ", FORMAT_TER },
 			{ RECORD_TYPE__TITLE,  "TITLE ", FORMAT_TITLE },
