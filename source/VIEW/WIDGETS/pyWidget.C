@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.25 2004/04/19 16:51:12 amoll Exp $
+// $Id: pyWidget.C,v 1.26 2004/04/19 17:27:56 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -113,12 +113,12 @@ namespace BALL
 			int row, col;
 			getCursorPosition(&row, &col);
 			current_line_ = getCurrentLine_();
+			QTextEdit::returnPressed();
 			if (col < 5)
 			{
 				if (multi_line_mode_)
 				{
 					// in multi line mode: end of input - parse it!
-					QTextEdit::returnPressed();
 					parseLine_();
 				}
 				else	
@@ -126,14 +126,12 @@ namespace BALL
 					// return on an empty line is handled 
 					// as in the interactive interpreter: do nothing and 
 					// print another prompt
-					QTextEdit::returnPressed();
 					newPrompt_();
 				}
 			} 
 			else 
 			{	
 				// parse the line
-				QTextEdit::returnPressed();	
 				parseLine_();
 			}
 
