@@ -1,4 +1,4 @@
-// $Id: server.C,v 1.6.4.2 2002/11/27 23:30:06 oliver Exp $
+// $Id: server.C,v 1.6.4.3 2002/12/08 23:03:38 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
 
@@ -64,8 +64,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Server>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<Server>() << endl;
 			#endif 
 
 			destroy();
@@ -219,11 +219,7 @@ namespace BALL
 					QToolTip::add(server_icon_, "VIEW Server disabled");
 				}
 
-				// notify the main window
-				WindowMessage *window_message_2 = new WindowMessage;
-				window_message_2->setStatusBar("");
-				window_message_2->setDeletable(true);
-				notify_(window_message_2);
+				setStatusbarText("");
  			}
 		}
 		
@@ -382,8 +378,7 @@ namespace BALL
 			*/
 			
 			// insert into hashmap
-			composite_hashmap_.
-				insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
+			composite_hashmap_.insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
  			
 			// notify main window
 			NewCompositeMessage new_message;
