@@ -1,7 +1,8 @@
-// $Id: property.C,v 1.13 2000/08/24 20:25:41 amoll Exp $
+// $Id: property.C,v 1.14 2000/08/25 20:09:24 amoll Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 
 using namespace std;
 
@@ -26,26 +27,27 @@ namespace BALL
 	void NamedProperty::persistentWrite(PersistenceManager& pm, const char* name) const
 	{
 		pm.writeObjectHeader(this, name);
-			pm.writePrimitive((int)type_, "type_");
-			pm.writePrimitive(name_, "name_");
-			
-			switch (type_)
-			{
-				case	INT:					pm.writePrimitive(data_.i, "data_.i");		break;
-				case	FLOAT:				pm.writePrimitive(data_.f, "data_.f");		break;
-				case	UNSIGNED_INT:	pm.writePrimitive(data_.ui, "data_.ui"); break;
-				case	BOOL:					pm.writePrimitive(data_.b, "data_.b");		break;
-				case	STRING:				pm.writePrimitive(data_.s, "data_.s");		break;
-				case	OBJECT:				pm.writeObjectPointer(data_.object, "data_.object"); break;
-				case	NONE:					break;
-				default:
-					Log.error() << "cannot write unknown property type: " << (int)type_ << endl;
-			}
+		pm.writePrimitive((int)type_, "type_");
+		pm.writePrimitive(name_, "name_");
+		
+		switch (type_)
+		{
+			case	INT:					pm.writePrimitive(data_.i, "data_.i");		break;
+			case	FLOAT:				pm.writePrimitive(data_.f, "data_.f");		break;
+			case	UNSIGNED_INT:	pm.writePrimitive(data_.ui, "data_.ui"); break;
+			case	BOOL:					pm.writePrimitive(data_.b, "data_.b");		break;
+			case	STRING:				pm.writePrimitive(data_.s, "data_.s");		break;
+			case	OBJECT:				pm.writeObjectPointer(data_.object, "data_.object"); break;
+			case	NONE:					break;
+			default:
+				Log.error() << "cannot write unknown property type: " << (int)type_ << endl;
+		}
 		pm.writeObjectTrailer(name);
 	}
 	
 	void NamedProperty::persistentRead(PersistenceManager& pm)
 	{
+		//pm.checkObjectHeader(RTTI::getStreamName<NamedProperty>()); 
 		int type;
 		pm.readPrimitive(type, "type_");
 		type_ = (Type)type;
@@ -92,13 +94,16 @@ namespace BALL
 			case NamedProperty::FLOAT : s << property.data_.f; break;
 			case NamedProperty::DOUBLE :s << property.data_.d; break;
 			case NamedProperty::STRING :s << *property.data_.s; break;
-			case NamedProperty::OBJECT :/*
-				PersistenceManager pm;
+			case NamedProperty::OBJECT :
+			{
+				TextPersistenceManager pm;
 				pm.setOstream(s);
-				property.data_.object->write(pm);*/
-				//s << property.data_.object; 
+				pm.writeObjectPointer(property.data_.object, "data_.object");
 				break;
-			default:break;
+			}
+			case NamedProperty::NONE : break;
+			default:
+				Log.error() << "Unknwown type while writing NamedProperty: " << (int)property.type_ << endl;
 		}
 		return s;
 	}
@@ -116,14 +121,22 @@ namespace BALL
 			case NamedProperty::FLOAT : s >> property.data_.f; break;
 			case NamedProperty::DOUBLE :s >> property.data_.d; break;
 			case NamedProperty::OBJECT :
-				/*s >> (PersistentObject*)property.data_.object;*/ 
+			{
+				TextPersistenceManager pm;
+				pm.setIstream(s);
+				pm.readObjectPointer(property.data_.object, "data_.object"); 
 				break;
+			}
 			case NamedProperty::NONE: break;
 			case NamedProperty::STRING :
+			{
 				string str;
 				s >> str;
 				property.data_.s = new string(str);
 				break;
+			}
+			default:
+				Log.error() << "Unknwown type while reading NamedProperty: " << (int)property.type_ << endl;
 		}
 		return s;
 	}
