@@ -7,6 +7,7 @@ SMILES_SOURCES= \
 	smilesParserLexer.C
 
 CPP_SOURCES= \
+	molecularGraph.C\
 	analyticalSES.C\
 	BSDTree.C\
 	connolly.C\
@@ -17,7 +18,6 @@ CPP_SOURCES= \
 	graphEdge.C\
 	graphFace.C\
 	graphVertex.C\
-	molecularGraph.C\
 	numericalSAS.C\
 	peptides.C\
 	radialDistributionFunction.C\

@@ -60,6 +60,7 @@ EXECUTABLES_DATATYPES = \
 	RegularData3D_test
 
 EXECUTABLES_CONCEPTS = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
+	Enumerator_test\
 	LogStream_test\
 	AutoDeletable_test\
 	Object_test\
@@ -148,8 +149,8 @@ EXECUTABLES_ENERGY = \
 	OoiEnergy_test
 
 EXECUTABLES_STRUCTURE = \
-	Enumerator_test\
 	AnalyticalSES_test\
+	MolecularGraph_test\
 	NumericalSAS_test\
 	Peptides_test\
 	RadialDistributionFunction_test\
@@ -196,7 +197,8 @@ EXECUTABLES = \
 	$(EXECUTABLES_SOLVATION)
 
 # default target
-all:	$(EXECUTABLES)
+#all:	$(EXECUTABLES)
+all:	MolecularGraph_test
 
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:=.C)
@@ -266,12 +268,4 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
-
-# ????
-AmberFF_test: AmberFF_test.o ../MOLMEC/AMBER/amberNonBonded.o
-	$(CXX) $(CXXFLAGS) AmberFF_test.o ../MOLMEC/AMBER/amberNonBonded.o $(LDFLAGS) -o $@ $(LIBS)
-
-# ????
-ReconstructFragmentProcessor_test: ReconstructFragmentProcessor_test.o ../STRUCTURE/reconstructFragmentProcessor.o ../FORMAT/HINFile.o
-	$(CXX) $(CXXFLAGS) ReconstructFragmentProcessor_test.o ../STRUCTURE/reconstructFragmentProcessor.o ../FORMAT/HINFile.o $(LDFLAGS) -o $@ $(LIBS)
 

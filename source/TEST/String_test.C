@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.38.4.1 2002/05/22 22:58:23 oliver Exp $
+// $Id: String_test.C,v 1.38.4.2 2002/05/31 22:59:27 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.38.4.1 2002/05/22 22:58:23 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.38.4.2 2002/05/31 22:59:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -190,15 +190,14 @@ CHECK(String::String(Size, char*, ... ))
 	}
 RESULT
 
-CHECK(String::String(strstream))
-	std::strstream instream;
-	instream << "ABC" << std::ends << "DEF";
+CHECK(String::String(stringstream))
+	std::stringstream instream("ABC DEF");
 	s2 = new String(instream);
 	TEST_NOT_EQUAL(s2, 0)
 	TEST_EQUAL(*s2, "ABC")
 	delete s2;
 	s2 = new String(instream);
-	TEST_EQUAL(*s2, "ABC")
+	TEST_EQUAL(*s2, "DEF")
 	delete s2;
 RESULT
 
@@ -361,15 +360,13 @@ CHECK(String::set(Size, char*, ...))
 RESULT
 delete s2;
 
-CHECK(String::set(strstream&))
-	std::strstream instream;
-	instream << "ABC" << std::ends << "DEF" << std::ends 
-		<< "GHI" << std::ends << "jkl" << std::ends << "mno" << std::ends;
+CHECK(String::set(stringstream&))
+	std::stringstream instream("ABC DEF GHI jkl mno");
 	s2 = new String;
 	s2->set(instream);
 	TEST_EQUAL(*s2, "ABC")
 	s2->set(instream);
-	TEST_EQUAL(*s2, "ABC")
+	TEST_EQUAL(*s2, "DEF")
 	delete s2;
 RESULT
 
@@ -484,15 +481,13 @@ CHECK(String::operator = (char*))
 	TEST_EQUAL(s4, "");
 RESULT
 
-CHECK(String::operator = (strstream&))
-	std::strstream instream;
-	instream << "ABC" << std::ends << "DEF" << std::ends 
-		<< "GHI" << std::ends << "jkl" << std::ends << "mno" << std::ends;
+CHECK(String::operator = (stringstream&))
+	std::stringstream instream("ABC DEF GHI jkl mni");
 	s2 = new String;
 	*s2 = instream;
 	TEST_EQUAL(*s2, "ABC")
 	*s2 = instream;
-	TEST_EQUAL(*s2, "ABC")
+	TEST_EQUAL(*s2, "DEF")
 	delete s2;
 RESULT
 
