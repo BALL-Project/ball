@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.h,v 1.23 2005/02/06 09:44:53 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.24 2005/02/15 13:49:08 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -81,14 +81,14 @@ namespace BALL
 				This method stores  \link OBJECT_HEADER OBJECT_HEADER \endlink  as an int value to mark the
 				start of an object (using <tt>xdr_int</tt>).
 		*/
-		virtual void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr)
+		virtual void writeHeader(const char* type_name, const char* name, LongSize ptr)
       throw();
 
 		/**	Check for an object header.
 				This method reads an int form the input stream (using <tt>xdr_int</tt>) and
 				returns <b>true</b> if the value read equals  \link OBJECT_HEADER OBJECT_HEADER \endlink .
 		*/
-		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr)
+		virtual bool checkHeader(const char* type_name, const char* name, LongSize& ptr)
       throw();
 
 		/** Write an object trailer.
@@ -127,7 +127,7 @@ namespace BALL
 
 		/**	Get an (unknown) object header.
 		*/
-		virtual bool getObjectHeader(String& type_name, PointerSizeUInt& ptr)
+		virtual bool getObjectHeader(String& type_name, LongSize& ptr)
       throw();
 
 		/**	Write a variable/member name.

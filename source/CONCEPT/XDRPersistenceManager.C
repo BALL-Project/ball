@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.C,v 1.27 2005/02/06 09:45:00 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.28 2005/02/15 13:49:03 amoll Exp $
 //
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
@@ -143,7 +143,7 @@ namespace BALL
 	{
 	}
 
-  void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr)
+  void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, LongSize ptr)
 		throw()
   {
 		DEBUG("XDRPersistenceManager: writing header for " << name << "/" << type_name)
@@ -295,7 +295,7 @@ namespace BALL
 		return (trailer == OBJECT_TRAILER);		
 	}
 
-	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr)
+	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, LongSize& ptr)
 		throw()
 	{
 		DEBUG("XDRPersistenceManager: entering checkHeader(" << type_name << ", " << name << ")")
@@ -317,7 +317,7 @@ namespace BALL
 		return true;
 	}
 
-	bool XDRPersistenceManager::getObjectHeader(String& type_name, PointerSizeUInt& ptr)
+	bool XDRPersistenceManager::getObjectHeader(String& type_name, LongSize& ptr)
 		throw()
 	{
 		DEBUG("XDRPersistenceManager: entering getObjectHeader()")
@@ -532,7 +532,7 @@ namespace BALL
 			xdr_u_int(&xdr_out_, p);
 #   endif
 
-		DEBUG("XDRPersistenceManager: put(PointerSizeUInt = " << ptr << ")")
+		DEBUG("XDRPersistenceManager: put(LongSize = " << ptr << ")")
 	}
 
 	void XDRPersistenceManager::put(const string& s)
