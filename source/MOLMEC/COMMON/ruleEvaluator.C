@@ -1,6 +1,6 @@
-// $Id: ruleEvaluator.C,v 1.1 2000/05/24 12:16:08 oliver Exp $
+// $Id: ruleEvaluator.C,v 1.2 2000/05/24 12:40:07 anker Exp $
 
-#include <BALL/MOLMEC/COMMON/rules.h>
+#include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/KERNEL/PTE.h>
 
 using namespace std;

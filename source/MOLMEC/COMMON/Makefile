@@ -11,7 +11,7 @@ CPP_SOURCES=\
 	gradient.C\
 	periodicBoundary.C\
 	radiusRuleProcessor.C\
-	rules.C\
+	ruleEvaluator.C\
 	ruleProcessor.C\
 	snapShot.C\
 	support.C\
