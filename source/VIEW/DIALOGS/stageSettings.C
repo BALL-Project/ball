@@ -36,10 +36,7 @@ void StageSettings::colorPressed()
 void StageSettings::updateFromStage()
 	throw()
 {
-	const ColorRGBA& color = stage_->getBackgroundColor();
-	QColor qcolor(color.getRed(), color.getGreen(), color.getBlue());
-	color_sample->setBackgroundColor(qcolor);
-
+	color_sample->setBackgroundColor(stage_->getBackgroundColor().getQColor());
 	coordinate_button->setChecked(stage_->coordinateSystemEnabled());
 }
 
@@ -47,11 +44,7 @@ void StageSettings::updateFromStage()
 void StageSettings::apply()
 	throw()
 {
-	const QColor& qcolor = color_sample->backgroundColor();
-	stage_->setBackgroundColor(ColorRGBA((float)qcolor.red() / 255.0,
-													 						 (float)qcolor.green() / 255.0,
-																			 (float)qcolor.blue() / 255.0));
-
+	stage_->setBackgroundColor(color_sample->backgroundColor());
 	stage_->showCoordinateSystem(coordinate_button->isChecked());
 }
 

@@ -109,11 +109,7 @@ void LightSettings::saveSettingsToLight_()
 	}
 
 	LightSource& light = lights_[current_light_];
-
-	const QColor& qcolor = color_sample->backgroundColor();
-	light.setColor(ColorRGBA((float)qcolor.red() / 255.0,
-													 (float)qcolor.green() / 255.0,
-													 (float)qcolor.blue() / 255.0));
+	light.setColor(color_sample->backgroundColor());
 
 	if (relative->isChecked())
 	{
@@ -246,9 +242,7 @@ void LightSettings::getValues_()
 	lights_list->setCurrentItem(current_light_);
 	lights_list->setSelected(current_light_, true);
 
-	const ColorRGBA& color = light_source->getColor();
-	QColor qcolor(color.getRed(), color.getGreen(), color.getBlue());
-	color_sample->setBackgroundColor(qcolor);
+	color_sample->setBackgroundColor(light_source->getColor().getQColor());
 
 	position_x->setText(String(light_source->getPosition().x).c_str());
 	position_y->setText(String(light_source->getPosition().y).c_str());

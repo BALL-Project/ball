@@ -75,21 +75,12 @@ void LabelDialog::fetchPreferences(INIFile& inifile)
 	if (inifile.hasEntry("WINDOWS", "Label::customcolor"))
 	{
 		custom_color_.set(inifile.getValue("WINDOWS", "Label::customcolor"));
-
-		QColor qcolor(custom_color_.getRed(), 
-									custom_color_.getGreen(), 
-									custom_color_.getBlue());
-
-		color_sample_->setBackgroundColor(qcolor);
+		color_sample_->setBackgroundColor(custom_color_.getQColor());
 	}
 	else
 	{
 		custom_color_.set(ColorRGBA(1.,1.,0.,1.));
-		QColor qcolor(custom_color_.getRed(), 
-									custom_color_.getGreen(), 
-									custom_color_.getBlue());
-
-		color_sample_->setBackgroundColor(qcolor);
+		color_sample_->setBackgroundColor(custom_color_.getQColor());
 	}			
 }
 
@@ -202,10 +193,7 @@ void LabelDialog::editColor()
 	color_sample_->setBackgroundColor(QColorDialog::getColor(color_sample_->backgroundColor()));
 	QColor qcolor = color_sample_->backgroundColor();
 
-	custom_color_.set((float)qcolor.red() / 255.0,
-										(float)qcolor.green() / 255.0,
-										(float)qcolor.blue() / 255.0);
-
+	custom_color_.set(qcolor);
 	update();
 }
 

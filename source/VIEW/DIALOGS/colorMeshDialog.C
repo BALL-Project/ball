@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.16 2003/12/01 19:17:18 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.17 2003/12/04 09:50:55 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -74,7 +74,7 @@ void ColorMeshDialog::cancelPressed()
 void ColorMeshDialog::choosePressed()
 {
 	QColor qcolor = setColor(choose_button);
-	selected_color.set(qcolor.red(), qcolor.green(), qcolor.blue());
+	selected_color.set(qcolor);
 	red_box->setValue(qcolor.red());
 	blue_box->setValue(qcolor.blue());
 	green_box->setValue(qcolor.green());
@@ -101,32 +101,27 @@ void ColorMeshDialog::colorBoxesChanged()
 
 void ColorMeshDialog::maxPressed()
 {
-	QColor qcolor = setColor(max_button);
-	max_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
+	max_color.set(setColor(max_button));
 }
 
 void ColorMeshDialog::midPressed()
 {
-	QColor qcolor = setColor(mid_button);
-	mid_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
+	mid_color.set(setColor(mid_button));
 }
 
 void ColorMeshDialog::minPressed()
 {
-	QColor qcolor = setColor(min_button);
-	min_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
+	min_color.set(setColor(min_button));
 }
 
 void ColorMeshDialog::minMinPressed()
 {
-	QColor qcolor = setColor(min_min_button);
-	min_min_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
+	min_min_color.set(setColor(min_min_button));
 }
 
 void ColorMeshDialog::maxMaxPressed()
 {
-	QColor qcolor = setColor(max_max_button);
-	max_max_color.set(qcolor.red(), qcolor.green(), qcolor.blue());;
+	max_max_color.set(setColor(max_max_button));
 }
 
 
@@ -255,18 +250,14 @@ void ColorMeshDialog::gridSelected()
 void ColorMeshDialog::setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box)
 {
 	QPalette p = button->palette();
-	QColor qcolor = p.color(QPalette::Active, QColorGroup::Button);
-	color.set(qcolor.red(), 
-						qcolor.green(), 
-						qcolor.blue(),
-						box->value());
+	color.set(p.color(QPalette::Active, QColorGroup::Button));
+	color.setAlpha(box->value());
 }
 
 void ColorMeshDialog::getColor_(const ColorRGBA& color, QPushButton* button, QSpinBox* box)
 {
-	QColor qcolor(color.getRed(), color.getGreen(), color.getBlue());
 	QPalette p = button->palette();
-	p.setColor(QColorGroup::Button, qcolor);
+	p.setColor(QColorGroup::Button, color.getQColor());
 	button->setPalette(p);
 	box->setValue(color.getAlpha());
 	button->update();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.48 2003/12/02 14:44:57 amoll Exp $
+// $Id: displayProperties.C,v 1.49 2003/12/04 09:50:55 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -94,17 +94,13 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 	if (inifile.hasEntry("REPRESENTATION", "custom_color"))
 	{
 		custom_color_.set(inifile.getValue("REPRESENTATION", "custom_color"));
-		QColor qcolor(custom_color_.getRed(), custom_color_.getGreen(), custom_color_.getBlue());
-		color_sample->setBackgroundColor(qcolor);
+		color_sample->setBackgroundColor(custom_color_.getQColor());
 	}
 
 	if (inifile.hasEntry("REPRESENTATION", "selected_color"))
 	{
 		BALL_SELECTED_COLOR.set(inifile.getValue("REPRESENTATION", "selected_color"));
-		QColor qcolor(BALL_SELECTED_COLOR.getRed(), 
-									BALL_SELECTED_COLOR.getGreen(), 
-									BALL_SELECTED_COLOR.getBlue());
-		color_sample_selection->setBackgroundColor(qcolor);
+		color_sample_selection->setBackgroundColor(BALL_SELECTED_COLOR.getQColor());
 	}
 
 	getEntry_(inifile, "model", *model_type_combobox);
@@ -147,10 +143,8 @@ void DisplayProperties::writePreferences(INIFile& inifile)
 	ModularWidget::writePreferences(inifile);
 	inifile.appendSection("REPRESENTATION");
 	const QColor& qcolor = color_sample->backgroundColor();
-	custom_color_.set(qcolor.red(),
-										qcolor.green(),
-										qcolor.blue(),
-										255 - (Position) (transparency_slider->value() * 2.55));
+	custom_color_.set(qcolor);
+	custom_color_.setAlpha(255 - (Position) (transparency_slider->value() * 2.55));
 
 	// the combobox values
 	inifile.insertValue("REPRESENTATION", "model", model_type_combobox->currentItem());
@@ -265,8 +259,7 @@ void DisplayProperties::modifyRepresentationMode()
 	if (rep_->getColorProcessor() != 0)
 	{
 		custom_color_ = rep_->getColorProcessor()->getDefaultColor();
-		QColor qcolor(custom_color_.getRed(), custom_color_.getGreen(), custom_color_.getBlue());
-		color_sample->setBackgroundColor(qcolor);
+		color_sample->setBackgroundColor(custom_color_.getQColor());
 	}
 
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
@@ -397,10 +390,7 @@ void DisplayProperties::applyButtonClicked()
 void DisplayProperties::editColor()
 {
 	color_sample->setBackgroundColor(QColorDialog::getColor(color_sample->backgroundColor()));
-	const QColor& qcolor = color_sample->backgroundColor();
-	custom_color_.set((float)qcolor.red() / 255.0,
-										(float)qcolor.green() / 255.0,
-										(float)qcolor.blue() / 255.0);
+	custom_color_.set(color_sample->backgroundColor());
 	update();
 }
 
@@ -408,10 +398,7 @@ void DisplayProperties::editSelectionColor()
 {
 	color_sample_selection->setBackgroundColor(QColorDialog::getColor(
 													color_sample_selection->backgroundColor()));
-	const QColor& qcolor = color_sample_selection->backgroundColor();
-	BALL_SELECTED_COLOR.set((float)qcolor.red() / 255.0,
-													(float)qcolor.green() / 255.0,
-													(float)qcolor.blue() / 255.0);
+	BALL_SELECTED_COLOR.set(color_sample_selection->backgroundColor());
 	update();
 }
 
@@ -541,10 +528,8 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 			
 
 	QColor qcolor = color_sample->backgroundColor();
-	custom_color_.set(qcolor.red(),
-										qcolor.green(),
-										qcolor.blue(),
-										255 - (Position)(transparency_slider->value() * 2.55));
+	custom_color_.set(qcolor);
+	custom_color_.setAlpha(255 - (Position)(transparency_slider->value() * 2.55));
 	color_processor->setDefaultColor(custom_color_);
 
 	bool rebuild_representation = false;

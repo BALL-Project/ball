@@ -26,7 +26,7 @@ QColorTableItem::QColorTableItem(QTable *t, EditType et, const ColorRGBA& color)
 void QColorTableItem::paint(QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected)
 {
   QColorGroup g( cg );
-	g.setColor( QColorGroup::Base, QColor (color_rgba_.getRed(), color_rgba_.getGreen(), color_rgba_.getBlue()));
+	g.setColor( QColorGroup::Base, QColor (color_rgba_.getQColor()));
   QTableItem::paint( p, g, cr, selected );
 }
 
@@ -82,11 +82,10 @@ QWidget* QColorTable::beginEdit(int row, int col, bool)
 {
 	if (col == 0 || setting_content_) return 0;
 	ColorRGBA old_rgba(((QColorTableItem*)item(row,col))->getColor());
-	QColor old(old_rgba.getRed(), old_rgba.getGreen(), old_rgba.getBlue());
-	QColor color = QColorDialog::getColor(old);
-	if (!color.isValid()) return 0;
+	QColor qcolor = QColorDialog::getColor(old_rgba.getQColor());
+	if (!qcolor.isValid()) return 0;
 
-	ColorRGBA new_color((Size)color.red(),(Size) color.green(),(Size) color.blue(),(Size) 255);
+	ColorRGBA new_color(qcolor);
 	((QColorTableItem*)item(row,col))->setColor(new_color);
 	updateCell(row, col);
 	colors_[row] = new_color;
@@ -433,9 +432,7 @@ void ColoringSettingsDialog::setNewColor_(QLabel* label, ColorRGBA& to)
 	if (!qcolor.isValid()) return;
 
 	label->setBackgroundColor(qcolor);
-	to.set((float)qcolor.red() / 255.0,
-				 (float)qcolor.green() / 255.0,
-				 (float)qcolor.blue() / 255.0);
+	to.set(qcolor);
 	update();
 }
 
@@ -549,7 +546,7 @@ void ColoringSettingsDialog::maxTFChanged()
 void ColoringSettingsDialog::setColorToLabel_(QLabel* label, const ColorRGBA& color)
 	throw()
 {
-	label->setBackgroundColor(QColor(color.getRed(), color.getGreen(), color.getBlue()));
+	label->setBackgroundColor(color.getQColor());
 }
 
 void ColoringSettingsDialog::setLabelColorsFromValues_()
