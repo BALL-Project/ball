@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.20 2000/09/03 20:01:55 oliver Exp $
+// $Id: property.C,v 1.21 2000/09/05 10:09:27 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -28,7 +28,7 @@ namespace BALL
 	{
 		pm.writeObjectHeader(this, name);
 			pm.writePrimitive((int)type_, "type_");
-			pm.writePrimitive(name_, "name_");
+			pm.writePrimitive(String(name_), "name_");
 			
 			switch (type_)
 			{
@@ -51,9 +51,10 @@ namespace BALL
 		int type;
 		pm.readPrimitive(type, "type_");
 		type_ = (Type)type;
-		pm.readPrimitive(name_, "name_");
-
 		String s;
+		pm.readPrimitive(s, "name_");
+		name_ = s;
+
 		switch (type_)
 		{
 			case	INT:					pm.readPrimitive(data_.i, "data_.i");		break;
