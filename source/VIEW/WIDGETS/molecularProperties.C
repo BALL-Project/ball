@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.18 2004/01/15 13:03:29 amoll Exp $
+// $Id: molecularProperties.C,v 1.19 2004/01/17 00:35:20 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -35,39 +35,39 @@ MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
 	MainControl& main_control = *MainControl::getMainControl(this);
 	String hint;
 	
-	hint = "focus the camera on one or multiple objects";
+	hint = "Focus the camera on one or multiple objects."; 
 	center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																										SLOT(centerCamera()), CTRL+Key_F, -1, hint);
 	
-	hint = "add missing missing bonds to a selected structure";
+	hint = "Add missing bonds to a selected structure.";
 	build_bonds_id_ = main_control.insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
 																										SLOT(buildBonds()), CTRL+Key_B, -1, hint);
 	
-	hint = "add missing missing H-atoms to a selected structure";
+	hint = "Add missing H-atoms to a selected structure."; 
 	add_hydrogens_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
 																										SLOT(addHydrogens()), CTRL+Key_H);
 	
-	hint = "check a structure against the fragment database";
+ 	hint = "Check a structure against the fragment database.";
 	check_structure_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
 																										SLOT(checkResidue()), CTRL+Key_K, -1, hint);
 	
-	hint = "recalulate the secondary structure";
+	hint = "Recalculate the secondary structure for a structure.";
 	calculate_ss_ = main_control.insertMenuEntry(MainControl::BUILD, "Calculate Secondary Structure", this,
 																							 SLOT(calculateSecondaryStructure()), ALT+Key_2, -1, hint);
 	
-	hint = "select a molecular object to see its position in the scene or to mark it for a simulation";
+	hint = "Select a molecular object to see its position in the scene or to mark it for a simulation";
 	select_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Select", this, 
 																										SLOT(select()), ALT+Key_S, -1, hint);   
 	
-	hint = "deselect a molecular object";
+	hint = "Deselect a molecular object.";
 	deselect_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Deselect", this, 
 																										SLOT(deselect()), ALT+Key_D, -1, hint);
 	
-	hint = "create a grid with the distance to the gemetric conter of a structure";
+	hint = "Create a grid with the distance to the geometric center of a structure.";
 	create_distance_grid_id_ = main_control.insertMenuEntry(MainControl::TOOLS_CREATE_GRID, 
 																			"&Distance Grid", this, SLOT(createGridFromDistance()));   
 
-	hint = "map two proteins";
+	hint = "Map two proteins.";
 	map_proteins_ = main_control.insertMenuEntry(MainControl::TOOLS,
 																			"&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 	}

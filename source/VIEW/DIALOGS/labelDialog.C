@@ -119,7 +119,8 @@ void LabelDialog::initializeWidget(MainControl& main_control)
 	main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
 	id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Add &Label", this,
-																		 SLOT(show()), CTRL+Key_L);   
+																		 SLOT(show()), CTRL+Key_L, -1,
+																		 "Add a label for selected molecular objects");   
 }
 
 void LabelDialog::finalizeWidget(MainControl& main_control)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.110 2004/01/13 00:52:05 amoll Exp $
+// $Id: mainframe.C,v 1.111 2004/01/17 00:39:48 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -169,7 +169,8 @@ Log.error() << "new Mainframe " << this << std::endl;
 	hint = "To assign H-bonds, one System has to be selected.";
 	insertMenuEntry(MainControl::BUILD, "Calculate H-Bonds", this, SLOT(calculateHBonds()),
 									CTRL+Key_9, MENU_CALCULATE_HBONDS, hint);
-	insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, MENU_PEPTIDE);
+	insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, 
+									MENU_PEPTIDE, "Build a peptide from selected amino acids.");
 
 	// Tools Menu -------------------------------------------------------------------
 	insertPopupMenuSeparator(MainControl::TOOLS);
