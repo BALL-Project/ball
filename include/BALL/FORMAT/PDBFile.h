@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.2 1999/09/26 17:16:20 oliver Exp $
+// $Id: PDBFile.h,v 1.3 1999/11/05 12:21:25 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -68,7 +68,7 @@ namespace BALL
 				@param	filename the name of the file to open
 				@param	open_mode the file mode
 		*/
-		PDBFile(const String& filename, int open_mode = ios::in);
+		PDBFile(const String& filename, File::OpenMode open_mode = ios::in);
 
 		/// Destructor
 		virtual ~PDBFile();
