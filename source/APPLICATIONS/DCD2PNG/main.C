@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.2 2004/07/15 15:21:16 amoll Exp $
+// $Id: main.C,v 1.3 2004/07/15 17:29:11 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -16,6 +16,7 @@
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 
 #include <iostream>
+#include <sys/wait.h>
 
 using namespace BALL;
 using namespace BALL::VIEW;
@@ -80,7 +81,6 @@ int main(int argc, char **argv)
 
 	// =============== initialize Mainframe ============================================
 	QApplication application(argc, argv);
-	// Create the mainframe.
 	BALL::Mainframe mainframe;
 //  	application.setMainWidget(&mainframe);
 	mainframe.setIdentifier("MAIN");
@@ -97,9 +97,10 @@ int main(int argc, char **argv)
 	// =============== parsing command line arguments ==================================
 	String dcd_file_name;
 	String molecular_file_name;
-	String working_dir;
+	String working_dir = ".";
 	bool error = false;
 	System* system;
+	Position nr = 100000000;
 
 	DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
 
@@ -128,11 +129,26 @@ int main(int argc, char **argv)
 			dcd_file_name = argument;
 			continue;
 		}
+
+		if (argument.hasPrefix("-s"))
+		{
+			argument.after("-s");
+			try
+			{
+				nr = argument.toUnsignedInt();
+			}
+			catch(...)
+			{
+			}
+			continue;
+		}
+			
 	
 		Directory d(argument);
 		if (d.isValid())
 		{
 			mainframe.setWorkingDir(argument);
+			working_dir = argument;
 			continue;
 		}
 
@@ -153,20 +169,59 @@ int main(int argc, char **argv)
 		DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
  		DisplayProperties::getInstance(0)->applyButtonClicked();
 	}
+
+	Size width = 1000;
+	Size height = 750;
 	
 	DCDFile dcdfile(dcd_file_name);
+	Scene::getInstance(0)->resize(width, height);
+
+	
+	int writepipe[2];
+	pid_t childpid;
+#define PARENT_WRITE 	writepipe[0]
+#define CHILD_READ 		writepipe[1]
+	int status;
+// 	if (pipe(writepipe) < 0 ) return -1;
+	
+
+	String povray_options;
+	povray_options = "-V -D +Imytemp +W" + String(width) + " +H" + String(height) + " +O" + working_dir + "/";
+
+	std::cout << povray_options << std::endl;
 
 	SnapShotManager sm(system, 0, &dcdfile, false);
 	POVRenderer pov;
-//  	pov.init(*Scene::getInstance(0)->getStage(), 1000, 1000);
-
- 	Scene::getInstance(0)->exportScene(pov);
-
+	pov.setFileName("mytemp");
 	sm.applyFirstSnapShot();
 	while(sm.applyNextSnapShot())
 	{
+		String pov_arg = povray_options + String(nr) + ".png" ;
  		Scene::getInstance(0)->exportScene(pov);
+		nr++;
+
+		if ( (childpid = fork()) < 0) 
+		{
+			std::cout << "Could not fork!" << std::endl;
+			return -1;
+		}
+		else if (childpid != 0)
+		{
+			waitpid( -1, &status, 0 );
+		}
+		else
+		{
+//		  	close(1);
+			execl ("/home/student/amoll/bin/povray", "povray", pov_arg.c_str(), 0);
+		}
+
+//		 	close(1);
+//  			dup (writepipe[1]);
+// 			execl ("/home/student/amoll/bin/mytest", "mytest", "+I- +Oa.png", 0);
+
 	}
+
+	std::cout << "asdasa2 " << std::endl;
 
 // 	mainframe.show();
 //   return application.exec();
