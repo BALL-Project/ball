@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.15 2001/05/13 16:29:09 hekl Exp $
+// $Id: mainControl.C,v 1.16 2001/05/27 10:31:24 hekl Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -267,8 +267,6 @@ namespace BALL
 
 			delete preferences_dialog_;
 			preferences_dialog_ = 0;
-
-			preferences_.write();
 		}
 
 		bool MainControl::remove(const Composite& composite, bool sent_message)

@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.5 2001/05/13 14:26:25 hekl Exp $
+// $Id: scene.C,v 1.6 2001/05/27 10:31:25 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 
@@ -6,6 +6,7 @@
 #include <qkeycode.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
+#include <qgl.h>
 
 #include "events.C"
 
@@ -47,7 +48,6 @@ namespace BALL
 				was_picking_(false),
 		    x_scale_((GLfloat)1),
 				y_scale_((GLfloat)1),
-				open_gl_initialized_(false),
 				zoom_(),
 				position_(1,0,0),
 				look_at_position_(0,0,0),
@@ -79,7 +79,6 @@ namespace BALL
 				was_picking_(false),
 				x_scale_((GLfloat)1),
 				y_scale_((GLfloat)1),
-				open_gl_initialized_(false),
 				zoom_(),
 				position_(1,0,0),
 				look_at_position_(0,0,0),
@@ -142,7 +141,6 @@ namespace BALL
 				was_picking_(false),
 				x_scale_(scene.x_scale_),
 				y_scale_(scene.y_scale_),
-				open_gl_initialized_(false),
 				zoom_(scene.zoom_),
 				position_(scene.position_),
 				look_at_position_(scene.look_at_position_),
@@ -215,7 +213,6 @@ namespace BALL
 			key_pressed_ = Scene::KEY_PRESSED__NONE;
 			x_scale_ = (GLfloat)1;
 			y_scale_ = (GLfloat)1;
-			open_gl_initialized_ = false;
 
 			zoom_ = Vector3(0,0,0);
 			position_ = Vector3(1,0,0);
@@ -369,9 +366,6 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth + 1);
 			s << "y scale: " << y_scale_ << endl;
 
-			BALL_DUMP_DEPTH(s, depth + 1);
-			s << "OpenGL initialized: " << open_gl_initialized_ << endl;
-
 			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
 
@@ -392,6 +386,45 @@ namespace BALL
 		// ---- protected Member functions (QT) -------------------------------------
 		// --------------------------------------------------------------------------
 
+		void Scene::initializeGL()
+		{
+			if (!format().rgba())
+			{
+				cerr << "no rgba mode for OpenGL available." << endl;
+			}
+
+			glFrontFace(GL_CCW);
+			glCullFace(GL_BACK);
+			glEnable(GL_CULL_FACE);
+
+			glEnable(GL_NORMALIZE);
+
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LEQUAL);
+			glClearDepth(200.0);
+			glShadeModel(GL_SMOOTH);
+		 
+			GLfloat diff[] = {1.0, 1.0, 1.0, 1.0};
+			GLfloat shin[] = {50.0};
+			GLfloat pos[]  = {0.0,0.0,100.0,0.0};
+
+			glMaterialfv(GL_FRONT, GL_SPECULAR, diff);
+			glMaterialfv(GL_FRONT, GL_SHININESS, shin);
+			glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
+			glLightfv(GL_LIGHT0, GL_POSITION, pos);
+
+			glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+			glEnable(GL_COLOR_MATERIAL);
+			glEnable(GL_LIGHTING);
+			glEnable(GL_LIGHT0);
+
+			GL_primitive_manager_.init();
+
+			initViewVectors_();
+			setCamera_();
+		}
+
 		void Scene::paintGL()
 		{
 			makeCurrent();
@@ -405,11 +438,6 @@ namespace BALL
 		{
 			makeCurrent();
 
-			if (open_gl_initialized_ == false)
-			{
-				initializeOpenGL_();
-			}
-
 			if (width > height)
 			{
 				x_scale_ = (GLfloat)width / ((GLfloat)height * (GLfloat)2);
@@ -421,6 +449,8 @@ namespace BALL
 				y_scale_ = (GLfloat)height / ((GLfloat)width * (GLfloat)2);
 			}
 
+			glViewport(0, 0, width, height);
+
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
 
@@ -431,8 +461,6 @@ namespace BALL
 			setCamera_();
 
 			glMatrixMode(GL_MODELVIEW);
-
-			glViewport(0, 0, width, height);
 
 			width_ = (Scene::Width)width;
 			height_ = (Scene::Height)height;
@@ -839,7 +867,7 @@ namespace BALL
 				cout << "rendering." << endl;
 			#endif
 
-			glEnable(GL_COLOR_MATERIAL);
+				//			glEnable(GL_COLOR_MATERIAL);
 
 			Matrix4x4 m;
 			GLfloat matrix[4][4];
@@ -951,7 +979,7 @@ namespace BALL
 
 			glPopMatrix();
 
-			glDisable(GL_COLOR_MATERIAL);
+			//			glDisable(GL_COLOR_MATERIAL);
 
 			// return to saved render mode, if names were turned on
 			if (with_names)
@@ -1116,40 +1144,6 @@ namespace BALL
 		// registerable functions end
 		//////////////////////////////////////////////////////////////////////////////////
 
-		void Scene::initializeOpenGL_()
-		{
-			GL_primitive_manager_.init();
-
-			initViewVectors_();
-			setCamera_();
-
-			glFrontFace(GL_CCW);
-			glCullFace(GL_BACK);
-			glEnable(GL_CULL_FACE);
-
-			glEnable(GL_NORMALIZE);
-
-			glEnable(GL_DEPTH_TEST);
-			glDepthFunc(GL_LEQUAL);
-			glClearDepth(200.0);
-			glShadeModel(GL_SMOOTH);
-		 
-			GLfloat diff[] = {1.0, 1.0, 1.0, 1.0};
-			GLfloat shin[] = {50.0};
-			GLfloat pos[]  = {0,0,10000,0};
-
-			glMaterialfv(GL_FRONT, GL_SPECULAR, diff);
-			glMaterialfv(GL_FRONT, GL_SHININESS, shin);
-			glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
-			glLightfv(GL_LIGHT0, GL_POSITION, pos);
-
-			glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-
-			glEnable(GL_LIGHTING);
-			glEnable(GL_LIGHT0);
-			
-			open_gl_initialized_ = true;
-		}
 
 		Vector3 Scene::translateObjectXY_(const Real distance)
 		{
@@ -1513,7 +1507,7 @@ namespace BALL
 				system_origin_ = getLookAtPosition();
 			}
 
-			if (open_gl_initialized_ == true)
+			if (QGLWidget::isValid())
 			{
 				makeCurrent();
 

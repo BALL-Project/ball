@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.C,v 1.5 2001/05/13 16:29:09 hekl Exp $
+// $Id: glPrimitiveManager.C,v 1.6 2001/05/27 10:31:24 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 
@@ -227,6 +227,8 @@ namespace BALL
 			GL_display_list_[1 * 4 + 3].endDefinition();
 			
 			GL_quadric_object.setDrawStyle(GLU_FILL);
+			GL_quadric_object.setNormals(GLU_SMOOTH);
+			GL_quadric_object.setOrientation(GLU_OUTSIDE);
 
 			// building solid display list
 			GL_display_list_[2 * 4 + 0].startDefinition();
