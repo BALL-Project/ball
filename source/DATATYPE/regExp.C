@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.9 2000/07/29 18:03:38 amoll Exp $ 
+// $Id: regExp.C,v 1.10 2000/10/20 16:30:24 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -146,53 +146,6 @@ namespace BALL
 	}
 
 	bool RegularExpression::find
-		(const char* text,
-		 const char* pattern,
-		 const char** found_substring_from,
-		 const char** found_substring_to,
-		 int compile_flags,
-		 int execute_flags)
-	{
-		if (text == 0)
-		{
-			throw Exception::NullPointer(__FILE__, __LINE__);
-		}
-		if (pattern == 0)
-		{
-			throw Exception::NullPointer(__FILE__, __LINE__);
-		}
-
-		regex_t regex;
-
-		if (regcomp(&regex, pattern, compile_flags) != 0)
-		{
-			return false;
-		}
-
-		regmatch_t regmatch[1];
-		
-		if (regexec(&regex, text, (size_t)1, regmatch, execute_flags) == 0)
-		{
-			if (found_substring_from != 0)
-			{
-				*found_substring_from = text + regmatch[0].rm_so;
-			}
-
-			if (found_substring_to != 0)
-			{
-				*found_substring_to = text + regmatch[0].rm_eo - 1;
-			}
-
-			regfree(&regex);
-
-			return true;
-		}
-
-		regfree(&regex);
-		return false;
-	}
-
-	bool RegularExpression::find
 		(const String& text, Substring& found,
 		 Index from, int execute_flags) const
 	{
@@ -225,11 +178,8 @@ namespace BALL
 	}
 
 	bool RegularExpression::find
-		(const String& text,
-		 Substring found_subexpression[],
-		 Size number_of_subexpresions,
-		 Index from,
-		 int execute_flags) const
+		(const String& text, vector<Substring>& subexpressions,
+		 Index from, int execute_flags) const
 	{
 		if (valid_pattern_ == false)
 		{
@@ -244,22 +194,17 @@ namespace BALL
 			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
 		}
 
-		for (Index index = 0; index < (Index)number_of_subexpresions; ++index)
+		Size number_of_subexpressions = (Size)regex_.re_nsub + 1;
+		subexpressions.resize(number_of_subexpressions);
+
+		regmatch_t* regmatch_ptr = new regmatch_t[number_of_subexpressions];
+
+		if (regexec(&regex_, text.c_str() + from, (size_t)number_of_subexpressions, regmatch_ptr, execute_flags) == 0)
 		{
-			found_subexpression[index].unbind();
-		}
-
-		number_of_subexpresions = BALL_MIN(number_of_subexpresions, (Size)regex_.re_nsub + 1);
-
-		regmatch_t *regmatch_ptr = new regmatch_t[number_of_subexpresions];
-
-		if (regexec(&regex_, text.c_str() + from, (size_t)number_of_subexpresions, regmatch_ptr, execute_flags) == 0)
-		{
-			for (Index index = 0; index < (Index)number_of_subexpresions; ++index)
+			for (Index index = 0; index < (Index)number_of_subexpressions; ++index)
 			{
-				found_subexpression[index].bind
-					(text, from + (Index)regmatch_ptr[index].rm_so, 
-					 (Index)(regmatch_ptr[index].rm_eo - (Index)regmatch_ptr[index].rm_so));
+				subexpressions[index].bind(text, from + (Index)regmatch_ptr[index].rm_so, 
+																	 (Index)(regmatch_ptr[index].rm_eo - (Index)regmatch_ptr[index].rm_so));
 			}
 
 			delete [] regmatch_ptr;			
@@ -267,139 +212,6 @@ namespace BALL
 		}
 
 		delete [] regmatch_ptr;
-		return false;
-	}
-
-	bool RegularExpression::find
-		(const Substring &text,
-		 Substring &found,
-		 Index from,
-		 int execute_flags) const
-	{
-		if (valid_pattern_ == false)
-		{
-			return false;
-		}
-		if (!text.isValid())
-		{
-			throw Substring::UnboundSubstring(__FILE__, __LINE__);
-		}
-		if (from < 0)
-		{
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, from, 0);
-		}
-		if (from >= (Index)text.size())
-		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
-		}
-
-		regmatch_t regmatch[1];
-		char* end_of_substring = (char*)(text.c_str() + text.size());
-		char c = *end_of_substring;
-		*end_of_substring = '\0';
-
-		if (regexec(&regex_, text.c_str() + from, (size_t)1, regmatch, execute_flags) == 0)
-		{
-			found.bind
-				(text, from + (Index)regmatch[0].rm_so,
-				 (Index)regmatch[0].rm_eo - (Index)regmatch[0].rm_so);
-
-			*end_of_substring = c;
-			return true;
-		}
-
-		found.unbind();
-		*end_of_substring = c;
-		return false;
-	}
-
-	bool RegularExpression::find
-		(const Substring &text,
-		 Substring found_subexpression[],
-		 Size number_of_subexpresions,
-		 Index from,
-		 int execute_flags) const
-	{
-		if (valid_pattern_ == false)
-		{
-			return false;
-		}
-		if (!text.isValid())
-		{
-			throw Substring::UnboundSubstring(__FILE__, __LINE__);
-		}
-		if (from < 0)
-		{
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, from, 0);
-		}
-		if (from >= (Index)text.size())
-		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
-		}
-
-		for (Index index = 0; index < (Index)number_of_subexpresions; ++index)
-		{
-			found_subexpression[index].unbind();
-		}
-
-		number_of_subexpresions = BALL_MIN(number_of_subexpresions, (Size)regex_.re_nsub + 1);
-
-		regmatch_t *regmatch_ptr = new regmatch_t[number_of_subexpresions];
-		char *end_of_substring = (char *)(text.c_str() + text.size());
-		char c = *end_of_substring;
-		*end_of_substring = '\0';
-
-		if (regexec(&regex_, text.c_str() + from, (size_t)number_of_subexpresions, regmatch_ptr, execute_flags) == 0)
-		{
-			for (Index index = 0; index < (Index)number_of_subexpresions;++index)
-			{
-				found_subexpression[index].bind
-					(text,  from	+ (Index)regmatch_ptr[index].rm_so,
-					 (Index)regmatch_ptr[index].rm_eo - (Index)regmatch_ptr[index].rm_so);
-			}
-
-			*end_of_substring = c;
-			delete [] regmatch_ptr;
-			return true;
-		}
-
-		*end_of_substring = c;
-		delete [] regmatch_ptr;
-		return false;
-	}
-
-	bool RegularExpression::find
-		(const char* text,
-		 const char** found_substring_from,
-		 const char** found_substring_to,
-		 int execute_flags) const
-	{
-		if (valid_pattern_ == false)
-		{
-			return false;
-		}
-		if (text == 0)
-		{
-			throw Exception::NullPointer(__FILE__, __LINE__);
-		}
-		
-		regmatch_t regmatch[1];
-		
-		if (regexec(&regex_, text, (size_t)1, regmatch, execute_flags) == 0)
-		{
-			if (found_substring_from != 0)
-			{
-				*found_substring_from = text + regmatch[0].rm_so;
-			}
-
-			if (found_substring_to != 0)
-			{
-				*found_substring_to = text + regmatch[0].rm_eo - 1;
-			}
-
-			return true;
-		}
-
 		return false;
 	}
 
