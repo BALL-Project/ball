@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.29 2004/04/15 12:10:24 amoll Exp $
+// $Id: representation.C,v 1.30 2004/04/17 21:45:58 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -277,11 +277,11 @@ namespace BALL
 					dots = "...";
 				}
 				
-				mc->setStatusbarText("Creating Model " + dots);
+				mc->setStatusbarText("Creating " + getModelName() + " Model " + dots);
 				thread_->wait(500); 
 			}
 
-//			mc->setStatusbarText(" Drawing...");
+			mc->setStatusbarText("");
 			mc->setCompositesMuteable(true);
 			
  			if (mc->getPrimitiveManager().has(*this))
