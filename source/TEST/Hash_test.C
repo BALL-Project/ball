@@ -1,11 +1,11 @@
-// $Id: Hash_test.C,v 1.4 2000/06/07 14:26:28 amoll Exp $
+// $Id: Hash_test.C,v 1.5 2000/06/16 08:45:51 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/COMMON/hash.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Hash_test.C,v 1.4 2000/06/07 14:26:28 amoll Exp $")
+START_TEST(class_name, "$Id: Hash_test.C,v 1.5 2000/06/16 08:45:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -40,12 +40,21 @@ CHECK(Hash(const String& s))
 RESULT
 
 CHECK(Hash(void *const& ptr))
-	void *x;
-	TEST_EQUAL(Hash(x), 2147483648)
+	void* x = 0;
+	TEST_EQUAL(Hash(x), 0)
+	x = (void*)123;
+	TEST_EQUAL(Hash(x), 106040973)
+	x = (void*)123456789;
+	TEST_EQUAL(Hash(x), 2147483648U)
 RESULT
 
 CHECK(getNextPrime(HashIndex l))
+	TEST_EQUAL(getNextPrime(0), 3)
+	TEST_EQUAL(getNextPrime(1), 3)
+	TEST_EQUAL(getNextPrime(2), 3)
+	TEST_EQUAL(getNextPrime(3), 3)
 	TEST_EQUAL(getNextPrime(4), 5)
+	TEST_EQUAL(getNextPrime(5), 5)
 RESULT
 
 /////////////////////////////////////////////////////////////
