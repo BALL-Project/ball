@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.7.4.3 2002/10/19 12:07:03 amoll Exp $
+// $Id: molecularControl.h,v 1.7.4.4 2002/10/27 20:25:17 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -19,7 +19,6 @@ using namespace BALL::VIEW;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 		/**	The MolecularControl class.

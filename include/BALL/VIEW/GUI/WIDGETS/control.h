@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.3 2002/10/18 14:40:51 amoll Exp $
+// $Id: control.h,v 1.10.4.4 2002/10/27 20:25:56 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -6,14 +6,6 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-
-#include <iostream>
-
-#include <qlistview.h>
-#include <qmessagebox.h>
-#include <qpoint.h>
-#include <qpopupmenu.h>
-
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -47,9 +39,13 @@
 # include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 #endif
 
+#include <qlistview.h>
+#include <qmessagebox.h>
+#include <qpoint.h>
+#include <qpopupmenu.h>
+
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -75,11 +71,12 @@ namespace BALL
 			/** @name Macros.
 		  */
 			//@{
+
 			/** Embeddable Macro.
 			*/
 			BALL_EMBEDDABLE(Control)
+
 			//@}
-					
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -104,7 +101,6 @@ namespace BALL
 				throw();
 			
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -128,8 +124,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+
 			//@}
-			
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -291,11 +287,11 @@ namespace BALL
 			*/
 			virtual void checkMenu(MainControl& main_control)
 				throw();
-			//@}			
 			
 
 			public slots:
 				
+			//@}			
 			/** @name Public slots
 			*/
 			//@{
@@ -415,17 +411,17 @@ namespace BALL
 					@see    GeometricObject
 			*/
 			void eraseGeometricObject();
-			//@}
 		
 
 		  signals:
 			
-			
 		  protected:
 			
+			//@}
 			/** @name Protected members
 			*/
 			//@{
+
 			/** Access the information visitor.
 					Access the \Ref{Information} visitor of {\em *this} control.
 					Override this method if another information visitor is needed.
@@ -563,11 +559,12 @@ namespace BALL
 			*/
 			QListViewItem* findListViewItem_(Composite* composite)
 				throw();
+
 			//@}
-			
 			/** @name Protected member variables
 			*/
 			//@{
+
 			/** Cut id.
 					In this variable the menu id for the cut menu is stored.
 					This variable is provided for access to the cut menu. With the help of this
@@ -610,10 +607,10 @@ namespace BALL
 					@see   checkMenu
 			*/
 			int clipboard_id_;
-			//@}
-			
 
-		  private:
+			//@}
+
+		  protected:
 			
 			enum ColumnID
 			{
