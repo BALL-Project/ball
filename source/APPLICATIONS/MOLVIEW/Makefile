@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.45 2003/09/01 07:31:58 oliver Exp $
+# $Id: Makefile,v 1.46 2003/09/01 10:38:53 oliver Exp $
 #
 
 EXECUTABLE=molview
@@ -43,20 +43,16 @@ depend: $(UIC_FILES) $(MOC_SOURCES)
 aboutDialog.h: aboutDialog.ui
 	$(UIC) aboutDialog.ui > aboutDialog.h
 				
-aboutDialog_moc.C: aboutDialog.h
-	$(MOC) aboutDialog.h -o $@
-
 mainframe_moc.C:	mainframe.h
 	$(MOC) mainframe.h -o $@
 
 aboutDialog_moc.C: aboutDialog.h
 	$(MOC) aboutDialog.h -o $@
 
-mainframe_moc.C:	mainframe.h
-	$(MOC) mainframe.h -o $@
-
-aboutDialog.h: aboutDialog.ui
-	$(UIC) aboutDialog.ui > aboutDialog.h
-				
 aboutDialog.C: aboutDialog.h
 	$(UIC) -impl aboutDialog.h aboutDialog.ui > aboutDialog.C
+
+clean: clean_moc_uic
+
+clean_moc_uic:
+	@$(RM) -f $(UIC_FILES)
