@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.5 2000/11/14 17:53:38 anker Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.6 2000/11/29 14:05:36 anker Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
@@ -7,6 +7,9 @@ using namespace std;
 
 namespace BALL
 {
+
+	// BAUSTELLE
+	float MIN_DISTANCE = 1e-6;
 
 	const char* Pair6_12RDFIntegrator::Option::VERBOSITY = "verbosity";
 	const char* Pair6_12RDFIntegrator::Option::METHOD = "integration_method";
@@ -114,20 +117,9 @@ namespace BALL
 
 		PiecewisePolynomial poly = getRDF().getRepresentation();
 		Interval interval;
-		double FROM;
 		double val = 0.0;
-
-		// In order to get the right interval and coefficients we have to
-		// project limits 
-		FROM = project(from);
-
-		Size k = poly.getIntervalIndex(FROM);
-		if (k == INVALID_POSITION)
-		{
-			// no error message, because getIntervalIndex() handles this
-			return 0.0;
-		}
-
+		double lower_inf; 
+		
 		// now build the interval we want to integrate
 		Size number_of_intervals = poly.getIntervals().size();
 		interval = poly.getInterval(number_of_intervals - 1);
@@ -142,53 +134,29 @@ namespace BALL
 			return 0.0;
 		}
 
-		// the point from where the integration to inf will start. As interval
-		// is an interval of the RDF we have to project it to the integration
-		// beam
-		double lower_inf = unproject(interval.first);
+		if (fabs(k2_) < MIN_DISTANCE)
+		{
+
+			// the point from where the integration to inf will start.
+			lower_inf = interval.first;
+
+		}
+		else
+		{
+
+			// the point from where the integration to inf will start. As interval
+			// is an interval of the RDF we have to project it to the integration
+			// beam
+			lower_inf = unproject(interval.first);
+
+		}
+
+		// first compute the integral addends with limits < infinity
 
 		if (from < lower_inf)
 		{
-			if (method == METHOD__ANALYTICAL)
-			{
-				// in case of analytical integration, we have to sum up the
-				// integration results of all defined RDF intervals
-
-				// first "finish" the interval we start at, if this isn't already the
-				// last interval
-
-				if (k < number_of_intervals - 1)
-				{
-					interval = poly.getInterval(k);
-					val += integrate(from, unproject(interval.second));
-					++k;
-
-					// then sum up all following intervals
-					for (; k < number_of_intervals - 1; ++k)
-					{
-						interval = poly.getInterval(k);
-						val += integrate(unproject(interval.first),
-								unproject(interval.second));
-
-						if (verbosity > 9)
-						{
-							Log.info() << "val = " << val << endl;
-						}
-					}
-				}
-			}
-			else
-			{
-				if (method == METHOD__TRAPEZIUM)
-				{
-					// the numerical method does not need to distinguish intervals
-					// because it uses values calculated by RDF::operator()
-
-					// integrate the whole interval
-					interval = Interval(from, lower_inf);
-					val = numericallyIntegrateInterval(interval);
-				}
-			}
+			interval = Interval(from, lower_inf);
+			val = integrate(from, interval.second);
 		}
 
 		// now compute the rest of the integral, i. e. the term to infinity.
@@ -226,6 +194,7 @@ namespace BALL
 		throw()
 	{
 
+		// This is hack. I think. 
 		if (to < from)
 		{
 			Log.warn() << "to < from, exchanging" << endl;
@@ -245,15 +214,36 @@ namespace BALL
 			method = METHOD__ANALYTICAL;
 		}
 
-		// BAUSTELLE: Hier sollte eine Art default aktiv werden können.
 		if (method == METHOD__ANALYTICAL)
 		{
-			// analytical integration
+			// analytical integration. We need to build the intervals for
+			// integration according to the limits of the polynomial
+			// representation of the radial distribution function. If geometrical
+			// correction has to be performed, these limits need to be projected
+			// to and from the integration beam.
+
+			// we need the parameters of the plynomial description of the radial
+			// distribution function.
 
 			PiecewisePolynomial poly = getRDF().getRepresentation();
 
-			double FROM = project(from);
-			double TO = project(to);
+			// k2_ is the squared distance between spehere center and atom
+			// center, so if this is small it is very likely that they are the
+			// same and thus projecting values is not necessary.
+
+			double FROM;
+			double TO;
+
+			if (fabs(k2_) < MIN_DISTANCE)
+			{
+				FROM = from;
+				TO = to;
+			}
+			else
+			{
+				FROM = project(from);
+				TO = project(to);
+			}
 
 			Size from_index = poly.getIntervalIndex(FROM);
 			Size to_index = poly.getIntervalIndex(TO);
@@ -264,8 +254,14 @@ namespace BALL
 				return 0.0;
 			}
 
+			// Although we might have to project, we are still integrating the
+			// interval [from, to).
+			
 			Interval interval(from, to);
 			Coefficients coeffs = poly.getCoefficients(from_index);
+
+			// If the (projected) limits yield one interval, just compute and
+			// return the value of it.
 
 			if (from_index == to_index)
 			{
@@ -283,47 +279,84 @@ namespace BALL
 
 			// if we didn't return, the indices weren't equal, so we have to sum
 			// up at least two intervals.
-			
+
 			// we have to set the upper limit which is the back projected
 			// interval limit of the rdf definition
-			interval.second = unproject(poly.getInterval(from_index).second);
 
-			// compute this interval.
-			double val;
+			double val = 0.0;
 
-			// this REQUIRES that the first integral is the one starting at
-			// zero
-			if (from_index > 0) 
+			if (fabs(k2_) < MIN_DISTANCE)
 			{
-				val = analyticallyIntegrateInterval(interval, coeffs, from_index);
+				interval.second = poly.getInterval(from_index).second;
+
+				// this REQUIRES that the first integral is the one starting at
+				// zero, i. e. has zero parameters, yielding a computed value of zero
+				if (from_index > 0) 
+				{
+					val = analyticallyIntegrateInterval(interval, coeffs, from_index);
+				}
+
+				// if we are below the last interval, sum up the results from each
+				// interval integration.
+				for (Size k = from_index + 1; k < to_index; ++k)
+				{
+					coeffs = poly.getCoefficients(k);
+					interval = poly.getInterval(k);
+					val += analyticallyIntegrateInterval(interval, coeffs, k);
+				}
+
+				// if the decision from_index == to_index was false, to_index should
+				// not be 0 here, so I won't test that...
+
+				coeffs = poly.getCoefficients(to_index);
+				interval = poly.getInterval(to_index);
+				interval.second = to;
+				val += analyticallyIntegrateInterval(interval, coeffs, to_index);
+
+				return val;
 			}
-
-			Interval INTERVAL;
-			// if we are below the last interval, sum up the results from each
-			// interval integration.
-			for (Size k = from_index + 1; k < to_index; ++k)
+			else
 			{
-				coeffs = poly.getCoefficients(k);
-				INTERVAL = poly.getInterval(k);
+				interval.second = unproject(poly.getInterval(from_index).second);
+
+				// this REQUIRES that the first integral is the one starting at
+				// zero, i. e. has zero parameters, yielding a computed value of zero
+				if (from_index > 0) 
+				{
+					val = analyticallyIntegrateInterval(interval, coeffs, from_index);
+				}
+
+				Interval INTERVAL;
+				// if we are below the last interval, sum up the results from each
+				// interval integration.
+				for (Size k = from_index + 1; k < to_index; ++k)
+				{
+					coeffs = poly.getCoefficients(k);
+					INTERVAL = poly.getInterval(k);
+					interval.first = unproject(INTERVAL.first);
+					interval.second = unproject(INTERVAL.second);
+					val += analyticallyIntegrateInterval(interval, coeffs, k);
+				}
+
+				// if the decision from_index == to_index was false, to_index should
+				// not be 0 here, so I won't test that...
+				coeffs = poly.getCoefficients(to_index);
+				INTERVAL = poly.getInterval(to_index);
 				interval.first = unproject(INTERVAL.first);
-				interval.second = unproject(INTERVAL.second);
-				val += analyticallyIntegrateInterval(interval, coeffs, k);
+				interval.second = to;
+				val += analyticallyIntegrateInterval(interval, coeffs, to_index);
+
+				return val;
 			}
-
-			// if the decision from_index == to_index was false, to_index should
-			// not be 0 here, so I won't test that...
-			coeffs = poly.getCoefficients(to_index);
-			INTERVAL = poly.getInterval(to_index);
-			interval.first = unproject(INTERVAL.first);
-			interval.second = to;
-			val += analyticallyIntegrateInterval(interval, coeffs, to_index);
-
-			return val;
 		}
 		else
 		{
 			if (method == METHOD__TRAPEZIUM)
 			{
+				// numerical integration does not need this projecting thing
+				// because this method uses values of the integrand, that are
+				// computed with respect to the geometry
+
 				Interval interval(from, to);
 				return numericallyIntegrateInterval(interval);
 			}
@@ -445,7 +478,7 @@ namespace BALL
 			Log.error() << "R = " << R << endl;
 		}
 
-		if (fabs(k2_) < 1e-6)
+		if (fabs(k2_) < MIN_DISTANCE)
 		{
 
 			// This is the case where no projection has to be done, because the
