@@ -1,4 +1,4 @@
-// $Id: Pair6_12RDFIntegrator_test.C,v 1.3 2000/12/01 11:45:57 anker Exp $
+// $Id: Pair6_12RDFIntegrator_test.C,v 1.4 2000/12/01 15:15:03 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12RDFIntegrator_test.C,v 1.3 2000/12/01 11:45:57 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12RDFIntegrator_test.C,v 1.4 2000/12/01 15:15:03 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -198,7 +198,6 @@ CHECK(Pair6_12RDFIntegrator::integrate(double from, double to) const )
 	TEST_REAL_EQUAL(val, 0.0)
 	val = integrator.integrate(1.0, 1.5);
 	rel_err = fabs((val - (-0.4103491733)) / -0.4103491733);
-	Log.info() << "LOG: " << val << endl;
 	TEST_REAL_EQUAL(rel_err, 0.01);
 	val = integrator.integrate(2.3, 2.7);
 	rel_err = fabs((val - (-0.004029138)) / -0.004029138);
@@ -237,6 +236,56 @@ CHECK(Pair6_12RDFIntegrator::integrate(double from, double to) const )
 	val = integrator.integrate(0.8486832981, 1.172792206);
 	rel_err = fabs((val - 0.4461636106) / 0.4461636106);
 	TEST_REAL_EQUAL(rel_err, 0.01);
+
+	// and now the part of numerical integration
+
+	integrator.setConstants(1, 1, 0, 0);
+	integrator.options.setInteger(Pair6_12RDFIntegrator::Option::METHOD,
+		Pair6_12RDFIntegrator::METHOD__TRAPEZIUM);
+	val = integrator.integrate(0.1, 0.9);
+	TEST_REAL_EQUAL(val, 0.0)
+	val = integrator.integrate(1.0, 1.5);
+	rel_err = fabs((val - (-0.4103491733)) / -0.4103491733);
+	TEST_REAL_EQUAL(rel_err, 0.01);
+	val = integrator.integrate(2.3, 2.7);
+	rel_err = fabs((val - (-0.004029138)) / -0.004029138);
+	TEST_REAL_EQUAL(rel_err, 0.01);
+	val = integrator.integrate(1.3, 2.3);
+	rel_err = fabs((val - (-0.3558524516)) / -0.3558524516);
+	TEST_REAL_EQUAL(rel_err, 0.01);
+
+	// now come the tests involving geometric correction 
+
+	integrator.setConstants(1.0, 1.0, 1.0, 1.0);
+	// these limits correspond to 1.5 .. 1.7 as argument for the rdf.
+	val = integrator.integrate(0.7247448714, 0.9628738838);
+	rel_err = fabs((val - 4.80942202) / 4.80942202);
+	TEST_REAL_EQUAL(rel_err, 0.01);
+	// these limits correspond to 1.7 .. 1.9 as argument for the rdf.
+	val = integrator.integrate(0.9628738838, 1.191153453);
+	rel_err = fabs((val - (-0.1653446139)) / -0.1653446139);
+	TEST_REAL_EQUAL(rel_err, 0.01);
+
+	// now the same with some k1
+	integrator.setConstants(1.0, 1.0, 0.2, 1.0);
+	val = integrator.integrate(1.022497216, 1.278404875);
+	rel_err = fabs((val - (-0.2650117748)) / -0.2650117748);
+	TEST_REAL_EQUAL(rel_err, 0.01);
+	val = integrator.integrate(1.278404875, 1.518641406);
+	rel_err = fabs((val - (-0.2076186615)) / -0.2076186615);
+	TEST_REAL_EQUAL(rel_err, 0.01);
+
+	// now the same with some k1 and k2
+	integrator.setConstants(1.0, 1.0, 0.2, 2.0);
+	val = integrator.integrate(0.4099019514, 0.8486832981);
+	rel_err = fabs((val - 1179.861575) / 1179.861575);
+	TEST_REAL_EQUAL(rel_err, 0.01);
+
+	val = integrator.integrate(0.8486832981, 1.172792206);
+	rel_err = fabs((val - 0.4461636106) / 0.4461636106);
+	TEST_REAL_EQUAL(rel_err, 0.01);
+
+
 RESULT
 
 
