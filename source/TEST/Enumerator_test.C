@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.3 2001/07/10 16:37:39 anker Exp $
+// $Id: Enumerator_test.C,v 1.4 2001/07/13 20:47:31 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.3 2001/07/10 16:37:39 anker Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.4 2001/07/13 20:47:31 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,11 +22,10 @@ using namespace BALL;
 
 // tests for class EnumeratorIndex::IncompatibleIndex::
 
-EnumeratorIndex::IncompatibleIndex::IncompatibleIndex* ex_ptr;
+EnumeratorIndex::IncompatibleIndex* ex_ptr;
 
 CHECK(EnumeratorIndex::IncompatibleIndex::IncompatibleIndex(const char* file, int line))
-	ex_ptr = new EnumeratorIndex::IncompatibleIndex::IncompatibleIndex(__FILE__,
-			__LINE__);
+	ex_ptr = new EnumeratorIndex::IncompatibleIndex(__FILE__,__LINE__);
 	TEST_NOT_EQUAL(ex_ptr, 0)
 RESULT
 
