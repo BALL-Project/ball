@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.6 2000/01/15 18:58:11 oliver Exp $
+// $Id: INIFile.C,v 1.7 2000/01/18 12:53:50 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
@@ -153,7 +153,7 @@ namespace BALL
 				}
 			} 
 			// store the section index for each line
-			line_section_index_.push_back(section_index);
+			line_section_index_.push_back((Index)section_index);
 		}
 		
 		// terminate the last section
@@ -352,12 +352,12 @@ namespace BALL
 				section_index = (Index)section_names_.size();
 				section_names_.push_back(section);
 				lines_.push_back("[" + section + "]");
-				line_section_index_.push_back((Size)section_index);
+				line_section_index_.push_back((Index)section_index);
 			}
 				
 			// create the line
 			lines_.push_back(key + "=" + new_value);
-			line_section_index_.push_back((Size)section_index);
+			line_section_index_.push_back((Index)section_index);
 
 			// insert the line into the hash map
 			section_key_map_.insert
