@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.h,v 1.2 2000/09/20 18:31:35 amoll Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.3 2000/09/22 12:07:38 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -23,7 +23,19 @@ namespace BALL
 		:	public ShiftModule
 	{
 		public:
+
+		BALL_CREATE(HaighMallionShiftProcessor)
 		
+    /** @name Enums and Constants
+    */
+    //@{
+
+    /** A symbolic name for the ring current contribution to the chemical shift
+        @see ShiftModule::PROPERTY__SHIFT
+    */
+    static const char* PROPERTY__RING_CURRENT_SHIFT;
+    //@}
+ 
 		/**@name	Constructors and Destructors
 		*/
 		//@{
