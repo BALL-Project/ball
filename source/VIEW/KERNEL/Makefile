@@ -10,7 +10,9 @@ CPP_SOURCES=\
 	colorExtension3.C\
 	colorExtension4.C\
 	colorExtension5.C\
+	connectionObject.C\
 	geometricObject.C\
+	message.C\
 	normal.C\
 	QTTimer.C\
 	radius.C\
