@@ -1,0 +1,332 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>BALLViewTutorialData</class>
+<widget class="QWizard">
+    <property name="name">
+        <cstring>BALLViewTutorialData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>523</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>BALLView Tutorial</string>
+    </property>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Building a peptide from a given sequence</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>2</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+Welcome to the BALLView tutorial. It will show you some of 
+BALLViews main features. The demo is divided in 
+several steps, wich have to be finished one after the other. 
+The button "next" will be enabled after finishing each individual step.
+&lt;br&gt;
+&lt;br&gt;
+We start by building a polypeptide from an aminoacid sequence.
+To do so, open the PeptideBuilder dialog by clicking the menu entry
+&lt;br&gt;
+&lt;b&gt;"Build-&gt;BuildPeptide"&lt;/b&gt;.
+&lt;br&gt;
+&lt;br&gt;
+Then enter the sequence ARND in the label field at the top. This
+will create a polypeptide with the aminosequence
+Alanin-&gt;Arginin-&gt;Asparagine-&gt;Aspartic acid. 
+&lt;br&gt;
+Then press the "&lt;b&gt;Build&lt;/b&gt;" button.
+&lt;blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Hierarchy of molecules</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>2</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+After we created the peptide you can have a look at the peptides
+hierarchy. In the main window there is a listview with the title
+"Structures". This widget contains a hierarchical list of all loaded
+molecules. Double click the cross to the left of the name of your
+newly created protein to open the hierarchy tree. Repeat this
+to see, that the peptide clearly consists of four amino acids
+(if you entered the sequence correctly).
+&lt;br&gt;&lt;br&gt;
+When you are finished playing around with the hierarchy,
+highlight the System by clicking on its name ("ARND").
+This will take you to the next step of the demo.
+&lt;blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Molecular Dynamics Simulation</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>1</x>
+                    <y>2</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+Now we will simulate the peptides natural movements 
+by performing a molecular dynamics simulation (MDS). To do so,
+open the according dialog by using the menu entry &lt;br&gt;
+&lt;b&gt;"Molecular Mechanics -&gt; Molecular Dynamics"&lt;/b&gt;&lt;br&gt;
+(The menu entry is only enabled if a System is selected.)&lt;br&gt;
+&lt;br&gt;
+Now we have to perform some settings:&lt;br&gt;
+Set the number of iterations to 500.&lt;br&gt;
+To accelerate the MDS, set the timestep to 0.001. &lt;br&gt;
+Select "&lt;b&gt;use AMBERFF&lt;/b&gt;".&lt;br&gt;
+&lt;br&gt;
+Also, we want to be able to visualise the resulting trajectories.
+To do so, click the checkbox "store to DCDFile".
+Then click &lt;b&gt;"Start"&lt;/b&gt;.
+
+The next step becomes available, when the simulation has finished
+and a trajectory file was created.
+&lt;/blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Visualisation of trajectories</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_3_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>3</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+To visualise the resulting trajectory, we will have a look at the 
+DatasetControl. It is one of the listviews in the main window and
+has the caption "Datasets". 
+(Maybe it is hidden, if you dont find it, have a look at the menu
+entry &lt;b&gt;"Windows-&gt;Datasets"&lt;/b&gt;.)&lt;br&gt;&lt;br&gt;
+The DatasetControl should have an entry for the trajectory.
+To visualise it, click on the entry and open the context menu with
+the right mouse button. First choose "&lt;b&gt;Load into RAM&lt;/b&gt;" and than 
+"&lt;b&gt;Visualise&lt;/b&gt;". In the Snapshot Visualisation dialog press "&lt;b&gt;Animate&lt;/b&gt;".
+&lt;/blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Calculation of electrostatics</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_3_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>1</x>
+                    <y>4</y>
+                    <width>588</width>
+                    <height>427</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+Now we will have a look at the peptides electrostatics. To do so, 
+highlight the System again and open the according dialog with the menu 
+entry &lt;b&gt;"Tools-&gt;FDPB Electrostatics"&lt;/b&gt;. In the dialog all kind of settings
+can be done, but for now only press "&lt;b&gt;OK&lt;/b&gt;". 
+&lt;br&gt;&lt;br&gt;
+The result is a threedimenisonal grid around the molecule with its
+electrostatics. 
+&lt;/blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Creating a Solvent Excluded Surface</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_3_2_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>5</y>
+                    <width>588</width>
+                    <height>427</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+Next we want to visualise the peptides electrostatics. To do so, we
+will first create a Solvent Excluded Surface (SES),
+which we will colorize accordingly later.
+&lt;br&gt;&lt;br&gt;
+To create a SES, highlight the System and open the context menu 
+with the right mouse button. Select 
+&lt;br&gt;"&lt;b&gt;Create Representation-&gt;SES-&gt;by element&lt;/b&gt;".&lt;br&gt; 
+&lt;br&gt;
+The resulting SES will show up in the listview with the title 
+"Representations".
+
+
+&lt;/blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Coloring a SES by electrostatics</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>2</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+Now we will colorize the SES. Highlight the Representation
+and press "&lt;b&gt;Color Surface&lt;/b&gt;" in the context menu.
+The newly opened dialog can interpolate the colors of the SES
+between the selected values. For now the most negative and 
+positive values in the grid are used, but you can also change them
+to your liking. Now press "&lt;b&gt;Apply&lt;/b&gt;" and have a look at 
+the SES. 
+&lt;br&gt;&lt;br&gt;
+If you want to, you can now try some other 
+settings and colors. The colors can be changed by clicking on
+them.
+&lt;blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Demo finished</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_5</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>2</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+Congratulations, you successfully finished the the BALLView demo. 
+It has shown you some of BALLViews main features. 
+Feel free to explore its other functions. A good point to start is the 
+BALLView documentation.
+&lt;blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
