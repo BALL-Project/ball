@@ -1,22 +1,25 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.10 2005/01/18 23:46:53 amoll Exp $
-//
+// $Id: vertexBuffer.C,v 1.1.2.11 2005/01/19 12:52:32 amoll Exp $
+
+// prevent typedef clash under Linux
+#define QT_CLEAN_NAMESPACE
+#include <qgl.h>
+
 #ifdef _WINDOWS
+// Header Files For Windows
  #include <windows.h>
- #include <wingdi.h>											// Header File For Windows
+ #include <wingdi.h>	
 #else
  #include <GL/gl.h>
- #include <GL/glext.h>
+ #include <GL/glx.h>
 #endif
 
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/common.h>
-
-#include <qgl.h>
 
 #ifndef APIENTRY
 #define APIENTRY
@@ -34,7 +37,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-#ifdef _WINDOWS
+	// declare gl methods pointer
 	GLAPI void glBindBuffer (GLenum, GLuint);
 	GLAPI void glDeleteBuffers (GLsizei, const GLuint *);
 	GLAPI void glGenBuffers (GLsizei, GLuint *);
@@ -57,15 +60,20 @@ namespace BALL
 	PFNGLBINDBUFFERARBPROC glBindBufferARB = NULL;					// VBO Bind Procedure
 	PFNGLBUFFERDATAARBPROC glBufferDataARB = NULL;					// VBO Data Loading Procedure
 	PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB = NULL;			// VBO Deletion Procedure
-#endif
 
 void MeshBuffer::initGL()
 {
+	// obtain gl method pointers
 #ifdef _WINDOWS
 		glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) wglGetProcAddress("glGenBuffersARB");
 		glBindBufferARB = (PFNGLBINDBUFFERARBPROC) wglGetProcAddress("glBindBufferARB");
 		glBufferDataARB = (PFNGLBUFFERDATAARBPROC) wglGetProcAddress("glBufferDataARB");
 		glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) wglGetProcAddress("glDeleteBuffersARB");
+#else
+		glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*)"glGenBuffersARB");
+		glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*)"glBindBufferARB");
+		glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glXGetProcAddressARB((const GLubyte*)"glBufferDataARB");
+		glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*)"glDeleteBuffersARB");
 #endif
 }
 
