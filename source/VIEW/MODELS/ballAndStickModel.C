@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.15 2004/07/13 11:06:29 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.16 2004/07/13 11:47:14 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -188,7 +188,9 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 	if (bond.getType() == Bond::TYPE__HYDROGEN) return;
 
 	if (!ball_and_stick_ ||
-			bond.getOrder() == Bond::ORDER__SINGLE)
+			(bond.getOrder() != Bond::ORDER__DOUBLE &&
+			 bond.getOrder() != Bond::ORDER__TRIPLE &&
+			 bond.getOrder() != Bond::ORDER__AROMATIC))
 	{
 		// generate two colored tube
 		TwoColoredTube *tube = new TwoColoredTube;
