@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.10 2000/03/05 11:01:04 oliver Exp $
+// $Id: string.h,v 1.11 2000/05/23 14:21:34 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -165,7 +165,7 @@ namespace BALL
 		void set(const Substring& s);
 
 		/// Assigns a substring from a char pointer
-		void set(const char* char_ptr, Size size = 0);
+		void set(const char* char_ptr, Size size = string::npos);
 
 		/// String assignment operator
 		Substring& operator = (const String& string);
