@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.14 2004/02/18 17:13:59 amoll Exp $
+// $Id: molecularStructure.C,v 1.15 2004/02/18 17:17:05 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -105,6 +105,7 @@ namespace BALL
 															SLOT(amberMDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
 
 		// Molecular Mechanics Menu
+		getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 		(main_control.initPopupMenu(MainControl::CHOOSE_FF))->setCheckable(true);
 		hint = "Use Amber Force Field";
 		amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, SLOT(chooseAmberFF()),0,-1,hint);
@@ -118,6 +119,7 @@ namespace BALL
 		hint = "Setup Force Field";
 		insertMenuEntry(MainControl::MOLECULARMECHANICS, "Setup Force Field", this, 
 											SLOT(setupForceField()),0,-1, hint);
+		getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
 		// Tools Menu -------------------------------------------------------------------
 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
