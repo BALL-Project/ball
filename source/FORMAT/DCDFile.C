@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.23 2003/01/29 20:25:25 anker Exp $
+// $Id: DCDFile.C,v 1.24 2003/07/06 16:23:11 amoll Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -65,9 +65,6 @@ namespace BALL
 
 		// If we want to open the file for writing, write a default header,
 		// else read the header information from the existing file.
-		// ?????
-		// Are there other file modes I have to check for?
-		// open() has to do the same!
 		if ((open_mode & std::ios::out) != 0)
 		{
 			// if this file is to be overwritten, write a default header.
@@ -77,7 +74,6 @@ namespace BALL
 		{
 			readHeader();
 		}
-
 	}
 
 
@@ -113,8 +109,7 @@ namespace BALL
 	bool DCDFile::operator == (const DCDFile& file) const
 		throw()
 	{
-		// ?????: Header vergleichen. Was heiﬂt gleich eigentlich in diesem
-		// Fall?
+		// ?????: Header vergleichen. Was heiﬂt gleich eigentlich in diesem Fall?
 		return (TrajectoryFile::operator == (file));
 	}
 
@@ -127,27 +122,20 @@ namespace BALL
 
 
 	bool DCDFile::open(const String& name, File::OpenMode open_mode)
-		throw()
+		throw(Exception::FileNotFound)
 	{
-
-		if (TrajectoryFile::open(name, open_mode) == true)
+		if (!TrajectoryFile::open(name, open_mode))
 		{
-
-			if ((open_mode & std::ios::out) != 0)
-			{
-				// if this file is to be overwritten, write a default header.
-				writeHeader();
-			}
-			else
-			{
-				readHeader();
-			}
-
-			return(true);
-
+			return(false);
 		}
-		else return(false);
+
+		if ((open_mode & std::ios::out) != 0)
+		{
+			// if this file is to be overwritten, write a default header.
+			return writeHeader();
+		}
 		
+		return readHeader();
 	}
 
 
@@ -161,7 +149,6 @@ namespace BALL
 	bool DCDFile::readHeader()
 		throw()
 	{
-
 		BinaryFileAdaptor<char> adapt_char;
 		BinaryFileAdaptor<Size> adapt_Size;
 		BinaryFileAdaptor<double> adapt_double;
@@ -174,13 +161,16 @@ namespace BALL
 			swapBytes(adapt_Size.getData());
 			if (adapt_Size.getData() != 84)
 			{
-				Log.error() << "DCDFile::readHeader(): "
-					<< "wrong header; expected 84, got " << adapt_Size.getData() << endl;
+				Log.error() << "DCDFile::readHeader(): wrong header; expected 84, got " 
+										<< adapt_Size.getData() << endl;
 				return false;
 			}
 			else
 			{
-				Log.info() << "Swapping bytes." << endl;
+				if (verbosity_ > 0)
+				{
+					Log.info() << "Swapping bytes." << endl;
+				}
 				swap_bytes_ = true;
 			}
 		}
@@ -194,8 +184,8 @@ namespace BALL
 			if (adapt_char.getData() != CORD_[i])
 			{
 				Log.error() << "DCDFile::readHeader(): "
-					<< "error in CORD; expected " << CORD_[i] 
-					<< ", got " << adapt_char.getData() << endl;
+										<< "error in CORD; expected " << CORD_[i] 
+										<< ", got " << adapt_char.getData() << endl;
 				return false;
 			}
 		}
@@ -206,9 +196,8 @@ namespace BALL
 		number_of_snapshots_ = adapt_Size.getData();
 		if (verbosity_ > 0)
 		{
-			Log.info() << "DCDFile::readHeader(): "
-				<< "number of snapshots: " << number_of_snapshots_
-				<< endl;
+			Log.info() << "DCDFile::readHeader(): number of snapshots: " 
+								 << number_of_snapshots_ << endl;
 		}
 
 		bool count_snapshots = false;
@@ -216,10 +205,8 @@ namespace BALL
 		if (number_of_snapshots_ == 0)
 		{
 			Log.info() << "DCDFile::readHeader(): "
-				<< "Number of snapshots seems to be zero, trying to count"
-				<< endl
-				<< "\tsnapshots. Please ignore a single error message about an X header."
-				<< endl;
+				<< "Number of snapshots seems to be zero, trying to count" << endl
+				<< "snapshots. Please ignore a single error message about an X header." << endl;
 			count_snapshots = true;
 		}
 
@@ -240,14 +227,15 @@ namespace BALL
 		{
 			if (adapt_Size.getData() == 1)
 			{
-				Log.info() << "DCDFile::readHeader(): "
-					<< "DCDFile contains velocities" << endl;
+				if (verbosity_ > 0)
+				{
+					Log.info() << "DCDFile::readHeader(): DCDFile contains velocities" << endl;
+				}
 				has_velocities_ = true;
 			}
 			else
 			{
-				Log.error() << "This does not look like the BALL additional flag."
-					<< endl;
+				Log.error() << "This does not look like the BALL additional flag." << endl;
 			}
 		}
 
@@ -266,9 +254,8 @@ namespace BALL
 		time_step_length_ = adapt_double.getData();
 		if (verbosity_ > 0)
 		{
-			Log.info() << "DCDFile::readHeader(): "
-				<< "length of a time step: " << time_step_length_
-				<< endl;
+			Log.info() << "DCDFile::readHeader(): length of a time step: " 
+								 << time_step_length_ << endl;
 		}
 
 		// skip unused fields
@@ -284,8 +271,7 @@ namespace BALL
 		{
 			Log.info() << "DCDFile::readHeader(): "
 				<< "encountered CHARMm version number " << adapt_Size.getData()
-				<< ", rereading several" << endl
-				<< "\tfields" << endl;
+				<< ", rereading several fields" << endl;
 
 			Position here = tellg();
 			seekg(ts_pos);
@@ -297,9 +283,8 @@ namespace BALL
 			time_step_length_ = adapt_float.getData();
 			if (verbosity_ > 0)
 			{
-				Log.info() << "DCDFile::readHeader(): "
-					<< "length of a time step: " << time_step_length_
-					<< endl;
+				Log.info() << "DCDFile::readHeader(): length of a time step: " 
+									 << time_step_length_ << endl;
 			}
 
 			*this >> adapt_Size;
@@ -308,8 +293,7 @@ namespace BALL
 				charmm_extra_block_A_ = true;
 				if (verbosity_ > 0)
 				{
-					Log.info() << "DCDFile::readHeader(): "
-						<< "CHARMm extra block A present." << endl;
+					Log.info() << "DCDFile::readHeader(): CHARMm extra block A present." << endl;
 				}
 			}
 
@@ -320,13 +304,11 @@ namespace BALL
 				charmm_extra_block_B_ = true;
 				if (verbosity_ > 0)
 				{
-					Log.info() << "DCDFile::readHeader(): "
-						<< "CHARMm extra block B present." << endl;
+					Log.info() << "DCDFile::readHeader(): CHARMm extra block B present." << endl;
 				}
 			}
 
 			seekg(here);
-
 		}
 
 		// read the "footer" of the 84 byte block. This also must contain the
@@ -363,8 +345,7 @@ namespace BALL
 			Log.warn() << "DCDFile::readHeader(): "
 				<< "comments block size (" << adapt_Size.getData()
 				<< ") does not match number of" << endl
-				<< "\tcomments ("
-				<< number_of_comments << ")" << endl;
+				<< "comments (" << number_of_comments << ")" << endl;
 		}
 		number_of_comments_ = number_of_comments;
 
@@ -418,7 +399,7 @@ namespace BALL
 		}
 
 
-		if (count_snapshots == true)
+		if (count_snapshots)
 		{
 			SnapShot dummy;
 			Size count = 0;
@@ -431,7 +412,7 @@ namespace BALL
 
 			do
 			{
-				if (read(dummy) == true) count++;
+				if (read(dummy)) count++;
 				else break;
 			}
 			while ((tellg() > 0) && (tellg() < end));
@@ -449,11 +430,11 @@ namespace BALL
 	bool DCDFile::writeHeader()
 		throw()
 	{
-
 		// DEBUG
 		// Log.info() << good() << " " << bad() << endl;
 		// /DEBUG
 		Size i;
+		if (!isAccessible() || !isOpen()) return false;
 
 		// write the info block
 		*this << BinaryFileAdaptor<Size>(84);
@@ -507,21 +488,27 @@ namespace BALL
 		// Log.info() << good() << " " << bad() << endl;
 		// /DEBUG
 
-		// ?????
-		// We should check here whether this is the *correct* number of atoms,
-		// i. e. whether earlier snapshots had the same number.
-		number_of_atoms_ = snapshot.getNumberOfAtoms();
+		if (number_of_atoms_ != snapshot.getNumberOfAtoms())
+		{
+			if (number_of_atoms_ != 0)
+			{
+				Log.error() << "Differnt number of atoms in SnapShot in DCDFile:" 
+										<< snapshot.getNumberOfAtoms() << std::endl;
+			}
+			number_of_atoms_ = snapshot.getNumberOfAtoms();
+		}
+		
 		// DEBUG
 		// Log.info() << "append: number_of_atoms_ " << number_of_atoms_ << endl;
 		// /DEBUG
+		
 		// increase the snapshot counter for a correct header
 		number_of_snapshots_++;
 
 		const vector<Vector3>& positions = snapshot.getAtomPositions();
 		if (positions.size() == 0)
 		{
-			Log.error() << "DCDFile::append(): "
-				<< "No atom positions available" << endl;
+			Log.error() << "DCDFile::append(): No atom positions available" << endl;
 			return false;
 		}
 
@@ -549,8 +536,7 @@ namespace BALL
 			const vector<Vector3>& velocities = snapshot.getAtomVelocities();
 			if (velocities.size() == 0)
 			{
-				Log.error() << "DC2File::append(): "
-					<< "No atom velocities available" << endl;
+				Log.error() << "DC2File::append(): No atom velocities available" << endl;
 				return false;
 			}
 
@@ -582,7 +568,6 @@ namespace BALL
 	bool DCDFile::read(SnapShot& snapshot)
 		throw()
 	{
-
 		// DEBUG
 		// Log.info() << "file position at beginning of read(): " << tellg() << endl;
 		// /DEBUG
@@ -596,8 +581,7 @@ namespace BALL
 		if (expected_noa == 0)
 		{
 			Log.error() << "DCDFile::read(): "
-				<< "DCDFile does not contain any atoms. Did you call readHeader()?" 
-				<< endl;
+				<< "DCDFile does not contain any atoms. Did you call readHeader()?" << endl;
 			return false;
 		}
 		snapshot.setNumberOfAtoms(expected_noa);
@@ -608,8 +592,7 @@ namespace BALL
 		BinaryFileAdaptor<float> adapt_float;
 
 		// ignore the CHARMm extra block A if present
-
-		if (charmm_extra_block_A_ == true)
+		if (charmm_extra_block_A_)
 		{
 			*this >> adapt_Size;
 			Size count = adapt_Size.getData();
@@ -619,8 +602,7 @@ namespace BALL
 			*this >> adapt_Size;
 			if (adapt_Size.getData() != count)
 			{
-				Log.error() << "DCDFile::read(): "
-					<< "CHARMm extra block A corrupt." << endl;
+				Log.error() << "DCDFile::read(): CHARMm extra block A corrupt." << endl;
 				return false;
 			}
 		}
@@ -628,7 +610,6 @@ namespace BALL
 		// first read the x coordinates
 
 		// read the block "header"...
-
 		*this >> adapt_Size; 
 		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		tmp = adapt_Size.getData();
@@ -637,8 +618,7 @@ namespace BALL
 		if (tmp != expected_size)
 		{
 			Log.error() << "DCDFile::read(): "
-				<< "X block header: expected " << expected_size << " but got " 
-				<< tmp << endl;
+				<< "X block header: expected " << expected_size << " but got " << tmp << endl;
 			return false;
 		}
 
@@ -655,9 +635,8 @@ namespace BALL
 		tmp = adapt_Size.getData();
 		if (tmp != expected_size)
 		{
-			Log.error() << "DCDFile::read(): "
-				<< "X block footer: expected " << expected_size << " but got " 
-				<< tmp << endl;
+			Log.error() << "DCDFile::read(): X block footer: expected " 
+									<< expected_size << " but got " << tmp << endl;
 			return false;
 		}
 
@@ -670,9 +649,8 @@ namespace BALL
 		// sanity check
 		if (tmp != expected_size)
 		{
-			Log.error() << "DCDFile::read(): "
-				<< "Y block header: expected " << expected_size << " but got " 
-				<< tmp << endl;
+			Log.error() << "DCDFile::read(): Y block header: expected " 
+									<< expected_size << " but got " << tmp << endl;
 			return false;
 		}
 		// data
@@ -689,9 +667,8 @@ namespace BALL
 		// sanity check
 		if (tmp != expected_size)
 		{
-			Log.error() << "DCDFile::read(): "
-				<< "Y block footer: expected " << expected_size << " but got " 
-				<< tmp << endl;
+			Log.error() << "DCDFile::read(): " << "Y block footer: expected " 
+									<< expected_size << " but got " << tmp << endl;
 			return false;
 		}
 
@@ -704,9 +681,8 @@ namespace BALL
 		// sanity check
 		if (tmp != expected_size)
 		{
-			Log.error() << "DCDFile::read(): "
-				<< "Z block header: expected " << expected_size << " but got " 
-				<< tmp << endl;
+			Log.error() << "DCDFile::read(): Z block header: expected " 
+									<< expected_size << " but got " << tmp << endl;
 			return false;
 		}
 		// data
@@ -723,9 +699,8 @@ namespace BALL
 		// sanity check
 		if (tmp != expected_size)
 		{
-			Log.error() << "DCDFile::read(): "
-				<< "Z block footer: expected " << expected_size << " but got " 
-				<< tmp << endl;
+			Log.error() << "DCDFile::read(): Z block footer: expected " 
+									<< expected_size << " but got " << tmp << endl;
 			return false;
 		}
 
@@ -739,8 +714,7 @@ namespace BALL
 			*this >> adapt_Size;
 			if (adapt_Size.getData() != count)
 			{
-				Log.error() << "DCDFile::read(): "
-					<< "CHARMm extra block B corrupt." << endl;
+				Log.error() << "DCDFile::read(): " << "CHARMm extra block B corrupt." << endl;
 				return false;
 			}
 		}
@@ -763,9 +737,8 @@ namespace BALL
 			// information of the file header.
 			if (tmp != expected_size)
 			{
-				Log.error() << "DC2File::read(): "
-					<< "X block header: expected " << expected_size << " but got " 
-					<< tmp << endl;
+				Log.error() << "DC2File::read(): X block header: expected " 
+										<< expected_size << " but got " << tmp << endl;
 				return false;
 			}
 
@@ -782,9 +755,8 @@ namespace BALL
 			tmp = adapt_Size.getData();
 			if (tmp != expected_size)
 			{
-				Log.error() << "DC2File::read(): "
-					<< "X block footer: expected " << expected_size << " but got " 
-					<< tmp << endl;
+				Log.error() << "DC2File::read(): X block footer: expected " 
+										<< expected_size << " but got " << tmp << endl;
 				return false;
 			}
 
@@ -797,9 +769,8 @@ namespace BALL
 			// sanity check
 			if (tmp != expected_size)
 			{
-				Log.error() << "DC2File::read(): "
-					<< "Y block header: expected " << expected_size << " but got " 
-					<< tmp << endl;
+				Log.error() << "DC2File::read(): Y block header: expected " 
+										<< expected_size << " but got " << tmp << endl;
 				return false;
 			}
 			// data
@@ -816,9 +787,8 @@ namespace BALL
 			// sanity check
 			if (tmp != expected_size)
 			{
-				Log.error() << "DC2File::read(): "
-					<< "Y block footer: expected " << expected_size << " but got " 
-					<< tmp << endl;
+				Log.error() << "DC2File::read(): Y block footer: expected " 
+										<< expected_size << " but got " << tmp << endl;
 				return false;
 			}
 
@@ -831,9 +801,8 @@ namespace BALL
 			// sanity check
 			if (tmp != expected_size)
 			{
-				Log.error() << "DC2File::read(): "
-					<< "Z block header: expected " << expected_size << " but got " 
-					<< tmp << endl;
+				Log.error() << "DC2File::read(): Z block header: expected " 
+										<< expected_size << " but got " << tmp << endl;
 				return false;
 			}
 			// data
@@ -850,9 +819,8 @@ namespace BALL
 			// sanity check
 			if (tmp != expected_size)
 			{
-				Log.error() << "DC2File::read(): "
-					<< "Z block footer: expected " << expected_size << " but got " 
-					<< tmp << endl;
+				Log.error() << "DC2File::read(): Z block footer: expected " 
+										<< expected_size << " but got " << tmp << endl;
 				return false;
 			}
 
@@ -876,31 +844,50 @@ namespace BALL
 	bool DCDFile::flushToDisk(const ::std::vector<SnapShot>& buffer)
 		throw()
 	{
-		::std::vector<SnapShot>::const_iterator it = buffer.begin();
+		if (!isOpen())
+		{
+			Log.error() << "Could not flushToDisk because file is not open" << std::endl;
+			return false;
+		}
 
-		// adjust the number of snapshots 
+		if (open_mode_ != File::OUT) 
+		{
+			Log.error() << "Could not flushToDisk because wrong file mode" << std::endl;
+			return false;
+		}
+
+		// adjust the number of snapshots for header
 		number_of_snapshots_ += buffer.size();
 		// ?????:
 		// this is not quite the place to do this. it should be done when the
 		// snapshot manager is set up or at some similar place. the question is
-		// how much information has to be replicated at which place in the
-		// code.
+		// how much information has to be replicated at which place in the code.
 		// we should think about something like updateHeader().
+		::std::vector<SnapShot>::const_iterator it = buffer.begin();
 		number_of_atoms_ = it->getNumberOfAtoms();
 
 		// write the header
 		seekp(0, ios::beg);
-		writeHeader();
+		if (!writeHeader()) 
+		{
+			Log.error() << "Could not write header in DCDFile" << std::endl;
+			return false;
+		}
+
+		// adjust the number of snapshots back, because, append increases this number also
+		number_of_snapshots_ -= buffer.size();
 
 		// append the data
 		seekp(0, ios::end);
 		for(; it != buffer.end(); ++it)
 		{
-			append(*it);
+			if (!append(*it))
+			{
+				Log.error() << "Could not write SnapShot" << std::endl;
+				return false;
+			}
 		}
 
-		// ?????
-		// no error handling/reporting at the moment
 		return true;
 	}
 
@@ -914,15 +901,15 @@ namespace BALL
 
 		if (sizeof(Size) != 4)
 		{
-			Log.error() << "DCDFile::DCDFile(): "
-				<< "Size of int is not equal to 4 on this machine." << endl;
+			Log.error() << "DCDFile::DCDFile(): " 
+									<< "Size of int is not equal to 4 on this machine." << endl;
 			return false;
 		}
 
 		if (sizeof(double) != 8)
 		{
 			Log.error() << "DCDFile::DCDFile(): "
-				<< "Size of double is not equal to 4 on this machine." << endl;
+									<< "Size of double is not equal to 4 on this machine." << endl;
 			return false;
 		}
 
@@ -942,7 +929,5 @@ namespace BALL
 	{
 		has_velocities_ = false;
 	}
-
-
 
 } // namespace BALL
