@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.10 2003/10/05 16:26:58 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.11 2003/10/15 13:54:45 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -551,6 +551,12 @@ void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
 	}
 
 	apply_button->setEnabled(grid_);
+}
+
+void ColorMeshDialog::show()
+{
+	ColorMeshDialogData::show();
+	raise();
 }
 
 
