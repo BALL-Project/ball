@@ -1,4 +1,4 @@
-// $Id: atom.iC,v 1.4 2000/04/17 19:36:39 oliver Exp $
+// $Id: atom.iC,v 1.5 2000/04/17 20:38:57 oliver Exp $
 
 	BALL_INLINE
   void Atom::setElement(Element &element)
@@ -79,6 +79,12 @@
 	}
 
 	BALL_INLINE
+  Vector3 &Atom::getPosition()
+  {
+    return position_;
+	}
+
+	BALL_INLINE
   void Atom::setRadius(float radius)
   {
     radius_ = radius;
@@ -137,3 +143,10 @@
   {
     return force_;
 	}
+
+	BALL_INLINE
+  Vector3& Atom::getForce()
+  {
+    return force_;
+	}
+

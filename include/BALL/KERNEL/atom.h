@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.16 2000/04/17 15:21:53 amoll Exp $
+// $Id: atom.h,v 1.17 2000/04/17 20:38:56 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -82,9 +82,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Atom class (BALL kernel framework)
-			@author  $Author: amoll $
-			@version $Revision: 1.16 $
-			@date    $Date: 2000/04/17 15:21:53 $
+			@author  $Author: oliver $
+			@version $Revision: 1.17 $
+			@date    $Date: 2000/04/17 20:38:56 $
 	*/
 	class Atom
 		: public Composite,
@@ -501,6 +501,14 @@ namespace BALL
 			*/
 			const Vector3& getPosition() const;
 
+			/** Mutable inspection of the atom's position vector.
+					Access a mutable reference to the position vector of {\em *this} atom.
+
+					@return      Vector3& - constant reference to the position vector of {\em *this} atom
+					@see         Atom::setPosition
+			*/
+			Vector3& getPosition();
+
 			/** Change of the atom's radius.
 					Change the radius of {\em *this} atom to {\em radius}.
 
@@ -578,6 +586,15 @@ namespace BALL
 					@see         Atom::setForce
 			*/
 			const Vector3& getForce() const;
+
+			/** Mutable inspection of the atom's force vector.
+					Access a mutable reference to the force vector of {\em *this} atom.
+					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
+
+					@return      Vector3& - constant reference to the force vector of {\em *this} atom
+					@see         Atom::setForce
+			*/
+			Vector3& getForce();
 
 			/** Constant inspection of the atom's number of bonds.
 					Access the number of bonds of {\em *this} atom.
