@@ -1,5 +1,7 @@
 #!/bin/sh
 
+rm -rf deb-ball &&
+cp -r deb-ball-source deb-ball &&
 cp ../lib/$PLATFORM/lib*.so deb-ball/opt/BALL/lib &&
 
 cp ../lib/$PLATFORM/BALLmodule.so deb-ball/usr/lib/python2.3/site-packages &&
@@ -9,17 +11,14 @@ cp ../source/APPLICATIONS/BALLVIEW/BALLView deb-ball/opt/BALL/bin &&
 
 cp -rf ../doc/BALLView deb-ball/opt/BALL/doc &&
 
-rm -rf deb-ball/opt/BALL/data &&
 cp -r ../data deb-ball/opt/BALL &&
-
-cp ../source/config/control deb-ball/DEBIAN &&
 
 for i in `find deb-ball -name "CVS"`; do rm -rf $i; done &&
 
+chmod -R 0755 deb-ball/DEBIAN &&
+chmod +x deb-ball/usr/bin/BALLView &&
+
 dpkg -b deb-ball BALLView.deb &&
 
-rm -rf deb-ball/opt/BALL/data &&
-rm -f deb-ball/opt/BALL/bin/* &&
-rm -rf deb-ball/opt/BALL/lib/* &&
-rm -rf deb-ball/opt/BALL/doc/*
+rm -rf deb-ball
 
