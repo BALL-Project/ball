@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.19 2000/12/19 13:28:06 anker Exp $
+// $Id: file.h,v 1.20 2000/12/19 18:36:07 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -481,32 +481,82 @@ namespace BALL
 	};
 
 
+	/** Helper class for data conversion.
+			\\
+			{\bf Definition:} \URL{BALL/SYSTEM/file.h}
+			\\
+	*/
 	template <typename T>
 	class BinaryFileAdaptor
 	{
+
 		public:
+
+		/// @name Constructors and destructor
+		//@{
+
+		///
 		BinaryFileAdaptor()
-		{
-		}
+			throw();
 
+		///
 		BinaryFileAdaptor(const T& data)
-			:	data_(data)
-		{
-		}
+			throw();
 
+		//@}
+
+		///@name Accessors
+		//@{
+
+		///
 		const T& getData() const
-		{
-			return data_;
-		}
+			throw();
 
+		///
 		T& getData()
-		{
-			return data_;
-		}
+			throw();
+
+		//@}
+
 
 		protected:
+
+		//_
 		T data_;
+
 	};
+
+	template <typename T>
+	BALL_INLINE
+	BinaryFileAdaptor<T>::BinaryFileAdaptor()
+		throw()
+		: data_()
+	{
+	}
+
+	template <typename T>
+	BALL_INLINE
+	BinaryFileAdaptor<T>::BinaryFileAdaptor(const T& data)
+		throw()
+		: data_(data)
+	{
+	}
+
+	template <typename T>
+	BALL_INLINE
+	const T& BinaryFileAdaptor<T>::getData() const 
+		throw()
+	{
+		return data_;
+	}
+
+	template <typename T>
+	BALL_INLINE
+	T& BinaryFileAdaptor<T>::getData()
+		throw()
+	{
+		return data_;
+	}
 
 	template <typename T>
 	std::ostream& operator << (std::ostream& os, const BinaryFileAdaptor<T>& data)
