@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>PythonSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -67,22 +67,6 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>clear_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>351</x>
-                <y>49</y>
-                <width>80</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Clear</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
             <cstring>choose_button</cstring>
         </property>
         <property name="geometry">
@@ -97,6 +81,22 @@
             <string>Browse</string>
         </property>
     </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>clear_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>351</x>
+                <y>49</y>
+                <width>80</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Clear</string>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -108,17 +108,17 @@
     <connection>
         <sender>clear_button</sender>
         <signal>clicked()</signal>
-        <receiver>PythonSettings</receiver>
-        <slot>clearSelected()</slot>
+        <receiver>script_edit</receiver>
+        <slot>clear()</slot>
     </connection>
 </connections>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
 <slots>
     <slot>fileSelected()</slot>
     <slot>clearSelected()</slot>
 </slots>
-<includes>
-	<include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
-</includes>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
