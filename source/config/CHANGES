@@ -13,6 +13,7 @@ added:
 - Writing and loading of project files
 - Benchmark Scritps for BALLView
 - Visualisation for double-, triple- and aromatic bonds in BallAndStick Model
+- Hotkey support for starting any (BALL-)Python command from BALLView
 
 fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier

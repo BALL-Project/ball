@@ -18,6 +18,5 @@ def createStickModel():
 	dp.selectModel(MODEL_STICK)
 	dp.selectColoringMethod(COLORING_ELEMENT)
 	dp.setTransparency(0)
-	dp.applyButtonClicked()
-	dp.applyButtonClicked()
+	dp.apply()
 
