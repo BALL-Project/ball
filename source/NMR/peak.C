@@ -1,4 +1,4 @@
-// $Id: peak.C,v 1.5 2000/09/21 23:05:12 amoll Exp $
+// $Id: peak.C,v 1.6 2000/09/22 11:49:34 amoll Exp $
 
 #include<BALL/NMR/peak.h>
 #include<BALL/MATHS/common.h>
@@ -46,12 +46,12 @@ namespace BALL
 		return atom_;
 	}
 
-	void Peak1D::setValue(float value)
+	void Peak1D::setValue(const float& value)
 	{
 		value_ = value;
 	}
 
-	void Peak1D::setWidth(float value)
+	void Peak1D::setWidth(const float& value)
 	{
 		width_ = value;
 	}
@@ -61,7 +61,7 @@ namespace BALL
 		atom_ = atom;
 	}
 
-	void Peak1D::setHeight(float value)
+	void Peak1D::setHeight(const float& value)
 	{
 		height_ = value;
 	}

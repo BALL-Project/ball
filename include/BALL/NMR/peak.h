@@ -1,4 +1,4 @@
-// $Id: peak.h,v 1.4 2000/09/07 20:57:30 oliver Exp $
+// $Id: peak.h,v 1.5 2000/09/22 11:49:39 amoll Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -16,8 +16,8 @@ namespace BALL
 	//@{
 
 	/**	1D Peak Class.
-			Each peak contains a pointer to an associated atom (in the case of NMR: the atom that causes
-      this peak).																													
+			Each peak contains a pointer to an associated atom 
+			(in the case of NMR: the atom that causes this peak).																													
 	*/
 	class Peak1D
 	{
@@ -60,15 +60,15 @@ namespace BALL
 		
 		/** Set the peak position.
 		*/
-		void setValue(float value);
+		void setValue(const float& value);
 
 		/** Set the peak width
 		*/
-		void setWidth(float width);
+		void setWidth(const float& width);
 		
 		/** Set the peak height
 		*/
-		void setHeight(float height);
+		void setHeight(const float& height);
 
 		/**	Return the atom pointer.
 		*/
