@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.11 2000/02/22 19:38:07 oliver Exp $
+// $Id: line3.h,v 1.12 2000/02/25 19:33:48 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -192,9 +192,9 @@ namespace BALL
 			point = p;
 			if (form == FORM__PARAMETER) 
 			{
-				d = vector;
+				vector = d;
 			} else {
-				d = vector - point;
+				vector - point = d;
 			}
 		}
 
