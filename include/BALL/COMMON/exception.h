@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.12 2000/05/30 18:26:13 oliver Exp $
+// $Id: exception.h,v 1.13 2000/07/02 23:47:53 amoll Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -268,6 +268,15 @@ namespace BALL
 		{
 			public:
 			DivisionByZero(const char* file, int line);
+		};
+
+		/**	Out of grid error.
+		*/
+		class OutOfGrid 
+			: public GeneralException
+		{
+			public:
+			OutOfGrid(const char* file, int line);
 		};
 
 		/**	File not found.

@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.9 2000/05/30 23:58:35 oliver Exp $
+// $Id: exception.C,v 1.10 2000/07/02 23:48:03 amoll Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -181,6 +181,8 @@ namespace BALL
 			DEF_EXCEPTION(NotImplemented, "this method has not been implemented yet. Feel free to complain about it!")
 
 			DEF_EXCEPTION(BufferOverflow, "the maximum buffersize has been reached")
+
+			DEF_EXCEPTION(OutOfGrid, "a point was outside a grid")
 
 		
 			GlobalExceptionHandler::GlobalExceptionHandler()
