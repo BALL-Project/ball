@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.21 2001/05/02 21:10:47 oliver Exp $
+// $Id: logStream.C,v 1.22 2001/05/10 13:39:54 oliver Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
@@ -7,6 +7,7 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <limits.h>
+#include <string.h>
 
 #define BUFFER_LENGTH 32768
 
