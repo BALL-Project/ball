@@ -1,104 +1,104 @@
 <node>ARG
- <node>Names
- <node>Arginine</node>
- <node>Arginin</node>
- <node>Arg</node>
- <node>R</node>
- </node>
- <node>Atoms
- <node>N<value>N 0.04658213 1.228698 -0.008203848</value></node>
- <node>3H<value>H 1.029144 1.468065 -0.01885969</value></node>
- <node>CA<value>C -0.651675 1.900984 -1.120636</value></node>
- <node>HA<value>H -0.1560273 1.589999 -2.041618</value></node>
- <node>C<value>C -0.5384113 3.425156 -1.007164</value></node>
- <node>O<value>O -0.4560871 4.056512 -2.083366</value></node>
- <node>CB<value>C -2.115081 1.438444 -1.186192</value></node>
- <node>1HB<value>H -2.126043 0.3475202 -1.20068</value></node>
- <node>2HB<value>H -2.643967 1.778842 -0.2945162</value></node>
- <node>CG<value>C -2.829752 1.953359 -2.443151</value></node>
- <node>1HG<value>H -2.889884 3.042607 -2.412891</value></node>
- <node>2HG<value>H -2.25911 1.654155 -3.324525</value></node>
- <node>CD<value>C -4.246704 1.376451 -2.533151</value></node>
- <node>1HD<value>H -4.174877 0.2870844 -2.574071</value></node>
- <node>2HD<value>H -4.797596 1.672022 -1.637285</value></node>
- <node>NE<value>N -4.940577 1.875193 -3.731703</value></node>
- <node>HE<value>H -4.414851 2.512341 -4.314554</value></node>
- <node>CZ<value>C -6.193176 1.546153 -4.088384</value></node>
- <node>NH1<value>N -6.900425 0.7030471 -3.327994</value></node>
- <node>1HH1<value>H -6.480561 0.3232263 -2.492691</value></node>
- <node>2HH1<value>H -7.843661 0.4323652 -3.563007</value></node>
- <node>NH2<value>N -6.730267 2.060851 -5.200565</value></node>
- <node>1HH2<value>H -6.201764 2.698435 -5.778988</value></node>
- <node>2HH2<value>H -7.669785 1.826959 -5.486362</value></node>
- <node>OXT<value>O -0.796168 3.930999 0.1074273</value></node>
- <node>1H<value>H -0.3621705 1.521632 0.867786</value></node>
- <node>2H<value>H -0.05222332 0.2284002 -0.1067282</value></node>
- </node>
-  <node>Bonds
-    <node>5<value>3H N s</value></node>
-    <node>6<value>CA N s</value></node>
-    <node>10<value>HA CA s</value></node>
-    <node>11<value>C CA s</value></node>
-    <node>14<value>O C a</value></node>
-    <node>15<value>CB CA s</value></node>
-    <node>19<value>1HB CB s</value></node>
-    <node>20<value>2HB CB s</value></node>
-    <node>21<value>CG CB s</value></node>
-    <node>25<value>1HG CG s</value></node>
-    <node>26<value>2HG CG s</value></node>
-    <node>27<value>CD CG s</value></node>
-    <node>31<value>1HD CD s</value></node>
-    <node>32<value>2HD CD s</value></node>
-    <node>33<value>NE CD s</value></node>
-    <node>36<value>HE NE s</value></node>
-    <node>37<value>CZ NE s</value></node>
-    <node>40<value>NH1 CZ a</value></node>
-    <node>43<value>1HH1 NH1 s</value></node>
-    <node>44<value>2HH1 NH1 s</value></node>
-    <node>45<value>NH2 CZ a</value></node>
-    <node>48<value>1HH2 NH2 s</value></node>
-    <node>49<value>2HH2 NH2 s</value></node>
-    <node>50<value>OXT C a</value></node>
-    <node>51<value>1H N s</value></node>
-    <node>52<value>2H N s</value></node>
-  </node>
- <node>Connections
- <node>N-term<value>N C-term s 1.33 0.5</value></node>
- <node>C-term<value>C N-term s 1.33 0.5</value></node>
- </node>
- <node>Properties 
- <node>AMINO_ACID</node>
- </node>
- <node>Variants
- <node>Default
- <node>Delete
- <node>OXT</node>
- <node>1H</node>
- <node>2H</node>
- </node>
- <node>Rename
- <node>3H<value>H</value></node>
- </node>
- </node>
- <node>ARG-C
- <node>Delete
- <node>1H</node>
- <node>2H</node>
- </node>
- <node>Rename
- <node>3H<value>H</value></node>
- </node>
- <node>Properties
- <node>C_TERMINAL</node>
- </node>
- </node>
- <node>ARG-N
- <node>Delete
- <node>OXT</node>
- </node>
- <node>Properties
- <node>N_TERMINAL</node>
- </node>
- </node>
- </node>
+	<node>Names
+		<node>Arginine</node>
+		<node>Arginin</node>
+		<node>Arg</node>
+		<node>R</node>
+	</node>
+		<node>Atoms
+		<node>N<value>N 0.04658213 1.228698 -0.008203848</value></node>
+		<node>3H<value>H 1.029144 1.468065 -0.01885969</value></node>
+		<node>CA<value>C -0.651675 1.900984 -1.120636</value></node>
+		<node>HA<value>H -0.1560273 1.589999 -2.041618</value></node>
+		<node>C<value>C -0.5384113 3.425156 -1.007164</value></node>
+		<node>O<value>O -0.4560871 4.056512 -2.083366</value></node>
+		<node>CB<value>C -2.115081 1.438444 -1.186192</value></node>
+		<node>1HB<value>H -2.126043 0.3475202 -1.20068</value></node>
+		<node>2HB<value>H -2.643967 1.778842 -0.2945162</value></node>
+		<node>CG<value>C -2.829752 1.953359 -2.443151</value></node>
+		<node>1HG<value>H -2.889884 3.042607 -2.412891</value></node>
+		<node>2HG<value>H -2.25911 1.654155 -3.324525</value></node>
+		<node>CD<value>C -4.246704 1.376451 -2.533151</value></node>
+		<node>1HD<value>H -4.174877 0.2870844 -2.574071</value></node>
+		<node>2HD<value>H -4.797596 1.672022 -1.637285</value></node>
+		<node>NE<value>N -4.940577 1.875193 -3.731703</value></node>
+		<node>HE<value>H -4.414851 2.512341 -4.314554</value></node>
+		<node>CZ<value>C -6.193176 1.546153 -4.088384</value></node>
+		<node>NH1<value>N -6.900425 0.7030471 -3.327994</value></node>
+		<node>1HH1<value>H -6.480561 0.3232263 -2.492691</value></node>
+		<node>2HH1<value>H -7.843661 0.4323652 -3.563007</value></node>
+		<node>NH2<value>N -6.730267 2.060851 -5.200565</value></node>
+		<node>1HH2<value>H -6.201764 2.698435 -5.778988</value></node>
+		<node>2HH2<value>H -7.669785 1.826959 -5.486362</value></node>
+		<node>OXT<value>O -0.796168 3.930999 0.1074273</value></node>
+		<node>1H<value>H -0.3621705 1.521632 0.867786</value></node>
+		<node>2H<value>H -0.05222332 0.2284002 -0.1067282</value></node>
+	</node>
+	<node>Bonds
+		<node>5<value>3H N s</value></node>
+		<node>6<value>CA N s</value></node>
+		<node>10<value>HA CA s</value></node>
+		<node>11<value>C CA s</value></node>
+		<node>14<value>O C a</value></node>
+		<node>15<value>CB CA s</value></node>
+		<node>19<value>1HB CB s</value></node>
+		<node>20<value>2HB CB s</value></node>
+		<node>21<value>CG CB s</value></node>
+		<node>25<value>1HG CG s</value></node>
+		<node>26<value>2HG CG s</value></node>
+		<node>27<value>CD CG s</value></node>
+		<node>31<value>1HD CD s</value></node>
+		<node>32<value>2HD CD s</value></node>
+		<node>33<value>NE CD s</value></node>
+		<node>36<value>HE NE s</value></node>
+		<node>37<value>CZ NE s</value></node>
+		<node>40<value>NH1 CZ a</value></node>
+		<node>43<value>1HH1 NH1 s</value></node>
+		<node>44<value>2HH1 NH1 s</value></node>
+		<node>45<value>NH2 CZ a</value></node>
+		<node>48<value>1HH2 NH2 s</value></node>
+		<node>49<value>2HH2 NH2 s</value></node>
+		<node>50<value>OXT C a</value></node>
+		<node>51<value>1H N s</value></node>
+		<node>52<value>2H N s</value></node>
+	</node>
+	<node>Connections
+		<node>N-term<value>N C-term s 1.33 0.5</value></node>
+		<node>C-term<value>C N-term s 1.33 0.5</value></node>
+	</node>
+	<node>Properties 
+		<node>AMINO_ACID</node>
+	</node>
+	<node>Variants
+		<node>Default
+			<node>Delete
+				<node>OXT</node>
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+		</node>
+		<node>ARG-C
+			<node>Delete
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+			<node>Properties
+				<node>C_TERMINAL</node>
+			</node>
+		</node>
+		<node>ARG-N
+			<node>Delete
+				<node>OXT</node>
+			</node>
+			<node>Properties
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+	</node>
 </node>

@@ -1,76 +1,76 @@
 <node>ALA
- <node>Names
- <node>Alanine</node>
- <node>Alanin</node>
- <node>Ala</node>
- <node>A</node>
- </node>
- <node>Atoms
- <node>N<value>N 0.09952427 1.425946 -0.01392276</value></node>
- <node>3H<value>H 0.9122966 2.021833 0.09543685</value></node>
- <node>CA<value>C -0.6343572 1.904422 -1.199327</value></node>
- <node>HA<value>H -0.06613517 1.608824 -2.082189</value></node>
- <node>C<value>C -0.7061328 3.434369 -1.195026</value></node>
- <node>O<value>O 0.2770563 4.020259 -0.6877273</value></node>
- <node>CB<value>C -2.018631 1.250585 -1.273356</value></node>
- <node>1HB<value>H -2.525042 1.535779 -2.196084</value></node>
- <node>2HB<value>H -1.909473 0.1656088 -1.256012</value></node>
- <node>3HB<value>H -2.621985 1.560564 -0.4192078</value></node>
- <node>OXT<value>O -1.554726 3.968913 -1.942107</value></node>
- <node>1H<value>H -0.4859746 1.514033 0.8043322</value></node>
- <node>2H<value>H 0.3756785 0.4622824 -0.137128</value></node>
- </node>
-  <node>Bonds
-    <node>5<value>3H N s</value></node>
-    <node>6<value>CA N s</value></node>
-    <node>10<value>HA CA s</value></node>
-    <node>11<value>C CA s</value></node>
-    <node>14<value>O C a</value></node>
-    <node>15<value>CB CA s</value></node>
-    <node>19<value>1HB CB s</value></node>
-    <node>20<value>2HB CB s</value></node>
-    <node>21<value>3HB CB s</value></node>
-    <node>22<value>OXT C a</value></node>
-    <node>23<value>1H N s</value></node>
-    <node>24<value>2H N s</value></node>
-  </node>
- <node>Connections
- <node>N-term<value>N C-term s 1.33 0.5</value></node>
- <node>C-term<value>C N-term s 1.33 0.5</value></node>
- </node>
- <node>Properties
- <node>AMINO_ACID</node>
- </node>
- <node>Variants
- <node>Default
- <node>Delete
- <node>OXT<value></value></node>
- <node>1H<value></value></node>
- <node>2H<value></value></node>
- </node>
- <node>Rename
- <node>3H<value>H</value></node>
- </node>
- </node>
- <node>ALA-C
- <node>Delete
- <node>1H<value></value></node>
- <node>2H<value></value></node>
- </node>
- <node>Rename
- <node>3H<value>H</value></node>
- </node>
- <node>Properties
- <node>C_TERMINAL</node>
- </node>
- </node>
- <node>ALA-N
- <node>Delete
- <node>OXT<value></value></node>
- </node>
- <node>Properties
- <node>N_TERMINAL</node>
- </node>
- </node>
- </node> 
+	<node>Names
+		<node>Alanine</node>
+		<node>Alanin</node>
+		<node>Ala</node>
+		<node>A</node>
+	</node>
+	<node>Atoms
+		<node>N<value>N 0.09952427 1.425946 -0.01392276</value></node>
+		<node>3H<value>H 0.9122966 2.021833 0.09543685</value></node>
+		<node>CA<value>C -0.6343572 1.904422 -1.199327</value></node>
+		<node>HA<value>H -0.06613517 1.608824 -2.082189</value></node>
+		<node>C<value>C -0.7061328 3.434369 -1.195026</value></node>
+		<node>O<value>O 0.2770563 4.020259 -0.6877273</value></node>
+		<node>CB<value>C -2.018631 1.250585 -1.273356</value></node>
+		<node>1HB<value>H -2.525042 1.535779 -2.196084</value></node>
+		<node>2HB<value>H -1.909473 0.1656088 -1.256012</value></node>
+		<node>3HB<value>H -2.621985 1.560564 -0.4192078</value></node>
+		<node>OXT<value>O -1.554726 3.968913 -1.942107</value></node>
+		<node>1H<value>H -0.4859746 1.514033 0.8043322</value></node>
+		<node>2H<value>H 0.3756785 0.4622824 -0.137128</value></node>
+	</node>
+	<node>Bonds
+		<node>5<value>3H N s</value></node>
+		<node>6<value>CA N s</value></node>
+		<node>10<value>HA CA s</value></node>
+		<node>11<value>C CA s</value></node>
+		<node>14<value>O C a</value></node>
+		<node>15<value>CB CA s</value></node>
+		<node>19<value>1HB CB s</value></node>
+		<node>20<value>2HB CB s</value></node>
+		<node>21<value>3HB CB s</value></node>
+		<node>22<value>OXT C a</value></node>
+		<node>23<value>1H N s</value></node>
+		<node>24<value>2H N s</value></node>
+	</node>
+	<node>Connections
+		<node>N-term<value>N C-term s 1.33 0.5</value></node>
+		<node>C-term<value>C N-term s 1.33 0.5</value></node>
+	</node>
+	<node>Properties
+		<node>AMINO_ACID</node>
+	</node>
+	<node>Variants
+		<node>Default
+			<node>Delete
+				<node>OXT<value></value></node>
+				<node>1H<value></value></node>
+				<node>2H<value></value></node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+		</node>
+		<node>ALA-C
+			<node>Delete
+				<node>1H<value></value></node>
+				<node>2H<value></value></node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+			<node>Properties
+				<node>C_TERMINAL</node>
+			</node>
+		</node>
+		<node>ALA-N
+			<node>Delete
+				<node>OXT<value></value></node>
+			</node>
+			<node>Properties
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+	</node> 
 </node>
