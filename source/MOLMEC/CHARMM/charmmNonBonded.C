@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.22 2003/04/29 16:07:17 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.23 2003/04/30 06:05:18 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -42,7 +42,7 @@ namespace BALL
 			scaling_vdw_1_4_(0.0),
 			scaling_electrostatic_1_4_(0.0),
 			use_dist_depend_dielectric_(),
-			// algorithm_type_(),
+			algorithm_type_(),
 			van_der_waals_parameters_(),
 			van_der_waals_parameters_14_(),
 			solvation_parameters_(),
@@ -77,7 +77,7 @@ namespace BALL
 			scaling_vdw_1_4_(0.0),
 			scaling_electrostatic_1_4_(0.0),
 			use_dist_depend_dielectric_(),
-			// algorithm_type_(),
+			algorithm_type_(),
 			van_der_waals_parameters_(),
 			van_der_waals_parameters_14_(),
 			solvation_parameters_(),
@@ -91,7 +91,6 @@ namespace BALL
 
 	// copy constructor
 	CharmmNonBonded::CharmmNonBonded(const CharmmNonBonded&	component)
-		throw()
 		:	ForceFieldComponent(component),
 			electrostatic_energy_(component.electrostatic_energy_),
 			vdw_energy_(component.vdw_energy_),

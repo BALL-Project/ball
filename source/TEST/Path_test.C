@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Path_test.C,v 1.9 2002/12/23 08:26:15 oliver Exp $
+// $Id: Path_test.C,v 1.10 2003/04/30 06:05:18 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.9 2002/12/23 08:26:15 oliver Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.10 2003/04/30 06:05:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -54,12 +54,18 @@ RESULT
 
 CHECK(find(const string& name))
 	Path p1;
-	TEST_NOT_EQUAL(p1.find("fragments/Fragments.db"), "")
-	TEST_EQUAL(p1.find("Fragments.db"), "")
-	TEST_EQUAL(p1.find("Path_test.C"), "Path_test.C");
-	TEST_EQUAL(p1.find("TEST/Path_test.C"), "Path_test.C");	
-	TEST_EQUAL(p1.find("xxx/Path_test.C"), "Path_test.C");
-	TEST_EQUAL(p1.find("Path_testX.C"), "");
+	String file = String("fragments") + FileSystem::PATH_SEPARATOR + "Fragments.db";
+	TEST_NOT_EQUAL(p1.find(file), "")
+	file = "Fragments.db";
+	TEST_EQUAL(p1.find(file), "")
+	file = "Path_test.C";
+	TEST_EQUAL(p1.find(file), "Path_test.C");
+	file = String("TEST") + FileSystem::PATH_SEPARATOR + "Path_test.C";
+	TEST_EQUAL(p1.find(file), "Path_test.C");	
+	file = String("xxx") + FileSystem::PATH_SEPARATOR + "Path_test.C";
+	TEST_EQUAL(p1.find(file), "Path_test.C");
+	file = "Path_testX.C";
+	TEST_EQUAL(p1.find(file), "");
 RESULT
 
 CHECK(findStrict(const string& name))

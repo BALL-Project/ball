@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.iC,v 1.28 2002/02/27 12:18:27 sturm Exp $
+// $Id: property.iC,v 1.29 2003/04/30 06:05:18 oliver Exp $
 
 using namespace std;
 
@@ -174,7 +174,7 @@ float NamedProperty::getFloat() const
 {
 	return (type_ == FLOAT ? data_.f : 
 						(type_ == DOUBLE ? (float)data_.d : 
-							(type_ == INT ? (float)data_.i : 0.0)));
+							(type_ == INT ? (float)data_.i : (float)0.0)));
 }
 
 BALL_INLINE 

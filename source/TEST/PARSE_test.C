@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PARSE_test.C,v 1.3 2003/02/07 14:42:48 anker Exp $
+// $Id: PARSE_test.C,v 1.4 2003/04/30 06:05:18 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PARSE_test.C,v 1.3 2003/02/07 14:42:48 anker Exp $")
+START_TEST(class_name, "$Id: PARSE_test.C,v 1.4 2003/04/30 06:05:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,135 +43,131 @@ float total_charge;
 ClearChargeProcessor clear_charges;
 
 CHECK("AlaGlySer: -CONH-, -OH, COO(-), NH3(+), aliphatic carbons with hydrogens")
-hinfile.open("data/AlaGlySer.hin");
-hinfile >> system;
-hinfile.close();
-system.apply(db.normalize_names);
-system.apply(clear_charges);
-system.apply(charges);
-system.apply(radii);
-for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
-{
-	total_charge += atom_it->getCharge();
-}
-TEST_REAL_EQUAL(total_charge, 0.0)
-hinfile.open("data/AlaGlySer_PARSE_charges.hin");
-hinfile >> ref_system;
-hinfile.close();
-for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
-		+atom_it; ++atom_it, ++ref_atom_it)
-{
-	TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
-}
+	hinfile.open("data/AlaGlySer.hin");
+	hinfile >> system;
+	hinfile.close();
+	system.apply(db.normalize_names);
+	system.apply(clear_charges);
+	system.apply(charges);
+	system.apply(radii);
+	for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
+	{
+		total_charge += atom_it->getCharge();
+	}
+	TEST_REAL_EQUAL(total_charge, 0.0)
+	hinfile.open("data/AlaGlySer_PARSE_charges.hin");
+	hinfile >> ref_system;
+	hinfile.close();
+	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
+			+atom_it; ++atom_it, ++ref_atom_it)
+	{
+		TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
+	}
 RESULT
 
 CHECK("AspGluAsnGlnArg: -COOH -CONH2 -CONH- -CNC-(NH2)2")
-system.clear();
-hinfile.open("data/AspGluAsnGlnArg.hin");
-hinfile >> system;
-hinfile.close();
-system.apply(db.normalize_names);
-system.apply(clear_charges);
-system.apply(charges);
-system.apply(radii);
+	system.clear();
+	hinfile.open("data/AspGluAsnGlnArg.hin");
+	hinfile >> system;
+	hinfile.close();
+	system.apply(db.normalize_names);
+	system.apply(clear_charges);
+	system.apply(charges);
+	system.apply(radii);
 
-for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
-{
-	total_charge += atom_it->getCharge();
-}
-TEST_REAL_EQUAL(total_charge, -0.0)
-ref_system.clear();
-hinfile.open("data/AspGluAsnGlnArg_PARSE_charges.hin");
-hinfile >> ref_system;
-hinfile.close();
-for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
-		+atom_it; ++atom_it, ++ref_atom_it)
-{
-	TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
-}
+	for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
+	{
+		total_charge += atom_it->getCharge();
+	}
+	TEST_REAL_EQUAL(total_charge, -0.0)
+	ref_system.clear();
+	hinfile.open("data/AspGluAsnGlnArg_PARSE_charges.hin");
+	hinfile >> ref_system;
+	hinfile.close();
+	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
+			+atom_it; ++atom_it, ++ref_atom_it)
+	{
+		TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
+	}
 RESULT
 
 CHECK("PheTyrTrpHisLys+.hin")
-system.clear();
-hinfile.open("data/PheTyrTrpHisLys+.hin");
-hinfile >> system;
-hinfile.close();
-system.apply(db.normalize_names);
-system.apply(clear_charges);
-system.apply(charges);
-system.apply(radii);
+	system.clear();
+	hinfile.open("data/PheTyrTrpHisLys+.hin");
+	hinfile >> system;
+	hinfile.close();
+	system.apply(db.normalize_names);
+	system.apply(clear_charges);
+	system.apply(charges);
+	system.apply(radii);
 
-for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
-{
-	total_charge += atom_it->getCharge();
-}
-TEST_REAL_EQUAL(total_charge, 1.0)
-ref_system.clear();
-hinfile.open("data/PheTyrTrpHisLys+_PARSE_charges.hin");
-hinfile >> ref_system;
-hinfile.close();
-for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
-		+atom_it; ++atom_it, ++ref_atom_it)
-{
-	TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
-}
+	for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
+	{
+		total_charge += atom_it->getCharge();
+	}
+	TEST_REAL_EQUAL(total_charge, 1.0)
+	ref_system.clear();
+	hinfile.open("data/PheTyrTrpHisLys+_PARSE_charges.hin");
+	hinfile >> ref_system;
+	hinfile.close();
+	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
+			+atom_it; ++atom_it, ++ref_atom_it)
+	{
+		TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
+	}
 RESULT
 
 CHECK("Cys-Asp-Glu-Tyr-His+Arg+.hin")
-system.clear();
-hinfile.open("data/Cys-Asp-Glu-Tyr-His+Arg+.hin");
-hinfile >> system;
-hinfile.close();
-system.apply(db.normalize_names);
-system.apply(clear_charges);
-system.apply(charges);
-system.apply(radii);
+	system.clear();
+	hinfile.open("data/Cys-Asp-Glu-Tyr-His+Arg+.hin");
+	hinfile >> system;
+	hinfile.close();
+	system.apply(db.normalize_names);
+	system.apply(clear_charges);
+	system.apply(charges);
+	system.apply(radii);
 
-for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
-{
-	total_charge += atom_it->getCharge();
-}
-TEST_REAL_EQUAL(total_charge, -2.0)
-ref_system.clear();
-hinfile.open("data/Cys-Asp-Glu-Tyr-His+Arg+_PARSE_charges.hin");
-hinfile >> ref_system;
-hinfile.close();
-for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
-		+atom_it; ++atom_it, ++ref_atom_it)
-{
-	TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
-}
+	for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
+	{
+		total_charge += atom_it->getCharge();
+	}
+	TEST_REAL_EQUAL(total_charge, -2.0)
+	ref_system.clear();
+	hinfile.open("data/Cys-Asp-Glu-Tyr-His+Arg+_PARSE_charges.hin");
+	hinfile >> ref_system;
+	hinfile.close();
+	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
+			+atom_it; ++atom_it, ++ref_atom_it)
+	{
+		TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
+	}
 RESULT
 
 
 CHECK("SerThrLysCysMet.hin")
-system.clear();
-hinfile.open("data/SerThrLysCysMet.hin");
-hinfile >> system;
-hinfile.close();
-system.apply(db.normalize_names);
-system.apply(clear_charges);
-system.apply(charges);
-system.apply(radii);
+	system.clear();
+	hinfile.open("data/SerThrLysCysMet.hin");
+	hinfile >> system;
+	hinfile.close();
+	system.apply(db.normalize_names);
+	system.apply(clear_charges);
+	system.apply(charges);
+	system.apply(radii);
 
-HINFile ref_out("out.hin", std::ios::out);
-ref_out << system;
-ref_out.close();
-
-for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
-{
-	total_charge += atom_it->getCharge();
-}
-TEST_REAL_EQUAL(total_charge, 0.0)
-ref_system.clear();
-hinfile.open("data/SerThrLysCysMet_PARSE_charges.hin");
-hinfile >> ref_system;
-hinfile.close();
-for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
-		+atom_it; ++atom_it, ++ref_atom_it)
-{
-	TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
-}
+	for (atom_it = system.beginAtom(), total_charge = 0.0f; +atom_it; ++atom_it)
+	{
+		total_charge += atom_it->getCharge();
+	}
+	TEST_REAL_EQUAL(total_charge, 0.0)
+	ref_system.clear();
+	hinfile.open("data/SerThrLysCysMet_PARSE_charges.hin");
+	hinfile >> ref_system;
+	hinfile.close();
+	for (atom_it = system.beginAtom(), ref_atom_it = ref_system.beginAtom();
+			+atom_it; ++atom_it, ++ref_atom_it)
+	{
+		TEST_REAL_EQUAL(atom_it->getCharge(), ref_atom_it->getCharge())
+	}
 RESULT
 
 

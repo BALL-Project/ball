@@ -192,6 +192,9 @@
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog.C">
 					</File>
 					<File
+						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.C">
+					</File>
+					<File
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\displayProperties.C">
 					</File>
 					<File
@@ -774,7 +777,8 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"
-						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\countourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;
+						CommandLine="&quot;$(QTDIR)\bin\uic&quot; -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;
+&quot;$(QTDIR)\bin\uic&quot; -o &quot;$(InputDir)\contourSurfaceDialogData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;
 "
 						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h;$(InputDir)contourSurfaceDialogData.C"/>
 				</FileConfiguration>
