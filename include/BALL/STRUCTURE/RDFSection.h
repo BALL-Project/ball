@@ -1,4 +1,4 @@
-// $Id: RDFSection.h,v 1.3 2000/10/18 12:38:35 oliver Exp $
+// $Id: RDFSection.h,v 1.4 2000/10/18 13:53:19 anker Exp $
 
 #ifndef BALL_STRUCTURE_RDFSECTION_H
 #define BALL_STRUCTURE_RDFSECTION_H
@@ -14,12 +14,15 @@
 namespace BALL
 {
 
+	/** Helper class for RDFParameter.
+			\\
+			{\bf Definition:} \URL{BALL/STRUCTURE/RDFSection.h}
+	 */
 	class RDFSection
 		:	public ParameterSection
 	{
 
 		public:
-
 
 		BALL_CREATE(RDFSection)
 
@@ -38,21 +41,13 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		RDFSection();
+		RDFSection() throw();
 
 		/** Copy constructor */
-		RDFSection(const RDFSection& rdf_section);
+		RDFSection(const RDFSection& rdf_section) throw();
 
 		/** Destructor */
-		virtual ~RDFSection()
-			throw();
-
-		/** Destroy method */
-		virtual void destroy();
-
-		/** Clear method */
-		virtual void clear()
-			throw();
+		virtual ~RDFSection() throw();
 
 		//@}
 
@@ -61,24 +56,45 @@ namespace BALL
 		//@{
 
 		/** */
-		void set(const RDFSection& rdf_section);
+		const RDFSection& operator = (const RDFSection& rdf_section) throw();
 
-		/** */
-		const RDFSection& operator = (const RDFSection& rdf_section);
+		/** Clear method */
+		virtual void clear() throw();
 
 		//@}
 
 
+		/** @name Parameter extraction */
+		//@{
+
 		/** */
 		virtual bool extractSection(Parameters& parameters,
-				const String& section_name);
+				const String& section_name) throw();
 		
-		/** */
-		RadialDistributionFunction getRDF() const;
+		//@}
+		
+
+		/** @name Accessors */
+		//@{
+
+		/** return the RDF created by extractSection() */
+		const RadialDistributionFunction& getRDF() const throw();
+
+		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const RDFSection& section) const throw();
+
+		//@}
 
 
 		protected:
 
+		/*_ The RDF that is to be read from a section*/
 		RadialDistributionFunction rdf_;
 
 	
