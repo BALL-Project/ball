@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.26 2001/07/05 17:58:07 oliver Exp $ 
+// $Id: config.h.in,v 1.27 2001/07/13 20:01:56 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -100,10 +100,12 @@
 #undef BALL_INCLUDE_IEEEFP
 
 // the signature of the function arguments used in xdrrec_create differs
-// from platform to platform, so we define a symbol whenever the functions
+// from platform to platform, so we define some symbols describing the
+// correct arguments: (void*, char*, int), (char*, char*, int), or (void)
 // take arguments of type (void*, char*, int)
 #undef BALL_XDRREC_CREATE_VOID_CHAR_INT
 #undef BALL_XDRREC_CREATE_CHAR_CHAR_INT
+#undef BALL_XDRREC_CREATE_VOID
 
 // some platforms (e.g. Debian 2.1) do not provide xdr_u_hyper, so we 
 // need a workaround for this
