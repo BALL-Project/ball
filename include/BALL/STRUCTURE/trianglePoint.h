@@ -122,6 +122,10 @@ namespace BALL
 		void setNormal(const TVector3<T>& normal)
 			throw();
 
+
+		bool join(const TTrianglePoint<T>& point)
+			throw();
+
 		//@}
 
 		/**	@name	Predicates
@@ -167,15 +171,19 @@ namespace BALL
 		s << "POINT";
 		s << point.getIndex();
 		s << "( " << point.getPoint() << " " << point.getNormal() << " {";
-		std::list<TTriangleEdge<T>*> edges = point.getEdges();
-		typename std::list<TTriangleEdge<T>*>::const_iterator e;
+		//std::list<TTriangleEdge<T>*> edges = point.getEdges();
+		//typename std::list<TTriangleEdge<T>*>::const_iterator e;
+		HashSet<TTriangleEdge<T>*> edges = point.getEdges();
+		typename HashSet<TTriangleEdge<T>*>::ConstIterator e;
 		for (e = edges.begin(); e != edges.end(); e++)
 		{
 			s << (*e)->getIndex() << " ";
 		}
 		s << "} [";
-		std::list<TTriangle<T>*> triangles = point.getFaces();
-		typename std::list<TTriangle<T>*>::const_iterator t;
+		//std::list<TTriangle<T>*> triangles = point.getFaces();
+		//typename std::list<TTriangle<T>*>::const_iterator t;
+		HashSet<TTriangle<T>*> triangles = point.getFaces();
+		typename HashSet<TTriangle<T>*>::ConstIterator t;
 		for (t = triangles.begin(); t != triangles.end(); t++)
 		{
 			s << (*t)->getIndex() << " ";
@@ -252,6 +260,31 @@ namespace BALL
 		throw()
 	{
 		normal_ = normal;
+	}
+
+
+	template <typename T>
+	bool TTrianglePoint<T>::join(const TTrianglePoint<T>& point)
+		throw()
+	{
+		if (point_ == point.point_)
+		{
+			typename HashSet<TTriangleEdge<T>*>::ConstIterator e;
+			for (e = point.edges_.begin(); e != point.edges_.end(); e++)
+			{
+				edges_.insert(*e);
+			}
+			typename HashSet<TTriangle<T>*>::ConstIterator f;
+			for (f = point.faces_.begin(); f != point.faces_.end(); f++)
+			{
+				faces_.insert(*f);
+			}
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 
