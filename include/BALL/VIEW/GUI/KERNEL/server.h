@@ -1,4 +1,4 @@
-// $Id: server.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
+// $Id: server.h,v 1.10 2001/12/28 02:33:39 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -72,6 +72,8 @@ namespace BALL
    			public ModularWidget
 		{
 			public:
+			
+			BALL_EMBEDDABLE(Server)
 
 			/**	@name	Constructors
 			*/	

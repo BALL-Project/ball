@@ -27,10 +27,11 @@ namespace BALL
 				other \Ref{ModularWidget} objects have preferences tab dialogs. \\
 				{\bf Definition:} \URL{BALL/VIEW/GUI/DIALOGS/preferences.h}
 		*/
-		class Preferences : public QTabDialog
+		class Preferences 
+			: public QTabDialog
 		{
 			Q_OBJECT
-				
+			
 			public:
 
 			/**	@name	Constructors

@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.10 2001/12/27 00:26:44 oliver Exp $
+// $Id: surface.h,v 1.11 2001/12/28 02:33:38 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -16,6 +16,9 @@ namespace BALL
 
 	/**	Generic Three-dimensional Surface class.
 			This class describes a three-dimensional triangulated surface. 
+			Each tringle is represented by three indices to vertices (as described by the
+			\Ref{TSurface::Triangle}). Each of the vertices has a position and possibly a 
+			normal vector associated.
 			\\
 			{\bf Definition:} \URL{BALL/MATHS/surface.h}
 			\\
@@ -93,9 +96,79 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/** Compute the surface area.
+				The area is computed as the sum of the areas of all 
+				triangles.
+		*/
 		float getArea() const
 			throw();
+
+		/// Return the number of triangles
+		Size getNumberOfTriangles() const
+			throw();
+		
+		/// Return the number of vertices
+		Size getNumberOfVertices() const
+			throw();
+
+		/// Return the number of normals
+		Size getNumberOfNormals() const
+			throw();
+
+		/// Return a triangle with a given index
+		Triangle& getTriangle(Position index)
+			throw();
+
+		/// Return a triangle with a given index
+		const Triangle& getTriangle(Position index) const
+			throw();
+			
+		/// Clear all triangles
+		void clearTriangles();
+
+		/// Resize the triangle array
+		void resizeTriangles(Size size);
+
+		/// Add a triangle
+		void pushBackTriangle(const Triangle& triangle)
+			throw();
+
+		/// Return the position of a vertex
+		Vector3& getVertex(Position index)
+			throw();
+
+		/// Return the position of a vertex
+		const Vector3& getVertex(Position index) const
+			throw();
+
+		/// Clear all vertices
+		void clearVertices();
+
+		/// Resize the vertex array
+		void resizeVertices(Size size);
+
+		/// Add a vertex
+		void pushBackVertex(const Vector3& position)
+			throw();
+
+		/// Return the position of a normal
+		Vector3& getNormal(Position index)
+			throw();
+
+		/// Return the position of a normal
+		const Vector3& getNormal(Position index) const
+			throw();
+
+		/// Clear all normals
+		void clearNormals();
+
+		/// Resize the normal array
+		void resizeNormals(Size size);
+
+		/// Add a normal
+		void pushBackNormal(const Vector3& position)
+			throw();
+
 		//@}
 
 		/**	@name	Predicates
@@ -108,14 +181,6 @@ namespace BALL
 
 		///
 		bool operator != (const TSurface& surface) const
-			throw();
-		//@}
-
-		/**	@name	Debugging and Diagnostics
-		*/
-		//@{
-		///
-		bool isValid() const
 			throw();
 		//@}
 
@@ -132,16 +197,11 @@ namespace BALL
 		/// the triangles
 		vector<Triangle>				triangle;
 		//@}
-
-		protected:
-
-		bool valid_;
 	};
 
 	template <typename T>
 	TSurface<T>::TSurface()
 		throw()
-		:	valid_(false)
 	{
 	}
 
@@ -150,8 +210,7 @@ namespace BALL
 		throw()
 		:	vertex(surface.vertex),
 			normal(surface.normal),
-			triangle(surface.triangle),
-			valid_(surface.valid_)
+			triangle(surface.triangle)
 	{
 	}
 
@@ -159,14 +218,12 @@ namespace BALL
 	TSurface<T>::~TSurface()
 		throw()
 	{
-		valid_ = false;
 	}
 
 	template <typename T>
 	void TSurface<T>::clear()
 		throw()
 	{
-		valid_ = true;
 		vertex.clear();
 		normal.clear();
 		triangle.clear();
@@ -179,7 +236,6 @@ namespace BALL
 		vertex = surface.vertex;
 		normal = surface.normal;
 		triangle = surface.triangle;
-		valid_ = surface.valid_;
 	}
 
 	template <typename T>
@@ -189,7 +245,6 @@ namespace BALL
 		vertex = surface.vertex;
 		normal = surface.normal;
 		triangle = surface.triangle;
-		valid_ = surface.valid_;
 		return *this;
 	}
 	
@@ -200,7 +255,6 @@ namespace BALL
 		surface.vertex = vertex;
 		surface.normal = normal;
 		surface.triangle = triangle;
-		surface.valid_ = valid_;
 	}
 	
 	template <typename T>
@@ -283,37 +337,166 @@ namespace BALL
 	float TSurface<T>::getArea() const
 		throw()
 	{
-		float area = 0;
 		// add the areas of all triangles
+		double area = 0;
 		for (Size i = 0; i < triangle.size(); i++)
 		{
-			//Vector3 v1 = vertex[triangle[i].v1];
-			//Vector3 v2 = vertex[triangle[i].v2];
-			//Vector3 v3 = vertex[triangle[i].v3];
-			
-			// projection of v3 onto v1-v2
-			//Vector3	v4 = 
-			// BAUSTELLE
+			area += (vertex[triangle[i].v2] - vertex[triangle[i].v1]) * (vertex[triangle[i].v3] - vertex[triangle[i].v1]);
 		}
 		
-		return area;
-	}
-
-	template <typename T>
-	bool TSurface<T>::isValid() const
-		throw()
-	{
-		return valid_;
+		// A = 1/2 \sum <r1, r2>
+		return area * 0.5;
 	}
 
 	template <typename T>
 	bool TSurface<T>::operator == (const TSurface<T>& surface) const
 		throw()
 	{
-		return ((valid_ == surface.valid_) 
-						&& (surface.vertex == vertex) 
+		return ((surface.vertex == vertex) 
 						&& (surface.normal == normal) 
 						&& (surface.triangle == triangle));
+	}
+
+	template <typename T>
+	BALL_INLINE
+	Size TSurface<T>::getNumberOfTriangles() const
+			throw()
+	{
+		return triangle.size();
+	}
+		
+	template <typename T>
+	BALL_INLINE
+	Size TSurface<T>::getNumberOfVertices() const
+			throw()
+	{
+		return vertex.size();
+	}
+
+	template <typename T>
+	BALL_INLINE
+	Size TSurface<T>::getNumberOfNormals() const
+			throw()
+	{
+		return normal.size();
+	}
+
+	
+	template <typename T>
+	BALL_INLINE
+	TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index)
+		throw()
+	{
+		return triangle[index];
+	}
+
+	template <typename T>
+	BALL_INLINE
+	const TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index) const
+		throw()
+	{
+		return triangle[index];
+	}
+
+	
+	template <typename T>
+	BALL_INLINE
+	void TSurface<T>::clearTriangles()
+	{
+		triangle.clear();
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TSurface<T>::resizeTriangles(Size size)
+	{
+		triangle.resize(size);
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TSurface<T>::pushBackTriangle(const Triangle& t)
+		throw()
+	{
+		triangle.push_back(t);
+	}
+
+	
+	template <typename T>
+	BALL_INLINE
+	Vector3& TSurface<T>::getVertex(Position index)
+		throw()
+	{
+		return vertex[index];
+	}
+
+	template <typename T>
+	BALL_INLINE
+	const Vector3& TSurface<T>::getVertex(Position index) const
+		throw()
+	{
+		return vertex[index];
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TSurface<T>::clearVertices()
+	{
+		vertex.clear();
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TSurface<T>::resizeVertices(Size size)
+	{
+		vertex.resize(size);
+	}
+
+	
+	template <typename T>
+	BALL_INLINE
+	void TSurface<T>::pushBackVertex(const Vector3& position)
+		throw()
+	{
+		vertex.push_back(position);
+	}
+
+	template <typename T>
+	BALL_INLINE
+	Vector3& TSurface<T>::getNormal(Position index)
+		throw()
+	{
+		return normal[index];
+	}
+
+	template <typename T>
+	BALL_INLINE
+	const Vector3& TSurface<T>::getNormal(Position index) const
+		throw()
+	{
+		return normal[index];
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TSurface<T>::clearNormals()
+	{
+		normal.clear();
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TSurface<T>::resizeNormals(Size size)
+	{
+		normal.resize(size);
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TSurface<T>::pushBackNormal(const Vector3& n)
+		throw()
+	{
+		normal.push_back(n);
 	}
 
 	template <typename T>

@@ -1,4 +1,4 @@
-// $Id: molecularProperties.h,v 1.7 2001/07/16 14:49:28 amoll Exp $
+// $Id: molecularProperties.h,v 1.8 2001/12/28 02:33:39 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -56,9 +56,12 @@ namespace BALL
 				See \Ref{onNotify} for information concerning the conversion mechanism. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h}
 		*/
-		class MolecularProperties: public QWidget, public ModularWidget
+		class MolecularProperties
+			: public QWidget, public ModularWidget
 		{
-		public:
+			public:
+			
+			BALL_EMBEDDABLE(MolecularProperties)
 			
 			/**	@name	Constructors
 			*/	

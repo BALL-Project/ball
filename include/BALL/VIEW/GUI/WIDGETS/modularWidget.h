@@ -1,4 +1,4 @@
-// $Id: modularWidget.h,v 1.9 2001/07/16 14:49:31 amoll Exp $
+// $Id: modularWidget.h,v 1.10 2001/12/28 02:33:39 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -57,19 +57,9 @@ namespace BALL
 		{
 		  public:
 			
-			/** @name Macros.
-		  */
-			//@{
-			
-			/** Embeddable Macro.
-			*/
 			BALL_EMBEDDABLE(ModularWidget)			
-			 
-			/** Create Macro.
-			*/
 			BALL_CREATE(ModularWidget)
 			
-			//@}	
 			/**	@name	Constructors
 			*/	
 			//@{

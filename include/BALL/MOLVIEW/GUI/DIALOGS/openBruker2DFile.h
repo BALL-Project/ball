@@ -1,4 +1,4 @@
-// $Id: openBruker2DFile.h,v 1.4 2001/05/13 16:32:29 hekl Exp $
+// $Id: openBruker2DFile.h,v 1.5 2001/12/28 02:33:38 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER2DFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER2DFILE_H
@@ -31,14 +31,13 @@ namespace BALL
     : public FileDialog
 	{
     public:
-
-		// macro for create method
-	  //    BALL_CREATE(OpenBruker2DFile)
+		
+		BALL_EMBEDDABLE(OpenBruker2DFile)
 
 		/** Constructors and Destructors
 		*/
 		//@{
-      /// Constructor.
+    /// Constructor.
     OpenBruker2DFile(QWidget *parent = 0, const char *name = 0);
 
     /// Destructor

@@ -1,4 +1,4 @@
-// $Id: surface.sip,v 1.4 2001/12/28 02:25:52 oliver Exp $
+// $Id: surface.sip,v 1.5 2001/12/28 02:32:45 oliver Exp $
 
 class Surface
 {
@@ -44,8 +44,8 @@ class Surface
 	void clearTriangles();
 	void clearNormals();
 	void pushBackTriangle(const Triangle& /t/) throw();
-	void pushBackVertex(const Triangle& /v/) throw();
-	void pushBackNormal(const Triangle& /n/) throw();
+	void pushBackVertex(const Vector3& /v/) throw();
+	void pushBackNormal(const Vector3& /n/) throw();
 	void resizeTriangles(Size /size/);
 	void resizeNormals(Size /size/);
 	void resizeVertices(Size /size/);

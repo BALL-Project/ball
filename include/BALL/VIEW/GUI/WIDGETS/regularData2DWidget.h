@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.16 2001/06/07 01:33:10 amoll Exp $
+// $Id: regularData2DWidget.h,v 1.17 2001/12/28 02:33:39 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -92,6 +92,8 @@ class RegularData2DWidget
   Q_OBJECT
 		
 	public:
+
+	BALL_EMBEDDABLE(RegularData2DWidget)
 
 	///
   RegularData2DWidget(int lx_, int ly_, double min = 0, double max = 1., QWidget* parent = 0);

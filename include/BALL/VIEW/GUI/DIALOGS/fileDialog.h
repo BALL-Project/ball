@@ -1,4 +1,4 @@
-// $Id: fileDialog.h,v 1.6 2001/07/16 14:49:29 amoll Exp $
+// $Id: fileDialog.h,v 1.7 2001/12/28 02:33:39 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -28,11 +28,14 @@ namespace BALL
 				name can be accessed with the methods \Ref{getPathName} and \Ref{getFileName}. \\
 				{\bf Definition:} \URL{BALL/VIEW/GUI/DIALOGS/fileDialog.h}\
 		*/
-		class FileDialog: public QFileDialog,	public ModularWidget
+		class FileDialog
+			: public QFileDialog,	public ModularWidget
 		{
 			Q_OBJECT
 
 			public:
+
+			BALL_EMBEDDABLE(FileDialog)
 
 			/**	@name	Constructors
 			*/	

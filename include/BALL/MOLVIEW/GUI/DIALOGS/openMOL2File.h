@@ -1,4 +1,4 @@
-// $Id: openMOL2File.h,v 1.1 2001/08/16 00:50:58 oliver Exp $
+// $Id: openMOL2File.h,v 1.2 2001/12/28 02:33:38 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENMOL2FILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENMOL2FILE_H
@@ -35,9 +35,11 @@ namespace BALL
 				concerning conversion and notification. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h}
 		*/
-		class OpenMOL2File: public FileDialog
+		class OpenMOL2File
+			: public FileDialog
 		{
 			public:
+			BALL_EMBEDDABLE(OpenMOL2File)
 
 			/**	@name	Constructors
 			*/	

@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.19 2001/07/25 11:30:08 oliver Exp $
+// $Id: mainControl.h,v 1.20 2001/12/28 02:33:39 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -105,14 +105,7 @@ namespace BALL
 
 			public:
 
-			/** @name Applied concepts
-			*/
-			//@{
-			/** Embeddable concept.
-					See class \Ref{Embeddable} for information concerning embeddable objects.
-			*/
 			BALL_EMBEDDABLE(MainControl)
-			//@}
 
 			/**	@name	Type Definitions
 			*/

@@ -55,6 +55,7 @@ namespace BALL
 			public ModularWidget
 		{
 			Q_OBJECT
+			BALL_EMBEDDABLE(LabelProperties)
 				
 			public:
 			

@@ -1,4 +1,4 @@
-// $Id: pyWidget.C,v 1.6 2001/12/27 00:32:12 oliver Exp $
+// $Id: pyWidget.C,v 1.7 2001/12/28 02:33:13 oliver Exp $
 
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
@@ -57,7 +57,7 @@ void PyWidget::startInterpreter()
 
 	// print the PyBALL version and clear
 	// the widget's contents in case of a restart
-	setText(VersionInfo::getVersion());
+	setText((String("BALL ") + VersionInfo::getVersion()).c_str());
 
 	// print the first prompt 
 	multi_line_mode_ = false;

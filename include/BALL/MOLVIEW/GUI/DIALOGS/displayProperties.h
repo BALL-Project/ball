@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.10 2001/07/16 14:49:27 amoll Exp $
+// $Id: displayProperties.h,v 1.11 2001/12/28 02:33:38 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -123,11 +123,12 @@ namespace BALL
 		class DisplayProperties 
 			: public BALL::MOLVIEW::DisplayPropertiesData,
 			  public ModularWidget
-			{
-				Q_OBJECT
-					
-					public:
+		{
+			Q_OBJECT
+			BALL_EMBEDDABLE(DisplayProperties)
 				
+			public:
+			
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -171,7 +172,7 @@ namespace BALL
 					will be applied to the \Ref{Composite} object and the follwing \Ref{Message}
 					objects will be sent through the \Ref{ConnectionObject} tree:
 					\begin{itemize}
-					  \item  \Ref{ChangedMolecularMessage} to indicate that the \Ref{Composite} object has changed.
+						\item  \Ref{ChangedMolecularMessage} to indicate that the \Ref{Composite} object has changed.
 						\item  \Ref{SceneMessage} to force an update of the \Ref{Scene} (and set the camera to new object)
 					\end{itemize}
 					If \Ref{MolecularSelectionMessage} is catched the selection of this object will 
@@ -186,7 +187,7 @@ namespace BALL
 					@see   SceneMessage
 					@see   ConnectionObject
 					@see   Message
-		  */
+			*/
 			virtual void onNotify(Message *message)
 					throw();
 			//@}
@@ -224,12 +225,12 @@ namespace BALL
 			/**	Initializes the widget.
 					Initializes the popup menu {\em Display} with its checkable submenus
 					\begin{itemize}
-					  \item  {\em Display Properties} - opens the dialog (indicates if open)
-					  \item  {\em Select} - marks the selected molecular objects in the selected color (See \Ref{GeometricObject})
-					  \item  {\em Deselect} - uses the previously set color of the selected molecular objects
-					  \item  {\em Focus Camera} - centers the camera of \Ref{Scene} to the geometric center of the molecular objects in the selection
-					  \item  {\em Build Bonds} - generates the \Ref{Bond} object to the molecular objects in the selection
-					  \item  {\em Add Hydrogens} - adds hydrogens to the molecular objects in the selection
+						\item  {\em Display Properties} - opens the dialog (indicates if open)
+						\item  {\em Select} - marks the selected molecular objects in the selected color (See \Ref{GeometricObject})
+						\item  {\em Deselect} - uses the previously set color of the selected molecular objects
+						\item  {\em Focus Camera} - centers the camera of \Ref{Scene} to the geometric center of the molecular objects in the selection
+						\item  {\em Build Bonds} - generates the \Ref{Bond} object to the molecular objects in the selection
+						\item  {\em Add Hydrogens} - adds hydrogens to the molecular objects in the selection
 					\end{itemize}
 					and adds them to the appropriate slots.
 					This method is called automatically	immediately before the main application 
@@ -308,7 +309,7 @@ namespace BALL
 					@see  WindowMessage
 					@see  MainControl
 			*/
-		  void select();
+			void select();
 
 			/** Colors deselected objects in their own color.
 					If selected molecular objects are available they will be colored according to
@@ -390,7 +391,7 @@ namespace BALL
 			protected slots:
 					
 			/** @name Protected slots
-		  */
+			*/
 			//@{
 					
 			/** Changes the drawing precision.
@@ -456,133 +457,133 @@ namespace BALL
 			//@}
 				
 			private:
-				
-				void setComboBoxIndex_(QComboBox* combo_box, QString& item_string);
-
-				// --------------------------------------------------------------------------------
-				// methods for the model processors
-				// --------------------------------------------------------------------------------
-
-				enum Address
-				{
-					ADDRESS__UNKOWN                    = 0,
-					ADDRESS__STATIC_MODEL,
-					ADDRESS__DYNAMIC_MODEL,
-					ADDRESS__ALWAYS_FRONT_MODEL,
-					ADDRESS__TRANSPARENT_MODEL,
-					ADDRESS__STATIC_DRAWING_PRECISION,
-					ADDRESS__STATIC_DRAWING_MODE,
-					ADDRESS__DYNAMIC_DRAWING_PRECISION,
-					ADDRESS__DYNAMIC_DRAWING_MODE,
-					ADDRESS__CAMERA_DISTANCE
-				};		
-				
-				enum Value
-				{
-					VALUE__MODEL_UNKOWN         = 0,
-					VALUE__MODEL_LINES          = 1,
-					VALUE__MODEL_STICK          = 2,
-					VALUE__MODEL_BALL_AND_STICK = 3,
-					VALUE__MODEL_SURFACE        = 4,
-					VALUE__MODEL_VAN_DER_WAALS  = 5,
-					VALUE__MODEL_REMOVE         = 6,
-					VALUE__MODEL_BACKBONE       = 7,
-					VALUE__SELECT               = 20,
-					VALUE__DESELECT             = 21,
-					
-					VALUE__DRAWING_PRECISION_LOW    = 0,
-					VALUE__DRAWING_PRECISION_MEDIUM = 1,
-					VALUE__DRAWING_PRECISION_HIGH   = 2,
-					VALUE__DRAWING_PRECISION_ULTRA  = 3,
-					
-					VALUE__DRAWING_MODE_DOTS      = 0,
-					VALUE__DRAWING_MODE_WIREFRAME = 1,
-					VALUE__DRAWING_MODE_SOLID     = 2
-				};
-				
-				enum ColorCalculatorValues
-				{
-					COLORCALCULATOR_VALUES__ELEMENT          = 0,
-					COLORCALCULATOR_VALUES__RESIDUE_NAME     = 1,
-					COLORCALCULATOR_VALUES__ATOM_CHARGE      = 2,
-					COLORCALCULATOR_VALUES__CUSTOM           = 3
-				};
-
-				void setValue_(int address, int value);
-				int getValue_(int address);
-				bool hasValue_(int address, int value);
-
-				void setViewCenter_(const Vector3 &vector3);
-				Vector3 getViewCenter_() const;
-
-				void setViewDirection_(int view_direction);
-				// muss noch verbessert werden (VIEW_DIRECTION)
-				int getViewDirection_() const;
-				void setViewDistance_(Real view_distance);
-				Real getViewDistance_() const;
-
-				virtual void applyOn_(Composite& composite);
-				virtual void calculateCenter_(Composite& composite);
-				virtual bool checkResidue_(Composite& composite);
-				virtual void setColorCalculator_(ColorCalculatorValues values,
-																				 const ColorRGBA &first_color = ColorRGBA(),
-																				 const ColorRGBA &second_color = ColorRGBA(),
-																				 const ColorRGBA &third_color = ColorRGBA());
-				virtual void setColorCalculator_(ColorCalculator& color_calculator);
-
-
-				void applyOnComposite_(Composite& composite, UnaryProcessor<Composite>* processor);		
-				void applyOnComposite_(Composite& composite, UnaryProcessor<Atom>* processor);		
-
-
-				// --------------------------------------------------------------------------------
-				// attributs
-				// --------------------------------------------------------------------------------
-				
-				int id_;
-				int select_id_;
-				int deselect_id_;
-				int center_camera_id_;
-				int build_bonds_id_;
-				int add_hydrogens_id_;
-				
-				QString   model_string_;
-				QString   precision_string_;
-				QString   coloring_method_string_;
-				ColorRGBA custom_color_;
-				
-				// MoleculeObjectProcessor object_processor_;
-				
-				bool distance_coloring_;
-				
-				List<Composite*> selection_;
-
-
-				// --------------------------------------------------------------------------------
-				// Attributs for the model processors
-				// --------------------------------------------------------------------------------
 			
-				// general
-				Vector3 view_center_vector_;
-				int view_direction_;
-				Real view_distance_;
-				vector<int> address_array_;
+			void setComboBoxIndex_(QComboBox* combo_box, QString& item_string);
 
-				// model specific
-				FragmentDB fragmentdb_;
-				ColorCalculator *color_calculator_;
-				GLAtomBondModelConnector model_connector_;
+			// --------------------------------------------------------------------------------
+			// methods for the model processors
+			// --------------------------------------------------------------------------------
 
-				ElementColorCalculator      element_color_calculator_;
-				ResidueNameColorCalculator  residue_name_color_calculator_;
-				AtomChargeColorCalculator   atom_charge_color_calculator_;
-				AtomDistanceColorCalculator distance_color_calculator_;
-				CustomColorCalculator       custom_color_calculator_;
+			enum Address
+			{
+				ADDRESS__UNKOWN                    = 0,
+				ADDRESS__STATIC_MODEL,
+				ADDRESS__DYNAMIC_MODEL,
+				ADDRESS__ALWAYS_FRONT_MODEL,
+				ADDRESS__TRANSPARENT_MODEL,
+				ADDRESS__STATIC_DRAWING_PRECISION,
+				ADDRESS__STATIC_DRAWING_MODE,
+				ADDRESS__DYNAMIC_DRAWING_PRECISION,
+				ADDRESS__DYNAMIC_DRAWING_MODE,
+				ADDRESS__CAMERA_DISTANCE
+			};		
+			
+			enum Value
+			{
+				VALUE__MODEL_UNKOWN         = 0,
+				VALUE__MODEL_LINES          = 1,
+				VALUE__MODEL_STICK          = 2,
+				VALUE__MODEL_BALL_AND_STICK = 3,
+				VALUE__MODEL_SURFACE        = 4,
+				VALUE__MODEL_VAN_DER_WAALS  = 5,
+				VALUE__MODEL_REMOVE         = 6,
+				VALUE__MODEL_BACKBONE       = 7,
+				VALUE__SELECT               = 20,
+				VALUE__DESELECT             = 21,
+				
+				VALUE__DRAWING_PRECISION_LOW    = 0,
+				VALUE__DRAWING_PRECISION_MEDIUM = 1,
+				VALUE__DRAWING_PRECISION_HIGH   = 2,
+				VALUE__DRAWING_PRECISION_ULTRA  = 3,
+				
+				VALUE__DRAWING_MODE_DOTS      = 0,
+				VALUE__DRAWING_MODE_WIREFRAME = 1,
+				VALUE__DRAWING_MODE_SOLID     = 2
+			};
+			
+			enum ColorCalculatorValues
+			{
+				COLORCALCULATOR_VALUES__ELEMENT          = 0,
+				COLORCALCULATOR_VALUES__RESIDUE_NAME     = 1,
+				COLORCALCULATOR_VALUES__ATOM_CHARGE      = 2,
+				COLORCALCULATOR_VALUES__CUSTOM           = 3
 			};
 
-		#		ifndef BALL_NO_INLINE_FUNCTIONS
-		#			include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.iC>
-		#		endif 
+			void setValue_(int address, int value);
+			int getValue_(int address);
+			bool hasValue_(int address, int value);
+
+			void setViewCenter_(const Vector3 &vector3);
+			Vector3 getViewCenter_() const;
+
+			void setViewDirection_(int view_direction);
+			// muss noch verbessert werden (VIEW_DIRECTION)
+			int getViewDirection_() const;
+			void setViewDistance_(Real view_distance);
+			Real getViewDistance_() const;
+
+			virtual void applyOn_(Composite& composite);
+			virtual void calculateCenter_(Composite& composite);
+			virtual bool checkResidue_(Composite& composite);
+			virtual void setColorCalculator_(ColorCalculatorValues values,
+																			 const ColorRGBA &first_color = ColorRGBA(),
+																			 const ColorRGBA &second_color = ColorRGBA(),
+																			 const ColorRGBA &third_color = ColorRGBA());
+			virtual void setColorCalculator_(ColorCalculator& color_calculator);
+
+
+			void applyOnComposite_(Composite& composite, UnaryProcessor<Composite>* processor);		
+			void applyOnComposite_(Composite& composite, UnaryProcessor<Atom>* processor);		
+
+
+			// --------------------------------------------------------------------------------
+			// attributs
+			// --------------------------------------------------------------------------------
+			
+			int id_;
+			int select_id_;
+			int deselect_id_;
+			int center_camera_id_;
+			int build_bonds_id_;
+			int add_hydrogens_id_;
+			
+			QString   model_string_;
+			QString   precision_string_;
+			QString   coloring_method_string_;
+			ColorRGBA custom_color_;
+			
+			// MoleculeObjectProcessor object_processor_;
+			
+			bool distance_coloring_;
+			
+			List<Composite*> selection_;
+
+
+			// --------------------------------------------------------------------------------
+			// Attributs for the model processors
+			// --------------------------------------------------------------------------------
+		
+			// general
+			Vector3 view_center_vector_;
+			int view_direction_;
+			Real view_distance_;
+			vector<int> address_array_;
+
+			// model specific
+			FragmentDB fragmentdb_;
+			ColorCalculator *color_calculator_;
+			GLAtomBondModelConnector model_connector_;
+
+			ElementColorCalculator      element_color_calculator_;
+			ResidueNameColorCalculator  residue_name_color_calculator_;
+			AtomChargeColorCalculator   atom_charge_color_calculator_;
+			AtomDistanceColorCalculator distance_color_calculator_;
+			CustomColorCalculator       custom_color_calculator_;
+		};
+
+#		ifndef BALL_NO_INLINE_FUNCTIONS
+#			include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.iC>
+#		endif 
 
 	} // namespace MOLVIEW
 

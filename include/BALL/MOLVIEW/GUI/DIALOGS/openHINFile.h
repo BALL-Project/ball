@@ -1,4 +1,4 @@
-// $Id: openHINFile.h,v 1.6 2001/07/16 14:49:27 amoll Exp $
+// $Id: openHINFile.h,v 1.7 2001/12/28 02:33:38 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
@@ -35,9 +35,11 @@ namespace BALL
 				concerning conversion and notification. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h}
 		*/
-		class OpenHINFile: public FileDialog
+		class OpenHINFile
+			: public FileDialog
 		{
 			public:
+			BALL_EMBEDDABLE(OpenHINFile)
 
 			/**	@name	Constructors
 			*/	

@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.h,v 1.7 2001/06/21 23:22:48 amoll Exp $
+// $Id: regularData1DWidget.h,v 1.8 2001/12/28 02:33:39 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
@@ -61,7 +61,7 @@ class NewRegularData1DMessage: public CompositeMessage
 };
 
 
-/** Widget used to display 1-dimensional NMR-spectra.
+/** Widget used to display one-dimensional data.
  */
 class RegularData1DWidget
   : public QScrollView,
@@ -71,8 +71,7 @@ class RegularData1DWidget
 		
  	public:
 		
-  // macro for create method
-  //  BALL_CREATE(RegularData1DWidget);
+	BALL_EMBEDDABLE(RegularData1DWidget)
 
   /** Constructors and Destructors
    */

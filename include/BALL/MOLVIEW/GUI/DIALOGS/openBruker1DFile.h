@@ -1,4 +1,4 @@
-// $Id: openBruker1DFile.h,v 1.3 2001/06/06 14:51:15 anhi Exp $
+// $Id: openBruker1DFile.h,v 1.4 2001/12/28 02:33:38 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
@@ -29,55 +29,52 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-	/** This class provides an interface to select and open spectra stored in the bruker file format.
-	*/
-  class OpenBruker1DFile
-    : public FileDialog
-	{
-    public:
-
-		// macro for create method
-	  //    BALL_CREATE(OpenBruker1DFile)
-
-		/** Constructors and Destructors
+		/** This class provides an interface to select and open spectra stored in the bruker file format.
 		*/
-		//@{
-      /// Constructor.
-    OpenBruker1DFile(QWidget *parent = 0, const char *name = 0);
+		class OpenBruker1DFile
+			: public FileDialog
+		{
+			BALL_EMBEDDABLE(OpenBruker1DFile)
 
-    /// Destructor
-    virtual ~OpenBruker1DFile()
-			throw();
-		//@}
+			public:
 
-		/** Assignment
-		*/
+			/** Constructors and Destructors
+			*/
+			//@{
+			/// Constructor.
+			OpenBruker1DFile(QWidget *parent = 0, const char *name = 0);
 
-    /** Initialization. This method is called automatically before the main application is started. 
-				It adds the	dialog's menu entries and connections.
-    */
-    virtual void initializeWidget(MainControl& main_control)
-		throw();
+			/// Destructor
+			virtual ~OpenBruker1DFile()
+				throw();
+			//@}
 
-    /** Remove the dialog.
-				This method is called by the dialog's destructor.
-				It reverses all actions performed in 
-				initializeWidget (remove menu entries and connections).
-    */
-    virtual void finalizeWidget(MainControl& main_control)
-		throw();
+			/** Assignment
+			*/
 
+			/** Initialization. This method is called automatically before the main application is started. 
+					It adds the	dialog's menu entries and connections.
+			*/
+			virtual void initializeWidget(MainControl& main_control)
+				throw();
 
-		protected:
-
-    /** Open the bruker1DFile.
-     */
-    virtual void openFile_()
-		throw();
-
-	};
+			/** Remove the dialog.
+					This method is called by the dialog's destructor.
+					It reverses all actions performed in 
+					initializeWidget (remove menu entries and connections).
+			*/
+			virtual void finalizeWidget(MainControl& main_control)
+				throw();
 
 
+			protected:
+
+			/** Open the bruker1DFile.
+			 */
+			virtual void openFile_()
+				throw();
+
+		};
 	}
 }
 
