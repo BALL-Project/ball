@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.14 2003/09/19 18:17:58 amoll Exp $
+// $Id: displayProperties.C,v 1.15 2003/09/22 10:48:43 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -286,8 +286,7 @@ void DisplayProperties::applyButtonClicked()
 	createRepresentation_();
 
 	// update scene
-	SceneMessage scene_message;
-	scene_message.setType(SceneMessage::REDRAW);
+	SceneMessage* scene_message = new SceneMessage(SceneMessage::REDRAW);
 	notify_(scene_message);
 	setStatusbarText("");
 }
