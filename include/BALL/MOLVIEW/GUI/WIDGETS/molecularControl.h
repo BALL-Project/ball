@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.7.4.6 2002/11/29 00:59:36 amoll Exp $
+// $Id: molecularControl.h,v 1.7.4.7 2002/11/30 11:37:29 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -23,9 +23,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-		using VIEW::MainControl;
-		using VIEW::Information;
-		using VIEW::Message;
+		using VIEW::Control;
 
 		/**	The MolecularControl class.
 				The MolecularControl class is a widget to display the molecular structure of 
@@ -38,11 +36,12 @@ namespace BALL
 				objects. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h}
 		*/
-		class MolecularControl: public BALL::VIEW::Control
+		class MolecularControl
+			: public VIEW::Control
 		{			
 			Q_OBJECT
 			
-		public:
+			public:
 			
 			/**	@name	Constructors
 			*/	
@@ -88,7 +87,7 @@ namespace BALL
 					@see   show
 					@see   checkMenus
 			*/
-			virtual void checkMenu(MainControl& main_control)
+			virtual void checkMenu(VIEW::MainControl& main_control)
 				throw();
 
 			/** Builds a context menu.
@@ -137,7 +136,7 @@ namespace BALL
 					@see     MolecularInformation
 					@see     generateListViewItem_
 			*/
-		  virtual Information& getInformationVisitor_()
+		  virtual VIEW::Information& getInformationVisitor_()
 				throw();
 
 			/** Recursive iteration method.
@@ -174,7 +173,7 @@ namespace BALL
 					@return  bool {\tt true} if an update of {\em *this} molecularControl is necessary, {\tt false} otherwise
 					@see     onNotify
 			*/
-			virtual bool reactToMessages_(Message* message)
+			virtual bool reactToMessages_(VIEW::Message* message)
 				throw();
 			//@}
 			

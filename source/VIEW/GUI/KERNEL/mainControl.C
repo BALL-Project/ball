@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.5 2002/11/29 00:54:58 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.6 2002/11/30 11:37:30 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -836,7 +836,7 @@ namespace BALL
 			throw()
 		{
 			// wird GeometricObject list
-			List<Composite*>& objects = message.getSelection();
+			List<Composite*>& objects = const_cast<List<Composite*>&>(message.getSelection());
 			List<Composite*>::Iterator it = objects.begin();
 
 			selection_.clear();
