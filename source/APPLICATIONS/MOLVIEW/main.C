@@ -7,8 +7,6 @@
 #include "mainframe.h"
 #include <BALL/MOLVIEW/OPENGL/KERNEL/moleculeObjectCreator.h>
 
-
-
 using namespace BALL;
 using namespace BALL::VIEW;
 using namespace BALL::MOLVIEW;
@@ -16,11 +14,11 @@ using namespace BALL::MOLVIEW;
 
 int main(int argc, char **argv)
 {
-  QApplication __QApplication(argc, argv);
+  QApplication application(argc, argv);
 
 	// creating Mainframe
 	Mainframe mainframe;
-	__QApplication.setMainWidget(&mainframe);
+	application.setMainWidget(&mainframe);
 	
   // creating server
   Server server;
@@ -43,7 +41,7 @@ int main(int argc, char **argv)
 
 	// start the application
 	mainframe.show();
-  return __QApplication.exec();
+  return application.exec();
 }
 
 
