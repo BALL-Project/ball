@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.37 2003/06/19 11:46:07 oliver Exp $
+// $Id: regularData1D.h,v 1.38 2003/06/23 14:49:03 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -326,13 +326,17 @@ namespace BALL
 		void rescale(const IndexType& new_size)
 			throw(Exception::OutOfMemory);
 
-		/// Write the grid contents in a (non-portable) binary format.
+		/** Write the grid contents in a (non-portable) binary format.
+		 		@exception FileNotFound thrown if file could not be written
+		*/
 		void binaryWrite(const String& filename) const
-			throw();
+			throw(Exception::FileNotFound);
 
-		/// Read the grid contents from a file written with binaryWrite
+		/** Read the grid contents from a file written with binaryWrite
+		 		@exception FileNotFound thrown if file doesnt exists or could not be read
+		*/
 		void binaryRead(const String& filename)
-			throw();
+			throw(Exception::FileNotFound);
 		//@}
 	
 		protected:
@@ -779,10 +783,11 @@ namespace BALL
 
 	template <typename ValueType>
 	void TRegularData1D<ValueType>::binaryWrite(const String& filename) const
-		throw()
+		throw(Exception::FileNotFound)
 	{
 		File outfile(filename, std::ios::out|std::ios::binary);
-		
+		if (!outfile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+
 		BinaryFileAdaptor<BlockValueType> adapt_block;
 		BinaryFileAdaptor<ValueType>			adapt_single;
 		
@@ -829,9 +834,10 @@ namespace BALL
 
 	template <typename ValueType>
 	void TRegularData1D<ValueType>::binaryRead(const String& filename)
-		throw()
+		throw(Exception::FileNotFound)
 	{
 		File infile(filename, std::ios::in|std::ios::binary);
+		if (!infile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		
 		BinaryFileAdaptor<BlockValueType> adapt_block;
 		BinaryFileAdaptor<ValueType>		  adapt_single;

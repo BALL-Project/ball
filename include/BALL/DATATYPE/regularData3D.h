@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.26 2003/06/19 13:42:17 anker Exp $ 
+// $Id: regularData3D.h,v 1.27 2003/06/23 14:49:04 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -314,7 +314,7 @@ namespace BALL
     /** Set the dimension of the data.
         This will affect neither the origin of the data, nor the number of
         elements stored (in contrast to \link resize() resize() \endlink).
-        It will just store the appropriate scling factor and affect the spacing.
+        It will just store the appropriate scaling factor and affect the spacing.
     */
     void setDimension(const CoordinateType& dimension) throw()	
 		{
@@ -393,13 +393,19 @@ namespace BALL
 			 ValueType& llb, ValueType& rlb, ValueType& lub, ValueType& rub) const
       throw(Exception::OutOfGrid);
 		
+		/** Write the grid contents in a (non-portable) binary format.
+		 		@exception FileNotFound thrown if file could not be written
+		*/
 		void binaryWrite(const String& filename) const
-			throw();
+			throw(Exception::FileNotFound);
 
+		/** Read the grid contents from a file written with binaryWrite
+		 		@exception FileNotFound thrown if file doesnt exists or could not be read
+		*/
 		void binaryRead(const String& filename)
-			throw();
+			throw(Exception::FileNotFound);
 		//@}
-				
+	
 		protected:
 			
 		/// The grid data
@@ -992,9 +998,10 @@ namespace BALL
 
 	template <typename ValueType>
 	void TRegularData3D<ValueType>::binaryWrite(const String& filename) const
-		throw()
+		throw(Exception::FileNotFound)
 	{
 		File outfile(filename, std::ios::out|std::ios::binary);
+		if (!outfile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		
 		BinaryFileAdaptor< BlockValueType > adapt_block;
 		BinaryFileAdaptor< ValueType >			 adapt_single;
@@ -1044,9 +1051,10 @@ namespace BALL
 
 	template <typename ValueType>
 	void TRegularData3D<ValueType>::binaryRead(const String& filename)
-		throw()
+		throw(Exception::FileNotFound)
 	{
 		File infile(filename, std::ios::in|std::ios::binary);
+		if (!infile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		
 		BinaryFileAdaptor< BlockValueType > adapt_block;
 		BinaryFileAdaptor< ValueType >		  adapt_single;
