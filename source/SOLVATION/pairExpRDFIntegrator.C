@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.10 2000/09/25 16:31:19 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.11 2000/09/28 12:17:37 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -30,6 +30,7 @@ namespace BALL
 	PairExpRDFIntegrator::PairExpRDFIntegrator
 			(const PairExpRDFIntegrator& integrator)
 		:	RDFIntegrator(integrator),
+			options(integrator.options),
 			alpha_(integrator.alpha_),
 			C1_(integrator.C1_),
 			C2_(integrator.C2_),
@@ -88,6 +89,7 @@ namespace BALL
 		R_ij_o_ = integrator.R_ij_o_;
 		k1_ = integrator.k1_;
 		k2_ = integrator.k2_;
+		options = integrator.options;
 		RDFIntegrator::set(integrator);
 	}
 
