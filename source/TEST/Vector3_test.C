@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.21 2000/03/21 12:38:54 amoll Exp $
+// $Id: Vector3_test.C,v 1.22 2000/03/27 12:40:25 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.21 2000/03/21 12:38:54 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.22 2000/03/27 12:40:25 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ CHECK(TVector3(const T& x, const T& y, const T& z);)
 RESULT
 
 //line 131
-CHECK(TVector3(const TVector3& vector, bool deep = true);)
+CHECK(TVector3(const TVector3& vector);)
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v  = Vector3(v2);
 	TEST_REAL_EQUAL(v[0], 1.0)
@@ -181,9 +181,9 @@ CHECK(TVector3::set(const T& x, const T& y, const T& z))
 RESULT
 
 //line 213
-CHECK(TVector3::set(const TVector3& vector, bool deep = true);)
+CHECK(TVector3::set(const TVector3& vector);)
 	v = Vector3(1.0, 2.0, 3.0);
-	v2.set(v, true);
+	v2.set(v);
 	TEST_EQUAL(v2, v)
 RESULT
 
@@ -244,10 +244,10 @@ CHECK(TVector3::get(T& rx, T& ry, T& rz) const)
 RESULT
 
 //line 265
-CHECK(TVector3::get(TVector3<T>& v, bool deep) const )
+CHECK(TVector3::get(TVector3<T>& v) const )
 	v2 = Vector3(1.0, 2.0, 3.0);
 	v  = Vector3();
-	v.get(v2, false);
+	v.get(v2);
 	TEST_EQUAL(v2, v)
 RESULT
 
