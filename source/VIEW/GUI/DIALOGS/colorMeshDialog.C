@@ -24,6 +24,7 @@ ColorMeshDialog::ColorMeshDialog( QWidget* parent,  const char* name, bool modal
 {
 	connect((QObject*)Compute_, SIGNAL(clicked()), this, SLOT(colorMesh()));
 	connect((QObject*)Browseload, SIGNAL(clicked()), this, SLOT(browseLoadFiles()));
+	connect((QObject*)Cancel_, SIGNAL(clicked()), this, SLOT(cancel()));
 }
 
 ColorMeshDialog::~ColorMeshDialog()
@@ -37,6 +38,7 @@ void ColorMeshDialog::colorMesh()
 
 	if (fileName.isEmpty())
 	{
+		hide();
 		return;
 	}
 
@@ -73,6 +75,8 @@ void ColorMeshDialog::colorMesh()
 	
 	// update of the scene and the composites needed
 	MainControl::getMainControl(this)->updateAll();
+
+	hide();
 }
 
 void ColorMeshDialog::browseLoadFiles()
@@ -91,3 +95,9 @@ void ColorMeshDialog::browseLoadFiles()
 		Loadfile_->setText(result);
 	}
 }
+
+void ColorMeshDialog::cancel()
+{
+	hide();
+}
+
