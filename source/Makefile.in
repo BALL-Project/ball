@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# $Id: Makefile.in,v 1.1.2.1 2002/12/05 14:36:34 anhi Exp $
+# $Id: Makefile.in,v 1.1.2.5 2002/12/08 16:49:39 oliver Exp $
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -215,9 +215,9 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
 	install-exec-recursive installdirs-recursive install-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
-DIST_COMMON = README ChangeLog Make.rules.in Makefile.am Makefile.in \
-	acinclude.m4 aclocal.m4 configure configure.ac depcomp \
-	install-sh missing mkinstalldirs
+DIST_COMMON = README AUTHORS COPYING ChangeLog INSTALL Make.rules.in \
+	Makefile.am Makefile.in NEWS acinclude.m4 aclocal.m4 configure \
+	configure.ac depcomp install-sh missing mkinstalldirs
 DIST_SUBDIRS = $(SUBDIRS)
 SOURCES = $(BALL_objects_SOURCES) $(BALLVIEW_objects_SOURCES) $(MOLVIEW_objects_SOURCES)
 
@@ -230,7 +230,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  Makefile
+	  $(AUTOMAKE) --gnu  Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)
 
