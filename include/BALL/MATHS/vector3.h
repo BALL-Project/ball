@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.70.2.1 2004/05/18 11:45:27 amoll Exp $
+// $Id: vector3.h,v 1.70.2.2 2004/05/18 11:51:49 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -182,13 +182,11 @@ namespace BALL
 				<tt>phi</tt>	ranges from 0 to \f$2 \pi\f$, <tt>theta</tt> ranges from 0 (north pole, positive z-axis)
 				to \f$\pi\f$ (south pole, negative z-axis). \par
 				Coordinates are calculated according to the following formulae: \par
-				\[
-					\begin{aligned}
+				\f[
 					x & = & r \sin \theta \cos \phi \par
 					y & = & r \sin \theta \sin \phi \par
 					z & = & r \cos \theta
-					\end{aligned}
-				\]
+				\f]
 				@param	r the radius
 				@param	phi the azimuth
 				@param	theta	the co-latitude
@@ -356,7 +354,7 @@ namespace BALL
 		/**	Scalar product.
 				Return <tt>TVector3(x * scalar, y * scalar, z * scalar)</tt>.
 				@param scalar, the scalar to multiply by
-				@return TVector3, the scalar product of this vector and <tt>scalar</tt>
+				@return TVector3 the scalar product of this vector and <tt>scalar</tt>
 		*/
 		TVector3 operator * (const T& scalar) const
 			throw();
