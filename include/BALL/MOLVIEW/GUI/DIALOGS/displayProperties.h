@@ -1,4 +1,4 @@
-// $Id:
+// $Id: displayProperties.h,v 1.9 2001/07/15 16:24:36 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -121,9 +121,9 @@ namespace BALL
 				The class DisplayPropertiesData contains the definition of the layout of
 				this dialog and is therefore not necessary for understanding.
 				@memo    DisplayProperties class (BALL MOLVIEW gui dialogs framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/06 13:54:47 $
+				@author  $Author: oliver $
+				@version $Revision: 1.9 $
+				@date    $Date: 2001/07/15 16:24:36 $
 		*/
 		class DisplayProperties 
 			: public BALL::MOLVIEW::DisplayPropertiesData,
@@ -151,7 +151,7 @@ namespace BALL
 					@see        QDialog
 					@see        ModularWidget
 			*/
-			DisplayProperties(QWidget *parent = NULL, const char *name = NULL)
+			DisplayProperties(QWidget *parent = NULL, const char* name = NULL)
 					throw();
 			//@}
 
@@ -526,9 +526,9 @@ namespace BALL
 				void setViewDistance_(Real view_distance);
 				Real getViewDistance_() const;
 
-				virtual void applyOn_(Composite &composite);
-				virtual void calculateCenter_(Composite &composite);
-				virtual bool checkResidue_(Composite &composite);
+				virtual void applyOn_(Composite& composite);
+				virtual void calculateCenter_(Composite& composite);
+				virtual bool checkResidue_(Composite& composite);
 				virtual void setColorCalculator_(ColorCalculatorValues values,
 																				 const ColorRGBA &first_color = ColorRGBA(),
 																				 const ColorRGBA &second_color = ColorRGBA(),
@@ -536,8 +536,8 @@ namespace BALL
 				virtual void setColorCalculator_(ColorCalculator& color_calculator);
 
 
-				void applyOnComposite_(Composite &composite, UnaryProcessor<Composite> *processor);		
-				void applyOnComposite_(Composite &composite, UnaryProcessor<Atom> *processor);		
+				void applyOnComposite_(Composite& composite, UnaryProcessor<Composite>* processor);		
+				void applyOnComposite_(Composite& composite, UnaryProcessor<Atom>* processor);		
 
 
 				// --------------------------------------------------------------------------------
