@@ -1,4 +1,4 @@
-// $Id: fileSystem.C,v 1.7 2001/05/17 12:19:25 oliver Exp $
+// $Id: fileSystem.C,v 1.8 2001/07/31 00:49:39 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -13,13 +13,14 @@ namespace BALL
 	const char* const FileSystem::PARENT_DIRECTORY = "..";
 	// must be adapted in case of porting to other platforms than UNIX
 	static const char* const REGEXP_CONFORM_PARENT_DIRECTORY = "\\.\\.";
+	static const char* const REGEXP_CONFORM_CURRENT_DIRECTORY = "\\.";
 
-	String& FileSystem::canonizePath(String& path)
+	void FileSystem::canonizePath(String& path)
+		throw()
 	{
-
 		if (path == "")
 		{
-			throw (Exception::FileNotFound(__FILE__, __LINE__, path));
+			return;
 		}
 
 		Index index = 0;
@@ -27,22 +28,22 @@ namespace BALL
 		// replace all double occurences of a PATH_SEPARATOR with a single PATH_SEPARATOR
 		String s(FileSystem::PATH_SEPARATOR);
 		s += FileSystem::PATH_SEPARATOR;
-		for (;index != INVALID_INDEX; index = path.substitute(s, FileSystem::PATH_SEPARATOR));
+		for (; index != INVALID_INDEX; index = path.substitute(s, FileSystem::PATH_SEPARATOR));
 		
 		// expand ~ to the user's home directory
 		FileSystem::expandTilde_(path);
 
 		// replace occurences of "/./" with "/"
-		s.set(FileSystem::PATH_SEPARATOR);
+		s = FileSystem::PATH_SEPARATOR;
 		s += FileSystem::CURRENT_DIRECTORY;
 		s += FileSystem::PATH_SEPARATOR;
 		for (index = 0; index != INVALID_INDEX;
 				 index = path.substitute(s, FileSystem::PATH_SEPARATOR));
-		
+
 		// remove a leading "./"
 		s.set(FileSystem::CURRENT_DIRECTORY);
 		s += FileSystem::PATH_SEPARATOR;
-		if (path.hasPrefix(s) == true)
+		while (path.hasPrefix(s) == true)
 		{
 			path.erase(0, s.size());	
 		}
@@ -50,13 +51,20 @@ namespace BALL
 		// remove trailing "/."
 		s.set(FileSystem::PATH_SEPARATOR);
 		s += FileSystem::CURRENT_DIRECTORY;
-		if (path.hasSuffix(s) == true)
+		while (path.hasSuffix(s) == true)
 		{
 			path.resize(path.size() - s.size());
 		}
 
-		s.set("[^");
+		// remove intermediate reversals of path 
+		// (something like "/usr/local/../bin" 
+		//  would be reduced to "/usr/bin")
+		s = "[^";
 		s += FileSystem::PATH_SEPARATOR;
+		s += FileSystem::CURRENT_DIRECTORY;
+		s += "][^";
+		s += FileSystem::PATH_SEPARATOR;
+		s += FileSystem::CURRENT_DIRECTORY;
 		s += "]*";
 		s += FileSystem::PATH_SEPARATOR;
 		s += REGEXP_CONFORM_PARENT_DIRECTORY;
@@ -67,20 +75,19 @@ namespace BALL
 		{
 			sub.destroy();
 		}
-		
-		return path;
 	}
 
-	String& FileSystem::expandTilde_(String& path)
+	void FileSystem::expandTilde_(String& path)
+		throw()
 	{
 		if (path.isEmpty() == true)
 		{
-			return path;
+			return;
 		}
 		
 		if (path[0] != '~')
 		{ 
-			return path;                
+			return;                
 		}
 		
 		Index index = (Index)path.find_first_not_of(FileSystem::PATH_SEPARATOR, 1);
@@ -107,7 +114,7 @@ namespace BALL
 		struct passwd *passwd = ::getpwnam(&path[1]);
 		if(passwd == 0)
 		{ 
-			return path;                                 
+			return;                                 
 		}
 		path[index] = c;
 		
@@ -115,7 +122,7 @@ namespace BALL
 		buffer.append(path.c_str() + index);
 		buffer.swap(path);
 		
-		return path;
+		return;
 	}
 
 } // namespace BALL
