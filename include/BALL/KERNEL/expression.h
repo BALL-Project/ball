@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.9 2001/06/06 22:26:36 amoll Exp $
+// $Id: expression.h,v 1.10 2001/06/27 01:33:51 oliver Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -20,6 +20,7 @@ namespace BALL
 
 	/**	@name	Expression Trees.
 			Evaluate simple expressions on Atoms.
+			\\
 			{\bf Definition:}\URL{BALL/KERNEL/expression.h}
 	*/
 	//@{
@@ -34,7 +35,6 @@ namespace BALL
 		public:
 
 		BALL_CREATE(ExpressionPredicate)
-
 
 		/**	@name	Constructors and Destructor.
 		*/
@@ -102,7 +102,7 @@ namespace BALL
 		virtual void setArgument(const String& argument) 
 			throw();
 
-		/** Get the argument of an ExpressionPredicate i
+		/** Get the argument of an ExpressionPredicate
 				@return the argument of the expression
 		 */
 		const String& getArgument() const 
@@ -122,9 +122,8 @@ namespace BALL
 			Represents the logical tree of an Expression. This is the backend of
 			Expression.
 			\\
-			@see Expression
-			\\
 			{\bf Definition:} \URL{BALL/KERNEL/expression.h}
+			@see Expression
 	*/
 	class ExpressionTree
 	{
