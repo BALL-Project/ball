@@ -3,8 +3,8 @@ DIRECTORY=MOLMEC/MINIMIZATION
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	energyMinimizer.C\
-	lineSearch.C\
-	steepestDescent.C
+	steepestDescent.C\
+	conjugateGradient.C\
+	energyMinimizer.C 
 
 include ../../common.mak
