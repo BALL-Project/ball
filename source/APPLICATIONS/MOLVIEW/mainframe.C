@@ -35,9 +35,9 @@ Mainframe::Mainframe
 	// ---------------------
 
 	connect(&__mControl_,
-					SIGNAL(itemSelected(bool, bool)),
+					SIGNAL(itemSelected(bool)),
 					this,
-					SLOT(updateEditMenuFromSelection(bool, bool)));
+					SLOT(updateEditMenuFromSelection(bool)));
 
 	connect(&__mControl_,
 					SIGNAL(itemCutOrCopied(bool)),
@@ -169,7 +169,7 @@ Mainframe::Mainframe
 	// TextView setup ------
 	// ---------------------
 	
-	QFont f("Courier", 12, QFont::Bold, false, QFont::ISO_8859_1);
+	QFont f("Courier", 12, QFont::Bold, false);
 	__mTimerTextView_.setFont(f);
 	__mTimerTextView_.setReadOnly(TRUE);
 	__mTimerTextView_.setAutoUpdate(TRUE);
@@ -335,22 +335,17 @@ void Mainframe::exportPovray()
 void Mainframe::about()
 {
 	DlgAbout about_box;
-	about_box.show();
+	about_box.exec();
+	//	QColor color = QColorDialog::getColor(about_box.backgroundColor());
+	//	about_box.setBackgroundColor(color);
+	//	about_box.exec();
 }
 
-void Mainframe::updateEditMenuFromSelection(bool selected__bool, bool residue__bool)
+void Mainframe::updateEditMenuFromSelection(bool selected__bool)
 {
-	if (residue__bool == true)
-	{
-		edit__mpQPopupMenu_->setItemEnabled(MENU__CHECK_RESIDUE, TRUE);
-	}
-	else
-	{
-		edit__mpQPopupMenu_->setItemEnabled(MENU__CHECK_RESIDUE, FALSE);
-	}
-
 	if (selected__bool == true)
 	{
+		edit__mpQPopupMenu_->setItemEnabled(MENU__CHECK_RESIDUE, TRUE);
 		edit__mpQPopupMenu_->setItemEnabled(MENU__CUT, TRUE);
 		edit__mpQPopupMenu_->setItemEnabled(MENU__COPY, TRUE);
 		edit__mpQPopupMenu_->setItemEnabled(MENU__BUILD_BONDS, TRUE);
