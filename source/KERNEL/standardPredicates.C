@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.41 2003/03/28 14:42:20 anker Exp $
+// $Id: standardPredicates.C,v 1.42 2003/03/28 19:19:08 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -197,25 +197,40 @@ namespace BALL
 	// in ring predicate
 
 	bool InRingPredicate::dfs_(const Atom& atom, const Atom& first_atom,
-			const Size limit, HashSet<const Bond*>& visited) const
+			const Size limit, const bool exact, HashSet<const Bond*>& visited) const
 		throw()
 	{
 		// the following recursive function performs an ad-hoc dfs and returns
 		// true, if a ring was found and false otherwise.
 
-		if (limit == 0) 
+		if (exact == true)
 		{
-			if (atom == first_atom) 
+			if (limit == 0) 
 			{
-				// Found first atom at limit
+				if (atom == first_atom) 
+				{
+					// Found first atom at limit
+					return true;
+				}
+				else
+				{
+					// Reached limit without finding the first atom
+					return false;
+				}
+			}
+		}
+		else
+		{
+			if ((atom == first_atom) && (visited.size() > 0))
+			{
 				return true;
 			}
-			else
+			if (limit == 0)
 			{
-				// Reached limit without finding the first atom
 				return false;
 			}
 		}
+
 		Size i;
 		const Bond* bond;
 		Atom* descend;
@@ -230,7 +245,7 @@ namespace BALL
 			{
 				descend = bond->getPartner(atom);
 				my_visited.insert(bond);
-				if (dfs_(*descend, first_atom, limit-1, my_visited))
+				if (dfs_(*descend, first_atom, limit-1, exact, my_visited))
 				{
 					return true;
 				}
@@ -244,12 +259,21 @@ namespace BALL
 	bool InRingPredicate::operator () (const Atom& atom) const
 		throw()
 	{
+		// the size of the ring to be found
 		int n;
+		// do we search a ring of a certain number of members or just a ring?
+		bool exact = true;
+
 		if (argument_.size() == 1)
 		{
 			if (argument_.isDigit())
 			{
 				n = argument_.toInt();
+				// There are no rings with less than 3 atoms
+				if (n < 3) 
+				{
+					return false;
+				}
 			}
 			else
 			{
@@ -260,25 +284,35 @@ namespace BALL
 		}
 		else
 		{
-			Log.error() << "InRingPredicate::operator () (): "
-				<< "Expected a number < 9: " << argument_ << std::endl;
-			return false;
+			if (argument_ == "")
+			{
+				n = 99;
+				exact = false;
+			}
+			else
+			{
+				Log.error() << "InRingPredicate::operator () (): "
+					<< "Expected a number < 9: " << argument_ << std::endl;
+				return false;
+			}
 		}
 
-		// There are no rings with less than 3 atoms
-		if (n < 3) 
+		// if the atom does not have bonds, we cannot find any rings.
+		if (atom.countBonds() > 0)
 		{
-			return false;
-		}
-
-		HashSet<const Bond*> visited;
-		if (dfs_(atom,atom,n,visited))
-		{
-			return true;
+			HashSet<const Bond*> visited;
+			if (dfs_(atom, atom, n, exact, visited) == true)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
-			return false;
+			return(false);
 		}
 
 	}
