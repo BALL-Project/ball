@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.11 2001/06/21 08:58:41 amoll Exp $
+// $Id: RSEdge.h,v 1.12 2001/06/21 23:22:25 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -163,7 +163,8 @@ namespace BALL
 			intersection_point0_ = intersection_point0; intersection_point1_ = intersection_point1;
 			singular_ = singular; index_ = index;
 		}
-
+		
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{

@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.14 2001/06/21 08:58:41 amoll Exp $
+// $Id: rotamerLibrary.h,v 1.15 2001/06/21 23:22:26 amoll Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -136,7 +136,7 @@ namespace BALL
 		//@}
 		/** @name Accessors
 		*/
-		//{
+		//@{
 
 		/** Get the name of the ResidueRotamerSet 
 		*/

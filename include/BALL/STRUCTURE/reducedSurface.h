@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.16 2001/06/21 08:58:41 amoll Exp $
+// $Id: reducedSurface.h,v 1.17 2001/06/21 23:22:25 amoll Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -633,6 +633,7 @@ namespace BALL
 		bool checkProbe(const TSphere3<T>& probe)
 			throw();
 
+		//@}
 
 		protected:
 

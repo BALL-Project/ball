@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.12 2001/06/21 08:58:41 amoll Exp $
+// $Id: RSFace.h,v 1.13 2001/06/21 23:22:25 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -130,6 +130,7 @@ namespace BALL
 			normal_.normalize();
 		}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
