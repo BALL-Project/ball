@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.2 2000/03/30 10:16:05 oliver Exp $
+// $Id: PTE.h,v 1.3 2000/04/17 14:38:59 amoll Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -363,17 +363,10 @@ namespace BALL
 
 			/**
 			*/
-			String& getName();
-
-			/**
-			*/
 			const String& getName() const;
 
 			///
 			void setSymbol(const String& symbol);
-
-			///
-			String& getSymbol();
 
 			///
 			const String& getSymbol() const;

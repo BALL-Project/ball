@@ -1,15 +1,9 @@
-// $Id: PTE.iC,v 1.1 2000/03/27 21:33:35 oliver Exp $
+// $Id: PTE.iC,v 1.2 2000/04/17 14:39:19 amoll Exp $
 
 BALL_INLINE 
 void Element::setName(const String& name)
 {
   name_ = name;
-}
-
-BALL_INLINE 
-String& Element::getName()
-{
-  return name_;
 }
 
 BALL_INLINE 
@@ -22,12 +16,6 @@ BALL_INLINE
 void Element::setSymbol(const String& symbol)
 {
   symbol_ = symbol;
-}
-
-BALL_INLINE 
-String& Element::getSymbol()
-{
-  return symbol_;
 }
 
 BALL_INLINE 
