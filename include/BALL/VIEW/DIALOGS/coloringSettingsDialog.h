@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.5 2003/11/19 21:28:23 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.6 2003/11/19 22:44:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -28,6 +28,7 @@
 #endif
 
 #include <qtable.h>
+#include <qcolor.h>
 			
 namespace BALL
 {
@@ -111,10 +112,54 @@ namespace BALL
 			vector<ColorRGBA> getResidueColors() const
 				throw();
 
+			protected slots:
+
+			virtual void minimumOccupancyColorPressed();
+			virtual void middleResidueColorPressed();
+			virtual void lastResidueColorPressed();
+			virtual void negativeChargeColorPressed();
+			virtual void neutralChargeColorPressed();
+			virtual void positiveChargeColorPressed();
+			virtual void nullDistanceColorPressed();
+			virtual void maxDistanceColorPressed();
+			virtual void maxDistanceChanged();
+			virtual void minimumTFColorPressed();
+			virtual void maximumTFColorPressed();
+			virtual void unassignedTFColorPressed();
+			virtual void maximumOccupancyColorPressed();
+			virtual void unassignedOccupancyColorPressed();
+			virtual void firstResidueColorPressed();
+			virtual void helixColorPressed();
+			virtual void turnColorPressed();
+			virtual void strandColorPressed();
+			virtual void coilColorPressed();
+
 			protected:
+
+			void setNewColor_(QLabel* label, ColorRGBA& to)
+				throw();
 
 			QColorTable* element_table_;
 			QColorTable* residue_table_;
+
+			ColorRGBA minimum_occupancy_color_,
+								middle_residue_color_,
+								last_residue_color_,
+								negative_charge_color_,
+								neutral_charge_color_,
+								positive_charge_color_,
+								null_distance_color_,
+								max_distance_color_,
+								minimum_tf_color_,
+								maximum_tf_color_,
+								unassigned_tf_color_,
+								maximum_occupancy_color_,
+								unassigned_occupancy_color_,
+								first_residue_color_,
+								helix_color_,
+								coil_color_,
+								strand_color_,
+								turn_color_;
 		};
 
 } }
