@@ -9,8 +9,12 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
-# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
+# include <BALL/VIEW/KERNEL/mainControl.h>
+#endif
+
+#ifndef BALL_STRUCTURE_DOCKING_CONFORMATIONSET_H
+# include <BALL/STRUCTURE/DOCKING/conformationSet.h>
 #endif
 
 #include "dockResultDialogData.h"
@@ -21,8 +25,7 @@ namespace BALL
 	{
 		class BALL_EXPORT DockResultDialog : 
 				public DockResultDialogData,
-				public ModularWidget,
-				public PreferencesEntry
+				public ModularWidget
 		{ 
 				Q_OBJECT
 				BALL_EMBEDDABLE(DockResultDialog,ModularWidget)
@@ -37,15 +40,31 @@ namespace BALL
 					~DockResultDialog()
 						throw();
 				
+					void setConformationSet(ConformationSet conformations)
+						throw() {ranked_conformations_ = conformations;}
+						
+					ConformationSet getConformationSet()
+						throw() {return ranked_conformations_;}
+					
+					// add docked system to BALLView structures 
+					void displayDockedSystem()
+						throw();
+							
 				public slots:
 				
-				//
+					/// Show and raise
+					void show();
+				
+					//
 					virtual void showSnapshot();
 				
 				protected:
 				
 				private:
-				
+					ConformationSet ranked_conformations_;
+					System* docked_system_;
+					
+					
 		};
 		
 } } // Namespaces

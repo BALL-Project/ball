@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.9 2005/03/17 16:57:47 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.10 2005/03/18 14:48:16 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -330,34 +330,11 @@ namespace BALL
 			Log.error() << "finished docking" << std::endl;
 			
 			ConformationSet ranked_conformations = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
-			
-			// get the conformations (= pair<Index, float> = Snapshot number & energy value) for the result dialog
-			std::vector<ConformationSet::Conformation> conformations = ranked_conformations.getScoring();
-			
-			// fill the table of the result dialog
-			result_dialog_->result_table->insertRows(0,conformations.size());
-			for(unsigned int i = 0; i < conformations.size() ; i++)
-			{
-				//1.column = snapshot number; 2.column = energy value 
-				QString string;
-				result_dialog_->result_table->setText(i,0,string.setNum(conformations[i].first));
-				result_dialog_->result_table->setText(i,1,string.setNum(conformations[i].second));
-			}
-			
-			
-			SnapShot blubb = ranked_conformations[0];
-			
-			System* docked_system = new System(ranked_conformations.getSystem());
-			blubb.applySnapShot(*docked_system);
-			getMainControl()->insert(*docked_system, "Docked System");
-			
-			
-			for(int j = 0; j < result_dialog_->result_table->numCols() ; j++)
-			{
-				result_dialog_->result_table->adjustColumn(j);
-			}
-			result_dialog_->exec();
-	 		
+			result_dialog_->setConformationSet(ranked_conformations);
+	
+			// add docked system to BALLView structures 
+			result_dialog_->displayDockedSystem();
+			result_dialog_->show();
 
 			Log.info() << "End of calculate" << std::endl;
 			return true;

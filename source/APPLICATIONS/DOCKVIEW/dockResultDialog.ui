@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>380</width>
+            <width>409</width>
             <height>422</height>
         </rect>
     </property>
@@ -22,6 +22,9 @@
     </property>
     <property name="caption">
         <string>Docking Results</string>
+    </property>
+    <property name="modal">
+        <bool>false</bool>
     </property>
     <grid>
         <property name="name">
@@ -47,6 +50,9 @@
             <property name="name">
                 <cstring>result_table</cstring>
             </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
             <property name="sizePolicy">
                 <sizepolicy>
                     <hsizetype>7</hsizetype>
@@ -60,6 +66,15 @@
                     <width>250</width>
                     <height>400</height>
                 </size>
+            </property>
+            <property name="mouseTracking">
+                <bool>false</bool>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+            <property name="acceptDrops">
+                <bool>false</bool>
             </property>
             <property name="resizePolicy">
                 <enum>Manual</enum>
@@ -78,6 +93,9 @@
             </property>
             <property name="readOnly">
                 <bool>true</bool>
+            </property>
+            <property name="selectionMode">
+                <enum>SingleRow</enum>
             </property>
         </widget>
         <spacer row="0" column="1">
