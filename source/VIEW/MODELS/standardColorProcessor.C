@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.9 2003/10/20 15:41:52 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.10 2003/10/20 16:12:22 amoll Exp $
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -517,6 +517,7 @@ TemperatureFactorColorProcessor::TemperatureFactorColorProcessor()
 		max_color_(ColorRGBA(1.0,1.0,0)),
 		max_value_(50)
 {
+	default_color_ = ColorRGBA(1.0,1.0,1.0);
 }
 
 ColorRGBA TemperatureFactorColorProcessor::getColor(const Composite* composite)
@@ -527,7 +528,8 @@ ColorRGBA TemperatureFactorColorProcessor::getColor(const Composite* composite)
 	}
 
 	float value = (dynamic_cast<const PDBAtom*>(composite))->getTemperatureFactor();
-	if (value < 0) 					value = 0;
+
+	if (value == 0.0) return ColorRGBA(1.0,1.0,1.0);
 	if (value > max_value_) value = max_value_;
 
 	float red1   = min_color_.getRed();
