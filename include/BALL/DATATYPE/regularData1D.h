@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.18 2001/07/10 17:50:36 amoll Exp $
+// $Id: regularData1D.h,v 1.19 2001/07/10 17:58:10 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -42,7 +42,7 @@ namespace BALL
 		*/
 		//@{
 			
-		/**	Default constructor
+		/**	Default constructor.
 		*/
 		TRegularData1D()
 			throw();
@@ -52,7 +52,9 @@ namespace BALL
 		TRegularData1D(const TRegularData1D& data)
 			throw();
 
-		/** Detailled constructor
+		/** Detailled constructor.
+				If the values for upper and lower boundaries dont match,
+				they are swapped.
 		*/
 		TRegularData1D(const VectorType& data, double lower = 0, double upper = 0)
 			throw();
@@ -230,6 +232,12 @@ namespace BALL
 			upper_(upper),
 			data_(data)
 	{
+		if (lower_ > upper_)
+		{
+			double temp(lower_);
+			lower_ = upper_;
+			upper_ = temp;
+		}
 	}
 
 	template <typename T>
