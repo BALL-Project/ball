@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.22 2001/06/26 02:44:32 oliver Exp $
+// $Id: amberTorsion.C,v 1.23 2001/06/27 10:41:06 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -101,41 +101,40 @@ namespace BALL
 				{
 					// central atoms
 					a2 = *atom_it;
-					a3 = it1->getSecondAtom();
+					a3 = const_cast<Atom*>(it1->getSecondAtom());
 
 					for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 					{
-						if ((*it2).getSecondAtom() != (*it1).getSecondAtom()) 
+						if (it2->getSecondAtom() != it1->getSecondAtom()) 
 						{
 							// determine the first atom
-							if ((*it2).getFirstAtom() == *atom_it) 
+							if (it2->getFirstAtom() == *atom_it) 
 							{
-								a1 = (*it2).getSecondAtom();
+								a1 = const_cast<Atom*>(it2->getSecondAtom());
 							} 
 							else 
 							{
-								a1 = (*it2).getFirstAtom();
+								a1 = const_cast<Atom*>(it2->getFirstAtom());
 							}
  
-							for (it3 = (*it1).getSecondAtom()->beginBond(); +it3 ; ++it3) 
+							for (it3 = const_cast<Atom*>(it1->getSecondAtom())->beginBond(); +it3 ; ++it3) 
 							{
-								if ((*it3).getFirstAtom() != a2 ) 
+								if (it3->getFirstAtom() != a2 ) 
 								{
 									// determine the fourth atom a4
-									if ((*it3).getFirstAtom() == a3)
+									if (it3->getFirstAtom() == a3)
 									{
-										a4 = (*it3).getSecondAtom();
+										a4 = const_cast<Atom*>(it3->getSecondAtom());
 									} 
 									else 
 									{
-										a4 = (*it3).getFirstAtom();
+										a4 = const_cast<Atom*>(it3->getFirstAtom());
 									}
 
 									if (getForceField()->getUseSelection() == false ||
-										(getForceField()->getUseSelection() == true &&
-										(a1->isSelected() || a2->isSelected() || a3->isSelected() || a4->isSelected())))
+											(getForceField()->getUseSelection() == true &&
+											 (a1->isSelected() || a2->isSelected() || a3->isSelected() || a4->isSelected())))
 									{
-
 										// search torsion parameters for (a1,a2,a3,a4)
 										Atom::Type type_a1 = a1->getType();
 										Atom::Type type_a2 = a2->getType();
