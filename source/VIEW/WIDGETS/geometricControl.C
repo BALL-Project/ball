@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.33 2004/02/24 13:31:23 amoll Exp $
+// $Id: geometricControl.C,v 1.34 2004/03/13 12:11:33 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -121,14 +121,29 @@ void GeometricControl::updateRepresentation(Representation& rep)
 {
 	QListViewItem* item = representation_to_item_[&rep]; 
 	if (item == 0) return;
-	
-	item->setText(0, getRepresentationName_(rep).c_str());
-	item->setText(1, rep.getColoringName().c_str());
-	item->setText(2, rep.getProperties().c_str());
-	listview->triggerUpdate();
 
+	bool changed_content = false;
+	String new_text;
+
+	new_text = getRepresentationName_(rep);
+	changed_content = item->text(0).ascii() != new_text;
+	if (changed_content) item->setText(0, new_text.c_str());
+
+	new_text = rep.getColoringName();
+	changed_content |= item->text(1).ascii() != new_text;
+	if (changed_content) item->setText(1, new_text.c_str());
+
+	new_text = rep.getProperties();
+	changed_content |= item->text(2).ascii() != new_text;
+	if (changed_content) item->setText(2, new_text.c_str());
+
+	if (changed_content) listview->triggerUpdate();
+
+	// ????? testing, if I can remove these lines: 13.03.04
+	/*
 	RepresentationMessage* message = new RepresentationMessage(rep, RepresentationMessage::SELECTED);
 	notify_(message);
+	*/
 	return;
 }
 
@@ -313,8 +328,8 @@ void GeometricControl::selectedRepresentation(Representation& representation, bo
 		
 	representation.toggleProperty(Representation::PROPERTY__HIDDEN);
 
-// 	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-	SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
+ 	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
+// 	SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
 	notify_(scene_message);
 }
 
