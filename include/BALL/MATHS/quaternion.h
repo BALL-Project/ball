@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.8 2000/03/03 16:47:54 amoll Exp $
+// $Id: quaternion.h,v 1.9 2000/03/05 15:40:26 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -134,7 +134,7 @@ namespace BALL
 		/**	Get the normalized direction vector of axis of rotation.
 				@return TVector3 the Axis
 		*/
-		TVector3<T> getAxis(TVector3<T> &v);
+		TVector3<T> getAxis();
 
 		/**	Get the rotation matrix.
 				@return TMatrix4x4 the matrix
@@ -321,15 +321,15 @@ namespace BALL
 	}
 
 	template <class T>
-	TVector3<T> TQuaternion<T>::getAxis(TVector3<T>& v)
+	TVector3<T> TQuaternion<T>::getAxis()
 	{
 		TVector3<T> vector(i, j, k);
 		T length = vector.getLength();
 
-		BALL_PRECONDITION
-			(length != (T)0,  
-			 BALL_TYPED_QUATERNION_ERROR_HANDLER(ERROR__AXIS_NOT_WELL_DEFINED));
-		
+  	if (length == (T)0)
+    {
+    	throw Exception::DivisionByZero(__FILE__, __LINE__);
+    }		
 		vector.x /= length;
 		vector.y /= length;
 		vector.z /= length;
@@ -429,6 +429,18 @@ namespace BALL
 		return *this;
 	}
 
+
+	template <class T>
+	BALL_INLINE 
+	TQuaternion<T>& TQuaternion<T>::operator -= (const TQuaternion<T>& q)
+	{
+		return (*this += -q);
+	}
+
+
+	/** Addition operator for two Quaternions
+			@return TQuaternion - the new Quaternion
+	*/
 	template <class T>
 	BALL_INLINE 
 	TQuaternion<T> operator + (const TQuaternion<T>& a, const TQuaternion<T>& b)
@@ -440,13 +452,9 @@ namespace BALL
 		return q;
 	}
 
-	template <class T>
-	BALL_INLINE 
-	TQuaternion<T>& TQuaternion<T>::operator -= (const TQuaternion<T>& q)
-	{
-		return (*this += -q);
-	}
-
+	/** Substraction operator for two Quaternions
+			@return TQuaternion - the new Quaternion
+	*/
 	template <class T>
 	BALL_INLINE 
 	TQuaternion<T> operator - (const TQuaternion<T>& a, const TQuaternion<T>& b)
