@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.2 2000/10/22 15:24:19 hekl Exp $
+// $Id: molecularControl.C,v 1.3 2000/12/03 15:54:36 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <qpopupmenu.h>
@@ -60,10 +60,10 @@ void MolecularControl::checkMenu(MainControl& main_control)
 void MolecularControl::sentSelection()
 {
 	// will be inserted later
-	// Control::setSelection();
+	Control::sentSelection();
 
 	// refill and filter selection
-	filterSelection_(molecular_filter_, true);
+	filterSelection_(molecular_filter_);
 
 	// sent new selection through tree
 	MolecularSelectionMessage* message = new MolecularSelectionMessage;
@@ -71,6 +71,13 @@ void MolecularControl::sentSelection()
 	message->setDeletable(true);
 
 	notify_(message);
+}
+
+void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* item)
+{
+	Control::buildContextMenu(composite, item);
+
+	// to be added: Context menus for molecular objects
 }
 
 Information& MolecularControl::getInformationVisitor_()

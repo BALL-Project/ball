@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.2 2000/10/22 15:29:23 hekl Exp $
+// $Id: molecularControl.h,v 1.3 2000/12/03 15:55:58 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -72,6 +72,10 @@ namespace BALL
 				
 			// override for distinguishing selected composites
 			virtual void sentSelection();
+
+			// create the context menu for the given composite
+			virtual void buildContextMenu(Composite* composite, QListViewItem* item);
+		
 
 		signals:
 			
