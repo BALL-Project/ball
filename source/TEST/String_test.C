@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.2 1999/11/30 19:43:36 oliver Exp $
+// $Id: String_test.C,v 1.3 1999/12/01 15:50:06 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.2 1999/11/30 19:43:36 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.3 1999/12/01 15:50:06 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1743,12 +1743,12 @@ std::ofstream dump_stream(tmp_filename.c_str(), std::ios::out);
 s2 = new String("abcdefghijklm");
 s2->dump(dump_stream, 0);
 dump_stream.close();
-TEST_FILE(tmp_filename.c_str(), "data/string_test_dump0.txt", false)
+TEST_FILE(tmp_filename.c_str(), "data/string_test_dump0.txt", true)
 
 dump_stream.open(tmp_filename.c_str(), std::ios::out);
 s2->dump(dump_stream, 4);
 dump_stream.close();
-TEST_FILE(tmp_filename.c_str(), "data/string_test_dump4.txt", false)
+TEST_FILE(tmp_filename.c_str(), "data/string_test_dump4.txt", true)
 RESULT
 
 CHECK(String::getline(istream&, char*))
