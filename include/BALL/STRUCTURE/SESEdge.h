@@ -1,4 +1,4 @@
-// $Id: SESEdge.h,v 1.10 2001/09/19 17:44:38 strobel Exp $
+// $Id: SESEdge.h,v 1.11 2001/12/08 17:03:43 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -11,8 +11,23 @@
 #	include <BALL/MATHS/circle3.h>
 #endif
 
+#ifndef BALL_STRUCTURE_GRAPHEDGE_H
+#	include <BALL/STRUCTURE/graphEdge.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHFACE_H
+#	include <BALL/STRUCTURE/graphFace.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHVERTEX_H
+#	include <BALL/STRUCTURE/graphVertex.h>
+#endif
+
 namespace BALL
 {
+
+	template <typename T>
+	class TSolventExcludedSurface;
 
 	template <typename T>
 	class TSESFace;
@@ -23,15 +38,35 @@ namespace BALL
 	template <typename T>
 	class TRSEdge;
 
+	template <typename T>
+	class TTriangulatedSES;
+
 	/** Generic SESEdge Class.
-			\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/SESEdge.h}
-			\\
+			{\bf Definition:} \URL{BALL/STRUCTURE/SESEdge.h} 
 	*/
 	template <class T>
-	class TSESEdge
+	class TSESEdge	:	public GraphEdge< TSESVertex<T>,TSESFace<T> >
 	{
 		public:
+
+		/** @name Class friends
+				\begin{itemize}
+					\item class GraphEdge< TRSVertex<T>,TRSFace<T> >
+					\item class GraphFace< TRSVertex<T>,TRSEdge<T> >
+					\item class GraphVertex< TRSEdge<T>,TRSFace<T> >
+					\item class TSolventExcludedSurface<T>
+					\item class TSESFace<T>
+					\item class TSESVertex<T>
+					\item class TTriangulatedSES<T>
+				\end{itemize}
+		*/
+		friend class GraphEdge< TSESVertex<T>,TSESFace<T> >;
+		friend class GraphFace< TSESVertex<T>,TSESEdge<T> >;
+		friend class GraphVertex< TSESEdge<T>,TSESFace<T> >;
+		friend class TSolventExcludedSurface<T>;
+		friend class TSESFace<T>;
+		friend class TSESVertex<T>;
+		friend class TTriangulatedSES<T>;
 
 		BALL_CREATE(TSESEdge)
 
@@ -50,170 +85,139 @@ namespace BALL
 			TYPE_CONVEX = 1,
 			TYPE_SINGULAR = 2
 		};
-		//@}
 
+
+		//@}
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 
 		/**	Default constructor.
-				This method creates a new SESEdge object. All components are
-				initialized to {\tt (T)0} or {\tt NULL}, respectivly.
+				This method creates a new SESEdge object.
 		*/
 		TSESEdge()
-			: vertex1(NULL), vertex2(NULL), face1(NULL), face2(NULL), circle(), rsedge(NULL), type(0), index(-1)
-		{
-		}
+			throw();
 
 		/**	Copy constructor.
 				Create a new SESEdge object from another.
-				@param sesedge the SESEdge object to be copied
-				@param bool ignored - just for interface consistency
+				@param	sesedge	the SESEdge object to be copied
+				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the new
+												SESEdge object is linked to the neighbours of the old SESEdge object.
 		*/
-		TSESEdge(const TSESEdge<T>& sesedge, bool /* deep */ = true)
-			: vertex1(sesedge.vertex1), vertex2(sesedge.vertex2), face1(sesedge.face1), face2(sesedge.face2),
-				circle(sesedge.circle), rsedge(sesedge.rsedge), type(sesedge.type), index(sesedge.index)
-		{
-		}
+		TSESEdge(const TSESEdge<T>& sesedge, bool deep = false)
+			throw();
 
 		/**	Detailled constructor.
-				Create a new SESEdge object from two pointers to sesvertices, two pointers to sesedges,
-				a noraml vector, a center and a radius of a circle and a rsedge
-				@param	v1 assigned to the first vertex
-				@param	v2 assigned to the second vertex
-				@param	f1 assigned to the first face
-				@param	f2 assigned to the second face
-				@param	c assigned to the circle
-				@param	rse assigned to the rsedge
-				@param	i assigned to the index
+				Create a new SESEdge object from a lot of nice objects.
+				@param	vertex0	assigned to the first vertex
+				@param	vertex1	assigned to the second vertex
+				@param	face0		assigned to the first face
+				@param	face1		assigned to the second face
+				@param	circle	assigned to the circle
+				@param	rsedge	assigned to the RSEdge
+				@param	type		assigned to the type of the SESEdge
+				@param	index		assigned to the index
 		*/
-		TSESEdge(TSESVertex<T>* v1, TSESVertex<T>* v2, TSESFace<T>* f1, TSESFace<T>* f2,
-						 const TCircle3<T>& c, TRSEdge<T>* rse, const int& i)
-			: vertex1(v1), vertex2(v2), face1(f1), face2(f2), circle(c), rsedge(rse), type(0), index(i)
-		{
-		}
+		TSESEdge(TSESVertex<T>* vertex0,
+				TSESVertex<T>* vertex1,
+				TSESFace<T>* face0,
+				TSESFace<T>* face1,
+				const TCircle3<T>& circle,
+				TRSEdge<T>* rsedge,
+				Type type,
+				Index index)
+			throw();
 
 		/**	Destructor.
-				Destructs the SESEdge object. As there are no dynamic
-				data structures, nothing happens.
+				Destructs the SESEdge object.
 		*/
 		virtual ~TSESEdge()
-		{
-		}
-		//@}
+			throw();
 
+		//@}
 		/**	@name	Assignment
 		*/
 		//@{
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
 
-		TSESFace<T>* other(TSESFace<T>* face)
-		{
-			if (face1 == face)
-			{
-				return face2;
-			}
-			else
-			{
-				return face1;
-			}
-		}
+		/** Set the circle on wich the SESEdge lies.
+				@param	circle	the new circle
+		*/
+		void setCircle(const TCircle3<T>& center)
+			throw();
 
-		bool substituteVertex(TSESVertex<T>* old, TSESVertex<T>* new_)
-		{
-			if (vertex1 == old)
-			{
-				vertex1 = new_;
-				return true;
-			}
-			if (vertex2 == old)
-			{
-				vertex2 = new_;
-				return true;
-			}
-			return false;
-		}
+		/** Return the circle on wich the SESEdge lies.
+				@return	TCircle3<T>	the circle of The SESEdge
+		*/
+		TCircle3<T> getCircle() const
+			throw();
+
+		/** Set the corresponding RSEdge.
+				@param	rsedge	a pointer to the new RSEdge
+		*/
+		void setRSEdge(TRSEdge<T>* rsedge)
+			throw();
+
+		/** Return the corresponding RSEdge.
+				@return	TRSEdge<T>*	a pointer to th correwsponding RSEdge
+		*/
+		TRSEdge<T>* getRSEdge() const
+			throw();
+
+
+		/** Set the type of the SESEdge.
+				@param	type	the new type of the SESEdge
+		*/
+		void setType(Type typ)
+			throw();
+
+		/** Get the type of the SESEdge.
+				@return	Type	the type of the SESEdge
+		*/
+		Type getType() const
+			throw();
 
 		//@}
-
 		/**	@name	Predicates
 		*/
 		//@{
 
 		/**	similar.
-				@return bool, {\bf true} if all vertices are representing the same pointequal modulo order,
+				@return	bool	{\bf true} if all vertices are representing the same	
+											point modulo order, {\bf false} otherwise
+		*/
+		bool similar(const TSESEdge<T>& sesedge) const
+			throw();
+
+		/** isFree.
+				@return	bool	{\bf true} if the RSEdge of the SESEdge is free,	
 											{\bf false} otherwise
 		*/
-		bool similar(const TSESEdge& sesedge) const
-		{
-			if ((vertex1->p != sesedge.vertex1->p) && (vertex1->p != sesedge.vertex2->p))
-				{
-					return false;
-				}
-			if ((vertex2->p != sesedge.vertex1->p) && (vertex2->p != sesedge.vertex2->p))
-				{
-					return false;
-				}
-			return true;
-		}
-
 		bool isFree() const
-			throw()
-		{
-			if (rsedge == NULL)
-			{
-				return false;
-			}
-			else
-			{
-				return rsedge->isFree();
-			}
-		}
-		//@}
+			throw();
 
+		//@}
+		
+		protected:
+		
 		/**	@name	Attributes
 		*/
 		//@{
 
-		/**	vertex1.
-				A pointer to the first vertex that belongs to the edge.
+		/*_ The circle on which the SESEdge lies.
 		*/
-		TSESVertex<T>* vertex1;
-
-		/**	vertex2.
-				A pointr to the second vertex that belongs to the edge.
+		TCircle3<T> circle_;
+		/*_ A pointer to the corresponding RSEdge.
 		*/
-		TSESVertex<T>* vertex2;
-
-		/**	face1.
-				A pointer to the first face the edge belongs to.
+		TRSEdge<T>* rsedge_;
+		/*_ The type of the SESEdge.
 		*/
-		TSESFace<T>* face1;
-
-		/**	face2.
-				A pointer to the second face the edge belongs to.
-		*/
-		TSESFace<T>* face2;
-
-		/** circle
-				The circle on which the edge lies.
-		*/
-		TCircle3<T> circle;
-
-		/** rsdge.
-				A pointer to the corresponding RSEdge.
-		*/
-		TRSEdge<T>* rsedge;
-		
-		int type;
-		
-		/** index.
-		*/
-		int index;
+		//int type;
+		Type type_;
 
 		//@}
 	};
@@ -222,37 +226,37 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
-			reads in a TVector3 and a {\bf T} value : p, radius
+	/*	Input- Operator
 	*/
-/*
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TRSEdge<T>& rsedge)
+	std::istream& operator >> (std::istream& s, TSESEdge<T>& sesedge)
 	{
-		char c;
-		for (int i=0; i<7 ; i++)
-		{
-			s >> c;
-		}
-		s >> rsedge.p >> rsedge.radius >> c;
-		return s;
+		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
-*/
 
 	/**	Output- Operator
 	*/
-		template <typename T>
-		std::ostream& operator << (std::ostream& s, const TSESEdge<T>& sesedge)
-		{
-			return (s << "SESEDGE" << sesedge.index << "(["
-								<< ((sesedge.vertex1 == NULL) ? -2 : sesedge.vertex1->index) << ' '
-								<< ((sesedge.vertex2 == NULL) ? -2 : sesedge.vertex2->index) << "] ["
-								<< ((sesedge.face1 == NULL) ? -2 : sesedge.face1->index) << ' '
-								<< ((sesedge.face2 == NULL) ? -2 : sesedge.face2->index) << "] "
-								<< sesedge.circle << ' ' << ((sesedge.rsedge == NULL) ? -2 : sesedge.rsedge->getIndex())
-								<< ((sesedge.type == 0) ? " convex)" : ((sesedge.type == 1) ? " concave)"
-																																						: " singular)")));
-		}
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TSESEdge<T>& sesedge)
+	{
+		return (s << "SESEDGE" << sesedge.getIndex() << "(["
+							<< ((sesedge.getVertex(0) == NULL) ?
+											-2 : sesedge.getVertex(0)->getIndex()) << ' '
+							<< ((sesedge.getVertex(1) == NULL) ?
+											-2 : sesedge.getVertex(1)->getIndex()) << "] ["
+							<< ((sesedge.getFace(0) == NULL) ?
+											-2 : sesedge.getFace(0)->getIndex()) << ' '
+							<< ((sesedge.getFace(1) == NULL) ?
+											-2 : sesedge.getFace(1)->getIndex()) << "] "
+							<< sesedge.getCircle() << ' '
+							<< ((sesedge.getRSEdge() == NULL) ?
+											-2 : sesedge.getRSEdge()->getIndex())
+							<< ((sesedge.getType() == TSESEdge<T>::TYPE_CONCAVE) ?
+											" cocave)" :
+											((sesedge.getType() == TSESEdge<T>::TYPE_CONVEX) ?
+														" convex)" : " singular)"))
+						);
+	}
 	//@}
 
 
@@ -261,6 +265,141 @@ namespace BALL
 			be used. It is predefined as {\tt SESEdge} for convenience.
 	*/
 	typedef TSESEdge<float> SESEdge;
+
+
+	template <typename T>
+	TSESEdge<T>::TSESEdge()
+		throw()
+		: GraphEdge< TSESVertex<T>,TSESFace<T> >(),
+			circle_(),
+			rsedge_(NULL),
+			type_(TSESEdge<T>::TYPE_CONCAVE)
+	{
+	}
+
+
+	template <typename T>
+	TSESEdge<T>::TSESEdge(const TSESEdge<T>& sesedge, bool deep)
+		throw()
+		: GraphEdge< TSESVertex<T>,TSESFace<T> >(sesedge,deep),
+			circle_(sesedge.circle_),
+			rsedge_(NULL),
+			type_(sesedge.type_)
+	{
+		if (deep)
+		{
+			rsedge_ = sesedge.rsedge_;
+		}
+	}
+
+
+	template <typename T>
+	TSESEdge<T>::TSESEdge(TSESVertex<T>* vertex0,
+			TSESVertex<T>* vertex1,
+			TSESFace<T>* face0,
+			TSESFace<T>* face1,
+			const TCircle3<T>& circle,
+			TRSEdge<T>* rsedge,
+			Type type,
+			Index index)
+		throw()
+		: GraphEdge< TSESVertex<T>,TSESFace<T> >(vertex0,vertex1,face0,face1,index),
+			circle_(circle),
+			rsedge_(rsedge),
+			type_(type)
+	{
+	}
+
+
+	template <typename T>
+	TSESEdge<T>::~TSESEdge()
+		throw()
+	{
+	}
+
+
+	template <typename T>
+	void TSESEdge<T>::setCircle(const TCircle3<T>& center)
+		throw()
+	{
+		circle_ = circle;
+	}
+
+
+	template <typename T>
+	TCircle3<T> TSESEdge<T>::getCircle() const
+		throw()
+	{
+		return circle_;
+	}
+
+
+	template <typename T>
+	void TSESEdge<T>::setRSEdge(TRSEdge<T>* rsedge)
+		throw()
+	{
+		rsedge_ = rsedge;
+	}
+
+
+	template <typename T>
+	TRSEdge<T>* TSESEdge<T>::getRSEdge() const
+		throw()
+	{
+		return rsedge_;
+	}
+
+
+	template <typename T>
+	void TSESEdge<T>::setType(TSESEdge<T>::Type typ)
+		throw()
+	{
+		type_ = typ;
+	}
+
+
+	template <typename T>
+	TSESEdge<T>::Type TSESEdge<T>::getType() const
+		throw()
+	{
+		return type_;
+	}
+
+
+	template <typename T>
+	bool TSESEdge<T>::similar(const TSESEdge<T>& sesedge) const
+		throw()
+	{
+		if ((vertex0_->p != sesedge.vertex0_->p) &&
+				(vertex0_->p != sesedge.vertex1_->p)		)
+		{
+			return false;
+		}
+		if ((vertex1_->p != sesedge.vertex0_->p) &&
+				(vertex1_->p != sesedge.vertex1_->p)		)
+		{
+			return false;
+		}
+		return true;
+	}
+
+
+	template <typename T>
+	bool TSESEdge<T>::isFree() const
+		throw()
+	{
+		if (rsedge_ == NULL)
+		{
+			return false;
+		}
+		else
+		{
+			return rsedge_->isFree();
+		}
+	}
+
+
+
 
 } // namespace BALL
 
