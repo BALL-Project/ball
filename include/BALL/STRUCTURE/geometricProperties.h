@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.5 2000/02/16 19:15:15 oliver Exp $
+// $Id: geometricProperties.h,v 1.6 2000/07/04 22:55:53 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -7,8 +7,12 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_CONCEPT_OBJECT_H
-#	include <BALL/CONCEPT/object.h>
+#ifndef BALL_MATHS_VECTOR3_H
+#	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_MATHS_BOX3_H
+#	include <BALL/MATHS/box3.h>
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -17,10 +21,6 @@
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #	include <BALL/KERNEL/fragment.h>
-#endif
-
-#ifndef BALL_MATHS_VECTOR3_H
-#	include <BALL/MATHS/vector3.h>
 #endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
@@ -78,11 +78,29 @@ namespace BALL
 	{
 		public:
 
+		/** @name Processor related methods.
+		*/
+		//@{
+			
+		/**
+		*/
 		virtual bool start();
 
+		/**
+		*/
 		virtual bool finish();
 
-		virtual Processor::Result operator()(Atom& atom);
+		/**
+		*/
+		virtual Processor::Result operator () (Atom& /atom/);
+		//@}
+
+		/**	@name Accessors
+		*/
+		//@{
+		/** Return the bounding box
+		*/
+		Box3& getBox();
 
 		/**	Returns the lower corner of the bounding box
 		*/
@@ -91,12 +109,12 @@ namespace BALL
 		/**	Returns the upper corner of the bounding box
 		*/
 		Vector3& getUpper();
+		//@}
 			
 		private:
 
 		Vector3	lower_;
 		Vector3	upper_;
-
 	};
 
 	/**	Calculates the geometric center of a given Composite object.
@@ -110,26 +128,40 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/STRUCTURE/geometricProperties.h}
 			\\
 	*/
-	class GeometricCenterProcessor:public UnaryProcessor<Atom> {
-
+	class GeometricCenterProcessor
+		:	public UnaryProcessor<Atom> 
+	{
 		public:
 
-		
+		/**	@name Processor related methods
+		*/
+		//@{
+
+		/**
+		*/
 		virtual bool start();
 
+		/**
+		*/
 		virtual bool finish();
 
-		virtual Processor::Result operator()(Atom& atom);
+		/**
+		*/
+		virtual Processor::Result operator()(Atom& /atom/);
+		//@}
 
+		/**@name	Accessors
+		*/
+		//@{
 		/**	Returns the center of the object
 		*/
 		Vector3& getCenter();
+		//@}
 
 		private:
 
 		Vector3	center_;
-		long		n_;
-
+		Size		n_;
 	};
 
 
@@ -151,10 +183,12 @@ namespace BALL
 	*/
 	class FragmentDistanceCollector
 		: public UnaryProcessor<Composite> 
-	{
-		
+	{		
 		public:
 
+		/** @name Constructors and Destructors 
+		*/
+		//@{
 
 		/**	Default constructor
 		*/
@@ -172,15 +206,28 @@ namespace BALL
 				@param	distance the maximum distance between any two atoms
 		*/
 		FragmentDistanceCollector(const Composite& composite, float distance);
+		//@}
 
+		/**	@name	Processor related methods
+		*/
+		//@{
 
+		/**
+		*/
 		virtual bool start();
 
+		/**
+		*/
 		virtual bool finish();
 
-		virtual Processor::Result operator()(Composite& composite);
+		/**
+		*/
+		virtual Processor::Result operator()(Composite& /composite/);
+		//@}
 		
-
+		/**	@name Accessors
+		*/
+		//@{
 		/**	Returns the number of molecular fragments found
 				@return	the number of fragments in the array
 		*/
@@ -205,6 +252,7 @@ namespace BALL
 				@param	distance the new maximum distance 
 		*/
 		void setDistance(float distance);
+		//@}
 		
 
 		/**	The array containing all molecular fragments collected
@@ -219,8 +267,6 @@ namespace BALL
 		const Composite*	reference_composite_;
 		
 		float	squared_distance_;
-
-		private:	
 	};
 
 

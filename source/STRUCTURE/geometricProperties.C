@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.6 2000/01/15 18:56:51 oliver Exp $
+// $Id: geometricProperties.C,v 1.7 2000/07/04 22:55:35 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -57,6 +57,10 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
+	Box3 BoundingBoxProcessor::getBox()
+	{
+		return Box3(lower_, upper_);
+	}
 
 	Vector3& BoundingBoxProcessor::getLower()
 	{
