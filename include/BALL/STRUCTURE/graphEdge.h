@@ -188,6 +188,11 @@ namespace BALL
 		Face* deleteFace(Face* face)
 			throw();
 
+		/*	Swap the two vertices of the GraphEdge
+		*/
+		void revert()
+			throw();
+
 		//@}
 
 
@@ -526,6 +531,16 @@ namespace BALL
 			}
 		}
 		return face_[0];
+	}
+
+
+	template <typename Vertex, typename Face>
+	void GraphEdge<Vertex,Face>::revert()
+		throw()
+	{
+		Vertex* tmp = vertex_[0];
+		vertex_[0] = vertex_[1];
+		vertex_[1] = tmp;
 	}
 
 
