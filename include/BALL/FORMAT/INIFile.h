@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.4 2000/01/13 22:19:30 oliver Exp $
+// $Id: INIFile.h,v 1.5 2000/01/14 20:40:50 oliver Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -250,7 +250,7 @@ namespace BALL
 
 		std::vector<String>		lines_;
 
-		std::vector<Size>			line_section_index_;
+		std::vector<Index>		line_section_index_;
 
 		std::vector<Size>			section_start_;
 
