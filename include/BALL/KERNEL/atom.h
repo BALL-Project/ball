@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.12 2000/03/03 08:51:59 oliver Exp $
+// $Id: atom.h,v 1.13 2000/03/17 11:25:53 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,8 +83,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.12 $
-			@date    $Date: 2000/03/03 08:51:59 $
+			@version $Revision: 1.13 $
+			@date    $Date: 2000/03/17 11:25:53 $
 	*/
 	class Atom
 		: public Composite,
@@ -1177,6 +1177,10 @@ namespace BALL
 			unsigned char number_of_bonds_;
 			Bond* bond_[MAX_NUMBER_OF_BONDS];
 	};
+
+# ifndef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/KERNEL/atom.iC>
+# endif
 
 } // namespace BALL
 

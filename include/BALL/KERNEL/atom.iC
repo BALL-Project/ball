@@ -1,0 +1,133 @@
+// $Id: atom.iC,v 1.1 2000/03/17 11:25:52 oliver Exp $
+
+	BALL_INLINE
+  void Atom::setElement(Element &element)
+  {
+    element_ = &element;
+	}
+
+	BALL_INLINE
+  Element& Atom::getElement()
+  {
+    return *element_;
+	}
+
+	BALL_INLINE
+  const Element& Atom::getElement() const
+  {
+    return *element_;
+	}
+
+	BALL_INLINE
+  void Atom::setCharge(float charge)
+  {
+    charge_ = charge;
+	}
+
+	BALL_INLINE
+  float Atom::getCharge() const
+  {
+    return charge_;
+	}
+
+	BALL_INLINE
+  String & Atom::getName()
+  {
+    return name_;
+	}
+
+	BALL_INLINE
+  const String& Atom::getName() const
+  {
+    return name_;
+	}
+
+	BALL_INLINE
+  void Atom::setPosition(const Vector3 &position)
+  {
+    position_.set(position);
+	}
+
+	BALL_INLINE
+  Vector3 &Atom::getPosition()
+  {
+    return position_;
+	}
+
+	BALL_INLINE
+  const Vector3 &Atom::getPosition() const
+  {
+    return position_;
+	}
+
+	BALL_INLINE
+  void Atom::setRadius(float radius)
+  {
+    radius_ = radius;
+	}
+
+	BALL_INLINE
+  float Atom::getRadius() const
+  {
+    return radius_;
+	}
+
+	BALL_INLINE
+  void Atom::setType(Type atom_type)
+  {
+    type_ = atom_type;
+	}
+
+	BALL_INLINE
+  Atom::Type Atom::getType() const
+  {
+    return type_;
+	}
+
+	BALL_INLINE
+  void Atom::setTypeName(const String& type_name)
+  {
+    type_name_ = type_name;
+	}
+
+	BALL_INLINE
+  String Atom::getTypeName() const
+  {
+    return type_name_;
+	}
+
+	BALL_INLINE
+  void Atom::setVelocity(const Vector3 &velocity)
+  {
+    velocity_.set(velocity);
+	}
+
+	BALL_INLINE
+  Vector3& Atom::getVelocity()
+  {
+    return velocity_;
+	}
+
+	BALL_INLINE
+  const Vector3& Atom::getVelocity() const
+  {
+    return velocity_;
+	}
+
+	BALL_INLINE
+  void Atom::setForce(const Vector3& force)
+  {
+    force_.set(force);
+	}
+
+	BALL_INLINE
+  Vector3& Atom::getForce()
+  {
+    return force_;
+	}
+
+	BALL_INLINE
+  const Vector3& Atom::getForce() const
+  {
+    return force_;
+	}

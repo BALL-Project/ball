@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.12 2000/02/15 18:16:08 oliver Exp $
+// $Id: atom.C,v 1.13 2000/03/17 11:24:46 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -219,31 +219,6 @@ namespace BALL
 		atom.number_of_bonds_ = temp_c;
 	}
 		
-	void Atom::setElement(Element &element)
-	{
-		element_ = &element;
-	}
-
-	Element& Atom::getElement()
-	{
-		return *element_;
-	}
-
-	const Element& Atom::getElement() const
-	{
-		return *element_;
-	}
-
-	void Atom::setCharge(float charge)
-	{
-		charge_ = charge;
-	}
-
-	float Atom::getCharge() const
-	{
-		return charge_;
-	}
-
 	Molecule* Atom::getMolecule()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Molecule>());
@@ -267,16 +242,6 @@ namespace BALL
 	void Atom::setName(const String &name)
 	{
 		name_ = name;
-	}
-
-	String & Atom::getName()
-	{
-		return name_;
-	}
-
-	const String& Atom::getName() const
-	{
-		return name_;
 	}
 
 	String Atom::getFullName(Atom::FullNameType type) const
@@ -316,82 +281,6 @@ namespace BALL
 		}
 
 		return name;
-	}
-
-
-	void Atom::setPosition(const Vector3 &position)
-	{
-		position_.set(position);
-	}
-
-	Vector3 &Atom::getPosition()
-	{
-		return position_;
-	}
-
-	const Vector3 &Atom::getPosition() const
-	{
-		return position_;
-	}
-
-	void Atom::setRadius(float radius)
-	{
-		radius_ = radius;
-	}
-
-	float Atom::getRadius() const
-	{
-		return radius_;
-	}
-
-	void Atom::setType(Type atom_type)
-	{
-		type_ = atom_type;
-	}
-		
-	Atom::Type Atom::getType() const
-	{
-		return type_;
-	}
-		
-	void Atom::setTypeName(const String& type_name)
-	{
-		type_name_ = type_name;
-	}
-		
-	String Atom::getTypeName() const
-	{
-		return type_name_;
-	}
-		
-	void Atom::setVelocity(const Vector3 &velocity)
-	{
-		velocity_.set(velocity);
-	}
-
-	Vector3& Atom::getVelocity()
-	{
-		return velocity_;
-	}
-
-	const Vector3& Atom::getVelocity() const
-	{
-		return velocity_;
-	}
-
-	void Atom::setForce(const Vector3& force)
-	{
-		force_.set(force);
-	}
-
-	Vector3& Atom::getForce()
-	{
-		return force_;
-	}
-
-	const Vector3& Atom::getForce() const
-	{
-		return force_;
 	}
 
 	Size Atom::countBonds() const
@@ -708,5 +597,9 @@ namespace BALL
 			}
 		}
 	}
+
+# ifdef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/KERNEL/atom.iC>
+# endif
 
 } // namespace BALL
