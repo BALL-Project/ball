@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.2 1999/12/04 14:12:33 oliver Exp $
+// $Id: vector3.h,v 1.3 1999/12/28 18:49:18 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -33,12 +33,30 @@
 
 namespace BALL 
 {
+	template <class T>
+	class TVector3;
+
+	///
+	template <class T>
+	BALL_INLINE TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b);
+
+	///
+	template <class T>
+	BALL_INLINE TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b);
+
+	///
+	template <class T>
+	std::istream& operator >> (std::istream& s, TVector3<T>& vector);
+
+	///
+	template <class T>
+	std::ostream& operator << (std::ostream& s, const TVector3<T>& vector);
 
 	/** Generic Three-Dimensional Vector.
       {\bf Definition:} \URL{BALL/MATHS/.h}
       \\
 	*/
-	template <typename T>
+	template <class T>
 	class TVector3
 		: public PersistentObject
 	{
@@ -306,23 +324,12 @@ namespace BALL
 		//@{
 
 		/**	Positive sign.
-				Return the vector.
 		*/
 		TVector3 operator + () const;
 
 		/**	Negative sign.
-				Return the vector multiplied by -1.
 		*/
 		TVector3 operator - () const;
-		
-		/**	Add two vectors.
-				Return the sum of the two vectors {\tt a} and {\tt b}.
-				@param a the first vector
-				@param b the second vector
-				@return TVector3, {\tt TVector3(a.x + b.x, a.y + b.y, a.z + b.z)}
-		*/
-		template <typename C>
-		friend TVector3<C> operator + (const TVector3<C>& a, const TVector3<C>& b);
 
 		/**	Add a vector to this vector.
 				Add the components of {\tt vector} to this vector.
@@ -331,22 +338,12 @@ namespace BALL
 		*/
 		TVector3& operator += (const TVector3& vector);
 
-		///
-		/**	Subtract two vectors.
-				Return the difference of the two vectors {\tt a} and {\tt b}.
-				@param a the first vector
-				@param b the second vector
-				@return TVector3, {\tt TVector3(a.x - b.x, a.y - b.y, a.z - b.z)}
-		*/
-		template <typename C>
-		friend TVector3<C> operator - (const TVector3<C>& a, const TVector3<C>& b);
-
 		/**	Subtract a vector from this vector.
 				Subtract {\tt vector} from this vector componentwise.
 				@param vector the vector to subtract
 				@return TVector3, {\tt *this}
 		*/
-		TVector3 &operator -= (const TVector3& vector);
+		TVector3& operator -= (const TVector3& vector);
 
 		/**	Scalar product.
 				Return {\tt TVector3(x * scalar, y * scalar, z * scalar)}.
@@ -457,29 +454,13 @@ namespace BALL
 		*/
 		//@{
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
 
 		///
 		bool isValid() const;
 
 		//@}
 
-
-		/**	@name	Storers
-		*/
-		//@{
-
-		/**	Stream input.
-		*/
-		template <typename C>
-		friend istream& operator >> (istream& s, TVector3<C>& vector);
-
-		/**	Stream output.
-		*/
-		template <typename C>
-		friend ostream& operator << (ostream& s, const TVector3<C>& vector);
-	
-		//@}
 
 		/**	@name	Vector components
 				For easier access the three components of the vector
@@ -574,7 +555,7 @@ namespace BALL
 	{
 	}
 
-	template <typename T>
+	template <class T>
 	TVector3<T>::TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
 			:	x(r * cos(phi) * sin(theta)),
 				y(r * sin(phi) * sin(theta)),
@@ -582,13 +563,13 @@ namespace BALL
 	{
 	}
 
-	template <typename T>
+	template <class T>
 	TVector3<T>::~TVector3()
 	{
 	}
 
-	template <typename T>
-  void TVector3<T>::persistentWrite(PersistenceManager& pm, const char* name = 0) const
+	template <class T>
+  void TVector3<T>::persistentWrite(PersistenceManager& pm, const char* name) const
 	{
 		pm.writeObjectHeader(this, name);
 			pm.writePrimitive(x, "x");
@@ -855,25 +836,32 @@ namespace BALL
 		}
 	}
 
-	template <typename T>
-	BALL_INLINE 
-	TVector3<T> TVector3<T>::operator + () const
-	{
-		return *this;
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	TVector3<T> TVector3<T>::operator - () const
-	{
-		return TVector3<T>(-x, -y, -z);
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	TVector3<T> operator + (const TVector3<T> &a, const TVector3<T> &b)
+	template <class T>
+	inline 
+	TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b)
 	{
 		return TVector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
+	}
+
+	template <class T>
+	inline
+	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b)
+	{
+		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
+	}
+
+	template <typename T>
+	BALL_INLINE
+	TVector3<T> TVector3<T>::operator + () const	
+	{
+		return TVector3<T>(x, y, z);
+	}
+
+	template <typename T>
+	BALL_INLINE
+	TVector3<T> TVector3<T>::operator - () const	
+	{
+		return TVector3<T>(-x, -y, -z);
 	}
 
 	template <typename T>
@@ -885,13 +873,6 @@ namespace BALL
 		z += vector.z;
 
 		return *this;
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T> &b)
-	{
-		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
 	}
 
 	template <typename T>
@@ -1095,7 +1076,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TVector3<T>::dump(ostream& s, unsigned long depth) const
+	void TVector3<T>::dump(std::ostream& s, unsigned long depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -1107,16 +1088,11 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	///
-	typedef TVector3<Real> Vector3;
+	template <class T>
+	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector);
 
-
-	///
-	template <typename C>
-	TVector3<C> operator * (const C& scalar, const TVector3<C>& vector);
-
-	template <typename T>
-	istream& operator >> (istream& s, ::BALL::TVector3<T>& v)
+	template <class T>
+	std::istream& operator >> (std::istream& s, TVector3<T>& v)
 	{
 		char c;
 		s >> c;
@@ -1129,16 +1105,17 @@ namespace BALL
 		return s;
 	}
 
-	template <typename T>
-	ostream& operator << (ostream& s, const ::BALL::TVector3<T>& v)
+	template <class T>
+	std::ostream& operator << (std::ostream& s, const TVector3<T>& v)
 	{
 		s << '(' << v.x << ' ' << v.y << ' ' << v.z << ')';
 
 		return s;
 	}
 
+	///
+	typedef TVector3<Real> Vector3;
+
 } // namespace BALL
-
-
 
 #endif // BALL_MATHS_VECTOR3_H

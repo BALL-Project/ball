@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.3 1999/12/04 18:34:20 oliver Exp $
+// $Id: quaternion.h,v 1.4 1999/12/28 18:49:19 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -103,15 +103,8 @@ namespace BALL
 		TQuaternion& operator += (const TQuaternion& q);
 
 		///
-		template <typename C>
-		friend TQuaternion<C> operator + (const TQuaternion<C>& a, const TQuaternion<C>& b);
-
-		///
 		TQuaternion& operator -= (const TQuaternion& q);
 
-		///
-		template <typename C>
-		friend TQuaternion<C> operator - (const TQuaternion<C>& a, const TQuaternion<C>& b);
 		//@}
 
 
@@ -126,23 +119,11 @@ namespace BALL
 		//@}
 
 
-		/**	@name	Storers
-		*/
-		//@{
-		///
-		template <typename C>
-		friend ostream& operator << (ostream& s, const TQuaternion<C>& q);
-
-		///
-		template <typename C>
-		friend istream &operator >> (istream &s, TQuaternion<C>& q);
-		//@}
-
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 
@@ -446,7 +427,7 @@ namespace BALL
 	}
 
 	template <class T>
-	istream& operator >>(istream &s, TQuaternion<T>& q)
+	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
 	{
 		s >> q.i;
 		s >> q.j;
@@ -457,7 +438,7 @@ namespace BALL
 	}
 
 	template <class T>
-	ostream& operator << (ostream& s, const TQuaternion<T>& q)
+	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
 	{
 		s << '(' << q.i << ' ' << q.j << ' '
 				 << q.k << ' ' << q.angle << ')';
@@ -466,7 +447,7 @@ namespace BALL
 	}   
 
 	template <class T>
-	void TQuaternion<T>::dump(ostream& s, unsigned long depth) const
+	void TQuaternion<T>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

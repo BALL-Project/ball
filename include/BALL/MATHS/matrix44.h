@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.3 1999/12/04 18:34:20 oliver Exp $
+// $Id: matrix44.h,v 1.4 1999/12/28 18:49:18 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -22,8 +22,17 @@
 #	include <BALL/MATHS/vector4.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
+	template <typename T>
+	class TMatrix4x4;
 
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m);
+
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m);
+	
 	/**	Generic 4x4 Matrix Class.
       {\bf Definition:} \URL{BALL/MATHS/.h}
       \\
@@ -163,23 +172,23 @@ namespace BALL {
 		///
 		const T& operator ()(Index row, Index col) const;
 
-		///
+		/// 
 		TMatrix4x4 operator + () const;
 
-		///
+		/// 
 		TMatrix4x4 operator - () const;
 
 		///
 		TMatrix4x4 operator + (const TMatrix4x4& m) const;
 
 		///
-		TMatrix4x4 &operator += (const TMatrix4x4& m);
+		TMatrix4x4& operator += (const TMatrix4x4& m);
 
 		///
 		TMatrix4x4 operator - (const TMatrix4x4& m) const;
 
 		///
-		TMatrix4x4 &operator -= (const TMatrix4x4& m);
+		TMatrix4x4& operator -= (const TMatrix4x4& m);
 
 		///
 		TMatrix4x4 operator * (const T& scalar) const;
@@ -197,13 +206,10 @@ namespace BALL {
 		TMatrix4x4 operator * (const TMatrix4x4& m) const;
 
 		///
-		TMatrix4x4 &operator *= (const TMatrix4x4& m);
+		TMatrix4x4& operator *= (const TMatrix4x4& m);
 
 		///
 		TVector4<T> operator * (const TVector4<T> &) const;
-
-		///
-		static TMatrix4x4 &not (const TMatrix4x4& m, TMatrix4x4& result);
 
 		///
 		bool invert(TMatrix4x4& inverse) const;
@@ -362,21 +368,9 @@ namespace BALL {
 		bool isValid() const;
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
-		/**	@name	Storers
-		*/
-		//@{
-
-		///
-		template <typename C>
-		friend istream& operator >> (istream& s, TMatrix4x4<C>& m);
-
-		///
-		template <typename C>
-		friend ostream& operator << (ostream& s, const TMatrix4x4<C>& m);
-		//@}
 
 		/**	@name	Attributes
 		*/
@@ -2003,7 +1997,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	istream& operator >> (istream& s, TMatrix4x4<T>& m)
+	std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m)
 	{
 		s >> m.m11 >> m.m12 >> m.m13 >> m.m14
 		  >> m.m21 >> m.m22 >> m.m23 >> m.m24
@@ -2014,47 +2008,45 @@ namespace BALL {
 	}
 
 	template <class T>
-	ostream& operator << (ostream& s, const TMatrix4x4<T>& m)
+	std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m)
 	{
-		s << '/'  <<  setw(14) << m.m11 << ' ' << setw(14) << m.m12 << ' ' << setw(14) << m.m13 << ' ' << setw(14) << m.m14 << " \\" << endl
-			<< '|'  <<  setw(14) << m.m21 << ' ' << setw(14) << m.m22 << ' ' << setw(14) << m.m23 << ' ' << setw(14) << m.m24 << " |"  << endl
-			<< '|'  <<  setw(14) << m.m31 << ' ' << setw(14) << m.m32 << ' ' << setw(14) << m.m33 << ' ' << setw(14) << m.m34 << " |"  << endl
-			<< '\\' <<  setw(14) << m.m41 << ' ' << setw(14) << m.m42 << ' ' << setw(14) << m.m43 << ' ' << setw(14) << m.m44 << " /" << endl;
+		s << '/'  <<  std::setw(14) << m.m11 << ' ' << std::setw(14) << m.m12 << ' ' << std::setw(14) << m.m13 << ' ' << std::setw(14) << m.m14 << " \\" << std::endl
+			<< '|'  <<  std::setw(14) << m.m21 << ' ' << std::setw(14) << m.m22 << ' ' << std::setw(14) << m.m23 << ' ' << std::setw(14) << m.m24 << " |"  << std::endl
+			<< '|'  <<  std::setw(14) << m.m31 << ' ' << std::setw(14) << m.m32 << ' ' << std::setw(14) << m.m33 << ' ' << std::setw(14) << m.m34 << " |"  << std::endl
+			<< '\\' <<  std::setw(14) << m.m41 << ' ' << std::setw(14) << m.m42 << ' ' << std::setw(14) << m.m43 << ' ' << std::setw(14) << m.m44 << " /" << std::endl;
 
 		return s;
 	}
 
 	template <class T>
-	void TMatrix4x4<T>::dump(ostream& s, unsigned long depth) const
+	void TMatrix4x4<T>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
 		BALL_DUMP_HEADER(s, this, this);
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << m11 << " " << m12 << " " << m13 << " " << m14 << endl;
+		s << m11 << " " << m12 << " " << m13 << " " << m14 << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << m21 << " " << m22 << " " << m23 << " " << m24 << endl;
+		s << m21 << " " << m22 << " " << m23 << " " << m24 << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << m31 << " " << m32 << " " << m33 << " " << m34 << endl;
+		s << m31 << " " << m32 << " " << m33 << " " << m34 << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << m41 << " " << m42 << " " << m43 << " " << m44 << endl;
+		s << m41 << " " << m42 << " " << m43 << " " << m44 << std::endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	///
-	template <typename C>
-	TMatrix4x4<C> operator * (const C& scalar, const TMatrix4x4<C>& m);
+	template <class T>
+	TMatrix4x4<T> operator * (const T& scalar, const TMatrix4x4<T>& m);
+
+	template <class T>
+	TVector3<T> operator * (const TMatrix4x4<T>& matrix, const TVector3<T>& vector);
 
 	///
-	template <typename C>
-	TVector3<C> operator * (const TMatrix4x4<C>& matrix, const TVector3<C>& vector);
-
-
 	typedef TMatrix4x4<Real> Matrix4x4;
 
 } // namespace BALL

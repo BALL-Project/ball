@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.3 1999/12/04 18:34:21 oliver Exp $
+// $Id: vector4.h,v 1.4 1999/12/28 18:49:19 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -29,6 +29,32 @@
 
 namespace BALL 
 {
+
+	template <class T>
+	class TVector4;
+	
+	///
+	template <class T>
+	BALL_INLINE
+	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b);
+
+	///
+	template <class T>
+	BALL_INLINE
+	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b);
+	
+	///
+	template <class T>
+	BALL_INLINE
+	TVector4<T> operator * (const TVector4<T>& a, const TVector4<T>& b);
+	
+	///
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TVector4<T>& vector);
+
+	///
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TVector4<T>& vector);
 
 	/**	Generic Four-Dimensional Vector.
 			{\bf Definition:} \URL{BALL/MATHS/vector4.h}
@@ -95,7 +121,7 @@ namespace BALL
 		TVector4& operator = (const TVector_<T>& vector);
 
 		///	
-		TVector4 &operator = (const TVector4& vector);
+		TVector4& operator = (const TVector4& vector);
 
 		///	
 		void get(T* ptr) const;
@@ -144,28 +170,17 @@ namespace BALL
 		///
 		const T& operator [] (Index index) const;
 
-		// --- unary operators ---
-
+		// unary operators
 		///
 		TVector4 operator + () const;
-		
+
 		///
 		TVector4 operator - () const;
-
-		// --- vector addition ---
-
-		///
-		template <typename C>
-		friend TVector4<C> operator + (const TVector4<C>& a, const TVector4<C>& b);
 
 		///
 		TVector4& operator += (const TVector4& vector);
 
 		// --- vector subtraction ---
-
-		///
-		template <typename C>
-		friend TVector4<C> operator - (const TVector4<C>& a, const TVector4<C>& b);
 
 		///
 		TVector4& operator -= (const TVector4& vector);
@@ -176,10 +191,6 @@ namespace BALL
 		TVector4 operator * (const T& scalar);
 
 		///
-		template <typename C>
-		friend TVector4<C> operator * (const T& scalar,const TVector4<C>& vector);
-
-		///
 		TVector4& operator *= (const T& scalar);
 
 		// --- scalar division --- 
@@ -188,7 +199,7 @@ namespace BALL
 		TVector4 operator / (const T& scalar);
 
 		///
-		TVector4 &operator /= (const T& scalar);
+		TVector4& operator /= (const T& scalar);
 
 		// --- dot product ---
 
@@ -226,18 +237,6 @@ namespace BALL
 		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
 		//@}
 
-		/**	@name	Storers
-		*/
-		//@{
-
-		///
-		template <typename C>
-		friend std::istream& operator >> (std::istream& s, TVector4<C>& vector);
-
-		///
-		template <typename C>
-		friend std::ostream& operator << (std::ostream& s, const TVector4<C>& vector);
-		//@}
 
 		/**	@name	Attributes
 		*/
