@@ -16,10 +16,6 @@ CPP_SOURCES=\
 	RDFParameter.C\
 	RDFSection.C\
 	reducedSurface.C\
-	singularities.C\
-	solventExcludedSurface.C\
-	triangulatedSurface.C\
-	triangulation.C\
 	residueChecker.C\
 	rotamerLibrary.C\
 	RSEdge.C\
@@ -28,7 +24,12 @@ CPP_SOURCES=\
 	SESEdge.C\
 	SESFace.C\
 	SESVertex.C\
-	structureMapper.C
+	singularities.C\
+	solventExcludedSurface.C\
+	structureMapper.C\
+	surfaceProcessor.C\
+	triangulatedSurface.C\
+	triangulation.C
 
 include ../common.mak
 include .Dependencies
