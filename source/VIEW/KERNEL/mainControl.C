@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.32 2003/12/10 17:19:44 amoll Exp $
+// $Id: mainControl.C,v 1.33 2003/12/10 17:20:00 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -463,7 +463,6 @@ void MainControl::onNotify(Message *message)
 				NewSelectionMessage* nws_message = new NewSelectionMessage;					
 				notify_(nws_message); // send to MolecularControl
 			}
-			return;
 
 			default:
 				return;
