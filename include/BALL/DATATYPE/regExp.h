@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.7 2000/08/30 19:58:02 oliver Exp $
+// $Id: regExp.h,v 1.8 2000/10/05 08:27:56 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -7,7 +7,6 @@
 #	include <BALL/common.h>
 #endif
 
-// BAUSTELLE
 // for SGI CC: turn of warnings #1174: function "regcomp" was declared but never referenced
 #if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
 #	pragma set woff 1174
