@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.12 2003/08/26 13:14:41 oliver Exp $
+dnl $Id: configure.ac,v 1.13 2004/02/16 21:05:58 oliver Exp $
 dnl
 dnl
 
@@ -280,12 +280,13 @@ CXXFLAGS="${SAVE_CXXFLAGS}"
 dnl
 dnl  		Try to identify the compiler and determine its version number.
 dnl
-CF_IDENTIFY_GXX
+CXX_IDENTIFIED=false
+if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_INTEL fi
+if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_GXX fi
 if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_KAI fi
 if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_SUN fi
 if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_SGI fi
 if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_COMPAQ fi
-if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_INTEL fi
 
 dnl
 dnl		Default (fall-back) for make depend
