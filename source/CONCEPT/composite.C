@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.18 2000/08/27 16:09:50 amoll Exp $
+// $Id: composite.C,v 1.19 2000/08/28 10:00:13 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -15,6 +15,7 @@ namespace BALL
 
 	Composite::Composite()
 		:	PersistentObject(),
+			Object(),
 			Selectable(),
 			number_of_children_(0),
 			parent_(0),
@@ -24,13 +25,16 @@ namespace BALL
 			last_child_(0),
 			contains_selection_(false),
 			number_of_selected_children_(0),
-			number_of_children_containing_selection_(0)
+			number_of_children_containing_selection_(0),
+			selection_stamp_(),
+			modification_stamp_()
 	{
 		BALL_BIT_CLEAR_ALL(properties_);
 	}
 
 	Composite::Composite(const Composite& composite, bool deep)
 		:	PersistentObject(composite),
+			Object(composite),
 			Selectable(composite),
 			number_of_children_(0),
 			parent_(0),
@@ -40,7 +44,9 @@ namespace BALL
 			last_child_(0),
 			contains_selection_(false),
 			number_of_selected_children_(0),
-			number_of_children_containing_selection_(0)
+			number_of_children_containing_selection_(0),
+			selection_stamp_(),
+			modification_stamp_()
 	{
 		if (deep == true)
 		{
@@ -69,6 +75,8 @@ namespace BALL
 			pm.writePrimitive(contains_selection_, "contains_selection_");
 			pm.writePrimitive(number_of_selected_children_, "number_of_selected_children_");
 			pm.writePrimitive(number_of_children_containing_selection_, "number_of_children_containing_selection_");
+			pm.writeStorableObject(selection_stamp_, "selection_stamp_");
+			pm.writeStorableObject(modification_stamp_, "modification_stamp_");
 		pm.writeObjectTrailer(name);
 	}
 
@@ -86,6 +94,8 @@ namespace BALL
 		pm.readPrimitive(contains_selection_, "contains_selection_");
 		pm.readPrimitive(number_of_selected_children_, "number_of_selected_children_");
 		pm.readPrimitive(number_of_children_containing_selection_, "number_of_children_containing_selection_");
+		pm.readStorableObject(selection_stamp_, "selection_stamp_");
+		pm.readStorableObject(modification_stamp_, "modification_stamp_");
 	}
  
 
@@ -277,6 +287,9 @@ namespace BALL
 			number_of_children_containing_selection_ = number_of_children_;
 			selected_ = true;
 
+			// update the time stamp
+			selection_stamp_.stamp();
+
 			// check whether we have to inform the parent
 			if (update_parent && (parent_ != 0))
 			{
@@ -289,11 +302,14 @@ namespace BALL
 					parent_->number_of_children_containing_selection_++;
 				}
 				contains_selection_ = true;
+
+				// updateSelection updates the time stamp and propagates it upwards...
 				parent_->updateSelection_();
-			} else {
+			} 
+			else 
+			{
 				contains_selection_ = true;
 			}
-
 		}
 	}
 	
@@ -320,6 +336,9 @@ namespace BALL
 			selected_ = false;
 			number_of_selected_children_ = 0;
 			number_of_children_containing_selection_ = 0;
+			
+			// update the time stamp
+			selection_stamp_.stamp();
 
 			// check whether we have to inform the parent
 			if (update_parent && (parent_ != 0))
@@ -333,8 +352,13 @@ namespace BALL
 					parent_->number_of_children_containing_selection_--;
 				}
 				contains_selection_ = false;
+
+				// updateSelection_ updates the time stamp as well
+				// and propagates it upwards to the root
 				parent_->updateSelection_();
-			} else {
+			} 
+			else 
+			{
 				contains_selection_ = false;
 			}
 		}
@@ -342,6 +366,17 @@ namespace BALL
 	
 	void Composite::updateSelection_()
 	{
+		// update the time stamp
+		selection_stamp_.stamp();
+
+		// and propagate the time stamp upwards to the root
+		Composite* parent(parent_);
+		while (parent != 0)
+		{
+			parent->selection_stamp_.stamp();
+			parent = parent->parent_;
+		}
+
 		// calculate the new selection flags according 
 		// to the current contents of the counters
 		bool new_selected = (((number_of_selected_children_ == number_of_children_) && (number_of_children_ > 0))
@@ -360,28 +395,38 @@ namespace BALL
 					// it does not even contain a selection any more
 					parent_->number_of_selected_children_--;
 					parent_->number_of_children_containing_selection_--;
-				} else {
+				} 
+				else 
+				{
 					// it still contains selected nodes
 					parent_->number_of_selected_children_--;
 				}
-			} else if (!selected_ && new_selected) {
+			} 
+			else if (!selected_ && new_selected) 
+			{
 				// the node was deselected before and now is selected
 				if (!contains_selection_)
 				{
 					// the node didn`t contain selected nodes before
 					parent_->number_of_selected_children_++;
 					parent_->number_of_children_containing_selection_++;
-				} else {
+				} 
+				else 
+				{
 					// the node did contain selected nodes before
 					parent_->number_of_selected_children_++;
 				}
-			} else {
+			} 
+			else 
+			{
 				// selected didn`t change at all
 				if (contains_selection_ && !new_contains_selection)
 				{
 					// there are no more selections left
 					parent_->number_of_children_containing_selection_--;
-				} else {
+				} 
+				else 
+				{
 					// a child now contains a selection
 					parent_->number_of_children_containing_selection_++;
 				}
@@ -450,7 +495,9 @@ namespace BALL
 		{ 
 			// if there is no child, it's easy
 			first_child_ = last_child_ = &composite;
-		} else {
+		} 
+		else 
+		{
 			// otherwise insert it into the list
 			first_child_->previous_ = &composite;
 			composite.next_ = first_child_;
@@ -500,7 +547,9 @@ namespace BALL
 		{
 			// its the only child - easy!
 			first_child_ = last_child_ = &composite;
-		} else {
+		} 
+		else 
+		{
 			// append it to the list of children
 			last_child_->next_ = &composite;
 			composite.previous_ = last_child_;
@@ -555,7 +604,9 @@ namespace BALL
 			if (parent_ptr->last_child_ == &last)
 			{
 				parent_ptr->last_child_ = &parent;
-			} else {
+			} 
+			else 
+			{
 				last.next_->previous_ = &parent;
 				parent.next_  = last.next_;
 				last.next_ = 0;
@@ -571,16 +622,14 @@ namespace BALL
 			
 			parent_ptr->last_child_ = &parent;
 
-		} else {
+		} 
+		else 
+		{
 
 			first.previous_->next_ = &parent;
-
 			parent.previous_ = first.previous_;
-
 			last.next_->previous_ = &parent;
-
 			parent.next_ = last.next_;
-
 			first.previous_ = last.next_ = 0;
 		}
 				
@@ -600,7 +649,7 @@ namespace BALL
 		return true;
 	}
 
-	void  Composite::insertBefore(Composite& composite)
+	void Composite::insertBefore(Composite& composite)
 	{
 		// abort if a self-insertion is requested, there`s no parent at all,
 		// or this node is a descendant of composite
@@ -619,7 +668,7 @@ namespace BALL
 			return;
 		}
 
-		// if composite has a parent, remov it from there
+		// if composite has a parent, remove it from there
 		if (composite.parent_ != 0)
 		{
 			composite.parent_->removeChild(composite);
@@ -727,11 +776,10 @@ namespace BALL
 			if (first_child_ != 0)
 			{
 				composite.last_child_->next_ = first_child_;
-
 				first_child_->previous_  = composite.last_child_;
-
-			} else {
-
+			} 
+			else 
+			{
 				last_child_ = composite.last_child_;
 			}
 			
@@ -781,11 +829,10 @@ namespace BALL
 			if (first_child_ != 0)
 			{
 				last_child_->next_ = composite.first_child_;
-
 				composite.first_child_->previous_  = last_child_;
-
-			} else {
-
+			} 
+			else 
+			{
 				first_child_ = composite.first_child_;
 			}
 
@@ -821,8 +868,8 @@ namespace BALL
 		{
 			spliceBefore(composite);
 			return;
-
-		} else if (&composite == last_child_)
+		} 
+		else if (&composite == last_child_)
 		{
 			// ... or spliceAfter()
 			spliceAfter(composite);
@@ -855,7 +902,9 @@ namespace BALL
 					composite.next_->previous_ = composite.last_child_;
 				}
 
-			} else {
+			} 
+			else 
+			{
 				first_child_ = composite.first_child_;
 				last_child_ = composite.last_child_;
 			}
@@ -892,21 +941,20 @@ namespace BALL
 	bool Composite::removeChild(Composite& child)
 	{
 		// avoid self-removal and removal of ancestors
-		if (&child == this || isDescendantOf(child) == true || child.parent_ != this)
+		if (&child == this || isDescendantOf(child) == true)
 		{
 			return false;
 		}
 		
 		
-//		Composite* parent_ptr = child.parent_;
-/*			
-		// this seems strange. Indeed, it is. It is just an archaic relic.
-		// Did not dare to change it. 
-		if (parent_ptr != this)	
+		Composite* parent_ptr = child.parent_;
+
+		// if child has no parent, we cannot remove it
+		if (parent_ptr != this)
 		{
-			return parent_ptr->removeChild(child);
+			return false;
 		}
-*/	
+			
 		// remove child from the list of children
 		if (first_child_ == &child)
 		{
@@ -915,20 +963,21 @@ namespace BALL
 			if (first_child_ != 0)
 			{
 				first_child_->previous_ = 0;
-
-			} else {
-
+			} 
+			else 
+			{
 				last_child_ = 0;
 			}
 			
 			child.next_ = 0;
-
-		} else if (last_child_ == &child)
+		} 
+		else if (last_child_ == &child)
 		{
 			last_child_ = child.previous_;
 			last_child_->next_ = child.previous_ = 0;
 
-		} else
+		} 
+		else
 		{
 			child.previous_->next_ = child.next_;
 			
@@ -969,11 +1018,10 @@ namespace BALL
 			if (composite_ptr->isAutoDeletable() == true)
 			{
 				delete composite_ptr;
-
-			} else
+			} 
+			else
 			{
 				composite_ptr->previous_ = composite_ptr->next_ = composite_ptr->parent_ = 0;
-				
 				composite_ptr->clear();
 			}
 			
@@ -1014,9 +1062,9 @@ namespace BALL
 		if (virtual_flag == true)
 		{
 			clear();
-
-		} else {
-
+		} 
+		else 
+		{
 			Composite::clear();
 		}
 	}
@@ -1036,7 +1084,8 @@ namespace BALL
 			{
 				parent_->first_child_ = &composite;
 			} 
-			if (parent_->last_child_ == this) {
+			if (parent_->last_child_ == this) 
+			{
 				parent_->last_child_ = &composite;
 			}
 		}
@@ -1046,7 +1095,8 @@ namespace BALL
 			{
 				composite.parent_->first_child_ = &composite;
 			} 
-			if (composite.parent_->last_child_ == this) {
+			if (composite.parent_->last_child_ == this) 
+			{
 				composite.parent_->last_child_ = &composite;
 			}
 		}
@@ -1109,11 +1159,13 @@ namespace BALL
 
 	bool Composite::isDescendantOf(const Composite& composite) const
 	{
-		for (Composite *composite_ptr = parent_;
+		for (Composite* composite_ptr = parent_;
 				 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
 		{
-			if (composite_ptr ==& composite)
+			if (composite_ptr == &composite)
+			{
 				return true;
+			}
 		}
 		
 		return false;
@@ -1125,18 +1177,23 @@ namespace BALL
 		{
 			return true;
 		}
+
 		if (number_of_children_ != composite.number_of_children_)
 		{
 			return false;
 		}
-		Composite* acomposite_ptr = first_child_;
 
-		Composite* bcomposite_ptr = composite.first_child_;
+		Composite* ptr_a = first_child_;
 
-		for (; acomposite_ptr != 0 && bcomposite_ptr != 0;
-				 acomposite_ptr = acomposite_ptr->next_, bcomposite_ptr = bcomposite_ptr->next_)
+		Composite *ptr_b = composite.first_child_;
+
+		for (; ptr_a != 0 && ptr_b != 0;
+				 ptr_a = ptr_a->next_, ptr_b = ptr_b->next_)
 		{
-			if (!acomposite_ptr->isHomomorph(*bcomposite_ptr)) return false;
+			if (*ptr_a != *ptr_b)
+			{
+				return false;
+			}
 		}
 
 		return true;
@@ -1144,7 +1201,7 @@ namespace BALL
 
 	bool Composite::isValid() const
 	{
-		Composite *composite_ptr = first_child_;
+		Composite* composite_ptr = first_child_;
 		Size number_of_children = 0;
 		
 		for (; composite_ptr != 0; composite_ptr = composite_ptr->next_)
@@ -1152,9 +1209,7 @@ namespace BALL
 			if (!composite_ptr->isValid())
 			{
 #				ifdef BALL_DEBUG      
-
-				Log.level(LogStream::ERROR) << "INVALID: substructure is invalid" << endl;
-
+					Log.error() << "Composite::isValid: INVALID: substructure is invalid" << endl;
 #				endif      
 				
 				return false;
@@ -1163,11 +1218,9 @@ namespace BALL
 			if (composite_ptr->parent_ != this)
 			{
 #				ifdef BALL_DEBUG      
-
-				Log.level(LogStream::ERROR) << "INVALID: parent of " << composite_ptr->getHandle()
-						 << " should be " << getHandle()
-						 << " but is " << composite_ptr->parent_->getHandle() << endl;
-
+					Log.error() << "Composite::isValid: INVALID: parent of " << composite_ptr->getHandle()
+											<< " should be " << getHandle()
+											<< " but is " << composite_ptr->parent_->getHandle() << endl;
 #				endif      
 				
 				return false;
@@ -1181,10 +1234,9 @@ namespace BALL
 				{
 #					ifdef BALL_DEBUG      
 
-					Log.level(LogStream::ERROR) << "INVALID: last child of " << getHandle()
-							 << " should be " << last_child_->getHandle()
-							 << " but is " << composite_ptr->getHandle() << endl;
-
+						Log.error() << "INVALID: last child of " << getHandle()
+												<< " should be " << last_child_->getHandle()
+												<< " but is " << composite_ptr->getHandle() << endl;
 #					endif      
 		
 					return false;
@@ -1193,15 +1245,14 @@ namespace BALL
 				if (number_of_children != number_of_children_)
 				{
 #					ifdef BALL_DEBUG      
-
-					Log.level(LogStream::ERROR) << "INVALID: number of children " << getHandle()
-							 << " should be " << number_of_children_
-							 << " but is " << number_of_children << endl;
-
+						Log.error() << "INVALID: number of children " << getHandle()
+												<< " should be " << number_of_children_
+												<< " but is " << number_of_children << endl;
 #					endif      
 		
 					return false;
 				}
+
 				break;
 			}
 		}
@@ -1214,9 +1265,7 @@ namespace BALL
 			if (!composite_ptr->isValid())
 			{
 #				ifdef BALL_DEBUG      
-
-				Log.level(LogStream::ERROR) << "INVALID: substructure is invalid" << endl;
-
+					Log.error() << "INVALID: substructure is invalid" << endl;
 #				endif      
 				
 				return false;
@@ -1229,11 +1278,9 @@ namespace BALL
 				if (composite_ptr != first_child_)
 				{
 #					ifdef BALL_DEBUG      
-
-					Log.level(LogStream::ERROR) << "INVALID: first child of " << getHandle()
-							 << " should be " << first_child_->getHandle()
-							 << " but is " << composite_ptr->getHandle() << endl;
-
+						Log.error() << "INVALID: first child of " << getHandle()
+												<< " should be " << first_child_->getHandle()
+												<< " but is " << composite_ptr->getHandle() << endl;
 #					endif      
 		
 					return false;
@@ -1242,15 +1289,14 @@ namespace BALL
 				if (number_of_children != number_of_children_)
 				{
 #					ifdef BALL_DEBUG      
-
-					Log.level(LogStream::ERROR) << "INVALID: number of children of " << getHandle()
-							 << " should be " << number_of_children_
-							 << " but is " << number_of_children << endl;
-
+						Log.error() << "INVALID: number of children of " << getHandle()
+												<< " should be " << number_of_children_
+												<< " but is " << number_of_children << endl;
 #					endif      
 		
 					return false;
 				}
+
 				break;
 			}
 		}
@@ -1402,13 +1448,13 @@ namespace BALL
 					clone_(*composite_ptr, *cloned_ptr, predicate);
 				}
 				
-			}	else {
-
+			}	
+			else 
+			{
 				if (composite_ptr->first_child_ != 0)
 				{
 					clone_(*composite_ptr, stack, predicate);
 				}
-
 			}
 		}
 
@@ -1431,7 +1477,7 @@ namespace BALL
 		
 	Composite& Composite::getLastPreorderIteratorPosition_(Composite& composite)
 	{
-		Composite *composite_ptr =& composite;
+		Composite* composite_ptr = &composite;
 		
 		for (;	composite_ptr->last_child_ != 0; composite_ptr = composite_ptr->last_child_);
 				
@@ -1466,7 +1512,7 @@ namespace BALL
 	{
 		if (position.traversing_forward_ == false)
 		{
-			setCurrentPreorderForward_(*(position.current_), position, (bool)(position.empty_stack_ != 0));
+			setCurrentPreorderForward_(*(position.current_), position, (position.empty_stack_ != 0));
 			
 			return getNextPreorderIteratorPosition_(position);
 		}
@@ -1483,12 +1529,16 @@ namespace BALL
 				{
 					position.current_ = position.current_->first_child_;
 				}
-			} else {
+			} 
+			else 
+			{
 				position.current_ = position.current_->next_;
 			}
 
 			if (position.stack_ == position.empty_stack_)
+			{
 				return (position.current_ = 0);
+			}
 			
 			if (position.current_ == 0)
 			{
@@ -1496,18 +1546,22 @@ namespace BALL
 				position.stack_ = position.stack_->parent_;
 
 				if (position.stack_	== position.empty_stack_)
+				{
 					return (position.current_ = 0);
+				}
 
 				if (position.current_->next_ == 0)
 				{
-						return getNextPreorderIteratorPosition_(position);
-
-				} else {
-
+					return getNextPreorderIteratorPosition_(position);
+				} 
+				else 
+				{
 					position.current_ = position.current_->next_;
 				}
 			}
-		} else {
+		} 
+		else 
+		{
 			position.stack_ = position.current_;
 			position.current_ = position.current_->first_child_;
 		}
@@ -1523,11 +1577,11 @@ namespace BALL
 		return position.current_;
 	}
 
-	Composite* Composite::getPreviousPreorderIteratorPosition_(CompositeIteratorPosition_ &position)
+	Composite* Composite::getPreviousPreorderIteratorPosition_(CompositeIteratorPosition_& position)
 	{
 		if (position.traversing_forward_ == true)
 		{
-			setCurrentPreorderBackward_(*(position.current_), position, (bool)(position.empty_stack_ != 0));
+			setCurrentPreorderBackward_(*(position.current_), position, (position.empty_stack_ != 0));
 			
 			return getPreviousPreorderIteratorPosition_(position);
 		}
@@ -1538,35 +1592,35 @@ namespace BALL
 					|| position.current_->isCollapsed() == true)
 			{
 				return (position.current_ = 0);
-
-			} else {
-
+			} 
+			else 
+			{
 				position.current_ = position.current_->previous_;
 			}
 			
 			if (position.stack_ == position.empty_stack_)
+			{
 				return (position.current_ = 0);
+			}
 			
 			while (position.current_ != 0
 						 && position.current_->last_child_ != 0
 						 && position.current_->isCollapsed() == false)
 			{
-				position.stack_ = position.current_;
-				
+				position.stack_ = position.current_;	
 				position.current_ = position.current_->last_child_;
 			}
 			
 			if (position.current_ == 0)
 			{
 				position.current_ = position.stack_;
-				
 				position.stack_ = position.stack_->parent_;
-				
 				return position.current_;
 			}
-		} else {
-			position.stack_ = position.current_;
-			
+		} 
+		else 
+		{
+			position.stack_ = position.current_;	
 			position.current_ = position.current_->last_child_;
 		}
 				
@@ -1574,17 +1628,15 @@ namespace BALL
 				&& position.current_->isCollapsed() == false)
 		{
 			position.continue_ = true;
-			
 			return position.current_;
 		}
 
 		position.continue_ = false;
-		
 		return position.current_;
 	}
 
 	Composite* Composite::setCurrentPreorderForward_
-		(Composite& composite, CompositeIteratorPosition_ &position,
+		(Composite& composite, CompositeIteratorPosition_& position,
 		 bool subcomposite)
 	{
 		if (subcomposite == true)
@@ -1598,20 +1650,19 @@ namespace BALL
 		
 		if (composite.parent_ == position.empty_stack_)
 		{
-			position.stack_ =& composite;
+			position.stack_ = &composite;
 			position.continue_ = false;
-
-		} else {
-
-			position.stack_ = composite.parent_;
-			
-			position.continue_ = (bool)(composite.first_child_ != 0);
+		} 
+		else 
+		{
+			position.stack_ = composite.parent_;	
+			position.continue_ = (composite.first_child_ != 0);
 		}
 
-		position.current_ =& composite;
+		position.current_ = &composite;
 		position.traversing_forward_ = true;
 		
-		return& composite;
+		return &composite;
 	}
 
 	Composite* Composite::setCurrentPreorderBackward_
@@ -1625,18 +1676,18 @@ namespace BALL
 		
 		if (composite.parent_ == position.empty_stack_)
 		{
-			position.stack_ =& composite;
+			position.stack_ = &composite;
 		}
 		else
 		{
 			position.stack_ = composite.parent_;
 		}
 		
-		position.current_ =& composite;
+		position.current_ = &composite;
 		position.continue_ = false;
 		position.traversing_forward_ = false;
 		
-		return& composite;
+		return &composite;
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
