@@ -1524,13 +1524,11 @@ dnl
 dnl   Check whether ieeefp.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_IEEEFP_H, [
-	if test "$BALL_HAS_IEEEFP_H" = true ; then
-		AC_CHECK_HEADERS(ieeefp.h,
-				[BALL_HAS_IEEEFP_H=true],
-				[BALL_HAS_IEEEFP_H=false])
-		if test ${BALL_HAS_IEEEFP_H} = true ; then
-			AC_DEFINE(BALL_HAS_IEEEFP_H,)
-		fi
+	AC_CHECK_HEADERS(ieeefp.h,
+			[BALL_HAS_IEEEFP_H=true],
+			[BALL_HAS_IEEEFP_H=false])
+	if test ${BALL_HAS_IEEEFP_H} = true ; then
+		AC_DEFINE(BALL_HAS_IEEEFP_H,)
 	fi
 ])
 

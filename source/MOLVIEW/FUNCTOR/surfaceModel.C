@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.17 2002/12/17 18:07:27 amoll Exp $
+// $Id: surfaceModel.C,v 1.18 2002/12/17 18:19:40 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 #include <BALL/KERNEL/system.h>

@@ -7777,7 +7777,6 @@ _ACEOF
 	fi
 
 
-	if test "$BALL_HAS_IEEEFP_H" = true ; then
 
 for ac_header in ieeefp.h
 do
@@ -7922,12 +7921,11 @@ fi
 
 done
 
-		if test ${BALL_HAS_IEEEFP_H} = true ; then
-			cat >>confdefs.h <<\_ACEOF
+	if test ${BALL_HAS_IEEEFP_H} = true ; then
+		cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_IEEEFP_H
 _ACEOF
 
-		fi
 	fi
 
 
