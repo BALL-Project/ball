@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.56 2003/07/06 16:18:16 amoll Exp $
+// $Id: file.h,v 1.57 2003/07/15 11:58:21 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -134,6 +134,25 @@ namespace BALL
 		: public std::fstream
 	{
 		public:
+
+		/**	Exception CanNotWrite
+				A given file could not be written, either because its not open or it has a wrong open mode.
+		*/
+		class CanNotWrite
+			: public Exception::GeneralException
+		{
+			public:
+			CanNotWrite(const char* file, int line, const String& filename)
+				throw();
+
+			~CanNotWrite()
+				throw();
+			String getFilename() const
+				throw();
+
+			protected:
+			std::string filename_;
+		};
 
 		/**	@name	Type definitions
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.43 2003/07/06 16:17:49 amoll Exp $
+// $Id: file.C,v 1.44 2003/07/15 11:58:36 amoll Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -19,9 +19,29 @@
 // (in order to avoid infinite recursion)
 #define MAX_SUBSTITUTIONS 10
 
-
 namespace BALL 
 {
+	using namespace Exception;
+
+	File::CanNotWrite::CanNotWrite(const char* file, int line, const String& filename)
+		throw()
+		:	Exception::GeneralException(file, line, "File::CanNotWrite", ""),
+			filename_(filename)
+	{
+		message_ = "the file " + filename + " could not be written(i.g. not open or wrong open mode)";
+		globalHandler.setMessage(message_);
+	}
+
+	File::CanNotWrite::~CanNotWrite()
+		throw()
+	{
+	}
+
+	String File::CanNotWrite::getFilename() const
+		throw()
+	{
+		return filename_;
+	}
 
 	TransformationManager::TransformationManager()
 	{
