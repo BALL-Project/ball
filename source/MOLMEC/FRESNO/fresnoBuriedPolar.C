@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.6 2002/04/06 20:04:26 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.7 2002/04/11 11:29:06 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -96,8 +96,8 @@ namespace BALL
 			= options.setDefaultReal(FresnoFF::Option::BP_R1_OFFSET,
 					FresnoFF::Default::BP_R1_OFFSET);
 		r2_offset_
-			= options.setDefaultReal(FresnoFF::Option::BP_R1_OFFSET,
-					FresnoFF::Default::BP_R1_OFFSET);
+			= options.setDefaultReal(FresnoFF::Option::BP_R2_OFFSET,
+					FresnoFF::Default::BP_R2_OFFSET);
 
 		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
 
