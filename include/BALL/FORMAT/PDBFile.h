@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.31 2005/02/13 22:38:48 oliver Exp $
+// $Id: PDBFile.h,v 1.32 2005/02/14 17:13:13 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_PDBFILE_H
@@ -168,7 +168,7 @@ namespace BALL
 		PDBFile();
 			
 		/// File-like constructor
-		PDBFile(const String& filename, File::OpenMode open_mode = File::IN) throw(Exception::FileNotFound);
+		PDBFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound);
 
 		/// Construct with options.
 		PDBFile(const Options& new_options);
