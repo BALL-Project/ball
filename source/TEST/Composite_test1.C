@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Composite_test1.C,v 1.3 2002/12/18 16:00:38 sturm Exp $
+// $Id: Composite_test1.C,v 1.4 2003/06/11 06:52:42 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -28,7 +28,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test1.C,v 1.3 2002/12/18 16:00:38 sturm Exp $")
+START_TEST(Composite, "$Id: Composite_test1.C,v 1.4 2003/06/11 06:52:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -252,7 +252,7 @@ CHECK(deselect())
 	TEST_EQUAL(e.isSelected(), false);
 RESULT
 
-CHECK(Subcomposite Iteration)
+CHECK(Subcomposite forward iteration)
   Composite a, b, c, d, e;
   a.appendChild(b);
   b.appendChild(c);
@@ -263,6 +263,50 @@ CHECK(Subcomposite Iteration)
   sub_it = a.beginSubcomposite();
   TEST_EQUAL(+sub_it, true)
   TEST_EQUAL(&*sub_it, &a)
+	++sub_it;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &b)
+	sub_it++;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &c)
+	sub_it++;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &e)
+	sub_it++;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &d)
+	sub_it++;
+  TEST_EQUAL(+sub_it, false)
+  TEST_EQUAL(sub_it == a.endSubcomposite(), true)
+RESULT
+
+CHECK(Subcomposite reverse iteration)
+  Composite a, b, c, d, e;
+  a.appendChild(b);
+  b.appendChild(c);
+  b.appendChild(d);
+  c.appendChild(e);
+	Composite::SubcompositeIterator sub_it;
+  TEST_EQUAL(+sub_it, false)
+  sub_it = a.endSubcomposite();
+  TEST_EQUAL(sub_it.isValid(), false)
+	--sub_it;
+	TEST_EQUAL(sub_it.isValid(), true)
+  TEST_EQUAL(&*sub_it, &d)
+	--sub_it;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &e)
+	sub_it--;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &c)
+	sub_it--;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &b)
+	sub_it--;
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &a)
+	sub_it--;
+  TEST_EQUAL(+sub_it, false)
 RESULT
 
 TextPersistenceManager  pm;
