@@ -148,6 +148,52 @@ namespace BALL
 
 	std::vector<String> NMRStarFile::reference_options_;
 
+
+
+	NMRStarFile::NMRStarFile()
+		throw ()
+		:	LineBasedFile(),
+			number_of_shifts_(0)
+	{
+	}
+
+	NMRStarFile::NMRStarFile(const NMRStarFile& f)
+		throw ()
+		:	LineBasedFile(f),
+			number_of_shifts_		(f.number_of_shifts_),
+			atom_data_sets_			(f.atom_data_sets_),
+			sample_conditions_  (f.sample_conditions_),
+			shift_references_   (f.shift_references_),
+			system_name_				(f.system_name_)
+	{
+	}
+
+	NMRStarFile::NMRStarFile(const String& file_name)
+		throw (Exception::FileNotFound)
+		:	LineBasedFile(file_name),
+			number_of_shifts_(0)
+	{
+		readEntryInformation_();
+		readMolSystem_();
+		readSampleConditions_();
+		readShiftReferences_();
+		readShifts_();
+	}
+
+	NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)
+		throw ()
+	{
+		LineBasedFile::operator = (f);
+
+		number_of_shifts_		= f.number_of_shifts_;;
+		atom_data_sets_			= f.atom_data_sets_;
+		sample_conditions_  = f.sample_conditions_ ;
+		shift_references_   = f.shift_references_;
+		system_name_				= f.system_name_ ;
+
+		return *this;
+	}
+
 	Size NMRStarFile::getNumberOfAtoms() 
 		const	throw()
 	{
@@ -176,7 +222,7 @@ namespace BALL
 		{
 			rewind();
 			test(__FILE__, __LINE__, 
-				search("       assigned_chemical_shifts"),
+				search("       assigned_chemical_shifts", true),
 				"Number of assigned chemical shifts could not be found");
 
 			number_of_shifts_ = getField(1).toUnsignedInt();
@@ -197,15 +243,14 @@ namespace BALL
 	{
 		try
 		{
-			rewind();
 			test(__FILE__, __LINE__, 
-						search("#  Molecular system description  #"),
+						search("#  Molecular system description  #", true),
 						"Molecular system description could not be found");
 
 			skipLines();
 
 			test(__FILE__, __LINE__,
-						search("   _Mol_system_name", "#"),
+						search("   _Mol_system_name", "#", true),
 						"Molecular system description could not be found");
 
 			// systemname can be enclosed with ' '
@@ -227,9 +272,8 @@ namespace BALL
 	{
 		try
 		{
-			rewind();
 			test(__FILE__, __LINE__, 
-						search("#  Sample conditions  #"),
+						search("#  Sample conditions  #", true),
 						"sample conditions could not be found");
 
 			skipLines();
@@ -245,7 +289,7 @@ namespace BALL
 				}
 
 				SampleCondition* condition = new SampleCondition();
-				condition->name = copyString(5);
+				condition->name.set(getLine(), 5);
 				if (!search("      _Variable_value_units", "#"))
 				{
 					break;
@@ -323,11 +367,10 @@ namespace BALL
 	{
 		try
 		{
-			rewind();
 			NMRStarFile::initializeReferenceOptions_();
 
 			test(__FILE__, __LINE__, 
-						search("	#  Chemical shift referencing  #"),
+						search("	#  Chemical shift referencing  #", true),
 						"Chemical shift referencing could not be found.");
 
 			skipLines();
@@ -343,7 +386,7 @@ namespace BALL
 				}
 
 				ShiftReferenceSet* shift_reference = new ShiftReferenceSet();
-				shift_reference->name = copyString(5);
+				shift_reference->name.set(getLine(), 5);
 				if (!search("   loop_", "#"))
 				{
 					break;
@@ -525,7 +568,6 @@ namespace BALL
 		throw (LineBasedFileError)
 	{
 		rewind();
-
 		test(__FILE__, __LINE__, 
 				search("#      9             Ambiguous, specific ambiguity not defined    #"),
 				"Assigned chemical shift lists could not be found");
@@ -541,7 +583,7 @@ namespace BALL
 				continue;
 			}
 			NMRAtomDataSet* atom_data_sets = new NMRAtomDataSet();
-			atom_data_sets->name = copyString(5);
+			atom_data_sets->name.set(getLine(), 5);
 			
 			try
 			{
@@ -611,50 +653,6 @@ namespace BALL
 						atom_data_sets_.size() == number_of_shifts_,
 						"wrong number of shift sets found");
 		}
-	}
-
-	NMRStarFile::NMRStarFile()
-		throw ()
-		:	LineBasedFile(),
-			number_of_shifts_(0)
-	{
-	}
-
-	NMRStarFile::NMRStarFile(const NMRStarFile& f)
-		throw ()
-		:	LineBasedFile(f),
-			number_of_shifts_		(f.number_of_shifts_),
-			atom_data_sets_			(f.atom_data_sets_),
-			sample_conditions_  (f.sample_conditions_),
-			shift_references_   (f.shift_references_),
-			system_name_				(f.system_name_)
-	{
-	}
-
-	NMRStarFile::NMRStarFile(const String& file_name)
-		throw (Exception::FileNotFound)
-		:	LineBasedFile(file_name),
-			number_of_shifts_(0)
-	{
-		readEntryInformation_();
-		readMolSystem_();
-		readSampleConditions_();
-		readShiftReferences_();
-		readShifts_();
-	}
-
-	NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)
-		throw ()
-	{
-		LineBasedFile::operator = (f);
-
-		number_of_shifts_		= f.number_of_shifts_;;
-		atom_data_sets_			= f.atom_data_sets_;
-		sample_conditions_  = f.sample_conditions_ ;
-		shift_references_   = f.shift_references_;
-		system_name_				= f.system_name_ ;
-
-		return *this;
 	}
 
 } //namespace

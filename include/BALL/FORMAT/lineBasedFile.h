@@ -140,10 +140,6 @@ namespace BALL
 										const String& delimiters = String::CHARACTER_CLASS__WHITESPACE)
 			const	throw(Exception::IndexUnderflow);
 
-		/// Copy a substring to a new String
-		String copyString(Index start = 0, Index end = -1) 
-			const throw(Exception::IndexUnderflow);
-
 		/// Function to test if a String starts like an other String
 		bool startsWith(const String& text) 
 			const throw();

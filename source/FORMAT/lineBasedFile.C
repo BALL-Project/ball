@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.5 2000/10/15 16:54:12 oliver Exp $
+// $Id: lineBasedFile.C,v 1.6 2000/10/15 22:36:10 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -248,24 +248,6 @@ namespace BALL
 		}
 
 		return line_.getFieldQuoted(pos, delimiters.c_str(), quotes.c_str());
-	}
-
-	String LineBasedFile::copyString(Index start, Index end)
-		const throw(Exception::IndexUnderflow)
-	{
-		if (end < 0)
-		{
-      end = line_.size() + end;
-
-			// if the values are out of bounds - throw an exception
-			// and leave it...
-			if (end < 0)
-			{
-				throw Exception::IndexUnderflow(__FILE__, __LINE__, end, line_.size());
-			}
-		}
-
-		return String(line_, start, end - start);
 	}
 
 	int LineBasedFile::switchString(const vector<String>& data)
