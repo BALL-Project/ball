@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.25 2003/12/02 02:34:43 amoll Exp $
+// $Id: scene.C,v 1.26 2003/12/05 23:56:23 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -244,16 +244,15 @@ void Scene::onNotify(Message *message)
 		switch (rm->getType())
 		{
 			case RepresentationMessage::ADD:
-				gl_renderer_.addRepresentation(*rep);
+				gl_renderer_.buildDisplayListFor(*rep);
 				break;
 
 			case RepresentationMessage::REMOVE:
-				gl_renderer_.removeRepresentation(*rep);
+				gl_renderer_.removeDisplayListFor(*rep);
 				break;
 
 			case RepresentationMessage::UPDATE:
-				gl_renderer_.removeRepresentation(*rep);
-				gl_renderer_.addRepresentation(*rep);
+				gl_renderer_.rebuildDisplayListFor(*rep);
 				break;
 
 			case RepresentationMessage::UNDEFINED:
@@ -437,7 +436,7 @@ void Scene::render_(const Representation& rep, RenderMode mode)
 			break;
 
 		case REBUILD_DISPLAY_LISTS:
-			gl_renderer_.updateRepresentation(rep);
+			gl_renderer_.rebuildDisplayListFor(rep);
 			break;
 	}
 }
@@ -738,8 +737,9 @@ void Scene::createCoordinateSystem_()
 	
 	// we have to add the representation in the GLRenderer manualy,
 	// because the message wont arrive in Scene::onNotify
-	gl_renderer_.addRepresentation(*rp);
+	gl_renderer_.buildDisplayListFor(*rp);
 	
+	// notify GeometricControl
 	RepresentationMessage* message = new RepresentationMessage(rp, RepresentationMessage::ADD);
 	notify_(message);
 }
