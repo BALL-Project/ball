@@ -142,7 +142,7 @@ cout << test_string.compare("me", start_index, length) << endl;
 \subsection{Stream and Field Operations}
 
 Everyone familiar with measurement data processing encountered the problem of
-getting data fields out of lines containing several values of data. Quite
+getting data fields out of lines containing several values of data. Quiet
 often interpreter languages like awk or perl are used for such tasks. The
 disadvantage of using such tools obviuosly is that you cannot integrate such
 languages easily into a C++ program. The BALL development team was also
@@ -156,7 +156,7 @@ cout << "The data at index 5 is " << data.getField(5) << endl;
 \end{lstlisting}
 The code above should print the number 8.
 Sometimes log files contain quoted data. You can even handle such lines by
-using the filed functions for quoted entries:
+using the field functions for quoted entries:
 \begin{lstlisting}{}
 String data = "1 2 3 4.567 \"8 blah\"";
 cout << "Line contains " << data.countFieldsQuoted() 

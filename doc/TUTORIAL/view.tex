@@ -162,14 +162,14 @@ above properties. As an example we choose the \class{LabelDialog}, which already
 exists in the VIEW library. This dialog can add Labels to the visualisation of
 molecules.
 We created the GUI of the dialog with the program "QT Designer" which is part
-of every QT-package. This has the advantage, that the creation of the GUI take
+of every QT-package. This has the advantage, that the creation of the GUI takes
 less time and the layout can be changed with much less effort. 
 The result of the "designer" program is a .ui file, which the program "uic"
 from the QT-library transforms to source files. We derive from the class
 LabelDialogData, that is defined in these sources.
 
 The menu entry "Add Label" for our dialog will toggle the visibility of the dialog itself.
-The color for the labels will be writen to
+The color for the labels will be written to
 and read from the \class{INIFile}, which the main application keeps. The
 \class{Message} that should trigger some effect will be the message 
 \class{ControlSelectionMessage} that is sent by the class \class{MolecularControl} 
@@ -237,7 +237,7 @@ update and the removal of the menu entries let's have a look to the
 implementation of the constructor. First we set the caption of this dialog
 and register it as a modular widget. This action is very important because it
 creates the internal mechanism that connects all widgets with each other. If
-you create own dialogs/widgets, which have to react to messages always make 
+you create your own dialogs/widgets which have to react to messages always make 
 sure this method is called.
 
 \begin{lstlisting}{}
@@ -294,11 +294,11 @@ there must be a slot to be connected to).
 
 
 The next methods we will discuss are the methods responsible for reading and
-writing the contents of this widget into the inifile. First we look at the
+writing the contents of this widget into the \class{INIFile}. First we look at the
 method responsible form reading the preferences.
-If the inifile has the section {\tt WINDOWS} and the key {\tt Label::customcolor} then
+If the \class{INIFile} has the section {\tt WINDOWS} and the key {\tt Label::customcolor} then
 we read the contents of this key and convert it to a color which we store in
-\member{custom\_color\_}{} (see \class{ColorRGBA}). 
+\member{custom_color_}{} (see \class{ColorRGBA}). 
 Additionally we assign the color to the label to be displayed in the widget.
 
 \begin{lstlisting}{}
