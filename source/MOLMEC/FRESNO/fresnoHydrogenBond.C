@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.2 2002/02/14 19:05:19 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.3 2002/02/14 19:52:58 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -204,11 +204,7 @@ namespace BALL
 			// h_bond is the vector of the hbond
 
 			h_bond = acceptor->getPosition() - hydrogen->getPosition();
-			distance = ideal_hbond_length_ - h_bond.getLength();
-
-			// DEBUG
-			cout << "HB distance deviation: " << distance << endl;
-			// /DEBUG
+			distance = fabs(ideal_hbond_length_ - h_bond.getLength());
 
 			// if the distance is too large, the product of g1 and g2 is zero, so
 			// we can skip the rest
@@ -242,10 +238,7 @@ namespace BALL
 				// /PARANOIA
 
 				// angle is the angle of the h bond
-				angle = ideal_hbond_angle_ - h_bond.getAngle(h_connection);
-				// DEBUG
-				cout << "HB angle deviation: " << angle << endl;
-				// /DEBUG
+				angle = ideal_hbond_angle_ - h_bond.getAngle(h_connection).toDegree();
 
 				// if angle is too large, skip the rest
 				if (angle <= h_bond_angle_upper_)
@@ -253,7 +246,10 @@ namespace BALL
 					tmp *= MolmecSupport::calculateFresnoHelperFunction(angle,
 						h_bond_angle_lower_, h_bond_angle_upper_);
 					// DEBUG
-					cout << "tmp: " << tmp << endl;
+					cout << "HB: adding score of " << tmp 
+						<< "(distance " << distance
+						<< ", angle " << angle << ")"
+						<< endl;
 					// /DEBUG
 					val += tmp;
 				}
@@ -262,7 +258,6 @@ namespace BALL
 
 		E = val;
 		return E;
-		
 	}
 
 
