@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.22 2000/07/25 21:24:55 oliver Exp $
+// $Id: fragmentDB.C,v 1.23 2000/08/07 12:53:34 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -757,13 +757,61 @@ namespace BALL
 					
 	const Fragment* FragmentDB::getFragment(const String& fragment_name) const
 	{
-		if (name_to_frag_pointer_.has(fragment_name)){
+		if (name_to_frag_pointer_.has(fragment_name))
+		{
 			return (*name_to_frag_pointer_.find(fragment_name)).second;
 		} 
 		else	
 		{
 			return 0;		
 		}
+	}
+
+	Fragment* FragmentDB::getFragmentCopy(const String& fragment_name) const
+	{
+		const Fragment* ref_fragment = getFragment(fragment_name);
+		Fragment* copy = 0;
+
+		// copy the reference fragment if we found a reference fragment
+		// (pointer != 0). Otherwise, return the NULL pointer.
+		if (ref_fragment !=	0)
+		{
+			copy = new Fragment(*ref_fragment);
+		}
+
+		return copy;
+	}
+
+	Residue* FragmentDB::getResidueCopy(const String& fragment_name) const
+	{
+		const Residue* ref_residue = getResidue(fragment_name);
+		Residue* copy = 0;
+
+		// copy the reference residue if we found a reference residue
+		// (pointer != 0). Otherwise, return the NULL pointer.
+		if (ref_residue !=	0)
+		{
+			copy = new Residue(*ref_residue);
+		}
+
+		return copy;
+	}
+
+	Molecule* FragmentDB::getMoleculeCopy(const String& fragment_name) const
+	{
+		const Fragment* ref_fragment = getFragment(fragment_name);
+		Molecule* copy = 0;
+
+		// copy the reference fragment if we found a reference fragment
+		// (pointer != 0) and insert it into a new molecule.
+		// Otherwise, return the NULL pointer.
+		if (ref_fragment !=	0)
+		{
+			copy = new Molecule;
+			copy->insert(*new Fragment(*ref_fragment));
+		}
+
+		return copy;
 	}
 
 	const Fragment* FragmentDB::getReferenceFragment(const Fragment& fragment) const
