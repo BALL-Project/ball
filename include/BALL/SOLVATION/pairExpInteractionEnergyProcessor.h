@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.11 2001/12/30 13:28:42 sturm Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.12 2002/01/13 13:54:52 aubertin Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -35,8 +35,8 @@
 # include <BALL/SOLVATION/solventDescriptor.h>
 #endif
 
-// ?????: Die Konstanten alpha, C1 und C2 bzw die K_ij müssen noch in
-// sinnvoller Form eingebettet werden.
+// ?????: The constants alpha, C1 and C2 i.e. the K_ij have to be
+// embedded in a senseful way.
 
 namespace BALL
 {
