@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.119 2004/08/16 12:36:52 amoll Exp $
+// $Id: scene.C,v 1.120 2004/08/16 14:10:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -14,7 +14,6 @@
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
-#include <BALL/VIEW/DIALOGS/animationDialog.h>
 
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -48,6 +47,7 @@ namespace BALL
 		float Scene::mouse_sensitivity_ = 5;
 		float Scene::mouse_wheel_sensitivity_ = 5;
 		bool  Scene::show_light_sources_ = false;
+		float Scene::animation_smoothness_ = 2;
 		#define  ZOOM_FACTOR 			135
 		#define  ROTATE_FACTOR    22
 		#define  TRANSLATE_FACTOR 10
@@ -69,7 +69,9 @@ namespace BALL
 				light_settings_(0),
 				stage_settings_(0),
 				screenshot_nr_(10000),
-				pov_nr_(10000)
+				pov_nr_(10000),
+				animation_thread_(0),
+				stop_animation_(false)
 		{
 			gl_renderer_.setSize(600, 600);
 #ifdef BALL_VIEW_DEBUG
@@ -92,7 +94,8 @@ namespace BALL
 				light_settings_(0),
 				stage_settings_(0),
 				screenshot_nr_(10000),
-				pov_nr_(10000)
+				pov_nr_(10000),
+				stop_animation_(false)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
@@ -118,7 +121,9 @@ namespace BALL
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				screenshot_nr_(10000),
-				pov_nr_(10000)
+				pov_nr_(10000),
+				animation_thread_(0),
+				stop_animation_(false)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
@@ -138,6 +143,10 @@ namespace BALL
 #endif 
 
 				delete stage_;
+
+#ifdef BALL_QT_HAS_THREADS
+				if (animation_thread_ != 0) delete animation_thread_;
+#endif
 			}
 
 		void Scene::clear()
@@ -949,6 +958,7 @@ namespace BALL
 			inifile.insertValue("STAGE", "BackgroundColor", String(data));
 			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
 			inifile.insertValue("STAGE", "Fulcrum", vector3ToString(system_origin_));
+			inifile.insertValue("STAGE", "AnimationSmoothness", String(animation_smoothness_));
 			writeLights_(inifile);
 		}
 
@@ -985,6 +995,12 @@ namespace BALL
 			{
 				stringToVector3(inifile.getValue("STAGE", "Fulcrum"), system_origin_);
 			}
+
+			if (inifile.hasEntry("STAGE", "AnimationSmoothness"))
+			{
+				setAnimationSmoothness(inifile.getValue("STAGE", "AnimationSmoothness").toFloat());
+			}
+
 
 			if (inifile.hasEntry("STAGE", "BackgroundColor"))
 			{
@@ -1245,9 +1261,6 @@ namespace BALL
 		void Scene::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			anim_dialog_ = new AnimationDialog(this);
-			CHECK_PTR(anim_dialog_);
-
 			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
 			String hint;
@@ -1301,7 +1314,16 @@ namespace BALL
  			menuBar()->setItemChecked(record_animation_id_, false) ;
 			
 			clear_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Clear", this, SLOT(clearRecordedAnimation()));
-			start_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", anim_dialog_, SLOT(show()));
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
+			start_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Start", this, SLOT(startAnimation()));
+
+			cancel_animation_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Stop", this, SLOT(stopAnimation()));
+			menuBar()->setItemEnabled(cancel_animation_id_, false);
+
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION);
+			animation_export_PNG_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export PNG", this, SLOT(animationExportPNGClicked()));
+			animation_export_POV_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Export POV", this, SLOT(animationExportPOVClicked()));
+			animation_repeat_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_ANIMATION, "Repeat", this, SLOT(animationRepeatClicked()));
 
 
 			setCursor(QCursor(Qt::SizeAllCursor));
@@ -1331,7 +1353,15 @@ namespace BALL
 		{
 			menuBar()->setItemChecked(rotate_id_, 	(current_mode_ == ROTATE__MODE));
 			menuBar()->setItemChecked(picking_id_,  (current_mode_ == PICKING__MODE));		
-			menuBar()->setItemEnabled(start_animation_id_, animation_points_.size() > 0 && getMainControl()->compositesAreMuteable());
+			
+			menuBar()->setItemEnabled(start_animation_id_, 
+					animation_points_.size() > 0 && 
+					getMainControl()->compositesAreMuteable()
+			#ifdef BALL_QT_HAS_THREADS
+					&& (animation_thread_ == 0 || !animation_thread_->running())
+			#endif
+					);
+			
 			menuBar()->setItemEnabled(clear_animation_id_, animation_points_.size() > 0);
 		}
 
@@ -1788,12 +1818,115 @@ namespace BALL
 		void Scene::startAnimation()
 			throw()
 		{
+			menuBar()->setItemEnabled(start_animation_id_, false);
+			menuBar()->setItemEnabled(cancel_animation_id_, true);
+
+			#ifdef BALL_QT_HAS_THREADS
+				if (animation_thread_ != 0) delete animation_thread_;
+				animation_thread_ = new AnimationThread();
+				animation_thread_->start();
+				return;
+			#endif
+	
+			animate_();
+		}
+
+		void Scene::stopAnimation()
+			throw()
+		{
+			stop_animation_ = true;
 		}
 
 		void Scene::recordAnimationClicked()
 			throw()
 		{
 			menuBar()->setItemChecked(record_animation_id_, !menuBar()->isItemChecked(record_animation_id_));
+		}
+
+		void Scene::animate_()
+			throw()
+		{
+			do
+			{
+				List<Camera>::Iterator it = getAnimationPoints().begin();
+				Camera last_camera = *it;
+				it++;
+
+				for (; it != getAnimationPoints().end(); it++)
+				{
+					if (*it == last_camera) continue;
+			 
+					Camera camera = last_camera;
+					Vector3 diff_viewpoint = (camera.getViewPoint() - (*it).getViewPoint());
+					Vector3 diff_up = (camera.getLookUpVector() - (*it).getLookUpVector());
+					Vector3 diff_look_at = (camera.getLookAtPosition() - (*it).getLookAtPosition());
+
+					Vector3 max = diff_viewpoint;
+					if (diff_look_at.getLength() > max.getLength()) max = diff_look_at;
+					
+					Size steps = (Size) (max.getLength() * animation_smoothness_);
+					if (steps == 0) steps = 1;
+					
+					diff_viewpoint /= steps;
+					diff_up /= steps;
+					diff_look_at /= steps;
+
+					for (Size i = 0; i < steps && !stop_animation_; i++)
+					{
+						#ifdef BALL_QT_HAS_THREADS
+							while (qApp->hasPendingEvents())
+							{
+								animation_thread_->mySleep(50);
+							}
+						#endif
+
+						camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
+						camera.setLookUpVector(camera.getLookUpVector() - diff_up);
+						camera.setLookAtPosition(camera.getLookAtPosition() - diff_look_at);
+
+						Scene::SceneSetCameraEvent* e = new Scene::SceneSetCameraEvent();
+						e->camera = camera;
+						qApp->postEvent(this, e);
+
+						if (menuBar()->isItemChecked(animation_export_PNG_id_))
+						{
+							Scene::SceneExportPNGEvent* e = new Scene::SceneExportPNGEvent();
+							qApp->postEvent(this, e);
+						}
+
+						if (menuBar()->isItemChecked(animation_export_POV_id_))
+						{
+							Scene::SceneExportPOVEvent* e = new Scene::SceneExportPOVEvent();
+							qApp->postEvent(this, e);
+						}
+					}
+					
+					last_camera = *it;
+				}
+			}
+			while(menuBar()->isItemChecked(animation_repeat_id_));
+
+			stop_animation_ = false;
+			menuBar()->setItemEnabled(start_animation_id_, true);
+			menuBar()->setItemEnabled(cancel_animation_id_, false);
+		}
+
+		void Scene::animationRepeatClicked()
+			throw()
+		{
+			menuBar()->setItemChecked(animation_repeat_id_, !menuBar()->isItemChecked(animation_repeat_id_));
+		}
+
+		void Scene::animationExportPOVClicked()
+			throw()
+		{
+			menuBar()->setItemChecked(animation_export_POV_id_, !menuBar()->isItemChecked(animation_export_POV_id_));
+		}
+
+		void Scene::animationExportPNGClicked()
+			throw()
+		{
+			menuBar()->setItemChecked(animation_export_PNG_id_, !menuBar()->isItemChecked(animation_export_PNG_id_));
 		}
 
 } }// namespaces

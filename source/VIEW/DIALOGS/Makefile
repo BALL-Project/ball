@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.40 2004/08/13 18:04:54 amoll Exp $
+# $Id: Makefile,v 1.41 2004/08/16 14:10:41 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -15,8 +15,6 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	amberConfigurationDialog.C\
 	amberConfigurationDialogData.C\
-	animationDialog.C\
-	animationDialogData.C\
 	minimizationDialog.C\
 	minimizationDialogData.C\
 	bondProperties.C\
@@ -73,8 +71,6 @@ CPP_SOURCES=\
 MOC_SOURCES=\
 	amberConfigurationDialog_moc.C\
 	amberConfigurationDialogData_moc.C\
-	animationDialog_moc.C\
-	animationDialogData_moc.C\
 	minimizationDialog_moc.C\
 	minimizationDialogData_moc.C\
 	compositeProperties_moc.C\
@@ -130,7 +126,6 @@ MOC_SOURCES=\
 
 UIC_SOURCES=\
 	amberConfigurationDialogData.C\
-	animationDialogData.C\
 	minimizationDialogData.C\
 	bondPropertiesData.C\
 	charmmConfigurationDialogData.C\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.51 2004/08/16 12:36:57 amoll Exp $
+// $Id: scene.h,v 1.52 2004/08/16 14:10:46 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -26,6 +26,11 @@
 // has to come after BALL includes to prevent problems with Visual Studio Net
 #include <qgl.h>
 
+#ifdef BALL_QT_HAS_THREADS
+ #include <qthread.h>
+ #include <qevent.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -34,7 +39,7 @@ namespace BALL
 		class LightSettings;
 		class StageSettings;
 		class MaterialSettings;
-		class AnimationDialog;
+		class AnimationThread;
 
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
@@ -83,6 +88,8 @@ namespace BALL
 			: public QGLWidget, 
 				public ModularWidget
 		{
+			friend class AnimationThread;
+
 			Q_OBJECT
 
 		  public:
@@ -355,6 +362,14 @@ namespace BALL
 				throw() { return animation_points_;}
 
 			///
+			static void setAnimationSmoothness(float value)
+				throw() { animation_smoothness_ = value;}
+
+			///
+			static float getAnimationSmoothness()
+				throw() { return animation_smoothness_;}
+
+			///
 			void setDefaultLighting(bool update_GL = true)
 				throw();
 
@@ -510,7 +525,23 @@ namespace BALL
 				throw();
 
 			///
+			void stopAnimation()
+				throw();
+
+			///
 			void recordAnimationClicked()
+				throw();
+
+			///
+			void animationRepeatClicked()
+				throw();
+
+			///
+			void animationExportPOVClicked()
+				throw();
+
+			///
+			void animationExportPNGClicked()
 				throw();
 
 			protected slots:
@@ -572,6 +603,9 @@ namespace BALL
 			void render_(const Representation& rep, RenderMode mode)
 				throw();
 
+			//_
+			void animate_()
+				throw();
 
 			void processRotateModeMouseEvents_(QMouseEvent* e);
 
@@ -606,7 +640,8 @@ namespace BALL
 			// Menu entry IDs
 			Index rotate_id_, picking_id_;
 			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
-			Index record_animation_id_, start_animation_id_, clear_animation_id_;
+			Index record_animation_id_, start_animation_id_, clear_animation_id_, cancel_animation_id_;
+			Index animation_export_POV_id_, animation_export_PNG_id_, animation_repeat_id_;
 			
 			Vector3 system_origin_;
 			Quaternion quaternion_;
@@ -632,14 +667,13 @@ namespace BALL
 			static float mouse_sensitivity_;
 			static float mouse_wheel_sensitivity_;
 			static bool show_light_sources_;
+			static float animation_smoothness_;
 
 			LightSettings* light_settings_;
 
 			StageSettings* stage_settings_;
 
 			MaterialSettings* material_settings_;
-
-			AnimationDialog* anim_dialog_;
 
 			Position screenshot_nr_,
 							 pov_nr_;
@@ -649,7 +683,30 @@ namespace BALL
 			static QGLFormat gl_format_;
 			GLint  current_clipping_plane_;
 			List<Camera> animation_points_;
+			AnimationThread* animation_thread_;
+			bool stop_animation_;
 		};
+
+
+#ifdef BALL_QT_HAS_THREADS
+		///
+		class AnimationThread
+			: public QThread
+		{
+			public:
+				
+				///
+				AnimationThread()
+					throw(){};
+
+				///
+				virtual void run() {((Scene*) Scene::getInstance(0))->animate_();}
+
+				///
+				void mySleep(Size msec) {msleep(msec);}
+		};
+#endif
+
 
 } } // namespaces
 

@@ -47,6 +47,7 @@ void StageSettings::updateFromStage()
 	focal_distance_slider->setValue((int) (stage_->getFocalDistance()));
 	fog_slider->setValue((int) (stage_->getFogIntensity()));
 	enable_fog->setChecked(stage_->getFogIntensity() > 0);
+	animation_smoothness->setValue((int) (Scene::getAnimationSmoothness() * 10.0));
 	eyeDistanceChanged();
 	focalDistanceChanged();
 }
@@ -77,6 +78,8 @@ void StageSettings::apply()
 	}
 
 	Scene::setShowLightSources(show_lights_->isChecked());
+
+	Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
 }
 
 
@@ -96,6 +99,7 @@ void StageSettings::setDefaultValues()
 
 	enable_fog->setChecked(false);
 	fog_slider->setValue(200);
+	animation_smoothness->setValue(25);
 }
 
 void StageSettings::eyeDistanceChanged()
