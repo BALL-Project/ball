@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.38 2004/10/21 13:31:42 amoll Exp $
+// $Id: molecularControl.h,v 1.39 2004/11/16 15:32:47 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -266,6 +266,10 @@ namespace BALL
 					Calls updateSelection().
 			*/
 			void invalidateSelection();
+
+			///
+			void highlightSelection()
+				throw();
 
 			/** Cut the selected Composite objects and copy them into an internal
 					copy list. If there are already Composite objects in the 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.77 2004/11/10 02:56:46 amoll Exp $
+// $Id: molecularControl.C,v 1.78 2004/11/16 15:32:43 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -368,6 +368,7 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.insertSeparator();
 	context_menu_.insertItem("Collapse all", this, SLOT(collapseAll()), 0, COLLAPSE_ALL);
 	context_menu_.insertItem("Expand all", this, SLOT(expandAll()), 0, EXPAND_ALL);
+	context_menu_.insertItem("Highlight Selection", this, SLOT(highlightSelection()));
 }
 
 
@@ -1252,6 +1253,35 @@ Size MolecularControl::applySelector(const String& expression)
 {
 	selector_edit_->setText(expression.c_str());
 	return applySelector();
+}
+
+void MolecularControl::highlightSelection()
+	throw()
+{
+	QListViewItemIterator it1(listview);
+	for (; it1.current(); ++it1)
+	{
+		SelectableListViewItem* item = (SelectableListViewItem*) it1.current();
+		item->setOpen(false);
+		listview->setSelected(item, false);
+	}
+
+	QListViewItemIterator it(listview);
+	for (; it.current(); ++it)
+	{
+		SelectableListViewItem* item = (SelectableListViewItem*) it.current();
+		if (item->isOn())
+		{
+			item->setOpen(true);
+			listview->setSelected(item, true);
+			QListViewItem* parent = item->parent();
+			while (parent != 0 && !parent->isOpen())
+			{
+				parent->setOpen(true);
+				parent = parent->parent();
+			}
+		}
+	}
 }
 
 } } // namespaces
