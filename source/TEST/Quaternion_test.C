@@ -1,4 +1,4 @@
-// $Id: Quaternion_test.C,v 1.2 2000/03/05 23:00:45 amoll Exp $
+// $Id: Quaternion_test.C,v 1.3 2000/03/16 08:24:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quaternion_test.C,v 1.2 2000/03/05 23:00:45 amoll Exp $")
+START_TEST(class_name, "$Id: Quaternion_test.C,v 1.3 2000/03/16 08:24:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@ String filename;
 using std::ofstream;
 using std::ios;
 #undef PRECISION
-#define PRECISION 1E-5
+#define PRECISION 1E-4
 
 //line43: method TQuaternion::BALL_CREATE(TQuaternion<T>)
 CHECK(TQuaternion::BALL_CREATE(TQuaternion<T>))
