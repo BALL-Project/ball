@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.50 2004/05/18 11:21:47 amoll Exp $
+// $Id: vector4.h,v 1.51 2004/05/18 11:54:45 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR4_H
@@ -53,7 +53,6 @@ namespace BALL
 		
 	/**	Generic Four-Dimensional Vector.
 			Representation of points and vectors in four-dimensional space.
-			\URL{vector4.h}
 	*/
 	template <typename T>
 	class TVector4
