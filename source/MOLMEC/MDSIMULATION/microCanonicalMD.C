@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.C,v 1.1 1999/12/30 09:59:34 pmueller Exp $
+// $Id: microCanonicalMD.C,v 1.2 1999/12/30 18:15:10 pmueller Exp $
 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 
@@ -20,11 +20,11 @@ namespace BALL
    // the user does not want to take snapshots. 
    // Create a dummy manager 
    SnapShotManager tmp; 
-   valid_ = setup(myforcefield,tmp); 
+   valid_ = setup(myforcefield,&tmp); 
    }
 
   // This constructor uses the given force field and snapshot manager 
-  MicroCanonicalMD::MicroCanonicalMD(ForceField &myforcefield,SnapShotManager &ssm) 
+  MicroCanonicalMD::MicroCanonicalMD(ForceField &myforcefield,SnapShotManager *ssm) 
               : MolecularDynamics(myforcefield)
    {
    valid_ = setup(myforcefield,ssm); 
@@ -32,7 +32,7 @@ namespace BALL
 
   // This constructor uses the given force field and options 
   MicroCanonicalMD::MicroCanonicalMD(ForceField &myforcefield,
-             SnapShotManager &ssm,
+             SnapShotManager *ssm,
              const Options &myoptions)  
              : MolecularDynamics(myforcefield)
    {
@@ -46,7 +46,7 @@ namespace BALL
      }
 
    // This method does the general setup. 
-   bool MicroCanonicalMD::setup(ForceField &myforcefield,SnapShotManager &ssm)
+   bool MicroCanonicalMD::setup(ForceField &myforcefield,SnapShotManager *ssm)
      {
      // No specific options have been named -> we use the force field's options
      valid_ = setup(myforcefield, ssm, myforcefield.options); 
@@ -54,7 +54,7 @@ namespace BALL
      return valid_; 
      }
 
-   bool MicroCanonicalMD::setup(ForceField &myforcefield, SnapShotManager &ssm, const Options &myoptions)
+   bool MicroCanonicalMD::setup(ForceField &myforcefield, SnapShotManager *ssm, const Options &myoptions)
      {
      // First check whether the force field is valid. If not, then it is useless
     // to do anything here.

@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.h,v 1.1 1999/12/30 10:01:18 pmueller Exp $
+// $Id: microCanonicalMD.h,v 1.2 1999/12/30 18:14:23 pmueller Exp $
 // Microcanonical MD: A class for doing molecular dynamics simulations      
 // according to the principle of a microcanonical ensemble (NVE), i.e., 
 // the total energy of the system is kept constant.
@@ -91,11 +91,11 @@ namespace BALL
     /** This constructor expects a force field  and a snapshot-manager 
         The force field's options are used 
     */
-    MicroCanonicalMD(ForceField &myforcefield, SnapShotManager &ssm); 
+    MicroCanonicalMD(ForceField &myforcefield, SnapShotManager *ssm); 
 
     /** This constructor wants a force field, a snapshot manager  and new options 
     */
-    MicroCanonicalMD(ForceField &myforcefield, SnapShotManager &ssm, const Options &myoptions);
+    MicroCanonicalMD(ForceField &myforcefield, SnapShotManager *ssm, const Options &myoptions);
 
     /** The standard copy constructor
     */
@@ -124,11 +124,11 @@ namespace BALL
 
     /** This method does general setup things 
     */
-    virtual bool setup(ForceField &myforcefield, SnapShotManager &ssm); 
+    virtual bool setup(ForceField &myforcefield, SnapShotManager *ssm); 
 
     /** This method does general setup things 
     */
-    virtual bool setup(ForceField &myforcefield, SnapShotManager &ssm, const Options &myoptions); 
+    virtual bool setup(ForceField &myforcefield, SnapShotManager *ssm, const Options &myoptions); 
 
     /** This method is meant for additional preparations  apart from those
        done in setup 

@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.C,v 1.1 1999/12/30 09:59:07 pmueller Exp $
+// $Id: molecularDynamics.C,v 1.2 1999/12/30 18:15:19 pmueller Exp $
 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 
@@ -144,7 +144,7 @@ namespace BALL
 
   // This method does all necessary initialisations. It basically calls
   // another setup method where the work is really done
-  bool MolecularDynamics::setup(ForceField &myforcefield, SnapShotManager &ssm)
+  bool MolecularDynamics::setup(ForceField &myforcefield, SnapShotManager *ssm)
     {
     // No specific Options have been handed over, so we use the options of the
     // force field instead.
@@ -154,7 +154,7 @@ namespace BALL
     }
 
   // This is the real setup method doing all the work! 
-  bool MolecularDynamics::setup(ForceField &myforcefield, SnapShotManager &ssm,
+  bool MolecularDynamics::setup(ForceField &myforcefield, SnapShotManager *ssm,
                                                                const Options &myoptions)
     {
     // First check whether the force field is valid. If not, then it is useless
@@ -175,8 +175,8 @@ namespace BALL
     system_ptr_ = force_field_ptr_->getSystem();  
 
     // check if the user wants to do snapshots 
-    if(ssm.isValid() == true)
-       snapshot_manager_ptr_ = &ssm;
+    if(ssm->isValid() == true)
+       snapshot_manager_ptr_ = ssm;
     else
        snapshot_manager_ptr_ = 0;
 

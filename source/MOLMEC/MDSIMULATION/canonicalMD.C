@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.1 1999/12/30 09:59:59 pmueller Exp $
+// $Id: canonicalMD.C,v 1.2 1999/12/30 18:14:56 pmueller Exp $
 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h> 
 
@@ -18,20 +18,20 @@ namespace BALL
               : MolecularDynamics(myforcefield)
    {
    // the user does not want to take snapshots.
-   // Create a dummy manager
+   // Create an invalid  dummy manager
    SnapShotManager tmp;
-   valid_ = setup(myforcefield,tmp);
+   valid_ = setup(myforcefield,&tmp);
    }
 
   // This constructor uses the given force field and a snapshot manager 
-  CanonicalMD::CanonicalMD(ForceField &myforcefield, SnapShotManager &ssm) 
+  CanonicalMD::CanonicalMD(ForceField &myforcefield, SnapShotManager *ssm) 
               : MolecularDynamics(myforcefield)
    {
    valid_ = setup(myforcefield,ssm);
    }
 
   // This constructor uses the given force field and options 
-  CanonicalMD::CanonicalMD(ForceField &myforcefield, SnapShotManager &ssm,
+  CanonicalMD::CanonicalMD(ForceField &myforcefield, SnapShotManager *ssm,
              const Options &myoptions)  
              : MolecularDynamics(myforcefield)
    {
@@ -45,7 +45,7 @@ namespace BALL
      }
 
    // This method does the general setup. 
-   bool CanonicalMD::setup(ForceField &myforcefield, SnapShotManager &ssm)
+   bool CanonicalMD::setup(ForceField &myforcefield, SnapShotManager *ssm)
      {
      // No specific options have been named -> we use the force field's options
      valid_ = setup(myforcefield, ssm, myforcefield.options); 
@@ -53,7 +53,7 @@ namespace BALL
      return valid_; 
      }
 
-   bool CanonicalMD::setup(ForceField &myforcefield, SnapShotManager &ssm, const Options &myoptions)
+   bool CanonicalMD::setup(ForceField &myforcefield, SnapShotManager *ssm, const Options &myoptions)
      {
      // First check whether the force field is valid. If not, then it is useless
     // to do anything here.

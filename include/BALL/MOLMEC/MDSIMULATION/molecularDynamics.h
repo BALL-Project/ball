@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.1 1999/12/30 10:00:50 pmueller Exp $
+// $Id: molecularDynamics.h,v 1.2 1999/12/30 18:13:44 pmueller Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -215,11 +215,11 @@ namespace BALL
 
 	     /**	Set up the molecular dynamics 
 	     */
-	     virtual bool setup(ForceField &myforcefield,SnapShotManager &snapshot_man);
+	     virtual bool setup(ForceField &myforcefield,SnapShotManager *snapshot_man);
 
 	     /**	Set up the molecular dynamics    
 	     */
-	     virtual bool setup(ForceField &myforcefield,SnapShotManager &snapshot_man,
+	     virtual bool setup(ForceField &myforcefield,SnapShotManager *snapshot_man,
                                                                  const Options &myoptions);
 
 	     /**	Specific setup; derived class can use this method for
