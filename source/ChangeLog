@@ -2,7 +2,7 @@
 1.1pre3: 03.11.2004
 
 1.1 mostly features changes related to the Python support, some bugfixes and
-a larg numer of prominent fixes and improvements in BALLView.
+a large numer of prominent fixes and improvements in BALLView.
 Most of these improvements are related to an improved user interface and some
 new models and animation possibilities.
 
@@ -30,7 +30,6 @@ Added:
 	  	- support to quit program from Python interpreter
   		- support for starting Python script from command line
   		- Benchmark scripts for BALLView
-
 
 
 Fixed:
