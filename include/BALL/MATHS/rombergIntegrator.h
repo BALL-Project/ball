@@ -1,4 +1,4 @@
-// $Id: rombergIntegrator.h,v 1.2 2001/04/06 08:51:31 anhi Exp $
+// $Id: rombergIntegrator.h,v 1.3 2001/06/09 11:31:43 amoll Exp $
 
 #ifndef BALL_MATHS_ROMBERGINTEGRATOR_H
 #define BALL_MATHS_ROMBERGINTEGRATOR_H
@@ -191,12 +191,10 @@ namespace BALL
 		int count;
 		
 		Size nsteps = (Size) (sqrt((helper*helper)/(h*h)));
-// cout << nsteps<< " " <<endl;	
 		for (count=1; count<nsteps-1; count++)
 		{
 			sum +=function_(from+(count*h));
 
-//			cout << sum << endl;
 		}
 
 		sum+=function_(from)+function_(to);
