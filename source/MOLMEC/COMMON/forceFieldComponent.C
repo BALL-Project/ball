@@ -1,7 +1,9 @@
-// $Id: forceFieldComponent.C,v 1.2 1999/12/04 18:34:31 oliver Exp $
+// $Id: forceFieldComponent.C,v 1.3 1999/12/28 17:50:06 oliver Exp $
 
 
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+
+using namespace std;
 
 namespace BALL 
 {

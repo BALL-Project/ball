@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.2 1999/12/04 18:34:32 oliver Exp $
+// $Id: periodicBoundary.C,v 1.3 1999/12/28 17:50:06 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -10,6 +10,8 @@
 #include <BALL/MATHS/common.h>
 #include <BALL/KERNEL/PSE.h>
 #include <BALL/KERNEL/system.h>
+
+using namespace std;
 
 namespace BALL 
 {

@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.3 1999/09/08 12:08:07 len Exp $
+// $Id: support.C,v 1.4 1999/12/28 17:50:06 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -8,9 +8,13 @@
 #include <BALL/KERNEL/atomIterator.h>
 #include <BALL/COMMON/limits.h>
 
-namespace BALL {
+using namespace std;
 
-	namespace MolmecSupport {
+namespace BALL 
+{
+
+	namespace MolmecSupport 
+	{
 
 		Size calculateNonBondedAtomPairs
 			(vector< pair <Atom*, Atom*> >& pair_vector, 

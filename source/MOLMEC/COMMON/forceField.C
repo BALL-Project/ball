@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.7 1999/12/04 18:34:31 oliver Exp $
+// $Id: forceField.C,v 1.8 1999/12/28 17:50:05 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -6,6 +6,8 @@
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+
+using namespace std;
 
 namespace BALL 
 {

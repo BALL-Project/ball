@@ -1,8 +1,10 @@
-// $Id: assignTypes.C,v 1.6 1999/10/30 12:53:36 oliver Exp $
+// $Id: assignTypes.C,v 1.7 1999/12/28 17:50:05 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 
 #include <iostream>
+
+using namespace std;
 
 namespace BALL 
 {

@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.2 1999/12/27 15:10:50 pmueller Exp $
+// $Id: snapShot.C,v 1.3 1999/12/28 17:50:06 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h> 
@@ -6,9 +6,8 @@
 
 using namespace std; 
 
-
 namespace BALL
-  {
+{
   // Definition of class-specific options and default values
   const char *SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY =
                              "Flush_to_disk_frequency";
