@@ -1,4 +1,4 @@
-// $Id: contourLine.h,v 1.5 2001/01/24 11:56:10 amoll Exp $
+// $Id: contourLine.h,v 1.6 2001/03/11 23:59:49 amoll Exp $
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -200,7 +200,7 @@ namespace BALL
     void TContourLine<T>::createContourLine(const TRegularData2D<T>& from)
     {
       // This function uses a "marching cubes"-style algorithm to determine the contour-lines.
-      Size number_of_cells;
+      //Size number_of_cells;
       Size number_of_cells_x;
       Size number_of_cells_y;
       Position act_cell_x;
@@ -211,7 +211,7 @@ namespace BALL
 
       number_of_cells_x = (Size) from.getXSize() - 1;
       number_of_cells_y = (Size) from.getYSize() - 1;
-      number_of_cells   = number_of_cells_x * number_of_cells_y;
+      //number_of_cells   = number_of_cells_x * number_of_cells_y;
       
       for (act_cell_y = 0; act_cell_y < number_of_cells_y; act_cell_y++)
 			{
