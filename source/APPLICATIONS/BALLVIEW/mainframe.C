@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.16 2004/07/20 11:25:45 amoll Exp $
+// $Id: mainframe.C,v 1.17 2004/07/20 19:37:21 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -400,6 +400,8 @@ namespace BALL
 			PersistentObject* po = pm.readObject();
 			if (!RTTI::isKindOf<System>(*po))
 			{
+				setStatusbarText("Error while reading project file! Aborting...");
+				Log.error() << "Error while reading project file! Aborting..." << std::endl;
 				return;
 			}
 			new_system = (System*) po;
