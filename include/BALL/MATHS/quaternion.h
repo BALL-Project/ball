@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.6 2000/02/17 00:30:43 oliver Exp $
+// $Id: quaternion.h,v 1.7 2000/02/25 19:38:07 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -172,7 +172,7 @@ namespace BALL
 	template <class T>
 	TQuaternion<T>::TQuaternion(const TVector3<T>& axis, const T& angle)
 	{
-		set(axisv.x, axisv.y, axisv.z, angle);
+		set(axis.x, axis.y, axis.z, angle);
 	}
 
 	template <class T>
