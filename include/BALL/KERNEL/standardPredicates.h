@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.7 2000/05/26 12:50:38 anker Exp $
+// $Id: standardPredicates.h,v 1.8 2000/05/26 17:15:26 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -374,9 +374,9 @@ namespace BALL
 				bool bondOrderMatch(const String& bond_description, 
 						const Bond::Order order) const;
 				bool find(const String& group, const Atom& atom, 
-						HashSet<const Bond*>& found, const Bond* source) const;
+						const Bond* source) const;
 				bool findAndTest(const String& group, const Atom& atom,
-						HashSet<const Bond*>& found, const Bond* source) const;
+						const Bond* source) const;
 		};
 
 	/** Predicate class for atoms being sp hybridized ...
