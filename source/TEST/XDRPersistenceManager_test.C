@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.14 2004/07/07 22:33:41 amoll Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.15 2004/07/07 23:04:02 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.14 2004/07/07 22:33:41 amoll Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.15 2004/07/07 23:04:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -421,6 +421,23 @@ RESULT
 CHECK(void initializeOutputStream() throw())
 	// ???
 RESULT
+
+CHECK([Extra] full_test0)
+	String filename;
+	Bond b1;
+
+	NEW_TMP_FILE(filename);
+	ofstream os(filename.c_str(), std::ios::out);
+	XDRPersistenceManager pm(os);
+	b1 >> pm;
+	os.close();
+
+	ifstream is(filename.c_str(), std::ios::in);
+	XDRPersistenceManager pm2(is);
+	PersistentObject* po =  pm2.readObject();
+	is.close();
+RESULT
+	
 
 CHECK([Extra] full_test1)
 	String filename;
