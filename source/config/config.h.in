@@ -60,7 +60,7 @@
 #undef BALL_OS_IRIX
 #undef BALL_OS_IRIX32
 #undef BALL_OS_IRIX64
-
+#undef BALL_OS_FREEBSD
 
 // define if gethostname is supported
 #undef BALL_HAVE_GETHOSTNAME
@@ -103,7 +103,7 @@
 #undef STDC_HEADERS
 
 // Define if numeric_limits is defined in <limits>
-#undef HAVE_NUMERIC_LIMITS
+#undef BALL_HAVE_NUMERIC_LIMITS
 
 // Define whether float.h has to be included along with limits.h
 #undef BALL_INCLUDE_FLOAT_H 
