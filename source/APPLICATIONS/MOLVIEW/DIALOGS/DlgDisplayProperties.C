@@ -211,6 +211,10 @@ void DlgDisplayProperties::selectModel(const QString& string)
 {
 	model_string_ = string;
 
+	object_processor_
+		->setValue(ADDRESS__DYNAMIC_DRAWING_MODE, 
+							 VALUE__DRAWING_MODE_SOLID);
+
 	if (string == "none")
 	{
 		object_processor_
@@ -244,7 +248,10 @@ void DlgDisplayProperties::selectModel(const QString& string)
 		object_processor_
 			->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_SURFACE);
 		object_processor_
-			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_SURFACE);
+		object_processor_
+			->setValue(ADDRESS__DYNAMIC_DRAWING_MODE, 
+								 VALUE__DRAWING_MODE_DOTS);
 	}
 	else if (string == "van der Waals")
 	{
