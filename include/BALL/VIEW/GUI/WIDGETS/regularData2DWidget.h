@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.6 2000/12/04 21:05:28 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.7 2000/12/14 19:56:51 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -195,41 +195,83 @@ class RegularData2DWidget
 
   void slotOverlayMove(int i);
 
+  void plot();
+
+  void viewportMousePressEvent(QMouseEvent *e);
+  void viewportMouseMoveEvent(QMouseEvent *e);
+  void viewportMouseReleaseEvent(QMouseEvent *e);
+
  protected:
   QPixmap *pm_, *legend_map_, *buffer_map_;
+
   PixWid *pix_wid_;
-  Size legend_last_x_, legend_last_y_;
+
+  Position legend_last_x_, legend_last_y_;
+
   /* Length of original data. */
   Size lengthx_, lengthy_;
+
   /* Length of field (after interpolation). */
   Size full_length_x_, full_length_y_;
+
   /* Range. */
   double min_, max_;
+
   /* Flag that decides whether to plot mousepos or not. */
   bool showMousePos_;
+
   /* Shows mouse position.*/
   QLabel *posLabel_;
-  double soffsetf1_, soffsetf2_;
-  double swidthf1_, swidthf2_;
-  double bfreqf1_, bfreqf2_;
+
   /* Stores the spectrum */
   RegularData2D *spec_;
+
   /* Context-menu */
   QPopupMenu *men_;
+
   /* If we zoom into the data, we have to store the position of the lower left corner of the
      area we are looking at at the moment and we have to know a zoom - factor.
   */
   double xvis_low_, xvis_high_, yvis_low_, yvis_high_;
+
   Position act_lower_left_x_;
+
   Position act_lower_left_y_;
+
   double zoom_x_;
+
   double zoom_y_;
+
   /* This class creates and stores a number of contour-lines */
   Contour *cont_;
+
   /* The number and range of the contour-lines we want to plot. */
-  Size cont_num_, cont_start_, cont_end_;
+  Size cont_num_;
+
+  double cont_start_, cont_end_;
+
   DlgMoveOverlay* mvover_;
+
   Position ind_side_, ind_updown_;
+
+  /* These variables store the parameters of the spectrum */
+  Size spec_length_x_, spec_length_y_;
+
+  /* This pixmap is intended to hold the contour-lines */
+  QPixmap *pm_cont_;
+
+  /* decide if we plot contour-lines */
+  bool plot_cont_;
+
+  /* decide if we plot the data itself */
+  bool plot_data_;
+
+  /* If a selection is in progress, the coordinate of the first endpoint of the
+     selected rectangle is stored in here.
+  */
+  QPoint last_selection_;
+
+  bool select_;
 };
 
 #endif
