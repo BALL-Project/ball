@@ -1,4 +1,4 @@
-// $Id: modularWidget.C,v 1.1 2000/09/23 13:28:39 hekl Exp $
+// $Id: modularWidget.C,v 1.2 2000/11/12 15:22:15 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 
@@ -25,25 +25,33 @@ ModularWidget::ModularWidget(const ModularWidget& widget)
 ModularWidget::~ModularWidget()
 {
 	cerr << "destructing ModularWidget at " << this << endl;
-	QWidget* widget = dynamic_cast<QWidget*>(this);
-	if (widget != 0)
+
+	// do not function because the mainControl is already destroyed
+	// at this time => moved to maincontrol
+	/* 
+	QObject* object = dynamic_cast<QObject*>(this);
+	if (object != 0)
 	{
-		MainControl* mc = MainControl::getMainControl(widget);
+		MainControl* mc = MainControl::getMainControl(object);
 		if (mc != 0)
 		{
+			writePreferences(mc->getINIFile());
+			finalizePreferencesTab(*(mc->getPreferences()));
 			finalizeWidget(*mc);
 			mc->removeModularWidget(this);
 		}
 	}
+
+	*/
 }
 
 void ModularWidget::registerWidget(ModularWidget* mwidget)
 {
 	cerr << "registering ModularWIdget at " << mwidget << endl;
-	QWidget* widget = dynamic_cast<QWidget*>(mwidget);
-	if (widget != 0)
+	QObject* object = dynamic_cast<QObject*>(mwidget);
+	if (object != 0)
 	{
-		MainControl* mc = MainControl::getMainControl(widget);
+		MainControl* mc = MainControl::getMainControl(object);
 		if (mc != 0)
 		{
 			mc->addModularWidget(mwidget);
@@ -65,5 +73,25 @@ void ModularWidget::finalizeWidget(MainControl& /* main_control */)
 }
 
 void ModularWidget::checkMenu(MainControl& /* main_control */)
+{
+}
+
+void ModularWidget::initializePreferencesTab(Preferences & /* preferences */)
+{
+}
+
+void ModularWidget::finalizePreferencesTab(Preferences & /* preferences */)
+{
+}
+
+void ModularWidget::applyPreferences(Preferences & /* preferences */)
+{
+}
+
+void ModularWidget::fetchPreferences(INIFile & /* inifile */)
+{
+}
+
+void ModularWidget::writePreferences(INIFile & /* inifile */)
 {
 }
