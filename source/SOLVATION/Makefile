@@ -9,6 +9,7 @@ CPP_SOURCES=\
 	ooiEnergy.C\
 	PCMCavFreeEnergyProcessor.C\
 	pierottiCavFreeEnergyProcessor.C\
+	pair6_12InteractionEnergyProcessor.C\
 	pair6_12RDFIntegrator.C\
 	pairExpInteractionEnergyProcessor.C\
 	pairExpRDFIntegrator.C\
