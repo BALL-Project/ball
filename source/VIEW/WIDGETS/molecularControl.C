@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.3 2003/09/08 02:06:55 amoll Exp $
+// $Id: molecularControl.C,v 1.4 2003/09/11 09:52:09 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -12,7 +12,7 @@
 #include <qmenubar.h>
 
 using std::endl;
-#define BALL_VIEW_DEBUG
+
 namespace BALL
 {
 	namespace VIEW
@@ -870,6 +870,5 @@ const List<Composite*>& MolecularControl::getCopyList_() const
 {
 	return copy_list_;
 }
-#undef BALL_VIEW_DEBUG
-	} // namespace VIEW
-} // namespace BALL
+
+} } // namespaces
