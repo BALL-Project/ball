@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.20 2001/01/22 08:59:56 oliver Exp $
+// $Id: PDBFile.C,v 1.21 2001/05/17 18:10:03 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -489,7 +489,7 @@ namespace BALL
 		Residue*							residue[13] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		SecondaryStructure*		current_sec_struc = 0;
 		Atom*									current_atom = 0;
-		Size									length_of_secstruc = 0;
+		PDB::Integer					length_of_secstruc = 0;
 		String								temp_string;
 		HashMap<void*, PDB::Integer> atom_map;
 		Atom* covalent_bonded_atom[4];
@@ -658,10 +658,9 @@ namespace BALL
 						residue[0]->getName().get(PDB_residue_name[0], 0, 4);
 						residue[1]->getName().get(PDB_residue_name[1], 0, 4);
 
-						for (length_of_secstruc = 1; !residue_it.isEnd() && residue_it != reverse_residue_it;
-								 ++length_of_secstruc, ++residue_it)
-						{
-						}
+						for (length_of_secstruc = 1; 
+								 !residue_it.isEnd() && residue_it != reverse_residue_it;
+								 ++length_of_secstruc, ++residue_it);
 			
 						chain_name = current_chain_->getName().c_str()[0];
 						if (chain_name == 0)
