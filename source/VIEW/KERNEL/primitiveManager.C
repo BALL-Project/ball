@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.26 2004/11/14 22:41:44 amoll Exp $
+// $Id: primitiveManager.C,v 1.27 2004/11/14 23:44:12 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -273,8 +273,13 @@ void PrimitiveManager::startUpdateThread_()
 
 	// start the UpdateRepresentationThread
 	thread_.setRepresentation(*rep);
-	thread_.start();
 
+	#if BALL_QT_VERSION >=	0x030200
+		thread_.start(QThread::LowPriority);
+	#else
+		thread_.start();
+	#endif
+				
 	// no statusbar changes while beeing otherwise busy
 	if (main_control_->compositesAreLocked()) return;
 
