@@ -1,6 +1,11 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: canvasWidget.C
+//
+
 #include <BALL/VIEW/WIDGETS/canvasWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <qlabel.h>
 
 namespace BALL
 {
@@ -37,21 +42,21 @@ namespace BALL
 
     //-----------------------class CanvasWidget
     
-    //Constructor
     CanvasWidget::CanvasWidget(QWidget *parent, int x, int y, 
-			       const char* name, WFlags f)
+															 const char* name, WFlags f)
       : QCanvasView(parent, name, f),
 				canvas_(0,0),  //Constructs a QCanvas that is w pixels wide and h pixels high
 				x_(x),
 				y_(y)
     {
-      setCanvas(&canvas_);  //Sets the QCanvas upon which the canvas item is to be drawn to c. 
+			//Sets the QCanvas upon which the canvas item is to be drawn to c. 
+      setCanvas(&canvas_);  
     }
 
-    //Destructor
+
     CanvasWidget::~CanvasWidget()
     {
-	// we are responsible for destrucing the items
+			// we are responsible for destrucing the items
       for (int i=0; i<(int)objects_.size(); i++)
 			{
 				if (objects_[i] != 0)
@@ -59,7 +64,6 @@ namespace BALL
 			}
     }
 		
- 		//get/set methods
     const QCanvas& CanvasWidget::getCanvas()
 			throw()
 		{
@@ -67,7 +71,6 @@ namespace BALL
 		}
 		
     
-    //methods:
     void CanvasWidget::showObjects()
       throw() 
     {

@@ -14,55 +14,53 @@ namespace BALL
 {
   namespace VIEW
   {      
+		///
     class BALL_EXPORT CanvasWidget
       : public QCanvasView
     {
-      Q_OBJECT                        //macro for QT messages
-       public:
+      Q_OBJECT    
+
+      public:
       
       class BALL_EXPORT PixmapItem
-	: public QCanvasRectangle
+				: public QCanvasRectangle
       {
-      public:
-	//Constructor
-	PixmapItem(QCanvas* canvas, const QPixmap& pixmap);
-	//Copyconstructor
-	PixmapItem(const PixmapItem& pixitem);
-	//Destructor
-	virtual ~PixmapItem();
-	
-	//get-/set- methods
-	QPixmap& getPixmap();
+				public:
+					
+				PixmapItem(QCanvas* canvas, const QPixmap& pixmap);
+				
+				PixmapItem(const PixmapItem& pixitem);
 
-      protected:
-	void drawShape(QPainter& p);
-	QPixmap pixmap_;
+				virtual ~PixmapItem();
+	
+				QPixmap& getPixmap();
+
+				protected:
+
+				void drawShape(QPainter& p);
+
+				QPixmap pixmap_;
 	
       }; //end of class PixmapItem
       
-      //Constructor
+			///
       CanvasWidget (QWidget *parent  = 0, 
-		    int x=0, int y=0,  
-		    const char* name = 0, 
-		    WFlags f         = 0);
+										int x=0, int y=0,  
+										const char* name = 0, 
+										WFlags f         = 0);
                 
-
-      //Copyconstructor doesn't work because of the QT private copy constructors
 
       //Destructor
       virtual ~CanvasWidget();  
       
-
-			//get/set methods
+			///
 			const QCanvas& getCanvas()
 				throw();
 			
-      //methods
+      ///
       void showObjects()	 
 				throw();
       
-				
-			
       /*
       void enlarge()
         throw();
@@ -95,26 +93,33 @@ namespace BALL
       */
 
     public slots:
+
       virtual void zoomIn()
         throw();
-      virtual void zoomOut()
-	throw();
-      virtual void zoom(float xfactor,float yfactor)
-	throw();
-      virtual void zoomToFit()
-	throw();
 
+      virtual void zoomOut()
+				throw();
+
+      virtual void zoom(float xfactor,float yfactor)
+				throw();
+
+      virtual void zoomToFit()
+				throw();
 
     protected:  
+
+      //Copyconstructor doesn't work because of the QT private copy constructors
+			CanvasWidget(const CanvasWidget& cw)
+				throw();
+
       QCanvas canvas_;
-      std::vector<QCanvasItem*> objects_; //z.B PixItem, Polygonzuege
+      std::vector<QCanvasItem*> objects_; //e.g PixItem, Polygonzuege
       int x_; //width
       int y_; //heights
       
     };//end of class CanvasWidget
-    
+
   }
 }
-
 
 #endif
