@@ -38,6 +38,9 @@ namespace BALL
 	template <class T>
 	class TTriangulatedSES;
 
+	template <class T>
+	class TTriangulatedSAS;
+
 
 	/** Generic TriangleEdge Class.
 			\\
@@ -57,6 +60,7 @@ namespace BALL
 					\item class GraphVertex< TTriangleEdge<T>,TTriangle<T> >
 					\item class TTriangulatedSurface<T>
 					\item class TTriangulatedSES<T>
+					\item class TTriangulatedSAS<T>
 					\item class TTriangle<T>;
 					\item class TTriangleEdge<T>;
 				\end{itemize}
@@ -66,6 +70,7 @@ namespace BALL
 		friend class GraphVertex< TTriangleEdge<T>,TTriangle<T> >;
 		friend class TTriangulatedSurface<T>;
 		friend class TTriangulatedSES<T>;
+		friend class TTriangulatedSAS<T>;
 		friend class TTriangle<T>;
 		friend class TTriangleEdge<T>;
 
