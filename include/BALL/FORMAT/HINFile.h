@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.9 2000/10/23 23:31:00 amoll Exp $
+// $Id: HINFile.h,v 1.10 2001/01/24 11:51:20 anker Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -34,6 +34,8 @@ namespace BALL
 		: public File
 	{
 		public:
+
+		BALL_CREATE(HINFile)
 
 		/**	@name	Constructors and Destructors
 		*/
