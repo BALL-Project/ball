@@ -1,4 +1,4 @@
-// $Id: Vector2_test.C,v 1.3 2001/05/31 22:37:23 amoll Exp $
+// $Id: Vector2_test.C,v 1.4 2001/06/26 10:01:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(TVector2, "$Id: Vector2_test.C,v 1.3 2001/05/31 22:37:23 amoll Exp $")
+START_TEST(TVector2, "$Id: Vector2_test.C,v 1.4 2001/06/26 10:01:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -139,6 +139,14 @@ CHECK(TVector2<T>& TVector2<T>::operator = (const TVector2<T>& v))
 	v = v2;
 	TEST_EQUAL(v2, v)
 RESULT
+
+
+CHECK(operator = (T value))
+	v2 = 1.1;
+	TEST_REAL_EQUAL(v2.x, (float) 1.1)
+	TEST_REAL_EQUAL(v2.y, (float) 1.1)
+RESULT
+
 
 CHECK(TVector2::get(T& rx, T& ry) const)
 	float a, b;

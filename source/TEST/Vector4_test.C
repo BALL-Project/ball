@@ -1,11 +1,11 @@
-// $Id: Vector4_test.C,v 1.19 2001/05/09 16:19:39 oliver Exp $
+// $Id: Vector4_test.C,v 1.20 2001/06/26 10:01:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.19 2001/05/09 16:19:39 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.20 2001/06/26 10:01:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -207,6 +207,14 @@ CHECK(TVector4::set(const T& value = (T)1))
 	TEST_EQUAL(v[1], 3)
 	TEST_EQUAL(v[2], 3)
 	TEST_EQUAL(v[3], 3)
+RESULT
+
+CHECK(operator = (T value))
+	v = 1.1;
+	TEST_REAL_EQUAL(v.x, (float) 1.1)
+	TEST_REAL_EQUAL(v.y, (float) 1.1)
+	TEST_REAL_EQUAL(v.z, (float) 1.1)
+	TEST_REAL_EQUAL(v.h, (float) 1.1)
 RESULT
 
 CHECK(TVector4::T& operator [] (Index index) )

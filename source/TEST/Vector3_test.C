@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.31 2001/05/09 16:19:20 oliver Exp $
+// $Id: Vector3_test.C,v 1.32 2001/06/26 10:01:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.31 2001/05/09 16:19:20 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.32 2001/06/26 10:01:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -207,6 +207,13 @@ CHECK(TVector3<T>& TVector3<T>::operator = (const TVector3<T>& v))
 	v  = Vector3();
 	v = v2;
 	TEST_EQUAL(v2, v)
+RESULT
+
+CHECK(operator = (T value))
+	v2 = 1.1;
+	TEST_REAL_EQUAL(v2.x, (float) 1.1)
+	TEST_REAL_EQUAL(v2.y, (float) 1.1)
+	TEST_REAL_EQUAL(v2.z, (float) 1.1)
 RESULT
 
 CHECK(TVector3::get(T* ptr) const )
