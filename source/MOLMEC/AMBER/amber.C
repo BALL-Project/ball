@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.7 1999/09/17 13:39:10 oliver Exp $
+// $Id: amber.C,v 1.8 1999/09/18 19:11:47 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -16,28 +16,27 @@ namespace BALL
 	const char* AmberFF::Option::ELECTROSTATIC_CUTOFF = "electrostatic_cutoff";
 	const char* AmberFF::Option::SCALING_VDW_1_4 = "SCAB";
 	const char* AmberFF::Option::SCALING_ELECTROSTATIC_1_4 = "SCEE";
-        const char* AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC = "DDDC"; 
+	const char* AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC = "DDDC"; 
  
 	const float AmberFF::Default::NONBONDED_CUTOFF = 20.0;
 	const float AmberFF::Default::VDW_CUTOFF = 15.0;
 	const float AmberFF::Default::ELECTROSTATIC_CUTOFF = 15.0;
 	const float AmberFF::Default::SCALING_ELECTROSTATIC_1_4 = 0.5;
 	const float AmberFF::Default::SCALING_VDW_1_4 = 0.5;
-        const bool  AmberFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = false;   
+  const bool  AmberFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = false;   
  
 	// Default constructor
 	AmberFF::AmberFF() 
-			// call the base class constructor
 		: ForceField()
 	{
 		// set the force field name
 		setName("Amber");
 
 		// create the component list
-		insertComponent(new AmberStretch( this ));
-		insertComponent(new AmberBend( this ));
-		insertComponent(new AmberTorsion( this ));
-		insertComponent(new AmberNonBonded( this ));
+		insertComponent(new AmberStretch(this));
+		insertComponent(new AmberBend(this));
+		insertComponent(new AmberTorsion(this));
+		insertComponent(new AmberNonBonded(this));
 	}
 
   // Constructor initialized with a system
@@ -48,10 +47,10 @@ namespace BALL
 		setName("Amber");
 
 		// create the component list
-		insertComponent(new AmberStretch( this ));
-		insertComponent(new AmberBend( this ));
-		insertComponent(new AmberTorsion( this ));
-		insertComponent(new AmberNonBonded( this ));
+		insertComponent(new AmberStretch(this));
+		insertComponent(new AmberBend(this));
+		insertComponent(new AmberTorsion(this));
+		insertComponent(new AmberNonBonded(this));
 
     bool result = setup(system);
 
@@ -70,10 +69,10 @@ namespace BALL
 		setName("Amber");
 
 		// create the component list
-		insertComponent(new AmberStretch( this ));
-		insertComponent(new AmberBend( this ));
-		insertComponent(new AmberTorsion( this ));
-		insertComponent(new AmberNonBonded( this ));
+		insertComponent(new AmberStretch(this));
+		insertComponent(new AmberBend(this));
+		insertComponent(new AmberTorsion(this));
+		insertComponent(new AmberNonBonded(this));
 
     bool result = setup(system, new_options);
 
@@ -92,12 +91,12 @@ namespace BALL
 	}
 
 	// destructor 
-	AmberFF::~AmberFF(void)
+	AmberFF::~AmberFF()
 	{
 	}
 
 	// force field specific setup method BAUSTELLE
-	bool AmberFF::specificSetup(void)
+	bool AmberFF::specificSetup()
 	{
 
 		// check whether the system is assigned
@@ -105,7 +104,6 @@ namespace BALL
 		{
 			return false;
 		}
-
  
 		// open parameter file
 		Path    path;
@@ -122,9 +120,11 @@ namespace BALL
 		parameters_.setFilename(filename);
 		parameters_.init();
 
-		// assign atom types: QUICK AND _VERY_ DIRTY (BAUSTELLLE)
+		// assign atom types and respect existing atom type names
 		AssignTypeNameProcessor type_name_proc("/KM/comp-bio/BALL-data/Amber/amber94.types", false);
 		getSystem()->apply(type_name_proc);
+
+		// convert the type names to types
 		AssignTypeProcessor type_proc(parameters_.getAtomTypes());
 		getSystem()->apply(type_proc);
 		
