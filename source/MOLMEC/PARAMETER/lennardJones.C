@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.13.4.2 2002/05/31 22:53:57 oliver Exp $
+// $Id: lennardJones.C,v 1.13.4.3 2002/06/03 20:15:03 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -165,9 +165,9 @@ namespace BALL
 			is_defined_[i] = false;
 		}
 
-		// the indices of the colums containing the values
-		Size					index_A;
-		Size					index_B;
+		// the indices of the columns containing the values
+		Size index_A = 0;
+		Size index_B = 0;
 		if (format_ == A_B_FORMAT)
 		{
 			index_A = getColumnIndex("A");
