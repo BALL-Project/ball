@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.23 2001/07/17 00:40:02 oliver Exp $
+// $Id: regularData2DWidget.C,v 1.24 2001/07/25 11:39:43 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -191,11 +191,10 @@ bool RegularData2DWidget::reactToMessages_(Message* message)
       {
 				delete (spec_);
       }
-			Vector2 vec;
 			
       spec_ = (RegularData2D *)composite_message->getComposite();
-      min_ = *(spec_->getMinValue(vec));
-      max_ = *(spec_->getMaxValue(vec));
+      min_ = spec_->getMinValue();
+      max_ = spec_->getMaxValue();
       lengthx_ = spec_->getMaxXIndex();
       lengthy_ = spec_->getMaxYIndex();
       spec_length_x_ = spec_->getMaxXIndex();
@@ -394,9 +393,8 @@ void RegularData2DWidget::plotOverlay()
 
   //spec_->createGroundState();
   //cont_start_ = spec_->getGroundState() + 0.5*spec_->getSigmaGroundState();
-	Vector2 v;
-  cont_start_   = *(spec_->getMaxValue(v)) / 2;
-  cont_end_     = *(spec_->getMaxValue(v));
+  cont_start_   = spec_->getMaxValue() / 2;
+  cont_end_     = spec_->getMaxValue();
   // up to here...
 
   cont_ = new Contour(cont_num_, cont_start_, cont_end_);
@@ -443,8 +441,7 @@ void RegularData2DWidget::createPlot()
 
   
   // min_ = spec_->getGroundState() + spec_->getSigmaGroundState();
-	Vector2 v;
-  min_ = (double) *(spec_->getMinValue(v));
+  min_ = spec_->getMinValue();
  
   act_lower_left_x_ = 0;
   act_lower_left_y_ = 0;
@@ -690,9 +687,8 @@ void RegularData2DWidget::createContour()
 
   //spec_->createGroundState();
   //cont_start_ = spec_->getGroundState() + 0.5 * spec_->getSigmaGroundState();
-	Vector2 v;
-  cont_start_   = *(spec_->getMaxValue(v)) / 2;
-  cont_end_     = *(spec_->getMaxValue(v));
+  cont_start_   = spec_->getMaxValue() / 2;
+  cont_end_     = spec_->getMaxValue();
   // up to here...
 
   cont_ = new Contour(cont_num_, cont_start_, cont_end_);
