@@ -1,143 +1,193 @@
-// $Id: LEF.C,v 1.6 2000/09/08 07:13:24 oliver Exp $
+// $Id: LEF.C,v 1.7 2000/09/15 07:42:34 oliver Exp $
 
 #include<BALL/NMR/LEF.h>
-#include<BALL/KERNEL/atom.h>
-#include<BALL/KERNEL/bond.h>
-#include<BALL/KERNEL/PTE.h>
 
 using namespace std;
 
-namespace BALL
+namespace BALL 
 {
-	// def. constructor
-	LEFShift::LEFShift()
-	{
+
+
+	const int MAX_EXPR = 5;
+
+	// default ctor
+	LEFShiftProcessor::LEFShiftProcessor()
+	{	
+		ini_file_name_ = "/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";	
 	}
 
-
+		
 	// destructor
-	LEFShift::~LEFShift()
+	LEFShiftProcessor::~LEFShiftProcessor()
 	{
 	}
 
-
-	// finish method
-	bool LEFShift::finish()
+	void LEFShiftProcessor::setFilename(const String& filename)
 	{
-		//cout << endl << "LEF Modul";
+		ini_filename_ = filename;
+	}
+		
+	// Processor start method
+	bool LEFShiftProcessor::start()
+	{
+		// hier werden die Ladungen aus einem File eingelesen und zugewiesen
+		// nein : wurden bereits in calculate_shifts() von NMRSPectrum zugewiesen
+		// dort ist ein pointer auf das System das fuer den acp Processor benoetigt wird.
 
-		Vector3 proton;
-		Vector3 bond;
-		Vector3 atom;
-		Vector3 prot_bin, prot_atom;
-		float sc, theta, charge, Ez, Efact, b_prot_bin, b_prot_atom;
-
-
-		// units? / e0 = 1.602e-19 C = 4.80287e-10 esu (charge)
-		//  values are in 1e-10 esu:
-		const float QC = 1.6;				// =  0.333 e0
-		const float QN = -1.7;			// = -0.354 e0
-		const float QH = 0.7;				// =  0.146 e0
-		const float QO = -2.3;			// = -0.479 e0
-		const float sigmaE = 0.6;
-
-	  list<Atom*>::iterator proton_iter;
-	  list<Atom*>::iterator atom_iter;
-	  proton_iter = proton_list_.begin();
-
-		if ((proton_list_.size() > 0) && (atom_list_.size() > 0))
+		// hier wird die Expression Liste aufgebaut fuer die shiftatome
+		
+		int number_of_keys;
+		int counter;
+		String description;
+		
+		parameters_ = new Parameters(ini_file_name_);
+		parameter_section_ = new ParameterSection;
+		
+		parameter_section_->extractSection(*parameters_,"LEF-ShiftAtoms");
+		
+		number_of_keys = parameter_section_->getNumberOfKeys();
+		number_of_expressions_ = number_of_keys;
+		
+		expressions_ = new Expression[MAX_EXPR];
+		
+		Position description_column = parameter_section_->getColumnIndex("description");
+		
+		for (counter = 0; counter < number_of_keys; counter++)
 		{
-			for (; proton_iter != proton_list_.end(); ++proton_iter)
+			description = parameter_section_->getValue(counter,description_column);
+			while (description.has('_'))
 			{
-				//cout << endl<< "Bearbeite jetzt Hydrogen : " << (*proton_iter)->getName();
-				proton = (*proton_iter)->getPosition();
-				bond = (*proton_iter)->getBond (0)->getBoundAtom (*(*proton_iter))->getPosition();
-				prot_bin = proton - bond;
-				Ez = 0;
-				for (atom_iter = atom_list_.begin(); atom_iter != atom_list_.end(); ++atom_iter)
+				description.substitute("_"," ");
+			}
+				
+			expressions_[counter].setExpression(description);
+		}	
+		
+		// Aufbau der Expression fuer die Bindungsatom der ShiftAtome
+		
+		isSecondAtom_ = new Expression[MAX_EXPR];
+		
+		Position second_atom_column = parameter_section_->getColumnIndex("second_atom");
+		
+		for (counter = 0; counter < number_of_keys; counter++)
+		{
+			description = parameter_section_->getValue(counter, second_atom_column);
+			while (description.has('_'))
+			{
+				description.substitute("_"," ");
+			}
+				
+			isSecondAtom_[counter].setExpression(description);
+		}
+				
+		return 1;
+	}
+		
+
+	// Processor finish method
+	bool LEFShiftProcessor::finish()
+	{
+		parameter_section_->extractSection(*parameters_,"LEF-ShiftAtoms");
+
+		Vector3 proton,bindung,atom,prot_bin,prot_atom;
+		float sigmaE,sc,theta,ladung,Ez,Efact,b_prot_bin,b_prot_atom,hshift;
+		int test=0;
+		int counter,key;
+
+		int number_of_bonds;
+		Bond *bond;
+
+		list<PDBAtom*>::iterator atom_iter;
+		list<PDBAtom*>::iterator effector_iter;
+		atom_iter=atom_list_.begin();
+		
+		if ((atom_list_.begin() != NULL) && (effector_list_.begin() != NULL))
+		{
+			for (;atom_iter != atom_list_.end(); ++atom_iter)
+			{
+				test = 0;
+				for(counter = 0; counter < number_of_expressions_; counter++)
 				{
-					//cout << endl <<"  "<< (*atom_iter)->getName()<<"?";
-					if ((*atom_iter)->getFragment() != (*proton_iter)->getFragment())
+					if (expressions_[counter](*(*atom_iter)))
 					{
-						if ((*atom_iter)->getName() == "C")
-						{
-							charge = QC;
-						}
-						if ((*atom_iter)->getName() == "N")
-						{
-							charge = QN;
-						}
-						if ((*atom_iter)->getName() == "H")
-						{
-							charge = QH;
-						}
-						if ((*atom_iter)->getName() == "O")
-						{
-							charge = QO;
-						}
-
-						//cout << " charge:"<< charge;
-
-						atom = (*atom_iter)->getPosition();
-						prot_atom = proton - atom;
-						sc = prot_bin * prot_atom;
-						b_prot_bin = prot_bin.getLength();
-						b_prot_atom = prot_atom.getLength();
-						theta = sc / (b_prot_bin * b_prot_atom);
-						Efact = charge / (b_prot_atom * b_prot_atom);
-						Ez = Ez + (theta * Efact);
+						key=counter;
+						counter=MAX_EXPR+1;
 					}
 				}
-				float shift = (*proton_iter)->getProperty("chemical_shift").getFloat();
-				shift -= Ez * sigmaE;
-				(*proton_iter)->setProperty("chemical_shift", shift);
+					
+				sigmaE = parameter_section_->getValue(key,"sigmaE").toFloat();
+				
+				proton=(*atom_iter)->getPosition();
+				
+				number_of_bonds = (*atom_iter)->countBonds();
+				for(counter=0;counter<number_of_bonds;counter++)
+				{
+					bond = (*atom_iter)->getBond(counter);
+					if (isSecondAtom_[key](*bond->getBoundAtom(*(*atom_iter)))) 
+					{
+						bindung = (*atom_iter)->getBond(counter)->getBoundAtom(*(*atom_iter))->getPosition();
+						counter = number_of_bonds + 1;
+					}
+				}
+									
+				bindung = (*atom_iter)->getBond(0)->getBoundAtom(*(*atom_iter))->getPosition();
+				prot_bin = proton-bindung;
+				Ez=0;
+				for(effector_iter=effector_list_.begin();effector_iter!=effector_list_.end();++effector_iter)
+				{
+					if ( (*effector_iter)->getResidue()!=(*atom_iter)->getResidue() )
+					{
+						ladung = (*effector_iter)->getCharge();
+						
+						atom=(*effector_iter)->getPosition();
+						prot_atom=proton-atom;			
+						sc=prot_bin*prot_atom;
+						b_prot_bin=prot_bin.getLength();
+						b_prot_atom=prot_atom.getLength();
+						//if (test) cout << "	abstand :" << b_prot_atom;
+						theta=sc / (b_prot_bin*b_prot_atom);
+						Efact=ladung/(b_prot_atom*b_prot_atom);
+						Ez=Ez+(theta*Efact);
+					}
+				}
+				hshift = -Ez*sigmaE;
+				shift_ = (*atom_iter)->getProperty("chemical_shift").getFloat();
+				shift_ -= hshift;
+				(*atom_iter)->setProperty("chemical_shift", shift_);
+				(*atom_iter)->setProperty("LEF",hshift);
 			}
 		}
 
-		return true;
+		return 1;
 	}
-
-
-	//apply method
-	Processor::Result LEFShift::operator() (Composite& composite)
+		
+		
+	// Processor operator ()
+	Processor::Result LEFShiftProcessor::operator () (Composite& object)
 	{
 		// ist das Objekt ein Atom und noch dazu ein Wasserstoff
 		// und hängt es an einem Kohlenstoff, so wird es in der _proton_list gespeichert
-
-		if (RTTI::isKindOf<Atom>(composite))
+		int counter;
+	
+		if (RTTI::isKindOf<PDBAtom>(object))
 		{
-			// Baustelle : überprüfe ob Hydrogen an einem Kohlenstoff hängt !!
-			patom_ = RTTI::castTo<Atom>(composite);
-			//cout  << endl << "    atom name : " << patom_->getName();
-			//cout  << endl << "    Element : " << (patom_->getElement()).getName();
-			if (patom_->getElement() == PTE[Element::H])
+			patom_ = RTTI::castTo<PDBAtom>(object);
+				
+			for(counter=0;counter<number_of_expressions_;counter++)
 			{
-				if (patom_->getName() == "H")
+				if (expressions_[counter](*patom_))
 				{
-					atom_list_.push_back (patom_);
-				}
-				else
-				{
-
-					// Wasserstoffe haben nur eine Bindung : Index = 1 oder 0 ?
-					// Hole diese Bindung und überprüfe ob Kohlenstoff
-					if (patom_->isBound())
-					{
-						if ((patom_->getBond (0)->getBoundAtom (*patom_)->getElement()) == PTE[Element::C])
-						{
-							proton_list_.push_back (patom_);
-						}
-					}
+					atom_list_.push_back(patom_);
+					counter=MAX_EXPR+1;
 				}
 			}
-			else if ((patom_->getName() == "C") || (patom_->getName() == "N") || (patom_->getName() == "O"))
-			{
-				atom_list_.push_back (patom_);
-			}
-
-		}	
-
+				
+			if (patom_->getCharge()!=0) effector_list_.push_back(patom_);
+				
+		} // Ende is kind of PDBAtom : die Liste wurde um alle entsprechenden Atome  erweitert
+			
+				
 		return Processor::CONTINUE;
 	}
 
-}	// namespace BALL
+} // namespace BALL
