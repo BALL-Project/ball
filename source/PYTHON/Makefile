@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.14 2000/07/06 14:08:45 oliver Exp $
+# $Id: Makefile,v 1.15 2000/07/12 19:35:13 oliver Exp $
 #
 
 all: libBALLc.so
@@ -110,7 +110,8 @@ SIP_SOURCES_MOLMEC_COMMON=\
 SIP_SOURCES_NMR=
 
 SIP_SOURCES_SYSTEM=\
-	sipBALLFile.C
+	sipBALLFile.C\
+	sipBALLOpenMode.C
 
 SIP_SOURCES_PYTHON=\
 	sipBALLPyAtomList.C\

@@ -1,14 +1,16 @@
+// $Id: HINFile.sip,v 1.3 2000/07/12 19:35:13 oliver Exp $
+
 class HINFile
 	: File
 {
 %HeaderCode
-#include <BALL/FORMAT/HINFile.h>
-using namespace BALL;
+	#include <BALL/FORMAT/HINFile.h>
+	using namespace BALL;
 %End
   public:
   HINFile();
-	// default open mode is "READ"
-  HINFile(String&, int = 1);
+	// default open mode is "IN"
+  HINFile(String&, File::OpenMode /openmode/ = File::IN);
 
   virtual void write(System&);
   virtual void read(System&);

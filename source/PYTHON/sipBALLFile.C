@@ -29,11 +29,11 @@ static PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-#line 19 "file.sip"
+#line 26 "file.sip"
 
     const String *a0;
     PyObject *a0obj;
-    int a1 = 1;
+    File::OpenMode a1 = File::IN;
 
     if (sipParseArgs(sipArgs,"I|i",sipCanConvertTo_String,&a0obj,&a1))
     {
@@ -169,15 +169,15 @@ static PyObject *sipDo_File_getSize(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			Size *res;
 			File *ptr;
 
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
-			res = ptr -> File::getSize();
+			res = new Size(ptr -> File::getSize());
 
-			return PyInt_FromLong((long)res);
+			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -198,15 +198,15 @@ static PyObject *sipDo_File_getOpenMode(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			OpenMode *res;
 			File *ptr;
 
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
-			res = ptr -> File::getOpenMode();
+			res = new OpenMode(ptr -> File::getOpenMode());
 
-			return PyInt_FromLong((long)res);
+			return sipNewCppToSelf(res,sipClass_OpenMode,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -682,21 +682,26 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		const String *a0;
 		PyObject *a0obj;
-		int a1 = 1;
+		OpenMode *a1 = (OpenMode *)&File::IN;
+		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"-I|i",sipCanConvertTo_String,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_OpenMode,&a1obj))
 		{
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+			int istemp1 = sipConvertTo_OpenMode(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			sipNew = new File(* a0, a1);
+			sipNew = new File(* a0,* a1);
 
 			if (istemp0)
 				delete a0;
+
+			if (istemp1)
+				delete a1;
 		}
 	}
 

@@ -99,7 +99,9 @@
 #include "sipBALLTranslationProcessor.h"
 #include "sipBALLTransformationProcessor.h"
 #include "sipBALLFile.h"
+#include "sipBALLOpenMode.h"
 
+char sipName_BALL_OpenMode[] = "OpenMode";
 char sipName_BALL_isExecutable[] = "isExecutable";
 char sipName_BALL_isWritable[] = "isWritable";
 char sipName_BALL_isReadable[] = "isReadable";
@@ -112,6 +114,12 @@ char sipName_BALL_renameTo[] = "renameTo";
 char sipName_BALL_copyTo[] = "copyTo";
 char sipName_BALL_getOpenMode[] = "getOpenMode";
 char sipName_BALL_reopen[] = "reopen";
+char sipName_BALL_TRUNC[] = "TRUNC";
+char sipName_BALL_ATE[] = "ATE";
+char sipName_BALL_BINARY[] = "BINARY";
+char sipName_BALL_APP[] = "APP";
+char sipName_BALL_OUT[] = "OUT";
+char sipName_BALL_IN[] = "IN";
 char sipName_BALL_getTransformation[] = "getTransformation";
 char sipName_BALL_setTransformation[] = "setTransformation";
 char sipName_BALL_TransformationProcessor[] = "TransformationProcessor";
@@ -613,6 +621,7 @@ char sipName_BALL_isVector[] = "isVector";
 char sipName_BALL_isReal[] = "isReal";
 char sipName_BALL_isBool[] = "isBool";
 char sipName_BALL_isInteger[] = "isInteger";
+char sipName_BALL_MAX_ENTRY_LENGTH[] = "MAX_ENTRY_LENGTH";
 char sipName_BALL_Options[] = "Options";
 char sipName_BALL_isEveryBit[] = "isEveryBit";
 char sipName_BALL_isAnyBit[] = "isAnyBit";
@@ -1213,10 +1222,10 @@ static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 	{
 		const BaseFragment *a0;
 		PyObject *a0obj;
-		const String *a1 = NULL;
-		PyObject *a1obj = NULL;
+		const String *a1;
+		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			PyPDBAtomList *res;
 
@@ -1239,6 +1248,29 @@ static PyObject *sipDo_PDBAtoms(PyObject *,PyObject *sipArgs)
 		}
 	}
 
+	{
+		const BaseFragment *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_BaseFragment,&a0obj))
+		{
+			PyPDBAtomList *res;
+
+			int iserr = 0;
+
+			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = PDBAtoms(* a0);
+
+			PyObject *resobj = sipConvertFrom_PyPDBAtomList(res);
+
+			return resobj;
+		}
+	}
+
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoFunction(sipName_BALL_PDBAtoms);
@@ -1252,10 +1284,10 @@ static PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 	{
 		const BaseFragment *a0;
 		PyObject *a0obj;
-		const String *a1 = NULL;
-		PyObject *a1obj = NULL;
+		const String *a1;
+		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_BaseFragment,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			PyAtomList *res;
 
@@ -1271,6 +1303,29 @@ static PyObject *sipDo_atoms(PyObject *,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
+
+			PyObject *resobj = sipConvertFrom_PyAtomList(res);
+
+			return resobj;
+		}
+	}
+
+	{
+		const BaseFragment *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_BaseFragment,&a0obj))
+		{
+			PyAtomList *res;
+
+			int iserr = 0;
+
+			sipConvertTo_BaseFragment(a0obj,(BaseFragment **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = atoms(* a0);
 
 			PyObject *resobj = sipConvertFrom_PyAtomList(res);
 
@@ -2660,6 +2715,7 @@ static PyObject *sipDo_calculateACE(PyObject *,PyObject *sipArgs)
 }
 
 static sipClassDef classesTable[] = {
+	{sipName_BALL_OpenMode, sipNew_OpenMode, &sipClass_OpenMode, sipClassAttrTab_OpenMode, NULL},
 	{sipName_BALL_TransformationProcessor, sipNew_TransformationProcessor, &sipClass_TransformationProcessor, sipClassAttrTab_TransformationProcessor, NULL},
 	{sipName_BALL_TranslationProcessor, sipNew_TranslationProcessor, &sipClass_TranslationProcessor, sipClassAttrTab_TranslationProcessor, NULL},
 	{sipName_BALL_FragmentDistanceCollector, sipNew_FragmentDistanceCollector, &sipClass_FragmentDistanceCollector, sipClassAttrTab_FragmentDistanceCollector, NULL},
@@ -2763,7 +2819,7 @@ static sipClassDef classesTable[] = {
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	99,
+	100,
 	classesTable
 };
 
@@ -2851,6 +2907,31 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 	};
 
 	if (sipAddCharInstances(((PyClassObject *)sipClass_ResourceFile) -> cl_dict,ResourceFilecharInstances) < 0)
+		return NULL;
+
+	// Add the class instances to the dictionary.
+
+	static sipClassInstanceDef FileclassInstances[] = {
+		{sipName_BALL_IN, &File::IN, sipClass_OpenMode, SIP_SIMPLE},
+		{sipName_BALL_OUT, &File::OUT, sipClass_OpenMode, SIP_SIMPLE},
+		{sipName_BALL_APP, &File::APP, sipClass_OpenMode, SIP_SIMPLE},
+		{sipName_BALL_BINARY, &File::BINARY, sipClass_OpenMode, SIP_SIMPLE},
+		{sipName_BALL_ATE, &File::ATE, sipClass_OpenMode, SIP_SIMPLE},
+		{sipName_BALL_TRUNC, &File::TRUNC, sipClass_OpenMode, SIP_SIMPLE},
+		NULL
+	};
+
+	if (sipAddClassInstances(((PyClassObject *)sipClass_File) -> cl_dict,FileclassInstances) < 0)
+		return NULL;
+
+	// Add the class instances to the dictionary.
+
+	static sipClassInstanceDef OptionsclassInstances[] = {
+		{sipName_BALL_MAX_ENTRY_LENGTH, &Options::MAX_ENTRY_LENGTH, sipClass_Size, SIP_SIMPLE},
+		NULL
+	};
+
+	if (sipAddClassInstances(((PyClassObject *)sipClass_Options) -> cl_dict,OptionsclassInstances) < 0)
 		return NULL;
 
 	// Add the class instances to the dictionary.

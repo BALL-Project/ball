@@ -1,4 +1,4 @@
-// $Id: pyAtomList.C,v 1.2 2000/07/06 14:08:50 oliver Exp $
+// $Id: pyAtomList.C,v 1.3 2000/07/12 19:35:15 oliver Exp $
 
 #include <BALL/PYTHON/pyAtomList.h>
 #include <BALL/KERNEL/atom.h>
@@ -25,6 +25,11 @@ namespace BALL
 	PyAtomList::PyAtomList(const BaseFragment& fragment, const String& expression)
 	{
 		set(fragment, expression);
+	}
+
+	PyAtomList::PyAtomList(const BaseFragment& fragment)
+	{
+		set(fragment, "");
 	}
 
 	void PyAtomList::set(const BaseFragment& fragment, const String& expression)
@@ -56,4 +61,5 @@ namespace BALL
 			}
 		}
 	}
+
 }

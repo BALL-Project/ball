@@ -1,25 +1,32 @@
-// $Id: file.sip,v 1.5 2000/07/06 14:08:47 oliver Exp $
+// $Id: file.sip,v 1.6 2000/07/12 19:35:14 oliver Exp $
+
 class File
 {
 %HeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
+	typedef File::OpenMode OpenMode;
 %End
   public:
+	static const OpenMode IN;
+	static const OpenMode OUT;
+	static const OpenMode APP;
+	static const OpenMode BINARY;
+	static const OpenMode ATE;
+	static const OpenMode TRUNC;
+
   File();
-	// default open mode: READ
-  File(const String&, int = 1);
+	// default open mode: IN
+  File(const String&, File::OpenMode /openmode/ = File::IN);
   File(const File&);
   ~File();
-  // static void enableProtocol(Protocol protocol);
-  // static void disableProtocol(Protocol protocol);
-	// default open mode: READ
-  bool open(const String&, int = 1);
+	// default open mode: IN
+  bool open(const String&, File::OpenMode /openmode/ = File::IN);
 %MemberCode
 
     const String *a0;
     PyObject *a0obj;
-    int a1 = 1;
+    File::OpenMode a1 = File::IN;
 
     if (sipParseArgs(sipArgs,"I|i",sipCanConvertTo_String,&a0obj,&a1))
     {
@@ -53,8 +60,8 @@ class File
   bool reopen();
   void close();
   const String& getName() const;
-  int getSize();
-  int getOpenMode() const;
+  Size getSize();
+  File::OpenMode getOpenMode() const;
   // int getType() const;
   // std::fstream& getFileStream();
   bool copyTo(const String&);
@@ -73,3 +80,63 @@ class File
   bool isExecutable() const;
   bool isValid() const;
 };
+
+
+class OpenMode
+{
+%HeaderCode
+	#include <BALL/SYSTEM/file.h>
+	using namespace BALL;
+	typedef File::OpenMode OpenMode;
+%End
+  public:
+  operator const char* ();
+%MemberCode
+  OpenMode* ptr;
+  if ((ptr = (OpenMode*)sipGetCppPtr(sipThis,sipClass_OpenMode)) == NULL)
+    return NULL;
+	
+	String mode_string;
+	switch (*ptr)
+	{
+		case File::APP: 		mode_string = "File::APP"; break;
+		case File::BINARY:	mode_string = "File::BINARY"; break;
+		case File::ATE: 		mode_string = "File::ATE"; break;
+		case File::TRUNC: 	mode_string = "File::TRUNC"; break;
+		case File::OUT: 		mode_string = "File::OUT"; break;
+		case File::IN: 			mode_string = "File::IN"; break;
+		default:						mode_string = *ptr;
+	}
+
+  return PyString_FromString(mode_string.c_str());
+%End
+%CanConvertToClassCode
+  // automatic conversion of Py integers to Position
+  return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_OpenMode));
+%End
+%ConvertToClassCode
+  if (PyInt_Check(sipPy))
+  {
+		int mode = PyInt_AS_LONG(sipPy);
+		File::OpenMode result;
+		switch (mode)
+		{
+			case File::OUT:		result = File::OUT; break;
+			case File::BINARY:	result = File::BINARY; break;
+			case File::ATE:		result = File::ATE; break;
+			case File::TRUNC:	result = File::TRUNC; break;
+			case File::APP:		result = File::APP; break;
+
+			case File::IN:
+			default: result = File::IN;
+		};
+    *sipCppPtr = new OpenMode(result);
+
+    return 1;
+  }
+
+  *sipCppPtr = (OpenMode*)sipConvertToCpp(sipPy, sipClass_OpenMode, sipIsErr);
+
+  return 0;
+%End
+}; 

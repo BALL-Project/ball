@@ -26,7 +26,7 @@ sipHINFile::sipHINFile(): HINFile()
 	sipCommonCtor(sipPyMethods,2);
 }
 
-sipHINFile::sipHINFile(String& a0,int a1): HINFile(a0,a1)
+sipHINFile::sipHINFile(String& a0,OpenMode a1): HINFile(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
@@ -360,21 +360,26 @@ PyObject *sipNew_HINFile(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		String *a0;
 		PyObject *a0obj;
-		int a1 = 1;
+		OpenMode *a1 = (OpenMode *)&File::IN;
+		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"-I|i",sipCanConvertTo_String,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_OpenMode,&a1obj))
 		{
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_String(a0obj,&a0,1,&iserr);
+			int istemp1 = sipConvertTo_OpenMode(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			sipNew = new sipHINFile(* a0, a1);
+			sipNew = new sipHINFile(* a0,* a1);
 
 			if (istemp0)
 				delete a0;
+
+			if (istemp1)
+				delete a1;
 		}
 	}
 

@@ -26,7 +26,7 @@ sipPDBFile::sipPDBFile(): PDBFile()
 	sipCommonCtor(sipPyMethods,2);
 }
 
-sipPDBFile::sipPDBFile(const String& a0,int a1): PDBFile(a0,a1)
+sipPDBFile::sipPDBFile(const String& a0,OpenMode a1): PDBFile(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
@@ -414,21 +414,26 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		const String *a0;
 		PyObject *a0obj;
-		int a1 = 1;
+		OpenMode *a1 = (OpenMode *)&File::IN;
+		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"-I|i",sipCanConvertTo_String,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_OpenMode,&a1obj))
 		{
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+			int istemp1 = sipConvertTo_OpenMode(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			sipNew = new sipPDBFile(* a0, a1);
+			sipNew = new sipPDBFile(* a0,* a1);
 
 			if (istemp0)
 				delete a0;
+
+			if (istemp1)
+				delete a1;
 		}
 	}
 

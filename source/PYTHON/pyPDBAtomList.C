@@ -1,4 +1,4 @@
-// $Id: pyPDBAtomList.C,v 1.3 2000/07/06 14:08:51 oliver Exp $
+// $Id: pyPDBAtomList.C,v 1.4 2000/07/12 19:35:15 oliver Exp $
 
 #include <BALL/PYTHON/pyPDBAtomList.h>
 #include <BALL/KERNEL/PDBAtom.h>
@@ -25,6 +25,11 @@ namespace BALL
 	PyPDBAtomList::PyPDBAtomList(const BaseFragment& fragment, const String& expression)
 	{
 		set(fragment, expression);
+	}
+
+	PyPDBAtomList::PyPDBAtomList(const BaseFragment& fragment)
+	{
+		set(fragment, "");
 	}
 
 	void PyPDBAtomList::set(const BaseFragment& fragment, const String& expression)
