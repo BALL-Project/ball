@@ -1,4 +1,4 @@
-// $Id: scene.iC,v 1.7 2001/05/13 14:03:45 hekl Exp $
+// $Id: scene.iC,v 1.7.4.1 2002/08/29 16:53:13 anhi Exp $
 
 BALL_INLINE
 void Scene::setRenderMode_(RenderMode mode)
@@ -70,6 +70,29 @@ void Scene::setLookAtPosition(const Real x, const Real y, const Real z, bool set
 	throw()
 {
 	setCameraPosition_(Vector3(x, y, z), position_, set_origin);  
+}
+
+BALL_INLINE
+const Vector3& Scene::getUpVector() const
+	throw()
+{
+	return up_;
+}
+
+BALL_INLINE
+const Vector3& Scene::getRightVector() const
+	throw()
+{
+	return right_;
+}
+
+BALL_INLINE
+void Scene::getScalingFactor(Vector3& scaling) const
+	throw()
+{
+	scaling.x = x_scale_;
+	scaling.y = y_scale_;
+	scaling.z = 1.;
 }
 
 BALL_INLINE

@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.6 2001/05/27 10:31:25 hekl Exp $
+// $Id: scene.C,v 1.6.4.1 2002/08/29 16:52:11 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 
@@ -300,6 +300,26 @@ namespace BALL
 				}
 
 				update(false);
+			}
+		}
+
+		void Scene::exportScene(ExternalRenderer &er)
+			throw()
+		{
+			er.setScene(*this);
+			ConnectionObject *object = getParent();
+			MainControl *main_control = RTTI::castTo<MainControl>(*object);
+			MainControl::DescriptorIterator descriptor_iterator;
+		// do we have to do that for all entries in the descriptor list? That might become
+		// a problem...
+			for (descriptor_iterator = main_control->getDescriptorList().begin();
+					 descriptor_iterator != main_control->getDescriptorList().end(); 
+					 ++descriptor_iterator)
+			{
+				CompositeDescriptor *composite_descriptor
+					= *descriptor_iterator;
+
+				composite_descriptor->getComposite()->apply(er);
 			}
 		}
 

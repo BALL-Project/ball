@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.8.4.2 2002/08/27 11:58:22 oliver Exp $
+// $Id: scene.h,v 1.8.4.3 2002/08/29 16:53:07 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -55,11 +55,18 @@
 #	include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #endif
 
+#ifndef BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
+# include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
+#endif
+
 namespace BALL
 {
 
 	namespace VIEW
 	{
+
+		// necessary forward declaration
+		class ExternalRenderer;
 
 		/**	The Scene class.
 				The class Scene is the main visualization widget that shows that graphical
@@ -344,6 +351,27 @@ namespace BALL
 			void setLookAtPosition(const Vector3& v, bool set_origin = true)
 				throw();
 			
+			/** Non-mutable inspection of the up vector.
+					@return Vector3& a constant reference to the up vector of
+					                 {\em *this} scene
+					@see	Vector3
+			*/
+			const Vector3& getUpVector() const
+				throw();
+			
+			/** Non-mutable inspection of the right vector.
+					@return Vector3& a constant reference to the right vector of
+					                 {\em *this} scene
+					@see	Vector3
+			*/
+			const Vector3& getRightVector() const
+				throw();
+
+			/** Inspection of the scaling factor of {\em *this} scene.
+			 */
+			void getScalingFactor(Vector3& scaling) const
+				throw();
+			
 			/** Non-mutable inspection of the look at position of the camera.
 					Acces the constant reference of the look at position of the camera of
 					{\em *this} scene.
@@ -461,6 +489,11 @@ namespace BALL
 			virtual void onNotify(Message *message)
 				throw();
 
+			/** Exporting method.
+			 		This method prepares an ExternalRenderer for a later export of this scene.
+				*/
+			virtual void exportScene(BALL::VIEW::ExternalRenderer &er)
+				throw();
 			//@}			
 
 
