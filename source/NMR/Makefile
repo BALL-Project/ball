@@ -8,6 +8,7 @@ CPP_SOURCES=\
 	anisotropyShiftProcessor.C\
 	assignShiftProcessor.C\
 	clearShiftProcessor.C\
+	createSpectrumProcessor.C\
 	EFShiftProcessor.C\
 	haighMallionShiftProcessor.C\
 	makeSpectrumProcessor.C\
