@@ -15,6 +15,8 @@ namespace BALL
 	namespace VIEW
 	{
 		/** Dialog for setting the Python preferences.
+		 		Currently only a startup script can be selected, that will be called,
+				when the application has loaded and a PyWidget instance is added.
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT PythonSettings 
@@ -30,17 +32,17 @@ namespace BALL
 			/// Destructor
 			~PythonSettings() {}
 
-			///
+			/// Set the filename of the startup script
 			void setFilename(const String& filename)
 				throw();
 
-			///
+			/// Get the filename of the startup script
 			String getFilename() const
 				throw();
 
 			public slots:
 
-			///
+			/// Open a filedialog to select the startup script
 			void fileSelected();
 		};
 } }

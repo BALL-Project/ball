@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.8 2004/02/26 08:41:35 anhi Exp $
+// $Id: preferences.h,v 1.9 2004/05/18 14:56:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -18,10 +18,10 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/** Preferences is a tab dialog for other preference dialogs to be
-				inserted. An interface for adding and removing the tab dialogs is
+		/** Preferences is a dialog for other preference pages to be
+				inserted. An interface for adding and removing the pages is
 				available. The Preferences dialog will be created by the MainControl. 
-				All ModularWidget classes can add their own prefrences tabs.
+				All ModularWidget classes can add their own preferences pages.
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT Preferences 
@@ -36,15 +36,12 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Set the size of this preferences to <tt> width</tt> and <tt> height</tt>.
-					Tab dialogs that are inserted must have their size accordingly adjusted to the
-					size given to this preferences.
-					There are two buttons in this preferences:
+					There are three buttons:
 						-  apply - apply the preferences
 						-  cancel - hide the preferences dialog
-					\par
+						-  defaults - reset the values of the currently selected page
 					\param       parent the parent QWidget (See QTabDialog in the QT documentation)
-					\param       name (See QTabeDialog in the QT documentation)
+					\param       name (See QDialog in the QT documentation)
 			*/
 			Preferences(QWidget *parent = NULL,	const char *name = NULL)
 				throw();
@@ -61,25 +58,25 @@ namespace BALL
 			*/
 			//@{
 
-			/** Check if tabs are available.				
-					\return bool <tt>true</tt> if tabs are available
+			/** Check if pages are available.				
+					\return bool <tt>true</tt> if pages are available
 			*/
 			bool hasPages()
 				throw();
 
-			/** Insert a new tab dialog 
+			/** Insert a new page.
 					This method can be called inside ModularWidget::initializePreferencesTab
-					\param  child a pointer to the new tab dialog
-					\param  name the name of the new tab dialog
-					\see    removeTab
+					\param  child a pointer to the new dialog
+					\param  name the name of the new dialog
+					\see    removePage
 			*/
 			void insertPage(QWidget *child, const String &name)
 				throw();
 
-			/** Remove a tab dialog previously inserted from this preferences.
+			/** Remove a previously inserted page.
 					This method can called inside ModularWidget::finalizePreferencesTab 
-					\param  child a pointer to the tab dialog to be removed 
-					\see    insertTab
+					\param  child a pointer to the dialog to be removed 
+					\see    insertPage
 			*/
 			void removePage(QWidget *child)
 				throw();
@@ -111,10 +108,12 @@ namespace BALL
 			*/
 			void show();
 			
-			///
+			/// Show the given page
 			void showPage(QWidget* page);
 						
-			///
+			/** Show the given page
+			 		@param nr the number of the dialog, that is to be shown
+			*/
 			void showPage(int nr);
 
 			//@}
