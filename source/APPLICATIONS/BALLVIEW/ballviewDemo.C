@@ -143,7 +143,7 @@ void BALLViewDemo::accept()
 
 	if (id == 15) // last page
 	{
-   	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_LINE, COLORING_ELEMENT);
+   	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_LINES, COLORING_ELEMENT);
    	notify_(crmsg);
 		hide();
 		return;
