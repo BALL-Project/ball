@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.12 2000/01/14 20:34:08 oliver Exp $
+// $Id: socket.C,v 1.13 2000/01/15 19:01:01 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -122,8 +122,6 @@ namespace BALL
 			close();
 		}
 
-		delete [] pbase();
-			
 		if (--rep->cnt == 0) 
 		{
 			delete rep;
