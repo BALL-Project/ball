@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.9 2005/03/26 00:13:49 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.10 2005/03/26 00:25:27 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -220,7 +220,9 @@ bool testBend(MMFF94& mmff, const String& filename)
 		
 		if (!found) 
 		{
-			Log.error() << "Could not find atoms " << atoms1[poss] << " " << atoms2[poss] << std::endl;
+			Log.error() << "Could not find atoms " << atoms1[poss] 
+				<< " " << atoms2[poss] << " "
+				<< " " << atoms3[poss] << std::endl;
 		}
 	}
 

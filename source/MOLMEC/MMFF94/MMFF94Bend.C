@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.4 2005/03/25 21:38:35 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.5 2005/03/26 00:25:30 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -168,7 +168,6 @@ namespace BALL
 		vector<Bend>::iterator bend_it = bends_.begin();
 
 		float radian_to_degree = 180.0 / Constants::PI;
-		float degree_to_radian = Constants::PI / 180.0;
 
 		// -0.007 degree^-1
 		const float k1 = -0.007;
@@ -226,6 +225,7 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 
 #ifdef BALL_DEBUG_MMFF
 	Log.info() << "  E: "<< energy << std::endl;
+	bend_it->energy = energy;
 #endif
 
 			energy_ += energy;
