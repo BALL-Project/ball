@@ -1,9 +1,9 @@
-// $Id: INIFile.C,v 1.18 2001/04/10 12:30:34 amoll Exp $
+// $Id: INIFile.C,v 1.19 2001/04/17 14:04:37 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
 
-#include <iostream>
+//#include <iostream>
 
 using namespace std;
 
@@ -39,6 +39,8 @@ namespace BALL
 		sections_.destroy();
 		section_index_.destroy();
 		valid_ = false;
+
+    appendSection(HEADER);
 	}
 
 	INIFile::~INIFile()
@@ -77,13 +79,6 @@ namespace BALL
 			return false;
 		}
 
-    // create the header; this has to be done to prevent problems 
-		// with the positions in the list; the HEADER is section 0
-		Section header;
-		header.name_ = HEADER;
- 		sections_.push_back(header);
-		section_index_[HEADER] = sections_.begin();
-
 		List<Section>::Iterator	section_it(sections_.begin());
 		List<String >::Iterator	   line_it(section_it->lines_.begin());
 
@@ -107,48 +102,26 @@ namespace BALL
 			// check for start of section
 			if (line[0] == '[')
 			{	
-				// remove the leading '['
-				line.erase(0, 1);
-
-				// check for a closing "]"
-				if (!line.has(']'))
+				if (!appendSection(line))
 				{
-					// error in line, skip it
-					continue;
+					return false;
 				}
 
-				// OK, this is really a section
-
-				// strip the bracket to get the name
-				line = line.before("]");
-
-				Section section;
-				section.name_ = line;
-				sections_.push_back(section);
 				section_it++;
-
-				// store the line
-				section_it->lines_.push_back(buffer);
 				line_it = section_it->lines_.begin();
-				
-				// remember the current section_name
-				section_index_[line] = section_it;
 				
 				continue;
 			}
 			
 			// this is neither a comment line nor a section start
 			// line still has to be added
-			section_it->lines_.push_back(buffer);
+			if (!appendLine("", line))
+			{
+				return false;
+			}
+
 			line_it++;
 
-			// check for lines matching ".*=". These are key/value pairs
-			if (line.find_first_of("=") > 0)
-			{
-				String key(line.before("="));
-				key.trim();
-				section_it->key_map_[key] = line_it;			
-			}
 		}
 		
 		// close the file
@@ -224,22 +197,25 @@ namespace BALL
 		String new_key(line.before("="));
 		new_key.trim();
 
-		if ((*line_it).find_first_of("=") > 0)
+		if ((*line_it).hasSubstring("=", 1))
 		{
 			// oh, this line had a key :(
 			String old_key((*line_it).before("="));
 			old_key.trim();
 
-			// its a new key: delete the old one.
-			if (old_key != new_key)
-			{		
-			  line_it.getSection()->key_map_.remove(old_key);
+			if (old_key == new_key)
+			{
+				line_it.setLine_(line);
+				return true;
 			}
+
+			// its a new key: delete the old one.
+			line_it.getSection()->key_map_.remove(old_key);
 		}
 
 		line_it.setLine_(line);
 
-		if (line.find_first_of("=") > 0)
+		if (line.hasSubstring("=", 1))
 		{
 			// oh, the new line has a key :(
 			line_it.getSection()->key_map_[new_key] = line_it.getPosition();		
@@ -250,35 +226,41 @@ namespace BALL
 
 	bool INIFile::insertLine(LineIterator line_it, const String& line)
 	{
-		if (!isValid(line_it))
-		{
-			return false;
+		if (line_it.isSectionLastLine())
+    {
+			return appendLine(line_it.getSection()->getName(), line);
 		}
 
-		//LineIterator it(line_it);
+		if (!isValid(line_it))
+		{
+      Log.error() << "In INIFile " << filename_ << " , error while inserting line: "
+                  << line << " . Illegal iterator!" << endl;			
+			return false;
+		}
 
 		Section& section(*line_it.getSection());
 
 		// key?
-    if (line.find_first_of("=") > 0)
+    if (line.hasSubstring("=", 1))
     {
 			String key(line.before("="));
 			key.trim();
 
 			if (section.key_map_.has(key))
 			{
+
+        Log.error() << "In INIFile " << filename_ << " , error while appending line: "
+                    << line << " . Key '" << key << "' already exists in section." << endl;
 				return false;
 			}
 
 			line_it.getSectionNextLine();
 
-			section.lines_.insert(line_it.position_, line);
-			--line_it;
-			section.key_map_[key] = line_it.position_;
+			section.key_map_[key] = section.lines_.insert(line_it.position_, line);
 			return true;
 		}
 
-		--line_it;
+		line_it.getSectionNextLine();
 		section.lines_.insert(line_it.position_, line);
 		return true;
 	}
@@ -290,8 +272,9 @@ namespace BALL
 		{
 			return false;
 		}
+
 		// falls key, entfernen		
-		if ((*line_it).find_first_of("=") > 0)
+		if ((*line_it).hasSubstring("=", 1))
 		{
 			String key((*line_it).before("="));
 			key.trim();
@@ -303,23 +286,38 @@ namespace BALL
 	}
 
 	
-	bool INIFile::appendLine(const String& section_name, const String& line)
+	bool INIFile::appendLine(const String& sectionName, const String& line)
 	{
+		String section_name(sectionName);
+
+		if (section_name == "")
+		{
+			Section_iterator it(sections_.end());
+			it--;
+			section_name = it->getName();
+		}
+
 		if (!hasSection(section_name) || line[0] == '[')
 		{
+      Log.error() << "In INIFile " << filename_ << " , error while appending line: "
+                  << line << " . Illegal section-name: " << sectionName << endl;
 			return false;
 		}
 		
 		Section& section(*getSection(section_name));
 
-		// if no key, we are finished
-    if (line.find_first_of("=") > 0)
+		// key?
+    if (line.hasSubstring("=", 1))
     {
 			String key(line.before("="));
 			key.trim();
 
 			if (section.key_map_.has(key))
 			{
+
+				Log.error() << "In INIFile " << filename_ << " , error while appending line: "
+										<< line << " . Key '" << key << "' already exists in section." << endl;   
+
 				return false;
 			}
 			
@@ -492,14 +490,19 @@ namespace BALL
 		{	
 			// remove the leading '['
 			line.erase(0, 1);
-		}
-		if (line.has('['))
-		{
-			line = line.before("]");
+			if (!line.has(']'))
+			{
+				Log.error() << "In INIFile " << filename_ << " , while adding section:"
+										<< "missing bracet." << endl;
+				return false;
+			}
+			line = line.before("]");			
 		}
 
 		if (section_index_.has(line))
 		{
+      Log.error() << "In INIFile " << filename_ << " , while adding section:"
+                    << "Section '" << line << "already exists." << endl;
 			return false;
 		}
 
@@ -512,6 +515,11 @@ namespace BALL
 
 		// remember the current section_name
 		section_index_[line] = section_it;
+
+		if (line == HEADER)
+		{
+			return true;
+		}
 
 		// store the line
 		line = '[' + line +']';
