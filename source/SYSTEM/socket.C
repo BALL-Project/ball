@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.21 2001/05/18 16:20:35 anker Exp $
+// $Id: socket.C,v 1.22 2001/05/18 16:48:41 anker Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -77,7 +77,7 @@ namespace BALL
 	{
 	}
 
-	SockAddr::SockAddr(const SockAddr& /* sock_addr */)
+	SockAddr::SockAddr(const SockAddr& /* sockaddr */)
 		throw()
 	{
 	}
@@ -121,71 +121,81 @@ namespace BALL
 
 
 	SocketBuf::SocketBuf(int soc)
-		: rep (new sockcnt (soc, 1)),
-			stmo (-1), 
-			rtmo (-1)
+		throw()
+		: rep(new sockcnt(soc, 1)),
+			stmo(-1), 
+			rtmo(-1)
 	{
-#	ifdef BALL_HAS_ANSI_IOSTREAM
-		xflags (0);
-#	endif
-		xsetflags (_S_LINE_BUF);
+		xflags(0);
+		xsetflags(_S_LINE_BUF);
 	}
 
-	SocketBuf::SocketBuf(int domain, SocketBuf::type st, int proto)
+
+	SocketBuf::SocketBuf(int domain, SocketBuf::type socket_type, int proto)
+		throw()
 		: rep(0), 
 			stmo(-1), 
 			rtmo(-1)
 	{
-		int soc = ::socket(domain, st, proto);
+		int soc = ::socket(domain, socket_type, proto);
 		rep = new sockcnt(soc, 1);
 #	ifdef BALL_HAS_ANSI_IOSTREAM
-		xflags (0);
+		xflags_ (0);
 #	endif
 		if (rep->sock == -1)
 		{
 			errnoError_("SocketBuf::SocketBuf");
 		}
 
-		xsetflags (_S_LINE_BUF);
+		xsetflags(_S_LINE_BUF);
 	}
 
-	SocketBuf::SocketBuf(const SocketBuf& sb)
+
+	SocketBuf::SocketBuf(const SocketBuf& socket_buf)
+		throw()
 		: std::streambuf(),
-			rep(sb.rep), 
-			stmo(sb.stmo), 
-			rtmo(sb.rtmo)
+			rep(socket_buf.rep), 
+			stmo(socket_buf.stmo), 
+			rtmo(socket_buf.rtmo)
 	{
 #	ifdef BALL_HAS_ANSI_IOSTREAM
-		xflags(0);
+		xflags_(0);
 #	endif
 		rep->cnt++;
 		xsetflags(_S_LINE_BUF);
 	}
 
-	SocketBuf& SocketBuf::operator = (const SocketBuf& sb)
+
+	SocketBuf& SocketBuf::operator = (const SocketBuf& socket_buf)
+		throw()
 	{
-		if (this != &sb && rep != sb.rep && rep->sock != sb.rep->sock) 
+		if (this != &socket_buf 
+				&& rep != socket_buf.rep 
+				&& rep->sock != socket_buf.rep->sock) 
 		{
 			this->SocketBuf::~SocketBuf();
-			rep = sb.rep; 
-			stmo = sb.stmo; 
-			rtmo = sb.rtmo;
+			rep = socket_buf.rep; 
+			stmo = socket_buf.stmo; 
+			rtmo = socket_buf.rtmo;
 			rep->cnt++;
-#			ifdef BALL_HAS_ANSI_IOSTREAM
-				xflags (sb.xflags());
-#			else
-				xflags (((SocketBuf&)sb).xflags());
-#			endif
+#	ifdef BALL_HAS_ANSI_IOSTREAM
+				xflags(socket_buf.xflags());
+#	else
+				xflags(((SocketBuf&)socket_buf).xflags());
+#	endif
 		}
 
 		return *this;
 	}
 
+
 	SocketBuf::~SocketBuf()
+		throw()
 	{
 		overflow(EOF);
 
-		if (rep->cnt == 1 && !(xflags() & _S_DELETE_DONT_CLOSE))
+		if (rep->cnt == 1 
+				&& !(xflags() & _S_DELETE_DONT_CLOSE))
 		{
 			close();
 		}
@@ -196,12 +206,9 @@ namespace BALL
 		}
 	}
 
-	SocketBuf* SocketBuf::open(type, int)
-	{
-		return 0;
-	}
 
 	SocketBuf* SocketBuf::close()
+		throw()
 	{
 		if (rep->sock >= 0) 
 		{
@@ -215,21 +222,10 @@ namespace BALL
 		return 0;
 	}
 
-	// return EOF on eof, 0 on timeout, and # of chars read on success
-	_G_ssize_t SocketBuf::sys_read (char* buf, _G_ssize_t len)
-	{
-		return read (buf, (int)len);
-	}
-
-	// return written_length; < len indicates error
-	_G_ssize_t SocketBuf::sys_write (const void* buf, long len)
-	{
-		return write (buf, (int)len);
-	}
-
 	// return 0 when there is nothing to flush or when the flush is a success
 	// return EOF when it could not flush
 	int SocketBuf::flush_output()
+		throw()
 	{
 		if (pptr() <= pbase()) 
 		{
@@ -258,12 +254,14 @@ namespace BALL
 	}
 
 	int SocketBuf::sync()
+		throw()
 	{
 		return flush_output();
 	}
 
 	// return 1 on allocation and 0 if there is no need
 	int SocketBuf::doallocate()
+		throw()
 	{
 		if (!pbase()) 
 		{
@@ -279,6 +277,7 @@ namespace BALL
 	}
 
 	int SocketBuf::underflow()
+		throw()
 	{
 		if (xflags() & _S_NO_READS) 
 		{
@@ -320,6 +319,7 @@ namespace BALL
 	// return (flush_output()==EOF)? EOF: c;     
 	// otherwise insert c into the buffer and return c
 	int SocketBuf::overflow(int c)
+		throw()
 	{
 		if (c == EOF) 
 		{
@@ -351,6 +351,7 @@ namespace BALL
 	}
 
 	std::streamsize SocketBuf::xsputn(const char* s, std::streamsize n)
+		throw()
 	{
 		if (n <= 0) 
 		{
@@ -380,6 +381,7 @@ namespace BALL
 	}
 
 	int SocketBuf::bind(SockAddr& sa)
+		throw()
 	{
 		if (::bind(rep->sock, sa.getAddr(), sa.getSize()) == -1) 
 		{
@@ -390,6 +392,7 @@ namespace BALL
 	}
 
 	int SocketBuf::connect(SockAddr& sa)
+		throw()
 	{
 		int result = 0;
 		if (::connect(rep->sock, sa.getAddr(), sa.getSize()) == -1) 
@@ -401,6 +404,7 @@ namespace BALL
 	}
 
 	void SocketBuf::listen(int num)
+		throw()
 	{
 		if (::listen(rep->sock, num) == -1)
 		{
@@ -409,6 +413,7 @@ namespace BALL
 	}
 
 	SocketBuf	SocketBuf::accept(SockAddr& sa)
+		throw()
 	{
 		BALL_SOCKLEN_TYPE len = sa.getSize();
 		int soc = -1;
@@ -427,6 +432,7 @@ namespace BALL
 	}
 
 	SocketBuf	SocketBuf::accept()
+		throw()
 	{
 		int soc = -1;
 		while ((soc = ::accept (rep->sock, 0, 0)) == -1 && errno == EINTR)
@@ -443,6 +449,7 @@ namespace BALL
 	}
 
 	int SocketBuf::read(void* buf, int len)
+		throw()
 	{
 		if (rtmo != -1 && is_readready(rtmo)==0)
 		{
@@ -459,6 +466,7 @@ namespace BALL
 	}
 
 	int SocketBuf::recv(void* buf, int len, int msgf)
+		throw()
 	{
 		if (rtmo != -1 && is_readready (rtmo)==0) 
 		{
@@ -476,6 +484,7 @@ namespace BALL
 	}
 
 	int SocketBuf::recvfrom(SockAddr& sa, void* buf, int len, int msgf)
+		throw()
 	{
 		if (rtmo != -1 && is_readready (rtmo)==0) 
 		{
@@ -483,9 +492,9 @@ namespace BALL
 		}
 		
 		int	rval;
-		BALL_SOCKLEN_TYPE	sock_addr_len = sa.getSize();
+		BALL_SOCKLEN_TYPE	sockaddr_len = sa.getSize();
 		
-		if ((rval = ::recvfrom (rep->sock, (char*) buf, len, msgf, sa.getAddr(), &sock_addr_len)) == -1)
+		if ((rval = ::recvfrom (rep->sock, (char*) buf, len, msgf, sa.getAddr(), &sockaddr_len)) == -1)
 		{
 			errnoError_("SocketBuf::recvfrom()");
 		}
@@ -494,6 +503,7 @@ namespace BALL
 	}
 
 	int SocketBuf::write(const void* buf, int len)
+		throw()
 	{
 		if (stmo != -1 && is_writeready (stmo)==0) 
 		{
@@ -518,6 +528,7 @@ namespace BALL
 	}
 
 	int SocketBuf::send(const void* buf, int len, int msgf)
+		throw()
 	{
 		if (stmo != -1 && is_writeready (stmo)==0) 
 		{
@@ -542,6 +553,7 @@ namespace BALL
 	}
 
 	int SocketBuf::sendto(SockAddr& sa, const void* buf, int len, int msgf)
+		throw()
 	{
 		if (stmo != -1 && is_writeready (stmo)==0) 
 		{
@@ -566,6 +578,7 @@ namespace BALL
 	}
 
 	int SocketBuf::sendtimeout(int wp)
+		throw()
 	{
 		int oldstmo = stmo;
 		stmo = (wp < 0) ? -1: wp;
@@ -573,6 +586,7 @@ namespace BALL
 	}
 
 	int SocketBuf::recvtimeout(int wp)
+		throw()
 	{
 		int oldrtmo = rtmo;
 		rtmo = (wp < 0) ? -1: wp;
@@ -580,6 +594,7 @@ namespace BALL
 	}
 
 	int SocketBuf::is_readready(int wp_sec, int wp_usec) const
+		throw()
 	{
 		fd_set fds;
 		FD_ZERO (&fds);
@@ -600,6 +615,7 @@ namespace BALL
 	}
 
 	int SocketBuf::is_writeready(int wp_sec, int wp_usec) const
+		throw()
 	{
 		fd_set fds;
 		FD_ZERO (&fds);
@@ -620,6 +636,7 @@ namespace BALL
 	}
 
 	int SocketBuf::is_exceptionpending(int wp_sec, int wp_usec) const
+		throw()
 	{
 		fd_set fds;
 		FD_ZERO (&fds);
@@ -640,6 +657,7 @@ namespace BALL
 	}
 
 	void SocketBuf::shutdown(shuthow sh)
+		throw()
 	{
 		switch (sh) 
 		{
@@ -661,6 +679,7 @@ namespace BALL
 	}
 
 	int SocketBuf::getopt(option op, void* buf, int len, level l) const
+		throw()
 	{
 		BALL_SOCKLEN_TYPE	rlen = len;
 		if (::getsockopt (rep->sock, l, op, (char*) buf, &rlen) == -1)
@@ -672,6 +691,7 @@ namespace BALL
 	}
 
 	void SocketBuf::setopt(option op, void* buf, int len, level l) const
+		throw()
 	{
 		if (::setsockopt (rep->sock, l, op, (char*) buf, len) == -1)
 		{
@@ -680,6 +700,7 @@ namespace BALL
 	}
 
 	SocketBuf::type SocketBuf::gettype() const
+		throw()
 	{
 		int	ty=0;
 		getopt (so_type, &ty, sizeof (ty));
@@ -688,6 +709,7 @@ namespace BALL
 	}
 
 	int SocketBuf::clearerror() const
+		throw()
 	{
 		int 	err=0;
 		getopt (so_error, &err, sizeof (err));
@@ -696,6 +718,7 @@ namespace BALL
 	}
 
 	int SocketBuf::debug (int opt) const
+		throw()
 	{
 		int old=0;
 		getopt (so_debug, &old, sizeof (old));
@@ -708,6 +731,7 @@ namespace BALL
 	}
 
 	int SocketBuf::reuseaddr(int opt) const
+		throw()
 	{
 		int old=0;
 		getopt (so_reuseaddr, &old, sizeof (old));
@@ -721,6 +745,7 @@ namespace BALL
 	}
 
 	int SocketBuf::keepalive(int opt) const
+		throw()
 	{
 		int old=0;
 		getopt (so_keepalive, &old, sizeof (old));
@@ -734,6 +759,7 @@ namespace BALL
 	}
 
 	int SocketBuf::dontroute(int opt) const
+		throw()
 	{
 		int old=0;
 		getopt (so_dontroute, &old, sizeof (old));
@@ -747,6 +773,7 @@ namespace BALL
 	}
 
 	int SocketBuf::broadcast(int opt) const
+		throw()
 	{
 		int old=0;
 		getopt (so_broadcast, &old, sizeof (old));
@@ -760,6 +787,7 @@ namespace BALL
 	}
 
 	int SocketBuf::oobinline(int opt) const
+		throw()
 	{
 		int old=0;
 		getopt (so_oobinline, &old, sizeof (old));
@@ -773,6 +801,7 @@ namespace BALL
 	}
 
 	int SocketBuf::linger(int opt) const
+		throw()
 	{
 		socklinger old (0, 0);
 		getopt(so_linger, &old, sizeof(old));
@@ -795,6 +824,7 @@ namespace BALL
 	}
 
 	int SocketBuf::sendbufsz (int  sz) const
+		throw()
 	{
 		int old=0;
 		getopt (so_sndbuf, &old, sizeof (old));
@@ -807,6 +837,7 @@ namespace BALL
 	}
 
 	int SocketBuf::recvbufsz(int sz) const
+		throw()
 	{
 		int old=0;
 		getopt (so_rcvbuf, &old, sizeof (old));

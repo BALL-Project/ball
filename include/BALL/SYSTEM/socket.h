@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.18 2001/05/18 16:20:32 anker Exp $
+// $Id: socket.h,v 1.19 2001/05/18 16:48:39 anker Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -166,7 +166,9 @@ namespace BALL
 		return getAddr(); 
 	}
 
-	/**	
+
+	/**	Socket buffer class.
+			{\bf Definition:} \URL{BALL/SYSTEM/socket.h}
 	*/
 	class SocketBuf
 		: public std::streambuf 
@@ -177,7 +179,7 @@ namespace BALL
 		*/
 		//@{
 			
-		///
+		/// 
 		enum type 
 		{
 			///
@@ -272,49 +274,83 @@ namespace BALL
 		///
 		struct socklinger 
 		{
-			///
-			int	l_onoff;	// option on/off
-			///
-			int	l_linger;	// linger time
-			///
-			socklinger (int a, int b): l_onoff (a), l_linger (b) {}
+			/// option on/off
+			int	l_onoff;	
+			/// linger time
+			int	l_linger;	
+			/// BAUSTELLE
+			socklinger (int a, int b)
+				: l_onoff (a), 
+					l_linger (b)
+			{
+			}
 		};
 
 		//@}
 
 		protected:
 
-		struct sockcnt 
+		struct sockcnt
 		{
+			//_
 			int	sock;
+			//_
 			int	cnt;
 
-			sockcnt(int s, int c): 
-				sock(s), cnt(c) {}
+			//_
+			sockcnt(int s, int c)
+				: sock(s),
+					cnt(c)
+			{
+			}
+
 		};
+
+		//_ counts the # refs to sock	
+		sockcnt* rep;
+
+		/*_ Send timeout (I assume)
+				-1==block, 0==poll, >0 == waiting time in secs
+		*/
+		int	stmo; 
+
+		/*_ Receive timeout (I assume)
+				-1==block, 0==poll, >0 == waiting time in secs
+		*/
+		int	rtmo; 
 			
-		sockcnt* 	rep;  // counts the # refs to sock
-		int				stmo; // -1==block, 0==poll, >0 == waiting time in secs
-		int				rtmo; // -1==block, 0==poll, >0 == waiting time in secs
-			
-		virtual int underflow();
-		virtual int	overflow(int c = EOF);
-		virtual int	doallocate();
-		int flush_output();
+		//_
+		virtual int underflow()
+			throw();
+
+		//_ 
+		virtual int	overflow(int c = EOF)
+			throw();
+
+		//_ 
+		virtual int	doallocate()
+			throw();
+
+		//_
+		int flush_output()
+			throw();
 
 #	ifdef BALL_HAS_ANSI_IOSTREAM
-		int	x_flags; // port to USL iostream
 
-		int xflags() const 
+		//_ port to USL iostream
+		int	x_flags; 
+
+		// BAUSTELLE:
+		// The following names don't follow our naming convention!
+
+		//_
+		int xflags() const
+			throw();
 		{ 
 			return x_flags; 
 		}
 
-		int xsetflags(int f) 
-		{ 
-			return x_flags |= f; 
-		}
-
+		//_
 		int xflags(int f)
 		{ 
 			int ret = x_flags; 
@@ -322,17 +358,26 @@ namespace BALL
 			return ret; 
 		}
 
+		//_
+		int xsetflags(int f) 
+		{ 
+			return x_flags |= f; 
+		}
+
+		//_
 		void xput_char(char c) 
 		{ 
 			*pptr() = c; 
 			pbump(1); 
 		}
 
+		//_
 		int unbuffered() const
 		{
 			return x_flags & _S_UNBUFFERED;
 		}
 
+		//_
 		int linebuffered() const 
 		{ 
 			return x_flags & _S_LINE_BUF; 
@@ -346,95 +391,223 @@ namespace BALL
 		*/
 		//@{
 			
-		///
-		SocketBuf(int soc = -1);
+		/// Default Constructor
+		//SocketBuf()
+		//	throw();
 
 		///
-		SocketBuf(int, type, int proto = 0);
+		SocketBuf(int soc = -1)
+			throw();
 
-		///
-		SocketBuf(const SocketBuf&);
+		/// Detailed constructor
+		SocketBuf(int domain, type socket_type, int proto = 0)
+			throw();
 
-		///
-		virtual ~SocketBuf();
+		/// Copy constructor
+		SocketBuf(const SocketBuf& socket_buf)
+			throw();
+
+		/// Destructor
+		virtual ~SocketBuf()
+			throw();
+
+		//@}
+		/** @name Assignment
+		*/
+		//@{
+
+		/// Assignment operator
+		SocketBuf& operator = (const SocketBuf&)
+			throw();
 
 		//@}
 		/**	@name	Converters 
 		*/
 		//@{
 
-		///
-		SocketBuf& operator = (const SocketBuf&);
-
-		///
+		/// Convert this SocketBuf to int.
 		operator int() const 
-		{ 
-			return rep->sock; 
-		}
+			throw();
+
 		//@}
 			
-		virtual SocketBuf* open(type, int proto=0);
+		///
+		virtual SocketBuf* open(type socket_type, int proto = 0)
+			throw();
 
-		virtual SocketBuf* close();
+		///
+		virtual SocketBuf* close()
+			throw();
 
-		virtual int sync();
+		///
+		virtual int sync()
+			throw();
 
-		virtual _G_ssize_t sys_read (char* buf, _G_ssize_t len);
+		/// return EOF on eof, 0 on timeout, and # of chars read on success
+		virtual _G_ssize_t sys_read (char* buf, _G_ssize_t len)
+			throw();
 
-		virtual _G_ssize_t sys_write (const void* buf, long len);
+		/// return written_length; < len indicates error
+		virtual _G_ssize_t sys_write (const void* buf, long len)
+			throw();
 
-		virtual std::streamsize xsputn(const char* s, std::streamsize n);
+		///
+		virtual std::streamsize xsputn(const char* s, std::streamsize n)
+			throw();
 
-		int is_open() const 
-		{ 
-			return rep->sock >= 0; 
-		}
-
-		int is_eof()       
-		{ 
-			return xflags() & _S_EOF_SEEN; 
-		}
+		///
+		int is_open() const
+			throw();
+		///
+		int is_eof()
+			throw();
 		
-		virtual int bind(SockAddr&);
+		///
+		virtual int bind(SockAddr&)
+			throw();
 
-		virtual int connect(SockAddr&);
+		///
+		virtual int connect(SockAddr&)
+			throw();
 		
-		void listen(int num = somaxconn);
+		///
+		void listen(int num = somaxconn)
+			throw();
 
-		virtual SocketBuf	accept();
-		virtual SocketBuf	accept(SockAddr& sa);
+		///
+		virtual SocketBuf	accept()
+			throw();
+		///
+		virtual SocketBuf	accept(SockAddr& sa)
+			throw();
 		
-		int read(void* buf, int len);
-		int recv(void* buf, int len, int msgf = 0);
-		int recvfrom(SockAddr& sa, void* buf, int len, int msgf = 0);
+		///
+		int read(void* buf, int len)
+			throw();
+		///
+		int recv(void* buf, int len, int msgf = 0)
+			throw();
+		///
+		int recvfrom(SockAddr& sa, void* buf, int len, int msgf = 0)
+			throw();
 
-		int write(const void* buf, int len);
-		int send(const void* buf, int len, int msgf = 0);
-		int sendto(SockAddr& sa, const void* buf, int len, int msgf = 0);
+		///
+		int write(const void* buf, int len)
+			throw();
+		///
+		int send(const void* buf, int len, int msgf = 0)
+			throw();
+		///
+		int sendto(SockAddr& sa, const void* buf, int len, int msgf = 0)
+			throw();
 		
-		int	sendtimeout (int wp = -1);
-		int	recvtimeout (int wp = -1);
-		int	is_readready (int wp_sec, int wp_usec = 0) const;
-		int	is_writeready (int wp_sec, int wp_usec = 0) const;
-		int	is_exceptionpending (int wp_sec, int wp_usec = 0) const;
+		///
+		int	sendtimeout (int wp = -1)
+			throw();
+		///
+		int	recvtimeout (int wp = -1)
+			throw();
+		///
+		int	is_readready (int wp_sec, int wp_usec = 0) const
+			throw();
+		///
+		int	is_writeready (int wp_sec, int wp_usec = 0) const
+			throw();
+		///
+		int	is_exceptionpending (int wp_sec, int wp_usec = 0) const
+			throw();
 		
-		void shutdown (shuthow sh);
+		///
+		void shutdown (shuthow sh)
+			throw();
 		
-		int	getopt(option op, void* buf,int len, level l = sol_socket) const;
-		void setopt(option op, void* buf,int len, level l = sol_socket) const;
+		///
+		int	getopt(option op, void* buf,int len, level l = sol_socket) const
+			throw();
+		///
+		void setopt(option op, void* buf,int len, level l = sol_socket) const
+			throw();
 		
-		type gettype() const;
-		int clearerror() const;
-		int debug(int opt = -1) const;
-		int reuseaddr(int opt = -1) const;
-		int keepalive(int opt = -1) const;
-		int dontroute(int opt = -1) const;
-		int broadcast(int opt = -1) const;
-		int oobinline(int opt = -1) const;
-		int linger(int tim = -1) const;
-		int sendbufsz(int sz = -1)   const;
-		int recvbufsz(int sz = -1)   const;
+		///
+		type gettype() const
+			throw();
+		///
+		int clearerror() const
+			throw();
+		///
+		int debug(int opt = -1) const
+			throw();
+		///
+		int reuseaddr(int opt = -1) const
+			throw();
+		///
+		int keepalive(int opt = -1) const
+			throw();
+		///
+		int dontroute(int opt = -1) const
+			throw();
+		///
+		int broadcast(int opt = -1) const
+			throw();
+		///
+		int oobinline(int opt = -1) const
+			throw();
+		///
+		int linger(int tim = -1) const
+			throw();
+		///
+		int sendbufsz(int sz = -1)   const
+			throw();
+		///
+		int recvbufsz(int sz = -1)   const
+			throw();
+
 	};
+
+	BALL_INLINE
+	SocketBuf::operator int() const 
+		throw()
+	{ 
+		return rep->sock; 
+	}
+
+
+	BALL_INLINE
+	SocketBuf* SocketBuf::open(type /* socket_type */, int /* proto */)
+		throw()
+	{
+		return 0;
+	}
+
+
+	BALL_INLINE
+	int SocketBuf::is_open() const
+		throw()
+	{ 
+		return (rep->sock >= 0);
+	}
+
+
+	BALL_INLINE
+	int SocketBuf::is_eof()
+		throw()
+	{ 
+		return (xflags() & _S_EOF_SEEN);
+	}
+
+	BALL_INLINE
+	_G_ssize_t SocketBuf::sys_read (char* buf, _G_ssize_t len)
+		throw()
+	{
+		return read(buf, (int) len);
+	}
+
+	BALL_INLINE
+	_G_ssize_t SocketBuf::sys_write (const void* buf, long len)
+		throw()
+	{
+		return write(buf, (int) len);
+	}
 
 #ifdef BALL_HAS_ANSI_IOSTREAM
 #	define BALL_IOS std::basic_ios<char>
