@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.h,v 1.5 2000/06/30 05:53:21 oliver Exp $
+// $Id: forceFieldComponent.h,v 1.6 2000/07/25 21:14:20 oliver Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -120,6 +120,15 @@ namespace BALL
 				is assigned to.
 		*/
 		virtual void updateForces();
+
+		/**	Regular update of the pair list and the like.
+				Each component that contains updatable data structures
+				(like nonbonded pair lists) should implement
+				this method. It is called for each component of a force field
+				each time \Ref{ForceField::update} is called.
+				The default implementation does exactly nothing.
+		*/
+		virtual void update();
 		
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.7 2000/03/26 12:43:14 oliver Exp $
+// $Id: forceField.h,v 1.8 2000/07/25 21:14:20 oliver Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -267,7 +267,9 @@ namespace BALL
 				The force field may use this method to update internal data structures
 				(e.g. pair lists) periodically. The MD simulation class as well as the minimizer classes
 				use \Ref{getUpdateFrequency} to determine the number of iterations
-				between two calls to update.
+				between two calls to update.\\
+				The default implementation calls \Ref{ForceFieldComponent::update} for
+				each component in the force field.
 		*/
 		virtual void update();
 

@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.10 2000/06/30 05:53:17 oliver Exp $
+// $Id: amberNonBonded.h,v 1.11 2000/07/25 21:14:17 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -81,6 +81,13 @@ namespace BALL
 		/**	Calculates and returns the component's forces.
 		*/
 		virtual void updateForces();
+
+		/**	Update the pair list.
+				This method is called by the force field whenever
+				\Ref{ForceField::update} is called. It is used
+				to recalculate the nonbonded pair list.
+		*/
+		virtual void update();
 
 		/**	Return the electrostatic energy.
 		*/

@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.C,v 1.6 2000/06/30 05:56:15 oliver Exp $
+// $Id: forceFieldComponent.C,v 1.7 2000/07/25 21:14:22 oliver Exp $
 
 
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
@@ -42,6 +42,11 @@ namespace BALL
 	bool ForceFieldComponent::setup()
 	{
 		return true;
+	}
+
+	// update pair lists - empty!
+	void update()
+	{
 	}
 
 	// Set the name of the component

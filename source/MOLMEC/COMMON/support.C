@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.12 2000/07/10 21:22:48 oliver Exp $
+// $Id: support.C,v 1.13 2000/07/25 21:14:23 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -237,7 +237,7 @@ namespace BALL
 						for (Size atom_index_b = atom_index_a + 1; atom_index_b < atom_vector.size(); ++atom_index_b) 
 						{
 							if (((position.getSquareDistance(atom_vector[atom_index_b]->getPosition())) <= squared_distance) 
-									&& !atom_vector[atom_index_a]->isBondedTo(*atom_vector[atom_index_b])
+									&& !atom_vector[atom_index_a]->isBoundTo(*atom_vector[atom_index_b])
 									&& !atom_vector[atom_index_a]->isGeminal(*atom_vector[atom_index_b]))
 							{
 								pair_vector.push_back(pair<Atom*,Atom*>(atom_vector[atom_index_a], atom_vector[atom_index_b]));
@@ -264,7 +264,7 @@ namespace BALL
 								for (data_it = (*box_it).beginData(); +data_it; ++data_it) 
 								{
 									if (((position.getSquareDistance((*data_it)->getPosition())) <= squared_distance) 
-											&& !(*data_it)->isBondedTo(**atom_it)
+											&& !(*data_it)->isBoundTo(**atom_it)
 											&& !(*data_it)->isGeminal(**atom_it))
 									{
 										pair_vector.push_back(pair<Atom*,Atom*>((*atom_it),(*data_it)));

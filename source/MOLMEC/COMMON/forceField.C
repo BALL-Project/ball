@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.16 2000/03/26 12:57:12 oliver Exp $
+// $Id: forceField.C,v 1.17 2000/07/25 21:14:22 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -365,6 +365,19 @@ namespace BALL
 
 	void ForceField::update()
 	{
+		// check for validity of the force field
+		if (!isValid())
+		{
+			return;
+		}
+
+		// iterate over all components and 
+		// call their update methods
+		vector<ForceFieldComponent*>::iterator it;
+		for (it = components_.begin(); it != components_.end(); ++it)
+		{
+			(*it)->update();
+		}
 	}
 	
 

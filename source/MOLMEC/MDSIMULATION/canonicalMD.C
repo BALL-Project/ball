@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.7 2000/07/24 20:13:07 oliver Exp $
+// $Id: canonicalMD.C,v 1.8 2000/07/25 21:14:23 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -253,11 +253,11 @@ namespace BALL
 
 
 		// Get the frequency for updating the Force Field pair lists
-		force_update_freq = force_field_ptr_->getUpdateFrequency ();
+		force_update_freq = force_field_ptr_->getUpdateFrequency();
 
 		// If the simulation runs with periodic boundary conditions, update the
 		// list and position of molecules
-		if (force_field_ptr_->periodic_boundary.isEnabled () == true)
+		if (force_field_ptr_->periodic_boundary.isEnabled() == true)
 		{
 			force_field_ptr_->periodic_boundary.updateMolecules ();
 		}

@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.11 2000/07/10 21:23:18 oliver Exp $
+// $Id: periodicBoundary.C,v 1.12 2000/07/25 21:14:22 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -125,8 +125,8 @@ namespace BALL
 		AtomIndexArray::iterator it = molecules_.begin();
 
 		// Iterate over all molecules stored in molecule_
-		for ( ; it != molecules_.end() ; ++it) {
-
+		for ( ; it != molecules_.end() ; ++it) 
+		{
 			mass = 0;
 			center_of_gravity.x = 0;
 			center_of_gravity.y = 0;
@@ -151,34 +151,47 @@ namespace BALL
 			// the translation (according to the periodic boundary definition)
 			// that moves the center of gravity back into the box.
 
-			if (center_of_gravity.x < box_.a.x) {
+			if (center_of_gravity.x < box_.a.x) 
+			{
 				translation.x += shift_x;
 				shift = true;
-			} else if (center_of_gravity.x > box_.b.x) {
+			} 
+			else if (center_of_gravity.x > box_.b.x) 
+			{
 				translation.x -= shift_x;
 				shift = true;
 			}
 
-			if (center_of_gravity.y < box_.a.y) {
+			if (center_of_gravity.y < box_.a.y) 
+			{
 				translation.y += shift_y;
 				shift = true;
-			} else if (center_of_gravity.y > box_.b.y) {
+			} 
+			else if (center_of_gravity.y > box_.b.y) 
+			{
 				translation.y -= shift_y;
 				shift = true;
 			}
 
-			if (center_of_gravity.z < box_.a.z) {
+			if (center_of_gravity.z < box_.a.z) 
+			{
 				translation.z += shift_z;
 				shift = true;
-			} else if (center_of_gravity.z > box_.b.z) {
+			} 
+			else if (center_of_gravity.z > box_.b.z) 
+			{
 				translation.z -= shift_z;
 				shift = true;
 			}
 
 			// Translate the atoms of the molecule if it has to be shifted
-			if (shift) {
+			if (shift) 
+			{
 				for (Size i = (*it).first; i < (*it).second ; i++) 
 				{
+					// BAUSTELLE: debugging code
+					Log.info() << "PerBound: translating molecule " 
+							<< atom[i]->getFullName() << "/" << i << " by " << translation << endl;
 					atom[i]->setPosition(atom[i]->getPosition() + translation);
 				}
 			}
@@ -201,7 +214,8 @@ namespace BALL
 		for ( ; it != force_field_->getAtoms().end() ; ++it, ++end) 
 		{
 			new_molecule = (*it)->getMolecule();
-			if (new_molecule != old_molecule) {
+			if (new_molecule != old_molecule) 
+			{
 				if (end > start && mass != 0)
 				{
 					 molecules_.push_back(pair<Size,Size>(start,end));
@@ -210,7 +224,9 @@ namespace BALL
 				start = end;
 				old_molecule = new_molecule;
 				mass = 0;
-			} else {
+			} 
+			else 
+			{
 				mass += (*it)->getElement().getAtomicWeight();
 			}
 		}
