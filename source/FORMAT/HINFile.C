@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.19 2000/06/20 22:00:06 oliver Exp $
+// $Id: HINFile.C,v 1.20 2000/07/06 14:39:42 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -384,10 +384,10 @@ namespace BALL
 		// define a macro to print an error message for the file (only once!)
 #		define ERROR_HEADER\
 			if (!error) {\
-				Log.level(LogStream::ERROR) << "HINFile::read: Invalid HyperChem file: " << getName() << endl;\
+				Log.error() << "HINFile::read: Invalid HyperChem file: " << getName() << endl;\
 				error = true;\
 			}\
-			Log.level(LogStream::ERROR) << "Line " << number_of_lines << ": "
+			Log.error() << "Line " << number_of_lines << ": "
 		
 		
 
@@ -675,13 +675,23 @@ namespace BALL
 					// We do not yet know, whether this contains residues.
 					// If it does, we have to convert it to a protein afterwards.
 					system.insert(*(molecule = new Molecule));
+
+					if (line.countFields() > 2)
+					{
+						String name = line.getField(2);
+						if ((name != "") && (name != "-"))
+						{
+							molecule->setName(name);
+						}	
+					}
 					
 					continue;
 				}
 
 				if (tag == "endmol")
 				{
-					if (state != IN_MOLECULE){
+					if (state != IN_MOLECULE)
+					{
 						ERROR_HEADER << "missing <mol> or <endres> tag!" << endl;
 					}
 
