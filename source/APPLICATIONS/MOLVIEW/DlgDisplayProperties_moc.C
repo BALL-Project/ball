@@ -1,8 +1,8 @@
 /****************************************************************************
 ** DlgDisplayProperties meta object code from reading C++ file 'DlgDisplayProperties.h'
 **
-** Created: Tue Jan 11 19:47:11 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.3 $)
+** Created: Thu Jan 13 16:54:08 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.4 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/

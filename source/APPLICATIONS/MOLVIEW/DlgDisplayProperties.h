@@ -14,6 +14,10 @@
 # include <BALL/MOLVIEW/OPENGL/FUNCTOR/moleculeObjectProcessor.h>
 #endif
 
+#ifndef BALL_FORMAT_INIFILE_H
+#	include <BALL/FORMAT/INIFile.h>
+#endif
+
 #include "DlgDisplayPropertiesData.h"
 
 class DlgDisplayProperties : public DlgDisplayPropertiesData
@@ -30,6 +34,10 @@ public:
 
 		void setObjectProcessor(const MoleculeObjectProcessor& object_processor);
 
+		void setPreferences(INIFile& inifile) const;
+
+		void getPreferences(const INIFile& inifile);
+
     protected slots:
 
     virtual void selectPrecision(const QString& string);
@@ -43,6 +51,13 @@ public:
 		void apply();
 
     private:
+
+		void setComboBoxIndex_(QComboBox* combo_box, QString& item_string);
+
+		QString   model_string_;
+		QString   precision_string_;
+		QString   coloring_method_string_;
+		ColorRGBA custom_color_;
 
 		MoleculeObjectProcessor *object_processor_;
 };

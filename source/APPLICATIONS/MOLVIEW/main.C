@@ -23,20 +23,23 @@ int main(int argc, char **argv)
 	__QApplication.setMainWidget(&mainframe);
 	
   // creating server
-	//  Server server;
+  Server server;
+
+	// connecting server with mainframe
+	NotificationRegister(server, mainframe);
 
 	// registering scene for creation
-	//  server.registerCreationScene(mainframe.getScene());
+  server.registerCreationScene(mainframe.getScene());
 
 	// registering object generator
-	//	MoleculeObjectCreator object_creator;
-	//	server.registerObjectCreator(object_creator);
+	MoleculeObjectCreator object_creator;
+	server.registerObjectCreator(object_creator);
 
 	// registering object processor
-	//	server.registerObjectProcessor(mainframe.getObjectProcessor());
+	server.registerObjectProcessor(mainframe.getObjectProcessor());
 
 	// activate the server and wait for client to connect
-	//  server.activate();
+  server.activate();
 
 	// start the application
 	mainframe.show();

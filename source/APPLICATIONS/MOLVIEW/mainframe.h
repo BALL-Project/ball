@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.6 2000/01/12 17:41:55 oliver Exp $
+// $Id: mainframe.h,v 1.7 2000/01/14 20:48:39 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -17,6 +17,7 @@
 #include <qmessagebox.h>
 #include <qpopupmenu.h>
 #include <qlayout.h>
+#include <qbutton.h>
 #include <qstring.h>
 #include <qsplitter.h>
 #include <qstatusbar.h>
@@ -49,8 +50,8 @@
 # include <BALL/VIEW/OPENGL/KERNEL/scene.h>
 #endif
 
-#ifndef BALL_APPLICATIONS_MOLVIEW_CONTROL_H
-# include "control.h"
+#ifndef BALL_VIEW_OPENGL_KERNEL_SERVER_H
+# include <BALL/VIEW/OPENGL/KERNEL/server.h>
 #endif
 
 #ifndef BALL_MOLVIEW_OPENGL_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
@@ -62,88 +63,151 @@
 #endif
 
 
+#include "control.h"
+#include "DlgDisplayProperties.h"
+#include "DlgPreferences.h"
+
 using namespace BALL;
 using namespace BALL::VIEW;
 using namespace BALL::MOLVIEW;
 
 
 class Mainframe	
-	: public QWidget
+: public QWidget,
+	public NotificationTarget<Server>
 {
 	Q_OBJECT
 
   public:
 
-	  enum
+	  enum MenuKey
 		{
-			MENU__CHECK_RESIDUE   = 1,
-			MENU__CUT             = 2,
-			MENU__COPY            = 3,
-			MENU__PASTE           = 4,
-			MENU__BUILD_BONDS     = 5,
-			MENU__REMOVE_BONDS    = 6,
-			MENU__SELECT          = 7,
-			MENU__DESELECT        = 8,
-			MENU__CENTER_CAMERA   = 9,
-			MENU__OPEN_DISPLAY    = 10,
-			MENU__CLEAR_CLIPBOARD = 11
+			MENU__OPEN_FILE_PDB,
+			MENU__OPEN_FILE_HIN,
+			MENU__OPEN_FILE_MOL2,
+
+			MENU__EXPORT_POVRAY,
+			
+			MENU__EDIT_CUT,
+			MENU__EDIT_COPY,
+			MENU__EDIT_PASTE,
+			MENU__EDIT_DELETE,
+			MENU__EDIT_SELECT,
+			MENU__EDIT_DESELECT,
+			MENU__EDIT_CLEAR_CLIPBOARD,
+
+			MENU__BUILD_CHECK_RESIDUE,
+			MENU__BUILD_BUILD_BONDS,
+			MENU__BUILD_ADD_HYDROGENS,
+
+			MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG,
+			MENU__DISPLAY_OPEN_PREFERENCES_DIALOG,
+			MENU__DISPLAY_CENTER_CAMERA,
+
+			MENU__HELP_ABOUT
 		};
 	
 
 	  Mainframe
-			(QWidget *parent__pQWidget = 0,
-			 const char *name__pc = 0);
+			(QWidget* parent = 0, const char* name = 0);
 
-  	~Mainframe
-			(void);
+  	~Mainframe();
 
-		Scene &getScene
-			(void);
+		Scene& getScene();
 
-		MoleculeObjectProcessor &getObjectProcessor
-			(void);
+		MoleculeObjectProcessor& getObjectProcessor();
 		
 		void setPreferences(INIFile& inifile) const;
+
 		void getPreferences(const INIFile& inifile);
-		
+
+		void addComposite(Composite*, QString*);
+
+		void removeComposite(Composite*, bool delete_composite = true);
+
+
+ protected:
+
+		virtual bool onNotify(Server& server);
+
 
   public slots:
-
+		
+		// active the menu entries
+		// (connected to aboutToShow())
+		void checkMenuEntries();
+		
+		// File menu
 	  void importPDB();
 	  void importHIN();
-
 		void exportPovray();
 
+		// Edit menu
+		void cut();
+		void copy();
+		void paste();
+		void erase();
+		void clearClipboard();
+		void select();
+		void deselect();
+
+		// Build menu
+		void checkResidue();
+		void buildBonds();
+		void addHydrogens();
+		
+    // Display menu
+		void openDisplayPropertiesDialog();
+		void openPreferencesDialog();
+		void centerCamera();
+
+		// Help menu
 		void about();
 
-		void updateEditMenuFromSelection(bool selected__bool);
-		void updateEditMenuFromCutOrCopy(bool copied__bool);
-    
+
+		void applyDisplayPropertiesDialog();
+		void applyPreferencesDialog();
+
+		void startServer();
+		void stopServer();
+		void toggleServer();
+
+		
   protected:
 	  
-	  void resizeEvent(QResizeEvent *__pQResizeEvent);
-
+	  void resizeEvent(QResizeEvent* event);
 
   private:
 	
 	  Scene*				scene_;
 
-    MoleculeObjectProcessor __mMoleculeObjectProcessor_;
-		MoleculeGLObjectCollector __mMoleculeGLObjectCollector_;
+    MoleculeObjectProcessor		object_processor_;
+		MoleculeGLObjectCollector GL_object_collector_;
 
 		QMenuBar*			menubar_;
-		QPopupMenu*		edit__mpQPopupMenu_;
+		QPopupMenu*		edit_menu_;
 		QSplitter*		hor_splitter_;
 		QSplitter*		vert_splitter_;
 		Control*			control_;
 		LogView*			logview_;
 		QStatusBar*		statusbar_;
 		QVBoxLayout*	vboxlayout_;
-	
+		
+		DlgDisplayProperties	display_properties_dialog_;
+		DlgPreferences				preferences_dialog_;
 
-		List<QPopupMenu*> popup_menus__mList_;
+		List<QPopupMenu*> popup_menus_;
 
 		INIFile				preferences_;
+
+		FragmentDB		fragment_db_;
+		
+		List<Composite*>	selection_;
+		List<Composite*>  copy_list_;
+		List<Composite*>  cut_list_;
+
+		QLabel*						server_icon_;
+		QLabel*						tool_box_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,312 +1,188 @@
-// $Id: control.C,v 1.9 2000/01/12 17:41:54 oliver Exp $
+// $Id: control.C,v 1.10 2000/01/14 20:48:37 oliver Exp $
 
 #include "control.h"
 
 using namespace std;
 
 Control::Control
-  (QWidget* parent__pQWidget, 
-	 const char* name__pc)
-		:	QListView(parent__pQWidget, name__pc),
-			selected__mpComposite_(0),
-			selected__mpQListViewItem_(0),
-			selected_name__mQString_("unkown"),
-			selected_root_name__mQString_("unkown"),
-			selected_type__mQString_("unkown"),
-			selected_root_type__mQString_("unkown"),
-			copied__mpComposite_(0),
-			display_properties_dialog_(0)
+  (QWidget* parent, const char* name)
+		:	QListView(parent, name),
+			selected_(),
+			selection_changed_(true)
 {
+	// appearance
 	setRootIsDecorated(TRUE);
-	//setMultiSelection(TRUE);
+	setMultiSelection(TRUE);
 	setSorting(-1);
 
-	connect(this, 
-					SIGNAL(rightButtonClicked(QListViewItem *, const QPoint &, int)),
-					SLOT(ContextMenu(QListViewItem *, const QPoint &, int)));
-
+	// if the selection of any item changed,
+	// mark the complete selection as invalid
+	// it is then re-determined by getSelection()
 	connect(this,
-					SIGNAL(selectionChanged(QListViewItem *)),
-					SLOT(objectSelected(QListViewItem *)));
-	/*
-	connect(&__mDisplayProperties_,
-					SIGNAL(apply()),
+					SIGNAL(selectionChanged()),
 					this,
-					SLOT(applyDisplayProperties()));
-	*/
-
-	connect(&display_properties_dialog_,
-					SIGNAL(apply()),
-					this,
-					SLOT(applyDisplayProperties()));
+					SLOT(invalidateSelection()));
 }
 
-Control::~Control
-  (void)
+Control::~Control()
 {
 }
 
-void 
-Control::updateContent
-  (void)
+bool Control::addComposite
+  (Composite* composite, QString* own_name)
 {
-}
-
-bool
-Control::addComposite
-  (Composite *__pComposite,
-	 QString *name__pQString)
-{
-	if (__pComposite == 0)
+	if (composite == 0)
 	{
 		return false;
 	}
 
-	// if the own name is empty use name__pString as name
-	QString name__QString = getName(__pComposite);
+	// if the own name is empty use name as name
+	QString name = getName(composite);
 
-	if (name__QString == "UNKOWN")
+	if ((name == "UNKNOWN") && (own_name != 0))
 	{
-		if (name__pQString != 0)
-		{
-			name__QString = *name__pQString;
-		}
+		name = *own_name;
 	}
-
-	// status text
-	Log.info() << "> checking scene integrity ... ";
-
-	// test, if composite is already inserted into scene
-	CompositeManager *__pCompositeManager 
-		= 	__mpScene_->getCompositeManager();
-
-	// is there already a descriptor with the same name 
-	CompositeDescriptor *__pCompositeDescriptor 
-		= __pCompositeManager->getDescriptor(name__QString.ascii());
-
-	if (__pCompositeDescriptor != 0)
-	{
-		// is the type the same
-		if (getType(__pComposite) == getType(__pCompositeDescriptor->getComposite()))
-		{
-			// ask if the old composite should be replaced by the new one
-			QString a__QString, b__QString;
-			a__QString.sprintf("%s '%s' is already inserted in scene.\n", 
-												 getTypeName(__pComposite).ascii(), name__QString.ascii());
-
-			b__QString.sprintf("%s\n\nWould you like to replace it ?", a__QString.ascii());
-
-			int button__i	= QMessageBox::information
-				(this, "Load information", b__QString, "Yes", "No");
-
-			if (button__i == 0) // yes
-			{
-				// removes the subtree belonging to the composite
-				delete _findListViewItem(__pCompositeDescriptor->getComposite());
-
-				// removes the descritor from the scene
-				__pCompositeManager->remove(*__pCompositeDescriptor);
-			}
-			else // no
-			{
-				return true;
-			}
-		}
-	}
-
-	// status text
-	Log.info() << "done." << endl;
-
-	// status text
-	Log.info() << "> generating new scene object ... ";
-
-	// insert the composite into scene
-	// create a tempory CompositeDescriptor
-	CompositeDescriptor __CompositeDescriptor;
-	__CompositeDescriptor.setName(name__QString.ascii());
-	__CompositeDescriptor.setComposite(*__pComposite);
-
-	// insert the desciptor into the compositemanager
-	// and create a new deep copy of the compositedescriptor
-	CompositeDescriptor *new__pCompositeDescriptor
-		= __pCompositeManager->insert(__CompositeDescriptor, true);
-
-	// if the descriptor is 0 => something very bad has happened
-	if (new__pCompositeDescriptor == 0)
-	{
-		QMessageBox::about(this, "Load object error", "descriptor deep clone failed !");
-		return false;
-	}
-
-	// get the new cloned composite
-	Composite *new__pComposite = new__pCompositeDescriptor->getComposite();
-
-	// status text
-	Log.info() << "done." << endl;
-
-	// status text
-	Log.info() << "> generating graphical representation ... ";
-
-	// use specified object processor for building the visible object
-	// and setting the properties
-	__mpMoleculeObjectProcessor_->applyOn(*new__pComposite);
-	
-	// set the center of the composite
-	new__pCompositeDescriptor->setCenter(__mpMoleculeObjectProcessor_->getViewCenter());
-
-	// status text
-	Log.info() << "done." << endl;
 
 	// status text
 	Log.info() << "> generating tree representation ... ";
 
-	// generate ListViewItem
-	_genListViewItem(0, new__pComposite, &name__QString);
+	// generate ListViewItem and insert it into the ListView
+	genListViewItem_(0, composite, &name);
 
-	// status text
-	Log.info() << "done." << endl;
-
-	// status text
-	Log.info() << "> setting up scene ... ";
-
-	// set the camera on the the new composite
-	__mpScene_->camera.
-		set(__mpMoleculeObjectProcessor_->getViewCenter(), 
-				(Camera::ViewDirection)__mpMoleculeObjectProcessor_->getViewDirection(),
-				__mpMoleculeObjectProcessor_->getViewDistance());
-
-	// update the scene
-	__mpScene_->update();
-
-	// status text
-	Log.info() << "done." << endl;
+	// update the view
+  selection_changed_ = true;
+	updateContents();
 
 	return true;
 }
 
-bool 
-Control::removeComposite
-  (Composite *__pComposite)
+bool Control::removeComposite(Composite* composite)
 {
+	QListViewItem* item = findListViewItem_(composite);
+	if (item != 0)
+	{
+		delete item;
+		selection_changed_ = true;
+		updateContents();
+	}
+
 	return true;
 }
 
-QString
-Control::getTypeName
-  (Composite *__pComposite)
+QString Control::getTypeName
+  (Composite* composite)
 {
-	QString temp__QString;
+	QString temp;
 
-	switch(getType(__pComposite))
+	switch(getType(composite))
 	{
 	  case TYPE__PROTEIN:
-			temp__QString = "Protein";
+			temp = "Protein";
 			break;
 
 	  case TYPE__MOLECULE:
-			temp__QString = "Molecule";
+			temp = "Molecule";
 			break;
 
 	  case TYPE__SYSTEM:
-			temp__QString = "System";
+			temp = "System";
 			break;
 
 	  case TYPE__FRAGMENT:
-			temp__QString = "Fragment";
+			temp = "Fragment";
 			break;
 
 	  case TYPE__CHAIN:
-			temp__QString = "Chain";
+			temp = "Chain";
 			break;
 
 	  case TYPE__RESIDUE:
-			temp__QString = "Residue";
+			temp = "Residue";
 			break;
 
 	  case TYPE__SECONDARY_STRUCTURE:
-			temp__QString = "SecondaryStructure";
+			temp = "SecondaryStructure";
 			break;
 
 	  case TYPE__ATOM:
-			temp__QString = "Atom";
+			temp = "Atom";
 			break;
 
 	  default:
-			temp__QString = "Unkown";
+			temp = "Unknown";
 			break;
 	}
 
-	return temp__QString;
+	return temp;
 }
 
-Control::Type 
-Control::getType
-  (Composite *__pComposite)
+Control::Type Control::getType
+  (Composite* composite)
 {
-	Control::Type __Type = TYPE__UNKOWN;
+	Control::Type type = TYPE__UNKNOWN;
 
-	if (__pComposite == 0)
+	if (composite == 0)
 	{
-		return __Type;
+		return type;
 	}
 
-	if (RTTI::isKindOf<System>(*__pComposite))
+	if (RTTI::isKindOf<System>(*composite))
 	{
-		__Type = TYPE__SYSTEM;
+		type = TYPE__SYSTEM;
 	}	
-	else if (RTTI::isKindOf<Protein>(*__pComposite))
+	else if (RTTI::isKindOf<Protein>(*composite))
 	{
-		__Type = TYPE__PROTEIN;
+		type = TYPE__PROTEIN;
 	}
-	else if (RTTI::isKindOf<Molecule>(*__pComposite))
+	else if (RTTI::isKindOf<Molecule>(*composite))
 	{
-		__Type = TYPE__MOLECULE;
+		type = TYPE__MOLECULE;
 	}
-	else if (RTTI::isKindOf<Chain>(*__pComposite))
+	else if (RTTI::isKindOf<Chain>(*composite))
 	{
-		__Type = TYPE__CHAIN;
+		type = TYPE__CHAIN;
 	}	
-	else if (RTTI::isKindOf<SecondaryStructure>(*__pComposite))
+	else if (RTTI::isKindOf<SecondaryStructure>(*composite))
 	{
-		__Type = TYPE__SECONDARY_STRUCTURE;
+		type = TYPE__SECONDARY_STRUCTURE;
 	}	
-	else if (RTTI::isKindOf<Residue>(*__pComposite))
+	else if (RTTI::isKindOf<Residue>(*composite))
 	{
-		__Type = TYPE__RESIDUE;
+		type = TYPE__RESIDUE;
 	}	
-	else if (RTTI::isKindOf<Fragment>(*__pComposite))
+	else if (RTTI::isKindOf<Fragment>(*composite))
 	{
-		__Type = TYPE__FRAGMENT;
+		type = TYPE__FRAGMENT;
 	}	
-	else if (RTTI::isKindOf<Atom>(*__pComposite))
+	else if (RTTI::isKindOf<Atom>(*composite))
 	{
-		__Type = TYPE__ATOM;
+		type = TYPE__ATOM;
 	}	
 
-	return __Type;
+	return type;
 }
 
-QString 
-Control::getName
-  (Composite *__pComposite)
+QString Control::getName
+  (Composite* composite)
 {
-	QString __QString = "UNKOWN";
+	QString temp = "UNKNOWN";
 
-	switch(getType(__pComposite))
+	switch(getType(composite))
 	{
 	  case TYPE__SYSTEM:
 			{
-				System *system_ptr = RTTI::castTo<System>(*__pComposite);
-				__QString = system_ptr->getName().c_str(); 			
+				System* system = RTTI::castTo<System>(*composite);
+				temp = system->getName().c_str(); 			
 			}
 			break;
 
 		case TYPE__RESIDUE:
 			{
-				Residue* residue = RTTI::castTo<Residue>(*__pComposite);
-				__QString = residue->getName().c_str();
-				__QString += " ";
-				__QString += residue->getID().c_str();
+				Residue* residue = RTTI::castTo<Residue>(*composite);
+				temp = residue->getName().c_str();
+				temp += " ";
+				temp += residue->getID().c_str();
 			}
 			break;
 
@@ -316,16 +192,15 @@ Control::getName
 		case TYPE__FRAGMENT:
 	  case TYPE__SECONDARY_STRUCTURE:
 			{
-				BaseFragment* base_fragment = RTTI::castTo<BaseFragment>(*__pComposite);
-				__QString = base_fragment->getName().c_str();
+				BaseFragment* base_fragment = RTTI::castTo<BaseFragment>(*composite);
+				temp = base_fragment->getName().c_str();
 			}
 			break;
 
 	  case TYPE__ATOM:
 			{
-				Atom *atom_ptr 
-					= RTTI::castTo<Atom>(*__pComposite);
-				__QString = atom_ptr->getName().c_str();
+				Atom* atom = RTTI::castTo<Atom>(*composite);
+				temp = atom->getName().c_str();
 			}
 			break;
 
@@ -333,264 +208,19 @@ Control::getName
 		  break;
 	}
 
-	__QString = __QString.stripWhiteSpace();
+	temp = temp.stripWhiteSpace();
 
 	// empty string
-	if (__QString.isEmpty()
-			|| __QString.isNull())
+	if (temp.isEmpty() || temp.isNull())
 	{
-		__QString = "UNKOWN";
+		temp = "UNKNOWN";
 	}
 
-	return __QString;
+	return temp;
 }
 
-/*
-void 
-Control::ContextMenu
-  (QListViewItem *__pQListViewItem, 
-	 const QPoint &__rQPoint,
-	 int column__i)
-{
-	enum
-	{
-		REMOVE__SYSTEM               = 0,
-		REMOVE__PROTEIN              = 1,
-		REMOVE__MOLECULE             = 2,
-		REMOVE__FRAGMENT             = 3,
-		REMOVE__CHAIN                = 4,
-		REMOVE__RESIDUE              = 5,
-		REMOVE__SECONDARY_STRUCTURE  = 6,
-		CAMERA__CENTER_SYSTEM        = 10,
-		DISPLAY__REMOVE_MODEL        = 20,
-		DISPLAY__BALL_AND_STICK      = 21,
-		DISPLAY__STICK               = 22,
-		DISPLAY__VAN_DER_WAALS       = 23,
-		DISPLAY__LINES               = 24,
-		SELECT                       = 30,
-		DESELECT                     = 31
-	};
-
-	QPopupMenu __QPopupMenu;
-	QPopupMenu *camera__pQPopupMenu = new QPopupMenu();
-	CHECK_PTR(camera__pQPopupMenu);
-	camera__pQPopupMenu->insertItem("center Camera", CAMERA__CENTER_SYSTEM);
-
-	QPopupMenu *display__pQPopupMenu = new QPopupMenu();
-	CHECK_PTR(display__pQPopupMenu);
-	display__pQPopupMenu->insertItem("remove Model", DISPLAY__REMOVE_MODEL);
-	display__pQPopupMenu->insertSeparator();
-	display__pQPopupMenu->insertItem("generate Wireframe model", DISPLAY__LINES);
-	display__pQPopupMenu->insertItem("generate Stick model", DISPLAY__STICK);
-	display__pQPopupMenu->insertItem("generate Ball and Stick model", DISPLAY__BALL_AND_STICK);
-	display__pQPopupMenu->insertItem("generate Van der Waals model", DISPLAY__VAN_DER_WAALS);
-
-	// get address from the attached composite
-	QString address__QString = __pQListViewItem->text(6);
-
-	// convert address string to the real composite address
-	Composite *__pComposite;
-	__pComposite = (Composite *)(atoi(address__QString.ascii()));
-
-	// get name and type
-	QString name__QString = __pQListViewItem->text(0);
-	QString type__QString = __pQListViewItem->text(1);
-
-	// build the context menu
-	switch (getType(__pComposite))
-	{
-	  case TYPE__SYSTEM:
-			__QPopupMenu.insertItem("remove System", REMOVE__SYSTEM);
-			__QPopupMenu.insertItem("Camera", camera__pQPopupMenu);
-			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
-			__QPopupMenu.insertSeparator();
-			__QPopupMenu.insertItem("select", SELECT);
-			__QPopupMenu.insertItem("deselect", DESELECT);
-			break;
-
-	  case TYPE__PROTEIN:
-	  case TYPE__MOLECULE:
-	  case TYPE__CHAIN:
-	  case TYPE__RESIDUE:
-	  case TYPE__SECONDARY_STRUCTURE:
-	  case TYPE__FRAGMENT:
-			__QPopupMenu.insertItem("Camera", camera__pQPopupMenu);
-			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
-			__QPopupMenu.insertSeparator();
-			__QPopupMenu.insertItem("select", SELECT);
-			__QPopupMenu.insertItem("deselect", DESELECT);
-			break;
-
-	  default:
-			break;
-	}
-
-	__QPopupMenu.insertItem("Test 1   ", 2);
-	__QPopupMenu.insertItem("Test 2   ", 3);
-	__QPopupMenu.insertSeparator();
-	__QPopupMenu.insertItem("Test 3   ", 4);
-	
-	// status text
-	outputStatus(QString("preforming action ..."));
-
-	// execute the action
-	switch (__QPopupMenu.exec(__rQPoint))
-	{
-	  case REMOVE__SYSTEM:
-		{
-			QString remove__QString;
-			remove__QString.sprintf("Do you really want to remove %s '%s'.\n\n", 
-															type__QString.ascii(), name__QString.ascii());
-
-			int button__i	= QMessageBox::information
-				(this, "Remove information", remove__QString, "Yes", "No");
-
-			if (button__i == 0) // yes
-			{
-				// removes the subtree belonging to the composite
-				delete __pQListViewItem;
-
-				// removes the composite from the scene
-				__mpScene_->getCompositeManager()->remove(*__pComposite);
-			}
-		}
-		break;
-
-  	case CAMERA__CENTER_SYSTEM:
-		{
-			// use specified object processor for calculating the center
-			__mpMoleculeObjectProcessor_->calculateCenter(*__pComposite);
-
-			// set the camera on the the new composite
-			__mpScene_->camera.
-				set(__mpMoleculeObjectProcessor_->getViewCenter(), 
-						(Camera::ViewDirection)__mpMoleculeObjectProcessor_->getViewDirection(),
-						__mpMoleculeObjectProcessor_->getViewDistance());
-
-			__mpScene_->update();
-		}
-		break;
-
-  	case DISPLAY__REMOVE_MODEL:
-		{
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
-			__mpScene_->update();
-		}
-		break;
-
-  	case DISPLAY__BALL_AND_STICK:
-		{
-			// remove Model first
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
-
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
-			__mpScene_->update();
-		}
-		break;
-
-  	case DISPLAY__STICK:
-		{
-			// remove Model first
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
-
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
-			__mpScene_->update();
-		}
-		break;
-
-  	case DISPLAY__VAN_DER_WAALS:
-		{
-			// remove Model first
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
-
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
-			__mpScene_->update();
-		}
-		break;
-
-  	case DISPLAY__LINES:
-		{
-			// remove Model first
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_LINES);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
-
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
-			__mpScene_->update();
-		}
-		break;
-
-  	case SELECT:
-		{
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__SELECT);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
-			__mpScene_->update();
-		}
-		break;
-
-  	case DESELECT:
-		{
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
-			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
-			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
-
-			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
-			__mpScene_->update();
-		}
-		break;
-
-    	default:
-			break;
-	}
-
-	// clear
-	delete camera__pQPopupMenu;
-	delete display__pQPopupMenu;
-
-	// status text
-	outputStatus(QString(" done.\n"), false);
-}
-*/
-
-void 
-Control::ContextMenu
-  (QListViewItem *__pQListViewItem, 
-	 const QPoint &__rQPoint,
-	 int column__i)
+void Control::ContextMenu
+  (QListViewItem* item,  const QPoint& point, int column)
 {
 	enum
 	{
@@ -607,33 +237,33 @@ Control::ContextMenu
 		DISPLAY__CHANGE              = 50
 	};
 
-	if (__pQListViewItem == 0)
+	if (item == 0)
 	{
 		return;
 	}
 
-	bool no_context_available__bool = false;
-	
+/*	
+	bool no_context_available = false;
 	// select the current listviewitem
-	setSelected(__pQListViewItem, TRUE);
+	setSelected(item, TRUE);
 
 	// get composite address
-	Composite *__pComposite = _getCompositeAddress(__pQListViewItem);
+	Composite* composite = getCompositeAddress_(item);
 	
 	// storing ptr
-	selected__mpComposite_ = __pComposite;
-	selected__mpQListViewItem_ = __pQListViewItem;
+	selectedcomposite_ = composite;
+	selected__mpQListViewItem_ = item;
 
 	// get names and types
-	selected_name__mQString_ = _getName(__pQListViewItem);
-	selected_root_name__mQString_ = _getRootName(__pQListViewItem);
-	selected_type__mQString_ = _getTypeName(__pQListViewItem);
-	selected_root_type__mQString_ = _getRootTypeName(__pQListViewItem);
+	selected_name__mQString_ = _getName(item);
+	selected_root_name__mQString_ = _getRootName(item);
+	selected_type__mQString_ = _getTypeName(item);
+	selected_root_type__mQString_ = _getRootTypeName(item);
 
 	QPopupMenu __QPopupMenu;
 
 	// build the context menu
-	switch (getType(__pComposite))
+	switch (getType(composite))
 	{
 	  case TYPE__RESIDUE:
 	  case TYPE__SYSTEM:
@@ -649,7 +279,7 @@ Control::ContextMenu
 				__QPopupMenu.insertItem("copy", OBJECT__COPY);
 				__QPopupMenu.insertItem("paste", OBJECT__PASTE);
 				
-				if (copied__mpComposite_ != 0)
+				if (copiedcomposite_ != 0)
 				{
 					__QPopupMenu.setItemEnabled(OBJECT__PASTE, TRUE);
 				}
@@ -664,14 +294,14 @@ Control::ContextMenu
 				__QPopupMenu.insertSeparator();
 				
 				QString __QString("remove ");
-				__QString += getTypeName(__pComposite);
+				__QString += getTypeName(composite);
 
 				__QPopupMenu.insertItem(__QString, OBJECT__REMOVE);
 				__QPopupMenu.insertSeparator();
 				__QPopupMenu.insertItem("select", SELECT);
 				__QPopupMenu.insertItem("deselect", DESELECT);
 	
-				if (__pComposite->isSelected())
+				if (composite->isSelected())
 				{
   				__QPopupMenu.setItemEnabled(SELECT, FALSE);
   				__QPopupMenu.setItemEnabled(DESELECT, TRUE);
@@ -698,7 +328,7 @@ Control::ContextMenu
 	}
 
 	// execute the action
-	switch (__QPopupMenu.exec(__rQPoint))
+	switch (__QPopupMenu.exec(point))
 	{
 	  case RESIDUE__CHECK:
 			checkResidue();
@@ -743,811 +373,181 @@ Control::ContextMenu
 	  default:
 			break;
 	}
+	*/
 }
 
-void Control::objectSelected
-  (QListViewItem *__pQListViewItem)
+QListViewItem* Control::getRoot_(QListViewItem* item)
 {
-	if (__pQListViewItem == 0)
+	QListViewItem* parent = item;
+
+	while (parent->parent() != 0)
 	{
-		selected__mpComposite_ = 0;
-		selected__mpQListViewItem_ = 0;
-		selected_name__mQString_ = "unkown";
-		selected_root_name__mQString_ = "unkown";
-		selected_type__mQString_ = "unkown";
-		selected_root_type__mQString_ = "unkown";
-
-		emit itemSelected(false);
-
-		return;
+		parent = parent->parent();
 	}
 
-	// convert address string to the real composite address
-	Composite *__pComposite = _getCompositeAddress(__pQListViewItem);
-
-	// storing ptr
-	selected__mpComposite_ = __pComposite;
-	selected__mpQListViewItem_ = __pQListViewItem;
-
-	// get names and types
-	selected_name__mQString_ = _getName(__pQListViewItem);
-	selected_root_name__mQString_ = _getRootName(__pQListViewItem);
-	selected_type__mQString_ = _getTypeName(__pQListViewItem);
-	selected_root_type__mQString_ = _getRootTypeName(__pQListViewItem);
-
-	emit itemSelected(true);
+	return parent;
 }
 
-void Control::cut()
+QString Control::getName_(QListViewItem* item)
 {
-	QMessageBox::about(this, "CUT-DEMO", "cut object choosen.");
-
-	emit itemCutOrCopied(true);
-}
-
-void Control::copy()
-{
-	QMessageBox::about(this, "COPY-DEMO", "copy object choosen.");
-
-	emit itemCutOrCopied(true);
-}
-
-void Control::paste()
-{
-	QMessageBox::about(this, "PASTE-DEMO", "paste object choosen.");
-}
-
-void Control::buildBonds()
-{
-	QMessageBox::about(this, "BONDS-DEMO", "build bonds choosen.");
-}
-
-void Control::removeBonds()
-{
-	QMessageBox::about(this, "BONDS-DEMO", "remove bonds choosen.");
-}
-
-void Control::select()
-{
-	if (selected__mpComposite_ == 0)
+	if (item == 0)
 	{
-		return;
+		return QString("unknown");
 	}
 
-	// status text
-	Log.info() << selected_root_type__mQString_.ascii()
-						 << " ´"
-						 << selected_root_name__mQString_.ascii() 
-						 << "´> selecting " 
-						 << selected_type__mQString_.ascii()
-						 << " ´"
-						 << selected_name__mQString_.ascii()
-						 << "´ ... ";
-
-	// save old values
-	int value_static__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__STATIC_MODEL);
-	int value_dynamic__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__DYNAMIC_MODEL);
-
-	__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__SELECT);
-	__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
-	__mpMoleculeObjectProcessor_->applyOn(*selected__mpComposite_);
-	
-	// restore old values
-	__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, value_static__i);
-	__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic__i);
-
-	// update scene
-	__mpScene_->getCompositeManager()->update(selected__mpComposite_->getRoot());
-	__mpScene_->update();
-
-	// status text
-	Log.info() << "done." << endl;
+	return item->text(COLUMN_ID__NAME);
 }
 
-void
-Control::deselect()
+QString Control::getRootName_(QListViewItem* item)
 {
-	if (selected__mpComposite_ == 0)
+	return getName_(getRoot_(item));
+}
+
+QString Control::getTypeName_(QListViewItem* item)
+{
+	if (item == 0)
 	{
-		return;
+		return QString("unknown");
 	}
 
-	// status text
-	Log.info() << selected_root_type__mQString_.ascii()
-						 << " ´"
-						 << selected_root_name__mQString_.ascii() 
-						 << "´> deselecting " 
-						 << selected_type__mQString_.ascii()
-						 << " ´"
-						 << selected_name__mQString_.ascii()
-						 << "´ ... ";
-
-	// save old values
-	int value_static__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__STATIC_MODEL);
-	int value_dynamic__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__DYNAMIC_MODEL);
-
-	__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
-	__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
-	__mpMoleculeObjectProcessor_->applyOn(*selected__mpComposite_);
-	
-	// restore old values
-	__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, value_static__i);
-	__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic__i);
-
-	// update scene
-	__mpScene_->getCompositeManager()->update(selected__mpComposite_->getRoot());
-	__mpScene_->update();
-
-	// status text
-	Log.info() << "done." << endl;
+	return item->text(COLUMN_ID__TYPE);
 }
 
-void Control::checkResidue()
+QString Control::getRootTypeName_(QListViewItem* item)
 {
-	if (selected__mpComposite_ == 0)
+	return getTypeName_(getRoot_(item));
+}
+
+Composite* Control::getCompositeAddress_(QListViewItem* item)
+{
+	if (item == 0)
 	{
-		return;
-	}
-
-	if (__mpMoleculeObjectProcessor_->checkResidue(*selected__mpComposite_) == true)
-	{
-		Log.info() << "ResidueChecker: all residues OK." << endl;
-	}
-	
-}
-
-void Control::removeObject()
-{
-	if (selected__mpComposite_ == 0)
-	{
-		return;
-	}
-
-	// status text
-	Log.info() << selected_root_type__mQString_.ascii()
-						 << " ´"
-						 << selected_root_name__mQString_.ascii() 
-						 << "´> removing " 
-						 << selected_type__mQString_.ascii()
-						 << " ´"
-						 << selected_name__mQString_.ascii()
-						 << "´ ... " << endl;
-
-	if (RTTI::isKindOf<System>(*selected__mpComposite_))
-	{
-			QString remove__QString;
-			remove__QString.sprintf("Do you really want to remove %s '%s'.\n\n", 
-															selected_type__mQString_.ascii(), selected_name__mQString_.ascii());
-
-			int button__i	= QMessageBox::information
-				(this, "Remove information", remove__QString, "Yes", "No");
-
-			if (button__i == 0) // yes
-			{
-				// removes the composite from the scene
-				__mpScene_->getCompositeManager()->remove(*selected__mpComposite_);
-				__mpScene_->update();
-
-				// removes the subtree belonging to the composite
-				delete selected__mpQListViewItem_;
-
-			}
-
-			selected__mpComposite_ = 0;
-			selected__mpQListViewItem_ = 0;
-	}
-	else
-	{
-		QString __QString = "remove ";
-		__QString += selected_type__mQString_;
-
-		QMessageBox::about(this, __QString, "not yet supported!");
-	}
-
-	// status text
-	Log.info() << "done." << endl;
-}
-
-void 
-Control::centerCamera()
-{
-	if (selected__mpComposite_ == 0)
-	{
-		return;
-	}
-
-	// status text
-	Log.info() << selected_root_type__mQString_.ascii()
-						 << " ´"
-						 << selected_root_name__mQString_.ascii() 
-						 << "´> set camera at " 
-						 << selected_type__mQString_.ascii()
-						 << " ´"
-						 << selected_name__mQString_.ascii()
-						 << "´ ... ";
-
-	// use specified object processor for calculating the center
-	__mpMoleculeObjectProcessor_->calculateCenter(*selected__mpComposite_);
-	
-	// set the camera on the the new composite
-	__mpScene_->camera.
-		set(__mpMoleculeObjectProcessor_->getViewCenter(), 
-				(Camera::ViewDirection)__mpMoleculeObjectProcessor_->getViewDirection(),
-				__mpMoleculeObjectProcessor_->getViewDistance());
-	
-	__mpScene_->update();
-
-	// status text
-	Log.info() << "done." << endl;
-}
-
-void Control::openDisplay()
-{
-	display_properties_dialog_.show();
-	display_properties_dialog_.raise();
-}
-
-void Control::clearClipboard()
-{
-	QMessageBox::about(this, "CLIPBOARD-DEMO", "clear clipboard choosen.");
-
-	emit itemCutOrCopied(false);	
-}
-
-void 
-Control::applyDisplayProperties()
-{
-	if (selected__mpComposite_ == 0)
-	{
-		return;
-	}
-
-	Log.info() << selected_root_type__mQString_.ascii()
-						 << " ´"
-						 << selected_root_name__mQString_.ascii() 
-						 << "´> applying display properties on " 
-						 << selected_type__mQString_.ascii()
-						 << " ´"
-						 << selected_name__mQString_.ascii()
-						 << "´: ";
-
-	__mpMoleculeObjectProcessor_->applyOn(*selected__mpComposite_);
-	
-	__mpScene_->getCompositeManager()->update(selected__mpComposite_->getRoot());
-
-	__mpScene_->update();
-}
-
-QListViewItem *
-Control::_getRoot(QListViewItem *__pQListViewItem)
-{
-	QListViewItem *parent__pQListViewItem = __pQListViewItem;
-
-	while (parent__pQListViewItem->parent() != 0)
-	{
-		parent__pQListViewItem = parent__pQListViewItem->parent();
-	}
-
-	return parent__pQListViewItem;
-}
-
-QString 
-Control::_getName(QListViewItem *__pQListViewItem)
-{
-	if (__pQListViewItem == 0)
-	{
-		return QString("unkown");
-	}
-
-	return __pQListViewItem->text(COLUMN_ID__NAME);
-}
-
-QString 
-Control::_getRootName(QListViewItem *__pQListViewItem)
-{
-	return _getName(_getRoot(__pQListViewItem));
-}
-
-QString 
-Control::_getTypeName(QListViewItem *__pQListViewItem)
-{
-	if (__pQListViewItem == 0)
-	{
-		return QString("unkown");
-	}
-
-	return __pQListViewItem->text(COLUMN_ID__TYPE);
-}
-
-QString 
-Control::_getRootTypeName(QListViewItem *__pQListViewItem)
-{
-	return _getTypeName(_getRoot(__pQListViewItem));
-}
-
-Composite *
-Control::_getCompositeAddress(QListViewItem *__pQListViewItem)
-{
-	if (__pQListViewItem == 0)
-	{
-		return (Composite *)0;
+		return 0;
 	}
 
 	// get address from the attached composite
-	QString address__QString = __pQListViewItem->text(COLUMN_ID__ADDRESS);
+	QString address = item->text(COLUMN_ID__ADDRESS);
 
 	// convert address string to the real composite address
-	Composite *__pComposite;
-	__pComposite = (Composite *)(atoi(address__QString.ascii()));
-
-	return __pComposite;
-}
-
-List<QListViewItem *> 
-Control::_getSelectedListViewItems()
-{
-	List<QListViewItem *> listviewitem__List;
-
-	QListViewItemIterator __QListViewItemIterator(this);
-
-	for (; __QListViewItemIterator.current(); ++__QListViewItemIterator)
+	Composite* composite = 0;
+	if (address != 0)
 	{
-		if (__QListViewItemIterator.current()->isSelected())
-		{
-			listviewitem__List.push_back(__QListViewItemIterator.current());
-		}
+		composite = (Composite*)(atoi(address.ascii()));
 	}
 
-	return listviewitem__List;
+	return composite;
 }
 
-void 
-Control::_genListViewItem
-  (QListViewItem *__pQListViewItem,
-	 Composite *__pComposite,
-	 QString *name__pQString)
+void Control::genListViewItem_
+  (QListViewItem* item, Composite* composite, QString* default_name)
 {
-	if (__pComposite == 0)
+	if (composite == 0)
 	{
 		return;
 	}
 
-	QString type__QString;
-	QString address__QString;
+	// if getName returns ´UNKNOWN´ and name__pString contains a valid string
+	// use it instead of the string ´UNKNOWN´
+	QString name = getName(composite);
 
-	// if getName returns ´UNKOWN´ and name__pString contains a valid string
-	// use it instead of the string ´UNKOWN´
-	QString name__QString = getName(__pComposite);
-
-	if (name__QString == "UNKOWN")
+	if (name == "UNKNOWN")
 	{
-		if (name__pQString != 0)
+		if (default_name == 0)
 		{
-			name__QString = *name__pQString;
+			name = "<";
+			name += getTypeName(composite);
+			name += ">";
+		} else {
+			name = *default_name;
 		}
 	}
 
-	switch (getType(__pComposite))
+
+	// create an entry for this composite
+	QString type = getTypeName(composite);
+	QString address_string;
+	address_string.sprintf("%ld", (((unsigned long)((void*)composite))));
+
+	// create a new list item
+	QListViewItem* new_item = 0;
+
+	// is this the first item?
+	if (item == 0)
 	{
-	  case TYPE__MOLECULE:
-			{
-				QListViewItem *new__pQListViewItem = 0;
-				type__QString = "Molecule";
+		// yes, insert into the root node 
+		new_item = new QListViewItem
+							(this, 
+							 name, type, QString::null, QString::null,
+							 QString::null, QString::null, address_string);
+	} else {
+		// no, insert into the current item
+		new_item = new QListViewItem
+							(item, name, type, QString::null, QString::null,
+							 QString::null, QString::null, address_string);
+	}
+	CHECK_PTR(new_item);
 
-				address__QString.sprintf("%ld", (((unsigned long)((void *)__pComposite))));
-				
-				// is it the first listviewitem (use this as parent)
-				if (__pQListViewItem == 0)
-				{
-					new__pQListViewItem 
-						= new QListViewItem(this,	name__QString, type__QString,
-																QString::null, QString::null, QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-				else
-				{
-					new__pQListViewItem 
-						= new QListViewItem(__pQListViewItem, name__QString, type__QString,
-																QString::null, QString::null,	QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-
-				// recursiv all included fragments
-				Molecule *__pMolecule = RTTI::castTo<Molecule>(*__pComposite);
-				FragmentIterator __FragmentIterator;
-				int index__i = 0;
-				
-				for(__FragmentIterator = __pMolecule->rbeginFragment();
-						+__FragmentIterator; ++__FragmentIterator)
-				{
-					QString fragname__QString;
-					fragname__QString.sprintf("Fragment_%d", ++index__i);
-
-					_genListViewItem(new__pQListViewItem, 
-													 (Composite *)&(*__FragmentIterator),
-													 &fragname__QString);
-				}
-
-				// all Atoms
-				AtomIterator __AtomIterator;
-				index__i = 0;
-				
-				for(__AtomIterator = __pMolecule->beginAtom();
-						__AtomIterator != __pMolecule->endAtom();
-						++__AtomIterator)
-				{
-					QString atom__QString;
-					atom__QString.sprintf("Atom_%d", ++index__i);
-
-					_genListViewItem(new__pQListViewItem, 
-													 (Composite *)&(*__AtomIterator),
-													 &atom__QString);
-				}
-			}
-			break;
-
-	  case TYPE__PROTEIN:
-			{
-				QListViewItem *new__pQListViewItem = 0; 
-				type__QString = "Protein";
-
-				address__QString.sprintf("%ld", (((unsigned long)((void *)__pComposite))));
-
-				// is it the first listviewitem (use this as parent)
-				if (__pQListViewItem == 0)
-				{
-					new__pQListViewItem 
-						= new QListViewItem(this,	name__QString, type__QString,
-																QString::null, QString::null, QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-				else
-				{
-					new__pQListViewItem 
-						= new QListViewItem(__pQListViewItem, name__QString, type__QString,
-																QString::null, QString::null,	QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-
-				// recursiv all included chains
-				Protein *__pProtein = RTTI::castTo<Protein>(*__pComposite);
-				ChainIterator __ChainIterator;
-				int index__i = 0;
-				
-				for(__ChainIterator = __pProtein->beginChain();
-						__ChainIterator != __pProtein->endChain();
-						++__ChainIterator)
-				{
-					QString chain__QString;
-					chain__QString.sprintf("Chain_%d", ++index__i);
-
-					_genListViewItem(new__pQListViewItem, 
-													 (Composite *)&(*__ChainIterator),
-													 &chain__QString);
-				}
-			}
-			break;
-
-  	case TYPE__SYSTEM:
-			{
-				QListViewItem *new__pQListViewItem = 0;
-				type__QString = "System";
-				
-				address__QString.sprintf("%ld", (((unsigned long)((void *)__pComposite))));
-
-				// is it the first listviewitem (use this as parent)
-				if (__pQListViewItem == 0)
-				{
-					new__pQListViewItem 
-						= new QListViewItem(this,	name__QString, type__QString,
-																QString::null, QString::null, QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-				else
-				{
-					new__pQListViewItem 
-						= new QListViewItem(__pQListViewItem, name__QString, type__QString,
-																QString::null, QString::null,	QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-
-				// recursiv all included molecules			
-				System *__pSystem = RTTI::castTo<System>(*__pComposite);
-				MoleculeIterator __MoleculeIterator;
-				int index__i = 0;
-				
-				for(__MoleculeIterator = __pSystem->beginMolecule();
-						__MoleculeIterator != __pSystem->endMolecule();
-						++__MoleculeIterator)
-				{
-					Composite *__pComposite;
-					QString molprotname__QString;
-
-					// is the molecule a protein ?
-					if (RTTI::isKindOf<Protein>(*__MoleculeIterator))
-					{
-						__pComposite = (Composite *)(RTTI::castTo<Protein>(*__MoleculeIterator));
-						molprotname__QString.sprintf("Protein_%d", ++index__i);
-					}
-					else
-					{
-						__pComposite = (Composite *)&(*__MoleculeIterator);
-						molprotname__QString.sprintf("Molecule_%d", ++index__i);
-					}
-
-					_genListViewItem(new__pQListViewItem, 
-													 __pComposite,
-													 &molprotname__QString);
-				}
-			}	
-			break;
-
-  	case TYPE__CHAIN:
-			{
-				QListViewItem *new__pQListViewItem = 0;
-				type__QString = "Chain";
-				
-				address__QString.sprintf("%ld", (((unsigned long)((void *)__pComposite))));
-				
-				// is it the first listviewitem (use this as parent)
-				if (__pQListViewItem == 0)
-				{
-					new__pQListViewItem 
-						= new QListViewItem(this,	name__QString, type__QString,
-																QString::null, QString::null, QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-				else
-				{
-					new__pQListViewItem 
-						= new QListViewItem(__pQListViewItem, name__QString, type__QString,
-																QString::null, QString::null,	QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-
-				Composite::ChildCompositeIterator __ChildCompositeIterator;
-				int residue_index__i = 0;
-				int sstructure_index__i = 0;
-
-				for(__ChildCompositeIterator = __pComposite->beginChildComposite();
-						__ChildCompositeIterator != __pComposite->endChildComposite();
-						++__ChildCompositeIterator)
-				{
-					Composite *actual__pComposite = (Composite *)&(*__ChildCompositeIterator);
-
-					if (RTTI::isKindOf<Residue>(*actual__pComposite))
-					{
-						QString residue__QString;
-						residue__QString.sprintf("Residue_%d", ++residue_index__i);
-						
-						_genListViewItem(new__pQListViewItem, 
-														 actual__pComposite,
-														 &residue__QString);
-					}
-					else
-					{
-						QString secondaryStructure__QString;
-						secondaryStructure__QString.sprintf("SecondaryStructure_%d", ++sstructure_index__i);
-						
-						_genListViewItem(new__pQListViewItem, 
-														 actual__pComposite,
-														 &secondaryStructure__QString);
-					}
-				}
-
-
-			}	
-			break;
-
-  	case TYPE__SECONDARY_STRUCTURE:
-			{
-				QListViewItem *new__pQListViewItem = 0;
-				type__QString = "SecondaryStructure";
-				
-				address__QString.sprintf("%ld", (((unsigned long)((void *)__pComposite))));
-				
-				// is it the first listviewitem (use this as parent)
-				if (__pQListViewItem == 0)
-				{
-					new__pQListViewItem 
-						= new QListViewItem(this,	name__QString, type__QString,
-																QString::null, QString::null, QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-				else
-				{
-					new__pQListViewItem 
-						= new QListViewItem(__pQListViewItem, name__QString, type__QString,
-																QString::null, QString::null,	QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-
-				// all Residues
-				SecondaryStructure *__pSecondaryStructure = RTTI::castTo<SecondaryStructure>(*__pComposite);
-				ResidueReverseIterator __ResidueIterator;
-				int index__i = 0;
-				
-				for(__ResidueIterator = __pSecondaryStructure->rbeginResidue();
-						__ResidueIterator != __pSecondaryStructure->rendResidue();
-						++__ResidueIterator)
-				{
-					QString residue__QString;
-					residue__QString.sprintf("Residue_%d", ++index__i);
-
-					_genListViewItem(new__pQListViewItem, 
-													 (Composite *)&(*__ResidueIterator),
-													 &residue__QString);
-				}
-			}	
-			break;
-
-  	case TYPE__RESIDUE:
-			{
-				QListViewItem *new__pQListViewItem = 0;
-				type__QString = "Residue";
-				
-				address__QString.sprintf("%ld", (((unsigned long)((void *)__pComposite))));
-				
-				// is it the first listviewitem (use this as parent)
-				if (__pQListViewItem == 0)
-				{
-					new__pQListViewItem 
-						= new QListViewItem(this,	name__QString, type__QString,
-																QString::null, QString::null, QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-				else
-				{
-					new__pQListViewItem 
-						= new QListViewItem(__pQListViewItem, name__QString, type__QString,
-																QString::null, QString::null,	QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-
-				// all Atoms
-				Residue *__pResidue = RTTI::castTo<Residue>(*__pComposite);
-				AtomIterator __AtomIterator;
-				int index__i = 0;
-				
-				for(__AtomIterator = __pResidue->beginAtom();
-						__AtomIterator != __pResidue->endAtom();
-						++__AtomIterator)
-				{
-					QString atom__QString;
-					atom__QString.sprintf("Atom_%d", ++index__i);
-
-					_genListViewItem(new__pQListViewItem, 
-													 (Composite *)&(*__AtomIterator),
-													 &atom__QString);
-				}
-			}	
-			break;
-
-  	case TYPE__FRAGMENT:
-			{
-				QListViewItem *new__pQListViewItem = 0;
-				type__QString = "Fragment";
-				
-				address__QString.sprintf("%ld", (((unsigned long)((void *)__pComposite))));
-				
-				// is it the first listviewitem (use this as parent)
-				if (__pQListViewItem == 0)
-				{
-					new__pQListViewItem 
-						= new QListViewItem(this,	name__QString, type__QString,
-																QString::null, QString::null, QString::null, QString::null,
-																address__QString);
-					
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-				else
-				{
-					new__pQListViewItem 
-						= new QListViewItem(__pQListViewItem, name__QString, type__QString,
-																QString::null, QString::null,	QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-
-				// all Atoms
-				Fragment *__pFragment = RTTI::castTo<Fragment>(*__pComposite);
-				AtomIterator __AtomIterator;
-				int index__i = 0;
-				
-				for(__AtomIterator = __pFragment->beginAtom();
-						__AtomIterator != __pFragment->endAtom();
-						++__AtomIterator)
-				{
-					QString atom__QString;
-					atom__QString.sprintf("Atom_%d", ++index__i);
-
-					_genListViewItem(new__pQListViewItem, 
-													 (Composite *)&(*__AtomIterator),
-													 &atom__QString);
-				}
-			}	
-			break;
-
-  	case TYPE__ATOM:
-			{
-				type__QString = "Atom";
-				
-				address__QString.sprintf("%ld", (((unsigned long)((void *)__pComposite))));
-				
-				// is it the first listviewitem (use this as parent)
-				if (__pQListViewItem == 0)
-				{
-					QListViewItem *new__pQListViewItem 
-						= new QListViewItem(this,	name__QString, type__QString,
-																QString::null, QString::null, QString::null, QString::null,
-																address__QString);
-					
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-				else
-				{
-					QListViewItem *new__pQListViewItem 
-						= new QListViewItem(__pQListViewItem, name__QString, type__QString,
-																QString::null, QString::null,	QString::null, QString::null,
-																address__QString);
-					
-					CHECK_PTR(new__pQListViewItem);
-				}
-			}	
-			break;
-
-  	default:
-			break;
+	// if the composite is anything but an atom,
+	// we iterate over all children and recurse
+	if (!RTTI::isKindOf<Atom>(*composite))
+	{
+		Composite::ChildCompositeReverseIterator it = composite->rbeginChildComposite();
+		for (; it != composite->rendChildComposite(); ++it)
+		{
+			genListViewItem_(new_item, &*it);
+		}
 	}
 }
 
-QListViewItem *
-Control::_findListViewItem
-  (Composite *__pComposite)
+QListViewItem* Control::findListViewItem_
+  (Composite* composite)
 {
-	QString address__QString;
-	address__QString.sprintf("%ld", (((unsigned long)((void *)__pComposite))));
+	QString address;
+	address.sprintf("%ld", (((unsigned long)((void *)composite))));
 
-	QListViewItemIterator __QListViewItemIterator(this);
+	QListViewItemIterator it(this);
 
 	// iterate through all items
-	for (; __QListViewItemIterator.current(); ++__QListViewItemIterator)
+	for (; it.current(); ++it)
 	{
 		// find the address of the composite
-		if (__QListViewItemIterator.current()->text(6) == address__QString)
+		if (it.current()->text(6) == address)
 		{
-			return __QListViewItemIterator.current();
+			return it.current();
 		}
 	}
 
-	return (QListViewItem *)0;
+	return 0;
+}
+
+const List<Composite*>& Control::getSelection()
+{
+	if (selection_changed_)
+	{
+		selected_.clear();
+
+		QListViewItemIterator it(this);
+		for (; it.current(); ++it)
+		{
+			if (it.current()->isSelected())
+			{
+				Composite* composite = getCompositeAddress_(it.current());
+				if (composite != 0)
+				{
+					selected_.push_back(composite);
+				}
+			}
+		}
+		
+		selection_changed_ = false;
+	}
+			
+	return selected_;
+}
+
+void Control::invalidateSelection()
+{
+	selection_changed_ = true;
 }
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

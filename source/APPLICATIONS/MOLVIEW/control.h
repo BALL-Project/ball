@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.6 2000/01/12 17:41:54 oliver Exp $
+// $Id: control.h,v 1.7 2000/01/14 20:48:38 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_CONTROL_H
 #define BALL_APPLICATIONS_MOLVIEW_CONTROL_H
@@ -59,9 +59,6 @@
 # include <BALL/MOLVIEW/OPENGL/FUNCTOR/moleculeObjectProcessor.h>
 #endif
 
-#include "displayProperties.h"
-#include "DlgDisplayProperties.h"
-
 using namespace BALL;
 using namespace BALL::VIEW;
 using namespace BALL::MOLVIEW;
@@ -82,7 +79,7 @@ class Control
 	  //@{
 	  enum Type
 		{
-			TYPE__UNKOWN               = -1,
+			TYPE__UNKNOWN              = -1,
 			TYPE__SYSTEM               = 0,
 			TYPE__PROTEIN              = 1,
 			TYPE__MOLECULE             = 2,
@@ -108,134 +105,70 @@ class Control
 		 */
 		//@{
 
-		Control
-		  (QWidget* parent__pQWidget = NULL,
-			 const char* name__pc = NULL);
+		Control(QWidget* parent = 0, const char* name = 0);
 	
 		virtual ~Control();
  		//@}
 		
-		// --- CONVERTERS
-		
-		// --- ASSIGNMENT METHODS
-		
-		void setScene
-			(const Scene& __rScene);
-
-		Scene* getScene
-			(void) const;
-
-		void setMoleculeObjectProcessor
-			(const MoleculeObjectProcessor &__rMoleculeObjectProcessor);
-
-		MoleculeObjectProcessor* getMoleculeObjectProcessor
-			(void) const;
-
 		// --- ACCESSORS: INSPECTORS and MUTATORS
 		
-		void updateContent
-			(void);
+		void updateContent();
 
 		bool addComposite
-			(Composite *__pComposite,
-			 QString *name__pQString = 0);
+			(Composite* composite, QString* name = 0);
 
 	  bool removeComposite
-			(Composite *__pComposite);
-
-		// --- DEBUGGERS and DIAGNOSTICS
-
-		// --- STORERS
-		
-		// --- EXTERNAL ITERATORS
+			(Composite* composite);
 
 	  static QString getTypeName
-			(Composite *__pComposite);
+			(Composite* composite);
 
 	  static Type getType
-			(Composite *__pComposite);
+			(Composite* composite);
 
 	  static QString getName
-			(Composite *__pComposite);
+			(Composite* composite);
 
-		// --- DEBUGGERS and DIAGNOSTICS
-
-		// --- STORERS
-		
-		// --- EXTERNAL ITERATORS
-
+		const List<Composite*>& getSelection();
 
   public slots:
 
 		void ContextMenu
-		  (QListViewItem *__pQListViewItem, 
-			 const QPoint &__rQPoint, int column__i);
+		  (QListViewItem* item, const QPoint& point, int column);
 
-	  void objectSelected(QListViewItem *__pQListViewItem);
-		
-	  void cut();
-		void copy();
-		void paste();
+		void invalidateSelection();
 
-		void buildBonds();
-		void removeBonds();
-
-		void select();
-		void deselect();
-
-		void checkResidue();
-
-		void removeObject();
-
-		void centerCamera();
-
-		void openDisplay();
-
-		void clearClipboard();
-
-		void applyDisplayProperties();
 
   signals:
 
-		void itemSelected(bool selected__bool);
-		void itemCutOrCopied(bool copied__bool);
-
-	
-  protected:
+		void cut();
+		void copy();
+		void paste();
+		void select();
+		void deselect();
+		void centerCamera();
+		void removeObject();
 
   private:
 
-		QListViewItem *_getRoot(QListViewItem *__pQListViewItem);
-		QString _getRootName(QListViewItem *__pQListViewItem);
-		QString _getName(QListViewItem *__pQListViewItem);
-		QString _getTypeName(QListViewItem *__pQListViewItem);
-		QString _getRootTypeName(QListViewItem *__pQListViewItem);
-		Composite *_getCompositeAddress(QListViewItem *__pQListViewItem);
+		QListViewItem*	getRoot_(QListViewItem* item);
+		Composite*			getCompositeAddress_(QListViewItem* item);
+		QString					getRootName_(QListViewItem* item);
+		QString					getName_(QListViewItem* item);
+		QString					getTypeName_(QListViewItem* item);
+		QString					getRootTypeName_(QListViewItem* item);
 
-		List<QListViewItem *> _getSelectedListViewItems();
+	  void genListViewItem_
+			(QListViewItem* item, Composite* composite, QString* default_name = 0);
 
-	  void _genListViewItem
-			(QListViewItem *__pQListViewItem,
-			 Composite *__pComposite,
-			 QString *name__pQString = 0);
+	  QListViewItem* findListViewItem_
+			(Composite* composite);
 
-	  QListViewItem *_findListViewItem
-			(Composite *__pComposite);
+		// ATRTIBUTES
 
-		Scene *__mpScene_;
-    MoleculeObjectProcessor *__mpMoleculeObjectProcessor_;
+		List<Composite*> selected_;
 
-		Composite *selected__mpComposite_;
-		QListViewItem *selected__mpQListViewItem_;
-		QString selected_name__mQString_;
-		QString selected_root_name__mQString_;
-		QString selected_type__mQString_;
-		QString selected_root_type__mQString_;
-
-		Composite *copied__mpComposite_;
-
-		DisplayProperties __mDisplayProperties_;
-		DlgDisplayProperties display_properties_dialog_;
+		bool selection_changed_;
 };
 
 
