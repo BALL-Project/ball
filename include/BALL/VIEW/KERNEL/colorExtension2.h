@@ -1,4 +1,4 @@
-// $Id: colorExtension2.h,v 1.5 2001/05/13 13:47:45 hekl Exp $
+// $Id: colorExtension2.h,v 1.6 2001/07/09 17:34:01 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION2_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION2_H
@@ -24,9 +24,9 @@ namespace BALL
 				objects that needs two colors \Ref{ColorRGBA}. It provides the derived
 				class with methods for accessing these colors.
 				@memo    ColorExtension2 class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:47:45 $
+				@author  $Author: sturm $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:34:01 $
 		*/
 		class ColorExtension2
 		{
@@ -181,11 +181,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the first color of {\em *this} colorExtension2.
-					Access the constant reference of the first color of {\em *this}
-					colorExtension2.
-					@return      ColorRGBA& constant reference to the first color of {\em *this} colorExtension2
-					@see         setColor1
-					@see         ColorRGBA
+					For further information see \Ref{getColor1}.
 			*/
 			const ColorRGBA& getColor1() const
 				throw();
@@ -298,11 +294,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the second color of {\em *this} colorExtension2.
-					Access the constant reference of the second color of {\em *this}
-					colorExtension2.
-					@return      ColorRGBA& constant reference to the second color of {\em *this} colorExtension2
-					@see         setColor2
-					@see         ColorRGBA
+					For further information see \Ref{getColor2}.
 			*/
 			const ColorRGBA& getColor2() const
 				throw();
