@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.13 2001/04/04 09:39:46 anker Exp $
+// $Id: DCDFile.C,v 1.14 2001/04/04 09:50:44 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -99,7 +99,7 @@ namespace BALL
 	bool DCDFile::hasVelocities() const
 		throw()
 	{
-		return swap_bytes_;
+		return has_velocities_;
 	}
 
 
