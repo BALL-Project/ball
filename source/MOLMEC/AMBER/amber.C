@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.9 1999/09/19 20:54:57 oliver Exp $
+// $Id: amber.C,v 1.10 1999/09/21 15:17:50 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -196,7 +196,6 @@ namespace BALL
 		options.setDefaultBool(Option::OVERWRITE_CHARGES, Default::OVERWRITE_CHARGES);
 		bool overwrite_charges = options.getBool(Option::OVERWRITE_CHARGES);
 		
-
 		// extract template section (containing charges and atom types)
 		if (assign_charges || assign_type_names)
 		{
@@ -204,13 +203,13 @@ namespace BALL
 			templates.extractSection(parameters_, "ChargesAndTypeNames");
 			if (assign_charges && assign_type_names)
 			{
-				templates.assign(*system_, overwrite_type_names, overwrite_charges);
+				templates.assign(*getSystem(), overwrite_type_names, overwrite_charges);
 			} else {
 				if (assign_type_names)
 				{
-					templates.assignTypeNames(*system_, overwrite_type_names);
+					templates.assignTypeNames(*getSystem(), overwrite_type_names);
 				} else {
-					templates.assignCharges(*system_, overwrite_charges);
+					templates.assignCharges(*getSystem(), overwrite_charges);
 				}
 			}
 		}
