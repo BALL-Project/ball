@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BaseIterator_test.C,v 1.1 2003/06/11 16:09:25 oliver Exp $
+// $Id: BaseIterator_test.C,v 1.2 2003/06/12 18:07:23 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -356,7 +356,7 @@ class VectorIteratorTraits_
 
 typedef BaseIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 
-START_TEST(BaseIterator, "$Id: BaseIterator_test.C,v 1.1 2003/06/11 16:09:25 oliver Exp $")
+START_TEST(BaseIterator, "$Id: BaseIterator_test.C,v 1.2 2003/06/12 18:07:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -380,13 +380,6 @@ v.push_back((float)0.1);
 v.push_back((float)0.2);
 v.push_back((float)0.3);
 v.push_back((float)0.4);
-
-CHECK(BaseIterator(const Container& container))
-	MyIterator m;
-	m.getTraits().bindTo(v);
-	TEST_EQUAL(m.isValid(), true)
-	TEST_REAL_EQUAL(*m, 0.1)
-RESULT
 
 MyIterator m;
 m.getTraits().bindTo(v);
@@ -515,7 +508,7 @@ CHECK(void swap(BaseIterator& iterator) throw())
 	TEST_EQUAL(i2.getContainer(), &v1)	
 RESULT
 
-CHECK(STL requirements for input iterator)
+CHECK([EXTRA] STL requirements for input iterator)
  // ????
 RESULT
 

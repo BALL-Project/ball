@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.49 2003/06/12 15:42:22 oliver Exp $
+// $Id: composite.h,v 1.50 2003/06/12 18:07:21 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -1009,14 +1009,12 @@ namespace BALL
 		typedef ConstForwardIterator<Composite, Composite, Composite *, AncestorIteratorTraits>
 			AncestorConstIterator;
 
-		AncestorConstIterator beginAncestor() const
-			throw()
+		AncestorConstIterator beginAncestor() const throw()
 		{
 			return AncestorConstIterator::begin(*this);
 		}
 
-		AncestorConstIterator endAncestor() const
-			throw()
+		AncestorConstIterator endAncestor() const throw()
 		{
 			return AncestorConstIterator::end(*this);
 		}
