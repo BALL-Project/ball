@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.4 2004/05/03 12:03:37 amoll Exp $
+// $Id: main.C,v 1.5 2004/05/03 12:19:33 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -47,10 +47,12 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	}
 
 	// =============== testing if we can write in current directoy =====================
-	BALL::String temp_file_name;
-	BALL::File::createTemporaryFilename(temp_file_name);
+	bool dir_error = false;
+	char* home_dir = 0;
 	try
 	{
+		BALL::String temp_file_name;
+		BALL::File::createTemporaryFilename(temp_file_name);
 		BALL::File out(temp_file_name, std::ios::out);
 		out << "test" << std::endl;
 		out.remove();
@@ -58,10 +60,10 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	catch(...)
 	{
 		// oh, we have a problem, look for the users home dir
-		bool dir_error = true;
+		dir_error = true;
 
 		// default for UNIX/LINUX
-		char* home_dir = getenv("HOME");
+		home_dir = getenv("HOME");
 		if (home_dir == 0) 
 		{
 			// windows
@@ -81,7 +83,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 					QString("You dont have write access to the current working directory\n") + 
 					"and BALLView can not find your home directory. This can cause\n" + 
 					"unexpected behaviour. Please start BALLView from your homedir with\n" + 
-					"absolute path (e.g. C:\Windows\BALLView\BALLView).\n");
+					"absolute path (e.g. C:\\Windows\\BALLView\\BALLView).\n");
 		}
 	}
 
@@ -89,6 +91,12 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	// Create the mainframe.
 	BALL::Mainframe mainframe;
 	application.setMainWidget(&mainframe);
+
+	// if we need to use the users homedir as working dir, do so
+	if (home_dir != 0 && !dir_error)
+	{
+		mainframe.setWorkingDir(home_dir);
+	}
 
 	// Register the mainfram (required for Python support).
 	mainframe.setIdentifier("MAIN");
