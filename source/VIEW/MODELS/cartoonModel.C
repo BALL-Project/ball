@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.37 2005/02/02 16:08:14 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.38 2005/02/03 14:04:21 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -504,6 +504,9 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		last_mesh = mesh;
 		geometric_objects_.push_back(mesh);
 	}
+
+	// make sure atoms of arrow head are found for coloring
+	mesh->setComposite(atoms_of_spline_points_[spline_point_nr]->getParent()->getParent());
 
 	// finally, we draw the arrow
 	for (Index j = -1; j <= 6; j++)
