@@ -1,4 +1,4 @@
-// $Id: Vector4_test.C,v 1.2 2000/02/19 19:55:29 oliver Exp $
+// $Id: Vector4_test.C,v 1.3 2000/02/19 19:56:34 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.2 2000/02/19 19:55:29 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.3 2000/02/19 19:56:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -39,8 +39,8 @@ CHECK(TVector4::T& operator [] (Index index) const)
 	TEST_EQUAL(v[1], 2.0)
 	TEST_EQUAL(v[2], 3.0)
 	TEST_EQUAL(v[3], 4.0)
-	TEST_EXCEPTION(Exception::IndexUnderflow, x == v[-1])
-	TEST_EXCEPTION(Exception::IndexOverflow,  x == v[4])
+	TEST_EXCEPTION(Exception::IndexUnderflow, x = v[-1])
+	TEST_EXCEPTION(Exception::IndexOverflow,  x = v[4])
 RESULT
 
 
