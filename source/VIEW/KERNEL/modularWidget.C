@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.11 2004/07/27 12:46:49 amoll Exp $
+// $Id: modularWidget.C,v 1.12 2004/08/29 17:52:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -43,6 +43,11 @@ ModularWidget::~ModularWidget()
 		Log.info() << "Destructing object " << (void *)this 
 							 << " of class " << RTTI::getName<ModularWidget>() << endl;
 	#endif 
+
+	if (getMainControl() != 0)
+	{
+		getMainControl()->removeModularWidget(this);
+	}
 }
 
 void ModularWidget::clear()
