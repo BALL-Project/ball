@@ -1,4 +1,4 @@
-// $Id: glDisplayList.C,v 1.5.4.1 2002/11/04 18:14:45 amoll Exp $
+// $Id: glDisplayList.C,v 1.5.4.2 2002/11/27 23:30:06 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
@@ -71,7 +71,7 @@ namespace BALL
 		}
 
 		void GLDisplayList::startDefinition()
-			throw(NestedDisplayList, NoDisplayListAvailable, DisplayListRedeclaration)
+			throw(GLDisplayList::NestedDisplayList, GLDisplayList::NoDisplayListAvailable, GLDisplayList::DisplayListRedeclaration)
 		{
 			if (GL_list_ == 0)
 			{

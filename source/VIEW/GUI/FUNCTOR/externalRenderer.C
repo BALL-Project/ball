@@ -1,4 +1,4 @@
-// $Id: externalRenderer.C,v 1.1.2.1 2002/08/29 16:51:15 anhi Exp $
+// $Id: externalRenderer.C,v 1.1.2.2 2002/11/27 23:30:06 oliver Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
 
@@ -68,6 +68,7 @@ namespace BALL
 		Processor::Result ExternalRenderer::operator() (Composite& composite)
 			throw()
 		{
+			return Processor::CONTINUE;
 		}
 	}
 }

@@ -3406,6 +3406,7 @@ _ACEOF
 
 
 		TEMPLATE_DIR="SunWS_cache"
+
 						cat >>confdefs.h <<\_ACEOF
 #define BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
 _ACEOF

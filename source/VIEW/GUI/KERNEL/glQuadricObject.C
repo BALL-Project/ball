@@ -1,4 +1,4 @@
-// $Id: glQuadricObject.C,v 1.5.4.1 2002/11/04 18:14:46 amoll Exp $
+// $Id: glQuadricObject.C,v 1.5.4.2 2002/11/27 23:30:06 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
 #include <BALL/COMMON/exception.h>
@@ -138,7 +138,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::setDrawStyle(int style)
-			throw(WrongDrawingStyle)
+			throw(GLQuadricObject::WrongDrawingStyle)
 		{
 			if (style != GLU_FILL
 					&& style != GLU_LINE
@@ -152,7 +152,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::setOrientation(int orientation)
-			throw(WrongOrientationStyle)
+			throw(GLQuadricObject::WrongOrientationStyle)
 		{
 			if (orientation != GLU_INSIDE
 					&& orientation != GLU_OUTSIDE)
@@ -170,7 +170,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::setNormals(int normals)
-			throw(WrongNormalStyle)
+			throw(GLQuadricObject::WrongNormalStyle)
 		{
 			if (normals != GLU_NONE
 					&& normals != GLU_FLAT
@@ -185,7 +185,7 @@ namespace BALL
 		void GLQuadricObject::drawPartialDisk
 			(GLdouble inner_radius, GLdouble outer_radius,
 			 int slices, int rings, GLdouble start_angle, GLdouble sweep_angle)
-			throw(NoQuadricObjectAvailable)
+			throw(GLQuadricObject::NoQuadricObjectAvailable)
 		{
 			create_();
 
@@ -196,7 +196,7 @@ namespace BALL
 		void GLQuadricObject::drawDisk
 			(GLdouble inner_radius, GLdouble outer_radius,
 			 int slices, int rings)
-			throw(NoQuadricObjectAvailable)
+			throw(GLQuadricObject::NoQuadricObjectAvailable)
 		{
 			create_();
 
@@ -206,7 +206,7 @@ namespace BALL
 		void GLQuadricObject::drawCylinder
 			(GLdouble base_radius, GLdouble top_radius, GLdouble height,
 			 int slices, int stacks)
-			throw(NoQuadricObjectAvailable)
+			throw(GLQuadricObject::NoQuadricObjectAvailable)
 		{
 			create_();
 
@@ -215,7 +215,7 @@ namespace BALL
 
 		void GLQuadricObject::drawSphere
 			(GLdouble radius, int slices, int stacks)
-			throw(NoQuadricObjectAvailable)
+			throw(GLQuadricObject::NoQuadricObjectAvailable)
 		{
 			create_();
 			gluSphere(GLU_quadric_obj_, radius, slices, stacks);
@@ -322,7 +322,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::create_()
-			throw(NoQuadricObjectAvailable)
+			throw(GLQuadricObject::NoQuadricObjectAvailable)
 		{
 			if (GLU_quadric_obj_ == 0)
 			{

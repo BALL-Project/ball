@@ -1,4 +1,4 @@
-// $Id: client.C,v 1.9.4.1 2002/10/18 14:47:58 amoll Exp $
+// $Id: client.C,v 1.9.4.2 2002/11/27 23:30:06 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -67,7 +67,7 @@ namespace BALL
 		}
 
 	  void Client::insert(Composite &composite)
-			throw(InvalidClient, NoPersistentObject)
+			throw(Client::InvalidClient, Client::NoPersistentObject)
     {
 			if (!isValid())
 			{

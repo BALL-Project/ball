@@ -1,4 +1,4 @@
-// $Id: POVRenderer.C,v 1.1.2.3 2002/11/15 16:52:59 amoll Exp $
+// $Id: POVRenderer.C,v 1.1.2.4 2002/11/27 23:30:06 oliver Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
 #include <BALL/KERNEL/atom.h>
@@ -137,6 +137,8 @@ namespace BALL
 		{
 			outfile_ << "}" << endl;
 			outfile_.close();
+
+			return true;
 		}
 
 		Processor::Result POVRenderer::operator() (Composite& composite)

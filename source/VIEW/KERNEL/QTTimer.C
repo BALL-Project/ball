@@ -1,4 +1,4 @@
-// $Id: QTTimer.C,v 1.12.4.2 2002/11/08 18:52:16 oliver Exp $
+// $Id: QTTimer.C,v 1.12.4.3 2002/11/27 23:30:06 oliver Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
@@ -102,7 +102,7 @@ namespace BALL
 		}
 
 		void QTTimer::setInterval(int interval)
-				throw(NoValidInterval)
+				throw(QTTimer::NoValidInterval)
 		{
 			if (interval <= 0)
 			{

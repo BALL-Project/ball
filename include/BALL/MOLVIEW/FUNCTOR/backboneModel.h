@@ -1,4 +1,4 @@
-// $Id: backboneModel.h,v 1.5.4.2 2002/10/23 14:25:02 amoll Exp $
+// $Id: backboneModel.h,v 1.5.4.3 2002/11/27 23:30:03 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
@@ -15,11 +15,16 @@
 #	include <BALL/MOLVIEW/PRIMITIV/backbone.h>
 #endif
 
-class Atom;
-class ColorRGBA;
 
 namespace BALL
 {
+	class Atom;
+	
+	namespace VIEW
+	{
+		class ColorRGBA;
+	}
+
 	namespace MOLVIEW
 	{
 		/** AddBackboneModel class.

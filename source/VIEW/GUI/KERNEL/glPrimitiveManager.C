@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.C,v 1.7.4.4 2002/11/07 19:22:20 amoll Exp $
+// $Id: glPrimitiveManager.C,v 1.7.4.5 2002/11/27 23:30:06 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
@@ -108,7 +108,7 @@ namespace BALL
 		}
 
 		void GLSphereDisplayLists_::init()
-			throw(NoGLDisplayListsAvailable)
+			throw(GLSphereDisplayLists_::NoGLDisplayListsAvailable)
 		{
 			if (GL_display_list_ == 0)
 			{
@@ -125,7 +125,7 @@ namespace BALL
 
 		GLDisplayList& GLSphereDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
-			throw(WrongModes)
+			throw(GLSphereDisplayLists_::WrongModes)
 		{
 			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
@@ -318,7 +318,7 @@ namespace BALL
 		}
 
 		void GLTubeDisplayLists_::init()
-			throw(NoGLDisplayListsAvailable)
+			throw(GLTubeDisplayLists_::NoGLDisplayListsAvailable)
 		{
 			if (GL_display_list_ == 0)
 			{
@@ -335,7 +335,7 @@ namespace BALL
 
 		GLDisplayList& GLTubeDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
-			throw(WrongModes)
+			throw(GLTubeDisplayLists_::WrongModes)
 		{
 			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
@@ -479,7 +479,7 @@ namespace BALL
 		}
 
 		void GLSimpleBoxDisplayLists_::init()
-			throw(NoGLDisplayListsAvailable)
+			throw(GLSimpleBoxDisplayLists_::NoGLDisplayListsAvailable)
 		{
 			if (GL_display_list_ == 0)
 			{
@@ -496,7 +496,7 @@ namespace BALL
 
 		GLDisplayList& GLSimpleBoxDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
-			throw(WrongModes)
+			throw(GLSimpleBoxDisplayLists_::WrongModes)
 		{
 			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{

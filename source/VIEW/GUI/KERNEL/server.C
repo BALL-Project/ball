@@ -1,4 +1,4 @@
-// $Id: server.C,v 1.6.4.1 2002/10/25 23:32:45 amoll Exp $
+// $Id: server.C,v 1.6.4.2 2002/11/27 23:30:06 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
 
@@ -310,7 +310,7 @@ namespace BALL
 		}
 
 	  void Server::sendObject(IOStreamSocket &iostream_socket)
-				throw(NotCompositeObject)
+				throw(Server::NotCompositeObject)
     {
 			Log.info() << "Server: receiving object ... " << endl;
 
