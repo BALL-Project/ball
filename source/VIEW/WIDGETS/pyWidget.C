@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.19 2003/12/02 14:30:29 amoll Exp $
+// $Id: pyWidget.C,v 1.20 2003/12/09 13:33:06 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -104,22 +104,6 @@ namespace BALL
 			removeParagraph(row +1);
 		}
 
-	//	void PyWidgetData::contentsMousePressEvent(QMouseEvent* /* m */)
-/*
-		{
-			setCursorPosition(paragraphs() - 1, 4);
-			// we ignore the mouse events! 
-			// they might place the cursor anywhere!
-		}
-*/	
-	//	void PyWidgetData::mousePressEvent(QMouseEvent* /* m */) 
-	/*
-		{
-			setCursorPosition(paragraphs() - 1, 4);
-			// we ignore the mouse events! 
-			// they might place the cursor anywhere!
-		}
-*/
 
 		bool PyWidgetData::returnPressed()
 		{

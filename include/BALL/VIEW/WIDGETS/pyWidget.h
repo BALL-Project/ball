@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.10 2003/11/14 13:39:12 amoll Exp $
+// $Id: pyWidget.h,v 1.11 2003/12/09 13:32:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -23,13 +23,13 @@
 
 namespace BALL
 {
-	class LineBasedFile;
-
 	namespace VIEW
 	{
 		class PythonSettings;
 
-		/** Python Widget class.
+		/** Python Widget base class.
+		 		This class was added, because we had to overwrite some qt-methods.
+				Use the derived PyWidget class for your application!
 				\ingroup ViewWidgets
 		*/
 		class PyWidgetData
@@ -48,15 +48,10 @@ namespace BALL
 			//@{
 
 			/** Standard constructor.
-					If the widget is part of a BALL \ref{MainControl} widget, 
-					it inserts a menu entry <tt>Tools|Restart Python</tt> into the menu bar.
-					\param parent the parent widget
-					\param name the widget name
 			*/
 			PyWidgetData(QWidget* parent = 0, const char* name = 0);
 
 			/** Copy constructor.
-					Creates a new widget and inserts it in the same place as the original widget.
 			*/
 			PyWidgetData(const PyWidgetData& widget);
 
@@ -67,7 +62,7 @@ namespace BALL
 			public slots:
 
 			//@}
-			/**	@name Running the interpreter
+			/**	@name QT Slots
 			*/
 			//@{
 			
@@ -75,17 +70,15 @@ namespace BALL
 					This method initializes the interpreter if it is not yet running. 
 					An already running interpreter is reinitialized.
 					This method calls <tt>PyInitialize()</tt> to create an interpreter.
-					This is a QT <b>SLOT</b>.
 			*/
 			virtual void startInterpreter();
 
 			/**	Stop the interpreter.
 					The interpreter is stoped by calling <tt>Py_Finish()</tt>.
-					This is a QT <b>SLOT</b>.
 			*/
 			virtual void stopInterpreter();
 
-			///
+			/// Open a dialog to select a start up script
 			virtual void scriptDialog();
 
 			/**	Run a Python program from a file.
@@ -95,14 +88,13 @@ namespace BALL
 
 			///
 			virtual void exportHistory();			
-			//@}
+
 			public:
 
 			//@}
-
 			/** @name	Widget related methods
 					These methods implement the basic behaviour of the edit window by 
-					overwriting the corresponding methods of <tt>QMultiLineEdit</tt>.
+					overwriting the corresponding methods of <tt>QTextEdit</tt>.
 					You should not call them immediately, but you might want to
 					overwrite them in derived classes.
 			*/
@@ -124,22 +116,12 @@ namespace BALL
 
 			protected:
 
-			// old way of handling mouse, maybe to be removed in the future (today 14.11.2003)
-			/*
-			virtual void ensureCursorVisible() {}
-			virtual void scrollToBottom() {}
-			*/
-			//virtual void placeCursor ( const QPoint& /*pos*/, QTextCursor* /*c = 0*/ ){}
-//			virtual void mousePressEvent(QMouseEvent* m);
-//			virtual void contentsMousePressEvent(QMouseEvent* m);
-
 			virtual void keyPressEvent(QKeyEvent* e);
 
-			///
 			virtual void clear();
-			///
+			
 			virtual void cut();
-			///
+			
 			virtual void paste();
 
 			void parseLine_();
@@ -178,7 +160,11 @@ namespace BALL
 		}; 
 
 
-		///
+		/** Python Widget
+		 		This class is a Window for a Python interpreter interface.
+				So it is possible to access all data in the running application in realtime with the script language.
+				PyWidget also has the capablities to run a Python script from a file at startup, or on demand from the user.
+		*/
 		class PyWidget
 			: public DockWidget
 		{
