@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.h,v 1.2 2000/09/20 11:10:46 oliver Exp $
+// $Id: EFShiftProcessor.h,v 1.3 2000/09/21 07:56:32 oliver Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -26,6 +26,8 @@ namespace BALL
 		:	public ShiftModule
 	{
 		public:
+
+		BALL_CREATE(EFShiftProcessor)
 
 		/**	@name Enums and Constants
 		*/
