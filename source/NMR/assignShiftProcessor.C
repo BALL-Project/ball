@@ -1,7 +1,7 @@
-// $Id: assignShiftProcessor.C,v 1.20 2000/10/02 18:58:21 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.21 2000/10/03 02:04:12 amoll Exp $
 
-#include<BALL/NMR/assignShiftProcessor.h>
-#include<BALL/KERNEL/atom.h>
+#include <BALL/NMR/assignShiftProcessor.h>
+#include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/DATATYPE/string.h>
@@ -58,8 +58,8 @@ namespace BALL
 		for (Position atom_pos = 0; atom_pos < atom_data_.size() ; atom_pos++)
 		{
 			// normalize the atom name to reflect the PDB standard
-			String residue_name = atom_data_[atom_pos]->residueLabel;
-			String atom_name    = atom_data_[atom_pos]->atomName;
+			String residue_name = atom_data_[atom_pos]->residue_label;
+			String atom_name    = atom_data_[atom_pos]->atom_name;
 			bool normalized = false;
 			if (map != 0)
 			{
@@ -73,7 +73,7 @@ namespace BALL
 				Log.warn() << "AssignShiftProcessor::start: could not convert atom name " << entry << endl;
 			}
 
-			String prefix(atom_data_[atom_pos]->residueSeqCode);
+			String prefix(atom_data_[atom_pos]->residue_seq_code);
 			prefix += residue_name;
 			prefix += ":";
 
@@ -81,8 +81,8 @@ namespace BALL
 			{
 				String full_name(prefix);
 				full_name += atom_name;
-				shift_table_[full_name] = atom_data_[atom_pos]->shiftValue;
-				//cout << full_name << " " << atom_data_[atom_pos]->shiftValue << endl;
+				shift_table_[full_name] = atom_data_[atom_pos]->shift_value;
+				//cout << full_name << " " << atom_data_[atom_pos]->shift_value << endl;
 				continue;
 			}
 
@@ -91,8 +91,8 @@ namespace BALL
 			{
 				String full_name(residue_name);
 				full_name += transform_table[entry];
-				shift_table_[full_name] = atom_data_[atom_pos]->shiftValue;
-				//cout << full_name << " " << atom_data_[atom_pos]->shiftValue << endl;
+				shift_table_[full_name] = atom_data_[atom_pos]->shift_value;
+				//cout << full_name << " " << atom_data_[atom_pos]->shift_value << endl;
 				continue;
 			}
 			
@@ -101,10 +101,10 @@ namespace BALL
 			Size size = transform_table[entry].split(tokens, "/");
 			for (Position wordpos = 0; wordpos < size ; wordpos++)
 			{
-				String full_name(atom_data_[atom_pos]->residueSeqCode);
+				String full_name(atom_data_[atom_pos]->residue_seq_code);
 				full_name += tokens[wordpos];
-				shift_table_[full_name] = atom_data_[atom_pos]->shiftValue;
-				//cout << full_name << " " << atom_data_[atom_pos]->shiftValue << endl;
+				shift_table_[full_name] = atom_data_[atom_pos]->shift_value;
+				//cout << full_name << " " << atom_data_[atom_pos]->shift_value << endl;
 			}
 		}
 
