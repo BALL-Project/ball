@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.12 2004/07/25 21:26:15 amoll Exp $
+// $Id: main.C,v 1.13 2004/07/26 13:56:41 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -81,17 +81,17 @@ int main(int argc, char **argv)
 
 	// =============== initialize Mainframe ============================================
 	QApplication application(argc, argv);
-	BALL::Mainframe mainframe;
- 	application.setMainWidget(&mainframe);
-	mainframe.setIdentifier("MAIN");
-	mainframe.registerThis();
+	BALL::Mainframe* mainframe = new Mainframe();
+ 	application.setMainWidget(mainframe);
+	mainframe->setIdentifier("MAIN");
+	mainframe->registerThis();
 
- 	mainframe.hide();
+ 	mainframe->hide();
 
 	// if we need to use the users homedir as working dir, do so
 	if (home_dir != 0 && !dir_error)
 	{
-		mainframe.setWorkingDir(home_dir);
+		mainframe->setWorkingDir(home_dir);
 	}
 
 	// =============== parsing command line arguments ==================================
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 		if (argument.hasSuffix(".bvp"))
 		{
 			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
-		 	mainframe.loadBALLViewProjectFile(argument);
+		 	mainframe->loadBALLViewProjectFile(argument);
 			project_file = argument;
 			continue;
 		}
@@ -237,7 +237,8 @@ int main(int argc, char **argv)
 	Size s = povray_exec.split(strings, String(FileSystem::PATH_SEPARATOR).c_str());
 	String pov_exec2 = strings[s - 1];
 
-	while(sm.applyNextSnapShot())
+//	whil e(sm.applyNextSnapShot())
+	while (false)
 	{
 		String pov_arg = povray_options + String(nr) + ".png" ;
 
@@ -310,8 +311,11 @@ int main(int argc, char **argv)
 			}
 
  	   	execl (povray_exec.c_str(), pov_exec2.c_str(), pov_arg.c_str(), 0);
-// 			std::cout << std::endl ;
-//  	  	execl ("/bin/cat", "cat", 0);
+
+			/*
+ 			std::cout << std::endl ;
+  		execl ("/bin/cat", "cat", 0);
+			*/
 		}
 
 		nr++;
@@ -320,9 +324,11 @@ int main(int argc, char **argv)
 
 	std::cout << "Written " + String(nr2) + " images." << std::endl;
 	
+	/*
+	mainframe->show();
+ 	return application.exec();
+	*/
 
- 	mainframe.show();
-  return application.exec();
 	return 0;
 }
 
