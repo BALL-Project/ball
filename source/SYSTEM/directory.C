@@ -1,16 +1,17 @@
-// $Id: directory.C,v 1.15.4.1 2002/11/30 09:48:45 oliver Exp $
+// $Id: directory.C,v 1.15.4.2 2002/11/30 10:32:02 oliver Exp $
 
 #include <BALL/SYSTEM/directory.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
-#ifdef BALL_INCLUDE_SYS_TYPES_H
+#ifdef BALL_HAS_SYS_TYPES_H
 #	include <sys/types.h>
 #endif
-#ifdef BALL_INCLUDE_UNISTD_H
+#ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h>
 #endif
+
 #include <iostream>
 #include <errno.h>
 

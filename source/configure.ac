@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.7 2002/11/30 09:57:31 oliver Exp $
+dnl    $Id: configure.ac,v 1.1.2.8 2002/11/30 10:32:02 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -325,6 +325,9 @@ CF_CHECK_DIRENT_H
 CF_CHECK_DIRECT_H
 CF_CHECK_IO_H
 CF_CHECK_SYS_TIME_H
+CF_CHECK_SYS_TIMES_H
+CF_CHECK_SYS_TYPES_H
+CF_CHECK_SYS_IOCTL_H
 CF_CHECK_SYS_SOCKET_H
 CF_CHECK_SYS_PARAM_H
 CF_CHECK_NETINET_IN_H

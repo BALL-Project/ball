@@ -1466,7 +1466,9 @@ AC_DEFUN(CF_CHECK_REGEX_H, [
 	AC_CHECK_HEADER(regex.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
 	if test "${HAS_REGEX_H}" = "false" ; then
 		AC_CHECK_HEADER(regexp.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
-		AC_DEFINE(BALL_USE_REGEXP_H)
+		AC_DEFINE(BALL_HAS_REGEXP_H,)
+	else
+		AC_DEFINE(BALL_HAS_REGEX_H,)
 	fi
 	if test "${HAS_REGEX_H}" = "false" ; then
 		AC_MSG_RESULT()
@@ -1563,6 +1565,42 @@ AC_DEFUN(CF_CHECK_SYS_TIME_H, [
 			[BALL_HAS_SYS_TIME_H=false])
 	if test ${BALL_HAS_SYS_TIME_H} = true ; then
 		AC_DEFINE(BALL_HAS_SYS_TIME_H,)
+	fi
+])
+
+dnl
+dnl   Check whether sys/times.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_SYS_TIMES_H, [
+	AC_CHECK_HEADERS(sys/times.h,
+			[BALL_HAS_SYS_TIMES_H=true],
+			[BALL_HAS_SYS_TIMES_H=false])
+	if test ${BALL_HAS_SYS_TIMES_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_TIMES_H,)
+	fi
+])
+
+dnl
+dnl   Check whether sys/types.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_SYS_TYPES_H, [
+	AC_CHECK_HEADERS(sys/types.h,
+			[BALL_HAS_SYS_TYPES_H=true],
+			[BALL_HAS_SYS_TYPES_H=false])
+	if test ${BALL_HAS_SYS_TYPES_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_TYPES_H,)
+	fi
+])
+
+dnl
+dnl   Check whether sys/ioctl.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_SYS_IOCTL_H, [
+	AC_CHECK_HEADERS(sys/ioctl.h,
+			[BALL_HAS_SYS_IOCTL_H=true],
+			[BALL_HAS_SYS_IOCTL_H=false])
+	if test ${BALL_HAS_SYS_IOCTL_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_IOCTL_H,)
 	fi
 ])
 

@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.18.4.6 2002/11/30 09:48:45 oliver Exp $
+// $Id: TCPTransfer.C,v 1.18.4.7 2002/11/30 10:32:02 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -6,19 +6,19 @@
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
 
-#ifdef BALL_INCLUDE_SYS_SOCKET_H
+#ifdef BALL_HAS_SYS_SOCKET_H
 #	include <sys/socket.h>		// socket
 #endif
-#ifdef BALL_INCLUDE_NETDB_H
+#ifdef BALL_HAS_NETDB_H
 #	include <netdb.h>				// gethostbyname
 #endif
-#ifdef BALL_INCLUDE_NETINET_IN_H
+#ifdef BALL_HAS_NETINET_IN_H
 #	include <netinet/in.h> 	// sockaddr_in
 #endif
-#ifdef BALL_INCLUDE_UNISTD_H
+#ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h>  			// close, ioctl
 #endif
-#ifdef BALL_INCLUDE_SYS_IOCTL_H
+#ifdef BALL_HAS_SYS_IOCTL_H
 #	include <sys/ioctl.h>		// FIONBIO
 #endif
 #ifdef BALL_USE_WINSOCK

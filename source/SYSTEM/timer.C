@@ -1,13 +1,15 @@
-// $Id: timer.C,v 1.7.4.1 2002/11/30 09:48:45 oliver Exp $
+// $Id: timer.C,v 1.7.4.2 2002/11/30 10:32:02 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
 #ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h>
 #endif
-#include <sys/types.h>
 #ifdef BALL_HAS_TIME_H
 #	include <time.h>
+#endif
+#ifdef BALL_HAS_SYS_TYPES_H
+#	include <sys/types.h>
 #endif
 #ifdef BALL_HAS_SYS_TIMES_H
 #	include <sys/times.h>

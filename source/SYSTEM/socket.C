@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.25.4.1 2002/11/30 09:48:45 oliver Exp $
+// $Id: socket.C,v 1.25.4.2 2002/11/30 10:32:02 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -13,23 +13,24 @@
 // Version: 17Oct95 1.10
 
 #include <BALL/SYSTEM/socket.h>
+
 #include <stdio.h>
+#include <errno.h>
+#include <stdlib.h>
 
 #ifdef BALL_INCLUDE_SYS_TIME_H
 #	include <sys/time.h>
 #endif
-#include <stdlib.h>
-#ifdef BALL_INCLUDE_UNISTD_H
+#ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h>
 #endif
-#include <errno.h>
-#include <stdio.h>
-#ifdef BALL_INCLUDE_NETDB_H
+#ifdef BALL_HAS_NETDB_H
 #	include <netdb.h>
 #endif
-#ifdef BALL_INCLUDE_ARPA_INET_H
+#ifdef BALL_HAS_ARPA_INET_H
 #	include <arpa/inet.h>
 #endif
+
 #ifdef BALL_USE_WINSOCK
 #	include <io.h>
 #	define GLOBAL_CLOSE	_close

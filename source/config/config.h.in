@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.29.2.4 2002/11/30 09:57:35 oliver Exp $ 
+// $Id: config.h.in,v 1.29.2.5 2002/11/30 10:32:02 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -116,7 +116,8 @@
 #undef BALL_HAS_XDR_U_HYPER 
 
 // on some systems, we do not have regex.h, so we have to use regexp.h
-#undef BALL_USE_REGEXP_H
+#undef BALL_HAS_REGEXP_H
+#undef BALL_HAS_REGEX_H
 
 // Define to `int' if <sys/types.h> doesn't define.  
 #undef pid_t
@@ -192,21 +193,26 @@
 
 #undef BALL_HAS_UNISTD_H
 #undef BALL_HAS_PROCESS_H
-#undef BALL_HAS_SYS_TIME_H
 #undef BALL_HAS_TIME_H
 #undef BALL_HAS_VALUES_H
 #undef BALL_HAS_LIMITS_H
 #undef BALL_HAS_FLOAT_H
-#undef BALL_HAS_SYS_PARAM_H
 #undef BALL_HAS_DIRENT_H
 #undef BALL_HAS_DIRECT_H
+#undef BALL_HAS_SYS_IOCTL_H
+#undef BALL_HAS_SYS_TIME_H
+#undef BALL_HAS_SYS_TIMES_H
+#undef BALL_HAS_SYS_TYPES_H
+#undef BALL_HAS_SYS_PARAM_H
 #undef BALL_HAS_SYS_SOCKET_H
+
 #undef BALL_HAS_NETINET_IN_H
 #undef BALL_HAS_NETDB_H
 #undef BALL_HAS_ARPA_INET_H
 
 #undef BALL_HAS_KILL
 #undef BALL_HAS_SYSCONF
+
 #undef BALL_HAS_CLOCKS_PER_SEC
 #undef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 
