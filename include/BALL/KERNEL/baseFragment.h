@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.11 2000/04/14 13:09:54 amoll Exp $
+// $Id: baseFragment.h,v 1.12 2000/04/17 13:46:02 amoll Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -150,13 +150,6 @@ namespace BALL
 				@see    BaseFragment::getName
 		*/
 		void setName(const String& name);
-
-		/** Mutable inspection of the BaseFragment's name.
-				Access a mutable reference to the name of {\em *this} BaseFragment.
-				@return  String& - mutable reference to the name of {\em *this} BaseFragment
-				@see     BaseFragment::setName
-		*/
-		String& getName();
 
 		/** Constant inspection of the BaseFragment's name.
 				Access a constant reference to the name of {\em *this} BaseFragment.
