@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.38 2003/03/07 15:56:51 sneumann Exp $
+// $Id: classTest.h,v 1.39 2003/03/08 08:03:38 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -718,7 +718,7 @@ int main(int argc, char **argv)\
 		Each <tt>CAPTURE_OUTPUT</tt> requires exactly one subsequent
 		 \link COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
 */
-#ifdef HAS_SSTREAM
+#ifdef BALL_HAS_SSTREAM
 #define CAPTURE_OUTPUT_LEVEL(level) \
 	{\
 		std::ostringstream TEST_strstr;\
@@ -745,7 +745,7 @@ int main(int argc, char **argv)\
 		Each <tt>CAPTURE_OUTPUT</tt> requires exactly one subsequent
 		 \link COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
 */
-#ifdef HAS_SSTREAM
+#ifdef BALL_HAS_SSTREAM
 #define CAPTURE_OUTPUT_LEVEL_RANGE(minlevel, maxlevel) \
 	{\
 		std::ostringstream TEST_strstr;\
@@ -764,7 +764,7 @@ int main(int argc, char **argv)\
 		@see CAPTURE_OUTPUT
 */
 
-#ifdef HAS_SSTREAM
+#ifdef BALL_HAS_SSTREAM
 #define COMPARE_OUTPUT(text) \
                 Log.remove(TEST_strstr);\
                 Log.insert(std::cout, LogStream::INFORMATION, LogStream::ERROR - 1);\
@@ -784,7 +784,7 @@ int main(int argc, char **argv)\
                                 TEST::newline = true;\
                                 std::cout << std::endl;\
                         }\
-                        std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got '" << (TEST_strstr_contents) << "', expected '" <
+                        std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got '" << (TEST_strstr_contents) << "', expected '" << (text) << ") ";\
                         if (TEST::this_test)\
                                 std::cout << " + " << std::endl;\
                         else \
