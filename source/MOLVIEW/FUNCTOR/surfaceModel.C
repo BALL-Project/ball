@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.14 2002/02/27 12:21:52 sturm Exp $
+// $Id: surfaceModel.C,v 1.15 2002/09/10 06:12:16 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -145,9 +145,7 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		Mesh *
-		AddSurfaceModel::createMesh_
-			()
+		Mesh*	AddSurfaceModel::createMesh_()
 		{
 			return (Mesh *)(new Mesh());
 		}
