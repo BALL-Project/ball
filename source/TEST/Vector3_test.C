@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.13 2000/03/02 21:12:13 amoll Exp $ #include
+// $Id: Vector3_test.C,v 1.14 2000/03/02 23:18:50 oliver Exp $ #include
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.13 2000/03/02 21:12:13 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.14 2000/03/02 23:18:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -467,7 +467,7 @@ CHECK(TVector3<T> TVector3<T>::getOrthogonalProjection(const TVector3<T>& direct
 RESULT
 
 //line 436
-CHECK(TAngle<T> TVector3<T>::getTorsionTAngle())
+CHECK(TAngle<T> TVector3<T>::getTorsionAngle())
 	Vector3 a, b, c, d, e;
 	Angle angle;
 	a = Vector3(0, 1, 2);
