@@ -1,4 +1,4 @@
-// $Id: energyProcessor.h,v 1.4 2000/10/05 17:20:25 anker Exp $
+// $Id: energyProcessor.h,v 1.5 2000/10/17 17:11:06 anker Exp $
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #define BALL_ENERGY_ENERGYPROCESSOR_H
@@ -94,9 +94,13 @@ namespace BALL
 
 		protected:
 
+		/*_ this is the Fragment for which the computation is to be done */
 		const AtomContainer* fragment_;
+
+		/*_ the calculated energy */
 		double energy_;
 
+		/*_ the valid flag */
 		bool valid_;
 
 	};
