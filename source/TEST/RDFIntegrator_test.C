@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator_test.C,v 1.2 2000/09/25 16:34:01 anker Exp $
+// $Id: RDFIntegrator_test.C,v 1.3 2000/12/01 11:56:56 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RDFIntegrator_test.C,v 1.2 2000/09/25 16:34:01 anker Exp $")
+START_TEST(class_name, "$Id: RDFIntegrator_test.C,v 1.3 2000/12/01 11:56:56 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -50,6 +50,8 @@ intervals.push_back(Interval(3.0, INFINITY));
 PiecewisePolynomial poly(4, intervals, coefs);
 RadialDistributionFunction rdf(poly);
 
+
+
 RDFIntegrator* pointer;
 
 CHECK(RDFIntegrator::RDFIntegrator())
@@ -82,19 +84,6 @@ CHECK(RDFIntegrator::RDFIntegrator(const RDFIntegrator& integrator))
 RESULT
 
 
-CHECK(RDFIntegrator::destroy())
-  RDFIntegrator integrator(rdf);
-	integrator.destroy();
-	vector<Interval> no_intervals;
-	vector<Coefficients> no_coeffs;
-	bool test = (integrator.getRDF().getRepresentation().getIntervals() == no_intervals);
-	TEST_EQUAL(test, true);
-	test = (integrator.getRDF().getRepresentation().getCoefficients() == no_coeffs);
-	TEST_EQUAL(test, true);
-	TEST_EQUAL(integrator.getRDF().isValid(), false);
-RESULT
-
-
 CHECK(RDFIntegrator::clear())
   RDFIntegrator integrator(rdf);
 	integrator.clear();
@@ -108,22 +97,47 @@ CHECK(RDFIntegrator::clear())
 RESULT
 
 
-CHECK(RDFIntegrator::set(const RDFIntegrator& integrator))
-  //BAUSTELLE
-RESULT
-
-
 CHECK(RDFIntegrator::RDFIntegrator& operator = (const RDFIntegrator& integrator))
   //BAUSTELLE
 RESULT
 
 
+CHECK(bool RDFIntegrator::operator == (const RDFIntegrator& integrator))
+	RDFIntegrator int1, int2;
+	bool test = (int1 == int2);
+	TEST_EQUAL(test, true);
+	int1.setRDF(rdf);
+	test = (int1 == int2);
+	TEST_EQUAL(test, false);
+	int2.setRDF(rdf);
+	test = (int1 == int2);
+	TEST_EQUAL(test, true);
+	// BAUSTELLE
+RESULT
+
+
+CHECK(bool RDFIntegrator::isValid())
+	RDFIntegrator int1;
+	TEST_EQUAL(int1.isValid(), false);
+	int1.setRDF(rdf);
+	TEST_EQUAL(int1.isValid(), false);
+	int1.clear();
+	TEST_EQUAL(int1.isValid(), false);
+RESULT
+
 CHECK(RDFIntegrator::double operator () (double x) const )
+	RDFIntegrator int1;
+	TEST_REAL_EQUAL(int1.operator()(1.5), 0.0);
   //BAUSTELLE
 RESULT
 
 
 CHECK(RDFIntegrator::setRDF(const RadialDistributionFunction& rdf))
+	RDFIntegrator int1;
+	int1.setRDF(rdf);
+	RDFIntegrator int2(rdf);
+	bool test = (int1 == int2);
+	TEST_EQUAL(test, true);
   //BAUSTELLE
 RESULT
 
