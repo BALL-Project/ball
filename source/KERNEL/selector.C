@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.9 2000/01/13 22:29:04 oliver Exp $
+// $Id: selector.C,v 1.10 2000/02/12 09:32:24 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -35,7 +35,7 @@ namespace BALL
 	{
 	}
 	
-	bool Selector::ExpressionNode::operator () (const Composite& composite) const
+	bool Selector::ExpressionNode::operator () (const Atom& atom) const
 	{
     bool result;
     if (type_ == LEAF)
@@ -43,7 +43,7 @@ namespace BALL
 
       if (predicate_ != 0)
       {
-        result = (negate_ ^ (predicate_->operator () (composite)));
+        result = (negate_ ^ (predicate_->operator () (atom)));
 			} else {
         result = false;
 			}
@@ -61,9 +61,9 @@ namespace BALL
       bool abort = false;
       for (; !abort && list_it != children_.end(); ++list_it)
       {
-        result = (*list_it)->operator () (composite);
+        result = (*list_it)->operator () (atom);
 
-				// OR exressions may be aborted, if the first subexpression yields true
+				// OR expressions may be aborted, if the first subexpression yields true
         if (type_ == OR)
         {
           if (result == true)
@@ -475,7 +475,7 @@ namespace BALL
 		create_methods_.insert("residue", (CreationMethod)getNew<ResiduePredicate>);
 		create_methods_.insert("residueID", (CreationMethod)getNew<ResidueIDPredicate>);
 		create_methods_.insert("protein", (CreationMethod)getNew<ProteinPredicate>);
-		create_methods_.insert("protein", (CreationMethod)getNew<SecondaryStructurePredicate>);
+		create_methods_.insert("secondarystruct", (CreationMethod)getNew<SecondaryStructurePredicate>);
 		create_methods_.insert("solvent", (CreationMethod)getNew<SolventPredicate>);
 		create_methods_.insert("backbone", (CreationMethod)getNew<BackBonePredicate>);
 		create_methods_.insert("chain", (CreationMethod)getNew<ChainPredicate>);
@@ -537,12 +537,12 @@ namespace BALL
 
   Processor::Result Selector::operator () (Composite& composite)
   {
-    Selectable* selectable = dynamic_cast<Selectable*>(&composite);
-    if (selectable != 0)
-    {
-      if (expression_tree_->operator () (composite))
-      {
-        selectable->select();
+		if (RTTI::isKindOf<Atom>(composite))
+		{
+			Atom& atom = dynamic_cast<Atom&>(composite);
+			if (expression_tree_->operator () (atom))
+			{
+				atom.select();
 			}
 		}
 
@@ -573,73 +573,47 @@ namespace BALL
 
 	// Atom name predicate
 
-	bool AtomNamePredicate::operator () (const Composite& composite) const
+	bool AtomNamePredicate::operator () (const Atom& atom) const
 	{
-    const Atom* atom = dynamic_cast<const Atom*>(&composite);
-    if (atom != 0)
-    {
-      return (atom->getName() == argument_);
-		}
-
-    return false;
+    return (atom.getName() == argument_);
  	}
 
 	// Atom type predicate
 
-	bool AtomTypePredicate::operator () (const Composite& composite) const
+	bool AtomTypePredicate::operator () (const Atom& atom) const
 	{
-    const Atom* atom = dynamic_cast<const Atom*>(&composite);
-    if (atom != 0)
-    {
-      return (atom->getTypeName() == argument_);
-		}
-
-    return false;
+		return (atom.getTypeName() == argument_);
  	}
 
 
 	// element predicate
 
-	bool ElementPredicate::operator () (const Composite& composite) const
+	bool ElementPredicate::operator () (const Atom& atom) const
 	{
-    const Atom* atom = dynamic_cast<const Atom*>(&composite);
-    if (atom != 0)
-    {
-			return (atom->getElement().getSymbol() == argument_);
-		}
-		
-		return false;
+		return (atom.getElement().getSymbol() == argument_);
 	}
 
 	// residue predicate
 
-	bool ResiduePredicate::operator () (const Composite& composite) const
+	bool ResiduePredicate::operator () (const Atom& atom) const
 	{
-    const Atom* atom = dynamic_cast<const Atom*>(&composite);
-    if (atom != 0)
-    {
-			const Residue*	res = atom->getAncestor(RTTI::getDefault<Residue>());
-			if (res != 0)
-			{
-				return (res->getName() == argument_);
-			}
+		const Residue*	res = atom.getAncestor(RTTI::getDefault<Residue>());
+		if (res != 0)
+		{
+			return (res->getName() == argument_);
 		}
-		
+
 		return false;
 	}
 	
 	// residue ID predicate
 
-	bool ResidueIDPredicate::operator () (const Composite& composite) const
+	bool ResidueIDPredicate::operator () (const Atom& atom) const
 	{
-    const Atom* atom = dynamic_cast<const Atom*>(&composite);
-    if (atom != 0)
-    {
-			const Residue*	res = atom->getAncestor(RTTI::getDefault<Residue>());
-			if (res != 0)
-			{
-				return (res->getID() == argument_);
-			}
+    const Residue*	res = atom.getAncestor(RTTI::getDefault<Residue>());
+		if (res != 0)
+		{
+			return (res->getID() == argument_);
 		}
 		
 		return false;
@@ -647,7 +621,7 @@ namespace BALL
 	
 	// protein predicate
 
-	bool ProteinPredicate::operator () (const Composite& /* composite */) const
+	bool ProteinPredicate::operator () (const Atom& /* atom */) const
 	{
 		//BAUSTELLE
 		return false;
@@ -655,7 +629,7 @@ namespace BALL
 	
 	// chain predicate
 
-	bool ChainPredicate::operator () (const Composite& /* composite */) const
+	bool ChainPredicate::operator () (const Atom& /* atom */) const
 	{
 		//BAUSTELLE
 		return false;
@@ -663,7 +637,7 @@ namespace BALL
 	
 	// secondary structure predicate
 
-	bool SecondaryStructurePredicate::operator () (const Composite& /* composite */) const
+	bool SecondaryStructurePredicate::operator () (const Atom& /* atom */) const
 	{
 		//BAUSTELLE
 		return false;
@@ -671,7 +645,7 @@ namespace BALL
 	
 	// solvent predicate
 
-	bool SolventPredicate::operator () (const Composite& /* composite */) const
+	bool SolventPredicate::operator () (const Atom& /* atom */) const
 	{
 		//BAUSTELLE
 		return false;
@@ -679,17 +653,14 @@ namespace BALL
 	
 	// backbone predicate
 
-	bool BackBonePredicate::operator () (const Composite& composite) const
+	bool BackBonePredicate::operator () (const Atom& atom) const
 	{
-		if (RTTI::isKindOf<Atom>(composite))
+		if (atom.hasAncestor(RTTI::getDefault<Residue>()))
 		{
-			if (composite.hasAncestor(RTTI::getDefault<Residue>()))
+			String name = RTTI::castTo<Atom>(atom)->getName();
+			if ((name == "C") || (name == "N") || (name == "CA") || (name == "O"))
 			{
-				String name = RTTI::castTo<Atom>(composite)->getName();
-				if ((name == "C") || (name == "N") || (name == "CA") || (name == "O"))
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 
@@ -698,9 +669,9 @@ namespace BALL
 	
 	// nucleotide predicate
 
-	bool NucleotidePredicate::operator () (const Composite& composite) const
+	bool NucleotidePredicate::operator () (const Atom& atom) const
 	{
-		return RTTI::isKindOf<Nucleotide>(composite);
+		return RTTI::isKindOf<Nucleotide>(atom);
 	}
 	
 } // namespace BALL
