@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.44 2002/01/16 00:21:24 oliver Exp $
+// $Id: HINFile.C,v 1.45 2002/01/17 00:45:56 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -59,7 +59,7 @@ namespace BALL
 		String name = atom.getName();
 		if (name != "") 
 		{
-			// if the filename contains blanks or some bullshit like that, 
+			// if the atom name contains blanks or some bullshit like that, 
 			// truncate it to the first field and complain about it
 			if (name.countFields() > 1)
 			{
@@ -76,8 +76,8 @@ namespace BALL
 			getFileStream() << "- ";
 		}
 
-		getFileStream() << atom.getElement().getSymbol() << " ";
-		if (atom.getTypeName() == "?")
+		getFileStream() << atom.getElement().getSymbol().trim() << " ";
+		if ((atom.getTypeName() == "?") || (atom.getTypeName() == ""))
 		{
 			getFileStream() << "**";
 		} 
