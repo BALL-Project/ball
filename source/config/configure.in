@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.120 2000/12/14 19:32:10 oliver Exp $
+dnl    $Id: configure.in,v 1.121 2000/12/19 22:09:54 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2146,6 +2146,7 @@ if test "${USE_BALLVIEW}" = true ; then
 				AC_MSG_RESULT((${QT_LIBPATH}))	
 			fi
 
+			
 			QGL_LIBPATH=${QT_LIBPATH}
 			AC_MSG_CHECKING(for libqgl)
 			if test "${QTDIR}" != "" ; then
@@ -2374,18 +2375,34 @@ if test "${USE_BALLVIEW}" = true ; then
 fi
 if test "${USE_BALLVIEW}" = true ; then
 	if test "${QT_LIBPATH}" != "/usr/lib" ; then
-		QT_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt"
+		QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt"
+		QT_LIBOPTS="-L${QT_LIBPATH} -lqt"
 	else 
 		QT_LIBPATH=""
-		QT_LIBOPTS="-lqgl -lqt"
+		QTQGL_LIBOPTS="-lqgl -lqt"
+		QT_LIBOPTS="-lqt"
 	fi
 fi
 if test "${USE_BALLVIEW}" = true ; then
 	AC_MSG_CHECKING(linking against QT libraries)
+
+
 	SAVE_LIBS=${LIBS}
-	LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+	LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 	AC_TRY_LINK([const char* qGLVersion();], [qGLVersion();], QT_LINKING_OK=1)
 	LIBS=${SAVE_LIBS}
+
+
+	if test "${QT_LINKING_OK+set}" != set ; then
+		SAVE_LIBS=${LIBS}
+		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+		AC_TRY_LINK([const char* qGLVersion();], [qGLVersion();], QT_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	else
+		dnl link agains qgl as well (for qt <= 2.0)
+		QT_LIBOPTS="${QTQGL_LIBOPTS}"
+	fi
+
 	if test "${QT_LINKING_OK+set}" != set ; then
 		AC_MSG_RESULT(no)
 		AC_MSG_RESULT()
