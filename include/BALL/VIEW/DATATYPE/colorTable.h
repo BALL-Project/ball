@@ -1,4 +1,4 @@
-// $Id: colorTable.h,v 1.3.4.3 2002/11/26 12:29:39 oliver Exp $
+// $Id: colorTable.h,v 1.3.4.4 2002/11/26 16:55:02 anhi Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -89,7 +89,7 @@ namespace BALL
 				throw();
 
 			/// Return the number of elements in our color table.
-			const Size getNumberOfColors() const
+			Size getNumberOfColors() const
 				throw();
 
 			/// Decides if we should interpolate the alpha channel as well
@@ -97,7 +97,7 @@ namespace BALL
 				throw();
 
 			/// Returns true if the alpha channel is interpolated between colors, false otherwise.
-			const	bool getAlphaBlending() const
+			bool getAlphaBlending() const
 				throw();
 
 			/** Build the table, i.e. interpolate between the colors to obtain the desired number of colors. 

@@ -1,4 +1,4 @@
-// $Id: colorTable.C,v 1.4.4.7 2002/11/26 16:53:19 anhi Exp $
+// $Id: colorTable.C,v 1.4.4.8 2002/11/26 16:55:30 anhi Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/COMMON/rtti.h>
@@ -115,7 +115,7 @@ namespace BALL
 			color_number_ = color_number;
 		}
 			
-		const Size ColorTable::getNumberOfColors() const
+		Size ColorTable::getNumberOfColors() const
 			throw()
 		{
 			return color_number_;
@@ -127,7 +127,7 @@ namespace BALL
 			alpha_blending_ = blending;
 		}
 
-		const	bool ColorTable::getAlphaBlending() const
+		bool ColorTable::getAlphaBlending() const
 			throw()
 		{
 			return alpha_blending_;
