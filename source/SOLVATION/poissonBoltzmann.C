@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.17 2000/05/20 13:33:33 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.18 2000/07/03 22:37:02 amoll Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -2386,9 +2386,9 @@ namespace BALL
 
 				// if the image charge is not inside the grid, it does not contribute to the 
 				// energy of the reaction field
-
-				if (phi_grid->getBoxIndices(image_position, llf, rlf, luf, ruf, llb, rlb, lub, rub)) 
+				if (phi_grid->has(image_position))
 				{
+					phi_grid->getBoxIndices(image_position, llf, rlf, luf, ruf, llb, rlb, lub, rub);
 					PointGrid<float>::GridIndex grid_index = phi_grid->getIndex(image_position);
 					Size Nx = phi_grid->getMaxXIndex() + 1;
 					Size Nxy = (phi_grid->getMaxYIndex() + 1) * Nx;
