@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.21 2001/05/17 18:10:03 oliver Exp $
+// $Id: PDBFile.C,v 1.22 2001/06/05 15:45:20 anker Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -435,7 +435,7 @@ namespace BALL
 		} 
 		else 
 		{
-			Composite::SubcompositeIterator it = system.beginSubcomposite();
+			Composite::SubcompositeConstIterator it = system.beginSubcomposite();
 			for (; +it && !RTTI::isKindOf<Protein>(*it); ++it);
 			if (+it)
 			{
@@ -454,14 +454,14 @@ namespace BALL
 		const Molecule& molecule = *RTTI::castTo<Molecule>(composite);
   
 		char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
-		ChainIterator chain_it;
-		SecondaryStructureIterator sec_struc_it;
-		SecondaryStructureIterator sheet_it;
-		ResidueIterator residue_it;
-		ResidueReverseIterator reverse_residue_it;
-		PDBAtomIterator atom_iterator;
-		AtomIterator atom_it;
-		Atom::BondIterator bond_it;
+		ChainConstIterator chain_it;
+		SecondaryStructureConstIterator sec_struc_it;
+		SecondaryStructureConstIterator sheet_it;
+		ResidueConstIterator residue_it;
+		ResidueConstReverseIterator reverse_residue_it;
+		PDBAtomConstIterator atom_iterator;
+		AtomConstIterator atom_it;
+		Atom::BondConstIterator bond_it;
 		unsigned long secstruc_serial_number = 0;
 		unsigned long residue_sequence_number = 0;
 		char chain_name = BALL_CHAIN_DEFAULT_NAME;
@@ -480,21 +480,22 @@ namespace BALL
 		unsigned long number_of_turn_records = 0;
 		unsigned long number_of_site_records = 0;
 		unsigned long number_of_coordinate_transformation_records = 0;
-		Fragment *current_fragment = 0;
+		const Fragment *current_fragment = 0;
 		unsigned long number_of_atomic_coordinate_records = 0;
 		unsigned long number_of_ter_records = 0;
 		unsigned long number_of_conect_records = 0;
 		unsigned long number_of_seqres_records = 0;
 		PDB::RecordType record_type = PDB::RECORD_TYPE__UNKNOWN;
-		Residue*							residue[13] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		SecondaryStructure*		current_sec_struc = 0;
-		Atom*									current_atom = 0;
+		// Residue*							residue[13] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		vector<const Residue*> residue(13);
+		const SecondaryStructure*		current_sec_struc = 0;
+		const Atom*									current_atom = 0;
 		PDB::Integer					length_of_secstruc = 0;
 		String								temp_string;
 		HashMap<void*, PDB::Integer> atom_map;
-		Atom* covalent_bonded_atom[4];
-		Atom* hydrogen_bonded_atom[4];
-		Atom* saltbridge_bonded_atom[2];
+		vector<const Atom*> covalent_bonded_atom(4);
+		vector<const Atom*> hydrogen_bonded_atom(4);
+		vector<const Atom*> saltbridge_bonded_atom(2);
 		unsigned short covalent_bond = 0;
 		unsigned short hydrogen_bond = 0;
 		unsigned short saltbridge_bond = 0;
@@ -531,25 +532,25 @@ namespace BALL
 		{
 			BALL_FOREACH_CHAIN(*protein, chain_it)
 			{
-				current_chain_ = &(*chain_it);
-				number_of_residues_in_chain = current_chain_->countResidues();
+				current_const_chain_ = &(*chain_it);
+				number_of_residues_in_chain = current_const_chain_->countResidues();
 				residue_sequence_number = 0;
 				
 				BALL_FOREACH_RESIDUE((*chain_it), residue_it)
 				{
-					current_residue_ = &(*residue_it);
+					current_const_residue_ = &(*residue_it);
 
-					if (current_residue_->hasProperty(Residue::PROPERTY__NON_STANDARD) == true)
+					if (current_const_residue_->hasProperty(Residue::PROPERTY__NON_STANDARD) == true)
 					{
 						continue;
 					}
 				
-					residue[residue_sequence_number] = current_residue_;
+					residue[residue_sequence_number] = current_const_residue_;
 					residue[residue_sequence_number]->getName().get(PDB_residue_name[residue_sequence_number], 0, 4);
 			
 					if (residue_sequence_number++ == 12)
 					{
-						chain_name = current_chain_->getName().c_str()[0];
+						chain_name = current_const_chain_->getName().c_str()[0];
 						if (chain_name == 0)
 						{
 							chain_name = BALL_CHAIN_DEFAULT_NAME;
@@ -600,7 +601,7 @@ namespace BALL
 
 				if (residue_sequence_number > 0)
 				{
-					chain_name = current_chain_->getName().c_str()[0];
+					chain_name = current_const_chain_->getName().c_str()[0];
 					if (chain_name == 0)
 					{
 						chain_name = BALL_CHAIN_DEFAULT_NAME;
@@ -636,7 +637,7 @@ namespace BALL
 
 			BALL_FOREACH_CHAIN(*protein, chain_it)
 			{
-				current_chain_ = &(*chain_it);
+				current_const_chain_ = &(*chain_it);
 				
 				BALL_FOREACH_SECONDARYSTRUCTURE(*chain_it, sec_struc_it)
 				{
@@ -662,7 +663,7 @@ namespace BALL
 								 !residue_it.isEnd() && residue_it != reverse_residue_it;
 								 ++length_of_secstruc, ++residue_it);
 			
-						chain_name = current_chain_->getName().c_str()[0];
+						chain_name = current_const_chain_->getName().c_str()[0];
 						if (chain_name == 0)
 						{
 							chain_name = BALL_CHAIN_DEFAULT_NAME;
@@ -698,7 +699,7 @@ namespace BALL
 			
 			BALL_FOREACH_CHAIN(*protein, chain_it)
 			{
-				current_chain_ = &(*chain_it);
+				current_const_chain_ = &(*chain_it);
 				
 				BALL_FOREACH_SECONDARYSTRUCTURE(*chain_it, sec_struc_it)
 				{
@@ -738,7 +739,7 @@ namespace BALL
 						residue[0]->getName().get(PDB_residue_name[0], 0, 4);
 						residue[1]->getName().get(PDB_residue_name[1], 0, 4);
 
-						chain_name = current_chain_->getName().c_str()[0];
+						chain_name = current_const_chain_->getName().c_str()[0];
 						if (chain_name == 0)
 						{	
 							chain_name = BALL_CHAIN_DEFAULT_NAME;
@@ -781,7 +782,7 @@ namespace BALL
 
 			BALL_FOREACH_CHAIN(*protein, chain_it)
 			{
-				current_chain_ = &(*chain_it);
+				current_const_chain_ = &(*chain_it);
 				
 				BALL_FOREACH_SECONDARYSTRUCTURE(*chain_it, sec_struc_it)
 				{
@@ -809,7 +810,7 @@ namespace BALL
 						{
 						}
 						
-						chain_name = current_chain_->getName().c_str()[0];
+						chain_name = current_const_chain_->getName().c_str()[0];
 						if (chain_name == 0)
 						{
 							chain_name = BALL_CHAIN_DEFAULT_NAME;
@@ -922,36 +923,36 @@ namespace BALL
 		{
 			BALL_FOREACH_CHAIN(*protein, chain_it)
 			{
-				current_chain_ = &(*chain_it);
-				current_residue_ = 0;
+				current_const_chain_ = &(*chain_it);
+				current_const_residue_ = 0;
 					
 				BALL_FOREACH_RESIDUE((*chain_it), residue_it)
 				{
-					current_residue_ = &(*residue_it);
-					current_residue_->getName().get(PDB_residue_name[0], 0, 4);
+					current_const_residue_ = &(*residue_it);
+					current_const_residue_->getName().get(PDB_residue_name[0], 0, 4);
 
-					if (current_residue_->hasProperty(Residue::PROPERTY__AMINO_ACID) == true)
+					if (current_const_residue_->hasProperty(Residue::PROPERTY__AMINO_ACID) == true)
 					{
 						record_type = PDB::RECORD_TYPE__ATOM;
 					}	else {
 						record_type = PDB::RECORD_TYPE__HETATM;
 					}
 
-					BALL_FOREACH_PDBATOM(*current_residue_, atom_iterator)
+					BALL_FOREACH_PDBATOM(*current_const_residue_, atom_iterator)
 					{
 						++number_of_atomic_coordinate_records;
 						
-						current_PDB_atom_ = &(*atom_iterator);
+						current_const_PDB_atom_ = &(*atom_iterator);
 
 						// get the element symbol
-						strcpy(element_symbol, current_PDB_atom_->getElement().getSymbol().c_str());
+						strcpy(element_symbol, current_const_PDB_atom_->getElement().getSymbol().c_str());
 
 						// normalize the atom name:
 						//  if the atom name starts with the element name and the element
 						//	name is a single character (e.g. C, N, O, H and the name is not
 						//  prefixed by a number) then the name should pe prefixed by
 						//  a blank to distinguish CA (carbon alpha) from CA (calcium)
-						String name = current_PDB_atom_->getName();
+						String name = current_const_PDB_atom_->getName();
 						name.trim();
 						Index offset;
 						if ((name.size() < 4) && name.hasPrefix(element_symbol) && (strlen(element_symbol) == 1))
@@ -964,7 +965,7 @@ namespace BALL
 
 						name.get(&(PDB_atom_name[offset]), 0, 4 - offset);
 							
-						chain_name = current_chain_->getName().c_str()[0];
+						chain_name = current_const_chain_->getName().c_str()[0];
 						if (chain_name == (char)0)
 						{
 							chain_name = BALL_CHAIN_DEFAULT_NAME;
@@ -975,16 +976,16 @@ namespace BALL
 							record_type_format_[record_type].string,
 							++atom_serial_number,
 							PDB_atom_name,
-							current_PDB_atom_->getAlternateLocationIndicator(),
+							current_const_PDB_atom_->getAlternateLocationIndicator(),
 							PDB_residue_name[0],
 							chain_name,
-							current_residue_->getID().toLong(),
-							current_residue_->getInsertionCode(),
-							current_PDB_atom_->getPosition().x,
-							current_PDB_atom_->getPosition().y,
-							current_PDB_atom_->getPosition().z,
-							current_PDB_atom_->getOccupancy(),
-							current_PDB_atom_->getTemperatureFactor(),
+							current_const_residue_->getID().toLong(),
+							current_const_residue_->getInsertionCode(),
+							current_const_PDB_atom_->getPosition().x,
+							current_const_PDB_atom_->getPosition().y,
+							current_const_PDB_atom_->getPosition().z,
+							current_const_PDB_atom_->getOccupancy(),
+							current_const_PDB_atom_->getTemperatureFactor(),
 							PDB_code,
 							element_symbol,
 							""); // CHARGE NOT YET SUPPORTED
@@ -992,18 +993,18 @@ namespace BALL
 						line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 						File::getFileStream() << line_buffer << endl;
 
-						atom_map[(void *)current_PDB_atom_] =  (long)atom_serial_number;
+						atom_map[(void *)current_const_PDB_atom_] =  (long)atom_serial_number;
 					}
 				}
 			
 
 				// --- TER ---
 
-				if (current_residue_ != 0)
+				if (current_const_residue_ != 0)
 				{
 					++number_of_ter_records;
 					
-					chain_name = current_chain_->getName().c_str()[0];
+					chain_name = current_const_chain_->getName().c_str()[0];
 
 					if (chain_name == 0)
 					{
@@ -1016,8 +1017,8 @@ namespace BALL
 						++atom_serial_number,
 						PDB_residue_name[0],
 						chain_name,
-						current_residue_->getID().toLong(),
-						current_residue_->getInsertionCode());
+						current_const_residue_->getID().toLong(),
+						current_const_residue_->getInsertionCode());
 					
 					line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 					File::getFileStream() << line_buffer << endl;
@@ -1027,7 +1028,7 @@ namespace BALL
 				
 				if (system == true)
 				{
-					AtomContainerIterator frag_it;
+					AtomContainerConstIterator frag_it;
 		
 					BALL_FOREACH_ATOMCONTAINER(molecule, frag_it)
 					{	
