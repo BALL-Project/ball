@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.8 2000/11/02 18:22:34 oliver Exp $
+// $Id: timeStamp.h,v 1.9 2000/12/09 21:28:00 amoll Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -45,19 +45,23 @@ namespace BALL
 		/**	Default constructor.
 				Initialize with zero.
 		*/
-		PreciseTime();
+		PreciseTime()
+			throw();
 			
 		/**	Copy constructor
 		*/
-		PreciseTime(const PreciseTime& time);
+		PreciseTime(const PreciseTime& time)
+			throw();
 
 		/**	Detailed constructor
 		*/
-		PreciseTime(long secs, long usecs);
+		PreciseTime(long secs, long usecs)
+			throw();
 			
 		/**	Destructor
 		*/
-		virtual ~PreciseTime();
+		virtual ~PreciseTime()
+			throw();
 		//@}
 
 		/**	@name Constants.
@@ -71,12 +75,12 @@ namespace BALL
 		/**	@name Assignment
 		*/
 		//@{
-		/** 
+		/** Assignment method
 		*/
 		void set(long secs, long usecs) 
 			throw();
 
-		/**
+		/** Assignment method
 		*/
 		void set(const PreciseTime& time) 
 			throw();
@@ -141,7 +145,8 @@ namespace BALL
         of the PersistenceManager.
         @param pm the persistence manager
     */
-    void write(PersistenceManager& pm) const;
+    void write(PersistenceManager& pm) const
+			throw();
 
     /** Persistent stream reading.
         This method reads the contents of a \Ref{PreciseTime} object from the
@@ -149,10 +154,12 @@ namespace BALL
         of the PersistenceManager.
         @param pm the persistence manager
     */
-    bool read(PersistenceManager& pm);
+    bool read(PersistenceManager& pm)
+			throw();
 		//@}
  
 		protected:
+
 		long secs_;
 		long usecs_;
 	};
@@ -170,6 +177,7 @@ namespace BALL
 	class TimeStamp
 	{
 		public:
+
 		BALL_CREATE(TimeStamp)
 		/**	@name	Constructors and Destructors
 		*/
@@ -177,11 +185,13 @@ namespace BALL
 
 		/** Default constructor
 		*/
-		TimeStamp();
+		TimeStamp()
+			throw();
 
 		/** Destructor
 		*/
-		virtual ~TimeStamp();
+		virtual ~TimeStamp()
+			throw();
 		//@}
 
 		/**	@name	Predicates
@@ -207,6 +217,12 @@ namespace BALL
 		*/
 		bool isOlderThan(const TimeStamp& stamp) const 
 			throw();
+
+		/** Equality operator
+		*/
+		bool operator == (const TimeStamp& stamp) const 
+			throw();
+		
 		//@}
 
 		/**	@name Accessors
@@ -254,7 +270,8 @@ namespace BALL
         of the PersistenceManager.
         @param pm the persistence manager
     */
-    void write(PersistenceManager& pm) const;
+    void write(PersistenceManager& pm) const
+			throw();
 
     /** Persistent stream reading.
         This method reads the contents of a \Ref{TimeStamp} object from the
@@ -262,7 +279,8 @@ namespace BALL
         of the PersistenceManager.
         @param pm the persistence manager
     */
-    bool read(PersistenceManager& pm);
+    bool read(PersistenceManager& pm)
+			throw();
 		//@}
 
 		protected:
@@ -277,11 +295,13 @@ namespace BALL
 	//@{
 	/**	Print the contents of a PreciseTime object to a stream.
 	*/
-	std::ostream& operator << (std::ostream& os, const PreciseTime& time);
+	std::ostream& operator << (std::ostream& os, const PreciseTime& time)
+		throw();
 
 	/**	Print the contents of a TimeStamp object to a stream.
 	*/
-	std::ostream& operator << (std::ostream& os, const TimeStamp& stamp);
+	std::ostream& operator << (std::ostream& os, const TimeStamp& stamp)
+		throw();
 	//@}
 
 

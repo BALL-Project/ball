@@ -1,37 +1,191 @@
-// $Id: timeStamp.iC,v 1.2 2000/10/18 12:39:58 oliver Exp $
+// $Id: timeStamp.iC,v 1.3 2000/12/09 21:28:01 amoll Exp $
 
 BALL_INLINE
-long PreciseTime::getSeconds() const throw()
+PreciseTime::PreciseTime()
+	throw()
+	: secs_(0),
+		usecs_(0)
+{
+}
+
+BALL_INLINE
+PreciseTime::PreciseTime(const PreciseTime& time)
+	throw()
+	:	secs_(time.secs_),
+		usecs_(time.usecs_)
+{
+}
+
+BALL_INLINE
+PreciseTime::PreciseTime(long secs, long usecs)
+	throw()
+	:	secs_(secs),
+		usecs_(usecs)
+{
+}
+
+BALL_INLINE
+PreciseTime::~PreciseTime()
+	throw()
+{
+}
+
+BALL_INLINE
+void PreciseTime::set(const PreciseTime& time)
+	throw()
+{
+	secs_ = time.secs_;
+	usecs_ = time.usecs_;
+}
+
+BALL_INLINE
+void PreciseTime::set(long secs, long usecs)
+	throw()
+{
+	secs_ = secs;
+	usecs_ = usecs;
+}
+
+BALL_INLINE
+const PreciseTime& PreciseTime::operator = (const PreciseTime& time)
+	throw()
+{
+	set(time);
+	return *this;
+}
+
+BALL_INLINE
+void PreciseTime::clear() 
+	throw()
+{
+	secs_ = 0;
+	usecs_ = 0;
+}
+
+BALL_INLINE
+bool PreciseTime::operator < (const PreciseTime& time) const
+	throw()
+{
+	return ((secs_ < time.secs_) || ((secs_ == time.secs_) && (usecs_ < time.usecs_)));
+}
+
+BALL_INLINE
+bool PreciseTime::operator > (const PreciseTime& time) const 
+	throw()
+{
+	return ((secs_ > time.secs_) || ((secs_ == time.secs_) && (usecs_ > time.usecs_)));
+}
+
+BALL_INLINE
+bool PreciseTime::operator == (const PreciseTime& time) const 
+	throw()
+{
+	return ((secs_ == time.secs_) && (usecs_ == time.usecs_));
+}
+
+BALL_INLINE
+long PreciseTime::getSeconds() const 
+	throw()
 {
 	return secs_;
 }
 
 BALL_INLINE
-long PreciseTime::getMicroSeconds() const throw()
+long PreciseTime::getMicroSeconds() const 
+	throw()
 {
 	return usecs_;
 }
 
 BALL_INLINE
-bool TimeStamp::isOlderThan(const PreciseTime& time) const throw()
+bool TimeStamp::isOlderThan(const PreciseTime& time) const 
+	throw()
 {
 	return (time_ < time);
 }
 
 BALL_INLINE
-bool TimeStamp::isNewerThan(const PreciseTime& time) const throw()
+bool TimeStamp::isNewerThan(const PreciseTime& time) const 
+	throw()
 {
 	return (time_ > time);
 }
 
 BALL_INLINE
-bool TimeStamp::isOlderThan(const TimeStamp& stamp) const throw()
+bool TimeStamp::isOlderThan(const TimeStamp& stamp) const 
+	throw()
 {
 	return (time_ < stamp.time_);
 }
 
 BALL_INLINE
-bool TimeStamp::isNewerThan(const TimeStamp& stamp) const throw()
+bool TimeStamp::isNewerThan(const TimeStamp& stamp) const 
+	throw()
 {
 	return (time_ > stamp.time_);
+}
+
+BALL_INLINE
+TimeStamp::TimeStamp()
+	throw()
+	:	time_()
+{
+}
+
+BALL_INLINE
+TimeStamp::~TimeStamp()
+	throw()
+{
+	clear();
+}
+
+BALL_INLINE
+void TimeStamp::clear()
+	throw()
+{
+	time_.clear();
+}
+
+BALL_INLINE
+void TimeStamp::stamp(const PreciseTime& time) 
+	throw ()
+{
+	// in the default case, stamp with the current 
+	// time
+	if (time == PreciseTime::ZERO)
+	{
+		time_ = PreciseTime::now();
+	}
+	else 
+	{
+		time_ = time;
+	}
+}
+
+BALL_INLINE
+const PreciseTime& TimeStamp::getTime() const 
+	throw()
+{
+	return time_;
+}
+
+BALL_INLINE
+void TimeStamp::write(PersistenceManager& pm) const
+	throw()
+{
+	pm.writeStorableObject(time_, "time_");
+}
+
+BALL_INLINE
+bool TimeStamp::read(PersistenceManager& pm)
+	throw()
+{
+	return pm.readStorableObject(time_, "time_");
+}
+
+BALL_INLINE
+bool TimeStamp::operator == (const TimeStamp& stamp) const 
+	throw()
+{
+	return time_ == stamp.time_;
 }
