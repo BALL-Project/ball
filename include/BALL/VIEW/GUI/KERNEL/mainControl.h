@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.20.4.6 2002/12/06 16:57:10 amoll Exp $
+// $Id: mainControl.h,v 1.20.4.7 2002/12/08 23:25:33 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -858,6 +858,9 @@ namespace BALL
 							
 			//@}
 			
+			void selectCompositeRecursive(Composite* composite, bool state)
+				throw();
+
 			protected:
 
 			/*_ List with the selected composites
@@ -880,6 +883,12 @@ namespace BALL
 				throw();
 
 			CompositeDescriptor* insert_(CompositeDescriptor& composite_descriptor, bool deep = true)
+				throw();
+
+			void selectRecursive_(Composite* composite)
+				throw();
+
+			void deselectRecursive_(Composite* composite)
 				throw();
 
 			typedef HashMap<void*, List<CompositeDescriptor*>::Iterator> ListIteratorHashMap;

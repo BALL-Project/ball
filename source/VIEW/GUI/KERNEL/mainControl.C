@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.11 2002/12/06 16:56:46 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.12 2002/12/08 23:21:56 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -6,6 +6,8 @@
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/bond.h>
 
 #include <qapplication.h>
 #include <qwidget.h>
@@ -889,6 +891,82 @@ namespace BALL
 				selection_.erase(composite);			
 			}				
 		}			
+
+
+		void MainControl::selectCompositeRecursive(Composite* composite, bool state)
+			throw()
+		{
+			if (selection_.has(composite) == state)
+			{
+				return;
+			}
+
+			if (RTTI::isKindOf<Atom> (*composite))
+			{
+				Atom *atom = (Atom*) composite;
+				AtomBondIterator bi;		
+				BALL_FOREACH_ATOM_BOND(*atom, bi)
+				{
+					if (selection_.has(bi->getPartner(*atom)) == state)
+					{
+						if (state)
+						{
+							bi->select();			
+						}
+						else				
+						{				
+							bi->deselect();
+						}					
+					}				
+				}				
+			}		
+
+			if (state)	selectRecursive_(composite);
+			else			  deselectRecursive_(composite);
+
+				
+			if (RTTI::isKindOf<AtomContainer> (*composite))
+			{
+				AtomIterator ai;
+				AtomBondIterator bi;		
+				BALL_FOREACH_INTERBOND((*(AtomContainer*) composite), ai, bi)
+				{
+					if (selection_.has(bi->getPartner(*ai)) == state)
+					{			
+						if (state)
+						{
+							bi->select();			
+						}
+						else				
+						{				
+							bi->deselect();
+						}					
+					}				
+				}						
+			}		
+		}
+
+		void MainControl::selectRecursive_(Composite* composite)
+			throw()
+		{
+			if (RTTI::isKindOf<GeometricObject> (*composite)) return;
+			selection_.insert(composite);
+			for (Size i=0; i< composite->getDegree();i++)
+			{
+				selectRecursive_(composite->getChild(i));			
+			}
+		}		
+
+		void MainControl::deselectRecursive_(Composite* composite)
+			throw()
+		{
+			if (RTTI::isKindOf<GeometricObject> (*composite)) return;
+			selection_.erase(composite);
+			for (Size i=0; i< composite->getDegree();i++)
+			{
+				deselectRecursive_(composite->getChild(i));			
+			}
+		}		
 
 #ifdef BALL_NO_INLINE_FUNCTIONS
 #	include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
