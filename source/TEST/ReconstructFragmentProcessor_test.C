@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ReconstructFragmentProcessor_test.C,v 1.3 2003/06/02 17:22:50 anker Exp $
+// $Id: ReconstructFragmentProcessor_test.C,v 1.4 2003/10/13 19:06:33 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,6 +12,7 @@
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/structureMapper.h>
+#include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/residue.h>
@@ -18,7 +21,7 @@
 
 ///////////////////////////
 
-START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.3 2003/06/02 17:22:50 anker Exp $")
+START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.4 2003/10/13 19:06:33 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -86,6 +89,37 @@ CHECK(ReconstructFragmentProcessor::operator ())
 	S.apply(rfp);
 	TEST_EQUAL(rfp.getNumberOfInsertedAtoms(), 4)
 	TEST_EQUAL(S.countAtoms(), 31)
+RESULT
+
+CHECK([EXTRA]Contents of FragmentDB -- proteinogenous amino acids)
+	ReconstructFragmentProcessor rfp(frag_db);
+	ResidueChecker rc(frag_db);
+
+	String aa_names[20] = {"ALA", "ARG", "ASN", "ASP", "CYS", 
+												 "GLN", "GLU", "GLY", "HIS", "ILE",
+												 "LEU", "LYS", "MET", "PHE", "PRO",
+												 "SER", "THR", "TRP", "TYR", "VAL"};
+	for (Position i = 0; i < 20; i++)
+	{
+		System S;
+		PDBAtom* atom = new PDBAtom;
+		atom->setName("CA");
+		atom->setElement(PTE[Element::C]);
+		Residue* res = new Residue;
+		res->setName(aa_names[i]);
+		res->insert(*atom);
+		Chain* chain = new Chain;
+		chain->insert(*res);
+		chain->setName("C");
+		Protein* protein = new Protein;
+		protein->insert(*chain);
+		protein->setName("P");
+		S.insert(*protein);
+		S.apply(rfp);
+		S.apply(rc);
+		TEST_EQUAL(rc.getStatus(), true)
+	}
+                                
 RESULT
 
 /////////////////////////////////////////////////////////////
