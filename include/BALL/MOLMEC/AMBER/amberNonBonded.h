@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.6 2000/02/06 19:45:00 oliver Exp $
+// $Id: amberNonBonded.h,v 1.7 2000/02/10 15:03:56 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -18,6 +18,10 @@
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
 #	include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_SUPPORT_H
+#	include <BALL/MOLMEC/COMMON/support.h>
 #endif
 
 namespace BALL 
@@ -94,7 +98,8 @@ namespace BALL
 
 		/**	Computes the most efficient way to calculate the non-bonded atom pairs
 		*/
-		virtual int	determineMethodOfAtomPairGeneration();
+		virtual MolmecSupport::PairListAlgorithmType
+			determineMethodOfAtomPairGeneration();
 
 		/**	Build a vector of non-bonded atom pairs with the vdw parameters
 		*/
@@ -165,12 +170,12 @@ namespace BALL
                 */
                 bool    use_dist_depend_dielectric_; 
 
-		/**	A number that characterizes the most efficient way to calculate the non-bonded atom pairs
-			0: brute force: all against all
-			1: box grid
-		*/
-		int	algorithm_type_;
-		
+    /** The most efficient algorithm to calculate the non-bonded atom pairs.
+        {\tt BRUTE\_FORCE}: brute force: all against all\\
+        {\tt HASH\_GRID}: box grid
+    */
+    MolmecSupport::PairListAlgorithmType  algorithm_type_;
+ 		
 		FFPSLennardJones van_der_waals_;
 
 		FFPSPotential1210 hydrogen_bond_;
