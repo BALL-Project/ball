@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.29 2003/10/28 00:23:17 amoll Exp $
+// $Id: displayProperties.C,v 1.30 2003/10/28 01:28:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -212,15 +212,6 @@ void DisplayProperties::modifyRepresentationMode()
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
 
 	apply_button->setEnabled(true);
-}
-
-void DisplayProperties::selectPrecision(int index)
-{
-	if (index > DRAWING_PRECISION_HIGH)
-	{
-		throw(InvalidOption(__FILE__, __LINE__, index));
-	}
-	precision_ = index;
 }
 
 void DisplayProperties::selectModel(int index)
@@ -569,7 +560,7 @@ void DisplayProperties::precisionSliderChanged()
 	String text = String((float)precision_slider->value() / 10.0).trimRight("0");
 	if (text.right(1) == ".") text = text + "0";
 
-	precision_label->setText(text.c_str());
+	custom_precision_label->setText(text.c_str());
 	custom_precision_button->setChecked(true);
 }
 
@@ -581,9 +572,33 @@ void DisplayProperties::modelOptionsPressed()
 {
 }
 
-void DisplayProperties::precisionBoxChanged()
+void DisplayProperties::precisionBoxChanged(int index)
 {
 	presets_precision_button->setChecked(true);
+
+	if (index > DRAWING_PRECISION_HIGH)
+	{
+		throw(InvalidOption(__FILE__, __LINE__, index));
+	}
+	precision_ = index;
+
+	switch (index)
+	{
+		case VIEW::DRAWING_PRECISION_LOW:
+			presets_precision_label->setText("1.5");
+			break;
+
+		case VIEW::DRAWING_PRECISION_MEDIUM:
+			presets_precision_label->setText("3.5");
+			break;
+
+		case VIEW::DRAWING_PRECISION_HIGH:
+			presets_precision_label->setText("6.5");
+			break;
+
+		default:
+			Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
+	}
 }
 
 } } // namespaces

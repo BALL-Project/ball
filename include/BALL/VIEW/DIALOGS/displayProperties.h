@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.12 2003/10/26 23:22:07 amoll Exp $
+// $Id: displayProperties.h,v 1.13 2003/10/28 01:28:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -174,13 +174,6 @@ namespace BALL
 					
 			//@} /** @name Protected slots */ //@{
 					
-			/** Changes the drawing precision.
-					This slot is connected to the drawing precision combo box and will be automatically
-					called if the contents of this combo box is changed.
-					\param  index the position of the entry in the combobox
-			*/
-			virtual void selectPrecision(int index);
-
 			/** Changes the model.
 					This slot is connected to the model combo box and will be automatically
 					called if the content of this combo box is changed.
@@ -227,7 +220,7 @@ namespace BALL
 			virtual void modelOptionsPressed();
 
 			///
-			virtual void precisionBoxChanged();
+			virtual void precisionBoxChanged(int index);
 
 			///
 			virtual void transparencySliderChanged();

@@ -1688,14 +1688,89 @@
                     <string>custom:</string>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="QRadioButton">
                 <property name="name">
-                    <cstring>precision_label</cstring>
+                    <cstring>presets_precision_button</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>202</x>
+                        <x>8</x>
+                        <y>19</y>
+                        <width>69</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>presets:</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QSlider">
+                <property name="name">
+                    <cstring>precision_slider</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>78</x>
                         <y>51</y>
+                        <width>121</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="minValue">
+                    <number>10</number>
+                </property>
+                <property name="maxValue">
+                    <number>300</number>
+                </property>
+                <property name="lineStep">
+                    <number>1</number>
+                </property>
+                <property name="value">
+                    <number>30</number>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="tickmarks">
+                    <enum>Left</enum>
+                </property>
+                <property name="tickInterval">
+                    <number>20</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>custom_precision_label</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>206</x>
+                        <y>50</y>
+                        <width>48</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>ToolBarPanel</enum>
+                </property>
+                <property name="text">
+                    <string>6.5</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>presets_precision_label</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>206</x>
+                        <y>19</y>
                         <width>48</width>
                         <height>20</height>
                     </rect>
@@ -1731,23 +1806,11 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>110</x>
-                        <y>21</y>
-                        <width>140</width>
+                        <x>79</x>
+                        <y>18</y>
+                        <width>119</width>
                         <height>24</height>
                     </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>140</width>
-                        <height>24</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>130</width>
-                        <height>24</height>
-                    </size>
                 </property>
                 <property name="backgroundMode">
                     <enum>NoBackground</enum>
@@ -1769,59 +1832,6 @@
                 </property>
                 <property name="duplicatesEnabled">
                     <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>presets_precision_button</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>8</x>
-                        <y>19</y>
-                        <width>69</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>presets:</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QSlider">
-                <property name="name">
-                    <cstring>precision_slider</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>110</x>
-                        <y>51</y>
-                        <width>85</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="minValue">
-                    <number>10</number>
-                </property>
-                <property name="maxValue">
-                    <number>300</number>
-                </property>
-                <property name="lineStep">
-                    <number>1</number>
-                </property>
-                <property name="value">
-                    <number>30</number>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="tickmarks">
-                    <enum>Left</enum>
-                </property>
-                <property name="tickInterval">
-                    <number>20</number>
                 </property>
             </widget>
         </widget>
@@ -2715,7 +2725,7 @@
         <sender>precision_combobox</sender>
         <signal>activated(int)</signal>
         <receiver>DisplayPropertiesData</receiver>
-        <slot>precisionBoxChanged()</slot>
+        <slot>precisionBoxChanged(int)</slot>
     </connection>
     <connection>
         <sender>apply_button</sender>
@@ -2779,13 +2789,12 @@
     <slot>editSelectionColor()</slot>
     <slot>selectModel(int)</slot>
     <slot>selectColoringMethod(int )</slot>
-    <slot>selectPrecision(int)</slot>
     <slot>selectMode(int)</slot>
     <slot>modelOptionsPressed()</slot>
     <slot>coloringOptionsPressed()</slot>
     <slot>transparencySliderChanged()</slot>
     <slot>precisionSliderChanged()</slot>
-    <slot>precisionBoxChanged()</slot>
+    <slot>precisionBoxChanged(int)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
