@@ -8,6 +8,10 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 
+#include <BALL/SYSTEM/directory.h>
+#include <BALL/SYSTEM/file.h>
+#include <BALL/SYSTEM/fileSystem.h>
+
 #ifdef BALL_PLATFORM_WINDOWS
  #include <qapplication.h>
 #endif
@@ -231,6 +235,21 @@ MainControl* getMainControl()
 
 	return mc; 
 }
+
+
+String createTemporaryFilename()
+	throw()
+{
+	Directory org;
+	Directory d;
+	d.changeToUserHomeDir();
+	String filename;
+	File::createTemporaryFilename(filename);
+	filename = d.getPath() + FileSystem::PATH_SEPARATOR + filename;
+	org.setCurrent();
+	return filename;
+}
+
 
 	
 } } //namespaces
