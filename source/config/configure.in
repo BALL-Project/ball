@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.133 2001/05/10 23:35:11 oliver Exp $
+dnl    $Id: configure.in,v 1.134 2001/05/14 00:08:18 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1379,6 +1379,7 @@ fi
 rm /tmp/$$.conftest.c a.out 2>/dev/null
 
 
+
 dnl
 dnl		check for template arguments needed for friends of template
 dnl 	classses. Some compilers require "<>" after the method name,
@@ -1594,6 +1595,66 @@ else
 fi
 AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
 
+
+dnl 
+dnl   check for endianness of the architecture
+dnl
+dnl
+AC_MSG_CHECKING(for byte order)
+AC_TRY_RUN(
+		[
+			#include <iostream>
+			#include <fstream>
+			int main(int, char**)
+			{
+		] ${BALL_SIZE_TYPE} endian_one = 1; [
+			std::ofstream os("config.endian.log", std::ios::out);
+
+	    if (*(char*)&endian_one == '\001')
+      {
+				// big endian
+				os << "LITTLE" << std::endl;
+      }
+	    else
+      {
+				// little endian
+				os << "BIG" << std::endl;
+      }
+			os.close();
+			
+			return 0;
+			}
+		],
+		BALL_ENDIAN_TEST=true,
+		DUMMY=0,
+		DUMMY=0
+)
+if test ${BALL_ENDIAN_TEST+set} != set ; then
+	AC_MSG_RESULT(<cannot determine>)
+	AC_MSG_RESULT()
+	AC_MSG_ERROR(Cannot determine endianness of machine.)
+else
+	dnl
+	dnl	read the result of the endian test from the file
+	dnl and delete the file
+	dnl
+	ENDIAN_TYPE=`${CAT} config.endian.log`
+	if test "${ENDIAN_TYPE}" = "LITTLE" ; then
+		BALL_LITTLE_ENDIAN=true
+		AC_DEFINE(BALL_LITTLE_ENDIAN, true)
+		AC_MSG_RESULT(little)
+	else
+		if test "${ENDIAN_TYPE}" = "BIG" ; then
+			BALL_BIG_ENDIAN=true
+			AC_DEFINE(BALL_BIG_ENDIAN, true)
+			AC_MSG_RESULT(big)
+		else
+			AC_MSG_RESULT(<cannot determine>)
+			AC_MSG_RESULT()
+			AC_MSG_ERROR(Cannot determine endianness of machine.)
+		fi
+	fi
+fi
 
 dnl
 dnl		check whether vsnprintf is defined
