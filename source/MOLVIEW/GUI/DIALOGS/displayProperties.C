@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.18 2002/12/12 17:21:42 amoll Exp $
+// $Id: displayProperties.C,v 1.19 2002/12/15 01:52:49 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -10,10 +10,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
-
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/protein.h>
-#include <BALL/KERNEL/system.h>
 
 namespace BALL
 {
@@ -42,34 +38,11 @@ namespace BALL
 
 				fragmentdb_(),
 				color_calculator_(0),
-				model_connector_(),
-				
-				ball_and_stick_model_static_(),
-				ball_and_stick_model_dynamic_(),
-				surface_model_static_(),
-				surface_model_dynamic_(),
-				van_der_waals_model_static_(),
-				van_der_waals_model_dynamic_(),
-				backbone_model_static_(),
-				backbone_model_dynamic_(),
-				remove_model_static_(),
-				remove_model_dynamic_(),
-				line_model_static_(),
-				line_model_dynamic_(),
-				
 				static_base_model_pointer_(0),
-				dynamic_base_model_pointer_(0),
-				
-				element_color_calculator_(),
-				residue_name_color_calculator_(),
-				atom_charge_color_calculator_(),
-				distance_color_calculator_(),
-				custom_color_calculator_()
+				dynamic_base_model_pointer_(0)
 		{
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
-
-			color_calculator_ = &element_color_calculator_;
 
 			  van_der_waals_model_static_.registerModelConnector(model_connector_);
 			 van_der_waals_model_dynamic_.registerModelConnector(model_connector_);
@@ -79,6 +52,8 @@ namespace BALL
 								line_model_dynamic_.registerModelConnector(model_connector_);
 
 			// seting up defaults
+			color_calculator_ = &element_color_calculator_;
+
 			ball_and_stick_model_static_.enableStickModel();
 			ball_and_stick_model_dynamic_.enableStickModel();
 
@@ -177,6 +152,7 @@ namespace BALL
 			throw()
 		{
 			// the display window position
+			inifile.insertValue("WINDOWS", "Display::x", String(x()));
 			inifile.insertValue("WINDOWS", "Display::y", String(y()));
 
 			// the combobox values
@@ -204,11 +180,6 @@ namespace BALL
 			throw()
 		{
 			main_control.removeMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, SLOT(openDialog()), CTRL+Key_I);   
-			main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
-			main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
-			main_control.removeMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A);
-			main_control.removeMenuEntry(MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B);
-			main_control.removeMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H);
 		}
 
 
@@ -216,12 +187,6 @@ namespace BALL
 			throw()
 		{
 			(main_control.menuBar())->setItemChecked(id_, isVisible());
-
-			Size number_of_selected_objects = MainControl::getMainControl(this)->getControlSelection().size(); 
-			bool selected = (number_of_selected_objects != 0);
-
-			(main_control.menuBar())->setItemEnabled(select_id_, selected);
-			(main_control.menuBar())->setItemEnabled(deselect_id_, selected);
 		}
 
 
@@ -263,6 +228,7 @@ namespace BALL
 			}
 		}
 
+		
 		void DisplayProperties::selectPrecisionDynamic(const QString& string)
 		{
 			precision_string_dynamic_ = string;
@@ -289,6 +255,7 @@ namespace BALL
 			}
 		}
 
+		
 		void DisplayProperties::selectModelStatic(const QString& string)
 		{
 			model_string_static_ = string;
@@ -436,9 +403,7 @@ namespace BALL
 			}
 		}
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//----------------------------------------------------to be moved:
-//////////////////////////////////////////////////////////////////////////////////////////
+
 		void DisplayProperties::onNotify(Message *message)
 			throw()
 		{
@@ -457,22 +422,10 @@ namespace BALL
 				changed_message->setDeletable(true);
 				notify_(changed_message);
 
-				// calculate center of the new composite
-				Composite *composite = composite_message->getComposite();
-				SceneMessage *scene_message = new SceneMessage;
-				scene_message->setDeletable(true);
-
-				GeometricCenterProcessor center;
-				composite->apply(center);        
-				
-				scene_message->setCameraLookAt(center.getCenter());
-				
-				Vector3 view_point = center.getCenter();
-				view_point.z = view_point.z + 5;
-				scene_message->setCameraViewPoint(view_point);
-
-				// notify scene to perform an update and set the camera to the new object
-				notify_(scene_message);
+				CenterCameraMessage* ccmessage = new CenterCameraMessage;
+				ccmessage->setDeletable(true);
+				ccmessage->setComposite(composite_message->getComposite());
+				notify_(ccmessage);
 			}
 			else if (RTTI::isKindOf<DrawMessage>(*message))
 			{
@@ -495,7 +448,8 @@ namespace BALL
 		void DisplayProperties::applyButtonClicked()
 		{
 			// no selection present => return
-			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
+			List<Composite*>& selection = MainControl::getMainControl(this)->getControlSelection();
+			if (selection.size() == 0)
 			{
 				return;
 			}
@@ -506,8 +460,8 @@ namespace BALL
 				distance_color_calculator_.destroy();
 
 				// for each element in the selection => perform generation
-				List<Composite*>::Iterator it = MainControl::getMainControl(this)->getControlSelection().begin();
-				for (; it != MainControl::getMainControl(this)->getControlSelection().end(); ++it)
+				List<Composite*>::Iterator it = selection.begin();
+				for (; it != selection.end(); ++it)
 				{
 					(**it).apply(*((UnaryProcessor<Composite>*)&distance_color_calculator_));
 				}
@@ -517,29 +471,25 @@ namespace BALL
 			
 
 			// for top elements in the selection => perform generation
-			List<Composite*> updates;
-			List<Composite*>::ConstIterator it = MainControl::getMainControl(this)->getControlSelection().begin();
-			for (; it != MainControl::getMainControl(this)->getControlSelection().end(); ++it)
-			{
-				updates.push_back(*it);
-			}
+			// copy selection list, selection can change while applying models
+			List<Composite*> updates = selection;
 
 			setupStaticProcessor_();
 			setupDynamicProcessor_();
 			ObjectSelector selector;
+
+			ChangedCompositeMessage* ccm = new ChangedCompositeMessage;
+			ccm->setDeletable();
+			const HashSet<Composite*>& picked_objects = MainControl::getMainControl(this)->getSelection();
 			List<Composite*>::Iterator updates_it = updates.begin();
 			for (; updates_it != updates.end(); updates_it++)
 			{
 				applyOn_(**updates_it);
-				if (MainControl::getMainControl(this)->getSelection().has(*updates_it))
-				{
-					(*updates_it)->apply(selector);
-				}
+
+				// reselect geometric objects, this is workaround
+				if (picked_objects.has(*updates_it))   (*updates_it)->apply(selector);
 					
 				// perform update of the composites
-				//MainControl::getMainControl(this)->update(**updates_it);
-				ChangedCompositeMessage* ccm = new ChangedCompositeMessage;
-				ccm->setDeletable();
 				ccm->setComposite(*updates_it);
 				notify_(ccm);
 			}
@@ -555,15 +505,12 @@ namespace BALL
 		void DisplayProperties::editColor()
 		{
 			color_sample->setBackgroundColor(QColorDialog::getColor(color_sample->backgroundColor()));
-			ColorRGBA color;
-			QColor qcolor = color_sample->backgroundColor();
-			color.set((float)qcolor.red() / 255.0,
-								(float)qcolor.green() / 255.0,
-								(float)qcolor.blue() / 255.0);
+			const QColor& qcolor = color_sample->backgroundColor();
+			custom_color_.set((float)qcolor.red() / 255.0,
+												(float)qcolor.green() / 255.0,
+												(float)qcolor.blue() / 255.0);
 
-			custom_color_ = color;
-
-			setColorCalculator_(COLORCALCULATOR_VALUES__CUSTOM, color);
+			setColorCalculator_(COLORCALCULATOR_VALUES__CUSTOM, custom_color_);
 
 			coloring_method_string_ = "custom";
 			setComboBoxIndex_(coloring_type_combobox, coloring_method_string_);
@@ -574,14 +521,10 @@ namespace BALL
 		void DisplayProperties::editSelectionColor()
 		{
 			color_sample_selection->setBackgroundColor(QColorDialog::getColor(color_sample_selection->backgroundColor()));
-			ColorRGBA color;
-			QColor qcolor = color_sample_selection->backgroundColor();
-			color.set((float)qcolor.red() / 255.0,
-								(float)qcolor.green() / 255.0,
-								(float)qcolor.blue() / 255.0);
-
-			BALL_SELECTED_COLOR = color;
-
+			const QColor& qcolor = color_sample_selection->backgroundColor();
+			BALL_SELECTED_COLOR.set((float)qcolor.red() / 255.0,
+															(float)qcolor.green() / 255.0,
+															(float)qcolor.blue() / 255.0);
 			update();
 		}
 
@@ -614,11 +557,6 @@ namespace BALL
 		{
 			// apply static visualization processor
 			composite.apply(*static_base_model_pointer_);
-
-			if (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_BACKBONE)
-			{
-				//return;
-			}
 			composite.apply(*dynamic_base_model_pointer_);
 		}
 
