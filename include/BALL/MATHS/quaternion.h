@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.12 2000/03/26 21:52:28 oliver Exp $
+// $Id: quaternion.h,v 1.13 2000/03/27 09:36:31 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -52,7 +52,7 @@ namespace BALL
 				Create a new TQuaternion object from another.
 				@param TQuaternion the TQuaternion object to be copied
 		*/	
-		TQuaternion(const TQuaternion& q)
+		TQuaternion(const TQuaternion& q);
 
 		/**	Detailled constructor.
 				Create a new TQuaternion object from a TVector3 and an angle.
@@ -81,7 +81,7 @@ namespace BALL
 		*/
 		//@{
 		///
-		void set(const TQuaternion& q)
+		void set(const TQuaternion& q);
 
 		/**	Assign the TQuaternion components.
 				@param axis the new axis component
@@ -106,7 +106,7 @@ namespace BALL
 				Assigns the components to another TQuaternion.
 				@param q the TQuaternion to be asigned to
 		*/
-		void get(TQuaternion& q) const
+		void get(TQuaternion& q) const;
 
 		/**	Assign the components to the standard values.
 				The axis-compnents are set to {\tt 0}, the angle is set to {\tt 1}.
