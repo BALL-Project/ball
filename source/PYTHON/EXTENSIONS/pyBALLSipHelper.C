@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyBALLSipHelper.C,v 1.2 2002/02/27 12:23:58 sturm Exp $
+// $Id: pyBALLSipHelper.C,v 1.3 2003/10/31 23:15:50 oliver Exp $
 
 #include <typeinfo>
 
-#include "sipBALLDeclBALL.h"
 #include "sipBALLComposite.h"
 #include "sipBALLAtom.h"
 #include "sipBALLBond.h"

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.13 2003/10/29 22:54:39 oliver Exp $
+// $Id: file.sip,v 1.14 2003/10/31 23:15:49 oliver Exp $
 //
 
 class std__openmode
@@ -13,6 +13,21 @@ class std__openmode
 %End
 	public:
 };
+
+// nested class File::CannotWrite
+class CannotWrite
+{
+%TypeHeaderCode
+	#include <BALL/SYSTEM/file.h>
+	using namespace BALL;
+	typedef File::CannotWrite CannotWrite;
+%End
+  public:
+  CannotWrite(const char* /file/, int /line/, const String& /filename/) throw();
+  ~CannotWrite() throw();
+  String getFilename() const throw();
+};
+
 
 class File
 {
@@ -79,25 +94,21 @@ class OpenMode
 %End
   public:
 
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-  OpenMode* ptr;
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_OpenMode,&ptr))
-  {
-		String mode_string;
-		switch ((int)*ptr)
-		{
-			case (int)std::ios::app: 		mode_string = "std::ios::app"; break;
-			case (int)std::ios::binary:	mode_string = "std::ios::binary"; break;
-			case (int)std::ios::ate: 		mode_string = "std::ios::ate"; break;
-			case (int)std::ios::trunc: 	mode_string = "std::ios::trunc"; break;
-			case (int)std::ios::out: 		mode_string = "std::ios::out"; break;
-			case (int)std::ios::in: 			mode_string = "std::ios::in"; break; 
-			default:						mode_string = *ptr;
-		}
-
-		return PyString_FromString(mode_string.c_str());
+  OpenMode om = *sipCpp;
+	const char* mode_string;
+	switch ((int)om)
+	{
+		case (int)std::ios::app: 		mode_string = "std::ios::app"; break;
+		case (int)std::ios::binary:	mode_string = "std::ios::binary"; break;
+		case (int)std::ios::ate: 		mode_string = "std::ios::ate"; break;
+		case (int)std::ios::trunc: 	mode_string = "std::ios::trunc"; break;
+		case (int)std::ios::out: 		mode_string = "std::ios::out"; break;
+		case (int)std::ios::in: 		mode_string = "std::ios::in"; break; 
+		default:										mode_string = "";
 	}
+	sipRes = PyString_FromString(mode_string);
 %End
 
 %ConvertToTypeCode

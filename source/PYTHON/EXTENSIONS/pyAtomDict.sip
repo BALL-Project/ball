@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomDict.sip,v 1.4 2003/10/29 22:54:43 oliver Exp $
+// $Id: pyAtomDict.sip,v 1.5 2003/10/31 23:15:50 oliver Exp $
 //
 
 %MappedType PyAtomDict
@@ -69,7 +69,7 @@
 			break;
 		}
 		double value = PyFloat_AsDouble(float_obj);
-		atom_dict -> insert(pair<Atom*,float>(atom, value));
+		atom_dict -> insert(std::pair<Atom*,float>(atom, value));
 	}
  
 	*sipCppPtr = atom_dict;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.6 2003/09/13 14:31:48 amoll Exp $
+// $Id: pyWidget.h,v 1.7 2003/10/31 23:15:47 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -229,6 +229,7 @@ namespace BALL
 				throw();
 
 			virtual void startInterpreter();
+			virtual void stopInterpreter();
 
 			protected:
 

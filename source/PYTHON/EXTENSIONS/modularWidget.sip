@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.sip,v 1.3 2003/10/29 22:54:41 oliver Exp $
+// $Id: modularWidget.sip,v 1.4 2003/10/31 23:15:49 oliver Exp $
 //
 
 class ModularWidget
   : Embeddable
 {
 %TypeHeaderCode
-	#include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+	#include <BALL/VIEW/KERNEL/modularWidget.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.8 2003/08/26 09:18:10 oliver Exp $
+// $Id: pyInterpreter.C,v 1.9 2003/10/31 23:15:47 oliver Exp $
 //
 
+#include <Python.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/FORMAT/lineBasedFile.h>
-#include <Python.h>
 
 namespace BALL
 {

@@ -1,8 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.9 2003/10/05 15:40:06 amoll Exp $
+// $Id: pyWidget.C,v 1.10 2003/10/31 23:15:51 oliver Exp $
 //
+
+// This include has to be first in order to avoid collisions.
+#include <Python.h>
+
 
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -10,7 +14,6 @@
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/FORMAT/lineBasedFile.h>
-#include <Python.h>
 
 #include <qscrollbar.h>
 #include <qfiledialog.h>
@@ -20,477 +23,478 @@ namespace BALL
 	namespace VIEW
 	{
 
-PyWidgetData::PyWidgetData(QWidget* parent, const char* name)
-	: QTextEdit(parent, name)
-{
-}
-
-PyWidgetData::PyWidgetData(const PyWidgetData& /*widget*/)
-	:	QTextEdit()
-{
-}
-
-PyWidgetData::~PyWidgetData()
-	throw()
-{	
-}
-
-
-void PyWidgetData::stopInterpreter()
-{
-	PyInterpreter::finalize();
-}
-
-
-void PyWidgetData::startInterpreter()
-{
-	// initialize the interpreter
-	PyInterpreter::initialize();
-
-	// print the PyBALL version and clear
-	// the widget's contents in case of a restart
-	setText((String("BALL ") + VersionInfo::getVersion()).c_str());
-
-	// print the first prompt 
-	multi_line_mode_ = false;
-	newPrompt_();
-	history_position_ = history_.size() + 1;
-}
-
-
-void PyWidgetData::retrieveHistoryLine_(Position index)
-{
-	if (index > history_.size()) 
-	{
-		history_position_ = history_.size();
-		return;
-	}
-
-	int row, col;
-	getCursorPosition(&row, &col);
-
-	if (index == history_.size())
-	{
-		history_position_ = history_.size();
-		removeParagraph(row);
-		insertParagraph(getPrompt_(), row);
-		setCursorPosition(row, col); 
-		QScrollBar* sb = verticalScrollBar();
-		if (sb != 0)
+		PyWidgetData::PyWidgetData(QWidget* parent, const char* name)
+			: QTextEdit(parent, name)
 		{
-			sb->setValue(sb->maxValue());
 		}
-		return;
-	}
 
-	String line = getPrompt_()+ history_[index];
-
-	// replace the line's contents
-	removeParagraph(row);
-	insertParagraph(line.c_str(), row);
-	setCursorPosition(row, line.size()); 
-	QScrollBar* sb = verticalScrollBar();
-	if (sb != 0)
-	{
-		sb->setValue(sb->maxValue());
-	}
-
-	// update the history position
-	history_position_ = index;
-}
-
-
-void PyWidgetData::mousePressEvent(QMouseEvent* /* m */) 
-{
-	// we ignore the mouse events! 
-	// they might place the cursor anywhere!
-}
-
-
-bool PyWidgetData::returnPressed()
-{
-	// check for an empty line (respect the prompt)
-	int row, col;
-	getCursorPosition(&row, &col);
-	current_line_ = getCurrentLine_();
-	if (col < 5)
-	{
-		if (multi_line_mode_)
+		PyWidgetData::PyWidgetData(const PyWidgetData& /*widget*/)
+			:	QTextEdit()
 		{
-			// in multi line mode: end of input - parse it!
-			QTextEdit::returnPressed();
-			parseLine_();
 		}
-		else	
+
+		PyWidgetData::~PyWidgetData()
+			throw()
+		{	
+		}
+
+
+		void PyWidgetData::stopInterpreter()
 		{
-			// return on an empty line is handled 
-			// as in the interactive interpreter: do nothing and 
-			// print another prompt
-			QTextEdit::returnPressed();
+			PyInterpreter::finalize();
+		}
+
+
+		void PyWidgetData::startInterpreter()
+		{
+			// initialize the interpreter
+			PyInterpreter::initialize();
+
+			// print the PyBALL version and clear
+			// the widget's contents in case of a restart
+			setText((String("BALL ") + VersionInfo::getVersion()).c_str());
+
+			// print the first prompt 
+			multi_line_mode_ = false;
+			newPrompt_();
+			history_position_ = history_.size() + 1;
+		}
+
+
+		void PyWidgetData::retrieveHistoryLine_(Position index)
+		{
+			if (index > history_.size()) 
+			{
+				history_position_ = history_.size();
+				return;
+			}
+
+			int row, col;
+			getCursorPosition(&row, &col);
+
+			if (index == history_.size())
+			{
+				history_position_ = history_.size();
+				removeParagraph(row);
+				insertParagraph(getPrompt_(), row);
+				setCursorPosition(row, col); 
+				QScrollBar* sb = verticalScrollBar();
+				if (sb != 0)
+				{
+					sb->setValue(sb->maxValue());
+				}
+				return;
+			}
+
+			String line = getPrompt_()+ history_[index];
+
+			// replace the line's contents
+			removeParagraph(row);
+			insertParagraph(line.c_str(), row);
+			setCursorPosition(row, line.size()); 
+			QScrollBar* sb = verticalScrollBar();
+			if (sb != 0)
+			{
+				sb->setValue(sb->maxValue());
+			}
+
+			// update the history position
+			history_position_ = index;
+		}
+
+
+		void PyWidgetData::mousePressEvent(QMouseEvent* /* m */) 
+		{
+			// we ignore the mouse events! 
+			// they might place the cursor anywhere!
+		}
+
+
+		bool PyWidgetData::returnPressed()
+		{
+			// check for an empty line (respect the prompt)
+			int row, col;
+			getCursorPosition(&row, &col);
+			current_line_ = getCurrentLine_();
+			if (col < 5)
+			{
+				if (multi_line_mode_)
+				{
+					// in multi line mode: end of input - parse it!
+					QTextEdit::returnPressed();
+					parseLine_();
+				}
+				else	
+				{
+					// return on an empty line is handled 
+					// as in the interactive interpreter: do nothing and 
+					// print another prompt
+					QTextEdit::returnPressed();
+					newPrompt_();
+				}
+			} 
+			else 
+			{	
+				// parse the line
+				QTextEdit::returnPressed();	
+				parseLine_();
+			}
+
+			return false;
+		}
+
+
+		void PyWidgetData::parseLine_()
+		{
+			if (!Py_IsInitialized())
+			{
+				append("ERROR: no interpreter running!\n");
+				return;
+			}
+
+			history_position_ = history_.size();
+
+			String line = current_line_.getSubstring(4);
+			line.trimRight();
+			
+			if (!multi_line_mode_)
+			{
+				if (line.isEmpty()) return;
+				if ((line.hasPrefix("for ") 		|| 
+						 line.hasPrefix("def ") 		||
+						 line.hasPrefix("class ") 	||
+						 line.hasPrefix("while ")	||
+						 line.hasPrefix("if "))
+						&& line.hasSuffix(":"))
+				{
+						multi_line_mode_ = true;
+						multi_line_text_ = line;
+						multi_line_text_.append("\n");
+						multi_lines_ = 1;
+						appendToHistory_(line);
+						newPrompt_();
+						return;
+				}
+
+				multi_lines_ = 0;
+				appendToHistory_(line);
+			}
+			else // Multiline mode
+			{
+				multi_lines_ += 1;
+				appendToHistory_(line);
+				if (!line.isEmpty())
+				{
+					multi_line_text_ += line + "\n";
+					newPrompt_();
+					return;
+				}
+
+				line = multi_line_text_ + "\n";
+			}
+
+			bool state;
+			String result = PyInterpreter::run(line, state);
+			if (result != "") append(result.c_str());
+
+				
+			if (!multi_line_mode_)
+			{
+				results_.push_back(state);
+			}
+			else
+			{
+				for (Position p = 0; p <= multi_lines_ -1; p++) results_.push_back(state);
+			}
+			
+			multi_line_mode_ = false;
+
 			newPrompt_();
 		}
-	} 
-	else 
-	{	
-		// parse the line
-		QTextEdit::returnPressed();	
-		parseLine_();
-	}
 
-	return false;
-}
-
-
-void PyWidgetData::parseLine_()
-{
-	if (!Py_IsInitialized())
-	{
-		append("ERROR: no interpreter running!\n");
-		return;
-	}
-
-	history_position_ = history_.size();
-
-	String line = current_line_.getSubstring(4);
-	line.trimRight();
-	
-	if (!multi_line_mode_)
-	{
-		if (line.isEmpty()) return;
-		if ((line.hasPrefix("for ") 		|| 
-				 line.hasPrefix("def ") 		||
-				 line.hasPrefix("class ") 	||
-				 line.hasPrefix("while ")	||
-				 line.hasPrefix("if "))
-				&& line.hasSuffix(":"))
+		void PyWidgetData::appendToHistory_(const String& line)
 		{
-				multi_line_mode_ = true;
-				multi_line_text_ = line;
-				multi_line_text_.append("\n");
-				multi_lines_ = 1;
-				appendToHistory_(line);
+			history_.push_back(line);
+			history_position_ = history_.size();
+		}
+
+		const char* PyWidgetData::getPrompt_() const
+		{
+			return (multi_line_mode_ ? "... " : ">>> ");
+		}
+
+		void PyWidgetData::newPrompt_()
+		{
+			append(getPrompt_());
+			setCursorPosition(lines() - 1, 4);
+		}
+
+
+		void PyWidgetData::keyPressEvent(QKeyEvent* e)
+		{
+			int row, col;
+			getCursorPosition(&row, &col);
+
+			if (e->key() == Key_Left || e->key() == Key_Backspace)
+			{
+				if (col <= 4) return;
+			}
+			else if (e->key() == Key_Right)
+			{
+				setCursorPosition(row, col+1);
+				return;
+			}
+			else if (e->key() == Key_Up)
+			{
+				if (history_position_ != 0) retrieveHistoryLine_(history_position_ - 1);
+				return;
+			}
+			else if (e->key() == Key_Down)
+			{
+				retrieveHistoryLine_(history_position_ + 1);
+				return;
+			}
+			else if (e->key() == Key_Home)
+			{
+				setCursorPosition(row, 4);
+				return;
+			}
+			else if (e->key() == Key_Return)
+			{
+				if (!returnPressed()) return;
+			}
+
+			QTextEdit::keyPressEvent(e);
+		} 
+
+
+		void PyWidgetData::dump(std::ostream& s, Size depth) const
+			throw()
+		{
+			BALL_DUMP_STREAM_PREFIX(s);
+
+			BALL_DUMP_HEADER(s, this, this);
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "multiline_mode : " << multi_line_mode_<< std::endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "multi_line_text  : " << multi_line_text_<< std::endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "history : "<< std::endl;
+			
+			for (Position i = 0; i < history_.size(); i++)
+			{
+				BALL_DUMP_DEPTH(s, depth);
+				s << history_[i]<< std::endl;
+			}
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "history_position : " << history_position_ << std::endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "current_line : " << current_line_ << std::endl;
+
+			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+
+		String PyWidgetData::getCurrentLine_()
+		{
+			int row, col;
+			getCursorPosition(&row, &col);
+			return String(text(row).ascii());
+		}
+
+
+		void PyWidgetData::runFile(const String& filename)
+		{
+			append(String("> running File " + filename + "\n").c_str());
+			bool result;
+			String result_string;
+			LineBasedFile file;
+			try
+			{
+				file.open(filename);
+			}
+			catch(Exception::GeneralException e)
+			{
+				append(String("> Could not find file " + filename + "\n").c_str());
 				newPrompt_();
 				return;
-		}
+			}
 
-		multi_lines_ = 0;
-		appendToHistory_(line);
-	}
-	else // Multiline mode
-	{
-		multi_lines_ += 1;
-		appendToHistory_(line);
-		if (!line.isEmpty())
-		{
-			multi_line_text_ += line + "\n";
+			while (file.readLine())
+			{
+				result_string = PyInterpreter::run(file.getLine(), result);
+				if (!result)
+				{
+					result_string += "> Error in Line " + String(file.getLineNumber()) + " in file " + filename + "\n";
+					append(result_string.c_str());
+					newPrompt_();
+					return;
+				}
+
+				append(result_string.c_str());
+			}
+			append("> finished...");
 			newPrompt_();
-			return;
 		}
 
-		line = multi_line_text_ + "\n";
-	}
-
-	bool state;
-	String result = PyInterpreter::run(line, state);
-	if (result != "") append(result.c_str());
-
-		
-	if (!multi_line_mode_)
-	{
-		results_.push_back(state);
-	}
-	else
-	{
-		for (Position p = 0; p <= multi_lines_ -1; p++) results_.push_back(state);
-	}
-	
-	multi_line_mode_ = false;
-
-	newPrompt_();
-}
-
-void PyWidgetData::appendToHistory_(const String& line)
-{
-	history_.push_back(line);
-	history_position_ = history_.size();
-}
-
-const char* PyWidgetData::getPrompt_() const
-{
-	return (multi_line_mode_ ? "... " : ">>> ");
-}
-
-void PyWidgetData::newPrompt_()
-{
-	append(getPrompt_());
-	setCursorPosition(lines() - 1, 4);
-}
-
-
-void PyWidgetData::keyPressEvent(QKeyEvent* e)
-{
-	int row, col;
-	getCursorPosition(&row, &col);
-
-	if (e->key() == Key_Left || e->key() == Key_Backspace)
-	{
-		if (col <= 4) return;
-	}
-	else if (e->key() == Key_Right)
-	{
-		setCursorPosition(row, col+1);
-		return;
-	}
-	else if (e->key() == Key_Up)
-	{
-		if (history_position_ != 0) retrieveHistoryLine_(history_position_ - 1);
-		return;
-	}
-	else if (e->key() == Key_Down)
-	{
-		retrieveHistoryLine_(history_position_ + 1);
-		return;
-	}
-	else if (e->key() == Key_Home)
-	{
-		setCursorPosition(row, 4);
-		return;
-	}
-	else if (e->key() == Key_Return)
-	{
-		if (!returnPressed()) return;
-	}
-
-	QTextEdit::keyPressEvent(e);
-} 
-
-
-void PyWidgetData::dump(std::ostream& s, Size depth) const
-	throw()
-{
-	BALL_DUMP_STREAM_PREFIX(s);
-
-	BALL_DUMP_HEADER(s, this, this);
-
-	BALL_DUMP_DEPTH(s, depth);
-	s << "multiline_mode : " << multi_line_mode_<< std::endl;
-
-	BALL_DUMP_DEPTH(s, depth);
-	s << "multi_line_text  : " << multi_line_text_<< std::endl;
-
-	BALL_DUMP_DEPTH(s, depth);
-	s << "history : "<< std::endl;
-	
-	for (Position i = 0; i < history_.size(); i++)
-	{
-		BALL_DUMP_DEPTH(s, depth);
-		s << history_[i]<< std::endl;
-	}
-
-	BALL_DUMP_DEPTH(s, depth);
-	s << "history_position : " << history_position_ << std::endl;
-
-	BALL_DUMP_DEPTH(s, depth);
-	s << "current_line : " << current_line_ << std::endl;
-
-	BALL_DUMP_STREAM_SUFFIX(s);
-}
-
-
-String PyWidgetData::getCurrentLine_()
-{
-	int row, col;
-	getCursorPosition(&row, &col);
-	return String(text(row).ascii());
-}
-
-
-void PyWidgetData::runFile(const String& filename)
-{
-	append(String("> running File " + filename + "\n").c_str());
-	bool result;
-	String result_string;
-	LineBasedFile file;
-	try
-	{
-		file.open(filename);
-	}
-	catch(Exception::GeneralException e)
-	{
-		append(String("> Could not find file " + filename + "\n").c_str());
-		newPrompt_();
-		return;
-	}
-
-	while (file.readLine())
-	{
-		result_string = PyInterpreter::run(file.getLine(), result);
-		if (!result)
+		void PyWidgetData::scriptDialog()
 		{
-			result_string += "> Error in Line " + String(file.getLineNumber()) + " in file " + filename + "\n";
-			append(result_string.c_str());
-			newPrompt_();
-			return;
+			// no throw specifier because of that #$%@* moc
+			QFileDialog *fd = new QFileDialog(this, "Run Python Script", true);
+			fd->setMode(QFileDialog::ExistingFile);
+			fd->addFilter("Python Scripts(*.py)");
+			fd->setSelectedFilter(1);
+
+			fd->setCaption("Run Python Script");
+			fd->setViewMode(QFileDialog::Detail);
+			fd->setGeometry(300, 150, 400, 400);
+
+			int result_dialog = fd->exec();
+			if (!result_dialog == QDialog::Accepted) return;
+
+			String filename(fd->selectedFile().ascii());
+
+			runFile(filename);
 		}
 
-		append(result_string.c_str());
-	}
-	append("> finished...");
-	newPrompt_();
-}
+		void PyWidgetData::exportHistory()
+		{
+			QFileDialog *fd = new QFileDialog(this, "Export History", true);
+			fd->setMode(QFileDialog::AnyFile);
+			fd->addFilter("Python Scripts(*.py)");
+			fd->setSelectedFilter(1);
 
-void PyWidgetData::scriptDialog()
-{
-	// no throw specifier because of that #$%@* moc
-	QFileDialog *fd = new QFileDialog(this, "Run Python Script", true);
-	fd->setMode(QFileDialog::ExistingFile);
-	fd->addFilter("Python Scripts(*.py)");
-	fd->setSelectedFilter(1);
+			fd->setCaption("Export History");
+			fd->setViewMode(QFileDialog::Detail);
+			fd->setGeometry(300, 150, 400, 400);
 
-	fd->setCaption("Run Python Script");
-	fd->setViewMode(QFileDialog::Detail);
-	fd->setGeometry(300, 150, 400, 400);
+			int result_dialog = fd->exec();
+			if (!result_dialog == QDialog::Accepted) return;
 
-	int result_dialog = fd->exec();
-	if (!result_dialog == QDialog::Accepted) return;
+			String filename(fd->selectedFile().ascii());
 
-	String filename(fd->selectedFile().ascii());
+			File file(filename, std::ios::out);
+			if (!file.isOpen()) 
+			{
+				append(String("> Could not export history to file " + filename + "\n").c_str());
+				newPrompt_();
+				return;
+			}
+					
+			for (Position p = 0; p < history_.size(); p++)
+			{
+				if (results_[p]) file << history_[p] << std::endl;
+			}
 
-	runFile(filename);
-}
-
-void PyWidgetData::exportHistory()
-{
-	QFileDialog *fd = new QFileDialog(this, "Export History", true);
-	fd->setMode(QFileDialog::AnyFile);
-	fd->addFilter("Python Scripts(*.py)");
-	fd->setSelectedFilter(1);
-
-	fd->setCaption("Export History");
-	fd->setViewMode(QFileDialog::Detail);
-	fd->setGeometry(300, 150, 400, 400);
-
-	int result_dialog = fd->exec();
-	if (!result_dialog == QDialog::Accepted) return;
-
-	String filename(fd->selectedFile().ascii());
-
-	File file(filename, std::ios::out);
-	if (!file.isOpen()) 
-	{
-		append(String("> Could not export history to file " + filename + "\n").c_str());
-		newPrompt_();
-		return;
-	}
-			
-	for (Position p = 0; p < history_.size(); p++)
-	{
-		if (results_[p]) file << history_[p] << std::endl;
-	}
-
-	file.close();
-}
+			file.close();
+		}
 
 
 
-PyWidget::PyWidget(QWidget *parent, const char *name)
-	throw()
-	: DockWidget(parent, name),
-		text_edit_(new PyWidgetData(this))
-{
-#ifdef BALL_VIEW_DEBUG
-	Log.error() << "new PyWidget " << this << std::endl;
-#endif
-	default_visible_ = false;
-	setGuest(*text_edit_);
-}
+		PyWidget::PyWidget(QWidget *parent, const char *name)
+			throw()
+			: DockWidget(parent, name),
+				text_edit_(new PyWidgetData(this))
+		{
+		#ifdef BALL_VIEW_DEBUG
+			Log.error() << "new PyWidget " << this << std::endl;
+		#endif
+			default_visible_ = false;
+			setGuest(*text_edit_);
+		}
 
-void PyWidget::initializeWidget(MainControl& main_control)
-	throw()
-{
-	main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-	main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
-	main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
+		void PyWidget::initializeWidget(MainControl& main_control)
+			throw()
+		{
+			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
+			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
+			main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
-	DockWidget::initializeWidget(main_control);
-}
-
-
-void PyWidget::finalizeWidget(MainControl& main_control)
-	throw()
-{
-	main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
-	main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
-	main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
-
-	DockWidget::finalizeWidget(main_control);
-}
+			DockWidget::initializeWidget(main_control);
+		}
 
 
-void PyWidget::fetchPreferences(INIFile& inifile)
-	throw()
-{
-	DockWidget::fetchPreferences(inifile);
+		void PyWidget::finalizeWidget(MainControl& main_control)
+			throw()
+		{
+			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
+			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
+			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
-	if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
-
-	text_edit_->startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
-	text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
-	if (text_edit_->startup_script_ != "") text_edit_->runFile(text_edit_->startup_script_);
-}
+			DockWidget::finalizeWidget(main_control);
+		}
 
 
-void PyWidget::writePreferences(INIFile& inifile)
-	throw()
-{
-	inifile.appendSection("PYTHON");
-	inifile.insertValue("PYTHON", "StartupScript", text_edit_->startup_script_);
+		void PyWidget::fetchPreferences(INIFile& inifile)
+			throw()
+		{
+			DockWidget::fetchPreferences(inifile);
 
-	DockWidget::writePreferences(inifile);
-}
+			if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
 
-
-void PyWidget::initializePreferencesTab(Preferences &preferences)
-	throw()
-{
-	text_edit_->python_settings_= new PythonSettings(this);
-	text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
-	preferences.insertTab(text_edit_->python_settings_, "Python");
-}
-
-void PyWidget::finalizePreferencesTab(Preferences &preferences)
-	throw()
-{
-	if (text_edit_->python_settings_ != 0)
-	{
-		preferences.removeTab(text_edit_->python_settings_);
-
-		delete text_edit_->python_settings_;
-		text_edit_->python_settings_ = 0;
-	}
-}
-
-void PyWidget::applyPreferences(Preferences & /* preferences */)
-	throw()
-{
-	if (text_edit_->python_settings_ == 0) return;
-	text_edit_->startup_script_ = text_edit_->python_settings_->getFilename();
-}
-
-void PyWidget::cancelPreferences(Preferences&)
-	throw()
-{
-	if (text_edit_->python_settings_ != 0)
-	{
-		text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
-	}
-}
+			text_edit_->startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
+			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
+			if (text_edit_->startup_script_ != "") text_edit_->runFile(text_edit_->startup_script_);
+		}
 
 
-void PyWidget::startInterpreter()
-{
-	text_edit_->startInterpreter();
-}
+		void PyWidget::writePreferences(INIFile& inifile)
+			throw()
+		{
+			inifile.appendSection("PYTHON");
+			inifile.insertValue("PYTHON", "StartupScript", text_edit_->startup_script_);
+
+			DockWidget::writePreferences(inifile);
+		}
 
 
-} } // namespaces
+		void PyWidget::initializePreferencesTab(Preferences &preferences)
+			throw()
+		{
+			text_edit_->python_settings_= new PythonSettings(this);
+			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
+			preferences.insertTab(text_edit_->python_settings_, "Python");
+		}
+
+		void PyWidget::finalizePreferencesTab(Preferences &preferences)
+			throw()
+		{
+			if (text_edit_->python_settings_ != 0)
+			{
+				preferences.removeTab(text_edit_->python_settings_);
+
+				delete text_edit_->python_settings_;
+				text_edit_->python_settings_ = 0;
+			}
+		}
+
+		void PyWidget::applyPreferences(Preferences & /* preferences */)
+			throw()
+		{
+			if (text_edit_->python_settings_ == 0) return;
+			text_edit_->startup_script_ = text_edit_->python_settings_->getFilename();
+		}
+
+		void PyWidget::cancelPreferences(Preferences&)
+			throw()
+		{
+			if (text_edit_->python_settings_ != 0)
+			{
+				text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
+			}
+		}
+
+
+		void PyWidget::startInterpreter()
+		{
+			text_edit_->startInterpreter();
+		}
+
+	} // namespace VIEW
+
+} // namespace BALL

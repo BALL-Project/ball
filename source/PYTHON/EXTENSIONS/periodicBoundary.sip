@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.sip,v 1.3 2003/10/29 22:54:42 oliver Exp $
+// $Id: periodicBoundary.sip,v 1.4 2003/10/31 23:15:49 oliver Exp $
 //
 
 class PeriodicBoundary
@@ -20,8 +20,8 @@ using namespace BALL;
   int generateMoleculesVector();
   void enable();
   void disable();
-  Box3 getBox() const;
-  void setBox(const Box3&);
+  SimpleBox3 getBox() const;
+  void setBox(const SimpleBox3&);
   int addSolvent(const String&) const;
   int removeSolvent() const;
   bool isEnabled() const;

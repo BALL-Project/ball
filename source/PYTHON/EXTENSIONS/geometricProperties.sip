@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.sip,v 1.4 2003/10/29 22:54:40 oliver Exp $
+// $Id: geometricProperties.sip,v 1.5 2003/10/31 23:15:49 oliver Exp $
 //
 
 class BoundingBoxProcessor
@@ -17,7 +17,7 @@ class BoundingBoxProcessor
   virtual bool start() throw();
   virtual bool finish() throw();
   Processor::Result operator()(Atom& /atom/) throw();
-	Box3 getBox() const;
+	SimpleBox3 getBox() const;
   const Vector3& getLower() const;
   const Vector3& getUpper() const;
 };

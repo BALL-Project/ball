@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.39 2003/08/26 09:18:26 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.40 2003/10/31 23:15:50 oliver Exp $ 
 //
 
 // FDPB: Finite Difference Poisson Solver
@@ -26,41 +26,41 @@ using namespace std;
 namespace BALL 
 {
 
-	const char* FDPB::Option::VERBOSITY = "verbosity";
-	const char* FDPB::Option::PRINT_TIMING = "print_timing";
-	const char* FDPB::Option::SPACING = "spacing";
-	const char* FDPB::Option::BORDER = "border";
-	const char* FDPB::Option::IONIC_STRENGTH = "ionic_strength";
-	const char* FDPB::Option::SOLUTE_DC = "solute_dielectric_constant";
-	const char* FDPB::Option::SOLVENT_DC = "solvent_dielectric_constant";
-	const char* FDPB::Option::PROBE_RADIUS = "probe_radius";
-	const char* FDPB::Option::ION_RADIUS = "ion_radius";
-	const char* FDPB::Option::TEMPERATURE = "temperature";
-	const char* FDPB::Option::BOUNDARY = "boundary_condition";
-	const char* FDPB::Option::CHARGE_DISTRIBUTION = "charge_distribution";
-	const char* FDPB::Option::DIELECTRIC_SMOOTHING = "dielectric_smoothing";
-	const char* FDPB::Option::OFFSET = "offset";
-	const char* FDPB::Option::LOWER = "lower";
-	const char* FDPB::Option::UPPER = "upper";
-	const char* FDPB::Option::BOUNDING_BOX_LOWER = "bounding_box_lower";
-	const char* FDPB::Option::BOUNDING_BOX_UPPER = "bounding_box_upper";
-	const char* FDPB::Option::RMS_CRITERION = "rms_criterion";
-	const char* FDPB::Option::MAX_CRITERION = "max_criterion";
-	const char* FDPB::Option::CHECK_AFTER_ITERATIONS = "check_after_iterations";
-	const char* FDPB::Option::MAX_ITERATIONS = "max_iterations";
+	const String FDPB::Option::VERBOSITY = "verbosity";
+	const String FDPB::Option::PRINT_TIMING = "print_timing";
+	const String FDPB::Option::SPACING = "spacing";
+	const String FDPB::Option::BORDER = "border";
+	const String FDPB::Option::IONIC_STRENGTH = "ionic_strength";
+	const String FDPB::Option::SOLUTE_DC = "solute_dielectric_constant";
+	const String FDPB::Option::SOLVENT_DC = "solvent_dielectric_constant";
+	const String FDPB::Option::PROBE_RADIUS = "probe_radius";
+	const String FDPB::Option::ION_RADIUS = "ion_radius";
+	const String FDPB::Option::TEMPERATURE = "temperature";
+	const String FDPB::Option::BOUNDARY = "boundary_condition";
+	const String FDPB::Option::CHARGE_DISTRIBUTION = "charge_distribution";
+	const String FDPB::Option::DIELECTRIC_SMOOTHING = "dielectric_smoothing";
+	const String FDPB::Option::OFFSET = "offset";
+	const String FDPB::Option::LOWER = "lower";
+	const String FDPB::Option::UPPER = "upper";
+	const String FDPB::Option::BOUNDING_BOX_LOWER = "bounding_box_lower";
+	const String FDPB::Option::BOUNDING_BOX_UPPER = "bounding_box_upper";
+	const String FDPB::Option::RMS_CRITERION = "rms_criterion";
+	const String FDPB::Option::MAX_CRITERION = "max_criterion";
+	const String FDPB::Option::CHECK_AFTER_ITERATIONS = "check_after_iterations";
+	const String FDPB::Option::MAX_ITERATIONS = "max_iterations";
 
-	const char* FDPB::Boundary::ZERO = "zero";
-	const char* FDPB::Boundary::DEBYE = "Debye";
-	const char* FDPB::Boundary::COULOMB = "Coulomb";
-	const char* FDPB::Boundary::DIPOLE = "dipole";
-	const char* FDPB::Boundary::FOCUSING = "focusing";
+	const String FDPB::Boundary::ZERO = "zero";
+	const String FDPB::Boundary::DEBYE = "Debye";
+	const String FDPB::Boundary::COULOMB = "Coulomb";
+	const String FDPB::Boundary::DIPOLE = "dipole";
+	const String FDPB::Boundary::FOCUSING = "focusing";
 
-	const char* FDPB::ChargeDistribution::TRILINEAR = "trilinear";
-	const char* FDPB::ChargeDistribution::UNIFORM = "uniform";
+	const String FDPB::ChargeDistribution::TRILINEAR = "trilinear";
+	const String FDPB::ChargeDistribution::UNIFORM = "uniform";
 
-	const char* FDPB::DielectricSmoothing::NONE = "none";
-	const char* FDPB::DielectricSmoothing::UNIFORM = "uniform";
-	const char* FDPB::DielectricSmoothing::HARMONIC = "harmonic";
+	const String FDPB::DielectricSmoothing::NONE = "none";
+	const String FDPB::DielectricSmoothing::UNIFORM = "uniform";
+	const String FDPB::DielectricSmoothing::HARMONIC = "harmonic";
 
 	const int		FDPB::Default::VERBOSITY  = 0;
 	const bool	FDPB::Default::PRINT_TIMING  = false;
@@ -70,9 +70,9 @@ namespace BALL
 	const float FDPB::Default::PROBE_RADIUS = 1.5F;
 	const float FDPB::Default::ION_RADIUS = 2.0F;
 	const float FDPB::Default::IONIC_STRENGTH = 0.0F;
-	const char* FDPB::Default::BOUNDARY = FDPB::Boundary::DIPOLE;
-	const char* FDPB::Default::CHARGE_DISTRIBUTION = FDPB::ChargeDistribution::UNIFORM;
-	const char* FDPB::Default::DIELECTRIC_SMOOTHING = FDPB::DielectricSmoothing::NONE;
+	const String FDPB::Default::BOUNDARY = FDPB::Boundary::DIPOLE;
+	const String FDPB::Default::CHARGE_DISTRIBUTION = FDPB::ChargeDistribution::UNIFORM;
+	const String FDPB::Default::DIELECTRIC_SMOOTHING = FDPB::DielectricSmoothing::NONE;
 	const float FDPB::Default::SOLVENT_DC = 78.0;
 	const float FDPB::Default::SOLUTE_DC = 2.0;
 	const float FDPB::Default::RMS_CRITERION = 1e-5F;

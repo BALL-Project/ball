@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.sip,v 1.3 2003/10/29 22:54:38 oliver Exp $
+// $Id: client.sip,v 1.4 2003/10/31 23:15:49 oliver Exp $
 //
 
 class Client
@@ -43,7 +43,6 @@ class Client
 
 	~Client() throw();
 	virtual void clear() throw();
-	virtual void destroy() throw();
 
 	void connect(const String& /host/, int /port/ = VIEW_DEFAULT_PORT) throw();
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.sip,v 1.3 2003/10/29 22:54:42 oliver Exp $
+// $Id: poissonBoltzmann.sip,v 1.4 2003/10/31 23:15:50 oliver Exp $
 //
 
 class FDPB
@@ -127,9 +127,9 @@ class FDPB
 		static const float TEMPERATURE;
 		static const float PROBE_RADIUS;
 		static const float ION_RADIUS;
-		static const String& BOUNDARY;
-		static const String& CHARGE_DISTRIBUTION;
-		static const String& DIELECTRIC_SMOOTHING;
+		static const String BOUNDARY;
+		static const String CHARGE_DISTRIBUTION;
+		static const String DIELECTRIC_SMOOTHING;
 		static const float SOLVENT_DC;
 		static const float SOLUTE_DC;
 		static const float RMS_CRITERION;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.sip,v 1.5 2003/10/29 22:54:45 oliver Exp $
+// $Id: pyWidget.sip,v 1.6 2003/10/31 23:15:50 oliver Exp $
 //
 
 class PyWidget
@@ -9,7 +9,7 @@ class PyWidget
   : ModularWidget
 {
 %TypeHeaderCode
-	#include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
+	#include <BALL/VIEW/WIDGETS/pyWidget.h>
 	using namespace BALL;
 	using namespace VIEW;
 %End
@@ -17,9 +17,9 @@ class PyWidget
   public:
 	// BALL_EMBEDDABLE(PyWidget)
 	// is expanded to:
-	static Size countInstances();
-	static PyWidget* getInstance(const String& /identifier/);
-	static PyWidget* getInstance(Position /index/);
+	//static Size countInstances();
+	//static PyWidget* getInstance(const String& /identifier/);
+	//static PyWidget* getInstance(Position /index/);
 	
   // PyWidget(QWidget* /parent/ = 0, const char* /name/ = 0);
 	PyWidget(const PyWidget& /widget/);
@@ -29,8 +29,8 @@ class PyWidget
 	public:
 	virtual void startInterpreter();
 	virtual void stopInterpreter();
-	virtual void initializeWidget(MainControl& /main_control/);
-	virtual void finalizeWidget(MainControl& /main_control/);
+	virtual void initializeWidget(MainControl& /main_control/) throw();
+	virtual void finalizeWidget(MainControl& /main_control/) throw();
 
 	// virtual void mousePressEvent(QMouseEvent* /m/);
 }; 

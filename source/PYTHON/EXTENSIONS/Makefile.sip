@@ -1,6 +1,6 @@
-%Makefile Makefile.inc .o
+%Build Makefile.inc .o
 SIP_SOURCES=\
-	$S
+	$B
 
 SIP_OBJECTS	=	\
 	$O

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.sip,v 1.7 2003/10/29 22:54:35 oliver Exp $
+// $Id: SDFile.sip,v 1.8 2003/10/31 23:15:48 oliver Exp $
 //
 
 class SDFile
@@ -14,17 +14,13 @@ class SDFile
   public:
   SDFile();
 	// default open mode is "IN"
-  SDFile(String&, File::OpenMode /openmode/ = std::ios::in)
-		throw(FileNotFound);
-	~SDFile()
-		throw();
+  SDFile(String&, File::OpenMode /openmode/ = std::ios::in)	throw(FileNotFound);
+	~SDFile()	throw();
 
-  virtual void write(const System& /system/);
-  virtual bool read(System& /system/)
-		throw(ParseError);
-	virtual void write(const Molecule& /molecule/);
-	virtual Molecule* read()
-		throw(ParseError);
+  virtual bool write(const System& /system/) throw(CannotWrite);
+	virtual bool write(const Molecule& /molecule/) throw(CannotWrite);
+  virtual bool read(System& /system/)	throw(ParseError);
+	virtual Molecule* read() throw(ParseError);
 	void disableAtoms() throw();
 	void enableAtoms() throw();
 };

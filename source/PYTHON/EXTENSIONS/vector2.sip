@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.sip,v 1.8 2003/10/29 22:54:48 oliver Exp $
+// $Id: vector2.sip,v 1.9 2003/10/31 23:15:50 oliver Exp $
 //
 
 //Vector2 operator * (float scalar, const Vector2& vector)
@@ -101,16 +101,11 @@ class Vector2
 	float x;
 	float y;
 
-  char* __str__() /NonLazy/;
+  SIP_PYOBJECT __str__();
 %MethodCode
-  Vector2* ptr;
- 
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Vector3,&ptr))
-  {
-	  static String tmp;
-	  tmp = "(";
-	  tmp += String(ptr->x) + " ";
-	  tmp += String(ptr->y) + ")";
-	  return PyString_FromString(tmp.c_str());
-	}
+	static String tmp;
+	tmp = "(";
+	tmp += String(sipCpp->x) + " ";
+	tmp += String(sipCpp->y) + ")";
+	sipRes = PyString_FromString(tmp.c_str());
 %End};

@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.21 2003/10/29 22:54:35 oliver Exp $
+# $Id: Makefile,v 1.22 2003/10/31 23:15:48 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -16,12 +16,12 @@ all:	libBALLc.so
 include ../../common.mak
 include Makefile.inc
 
-SIP_OPTS=-c SIP -e -s ".C"
+SIP_OPTS=-c SIP -e -s ".C" -m Makefile.inc
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
  
-BALL_INCLUDES+=$(BALLVIEW_INCLUDES)
-BALL_LIBS=$(BALLVIEW_LIBS)
+BALL_INCLUDES+=$(VIEW_INCLUDES)
+BALL_LIBS=$(VIEW_LIBS)
 ADD_INCLUDES=$(PYTHON_INCLUDES) $(SIP_INCLUDES)
  
 PYBALL_SOURCES = \
@@ -34,7 +34,6 @@ PYBALL_SOURCES = \
 	pyProteinList.C \
 	pySecondaryStructureList.C \
 	pyAtomContainerList.C \
-	pyBALLSipHelper.C \
 	pyChainList.C \
 	pyFragmentList.C \
 	pyNucleicAcidList.C \
@@ -51,10 +50,10 @@ BALL.py:	sip
 sip:
 	@if test ! -d SIP ; then mkdir SIP 2>/dev/null ; fi
 	@echo "running SIP..."
-	@$(SIP) $(SIP_OPTS) BALL.sip
+	$(SIP) $(SIP_OPTS) BALL.sip
 	@echo "removing SIP headers..."
 	@-rm -f SIP/tmp 2>/dev/null
-	@for i in SIP/*; do mv $$i SIP/tmp ; cat SIP/tmp |sed 3d > $$i ; rm -rf SIP/tmp 2>/dev/null ; done
+	@for i in SIP/*; do mv $$i SIP/tmp ; cat SIP/tmp |sed 4d > $$i ; rm -rf SIP/tmp 2>/dev/null ; done
 	@echo "updating modified files..."
 	@for i in SIP/*; do if cmp -s $$i `basename $$i`; then true ; else echo " - $$i"; cp $$i . ; fi ; done
 

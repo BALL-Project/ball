@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.26 2003/08/26 08:04:49 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.27 2003/10/31 23:15:47 oliver Exp $ 
 //
 
 // Finite Difference Poisson Boltzmann Solver
@@ -222,7 +222,7 @@ namespace BALL
 					@see		Default::VERBOSITY
 					@param	verbosity  integer
 			*/
-			static const char* VERBOSITY;
+			static const String VERBOSITY;
 
 			/**	Print the timing for each step.
 					
@@ -233,7 +233,7 @@ namespace BALL
 					@see		Default::PRINT_TIMING
 					@param	print_timing	bool
 			*/
-			static const char* PRINT_TIMING;
+			static const String PRINT_TIMING;
 			
 			/**	The grid spacing in Angstrom.
 					Use this option to define the distance between a grid point
@@ -242,7 +242,7 @@ namespace BALL
 					@see	Default::SPACING
 					@parameter	spacing float
 			*/
-			static const char* SPACING;
+			static const String SPACING;
 
 			/** The border of the system.
 					Use this option to define the aumount of space left between the
@@ -252,7 +252,7 @@ namespace BALL
 					@see	Default::BORDER
 					@parameter	border float
 			*/
-			static const char* BORDER;
+			static const String BORDER;
 
 			/** The ionic strength of the salt solution
 					This parameter defines the ionic strength of the salt solution in
@@ -262,41 +262,41 @@ namespace BALL
 					@see	Default::IONIC_STRENGTH
 					@parameter ionic_strength float
 			*/
-			static const char* IONIC_STRENGTH;
+			static const String IONIC_STRENGTH;
 
 			/** The dielectric constant of the solute. This parameter derfaults
 					to 2.0.
 					@see	Default::SOLUTE_DC
 					@parameter	solute_dielectric_constant float
 			*/
-			static const char* SOLUTE_DC;
+			static const String SOLUTE_DC;
 
 			/** The dielectric constant of the solvent. This parameter defaults
 					to 78.0.
 					@see	Default::SOLVENT_DC
 					@parameter	solvent_dielectric_constant float
 			*/
-			static const char* SOLVENT_DC;
+			static const String SOLVENT_DC;
 
 			/** The probe radius used for calculating the SAS of the molecule.
 					This parameter defaults to 1.4 A (water).
 					@see	Default::PROBE_RADIUS
 					@parameter	probe_radius float
 			*/
-			static const char* PROBE_RADIUS;
+			static const String PROBE_RADIUS;
 
 			/** The ion exclusion radius.
 					@see	Default::ION_RADIUS
 					@parameter	ion_radius float
 			*/
-			static const char* ION_RADIUS;
+			static const String ION_RADIUS;
 
 			/** The temperature of the system. This parameter needs values in
 					units of K. The default temperature is 298.15 K = 25.15 deg C.
 					@see	Default::TEMPERATURE
 					@parameter	temperature float
 			*/
-			static const char* TEMPERATURE;
+			static const String TEMPERATURE;
 
 			/** Boundary condition for solving the differential equation.
 					This parameter defines the type of boundary condition will be
@@ -305,7 +305,7 @@ namespace BALL
 					@see	Default::BOUNDARY
 					@parameter	boundary_condition String
 			*/
-			static const char* BOUNDARY;
+			static const String BOUNDARY;
 
 			/** Charge distribution of the system.
 					This parameter chooses the method used for distributing charges
@@ -314,7 +314,7 @@ namespace BALL
 					@see	Default::BORDER
 					@parameter	border float
 			*/
-			static const char* CHARGE_DISTRIBUTION;
+			static const String CHARGE_DISTRIBUTION;
 
 			/** Smoothing the dielectric constant.
 					With this option you can choose a smoothing function for the
@@ -326,7 +326,7 @@ namespace BALL
 					@see	Default::DIELECTRIC_SMOOTHING
 					@parameter	dielectric_smoothing String
 			*/
-			static const char* DIELECTRIC_SMOOTHING;
+			static const String DIELECTRIC_SMOOTHING;
 
 			/** Use an offset.
 					This option allows to offset the wohle system by the vector
@@ -335,7 +335,7 @@ namespace BALL
 					this option.
 					@parameter	offset Vector3
 			*/
-			static const char* OFFSET;
+			static const String OFFSET;
 
 			/** Define the RMS criterion.
 					This option defines the RMS criterion in Angstrom used for
@@ -345,7 +345,7 @@ namespace BALL
 					@see	Default::RMS_CRITERION
 					@parameter	rms_criterion float
 			*/
-			static const char* RMS_CRITERION;
+			static const String RMS_CRITERION;
 
 			/** Define the MAX criterion.
 					This option defines the upper limit for the residuals. If the
@@ -354,7 +354,7 @@ namespace BALL
 					@see	Default::MAX_CRITERION
 					@parameter	max_criterion float
 			*/
-			static const char* MAX_CRITERION;
+			static const String MAX_CRITERION;
 
 			/** Checking frequency.
 					This option defines the number of iterations which will be
@@ -362,7 +362,7 @@ namespace BALL
 					@see	Default::CHECK_AFTER_ITERATIONS
 					@parameter	check_after_iterations int
 			*/
-			static const char* CHECK_AFTER_ITERATIONS;
+			static const String CHECK_AFTER_ITERATIONS;
 
 			/** The upper limit of iterations.
 					Use this option to define the maximum number of iterations to be
@@ -372,7 +372,7 @@ namespace BALL
 					@see	Default::MAX_ITERATIONS
 					@parameter	max_iterations int
 			*/
-			static const char* MAX_ITERATIONS;
+			static const String MAX_ITERATIONS;
 
 			/** The lower corner of the grid.
 					This option contains the lower corner of the grid. It can be used
@@ -382,26 +382,26 @@ namespace BALL
 					Use a vector of Angstroms with this option.
 					@parameter	lower Vector3
 			*/
-			static const char* LOWER;
+			static const String LOWER;
 
 			/** The upper corner of the grid.
 					This is the analogous option to @see LOWER.
 					@parameter	upper Vector3
 			*/
-			static const char* UPPER;
+			static const String UPPER;
 
 			/** The lower corner of the bounding box of the solute molecule.
 					This option works like @see LOWER for the bounding box of the
 					solvent molecule.
 					@parameter	bounding_box_lower Vector3
 			*/
-			static const char* BOUNDING_BOX_LOWER;
+			static const String BOUNDING_BOX_LOWER;
 
 			/** The upper corner of the bounding box of the solute molecule.
 					This is the analogous option to @see BOUNDING_BOX_LOWER.
 					@parameter	bounding_box_upper Vector3
 			*/
-			static const char* BOUNDING_BOX_UPPER;
+			static const String BOUNDING_BOX_UPPER;
 
 		};
 
@@ -416,7 +416,7 @@ namespace BALL
 					This is the simplest and least accurate method. It's use is
 					not recommended.
 			*/
-			static const char* ZERO;
+			static const String ZERO;
 
 			/** Boundary condition Debye: potential at boundary points is
 					estimated using Debye Hueckel theory.
@@ -428,16 +428,16 @@ namespace BALL
 					\]
 					This options tends to become {\em very} slow for large grids.
 			*/
-			static const char* DEBYE;
+			static const String DEBYE;
 
 			/**	Boundary condition Coulomb: potential at boundary points is estimated
 					using coulomb's law.
 			*/
-			static const char* COULOMB;
+			static const String COULOMB;
 
 			/**	Boundary condition Dipole: potential is estimated via dipole potentials
 			*/
-			static const char* DIPOLE;
+			static const String DIPOLE;
 
 			/**	Boundary condition Focusing: potential is estimated via a larger but coarser grid.
 					Focusing calculates a larger grid (double extension in each direction)
@@ -445,7 +445,7 @@ namespace BALL
 					Focusing also assigns an estimate of the electrostatic potential to 
 					each grid point in the final grid, thus acceleratingthe convergence.
 			*/
-			static const char* FOCUSING;
+			static const String FOCUSING;
 		};
 		
 		/**	Constants to define  the charge distribution methods.
@@ -455,12 +455,12 @@ namespace BALL
 			/**	Charge distribution method Trilinear: charge is distributed 
 					over the eight nearest gridpoints.
 			*/
-			static const char* TRILINEAR;
+			static const String TRILINEAR;
 
 			/**	Charge distribution method Uniform: charge is distributed 
 					over all gridpoints inside the atom radius.
 			*/
-			static const char* UNIFORM;
+			static const String UNIFORM;
 		};
 
 		/**	Constants to define  the dielectric smoothing methods.
@@ -473,7 +473,7 @@ namespace BALL
 		{
 			/**	Do not perform any smoothing
 			*/
-			static const char* NONE;
+			static const String NONE;
 
 			/**	Uniform smoothing.
 					This method assigns the arithmetic average of the point's value and
@@ -482,7 +482,7 @@ namespace BALL
 							\varepsilon_0 = \frac{1}{27} \left( \sum_{i=1}^{26} \varepsilon_i + \varepsilon_0 \right)
 					\] \par
 			*/
-			static const char* UNIFORM;
+			static const String UNIFORM;
 
 			/**	Harmonic smoothing.
 					This method assigns the harmonic average of the point's value and 
@@ -491,7 +491,7 @@ namespace BALL
 							\varepsilon_0 = \frac{1}{\sum_{i=1}^{26} \frac{1}{\varepsilon_i} + \frac{1}{\varepsilon_0}}
 					\] \par
 			*/
-			static const char* HARMONIC;
+			static const String HARMONIC;
 		};
 
 		/** Default values for FDPB options.  
@@ -555,21 +555,21 @@ namespace BALL
 					@see	Option::BOUNDARY
 					@see	Boundary
 			*/
-			static const char*  BOUNDARY;
+			static const String  BOUNDARY;
 
 			/**	Default charge distribution method.
 					Default is ChargeDistribution::uniform
 					@see	Option::charge_distribution
 					@see	ChargeDistribution
 			*/
-			static const char* CHARGE_DISTRIBUTION;
+			static const String CHARGE_DISTRIBUTION;
 
 			/**	Default method for dielectric smoothing.
 					Default is DielectricSmoothing::HARMONIC
 					@see	Option::DIELECTRIC_SMOOTHING
 					@see	DielectricSmoothing
 			*/
-			static const char* DIELECTRIC_SMOOTHING;
+			static const String DIELECTRIC_SMOOTHING;
 
 			/**	Default solvent dielectric constant.
 					Default is 78.0 (roughly the dielectric constant of water at 298 K)

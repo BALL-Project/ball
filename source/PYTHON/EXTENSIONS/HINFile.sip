@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.sip,v 1.10 2003/10/29 22:54:34 oliver Exp $
+// $Id: HINFile.sip,v 1.11 2003/10/31 23:15:48 oliver Exp $
 //
 
 class HINFile
@@ -19,12 +19,10 @@ class HINFile
 	~HINFile()
 		throw();
 
-  virtual void write(const System& /system/);
-  virtual bool read(System& /system/)
-		throw(ParseError);
-	virtual void write(const Molecule& /molecule/);
-	virtual Molecule* read()
-		throw(ParseError);
+  virtual bool write(const System& /system/) throw(CannotWrite);
+	virtual bool write(const Molecule& /molecule/) throw(CannotWrite);
+  virtual bool read(System& /system/)	throw(ParseError);
+	virtual Molecule* read() throw(ParseError);
 
   bool hasPeriodicBoundary() const;
   Box3 getPeriodicBoundary() const;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.12 2003/10/29 22:54:34 oliver Exp $
+// $Id: BALL.sip,v 1.13 2003/10/31 23:15:48 oliver Exp $
 //
 //
 //
@@ -141,6 +141,7 @@
 %Include analyticalGeometry.sip
 %Include angle.sip
 %Include box3.sip
+%Include simpleBox3.sip
 %Include circle3.sip
 // %Include common.sip - trouble! namespaces...
 // %Include function.sip - template stuff only...
@@ -231,7 +232,6 @@
 %Include pyAtomProcessor.sip
 %Include pyFragmentProcessor.sip
 %Include pyResidueProcessor.sip
-%Include pyCompositeDescriptorList.sip
 %Include pyCompositeProcessor.sip
 %Include pyBondList.sip
 %Include pyAtomContainerList.sip
@@ -278,8 +278,10 @@
 
 // VIEW/GUI/KERNEL
 %Include mainControl.sip
-%Include compositeDescriptor.sip
 
 // VIEW/GUI/WIDGETS
 %Include modularWidget.sip
 %Include pyWidget.sip
+
+// Makefile
+%Include Makefile.sip

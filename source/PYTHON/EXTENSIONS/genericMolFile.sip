@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.sip,v 1.7 2003/10/29 22:54:40 oliver Exp $
+// $Id: genericMolFile.sip,v 1.8 2003/10/31 23:15:49 oliver Exp $
 //
 
 class GenericMolFile
@@ -28,16 +28,12 @@ class GenericMolFile
 
 	virtual void initRead();
 	virtual void initWrite();
-	virtual void write(const System& /system/);
-	virtual void write(const Molecule& /molecule/);
-	virtual bool read(System& /system/)
-					throw(ParseError);
-	virtual Molecule* read()
-					throw(ParseError);
-	GenericMolFile& operator >> (System& /system/)
-					throw(ParseError);
+	virtual bool write(const System& /system/) throw(CannotWrite);
+	virtual bool write(const Molecule& /molecule/) throw(CannotWrite);
+	virtual bool read(System& /system/)	throw(ParseError);
+	virtual Molecule* read() throw(ParseError);
+	GenericMolFile& operator >> (System& /system/) throw(ParseError);
 	GenericMolFile& operator << (const System& /system/);
-	GenericMolFile& operator >> (Molecule& /molecule/)
-					throw(ParseError);
+	GenericMolFile& operator >> (Molecule& /molecule/) throw(ParseError);
 	GenericMolFile& operator << (const Molecule& /molecule/);
 };
