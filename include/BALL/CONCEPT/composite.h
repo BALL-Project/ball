@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.31 2001/02/05 01:28:35 amoll Exp $
+// $Id: composite.h,v 1.32 2001/02/06 13:17:51 amoll Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -613,13 +613,13 @@ namespace BALL
 			throw();
 
 		//@}
-	
 		/**	@name	Predicates */
 		//@{
 
 		/**	Equality operator.
-				Two Composite objects are equal if they are homomorph.
-				@see Composite::isHomomorph
+				Compares the handles of two Composite objects, so
+				two Composite objects can never be eqaul.
+				@see Object::operator ==
 		*/
 		bool operator == (const Composite& composite) const
 			throw();
