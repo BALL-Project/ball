@@ -1,4 +1,4 @@
-// $Id: proteinMapper.C,v 1.6 2000/04/25 14:41:33 oliver Exp $
+// $Id: proteinMapper.C,v 1.7 2000/09/06 19:36:59 oliver Exp $
 
 //========================================================================
 // protein mapper example
@@ -39,8 +39,8 @@ int main(int argc, char** argv)
 				 << "  <tolerance> (double):" << endl
 				 << "     maximum distance between two (mapped) Calpha atoms in Angstrom" << endl << endl
 				 << "Defaults for optional parameters:" << endl
-				 << "    lower     = " << upper << endl
-				 << "    upper     = " << lower << endl
+				 << "    upper     = " << upper << endl
+				 << "    lower     = " << lower << endl
 				 << "    tolerance = " << tolerance << endl
 				 << endl;
 
@@ -49,13 +49,19 @@ int main(int argc, char** argv)
 
 	// set the optional parameters
 	if (argc > 4)
-		upper = atof(argv[4]);
+	{
+		upper = atof(argv[4]);	
+	}
 
 	if (argc > 5)
+	{
 		lower = atof(argv[5]);
+	}
 
 	if (argc > 6)
+	{
 		tolerance = atof(argv[6]);
+	}
 
 	map<String,int> type_map;
 	type_map["ALA"] = 0;
@@ -89,21 +95,23 @@ int main(int argc, char** argv)
 
 	// read the proteins
 	pdb_file.open(argv[1]);
-	cout << "reading " << argv[1] << "... " << endl;
+	cout << "reading " << argv[1] << "... " << flush;
 	pdb_file >> protein1;
+	cout << "read " << protein1.countAtoms() << " atoms" << endl;
 	pdb_file.close();
 
 
 	pdb_file.open(argv[2]);
-	cout << "reading " << argv[2] << "... " << endl;
+	cout << "reading " << argv[2] << "... " << flush;
 	pdb_file >> protein2;
+	cout << "read " << protein2.countAtoms() << " atoms" << endl;
 	pdb_file.close();
 
 	// map the two proteins
 	Matrix4x4				T;
 	StructureMapper	mapper;
 	int							no_ca;
-	double						rmsd;
+	double					rmsd;
 	
 	cout << "mapping " << argv[1] << " onto " << argv[2] << " (this may take a while)..." << endl;
 
