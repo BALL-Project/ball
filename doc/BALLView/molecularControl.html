@@ -1,5 +1,6 @@
 <H2>Molecular Control</H2>
-The Molecular Control gives a hierarchical overview of the loaded molecules.<br><br>
+The Molecular Control gives a hierarchical overview of the loaded molecules and provides means 
+to interact with the molecular entities.<br><br>
 
 <img src="images/molecularControl2.png" border=0>
 
@@ -76,4 +77,29 @@ Possible predicates are:
 <p></p>
 
 All predicates can be connected with AND and OR, grouped with brackets, and each predicate can be negated with '!'<br>
-Example: !residueID(12) AND (element(N) OR element(C))
+Example: <b>!residueID(12) AND (element(N) OR element(C))</b>
+
+<H3>Properties of Molecular Entities</H3>
+To view and modify the properties of molecular entities, BALLView offers a special dialog, which can be opened 
+in the context menu of the MolecularControl under the point "Properties.
+In this dialog the user can e.g. set the name of a Chain or change the charge of atoms.
+(An other fast way to obtain the basic informations for an atom, is to select(pick) exactly one atoms. 
+The informations like charge and position are then shown in the LogView.)
+<br><br>
+<img src="images/atom_properties.png" width=392 height=442 border=0><br><br>
+
+An other dialog enables the user to obtain all informations of any bond. To open this dialog, one atom has to be highlighted and 
+the context menu entry "Show Bonds" has to be clicked. The arrow buttons in the dialog enable the user to 
+identify the partner atoms in the bond<br>
+<img src="images/bond_properties.png" width=311 height=286 border=0>
+
+<H3>Distances and angles between atoms</H3>
+When exactly two atoms are selected(picked) the distance between them is shown in the LogView. For three selected atoms, 
+the angle between them is shown, and for four atoms the torsion angle.
+
+<H3>Count atoms and bonds</H3>
+The context menu also has an entry to count the bonds and atoms of the currently selected molecular entity (e.g. a Residue).
+
+<H3>Move molecular entities</H3>
+To move e.g. a Chain or single atoms, the user can highlight them and open an according dialog with the context menu entry "Move".
+This can be useful for simulations or for increasing clearness.
