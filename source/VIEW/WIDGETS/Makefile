@@ -9,6 +9,7 @@ UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	dockWidget.C\
 	geometricControl.C\
 	genericControl.C\
 	genericControlData.C\
@@ -23,6 +24,7 @@ PYTHON_CPP_SOURCES=\
 	pyWidget.C
 
 MOC_SOURCES=\
+	dockWidget_moc.C\
 	geometricControl_moc.C\
 	genericControl_moc.C\
 	genericControlData_moc.C\
@@ -44,6 +46,9 @@ BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 $(UIC_SOURCES):	$(UIC_HDR)
 
 depend: $(UIC_SOURCES) $(MOC_SOURCES)
+
+dockWidget_moc.C:	$(HEADER_DIR)/dockWidget.h
+	$(MOC) $(HEADER_DIR)/dockWidget.h -o $@
 
 geometricControl_moc.C:	$(HEADER_DIR)/geometricControl.h
 	$(MOC) $(HEADER_DIR)/geometricControl.h -o $@
