@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.C,v 1.1 2000/02/06 19:57:52 oliver Exp $
+// $Id: charmmImproperTorsion.C,v 1.2 2000/02/08 21:25:43 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -107,7 +107,6 @@ namespace BALL
 			if ((*atom_it)->countBonds() == 3)
 			{
 				String res_name;
-				int terminal = 0;
 				Residue* res = (*atom_it)->getAncestor(RTTI::getDefault<Residue>());
 				if (res == 0)
 				{
@@ -138,29 +137,44 @@ namespace BALL
 						res_name += suffix;
 					}
 				}
-
-				String key;
-				if (res_name != "")
-				{
-					key = res_name + " " + (*atom_it)->getName();
-					switch (terminal)
-					{
-						case 1:		key += " N"; break;
-						case 2:		key += " C"; break;
-						default:	key += " -";
-					}
-				}
+				
+				String key = res_name + ":" + (*atom_it)->getName();
 
 				if (improper_atoms_.has(key))
 				{
-						
-					// identify the three remaining atoms 
-					// BAUSTELLE
-					Atom* a1 = 0;
+					Atom* a1 = *atom_it;
 					Atom* a2 = 0;
 					Atom* a3 = 0;
 					Atom* a4 = 0;
 
+					// identify the three remaining atoms 
+					Atom::BondIterator bond_it = a1->beginBond();
+					for (; +bond_it; ++bond_it)
+					{
+						if (a2 == 0)
+						{
+							a2 = bond_it->getPartner(*a1);
+						}
+						else if (a3 == 0)
+						{
+							a3 = bond_it->getPartner(*a1);
+						} 
+						else if (a4 == 0)
+						{
+							a4 = bond_it->getPartner(*a1);
+						}
+					}		
+					
+					// sanity check
+					if ((a1 == 0) || (a2 == 0) || (a3 == 0) || (a4 ==0))
+					{
+						Log.error() << "CharmmImproperTorsion::setup: #bonds: " << a1->countBonds() << "   a1 = " << a1 << "  a2 = " << a2 << "  a3 = " << a3 << "  a4 = " << a4 << endl;
+						return false;
+					}
+					Log.info() << "Improper: " << a1->getFullName() << "/" << a2->getFullName() << "/" << a3->getFullName() << "/" << a4->getFullName()
+										 << "   types: " << a1->getTypeName() << "/" << a2->getTypeName() << "/" << a3->getTypeName() << "/" << a4->getTypeName() << endl;
+
+					// store the atom pointers for the improper
 					FFPSQuadraticImproperTorsion::Torsion values;
 					values.atom1 = a1;
 					values.atom2 = a2;
@@ -185,32 +199,71 @@ namespace BALL
 							improper_parameters_.assignParameters(values.values, type_a1, type_a2, type_a3, type_a4);
 
 							found = true;
-						} else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, type_a4))
+						}
+						else if (improper_parameters_.hasParameters(type_a1, type_a2, type_a4, type_a3)) 
 						{
-							improper_parameters_.assignParameters(values.values, Atom::ANY_TYPE, type_a2, type_a3, type_a4);
+							improper_parameters_.assignParameters(values.values, type_a1, type_a2, type_a4, type_a4);
 
 							found = true;
-						} else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4)) 
+						} 
+						if (improper_parameters_.hasParameters(type_a1, type_a3, type_a2, type_a4)) 
 						{
-							improper_parameters_.assignParameters(values.values, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4);
-
-							found = true;
-						} else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
-						{
-							improper_parameters_.assignParameters(values.values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
+							improper_parameters_.assignParameters(values.values, type_a1, type_a3, type_a2, type_a4);
 
 							found = true;
 						}
+						else if (improper_parameters_.hasParameters(type_a1, type_a3, type_a4, type_a2)) 
+						{
+							improper_parameters_.assignParameters(values.values, type_a1, type_a3, type_a4, type_a2);
+
+							found = true;
+						} 
+						if (improper_parameters_.hasParameters(type_a1, type_a4, type_a2, type_a3)) 
+						{
+							improper_parameters_.assignParameters(values.values, type_a1, type_a4, type_a2, type_a3);
+
+							found = true;
+						}
+						else if (improper_parameters_.hasParameters(type_a1, type_a4, type_a3, type_a2)) 
+						{
+							improper_parameters_.assignParameters(values.values, type_a1, type_a4, type_a3, type_a2);
+
+							found = true;
+						} 
+						else if (improper_parameters_.hasParameters(type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a2))
+						{
+							improper_parameters_.assignParameters(values.values, type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a2);
+
+							found = true;
+						} 
+						else if (improper_parameters_.hasParameters(type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3))
+						{
+							improper_parameters_.assignParameters(values.values, type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3);
+
+							found = true;
+						} 
+						else if (improper_parameters_.hasParameters(type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a4))
+						{
+							improper_parameters_.assignParameters(values.values, type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a4);
+
+							found = true;
+						} 
 
 						if (found)	
 						{
 							impropers_.push_back(values);
+						} else {
+							Log.info() << "no parameters for improper " << key << endl;
 						}
 					}
+				} else {
+					Log.info() << "no entry for improper: " << key << endl;
 				}
 			}
 		}
 
+    Log.info() << "CharmmImproperTorsion::setup: number of torsions: " << impropers_.size() << endl;
+ 
 		return true;
 	}
 
@@ -246,7 +299,6 @@ namespace BALL
 				float length_bcxbd = bcxbd.getLength();
 
 
-				// QUESTION: Only two test for the cross products seem to be necessary
 				if (length_bcxba != 0 && length_bcxbd != 0) 
 				{
 					bcxba /= length_bcxba;
