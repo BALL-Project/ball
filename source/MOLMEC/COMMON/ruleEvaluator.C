@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.C,v 1.5 2000/05/25 11:02:01 oliver Exp $
+// $Id: ruleEvaluator.C,v 1.6 2000/05/26 09:28:26 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -121,7 +121,8 @@ namespace BALL
 		for (; i < file.getSectionLastLine(section_name); i++)
 		{
 			String line(*file.getLine(i));
-			if (line.has('='))
+			// empty lines or comment lines (starting with ';' or '#') are ignored
+			if (line.has('=') && (line[0] != ';') && (line[0] != '#'))
 			{
 				if (line[0] == '=')
 				{
