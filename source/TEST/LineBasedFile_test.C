@@ -1,21 +1,17 @@
-// $Id: LineBasedFile_test.C,v 1.9 2000/10/19 20:04:04 amoll Exp $
+// $Id: LineBasedFile_test.C,v 1.10 2001/02/10 19:07:52 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LineBasedFile_test.C,v 1.9 2000/10/19 20:04:04 amoll Exp $")
+START_TEST(class_name, "$Id: LineBasedFile_test.C,v 1.10 2001/02/10 19:07:52 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-
-CHECK(BALL_CREATE(LineBasedFile))
-  //BAUSTELLE
-RESULT
 
 LineBasedFile* fl;
 
@@ -26,6 +22,12 @@ RESULT
 
 CHECK(~LineBasedFile() throw())
 	delete fl;
+RESULT
+
+CHECK(BALL_CREATE(LineBasedFile))
+	LineBasedFile c;
+	LineBasedFile* ptr = (LineBasedFile*)c.create(false, true);
+	TEST_NOT_EQUAL(ptr, 0)
 RESULT
 
 CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = File::IN)
