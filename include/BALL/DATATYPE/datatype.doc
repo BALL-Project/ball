@@ -1,4 +1,4 @@
-/* $Id: datatype.doc,v 1.1 1999/08/26 07:53:13 oliver Exp $ */
+/* $Id: datatype.doc,v 1.2 1999/12/28 18:32:52 oliver Exp $ */
 
 /**@name	General datastructures
 		This section contains all relevant information on 
@@ -6,21 +6,37 @@
 */
 //@{
 
-	//@Include: binarySearchTree.h	
-	//@Include: bitVector.h	
-	//@Include: forEach.h	
-	//@Include: hashGrid.h
-	//@Include: hashMap.h
-	//@Include: hashSet.h
-	//@Include: options.h 
-	//@Include: pointGrid.h
-	//@Include: quadruple.h
-	//@Include: redBlackTree.h
-	//@Include: regExp.h
-	//@Include: splayTree.h
-	//@Include:	string.h
-	//@Include:	stringHashMap.h
-	//@Include:	stringHashSet.h
-	//@Include:	stringMap.h
+	/**	@name	Grid Datastructures
+	*/
+	//@{
+		// @Include: hashGrid.h
+		// @Include: pointGrid.h
+	//@}
+	/**	@name	Generic Hash Associative Containers
+	*/
+	//@{
+		//@Include: hashMap.h
+		//@Include: hashSet.h
+		//@Include: stringHashMap.h
+		//@Include: stringHashSet.h
+		//@Include: options.h 
+	//@}
+	/**	@name	Tree Datastructures
+	*/
+	//@{
+		//@Include: binarySearchTree.h	
+		//@Include: splayTree.h
+		//@Include: redBlackTree.h
+	//@}
+	/**	@name	Other Datastructures
+	*/
+	//@{
+		//@Include: bitVector.h	
+		//@Include: forEach.h	
+		//@Include: quadruple.h
+		//@Include: regExp.h
+		//@Include:	string.h
+		//@Include:	stringMap.h
+	//@}
 
 //@}
