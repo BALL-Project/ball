@@ -1,4 +1,4 @@
-// $Id: ShiftModel_test.C,v 1.3 2000/09/21 07:47:45 oliver Exp $
+// $Id: ShiftModel_test.C,v 1.4 2000/09/22 11:21:20 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.3 2000/09/21 07:47:45 oliver Exp $")
+START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.4 2000/09/22 11:21:20 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -131,19 +131,41 @@ CHECK(ShiftModel::clear() throw())
 	TEST_EQUAL(sm.getModuleList().size(), 0)
 RESULT
 
+const ShiftModel smx("data/ShiftModel_test.ini");
 
 CHECK(ShiftModel::ShiftModel(const ShiftModel& model) throw())
-  //BAUSTELLE
+	ShiftModel sm(smx);
+	TEST_EQUAL(sm.isValid(), true)
+	ShiftModel::ModuleList mod_list = sm.getModuleList();
+	TEST_EQUAL(mod_list.size(), 2)
+	if (mod_list.size() > 0)
+	{
+		TEST_EQUAL((*mod_list.begin())->getName(), "JB_ring_current")
+	}
 RESULT
 
 
 CHECK(ShiftModel::ShiftModel& operator = (const ShiftModel& model) throw())
-  //BAUSTELLE
+	ShiftModel sm = smx;
+	TEST_EQUAL(sm.isValid(), true)
+	ShiftModel::ModuleList mod_list = sm.getModuleList();
+	TEST_EQUAL(mod_list.size(), 2)
+	if (mod_list.size() > 0)
+	{
+		TEST_EQUAL((*mod_list.begin())->getName(), "JB_ring_current")
+	}
 RESULT
 
 
 CHECK(ShiftModel::ShiftModel& operator = (const String& filename) throw())
-  //BAUSTELLE
+	ShiftModel sm = String("data/ShiftModel_test.ini");
+	TEST_EQUAL(sm.isValid(), true)
+	ShiftModel::ModuleList mod_list = sm.getModuleList();
+	TEST_EQUAL(mod_list.size(), 2)
+	if (mod_list.size() > 0)
+	{
+		TEST_EQUAL((*mod_list.begin())->getName(), "JB_ring_current")
+	}
 RESULT
 
 
