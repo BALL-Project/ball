@@ -68,7 +68,7 @@ namespace BALL
  		class MainControlMissing: public Exception::GeneralException
 		{
  			public:
-   			MainControlMissing(const char* file, int line, const string& data)
+   			MainControlMissing(const char* file, int line, const string data = "")
 					throw()
 					: Exception::GeneralException(file, line, string("MainControlMissing"), data)
 				{
