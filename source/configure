@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.109 2000/07/16 22:00:15 oliver Exp $
+#  $Id: configure,v 1.110 2000/07/16 22:05:07 oliver Exp $
 
 
 ##################################################
@@ -892,7 +892,7 @@ fi
 if test "$with_python" = "yes" -o "$enable_python" = yes ; then
 	PYTHON_SUPPORT=true
 else
-	PYTHON_SUPPORT=false
+	PYTHON_SUPPORT=
 fi
 
 # the path to the python includes (Python.h)
@@ -6165,24 +6165,22 @@ fi
 
 
 
+
+
 if test "${PYTHON_SUPPORT}" = true ; then
-	
 	cat >> confdefs.h <<\EOF
 #define BALL_PYTHON_SUPPORT 1
 EOF
 
-else
-	
 fi
-
 
 if test "${PYTHON_SUPPORT}" = true ; then
 	echo $ac_n "checking stuff required for Python extensions""... $ac_c" 1>&6
-echo "configure:6081: checking stuff required for Python extensions" >&5
+echo "configure:6079: checking stuff required for Python extensions" >&5
 	echo "$ac_t""." 1>&6
 	
 				echo $ac_n "checking Python.h""... $ac_c" 1>&6
-echo "configure:6085: checking Python.h" >&5
+echo "configure:6083: checking Python.h" >&5
 	
 	_INCLUDES=
 
@@ -6271,11 +6269,11 @@ echo "configure:6085: checking Python.h" >&5
 
 
 				echo $ac_n "checking sip executable""... $ac_c" 1>&6
-echo "configure:6174: checking sip executable" >&5
+echo "configure:6172: checking sip executable" >&5
 	echo "$ac_t""${SIP}" 1>&6
 
 				echo $ac_n "checking libsip.a""... $ac_c" 1>&6
-echo "configure:6178: checking libsip.a" >&5
+echo "configure:6176: checking libsip.a" >&5
 	if test -r "${SIP_LIBPATH}/libsip.a" ; then
 		SIP_LIB=${SIP_LIBPATH}/libsip.a
 		echo "$ac_t""${SIP_LIB}" 1>&6
@@ -6291,7 +6289,7 @@ echo "configure:6178: checking libsip.a" >&5
 	fi
 	
 				echo $ac_n "checking sip headers (sip.h)""... $ac_c" 1>&6
-echo "configure:6194: checking sip headers (sip.h)" >&5
+echo "configure:6192: checking sip headers (sip.h)" >&5
 	
 	_INCLUDES=
 
@@ -6659,9 +6657,9 @@ s%@CXXCPP@%$CXXCPP%g
 s%@MOC@%$MOC%g
 s%@SIP@%$SIP%g
 s%@SIP_LIB@%$SIP_LIB%g
+s%@SIP_INCLUDES@%$SIP_INCLUDES%g
 s%@PYTHON_INCLUDES@%$PYTHON_INCLUDES%g
 s%@PYTHON_SUPPORT@%$PYTHON_SUPPORT%g
-s%@SIP_INCLUDES@%$SIP_INCLUDES%g
 s%@BALL_PATH@%$BALL_PATH%g
 s%@BALL_INCLUDES@%$BALL_INCLUDES%g
 s%@CXX_MAKEDEPEND@%$CXX_MAKEDEPEND%g
