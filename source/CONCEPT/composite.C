@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.C,v 1.35 2002/12/12 10:05:40 oliver Exp $
+// $Id: composite.C,v 1.36 2003/06/11 08:09:59 oliver Exp $
+//
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -1766,8 +1767,7 @@ namespace BALL
 	{
 		if (position.traversing_forward_ == true)
 		{
-			setCurrentPreorderBackward_(*(position.current_), position, (position.empty_stack_ != 0));
-			
+			setCurrentPreorderBackward_(*(position.current_), position, (position.empty_stack_ != 0));			
 			return getPreviousPreorderIteratorPosition_(position);
 		}
 
