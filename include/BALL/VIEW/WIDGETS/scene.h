@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.13 2003/12/05 23:53:53 amoll Exp $
+// $Id: scene.h,v 1.14 2003/12/09 13:41:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -39,19 +39,19 @@ namespace BALL
 		class StageSettings;
 
 		/**	The Scene class.
-				The class Scene is the main visualization widget that shows that graphical
-				representation of the inserted Composite objects that are stored
-				in the MainControl object.
-				To do this the class Scene must be a child of the MainControl object.
-				Because the MainControl object is also the main application object
-				a scene widget must be created with the pointer to the MainControl object
+				The class Scene is the main visualization widget that shows the graphical
+				representation of the inserted Composite 's, that are stored
+				in the MainControl.
+				To do this, the class Scene must be a child of the MainControl.
+				Because the MainControl is also the main application object
+				a Scene must be created with the pointer to the MainControl 
 				as parent widget.
-				It is also possible to connect scenes together with the Notification
-				mechanism of BALL. Connecting two or more scenes together means that that
-				mouse action performed in one scene are also transfered to all other connected
-				scenes. These other scenes can have different camera angles or other properties.
+				It is also possible to connect Scenes together with the Notification
+				mechanism of BALL. Connecting two or more Scenes together means that that
+				mouse action performed in one Scene are also transfered to all other connected
+				Scenes. These other Scenes can have different Camera angles or other properties.
 				The class Events is a container class of appropriate events that can
-				be assigned to a scene.
+				be assigned to a Scene.
 				\ingroup ViewWidgets
 		*/
 		class Scene
@@ -86,20 +86,24 @@ namespace BALL
 
 			//@} /** @name Enums */ //@{
 			
-			///
+			/** There a three different kind of rendering for a Scene:
+			*/
 			enum RenderMode
 			{
-				///
+				/// Render without display lists, directly to the Scene
 				DIRECT_RENDERING = 0,
 
-				///
+				/// Render the contents of the display lists
 				DISPLAY_LISTS_RENDERING,
 
-				///
+				/// Rebuild the contents of the display lists and redraw them
 				REBUILD_DISPLAY_LISTS
 			};
 				
-			//@} /**	@name	Constructors */	//@{
+			//@} 
+			/**	@name	Constructors 
+			*/	
+			//@{
 
 			Scene()
 				throw();
@@ -195,8 +199,7 @@ namespace BALL
 				throw();
 
 			/** Handles messages sent by other registered ConnectionObject objects.
-					Filters for SceneMessage and sets the camera appropriate or updates the visualization. 
-					Calls update with <tt>false</tt> as parameter.
+					Filters for SceneMessage and sets the Camera appropriate or updates the visualization. 
 					\param message the pointer to the message that should be processed
 					\see   ConnectionObject
 					\see   Message
@@ -204,7 +207,7 @@ namespace BALL
 			virtual void onNotify(Message *message)
 				throw();
 
-			/** This method prepares an external Renderer for a later export of this scene.
+			/** This method exports the content of the Scene to an external Renderer.
 			*/
 			virtual void exportScene(Renderer &er) const
 				throw();
@@ -261,10 +264,9 @@ namespace BALL
 				throw();
 
 			/**	Menu checking method.
-					This method is called by the method checkMenus from the
-					MainControl object before a popup menu is shown.
-					The menus <b> rotate mode</b> and <b> picking mode</b> each will be checked
-					if this scene is in the beloning mode.
+					This method is called by MainControl::checkMenus before a popup menu is shown.
+					The menus <b>rotate mode</b> and <b>picking mode</b> each will be checked
+					if this scene is in the belonging mode.
 					\param main_control the MainControl object whose menus should be checked
 					\see   initializeWidget
 					\see   finalizeWidget
