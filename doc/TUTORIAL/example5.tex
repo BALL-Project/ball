@@ -134,8 +134,8 @@ cout << test_string << another_test_string << endl;
 And finally it is even possible to limit the comparison to a certain area of
 a string by defining the start index and the length of the segment:
 \begin{lstlisting}{}
-int start_index = 9;
-int length = 2;
+Index start_index = 9;
+Size length = 2;
 cout << test_string.compare("me", start_index, length) << endl;
 \end{lstlisting}
 
@@ -150,7 +150,8 @@ frequently confronted with such problems. Resultingly, BALL strings provide
 methods to extract fields from strings.
 \begin{lstlisting}{}
 String data = "1 2 3 4.567 8 blah";
-cout << "Line contains " << data.countFields() << " values" << endl;
+cout << "Line contains " << data.countFields() 
+		 << " values" << endl;
 cout << "The data at index 5 is " << data.getField(5) << endl;
 \end{lstlisting}
 The code above should print the number 8.
@@ -158,7 +159,8 @@ Sometimes log files contain quoted data. You can even handle such lines by
 using the filed functions for quoted entries:
 \begin{lstlisting}{}
 String data = "1 2 3 4.567 \"8 blah\"";
-cout << "Line contains " << data.countFieldsQuoted() << " values" << endl;
+cout << "Line contains " << data.countFieldsQuoted() 
+		 << " values" << endl;
 cout << "The data at index 5 is " << data.getFieldQuoted(5) << endl;
 \end{lstlisting}
 The code above should print the number "8 blah".
@@ -168,7 +170,7 @@ you want to read and analyze a log file, open it, read the sinlge lines and
 get the values you want:
 \begin{lstlisting}{}
 istream is;
-int index = 5;
+Index index = 5;
 String line = getline(is)
 String value = line.getField(index)
 \end{lstlisting}{}

@@ -1,3 +1,4 @@
+\section{Kernel classes}
 The BALL kernel data structures have been designed to model the problem 
 domain (\ie well-known biochemical entities) as closely as possible.
 Although some of the terms in biochemistry are rather fuzzy, there is a clear
@@ -71,10 +72,65 @@ By deriving all kernel classes from the common base class \class{Composite},
 they share all the features implemented there. The following section will
 briefly discuss some of these features.
 
-\paragraph{Iteration} over kernel data structures is a key concept in BALL.
+\section{Kernel iterators}
+Iteration over kernel data structures is a key concept in BALL.
 The BALL kernel iterators a re STL-like iterators. Since most BALL kernel
 classes are so-called {\em multi-containers}, \ie they can contain different
 objects, we cannot use the typical STL {\tt begin()}/{\tt end()} methods.
 For example in a protein, you might not only want to iterate over all chains,
-but also over all residues or all atoms contained therein. So in BALL there
-are the methods \member{System}{beginChain()}/
+but also over all residues or all atoms contained therein. In BALL there
+are the methods \member{System}{beginChain()}/\member{System}{endChain()},
+\member{System}{beginAtom()}/\member{System}{endAtom()}, and so on for all
+kernel classes. Similarly, the iterators are not typedefed within the class,
+but are independent classes, because an \class{AtomIterator} could be defined
+for any kernel class containing atoms. The only exception from that rule
+is \class{Atom::BondIterator}, since an atom is the only container having
+bonds. We can use those iterators in an STL-like fashion
+\\
+\begin{lstlisting}{}
+	Molecule m = ...;
+	AtomIterator ai;
+	for (ai = m.beginAtom(); ai != m.beginAtom(); ++ai)
+	{
+		...
+	}
+\end{lstlisting}
+\noindent but there is also a conventient shorthand, the \method{operator +}
+for all iterators. In contrast to STL iterators, BALL iterators are tightly 
+bound to their containers and are thus aware of the container's end.
+The plus operator returns a boolean value determining the validity of the
+operator. It will return {\bf false} as soon as the iterator reaches the
+end of the container. So we can rewrite the above code as:
+\\
+\begin{lstlisting}{}
+	Molecule m = ...;
+	AtomIterator ai(m.beginAtom());
+	for (; +ai; ++ai)
+	{
+		...
+	}
+\end{lstlisting}
+\noindent There exist several variants of the kernel iterators : the standard
+forward iterators (\eg \class{AtomIterator}) and reverse iterators
+(\class{AtomReverseIterator}). For both, there are also const versions of
+these iterators, which are required when iterating over const instances of
+kernel classes (\class{AtomConstIterator}, \class{AtomConstReversIterator}).
+Iteration is possible for all kernel classes, if they can contain the
+respective instances. So it is possible to iterate over all atoms in a
+molecule, but it is not possible to iterate over all chains of a residue,
+because \class{Residue} does not provide the {\tt beginChain}/{\tt endChain}
+methods.
+
+A with the STL, iterators may be dereferenced using both the star operator, and
+the arrow operator:\\
+\begin{lstlisting}{}
+	AtomIterator ai = molecule.beginAtom();
+	cout << "first atom: " << (*ai).getName() 
+			 << " @ " << ai->getPosition() << std::endl;
+\end{lstlisting}
+
+%\section{Selection}???
+
+%\section{Properties}???
+
+%\section{TimeStamps}???

@@ -221,16 +221,16 @@
 %  - then under BALL!methods!<function name>
 
 \newcommand{\member}[2]{%
-	{\ttfamily{#1}}%
-	\index{#1@{\ttfamily{#1}}(member of \ttfamily{#2})}%
-	\index{BALL!#2!#1@{\ttfamily{#1}}}%
+	{\ttfamily{#2}}%
+	\index{#1@{\ttfamily{#2}}(member of \ttfamily{#1})}%
+	\index{BALL!#1!#2@{\ttfamily{#1}}}%
 }%
 % method names are typeset in typewriter bold and indexed automatically:
 %  - first with their name
 %  - then under BALL!members!<function name>
 
-\newcommand{\attribute}[2]{{\ttfamily{#1}}\index{#1@{\ttfamily{#2}}
-({\ttfamily #1} attribute)}\index{BALL!!#1!#2@{\ttfamily{#1}}}}
+\newcommand{\attribute}[2]{{\ttfamily{#2}}\index{#2@{\ttfamily{#2}}
+({\ttfamily #1} attribute)}\index{BALL!!#1!#2@{\ttfamily{#2}}}}
 % attribute names are typeset in typewriter bold and indexed automatically:
 %  - first with their name and (<class> attribute)
 %  - then under BALL!<class>!<attribute>

@@ -9,14 +9,14 @@ class) that is not stored locally on a disc, but in the internet:
 
 \begin{lstlisting}{}
 	PDBFile
-	infile("ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/pdb4pti.ent");
+	infile("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/pdb4pti.ent");
 	System S;
 	infile >> S;
 	infile.close();
 \end{lstlisting}
 
 \noindent
-This command retrieves the file {\tt pdb4pti.ent} from its location at the RCSB
+This command retrieves the file {\tt pdb4pti.ent} from its location at the MPI
 site using the FTP protocol and reads the contents of that file into a
 \class{System}. The retrieval and the expansion of the URL into something
 meaningful is performed by the classes \class{TransformationManager} and
@@ -27,7 +27,7 @@ expanded file names are then checked for special prefixes by \class{File}:
 \begin{itemize}
 	\item a file name starting with {\tt exec:} will execute the command after the
 					colon, redirect the output of the command to a temporary file, which 	
-					is the opened and returned
+					is then opened and returned
 	\item a file name starting with {\tt http:} or {\tt ftp:} will initiate
 					an HTTP or FTP tranfer from the given URL to a temporary file, which
 					is opened and returned
