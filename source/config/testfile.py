@@ -24,7 +24,7 @@ class test:
 	# expressions for use in all files.
 	exp = [\
 		re.compile(''),																		#00 DOS carriage
-		re.compile('BAUSTELLE'),														#01 good old BAUSTELLE
+		re.compile('\?\?\?'),																	#01 code problems
 		re.compile('cout'),																	#02 no cout in BALL!
 		re.compile('cerr'),																	#03 no cerr in BALL!
 		re.compile('[\s(]+int[\s\(\)\&\*]+'),								#04 integer values are bad!

@@ -1,4 +1,4 @@
-// $Id: widgets.doc,v 1.4 2001/05/27 10:26:37 hekl Exp $
+// $Id: widgets.doc,v 1.5 2001/12/31 00:30:54 oliver Exp $
 
 //@Include: control.h
 //@Include: events.h
@@ -8,3 +8,4 @@
 //@Include: regularData2DWidget.h
 //@Include: scene.h
 //@Include: serverPreferences.h
+//@Include: pyWidget.h

@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.27 2001/12/30 13:28:57 sturm Exp $
+// $Id: File_test.C,v 1.28 2001/12/31 00:30:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(File, "$Id: File_test.C,v 1.27 2001/12/30 13:28:57 sturm Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.28 2001/12/31 00:30:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -389,8 +389,8 @@ CHECK(TCPTransfer/2)
 RESULT	
 
 CHECK(TCPTransfer/3)
-	File::registerTransformation("PDB://", "ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/");
-	File f2("PDB://4pti.brk");
+	File::registerTransformation("PDB://", "ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/pdb%b.ent.Z");
+	File f2("PDB://4pti");
 	f2.copyTo("4pti.brk2");
 RESULT
 

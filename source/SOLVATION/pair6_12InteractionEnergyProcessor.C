@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.14 2001/12/30 13:28:53 sturm Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.15 2001/12/31 00:30:54 oliver Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -169,7 +169,7 @@ namespace BALL
 	{
 
 		// how loud will we cry?
-		int verbosity = (int) options.getInteger(Option::VERBOSITY);
+		Index verbosity = options.getInteger(Option::VERBOSITY);
 		// this is the flag stating whether the rdf information should be used
 		bool use_rdf = options.getBool(Option::USE_RDF);
 		// the file containing the rdf descriptions
@@ -360,7 +360,7 @@ namespace BALL
 					++solute_iterator)
 			{
 
-				// ?????: Warum geht das net?
+				// ?????: This should work -- but it doesn't!
 				// type_j = solute_iterator->getType();
 				type_j = ffparam.getAtomTypes().getType(solute_iterator->getTypeName());
 				atom_center = solute_iterator->getPosition();
@@ -571,7 +571,7 @@ namespace BALL
 	}
 
 
-	// ?????: sollte nicht hier stehen.
+	// ?????: shouldn't be here...
 	void Pair6_12InteractionEnergyProcessor::getExternalSurface_(
 			vector< pair<Vector3, Surface> >& surface_map, 
 			const char* surface_file) throw()

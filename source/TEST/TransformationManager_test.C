@@ -1,4 +1,4 @@
-// $Id: TransformationManager_test.C,v 1.4 2001/12/30 00:09:43 oliver Exp $
+// $Id: TransformationManager_test.C,v 1.5 2001/12/31 00:30:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.4 2001/12/30 00:09:43 oliver Exp $")
+START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.5 2001/12/31 00:30:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -57,8 +57,8 @@ CHECK(TransformationManager::transform(const String& name))
 	TEST_EQUAL(tm.transform(test_test), test_test + " " + test_test)
 	TEST_EQUAL(tm.transform(" "), "   ")
 	TEST_EQUAL(tm.transform(""), " ")
-	// check whether we really avoid infinite recursion
-	//???TEST_EQUAL(tm.transform("%s-").hasPrefix("%s- %s- %s- "), true)
+	// check whether we really avoid infinite recursion	
+	TEST_EQUAL(tm.transform("%s-").hasPrefix("%s---"), true)
 	tm.unregisterTransformation("");
 	tm.registerTransformation("", "TEST");
 	TEST_EQUAL(tm.transform(test_test), "TEST")
@@ -83,29 +83,29 @@ CHECK(TransformationManager::transform(const String& name))
 
  	// %f: full name without last dot-separated suffix
 	tm.registerTransformation("", "A%fB%fC");
-	TEST_EQUAL(tm.transform(test_test), String("A") + test_test + "B" + test_test + "C")
+	TEST_EQUAL(tm.transform(test_test), String("Atest") + PS + "testBtest" + PS + "testC")
 	TEST_EQUAL(tm.transform(" "), "A B C")
-	//??? TEST_EQUAL(tm.transform(""), "ABC")
+	TEST_EQUAL(tm.transform(""), "ABC")
 	tm.unregisterTransformation("");
 
 	// %f: full name without user-defined suffix
 	String test(PS + "test" + PS + PS + "TEST" + PS + "basename");
 	tm.registerTransformation("", "A%f[suffix]B%fC");
-	TEST_EQUAL(tm.transform(test_test + "suffix"), String("A") + test + "B" + test + "suffixC")
+	TEST_EQUAL(tm.transform(test + "suffix"), String("A") + test + "B" + test + "suffixC")
 	TEST_EQUAL(tm.transform(" suffix"), "A B suffixC")
 	TEST_EQUAL(tm.transform(""), "ABC")
 	tm.unregisterTransformation("");
 
  	// %b: base name without last dot-separated suffix
 	tm.registerTransformation("", "A%bB%bC");
-	TEST_EQUAL(tm.transform(test_test), String("A") + test_test + "B" + test_test + "C")
+	TEST_EQUAL(tm.transform(test_test), "AtestBtestC");
 	TEST_EQUAL(tm.transform(" "), "A B C")
 	TEST_EQUAL(tm.transform(""), "ABC")
 	tm.unregisterTransformation("");
 
 	// %b: base name without user-defined suffix
 	tm.registerTransformation("", "A%b[suffix]B%bC");
-	TEST_EQUAL(tm.transform(test_test + "suffix"), "AbasenameBbasenamesuffixC")
+	TEST_EQUAL(tm.transform(test + "suffix"), "AbasenameBbasenamesuffixC")
 	TEST_EQUAL(tm.transform(" suffix"), "A B suffixC")
 	TEST_EQUAL(tm.transform(""), "ABC")
 	tm.unregisterTransformation("");

@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.23 2001/12/30 00:09:43 oliver Exp $
+// $Id: file.C,v 1.24 2001/12/31 00:30:54 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -67,21 +67,17 @@ namespace BALL
 			// and "%f[suffix]" with the full filename without [suffix]
 			if (result.hasSubstring("%f["))
 			{
-				std::cout << "has substring %f[" << std::endl;
 				String full_name = name;
-				RegularExpression suffix_regexp("%f\\[[^\\]]\\]");
+				RegularExpression suffix_regexp("%f\\[[^]]*\\]");
 				Substring suffix_substring;
 				count = 0;
-				std::cout << "suffix_regexp.match: " << suffix_regexp.match(result) << std::endl;
 				while (suffix_regexp.find(result, suffix_substring) && (++count <= MAX_SUBSTITUTIONS))
 				{
 					String suffix = suffix_substring;
-					std::cout << "suffix = " << suffix << std::endl;
 					suffix = suffix(3, suffix.size() - 4);
-					std::cout << "substituting with user-defined prefix:" << name << "/" << suffix << std::endl;
-					if (!suffix.empty())
+					if (!suffix.empty() && full_name.hasSuffix(suffix))
 					{
-						full_name.substitute(suffix, "");
+						full_name = full_name(0, full_name.size() - suffix.size());
 					}
 					suffix_substring = full_name;
 				}
@@ -89,22 +85,49 @@ namespace BALL
 			if (result.hasSubstring("%f"))
 			{
 				String full_name = name;
-				String suffix = name(name.find_last_of("."));
-				if (!suffix.empty())
+				if (full_name.has('.'))
 				{
-					full_name.substitute(suffix +"$", "");
+					String suffix = name(name.find_last_of('.'));
+					if (!suffix.empty() && full_name.hasSuffix(suffix))
+					{
+						full_name = full_name(0, full_name.size() - suffix.size());
+					}
 				}
 				count = 0;
 				while ((result.substitute("%f", full_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
 			}
 			// substitute "%f" with the full name without the last file suffix (after and including the last ".")
 			// and "%f[suffix]" with the full filename without [suffix]
+			if (result.hasSubstring("%b["))
+			{
+				RegularExpression suffix_regexp("%b\\[[^]]*\\]");
+				Substring suffix_substring;
+				count = 0;
+				while (suffix_regexp.find(result, suffix_substring) && (++count <= MAX_SUBSTITUTIONS))
+				{
+					String suffix = suffix_substring;
+					String base_name = FileSystem::baseName(name);
+					suffix = suffix(3, suffix.size() - 4);
+					if (!suffix.empty() && base_name.hasSuffix(suffix))
+					{
+						base_name = base_name(0, base_name.size() - suffix.size());
+					}
+					suffix_substring = base_name;
+				}
+			}
 			if (result.hasSubstring("%b"))
 			{
-				if (result.hasSubstring("%b["))
-				{
-				}
 				String base_name = FileSystem::baseName(name);
+				if (base_name.has('.'))
+				{
+					String suffix = name(name.find_last_of("."));
+					if (!suffix.empty() && base_name.hasSuffix(suffix))
+					{
+						base_name = base_name(0, base_name.size() - suffix.size());
+					}
+				}
+				count = 0;
+				while ((result.substitute("%b", base_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
 			}
 
 			// "%p" with the path to the file
