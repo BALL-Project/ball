@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.8 2000/03/02 22:15:22 oliver Exp $
+// $Id: box3.h,v 1.9 2000/03/08 18:30:00 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -436,6 +436,30 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
+	/**	@name	Storers
+	*/
+	//@{
+
+	/**	Input- Operator
+			reads in two TVector3: a, b
+	*/
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TBox3<T>& box)
+	{
+		char c;
+		s >> c >> c >> c >> c >> c >> box.a >> box.b >> c;
+		return s;
+	}
+
+	/**	Input- Operator
+			prints out two TVector3: a, b
+	*/
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TBox3<T>& box)
+	{
+		return (s << "Box3(" << box.a << ' ' << box.b << ')');
+	}
+	//@}
 
 	/**	Default three-dimensional box class of type {\bf float}
 	*/
