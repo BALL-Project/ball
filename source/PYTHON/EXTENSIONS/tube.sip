@@ -1,12 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.sip,v 1.1 2003/11/18 15:06:05 amoll Exp $
+// $Id: tube.sip,v 1.2 2003/11/24 22:46:33 amoll Exp $
 //
 
-class Tube
-	: GeometricObject,
-		Vertex2
+class RealgetRadius 
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -14,17 +12,17 @@ class Tube
 	using namespace BALL::VIEW;
 %End
   public:
-
-  Tube() throw();
-  Tube(const Tube&) throw();
-  bool isValid() const throw();
-//  const Tube& operator = (const Tube&) throw();
-  void clear() throw();
-//  void dump(std::ostream& = std::cout, Size = 0) const throw();
-  void set(const Tube&) throw();
-	float getLength() const throw();
-	float getSquareLength() const throw();
-	float getRadius() const throw();
-	void setRadius(float) throw();
-  ~Tube() throw();
+//  void dump(std::ostream& s = std::cout, Size depth = 0) const throw()
+//  const Tube& operator = (const Tube& tube) throw()
+  Real getRadius() const throw()
+  Tube() throw()
+  Tube(const Tube&) throw()
+  bool isValid() const throw()
+  float getLength() const throw()
+  float getSquareLength() const throw()
+  void clear() throw()
+  void set(const Tube&) throw()
+  void setRadius(Real) throw()
+  void swap(Tube&) throw()
+  ~Tube() throw()
 };

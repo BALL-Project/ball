@@ -15,11 +15,11 @@ grep "operator = (" $FILE | sed -e "s/^/\/\//" >> $FILE2
 cat $FILE 							|\
 sed "/ostream/d" 				|\
 sed "/operator = (/d"		|\
-sed -e "s/\/\*.*\*\///g"	|\
-sed -e "s/ = .*,/,/g"		|\
-sed -e "s/ = .*)/)/g"		|\
-sed -e "s/ [a-z_0-9]*)/)/g" | \
-sed -e "s/ [a-z_0-9]*,/,/g" \
+sed -e"s/\/\*.*\*\///g"		\
+-e "s/ = .*,/,/g"					\
+-e "s/ = .*)/)/g"					\
+-e "s/ [a-z_0-9]*)/)/g" 	\
+-e "s/ [a-z_0-9]*,/,/g" 	\
 >> $FILE2
 
 cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip |\
@@ -27,13 +27,14 @@ cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip |\
 
 cat $1 |\
 sed -n -e "/public.*[$^.]*/p" |\
-sed -e "s/public://" \
-	  -e "s/public slots://" \
-		-e "s/^/  /" \
-		-e "s/[ \t]//g" \
-		-e "s/:public/  : /g" \
-		-e "s/public/    /" \
-		-e "/^$/d" >>$FILE
+sed -e "s/public://" 				\
+	  -e "s/public slots://"	\
+		-e "s/^/  /" 						\
+		-e "s/[ \t]//g" 				\
+		-e "s/:public/  : /g" 	\
+		-e "s/public/    /" 		\
+		-e "/^$/d" 							\
+>>$FILE
 
 cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip |\
  sed -n -e '8,14p' | sed "s/BALL\/.h/"$INCLUDE"/" >>$FILE

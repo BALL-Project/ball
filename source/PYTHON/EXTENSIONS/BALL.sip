@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.15 2003/11/18 15:06:24 amoll Exp $
+// $Id: BALL.sip,v 1.16 2003/11/24 22:46:30 amoll Exp $
 //
 //
 //
@@ -294,6 +294,15 @@
 
 // VIEW/PRIMITIVES
 %Include box.sip
+%Include disc.sip
+%Include label.sip
+%Include line.sip
+%Include mesh.sip
+%Include point.sip
+%Include simpleBox.sip
+%Include sphere.sip
+%Include twoColoredLine.sip
+%Include twoColoredTube.sip
 %Include tube.sip
 
 // VIEW/DIALOGS
