@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.19 2001/01/20 00:26:44 amoll Exp $
+// $Id: bond.h,v 1.20 2001/02/22 20:35:47 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -36,12 +36,9 @@ namespace BALL
 	class System;
 
 	/** The bond class of the kernel framework.
-		
 			{\bf Framework:} BALL/KERNEL\\
-			{\bf Definition:} \URL{BALL/KERNEL/bond.h}
-			\\
+			{\bf Definition:} \URL{BALL/KERNEL/bond.h}\\
 			{\bf Concept:} association\\
-			
 			An instance of Bond represents a chemical connectivity ("bond")
 			between two \Ref{Atom} instances ("first atom" and "second atom").
 			During each runtime instance of a program a bond is unique and identified by a \Ref{Object::Handle}.
@@ -59,11 +56,10 @@ namespace BALL
 				\item "bond order" (\Ref{Bond::bond_order_})
 				\item "bond type" (\Ref{Bond::bond_type_})
 			\end{itemize}
-			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.19 $
-			@date    $Date: 2001/01/20 00:26:44 $
+			@version $Revision: 1.20 $
+			@date    $Date: 2001/02/22 20:35:47 $
 	*/
 	class Bond
 		: public Composite,
@@ -74,9 +70,7 @@ namespace BALL
 		///
 		friend class Atom;
 
-
 		BALL_CREATE_DEEP(Bond)
-
 
 		/**	@name	Exceptions
 		*/
@@ -106,8 +100,8 @@ namespace BALL
 		};
 
 		//@}
-
-		/** @name Type definitions */
+		/** @name Type definitions 
+		*/
 		//@{
 
 		/** Bond type.
@@ -117,10 +111,12 @@ namespace BALL
 
 		//@}  
 	
-		/** @name Enumerations */
+		/** @name Enumerations 
+		*/
 		//@{
 		
-		/**	Predefined constants for the bond order */
+		/**	Predefined constants for the bond order 
+		*/
 		enum BondOrder
 		{
 			///
@@ -134,13 +130,13 @@ namespace BALL
 			///
 			ORDER__QUADRUPLE      = 4,
 			///
-			ORDER__AROMATIC       = 5,
-			
+			ORDER__AROMATIC       = 5,			
 			///
 			NUMBER_OF_BOND_ORDERS
 		};
 			
-		/**	Predefined constants for the bond type */
+		/**	Predefined constants for the bond type 
+		*/
 		enum BondType
 		{
 			///
@@ -169,7 +165,8 @@ namespace BALL
 		};
 		//@}  
 
-		/** @name Constructors and Destructors */
+		/** @name Constructors and Destructors 
+		*/
 		//@{
 
 		/** Default constructor.
@@ -182,7 +179,6 @@ namespace BALL
 					\item bond order is unknown (=\Ref{Bond::ORDER__UNKNOWN})
 					\item bond type is unknown (=\Ref{Bond::TYPE__UNKNOWN})
 				\end{itemize}
-
 				@return    Bond - new constructed bond
 		*/
 		Bond()
@@ -192,12 +188,10 @@ namespace BALL
 				Construct new bond by copying the bond {\em bond}.
 				Calls \Ref{Bond::createBond}.
 				The state of {\em *this} bond is initialized to the state of the bond {\em bond}.\\
-				\\
 				{\bf Note:} Deep copying of bonds make no sense, the parameter {\bf deep} is therefore
 				ignored.
 				The use of this method is not recommended because it may result in inconcistencies
 				of the whole system. It is used for backup only.
-
 				@param  bond the bond to be copied (cloned)
 				@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
 				@return      Bond - new constructed bond cloned from {\em bond}
@@ -216,7 +210,6 @@ namespace BALL
 					\item bond order is {\em order}
 					\item bond type is {\em type}
 				\end{itemize}
-
 				@param       name name of the constructed bond
 				@param       first first atom of the constructed bond
 				@param       second second atom of the constructed bond
@@ -235,7 +228,6 @@ namespace BALL
 					\item bond has connectivity with first atom (={\em first})
 					\item bond has connectivity with second atom (={\em second})
 				\end{itemize}
-
 				@param 	bond the instantiated bond that connects the first atom {\em first}
 								to the second atom {\em second}
 				@param 	first the first atom of the bond
@@ -279,14 +271,14 @@ namespace BALL
 					\item bond type is unknown (=\Ref{Bond::TYPE__UNKNOWN})
 				\end{itemize}
 				{\bf Note:} Destroy is equivalent to \Ref{Bond::clear}.
-
 				@see Bond::clear
 		*/
 		virtual void destroy()
 			throw();
-		//@}
 
-		/**	@name Persistence */
+		//@}
+		/**	@name Persistence 
+		*/
 		//@{
 	
 		/**	Persistent writing.
@@ -310,7 +302,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	Equality operator.
 				@see Object::operator ==
 		*/
@@ -323,18 +314,17 @@ namespace BALL
 		bool operator != (const Bond& bond) const
 			throw();
 
-		/** @name Assignment methods */
+		/** @name Assignment methods 
+		*/
 		//@{
 
     /** Assignment with cloning facility.
         Assign the bond {\em bond} to {\em *this}.
         The assignment is either deep or shallow (default).
         The state of {\em *this} bond is initialized to the state of the bond {\em bond}.\\
-        \\
         {\bf Note:} Deep copying of bonds is not supported.
         The use of this method is not recommended because it may result in inconcistencies
         of the whole system. It is used for backup only.
-
         @param bond the bond to be copied (cloned)
         @param deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
     */
@@ -346,11 +336,9 @@ namespace BALL
         The assignment is either deep or shallow (default).
         Calls \Ref{Bond::set}.
         The state of the bond {\em bond} is initialized to the state of {\em *this}.\\
-        \\
         {\bf Note:} Deep copying of bonds is not supported.
         The use of this method is not recommended because it may result in inconcistencies
         of the whole system. It is used for backup only.
-
         @param bond the bond to be assigned to
         @see   Bond::set
     */  
@@ -362,11 +350,9 @@ namespace BALL
 				The assignment is either deep or shallow (default).
 				Calls \Ref{Bond::set}.
 				The state of {\em *this} bond is initialized to the state of the bond {\em bond}.\\
-				\\
 				{\bf Note:} Deep copying of bonds is not supported.
 				The use of this method is not recommended because it may result in inconcistencies
 				of the whole system. It is used for backup only.
-
 				@param  bond the bond to be copied (cloned)
 				@return Bond - {\em *this} bond
 				@see    Bond::set
@@ -376,7 +362,6 @@ namespace BALL
 
 		/** Swapping of bonds.
 				Swap the states of {\em *this} with the bond {\em bond}.
-
 				@param bond the bond {\em *this} is being swapped with
 				@see   Bond::Bond
 		*/
@@ -384,8 +369,8 @@ namespace BALL
 			throw();
 	
 		//@}
-	
-		/** @name Accessors: inspectors and mutators */
+		/** @name Accessors: inspectors and mutators 
+		*/
 		//@{ 
 
 		/** Set the first Atom.
@@ -397,7 +382,6 @@ namespace BALL
 		/** Mutable inspection of the first bond atom.
 				Access a mutable reference to the first atom of {\em *this} bond.
 				The reference is 0 if no first atom is connected to {\em *this} bond.\\
-				\\
 				{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
 										of the bond tables in the atoms.
 				@return      Atom* -
@@ -411,7 +395,6 @@ namespace BALL
 		/** Constant inspection of the first bond atom.
 				Access a constant reference to the first atom of {\em *this} bond.
 				The reference is 0 if no first atom is connected to {\em *this} bond.\\
-				\\
 				{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
 										of the bond tables in the atoms.
 				@return      Atom* - 
@@ -441,7 +424,6 @@ namespace BALL
 		/** Mutable inspection of the second bond atom.
 				Access a mutable reference to the second atom of {\em *this} bond.
 				The reference is 0 if no second atom is connected to {\em *this} bond.\\
-				\\
 				{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
 										of the bond tables in the atoms.
 				@return      Atom* - 
@@ -455,7 +437,6 @@ namespace BALL
 		/** Constant inspection of the second bond atom.
 				Access a constant reference to the second atom of {\em *this} bond.
 				The reference is 0 if no second atom is connected to {\em *this} bond.\\
-				\\
 				{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
 										of the bond tables in the atoms.
 				@return      Atom* -
@@ -554,8 +535,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{ 
 
 		/** Determine whether the bond belongs to an atom.
@@ -612,7 +593,6 @@ namespace BALL
 				Query, if {\em *this} bond connects its two atoms within the common parent {\em system} instance.
 				If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
 				Calls \Ref{Composite::isDescendantOf}.
-	
 				@param 	system the queried parent system.
 				@return	bool -
 								{\tt true} if {\em *this} bond is intermolecular
@@ -639,7 +619,6 @@ namespace BALL
 				Query, if {\em *this} bond connects its two atoms within the common parent {\em atom_container} instance.
 				If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
 				Calls \Ref{Composite::isDescendantOf}.
-	
 				@param       atom_container the queried parent fragment.
 				@return      bool -
 										 {\tt true} if {\em *this} bond is intramolecular
@@ -653,7 +632,6 @@ namespace BALL
 				Query, if {\em *this} bond connects its two atoms within the common parent {\em system} instance.
 				If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
 				Calls \Ref{Composite::isDescendantOf}.
-	
 				@param 		system the queried parent system.
 				@return   bool -
 									{\tt true} if {\em *this} bond is intramolecular
@@ -664,15 +642,14 @@ namespace BALL
 			throw();
 
 		//@}
-
-		/** @name Debuggers and diagnostics */
+		/** @name Debuggers and diagnostics 
+		*/
 		//@{ 
 
 		/** Internal state and consistency self-validation.
 				Initiate self-validation of the internal state and data structure consistencies of {\em *this} bond.
 				If the internal state of {\em *this} bond is correct (self-validated) and consistent {\tt true} 
 				is returned,{\tt false} otherwise. 
-	
 				@return      bool -
 										 {\tt true} if the internal state of {\em *this} bond is correct (self-validated)
 										 and consistent, {\tt false} otherwise
@@ -683,7 +660,6 @@ namespace BALL
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} bond to the output ostream {\em s}
 				with dumping depth {\em depth}.
-	
 				@param	s output stream where to output the internal state of {\em *this} bond
 				@param  depth the dumping depth
 		*/
