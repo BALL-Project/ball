@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.C,v 1.7 2004/06/25 15:51:12 amoll Exp $
+// $Id: renderer.C,v 1.8 2004/07/26 13:45:10 amoll Exp $
 
 #include <BALL/VIEW/RENDERING/renderer.h>
 #include <BALL/VIEW/KERNEL/stage.h>
@@ -47,10 +47,7 @@ namespace BALL
 		bool Renderer::render(const Representation& representation)
 			throw()
 		{
-			if (representation.hasProperty(Representation::PROPERTY__HIDDEN))
-			{
-				return true;
-			}
+			if (representation.isHidden()) return true;
 
 			if (representation.getModelType() == MODEL_CLIPPING_PLANE)
 			{

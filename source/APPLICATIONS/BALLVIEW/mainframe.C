@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.25 2004/07/25 21:14:31 amoll Exp $
+// $Id: mainframe.C,v 1.26 2004/07/26 13:45:29 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -528,7 +528,7 @@ namespace BALL
 						rep = *pit;
 					}
 
-					rep->setProperty(Representation::PROPERTY__HIDDEN);
+					rep->setHidden(true);
 					rep->update(false);
 
 #ifndef BALL_QT_HAS_THREADS

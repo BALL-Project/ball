@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.46 2004/07/23 12:43:03 amoll Exp $
+// $Id: geometricControl.C,v 1.47 2004/07/26 13:45:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -137,10 +137,10 @@ namespace BALL
 			changed_content |= item->text(2).ascii() != new_text;
 			if (changed_content) item->setText(2, new_text.c_str());
 
-			if (rep.hasProperty(Representation::PROPERTY__HIDDEN) == item->isOn())
+			if (rep.isHidden() == item->isOn())
 			{
 				changed_content = true;
-				item->setOn(!rep.hasProperty(Representation::PROPERTY__HIDDEN));
+				item->setOn(!rep.isHidden());
 			}
 
 			if (changed_content) listview->triggerUpdate();
@@ -339,7 +339,7 @@ namespace BALL
 
 		void GeometricControl::selectedRepresentation(Representation& representation, bool state)
 		{
-			if (state != representation.hasProperty(Representation::PROPERTY__HIDDEN)) return;
+			if (state != representation.isHidden()) return;
 
 			if (!state)
 			{
@@ -350,7 +350,7 @@ namespace BALL
 				setStatusbarText("Show representation.");
 			}
 				
-			representation.toggleProperty(Representation::PROPERTY__HIDDEN);
+			representation.setHidden(!representation.isHidden());
 
 			if (representation.needsUpdate()) 
 			{

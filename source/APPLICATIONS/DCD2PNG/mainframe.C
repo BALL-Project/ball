@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.2 2004/07/20 11:50:11 amoll Exp $
+// $Id: mainframe.C,v 1.3 2004/07/26 13:49:52 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -175,7 +175,7 @@ namespace BALL
 				NewSelectionMessage* msg = new NewSelectionMessage();
 				notify_(msg);
 			
-				display_properties_->applyButtonClicked();
+				display_properties_->apply();
 			}
 		}
 		catch(...)

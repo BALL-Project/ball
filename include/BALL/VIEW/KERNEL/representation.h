@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.22 2004/07/04 16:33:01 amoll Exp $
+// $Id: representation.h,v 1.23 2004/07/26 13:45:19 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -61,10 +61,7 @@ namespace BALL
 			enum Properties
 			{
 				///
-				PROPERTY__HIDDEN = 0,
-				
-				///
-				PROPERTY__ALWAYS_FRONT,
+				PROPERTY__ALWAYS_FRONT = 0,
 				
 				///
 				PROPERTY__IS_COORDINATE_SYSTEM
@@ -132,6 +129,14 @@ namespace BALL
 			///
 			void clear()
 				throw();
+
+			///
+			void setHidden(bool state) 
+				throw() { hidden_ = state;}
+
+			///
+			bool isHidden() const
+				throw() { return hidden_;}
 
 			///
 			void setDrawingPrecision(DrawingPrecision precision)
@@ -337,6 +342,9 @@ namespace BALL
 
 			//_ 								true, if thread is currently updateing this representation
 			bool 								update_running_;
+
+			//_
+			bool 								hidden_;
 
 			static UpdateRepresentationThread* thread_;
 		};

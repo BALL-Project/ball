@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.45 2004/07/22 16:28:35 amoll Exp $
+// $Id: representation.C,v 1.46 2004/07/26 13:45:10 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -43,7 +43,8 @@ namespace BALL
 					color_processor_(0),
 					geometric_objects_(),
 					composites_(),
-					update_running_(false)
+					update_running_(false),
+					hidden_(false)
 		{
 		}
 
@@ -61,7 +62,8 @@ namespace BALL
 					color_processor_(0),
 					geometric_objects_(),
 					composites_(rp.composites_),
-					update_running_(false)
+					update_running_(false),
+					hidden_(rp.hidden_)
 		{
 			if (rp.model_processor_ != 0)
 			{
@@ -96,7 +98,8 @@ namespace BALL
 					color_processor_(0),
 					geometric_objects_(),
 					composites_(),
-					update_running_(false)
+					update_running_(false),
+					hidden_(false)
 		{
 		}
 
@@ -113,7 +116,8 @@ namespace BALL
 				color_processor_(0),
 				geometric_objects_(),
 				composites_(composites),
-				update_running_(false)
+				update_running_(false),
+				hidden_(false)
 		{
 		}
 
@@ -162,6 +166,8 @@ namespace BALL
 
 			update_running_ = false;
 
+			hidden_ = representation.hidden_;
+
 			return *this;
 		}
 
@@ -190,6 +196,8 @@ namespace BALL
 			coloring_method_ = COLORING_UNKNOWN;
 			transparency_ = 0;
 			surface_drawing_precision_ = -1;
+
+			hidden_ = false;
 		}
 
 		
@@ -234,6 +242,8 @@ namespace BALL
 			s << "model processor: " << model_processor_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			s << "update runnning: " << update_running_ << std::endl;
+			BALL_DUMP_DEPTH(s, depth);
+			s << "hidden: " << hidden_ << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "PropertyManager: " << std::endl;
@@ -278,7 +288,7 @@ namespace BALL
 #endif
 
 			// no need to update hidden representations
-			if (hasProperty(PROPERTY__HIDDEN) && mc != 0) 
+			if (isHidden() && mc != 0) 
 			{
 				needs_update_ = true;
 				// update of GeometricControl, also if Representation is hidden
@@ -551,7 +561,7 @@ namespace BALL
 				result += "|";
 			}
 
-			if (hasProperty(PROPERTY__HIDDEN))
+			if (isHidden())
 			{
 				result += "H";
 			}

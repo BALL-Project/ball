@@ -14,10 +14,11 @@ added:
 - Benchmark Scripts for BALLView
 - Visualisation for double-, triple- and aromatic bonds in BallAndStick Model
 - Hotkey support for starting any (BALL-)Python command from BALLView
+- new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
 
 fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier
-- Cartoon model with missing atoms 
+- Cartoon model had problems with missing atoms 
 - creation of models for several selected items
 - overall cleanup of RegularDataWidgets
 - export of PNGs could result in strange problems e.g. with empty images
@@ -27,8 +28,9 @@ fixed:
 - issue with restoring window's geometry on X11 (still buggy on some X-Servers)
 
 changed:
-- Scene Preferences
-- interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
 - doubled OpenGL performance since BALL(View) 1.0 !
+- Scene Preferences
 - GeometricObjects no longe have names
 - removed Information Processor for GeometricObjects
+- interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
+- interface for the hidden property of Representation's

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.39 2004/07/20 22:28:48 amoll Exp $
+// $Id: glRenderer.C,v 1.40 2004/07/26 13:45:10 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -316,12 +316,8 @@ namespace BALL
 		void GLRenderer::drawFromDisplayList(const Representation& rep)
 			throw()
 		{
-			if (!display_lists_.has(&rep)) 
-			{
-				return;
-			}
-
-			if (rep.hasProperty(Representation::PROPERTY__HIDDEN))
+			if (!display_lists_.has(&rep) ||
+					rep.isHidden()) 
 			{
 				return;
 			}
@@ -333,10 +329,7 @@ namespace BALL
 		bool GLRenderer::render(const Representation& representation)
 			throw()
 		{
-			if (representation.hasProperty(Representation::PROPERTY__HIDDEN))
-			{
-				return true;
-			}
+			if (representation.isHidden()) return true;
 
 			if (!representation.isValid())
 			{

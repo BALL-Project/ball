@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.114 2004/07/25 21:51:15 amoll Exp $
+// $Id: scene.C,v 1.115 2004/07/26 13:45:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -425,7 +425,7 @@ namespace BALL
 			float d = rep.getProperty("D").getDouble();
 
 
-			if (rep.hasProperty(Representation::PROPERTY__HIDDEN))
+			if (rep.isHidden())
 			{
 				Vector3 x(1,0,0);
 				Vector3 y(0,1,0);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.8 2004/02/11 18:52:29 oliver Exp $
+// $Id: representation.sip,v 1.9 2004/07/26 13:46:02 amoll Exp $
 //
 
 class Representation
@@ -52,5 +52,7 @@ class Representation
 	void setSurfaceDrawingPrecision(float /precision/) throw();
 	void setTransparency(Size /value/) throw();
 	void update(bool /rebuild/) throw();
+	bool isHidden() const throw();
+	void setHidden(bool state) throw();
 	~Representation() throw();
 };
