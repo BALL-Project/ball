@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.17 2000/06/27 07:46:23 oliver Exp $
+// $Id: string.C,v 1.18 2000/06/27 22:10:57 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -47,6 +47,11 @@ namespace BALL
 	String::CompareMode String::compare_mode_ = String::CASE_SENSITIVE;
 
 	Substring::UnboundSubstring::UnboundSubstring(const char* file, int line)
+		:	Exception::GeneralException(file, line)
+	{
+	}
+
+	Substring::InvalidSubstring::InvalidSubstring(const char* file, int line)
 		:	Exception::GeneralException(file, line)
 	{
 	}
@@ -446,14 +451,15 @@ namespace BALL
 
 	String String::getField(Index index, const char* delimiters, Index* from_and_next_field) const
 	{
-		BALL_PRECONDITION
-			(from_and_next_field == 0
-			 || *from_and_next_field >= 0, 
-			 BALL_STRING_ERROR_HANDLER(ERROR__INDEX_UNDERFLOW));
-
-		BALL_PRECONDITION
-			(delimiters != 0, 
-			 BALL_STRING_ERROR_HANDLER(ERROR__POINTER_IS_NULL));
+		if ((from_and_next_field != 0) && (*from_and_next_field < 0))
+		{
+			throw Exception::IndexUnderFlow(__FILE__, __LINE__, *from_and_next_field, 0)
+		}
+		
+		if (delimiters == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 
 		// allow also negative indices (last field == -1)
 		if (index < 0)
