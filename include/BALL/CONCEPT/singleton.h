@@ -1,4 +1,4 @@
-// $Id: singleton.h,v 1.5 2000/12/19 12:50:50 amoll Exp $
+// $Id: singleton.h,v 1.6 2001/05/29 16:34:12 anker Exp $
 
 #ifndef BALL_CONCEPT_SINGLETON_H
 #define BALL_CONCEPT_SINGLETON_H
@@ -10,8 +10,8 @@
 namespace BALL 
 {
 
-	
 	/**	Generic Singleton Class.
+			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/singleton.h}
 	*/
 	template <class T>
@@ -19,11 +19,11 @@ namespace BALL
 	{
 		public:
 
-		/**	@name Constructors and Destructors
+		/**	@name Constructors and Destructor
 		*/
 		//@{
 		
-		/**
+		/** Destructor
 		*/
 		~Singleton()
 			throw()
@@ -32,40 +32,67 @@ namespace BALL
 		}
 		//@}
 
+		/** @name Accessors
+		*/
+		//@{
+
+		/** Count the references.
+				@return the number of references
+		*/
 		static Size countReferences()
 			throw();
 
+		/**
+		*/
 		T* operator -> ()
 			throw();
 
+		/**
+		*/
 		const T* operator -> () const
 			throw();
 
+		/**
+		*/
 		T& getExemplary()
 			throw();
 
+		/**
+		*/
 		const T& getExemplary() const
 			throw();
 
+		/**
+		*/
 		operator T & ()
 			throw();
 
+		/**
+		*/
 		operator T * ()
 			throw();
 
+
 		protected:
 
+		/*_
+		*/
 		Singleton()
 			throw()
 		{
 			++countReferences_();
 		}
 
+		/*_
+		*/
 		const Singleton& operator = (const Singleton &)
 			throw();
 
+
 		private:
 
+		/*_
+		*/
 		static Size &countReferences_()
 			throw();
 	};
