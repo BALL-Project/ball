@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.21 2003/03/26 13:56:40 anhi Exp $
+// $Id: support.h,v 1.22 2003/05/12 14:31:30 sneumann Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -24,6 +24,10 @@
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #	include <BALL/DATATYPE/hashGrid.h>
+#endif
+
+#ifndef BALL_KERNEL_BOND_H
+#     include <BALL/KERNEL/bond.h>
 #endif
 
 #include <vector>
