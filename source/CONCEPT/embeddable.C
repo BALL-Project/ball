@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.C,v 1.12 2002/02/27 12:20:55 sturm Exp $
+// $Id: embeddable.C,v 1.13 2003/09/07 17:24:00 oliver Exp $
+//
 
 #include <BALL/CONCEPT/embeddable.h>
 
@@ -133,12 +134,6 @@ namespace BALL
 										<< "instance_lists_ and instance_to_type_map_ are inconsistent!" << endl;
 			}
 		}
-		else 
-		{
-			// complain if trying to unregister an unregistered instance
-			Log.warn() << "Embeddable::unregisterInstance_: trying to unregister unregistered instance at " 
-								 << instance << endl;
-		}	
 	}
 
 	Size Embeddable::countInstances_(const type_info& type) 

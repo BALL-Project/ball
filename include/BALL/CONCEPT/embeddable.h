@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.15 2003/08/26 08:04:07 oliver Exp $
+// $Id: embeddable.h,v 1.16 2003/09/07 17:23:59 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
@@ -28,9 +28,23 @@
 namespace BALL 
 {
 
-	///
+	/** Embeddable macro.
+			This macro defines all methods required for clases
+			derived from Embeddable. It should be included in the class definition
+			of each of these classes, even for classes further down in the inheritance.
+			The argument ist just the class type, e.g. BALL::ModularWidget.
+	*/
 	#define BALL_EMBEDDABLE(TYPE)\
-		virtual void registerThis() throw() { Embeddable::registerInstance_(typeid(TYPE), this); };\
+		virtual void registerThis() throw() \
+		{ \
+			if (typeid(*this) != typeid(TYPE))\
+			{\
+				Log.error() << "Warning: derived class " << typeid(*this).name() << " was derived from BALL::Embeddable, but the macro " << std::endl\
+                  << "BALL_EMBEDDABLE(...) was not specified in the class declaration!" << std::endl;\
+			}\
+			Embeddable::registerInstance_(typeid(TYPE), this);\
+		}\
+		\
 		static TYPE* getInstance(Position index) throw() { return dynamic_cast<TYPE*>(Embeddable::getInstance_(typeid(TYPE), index)); };\
 		static TYPE* getInstance(const String& identifier) throw() { return dynamic_cast<TYPE*>(Embeddable::getInstance_(typeid(TYPE), identifier)); };\
 		static Size countInstances() throw() { return (Embeddable::countInstances_(typeid(TYPE))); };
@@ -38,9 +52,10 @@ namespace BALL
 	/**	Python Embedding Base Class.
 			This class defines a common interface for all classes that
 			have to be accessible from an embedded Python interpreter.
-			 \par
-			
-			 \par
+			Each instance of a class derived from embeddable can be registered by calling
+			registerThis() of the instance and is then accessible through the static methods
+			of the class (e.g. getInstance).
+		 \par
 			@see PyInterpreter
 			@see MainControl
 			@see ModularWidget

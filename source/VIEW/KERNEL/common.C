@@ -18,8 +18,10 @@ String getModelName(ModelTypes type)
 			return "BallandStick";
 		case MODEL_VDW:
 			return "VDW";
-		case MODEL_SURFACE:
-			return "Surface";
+		case MODEL_SE_SURFACE:
+			return "SES";
+		case MODEL_SA_SURFACE:
+			return "SAS";
 		case MODEL_BACKBONE:
 			return "Backbone";
 		case MODEL_CARTOON:

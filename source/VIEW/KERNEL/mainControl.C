@@ -1,11 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.3 2003/08/29 10:55:55 amoll Exp $
+// $Id: mainControl.C,v 1.4 2003/09/07 17:24:01 oliver Exp $
 //
-
-// this is required for QMenuItem
-//#define iNCLUDE_MENUITEM_DEy
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
@@ -34,6 +31,7 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
+
 using std::istream;
 using std::ostream;
 using std::endl;
@@ -46,6 +44,8 @@ namespace BALL
 		MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 			throw()
 			:	QMainWindow(parent, name),
+				ConnectionObject(),
+				Embeddable("BALL::VIEW::MainControl"),
 				selection_(),
 				message_label_(new QLabel("" , statusBar())),
 				main_control_preferences_(0),

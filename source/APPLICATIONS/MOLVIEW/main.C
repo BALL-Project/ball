@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.16 2003/08/26 09:17:36 oliver Exp $
+// $Id: main.C,v 1.17 2003/09/07 17:24:00 oliver Exp $
 //
 
 // order of includes is important:
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 		
   QApplication application(argc, argv);
 
-	// creating Mainframe
+	// Create the mainframe.
 	BALL::Mainframe mainframe;
 	application.setMainWidget(&mainframe);
 
@@ -31,12 +31,16 @@ int main(int argc, char **argv)
 		mainframe.registerThis();
 	#endif
 
-	// start the application
+	// Show the main window.
 	mainframe.show();
-	for (BALL::Index i = 1; i<argc;i++)
+
+	// If there are additional command line arguments, interpret
+	// them as files to open.
+	for (BALL::Index i = 1; i < argc; ++i)
 	{
 		mainframe.openFile(argv[i]);
 	}
+
+	// Hand over control to the application.
   return application.exec();
-	
 }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.5 2003/09/03 12:34:51 amoll Exp $
+// $Id: surfaceModel.h,v 1.6 2003/09/07 17:24:00 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
 #	include <BALL/VIEW/MODELS/modelProcessor.h>
+#endif
+
+#ifndef BALL_STRUCTURE_SURFACEPROCESSOR_H
+#	include <BALL/STRUCTURE/surfaceProcessor.h>
 #endif
 
 namespace BALL
@@ -21,6 +25,8 @@ namespace BALL
 				The class AddSurfaceModel is a model processor that creates a surface model
 				of the given Composite object. 
 				A Mesh object is created and filled with the method SurfaceProcessor::getSurface.
+				The surface can be either a solvent excluded surface (SES, default) or the
+				solvent accesible surface (SAS). See SurfaceProcessor for details.
 				\see     Mesh
 				\see     SurfaceProcessor
 				\ingroup  ViewModels
@@ -53,6 +59,14 @@ namespace BALL
 				throw();
 
 			//@} 
+
+			/**	@name Accessors */	
+			//{
+			/// Return the surface type (SES/SAS)
+			SurfaceProcessor::SurfaceType getType() const { return type_; }
+			/// Set the surface type (SES/SAS)
+			void setType(SurfaceProcessor::SurfaceType type) { type_ = type; }
+			//}
 			/**	@name Processor specific methods 
 			*/ 
 			//@{
@@ -83,6 +97,7 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 
 			//@} 
+
 			/**	@name	debuggers and diagnostics 
 			*/ 
 			//@{
@@ -103,6 +118,8 @@ namespace BALL
 			Composite* 				start_composite_;
 
 			HashSet<Atom*> 		atoms_;
+
+			SurfaceProcessor::SurfaceType type_;
 		};
 
 	} // namespace VIEW

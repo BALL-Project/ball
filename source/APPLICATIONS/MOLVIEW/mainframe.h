@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.46 2003/09/03 15:23:51 amoll Exp $
+// $Id: mainframe.h,v 1.47 2003/09/07 17:24:00 oliver Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -81,132 +81,133 @@ namespace BALL
 	class AmberFF;
 	class SimulationThread;
 
-class Mainframe	
-	: public BALL::VIEW::MainControl
-{
-	Q_OBJECT
-
-	public:
-
-			/** This class is only intended for usage with multithreading.
-			 		It notifies the Mainframe, that the thread for simulations has finished and can be deleted.
-					This should only be used internaly.
-			*/
-			class SimulationThreadFinished: public QCustomEvent
-			{
-				public:
-					SimulationThreadFinished()
-						: QCustomEvent( 65431 ){}
-			};
-
-			class SimulationOutput: public QCustomEvent
-			{
-				public:
-					SimulationOutput()
-						: QCustomEvent( 65430 ){}
-
-					void setMessage(const String& msg) {message_ = msg;}
-
-					String getMessage() {return message_;}
-
-				protected:
-					String message_;
-			};
-
-
-	enum MenuKey
+	class Mainframe	
+		: public BALL::VIEW::MainControl
 	{
-		MENU__FILE_EXPORT_POVRAYFILE = 20000,
-		
-		MENU__BUILD_ASSIGN_CHARGES,
-		MENU__BUILD_AMBER_ENERGY,
-		MENU__BUILD_AMBER_MINIMIZATION,
-		MENU__BUILD_AMBER_MDSIMULATION,
-		MENU__BUILD_STOPSIMULATION,
-		MENU__BUILD_PEPTIDE,
-		MENU__BUILD_CALCULATE_HBONDS,
+		Q_OBJECT
+		BALL_EMBEDDABLE(Mainframe)
 
-		MENU__DISPLAY_FULLSCREEN,
-		MENU__DISPLAY_OPEN_SURFACE_DIALOG,
+		public:
 
-		MENU__HELP_ABOUT
-	};
+				/** This class is only intended for usage with multithreading.
+						It notifies the Mainframe, that the thread for simulations has finished and can be deleted.
+						This should only be used internaly.
+				*/
+				class SimulationThreadFinished: public QCustomEvent
+				{
+					public:
+						SimulationThreadFinished()
+							: QCustomEvent( 65431 ){}
+				};
+
+				class SimulationOutput: public QCustomEvent
+				{
+					public:
+						SimulationOutput()
+							: QCustomEvent( 65430 ){}
+
+						void setMessage(const String& msg) {message_ = msg;}
+
+						String getMessage() {return message_;}
+
+					protected:
+						String message_;
+				};
 
 
-	Mainframe(QWidget* parent = 0, const char* name = 0);
-
-	virtual ~Mainframe()
-		throw();
-
-	virtual void fetchPreferences(INIFile& inifile)
-	throw();
-
-	virtual void writePreferences(INIFile& inifile)
-	throw();
-
-	virtual void onNotify(Message *message)
-	throw();
-	
-	bool stopedSimulation() { return stop_simulation_;}
-
-	void printAmberResults(const AmberFF& amber)
-		throw();
+		enum MenuKey
+		{
+			MENU__FILE_EXPORT_POVRAYFILE = 20000,
 			
-	public slots:
-	// active the menu entries
-	// (connected to aboutToShow())
-	void checkMenuEntries();
+			MENU__BUILD_ASSIGN_CHARGES,
+			MENU__BUILD_AMBER_ENERGY,
+			MENU__BUILD_AMBER_MINIMIZATION,
+			MENU__BUILD_AMBER_MDSIMULATION,
+			MENU__BUILD_STOPSIMULATION,
+			MENU__BUILD_PEPTIDE,
+			MENU__BUILD_CALCULATE_HBONDS,
 
-	void exportPOVRay();
+			MENU__DISPLAY_FULLSCREEN,
+			MENU__DISPLAY_OPEN_SURFACE_DIALOG,
 
-	// Build menu
-	void assignCharges();
-	void calculateAmberEnergy();
-	void amberMinimization();
-	void amberMDSimulation();
-  void computeSurface();
-	void buildPeptide();
-	void calculateHBonds();
-	void stopSimulation();
+			MENU__HELP_ABOUT
+		};
 
-	void toggleFullScreen();
-	// Help menu
-	void about();
 
-	virtual void customEvent( QCustomEvent * e );
+		Mainframe(QWidget* parent = 0, const char* name = 0);
 
-	/** Open a file.
-	 		Calls MolecularFileDialog::openFile
-	*/
-	void openFile(const String& file)
+		virtual ~Mainframe()
+			throw();
+
+		virtual void fetchPreferences(INIFile& inifile)
 		throw();
 
-  private:
+		virtual void writePreferences(INIFile& inifile)
+		throw();
 
-	Scene*										scene_;
-	MolecularControl*					control_;
-	TrajectoryControl*				trajectory_control_;
-	GeometricControl*					geometric_control_;
-	DisplayProperties*    		display_properties_;
-	AmberMinimizationDialog*	minimization_dialog_;
-	MolecularDynamicsDialog*	md_dialog_;
-  ContourSurfaceDialog* 		surface_dialog_;
-	LabelDialog*	    				label_dialog_;
-	MolecularProperties*  		molecular_properties_;
-	MolecularFileDialog*  		file_dialog_;
-	FDPBDialog*  							FDPB_dialog_;
-	Server*   								server_;
+		virtual void onNotify(Message *message)
+		throw();
+		
+		bool stopedSimulation() { return stop_simulation_;}
 
-	QSplitter*								hor_splitter_;
-	QSplitter*								vert_splitter_;
-	QSplitter*								vert_splitter2_;
-	QSplitter*								vert_splitter3_;
-	LogView*									logview_;
-	SimulationThread* 				simulation_thread_;
-	
-	bool 											fullscreen_;
-	bool 											stop_simulation_;
-};
+		void printAmberResults(const AmberFF& amber)
+			throw();
+				
+		public slots:
+		// active the menu entries
+		// (connected to aboutToShow())
+		void checkMenuEntries();
+
+		void exportPOVRay();
+
+		// Build menu
+		void assignCharges();
+		void calculateAmberEnergy();
+		void amberMinimization();
+		void amberMDSimulation();
+		void computeSurface();
+		void buildPeptide();
+		void calculateHBonds();
+		void stopSimulation();
+
+		void toggleFullScreen();
+		// Help menu
+		void about();
+
+		virtual void customEvent( QCustomEvent * e );
+
+		/** Open a file.
+				Calls MolecularFileDialog::openFile
+		*/
+		void openFile(const String& file)
+			throw();
+
+		private:
+
+		Scene*										scene_;
+		MolecularControl*					control_;
+		TrajectoryControl*				trajectory_control_;
+		GeometricControl*					geometric_control_;
+		DisplayProperties*    		display_properties_;
+		AmberMinimizationDialog*	minimization_dialog_;
+		MolecularDynamicsDialog*	md_dialog_;
+		ContourSurfaceDialog* 		surface_dialog_;
+		LabelDialog*	    				label_dialog_;
+		MolecularProperties*  		molecular_properties_;
+		MolecularFileDialog*  		file_dialog_;
+		FDPBDialog*  							FDPB_dialog_;
+		Server*   								server_;
+
+		QSplitter*								hor_splitter_;
+		QSplitter*								vert_splitter_;
+		QSplitter*								vert_splitter2_;
+		QSplitter*								vert_splitter3_;
+		LogView*									logview_;
+		SimulationThread* 				simulation_thread_;
+		
+		bool 											fullscreen_;
+		bool 											stop_simulation_;
+	};
 
 }
 

@@ -1120,7 +1120,12 @@
             </item>
             <item>
                 <property name="text">
-                    <string>surface</string>
+                    <string>solvent-excluded surface</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>solvent-accesible surface</string>
                 </property>
             </item>
             <item>

@@ -1,21 +1,42 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.38 2003/08/26 18:35:31 amoll Exp $
+// $Id: surfaceProcessor.h,v 1.39 2003/09/07 17:23:59 oliver Exp $
 //
 
-#include <BALL/STRUCTURE/reducedSurface.h>
-#include <BALL/STRUCTURE/solventExcludedSurface.h>
-#include <BALL/STRUCTURE/triangulatedSES.h>
-#include <BALL/STRUCTURE/solventAccessibleSurface.h>
-#include <BALL/STRUCTURE/triangulatedSAS.h>
-#include <BALL/STRUCTURE/triangulatedSurface.h>
-#include <BALL/MATHS/surface.h>
-#include <BALL/CONCEPT/processor.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/PTE.h>
+#ifndef BALL_STRUCTURE_SURFACE_PROCESSOR_H
+#define BALL_STRUCTURE_SURFACE_PROCESSOR_H
 
-#include <string>
+#ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
+#	include <BALL/STRUCTURE/reducedSurface.h>
+#endif
+#ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
+#	include <BALL/STRUCTURE/solventExcludedSurface.h>
+#endif
+#ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
+#	include <BALL/STRUCTURE/triangulatedSES.h>
+#endif
+#ifndef BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
+#	include <BALL/STRUCTURE/solventAccessibleSurface.h>
+#endif
+#ifndef BALL_STRUCTURE_TRIANGULATEDSAS_H
+#	include <BALL/STRUCTURE/triangulatedSAS.h>
+#endif
+#ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
+#	include <BALL/STRUCTURE/triangulatedSurface.h>
+#endif
+#ifndef BALL_MATHS_SURFACE_H
+#	include <BALL/MATHS/surface.h>
+#endif
+#ifndef BALL_CONCEPT_PROCESSOR_H
+#	include <BALL/CONCEPT/processor.h>
+#endif
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atom.h>
+#endif
+#ifndef BALL_KERNEL_PTE_H
+#	include <BALL/KERNEL/PTE.h>
+#endif
 
 namespace BALL
 {
@@ -120,3 +141,5 @@ namespace BALL
 	};
    
 }
+
+#endif //  BALL_STRUCTURE_SURFACE_PROCESSOR_H

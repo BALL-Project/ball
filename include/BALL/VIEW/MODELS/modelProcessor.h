@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.3 2003/09/03 10:18:26 amoll Exp $
+// $Id: modelProcessor.h,v 1.4 2003/09/07 17:24:00 oliver Exp $
+//
 
 #ifndef BALL_VIEW_GUI_MODELS_ModelProcessor_H
 #define BALL_VIEW_GUI_MODELS_ModelProcessor_H

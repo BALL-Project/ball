@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.10 2003/09/04 23:14:46 amoll Exp $
+// $Id: displayProperties.C,v 1.11 2003/09/07 17:24:01 oliver Exp $
+//
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -349,8 +350,20 @@ namespace BALL
 					((AddBallAndStickModel*) model_processor)->enableBallAndStickModel();
 					break;
 					
-				case MODEL_SURFACE:
-					model_processor = new AddSurfaceModel;
+				case MODEL_SE_SURFACE:
+					{
+						AddSurfaceModel* surface_model = new AddSurfaceModel;
+						model_processor = surface_model;
+						surface_model->setType(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE);	
+					}
+					break;
+					
+				case MODEL_SA_SURFACE:
+					{
+						AddSurfaceModel* surface_model = new AddSurfaceModel;
+						model_processor = surface_model;
+						surface_model->setType(SurfaceProcessor::SOLVENT_ACCESSIBLE_SURFACE);
+					}
 					break;
 					
 				case MODEL_VDW:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.C,v 1.10 2003/08/26 09:18:28 oliver Exp $
+// $Id: surfaceProcessor.C,v 1.11 2003/09/07 17:24:00 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -63,7 +63,7 @@ namespace BALL
 		{
 			SolventExcludedSurface* ses = new SolventExcludedSurface(reduced_surface);
 			ses->compute();
-			double diff = (probe_radius_ < 1.5 ? 0.1 : -0.1);
+			double diff = (probe_radius_ < 1.5 ? 0.01 : -0.01);
 			Size i = 0;
 			bool ok = false;
 			while (!ok && (i < 10))
@@ -83,7 +83,7 @@ namespace BALL
 			}
 			if (ok)
 			{
-				TriangulatedSES* surface = new TriangulatedSES(ses,density_);
+				TriangulatedSES* surface = new TriangulatedSES(ses, density_);
 				surface->compute();
 				surface->exportSurface(surface_);
 				delete surface;

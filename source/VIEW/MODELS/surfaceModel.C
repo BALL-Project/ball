@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.4 2003/09/03 12:34:32 amoll Exp $
+// $Id: surfaceModel.C,v 1.5 2003/09/07 17:24:01 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/molecularInformation.h>
 #include <BALL/VIEW/KERNEL/representation.h>
-#include <BALL/STRUCTURE/surfaceProcessor.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/forEach.h>
@@ -24,7 +23,8 @@ namespace BALL
 			throw()
 			: ModelProcessor(),
 				get_composite_(true),
-				start_composite_(0)
+				start_composite_(0),
+				type_(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE)
 		{
 		}
 
@@ -32,7 +32,8 @@ namespace BALL
 			throw()
 			:	ModelProcessor(add_surface),
 				get_composite_(true),
-				start_composite_(0)
+				start_composite_(0),
+				type_(add_surface.type_)
 		{
 		}
 
@@ -51,6 +52,7 @@ namespace BALL
 			ModelProcessor::clear();
 			get_composite_ = true;
 			start_composite_ = 0;
+			type_ = SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE;
 		}
 
 		bool AddSurfaceModel::start()
@@ -74,6 +76,7 @@ namespace BALL
 			start_composite_->host(molecular_information);
 
 			SurfaceProcessor sp;
+			sp.setType(getType());
 
 			switch (getDrawingPrecision())
 			{
@@ -173,4 +176,5 @@ namespace BALL
 		}
 
 	} // namespace VIEW
+
 } // namespace BALL

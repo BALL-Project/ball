@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.4 2003/09/04 23:14:10 amoll Exp $
+// $Id: common.h,v 1.5 2003/09/07 17:24:00 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -115,8 +115,11 @@ namespace BALL
 			/// defines the property for the model: Van der Waals
 			MODEL_VDW,
 
-			/// defines the property for the model: Surface
-			MODEL_SURFACE,
+			/// defines the property for the model: solvent-excluded surface
+			MODEL_SE_SURFACE,
+
+			/// defines the property for the model: solvent-accessible surface
+			MODEL_SA_SURFACE,
 
 			/// defines the property for the model: Backbone
 			MODEL_BACKBONE,
