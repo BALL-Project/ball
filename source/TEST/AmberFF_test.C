@@ -1,4 +1,4 @@
-// $Id: AmberFF_test.C,v 1.2 1999/09/05 09:04:26 oliver Exp $
+// $Id: AmberFF_test.C,v 1.3 1999/09/07 19:36:10 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/FORMAT/HINFile.h>
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.2 1999/09/05 09:04:26 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.3 1999/09/07 19:36:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ amber89a.updateForces();
 #undef PRECISION
 #define PRECISION 5e-2
 TEST_REAL_EQUAL(amber89a.getEnergy(), -314.12)
-TEST_REAL_EQUAL(amber89a.getRMSGradient(), 32.2732)
+TEST_REAL_EQUAL(amber89a.getRMSGradient(), 35.2728)
 TEST_REAL_EQUAL(amber89a.getStretchEnergy(), 3.00453)
 TEST_REAL_EQUAL(amber89a.getBendEnergy(), 8.59268)
 TEST_REAL_EQUAL(amber89a.getTorsionEnergy(), 0.0489528)

@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.2 1999/09/07 14:28:28 oliver Exp $
+// $Id: Composite_test.C,v 1.3 1999/09/07 19:36:10 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.2 1999/09/07 14:28:28 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.3 1999/09/07 19:36:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -233,15 +233,15 @@ RESULT
 
 
 TextPersistenceManager  pm;
-Composite a;
-a.select();
+Composite composite;
+composite.select();
 String filename;
 CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
 NEW_TMP_FILE(filename)
 ofstream  ofile(filename.c_str(), ios::out);
 pm.setOstream(ofile);
 pm.registerClass(RTTI<Composite>::getStreamName(), RTTI<Composite>::getNew);
-a >> pm;
+composite >> pm;
 ofile.close();
 RESULT
 
@@ -307,12 +307,12 @@ TEST_EQUAL(Composite::getPathLength(a, f), INVALID_SIZE)
 TEST_EQUAL(Composite::getPathLength(f, a), INVALID_SIZE)
 RESULT
 
-CHECK(getDepth(const Composite&))
 Composite a, b, c, d, e, f;
 a.appendChild(b);
 b.appendChild(c);
 b.appendChild(d);
 c.appendChild(e);
+CHECK(getDepth(const Composite&))
 TEST_EQUAL(a.getDepth(), 0)
 TEST_EQUAL(b.getDepth(), 1)
 TEST_EQUAL(c.getDepth(), 2)
@@ -322,11 +322,6 @@ TEST_EQUAL(f.getDepth(), 0)
 RESULT
 
 CHECK(getDepth() const)
-Composite a, b, c, d, e, f;
-a.appendChild(b);
-b.appendChild(c);
-b.appendChild(d);
-c.appendChild(e);
 const Composite& c_a = a;
 const Composite& c_b = b;
 const Composite& c_c = c;
@@ -342,11 +337,6 @@ TEST_EQUAL(c_f.getDepth(), 0)
 RESULT
 
 CHECK(getHeight() const)
-Composite a, b, c, d, e, f;
-a.appendChild(b);
-b.appendChild(c);
-b.appendChild(d);
-c.appendChild(e);
 TEST_EQUAL(a.getHeight(), 3)
 TEST_EQUAL(b.getHeight(), 2)
 TEST_EQUAL(c.getHeight(), 1)
@@ -356,11 +346,6 @@ TEST_EQUAL(f.getHeight(), 0)
 RESULT
 
 CHECK(getRoot())
-Composite a, b, c, d, e, f;
-a.appendChild(b);
-b.appendChild(c);
-b.appendChild(d);
-c.appendChild(e);
 TEST_EQUAL(&a.getRoot(), &a)
 TEST_EQUAL(&b.getRoot(), &a)
 TEST_EQUAL(&c.getRoot(), &a)
@@ -370,11 +355,6 @@ TEST_EQUAL(&f.getRoot(), &f)
 RESULT
 
 CHECK(getRoot() const)
-Composite a, b, c, d, e, f;
-a.appendChild(b);
-b.appendChild(c);
-b.appendChild(d);
-c.appendChild(e);
 const Composite& c_a = a;
 const Composite& c_b = b;
 const Composite& c_c = c;
@@ -391,11 +371,6 @@ RESULT
 
 
 CHECK(isEmpty() const)
-Composite a, b, c, d, e, f;
-a.appendChild(b);
-b.appendChild(c);
-b.appendChild(d);
-c.appendChild(e);
 TEST_EQUAL(a.isEmpty(), false)
 TEST_EQUAL(b.isEmpty(), false)
 TEST_EQUAL(c.isEmpty(), false)
@@ -405,11 +380,6 @@ TEST_EQUAL(f.isEmpty(), true)
 RESULT
 
 CHECK(isRoot() const)
-Composite a, b, c, d, e, f;
-a.appendChild(b);
-b.appendChild(c);
-b.appendChild(d);
-c.appendChild(e);
 TEST_EQUAL(a.isRoot(), true)
 TEST_EQUAL(b.isRoot(), false)
 TEST_EQUAL(c.isRoot(), false)
@@ -419,11 +389,6 @@ TEST_EQUAL(f.isRoot(), true)
 RESULT
 
 CHECK(isRootOf() const)
-Composite a, b, c, d, e, f;
-a.appendChild(b);
-b.appendChild(c);
-b.appendChild(d);
-c.appendChild(e);
 TEST_EQUAL(a.isRootOf(a), true)
 TEST_EQUAL(a.isRootOf(b), true)
 TEST_EQUAL(b.isRootOf(a), false)
@@ -439,21 +404,138 @@ TEST_EQUAL(a.isRootOf(e), true)
 TEST_EQUAL(a.isRootOf(f), false)
 RESULT
 
-// 		bool isInterior() const;
-// 		bool isInteriorOf(const Composite& composite) const;
-// 		bool isLeaf() const;
-// 		bool isLeafOf(const Composite& composite) const;
-// 		bool hasChild() const;
-// 		bool isChild() const;
-// 		bool isChildOf(const Composite& composite) const;
-// 		bool isFirstChild() const;
-// 		bool isFirstChildOf(const Composite& composite) const;
-// 		bool isLastChild() const;
-// 		bool isLastChildOf(const Composite& composite) const;
-// 		bool hasParent() const;
-// 		bool isParent() const;
-// 		bool isParentOf(const Composite& composite) const;
-// 		bool hasSibling() const;
+CHECK(isInterior() const)
+TEST_EQUAL(a.isInterior(), false)
+TEST_EQUAL(b.isInterior(), true)
+TEST_EQUAL(c.isInterior(), true)
+TEST_EQUAL(d.isInterior(), false)
+TEST_EQUAL(e.isInterior(), false)
+TEST_EQUAL(f.isInterior(), false)
+RESULT
+
+CHECK(hasChild() const)
+TEST_EQUAL(a.hasChild(), true)
+TEST_EQUAL(b.hasChild(), true)
+TEST_EQUAL(c.hasChild(), true)
+TEST_EQUAL(d.hasChild(), false)
+TEST_EQUAL(e.hasChild(), false)
+TEST_EQUAL(f.hasChild(), false)
+RESULT
+
+CHECK(isChild() const)
+TEST_EQUAL(a.isChild(), false)
+TEST_EQUAL(b.isChild(), true)
+TEST_EQUAL(c.isChild(), true)
+TEST_EQUAL(d.isChild(), true)
+TEST_EQUAL(e.isChild(), true)
+TEST_EQUAL(f.isChild(), false)
+RESULT
+
+CHECK(isChildOf() const)
+TEST_EQUAL(a.isChildOf(a), false)
+TEST_EQUAL(b.isChildOf(a), true)
+TEST_EQUAL(c.isChildOf(a), false)
+TEST_EQUAL(d.isChildOf(a), false)
+TEST_EQUAL(e.isChildOf(a), false)
+TEST_EQUAL(f.isChildOf(a), false)
+TEST_EQUAL(a.isChildOf(b), false)
+TEST_EQUAL(b.isChildOf(b), false)
+TEST_EQUAL(c.isChildOf(b), true)
+TEST_EQUAL(d.isChildOf(b), true)
+TEST_EQUAL(e.isChildOf(b), false)
+TEST_EQUAL(f.isChildOf(b), false)
+RESULT
+
+CHECK(isFirstChild() const)
+TEST_EQUAL(a.isFirstChild(), false)
+TEST_EQUAL(b.isFirstChild(), true)
+TEST_EQUAL(c.isFirstChild(), true)
+TEST_EQUAL(d.isFirstChild(), false)
+TEST_EQUAL(e.isFirstChild(), true)
+TEST_EQUAL(f.isFirstChild(), false)
+RESULT
+
+CHECK(isFirstChildOf(const Composite&) const)
+TEST_EQUAL(a.isFirstChildOf(a), false)
+TEST_EQUAL(b.isFirstChildOf(a), true)
+TEST_EQUAL(c.isFirstChildOf(a), false)
+TEST_EQUAL(d.isFirstChildOf(a), false)
+TEST_EQUAL(e.isFirstChildOf(a), false)
+TEST_EQUAL(f.isFirstChildOf(a), false)
+TEST_EQUAL(a.isFirstChildOf(b), false)
+TEST_EQUAL(b.isFirstChildOf(b), false)
+TEST_EQUAL(c.isFirstChildOf(b), true)
+TEST_EQUAL(d.isFirstChildOf(b), false)
+TEST_EQUAL(e.isFirstChildOf(b), false)
+TEST_EQUAL(f.isFirstChildOf(b), false)
+RESULT
+
+CHECK(isLastChild() const)
+TEST_EQUAL(a.isLastChild(), false)
+TEST_EQUAL(b.isLastChild(), true)
+TEST_EQUAL(c.isLastChild(), false)
+TEST_EQUAL(d.isLastChild(), true)
+TEST_EQUAL(e.isLastChild(), true)
+TEST_EQUAL(f.isLastChild(), false)
+RESULT
+
+CHECK(isLastChildOf(const Composite&) const)
+TEST_EQUAL(a.isLastChildOf(a), false)
+TEST_EQUAL(b.isLastChildOf(a), true)
+TEST_EQUAL(c.isLastChildOf(a), false)
+TEST_EQUAL(d.isLastChildOf(a), false)
+TEST_EQUAL(e.isLastChildOf(a), false)
+TEST_EQUAL(f.isLastChildOf(a), false)
+TEST_EQUAL(a.isLastChildOf(b), false)
+TEST_EQUAL(b.isLastChildOf(b), false)
+TEST_EQUAL(c.isLastChildOf(b), false)
+TEST_EQUAL(d.isLastChildOf(b), true)
+TEST_EQUAL(e.isLastChildOf(b), false)
+TEST_EQUAL(f.isLastChildOf(b), false)
+RESULT
+
+CHECK(hasParent() const)
+TEST_EQUAL(a.hasParent(), false)
+TEST_EQUAL(b.hasParent(), true)
+TEST_EQUAL(c.hasParent(), true)
+TEST_EQUAL(d.hasParent(), true)
+TEST_EQUAL(e.hasParent(), true)
+TEST_EQUAL(f.hasParent(), false)
+RESULT
+
+CHECK(isParentOf() const)
+TEST_EQUAL(a.isParentOf(a), false)
+TEST_EQUAL(a.isParentOf(b), true)
+TEST_EQUAL(b.isParentOf(a), false)
+TEST_EQUAL(c.isParentOf(a), false)
+TEST_EQUAL(d.isParentOf(a), false)
+TEST_EQUAL(e.isParentOf(a), false)
+TEST_EQUAL(f.isParentOf(a), false)
+TEST_EQUAL(f.isParentOf(f), false)
+TEST_EQUAL(a.isParentOf(c), false)
+TEST_EQUAL(a.isParentOf(d), false)
+TEST_EQUAL(a.isParentOf(e), false)
+TEST_EQUAL(a.isParentOf(f), false)
+RESULT
+
+CHECK(isParent() const)
+TEST_EQUAL(a.isParent(), true)
+TEST_EQUAL(b.isParent(), true)
+TEST_EQUAL(c.isParent(), true)
+TEST_EQUAL(d.isParent(), false)
+TEST_EQUAL(e.isParent(), false)
+TEST_EQUAL(f.isParent(), false)
+RESULT
+
+CHECK(hasSibling() const)
+TEST_EQUAL(a.hasSibling(), false)
+TEST_EQUAL(b.hasSibling(), false)
+TEST_EQUAL(c.hasSibling(), true)
+TEST_EQUAL(d.hasSibling(), true)
+TEST_EQUAL(e.hasSibling(), false)
+TEST_EQUAL(f.hasSibling(), false)
+RESULT
+
 // 		bool isSibling() const;
 // 		bool isSiblingOf(const Composite& composite) const;
 // 		bool hasPreviousSibling() const;
