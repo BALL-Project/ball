@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.8 2005/01/04 14:41:34 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.9 2005/01/04 15:30:08 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -77,6 +77,10 @@ namespace BALL
 
 			outfile_ = &std::cout;
 			human_readable_ = true;
+
+			representations_.clear();
+			color_map_.clear();
+			color_vector_.clear();
 		}
 
 		void POVRenderer::setFileName(const String& name)
@@ -118,6 +122,8 @@ namespace BALL
 		String POVRenderer::POVFinish(const String& object, const ColorRGBA& input)
 			throw()
 		{
+
+
 			String output = "finish { BALLFinish";
 			output += object;
 
@@ -169,6 +175,10 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Start the POVRender output..." << endl;
 			#endif
+
+			representations_.clear();
+			color_map_.clear();
+			color_vector_.clear();
 
 			std::ostream& out = *outfile_;
 
@@ -284,9 +294,6 @@ namespace BALL
 			out << "cylinder { Position1, Position2, Radius pigment { Color } finish { BALLFinishTubeTransp } }" << endl;
 			out << "#end" << endl << endl;
 
-			// now begin the CSG union containing all the geometric objects
-			out << "union {" << endl;
-
 			return true;
 		}
 
@@ -294,6 +301,29 @@ namespace BALL
 			throw()
 		{
 			std::ostream& out = *outfile_;
+
+			for (Position p = 0; p < color_vector_.size(); p++)
+			{
+				out << "#declare c" << p << " = " << POVColorRGBA(*color_vector_[p]) << ";" << endl;
+			}
+
+			out << endl;
+			
+			// now begin the CSG union containing all the geometric objects
+			out << "union {" << endl;
+
+
+			vector<const Representation*>::iterator rit = representations_.begin();
+			for (; rit != representations_.end(); rit++)
+			{
+				List<GeometricObject*>::ConstIterator it;
+				for (it =  (*rit)->getGeometricObjects().begin();
+						 it != (*rit)->getGeometricObjects().end();
+						 it++)
+				{
+					render_(*it);
+				}
+			}
 
 			vector<POVRendererClippingPlane>::iterator it = clipping_planes_.begin();
 			for (;it != clipping_planes_.end(); it++)
@@ -331,7 +361,7 @@ namespace BALL
 
 		  out << POVVector3(sphere.getPosition()) << ", "
 					<< sphere.getRadius() << ", "
-					<< POVColorRGBA(color) << ")" << endl;
+					<< getColorIndex_(color) << ")" << endl;
 		}
 
 		void POVRenderer::renderDisc_(const Disc& disc)
@@ -353,7 +383,7 @@ namespace BALL
 			out << POVVector3(position) << ", ";
 			out << POVVector3(normal) << ", ";
 			out << radius;
-			out << " pigment { " << POVColorRGBA(color) << " } ";
+			out << " pigment { " << getColorIndex_(color) << " } ";
 			out << POVFinish("Tube", color); // We use the same finish as for tubes -> helices
 			out << "} " << endl;
 		}
@@ -371,7 +401,7 @@ namespace BALL
 		  out << POVVector3(line.getVertex1()) << ", "
 		      << POVVector3(line.getVertex2()) << ", "
 					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
-					<< POVColorRGBA(color) << ")" << endl;
+					<< getColorIndex_(color) << ")" << endl;
 		}
 
 		void POVRenderer::renderTwoColoredLine_(const TwoColoredLine& tube)
@@ -399,7 +429,7 @@ namespace BALL
 		  out << POVVector3(tube.getVertex1()) << ", "
 		      << POVVector3(tube.getMiddleVertex()) << ", "
 					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
-					<< POVColorRGBA(color1) << ")" << endl;
+					<< getColorIndex_(color1) << ")" << endl;
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
@@ -407,7 +437,7 @@ namespace BALL
 		  out << POVVector3(tube.getMiddleVertex()) << ", "
 		      << POVVector3(tube.getVertex2()) << ", "
 					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
-					<< POVColorRGBA(color2) << ")" << endl;
+					<< getColorIndex_(color2) << ")" << endl;
 		}
 
 
@@ -424,7 +454,7 @@ namespace BALL
 		  out << POVVector3(tube.getVertex1()) << ", "
 		      << POVVector3(tube.getVertex2()) << ", "
 					<< tube.getRadius() << ", "
-					<< POVColorRGBA(color) << ")" << endl;
+					<< getColorIndex_(color) << ")" << endl;
 		}	
 
 		void POVRenderer::renderPoint_(const Point& point)
@@ -439,7 +469,7 @@ namespace BALL
 
 		  out << POVVector3(point.getVertex()) << ", "
 					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
-					<< POVColorRGBA(color) << ")" << endl;
+					<< getColorIndex_(color) << ")" << endl;
 		}
 
 
@@ -468,7 +498,7 @@ namespace BALL
 		  out << POVVector3(tube.getVertex1()) << ", "
 		      << POVVector3(tube.getMiddleVertex()) << ", "
 					<< tube.getRadius() << ", "
-					<< POVColorRGBA(color1) << ")" << endl;
+					<< getColorIndex_(color1) << ")" << endl;
 
   		if ((Size) color1.getAlpha() == 255) out << "Tube(";
 			else 																 out << "TubeT(";
@@ -476,12 +506,13 @@ namespace BALL
 		  out << POVVector3(tube.getMiddleVertex()) << ", "
 		      << POVVector3(tube.getVertex2()) << ", "
 					<< tube.getRadius() << ", "
-					<< POVColorRGBA(color2) << ")" << endl;
+					<< getColorIndex_(color2) << ")" << endl;
 		}
 
 		void POVRenderer::renderMesh_(const Mesh& mesh)
 			throw()
 		{
+			 //	 All meshes have their own color lists up to now ????????
 			if (mesh.vertex.size() == 0 ||
 			    mesh.normal.size() == 0 ||
 					mesh.triangle.size() == 0)
@@ -517,7 +548,6 @@ namespace BALL
 			/////////////////////////////////////////////////
 			// calculate a hashset of all colors in the mesh
 			/////////////////////////////////////////////////
-			typedef HashMap<String, Position> ColorMap;
 			ColorMap colors;
 			vector<const ColorRGBA*> color_vector;
 			String color_string;
@@ -609,5 +639,58 @@ namespace BALL
 			return object.getColor();
 		}
 		
+		bool POVRenderer::render(const Representation& representation)
+			throw()
+		{
+			if (representation.isHidden()) return true;
+
+			if (representation.getModelType() == MODEL_CLIPPING_PLANE)
+			{
+				renderClippingPlane_(representation);
+				return true;
+			}
+
+			if (!representation.isValid())
+			{
+				Log.error() << "Representation " << &representation 
+										<< "not valid, so aborting." << std::endl;
+				return false;
+			}
+
+			List<GeometricObject*>::ConstIterator it;
+
+			for (it =  representation.getGeometricObjects().begin();
+					 it != representation.getGeometricObjects().end();
+					 it++)
+			{
+				if (!RTTI::isKindOf<Mesh>(**it))
+				{
+					storeColor_(**it);
+				}
+			}
+
+			representations_.push_back(&representation);
+
+			return true;
+		}
+
+		void POVRenderer::storeColor_(const GeometricObject& object)
+		{
+			String color_string;
+			getColor_(object).get(color_string);
+			if (!color_map_.has(color_string))
+			{
+				color_map_.insert(ColorMap::ValueType(color_string, color_map_.size()));
+				color_vector_.push_back(&getColor_(object));
+			}
+		}
+
+		String POVRenderer::getColorIndex_(const ColorRGBA& color)
+		{
+			String color_temp;
+			color.get(color_temp);
+			return String("c") + String(color_map_[color_temp]);
+		}
+
 	} // namespaces
 }

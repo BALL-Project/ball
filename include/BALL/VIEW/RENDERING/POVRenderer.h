@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.7.2.2 2005/01/04 14:41:39 amoll Exp $
+// $Id: POVRenderer.h,v 1.7.2.3 2005/01/04 15:30:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -111,6 +111,9 @@ namespace BALL
 			String POVVector3(Vector3 input)
 				throw();
 
+			virtual bool render(const Representation& representation)
+				throw();
+
 			//@}
 			
 			/** @name Processor specific methods
@@ -163,11 +166,18 @@ namespace BALL
 				std::ostream* outfile_;
 				String trimFloatValue_(float value);
 				const ColorRGBA& getColor_(const GeometricObject& object);
+				void storeColor_(const GeometricObject& object);
+				String getColorIndex_(const ColorRGBA& color);
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;
 				vector<POVRendererClippingPlane> clipping_planes_;
 				bool human_readable_;
+
+				typedef HashMap<String, Position> ColorMap;
+				ColorMap color_map_;
+				vector<const ColorRGBA*> color_vector_;
+				vector<const Representation*> representations_;
 		};
   
 	} // namespace BALL
