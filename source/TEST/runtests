@@ -53,7 +53,12 @@ for i in $* ; do
 	else 
 		# test didn't pass
 		OK=false
-		
+			
+		# if backtracing suport is configured, try a stack backtrace
+		if test "${BALL_BACKTRACE}" != "" ; then
+			${BALL_BACKTRACE} $i
+		fi
+	
 		# remember this test
 		FAILED_TESTS="${FAILED_TESTS} $i"
 
