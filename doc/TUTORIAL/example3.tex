@@ -40,8 +40,8 @@ fragment database and the naming conversion tables stored in
 \directory{BALL/data/Fragments}. The resulting data may then be used by two
 very handy processors: \member{add\_hydrogens}{} and \member{build\_bonds}{}.
 As their names suggest, those processors add the missing hydrogen atoms and
-rebuild missing bonds. We will now complete the BPTI protein by using those
-very handy processors:
+rebuild missing bonds. We will now add the missing atoms and bonds of BPTI 
+through simple application of the two processors:
 
 \begin{lstlisting}{}
 	S.apply(db.add_hydrogens);
@@ -93,7 +93,7 @@ setting up a calculation is very simple:\index{AMBER force field}
 \noindent
 This constructor call creates a new \class{AmberFF}, reads the parameter
 file (the default one, \file{amber94.ini}, which corresponds to the AMBER
-file {\tt parm94.dat}), and the parameters suitable for the system.
+file {\tt parm94.dat}), and constructs some internal data structures.
 This particular instance of the force field is now {\em bound} to the 
 system and all its actions will apply to that system, unless a different
 system is specified in a call to \method{setup}.
@@ -104,9 +104,8 @@ not has different meanings at different stages of the force field calculation.
 When calling \method{setup} (as the above constructor does implicitly),
 the force field will ignore all unselected atoms and only selected atoms will
 be part of the computation. There is one special case: If the whole system is
-unselected, it will be treated as if it had been selected completely. This is
-just for convenience, because thus a user does not need to select a system
-prior to setting up a force field calculation.
+unselected, it will be treated as if it had been selected completely (this is
+just for convenience).
 
 {\em After} \method{setup} has been called, the selection gets a different
 meaning. It now indicates which atoms are to be optimized (in an energy
@@ -151,7 +150,7 @@ This status message contains information on the current energy and the
 gradient. \method{setMaxGradient} adjusts the convergence criterion for the
 minimizer: as soon as the RMS gradient of the system falls below 5~kJ/(mol
 \AA), the minimization is aborted. Please note that all energies in BALL
-are in kJ/mol, all positions and distances in \AA and therefore the gradient
+are in kJ/mol, all positions and distances in {\AA} and therefore the gradient
 in kJ/(mol \AA). The current settings of the minimizer are all stored in 
 the member \member{EnergyMinimizer}{options} (a public instance of 
 \class{Options}), so the internal state of the minimizer is readily obtained by
@@ -187,8 +186,10 @@ let the force field know that you want to set up a box with water around the
 current system:
 
 \begin{lstlisting}{}
-	amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
-	amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+	amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] 
+			= true;
+	amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] 
+			= true;
 	amber.setup(S);
 \end{lstlisting}
 
@@ -197,7 +198,7 @@ Setting the options {\tt PERIODIC\_BOX\_ENABLED} and {\tt
 PERIODIC\_BOX\_ADD\_SOLVENT} will cause the force field to enable periodic
 boundary conditions and add the default solvent to the box at the next call
 to \method{setup}. By default, the box is defined as the bounding box of the
-system augmented by 5~\AA in each direction. You can also specify arbitrary
+system augmented by 5~\AA{} in each direction. You can also specify arbitrary
 bounding boxes or different solvents. Please refer to the documentation of
 \class{PeriodicBoundary} for a more detailed description.
 
@@ -214,7 +215,7 @@ perform a few  MD simulation steps:
 
 \noindent
 As in the force field and the energy minimizer, the MD simulation object
-stores all its settings in an options object. The
+stores all its settings in an \class{options} object. The
 \method{simulate} method simulates a given number of MD
 steps. 
 

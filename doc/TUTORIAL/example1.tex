@@ -196,14 +196,14 @@ system to a file and inspect it with a molecule viewer (\eg MolVIEW).
 BALL supports a variety of file formats. For example we could write the system
 to a HyperChem HIN file~\cite{HyperChem}:
 \begin{lstlisting}{}
-	HINFile outfile("water.hin", ios::out);
+	HINFile outfile("water.hin", File::OUT);
 	outfile << S;
 	outfile.close();
 \end{lstlisting}
 \noindent
 These three lines of code create a \class{HINFile} object which is used to
 read and write HyperChem files. The first line opens a file named {\tt
-water.hin} for output ({\tt ios::out}; if the second argument is omitted the
+water.hin} for output ({\tt File::OUT}; if the second argument is omitted the
 file is opened for reading only).
 The second line uses the stream operator {\tt <<} to write the contents
 of system {\tt S} to this file. The file is closed in the third line.
@@ -268,7 +268,7 @@ libraries are installed.
 After the successful execution of the example, a file named {\tt water.hin}
 should appear in the current directory. This file contains the two water
 molecules. You might inspect it with the molecule viewer MolVIEW.
-Fig.~\ref{fig:tut1-screenshot} shows a screenshot of MolVIEW showing the two
+Fig.~\ref{fig:tut1-screenshot} shows a screenshot of MolVIEW displaying the two
 water molecules.
 
 \newpage
@@ -293,9 +293,8 @@ water molecules.
 // the TranslationProcessor
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
-// we use the BALL namespace
+// we use the BALL namespace and the std namespace
 using namespace BALL;
-// .. and the std namespace (for cout and endl)
 using namespace std;
 
 int main()
@@ -362,7 +361,7 @@ int main()
 	S->insert(*water2);
 
 	// and write this system to a HyperChem file
-	HINFile outfile("water.hin", ios::out);
+	HINFile outfile("water.hin", File::OUT);
 	outfile << *S;
 	outfile.close();
 
