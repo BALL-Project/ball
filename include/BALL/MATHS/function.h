@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.3 2000/12/19 13:27:37 anker Exp $
+// $Id: function.h,v 1.4 2000/12/19 16:24:24 anker Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -14,7 +14,8 @@ namespace BALL
 			\\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
-	template <float constant_template>
+	// BAUSTELLE float templates sind nicht ansi.
+	template <int constant_template>
 	class ConstantFunction
 	{
 		public:
