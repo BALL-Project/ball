@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.h,v 1.4 2002/12/18 17:36:46 sturm Exp $
+// $Id: parsedFunction.h,v 1.5 2003/02/25 10:48:09 anhi Exp $
 
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
 #define BALL_MATHS_PARSEDFUNCTION_H
@@ -24,10 +24,10 @@ namespace BALL
 	extern HashMap<String, double*> *parsedFunctionConstants;
 	extern HashMap<String, double (*)(double)> *parsedFunctionFunctions;
 	
-	/** @name parsedFunction.
+	/** ParsedFunction.
 	 		This function type contains a double - valued function string like
-			$var1=atan(.5); sin(cos(atan(asin(exp(X+var1)))))$.
-			When the operator () is called, $X$ is replaced with
+			\f$var1=atan(.5); sin(cos(atan(asin(exp(X+var1)))))\f$.
+			When the operator () is called, \f$X\f$ is replaced with
 			the argument of the operator call and the function string
 			is parsed and evaluated.
 	*/
@@ -62,7 +62,7 @@ namespace BALL
 		/** @name Accessors
 		 */
 		//@{
-		/** Evaluate the function at point $p$.
+		/** Evaluate the function at point \f$p\f$.
 		 */
 		double operator () (arg p)
 			throw(Exception::ParseError);

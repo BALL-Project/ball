@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.h,v 1.15 2003/02/21 16:01:17 anhi Exp $
+// $Id: hash.h,v 1.16 2003/02/25 10:47:34 anhi Exp $
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H
@@ -18,6 +18,7 @@ namespace BALL
 {
 
 	/**	@name	Hashing
+	* 	\ingroup Common
 	*/
 	//@{
 

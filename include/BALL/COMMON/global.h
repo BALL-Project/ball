@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.14 2003/02/21 16:01:16 anhi Exp $
+// $Id: global.h,v 1.15 2003/02/25 10:47:32 anhi Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -35,6 +35,9 @@
 namespace BALL
 {
 	 
+	/** \ingroup Common
+	 *	@{
+	 */
 	typedef int (*ComparatorType)(const void *, const void *);
 
 
@@ -231,7 +234,8 @@ namespace BALL
 	static const Size INVALID_SIZE = INT_MAX;
 	static const Size SIZE_MIN = 0;
 	static const Size SIZE_MAX = INT_MAX - 1;
-
+	
+	/** @} */
 }
 
 #endif // BALL_COMMON_GLOBAL_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.14 2003/02/21 16:01:36 anhi Exp $
+// $Id: notification.h,v 1.15 2003/02/25 10:47:53 anhi Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -18,6 +18,9 @@
 
 namespace BALL 
 {
+	/** \ingroup Concepts
+	 *	@{
+	 */
 
 	/**	@name	Notification Management.
 			Using the notification management, objects may exchange data and notify
@@ -587,7 +590,7 @@ namespace BALL
 	}
 
 	//@}
-
+	/** @} */
 } // namespace BALL
 
 #endif // BALL_CONCEPT_NOTIFICATION_H

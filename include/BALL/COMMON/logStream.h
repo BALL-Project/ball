@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.18 2003/02/21 16:01:19 anhi Exp $
+// $Id: logStream.h,v 1.19 2003/02/25 10:47:36 anhi Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -59,6 +59,7 @@ namespace BALL
 			class, which does the actual buffering and storing, but is only
 			of interest if you want to implement a derived class, as the 
 			actual user interface is implemented in the LogStream class.
+	* 	\ingroup Common
 	*/
 	//@{
 

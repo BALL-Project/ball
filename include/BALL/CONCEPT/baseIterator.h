@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseIterator.h,v 1.20 2003/02/21 16:01:25 anhi Exp $
+// $Id: baseIterator.h,v 1.21 2003/02/25 10:47:42 anhi Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -46,14 +46,15 @@ namespace BALL
 			to check for the validity of the iterator.
 			this allows the convenient implementation of for loops, e.g. as follows: \par
  
-			\begin{verbatim}
+			\code
 				AtomIterator atom_it = system.beginAtom();
 				for (; +atom_it; ++atom_it)
 				{
 					....
 				}
-			\end{verbatim}
+			\endcode
 			<b>Definition:</b> BALL/CONCEPT/baseIterator.h
+	* 	\ingroup ConceptsIterators
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstBaseIterator
@@ -526,6 +527,7 @@ namespace BALL
 
 	/**	Constant Basic Iterator.
 			<b>Definition:</b> BALL/CONCEPT/baseIterator.h
+	* 	\ingroup ConceptsIterators
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class BaseIterator

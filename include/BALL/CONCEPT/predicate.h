@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.5 2003/02/21 16:01:40 anhi Exp $
+// $Id: predicate.h,v 1.6 2003/02/25 10:47:57 anhi Exp $
 
 #ifndef BALL_CONCEPT_PREDICATE_H
 #define BALL_CONCEPT_PREDICATE_H
@@ -10,7 +10,10 @@
 
 namespace BALL 
 {
-	
+	/** \ingroup Concepts
+	 * 	@{
+	 */
+
 	using std::unary_function;
 	using std::binary_function;
 		
@@ -52,6 +55,7 @@ namespace BALL
 	};
 
 	//@}
+	/** @} */
 
 } // namespace BALL
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.37 2003/02/21 16:01:38 anhi Exp $
+// $Id: persistenceManager.h,v 1.38 2003/02/25 10:47:55 anhi Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -39,19 +39,17 @@ namespace BALL
 			provides support for the implementation of the object-specific 
 			serialization methods  \link persistentRead persistentRead \endlink  and  \link persistentWrite persistentWrite \endlink .
 			It defines three different layers:
-			\begin{itemize}
-				\item <b>Layer 0</b> contains the basic I/O routines for primitive
+				- <b>Layer 0</b> contains the basic I/O routines for primitive
 					data types. All methods of layer 0 are virtual to exchange the 
 					implementation of the format-independent storage and retrieval of
 					this data (e.g. XDR or text format)
-				\item <b>Layer 1</b> implements the methods needed to store objects
+				- <b>Layer 1</b> implements the methods needed to store objects
 					or more complex data structures using Layer 0. To implement
 					object persistence for a user defined object, methods from layer
 					0 and layer 1 are needed
-				\item <b>Layer 2</b> implements the persistence manager's {\em user interface}.
+				- <b>Layer 2</b> implements the persistence manager's <b>user interface</b>.
 					These are the methods needed to register classes,
 					set the associated streams, and to store or retrieve objects.
-			\end{itemize}
 			When writing a pointer to a persistent object, the serialization of
 			the referenced object is automatically initiated after the objects
 			holding the pointer has been written. Hence, pointers between persistent 
@@ -63,6 +61,7 @@ namespace BALL
 			@see	PersistentObject
 			@see	XDRPersistenceManager
 			@see	TextPersistenceManager
+	*		\ingroup Persistence
 	*/		
 	class PersistenceManager
 	{

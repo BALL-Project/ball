@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.h,v 1.17 2003/02/21 16:01:22 anhi Exp $
+// $Id: XDRPersistenceManager.h,v 1.18 2003/02/25 10:47:39 anhi Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -15,6 +15,9 @@
 
 namespace BALL 
 {
+	/** \ingroup Persistence
+	 *	@{
+	 */
 
 	/**	XDR-format-based persistence manager.
 			This class implements a persistence manager that reads and writes
@@ -357,6 +360,7 @@ namespace BALL
 		XDR		xdr_out_;
 		
 	};
+	/** @} */
 
 } // namespace BALL
 

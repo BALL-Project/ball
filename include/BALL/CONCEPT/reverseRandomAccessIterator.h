@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reverseRandomAccessIterator.h,v 1.8 2003/02/21 16:01:45 anhi Exp $
+// $Id: reverseRandomAccessIterator.h,v 1.9 2003/02/25 10:48:02 anhi Exp $
 
 #ifndef BALL_CONCEPT_REVERSERANDOMACCESS_H
 #define BALL_CONCEPT_REVERSERANDOMACCESS_H
@@ -25,6 +25,7 @@ namespace BALL
 	/**	@name	Generic Reverse Random Access Iterator Classes.
 			 \par
 			<b>Definition:</b> BALL/CONCEPT/reverseRandomAccessIterator.h
+	* 	\ingroup ConceptsIterators
 	*/
 	//@{
 

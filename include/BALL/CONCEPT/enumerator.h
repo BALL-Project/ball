@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.23 2003/02/21 16:01:33 anhi Exp $
+// $Id: enumerator.h,v 1.24 2003/02/25 10:47:50 anhi Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -41,6 +41,7 @@ namespace BALL
 			is operator [] (0), so incrementing starts at operator [] (size() - 1)
 			 \par
 			<b>Definition:</b> BALL/CONCEPT/enumerator.h
+	* 	\ingroup Concepts
 	*/
 	class EnumeratorIndex
 		: private std::vector<Position>

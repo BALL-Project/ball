@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.21 2003/02/21 16:02:02 anhi Exp $
+// $Id: regularData2D.h,v 1.22 2003/02/25 10:48:08 anhi Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -15,6 +15,9 @@
 
 namespace BALL 
 {
+	/** \ingroup RegularData
+	 * 	@{
+	 */
 
 	/**	Simple 2D grid class.
 			This class represents a two-dimensional array. 
@@ -1185,6 +1188,7 @@ namespace BALL
 	{
 		return !(*this == grid);
 	}
+	/** @} */
 
  } // namespace BALL
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.35 2003/02/21 16:01:29 anhi Exp $
+// $Id: classTest.h,v 1.36 2003/02/25 10:47:46 anhi Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -37,11 +37,9 @@
 
 		A number of elementary tests has been implemented that is sufficient
 		for most cases:
-		\begin{itemize}
-			\item  \link TEST_EQUAL TEST_EQUAL \endlink 
-			\item  \link TEST_NOT_EQUAL TEST_NOT_EQUAL \endlink 
-			\item  \link TEST_REAL_EQUAL TEST_REAL_EQUAL \endlink 
-		\end{itemize}
+			- \link TEST_EQUAL TEST_EQUAL \endlink 
+			- \link TEST_NOT_EQUAL TEST_NOT_EQUAL \endlink 
+			- \link TEST_REAL_EQUAL TEST_REAL_EQUAL \endlink 
 		A subtest is defined by calling the  \link CHECK CHECK \endlink  macro with the subtest name
 		as an argument. Then a series of calls to <b>TEST</b> macros follows,
 		mixed with standard BALL code (remember to include all neccessary header files).
@@ -53,6 +51,7 @@
 		<a href="../../source/BALL/TEST/Skeleton_test.C">source/TEST/Skeleton_test.C</a>
 		 \par
 		<b>Definitions:</b> BALL/CONCEPT/classTest.h
+* 	\ingroup Concepts
 */
 //@{
 

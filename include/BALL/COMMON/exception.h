@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.34 2003/02/21 16:01:15 anhi Exp $
+// $Id: exception.h,v 1.35 2003/02/25 10:47:11 anhi Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -22,14 +22,12 @@ namespace BALL
 
 	class String;
 
+	/**	Exception Handling
+	 * 	\ingroup Common
+   */
+	//@{
 	namespace Exception 
 	{
-
-
-		/**	@name	Exception Handling
-		*/
-		//@{
-
 		
 		/**	General exception class.
 				This class is intended as a base class for all other exceptions.
@@ -490,9 +488,10 @@ namespace BALL
 		*/
 		extern GlobalExceptionHandler globalHandler;
 
-		//@}
 	}
+	//@}
 		/**	Output operator for exceptions.
+				\ingroup Common
 				All BALL exceptions can be printed to an arbitrary output stream.
 				Information written contains the exception class, the error message,
         and the location (file, line number). The following code block

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.19 2003/02/21 16:01:20 anhi Exp $
+// $Id: rtti.h,v 1.20 2003/02/25 10:47:37 anhi Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -18,6 +18,9 @@ using std::string;
 namespace BALL 
 {
 
+	/** \ingroup Common
+	 * 	@{
+	 */
 
 #	ifdef	__GNUC__
 	// EGCS produces a nearly unreadable name mangling that requires 
@@ -229,6 +232,7 @@ namespace BALL
 
 	} // namespace RTTI
 
+	/** @} */
 } // namespace BALL
 
 #endif // BALL_COMMON_RTTI_H

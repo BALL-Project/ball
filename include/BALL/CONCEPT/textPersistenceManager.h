@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.h,v 1.12 2003/02/21 16:01:47 anhi Exp $
+// $Id: textPersistenceManager.h,v 1.13 2003/02/25 10:48:04 anhi Exp $
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -12,6 +12,10 @@
 
 namespace BALL 
 {
+
+	/** \ingroup Persistence
+	 *	@{
+	 */
 
 	/**	Text-format-based persistence manager.
 			This class implements a persistnece manager that reads and writes
@@ -285,7 +289,7 @@ namespace BALL
 		Size indent_depth_;
 
 	};
-
+	/** @} */
 } // namespace BALL
 
 #endif // BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H

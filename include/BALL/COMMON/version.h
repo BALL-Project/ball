@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.15 2003/02/21 16:01:21 anhi Exp $
+// $Id: version.h,v 1.16 2003/02/25 10:47:38 anhi Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -17,8 +17,11 @@
 
 namespace BALL
 {
+	/** \ingroup Common
+	 *  @{
+	 */
 
-	/**	@name Version information class.
+	/**	Version information class.
 			The BALL release, release data and related version
 			can be retrieved by these methods. \par
 			BALL releases ending on:
@@ -73,6 +76,7 @@ namespace BALL
 		static const char* RELEASE_DATE_AND_TIME;
 	  static const char* RELEASE_WHAT_STRING;
 	};
+	/** @} */
 }
 
 #endif // BALL_COMMON_VERSION_H

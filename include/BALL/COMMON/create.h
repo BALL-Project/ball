@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: create.h,v 1.6 2003/02/21 16:01:14 anhi Exp $
+// $Id: create.h,v 1.7 2003/02/25 10:47:09 anhi Exp $
 
 #ifndef BALL_COMMON_CREATE_H
 #define BALL_COMMON_CREATE_H
 
 /**	@name	Dynamic Creation and Virtual Construction of Objects
+* 	\ingroup Common
 */
 //@{
 
