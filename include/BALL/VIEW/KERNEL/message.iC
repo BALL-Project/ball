@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.iC,v 1.10 2003/12/20 15:58:21 amoll Exp $
+// $Id: message.iC,v 1.11 2004/06/03 16:03:36 amoll Exp $
 
 BALL_INLINE
 void Message::setSender(const ConnectionObject* object)
 	throw()
 {
 #ifdef BALL_VIEW_DEBUG
-	Log.error() << "Message " << this << " setSender " << object<< std::endl;
+	Log.error() << "Message " << this << " setSender " << object << "   " << typeid(object).name() << std::endl;
 #endif
   connection_object_ = object;
 }
