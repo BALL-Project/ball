@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reverseBidirectionalIterator.h,v 1.18 2003/05/08 20:48:17 oliver Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.19 2003/05/22 15:11:26 oliver Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -44,7 +44,7 @@ namespace BALL
 		/** Tag this iterator as a bidirectional iterator according to the STL
 				scheme.
 		 */
-		typedef ::std::bidirectional_iterator_tag iterator_category;
+		typedef std::bidirectional_iterator_tag iterator_category;
 
 		//@}
 
@@ -165,14 +165,14 @@ namespace BALL
 	bool ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
+		return BidirectionalIterator<Container, DataType, Position, Traits>::getTraits().isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator - () const
 		throw()
 	{
-		return (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid() == false);
+		return (BidirectionalIterator<Container, DataType, Position, Traits>::getTraits()->isValid() == false);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -462,14 +462,14 @@ namespace BALL
 	bool ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
+		return ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator - () const
 		throw()
 	{
-		return (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid() == false);
+		return (ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().isValid() == false);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>

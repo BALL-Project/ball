@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.29 2003/05/08 08:53:11 sneumann Exp $
+// $Id: enumerator.h,v 1.30 2003/05/22 15:11:26 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -588,7 +588,8 @@ namespace BALL
 			const ValueType& getData() const
 				throw()
 			{
-				validate();
+				// This is logically const only!
+				const_cast<typename Enumerator<Container, SiteIterator, Variant>::IteratorTraits_*>(this)->validate();
 				return bound_->getCurrent();
 			}
 			
