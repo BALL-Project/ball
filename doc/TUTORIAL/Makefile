@@ -27,7 +27,7 @@ tutorial.ps:	tutorial.dvi
 	-@touch tutorial.tex
 
 tutorial.pdf: tutorial.dvi
-	-@dvi2pdf tutorial.dvi
+	-@dvipdf tutorial.dvi
 
 tutorial.idx:
 	latex tutorial && latex tutorial
@@ -43,6 +43,9 @@ tutorial.ind: tutorial.idx
 
 	
 tutorial.dvi:	*.tex tutorial.ind
+	@latex tutorial
+	@bibtex tutorial
+	@latex tutorial
 	@latex tutorial
 	-@echo ""
 	-@echo "-----------------------------------------------------------------"
