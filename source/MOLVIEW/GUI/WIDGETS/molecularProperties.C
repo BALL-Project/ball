@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.5 2001/05/13 15:02:41 hekl Exp $
+// $Id: molecularProperties.C,v 1.6 2001/07/15 17:47:46 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 
@@ -57,9 +57,13 @@ namespace BALL
 				{
 					atom_container->apply(fragment_db_.normalize_names);
 				}
-				catch(...)
+				catch (Exception::GeneralException e)
 				{
-					Log.info() << "  > normalized names failed." << endl;
+					Log.error() << " > normalize named failed: " << e << endl;
+				}
+				catch (...)
+				{
+					Log.error() << "  > normalized names failed." << endl;
 					return;
 				}
 				
@@ -69,9 +73,13 @@ namespace BALL
 				{
 					atom_container->apply(fragment_db_.build_bonds);
 				}
-				catch(...)
+				catch (Exception::GeneralException e)
 				{
-					Log.info() << "  > generated missing bonds failed." << endl;
+					Log.error() << " > generate missing bonds - failed: " << e << endl;
+				}
+				catch (...)
+				{
+					Log.error() << "  > generate missing bonds - failed." << endl;
 					return;
 				}
 				
