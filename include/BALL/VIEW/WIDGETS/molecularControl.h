@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.24 2004/02/23 22:47:01 amoll Exp $
+// $Id: molecularControl.h,v 1.25 2004/02/24 14:29:53 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -459,6 +459,10 @@ namespace BALL
 					\param  composite the Composite object whose subtree will be checked against <b>item</b>
 			*/
 			void updateListViewItem_(SelectableListViewItem* item, Composite& composite)
+				throw();
+
+			//_
+			void removeInvalidItems_(SelectableListViewItem* parent)
 				throw();
 			
 			//@} 

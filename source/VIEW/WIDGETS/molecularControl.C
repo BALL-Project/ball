@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.43 2004/02/23 22:41:59 amoll Exp $
+// $Id: molecularControl.C,v 1.44 2004/02/24 14:29:50 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -200,8 +200,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 				return false;
 
 			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
-//					removeComposite(composite_message->getCo mposite()->getRoot());
-// 					addComposite(composite_message->getComposite()->getRoot());
+				removeInvalidItems_(composite_to_item_[composite_message->getComposite()]);
 				updateListViewItem_(0, *composite_message->getComposite());
 				return true;
 				
@@ -922,6 +921,41 @@ MolecularControl::SelectableListViewItem*
 
 	return new_item;
 }
+
+// this method might seem strange, but it is needed to remove listview items for composites,
+// which were removed from a parent composite and the MolecularControl was notified about this
+// with a CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL. The simpler method
+// would be to rebuild the tree from scratch, but this is annoying for the user.
+// So just let this code prevail, it works ;)
+void MolecularControl::removeInvalidItems_(SelectableListViewItem* parent)
+	throw()
+{
+	Composite& composite = *parent->getComposite();
+	QListViewItemIterator it(parent);
+	for (; it.current(); ++it)
+	{
+		Composite& child = *(((SelectableListViewItem*)(*it))->getComposite());
+		bool found = false;
+		for (Position p = 0; p < composite.getDegree(); p++)
+		{
+			if (composite.getChild(p) == &child)
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+		{
+			delete *it;
+			composite_to_item_.erase(&child);		
+			break;
+		}
+
+		removeInvalidItems_((SelectableListViewItem*)*it);
+	} 
+}
+
 
 void MolecularControl::updateListViewItem_(SelectableListViewItem* parent, Composite& composite)
 	throw()
