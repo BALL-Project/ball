@@ -1,4 +1,4 @@
-// $Id: parameters.C,v 1.8 2000/10/16 20:02:17 oliver Exp $
+// $Id: parameters.C,v 1.9 2001/04/23 22:00:32 amoll Exp $
 //
 
 #include <BALL/FORMAT/parameters.h>
@@ -67,7 +67,7 @@ namespace BALL
 		// read the parameter file
 		if (!INI_file_.read())
 		{
-			throw Exception::FileNotFound(__FILE__, __LINE__, INI_file_.getFilename().c_str());
+			return false;
 		}
 
 		// extract the AtomTypes section
