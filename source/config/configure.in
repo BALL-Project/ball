@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.71 2000/03/21 14:09:12 oliver Exp $
+dnl    $Id: configure.in,v 1.72 2000/03/26 09:17:35 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1504,7 +1504,36 @@ dnl		check whether vsnprintf is defined
 dnl
 AC_CHECK_FUNCS(vsnprintf, HAVE_VSNPRINTF=1)
 if test "${HAVE_VSNPRINTF}" = 1 ; then
-	AC_DEFINE(BALL_HAVE_VSNPRINTF)
+	dnl
+	dnl   check whether vsnprintf works as expected 
+	dnl   on Solaris 2.x it is broken in the 64bit version
+	dnl
+	AC_TRY_RUN(
+		[
+			#include <stdlib.h> 
+			int main()
+			{
+				char* buffer[50];
+				vsnprintf(buffer, "%1s", "TEST");
+				
+				if (!strcmp(buffer, "T"))
+				{			
+					return 0;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+		], 
+		VSNPRINTF_OK=1,
+		DUMMY=0,
+		DUMMY=0
+	)
+
+	if test "${VSNPRINTF_OK}" = 1 ; then
+		AC_DEFINE(BALL_HAVE_VSNPRINTF)
+	fi
 fi
 
 dnl   
