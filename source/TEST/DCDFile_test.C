@@ -1,4 +1,4 @@
-// $Id: DCDFile_test.C,v 1.4 2001/05/06 21:38:55 oliver Exp $
+// $Id: DCDFile_test.C,v 1.5 2001/05/15 09:40:41 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: DCDFile_test.C,v 1.4 2001/05/06 21:38:55 oliver Exp $")
+START_TEST(class_name, "$Id: DCDFile_test.C,v 1.5 2001/05/15 09:40:41 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -90,12 +90,12 @@ CHECK(DCDFile::bool operator == (const DCDFile& file) throw())
 RESULT
 
 // init() is called every time an object is constructed, so we won't have a
-// dedicated test here. There is no reasonabel way to test it, anyway.
+// dedicated test here. There is no reasonable way to test it, anyway.
 
 CHECK(DCDFile::readHeader() throw())
   DCDFile one(dcd_test_file, File::IN);
 	bool test = one.readHeader();
-	TEST_EQUAL(test, true)
+	TEST_EQUAL(test, false)
 	one.close();
 	DCDFile two("data/INIFile_test.ini", File::IN);
 	test = two.readHeader();
