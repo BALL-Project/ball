@@ -1,4 +1,4 @@
-// $Id: QTTimer.h,v 1.8 2001/05/13 16:31:38 hekl Exp $
+// $Id: QTTimer.h,v 1.9 2001/07/10 12:33:06 aubertin Exp $
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #define BALL_VIEW_KERNEL_QTTIMER_H
@@ -20,7 +20,7 @@ namespace BALL
 		/** QTTimer class.		
 				{\bf Framework:} BALL/VIEW/KERNEL\\
 				{\bf Definition:} \URL{BALL/VIEW/KERNEL/QTTimer.h}\\ \\
-				The QTTimer class is a timer class that is usefull for having repeated a job
+				The QTTimer class is a timer class that is useful to have a job repeated
 				unhindered by other jobs that are already processing.
 				The protected method {\em timer} will be called every {\em intervall} msec
 				to process its contents. It is important that the process time for executing
@@ -32,9 +32,9 @@ namespace BALL
 				The class is derived from the \Ref{QObject} class from the QT library. 
 				Therefore it will only function within a qt application.
 				@memo    QTTimer class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/05/13 16:31:38 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.9 $
+				@date    $Date: 2001/07/10 12:33:06 $
 		*/
 		class QTTimer: public QObject
 		{
@@ -63,7 +63,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new QTTimer.
+					Constructs new QTTimer.
 					The state of {\em *this} qtTimer is:
 					\begin{itemize}
 					  \item interval is set to 100
@@ -76,7 +76,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor.
-					Construct new QTTimer by copying the qtTimer {\em qt_timer}.
+					Constructs new QTTimer by copying the qtTimer {\em qt_timer}.
 					The state of {\em *this} qtTimer is initialized to the state of the qtTimer {\em qt_timer}.\\
 					@param       qt_timer the qtTimer to be copied
 					@return      QTTimer new constructed qtTimer copied from {\em qt_timer}
@@ -98,7 +98,7 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Set the state of {\em *this} qtTimer to the default values.
+					Sets the state of {\em *this} qtTimer to the default values.
 					The state of {\em *this} qtTimer is:
 					\begin{itemize}
 					  \item interval is set to 100
@@ -109,7 +109,7 @@ namespace BALL
 				throw();
 
 			/** Explicit destructor.
-					Destroy {\em *this} qtTimer.
+					Destroys {\em *this} qtTimer.
 					Halts the timer.
 			*/
 			virtual void destroy()
@@ -121,7 +121,7 @@ namespace BALL
 			//@{
 
 			/** Assignment with cloning facility.
-					Assign the qtTimer {\em qt_timer} to {\em *this} qtTimer.
+					Assigns the qtTimer {\em qt_timer} to {\em *this} qtTimer.
 					The state of {\em *this} qtTimer is initialized to the state of 
 					the qtTimer {\em qt_timer}.
 					The timer is halted.\\
@@ -131,7 +131,7 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the qtTimer {\em qt_timer} to {\em *this} qtTimer.
+					Assigns the qtTimer {\em qt_timer} to {\em *this} qtTimer.
 					Calls \Ref{set}.
 					The state of {\em *this} qtTimer is initialized to the state 
 					of the qtTimer {\em qt_timer}.\\
@@ -143,7 +143,7 @@ namespace BALL
 				throw();
 
 			/** Copying.
-					Copy {\em *this} qtTimer to the qtTimer {\em qt_timer}.
+					Copies {\em *this} qtTimer to the qtTimer {\em qt_timer}.
 					Calls \Ref{set}.
 					The state of the qtTimer {\em qt_timer} is initialized to the
 					state of {\em *this} qtTimer.\\
@@ -154,7 +154,7 @@ namespace BALL
   			throw();
 
 			/** Swapping of qtTimer's.
-					Swap the states of {\em *this} qtTimer with the qtTimer
+					Swaps the states of {\em *this} qtTimer with the qtTimer
 					{\em qt_timer}. The timer is halted.
 					@param       qt_timer the qtTimer being swapped with {\em *this} qtTimer 
 			*/
@@ -166,8 +166,8 @@ namespace BALL
 			*/
 			//@{
 
-			/** Change the interval of {\em *this} qtTimer.
-					Change the interval of {\em *this} qtTimer to the value
+			/** Changes the interval of {\em *this} qtTimer.
+					Changes the interval of {\em *this} qtTimer to the value
 					represented by the parameter {\em interval}. {\em *this} qtTimer will
 					call the method {\em timer} every {\em interval} msec.
 					@param       interval the new interval of {\em *this} qtTimer
@@ -180,15 +180,15 @@ namespace BALL
 				throw(NoValidInterval);
 
 			/** Inspection of the interval.
-					Access the interval of {\em *this} qtTimer.
+					Accesses the interval of {\em *this} qtTimer.
 					@return      int the value of the interval of {\em *this} qtTimer
 					@see         setInterval
 			*/
 			int getInterval() const
 				throw();
 
-			/** Start the timer.
-					Start the timer of {\em *this} qtTimer.
+			/** Starts the timer.
+					Starts the timer of {\em *this} qtTimer.
 					After this method is called the method {\em timer} will be called
 					every {\em interval} msec.
 					@see     stopTimer
@@ -197,8 +197,8 @@ namespace BALL
 			void startTimer()
 				throw();
 			
-			/** Stop the timer.
-					Stop the timer of {\em *this} qtTimer.
+			/** Stops the timer.
+					Stops the timer of {\em *this} qtTimer.
 					After this method is called the execution of the {\em timer} method
 					will be stopped.
 					@see     startTimer
@@ -212,7 +212,7 @@ namespace BALL
 			*/
 			//@{
 
-			/** Test if {\em *this} qtTimer is running.
+			/** Tests if {\em *this} qtTimer is running.
 					@return  bool -	{\tt true} if {\em *this} qtTimer is running, {\tt false} otherwise
 					@see     startTimer
 					@see     stopTimer
@@ -220,7 +220,7 @@ namespace BALL
 			bool isTimerEnabled() const
 				throw();
 
-			/** Test if {\em *this} qtTimer is stopped.
+			/** Tests if {\em *this} qtTimer is stopped.
 					@return  bool -	{\tt true} if {\em *this} qtTimer is stopped, {\tt false} otherwise
 					@see     startTimer
 					@see     stopTimer
@@ -234,7 +234,7 @@ namespace BALL
 			//@{
 
 			/** Internal value dump.
-					Dump the current state of {\em *this} qtTimer to 
+					Dumps the current state of {\em *this} qtTimer to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 					@param   s output stream where to output the state of {\em *this} qtTimer
 					@param   depth the dumping depth
@@ -248,8 +248,8 @@ namespace BALL
 			//@{
 
 			/** Persistent stream output and state restorage.
-  			  Read persistent qtTimer data from the input stream {\em s} and 
-				  restore the state of {\em *this}.	 \\
+  			  Reads persistent qtTimer data from the input stream {\em s} and 
+				  restores the state of {\em *this}.	 \\
 				  {\bf Note:} Not yet implemented.		 
 				  @param       s input stream from where to restore the internal state of {\em *this} qtTimer
 			*/
@@ -257,8 +257,8 @@ namespace BALL
 				throw();
 
 			/** Persistent stream output and state storage.
-  			  Write persistent qtTimer data to the output stream {\em s} and 
-				  store the state of {\em *this}. \\
+  			  Writes persistent qtTimer data to the output stream {\em s} and 
+				  stores the state of {\em *this}. \\
 				  {\bf Note:} Not yet implemented.	 
 				  @param       s output stream to where to store the internal state of {\em *this} qtTimer
 			*/

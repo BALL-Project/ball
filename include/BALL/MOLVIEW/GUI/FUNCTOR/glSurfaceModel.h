@@ -1,4 +1,4 @@
-// $Id: glSurfaceModel.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
+// $Id: glSurfaceModel.h,v 1.4 2001/07/10 12:43:18 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
@@ -32,9 +32,9 @@ namespace BALL
 				OpenGL implementation to generate the graphical visualization of the surface.
 				This class has the same functionality as its base class \Ref{AddSurfaceModel}.
 				@memo    AddGLSurfaceModel class (BALL MOLVIEW gui functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/10 12:43:18 $
 		*/
 		class AddGLSurfaceModel: public AddSurfaceModel
 		{
@@ -45,7 +45,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new addGLSurfaceModel.
+					Constructs new addGLSurfaceModel.
 					@return      AddGLSurfaceModel new constructed addGLSurfaceModel
 					@see         AddSurfaceModel
 			*/
@@ -53,7 +53,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor.
-					Construct new addGLSurfaceModel by copying the addGLSurfaceModel
+					Constructs new addGLSurfaceModel by copying the addGLSurfaceModel
 					{\em add_gl_surface_model}. Initializes the state of {\em this} addGLSurfaceModel 
 					to the state of {\em add_gl_surface_model}.
 					@param       add_gl_surface_model the addGLSurfaceModel to be copied
@@ -84,7 +84,7 @@ namespace BALL
 			protected:
 
 			/** @name Creation method
-					This method creates a primitives with OpenGL implementation used
+					This method creates primitives with OpenGL implementation used
 					for generating the graphical representation of the shapes they
 					represent.
 					This method is the overridden method of the base class 
@@ -92,8 +92,8 @@ namespace BALL
 					@see  AddSurfaceModel
 			*/
 			//@{
-			/** Create a mesh.
-					Create a \Ref{GLMesh} object and returns it as \Ref{Mesh}.
+			/** Creates a mesh.
+					Creates a \Ref{GLMesh} object and returns it as \Ref{Mesh}.
 					This overridden method of the class \Ref{AddSurfaceModel} creates
 					a primitive with openGL implementation.
 					The method \Ref{operator()} uses this method to create a mesh object

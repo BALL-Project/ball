@@ -1,4 +1,4 @@
-// $Id: glVanDerWaalsModel.h,v 1.4 2001/07/04 12:58:56 aubertin Exp $
+// $Id: glVanDerWaalsModel.h,v 1.5 2001/07/10 12:45:00 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
@@ -33,8 +33,8 @@ namespace BALL
 				This class has the same functionality as its base class \Ref{AddVanDerWaalsModel}.
 				@memo    AddGLVanDerWaalsModel class (BALL MOLVIEW gui functor framework)
 				@author  $Author: aubertin $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/04 12:58:56 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/10 12:45:00 $
 		*/
 		class AddGLVanDerWaalsModel: public AddVanDerWaalsModel
 		{
@@ -84,7 +84,7 @@ namespace BALL
 			protected:
 
 			/** @name Creation method
-					This method creates a primitives with OpenGL implementation used
+					This method creates primitives with OpenGL implementation used
 					for generating the graphical representation of the shapes they
 					represent.
 					This method is the overridden method of the base class 

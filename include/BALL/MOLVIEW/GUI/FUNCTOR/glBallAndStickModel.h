@@ -1,4 +1,4 @@
-// $Id: glBallAndStickModel.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
+// $Id: glBallAndStickModel.h,v 1.4 2001/07/10 12:38:05 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
@@ -40,9 +40,9 @@ namespace BALL
 				shapes they present.
 				This class has the same functionality as its base class \Ref{AddBallAndStickModel}.
 				@memo    AddGLBallAndStickModel class (BALL MOLVIEW gui functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/10 12:38:05 $
 		*/
 		class AddGLBallAndStickModel: public AddBallAndStickModel
 		{
@@ -53,7 +53,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new addGLBallAndStickModel.
+					Constructs new addGLBallAndStickModel.
 					@return      AddGLBallAndStickModel new constructed addGLBallAndStickModel
 					@see         AddBallAndStickModel
 			*/
@@ -61,7 +61,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor.
-					Construct new addGLBallAndStickModel by copying the addGLBallAndStickModel
+					Constructs new addGLBallAndStickModel by copying the addGLBallAndStickModel
 					{\em add_GL_ball_and_stick_model}. Initializes the state of {\em this} 
 					addGLBallAndStickModel to the state of {\em add_GL_ball_and_stick_model}.
 					@param       add_GL_ball_and_stick_model the addGLBallAndStickModel to be copied
@@ -99,8 +99,8 @@ namespace BALL
 					@see  AddBallAndStickModel
 			*/
 			//@{
-			/** Create a sphere.
-					Create a \Ref{GLSphere} object and returns it as \Ref{Sphere}.
+			/** Creates a sphere.
+					Creates a \Ref{GLSphere} object and returns it as \Ref{Sphere}.
 					This overridden method of the class \Ref{AddBallAndStickModel} creates
 					a primitive with openGL implementation.
 					The method \Ref{operator()} uses this method to create a sphere
@@ -112,8 +112,8 @@ namespace BALL
 			*/
 			virtual Sphere* createSphere_();
 		 
-			/** Create a one colored tube.
-					Create a \Ref{GLTube} object and returns it as \Ref{Tube}.
+			/** Creates a one colored tube.
+					Creates a \Ref{GLTube} object and returns it as \Ref{Tube}.
 					This overridden method of the class \Ref{AddBallAndStickModel} creates
 					a primitive with openGL implementation.
 					The method \Ref{operator()} uses this method to create one colored
@@ -127,8 +127,8 @@ namespace BALL
 			*/
 			virtual Tube* createTube_();
 		 
-			/** Create a two colored tube.
-					Create a \Ref{GLTwoColoredTube} object and returns it as \Ref{TwoColoredTube}.
+			/** Creates a two colored tube.
+					Creates a \Ref{GLTwoColoredTube} object and returns it as \Ref{TwoColoredTube}.
 					This overridden method of the class \Ref{AddBallAndStickModel} creates
 					a primitive with openGL implementation.
 					The method \Ref{operator()} uses this method to create two colored

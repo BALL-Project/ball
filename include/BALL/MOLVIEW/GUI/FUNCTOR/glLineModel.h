@@ -1,4 +1,4 @@
-// $Id: glLineModel.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
+// $Id: glLineModel.h,v 1.4 2001/07/10 12:40:53 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
@@ -39,9 +39,9 @@ namespace BALL
 				shapes they present.
 				This class has the same functionality as its base class \Ref{AddLineModel}.
 				@memo    AddGLLineModel class (BALL MOLVIEW gui functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/10 12:40:53 $
 		*/
 		class AddGLLineModel: public AddLineModel
 		{
@@ -53,7 +53,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new addGLLineModel.
+					Constructs new addGLLineModel.
 					@return      AddGLLineModel new constructed addGLLineModel
 					@see         AddLineModel
 			*/
@@ -61,7 +61,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor.
-					Construct new addGLLineModel by copying the addGLLineModel
+					Constructs new addGLLineModel by copying the addGLLineModel
 					{\em add_GL_line_model}. Initializes the state of {\em this} 
 					addGLLineModel to the state of {\em add_GL_line_model}.
 					@param       add_GL_line_model the addGLLineModel to be copied
@@ -101,8 +101,8 @@ namespace BALL
 					@see  AddLineModel
 			*/
 			//@{
-			/** Create a point.
-					Create a \Ref{GLPoint} object and returns it as \Ref{Point}.
+			/** Creates a point.
+					Creates a \Ref{GLPoint} object and returns it as \Ref{Point}.
 					This overridden method of the class \Ref{AddLineModel} creates
 					a primitive with openGL implementation.
 					The method \Ref{operator()} uses this method to create a point
@@ -114,8 +114,8 @@ namespace BALL
 			*/
 			virtual Point* createPoint_();
 		 
-			/** Create a one colored line.
-					Create a \Ref{GLLine} object and returns it as \Ref{Line}.
+			/** Creates a one colored line.
+					Creates a \Ref{GLLine} object and returns it as \Ref{Line}.
 					This overridden method of the class \Ref{AddLineModel} creates
 					a primitive with openGL implementation.
 					The method \Ref{operator()} uses this method to create one colored
@@ -129,8 +129,8 @@ namespace BALL
 			*/
 			virtual Line* createLine_();
 
-			/** Create a two colored line.
-					Create a \Ref{GLTwoColoredLine} object and returns it as \Ref{TwoColoredLine}.
+			/** Creates a two colored line.
+					Creates a \Ref{GLTwoColoredLine} object and returns it as \Ref{TwoColoredLine}.
 					This overridden method of the class \Ref{AddLineModel} creates
 					a primitive with openGL implementation.
 					The method \Ref{operator()} uses this method to create two colored
