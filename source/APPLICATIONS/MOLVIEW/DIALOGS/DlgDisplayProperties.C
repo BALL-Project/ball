@@ -159,9 +159,9 @@ void DlgDisplayProperties::onNotify(Message *message)
 		notify_(scene_message);
 	}
 	// selection => store last selection for later processing
-	else if (RTTI::isKindOf<SelectionMessage>(*message))
+	else if (RTTI::isKindOf<MolecularSelectionMessage>(*message))
 	{
-		SelectionMessage *selection = RTTI::castTo<SelectionMessage>(*message);
+		MolecularSelectionMessage *selection = RTTI::castTo<MolecularSelectionMessage>(*message);
 
 		selection_ = selection->getSelection();
 	}
