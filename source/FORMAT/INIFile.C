@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.7 2000/01/18 12:53:50 oliver Exp $
+// $Id: INIFile.C,v 1.8 2000/01/28 16:36:35 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
@@ -368,7 +368,9 @@ namespace BALL
 		}
 
 		Size index = section_key_map_[match_name];
-		if (lines_[index][-1] != '=')
+		// nasty workaround: KCC produces a warning 
+		Index minus_one = -1;
+		if (lines_[index][minus_one] != '=')
 		{
 			// create the substring describing the value part of the line
 			Substring value = lines_[index].after('=', 0);
