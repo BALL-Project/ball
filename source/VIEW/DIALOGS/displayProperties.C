@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.30 2003/10/28 01:28:38 amoll Exp $
+// $Id: displayProperties.C,v 1.31 2003/11/02 14:12:24 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -106,6 +106,11 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 		precision_slider->setValue((Position)inifile.getValue("WINDOWS", "Display::surface_precision").toFloat() * 10);
 		custom_precision_button->setChecked(true);
 	}
+	else
+	{ 
+		presets_precision_button->setChecked(true);
+		precision_slider->setValue(12 * 10);
+	}
 
 	getEntry_(inifile, "model", model_type_, *model_type_combobox);
 	getEntry_(inifile, "precision", precision_, *precision_combobox);
@@ -186,6 +191,7 @@ void DisplayProperties::createRepresentationMode()
 	model_type_combobox->setCurrentItem(model_type_);
 	mode_combobox->setCurrentItem(mode_);
 	apply_button->setEnabled(getMainControl()->getControlSelection().size());
+	checkDrawingPrecision_();
 }
 
 void DisplayProperties::modifyRepresentationMode()
@@ -193,15 +199,6 @@ void DisplayProperties::modifyRepresentationMode()
 	setCaption("modify Representation");
 	coloring_method_combobox->setCurrentItem(rep_->getColoringType());
 	precision_combobox->setCurrentItem(rep_->getDrawingPrecision());
-	if (rep_->getSurfaceDrawingPrecision() != -1)
-	{
-		precision_slider->setValue((Position)(rep_->getSurfaceDrawingPrecision() * 10));
-		custom_precision_button->setChecked(true);
-	}
-	else
-	{
-		presets_precision_button->setChecked(true);
-	}
 	model_type_combobox->setCurrentItem(rep_->getModelType());
 	mode_combobox->setCurrentItem(rep_->getDrawingMode());
 
@@ -210,6 +207,8 @@ void DisplayProperties::modifyRepresentationMode()
 	color_sample->setBackgroundColor(qcolor);
 
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
+
+	checkDrawingPrecision_();
 
 	apply_button->setEnabled(true);
 }
@@ -222,6 +221,7 @@ void DisplayProperties::selectModel(int index)
 	}
 
 	model_type_ = index;
+	checkDrawingPrecision_();
 }
 
 void DisplayProperties::selectMode(int index)
@@ -600,5 +600,33 @@ void DisplayProperties::precisionBoxChanged(int index)
 			Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
 	}
 }
+
+void DisplayProperties::checkDrawingPrecision_()
+	throw()
+{
+	if (model_type_ != MODEL_SE_SURFACE && 
+			model_type_ != MODEL_SA_SURFACE)
+	{
+		presets_precision_button->setChecked(true);
+		custom_precision_button->setEnabled(false);
+		precision_slider->setEnabled(false);
+	}
+	else
+	{
+		precision_slider->setEnabled(true);
+		custom_precision_button->setEnabled(true);
+		if (rep_ != 0 &&
+				rep_->getSurfaceDrawingPrecision() != -1)
+		{
+			custom_precision_button->setChecked(true);
+			precision_slider->setValue((Position)(rep_->getSurfaceDrawingPrecision() * 10));
+		}
+		else
+		{
+			presets_precision_button->setChecked(true);
+		}
+	}
+}
+
 
 } } // namespaces
