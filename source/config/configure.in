@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.129 2001/04/30 18:39:12 oliver Exp $
+dnl    $Id: configure.in,v 1.130 2001/05/07 14:25:42 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2984,7 +2984,7 @@ if test "${MULTI_BUILD}" = "true" ; then
 	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
 	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
 	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
-	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
+	${LN} -s `pwd`/TEST/runbenchmarks `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
 
 	${CP} config/Makefile.multiplatform Makefile
 
