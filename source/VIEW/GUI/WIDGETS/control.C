@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.3 2002/10/27 20:31:17 amoll Exp $
+// $Id: control.C,v 1.7.4.4 2002/11/07 19:04:30 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -11,8 +11,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-Control::Control
-  (QWidget* parent, const char* name)
+Control::Control(QWidget* parent, const char* name)
 	throw()
 		:	QListView(parent, name),
 			ModularWidget(name),
@@ -40,14 +39,9 @@ Control::Control
 	// if the selection of any item changed,
 	// mark the complete selection as invalid
 	// it is then re-determined by getSelection()
-	connect(this,
-					SIGNAL(selectionChanged()),
-					this,
-					SLOT(updateSelection()));
+	connect(this, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 
-	connect(this,
-				  SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
-					this,
+	connect(this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)), this,
 					SLOT(onContextMenu(QListViewItem*, const QPoint&, int)));
 
 	// register ModularWidget
@@ -58,8 +52,7 @@ Control::~Control()
 	throw()
 {
   #ifdef BALL_VIEW_DEBUG
-	  cout << "Destructing object " << (void *)this 
-				 << " of class " << RTTI::getName<Control>() << endl;
+	  cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<Control>() << endl;
   #endif 
 		
 	destroy();
@@ -78,21 +71,10 @@ void Control::destroy()
 void Control::initializeWidget(MainControl& main_control)
 	throw()
 {
-	cut_id_ 
-		= main_control.insertMenuEntry
-		   (MainControl::EDIT, "&Cut", this, SLOT(cut()), CTRL+Key_C);
-
-	copy_id_ 
-		= main_control.insertMenuEntry
-		   (MainControl::EDIT, "C&opy", this, SLOT(copy()), CTRL+Key_O);
-
-	paste_id_ 
-		= main_control.insertMenuEntry
-		   (MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_P);
-
-	clipboard_id_ 
-		= main_control.insertMenuEntry
-		   (MainControl::EDIT, "Cl&ear Clipboard", this, SLOT(clearClipboard()), CTRL+Key_E);
+	cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Cut", this, SLOT(cut()), CTRL+Key_C);
+	copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "C&opy", this, SLOT(copy()), CTRL+Key_O);
+	paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_P);
+	clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cl&ear Clipboard", this, SLOT(clearClipboard()), CTRL+Key_E);
 }
 
 void Control::finalizeWidget(MainControl& main_control)
@@ -109,8 +91,7 @@ void Control::checkMenu(MainControl& /* main_control */)
 {
 }
 
-bool Control::addComposite
-  (Composite* composite, QString* own_name)
+bool Control::addComposite(Composite* composite, QString* own_name)
 	throw()
 {
 	if (composite == 0)
@@ -152,8 +133,7 @@ bool Control::removeComposite(Composite* composite)
 	return false;
 }
 
-bool Control::updateComposite
-  (Composite* composite)
+bool Control::updateComposite(Composite* composite)
 	throw()
 {
 	if (composite == 0)
@@ -199,12 +179,10 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* item)
 			delete colorMeshDlg_;
 			colorMeshDlg_ = 0;
 		}
-		colorMeshDlg_ = new ColorMeshDialog();
-
+		colorMeshDlg_ = new ColorMeshDialog(this);
 		colorMeshDlg_->mesh = (Mesh*)RTTI::castTo<Mesh>(*composite);
 		insertContextMenuEntry("Color mesh", colorMeshDlg_, SLOT(show()));	
 	}
-
 }
 
 void Control::insertContextMenuEntry(const String& name, const QObject* receiver, const char* slot, int accel, int entry_ID)
@@ -333,23 +311,17 @@ bool Control::reactToMessages_(Message* message)
 
 	if (RTTI::isKindOf<NewCompositeMessage>(*message))
 	{
-		NewCompositeMessage *composite_message 
-			= RTTI::castTo<NewCompositeMessage>(*message);
-
+		NewCompositeMessage *composite_message = RTTI::castTo<NewCompositeMessage>(*message);
 		update = addComposite((Composite *)composite_message->getComposite());
 	}
 	else if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
   {
-    RemovedCompositeMessage *composite_message
-      = RTTI::castTo<RemovedCompositeMessage>(*message);
-
+    RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
     update = removeComposite((Composite *)composite_message->getComposite());
 	}   
 	else if  (RTTI::isKindOf<ChangedCompositeMessage>(*message))
   {
-    ChangedCompositeMessage *composite_message
-      = RTTI::castTo<ChangedCompositeMessage>(*message);
-
+    ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
 		update = updateComposite(&(composite_message->getComposite()->getRoot()));
 	}
 
@@ -424,8 +396,7 @@ Composite* Control::getCompositeAddress_(QListViewItem* item)
 	return composite;
 }
 
-void Control::generateListViewItem_
-  (QListViewItem* item, Composite* composite, QString* default_name)
+void Control::generateListViewItem_(QListViewItem* item, Composite* composite, QString* default_name)
 	throw()
 {
 	if (composite == 0)
@@ -483,8 +454,7 @@ void Control::generateListViewItem_
 	recurseGeneration_(new_item, composite);
 }
 
-bool Control::updateListViewItem_
-  (QListViewItem* item, Composite* composite, QString* /* default_name */)
+bool Control::updateListViewItem_(QListViewItem* item, Composite* composite, QString* /* default_name */)
 	throw()
 {
 	// was the tree updated ?
