@@ -1,7 +1,7 @@
-// $Id: findGeometricObject.h,v 1.3 1999/12/28 18:38:06 oliver Exp $
+// $Id: findGeometricObject.h,v 1.4 2000/06/18 16:38:13 hekl Exp $
 
-#ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECT_H
-#define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECT_H
+#ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
+#define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -9,6 +9,10 @@
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
+#endif
+
+#ifndef BALL_DATATYPE_LIST_H
+#	include <BALL/DATATYPE/list.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -31,7 +35,7 @@ namespace BALL
 		
 		/**
 		*/
-		class FindGeometricObject
+		class FindGeometricObjects
 			: public UnaryProcessor<Composite>,
 				public ExtendedPropertyManager
 		{
@@ -41,12 +45,12 @@ namespace BALL
 			*/
 			//@{
 
-			FindGeometricObject();
+			FindGeometricObjects();
 
-			FindGeometricObject
-				(const FindGeometricObject& find_geometric_object, bool deep = true);
+			FindGeometricObjects
+				(const FindGeometricObjects& find_geometric_objects, bool deep = true);
 
-			virtual ~FindGeometricObject();
+			virtual ~FindGeometricObjects();
 
 			virtual void clear();
 
@@ -59,22 +63,24 @@ namespace BALL
 			//@{
 
 			void set
-				(const FindGeometricObject& find_geometric_object, bool deep = true);
+				(const FindGeometricObjects& find_geometric_objects, bool deep = true);
 
-			FindGeometricObject& operator =
-				(const FindGeometricObject& find_geometric_object);
+			FindGeometricObjects& operator =
+				(const FindGeometricObjects& find_geometric_objects);
 
 			void get
-				(FindGeometricObject& find_geometric_object, bool deep = true) const;
+				(FindGeometricObjects& find_geometric_objects, bool deep = true) const;
 
-			void swap(FindGeometricObject& find_geometric_object);
+			void swap(FindGeometricObjects& find_geometric_objects);
 			//@}
 
 			/**	@name	Accessors
 			*/
 			//@{
 
-			VIEW::GeometricObject* getGeometricObject() const;
+			List<VIEW::GeometricObject*>& getGeometricObjects();
+
+			const List<VIEW::GeometricObject*>& getGeometricObjects() const;
 
 			//@}
 			
@@ -95,7 +101,7 @@ namespace BALL
 			/**	@name	Predicates
 			*/
 			//@{
-			bool geometricObjectFound() const;
+			bool geometricObjectsFound() const;
 			//@}
 
 			/**	@name	Debugging and Diagnostics
@@ -112,7 +118,7 @@ namespace BALL
 			
 			private:  
 
-			VIEW::GeometricObject* geometric_object_;
+			List<VIEW::GeometricObject*> geometric_objects_;
 		};
 
 			
@@ -124,4 +130,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECT_H
+#endif // BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H

@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.6 2000/03/15 08:44:35 oliver Exp $
+// $Id: findGeometricObject.C,v 1.7 2000/06/18 16:34:50 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -11,99 +11,99 @@ namespace BALL
 	{
 
 
-		FindGeometricObject::FindGeometricObject()
+		FindGeometricObjects::FindGeometricObjects()
 			:	UnaryProcessor<Composite>(),
 				ExtendedPropertyManager(),
-				geometric_object_(0)
+				geometric_objects_()
 		{
 		}
 
-		FindGeometricObject::FindGeometricObject
-			(const FindGeometricObject &find_geometric_object, bool deep)
-			:	UnaryProcessor<Composite>(find_geometric_object),
-				ExtendedPropertyManager(find_geometric_object, deep),
-				geometric_object_(find_geometric_object.geometric_object_)
+		FindGeometricObjects::FindGeometricObjects
+			(const FindGeometricObjects &find_geometric_objects, bool deep)
+			:	UnaryProcessor<Composite>(find_geometric_objects),
+				ExtendedPropertyManager(find_geometric_objects, deep),
+				geometric_objects_(find_geometric_objects.geometric_objects_)
 		{
 		}
 
-		FindGeometricObject::~FindGeometricObject
+		FindGeometricObjects::~FindGeometricObjects
 			()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<FindGeometricObject>() << endl;
+					<< " of class " << RTTI::getName<FindGeometricObjects>() << endl;
 			#endif 
 
 			destroy();
 		}
 
 		void 
-		FindGeometricObject::clear
+		FindGeometricObjects::clear
 			()
 		{
 			ExtendedPropertyManager::clear();
-			geometric_object_ = 0;
+			geometric_objects_.clear();
 		}
 
 		void 
-		FindGeometricObject::destroy
+		FindGeometricObjects::destroy
 			()
 		{
 			clear();
 		}
 
 		void 
-		FindGeometricObject::set
-			(const FindGeometricObject &find_geometric_object,
+		FindGeometricObjects::set
+			(const FindGeometricObjects &find_geometric_objects,
 			 bool deep)
 		{
 			clear();
 
-			ExtendedPropertyManager::set(find_geometric_object, deep);
+			ExtendedPropertyManager::set(find_geometric_objects, deep);
 		}
 
-		FindGeometricObject &
-		FindGeometricObject::operator =
-			(const FindGeometricObject &find_geometric_object)
+		FindGeometricObjects &
+		FindGeometricObjects::operator =
+			(const FindGeometricObjects &find_geometric_objects)
 		{
-			set(find_geometric_object);
+			set(find_geometric_objects);
 
 			return *this;
 		}
 
 		void 
-		FindGeometricObject::get
-			(FindGeometricObject &find_geometric_object,
+		FindGeometricObjects::get
+			(FindGeometricObjects &find_geometric_objects,
 			 bool deep) const
 		{
-			find_geometric_object.set(*this, deep);
+			find_geometric_objects.set(*this, deep);
 		}
 
 		void 
-		FindGeometricObject::swap
-			(FindGeometricObject &find_geometric_object)
+		FindGeometricObjects::swap
+			(FindGeometricObjects &find_geometric_objects)
 		{
-			ExtendedPropertyManager::swap(find_geometric_object);
+			ExtendedPropertyManager::swap(find_geometric_objects);
 		}
 
 		bool 
-		FindGeometricObject::start
+		FindGeometricObjects::start
 			()
 		{
-			geometric_object_ = 0;
+			geometric_objects_.clear();
 
 			return true;
 		}
 				
 		bool 
-		FindGeometricObject::finish
+		FindGeometricObjects::finish
 			()
 		{
 			return true;
 		}
 				
 		Processor::Result 
-		FindGeometricObject::operator ()
+		FindGeometricObjects::operator ()
 			(Composite &composite)
 		{
 			// skip composites that are not instances of geometricObject
@@ -119,30 +119,24 @@ namespace BALL
 			BitVector help_bitvector(and_bitvector.getSize());
 
 			help_bitvector.bitwiseOr(getBitVector());
-			/*
-			cout << "own: " << help_bitvector << " object:  " << __pGeometricObject->getBitVector()
-					 << "  &: " << and_bitvector << " size own: " << help_bitvector.getSize()
-					 << "  temp size: " << and_bitvector.getSize() << endl;
-			*/
+
 			if (and_bitvector == help_bitvector)
 			{
-				geometric_object_ = __pGeometricObject;
-
-				return Processor::BREAK;
+				geometric_objects_.push_back(__pGeometricObject);
 			}
 			
 			return Processor::CONTINUE;
 		}
 
 		bool 
-		FindGeometricObject::isValid
+		FindGeometricObjects::isValid
 			() const
 		{
 			return true;
 		}
 
 		void 
-		FindGeometricObject::dump
+		FindGeometricObjects::dump
 			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -238,17 +232,7 @@ namespace BALL
 					 << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "object: --------------------------------------" << endl;
-
-			if (geometric_object_ != 0)
-			{
-				geometric_object_->dump(s, depth + 1);
-			}
-			else
-			{
-				BALL_DUMP_DEPTH(s, depth);
-				s << "no object found" << endl;;
-			}
+			s << "number of objects: " << geometric_objects_.size() << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
