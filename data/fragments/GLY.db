@@ -29,8 +29,8 @@
     <node>18<value>OXT C a</value></node>
   </node>
  <node>Connections
- <node>N-term<value>N C-term 1.33 0.5</value></node>
- <node>C-term<value>C N-term 1.33 0.5</value></node>
+ <node>N-term<value>N C-term s 1.33 0.5</value></node>
+ <node>C-term<value>C N-term s 1.33 0.5</value></node>
  </node>
  <node>Properties
  <node>AMINO_ACID</node>
