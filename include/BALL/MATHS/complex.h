@@ -1,4 +1,4 @@
-// $Id: complex.h,v 1.3 2002/08/27 11:58:16 oliver Exp $
+// $Id: complex.h,v 1.4 2002/08/30 11:56:49 oliver Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -192,14 +192,14 @@ namespace BALL
 				@param real the number to multiply by
 				@return TComplex&, {\em *this}
 		*/
-		TComplex& operator *= (const T& real)
+		const TComplex& operator *= (const T& real)
 			throw();
 
 		/**	Multiply by a complex number.
 				@param cpx the to multiply by
 				@return TComplex&, {\em *this}
 		*/
-		TComplex& operator *= (const TComplex<T>& cpx)
+		const TComplex& operator *= (const TComplex<T>& cpx)
 			throw();
 
 		/**	Divide by a real number.
@@ -447,6 +447,26 @@ namespace BALL
 	TComplex<T> TComplex<T>::operator * (const TComplex<T>& cpx) const throw()
 	{
 		return TComplex<T>(re * cpx.re - im * cpx.im, re * cpx.im - im * cpx.re);
+	}
+
+	template <typename T>
+	BALL_INLINE
+  const TComplex<T>& TComplex<T>::operator *= (const T& real)
+    throw()
+	{
+		re = re * real;
+		im = -im * real;
+		return *this;
+	}
+
+	template <typename T>
+	BALL_INLINE
+  const TComplex<T>& TComplex<T>::operator *= (const TComplex<T>& cpx)
+    throw()
+	{
+		re = re * cpx.re - im * cpx.im;
+		im = re * cpx.im - im * cpx.re;
+		return *this;
 	}
 
 	template <typename T>
