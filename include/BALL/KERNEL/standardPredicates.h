@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.50 2004/11/17 16:00:42 anker Exp $
+// $Id: standardPredicates.h,v 1.51 2004/11/17 22:25:05 anker Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -704,6 +704,9 @@ namespace BALL
 			BALL_CREATE(ConnectedToPredicate)
 
 			ConnectedToPredicate()
+				throw();
+
+			ConnectedToPredicate(const ConnectedToPredicate& predicate)
 				throw();
 
 			virtual ~ConnectedToPredicate()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.57 2004/11/17 15:51:19 anker Exp $
+// $Id: standardPredicates.C,v 1.58 2004/11/17 22:25:05 anker Exp $
 //
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -723,10 +723,28 @@ namespace BALL
 	{
 	}
 
+	ConnectedToPredicate::ConnectedToPredicate(const ConnectedToPredicate& predicate)
+		throw()
+		:	ExpressionPredicate(predicate),
+			tree_(0),
+			link_map_(predicate.link_map_),
+			link_mark_(predicate.link_mark_)
+	{
+		// we have to copy the whole tree
+		// fast solution: parse_() again.
+		if (argument_ != "")
+		{
+			tree_ = parse_();
+		}
+	}
+
 	ConnectedToPredicate::~ConnectedToPredicate()
 		throw()
 	{
-		delete tree_;
+		if (tree_ != 0) 
+		{
+			delete tree_;
+		}
 	}
 			
 	ConnectedToPredicate::CTPNode* ConnectedToPredicate::createNewNode_(ConnectedToPredicate::CTPNode* node)
