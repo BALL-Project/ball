@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.43 2005/01/29 18:01:56 oliver Exp $
+// $Id: hashGrid.h,v 1.44 2005/01/31 14:44:17 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -1926,7 +1926,7 @@ namespace BALL
 		throw()
 	{
 		LongSize memory_for_box = sizeof(HashGridBox3<Item>) + sizeof(HashGridBox3<Item>*);
-		LongSize nr_boxes =(LongSize)floor(memory / memory_for_box);
+		LongSize nr_boxes =(LongSize)floor((float)(memory / memory_for_box));
 
 		return pow((double)((size.x * size.y * size.z) / nr_boxes), (double)(1.0 / 3.0));
 	}
