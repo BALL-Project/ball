@@ -1,6 +1,6 @@
-// $Id: LEFShiftProcessor.C,v 1.1 2000/09/19 11:38:50 amoll Exp $
+// $Id: EFShiftProcessor.C,v 1.1 2000/09/19 12:07:20 oliver Exp $
 
-#include<BALL/NMR/LEF.h>
+#include<BALL/NMR/EFShiftProcessor.h>
 
 #ifndef BALL_COMMON_PATH_H
 # include <BALL/SYSTEM/path.h>
@@ -15,36 +15,40 @@ using namespace std;
 namespace BALL 
 {
 
-	LEFShiftProcessor::LEFShiftProcessor()
+	EFShiftProcessor::EFShiftProcessor()
 		throw()
+		:	ShiftModule()
 	{	
-		Path path;
-		ini_filename_ = path.find("NMR/nmr.ini").c_str();
 	}
-		
-	LEFShiftProcessor::~LEFShiftProcessor()
+
+	EFShiftProcessor::EFShiftProcessor(const EFShiftProcessor& processor)
+		throw()
+		:	ShiftModule(processor),
+			proton_list_(processor.proton_list_),
+			effector_list_(processor.effector_list_),
+			atom_list_(processor.atom_list_),
+			first_atom_expressions_(processor.first_atom_expressions_),
+			second_atom_expressions_(processor.second_atom_expressions_),
+			parameter_section_(processor.parameter_section_)
+	{
+	}
+	
+	EFShiftProcessor::~EFShiftProcessor()
 		throw()
 	{
 	}
 
-	void LEFShiftProcessor::setFilename(const String& filename)
+	bool EFShiftProcessor::start()
 		throw()
 	{
-		ini_filename_ = filename;
-	}
-		
-	const String& LEFShiftProcessor::getFilename() const
-		throw()
-	{
-		return ini_filename_;
-	}
-		
-	bool LEFShiftProcessor::start()
-		throw()
-	{
+		// if no parameters are assigned, abort immediately
+		if (parameters_ == 0)
+		{
+			return false;
+		}
+
 		// building the Expression List for the shiftatoms		
-		parameters_.setFilename(ini_filename_);
-		parameter_section_.extractSection(parameters_, "LEF-ShiftAtoms");
+		parameter_section_.extractSection(*parameters_, "EFShift-Bonds");
 
 		// clear the arrays containing the expressions
 		first_atom_expressions_.clear();
@@ -58,7 +62,7 @@ namespace BALL
 
 			while (description.has('_'))
 			{
-				description.substitute("_"," "); // warum wird hier nicht durch "" ersetzt ???
+				description.substitute("_"," "); 
 			}
 			first_atom_expressions_.push_back(Expression(description));
 		}	
@@ -80,10 +84,16 @@ namespace BALL
 		return true;
 	}
 		
-	bool LEFShiftProcessor::finish()
+	bool EFShiftProcessor::finish()
 		throw()
 	{
-		parameter_section_.extractSection(parameters_, "LEF-ShiftAtoms");
+		// abort if the parameters_ were not set (using ShiftModule::setParameters)
+		if (parameters_ == 0)
+		{
+			return false;
+		}
+
+		parameter_section_.extractSection(*parameters_, "EFShift-Bonds");
 
 		if (atom_list_.size() <= 0 || effector_list_.size() <= 0)
 		{
@@ -159,7 +169,7 @@ namespace BALL
 		return true;
 	}
 		
-	Processor::Result LEFShiftProcessor::operator () (Composite& object)
+	Processor::Result EFShiftProcessor::operator () (Composite& object)
 		throw()
 	{
 		// if object is an H-atom connected to a C-atom it is saved in _proton_list

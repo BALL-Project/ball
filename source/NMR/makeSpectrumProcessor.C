@@ -1,4 +1,4 @@
-// $Id: makeSpectrumProcessor.C,v 1.3 2000/09/07 19:38:30 oliver Exp $
+// $Id: makeSpectrumProcessor.C,v 1.4 2000/09/19 12:07:24 oliver Exp $
 
 #include<BALL/NMR/makeSpectrumProcessor.h>
 
@@ -9,9 +9,6 @@ namespace BALL
 
 	MakeSpectrumProcessor::MakeSpectrumProcessor()
 	{
-		spectrum_.insertShiftModule("JB");
-		spectrum_.insertShiftModule("LEF");
-		spectrum_.insertShiftModule("ANISO");
 	}
 
 	MakeSpectrumProcessor::~MakeSpectrumProcessor()

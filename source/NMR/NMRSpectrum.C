@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.C,v 1.3 2000/09/07 19:38:30 oliver Exp $
+// $Id: NMRSpectrum.C,v 1.4 2000/09/19 12:07:22 oliver Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/FORMAT/PDBFile.h>
@@ -56,27 +56,9 @@ namespace BALL
 		return system_;
 	}
 
-	void NMRSpectrum::insertShiftModule(const String& module_name)
-	{
-		ShiftModule* module  = names_.getModule(module_name);
-		if (module != 0)
-		{
-			processorlist_.push_back(names_.getModule(module_name));
-		}
-		else
-		{
-			Log.error() << "NMRSpectrum:insertShiftModule: unknown module name " << module_name << endl;
-		}
-	}
-
 	void NMRSpectrum::calculateShifts()
 	{
-		list<ShiftModule*>::iterator it = processorlist_.begin();
-
-		for (; it != processorlist_.end (); ++it)
-		{
-			system_->apply(**it);
-		}
+		system_->apply(shift_model_);
 	}
 
 	void NMRSpectrum::createSpectrum()

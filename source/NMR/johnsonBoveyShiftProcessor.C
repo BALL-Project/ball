@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.C,v 1.11 2000/09/18 17:09:43 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.1 2000/09/19 12:07:23 oliver Exp $
 
 
 #include <BALL/NMR/johnsonBovey.h>

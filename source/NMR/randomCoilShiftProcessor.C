@@ -1,4 +1,4 @@
-// $Id: randomCoil.C,v 1.5 2000/09/18 17:09:43 oliver Exp $
+// $Id: randomCoilShiftProcessor.C,v 1.1 2000/09/19 12:07:24 oliver Exp $
 
 #include<BALL/NMR/randomCoil.h>
 

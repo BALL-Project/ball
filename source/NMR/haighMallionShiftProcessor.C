@@ -1,4 +1,4 @@
-// $Id: haighMallion.C,v 1.5 2000/09/18 17:09:43 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.1 2000/09/19 12:07:23 oliver Exp $
 
 #include <BALL/NMR/haighMallion.h>
 #include <BALL/KERNEL/atomIterator.h>

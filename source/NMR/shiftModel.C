@@ -1,10 +1,10 @@
-// $Id: shiftModel.C,v 1.6 2000/09/18 21:25:14 oliver Exp $
+// $Id: shiftModel.C,v 1.7 2000/09/19 12:07:25 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/NMR/johnsonBovey.h>
 #include <BALL/NMR/haighMallion.h>
-#include <BALL/NMR/LEF.h>
+#include <BALL/NMR/EFShiftProcessor.h>
 #include <BALL/NMR/anisotropy.h>
 
 namespace BALL
@@ -242,7 +242,7 @@ namespace BALL
 		using RTTI::getNew;
 		registerModule("JohnsonBovey", getNew<JohnsonBoveyShift>);
 		registerModule("HaighMallion", getNew<HaighMallionShift>);
-		registerModule("ElectricField", getNew<LEFShiftProcessor>);
+		registerModule("ElectricField", getNew<EFShiftProcessor>);
 		registerModule("Anisotropy", getNew<AnIsoShift>);
 	}
 }
