@@ -1,4 +1,4 @@
-// $Id: notification.h,v 1.5 2000/01/14 20:40:03 oliver Exp $
+// $Id: notification.h,v 1.6 2000/01/28 16:38:51 oliver Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -169,6 +169,9 @@ namespace BALL
 		bool 								enabled_;
 	};
 
+		
+  NotificationManager_& NotificationManager();
+ 
 	void NotificationManagerEnable();
 
 	void NotificationManagerDisable();
