@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.20 2003/04/18 17:36:34 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.21 2003/04/19 08:53:31 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -633,13 +633,13 @@ AC_DEFUN(CF_GXX_OPTIONS, [
   fi
 
   DYNAR="${CXX}"
-  if test "${OS}" != "Solaris" ; then
-    DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
+  if test "${OS}" == "Solaris" ; then
+    DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
   else 
     if test "${OS}" == Darwin ; then
 	    DYNAROPTS="${DYNAROPTS} -dynamiclib -fPIC -o"			
 		else	
-  	  DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
+  	  DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
 		fi
   fi
 
