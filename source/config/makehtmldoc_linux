@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-# $Id: makehtmldoc_linux,v 1.1 2001/07/11 09:39:45 amoll Exp $
+# $Id: makehtmldoc_linux,v 1.2 2001/07/11 10:06:26 amoll Exp $
 
 # highly non-portable code - but doesn't matter as it is intended for
 # the developers only! - OK
@@ -52,5 +52,5 @@ for i in $BALLDIR/doc/tools/*.inc $BALLDIR/doc/tools/*.html ; do
 		sed "s/@DATE@/${DATE}/" > `basename $i`
 done
 
-~amoll/misc/docpp_linux -u -m -w -W -G -ep amsmath -ep epsfig -eo 11pt -d . $BALLDIR/include/BALL/BALL.doc
+~amoll/misc/docpp_linux -u -m -w -W -G -ep amsmath -ep graphicx -eo 11pt -d . $BALLDIR/include/BALL/BALL.doc
 
