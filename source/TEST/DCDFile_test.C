@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.19 2003/08/26 19:04:53 oliver Exp $
+// $Id: DCDFile_test.C,v 1.20 2004/01/15 16:18:53 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.19 2003/08/26 19:04:53 oliver Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.20 2004/01/15 16:18:53 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -114,10 +114,12 @@ RESULT
 SnapShot ss;
 CHECK(bool read(SnapShot& snapshot) throw())
 	DCDFile dcd(filename);
-	TEST_EQUAL(dcd.read(ss), true)
+	bool result = dcd.read(ss);
+	TEST_EQUAL(result, true)
 	ss.applySnapShot(system);
 	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
-	TEST_EQUAL(dcd.read(ss), true)
+	result = dcd.read(ss);
+	TEST_EQUAL(result, true)
 	ss.applySnapShot(system);
 	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(1,2,1111))
 	TEST_EQUAL(system.getAtom(0)->getForce(), Vector3(3,4,5))
