@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.26 2003/12/23 13:14:45 amoll Exp $
+// $Id: molecularControl.C,v 1.27 2003/12/23 17:59:28 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -175,6 +175,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 	{
 		NewSelectionMessage* nsm = (NewSelectionMessage*) message;
 		setSelection_(true, nsm->openItems());
+		updateSelection();
 	}
 
 	return false;
