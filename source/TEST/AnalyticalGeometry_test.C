@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.14 2000/03/29 13:34:48 oliver Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.15 2000/04/05 19:40:51 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.14 2000/03/29 13:34:48 oliver Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.15 2000/04/05 19:40:51 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,7 +28,32 @@ Plane3 p1, p2, p3, p4;
 
 //line54: method GetDeterminant_(const T* m, Size dim)
 CHECK(GetDeterminant_(const T* m, Size dim))
-  //BAUSTELLE
+	float m[16];
+	float x, x1;
+	for (Size i = 0; i < 16; i++ )
+	{
+		m[i] = (float) i;
+	}
+	m[5] = (float)6;
+	m[6] = (float)5;
+	x = GetDeterminant_(m, 4);
+
+	m[0] = (float)4;
+	m[1] = (float)6;
+	m[2] = (float)5;
+	m[3] = (float)7;
+	m[4] = (float)0;
+	m[5] = (float)1;
+	m[6] = (float)2;
+	m[7] = (float)3;
+	x1 = GetDeterminant_(m, 4);
+	TEST_REAL_EQUAL(-x, x1)
+	for (int i = 0; i < 16 ; i++ )
+	{
+		m[i] = (float) i * 2;
+	}
+	x = GetDeterminant_(m, 4);
+	TEST_REAL_EQUAL(x * 2, x1)
 RESULT
 
 //line90
@@ -126,19 +151,63 @@ RESULT
 
 //line166: method SolveSystem(const T* m, T* x, const Size dim)
 CHECK(SolveSystem(const T* m, T* x, const Size dim))
-  //BAUSTELLE
+	float m[6], x[2];
+	m[0] = 1.0;
+	m[1] = 1.0;
+	m[2] = 2.0;
+	m[3] = 2.0;
+	m[4] = 2.0;
+	m[5] = 4.0;
+	TEST_EQUAL(SolveSystem(m, x, 2), false)
+
+	m[0] = 2.0;
+	m[1] = 2.0;
+	m[2] = 6.0;
+	m[3] = 3.0;
+	m[4] = 4.0;
+	m[5] = 11.0;
+	TEST_EQUAL(SolveSystem(m, x, 2), true)
+	TEST_REAL_EQUAL(x[0], 1.0)
+	TEST_REAL_EQUAL(x[1], 2.0)
 RESULT
 
 //line249
 CHECK(SolveSystem2(const T& a1, const T& b1, const T& c1,
 									const T& a2, const T& b2, const T& c2,
 									T& x1, T& x2))
-  //BAUSTELLE
+	float x1, x2;
+  //2*1 + 2*2 = 6
+	//3*1 + 4*2 = 11
+	TEST_EQUAL(SolveSystem2((float)2.0, (float)2.0, (float)6.0, (float)3.0, (float)4.0, (float)11.0, x1, x2), true)
+	TEST_REAL_EQUAL(x1, 1.0)
+	TEST_REAL_EQUAL(x2, 2.0)
 RESULT
 
 //line275: method SolveSquaredEquality(const T& a, const T& b, const T &c, T &x1, T &x2)
 CHECK(SolveSquaredEquality(const T& a, const T& b, const T &c, T &x1, T &x2))
-  //BAUSTELLE
+	float x1, x2;
+	// 0 + 0 = 0
+	// -1^2 - 1 = 0 
+	TEST_REAL_EQUAL(SolveSquaredEquality((float)1.0, (float)1.0, (float)0.0, x1, x2), 2.0)
+	TEST_REAL_EQUAL(x1, 0.0)
+	TEST_REAL_EQUAL(x2, -1.0)
+	// 2*2^2 + 2*2 = 0
+	// 2*0^2 + 2*0 = 0
+	TEST_REAL_EQUAL(SolveSquaredEquality((float)2.0, (float)-4.0, (float)0.0, x1, x2), 2.0)
+	TEST_REAL_EQUAL(x1, 2.0)
+	TEST_REAL_EQUAL(x2, 0.0)
+	// 2*2^2  + 4*2  - 16 = 0
+	// 2*-4^2 + 4*-4 - 16 = 0
+	TEST_REAL_EQUAL(SolveSquaredEquality((float)2.0, (float)4.0, (float)-16.0, x1, x2), 2.0)
+	TEST_REAL_EQUAL(x1, 2.0)
+	TEST_REAL_EQUAL(x2, -4.0)
+	// 0*x^2 + 0*x + 1 != 0 
+	TEST_REAL_EQUAL(SolveSquaredEquality((float)0.0, (float)0.0, (float)1.0, x1, x2), 0.0)
+	TEST_REAL_EQUAL(x1, 2.0)
+	// 0*x^2 + 1*1 + 1 = 0
+	TEST_REAL_EQUAL(SolveSquaredEquality((float)0.0, (float)1.0, (float)1.0, x1, x2), 1.0)
+	TEST_REAL_EQUAL(x1, 1.0)
+	TEST_REAL_EQUAL(x2, 1.0)
 RESULT
 
 //line301
