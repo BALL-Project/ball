@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.58 2004/11/03 13:10:57 amoll Exp $
+// $Id: message.h,v 1.59 2004/11/03 13:17:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -140,31 +140,41 @@ class BALL_EXPORT CompositeMessage: public Message
 {
 	public:
 
+	///
 	enum CompositeMessageType
 	{
-		/// undefinded (default) type
+		/// Undefinded (default) type
 		UNDEFINED = -1,
-		/// a new composite to be added
+
+		/** A new composite to be added 
+		 		MolecularStructure will add bonds, normalize names and send a msg with type NEW_MOLECULE afterwards.
+		*/
 		NEW_COMPOSITE,
-		/// a composite to be removed
+		
+		/// A Composite to be removed
 		REMOVED_COMPOSITE,
-		/// update all datas for a composite (but not in the MolecularControl)
+		
+		/// Update all datas for a Composite (but not in the MolecularControl)
 		CHANGED_COMPOSITE,
-		/// update all datas for a composite
+		
+		/// Update all datas for a composite (also in MolecularControl)
 		CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL,
+		
 		/// selected a composite (e.g. per checkboxes in MolecularControl)
 		SELECTED_COMPOSITE,
+		
 		/// deselected a composite (e.g. per checkboxes in MolecularControl)
 		DESELECTED_COMPOSITE,
+		
 		/// center the camera on a composite
 		CENTER_CAMERA,
-		/// a new molecule
-		NEW_MOLECULE,
-		/// highlight in MolecularControl
-		HIGHLIGHT,
-		/// remove highlighting in MolecularControl
-		UNHIGHLIGHT
+
+		/** MolecularControl will add the Composite.
+		 * 	DisplayProperties will create a Representation
+		*/
+		NEW_MOLECULE
 	};
+
 	/**	@name	Constructors and Destructors
 	*/	
 	//@{
