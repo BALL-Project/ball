@@ -77,6 +77,7 @@ EXECUTABLES_KERNEL = \
 	SecondaryStructure_test\
 	System_test\
 	Protein_test\
+	PDBAtom_test\
 	NucleicAcid_test\
 	Nucleotide_test\
 	Residue_test\
