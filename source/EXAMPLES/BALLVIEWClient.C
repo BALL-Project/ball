@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 	{
 		cerr << argv[0] << " <host>[:<port>] <PDB file>" << endl;
 		cerr << "  Reads a PDB file and sends its contents via the network" << endl;
-		cerr << "  to the MOLVIEW server listening on <port> of <host> and" << endl;
+		cerr << "  to the BALLVIEW server listening on <port> of <host> and" << endl;
 		cerr << "  displays the contents of the file there." << endl;
 		cerr << "  If no port is given, the default port 20000 is assumed." << endl << endl;
 		return 1;
