@@ -1,4 +1,4 @@
-// $Id: RegularData1D_test.C,v 1.10 2001/07/15 17:32:41 amoll Exp $
+// $Id: RegularData1D_test.C,v 1.11 2001/07/16 00:26:37 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.10 2001/07/15 17:32:41 amoll Exp $")
+START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.11 2001/07/16 00:26:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -209,7 +209,7 @@ CHECK(TRegularData1D::rescale(Size new_size))
 	TEST_EQUAL(data.getSize(), 0)
 	data.rescale(1);
 	TEST_EQUAL(data.getSize(), 1)
-	TEST_EQUAL(data[0], 0.0)
+	// the contents if data[0] are now undetermined!
 	data[0] = 2.0;
 	data.rescale(2);
 	TEST_EQUAL(data.getSize(), 2)
