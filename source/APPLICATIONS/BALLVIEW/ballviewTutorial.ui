@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>BALLViewTutorialData</class>
 <widget class="QWizard">
     <property name="name">
@@ -288,6 +288,38 @@ the SES.
 If you want to, you can now try some other 
 settings and colors. The colors can be changed by clicking on
 them.
+&lt;blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Creating a isocontour surface</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_4_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>1</x>
+                    <y>3</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+An other way to visualise the electorstatics grid are isocontour surfaces which 
+connect all neighbouring points in the grid which have the same electrostatic 
+value. To create such a isocontour surface use the menu entry "&lt;b&gt;Tools-&gt;Contour Surface&lt;/b&gt;".
+In the now open dialog enter the value &lt;b&gt;0.01&lt;/b&gt; in the field at the left and press "&lt;b&gt;Ok&lt;/b&gt;".
 &lt;blockquote&gt;</string>
             </property>
             <property name="alignment">

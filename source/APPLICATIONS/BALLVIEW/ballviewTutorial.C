@@ -6,6 +6,7 @@
 #include "ballviewTutorial.h"
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/KERNEL/system.h>
 
 #include <qlabel.h>
@@ -51,6 +52,7 @@ void BALLViewTutorial::show()
 {
 	showPage(page(0));
 	nextButton()->setEnabled(false);
+	DisplayProperties::getInstance(0)->selectModel(MODEL_STICK);
 	BALLViewTutorialData::show();
 	raise();
 }
@@ -140,6 +142,15 @@ void BALLViewTutorial::onNotify(Message *message)
 		if (rmsg != 0 && 
 				rmsg->getType() == RepresentationMessage::UPDATE &&
 				rmsg->getRepresentation()->getModelType() == MODEL_SE_SURFACE)
+		{
+			enableNextStep_();
+		}
+	}
+
+	else if (title == "Creating a isocontour surface")
+	{
+		if (rmsg != 0 && 
+				rmsg->getRepresentation()->getModelType() == MODEL_CONTOUR_SURFACE)
 		{
 			enableNextStep_();
 		}
