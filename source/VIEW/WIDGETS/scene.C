@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.127 2004/09/03 13:49:49 amoll Exp $
+// $Id: scene.C,v 1.128 2004/09/03 23:38:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1450,23 +1450,18 @@ namespace BALL
 			switch (e->state())
 			{
 				case (Qt::ShiftButton | Qt::LeftButton): 
+				case  Qt::MidButton:
 					zoomSystem_(this);
 					break;
 
 				case (Qt::ControlButton | Qt::LeftButton):
+				case  Qt::RightButton:
 					translateSystem_(this);
 					break;
 
 				case (Qt::LeftButton | Qt::RightButton):
+				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
 					rotateSystem2_(this);
-					break;
-
-				case Qt::MidButton:
-					zoomSystem_(this);
-					break;
-
-				case Qt::RightButton:
-					translateSystem_(this);
 					break;
 
 				case Qt::LeftButton:

@@ -7,6 +7,7 @@ added:
 - Writing and loading of BALLView project files
 - Hotkey support for starting any (BALL-)Python command from BALLView
 - new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
+- new rotate mode for Scene
 - DataSetControl:
 	management of 1D and 2D grids 
   ability to start visualisation of 1D and 2D grids
