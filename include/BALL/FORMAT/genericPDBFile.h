@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.3 2000/01/07 21:52:37 oliver Exp $
+// $Id: genericPDBFile.h,v 1.4 2000/01/17 13:08:52 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -133,9 +133,10 @@ namespace BALL
 		
 		struct RecordTypeFormat
 		{
+			public:
 			RecordType		record_type;
 			char					string[7];
-			char*					format_string;
+			const char*		format_string;
 		};
 
 		struct RecordUNKNOWN
@@ -855,7 +856,7 @@ namespace BALL
 			Size countRecords
 				(bool from_begin_of_file = true);
 		
-			bool parseLine(char* line, Size size, char* format_string, ...);
+			bool parseLine(const char* line, Size size, const char* format_string, ...);
 
 			bool readLine(char* line, Size size, bool extract_values);
 
@@ -865,9 +866,9 @@ namespace BALL
 
 			bool readRecords();
 		
-			virtual bool readUnknownRecord(char* line);
+			virtual bool readUnknownRecord(const char* line);
 		
-			virtual bool readInvalidRecord(char* line);
+			virtual bool readInvalidRecord(const char* line);
 		
 			virtual bool readRecordANISOU
 				(PDB::Integer serial_number,
@@ -1209,9 +1210,6 @@ namespace BALL
 			GenericPDBFile(const File& generic_PDB_file);
 
 			GenericPDBFile& operator = (const GenericPDBFile& generic_PDB_file);
-
-			static int RecordNameComparator_
-				(const PDB::RecordTypeFormat* a, const PDB::RecordTypeFormat* b);
 
 			Index current_model_;
 			Index selected_model_;

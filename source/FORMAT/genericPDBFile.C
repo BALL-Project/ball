@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.5 2000/01/17 09:42:00 oliver Exp $
+// $Id: genericPDBFile.C,v 1.6 2000/01/17 13:08:48 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -12,9 +12,11 @@ namespace BALL
 {
 
 	extern "C" int GenericPDBFileRecordNameComparator_
-		(const PDB::RecordTypeFormat* a, const PDB::RecordTypeFormat* b)
+		(const void* a_ptr, const void* b_ptr)
 	{
-		return memcmp(a->string, b->string, 6);
+		return memcmp
+			(((PDB::RecordTypeFormat*)a_ptr)->string, 
+			 ((PDB::RecordTypeFormat*)b_ptr)->string, 6);
 	}
 
 
@@ -84,7 +86,7 @@ namespace BALL
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN)
 	{
 		compare_record_type_format_.record_type = PDB::RECORD_TYPE__UNKNOWN;
-		memcpy(compare_record_type_format_.string, "      ", 7);
+		memcpy(const_cast<char*>(compare_record_type_format_.string), const_cast<char*>("      "), 7);
 		compare_record_type_format_.format_string = "";
 
 		memset(line_buffer_, 0, sizeof(line_buffer_));
@@ -249,12 +251,12 @@ namespace BALL
 		return true;
 	}
 
-	bool GenericPDBFile::readUnknownRecord(char* /* line */)
+	bool GenericPDBFile::readUnknownRecord(const char* /* line */)
 	{
 		return true;
 	}
 
-	bool GenericPDBFile::readInvalidRecord(char* /* line */)
+	bool GenericPDBFile::readInvalidRecord(const char* /* line */)
 	{
 		return true;
 	}
@@ -753,10 +755,10 @@ namespace BALL
 	}
 
 	bool GenericPDBFile::parseLine
-		(char* line, Size size, char* format_string, ...)
+		(const char* line, Size size, const char* format_string, ...)
 	{
 		static char formats[PDB::SIZE_OF_FORMAT_STRING_BUFFER];
-		char* line_column = line;
+		char* line_column = const_cast<char*>(line);
 		char* format_column = 0;
 		char* temp = 0;
 		char* temp2 = 0;
@@ -898,14 +900,14 @@ namespace BALL
 		if (record_type_format == 0
 				|| memcmp(record_type_format->string, line, 6) != 0)
 		{
-			memcpy(compare_record_type_format_.string, line, 6);
+			memcpy(const_cast<char*>(compare_record_type_format_.string), line, 6);
 
 			record_type_format = (PDB::RecordTypeFormat*)::bsearch 
 				((const void*)&compare_record_type_format_, 
 				 (const void*)record_type_format_, 
 				 (Size)PDB::NUMBER_OF_REGISTERED_RECORD_TYPES, 
 				 (Size)sizeof(PDB::RecordTypeFormat), 
-				 (ComparatorType)RecordNameComparator_);
+				 GenericPDBFileRecordNameComparator_);
 			
 			if (record_type_format == 0)
 			{
@@ -924,117 +926,115 @@ namespace BALL
 		{
 			case PDB::RECORD_TYPE__ANISOU:
 
-				if (selected_model_ != 0
-			&& selected_model_ != current_model_)
+				if (selected_model_ != 0 && selected_model_ != current_model_)
 				{
-		return true;
+					return true;
 				}
 
 				parseLine
-		(line,
-		 size,
-		 record_type_format->format_string,
-		 record_ANISOU.record_name,
-		 &record_ANISOU.serial_number,
-		 record_ANISOU.atom_name,
-		 &record_ANISOU.alternate_location_indicator,
-		 record_ANISOU.residue_name,
-		 &record_ANISOU.chain_ID,
-		 &record_ANISOU.residue_sequence_number,
-		 &record_ANISOU.insertion_code,
-		 &record_ANISOU.u11,
-		 &record_ANISOU.u22,
-		 &record_ANISOU.u33,
-		 &record_ANISOU.u12,
-		 &record_ANISOU.u13,
-		 &record_ANISOU.u23,
-		 record_ANISOU.segment_ID,
-		 record_ANISOU.element_symbol,
-		 record_ANISOU.charge);
+					(line,
+					 size,
+					 record_type_format->format_string,
+					 record_ANISOU.record_name,
+					 &record_ANISOU.serial_number,
+					 record_ANISOU.atom_name,
+					 &record_ANISOU.alternate_location_indicator,
+					 record_ANISOU.residue_name,
+					 &record_ANISOU.chain_ID,
+					 &record_ANISOU.residue_sequence_number,
+					 &record_ANISOU.insertion_code,
+					 &record_ANISOU.u11,
+					 &record_ANISOU.u22,
+					 &record_ANISOU.u33,
+					 &record_ANISOU.u12,
+					 &record_ANISOU.u13,
+					 &record_ANISOU.u23,
+					 record_ANISOU.segment_ID,
+					 record_ANISOU.element_symbol,
+					 record_ANISOU.charge);
 				
 				return readRecordANISOU
-		(record_ANISOU.serial_number,
-		 record_ANISOU.atom_name,
-		 record_ANISOU.alternate_location_indicator,
-		 record_ANISOU.residue_name,
-		 record_ANISOU.chain_ID,
-		 record_ANISOU.residue_sequence_number,
-		 record_ANISOU.insertion_code,
-		 record_ANISOU.u11,
-		 record_ANISOU.u22,
-		 record_ANISOU.u33,
-		 record_ANISOU.u12,
-		 record_ANISOU.u13,
-		 record_ANISOU.u23,
-		 record_ANISOU.segment_ID,
-		 record_ANISOU.element_symbol,
-		 record_ANISOU.charge);
+					(record_ANISOU.serial_number,
+					 record_ANISOU.atom_name,
+					 record_ANISOU.alternate_location_indicator,
+					 record_ANISOU.residue_name,
+					 record_ANISOU.chain_ID,
+					 record_ANISOU.residue_sequence_number,
+					 record_ANISOU.insertion_code,
+					 record_ANISOU.u11,
+					 record_ANISOU.u22,
+					 record_ANISOU.u33,
+					 record_ANISOU.u12,
+					 record_ANISOU.u13,
+					 record_ANISOU.u23,
+					 record_ANISOU.segment_ID,
+					 record_ANISOU.element_symbol,
+					 record_ANISOU.charge);
 
 				
 			
 			case PDB::RECORD_TYPE__ATOM:
 				
-				if (selected_model_ != 0
-			&& selected_model_ != current_model_)
+				if (selected_model_ != 0 && selected_model_ != current_model_)
 				{
-		return true;
+					return true;
 				}
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_ATOM.record_name,
-		 &record_ATOM.serial_number,
-		 record_ATOM.atom_name,
-		 &record_ATOM.alternate_location_indicator,
-		 record_ATOM.residue_name,
-		 &record_ATOM.chain_ID,
-		 &record_ATOM.residue_sequence_number,
-		 &record_ATOM.insertion_code,
-		 &record_ATOM.orthogonal_vector[0],
-		 &record_ATOM.orthogonal_vector[1],
-		 &record_ATOM.orthogonal_vector[2],
-		 &record_ATOM.occupancy,
-		 &record_ATOM.temperature_factor,
-		 record_ATOM.segment_ID,
-		 record_ATOM.element_symbol,
-		 record_ATOM.charge);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_ATOM.record_name,
+					 &record_ATOM.serial_number,
+					 record_ATOM.atom_name,
+					 &record_ATOM.alternate_location_indicator,
+					 record_ATOM.residue_name,
+					 &record_ATOM.chain_ID,
+					 &record_ATOM.residue_sequence_number,
+					 &record_ATOM.insertion_code,
+					 &record_ATOM.orthogonal_vector[0],
+					 &record_ATOM.orthogonal_vector[1],
+					 &record_ATOM.orthogonal_vector[2],
+					 &record_ATOM.occupancy,
+					 &record_ATOM.temperature_factor,
+					 record_ATOM.segment_ID,
+					 record_ATOM.element_symbol,
+					 record_ATOM.charge);
 
 				if (hasProperty(PDB::PROPERTY__PSEUDO_XPLOR_ATOM_IMPORT) == false
-			&& record_ATOM.orthogonal_vector[0] == 9999.000
-			&& record_ATOM.orthogonal_vector[1] == 9999.000
-			&& record_ATOM.orthogonal_vector[2] == 9999.000)
+						&& record_ATOM.orthogonal_vector[0] == 9999.000
+						&& record_ATOM.orthogonal_vector[1] == 9999.000
+						&& record_ATOM.orthogonal_vector[2] == 9999.000)
 				{ // ignore XPLOR pseudo atoms (see Rasmol2.6 source 'molecule.c/ReadPDBAtom')
-		return true;
+					return true;
 				}
 
 				return readRecordATOM
-		(record_ATOM.serial_number,
-		 record_ATOM.atom_name,
-		 record_ATOM.alternate_location_indicator,
-		 record_ATOM.residue_name,
-		 record_ATOM.chain_ID,
-		 record_ATOM.residue_sequence_number,
-		 record_ATOM.insertion_code,
-		 record_ATOM.orthogonal_vector,
-		 record_ATOM.occupancy,
-		 record_ATOM.temperature_factor,
-		 record_ATOM.segment_ID,
-		 record_ATOM.element_symbol,
-		 record_ATOM.charge);
+					(record_ATOM.serial_number,
+					 record_ATOM.atom_name,
+					 record_ATOM.alternate_location_indicator,
+					 record_ATOM.residue_name,
+					 record_ATOM.chain_ID,
+					 record_ATOM.residue_sequence_number,
+					 record_ATOM.insertion_code,
+					 record_ATOM.orthogonal_vector,
+					 record_ATOM.occupancy,
+					 record_ATOM.temperature_factor,
+					 record_ATOM.segment_ID,
+					 record_ATOM.element_symbol,
+					 record_ATOM.charge);
 				
 
 
 			case PDB::RECORD_TYPE__AUTHOR:
 
 				parseLine
-		(line,
-		 size, 
-		 record_type_format->format_string,
-		 record_AUTHOR.record_name,
-		 &record_AUTHOR.continuation,
-		 record_AUTHOR.authors);
+					(line,
+					 size, 
+					 record_type_format->format_string,
+					 record_AUTHOR.record_name,
+					 &record_AUTHOR.continuation,
+					 record_AUTHOR.authors);
 				
 				return readRecordAUTHOR
 		(record_AUTHOR.continuation,

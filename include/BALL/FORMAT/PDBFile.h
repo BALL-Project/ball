@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.5 1999/12/28 18:46:29 oliver Exp $
+// $Id: PDBFile.h,v 1.6 2000/01/17 13:08:51 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -75,9 +75,9 @@ namespace BALL
 
 		//@}
 
-		virtual bool readUnknownRecord(char* line);
+		virtual bool readUnknownRecord(const char* line);
 
-		virtual bool readInvalidRecord(char* line);
+		virtual bool readInvalidRecord(const char* line);
 
 		virtual bool readRecordATOM
 			(PDB::Integer serial_number,
