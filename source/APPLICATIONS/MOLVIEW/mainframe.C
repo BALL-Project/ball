@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.65 2003/08/28 13:38:51 amoll Exp $
+// $Id: mainframe.C,v 1.66 2003/08/28 14:27:50 amoll Exp $
 
 #include "mainframe.h"
 #include "icons.h"
@@ -46,7 +46,6 @@
 
 // testing
 #include <BALL/VIEW/DIALOGS/parsedFunctionDialog.h>
-#include <qlineedit.h>
 
 namespace BALL
 {
@@ -169,9 +168,6 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
   insertMenuEntry(MainControl::DISPLAY, "Contour S&urface", this,  SLOT(computeSurface()), 
 									CTRL+Key_U,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
 
-	// DISPLAY Menu
-	insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
-									ALT+Key_X, MENU__DISPLAY_FULLSCREEN);
 	// Build Menu -------------------------------------------------------------------
 	insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()), 
 									CTRL+Key_G, MENU__BUILD_ASSIGN_CHARGES);
@@ -709,12 +705,13 @@ void Mainframe::toggleFullScreen()
 		showFullScreen();
 		setGeometry(qApp->desktop()->screenGeometry());
 
-		logview_->hide();
-
+		// disabled after widgets were able to be switched of manualy:
+		/*
 		List<ModularWidget*>::Iterator it = modular_widgets_.begin();
 		for( ; it != modular_widgets_.end(); it++)
 		{
-			if (!RTTI::isKindOf<QWidget>(**it))
+			if (!RTTI::isKindOf<QWidget>(**it) ||
+					!dynamic_cast<QWidget*>(*it)->isVisible()) 
 			{
 				continue;
 			}
@@ -722,13 +719,15 @@ void Mainframe::toggleFullScreen()
 			dynamic_cast<QWidget*>(*it)->hide();
 		}
 		scene_->show();
-	
+		*/
 		fullscreen_ = true;
 		return;
 	}
 
 	showNormal();
 
+	// disabled after widgets were able to be switched of manualy:
+	/*
 	List<ModularWidget*>::Iterator it = modular_widgets_.begin();
 	for( ; it != modular_widgets_.end(); it++)
 	{
@@ -739,8 +738,8 @@ void Mainframe::toggleFullScreen()
 			dynamic_cast<QWidget*>(*it)->show();
 		}
 	}
+	*/
 	
-	logview_->show();
 	fullscreen_ = false;
 }
 
