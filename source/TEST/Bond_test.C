@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.12 2000/05/31 01:01:46 amoll Exp $
+// $Id: Bond_test.C,v 1.13 2000/05/31 01:11:45 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.12 2000/05/31 01:01:46 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.13 2000/05/31 01:11:45 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -69,6 +69,11 @@ CHECK(createBond(Bond&, Atom&, Atom&))
 	Atom a10;
 	Bond b1;
 	Bond b2;
+
+	TEST_NOT_EQUAL(b1.createBond(b1, a2, a1), 0)
+	TEST_EQUAL(a2.countBonds(), 1);
+	TEST_EQUAL(b1.getFirstAtom(), &a1);
+	TEST_EQUAL(b1.getSecondAtom(), &a2);
 
 	TEST_NOT_EQUAL(b1.createBond(b1, a1, a2), 0);
 	TEST_EQUAL(a1.countBonds(), 1);
