@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: johnsonBovey.h,v 1.2 1999/12/28 21:29:22 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -27,7 +27,8 @@
 #include <list>
 using std::list;
 
-namespace BALL {
+namespace BALL 
+{
 		
 	/**@name	Johnson Bovey Model
 	*/

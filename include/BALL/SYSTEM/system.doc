@@ -1,4 +1,4 @@
-/* $Id */
+// $Id: system.doc,v 1.2 1999/12/28 21:29:23 oliver Exp $
 
 /**@name	Operating system support
 		This chapter contains all relevant information on 
@@ -7,6 +7,10 @@
 */
 //@{
 
-	//@Include: *.h
+	//@Include: directory.h
+	//@Include: file.h
+	//@Include: fileSystem.h
+	//@Include: socket.h
+	//@Include: timer.h
 
 //@}

@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.3 1999/12/28 18:52:37 oliver Exp $
+// $Id: file.h,v 1.4 1999/12/28 21:29:22 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -8,11 +8,11 @@
 #endif
 
 #include <fstream>
-#include <stdlib.h>   // 'getenv'
+#include <stdlib.h>			// 'getenv'
 #include <sys/types.h>
-#include <sys/stat.h> // 'stat', 'lstat'
-#include <stdio.h>    // 'rename'
-#include <unistd.h>   // 'access', 'rename', 'truncate'
+#include <sys/stat.h>		// 'stat', 'lstat'
+#include <stdio.h>			// 'rename'
+#include <unistd.h>			// 'access', 'rename', 'truncate'
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #	include <BALL/DATATYPE/regExp.h>
@@ -28,22 +28,25 @@
 
 namespace BALL 
 {
-
+	
+	/**	File Class.
+	*/
 	class File
-		: public ::std::fstream
+		: public std::fstream
 	{
 		public:
 
 		/**	@name	Type definitions
 		*/
 		//@{
-		typedef ::std::ios::openmode OpenMode;
+		typedef std::ios::openmode OpenMode;
 		//@}
 
 		/**	@name	Enums
 		*/
 		//@{
-		
+
+		///
 		enum ProtectionMode
 		{
 			PROTECTION_MODE__INVALID                   = -1,
@@ -66,6 +69,8 @@ namespace BALL
 			PROTECTION_MODE__OTHER_EXECUTE             = S_IXOTH
 		};
 
+		/**	
+		*/
 		enum Protocol
 		{
 			PROTOCOL__FILE   = 1,
@@ -73,6 +78,8 @@ namespace BALL
 			PROTOCOL__ACTION = 3
 		};
 		
+		/**	
+		*/
 		enum Type
 		{
 			TYPE__UNKNOWN            = 0,
@@ -96,7 +103,7 @@ namespace BALL
 
 		/**
 		*/
-		File(const String& name, OpenMode open_mode = ::std::ios::in);
+		File(const String& name, OpenMode open_mode = std::ios::in);
 
 		/**
 		*/
@@ -105,56 +112,105 @@ namespace BALL
 		//@}
 			
 			
+		/**	
+		*/
 		static void enableProtocol(Protocol protocol);
 
+		/**	
+		*/
 		static void disableProtocol(Protocol protocol);
 
-		bool open(const String& name, OpenMode open_mode = ::std::ios::in);
+		/**	
+		*/
+		bool open(const String& name, OpenMode open_mode = std::ios::in);
 
+		/**	
+		*/
 		bool reopen();
 
+		/**	
+		*/
 		void close();
 
+		/**	
+		*/
 		const String& getName() const;
 
+		/**	
+		*/
 		const String& getOriginalName() const;
 
+		/**	
+		*/
 		Size getSize() const;
 
+		/**	
+		*/
 		int getOpenMode() const;
 		
+		/**	
+		*/
 		static Type getType(String name, bool trace_link);
 
+		/**	
+		*/
 		Type getType(bool trace_link) const;
 
-		::std::fstream& getFileStream();
+		/**	
+		*/
+		std::fstream& getFileStream();
 		
+		/**	
+		*/
 		static bool copy
-			(String source_name, String destination_name,
-			 Size buffer_size = 4096);
+			(String source_name, String destination_name, Size buffer_size = 4096);
 
+		/**	
+		*/
 		bool copyTo(const String& destination_name, Size buffer_size = 4096);
 
+		/**	
+		*/
 		static bool move(const String& source_name, const String& destination_name);
 
+		/**	
+		*/
 		bool moveTo(const String& destination_name);
 
+		/**	
+		*/
 		static bool remove(String name);
 
+		/**	
+		*/
 		bool remove() const;
 
+		/**	
+		*/
 		static bool rename(String old_path, String new_path);
 
+		/**	
+		*/
 		bool renameTo(const String& new_path) const;
 
+		/**	
+		*/
 		static bool truncate(String path, Size size = 0);
 
+		/**	
+		*/
 		bool truncate(Size size = 0) const;
 
+		/**	
+		*/
 		static void registerAction(const String& pattern, const String& exec);
 			
+		/**	
+		*/
 		static void unregisterAction(const String& pattern);
 			
+		/**	
+		*/
 		static bool createTemporaryFilename(String& temporary);
 
 		/**	@name Predicates 
@@ -170,32 +226,60 @@ namespace BALL
 		bool operator != (const File& file) const;
 		//@}
 
+		/**	
+		*/
 		static bool isProtocolEnabled(Protocol protocol);
 
+		/**	
+		*/
 		bool isOpen() const;
 
+		/**	
+		*/
 		bool isClosed() const;
 
+		/**	
+		*/
 		static bool isAccessible(String name);
 
+		/**	
+		*/
 		bool isAccessible() const;
 
+		/**	
+		*/
 		bool isCanonized() const;
 	
+		/**	
+		*/
 		static bool isReadable(String name);
 
+		/**	
+		*/
 		bool isReadable() const;
 
+		/**	
+		*/
 		static bool isWritable(String name);
 
+		/**	
+		*/
 		bool isWritable() const;
 
+		/**	
+		*/
 		static bool isExecutable(String name);
 
+		/**	
+		*/
 		bool isExecutable() const;
 
+		/**	
+		*/
 		virtual bool hasFormat();
 
+		/**	
+		*/
 		bool hasFormat() const;
 
 		/**
@@ -211,7 +295,7 @@ namespace BALL
 	
 		/**
 		*/
-		static void dumpRegisteredActions(::std::ostream& s)
+		static void dumpRegisteredActions(std::ostream& s)
 		{
 			action_manager_.dump(s);
 		}
@@ -370,15 +454,15 @@ namespace BALL
 				return 0;
 			}
 
-			void dump(::std::ostream& s) const
+			void dump(std::ostream& s) const
 			{
-				s << "Registered actions: " << ::std::endl;
+				s << "Registered actions: " << std::endl;
 		
 				for (register Action_ *action = first_action_;
 						 action != 0; action = action->next_action_)
 				{
-					s << "  regular expression: \"" << action->regular_expression_ << "\"" << ::std::endl
-						<< "  exec: \"" << action->exec_string_ << "\"" << ::std::endl;
+					s << "  regular expression: \"" << action->regular_expression_ << "\"" << std::endl
+						<< "  exec: \"" << action->exec_string_ << "\"" << std::endl;
 				}
 			}	
 

@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: directory.h,v 1.2 1999/12/28 21:29:22 oliver Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -19,22 +19,23 @@
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	class DirectoryProcessor
 		: public UnaryProcessor<String>
 	{
 		public:
 
-			DirectoryProcessor()
-			{
-			}
+		DirectoryProcessor()
+		{
+		}
 
-			virtual ~DirectoryProcessor()
-			{
-			}
+		virtual ~DirectoryProcessor()
+		{
+		}
 
-			virtual Processor::Result operator () (const String& path) = 0;
+		virtual Processor::Result operator () (const String& path) = 0;
 	};
 
 	class DirectoryRecursiveProcessor
@@ -42,16 +43,16 @@ namespace BALL {
 	{
 		public:
 
-			DirectoryRecursiveProcessor()
-			{
-			}
+		DirectoryRecursiveProcessor()
+		{
+		}
 
-			virtual ~DirectoryRecursiveProcessor()
-			{
-			}
+		virtual ~DirectoryRecursiveProcessor()
+		{
+		}
 
-			virtual Processor::Result operator () 
-				(const String& path, const unsigned long& directory_depth) = 0;
+		virtual Processor::Result operator () 
+			(const String& path, const unsigned long& directory_depth) = 0;
 	};
 
 	/**	Directory class 
@@ -60,148 +61,148 @@ namespace BALL {
 	{
 		public:
 
-			/**	@name	Constructors and Destructors */
-			//@{
+		/**	@name	Constructors and Destructors */
+		//@{
 
-			///
-			Directory();
+		///
+		Directory();
 
-			///
-			Directory(const String& directory_path, bool set_current = false);
+		///
+		Directory(const String& directory_path, bool set_current = false);
 
-			///
-			Directory(const Directory& directory);
+		///
+		Directory(const Directory& directory);
 
-			///
-			~Directory();
+		///
+		~Directory();
 
-			///
-			void clear();
+		///
+		void clear();
 
-			///
-			void destroy();
-			//@}
+		///
+		void destroy();
+		//@}
 
-			/**	@name	Assignment */
-			//@{
+		/**	@name	Assignment */
+		//@{
 
-			///
-			void set(const String& directory_path, bool set_current = false);
+		///
+		void set(const String& directory_path, bool set_current = false);
 
-			///
-			void set(const Directory& directory);
+		///
+		void set(const Directory& directory);
 
-			///
-			Directory& operator = (const Directory& directory);
+		///
+		Directory& operator = (const Directory& directory);
 
-			///
-			void get(Directory& directory) const;
+		///
+		void get(Directory& directory) const;
 
-			///
-			void swap(Directory& directory);
-			//@}
-				
-
-			/**	@name	Accessors */
-			//@{
-
-			///
-			const String& getPath() const;
-
-			///
-			static bool rename(String old_path, String new_path);
-
-			///
-			bool renameTo(const String& new_path);
-
-			///
-			static bool setCurrent(String& directory_path);
-
-			///
-			bool setCurrent();
-
-			///
-			static bool create(String& path, mode_t mode = 0777);
-
-			///
-			static bool remove(String old_path);
-
-			bool getFirstEntry(String& entry);
-
-			const String& getFirstEntry(String& entry) const;
-
-			bool getNextEntry(String& entry);
-
-			const String& getNextEntry(String& entry) const;
-
-			BALL::Size getSize() const;
-
-			BALL::Size countFiles() const;
-
-			BALL::Size countDirectories() const;
-
-			bool find(const String& filename, String& filepath, bool recursive = false);
-
-			bool find(const String& filename, String& filepath, bool recursive = false) const;
-			//@}
-
-			/**	@name	Predicates */
-			//@{
+		///
+		void swap(Directory& directory);
+		//@}
 			
-			///
-			bool has(const String& filename, bool recursive = false) const;
 
-			///
-			bool isCurrent() const;
+		/**	@name	Accessors */
+		//@{
 
-			///
-			bool isEmpty() const;
+		///
+		const String& getPath() const;
 
-			///
-			bool operator == (const Directory& directory) const;
+		///
+		static bool rename(String old_path, String new_path);
 
-			///
-			bool operator != (const Directory& directory) const;
-			//@}
+		///
+		bool renameTo(const String& new_path);
 
-			/**	@name	Internal Iterators */
-			//@{
-			
-			///
-			bool apply(DirectoryProcessor& processor);
+		///
+		static bool setCurrent(String& directory_path);
 
-			///
-			bool apply(DirectoryRecursiveProcessor& processor);
-			//@}
+		///
+		bool setCurrent();
+
+		///
+		static bool create(String& path, mode_t mode = 0777);
+
+		///
+		static bool remove(String old_path);
+
+		bool getFirstEntry(String& entry);
+
+		const String& getFirstEntry(String& entry) const;
+
+		bool getNextEntry(String& entry);
+
+		const String& getNextEntry(String& entry) const;
+
+		BALL::Size getSize() const;
+
+		BALL::Size countFiles() const;
+
+		BALL::Size countDirectories() const;
+
+		bool find(const String& filename, String& filepath, bool recursive = false);
+
+		bool find(const String& filename, String& filepath, bool recursive = false) const;
+		//@}
+
+		/**	@name	Predicates */
+		//@{
+		
+		///
+		bool has(const String& filename, bool recursive = false) const;
+
+		///
+		bool isCurrent() const;
+
+		///
+		bool isEmpty() const;
+
+		///
+		bool operator == (const Directory& directory) const;
+
+		///
+		bool operator != (const Directory& directory) const;
+		//@}
+
+		/**	@name	Internal Iterators */
+		//@{
+		
+		///
+		bool apply(DirectoryProcessor& processor);
+
+		///
+		bool apply(DirectoryRecursiveProcessor& processor);
+		//@}
 
 		private:
 
-			class FileFinder_
-				: public DirectoryProcessor
-			{
-				public:
+		class FileFinder_
+			: public DirectoryProcessor
+		{
+			public:
 
-					FileFinder_(const String& filename)
-						:	filename_(filename)
+				FileFinder_(const String& filename)
+					:	filename_(filename)
+				{
+				}
+
+				virtual BALL::Processor::Result operator() (const String& path)
+				{
+					const char* filename = strrchr(path.getData(), FileSystem::PATH_SEPARATOR);
+
+					if ((filename != 0 && strcmp(filename + 1, filename_) == 0)
+							|| strcmp(path, filename_) == 0)
 					{
+						return Processor::ABORT;
+					} else {
+						return Processor::CONTINUE;
 					}
-
-					virtual BALL::Processor::Result operator() (const String& path)
-					{
-						const char* filename = strrchr(path.getData(), FileSystem::PATH_SEPARATOR);
-
-						if ((filename != 0 && strcmp(filename + 1, filename_) == 0)
-								|| strcmp(path, filename_) == 0)
-						{
-							return Processor::ABORT;
-						} else {
-							return Processor::CONTINUE;
-						}
-					}
+				}
 
 				private:
 
-					const String& filename_;
+				const String& filename_;
 			};
 
 			Processor::Result apply_(DirectoryRecursiveProcessor& processor);

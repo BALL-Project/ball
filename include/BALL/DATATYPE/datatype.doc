@@ -1,4 +1,4 @@
-/* $Id: datatype.doc,v 1.2 1999/12/28 18:32:52 oliver Exp $ */
+/* $Id: datatype.doc,v 1.3 1999/12/28 21:29:13 oliver Exp $ */
 
 /**@name	General datastructures
 		This section contains all relevant information on 
@@ -9,8 +9,8 @@
 	/**	@name	Grid Datastructures
 	*/
 	//@{
-		// @Include: hashGrid.h
-		// @Include: pointGrid.h
+		//@Include: hashGrid.h
+		//@Include: pointGrid.h
 	//@}
 	/**	@name	Generic Hash Associative Containers
 	*/

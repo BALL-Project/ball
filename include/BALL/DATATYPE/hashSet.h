@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.3 1999/12/28 18:35:56 oliver Exp $ 
+// $Id: hashSet.h,v 1.4 1999/12/28 21:29:14 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -868,51 +868,37 @@ namespace BALL
  
 	template <class Key>
 	void HashSet<Key>::rehash_()
-	{
-		/*
-		Size old_bucket__Size = bucket_.size();
-		
-		rehash();
-		
-		HashSetItem<Key> **new_bucket_
-			= createBuckets_(number_of_buckets_);
-		
-		Position new_bucket = 0;
-		Node* item = 0;
-		Node* nextitem = 0;
-		
-		for (new_bucket = 0;
-				 new_bucket < (Position)number_of_buckets_;
-				 ++new_bucket)
-		{
-			new_bucket_[new_bucket] = 0;
-		}
-		
-		for (register Index old_bucket = 0;
-				 old_bucket < (Index)old_bucket__Size;
-				 ++old_bucket)
-		{
-			for (item = bucket_[old_bucket];
-		 item != 0;
-		 item = nextitem)
-				{
-		nextitem = item->next__mpHashSetItem_;
-		
-		new_bucket = _hash(item->__mKey_);
-		
-		item->next__mpHashSetItem_
-			= new_bucket_[new_bucket];
-		
-		new_bucket_[new_bucket] = item; // could be optimized
-				}
-		}
-		
-		deleteBuckets_(bucket_);
-		
-		bucket_ = new_bucket_;
-		*/
-	}
+  {
+    // calculate the new number of buckets (in capacity_)
+    rehash();
 
+    // save the old contents
+    vector<Node*> old_buckets(bucket_);
+
+    // resize the bucket vector and initialize it with zero
+    bucket_.clear();
+    bucket_.resize(capacity_);
+    Position i;
+    for (i = 0; i < capacity_; i++)
+    {
+      bucket_[i] = 0;
+		}
+
+    // rehash the old contents into the new buckets
+    Node* node;
+    Node* next_node;
+    for (Position i = 0; i < (Position)old_buckets.size(); ++i)
+    {
+      for (node = old_buckets[i]; node != 0; node = next_node)
+      {
+        next_node = node->next;
+        Position new_bucket = (Position)hash_(node->value);
+        node->next = bucket_[new_bucket];
+        bucket_[new_bucket] = node;
+			}
+		}
+	}
+ 
 } // namespace BALL
 
 #endif // BALL_DATATYPE_HASHSET_H

@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.4 1999/12/28 18:35:32 oliver Exp $ 
+// $Id: hashMap.h,v 1.5 1999/12/28 21:29:14 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -67,102 +67,103 @@ namespace BALL
 
 		class IteratorTraits_;
 
-		/* *	@name	Type definitions
+		/**	@name	Type definitions
 		*/
-		// @{
-		/* *
+		//@{
+		/**
 		*/
 		typedef std::pair<Key, T> ValueType;
 			
-		/* *
+		/**
 		*/
 		typedef Key KeyType;
 
-		/* *
+		/**
 		*/
 		typedef std::pair<Key, T>* PointerType;
 			
-		/* *
+		/**
 		*/
 		typedef 
 				ForwardIterator<HashMap<Key, T>, ValueType, PointerType, IteratorTraits_>
 			Iterator;
 
-		/* *
+		/**
 		*/
 		typedef 
 				ConstForwardIterator <HashMap<Key, T>, ValueType, PointerType, IteratorTraits_>
 			ConstIterator;
-		// @}
+		//@}
 
-		/* *	@name Constructors and Destructors 
+		/**	@name Constructors and Destructors 
 		*/
-		// @{
+		//@{
 
-		/* *	Default constructor.
+		/**	Default constructor.
 				Create a new and empty hash map.
 				@param initial_capacity the capcaity of the hash map
-				@param number_of_buckets the number_of_buckets to create
+				@param number_of_buckets the number of buckets to create
 		*/
 		HashMap(Size initial_capacity = INITIAL_CAPACITY, Size number_of_buckets = INITIAL_NUMBER_OF_BUCKETS);
 			
-		/* *	Copy Constructor.
+		/**	Copy Constructor.
 				@param	hash_map the hash map to be copied
 				@param	deep not used
 		*/
 		HashMap(const HashMap& hash_map, bool deep = true);
 
-		/* *	Destructor.
+		/**	Destructor.
 		*/
 		virtual ~HashMap();
 
-		/* *	Clear the hash map.
+		/**	Clear the hash map.
 				Remove all nodes from all buckets.
 				The capacity and the number of buckets remain unchanged.
 		*/
 		virtual void clear();
 	
-		/* *	Clear the hash map.
+		/**	Clear the hash map.
 				Remove all nodes from all buckets.
 				The capacity and the number of buckets remain unchanged.
 				Simply calls clear;
 		*/
 		void destroy();
-		// @}
+		//@}
 		
-		/* *	@name Assignment 
+		/**	@name Assignment 
 		*/
-		// @{
+		//@{
 
-		/* *	Assignment from another hash map.
+		/**	Assignment from another hash map.
 				@param hash_map the hash map to assign from
 				@param deep not used
 		*/
 		void set(const HashMap& hash_map, bool deep = true);
 
-		/* *	Assignment operator.
+		/**	Assignment operator.
 				Assign the contents of a hash map to another.
 				@param hash_map the hash map to assign from
 		*/
 		HashMap& operator = (const HashMap& hash_map);
 
-		/* *	Assign the contents of this hash map to another map.
+		/**	Assign the contents of this hash map to another map.
 		*/
 		void get(HashMap& hash_map, bool deep = true) const;
 
-		/* *	Swap the contents of two hash maps.
+		/**	Swap the contents of two hash maps.
 		*/
 		void swap(HashMap& hash_map);
-		// @}
+		//@}
 
-		/* *	@name	Accessors
+		/**	@name	Accessors
 		*/
-		// @{
+		//@{
+
 		/* *	Return the number of buckets
 		*/
 		Size getBucketSize() const;
 
-		/* *	????
+		/* * Return the capcacity of the hash map.
 		*/
 		Size getCapacity() const;
 
@@ -207,52 +208,52 @@ namespace BALL
 				Erase all elemntes in the range {\tt \[first, last)}.
 		*/
 		void erase(Iterator first, Iterator last);
-		// @}
+		//@}
 
-		/* *	@name Miscellaneous
+		/**	@name Miscellaneous
 		*/
-		// @{
+		//@{
 
-		/* *	Host a visitor.
+		/**	Host a visitor.
 		*/
 		void host(Visitor<ValueType>& visitor);
-		// @}
+		//@}
 	
-		/* *	@name	Predicates
+		/**	@name	Predicates
 		*/
-		// @{
+		//@{
 
-		/* *	Test whether the map contains the key {\tt key}.
+		/**	Test whether the map contains the key {\tt key}.
 		*/
 		bool has(const Key& key) const;
 
-		/* *	Test whether the map is empty.
+		/**	Test whether the map is empty.
 		*/
 		bool isEmpty() const;
 
-		/* *	Compare two hash maps.
+		/**	Compare two hash maps.
 		*/
 		bool operator == (const HashMap& hash_map) const;
 
-		/* *	Compare two hash maps.
+		/**	Compare two hash maps.
 		*/
 		bool operator != (const HashMap& hash_map) const;
-		// @}
+		//@}
 
-		/* *	@name	Debugging and Diagnostics
+		/**	@name	Debugging and Diagnostics
 		*/
-		// @{
+		//@{
 
-		/* *	Return true if the hash map is consistent.
+		/**	Return true if the hash map is consistent.
 				Condition: the number of entries in all buckets has to equal the 
 				stored number of entries (getSize()).
 		*/
 		bool isValid() const;
 
-		/* *
+		/**
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
-		// @}
+		//@}
 
 		// --- STORERS
 

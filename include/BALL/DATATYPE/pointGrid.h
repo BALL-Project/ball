@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.6 1999/12/28 18:37:21 oliver Exp $ 
+// $Id: pointGrid.h,v 1.7 1999/12/28 21:29:14 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -14,34 +14,6 @@
 namespace BALL 
 {
 
-	// BUG: egcs doesn't allow structs in template classes
-	// until this is fixed, they remain outside
-
-	/**	@name	Type Definitions
-	*/
-	//@{
-	/**	IndexStruct
-			PointGrid index type.
-			This struct is used to represent the indices of a
-			grid point.
-			@see		PointGrid
-			@see		GridPoint::getIndex
-	*/
-	struct IndexStruct 
-	{
-		///
-		Position x;
-		///
-		Position y;
-		///
-		Position z;
-	};
-	/**	@name	Index
-			@memo  Grid index type
-	*/
-	typedef struct IndexStruct GridIndex;
-	//@}
-
 	/**	Simple 3D grid class.
 			Unlike BoxGrid this class represents a three-dimensional
 			array. An instance of GridDataType will be created
@@ -55,8 +27,34 @@ namespace BALL
 	template <class GridDataType>
 	class PointGrid 
 	{
-
 		public:
+
+		/**	@name	Type Definitions
+		*/
+		//@{
+		/**	IndexStruct
+				PointGrid index type.
+				This struct is used to represent the indices of a
+				grid point.
+				@see		PointGrid
+				@see		GridPoint::getIndex
+		*/
+		struct IndexStruct 
+		{
+			///
+			Position x;
+			///
+			Position y;
+			///
+			Position z;
+		};
+
+		/**	@name	Index
+				@memo  Grid index type
+		*/
+		typedef struct IndexStruct GridIndex;
+		//@}
+
 
 		/**	@name	Constructors and Destructors
 		*/
