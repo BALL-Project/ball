@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.17 2000/10/06 07:32:08 oliver Exp $
+// $Id: classTest.h,v 1.18 2001/02/05 00:51:33 amoll Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -22,7 +22,7 @@
 
 		There are several macros defined to simplify the creation of a test program
 		and to provide a common interface.
-		Each test program consists of several subtests the usually test one
+		Each test program consists of several subtests which usually test one
 		method or property of the class. Each of this subtests uses a series
 		of elementary tests to check the functionality of the method.
 
@@ -69,7 +69,7 @@
 		All exceptions that are thrown due to some malfunction in one of the member functions should be 
 		caught by the {\tt try} block created by \Ref{CHECK} and \Ref{RESULT}.
 */
-#define START_TEST(class_name,version)\
+#define START_TEST(class_name, version)\
 /* define a special namespace for all internal variables */\
 /* to avoid potential collisions                         */\
 namespace TEST {\
@@ -240,18 +240,19 @@ int main(int argc, char **argv)\
 /**	Check subtest result.
 		Each elementary test macro updates an internal variable ({\bf TEST}, defined by 
 		\Ref{START_TEST}) that holds the state of the current subtest.\\
-		{\bf RESULT} prints a whether the subtest has failed or passed in verbose mode
+		{\bf RESULT} prints whether the subtest has failed or passed in verbose mode
 		and updates the internal variables {\bf TEST::all_tests} that describes the state of
 		the whole class test. {\bf TEST::all_tests} is initialized to be {\bf true}.
 		If any elementary test fails, {\bf TEST::test} becomes {\bf false}.
 		At the time of the next call to {\bf RESULT}, {\bf TEST::all_tests} will be
     set to false, if {\bf TEST::test} is false. One failed elementary test leads therefore
 		to a failed subtest, which leads to a failed class test.\\
-		This macro closes the {\tt try} block opened by CHECK, so CHECK and RESULT--if they are not balanced, 
-		ugly compile-time errors may occur.
-		RESULT first tries to catch all {\tt BALL} exceptions (i.e. exceptions derived from GeneralException).
-		If this fails, it tries to catch any exception. After the exception is thrown, the execution will continue with the 
-		next subtest, the current subtest will be marked as failed (as is the whole test program).
+		This macro closes the {\tt try} block opened by CHECK, so CHECK and RESULT have to 
+		be balanced, or some ugly compile-time errors may occur.
+		RESULT first tries to catch all {\tt BALL} exceptions (i.e. exceptions 
+		derived from GeneralException).	If this fails, it tries to catch any exception. 
+		After the exception is thrown, the execution will continue with the next subtest,
+		the current subtest will be marked as failed (as is the whole test program).
 */
 #define RESULT \
   }\
@@ -408,6 +409,13 @@ int main(int argc, char **argv)\
 	}\
 
 /**	Exception test macro.
+		This macro checks if a given type of exception occured while executing the
+		given command.
+		Example:\\
+		#TEST_EXCEPTION(Exception::IndexOverflow, vector3[-1])#\\
+		If no or a wrong exception occured, false is returned, otherwise true.
+		@param exception_type the exception-class
+		@param command any general C++ or BALL-specific command
 */
 #define TEST_EXCEPTION(exception_type, command) \
 	{\
