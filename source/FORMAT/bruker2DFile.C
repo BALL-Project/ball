@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.C,v 1.4 2000/11/10 17:17:14 anhi Exp $
+// $Id: bruker2DFile.C,v 1.5 2000/11/24 16:42:05 anhi Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -69,6 +69,22 @@ namespace BALL
 			delete parsf1_;
 		if (parsf2_)
 			delete parsf2_;
+	}
+
+        void Bruker2D::read(const String& name)
+        {
+	  parsf1_ = new JCAMPFile( name + "/proc2s" );
+	  parsf2_ = new JCAMPFile( name + "/procs"  );
+	  parsf1_->read();
+	  parsf2_->read();
+	  miny_ = (int) parsf1_->parameter( "YMIN_p" );
+	  maxy_ = (int) parsf1_->parameter( "YMAX_p" );
+	  minx_ = (int) parsf2_->parameter( "YMIN_p" );
+	  maxx_ = (int) parsf2_->parameter( "YMAX_p" );
+		
+	  close();
+	  open(name);
+	  read();
 	}
 
 	void Bruker2D::read()
@@ -369,8 +385,8 @@ namespace BALL
     spointnumf2_ = spointnumf2;
 
     double dum1, dum2;
-    spectrum_.setXSize(swidthf2);
-    spectrum_.setYSize(swidthf1);
+    spectrum_.setXSize(spointnumf2);
+    spectrum_.setYSize(spointnumf1);
     dum1 = GetShift(0,0).first;
     dum2 = GetShift(spointnumf2,0).first;
     spectrum_.setXLower(MIN(dum1, dum2));
