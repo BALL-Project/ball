@@ -1,8 +1,16 @@
-// $Id: molecularControl.C,v 1.1 2000/09/23 15:39:17 hekl Exp $
+// $Id: molecularControl.C,v 1.2 2000/10/22 15:24:19 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
+#include <qpopupmenu.h>
+#include <qmenubar.h>
 
 using namespace std;
+
+namespace BALL
+{
+
+	namespace MOLVIEW
+	{
 
 MolecularControl::MolecularControl
   (QWidget* parent, const char* name)
@@ -14,6 +22,39 @@ MolecularControl::MolecularControl
 
 MolecularControl::~MolecularControl()
 {
+}
+
+void MolecularControl::checkMenu(MainControl& main_control)
+{
+	bool copy_list_filled = (bool)(getCopyList_().size() > 0);
+
+	// check for paste-slot: enable only if copy_list_ not empty
+	(main_control.menuBar())->setItemEnabled(paste_id_, copy_list_filled);	
+
+	// check for clearClipboard-slot: enable only if copy_list_ not empty
+	(main_control.menuBar())->setItemEnabled(clipboard_id_, copy_list_filled);
+
+	// check for cut/copy-slot: enable only if all selected composites
+	// are systems
+	bool list_filled = (getSelection().size() > 0);
+
+	if (list_filled)
+	{
+		List<Composite*>::ConstIterator list_it = getSelection().begin();	
+		for (; list_it != getSelection().end(); ++list_it)
+		{
+			if (!RTTI::isKindOf<System>(**list_it))
+			{
+				list_filled = false;
+			}
+		}
+	}
+
+	// cut, copy, and paste will are only available for 
+	// top level selections
+	(main_control.menuBar())->setItemEnabled(cut_id_, list_filled);
+	(main_control.menuBar())->setItemEnabled(copy_id_, list_filled);	
+
 }
 
 void MolecularControl::sentSelection()
@@ -262,11 +303,10 @@ void MolecularControl::ContextMenu
 */
 
 
-
-
-
-
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.iC>
 #		endif
 
+	} // namespace MOLVIEW
+
+} // namespace BALL
