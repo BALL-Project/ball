@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.4 2000/01/08 20:32:52 hekl Exp $
+// $Id: ballAndStickModel.C,v 1.5 2000/01/15 18:59:42 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -181,58 +181,58 @@ namespace BALL
 					// use only atoms with greater handles than first atom
 					if (*first__pAtom < *second__pAtom)
 					{
-			// search for BallAndStick representants
-			second__pAtom->applyChild(getSearcher());
+						// search for BallAndStick representants
+						second__pAtom->applyChild(getSearcher());
 
-			// if found, build a Tube between them
-			if (getSearcher().geometricObjectFound() == true)
-			{
-				// get colors from both atoms
-				first__pAtom->host(*getColorCalculator());
-				first__ColorRGBA = getColorCalculator()->getColor();
-
-				second__pAtom->host(*getColorCalculator());
-				second__ColorRGBA = getColorCalculator()->getColor();
-
-				// if both colors are identical
-				if (first__ColorRGBA == second__ColorRGBA)
-				{
-					// generate single colored tube
-					Tube *__pTube = createTube_();
-
-					BALL_PRECONDITION
-						(__pTube != 0,
-						 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
-						 (AddBallAndStickModel::ERROR__CANNOT_CREATE_TUBE));
-
-					__pTube->PropertyManager::set(*this);
-					__pTube->setRadius(stick_radius_);
-					__pTube->setVertex1Address(first__pAtom->getPosition());
-					__pTube->setVertex2Address(second__pAtom->getPosition());
-					__pTube->setColor(first__ColorRGBA);
-
-					__pBond->Composite::appendChild(*__pTube);
-				}
-				else
-				{
-					// generate two colored tube
-					TwoColoredTube *__pTwoColoredTube = createTwoColoredTube_();
-
-					BALL_PRECONDITION
-						(__pTwoColoredTube != 0,
-						 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
-						 (AddBallAndStickModel::ERROR__CANNOT_CREATE_2CTUBE));
-
-					__pTwoColoredTube->PropertyManager::set(*this);
-					__pTwoColoredTube->setRadius(stick_radius_);
-					__pTwoColoredTube->setVertex1Address(first__pAtom->getPosition());
-					__pTwoColoredTube->setVertex2Address(second__pAtom->getPosition());
-					__pTwoColoredTube->setColor1(first__ColorRGBA);
-					__pTwoColoredTube->setColor2(second__ColorRGBA);
-
-					__pBond->Composite::appendChild(*__pTwoColoredTube);
-				}
-			}
+						// if found, build a Tube between them
+						if (getSearcher().geometricObjectFound() == true)
+						{
+							// get colors from both atoms
+							first__pAtom->host(*getColorCalculator());
+							first__ColorRGBA = getColorCalculator()->getColor();
+							
+							second__pAtom->host(*getColorCalculator());
+							second__ColorRGBA = getColorCalculator()->getColor();
+							
+							// if both colors are identical
+							if (first__ColorRGBA == second__ColorRGBA)
+							{
+								// generate single colored tube
+								Tube *__pTube = createTube_();
+								
+								BALL_PRECONDITION
+									(__pTube != 0,
+									 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
+									 (AddBallAndStickModel::ERROR__CANNOT_CREATE_TUBE));
+								
+								__pTube->PropertyManager::set(*this);
+								__pTube->setRadius(stick_radius_);
+								__pTube->setVertex1Address(first__pAtom->getPosition());
+								__pTube->setVertex2Address(second__pAtom->getPosition());
+								__pTube->setColor(first__ColorRGBA);
+								
+								__pBond->Composite::appendChild(*__pTube);
+							}
+							else
+							{
+								// generate two colored tube
+								TwoColoredTube *__pTwoColoredTube = createTwoColoredTube_();
+								
+								BALL_PRECONDITION
+									(__pTwoColoredTube != 0,
+									 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
+									 (AddBallAndStickModel::ERROR__CANNOT_CREATE_2CTUBE));
+								
+								__pTwoColoredTube->PropertyManager::set(*this);
+								__pTwoColoredTube->setRadius(stick_radius_);
+								__pTwoColoredTube->setVertex1Address(first__pAtom->getPosition());
+								__pTwoColoredTube->setVertex2Address(second__pAtom->getPosition());
+								__pTwoColoredTube->setColor1(first__ColorRGBA);
+								__pTwoColoredTube->setColor2(second__ColorRGBA);
+								
+								__pBond->Composite::appendChild(*__pTwoColoredTube);
+							}
+						}
 					}
 				}
 			}

@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.3 1999/12/28 18:00:46 oliver Exp $
+// $Id: lineModel.C,v 1.4 2000/01/15 18:59:42 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -137,60 +137,60 @@ namespace BALL
 					// use only atoms with greater handles than first atom
 					if (*first__pAtom < *second__pAtom)
 					{
-			// search for Line representants
-			second__pAtom->applyChild(getSearcher());
-
-			// if found, build a Line between them
-			if (getSearcher().geometricObjectFound() == true)
-			{
-				// get colors from both atoms
-				first__pAtom->host(*getColorCalculator());
-				first__ColorRGBA = getColorCalculator()->getColor();
-
-				second__pAtom->host(*getColorCalculator());
-				second__ColorRGBA = getColorCalculator()->getColor();
-
-				// if both colors are identical
-				if (first__ColorRGBA == second__ColorRGBA)
-				{
-					// generate single colored line
-					Line *__pLine = createLine_();
-
-					BALL_PRECONDITION
-						(__pLine != 0,
-						 BALL_MOLVIEW_LINEMODEL_ERROR_HANDLER
-						 (AddLineModel::ERROR__CANNOT_CREATE_LINE));
-
-					__pLine->PropertyManager::set(*this);
-					__pLine->setVertex1Address(first__pAtom->getPosition());
-					__pLine->setVertex2Address(second__pAtom->getPosition());
-					__pLine->setColor(first__ColorRGBA);
-
-					__pBond->Composite::appendChild(*__pLine);
-				}
-				else
-				{
-					// generate two colored line
-					TwoColoredLine *__pTwoColoredLine = createTwoColoredLine_();
-
-					BALL_PRECONDITION
-						(__pTwoColoredLine != 0,
-						 BALL_MOLVIEW_LINEMODEL_ERROR_HANDLER
-						 (AddLineModel::ERROR__CANNOT_CREATE_2CLINE));
-
-					__pTwoColoredLine->PropertyManager::set(*this);
-					__pTwoColoredLine->setVertex1Address(first__pAtom->getPosition());
-					__pTwoColoredLine->setVertex2Address(second__pAtom->getPosition());
-					__pTwoColoredLine->setColor1(first__ColorRGBA);
-					__pTwoColoredLine->setColor2(second__ColorRGBA);
-
-					__pBond->Composite::appendChild(*__pTwoColoredLine);
-				}
-			}
+						// search for Line representants
+						second__pAtom->applyChild(getSearcher());
+						
+						// if found, build a Line between them
+						if (getSearcher().geometricObjectFound() == true)
+						{
+							// get colors from both atoms
+							first__pAtom->host(*getColorCalculator());
+							first__ColorRGBA = getColorCalculator()->getColor();
+							
+							second__pAtom->host(*getColorCalculator());
+							second__ColorRGBA = getColorCalculator()->getColor();
+							
+							// if both colors are identical
+							if (first__ColorRGBA == second__ColorRGBA)
+							{
+								// generate single colored line
+								Line *__pLine = createLine_();
+								
+								BALL_PRECONDITION
+									(__pLine != 0,
+									 BALL_MOLVIEW_LINEMODEL_ERROR_HANDLER
+									 (AddLineModel::ERROR__CANNOT_CREATE_LINE));
+								
+								__pLine->PropertyManager::set(*this);
+								__pLine->setVertex1Address(first__pAtom->getPosition());
+								__pLine->setVertex2Address(second__pAtom->getPosition());
+								__pLine->setColor(first__ColorRGBA);
+								
+								__pBond->Composite::appendChild(*__pLine);
+							}
+							else
+							{
+								// generate two colored line
+								TwoColoredLine *__pTwoColoredLine = createTwoColoredLine_();
+								
+								BALL_PRECONDITION
+									(__pTwoColoredLine != 0,
+									 BALL_MOLVIEW_LINEMODEL_ERROR_HANDLER
+									 (AddLineModel::ERROR__CANNOT_CREATE_2CLINE));
+								
+								__pTwoColoredLine->PropertyManager::set(*this);
+								__pTwoColoredLine->setVertex1Address(first__pAtom->getPosition());
+								__pTwoColoredLine->setVertex2Address(second__pAtom->getPosition());
+								__pTwoColoredLine->setColor1(first__ColorRGBA);
+								__pTwoColoredLine->setColor2(second__ColorRGBA);
+								
+								__pBond->Composite::appendChild(*__pTwoColoredLine);
+							}
+						}
 					}
 				}
 			}
-			
+
 			return true;
 		}
 				
