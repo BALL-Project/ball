@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.51 2004/03/12 22:36:14 amoll Exp $
+// $Id: molecularControl.C,v 1.52 2004/03/13 12:49:14 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -532,6 +532,11 @@ void MolecularControl::initializeWidget(MainControl& main_control)
 	throw()
 {
 	String hint;
+
+	hint = "Select a molecular object to see its position in the scene or to mark it for a simulation";
+	select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S, -1, hint);   
+	hint = "Deselect a molecular object.";
+	deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D, -1, hint);
 	main_control.insertPopupMenuSeparator(MainControl::EDIT);
 	cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), CTRL+Key_X);
 	copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
@@ -875,32 +880,6 @@ void MolecularControl::clearClipboard()
 }
 
 
-void MolecularControl::select()
-{
-	// copy list, because selection could change
-	List<Composite*> selection = selected_;
-
-	List<Composite*>::Iterator it = selection.begin();
-	for(; it != selection.end(); it++)
-	{
-		selectedComposite_(*it, true);
-	}
-}
-
-
-void MolecularControl::deselect()
-{
-	// copy list, because selection could change
-	List<Composite*> selection = selected_;
-
-	List<Composite*>::Iterator it = selection.begin();
-	for(; it != selection.end(); it++)
-	{
-		selectedComposite_(*it, false);
-	}	
-}
-
-
 void MolecularControl::move()
 {
 	if (selected_.size() == 0) return;
@@ -1228,5 +1207,32 @@ bool MolecularControl::pasteAllowedFor_(Composite& child)
 
 	return true;
 }
+
+
+void MolecularControl::select()
+{
+	// copy list, because selection could change
+	List<Composite*> selection = selected_;
+
+	List<Composite*>::Iterator it = selection.begin();
+	for(; it != selection.end(); it++)
+	{
+		selectedComposite_(*it, true);
+	}
+}
+
+
+void MolecularControl::deselect()
+{
+	// copy list, because selection could change
+	List<Composite*> selection = selected_;
+
+	List<Composite*>::Iterator it = selection.begin();
+	for(; it != selection.end(); it++)
+	{
+		selectedComposite_(*it, false);
+	}	
+}
+
 
 } } // namespaces

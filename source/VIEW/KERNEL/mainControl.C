@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.70 2004/03/04 13:01:37 amoll Exp $
+// $Id: mainControl.C,v 1.71 2004/03/13 12:52:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -394,11 +394,15 @@ void MainControl::defaultPreferencesTab()
 	}
 }
 
+
 void MainControl::aboutToExit()
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "MainControl::aboutToExit()" << std::endl;
 #endif
+	
+	stopSimulation();
+
 	preferences_.clear();
 	preferences_.appendSection("WINDOWS");
 
@@ -430,6 +434,7 @@ void MainControl::aboutToExit()
 	Log.error() << "MainControl::aboutToExit() finished" << std::endl;
 #endif
 }
+
 
 bool MainControl::remove_(Composite& composite, bool update_representations_of_parent)
 	throw()

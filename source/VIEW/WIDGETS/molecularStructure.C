@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.35 2004/03/13 12:00:22 amoll Exp $
+// $Id: molecularStructure.C,v 1.36 2004/03/13 12:49:31 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -84,12 +84,6 @@ namespace BALL
 		check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
 																											SLOT(checkResidue()), CTRL+Key_K, -1, hint);
 		
-	
-		hint = "Select a molecular object to see its position in the scene or to mark it for a simulation";
-		select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S, -1, hint);   
-		
-		hint = "Deselect a molecular object.";
-		deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D, -1, hint);
 		// MOLECULARMECHANICS Menu -------------------------------------------------------------------
 		hint = "Calculate the energy of a System with the AMBER/CHARMM force field.";
 		amber_energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
@@ -420,59 +414,9 @@ namespace BALL
 		menuBar()->setItemEnabled(calculate_RMSD_id_, (number_of_selected_objects == 2) &&
 																									composites_muteable); 
 
-		menuBar()->setItemEnabled(select_id_, selected);
-		menuBar()->setItemEnabled(deselect_id_, selected);
-
 		menuBar()->setItemEnabled(check_overlap_, one_system && composites_muteable);
 	}
 
-
-	void MolecularStructure::select()
-	{
-		List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
-
-		if (!selection.size()) return;
-
-		// notify the main window
-		setStatusbarText("selecting " + String(selection.size()) + " objects...");
-
-		// copy list because the selection_ list can change after a changemessage event
-		List<Composite*> temp_selection_ = selection;
-					
-		List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-
-		for (; list_it != temp_selection_.end(); ++list_it)
-		{
-			CompositeMessage* cs_message = new CompositeMessage(**list_it, CompositeMessage::SELECTED_COMPOSITE);
-			notify_(cs_message);
-		}
-
-		getMainControl()->printSelectionInfos();
-	}
-
-
-	void MolecularStructure::deselect()
-	{
-		List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
-
-		if (!selection.size()) return;
-
-		setStatusbarText("deselecting " + String(selection.size()) + "objects...");
-
-		// copy list because the selection_ list can change after a changemessage event
-		List<Composite*> temp_selection_ = selection;
-
-		List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-		for (; list_it != temp_selection_.end(); ++list_it)
-		{
-			if (!(*list_it)->isSelected()) continue;
-			// mark composite for update
-			CompositeMessage* cs_message = new CompositeMessage(**list_it, CompositeMessage::DESELECTED_COMPOSITE);
-			notify_(cs_message);
-		}
-
-		getMainControl()->printSelectionInfos();
-	}
 
 
 	void MolecularStructure::addComposite_(Composite& composite, const String& name)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.29 2004/03/02 00:26:31 amoll Exp $
+// $Id: molecularControl.h,v 1.30 2004/03/13 12:49:24 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -443,40 +443,24 @@ namespace BALL
 				throw();
 
 			//@} 
-			/** @name Protected member variables 
+			/** @name Menu entries ids
 			*/ 
 			//@{
 
-			/** Cut id.
-					In this variable the menu id for the cut menu is stored.
-					This variable is provided for access to the cut menu. With the help of this
-					variable the cut menu can be enabled or disabled in the checkMenu().
-			*/
+			//_
 			int cut_id_;
-
-			/** Copy id.
-					In this variable the menu id for the copy menu is stored.
-					This variable is provided for access to the copy menu. With the help of this
-					variable the copy menu can be enabled or disabled in checkMenu().
-			*/
+			//_
 			int copy_id_;
-
-			/** Paste id.
-					In this variable the menu id for the paste menu is stored.
-					This variable is provided for access to the paste menu. With the help of this
-					variable the paste menu can be enabled or disabled in checkMenu().
-			*/
+			//_
 			int paste_id_;
-
-			///
+			//_
 			int delete_id_;
-
-			/** Clipboard id.
-					This variable is provided for access to the clipboard menu. With the help of
-					this variable the clipboard menu can be enabled or disabled in the 
-					checkMenu	method.
-			*/
+			//_
 			int clipboard_id_;
+			//_
+			int select_id_;
+			//_
+			int deselect_id_;
 
 			//@}
 			

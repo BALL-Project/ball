@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.13 2004/03/13 12:00:42 amoll Exp $
+// $Id: molecularStructure.h,v 1.14 2004/03/13 12:49:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -56,8 +56,6 @@ namespace BALL
 				- centerCamera
 				- buildBonds
 				- addHydrogens
-				- select
-				- deselect
 				- createGridFromDistance
 				- calculateSecondaryStructure
 				This class is also necessary to add certain properties to new Composite objects, 
@@ -187,21 +185,6 @@ namespace BALL
 			*/
 			void addHydrogens();
 			
-			/** Colors selected objects uniquely.
-					If selected molecular objects are available they will be colored according to
-					the BALL_SELECTED_COLOR.
-					A CompositeMessage will be sent for each object in the selection list.
-			*/
-			void select();
-
-			/** Colors deselected objects in their own color.
-					If selected molecular objects are available they will be colored according to
-					their own color as specified in the objects. This method reverses the process
-					done in the select method.
-					A CompositeMessage will be sent for each object in the selection list.
-			*/
-			void deselect();
-
 			/** Check the residues
 			 */
 			virtual bool checkResidue();
@@ -267,8 +250,6 @@ namespace BALL
 			Index build_bonds_id_;
 			Index add_hydrogens_id_;
 			Index check_structure_id_;
-			Index	select_id_;
-			Index	deselect_id_; 
 			Index	create_distance_grid_id_;
 			Index	calculate_ss_id_;
 			Index	map_proteins_id_;
