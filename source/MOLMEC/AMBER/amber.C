@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.1 1999/08/26 08:02:44 oliver Exp $
+// $Id: amber.C,v 1.2 1999/09/05 09:03:23 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -122,12 +122,86 @@ namespace BALL
 		parameters_.init();
 
 		// assign atom types: QUICK AND _VERY_ DIRTY (BAUSTELLLE)
-		AssignTypeNameProcessor type_name_proc("/KM/comp-bio/BALL-data/amber_types.dat");
+		AssignTypeNameProcessor type_name_proc("/KM/comp-bio/BALL-data/amber_types.dat", false);
 		getSystem()->apply(type_name_proc);
 		AssignTypeProcessor type_proc(parameters_.getAtomTypes());
 		getSystem()->apply(type_proc);
 		
 		return true;
+	}
+
+	float AmberFF::getStretchEnergy() const
+	{
+		ForceFieldComponent* component = getComponent("Amber Stretch");
+		if (component != 0)
+		{
+			return component->getEnergy();
+		} else {
+			return 0;
+		}
+	}
+
+	float AmberFF::getBendEnergy() const
+	{
+		ForceFieldComponent* component = getComponent("Amber Bend");
+		if (component != 0)
+		{
+			return component->getEnergy();
+		} else {
+			return 0;
+		}
+	}
+
+	float AmberFF::getTorsionEnergy() const
+	{
+		ForceFieldComponent* component = getComponent("Amber Torsion");
+		if (component != 0)
+		{
+			return component->getEnergy();
+		} else {
+			return 0;
+		}
+	}
+
+	float AmberFF::getVdWEnergy() const
+	{
+		const ForceFieldComponent* component = getComponent("Amber NonBonded");
+		if (component != 0)
+		{
+			const AmberNonBonded* nonbonded_component = dynamic_cast<const AmberNonBonded*>(component);
+			if (nonbonded_component != 0)
+			{
+				return nonbonded_component->getVdwEnergy();
+			}
+		}
+
+		return 0;
+	}
+
+	float AmberFF::getESEnergy() const
+	{
+		const ForceFieldComponent* component = getComponent("Amber NonBonded");
+		if (component != 0)
+		{
+			const AmberNonBonded* nonbonded_component = dynamic_cast<const AmberNonBonded*>(component);
+			if (nonbonded_component != 0)
+			{
+				return nonbonded_component->getElectrostaticEnergy();
+			}
+		}
+
+		return 0;
+	}
+
+	float AmberFF::getNonbondedEnergy() const
+	{
+		const ForceFieldComponent* component = getComponent("Amber NonBonded");
+		if (component != 0)
+		{
+			return component->getEnergy();
+		}
+
+		return 0;
 	}
 
 } // namespace BALL
