@@ -1,4 +1,4 @@
-// $Id: directory.C,v 1.7 2000/06/17 10:54:32 oliver Exp $
+// $Id: directory.C,v 1.8 2000/06/19 00:10:19 amoll Exp $
 
 #include <dirent.h>
 #include <stdio.h>
@@ -21,19 +21,32 @@ namespace BALL
 		else directory_path_ = "";
 	}
 
-	Directory::Directory(const String& directory_path, bool set_current)
-		:	dir_(0),
-			dirent_(0),
-			directory_depth_(0),
-			directory_path_(directory_path)
+	Directory::Directory(const String& directory_path, bool set_current = false)
 	{
-		if (set_current) ::chdir(directory_path.data());
+		dir_ = 0;
+		dirent_ = 0;
+		char* buffer_;
+		if ((buffer_ = ::getcwd(NULL, 64)) != NULL)
+		{
+			directory_path_ = buffer_;
+			directory_path_ += BALL::FileSystem::PATH_SEPARATOR;
+			directory_path_ += directory_path;
+		  FileSystem::canonizePath(directory_path_);
+			if (directory_path_.hasSuffix(String(BALL::FileSystem::PATH_SEPARATOR)))
+			{
+				directory_path_.truncate(directory_path_.size() - 1);
+			}
+		}
+		else directory_path_ = "";
+//		if (has(directory_path))
+ 			directory_path_ = directory_path;
+	//	else  directory_path_ = "";
+		if (set_current) setCurrent();
 	}
 
 	Directory::Directory(const Directory& directory)
 		:	dir_(0),
 			dirent_(0),
-			directory_depth_(0),
 			directory_path_(directory.directory_path_)
 	{}
 
@@ -52,146 +65,116 @@ namespace BALL
 		dirent_ = directory.dirent_;
 		directory.dirent_ = temp_dirent;
 		
-		unsigned long temp = directory_depth_;
-		directory_depth_ = directory.directory_depth_;
-		directory.directory_depth_ = temp;
-
 		directory_path_.swap(directory.directory_path_);
 	}
 
-
 	bool Directory::getFirstEntry(String& entry) 
 	{
+		synchronize_();
 		if (dir_ != 0) ::closedir(dir_);
 		dir_ = ::opendir(directory_path_.data());
-		if (dir_ == 0) return false;
+		if (dir_ == 0) result_ = false;
 		dirent_ = ::readdir(dir_);
 		if (dirent_ == 0)
 		{
 			::closedir(dir_);
 			dir_ = 0;
-			return false;
+			result_ = false;
 		} 
 		else 
 		{
 			entry = dirent_->d_name;
-			return true;
+			result_ = true;
 		}
+		return desynchronize_();
 	}
-
-	bool Directory::getFirstEntry(String& entry) const
+/*
+	bool Directory::getFirstEntry(String& entry)
 	{
 		return getFirstEntry(entry);
 	}
-
+*/
 	bool Directory::getNextEntry(String& entry)
 	{
+		synchronize_();
 		if (dir_ == 0) dir_ = ::opendir(directory_path_.data());
+		if (dir_ == 0) result_ = false;
 
-		if (dir_ == 0) return false;
 		dirent_ = ::readdir(dir_);
 		if (dirent_ == 0)
 		{
-			if (dir_ != 0)
-			{
-				::closedir(dir_);
-				dir_ = 0;
-			}
-			return false;
+			::closedir(dir_);
+			dir_ = 0;
+			result_ = false;
 		}
+		result_ = true;
 		entry = dirent_->d_name;
-		return true;
+		return desynchronize_();
 	}
-
+/*
 	bool Directory::getNextEntry(String& entry) const
 	{
 		return getNextEntry(entry);
 	}
-
-	Size Directory::countItems() const
+*/
+	Size Directory::countItems() //const
 	{
+		synchronize_();
 		Size size = 0;
 		DIR* dir = ::opendir(directory_path_.data());
-		if (dir == 0)	return 0;
+		if (dir == 0)	
+		{	
+			desynchronize_();
+			return 0;
+		}
 		while(::readdir(dir) != 0) ++size;
 		::closedir(dir);
+		desynchronize_();
 		return (size - 2); // ignore current (.) and parent directory entry (..)
 	}
 
-	Size Directory::countFiles() const
+	Size Directory::countFiles() //const
 	{
+		synchronize_();
 		struct stat stats;
 		Size size = 0;
+		dirent* myDirent;
 		DIR* dir = ::opendir(directory_path_.data());
-		if (dir == 0)	return 0;
-
-		while(readdir(dir) != 0)
+		if (dir == 0)	
+		{	
+			desynchronize_();
+			return 0;
+		}
+		while((myDirent = ::readdir(dir)) != 0)
 		{
-			char* c;
-			if (lstat(c, &stats) < 0)	continue;
+			if (lstat(myDirent->d_name, &stats) < 0)	continue;
 			if (S_ISDIR(stats.st_mode) == 0) ++size;
 		}
-
 		::closedir(dir);
+		desynchronize_();
 		return size;
 	}
 
-	Size Directory::countDirectories() const
+	Size Directory::countDirectories() //const
 	{
+		synchronize_();
 		struct stat stats;
 		Size size = 0;
+		dirent* myDirent;
 		DIR *dir = ::opendir(directory_path_.data());
-		if (dir == 0)	return 0;
-
-		while(::readdir(dir) != 0)
+		if (dir == 0)	
+		{	
+			desynchronize_();
+			return 0;
+		}
+		while((myDirent = ::readdir(dir)) != 0)
 		{
-			char* c;
-			if (lstat(c, &stats) < 0)	continue;
+			if (lstat(myDirent->d_name, &stats) < 0)	continue;
 			if (S_ISDIR(stats.st_mode) != 0) ++size;
 		}
-
 		::closedir(dir);
+		desynchronize_();
 		return (size - 2); // ignore current (.) and parent directory entry (..)
-	}
-
-	bool Directory::find(const String &filename, String &filepath, bool recursive)
-	{/*
-		if (!recursive)
-		{
-			FileFinder_ file_finder(filename);
-			if (!apply(file_finder))
-			{
-				filepath = directory_path_;
-				filepath += FileSystem::PATH_SEPARATOR;
-				filepath += filename;
-				return true;
-			}
-			else return false;
-		}
-		else
-		{
-			RecursiveFileFinder_ file_finder(filename);
-			if (!apply(file_finder))
-			{
-				file_finder.getFilePath(filepath);*/
-				return true;
-	/*		}
-			else return false;
-		}*/
-	}
-
-	bool Directory::has(const String& filename, bool recursive) const
-	{
-		if (!recursive)
-		{
-			FileFinder_ file_finder(filename);
-		}
-		else
-		{
-			//RecursiveFileFinder_ file_finder(filename);
-		}
-		//return (!apply(file_finder));
-		return true;
 	}
 
 	bool Directory::isCurrent() const
@@ -200,90 +183,69 @@ namespace BALL
 		if ((buffer_ = ::getcwd(NULL, 64)) == NULL)
 		{
 			return false;
-		}
-		return (bool)(directory_path_ == buffer_);
+		}/*
+		cout <<endl;
+		cout << directory_path_ <<endl;
+		cout << ::getcwd(NULL, 64) <<endl;*/
+		return (directory_path_ == buffer_);
 	}
 
-	BALL::Processor::Result Directory::FileFinder_::operator() (const String& path)
-	{
-		const char* filename = strrchr(path.data(), FileSystem::PATH_SEPARATOR);
-
-		if ((filename != 0 && strcmp(filename + 1, filename_.data()) == 0)
-				|| path == filename_)
+	bool Directory::has(const String& item) //const
+	{	
+		synchronize_();
+		String entry;
+		while (getNextEntry(entry))
 		{
-			return Processor::ABORT;
-		} else return Processor::CONTINUE;
-	}
-
-/*
-	BALLApplicator::Result Directory::apply_
-		(DirectoryRecursiveApplicator &directoryRecursiveApplicator,
-		 String& s)
-	{
-		struct stat stats;
-		struct dirent *dir_entry;
-		DIR *dir = 0;
-		char* c = 0;
-		 BALLApplicator::Result result = Applicator::ABORT;
-		
-		if (lstat(s.c_str(), &stats) < 0)
-		{
-			return Applicator::ABORT;
-		}
-		
-		if (S_ISDIR(stats.st_mode) == 0) // no directory
-		{ 
-			return directoryRecursiveApplicator(s, directory_depth_);
-		}
-
-		if ((dir = ::opendir(s.c_str())) == 0) 
-		{ // directory unreadable 
-
-			::closedir(dir);
-
-			return directoryRecursiveApplicator(s, directory_depth_);
-		}
-
-		result = directoryRecursiveApplicator(s, directory_depth_);
-
-		if (result <= Applicator::BREAK) return result;
-		
-		c = buffer_ + strlen(buffer_);
-		*c++ = FileSystem::PATH_SEPARATOR;
-		*c = '\0';
-
-		while ((dir_entry = ::readdir(dir)) != 0) 
-		{
-			if (strcmp(dir_entry->d_name, BALLFileSystem::CURRENT_DIRECTORY) != 0
-			 && strcmp(dir_entry->d_name, BALLFileSystem::PARENT_DIRECTORY ) != 0) 
+			if (entry == item)
 			{
-				strcpy(c, dir_entry->d_name);
-
-				directory_depth_++;
-
-				result = apply_(directoryRecursiveApplicator);
-
-				if (result <= Applicator::BREAK) // recursion 
-				{
-					directory_depth_--;
-
-					if (::closedir(dir) < 0)// closedir error
-					{ 
-						return Applicator::ABORT;
-					}
-					return result;
-				}
-				directory_depth_--;
+				result_ = true;
+				return desynchronize_();
 			}
 		}
+		result_ = false;
+		return desynchronize_();
+	}
 
-		*(c - 1) = '\0';
-
-		if (::closedir(dir) < 0)// closedir error
-		{ 
-			return Applicator::ABORT;
+	bool Directory::find(const String& item, String& filepath)
+	{
+		if (has(item))
+		{
+			filepath = directory_path_;
+			return true;  // stimmt so
 		}
-		return result;
+
+		synchronize_();
+		struct stat stats;		
+		String entry, path;
+		Directory directory;
+		while (getNextEntry(entry))
+		{
+			if (lstat(entry.data(), &stats) < 0) continue;
+			if (S_ISDIR(stats.st_mode) != 0 && 
+					strcmp(entry.data(), BALL::FileSystem::CURRENT_DIRECTORY) != 0 &&
+			    strcmp(entry.data(), BALL::FileSystem::PARENT_DIRECTORY ) != 0) 
+			{	
+				directory = Directory(entry);
+				if (directory.find(item, path))
+				{
+					filepath = path;
+					result_ = true;
+					return desynchronize_();
+				}
+			}
+		}
+		result_ = false;
+		return desynchronize_();
+	}
+/*
+	bool Directory::find(const String& item, String& filepath) const
+	{
+		return find(item, filepath);
+	}
+*/
+/*
+	List String Directory::findAll(const String &filename, String &filepath, bool recursive = false)
+	{
 	}*/
 
 #       ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.4 2000/06/15 19:11:01 amoll Exp $
+// $Id: directory.h,v 1.5 2000/06/19 00:09:56 amoll Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -24,40 +24,6 @@
 
 namespace BALL 
 {
-
-	class DirectoryProcessor
-		: public UnaryProcessor<String>
-	{
-		public:
-
-		DirectoryProcessor()
-		{
-		}
-
-		virtual ~DirectoryProcessor()
-		{
-		}
-
-		virtual Processor::Result operator () (const String& path) = 0;
-	};
-
-	class DirectoryRecursiveProcessor
-		: public BinaryProcessor<String, const unsigned long>
-	{
-		public:
-
-		DirectoryRecursiveProcessor()
-		{
-		}
-
-		virtual ~DirectoryRecursiveProcessor()
-		{
-		}
-
-		virtual Processor::Result operator () 
-			(const String& path, const unsigned long& directory_depth) = 0;
-	};
-
 	/**	Directory class 
 	*/
 	class Directory
@@ -68,13 +34,17 @@ namespace BALL
 		//@{
 
 		/** Default constructor.
-				Construct new Directory object.
+				Constructs new Directory object.
+				The directory path is set to the current working directory.
+				The directory path does not have a path seperator {\em /} at its end.
 				@return    Directory - new constructed Directory object
 		*/
 		Directory();
 
 		/** Detailed constructor.
 				Construct new Directory object from the directory {\em directory_path}.
+				If the given directory does not exists, the directory path is set to an empty string.
+				The directory path does not have a path seperator {\em /} at its end.
 				@param  directory_path the name of the directory to be opend
 				@param  set_current true, to set the directory as the current, default = false
 				@return Directory - new constructed Directory object
@@ -110,7 +80,7 @@ namespace BALL
 				@param  directory_path the name of the directory to be cloned
 				@param  set_current true to set the directory as the current, default = false
 		*/
-		void set(const String& directory_path, bool set_current = false);
+		bool set(const String& directory_path, bool set_current = false);
 
 		/** Assignment with cloning facility.
 				Assign the Directory {\em directory} to {\em *this}.
@@ -151,7 +121,7 @@ namespace BALL
 				@param new_path the new oath
 				@return bool  true if the directory could be renamed
 		*/
-		static bool rename(String old_path, String new_path);
+		/*static*/ bool rename(String old_path, String new_path);
 
 		/** Rename the directory associated with this object.
 				@param new_path the new oath
@@ -163,7 +133,7 @@ namespace BALL
 				@param directory_path the name of the directory
 				@return bool true if the directory could be set as the current
 		*/
-		static bool setCurrent(String directory_path);
+		/*static*/ bool setCurrent(String directory_path);
 
 		/** Set the directory as the current.
 				@return bool true if the directory could be set as the current
@@ -175,13 +145,13 @@ namespace BALL
 				@param mode the access mode of the directory
 				@return bool true if the directory could be created
 		*/
-		static bool create(String path, const mode_t& mode = 0777);
+		/*static*/ bool create(String path, const mode_t& mode = 0777);
 
 		/** Remove a directory.
 				@param old_path the path of the directory
 				@return bool true if the directory could be removed
 		*/
-		static bool remove(String old_path);
+		/*static*/ bool remove(String old_path);
 
 		/** Get the name of the first entry in the directory.
 				@param entry reference to the first name of the entry
@@ -193,7 +163,7 @@ namespace BALL
 				@param entry constant reference to first the name of the entry
 				@return bool true if an entry was found
 		*/
-		bool getFirstEntry(String& entry) const;
+		//bool getFirstEntry(String& entry) const;
 
 		/** Get the name of the next entry in the directory.
 				@param entry reference to the next name of the entry
@@ -205,55 +175,59 @@ namespace BALL
 				@param entry constant reference to the next name of the entry
 				@return bool true if an entry was found
 		*/
-		bool getNextEntry(String& entry) const;
+		//bool getNextEntry(String& entry) const;
 
 		/** Count all items in the directory.
 				@return Size the size
 		*/
-		Size countItems() const;
+		Size countItems(); //const;
 
 		/** Count the files in the directory.
 				@return Size the number of files
 		*/
-		Size countFiles() const;
+		Size countFiles(); //const;
 
 		/** Count the subdirectories in the directory.
 				@return Size the number of subdirectories
 		*/
-		Size countDirectories() const;
+		Size countDirectories(); //const;
 
 		/** Find a file in the directory.
 				The search can be recursive.
 				@param filename the name of the file to be searched
 				@param filepath	the path of the file, if it was found
-				@param recursive true to search recursive, default = false
 				@return bool true if the file was found
 		*/
-		bool find(const String& filename, String& filepath, bool recursive = false);
+		bool find(const String& filename, String& filepath);
 
 		/** Find a file in the directory.
 				The search can be recursive.
 				This function returns a constant reference.
 				@param filename the name of the file to be searched
 				@param filepath contains the path the file was found in
-				@param recursive true to search recursive, default = false
 				@return bool true if the file was found
 		*/
-		bool find(const String& filename, String& filepath, bool recursive = false) const;
+		//bool find(const String& filename, String& filepath) //const;
 		//@}
 
 		/**	@name	Predicates */
 		//@{
 		
-		/** Test if the directory has a file.
+		/** Test if the directory has a item.
 				The search can be recursive.
-				@param filename the name of the file to look for
-				@param recursive true to search recursive
+				@param filename the name of the item to look for
 				@return bool true if the directory has the file
 		*/
-		bool has(const String& filename, bool recursive = false) const;
+		bool has(const String& item); //const;
 
-		/** Test if the directory is the current.
+		/**	Test if the directory ist valid.
+				The directory is valid if it exists.
+				This function uses ::opendir(const char *dirname).
+				@return bool true if the directory is valid
+		*/
+		bool isValid() const;
+
+		/** Test if the directory is the current working directory.
 				@return bool
 		*/
 		bool isCurrent() const;
@@ -261,56 +235,30 @@ namespace BALL
 		/** Test if the directory is empty.
 				@return bool
 		*/
-		bool isEmpty() const;
+		bool isEmpty(); // const;
 
 		/**	Equality operator.
-				@return bool, {\bf true} if the name of the directories are equal
+				@return bool, {\bf true} if the name of both directories are equal
 		*/
 		bool operator == (const Directory& directory) const;
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the name of the directories are inequal
+				@return bool, {\bf true} if the name of both directories are inequal
 		*/
 		bool operator != (const Directory& directory) const;
-		//@}
 
-		/**	@name	Internal Iterators */
-		//@{
-		
-		/** Apply a directory processor.
-				@param processor the DirectoryProcessor
-				@return true if successful
-		*/
-		bool apply(DirectoryProcessor& processor);
-
-		/** Apply a recursive directory processor.
-				@param processor the DirectoryRecursiveProcessor
-				@return true if successful
-		*/
-		bool apply(DirectoryRecursiveProcessor& processor);
 		//@}
 
 		private:
 
-		class FileFinder_
-			: public DirectoryProcessor
-		{
-			public:
-
-				FileFinder_(const String& filename);
-				BALL::Processor::Result operator() (const String& path);
-
-				private:
-
-				const String& filename_;
-			};
-
-			Processor::Result apply_(DirectoryRecursiveProcessor& processor);
+			void synchronize_();
+			bool desynchronize_();
 
 			DIR*						dir_;
 			dirent*					dirent_;
-			unsigned long		directory_depth_;
 			String					directory_path_;
+			String					backup_path_;
+			bool						result_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
