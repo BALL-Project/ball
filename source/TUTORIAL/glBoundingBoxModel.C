@@ -1,17 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBoundingBoxModel.C,v 1.2 2002/02/27 12:25:05 sturm Exp $
+// $Id: glBoundingBoxModel.C,v 1.3 2004/02/19 10:50:18 oliver Exp $
 // molview tutorial example
 // ------------------------
 // create a processor that computes the bounding box of a molecular structure
 
 #include "glBoundingBoxModel.h"
+#include <BALL/KERNEL/system.h>
+#include <BALL/VIEW/KERNEL/molecularInformation.h>
 
 namespace BALL
 {
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		GLBoundingBoxModel::GLBoundingBoxModel() 
@@ -40,7 +42,7 @@ namespace BALL
 			new_start_ = true;
 			start_composite_ = 0;
 
-			return BaseModelProcessor::start();
+			return ModelProcessor::start();
 		}
 
 
@@ -61,12 +63,10 @@ namespace BALL
 			MolecularInformation molecular_information;
 			start_composite_->host(molecular_information);                        
 
-			// create a GLSimpleBox with the boundaries of the calculated box and set
+			// create a SimpleBox with the boundaries of the calculated box and set
 			// its properties with help from MolecularInformation
-			GLSimpleBox *pbox = new GLSimpleBox();
-			pbox->setVertex1(bbox_.a);
-			pbox->setVertex2(bbox_.b);
-			pbox->PropertyManager::set(*this);
+			SimpleBox* pbox = new SimpleBox;
+			*pbox == bbox_;
 			pbox->setColor(color_);
 			pbox->setName(String("BoundingBox of ")
 										+ molecular_information.getTypeName()

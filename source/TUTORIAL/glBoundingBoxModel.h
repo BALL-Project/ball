@@ -1,52 +1,46 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBoundingBoxModel.h,v 1.2 2002/02/27 12:25:06 sturm Exp $
+// $Id: glBoundingBoxModel.h,v 1.3 2004/02/19 10:50:19 oliver Exp $
 // molview tutorial example
 // ------------------------
 // create a processor that computes the bounding box of a molecular structure
 
 // BALL includes
-#include <BALL/MATHS/box3.h>
+#include <BALL/MATHS/simpleBox3.h>
 
 // BALLVIEW includes
-#include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
-#include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
+#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
+#include <BALL/VIEW/MODELS/modelProcessor.h>
 
 namespace BALL
 {
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		class GLBoundingBoxModel
-			: public BaseModelProcessor
+			: public ModelProcessor
 		{
 			public:
 
-				// constructors and destructor
-				GLBoundingBoxModel() 
-					throw();
-				virtual ~GLBoundingBoxModel()
-					throw();
+			// constructors and destructor
+			GLBoundingBoxModel() throw();
+			virtual ~GLBoundingBoxModel()	throw();
 
-				// accessors
-				void setColor(const ColorRGBA &color) 
-					throw();
+			// accessors
+			void setColor(const ColorRGBA& color) throw();
 
-				// processor related methods
-				virtual bool start()
-					throw();
-				virtual bool finish()
-					throw();
-				virtual Processor::Result operator() (Composite& composite)
-					throw();
+			// processor related methods
+			virtual bool start() throw();
+			virtual bool finish()	throw();
+			virtual Processor::Result operator() (Composite& composite)	throw();
 
-			private:
-				ColorRGBA color_;
-				bool new_start_;
-				Composite* start_composite_;
-				Box3 bbox_;
+			protected:
+			ColorRGBA color_;
+			bool new_start_;
+			Composite* start_composite_;
+			SimpleBox3 bbox_;
 		};
 	
 	}

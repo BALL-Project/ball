@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bounding_box.C,v 1.2 2002/02/27 12:25:05 sturm Exp $
+// $Id: bounding_box.C,v 1.3 2004/02/19 10:50:18 oliver Exp $
 // molview tutorial example
 // ------------------------
 // create a processor that computes the bounding box of a molecular structure
@@ -12,12 +12,13 @@
 // BALL includes
 #include <BALL/common.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/KERNEL/system.h>
 
 // include our new processor
 #include "glBoundingBoxModel.h"
 
 using namespace BALL;
-using namespace BALL::MOLVIEW;
+using namespace BALL::VIEW;
 using namespace std;
 
 int main()
