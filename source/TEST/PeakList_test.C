@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeakList_test.C,v 1.7 2003/06/19 19:19:47 oliver Exp $
+// $Id: PeakList_test.C,v 1.8 2003/11/10 08:47:45 anhi Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(PeakList, "$Id: PeakList_test.C,v 1.7 2003/06/19 19:19:47 oliver Exp $")
+START_TEST(PeakList, "$Id: PeakList_test.C,v 1.8 2003/11/10 08:47:45 anhi Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -211,3 +211,4 @@ RESULT
 /////////////////////////////////////////////////////////////
 
 END_TEST
+
