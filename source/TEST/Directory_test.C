@@ -1,4 +1,4 @@
-// $Id: Directory_test.C,v 1.5.4.2 2002/12/10 10:48:40 crauser Exp $
+// $Id: Directory_test.C,v 1.5.4.3 2002/12/11 10:32:27 crauser Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.5.4.2 2002/12/10 10:48:40 crauser Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.5.4.3 2002/12/11 10:32:27 crauser Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -46,9 +46,9 @@ CHECK(Directory::~Directory())
 	delete dd;
 RESULT
 
-Directory d;
 
 CHECK(Directory::setCurrent(const String& path))
+	Directory d;
 	bool result = d.setCurrent(test_dir);
 	TEST_EQUAL(result, true);
 #ifdef BALL_COMPILER_MSVC
@@ -161,6 +161,7 @@ CHECK(Directory::get(Directory& directory) const )
 RESULT
 
 CHECK(Directory::swap(Directory& directory))
+	Directory d;
 	Directory d1("dir_a" + PS);
 	Directory d2("dir_a" + PS + "dir_c" + PS, true);
 	d1.swap(d2);
@@ -177,6 +178,7 @@ CHECK(Directory::getPath() const )
 RESULT
 
 CHECK(Directory::create(String& path, mode_t mode = 0777))
+	Directory d;
 #ifdef BALL_COMPILER_MSVC
 	::_chdir(test_dir.c_str());
 #else
@@ -231,37 +233,37 @@ CHECK(Directory::getNextEntry(String& entry))
 RESULT
 
 
-Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
-d0.create("test1");
-Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
-d1.create("test1");
-d1.create("test2");
-d1.create("test3");
-d1.create("test4");
+
 CHECK(Directory::countItems() const)
+	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
+	d0.create("test1");
+	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
+	d1.create("test1");
+	d1.create("test2");
+	d1.create("test3");
+	d1.create("test4");
 	TEST_EQUAL(d1.countItems(), 4)
 RESULT
 
 CHECK(Directory::countFiles() const)
+	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
 	TEST_EQUAL(d1.countFiles(), 0)
 RESULT
 
 CHECK(Directory::countDirectories() const )
-	TEST_EQUAL(d1.countDirectories(), 4)
+	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
+	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
+	TEST_EQUAL(d1.countDirectories(), 4)d1.remove("test1");
+	d1.remove("test2");
+	d1.remove("test3");
+	d1.remove("test4");
+	d0.remove("test1");
 RESULT
-d1.remove("test1");
-d1.remove("test2");
-d1.remove("test3");
-d1.remove("test4");
-d0.remove("test1");
 
-#ifdef BALL_COMPILER_MSVC
-// this is a hack, the file handles of d0 and d1 point to directory test1,
-// therefore you cannot remove test1 in line 274 and are not closed!
-d0.clear();
-d1.clear();
-#endif
+
+
 CHECK(Directory::remove(String old_path))
+	Directory d;
 #ifdef BALL_COMPILER_MSVC
 	::_chdir(test_dir.c_str());
 #else
@@ -270,31 +272,38 @@ CHECK(Directory::remove(String old_path))
 	Directory d1("dir_a" + PS + "dir_c" + PS, true);
 	d1.create("test1");
 	TEST_EQUAL(d1.isValid(), true)
-		
-	TEST_EQUAL(d1.remove("test1"), true)
+	bool result = d1.remove("test1");
+	TEST_EQUAL(result, true)
 	TEST_EQUAL(d1.remove("xxxx"), false)
-	
+
 	d.setCurrent(test_dir);
 RESULT
 
 CHECK(Directory::rename(String old_path, String new_path))
+	Directory d;
 	Directory d1("dir_a" + PS + "dir_c", true);
 	TEST_EQUAL(d1.isValid(), true)
-	TEST_EQUAL(d1.create("test1"), true)
-	TEST_EQUAL(d1.rename("test1", "test2"), true)	  
-	TEST_EQUAL(d1.rename("test2", "test3"), true)	  
-	TEST_EQUAL(d1.rename("testz", "test"), false)	  
-	TEST_EQUAL(d1.remove("test3"), true)
+	bool result = d1.create("test1");
+	TEST_EQUAL(result, true)	
+	result = d1.rename("test1", "test2");
+	TEST_EQUAL(result, true)  
+	result = d1.rename("test2", "test3");
+	TEST_EQUAL(result, true)	  
+	TEST_EQUAL(d1.rename("testz", "test"), false)	 
+	result = d1.remove("test3");
+	TEST_EQUAL(result, true)
 	d.setCurrent(test_dir);
 RESULT
 
 CHECK(Directory::renameTo(const String& new_path))
+	Directory d;
 	Directory d1("dir_a" + PS + "dir_c");
-	TEST_EQUAL(d1.create("test1"), true)
+	bool result = d1.create("test1");
+	TEST_EQUAL(result, true)
 	d.setCurrent(test_dir);
 	Directory d2("dir_a" + PS + "dir_c" + PS + "test1", true);
 	TEST_EQUAL(d2.isValid(), true)
-	bool result = d2.renameTo("test2");
+  result = d2.renameTo("test2");
 	TEST_EQUAL(result, true)	  
 	result = d1.remove("test2");
 	TEST_EQUAL(result, true)
@@ -303,9 +312,8 @@ RESULT
 
 CHECK(Directory::getFirstEntry(String& entry) const )
 	String s;
-#ifdef BALL_COMPILER_MSVC
 	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
-#endif
+
 	d0.create("test1");
 
 	TEST_EQUAL(d0.getFirstEntry(s), true)
@@ -336,6 +344,7 @@ CHECK(Directory::has(const String& filename, bool recursive = false) const )
 RESULT
 
 CHECK(Directory::isCurrent() const )
+	Directory d;
 	Directory d1("dir_a" + PS + "dir_c"+ PS);
 	TEST_EQUAL(d1.isCurrent(), false)
 	d1.setCurrent();

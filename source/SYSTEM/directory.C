@@ -1,4 +1,4 @@
-// $Id: directory.C,v 1.15.4.5 2002/12/10 10:48:39 crauser Exp $
+// $Id: directory.C,v 1.15.4.6 2002/12/11 10:32:26 crauser Exp $
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -634,6 +634,9 @@ namespace BALL
 		FileSystem::canonizePath(new_path);
 #ifdef BALL_COMPILER_MSVC
 		if (::_chdir("..") != 0)	return desynchronize_(false);
+		CloseHandle(dir_);
+		FindClose(dirent_);
+		dir_ = dirent_ = INVALID_HANDLE_VALUE;
 #else
 		if (::chdir("..") != 0)	return desynchronize_(false);
 #endif
