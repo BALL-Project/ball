@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.h,v 1.1.2.3 2005/03/25 21:07:48 amoll Exp $
+// $Id: MMFF94Bend.h,v 1.1.2.4 2005/03/27 16:06:30 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -48,6 +48,7 @@ namespace BALL
 			Atom::StaticAtomAttributes*	atom3;
 			bool is_linear;
 			Position ATIJK;
+			float energy;  // debug
 		};
 
 		BALL_CREATE(MMFF94Bend)

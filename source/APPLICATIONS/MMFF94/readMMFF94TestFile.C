@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.10 2005/03/26 00:25:27 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.11 2005/03/27 16:06:28 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -154,7 +154,7 @@ bool testStretch(MMFF94& mmff, const String& filename)
 
 	float stretch_diff = std::fabs(mmff.getEnergy() - results[1]);
 
-	if (std::fabs(stretch_diff / results[1]) > 1.0 / 100.0 && stretch_diff > 0.0001)
+	if (std::fabs(stretch_diff / results[1]) > 1.0 / 100.0 && stretch_diff > 0.001)
 	{
 		Log.error() << filename << "   " << results[1] << "  " << mmff.getEnergy() << std::endl;
 		return false;
@@ -203,8 +203,10 @@ bool testBend(MMFF94& mmff, const String& filename)
 				continue;
 			}
 
+			float delta = std::fabs(s.energy - energy[poss2]);
 			found = true;
-			if (s.theta0 != theta0[poss2])
+			if (s.theta0 != theta0[poss2] ||
+					delta > energy[poss2] / 20.0 && delta > 0.001)
 			{
 				Log.error() << std::endl
 										<< "Problem Bend:   " << filename << "   " 
@@ -230,7 +232,7 @@ bool testBend(MMFF94& mmff, const String& filename)
 
 	float bend_diff = std::fabs(mmff.getEnergy() - results[2]);
 
-	if (std::fabs(bend_diff / results[1]) > 1.0 / 100.0 && bend_diff > 0.0001)
+	if (std::fabs(bend_diff / results[1]) > 1.0 / 100.0 && bend_diff > 0.001)
 	{
 		Log.error() << filename << "   " << results[2] << "  " << mmff.getEnergy() << std::endl;
 		return false;
@@ -262,8 +264,8 @@ int runtests(const vector<String>& filenames)
 
 		mmff.updateEnergy();
 
-//   		if (testStretch(mmff, filenames[pos])) ok++;
- 		if (testBend(mmff, filenames[pos])) ok++;
+//    		if (testStretch(mmff, filenames[pos])) ok++;
+		if (testBend(mmff, filenames[pos])) ok++;
 	}
 
 	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;
