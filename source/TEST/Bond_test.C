@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.21 2001/02/06 12:37:24 amoll Exp $
+// $Id: Bond_test.C,v 1.22 2001/02/22 20:35:20 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.21 2001/02/06 12:37:24 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.22 2001/02/22 20:35:20 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -168,6 +168,13 @@ CHECK(get(Bond&, bool))
 	TEST_EQUAL(b1.getName(), b2.getName())
 	TEST_EQUAL(b1.getOrder(), b2.getOrder())
 	TEST_EQUAL(b1.getType(), b2.getType())
+	// for safety...
+	a1.destroyBonds();
+	a2.destroyBonds();
+	b1.setFirstAtom(0);
+	b1.setSecondAtom(0);
+	b2.setFirstAtom(0);
+	b2.setSecondAtom(0);
 RESULT
 
 CHECK(swap())
@@ -195,6 +202,20 @@ CHECK(swap())
 	TEST_EQUAL(b2.getName(), b4.getName())
 	TEST_EQUAL(b2.getOrder(), b4.getOrder())
 	TEST_EQUAL(b2.getType(), b4.getType())
+	
+	// for safety...
+	a1.destroyBonds();
+	a2.destroyBonds();
+	a3.destroyBonds();
+	a4.destroyBonds();
+	b1.setFirstAtom(0);
+	b1.setSecondAtom(0);
+	b2.setFirstAtom(0);
+	b2.setSecondAtom(0);
+	b3.setFirstAtom(0);
+	b3.setSecondAtom(0);
+	b4.setFirstAtom(0);
+	b4.setSecondAtom(0);
 RESULT
 
 CHECK(setFirstAtom(Atom*))
@@ -352,6 +373,7 @@ CHECK(isInterBond())
 	TEST_EQUAL(b1.isInterBond(), false)
 	
 	Bond b2("bond2", a3, a4);
+
 	TEST_EQUAL(b2.isInterBond(), false)
 	
 	Bond b3("bond3", a1, a3);
@@ -410,7 +432,7 @@ CHECK(isIntraBond())
 	TEST_EQUAL(b1.isIntraBond(), true)
 	
 	Bond b2("bond2", a3, a4);
-	TEST_EQUAL(b2.isIntraBond(), true)
+	TEST_EQUAL(b2.isIntraBond(), false)
 	
 	Bond b3("bond3", a1, a3);
 	TEST_EQUAL(b3.isIntraBond(), false)
@@ -484,6 +506,11 @@ CHECK(finalize())
 	TEST_EQUAL(b1.getSecondAtom(), &a3);
 	TEST_EQUAL(a1.countBonds(), 1);
 	TEST_EQUAL(a2.countBonds(), 1);
+	a1.destroyBonds();
+	a2.destroyBonds();
+	a3.destroyBonds();
+	b1.setFirstAtom(0);
+	b1.setSecondAtom(0);
 RESULT
 
 TextPersistenceManager pm;
