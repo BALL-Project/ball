@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.22 2000/03/16 08:20:41 amoll Exp $
+// $Id: matrix44.h,v 1.23 2000/03/19 23:46:13 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -2005,6 +2005,15 @@ namespace BALL
 	template <class T>
 	BALL_INLINE 
 	void TMatrix4x4<T>::setRotation(const Angle& phi, const TVector3<T>& v)
+	{
+		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
+		m11 = m22 = m33 = m44 = (T)1;
+		rotate(phi, v.x, v.y, v.z);
+	}
+
+	template <class T>
+	BALL_INLINE 
+	void TMatrix4x4<T>::setRotation(const Angle& phi, const TVector4<T>& v)
 	{
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
 		m11 = m22 = m33 = m44 = (T)1;
