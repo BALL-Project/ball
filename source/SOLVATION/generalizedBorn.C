@@ -131,6 +131,11 @@ namespace BALL
 		retval = retval && setupIntegrationPoints_();
 		retval = retval && setupIntegrationWeights_();
 
+		// DEBUG
+		Log.info() << "Wild guess: "
+			<< 20 * shell_radii_.size() * atom_container_->countAtoms()
+			<< " iterations" << endl;
+		// /DEBUG
 		dump();
 
 		return(retval);
@@ -160,14 +165,21 @@ namespace BALL
 	{
 		float s = 0.0f;
 		float gamma_0_ln_lambda = gamma_0_ * log(lambda_);
-		float distance;
+		float distance_4;
+		float radius_sq;
 
 		AtomConstIterator it = atom_container_->beginAtom();
 		for (; +it; ++it)
 		{
-			distance = (r - it->getPosition()).getLength();
-			s += exp(gamma_0_ln_lambda / (it->getRadius() * it->getRadius())
-					* pow(distance, 4.0f));
+			distance_4 = (r - it->getPosition()).getLength();
+			distance_4 *= distance_4;
+			distance_4 *= distance_4;
+			distance_4 *= distance_4;
+			radius_sq = it->getRadius();
+			radius_sq *= radius_sq;
+			// s += exp(gamma_0_ln_lambda / (it->getRadius() * it->getRadius())
+			// 		* pow(distance, 4.0f));
+			s += exp(gamma_0_ln_lambda / radius_sq * distance_4);
 		}
 		float H = 1.0f/(1.0f + exp(beta_ * (s - lambda_)));
 
@@ -180,7 +192,7 @@ namespace BALL
 			<< std::endl;
 		// This might move to the paramters.
 		epsilon_ = 1e-8f;
-		grid_spacing_ = 0.2f;
+		grid_spacing_ = 2.0f;
 		r_buffer_ = 0.3;
 		// Two constants used in the calculation of r_iw
 		C_ = pow(log(epsilon_) / log(lambda_ * gamma_0_), 0.25f);
