@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.2 1999/09/03 08:11:11 len Exp $
+// $Id: forceField.h,v 1.3 1999/09/03 14:05:34 oliver Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -222,6 +222,11 @@ namespace BALL
 				countComponents. The first component in the list has the index zero.
 		*/
 		ForceFieldComponent*	getComponent(const Size	index) const;
+
+		/**	Return a pointer to the specified force field component.
+				If a component with the specified name does not exist, 0 is returned.
+		*/
+		ForceFieldComponent*	getComponent(const String& name) const;
 
 
 		/**	Return the sum of energies of all registered force field components. 
