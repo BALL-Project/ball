@@ -1,3 +1,5 @@
+// $Id: bitVector.sip,v 1.2 2000/07/24 20:16:03 oliver Exp $
+
 class Bit
 {
 %HeaderCode
@@ -41,11 +43,10 @@ class BitVector
   void setSize(Size /size/, bool /keep/ = true);
   Size getSize() const;
   Size countValue(bool /value/) const;
-  Index getMaxIndex() const;
   // BlockType* getBitSet();
   // const BlockType* getBitSet() const;
-  // Bit operator [] (Index /index/);
-  // bool operator [] (Index /index/) const;
+  Bit operator [] (Index /index/);
+  bool operator [] (Index /index/) const;
   void setBit(Index /index/, bool /value/ = true);
   bool getBit(Index /index/) const;
   bool getBit(Index /index/);
