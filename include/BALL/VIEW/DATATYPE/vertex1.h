@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.3 2003/08/29 15:36:45 amoll Exp $
+// $Id: vertex1.h,v 1.4 2003/11/18 14:42:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
@@ -138,9 +138,9 @@ namespace BALL
 					\param       z the z component of the new vector of this vertex
 					\see         getVertex
 					\see         Vector3
-					\see         Real
+					\see         float
 			*/
-			void setVertex(const Real x, const Real y, const Real z)
+			void setVertex(const float x, const float y, const float z)
 				throw();
 
 			/** Mutable inspection of the vector of this vertex.
@@ -168,14 +168,14 @@ namespace BALL
 				throw();
 
 			/** Inspection of the components of the vector of this vertex.
-					Access the components of the vector of this vertex by using Real.
+					Access the components of the vector of this vertex by using float.
 					\param       x the x component of the vector of this vertex
 					\param       y the y component of the vector of this vertex
 					\param       z the z component of the vector of this vertex
 					\see         setVertex
-					\see         Real
+					\see         float
 			*/
-			void getVertex(Real& x, Real& y, Real& z) const
+			void getVertex(float& x, float& y, float& z) const
 				throw();
 
 			/** Change the vector address of this vertex.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.5 2003/08/29 15:36:45 amoll Exp $
+// $Id: vertex2.h,v 1.6 2003/11/18 14:42:47 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_VERTEX2_H
 #define BALL_VIEW_DATATYPE_VERTEX2_H
@@ -140,9 +140,9 @@ namespace BALL
 					\param       z the z component of the new first vector of this vertex2
 					\see         getVertex1
 					\see         Vector3
-					\see         Real
+					\see         float
 			*/
-			void setVertex1(const Real x, const Real y, const Real z)
+			void setVertex1(const float x, const float y, const float z)
 				throw();
 
 			/** Mutable inspection of the first vector of this vertex2.
@@ -170,14 +170,14 @@ namespace BALL
 				throw();
 
 			/** Inspection of the components of the first vector of this vertex2.
-					Access the components of the first vector of this vertex2 by using Real.
+					Access the components of the first vector of this vertex2 by using float.
 					\param       x the x component of the first vector of this vertex2
 					\param       y the y component of the first vector of this vertex2
 					\param       z the z component of the first vector of this vertex2
 					\see         setVertex1
-					\see         Real
+					\see         float
 			*/
-			void getVertex1(Real& x, Real& y, Real& z) const
+			void getVertex1(float& x, float& y, float& z) const
 				throw();
 
 			/** Change the vector address of the first vector of this vertex2.
@@ -240,9 +240,9 @@ namespace BALL
 					\param       z the z component of the new second vector of this vertex2
 					\see         getVertex2
 					\see         Vector3
-					\see         Real
+					\see         float
 			*/
-			void setVertex2(const Real x, const Real y, const Real z)
+			void setVertex2(const float x, const float y, const float z)
 				throw();
 
 			/** Mutable inspection of the second vector of this vertex2.
@@ -271,14 +271,14 @@ namespace BALL
 
 			/** Inspection of the components of the second vector of this vertex2.
 					Access the components of the second vector of this vertex2 
-					by using Real.
+					by using float.
 					\param       x the x component of the second vector of this vertex2
 					\param       y the y component of the second vector of this vertex2
 					\param       z the z component of the second vector of this vertex2
 					\see         setVertex2
-					\see         Real
+					\see         float
 			*/
-			void getVertex2(Real& x, Real& y, Real& z) const
+			void getVertex2(float& x, float& y, float& z) const
 				throw();
 
 			/** Change the vector address of the second vector of this vertex2.
@@ -347,15 +347,15 @@ namespace BALL
 					\param       vertex2_z the z component of the new second vector of this vertex2
 					\see         getVertices
 					\see         Vector3
-					\see         Real
+					\see         float
 			*/
 			void setVertices
-				(const Real vertex1_x,
-				 const Real vertex1_y,
-				 const Real vertex1_z,
-				 const Real vertex2_x,
-				 const Real vertex2_y,
-				 const Real vertex2_z)
+				(const float vertex1_x,
+				 const float vertex1_y,
+				 const float vertex1_z,
+				 const float vertex2_x,
+				 const float vertex2_y,
+				 const float vertex2_z)
 				throw();
 
 			/** Change the vector addresses of the first and second vector of this
@@ -388,7 +388,7 @@ namespace BALL
 			/** Inspection of the components of the first and second vector of 
 					this vertex2.
 					Access the components of the first and second vector of this
-					vertex2 by using Real.
+					vertex2 by using float.
 					\param       vertex1_x the x component of the first vector of this vertex2
 					\param       vertex1_y the y component of the first vector of this vertex2
 					\param       vertex1_z the z component of the first vector of this vertex2
@@ -396,11 +396,11 @@ namespace BALL
 					\param       vertex2_y the y component of the second vector of this vertex2
 					\param       vertex2_z the z component of the second vector of this vertex2
 					\see         setVertices
-					\see         Real
+					\see         float
 			*/
 			void getVertices
-				(Real& vertex1_x, Real& vertex1_y, Real& vertex1_z,
-				 Real& vertex2_x, Real& vertex2_y, Real& vertex2_z)
+				(float& vertex1_x, float& vertex1_y, float& vertex1_z,
+				 float& vertex2_x, float& vertex2_y, float& vertex2_z)
 				throw();
 
 			/** Change the first and second vector address of this vertex2
