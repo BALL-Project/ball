@@ -1,0 +1,2 @@
+#!/bin/sh
+g++ -E $1 |tr "\011" " " | grep -v "^ *\$" > `basename $1 .h`.sip
