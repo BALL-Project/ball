@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Composite_test2.C,v 1.3 2002/12/18 16:00:38 sturm Exp $
+// $Id: Composite_test2.C,v 1.4 2002/12/21 14:58:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -28,12 +28,11 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test2.C,v 1.3 2002/12/18 16:00:38 sturm Exp $")
+START_TEST(Composite, "$Id: Composite_test2.C,v 1.4 2002/12/21 14:58:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-Composite* c_ptr = 0;
 Composite a, b, c, d, e, f;
 a.appendChild(b);
 b.appendChild(c);
