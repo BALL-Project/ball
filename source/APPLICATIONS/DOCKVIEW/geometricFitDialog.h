@@ -58,7 +58,7 @@ namespace BALL
 					throw();
 				
 				/// Set options of GeometricFit
-				void setOptions(Options& options)
+				void getOptions(Options& options)
 					throw();
 
 			public slots:

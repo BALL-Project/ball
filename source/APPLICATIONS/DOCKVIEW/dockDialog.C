@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.17 2005/04/05 11:41:09 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.18 2005/04/06 15:25:56 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -32,8 +32,16 @@
 # include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #endif
 
+#ifndef BALL_STRUCTURE_DOCKING_AMBEREVALUATION_H
+# include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
+#endif
+
 #ifndef BALL_STRUCTURE_DOCKING_RANDOMEVALUATION_H
 # include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
+#endif
+
+#ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
+#include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #endif
 
 namespace BALL
@@ -79,6 +87,8 @@ namespace BALL
 			
 			//build HashMap for scoring function advanced option dialogs
 			addScoringFunction("Default", DEFAULT);
+			AmberConfigurationDialog* amber = new AmberConfigurationDialog(this); 
+			addScoringFunction("Amber Force Field", AMBER_FF, amber);
 			addScoringFunction("Random", RANDOM);
 			
 			hide(); 
@@ -302,16 +312,31 @@ namespace BALL
 			EnergeticEvaluation* scoring = 0;
 			//check which scoring function is chosen
 			index = scoring_functions->currentItem();
+			AmberFF* ff = 0;
 			switch(index)
 			{
 				case DEFAULT:
 					scoring = new EnergeticEvaluation();
 					break;
+				case AMBER_FF:
+				{
+					ff = new AmberFF();
+					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
+					dialog->applyTo(*ff);
+					Log.info() << "in DockDialog:: Option of Amber FF:" << std::endl;
+					Options::Iterator it = ff->options.begin();
+					for(; +it; ++it)
+					{
+						Log.info() << it->first << " : " << it->second << std::endl;
+					}
+					scoring = new AmberEvaluation(*ff);
+					break;
+				}
 				case RANDOM:
 					scoring = new RandomEvaluation();
 					break;
 			}
-			
+		
 			// apply scoring function; set new scores in the conformation set
 			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set);
 			conformation_set.setScoring(ranked_conformations);
@@ -342,13 +367,13 @@ namespace BALL
 			// send a DockResultMessage
 			NewDockResultMessage* dock_res_m = new NewDockResultMessage();
 			dock_res_m->setDockResult(*dock_res);
-			//dock_res_m->setComposite(conformation_set.getSystem());
 			dock_res_m->setComposite(*docked_system);
 			notify_(dock_res_m);
 			
 			
-			delete dock_alg;
-			delete scoring;
+  			delete dock_alg;
+  			delete scoring;
+				delete ff;
 			
 			Log.info() << "End of calculate" << std::endl;
 			return true;
@@ -370,7 +395,7 @@ namespace BALL
 			{
 				case GEOMETRIC_FIT:
 					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
-					dialog->setOptions(options_);
+					dialog->getOptions(options_);
 					break;
 			}
 			

@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.11 2005/04/04 15:59:54 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.12 2005/04/06 15:25:57 leonhardt Exp $
 //
 
 #include <qtable.h>
@@ -11,8 +11,16 @@
 # include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
 #endif
 
+#ifndef BALL_STRUCTURE_DOCKING_AMBEREVALUATION_H
+# include <BALL/STRUCTURE/DOCKING/amberEvaluation.h>
+#endif
+
 #ifndef BALL_STRUCTURE_DOCKING_RANDOMEVALUATION_H
 # include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
+#endif
+
+#ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
+#include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #endif
 
 #ifndef BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
@@ -39,6 +47,9 @@ namespace BALL
 			//build HashMap for scoring function advanced option dialogs
 			addScoringFunction("Default", DEFAULT);
 			addScoringFunction("Random", RANDOM);
+			AmberConfigurationDialog* amber = new AmberConfigurationDialog(this); 
+			addScoringFunction("Amber Force Field", AMBER_FF, amber);
+			
 		
 			// signals and slots connections
     	QHeader* columns = result_table->horizontalHeader();
@@ -219,6 +230,7 @@ namespace BALL
 			EnergeticEvaluation* scoring = 0;
 			// check which scoring function is chosen
 			int index = scoring_functions->currentItem();
+			AmberFF* ff = 0;
 			switch(index)
 			{
 				case DEFAULT:
@@ -227,6 +239,20 @@ namespace BALL
 				case RANDOM:
 					scoring = new RandomEvaluation();
 					break;
+				case AMBER_FF:
+				{
+					ff = new AmberFF();
+					AmberConfigurationDialog* dialog = RTTI::castTo<AmberConfigurationDialog>(*(scoring_dialogs_[index]));
+					dialog->applyTo(*ff);
+					Log.info() << "in DockDialog:: Option of Amber FF:" << std::endl;
+					Options::Iterator it = ff->options.begin();
+					for(; +it; ++it)
+					{
+						Log.info() << it->first << " : " << it->second << std::endl;
+					}
+					scoring = new AmberEvaluation(*ff);
+					break;
+				}	
 			}
 			
 			// apply scoring function; set new scores in the conformation set
@@ -291,6 +317,10 @@ namespace BALL
 			//result_table->resize(recommended_size);
 			result_table->adjustSize();
 			adjustSize();
+			
+			delete scoring;
+			delete ff;
+			
 		}
 		
 		// sets the advanced button enabled if the selected scoring function has options

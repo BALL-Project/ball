@@ -77,7 +77,7 @@ namespace BALL
 		}
 		
 		/// Set options of GeometricFit
-		void GeometricFitDialog::setOptions(Options& options)
+		void GeometricFitDialog::getOptions(Options& options)
 					throw()
 		{
 			options[GeometricFit::Option::NEAR_RADIUS] = String(near_radius->text().ascii()).toFloat();

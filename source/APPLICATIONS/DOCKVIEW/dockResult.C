@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.3 2005/04/05 11:41:09 haid Exp $
+// $Id: dockResult.C,v 1.1.2.4 2005/04/06 15:25:57 leonhardt Exp $
 //
 
 #include "dockResult.h"
@@ -72,7 +72,9 @@ namespace BALL
 		// returns scores of scoring_ i
 		const vector<float>& DockResult::getScores(int i) const
 			throw()
-		{return scorings_[i].scores_;}
+		{
+			return scorings_[i].scores_;
+		}
 					
 		const QString& DockResult::getScoringName(int i) const
 			throw()
@@ -97,8 +99,7 @@ namespace BALL
 		void DockResult::addScoring(const QString& name, const Options& options, const vector<float>& scores)
 			throw()
 		{
-			Scoring_ scoring = Scoring_(name, options, scores);
-			scorings_.push_back(scoring);
+			scorings_.push_back(Scoring_(name, options, scores));
 		}
 		
 		
