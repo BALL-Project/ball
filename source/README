@@ -1,9 +1,10 @@
 
                     BALL  -  Biochemical ALgorithm Library
                     --------------------------------------
-                        alpha release 0.9a - 17.01.2000
+                        public alpha release 1.0a BF 3
 ------------------------------------------------------------------------------
-    (N.P. Boghossian, H. Klein, O. Kohlbacher, H.-P. Lenhof, P. Mueller)		
+    N. P. Boghossian, A. Burchardt, A. Hildebrandt, H. Klein, A. Kerzmann, 
+         O. Kohlbacher, H.-P. Lenhof, A. Moll, P. Mueller, S. Strobel
 	
 
 To install BALL it should be sufficient to typed the following
@@ -40,6 +41,10 @@ of this library by sending all the problems you ran into, all criticism,
 encouragements, improvements, bug reports, and wishes for further 
 functionality to 
   
-  BALL@mpi-sb.mpg.de
+  ball-bugs@mpi-sb.mpg.de
+
+Please have a look at our website as well: 
+
+  http://www.mpi-sb.mpg.de/BALL/
 
 Have fun!
