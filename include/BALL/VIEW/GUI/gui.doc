@@ -1,4 +1,19 @@
-// $Id: gui.doc,v 1.4 2001/02/18 20:56:33 amoll Exp $
+// $Id: gui.doc,v 1.5 2001/05/13 13:51:05 hekl Exp $
+
+/** @name Functor classes.
+					This section contains functor classes that are used by other
+	        classes.
+*/
+//@{
+  //@Include: FUNCTOR/functor.doc
+//@}
+
+/** @name Dialog classes.
+					This section contains some dialogs.
+*/
+//@{
+  //@Include: DIALOGS/dialogs.doc
+//@}
 
 /** @name Kernel classes.
 					This section contains classes that are responsible for
@@ -9,6 +24,16 @@
 */
 //@{
   //@Include: KERNEL/kernel.doc
+//@}
+
+/**@name	Widget classes.
+          This section contains some predefined widgets that can be used
+          in an application, some preference widgets that are used by other
+	        objects and the class modularWidget that is a base class for user
+	        defined widgets.
+*/
+//@{
+	//@Include: WIDGETS/widgets.doc
 //@}
 
 /**@name	Predefined primitives with graphical representation.
@@ -23,8 +48,4 @@
 	//@Include: PRIMITIV/primitiv.doc
 //@}
 
-//@Include: DIALOGS/dialogs.doc
-//@Include: FUNCTOR/functor.doc
-//@Include: KERNEL/kernel.doc
-//@Include: PRIMITIV/primitiv.doc
-//@Include: WIDGETS/widgets.doc
+
