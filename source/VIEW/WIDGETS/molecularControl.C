@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.85 2004/12/13 23:14:12 amoll Exp $
+// $Id: molecularControl.C,v 1.86 2004/12/13 23:28:49 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -173,13 +173,7 @@ MolecularControl::~MolecularControl()
 	Log.error() << "Destroying MolecularControl " << this << std::endl;
 #endif
 
-	List<Composite*>::ConstIterator list_it = copy_list_.begin();	
-	for (; list_it != copy_list_.end(); ++list_it)
-	{
-		delete *list_it;
-	}
-
-	copy_list_.clear();
+	clearClipboard();
 }
 
 void MolecularControl::checkMenu(MainControl& main_control)
@@ -750,13 +744,7 @@ void MolecularControl::cut()
 	// delete old composites
 	if (!was_delete_ && copy_list_.size() > 0)
 	{
-		List<Composite*>::ConstIterator list_it = copy_list_.begin();	
-		for (; list_it != copy_list_.end(); ++list_it)
-		{
-			delete *list_it;
-		}
-
-		copy_list_.clear();
+		clearClipboard();
 	}
 
 	// remove the selected composites from the tree and from the scene
@@ -818,13 +806,7 @@ void MolecularControl::copy()
 	// delete old cutted composites
 	if (copy_list_.size() > 0)
 	{
-		List<Composite*>::ConstIterator list_it = copy_list_.begin();	
-		for (; list_it != copy_list_.end(); ++list_it)
-		{
-			delete *list_it;
-		}
-
-		copy_list_.clear();
+		clearClipboard();
 	}
 
 	// copy the selected composites into the copy_list_
@@ -891,8 +873,6 @@ void MolecularControl::paste()
 
 void MolecularControl::clearClipboard()
 {
-	setStatusbarText("cleared clipboard");
-
 	// delete old composites
 	if (copy_list_.size() > 0)
 	{
