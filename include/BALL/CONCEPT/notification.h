@@ -1,4 +1,4 @@
-// $Id: notification.h,v 1.10 2001/06/25 13:51:53 amoll Exp $
+// $Id: notification.h,v 1.11 2001/07/15 16:35:00 oliver Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -20,7 +20,9 @@ namespace BALL
 
 	/**	@name	Notification Management.
 			Using the notification management, objects may exchange data and notify
-			each other of events.\\
+			each other of events by invoking methods of the other object (remotely similar to the
+			signal/slot mechanism of QT).
+			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/notification.h}
 	*/
 	//@{
@@ -260,18 +262,18 @@ namespace BALL
 	}
 
 
-	/**	Notification Target Class
+	/**	Notification Target Class.
 	*/
 	template <class NotificationSource>
 	class NotificationTarget
 	{
 		public:
 
-		/**
+		/**	The method to be invoked upon receiving a notification
 		*/
 		virtual bool onNotify(NotificationSource& source) = 0;
 
-		/**
+		/** 
 		*/
 		virtual unsigned short countNotificationTypes_()
 			throw()
@@ -296,22 +298,24 @@ namespace BALL
 		}
 	};
 
+	///
 	template <class NotificationSource, class T1>
 	class NotificationTarget1
 	{
 		public:
 
-			virtual bool onNotify(NotificationSource &, T1) = 0;
+		///	
+		virtual bool onNotify(NotificationSource &, T1) = 0;
 
-			virtual unsigned short countNotificationTypes_()
-				throw()
-			{
-				return 1;
-			}
+		virtual unsigned short countNotificationTypes_()
+			throw()
+		{
+			return 1;
+		}
 
-			static void* getNotificationType_()
-				throw()
-			{
+		static void* getNotificationType_()
+			throw()
+		{
 				return (void* )&getNotificationType_;
 			}
 
