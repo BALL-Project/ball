@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.10 2000/02/18 03:00:45 amoll Exp $
+// $Id: vector4.h,v 1.11 2000/02/18 22:19:19 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -517,12 +517,15 @@ namespace BALL
 	}
 
 	template <class T>
-	TVector4& TVector4<T>::normalize()
+	BALL_INLINE
+	TVector4<T>& TVector4<T>::normalize()
 	{
 		T len = (T)sqrt(x * x + y * y + z * z + h * h);
 
 		if (Maths::isZero(len))
+		{
 			throw Exception::DivisionByZero(__FILE__, __LINE__);		
+		}
 		
 		x /= len;
 		y /= len;
