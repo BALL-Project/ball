@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.6 2004/07/16 13:55:32 amoll Exp $
+// $Id: main.C,v 1.7 2004/07/16 14:09:41 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -172,37 +172,34 @@ int main(int argc, char **argv)
 
 	Size width = 1000;
 	Size height = 750;
-	
-	DCDFile dcdfile(dcd_file_name);
 	Scene::getInstance(0)->resize(width, height);
-
-	
-	int writepipe[2];
-	pid_t childpid;
- 	if (pipe(writepipe) < 0 ) 
-	{
-		std::cerr << "Could not pipe!" << std::endl;
-		return -1;
-	}
-	
 
 	String povray_options;
 	povray_options = "-V -D +I- +W" + String(width) + " +H" + String(height) + " +O" + working_dir + "/";
-
-	SnapShotManager sm(system, 0, &dcdfile, false);
 	POVRenderer pov;
-	std::stringstream pov_renderer_output;
-	pov.setOstream(pov_renderer_output);
 	pov.setHumanReadable(false);
+
 	Position nr2 = 0;
+
+	DCDFile dcdfile(dcd_file_name);
+	SnapShotManager sm(system, 0, &dcdfile, false);
 	sm.applyFirstSnapShot();
 
-	
 	while(sm.applyNextSnapShot())
 	{
-		String pov_arg = povray_options + String(nr) + ".png" ;
+		std::stringstream pov_renderer_output;
+		pov.setOstream(pov_renderer_output);
  		Scene::getInstance(0)->exportScene(pov);
 
+		int writepipe[2];
+		pid_t childpid;
+	
+		if (pipe(writepipe) < 0 ) 
+		{
+			std::cerr << "Could not pipe!" << std::endl;
+			return -1;
+		}
+	
 		// abort, if we can not fork!
 		if ( (childpid = fork()) < 0) 
 		{
@@ -251,14 +248,17 @@ int main(int argc, char **argv)
 			{
 				if(dup2(writepipe[0], STDIN_FILENO) < 0) 
 				{ 
-					std::cout << "Could not dup2!" << std::endl;
-					return -1;
+ 					std::cerr << "Could not dup2!" << std::endl;
+ 					return -1;
 				} 
 
-				close(writepipe[0]);
+ 				close(writepipe[0]);
 			}
 
-	  	execl ("/home/student/amoll/bin/povray", "povray", pov_arg.c_str(), 0);
+			String pov_arg = povray_options + String(nr) + ".png" ;
+	   	execl ("/home/student/amoll/bin/povray", "povray", pov_arg.c_str(), 0);
+// 			std::cout << std::endl;
+// 	  	execl ("/bin/cat", "cat", 0);
 		}
 
 		nr++;
