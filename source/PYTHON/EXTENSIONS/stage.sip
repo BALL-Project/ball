@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.sip,v 1.1 2003/12/11 00:27:03 amoll Exp $
+// $Id: stage.sip,v 1.2 2005/01/22 00:46:13 amoll Exp $
 //
 
 class LightSource
@@ -38,7 +38,6 @@ class LightSource
 	void setRelativeToCamera(bool) throw();
 	bool isRelativeToCamera() const throw();
 	void translate(const Vector3&) throw();
-	void rotate(const Quaternion&) throw();
 	//bool operator == (const LightSource&) const throw();
 	//virtual void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 };
@@ -98,7 +97,7 @@ class Stage
 	void showCoordinateSystem(bool ) throw();
 	bool coordinateSystemEnabled() const throw();
 	void translate(const Vector3& ) throw();
-	void rotate(const Quaternion& ) throw();
+	void rotate(const Quaternion&, const Vector3&) throw();
 	void moveCameraTo(const Camera& ) throw();
 	//bool operator == (const Stage& ) const throw();
 	//void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
