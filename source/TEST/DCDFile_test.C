@@ -1,4 +1,4 @@
-// $Id: DCDFile_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $
+// $Id: DCDFile_test.C,v 1.7 2001/12/17 01:28:53 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.7 2001/12/17 01:28:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,7 +53,9 @@ CHECK(DCDFile::DCDFile(const String& name, File::OpenMode open_mode) throw())
 	test_file.close();
 	TEST_EQUAL(test_file.isOpen(), false)
 
-	DCDFile test_file2("test.out.dcd", File::OUT);
+	String filename;
+	NEW_TMP_FILE(filename)
+	DCDFile test_file2(filename, File::OUT);
 	TEST_EQUAL(test_file2.isOpen(), true)
 	TEST_EQUAL(test_file2.getOpenMode(), File::OUT)
 	test_file2.close();
