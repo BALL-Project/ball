@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.4 2004/12/21 13:22:50 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.5 2004/12/21 14:44:42 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -10,6 +10,8 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/forEach.h>
+
+#include <algorithm>
 
 using namespace std;
 
@@ -32,6 +34,13 @@ namespace BALL
 				atom_(atom)
 		{
 		}
+
+		bool AddBackboneModel::SplinePoint::operator < (const SplinePoint::SplinePoint& point) const
+			throw()
+		{
+			return atom_ < point.atom_;
+		}
+
 
 		AddBackboneModel::AddBackboneModel()
 			throw()
@@ -64,7 +73,7 @@ namespace BALL
 			clear_();
 		}
 
-		Processor::Result AddBackboneModel::operator () (Composite& composite)
+		Processor::Result AddBackboneModel::operator() (Composite& composite)
 		{
 			if (!RTTI::isKindOf<Residue>(composite))  return Processor::CONTINUE;
 			Residue& residue(*RTTI::castTo<Residue>(composite));
@@ -137,6 +146,7 @@ namespace BALL
 			throw()
 		{
 			have_start_point_ = false;
+			sort(spline_vector_.begin(), spline_vector_.end());
 			calculateTangentialVectors_();
 			createSplinePath_();
 			buildGraphicalRepresentation_();
@@ -278,15 +288,6 @@ namespace BALL
 			have_start_point_ = true;
 		}
 
-		bool AddBackboneModel::finish()
-		{
-			if (spline_vector_.size() == 0) return true;
-
-			createBackbone_();
-			clear_();
-			return true;
-		}
-		
 		void AddBackboneModel::clear_()
 			throw()
 		{
@@ -296,6 +297,15 @@ namespace BALL
 
 			spline_points_.clear();
 			atoms_of_spline_points_.clear();
+		}
+
+		bool AddBackboneModel::createGeometricObjects()
+			throw()
+		{
+			if (spline_vector_.size() == 0) return true;
+			createBackbone_();
+			clear_();
+			return true;
 		}
 
 	} // namespace VIEW

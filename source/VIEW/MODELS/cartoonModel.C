@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.7 2004/12/21 13:22:44 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.8 2004/12/21 14:44:37 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -72,7 +72,8 @@ AddCartoonModel::~AddCartoonModel()
 	#endif 
 }
 
-bool AddCartoonModel::finish()
+bool AddCartoonModel::createGeometricObjects()
+	throw()
 {
 	return true;
 }
@@ -414,6 +415,29 @@ void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
 	}
 
 	if (catoms.size() == 0) return;
+
+
+	if (have_start_point_)
+	{
+		// build tube connection to the last point
+		Tube* tube = new Tube;
+		if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
+		
+		tube->setRadius(tube_radius_);
+		tube->setVertex1(last_point_);
+		tube->setVertex2(first->getPosition());
+		tube->setComposite(first);
+		geometric_objects_.push_back(tube);
+
+		// create sphere for the point
+		Sphere* sphere = new Sphere;
+		if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+
+		sphere->setRadius(tube_radius_);
+		sphere->setPosition(last_point_);
+		sphere->setComposite(first);
+		geometric_objects_.push_back(sphere);
+	}
 
 	List<const Atom*>::ConstIterator lit = catoms.begin();
 	Vector3 normal = last->getPosition() - first->getPosition();

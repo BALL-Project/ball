@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.26.2.2 2004/12/21 13:22:47 amoll Exp $
+// $Id: cartoonModel.h,v 1.26.2.3 2004/12/21 14:44:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -57,15 +57,10 @@ namespace BALL
 			*/ 
 			//@{
 		
-			/** Finish method.
-					This method will be internally called from the processor mechanism when the processor
-					has finished processing the Composite tree.
-					All previously inserted Atom objects 
-					(inserted in the method operator()) will be used to create a Cartoon.
-					\return bool true if the finish was successful, false otherwise
-					@exception OutOfMemory thrown if the memory allocation failed
+			/** 
 			*/
-			virtual bool finish();
+			virtual bool createGeometricObjects()
+				throw();
 			
 			/**	Operator method.
 					This method iterates over each Composite object reachable in the 
