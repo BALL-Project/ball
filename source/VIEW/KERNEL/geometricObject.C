@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.19 2003/08/26 09:18:48 oliver Exp $
+// $Id: geometricObject.C,v 1.20 2003/08/29 10:55:02 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -22,7 +22,7 @@ namespace BALL
 		{
 		}
 
-		GeometricObject::GeometricObject(const GeometricObject& geometric_object, bool deep)
+		GeometricObject::GeometricObject(const GeometricObject& geometric_object)
 			throw()
 			:	name_(geometric_object.name_),
 				color_(geometric_object.color_),
@@ -46,7 +46,7 @@ namespace BALL
 			composite_ = 0;
 		}
 
-		void GeometricObject::set(const GeometricObject& geometric_object, bool deep)
+		void GeometricObject::set(const GeometricObject& geometric_object)
 			throw()
 		{
 			name_ = geometric_object.name_;
@@ -61,10 +61,10 @@ namespace BALL
 			return *this;
 		}
 
-		void GeometricObject::get(GeometricObject& geometric_object, bool deep) const
+		void GeometricObject::get(GeometricObject& geometric_object) const
 			throw()
 		{
-			geometric_object.set(*this, deep);
+			geometric_object.set(*this);
 		}
 
 		void GeometricObject::swap(GeometricObject& geometric_object)

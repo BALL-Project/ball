@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.C,v 1.2 2003/08/26 15:32:49 amoll Exp $
+// $Id: twoColoredLine.C,v 1.3 2003/08/29 10:53:25 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 
@@ -20,9 +20,9 @@ namespace BALL
 		{
 		}
 
-		TwoColoredLine::TwoColoredLine(const TwoColoredLine& two_colored_line, bool deep)
+		TwoColoredLine::TwoColoredLine(const TwoColoredLine& two_colored_line)
 			throw()
-			:	GeometricObject(two_colored_line, deep),
+			:	GeometricObject(two_colored_line),
 				ColorExtension2(two_colored_line),
 				Vertex2(two_colored_line)
 		{
@@ -45,10 +45,10 @@ namespace BALL
 			Vertex2::clear();
 		}
 
-		void TwoColoredLine::set(const TwoColoredLine& two_colored_line, bool deep)
+		void TwoColoredLine::set(const TwoColoredLine& two_colored_line)
 			throw()
 		{
-			GeometricObject::set(two_colored_line, deep);
+			GeometricObject::set(two_colored_line);
 			ColorExtension2::set(two_colored_line);
 			Vertex2::set(two_colored_line);
 		}
@@ -60,10 +60,10 @@ namespace BALL
 			return *this;
 		}
 
-		void TwoColoredLine::get(TwoColoredLine& two_colored_line, bool deep) const
+		void TwoColoredLine::get(TwoColoredLine& two_colored_line) const
 			throw()
 		{
-			two_colored_line.set(*this, deep);
+			two_colored_line.set(*this);
 		}
 
 		void TwoColoredLine::swap(TwoColoredLine& two_colored_line)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.C,v 1.2 2003/08/26 15:32:47 amoll Exp $
+// $Id: box.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/box.h>
 
@@ -19,9 +19,9 @@ namespace BALL
 		{
 		}
 
-		Box::Box(const Box& box, bool deep)
+		Box::Box(const Box& box)
 			throw()
-			:	GeometricObject(box, deep),
+			:	GeometricObject(box),
 				Box3(box)
 		{
 		}
@@ -52,10 +52,10 @@ namespace BALL
 			Box3::clear();
 		}
 
-		void Box::set(const Box& box, bool deep)
+		void Box::set(const Box& box)
 			throw()
 		{
-			GeometricObject::set(box, deep);
+			GeometricObject::set(box);
 			Box3::set(box);
 		}
 
@@ -66,10 +66,10 @@ namespace BALL
 			return *this;
 		}
 
-		void Box::get(Box& box, bool deep) const
+		void Box::get(Box& box) const
 			throw()
 		{
-			box.set(*this, deep);
+			box.set(*this);
 		}
 
 		bool Box::isValid() const

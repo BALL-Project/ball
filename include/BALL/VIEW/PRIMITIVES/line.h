@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.h,v 1.2 2003/08/26 15:32:57 amoll Exp $
+// $Id: line.h,v 1.3 2003/08/29 10:53:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_LINE_H
@@ -56,15 +56,10 @@ namespace BALL
 				throw();
 
 			/** Copy constructor with cloning facility.
-					Construct new line by copying the line <b> line</b>.
-					The copy is either deep (default) or shallow.
-					\param       line the line to be copied (cloned)
-					\param       deep make a deep (=<tt> true</tt>) or shallow (=<tt> false</tt>)
-					\return      Line new constructed line copied from <b> line</b>
 					\see         GeometricObject
 					\see         Vertex2
 			*/
-			Line(const Line& line, bool deep = true)
+			Line(const Line& line)
 				throw();
 
 			//@}
@@ -89,20 +84,15 @@ namespace BALL
 			/**	@name	Assignment methods */
 			//@{
 
-			/** Assignment.
-					Assign the line <b> line</b> to this line.
-					The copy is either deep (default) or shallow.
-					The value of this line is initialized to the value of 
+			/** Assign the line <b> line</b> to this line.
 					the line <b> line</b>.\par
 					\param       line the line to be copied
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> line</b>
 			*/
-			void set(const Line& line, bool deep = true)
+			void set(const Line& line)
 				throw();
 
 			/** Assignment operator.
 					Assign the line <b> line</b> to this line.
-					The copy is deep.
 					Calls set.
 					The value of this line is initialized to the value 
 					of the line <b> line</b>.\par
@@ -114,16 +104,13 @@ namespace BALL
 				throw();
 
 			/** Copying with cloning facility.
-					Copy this line to the line <b> line</b>.
-					The copy is either deep (default) or shallow.
 					Calls set.
 					The value of the line <b> line</b> is initialized to the
 					value of this line.\par
 					\param       line the line to be assigned to
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> line</b>
 					\see         set
 			*/
-			void get(Line& line, bool deep = true) const
+			void get(Line& line) const
 				throw();
 
 			/** Swapping of line's.

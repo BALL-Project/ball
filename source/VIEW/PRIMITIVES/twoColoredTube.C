@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.C,v 1.2 2003/08/26 15:32:49 amoll Exp $
+// $Id: twoColoredTube.C,v 1.3 2003/08/29 10:53:26 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
@@ -21,9 +21,9 @@ namespace BALL
 		{
 		}
 
-		TwoColoredTube::TwoColoredTube(const TwoColoredTube& two_colored_tube, bool deep)
+		TwoColoredTube::TwoColoredTube(const TwoColoredTube& two_colored_tube)
 			throw()
-			:	GeometricObject(two_colored_tube, deep),
+			:	GeometricObject(two_colored_tube),
 				ColorExtension2(two_colored_tube),
 				Vertex2(two_colored_tube),
 				radius_(two_colored_tube.radius_)
@@ -48,10 +48,10 @@ namespace BALL
 			radius_ = 1;
 		}
 
-		void TwoColoredTube::set(const TwoColoredTube& two_colored_tube, bool deep)
+		void TwoColoredTube::set(const TwoColoredTube& two_colored_tube)
 			throw()
 		{
-			GeometricObject::set(two_colored_tube, deep);
+			GeometricObject::set(two_colored_tube);
 			ColorExtension2::set(two_colored_tube);
 			Vertex2::set(two_colored_tube);
 			radius_ = two_colored_tube.radius_;
@@ -64,10 +64,10 @@ namespace BALL
 			return *this;
 		}
 
-		void TwoColoredTube::get(TwoColoredTube& two_colored_tube, bool deep) const
+		void TwoColoredTube::get(TwoColoredTube& two_colored_tube) const
 			throw()
 		{
-			two_colored_tube.set(*this, deep);
+			two_colored_tube.set(*this);
 		}
 
 		void TwoColoredTube::swap(TwoColoredTube& two_colored_tube)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.h,v 1.1 2003/08/26 12:11:36 oliver Exp $
+// $Id: disc.h,v 1.2 2003/08/29 10:53:54 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_DISC_H
 #define BALL_VIEW_PRIMITIV_DISC_H
@@ -39,9 +39,9 @@ namespace BALL
 			Disc()
 				throw();
 
-			/** Copy constructor with cloning facility.
+			/** Copy constructor 
 			*/
-			Disc(const Disc& disc, bool deep = true)
+			Disc(const Disc& disc)
 				throw();
 
 			Disc(const Circle3& circle)
@@ -71,7 +71,7 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const Disc& Disc, bool deep = true)
+			void set(const Disc& Disc)
 				throw();
 
 			/** Assignment operator.
@@ -79,9 +79,9 @@ namespace BALL
 			const Disc& operator = (const Disc& Disc)
 				throw();
 
-			/** Copying with cloning facility.
+			/** Copying 
 			*/
-			void get(Disc& Disc, bool deep = true) const
+			void get(Disc& Disc) const
 				throw();
 
 			/** Swapping of Disc's.

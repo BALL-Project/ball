@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.3 2003/08/27 13:39:43 amoll Exp $
+// $Id: twoColoredTube.h,v 1.4 2003/08/29 10:53:56 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
 #define BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
@@ -69,16 +69,11 @@ namespace BALL
 				throw();
 
 			/** Copy constructor with cloning facility.
-					Construct new twoColoredTube by copying the twoColoredTube <b> two_colored_tube</b>.
-					The copy is either deep (default) or shallow.
-					\param       two_colored_tube the twoColoredTube to be copied (cloned)
-					\param       deep make a deep (=<tt> true</tt>) or shallow (=<tt> false</tt>)
-					\return      TwoColoredTube new constructed twoColoredTube copied from <b> two_colored_tube</b>
 					\see         GeometricObject
 					\see         ColorExtension2
 					\see         Vertex2
 			*/
-			TwoColoredTube(const TwoColoredTube& two_colored_tube, bool deep = true)
+			TwoColoredTube(const TwoColoredTube& two_colored_tube)
 				throw();
 
 			//@}
@@ -94,7 +89,6 @@ namespace BALL
 			/** Explicit default initialization.
 					Calls GeometricObject::clear.
 					Calls ColorExtension2::clear.
-					Calls Radius::clear.
 					Calls Vertex2::clear.
 					\see  GeometricObject::clear
 					\see  ColorExtension2::clear
@@ -109,55 +103,26 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the twoColoredTube <b> two_colored_tube</b> to this
-					twoColoredTube.
-					The copy is either deep (default) or shallow.
-					The value of this twoColoredTube is initialized to the value of 
-					the twoColoredTube <b> two_colored_tube</b>.
 					Calls GeometricObject::set.
 					Calls ColorExtension2::set.
-					Calls Radius::set.
 					Calls Vertex2::set.
-					\param       two_colored_tube the twoColoredTube to be copied
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> two_colored_tube</b>
-					\see         GeometricObject::set
-					\see         ColorExtension2::set
-					\see         Radius::set
-					\see         Vertex2::set
 			*/
-			void set(const TwoColoredTube& two_colored_tube, bool deep = true)
+			void set(const TwoColoredTube& two_colored_tube)
 				throw();
 
 			/** Assignment operator.
-					Assign the twoColoredTube <b> two_colored_tube</b> to this
-					twoColoredTube.	The copy is deep.
-					Calls set.
-					The value of this twoColoredTube is initialized to the value 
-					of the twoColoredTube <b> two_colored_tube</b>.\par
-					\param       two_colored_tube the twoColoredTube to be copied
-					\return      TwoColoredTube& constant reference of this twoColoredTube
 					\see         set
 			*/
 			const TwoColoredTube& operator = (const TwoColoredTube& two_colored_tube)
 				throw();
 
-			/** Copying with cloning facility.
-					Copy this twoColoredTube to the twoColoredTube <b> two_colored_tube</b>.
-					The copy is either deep (default) or shallow.
+			/** Copying 
 					Calls set.
-					The value of the twoColoredTube <b> two_colored_tube</b> is initialized to the
-					value of this twoColoredTube.\par
-					\param       two_colored_tube the twoColoredTube to be assigned to
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> two_colored_tube</b>
-					\see         set
 			*/
-			void get(TwoColoredTube& two_colored_tube, bool deep = true) const
+			void get(TwoColoredTube& two_colored_tube) const
 				throw();
 
 			/** Swapping of two_colored_tube's.
-					Swap the value of this twoColoredTube with the twoColoredTube
-					<b> two_colored_tube</b>.
-					\param       two_colored_tube the twoColoredTube being swapped with this  twoColoredTube
 			*/
 			void swap(TwoColoredTube& two_colored_tube)
 				throw();

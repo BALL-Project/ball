@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.2 2003/08/26 15:32:56 amoll Exp $
+// $Id: label.h,v 1.3 2003/08/29 10:53:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -59,22 +59,14 @@ namespace BALL
 				throw();
 
 			/** Copy constructor with cloning facility.
-					Construct new label by copying the label <b> label</b>.
-					The copy is either deep (default) or shallow.
 					\param       label the label to be copied (cloned)
-					\param       deep make a deep (= <tt> true</tt>) or shallow (= <tt> false</tt>)
-					\return      Label new constructed label copied from <b> label</b>
 					\see         GeometricObject
 					\see         Vertex
 			*/
-			Label(const Label& label, bool deep = true)
+			Label(const Label& label)
 				throw();
 
 			/** Copy constructor from geometricObject.
-					Construct new label by copying the internal values from geometricObject 
-					<b> geometric_object</b>.
-					\param       geometric_object the geometricObject which internal value should be copied
-					\return      Label new constructed label initialized from <b> geometric_object</b>
 					\see         GeometricObject
 					\see         Vertex
 			*/
@@ -105,18 +97,13 @@ namespace BALL
 
 			/** Assignment.
 					Assign the label <b> label</b> to this label.
-					The copy is either deep (default) or shallow.
-					The value of this label is initialized to the value of 
-					the label <b> label</b>.\par
 					\param       label the label to be copied
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> label</b>
 			*/
-			void set(const Label& label, bool deep = true)
+			void set(const Label& label)
 				throw();
 
 			/** Assignment operator.
 					Assign the label <b> label</b> to this label.
-					The copy is deep.
 					Calls set.
 					The value of this label is initialized to the value 
 					of the label <b> label</b>.\par
@@ -129,15 +116,13 @@ namespace BALL
 
 			/** Copying with cloning facility.
 					Copy this label to the label <b> label</b>.
-					The copy is either deep (default) or shallow.
 					Calls set.
 					The value of the label <b> label</b> is initialized to the
 					value of this label.\par
 					\param       label the label to be assigned to
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> label</b>
 					\see         set
 			*/
-			void get(Label& label, bool deep = true) const
+			void get(Label& label) const
 				throw();
 
 			/** Swapping of label's.

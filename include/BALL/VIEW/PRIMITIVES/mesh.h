@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.1 2003/08/26 12:11:37 oliver Exp $
+// $Id: mesh.h,v 1.2 2003/08/29 10:53:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
@@ -61,15 +61,10 @@ namespace BALL
 				throw();
 
 			/** Copy constructor with cloning facility.
-					Construct new mesh by copying the mesh <b> mesh</b>.
-					The copy is either deep (default) or shallow.
-					\param       mesh the mesh to be copied (cloned)
-					\param       deep make a deep (=<tt> true</tt>) or shallow (=<tt> false</tt>)
-					\return      Mesh new constructed mesh copied from <b> mesh</b>
 					\see         GeometricObject
 					\see         Surface
 			*/
-			Mesh(const Mesh& mesh, bool deep = true)
+			Mesh(const Mesh& mesh)
 				throw();
 
 			/** Copy constructor from geometricObject.
@@ -106,20 +101,13 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the mesh <b> mesh</b> to this mesh.
-					The copy is either deep (default) or shallow.
-					The value of this mesh is initialized to the value of 
-					the mesh <b> mesh</b>.\par
 					\param       mesh the mesh to be copied
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> mesh</b>
 					\see         Mesh
 			*/
-			void set(const Mesh& mesh, bool deep = true)
+			void set(const Mesh& mesh)
 				throw();
 
 			/** Assignment operator.
-					Assign the mesh <b> mesh</b> to this mesh.
-					The copy is deep.
 					Calls set.
 					The value of this mesh is initialized to the value 
 					of the mesh <b> mesh</b>.\par
@@ -130,17 +118,12 @@ namespace BALL
 			const Mesh& operator = (const Mesh& mesh)
 				throw();
 
-			/** Copying with cloning facility.
-					Copy this mesh to the mesh <b> mesh</b>.
-					The copy is either deep (default) or shallow.
+			/** Copy this mesh to the mesh <b> mesh</b>.
 					Calls set.
-					The value of the mesh <b> mesh</b> is initialized to the
-					value of this mesh.\par
 					\param       mesh the mesh to be assigned to
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> mesh</b>
 					\see         set
 			*/
-			void get(Mesh& mesh, bool deep = true) const
+			void get(Mesh& mesh) const
 				throw();
 
 			/** Swapping of mesh's.

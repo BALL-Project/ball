@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
+// $Id: sphere.C,v 1.3 2003/08/29 10:53:25 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 
@@ -20,9 +20,9 @@ namespace BALL
 		{
 		}
 
-		Sphere::Sphere(const Sphere& sphere, bool deep)
+		Sphere::Sphere(const Sphere& sphere)
 			throw()
-			:	GeometricObject(sphere, deep),
+			:	GeometricObject(sphere),
 				Sphere3(sphere),
 				point_ptr_(sphere.point_ptr_)
 		{
@@ -45,10 +45,10 @@ namespace BALL
 			point_ptr_ = &p;
 		}
 
-		void Sphere::set(const Sphere& sphere, bool deep)
+		void Sphere::set(const Sphere& sphere)
 			throw()
 		{
-			GeometricObject::set(sphere, deep);
+			GeometricObject::set(sphere);
 			Sphere3::set(sphere);
 			point_ptr_ = sphere.point_ptr_;
 		}
@@ -60,10 +60,10 @@ namespace BALL
 			return *this;
 		}
 
-		void Sphere::get(Sphere& sphere, bool deep) const
+		void Sphere::get(Sphere& sphere) const
 			throw()
 		{
-			sphere.set(*this, deep);
+			sphere.set(*this);
 		}
 
 		void Sphere::swap(Sphere& sphere)

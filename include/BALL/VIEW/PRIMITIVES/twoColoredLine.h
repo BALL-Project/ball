@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.3 2003/08/27 13:39:43 amoll Exp $
+// $Id: twoColoredLine.h,v 1.4 2003/08/29 10:53:56 amoll Exp $
 
 #ifndef BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
 #define BALL_VIEW_VIEW_PRIMITIVES_TWOCOLOREDLINE_H
@@ -67,16 +67,11 @@ namespace BALL
 				throw();
 
 			/** Copy constructor with cloning facility.
-					Construct new line by copying the twoColoredLine <b> two_colored_line</b>.
-					The copy is either deep (default) or shallow.
-					\param       two_colored_line the twoColoredLine to be copied (cloned)
-					\param       deep make a deep (=<tt> true</tt>) or shallow (=<tt> false</tt>)
-					\return      TwoColoredLine new constructed twoColoredLine copied from <b> two_colored_line</b>
 					\see         GeometricObject
 					\see         ColorExtension2
 					\see         Vertex2
 			*/
-			TwoColoredLine(const TwoColoredLine& two_colored_line, bool deep = true)
+			TwoColoredLine(const TwoColoredLine& two_colored_line)
 				throw();
 
 			//@}
@@ -105,53 +100,29 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the twoColoredLine <b> two_colored_line</b> to this
-					twoColoredLine.
-					The copy is either deep (default) or shallow.
-					The value of this twoColoredLine is initialized to the value of 
-					the twoColoredLine <b> two_colored_line</b>.
 					Calls GeometricObject::set.
 					Calls ColorExtension2::set.
 					Calls Vertex2::set.
-					\param       two_colored_line the twoColoredLine to be copied
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> two_colored_line</b>
 					\see         GeometricObject::set
 					\see         ColorExtension2::set
 					\see         Vertex2::set
 			*/
-			void set(const TwoColoredLine& two_colored_line, bool deep = true)
+			void set(const TwoColoredLine& two_colored_line)
 				throw();
 
 			/** Assignment operator.
-					Assign the twoColoredLine <b> two_colored_line</b> to this
-					twoColoredLine.	The copy is deep.
 					Calls set.
-					The value of this twoColoredLine is initialized to the value 
-					of the twoColoredLine <b> two_colored_line</b>.\par
-					\param       two_colored_line the twoColoredLine to be copied
-					\return      TwoColoredLine& constant reference of this twoColoredLine
-					\see         set
 			*/
 			const TwoColoredLine& operator = (const TwoColoredLine& two_colored_line)
 				throw();
 
-			/** Copying with cloning facility.
-					Copy this twoColoredLine to the twoColoredLine <b> two_colored_line</b>.
-					The copy is either deep (default) or shallow.
-					Calls set.
-					The value of the twoColoredLine <b> two_colored_line</b> is initialized to the
-					value of this twoColoredLine.\par
-					\param       two_colored_line the twoColoredLine to be assigned to
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> two_colored_line</b>
+			/** Copying 
 					\see         set
 			*/
-			void get(TwoColoredLine& two_colored_line, bool deep = true) const
+			void get(TwoColoredLine& two_colored_line) const
 				throw();
 
 			/** Swapping of two_colored_line's.
-					Swap the value of this twoColoredLine with the twoColoredLine
-					<b> two_colored_line</b>.
-					\param       two_colored_line the twoColoredLine being swapped with this twoColoredLine 
 			*/
 			void swap(TwoColoredLine& two_colored_line)
 				throw();

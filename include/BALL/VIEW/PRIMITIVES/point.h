@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.2 2003/08/26 15:32:57 amoll Exp $
+// $Id: point.h,v 1.3 2003/08/29 10:53:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_POINT_H
@@ -53,16 +53,9 @@ namespace BALL
 			Point()
 				throw();
 
-			/** Copy constructor with cloning facility.
-					Construct new point by copying the point <b> point</b>.
-					The copy is either deep (default) or shallow.
-					\param       point the point to be copied (cloned)
-					\param       deep make a deep (=<tt> true</tt>) or shallow (=<tt> false</tt>)
-					\return      Point new constructed point copied from <b> point</b>
-					\see         GeometricObject
-					\see         Vertex
+			/** Copy constructor 
 			*/
-			Point(const Point& point, bool deep = true)
+			Point(const Point& point)
 				throw();
 
 			//@}
@@ -90,41 +83,20 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the point <b> point</b> to this point.
-					The copy is either deep (default) or shallow.
-					The value of this point is initialized to the value of 
-					the point <b> point</b>.\par
-					\param       point the point to be copied
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> point</b>
-					\see         Point
 			*/
-			void set(const Point& point, bool deep = true)
+			void set(const Point& point)
 				throw();
 
 			/** Assignment operator.
-					Assign the point <b> point</b> to this point.
-					The copy is deep.
 					Calls set.
-					The value of this point is initialized to the value 
-					of the point <b> point</b>.\par
-					\param       point the point to be copied
-					\return      Point& this point
-					\see         set
 			*/
 			const Point& operator = (const Point& point)
 				throw();
 
-			/** Copying with cloning facility.
-					Copy this point to the point <b> point</b>.
-					The copy is either deep (default) or shallow.
+			/** Copying 
 					Calls set.
-					The value of the point <b> point</b> is initialized to the
-					value of this point.\par
-					\param       point the point to be assigned to
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> point</b>
-					\see         set
 			*/
-			void get(Point& point, bool deep = true) const
+			void get(Point& point) const
 				throw();
 
 			/** Swapping of point's.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
+// $Id: line.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/line.h>
 
@@ -19,9 +19,9 @@ namespace BALL
 		{
 		}
 
-		Line::Line(const Line& line, bool deep)
+		Line::Line(const Line& line)
 			throw()
-			:	GeometricObject(line, deep),
+			:	GeometricObject(line),
 				Vertex2(line)
 		{
 		}
@@ -42,10 +42,10 @@ namespace BALL
 			Vertex2::clear();
 		}
 
-		void Line::set(const Line& line, bool deep)
+		void Line::set(const Line& line)
 			throw()
 		{
-			GeometricObject::set(line, deep);
+			GeometricObject::set(line);
 			Vertex2::set(line);
 		}
 
@@ -56,10 +56,10 @@ namespace BALL
 			return *this;
 		}
 
-		void Line::get(Line& line, bool deep) const
+		void Line::get(Line& line) const
 			throw()
 		{
-			line.set(*this, deep);
+			line.set(*this);
 		}
 
 		void Line::swap(Line& line)

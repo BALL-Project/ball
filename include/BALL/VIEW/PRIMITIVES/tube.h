@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.2 2003/08/26 15:32:57 amoll Exp $
+// $Id: tube.h,v 1.3 2003/08/29 10:53:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
@@ -60,16 +60,11 @@ namespace BALL
 				throw();
 
 			/** Copy constructor with cloning facility.
-					Construct new tube by copying the tube <b> tube</b>.
-					The copy is either deep (default) or shallow.
-					\param       tube the tube to be copied (cloned)
-					\param       deep make a deep (=<tt> true</tt>) or shallow (=<tt> false</tt>) copy
-					\return      Tube new constructed tube copied from <b> tube</b>
 					\see         GeometricObject
 					\see         Radius
 					\see         Vertex2
 			*/
-			Tube(const Tube& tube, bool deep = true)
+			Tube(const Tube& tube)
 				throw();
 
 			//@}
@@ -99,23 +94,15 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the tube <b> tube</b> to this tube.
-					The copy is either deep (default) or shallow.
-					The value of this tube is initialized to the value of 
-					the tube <b> tube</b>.\par
 					\param       tube the tube to be copied
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> tube</b>
 					\see         Tube
 			*/
-			void set(const Tube& tube, bool deep = true)
+			void set(const Tube& tube)
 				throw();
 
 			/** Assignment operator.
 					Assign the tube <b> tube</b> to this tube.
-					The copy is deep.
 					Calls set.
-					The value of this tube is initialized to the value 
-					of the tube <b> tube</b>.\par
 					\param       tube the tube to be copied
 					\return      Tube& this tube
 					\see         set
@@ -125,15 +112,11 @@ namespace BALL
 
 			/** Copying with cloning facility.
 					Copy this tube to the tube <b> tube</b>.
-					The copy is either deep (default) or shallow.
 					Calls set.
-					The value of the tube <b> tube</b> is initialized to the
-					value of this tube.\par
 					\param       tube the tube to be assigned to
-					\param       deep make a deep (=<tt> true</b>) or shallow (=<tt> false</b>) copy of <b> tube</b>
 					\see         set
 			*/
-			void get(Tube& tube, bool deep = true) const
+			void get(Tube& tube) const
 				throw();
 
 			/** Swapping of tube's.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
+// $Id: label.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 
@@ -19,9 +19,9 @@ namespace BALL
 		{
 		}
 
-		Label::Label(const Label& label, bool deep)
+		Label::Label(const Label& label)
 			throw()
-			:	GeometricObject(label, deep),
+			:	GeometricObject(label),
 				Vertex(label)
 		{
 		}
@@ -42,10 +42,10 @@ namespace BALL
 			Vertex::clear();
 		}
 
-		void Label::set(const Label& label, bool deep)
+		void Label::set(const Label& label)
 			throw()
 		{
-			GeometricObject::set(label, deep);
+			GeometricObject::set(label);
 			Vertex::set(label);
 		}
 
@@ -56,10 +56,10 @@ namespace BALL
 			return *this;
 		}
 
-		void Label::get(Label& label, bool deep) const
+		void Label::get(Label& label) const
 			throw()
 		{
-			label.set(*this, deep);
+			label.set(*this);
 		}
 
 		void Label::swap(Label& label)

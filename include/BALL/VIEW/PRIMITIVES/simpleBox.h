@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.1 2003/08/26 12:11:37 oliver Exp $
+// $Id: simpleBox.h,v 1.2 2003/08/29 10:53:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -39,7 +39,6 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new SimpleBox.
 					The properties of this SimpleBox are set to:
   				  - color - to the color black
 					\par
@@ -49,7 +48,7 @@ namespace BALL
 
 			/** Copy constructor with cloning facility.
 			*/
-			SimpleBox(const SimpleBox& box, bool deep = true)
+			SimpleBox(const SimpleBox& box)
 				throw();
 
 			//@}
@@ -75,7 +74,7 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const SimpleBox& box, bool deep = true)
+			void set(const SimpleBox& box)
 				throw();
 
 			/** Assignment operator.
@@ -86,7 +85,7 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy this SimpleBox to the SimpleBox <b> Box</b>.
 			*/
-			void get(SimpleBox& box, bool deep = true) const
+			void get(SimpleBox& box) const
 				throw();
 
 			//@}

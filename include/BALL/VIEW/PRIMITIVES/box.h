@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.h,v 1.1 2003/08/26 12:11:36 oliver Exp $
+// $Id: box.h,v 1.2 2003/08/29 10:53:54 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_BOX_H
 #define BALL_VIEW_PRIMITIV_BOX_H
@@ -54,7 +54,7 @@ namespace BALL
 
 			/** Copy constructor with cloning facility.
 			*/
-			Box(const Box& box, bool deep = true)
+			Box(const Box& box)
 				throw();
 
 			Box(const Vector3& point, 
@@ -87,7 +87,7 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const Box& box, bool deep = true)
+			void set(const Box& box)
 				throw();
 
 			/** Assignment operator.
@@ -98,7 +98,7 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy this Box to the Box <b> Box</b>.
 			*/
-			void get(Box& box, bool deep = true) const
+			void get(Box& box) const
 				throw();
 
 			//@}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: disc.C,v 1.2 2003/08/26 15:32:47 amoll Exp $
+// $Id: disc.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 
@@ -19,9 +19,9 @@ namespace BALL
 		{
 		}
 
-		Disc::Disc(const Disc& disc, bool deep)
+		Disc::Disc(const Disc& disc)
 			throw()
-			:	GeometricObject(disc, deep),
+			:	GeometricObject(disc),
 				Circle3(disc)
 		{
 		}
@@ -42,10 +42,10 @@ namespace BALL
 			Circle3::clear();
 		}
 
-		void Disc::set(const Disc& disc, bool deep)
+		void Disc::set(const Disc& disc)
 			throw()
 		{
-			GeometricObject::set(disc, deep);
+			GeometricObject::set(disc);
 			Circle3::set(disc);
 		}
 
@@ -56,10 +56,10 @@ namespace BALL
 			return *this;
 		}
 
-		void Disc::get(Disc& disc, bool deep) const
+		void Disc::get(Disc& disc) const
 			throw()
 		{
-			disc.set(*this, deep);
+			disc.set(*this);
 		}
 
 		void Disc::swap(Disc& disc)

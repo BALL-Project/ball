@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.1 2003/08/26 12:11:38 oliver Exp $
+// $Id: sphere.h,v 1.2 2003/08/29 10:53:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
@@ -44,7 +44,7 @@ namespace BALL
 			/** Copy constructor with cloning facility.
 
 			*/
-			Sphere(const Sphere& sphere, bool deep = true)
+			Sphere(const Sphere& sphere)
 				throw();
 
 			//@}
@@ -71,7 +71,7 @@ namespace BALL
 
 			/** Assignment.
 			*/
-			void set(const Sphere& sphere, bool deep = true)
+			void set(const Sphere& sphere)
 				throw();
 
 			/** Assignment operator.
@@ -81,7 +81,7 @@ namespace BALL
 
 			/** Copying with cloning facility.
 			*/
-			void get(Sphere& sphere, bool deep = true) const
+			void get(Sphere& sphere) const
 				throw();
 
 			/** Swapping of sphere's.

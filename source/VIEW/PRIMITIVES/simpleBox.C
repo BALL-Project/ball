@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
+// $Id: simpleBox.C,v 1.3 2003/08/29 10:53:25 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 
@@ -19,10 +19,10 @@ namespace BALL
 		{
 		}
 
-		SimpleBox::SimpleBox(const SimpleBox& box, bool deep)
+		SimpleBox::SimpleBox(const SimpleBox& box)
 			throw()
 			:	SimpleBox3(box),
-				GeometricObject(box, deep)
+				GeometricObject(box)
 		{
 		}
 
@@ -42,10 +42,10 @@ namespace BALL
 			SimpleBox3::clear();
 		}
 
-		void SimpleBox::set(const SimpleBox& box, bool deep)
+		void SimpleBox::set(const SimpleBox& box)
 			throw()
 		{
-			GeometricObject::set(box, deep);
+			GeometricObject::set(box);
 			SimpleBox3::set(box);
 		}
 
@@ -56,10 +56,10 @@ namespace BALL
 			return *this;
 		}
 
-		void SimpleBox::get(SimpleBox& box, bool deep) const
+		void SimpleBox::get(SimpleBox& box) const
 			throw()
 		{
-			box.set(*this, deep);
+			box.set(*this);
 		}
 
 		bool SimpleBox::isValid() const

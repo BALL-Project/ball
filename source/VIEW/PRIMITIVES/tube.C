@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
+// $Id: tube.C,v 1.3 2003/08/29 10:53:25 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 
@@ -20,9 +20,9 @@ namespace BALL
 		{
 		}
 
-		Tube::Tube(const Tube& tube, bool deep)
+		Tube::Tube(const Tube& tube)
 			throw()
-			: GeometricObject(tube, deep),
+			: GeometricObject(tube),
    			Vertex2(tube),
 				radius_(1)
 		{
@@ -45,10 +45,10 @@ namespace BALL
 			radius_ = 1;
 		}
 
-		void Tube::set(const Tube& tube, bool deep)
+		void Tube::set(const Tube& tube)
 			throw()
 		{
-			GeometricObject::set(tube, deep);
+			GeometricObject::set(tube);
 			Vertex2::set(tube);
 			radius_ = tube.radius_;
 		}
@@ -60,10 +60,10 @@ namespace BALL
 			return *this;
 		}
 
-		void Tube::get(Tube& tube, bool deep) const
+		void Tube::get(Tube& tube) const
 			throw()
 		{
-			tube.set(*this, deep);
+			tube.set(*this);
 		}
 
 		void Tube::swap(Tube& tube)

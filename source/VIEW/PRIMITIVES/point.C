@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
+// $Id: point.C,v 1.3 2003/08/29 10:53:25 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/point.h>
 
@@ -19,9 +19,9 @@ namespace BALL
 		{
 		}
 
-		Point::Point(const Point& point, bool deep)
+		Point::Point(const Point& point)
 			throw()
-			:	GeometricObject(point, deep),
+			:	GeometricObject(point),
 				Vertex(point)
 		{
 		}
@@ -42,10 +42,10 @@ namespace BALL
 			Vertex::clear();
 		}
 
-		void Point::set(const Point& point, bool deep)
+		void Point::set(const Point& point)
 			throw()
 		{
-			GeometricObject::set(point, deep);
+			GeometricObject::set(point);
 			Vertex::set(point);
 		}
 
@@ -56,10 +56,10 @@ namespace BALL
 			return *this;
 		}
 
-		void Point::get(Point& point, bool deep) const
+		void Point::get(Point& point) const
 			throw()
 		{
-			point.set(*this, deep);
+			point.set(*this);
 		}
 
 		void Point::swap(Point& point)

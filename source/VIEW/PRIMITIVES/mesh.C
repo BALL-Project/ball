@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
+// $Id: mesh.C,v 1.3 2003/08/29 10:53:24 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
@@ -21,9 +21,9 @@ namespace BALL
 		{
 		}
 
-		Mesh::Mesh(const Mesh& mesh, bool deep)
+		Mesh::Mesh(const Mesh& mesh)
 			throw()
-			:	GeometricObject(mesh, deep),
+			:	GeometricObject(mesh),
 				Surface(mesh),
 				colorList(mesh.colorList)
 		{
@@ -53,10 +53,10 @@ namespace BALL
 	//		colorList.clear();
 		}
 
-		void Mesh::set(const Mesh& mesh, bool deep)
+		void Mesh::set(const Mesh& mesh)
 			throw()
 		{
-			GeometricObject::set(mesh, deep);
+			GeometricObject::set(mesh);
 			colorList = mesh.colorList;
 		}
 
@@ -67,10 +67,10 @@ namespace BALL
 			return *this;
 		}
 
-		void Mesh::get(Mesh& mesh, bool deep) const
+		void Mesh::get(Mesh& mesh) const
 			throw()
 		{
-			mesh.set(*this, deep);
+			mesh.set(*this);
 		}
 
 		void Mesh::swap(Mesh& mesh)
