@@ -96,8 +96,6 @@ EXECUTABLES_MOLMEC = \
 	SnapShotManager_test
 
 EXECUTABLES_NMR = \
-	MakeSpectrumProcessor_test\
-	NMRSpectrum_test\
 	RandomCoilShiftProcessor_test\
 	AnisotropyShiftProcessor_test\
 	AssignShiftProcessor_test\
@@ -108,7 +106,8 @@ EXECUTABLES_NMR = \
 	JohnsonBoveyShiftProcessor_test\
 	ShiftModel_test\
 	ShiftModule_test\
-	Peak_test
+	Peak_test\
+	PeakList_test
 
 EXECUTABLES_FILES =\
 	LineBasedFile_test\
@@ -163,8 +162,8 @@ EXECUTABLES = \
 	$(EXECUTABLES_KERNEL)\
 	$(EXECUTABLES_FILES)\
 	$(EXECUTABLES_MOLMEC)\
-	$(EXECUTABLES_ENERGY)\
 	$(EXECUTABLES_NMR)\
+	$(EXECUTABLES_ENERGY)\
 	$(EXECUTABLES_STRUCTURE)\
 	$(EXECUTABLES_SOLVATION)
 
