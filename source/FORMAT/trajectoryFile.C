@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.C,v 1.1 2000/12/15 17:18:37 anker Exp $
+// $Id: trajectoryFile.C,v 1.2 2000/12/19 13:30:29 anker Exp $
 
 #include <BALL/FORMAT/trajectoryFile.h>
 
@@ -109,16 +109,7 @@ namespace BALL
 	}
 
 
-	bool TrajectoryFile::append(const SnapShotManager& /* manager */)
-		throw()
-	{
-		Log.error() << "TrajectoryFile::append(): " 
-			<< "This method should not be called" << endl;
-		return false;
-	}
-
-
-	bool TrajectoryFile::append(const std::vector<SnapShot>& /* buffer */)
+	bool TrajectoryFile::append(const SnapShot& /* snapshot */)
 		throw()
 	{
 		Log.error() << "TrajectoryFile::append(): " 
