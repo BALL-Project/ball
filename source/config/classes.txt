@@ -144,6 +144,7 @@ LineBasedFile                       /           /
 MOLFile                             /           /
 MOL2File                            /,          /
 NMRStarFile                         /           /
+TRRFile                             /?          Z
 Parameters                          E           /
 ParameterSection                    I,          /
 trajectoryFile                      /           X       Test is empty!       
