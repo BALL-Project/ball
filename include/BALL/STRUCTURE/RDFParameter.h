@@ -1,4 +1,4 @@
-// $Id: RDFParameter.h,v 1.4 2000/10/30 00:19:26 amoll Exp $
+// $Id: RDFParameter.h,v 1.5 2000/12/06 19:04:22 anker Exp $
 
 #ifndef BALL__RDFPARAMETER_H
 #define BALL__RDFPARAMETER_H
@@ -24,7 +24,7 @@ namespace BALL
 
 	/** Parametersection for radial distribution function
 		BAUSTELLE
-		{\bf Definition:} \URL{BALL/.../RDFParameter.h}
+		{\bf Definition:} \URL{BALL/STRUCTURE/RDFParameter.h}
 	 */
 	
 	class RDFParameter
@@ -37,14 +37,21 @@ namespace BALL
 		/** @name Constructors and destructors. */
 		//@{
 
-		/** Default constructor */
-		RDFParameter() throw();
+		/** Default constructor 
+		*/
+		RDFParameter() 
+			throw();
 
-		/** Copy constructor */
-		RDFParameter(const RDFParameter& rdf_parameter) throw();
+		/** Copy constructor 
+				@param rdf_parameter the RDFParameter instance to copy from
+		*/
+		RDFParameter(const RDFParameter& rdf_parameter) 
+			throw();
 
-		/** Destructor */
-		virtual ~RDFParameter() throw();
+		/** Destructor 
+		*/
+		virtual ~RDFParameter() 
+			throw();
 
 		//@}
 
@@ -52,12 +59,17 @@ namespace BALL
 		/** @name Assignment */
 		//@{
 
-		/** Assignment operator */
+		/** Assignment operator 
+				@param rdf_parameter the parameter to assign from
+				@return a const reference to {\em this}
+		*/
 		const RDFParameter& operator = (const RDFParameter& rdf_parameter)
 			throw();
 
-		/** Clear method */
-		virtual void clear() throw();
+		/** Clear method 
+		*/
+		virtual void clear() 
+			throw();
 
 		//@}
 
@@ -65,32 +77,60 @@ namespace BALL
 		/** @name Accessors */
 		//@{
 
-		/** */
-		Position getIndex(Atom::Type type_i, Atom::Type type_j) const throw();
+		/** Get the index in dependance of atom types of solute and solvent
+				@param type_i the type of the solvent atom
+				@param type_j the type of the solute atom
+				@return the index of the respective RDF in the list built from the
+				RDFSections.
+		*/
+		Position getIndex(Atom::Type type_i, Atom::Type type_j) const 
+			throw();
 
-		/** Return a radial distribution function determined by type */
-		const RadialDistributionFunction& getRDF(Atom::Type type_i, Atom::Type type_j) 
-			const throw();
+		/** Return a radial distribution function determined by type
+				@param type_i the type of the solvent atom
+				@param type_j the type of the solute atom
+				@return the RDF
+		*/
+		const RadialDistributionFunction& getRDF(Atom::Type type_i,
+				Atom::Type type_j) const 
+			throw();
 
-		/** Return a radial distribution function determined by index */
-		const RadialDistributionFunction& getRDF(Position index) const throw();
+		/** Return a radial distribution function determined by index 
+				@param index the index of the radial distribution function in the
+				internal list
+				@return the specified RDF
+		*/
+		const RadialDistributionFunction& getRDF(Position index) const 
+			throw();
 
 		//@}
 
-		/** */
+		/** Extract the information from the parameter file.
+				@param parameters a ForceFieldParameters instance
+				@param saection_name the name of the section to be parsed
+				@return true if the section could be read, false otherwise
+		*/
 		virtual bool extractSection(ForceFieldParameters& parameters,
-			const String& section_name) throw();
+				const String& section_name) 
+			throw();
 
 		/** @name Predicates */
 		//@{
 
-		/** */
+		/** Find out, whether the parameter file contained a RDF for a special
+				solute/solvent atom combination.
+				@param solvent_atom_type the type of the solvent atom
+				@param solute_atom_type the type of the solute atom
+				@return true, if there was a definition for this combination of
+				atom types
+		*/
 		bool hasRDF(Atom::Type solvent_atom_type,	Atom::Type solute_atom_type) 
 			const throw();
 
 		/** @see hasRDF */
-		bool hasParameters(Atom::Type solvent_atom_type, Atom::Type solute_atom_type) 
-			const throw();
+		bool hasParameters(Atom::Type solvent_atom_type,
+				Atom::Type solute_atom_type) const 
+			throw();
 
 		//@}
 
