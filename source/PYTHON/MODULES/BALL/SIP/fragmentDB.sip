@@ -1,4 +1,4 @@
-// $Id: fragmentDB.sip,v 1.3 2000/08/07 11:53:44 oliver Exp $
+// $Id: fragmentDB.sip,v 1.4 2001/01/31 05:36:46 oliver Exp $
 
 class FragmentDB 
 {
@@ -98,7 +98,7 @@ class AddHydrogensProcessor
 	virtual bool start();
 	virtual bool finish();
 	virtual Processor::Result operator()(Fragment&);
-	Size getNumberOfInsertedH();
+	Size getNumberOfInsertedHydrogens();
 	void setFragmentDB(const FragmentDB& /fragment_db/);
 };
 

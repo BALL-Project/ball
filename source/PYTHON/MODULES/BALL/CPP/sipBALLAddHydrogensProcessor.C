@@ -244,7 +244,7 @@ static PyObject *sipDo_AddHydrogensProcessor_Operator__call__(PyObject *sipThisO
 	return NULL;
 }
 
-static PyObject *sipDo_AddHydrogensProcessor_getNumberOfInsertedH(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_AddHydrogensProcessor_getNumberOfInsertedHydrogens(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -260,7 +260,7 @@ static PyObject *sipDo_AddHydrogensProcessor_getNumberOfInsertedH(PyObject *sipT
 			if ((ptr = (AddHydrogensProcessor *)sipGetCppPtr(sipThis,sipClass_AddHydrogensProcessor)) == NULL)
 				return NULL;
 
-			res = ptr -> AddHydrogensProcessor::getNumberOfInsertedH();
+			res = ptr -> AddHydrogensProcessor::getNumberOfInsertedHydrogens();
 
 			return PyInt_FromLong((long)res);
 		}
@@ -268,7 +268,7 @@ static PyObject *sipDo_AddHydrogensProcessor_getNumberOfInsertedH(PyObject *sipT
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AddHydrogensProcessor,sipName_BALL_getNumberOfInsertedH);
+	sipNoMethod(sipName_BALL_AddHydrogensProcessor,sipName_BALL_getNumberOfInsertedHydrogens);
 
 	return NULL;
 }
@@ -432,7 +432,7 @@ PyMethodDef sipClassAttrTab_AddHydrogensProcessor[] = {
 	{sipName_BALL_start, sipDo_AddHydrogensProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_AddHydrogensProcessor_finish, METH_VARARGS, NULL},
 	{sipName_BALL_Operator__call__, sipDo_AddHydrogensProcessor_Operator__call__, METH_VARARGS, NULL},
-	{sipName_BALL_getNumberOfInsertedH, sipDo_AddHydrogensProcessor_getNumberOfInsertedH, METH_VARARGS, NULL},
+	{sipName_BALL_getNumberOfInsertedHydrogens, sipDo_AddHydrogensProcessor_getNumberOfInsertedHydrogens, METH_VARARGS, NULL},
 	{sipName_BALL_setFragmentDB, sipDo_AddHydrogensProcessor_setFragmentDB, METH_VARARGS, NULL},
 	{NULL}
 };
