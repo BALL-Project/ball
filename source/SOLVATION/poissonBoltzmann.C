@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.3 1999/09/25 12:15:05 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.4 1999/09/26 17:19:02 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -1239,8 +1239,9 @@ namespace BALL
 			case 2:  // Dipole approximation for the potential
 
 				if (verbosity > 3)
-					Log.info(4) << "caclulating effective dipole..." << endl;
-
+				{
+					Log.info(4) << "calculating effective dipole..." << endl;
+				}
 
 				positive_x = 0.0;
 				positive_y = 0.0;
