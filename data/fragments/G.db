@@ -58,10 +58,19 @@
 		<node>5-term<value></value></node>
 		<node>3-term<value></value></node>
 	</node>
-	<node>Properties
-		<node>NUCLEIC_ACID</node>
-	</node>
-	<node>Variants
-	</node>
-
+  <node>Properties
+    <node>NUCLEOTIDE</node>
+  </node>
+  <node>Variants
+    <node>G-M
+      <node>Properties
+        <node>5_PRIME</node>
+        <node>3_PRIME</node>
+      </node>
+    </node>
+    <node>Default
+      <node>Properties
+      </node>
+    </node>
+  </node>
 </node>

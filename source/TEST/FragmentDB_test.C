@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_test.C,v 1.11 2004/02/16 16:11:25 oliver Exp $
+// $Id: FragmentDB_test.C,v 1.12 2004/02/26 21:10:11 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.11 2004/02/16 16:11:25 oliver Exp $")
+START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.12 2004/02/26 21:10:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -219,6 +219,30 @@ CHECK(FragmentDB::BuildBondsProcessor::operator () / BPTI)
 	// build the bonds
 	S.apply(db.build_bonds);
 	TEST_EQUAL(S.countBonds(), 906)	
+RESULT
+
+CHECK([EXTRA]DNA bond contruction)
+	PDBFile f("data/AG.pdb");
+	System S;
+	f.read(S);
+	f.close();
+	STATUS("number of atoms: " << S.countAtoms())
+	STATUS("number of bonds: " << S.countBonds())
+	TEST_EQUAL(S.countAtoms(), 34)
+	ABORT_IF(S.countAtoms() != 34)
+	
+	FragmentDB db;
+	STATUS("number of atoms: " << S.countAtoms())
+	STATUS("number of bonds: " << S.countBonds())
+	S.apply(db.build_bonds);
+	STATUS("number of atoms: " << S.countAtoms())
+	STATUS("number of bonds: " << S.countBonds())
+	S.apply(db.add_hydrogens);
+	STATUS("number of atoms: " << S.countAtoms())
+	STATUS("number of bonds: " << S.countBonds())
+	S.apply(db.build_bonds);
+	STATUS("number of atoms: " << S.countAtoms())
+	STATUS("number of bonds: " << S.countBonds())
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -58,10 +58,19 @@
 		<node>3-term<value></value></node>
 	</node>
 	<node>Properties
-		<node>AMINO_ACID</node>
+		<node>NUCLEOTIDE</node>
 	</node>
 	<node>Variants
-	</node>
-
+    <node>A-M
+      <node>Properties
+        <node>5_PRIME</node>
+        <node>3_PRIME</node>
+      </node>
+    </node>
+    <node>Default
+      <node>Properties
+      </node>
+    </node>
+ 	</node>
 </node>
 	
