@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.5 2001/12/28 02:25:52 oliver Exp $
+// $Id: BALL.sip,v 1.6 2002/02/03 14:28:24 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -258,7 +258,7 @@
 // %Include rotamerLibrary.sip
 // %Include rules.sip
 // %Include structureMapper.sip
-
+%Include smilesParser.sip
 
 // SYSTEM
 // %Include directory.sip
