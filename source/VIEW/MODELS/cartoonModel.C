@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.4 2003/09/01 10:27:20 amoll Exp $
+// $Id: cartoonModel.C,v 1.5 2003/10/15 13:58:09 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -107,7 +107,7 @@ namespace BALL
 					Vector3 normal =   (O->getPosition()  - it->getPosition()) 
 						               % (N->getPosition()  - it->getPosition()) ;
 
-					if (normal.getSquareLength() == 0) 
+					if (Maths::isZero(normal.getSquareLength())) 
 					{
 						Log.error() << "Could not draw cartoon style: degenerate peptide bond!" << std::endl;
 						return;
@@ -156,10 +156,11 @@ namespace BALL
 			Vector3 right = spline_[first_c*9+1] - spline_[first_c*9];
 
 			Vector3 normal = peptide_normals[0];
-			normal.normalize();
 
+			// maybe this cases should not happen, but they do...
+			if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
+			if (!Maths::isZero(right.getSquareLength()))  right.normalize();
 
-			right.normalize();
 			float box_height_ = 0.6;
 			float box_depth_  = 1.5;//3.0;
 			Vector3 perpendic = normal % right; // perpendicular to spline
@@ -237,12 +238,12 @@ namespace BALL
 					normal =   peptide_normals[i-first_c  ] *(1-j * 0.9/8.) 
 						       + peptide_normals[i-first_c+1] *   j * 0.9/8.;
 
-
-					normal.normalize();
-					right.normalize();
+					// maybe this cases should not happen, but they do...
+					if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
+					if (!Maths::isZero(right.getSquareLength())) right.normalize();
 
 					perpendic = normal % right; // perpendicular to spline
-					perpendic.normalize();
+					if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
 
 					current_points[0] = spline_[i*9+j] - (perpendic * box_depth_/2.) - normal * box_height_/2.;
 					current_points[1] = current_points[0] + normal * box_height_;
@@ -294,11 +295,11 @@ namespace BALL
 //				normal =   peptide_normals[i-first_c  ] *(1-j * 0.9/8.) 
 //					       + peptide_normals[i-first_c+1] *   j * 0.9/8.;
 
-				normal.normalize();
-				right.normalize();
+				if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
+				if (!Maths::isZero(right.getSquareLength())) right.normalize();
 
 				perpendic = normal % right; // perpendicular to spline
-				perpendic.normalize();
+				if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
 
 				current_points[0] = spline_[i*9+j] - (perpendic * new_box_depth/2.) - normal * box_height_/2.;
 				current_points[1] = current_points[0] + normal * box_height_;
