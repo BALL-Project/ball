@@ -1,4 +1,4 @@
-// $Id: energyProcessor.C,v 1.4 2001/07/16 11:15:54 amoll Exp $
+// $Id: energyProcessor.C,v 1.5 2001/07/17 12:09:08 anker Exp $
 
 #include <BALL/ENERGY/energyProcessor.h>
 
@@ -70,9 +70,25 @@ namespace BALL
 
 	bool EnergyProcessor::operator == (const EnergyProcessor& proc) const throw()
 	{
-		return ((fragment_ == proc.fragment_) 
-				 && (energy_ 	 == proc.energy_)
-				 && (valid_ 	 == proc.valid_));
+		bool result;
+		if ((fragment_ == 0) && (proc.fragment_ == 0))
+		{
+			result = ((energy_ == proc.energy_) && (valid_ == proc.valid_));
+		}
+		else
+		{
+			if ((fragment_ == 0) || (proc.fragment_ == 0))
+			{
+				result = false;
+			}
+			else
+			{
+				result = ((*fragment_ == *proc.fragment_) 
+						&& (energy_ 	 == proc.energy_)
+						&& (valid_ 	 == proc.valid_));
+			}
+		}
+		return result;
 	}
 
 
