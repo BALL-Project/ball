@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.C,v 1.8 2000/03/26 12:58:13 oliver Exp $
+// $Id: conjugateGradient.C,v 1.9 2000/04/25 14:43:57 oliver Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -625,23 +625,18 @@ namespace BALL
 			direction_.invalidate();
 
 			// try to find a new solution
-			if (!findStep())
+			bool result = findStep();
+			// take the step and save these positions
+			atoms.moveTo(direction_, lambda_ * step_);
+			atoms.savePositions();
+
+			// if findStep only found an emergency solution...
+			if (!result)
 			{	
-				// findStep only found an emergency solution!
-				// take the step and save these positions
-				atoms.moveTo(direction_, lambda_ * step_);
-				atoms.savePositions();
-				
-				// calculate energy and forces for the new position
+				// ...calculate energy and forces for the new position
 				updateForces();
 				updateEnergy();
 			} 
-			else 
-			{
-				// take the step and save these positions
-				atoms.moveTo(direction_, lambda_ * step_);
-				atoms.savePositions();
-			}
 			
 			// store the gradient and the energy
 			old_grad_ = initial_grad_;
@@ -650,7 +645,6 @@ namespace BALL
 			// store the current gradient and energy
 			initial_energy_ = current_energy_;
 			initial_grad_ = current_grad_;
-
 
 			// Calculate a new search direction if the search direction is invalid
 			// 
@@ -693,13 +687,15 @@ namespace BALL
 	
 		}	// end of main loop
 
-		if (isConverged())
+
+		// check for convergence
+		bool convergence_reached = isConverged();
+		if (convergence_reached)
 		{
 			Log.info() << "convergence reached" << endl;
 		}
 
-		return (isConverged());
-
+		return convergence_reached;
   } // end of method 'minimize' 
 			
 } // end of namespace BALL
