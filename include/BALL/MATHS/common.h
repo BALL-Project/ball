@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.11 2000/05/05 17:39:04 amoll Exp $
+// $Id: common.h,v 1.12 2000/09/07 19:40:13 oliver Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -11,6 +11,18 @@
 
 #ifdef BALL_INCLUDE_IEEEFP
 # include <ieeefp.h>
+#endif
+
+#ifndef BALL_COMMON_CONSTANTS_H
+#	include <BALL/COMMON/constants.h>
+#endif
+
+#ifndef BALL_COMMON_GLOBAL_H
+#	include <BALL/COMMON/global.h>
+#endif
+
+#ifndef BALL_COMMON_MACROS_H
+#	include <BALL/COMMON/macros.h>
 #endif
 
 namespace BALL 
@@ -209,7 +221,7 @@ namespace BALL
 		inline 
 		bool isLess(const T1& a, const T2& b)
 		{
-			return (a - b <= -Constants::EPSILON);
+			return ((a - b) <= -Constants::EPSILON);
 		}
 
 		/**	Test whether a number is less or equal compared to another.
@@ -221,7 +233,7 @@ namespace BALL
 		inline 
 		bool isLessOrEqual(const T1& a, const T2& b)
 		{
-			return (a - b < Constants::EPSILON);
+			return ((a - b) < Constants::EPSILON);
 		}
 
 		/**	Test whether a number is greater or equal compared to another.
@@ -233,7 +245,7 @@ namespace BALL
 		inline 
 		bool isGreaterOrEqual(const T1& a, const T2& b)
 		{
-			return (a - b > -Constants::EPSILON);
+			return ((a - b) > -Constants::EPSILON);
 		}
 
 		/**	Test whether a number is greater compared to another.
