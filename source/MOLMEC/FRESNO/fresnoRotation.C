@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.5 2002/04/03 16:44:52 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.6 2002/04/06 20:04:28 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -412,8 +412,9 @@ namespace BALL
 
 			E *= (1 - 1/N_rot_);
 			E += 1.0;
-			energy_ = E;
+			energy_ = factor_ * E;
 			// DEBUG
+			cout << "ROT: score is " << E << endl;
 			cout << "ROT: energy is " << energy_ << endl;
 			// /DEBUG
 			return energy_;
