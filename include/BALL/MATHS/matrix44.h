@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.30 2000/05/04 18:26:45 oliver Exp $
+// $Id: matrix44.h,v 1.31 2000/05/05 17:39:05 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -35,7 +35,6 @@ namespace BALL
 
 	/**	Input Operator.
 			Read sixteen values of type {\tt T} from an input stream.
-
 			@param s	the input stream
 			@param m the matrix to read 
 	*/
@@ -43,13 +42,15 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m);
 
 	/**	Output Operator
-			Write 
+			Writes sixteen values of type {\tt T} to an output stream.
+			@param s	the output stream
+			@param m  the matrix to write 
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m);
 	
 	/**	Generic 4x4 Matrix Class.
-      {\bf Definition:} \URL{BALL/MATHS/.h}
+      {\bf Definition:} \URL{BALL/MATHS/matrix44.h}
       \\
  	*/
 	template <typename T>
@@ -88,7 +89,7 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new TMatrix4x4 object from another.
 				@param TMatrix4x4 the TMatrix4x4 object to be copied
-				@param bool ignored - just for interface consistency
+				@param bool ignored (just for interface consistency)
 		*/	
 		TMatrix4x4(const TMatrix4x4& m);
 
@@ -127,14 +128,14 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Assign from the first
+		/**	Assign from the first.
 				sixteen elements pointed to by {\tt ptr}.
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
 		*/
 		void set( const T* ptr);
 
-		/**	Assign from the first sixteen elements
+		/**	Assign from the first sixteen elements.
 				pointed to by the array assigned by {\tt ptr}.
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
@@ -151,14 +152,13 @@ namespace BALL
 				@param col2 assigned to the second column
 				@param col3 assigned to the third column
 				@param col4 assigned to the fourth column
-
 		*/
 		void set
 			(const TVector4<T>& col1, const TVector4<T>& col2,
 			 const TVector4<T>& col3, const TVector4<T>& col4);
 
-		/**	Assign from sixteen {\tt T} values.
-				@param m11 - {\tt m14} assigned to the components
+		/**	Assign from sixteen values of type {\tt T}.
+				@param m11 - {\tt m44} assigned to the components
 		*/
 		void set
 			(const T& m11, const T& m12, const T& m13, const T& m14, 
@@ -167,55 +167,55 @@ namespace BALL
 			 const T& m41, const T& m42, const T& m43, const T& m44);
 
 		/**	Assignment operator.
-				Assign the components from an array assigned by {\tt ptr}.
+				Assign the components from the first 16 values assigned by {\tt ptr}.
 				@param ptr the array to construct from
 		**/
 		TMatrix4x4& operator = ( const T* ptr);
 
 		/**	Assignment operator.
-				Assign the components from an array assigned by {\tt ptr}.
+				Assign the components from the first 16 values assigned by {\tt ptr}.
 				@param ptr the array to construct from
 		**/
 		TMatrix4x4& operator = (const T ptr[4][4]);
 
 		/**	Assignment operator.
-				Assign the components from another TMatrix4x4.
+				Assign the components from another instance of TMatrix4x4.
 				@param TMatrix4x4 the TMatrix4x4 to assign from
 		**/
 		TMatrix4x4& operator = (const TMatrix4x4& m);
 
 		/**	Assign to an array.
-				Assigns the components to a pointer of an array of sixteen {\tt T} values.
+				Assigns the components to a pointer of an array of sixteen values of type {\tt T}.
 				@exception NullPointer if {\tt ptr == 0}
 				@param ptr the pointer to assign to
 		*/
 		void get(T* ptr) const;
 
 		/**	Assign to an array.
-				Assigns the components to an array of sixteen {\tt T} values.
+				Assigns the components to an array of sixteen values of type {\tt T}.
 				@exception NullPointer if {\tt ptr == 0}
 				@param ptr the array to assign to
 		*/
 		void get(T ptr[4][4]) const;
 
-		/**	Assign to another TMatrix4x4.
+		/**	Assign to another instance of TMatrix4x4.
 				Assigns the components to another TMatrix4x4.
 				@param TMatrix4x4	the TMatrix4x4 to be assigned to
 		*/
 		void get(TMatrix4x4& m) const;
 
-		/**	Assign to four variables of type TVector4.
-				@param col1 the TVector4 to assign to the first column
-				@param col2 the TVector4 to assign to the second column
-				@param col3 the TVector4 to assign to the third column
-				@param col4 the TVector4 to assign to the fourth column
+		/**	Assign to four variables of type {\em TVector4}.
+				@param col1 the TVector4 to obtain the values of the first column
+				@param col2 the TVector4 to obtain the values of the second column
+				@param col3 the TVector4 to obtain the values of the third column
+				@param col4 the TVector4 to obtain the values of the fourth column
 		*/
 		void get
 			(TVector4<T>& col1, TVector4<T>& col2,
 			 TVector4<T>& col3, TVector4<T>& col4) const;
 
 		/**	Assign to sixteen variables of type {\tt T}.
-				@param m11 - {\tt m44} the variables to assign to
+				@param m11 {\tt - m44} the variables to assign to
 		*/
 		void get
 			(T& m11, T& m12, T& m13, T& m14, 
@@ -223,7 +223,7 @@ namespace BALL
 			 T& m31, T& m32, T& m33, T& m34, 
 			 T& m41, T& m42, T& m43, T& m44) const;
 
-		/**	Swap the contents of two TMatrix4x4.
+		/**	Swap the contents of two instances of TMatrix4x4.
 				@param TMatrix4x4 the TMatrix4x4 to swap contents with
 		*/
 		void swap(TMatrix4x4& m);
@@ -234,8 +234,8 @@ namespace BALL
 		*/
 		//@{
 
-		/** Get the sum of the diagonal trace 
-				(m11 + m22 + m33 + m44)
+		/** Compute the trace.
+				Get the sum of the diagonal elements (m11 + m22 + m33 + m44).
 				@return T the trace
 		*/
 		T getTrace() const;
@@ -244,31 +244,32 @@ namespace BALL
 
 		static const TMatrix4x4& getIdentity();
 
-		/** Set the TMatrix4x4 to an identity matrix
+		/** Set the TMatrix4x4 to an identity matrix.
 				m11, m22, m33, m44 = 1;
 				the other cells have the value 0;
 		*/
 		void setIdentity();
 
-		/** Fill the Matrix with a value
-				@param T the value to fill with (default = 1)
+		/** Set the diagonal elements of this instance of Matrix4x4 to the 
+				given value (default: 1) and all other elements to 0.
+				@param T the value to fill with (default: 1)
 		*/
 		void fill(const T& t = (T)1);
 
 		/** Mirror the Matrix at the diagonal.
 				All values are swaped by the mirrored value.
-				(m12 <=> m21 , m13 <=> m31 , ...)
+				(I.e. m12 <=> m21 , m13 <=> m31 , ...)
 		*/
 		void transpose();
 
-		/** Get a row of the matrix
+		/** Get a row of the matrix.
 				@param row the number of the row (0-3)
 				@exception IndexOverflow if {\tt row > 3}
 				@return TVector4 the row
 		*/
 		TVector4<T> getRow(Position row) const;
 
-		/** Get a column of the matrix
+		/** Get a column of the matrix.
 				@param col the number of the column (0-3)
 				@exception IndexOverflow if {\tt col > 3}
 				@return TVector4 the column
@@ -276,14 +277,14 @@ namespace BALL
 		TVector4<T> getColumn(Position col) const;
 
 
-		/** Set a row of the matrix
+		/** Set a row of the matrix.
 				@param row the number of the row (0-3)
 				@param row_value the new value of the row
 				@exception IndexOverflow if {\tt row > 3}
 		*/
 		void setRow(Position row, const TVector4<T> row_value);
 
-		/** Set a column of the matrix
+		/** Set a column of the matrix.
 				@param col the number of the column (0-3)
 				@param col_value the new value of the col
 				@exception IndexOverflow if {\tt col > 3}
@@ -291,7 +292,7 @@ namespace BALL
 		void setColumn(Position col, const TVector4<T> col_value);
 
 
-		/** Test if two matrices are equal.
+		/** Test whether two matrices are equal.
 				Two matrices are considered equal, if \Ref{Maths::isEqual} returns {\bf true} 
 				for each pair of corresponding elements.
 				@param m the matrix to compare with
@@ -300,12 +301,12 @@ namespace BALL
 		bool isEqual(const TMatrix4x4& m) const;
 
 
-		/** Get the diagonal of the matrix
+		/** Get the diagonal of the matrix.
 				@return TVector4 the diagonal
 		*/
 		TVector4<T> getDiagonal() const;
 		
-		/** Access operator of a cell
+		/** Access operator of a cell.
 				@param row the number of the row (0-3)
 				@param col the number of the column (0-3)
 				@exception IndexOverflow if {\tt col >3 || row > 3}
@@ -313,7 +314,7 @@ namespace BALL
 		*/
 		T& operator () (Position row, Position col);
 
-		/** Constant access operator of a cell
+		/** Constant access operator of a cell.
 				@param row the number of the row (0-3)
 				@param col the number of the column (0-3)
 				@exception IndexOverflow if {\tt col ||row > 3}
@@ -342,75 +343,78 @@ namespace BALL
 		*/
 		TMatrix4x4 operator - () const;
 
-		/** Addition operator,
-				adds another matrix to this matrix and return the result
+		/** Addition operator.
+				Adds another matrix to this matrix and return the result.
 				@param m the matrix to add
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator + (const TMatrix4x4& m) const;
 
-		/** Addition operator
-				Adds another matrix to this matrix
+		/** Addition operator.
+				Adds another matrix to this matrix.
 				@param m the matrix to add
 				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator += (const TMatrix4x4& m);
 
-		/** Subtraction operator,
-				subtract another matrix from this matrix and return the result
+		/** Subtraction operator.
+				Subtract another matrix from this matrix and return the result
 				@param m the matrix to subtract
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator - (const TMatrix4x4& m) const;
 
-		/** Subtraction operator
-				Subtract another matrix from this matrix
+		/** Subtraction operator.
+				Subtract another matrix from this matrix.
 				@param m the matrix to subtract
 				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator -= (const TMatrix4x4& m);
 
-		/**	Multiplication operator for a scalar with the matrix
+		/**	Multiply by a scalar.
+				Operator for multiplying every cell value with a scalar value.
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator * (const T& scalar) const;
 
-		/**	Multiplication operator for a scalar with the matrix
+		/**	Multiply by a scalar.
+				Operator for multiplying every cell value with a scalar value.
 				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator *= (const T& scalar);
 
-		/**	Division operator for the matrix and a scalar
+		/**	Divide by a scalar.
+				Operator for dividing every cell value by a scalar value.
 				@exception DivisionByZero if {\tt scalar == 0}
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator / (const T& scalar) const;
 
-		/**	Division operator for the matrix and a scalar
+		/**	Divide by a scalar.
+				Operator for dividing every cell value by a scalar value.
 				@exception DivisionByZero if {\tt scalar == 0}
 				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator /= (const T& scalar);
 
-		/**	Multiplication operator for two matrices
+		/**	Multiply two matrices.
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator * (const TMatrix4x4& m) const;
 
-		/**	Multiplication operator for two matrices
+		/**	Multiply two matrices
 				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator *= (const TMatrix4x4& m);
 
-		/**	Multiplication operator with a TVector4
+		/**	Multiplication by an instance of type {\em TVector4}.
 				@return TMatrix4x4&, {\em *this}
 		*/
 		TVector4<T> operator * (const TVector4<T> &) const;
 
 		/**	Invert the matrix.
 				Tests if the matrix can be inverted.
-				If this is possible, the result is returned in 
-				another matrix.
+				If possible, the result will be inverted and the result returned in {\em inverse}.
 				@param inverse is assigned the inverse matrix 
 				@return bool true if the inverse matrix could be calculated, otherwise false.
 		*/
@@ -423,7 +427,7 @@ namespace BALL
 		*/
 		bool invert();
 
-		/**	Get the determinant.
+		/**	Compute the determinant.
 				@return T the determinant.
 		*/
 		T getDeterminant() const;
@@ -563,49 +567,52 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
+				Instead of this operator isEqual should be used.
+				\Ref{isEqual}
 				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
 		*/
 		bool operator == (const TMatrix4x4& m) const; 
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two TMatrix4x4 differ in at least on component, {\bf false} otherwise
+				Instead of this operator isEqual should be used.
+				\Ref{isEqual}
+				@return bool, {\bf true} if the two TMatrix4x4 differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TMatrix4x4& m) const;
 
-		/** Test if this matrix is an identity matrix
-				(m11, m22, m33, m44 = 1 and
-				the other cells have the value 0;)
+		/** Test whether this matrix is an identity matrix.
+				(I.e. m11, m22, m33, m44 = 1 and the other cells have the value 0;)
 				@return bool, {\bf true} if identity matrix, {\bf false} otherwise
 		*/
 		bool isIdentity() const;
 
-		/** Test if this matrix is regular.
+		/** Test whether this matrix is regular.
 				@return bool, {\bf true} if (Determinant != 0), {\bf false} otherwise
 		*/
 		bool isRegular() const;
 
-		/** Test if this matrix is regular.
+		/** Test whether this matrix is singular.
 				@return bool, {\bf true} if (Determinant == 0), {\bf false} otherwise
 		*/
 		bool isSingular() const;
 
-		/** Test if this matrix is symmetric.
+		/** Test whether this matrix is symmetric.
 				(m12 = m21, m31 = m13, ...)
 				@return bool, {\bf true} if symmatric, {\bf false} otherwise
 		*/
 		bool isSymmetric() const;
 
-		/** Test if the lower triangular is zero.
+		/** Test whether the lower triangular is zero.
 				@return bool, {\bf true} if (m12 = m13 = m14 = m23 = m24 = m34 = 0), {\bf false} otherwise
 		*/
 		bool isLowerTriangular() const;
 
-		/** Test if the upper triangular is zero.
+		/** Test whether the upper triangular is zero.
 				@return bool, {\bf true} if (m21 = m31 = m32 = m41 = m42 = m43 = 0), {\bf false} otherwise
 		*/
 		bool isUpperTriangular() const;
 
-		/** Test if all cells but the diagonal are zero.
+		/** Test whether all cells but the diagonal are zero.
 				@return bool, {\bf true} or {\bf false}
 		*/
 		bool isDiagonal() const;
@@ -615,13 +622,18 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Test if instance is valid.
-				Always returns true
+		/**	Test whether instance is valid.
+				Always returns true.
 				@return bool {\bf true}
 		*/
 		bool isValid() const;
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
@@ -631,70 +643,70 @@ namespace BALL
 		//@{
 
 		/**
-				1. cell in the 1. row
+				1st cell in the 1st row
 		*/
 		T m11;
 		/**
-				2. cell in the 1. row
+				2nd cell in the 1st row
 		*/
 		T m12;
 		/**
-				3. cell in the 1. row
+				3rd cell in the 1st row
 		*/
 		T m13;
 		/**
-				4. cell in the 1. row
+				4th cell in the 1st row
 		*/
 		T m14;
 
 		/**
-				1. cell in the 2. row
+				1st cell in the 2nd row
 		*/
 		T m21;
 		/**
-				2. cell in the 2. row
+				2nd cell in the 2nd row
 		*/
 		T m22;
 		/**
-				3. cell in the 2. row
+				3rd cell in the 2nd row
 		*/
 		T m23;
 		/**
-				4. cell in the 2. row
+				4th cell in the 2nd row
 		*/
 		T m24;
 
 		/**
-				1. cell in the 3. row
+				1st cell in the 3rd row
 		*/
 		T m31;
 		/**
-				2. cell in the 3. row
+				2nd cell in the 3rd row
 		*/
 		T m32;
 		/**
-				3. cell in the 3. row
+				3rd cell in the 3rd row
 		*/
 		T m33;
 		/**
-				4. cell in the 3. row
+				4th cell in the 3rd row
 		*/
 		T m34;
 
 		/**
-				1. cell in the 4. row
+				1st cell in the 4th row
 		*/
 		T m41;
 		/**
-				2. cell in the 4. row
+				2nd cell in the 4th row
 		*/
 		T m42;
 		/**
-				3. cell in the 4. row
+				3rd cell in the 4th row
 		*/
 		T m43;
 		/**
-				4. cell in the 4. row
+				4th cell in the 4th row
 		*/
 		T m44;
 		//@}
@@ -2257,8 +2269,7 @@ namespace BALL
 	TVector3<T> operator * (const TMatrix4x4<T>& matrix, const TVector3<T>& vector);
 
 	/**	The Default TMatrix4x4 Type.
-			If double precision is not needed, {\tt TTMatrix4x4<float>} should
-			be used. It is predefined as {\tt TMatrix4x4} for convenience.
+			This default is predefined for convenience for those cases where single precision is sufficient.
 	*/
 	typedef TMatrix4x4<float> Matrix4x4;
 	//@}

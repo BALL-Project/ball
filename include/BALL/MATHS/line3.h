@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.24 2000/05/04 18:43:15 oliver Exp $
+// $Id: line3.h,v 1.25 2000/05/05 17:39:05 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -48,7 +48,7 @@ namespace BALL
 		//@{
 
 		/** form of parameter to describe the line:
-				{\tt 0} one Point and one Vector
+				{\tt 0} one Point and one Vector.
 				{\tt 1} two Points
 		*/
 		enum Form
@@ -63,7 +63,7 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				This method creates a new TLine3 object..
+				This method creates a new TLine3 object.
 		*/
 		TLine3()
 			:	p(),
@@ -85,8 +85,10 @@ namespace BALL
 		// form: PARAMETER (default) or TWO_POINTS
 
 		/**	Detailed constructor.
-				Create a new TLine3 object from a point and a vector
-				of from two points, dependent from Form.
+				Depending on form, create a new TLine3 object from a point and a vector
+				or from two points.
+				{\tt 0} one Point and one Vector\\
+				{\tt 1} two Points
 				@param	point assigned to {\tt p}
 				@param	vector assigned to {\tt d}
 				@param	form assigns form of parameter
@@ -113,7 +115,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Swap the contents of two lines.
+		/**	Swap the contents of two instances of lines.
 				@param	line the TLine3 to swap contents with
 		*/
 		void swap(TLine3& line)
@@ -127,7 +129,7 @@ namespace BALL
 			line.d = temp_vector;
 		}
 
-		/**	Assign from another TLine3.
+		/**	Assign from another instance of TLine3.
 				@param line	the TLine3 object to assign from
 		*/
 		void set(const TLine3& line)
@@ -137,7 +139,7 @@ namespace BALL
 		}
 
 		/**	Assign from one point and a vector
-				or from two points, dependent from form.
+				or from two points, depending on form.
 				@param	point assigned to {\tt p}
 				@param	vector assigned to {\tt d}
 				@param	form assigns form of parameter
@@ -154,7 +156,7 @@ namespace BALL
 		}
 
 		/**	Assignment operator.
-				Assign the components from another line.
+				Assign the components from another instance of line.
 				@param line the vector to assign from
 		**/
 		TLine3& operator = (const TLine3& line)
@@ -165,7 +167,7 @@ namespace BALL
 			return *this;
 		}
 
-		/**	Assign to another TLine3.
+		/**	Assign to another instance of TLine3.
 				Assigns the vector components to another vector.
 				@param line	the line to be assigned to
 		*/
@@ -175,10 +177,10 @@ namespace BALL
 			line.d = d;
 		}
 
-		/**	Assign to two {\tt TVector3}.
-				Type of componenents depends of form:
-				{\tt 0} two points
-				{\tt 1} one point and the vector component
+		/**	Assign to two instances of {\tt TVector3}.
+				Type of components depends on form.
+				If form is {\tt 0} two points, else 
+				{\tt 1} one point and the vector component.
 				@param	point the first point
 				@param	vector the second point or the vector component
 				@param	rh the h component
@@ -201,7 +203,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Normalize the vector- component.
+		/**	Normalize the vector component.
 				The vector is scaled with its length:
 				$\{x|y|z|\} *= \sqrt{x^2 + y^2 + z^2}$.
 				@exception DivisionByZero if the length of the vector is 0
@@ -232,7 +234,7 @@ namespace BALL
 			return (bool)(p != line.p || d != line.d);
 		}
 
-		/**	Test if a given point is a member of the line.
+		/**	Test whether a given point is a member of the line.
 				@return bool, {\bf true} or {\bf false}
 		*/
 		bool has(const TVector3<T>& point) const
@@ -264,8 +266,8 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Test if instance is valid.
-				Always returns true
+		/**	Test whether instance is valid.
+				Always returns true.
 				@return bool {\bf true}
 		*/
 		bool isValid() const
@@ -273,7 +275,12 @@ namespace BALL
 			return true;
 		}
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -295,26 +302,26 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Point- Component
+		/**	Point Component.
 		*/
 		TVector3<T> p;
 
-		/**	Vector- Component
+		/**	Vector Component.
 		*/
 		TVector3<T> d;
 		//@}
 	};
 
-	/**	Default line of type {\bf float}
+	/**	Default line of type {\bf float}.
 	*/
 	typedef TLine3<float> Line3;
 
 	/**	Stream operators of Line3
 	*/
 	//@{
-	/**	Input- Operator
-			reads two {\bf TVector3} obejcts from an {\tt istream} and
-			assigns them to {\tt d} and {\tt p}
+	/**	Input- Operator.
+			reads two objcts of type {\bf TVector3} from an {\tt istream} and
+			assigns them to {\tt d} and {\tt p}.
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TLine3<T>& line)
@@ -324,7 +331,7 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output-Operator
+	/**	Output-Operator.
 			Writes the two public attributes {\tt d} and {\tt p} to an output stream.
 			The values of the two vectors are enclosed in brackets.\\
 			{\bf Example:}\\

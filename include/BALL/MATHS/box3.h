@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.19 2000/05/04 11:06:32 amoll Exp $
+// $Id: box3.h,v 1.20 2000/05/05 17:39:04 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -45,14 +45,14 @@ namespace BALL
 		TBox3(const TBox3& box);
 
 		/**	Detailed constructor.
-				Create a new TBox3 object from two TVector3.
+				Create a new TBox3 object from two instances of TVector3.
 				@param	a assigned to {\tt a}
 				@param	b assigned to {\tt b}
 		*/
 		TBox3(const TVector3<T>& a, const TVector3<T>& b);
 
 		/**	Detailed constructor.
-				Create a new TBox3 object from six {\tt T} variables.
+				Create a new TBox3 object from six variables of type {\tt T}.
 				@param	ax assigned to {\tt a.x}
 				@param	ay assigned to {\tt a.y}
 				@param	az assigned to {\tt a.z}
@@ -77,18 +77,18 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Assign from another TBox3.
+		/**	Assign from another instance of TBox3.
 				@param vector	the TBox3 object to assign from
 		*/
 		void set(const TBox3& box);
 
-		/**	Assign from two vectors.
+		/**	Assign from two points.
 				@param lower the lower corner of the box
 				@param upper the upper corner of the box
 		*/
 		void set(const TVector3<T>& lower, const TVector3<T>& upper);
 
-		/**	Assign from six {\tt T} values.
+		/**	Assign from six values of type {\tt T}.
 				@param	ax assigned to {\tt a.x}
 				@param	ay assigned to {\tt a.y}
 				@param	az assigned to {\tt a.z}
@@ -101,12 +101,12 @@ namespace BALL
 			 const T& bx, const T& by, const T& bz);
 
 		/**	Assignment operator.
-				Assign the box components from another TBox3.
+				Assign the box components from another instance of TBox3.
 				@param box the TBox3 to assign from
 		**/
 		TBox3& operator = (const TBox3& box);
 
-		/**	Assign to another TBox3.
+		/**	Assign to another instance of TBox3.
 				Assigns the box components to another box.
 				@param box	the box to be assigned to
 		*/
@@ -128,7 +128,7 @@ namespace BALL
 		*/
 		void get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const;
 
-		/**	Swap the contents of two boxes.
+		/**	Swap the contents of two instances.
 				@param	box the box to swap contents with
 		*/
 		void swap(TBox3& box);
@@ -138,12 +138,12 @@ namespace BALL
 		/**	@name	Accessors
 		*/
 		//@{
-		/**	Return the surface of the box.
+		/**	Calculate the surface area.
 				@return T the surface
 		*/
 		T getSurface() const;
 
-		/**	Return the volume of the box.
+		/**	Calculate the volume.
 				@return T the volume
 		*/
 		T getVolume() const;
@@ -163,10 +163,10 @@ namespace BALL
 		*/
 		T getDepth() const;
 	
-		/**	Join the box with another.
-				Instance is set to to the box containing
-				both, the box and a given box 
-				@param	box the box to contain
+		/**	Join the box with an other.
+				Instance is set to the box containing
+				both, the box and a given box.
+				@param	box the box containing both boxes
 		*/
 		void join(const TBox3& box);
 		//@}
@@ -181,7 +181,7 @@ namespace BALL
 		bool operator == (const TBox3& box) const;
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two boxes differ in at least on component, {\bf false} otherwise
+				@return bool, {\bf true} if the two boxes differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TBox3& box) const;
 		//@}
@@ -190,13 +190,18 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Test if instance is valid.
-				Always returns true
+		/**	Test whether instance is valid.
+				Always returns true.
 				@return bool {\bf true}
 		*/
 		bool isValid() const;
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
@@ -205,11 +210,11 @@ namespace BALL
 		*/
 		//@{
 
-		/**	first point of the box
+		/**	First point of the box.
 		*/
 		TVector3<T> a;
 
-		/**	second point of the box
+		/**	Second point of the box.
 		*/
 		TVector3<T> b;
 		//@}
@@ -437,8 +442,8 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
-			reads in two TVector3: a, b
+	/**	Input- Operator.
+			Reads in two objects of type TVector3 a and b 
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TBox3<T>& box)
@@ -448,10 +453,9 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output Operator
+	/**	Output Operator.
 			Writes the two coordinates of the box to an output stream.
-			The first vector is prefixed by a left bracket, the second 
-			vector is followed by a closing bracket.\\
+			The vectors are enclosed by brackets.\\
 			{\bf Example:}\\
 			{\tt ((0 1 2) (7.5 3.4 10))}\\
 			@see TVector3::operator<<

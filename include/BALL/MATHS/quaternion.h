@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.20 2000/05/04 13:53:46 oliver Exp $
+// $Id: quaternion.h,v 1.21 2000/05/05 17:39:06 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -27,7 +27,7 @@ namespace BALL
 			
 
 	/**	Generic Quaternion Class.
-      {\bf Definition:} \URL{BALL/MATHS/.h}
+      {\bf Definition:} \URL{BALL/MATHS/quaternion.h}
       \\
 	*/
 	template <typename T>
@@ -44,7 +44,7 @@ namespace BALL
 
 		/**	Default constructor.
 				This method creates a new TQuaternion object. The axis-components
-				are initialized to {\tt 0}, the angle is set to  {\tt 1}.
+				are initialized to {\tt 0}, the angle is set to {\tt 1}.
 		*/
 		TQuaternion();
 
@@ -55,7 +55,7 @@ namespace BALL
 		TQuaternion(const TQuaternion& q);
 
 		/**	Detailed constructor.
-				Create a new TQuaternion object from a TVector3 and an angle.
+				Create a new TQuaternion object from a variable of type {\em TVector3} and an angle.
 				@param axis assigned to the axis
 				@param angle assigned to the angle
 		*/
@@ -134,7 +134,8 @@ namespace BALL
 		TVector3<T> getAxis();
 
 		/**	Get the rotation matrix.
-				@return TMatrix4x4 the matrix
+				@param m the matrix to compute from
+				@return TMatrix4x4 the rotation matrix
 		*/
 		TMatrix4x4<T>& getRotationMatrix(TMatrix4x4<T>& m) const;
 
@@ -186,7 +187,12 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
@@ -194,20 +200,16 @@ namespace BALL
 		/**	@name	Attributes
 		*/
 		//@{
-		/**	x component of the axis.
-		*/
+		/**	x component of the axis. */
 		T i;
 
-		/**	y component of the axis.
-		*/
+		/**	y component of the axis. */
 		T j;
 
-		/**	z component of the axis.
-		*/
+		/**	z component of the axis. */
 		T k;
 
-		/**	angle component.
-		*/
+		/**	Angle component. */
 		T angle;
 		//@}
 
@@ -497,6 +499,12 @@ namespace BALL
 		return (bool)(i != q.i || j != q.j || k != q.k || angle != q.angle);
 	}
 
+	/**	Input Operator.
+			Read the values of the quaternion from an input stream.
+			@param s	the input stream
+			@param q  the quaternion to read 
+
+	*/	
 	template <typename T>
 	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
 	{
@@ -509,9 +517,12 @@ namespace BALL
 	/**	Output Operator.
 			Write the values of the quaternion to an output stream.
 			The values of {\tt i}, {\tt j}, {\tt k}, and {\tt angle} are written to
-			an output stream. They are enclose in brackets.\\
+			an output stream. They are enclosed in brackets.\\
 			{\bf Example:}\\
 			{\tt (0.32 0.45 0.12 1.0)}
+			@param s	the output stream
+			@param q  the quaternion to write 
+
 	*/	
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)

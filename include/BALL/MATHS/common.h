@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.10 2000/05/04 11:06:33 amoll Exp $
+// $Id: common.h,v 1.11 2000/05/05 17:39:04 amoll Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -121,7 +121,7 @@ namespace BALL
 			return BALL_SGN(t);
 		}
 
-		/**	Test if a number is finite.
+		/**	Test whether a number is finite.
 				@param	t the number
 				@return bool, {\bf true} if {\tt t} is finite
 		*/
@@ -132,7 +132,7 @@ namespace BALL
 			return (bool)finite(t);
 		}
 
-		/**	Test if a number is infinite.
+		/**	Test whether a number is infinite.
 				@param	t the number
 				@return bool, {\bf true} if {\tt t} equals {\tt inf} or {\tt -inf}
 		*/
@@ -143,7 +143,7 @@ namespace BALL
 			return (bool)(!Maths::isFinite(t) && !Maths::isNan(t));
 		}
 
-		/**	Test if a value is not a number.
+		/**	Test whether a value is not a number.
 				@param	t the number
 				@return bool, {\bf true} if t equals {\tt nan}
 		*/
@@ -154,7 +154,7 @@ namespace BALL
 			return (bool)isnan(t);
 		}
 
-		/**	Test if a number is zero.
+		/**	Test whether a number is zero.
 				@param	t the number
 				@return bool, {\bf true} if the absolute value of {\tt t} is below \Ref{Constants::EPSILON}
 		*/
@@ -165,7 +165,7 @@ namespace BALL
 			return (abs(t) < Constants::EPSILON);
 		}
 
-		/**	Test if a number is not zero.
+		/**	Test whether a number is not zero.
 				@param	t the number
 				@return bool, {\bf true}, if the absolute value of {\tt t} is at leas \Ref{Constants::EPSILON}
 		*/
@@ -176,7 +176,7 @@ namespace BALL
 			return (abs(t) >= Constants::EPSILON);
 		}
 
-		/**	Test if a number is equal to another.
+		/**	Test whether a number is equal to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is below \Ref{Constants::EPSILON}
@@ -188,7 +188,7 @@ namespace BALL
 			return (abs(a - b) < Constants::EPSILON);
 		}
 
-		/**	Test if a number is not equal to another.
+		/**	Test whether a number is not equal to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is at least \Ref{Constants::EPSILON}
@@ -200,7 +200,7 @@ namespace BALL
 			return (abs(a - b) >= Constants::EPSILON);
 		}
 
-		/**	Test if a number is less compared to another.
+		/**	Test whether a number is less compared to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is smaller than {\tt b}
@@ -212,7 +212,7 @@ namespace BALL
 			return (a - b <= -Constants::EPSILON);
 		}
 
-		/**	Test if a number is less or equal compared to another.
+		/**	Test whether a number is less or equal compared to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is less or equal {\tt b}
@@ -224,7 +224,7 @@ namespace BALL
 			return (a - b < Constants::EPSILON);
 		}
 
-		/**	Test if a number is greater or equal compared to another.
+		/**	Test whether a number is greater or equal compared to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is greater or equal than {\tt b}
@@ -236,7 +236,7 @@ namespace BALL
 			return (a - b > -Constants::EPSILON);
 		}
 
-		/**	Test if a number is greater compared to another.
+		/**	Test whether a number is greater compared to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is greater than {\tt b}
@@ -282,7 +282,7 @@ namespace BALL
 			return (Maths::isLess(a, b) ? -1 : Maths::isEqual(a, b) ? 0 : 1);
 		}
 
-		/**	Test if two numbers are close each other.
+		/**	Test whether two numbers are close each other.
 				@param	a the first number
 				@param	b the second number
 				@param	max_diff the maximum allowed difference between the two numbers

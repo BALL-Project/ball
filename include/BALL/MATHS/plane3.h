@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.15 2000/05/04 11:06:34 amoll Exp $
+// $Id: plane3.h,v 1.16 2000/05/05 17:39:05 amoll Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -30,7 +30,7 @@ namespace BALL
 {
 
 	/**	Threedimensional plane.
-      {\bf Definition:} \URL{BALL/MATHS/.h}
+      {\bf Definition:} \URL{BALL/MATHS/plane3.h}
 			A plane is defined by a point and its normal.
 	*/
 
@@ -75,7 +75,7 @@ namespace BALL
 		}
 
 		/**	Detailed constructor.
-				Create a new TPlane3 object from a point and the normal.
+				Create a new instances of TPlane3 from a point and the normal.
 				@param	point assigned to {\tt p}
 				@param	normal assigned to {\tt n}
 		*/
@@ -86,7 +86,7 @@ namespace BALL
 		}
 
 		/**	Detailed constructor.
-				Create a new TPlane3 object from three points.
+				Create a new instance of TPlane3 from three points.
 				@param	a assigned to {\tt p}
 				@param	a, b, c are used to calculate the normal {\tt n}
 		*/
@@ -148,7 +148,7 @@ namespace BALL
 			plane.n = temp_vector;
 		}
 
-		/**	Swap the contents of two planes.
+		/**	Swap the contents of two instances of planes.
 				@param vector the plane to swap contents with
 				@param bool ignored - just for interface consistency
 		*/
@@ -180,7 +180,7 @@ namespace BALL
 		}
 
 		/**	Assignment operator.
-				Assign the components from another plane.
+				Assign the components from another instance of plane.
 				@param plane the plane to assign from
 		**/
 		TPlane3& operator = (const TPlane3 &plane)
@@ -191,7 +191,7 @@ namespace BALL
 			return *this;
 		}
 
-		/**	Assign to another Plane3.
+		/**	Assign to another instance of Plane3.
 				Assigns the components to another plane.
 				@param plane the plane to be assigned to
 		*/
@@ -270,7 +270,7 @@ namespace BALL
 			return (bool)(p != plane.p || n != plane.n);
 		}
 
-		/**	Test if a given point is a member of the plane.
+		/**	Test whether a given point is a member of the plane.
 				@param point the point to be tested
 				@return bool, {\bf true} or {\bf false}
 		*/
@@ -279,7 +279,7 @@ namespace BALL
 			return Maths::isZero(n * (point - p));
 		}
 
-		/**	Test if a given line is a member of the plane.
+		/**	Test whether a given line is a member of the plane.
 				@param line the line to be tested
 				@return bool, {\bf true} or {\bf false}
 		*/
@@ -293,7 +293,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Test if instance is valid.
+		/**	Test whether instance is valid.
 				always retruns true
 				@return bool {\bf true}
 		*/
@@ -302,7 +302,12 @@ namespace BALL
 			return true;
 		}
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -322,11 +327,11 @@ namespace BALL
 		/**	@name	Attributes
 		*/
 		//@{
-		/**	the point
+		/**	The point
 		*/
 		TVector3<T> p;
 
-		/**	the normal
+		/**	The normal
 		*/
 		TVector3<T> n;
 		//@}
@@ -341,7 +346,7 @@ namespace BALL
 	//@{
 
 	/**	Input- Operator
-			reads in two TVector3 and a {\bf T} value: p, n, value
+			reads in two instances of TVector3: {\bf p, n}
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
@@ -351,8 +356,8 @@ namespace BALL
 		return s;
 	}
 
-	/**	Input- Operator
-			prints out two TVector3 and a {\bf T} value: p, n, value
+	/**	Output- Operator
+			Prints two instances of TVector3: {\bf p, n}
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)

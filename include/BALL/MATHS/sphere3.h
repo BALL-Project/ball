@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.18 2000/05/04 11:06:34 amoll Exp $
+// $Id: sphere3.h,v 1.19 2000/05/05 17:39:06 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 
 	/** Generic Sphere Class.
-      {\bf Definition:} \URL{BALL/MATHS/.h}
+      {\bf Definition:} \URL{BALL/MATHS/sphere3.h}
       \\
 	*/
 	template <typename T>
@@ -84,7 +84,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Swap the contents of two Sphere3.
+		/**	Swap the contents of two instances of Sphere3.
 				@param	sphere3 the sphere3 to swap contents with
 		*/
 		void swap(TSphere3& sphere3)
@@ -98,7 +98,7 @@ namespace BALL
 			sphere3.radius = temp;
 		}
 
-		/**	Assign from another Sphere3.
+		/**	Assign from another instance of Sphere3.
 				@param sphere3	the Sphere3 object to assign from
 		*/
 		void set(const TSphere3& sphere)
@@ -107,7 +107,7 @@ namespace BALL
 			radius = sphere.radius;
 		}
 
-		/**	Assign to a TVector3 and a variable of type {\tt T}.
+		/**	Assign to an instance of TVector3 and a variable of type {\tt T}.
 				@param point the point to assign from
 				@param rhs the radius to assign from
 
@@ -119,7 +119,7 @@ namespace BALL
 		}
 
 		/**	Assignment operator.
-				Assign the components from another Sphere.
+				Assign the components from another instance of Sphere.
 				@param sphere3 the sphere to assign from
 		**/
 		TSphere3& operator =
@@ -131,7 +131,7 @@ namespace BALL
 			return *this;
 		}
 
-		/**	Assign to another Sphere.
+		/**	Assign to another instance of Sphere.
 				Assigns the components to another Sphere.
 				@param sphere	the vector to be assigned to
 		*/
@@ -141,7 +141,7 @@ namespace BALL
 			sphere3.radius = radius;
 		}
 
-		/**	Assign to a Vector3 and a {\tt T} variable.
+		/**	Assign to an instance of Vector3 and a variable of type {\tt T}.
 				@param	point the point component
 				@param	rhs the radius component
 		*/
@@ -172,7 +172,7 @@ namespace BALL
 			return (bool)(p != sphere3.p || Maths::isNotEqual(radius, sphere3.radius));
 		}
 
-		/**	Test if a given point is a member of the Sphere.
+		/**	Test whether a given point is a member of the Sphere.
 				Optional it can be testet, if it is a member of the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
@@ -188,7 +188,7 @@ namespace BALL
 			}
 		}
 
-		/**	Test if the Sphere is empty (radius = 0).
+		/**	Test whether the Sphere is empty (radius = 0).
 				@return bool, {\bf true} or {\bf false}
 		*/
 		bool isEmpty() const
@@ -201,7 +201,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Test if instance is valid.
+		/**	Test whether instance is valid.
 				Always returns true
 				@return bool {\bf true}
 		*/
@@ -210,7 +210,12 @@ namespace BALL
 			return true;
 		}
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
+		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -247,8 +252,8 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
-			reads in a TVector3 and a {\bf T} value : p, radius
+	/**	Input- Operator.
+			Reads in an instance of TVector3 and a {\bf T} value : p, radius
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
@@ -259,7 +264,7 @@ namespace BALL
 	}
 
 	/**	Output Operator.
-			Write the contentsp of {\tt p} and {\tt radius} to an output stream.
+			Write the contents of {\tt p} and {\tt radius} to an output stream.
 			The values are enclose in brackets.\\
 			{\bf Example:}\\
 			{\tt ((0 1 1.5) 0.4)}

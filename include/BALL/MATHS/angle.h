@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.25 2000/05/04 11:06:32 amoll Exp $
+// $Id: angle.h,v 1.26 2000/05/05 17:39:04 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -332,7 +332,7 @@ namespace BALL
 		*/
 		bool operator > (const TAngle& angle) const;
 
-		/**	Test if two angles are equivalent.
+		/**	Test whether two angles are equivalent.
 				Both angles are normalized and afterwards compared with Maths::isEqual
 				instead of comparing the values directly.
 				@param angle the angle to compare with
@@ -346,13 +346,17 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Test if instance is valid.
+		/**	Test whether instance is valid.
 				Always returns true
 				@return bool {\bf true}
 		*/
 		bool isValid () const;
 
-		/**
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to 
+				the output ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state of {\em *this}
+				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}

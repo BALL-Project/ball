@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.29 2000/05/04 20:50:59 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.30 2000/05/05 17:39:04 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -954,7 +954,7 @@ namespace BALL
 		return true;
 	}
 
-	/**	Test if two vector3 are collinear
+	/**	Test whether two vector3 are collinear
 			@param	a the first vector3
 			@param	b the second vector3
 			@return bool, true or false
@@ -966,7 +966,7 @@ namespace BALL
 		return (a % b).isZero();
 	}
 
-	/**	Test if three vector3 are complanar
+	/**	Test whether three vector3 are complanar
 			@param	a the first vector3
 			@param	b the second vector3
 			@param	c the third vector3
@@ -979,7 +979,7 @@ namespace BALL
 		return Maths::isZero(TVector3<T>::getTripleProduct(a, b, c));
 	}
 
-	/**	Test if four vector3 are complanar
+	/**	Test whether four vector3 are complanar
 			@param	a the first vector3
 			@param	b the second vector3
 			@param	c the third vector3
@@ -993,7 +993,7 @@ namespace BALL
 		return isComplanar(a - b, a - c, a - d);
 	}
 
-	/**	Test if two vector3 are orthogonal
+	/**	Test whether two vector3 are orthogonal
 			@param	a the first vector3
 			@param	b the second vector3
 			@return bool, true or false
@@ -1005,7 +1005,7 @@ namespace BALL
 		return Maths::isZero(a * b);
 	}
 
-	/**	Test if a vector3 and a line are orthogonal
+	/**	Test whether a vector3 and a line are orthogonal
 			@param	vector the vector
 			@param	line the line
 			@return bool, true or false
@@ -1017,7 +1017,7 @@ namespace BALL
 		return Maths::isZero(vector * line.d);
 	}
 
-	/**	Test if a line and a vector3 are orthogonal
+	/**	Test whether a line and a vector3 are orthogonal
 			@param	line the line
 			@param	vector the vector
 			@return bool, true or false
@@ -1029,7 +1029,7 @@ namespace BALL
 		return isOrthogonal(vector, line);
 	}
 
-	/**	Test if two lines are orthogonal.
+	/**	Test whether two lines are orthogonal.
 			@param	a the first line
 			@param	b the second line
 			@return bool, true or false
@@ -1041,7 +1041,7 @@ namespace BALL
 		return Maths::isZero(a.d * b.d);
 	}
 
-	/**	Test if a vector3 and a plane are orthogonal.
+	/**	Test whether a vector3 and a plane are orthogonal.
 			@param	vector the vector3
 			@param	plane the plane
 			@return bool, true or false
@@ -1053,7 +1053,7 @@ namespace BALL
 		return isCollinear(vector, plane.n);
 	}
 
-	/**	Test if a plane and a vector3 are orthogonal.
+	/**	Test whether a plane and a vector3 are orthogonal.
 			@param	plane the plane
 			@param	vector the vector3
 			@return bool, true or false
@@ -1065,7 +1065,7 @@ namespace BALL
 		return isOrthogonal(vector, plane);
 	}
 
-	/**	Test if two planes are orthogonal.
+	/**	Test whether two planes are orthogonal.
 			@param	a the first plane
 			@param	b the second plane
 			@return bool, true or false
@@ -1077,7 +1077,7 @@ namespace BALL
 		return Maths::isZero(a.n * b.n);
 	}
 
-	/**	Test if a line is intersecting a point.
+	/**	Test whether a line is intersecting a point.
 			@param	point the point
 			@param	line the line
 			@return bool, true or false
@@ -1089,7 +1089,7 @@ namespace BALL
 		return Maths::isZero(GetDistance(point, line));
 	}
 
-	/**	Test if a line is intersecting a point.
+	/**	Test whether a line is intersecting a point.
 			@param	line the line
 			@param	point the point
 			@return bool, true or false
@@ -1101,7 +1101,7 @@ namespace BALL
 		return isIntersecting(point, line);
 	}
 
-	/**	Test if two line are intersecting.
+	/**	Test whether two line are intersecting.
 			@param	a the first line
 			@param	b the second line
 			@return bool, true or false
@@ -1113,7 +1113,7 @@ namespace BALL
 		return Maths::isZero(GetDistance(a, b));
 	}
 
-	/**	Test if a point is intersecting a plane.
+	/**	Test whether a point is intersecting a plane.
 			@param	point the point
 			@param	plane the plane
 			@return bool, true or false
@@ -1125,7 +1125,7 @@ namespace BALL
 		return Maths::isZero(GetDistance(point, plane));
 	}
 
-	/**	Test if a point is intersecting a plane.
+	/**	Test whether a point is intersecting a plane.
 			@param	plane the plane
 			@param	point the point
 			@return bool, true or false
@@ -1137,7 +1137,7 @@ namespace BALL
 		return isIntersecting(point, plane);
 	}
 
-	/**	Test if a line is intersecting a plane.
+	/**	Test whether a line is intersecting a plane.
 			@param	line the line
 			@param	plane the plane
 			@return bool, true or false
@@ -1149,7 +1149,7 @@ namespace BALL
 		return Maths::isZero(GetDistance(line, plane));
 	}
 
-	/**	Test if a plane is intersecting a line.
+	/**	Test whether a plane is intersecting a line.
 			@param	plane the plane
 			@param	line the line
 			@return bool, true or false
@@ -1161,7 +1161,7 @@ namespace BALL
 		return isIntersecting(line, plane);
 	}
 
-	/**	Test if two planes are intersecting.
+	/**	Test whether two planes are intersecting.
 			@param	a the first plane
 			@param	b the second plane
 			@return bool, true or false
@@ -1173,7 +1173,7 @@ namespace BALL
 		return Maths::isZero(GetDistance(a, b));
 	}
 
-	/**	Test if a line and a plane are parallel.
+	/**	Test whether a line and a plane are parallel.
 			@param	line the line
 			@param	plane the plane
 			@return bool, true or false
@@ -1185,7 +1185,7 @@ namespace BALL
 		return isOrthogonal(line.d, plane.n);
 	}
 
-	/**	Test if a plane and a line are parallel.
+	/**	Test whether a plane and a line are parallel.
 			@param	plane the plane
 			@param	line the line
 			@return bool, true or false
@@ -1197,7 +1197,7 @@ namespace BALL
 		return isParallel(line, plane);
 	}
 
-	/**	Test if two planes are parallel.
+	/**	Test whether two planes are parallel.
 			@param	a the first plane
 			@param	b the second plane
 			@return bool, true or false
