@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.C,v 1.3 2003/12/15 14:54:53 amoll Exp $
+// $Id: renderer.C,v 1.4 2003/12/15 14:57:47 amoll Exp $
 
 #include <BALL/VIEW/RENDERING/renderer.h>
 #include <BALL/VIEW/KERNEL/stage.h>
@@ -48,7 +48,6 @@ namespace BALL
 			throw()
 		{
 			if 			(RTTI::isKindOf<Sphere>(*object))  					renderSphere_(*(const 									Sphere*) object);
-			else if (RTTI::isKindOf<Tube>(*object))  	 					renderTube_(*(const   										Tube*) object);
 			else if (RTTI::isKindOf<TwoColoredLine>(*object))   renderTwoColoredLine_(*(const   TwoColoredLine*) object);
 			else if (RTTI::isKindOf<TwoColoredTube>(*object))   renderTwoColoredTube_(*(const   TwoColoredTube*) object);
 			else if (RTTI::isKindOf<Point>(*object))  	 				renderPoint_(*(const  					 				 Point*) object);
@@ -58,6 +57,7 @@ namespace BALL
 			else if (RTTI::isKindOf<Mesh>(*object))   					renderMesh_(*(const   										Mesh*) object);
 			else if (RTTI::isKindOf<Disc>(*object))   					renderDisc_(*(const   										Disc*) object);
 			else if (RTTI::isKindOf<Line>(*object))  	 					renderLine_(*(const   										Line*) object);
+			else if (RTTI::isKindOf<Tube>(*object))  	 					renderTube_(*(const   										Tube*) object);
 			// ... add more types of GeometricObjects here
 			else
 			{
