@@ -1,4 +1,4 @@
-// $Id: claverieParameter.C,v 1.2 2000/09/02 14:34:12 oliver Exp $
+// $Id: claverieParameter.C,v 1.3 2000/09/25 11:17:54 anker Exp $
 
 #include <BALL/SOLVATION/claverieParameter.h>
 
@@ -54,8 +54,14 @@ namespace BALL
 	bool ClaverieParameter::hasParameters(Atom::Type solvent_type,
 			Atom::Type solute_type) const
 	{
-		// BAUSTELLE!
-		return true;
+		if (indices_.has(solvent_type) && indices_.has(solute_type))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 

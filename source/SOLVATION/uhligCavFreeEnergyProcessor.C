@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.C,v 1.1 2000/08/31 18:48:36 anker Exp $
+// $Id: uhligCavFreeEnergyProcessor.C,v 1.2 2000/09/25 11:17:55 anker Exp $
 
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -37,7 +37,8 @@ namespace BALL
 
 		// first check for user settings
 
-		int verbosity = (int) options.getInteger(Option::VERBOSITY);
+		// for now, there is nothing to report
+		//int verbosity = (int) options.getInteger(Option::VERBOSITY);
 		// the solvent radius [ A ]
 		double solvent_radius = options.getReal(Option::PROBE_RADIUS);
 		// the surface tension [ J/mol/A^2 ]

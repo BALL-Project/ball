@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.8 2000/09/22 16:29:06 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.9 2000/09/25 11:17:55 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -218,25 +218,25 @@ namespace BALL
 
 		if (from_index == to_index)
 		{
-			return numericallyIntegrateInterval(interval, coeffs, from_index);
+			return numericallyIntegrateInterval(interval);
 		}
 
 		// if we didn't return, the indices weren't equal.
 
 		interval.second = poly.getInterval(from_index).second;
-		double val = numericallyIntegrateInterval(interval, coeffs, from_index);
+		double val = numericallyIntegrateInterval(interval);
 
 		for (Size k = from_index + 1; k < to_index; ++k)
 		{
 			coeffs = poly.getCoefficients(k);
 			interval = poly.getInterval(k);
-			val += numericallyIntegrateInterval(interval, coeffs, k);
+			val += numericallyIntegrateInterval(interval);
 		}
 
 		coeffs = poly.getCoefficients(to_index);
 		interval = poly.getInterval(to_index);
 		interval.second = to;
-		val += numericallyIntegrateInterval(interval, coeffs, to_index);
+		val += numericallyIntegrateInterval(interval);
 		
 		return val;
 	}
@@ -263,15 +263,14 @@ namespace BALL
 	}
 
 
-	double PairExpRDFIntegrator::numericallyIntegrateInterval(Interval
-			interval, Coefficients a, Position index) const
+	double PairExpRDFIntegrator::numericallyIntegrateInterval(Interval interval) 
+		const
 	{
 
 		// BAUSTELLE
 		int samples = (int) options.getInteger(Option::SAMPLES);
 		int verbosity = (int) options.getInteger(Option::VERBOSITY);
 
-		double val = 0.0;
 		double r = interval.first;
 		double R = interval.second;
 		double b = alpha_/R_ij_o_;

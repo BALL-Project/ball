@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.5 2000/09/22 16:29:06 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.6 2000/09/25 11:17:55 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -172,9 +172,7 @@ namespace BALL
 		double R_j = 0.0; // [ A ]
 		// energy contributions of one triangle
 		double e_ij = 0.0; // [ ? ]
-		// energy contributions of one solvent atom type
-		double E_i = 0.0;
-		// total dispersive and repulsive energy
+		// different energy contributions 
 		double E = 0.0;
 		double E_D = 0.0;
 		double E_R = 0.0;
@@ -206,8 +204,6 @@ namespace BALL
 		double r_k;
 		Vector3 atom_center;
 		Vector3 sphere_center;
-		Surface* current_surface;
-		char tmp[100];
 
 		//
 		std::pair<float, float> claverie;
