@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.C,v 1.18 2005/02/18 12:50:51 amoll Exp $
+// $Id: lennardJones.C,v 1.19 2005/02/18 13:06:53 amoll Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -280,7 +280,7 @@ namespace BALL
 				Index index = (Index)(i + number_of_atom_types_ * j);
 				Index sym_index = (Index)(j + number_of_atom_types_ * i);
 
-				if ((is_defined_[j] == true) && (is_defined_[i]))
+				if (is_defined_[j] && is_defined_[i])
 				{
 					// calculate the values for A and B if in eps/R format
 					if (format_ == EPSILON_R_FORMAT)
@@ -350,9 +350,8 @@ namespace BALL
 	}
 
 
-	bool LennardJones::assignParameters
-		(LennardJones::Values& parameters,
-		 Atom::Type I, Atom::Type J) const throw()
+	bool LennardJones::assignParameters(LennardJones::Values& parameters, Atom::Type I, Atom::Type J) const 
+		throw()
 	{
 		if (hasParameters(I, J)) 
 		{
@@ -369,8 +368,10 @@ namespace BALL
 	bool LennardJones::operator == (const LennardJones& lj) const throw()
 	{
 		return (ParameterSection::operator == (lj)
-						&& (A_ == lj.A_) && (B_ == lj.B_)
-						&& (Aij_ == lj.Aij_) && (Bij_ == lj.Bij_));
+						&& (A_ 		== lj.A_) 
+						&& (B_ 		== lj.B_)
+						&& (Aij_ 	== lj.Aij_) 
+						&& (Bij_ 	== lj.Bij_));
 	}
 	 
 } // namespace BALL
