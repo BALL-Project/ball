@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.17 2004/02/23 17:58:42 oliver Exp $
+// $Id: cartoonModel.C,v 1.18 2004/02/23 18:49:58 anhi Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -168,7 +168,30 @@ namespace BALL
 					}
 				}
 			}
+			
+			// an additional smoothing run...
+			for (Position i=0; i<peptide_normals.size()-1; i++)
+			{
+				// To smooth the strand representation a bit, we iterate over all normal
+				// vectors and compute the angle in between them.
+				// Then we reduce the angle by an appropriate rotation to a third of the
+				// original angle.
+				Vector3 rotaxis = (peptide_normals[i]%peptide_normals[i+1]);
 
+				if (rotaxis.getSquareLength() > 1e-2)
+				{
+					Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
+					Angle new_angle = Angle(2./3.*current);
+
+					Angle diff_angle = new_angle - current;
+					Matrix4x4 rotmat;
+
+					rotmat.rotate(diff_angle, rotaxis);
+
+					peptide_normals[i+1] = rotmat * peptide_normals[i+1];
+				}
+			}
+			
 			// put first four points into the mesh (and first two triangles)
 			Vector3 right = spline_[first_c*9+1] - spline_[first_c*9];
 
