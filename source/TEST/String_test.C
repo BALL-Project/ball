@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.5 1999/12/17 12:42:13 oliver Exp $
+// $Id: String_test.C,v 1.6 1999/12/19 18:46:47 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.5 1999/12/17 12:42:13 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.6 1999/12/19 18:46:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -163,6 +163,7 @@ CHECK(String::String(strstream))
 std::strstream instream;
 instream << "ABC" << std::ends << "DEF";
 s2 = new String(instream);
+TEST_NOT_EQUAL(s2, 0)
 TEST_EQUAL(*s2, "ABC")
 delete s2;
 s2 = new String(instream);

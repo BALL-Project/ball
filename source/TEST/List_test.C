@@ -1,0 +1,29 @@
+// $Id: List_test.C,v 1.1 1999/12/19 18:46:47 oliver Exp $
+#include <BALL/CONCEPT/classTest.h>
+
+///////////////////////////
+
+#include <BALL/DATATYPE/list.h>
+
+///////////////////////////
+
+START_TEST(List<T>, "$Id: List_test.C,v 1.1 1999/12/19 18:46:47 oliver Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+using namespace BALL;
+
+List<int>*	lst_ptr;
+CHECK(List<int>::List())											
+lst_ptr = new List<int>;
+TEST_NOT_EQUAL(lst_ptr, 0)
+RESULT
+
+CHECK(List<int>::~List())
+delete lst_ptr;
+RESULT
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+END_TEST
