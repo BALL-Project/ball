@@ -235,36 +235,6 @@
 		<Filter
 			Name="Quelldateien"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
-			<File
-				RelativePath="libView.cpp">
-			</File>
-			<File
-				RelativePath="stdafx.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
-				</FileConfiguration>
-			</File>
 			<Filter
 				Name="DATATYPE"
 				Filter="">
@@ -1078,40 +1048,6 @@
 		<Filter
 			Name="Headerdateien"
 			Filter="h;hpp;hxx;hm;inl;inc">
-			<File
-				RelativePath="libView.h">
-			</File>
-			<File
-				RelativePath="stdafx.h">
-			</File>
-			<Filter
-				Name="DATATYPE"
-				Filter="">
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\colorExtension2.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\colorHSV.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\colorRGBA.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\colorTable.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\colorUnit.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\colorUnitHue.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\vertex1.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\vertex2.h">
-				</File>
-			</Filter>
 			<Filter
 				Name="DIALOGS"
 				Filter="">
@@ -2565,105 +2501,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\threads.h">
-				</File>
-			</Filter>
-			<Filter
-				Name="MODELS"
-				Filter="">
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\atomBondModelBaseProcessor.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\backboneModel.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\ballAndStickModel.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\cartoonModel.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\colorProcessor.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\forceModel.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\HBondModel.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\lineModel.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\modelProcessor.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\standardColorProcessor.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\surfaceModel.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\vanDerWaalsModel.h">
-				</File>
-			</Filter>
-			<Filter
-				Name="RENDERING"
-				Filter="">
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glDisplayList.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glQuadricObject.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glRenderer.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\POVRenderer.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\renderer.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\VRMLRenderer.h">
-				</File>
-			</Filter>
-			<Filter
-				Name="PRIMITIVES"
-				Filter="">
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\box.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\disc.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\label.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\line.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\mesh.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\point.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\simpleBox.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\sphere.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\tube.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\twoColoredLine.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\twoColoredTube.h">
 				</File>
 			</Filter>
 			<Filter
