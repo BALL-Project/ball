@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.19 2000/12/15 21:24:50 amoll Exp $
+// $Id: forceField.C,v 1.20 2001/05/16 01:46:18 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -384,6 +384,11 @@ namespace BALL
 
 		// update use_selection_
 		use_selection_ = system_->containsSelection();
+
+		// check whether the selection changed since the last call
+		// to update and call update oterwise
+		// if (update_time_stamp_ )
+		// BAUSTELLE
 
 		// call each component and add their energies
 		vector<ForceFieldComponent*>::iterator		it;
