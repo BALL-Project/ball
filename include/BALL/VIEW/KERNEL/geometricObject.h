@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.10 2000/12/19 22:06:25 oliver Exp $
+// $Id: geometricObject.h,v 1.11 2000/12/20 21:41:26 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -183,9 +183,11 @@ namespace BALL
 			*/
 			//@{
 
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 			
