@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.84 2000/04/21 12:46:08 oliver Exp $
+dnl    $Id: configure.in,v 1.85 2000/04/22 10:03:25 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2501,7 +2501,11 @@ else
 	dnl move that damned file only if it differs from the previous
 	dnl version. Otherwise we have to rebuild _everything_ after each configure
 	dnl
-	if test "`diff config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
+	if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
+		if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
+			${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+		fi
+	else 
 		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 	fi
 fi
