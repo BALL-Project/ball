@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.11 2002/01/13 19:57:19 oliver Exp $
+dnl    $Id: configure.in,v 1.12 2002/01/15 03:22:58 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1013,7 +1013,7 @@ if test "${HAS_GPLUSPLUS}" = "true" ; then
 	MAKEDEP_CXX_OPTS="-M"
 	CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
-	CXXFLAGS_O="${CXXFLAGS_O} -O3"
+	CXXFLAGS_O="${CXXFLAGS_O} -O2"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
 	dnl  We do not need the -fPIC flag for CYGWIN,

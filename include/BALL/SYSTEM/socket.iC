@@ -1,4 +1,4 @@
-// $Id: socket.iC,v 1.1 2001/06/07 20:13:54 anker Exp $
+// $Id: socket.iC,v 1.2 2002/01/15 03:22:54 oliver Exp $
 
 
 	BALL_INLINE
@@ -56,6 +56,14 @@
 
 
 	BALL_INLINE
+	SocketBuf* ISockStream::rdbuf() 
+		throw()
+	{ 
+		return (SocketBuf*) BALL_ISTREAM::rdbuf(); 
+	}
+
+
+	BALL_INLINE
 	ISockStream::ISockStream(SocketBuf* socket_buf)
 		throw(Exception::NullPointer)
 		: BALL_IOS(socket_buf),
@@ -78,18 +86,18 @@
 
 
 	BALL_INLINE
-	SocketBuf* ISockStream::rdbuf() 
-		throw()
-	{ 
-		return (SocketBuf*) BALL_ISTREAM::rdbuf(); 
-	}
-
-
-	BALL_INLINE
 	SocketBuf* ISockStream::operator -> () 
 		throw()
 	{ 
 		return rdbuf(); 
+	}
+
+
+	BALL_INLINE
+	SocketBuf* OSockStream::rdbuf() 
+		throw()
+	{ 
+		return (SocketBuf*) BALL_OSTREAM::rdbuf(); 
 	}
 
 
@@ -112,14 +120,6 @@
 	{
 		delete rdbuf();
 		init(0);
-	}
-
-
-	BALL_INLINE
-	SocketBuf* OSockStream::rdbuf() 
-		throw()
-	{ 
-		return (SocketBuf*) BALL_OSTREAM::rdbuf(); 
 	}
 
 

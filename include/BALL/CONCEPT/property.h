@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.25 2001/12/18 01:16:12 oliver Exp $
+// $Id: property.h,v 1.26 2002/01/15 03:22:50 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -345,10 +345,12 @@ namespace BALL
 		/**	@name	Constructors and Destructors */
 		//@{
 
+		BALL_INLINE 
 		/// Default constructor
 		PropertyManager()
 			throw();
 
+		BALL_INLINE
 		/// Copy constructor
 		PropertyManager(const PropertyManager& property_manager)
 			throw();

@@ -1,6 +1,40 @@
-// $Id: property.iC,v 1.26 2002/01/05 03:57:20 oliver Exp $
+// $Id: property.iC,v 1.27 2002/01/15 03:22:50 oliver Exp $
 
 using namespace std;
+
+BALL_INLINE 
+PropertyManager::PropertyManager()
+	throw()
+{
+}
+
+BALL_INLINE 
+PropertyManager::PropertyManager(const PropertyManager& property_manager)
+	throw()
+	:	bitvector_(property_manager.bitvector_),
+		named_properties_(property_manager.named_properties_)
+{
+}
+
+BALL_INLINE 
+PropertyManager::~PropertyManager()
+	throw()
+{
+}
+
+
+BALL_INLINE 
+void NamedProperty::clear()
+	throw()
+{
+	// free allocated space for strings
+	if ((type_ == STRING) && (data_.s != 0))
+	{
+		delete data_.s;
+	}
+	type_ = NONE;
+	name_ = "";
+}
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name)
@@ -86,19 +120,6 @@ NamedProperty::~NamedProperty()
 	throw()
 {
 	clear();
-}
-
-BALL_INLINE 
-void NamedProperty::clear()
-	throw()
-{
-	// free allocated space for strings
-	if ((type_ == STRING) && (data_.s != 0))
-	{
-		delete data_.s;
-	}
-	type_ = NONE;
-	name_ = "";
 }
 
 BALL_INLINE 
@@ -202,26 +223,6 @@ bool NamedProperty::getBool() const
 	throw()
 {
 	return (type_ == BOOL ? data_.b : false);
-}
-
-BALL_INLINE 
-PropertyManager::PropertyManager()
-	throw()
-{
-}
-
-BALL_INLINE 
-PropertyManager::PropertyManager(const PropertyManager& property_manager)
-	throw()
-	:	bitvector_(property_manager.bitvector_),
-		named_properties_(property_manager.named_properties_)
-{
-}
-
-BALL_INLINE 
-PropertyManager::~PropertyManager()
-	throw()
-{
 }
 
 BALL_INLINE 
