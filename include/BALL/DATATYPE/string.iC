@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.15 2000/07/14 14:42:24 amoll Exp $
+// $Id: string.iC,v 1.16 2000/07/15 16:49:34 amoll Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -827,18 +827,12 @@ bool String::isDigit(char c)
 BALL_INLINE 
 bool String::isFloat() const 
 {
-/*	errno = 0;
-  strtod(c_str(), 0);
-  return (errno == 0);*/
-	const char* FLOAT = "0123456789.-+";
-	for (int i=0;i<size() ;i++ )
-	{
-		if (strchr(FLOAT, (*this)[i]) == 0)
-		{
-			return false;
-		}
-	}
-	return true;
+  char* test;
+	char* str = const_cast<char*>(c_str());
+  double x;
+  errno = 0;
+  x = strtod(str, &test);
+	return (errno == 0 && strlen(test) == 0);
 }
 
 BALL_INLINE 
