@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.23.2.1 2003/01/07 13:17:36 anker Exp $
+// $Id: regularData1D.h,v 1.23.2.2 2003/01/20 10:45:39 anker Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -217,6 +217,38 @@ namespace BALL
 		*/
 		VectorType	 data_;
 	};
+
+	template <typename T>
+	std::ostream& operator << (std::ostream& os, const TRegularData1D<T>& data)
+		throw()
+	{
+		os << data.size();
+
+		for (Position i = 0; i < data.getSize(); ++i)
+		{
+			os << data[i];
+		}
+	}
+
+
+	template <typename T>
+	std::istream& operator >> (std::istream& is, TRegularData1D<T>& data)
+		throw()
+	{
+		Size size;
+		is >> size;
+
+		data.resize(size);
+
+		for (Position i = 0; i < size; ++i)
+		{
+			is >> data[i];
+		}
+
+		return is;
+	}
+
+
 
 	/**	Default type
 	*/
