@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.2 2000/01/03 15:15:33 oliver Exp $
+// $Id: forwardIterator.h,v 1.3 2001/06/05 15:40:28 anker Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -15,153 +15,10 @@ namespace BALL
 {
 
 	/**	@name	Generic Forward Iterator Classes.
+			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/forwardIterator.h}
 	*/
 	//@{
-
-	/**	Generic Forward Iterator Class
-	*/
-	template <class Container, class DataType, class Position, class Traits>
-	class ForwardIterator
-		: public BaseIterator<Container, DataType, Position, Traits>
-	{
-		public:
-
-		/**	@name Constructors and Destructors
-		*/
-		//@{
-
-		/**
-		*/
-		ForwardIterator()
-			:	BaseIterator<Container, DataType, Position, Traits>()
-		{
-		}
-	
-		/**
-		*/
-		ForwardIterator(const ForwardIterator& iterator)
-			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
-		{
-		}
-
-		/**
-		*/
-		ForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
-		{
-		}
-		//@}
-
-		bool operator + () const
-		{
-			return traits_ptr_->isValid();
-		}
-
-		void toBegin()
-		{
-			if (traits_ptr_->isSingular())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-			traits_ptr_->toBegin();
-		}
-
-		bool isBegin() const
-		{
-			if (traits_ptr_->isSingular())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-			return traits_ptr_->isBegin();
-		}
-
-		void toEnd()
-		{
-			if (traits_ptr_->isSingular())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-			traits_ptr_->toEnd();
-		}
-
-		bool isEnd() const
-		{
-			if (traits_ptr_->isSingular())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-			return traits_ptr_->isEnd();
-		}
-
-		ForwardIterator& operator ++ ()
-		{
-			if (!traits_ptr_->isValid())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-			traits_ptr_->forward();
-			return *this;
-		}
-
-		ForwardIterator operator ++ (int)
-		{
-			ForwardIterator iterator(*this);
-			++(*this);
-			return iterator;
-		}
-
-		DataType* findFirst(const UnaryPredicate<DataType>& predicate)
-		{
-			if (!traits_ptr_->isValid())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-			for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-				if (predicate((const DataType &)traits_ptr_->getData()) == true)
-					return (DataType *)&(traits_ptr_->getData());
-
-			return 0;
-		}
-	
-		const DataType* findFirst(const UnaryPredicate<DataType>& predicate) const
-		{
-			return ((ForwardIterator *)this)->findFirst(predicate);
-		}
-
-		DataType* findNext(const UnaryPredicate<DataType>& predicate)
-		{
-			if (!traits_ptr_->isValid())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-			for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-				if (predicate((const DataType&)traits_ptr_->getData()) == true)
-					return (DataType*)&(traits_ptr_->getData());
-
-			return 0;
-		}
-	
-		const DataType* findNext(const UnaryPredicate<DataType>& predicate) const
-		{
-			return ((ForwardIterator*)this)->findNext(predicate);
-		}
-
-		static ForwardIterator begin(const Container &container)
-		{
-			ForwardIterator iterator(container);
-			iterator.toBegin();
-			return iterator;
-		}
-
-		static ForwardIterator end(const Container &container)
-		{
-			ForwardIterator iterator(container);
-			iterator.toEnd();
-			return iterator;
-		}
-
-		protected:
-
-		ForwardIterator(const Container& container)
-			:	BaseIterator<Container, DataType, Position, Traits>(container)
-		{
-		}
-	};
-
 
 	/**	Generic Constant Forward Iterator
 	*/
@@ -175,139 +32,503 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** Default constructor
 		*/
 		ConstForwardIterator()
-			:	ConstBaseIterator<Container, DataType, Position, Traits>()
-		{
-		}
+			throw();
 	
-		/**
+		/** Copy constructor
 		*/
 		ConstForwardIterator(const ConstForwardIterator &iterator)
-			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
-		{
-		}
+			throw();
 
-		/**
+		/** Detailed constructor
 		*/
-		ConstForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
-		{
-		}
+		ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
+			throw();
+		
 		//@}
 
+		/** @name Iterator methods
+		*/
+		//@{
+
+		/** BALL specific shortcut for validity checking.
+		 */
 		bool operator +	() const
-		{
-			return traits_ptr_->isValid();
-		}
+			throw();
 
+		/** Move the iterator to the item at the beginning of the container.
+		 */
 		void toBegin()
-		{
-			if (traits_ptr_->isSingular())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			throw(Exception::InvalidIterator);
 
-			traits_ptr_->toBegin();
-		}
-
+		/** Check whether the iterator points to the item at the beginning 
+				of the container
+		*/
 		bool isBegin() const
-		{
-			if (traits_ptr_->isSingular())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			throw(Exception::InvalidIterator);
 
-			return traits_ptr_->isBegin();
-		}
-
+		/** Move the iterator to the item at the end of the container.
+		 */
 		void toEnd()
-		{
-			if (traits_ptr_->isSingular())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			throw(Exception::InvalidIterator);
 
-			traits_ptr_->toEnd();
-		}
-
+		/** Check whether the iterator points to the item at the end of the
+				container
+		*/
 		bool isEnd() const
-		{
-			if (traits_ptr_->isSingular())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			throw(Exception::InvalidIterator);
 
-			return traits_ptr_->isEnd();
-		}
-
+		/** Advance the iterator.
+		 */
 		ConstForwardIterator& operator ++ ()
-		{
-			if (!traits_ptr_->isValid())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			throw(Exception::InvalidIterator);
 
-			traits_ptr_->forward();
-			return *this;
-		}
-
+		/** BAUSTELLE
+		 */
 		ConstForwardIterator operator ++ (int)
-		{
-			ConstForwardIterator iterator(*this);
-			++(*this);
-			return iterator;
-		}
+			throw(Exception::InvalidIterator);
 
-		const DataType *findFirst(const UnaryPredicate<DataType> &predicate)
-		{
-			if (!traits_ptr_->isValid())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-			for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-				if (predicate((const DataType &)traits_ptr_->getData()) == true)
-					return (const DataType *)&(traits_ptr_->getData());
-
-			return 0;
-		}
+		/** Find the first item matching a predicate
+		 */
+		const DataType* findFirst(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator);
 	
-		const DataType* findFirst(const UnaryPredicate<DataType>& predicate) const
-		{
-			return ((ConstForwardIterator*)this)->findFirst(predicate);
-		}
-
-		const DataType* findNext(const UnaryPredicate<DataType>& predicate)
-		{
-			if (!traits_ptr_->isValid())
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-			for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-				if (predicate((const DataType &)traits_ptr_->getData()) == true)
-					return (const DataType *)&(traits_ptr_->getData());
-
-			return 0;
-		}
-	
+		/** Find the next occurance of a predicate match
+		 */
 		const DataType* findNext(const UnaryPredicate<DataType>& predicate) const
-		{
-			return ((ConstForwardIterator*)this)->findNext(predicate);
-		}
-
+			throw(Exception::InvalidIterator);
+	
+		/** Return an iterator at the beginning of the container
+		 */
 		static ConstForwardIterator begin(const Container& container)
-		{
-			ConstForwardIterator iterator(container);
-			iterator.toBegin();
-			return iterator;
-		}
+			throw(Exception::InvalidIterator);
 
+		/** Return an iterator at the end of the container
+		 */
 		static ConstForwardIterator end(const Container &container) 
-		{
-			ConstForwardIterator iterator(container);
-			iterator.toEnd();
-			return iterator;
-		}
+			throw(Exception::InvalidIterator);
+
+		//@}
 
 		protected:
 
+		/*_
+		 */
 		ConstForwardIterator(const Container& container)
-			:	ConstBaseIterator<Container, DataType, Position, Traits>(container)
-		{
-		}
+			throw();
 
 	};
-				
-	//@}
+
+	// method implementations
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator()
+		throw()
+		:	ConstBaseIterator<Container, DataType, Position, Traits>()
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator(const ConstForwardIterator &iterator)
+		throw()
+		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
+		throw()
+		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstForwardIterator<Container, DataType, Position, Traits>::operator +	() const
+		throw()
+	{
+		return traits_ptr_->isValid();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ConstForwardIterator<Container, DataType, Position, Traits>::toBegin()
+		throw(Exception::InvalidIterator)
+	{
+		if (traits_ptr_->isSingular())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		traits_ptr_->toBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstForwardIterator<Container, DataType, Position, Traits> ConstForwardIterator<Container, DataType, Position, Traits>::begin(const Container &container)
+		throw(Exception::InvalidIterator)
+	{
+		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
+		iterator.toBegin();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstForwardIterator<Container, DataType, Position, Traits>::isBegin() const
+		throw(Exception::InvalidIterator)
+	{
+		if (traits_ptr_->isSingular())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		return traits_ptr_->isBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ConstForwardIterator<Container, DataType, Position, Traits>::toEnd()
+		throw(Exception::InvalidIterator)
+	{
+		if (traits_ptr_->isSingular())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		traits_ptr_->toEnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstForwardIterator<Container, DataType, Position, Traits> ConstForwardIterator<Container, DataType, Position, Traits>::end(const Container &container)
+		throw(Exception::InvalidIterator)
+	{
+		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
+		iterator.toEnd();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ConstForwardIterator<Container, DataType, Position, Traits>::isEnd() const
+		throw(Exception::InvalidIterator)
+	{
+		if (traits_ptr_->isSingular())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		return traits_ptr_->isEnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstForwardIterator<Container, DataType, Position, Traits>& ConstForwardIterator<Container, DataType, Position, Traits>::operator ++ ()
+		throw(Exception::InvalidIterator)
+	{
+		if (!traits_ptr_->isValid())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		traits_ptr_->forward();
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstForwardIterator<Container, DataType, Position, Traits> ConstForwardIterator<Container, DataType, Position, Traits>::operator ++ (int)
+		throw(Exception::InvalidIterator)
+	{
+		ConstForwardIterator iterator(*this);
+		++(*this);
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType ConstForwardIterator<Container, DataType, Position, Traits>::*findFirst(const UnaryPredicate<DataType> &predicate)
+		throw(Exception::InvalidIterator)
+	{
+		if (!traits_ptr_->isValid())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
+			if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				return (const DataType *)&(traits_ptr_->getData());
+
+		return 0;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	const DataType* ConstForwardIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		if (!traits_ptr_->isValid())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
+			if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				return (const DataType *)&(traits_ptr_->getData());
+
+		return 0;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator begin(const Container& container)
+		throw(Exception::InvalidIterator)
+	{
+		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
+		iterator.toBegin();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	static ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator end(const Container &container) 
+		throw(Exception::InvalidIterator)
+	{
+		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
+		iterator.toEnd();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator(const Container& container)
+		throw()
+		:	ConstBaseIterator<Container, DataType, Position, Traits>(container)
+	{
+	}
+
+
+
+	/**	Generic Forward Iterator Class
+	*/
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	class ForwardIterator
+		: public BaseIterator<Container, DataType, Position, Traits>
+	{
+		public:
+
+		/**	@name Constructors and Destructors
+		*/
+		//@{
+
+		/** Default constructor
+		*/
+		ForwardIterator()
+			throw();
+	
+		/** Copy constructor
+		*/
+		ForwardIterator(const ForwardIterator& iterator)
+			throw();
+
+		/** Detailed constructor
+		*/
+		ForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+			throw();
+
+		//@}
+
+		/** @name Iterator methods
+		*/
+		//@{
+
+		/** BALL specific shortcut for validity checking.
+		 */
+		bool operator + () const
+			throw();
+
+		/** Move the iterator to the item at the beginning of the container.
+		 */
+		void toBegin()
+			throw(Exception::InvalidIterator);
+
+		/** Check whether the iterator points to the item at the beginning 
+				of the container
+		*/
+		bool isBegin() const
+			throw(Exception::InvalidIterator);
+
+		/** Move the iterator to the item at the end of the container.
+		 */
+		void toEnd()
+			throw(Exception::InvalidIterator);
+
+		/** Check whether the iterator points to the item at the end of the
+				container
+		*/
+		bool isEnd() const
+			throw(Exception::InvalidIterator);
+
+		/** Advance the iterator.
+		 */
+		ForwardIterator& operator ++ ()
+			throw(Exception::InvalidIterator);
+
+		/** BAUSTELLE
+		 */
+		ForwardIterator operator ++ (int)
+			throw(Exception::InvalidIterator);
+
+		/** Find the first item matching a predicate
+		 */
+		DataType* findFirst(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
+	
+		/** Find the next occurance of a predicate match
+		 */
+		DataType* findNext(const UnaryPredicate<DataType>& predicate) const
+			throw(Exception::InvalidIterator);
+	
+		/** Return an iterator at the beginning of the container
+		 */
+		static ForwardIterator begin(const Container &container)
+			throw(Exception::InvalidIterator);
+
+		/** Return an iterator at the end of the container
+		 */
+		static ForwardIterator end(const Container &container)
+			throw(Exception::InvalidIterator);
+
+		//@}
+
+
+		protected:
+
+		/*_
+		 */
+		ForwardIterator(const Container& container)
+			throw();
+
+	};
+
+	// AB HIER BAUSTELLE
+	// method implementations
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ForwardIterator<Container, DataType, Position, Traits>::ForwardIterator()
+		throw()
+		:	BaseIterator<Container, DataType, Position, Traits>()
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ForwardIterator<Container, DataType, Position, Traits>::ForwardIterator(const ForwardIterator& iterator)
+		throw()
+		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ForwardIterator<Container, DataType, Position, Traits>::ForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+		throw()
+		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ForwardIterator<Container, DataType, Position, Traits>::operator + () const
+		throw()
+	{
+		return traits_ptr_->isValid();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ForwardIterator<Container, DataType, Position, Traits>::toBegin()
+		throw(Exception::InvalidIterator)
+	{
+		if (traits_ptr_->isSingular())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		traits_ptr_->toBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ForwardIterator<Container, DataType, Position, Traits>::isBegin() const
+		throw(Exception::InvalidIterator)
+	{
+		if (traits_ptr_->isSingular())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		return traits_ptr_->isBegin();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	void ForwardIterator<Container, DataType, Position, Traits>::toEnd()
+		throw(Exception::InvalidIterator)
+	{
+		if (traits_ptr_->isSingular())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		traits_ptr_->toEnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	bool ForwardIterator<Container, DataType, Position, Traits>::isEnd() const
+		throw(Exception::InvalidIterator)
+	{
+		if (traits_ptr_->isSingular())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		return traits_ptr_->isEnd();
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ForwardIterator<Container, DataType, Position, Traits>& ForwardIterator<Container, DataType, Position, Traits>::operator ++ ()
+		throw(Exception::InvalidIterator)
+	{
+		if (!traits_ptr_->isValid())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		traits_ptr_->forward();
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ForwardIterator<Container, DataType, Position, Traits> ForwardIterator<Container, DataType, Position, Traits>::operator ++ (int)
+		throw(Exception::InvalidIterator)
+	{
+		ForwardIterator iterator(*this);
+		++(*this);
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ForwardIterator<Container, DataType, Position, Traits>::findFirst(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		if (!traits_ptr_->isValid())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
+			if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				return (DataType *)&(traits_ptr_->getData());
+
+		return 0;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	DataType* ForwardIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate) const
+		throw(Exception::InvalidIterator)
+	{
+		if (!traits_ptr_->isValid())
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+
+		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
+			if (predicate((const DataType&)traits_ptr_->getData()) == true)
+				return (DataType*)&(traits_ptr_->getData());
+
+		return 0;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ForwardIterator<Container, DataType, Position, Traits> ForwardIterator<Container, DataType, Position, Traits>::begin(const Container &container)
+		throw(Exception::InvalidIterator)
+	{
+		ForwardIterator<Container, DataType, Position, Traits> iterator(container);
+		iterator.toBegin();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ForwardIterator<Container, DataType, Position, Traits> ForwardIterator<Container, DataType, Position, Traits>::end(const Container &container)
+		throw(Exception::InvalidIterator)
+	{
+		ForwardIterator<Container, DataType, Position, Traits> iterator(container);
+		iterator.toEnd();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ForwardIterator<Container, DataType, Position, Traits>::ForwardIterator(const Container& container)
+		throw()
+		:	BaseIterator<Container, DataType, Position, Traits>(container)
+	{
+	}
 
 } // namespace BALL
 
