@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.9 2005/01/31 15:59:41 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.10 2005/02/02 15:14:49 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -52,6 +52,7 @@ MolecularControl::SelectableListViewItem::SelectableListViewItem(QListView* pare
 void MolecularControl::SelectableListViewItem::setSelected(bool state)
 {
 	QCheckListItem::setSelected(state);
+	
 	if (!state)
 	{
 		QListViewItem* child = firstChild();
@@ -75,6 +76,8 @@ void MolecularControl::SelectableListViewItem::stateChange(bool state)
 	if (control_reference_.getMainControl()->compositesAreLocked() ||
 			control_reference_.getMainControl()->updateOfRepresentationRunning())
 	{
+		if (composite_->isSelected() == state) return;
+
 		ignore_change_ = true;
 		setOn(!state);
 		return;
@@ -329,7 +332,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 	{
 		NewSelectionMessage* nsm = (NewSelectionMessage*) message;
 		setSelection_(true, nsm->openItems());
-		updateSelection();
+		return true;
 	}
 
 	return false;
@@ -533,31 +536,12 @@ void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point,
 
 void MolecularControl::selectedComposite_(Composite* composite, bool state)
 {
-	const HashSet<Composite*>& selection = getMainControl()->getSelection();
-	if (selection.has(composite) == state)
-	{
-		return;
-	}
+	if (composite->isSelected() == state) return;
 	
-	SelectableListViewItem* item = composite_to_item_[composite];
-	item->setOn(state);
-	item->setSelected(true);
-	if (selection.size() < 10)
-	{
-		QListViewItem* parent = item->parent();
-		while (parent != 0)
-		{
-			parent->setOpen(true);
-			parent = parent->parent();
-		}
-	}
-
 	CompositeMessage::CompositeMessageType id = CompositeMessage::DESELECTED_COMPOSITE;
 	if (state) id = CompositeMessage::SELECTED_COMPOSITE;
 	CompositeMessage* message = new CompositeMessage(*composite, id);
 	notify_(message);
-	
-	setSelection_(false);
 }
 
 
@@ -719,46 +703,42 @@ void MolecularControl::setSelection_(bool open, bool force)
 	throw()
 {	
 	const HashSet<Composite*>& selection = getMainControl()->getSelection();
-	if (selection.size() == 0)
+	if (!selection.size())
 	{
 		listview->clearSelection();
 
 		QListViewItemIterator it(listview);
 		for (; it.current(); ++it)
 		{
-			SelectableListViewItem* item = (SelectableListViewItem*) it.current();
+			SelectableListViewItem* item = dynamic_cast<SelectableListViewItem*>(it.current());
 			item->setOn(false);
+			item->setSelected(false);
 		}
 		return;
 	}
 
-	if (selection.size() > 5 && !force) open = false;
+	if (!force) open = false;
 
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
-		SelectableListViewItem* item = (SelectableListViewItem*) it.current();
-		if (selection.has(item->getComposite()))
-		{
-			item->setOn(true);
-			item->setSelected(true);
-			if (open)
-			{
-				QListViewItem* parent = item->parent();
-				while (parent != 0 && !parent->isOpen())
-				{
-					parent->setOpen(true);
-					parent = parent->parent();
-				}
-			}
-		}
-		else
+		SelectableListViewItem* item = dynamic_cast<SelectableListViewItem*>(it.current());
+		if (!item->getComposite()->isSelected()) 
 		{
 			item->setOn(false);
-			if (open)
+			item->setSelected(false);
+			continue;
+		}
+		
+		item->setOn(true);
+		item->setSelected(true);
+		if (open)
+		{
+			QListViewItem* parent = item->parent();
+			while (parent != 0 && !parent->isOpen())
 			{
-				item->setSelected(false);
-				item->setOpen(false);
+				parent->setOpen(true);
+				parent = parent->parent();
 			}
 		}
 	}
