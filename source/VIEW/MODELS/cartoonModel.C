@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.30 2005/01/11 16:41:16 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.31 2005/01/11 16:45:12 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -321,8 +321,9 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 
 	} // iteration over all residues of secondary structure
 
-	peptide_normals[peptide_normals.size() - 1] = 
-	peptide_normals[peptide_normals.size() - 2];
+	// replace first and last peptide_normals, because they may differ too much
+	peptide_normals[peptide_normals.size() - 1] = peptide_normals[peptide_normals.size() - 2];
+	peptide_normals[0] = peptide_normals[1];
 
 	Matrix4x4 rotmat;
 	Angle angle_pi(M_PI);
