@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.6 2000/09/19 09:15:48 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.7 2000/09/21 13:31:09 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -157,14 +157,24 @@ namespace BALL
 				<< " There might be something wrong." << endl;
 		}
 
-		double E = 3.0 * exp(-alpha_ * from / R_ij_o_);
-		double r3 = from * from * from;
-		double infval = a[0] * R_ij_o_ / (3 * pow(alpha_, 3) * r3) *
+		// only for readibility
+		double r = from;
+		double b = alpha_ / R_ij_o_;
+		double d = pow(R_ij_o_, 6);
+		double exp_br = exp( - b * r );
+		double r3 = r * r * r;
+		double infval = a[0] / (3 * pow(b, 3) * r3) *
 			(
+				  C1_ * 3 * b * b * r3 * r * r * exp_br
+				+ C1_ * 6 * b * r3 * r * exp_br
+				+ C1_ * 6 * r3 * exp_br
+				- C2_ * d * b * b * b
+				/*
 			 		2 * C1_                   * R_ij_o_ * R_ij_o_ * E * r3
 				+ 2 * C1_ * alpha_          * R_ij_o_           * E * r3 * from
 				+     C1_ * alpha_ * alpha_                     * E * r3 * from * from
 				-     C2_ * alpha_ * alpha_ * alpha_  * pow(R_ij_o_, 5)
+				*/
 			);
 		val += infval;
 		return val;
@@ -284,6 +294,7 @@ namespace BALL
 			// analytical form we can use.
 
 
+			/*
 			double s3 = d*pow(b,4.0)*a[0]/5+d*pow(b,4.0)*a[1]*R/4+d*pow(b,4.0)*a[2]*R*R/3+d*pow(b,4.0)*a[3]*R*R*R/2-6.0*exp(-b*R)*a[3]*pow(R,5.0)-exp(-b*R)*a[0]*b*b*b*pow(R,5.0)-exp(-b*R)*a[1]*b*b*pow(R,5.0)-exp(-b*R)*a[1]*b*b*b*pow(R,6.0)-2.0*exp(-b*R)*a[2]*b*b*pow(R,6.0)-2.0*exp(-b*R)*a[2]*b*pow(R,5.0)-exp(-b*R)*a[2]*b*b*b*pow(R,7.0)-6.0*exp(-b*R)*a[3]*b*pow(R,6.0)-3.0*exp(-b*R)*a[3]*b*b*pow(R,7.0)-exp(-b*R)*a[3]*b*b*b*pow(R,8.0)-d*pow(b,4.0)*a[2]*k*R/2;
 			double s2 = s3-d*pow(b,4.0)*a[3]*k*R*R+3.0/4.0*d*pow(b,4.0)*a[3]*k*k*R-d*pow(b,4.0)*a[1]*k/5+d*pow(b,4.0)*a[2]*k*k/5-d*pow(b,4.0)*a[3]*k*k*k/5-3.0*exp(-b*R)*a[3]*k*k*b*b*b*pow(R,6.0)+6.0*exp(-b*R)*a[3]*k*b*pow(R,5.0)+2.0*exp(-b*R)*a[2]*k*b*b*pow(R,5.0)+6.0*exp(-b*R)*a[3]*k*b*b*pow(R,6.0)+3.0*exp(-b*R)*a[3]*k*b*b*b*pow(R,7.0)-3.0*exp(-b*R)*a[3]*k*k*b*b*pow(R,5.0)+exp(-b*R)*a[1]*k*b*b*b*pow(R,5.0)+exp(-b*R)*a[3]*k*k*k*b*b*b*pow(R,5.0)-exp(-b*R)*a[2]*k*k*b*b*b*pow(R,5.0)+2.0*exp(-b*R)*a[2]*k*b*b*b*pow(R,6.0);
 			s3 = 1/pow(b,4.0)/pow(R,5.0);
@@ -291,6 +302,22 @@ namespace BALL
 			double s4 = -d*pow(b,4.0)*a[0]/5-d*pow(b,4.0)*a[1]*r/4-d*pow(b,4.0)*a[2]*r*r/3-d*pow(b,4.0)*a[3]*r*r*r/2+6.0*exp(-b*r)*a[3]*pow(r,5.0)+exp(-b*r)*a[0]*b*b*b*pow(r,5.0)+exp(-b*r)*a[1]*b*b*b*pow(r,6.0)+2.0*exp(-b*r)*a[2]*b*pow(r,5.0)+exp(-b*r)*a[1]*b*b*pow(r,5.0)+2.0*exp(-b*r)*a[2]*b*b*pow(r,6.0)+exp(-b*r)*a[2]*b*b*b*pow(r,7.0)+6.0*exp(-b*r)*a[3]*b*pow(r,6.0)+3.0*exp(-b*r)*a[3]*b*b*pow(r,7.0)+exp(-b*r)*a[3]*b*b*b*pow(r,8.0)+d*pow(b,4.0)*a[1]*k/5;
 			s3 = s4-d*pow(b,4.0)*a[2]*k*k/5+d*pow(b,4.0)*a[3]*k*k*k/5-6.0*exp(-b*r)*a[3]*k*b*pow(r,5.0)+d*pow(b,4.0)*a[2]*k*r/2+d*pow(b,4.0)*a[3]*k*r*r-3.0/4.0*d*pow(b,4.0)*a[3]*k*k*r-exp(-b*r)*a[1]*k*b*b*b*pow(r,5.0)-2.0*exp(-b*r)*a[2]*k*b*b*b*pow(r,6.0)-2.0*exp(-b*r)*a[2]*k*b*b*pow(r,5.0)-3.0*exp(-b*r)*a[3]*k*b*b*b*pow(r,7.0)+3.0*exp(-b*r)*a[3]*k*k*b*b*b*pow(r,6.0)+3.0*exp(-b*r)*a[3]*k*k*b*b*pow(r,5.0)+exp(-b*r)*a[2]*k*k*b*b*b*pow(r,5.0)-6.0*exp(-b*r)*a[3]*k*b*b*pow(r,6.0)-exp(-b*r)*a[3]*k*k*k*b*b*b*pow(r,5.0);
 			s4 = 1/pow(b,4.0)/pow(r,5.0);
+			s2 = s3*s4;
+			val = s1+s2;
+			*/
+
+
+			double s4 = 2.0*C1_*a[1]*k*exp(-b*R)*pow(b,4.0)*pow(R,4.0)-C2_*d*a[3]*k*k*k*pow(b,6.0)/3+C2_*d*a[0]*pow(b,6.0)/3+C2_*d*a[2]*k*k*pow(b,6.0)/3-C2_*d*a[1]*k*pow(b,6.0)/3-18.0*C1_*a[3]*k*k*exp(-b*R)*b*b*pow(R,3.0)-20.0*C1_*a[3]*exp(-b*R)*b*b*b*pow(R,6.0)-4.0*C1_*a[2]*exp(-b*R)*pow(b,4.0)*pow(R,6.0)+2.0*C1_*a[1]*k*exp(-b*R)*b*b*b*pow(R,3.0)-C1_*a[2]*k*k*exp(-b*R)*pow(b,5.0)*pow(R,5.0)-5.0*C1_*a[3]*exp(-b*R)*pow(b,4.0)*pow(R,7.0)+12.0*C1_*a[3]*k*exp(-b*R)*pow(b,4.0)*pow(R,6.0);
+			double s3 = s4-9.0*C1_*a[3]*k*k*exp(-b*R)*pow(b,4.0)*pow(R,5.0)-120.0*C1_*a[3]*exp(-b*R)*b*pow(R,4.0)-3.0*C1_*a[1]*exp(-b*R)*pow(b,4.0)*pow(R,5.0)-2.0*C1_*a[2]*k*k*exp(-b*R)*pow(b,4.0)*pow(R,4.0)-2.0*C1_*a[0]*exp(-b*R)*b*b*b*pow(R,3.0)+12.0*C1_*a[2]*k*exp(-b*R)*b*b*b*pow(R,4.0)-2.0*C1_*a[0]*exp(-b*R)*pow(b,4.0)*pow(R,4.0)+2.0*C1_*a[2]*k*exp(-b*R)*pow(b,5.0)*pow(R,6.0)-6.0*C1_*a[1]*exp(-b*R)*b*b*b*pow(R,4.0)-C1_*a[0]*exp(-b*R)*pow(b,5.0)*pow(R,5.0)-120.0*C1_*a[3]*exp(-b*R)*pow(R,3.0)-C1_*a[2]*exp(-b*R)*pow(b,5.0)*pow(R,7.0)+6.0*C1_*a[2]*k*exp(-b*R)*pow(b,4.0)*pow(R,5.0);
+			s4 = s3+C1_*a[3]*k*k*k*exp(-b*R)*pow(b,5.0)*pow(R,5.0)-2.0*C1_*a[2]*k*k*exp(-b*R)*b*b*b*pow(R,3.0)+C1_*a[1]*k*exp(-b*R)*pow(b,5.0)*pow(R,5.0)-6.0*C1_*a[1]*exp(-b*R)*b*b*pow(R,3.0)+2.0*C1_*a[3]*k*k*k*exp(-b*R)*pow(b,4.0)*pow(R,4.0)-3.0*C1_*a[3]*k*k*exp(-b*R)*pow(b,5.0)*pow(R,6.0)+36.0*C1_*a[3]*k*exp(-b*R)*b*b*b*pow(R,5.0)-18.0*C1_*a[3]*k*k*exp(-b*R)*b*b*b*pow(R,4.0)-3.0*C2_*d*a[3]*k*pow(b,6.0)*pow(R,2.0)+C2_*d*a[1]*pow(b,6.0)*R/2+3.0*C1_*a[3]*k*exp(-b*R)*pow(b,5.0)*pow(R,7.0)-C1_*a[3]*exp(-b*R)*pow(b,5.0)*pow(R,8.0);
+			double s2 = s4+72.0*C1_*a[3]*k*exp(-b*R)*b*pow(R,3.0)+72.0*C1_*a[3]*k*exp(-b*R)*b*b*pow(R,4.0)-24.0*C1_*a[2]*exp(-b*R)*b*b*pow(R,4.0)-24.0*C1_*a[2]*exp(-b*R)*b*pow(R,3.0)-C1_*a[1]*exp(-b*R)*pow(b,5.0)*pow(R,6.0)-60.0*C1_*a[3]*exp(-b*R)*b*b*pow(R,5.0)+2.0*C1_*a[3]*k*k*k*exp(-b*R)*b*b*b*pow(R,3.0)+12.0*C1_*a[2]*k*exp(-b*R)*b*b*pow(R,3.0)-C2_*d*a[3]*log(-b*R)*pow(b,6.0)*pow(R,3.0)-12.0*C1_*a[2]*exp(-b*R)*b*b*b*pow(R,5.0)-C2_*d*a[2]*k*pow(b,6.0)*R+C2_*d*a[2]*pow(b,6.0)*pow(R,2.0)+3.0/2.0*C2_*d*a[3]*k*k*pow(b,6.0)*R;
+			s3 = 1/pow(R,3.0)/pow(b,6.0);
+			double s1 = s2*s3;
+			double s5 = C2_*d*a[3]*log(-b*r)*pow(b,6.0)*pow(r,3.0)-2.0*C1_*a[2]*k*exp(-b*r)*pow(b,5.0)*pow(r,6.0)+18.0*C1_*a[3]*k*k*exp(-b*r)*b*b*pow(r,3.0)+9.0*C1_*a[3]*k*k*exp(-b*r)*pow(b,4.0)*pow(r,5.0)-12.0*C1_*a[2]*k*exp(-b*r)*b*b*b*pow(r,4.0)-36.0*C1_*a[3]*k*exp(-b*r)*b*b*b*pow(r,5.0)-C1_*a[3]*k*k*k*exp(-b*r)*pow(b,5.0)*pow(r,5.0)-2.0*C1_*a[3]*k*k*k*exp(-b*r)*pow(b,4.0)*pow(r,4.0)-12.0*C1_*a[3]*k*exp(-b*r)*pow(b,4.0)*pow(r,6.0)+C1_*a[2]*k*k*exp(-b*r)*pow(b,5.0)*pow(r,5.0)+C1_*a[0]*exp(-b*r)*pow(b,5.0)*pow(r,5.0)+C1_*a[1]*exp(-b*r)*pow(b,5.0)*pow(r,6.0);
+			s4 = s5+18.0*C1_*a[3]*k*k*exp(-b*r)*b*b*b*pow(r,4.0)+2.0*C1_*a[2]*k*k*exp(-b*r)*b*b*b*pow(r,3.0)-6.0*C1_*a[2]*k*exp(-b*r)*pow(b,4.0)*pow(r,5.0)-2.0*C1_*a[1]*k*exp(-b*r)*b*b*b*pow(r,3.0)-C1_*a[1]*k*exp(-b*r)*pow(b,5.0)*pow(r,5.0)-2.0*C1_*a[3]*k*k*k*exp(-b*r)*b*b*b*pow(r,3.0)-72.0*C1_*a[3]*k*exp(-b*r)*b*pow(r,3.0)+2.0*C1_*a[0]*exp(-b*r)*b*b*b*pow(r,3.0)-2.0*C1_*a[1]*k*exp(-b*r)*pow(b,4.0)*pow(r,4.0)-12.0*C1_*a[2]*k*exp(-b*r)*b*b*pow(r,3.0)+6.0*C1_*a[1]*exp(-b*r)*b*b*b*pow(r,4.0)-3.0*C1_*a[3]*k*exp(-b*r)*pow(b,5.0)*pow(r,7.0)-72.0*C1_*a[3]*k*exp(-b*r)*b*b*pow(r,4.0);
+			s5 = s4+3.0*C1_*a[3]*k*k*exp(-b*r)*pow(b,5.0)*pow(r,6.0)+24.0*C1_*a[2]*exp(-b*r)*b*b*pow(r,4.0)+2.0*C1_*a[2]*k*k*exp(-b*r)*pow(b,4.0)*pow(r,4.0)+4.0*C1_*a[2]*exp(-b*r)*pow(b,4.0)*pow(r,6.0)+12.0*C1_*a[2]*exp(-b*r)*b*b*b*pow(r,5.0)+3.0*C1_*a[1]*exp(-b*r)*pow(b,4.0)*pow(r,5.0)+24.0*C1_*a[2]*exp(-b*r)*b*pow(r,3.0)+20.0*C1_*a[3]*exp(-b*r)*b*b*b*pow(r,6.0)+5.0*C1_*a[3]*exp(-b*r)*pow(b,4.0)*pow(r,7.0)+C1_*a[2]*exp(-b*r)*pow(b,5.0)*pow(r,7.0)+C1_*a[3]*exp(-b*r)*pow(b,5.0)*pow(r,8.0)+2.0*C1_*a[0]*exp(-b*r)*pow(b,4.0)*pow(r,4.0);
+			s3 = s5+6.0*C1_*a[1]*exp(-b*r)*b*b*pow(r,3.0)+120.0*C1_*a[3]*exp(-b*r)*b*pow(r,4.0)+60.0*C1_*a[3]*exp(-b*r)*b*b*pow(r,5.0)+C2_*d*a[3]*k*k*k*pow(b,6.0)/3-C2_*d*a[0]*pow(b,6.0)/3-C2_*d*a[2]*k*k*pow(b,6.0)/3+C2_*d*a[1]*k*pow(b,6.0)/3+120.0*C1_*a[3]*exp(-b*r)*pow(r,3.0)-C2_*d*a[2]*pow(b,6.0)*pow(r,2.0)+C2_*d*a[2]*k*pow(b,6.0)*r-3.0/2.0*C2_*d*a[3]*k*k*pow(b,6.0)*r-C2_*d*a[1]*pow(b,6.0)*r/2+3.0*C2_*d*a[3]*k*pow(b,6.0)*pow(r,2.0);
+			s4 = 1/pow(b,6.0)/pow(r,3.0);
 			s2 = s3*s4;
 			val = s1+s2;
 
