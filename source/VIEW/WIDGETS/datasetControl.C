@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.21 2004/02/12 10:59:29 amoll Exp $
+// $Id: datasetControl.C,v 1.22 2004/02/26 09:28:41 anhi Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -99,7 +99,7 @@ void DatasetControl::addTrajectory()
 	delete fd;
 
 	// construct a name for the system(the filename without the dir path)
-	DCDFile* dcd = new DCDFile(filename, File::IN);
+	DCDFile* dcd = new DCDFile(filename, std::ios::in);
 	insertTrajectory_(dcd, *getMainControl()->getSelectedSystem());
 }
 
