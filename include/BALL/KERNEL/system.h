@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.5 2000/01/15 18:54:17 oliver Exp $
+// $Id: system.h,v 1.6 2000/02/23 07:54:40 oliver Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -37,24 +37,11 @@ namespace BALL
 	/**
 	*/
 	class System
-		: public Composite,
-			public PropertyManager
+		: public BaseFragment
 	{
 		public:
 
 		BALL_CREATE(System)
-
-		/**	@name	Enums
-		*/
-		//@{
-		
-		/**
-		*/
-		enum Property
-		{
-			NUMBER_OF_PROPERTIES
-		};
-		//@}
 
 		/**	@name	Constructors and Destructors*/
 		//@{
@@ -112,14 +99,6 @@ namespace BALL
 		//@{
 
 		///
-		void setName(const String& name);
-
-		///
-		String& getName();
-
-		///
-		const String& getName() const;
-
 		///
 		Size countMolecules() const;
 
@@ -143,6 +122,7 @@ namespace BALL
 
 		///
 		void insertAfter(Molecule& molecule, Composite& after);
+
 
 		///
 		bool remove(Molecule& molecule);
@@ -197,15 +177,6 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Residue)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Chain)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(SecondaryStructure)
-
-
-		private:
-
-		void clear_();
-
-		// --- ATTRIBUTES
-
-		String name_;
 	};
 
 } // namespace BALL
