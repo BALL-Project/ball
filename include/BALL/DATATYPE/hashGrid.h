@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.40 2005/01/26 14:06:15 amoll Exp $
+// $Id: hashGrid.h,v 1.41 2005/01/26 15:16:46 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -1930,7 +1930,7 @@ namespace BALL
 		Size memory_for_box = sizeof(HashGridBox3<Item>) + sizeof(HashGridBox3<Item>*);
 		Size nr_boxes = (Size) floor(memory / memory_for_box);
 
-		return pow((size.x * size.y * size.z) / nr_boxes, 1.0 / 3.0);
+		return pow((float)(size.x * size.y * size.z) / nr_boxes, (float)(1.0 / 3.0));
 	}
 
 	template <typename Item>
