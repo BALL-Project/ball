@@ -142,10 +142,9 @@ class BALL_EXPORT EditableScene
 	protected slots:
 			virtual void editMode_();
 			virtual void bondMode_();
-
-
+	
 			
-		private:
+	protected:
 			Index edit_id_;	
 			System system_; // Do we need them?? 
 			Molecule *current_molecule_;	//Do we need them??
@@ -158,12 +157,23 @@ class BALL_EXPORT EditableScene
 			float x_ewindow_bond_pos_second_old_;
 			float y_ewindow_bond_pos_second_old_;
 			
+			Vector3 near_left_bot_;  //TODO:: name in XYZ left_bot_mnear
+			Vector3 near_right_bot_;
+			Vector3 near_left_top_;
 			
 			double limit_;			
+			bool   mouse_has_moved_;
+			
 			void insert_(int x_, int y_, PDBAtom &atom_);
 			TVector2<Position> getScreenPosition_(Vector3 vec);
 			Vector3 clickedPointOnViewPlane_(int x, int y);
 			Atom* getClickedAtom_(int x, int y);
+			/**
+			 * Maps the current viewplane to screen coordinates.
+			 * Returns false if the projection matrix is not correctly
+			 * initialized.
+			 */
+			bool mapViewplaneToScreen_();
 
 };
 
