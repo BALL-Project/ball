@@ -1,4 +1,4 @@
-// $Id: reissCavFreeEnergyProcessor.C,v 1.8 2001/06/05 15:53:29 anker Exp $
+// $Id: reissCavFreeEnergyProcessor.C,v 1.9 2001/09/11 10:00:05 aubertin Exp $
 
 #include <BALL/SOLVATION/reissCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -56,6 +56,38 @@ namespace BALL
 		setDefaultOptions();
 
 		valid_ = true;
+	}
+
+
+        const ReissCavFreeEnergyProcessor& ReissCavFreeEnergyProcessor::operator = (const ReissCavFreeEnergyProcessor& proc) throw()     
+        {
+	         valid_=proc.valid_;
+                 energy_=proc.energy_;
+                 fragment_=proc.fragment_;  
+                 return *this;
+        }
+
+        bool ReissCavFreeEnergyProcessor::operator == (const ReissCavFreeEnergyProcessor& proc) const throw()
+        {
+          bool result;
+		if ((fragment_ == 0) && (proc.fragment_ == 0))
+		{
+			result = ((energy_ == proc.energy_) && (valid_ == proc.valid_));
+		}
+		else
+		{
+			if ((fragment_ == 0) || (proc.fragment_ == 0))
+			{
+				result = false;
+			}
+			else
+			{
+				result = ((*fragment_ == *proc.fragment_) 
+						&& (energy_ 	 == proc.energy_)
+						&& (valid_ 	 == proc.valid_));
+			}
+		}
+		return result;
 	}
 
 
