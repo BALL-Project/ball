@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>AmberConfigurationDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -7,9 +7,9 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>3</y>
+            <y>1</y>
             <width>530</width>
-            <height>415</height>
+            <height>425</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,13 +23,13 @@
     <property name="minimumSize">
         <size>
             <width>530</width>
-            <height>415</height>
+            <height>425</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
             <width>530</width>
-            <height>415</height>
+            <height>425</height>
         </size>
     </property>
     <property name="caption">
@@ -249,33 +249,6 @@
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>overwrite_typenames_checkBox</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>180</x>
-                    <y>20</y>
-                    <width>155</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>155</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Overwrite Typenames</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
                 <cstring>overwrite_charges_checkBox</cstring>
             </property>
             <property name="geometry">
@@ -299,6 +272,36 @@
             </property>
             <property name="text">
                 <string>Overwrite Charges</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>overwrite_typenames_checkBox</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>180</x>
+                    <y>20</y>
+                    <width>155</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>155</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                    <bold>0</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Overwrite Typenames</string>
             </property>
             <property name="checked">
                 <bool>true</bool>

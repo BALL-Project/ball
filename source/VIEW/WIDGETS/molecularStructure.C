@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.11 2004/02/12 10:59:30 amoll Exp $
+// $Id: molecularStructure.C,v 1.12 2004/02/18 11:45:12 bender Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -50,6 +50,7 @@ namespace BALL
 			amber_(0),
 			charmm_(0),
 			amber_dialog_(this),
+			charmm_dialog_(this),
 			minimization_dialog_(this),
 			md_dialog_(this)
 	{
@@ -63,9 +64,6 @@ namespace BALL
 		hint = "Focus the camera on one or multiple objects."; 
 		center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																											SLOT(centerCamera()), CTRL+Key_F, -1, hint);
-
-		minimization_dialog_.setAmberDialog(&amber_dialog_);
-		md_dialog_.setAmberDialog(&amber_dialog_);
 
 		// Build Menu -------------------------------------------------------------------
 		hint = "To assign charges, one System has to be selected.";
@@ -94,9 +92,9 @@ namespace BALL
 		hint = "Deselect a molecular object.";
 		deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D, -1, hint);
 		// MOLECULARMECHANICS Menu -------------------------------------------------------------------
-		hint = "Calculate the energy of a System with the AMBER force field.";
+		hint = "Calculate the energy of a System with the AMBER/CHARMM force field.";
 		amber_energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
-																			 SLOT(calculateAmberEnergy()), CTRL+Key_A, MainControl::MOLECULARMECHANICS + 12, hint);
+																			 SLOT(calculateForceFieldEnergy()), CTRL+Key_A, MainControl::MOLECULARMECHANICS + 12, hint);
 			
 		hint = "To perform an Energy Minimization, first select the molecular structures.";
 		amber_minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", this, 
@@ -106,10 +104,6 @@ namespace BALL
 		amber_mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
 															SLOT(amberMDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
 
-		hint = "Options for the used force fields.";
-		force_field_options_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Force Field &Options", this,
-															SLOT(showForceFieldOptions()), 0, MainControl::MOLECULARMECHANICS +14, hint);
-
 		// Tools Menu -------------------------------------------------------------------
 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 		hint = "Map two proteins.";
@@ -117,7 +111,7 @@ namespace BALL
 
 		hint = "Calculate RMSD for two Molecules or Fragments of Molecules.";
 		calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
-
+		
 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
 		hint = "Recalculate the secondary structure for a structure.";
@@ -133,6 +127,12 @@ namespace BALL
 		hint = "Create a grid with the distance to the geometric center of a structure.";
 		create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS, 
 																				"&Distance Grid", this, SLOT(createGridFromDistance()), 0, -1, hint);   
+
+		minimization_dialog_.setAmberDialog(&amber_dialog_);
+		minimization_dialog_.setCharmmDialog(&charmm_dialog_);
+		md_dialog_.setAmberDialog(&amber_dialog_);
+		md_dialog_.setCharmmDialog(&charmm_dialog_);
+		use_amber_= true; // use amber force field by default
 	}
 
 	MolecularStructure::~MolecularStructure()
@@ -722,24 +722,23 @@ namespace BALL
 	{
 		return amber_dialog_;
 	}
-		
+
+	CharmmConfigurationDialog& MolecularStructure::getCharmmConfigurationDialog()
+		throw()
+	{
+		return charmm_dialog_;
+	}
 
 	CharmmFF& MolecularStructure::getCHARMMFF()
 		throw()
 	{
-		if (charmm_ == 0) 
+
+		if (charmm_ == 0)
 		{
-			charmm_ = new CharmmFF();
-
-			charmm_->options[CharmmFF::Option::ASSIGN_TYPES] = "true";
-			charmm_->options[CharmmFF::Option::ASSIGN_CHARGES] = "true";
-			charmm_->options[CharmmFF::Option::ASSIGN_TYPENAMES] = "true";
-			charmm_->options[CharmmFF::Option::OVERWRITE_CHARGES] = "true";
-			charmm_->options[CharmmFF::Option::OVERWRITE_TYPENAMES] = "true";
-			charmm_->options[CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = 1;
-			charmm_->options[CharmmFF::Option::FILENAME] = "CHARMM/param22.ini";
+			charmm_ = new CharmmFF;
+			charmm_dialog_.setCharmmFF(*charmm_);
+			charmm_dialog_.accept();
 		}
-
 		return *charmm_;
 	}
 
@@ -757,12 +756,29 @@ namespace BALL
 		Log.info() << "  total energy       : " << getAMBERFF().getEnergy() << " kJ/mol" << endl;
 	}
 
+	void MolecularStructure::printCharmmResults()
+		throw()
+	{
+		Log.info() << endl;
+		Log.info() << "CHARMM Energy	:" << endl;
+		Log.info() << " - electrostatic	: " << getCHARMMFF().getESEnergy() << " kJ/mol" << endl;
+		Log.info() << " - van der Waals	: " << getCHARMMFF().getVdWEnergy() << " kJ/mol" << endl;
+		Log.info() << " - solvation	: " << getCHARMMFF().getSolvationEnergy() << "kJ/mol" << endl;
+		Log.info() << " - nonbonded		: " << getCHARMMFF().getNonbondedEnergy() << "kJ/mol" << endl;
+		Log.info() << " - bond stretch      : " << getCHARMMFF().getStretchEnergy() << " kJ/mol" << endl;
+		Log.info() << " - angle bend		: " << getCHARMMFF().getBendEnergy() << " kJ/mol" << endl;
+		Log.info() << " - torsion	: " << getCHARMMFF().getTorsionEnergy() << " kJ/mol" << endl;
+		Log.info() << "---------------------------------------" << endl;
+		Log.info() << "  total energy		: " << getCHARMMFF().getEnergy() << " kJ/mol" << endl;
+	}
+
 	void MolecularStructure::fetchPreferences(INIFile& inifile)
 		throw()
 	{
 		minimization_dialog_.readPreferences(inifile);
 		md_dialog_.readPreferences(inifile);
 		amber_dialog_.fetchPreferences(inifile);
+		charmm_dialog_.fetchPreferences(inifile);
 	}
 
 
@@ -772,6 +788,7 @@ namespace BALL
 		minimization_dialog_.writePreferences(inifile);
 		md_dialog_.writePreferences(inifile);
 		amber_dialog_.writePreferences(inifile);
+		charmm_dialog_.writePreferences(inifile);
 	}
 
 
@@ -794,36 +811,54 @@ namespace BALL
 		setStatusbarText("calculated H-bonds");
 	}
 
-	void MolecularStructure::calculateAmberEnergy()
+	void MolecularStructure::calculateForceFieldEnergy()
 	{
 		System* system = getMainControl()->getSelectedSystem();
 		if (system == 0)
 		{
-			setStatusbarText("to calculate AMBER energies, one system has to be selected");
+			setStatusbarText("to calculate ForceField energies, one system has to be selected");
 			return;
 		}
 
-		// set up the AMBER force field
+		// set up the force field
 		setStatusbarText("setting up force field...");
-
 		AmberFF& amber = getAMBERFF();
-
-		if (!amber.setup(*system))
+		CharmmFF& charmm = getCHARMMFF();
+		if(use_amber_)
 		{
-			Log.error() << "Force field setup failed." << std::endl;
-			return;
+			if (!amber.setup(*system))
+			{
+				Log.error() << "Amber force field setup failed." << std::endl;
+				return;
+			}
+		}
+		else
+		{
+			if (!charmm.setup(*system))
+			{
+				Log.error() << "Charmm force field setup failed." <<std::endl;
+				return;
+			}
 		}
 
 		// calculate the energy
 		setStatusbarText("calculating energy...");
-
-		amber.updateEnergy();
-
-		// print the result
-		printAmberResults();
-		setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
+		
+		if(use_amber_)
+		{
+			amber.updateEnergy();
+			// print the result
+			printAmberResults();
+			setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
+		}
+		else
+		{
+			charmm.updateEnergy();
+			// print the result
+			printCharmmResults();
+			setStatusbarText("Total CHARMM energy: " + String(charmm.getEnergy()) + " kJ/mol.");
+		}
 	}
-
 
 	void MolecularStructure::amberMinimization()
 	{
@@ -844,22 +879,39 @@ namespace BALL
 		{
 			return;
 		}
-		
-		// set up the AMBER force field
+
+		// set up the force field
 		setStatusbarText("setting up force field...");
-
+		
+		use_amber_ = minimization_dialog_.getUseAmber();
 		AmberFF& amber = getAMBERFF();
+		CharmmFF& charmm = getCHARMMFF();
 
-		if (!amber.setup(*system))
+		if (use_amber_)
 		{
-			Log.error() << "Setup of AMBER force field failed." << endl;
-			return;
+			if (!amber.setup(*system))
+			{
+				Log.error() << "Setup of amber force field failed." << endl;
+				return;
+			}
+			// calculate the energy
+			setStatusbarText("starting simulation...");
+			amber.updateEnergy();
+		}
+		else
+		{
+			if (!charmm.setup(*system))
+			{
+				Log.error() << "Setup of charmm force field failed." << endl;
+				return;
+			}
+			// calculate the energy
+			setStatusbarText("starting simulation...");
+			charmm.updateEnergy();
 		}
 
 		// calculate the energy
 		setStatusbarText("starting minimization...");
-
-		amber.updateEnergy();
 
 		EnergyMinimizer* minimizer;
 		if (minimization_dialog_.getUseConjugateGradient())	minimizer = new ConjugateGradientMinimizer;
@@ -870,7 +922,11 @@ namespace BALL
 		minimizer->options[EnergyMinimizer::Option::MAX_GRADIENT] = minimization_dialog_.getMaxGradient();
 		minimizer->options[EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND] = minimization_dialog_.getEnergyDifference();
 		minimizer->options[EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY] = 999999999;
-		minimizer->setup(amber);
+		if(use_amber_)
+			minimizer->setup(amber);
+		else
+			minimizer->setup(charmm);
+
 		minimizer->setMaxNumberOfIterations(minimization_dialog_.getMaxIterations());
 
 		try
@@ -902,16 +958,30 @@ namespace BALL
 				getMainControl()->update(*system);
 
 				QString message;
-				message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A",
+				if(use_amber_)
+					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 												minimizer->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
+				else
+					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+												minimizer->getNumberOfIterations(), charmm.getEnergy(), charmm.getRMSGradient());
 				setStatusbarText(String(message.ascii()));
 			}
 
 			Log.info() << endl << "minimization terminated." << endl << endl;
-			printAmberResults();
-			Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after "
-								 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
-			setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
+			if(use_amber_)
+			{
+				printAmberResults();
+				Log.info() << "final RMS gradient    : " << amber.getRMSGradient() << " kJ/(mol A)   after "
+									 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
+				setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
+			}
+			else
+			{
+				printCharmmResults();
+				Log.info() << "final RMS gradient    : " << charmm.getRMSGradient() << "kJ/(mol A) after"
+									<< minimizer->getNumberOfIterations() << " iterations" << endl << endl;
+				setStatusbarText("Total CHARMM energy: " + String(charmm.getEnergy()) + " kJ/mol.");
+			}
 
 			// clean up
 			delete minimizer;
@@ -945,27 +1015,43 @@ namespace BALL
 		{
 			return;
 		}
-		
-		AmberFF& amber = getAMBERFF();
 
-		// set up the AMBER force field
+		use_amber_ = md_dialog_.getUseAmber();
+		AmberFF& amber = getAMBERFF();
+		CharmmFF& charmm = getCHARMMFF();
+		// set up the force field
 		setStatusbarText("setting up force field...");
 
 	#ifdef BALL_VIEW_DEBUG
-		amber.options.dump();
+		if(use_amber_)
+			amber.options.dump();
+		else
+			charmm.options.dump();
 	#endif
-
-		if (!amber.setup(*system))
+	
+		if (use_amber_)
 		{
-			Log.error() << "Setup of AMBER force field failed." << endl;
-			return;
+			if (!amber.setup(*system))
+			{
+				Log.error() << "Setup of amber force field failed." << endl;
+				return;
+			}
+			// calculate the energy
+			setStatusbarText("starting simulation...");
+			amber.updateEnergy();
 		}
-
-		// calculate the energy
-		setStatusbarText("starting simulation...");
-
-		amber.updateEnergy();
-
+		else
+		{
+			if (!charmm.setup(*system))
+			{
+				Log.error() << "Setup of charmm force field failed." << endl;
+				return;
+			}
+			// calculate the energy
+			setStatusbarText("starting simulation...");
+			charmm.updateEnergy();
+		}
+		
 		MolecularDynamics* mds = 0;
 		if (md_dialog_.useMicroCanonical()) mds = new CanonicalMD;
 		else 																mds = new MicroCanonicalMD;
@@ -978,7 +1064,11 @@ namespace BALL
 		try
 		{
 			// setup the simulation
-			mds->setup(amber, 0, options);
+			if(use_amber_)
+				mds->setup(amber, 0, options);
+			else
+				mds->setup(charmm, 0, options);
+				
 			if (!mds->isValid())
 			{
 				Log.error() << "Setup for MD simulation failed!" << std::endl;
@@ -1019,9 +1109,19 @@ namespace BALL
 		#else
 			// ============================= WITHOUT MULTITHREADING ==============================
 			// iterate until done and refresh the screen every "steps" iterations
-			
-			SnapShotManager manager(amber.getSystem(), &amber, dcd);
+			SnapShotManager manager;
+			if(use_amber_)
+			{
+				 SnapShotManager mngr(amber.getSystem(), &amber, dcd);
+				 manager = mngr;
+			}
+			else
+			{
+				static SnapShotManager mngr(charmm.getSystem(), &charmm, dcd);
+				manager = mngr;
+			}
 			manager.setFlushToDiskFrequency(10);
+			
 			while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps())
 			{
 				mds->simulateIterations(steps, true);
@@ -1038,19 +1138,34 @@ namespace BALL
 				}
 
 				QString message;
-				message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+				if(use_amber_)
+					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 												mds->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
+				else
+					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+												mds->getNumberOfIterations(), charmm.getEnergy(), charmm.getRMSGradient());
 				setStatusbarText(String(message.ascii()));
 			}
 
 			if (dcd) manager.flushToDisk();
 
 			Log.info() << std::endl << "simulation terminated." << std::endl << endl;
-			printAmberResults();
-			Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
-								 << mds->getNumberOfIterations() << " iterations" << endl << endl;
-			setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
+			if(use_amber_)
+			{
+				printAmberResults();
+				Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
+									 << mds->getNumberOfIterations() << " iterations" << endl << endl;
+				setStatusbarText("Total FF energy: " + String(amber.getEnergy()) + " kJ/mol.");
 
+			}
+			else
+			{
+				printCharmmResults();
+				Log.info() << "final RMS gadient    : " << charmm.getRMSGradient() << " kJ/(mol A)   after " 
+									 << mds->getNumberOfIterations() << " iterations" << endl << endl;
+				setStatusbarText("Total FF energy: " + String(charmm.getEnergy()) + " kJ/mol.");
+			}
+				
 			// clean up
 			delete mds;
 
@@ -1061,7 +1176,10 @@ namespace BALL
 				dcd = new DCDFile(md_dialog_.getDCDFile(), File::IN);
 
 				NewTrajectoryMessage* message = new NewTrajectoryMessage;
-				message->setComposite(*amber.getSystem());
+				if(use_amber_)
+					message->setComposite(*amber.getSystem());
+				else
+					message->setComposite(*charmm.getSystem());
 				message->setTrajectoryFile(*dcd);
 				notify_(message);
 			}
@@ -1076,7 +1194,6 @@ namespace BALL
 		}
 	}
 
-
 	void MolecularStructure::buildPeptide()
 	{
 		PeptideDialog* dialog = new PeptideDialog;
@@ -1090,10 +1207,26 @@ namespace BALL
 		getMainControl()->insert(*system, dialog->getSequence());
 	}
 
-	void MolecularStructure::showForceFieldOptions()
+	void MolecularStructure::showAmberForceFieldOptions()
 	{
 		amber_dialog_.raise();
-		amber_dialog_.show();
+		if(amber_dialog_.exec() == QDialog::Accepted)
+		{
+			use_amber_ = true;
+			md_dialog_.setForceField(true);
+			minimization_dialog_.setForceField(true);
+		}
+	}
+	
+	void MolecularStructure::showCharmmForceFieldOptions()
+	{
+		charmm_dialog_.raise();
+		if(charmm_dialog_.exec() == QDialog::Accepted)
+		{
+			use_amber_ = false;
+			md_dialog_.setForceField(false);
+			minimization_dialog_.setForceField(false);
+		}
 	}
 
 } } // namespaces

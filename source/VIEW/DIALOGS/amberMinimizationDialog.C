@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberMinimizationDialog.C,v 1.8 2004/01/20 15:07:43 amoll Exp $
+// $Id: amberMinimizationDialog.C,v 1.9 2004/02/18 11:45:11 bender Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberMinimizationDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
+#include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
 #include <qfiledialog.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
@@ -17,7 +18,8 @@ namespace BALL
 
 		AmberMinimizationDialog::AmberMinimizationDialog(QWidget* parent, const char* name)
 			:	AmberMinimizationDialogData( parent, name ),
-				amber_dialog_(0)
+				amber_dialog_(0),
+				charmm_dialog_(0)
 		{
 		}
 
@@ -145,12 +147,55 @@ namespace BALL
 
 		void AmberMinimizationDialog::advancedOptions()
 		{
-			if (amber_dialog_ != 0) amber_dialog_->exec();
+			if(useAmberRadioButton->isChecked())
+			{
+				if (amber_dialog_ != 0) amber_dialog_->exec();
+			}
+			else
+			{
+				if (charmm_dialog_ != 0) charmm_dialog_->exec();
+			}
 		}
 
 		void AmberMinimizationDialog::setAmberDialog(AmberConfigurationDialog* dialog)
 		{
 			amber_dialog_ = dialog;
+		}
+
+		void AmberMinimizationDialog::setCharmmDialog(CharmmConfigurationDialog* dialog)
+		{
+			charmm_dialog_ = dialog;
+		}
+
+		void AmberMinimizationDialog::setForceField(bool sel)
+		{	
+			if(sel == true)
+			{
+				useAmberRadioButton->setChecked(true);
+				useCharmmRadioButton->setChecked(false);
+			}
+			else
+			{
+				useCharmmRadioButton->setChecked(true);
+				useAmberRadioButton->setChecked(false);
+			}
+		}
+
+		void AmberMinimizationDialog::useAmberFF()
+		{
+			useAmberRadioButton->setChecked(true);
+			useCharmmRadioButton->setChecked(false);
+		}
+
+		void AmberMinimizationDialog::useCharmmFF()
+		{
+			useCharmmRadioButton->setChecked(true);
+			useAmberRadioButton->setChecked(false);
+		}
+
+		bool AmberMinimizationDialog::getUseAmber()
+		{
+			return useAmberRadioButton->isChecked();
 		}
 
 	} // namespace VIEW

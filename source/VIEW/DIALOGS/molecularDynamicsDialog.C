@@ -4,6 +4,7 @@
 
 #include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
+#include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
 
 #include <qfiledialog.h>
 #include <qlineedit.h>
@@ -18,7 +19,8 @@ namespace BALL
 
 MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* name)
 	:	MolecularDynamicsDialogData( parent, name ),
-		amber_dialog_(0)
+		amber_dialog_(0),
+		charmm_dialog_(0)
 {
 }
 
@@ -166,7 +168,14 @@ Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const
 
 void MolecularDynamicsDialog::advancedOptions()
 {
-	if (amber_dialog_ != 0) amber_dialog_->exec();
+	if(useAmberRadioButton->isChecked())
+	{
+		if (amber_dialog_ != 0) amber_dialog_->exec();
+	}
+	else
+	{
+		if (charmm_dialog_ != 0) charmm_dialog_->exec();
+	}
 }
 
 void MolecularDynamicsDialog::setAmberDialog(AmberConfigurationDialog* dialog)
@@ -174,4 +183,39 @@ void MolecularDynamicsDialog::setAmberDialog(AmberConfigurationDialog* dialog)
 	amber_dialog_ = dialog;
 }
 
+void MolecularDynamicsDialog::setCharmmDialog(CharmmConfigurationDialog* dialog)
+{
+	charmm_dialog_ = dialog;
+}
+
+void MolecularDynamicsDialog::setForceField(bool sel)
+{	
+	if(sel == true)
+	{
+		useAmberRadioButton->setChecked(true);
+		useCharmmRadioButton->setChecked(false);
+	}
+	else
+	{
+		useCharmmRadioButton->setChecked(true);
+		useAmberRadioButton->setChecked(false);
+	}
+}
+
+void MolecularDynamicsDialog::useAmberFF()
+{
+	useAmberRadioButton->setChecked(true);
+	useCharmmRadioButton->setChecked(false);
+}
+
+void MolecularDynamicsDialog::useCharmmFF()
+{
+	useCharmmRadioButton->setChecked(true);
+	useAmberRadioButton->setChecked(false);
+}
+
+bool MolecularDynamicsDialog::getUseAmber()
+{
+	return useAmberRadioButton->isChecked();
+}
 }} //namespaces

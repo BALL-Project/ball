@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.3 2004/01/20 15:45:04 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.4 2004/02/18 11:45:11 bender Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -61,7 +61,7 @@ namespace BALL
 			assign_typenames_checkBox->setChecked(true);
 			assign_types_checkBox->setChecked(true);
 			overwrite_charges_checkBox->setChecked(true);
-			overwrite_typenames_checkBox->setChecked(false);
+			overwrite_typenames_checkBox->setChecked(true);
 		}
 
 		const String& AmberConfigurationDialog::getFilename() const
@@ -282,6 +282,7 @@ namespace BALL
 			assign_types_checkBox->setChecked(assign_types_);
 			overwrite_charges_checkBox->setChecked(overwrite_charges_);
 			overwrite_typenames_checkBox->setChecked(overwrite_typenames_);
+			setResult(0);
 		}
 
 		void AmberConfigurationDialog::accept()
@@ -310,6 +311,7 @@ namespace BALL
 			overwrite_charges_ = overwrite_charges_checkBox->isChecked();
 
 			if (amber_ != 0) applyTo(*amber_);
+			setResult(1);
 			hide();
 		}
 

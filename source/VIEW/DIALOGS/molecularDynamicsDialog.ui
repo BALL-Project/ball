@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>MolecularDynamicsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -7,9 +7,9 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>1</y>
-            <width>380</width>
-            <height>315</height>
+            <y>0</y>
+            <width>395</width>
+            <height>412</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -22,14 +22,14 @@
     </property>
     <property name="minimumSize">
         <size>
-            <width>380</width>
+            <width>395</width>
             <height>315</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
             <width>32767</width>
-            <height>310</height>
+            <height>420</height>
         </size>
     </property>
     <property name="caption">
@@ -38,109 +38,16 @@
     <property name="toolTip" stdset="0">
         <string>Saves a PNG images on each step (usefull if you want to create a movie from a MD simulation).</string>
     </property>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>advanced_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>237</x>
-                <y>238</y>
-                <width>139</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&amp;AMBER Options</string>
-        </property>
-        <property name="accel">
-            <string>Alt+A</string>
-        </property>
-    </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>dielectric_group_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>237</x>
-                <y>172</y>
-                <width>138</width>
-                <height>59</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Ensemble</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>canonical_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>17</y>
-                    <width>120</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>120</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>canonical</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>microcanonical_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>37</y>
-                    <width>126</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>120</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>microcanonical</string>
-            </property>
-        </widget>
-    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>GroupBox2_2</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>4</x>
-                <y>172</y>
-                <width>226</width>
-                <height>97</height>
+                <x>8</x>
+                <y>169</y>
+                <width>225</width>
+                <height>100</height>
             </rect>
         </property>
         <property name="frameShadow">
@@ -152,22 +59,6 @@
         <property name="alignment">
             <set>AlignHCenter</set>
         </property>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>export_images</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>70</y>
-                    <width>196</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>export PNG images</string>
-            </property>
-        </widget>
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>enable_dcd</cstring>
@@ -249,6 +140,22 @@
                 <set>AlignRight</set>
             </property>
         </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>export_images</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>70</y>
+                    <width>196</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>export PNG images</string>
+            </property>
+        </widget>
     </widget>
     <widget class="QPushButton">
         <property name="name">
@@ -256,10 +163,10 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>4</x>
-                <y>278</y>
-                <width>195</width>
-                <height>30</height>
+                <x>9</x>
+                <y>369</y>
+                <width>181</width>
+                <height>32</height>
             </rect>
         </property>
         <property name="backgroundMode">
@@ -281,49 +188,15 @@
             <bool>true</bool>
         </property>
     </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cancel_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>205</x>
-                <y>278</y>
-                <width>172</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="backgroundMode">
-            <enum>PaletteButton</enum>
-        </property>
-        <property name="focusPolicy">
-            <enum>TabFocus</enum>
-        </property>
-        <property name="text">
-            <string>Cancel</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>GroupBox_3</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>5</x>
+                <x>10</x>
                 <y>0</y>
-                <width>372</width>
+                <width>370</width>
                 <height>170</height>
             </rect>
         </property>
@@ -348,43 +221,6 @@
         <property name="alignment">
             <set>AlignHCenter</set>
         </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>Label_4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>18</y>
-                    <width>160</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>160</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="backgroundMode">
-                <enum>PaletteBackground</enum>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="lineWidth">
-                <number>1</number>
-            </property>
-            <property name="text">
-                <string>number of steps</string>
-            </property>
-            <property name="textFormat">
-                <enum>AutoText</enum>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignLeft</set>
-            </property>
-        </widget>
         <widget class="QLabel">
             <property name="name">
                 <cstring>Label_5</cstring>
@@ -496,43 +332,6 @@
                 <set>AlignVCenter|AlignLeft</set>
             </property>
         </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>temperature_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>12</x>
-                    <y>136</y>
-                    <width>171</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>160</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="backgroundMode">
-                <enum>PaletteBackground</enum>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="lineWidth">
-                <number>1</number>
-            </property>
-            <property name="text">
-                <string>steps between refresh</string>
-            </property>
-            <property name="textFormat">
-                <enum>AutoText</enum>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignLeft</set>
-            </property>
-        </widget>
         <widget class="QLineEdit">
             <property name="name">
                 <cstring>refresh_lineedit</cstring>
@@ -595,25 +394,6 @@
                 <set>AlignRight</set>
             </property>
         </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>time_lineedit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>190</x>
-                    <y>78</y>
-                    <width>158</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>0.01</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-        </widget>
         <widget class="QLineEdit">
             <property name="name">
                 <cstring>timestep_linedit</cstring>
@@ -673,6 +453,277 @@
                 <set>AlignRight</set>
             </property>
         </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>time_lineedit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>190</x>
+                    <y>78</y>
+                    <width>158</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>0.01</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>Label_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>18</y>
+                    <width>160</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>160</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>PaletteBackground</enum>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="text">
+                <string>number of steps</string>
+            </property>
+            <property name="textFormat">
+                <enum>AutoText</enum>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>temperature_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>12</x>
+                    <y>136</y>
+                    <width>171</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>160</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="backgroundMode">
+                <enum>PaletteBackground</enum>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="lineWidth">
+                <number>1</number>
+            </property>
+            <property name="text">
+                <string>steps between refresh</string>
+            </property>
+            <property name="textFormat">
+                <enum>AutoText</enum>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>269</y>
+                <width>371</width>
+                <height>99</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Force Field Options</string>
+        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>advanced_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>60</y>
+                    <width>166</width>
+                    <height>32</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;ForceField Options</string>
+            </property>
+            <property name="accel">
+                <string>Alt+F</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>useCharmmRadioButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>183</x>
+                    <y>31</y>
+                    <width>166</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Use CharmmFF</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>useAmberRadioButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>31</y>
+                    <width>166</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Use AmberFF</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>199</x>
+                <y>369</y>
+                <width>181</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteButton</enum>
+        </property>
+        <property name="focusPolicy">
+            <enum>TabFocus</enum>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>dielectric_group_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>239</x>
+                <y>169</y>
+                <width>141</width>
+                <height>100</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Ensemble</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>canonical_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>21</y>
+                    <width>120</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>120</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>canonical</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>microcanonical_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>58</y>
+                    <width>120</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>120</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>microcanonical</string>
+            </property>
+        </widget>
     </widget>
 </widget>
 <connections>
@@ -712,6 +763,18 @@
         <receiver>MolecularDynamicSimulation</receiver>
         <slot>advancedOptions()</slot>
     </connection>
+    <connection>
+        <sender>useAmberRadioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>useAmberFF()</slot>
+    </connection>
+    <connection>
+        <sender>useCharmmRadioButton</sender>
+        <signal>clicked()</signal>
+        <receiver>MolecularDynamicSimulation</receiver>
+        <slot>useCharmmFF()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>steps_lineedit</tabstop>
@@ -730,6 +793,8 @@
     <slot>timeChanged()</slot>
     <slot>enableDCDFileSelected()</slot>
     <slot>advancedOptions()</slot>
+    <slot>useAmberFF()</slot>
+    <slot>useCharmmFF()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

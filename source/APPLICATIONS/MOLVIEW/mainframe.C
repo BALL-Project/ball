@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.124 2004/02/12 16:21:09 amoll Exp $
+// $Id: mainframe.C,v 1.125 2004/02/18 11:45:11 bender Exp $
 //
 
 #include "mainframe.h"
@@ -133,6 +133,14 @@ namespace BALL
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 										ALT+Key_X, MENU_FULLSCREEN);
+
+		// Molecular Mechanics Menu
+		hint = "Use Amber Force Field";
+		insertMenuEntry(MainControl::CHOOSE_FF, "Use Amber Force Field", this, SLOT(choose_AmberFF()),0,MENU_CHOOSEAMBERFF,hint);
+		
+		hint = "Use Charmm Force Field";
+		insertMenuEntry(MainControl::CHOOSE_FF, "Use Charmm Force Field", this, SLOT(choose_CharmmFF()),0,MENU_CHOOSECHARMMFF, hint);
+
 		// Tools Menu -------------------------------------------------------------------
 		hint = "Calculate the Electrostatics with FDPB, if one System selected.";
 		insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", FDPB_dialog_, SLOT(show()), 0,
@@ -212,6 +220,15 @@ namespace BALL
 		pr.finish();
 	}
 
+	void Mainframe::choose_AmberFF()
+	{
+		molecular_structure_->showAmberForceFieldOptions();
+	}
+	
+	void Mainframe::choose_CharmmFF()
+	{
+		molecular_structure_->showCharmmForceFieldOptions();
+	}
 
 	void Mainframe::computeIsoContourSurface()
 	{
