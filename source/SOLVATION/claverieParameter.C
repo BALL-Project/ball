@@ -1,4 +1,4 @@
-// $Id: claverieParameter.C,v 1.3 2000/09/25 11:17:54 anker Exp $
+// $Id: claverieParameter.C,v 1.4 2000/09/28 12:16:19 anker Exp $
 
 #include <BALL/SOLVATION/claverieParameter.h>
 
@@ -93,6 +93,11 @@ namespace BALL
 		return params;
 	}
 
+	std::pair<float, float> ClaverieParameter::getParameters(Atom::Type type) const
+	{
+		return parameters_[indices_[type]];
+	}
+
 
 	bool ClaverieParameter::extractSection(ForceFieldParameters& parameters,
 		const String& section_name)
@@ -146,5 +151,7 @@ namespace BALL
 		}
 		return true;
 	}
+
+
 
 }
