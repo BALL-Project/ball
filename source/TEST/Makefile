@@ -3,6 +3,10 @@ DIRECTORY=TEST
 XDR_DEPENDENT_EXECUTABLES=\
 	XDRPersistenceManager_test
 
+SMILES_EXECUTABLES=\
+	SmilesParser_test
+
+
 EXECUTABLES_BASIC = \
 	ClassTest_test\
 	RegularExpression_test\
@@ -59,7 +63,7 @@ EXECUTABLES_DATATYPES = \
 	RegularData2D_test\
 	RegularData3D_test
 
-EXECUTABLES_CONCEPTS =$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
+EXECUTABLES_CONCEPTS = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	LogStream_test\
 	AutoDeletable_test\
 	Object_test\
@@ -146,7 +150,7 @@ EXECUTABLES_ENERGY = \
 	EnergyProcessor_test\
 	OoiEnergy_test
 
-EXECUTABLES_STRUCTURE = \
+EXECUTABLES_STRUCTURE = $(BALL_HAS_FLEX_YACC:true=$(SMILES_EXECUTABLES))\
 	Enumerator_test\
 	AnalyticalSES_test\
 	NumericalSAS_test\
@@ -262,3 +266,8 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
+
+SmilesParser_test: SmilesParser_test.o ../STRUCTURE/smilesParser.o
+	$(CXX) $(CXXFLAGS) SmilesParser_test.o ../STRUCTURE/smilesParser.o $(LDFLAGS) -o $@ $(LIBS)
+
+
