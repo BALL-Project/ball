@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.58 2004/05/06 21:39:38 oliver Exp $
+// $Id: fragmentDB.C,v 1.59 2004/05/10 12:13:52 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -133,10 +133,12 @@ namespace BALL
 	{
 		if (filename == "")
 		{
-			return;
+			setFilename("fragments/Fragments.db");
 		}
-
-		setFilename(filename);
+		else
+		{
+			setFilename(filename);
+		}
 
 		init();
 
