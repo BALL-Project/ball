@@ -1,5 +1,4 @@
-// $Id: property.iC,v 1.4 2000/08/22 17:03:27 amoll Exp $
-
+// $Id: property.iC,v 1.5 2000/08/24 12:00:00 amoll Exp $
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name)	
@@ -167,13 +166,10 @@ void PropertyManager::clear()
 	named_properties_.clear();
 }
 
-
-
 BALL_INLINE 
 void PropertyManager::destroy()
 {
-	// same as clear
-  clear();
+  clear();	// same as clear
 }
 
 BALL_INLINE 
@@ -278,6 +274,10 @@ void PropertyManager::swap(PropertyManager& property_manager)
 BALL_INLINE 
 bool PropertyManager::hasProperty(Property property) const
 {
+	if ((signed) (bitvector_.getSize() - 1) < property)
+	{
+		return false;
+	}
   return bitvector_.getBit(property);
 }
 

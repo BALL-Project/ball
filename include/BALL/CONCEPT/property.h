@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.11 2000/08/22 17:03:27 amoll Exp $
+// $Id: property.h,v 1.12 2000/08/24 12:00:00 amoll Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -231,6 +231,15 @@ namespace BALL
 		string getString() const;
 		//@}
 
+		/**	@name	Storers */
+		//@{
+
+		/// Output operator
+		friend std::ostream& operator << (std::ostream& s, const NamedProperty& property);
+
+		/// Input operator
+		friend std::istream& operator >> (std::istream& s, NamedProperty& property);
+		//@}
 
 		private:
 
