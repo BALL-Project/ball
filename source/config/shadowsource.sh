@@ -35,7 +35,8 @@ done
 
 echo "creating links for source files..."
 for i in ${DIRS} ; do
-	FILES=`cd ${SOURCE_PATH}/$i;find . -name \*[.i][hC] | sed "s/^\.\///g"`
+	FILES=`cd ${SOURCE_PATH}/$i;find . -name \*[.i][hC] | sed "s/^\.\///g"` 
+	FILES="${FILES} "`cd ${SOURCE_PATH}/$i;find . -name \*xpm | sed "s/^\.\///g"` 
 	FILES="${FILES} "`cd ${SOURCE_PATH}/$i;find . -name Makefile | sed "s/^\.\///g"`
 	for j in ${FILES}; do
 		${LN} -s ${SOURCE_PATH}/$i/$j ${TARGET_PATH}/$i/$j 2>/dev/null
