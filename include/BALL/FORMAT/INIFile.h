@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.10 2001/03/01 13:43:10 amoll Exp $
+// $Id: INIFile.h,v 1.11 2001/03/09 20:54:03 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -80,6 +80,7 @@ namespace BALL
 				are built (hash tables containing the section names).\\
 				Line starting with '!', ';', or '\#' are treated as comment
 				lines and are stored, but not interpreted.
+				Key-names and values are trimmed.
 				If the file could not be read, valid_ is set to false, ow true.
 				@return	bool \begin{itemize}
 												\item {\bf true} if the file could be opened and read
@@ -90,7 +91,6 @@ namespace BALL
 
 		/**	Writes the buffer contents to a file.
 				If the file could not be writen, valid_ is set to false, ow true.
-				Not yet implemented!
 				@return	bool - \begin{itemize}
 												\item {\bf true} if the file could be succesfully written
 												\item {\bf false} otherwise
@@ -139,8 +139,7 @@ namespace BALL
 		String* getLine(Size line_number);
 
 		/**	Change the contents of a line.
-				Replaces the line given by {\bf line_number} by the text 
-				in {\bf line}.\\
+				Replaces the line given by {\bf line_number} by the text in {\bf line}.\\
 				Not yet implemented!
 				@param	line_number number of the line to change, first line is 0
 				@param	line new content of the line
@@ -165,12 +164,25 @@ namespace BALL
 		*/	
 		bool hasSection(const String& section_name) const;
 
+
+		/** Return the name of a section at a given position.
+				@return String* \begin{itemize}
+											   \item the pointer to the section-name, or 
+											   \item 0, if pos is too high
+										    \end{itemize}
+		*/
+	  String* getSectionName(Position pos);
+
+		/**	Count all sections.
+		*/	
+		Size getNumberOfSections() const;
+
 		/**	Returns the index of the first line of a section.
 				The first line of a section is the line immediately following the 
 				section name (in square brackets).
 				@return	Size \begin{itemize}
 											\item the index of the first line, or 
-											\item -1 if the section could not be found
+											\item INVALID_SIZE if the section could not be found or has no lines
 										 \end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
@@ -182,8 +194,7 @@ namespace BALL
 				or the last line of a file.
 				@return	Size \begin{itemize}
 											\item the index of the last line, or 
-											\item -1 if the section could not be found
-										 \end{itemize}
+											\item INVALID_SIZE if the section could not be found or has no lines										 \end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
 		Size getSectionLastLine(const String& section_name) const;	
@@ -193,7 +204,7 @@ namespace BALL
 				by the last line of the file.
 				@return	Size \begin{itemize}
 											\item the number of lines, or 
-											\item -1 if the section could not be found
+											\item INVALID_SIZE if the section could not be found
 										 \end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
@@ -249,17 +260,33 @@ namespace BALL
 
 		//@}
 
-		private:	
+		protected:	
 
 		bool									valid_;
 		String								filename_;	
+
+		// names of all sections
 		std::vector<String>		section_names_;
+
+		// all lines
 		std::vector<String>		lines_;
+
+		// in which sector is the line
 		std::vector<Index>		line_section_index_;
+
+		// starts of the sections
 		std::vector<Size>			section_start_;
+
+		// end line number of the sections
 		std::vector<Size>			section_end_;
+
+		// hashmap with the section names  => index
 		StringHashMap<Size>		section_index_;
+
+		// hashmap with all keys
 		StringHashMap<Size>		section_key_map_;
+
+		// number of lines in the original file
 		Size									original_number_of_lines_;
 
 	};
