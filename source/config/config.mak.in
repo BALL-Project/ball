@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.15 2001/04/30 02:27:26 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.16 2001/05/22 15:42:11 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -97,7 +97,15 @@ DEFINES   = @DEFINES@
 #
 CXXFLAGS_D		= @CXXFLAGS_D@
 CXXFLAGS_O		= @CXXFLAGS_O@
-BALL_CXXFLAGS = @BALL_CXXFLAGS@
+
+#
+# additional CXXFLAGS for building library objects
+LIB_CXXFLAGS = @LIB_CXXFLAGS@
+
+#
+# additional CXXFLAGS for building applications, tests, examples
+# used instead of LIB_CXXFLAGS in APPLICATIONS, EXAMPLES, TEST, BENCHMARKS
+NONLIB_CXXFLAGS = @NONLIB_CXXFLAGS@
 
 # MODE_FLAGS is set to DEBUG_FLAGS or OPTIMIZE_FLAGS, this
 # can be controlled by specifying the configure switch 
@@ -129,4 +137,4 @@ DIRS	= @SUBDIRS@
 # Rule to create .o files from .C files
 #
 .C.o:
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@

@@ -29,7 +29,7 @@ FileNotFound
 GlobalExceptionHandler
 
 HashFunction                        /           /
-Limits                              E           /
+Limits                              /           /
 LogStreamNotifier                   EI,         X
 LogStreamBuf                        EI,         X
 LogStream                           EI,         X

@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.136 2001/05/16 15:04:34 oliver Exp $
+dnl    $Id: configure.in,v 1.137 2001/05/22 15:42:11 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1083,7 +1083,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
 	CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
-	BALL_CXXFLAGS="${BALL_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
+	LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
 	CXXFLAGS_O="${CXXFLAGS_O} -O5"
 	
 	CXXFLAGS_D="${CXXFLAGS_D}"
@@ -1241,7 +1241,9 @@ if test "${COMPILER_DONE}" != true ; then
 		AR="${CXX}"
 		DYNAR="${CXX}"
 		AROPTS="${AROPTS} -xar -KPIC -o"
-		DYNAROPTS="${DYNAROPTS} -G -KPIC -o"
+		DYNAROPTS="${DYNAROPTS} -pto -G -KPIC -o"
+		NONLIB_CXXFLAGS="-pto"
+		LIB_CXXFLAGS=""
 		CXX_MAKEDEPEND="${CXX}"
 		MAKEDEP_CXX_OPTS="-xM1"
 		MAKEDEP_CXX_SUFFIX=" >.Dependencies"
@@ -2953,7 +2955,8 @@ dnl         COMPILER
 AC_SUBST(CXX)               dnl C++ compiler (absolute path)
 AC_SUBST(CXXFLAGS)          dnl C++ compiler flags
 AC_SUBST(ADD_CXXFLAGS)      dnl additional C++ compiler falgs (not passed on to makedepend)
-AC_SUBST(BALL_CXXFLAGS)			dnl C++ compiler flags used during compilation of the library only
+AC_SUBST(LIB_CXXFLAGS)			dnl C++ compiler flags used during compilation of the library only
+AC_SUBST(NONLIB_CXXFLAGS)		dnl C++ compiler flags used during compilation of applications, tests, examples only
 AC_SUBST(HAS_GPLUSPLUS)     dnl true, if C++ compiler is g++
 AC_SUBST(STD_CPP_INCLUDES)  dnl standard include paths of C++ compiler
 AC_SUBST(MAKEDEP_OPTS)      dnl options for makedep (needed for Linux)
