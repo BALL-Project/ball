@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.11 2001/07/15 22:40:37 oliver Exp $
+// $Id: HINFile_test.C,v 1.12 2001/07/16 02:11:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.11 2001/07/15 22:40:37 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.12 2001/07/16 02:11:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,6 +34,12 @@ CHECK(HINFile::getTemperature() const )
   TEST_REAL_EQUAL(hin.getTemperature(), 0.0)
 RESULT
 
+CHECK(HINFile::getPeriodicBoundary() const )
+	Box3 box3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	TEST_EQUAL(hin.getPeriodicBoundary(), box3)
+RESULT
+
+
 CHECK(HINFile::HINFile(const String& filename, File::OpenMode open_mode = File::IN))
   hin = HINFile("data/HINFile_test.hin");
   TEST_EQUAL(hin.isValid(), true)
@@ -57,6 +63,12 @@ CHECK(HINFile::read(System& system))
   TEST_NOT_EQUAL(system.getAtom(1)->getRadius(), 0)
 	PRECISION(0.001)
 	TEST_REAL_EQUAL(hin.getTemperature(), 297.5626)
+	TEST_REAL_EQUAL(hin.getPeriodicBoundary().a.x, -9.35068)
+	TEST_REAL_EQUAL(hin.getPeriodicBoundary().a.y, -9.35068)
+	TEST_REAL_EQUAL(hin.getPeriodicBoundary().a.z, -9.35068)
+	TEST_REAL_EQUAL(hin.getPeriodicBoundary().b.x, 9.35068)
+	TEST_REAL_EQUAL(hin.getPeriodicBoundary().b.y, 9.35068)
+	TEST_REAL_EQUAL(hin.getPeriodicBoundary().b.z, 9.35068)
 	PRECISION(1e-5)
 RESULT
 
@@ -89,10 +101,6 @@ CHECK(HINFile::hasPeriodicBoundary() const )
 RESULT
 
 
-CHECK(HINFile::getPeriodicBoundary() const )
-	Box3 box3(-9.35068, -9.35068, -9.35068, 9.35068, 9.35068, 9.35068);
-	TEST_EQUAL(hin.getPeriodicBoundary(), box3)
-RESULT
 
 
 /////////////////////////////////////////////////////////////
