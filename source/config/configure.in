@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.54 2000/01/28 17:56:44 oliver Exp $
+dnl    $Id: configure.in,v 1.55 2000/01/31 16:24:31 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -62,7 +62,7 @@ if test "$with_compiler" != "" ; then
 fi
 
 if test "$with_cxxflags" != "" ; then
-	CPPFLAGS=$with_cxxflags
+	CXXFLAGS=$with_cxxflags
 fi
 
 if test "$with_ldflags" != "" ; then
@@ -827,14 +827,11 @@ dnl
 if test "${HAS_GPLUSPLUS}" = "true" ; then
 	CXX_MAKEDEPEND="${CXX}"
 	MAKEDEP_CXX_OPTS="-M"
-	if test "${ARCHITECTURE}" = "alpha" ; then
-		CPPFLAGS="${CPPFLAGS}"
-	fi
-	CPPFLAGS_D="${CPPFLAGS_D} -Wall"
-	CPPFLAGS_DI="${CPPFLAGS_DI} -g"
-	CPPFLAGS_O="${CPPFLAGS_O} -O2"
+	CXXFLAGS_D="${CXXFLAGS_D} -Wall"
+	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+	CXXFLAGS_O="${CXXFLAGS_O} -O2"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
-	CPPFLAGS="${CPPFLAGS} -fPIC"
+	CXXFLAGS="${CXXFLAGS} -fPIC"
 
 	DYNAR="${CXX}"
 	if test "${OS}" != "Solaris" ; then
@@ -871,28 +868,29 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 
 	dnl	
 	dnl		Someone at KAI seems to have the need
-	dnl		to torture developpers by introducing 
+	dnl		to torture developers by introducing 
 	dnl		a new flag for position independent code 
 	dnl		on EVERY platform...
 	dnl		
+	CXXFLAGS="${CXX_FLAGS} --one_per"
 	if test "${OS}" = Linux ; then
-		CPPFLAGS="${CPPFLAGS} -fPIC"
+		CXXFLAGS="${CXXFLAGS} -fPIC"
 	fi
 	if test "${OS}" = Solaris ; then
-		CPPFLAGS="${CPPFLAGS} -KPIC"
+		CXXFLAGS="${CXXFLAGS} -KPIC"
 	fi
 	if test "${OS}" = IRIX ; then
-		CPPFLAGS="${CPPFLAGS} --pic"
+		CXXFLAGS="${CXXFLAGS} --pic"
 	fi
 	
 	dnl		optimze as on highest level: this compiler 
 	dnl		does a good job optimizing!
-	CPPFLAGS_O="${CPPFLAGS_O} -O3 +K3"
+	CXXFLAGS_O="${CXXFLAGS_O} -O3 +K3"
 	
 	dnl		avoid high level optimization to
 	dnl		get debuggable code...
-	CPPFLAGS_D="${CPPFLAGS_D} +K0"
-	CPPFLAGS_DI="${CPPFLAGS_DI} -g"
+	CXXFLAGS_D="${CXXFLAGS_D} +K0"
+	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 
 	dnl
 	dnl	if we are running under Solaris/SPARC,
@@ -902,9 +900,9 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 		if test "${BINFMT_64_BIT}" = true ; then
 			CXX_NAME="${CXX_NAME}_V9"
 			LDFLAGS="${LDFLAGS} -xarch=v9"
-			CPPFLAGS="${CPPLAGS} -xarch=v9"
+			CXXFLAGS="${CXXFLAGS} -xarch=v9"
 			AROPTS="${AROPTS} -xarch=v9"
-			DYNAROPTS="${DYNAROPTS} -xarch=v9"
+			DYNAROPTS=" -xarch=v9 ${DYNAROPTS}"
 		else
 			CXX_NAME="${CXX_NAME}_V8"
 		fi
@@ -973,22 +971,22 @@ if test "${COMPILER_DONE}" != true ; then
 
 		if test "${IRIX_BINFMT}" = 64 ; then
 			DEF_BOOL=false
-			CPPFLAGS="$CPPFLAGS -64 -LANG:std"
+			CXXFLAGS="$CXXFLAGS -64 -LANG:std"
 			DYNAROPTS="-64 ${DYNAROPTS}"
-			CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
-			CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
-			CPPFLAGS_DI="${CPPFLAGS_DI} -g"
+			CXXFLAGS_O="${CXXFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
+			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
+			CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 			LDFLAGS="$LDFLAGS -64 -LANG:std"
 			AC_DEFINE(IRIX64,)
 			ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
 		fi
 		if test "${IRIX_BINFMT}" = N32 ; then
 			DEF_BOOL=false
-			CPPFLAGS="$CPPFLAGS -n32 -LANG:std"
+			CXXFLAGS="$CXXFLAGS -n32 -LANG:std"
 			DYNAROPTS="-n32 ${DYNAROPTS}"
-			CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
-			CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
-			CPPFLAGS_DI="${CPPFLAGS_DI} -g"
+			CXXFLAGS_O="${CXXFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
+			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
+			CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 			LDFLAGS="$LDFLAGS -n32 -LANG:std"
 			AC_DEFINE(IRIX32,)
 			ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
@@ -1002,9 +1000,9 @@ if test "${COMPILER_DONE}" != true ; then
 	dnl  old SunOS 4.x - only for completeness
 	dnl
 	if test $OS = SunOS ; then
-		CPPFLAGS_D="$CPPFLAGS_D}"
-		CPPFLAGS_DI="$CPPFLAGS_DI} -g"
-		CPPFLAGS_O="${CPPFLAGS_O} -O2"
+		CXXFLAGS_D="$CXXFLAGS_D}"
+		CXXFLAGS_DI="$CXXFLAGS_DI} -g"
+		CXXFLAGS_O="${CXXFLAGS_O} -O2"
 		AC_DEFINE(SPARC,)
 		AC_DEFINE(SUNOS,)
 		AC_ERROR(SunOS not supported - please use Solaris)
@@ -1037,9 +1035,9 @@ if test "${COMPILER_DONE}" != true ; then
 			SUN_BINFMT=V9
 			CXX_NAME="${CXX_NAME}_V9"
 			LDFLAGS="${LDFLAGS} -xarch=v9"
-			CPPFLAGS="${CPPLAGS} -xarch=v9"
+			CXXFLAGS="${CXXFLAGS} -xarch=v9"
 			AROPTS="${AROPTS} -xarch=v9"
-			DYNAROPTS="${DYNAROPTS} -xarch=v9"
+			DYNAROPTS=" -xarch=v9 ${DYNAROPTS}"
 		else
 			SUN_BINFMT=V8
 			CXX_NAME="${CXX_NAME}_V8"
@@ -1055,10 +1053,10 @@ if test "${COMPILER_DONE}" != true ; then
 		MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
 		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
-		CPPFLAGS="${CPPFLAGS} -pto -KPIC"
-		CPPFLAGS_O="${CPPFLAGS_O} -xO3 -xtarget=native"
-		CPPFLAGS_D="${CPPFLAGS_D}"
-		CPPFLAGS_DI="${CPPFLAGS_DI} -g"
+		CXXFLAGS="${CXXFLAGS} -pto -KPIC"
+		CXXFLAGS_O="${CXXFLAGS_O} -xO3 -xtarget=native"
+		CXXFLAGS_D="${CXXFLAGS_D}"
+		CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 	fi
 fi
 
@@ -1074,22 +1072,22 @@ if test "$DEBUG" != "" ; then
 	if test "$DEBUG" = true ; then	
 		dnl  if debug information is also required, add the corresponding flag
 		dnl
-		if test "${DEBUG_INFO}" = true -a "$CPPFLAGS_DI" != "" ; then
-			CPPFLAGS_D="${CPPFLAGS_D} ${CPPFLAGS_DI}"
+		if test "${DEBUG_INFO}" = true -a "$CXXFLAGS_DI" != "" ; then
+			CXXFLAGS_D="${CXXFLAGS_D} ${CXXFLAGS_DI}"
 		fi
 		AC_DEFINE(BALL_DEBUG,)
 		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
 		AC_MSG_RESULT(enabled)
-		CPP_MODE_FLAGS="${CPPFLAGS_D}"
-		CPP_MODE_FLAGS_NO_OPTIMIZATION="${CPPFLAGS_D}"
+		CPP_MODE_FLAGS="${CXXFLAGS_D}"
+		CPP_MODE_FLAGS_NO_OPTIMIZATION="${CXXFLAGS_D}"
 	else
 		AC_MSG_RESULT(disabled)
-		CPP_MODE_FLAGS="${CPPFLAGS_O}"
+		CPP_MODE_FLAGS="${CXXFLAGS_O}"
 		CPP_MODE_FLAGS_NO_OPTIMIZATION=""
 	fi
 else
 	AC_MSG_RESULT(disabled)
-	CPP_MODE_FLAGS="${CPPFLAGS_O}"
+	CPP_MODE_FLAGS="${CXXFLAGS_O}"
 	CPP_MODE_FLAGS_NO_OPTIMIZATION=""
 fi
 
@@ -2147,7 +2145,7 @@ LIBS="$BALL_LIBS $LIBS"
 dnl
 dnl   joining all flags
 dnl
-CPPFLAGS="$CPPFLAGS $DEFINES"
+CXXFLAGS="$CXXFLAGS $DEFINES"
 
 dnl
 dnl  we try to remove dependencies from non-BALL files
@@ -2180,7 +2178,7 @@ AC_SUBST(BALL_INCLUDES)     dnl includes
 
 dnl					DEPENDENCIES
 
-MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CPPFLAGS}"
+MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CXXFLAGS}"
 if test ${CXX_MAKEDEPEND} = "makedepend" ; then
 	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
 fi
@@ -2194,9 +2192,9 @@ AC_SUBST(DEPENDENCY_GREPS)  dnl command line to remove non-BALL headers from the
 dnl         COMPILER
 
 AC_SUBST(CXX)               dnl C++ compiler (absolute path)
-AC_SUBST(CPPFLAGS)          dnl C++ compiler flags
-AC_SUBST(ADD_CPPFLAGS)      dnl additional C++ compiler falgs (not passed on to makedepend)
-AC_SUBST(BALL_CPPFLAGS)			dnl C++ compiler flags used during compilation of the library only
+AC_SUBST(CXXFLAGS)          dnl C++ compiler flags
+AC_SUBST(ADD_CXXFLAGS)      dnl additional C++ compiler falgs (not passed on to makedepend)
+AC_SUBST(BALL_CXXFLAGS)			dnl C++ compiler flags used during compilation of the library only
 AC_SUBST(HAS_GPLUSPLUS)     dnl true, if C++ compiler is g++
 AC_SUBST(STD_CPP_INCLUDES)  dnl standard include paths of C++ compiler
 AC_SUBST(MAKEDEP_OPTS)      dnl options for makedep (needed for Linux)
@@ -2221,11 +2219,11 @@ AC_SUBST(BALL_LIBS)         dnl libraries
 AC_SUBST(LDFLAGS)           dnl linker flags
 AC_SUBST(LIBS)              dnl linker libraries
 AC_SUBST(DEFINES)           dnl defines (part of LDFLAGS)
-AC_SUBST(CPPFLAGS_D)        dnl debug flags for compiler 
-AC_SUBST(CPPFLAGS_O)        dnl optimization flags for compiler 
-AC_SUBST(CPP_MODE_FLAGS)    dnl set to CPPFLAGS_D|CPPFLAGS_O, depending on BALL_DEBUG
+AC_SUBST(CXXFLAGS_D)        dnl debug flags for compiler 
+AC_SUBST(CXXFLAGS_O)        dnl optimization flags for compiler 
+AC_SUBST(CPP_MODE_FLAGS)    dnl set to CXXFLAGS_D|CXXFLAGS_O, depending on BALL_DEBUG
 AC_SUBST(CPP_MODE_FLAGS_NO_OPTIMIZATION)    
-														dnl set to CPPFLAGS_D|"", depending on BALL_DEBUG
+														dnl set to CXXFLAGS_D|"", depending on BALL_DEBUG
 
 
 
