@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.7 2001/03/11 19:39:37 anker Exp $
+// $Id: DCDFile.C,v 1.8 2001/03/11 22:00:54 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -139,8 +139,12 @@ namespace BALL
 		}
 
 		// read the number of coordinate sets contained in this file
+		// BAUSTELLE:
+		// storing that number in this instance AND in header_ might not be too
+		// clever.
 		*this >> adapt_Size;
-		header_.number_of_coordinate_sets = adapt_Size.getData();
+		header_.number_of_coordinate_sets = number_of_snapshots_ 
+			= adapt_Size.getData();
 		
 		// read the number of the first step
 		*this >> adapt_Size;
@@ -471,6 +475,10 @@ namespace BALL
 		{
 			append(*it);
 		}
+
+		// BAUSTELLE
+		// no error handling/reporting at the moment
+		return true;
 	}
 
 
@@ -481,14 +489,18 @@ namespace BALL
 		{
 			Log.error() << "DCDFile::DCDFile(): "
 				<< "Size of int is not equal to 4 on this machine." << endl;
+			return false;
 		}
 
 		if (sizeof(DoubleReal) != 8)
 		{
 			Log.error() << "DCDFile::DCDFile(): "
 				<< "Size of double is not equal to 4 on this machine." << endl;
+			return false;
 		}
+		// BAUSTELLE
 		// return readHeader();
+		return true;
 	}
 
 
