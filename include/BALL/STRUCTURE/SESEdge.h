@@ -1,4 +1,4 @@
-// $Id: SESEdge.h,v 1.9 2001/07/15 21:21:02 amoll Exp $
+// $Id: SESEdge.h,v 1.10 2001/09/19 17:44:38 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -24,7 +24,9 @@ namespace BALL
 	class TRSEdge;
 
 	/** Generic SESEdge Class.
-			{\bf Definition:} \URL{BALL/STRUCTURE/SESEdge.h} 
+			\\
+			{\bf Definition:} \URL{BALL/STRUCTURE/SESEdge.h}
+			\\
 	*/
 	template <class T>
 	class TSESEdge
@@ -48,8 +50,8 @@ namespace BALL
 			TYPE_CONVEX = 1,
 			TYPE_SINGULAR = 2
 		};
-
 		//@}
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -98,13 +100,13 @@ namespace BALL
 		virtual ~TSESEdge()
 		{
 		}
-
 		//@}
+
 		/**	@name	Assignment
 		*/
 		//@{
-
 		//@}
+
 		/**	@name	Accessors
 		*/
 		//@{
@@ -137,6 +139,7 @@ namespace BALL
 		}
 
 		//@}
+
 		/**	@name	Predicates
 		*/
 		//@{
@@ -158,16 +161,20 @@ namespace BALL
 			return true;
 		}
 
-		bool isFree()
+		bool isFree() const
+			throw()
 		{
 			if (rsedge == NULL)
 			{
 				return false;
 			}
-			return rsedge->isFree();
+			else
+			{
+				return rsedge->isFree();
+			}
 		}
-
 		//@}
+
 		/**	@name	Attributes
 		*/
 		//@{
@@ -215,7 +222,7 @@ namespace BALL
 	*/
 	//@{
 
-	/*	Input operator
+	/**	Input- Operator
 			reads in a TVector3 and a {\bf T} value : p, radius
 	*/
 /*
@@ -232,20 +239,20 @@ namespace BALL
 	}
 */
 
-	/**	Output operator
+	/**	Output- Operator
 	*/
-	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TSESEdge<T>& sesedge)
-	{
-		return (s << "SESEDGE" << sesedge.index << "(["
-							<< ((sesedge.vertex1 == NULL) ? -2 : sesedge.vertex1->index) << ' '
-							<< ((sesedge.vertex2 == NULL) ? -2 : sesedge.vertex2->index) << "] ["
-							<< ((sesedge.face1 == NULL) ? -2 : sesedge.face1->index) << ' '
-							<< ((sesedge.face2 == NULL) ? -2 : sesedge.face2->index) << "] "
-							<< sesedge.circle << ' ' << ((sesedge.rsedge == NULL) ? -2 : sesedge.rsedge->getIndex())
-							<< ((sesedge.type == 0) ? " convex)" : ((sesedge.type == 1) ? " concave)"
-																																					: " singular)")));
-	}
+		template <typename T>
+		std::ostream& operator << (std::ostream& s, const TSESEdge<T>& sesedge)
+		{
+			return (s << "SESEDGE" << sesedge.index << "(["
+								<< ((sesedge.vertex1 == NULL) ? -2 : sesedge.vertex1->index) << ' '
+								<< ((sesedge.vertex2 == NULL) ? -2 : sesedge.vertex2->index) << "] ["
+								<< ((sesedge.face1 == NULL) ? -2 : sesedge.face1->index) << ' '
+								<< ((sesedge.face2 == NULL) ? -2 : sesedge.face2->index) << "] "
+								<< sesedge.circle << ' ' << ((sesedge.rsedge == NULL) ? -2 : sesedge.rsedge->getIndex())
+								<< ((sesedge.type == 0) ? " convex)" : ((sesedge.type == 1) ? " concave)"
+																																						: " singular)")));
+		}
 	//@}
 
 
