@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.h,v 1.7 2001/02/28 01:17:38 amoll Exp $
+// $Id: charmmImproperTorsion.h,v 1.8 2001/07/11 23:59:31 amoll Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMIMPROPERTORSION_H
@@ -90,7 +90,7 @@ namespace BALL
 
 		/*_	@name	Private Attributes
 		*/
-		//@{
+		//_@{
 
 		/*_	array with the torsions
 		*/
@@ -100,7 +100,7 @@ namespace BALL
 
 		ResidueTorsions													improper_atoms_;
 
-		//@}
+		//_@}
 	 
 	};
 

@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.h,v 1.8 2001/05/17 18:23:38 anker Exp $
+// $Id: charmmNonBonded.h,v 1.9 2001/07/11 23:59:31 amoll Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -131,7 +131,6 @@ namespace BALL
 		virtual double getSolvationEnergy() const
 			throw();
 
-
 		//@}
 		/**	@name Neighbourhood and Parameter calculations
 		*/
@@ -153,23 +152,23 @@ namespace BALL
 
 		protected:
 
-		/**	@name	Protected Attributes	
+		/*_	@name	Protected Attributes	
 		*/
-		//@{
+		//_@{
 
-		/**	Value of the electrostatic energy
+		/*_	Value of the electrostatic energy
 		*/
 		double	electrostatic_energy_;
 
-		/**	Value of the vdw energy
+		/*_	Value of the vdw energy
 		*/
 		double	vdw_energy_;
 
-		/** Value of the solvation energy
+		/*_ Value of the solvation energy
 		*/
 		double solvation_energy_;
 
-		//@}
+		//_@}
 		/*_	@name	Private Attributes	
 		*/
 		//_@{

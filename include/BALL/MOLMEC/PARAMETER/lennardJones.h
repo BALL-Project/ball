@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.15 2001/03/02 22:10:27 amoll Exp $
+// $Id: lennardJones.h,v 1.16 2001/07/11 23:59:33 amoll Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -51,6 +51,7 @@ namespace BALL
 			EPSILON_R_FORMAT,
 			SLATER_KIRKWOOD_FORMAT
 		};
+		
 		//@}
 		/**	@name	Type definitions
 		*/
@@ -160,6 +161,7 @@ namespace BALL
 		FormatType						format_;
 			
 		std::vector<String>		names_;
+
 	};
 
 } // namespace BALL

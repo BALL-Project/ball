@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.15 2001/05/17 18:22:11 anker Exp $
+// $Id: amberNonBonded.h,v 1.16 2001/07/11 23:59:23 amoll Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -152,19 +152,19 @@ namespace BALL
 
 		protected:
 
-		/**	@name	Protected Attributes	
+		/*_	@name	Protected Attributes	
 		*/
-		//@{
+		//_@{
 
-		/**	Value of the electrostatic energy
+		/*_	Value of the electrostatic energy
 		*/
 		double	electrostatic_energy_;
 
-		/**	Value of the vdw energy
+		/*_	Value of the vdw energy
 		*/
 		double	vdw_energy_;
 
-		//@}
+		//_@}
 
 		private:
 
@@ -223,8 +223,8 @@ namespace BALL
 		*/
 		double	scaling_electrostatic_1_4_;
 
-		/*_     Flag for using constant or distance dependent dielectric constant.
-            True = distance dependent
+		/*_ Flag for using constant or distance dependent dielectric constant.
+        True = distance dependent
     */
     bool    use_dist_depend_dielectric_; 
 
@@ -237,6 +237,7 @@ namespace BALL
 		LennardJones	van_der_waals_;
 
 		Potential1210 hydrogen_bond_;
+
 		//_@}
 
 	};

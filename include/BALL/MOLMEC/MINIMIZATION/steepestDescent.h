@@ -1,4 +1,4 @@
-// $Id: steepestDescent.h,v 1.7 2000/08/30 19:58:21 oliver Exp $
+// $Id: steepestDescent.h,v 1.8 2001/07/11 23:59:32 amoll Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -48,15 +48,13 @@ namespace BALL
 		:	public EnergyMinimizer	
 	{
 
-
 		public:
-
 
 		/**	@name	Options definitions
 		*/
 		//@{
 
-		/**     Options names
+		/**  Options names
 		*/
 		struct Option
 		{
@@ -82,9 +80,6 @@ namespace BALL
 		};
 
 		//@}
-
-
-
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{
@@ -121,8 +116,6 @@ namespace BALL
 		virtual ~SteepestDescentMinimizer();
 
 		//@}
-
-
 		/**	@name	Assignments 
 		*/
 		//@{
@@ -132,7 +125,6 @@ namespace BALL
 		SteepestDescentMinimizer&	operator = (const SteepestDescentMinimizer& SteepestDescentMinimizer);
 
 		//@}
-
 		/**	@name	Setup methods 
 		*/
 		//@{
@@ -142,8 +134,6 @@ namespace BALL
 		virtual bool specificSetup();
 
 		//@}
-
-
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -171,8 +161,6 @@ namespace BALL
 		virtual bool	minimize(Size steps = 0, bool restart = false);
 
 		//@}
-
-
 		/**	@name	Public Attributes
 		*/
 		//@{
@@ -185,7 +173,8 @@ namespace BALL
 
 		protected:
 
-		/*_	@name	Protected Attributes */
+		/*_	@name	Protected Attributes 
+		*/
 		//_@{
 
 		/*_	The maximal number of steps in an iteration step
@@ -197,7 +186,5 @@ namespace BALL
 	};
 
 } // namespace BALL
-
-
 
 #endif // BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H

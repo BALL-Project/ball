@@ -1,4 +1,4 @@
-// $Id: residueTorsions.h,v 1.9 2001/03/02 22:10:27 amoll Exp $
+// $Id: residueTorsions.h,v 1.10 2001/07/11 23:59:33 amoll Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -118,13 +118,13 @@ namespace BALL
 
 		protected:
 
-		/**	Contains arrays of ResidueTorsions.
+		/*_	Contains arrays of ResidueTorsions.
 				All torsions for a given residue name are collected in 
 				a vector and accessed via the residue name through a StringHashMap.
 		*/
 		StringHashMap<vector<Data> >	torsions_;
 
-		/**	Hash set of all torsion identifiers.
+		/*_ Hash set of all torsion identifiers.
 				This hash set contains all entries in the form of strings.
 				It is used by \Ref{hasTorsion}.
 		*/

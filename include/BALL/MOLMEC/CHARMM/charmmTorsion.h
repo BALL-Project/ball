@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.h,v 1.7 2001/02/28 01:17:38 amoll Exp $
+// $Id: charmmTorsion.h,v 1.8 2001/07/11 23:59:31 amoll Exp $
 // Molecular Mechanics: CHARMM force field, proper torsion component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMTORSION_H
@@ -123,7 +123,7 @@ namespace BALL
 
 		/*_	@name	Private Attributes	
 		*/
-		//@{
+		//_@{
 
 		/*_	Vector containing the parameters for each torsion.
 		*/
@@ -141,7 +141,7 @@ namespace BALL
 		*/
 		bool use_residue_torsion_list_;
 
-		//@}
+		//_@}
 	 
 	};
 

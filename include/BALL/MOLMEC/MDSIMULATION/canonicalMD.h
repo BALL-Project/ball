@@ -1,4 +1,4 @@
-// $Id: canonicalMD.h,v 1.14 2001/03/02 22:10:23 amoll Exp $
+// $Id: canonicalMD.h,v 1.15 2001/07/11 23:59:32 amoll Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -220,7 +220,7 @@ namespace BALL
 
     //_@}
     //_  @name Protected Attributes
-    //@{
+    //_@{
 
     //_  The coupling parameter to the heat bath
     double bath_relaxation_time_; 
@@ -228,7 +228,7 @@ namespace BALL
     //_  This vector contains special precomputed factors 
     vector<Aux_Factors> mass_factor_; 
 
-    //@} 
+    //_@} 
 
     };  // end of class CanonicalMD  
 

@@ -1,4 +1,4 @@
-// $Id: chargeRuleProcessor.h,v 1.5 2001/03/02 00:34:14 amoll Exp $
+// $Id: chargeRuleProcessor.h,v 1.6 2001/07/11 23:59:32 amoll Exp $
 // Molecular Mechanics: rule-based assignment of charges 
 
 #ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
@@ -10,7 +10,6 @@
 
 namespace BALL 
 {
-
 	/**	Charge Rule Processor.
 			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/chargeRuleProcessor.h}
 	*/
@@ -49,6 +48,7 @@ namespace BALL
 		/**
 		*/
 		virtual Processor::Result operator () (Atom& atom);
+		
 		//@}
 
 	};

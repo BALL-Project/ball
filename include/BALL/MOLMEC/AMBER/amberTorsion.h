@@ -1,4 +1,4 @@
-// $Id: amberTorsion.h,v 1.10 2001/02/28 01:17:25 amoll Exp $
+// $Id: amberTorsion.h,v 1.11 2001/07/11 23:59:23 amoll Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERTORSION_H
@@ -119,7 +119,7 @@ namespace BALL
 
 		/*_	@name	Private Attributes	
 		*/
-		//@{
+		//_@{
 
 		/*_	array with the torsions
 		*/
@@ -131,7 +131,7 @@ namespace BALL
 
 		ParameterSection	impropers_;
 
-		//@}
+		//_@}
 	 
 	};
 

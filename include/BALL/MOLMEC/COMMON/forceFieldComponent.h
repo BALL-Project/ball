@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.h,v 1.8 2001/03/02 00:34:15 amoll Exp $
+// $Id: forceFieldComponent.h,v 1.9 2001/07/11 23:59:32 amoll Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -122,11 +122,10 @@ namespace BALL
 				The default implementation does exactly nothing.
 		*/
 		virtual void update();
-		
-		//@}
 
 		protected:
 
+		//@}
 		/*_	@name Protected Attributes
 		*/
 		//_@{
@@ -138,11 +137,10 @@ namespace BALL
 		/*_	The energy of the component
 		*/
 		double	energy_;
-
-		//_@}
 			
 		private:
 		
+		//_@}
 		/*_	@name Private Attributes
 		*/
 		//_@{
@@ -150,6 +148,7 @@ namespace BALL
 		/*_	The force field component name
 		*/
 		String	name_;
+		
 		//_@}
 
 	};

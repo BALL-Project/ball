@@ -1,4 +1,4 @@
-// $Id: atomVector.h,v 1.10 2001/06/26 02:46:56 oliver Exp $
+// $Id: atomVector.h,v 1.11 2001/07/11 23:59:32 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -170,7 +170,7 @@ namespace BALL
 		
 		protected:
 
-		/**	The saved positions.
+		/*_	The saved positions.
 		*/
 		std::vector<Vector3>	saved_position_;
   };

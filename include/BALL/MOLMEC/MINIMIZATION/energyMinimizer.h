@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.21 2001/06/26 02:35:10 oliver Exp $
+// $Id: energyMinimizer.h,v 1.22 2001/07/11 23:59:32 amoll Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -175,15 +175,16 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{
+		
 		/**	Is the energy minimizer valid : did the setup work?
 		*/
 		bool	isValid() const;
 
 		//@}
-
 		/**	@name	Setup methods 
 		*/
 		//@{
+
 		/**	Sets up the energy minimizer.
 		*/
 		bool	setup(ForceField& force_field);
@@ -205,12 +206,9 @@ namespace BALL
 		virtual bool specificSetup();
 
 		//@}
-
-
 		/**	@name	Accessors 
 		*/
 		//@{
-
 
     /** Implements the convergence criterion.
 				If the convergence criterion is fulfilled, this method
@@ -399,8 +397,6 @@ namespace BALL
 		virtual bool	minimize(Size steps = 0, bool restart = false);
 
 		//@}
-
-
 		/**	@name	Public Attributes
 		*/
 		//@{
@@ -409,106 +405,105 @@ namespace BALL
 		*/
 		Options	options;
 
-
-		//@}
-
 		protected:
-		/**	@name	Protected Attributes
+		
+		//@}
+		/*_	@name	Protected Attributes
 		*/
-		//@{
+		//_@{
 
-		/**	The gradient at the beginning of the current minimization step.
+		/*_	The gradient at the beginning of the current minimization step.
 		*/
 		Gradient initial_grad_;
 
-		/**	The current gradient.
+		/*_	The current gradient.
 		*/
 		Gradient current_grad_;
 
-		/**	The energy at the beginning of the current minimization step.
+		/*_	The energy at the beginning of the current minimization step.
 		*/
 		double initial_energy_;
 
-		/**	The current energy.
+		/*_	The current energy.
 		*/
 		double current_energy_;
 
-    /** The gradient from the last step
+    /*_ The gradient from the last step
     */
     Gradient old_grad_;
 
-    /** The energy from the last step
+    /*_ The energy from the last step
     */
     double old_energy_;
  
-    /** The current search direction
+    /*_ The current search direction
     */
     Gradient direction_;
  
-		/**	The boolean variable indicates if the setup of the energy minimizer was successful
+		/*_	The boolean variable indicates if the setup of the energy minimizer was successful
 		*/
 		bool 	valid_;
 
-		/** Pointer to a SnapShotManager for storing snapshots of the
-					system 
+		/*_ Pointer to a SnapShotManager for storing snapshots of the	system 
 		*/
 		SnapShotManager* snapshot_ptr_; 
 
-		/**	The force field bound to the energy minimizer.
+		/*_	The force field bound to the energy minimizer.
 				Among other data the force field contains the molecular system
 				whose energy will be minimized by the energy minimizer.
 		*/
 		ForceField*	force_field_;
 
-		/**	the current iteration number
+		/*_	the current iteration number
 		*/
 		Size	number_of_iteration_;
 
-		/**	Maximal number of iterations 
+		/*_	Maximal number of iterations 
 		*/
 		Size	maximal_number_of_iterations_;
 
-		/**	Frequency of energy output  
+		/*_	Frequency of energy output  
 		*/
 		Size	energy_output_frequency_;
 
-		/**	Frequency of atom coordinate ouput;
+		/*_	Frequency of atom coordinate ouput;
 		*/
 		Size	snapshot_frequency_;
 
-		/**	If the energy difference (before and after an iteration) 
+		/*_	If the energy difference (before and after an iteration) 
 				is smaller than this bound, the minimization procedure stops.
 		*/
 		double	energy_difference_bound_;
 
-    /** The maximum RMS gradient tolerated (first convergence criterion)
+    /*_ The maximum RMS gradient tolerated (first convergence criterion)
     */
     float max_gradient_;
 
-    /** The maximum number of iterations with same energy.
+    /*_ The maximum number of iterations with same energy.
         When this number is reached, we assume the system to have converged
         (second convergence criterion)
     */
     Size max_same_energy_;
 
-		/**	A counter for the number of steps with a similar energy.
+		/*_	A counter for the number of steps with a similar energy.
 		*/
 		Size same_energy_counter_;
 
-		/**	The maximal shift of an atom per iteration step (in Angstrom).
+		/*_	The maximal shift of an atom per iteration step (in Angstrom).
 		*/
 		float	maximal_shift_;
 
-    /** Internal counter: how often is a force update done.
-       Measure for the speed of minimization 
+    /*_ Internal counter: how often is a force update done.
+       	Measure for the speed of minimization 
     */
     int force_update_counter_;
 
-    /** Internal counter: how often is an energy update done.
-       Measure for the speed of minimization 
+    /*_ Internal counter: how often is an energy update done.
+       	Measure for the speed of minimization 
     */
     int energy_update_counter_; 
-		//@}
+		
+		//_@}
 	};
 
 } // namespace Ball

@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.h,v 1.9 2001/06/21 21:28:47 amoll Exp $ 
+// $Id: conjugateGradient.h,v 1.10 2001/07/11 23:59:32 amoll Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -52,7 +52,7 @@ namespace BALL
 { 
 
 	/**	Conjugate gradient (CG) minimizer. 
-			{\bf Definition:}\URL{BALL/MOLMEC/MINIMIZATION/conjugateGradient.h} \\
+			{\bf Definition:} \URL{BALL/MOLMEC/MINIMIZATION/conjugateGradient.h} \\
 			A conjugate gradient minimizer for geometry optimisation.
 	*/
   class ConjugateGradientMinimizer 
@@ -213,13 +213,14 @@ namespace BALL
     /**	Force field options
     */
     Options	options;
-    //@}
+		
 
     protected:
 
-    /**	@name	Protected Attributes 
+    //@}
+    /*_	@name	Protected Attributes 
 		*/
-    //*@{
+    //_@{
 
 		Size number_of_atoms_;
 

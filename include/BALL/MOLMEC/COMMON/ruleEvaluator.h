@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.h,v 1.7 2001/03/02 00:34:15 amoll Exp $
+// $Id: ruleEvaluator.h,v 1.8 2001/07/11 23:59:32 amoll Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEEVALUATOR_H
@@ -21,10 +21,10 @@ namespace BALL
 	class INIFile;
 
 	/**	Rule evaluator class.
-			This class provides means for evaluating rules on Atoms. It is a
-			helper class of RuleProcessors. Rules define
-			values depending on atom constellations. They are defined in an
-			INIFile. \\
+			This class provides means for evaluating rules on Atoms. 
+			It is a helper class of RuleProcessors. 
+			Rules define values depending on atom constellations. 
+			They are defined in an INIFile. \\
 			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/ruleEvaluator.h}
 			@see RuleProcessor
 	*/
@@ -131,17 +131,18 @@ namespace BALL
 
 		protected:
 
-		/// parse the section with name: predicate_ + ":" + symbol of file
+		//_ parse the section with name: predicate_ + ":" + symbol of file
 		void extractSection_(INIFile& file, const String& symbol) throw();
 
-		/// The INI file section prefix
+		//_ The INI file section prefix
 		String		prefix_;
 
-		/// The map relating an element name and the corresponding list of expressions
+		//_ The map relating an element name and the corresponding list of expressions
 		RuleMap		rule_map_;
 
-		/// 
+		//_ 
 		bool			valid_;
+		
 	};
 
 } // namespace BALL

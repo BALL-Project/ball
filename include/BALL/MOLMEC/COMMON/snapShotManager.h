@@ -1,4 +1,4 @@
-// $Id: snapShotManager.h,v 1.4 2001/07/11 23:05:10 amoll Exp $
+// $Id: snapShotManager.h,v 1.5 2001/07/11 23:59:32 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -30,7 +30,6 @@
 #ifndef BALL_DATATYPE_OPTIONS_H
 #	include <BALL/DATATYPE/options.h>
 #endif
-
 
 namespace BALL
 {
@@ -69,7 +68,6 @@ namespace BALL
 
 
     BALL_CREATE(SnapShotManager)
-
 
     /// @name Constructors and Destructors
     //@{
@@ -263,7 +261,7 @@ namespace BALL
     protected:
 
     //_ @name Protected Attributes
-    //@{
+    //_@{
 
 		// BAUSTELLE: this was a const ptr before, but applySnapShot needs a
 		// mutable System. is that reasonable
@@ -292,16 +290,16 @@ namespace BALL
     */
     bool valid_;
 
-    //@}
+    //_@}
     /*_ @name Protected methods
     */
-    //@{
+    //_@{
 
     /*_ Calculate the kinetic energy 
     */
     double calculateKineticEnergy_();
 
-    //@}
+    //_@}
 
 	}; // end of class SnapshotManager 
 }

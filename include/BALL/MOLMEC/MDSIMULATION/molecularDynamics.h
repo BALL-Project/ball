@@ -1,12 +1,10 @@
-// $Id: molecularDynamics.h,v 1.17 2001/07/11 23:11:19 amoll Exp $
+// $Id: molecularDynamics.h,v 1.18 2001/07/11 23:59:32 amoll Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H
 #define BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H
 
-
-// Include all necessary BALL headers 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
 #endif
@@ -55,8 +53,6 @@
 # include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #endif
 
-
-// STL include commands 
 #include <vector>
 
 namespace BALL
@@ -331,27 +327,26 @@ namespace BALL
 		*/
 		//@{
 
-		/**   The options for this class
+		/** The options for this class
 		*/
 		Options options;
 
-		//@}
-
 		protected:
 
+		//@}
 		/*_ @name Protected Methods 
 		*/
-		//@{
+		//_@{
 
 		/*_ A method for calculating the
 		    current temperature in the system
 		*/
 		void updateInstantaneousTemperature();
 
-		//@}
+		//_@}
 		/*_ @name Protected Attributes
 		*/
-		//@{
+		//_@{
 
 		/*_  The boolean variable indicates if the setup of the 
 		     molecular dynamics has been successful 
@@ -415,8 +410,8 @@ namespace BALL
 		*/
 		SnapShotManager *snapshot_manager_ptr_;
 
-		//@}
-		//
+		//_@}
+		
 	};	// end of class MolecularDynamics 
 
 }	 // end of namespace Ball

@@ -1,4 +1,4 @@
-// $Id: gradient.h,v 1.8 2001/07/07 02:52:12 oliver Exp $ 
+// $Id: gradient.h,v 1.9 2001/07/11 23:59:32 amoll Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_COMMON_GRADIENT_H 
@@ -110,7 +110,6 @@ namespace BALL
 		double operator * (const Gradient& gradient) const;
 
     //@}
-
     /**	@name	Accessors 
     */
     //@{
@@ -134,7 +133,6 @@ namespace BALL
 		bool isValid() const;
 
     //@}
-
 		/**	@name	Iteration
 		*/
 		//@{
@@ -152,7 +150,6 @@ namespace BALL
 		ConstIterator end() const { return vector<Vector3>::end(); }
 
 		//@}
-
     /**	@name	Public Attributes
     */
     //@{
@@ -173,13 +170,12 @@ namespace BALL
 
 		protected:
 			
-		/**	The validity flag.
+		/*_	The validity flag.
 		*/
 		bool valid_;
+		
     };
 
   } // end of namespace BALL
-
-
 
 #endif // BALL_MOLMEC_COMMON_GRADIENT_H 
