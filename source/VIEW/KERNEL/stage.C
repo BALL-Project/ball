@@ -204,7 +204,11 @@ Stage::Stage()
 		fog_intensity_(0),
 		eye_distance_(2.0),
 		focal_distance_(40),
-		swap_side_by_side_stereo_(false)
+		swap_side_by_side_stereo_(false),
+		specular_(0.4),
+		diffuse_(0.2),
+		ambient_(0.0),
+		shininess_(128.0)
 {}
 
 Stage::Stage(const Stage& stage)
@@ -216,7 +220,11 @@ Stage::Stage(const Stage& stage)
 		fog_intensity_(stage.fog_intensity_),
 		eye_distance_(stage.eye_distance_),
 		focal_distance_(stage.focal_distance_),
-		swap_side_by_side_stereo_(stage.swap_side_by_side_stereo_)
+		swap_side_by_side_stereo_(stage.swap_side_by_side_stereo_),
+		specular_(stage.specular_),
+		diffuse_(stage.diffuse_),
+		ambient_(stage.ambient_),
+		shininess_(stage.shininess_)
 {
 }
 
@@ -231,6 +239,10 @@ void Stage::clear()
 	focal_distance_ = 40;
 	swap_side_by_side_stereo_ = false;
 	fog_intensity_ = 0;
+	specular_ = 0.4;
+	diffuse_  = 0.2;
+	ambient_  = 0.0;
+	shininess_ = 128.0;
 }
 
 void Stage::removeLightSource(const LightSource& light_source)
@@ -256,7 +268,11 @@ bool Stage::operator == (const Stage& stage) const
 				 show_coordinate_system_ 	== stage.show_coordinate_system_ &&
 				 eye_distance_ 						== stage.eye_distance_ 			&&
 				 focal_distance_ 					== stage.focal_distance_ 		&&
-				 swap_side_by_side_stereo_== stage.swap_side_by_side_stereo_;
+				 swap_side_by_side_stereo_== stage.swap_side_by_side_stereo_ &&
+				 specular_ 								== stage.specular_ &&
+				 diffuse_ 								== stage.diffuse_  &&
+				 ambient_ 								== stage.ambient_  &&
+				 shininess_ 							== stage.shininess_;
 }
 
 

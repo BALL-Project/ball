@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.14 2004/07/04 13:29:16 amoll Exp $
+// $Id: stage.h,v 1.14.2.1 2004/12/30 13:59:45 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -466,6 +466,38 @@ namespace BALL
 			///
 			void setFogIntensity(float value)
 				throw() { fog_intensity_ = value;}
+				
+			///
+			float getSpecularIntensity() const
+				throw() { return specular_;}
+
+			///
+			void setSpecularIntensity(float value)
+				throw() { specular_ = value;}
+					
+			///
+			float getDiffuseIntensity() const
+				throw() { return diffuse_;}
+
+			///
+			void setDiffuseIntensity(float value)
+				throw() { diffuse_ = value;}
+					
+			///
+			float getAmbientIntensity() const
+				throw() { return ambient_;}
+
+			///
+			void setAmbientIntensity(float value)
+				throw() { ambient_ = value;}
+					
+			///
+			float getShininess() const
+				throw() { return shininess_;}
+
+			///
+			void setShininess(float value)
+				throw() { shininess_ = value;}
 			
 			//@}
 			/**	@name Predicates
@@ -512,6 +544,11 @@ namespace BALL
 
 			//_
 			bool 								swap_side_by_side_stereo_;
+
+			float 							specular_;
+			float 							diffuse_;
+			float 							ambient_;
+			float 							shininess_;
 		};
 
 
