@@ -1,7 +1,12 @@
- <node>XPLORE<value>PDB</value>
+ <node>XPLOR<value>PDB</value>
  <node>*:H1<value>*:1H</value></node>
  <node>*:H2<value>*:2H</value></node>
  <node>*:H3<value>*:3H</value></node>
+ <node>*:HT1<value>*:1H</value></node>
+ <node>*:HT2<value>*:2H</value></node>
+ <node>*:HT3<value>*:3H</value></node>
+ <node>*:OT1<value>*:O</value></node>
+ <node>*:OT2<value>*:OXT</value></node>
  <node>*:N<value>*:N</value></node>
  <node>*:O<value>*:O</value></node>
  <node>*:C<value>*:C</value></node>
