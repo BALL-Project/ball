@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.110 2000/07/16 22:05:07 oliver Exp $
+#  $Id: configure,v 1.111 2000/07/16 22:07:53 oliver Exp $
 
 
 ##################################################
@@ -6282,7 +6282,7 @@ echo "configure:6176: checking libsip.a" >&5
 		echo "$ac_t""" 1>&6
 		echo "$ac_t""Please specify the path to the directory that contains" 1>&6
 		echo "$ac_t""libsip.a using the option --with-sip-lib=DIR." 1>&6
-		echo "$ac_t"""If you do not have that file" 1>&6
+		echo "$ac_t""If you do not have that file, you should obtain SIP" 1>&6
 		echo "$ac_t""from" 1>&6
 		echo "$ac_t""www.thekompany.com/projects/pykde" 1>&6
 		{ echo "configure: error: Aborted." 1>&2; exit 1; }
@@ -6370,7 +6370,7 @@ echo "configure:6192: checking sip headers (sip.h)" >&5
 		echo "$ac_t""" 1>&6
 		echo "$ac_t""Please specify the path to the directory that contains" 1>&6
 		echo "$ac_t""sip.h using the option --with-sip-incl=DIR." 1>&6
-		echo "$ac_t"""If you do not have that file" 1>&6
+		echo "$ac_t""If you do not have that file, you should obtain SIP" 1>&6
 		echo "$ac_t""from" 1>&6
 		echo "$ac_t""www.thekompany.com/projects/pykde" 1>&6
 		{ echo "configure: error: Aborted." 1>&2; exit 1; }
