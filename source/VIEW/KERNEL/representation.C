@@ -1,22 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.54 2004/12/09 23:22:56 amoll Exp $
+// $Id: representation.C,v 1.55 2004/12/09 23:58:54 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/KERNEL/geometricObject.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
-#include <BALL/VIEW/KERNEL/geometricObject.h>
-
-#include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <BALL/KERNEL/atom.h>
-
 #include <BALL/SYSTEM/timer.h>
-
-#include <qapplication.h>
 
 // #define BALL_BENCHMARKING
 
@@ -281,7 +277,6 @@ namespace BALL
 			MainControl* mc = getMainControl();
 			if (mc != 0)
 			{
-//   				MainControl* mc = dynamic_cast<MainControl*>(qApp->mainWidget());
 				mc->getPrimitiveManager().update_(*this);
 				return;
 			}
@@ -349,6 +344,21 @@ namespace BALL
 		String Representation::getProperties() const
 			throw()
 		{
+			if (VIEW::isSurfaceModel(model_type_))
+			{
+				GeometricObjectList::ConstIterator it = geometric_objects_.begin();
+				Size triangles = 0;
+				for (;it != geometric_objects_.end(); it++)
+				{
+					if (RTTI::isKindOf<Mesh>(**it))
+					{ 
+						triangles += dynamic_cast<Mesh*>(*it)->triangle.size();
+					}
+				}
+						
+				return String(composites_.size()) + " C, " + String(triangles) + " T";
+			}
+			
 			return String(composites_.size()) + " C, " + String(geometric_objects_.size()) + " P";
 		}
 
