@@ -2884,9 +2884,9 @@ if test "${COMPILER_DONE}" != true -a "${IS_INTELCC}" = true ; then
 
 	CXXFLAGS="${CXXFLAGS} -KPIC"
 
-		CXXFLAGS_O="${CXXFLAGS_O} -O3 -unroll"
+		CXXFLAGS_O="${CXXFLAGS_O} -O1"
 
-			CXXFLAGS_D="${CXXFLAGS_D} -g -w1"
+			CXXFLAGS_D="${CXXFLAGS_D} -O0 -g -w1"
 	CXXFLAGS_DI="${CXXFLAGS_DI}"
 
 	COMPILER_DONE=true

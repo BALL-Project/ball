@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.17 2002/01/27 14:05:33 oliver Exp $
+dnl    $Id: configure.in,v 1.18 2002/01/28 00:08:40 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1162,11 +1162,11 @@ if test "${COMPILER_DONE}" != true -a "${IS_INTELCC}" = true ; then
 	CXXFLAGS="${CXXFLAGS} -KPIC"
 	
 	dnl		optimze as on highest level: this compiler 
-	CXXFLAGS_O="${CXXFLAGS_O} -O3 -unroll"
+	CXXFLAGS_O="${CXXFLAGS_O} -O1"
 	
 	dnl		avoid high level optimization to
 	dnl		get debuggable code...
-	CXXFLAGS_D="${CXXFLAGS_D} -g -w1"
+	CXXFLAGS_D="${CXXFLAGS_D} -O0 -g -w1"
 	CXXFLAGS_DI="${CXXFLAGS_DI}"
 
 	COMPILER_DONE=true
