@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.78 2004/06/14 14:47:27 amoll Exp $
+// $Id: scene.C,v 1.79 2004/06/16 12:56:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -436,6 +436,7 @@ namespace BALL
 				}
 
 				glPushMatrix();
+				glLoadIdentity();
 				glTranslatef ((**it).getProperty("X").getDouble(),
 											(**it).getProperty("Y").getDouble(),
 											(**it).getProperty("Z").getDouble());
