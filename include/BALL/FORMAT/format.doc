@@ -1,4 +1,4 @@
-// $Id: format.doc,v 1.6 2001/01/16 17:18:08 anker Exp $
+// $Id: format.doc,v 1.7 2001/02/16 18:22:29 amoll Exp $
 
 /**@name	Fileformats
 		This chapter contains all relevant information on 
@@ -10,7 +10,7 @@
 	/**	@name	Molecular structure file formats
 	*/
 	//@{
-
+    //@Include: genericMolFile.h
 		//@Include: genericPDBFile.h
 		//@Include: PDBFile.h
 		//@Include: HINFile.h
@@ -35,6 +35,7 @@
 		//@Include: JCAMPFile.h
 		//@Include: bruker1DFile.h
 		//@Include: bruker2DFile.h
+    //@Include: NMRStarFile.h
 	//@}
 
 	/** @name Molecular Dynamics file formats

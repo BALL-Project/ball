@@ -29,4 +29,6 @@
 	//@Include: analyticalGeometry.h
 	//@Include: function.h
 	//@Include: numericalIntegrator.h
+  //@Include: piecewiseFunction.h
+  //@Include: piecewisePolynomial.h
 //@}

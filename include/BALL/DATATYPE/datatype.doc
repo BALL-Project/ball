@@ -1,4 +1,4 @@
-// $Id: datatype.doc,v 1.9 2001/02/06 21:27:44 amoll Exp $
+// $Id: datatype.doc,v 1.10 2001/02/16 18:22:29 amoll Exp $
 
 /**@name	General datastructures
 		This section contains all relevant information on 
@@ -10,6 +10,7 @@
 	*/
 	//@{
 		//@Include: regularData1D.h
+    //@Include: regularData2D.h
 		//@Include: regularData3D.h
 	//@}
 
@@ -32,6 +33,11 @@
 		//@Include: quadruple.h
 		//@Include: regExp.h
 		//@Include: string.h
+    //@Include: options.h
+    //@Include: list.h
+    //@Include: contour.h
+    //@Include: contourLine.h
+
 	//@}
 
 //@}

@@ -10,7 +10,9 @@
 
 	
 	//@Include: atomicContactEnergy.h
-	
+  //@Include: composedEnergyProcessor.h	
+  //@Include: energyProcessor.h
+
 	/**	@name	Electrostatic energy
 	*/
 	//@{
