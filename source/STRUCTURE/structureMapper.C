@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.25 2003/08/26 09:18:28 oliver Exp $
+// $Id: structureMapper.C,v 1.26 2003/09/02 07:02:20 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/structureMapper.h>
@@ -28,7 +28,7 @@ namespace BALL
 	}
 
 	/* Constructor */
-	StructureMapper::StructureMapper(Composite & A, Composite & B)
+	StructureMapper::StructureMapper(AtomContainer& A, AtomContainer& B)
 	{
 		set(A, B);
 	}
@@ -41,7 +41,7 @@ namespace BALL
 	}
 
 	/* Assign the two objects to be mapped */
-	void StructureMapper::set(Composite & A, Composite & B)
+	void StructureMapper::set(AtomContainer & A, AtomContainer & B)
 	{
 		A_ = &A;
 		B_ = &B;
@@ -94,10 +94,10 @@ namespace BALL
 	}
 
 	/* Calculate the transformation to map the first of two isomorphous
-	   Composite objects onto the second */
+	   AtomContainer objects onto the second */
 	bool StructureMapper::calculateTransformation()
 	{
-		// check whether both composites are defined
+		// check whether both acs are defined
 		if ((A_ == 0) ||(B_ == 0))
 		{
 			return false;
@@ -215,16 +215,75 @@ namespace BALL
 
 	void StructureMapper::calculateDefaultBijection()
 	{
+		// Remember the names of A and their atom pointers.
+		StringHashMap<Atom*> A_names;
+		for (AtomIterator ai = A_->beginAtom(); +ai; ++ai)
+		{
+			A_names.insert(std::pair<String, Atom*>(ai->getFullName(), &*ai));
+		}
+		
+		// Iterate over all atoms of B and try to find an 
+		// atom in A identical names.
+		bijection_.clear();
+		for (AtomIterator ai = B_->beginAtom(); +ai; ++ai)
+		{
+			if (A_names.has(ai->getFullName()))
+			{
+				// We found two matching atoms. Remember them.
+				bijection_.push_back(AtomPairType(A_names[ai->getFullName()], &*ai));
+				// Throw away the hash map entry in order to avoid
+				// 1:n mappings.
+				A_names.erase(ai->getFullName());
+			}
+		}
+		
+		// Check whether we could map anything.
+		if (bijection_.size() == 0)	
+		{
+			// Next stage: try to map by atom name only.
+			A_names.clear();
+			for (AtomIterator ai = A_->beginAtom(); +ai; ++ai)
+			{
+				A_names.insert(std::pair<String, Atom*>(ai->getName(), &*ai));
+			}
+			bijection_.clear();
+			for (AtomIterator ai = B_->beginAtom(); +ai; ++ai)
+			{
+				if (A_names.has(ai->getName()))
+				{
+					// We found two matching atoms. Remember them.
+					bijection_.push_back(std::pair<Atom*, Atom*>
+															(A_names[ai->getName()], &*ai));
+					// Throw away the hash map entry in order to avoid
+					// 1:n mappings.
+					A_names.erase(ai->getName());
+				}
+			}			
+		}
+
+		// Check whether we could map anything.
+		if (bijection_.size() == 0)	
+		{
+			// Last stage: map in order -- first atom of A onto
+			// first atom of B and so on.
+			AtomIterator ai(A_->beginAtom());
+			AtomIterator bi(B_->beginAtom());
+			for (; +ai && +bi; ++ai, ++bi)
+			{
+				bijection_.push_back(std::pair<Atom*, Atom*>
+														 (&*ai, &*bi));
+			}
+		}
 	}
 
 
-	Size StructureMapper::countFragments_(const Composite & composite) const
+	Size StructureMapper::countFragments_(const AtomContainer & ac) const
 	{
 		Size number_of_mol_fragments = 0;
 
-		Composite::CompositeConstIterator it;
+		AtomContainerConstIterator it;
 
-		for (it = composite.beginComposite(); +it; ++it)
+		for (it = ac.beginAtomContainer(); +it; ++it)
 		{
 			if (RTTI::isKindOf<Fragment>(*it))
 			{
@@ -480,7 +539,7 @@ namespace BALL
 
 	vector<vector<Fragment*> >& StructureMapper::searchPattern
 		(vector<Fragment*>& pattern,
-		 Composite& composite, double max_rmsd, double max_center_tolerance, double upper_bound, double lower_bound)
+		 AtomContainer& ac, double max_rmsd, double max_center_tolerance, double upper_bound, double lower_bound)
 	{
 		// determine number of fragments in the pattern
 		Size no_of_frag = (Size)pattern.size();
@@ -513,33 +572,34 @@ namespace BALL
 		}
 		pattern_centers.clear();
 
-		// determine the molecular fragments in composite 
+		// determine the molecular fragments in ac 
 		// and store them in an array
 
-		Composite::CompositeIterator composite_it;
-		vector < Fragment * >composite_fragments;
+		AtomContainerIterator ac_it;
+		vector<Fragment*> ac_fragments;
 
-		for(composite_it = composite.beginComposite(); composite_it != composite.endComposite(); ++composite_it)
+		for	(ac_it = ac.beginAtomContainer(); 
+				 ac_it != ac.endAtomContainer(); ++ac_it)
 		{
-			if (RTTI::isKindOf < Fragment >(*composite_it))
+			if (RTTI::isKindOf<Fragment>(*ac_it))
 			{
-				composite_fragments.push_back(RTTI::castTo < Fragment >(*composite_it));
+				ac_fragments.push_back(RTTI::castTo<Fragment>(*ac_it));
 			}
 		}
 
-		// determine the number of fragments of the composite
-		Size no_of_comp_frag = (Size)composite_fragments.size();
+		// determine the number of fragments of the ac
+		Size no_of_comp_frag = (Size)ac_fragments.size();
 
-		// calculate the centers of the composite fragments
-		vector < Vector3 > composite_centers(no_of_comp_frag);
+		// calculate the centers of the ac fragments
+		vector<Vector3> ac_centers(no_of_comp_frag);
 
 		for(i = 1; i < no_of_comp_frag; i++)
 		{
-			composite_fragments[i]->apply(geo_center);
-			composite_centers[i] = geo_center.getCenter();
+			ac_fragments[i]->apply(geo_center);
+			ac_centers[i] = geo_center.getCenter();
 		}
 
-		// calculate the distances of the centers of composite fragments
+		// calculate the distances of the centers of ac fragments
 
 		vector < float >comp_frag_dist(no_of_comp_frag * no_of_comp_frag);
 
@@ -547,13 +607,13 @@ namespace BALL
 		{
 			for(j = i; j < no_of_comp_frag; j++)
 			{
-				distance = composite_centers[i].getDistance(composite_centers[j]);
+				distance = ac_centers[i].getDistance(ac_centers[j]);
 				comp_frag_dist[i * no_of_comp_frag + j] = distance;
 				comp_frag_dist[j * no_of_comp_frag + i] = distance;
 			}
 		}
 
-		composite_centers.clear();
+		ac_centers.clear();
 
 		// calculate an array of arrays that contains the indices of potential matching fragments
 
@@ -568,7 +628,7 @@ namespace BALL
 		{
 			for(j = 0, counter = 0; j < no_of_comp_frag; ++j)
 			{
-				if (composite_fragments[j]->getName() == pattern[i]->getName())
+				if (ac_fragments[j]->getName() == pattern[i]->getName())
 				{
 					counter++;
 					indices_CF[i].push_back(j);
@@ -615,7 +675,7 @@ namespace BALL
 				{
 					for(k = 0; k < no_of_frag; k++)
 					{
-						potential_pattern.push_back(composite_fragments[indices_of_pot_pattern[k]]);
+						potential_pattern.push_back(ac_fragments[indices_of_pot_pattern[k]]);
 
 						mapFragments(potential_pattern, pattern, &T, upper_bound, lower_bound);
 						if (rmsd_ <= max_rmsd)
