@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.40 2001/06/28 20:42:37 amoll Exp $
+// $Id: atom.h,v 1.41 2001/07/10 16:37:12 anker Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -53,14 +53,17 @@ namespace BALL
 	/** Atom class.
 			A class representing atoms.
 			During each runtime instance of a program an atom is unique and
-			identified by a \Ref{Object::Handle}.
-			Atom equality is defined as atom identity, so there cannot be any two identical atoms.
-			A linear ordering of atoms is defined as the linear order of the
-			\Ref{Object::Handle}'s.\\
-			Two atoms can be connected via a \Ref{Bond}. There can be only one bond
-			between any two atoms (double bonds etc. are expressed via the bond order
-			attribute of the bond) and the total number of bonds of an atom is limited to 
-			eight (can be changed at compile time, see \Ref{MAX_NUMBER_OF_BONDS}).\\
+			identified by a \Ref{Object::Handle}. Atom equality is defined as
+			atom identity, so there cannot be any two identical atoms. A linear
+			ordering of atoms is defined as the linear order of the
+			\Ref{Object::Handle}s.
+			\\
+			Two atoms can be connected via a \Ref{Bond}. There can be only one
+			bond between any two atoms (double bonds etc. are expressed via the
+			bond order attribute of the bond) and the total number of bonds of an
+			atom is limited to eight (can be changed at compile time, see
+			\Ref{MAX_NUMBER_OF_BONDS}).
+			\\
 			Since \Ref{Atom} is derived from \Ref{ProperyManager}, it may contain
 			arbitrary, user-defined properties.
 			An atom may be inserted in a \Ref{Fragment} instance ("parent fragment").
@@ -69,15 +72,20 @@ namespace BALL
 				\item "element" - an instance of \Ref{Element}
 				\item "charge" - the charge in multiples of the the proton charge
 				\item "name" - a string identifier
-				\item "type name" - a string identifier, meaningful in the the context of a forcefield only
-				\item "position" - the absolute position in cartesian coordinates (Angstrom)
+				\item "type name" - a string identifier, meaningful in the the
+							context of a forcefield only
+				\item "position" - the absolute position in cartesian coordinates
+							(Angstrom)
 				\item "radius" - the radius (Angstrom)
-				\item "type" - an integer type, meaningful only in the context of a forcefield 
+				\item "type" - an integer type, meaningful only in the context of a
+							forcefield 
 				\item "velocity" - velocity the velocity of the atom (Angstrom/ps)
-				\item "force" - the force experienced by the atom (for forcefield calculations, in units of Newton)
+				\item "force" - the force experienced by the atom (for forcefield
+							calculations, in units of Newton)
 				\item "bonds" - up to \Ref{MAX_NUMBER_OF_BONDS} bonds to other atoms
 			\end{itemize}
-			{\bf Definition:} \URL{BALL/KERNEL/atom.h} \\
+			{\bf Definition:} \URL{BALL/KERNEL/atom.h}
+			\\
 			@see Bond
 			@see Molecule
 			@see AtomContainer
