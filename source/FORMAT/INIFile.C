@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.25 2001/05/17 00:41:33 oliver Exp $
+// $Id: INIFile.C,v 1.26 2001/05/17 09:18:59 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -352,8 +352,7 @@ namespace BALL
 	Size INIFile::getNumberOfSections() const 
 	{
 		// HEADER is not counted
-		// BAUSTELLE: wo wird sichergestellt, dass sections_ mindestens
-		// 1 ist? Ansonsten gibt es einen Unterlauf und der Rueckgabewert
+		// every inifile has at least one section: the header
 		// wird sehr gross positiv!
 		return (Size)sections_.size() - 1;
 	}
