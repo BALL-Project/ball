@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.18 2000/06/27 22:10:57 oliver Exp $
+// $Id: string.C,v 1.19 2000/06/28 07:41:47 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -453,7 +453,7 @@ namespace BALL
 	{
 		if ((from_and_next_field != 0) && (*from_and_next_field < 0))
 		{
-			throw Exception::IndexUnderFlow(__FILE__, __LINE__, *from_and_next_field, 0)
+			throw Exception::IndexUnderFlow(__FILE__, __LINE__, *from_and_next_field, 0);
 		}
 		
 		if (delimiters == 0)
