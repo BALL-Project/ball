@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.1 2004/02/02 18:58:23 anhi Exp $
+// $Id: downloadPDBFile.h,v 1.2 2004/02/04 12:40:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -39,27 +39,23 @@ namespace BALL
 				virtual void initializeWidget(VIEW::MainControl& main_control)
 					throw();
 
-	/** Removes the widget.
-			Reverses all actions performed in initializeWidget
-			(removes menu entries of this MolecularFileDialog).
-			This method will be called by aboutToExit from the
-			MainControl object.
-			\param		main_control the MainControl object to be finalized with
-								this MolecularFileDialog
-			\see			initializeWidget
-			\see			removeMenuEntry
-			\see			aboutToExit
+			/** Removes the widget.
+					Reverses all actions performed in initializeWidget()
+					This method will be called by MainControl::aboutToExit()
+					\param		main_control the MainControl object to be finalized with
+										this MolecularFileDialog
+					\see			removeMenuEntry
 			*/
-				virtual void finalizeWidget(VIEW::MainControl& main_control)
-					throw();
+			virtual void finalizeWidget(VIEW::MainControl& main_control)
+				throw();
 
 			public slots:
-				void showDialog();
 				void slotSearch();
 				void slotDownload();
 				void slotShowDetail();
 				void slotNewId(const QString& new_id);
 				void displayHTML(const QString& url);
+				void idChanged();
 
 				virtual void checkMenuEntries()
 					throw();
@@ -67,7 +63,6 @@ namespace BALL
 			protected:
 				QTextBrowser *qb_;
 		};
-
 
 	} 
 } //namespaces

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>DownloadPDBFileData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,19 +8,31 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>551</width>
-            <height>393</height>
+            <width>520</width>
+            <height>354</height>
         </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>520</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>520</width>
+            <height>32767</height>
+        </size>
     </property>
     <property name="caption">
         <string>Download a structure file from www.rcsb.org</string>
     </property>
     <property name="sizeGripEnabled">
-        <bool>true</bool>
+        <bool>false</bool>
     </property>
     <spacer>
         <property name="name">
-            <cstring>spacer6</cstring>
+            <cstring>spacer5</cstring>
         </property>
         <property name="orientation">
             <enum>Horizontal</enum>
@@ -30,16 +42,57 @@
         </property>
         <property name="sizeHint">
             <size>
-                <width>30</width>
-                <height>21</height>
+                <width>305</width>
+                <height>20</height>
             </size>
         </property>
         <property name="geometry">
             <rect>
-                <x>380</x>
-                <y>100</y>
-                <width>30</width>
-                <height>21</height>
+                <x>209</x>
+                <y>189</y>
+                <width>305</width>
+                <height>20</height>
+            </rect>
+        </property>
+    </spacer>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>exactMatch</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>175</x>
+                <y>137</y>
+                <width>181</width>
+                <height>31</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Match exact word</string>
+        </property>
+    </widget>
+    <spacer>
+        <property name="name">
+            <cstring>spacer3</cstring>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+        <property name="sizeType">
+            <enum>Expanding</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>176</width>
+                <height>20</height>
+            </size>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>250</x>
+                <y>323</y>
+                <width>176</width>
+                <height>20</height>
             </rect>
         </property>
     </spacer>
@@ -49,8 +102,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>20</x>
-                <y>20</y>
+                <x>5</x>
+                <y>-3</y>
                 <width>520</width>
                 <height>51</height>
             </rect>
@@ -59,16 +112,89 @@
             <string>Enter a query string. Queries may contain boolean modifiers &lt;font color="#ff0000"&gt;and&lt;/font&gt;, &lt;font color="#ff0000"&gt;or&lt;/font&gt; and &lt;font color="#ff0000"&gt;not&lt;/font&gt;, and the wildcard &lt;font color="#ff0000"&gt;*&lt;/font&gt;. Queries are case insensitive.</string>
         </property>
     </widget>
-    <widget class="QTextEdit">
+    <widget class="QCheckBox">
         <property name="name">
-            <cstring>searchField</cstring>
+            <cstring>removeSimilar</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>20</x>
-                <y>71</y>
-                <width>361</width>
-                <height>80</height>
+                <x>325</x>
+                <y>137</y>
+                <width>200</width>
+                <height>31</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Remove similar sequences</string>
+        </property>
+    </widget>
+    <spacer>
+        <property name="name">
+            <cstring>spacer4</cstring>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+        <property name="sizeType">
+            <enum>Expanding</enum>
+        </property>
+        <property name="sizeHint">
+            <size>
+                <width>270</width>
+                <height>20</height>
+            </size>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>269</y>
+                <width>270</width>
+                <height>20</height>
+            </rect>
+        </property>
+    </spacer>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>282</x>
+                <y>268</y>
+                <width>44</width>
+                <height>22</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>PDB Id</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>188</y>
+                <width>197</width>
+                <height>22</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Structures matching the query</string>
+        </property>
+    </widget>
+    <widget class="QComboBox">
+        <property name="name">
+            <cstring>results</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>216</y>
+                <width>508</width>
+                <height>25</height>
             </rect>
         </property>
     </widget>
@@ -78,14 +204,17 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>410</x>
-                <y>70</y>
-                <width>120</width>
+                <x>399</x>
+                <y>42</y>
+                <width>113</width>
                 <height>80</height>
             </rect>
         </property>
         <property name="title">
             <string>Search method</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
         </property>
         <widget class="QRadioButton">
             <property name="name">
@@ -111,7 +240,7 @@
                 <rect>
                     <x>10</x>
                     <y>20</y>
-                    <width>106</width>
+                    <width>96</width>
                     <height>22</height>
                 </rect>
             </property>
@@ -123,36 +252,17 @@
             </property>
         </widget>
     </widget>
-    <widget class="QCheckBox">
+    <widget class="QTextEdit">
         <property name="name">
-            <cstring>exactMatch</cstring>
+            <cstring>searchField</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>190</x>
-                <y>160</y>
-                <width>181</width>
-                <height>31</height>
+                <x>5</x>
+                <y>48</y>
+                <width>383</width>
+                <height>73</height>
             </rect>
-        </property>
-        <property name="text">
-            <string>Match exact word</string>
-        </property>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>removeSimilar</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>340</x>
-                <y>160</y>
-                <width>200</width>
-                <height>31</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Remove similar sequences</string>
         </property>
     </widget>
     <widget class="QPushButton">
@@ -161,8 +271,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>20</x>
-                <y>160</y>
+                <x>5</x>
+                <y>137</y>
                 <width>160</width>
                 <height>30</height>
             </rect>
@@ -171,163 +281,14 @@
             <string>Search www.rcsb.org</string>
         </property>
     </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>21</x>
-                <y>211</y>
-                <width>197</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Structures matching the query</string>
-        </property>
-    </widget>
-    <spacer>
-        <property name="name">
-            <cstring>spacer5</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="sizeHint">
-            <size>
-                <width>305</width>
-                <height>20</height>
-            </size>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>224</x>
-                <y>212</y>
-                <width>305</width>
-                <height>20</height>
-            </rect>
-        </property>
-    </spacer>
-    <spacer>
-        <property name="name">
-            <cstring>spacer4</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="sizeHint">
-            <size>
-                <width>270</width>
-                <height>20</height>
-            </size>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>21</x>
-                <y>292</y>
-                <width>270</width>
-                <height>20</height>
-            </rect>
-        </property>
-    </spacer>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>297</x>
-                <y>291</y>
-                <width>44</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>PDB Id</string>
-        </property>
-    </widget>
-    <spacer>
-        <property name="name">
-            <cstring>spacer3</cstring>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="sizeType">
-            <enum>Expanding</enum>
-        </property>
-        <property name="sizeHint">
-            <size>
-                <width>176</width>
-                <height>20</height>
-            </size>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>265</x>
-                <y>346</y>
-                <width>176</width>
-                <height>20</height>
-            </rect>
-        </property>
-    </spacer>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>showDetails</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>128</x>
-                <y>341</y>
-                <width>131</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>PDBFile Details</string>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>pdbId</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>347</x>
-                <y>291</y>
-                <width>182</width>
-                <height>22</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QComboBox">
-        <property name="name">
-            <cstring>results</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>21</x>
-                <y>239</y>
-                <width>508</width>
-                <height>30</height>
-            </rect>
-        </property>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>buttonCancel</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>447</x>
-                <y>341</y>
+                <x>432</x>
+                <y>318</y>
                 <width>82</width>
                 <height>30</height>
             </rect>
@@ -344,18 +305,56 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>download</cstring>
+            <cstring>showDetails</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>21</x>
-                <y>341</y>
-                <width>101</width>
+                <x>124</x>
+                <y>318</y>
+                <width>120</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>PDBFile Details</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>pdbId</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>332</x>
+                <y>268</y>
+                <width>182</width>
+                <height>22</height>
+            </rect>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>You can also enter a PDB id directly.</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>download</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>318</y>
+                <width>112</width>
                 <height>30</height>
             </rect>
         </property>
         <property name="text">
             <string>Download</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
         </property>
     </widget>
 </widget>
@@ -384,14 +383,18 @@
         <receiver>downloadPDBFile</receiver>
         <slot>slotDownload()</slot>
     </connection>
+    <connection>
+        <sender>pdbId</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>downloadPDBFile</receiver>
+        <slot>idChanged()</slot>
+    </connection>
 </connections>
-<includes>
-    <include location="local" impldecl="in implementation">downloadPDBFile.ui.h</include>
-</includes>
 <slots>
     <slot>slotSearch()</slot>
     <slot>slotDownload()</slot>
     <slot>slotShowDetail()</slot>
+    <slot>idChanged()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -19,6 +19,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qimage.h>
+#include <qpushbutton.h>
 
 namespace BALL
 {
@@ -31,7 +32,7 @@ namespace BALL
 				ModularWidget(name)
 		{
 #ifdef BALL_VIEW_DEBUG
-	Log.error() << "new MolecularFileDialog " << this << std::endl;
+	Log.error() << "new DownloadPDBFile" << this << std::endl;
 #endif
 			// register the widget with the MainControl
 			registerWidget(this);
@@ -44,7 +45,7 @@ namespace BALL
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.info() << "Destructing object " << (void *)this 
-								 << " of class MolecularFileDialog" << std::endl; 
+								 << " of class DownloadPDBFile" << std::endl; 
 #endif 
 		}
 
@@ -53,14 +54,14 @@ namespace BALL
 		{
 			String hint("Download a PDB file from www.rcsb.org");
 			main_control.insertMenuEntry(MainControl::FILE_OPEN, "&Download Structure", (QObject *)this,
-																	 SLOT(showDialog()), CTRL+Key_D, -1, hint);
+																	 SLOT(show()), CTRL+Key_D, -1, hint);
 		}
 
 		void DownloadPDBFile::finalizeWidget(MainControl& main_control)
 			throw()
 		{
 			main_control.removeMenuEntry(MainControl::FILE_OPEN, "&Download Structure", (QObject *)this, 
-																	 SLOT(showDialog()), CTRL+Key_R);
+																	 SLOT(show()), CTRL+Key_R);
 		}
 
 		void DownloadPDBFile::checkMenuEntries()
@@ -68,11 +69,6 @@ namespace BALL
 		{
 		}
 
-
-		void DownloadPDBFile::showDialog()
-		{
-			show();
-		}
 
 		void DownloadPDBFile::slotSearch()
 		{
@@ -145,16 +141,21 @@ namespace BALL
 				Log.info() << "> read " << system->countAtoms() << " atoms from URL \"" << filename<< "\"" << std::endl;
 
 				if (system->getName() == "")
+				{
 					system->setName(pdbId->text().latin1());
+				}
 
 				system->setProperty("FROM_FILE", filename);
 				
+				/*
 				// notify tree of a new composite
 				CompositeMessage* new_message = new CompositeMessage;
 				new_message->setComposite(*system);
 				new_message->setCompositeName(pdbId->text().latin1());
 				new_message->setType(CompositeMessage::NEW_COMPOSITE);
 				notify_(new_message);
+				*/
+				getMainControl()->insert(*system, pdbId->text().latin1());
 			}
 			catch(...)
 			{
@@ -250,6 +251,12 @@ namespace BALL
 			catch (...)
 			{ }
 		} 
+
+
+		void DownloadPDBFile::idChanged()
+		{
+			download->setEnabled(pdbId->text() != "");
+		}
 
 	}
 }
