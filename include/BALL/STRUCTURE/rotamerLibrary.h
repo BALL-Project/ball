@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.15 2001/06/21 23:22:26 amoll Exp $
+// $Id: rotamerLibrary.h,v 1.16 2001/12/17 01:34:26 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -178,6 +178,13 @@ namespace BALL
 		/**	Calculate the torsion angle of a residue
 		*/
 		Rotamer getRotamer(const Residue& residue) const;
+
+		/**	Return a reference to a given rotamer by number.
+				The index should be in the range [0, \Ref{getNumberOfRotamers}()[,
+				however the index is computed modulo the maximum number, so it
+				really doesn't matter.
+		*/
+		const Rotamer& getRotamer(Position index) const;
 
 		/** Assign a new name
 		*/
