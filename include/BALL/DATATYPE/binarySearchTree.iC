@@ -7,7 +7,7 @@ BSTreeItem::BSTreeItem()
 }
 
 BALL_INLINE
-BSTreeItem::BSTreeItem(const BSTreeItem& item, bool /* deep */= true)
+BSTreeItem::BSTreeItem(const BSTreeItem& item, bool /* deep */)
 	: left_(item.left_),
 		right_(item.right_),
 		color_(item.color_)
@@ -15,7 +15,7 @@ BSTreeItem::BSTreeItem(const BSTreeItem& item, bool /* deep */= true)
 }
 
 BALL_INLINE
-BSTreeItem::BSTreeItem(BSTreeItem* left_item, BSTreeItem* right_item, char color = BSTreeItem::BLACK)
+BSTreeItem::BSTreeItem(BSTreeItem* left_item, BSTreeItem* right_item, char color)
 	:	left_(left_item),
 		right_(right_item),
 		color_(color)
