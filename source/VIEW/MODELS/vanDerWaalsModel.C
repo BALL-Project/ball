@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.4 2003/10/17 16:17:37 amoll Exp $
+// $Id: vanDerWaalsModel.C,v 1.5 2003/11/13 21:49:54 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
@@ -18,13 +18,15 @@ namespace BALL
 
 		AddVanDerWaalsModel::AddVanDerWaalsModel()
 			throw()
-			: AtomBondModelBaseProcessor()
+			: AtomBondModelBaseProcessor(),
+				radius_factor_(1)
 		{
  		}
 
 		AddVanDerWaalsModel::AddVanDerWaalsModel(const AddVanDerWaalsModel& model)
 			throw()
-			: AtomBondModelBaseProcessor(model)
+			: AtomBondModelBaseProcessor(model),
+				radius_factor_(model.radius_factor_)
 		{
 		}
 
@@ -50,8 +52,6 @@ namespace BALL
 				
 		bool AddVanDerWaalsModel::finish()
 		{
-//			buildBondModels_(); // ????? kann man vielleicht weglassen?
-
 			return true;
 		}
 				
@@ -66,13 +66,10 @@ namespace BALL
 			Atom* atom = RTTI::castTo<Atom>(composite);
 
 			Sphere* sphere_ptr = new Sphere;
-
 			if (sphere_ptr == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
-
 			sphere_ptr->setComposite(atom);
-			sphere_ptr->setRadius(atom->getElement().getVanDerWaalsRadius());
+			sphere_ptr->setRadius(atom->getElement().getVanDerWaalsRadius() * radius_factor_);
 			sphere_ptr->setPositionAddress(atom->getPosition());
-			
 			geometric_objects_.push_back(sphere_ptr);
 			
 			insertAtom_(atom);

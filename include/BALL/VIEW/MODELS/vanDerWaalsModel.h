@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.4 2003/09/03 12:34:51 amoll Exp $
+// $Id: vanDerWaalsModel.h,v 1.5 2003/11/13 21:49:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_VANDERWAALSMODEL_H
@@ -100,8 +100,19 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+
+			/// Default = 1
+			void setVDWRadiusFactor(float value)
+				throw() { radius_factor_ = value;}
+
+			///
+			float getVDWRadiusFactor() const
+				throw() { return 	radius_factor_;}
 							
 			//@}
+			
+			protected:
+			float radius_factor_;
 		};
 
 	} // namespace VIEW
