@@ -1,37 +1,34 @@
-// $Id: numericalSAS.C,v 1.6 2000/02/12 19:35:20 oliver Exp $
+// $Id: numericalSAS.C,v 1.7 2000/05/30 10:36:18 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/DATATYPE/hashMap.h>
+#include <BALL/KERNEL/baseFragment.h>
 
 using namespace std;
-
-namespace BALL
-{
 
 #define FLAG_DOTS       01
 #define FLAG_VOLUME     02
 #define FLAG_ATOM_AREA  04
+namespace BALL
+{
 
 	// forward
 	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*);
 
 	void calculateNumericalSASAtomAreas
-		(HashMap<Atom*,float>& aareas,
-			const Composite& composite, float probe_radius, int number_of_dots)
+		(HashMap<Atom*,float>& atom_areas,
+			const BaseFragment& fragment, float probe_radius, Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
 		vector<Atom*>	atoms;
-		Composite::SubcompositeIterator	it = composite.beginSubcomposite();
-		for (; it != composite.endSubcomposite(); ++it)
+		AtomIterator	it = fragment.beginAtom();
+		for (; +it; ++it)
 		{
-			if (RTTI::isKindOf<Atom>(*it))
+			if (it->getRadius() > 0.0)
 			{
-				Atom* atom = RTTI::castTo<Atom>(*it);
-				if (atom->getRadius() != 0.0)
-				{
-					atoms.push_back(atom);
-				}
+				atoms.push_back(&*it);
 			}
 		}
 		
@@ -57,39 +54,36 @@ namespace BALL
 		double area;
 		double volume;
 		int number_of_surface_dots;
-		double* atom_areas = 0;
-		double* surface_dots = 0;
+
+		// these two array won't get out
+		double* internal_atom_areas = 0;
+		double* internal_surface_dots = 0;
 
 		// call nsc
 		nsc_(coordinates, radii, (int)atoms.size(),
-				 number_of_dots, FLAG_ATOM_AREA, 
-				 &area, &atom_areas, &volume, 
-				 &surface_dots, &number_of_surface_dots);
+				 (int)number_of_dots, FLAG_ATOM_AREA, 
+				 &area, &internal_atom_areas, &volume, 
+				 &internal_surface_dots, &number_of_surface_dots);
 
 
 		// clear the hash map
-		aareas.clear();
+		atom_areas.clear();
 		
 		// iterate over all atoms and insert them into the
-		// hash map aareas
-		it = composite.beginSubcomposite();
-		for (Size j = 0; it != composite.endSubcomposite(); ++it)
+		// hash map atom_areas
+		for (Size j = 0; j < atoms.size(); ++j)
 		{
-			if (RTTI::isKindOf<Atom>(*it))
-			{
-				aareas.insert(pair<Atom*,float>(RTTI::castTo<Atom>(*it), (float)atom_areas[j]));
-				j++;
-			}
+			atom_areas.insert(pair<Atom*, float>(atoms[j], (float)internal_atom_areas[j]));
 		}
 
 		// free arrays (if created)
-		if (atom_areas != 0)
+		if (internal_atom_areas != 0)
 		{
-			free(atom_areas);
+			free(internal_atom_areas);
 		}
-		if (surface_dots != 0)
+		if (internal_surface_dots != 0)
 		{
-			free(surface_dots);
+			free(internal_surface_dots);
 		}
 
 		// free the input fields
@@ -101,21 +95,17 @@ namespace BALL
 
 
 	float calculateNumericalSASArea	
-		(const Composite& composite, float probe_radius, int number_of_dots)
+		(const BaseFragment& fragment, float probe_radius, Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
 		vector<Atom*>	atoms;
-		Composite::SubcompositeIterator	it = composite.beginSubcomposite();
-		for (; it != composite.endSubcomposite(); ++it)
+		AtomIterator	it = fragment.beginAtom();
+		for (; +it; ++it)
 		{
-			if (RTTI::isKindOf<Atom>(*it))
+			if (it->getRadius() != 0.0)
 			{
-				Atom* atom = RTTI::castTo<Atom>(*it);
-				if (atom->getRadius() != 0.0)
-				{
-					atoms.push_back(atom);
-				}
+				atoms.push_back(&*it);
 			}
 		}
 		
