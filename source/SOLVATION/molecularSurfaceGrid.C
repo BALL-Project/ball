@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.C,v 1.9 2001/07/15 18:59:12 amoll Exp $
+// $Id: molecularSurfaceGrid.C,v 1.10 2001/08/01 01:11:44 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -12,7 +12,7 @@ namespace BALL
 		return (int)(*(long*)a - *(long*)b);
 	}
 
-	RegularData3D<char> *calculateSESGrid
+	TRegularData3D<char> *calculateSESGrid
 		(const Vector3& lower, const Vector3& upper,
 		 const float spacing, const System& system, 
 		 const float probe_radius)
@@ -42,7 +42,7 @@ namespace BALL
 		float R_b, R_b2;
 
 		// the grid itself...
-		RegularData3D<char>	*grid;
+		TRegularData3D<char>	*grid;
 
 		// squared distance of any two vectors
 		float squared_distance;
@@ -50,7 +50,7 @@ namespace BALL
 		float origin_x, origin_y, origin_z;
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
-		RegularData3D<char>::GridIndex upper_index, lower_index;
+		TRegularData3D<char>::GridIndex upper_index, lower_index;
 
 		// pointer to grid data
 		char *grid_value;
@@ -60,7 +60,7 @@ namespace BALL
 
 		// Here we go...
 		// First, create the grid...
-		grid = new RegularData3D<char>(lower, upper, spacing);
+		grid = new TRegularData3D<char>(lower, upper, spacing);
 		
 		if ((grid == 0) || (!grid->isValid()))
 		{
@@ -270,7 +270,7 @@ namespace BALL
 		return &(*grid);
 	}
 
-	RegularData3D<char> *calculateSASGrid(
+	TRegularData3D<char> *calculateSASGrid(
 				const Vector3 &lower, 
 				const Vector3 &upper,
 				const float spacing,
@@ -295,7 +295,7 @@ namespace BALL
 		float R_b, R_b2;
 
 		// the grid itself...
-		RegularData3D<char>	*grid;
+		TRegularData3D<char>	*grid;
 
 		// squared distance of any two vectors
 		float squared_distance;
@@ -304,7 +304,7 @@ namespace BALL
 
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
-		RegularData3D<char>::GridIndex upper_index, lower_index;
+		TRegularData3D<char>::GridIndex upper_index, lower_index;
 
 		// pointer to grid data
 		char *grid_value;
@@ -315,7 +315,7 @@ namespace BALL
 		// Here we go...
 		// First, create the grid...
 
-		grid = new RegularData3D<char>(lower, upper, spacing);
+		grid = new TRegularData3D<char>(lower, upper, spacing);
 
 		if ((grid == 0) || !grid->isValid())
 		{
