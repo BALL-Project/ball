@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.9 2003/10/31 23:15:47 oliver Exp $
+// $Id: pyInterpreter.C,v 1.10 2003/11/16 20:59:51 amoll Exp $
 //
 
 #include <Python.h>
@@ -31,6 +31,9 @@ namespace BALL
 			char* message;
 			error_message_ = "ERROR: ";
 			PyErr_Fetch(&type, &value, &range);
+				error_message_ += message;
+				/*
+				 ????? 16.11.2003 always full error messages
 			if (PyArg_Parse(value, "s", &message))
 			{
 				error_message_ += message;
@@ -39,6 +42,7 @@ namespace BALL
 			{	
 				error_message_ = "Syntax error";
 			}
+			*/
 			error_message_ += "\n";
 
 			PyErr_Clear();
