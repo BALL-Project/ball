@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.7 1999/11/03 12:12:35 oliver Exp $
+// $Id: socket.C,v 1.8 1999/12/19 17:15:08 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -1112,7 +1112,7 @@ namespace BALL
 	{
 	}
 
-	IOStreamSocket::IOStreamSocket(SocketBuf& sb)
+	IOStreamSocket::IOStreamSocket(const SocketBuf& sb)
 		: BALL_IOS(new SockInetBuf(sb))
 	{
 	}

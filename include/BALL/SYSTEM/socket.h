@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.5 1999/11/03 12:11:58 oliver Exp $
+// $Id: socket.h,v 1.6 1999/12/19 17:19:15 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -751,7 +751,7 @@ namespace BALL
 		//@{
 
 		///
-		IOStreamSocket(SocketBuf& sb);
+		IOStreamSocket(const SocketBuf& sb);
 				
 		///
 		IOStreamSocket(SocketBuf::type ty=SocketBuf::sock_stream, int proto = 0);
