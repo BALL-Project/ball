@@ -1,4 +1,4 @@
-// $Id: anisotropy.C,v 1.2 2000/07/04 13:57:38 oliver Exp $
+// $Id: anisotropy.C,v 1.3 2000/07/25 21:24:55 oliver Exp $
 
 #include<BALL/NMR/anisotropy.h>
 
@@ -89,8 +89,8 @@ bool AnIsoShift::finish()
 					for(zaehler=0;zaehler<anzahl;zaehler++)
 						{
 						hbond=c_atom->getBond(zaehler);
-						if ( (hbond->getBondedAtomOf(*c_atom)->getName())==name)
-							x_atom=hbond->getBondedAtomOf(*c_atom);
+						if ( (hbond->getBoundAtom(*c_atom)->getName())==name)
+							x_atom=hbond->getBoundAtom(*c_atom);
 						}		
 
 					c_pos=c_atom->getPosition();
@@ -143,8 +143,8 @@ bool AnIsoShift::finish()
 					for(zaehler=0;zaehler<anzahl;zaehler++)
 						{
 						hbond=c_atom->getBond(zaehler);
-						if ( (hbond->getBondedAtomOf(*c_atom)->getName())=="O")
-							o_atom=hbond->getBondedAtomOf(*c_atom);
+						if ( (hbond->getBoundAtom(*c_atom)->getName())=="O")
+							o_atom=hbond->getBoundAtom(*c_atom);
 						}
 					c_pos=c_atom->getPosition();
 					o_pos=o_atom->getPosition();
@@ -217,7 +217,7 @@ Processor::Result AnIsoShift::operator()(Object&  object)
 
 		if (patom_->getName()=="C")
 			{
-			if (patom_->isBonded())
+			if (patom_->isBound())
 				{
 				n=0;o=0;
 				anzahl=patom_->countBonds();
@@ -229,12 +229,12 @@ Processor::Result AnIsoShift::operator()(Object&  object)
 				for (zaehler=0;zaehler<anzahl;zaehler++)
 					{
 					bond_=patom_->getBond(zaehler);
-					if ( (bond_->getBondedAtomOf(*patom_)->getName())=="N" )
+					if ( (bond_->getBoundAtom(*patom_)->getName())=="N" )
 						{
 						n=1;
 						n_zahl=zaehler;
 						}
-					if ( (bond_->getBondedAtomOf(*patom_)->getName())=="O" )
+					if ( (bond_->getBoundAtom(*patom_)->getName())=="O" )
 						{
 						o=1;
 						eff_list_.push_back(bond_);
@@ -260,7 +260,7 @@ Processor::Result AnIsoShift::operator()(Object&  object)
 				{
 				if (patom_->getName()=="CG")
 					{
-					if (patom_->isBonded())
+					if (patom_->isBound())
 						{
 						anzahl=patom_->countBonds();
 						//cout << endl << "anzahl :" << anzahl;
@@ -271,9 +271,9 @@ Processor::Result AnIsoShift::operator()(Object&  object)
 						for (zaehler=0;zaehler<anzahl;zaehler++)
 							{
 							bond_=patom_->getBond(zaehler);
-							if ( (bond_->getBondedAtomOf(*patom_)->getElement())==PTE[Element::O])
+							if ( (bond_->getBoundAtom(*patom_)->getElement())==PTE[Element::O])
 								{
-								if ((bond_->getBondedAtomOf(*patom_)->getName())=="OD1") eff_list_.push_back(bond_);
+								if ((bond_->getBoundAtom(*patom_)->getName())=="OD1") eff_list_.push_back(bond_);
 								//cout  << "... Bindung eingefügt.";
 								}
 							}
@@ -286,7 +286,7 @@ Processor::Result AnIsoShift::operator()(Object&  object)
 				{
 				if (patom_->getName()=="CD")
 					{
-					if (patom_->isBonded())
+					if (patom_->isBound())
 						{
 						anzahl=patom_->countBonds();
 						//cout << endl << "anzahl :" << anzahl;
@@ -297,9 +297,9 @@ Processor::Result AnIsoShift::operator()(Object&  object)
 						for (zaehler=0;zaehler<anzahl;zaehler++)
 							{
 							bond_=patom_->getBond(zaehler);
-							if ( (bond_->getBondedAtomOf(*patom_)->getElement())==PTE[Element::O])
+							if ( (bond_->getBoundAtom(*patom_)->getElement())==PTE[Element::O])
 								{
-								if ((bond_->getBondedAtomOf(*patom_)->getName())=="OE1") eff_list_.push_back(bond_);
+								if ((bond_->getBoundAtom(*patom_)->getName())=="OE1") eff_list_.push_back(bond_);
 								//cout  << "... Bindung eingefügt.";
 								}
 							}

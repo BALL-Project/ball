@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.21 2000/06/21 14:16:13 amoll Exp $
+// $Id: fragmentDB.C,v 1.22 2000/07/25 21:24:55 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1628,7 +1628,7 @@ namespace BALL
 									 }
 								}
 							// access hydrogen bound and get first reference atom
-							atom=atom->getBond(0)->getBondedAtomOf(*atom);
+							atom=atom->getBond(0)->getBoundAtom(*atom);
 							atom_feld[0]=atom;
 							zaehler1=0;
 							zaehler2=1;
@@ -1643,7 +1643,7 @@ namespace BALL
 								atom=atom_feld[zaehler1];
 								if (atom->getBond(bond_zaehler))
 									{
-									atom=atom->getBond(bond_zaehler)->getBondedAtomOf(*atom);
+									atom=atom->getBond(bond_zaehler)->getBoundAtom(*atom);
 									if (atom->getElement()!=PTE[Element::H])
 										{
 										test_zaehler=0;
@@ -2027,7 +2027,7 @@ namespace BALL
 								&& (fabs(distance - s2[3].toFloat()) < s2[4].toFloat()))
 						{
 							// create the bond only if it does not exist
-							if (!a1->isBondedTo(*a2))
+							if (!a1->isBoundTo(*a2))
 							{
 								Bond* bond = a1->createBond(*a2);
 								// create the bond

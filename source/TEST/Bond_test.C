@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.16 2000/07/12 19:36:44 oliver Exp $
+// $Id: Bond_test.C,v 1.17 2000/07/25 21:24:57 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.16 2000/07/12 19:36:44 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.17 2000/07/25 21:24:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -313,18 +313,18 @@ CHECK(getBond(Atom&, Atom&))
 	TEST_EQUAL(b1.getName(), "XXX")
 RESULT
 
-CHECK(getBondedAtomOf(Atom&))
+CHECK(getBoundAtom(Atom&))
 	Atom a1, a2;
 	Bond b1("bond", a1, a2);
-	b1.getBondedAtomOf(a1)->setCharge(0.1);
+	b1.getBoundAtom(a1)->setCharge(0.1);
 	TEST_REAL_EQUAL(a2.getCharge(), 0.1)
 RESULT
 
-CHECK(getBondedAtomOf(Atom&) const )
+CHECK(getBoundaAtom(Atom&) const )
 	Atom a1, a2;
 	a2.setCharge(0.1);
 	Bond b1("bond", a1, a2);
-	const Atom* a3 = b1.getBondedAtomOf(a1);
+	const Atom* a3 = b1.getBoundAtom(a1);
 	TEST_REAL_EQUAL(a3->getCharge(), 0.1)
 RESULT
 
@@ -336,10 +336,10 @@ CHECK(isBondOf(Atom&))
 	TEST_EQUAL(b1.isBondOf(a3), false)
 RESULT
 
-CHECK(isBonded())
+CHECK(isBound())
 	Atom a1, a2, a3;
 	Bond b1("bond", a1, a2);
-	TEST_EQUAL(b1.isBonded(), true)
+	TEST_EQUAL(b1.isBound(), true)
 	TEST_EQUAL(b1.isBondOf(a3), false)
 RESULT
 

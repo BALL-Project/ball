@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.13 2000/05/01 21:36:41 oliver Exp $
+// $Id: PDBFile.C,v 1.14 2000/07/25 21:24:53 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -1189,7 +1189,7 @@ namespace BALL
 					if (hydrogen_bond < 4)
 					{
 						hydrogen_bonded_atom[hydrogen_bond]
-							= (*bond_it).getBondedAtomOf(*current_atom);
+							= (*bond_it).getBoundAtom(*current_atom);
 
 						if (*hydrogen_bonded_atom[hydrogen_bond] >= *current_atom)
 						{
@@ -1206,7 +1206,7 @@ namespace BALL
 					if (saltbridge_bond < 2)
 					{
 						saltbridge_bonded_atom[saltbridge_bond]
-							= (*bond_it).getBondedAtomOf(*current_atom);
+							= (*bond_it).getBoundAtom(*current_atom);
 
 						if (*saltbridge_bonded_atom[saltbridge_bond] >= *current_atom)
 						{
@@ -1224,7 +1224,7 @@ namespace BALL
 					if (covalent_bond < 4)
 					{
 						covalent_bonded_atom[covalent_bond]
-							= (*bond_it).getBondedAtomOf(*current_atom);
+							= (*bond_it).getBoundAtom(*current_atom);
 
 						if (*covalent_bonded_atom[covalent_bond] >= *current_atom)
 						{

@@ -1,4 +1,4 @@
-// $Id: Atom_test.C,v 1.7 2000/07/12 19:36:44 oliver Exp $
+// $Id: Atom_test.C,v 1.8 2000/07/25 21:24:56 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.7 2000/07/12 19:36:44 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.8 2000/07/25 21:24:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -313,15 +313,15 @@ CHECK(hasBond(Bond&))
 	TEST_EQUAL(atom->hasBond(*atom->getBond(*atom)), false)
 RESULT
 
-CHECK(isBondedTo(Atom&))
-	TEST_EQUAL(atom->isBondedTo(*atom3), false)
-	TEST_EQUAL(atom->isBondedTo(*atom4), true)
-	TEST_EQUAL(atom->isBondedTo(*atom), false)
+CHECK(isBoundTo(Atom&))
+	TEST_EQUAL(atom->isBoundTo(*atom3), false)
+	TEST_EQUAL(atom->isBoundTo(*atom4), true)
+	TEST_EQUAL(atom->isBoundTo(*atom), false)
 RESULT
 
-CHECK(isBonded())
-	TEST_EQUAL(atom->isBonded(), true)
-	TEST_EQUAL(atom3->isBonded(), false)
+CHECK(isBound())
+	TEST_EQUAL(atom->isBound(), true)
+	TEST_EQUAL(atom3->isBound(), false)
 RESULT
 
 CHECK(isValid())

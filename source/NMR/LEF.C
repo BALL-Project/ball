@@ -1,4 +1,4 @@
-// $Id: LEF.C,v 1.2 2000/07/04 13:52:13 oliver Exp $
+// $Id: LEF.C,v 1.3 2000/07/25 21:24:54 oliver Exp $
 
 #include<BALL/NMR/LEF.h>
 
@@ -60,7 +60,7 @@ bool LEFShift::finish()
 			{
 			//cout << endl<< "Bearbeite jetzt Hydrogen : " << (*proton_iter)->getName();
 			proton=(*proton_iter)->getPosition();
-			bindung=(*proton_iter)->getBond(0)->getBondedAtomOf(*(*proton_iter))->getPosition();
+			bindung=(*proton_iter)->getBond(0)->getBoundAtom(*(*proton_iter))->getPosition();
 			prot_bin=proton-bindung;
 			Ez=0;
 			for(atom_iter=atom_list_.begin();atom_iter!=atom_list_.end();++atom_iter)
@@ -124,9 +124,9 @@ Processor::Result LEFShift::operator()(Object&  object)
 				// Wasserstoffe haben nur eine Bindung : Index = 1 oder 0 ?
 				// Hole diese Bindung und überprüfe ob Kohlenstoff
 
-				if (patom_->isBonded())
+				if (patom_->isBound())
 					{
-					if ((patom_->getBond(0)->getBondedAtomOf(*patom_)->getElement())==PTE[Element::C])
+					if ((patom_->getBond(0)->getBoundAtom(*patom_)->getElement())==PTE[Element::C])
 						{ 
 						proton_list_.push_back(patom_);
 	 	 				//cout  << "...in proton_list_ eingefuegt."; 	
