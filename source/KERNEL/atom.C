@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.35.4.2 2002/02/27 11:32:24 oliver Exp $
+// $Id: atom.C,v 1.35.4.3 2002/05/31 22:52:35 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -13,7 +13,7 @@ using namespace std;
 namespace BALL 
 {
 
-	Atom::AtomAttributeVector Atom::static_attributes_;
+	Atom::AttributeVector			Atom::static_attributes_;
 	Atom::AtomIndexList				Atom::free_list_;
 	
 	void Atom::StaticAtomAttributes::clear()
