@@ -3,7 +3,7 @@
 	--- Qt Architect generated file ---
 
 	File: displayDialog.h
-	Last generated: Mon Jan 10 11:52:00 2000
+	Last generated: Mon Jan 10 12:34:34 2000
 
  *********************************************************************/
 

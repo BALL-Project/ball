@@ -1,0 +1,311 @@
+DlgEdit:v1.2:Dialog:
+Dialog {
+	ClassHeader {DlgDisplayProperties.h}
+	ClassSource {DlgDisplayProperties.C}
+	ClassName {DlgDisplayProperties}
+	DataHeader {DlgDisplayPropertiesData.h}
+	DataSource {DlgDisplayPropertiesData.C}
+	DataName {DlgDisplayPropertiesData}
+	WindowBaseClass {QDialog}
+	IsModal {FALSE}
+	WindowCaption {Display Settings}
+	WindowFlags {720}
+}
+WidgetLayout {
+InitialPos {-1 -1}
+Size {250 290}
+MinSize {400 300}
+MaxSize {400 300}
+Grid {10}
+TextTranslated {FALSE}
+
+GroupBox {
+		Title {model}
+		Alignment {AlignHCenter}
+		Style {49}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {10 10 230 80}
+		Name {model_groupbox}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+GroupBox {
+		Title {custom color}
+		Alignment {AlignHCenter}
+		Style {49}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {20 150 210 80}
+		Name {custom_color_groupbox}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+GroupBox {
+		Title {color}
+		Alignment {AlignHCenter}
+		Style {51}
+		LineWidth {2}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {10 100 230 140}
+		Name {color_groupbox}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {TRUE}
+		IsMenuButton {FALSE}
+		Text {&Apply}
+		AutoRepeat {FALSE}
+		AutoResize {TRUE}
+		Rect {10 250 110 30}
+		Name {apply_button}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteButton}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {FALSE}
+		IsMenuButton {FALSE}
+		Text {&Close}
+		AutoRepeat {FALSE}
+		AutoResize {TRUE}
+		Rect {130 250 107 30}
+		Name {close_button}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteButton}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+ComboBox {
+		Style {ReadOnly}
+		SizeLimit {10}
+		Policy {AtBottom}
+		AutoResize {TRUE}
+		Item {by element}
+		Item {by residue type}
+		Item {by residue name}
+		Item {by atom charge}
+		Item {custom}
+		MaxCount {2147483647}
+		AutoCompletion {FALSE}
+		Rect {20 120 210 20}
+		Name {coloring_type_combo_box}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {StrongFocus}
+		BackgroundMode {NoBackground}
+		FontPropagation {AllChildren}
+		PalettePropagation {AllChildren}
+}
+Label {
+		Text {}
+		Alignment {AlignLeft|AlignVCenter|ExpandTabs}
+		AutoResize {FALSE}
+		Margin {0}
+		Style {50}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {40 180 30 30}
+		Name {color_sample_label}
+		Palette {0 12632256 15527148 8421504 10526884 0 16777215 16711680 14474460 0 0 0 0 16777215 8421504 12632256 15527148 8421504 10526884 8421504 12632256 12632256 14474460 8421504 8421504 0 8421504 12632256 0 12632256 15527148 8421504 10526884 0 16777215 12632256 14474460 0 0 0 0 16777215}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {TRUE}
+		IsMenuButton {FALSE}
+		Text {&Edit}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {110 180 80 30}
+		Name {edit_button}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteButton}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+Label {
+		Text {resolution}
+		Alignment {AlignLeft|AlignVCenter|ExpandTabs}
+		AutoResize {FALSE}
+		Margin {0}
+		Style {0}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {20 60 70 22}
+		Name {model_resolution_label}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+Label {
+		Text {type}
+		Alignment {AlignLeft|AlignVCenter|ExpandTabs}
+		AutoResize {TRUE}
+		Margin {0}
+		Style {0}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {20 30 28 18}
+		Name {model_type_label}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+ComboBox {
+		Style {ReadOnly}
+		SizeLimit {10}
+		Policy {AtBottom}
+		AutoResize {FALSE}
+		Item {line}
+		Item {none}
+		Item {stick}
+		Item {ball and stick}
+		Item {van der Waals}
+		MaxCount {2147483647}
+		AutoCompletion {FALSE}
+		Rect {90 30 140 24}
+		Name {model_type_combobox}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {StrongFocus}
+		BackgroundMode {NoBackground}
+		FontPropagation {AllChildren}
+		PalettePropagation {AllChildren}
+}
+ComboBox {
+		Style {ReadOnly}
+		SizeLimit {10}
+		Policy {AtBottom}
+		AutoResize {FALSE}
+		Item {low}
+		Item {medium}
+		Item {high}
+		Item {ultra}
+		MaxCount {2147483647}
+		AutoCompletion {FALSE}
+		Rect {90 60 140 22}
+		Name {model_resolution_combobox}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {StrongFocus}
+		BackgroundMode {NoBackground}
+		FontPropagation {AllChildren}
+		PalettePropagation {AllChildren}
+}
+
+}
