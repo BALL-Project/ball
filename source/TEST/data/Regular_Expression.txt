@@ -1,0 +1,3 @@
+  pattern: [A-Z]+
+  is valid: 1
+  compiled subexpressions: 0
