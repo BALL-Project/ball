@@ -45,6 +45,7 @@ changed:
 - increased OpenGL performance 
 - .BALLView config files are now always stored in the users homedir
 - Scene Preferences
+- ~ModularWidget now calls MainControl::removeModularWidget
 - GeometricObjects no longe have names
 - removed Information Processor for GeometricObjects
 - disabled Server in BALLView by default
