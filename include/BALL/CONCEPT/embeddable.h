@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.17 2003/09/07 21:56:20 oliver Exp $
+// $Id: embeddable.h,v 1.18 2003/10/15 14:11:45 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
@@ -120,7 +120,16 @@ namespace BALL
 			throw();	
 
 		//@}
-			
+		
+		/** Internal value dump.
+				Dump the current state to 
+				the output ostream <b> s</b> with dumping depth <b> depth</b>.
+				\param   s output stream where to output the state 
+				\param   depth the dumping depth
+		*/
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
+
 		protected:
 		/**
 		*/
