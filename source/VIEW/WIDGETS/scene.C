@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.138 2004/09/15 13:11:00 amoll Exp $
+// $Id: scene.C,v 1.140 2004/09/15 15:42:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -474,7 +474,7 @@ namespace BALL
 				}
 			
 				n *= -d;
-				Box b(n, e[0] * 300, e[1] * 300);
+				Box b(n, e[0] * 300, e[1] * 300, 0.4);
 				b.setColor(0,0,255, 255);
 				gl_renderer_.render_(&b);
 
@@ -1558,12 +1558,12 @@ namespace BALL
 				{
 					if (delta_x * delta_x > delta_y * delta_y)
 					{
-						Angle angle(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * -10)), false);
+						Angle angle(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * -3)), false);
 						m.rotate(angle, camera.getLookUpVector());
 					}
 					else
 					{
-						Angle angle(delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -10)), false);
+						Angle angle(delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -3)), false);
 						m.rotate(angle, camera.getRightVector());
 					}
 					break;
@@ -1949,9 +1949,10 @@ namespace BALL
 		{
 			Representation* rep = new Representation();
 			rep->setModelType(MODEL_CLIPPING_PLANE);
-			rep->setProperty("AX", 1);
-			rep->setProperty("BY", 0);
-			rep->setProperty("CZ", 0);
+			Vector3 v = stage_->getCamera().getViewVector();
+			rep->setProperty("AX", v.x);
+			rep->setProperty("BY", v.y);
+			rep->setProperty("CZ", v.z);
 			rep->setProperty("D", 10);
 			rep->setHidden(true);
 			getMainControl()->insert(*rep);
