@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.8 2003/09/03 13:05:01 amoll Exp $
+// $Id: displayProperties.C,v 1.9 2003/09/04 19:06:00 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -46,8 +46,13 @@ namespace BALL
 				model_type_(MODEL_BALL_AND_STICK),
 				rep_(0)
 		{
-			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
+
+			model_type_combobox->clear();
+			for (Index p = 0; p < MODEL_LABEL; p++)
+			{
+				model_type_combobox->insertItem(VIEW::getModelName((VIEW::ModelTypes)p).c_str());
+			}
 		}
 
 
