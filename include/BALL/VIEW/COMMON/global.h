@@ -59,6 +59,22 @@ namespace BALL
 		};	
 		//@}
 
+
+		/** MainControlMissing exception class.
+				This exception is thrown if {\em *this} scene is not inserted into a
+				\Ref{MainControl} object.
+				@see GeneralException
+		*/
+ 		class MainControlMissing: public Exception::GeneralException
+		{
+ 			public:
+   			MainControlMissing(const char* file, int line, const string& data)
+					throw()
+					: Exception::GeneralException(file, line, string("MainControlMissing"), data)
+				{
+    		}
+		};
+    
 	} // namespace VIEW
 
 } // namespace BALL
