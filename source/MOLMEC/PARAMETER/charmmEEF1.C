@@ -1,15 +1,17 @@
-// $Id: charmmEEF1.C,v 1.5 2000/10/18 10:40:06 anker Exp $
+// $Id: charmmEEF1.C,v 1.6 2001/06/27 10:38:15 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
+#include <string.h>
 
 using namespace std;
 
 namespace BALL 
 {
 
-	CharmmEEF1::CharmmEEF1() throw()
+	CharmmEEF1::CharmmEEF1() 
+		throw()
 		:	ParameterSection(),
 			V_(0),
 			dG_ref_(0),
@@ -24,20 +26,22 @@ namespace BALL
 
 
 	CharmmEEF1::CharmmEEF1(const CharmmEEF1& charmm_EEF1) throw()
-		:	ParameterSection(charmm_EEF1),
-			V_(charmm_EEF1.V_),
-			dG_ref_(charmm_EEF1.dG_ref_),
-			dG_free_(charmm_EEF1.dG_free_),
-			dH_ref_(charmm_EEF1.dH_ref_),
-			Cp_ref_(charmm_EEF1.Cp_ref_),
-			sig_w_(charmm_EEF1.sig_w_),
-			R_min_(charmm_EEF1.R_min_),
-			is_defined_(charmm_EEF1.is_defined_)
+		:	ParameterSection(),
+			V_(0),
+			dG_ref_(0),
+			dG_free_(0),
+			dH_ref_(0),
+			Cp_ref_(0),
+			sig_w_(0),
+			R_min_(0),
+			is_defined_(0)
 	{
+		this->operator = (charmm_EEF1);
 	}
 
 
-	CharmmEEF1::~CharmmEEF1() throw()
+	CharmmEEF1::~CharmmEEF1()
+		throw()
 	{
 		clear();
 
@@ -45,17 +49,25 @@ namespace BALL
 	}
 	
 
-	void CharmmEEF1::clear()  throw()
+	void CharmmEEF1::clear()  
+		throw()
 	{
 		// clear allocated parameter fields
 		delete [] V_;
+		V_ = 0;
 		delete [] dG_free_;
+		dG_free_ = 0;
 		delete [] dG_ref_;
+		dG_ref_ = 0;
 		delete [] Cp_ref_;
+		Cp_ref_ = 0;
 		delete [] dH_ref_;
+		dH_ref_ = 0;
 		delete [] sig_w_;
+		sig_w_ = 0;
 		delete [] R_min_;
-
+		R_min_ = 0;
+		
 		ParameterSection::clear();
 	}
 
@@ -89,6 +101,9 @@ namespace BALL
 			return false;
 
 		}
+
+		// release previous contents
+		clear();
 
 		// determine the number of atom types
 		const AtomTypes&	atom_types = parameters.getAtomTypes();
@@ -271,8 +286,9 @@ namespace BALL
 				R_min_[idx]		= getValue(i, index_R_min).toFloat() * factor_R_min;
 				is_defined_[idx] = true;
 
-			} else {
-
+			} 
+			else 
+			{
 				Log.level(LogStream::WARNING) << "unknown atom type in Charmm EEF1 parameters: " << key << "   i = " << i << endl;
 			}
 		}
@@ -292,8 +308,8 @@ namespace BALL
 	}
 
 
-	CharmmEEF1::Values CharmmEEF1::getParameters
-		(Atom::Type I) const throw()
+	CharmmEEF1::Values CharmmEEF1::getParameters(Atom::Type I) const 
+		throw()
 	{
 		CharmmEEF1::Values parameters;
 		assignParameters(parameters, I);
@@ -325,15 +341,38 @@ namespace BALL
 	const CharmmEEF1& CharmmEEF1::operator = (const CharmmEEF1& charmm_EEF1)
 		throw()
 	{
+		// clear old contents
+		clear();
+
+		// assign base class contents
+		ParameterSection::operator = (charmm_EEF1);
+
+		// copy attributes
 		number_of_atom_types_ = charmm_EEF1.number_of_atom_types_;
-		V_ = charmm_EEF1.V_;
-		dG_ref_ = charmm_EEF1.dG_ref_;
-		dG_free_ = charmm_EEF1.dG_free_;
-		dH_ref_ = charmm_EEF1.dH_ref_;
-		Cp_ref_ = charmm_EEF1.Cp_ref_;
-		sig_w_ = charmm_EEF1.sig_w_;
-		R_min_ = charmm_EEF1.R_min_;
-		is_defined_ = charmm_EEF1.is_defined_;
+
+		V_ = new float [number_of_atom_types_];
+		memcpy(V_, charmm_EEF1.V_, sizeof(float) * number_of_atom_types_);
+
+		dG_ref_ = new float [number_of_atom_types_];
+		memcpy(dG_ref_, charmm_EEF1.dG_ref_, sizeof(float) * number_of_atom_types_);
+
+		dG_free_ = new float [number_of_atom_types_];
+		memcpy(dG_free_, charmm_EEF1.dG_free_, sizeof(float) * number_of_atom_types_);
+
+		dH_ref_ = new float [number_of_atom_types_];
+		memcpy(dH_ref_, charmm_EEF1.dH_ref_, sizeof(float) * number_of_atom_types_);
+
+		Cp_ref_ = new float [number_of_atom_types_];
+		memcpy(Cp_ref_, charmm_EEF1.Cp_ref_, sizeof(float) * number_of_atom_types_);
+
+		sig_w_ = new float [number_of_atom_types_];
+		memcpy(sig_w_, charmm_EEF1.sig_w_, sizeof(float) * number_of_atom_types_);
+
+		R_min_ = new float [number_of_atom_types_];
+		memcpy(R_min_, charmm_EEF1.R_min_, sizeof(float) * number_of_atom_types_);
+		
+		is_defined_ = new bool [number_of_atom_types_];
+		memcpy(is_defined_, charmm_EEF1.is_defined_, sizeof(float) * number_of_atom_types_);
 
 		return *this;
 	}
