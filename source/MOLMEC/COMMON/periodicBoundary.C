@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.4 2000/02/02 09:53:39 len Exp $
+// $Id: periodicBoundary.C,v 1.5 2000/02/02 14:10:06 len Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -396,11 +396,11 @@ namespace BALL
 		Size N_y = (Size)(box_.getHeight() / height + 1.0);
 		Size N_z = (Size)(box_.getDepth() / depth + 1.0);
 		
-		for (Size i = 0; i < N_x; ++i)
+		for (Size i = 0; i <= N_x; ++i)
 		{
-			for (Size j = 0; j < N_y; ++j)
+			for (Size j = 0; j <= N_y; ++j)
 			{
-				for (Size k = 0; k < N_z; ++k)
+				for (Size k = 0; k <= N_z; ++k)
 				{
 					Vector3 tmp;
 					tmp.x = basis.x + (float)i * width;
