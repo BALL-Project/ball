@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.h,v 1.5 2000/03/12 22:20:57 oliver Exp $
+// $Id: textPersistenceManager.h,v 1.6 2000/03/14 22:46:18 oliver Exp $
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -212,6 +212,7 @@ namespace BALL
 		*/
 		virtual void put(const unsigned long s);
 
+#ifndef BALL_64BIT_ARCHITECTURE
 		/**	Write a signed long long to the output stream.
 		*/
 		virtual void put(const long long s);
@@ -219,6 +220,7 @@ namespace BALL
 		/**	Write an unsigned long to the output stream.
 		*/
 		virtual void put(const unsigned long long s);
+#endif
 
 		/**	Write a boolean value to the output stream.
 		*/
@@ -277,6 +279,7 @@ namespace BALL
 		*/
 		virtual void get(unsigned long& s);
 
+#ifndef BALL_64BIT_ARCHITECTURE
 		/**	Read a signed long long from the input stream.
 		*/
 		virtual void get(long long& s);
@@ -284,6 +287,7 @@ namespace BALL
 		/**	Read an unsigned long long from the input stream.
 		*/
 		virtual void get(unsigned long long& s);
+#endif
 
 		/**	Read a boolean value from the input stream.
 		*/

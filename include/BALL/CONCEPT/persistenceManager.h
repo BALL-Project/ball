@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.10 2000/03/14 19:37:56 oliver Exp $
+// $Id: persistenceManager.h,v 1.11 2000/03/14 22:46:18 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -630,13 +630,17 @@ namespace BALL
 		*/
 		virtual void put(const unsigned long s) = 0;
 
+#ifndef BALL_64BIT_ARCHITECTURE
 		/**	Write a signed long long to the output stream.
+				Available on 32bit machines only!
 		*/
 		virtual void put(const long long s) = 0;
 
 		/**	Write an unsigned long long to the output stream.
+				Available on 32bit machines only!
 		*/
 		virtual void put(const unsigned long long s) = 0;
+#endif
 
 		/**	Write a boolean value to the output stream.
 		*/
@@ -696,13 +700,17 @@ namespace BALL
 		*/
 		virtual void get(unsigned long& s) = 0;
 
+#ifndef BALL_64BIT_ARCHITECTURE
 		/**	Read a signed long from the input stream.
+				Available on 32bit machines only;
 		*/
 		virtual void get(long long& s) = 0;
 
 		/**	Read an unsigned long from the input stream.
+				Available on 32bit machines only;
 		*/
 		virtual void get(unsigned long long& s) = 0;
+#endif
 
 		/**	Read a boolean value from the input stream.
 		*/

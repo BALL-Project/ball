@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.6 2000/03/14 19:35:41 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.7 2000/03/14 22:46:23 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -302,8 +302,10 @@ namespace BALL
 	BALL_DEFINE_NUMBER_PUT(unsigned int)
 	BALL_DEFINE_NUMBER_PUT(long)
 	BALL_DEFINE_NUMBER_PUT(unsigned long)
+#ifndef BALL_64BIT_ARCHITECTURE
 	BALL_DEFINE_NUMBER_PUT(long long)
 	BALL_DEFINE_NUMBER_PUT(unsigned long long)
+#endif
 	BALL_DEFINE_NUMBER_PUT(float)
 	BALL_DEFINE_NUMBER_PUT(double)
 	BALL_DEFINE_NUMBER_PUT(void*)
@@ -368,8 +370,10 @@ namespace BALL
 	BALL_DEFINE_NUMBER_GET(unsigned int)
 	BALL_DEFINE_NUMBER_GET(long)
 	BALL_DEFINE_NUMBER_GET(unsigned long)
+#ifndef BALL_64BIT_ARCHITECTURE
 	BALL_DEFINE_NUMBER_GET(long long)
 	BALL_DEFINE_NUMBER_GET(unsigned long long)
+#endif
 	BALL_DEFINE_NUMBER_GET(float)
 	BALL_DEFINE_NUMBER_GET(double)	
 	BALL_DEFINE_NUMBER_GET(void*)

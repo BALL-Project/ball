@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.7 2000/03/12 22:21:43 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.8 2000/03/14 22:46:17 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -211,6 +211,7 @@ namespace BALL
 		*/
 		virtual void put(const unsigned long s);
 
+#ifndef BALL_64BIT_ARCHITECTURE
 		/**	Write a signed long long to the output stream.
 		*/
 		virtual void put(const long long s);
@@ -218,6 +219,7 @@ namespace BALL
 		/**	Write an unsigned long long to the output stream.
 		*/
 		virtual void put(const unsigned long long s);
+#endif
 
 		/**	Write a boolean value to the output stream.
 		*/
@@ -276,6 +278,7 @@ namespace BALL
 		*/
 		virtual void get(unsigned long& s);
 
+#ifndef BALL_64BIT_ARCHITECTURE
 		/**	Read a signed long long from the input stream.
 		*/
 		virtual void get(long long& s);
@@ -283,6 +286,7 @@ namespace BALL
 		/**	Read an unsigned long long from the input stream.
 		*/
 		virtual void get(unsigned long long& s);
+#endif
 
 		/**	Read a boolean value from the input stream.
 		*/
