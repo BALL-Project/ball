@@ -114,18 +114,6 @@ Mainframe::Mainframe
 	scene_->registerGLObjectCollector(GL_object_collector_);
 
 	// ---------------------
-<<<<<<< mainframe.C
-	// PyWidget setup
-	// ---------------------
-	#ifdef BALL_PYTHON_SUPPORT
-	//	py_widget->setFont(f);
-	//	py_widget->startInterpreter();
-	#endif
-	
-
-	// ---------------------
-=======
->>>>>>> 1.39
 	// Menus ---------------
 	// ---------------------
 
