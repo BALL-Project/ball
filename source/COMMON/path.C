@@ -1,7 +1,8 @@
-// $Id: path.C,v 1.4 1999/10/30 12:53:31 oliver Exp $
+// $Id: path.C,v 1.5 2000/03/27 19:42:24 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/path.h>
+#include <BALL/SYSTEM/file.h>
 #include <fstream>
 #include <stdlib.h>
 
@@ -110,28 +111,22 @@ namespace BALL
 		string filename;
 
 		// first, try the path itself
-		ifstream file(name.c_str());
-		if (file.is_open())
+		if (File::isAccessible(name))
 		{
-			file.close();
 			return name;
 		}
-		file.close();
 
 		// iterate over all path entries and check for 
 		// a file of the desired name...
 		for (; path_it != path_array_.end(); ++path_it)
 		{
 			filename = *path_it + name;
-			file.open(filename.c_str());
-			
+
 			// if the file could be opened, we return its name
-			if (file.is_open())	
+			if (File::isAccessible(filename))
 			{
-				file.close();
 				return filename;
 			}
-			file.close();
 		}
 			
 		// we didn't find anything - return an empty string
