@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.24 2001/03/11 18:23:44 anker Exp $
+// $Id: file.h,v 1.25 2001/03/29 08:19:41 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -580,6 +580,26 @@ namespace BALL
 		is.read((char*)&(data.getData()), sizeof(T));
 		return is;
 	}
+
+
+	/** Coping with endianness. This function swaps the bytes of a variable
+			of type T if this type is of size 2n.
+	*/
+
+	template <typename T>
+	BALL_INLINE
+	void swapBytes(T& t)
+	{
+		if (sizeof(T) % 2 != 0)
+		{
+			Log.error() << "Cannot swap types of uneven size." << endl;
+			return;
+		}
+
+		char* tmp = reinterpret_cast<char*>(&t);
+		std::reverse(tmp, tmp + sizeof(T));
+	}
+	
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/SYSTEM/file.iC>
