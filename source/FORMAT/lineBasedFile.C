@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.8 2000/10/17 08:47:51 oliver Exp $
+// $Id: lineBasedFile.C,v 1.9 2000/10/17 20:35:52 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -71,11 +71,10 @@ namespace BALL
 		}
 
 		Position start_point = line_number_;
-
 		while (readLine())
 		{
 			if (startsWith(text))
-			{
+			{ 
 				return true;
 			}
 		}
@@ -84,7 +83,6 @@ namespace BALL
 		{
 			goToLine(start_point);
 		}
-
 		return false;
 	}
 
@@ -101,7 +99,7 @@ namespace BALL
 
 		while (readLine())
 		{
-			if (has(stop))
+			if (startsWith(stop))
 			{
 				if (return_to_point)
 				{
@@ -143,7 +141,6 @@ namespace BALL
 		getline(c, 200);
 		line_ = c;
 		++line_number_;
-		
 		return true;
 	}
 
