@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.12 2003/11/23 15:06:46 amoll Exp $
+// $Id: cartoonModel.C,v 1.13 2003/11/25 14:19:55 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -136,10 +136,6 @@ namespace BALL
 
 			if (c_position.size() == 0) 
 			{
-Log.error() << "#~~#   9 " << std::endl;
-Log.error() << "#~~#   10 " << peptide_normals.size()<< std::endl;
-Log.error() << "#~~#   11 " << ss.countResidues()<< std::endl;
-Log.error() << "#~~#   12 " << ss.countAtoms()<< std::endl;
 				return;
 			}
 			Atom* first = c_position[0];
@@ -469,18 +465,13 @@ Log.error() << "#~~#   12 " << ss.countAtoms()<< std::endl;
 				createSplineSegment_(spline_vector_[p1-1], spline_vector_[p1]);
 			}
 
+			if (p2 == 0 || p2 == spline_vector_.size()) return;
+
 			spline_vector_[p2].setTangentialVector(normal);
 			
-  		//createSplineSegment_(spline_vector_[p2], spline_vector_[p2+1]);
  			last_point_ = spline_vector_[p2].getVector(); 
- 			have_start_point_ = true;
-			
-			
-			/*
-  		createSplineSegment_(spline_vector_[p2], spline_vector_[p2+1]);
- 			last_point_ = spline_vector_[p2+1].getVector(); 
  			have_start_point_ = true; 
-			*/
+			
 		}
 
 				
@@ -503,7 +494,6 @@ Log.error() << "#~~#   12 " << ss.countAtoms()<< std::endl;
 					computeSpline_(*RTTI::castTo<SecondaryStructure>(composite));
 				}
 
-Log.error() << "#~~#  x1 " << std::endl;
 				last_chain_ = composite.getParent();
 				computeSpline_(*RTTI::castTo<AtomContainer>(composite));
 			}
@@ -520,13 +510,14 @@ Log.error() << "#~~#  x1 " << std::endl;
 			else
 			{
 				if (spline_vector_.size() == 0) return Processor::CONTINUE;
-				Vector3 position; // of first C
+
+				Vector3 c1_position; // of first C
 				AtomIterator it;
 				BALL_FOREACH_ATOM(ss, it)
 				{
 					if (it->getName() == "C")
 					{
-						position = it->getPosition();	
+						c1_position = it->getPosition();	
 						break;
 					}
 				}
@@ -534,17 +525,19 @@ Log.error() << "#~~#  x1 " << std::endl;
 				Position index = 0; // start of spline points in the vector for the residues of this SS
 				for (; index<spline_vector_.size(); index++)
 				{
-					if (spline_vector_[index].getVector() == position) break;
+					if (spline_vector_[index].getVector() == c1_position) break;
 				}
 
-				for (Position res = 0; res < ss.countResidues() - 1; res++)
+				Position nr_of_residues = ss.countResidues() -1;
+				for (Position res = 0; res < nr_of_residues; res++)
 				{
+					Position pos = res + index;
 					for (Position j = 0; j < 9; j++)
 					{
 						buildGraphicalRepresentation_(
-								spline_[(res+index)*9 + j], (j < 5) ? 
-								spline_vector_[res+index].getAtom() : 
-								spline_vector_[res+index+1].getAtom());
+								spline_[pos*9 + j], (j < 5) ? 
+								spline_vector_[pos].getAtom() : 
+								spline_vector_[pos+1].getAtom());
 					}
 				}
 			}
@@ -559,7 +552,7 @@ Log.error() << "#~~#  x1 " << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			ModelProcessor::dump(s, depth + 1);
+			AddBackboneModel::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
@@ -601,6 +594,8 @@ Log.error() << "#~~#  x1 " << std::endl;
 
 			for (Position index = 0; index <= max_step; ++index, time += step)
 			{
+				if (index == 0) continue;
+
 				double t_2 = time * time;
 				double t_3 = t_2 * time;
 				double m2_t_3 = 2.0 * t_3;
@@ -628,7 +623,7 @@ Log.error() << "#~~#  x1 " << std::endl;
 											 (h3 * a.getTangentialVector().z) + 
 											 (h4 * b.getTangentialVector().z);
 
-				if (index != 0) spline_.push_back(new_vector);
+				spline_.push_back(new_vector);
 			}
 		}
 
