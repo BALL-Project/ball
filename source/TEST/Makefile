@@ -7,6 +7,7 @@ EXECUTABLES = \
 	AmberFF_test\
 	AnalyticalSES_test\
 	Atom_test\
+	BitVector_test\
 	Bond_test\
 	BaseFragment_test\
 	ClassTest_test\
@@ -49,6 +50,9 @@ BaseFragment_test:	BaseFragment_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Bond_test:	Bond_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+BitVector_test:	BitVector_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 ClassTest_test:	ClassTest_test.o
