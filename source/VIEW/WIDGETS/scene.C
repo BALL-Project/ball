@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.17 2003/10/06 15:24:54 oliver Exp $
+// $Id: scene.C,v 1.18 2003/10/15 13:33:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -116,8 +116,8 @@ Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, WFlag
 		quaternion_(scene.quaternion_),
 		key_pressed_(Scene::KEY_PRESSED__NONE),
 		stage_(new Stage(*scene.stage_)),
-		light_settings_(0),
-		stage_settings_(0),
+		light_settings_(new LightSettings(this)),
+		stage_settings_(new StageSettings(this)),
 		screenshot_nr_(1)
 {
 #ifdef BALL_VIEW_DEBUG
@@ -285,6 +285,10 @@ void Scene::onNotify(Message *message)
 		case SceneMessage::REMOVE_COORDINATE_SYSTEM:
 			stage_->showCoordinateSystem(false);
 			stage_settings_->updateFromStage();
+			return;
+
+		case SceneMessage::EXPORT_PNG:
+			exportPNG();
 			return;
 
 		case SceneMessage::UNDEFINED:
@@ -636,6 +640,7 @@ void Scene::updateCamera_()
 {
 	gl_renderer_.updateCamera();
 	gl_renderer_.setLights();
+	light_settings_->updateFromStage();
 	updateGL();
 }
 
@@ -817,12 +822,9 @@ void Scene::fetchPreferences(INIFile& inifile)
 void Scene::initializePreferencesTab(Preferences &preferences)
 	throw()
 {
-	light_settings_= new LightSettings(this);
-	CHECK_PTR(light_settings_);
+	light_settings_ = new LightSettings(this);
 	preferences.insertTab(light_settings_, "Lighting");
-
 	stage_settings_= new StageSettings(this);
-	CHECK_PTR(stage_settings_);
 	preferences.insertTab(stage_settings_, "Stage");
 }
 
@@ -1014,29 +1016,41 @@ void Scene::initializeWidget(MainControl& main_control)
 {
 	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
+	String hint;
+	main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+	hint = "Switch to rotate/zoom mode";
 	rotate_id_ =	main_control.insertMenuEntry(
-		MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
+		MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R, -1, hint);
 	
+	hint = "Switch to picking mode, e.g. to identify singe atoms or groups";
 	picking_id_ = main_control.insertMenuEntry(
-		MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
+		MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
+	main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
+	/*
 	stereo_id_ = main_control.insertMenuEntry(
 		MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()));
+	*/
 
+	hint = "Change the mouse sensitivity. (It also depends on how large the group is, you focused on";
 	main_control.insertMenuEntry(
-		MainControl::DISPLAY, "&Mouse Sensitivity", this, SLOT(mouseSensitivity_()), CTRL+Key_M);
+		MainControl::DISPLAY, "&Mouse Sensitivity", this, SLOT(mouseSensitivity_()), CTRL+Key_M, -1, hint);
 
+	hint = "Print the coordinates of the current viewpoint";
 	main_control.insertMenuEntry(
-		MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W);
+		MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W, -1, hint);
 
+	hint = "Move the viewpoint to the given coordinates";
 	main_control.insertMenuEntry(
-		MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), CTRL+Key_N);
+		MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), CTRL+Key_N, -1, hint);
 
+	hint = "Reset the camera to the orgin (0,0,0)";
 	main_control.insertMenuEntry(
-		MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T);
+		MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T, -1, hint);
 
+	hint = "Export a PNG image file from the Scene";
 	main_control.insertMenuEntry(
-		MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);
+		MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P, -1, hint);
 
 	window_menu_entry_id_ = 
 		main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
