@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.11 2003/09/07 17:24:01 oliver Exp $
+// $Id: displayProperties.C,v 1.12 2003/09/11 16:41:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -66,21 +66,7 @@ namespace BALL
 		void DisplayProperties::fetchPreferences(INIFile& inifile)
 			throw()
 		{
-			// the geometry of the main window
-			int x_pos = x();
-			int y_pos = y();
-
-			if (inifile.hasEntry("WINDOWS", "Display::x"))
-			{
-				x_pos = inifile.getValue("WINDOWS", "Display::x").toInt();
-			}
-			if (inifile.hasEntry("WINDOWS", "Display::y"))
-			{
-				y_pos = inifile.getValue("WINDOWS", "Display::y").toInt();
-			}
-
-			move(x_pos, y_pos);
-
+			ModularWidget::fetchPreferences(inifile);
 			// 
 			// the combobox values
 			//
@@ -121,15 +107,12 @@ namespace BALL
 		void DisplayProperties::writePreferences(INIFile& inifile)
 			throw()
 		{
+			ModularWidget::writePreferences(inifile);
 			const QColor& qcolor = color_sample->backgroundColor();
 			custom_color_.set(qcolor.red(),
 												qcolor.green(),
 												qcolor.blue(),
 												255 - transparency->value());
-
-			// the display window position
-			inifile.insertValue("WINDOWS", "Display::x", String(x()));
-			inifile.insertValue("WINDOWS", "Display::y", String(y()));
 
 			// the combobox values
 			inifile.insertValue("WINDOWS", "Display::model", model_type_);
