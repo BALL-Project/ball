@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.28 2001/06/21 01:58:33 oliver Exp $
+// $Id: persistenceManager.h,v 1.29 2001/06/22 10:48:44 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -1003,7 +1003,7 @@ namespace BALL
 		for (Position i = 0; i < size; i++)
 		{
 			ptr = (PersistentObject*)arr[i];
-			put((PointerSizeInt)(void*)ptr);
+			put((PointerSizeInt)(BALL_POINTERSIZEINT_TYPE)ptr);
 			if (ptr != 0 && !object_out_.has(ptr))
 			{
 				object_out_needed_.push_back(ptr);
@@ -1034,7 +1034,7 @@ namespace BALL
 				pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&(array[i]), ptr));
 			}
 
-			array[i] = (T*)ptr;
+			array[i] = (T*)((BALL_POINTERSIZEINT_TYPE)ptr);
 		}
 
 		return checkObjectPointerArrayTrailer();
