@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.115 2000/08/31 14:05:44 oliver Exp $
+#  $Id: configure,v 1.116 2000/09/02 19:51:24 oliver Exp $
 
 
 ##################################################
@@ -113,9 +113,9 @@ ac_help=
 ac_default_prefix=/usr/local
 # Any additions from configure.in:
 ac_help="$ac_help
-  --enable-optimization   optimize the library for speed. Omit debug info.!"
+  --enable-optimization   optimize the library for speed. Omits debug info!"
 ac_help="$ac_help
-  --disable-debuginfo     remove -g from the compiler flags (omit debug information)"
+  --enable-debuginfo      add -g to the compiler flags (to create debug information)"
 ac_help="$ac_help
   --disable-BALLVIEW      disable the compilation of BALLVIEW, the visualization component"
 ac_help="$ac_help
@@ -832,10 +832,10 @@ else
 	DEBUG=true
 fi
 
-if test "$enable_debuginfo" = "no" ; then
-	DEBUG_INFO=false
-else
+if test "$enable_debuginfo" = "yes" ; then
 	DEBUG_INFO=true
+else
+	DEBUG_INFO=false
 fi
 
 if test "$enable_64" = "yes" ; then
@@ -1799,7 +1799,7 @@ fi
 echo "$ac_t""searching for a C++ compiler:" 1>&6
 if test "${CXX}" != "" ; then
 	if test -x "${CXX}" ; then
-		echo "$ac_t""predefined in configure: ${CXX}" 1>&6
+		echo "$ac_t""from the command line: ${CXX}" 1>&6
 	else
 		# Extract the first word of "${CXX}", so it can be a program name with args.
 set dummy ${CXX}; ac_word=$2
