@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.9 2000/03/24 13:51:47 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.10 2000/03/24 15:46:07 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.9 2000/03/24 13:51:47 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.10 2000/03/24 15:46:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -335,6 +335,7 @@ CHECK(GetIntersection(const TPlane3<T>& plane, const TLine3<T>& line, TVector3<T
 	v2.set(0.0, 0.0, 10.0);
 	l1.set(v1, v2);
 	TEST_EQUAL(GetIntersection(p1, l1, v2), false)
+	TEST_EQUAL(v2, v1);//???
 RESULT
 
 //line682
@@ -392,7 +393,7 @@ CHECK(GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b,
 	v2.set(0.0, 10.0, 0.0);
 	v3.set(0.0, 0.0, 10.0);  
 	p3 = Plane3(v1, v2, v3);
-	v1.set(0.0, 0.0, 0.0);
+	v2.set(0.0, 0.0, 0.0);
 	TEST_EQUAL(GetIntersection(p1, p2, p3, v1), true)
 	TEST_EQUAL(v1, v2);
 	v1.set(100.0, 200.0, 0.0);
@@ -412,8 +413,8 @@ CHECK(GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3
 	v1.set(3.0, 0.0, 0.0);
 	v2.set(7.0, 0.0, 0.0);
 	TEST_EQUAL(GetIntersection(s1, l1, v3, v4), true);
-	TEST_EQUAL(v1, v3);
-	TEST_EQUAL(v2, v4);
+	TEST_EQUAL(v1, v4);
+	TEST_EQUAL(v2, v3);
 	v1.set(500.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 2);
 	TEST_EQUAL(GetIntersection(s1, l1, v3, v4), false);
@@ -429,11 +430,12 @@ CHECK(GetIntersection(const TLine3<T>& line, const TSphere3<T> &sphere TVector3<
 	v1.set(3.0, 0.0, 0.0);
 	v2.set(7.0, 0.0, 0.0);
 	TEST_EQUAL(GetIntersection(l1, s1, v3, v4), true);
-	TEST_EQUAL(v1, v3);
-	TEST_EQUAL(v2, v4);
+	TEST_EQUAL(v1, v4);
+	TEST_EQUAL(v2, v3);
 	v1.set(500.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 2);
 	TEST_EQUAL(GetIntersection(l1, s1, v3, v4), false);
+	TEST_EQUAL(v4, v1);//???
 RESULT
 
 //line818: method GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircle3<T>& intersectionCircle)
@@ -476,7 +478,7 @@ RESULT
 CHECK(GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle))
 	v1.set(0.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 5);
-	v1.set(2.5, 0.0, 0.0);
+	v1.set(5.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 5);
 	TEST_EQUAL(GetIntersection(s1, s2, c1), true)
 	v1.set(0.0, 0.0, 0.0);
