@@ -6,6 +6,7 @@
 PyObject *sipClass_CompositeDescriptor;
 
 static void sipDealloc_CompositeDescriptor(sipThisType *);
+static PyObject *sipPyInternalRepr_CompositeDescriptor(sipThisType *);
 
 static PyTypeObject sipType_CompositeDescriptor = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_CompositeDescriptor = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_CompositeDescriptor,
 };
 
 sipCompositeDescriptor::sipCompositeDescriptor(): CompositeDescriptor()
@@ -862,7 +863,7 @@ static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyO
     return pyMapBALLObjectToSip(*res);
   }
 	return NULL;
-#line 870 "./sipBALLCompositeDescriptor.cpp"
+#line 871 "./sipBALLCompositeDescriptor.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -1076,6 +1077,18 @@ static void sipDealloc_CompositeDescriptor(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_CompositeDescriptor(sipThisType *sipThis)
+{
+#line 83 "compositeDescriptor.sip"
+  CompositeDescriptor* ptr;
+  if ((ptr = (CompositeDescriptor*)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
+    return NULL;
+
+	String tmp = String("CompositeDescriptor { ") + ptr->getName() + " }";
+  return PyString_FromString(tmp.c_str());
+#line 1096 "./sipBALLCompositeDescriptor.cpp"
 }
 
 PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
