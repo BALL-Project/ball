@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.16 2000/05/26 19:25:00 amoll Exp $
+// $Id: BaseFragment_test.C,v 1.17 2000/05/31 01:01:46 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.16 2000/05/26 19:25:00 amoll Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.17 2000/05/31 01:01:46 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -212,26 +212,21 @@ CHECK(clone(bool))
 	delete bf1;
 RESULT
 
-/*
 TextPersistenceManager pm;
 using namespace RTTI;
-pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
 pm.registerClass(getStreamName<BaseFragment>(), BaseFragment::createDefault);
-pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
-String filename;
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
-	BaseFragment* bf1 = new BaseFragment("name1");
-	BaseFragment* bf2 = new BaseFragment("name2");
-	bf1->insert(*bf2);
+	BaseFragment* f1 = new BaseFragment("name1");
+	BaseFragment* f2 = new BaseFragment("name2");
+	f1->insert(*f2);
 	pm.setOstream(ofile);
-	*bf1 >> pm;
+	*f1 >> pm;
 	ofile.close();
-	delete bf1;
+	delete f1;
 RESULT
-*/
-/*
+
 CHECK(persistentRead(PersistenceManager&))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
@@ -240,16 +235,17 @@ CHECK(persistentRead(PersistenceManager&))
 	if (ptr != 0)
 	{
 		TEST_EQUAL(isKindOf<BaseFragment>(*ptr), true)
-		BaseFragment*	bf1 = castTo<BaseFragment>(*ptr);
-		TEST_EQUAL(bf1->getName(), "name1")
-		TEST_EQUAL(bf1->countBaseFragments(), 1)
-		TEST_EQUAL(bf1->getBaseFragment(0)->getName(), "name2")
-		delete bf1;
-	} else {
+		BaseFragment*	f1 = castTo<BaseFragment>(*ptr);
+		TEST_EQUAL(f1->getName(), "name1")
+		TEST_EQUAL(f1->countBaseFragments(), 1)
+		TEST_EQUAL(f1->getBaseFragment(0)->getName(), "name2")
+		delete f1;
+	} 
+	else 
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 RESULT
-*/
 
 CHECK(set(BaseFragment&, bool))
 	BaseFragment bf1("name1");
@@ -730,29 +726,12 @@ CHECK(dump(ostream&, Size))
 	TEST_FILE(filename.c_str(), "data/Base_Fragment.txt", true)
 RESULT
 
-CHECK(read(istream&)) // NotImplemented
-/*	std::ifstream instr("data/Base_Fragment.txt2.txt");
-	BaseFragment bf3;
-	bf3.read(instr);
-	instr.close();
-	TEST_EQUAL(bf3.getName(), "BF1")	
-	TEST_EQUAL(bf3.getBaseFragment(0)->getName(), "BF2")	
-	TEST_EQUAL(bf3.getBaseFragment(0)->getAtom(0)->getName(), "A1")	*/
+CHECK(read(istream&)) 
+// NotImplemented
 RESULT
 
-CHECK(write(ostream&)) // NotImplemented
-/*	BaseFragment bf1;
-	BaseFragment bf2;
-	bf1.append(bf2);
-	Atom a1;
-	a1.setName("A1");
-	bf2.append(a1);
-	bf1.setName("BF1");
-	bf2.setName("BF2");
-	std::ofstream outstr(filename.c_str(), std::ios::out);
-	bf1.write(outstr);
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Base_Fragment.txt2", false)*/
+CHECK(write(ostream&))
+// NotImplemented
 RESULT
 
 /////////////////////////////////////////////////////////////

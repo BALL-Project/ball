@@ -1,17 +1,17 @@
-// $Id: Bond_test.C,v 1.11 2000/05/29 08:17:44 oliver Exp $
+// $Id: Bond_test.C,v 1.12 2000/05/31 01:01:46 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/COMMON/exception.h>
-#include <BALL/CONCEPT/persistenceManager.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.11 2000/05/29 08:17:44 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.12 2000/05/31 01:01:46 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -92,11 +92,9 @@ CHECK(createBond(Bond&, Atom&, Atom&))
 	Bond b8("bond", a1, a9);
 	Bond b9;
 	TEST_EQUAL(b9.createBond(b9, a3, a3), 0);
-	TEST_EQUAL(a1.countBonds(), 8);
 	TEST_EXCEPTION(Exception::GeneralException, b9.createBond(b9, a1, a10))
 	TEST_EQUAL(a1.countBonds(), 8);
 	TEST_EXCEPTION(Exception::GeneralException, b9.createBond(b9, a10, a1))
-	TEST_EQUAL(a1.countBonds(), 8);
 RESULT
 
 CHECK(clear())
@@ -479,12 +477,42 @@ CHECK(finalize())
 	TEST_EQUAL(a2.countBonds(), 1);
 RESULT
 
-CHECK(persistentWrite(PersistenceManager&, String&, bool))
-//BAUSTELLE
+TextPersistenceManager pm;
+using namespace RTTI;
+pm.registerClass(getStreamName<Bond>(), Bond::createDefault);
+pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
+NEW_TMP_FILE(filename)
+CHECK(persistentWrite(PersistenceManager&, String, bool))
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	Atom a1;
+	a1.setName("a1");
+	Atom a2;
+	a2.setName("a2");
+	Bond* f1 = new Bond("name1", a1, a2);
+	pm.setOstream(ofile);
+	*f1 >> pm;
+	ofile.close();
+	delete f1;
 RESULT
 
 CHECK(persistentRead(PersistenceManager&))
-//BAUSTELLE
+	std::ifstream	ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject*	ptr = pm.readObject();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<Bond>(*ptr), true)
+		Bond*	f1 = castTo<Bond>(*ptr);
+		TEST_EQUAL(f1->getFirstAtom()->getName(), "a1")
+		TEST_EQUAL(f1->getSecondAtom()->getName(), "a2")
+		TEST_EQUAL(f1->getName(), "name1")
+		delete f1;
+	} 
+	else 
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 RESULT
 
 /////////////////////////////////////////////////////////////

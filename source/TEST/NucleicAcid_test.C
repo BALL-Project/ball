@@ -1,17 +1,20 @@
-// $Id: NucleicAcid_test.C,v 1.4 2000/05/11 23:10:25 amoll Exp $
+// $Id: NucleicAcid_test.C,v 1.5 2000/05/31 01:01:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/nucleotide.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.4 2000/05/11 23:10:25 amoll Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.5 2000/05/31 01:01:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+String filename;
+
 
 NucleicAcid*	r;
 CHECK(NucleicAcid())
@@ -216,7 +219,6 @@ CHECK(NucleicAcid::dump(ostream&, Size))
 	NucleicAcid na1("NA1");
 	Nucleotide n1("N1");
 	na1.insert(n1);
-	String filename;
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), ios::out);
 	na1.dump(outfile);
@@ -224,22 +226,49 @@ CHECK(NucleicAcid::dump(ostream&, Size))
 	TEST_FILE(filename.c_str(), "data/NucleicAcid_test.txt", true)
 RESULT
 
-CHECK(NucleicAcid::read(istream&))
-//BAUSTELLE
+CHECK(read(istream&)) 
+// NotImplemented
 RESULT
 
-CHECK(NucleicAcid::write(ostream&) const)
-//BAUSTELLE
+CHECK(write(ostream&))
+// NotImplemented
 RESULT
 
-CHECK(NucleicAcid::persistentWrite())
-//BAUSTELLE
+TextPersistenceManager pm;
+using namespace RTTI;
+pm.registerClass(getStreamName<Nucleotide>(), Nucleotide::createDefault);
+pm.registerClass(getStreamName<NucleicAcid>(), NucleicAcid::createDefault);
+NEW_TMP_FILE(filename)
+CHECK(persistentWrite(PersistenceManager&, String, bool))
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	Nucleotide* f2= new Nucleotide("name2");
+	NucleicAcid* f1 = new NucleicAcid("name1");
+	f1->insert(*f2);
+	pm.setOstream(ofile);
+	*f1 >> pm;
+	ofile.close();
+	delete f1;
 RESULT
 
-CHECK(NucleicAcid::persistentRead())
-//BAUSTELLE
+CHECK(persistentRead(PersistenceManager&))
+	std::ifstream	ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject*	ptr = pm.readObject();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<NucleicAcid>(*ptr), true)
+		NucleicAcid*	f1 = castTo<NucleicAcid>(*ptr);
+		TEST_EQUAL(f1->getName(), "name1")
+		TEST_EQUAL(f1->countNucleotides(), 1)
+		TEST_EQUAL(f1->getNucleotide(0)->getName(), "name2")
+		delete f1;
+	} 
+	else 
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 RESULT
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

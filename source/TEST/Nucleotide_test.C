@@ -1,4 +1,4 @@
-// $Id: Nucleotide_test.C,v 1.4 2000/05/26 19:25:04 amoll Exp $
+// $Id: Nucleotide_test.C,v 1.5 2000/05/31 01:01:47 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.4 2000/05/26 19:25:04 amoll Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.5 2000/05/31 01:01:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -392,22 +392,50 @@ CHECK(Nucleotide::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE(filename.c_str(), "data/Nucleotide_test.txt", true)
 RESULT
 
-CHECK(Nucleotide::read(std::istream& s))
-  //BAUSTELLE
+CHECK(read(istream&)) 
+// NotImplemented
 RESULT
 
-CHECK(Nucleotide::write(std::ostream& s) const )
-  //BAUSTELLE
+CHECK(write(ostream&))
+// NotImplemented
 RESULT
 
-CHECK(Nucleotide::persistentWrite(PersistenceManager& pm, const char* name = 0) const )
-  //BAUSTELLE
+TextPersistenceManager pm;
+using namespace RTTI;
+pm.registerClass(getStreamName<Nucleotide>(), Nucleotide::createDefault);
+pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
+NEW_TMP_FILE(filename)
+CHECK(persistentWrite(PersistenceManager&, String, bool))
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	Nucleotide* f1= new Nucleotide("name1");
+	Atom* f2 = new Atom();
+	f2->setName("name2");
+	f1->insert(*f2);
+	pm.setOstream(ofile);
+	*f1 >> pm;
+	ofile.close();
+	delete f1;
 RESULT
 
-CHECK(Nucleotide::persistentRead(PersistenceManager& pm))
-  //BAUSTELLE
+CHECK(persistentRead(PersistenceManager&))
+	std::ifstream	ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject*	ptr = pm.readObject();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<Nucleotide>(*ptr), true)
+		Nucleotide*	f1 = castTo<Nucleotide>(*ptr);
+		TEST_EQUAL(f1->getName(), "name1")
+		TEST_EQUAL(f1->countAtoms(), 1)
+		TEST_EQUAL(f1->getAtom(0)->getName(), "name2")
+		delete f1;
+	} 
+	else 
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 RESULT
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

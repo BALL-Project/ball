@@ -1,4 +1,4 @@
-// $Id: System_test.C,v 1.5 2000/05/26 19:25:05 amoll Exp $
+// $Id: System_test.C,v 1.6 2000/05/31 01:01:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.5 2000/05/26 19:25:05 amoll Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.6 2000/05/31 01:01:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -450,7 +450,6 @@ CHECK(destroyBonds())
 	TEST_EQUAL(a3.countBonds(), 1)	
 RESULT
 
-
 TextPersistenceManager pm;
 using namespace RTTI;
 pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
@@ -486,6 +485,14 @@ CHECK(persistentRead(PersistenceManager&))
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
+RESULT
+
+CHECK(read(istream&)) 
+// NotImplemented
+RESULT
+
+CHECK(write(ostream&))
+// NotImplemented
 RESULT
 
 /////////////////////////////////////////////////////////////

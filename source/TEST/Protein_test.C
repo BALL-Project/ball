@@ -1,15 +1,15 @@
-// $Id: Protein_test.C,v 1.1 2000/05/12 13:48:07 amoll Exp $
+// $Id: Protein_test.C,v 1.2 2000/05/31 01:01:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/residue.h>
-#include <BALL/CONCEPT/persistenceManager.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Protein_test.C,v 1.1 2000/05/12 13:48:07 amoll Exp $")
+START_TEST(class_name, "$Id: Protein_test.C,v 1.2 2000/05/31 01:01:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -407,37 +407,49 @@ CHECK(Protein::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE(filename.c_str(), "data/Protein_test.txt", true)
 RESULT
 
-CHECK(Protein::read(std::istream& s))
-/*std::ifstream instr("data/Protein.txt2");
-	Protein p1;
-	p1.read(instr);
-	instr.close();
-	TEST_EQUAL(p1.getName(), "Protein1")	
-	TEST_EQUAL(p1.getProtein(0)->getName(), "BF")	
-	TEST_EQUAL(p1.getResidue(0)->getName(), "Residue1")	*/
+CHECK(read(istream&)) 
+// NotImplemented
 RESULT
 
-CHECK(Protein::write(std::ostream& s) const ) // NotImplemented
-/*	Protein p1("Protein1");
-	Residue r1;
-	Protein Bf;
-	Bf.setName("BF");
-	r1.setName("Residue1");
-	p1.append(r1);
-	p1.append(Bf);
-	std::ofstream outstr(filename.c_str(), std::ios::out);
-	p1.write(outstr);
-	outstr.close();*/
+CHECK(write(ostream&))
+// NotImplemented
 RESULT
 
-CHECK(Protein::persistentWrite(PersistenceManager& pm, const char* name = 0) const )
-  //BAUSTELLE
+TextPersistenceManager pm;
+using namespace RTTI;
+pm.registerClass(getStreamName<Protein>(), Protein::createDefault);
+pm.registerClass(getStreamName<Chain>(), Chain::createDefault);
+NEW_TMP_FILE(filename)
+CHECK(persistentWrite(PersistenceManager&, String, bool))
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	Protein* f1= new Protein("name1");
+	Chain* f2 = new Chain("name2");
+	f1->insert(*f2);
+	pm.setOstream(ofile);
+	*f1 >> pm;
+	ofile.close();
+	delete f1;
 RESULT
 
-CHECK(Protein::persistentRead(PersistenceManager& pm))
-  //BAUSTELLE
+CHECK(persistentRead(PersistenceManager&))
+	std::ifstream	ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject*	ptr = pm.readObject();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<Protein>(*ptr), true)
+		Protein*	f1 = castTo<Protein>(*ptr);
+		TEST_EQUAL(f1->getName(), "name1")
+		TEST_EQUAL(f1->countChains(), 1)
+		TEST_EQUAL(f1->getChain(0)->getName(), "name2")
+		delete f1;
+	} 
+	else 
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 RESULT
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

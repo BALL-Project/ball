@@ -1,14 +1,14 @@
-// $Id: Molecule_test.C,v 1.3 2000/05/11 22:55:20 amoll Exp $
+// $Id: Molecule_test.C,v 1.4 2000/05/31 01:01:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/atom.h>
-#include <BALL/CONCEPT/persistenceManager.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Molecule_test.C,v 1.3 2000/05/11 22:55:20 amoll Exp $")
+START_TEST(class_name, "$Id: Molecule_test.C,v 1.4 2000/05/31 01:01:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -333,37 +333,50 @@ CHECK(Molecule::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE(filename.c_str(), "data/Molecule_test.txt", true)
 RESULT
 
-CHECK(Molecule::read(std::istream& s))
-/*std::ifstream instr("data/Molecule.txt2");
-	Molecule m;
-	m.read(instr);
-	instr.close();
-	TEST_EQUAL(m.getName(), "molecule1")	
-	TEST_EQUAL(m.getBaseFragment(0)->getName(), "BF")	
-	TEST_EQUAL(m.getAtom(0)->getName(), "atom1")	*/
+CHECK(read(istream&)) 
+// NotImplemented
 RESULT
 
-CHECK(Molecule::write(std::ostream& s) const ) // NotImplemented
-/*	Molecule m("molecule1");
-	Atom a1;
-	BaseFragment Bf;
-	Bf.setName("BF");
-	a1.setName("atom1");
-	m.append(a1);
-	m.append(Bf);
-	std::ofstream outstr(filename.c_str(), std::ios::out);
-	m.write(outstr);
-	outstr.close();*/
+CHECK(write(ostream&))
+// NotImplemented
 RESULT
 
-CHECK(Molecule::persistentWrite(PersistenceManager& pm, const char* name = 0) const )
-  //BAUSTELLE
+TextPersistenceManager pm;
+using namespace RTTI;
+pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
+pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
+NEW_TMP_FILE(filename)
+CHECK(persistentWrite(PersistenceManager&, String, bool))
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	Atom* f2= new Atom();
+	f2->setName("name2");
+	Molecule* f1 = new Molecule("name1");
+	f1->insert(*f2);
+	pm.setOstream(ofile);
+	*f1 >> pm;
+	ofile.close();
+	delete f1;
 RESULT
 
-CHECK(Molecule::persistentRead(PersistenceManager& pm))
-  //BAUSTELLE
+CHECK(persistentRead(PersistenceManager&))
+	std::ifstream	ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject*	ptr = pm.readObject();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<Molecule>(*ptr), true)
+		Molecule*	f1 = castTo<Molecule>(*ptr);
+		TEST_EQUAL(f1->getName(), "name1")
+		TEST_EQUAL(f1->countAtoms(), 1)
+		TEST_EQUAL(f1->getAtom(0)->getName(), "name2")
+		delete f1;
+	} 
+	else 
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 RESULT
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

@@ -1,14 +1,14 @@
-// $Id: SecondaryStructure_test.C,v 1.1 2000/05/12 13:22:11 amoll Exp $
+// $Id: SecondaryStructure_test.C,v 1.2 2000/05/31 01:01:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/residue.h>
-#include <BALL/CONCEPT/persistenceManager.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: SecondaryStructure_test.C,v 1.1 2000/05/12 13:22:11 amoll Exp $")
+START_TEST(class_name, "$Id: SecondaryStructure_test.C,v 1.2 2000/05/31 01:01:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -388,35 +388,48 @@ CHECK(SecondaryStructure::dump(std::ostream& s = std::cout, Size depth = 0) cons
 	TEST_FILE(filename.c_str(), "data/SecondaryStructure_test.txt", true)
 RESULT
 
-CHECK(SecondaryStructure::read(std::istream& s))
-/*std::ifstream instr("data/SecondaryStructure.txt2");
-	SecondaryStructure s1;
-	s1.read(instr);
-	instr.close();
-	TEST_EQUAL(s1.getName(), "SecondaryStructure1")	
-	TEST_EQUAL(s1.getSecondaryStructure(0)->getName(), "BF")	
-	TEST_EQUAL(s1.getResidue(0)->getName(), "Residue1")	*/
+CHECK(read(istream&)) 
+// NotImplemented
 RESULT
 
-CHECK(SecondaryStructure::write(std::ostream& s) const ) // NotImplemented
-/*	SecondaryStructure s1("SecondaryStructure1");
-	Residue r1;
-	SecondaryStructure Bf;
-	Bf.setName("BF");
-	r1.setName("Residue1");
-	s1.append(r1);
-	s1.append(Bf);
-	std::ofstream outstr(filename.c_str(), std::ios::out);
-	s1.write(outstr);
-	outstr.close();*/
+CHECK(write(ostream&))
+// NotImplemented
 RESULT
 
-CHECK(SecondaryStructure::persistentWrite(PersistenceManager& pm, const char* name = 0) const )
-  //BAUSTELLE
+TextPersistenceManager pm;
+using namespace RTTI;
+pm.registerClass(getStreamName<SecondaryStructure>(), SecondaryStructure::createDefault);
+pm.registerClass(getStreamName<Residue>(), Residue::createDefault);
+NEW_TMP_FILE(filename)
+CHECK(persistentWrite(PersistenceManager&, String, bool))
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	SecondaryStructure* f1= new SecondaryStructure("name1");
+	Residue* f2 = new Residue("name2");
+	f1->insert(*f2);
+	pm.setOstream(ofile);
+	*f1 >> pm;
+	ofile.close();
+	delete f1;
 RESULT
 
-CHECK(SecondaryStructure::persistentRead(PersistenceManager& pm))
-  //BAUSTELLE
+CHECK(persistentRead(PersistenceManager&))
+	std::ifstream	ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject*	ptr = pm.readObject();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<SecondaryStructure>(*ptr), true)
+		SecondaryStructure*	f1 = castTo<SecondaryStructure>(*ptr);
+		TEST_EQUAL(f1->getName(), "name1")
+		TEST_EQUAL(f1->countResidues(), 1)
+		TEST_EQUAL(f1->getResidue(0)->getName(), "name2")
+		delete f1;
+	} 
+	else 
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 RESULT
 
 /////////////////////////////////////////////////////////////

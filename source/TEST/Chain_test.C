@@ -1,4 +1,4 @@
-// $Id: Chain_test.C,v 1.3 2000/05/26 19:25:01 amoll Exp $
+// $Id: Chain_test.C,v 1.4 2000/05/31 01:01:46 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(BaseFragment, "$Id: Chain_test.C,v 1.3 2000/05/26 19:25:01 amoll Exp $")
+START_TEST(BaseFragment, "$Id: Chain_test.C,v 1.4 2000/05/31 01:01:46 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -504,22 +504,49 @@ CHECK(Chain::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE(filename.c_str(), "data/Chain_test.txt", true)
 RESULT
 
-CHECK(Chain::read(std::istream& s))
-  //BAUSTELLE
+CHECK(read(istream&)) 
+// NotImplemented
 RESULT
 
-CHECK(Chain::write(std::ostream& s) const )
-  //BAUSTELLE
+CHECK(write(ostream&))
+// NotImplemented
 RESULT
 
-CHECK(Chain::persistentWrite(PersistenceManager& pm, const char* name = 0) const )
-  //BAUSTELLE
+TextPersistenceManager pm;
+using namespace RTTI;
+pm.registerClass(getStreamName<Chain>(), Chain::createDefault);
+pm.registerClass(getStreamName<Residue>(), Residue::createDefault);
+NEW_TMP_FILE(filename)
+CHECK(persistentWrite(PersistenceManager&, String, bool))
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	Chain* f1 = new Chain("name1");
+	Residue* f2 = new Residue("name2");
+	f1->insert(*f2);
+	pm.setOstream(ofile);
+	*f1 >> pm;
+	ofile.close();
+	delete f1;
 RESULT
 
-CHECK(Chain::persistentRead(PersistenceManager& pm))
-  //BAUSTELLE
+CHECK(persistentRead(PersistenceManager&))
+	std::ifstream	ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject*	ptr = pm.readObject();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<Chain>(*ptr), true)
+		Chain*	f1 = castTo<Chain>(*ptr);
+		TEST_EQUAL(f1->getName(), "name1")
+		TEST_EQUAL(f1->countResidues(), 1)
+		TEST_EQUAL(f1->getResidue(0)->getName(), "name2")
+		delete f1;
+	} 
+	else 
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 RESULT
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

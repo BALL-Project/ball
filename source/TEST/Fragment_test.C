@@ -1,12 +1,13 @@
-// $Id: Fragment_test.C,v 1.7 2000/05/26 19:25:02 amoll Exp $
+// $Id: Fragment_test.C,v 1.8 2000/05/31 01:01:46 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/molecule.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.7 2000/05/26 19:25:02 amoll Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.8 2000/05/31 01:01:46 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -91,26 +92,23 @@ CHECK(dump(ostream&, Size))
 	TEST_FILE(filename.c_str(), "data/Fragment_test.txt", true)
 RESULT
 
-/*
 TextPersistenceManager pm;
 using namespace RTTI;
-pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
 pm.registerClass(getStreamName<Fragment>(), Fragment::createDefault);
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
-String filename;
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Fragment* f1 = new Fragment("name1");
-	Fragment* f2 = new Fragment("name2");
+	Atom* f2 = new Atom();
+	f2->setName("name2");
 	f1->insert(*f2);
 	pm.setOstream(ofile);
 	*f1 >> pm;
 	ofile.close();
 	delete f1;
 RESULT
-*/
-/*
+
 CHECK(persistentRead(PersistenceManager&))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
@@ -121,14 +119,13 @@ CHECK(persistentRead(PersistenceManager&))
 		TEST_EQUAL(isKindOf<Fragment>(*ptr), true)
 		Fragment*	f1 = castTo<Fragment>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countFragments(), 1)
-		TEST_EQUAL(f1->getFragment(0)->getName(), "name2")
+		TEST_EQUAL(f1->countAtoms(), 1)
+		TEST_EQUAL(f1->getAtom(0)->getName(), "name2")
 		delete f1;
 	} else {
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 RESULT
-*/
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
