@@ -1,19 +1,7 @@
-// $Id: openMOLFile.h,v 1.1.2.2 2002/10/18 14:48:13 amoll Exp $
+// $Id: openMOLFile.h,v 1.1.2.3 2002/10/21 15:39:34 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENMOLFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENMOLFILE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_FORMAT_MOLFILE_H
-#	include <BALL/FORMAT/MOLFile.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
-#	include <BALL/VIEW/KERNEL/logView.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #	include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
@@ -23,7 +11,6 @@ using namespace BALL::VIEW;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -57,7 +44,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -67,11 +53,12 @@ namespace BALL
 			*/
 			virtual ~OpenMOLFile()
 				throw();
+							
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+
 			/**	Initializes the widget.
 					Initializes the menu {\em File} with its submenu {\em Import}.
 					Adds menu entry {\em MOL File}.
@@ -98,15 +85,15 @@ namespace BALL
 			*/
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
-			//@}
-
+							
    		protected:
 
-			/**	@name	MOL file reading
+			//@}
+			/*_	@name	MOL file reading
 			*/
 			//@{
 
-			/** Opens the hin file.
+			/*_ Opens the hin file.
 					Opens the selected hin file and if successful converts it into a \Ref{System}
 					and sents the message \Ref{NewCompositeMessage} containing the \Ref{Composite}
 					object to the other \Ref{ConnectionObject} objects.
@@ -125,10 +112,8 @@ namespace BALL
 			*/
 			virtual void openFile_()
 				throw();
+							
 			//@}
-
-
-			private:
 		};
 
 		} // namespace VIEW

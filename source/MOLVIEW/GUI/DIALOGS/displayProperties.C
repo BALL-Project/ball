@@ -1,18 +1,13 @@
-// $Id: displayProperties.C,v 1.13.4.2 2002/10/19 14:47:27 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.3 2002/10/21 15:40:09 amoll Exp $
 
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/protein.h>
-#include <BALL/KERNEL/system.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <qcolordialog.h>
-#include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 
 #define Inherited DisplayPropertiesData
 #undef DEBUG
-
-using namespace std;
 
 namespace BALL
 {

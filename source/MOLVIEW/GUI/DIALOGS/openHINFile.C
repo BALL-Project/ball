@@ -1,11 +1,11 @@
-// $Id: openHINFile.C,v 1.6.4.1 2002/10/18 14:48:24 amoll Exp $
+// $Id: openHINFile.C,v 1.6.4.2 2002/10/21 15:40:10 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
-//#include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <BALL/MATHS/box3.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/FORMAT/HINFile.h>
 
 namespace BALL
 {
@@ -37,19 +37,13 @@ namespace BALL
 		void OpenHINFile::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.insertMenuEntry
-				(MainControl::FILE_IMPORT, "&HIN File", this,
-				 SLOT(exec()), 
-				 CTRL+Key_H);   
+			main_control.insertMenuEntry (MainControl::FILE_IMPORT, "&HIN File", this, SLOT(exec()), CTRL+Key_H);   
 		}
 		
 		void OpenHINFile::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry
-				(MainControl::FILE_IMPORT, "&HIN File", this,
-				 SLOT(exec()), 
-				 CTRL+Key_H);   
+			main_control.removeMenuEntry (MainControl::FILE_IMPORT, "&HIN File", this, SLOT(exec()), CTRL+Key_H);   
 		}
 
 		void OpenHINFile::openFile_()
@@ -101,9 +95,7 @@ namespace BALL
 
 				bounding_box.get(first.x, first.y, first.z,
 												 second.x, second.y, second.z);
-				Log.info() << "> creating bounding box (" 
-									 << first << ", " << second << ")" 
-									 << endl;
+				Log.info() << "> creating bounding box (" << first << ", " << second << ")" << endl;
 
 				simple_box->setVertex1(first);
 				simple_box->setVertex2(second);
@@ -115,8 +107,7 @@ namespace BALL
 			}
 
 			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from HIN file \"" 
-								 << getFileName() << "\"" << endl;
+			Log.info() << "> read " << system->countAtoms() << " atoms from HIN file \"" << getFileName() << "\"" << endl;
 
 
 			QString filename = getFileName().c_str();

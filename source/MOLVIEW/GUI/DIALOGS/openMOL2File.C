@@ -1,16 +1,8 @@
-// $Id: openMOL2File.C,v 1.1.4.1 2002/10/18 14:48:25 amoll Exp $
+// $Id: openMOL2File.C,v 1.1.4.2 2002/10/21 15:40:10 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h>
-
-#include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
-#include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
-#include <BALL/MATHS/box3.h>
+#include <BALL/FORMAT/MOL2File.h>
 #include <BALL/KERNEL/system.h>
-
-using std::istream;
-using std::ostream;
-using std::endl;
-using std::cerr;
 
 namespace BALL
 {
@@ -34,27 +26,20 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<OpenMOL2File>() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<OpenMOL2File>() << std::endl;
 			#endif 
 		}
 
 		void OpenMOL2File::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.insertMenuEntry
-				(MainControl::FILE_IMPORT, "&MOL2 File", this,
-				 SLOT(exec()), 
-				 CTRL+Key_H);   
+			main_control.insertMenuEntry(MainControl::FILE_IMPORT, "&MOL2 File", this, SLOT(exec()), CTRL+Key_H);   
 		}
 		
 		void OpenMOL2File::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry
-				(MainControl::FILE_IMPORT, "&MOL2 File", this,
-				 SLOT(exec()), 
-				 CTRL+Key_H);   
+			main_control.removeMenuEntry(MainControl::FILE_IMPORT, "&MOL2 File", this, SLOT(exec()), CTRL+Key_H);   
 		}
 
 		void OpenMOL2File::openFile_()
@@ -72,40 +57,31 @@ namespace BALL
 			// memory allocation failed ?
 			if (system == 0)
 			{
-				Log.info() << "> system memory allocation failed." << endl;
+				Log.info() << "> system memory allocation failed." << std::endl;
 				return;
 			}
 
 			try
 			{
 				MOL2File mol2_file(getFileName());
-				
 				mol2_file >> *system;
-				
 				mol2_file.close();
 			}
 			catch(...)
 			{
-				Log.info() << "> read MOL2 file failed." << endl;
+				Log.info() << "> read MOL2 file failed." << std::endl;
 				delete system;
-
 				return;
 			}
 
 			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from MOL2 file \"" 
-								 << getFileName() << "\"" << endl;
+			Log.info() << "> read " << system->countAtoms() << " atoms from MOL2 file \"" << getFileName() << "\"" << std::endl;
 
 
 			QString filename = getFileName().c_str();
 
-			cerr << filename << endl;
-			cerr << getPathName() << endl;
-
 			// construct a name (the filename without the dir path)
 			filename.remove(0, getPathName().length() + 1);
-
-			cerr << filename << endl;
 
 			if (filename.find('.') != -1)
 			{

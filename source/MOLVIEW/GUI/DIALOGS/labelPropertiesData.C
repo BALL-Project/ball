@@ -1,7 +1,5 @@
 // $Id:
 
-#include <qpixmap.h>
-#include <qlayout.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h>
 
 #include <qlabel.h>
@@ -10,7 +8,6 @@
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -185,10 +182,6 @@ LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
 LabelPropertiesData::~LabelPropertiesData()
 {
 }
-
-//#		ifdef BALL_NO_INLINE_FUNCTIONS
-//#			include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.iC>
-//#		endif
 
 	} // namespace MOLVIEW
 

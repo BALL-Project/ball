@@ -1,19 +1,7 @@
-// $Id: openMOL2File.h,v 1.2.4.1 2002/10/18 14:48:13 amoll Exp $
+// $Id: openMOL2File.h,v 1.2.4.2 2002/10/21 15:39:34 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENMOL2FILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENMOL2FILE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_FORMAT_MOL2FILE_H
-#	include <BALL/FORMAT/MOL2File.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
-#	include <BALL/VIEW/KERNEL/logView.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #	include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
@@ -23,7 +11,6 @@ using namespace BALL::VIEW;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -57,7 +44,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -67,8 +53,8 @@ namespace BALL
 			*/
 			virtual ~OpenMOL2File()
 				throw();
+							
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -98,10 +84,10 @@ namespace BALL
 			*/
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
-			//@}
 
    		protected:
 
+			//@}
 			/**	@name	MOL2 file reading
 			*/
 			//@{
@@ -125,10 +111,8 @@ namespace BALL
 			*/
 			virtual void openFile_()
 				throw();
+							
 			//@}
-
-
-			private:
 		};
 
 		} // namespace VIEW

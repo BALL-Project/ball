@@ -1,15 +1,12 @@
-// $Id: openPDBFile.C,v 1.5.4.1 2002/10/18 14:48:25 amoll Exp $
+// $Id: openPDBFile.C,v 1.5.4.2 2002/10/21 15:40:11 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
+# include <BALL/FORMAT/PDBFile.h>
 
-using std::istream;
-using std::ostream;
-using std::cerr;
 using std::endl;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 	  OpenPDBFile::OpenPDBFile(QWidget* parent, const char* name)
@@ -29,27 +26,20 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<OpenPDBFile>() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<OpenPDBFile>() << endl;
 			#endif 
 		}
 
 		void OpenPDBFile::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.insertMenuEntry
-				(MainControl::FILE_IMPORT, "&PDB File", this,
-				 SLOT(exec()), 
-				 CTRL+Key_P);   
+			main_control.insertMenuEntry (MainControl::FILE_IMPORT, "&PDB File", this, SLOT(exec()), CTRL+Key_P);   
 		}
 		
 		void OpenPDBFile::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry
-				(MainControl::FILE_IMPORT, "&PDB File", this,
-				 SLOT(exec()), 
-				 CTRL+Key_P);   
+			main_control.removeMenuEntry (MainControl::FILE_IMPORT, "&PDB File", this, SLOT(exec()), CTRL+Key_P);   
 		}
 
 		void OpenPDBFile::openFile_()
@@ -73,7 +63,6 @@ namespace BALL
 			try
 			{
 				PDBFile pdb_file(getFileName());
-				
 				pdb_file >> *system;
 				pdb_file.close();
 			}
@@ -81,14 +70,11 @@ namespace BALL
 			{
 				Log.info() << "> read PDB file failed." << endl;
 				delete system;
-
 				return;
 			}
 
 			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from PDB file \"" 
-								 << getFileName() << "\"" << endl;
-
+			Log.info() << "> read " << system->countAtoms() << " atoms from PDB file \"" << getFileName() << "\"" << endl;
 
 			QString filename = getFileName().c_str();
 

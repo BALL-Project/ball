@@ -1,5 +1,7 @@
 // $Id:
 
+#include <BALL/STRUCTURE/geometricProperties.h>
+# include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <qcolordialog.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>

@@ -1,19 +1,7 @@
-// $Id: openHINFile.h,v 1.7.4.1 2002/10/18 14:48:13 amoll Exp $
+// $Id: openHINFile.h,v 1.7.4.2 2002/10/21 15:39:33 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_FORMAT_HINFILE_H
-#	include <BALL/FORMAT/HINFile.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
-#	include <BALL/VIEW/KERNEL/logView.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #	include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
@@ -23,7 +11,6 @@ using namespace BALL::VIEW;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -125,8 +112,8 @@ namespace BALL
 			*/
 			virtual void openFile_()
 				throw();
-			//@}
 
+			//@}
 
 			private:
 		};

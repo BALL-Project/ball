@@ -3,20 +3,8 @@
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIES_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_FORMAT_INIFILE_H
 #	include <BALL/FORMAT/INIFile.h>
-#endif
-
-#ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
-#	include <BALL/STRUCTURE/geometricProperties.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLOR_H
-#	include <BALL/VIEW/DATATYPE/color.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -24,7 +12,7 @@
 #endif
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
-#	include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
+//#	include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #endif
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -66,8 +54,8 @@ namespace BALL
 			/** Default Constructor.
 					Construct new labelProperties.
 					Calls \Ref{registerWidget}.
-					@param      parent the parent widget of {\em *this} labelProperties (See documentation of QT-library for information concerning widgets)
-					@param      name the name of {\em *this} labelProperties (See documentation of QT-library for information concerning widgets)
+					@param      parent the parent widget of {\em *this} labelProperties 
+					@param      name the name of {\em *this} labelProperties
 					@return     LabelProperties new constructed labelProperties
 					@see        QDialog
 					@see        ModularWidget
@@ -76,7 +64,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -86,11 +73,12 @@ namespace BALL
 			*/
 			virtual ~LabelProperties()
 				throw();
+							
 			//@}
-			
 			/**	@name	Accessors: inspectors and mutators 
 			 */
 			//@{
+
 			/** Message handling method.
 					Handles messages sent by other registered \Ref{ConnectionObject} objects.
 					Catches only \Ref{MolecularSelectionMessage} objects.
@@ -104,8 +92,8 @@ namespace BALL
 		  */
 			virtual void onNotify(Message *message)
 				throw();
+							
 			//@}
-
 			/**	ModularWidget methods
 			*/
 			//@{
@@ -176,6 +164,7 @@ namespace BALL
 			*/
 			virtual void checkMenu(MainControl& main_control)
 				throw();
+							
 			//@}
 			
 			public slots:
@@ -190,14 +179,14 @@ namespace BALL
 					See documentation of QT-library for information concerning QDialog widgets.
 			*/
 			void openDialog();
+						
 			//@}
-			
-			protected slots:
-				
 			/** @name Protected slots
 			*/
 			//@{
 				
+			protected slots:
+							
 			/** Indicates the apply button was pressed.
 					Appends a \Ref{GLLabel} with the specified text and color
 					to the geometric center of the objects in the selection. 
@@ -221,6 +210,7 @@ namespace BALL
 					See documentation of QT-library for information concerning QColorDialog widgets.
 			 */ 
 			virtual void editColor();
+						
 			//@}
 			
 		private:
@@ -230,10 +220,6 @@ namespace BALL
 			ColorRGBA custom_color_;
 			List<Composite*> selection_;
 		};
-
-		//#		ifndef BALL_NO_INLINE_FUNCTIONS
-		//#			include <BALL/MOLVIEW/GUI/DIALOGS/labelProperties.iC>
-		//#		endif 
 
 	} // namespace MOLVIEW
 

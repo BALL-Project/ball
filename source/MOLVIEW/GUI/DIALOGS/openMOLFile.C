@@ -1,20 +1,13 @@
-// $Id: openMOLFile.C,v 1.1.2.2 2002/10/18 14:48:25 amoll Exp $
+// $Id: openMOLFile.C,v 1.1.2.3 2002/10/21 15:40:10 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openMOLFile.h>
-
-#include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
-#include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
-#include <BALL/MATHS/box3.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/FORMAT/MOLFile.h>
 
-using std::istream;
-using std::ostream;
 using std::endl;
-using std::cerr;
 
 namespace BALL
 {
-
 	using namespace BALL::VIEW;
 
 	namespace MOLVIEW
@@ -34,27 +27,20 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<OpenMOLFile>() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<OpenMOLFile>() << endl;
 			#endif 
 		}
 
 		void OpenMOLFile::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.insertMenuEntry
-				(MainControl::FILE_IMPORT, "&MOL File", this,
-				 SLOT(exec()), 
-				 CTRL+Key_H);   
+			main_control.insertMenuEntry (MainControl::FILE_IMPORT, "&MOL File", this, SLOT(exec()), CTRL+Key_H);   
 		}
 		
 		void OpenMOLFile::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry
-				(MainControl::FILE_IMPORT, "&MOL File", this,
-				 SLOT(exec()), 
-				 CTRL+Key_H);   
+			main_control.removeMenuEntry (MainControl::FILE_IMPORT, "&MOL File", this, SLOT(exec()), CTRL+Key_H);   
 		}
 
 		void OpenMOLFile::openFile_()
@@ -79,33 +65,23 @@ namespace BALL
 			try
 			{
 				MOLFile mol_file(getFileName());
-				
 				mol_file >> *system;
-				
 				mol_file.close();
 			}
 			catch(...)
 			{
 				Log.info() << "> read MOL file failed." << endl;
 				delete system;
-
 				return;
 			}
 
 			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from MOL file \"" 
-								 << getFileName() << "\"" << endl;
-
+			Log.info() << "> read " << system->countAtoms() << " atoms from MOL file \"" << getFileName() << "\"" << endl;
 
 			QString filename = getFileName().c_str();
 
-			cerr << filename << endl;
-			cerr << getPathName() << endl;
-
 			// construct a name (the filename without the dir path)
 			filename.remove(0, getPathName().length() + 1);
-
-			cerr << filename << endl;
 
 			if (filename.find('.') != -1)
 			{

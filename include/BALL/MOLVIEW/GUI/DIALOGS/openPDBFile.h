@@ -1,19 +1,7 @@
-// $Id: openPDBFile.h,v 1.7.4.1 2002/10/18 14:48:14 amoll Exp $
+// $Id: openPDBFile.h,v 1.7.4.2 2002/10/21 15:39:34 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENPDBFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENPDBFILE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_FORMAT_PDBFILE_H
-#	include <BALL/FORMAT/PDBFile.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
-#	include <BALL/VIEW/KERNEL/logView.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #	include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
@@ -23,14 +11,12 @@ using namespace BALL::VIEW;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
 		/** OpenPDBFile class.
 				The class OpenPDBFile is a class for reading pdb files into \Ref{System} objects.
-				It is derived from
-				the class \Ref{FileDialog}. If a pdb file is read it will be converted
+				It is derived from the class \Ref{FileDialog}. If a pdb file is read it will be converted
 				into a \Ref{Composite} object. See \Ref{openFile} for information
 				concerning conversion and notification. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h}
@@ -57,7 +43,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -67,11 +52,12 @@ namespace BALL
 			*/
 			virtual ~OpenPDBFile()
 				throw();
+							
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+
 			/**	Initializes the widget.
 					Initializes the menu {\em File} with its submenu {\em Import}.
 					Add menu entry {\em PDB File}.
@@ -98,11 +84,10 @@ namespace BALL
 			*/
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
-			//@}
-
 
    		protected:
 
+			//@}
 			/**	@name	PDB file reading
 			*/
 			//@{
@@ -123,10 +108,8 @@ namespace BALL
 			*/
 			virtual void openFile_()
 				throw();
+							
 			//@}
-
-
-			private:
 		};
 
 	} // namespace MOLVIEW
