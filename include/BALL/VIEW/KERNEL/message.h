@@ -1,4 +1,4 @@
-// $Id: message.h,v 1.9 2001/07/16 14:49:32 amoll Exp $
+// $Id: message.h,v 1.9.4.1 2002/11/29 00:39:46 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -424,25 +424,6 @@ namespace BALL
 		};
 
 
-		/*
-		class DisplayMessage: public CompositeMessage
-		{
-			public:
-
-			//@{
-			DisplayMessage()
-				throw();
-
-			DisplayMessage(const DisplayMessage& message)
-				throw();
-
-			virtual ~DisplayMessage()
-				throw();
-			//@}
- 			private:
-		};
-		*/
-
 		/** SceneMessage class.
 				The class SceneMessage is the message class that is responsible for
 				changing the visual properties of the \Ref{Scene}.
@@ -750,6 +731,30 @@ namespace BALL
 		};
 
 
+		/** Used to inform MainControl and MolecularProperties of the selection of one composite in Control.
+		 		MolecularProperties sends as answer a CompositeChanged message to inform the Scene.
+		 */
+		class CompositeSelectedMessage: public Message
+		{
+			public:
+
+			CompositeSelectedMessage(Composite* composite, bool selected) 
+				throw()
+				:	composite_(composite),
+					selected_(selected)
+			{Log.error() << "CompositeSelectedMessage" << std::endl;};
+
+			Composite* composite_;
+			bool selected_;
+		};
+
+		/** Send by MainControl to Controls to sync selection
+		 */
+		class NewSelectionMessage: public Message
+		{
+			public:
+			NewSelectionMessage() { Log.error() << "NewSelectionMessage" << std::endl;};
+		};
 
 		/** GeometricObjectSelectionMessage class.
 				The class GeometricObjectSelectionMessage is the message class that is a container for
