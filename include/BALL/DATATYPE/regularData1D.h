@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.8 2001/01/16 17:17:35 anker Exp $
+// $Id: regularData1D.h,v 1.9 2001/01/29 19:00:57 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -114,22 +114,22 @@ namespace BALL
 
 		/**	Return the lower bound
 		*/
-		double getLower() const
+		double getLowerBound() const
 			throw();
 		
 		/**	Return the upper bound
 		*/
-		double getUpper() const
+		double getUpperBound() const
 			throw();
 
 		/**	Set the upper bound
 		*/
-		void setUpper(double upper)
+		void setUpperBound(double upper)
 			throw();
 
 		/**	Set the lower bound
 		*/
-		void setLower(double lower)
+		void setLowerBound(double lower)
 			throw();
 
 		/**	Resize the data.
@@ -243,12 +243,12 @@ namespace BALL
 	const T& TRegularData1D<T>::operator [] (Position index) const
 		throw(Exception::IndexOverflow)
 	{
-		if (index >= data_.size)
+		if (index >= data_.size())
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, index);
 		}
 		
-		return data[index];
+		return data_[index];
 	}	
 	
 	template <typename T>
@@ -256,12 +256,12 @@ namespace BALL
 	T& TRegularData1D<T>::operator [] (Position index)
 		throw(Exception::IndexOverflow)
 	{
-		if (index >= data_.size)
+		if (index >= data_.size())
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, index);
 		}
 		
-		return data[index];
+		return data_[index];
 	}	
 
 	template <typename T>
@@ -274,7 +274,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	double TRegularData1D<T>::getLower() const
+	double TRegularData1D<T>::getLowerBound() const
 		throw()
 	{
 		return lower_;
@@ -282,7 +282,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	double TRegularData1D<T>::getUpper() const
+	double TRegularData1D<T>::getUpperBound() const
 		throw()
 	{
 		return upper_;
@@ -290,7 +290,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	void TRegularData1D<T>::setLower(double lower)
+	void TRegularData1D<T>::setLowerBound(double lower)
 		throw()
 	{
 		lower_ = lower;
@@ -298,14 +298,14 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	void TRegularData1D<T>::setUpper(double upper)
+	void TRegularData1D<T>::setUpperBound(double upper)
 		throw()
 	{
 		upper_ = upper;
 	}
 	
 	template <typename T>
-	void resize(Size new_size)
+	void TRegularData1D<T>::resize(Size new_size)
 		throw()
 	{
 		if (data_.size() > 0)
