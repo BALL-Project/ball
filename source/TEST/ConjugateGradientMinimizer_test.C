@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.18 2003/05/04 09:56:15 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.19 2003/05/05 06:04:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.18 2003/05/04 09:56:15 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.19 2003/05/05 06:04:50 oliver Exp $")
 
 using namespace BALL;
 
@@ -290,7 +290,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	ConjugateGradientMinimizer cgm(FF);
 
 	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.01);
+	cgm.setMaxGradient(0.1);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::POLAK_RIBIERE);
 	cgm.setMaximumDisplacement(20.0);
