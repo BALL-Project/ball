@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.214 2004/11/05 10:05:05 oliver Exp $
+# $Id: Makefile,v 1.215 2004/11/18 13:47:33 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -49,7 +49,7 @@ include .Dependencies
 LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 # do not optimize tests (reduces compile time drastically)
-CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -O0
+CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -g
 
 .o:
 	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)

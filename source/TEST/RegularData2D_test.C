@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData2D_test.C,v 1.20 2004/11/07 19:54:59 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.21 2004/11/18 13:47:33 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.20 2004/11/07 19:54:59 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.21 2004/11/18 13:47:33 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -542,10 +542,12 @@ RESULT
 CHECK(void binaryWrite(const String& filename) const throw(Exception::FileNotFound))
 	NEW_TMP_FILE(filename)
  	RegularData2D g(Vector2(1,2), Vector2(8,10), Vector2(1.0, 1.0));
-	for (Position x = 0; x < 7; x++) 
-		for (Position y = 0; y < 8; y++)
-	{ 
-		g[RegularData2D::IndexType(x,y)] = x*y;
+	for (Position x = 0; x < g.getSize().x; x++) 
+	{
+		for (Position y = 0; y < g.getSize().y; y++)
+		{ 
+			g[RegularData2D::IndexType(x,y)] = x*y;
+		}
 	}
 	TEST_EQUAL(g.size(), 99)
 	TEST_REAL_EQUAL(g.getOrigin().x, 1.0)

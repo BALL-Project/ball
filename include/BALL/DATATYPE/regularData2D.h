@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.41 2004/11/07 19:54:58 oliver Exp $
+// $Id: regularData2D.h,v 1.42 2004/11/18 13:47:33 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -1024,24 +1024,25 @@ namespace BALL
 		adapt_index.setData(size_);
 		outfile << adapt_index;
 	
-		// we slide a window of size 1024 over our data
+		// we slide a window of BLOCK_SIZE over our data.
+		const size_t BLOCK_SIZE = 1024;
 		Index window_pos = 0;
 		
-		while ( ((int)data_.size() - (1024 + window_pos)) >= 0 )
+		while (((size_t)data_.size() - (BLOCK_SIZE + window_pos)) >= 0)
 		{
 			adapt_block.setData(* (BlockValueType*)&(data_[window_pos]));
 			outfile << adapt_block;
-			window_pos += 1024;
+			window_pos += BLOCK_SIZE;
 		}
 
-		// now we have to write the remaining data one by one
+		// Now we have to write the remaining data one by one.
 		for (Size i = window_pos; i < data_.size(); i++)
 		{
 			adapt_single.setData(data_[i]);
 			outfile << adapt_single;
 		}
 
-		// that's it. I hope...
+		// That's it. 
 		outfile.close();
 	}
 
@@ -1050,7 +1051,10 @@ namespace BALL
 		throw(Exception::FileNotFound)
 	{
 		File infile(filename, std::ios::in|std::ios::binary);
-		if (!infile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		if (!infile.isValid()) 
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		}
 		
 		BinaryFileAdaptor< BlockValueType > adapt_block;
 		BinaryFileAdaptor< ValueType >		  adapt_single;
