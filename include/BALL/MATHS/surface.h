@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.28 2004/02/23 15:20:01 anhi Exp $
+// $Id: surface.h,v 1.29 2004/10/22 20:11:54 amoll Exp $
 //
 
 #ifndef BALL_MATHS_SURFACE_H
@@ -365,7 +365,7 @@ namespace BALL
 		}
 		
 		// A = 1/2 \sum |r1 x r2|
-		return area * 0.5;
+		return (float)( area * 0.5 );
 	}
 
 	template <typename T>
