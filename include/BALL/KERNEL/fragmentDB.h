@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: fragmentDB.h,v 1.2 1999/08/27 18:07:08 oliver Exp $
 
 #ifndef BALL_KERNEL_FRAGMENTDB_H
 #define BALL_KERNEL_FRAGMENTDB_H
@@ -150,6 +150,10 @@ namespace BALL {
 		/**	Return a fragment.
 		*/
 		FragmentDB::Type getFragmentType(const String& fragment_name) const;
+
+		/**	Return a list containing all variant names.
+		*/
+		list<String> getVariantNames(const String& name) const;
 		
 		/**	Return a fragment.
 		*/
