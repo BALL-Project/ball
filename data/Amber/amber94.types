@@ -1265,7 +1265,7 @@
    PCA:CG      CT
    PCA:CD      C
    PCA:OE      O
-   PCA:HA      HC
+   PCA:HA      H1
    PCA:1HB     HC
    PCA:2HB     HC
    PCA:1HG     HC
@@ -1280,7 +1280,7 @@
    PCA-N:CG    CT
    PCA-N:CD    C
    PCA-N:OE    O
-   PCA-N:HA    HC
+   PCA-N:HA    H1
    PCA-N:1HB   HC
    PCA-N:2HB   HC
    PCA-N:1HG   HC
@@ -1294,7 +1294,7 @@
    PCA-M:CG    CT
    PCA-M:CD    C
    PCA-M:OE    O
-   PCA-M:HA    HC
+   PCA-M:HA    H1
    PCA-M:1HB   HC
    PCA-M:2HB   HC
    PCA-M:1HG   HC
