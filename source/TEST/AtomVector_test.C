@@ -1,4 +1,4 @@
-// $Id: AtomVector_test.C,v 1.3 2001/07/15 00:53:36 oliver Exp $
+// $Id: AtomVector_test.C,v 1.4 2001/07/15 11:11:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/atom.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AtomVector_test.C,v 1.3 2001/07/15 00:53:36 oliver Exp $")
+START_TEST(class_name, "$Id: AtomVector_test.C,v 1.4 2001/07/15 11:11:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,6 +37,8 @@ AtomVector av;
 Molecule mol;
 mol.insert(a);
 mol.insert(b);
+Atom c;
+c.setName("c");
 
 CHECK(AtomVector::AtomVector(const AtomVector& atom_vector))
 	av.push_back(&a);
@@ -63,6 +65,21 @@ CHECK(AtomVector::set(const AtomVector& atoms))
 	TEST_EQUAL(av2.size(), 2)
 	TEST_EQUAL(av2[0]->getName(), "a")
 	TEST_EQUAL(av2[1]->getName(), "b")
+
+	Atom a1(a);
+	Atom b1(b);
+	AtomVector av3;
+	av3.push_back(&a1);
+	av3.push_back(&b1);
+	av3.savePositions();
+
+	// test for saved positons
+	av2.set(av3);
+	v3.set(-99, -99, -99);
+	a1.setPosition(v3);
+	av2.resetPositions();
+	v3.set(1.0, 2.0, 3.0);
+	TEST_EQUAL(av2[0]->getPosition(), v3)
 RESULT
 
 
@@ -138,18 +155,44 @@ RESULT
 
 
 CHECK(AtomVector::moveTo(const Gradient& direction, float step = 1.0))
+	// no step lengt, using saved position
   Gradient g(av);
-	Vector3 v3(-1.0, -2.0, -3.0);
+	Vector3 v3(2.2, 3.3, 4.4);
+	g[0] = v3;
+	v3.set(5.5, 6.6, 7.7);
+	g[1] = v3;
+	//v3.set(8.8, 9.9, 10.1);
+	v3.set(-1.0, -2.0, -3.0);
 	a.setPosition(v3);
 	TEST_EQUAL(av[0]->getPosition(), v3)
 	av.moveTo(g);
-	v3.set(1.0, 2.0, 3.0);
+	v3.set(3.2, 5.3, 7.4);
 	TEST_EQUAL(av[0]->getPosition(), v3)
-	// BAUSTELLE
+	v3.set(15.5, 26.6, 37.7);
+	TEST_EQUAL(av[1]->getPosition(), v3)
+	
+	// step length set
+	av.moveTo(g, 2.0);
+	v3.set(5.4, 8.6, 11.8);
+	TEST_EQUAL(av[0]->getPosition(), v3)
+	v3.set(1.0, 2.0, 3.0);
+	a.setPosition(v3);
+
+	// no saved positon, so using the actual position
+	AtomVector av2;
+	av2.push_back(&a);
+	av2.push_back(&b);
+	av2.moveTo(g);
+	v3.set(3.2, 5.3, 7.4);
+	TEST_EQUAL(av2[0]->getPosition(), v3)
+	
+	// if different sIze in gradient, nothing happens:
+	av2.push_back(&c);
+	v3 = a.getPosition();
+	av2.moveTo(g);
+	TEST_EQUAL(av2[0]->getPosition(), v3)
 RESULT
 
-Atom c;
-c.setName("c");
 CHECK(push_back)
 	av.push_back(&c);
 	TEST_EQUAL(av.size(), 3)
