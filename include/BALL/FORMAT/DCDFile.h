@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.29 2004/03/17 21:08:00 amoll Exp $
+// $Id: DCDFile.h,v 1.30 2004/03/19 00:52:00 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_DCDFILE_H
@@ -161,6 +161,18 @@ namespace BALL
 
 		protected:
 
+		//_ 
+		void writeSize_(const Size& data)
+			throw() { *this << BinaryFileAdaptor<Size>(data);}
+
+		//_ 
+		void writeFloat_(const float& data)
+			throw() { *this << BinaryFileAdaptor<float>(data);}
+
+		//_
+		void writeVector_(const vector<Vector3>& v)
+			throw();
+		
 		//_
  		float readFloat_()
 			throw(); 

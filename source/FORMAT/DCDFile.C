@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.28 2004/03/17 21:07:43 amoll Exp $
+// $Id: DCDFile.C,v 1.29 2004/03/19 00:50:54 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -406,40 +406,40 @@ namespace BALL
 		if (!isAccessible() || !isOpen()) return false;
 
 		// write the info block
-		*this << BinaryFileAdaptor<Size>(84);
+		writeSize_(84);
 		for (i = 0; i < 4; ++i)
 		{
 			*this << BinaryFileAdaptor<char>(CORD_[i]);
 		}
 
-		*this << BinaryFileAdaptor<Size>(number_of_snapshots_);
-		*this << BinaryFileAdaptor<Size>(step_number_of_starting_time_);
-		*this << BinaryFileAdaptor<Size>(steps_between_saves_);
-		*this << BinaryFileAdaptor<Size>((Size)has_velocities_);
+		writeSize_(number_of_snapshots_);
+		writeSize_(step_number_of_starting_time_);
+		writeSize_(steps_between_saves_);
+		writeSize_((Size)has_velocities_);
 		for (i = 0; i < 5; ++i)
 		{
-			*this << BinaryFileAdaptor<Size>(0);
+			writeSize_(0);
 		}
 		*this << BinaryFileAdaptor<double>(time_step_length_);
 		for (i = 0; i < 9; ++i)
 		{
-			*this << BinaryFileAdaptor<Size>(0);
+			writeSize_(0);
 		}
-		*this << BinaryFileAdaptor<Size>(84);
+		writeSize_(84);
 
 		// write the comment block
-		*this << BinaryFileAdaptor<Size>((number_of_comments_*80)+4);
-		*this << BinaryFileAdaptor<Size>(number_of_comments_);
+		writeSize_((number_of_comments_*80)+4);
+		writeSize_(number_of_comments_);
 		for (i = 0; i < (number_of_comments_*80); ++i)
 		{
 			*this << BinaryFileAdaptor<char>(' ');
 		}
-		*this << BinaryFileAdaptor<Size>((number_of_comments_*80)+4);
+		writeSize_((number_of_comments_*80)+4);
 
 		// write the atom number block
-		*this << BinaryFileAdaptor<Size>(4);
-		*this << BinaryFileAdaptor<Size>(number_of_atoms_);
-		*this << BinaryFileAdaptor<Size>(4);
+		writeSize_(4);
+		writeSize_(number_of_atoms_);
+		writeSize_(4);
 
 		return true;
 	}
@@ -461,66 +461,54 @@ namespace BALL
 		// increase the snapshot counter for a correct header
 		number_of_snapshots_++;
 
-		const vector<Vector3>& positions = snapshot.getAtomPositions();
-		if (positions.size() == 0)
+		if (snapshot.getAtomPositions().size() == 0)
 		{
 			Log.error() << "DCDFile::append(): No atom positions available" << endl;
 			return false;
 		}
+		writeVector_(snapshot.getAtomPositions());
 
-		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-		for (Size atom = 0; atom < number_of_atoms_; ++atom)
-		{
-			*this << BinaryFileAdaptor<float>((float) positions[atom].x);
-		}
-		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-		for (Size atom = 0; atom < number_of_atoms_; ++atom)
-		{
-			*this << BinaryFileAdaptor<float>((float) positions[atom].y);
-		}
-		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-		for (Size atom = 0; atom < number_of_atoms_; ++atom)
-		{
-			*this << BinaryFileAdaptor<float>((float) positions[atom].z);
-		}
-		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
 
 		if (has_velocities_)
 		{
-			const vector<Vector3>& velocities = snapshot.getAtomVelocities();
-			if (velocities.size() == 0)
+			if (snapshot.getAtomVelocities().size() == 0)
 			{
 				Log.error() << "DC2File::append(): No atom velocities available" << endl;
 				return false;
 			}
-
-			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-			for (Size atom = 0; atom < number_of_atoms_; ++atom)
-			{
-				*this << BinaryFileAdaptor<float>((float) velocities[atom].x);
-			}
-			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-			for (Size atom = 0; atom < number_of_atoms_; ++atom)
-			{
-				*this << BinaryFileAdaptor<float>((float) velocities[atom].y);
-			}
-			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
-			for (Size atom = 0; atom < number_of_atoms_; ++atom)
-			{
-				*this << BinaryFileAdaptor<float>((float) velocities[atom].z);
-			}
-			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+			writeVector_(snapshot.getAtomVelocities());
 		}
+
 
 		seekAndWriteHeader();
 		return true;
 	}
 
 
+	void DCDFile::writeVector_(const vector<Vector3>& v)
+		throw()
+	{
+		writeSize_(4*number_of_atoms_);
+		for (Size atom = 0; atom < number_of_atoms_; ++atom)
+		{
+			writeFloat_(v[atom].x);
+		}
+		writeSize_(4*number_of_atoms_);
+		writeSize_(4*number_of_atoms_);
+		for (Size atom = 0; atom < number_of_atoms_; ++atom)
+		{
+			writeFloat_(v[atom].y);
+		}
+		writeSize_(4*number_of_atoms_);
+		writeSize_(4*number_of_atoms_);
+		for (Size atom = 0; atom < number_of_atoms_; ++atom)
+		{
+			writeFloat_(v[atom].z);
+		}
+		writeSize_(4*number_of_atoms_);
+	}
+
+	
 	bool DCDFile::read(SnapShot& snapshot)
 		throw()
 	{
@@ -533,8 +521,7 @@ namespace BALL
 		Size expected_noa = getNumberOfAtoms();
 		if (expected_noa == 0)
 		{
-			Log.error() << "DCDFile::read(): "
-				<< "DCDFile does not contain any atoms. Did you call readHeader()?" << endl;
+			Log.error() << "DCDFile::read(): DCDFile does not contain any atoms. Did you call readHeader()?" << endl;
 			return false;
 		}
 		snapshot.setNumberOfAtoms(expected_noa);
@@ -626,6 +613,7 @@ namespace BALL
 		if (swap_bytes_) swapBytes(adapt_float_.getData());
 		return adapt_float_.getData();
 	}
+
 
 	bool DCDFile::readVector_(vector<Vector3>& v)
 		throw()
@@ -719,9 +707,9 @@ namespace BALL
 	bool DCDFile::init()
 		throw()
 	{
-		// DEBUG
-		// verbosity_ = 1;
-		// /DEBUG
+		#ifdef BALL_DEBUG
+		 verbosity_ = 1;
+		#endif
 
 		if (sizeof(Size) != 4)
 		{
