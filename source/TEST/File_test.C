@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.13 2000/10/21 14:10:54 amoll Exp $
+// $Id: File_test.C,v 1.14 2000/10/23 23:28:46 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.13 2000/10/21 14:10:54 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.14 2000/10/23 23:28:46 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -263,22 +263,6 @@ CHECK(operator != (const File& file))
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(isOpen())
-	file.copyTo("XXX");
-	File f1("XXX");
-	TEST_EQUAL(f1.isOpen(), true)	
-	f1.close();
-	TEST_EQUAL(f1.isOpen(), false)	
-RESULT
-
-CHECK(isClosed())
-	file.copyTo("XXX");
-	File f1("XXX");
-	TEST_EQUAL(f1.isClosed(), false)	
-	f1.close();
-	TEST_EQUAL(f1.isClosed(), true)	
-RESULT
-
 CHECK(isAccessible(String name))
 	TEST_EQUAL(f.isAccessible("data/File_test.txt"), true)
 	f.remove("XXX");
@@ -365,7 +349,6 @@ CHECK(isOpen())
 	f2.close();
 	TEST_EQUAL(f2.isOpen(), false)	
 RESULT
-
 
 CHECK(isClosed())
 	TEST_EQUAL(f.isClosed(), false)	

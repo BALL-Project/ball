@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.10 2000/10/22 10:07:49 oliver Exp $
+// $Id: ResourceFile_test.C,v 1.11 2000/10/23 23:28:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.10 2000/10/22 10:07:49 oliver Exp $")
+START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.11 2000/10/23 23:28:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -413,7 +413,7 @@ RESULT
 
 ResourceFile f;
 CHECK(ResourceFile::open(const String&))
-	f.open("data/test.db");
+	TEST_EQUAL(f.open("data/test.db"), true)
 	TEST_EQUAL(f.isValid(), true)
 	TEST_NOT_EQUAL(f.getEntry("/Node1"), 0)
 	TEST_EQUAL(f.getEntry("//Node1"), 0)
