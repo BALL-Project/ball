@@ -1,7 +1,8 @@
-// $Id: atomBondModelBaseProcessor.iC,v 1.1 2000/06/25 19:12:29 hekl Exp $
+// $Id: atomBondModelBaseProcessor.iC,v 1.2 2001/05/13 14:55:21 hekl Exp $
 
 BALL_INLINE
 void AtomBondModelBaseProcessor::insertAtom_(Atom* atom)
+	throw()
 {
 	used_atoms_.push_back(atom);
 	hashed_atoms_.insert(atom);
@@ -9,6 +10,7 @@ void AtomBondModelBaseProcessor::insertAtom_(Atom* atom)
 
 BALL_INLINE
 void AtomBondModelBaseProcessor::clearUsedAtoms_()
+	throw()
 {
 	used_atoms_.clear();
 	hashed_atoms_.clear();
@@ -16,12 +18,14 @@ void AtomBondModelBaseProcessor::clearUsedAtoms_()
 
 BALL_INLINE
 List<Atom*>& AtomBondModelBaseProcessor::getAtomList_()
+	throw()
 {
 	return used_atoms_;
 }
 
 BALL_INLINE
 HashSet<Atom*>& AtomBondModelBaseProcessor::getAtomSet_()
+	throw()
 {
 	return hashed_atoms_;
 }

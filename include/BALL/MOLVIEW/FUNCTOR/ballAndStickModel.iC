@@ -1,49 +1,57 @@
-// $Id: ballAndStickModel.iC,v 1.4 2001/01/26 01:36:55 amoll Exp $
+// $Id: ballAndStickModel.iC,v 1.5 2001/05/13 14:55:21 hekl Exp $
 
 BALL_INLINE
 Real AddBallAndStickModel::getBallRadius() const
+  throw()
 {
   return ball_radius_;
 }
 
 BALL_INLINE
 void AddBallAndStickModel::getBallRadius(Real& radius)
+  throw()
 {
   radius = ball_radius_;
 }
 
 BALL_INLINE
 Real AddBallAndStickModel::getStickRadius() const
+  throw()
 {
   return stick_radius_;
 }
 
 BALL_INLINE
 void AddBallAndStickModel::getStickRadius(Real &radius)
+  throw()
 {
   radius = stick_radius_;
 }
 
 BALL_INLINE
 void AddBallAndStickModel::enableBallAndStickModel()
+  throw()
 {
   ball_and_stick_ = true;
 }
 
 BALL_INLINE
 void AddBallAndStickModel::enableStickModel()
+  throw()
 {
   ball_and_stick_ = false;
 }
 
 BALL_INLINE
 bool AddBallAndStickModel::isBallAndStickModel() const
+  throw()
 {
   return ball_and_stick_;
 }
 
 BALL_INLINE
 bool AddBallAndStickModel::isStickModel() const
+  throw()
 {
   return (!ball_and_stick_);
 }

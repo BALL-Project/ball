@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.4 2000/12/22 19:12:14 amoll Exp $
+// $Id: molecularControl.h,v 1.5 2001/05/13 14:55:25 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -28,9 +28,9 @@
 #endif
 
 
-using namespace BALL;
+//using namespace BALL;
 using namespace BALL::VIEW;
-using namespace BALL::MOLVIEW;
+//using namespace BALL::MOLVIEW;
 
 
 namespace BALL
@@ -38,68 +38,160 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-		/**
-		 */
-		class MolecularControl
-		: public BALL::VIEW::Control
+		/**	The MolecularControl class.
+				{\bf Framework:} BALL/MOLVIEW/GUI/WIDGETS\\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h}\\ \\
+				The MolecularControl class is a widget to display the molecular structure of 
+				\Ref{Composite}	objects. 
+				This class is derived from the class \Ref{Control} and extends it for showing
+				molecular structures. The method \Ref{checkMenu} is overridden to enable and
+				disable the menu entries properly. The cut, copy and paste menus will work
+				only with \Ref{System} objects. Further the internal selection mechanism
+				is reimplemented to work on molecular objects instead of \Ref{GeometricObject}
+				objects.
+				@memo    MolecularControl class (BALL MOLVIEW gui widgets framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 14:55:25 $
+		*/
+		class MolecularControl: public BALL::VIEW::Control
 		{			
 			Q_OBJECT
 			
 		public:
 			
-			/**	@name	Enums
-			 */
+			/**	@name	Constructors
+			*/	
 			//@{
+
+			/** Default Constructor.
+					Construct new molecularControl.
+					@param      parent the parent widget of {\em *this} molecularControl (See documentation of QT-library for information concerning widgets)
+					@param      name the name of {\em *this} molecularControl (See documentation of QT-library for information concerning widgets)
+					@return     MolecularControl new constructed molecularControl
+					@see        Control
+			*/
+			MolecularControl(QWidget* parent = 0, const char* name = 0)
+				throw();
+			
 			//@}
-			
-			/**	@name	Type Definitions
-			 */
-			
-			/**	@name	Constructors and Destructors
-			 */
+
+			/** @name Destructors 
+			*/
 			//@{
-			
-			MolecularControl(QWidget* parent = 0, const char* name = 0);
-			
+
+			/** Destructor.
+					Default destruction of {\em *this} molecularControl.
+			*/
 			virtual ~MolecularControl()
 				throw();
 			//@}
 			
-			// --- ACCESSORS: INSPECTORS and MUTATORS
-			
-			virtual void checkMenu(MainControl& main_control);
+			/**	@name	Accessors: inspectors and mutators 
+			*/
+			//@{
+			/**	Menu checking method.
+					This method is called by the method \Ref{checkMenus} from the
+					\Ref{MainControl} object before a popup menu is shown.
+					The menus \Ref{cut}, \Ref{copy}, \Ref{paste} and \Ref{clearClipboard} will
+					be enabled and disabled as molecular structures are selected. \Ref{Paste}
+					and \Ref{clearClipboard} will only be enabled if \Ref{System} objects
+					were cutted or copied before.
+					The \Ref{cut} and \Ref{copy} menu entry are only enabled if all selected objects
+					were \Ref{System} objects, disabled otherwise.				
+					@param main_control the \Ref{MainControl} object whose menus should be checked
+					@see   Control::checkMenu
+					@see   show
+					@see   checkMenus
+			*/
+			virtual void checkMenu(MainControl& main_control)
+				throw();
+
+			/** Build a context menu.
+					Calls \Ref{Control::buildContextMenu}.\\
+					{\bf Note:} context menus for molecular structures must be added.
+					@param   composite the \Ref{Composite} object for that a context menu should be created
+					@param   item the \Ref{QListViewItem} object for that a context menu should be created
+					@see     Control::buildContextMenu
+			*/
+			virtual void buildContextMenu(Composite* composite, QListViewItem* item)
+				throw();
+			//@}
 
 		public slots:
 				
-			// override for distinguishing selected composites
+			/** @name Public slots
+			*/
+			//@{
+			/** Sent the selection.
+					Calls \Ref{Control::sentSelection}.
+					Filter the selection with the \Ref{MolecularFilter} and sent a message
+					\Ref{MolecularSelectionMessage} through the \Ref{ConnectionObject} tree.
+					@see  getSelection
+					@see  ConnectionObject
+					@see  MolecularFilter
+					@see  MolecularSelectionMessage
+					@see  notify_
+			*/
 			virtual void sentSelection();
 
-			// create the context menu for the given composite
-			virtual void buildContextMenu(Composite* composite, QListViewItem* item);
+			//@}
 		
 
 		signals:
 			
 		protected:
 
-		  // returns the actual Information visitor
-		  virtual Information& getInformationVisitor_();
+			/** @name Internal creation and message handling
+			*/
+			//@{
+			/** Access the molecular information visitor.
+					Access the \Ref{MolecularInformation} visitor of {\em *this} molecularControl.
+					This method is used in the method \Ref{generateListViewItem_} to
+					retrieve certain information of the given \Ref{Composite} object.
+					@return  Information a reference to a \Ref{Information} visitor.
+					@see     MolecularInformation
+					@see     generateListViewItem_
+			*/
+		  virtual Information& getInformationVisitor_()
+				throw();
 
-		  // recursive iteration methode for "genListViewItem_"
-		  // item is the item belonging to the composite parameter
-			// all subtrees of composite will be inserted to item
-			virtual void recurseGeneration_(QListViewItem* item, Composite* composite);
+			/** Recursive iteration method.
+					Iterate over the children of the \Ref{Composite} {\em composite} and
+					call for each the method \Ref{generateListViewItem_}.
+					@param   item a pointer to a \Ref{QListViewItem} to which all children of {\em composite} will be inserted
+					@param   composite a pointer to a \Ref{Composite} object whose children will be inserted into {\em item}
+					@see     generateListViewItem_
+			*/
+			virtual void recurseGeneration_(QListViewItem* item, Composite* composite)
+				throw();
 			
-			// recursive iteration methode for "updateListViewItem_"
-			// item is the item belonging to the composite parameter
-			// all subtrees of composite will be updated below the item
-			// returns true, if subtree changed
-			virtual bool recurseUpdate_(QListViewItem* item, Composite* composite);
+			/** Recursive update method.
+					Iterate over the children of the \Ref{Composite} {\em composite} and
+					call for each the method \Ref{updateListViewItem_}.
+					@param   item a pointer to a \Ref{QListViewItem} containing the subtree structure 
+					@param   composite a pointer to a \Ref{Composite} object containing the (possibly) new substructure
+					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree structure of {\em item} are unequal, {\tt false} otherwise 
+					@see     updateListViewItem_
+			*/
+			virtual bool recurseUpdate_(QListViewItem* item, Composite* composite)
+				throw();
 		
-			// override this function to catch different messages and 
-			// act accordingly 
-			// return true if update of control necessary
-			virtual bool reactToMessages_(Message* message);
+			/** Message handling.
+					Catch the \Ref{Message} objects and react accordingly to the different
+					messages.
+					\begin{itemize}
+					  \item  \Ref{NewMolecularMessage} - update always necessary
+					  \item  \Ref{RemovedCompositeMessage} - update necessary if already inserted
+					  \item  \Ref{ChangedCompositeMessage} - update necessary if \Ref{Composite} object has changed
+					\end{itemize}
+					@param   message a pointer to the \Ref{Message} object
+					@return  bool {\tt true} if an update of {\em *this} molecularControl is necessary, {\tt false} otherwise
+					@see     onNotify
+			*/
+			virtual bool reactToMessages_(Message* message)
+				throw();
+			//@}
 			
 
 		private:

@@ -1,4 +1,4 @@
-// $Id: molecularFilter.h,v 1.3 2000/12/12 16:16:52 oliver Exp $
+// $Id: molecularFilter.h,v 1.4 2001/05/13 14:55:22 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
@@ -33,52 +33,82 @@ namespace BALL
 	namespace MOLVIEW
 	{
 		
-		/**
+		/** MolecularFilter class.
+				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularFilter.h} \\
+				{\bf Concept:} visitor design pattern\\ \\
+				The class MolecularFilter is a class that filters
+				\Ref{Composite} objects. The \Ref{visit} method implements the filter
+				criteria. In this case this method filters \Ref{Composite} objects
+				that are of kind \Ref{Atom} or of kind \Ref{AtomContainer}.
+				This class is used by the class \Ref{MolecularControl} to filter
+				\Ref{Composite} objects that are of the kind specified above.
+				@memo    MolecularFilter class (BALL MOLVIEW functor framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/05/13 14:55:22 $
 		*/
-		class MolecularFilter
-			: public Filter
+		class MolecularFilter: public Filter
 		{
 			public:
-			
-			/**	@name	Enums
-			 */
+
+			/**	@name	Constructors
+			*/	
 			//@{
+
+			/** Default Constructor.
+					Construct new filter.
+					The state of {\em *this} filter is: result is {\tt false}.
+					@return      Filter new constructed filter
+					@see         Filter
+			*/
+			MolecularFilter()
+			  throw();
+
 			//@}
 
-
-			/**	@name	Type definitions
-			*/
-			//@{
-			//@}
-
-			/**	@name	Constructors and Destructors
+			/** @name Destructors 
 			*/
 			//@{
 
-			MolecularFilter();
-
+			/** Destructor.
+					Default destruction of {\em *this} molecularFilter.
+					Calls \Ref{destroy}.
+					@see         destroy
+			*/
 			virtual ~MolecularFilter()
+				throw();
+
+			/** Explicit default initialization.
+					Calls \Ref{Filter::clear}.
+					@see  Filter::clear
+			*/
+			virtual void clear()
+				throw();
+
+			/** Explicit destructor.
+					Calls \Ref{Filter::destroy}.
+					@see  Filter::destroy
+			*/
+			virtual void destroy()
 				throw();
 			//@}
 
-			/**	@name	Asignment
+			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+			/** Visit method.
+					This method sets the result to {\tt true} if the \Ref{Composite} object
+					is of kind \Ref{Atom} or of kind \Ref{AtomContainer}, {\tt false}
+					otherwise
+					@param  composite the \Ref{Composite} object to be filtered by {\em *this} molecularFilter.
+					@see    Filter
+					@see    setResult_
+			*/
+			virtual void visit(Composite& composite)
+			  throw();
 			//@}
-
 			
-			/**	@name	Accessors
-			*/
-			//@{
-			virtual void visit(Composite& composite);
-			//@}
-			
-
-			/**	@name	Debugging and Diagnostics
-			*/
-			//@{
-			//@}
-
 			protected:
 			
   		private:

@@ -1,4 +1,4 @@
-// $Id: glSurfaceModel.h,v 1.2 2000/12/12 16:16:57 oliver Exp $
+// $Id: glSurfaceModel.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
@@ -23,29 +23,87 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-		/**
+		/** AddGLSurfaceModel class.
+				{\bf Framework:} BALL/MOLVIEW/GUI/FUNCTOR\\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h}\\ \\
+				The class AddGLSurfaceModel is derived from the class 
+				\Ref{SurfaceModel} and extents this class by overriding the creation
+				method used for creating the \Ref{Surface}. This new primitive contains
+				OpenGL implementation to generate the graphical visualization of the surface.
+				This class has the same functionality as its base class \Ref{AddSurfaceModel}.
+				@memo    AddGLSurfaceModel class (BALL MOLVIEW gui functor framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.3 $
+				@date    $Date: 2001/05/13 14:55:24 $
 		*/
 		class AddGLSurfaceModel: public AddSurfaceModel
 		{
 			public:
 
-			/**	@name	Constructors and Destructors
+			/**	@name	Constructors
+			*/	
+			//@{
+
+			/** Default Constructor.
+					Construct new addGLSurfaceModel.
+					@return      AddGLSurfaceModel new constructed addGLSurfaceModel
+					@see         AddSurfaceModel
+			*/
+			AddGLSurfaceModel()
+				throw();
+
+			/** Copy constructor.
+					Construct new addGLSurfaceModel by copying the addGLSurfaceModel
+					{\em add_gl_surface_model}. Initializes the state of {\em this} addGLSurfaceModel 
+					to the state of {\em add_gl_surface_model}.
+					@param       add_gl_surface_model the addGLSurfaceModel to be copied
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_gl_surface_model}
+					@return      AddGLSurfaceModel new constructed addGLSurfaceModel copied from {\em add_gl_surface_model}
+					@see         AddSurfaceModel
+			*/
+			AddGLSurfaceModel
+				(const AddGLSurfaceModel& add_gl_surface_model, bool deep = true)
+				throw();
+
+			//@}
+
+			/** @name Destructors 
 			*/
 			//@{
 
-			AddGLSurfaceModel();
-
-			AddGLSurfaceModel
-				(const AddGLSurfaceModel& add_gl_surface_model, bool deep = true);
-
+			/** Destructor.
+					Default destruction of {\em *this} addGLSurfaceModel.
+					Calls \Ref{AddSurfaceModel::destroy}.
+					@see  AddSurfaceModel
+			*/
 			virtual ~AddGLSurfaceModel()
 				throw();
 			//@}
 
 
-			private:
+			protected:
 
+			/** @name Creation method
+					This method creates a primitives with OpenGL implementation used
+					for generating the graphical representation of the shapes they
+					represent.
+					This method is the overridden method of the base class 
+					\Ref{AddSurfaceModel}.
+					@see  AddSurfaceModel
+			*/
+			//@{
+			/** Create a mesh.
+					Create a \Ref{GLMesh} object and returns it as \Ref{Mesh}.
+					This overridden method of the class \Ref{AddSurfaceModel} creates
+					a primitive with openGL implementation.
+					The method \Ref{operator()} uses this method to create a mesh object
+					for the start \Ref{Composite} object.
+					@see  GLMesh
+					@see  Mesh
+					@see  AddSurfaceModel
+			*/
 			virtual Mesh* createMesh_();
+			//@}
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS

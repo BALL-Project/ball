@@ -1,7 +1,60 @@
-// $Id: functor.doc,v 1.2 2001/03/07 22:19:46 amoll Exp $
+// $Id: functor.doc,v 1.3 2001/05/13 14:55:22 hekl Exp $
 
-/**@name	MOLVIEW/FUNCTOR
+/** @name ColorCalculators.
+	        This sections contains the base class for colorCalculators
+          and certain already predefined colorCalculators.
+	        A colorCalculator is an object that computes a color
+					for a given object (normally an atom).
 */
 //@{
-	//@Include: *.h
+  //@Include: colorCalculator.h
+  //@Include: standardColorCalculator.h
 //@}
+
+/** @name Models.
+	  This section contains some processors used for creating
+	  the models. This processors only create models without OpenGL 
+	 	implementation. In the section {\tt GUI/FUNCTORS} the processors
+		are extended to use primitives with OpenGL implementation.
+	  See the documentation of BALL for information about the concept
+	  of processors.
+	  @see  Processor
+*/
+//@{
+	//@Include: backboneModel.h
+	//@Include: ballAndStickModel.h
+	//@Include: lineModel.h
+	//@Include: objectSelector.h
+	//@Include: removeModel.h
+	//@Include: surfaceModel.h
+	//@Include: vanDerWaalsModel.h
+//@}
+
+/** @name Base classes for model processors.
+	  This section contains some base classes used for creating model
+    processors und model connectors.
+    Model processors are responsible for creating the model representation.
+    Model connectors are used by the model processors to connect
+	  different models to each other (e.g. connect a {\em ball and stick} model
+	  with a {\em line} model, etc.).
+    Connector processors only create models for \Ref{Bond} objects.
+	  @see  Bond
+	  @see  Processor
+*/
+//@{
+	//@Include: atomBondModelBaseProcessor.h
+	//@Include: atomBondModelConnector.h
+	//@Include: baseModel.h
+	//@Include: baseModelConnector.h
+//@}
+
+/** @name Helper classes.
+    In this section some important helper classes for the model
+    processor classes are declared.
+*/
+//@{
+	//@Include: findGeometricObject.h
+	//@Include: molecularInformation.h
+	//@Include: molecularFilter.h
+//@}
+

@@ -1,0 +1,34 @@
+// $Id: objectSelector.iC,v 1.1 2001/05/13 14:55:23 hekl Exp $
+
+BALL_INLINE
+void 
+ObjectSelector::select()
+  throw()
+{
+	selection_ = true;
+}
+
+BALL_INLINE
+void 
+ObjectSelector::deselect()
+  throw()
+{
+	selection_ = false;
+}
+
+BALL_INLINE
+bool 
+ObjectSelector::isSelectionMode()
+  throw()
+{
+	return selection_;
+}
+
+BALL_INLINE
+bool 
+ObjectSelector::isDeselectionMode()
+  throw()
+{
+	return (!selection_);
+}
+

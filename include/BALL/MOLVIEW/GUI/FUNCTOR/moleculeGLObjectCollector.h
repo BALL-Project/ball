@@ -1,4 +1,4 @@
-// $Id: moleculeGLObjectCollector.h,v 1.2 2000/12/12 16:16:57 oliver Exp $
+// $Id: moleculeGLObjectCollector.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
@@ -35,32 +35,69 @@ namespace BALL
 
 		using VIEW::GLObjectCollector;
 
-		/**
+		/** MoleculeGLObjectCollector class.
+  
+				{\bf Framework:} BALL/MOLVIEW/GUI/FUNCTOR\\
+				{\bf Defintion:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h}\\ \\
+				The class MoleculeGLObjectCollector is responsible for additionally collecting 
+				the \Ref{GLObject} objects that are found in a \Ref{Bond} objects that are available
+				in the processed \Ref{Molecule} object. This is done by overriding the \Ref{finish}
+				method from the class \Ref{GLObjectCollector}. All bond primitives are collected
+				after the atom primitives are collected by the base class.
+				The \Ref{GLObject} objects
+				are separated into different visualization groups (=lists) that are necessary
+				for proper rendering.
+				See \Ref{GLObjectCollector} for further information about collecting \Ref{GLObject}
+				objects.
+				@memo    MoleculeGLObjectCollector class (BALL MOLVIEW gui functor framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.3 $
+				@date    $Date: 2001/05/13 14:55:24 $
 		*/
-		class MoleculeGLObjectCollector
-			: public GLObjectCollector
+		class MoleculeGLObjectCollector: public GLObjectCollector
 		{
 			public:
 
-			/**	@name	Constructors and Destructors
+			/**	@name	Constructors
+			*/	
+			//@{
+
+			/** Default Constructor.
+					Construct new moleculeGLObjectCollector.
+					@return MoleculeGLObjectCollector new constructed moleculeGLObjectCollector
+					@see    GLObjectCollector
+			 */
+			MoleculeGLObjectCollector()
+				throw();
+
+			//@}
+
+			/** @name Destructors 
 			*/
 			//@{
 
-			MoleculeGLObjectCollector();
-
-			MoleculeGLObjectCollector
-				(const MoleculeGLObjectCollector& molecule_GL_object_collector, bool deep = true);
-
+			/** Destructor.
+					Default destruction of {\em *this} moleculeGLObjectCollector.
+					Calls \Ref{GLObjectCollector::destroy}
+			 */
 			virtual ~MoleculeGLObjectCollector()
 				throw();
 			//@}
 
 
-			/**	@name Accessors
+			/**	@name Processor specific methods
 			*/
 			//@{
 
-			virtual bool finish();
+			/** Finish method.
+					Collect all \Ref{GLObject} objects that are accessable on each \Ref{Bond}
+					of the processed \Ref{Molecule} object (if \Ref{getRootComposite} is of type
+					\Ref{Molecule}).
+					Calls \Ref{GLObjectCollector::operator()} for each \Ref{Bond} of \Ref{Molecule}.
+					@return bool {\tt true} if the finish of {\em *this} moleculeGLObjectCollector was successful, {\tt false} otherwise
+			*/
+			virtual bool finish()
+				throw();
 			//@}
 		};
 

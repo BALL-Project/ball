@@ -1,19 +1,22 @@
-// $Id: findGeometricObject.iC,v 1.5 2001/01/26 01:36:55 amoll Exp $
+// $Id: findGeometricObject.iC,v 1.6 2001/05/13 14:55:22 hekl Exp $
 
 BALL_INLINE
-List<VIEW::GeometricObject*>& FindGeometricObjects::getGeometricObjects()
+List<GeometricObject*>& FindGeometricObjects::getGeometricObjects()
+  throw()
 {
   return geometric_objects_;
 }
 
 BALL_INLINE
-const List<VIEW::GeometricObject*>& FindGeometricObjects::getGeometricObjects() const
+const List<GeometricObject*>& FindGeometricObjects::getGeometricObjects() const
+  throw()
 {
   return geometric_objects_;
 }
 
 BALL_INLINE
 bool FindGeometricObjects::geometricObjectsFound() const
+  throw()
 {
   return (geometric_objects_.size() != 0);
 }

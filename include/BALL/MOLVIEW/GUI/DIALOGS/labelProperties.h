@@ -35,9 +35,9 @@
 # include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h>
 #endif
 
-using namespace BALL;
+//using namespace BALL;
 using namespace BALL::VIEW;
-using namespace BALL::MOLVIEW;
+//using namespace BALL::MOLVIEW;
 
 namespace BALL
 {
@@ -45,6 +45,20 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
+		/**	The LabelProperties class.
+				{\bf Framework:} BALL/MOLVIEW/GUI/DIALOGS\\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h}\\ \\
+				The class LabelProperties is a dialog for appending to a selection of 
+				molecular objects a label which text and color can be changed.
+				The class \Ref{MolecularControl} is responsible for creating such a selection.
+				If this dialog should be used create it with \Ref{MainControl} as parent.
+				The class LabelPropertiesData contains the definition of the layout of
+				this dialog and is therefore not necessary for understanding.
+				@memo    LabelProperties class (BALL MOLVIEW gui dialogs framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 14:55:23 $
+		*/
 		class LabelProperties : 
 			public BALL::MOLVIEW::LabelPropertiesData,
 			public ModularWidget
@@ -53,89 +67,166 @@ namespace BALL
 				
 			public:
 			
-			/** @name Constructors and Destructors
-			 */
+			/**	@name	Constructors
+			*/	
 			//@{
-			
-			/** Constructor for the label property dialog.
-					create a dialog for adding labels to the selected objects.
+
+			/** Default Constructor.
+					Construct new labelProperties.
+					Calls \Ref{registerWidget}.
+					@param      parent the parent widget of {\em *this} labelProperties (See documentation of QT-library for information concerning widgets)
+					@param      name the name of {\em *this} labelProperties (See documentation of QT-library for information concerning widgets)
+					@return     LabelProperties new constructed labelProperties
+					@see        QDialog
+					@see        ModularWidget
 			*/
-			LabelProperties(QWidget *parent = NULL, const char *name = NULL );
+			LabelProperties(QWidget *parent = NULL, const char *name = NULL )
+				throw();
+
+			//@}
+
+			/** @name Destructors 
+			*/
+			//@{
 
 			/** Destructor.
-			 */
+					Default destruction of {\em *this} labelProperties.
+			*/
 			virtual ~LabelProperties()
 				throw();
 			//@}
 			
-			/** @name Accessors
+			/**	@name	Accessors: inspectors and mutators 
 			 */
 			//@{
-			
-			/** Fetch the widgets preferences from the inifile.
-					This method extracts the default values from the given
-					inifile.
-					This method is called automatically
-					immediately before the main application 
-					is started. It gets the widget's initial values from the inifile. 
+			/** Message handling method.
+					Handles messages sent by other registered \Ref{ConnectionObject} objects.
+					Catches only \Ref{MolecularSelectionMessage} objects.
+					If such a message is catched the apply button will be enabled and labels
+					can be appended onto the selection.
+					@param message the pointer to the message that should be processed
+					@see   applyButtonClicked
+					@see   MolecularSelectionMessage
+					@see   ConnectionObject
+					@see   Message
+		  */
+			virtual void onNotify(Message *message)
+				throw();
+			//@}
+
+			/**	ModularWidget methods
 			*/
-			virtual void fetchPreferences(INIFile &inifile);
+			//@{
 			
-			/** Writes the widgets preferences to the inifile.
-					This method is called by the widget's destructor.
-					It writes all needed values to the given inifile (as read from
-					the inifile in the fetchPreferences method).
+			/** Fetch the preferences.
+					Fetch the preferences (the position and the selected color of {\em *this}
+					labelProperties) from the	\Ref{INIFile} {\em inifile}.
+					This method will be called inside the method \Ref{show} from the class
+					\Ref{MainControl}.
+					@param  inifile the \Ref{INIFile} that contains the needed information for {\em *this} labelProperties
+					@see    writePreferences
 			*/
-			virtual void writePreferences(INIFile &inifile);
+			virtual void fetchPreferences(INIFile &inifile)
+				throw();
+			
+			/** Write the preferences.
+					Write the preferences (the position and the selected color of {\em *this}
+					labelProperties) to the	\Ref{INIFile} {\em inifile}.
+					This method will be called inside the method \Ref{aboutToExit} from the class
+					\Ref{MainControl}.
+					@param  inifile the \Ref{INIFile} to be written into
+					@see    fetchPreferences
+			*/
+			virtual void writePreferences(INIFile &inifile)
+				throw();
 				
-			/** receive and process messages sent to this dialog.
-					Receives the selected objects to which a label would be attached.
-					@param message - a pointer to a given message
+			/**	Initialize the widget.
+					Initialize the popup menu {\em Display} with its checkable submenu 
+					{\em Label Properties} and connect it to the method \Ref{openDialog}.
+					This method is called automatically	immediately before the main application 
+					is started. 
+					This method will be called by \Ref{show} from the \Ref{MainControl} object.
+					@param main_control the \Ref{MainControl} object to be initialized with {\em *this} labelProperties
+					@see   openDialog
+					@see   finalizeWidget
+					@see   insertMenuEntry
+					@see   checkMenu
+					@see   show
 			*/
-			virtual void onNotify(Message *message);
+			virtual void initializeWidget(MainControl& main_control)
+				throw();
 			
-			/** Initialize the label properties dialog.
-					This method is called automatically immediately before the main application 
-					is started. It adds the dialog's menu entries and connections.
+			/**	Remove the widget.
+					Remove the checkable submenu {\em Label Properties} from the popup menu
+					{\em Display}	and cut the connection to the method \Ref{openDialog}.
+					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
+					object.
+					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} labelProperties
+					@see   initializeWidget
+					@see   checkMenu
+					@see   removeMenuEntry
+					@see   aboutToExit
 			*/
-			virtual void initializeWidget(MainControl& main_control);
+			virtual void finalizeWidget(MainControl& main_control)
+				throw();
 			
-			/** Remove the dialog.
-					This method is called by the dialog's destructor. It reverses all 
-					actions performed in initializeWidget (remove menu entries and connections).
+			/**	Menu checking method.
+					This method is called by the method \Ref{checkMenus} from the
+					\Ref{MainControl} object before a popup menu is shown.
+					The menus {\em Label Properties} will be checked
+					if {\em *this} labelProperties is visible. It will be enabled if a selection of
+					objects to be labeled is available, disabled otherwise.
+					@param main_control the \Ref{MainControl} object whose menus should be checked
+					@see   initializeWidget
+					@see   finalizeWidget
+					@see   checkMenus
+					@see   show
 			*/
-			virtual void finalizeWidget(MainControl& main_control);
-			
-			/** Update all menu entry states.
-					This method is called just before a popup menu is shown 
-					(via the QT signal aboutToShow()). It should be used to
-					update the state of menu entries (e.g. disable or enable entries).
-			*/
-			virtual void checkMenu(MainControl& main_control);
+			virtual void checkMenu(MainControl& main_control)
+				throw();
 			//@}
 			
 			public slots:
 				
-				/** @name Public slots
-				 */
-				//@{
+  		/** @name Public slots
+	  	*/
+			//@{
 				
-				/** open the dialog.
-				 */
-				void openDialog();
+			/** Start the labelProperties dialog.
+					Open {\em *this} labelProperties dialog.
+					Calls \Ref{show} and \Ref{raise} from \Ref{QDialog} class.
+					See documentation of QT-library for information concerning QDialog widgets.
+			*/
+			void openDialog();
 			//@}
 			
 			protected slots:
 				
-				/** @name Public slots
-				 */
-				//@{
+			/** @name Protected slots
+			*/
+			//@{
 				
-				/** indicates that the apply button is pressed.
-				 */
-				virtual void applyButtonClicked();
+			/** Indicates the apply button was pressed.
+					Append to the geometric center of the objects in the selection a \Ref{GLLabel}
+					with the specified text and color. 
+					Sent the message \Ref{ChangedCompositeMessage}, \Ref{SceneMessage}
+					and \Ref{WindowMessage} to inform other \Ref{ConnectionObject} about the change
+					in the \Ref{Composite} objects in the selection.
+					@see  onNotify
+					@see  Composite
+					@see  GeometricCenterProcessor
+					@see  GLLabel
+					@see  ChangedCompositeMessage
+					@see  SceneMessage
+					@see  WindowMessage
+			*/
+			virtual void applyButtonClicked();
 			
-			/** open the edit color dialog.
+			/** Open the edit color dialog.
+					Open the dialog for editing the color in which the text of the label
+					should be drawn.
+					Open a \Ref{QColorDialog} from the QT-library.
+					See documentation of QT-library for information concerning QColorDialog widgets.
 			 */ 
 			virtual void editColor();
 			//@}

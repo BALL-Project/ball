@@ -1,32 +1,37 @@
-// $Id: baseModelConnector.iC,v 1.1 2000/06/25 19:13:03 hekl Exp $
+// $Id: baseModelConnector.iC,v 1.2 2001/05/13 14:55:22 hekl Exp $
 
 BALL_INLINE
 void BaseModelConnector::registerColorCalculator
   (const ColorCalculator& color_calculator)
+  throw()
 {
   color_calculator_  = const_cast<ColorCalculator*>(&color_calculator);
 }
   
 BALL_INLINE
 void BaseModelConnector::unregisterColorCalculator()
+  throw()
 {
   color_calculator_ = const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>());
 }
   
 BALL_INLINE
 ColorCalculator* BaseModelConnector::getColorCalculator() const
+  throw()
 {
   return color_calculator_;
 }
 
 BALL_INLINE
 void BaseModelConnector::setProperties(PropertyManager &manager)
+  throw()
 {
 	PropertyManager::set(manager);
 }
 
 BALL_INLINE
 FindGeometricObjects& BaseModelConnector::getGeometricObjectSearcher()
+  throw()
 {
 	return searcher_;
 }

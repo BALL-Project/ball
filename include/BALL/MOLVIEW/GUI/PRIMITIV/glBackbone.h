@@ -1,4 +1,4 @@
-// $Id: glBackbone.h,v 1.2 2001/01/08 17:29:36 anker Exp $
+// $Id: glBackbone.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -34,7 +34,21 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-		/**
+		/** GlBackbone class.
+				{\bf Framework:} BALL/MOLVIEW/GUI/PRIMITIV\\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h}\\ \\
+				An instance of GlBackbone represents an instance of the geometric
+				visualization of a \Ref{Backbone}.
+				The class GlBackbone is derived from the classes \Ref{Backbone} and
+				\Ref{GLObject}. Therefore the class glBackbone is the graphical extension
+				of the geometrical definition of the class backbone.
+				The drawing method from \Ref{GLObject} is overridden to visualize the
+				backbone. OpenGL code is used for the visualization.
+				See these classes for further information.
+				@memo    GlBackbone class (BALL MOLVIEW gui primitiv framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.3 $
+				@date    $Date: 2001/05/13 14:55:24 $
 		*/
 		class GLBackbone
 			: public Backbone,
@@ -42,28 +56,148 @@ namespace BALL
 		{
 			public:
 
-			///	@name	Constructors and Destructors
+			/**	@name	Constructors
+			*/	
 			//@{
 
-			///
-			GLBackbone();
+			/** Default Constructor.
+					Construct new glBackbone.
+					@return      GlBackbone new constructed glBackbone
+					@see         Backbone
+					@see         GLObject
+			*/
+			GLBackbone()
+				throw();
 
-			///
-			GLBackbone(const GLBackbone& backbone, bool deep = true);
+			/** Copy constructor with cloning facility.
+					Construct new glBackbone by copying the glBackbone 
+					{\em GL_two_colored_tube}.
+					The copy is either deep (default) or shallow.
+					@param       tube the tube to be copied (cloned)
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
+					@return      GlBackbone new constructed glBackbone copied from {\em GL_two_colored_tube}
+					@see         Backbone
+					@see         GLObject
+			*/
+			GLBackbone(const GLBackbone& backbone, bool deep = true)
+				throw();
 
-			///
-			GLBackbone(const GeometricObject& geometric_object);
+			/** Copy constructor from geometricObject.
+					Construct new glBackbone by copying the internal values from
+					\Ref{GeometricObject} {\em geometric_object}.
+					@param       geometric_object the \Ref{GeometricObject} which internal value should be copied
+					@return      GlBackbone new constructed glBackbone initialized from {\em geometric_object}
+					@see         Backbone
+					@see         GLObject
+			*/
+			GLBackbone(const GeometricObject& geometric_object)
+				throw();
 
-			///
+			//@}
+
+			/** @name Destructors 
+			*/
+			//@{
+
+			/** Destructor.
+					Default destruction of {\em *this} glBackbone.
+					Calls \Ref{destroy}.
+					@see         destroy
+			*/
 			virtual ~GLBackbone()
 				throw();
 
-			///
+			/** Explicit default initialization.
+					Calls \Ref{Backbone::clear}
+					Calls \Ref{GLObject::clear}
+					@see  Backbone::clear
+					@see  GLObject::clear
+			*/
 			virtual void clear()
 				throw();
 
-			///
+			/** Explicit destructor.
+					Calls \Ref{Backbone::destroy}
+					Calls \Ref{GLObject::destroy}
+					@see  Backbone::destroy
+					@see  GLObject::destroy
+			*/
 			virtual void destroy()
+				throw();
+
+			//@}
+
+
+			/**	@name	Assignment methods
+			*/
+			//@{
+
+			/** Assignment.
+					Assign the glBackbone {\em glbackbone} to {\em *this}
+					glBackbone.
+					The copy is either deep (default) or shallow.
+					The value of {\em *this} glBackbone is initialized to the value of 
+					the glBackbone {\em glbackbone}.
+					This method does not copy the structure of {\em glbackbone} into {\em *this}
+					glBackbone. Only the geometric properties and the the access to the
+					\Ref{GLPrimitiveManager} are copied. 
+					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
+					Calls \Ref{GeometricObject::set}.
+					@param       glbackbone the glBackbone to be copied
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em glbackbone}
+					@see         GeometricObject::set
+					@see         GLObject::set
+			*/
+			void set(const GLBackbone& glbackbone, bool deep = true)
+				throw();
+
+			/** Assignment operator.
+					Assign the glBackbone {\em glbackbone} to {\em *this}
+					glBackbone.	The copy is deep.
+					This method does not copy the structure of {\em glbackbone} into {\em *this}
+					glBackbone. 
+					Only the geometric properties and the the access to the
+					\Ref{GLPrimitiveManager} are copied.
+					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
+					Calls \Ref{set}.
+					The value of {\em *this} glBackbone is initialized to the value 
+					of the glBackbone {\em glbackbone}.\\
+					@param       glbackbone the glBackbone to be copied
+					@return      GLBackbone& constant reference of {\em *this} glBackbone
+					@see         set
+			*/
+			const GLBackbone& operator = (const GLBackbone& glbackbone)
+				throw();
+
+			/** Copying with cloning facility.
+					Copy {\em *this} glBackbone to the glBackbone {\em glbackbone}.
+					The copy is either deep (default) or shallow.
+					This method does not copy the structure of {\em *this} glBackbone into
+					{\em glbackbone}. 
+					Only the geometric properties and the the access to the
+					\Ref{GLPrimitiveManager} are copied.
+					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
+					Calls \Ref{set}.
+					The value of the glBackbone {\em glbackbone} is initialized to the
+					value of {\em *this} glBackbone.\\
+					@param       glbackbone the glBackbone to be assigned to
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em glbackbone}
+					@see         set
+			*/
+			void get(GLBackbone& glbackbone, bool deep = true) const
+				throw();
+
+			/** Swapping of glBackbone's.
+					Swap the value of {\em *this} glBackbone with the glBackbone
+					{\em glbackbone}.
+					This method does not swap the structure of {\em glbackbone} with {\em *this}
+					glBackbone. 
+					Only the geometric properties and the the access to the
+					\Ref{GLPrimitiveManager} are swapped.
+					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
+					@param       glbackbone the glBackbone being swapped with {\em *this} glBackbone
+			*/
+			void swap(GLBackbone& glbackbone)
 				throw();
 
 			//@}
@@ -71,14 +205,33 @@ namespace BALL
 
 			protected:
 
-			// BAUSTELLE: protected method names must have a trailing _
-			//_
-			virtual bool draw(bool with_names = false);
+			/** @name Graphical interface methods
+			*/
+			//@{
+			
+			/** Creation of the graphical representation.
+					Overridden method from \Ref{GLObject}. Uses the geometrical properties
+					defined in class \Ref{Backbone} to create the graphical representation
+					of the backbone. This method is used internally from the render engine
+					of the \Ref{Scene}. Predefined shapes of tube objects from the class
+					\Ref{GLPrimitiveManager} are used for the variable drawing resolutions.
+					The parameter {\em with_names} indicates whether the openGL command 
+					{\em glLoadName} must be used for naming the graphical object 
+					(necessary for picking mode in the scene).
+					@param     with_names flag if the graphical objects must have a name
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					@see       GLObject::draw
+					@see       GLPrimitiveManager
+			*/
+			virtual bool draw(bool with_names = false)
+				throw();
 
-			//_
-			virtual bool drawUserDefined();
-
-			//_
+			/** Export method.
+					This method handles the export of {\em *this} glBackbone into another
+					format (eg. POVRAY, VRML)\\
+					Calls \Ref{Backbone::extract}.
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
+			*/
 			virtual bool extract()
 				throw();
 

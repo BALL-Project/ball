@@ -1,25 +1,29 @@
-// $Id: baseModel.iC,v 1.7 2001/01/26 01:36:55 amoll Exp $
+// $Id: baseModel.iC,v 1.8 2001/05/13 14:55:21 hekl Exp $
 
 BALL_INLINE
 void BaseModelProcessor::enableStaticModel()
+	throw()
 {
   setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 }
 
 BALL_INLINE
 void BaseModelProcessor::disableStaticModel()
+	throw()
 {
   setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
 }
 
 BALL_INLINE
 void BaseModelProcessor::enableDynamicModel()
+	throw()
 {
   setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
 }
 
 BALL_INLINE
 void BaseModelProcessor::disableDynamicModel()
+	throw()
 {
   setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 }
@@ -27,18 +31,21 @@ void BaseModelProcessor::disableDynamicModel()
 BALL_INLINE
 void BaseModelProcessor::registerColorCalculator
   (const ColorCalculator& color_calculator)
+	throw()
 {
   color_calculator_  = const_cast<ColorCalculator*>(&color_calculator);
 }
   
 BALL_INLINE
 void BaseModelProcessor::unregisterColorCalculator()
+	throw()
 {
   color_calculator_ = const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>());
 }
   
 BALL_INLINE
 ColorCalculator* BaseModelProcessor::getColorCalculator() const
+  throw()
 {
   return color_calculator_;
 }
@@ -46,54 +53,63 @@ ColorCalculator* BaseModelProcessor::getColorCalculator() const
 BALL_INLINE
 void BaseModelProcessor::registerModelConnector
   (const BaseModelConnector& model_connector)
+  throw()
 {
   model_connector_  = const_cast<BaseModelConnector*>(&model_connector);
 }
   
 BALL_INLINE
 void BaseModelProcessor::unregisterModelConnector()
+  throw()
 {
 	model_connector_ = const_cast<BaseModelConnector*>((BaseModelConnector*)&RTTI::getDefault<BaseModelConnector>());
 }
 
 BALL_INLINE
 BaseModelConnector* BaseModelProcessor::getModelConnector()
+  throw()
 {
   return model_connector_;
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isStaticModelEnabled()
+  throw()
 {
   return (hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC));
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isStaticModelDisabled()
+  throw()
 {
   return (!hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC));
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isDynamicModelEnabled()
+  throw()
 {
   return (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC));
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isDynamicModelDisabled()
+  throw()
 {
   return (!hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC));
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isDefaultColorCalculatorRegistered()
+  throw()
 {
   return (color_calculator_ == const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()));
 }
 
 BALL_INLINE
 FindGeometricObjects& BaseModelProcessor::getSearcher_()
+  throw()
 {
   return find_geometric_object_;
 }

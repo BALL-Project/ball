@@ -1,13 +1,15 @@
-// $Id: backbone.iC,v 1.1 2001/01/07 15:46:36 hekl Exp $
+// $Id: backbone.iC,v 1.2 2001/05/13 14:55:25 hekl Exp $
 
 BALL_INLINE	
 void Backbone::setAtomList(const List<Atom*> &atoms)
+	throw()
 {
 	atoms_ = atoms;
 }
 
 BALL_INLINE	
 void Backbone::setAtomColorList(const List<ColorRGBA> &atom_colors)
+	throw()
 {
 	atom_colors_ = atom_colors;
 }

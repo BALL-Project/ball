@@ -1,7 +1,8 @@
-// $Id: molecularInformation.iC,v 1.1 2000/05/04 17:29:41 hekl Exp $
+// $Id: molecularInformation.iC,v 1.2 2001/05/13 14:55:22 hekl Exp $
 
 BALL_INLINE
 MolecularInformation::Type MolecularInformation::getType() const
+  throw()
 {
 	return type_;
 }

@@ -1,31 +1,36 @@
-// $Id: colorCalculator.iC,v 1.4 2000/01/11 20:11:34 hekl Exp $
+// $Id: colorCalculator.iC,v 1.5 2001/05/13 14:55:22 hekl Exp $
 
 BALL_INLINE
 const ColorRGBA& ColorCalculator::getColor() const
+  throw()
 {
   return color_;
 }
 
 BALL_INLINE
 const ColorRGBA& ColorCalculator::getDefaultColor() const
+  throw()
 {
   return default_color_;
 }
 
 BALL_INLINE
 void ColorCalculator::setDefaultColor(const ColorRGBA& color)
+  throw()
 {
   default_color_ = color;
 }
 
 BALL_INLINE
 void ColorCalculator::setColorMap(const ColorCalculator::ColorMap& color_map)
+  throw()
 {
 	color_map_ = color_map;
 }
 
 BALL_INLINE
 const ColorCalculator::ColorMap& ColorCalculator::getColorMap() const
+  throw()
 {
 	return color_map_;
 }

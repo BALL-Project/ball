@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.11 2001/01/07 15:47:46 hekl Exp $
+// $Id: common.h,v 1.12 2001/05/13 14:55:21 hekl Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -11,15 +11,17 @@
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-
 #define BALL_MOLVIEW_PRINT_PROPERTY(property) \
 	(hasProperty(property) ? "yes" : "no")
+
+using BALL::VIEW::GeometricObject;
 
 namespace BALL
 {
 	
 	namespace MOLVIEW
 	{
+		/*
 		enum Address
 		{
 			ADDRESS__UNKOWN                    = 0,
@@ -64,13 +66,21 @@ namespace BALL
 			COLORCALCULATOR_VALUES__ATOM_CHARGE      = 2,
 			COLORCALCULATOR_VALUES__CUSTOM           = 3
 		};
+		*/
 
-		struct GeometricObject
-		{
+		//		struct GeometricObject
+		//		{
+			/** Predefined properties.
+					Enumeration of all properties that are used by the MOLVIEW kernel.
+					This properties define the models available in MOLVIEW.
+					This enumeration is an extension of the property in the \Ref{GeometricObject}
+					class.
+			*/
 			enum Property
 			{
+				/// unkown property
 				PROPERTY__UNKNOWN = -1,
-
+				/*
 				// Object Properties
 				PROPERTY__OBJECT_STATIC = VIEW::GeometricObject::PROPERTY__OBJECT_STATIC,     // Default
 				PROPERTY__OBJECT_DYNAMIC,
@@ -93,18 +103,30 @@ namespace BALL
 				PROPERTY__DRAWING_PRECISION_HIGH,
 				PROPERTY__DRAWING_PRECISION_ULTRA,
 				PROPERTY__DRAWING_PRECISION_USER_DEFINED,
+				*/
+				
+				/// defines the number of the first model available (the next free number).
+				PROPERTY__FIRST_MODEL            = GeometricObject::NUMBER_OF_PROPERTIES,
 
-				PROPERTY__FIRST_MODEL            = VIEW::GeometricObject::NUMBER_OF_PROPERTIES,
+				/// defines the property for the model: Van der Waals
 				PROPERTY__MODEL_VDW              = PROPERTY__FIRST_MODEL,
+
+				/// defines the property for the model: Dots
 				PROPERTY__MODEL_DOTS,
-				PROPERTY__MODEL_STARS,
+
+				/// defines the property for the model: Ball and Stick
 				PROPERTY__MODEL_BALL_AND_STICK,
+
+				/// defines the property for the model: Lines
 				PROPERTY__MODEL_LINES,
+
+				/// defines the number of the last model available.
 				PROPERTY__LAST_MODEL             = PROPERTY__MODEL_LINES,
 
+				/// defines the start of the next free properties.
 				NUMBER_OF_PROPERTIES
 			};
-		};
+			//		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/COMMON/common.iC>

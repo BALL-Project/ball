@@ -1,4 +1,4 @@
-// $Id: glVanDerWaalsModel.h,v 1.2 2000/12/12 16:16:57 oliver Exp $
+// $Id: glVanDerWaalsModel.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
@@ -22,30 +22,89 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-		/**
+		/** AddGLVanDerWaalsModel class.
+				{\bf Framework:} BALL/MOLVIEW/GUI/FUNCTOR\\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h}\\ \\
+				The class AddGLVanDerWaalsModel is derived from the class 
+				\Ref{AddVanDerWaalsModel} and extents this class by overriding the creation
+				methods used for creating the primitives. These new primitives contain
+				OpenGL implementation to generate the graphical visualization of geometric
+				shapes they present.
+				This class has the same functionality as its base class \Ref{AddVanDerWaalsModel}.
+				@memo    AddGLVanDerWaalsModel class (BALL MOLVIEW gui functor framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.3 $
+				@date    $Date: 2001/05/13 14:55:24 $
 		*/
-		class AddGLVanDerWaalsModel
-			: public AddVanDerWaalsModel
+		class AddGLVanDerWaalsModel: public AddVanDerWaalsModel
 		{
 			public:
 
-			/**	@name	Constructors and Destructors
+			/**	@name	Constructors
+			*/	
+			//@{
+
+			/** Default Constructor.
+					Construct new addGLVanDerWaalsModel.
+					@return      AddGLVanDerWaalsModel new constructed addGLVanDerWaalsModel
+					@see         AddVanDerWaalsModel
+			*/
+			AddGLVanDerWaalsModel()
+				throw();
+
+			/** Copy constructor.
+					Construct new addGLVanDerWaalsModel by copying the addGLVanDerWaalsModel
+					{\em add_GL_van_der_waals_model}. Initializes the state of {\em this} 
+					addGLVanDerWaalsModel to the state of {\em add_GL_van_der_waals_model}.
+					@param       add_GL_van_der_waals_model the addGLVanDerWaalsModel to be copied
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_GL_van_der_waals_model}
+					@return      AddGLVanDerWaalsModel new constructed addGLVanDerWaalsModel copied from {\em add_GL_van_der_waals_model}
+					@see         AddVanDerWaalsModel
+			*/
+			AddGLVanDerWaalsModel
+				(const AddGLVanDerWaalsModel& add_Gl_van_der_waals_model, bool deep = true)
+				throw();
+
+			//@}
+
+			/** @name Destructors 
 			*/
 			//@{
 
-			AddGLVanDerWaalsModel();
-
-			AddGLVanDerWaalsModel
-				(const AddGLVanDerWaalsModel& add_Gl_van_der_waals_model, bool deep = true);
-
+			/** Destructor.
+					Default destruction of {\em *this} addGLVanDerWaalsModel.
+					Calls \Ref{AddVanDerWaalsModel::destroy}.
+					@see  AddVanDerWaalsModel
+			*/
 			virtual ~AddGLVanDerWaalsModel()
 				throw();
 			//@}
 
 
-			private:
+			protected:
 
+			/** @name Creation method
+					This method creates a primitives with OpenGL implementation used
+					for generating the graphical representation of the shapes they
+					represent.
+					This method is the overridden method of the base class 
+					\Ref{AddVanDerWaalsModel}.
+					@see  AddVanDerWaalsModel
+			*/
+			//@{
+			/** Create a sphere.
+					Create a \Ref{GLSphere} object and returns it as \Ref{Sphere}.
+					This overridden method of the class \Ref{AddVanDerWaalsModel} creates
+					a primitive with openGL implementation.
+					The method \Ref{operator()} uses this method to create a sphere
+					for each \Ref{Atom} object.
+					@see  GLSphere
+					@see  Sphere
+					@see  AddVanDerWaalsModel
+					@see  Atom
+			*/
 			virtual Sphere* createSphere_();
+			//@}
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS

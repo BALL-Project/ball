@@ -1,4 +1,4 @@
-// $Id: molecularProperties.h,v 1.4 2000/12/22 19:12:14 amoll Exp $
+// $Id: molecularProperties.h,v 1.5 2001/05/13 14:55:25 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -35,9 +35,8 @@
 #endif
 
 
-using namespace BALL;
+//using namespace BALL;
 using namespace BALL::VIEW;
-using namespace BALL::MOLVIEW;
 
 
 namespace BALL
@@ -46,60 +45,81 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-		/**
-		 */
-		class MolecularProperties
-			: public QWidget,
-			  public ModularWidget
+		/**	The MolecularProperties class.
+				{\bf Framework:} BALL/MOLVIEW/GUI/WIDGETS\\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h}\\ \\
+				The class MolecularProperties is a widget that converts certain \Ref{Message}
+				objects to other \Ref{Message} objects.
+				This class is necessary to convert new \Ref{Composite} objects opened with either
+				\Ref{openPDBFile} or \Ref{openHINFile} to \Ref{Composite} objects
+				that have certain molecular properties. Further it converts the geometric selection
+				sent by \Ref{Scene} to a molecular selection whose objects can be given a new
+				graphical representation by the \Ref{DisplayProperties} dialog.
+				See \Ref{onNotify} for information concerning the conversion mechanism.
+				@memo    MolecularProperties class (BALL MOLVIEW gui widgets framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 14:55:25 $
+		*/
+		class MolecularProperties: public QWidget, public ModularWidget
 		{
 		public:
 			
-			/**	@name	Enums
-			 */
+			/**	@name	Constructors
+			*/	
 			//@{
+
+			/** Default Constructor.
+					Construct new molecularProperties.
+					Calls \Ref{registerWidget}.
+					@param      parent the parent widget of {\em *this} molecularProperties (See documentation of QT-library for information concerning widgets)
+					@param      name the name of {\em *this} molecularProperties (See documentation of QT-library for information concerning widgets)
+					@return     MolecularProperties new constructed molecularProperties
+					@see        QWidget
+					@see        ModularWidget
+			*/
+			MolecularProperties(QWidget* parent = 0, const char* name = 0)
+				throw();
+			
 			//@}
-			
-			/**	@name	Type Definitions
-			 */
-			
-			/**	@name	Constructors and Destructors
-			 */
+
+			/** @name Destructors 
+			*/
 			//@{
-			
-			MolecularProperties(QWidget* parent = 0, const char* name = 0);
-			
+
+			/** Destructor.
+					Default destruction of {\em *this} molecularProperties.
+			*/
 			virtual ~MolecularProperties()
 				throw();
 			//@}
 			
-			/**	@name Exceptions
+			/**	@name	Accessors: inspectors and mutators 
 			 */
 			//@{
-			//@}
-			
-			/**	@name	Accessors
-			 */
-			//@{
-			void onNotify(Message *message);
+			/** Message handling method.
+					Handles messages sent by other registered \Ref{ConnectionObject} objects.
+					Converts \Ref{NewCompositeMessage} to \Ref{NewMolecularMessage} if the
+					retrieved \Ref{Composite} object is kind of \Ref{AtomContainer} and
+					applies molecular properties to it (like \Ref{normalize_names} and
+					\Ref{build_bonds}).\\
+					Converts \Ref{GeometricObjectSelectionMessage} to \Ref{NewMolecularMessage}
+					if every \Ref{Composite} object in the selection has an ancestor that is
+					an \Ref{AtomContainer}. These found ancestors are put into a new selection
+					that is sent with the \Ref{NewMolecularMessage}.
+					@param message the pointer to the message that should be processed
+					@see   Message
+					@see   NewCompositeMessage
+					@see   NewMolecularMessage
+					@see   GeometricObjectSelectionMessage
+					@see   AtomContainer
+					@see   ConnectionObject
+		  */
+			void onNotify(Message *message)
+				throw();
 			//@}
 
 			
-			/**	ModularWidget methods.
-			*/
-			//@{
-			/**
-			*/
-			virtual void initializeWidget(MainControl& main_control);
-		
-			/**
-			*/
-			virtual void finalizeWidget(MainControl& main_control);
-		
-			/**
-			*/
-			virtual void checkMenu(MainControl& main_control);
-			//@}
-
 		private:
 			
 			FragmentDB fragment_db_;  			
