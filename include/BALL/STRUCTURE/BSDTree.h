@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.9 2001/03/06 00:43:42 amoll Exp $
+// $Id: BSDTree.h,v 1.10 2001/06/18 16:58:25 strobel Exp $
 
 #define DEBUG_BSDTREE
 
@@ -8,13 +8,18 @@
 #ifndef BALL_MATHS_BOX3_H
 #	include <BALL/MATHS/box3.h>
 #endif
+
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
 #endif
 
+#ifndef BALL_DATATYPE_HASHSET_H
+#	include <BALL/DATATYPE/hashSet.h>
+#endif
+
 #include <vector>
-#include <list>
-#include <string>
+//#include <list>
+//#include <string>
 
 namespace BALL 
 {
@@ -91,7 +96,7 @@ namespace BALL
 				@param	l assigned to the left child
 				@param	r assigned to the right child
 		*/
-		TBSDTree(const vector<TVector3<T> >& p, const list<Index>& prt, 
+		TBSDTree(const vector<TVector3<T> >& p, const HashSet<Index>& prt,
 						 const Direction& d,
 						 const TBox3<T>& bb, TBSDTree<T>* l, TBSDTree<T>* r)
 			: point_(p), part_(prt), division_(d), bounding_box_(bb),
@@ -108,7 +113,7 @@ namespace BALL
 		{
 			for (Position i = 0; i < p.size(); i++)
 			{
-				part_.push_back(i);
+				part_.insert(i);
 			}
 			if (part_.size() > 0)
 			{
@@ -125,7 +130,7 @@ namespace BALL
 				@param	p assigned to the points
 				@param	prt assigned to the indices of this part of the tree
 		*/
-		TBSDTree(const vector< TVector3<T> >& p, const list<Index>& prt)
+		TBSDTree(const vector< TVector3<T> >& p, const HashSet<Index>& prt)
 			:	point_(p), part_(prt), bounding_box_(), left_(NULL), right_(NULL)
 		{
 			if (part_.size() > 0)
@@ -184,7 +189,8 @@ namespace BALL
 			x_max = point_[*part_.begin()].x;
 			y_max = point_[*part_.begin()].y;
 			z_max = point_[*part_.begin()].z;
-			for (list<Index>::iterator i = part_.begin(); i != part_.end(); i++)
+			HashSet<Index>::Iterator i;
+			for (i = part_.begin(); i != part_.end(); i++)
 			{
 				x_min = Maths::min(point_[*i].x,x_min);
 				y_min = Maths::min(point_[*i].y,y_min);
@@ -237,18 +243,18 @@ namespace BALL
 						case TBSDTree<T>::DIRECTION_Y :	d = 1; break;
 						case TBSDTree<T>::DIRECTION_Z :	d = 2; break;
 					}
-					list<Index> left_part;
-					list<Index> right_part;
-					list<Index>::iterator i;
+					HashSet<Index> left_part;
+					HashSet<Index> right_part;
+					HashSet<Index>::Iterator i;
 					for (i = part_.begin(); i != part_.end(); i++)
 					{
 						if (Maths::isLess(point_[*i][d],middle))
 						{
-							left_part.push_back(*i);
+							left_part.insert(*i);
 						}
 						else
 						{
-							right_part.push_back(*i);
+							right_part.insert(*i);
 						}
 					}
 					left_ = new TBSDTree<T>(point_,left_part);
@@ -264,30 +270,70 @@ namespace BALL
 			}
 		}
 
-		list<Index> get(const TVector3<T>& p, const T& length)
+
+		void get(const TVector3<T>& p, const T& length, HashSet<Index>& indices)
 		{
-			TBox3<T> test_box(TVector3<T>(p.x-length,p.y-length,p.z-length),
-												TVector3<T>(p.x+length,p.y+length,p.z+length));
-			if (bounding_box_.isIntersecting(test_box) == false)
+			bool is_intersecting = true;
+    	for (Position i = 0; i < 3; i++)
+  	  {
+	      if ((p[i]+length < bounding_box_.a[i]) ||
+	      		(p[i]-length > bounding_box_.b[i])		)
+      	{
+    	    is_intersecting = false;
+  	    }
+	    }
+			if (is_intersecting)
 			{
-				list<Index> empty;
-				empty.clear();
-				return empty;
+				if (left_ == NULL)
+				{
+					HashSet<Index>::Iterator i;
+					for (i = part_.begin(); i != part_.end(); i++)
+					{
+						indices.insert(*i);
+					}
+				}
+				else
+				{
+					left_->get(p,length,indices);
+					right_->get(p,length,indices);
+				}
 			}
-			if (left_ == NULL)
+		}
+
+
+		void get(const TVector3<T>& p, const T& length, std::list<Index>& indices)
+		{
+			bool is_intersecting = true;
+    	for (Position i = 0; i < 3; i++)
+  	  {
+	      if ((p[i]+length < bounding_box_.a[i]) ||
+	      		(p[i]-length > bounding_box_.b[i])		)
+      	{
+    	    is_intersecting = false;
+  	    }
+	    }
+			if (is_intersecting)
 			{
-				return part_;
+				if (left_ == NULL)
+				{
+					HashSet<Index>::Iterator i;
+					for (i = part.begin(); i != part.end(); i++)
+					{
+						indices.push_back(*i);
+					}
+				}
+				else
+				{
+					left_->get(p,length,indices);
+					right_->get(p,length,indices);
+				}
 			}
-			list<Index> temp1 = left_->get(p,length);
-			list<Index> temp2 = right_->get(p,length);
-			temp1.merge(temp2);
-			return temp1;
 		}
 
 
 		void remove(Index i)
 		{
-			part_.remove(i);
+			part_.erase(i);
 			if (left_ != NULL)
 			{
 				if (left_->bounding_box_.has(point_[i]))
@@ -309,7 +355,7 @@ namespace BALL
 		protected:
 
 		vector< TVector3<T> > point_;
-		list<Index> part_;
+		HashSet<Index> part_;
 		Direction division_;
 		TBox3<T> bounding_box_;
 		TBSDTree<T>* left_;
