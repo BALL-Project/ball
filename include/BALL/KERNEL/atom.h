@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: atom.h,v 1.2 1999/08/31 22:14:06 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -88,8 +88,8 @@ namespace BALL {
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.1 $
-			@date    $Date: 1999/08/26 07:53:19 $
+			@version $Revision: 1.2 $
+			@date    $Date: 1999/08/31 22:14:06 $
 	*/
 	class Atom
 		: public Composite,
@@ -608,7 +608,7 @@ namespace BALL {
 											 mutable reference to the bond that is indexed in {\em *this} atom's bond table,
 											 0 if {\em *this} atom does not have a bond with index {\em index}
 			*/
-			Bond *getBond(Index index);
+			Bond* getBond(Position index);
 
 			/** Constant inspection of an atom's indexed bond.
 					Access a constant reference to the bond with index {\em index} in {\em *this} atom's bond table.
@@ -625,7 +625,7 @@ namespace BALL {
 											 constant reference to the bond that is indexed in {\em *this} atom's bond table,
 											 0 if {\em *this} atom does not have a bond with index {\em index}
 			*/
-			const Bond *getBond(Index index) const;
+			const Bond* getBond(Position index) const;
 
 			/** Mutable inspection of an atom's bond with another atom.
 					Access a mutable reference to the bond that connects the atom {\em atom} with {\em *this} atom.
@@ -1159,7 +1159,7 @@ namespace BALL {
 			Vector3 	velocity_;
 			Vector3 	force_;
 
-			char number_of_bonds_;
+			unsigned char number_of_bonds_;
 			Bond* bond_[MAX_NUMBER_OF_BONDS];
 	};
 

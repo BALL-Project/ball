@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: angle.h,v 1.2 1999/08/31 22:14:06 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -71,8 +71,8 @@ namespace BALL {
 		*/
 		TAngle(const T& new_value, bool radian = true)
 			:	value((radian == true)
-				 ? new_value 
-				 : BALL_ANGLE_DEGREE_TO_RADIAN(new_value))
+				 ? (T)new_value 
+				 : (T)BALL_ANGLE_DEGREE_TO_RADIAN((double)new_value))
 		{
 		}
 

@@ -1,10 +1,14 @@
-// $Id: exception.h,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: exception.h,v 1.2 1999/08/31 22:14:02 oliver Exp $
 
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
 
 #ifndef BALL_CONFIG_CONFIG_H
 #	include <BALL/CONFIG/config.h>
+#endif
+
+#ifndef BALL_COMMON_GLOBAL_H
+#	include <BALL/COMMON/global.h>
 #endif
 
 #include <string>
@@ -97,13 +101,13 @@ namespace BALL
 		{
 			public:
 
-			IndexUnderflow(const char* file, int line, int index = 0, int size = 0);
+			IndexUnderflow(const char* file, int line, Index index = 0, Size size = 0);
 
 
 			protected:
 
-			int size_;
-			int index_;
+			Size size_;
+			Index index_;
 		};
 
 		/**	Size underflow.
@@ -117,10 +121,10 @@ namespace BALL
 		{
 			public:
 
-			SizeUnderflow(const char* file, int line, int size = 0);
+			SizeUnderflow(const char* file, int line, Size size = 0);
 
 			protected:
-			int size_;
+			Size size_;
 		};
 
 		/**	Index overflow.
@@ -135,11 +139,11 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			IndexOverflow(const char* file, int line, int index = 0, int size = 0);
+			IndexOverflow(const char* file, int line, Index index = 0, Size size = 0);
 
 			protected:
-			int size_;
-			int index_;
+			Size size_;
+			Index index_;
 		};
 
 		/**	Invalid range.

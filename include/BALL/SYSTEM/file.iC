@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: file.iC,v 1.2 1999/08/31 22:14:07 oliver Exp $
 
 BALL_INLINE 
 void File::enableProtocol(File::Protocol protocol)
@@ -96,7 +96,7 @@ bool File::truncate(String path, Size size)
 {
   FileSystem::canonizePath(path);
   
-  return (bool)(::truncate(path.c_str(), size) == 0);
+  return (bool)(::truncate(path.c_str(), (long)size) == 0);
 }
 
 BALL_INLINE 

@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: cosineTorsion.h,v 1.2 1999/08/31 22:14:07 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
@@ -60,7 +60,7 @@ namespace BALL {
 			}
 			
 			Values(Size number)
-				: n(number),
+				: n((unsigned char)number),
 					values(new SingleValues[number])
 			{
 			}

@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: bitVector.iC,v 1.2 1999/08/31 22:14:05 oliver Exp $
 
 BALL_INLINE 
 void BitVector::clear(void)
@@ -37,7 +37,7 @@ BALL::Size BitVector::getSize(void) const
 BALL_INLINE 
 BALL::Index BitVector::getMaxIndex(void) const
 {
-  return size_ - 1;
+  return (Index)size_ - 1;
 }
   
 BALL_INLINE 

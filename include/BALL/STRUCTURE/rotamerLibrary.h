@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.4 1999/08/27 15:47:58 len Exp $
+// $Id: rotamerLibrary.h,v 1.5 1999/08/31 22:14:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -97,7 +97,7 @@ namespace BALL
 
 		/**	Detailed constructor
 		*/
-		ResidueRotamerSet(const Residue& residue);
+		ResidueRotamerSet(const Residue& residue, Size number_of_torsions);
 
 		/**	Destructor
 		*/
@@ -134,11 +134,25 @@ namespace BALL
 		*/
 		const String & getName() const; 
 
-		Residue &getResidue() ; 
+		/**
+		*/
+		Residue& getResidue() ; 
 
 		/** find out if the class instance is valid
 		*/
 		bool isValid() const; 
+
+		/**
+		*/
+		Size getNumberOfRotamers() const;
+
+		/**	Return the number of valid torsions
+		*/
+		Size getNumberOfTorsions() const;
+
+		/**	Set the number of valid torsions
+		*/
+		void setNumberOfTorsions(Size number_of_torsions);
 
 		//}
 
@@ -149,6 +163,10 @@ namespace BALL
 		/**	Assign a specific rotamer.
 		*/
 		bool setRotamer(Residue& residue, const Rotamer& rotamer) ;
+
+		/**	Calculate the torsion angle of a residue
+		*/
+		Rotamer getRotamer(const Residue& residue) const;
 
 		/**  assign a new name
 		*/
@@ -167,6 +185,14 @@ namespace BALL
 		/*_ @name Protected attributes 
 		*/
 		//@{
+
+		/*_ determines all movable atoms 
+		*/
+		void addMoveable_(vector<String>& moveable, Atom& a); 
+
+		/*_ set the torsion angles
+		*/
+		void setTorsionAngle_(const vector<String>& moveable, Angle angle); 
 
 
 		/*_ indicates whether the instance is valid 
@@ -205,13 +231,9 @@ namespace BALL
 		vector<String>				moveable_atoms_chi3_;
 		vector<String>				moveable_atoms_chi4_;
 
-		/*_ determines all movable atoms 
+		/*_	number of valid torsions of the side chain
 		*/
-		void addMoveable_(vector<String>& moveable, Atom& a); 
-
-		/*_ set the torsion angles
-		*/
-		void setTorsionAngle_(const vector<String>& moveable, Angle angle); 
+		Size number_of_torsions_;
 
 		//@}
 	};
@@ -234,7 +256,7 @@ namespace BALL
 
 		/**	Detailed constructor
 		*/
-		RotamerLibrary(const String& filename);
+		RotamerLibrary(const String& filename, const FragmentDB& fragment_db);
 
 		/**	Copy constructor
 		*/
@@ -247,8 +269,6 @@ namespace BALL
 		//@}
 
 		bool readSQWRLLibraryFile(const String& filename, const FragmentDB& fragment_db);
-
-		ResidueRotamerSet* getRotamerSet(const Residue& residue);
 
 		ResidueRotamerSet* getRotamerSet(const String& name);
 
@@ -273,7 +293,7 @@ namespace BALL
 	};
 
 #ifndef BALL_NO_INLINE_FUNCTIONS
-#	include <BALL/STRUCTURE/rotamerLibrary.h>
+#	include <BALL/STRUCTURE/rotamerLibrary.iC>
 #endif
 
 } // namespace BALL
