@@ -1,4 +1,4 @@
-// $Id: AtomicContactEnergy_test.C,v 1.3 2000/01/16 21:00:35 oliver Exp $
+// $Id: AtomicContactEnergy_test.C,v 1.4 2000/01/17 15:21:53 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(AtomicContactEnergy, "$Id: AtomicContactEnergy_test.C,v 1.3 2000/01/16 21:00:35 oliver Exp $")
+START_TEST(AtomicContactEnergy, "$Id: AtomicContactEnergy_test.C,v 1.4 2000/01/17 15:21:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ float ACE_B = calculateACE(B);
 TEST_REAL_EQUAL(ACE_B, -562.372)
 
 // join A and B and calculate the total energy
-STATUS("calculating the ACE of A and B")
+STATUS("calculating the ACE of AB")
 A.splice(B);
 float ACE_AB = calculateACE(A);
 TEST_REAL_EQUAL(ACE_AB, -2806.097)
