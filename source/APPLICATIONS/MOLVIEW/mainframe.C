@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.106 2003/12/19 21:14:30 amoll Exp $
+// $Id: mainframe.C,v 1.107 2003/12/20 15:28:43 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -35,6 +35,8 @@
 //#include <BALL/MATHS/parsedFunction.h>
 //#include <BALL/VIEW/DIALOGS/parsedFunctionDialog.h>
 
+#include <BALL/KERNEL/selector.h>
+
 #include "aboutDialog.h"
 
 #ifdef BALL_PYTHON_SUPPORT
@@ -63,6 +65,7 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 		label_dialog_(0),
 		molecular_properties_(0),
 		file_dialog_(0),
+		selector_dialog_(this),
 		server_(0),
 		logview_(0),
 		simulation_thread_(0),
@@ -195,6 +198,13 @@ Log.error() << "new Mainframe " << this << std::endl;
 	hint = "Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.";
 	insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  SLOT(computeIsoContourSurface()), 
 									CTRL+Key_U,MENU_CONTOUR_SURFACE, hint);
+
+	insertPopupMenuSeparator(MainControl::TOOLS);
+	hint = "Select atoms from a regular expression.";
+	insertMenuEntry(MainControl::TOOLS, "Select atoms", this,  SLOT(showSelectorDialog()), 
+									ALT+Key_S, MENU_SELECT_ATOMS, hint);
+
+
 	// Help-Menu -------------------------------------------------------------------
 	insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), CTRL+Key_9, MENU__HELP_ABOUT);
 
@@ -678,6 +688,27 @@ void Mainframe::amberMDSimulation()
 
 void Mainframe::about()
 {
+	Selector s;
+	s.setExpression(Expression("element(O)"));
+	CompositeManager::CompositeIterator it = getCompositeManager().begin();
+	selection_.clear();
+	for(; it != getCompositeManager().end(); it++)
+	{
+		(*it)->apply(s);
+		List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
+		for (; ait != s.getSelectedAtoms().end(); ait++)
+		{
+			selection_.insert(*ait);
+		}
+		NewSelectionMessage* nm = new NewSelectionMessage;
+		sendMessage(*nm);
+ 		CompositeMessage* cm = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+		sendMessage(*cm);
+	}
+
+	setStatusbarText("Selected " + String(s.getNumberOfSelectedAtoms()) + " Atoms.");
+	return;
+	
 // 	ParsedFunctionDialog* pfd = new ParsedFunctionDialog();
 // 	pfd->exec();
 //	return;
@@ -692,6 +723,7 @@ void Mainframe::about()
 	
 // 	QString s = pfd->y_axis->text();
 // 	ParsedFunction<float> pf(s.latin1());
+/*
 	RegularData1D *d = new RegularData1D(0.0, 4.*M_PI, 0.01);
 
 	for (int i=0; i<d->size(); i++)
@@ -729,7 +761,8 @@ cout << " vH2: " << rwd->height() << " cH: " << rwd->getWidget().contentsHeight(
  cout << " vW2: " << rwd->width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
 return;
 	AboutDialog about;
-	about.exec();
+	about.exec(); 
+	*/
 }
 
 void Mainframe::fetchPreferences(INIFile& inifile)
@@ -792,6 +825,12 @@ void Mainframe::buildPeptide()
 	notify_(new_message);
 }
 
+void Mainframe::showSelectorDialog()
+{
+	selector_dialog_.show();
+}
+
+		
 void Mainframe::stopSimulation() 
 {
 #ifdef BALL_QT_HAS_THREADS

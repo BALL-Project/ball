@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.57 2003/11/22 17:57:44 amoll Exp $
+// $Id: mainframe.h,v 1.58 2003/12/20 15:28:43 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -65,6 +65,10 @@
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
 # include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
+#endif
+
+#ifndef BALL_VIEW_DIALOGS_SELECTORDIALOG_H
+# include <BALL/VIEW/DIALOGS/selectorDialog.h>
 #endif
 
 #include <qwidget.h>
@@ -150,6 +154,7 @@ namespace BALL
 
 			MENU_FULLSCREEN,
 			MENU_CONTOUR_SURFACE,
+			MENU_SELECT_ATOMS,
 
 			MENU__HELP_ABOUT
 		};
@@ -195,6 +200,9 @@ namespace BALL
 		void stopSimulation();
 
 		void toggleFullScreen();
+
+		void showSelectorDialog();
+
 		// Help menu
 		void about();
 
@@ -220,6 +228,7 @@ namespace BALL
 		MolecularProperties*  		molecular_properties_;
 		MolecularFileDialog*  		file_dialog_;
 		FDPBDialog*  							FDPB_dialog_;
+		SelectorDialog  					selector_dialog_;
 		Server*   								server_;
 
 		LogView*									logview_;
