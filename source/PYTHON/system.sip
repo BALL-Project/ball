@@ -1,5 +1,5 @@
  class System
-  : Composite,
+  : BaseFragment,
   	PropertyManager
  {
 %HeaderCode

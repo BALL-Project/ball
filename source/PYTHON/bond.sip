@@ -10,7 +10,7 @@ using namespace BALL;
   Bond();
 	 Bond(const Bond&, bool = true);
 //	Bond(const String&, Atom&, Atom&, int = ORDER__UNKNOWN , int = TYPE__UNKNOWN );
-  static Bond* createBond(Bond&, Atom&, Atom&);
+	  static Bond* createBond(Bond&, Atom&, Atom&);
 //	virtual ~Bond();
   virtual void clear();
   virtual void destroy();

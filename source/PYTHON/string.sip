@@ -41,4 +41,8 @@ using namespace BALL;
 
   return 0;
 %End
+%PythonCode
+		def __cmp__(self, other):
+			return cmp(str(self), str(other))
+%End
 };

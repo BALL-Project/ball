@@ -28,6 +28,7 @@ using namespace BALL;
    const Fragment *getFragment() const;
    void setName(const String&);
    String& getName();
+   String& getFullName();
    const String& getName() const;
    void setPosition(const Vector3&);
    Vector3& getPosition();

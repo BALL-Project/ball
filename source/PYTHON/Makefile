@@ -1,13 +1,13 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.7 2000/06/22 10:23:02 oliver Exp $
+# $Id: Makefile,v 1.8 2000/06/27 07:27:00 oliver Exp $
 #
 
 all: libBALLc.so
 
 
-SIPSOURCES=\
+SIP_SOURCES=\
 	BALLcmodule.C\
 	sipBALLAmberFF.C\
 	sipBALLAngle.C\
@@ -46,7 +46,12 @@ SIPSOURCES=\
 	sipBALLString.C\
 	sipBALLSystem.C\
 	sipBALLVector3.C\
-	sipBALLXYZFile.C
+	sipBALLXYZFile.C\
+	sipBALLPyAtomList.C
+
+PYBALL_SOURCES=\
+	extractors.C\
+	pyAtomList.C
 
 include ../${BALL_BINFMT}/config.mak
 
@@ -59,22 +64,14 @@ sip:
 	for i in `ls ./sip*cpp`; do mv $$i ./`basename $$i .cpp`.C ; done
 	mv ./BALLcmodule.cpp ./BALLcmodule.C
 			 	
-sipBALLAtom.C:	atom.sip
-
-SIPOBJECTS=$(SIPSOURCES:.C=.o)
+SIP_OBJECTS			=	$(SIP_SOURCES:.C=.o)
+PYBALL_OBJECTS 	= $(PYBALL_SOURCES:.C=.o)
 
 .SUFFIXES: .sip
-
-.sip.C:
-	sip
 
 clean:	
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES) $(SIBOBJECTS) libBALLc.so
 
-libBALLc.so:	$(SIPOBJECTS)
-	$(DYNAR) $(DYNAROPTS) libBALLc.so $(SIPOBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) -lBALL
+libBALLc.so:	$(SIP_OBJECTS) $(PYBALL_OBJECTS)
+	$(DYNAR) $(DYNAROPTS) libBALLc.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) -lBALL
 
-test:
-	@echo "CXXFLAGS = "$(CXXFLAGS)
-	@echo "SIPFLAGS = "$(SIPFLAGS)
-	@echo "PY_INCLUDES = "$(PYTHON_INCLUDES)

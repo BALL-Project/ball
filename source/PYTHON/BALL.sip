@@ -17,6 +17,7 @@
 %Include molecule.sip
 %Include options.sip
 %Include protein.sip
+%Include extractors.sip
 %Include chain.sip
 %Include secondaryStructure.sip
 %Include residue.sip
@@ -35,3 +36,4 @@
 %Include energyMinimizer.sip
 %Include conjugateGradient.sip
 %Include periodicBoundary.sip
+%Include pyAtomList.sip
