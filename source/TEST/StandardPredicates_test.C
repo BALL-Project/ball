@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.10 2000/05/26 09:22:54 oliver Exp $
+// $Id: StandardPredicates_test.C,v 1.11 2000/05/26 09:26:07 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.10 2000/05/26 09:22:54 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.11 2000/05/26 09:26:07 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -370,6 +370,9 @@ CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	STATUS("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
 	connectedTo.setArgument("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))");
 	TEST_EQUAL(connectedTo(*it), true)
+	STATUS("(-H(-N(-H)))")
+	connectedTo.setArgument("(-H(-N(-H)))");
+	TEST_EQUAL(connectedTo(*it), false);
 
 	++it;
 	STATUS("(-N(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C))))))")
@@ -386,6 +389,9 @@ CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	STATUS("(-N(-H)(-O)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))");
 	connectedTo.setArgument("(-N(-H)(-O)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))");
 	TEST_EQUAL(connectedTo(*it), false)
+	STATUS("(C(~O)(~*))")
+	connectedTo.setArgument("(C(~O)(~*))");
+	TEST_EQUAL(connectedTo(*it), true)
 RESULT
 
 // tests for class AromaticBondsPredicate::
