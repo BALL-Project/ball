@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.16 2000/12/19 12:51:05 amoll Exp $
+// $Id: XDRPersistenceManager.C,v 1.17 2000/12/23 15:39:44 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -589,8 +589,15 @@ namespace BALL
 	void XDRPersistenceManager::put(const PointerSizeInt ptr)
 		throw()
 	{
-		BALL_XDR_UINT64_TYPE* p = (BALL_XDR_UINT64_TYPE*)&ptr;
-		xdr_u_hyper(&xdr_out_, p);
+#   ifdef BALL_HAS_XDR_U_HYPER
+			BALL_XDR_UINT64_TYPE* p = (BALL_XDR_UINT64_TYPE*)&ptr;
+			xdr_u_hyper(&xdr_out_, p);
+#   else
+			Size* p = (Size*)&ptr;
+			xdr_u_int(&xdr_out_, p);
+			p++;
+			xdr_u_int(&xdr_out_, p);
+#   endif
 
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.info() << "XDRPersistenceManager: put(PointerSizeInt = " << ptr << ")" << endl;
@@ -696,8 +703,15 @@ namespace BALL
 	void XDRPersistenceManager::get(PointerSizeInt& ptr)
 		throw()
 	{
+#   ifdef BALL_HAS_XDR_U_HYPER
 		BALL_XDR_UINT64_TYPE* p = (BALL_XDR_UINT64_TYPE*)&ptr;
 		xdr_u_hyper(&xdr_in_, p);
+#   else
+		Size* p = (Size*)&ptr;
+		xdr_u_int(&xdr_in_, p);
+		p++;
+		xdr_u_int(&xdr_in_, p);
+#   endif
 
 #		ifdef BALL_DEBUG_PERSISTENCE
 		Log.info() << "XDRPersistenceManager: get ptr: " << hex << ptr << endl;
