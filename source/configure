@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.112 2000/07/17 21:24:23 oliver Exp $
+#  $Id: configure,v 1.113 2000/07/18 23:13:39 oliver Exp $
 
 
 ##################################################
@@ -6380,6 +6380,12 @@ echo "configure:6192: checking sip headers (sip.h)" >&5
 	fi
 fi
 
+if test "${PYTHON_SUPPORT}" = true ; then
+	PYTHON=PYTHON
+else
+	PYTHON=
+fi
+
 BALL_INCLUDES="-I$BALL_PATH/include"
 
 BINFMT="${BINFMT}-${CXX_NAME}"
@@ -6496,7 +6502,7 @@ fi
 
 
 
-																			
+													
 
 cat >> confdefs.h <<EOF
 #define BALL_PATH "${BALL_PATH}"
@@ -6522,7 +6528,7 @@ fi
 
 
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION STRUCTURE SYSTEM ${BALLVIEW}"
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
 
 
 if test "${MULTI_BUILD}" = "true" ; then
@@ -6693,7 +6699,6 @@ s%@DYNAR@%$DYNAR%g
 s%@DYNAROPTS@%$DYNAROPTS%g
 s%@ADDITIONAL_COMMENTS@%$ADDITIONAL_COMMENTS%g
 s%@USE_BALLVIEW@%$USE_BALLVIEW%g
-s%@BALLVIEW@%$BALLVIEW%g
 s%@BALLVIEW_PLATFORM@%$BALLVIEW_PLATFORM%g
 s%@BALLVIEW_INCLUDES@%$BALLVIEW_INCLUDES%g
 s%@LIBBALLVIEW@%$LIBBALLVIEW%g
