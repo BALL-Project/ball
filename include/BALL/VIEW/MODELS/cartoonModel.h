@@ -1,17 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.4 2003/09/01 10:27:42 amoll Exp $
+// $Id: cartoonModel.h,v 1.5 2003/09/03 12:34:51 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
 #define BALL_VIEW_MODELS_CARTOONMODEL_H
 
-#ifndef BALL_VIEW_MODELS_BACKBONE_MODEL_H
-#	include <BALL/VIEW/MODELS/backboneModel.h>
-#endif
-
-#ifndef BALL_VIEW_PRIMITIVES_MESH_H
-# include <BALL/VIEW/PRIMITIVES/mesh.h>
+#ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
+ #include <BALL/VIEW/MODELS/backboneModel.h>
 #endif
 
 namespace BALL
@@ -21,6 +17,8 @@ namespace BALL
 
 	namespace VIEW
 	{
+		class Mesh;
+
 		/** AddCartoonModel class.
 				The class AddCartoonModel is a model processor that creates a Cartoon model
 				through the <b>CA</b>-atoms of the processed Composite object.

@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.3 2003/08/29 10:36:42 amoll Exp $
+// $Id: vanDerWaalsModel.h,v 1.4 2003/09/03 12:34:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_VANDERWAALSMODEL_H
 #define BALL_VIEW_MODELS_VANDERWAALSMODEL_H
-
-#ifndef BALL_VIEW_PRIMITIVES_SPHERE_H
-#	include <BALL/VIEW/PRIMITIVES/sphere.h>
-#endif
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
 # include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
@@ -109,7 +105,6 @@ namespace BALL
 		};
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_MODELS_VANDERWAALSMODEL_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.iC,v 1.2 2003/09/03 10:16:31 amoll Exp $
+// $Id: atomBondModelBaseProcessor.iC,v 1.3 2003/09/03 12:34:51 amoll Exp $
 
 BALL_INLINE
 void AtomBondModelBaseProcessor::insertAtom_(const Atom* atom)
@@ -22,5 +22,12 @@ List<const Atom*>& AtomBondModelBaseProcessor::getAtomList_()
 	throw()
 {
 	return used_atoms_;
+}
+
+BALL_INLINE
+HashSet<const Atom*>& AtomBondModelBaseProcessor::getAtomSet_()
+	throw()
+{
+	return atom_set_;
 }
 

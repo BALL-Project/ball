@@ -1,26 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.4 2003/09/01 10:27:41 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.5 2003/09/03 12:34:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
 #define BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
 
-#ifndef BALL_VIEW_PRIMITIVES_SPHERE_H
-#	include <BALL/VIEW/PRIMITIVES/sphere.h>
-#endif
-
-#ifndef BALL_VIEW_PRIMITIVES_TUBE_H
-#	include <BALL/VIEW/PRIMITIVES/tube.h>
-#endif
-
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
 #	include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
-#endif
-
-#ifndef BALL_VIEW_PRIMITIVES_TWOCOLOREDTUBE_H
-#	include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #endif
 
 namespace BALL
