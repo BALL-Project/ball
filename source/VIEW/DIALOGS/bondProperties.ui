@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>299</width>
-            <height>255</height>
+            <height>258</height>
         </rect>
     </property>
     <property name="paletteBackgroundColor">
@@ -110,61 +110,6 @@
                 <green>238</green>
                 <blue>230</blue>
             </color>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>type_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>84</x>
-                <y>129</y>
-                <width>167</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="paletteBackgroundColor">
-            <color>
-                <red>238</red>
-                <green>238</green>
-                <blue>230</blue>
-            </color>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>name_edit</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>84</x>
-                <y>159</y>
-                <width>167</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string></string>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>length_edit</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>84</x>
-                <y>189</y>
-                <width>167</width>
-                <height>21</height>
-            </rect>
         </property>
     </widget>
     <widget class="QPushButton">
@@ -343,6 +288,75 @@
         </property>
         <property name="toolTip" stdset="0">
             <string>focus and select atom</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>type_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>129</y>
+                <width>167</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>name_edit</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>159</y>
+                <width>167</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+            </color>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>length_edit</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>189</y>
+                <width>167</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+            </color>
         </property>
     </widget>
 </widget>
