@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.57 2004/04/25 12:02:54 oliver Exp $
+// $Id: composite.h,v 1.58 2004/04/25 12:04:17 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -551,8 +551,13 @@ namespace BALL
 		/**	Remove selected subcomposites.
 				This method iterates over all children of the current composite
 				and removes all selected composites by <tt>delete</tt>ing them.
-				This is useful in combination with the \link Selector \endlink
+				If the respective Composite are not \link AutoDeletable \endlink,	
+				they are just \link remove\endlink d from the hierarchy, but not 
+				deleted.
+
+				This method is useful in combination with the \link Selector \endlink
 				class in order to remove unwanted partitions of kernel data structures.
+			
 				@return the number of composites deleted.
 		*/
 		Size removeSelected() throw();
