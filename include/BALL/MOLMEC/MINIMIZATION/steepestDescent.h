@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.9 2002/02/27 12:19:05 sturm Exp $
+// $Id: steepestDescent.h,v 1.10 2003/02/03 21:38:18 oliver Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -11,24 +11,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
-#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 #	include <BALL/DATATYPE/options.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETERS_H
-#	include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
-#	include <BALL/MOLMEC/PARAMETER/atomTypes.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_PERIODIC_BOUNDARY_H
-#	include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -36,9 +20,8 @@
 #endif
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
-#       include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
+# include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #endif
-
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
 #	include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -83,11 +66,12 @@ namespace BALL
 		};
 
 		//@}
+
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{
 		
-		BALL_CREATE_DEEP(SteepestDescentMinimizer)
+		BALL_CREATE(SteepestDescentMinimizer)
 
 		/**	Default constructor.
 		*/
@@ -107,27 +91,26 @@ namespace BALL
 
 		/**	Constructor.
 		*/
-		SteepestDescentMinimizer(ForceField& force_field, SnapShotManager *ssm,
-                                                     const Options& options);
+		SteepestDescentMinimizer(ForceField& force_field, SnapShotManager* ssm, const Options& options);
 
 		/**	Copy constructor
 		*/
-		SteepestDescentMinimizer(const SteepestDescentMinimizer& line_search_minimizer, bool deep = true);
+		SteepestDescentMinimizer(const SteepestDescentMinimizer& minimizer);
 
 		/**	Destructor.
 		*/
 		virtual ~SteepestDescentMinimizer();
-
 		//@}
+
 		/**	@name	Assignments 
 		*/
 		//@{
 
 		/**	Assignment operator
 		*/
-		SteepestDescentMinimizer&	operator = (const SteepestDescentMinimizer& SteepestDescentMinimizer);
-
+		const SteepestDescentMinimizer&	operator = (const SteepestDescentMinimizer& minimizer);
 		//@}
+
 		/**	@name	Setup methods 
 		*/
 		//@{
@@ -135,56 +118,11 @@ namespace BALL
 		/**	Specific setup
 		*/
 		virtual bool specificSetup();
-
 		//@}
-		/**	@name	Accessors 
-		*/
-		//@{
-
-		/**	Set the maximal number of steps in an iteration
-		*/
-		void	setMaxSteps(Size max_steps);
-
-		/**	Get the maximal number of steps in an iteration
-		*/
-		Size	getMaxSteps() const;
-
-		/**	Set the maximum RMS gradient (convergence criterion).
-				The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
-		*/
-		void	setMaxGradient(float max_gradient);
-
-		/**	Get the maximum RMS gradient (convergence criterion).
-				The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
-		*/
-		float	getMaxGradient() const;
 
 		/**	Minimize the energy of the system using a greedy steepest descent.
 		*/
 		virtual bool	minimize(Size steps = 0, bool restart = false);
-
-		//@}
-		/**	@name	Public Attributes
-		*/
-		//@{
-		
-		/**	Options Force field options
-		*/
-		Options	options;
-
-		//@}
-
-		protected:
-
-		/*_	@name	Protected Attributes 
-		*/
-		//_@{
-
-		/*_	The maximal number of steps in an iteration step
-		*/
-		Size	max_steps_; 
-
-		//_@}
 
 	};
 

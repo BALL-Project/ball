@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.10 2003/02/02 21:53:59 oliver Exp $
+// $Id: lineSearch.h,v 1.11 2003/02/03 21:38:17 oliver Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
@@ -92,11 +92,29 @@ namespace BALL
 		*/
 		void setMinimizer(const EnergyMinimizer& minimizer);
 
-		/**	Line search criterion
+		/**	Line search criterion.
+				This predicate implements the Armijo-Goldstein criterion:
+				\begin{itemize}
+					\item sufficient decrease of energy:
+							$E(i+1) \leq E(i) + \alpha \lambda <g(i), dir>$
+					\item sufficient gradient reduction: $|<g(i+1), dir>| \leq \beta <g(i), dir>$
+				\end{itemize}
+				
+				where $g(i)$ and $g(i+1)$ are the initial and the current gradient
+				$dir$ is the (normalized) search direction
+				$E(i+1)$ is the current and $E(i)$ the initial energy ($\lambda = 0$)
+				$\alpha$ and $\beta$ are two parameters (usually 0.9 and 0.0001).
+				The line search was successful, if it could determine a value for $\lambda$
+				fulfilling this criterion. The function is used in the \Ref{minimize} method.
 		*/
-		virtual bool criterion() const;
+		virtual bool isSufficient(double lambda, double current_energy, double current_dir_grad) 
+			const;
 
-		/**	Cubic interpolation routine
+		/**	Cubic interpolation routine.
+				Use a cubic interpolation to estimate the minimum of the function.
+				if the function is linear, either {\bf lambda_0} or {\bf lambda_1} is returned
+				(the one with the lower energy associated).
+				The value returned may otherwise lie outside of the interval defined by {\bf lambda_0} and {\bf lambda_1}.
 		*/
 		virtual double interpolate	
 			(double lambda_0, double lambda_1, 
@@ -109,6 +127,7 @@ namespace BALL
 		//@{
 
 		/**	Perform a line search.
+				Find the minimum position for all atoms along direction
 		*/
 		virtual bool minimize(double& lambda, double step = 1.0);
 
@@ -133,10 +152,7 @@ namespace BALL
 		EnergyMinimizer* minimizer_;
 
 		double initial_dir_grad_;
-		double current_dir_grad_;
 		double initial_energy_;
-		double current_energy_;
-		double lambda_;
 		double step_;
 	};
 

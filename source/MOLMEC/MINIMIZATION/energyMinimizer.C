@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.17 2003/02/02 21:54:00 oliver Exp $
+// $Id: energyMinimizer.C,v 1.18 2003/02/03 21:38:18 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
@@ -24,19 +24,18 @@ namespace BALL
 	const char* EnergyMinimizer::Option::NUMBER_OF_ITERATION
 		= "number_of_iteration";
   const char* EnergyMinimizer::Option::MAX_GRADIENT = "max_gradient";
-	const char* EnergyMinimizer::Option::MAXIMAL_SHIFT = "MAXIMAL_SHIFT";
+	const char* EnergyMinimizer::Option::MAXIMUM_DISPLACEMENT = "MAXIMUM_DISPLACEMENT";
   const char* EnergyMinimizer::Option::MAX_SAME_ENERGY = "max_same_energy";
 	const char* EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND = "energy_difference_bound"; 
 
 	Size EnergyMinimizer::Default::MAXIMAL_NUMBER_OF_ITERATIONS = 1000;
 	Size EnergyMinimizer::Default::ENERGY_OUTPUT_FREQUENCY = 50;
-	Size EnergyMinimizer::Default::SNAPSHOT_FREQUENCY 
-		= Limits<Size>::max();
+	Size EnergyMinimizer::Default::SNAPSHOT_FREQUENCY = Limits<Size>::max();
   Size EnergyMinimizer::Default::MAX_SAME_ENERGY = 20; 
 	Size EnergyMinimizer::Default::NUMBER_OF_ITERATION = 0;              // start number 
 	float EnergyMinimizer::Default::ENERGY_DIFFERENCE_BOUND = 1e-2;      // in kJ/mol
   float EnergyMinimizer::Default::MAX_GRADIENT = 0.01;                 // in kJ/(mol A) 
-	float EnergyMinimizer::Default::MAXIMAL_SHIFT = 0.4;                 // Angstrom
+	float EnergyMinimizer::Default::MAXIMUM_DISPLACEMENT = 0.8;          // Angstrom
 
 	// default constructor
 	EnergyMinimizer::EnergyMinimizer()
@@ -48,8 +47,7 @@ namespace BALL
 			old_energy_(0.0),
 			direction_(),
 			valid_(false),
-			// ?????
-			// snapshot_(0),
+			snapshot_(0),
 			force_field_(0),
 			number_of_iteration_(0),
 			maximal_number_of_iterations_(0),
@@ -59,7 +57,7 @@ namespace BALL
 			max_gradient_(0.0F),
 			max_same_energy_(0),
 			same_energy_counter_(0),
-			maximal_shift_(0.0F),
+			maximum_displacement_(0.0F),
 			force_update_counter_(0),
 			energy_update_counter_(0)
 	{
@@ -77,8 +75,7 @@ namespace BALL
 			old_energy_(energy_minimizer.old_energy_),
 			direction_(energy_minimizer.direction_),
 			valid_(energy_minimizer.valid_),
-			// ?????
-			// snapshot_(0),
+			snapshot_(0),
 			force_field_(energy_minimizer.force_field_),
 			number_of_iteration_(energy_minimizer.number_of_iteration_),
 			maximal_number_of_iterations_(energy_minimizer.maximal_number_of_iterations_),
@@ -88,7 +85,7 @@ namespace BALL
 			max_gradient_(energy_minimizer.max_gradient_),
 			max_same_energy_(energy_minimizer.max_same_energy_),
 			same_energy_counter_(energy_minimizer.same_energy_counter_),
-			maximal_shift_(energy_minimizer.maximal_shift_),
+			maximum_displacement_(energy_minimizer.maximum_displacement_),
 			force_update_counter_(energy_minimizer.force_update_counter_),
 			energy_update_counter_(energy_minimizer.energy_update_counter_)
 	{
@@ -104,8 +101,7 @@ namespace BALL
 			// Copy the attributes
 			options												= energy_minimizer.options;
 			valid_												= energy_minimizer.valid_;
-// ?????
-//			snapshot_											= energy_minimizer.snapshot_;
+			snapshot_											= energy_minimizer.snapshot_;
 			force_field_									= energy_minimizer.force_field_;
 			number_of_iteration_					= energy_minimizer.number_of_iteration_;
 			maximal_number_of_iterations_	= energy_minimizer.maximal_number_of_iterations_ ;
@@ -115,7 +111,7 @@ namespace BALL
 			max_gradient_				          = energy_minimizer.max_gradient_ ;
       max_same_energy_              = energy_minimizer.max_same_energy_; 
 			same_energy_counter_          = energy_minimizer.same_energy_counter_;
-			maximal_shift_                = energy_minimizer.maximal_shift_;
+			maximum_displacement_                = energy_minimizer.maximum_displacement_;
       force_update_counter_         = energy_minimizer.force_update_counter_;
       energy_update_counter_        = energy_minimizer.energy_update_counter_;
 	
@@ -262,15 +258,15 @@ namespace BALL
 	}
 
 	//	Set the maximal shift
-	void EnergyMinimizer::setMaximalShift( float maximal_shift )
+	void EnergyMinimizer::setMaximumDisplacement(float displacement)
 	{
-		maximal_shift_ = maximal_shift;
+		maximum_displacement_ = displacement;
 	}
 
 	//	Get the maximal shift
-	float	EnergyMinimizer::getMaximalShift() const
+	float	EnergyMinimizer::getMaximumDisplacement() const
 	{
-		return maximal_shift_;
+		return maximum_displacement_;
 	}
 
 	//	Set the trajectory ouput frequency
@@ -291,13 +287,13 @@ namespace BALL
 		return force_field_;
 	}
 
-	int EnergyMinimizer::getForceUpdateCounter() const
+	Size EnergyMinimizer::getForceUpdateCounter() const
 		throw()
 	{
 		return force_update_counter_;
 	}
 
-	int EnergyMinimizer::getEnergyUpdateCounter() const
+	Size EnergyMinimizer::getEnergyUpdateCounter() const
 		throw()
 	{
 		return energy_update_counter_;
@@ -307,7 +303,7 @@ namespace BALL
 	bool EnergyMinimizer::setup(ForceField& force_field)
 	{
     // Default: no snapshot manager available 
-    snapshot_ptr_ = 0;
+    snapshot_ = 0;
 
 		// store the specified force field
 		force_field_ = &force_field; 
@@ -350,9 +346,9 @@ namespace BALL
 			(EnergyMinimizer::Option::MAX_GRADIENT,
 			 EnergyMinimizer::Default::MAX_GRADIENT);
 
-		maximal_shift_ = options.setDefaultReal
-			(EnergyMinimizer::Option::MAXIMAL_SHIFT, 
-			 EnergyMinimizer::Default::MAXIMAL_SHIFT);
+		maximum_displacement_ = options.setDefaultReal
+			(EnergyMinimizer::Option::MAXIMUM_DISPLACEMENT, 
+			 EnergyMinimizer::Default::MAXIMUM_DISPLACEMENT);
 
     energy_update_counter_ = 0; 
     force_update_counter_ = 0; 
@@ -376,7 +372,7 @@ namespace BALL
     // set a pointer to the indicated snapshot manager
     if (ssm->isValid())
 		{
-      snapshot_ptr_ = ssm; 
+      snapshot_ = ssm; 
 		}
 
     return result; 
@@ -391,7 +387,7 @@ namespace BALL
     // set a pointer to the indicated snapshot manager
     if(ssm->isValid())
 		{
-			snapshot_ptr_ = ssm; 
+			snapshot_ = ssm; 
 		}
 
     return result; 
@@ -497,9 +493,9 @@ namespace BALL
 	void EnergyMinimizer::takeSnapShot() const
 	{
 		// if a snapshot manager is defined, use it!
-		if (snapshot_ptr_ != 0)
+		if (snapshot_ != 0)
 		{
-			snapshot_ptr_->takeSnapShot();
+			snapshot_->takeSnapShot();
 		}
 	}
 
@@ -513,7 +509,7 @@ namespace BALL
 		}
 
 		// take a snapshot of the system every snapshot_frequency_ iterations
-		if ((snapshot_ptr_ != 0) && (number_of_iteration_ % snapshot_frequency_ == 0))
+		if ((snapshot_ != 0) && (number_of_iteration_ % snapshot_frequency_ == 0))
 		{
 			takeSnapShot();
 		}
@@ -554,7 +550,7 @@ namespace BALL
       && (max_same_energy_ == energy_minimizer.max_same_energy_) 
 			&& (energy_difference_bound_ == energy_minimizer.energy_difference_bound_ )
 			&& (max_gradient_ == energy_minimizer.max_gradient_ )
-			&& (maximal_shift_ == energy_minimizer.maximal_shift_)
+			&& (maximum_displacement_ == energy_minimizer.maximum_displacement_)
       && (force_update_counter_ == energy_minimizer.force_update_counter_)
 			&& (energy_update_counter_ == energy_minimizer.energy_update_counter_));
 	}

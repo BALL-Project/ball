@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.29 2003/02/02 21:53:59 oliver Exp $
+// $Id: energyMinimizer.h,v 1.30 2003/02/03 21:38:17 oliver Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -12,24 +12,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
-#endif
-
 #ifndef BALL_DATATYPE_OPTIONS_H
 #	include <BALL/DATATYPE/options.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETERS_H
-#	include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
-#endif
-
-#ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
-#	include <BALL/MOLMEC/PARAMETER/atomTypes.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_PERIODIC_BOUNDARY_H
-#	include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -93,7 +77,7 @@ namespace BALL
 
 			/**	Maximal shift of an atom per iteration 
 			*/
-			static const char* MAXIMAL_SHIFT;
+			static const char* MAXIMUM_DISPLACEMENT;
 
 		}; 
 
@@ -134,7 +118,7 @@ namespace BALL
 
 			/**	Maximal shift
 			*/
-			static float MAXIMAL_SHIFT;
+			static float MAXIMUM_DISPLACEMENT;
 		};
 		//@}
 
@@ -333,13 +317,13 @@ namespace BALL
 		*/
 		void	setNumberOfIteration(Size number_of_iteration);
 
-		/**	Get the maximal number of iterations
+		/**	Get the maximum number of iterations
 		*/
 		Size	getMaximalNumberOfIterations() const;
 
-		/**	Set the maximal number of iterations
+		/**	Set the maximum number of iterations
 		*/
-		void	setMaximalNumberOfIterations(Size maximal_number_of_iterations);
+		void	setMaximalNumberOfIterations(Size number_of_iterations);
 
     /** Set the maximum number of iterations allowed with equal energy
         (second convergence criterion)
@@ -377,13 +361,14 @@ namespace BALL
     */
     float getMaxGradient() const;
 
-		/** Set the maximal shift value
+		/** Set the maximum displacement value.
+				This is the maximum distance an atom may be moved by the minimizer in one iteration.
 		*/
-		void  setMaximalShift( float maximal_shift );
+		void  setMaximumDisplacement(float maximum_displacement);
 
-		/** Get the maximal shift value
+		/** Get the maximum displacement value
 		*/
-		float getMaximalShift() const;
+		float getMaximumDisplacement() const;
 
 		/**	Set the snapshot frequency
 		*/
@@ -397,14 +382,14 @@ namespace BALL
 		*/
 		ForceField*	getForceField();
 
-		/**	
+		/**	Return the number of force updates since the start of the minimization.
 		*/
-		int getForceUpdateCounter() const
+		Size getForceUpdateCounter() const
 			throw();
 
-		/**	
+		/**	Return the number of energy updates since the start of the minimization.
 		*/
-		int getEnergyUpdateCounter() const
+		Size getEnergyUpdateCounter() const
 			throw();
 
 		/**	Minimize the energy of the system bound to the force field.	
@@ -429,102 +414,102 @@ namespace BALL
 		/**	Options Force field options
 		*/
 		Options	options;
+		//@}
 
 		protected:
 		
-		//@}
-		/*_	@name	Protected Attributes
+		/**	@name	Protected Attributes
 		*/
-		//_@{
+		//@{
 
-		/*_	The gradient at the beginning of the current minimization step.
+		/**	The gradient at the beginning of the current minimization step.
 		*/
 		Gradient initial_grad_;
 
-		/*_	The current gradient.
+		/**	The current gradient.
 		*/
 		Gradient current_grad_;
 
-		/*_	The energy at the beginning of the current minimization step.
+		/**	The energy at the beginning of the current minimization step.
 		*/
 		double initial_energy_;
 
-		/*_	The current energy.
+		/**	The current energy.
 		*/
 		double current_energy_;
 
-    /*_ The gradient from the last step
+    /** The gradient from the last step
     */
     Gradient old_grad_;
 
-    /*_ The energy from the last step
+    /** The energy from the last step
     */
     double old_energy_;
  
-    /*_ The current search direction
+    /** The current search direction
     */
     Gradient direction_;
  
-		/*_	The boolean variable indicates if the setup of the energy minimizer was successful
+		/**	The boolean variable indicates if the setup of the energy minimizer was successful
 		*/
 		bool 	valid_;
 
-		/*_ Pointer to a SnapShotManager for storing snapshots of the	system 
+		/** Pointer to a SnapShotManager for storing snapshots of the	system 
 		*/
-		SnapShotManager* snapshot_ptr_; 
+		SnapShotManager* snapshot_; 
 
-		/*_	The force field bound to the energy minimizer.
+		/**	The force field bound to the energy minimizer.
 				Among other data the force field contains the molecular system
 				whose energy will be minimized by the energy minimizer.
 		*/
 		ForceField*	force_field_;
 
-		/*_	the current iteration number
+		/**	The current iteration number
 		*/
 		Size	number_of_iteration_;
 
-		/*_	Maximal number of iterations 
+		/**	Maximum number of iterations 
 		*/
 		Size	maximal_number_of_iterations_;
 
-		/*_	Frequency of energy output  
+		/**	Frequency of energy output  
 		*/
 		Size	energy_output_frequency_;
 
-		/*_	Frequency of atom coordinate ouput;
+		/**	Frequency of atom coordinate ouput;
 		*/
 		Size	snapshot_frequency_;
 
-		/*_	If the energy difference (before and after an iteration) 
+		/**	If the energy difference (before and after an iteration) 
 				is smaller than this bound, the minimization procedure stops.
 		*/
 		double	energy_difference_bound_;
 
-    /*_ The maximum RMS gradient tolerated (first convergence criterion)
+    /** The maximum RMS gradient tolerated (first convergence criterion)
     */
     double max_gradient_;
 
-    /*_ The maximum number of iterations with same energy.
+    /** The maximum number of iterations with same energy.
         When this number is reached, we assume the system to have converged
         (second convergence criterion)
     */
     Size max_same_energy_;
 
-		/*_	A counter for the number of steps with a similar energy.
+		/**	A counter for the number of steps with a similar energy.
 		*/
 		Size same_energy_counter_;
 
-		/*_	The maximal shift of an atom per iteration step (in Angstrom).
+		/**	The maximal shift of an atom per iteration step (in Angstrom).
 		*/
-		float	maximal_shift_;
+		float	maximum_displacement_;
 
-    /*_ Internal counter: how often is a force update done.
-       	Measure for the speed of minimization 
+    /** Internal counter: how often is a force update done.
+       	Measure for the speed of minimization .
     */
     Size force_update_counter_;
 
-    /*_ Internal counter: how often is an energy update done.
-       	Measure for the speed of minimization 
+    /** Internal counter: how often is an energy update done.
+       	Measure for the speed of minimization.
     */
     Size energy_update_counter_; 
 		//_@}

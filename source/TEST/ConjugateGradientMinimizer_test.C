@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.2 2003/02/02 21:54:00 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.3 2003/02/03 21:38:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.2 2003/02/02 21:54:00 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.3 2003/02/03 21:38:19 oliver Exp $")
 
 using namespace BALL;
 
@@ -152,15 +152,15 @@ CHECK(ConjugateGradientMinimizer::setEnergyDifferenceBound(float))
 	TEST_EQUAL(e_min.getEnergyDifferenceBound(), 9.0)
 RESULT
 
-CHECK(ConjugateGradientMinimizer::getMaximalShift() const)
+CHECK(ConjugateGradientMinimizer::getMaximumDisplacement() const)
 	ConjugateGradientMinimizer e_min;
-	TEST_EQUAL(e_min.getMaximalShift(), 0.0)
+	TEST_EQUAL(e_min.getMaximumDisplacement(), 0.0)
 RESULT
 
-CHECK(ConjugateGradientMinimizer::setMaximalShift(float))
+CHECK(ConjugateGradientMinimizer::setMaximumDisplacement(float))
 	ConjugateGradientMinimizer e_min;
-	e_min.setMaximalShift(56.0);
-	TEST_EQUAL(e_min.getMaximalShift(), 56.0)
+	e_min.setMaximumDisplacement(56.0);
+	TEST_EQUAL(e_min.getMaximumDisplacement(), 56.0)
 RESULT
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
@@ -178,7 +178,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	a1->setTypeName("C");
 	a2->setTypeName("C");
 	a1->setCharge(0.5);
-	a2->setCharge(-0.5);
+	a2->setCharge(0.5);
 	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
 	FF.setup(S);
 	TEST_REAL_EQUAL(FF.isValid(), true)

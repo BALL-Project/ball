@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.11 2002/02/27 12:21:38 sturm Exp $
+// $Id: steepestDescent.C,v 1.12 2003/02/03 21:38:19 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
+#include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/COMMON/limits.h>
 
 using namespace std;
@@ -14,118 +15,99 @@ namespace BALL
 	const char *SteepestDescentMinimizer::Option::MAX_STEPS = "max_steps";
 
 	// default constructor
-	  SteepestDescentMinimizer::SteepestDescentMinimizer ():EnergyMinimizer ()
+	 SteepestDescentMinimizer::SteepestDescentMinimizer()
+		:	EnergyMinimizer ()
 	{
 	}
 
-
 	// copy constructor 
-	SteepestDescentMinimizer::SteepestDescentMinimizer (const SteepestDescentMinimizer & line_search_minimizer,
-																											bool /* deep */ )
-	: EnergyMinimizer (line_search_minimizer)
+	SteepestDescentMinimizer::SteepestDescentMinimizer 
+		(const SteepestDescentMinimizer & line_search_minimizer)
+		: EnergyMinimizer(line_search_minimizer)
 	{
 	}
 
 	// assignment operator
-	SteepestDescentMinimizer & SteepestDescentMinimizer::operator =
-		(const SteepestDescentMinimizer & line_search_minimizer)
+	const SteepestDescentMinimizer& SteepestDescentMinimizer::operator =
+		(const SteepestDescentMinimizer& minimizer)
 	{
-		EnergyMinimizer::operator = (line_search_minimizer);
+		EnergyMinimizer::operator = (minimizer);
 		return *this;
 	}
 
 	// Constructor initialized with a force field
-SteepestDescentMinimizer::SteepestDescentMinimizer (ForceField & force_field):EnergyMinimizer ()
+	SteepestDescentMinimizer::SteepestDescentMinimizer(ForceField& force_field)
+		:	EnergyMinimizer()
 	{
 		valid_ = setup (force_field);
 
-
 		if (!valid_)
 		{
-			Log.level (LogStream::ERROR) << " steepest descent minimizer setup failed! " << endl;
+			Log.error() << "SteepestDescentMinimizer: steepest descent minimizer setup failed! " << std::endl;
 		}
-
 	}
 
 	// Constructor initialized with a force field and a snapshot  manager 
-SteepestDescentMinimizer::SteepestDescentMinimizer (ForceField & force_field, SnapShotManager * ssm):EnergyMinimizer ()
+	SteepestDescentMinimizer::SteepestDescentMinimizer(ForceField& force_field, SnapShotManager* ssm)
+		:	EnergyMinimizer()
 	{
 		valid_ = setup (force_field, ssm);
 
-
 		if (!valid_)
 		{
-			Log.level (LogStream::ERROR) << " steepest descent minimizer setup failed! " << endl;
+			Log.error() << " steepest descent minimizer setup failed! " << std::endl;
 		}
-
 	}
 
 	// Constructor initialized with a force field and a set of options
-	SteepestDescentMinimizer::SteepestDescentMinimizer (ForceField & force_field,
-																											const Options & new_options):EnergyMinimizer ()
+	SteepestDescentMinimizer::SteepestDescentMinimizer
+		(ForceField& force_field, const Options& new_options)
+		:	EnergyMinimizer()
 	{
 		valid_ = setup (force_field, new_options);
 
 		if (!valid_)
 		{
-			Log.level (LogStream::ERROR) << " steepest descent minimizer setup failed! " << endl;
+			Log.error() << " steepest descent minimizer setup failed! " << endl;
 		}
 	}
 
 	// Constructor initialized with a force field, a snapshot manager, and a set of options
-	SteepestDescentMinimizer::SteepestDescentMinimizer (ForceField & force_field,
-																											SnapShotManager * ssm,
-																											const Options & new_options):EnergyMinimizer ()
+	SteepestDescentMinimizer::SteepestDescentMinimizer 
+		(ForceField& force_field, SnapShotManager* ssm,
+		 const Options& new_options)
+		:	EnergyMinimizer()
 	{
-		valid_ = setup (force_field, ssm, new_options);
+		valid_ = setup(force_field, ssm, new_options);
 
 		if (!valid_)
 		{
-			Log.level (LogStream::ERROR) << " steepest descent minimizer setup failed! " << endl;
+			Log.error() << " steepest descent minimizer setup failed! " << std::endl;
 		}
 	}
 
-
-
-
 	// destructor
-	SteepestDescentMinimizer::~SteepestDescentMinimizer ()
+	SteepestDescentMinimizer::~SteepestDescentMinimizer()
 	{
 	}
 
 	// virtual function for the specific setup of derived classes
-	bool SteepestDescentMinimizer::specificSetup ()
+	bool SteepestDescentMinimizer::specificSetup()
 	{
-
-		max_steps_ =
-			(Size) options.setDefaultInteger (SteepestDescentMinimizer::Option::MAX_STEPS,
-																				(long) SteepestDescentMinimizer::Default::MAX_STEPS);
+		maximal_number_of_iterations_ = (Size)options.setDefaultInteger
+			(SteepestDescentMinimizer::Option::MAX_STEPS, 
+			 (long)SteepestDescentMinimizer::Default::MAX_STEPS);
 
 		return true;
 	}
 
-	// Set the parameter max_steps_
-	void SteepestDescentMinimizer::setMaxSteps (Size max_steps)
-	{
-		max_steps_ = max_steps;
-	}
-
-	//  Get the parameter max_steps_
-	Size SteepestDescentMinimizer::getMaxSteps () const
-	{
-		return max_steps_;
-	}
-
-
 	/*  The minimizer optimizes the energy of the system 
-	 * using a modified line search algorithm.
-	 */
-
-	bool SteepestDescentMinimizer::minimize (Size steps, bool restart)
+			using a modified line search algorithm.
+	*/
+	bool SteepestDescentMinimizer::minimize(Size steps, bool restart)
 	{
 		// define some static variables used for restarting
-
-		static double step_size = maximal_shift_;	// the current step size
+		static double step_size = maximum_displacement_;	// the current step size
 		static Size last_update = 1;	// last update of gradient (in number of iterations)
 		static Size same_energy_counter = 0;	// number of times the same energy was calculated (in number of iterations)
 		static double gradient_norm = 0;	// norm of the gradient
@@ -134,9 +116,9 @@ SteepestDescentMinimizer::SteepestDescentMinimizer (ForceField & force_field, Sn
 		static double energy = 0;		// last calculated energy
 
 		// Checking the minimizer 
-		if (isValid () == false)
+		if (isValid() == false)
 		{
-			Log.level (LogStream::ERROR) << "The steepest descent minimizer is not valid!" << endl;
+			Log.error() << "The steepest descent minimizer is not valid!" << endl;
 			return false;
 		}
 
@@ -148,11 +130,11 @@ SteepestDescentMinimizer::SteepestDescentMinimizer (ForceField & force_field, Sn
 			return true;
 		}
 
-		vector < Atom * >::const_iterator it;
+		vector<Atom*>::const_iterator it;
 		if (!restart)
 		{
 			// reset the step size to its default value
-			step_size = maximal_shift_;
+			step_size = getMaximumDisplacement();
 
 			// reset the counters
 			force_update_counter_ = 0;
@@ -166,7 +148,7 @@ SteepestDescentMinimizer::SteepestDescentMinimizer (ForceField & force_field, Sn
 			it = force_field_->getAtoms ().begin ();
 			for (; it != force_field_->getAtoms ().end (); ++it)
 			{
-				gradient_norm += (*it)->getForce ().getSquareLength ();
+				gradient_norm += (*it)->getForce().getSquareLength();
 			}
 
 			// calculate the RMS gradient (termination condition)
@@ -197,11 +179,9 @@ SteepestDescentMinimizer::SteepestDescentMinimizer (ForceField & force_field, Sn
 		while (iteration < maximal_number_of_iterations_)
 		{
 			// calculate current energy 
-
 			energy_change = energy;
 			energy = force_field_->updateEnergy ();
 			energy_update_counter_++;
-
 			energy_change = energy - energy_change;
 
 			iteration++;

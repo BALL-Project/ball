@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EnergyMinimizer_test.C,v 1.5 2003/02/02 10:15:50 oliver Exp $
+// $Id: EnergyMinimizer_test.C,v 1.6 2003/02/03 21:38:19 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.5 2003/02/02 10:15:50 oliver Exp $")
+START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.6 2003/02/03 21:38:19 oliver Exp $")
 
 using namespace BALL;
 
@@ -158,15 +159,15 @@ CHECK(EnergyMinimizer::setEnergyDifferenceBound(float))
 	TEST_EQUAL(e_min.getEnergyDifferenceBound(), 9.0)
 RESULT
 
-CHECK(EnergyMinimizer::getMaximalShift() const)
+CHECK(EnergyMinimizer::getMaximumDisplacement() const)
 	EnergyMinimizer e_min;
-	TEST_EQUAL(e_min.getMaximalShift(), 0.0)
+	TEST_EQUAL(e_min.getMaximumDisplacement(), 0.0)
 RESULT
 
-CHECK(EnergyMinimizer::setMaximalShift(float))
+CHECK(EnergyMinimizer::setMaximumDisplacement(float))
 	EnergyMinimizer e_min;
-	e_min.setMaximalShift(56.0);
-	TEST_EQUAL(e_min.getMaximalShift(), 56.0)
+	e_min.setMaximumDisplacement(56.0);
+	TEST_EQUAL(e_min.getMaximumDisplacement(), 56.0)
 RESULT
 
 CHECK(EnergyMinimizer::minimize(Size, bool))

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.15 2003/02/02 21:54:00 oliver Exp $
+// $Id: conjugateGradient.C,v 1.16 2003/02/03 21:38:18 oliver Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -495,51 +495,64 @@ namespace BALL
 		#endif
 		
 		bool success = true;
-		while (success)
+		bool adjusted = false;
+		while (success && !adjusted)
 		{
 			// TEST! This is a workaround...
 			// We try to find those cases where at least one atom might be
-			// translated more than maximal_shift_
-			if (direction_.norm * step_ * lambda_ <= direction_.size() * maximal_shift_)
+			// translated more than getMaximumDisplacement()
+			if (direction_.norm * step_ * lambda_ <= direction_.size() * getMaximumDisplacement())
 			{
+				#ifdef BALL_DEBUG
+					Log << "CG1: taking step: lambda = " << lambda_ << "  step = " << step_ << std::endl;
+				#endif
 				atoms.moveTo(direction_, lambda_ * step_);
 			}
 			else
 			{
 				#ifdef BALL_DEBUG
-					Log.info() << "CG1: Adjusted!!!!!" << endl;
+					Log.info() << "CG1: checking for adjustment: step = " << step_ << endl;
 				#endif
 
 				// find the maximal translation
 				Gradient::ConstIterator grad_it(direction_.begin());
-				double max=0;
-				double cur=0;
+				double max = 0;
+				double cur = 0;
 				for (; grad_it != direction_.end(); ++grad_it)
 				{
-					cur = (*grad_it).getSquareLength();
+					cur = grad_it->getSquareLength();
 					if (cur >= max)
 					{
 						max = cur;
 					}
 				}
 				
-				if (sqrt(max)*lambda_*step_ >= maximal_shift_)
+				if (sqrt(max)*lambda_*step_ >= getMaximumDisplacement())
 				{
-					step_ = maximal_shift_ / (sqrt(max) * lambda_);
+					step_ = getMaximumDisplacement() / (sqrt(max) * lambda_);
 				}
 
+				#ifdef BALL_DEBUG
+					Log.info() << "CG2: new step = " << step_ << endl;
+				#endif
+
+				#ifdef BALL_DEBUG
+					Log << "CG1: taking step: lambda = " << lambda_ << "  step = " << step_ << std::endl;
+				#endif
 				atoms.moveTo(direction_, lambda_ * step_);
+				adjusted = true;
 			}
+
 			success = (updateEnergy() < initial_energy_);
-			if (success)
+			if (success && !adjusted)
 			{
-				// check whether the gradient decreases along direction_
+				// check whether the gradient decreases along direction
 				updateForces();
 				double dir_grad = direction_ * current_grad_;
 				success &= (dir_grad < 0.0);
 			}
 			
-			if (success)
+			if (success && !adjusted)
 			{
 				step_ *= 2.0;
 			}
@@ -718,14 +731,14 @@ namespace BALL
 
 			// TEST! This is a workaround...
 			// We try to find those cases where at least one atom might be
-			// translated more than maximal_shift_
-			if (direction_.norm * step_ * lambda_ <= direction_.size() * maximal_shift_)
+			// translated more than getMaximumDisplacement()
+			if (direction_.norm * step_ * lambda_ <= direction_.size() * getMaximumDisplacement())
 			{
 				atoms.moveTo(direction_, lambda_ * step_);
 			}
 			else
 			{
-				Log.info() << "CG1: Adjusted!!!!" << endl;
+
 				// find the maximal translation
 				Gradient::ConstIterator grad_it(direction_.begin());
 				double max=0;
@@ -739,9 +752,9 @@ namespace BALL
 					}
 				}
 				
-				if (sqrt(max)*lambda_*step_ >= maximal_shift_)
+				if (sqrt(max)*lambda_*step_ >= getMaximumDisplacement())
 				{
-					step_ = maximal_shift_ / (sqrt(max) * lambda_);
+					step_ = getMaximumDisplacement() / (sqrt(max) * lambda_);
 				}
 
 				atoms.moveTo(direction_, lambda_ * step_);
