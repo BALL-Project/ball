@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.12 2004/07/05 08:51:07 amoll Exp $
+// $Id: mainframe.C,v 1.13 2004/07/05 10:12:53 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -351,7 +351,6 @@ namespace BALL
 			nr_of_representations++;
 		}
 				
-
 		writePreferences(out);
 	} 
 
@@ -409,7 +408,7 @@ namespace BALL
 			Size split_size = data_string.split(string_vector, "[]");
 			if (split_size < 2) return;
 			data_string = string_vector[1];
-			data_string.split(string_vector, "[]");
+			data_string.split(string_vector, ",");
 			HashSet<Position> hash_set;
 			try
 			{
@@ -434,6 +433,10 @@ namespace BALL
 			display_properties_->applyButtonClicked();
 		}
 
+		getSelection().clear();
+		NewSelectionMessage* msg = new NewSelectionMessage();
+		notify_(msg);
+ 	
 		fetchPreferences(in);
 
 		if (in.hasEntry("BALLVIEW_PROJECT", "Camera"))
