@@ -8,13 +8,17 @@ CPP_SOURCES=\
 	fileDialog.C\
 	preferences.C\
 	colorMeshDialog.C\
-	colorMeshDialogData.C
+	colorMeshDialogData.C\
+	dlgMoveOverlay.C\
+	dlgMoveOverlayData.C
 
 MOC_SOURCES=\
 	fileDialog_moc.C\
 	preferences_moc.C\
 	colorMeshDialog_moc.C\
 	colorMeshDialogData_moc.C\
+	dlgMoveOverlay_moc.C\
+	dlgMoveOverlayData_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -25,6 +29,12 @@ fileDialog_moc.C:	$(HEADER_DIR)/fileDialog.h
 	$(MOC) $< -o $@
 
 preferences_moc.C:	$(HEADER_DIR)/preferences.h
+	$(MOC) $< -o $@
+
+dlgMoveOverlay_moc.C:	$(HEADER_DIR)/dlgMoveOverlay.h
+	$(MOC) $< -o $@
+
+dlgMoveOverlayData_moc.C:	$(HEADER_DIR)/dlgMoveOverlayData.h
 	$(MOC) $< -o $@
 
 colorMeshDialog_moc.C:	$(HEADER_DIR)/colorMeshDialog.h

@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PropertyManager_test.C,v 1.21 2002/12/12 11:34:43 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.22 2002/12/12 16:28:37 oliver Exp $
+
+#include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/CONCEPT/property.h>
@@ -12,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.21 2002/12/12 11:34:43 oliver Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.22 2002/12/12 16:28:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

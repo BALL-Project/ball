@@ -6,7 +6,8 @@ CPP_SOURCES=\
 	colorHSV.C\
 	colorRGBA.C\
 	colorUnit.C\
-	colorUnitHue.C
+	colorUnitHue.C\
+	colorTable.C
 
 include ../../common.mak
 include .Dependencies
