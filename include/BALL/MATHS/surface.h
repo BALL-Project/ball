@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.2 1999/12/04 18:34:21 oliver Exp $
+// $Id: surface.h,v 1.3 2000/03/26 21:54:12 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -23,7 +23,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(Surface)
+		BALL_CREATE_NODEEP(Surface)
 
 		/**	@name	Type Definitions
 		*/
@@ -47,7 +47,7 @@ namespace BALL
 		Surface();
 
 		///
-		Surface(const Surface& surface, bool deep = true);
+		Surface(const Surface& surface);
 			
 		///
 		virtual ~Surface();
@@ -58,13 +58,13 @@ namespace BALL
 		//@{
 
 		///
-		void set(const Surface& box, bool deep = true);
+		void set(const Surface& box);
 
 		///
 		Surface& operator = (const Surface& box);
 
 		///
-		void get(Surface& box, bool deep = true) const;
+		void get(Surface& box) const;
 
 		///
 		void swap(Surface& box);
