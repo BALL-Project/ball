@@ -15,7 +15,7 @@ DockableRegularData1DWidget::DockableRegularData1DWidget(const RegularData1D* da
 	setSizePolicy(sizePolicy);
 	setMinimumSize(sizeHint());
 	setGuest(canWidget_);  
-	canWidget_.createPolygon();
+	canWidget_.createPlot();
 	getWidget().resize(size()); 
 }
 

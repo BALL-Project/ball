@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.10 2004/06/10 16:51:19 amoll Exp $
+// $Id: regularData1DWidget.h,v 1.11 2004/06/10 17:06:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
@@ -40,11 +40,6 @@ namespace BALL
 			RegularData1DWidget(const RegularData1D* data, QWidget *parent = 0)
 				throw();
 
-			/** Copy constructor
-			 */
-			RegularData1DWidget(RegularData1DWidget* widget)
-				throw() ;
-
 			/** Destructor
 			 */
 			~RegularData1DWidget()
@@ -60,10 +55,13 @@ namespace BALL
 
 			/** Creator of a plot
 			 */
-			void createPolygon()
+			void createPlot()
 				throw();
 			
 			protected:
+
+			RegularData1DWidget(RegularData1DWidget* widget)
+				throw();
 
 			const RegularData1D* data_;
 			QColor diagram_color_;
