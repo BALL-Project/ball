@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.12 2003/11/03 16:49:56 amoll Exp $
+// $Id: common.h,v 1.13 2003/11/09 23:42:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -156,6 +156,9 @@ enum ColoringMethod
 
 	///
 	COLORING_RESIDUE_NAME,
+
+	///
+	COLORING_SECONDARY_STRUCTURE,
 
 	///
 	COLORING_ATOM_CHARGE,
