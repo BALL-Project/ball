@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile_test.C,v 1.11 2004/03/17 11:16:02 amoll Exp $
+// $Id: MOLFile_test.C,v 1.12 2004/03/29 17:12:23 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.11 2004/03/17 11:16:02 amoll Exp $")
+START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.12 2004/03/29 17:12:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -51,10 +51,11 @@ CHECK(bool read(System& system) throw(Exception::ParseError))
 	TEST_REAL_EQUAL(atom.getPosition().y, -3.1475)
 	TEST_REAL_EQUAL(atom.getPosition().z,  0.0000)
 	system.clear();
-	MOLFile f2("MOLFile_test.C");
-	TEST_EQUAL(f2.read(system), false)
+	MOLFile f2("MOLFile_test.C");	
+	TEST_EXCEPTION(Exception::ParseError, f2.read(system))
 	MOLFile f3("data/Selectable_test.txt");
-	TEST_EQUAL(f3.read(system), false)
+	bool result = f3.read(system);
+	TEST_EQUAL(result, false)
 RESULT
 
 
@@ -199,6 +200,15 @@ CHECK(MOLFile(const MOLFile& file) throw(Exception::FileNotFound))
   MOLFile f("data/MOLFile_test1.mol");
 	MOLFile f2(f);
 	TEST_EQUAL(f2.getName(), "data/MOLFile_test1.mol")
+RESULT
+
+CHECK([EXTRA]bool read(System& system) throw(Exception::ParseError))
+	MOLFile f("data/MOLFile_test5.mol");
+	System system;
+	f.read(system);
+	TEST_EQUAL(system.countAtoms(), 30)
+	TEST_EQUAL(system.countBonds(), 32)
+	ABORT_IF(system.countAtoms() == 0)
 RESULT
 
 /////////////////////////////////////////////////////////////

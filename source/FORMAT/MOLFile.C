@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.18 2004/02/24 13:05:47 anker Exp $
+// $Id: MOLFile.C,v 1.19 2004/03/29 17:12:23 oliver Exp $
 //
 
 
@@ -88,7 +88,7 @@ namespace BALL
 	{
 		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
-			throw (File::CannotWrite(__FILE__, __LINE__, name_));
+			throw File::CannotWrite(__FILE__, __LINE__, name_);
 		}
 
 		// write header block
@@ -232,7 +232,17 @@ namespace BALL
 		#endif
 		// read the counts line
 		CountsStruct counts;
-		if (!readCountsLine_(counts)) return false;
+		if (!readCountsLine_(counts))
+		{
+			throw Exception::ParseError(__FILE__, __LINE__, 
+					String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
+																				String("Cannot parse counts line: "));
+
+		}
+		#ifdef DEBUG
+			Log.info() << "Counts line: " << counts.number_of_atoms 
+				<< " atoms and " << counts.number_of_bonds << " bonds." << std::endl;
+		#endif
 
 		// resize the array to the number of atoms
 		atom_map.resize(counts.number_of_atoms);
@@ -243,7 +253,13 @@ namespace BALL
 			AtomStruct atom_struct;
 			for (Position i = 0; i < counts.number_of_atoms; i++)
 			{
-				if (!readAtomLine_(atom_struct)) return false;
+				if (!readAtomLine_(atom_struct))
+				{
+					throw Exception::ParseError(__FILE__, __LINE__, 
+							String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
+																						String("Cannot parse atom line: "));
+
+				}
 
 				// create the atom
 				Atom* atom = new Atom(PTE[atom_struct.symbol.trim()], 
@@ -509,6 +525,7 @@ namespace BALL
 		readLine();
 
 		bool ok = true;
+
 		// parse the line according to the Counts format
 		counts.number_of_atoms = 0;
 		ok &= parseColumnFormat("%3d", 0, 3, (void*)&counts.number_of_atoms);
@@ -527,16 +544,16 @@ namespace BALL
 		ok &= parseColumnFormat("%3d", 15, 3, (void*)&counts.number_of_stext_entries);
 
 		counts.number_of_reaction_components = 0;
-		ok &= parseColumnFormat("%3d", 18, 3, (void*)&counts.number_of_reaction_components);
+		parseColumnFormat("%3d", 18, 3, (void*)&counts.number_of_reaction_components);
 
 		counts.number_of_reactants = 0;
-		ok &= parseColumnFormat("%3d", 21, 3, (void*)&counts.number_of_reactants);
+		parseColumnFormat("%3d", 21, 3, (void*)&counts.number_of_reactants);
 
 		counts.number_of_products = 0;
-		ok &= parseColumnFormat("%3d", 24, 3, (void*)&counts.number_of_products);
+		parseColumnFormat("%3d", 24, 3, (void*)&counts.number_of_products);
 
 		counts.number_of_intermediates = 0;
-		ok &= parseColumnFormat("%3d", 27, 3, (void*)&counts.number_of_intermediates);
+		parseColumnFormat("%3d", 27, 3, (void*)&counts.number_of_intermediates);
 
 		return ok;
 	}
@@ -604,10 +621,10 @@ namespace BALL
 		atom.inversion_retention = 0;
 		atom.exact_change = 0;
 		Size len = getLine().size();
-		if (len >= 51) ok &= parseColumnFormat("%d", 48, 3, (void*)&atom.valence);
-		if (len >= 54) ok &= parseColumnFormat("%d", 51, 3, (void*)&atom.H0_designator);
-		if (len >= 57) ok &= parseColumnFormat("%d", 54, 3, (void*)&atom.reaction_component_type);
-		if (len >= 60) ok &= parseColumnFormat("%d", 57, 3, (void*)&atom.reaction_component_number);
+		if (len >= 51) parseColumnFormat("%d", 48, 3, (void*)&atom.valence);
+		if (len >= 54) parseColumnFormat("%d", 51, 3, (void*)&atom.H0_designator);
+		if (len >= 57) parseColumnFormat("%d", 54, 3, (void*)&atom.reaction_component_type);
+		if (len >= 60) parseColumnFormat("%d", 57, 3, (void*)&atom.reaction_component_number);
 		if (len >= 63) ok &= parseColumnFormat("%d", 60, 3, (void*)&atom.number);
 		if (len >= 66) ok &= parseColumnFormat("%d", 63, 3, (void*)&atom.inversion_retention);
 		if (len >= 69) ok &= parseColumnFormat("%d", 66, 3, (void*)&atom.exact_change);

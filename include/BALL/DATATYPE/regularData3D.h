@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.30 2004/03/07 01:06:06 amoll Exp $ 
+// $Id: regularData3D.h,v 1.31 2004/03/29 17:12:23 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -88,7 +88,6 @@ namespace BALL
 				Creates a TRegularData3D object without allocating a grid.
 			*/
 		TRegularData3D() throw();	
-
 	
 		/**	Copy constructor.
 		*/
@@ -659,17 +658,26 @@ namespace BALL
 
       // Resize the data array to its new size.
       data_.resize(new_size);
-      spacing_.x = dimension_.x / (double)(size.x - 1);
-      spacing_.y = dimension_.y / (double)(size.y - 1);
-      spacing_.z = dimension_.z / (double)(size.z - 1);
+			spacing_.x = dimension_.x / (double)(size.x - 1);
+			spacing_.y = dimension_.y / (double)(size.y - 1);
+			spacing_.z = dimension_.z / (double)(size.z - 1);
 
-      // Correct the grid dimension. Origin and dimension remain constant.
-      size_ = size;
+			// Correct the grid size. Origin and dimension remain constant.
+			size_ = size;
 
-      // Walk over the new grid and copy the (interpolated) old stuff back.
-      for (size_type i = 0; i < new_size; i++)
-      {
-        data_[i] = old_data.getInterpolatedValue(getCoordinates(i));
+			// Walk over the new grid and copy the (interpolated) old stuff back.
+			for (size_type i = 0; i < data_.size(); i++)
+			{
+				try
+				{
+					Log.error() << "rescale: rescaled for i = " << i << " coord = " << getCoordinates(i) << std::endl;
+					data_[i] = old_data.getInterpolatedValue(getCoordinates(i));
+				}
+				catch (Exception::OutOfGrid&)
+				{
+					Log.error() << "rescale: caught exception for i = " << i << " coord = " << getCoordinates(i) << std::endl;
+					data_[i] = old_data.getClosestValue(getCoordinates(i));
+				}
 			}
 		}
     catch (std::bad_alloc& e)
