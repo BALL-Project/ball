@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.4 2000/10/30 00:19:27 amoll Exp $
+// $Id: singularities.h,v 1.5 2000/12/07 15:04:09 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -48,7 +48,7 @@ namespace BALL
 {
 
 	template <class T>
-	void TreatSingularities(TSolventExcludedSurface<T>* ses, const T& radius_of_probe)
+	void TreatSingularities(TSolventExcludedSurface<T>* ses, const T& /*radius_of_probe*/)
 	{
 		list< TSESFace<T>* > singular_faces = GetSingularFaces(ses);
 //		TreatFirstCathegory(ses,singular_faces,radius_of_probe);
