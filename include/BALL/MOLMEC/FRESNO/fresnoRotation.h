@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.1 2002/02/14 17:02:48 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.2 2002/03/05 23:46:20 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -7,6 +7,7 @@
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/DATATYPE/hashSet.h>
 #include <BALL/DATATYPE/hashGrid.h>
+#include <BALL/DATATYPE/stack.h>
 
 namespace BALL
 {
@@ -104,7 +105,15 @@ namespace BALL
 		*/
 		Size N_rot_;
 
-		/*_ A vector iof bool indicating which of rotatable bond was frozen upon
+		/*_ A vector of vectors containing all atoms on either side of a
+		 * rotatable bond.
+		 * ?????
+		 * We coulde use indices insterad of pointers.
+		*/
+		::vector< ::pair< HashSet<const Atom*>, HashSet<const Atom*> > >
+			possible_contact_atoms_;
+			
+		/*_ A vector of bool indicating which of rotatable bond was frozen upon
 		 * binding.
 		*/
 		::vector<bool> frozen_bonds_;
@@ -127,28 +136,28 @@ namespace BALL
 		*/
 		const HashMap<const Atom*, short>* fresno_types_;
 
-		/*_
+		/*_ A simple DFS algorithm for identifying rings (i. e. cycles) of the
+				molecule.
 		*/
-		bool ringDFS_(const Atom& atom, const Atom& first_atom,
-				const Size limit, HashSet<const Bond*>& visited) const
+		void cycleDFS_(const Atom* atom,
+				int& dfs_count, HashMap<const Atom*, int>& dfs_num, 
+				HashSet<const Bond*>& tree,
+				Stack<const Bond*>& possible_cycle_bonds,
+				HashSet<const Bond*>& cycle_bonds,
+				int& cycle_count)
 			throw();
 
-		/*_
+
+		/*_ A simple DFS implementation for counting heavy (as defined by
+		 * Rognan et al.) atoms.
 		*/
-		void findDFS_(const Atom* atom, const Bond* bond, 
-				HashSet<const Atom*>& visited, double& min_distance) const
+		void heavyAtomsDFS_(const Atom* atom, const Bond* bond,
+				int& dfs_count,
+				HashMap<const Atom*, int>& dfs_num,
+				int& heavy_atom_count)
+//				HashSet<const Atom*>& atoms_on_this_side)
 			throw();
 
-		/*_
-		*/
-		void countDFS_(const Atom* atom, const Bond* bond, 
-				HashSet<const Atom*>& visited, Size& heavy_count) const
-			throw();
-
-		/*_
-		*/
-		Size countHeavyAtoms_(const Atom* atom, const Bond* bond) const
-			throw();
 	};
 
 } // namespace BALL
