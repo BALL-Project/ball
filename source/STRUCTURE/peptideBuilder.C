@@ -127,7 +127,8 @@ namespace BALL
 			: sequence_(), 
 				chainname_("Chain"),
 				proteinname_("Protein"),
-				is_proline_(false)
+				is_proline_(false),
+				fragment_db_(0)
 		{
 		}
 
@@ -135,7 +136,8 @@ namespace BALL
 			: sequence_(sequence),
 				chainname_("Chain"),
 				proteinname_("Protein"),
-				is_proline_(false)
+				is_proline_(false),
+				fragment_db_(0)
 		{
 		}
 
@@ -143,7 +145,8 @@ namespace BALL
 			:sequence_(pc.sequence_),
 			 chainname_(pc.chainname_),
 			 proteinname_(pc.proteinname_),
-			 is_proline_(false)
+			 is_proline_(false),
+			 fragment_db_(0)
 		{ 
 		}
 
@@ -186,6 +189,8 @@ namespace BALL
 
 		Protein* PeptideBuilder::construct()
 		{
+			if (fragment_db_ == 0) return 0;
+
 			int id = 1;
 			Protein *protein = new Protein(proteinname_);
 			Chain *chain = new Chain(chainname_);
@@ -242,16 +247,12 @@ namespace BALL
 			protein->insert(*chain); 
 			
 			// read the names for a unique nomenclature 
-			// FragmentDB and RFP should be static for the PeptideBuilder class
-			// Anything else will lead to significant delay while reading the fragment DB again!
-			// ?????
-			FragmentDB db;
-			protein->apply(db.normalize_names);
+			protein->apply(fragment_db_->normalize_names);
 			
 			// Add missing bonds and atoms (including side chains!)
-			ReconstructFragmentProcessor rfp(db);
+			ReconstructFragmentProcessor rfp(*fragment_db_);
 			protein->apply(rfp);
-			protein->apply(db.build_bonds);
+			protein->apply(fragment_db_->build_bonds);
 			
 			return protein;
 		}
@@ -624,6 +625,19 @@ namespace BALL
 			return 0;
 		}
 
-	} // namespace Peptides
 
+		void PeptideBuilder::setFragmentDB(const FragmentDB* db)
+			throw()
+		{
+			fragment_db_ = (FragmentDB*) db;
+		}
+
+		const FragmentDB* PeptideBuilder::getFragmentDB() const
+			throw()
+		{
+			return fragment_db_;
+		}
+
+
+	} // namespace Peptides
 } // namespace BALL
