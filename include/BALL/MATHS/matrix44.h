@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.7 2000/02/17 00:30:43 oliver Exp $
+// $Id: matrix44.h,v 1.8 2000/02/25 21:10:28 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -87,7 +87,7 @@ namespace BALL
 		*/
 		//@{
 		///
-		void set(register const T* ptr);
+		void set( const T* ptr);
 
 		///
 		void set(const T* ptr[4]);
@@ -108,7 +108,7 @@ namespace BALL
 			 const T& m41, const T& m42, const T& m43, const T& m44);
 
 		///
-		TMatrix4x4& operator = (register const T* ptr);
+		TMatrix4x4& operator = ( const T* ptr);
 
 		///
 		TMatrix4x4& operator = (const T* ptr[4]);
@@ -435,7 +435,7 @@ namespace BALL
 
 		void initializeComponentPointers_()
 		{
-			register T **ptr = (T **)comp_ptr_;
+			 T **ptr = (T **)comp_ptr_;
 
 			*ptr++ = &m11;
 			*ptr++ = &m12;
@@ -470,7 +470,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TMatrix4x4<T>::TMatrix4x4(register const T* ptr)
+	TMatrix4x4<T>::TMatrix4x4( const T* ptr)
 	{
 		if (ptr == 0)
 		{
@@ -503,7 +503,7 @@ namespace BALL
 		if (array_ptr == 0)
 			throw Exception::NullPointer(__FILE__, __LINE__);
 		
-		register const T *ptr = *array_ptr;
+		 const T *ptr = *array_ptr;
 			
 		m11 = *ptr++; 
 		m12 = *ptr++; 
@@ -620,7 +620,7 @@ namespace BALL
     if (array_ptr == 0)
       throw Exception::NullPointer(__FILE__, __LINE__);
  		
-		register const T *ptr = *array_ptr;
+		 const T *ptr = *array_ptr;
 
 		m11 = *ptr++; 
 		m12 = *ptr++; 
@@ -765,7 +765,7 @@ namespace BALL
     if (array_ptr == 0)
        throw Exception::NullPointer(__FILE__, __LINE__);
  
-		register T *ptr = *array_ptr;
+		 T *ptr = *array_ptr;
 
 		*ptr++ = m11; 
 		*ptr++ = m12; 
@@ -1235,9 +1235,9 @@ namespace BALL
 	template <class T>
 	bool TMatrix4x4<T>::invert(TMatrix4x4<T>& inverse) const
 	{
-		register Index k;
-		register Index i;
-		register Index j;
+		 Index k;
+		 Index i;
+		 Index j;
 		T a[4][4];
 		T b[4][4] =
 		{
@@ -1331,9 +1331,9 @@ namespace BALL
 	template <class T>
 	T TMatrix4x4<T>::getDeterminant() const
 	{
-		register Index i;
-		register Index j;
-		register Index k;
+		 Index i;
+		 Index j;
+		 Index k;
 		T submatrix[3][3];
 		T matrix[4][4] =
 		{
@@ -1978,7 +1978,7 @@ namespace BALL
 	template <class T>
 	bool TMatrix4x4<T>::isValid() const
 	{
-		register T **ptr = (T **)comp_ptr_;
+		 T **ptr = (T **)comp_ptr_;
 		
 		return (bool)(   *ptr++ ==& m11
 									&& *ptr++ ==& m12
