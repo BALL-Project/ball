@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.19 2000/11/24 02:12:03 amoll Exp $
+// $Id: BitVector_test.C,v 1.20 2000/11/24 10:22:45 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.19 2000/11/24 02:12:03 amoll Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.20 2000/11/24 10:22:45 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -580,6 +580,8 @@ CHECK(Bit(const BitVector& bitvector, Index index = 0))
 	TEST_EQUAL(b8, true)
 
 	Bit cb99(cbv, 99);
+	cb99 = true;
+	TEST_EQUAL(cbv.getSize(), 8)
 	TEST_EQUAL(cb99, false)
 RESULT
 
