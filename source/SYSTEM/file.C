@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.25 2002/01/01 23:48:58 oliver Exp $
+// $Id: file.C,v 1.26 2002/01/02 02:34:23 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -244,7 +244,7 @@ namespace BALL
 				String tmp_file;
 				createTemporaryFilename(tmp_file);
 				ofstream out(tmp_file.c_str(), ios::out);
-				TCPTransfer tcp_t(out, name, true); ///????
+				TCPTransfer tcp_t(out, name, false);
 				name_ = tmp_file;
 				is_temporary_ = true;
 			}

@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.28 2001/12/31 00:30:54 oliver Exp $
+// $Id: File_test.C,v 1.29 2002/01/02 02:34:41 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(File, "$Id: File_test.C,v 1.28 2001/12/31 00:30:54 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.29 2002/01/02 02:34:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -376,22 +376,37 @@ CHECK(isClosed())
 RESULT
 
 CHECK(TCPTransfer)
-	File f("http://postino.mpi-sb.mpg.de/index.html");
+	File f("http://www.mpi-sb.mpg.de/BALL/test/http_test.txt");
 	String filename;
-	File::createTemporaryFilename(filename);
+	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_EQUAL(f.getSize(), 3453)
+	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
 RESULT
 
 CHECK(TCPTransfer/2)
-	File f1("ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/pdb4pti.ent.Z");
-	f1.copyTo("4pti.brk1");
+	File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/ftp_test.txt");
+	String filename;
+	NEW_TMP_FILE(filename)
+	f.copyTo(filename);
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
 RESULT	
 
 CHECK(TCPTransfer/3)
-	File::registerTransformation("PDB://", "ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/pdb%b.ent.Z");
-	File f2("PDB://4pti");
-	f2.copyTo("4pti.brk2");
+	File::registerTransformation("ftp_test://", "ftp://ftp.mpi-sb.mpg.de/pub/outgoing/%b.txt");
+	File f("ftp_test://ftp_test");
+	String filename;
+	NEW_TMP_FILE(filename)
+	f.copyTo(filename);
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+RESULT
+
+CHECK(TCPTransfer/4)
+	File::registerTransformation("http_test://", "http://www.mpi-sb.mpg.de/BALL/test/%b.txt");
+	File f("http_test://http_test");
+	String filename;
+	NEW_TMP_FILE(filename)
+	f.copyTo(filename);
+	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
 RESULT
 
 /////////////////////////////////////////////////////////////
