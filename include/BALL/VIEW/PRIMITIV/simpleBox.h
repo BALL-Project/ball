@@ -1,4 +1,4 @@
-// $Id: simpleBox.h,v 1.5 2001/02/04 15:58:22 hekl Exp $
+// $Id: simpleBox.h,v 1.6 2001/02/08 16:04:10 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
 #define BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -30,12 +30,9 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/** SimpleBox class.
-				
+		/** SimpleBox class.	
 				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/simpleBox.h}
-				\\
-
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/simpleBox.h}\\
 				An instance of SimpleBox represents an instance of the geometric representation "Box".
 				A simpleBox is a box whose sides are parallel to the coordinate axes. Therefore only
 				two vertices are needed. The first vertex is the lower left corner and the second
@@ -49,11 +46,10 @@ namespace BALL
 				The class SimpleBox is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension}
 				and \Ref{Vertex2}. See these classes for further information concerning
 				interface and additional methods.
-
 				@memo    SimpleBox class (BALL VIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/02/04 15:58:22 $
+				@author  $Author: amoll $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/02/08 16:04:10 $
 		*/
 		class SimpleBox
 			: public GeometricObject,
@@ -74,7 +70,6 @@ namespace BALL
 		  			\item vertex1 - to the vector (0,0,0)
 		  			\item vertex2 - to the vector (0,0,0)
 					\end{itemize}
-
 					@return      SimpleBox - new constructed simpleBox
 					@see         GeometricObject::GeometricObject
 					@see         ColorExtension::ColorExtension
@@ -86,9 +81,8 @@ namespace BALL
 			/** Copy constructor with cloning facility.
 					Construct new simpleBox by copying the simpleBox {\em simpleBox}.
 					The copy is either deep (default) or shallow.
-
 					@param       simpleBox the simpleBox to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
 					@return      SimpleBox - new constructed simpleBox copied from {\em simpleBox}
 					@see         GeometricObject::GeometricObject
 					@see         ColorExtension::ColorExtension
@@ -99,10 +93,9 @@ namespace BALL
 
 			/** Copy constructor from geometricObject.
 					Construct new simpleBox by copying the internal values from geometricObject 
-					{\em geometric_object}.
-
+					{\em geometric\_object}.
 					@param       geometric_object the geometricObject which internal value should be copied
-					@return      SimpleBox - new constructed simpleBox initialized from {\em geometric_object}
+					@return      SimpleBox - new constructed simpleBox initialized from {\em geometric\_object}
 					@see         GeometricObject::GeometricObject
 					@see         ColorExtension::ColorExtension
 					@see         Vertex2::Vertex2
@@ -111,7 +104,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors */
 			//@{
 
@@ -127,7 +119,6 @@ namespace BALL
 					Calls \Ref{GeometricObject::clear}
 					Calls \Ref{ColorExtension::clear}
 					Calls \Ref{Vertex2::clear}
-
 					@see  GeometricObject::clear
 					@see  ColorExtension::clear
 					@see  Vertex2::clear
@@ -139,16 +130,14 @@ namespace BALL
 					Calls \Ref{GeometricObject::destroy}
 					Calls \Ref{ColorExtension::destroy}
 					Calls \Ref{Vertex2::destroy}
-
 					@see  GeometricObject::destroy
 					@see  ColorExtension::destroy
 					@see  Vertex2::destroy
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
-			
+			//@}
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -158,7 +147,6 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} simpleBox is initialized to the value of 
 					the simpleBox {\em simpleBox}.\\
-
 					@param       simpleBox the simpleBox to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em simpleBox}
 					@see         SimpleBox::SimpleBox
@@ -172,7 +160,6 @@ namespace BALL
 					Calls \Ref{SimpleBox::set}.
 					The value of {\em *this} simpleBox is initialized to the value 
 					of the simpleBox {\em simpleBox}.\\
-
 					@param       simpleBox the simpleBox to be copied
 					@return      SimpleBox& - {\em *this} simpleBox
 					@see         SimpleBox::set
@@ -186,7 +173,6 @@ namespace BALL
 					Calls \Ref{SimpleBox::set}.
 					The value of the simpleBox {\em simpleBox} is initialized to the
 					value of {\em *this} simpleBox.\\
-
 					@param       simpleBox the simpleBox to be assigned to
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em simpleBox}
 					@see         SimpleBox::set
@@ -196,15 +182,13 @@ namespace BALL
 
 			/** Swapping of simpleBox's.
 					Swap the value of {\em *this} simpleBox with the simpleBox {\em simpleBox}.
-
 					@param       simpleBox the simpleBox being swapped with {\em *this} simpleBox 
 					@see         SimpleBox::SimpleBox
 			*/
 			void swap(SimpleBox& simpleBox)
 				throw();
+
 			//@}
-
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -216,7 +200,6 @@ namespace BALL
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {GeometricObject::isValid}.
 					Calls {Vertex2::isValid}.
-
 					@return			bool -
 											{\tt true} if the internal state of {\em *this} simpleBox is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
@@ -232,7 +215,6 @@ namespace BALL
 					Calls \Ref{GeometricObject::dump}.
 					Calls \Ref{ColorExtension::dump}.
 					Calls \Ref{Vertex2::dump}.
-
 					@param   s output stream where to output the value of {\em *this} simpleBox
 					@param   depth the dumping depth
 					@see        GeometricObject::dump
@@ -241,45 +223,37 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Storers
 			*/
 			//@{
 			/** Persistent stream output and state restorage.
-  			 Read persistent simpleBox data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal state of {\em *this} simpleBox
-					@exception   NotImplemented - always
+  			  Read persistent simpleBox data from the input stream {\em s} and 
+				  restore the state of {\em *this}. \\
+				  {\bf Note:} Not yet implemented. 
+				  @param       s input stream from where to restore the internal state of {\em *this} simpleBox
 			*/
 			virtual void read(std::istream&  s)
 				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent simpleBox data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal state of {\em *this} simpleBox
-					@exception   NotImplemented - always
+  			  Write persistent simpleBox data to the output stream {\em s} and 
+				  store the state of {\em *this}. \\
+				  {\bf Note:} Not yet implemented.	 
+				  @param       s output stream to where to store the internal state of {\em *this} simpleBox
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
-			//@}
 
+			//@}
 
 			protected:
 
 			/** Export method.
 					This method handles the export of {\em *this} simpleBox into another
-					format (eg. POVRAY, VRML)
-				  \\
+					format (eg. POVRAY, VRML) \\
 				  {\bf Note:} Not yet implemented.
-
 					@return    bool - {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()

@@ -1,4 +1,4 @@
-// $Id: connectionObject.h,v 1.4 2001/02/06 14:16:49 amoll Exp $
+// $Id: connectionObject.h,v 1.5 2001/02/08 16:04:04 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -52,7 +52,7 @@ namespace BALL
 				dialog and widget. In this process a tree will be created that connects all 
 				connectionObject objects.	See \Ref{ModularWidget} for further information concerning
 				widget and dialog interface definition.
-				The widgets communicate with the help of the method notify_. With this method
+				The widgets communicate with the help of the method notify\_. With this method
 				a message can be sent through the connectionObject tree. One connectionObject
 				will be the root of this tree and therefore responsible for handling and sending
 				all	incoming messages. A Message will first be sent to the root of the connectionObject
@@ -66,8 +66,8 @@ namespace BALL
 				that the message is already destroyed when it should be processed.
 				@memo    ConnectionObject class (BALL VIEW kernel framework)
 				@author  $Author: amoll $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/06 14:16:49 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/02/08 16:04:04 $
 		*/
 		class ConnectionObject
 		{
@@ -136,7 +136,7 @@ namespace BALL
 			/** Test if connectionObject is registered.
 					Test if {\em object} connectionObject is a child of {\em *this} connectionObject.
 					@param   object the connectionObject to be tested
-					@return  {\tt true} if {\em object} is a child of {\em *this} connectionObject, {\tt false} oterhwise
+					@return  bool - {\tt true} if {\em object} is a child of {\em *this} connectionObject, {\tt false} oterhwise
 					@see     ConnectionObject::registerConnectionObject
 					@see     ConnectionObject::unregisterConnectionObject
 			*/
@@ -249,7 +249,6 @@ namespace BALL
 					See {\em notify_} for detailed information on the notification process.
 					Only use this method if you are absolutely sure what you are doing!
 					@param    message a reference to a message that will be sent through the connectionObject tree.
-					@see      ConnectionObject::notify_
 					@see      Message::Message
 			*/
 			void notify_(Message &message);
