@@ -4,7 +4,6 @@ class String
 #include <BALL/DATATYPE/string.h>
 using namespace BALL;
 %End
-
 	public:
 	String();
   String(const char*);
@@ -32,7 +31,7 @@ using namespace BALL;
 %ConvertToClassCode
   if (PyString_Check(sipPy))
   {
-    *sipCppPtr = new String(PyString_AS_STRING(sipPy));
+    *sipCppPtr = new String(PyType_(sipPy));
 
     return 1;
   }
