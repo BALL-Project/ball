@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.14 2001/02/04 23:51:56 amoll Exp $
+// $Id: logStream.h,v 1.14.4.1 2002/11/29 21:29:58 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -15,7 +15,12 @@
 #	include <BALL/COMMON/debug.h>
 #endif
 
-#include <sys/time.h>
+#ifdef BALL_INCLUDE_SYS_TIME_H
+#	include <sys/time.h>
+#endif
+#ifdef BALL_INCLUDE_TIME_H
+#	include <time.h>
+#endif
 
 #include <iostream>
 #include <list>

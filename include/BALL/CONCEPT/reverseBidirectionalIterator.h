@@ -1,4 +1,4 @@
-// $Id: reverseBidirectionalIterator.h,v 1.8 2001/07/05 14:09:43 amoll Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.8.4.1 2002/11/29 21:30:11 oliver Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -61,7 +61,11 @@ namespace BALL
 		/**
 		*/
 		ReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
+			throw()
+			:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
+		{	
+		}
+
 
 		/**
 		 */
@@ -144,14 +148,6 @@ namespace BALL
 		throw()
 		:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits>
-	::ReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-		throw()
-		:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
-	{	
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -356,7 +352,11 @@ namespace BALL
 		/**
 		*/
 		ConstReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
+			throw()
+			:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
 
 		/**
 		 */
@@ -439,12 +439,14 @@ namespace BALL
 	{
 	}
 
+	/** WIN
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::ConstReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
 		throw()
 		:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 	{
 	}
+	*/
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::~ConstReverseBidirectionalIterator()

@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.10.4.1 2002/06/09 14:24:32 oliver Exp $
+// $Id: forwardIterator.h,v 1.10.4.2 2002/11/29 21:30:11 oliver Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -55,7 +55,11 @@ namespace BALL
 		/** Detailed constructor
 		*/
 		ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
-			throw();		
+			throw()
+			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
 		//@}
 
 		/** @name Iterator methods
@@ -130,14 +134,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator
 		(const ConstForwardIterator& iterator)
-		throw()
-		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits>
-	::ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
 		throw()
 		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
@@ -279,7 +275,11 @@ namespace BALL
 		/** Detailed constructor
 		*/
 		ForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
+			throw()
+			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
 
 		//@}
 		/** @name Iterator methods
@@ -357,6 +357,7 @@ namespace BALL
 	{
 	}
 
+	/** WIN
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ForwardIterator<Container, DataType, Position, Traits>
 	::ForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
@@ -364,6 +365,7 @@ namespace BALL
 		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
 	}
+	*/
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ForwardIterator<Container, DataType, Position, Traits>::operator + () const
