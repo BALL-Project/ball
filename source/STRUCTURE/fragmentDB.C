@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.38 2001/12/20 01:13:34 oliver Exp $
+// $Id: fragmentDB.C,v 1.39 2001/12/26 03:35:53 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -845,12 +845,10 @@ namespace BALL
 			if (residue->isCTerminal())
 			{
 				additional_properties.setBit(Residue::PROPERTY__C_TERMINAL);
-				Log.info() << "is C terminal!" << std::endl;
 			}
 			if (residue->isNTerminal())
 			{
 				additional_properties.setBit(Residue::PROPERTY__N_TERMINAL);
-				Log.info() << "is C terminal!" << std::endl;
 			}
 		}
 #ifdef DEBUG

@@ -1,4 +1,4 @@
-// $Id: moleculeObjectCreator.C,v 1.2 2001/05/13 15:02:41 hekl Exp $
+// $Id: moleculeObjectCreator.C,v 1.3 2001/12/26 03:35:53 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
 
@@ -60,11 +60,13 @@ namespace BALL
 		  REGISTER(System)
 		  REGISTER(Composite)
 		  REGISTER(Fragment)
+			REGISTER(Nucleotide)
+			REGISTER(NucleicAcid)
 
 			#undef REGISTER
 		}
 
-	  Composite *MoleculeObjectCreator::convertObject(PersistentObject &po)
+	  Composite* MoleculeObjectCreator::convertObject(PersistentObject &po)
 			throw()
     {
 			cout << "read object @ " << (void*)&po << endl;

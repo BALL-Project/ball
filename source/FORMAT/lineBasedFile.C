@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.21 2001/12/21 11:47:04 oliver Exp $
+// $Id: lineBasedFile.C,v 1.22 2001/12/26 03:35:53 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -203,7 +203,7 @@ namespace BALL
 	{
 		if (!condition)
 		{
-			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' while parsing line " + String(getLineNumber()), msg);
+			throw Exception::ParseError(file, line, String("File '") + getName() + "' while parsing line " + String(getLineNumber()), msg);
 		}
 	}
 

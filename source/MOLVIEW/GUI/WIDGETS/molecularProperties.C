@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.6 2001/07/15 17:47:46 oliver Exp $
+// $Id: molecularProperties.C,v 1.7 2001/12/26 03:35:53 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 
@@ -18,6 +18,7 @@ namespace BALL
     {
 			// register ModularWidget
 			registerWidget(this);
+			hide();
     }
 
   	MolecularProperties::~MolecularProperties()
@@ -89,8 +90,6 @@ namespace BALL
 				{
 					atom_container->setName(composite_message->getCompositeName());
 				}
-				
-				Log.info() << "> applying molecular properties ... finished" << endl;
 				
 				// continue with molecular message
 				NewMolecularMessage* mol_message = new NewMolecularMessage;

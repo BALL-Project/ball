@@ -1,4 +1,4 @@
-// $Id: genericMolFile.C,v 1.3 2001/12/20 01:12:15 oliver Exp $
+// $Id: genericMolFile.C,v 1.4 2001/12/26 03:35:52 oliver Exp $
 
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/KERNEL/system.h>
@@ -55,7 +55,7 @@ namespace BALL
 		return 0;
 	}
 
-	void GenericMolFile::write(const Molecule& molecule)
+	void GenericMolFile::write(const Molecule& /* molecule */)
 	{
 	}
 
@@ -84,6 +84,7 @@ namespace BALL
 	GenericMolFile& GenericMolFile::operator << (const System& system)
 	{
 		write(system);
+		return *this;
 	}
 
 	GenericMolFile& GenericMolFile::operator >> (Molecule& molecule)
@@ -101,6 +102,7 @@ namespace BALL
 	GenericMolFile& GenericMolFile::operator << (const Molecule& molecule)
 	{
 		write(molecule);
+		return *this;
 	}
 
 	void GenericMolFile::initRead()

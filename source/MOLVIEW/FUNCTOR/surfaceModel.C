@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.11 2001/08/16 01:14:57 oliver Exp $
+// $Id: surfaceModel.C,v 1.12 2001/12/26 03:35:53 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -84,9 +84,7 @@ namespace BALL
 				System* system = dynamic_cast<System*>(start_composite_);
 				if (system != 0)
 				{
-					cerr << "number of atoms in system:" << system->countAtoms() << endl;
 					SurfaceProcessor sp;
-					cerr << "applying SurfaceProcessor..." << endl;
 					try 
 					{
 						system->apply(sp);

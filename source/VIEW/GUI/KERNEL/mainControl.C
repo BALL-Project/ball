@@ -1,7 +1,9 @@
-// $Id: mainControl.C,v 1.19 2001/12/22 14:14:04 oliver Exp $
+// $Id: mainControl.C,v 1.20 2001/12/26 03:35:53 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
+
+#define BALL_VIEW_DEBUG
 
 
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
@@ -846,6 +848,7 @@ namespace BALL
 				Log << "MainControl::addModularWidget(" << widget << ")" << endl;
 			#endif
 			modular_widgets_.push_back(widget);
+			widget->registerThis();
 		}
 
 		void MainControl::removeModularWidget(ModularWidget* widget)

@@ -1,4 +1,4 @@
-// $Id: embeddable.h,v 1.5 2000/12/19 12:50:48 amoll Exp $
+// $Id: embeddable.h,v 1.6 2001/12/26 03:35:52 oliver Exp $
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #define BALL_CONCEPT_EMBEDDABLE_H
@@ -104,11 +104,11 @@ namespace BALL
 		protected:
 		/**
 		*/
-		static void registerInstance_(const std::type_info& type, Embeddable* instance)
+		static void registerInstance_(const std::type_info& type, const Embeddable* instance)
 			throw();
 		/**
 		*/
-		static void unregisterInstance_(Embeddable* instance)
+		static void unregisterInstance_(const Embeddable* instance)
 			throw();
 		
 		/**	Return the number of instances of a certain type

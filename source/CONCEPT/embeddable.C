@@ -1,4 +1,4 @@
-// $Id: embeddable.C,v 1.9 2001/12/22 14:14:04 oliver Exp $
+// $Id: embeddable.C,v 1.10 2001/12/26 03:35:52 oliver Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
@@ -12,17 +12,26 @@ namespace BALL
 		throw()
 		:	identifier_(identifier)
 	{
+		#ifdef DEBUG
+			Log.info() << "constructing Embeddable(const String& identified = '" << identifier << "') [this = " << (void*)this << "]" << std::endl;
+		#endif
 	}
 	
 	Embeddable::Embeddable(const Embeddable& embeddable)
 		throw()
 		:	identifier_(embeddable.identifier_)
 	{
+		#ifdef DEBUG
+			Log.info() << "copy constructing Embeddable(embeddable = " << (void*)&embeddable <<" [this = " << (void*)this << "]" << std::endl;
+		#endif
 	}
 	
 	Embeddable::~Embeddable()
 		throw()
 	{
+		#ifdef DEBUG
+			Log.info() << "destructing Embeddable [this = " << (void*)this << "]" << std::endl;
+		#endif
 		// make sure destructed instances are securely unregistered
 		unregisterInstance_(this);
 		identifier_ = "<destructed>";
@@ -43,6 +52,12 @@ namespace BALL
 	void Embeddable::registerThis() 
 		throw()
 	{
+		if (typeid(*this) != typeid(BALL::Embeddable))
+		{
+			Log.error() << "Warning: derived class " << typeid(*this).name() << " was derived from BALL::Embeddable, but the macro "
+									<< "BALL_EMBEDDABLE(...) was not specified in the class declaration!" << std::endl;
+		}
+		registerInstance_(typeid(BALL::Embeddable), this);
 	}
 
 	void Embeddable::unregisterThis() 
@@ -53,14 +68,14 @@ namespace BALL
 
 	// protected:
 
-	void Embeddable::registerInstance_(const type_info& type,
-			Embeddable* instance) 
+	void Embeddable::registerInstance_
+		(const type_info& type, const Embeddable* instance) 
 		throw()
 	{
 		// retrieve the class name
 		const char* class_id_string = type.name();
 
-		if (!instance_to_type_map_.has(instance))
+		if (!instance_to_type_map_.has(const_cast<Embeddable*>(instance)))
 		{
 			// this is fact a new registration
 			if (!instance_lists_.has(class_id_string))
@@ -69,10 +84,10 @@ namespace BALL
 				instance_lists_.insert(class_id_string, EmbeddableList());
 			}
 			// store the pointer to the instance in the instance list...
-			instance_lists_[class_id_string].push_back(instance);
+			instance_lists_[class_id_string].push_back(const_cast<Embeddable*>(instance));
 			
 			// ...and in the hash map for fast retrieval of the class id string
-			instance_to_type_map_.insert(pair<Embeddable*, string>(instance, class_id_string));
+			instance_to_type_map_.insert(pair<Embeddable*, string>(const_cast<Embeddable*>(instance), class_id_string));
 			#ifdef DEBUG
 				Log.info() << "Embeddable::registerInstance_: registering " << class_id_string 
 									 << " @ " << (void*)instance << std::endl;
@@ -86,9 +101,13 @@ namespace BALL
 		}
 	}
 
-	void Embeddable::unregisterInstance_(Embeddable* instance) 
+	void Embeddable::unregisterInstance_(const Embeddable* const_instance) 
 		throw()
 	{
+		// for convenience, we use const pointers in the map, but const ptrs
+		// for registerInstance/unregisterInstance, since it is *logically* const.
+		Embeddable* instance = const_cast<Embeddable*>(const_instance);
+
 		// check whether this instance was registered...
 		if (instance_to_type_map_.has(instance))
 		{

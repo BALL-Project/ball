@@ -1,4 +1,4 @@
-// $Id: modularWidget.C,v 1.7 2001/12/22 14:14:04 oliver Exp $
+// $Id: modularWidget.C,v 1.8 2001/12/26 03:35:53 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 
@@ -38,8 +38,6 @@ namespace BALL
 			  Log.info() << "Destructing object " << (void *)this 
 									 << " of class " << RTTI::getName<ModularWidget>() << endl;
       #endif 
-				
-			destroy();
 		}
 
 		void ModularWidget::clear()
@@ -68,7 +66,7 @@ namespace BALL
 					mc->addModularWidget(mwidget);
 
           #ifdef BALL_VIEW_DEBUG
-						Log.info() << "ModularWidget::registered: " <<mwidget << endl;
+						Log.info() << "ModularWidget::registered: " << mwidget << endl;
 					#endif
 				}
 				else 

@@ -101,6 +101,7 @@ Mainframe::Mainframe
 	#ifdef BALL_PYTHON_SUPPORT
 		PyWidget* py_widget = new PyWidget(vert_splitter_);
 		CHECK_PTR(py_widget);
+		py_widget->startInterpreter();
 	#endif
 
 	QLabel* message_label = new QLabel(tr("Ready."), statusBar());
@@ -111,24 +112,6 @@ Mainframe::Mainframe
 	// ---------------------
 
 	scene_->registerGLObjectCollector(GL_object_collector_);
-
-	// ---------------------
-	// LogView setup ------
-	// ---------------------
-	
-	QFont f("Courier", 12, QFont::DemiBold, false);
-	logview_->setFont(f);
-	Log.info() << "Welcome to MolVIEW." << endl;
-
-
-	// ---------------------
-	// PyWidget setup
-	// ---------------------
-	#ifdef BALL_PYTHON_SUPPORT
-		py_widget->setFont(f);
-		py_widget->startInterpreter();
-	#endif
-	
 
 	// ---------------------
 	// Menus ---------------
@@ -265,7 +248,9 @@ void Mainframe::checkResidue()
 	{
 		Log.info() << "ResidueChecker: no errors found." << endl;
 		statusBar()->message("no errors.");
-	} else {
+	} 
+	else 
+	{
 		statusBar()->message("errors found!");
 	}
 
@@ -274,7 +259,6 @@ void Mainframe::checkResidue()
 
 void Mainframe::assignCharges()
 {
-	
 }
 
 void Mainframe::calculateAmberEnergy()
