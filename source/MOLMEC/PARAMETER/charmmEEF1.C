@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.C,v 1.6 2001/06/27 10:38:15 oliver Exp $
+// $Id: charmmEEF1.C,v 1.7 2001/06/27 23:49:25 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -26,7 +26,7 @@ namespace BALL
 
 
 	CharmmEEF1::CharmmEEF1(const CharmmEEF1& charmm_EEF1) throw()
-		:	ParameterSection(),
+		:	ParameterSection(charmm_EEF1),
 			V_(0),
 			dG_ref_(0),
 			dG_free_(0),
@@ -36,7 +36,32 @@ namespace BALL
 			R_min_(0),
 			is_defined_(0)
 	{
-		this->operator = (charmm_EEF1);
+		// copy attributes
+		number_of_atom_types_ = charmm_EEF1.number_of_atom_types_;
+
+		V_ = new float [number_of_atom_types_];
+		memcpy(V_, charmm_EEF1.V_, sizeof(float) * number_of_atom_types_);
+
+		dG_ref_ = new float [number_of_atom_types_];
+		memcpy(dG_ref_, charmm_EEF1.dG_ref_, sizeof(float) * number_of_atom_types_);
+
+		dG_free_ = new float [number_of_atom_types_];
+		memcpy(dG_free_, charmm_EEF1.dG_free_, sizeof(float) * number_of_atom_types_);
+
+		dH_ref_ = new float [number_of_atom_types_];
+		memcpy(dH_ref_, charmm_EEF1.dH_ref_, sizeof(float) * number_of_atom_types_);
+
+		Cp_ref_ = new float [number_of_atom_types_];
+		memcpy(Cp_ref_, charmm_EEF1.Cp_ref_, sizeof(float) * number_of_atom_types_);
+
+		sig_w_ = new float [number_of_atom_types_];
+		memcpy(sig_w_, charmm_EEF1.sig_w_, sizeof(float) * number_of_atom_types_);
+
+		R_min_ = new float [number_of_atom_types_];
+		memcpy(R_min_, charmm_EEF1.R_min_, sizeof(float) * number_of_atom_types_);
+		
+		is_defined_ = new bool [number_of_atom_types_];
+		memcpy(is_defined_, charmm_EEF1.is_defined_, sizeof(bool) * number_of_atom_types_);
 	}
 
 
@@ -88,6 +113,9 @@ namespace BALL
 			return false;
 		}
 		
+		// release previous contents
+		clear();
+
 		// extract the basis information
 		ParameterSection::extractSection(parameters, section_name);
 
@@ -95,15 +123,12 @@ namespace BALL
 		if (!hasVariable("V") || !hasVariable("dG_free") || !hasVariable("R_min")
 				|| !hasVariable("dH_ref") || !hasVariable("Cp_ref") || !hasVariable("sig_w"))
 		{
-			Log.level(LogStream::ERROR) << "CHARMm EEF1 parameter section requires six variable columns:"		
+			Log.error() << "CHARMm EEF1 parameter section requires six variable columns:"		
 				<< "V, dG_ref, dG_free, dH_ref, Cp_ref, sig_w, and R_min." << endl;
 
 			return false;
 
 		}
-
-		// release previous contents
-		clear();
 
 		// determine the number of atom types
 		const AtomTypes&	atom_types = parameters.getAtomTypes();
@@ -267,10 +292,10 @@ namespace BALL
 										<< options["unit_V"] << ". Assuming Angstrom^3 as default unit." << endl;
 			}
 		}
-
+		
 		String key;
 		for (i = 0; i < getNumberOfKeys(); ++i)
-		{
+		{	
 			// get the key
 			key = getKey(i);
 			if (atom_types.hasType(key))
@@ -285,11 +310,10 @@ namespace BALL
 				sig_w_[idx]		= getValue(i, index_sig_w).toFloat() * factor_sig_w;
 				R_min_[idx]		= getValue(i, index_R_min).toFloat() * factor_R_min;
 				is_defined_[idx] = true;
-
 			} 
 			else 
 			{
-				Log.level(LogStream::WARNING) << "unknown atom type in Charmm EEF1 parameters: " << key << "   i = " << i << endl;
+				Log.warn() << "unknown atom type in Charmm EEF1 parameters: " << key << "   i = " << i << endl;
 			}
 		}
 
@@ -297,14 +321,10 @@ namespace BALL
 	}
 
 
-	bool CharmmEEF1::hasParameters(Atom::Type I) const throw()
+	bool CharmmEEF1::hasParameters(Atom::Type I) const 
+		throw()
 	{
-		if ((I < 0) && ((Size)I >= number_of_atom_types_))
-		{
-			return false;
-		}
-
-		return (is_defined_[I]);
+		return ((I >= 0) && ((Size)I < number_of_atom_types_) && is_defined_[I]);
 	}
 
 
@@ -372,7 +392,7 @@ namespace BALL
 		memcpy(R_min_, charmm_EEF1.R_min_, sizeof(float) * number_of_atom_types_);
 		
 		is_defined_ = new bool [number_of_atom_types_];
-		memcpy(is_defined_, charmm_EEF1.is_defined_, sizeof(float) * number_of_atom_types_);
+		memcpy(is_defined_, charmm_EEF1.is_defined_, sizeof(bool) * number_of_atom_types_);
 
 		return *this;
 	}
