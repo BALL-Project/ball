@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.10 2000/02/20 13:28:01 oliver Exp $
+// $Id: line3.h,v 1.11 2000/02/22 19:38:07 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -21,8 +21,19 @@
 namespace BALL 
 {
 
+	template <typename T>
+	class TLine3;
+	
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TLine3<T>& line);
+
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TLine3<T>& line);
+	
+
+
 	/**	Generic Line in Three-Dimensional Space.
-      {\bf Definition:} \URL{BALL/MATHS/.h}
+      {\bf Definition:} \URL{BALL/MATHS/line3.h}
       \\
 	*/
 	template <class T>
@@ -283,28 +294,6 @@ namespace BALL
 		//@}
 
 
-		/**	@name	Storers
-		*/
-		//@{
-
-		/**	Input- Operator
-				reads in two {\bf TVector3}
-		*/
-		friend std::istream& operator >> (std::istream &s, TLine3& line)
-		{
-			return (s >> line.p >> line.d);
-		}
-
-		/**	Output- Operator
-				gives two {\bf TVector3} out: a pointer and a vector
-		*/
-		friend std::ostream& operator << (std::ostream& s, const TLine3& line)
-		{
-			return (s << line.p << line.d);
-		}
-		//@}
-
-
 		/**	@name	Attributes
 		*/
 		//@{
@@ -322,6 +311,27 @@ namespace BALL
 	/**	Default line of type {\bf float}
 	*/
 	typedef TLine3<float> Line3;
+
+	/**	Input- Operator
+			reads two {\bf TVector3} obejcts from an {\tt istream} and
+			assigns them to {\tt d} and {\tt p}
+	*/
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TLine3<T>& line)
+	{
+		return (s >> line.p >> line.d);
+	}
+
+	/**	Output-Operator
+			writes the two public attrobutes {\tt d} and {\tt p} to an {\tt ostream}
+	*/
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
+	{
+		return (s << line.p << line.d);
+	}
+	//@}
+
 
 } // namespace BALL
 
