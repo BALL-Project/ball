@@ -1,0 +1,593 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>DockDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>DockDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>491</width>
+            <height>528</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>4</hsizetype>
+            <vsizetype>4</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>500</width>
+            <height>700</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Docking Options</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QPushButton" row="1" column="0">
+            <property name="name">
+                <cstring>ok_button</cstring>
+            </property>
+            <property name="text">
+                <string>OK</string>
+            </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>cancel_button</cstring>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>reset_button</cstring>
+            </property>
+            <property name="text">
+                <string>Reset</string>
+            </property>
+        </widget>
+        <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>tab_pages</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>general_page</cstring>
+                </property>
+                <attribute name="title">
+                    <string>General</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QButtonGroup" row="0" column="0">
+                        <property name="name">
+                            <cstring>systems_group</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Docking Partners</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QComboBox">
+                                <property name="name">
+                                    <cstring>systems1</cstring>
+                                </property>
+                                <property name="editable">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox">
+                                <property name="name">
+                                    <cstring>systems2</cstring>
+                                </property>
+                                <property name="editable">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QButtonGroup" row="1" column="0">
+                        <property name="name">
+                            <cstring>generator_group</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Docking Algorithm</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QComboBox" row="0" column="0">
+                                <item>
+                                    <property name="text">
+                                        <string>&lt;select&gt;</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>algorithms</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="0" column="1">
+                                <property name="name">
+                                    <cstring>alg_advanced_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Advanced...</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="2" column="0">
+                        <property name="name">
+                            <cstring>ranking_group</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Ranking</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QComboBox" row="0" column="0">
+                                <item>
+                                    <property name="text">
+                                        <string>&lt;select&gt;</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>rank_functions</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="0" column="1">
+                                <property name="name">
+                                    <cstring>rank_advanced_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Advanced...</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="3" column="0">
+                        <property name="name">
+                            <cstring>options_group</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Options</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>best_num_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>number of best docked structures </string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>best_num</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>100</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>verbosity_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>verbosity of algorithm</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>verbosity</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>1</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="4" column="0">
+                        <property name="name">
+                            <cstring>trajectories_group</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>7</hsizetype>
+                                <vsizetype>5</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>Trajectories</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>traject_file</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>200</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>trajectories.dcd</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>trajectories_label</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>store to DCDFile</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>processor_page</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Processors</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QButtonGroup" row="1" column="0">
+                        <property name="name">
+                            <cstring>radii_group</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Radii Config File</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>radii_rules_lineedit</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>solvation/PARSE.rul</string>
+                                </property>
+                                <property name="readOnly">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="1" column="2">
+                                <property name="name">
+                                    <cstring>radii_rules_browse</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Browse</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>radii_data_lineedit</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>radii/PARSE.siz</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="0" column="2">
+                                <property name="name">
+                                    <cstring>radii_data_browse</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Browse</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>radii_data_button</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>110</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>110</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>from table</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>radii_rules_button</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>110</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>by rules</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="2" column="0">
+                        <property name="name">
+                            <cstring>processors_group</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Processors</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QCheckBox" row="0" column="1">
+                                <property name="name">
+                                    <cstring>build_bonds</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>build Bonds</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="2">
+                                <property name="name">
+                                    <cstring>add_hydrogens</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>addHydrogens</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>normalize_names</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>normalize names</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>assign_charges</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>assign charges</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>assign_radii</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>assign radii</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="0" column="0">
+                        <property name="name">
+                            <cstring>charges_group</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Charges Config File</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QRadioButton" row="1" column="0">
+                                <property name="name">
+                                    <cstring>charges_rules_button</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>110</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>by rules</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
+                                    <cstring>charges_data_button</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>110</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>from table</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>charges_data_lineedit</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>charges/PARSE.crg</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>charges_rules_lineedit</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>solvation/PARSE.rul</string>
+                                </property>
+                                <property name="readOnly">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="0" column="2">
+                                <property name="name">
+                                    <cstring>charges_data_browse</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Browse</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="1" column="2">
+                                <property name="name">
+                                    <cstring>charges_rules_browse</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Browse</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>cancelPressed()</slot>
+    </connection>
+    <connection>
+        <sender>ok_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>okPressed()</slot>
+    </connection>
+    <connection>
+        <sender>reset_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>resetPressed()</slot>
+    </connection>
+    <connection>
+        <sender>alg_advanced_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>algAdvancedPressed()</slot>
+    </connection>
+    <connection>
+        <sender>rank_advanced_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>rankAdvancedPressed()</slot>
+    </connection>
+    <connection>
+        <sender>systems1</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>partner1Chosen()</slot>
+    </connection>
+    <connection>
+        <sender>systems2</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>partner2Chosen()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>systems1</tabstop>
+    <tabstop>systems2</tabstop>
+    <tabstop>algorithms</tabstop>
+    <tabstop>alg_advanced_button</tabstop>
+    <tabstop>rank_functions</tabstop>
+    <tabstop>rank_advanced_button</tabstop>
+    <tabstop>ok_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+    <tabstop>reset_button</tabstop>
+</tabstops>
+<slots>
+    <slot>resetPressed()</slot>
+    <slot>okPressed()</slot>
+    <slot>cancelPressed()</slot>
+    <slot>algAdvancedPressed()</slot>
+    <slot>rankAdvancedPressed()</slot>
+    <slot>partner1Chosen()</slot>
+    <slot>partner2Chosen()</slot>
+    <slot>browseRadiiData()</slot>
+    <slot>browseChargeData()</slot>
+    <slot>browseChargeRules()</slot>
+    <slot>browseRadiiRules()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
