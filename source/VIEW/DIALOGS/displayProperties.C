@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.77 2004/08/24 14:01:58 amoll Exp $
+// $Id: displayProperties.C,v 1.78 2004/08/24 15:08:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -310,8 +310,6 @@ void DisplayProperties::selectMode(int index)
 		mode_combobox->setCurrentItem(index);
 		return;
 	}
-
-	transparency_slider->setEnabled(index == VIEW::DRAWING_MODE_SOLID);
 }
 
 void DisplayProperties::selectColoringMethod(int index)
@@ -320,7 +318,6 @@ void DisplayProperties::selectColoringMethod(int index)
 	{
 		throw(InvalidOption(__FILE__, __LINE__, index));
 	}
-
 
 	// enable usage from python
 	if (index != coloring_method_combobox->currentItem())

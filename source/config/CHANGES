@@ -1,12 +1,13 @@
 changes since 1.0 (02.06.04):
 
 added:
+- Documentation for BALLView in the folder BALL/doc/BALLView
 - Stereo Modi: Side-by-Side and for shutter googles 
 - Clipping Planes
 - Writing and loading of BALLView project files
 - Hotkey support for starting any (BALL-)Python command from BALLView
 - new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
-- managment of 1D and 2D grids in DatasetControl
+- management of 1D and 2D grids in DatasetControl
   ability of DatasetControl to start visualisation of 1D and 2D grids
   1D and 2D RegularDataWidgets update their contents automaticaly
 - Ramachandran Plot
@@ -25,6 +26,7 @@ fixed:
 - overall cleanup of RegularDataWidgets
 - export of PNGs could result in strange problems e.g. with empty images
 - it was possible to delete molecular entities while simulation was running -> core dump
+- its now possible to create transparent wireframe and dot models
 - PeptideDialog: deletion of sequence
 - problem with normals in Cartoon model
 - issue with restoring window's geometry on X11 (still buggy on some X-Servers)

@@ -9,7 +9,7 @@
 <center>
 <table width="700" border="0" cellpadding="0">
   <tr>
-    <td>
+    <td align=left>
 
 <H2>DisplayProperties</H2>
 <img src="images/displayProperties.png"><br><br>
@@ -19,6 +19,84 @@ This is the main dialog for creating and modifiying Representations. It can be o
 	<li>the <a href="molecularControl.html#context_menu_mc">context menu</a> in the <a href="molecularControl.html">MolecularControl</a></li>
 	<li>the context menu in the <a href="geometricControl.html">GeometricControl</a></li>
 </ul>
+
+The dialog can be used in two modi, depending on what items the user selecteded:
+<ul>
+<li>If a Representation in the GeometricControl is selected, the dialog will modifiy this Representation. 
+</li>
+<li>If a molecular entity in the MolecularControl is selected, the dialog will create a new Representation.
+</li>
+</ul>
+To distingish between these two modi, the caption of the dialog and the caption of the apply button in the lower left side will differ, 
+depending on which mode is currently active.
+
+<H3>Model Settings</H3>
+The left side of the dialog contains all control elements for the model settings.
+
+<H4>Models</H4>
+In the upper left side the user can select the model. Currently BALLView provides the following models:
+<br><br>
+<table width="700" border="1" cellpadding="5">
+  <tr>
+    <td><b>Model</td>
+    <td><b>Note</b></td></td>
+  </tr>
+  <tr>
+    <td>Line</td>
+    <td>very fast, first choice for <b>very</b> slow computers</td>
+  </tr>
+  <tr>
+    <td>Stick</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Ball and Stick</td>
+    <td>can also show aromatic and multiple bonds dashed (see Advanced Options)</td>
+  </tr>
+  <tr>
+    <td>Van der Waals</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Solvent Excluded Surface</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Solvent Accessible Surface</td>
+    <td>Currently still very slow and buggy</td>
+  </tr>
+  <tr>
+    <td>Backbone</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Cartoon</td>
+    <td>Use best with coloring mode SecondaryStructure</td>
+  </tr>
+  <tr>
+    <td>H-Bonds</td>
+    <td>See <a href="tips.html#hydrogen_bonds">here</a></td>
+  </tr>
+  <tr>
+    <td>Forces</td>
+    <td>Invisible if no forces are acting on atoms. </td>
+  </tr>
+</table>
+
+<H4>Resolution</H4>
+
+	Every model can be created in at least three different resolutions to comply with vastly different graphic performances of todays computers.
+Try setting the detail level to "low" if the graphics are bucking while rotating the view. 
+The detail level of all surfaces can be set in smaller steps by using the according slider below. <br><br>
+
+<img src="images/resolution.png"><br><br>
+A Ball and Stick model in the three different detail levels.
+
+<H4>Drawing Mode</H4>
+
+<img src="images/dots_wireframe.jpg"><br>
+BALLView provides three drawing modes: solid, wireframe and dots.<br>
+<b>Hint:</b> For images like above try the wireframe modus for surfaces with a transparency around 80%.
 
  </td></tr></table>
 </body>
