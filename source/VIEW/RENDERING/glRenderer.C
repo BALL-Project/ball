@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.46 2004/09/07 14:16:13 amoll Exp $
+// $Id: glRenderer.C,v 1.47 2004/09/15 12:46:43 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -516,11 +516,20 @@ namespace BALL
 	 		translateVector3_(box.getPoint());
 
 			Vector3 v1(box.getRightVector());
-			v1.normalize();
 			Vector3 v2(box.getHeightVector());
-			v2.normalize();
+			if (v1.getSquareLength() != 0)
+			{
+				v1.normalize();
+			}
+			if (v2.getSquareLength() != 0)
+			{
+				v2.normalize();
+			}
 			Vector3 v3(box.getRightVector() % box.getHeightVector());
-			v3.normalize();
+			if (v3.getSquareLength() != 0)
+			{
+				v3.normalize();
+			}
 
 			float m[16] = { v1.x, v1.y, v1.z, 0,
 											v2.x, v2.y, v2.z, 0,
