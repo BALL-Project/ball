@@ -1,4 +1,4 @@
-// $Id: energyProcessor.C,v 1.3 2001/07/15 22:57:55 amoll Exp $
+// $Id: energyProcessor.C,v 1.4 2001/07/16 11:15:54 amoll Exp $
 
 #include <BALL/ENERGY/energyProcessor.h>
 
@@ -9,7 +9,7 @@ namespace BALL
 		: UnaryProcessor<AtomContainer>(),
 			fragment_(0),
 			energy_(0),
-			valid_(false)
+			valid_(true)
 	{
 	}
 
