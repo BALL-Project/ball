@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.4 2005/02/14 17:25:15 oliver Exp $
+// $Id: PDBFileDetails.C,v 1.5 2005/02/15 06:56:26 oliver Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -1256,7 +1256,7 @@ namespace BALL
 		(const PDB::Structure& /* structure */, const PDBInfo& /* info */)
 	{
 		// --- CONECT ---
-		// ????
+		
 	}
 	
 
@@ -1691,9 +1691,16 @@ namespace BALL
 
 	void PDBFile::writeRecord_(const PDB::RecordCONECT& cr)
 	{
-		// writeRecord_(PDB:RECORD_TYPE__CONECT,
-		//						 // ????
-		//						 );
+		writeRecord_(PDB::RECORD_TYPE__CONECT,
+								 cr.atom_serial_number,
+								 cr.bonded_atom_serial_number[0], cr.bonded_atom_serial_number[1],
+								 cr.bonded_atom_serial_number[2], cr.bonded_atom_serial_number[3],
+								 cr.hydrogen_bonded_atom_serial_number[0],
+								 cr.hydrogen_bonded_atom_serial_number[1],
+								 cr.salt_bridged_atom_serial_number[0],
+								 cr.hydrogen_bonded_atom_serial_number[2],
+								 cr.hydrogen_bonded_atom_serial_number[3],
+								 cr.salt_bridged_atom_serial_number[1]);
 	}
 
 } // namespace BALL
