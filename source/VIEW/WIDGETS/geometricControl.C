@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.66 2004/11/14 22:41:44 amoll Exp $
+// $Id: geometricControl.C,v 1.67 2004/11/25 19:19:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -44,7 +44,8 @@ namespace BALL
 			throw()
 			: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 				representation_(representation),
-				control_reference_(control)
+				control_reference_(control),
+				ignore_change_(false)
 		{
 			setText(0, text);
 			setText(1, representation->getColoringName().c_str());
