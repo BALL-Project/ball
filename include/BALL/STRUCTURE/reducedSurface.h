@@ -1,13 +1,15 @@
-// $Id: reducedSurface.h,v 1.30 2002/01/15 02:00:50 oliver Exp $
+// $Id: reducedSurface.h,v 1.31 2002/01/17 00:44:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
 
-//#define print_rs_debug_info
-#define debug_surface_processor
-#ifdef debug_surface_processor
-#	define debug_surface_processor_verbose
-//#	define debug_surface_processor_print
+#ifdef DEBUG
+	#define print_rs_debug_info
+	#define debug_surface_processor
+	#ifdef debug_surface_processor
+		#define debug_surface_processor_verbose
+		#define debug_surface_processor_print
+	#endif
 #endif
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H

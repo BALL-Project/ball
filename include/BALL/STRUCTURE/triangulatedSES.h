@@ -1,16 +1,16 @@
-// $Id: triangulatedSES.h,v 1.5 2002/01/15 02:00:52 oliver Exp $
+// $Id: triangulatedSES.h,v 1.6 2002/01/17 00:44:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
 #define BALL_STRUCTURE_TRIANGULATEDSES_H
 
-//#define with_indices
-//#define debug_triangulation
-#ifdef debug_triangulation
-#	define with_bonds
-#	define debug_triangulation_with_planes
-#endif
-#ifdef with_indices
-#	define print_debug_info
+#ifdef DEBUG
+	#ifdef debug_triangulation
+	#	define with_bonds
+	#	define debug_triangulation_with_planes
+	#endif
+	#ifdef with_indices
+	#	define print_debug_info
+	#endif
 #endif
 
 #ifdef BALL_STRUCTURE_TRIANGULATEDSURFACE_H

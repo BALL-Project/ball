@@ -1,11 +1,9 @@
-// $Id: surfaceProcessor.h,v 1.21 2002/01/07 18:07:50 strobel Exp $
+// $Id: surfaceProcessor.h,v 1.22 2002/01/17 00:44:07 oliver Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
-//#include <BALL/STRUCTURE/singularities.h>
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 #include <BALL/STRUCTURE/triangulatedSES.h>
-//#include <BALL/STRUCTURE/triangulation.h>
 #include <BALL/MATHS/surface.h>
 #include <BALL/CONCEPT/processor.h>
 #include <BALL/KERNEL/atom.h>
