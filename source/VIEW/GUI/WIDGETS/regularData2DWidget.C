@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.22 2001/06/06 15:08:33 anker Exp $
+// $Id: regularData2DWidget.C,v 1.23 2001/07/17 00:40:02 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -338,11 +338,11 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
     QWMatrix m(1, 0, 0, -1, 0, ny);
     paint.setWorldMatrix(m);
 
-    for (y=0; y<ny; y++) 
+    for (y = 0; y < ny; y++) 
     {
-      for (x=0; x<nx; x++) 
+      for (x = 0; x < nx; x++) 
       {
-				pCol = con2rgb((double) *(spec_->getData(actx+x*stepx, acty+y*stepy)), min_, max_);
+				pCol = con2rgb((double)*(spec_->getData((Position)(actx + x * stepx), (Position)(acty + y * stepy))), min_, max_);
 				paint.setPen(pCol);
 				paint.drawPoint(x, y);
       }

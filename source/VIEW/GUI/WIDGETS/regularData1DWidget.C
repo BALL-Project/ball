@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.C,v 1.6 2001/06/06 15:05:37 anker Exp $
+// $Id: regularData1DWidget.C,v 1.7 2001/07/17 00:40:02 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
 
@@ -41,12 +41,13 @@ RegularData1DWidget::RegularData1DWidget(Size l, DoubleReal min, DoubleReal max,
   viewport()->setMouseTracking(true);
 }
 
-RegularData1DWidget::RegularData1DWidget(const RegularData1DWidget& widget) 
+RegularData1DWidget::RegularData1DWidget(const RegularData1DWidget& /* widget */) 
   throw()
   : QScrollView(), 
     ModularWidget("RegularData1DWidget"),
     spec_(0)
 {
+	// BAUSTELLE
 }
 
 RegularData1DWidget::~RegularData1DWidget()
@@ -147,24 +148,24 @@ void RegularData1DWidget::createPlot()
   QPainter p( &pm_ );
 
   // scale
-  p.setWindow(  0, 0, length_, max_el);
-  p.setViewport(0, 0, length_, height());
+  p.setWindow(0, 0, length_, (int)max_el);
+  p.setViewport(0, 0, length_, (int)height());
   
   // transform: set (0,0) to lower left corner
   QWMatrix m(1, 0, 0, -1, 0, max_el);
   p.setWorldMatrix(m);
 
-  for (Size i=0; i<length_; i++)
+  for (Size i = 0; i < length_; i++)
   {
-    fdummy.putPoints(i, 1, i, (*spec_)[i]*10e4);
+    fdummy.putPoints(i, 1, i, (int)((*spec_)[i]*10e4));
   }
-  p.setPen( QColor(red) );
-  p.drawPolyline( fdummy );
+  p.setPen(QColor(red));
+  p.drawPolyline(fdummy);
 
-
-p.drawText(length_/2, (*spec_)[length_/2], "Hallo!");
-cout << (*spec_)[length_/2] << endl; 
-  p.drawLine(0,0,length_, max_el);
+	// BAUSTELLE: remove debugging code!
+	p.drawText(length_/2, (int)((*spec_)[length_/2]), "Hallo!");
+	cout << (*spec_)[length_/2] << endl; 
+  p.drawLine(0,0,length_, (int)max_el);
 
   p.end();
 
@@ -179,12 +180,13 @@ void RegularData1DWidget::drawContents(QPainter *paint, int clipx, int clipy, in
   };
 }
 
-void RegularData1DWidget::paintEvent(QPaintEvent *e)
+void RegularData1DWidget::paintEvent(QPaintEvent* /* e */)
 {
   if ((pm_.size() != QSize(0,0)))
   {
     QPainter paint(viewport());
 
+		// BAUSTELLE: remove debugging code
     pm_.save("abc.ppm", "PPMRAW");
     
     paint.setClipRect(contentsX(), contentsY(), contentsWidth(), contentsHeight());
