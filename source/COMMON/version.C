@@ -1,4 +1,4 @@
-// $Id: version.C,v 1.5 2000/07/17 22:37:18 oliver Exp $
+// $Id: version.C,v 1.6 2000/07/17 22:38:16 oliver Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
@@ -19,7 +19,7 @@ namespace BALL
 		return minor.toInt();
 	}
 	
-	int VersionInfo::getMinorRevision()
+	int VersionInfo::getMajorRevision()
 	{
 		static String release(BALL_RELEASE_STRING);
 		return release.getField(0, ". ").toInt();
