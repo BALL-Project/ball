@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.169 2005/03/01 16:46:28 amoll Exp $
+// $Id: scene.C,v 1.170 2005/03/04 14:58:38 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2254,8 +2254,22 @@ namespace BALL
 			gl_test->makeCurrent();
 			bool supports =  gl_test->isValid();
 			delete gl_test;
-			if (supports) gl_format_ = (QGL::DepthBuffer | QGL::DoubleBuffer);
+			if (!supports) 
+			{
+				gl_format_ = (QGL::DepthBuffer | QGL::DoubleBuffer);
+				gl_test = new QGLWidget(test_format, 0);
+				gl_test->makeCurrent();
+				supports =  gl_test->isValid();
+				delete gl_test;
+				if (!supports)
+				{
+					gl_format_ = (QGL::DepthBuffer);
+				}
+			}
+			
 			return supports;
 		}
 
-} }// namespaces
+	} // namespace VIEW
+
+} // namespace BALL
