@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.15 2000/02/12 10:48:37 oliver Exp $
+// $Id: forceField.C,v 1.16 2000/03/26 12:57:12 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -258,7 +258,7 @@ namespace BALL
 	}
 
 	// Returns the reference of the atom vector atoms_
-	const vector<Atom*>& ForceField::getAtoms() const 
+	const AtomVector& ForceField::getAtoms() const 
 	{
 		return atoms_;
 	}
@@ -296,7 +296,7 @@ namespace BALL
 		}
 
 		// Set forces to zero
-		for (vector<Atom*>::iterator it = atoms_.begin(); it != atoms_.end(); ++it) 
+		for (AtomVector::Iterator it = atoms_.begin(); it != atoms_.end(); ++it) 
 		{
 			(*it)->setForce(RTTI::getDefault<Vector3>());
 		}
@@ -313,25 +313,25 @@ namespace BALL
 	}
 
 	// Calculate the RMS of the gradient
-	float	ForceField::getRMSGradient() const
+	double	ForceField::getRMSGradient() const
 	{
-		float sum = 0;
-		vector<Atom*>::const_iterator it = atoms_.begin();
+		double sum = 0;
+		AtomVector::ConstIterator it = atoms_.begin();
 		for (; it != atoms_.end(); ++it)
 		{
 			sum += (*it)->getForce().getSquareLength();
 		}
-		sum = sqrt(sum/(3 * (float)atoms_.size()));
+		sum = sqrt(sum/(3 * (double)atoms_.size()));
 		sum *= Constants::AVOGADRO / 1e13;
 		return(sum);
 	}
 
-	float ForceField::getEnergy() const 
+	double ForceField::getEnergy() const 
 	{
 	 return energy_;
 	}
 
-	float ForceField::updateEnergy()
+	double ForceField::updateEnergy()
 	{
 		// check for validity of the force field
 		if (!isValid())
