@@ -1,4 +1,4 @@
-// $Id: forEach.h,v 1.2 1999/12/28 21:29:13 oliver Exp $
+// $Id: forEach.h,v 1.3 2000/10/05 21:50:07 oliver Exp $
 
 #ifndef BALL_DATATYPE_FOREACH_H
 #define BALL_DATATYPE_FOREACH_H
@@ -10,7 +10,7 @@
 /**	Container Iteration Macro.
 		Use this macro for convenient iteration over BALL container 
 		classes.\\
-		{\bf Example:}\\	
+		{\bf Example:}\\
 \begin{verbatim}
 		HashMap<int,int> hm;
 		HashMap<int,int>::Iterator it;

@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.18 2000/08/30 19:58:02 oliver Exp $ 
+// $Id: pointGrid.h,v 1.19 2000/10/05 21:52:58 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -404,7 +404,7 @@ namespace BALL
 				\TEX{
 				\begin{eqnarray*}
 					{\mathrm value} & = & v_1 dx dy dz\\
-													& + & v_2 (1 - dx) dy dz\\ 
+													& + & v_2 (1 - dx) dy dz\\
 													& + & v_3 dx (1 - dy) dz\\
 													& + & v_4 (1 - dx) (1 - dy) dz\\
 													& + & v_5 dx dy (1 - dz)\\

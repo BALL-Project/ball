@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.8 2000/07/26 15:11:18 amoll Exp $
+// $Id: options.h,v 1.9 2000/10/05 21:52:57 oliver Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -212,7 +212,7 @@ namespace BALL
 
 		/** 	Assigns the real number given by value to key.
 					{\bf value} is first converted to a string, which is 
-					then stored in the option object.\\	
+					then stored in the option object.\\
 					If {\bf key} didn't already exist, it is created.
 					@param	value the new value
 					@param key the key
@@ -245,7 +245,7 @@ namespace BALL
 		/**	Assigns the boolean value given by value to the table entry key.
 				The value assocaited with {\bf key} is either set to
 				the string "true" or the string "false".\\
-				If {\bf key} didn't already exist, it is created.\\	
+				If {\bf key} didn't already exist, it is created.\\
 				@param	key the key
 				@param	value the boolean value
 				@memo

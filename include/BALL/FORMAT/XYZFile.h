@@ -1,4 +1,4 @@
-// $Id: XYZFile.h,v 1.3 2000/07/12 19:30:56 oliver Exp $
+// $Id: XYZFile.h,v 1.4 2000/10/05 21:53:22 oliver Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
@@ -23,7 +23,7 @@ namespace BALL
 			The XYZ format is a very simple molecular file format. It contains
 			only the atom type (i.e., the element) and the cartesian coordinates
 			of the structure. Bonds, atom names, and structural information is
-			not part of this file format.\\	
+			not part of this file format.\\
 			The first line of oeach XYZ file contains a single integer number: the number
 			of atoms in the file. The second line is just a comment line. When reading a 
 			XYZ file, BALL stores this comment as the name attribute of the system read.
