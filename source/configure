@@ -18593,8 +18593,8 @@ fi
 echo "${ECHO_T}" >&6
 			echo "$as_me:$LINENO: result: Could not find the QT Meta Object Compiler (moc)!" >&5
 echo "${ECHO_T}Could not find the QT Meta Object Compiler (moc)!" >&6
-			echo "$as_me:$LINENO: result: You might run into trouble if you want to compile MolVIEW." >&5
-echo "${ECHO_T}You might run into trouble if you want to compile MolVIEW." >&6
+			echo "$as_me:$LINENO: result: You might run into trouble if you want to compile BALLView." >&5
+echo "${ECHO_T}You might run into trouble if you want to compile BALLView." >&6
 			echo "$as_me:$LINENO: result: Please include the correct path to moc into your" >&5
 echo "${ECHO_T}Please include the correct path to moc into your" >&6
 			echo "$as_me:$LINENO: result: PATH environment variable or specify the path to moc" >&5
@@ -18785,8 +18785,8 @@ fi
 echo "${ECHO_T}" >&6
 			echo "$as_me:$LINENO: result: Could not find the QT User Interface Compiler (uic)!" >&5
 echo "${ECHO_T}Could not find the QT User Interface Compiler (uic)!" >&6
-			echo "$as_me:$LINENO: result: You might run into trouble if you want to compile MolVIEW." >&5
-echo "${ECHO_T}You might run into trouble if you want to compile MolVIEW." >&6
+			echo "$as_me:$LINENO: result: You might run into trouble if you want to compile BALLView." >&5
+echo "${ECHO_T}You might run into trouble if you want to compile BALLView." >&6
 			echo "$as_me:$LINENO: result: Please include the correct path to uic into your" >&5
 echo "${ECHO_T}Please include the correct path to uic into your" >&6
 			echo "$as_me:$LINENO: result: PATH environment variable or specify the path to uic" >&5
