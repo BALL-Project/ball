@@ -1,18 +1,33 @@
-// $Id: List_test.C,v 1.4 2000/08/23 15:39:54 anker Exp $
+// $Id: List_test.C,v 1.5 2000/12/01 14:57:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/DATATYPE/list.h>
-
+#include <BALL/CONCEPT/visitor.h>
+#include "ItemCollector.h"
 ///////////////////////////
-
-START_TEST(List<T>, "$Id: List_test.C,v 1.4 2000/08/23 15:39:54 anker Exp $")
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-
 using namespace BALL;
+using namespace std;
+
+class myVisitor 
+	: public  Visitor<List<int> >
+{
+	public:
+
+	int value;
+
+	void visit(List<int>& list)
+	{
+		value = list.front();
+	}
+};
+
+START_TEST(List<T>, "$Id: List_test.C,v 1.5 2000/12/01 14:57:48 amoll Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
 
 List<int>*	lst_ptr;
 CHECK(List<int>::List())											
@@ -99,6 +114,51 @@ CHECK(remove)
 	++it;
 	TEST_EQUAL(*it, 3);
 RESULT
+
+List<int> int_list1;
+
+CHECK(operator ==/!=)
+	int_list1.push_back(1);
+	int_list1.push_back(2);
+	int_list1.push_back(3);
+	List<int> int_list2(int_list1);
+
+	TEST_EQUAL(int_list1 == int_list2, true);
+
+	int_list2.remove(2);
+	TEST_EQUAL(int_list1.size(), int_list2.size() +1)
+	TEST_EQUAL(int_list1 == int_list2, false);
+
+	int_list2.push_back(2);
+	TEST_EQUAL(int_list1 == int_list2, false);
+
+	int_list2.remove(3);
+	int_list2.push_back(3);
+	TEST_EQUAL(int_list1 == int_list2, true);
+RESULT
+
+
+CHECK(host(Visitor<List<Value> >& visitor))
+	myVisitor mv;
+	TEST_EQUAL(int_list1.front(), 1);
+	int_list1.host(mv);
+	
+	TEST_EQUAL(mv.value, 1)
+RESULT
+
+CHECK(apply(UnaryProcessor<List<Value> >& processor))
+	ItemCollector<int> myproc;
+	int_list1.apply(myproc);
+
+	TEST_EQUAL(myproc.getSize(), 3)
+	TEST_EQUAL(int_list1.size(), 3)
+
+	TEST_EQUAL(*myproc.getPointer(), 1) myproc.forward();
+	TEST_EQUAL(*myproc.getPointer(), 2) myproc.forward();
+	TEST_EQUAL(*myproc.getPointer(), 3) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), 0)
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
