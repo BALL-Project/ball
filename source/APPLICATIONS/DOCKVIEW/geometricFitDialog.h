@@ -17,8 +17,8 @@
 #include <BALL/DATATYPE/options.h>
 #endif
 
-#ifndef BALL_MOLMEC_DOCKING_GEOMETRICFIT_H
-# include <BALL/MOLMEC/DOCKING/geometricFit.h>
+#ifndef BALL_STRUCTURE_DOCKING_GEOMETRICFIT_H
+# include <BALL/STRUCTURE/DOCKING/geometricFit.h>
 #endif
 
 #include "geometricFitDialogData.h"
