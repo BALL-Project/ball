@@ -1,4 +1,4 @@
-// $Id: amberStretch.C,v 1.4 1999/12/28 17:51:10 oliver Exp $
+// $Id: amberStretch.C,v 1.5 2000/01/08 12:25:40 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -12,15 +12,13 @@ namespace BALL
 
 	// default constructor
 	AmberStretch::AmberStretch()
-		:	ForceFieldComponent()
+		:	ForceFieldComponent(),
+			stretch_(0),
+			number_of_stretches_(0)
 	{	
 		// set component name
 		setName( "Amber Stretch" );
 
-		// clear the stretches
-		stretch_ = 0;
-		number_of_stretches_ = 0;
-		
 		setForceField(0);
 	}
 
@@ -45,7 +43,10 @@ namespace BALL
 		:	ForceFieldComponent(component, clone_deep)
 	{
 		// clear the stretches array
-		delete [] stretch_;
+		if (stretch_ != 0)
+		{
+			delete [] stretch_;
+		}
 
 		number_of_stretches_ = component.number_of_stretches_;
 		stretch_ = new FFPSQuadraticBondStretch::QuadraticStretch[number_of_stretches_];
