@@ -1,4 +1,4 @@
-// $Id: GlobalTypes_test.C,v 1.1 2000/12/13 16:44:38 oliver Exp $
+// $Id: GlobalTypes_test.C,v 1.2 2001/05/17 18:20:14 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 // COMMON/global.h) have the correct size on all platforms.
 // This is required for portable persistence.
 
-START_TEST(sizes of the global data types, "$Id: GlobalTypes_test.C,v 1.1 2000/12/13 16:44:38 oliver Exp $")
+START_TEST(sizes of the global data types, "$Id: GlobalTypes_test.C,v 1.2 2001/05/17 18:20:14 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ CHECK(size of Size)
 RESULT											
 
 CHECK(size of Time)
-	TEST_EQUAL(sizeof(Size), sizeof(time_t))
+	TEST_EQUAL(sizeof(Time), sizeof(time_t))
 RESULT											
 
 CHECK(size of HashIndex)
