@@ -1,4 +1,4 @@
-// $Id: MOLFile.C,v 1.2 2001/12/18 01:14:45 oliver Exp $
+// $Id: MOLFile.C,v 1.3 2001/12/18 03:28:16 oliver Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -247,7 +247,8 @@ namespace BALL
 					case 6: atom->setCharge(-2.0); break;
 					case 7: atom->setCharge(-3.0); break;
 					default:
-						throw Exception::ParseError(__FILE__, __LINE__, getLine(), String("Illegal charge flag: ") + String(atom_struct.charge));
+						throw Exception::ParseError(__FILE__, __LINE__, String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
+																				String("Illegal charge flag: ") + String(atom_struct.charge));
 				}
 				
 				// store the remaining information as named properties
@@ -271,11 +272,13 @@ namespace BALL
 				// ensure the atoms referenced do exist
 				if ((bond_struct.first_atom < 1) || (bond_struct.first_atom > counts.number_of_atoms))
 				{
-					throw Exception::ParseError(__FILE__, __LINE__, getLine(), String("Referencing undefined atom number: ") + String(bond_struct.first_atom));
+					throw Exception::ParseError(__FILE__, __LINE__, String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
+																			String("Referencing undefined atom number: ") + String(bond_struct.first_atom));
 				}
 				if ((bond_struct.second_atom < 1) || (bond_struct.second_atom > counts.number_of_atoms))
 				{
-					throw Exception::ParseError(__FILE__, __LINE__, getLine(), String("Referencing undefined atom number: ") + String(bond_struct.second_atom));
+					throw Exception::ParseError(__FILE__, __LINE__, String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
+																			String("Referencing undefined atom number: ") + String(bond_struct.second_atom));
 				}
 				
 				// create the bond
@@ -303,7 +306,8 @@ namespace BALL
 						break; 
 					
 					default:
-						throw Exception::ParseError(__FILE__, __LINE__, getLine(), String("Illegal bond type: ") + String(bond_struct.type));
+						throw Exception::ParseError(__FILE__, __LINE__, String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
+																				String("Illegal bond type: ") + String(bond_struct.type));
 				}
 
 				// store remaining stuff as named properties	
@@ -449,7 +453,8 @@ namespace BALL
 		String comment = getLine();
 		if (!ok)
 		{
-			throw Exception::ParseError(__FILE__, __LINE__, getLine(), "Unable to read header block!");
+			throw Exception::ParseError(__FILE__, __LINE__, String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
+																	"Unable to read header block");
 		}
 		vector<Atom*> atom_map;
 		readCTAB_(molecule, atom_map);
