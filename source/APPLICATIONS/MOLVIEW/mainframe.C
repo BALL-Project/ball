@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.87 2003/10/05 21:18:00 amoll Exp $
+// $Id: mainframe.C,v 1.88 2003/10/15 14:05:02 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -34,7 +34,6 @@
 #	include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
-#include <qlabel.h>
 #include <qmenubar.h>
 #include <qdockwindow.h>
 #include <qstatusbar.h>
@@ -45,9 +44,6 @@
 #ifdef QT_THREAD_SUPPORT
 #	include "threads.h"
 #endif
-
-// testing
-#include <BALL/VIEW/DIALOGS/parsedFunctionDialog.h>
 
 namespace BALL
 {
@@ -169,28 +165,32 @@ Log.error() << "new Mainframe " << this << std::endl;
 	insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, MENU_PEPTIDE);
 
 	// Tools Menu -------------------------------------------------------------------
-	hint = "Calculate the energy of a System with the AMBER force field.";
-	insertMenuEntry(MainControl::TOOLS, "Single Point Energy", this, SLOT(calculateAmberEnergy()), 
-									CTRL+Key_A, MENU_AMBER_ENERGY, hint);
+	insertPopupMenuSeparator(MainControl::TOOLS);
 	hint = "To perform an Energy Minimization, first select the molecular structures.";
 	insertMenuEntry(MainControl::TOOLS, "&Energy Minimization", this, SLOT(amberMinimization()), 
 									CTRL+Key_E, MENU_AMBER_MINIMIZATION, hint);
 	hint = "To perform a MD simulation , first select the molecular structures.";
 	insertMenuEntry(MainControl::TOOLS, "Molecular &Dynamics", this, SLOT(amberMDSimulation()), 
 									CTRL+Key_D, MENU_AMBER_MDSIMULATION, hint);
-	hint = "Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.";
-	insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  SLOT(computeIsoContourSurface()), 
-									CTRL+Key_U,MENU_CONTOUR_SURFACE, hint);
 
 #ifdef QT_THREAD_SUPPORT
 	hint = "Abort a running simulation thread";
 	insertMenuEntry(MainControl::TOOLS, "Abort Calculation", this, SLOT(stopSimulation()),
 			ALT+Key_C, MENU_STOPSIMULATION, hint);
 #endif
+	insertPopupMenuSeparator(MainControl::TOOLS);
+
 	hint = "Calculate the Electrostatics with FDPB, if one System selected.";
 	insertMenuEntry(MainControl::TOOLS_CREATE_GRID, "Electrostatics", FDPB_dialog_, SLOT(show()), 0,
 			MENU_FDPB, hint);
 			
+	hint = "Calculate the energy of a System with the AMBER force field.";
+	insertMenuEntry(MainControl::TOOLS, "Single Point Energy", this, SLOT(calculateAmberEnergy()), 
+									CTRL+Key_A, MENU_AMBER_ENERGY, hint);
+	
+	hint = "Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.";
+	insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  SLOT(computeIsoContourSurface()), 
+									CTRL+Key_U,MENU_CONTOUR_SURFACE, hint);
 	// Help-Menu -------------------------------------------------------------------
 	insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), CTRL+Key_9, MENU__HELP_ABOUT);
 
@@ -377,13 +377,13 @@ void Mainframe::amberMinimization()
 	}
 	// retrieve the system from the selection
 	System* system = getSelectedSystem();
-	if (system == 0) return;
+	if (!system) return;
 
 	// execute the minimization dialog
-	// and abort if cancel is clicked
+	// and abort if cancel is clicked or nonsense arguments are given
 	if (!minimization_dialog_->exec() ||
-			minimization_dialog_->getMaxGradient() == 0 ||
-			minimization_dialog_->getEnergyDifference() == 0)
+			!minimization_dialog_->getMaxGradient() ||
+			!minimization_dialog_->getEnergyDifference())
 	{
 		return;
 	}
@@ -482,11 +482,11 @@ void Mainframe::amberMDSimulation()
 	System* system = getSelectedSystem();
 
 	// execute the MD simulation dialog
-	// and abort if cancel is clicked
-	if (system == 0 || 
+	// and abort if cancel is clicked or nonsense arguments given
+	if (system == 0|| 
 			!md_dialog_->exec() ||
-			md_dialog_->getSimulationTime() == 0 ||
-			md_dialog_->getTemperature() == 0)
+			!md_dialog_->getSimulationTime() ||
+			!md_dialog_->getTemperature())
 	{
 		return;
 	}
@@ -547,7 +547,7 @@ void Mainframe::amberMDSimulation()
 	Size steps = md_dialog_->getStepsBetweenRefreshs();
 
 	DCDFile* dcd = 0;
-	if (md_dialog_->getDCDFile().size()) 
+	if (md_dialog_->getDCDFile().size() != 0) 
 	{
 		dcd = new DCDFile;
 		dcd->open(md_dialog_->getDCDFile(), File::OUT);
@@ -584,7 +584,10 @@ void Mainframe::amberMDSimulation()
 			scene->exportPNG();
 		}
 		
-		if (dcd) manager.takeSnapShot();
+		if (dcd != 0) 
+		{
+			manager.takeSnapShot();
+		}
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
@@ -603,7 +606,7 @@ void Mainframe::amberMDSimulation()
 	// clean up
 	delete mds;
 
-	if (dcd)
+	if (dcd != 0)
 	{
 		dcd->close();
 		delete dcd;
@@ -626,6 +629,7 @@ void Mainframe::about()
 	pfd->show();
 	return;
 	*/
+	dump();
 
 	AboutDialog about;
 	about.exec();
