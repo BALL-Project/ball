@@ -108,11 +108,8 @@ void BALLViewDemo::onNotify(Message *message)
 		{
 			nextStep_();
 		}
-		return;
 	}
-
-
-	if (id == 13)
+	else if (id == 13)
 	{
 		RegularData3DMessage* msg = RTTI::castTo<RegularData3DMessage>(*message);
 		if (msg != 0 &&
@@ -121,30 +118,35 @@ void BALLViewDemo::onNotify(Message *message)
 			grid_ = msg->getData();
 			nextStep_();
 		}
-		return;
 	}
-
-	if (rmsg != 0 && 
-			rmsg->getType() == RepresentationMessage::UPDATE)
+	else if (id == 14)
+	{
+		SceneMessage* msg = RTTI::castTo<SceneMessage>(*message);
+		if (msg != 0 && msg->getType() == SceneMessage::REBUILD_DISPLAY_LISTS)
+		{
+ 			nextStep_();
+		}
+	}
+	else if (rmsg != 0 && 
+					 rmsg->getType() == RepresentationMessage::UPDATE)
 	{
 		nextStep_();
 	}
 }
 
+
 void BALLViewDemo::nextStep_()
 {
-	buttonOk->setEnabled(true);
 	widget_stack->raiseWidget(widget_stack->id(widget_stack->visibleWidget()) + 1);
+	buttonOk->setEnabled(true);
 }
 
 void BALLViewDemo::accept()
 {
 	Index id = widget_stack->id(widget_stack->visibleWidget());
 
-	if (id == 15) // last page
+	if (id == 16) // last page
 	{
-   	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_LINES, COLORING_ELEMENT);
-   	notify_(crmsg);
 		hide();
 		return;
 	}
@@ -223,6 +225,7 @@ void BALLViewDemo::accept()
 		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_SE_SURFACE, COLORING_ELEMENT);
 		notify_(crmsg);
+		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
 
 		Representation* rep = *getMainControl()->getPrimitiveManager().begin();
 		Mesh* mesh = dynamic_cast<Mesh*> (*rep->getGeometricObjects().begin());
@@ -235,12 +238,13 @@ void BALLViewDemo::accept()
 		cdialog->applyPressed();
 
 		rep->setColorProcessor(0);
-		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
 
- 		SceneMessage* smsg = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
- 		notify_(smsg);
-
-		/*
+ 		SceneMessage smsg(SceneMessage::REBUILD_DISPLAY_LISTS);
+ 		getMainControl()->sendMessage(smsg);
+		disable_button = false;
+	}
+	else if (id == 15)
+	{
 		ContourSurface cs(*grid_, 0.01);
 		Mesh* mesh = new Mesh;
 		mesh->Surface::operator = (static_cast<Surface&>(cs));
@@ -262,7 +266,7 @@ void BALLViewDemo::accept()
 			}
 		}
 
-		if (nr_of_strange_normals > mesh->normal.size() / 2.0)
+		if (nr_of_strange_normals < mesh->normal.size() / 2.0)
 		{
 			for (Position i = 0; i < mesh->normal.size(); i++)
 			{
@@ -270,27 +274,16 @@ void BALLViewDemo::accept()
 			}
 		}
 
-		Stage stage = *Scene::getInstance(0)->getStage();
-		stage.clearLightSources();
-		LightSource ls;
-		ls.setPosition(Vector3(0,0,4000));
-		ls.setDirection(Vector3(0,0,0));
-		stage.addLightSource(ls);
-		SceneMessage* smsg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
-		smsg->setStage(stage);
-		notify_(smsg);
 		// Create a new representation containing the contour surface.
 		Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
 		rep->insert(*mesh);
 		rep->setModelType(MODEL_CONTOUR_SURFACE); 
 
-		// Make sure BALLView knows about the new representation.
 		RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
 		notify_(message);
 
-*/
- 		disable_button = false;
-		
+   	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
+   	notify_(crmsg);
 	}
 
 	buttonOk->setEnabled(!disable_button);

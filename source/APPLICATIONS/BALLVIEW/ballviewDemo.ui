@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>BALLViewDemoData</class>
 <widget class="QDialog">
     <property name="name">
@@ -645,6 +645,8 @@ any representations, we can now choose from a number of
 different visualization
 options. For example, we can colour the protein's SES
 according to the electrostatic potential.
+Depending on the performance of your machine
+this might take a moment.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -678,13 +680,9 @@ according to the electrostatic potential.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-This completes our interactive tour of BALLView.&lt;br&gt;&lt;br&gt;
-But apart from what was shown in this demo, there are numerous
-additional features to explore, like e.g. the integrated peptide
-builder, the POVRay export, or the powerful Python scripting
-support.&lt;br&gt;&lt;br&gt;
-Additional information and the BALLView manual can be found
-at &lt;a href="http://www.ballview.org"&gt;http://www.ballview.org&lt;/a&gt;
+An other way to visualise the electorstatics grid are isocontour surfaces.
+The surface which will be drawn next connects all points in the grid which have an
+electrostatic value of 0.01. 
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -692,6 +690,50 @@ at &lt;a href="http://www.ballview.org"&gt;http://www.ballview.org&lt;/a&gt;
                                 </property>
                             </widget>
                         </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>16</number>
+                        </attribute>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel3_2_2_4_5_2_2_2_2_2_2_2_2</cstring>
+                            </property>
+                            <property name="geometry">
+                                <rect>
+                                    <x>12</x>
+                                    <y>12</y>
+                                    <width>483</width>
+                                    <height>273</height>
+                                </rect>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>7</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>&lt;blockquote&gt;
+This completes our interactive tour of BALLView.&lt;br&gt;&lt;br&gt;
+But apart from what was shown in this demo, there are numerous
+additional features to explore, like e.g. the integrated peptide
+builder, the POVRay export, or the powerful Python scripting
+support.&lt;br&gt;&lt;br&gt;
+Next you can try the BALLView tutorial.
+Additional information and the BALLView manual can be found
+at &lt;a href="http://www.ballview.org"&gt;http://www.ballview.org&lt;/a&gt;
+&lt;/blockquote&gt;</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignJustify|AlignTop</set>
+                            </property>
+                        </widget>
                     </widget>
                 </widget>
                 <widget class="QLayoutWidget">
