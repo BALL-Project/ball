@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.15 2003/12/15 15:13:40 amoll Exp $
+// $Id: glRenderer.C,v 1.16 2003/12/17 11:25:58 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -611,6 +611,11 @@ namespace BALL
 		void GLRenderer::renderMesh_(const Mesh& mesh)
 			throw()
 		{
+			if (drawing_mode_ == DRAWING_MODE_DOTS ||
+					drawing_mode_ == DRAWING_MODE_WIREFRAME)
+			{
+				glDisable(GL_LIGHTING);
+			}
 			// If we have only one color for the whole mesh, this can
 			// be assigned efficiently
 			if (mesh.colorList.size() < mesh.vertex.size())
@@ -671,7 +676,13 @@ namespace BALL
 						glEnd();
 					}
 				}
-
+				
+				if (drawing_mode_ == DRAWING_MODE_DOTS ||
+						drawing_mode_ == DRAWING_MODE_WIREFRAME)
+				{
+					glEnable(GL_LIGHTING);
+				}
+				
 				return;
 			}
 
@@ -733,6 +744,12 @@ namespace BALL
 					glEnd();
 				}
 				// ------------------
+			}
+
+			if (drawing_mode_ == DRAWING_MODE_DOTS ||
+					drawing_mode_ == DRAWING_MODE_WIREFRAME)
+			{
+				glEnable(GL_LIGHTING);
 			}
 		}
 
