@@ -46,6 +46,7 @@ EXECUTABLES = \
 	Matrix44_test\
 	MOL2File_test\
 	Molecule_test\
+	NMRStarFile_test\
 	NumericalSAS_test\
 	NucleicAcid_test\
 	Nucleotide_test\
