@@ -1,4 +1,4 @@
-// $Id: steepestDescent.C,v 1.2 1999/08/31 22:01:17 oliver Exp $
+// $Id: steepestDescent.C,v 1.3 1999/09/15 08:40:25 len Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/COMMON/limits.h>
@@ -227,8 +227,6 @@ namespace BALL
 				// calculate factor for atom displacements
 				factor = Constants::AVOGADRO / 1.0e13 * step_size / gradient_norm;
 
-				cout << "+step: " << step_size << " -> ";
-
 			} else {
 
 				// this step didn't result in a lower energy
@@ -240,7 +238,6 @@ namespace BALL
 				// reduce step size
 				step_size *= 0.5;
 				last_update++;
-				cout << "-step: " << step_size << " -> ";
 			}
 
 
@@ -265,7 +262,7 @@ namespace BALL
 				Log.info() << "iteration " << number_of_iteration_ 
 									 << " energy: " << energy << " kJ/mol"
 									 << " min_en: " << min_energy << " kJ/mol"
-									 << " grad: " << gradient_norm / 4.184 << " kcal/(mol A)"
+									 << " grad: " << gradient_norm  << " kJ/(mol A)"
 									 << " energy_change: " << energy_change << " kJ/mol" 
 									 << endl;
 			}
