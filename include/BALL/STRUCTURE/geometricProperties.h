@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.h,v 1.23 2003/08/26 08:04:51 oliver Exp $
+// $Id: geometricProperties.h,v 1.24 2004/02/24 13:33:29 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -97,7 +97,13 @@ namespace BALL
 		/**
 		*/
 		virtual Processor::Result operator () (Atom& atom)
+			throw() { return operator() (atom.getPosition());}
+
+		/**
+		*/
+		virtual Processor::Result operator () (const Vector3& v)
 			throw();
+
 
 		//@}
 		/**	@name Accessors
@@ -159,6 +165,11 @@ namespace BALL
 		/**
 		*/
 		virtual Processor::Result operator()(Atom& atom)
+			throw() { return operator()(atom.getPosition());}
+
+		/**
+		*/
+		virtual Processor::Result operator()(const Vector3& v)
 			throw();
 
 		//@}

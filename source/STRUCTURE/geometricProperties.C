@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.C,v 1.20 2003/08/26 09:18:27 oliver Exp $
+// $Id: geometricProperties.C,v 1.21 2004/02/24 13:33:38 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -40,38 +40,38 @@ namespace BALL
 	}
 
 
-	Processor::Result BoundingBoxProcessor::operator()(Atom& atom)
+	Processor::Result BoundingBoxProcessor::operator()(const Vector3& v)
 		throw()
 	{
 
-		if (lower_.x > atom.getPosition().x) 
+		if (lower_.x > v.x) 
 		{
-			lower_.x = atom.getPosition().x;
+			lower_.x = v.x;
 		}
 
-		if (lower_.y > atom.getPosition().y) 
+		if (lower_.y > v.y) 
 		{
-			lower_.y = atom.getPosition().y;
+			lower_.y = v.y;
 		}
 
-		if (lower_.z > atom.getPosition().z) 
+		if (lower_.z > v.z) 
 		{
-			lower_.z = atom.getPosition().z;
+			lower_.z = v.z;
 		}
 
-		if (upper_.x < atom.getPosition().x) 
+		if (upper_.x < v.x) 
 		{
-			upper_.x = atom.getPosition().x;
+			upper_.x = v.x;
 		}
 
-		if (upper_.y < atom.getPosition().y) 
+		if (upper_.y < v.y) 
 		{
-			upper_.y = atom.getPosition().y;
+			upper_.y = v.y;
 		}
 
-		if (upper_.z < atom.getPosition().z) 
+		if (upper_.z < v.z) 
 		{
-			upper_.z = atom.getPosition().z;
+			upper_.z = v.z;
 		}
 
 		return Processor::CONTINUE;
@@ -117,10 +117,10 @@ namespace BALL
 		return true;
 	}
 
-	Processor::Result GeometricCenterProcessor::operator()(Atom& atom)
+	Processor::Result GeometricCenterProcessor::operator()(const Vector3& v)
 		throw()
 	{
-		center_ += atom.getPosition();
+		center_ += v;
 		n_++;
 
 		return Processor::CONTINUE;
