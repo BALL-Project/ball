@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.3 2000/06/13 14:12:47 amoll Exp $
+// $Id: directory.h,v 1.4 2000/06/15 19:11:01 amoll Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -19,8 +19,8 @@
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
 
-#include <string.h>
 #include <dirent.h>
+
 
 namespace BALL 
 {
@@ -183,12 +183,28 @@ namespace BALL
 		*/
 		static bool remove(String old_path);
 
+		/** Get the name of the first entry in the directory.
+				@param entry reference to the first name of the entry
+				@return bool true if an entry was found
+		*/
 		bool getFirstEntry(String& entry);
 
+		/** Get the name of the first entry in the directory.
+				@param entry constant reference to first the name of the entry
+				@return bool true if an entry was found
+		*/
 		bool getFirstEntry(String& entry) const;
 
+		/** Get the name of the next entry in the directory.
+				@param entry reference to the next name of the entry
+				@return bool true if an entry was found
+		*/
 		bool getNextEntry(String& entry);
 
+		/** Get the name of the next entry in the directory.
+				@param entry constant reference to the next name of the entry
+				@return bool true if an entry was found
+		*/
 		bool getNextEntry(String& entry) const;
 
 		/** Count all items in the directory.
@@ -281,21 +297,8 @@ namespace BALL
 		{
 			public:
 
-				FileFinder_(const String& filename)
-					:filename_(filename)
-				{
-				}
-
-				virtual BALL::Processor::Result operator() (const String& path)
-				{
-					const char* filename = strrchr(path.data(), FileSystem::PATH_SEPARATOR);
-
-					if ((filename != 0 && strcmp(filename + 1, filename_.data()) == 0)
-							|| path == filename_)
-					{
-						return Processor::ABORT;
-					} else return Processor::CONTINUE;
-				}
+				FileFinder_(const String& filename);
+				BALL::Processor::Result operator() (const String& path);
 
 				private:
 
