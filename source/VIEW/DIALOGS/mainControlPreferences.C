@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.C,v 1.10 2004/04/30 13:17:15 amoll Exp $
+// $Id: mainControlPreferences.C,v 1.11 2004/09/02 15:09:24 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
@@ -22,7 +22,6 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 {
 	style_box_->setEditable(false);
 	style_box_->insertStringList(QStyleFactory::keys());
-	show();
 }
 
 MainControlPreferences::~MainControlPreferences()

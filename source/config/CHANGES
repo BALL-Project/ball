@@ -43,6 +43,7 @@ fixed:
 - MDS dialog: switching off storing to trajectory file
 - Scene: mouse sensitivity was adjusted
 - now show the correct number of added bonds
+- prevent flicking an startup from MainControlPreferences dialog
 
 changed:
 - inside of surfaces gets now correctly drawn
