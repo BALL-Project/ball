@@ -1,3 +1,5 @@
+// $Id: property.sip,v 1.2 2001/12/28 02:25:52 oliver Exp $
+
 class NamedProperty
   : PersistentObject
 {
@@ -25,43 +27,48 @@ class NamedProperty
   PersistentObject* getObject() const;
   String getString() const;
   NamedProperty();
- };
- class PropertyManager
- {
+};
+
+class PropertyManager
+{
   public:
-   PropertyManager();
-   PropertyManager(const PropertyManager&);
-	 ~PropertyManager();
-   void clear();
-   void destroy();
-   void set(const PropertyManager&);
-//   PropertyManager& operator = (const PropertyManager&);
-   void get(PropertyManager&) const;
-   void swap(PropertyManager&);
-//   BitVector& getBitVector();
-//   const BitVector& getBitVector() const;
-//   operator BitVector& ();
-   void setProperty(int);
-   void clearProperty(int);
-   void toggleProperty(int);
-   int countProperties() const;
-   void setProperty(NamedProperty&);
-   void setProperty(const String&);
-   //void setProperty(const String&, bool);
-   //void setProperty(const String&, int);
-//   void setProperty(const String&, unsigned int);
-   void setProperty(const String&, float);
-   void setProperty(const String&, String&);
-   void setProperty(const String&, PersistentObject&);
-   const NamedProperty& getProperty(const String&) const;
-   void clearProperty(const String&);
-   int countNamedProperties() const;
-   bool hasProperty(int) const;
-   bool hasProperty(const String&) const;
-//   friend ostream& operator << (ostream& s, const PropertyManager&);
-//   friend istream& operator >> (istream& s, PropertyManager&);
-//   void write(PersistenceManager& pm) const;
-//   bool read(PersistenceManager& pm);
-   bool isValid() const;
-//   void dump(ostream& s = cout, unsigned long depth = 0) const;
- };
+  PropertyManager();
+  PropertyManager(const PropertyManager&);
+	~PropertyManager();
+  void clear();
+  void destroy();
+  void set(const PropertyManager&);
+	//   PropertyManager& operator = (const PropertyManager&);
+  void get(PropertyManager&) const;
+  void swap(PropertyManager&);
+	//   BitVector& getBitVector();
+	//   const BitVector& getBitVector() const;
+	//   operator BitVector& ();
+  void setProperty(int);
+  void clearProperty(int);
+  void toggleProperty(int);
+  int countProperties() const;
+  void setProperty(NamedProperty&);
+  void setProperty(const String&);
+  //void setProperty(const String&, bool);
+  //void setProperty(const String&, int);
+	//   void setProperty(const String&, unsigned int);
+  void setProperty(const String&, float);
+  void setProperty(const String&, String&);
+  void setProperty(const String&, PersistentObject&);
+  const NamedProperty& getProperty(const String&) const;
+  void clearProperty(const String&);
+	Size countNamedProperties() const;
+  const NamedProperty& getNamedProperty(Position /index/) const
+     throw(IndexOverflow);
+  NamedProperty& getNamedProperty(Position /index/)
+     throw(IndexOverflow);
+  bool hasProperty(int) const;
+  bool hasProperty(const String&) const;
+	// friend ostream& operator << (ostream& s, const PropertyManager&);
+	// friend istream& operator >> (istream& s, PropertyManager&);
+	// void write(PersistenceManager& pm) const;
+	// bool read(PersistenceManager& pm);
+  bool isValid() const;
+	// void dump(ostream& s = cout, unsigned long depth = 0) const;
+};

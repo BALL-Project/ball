@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.4 2001/12/27 11:47:18 oliver Exp $
+// $Id: string.sip,v 1.5 2001/12/28 02:25:52 oliver Exp $
 
 class Substring
 {
@@ -244,6 +244,26 @@ class String
 
   if ((ptr = (String *)sipGetCppPtr((sipThisType*)a0,sipClass_String)) == NULL)
     return NULL;
+
+  if ((s = ptr->c_str()) == NULL)
+  {
+    Py_INCREF(Py_None);
+    return Py_None;
+  }
+
+  return PyString_FromString(s);
+%End
+
+ 
+	PyMethod __repr__
+%MemberCode
+  const char *s;
+  String *ptr;
+
+  if ((ptr = (String *)sipGetCppPtr((sipThisType*)a0,sipClass_String)) == NULL)
+    return NULL;
+
+	*ptr = String("'") + *ptr + "'";
 
   if ((s = ptr->c_str()) == NULL)
   {

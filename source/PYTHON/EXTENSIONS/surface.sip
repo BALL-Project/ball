@@ -1,4 +1,4 @@
-// $Id: surface.sip,v 1.3 2001/12/27 11:47:18 oliver Exp $
+// $Id: surface.sip,v 1.4 2001/12/28 02:25:52 oliver Exp $
 
 class Surface
 {
@@ -7,13 +7,15 @@ class Surface
 	using namespace BALL;
 %End
   public:
-	//  BALL_CREATE_NODEEP(Surface)
-  //struct Triangle
-  //{
-  // Index v1;
-  // Index v2;
-  // Index v3;
-  //};
+  class Triangle
+ 	{
+		public:
+	  Index v1;
+	  Index v2;
+	  Index v3;
+  };
+
+	public:
   Surface();
   Surface(const Surface& /surface/);
   ~Surface();
@@ -25,8 +27,26 @@ class Surface
   float getArea() const;
   bool operator == (const Surface& /box/) const;
   bool operator != (const Surface& /box/) const;
-  bool isValid() const;
   // vector<Vector3>  vertex;
   // vector<Vector3>  normal;
   // vector<Triangle> triangle;
+
+	Size getNumberOfTriangles() const throw();
+	Size getNumberOfVertices() const throw();
+	Size getNumberOfNormals() const throw();
+	Triangle& getTriangle(Position /index/) throw();
+	const Triangle& getTriangle(Position /index/) const throw();
+	Vector3& getVertex(Position /index/) throw();
+	const Vector3& getVertex(Position /index/) const throw();
+	Vector3& getNormal(Position /index/) throw();
+	const Vector3& getNormal(Position /index/) const throw();
+	void clearVertices();
+	void clearTriangles();
+	void clearNormals();
+	void pushBackTriangle(const Triangle& /t/) throw();
+	void pushBackVertex(const Triangle& /v/) throw();
+	void pushBackNormal(const Triangle& /n/) throw();
+	void resizeTriangles(Size /size/);
+	void resizeNormals(Size /size/);
+	void resizeVertices(Size /size/);
 };

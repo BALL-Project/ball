@@ -1,4 +1,4 @@
-// $Id: atom.sip,v 1.2 2001/12/22 16:39:14 oliver Exp $
+// $Id: atom.sip,v 1.3 2001/12/28 02:25:52 oliver Exp $
 
 class Atom
   : Composite,
@@ -106,6 +106,19 @@ class Atom
 				+ String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " " 
 				+ String(ptr->getPosition().z) + " }").c_str());
 %End
+
+	PyMethod __repr__
+%MemberCode
+  Atom* ptr;
+  if ((ptr = (Atom*)sipGetCppPtr((sipThisType*)a0 ,sipClass_Atom)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Atom ") + ptr->getName() 
+				+ " { " + ptr->getElement().getSymbol() + " @ (" 
+				+ String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " " 
+				+ String(ptr->getPosition().z) + " }").c_str());
+%End
+
 };
  
 class AtomType
@@ -130,6 +143,15 @@ class AtomType
 %End
 
 	PyMethod __str__
+%MemberCode
+	AtomType* ptr;
+  if ((ptr = (AtomType*)sipGetCppPtr((sipThisType*)a0,sipClass_AtomType)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(*ptr).c_str());
+%End
+
+	PyMethod __repr__
 %MemberCode
 	AtomType* ptr;
   if ((ptr = (AtomType*)sipGetCppPtr((sipThisType*)a0,sipClass_AtomType)) == NULL)
