@@ -1,4 +1,4 @@
-// $Id: canonicalMD.h,v 1.3 2000/03/26 12:48:54 oliver Exp $
+// $Id: canonicalMD.h,v 1.4 2000/05/10 08:40:18 pmueller Exp $
 // Canonical MD: A class for doing molecular dynamics simulations      
 // according to the principle of a canonical ensemble (NVT), i.e., 
 // the temperature is kept constant. 
@@ -116,6 +116,19 @@ namespace BALL
     //@}
 
 
+    /** Accessors
+    */
+    //@{
+    /** This method sets a new relaxation time for the coupling to an
+        external heat bath
+    */
+    void setBathRelaxationTime(double time);
+
+    /** This method gets the current value for heat bath coupling
+    */
+    double getBathRelaxationTime() const; 
+    //@}
+
     /** @name Setup methods
     */
     //@{
@@ -138,20 +151,30 @@ namespace BALL
     /** @name Accessors
     */
 
+    /** Set a new time step  for the numerical integration 
+    */
+    virtual void setTimeStep(double time); 
+
     //@{
     /**  This method does the actual simulation stuff
-         It runs for the number of iterations currently stored in
-         'number_of_iterations_'
+         It runs for getMaximalNumberIterations() iterations.
+         If restart is true, the counting of iterations starts with the
+         number of the last iteration in the previous run.  
     */
     virtual void simulate(bool restart = false);
 
-    /**  This method does the actual simulation stuff
-         It runs for the indicated number of iterations
+    /**  This method does the actual simulation stuff. 
+         It runs for the indicated number of iterations. 
+         If restart is true, the counting of iterations starts with the
+         number of the last iteration in the previous run.  
+          
     */
     virtual void simulateIterations(Size number,bool restart = false);
 
-    /**  This method does the actual simulation stuff
-         It runs for the indicated time in picoseconds  
+    /**  This method does the actual simulation stuff. 
+         It runs for the indicated time in picoseconds. 
+         If restart is true, the counting of iterations starts with the
+         number of the last iteration in the previous run.  
     */
     virtual void simulateTime(double simulation_time,bool restart = false); 
 
