@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.5 1999/12/28 18:17:10 oliver Exp $
+// $Id: fragmentDB.C,v 1.6 1999/12/30 18:05:41 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -722,9 +722,9 @@ namespace BALL
 		// As the fragment should be const, we store the properties
 		// in a bit vector and OR them later with the fragment's properties
 		BitVector	additional_properties;
-		if (RTTI<Residue>::isKindOf(fragment))
+		if (RTTI::isKindOf<Residue>(fragment))
 		{
-			const Residue*	residue = RTTI<const Residue>::castTo(fragment);
+			const Residue*	residue = RTTI::castTo<const Residue>(fragment);
 			if (residue->isCTerminal())
 			{
 				additional_properties.setBit(Residue::PROPERTY__C_TERMINAL);
@@ -920,10 +920,10 @@ namespace BALL
 
 				// determine whether the fragment is an amino acid
 				// if it is: determine the correct name for N-,C-terminal AA
-				if (RTTI<Residue>::isKindOf(*(*frag_it))) 
+				if (RTTI::isKindOf<Residue>(*(*frag_it))) 
 				{
 					Residue*	residue;	
-					residue = RTTI<Residue>::castTo(*(*frag_it));
+					residue = RTTI::castTo<Residue>(*(*frag_it));
 					if (residue->isCTerminal())
 					{
 						res_name_suffix = "-C";
@@ -1005,9 +1005,9 @@ namespace BALL
 
 				// determine whether the fragment is an amino acid
 				// if it is: determine the correct name for N-,C-terminal AA
-				if (RTTI<Residue>::isKindOf(*(*frag_it))) 
+				if (RTTI::isKindOf<Residue>(*(*frag_it))) 
 				{
-					Residue*	residue = RTTI<Residue>::castTo(*(*frag_it));
+					Residue*	residue = RTTI::castTo<Residue>(*(*frag_it));
 					if (residue->isCTerminal())
 					{
 						res_name_suffix = "-C";
@@ -1477,9 +1477,9 @@ namespace BALL
 
 		// setting the actual residue
 		
-		if (RTTI<Residue>::isKindOf(object))
+		if (RTTI::isKindOf<Residue>(object))
 		{
-			residue_ = RTTI<Residue>::castTo(object);
+			residue_ = RTTI::castTo<Residue>(object);
 			
 			String atom_name;
 

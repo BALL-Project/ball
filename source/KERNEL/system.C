@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.4 1999/12/28 18:17:52 oliver Exp $
+// $Id: system.C,v 1.5 1999/12/30 18:05:34 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -44,7 +44,7 @@ namespace BALL
 
   void System::persistentRead(PersistenceManager& pm)
   {
-    pm.checkObjectHeader(RTTI<Composite>::getStreamName());
+    pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);
     pm.checkObjectTrailer(0);
 

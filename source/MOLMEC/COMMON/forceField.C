@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.8 1999/12/28 17:50:05 oliver Exp $
+// $Id: forceField.C,v 1.9 1999/12/30 18:05:35 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -273,7 +273,7 @@ namespace BALL
 		// Set forces to zero
 		for (vector<Atom*>::iterator it = atoms_.begin(); it != atoms_.end(); ++it) 
 		{
-			(*it)->setForce(RTTI<Vector3>::getDefault());
+			(*it)->setForce(RTTI::getDefault<Vector3>());
 		}
 
 		// call each component - they will add their forces...

@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.6 1999/12/28 18:17:49 oliver Exp $
+// $Id: atom.C,v 1.7 1999/12/30 18:05:31 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -110,7 +110,7 @@ namespace BALL
 
 	void Atom::persistentRead(PersistenceManager& pm)
 	{
-		pm.checkObjectHeader(RTTI<Composite>::getStreamName());
+		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 
@@ -249,7 +249,7 @@ namespace BALL
 				 !ancestor_it.isEnd();
 				 ++ancestor_it)
 		{
-			if (RTTI<Molecule>::isKindOf(*ancestor_it))
+			if (RTTI::isKindOf<Molecule>(*ancestor_it))
 			{
 				return (Molecule *)&*ancestor_it;
 			}
@@ -272,7 +272,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI<Fragment>::isKindOf(*ancestor_it))
+			if (RTTI::isKindOf<Fragment>(*ancestor_it))
 			{
 				return (Fragment *)&*ancestor_it;
 			}

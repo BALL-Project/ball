@@ -1,5 +1,5 @@
-// $Id: analyticalSES.C,v 1.3 1999/12/28 18:17:09 oliver Exp $
-// $Id: analyticalSES.C,v 1.3 1999/12/28 18:17:09 oliver Exp $
+// $Id: analyticalSES.C,v 1.4 1999/12/30 18:05:40 oliver Exp $
+// $Id: analyticalSES.C,v 1.4 1999/12/30 18:05:40 oliver Exp $
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>
@@ -20,9 +20,9 @@ namespace BALL
 		Composite::SubcompositeIterator	it = composite.beginSubcomposite();
 		for (; it != composite.endSubcomposite(); ++it)
 		{
-			if (RTTI<Atom>::isKindOf(*it))
+			if (RTTI::isKindOf<Atom>(*it))
 			{
-				atoms.push_back(RTTI<Atom>::castTo(*it));
+				atoms.push_back(RTTI::castTo<Atom>(*it));
 			}
 		}
 		

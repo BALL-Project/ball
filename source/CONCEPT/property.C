@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.3 1999/12/28 18:19:41 oliver Exp $
+// $Id: property.C,v 1.4 1999/12/30 18:05:27 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -317,7 +317,7 @@ namespace BALL
 			}
 		}
 
-		return RTTI<NamedProperty>::getDefault();
+		return RTTI::getDefault<NamedProperty>();
 	}
 	
 	void PropertyManager::clearProperty(const string& name)

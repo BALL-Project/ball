@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.2 1999/12/28 18:00:44 oliver Exp $
+// $Id: control.C,v 1.3 1999/12/30 18:05:36 oliver Exp $
 
 #include <BALL/MOLVIEW/APPLICATION/control.h>
 
@@ -188,35 +188,35 @@ Control::getType
 {
 	Control::Type __Type = TYPE__UNKOWN;
 
-	if (RTTI<System>::isKindOf(*__pComposite))
+	if (RTTI::isKindOf<System>(*__pComposite))
 	{
 		__Type = TYPE__SYSTEM;
 	}	
-	else if (RTTI<Protein>::isKindOf(*__pComposite))
+	else if (RTTI::isKindOf<Protein>(*__pComposite))
 	{
 		__Type = TYPE__PROTEIN;
 	}
-	else if (RTTI<Molecule>::isKindOf(*__pComposite))
+	else if (RTTI::isKindOf<Molecule>(*__pComposite))
 	{
 		__Type = TYPE__MOLECULE;
 	}
-	else if (RTTI<Chain>::isKindOf(*__pComposite))
+	else if (RTTI::isKindOf<Chain>(*__pComposite))
 	{
 		__Type = TYPE__CHAIN;
 	}	
-	else if (RTTI<SecondaryStructure>::isKindOf(*__pComposite))
+	else if (RTTI::isKindOf<SecondaryStructure>(*__pComposite))
 	{
 		__Type = TYPE__SECONDARY_STRUCTURE;
 	}	
-	else if (RTTI<Residue>::isKindOf(*__pComposite))
+	else if (RTTI::isKindOf<Residue>(*__pComposite))
 	{
 		__Type = TYPE__RESIDUE;
 	}	
-	else if (RTTI<Fragment>::isKindOf(*__pComposite))
+	else if (RTTI::isKindOf<Fragment>(*__pComposite))
 	{
 		__Type = TYPE__FRAGMENT;
 	}	
-	else if (RTTI<Atom>::isKindOf(*__pComposite))
+	else if (RTTI::isKindOf<Atom>(*__pComposite))
 	{
 		__Type = TYPE__ATOM;
 	}	
@@ -234,42 +234,42 @@ Control::getName
 	{
 	  case TYPE__SYSTEM:
 			{
-				System *system_ptr = RTTI<System>::castTo(*__pComposite);
+				System *system_ptr = RTTI::castTo<System>(*__pComposite);
 				__QString = system_ptr->getName().c_str(); 			
 			}
 			break;
 
 	  case TYPE__MOLECULE:
 			{
-				Molecule *molecule_ptr = RTTI<Molecule>::castTo(*__pComposite);
+				Molecule *molecule_ptr = RTTI::castTo<Molecule>(*__pComposite);
 				__QString = molecule_ptr->getName().c_str(); 			
 			}
 			break;
 
 	  case TYPE__PROTEIN:
 			{
-				Protein *protein_ptr = RTTI<Protein>::castTo(*__pComposite);
+				Protein *protein_ptr = RTTI::castTo<Protein>(*__pComposite);
 				__QString = protein_ptr->getName().c_str();
 			}
 			break;
 
 	  case TYPE__CHAIN:
 			{
-				Chain *chain_ptr = RTTI<Chain>::castTo(*__pComposite);
+				Chain *chain_ptr = RTTI::castTo<Chain>(*__pComposite);
 				__QString = chain_ptr->getName().c_str();
 			}
 			break;
 
 	  case TYPE__FRAGMENT:
 			{
-				Fragment *fragment_ptr = RTTI<Fragment>::castTo(*__pComposite);
+				Fragment *fragment_ptr = RTTI::castTo<Fragment>(*__pComposite);
 				__QString = fragment_ptr->getName().c_str();
 			}
 			break;
 
 	  case TYPE__RESIDUE:
 			{
-				Residue *residue_ptr = RTTI<Residue>::castTo(*__pComposite);
+				Residue *residue_ptr = RTTI::castTo<Residue>(*__pComposite);
 				__QString = (residue_ptr->getName() + ": " + residue_ptr->getID()).c_str();
 			}
 			break;
@@ -277,7 +277,7 @@ Control::getName
 	  case TYPE__SECONDARY_STRUCTURE:
 			{
 				SecondaryStructure *secondarystructure_ptr 
-					= RTTI<SecondaryStructure>::castTo(*__pComposite);
+					= RTTI::castTo<SecondaryStructure>(*__pComposite);
 				__QString = secondarystructure_ptr->getName().c_str();
 			}
 			break;
@@ -285,7 +285,7 @@ Control::getName
 	  case TYPE__ATOM:
 			{
 				Atom *atom_ptr 
-					= RTTI<Atom>::castTo(*__pComposite);
+					= RTTI::castTo<Atom>(*__pComposite);
 				__QString = atom_ptr->getName().c_str();
 			}
 			break;
@@ -584,7 +584,7 @@ Control::_genListViewItem
 				}
 
 				// recursiv all included fragments
-				Molecule *__pMolecule = RTTI<Molecule>::castTo(*__pComposite);
+				Molecule *__pMolecule = RTTI::castTo<Molecule>(*__pComposite);
 				FragmentIterator __FragmentIterator;
 				int index__i = 0;
 				
@@ -646,7 +646,7 @@ Control::_genListViewItem
 				}
 
 				// recursiv all included chains
-				Protein *__pProtein = RTTI<Protein>::castTo(*__pComposite);
+				Protein *__pProtein = RTTI::castTo<Protein>(*__pComposite);
 				ChainIterator __ChainIterator;
 				int index__i = 0;
 				
@@ -692,7 +692,7 @@ Control::_genListViewItem
 				}
 
 				// recursiv all included molecules			
-				System *__pSystem = RTTI<System>::castTo(*__pComposite);
+				System *__pSystem = RTTI::castTo<System>(*__pComposite);
 				MoleculeIterator __MoleculeIterator;
 				int index__i = 0;
 				
@@ -704,9 +704,9 @@ Control::_genListViewItem
 					QString molprotname__QString;
 
 					// is the molecule a protein ?
-					if (RTTI<Protein>::isKindOf(*__MoleculeIterator))
+					if (RTTI::isKindOf<Protein>(*__MoleculeIterator))
 					{
-						__pComposite = (Composite *)(RTTI<Protein>::castTo(*__MoleculeIterator));
+						__pComposite = (Composite *)(RTTI::castTo<Protein>(*__MoleculeIterator));
 						molprotname__QString.sprintf("Protein_%d", ++index__i);
 					}
 					else
@@ -749,7 +749,7 @@ Control::_genListViewItem
 					CHECK_PTR(new__pQListViewItem);
 				}
 
-				Chain *__pChain = RTTI<Chain>::castTo(*__pComposite);
+				Chain *__pChain = RTTI::castTo<Chain>(*__pComposite);
 				SecondaryStructureIterator __SecondaryStructureIterator;
 				int index__i = 0;
 				
@@ -811,7 +811,7 @@ Control::_genListViewItem
 				}
 
 				// all Residues
-				SecondaryStructure *__pSecondaryStructure = RTTI<SecondaryStructure>::castTo(*__pComposite);
+				SecondaryStructure *__pSecondaryStructure = RTTI::castTo<SecondaryStructure>(*__pComposite);
 				ResidueIterator __ResidueIterator;
 				int index__i = 0;
 				
@@ -857,7 +857,7 @@ Control::_genListViewItem
 				}
 
 				// all Atoms
-				Residue *__pResidue = RTTI<Residue>::castTo(*__pComposite);
+				Residue *__pResidue = RTTI::castTo<Residue>(*__pComposite);
 				AtomIterator __AtomIterator;
 				int index__i = 0;
 				
@@ -904,7 +904,7 @@ Control::_genListViewItem
 				}
 
 				// all Atoms
-				Fragment *__pFragment = RTTI<Fragment>::castTo(*__pComposite);
+				Fragment *__pFragment = RTTI::castTo<Fragment>(*__pComposite);
 				AtomIterator __AtomIterator;
 				int index__i = 0;
 				

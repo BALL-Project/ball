@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.3 1999/12/28 18:17:51 oliver Exp $
+// $Id: protein.C,v 1.4 1999/12/30 18:05:34 oliver Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -55,7 +55,7 @@ namespace BALL
 
 	void Protein::persistentRead(PersistenceManager& pm)
 	{
-		pm.checkObjectHeader(RTTI<Molecule>::getStreamName());
+		pm.checkObjectHeader(RTTI::getStreamName<Molecule>());
 			Molecule::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 		pm.readPrimitive(id_, "id_");

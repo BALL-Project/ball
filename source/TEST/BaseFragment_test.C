@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.4 1999/12/28 18:14:27 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.5 1999/12/30 18:05:42 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.4 1999/12/28 18:14:27 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.5 1999/12/30 18:05:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -206,9 +206,10 @@ delete bf1;
 RESULT
 
 TextPersistenceManager pm;
-pm.registerClass(RTTI<Composite>::getStreamName(), RTTI<Composite>::getNew);
-pm.registerClass(RTTI<BaseFragment>::getStreamName(), RTTI<BaseFragment>::getNew);
-pm.registerClass(RTTI<Atom>::getStreamName(), RTTI<Atom>::getNew);
+using namespace RTTI;
+pm.registerClass(getStreamName<Composite>(), getNew<Composite>);
+pm.registerClass(getStreamName<BaseFragment>(), getNew<BaseFragment>);
+pm.registerClass(getStreamName<Atom>(), getNew<Atom>);
 String filename;
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
@@ -229,8 +230,8 @@ PersistentObject*	ptr = pm.readObject();
 TEST_NOT_EQUAL(ptr, 0)
 if (ptr != 0)
 {
-	TEST_EQUAL(RTTI<BaseFragment>::isKindOf(*ptr), true)
-	BaseFragment*	bf1 = RTTI<BaseFragment>::castTo(*ptr);
+	TEST_EQUAL(isKindOf<BaseFragment>(*ptr), true)
+	BaseFragment*	bf1 = castTo<BaseFragment>(*ptr);
 	TEST_EQUAL(bf1->getName(), "name1")
 	TEST_EQUAL(bf1->countBaseFragments(), 1)
 	TEST_EQUAL(bf1->getBaseFragment(0)->getName(), "name2")

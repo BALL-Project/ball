@@ -1,4 +1,4 @@
-// $Id: molecule.C,v 1.3 1999/12/28 18:17:50 oliver Exp $
+// $Id: molecule.C,v 1.4 1999/12/30 18:05:33 oliver Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -47,7 +47,7 @@ namespace BALL
 
 	void Molecule::persistentRead(PersistenceManager& pm)
 	{
-		pm.checkObjectHeader(RTTI<BaseFragment>::getStreamName());
+		pm.checkObjectHeader(RTTI::getStreamName<BaseFragment>());
 			BaseFragment::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 	}
@@ -79,7 +79,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI<System>::isKindOf(*ancestor_it) == true)
+			if (RTTI::isKindOf<System>(*ancestor_it) == true)
 			{
 				return (System *)&*ancestor_it;
 			}

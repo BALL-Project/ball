@@ -1,4 +1,4 @@
-// $Id: vertex2.C,v 1.3 1999/12/28 18:00:24 oliver Exp $
+// $Id: vertex2.C,v 1.4 1999/12/30 18:05:47 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/vertex2.h>
 
@@ -38,7 +38,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI<Vertex2>::getName() << endl;
+					<< " of class " << RTTI::getName<Vertex2>() << endl;
 			#endif 
 
 			destroy();

@@ -1,4 +1,4 @@
-// $Id: baseFragment.C,v 1.4 1999/12/28 18:17:49 oliver Exp $
+// $Id: baseFragment.C,v 1.5 1999/12/30 18:05:32 oliver Exp $
 
 #include <BALL/KERNEL/baseFragment.h>
 
@@ -69,7 +69,7 @@ namespace BALL
 
 	void BaseFragment::persistentRead(PersistenceManager& pm)
 	{
-		pm.checkObjectHeader(RTTI<Composite>::getStreamName());
+		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 
@@ -137,7 +137,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI<Molecule>::isKindOf(*ancestor_it) == true)
+			if (RTTI::isKindOf<Molecule>(*ancestor_it) == true)
 				return (Molecule *)&*ancestor_it;
 		}
 
@@ -154,7 +154,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI<BaseFragment>::isKindOf(*ancestor_it) == true)
+			if (RTTI::isKindOf<BaseFragment>(*ancestor_it) == true)
 			{
 				return (BaseFragment *)&*ancestor_it;
 			}

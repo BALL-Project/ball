@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.7 1999/12/28 18:14:27 oliver Exp $
+// $Id: Composite_test.C,v 1.8 1999/12/30 18:05:42 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.7 1999/12/28 18:14:27 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.8 1999/12/30 18:05:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -240,12 +240,14 @@ CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
 NEW_TMP_FILE(filename)
 std::ofstream  ofile(filename.c_str(), std::ios::out);
 pm.setOstream(ofile);
-pm.registerClass(RTTI<Composite>::getStreamName(), RTTI<Composite>::getNew);
+using namespace RTTI;
+pm.registerClass(getStreamName<Composite>(), getNew<Composite>);
 composite >> pm;
 ofile.close();
 RESULT
 
 CHECK(persistentRead(TextPersistenceManager()))
+using namespace RTTI;
 std::ifstream  ifile(filename.c_str());
 pm.setIstream(ifile);
 PersistentObject* ptr;
@@ -254,10 +256,10 @@ ifile.close();
 TEST_NOT_EQUAL(ptr, 0)
 if (ptr != 0)
 {
-  TEST_EQUAL(RTTI<Composite>::isKindOf(*ptr), true)
-  if (RTTI<Composite>::isKindOf(*ptr))
+  TEST_EQUAL(isKindOf<Composite>(*ptr), true)
+  if (isKindOf<Composite>(*ptr))
   {
-    Composite* pers_a = RTTI<Composite>::castTo(*ptr);
+    Composite* pers_a = castTo<Composite>(*ptr);
     TEST_EQUAL(pers_a->isSelected(), true)
 	}
 }

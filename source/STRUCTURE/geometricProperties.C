@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.3 1999/12/04 18:34:33 oliver Exp $
+// $Id: geometricProperties.C,v 1.4 1999/12/30 18:05:41 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -161,9 +161,9 @@ namespace BALL {
 
 		for (composite_it = reference_composite_->beginSubcomposite(); composite_it != reference_composite_->endSubcomposite(); ++composite_it) 
 		{
-			if (RTTI<Atom>::isKindOf(*composite_it))
+			if (RTTI::isKindOf<Atom>(*composite_it))
 			{
-				atom_ptr = RTTI<Atom>::castTo(*composite_it);
+				atom_ptr = RTTI::castTo<Atom>(*composite_it);
 				reference_atoms.push_back(atom_ptr);	
 			}
 		}
@@ -211,9 +211,9 @@ namespace BALL {
 	Processor::Result FragmentDistanceCollector::operator()(Composite& composite)
 	{
 		
-		if (RTTI<Fragment>::isKindOf(composite))
+		if (RTTI::isKindOf<Fragment>(composite))
 		{
-			Fragment*	mol_fragment = RTTI<Fragment>::castTo(composite);
+			Fragment*	mol_fragment = RTTI::castTo<Fragment>(composite);
 			all_fragments_.push_back(mol_fragment);
 		}
 

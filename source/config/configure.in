@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.18 1999/12/28 18:27:48 oliver Exp $
+dnl    $Id: configure.in,v 1.19 1999/12/30 18:05:52 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1275,22 +1275,12 @@ if test "${USE_BALLVIEW}" = "true" ; then
 fi
 
 dnl
-dnl    if BALLView is to be built, ask user which platform he intends to use (Mesa or OpenGL)
+dnl    if BALLView is to be built figure whether Mesa or OpenGL 
+dnl    should be used
 dnl
 if test "${USE_BALLVIEW}" = true ; then
   if test "${BALLVIEW_PLATFORM}" = "" ; then
-		dnl 	all SGI machines come with OpenGL, don't they?
-		if test "${OS}" = IRIX ; then
-			BALLVIEW_PLATFORM="OpenGL"
-		else 
-			dnl		let's ask the user....
-			ANSWER=
-			while test "${ANSWER}" != "Mesa" && test "${ANSWER}" != "OpenGL" ; do
-				AC_MSG_RESULT(Please enter BALLView platform - Mesa or OpenGL:)
-				read ANSWER
-			done
-			BALLVIEW_PLATFORM=${ANSWER}
-		fi
+		BALLVIEW_PLATFORM="OpenGL"
   fi
 fi
 

@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.4 1999/12/28 18:17:10 oliver Exp $
+// $Id: defaultProcessors.C,v 1.5 1999/12/30 18:05:40 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -82,10 +82,10 @@ namespace BALL
 		atom_name = atom.getName().trim();
 		String original_res_name = res_name;
 
-		if (RTTI<Residue>::isKindOf(*atom.getFragment()))
+		if (RTTI::isKindOf<Residue>(*atom.getFragment()))
 		{
 			Residue* residue;
-			residue = RTTI<Residue>::castTo(*atom.getFragment());
+			residue = RTTI::castTo<Residue>(*atom.getFragment());
 				
 			String suffix("-");
 			if (residue->isNTerminal())
@@ -228,10 +228,10 @@ namespace BALL
 		atom_name = atom.getName().trim();
 		String original_res_name = res_name;
 
-		if (RTTI<Residue>::isKindOf(*atom.getFragment()))
+		if (RTTI::isKindOf<Residue>(*atom.getFragment()))
 		{
 			Residue* residue;
-			residue = RTTI<Residue>::castTo(*atom.getFragment());
+			residue = RTTI::castTo<Residue>(*atom.getFragment());
 				
 			String suffix("-");
 			if (residue->isNTerminal())

@@ -1,4 +1,4 @@
-// $Id: fragment.C,v 1.3 1999/12/28 18:17:50 oliver Exp $
+// $Id: fragment.C,v 1.4 1999/12/30 18:05:33 oliver Exp $
 
 #include <BALL/KERNEL/fragment.h>
 
@@ -46,7 +46,7 @@ namespace BALL
 
   void Fragment::persistentRead(PersistenceManager& pm)
   {    
-		pm.checkObjectHeader(RTTI<BaseFragment>::getStreamName());
+		pm.checkObjectHeader(RTTI::getStreamName<BaseFragment>());
 			BaseFragment::persistentRead(pm);
     pm.checkObjectTrailer(0);
 	}

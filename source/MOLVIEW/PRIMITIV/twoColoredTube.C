@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.C,v 1.3 1999/12/28 18:00:48 oliver Exp $
+// $Id: twoColoredTube.C,v 1.4 1999/12/30 18:05:40 oliver Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 
@@ -34,7 +34,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI<TwoColoredTube>::getName() << endl;
+					<< " of class " << RTTI::getName<TwoColoredTube>() << endl;
 			#endif 
 
 			destroy();

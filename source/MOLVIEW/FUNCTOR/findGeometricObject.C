@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.3 1999/12/28 18:00:46 oliver Exp $
+// $Id: findGeometricObject.C,v 1.4 1999/12/30 18:05:37 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -33,7 +33,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI<FindGeometricObject>::getName() << endl;
+					<< " of class " << RTTI::getName<FindGeometricObject>() << endl;
 			#endif 
 
 			destroy();
@@ -112,14 +112,14 @@ namespace BALL
 		{
 			Log.info() << "FindGeometricObject::operator(" << (void*)&composite << ")" << endl;
 			// skip composites that are not instances of geometricObject
-			if (RTTI<VIEW::GeometricObject>::isKindOf(composite) == false)
+			if (RTTI::isKindOf<VIEW::GeometricObject>(composite) == false)
 			{
 				return Processor::CONTINUE;
 			}
 
 			Log.info() << "FindGeometricObject::operator(" << (void*)&composite << "): isKindOf(Composite)" << endl;
 			VIEW::GeometricObject *__pGeometricObject 
-				= RTTI<VIEW::GeometricObject>::castTo(composite);
+				= RTTI::castTo<VIEW::GeometricObject>(composite);
 
 			BitVector and_bitvector = getBitVector().operator&(__pGeometricObject->getBitVector());
 			BitVector help_bitvector(and_bitvector.getSize());

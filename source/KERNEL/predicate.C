@@ -1,4 +1,4 @@
-// $Id: predicate.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: predicate.C,v 1.2 1999/12/30 18:05:33 oliver Exp $
 
 #include <BALL/KERNEL/predicate.h>
 
@@ -7,18 +7,19 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/protein.h>
 
-namespace BALL {
+namespace BALL 
+{
 
-	template <class T>
-	bool KernelPredicate<T>::operator ()(const Composite& composite)
+	template <typename T>
+	bool KernelPredicate<T>::operator () (const Composite& composite)
 	{
-		return RTTI<T>::isKindOf(composite);
+		return RTTI::isKindOf<T>(composite);
 	}
 
 	template <class T>
-	bool KernelPredicate::operator ()(const Composite& composite) const
+	bool KernelPredicate::operator () (const Composite& composite) const
 	{
-		return RTTI<T>::isKindOf(composite);
+		return RTTI::isKindOf<T>(composite);
 	}
 
 } // namespace BALL

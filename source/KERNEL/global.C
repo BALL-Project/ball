@@ -1,8 +1,9 @@
-// $Id: global.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: global.C,v 1.2 1999/12/30 18:05:33 oliver Exp $
 
 #include <BALL/KERNEL/global.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	bool clone_bonds = true;
 

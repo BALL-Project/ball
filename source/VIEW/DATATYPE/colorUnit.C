@@ -1,4 +1,4 @@
-// $Id: colorUnit.C,v 1.3 1999/12/28 18:00:20 oliver Exp $
+// $Id: colorUnit.C,v 1.4 1999/12/30 18:05:44 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
@@ -171,7 +171,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " 
-					<< RTTI<ColorUnit>::getName() << endl;
+					<< RTTI::getName<ColorUnit>() << endl;
 			#endif 
 
 			destroy();

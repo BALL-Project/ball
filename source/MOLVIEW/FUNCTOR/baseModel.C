@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.3 1999/12/28 18:00:45 oliver Exp $
+// $Id: baseModel.C,v 1.4 1999/12/30 18:05:37 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -14,7 +14,7 @@ namespace BALL
 			:	UnaryProcessor<Atom>(),
 				ExtendedPropertyManager(),
 				find_geometric_object_(),
-				color_calculator_(const_cast<ColorCalculator*>((ColorCalculator*)&RTTI<ColorCalculator>::getDefault()))
+				color_calculator_(const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()))
 		{
 			clear_();
 		}
@@ -32,7 +32,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI<baseModelProcessor>::getName() << endl;
+					<< " of class " << RTTI::getName<baseModelProcessor>() << endl;
 			#endif 
 
 			destroy();
@@ -42,7 +42,7 @@ namespace BALL
 		{
 			ExtendedPropertyManager::clear();
 			find_geometric_object_.clear();
-			color_calculator_ = const_cast<ColorCalculator*>((const ColorCalculator*)&RTTI<ColorCalculator>::getDefault());
+			color_calculator_ = const_cast<ColorCalculator*>((const ColorCalculator*)&RTTI::getDefault<ColorCalculator>());
 
 			clear_();
 		}
@@ -138,13 +138,13 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "use default colorCalculator: " 
 					 << ((color_calculator_ == 
-								(const_cast<ColorCalculator*>((const ColorCalculator *)(&RTTI<ColorCalculator>::getDefault())))) ? "yes" : "no")
+								(const_cast<ColorCalculator*>((const ColorCalculator *)(&RTTI::getDefault<ColorCalculator>())))) ? "yes" : "no")
 					 << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "use user colorCalculator : " 
 					 << ((color_calculator_ != 
-								(const_cast<ColorCalculator*>((const ColorCalculator *)(&RTTI<ColorCalculator>::getDefault())))) ? "yes" : "no")
+								(const_cast<ColorCalculator*>((const ColorCalculator *)(&RTTI::getDefault<ColorCalculator>())))) ? "yes" : "no")
 					 << endl;
 
 			BALL_DUMP_DEPTH(s, depth);

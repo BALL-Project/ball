@@ -1,4 +1,4 @@
-// $Id: colorCalculator.C,v 1.3 1999/12/28 18:00:45 oliver Exp $
+// $Id: colorCalculator.C,v 1.4 1999/12/30 18:05:37 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/colorCalculator.h>
 
@@ -13,7 +13,7 @@ namespace BALL
 		ColorCalculator::ColorCalculator()
 			:	Visitor<Atom>(),
 				color_(),
-				color_table_(const_cast<ColorTable*>((const ColorTable*)&RTTI<ElementColor>::getDefault()))
+				color_table_(const_cast<ColorTable*>((const ColorTable*)&RTTI::getDefault<ElementColor>()))
 		{
 		}
 
@@ -29,7 +29,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI<ColorCalculator>::getName() << endl;
+					<< " of class " << RTTI::getName<ColorCalculator>() << endl;
 			#endif 
 
 			destroy();
@@ -40,7 +40,7 @@ namespace BALL
 			()
 		{
 			color_.set("000000FF");
-			color_table_ = const_cast<ColorTable*>((const ColorTable*)&RTTI<ElementColor>::getDefault());
+			color_table_ = const_cast<ColorTable*>((const ColorTable*)&RTTI::getDefault<ElementColor>());
 		}
 
 		void 
@@ -95,9 +95,9 @@ namespace BALL
 		{
 			Atom *atom = 0;
 
-			if (RTTI<Atom>::isKindOf(composite) == true)
+			if (RTTI::isKindOf<Atom>(composite) == true)
 			{
-				atom = RTTI<Atom>::castTo(composite);
+				atom = RTTI::castTo<Atom>(composite);
 
 				color_ = color_table_->operator[]((atom->getElement()).getAtomicNumber());
 			}
@@ -127,13 +127,13 @@ namespace BALL
 					
 			BALL_DUMP_DEPTH(s, depth);
 			s << "is default element colortable: " 
-					 << ((color_table_ ==  (const ColorTable*)&RTTI<ElementColor>::getDefault())
+					 << ((color_table_ ==  (const ColorTable*)&RTTI::getDefault<ElementColor>())
 										 ? "yes" : "no")
 					 << endl;
 					
 			BALL_DUMP_DEPTH(s, depth);
 			s << "is other colortable: " 
-					 << ((color_table_ !=  (const ColorTable*)&RTTI<ElementColor>::getDefault())
+					 << ((color_table_ !=  (const ColorTable*)&RTTI::getDefault<ElementColor>())
 										 ? "yes" : "no")
 					 << endl;
 					

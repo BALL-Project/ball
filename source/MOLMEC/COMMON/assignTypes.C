@@ -1,4 +1,4 @@
-// $Id: assignTypes.C,v 1.7 1999/12/28 17:50:05 oliver Exp $
+// $Id: assignTypes.C,v 1.8 1999/12/30 18:05:35 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 
@@ -50,10 +50,10 @@ namespace BALL
 			{
 				name = frag->getName().trim();
 				base_name = name;
-				if (RTTI<Residue>::isKindOf(*frag))
+				if (RTTI::isKindOf<Residue>(*frag))
 				{
 					String suffix = "-";
-					Residue*	res = RTTI<Residue>::castTo(*frag);
+					Residue*	res = RTTI::castTo<Residue>(*frag);
 					if (res->isNTerminal())
 					{
 						suffix += "N";

@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.5 1999/12/28 18:17:12 oliver Exp $
+// $Id: structureMapper.C,v 1.6 1999/12/30 18:05:41 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -220,7 +220,7 @@ namespace BALL
 		Composite::CompositeIterator	it;
 
 		for (it = composite.beginComposite(); +it; ++it){
-			if (RTTI<Fragment>::isKindOf(*it));
+			if (RTTI::isKindOf<Fragment>(*it));
 				number_of_mol_fragments++;
 		}
 
@@ -690,8 +690,8 @@ namespace BALL
 
 		for (composite_it = composite.beginSubcomposite(); 
 				 composite_it != composite.endSubcomposite(); ++composite_it) {
-					 if (RTTI<Fragment>::isKindOf(*composite_it)) {
-						composite_fragments.push_back(RTTI<Fragment>::castTo(*composite_it));
+					 if (RTTI::isKindOf<Fragment>(*composite_it)) {
+						composite_fragments.push_back(RTTI::castTo<Fragment>(*composite_it));
 					 }
 		}
 

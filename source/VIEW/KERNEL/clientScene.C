@@ -1,4 +1,4 @@
-// $Id: clientScene.C,v 1.4 1999/12/28 18:00:22 oliver Exp $
+// $Id: clientScene.C,v 1.5 1999/12/30 18:05:45 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/clientScene.h>
 
@@ -43,7 +43,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI<ClientScene>::getName() << endl;
+					<< " of class " << RTTI::getName<ClientScene>() << endl;
 			#endif 
 
 			destroy();
@@ -153,7 +153,7 @@ namespace BALL
 				throw InvalidClientScene(__FILE__, __LINE__);
 			}	
 				
-			if (!RTTI<PersistentObject *>::isKindOf(&composite))
+			if (!RTTI::isKindOf<PersistentObject*>(&composite))
 			{
 				throw NoPersistentObject(__FILE__, __LINE__);
 			}

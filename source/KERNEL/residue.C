@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.4 1999/12/28 18:17:51 oliver Exp $
+// $Id: residue.C,v 1.5 1999/12/30 18:05:34 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -61,7 +61,7 @@ namespace BALL
 
 	void Residue::persistentRead(PersistenceManager& pm)
 	{
-		pm.checkObjectHeader(RTTI<Fragment>::getStreamName());
+		pm.checkObjectHeader(RTTI::getStreamName<Fragment>());
 			Fragment::persistentRead(pm);
 		pm.checkObjectTrailer(0);
 
@@ -104,7 +104,7 @@ namespace BALL
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI<Protein>::isKindOf(*ancestor_it))
+			if (RTTI::isKindOf<Protein>(*ancestor_it))
 			{
 				return (Protein *)&*ancestor_it;
 			}
@@ -122,7 +122,7 @@ namespace BALL
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI<Chain>::isKindOf(*ancestor_it))
+			if (RTTI::isKindOf<Chain>(*ancestor_it))
 			{
 				return (Chain *)&*ancestor_it;
 			}

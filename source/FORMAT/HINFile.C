@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.7 1999/12/28 18:21:08 oliver Exp $
+// $Id: HINFile.C,v 1.8 1999/12/30 18:05:30 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/residue.h>
@@ -245,7 +245,7 @@ namespace BALL
 			{
 				// counter for the residues
 				Atom* this_atom = atom_vector[*comp_it];
-				Residue* this_residue = dynamic_cast<Residue*>(this_atom->getAncestor(RTTI<Residue>::getDefault()));
+				Residue* this_residue = dynamic_cast<Residue*>(this_atom->getAncestor(RTTI::getDefault<Residue>()));
 				if (this_residue != current_residue)
 				{
 					if (current_residue != 0)
@@ -425,7 +425,7 @@ namespace BALL
 						if (state == IN_RESIDUE) 
 						{
 							PDBAtom*	prot_atom = new PDBAtom;
-							atom = RTTI<Atom>::castTo(*prot_atom);
+							atom = RTTI::castTo<Atom>(*prot_atom);
 							residue->insert(*prot_atom);
 
 							// check the atom flags, whther this is a PDB HETATM: 

@@ -1,4 +1,4 @@
-// $Id: radius.C,v 1.3 1999/12/28 18:00:23 oliver Exp $
+// $Id: radius.C,v 1.4 1999/12/30 18:05:47 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/radius.h>
 
@@ -25,7 +25,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI<Radius>::getName() << endl;
+					<< " of class " << RTTI::getName<Radius>() << endl;
 			#endif 
 
 			destroy();

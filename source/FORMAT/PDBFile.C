@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.7 1999/12/28 18:21:37 oliver Exp $
+// $Id: PDBFile.C,v 1.8 1999/12/30 18:05:30 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -392,7 +392,7 @@ namespace BALL
 
 	void PDBFile::write(const System& system)
 	{
-		Size number_of_proteins = system.count(RTTI<KernelPredicate<Protein> >::getDefault());
+		Size number_of_proteins = system.count(RTTI::getDefault<KernelPredicate<Protein> >());
 		if (number_of_proteins > 1)
 		{
 			Log.error() << "PDBFile::write: cannot write a system with multiple proteins to a PDB file." << endl;
@@ -407,7 +407,7 @@ namespace BALL
 			((Composite&)system).splice((Composite &)p);
 		} else {
 			Composite::SubcompositeIterator it = system.beginSubcomposite();
-			for (; +it && !RTTI<Protein>::isKindOf(*it); ++it);
+			for (; +it && !RTTI::isKindOf<Protein>(*it); ++it);
 			if (+it)
 			{
 				write_(*it, true);
@@ -419,8 +419,8 @@ namespace BALL
 	
 	void PDBFile::write_(const Composite& composite, bool system)
 	{
-		const Protein* protein = RTTI<Protein>::castTo(composite);
-		const Molecule& molecule = *RTTI<Molecule>::castTo(composite);
+		const Protein* protein = RTTI::castTo<Protein>(composite);
+		const Molecule& molecule = *RTTI::castTo<Molecule>(composite);
   
 		char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
 		ChainIterator chain_it;
@@ -813,8 +813,8 @@ namespace BALL
 
 			BALL_FOREACH_BOND(*protein, atom_it, bond_it)
 			{
-				residue[0] = (Residue*)((*bond_it).getFirstAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
-				residue[1] = (Residue*)((*bond_it).getSecondAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
+				residue[0] = (Residue*)((*bond_it).getFirstAtom()->Composite::getAncestor(RTTI::getDefault<Residue>()));
+				residue[1] = (Residue*)((*bond_it).getSecondAtom()->Composite::getAncestor(RTTI::getDefault<Residue>()));
 
 				if (residue[0] == 0 || residue[1] == 0
 						|| residue[0] == residue[1]
@@ -1001,8 +1001,8 @@ namespace BALL
 		
 					BALL_FOREACH_BASEFRAGMENT(molecule, frag_it)
 					{	
-						if (RTTI<Molecule>::isKindOf(*frag_it) == false
-								|| RTTI<Protein>::isKindOf(*frag_it) == true)
+						if (RTTI::isKindOf<Molecule>(*frag_it) == false
+								|| RTTI::isKindOf<Protein>(*frag_it) == true)
 						{
 							continue;
 						}
@@ -1019,7 +1019,7 @@ namespace BALL
 							PDB_atom_name[4] = '\0';
 							strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
 						
-							current_fragment = (Fragment*)current_atom->getAncestor(RTTI<Fragment>::getDefault());
+							current_fragment = (Fragment*)current_atom->getAncestor(RTTI::getDefault<Fragment>());
 							if (current_fragment != 0)
 							{
 								current_fragment->getName().get(PDB_residue_name[0], 0, 3);
@@ -1084,7 +1084,7 @@ namespace BALL
       PDB_atom_name[4] = '\0';
       strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
       
-      current_fragment = (Fragment *)current_atom->getAncestor(RTTI<Fragment>::getDefault());
+      current_fragment = (Fragment *)current_atom->getAncestor(RTTI::getDefault<Fragment>());
       if (current_fragment != 0)
       {
 				current_fragment->getName().get(PDB_residue_name[0], 0, 4);
@@ -1366,7 +1366,7 @@ namespace BALL
 		
 					if (*protein_res_it == *initial_residue)
 					{
-						for (; !protein_res_it.isEnd() && (*protein_res_it).hasAncestor(RTTI<SecondaryStructure>::getDefault());
+						for (; !protein_res_it.isEnd() && (*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>());
 								 ++protein_res_it)
 						{	
 							if (*protein_res_it == *terminal_residue)
@@ -1388,7 +1388,7 @@ namespace BALL
 
 							for (; !protein_res_it.isEnd(); ++protein_res_it)
 							{
-								if ((*protein_res_it).hasAncestor(RTTI<SecondaryStructure>::getDefault()))
+								if ((*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>()))
 								{
 									--protein_res_it;
 
@@ -1447,13 +1447,13 @@ namespace BALL
 					 !protein_res_it.isEnd(); ++protein_res_it)
 			{
 				if ((*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID) == true
-						&& (*protein_res_it).Composite::hasAncestor(RTTI<SecondaryStructure>::getDefault()) == false)
+						&& (*protein_res_it).Composite::hasAncestor(RTTI::getDefault<SecondaryStructure>()) == false)
 				{
 					terminal_residue = initial_residue = &(*protein_res_it);
 		
 					for (; !protein_res_it.isEnd()
 							 && (*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID) == true
-							 && (*protein_res_it).hasAncestor(RTTI<SecondaryStructure>::getDefault()) == false;
+							 && (*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>()) == false;
 							 ++protein_res_it)
 					{
 						terminal_residue = &(*protein_res_it);

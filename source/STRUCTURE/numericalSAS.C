@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.3 1999/12/28 18:17:11 oliver Exp $
+// $Id: numericalSAS.C,v 1.4 1999/12/30 18:05:41 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -24,9 +24,9 @@ namespace BALL
 		Composite::SubcompositeIterator	it = composite.beginSubcomposite();
 		for (; it != composite.endSubcomposite(); ++it)
 		{
-			if (RTTI<Atom>::isKindOf(*it))
+			if (RTTI::isKindOf<Atom>(*it))
 			{
-				atoms.push_back(RTTI<Atom>::castTo(*it));
+				atoms.push_back(RTTI::castTo<Atom>(*it));
 			}
 		}
 		

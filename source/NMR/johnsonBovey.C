@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.C,v 1.3 1999/12/28 18:16:00 oliver Exp $
+// $Id: johnsonBovey.C,v 1.4 1999/12/30 18:05:40 oliver Exp $
 
 
 #include <BALL/NMR/johnsonBovey.h>
@@ -452,9 +452,9 @@ namespace BALL
 		// wenn es ein Residue mit aromatischen Ring ist, fuege es in aromat_list_ ein
 		// wenn es ein Hydrogen ist, fuege es in proton_list_ ein
 		
-		if (RTTI<Residue>::isKindOf(object))  // erganze aromat_list_ um aromatische Residues
+		if (RTTI::isKindOf<Residue>(object))  // erganze aromat_list_ um aromatische Residues
 		{
-			residue_ = RTTI<Residue>::castTo(object);
+			residue_ = RTTI::castTo<Residue>(object);
 			for(zaehler=0;zaehler < 4;zaehler++ )
 			{
 				found =0;
@@ -471,10 +471,10 @@ namespace BALL
 			}		
 		} // Ende is kind of Residue : die Liste wurde um die entsprechenden Residues erweitert
 		
-		if (RTTI<PDBAtom>::isKindOf(object))
+		if (RTTI::isKindOf<PDBAtom>(object))
 		{
 			cout  << endl << "Object is PDBAtom";
-			patom_ = RTTI<PDBAtom>::castTo(object);
+			patom_ = RTTI::castTo<PDBAtom>(object);
 			cout  << endl << "		atom name :" << patom_->getName();
 			cout  << endl << "		Element :" << (patom_->getElement()).getName();
 			if (patom_->getElement()==PSE[Element::H])

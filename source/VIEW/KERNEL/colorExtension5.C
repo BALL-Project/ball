@@ -1,4 +1,4 @@
-// $Id: colorExtension5.C,v 1.3 1999/12/28 18:00:23 oliver Exp $
+// $Id: colorExtension5.C,v 1.4 1999/12/30 18:05:46 oliver Exp $
 #include <BALL/VIEW/KERNEL/colorExtension5.h>
 
 using namespace std;
@@ -27,7 +27,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " 
-					<< RTTI<ColorExtension5>::getName() << endl;
+					<< RTTI::getName<ColorExtension5>() << endl;
 			#endif 
 
 			destroy();

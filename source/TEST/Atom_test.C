@@ -1,4 +1,4 @@
-// $Id: Atom_test.C,v 1.2 1999/10/30 12:53:38 oliver Exp $
+// $Id: Atom_test.C,v 1.3 1999/12/30 18:05:42 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/atom.h>
@@ -8,17 +8,12 @@
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.2 1999/10/30 12:53:38 oliver Exp $")
-
-using BALL::Atom;
-using BALL::Fragment;
-using BALL::Molecule;
-using BALL::PSE;
-using BALL::Element;
-using BALL::Vector3;
+START_TEST(Atom, "$Id: Atom_test.C,v 1.3 1999/12/30 18:05:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
+using namespace BALL;
 
 Atom*		atom;
 CHECK(Atom())
@@ -278,7 +273,6 @@ CHECK(getMolecule())
 TEST_EQUAL(atom->getMolecule(), molecule)
 RESULT
 
-using BALL::Bond;
 Bond*		bond;
 CHECK(createBond(Atom&)/getBond(Atom&))
 atom->createBond(*atom3);
@@ -334,13 +328,6 @@ CHECK(isValid())
 TEST_EQUAL(atom->isValid(), true)
 RESULT
 
-using BALL::TextPersistenceManager;
-using BALL::PersistentObject;
-using BALL::String;
-using BALL::Composite;
-using BALL::RTTI;
-using BALL::Log;
-
 
 TextPersistenceManager	pm;
 atom->setForce(Vector3(1.0, 2.0, 3.0));
@@ -356,9 +343,10 @@ CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
 NEW_TMP_FILE(filename)
 ofstream	ofile(filename.c_str(), ios::out);
 pm.setOstream(ofile);
-pm.registerClass(RTTI<Composite>::getStreamName(), RTTI<Composite>::getNew);
-pm.registerClass(RTTI<Atom>::getStreamName(), RTTI<Atom>::getNew);
-pm.registerClass(RTTI<Bond>::getStreamName(), RTTI<Bond>::getNew);
+using namespace RTTI;
+pm.registerClass(getStreamName<Composite>(), getNew<Composite>);
+pm.registerClass(getStreamName<Atom>(), getNew<Atom>);
+pm.registerClass(getStreamName<Bond>(), getNew<Bond>);
 fragment->remove(*atom);
 *atom >> pm;
 ofile.close();
@@ -366,6 +354,7 @@ RESULT
 
 using std::ifstream;
 using std::cout;
+using namespace RTTI;
 CHECK(persistentRead(TextPersistenceManager()))
 ifstream	ifile(filename.c_str());
 pm.setIstream(ifile);
@@ -375,10 +364,10 @@ ifile.close();
 TEST_NOT_EQUAL(ptr, 0)
 if (ptr != 0)
 {
-	TEST_EQUAL(RTTI<Atom>::isKindOf(*ptr), true)
-	if (RTTI<Atom>::isKindOf(*ptr))
+	TEST_EQUAL(isKindOf<Atom>(*ptr), true)
+	if (isKindOf<Atom>(*ptr))
 	{
-		Atom* pers_atom = RTTI<Atom>::castTo(*ptr);
+		Atom* pers_atom = castTo<Atom>(*ptr);
 		TEST_EQUAL(pers_atom->getName(), atom->getName())
 		TEST_REAL_EQUAL(pers_atom->getCharge(), atom->getCharge())
 		TEST_REAL_EQUAL(pers_atom->getRadius(), atom->getRadius())

@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.10 1999/12/28 17:51:10 oliver Exp $
+// $Id: amberTorsion.C,v 1.11 1999/12/30 18:05:35 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -217,7 +217,7 @@ namespace BALL
 			{
 				String res_name;
 				int terminal = 0;
-				Residue* res = (Residue*)(*atom_it)->getAncestor(RTTI<Residue>::getDefault());
+				Residue* res = (Residue*)(*atom_it)->getAncestor(RTTI::getDefault<Residue>());
 				if (res == 0)
 				{
 					if ((*atom_it)->getFragment() != 0)

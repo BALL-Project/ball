@@ -1,4 +1,4 @@
-// $Id: tube.C,v 1.3 1999/12/28 18:00:30 oliver Exp $
+// $Id: tube.C,v 1.4 1999/12/30 18:05:52 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/tube.h>
 
@@ -32,7 +32,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI<Tube>::getName() << endl;
+					<< " of class " << RTTI::getName<Tube>() << endl;
 			#endif 
 
 			destroy();

@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.3 1999/12/28 18:17:51 oliver Exp $
+// $Id: selector.C,v 1.4 1999/12/30 18:05:34 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -467,17 +467,18 @@ namespace BALL
 
 	void Selector::registerStandardPredicates_()
 	{
-		create_methods_.insert("name", RTTI<AtomNamePredicate>::getNew);
-		create_methods_.insert("type", RTTI<AtomTypePredicate>::getNew);
-		create_methods_.insert("element", RTTI<ElementPredicate>::getNew);
-		create_methods_.insert("residue", RTTI<ResiduePredicate>::getNew);
-		create_methods_.insert("residueID", RTTI<ResidueIDPredicate>::getNew);
-		create_methods_.insert("protein", RTTI<ProteinPredicate>::getNew);
-		create_methods_.insert("protein", RTTI<SecondaryStructurePredicate>::getNew);
-		create_methods_.insert("solvent", RTTI<SolventPredicate>::getNew);
-		create_methods_.insert("backbone", RTTI<BackBonePredicate>::getNew);
-		create_methods_.insert("chain", RTTI<ChainPredicate>::getNew);
-		create_methods_.insert("nucleotide", RTTI<NucleotidePredicate>::getNew);
+		using namespace RTTI;
+		create_methods_.insert("name", (CreationMethod)getNew<AtomNamePredicate>);
+		create_methods_.insert("type", (CreationMethod)getNew<AtomTypePredicate>);
+		create_methods_.insert("element", (CreationMethod)getNew<ElementPredicate>);
+		create_methods_.insert("residue", (CreationMethod)getNew<ResiduePredicate>);
+		create_methods_.insert("residueID", (CreationMethod)getNew<ResidueIDPredicate>);
+		create_methods_.insert("protein", (CreationMethod)getNew<ProteinPredicate>);
+		create_methods_.insert("protein", (CreationMethod)getNew<SecondaryStructurePredicate>);
+		create_methods_.insert("solvent", (CreationMethod)getNew<SolventPredicate>);
+		create_methods_.insert("backbone", (CreationMethod)getNew<BackBonePredicate>);
+		create_methods_.insert("chain", (CreationMethod)getNew<ChainPredicate>);
+		create_methods_.insert("nucleotide", (CreationMethod)getNew<NucleotidePredicate>);
 	}
 
 	void Selector::setExpression(const String& expression)
@@ -616,7 +617,7 @@ namespace BALL
     const Atom* atom = dynamic_cast<const Atom*>(&composite);
     if (atom != 0)
     {
-			const Residue*	res = dynamic_cast<const Residue*>(atom->getAncestor(RTTI<Residue>::getDefault()));
+			const Residue*	res = dynamic_cast<const Residue*>(atom->getAncestor(RTTI::getDefault<Residue>()));
 			if (res != 0)
 			{
 				return (res->getName() == argument_);
@@ -633,7 +634,7 @@ namespace BALL
     const Atom* atom = dynamic_cast<const Atom*>(&composite);
     if (atom != 0)
     {
-			const Residue*	res = dynamic_cast<const Residue*>(atom->getAncestor(RTTI<Residue>::getDefault()));
+			const Residue*	res = dynamic_cast<const Residue*>(atom->getAncestor(RTTI::getDefault<Residue>()));
 			if (res != 0)
 			{
 				return (res->getID() == argument_);
