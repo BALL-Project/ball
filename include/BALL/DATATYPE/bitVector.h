@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.20 2000/11/30 22:59:33 amoll Exp $
+// $Id: bitVector.h,v 1.21 2001/02/06 21:27:44 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -44,14 +44,13 @@
 
 
 namespace BALL 
-{
+
 
 	class BitVector;
-
-	/**	Bit Class. This class represents a bit within a BitVector (@see
-	 BitVector). 
-	 \\
-	{\bf Definition:} \URL{BALL/DATATYPE/bitVector.h}
+	{
+	/**	Bit Class. This class represents a bit within a BitVector
+			@see BitVector. 
+			{\bf Definition:} \URL{BALL/DATATYPE/bitVector.h}
 	*/
 	class Bit
 	{
@@ -60,6 +59,7 @@ namespace BALL
 		/**	@name Exceptions
 		*/
 		//@{
+
 		/** Exception thrown if a file could not be processed right.
 		*/
 		class IllegalOperation
@@ -68,8 +68,8 @@ namespace BALL
 			public:
 			IllegalOperation(const char* file, int line);
 		};
-		//@}
 
+		//@}
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -106,8 +106,6 @@ namespace BALL
 		virtual ~Bit() throw();
 
 		//@}
-
-
 		/**	@name	Converters
 		*/
 		//@{
@@ -115,8 +113,8 @@ namespace BALL
 		/** Casting operator from Bit to bool.
 		*/
 		operator bool() const throw(Exception::NullPointer);
-		//@}
 
+		//@}
 		/**	Assignment
 		*/
 		//@{
@@ -139,7 +137,6 @@ namespace BALL
 		virtual void clear() throw();
 
 		//@}
-
 		/**	@name	 Predicates
 		*/
 		//@{
@@ -163,6 +160,7 @@ namespace BALL
 				Test if this instance has not the given bool value
 		*/
 		bool operator != (bool bit) const throw(Exception::NullPointer);
+
 		//@}
 
 		private:
@@ -197,10 +195,10 @@ namespace BALL
 		typedef unsigned char BlockType;
 			
 		static const Size BlockSize;
-		//@}
 
-	
-		/**	@name	Constructors and Destructors */
+		//@}
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		/**	Default constructor
@@ -229,10 +227,10 @@ namespace BALL
 				This method will set the size of this instance to a size of 0.
 		*/
 		void clear() throw();
+
 		//@}
-
-
-		/**	@name	Assignment */
+		/**	@name	Assignment 
+		*/
 		//@{
 
 		/// Assignment from an other BitVector instance.
@@ -261,9 +259,10 @@ namespace BALL
 
 		/// Swapping of two BitVector instances.
 		void swap(BitVector& bitvector) throw();
-		//@}
 
-		/**	@name	Accessors */
+		//@}
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		/** Return a sub-BitVector.
@@ -277,7 +276,7 @@ namespace BALL
 
 		/** Set the size of this instance.
 				@param size the new size
-				@param keep ???
+				@param keep BAUSTELLE
 		*/
 		void setSize(Size size, bool keep = true)
 		  throw(Exception::OutOfMemory);
@@ -371,7 +370,7 @@ namespace BALL
 
 		/** Set a unsigned char as the bit pattern.
 				For example: 22 => 00010110.
-				@param bit_pattern the new pattern.
+				@param bit\_pattern the new pattern.
 		*/
 		void setUnsignedChar(unsigned char bit_pattern) throw();
 
@@ -411,50 +410,50 @@ namespace BALL
 		*/
 		unsigned long getUnsignedLong() const throw();
 
-		/** Compute {\em this or bit_vector}.
+		/** Compute {\em this or bit\_vector}.
 				The result is saved in this instance.
 		*/
 		void bitwiseOr(const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
-		/** Compute {\em this xor bit_vector}.
+		/** Compute {\em this xor bit\_vector}.
 				The result is saved in this instance.
 		*/
 		void bitwiseXor(const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
-		/** Compute {\em this and bit_vector}.
+		/** Compute {\em this and bit\_vector}.
 				The result is saved in this instance.
 		*/
 		void bitwiseAnd(const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Or Operator.
 				Creates a new BitVector object and fills it with the result of
-				{\em this or bit_Vector).
+				{\em this or bit\_Vector}.
 		*/
 		BitVector operator | (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
-		/** Compute {\em this or bit_vector}.
+		/** Compute {\em this or bit\_vector}.
 				The result is saved in this instance.
 		*/
 		BitVector& operator |= (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** And Operator.
 				Creates a new BitVector object and fills it with the result of
-				{\em this and bit_Vector).
+				{\em this and bit\_Vector}.
 		*/
 		BitVector operator & (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
-		/** Compute {\em this and bit_vector}.
+		/** Compute {\em this and bit\_vector}.
 				The result is saved in this instance.
 		*/
 		BitVector& operator &= (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Xor Operator.
 				Creates a new BitVector object and fills it with the result of
-				{\em this Xor bit_Vector).
+				{\em this Xor bit\_Vector}.
 		*/
 		BitVector operator ^ (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
-		/** Compute {\em this xor bit_vector}.
+		/** Compute {\em this xor bit\_vector}.
 				The result is saved in this instance.
 		*/
 		BitVector& operator ^= (const BitVector& bit_vector) throw(Exception::OutOfMemory);
@@ -464,9 +463,10 @@ namespace BALL
 				result of this instance.
 		*/
 		BitVector operator ~ () throw(Exception::OutOfMemory);
-		//@}
 
-		/**	@name	Predicates */
+		//@}
+		/**	@name	Predicates
+		*/
 		//@{
 
 		/// Equality operator
@@ -492,17 +492,17 @@ namespace BALL
 		  throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		//@}
-
-		/**	@name	Debugging and Diagnostics */
+		/**	@name	Debugging and Diagnostics 
+		*/
 		//@{
 
 		/** Test if this instance is valid.
 		*/
 		bool isValid() const throw();
+
 		//@}
-
-
-		/**	@name	Storers */
+		/**	@name	Storers 
+		*/
 		//@{
 
 		/**	Input- Operator.

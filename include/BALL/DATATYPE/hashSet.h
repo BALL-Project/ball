@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.23 2000/12/01 14:12:18 amoll Exp $ 
+// $Id: hashSet.h,v 1.24 2001/02/06 21:27:44 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -208,7 +208,7 @@ namespace BALL
 		void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator);
 
 		/**	Erase a range of elements.
-				Erase all elements in the range {\tt \[f, l)}.
+				Erase all elements in the range {\tt f - l}.
 		*/
 		void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators);
 		//@}

@@ -1,4 +1,4 @@
-/* $Id: datatype.doc,v 1.8 2000/12/05 12:58:50 amoll Exp $ */
+// $Id: datatype.doc,v 1.9 2001/02/06 21:27:44 amoll Exp $
 
 /**@name	General datastructures
 		This section contains all relevant information on 
@@ -16,9 +16,9 @@
 	/**	@name	Generic Hash Associative Containers
 	*/
 	//@{
-		// @Include: hashMap.h
-		// @Include: hashSet.h
-		// @Include: hashGrid.h
+		//@Include: hashMap.h
+		//@Include: hashSet.h
+		//@Include: hashGrid.h
 		//@Include: stringHashMap.h
 		//@Include: stringHashSet.h
 		//@Include: options.h 
@@ -27,7 +27,7 @@
 	/**	@name	Miscellaneous
 	*/
 	//@{
-		// @Include: bitVector.h	
+		//@Include: bitVector.h	
 		//@Include: forEach.h	
 		//@Include: quadruple.h
 		//@Include: regExp.h

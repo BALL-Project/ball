@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.22 2000/12/01 16:43:24 amoll Exp $ 
+// $Id: hashMap.h,v 1.23 2001/02/06 21:27:44 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -223,7 +223,7 @@ namespace BALL
 		void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator);
 
 		/**	Erase a range of elements.
-				Erase all elements in the range {\tt \[first, last)}.
+				Erase all elements in the range {\tt first - last}.
 		*/
 		void erase(Iterator first, Iterator last) throw(Exception::IncompatibleIterators);
 		//@}
