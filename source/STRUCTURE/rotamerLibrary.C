@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.28 2003/08/26 09:18:28 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.29 2004/06/25 13:07:07 anker Exp $
 //
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
@@ -429,6 +429,7 @@ namespace BALL
 			side_chain_ = residue_rotamer_set.side_chain_;
 			original_coordinates_ = residue_rotamer_set.original_coordinates_;
 			atom_name_map_ = residue_rotamer_set.atom_name_map_;
+			number_of_torsions_ = residue_rotamer_set.number_of_torsions_;
 
 			for (AtomIterator it = side_chain_.beginAtom(); +it; ++it)
 			{
