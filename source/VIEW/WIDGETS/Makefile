@@ -3,11 +3,16 @@ DIRECTORY=VIEW/WIDGETS
 # Where the headers of the derived classes reside
 HEADER_DIR		=$(BALL_PATH)/include/BALL/$(DIRECTORY)
 
+# Where the UIC-created headers reside
+UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
+
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	control.C\
 	geometricControl.C\
+	genericControl.C\
+	genericControlData.C\
 	logView.C\
 	molecularControl.C\
 	molecularProperties.C\
@@ -21,6 +26,8 @@ PYTHON_CPP_SOURCES=\
 MOC_SOURCES=\
 	control_moc.C\
 	geometricControl_moc.C\
+	genericControl_moc.C\
+	genericControlData_moc.C\
 	logView_moc.C\
 	molecularControl_moc.C\
 	molecularProperties_moc.C\
@@ -69,3 +76,9 @@ regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
 
 trajectoryControl_moc.C:	$(HEADER_DIR)/trajectoryControl.h
 	$(MOC) $(HEADER_DIR)/trajectoryControl.h -o $@
+
+default_clean: clean_uic
+
+clean_uic:
+	@echo "Cleaning UIC files in $(UIC_DIR)..."
+	@$(RM) -f $(UIC_DIR)/*.h
