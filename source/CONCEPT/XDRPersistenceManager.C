@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.C,v 1.22 2002/12/22 15:56:24 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.23 2003/05/26 15:43:36 oliver Exp $
+//
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -155,15 +156,7 @@ namespace BALL
 			Log.error() << "XDRPersistenceManager::writeStreamHeader: no output stream defined!" << std::endl;
 			return;
 		}
-		const caddr_t ostr_ptr = (caddr_t)ostr_;
-		#ifdef BALL_XDRREC_CREATE_VOID
-			*((void**)&XDRErrorPtr) = (void*)XDRError_;
-			*((void**)&XDRWriteStreamPtr) = (void*)XDRWriteStream_;
-			xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRErrorPtr, XDRWriteStreamPtr);
-		#else
-			xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
-		#endif
-		xdr_out_.x_op = XDR_ENCODE;
+
 		put(STREAM_HEADER);
 
 #ifdef BALL_DEBUG_PERSISTENCE
@@ -222,6 +215,7 @@ namespace BALL
 	{
 		// destroy the XDR stream
 		xdr_destroy(&xdr_out_);
+
 #ifdef BALL_DEBUG_PERSISTENCE
 		Log.info() << "XDRPersistenceManager: finalized output stream." << endl;
 #endif
@@ -231,7 +225,7 @@ namespace BALL
 		throw()
 	{
 		// destroy the XDR stream 
-		// xdr_destroy(&xdr_in_); //?????
+		xdr_destroy(&xdr_in_);
 #ifdef BALL_DEBUG_PERSISTENCE
 		Log.info() << "XDRPersistenceManager: finalized input stream." << endl;
 #endif
@@ -281,9 +275,6 @@ namespace BALL
 		// check for the correct trailer
 		Size trailer;
 		get(trailer);
-
-		// destroy the XDR stream
-		xdr_destroy(&xdr_in_);
 
 #ifdef BALL_DEBUG_PERSISTENCE
 		Log.info() << "XDRPersistenceManager: checkStreamTrailer = " << (trailer == STREAM_TRAILER) << endl;
