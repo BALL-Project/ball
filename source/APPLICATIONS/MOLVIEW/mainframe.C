@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.79 2003/09/18 06:19:20 oliver Exp $
+// $Id: mainframe.C,v 1.80 2003/09/18 09:17:48 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -141,39 +141,41 @@ namespace BALL
 
 		// File Menu
 		insertMenuEntry(MainControl::FILE, "Export POVRa&y file", this, SLOT(exportPOVRay()), 
-										CTRL+Key_Y, MENU__FILE_EXPORT_POVRAYFILE);
+										CTRL+Key_Y, MENU_EXPORT_POVRAYFILE);
 
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
-										ALT+Key_X, MENU__DISPLAY_FULLSCREEN);
+										ALT+Key_X, MENU_FULLSCREEN);
 		insertMenuEntry(MainControl::DISPLAY, "Contour S&urface", this,  SLOT(computeSurface()), 
-										CTRL+Key_U,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
+										CTRL+Key_U,MENU_OPEN_SURFACE_DIALOG);
 
 		// Build Menu -------------------------------------------------------------------
 		hint = "To assign charges, one System has to be selected.";
 		insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()), 
-										CTRL+Key_G, MENU__BUILD_ASSIGN_CHARGES, hint);
+										CTRL+Key_G, MENU_ASSIGN_CHARGES, hint);
 		hint = "To assign H-bonds, one System has to be selected.";
 		insertMenuEntry(MainControl::BUILD, "Calculate H-Bonds", this, SLOT(calculateHBonds()), 
-										CTRL+Key_9, MENU__BUILD_CALCULATE_HBONDS, hint);
-		insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, MENU__BUILD_PEPTIDE);
+										CTRL+Key_9, MENU_CALCULATE_HBONDS, hint);
+		insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, MENU_PEPTIDE);
 
 		// Tools Menu -------------------------------------------------------------------
 		hint = "Calculate the energy of a System with the AMBER force field.";
 		insertMenuEntry(MainControl::TOOLS, "Single Point Energy", this, SLOT(calculateAmberEnergy()), 
-										CTRL+Key_A, MENU__BUILD_AMBER_ENERGY, hint);
+										CTRL+Key_A, MENU_AMBER_ENERGY, hint);
 		hint = "To perform an Energy Minimization, first select the molecular structures.";
 		insertMenuEntry(MainControl::TOOLS, "&Energy Minimization", this, SLOT(amberMinimization()), 
-										CTRL+Key_E, MENU__BUILD_AMBER_MINIMIZATION, hint);
+										CTRL+Key_E, MENU_AMBER_MINIMIZATION, hint);
 		hint = "To perform a MD simulation , first select the molecular structures.";
 		insertMenuEntry(MainControl::TOOLS, "Molecular &Dynamics", this, SLOT(amberMDSimulation()), 
-										CTRL+Key_D, MENU__BUILD_AMBER_MDSIMULATION, hint);
+										CTRL+Key_D, MENU_AMBER_MDSIMULATION, hint);
 	#ifdef QT_THREAD_SUPPORT
 		hint = "Abort a running simulation thread";
 		insertMenuEntry(MainControl::TOOLS, "Abort Calculation", this, SLOT(stopSimulation()),
-				ALT+Key_C, MENU__BUILD_STOPSIMULATION, hint);
+				ALT+Key_C, MENU_STOPSIMULATION, hint);
 	#endif
-		insertMenuEntry(MainControl::TOOLS, "Electrostatics", FDPB_dialog_, SLOT(show()));
+		hint = "Calculate the Electrostatics with FDPB, if one System selected.";
+		insertMenuEntry(MainControl::TOOLS, "Electrostatics", FDPB_dialog_, SLOT(show()), -1,
+				MENU_FDPB, hint);
 				
 		// Help-Menu -------------------------------------------------------------------
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), CTRL+Key_9, MENU__HELP_ABOUT);
@@ -221,16 +223,18 @@ namespace BALL
 
 		bool one_item = (control_selection_.size() == 1);
 
-		menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, one_item && composites_muteable_);
+		menuBar()->setItemEnabled(MENU_ASSIGN_CHARGES, one_item && composites_muteable_);
 
 		// AMBER methods are available only for single systems
-		menuBar()->setItemEnabled(MENU__BUILD_AMBER_ENERGY, one_item);
+		menuBar()->setItemEnabled(MENU_AMBER_ENERGY, one_item);
 		// disable simulation entries, if a simulation is already running
-		menuBar()->setItemEnabled(MENU__BUILD_AMBER_MINIMIZATION, one_item && composites_muteable_);
-		menuBar()->setItemEnabled(MENU__BUILD_AMBER_MDSIMULATION, one_item && composites_muteable_);
-		menuBar()->setItemEnabled(MENU__BUILD_PEPTIDE, composites_muteable_);
+		menuBar()->setItemEnabled(MENU_AMBER_MINIMIZATION, one_item && composites_muteable_);
+		menuBar()->setItemEnabled(MENU_AMBER_MDSIMULATION, one_item && composites_muteable_);
+		menuBar()->setItemEnabled(MENU_PEPTIDE, composites_muteable_);
 		// enable stopSimulation if simulation is running
-		menuBar()->setItemEnabled(MENU__BUILD_STOPSIMULATION, !composites_muteable_);
+		menuBar()->setItemEnabled(MENU_STOPSIMULATION, !composites_muteable_);
+
+		menuBar()->setItemEnabled(MENU_FDPB, getSelectedSystem() && composites_muteable_);
 	}
 
 	void Mainframe::exportPOVRay()

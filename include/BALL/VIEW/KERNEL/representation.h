@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.2 2003/09/04 23:14:12 amoll Exp $
+// $Id: representation.h,v 1.3 2003/09/18 09:17:47 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -177,6 +177,10 @@ namespace BALL
 			///
 			void setModelType(Index type)
 				throw() { model_type_ = type;}
+
+			///
+			Index getModelType() const
+				throw() { return model_type_;}
 
 			///
 			String getProperties() const

@@ -5,6 +5,7 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/FORMAT/INIFile.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -236,6 +237,7 @@ void FDPBDialog::writePreferences(INIFile& file)
 bool FDPBDialog::calculate()
 	throw()
 {
+	if (system_ == 0) system_ = getMainControl()->getSelectedSystem();
 	if (system_ == 0)
 	{
 		Log.error() << "No system given! Aborting..." << std::endl;
@@ -246,6 +248,7 @@ bool FDPBDialog::calculate()
 	applyProcessors_();
 	fdpb_.setup(*system_, options_);
 	fdpb_.solve();
+	system_ = 0;
 	return true;
 }
 
