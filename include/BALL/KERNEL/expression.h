@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.29 2003/08/26 08:04:17 oliver Exp $
+// $Id: expression.h,v 1.30 2004/01/13 13:24:59 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_EXPRESSION_H
@@ -66,7 +66,7 @@ namespace BALL
 		/** Construct an Expression with a string
 		*/
 		Expression(const String& expression_string) 
-			throw();
+			throw(Exception::ParseError);
 
 		/** Destructor.
 		*/

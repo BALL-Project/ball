@@ -7,7 +7,8 @@ using namespace BALL;
 using namespace std;
 
 extern int ExpressionParserlex();
-extern void ExpressionParsererror(char* s);
+extern void ExpressionParsererror(char* s)
+	throw(Exception::ParseError);
 
 /* ??? */
 /* There is some nasty problem with alloca under Intel/icc/Linux */
@@ -129,6 +130,7 @@ something:
 %%
 
 void ExpressionParsererror(char* s)
+	throw(Exception::ParseError)
 {
 	throw Exception::ParseError(__FILE__, 0, 
 															ExpressionParser::state.buffer, 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.44 2003/08/26 09:17:48 oliver Exp $
+// $Id: expression.C,v 1.45 2004/01/13 13:25:09 amoll Exp $
 //
 
 #include <BALL/KERNEL/expression.h>
@@ -33,7 +33,7 @@ namespace BALL
 
 
 	Expression::Expression(const String& expression_string) 
-		throw()
+		throw(Exception::ParseError)
 		:	create_methods_(),
 			expression_tree_(0),
 			expression_string_("")
