@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.3 2003/09/18 09:17:47 amoll Exp $
+// $Id: representation.h,v 1.4 2003/10/17 16:17:18 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -27,6 +27,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class ModelProcessor;
+		class ColorProcessor;
 		class GeometricObject;
 
 		/** Representation
@@ -169,6 +170,14 @@ namespace BALL
 			///
 			void setModelProcessor(ModelProcessor* processor)
 				throw();
+			
+			///
+			ColorProcessor* getColorProcessor()
+				throw() { return color_processor_;}
+
+			///
+			void setColorProcessor(ColorProcessor* processor)
+				throw();
 
 			///
 			String getModelName() const
@@ -232,6 +241,9 @@ namespace BALL
 
 			//_
 			ModelProcessor* 		model_processor_;
+
+			//_
+			ColorProcessor* 		color_processor_;
 
 			//_
 			GeometricObjectList geometric_objects_;
