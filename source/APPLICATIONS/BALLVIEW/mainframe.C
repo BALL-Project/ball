@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.4 2004/05/03 12:04:42 amoll Exp $
+// $Id: mainframe.C,v 1.5 2004/05/03 15:21:38 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -12,6 +12,7 @@
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
+#include <BALL/COMMON/version.h>
 
 #include <BALL/DATATYPE/contourSurface.h>
 
@@ -21,10 +22,10 @@
 
 #include <qmenubar.h>
 #include <qlabel.h>
-
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qimage.h>
+#include <qapplication.h>
 
 namespace BALL
 {
@@ -238,6 +239,12 @@ namespace BALL
 	{
 		// Display about dialog
 		AboutDialog about;
+		about.qt_version_label->setText(String("QT ") + qVersion());
+		QFont font = about.BALLView_version_label->font();
+		about.BALLView_version_label->setText(String("BALLView ") + BALL_RELEASE_STRING);
+		font.setPixelSize(18);
+		about.BALLView_version_label->setFont(font);
+		about.BALL_version_label->setText(String("(BALL ") + BALL_RELEASE_STRING + ")");
 		about.exec(); 
 	}
 
