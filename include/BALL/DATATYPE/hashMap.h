@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.7 2000/03/14 19:37:25 oliver Exp $ 
+// $Id: hashMap.h,v 1.8 2000/07/03 13:44:32 anker Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -165,52 +165,52 @@ namespace BALL
 		*/
 		//@{
 
-		/* *	Return the number of buckets
+		/**	Return the number of buckets
 		*/
 		Size getBucketSize() const;
 
-		/* * Return the capcacity of the hash map.
+		/** Return the capcacity of the hash map.
 		*/
 		Size getCapacity() const;
 
-		/* *	Return the number of entries in the map.
+		/**	Return the number of entries in the map.
 		*/
 		Size getSize() const;
 			
-		/* *	Return the number of entries in the map.
+		/**	Return the number of entries in the map.
 		*/
 		Size size() const;
 
-		/* * Find the element whose key is {\tt key}.
+		/** Find the element whose key is {\tt key}.
 		*/
 		Iterator find(const Key& key);
 	
-		/* * Find the element whose key is {\tt key}.
+		/** Find the element whose key is {\tt key}.
 		*/
 		ConstIterator find(const Key& key) const;
 
-		/* *	Return a mutable reference to the element whose key is {\tt key}.
+		/**	Return a mutable reference to the element whose key is {\tt key}.
 				If an element with the key {\tt key} does not exist, it is inserted.
 				@param	key the key
 		*/
 		T& operator [] (const Key& key);
 
-		/* *	Return a constant reference to the element whose key is {\tt key}.
+		/**	Return a constant reference to the element whose key is {\tt key}.
 				@exception IllegalKey if the given key does not exist
 				@param	key the key
 		*/
 		const T& operator [] (const Key& key) const;
 
-		/* *	Insert a new entry into the hash map.
+		/**	Insert a new entry into the hash map.
 		*/
 		std::pair<Iterator, bool> insert(const ValueType& entry);
 
-		/* *	Erase element with key {\tt key}.
+		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
 		*/
 		Size erase(const Key& key);
 
-		/* *	Erase a range of elements.
+		/**	Erase a range of elements.
 				Erase all elemntes in the range {\tt \[first, last)}.
 		*/
 		void erase(Iterator first, Iterator last);
