@@ -1,4 +1,4 @@
-// $Id: HashMap_test.C,v 1.9 2000/12/01 14:10:19 amoll Exp $
+// $Id: HashMap_test.C,v 1.11 2000/12/01 16:11:00 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -34,7 +34,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashMap, "$Id: HashMap_test.C,v 1.9 2000/12/01 14:10:19 amoll Exp $")
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.11 2000/12/01 16:11:00 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -384,8 +384,14 @@ CHECK(HashMap::operator == (const HashMap&) const)
 
 	hm2.insert(HashMap<int, int>::ValueType(0, 0));
 	hm2.insert(HashMap<int, int>::ValueType(1, 1));
-
 	TEST_EQUAL(hm == hm2, true)
+
+	hm2.insert(HashMap<int, int>::ValueType(1, 2));
+	TEST_EQUAL(hm[1], 1)
+	TEST_EQUAL(hm2[1], 2)
+	TEST_EQUAL(hm == hm2, false)
+
+	hm2.insert(HashMap<int, int>::ValueType(1, 1));
 	hm2.insert(HashMap<int, int>::ValueType(2, 1));
 	TEST_EQUAL(hm == hm2, false)
 RESULT
@@ -429,9 +435,7 @@ CHECK(HashMap::apply(UnaryProcessor))
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
 	ItemCollector<pair<int,int> > myproc;
-	myproc.start();
 	TEST_EQUAL(hm.apply(myproc), true)
-	myproc.reset();
 	TEST_EQUAL(myproc.getSize(), 2)
 	TEST_EQUAL(myproc.getPointer()->first, 0) myproc.forward();
 	TEST_EQUAL(myproc.getPointer()->first, 1) myproc.forward();
