@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.6 2000/04/14 00:10:30 amoll Exp $
+// $Id: chain.h,v 1.7 2000/04/14 00:40:22 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -87,7 +87,7 @@ namespace BALL
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the BaseFragment {\em base_fragment} to {\em *this} chain.
+				Assign the chain {\em base_fragment} to {\em *this} chain.
 				The assignment is either deep or shallow (default).
 				@param  chain the chain to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em chain}
@@ -301,17 +301,17 @@ namespace BALL
 		*/
 		bool remove(Residue& residue);
 
-		/**	Prepend all children of {\tt chain} to the children of this chain.
+		/**	Cut all children of {\tt chain} and prepend them before the children of this chain.
 				@param chain the chain to access
 		*/
 		void spliceBefore(Chain& chain);
 
-		/**	Append all children of {\tt chain} to the children of this chain.
+		/**	Cut all children of {\tt chain} and append them after the children of this chain.
 				@param chain the chain to access
 		*/
 		void spliceAfter(Chain &chain);
 
-		/**	Insert the children of {\tt chain} into this chain.
+		/**	Move the children of {\tt chain} into this chain.
 				The children of {\tt chain} are inserted at the position of 
 				{\tt chain} if {\tt chain} is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.

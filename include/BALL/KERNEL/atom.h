@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.13 2000/03/17 11:25:53 oliver Exp $
+// $Id: atom.h,v 1.14 2000/04/14 00:40:21 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -82,9 +82,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Atom class (BALL kernel framework)
-			@author  $Author: oliver $
-			@version $Revision: 1.13 $
-			@date    $Date: 2000/03/17 11:25:53 $
+			@author  $Author: amoll $
+			@version $Revision: 1.14 $
+			@date    $Date: 2000/04/14 00:40:21 $
 	*/
 	class Atom
 		: public Composite,
@@ -631,6 +631,8 @@ namespace BALL
 					\Ref{Atom::createBond}.
 
 					@param       index the index of the bond to be accessed to
+					@exception   IndexUnderflow if {\tt index < 0}
+					@exception   IndexOverflow if {\tt index > MAX_NUMBER_OF_BONDS}
 					@return      Bond* -
 											 mutable reference to the bond that is indexed in {\em *this} atom's bond table,
 											 0 if {\em *this} atom does not have a bond with index {\em index}
@@ -648,6 +650,8 @@ namespace BALL
 					\Ref{Atom::createBond}.
 
 					@param       index the index of the bond to be accessed to
+					@exception   IndexUnderflow if {\tt index < 0}
+					@exception   IndexOverflow if {\tt index > MAX_NUMBER_OF_BONDS}
 					@return      Bond* -
 											 constant reference to the bond that is indexed in {\em *this} atom's bond table,
 											 0 if {\em *this} atom does not have a bond with index {\em index}

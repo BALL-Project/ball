@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.9 2000/04/14 00:11:14 amoll Exp $
+// $Id: baseFragment.h,v 1.10 2000/04/14 00:40:22 amoll Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -341,17 +341,17 @@ namespace BALL
 		*/
 		void insertAfter(BaseFragment& base_fragment, Composite& after);
 
-		/**	Prepend all children of {\tt base_fragment} to the children of this BaseFragment.
+		/**	Cut all children of {\tt base_fragment} and prepend them before the children of this BaseFragment.
 				@param base_fragment the BaseFragment to access
 		*/
 		void spliceBefore(BaseFragment& base_fragment);
 
-		/**	Append all children of {\tt base_fragment} after the children of this BaseFragment.
+		/**	Cut all children of {\tt base_fragment} and append them after the children of this BaseFragment.
 				@param base_fragment the BaseFragment to access
 		*/
 		void spliceAfter(BaseFragment& base_fragment);
 
-		/**	Insert the children of {\em base_fragment} into this BaseFragment.
+		/**	Move the children of {\em base_fragment} into this BaseFragment.
 				The children of {\tt base_fragment} are inserted at the position of 
 				{\tt base_fragment} if {\tt base_fragment} is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
