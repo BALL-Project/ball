@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.36 2003/12/15 02:11:57 amoll Exp $
+// $Id: message.h,v 1.37 2003/12/15 02:33:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -82,8 +82,7 @@ class Message
 	//@{
 
 	/** Change the sender.
-			Change the sender of this message to the value
-			represented by the void parameter <b> object</b>. This parameter always represents
+			This parameter always represents
 			a void pointer to a ConnectionObject. This method will be used internally
 			by the ConnectionObject class it its <b> notify_ method.
 			\param       object the new sender of this message
@@ -231,6 +230,7 @@ class CompositeMessage: public Message
 		(because of some changes in the composite structure) will sent this message.
 		There are methods available that will tell the Scene to update its contents
 		or change the camera positions.\par
+		Send by MainControl, GeometricControl and several dialogs. \par
 		Received by Scene
 */
 class SceneMessage: public Message
@@ -336,7 +336,6 @@ class SceneMessage: public Message
 		SelectionMessage is a container for Composite objects that are somehow selected.
 		It will be sent by existing ConnectionObject objects that collect
 		Composites objects for a certain purpose.
-
 */
 class SelectionMessage: public Message
 {
@@ -387,8 +386,8 @@ class SelectionMessage: public Message
 };
 
 
-/** Used to inform MainControl of selection in Control (not the one of the checkboxes!) \par
-		Send by Control.\par
+/** Used to inform MainControl of selection in MolecularControl (not the one of the checkboxes!) \par
+		Send by MolecularControl.\par
 		Caught by MainControl.
  */
 class ControlSelectionMessage: public SelectionMessage
@@ -407,8 +406,9 @@ class NewSelectionMessage: public Message
 		throw();
 };
 
-/** GeometricObjectSelectionMessage class.
-		Send by Scene after picking GeometricObject.
+/** GeometricObjectSelectionMessage class. \par
+		Send by Scene after picking GeometricObject. \par
+		Caught by MainControl.
 */
 class GeometricObjectSelectionMessage: public Message
 {
@@ -518,7 +518,7 @@ class RepresentationMessage: public Message
 	RepresentationMessageType type_;
 };
 	
-/** Message to perform specific tasks for molecular items.
+/** Message to perform specific tasks for molecular items.\par
 		Send by MolecularControl to MolecularProperties.
  */
 class MolecularTaskMessage
@@ -559,7 +559,9 @@ class MolecularTaskMessage
 };
 
 
-///
+/** Notify the DisplayProperties dialog to show itself.\par
+ 		Send by the GeometriControl and MolecularControl.
+*/
 class ShowDisplayPropertiesMessage
 	:public Message
 {
@@ -569,8 +571,8 @@ class ShowDisplayPropertiesMessage
 			: Message(){};
 };
 
-/** Notify the DisplayPropertiesDialog so that it creates a new Representation. 
- 		This message is send by the MolecularControl.
+/** Notify the DisplayProperties dialog so that it creates a new Representation. \par
+ 		Send by the MolecularControl.
 */
 class CreateRepresentationMessage
 	:public Message
@@ -626,6 +628,7 @@ class NewTrajectoryMessage
 		TrajectoryFile* file_;
 };
 
+///
 class RegularData3DMessage
 	:public CompositeMessage
 {

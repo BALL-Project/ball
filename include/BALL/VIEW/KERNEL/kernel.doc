@@ -1,11 +1,10 @@
-// $Id: kernel.doc,v 1.13 2003/12/15 02:12:11 amoll Exp $
+// $Id: kernel.doc,v 1.14 2003/12/15 02:38:22 amoll Exp $
 
-/** \defgroup ViewKernel Kernel classes
+/** \defgroup ViewKernel Kernel
 		\ingroup Visualisation
-		This section contains classes that are responsible for
-		building geometric primitives, handling client requests
-		and building a connection with message queuing between
-		widgets and dialogs.
+		This section contains core classes that are responsible for
+		handling client requests, building a connection with message 
+		queuing between widgets and dialogs and other things.
  */
 
 /** \defgroup ViewKernelClient Client/Server request handling
