@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.3 2004/12/20 23:43:13 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.4 2004/12/20 23:51:09 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -440,7 +440,6 @@ namespace BALL
 			if (catoms.size() == 0) return;
 
 			List<const Atom*>::ConstIterator lit = catoms.begin();
-//   			lit++;
 			Vector3 normal = last->getPosition() - first->getPosition();
 
 			// calcluate slices for the helix cylinder according to the C-atoms
@@ -493,16 +492,16 @@ namespace BALL
 				spline_vector_[p1].setTangentialVector(normal);
 			}
 
-			if (p2 == 0 || p2 == spline_vector_.size()-1) return;
+			if (p2 == 0 || p2 == spline_vector_.size() - 1) return;
 
-			spline_vector_[p2-2].setVector(last_pos-diff);
-			spline_vector_[p2-2].setTangentialVector(normal);
+			spline_vector_[p2 - 2].setVector(last_pos-diff);
+			spline_vector_[p2 - 2].setTangentialVector(normal);
 			
-			spline_vector_[p2-1].setVector(last_pos);
-			spline_vector_[p2-1].setTangentialVector(normal);
+			spline_vector_[p2 - 1].setVector(last_pos);
+			spline_vector_[p2 - 1].setTangentialVector(normal);
 
 			calculateTangentialVectors_();
-			createSplineSegment_(spline_vector_[p2-1], spline_vector_[p2]);
+			createSplineSegment_(spline_vector_[p2 - 1], spline_vector_[p2]);
 
 			last_spline_point_ = spline_vector_[p2];
 			last_point_ = last_spline_point_.getVector();
