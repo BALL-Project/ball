@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.12 2000/12/02 19:39:10 amoll Exp $ 
+// $Id: regExp.C,v 1.13 2000/12/08 09:22:03 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -92,7 +92,7 @@ namespace BALL
 
 		if (from > (Index)text.size())
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
+			throw Exception::IndexOverflow(__FILE__, __LINE__, from, (Size)text.size());
 		}
 
 		return (regexec(&regex_, text.c_str() + from, (size_t)0, 0, execute_flags) == 0);
@@ -160,7 +160,7 @@ namespace BALL
 		}
 		if (from >= (Index)text.size())
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
+			throw Exception::IndexOverflow(__FILE__, __LINE__, from, (Size)text.size());
 		}
 
 		regmatch_t regmatch[20];
@@ -191,7 +191,7 @@ namespace BALL
 		}
 		if (from >= (Index)text.size())
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
+			throw Exception::IndexOverflow(__FILE__, __LINE__, from, (Size)text.size());
 		}
 
 		Size number_of_subexpressions = (Size)regex_.re_nsub + 1;
