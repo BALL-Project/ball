@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.C,v 1.4 2000/01/10 15:51:14 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.5 2000/01/16 23:45:04 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 
@@ -8,7 +8,8 @@ namespace BALL
 {
 
 	// needed for quicksort (below)
-	int compareLong_(const void* a, const void* b){
+	extern "C" int compareLong_(const void* a, const void* b)
+	{
 		return (int)(*(long*)a - *(long*)b);
 	}
 
