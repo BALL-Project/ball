@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.8 2000/05/25 08:21:11 oliver Exp $
+// $Id: StandardPredicates_test.C,v 1.9 2000/05/25 09:07:51 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,12 +7,15 @@
 #include <BALL/KERNEL/standardPredicates.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/residue.h>
 #include <BALL/FORMAT/HINFile.h>
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.8 2000/05/25 08:21:11 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.9 2000/05/25 09:07:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,7 +27,7 @@ using namespace BALL;
 	
 // tests for class AtomNamePredicate::
 
-CHECK(AtomNamePredicate::()(const Atom& atom) const )
+CHECK(AtomNamePredicate::operator () (const Atom& atom) const )
   Atom atom;
 	atom.setName("Grmpfl.");
 	AtomNamePredicate atom_name;
@@ -42,7 +45,7 @@ RESULT
 
 // tests for class AtomTypePredicate::
 
-CHECK(AtomTypePredicate::()(const Atom& atom) const )
+CHECK(AtomTypePredicate::operator () (const Atom& atom) const )
   Atom atom;
 	atom.setTypeName("CT");
 	AtomTypePredicate type_name;
@@ -59,78 +62,100 @@ RESULT
 
 
 // tests for class ElementPredicate::
-
-CHECK(ElementPredicate::()(const Atom& atom) const )
-  //BAUSTELLE
+CHECK(ElementPredicate::operator () (const Atom& atom) const )
+	Atom atom;
+	ElementPredicate pred;
+	pred.setArgument("?");	
+	TEST_EQUAL(pred(atom), true)
+	pred.setArgument("Zr");
+	TEST_EQUAL(pred(atom), false)
+	atom.setElement(PTE[Element::Zr]);
+	TEST_EQUAL(pred(atom), true)
+	pred.setArgument("");
+	TEST_EQUAL(pred(atom), false)
 RESULT
 
 
 // tests for class ResiduePredicate::
 
-CHECK(ResiduePredicate::()(const Atom& atom) const )
-  //BAUSTELLE
+CHECK(ResiduePredicate::operator () (const Atom& atom) const )
+	Residue res;
+	PDBAtom* a1 = new PDBAtom;
+	res.insert(*a1);
+	ResiduePredicate pred;
+	res.setName("ARG");
+	TEST_EQUAL(pred(*a1), false)
+	pred.setArgument("ARG");
+	TEST_EQUAL(pred(*a1), true)
+	pred.setArgument("");
+	TEST_EQUAL(pred(*a1), false)
+	res.setName("");
+	TEST_EQUAL(pred(*a1), true)
+	res.remove(*a1);
+	TEST_EQUAL(pred(*a1), false)
+	delete a1;
 RESULT
 
 
 // tests for class ResidueIDPredicate::
 
-CHECK(ResidueIDPredicate::()(const Atom& atom) const )
+CHECK(ResidueIDPredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class ProteinPredicate::
 
-CHECK(ProteinPredicate::()(const Atom& atom) const )
+CHECK(ProteinPredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class ChainPredicate::
 
-CHECK(ChainPredicate::()(const Atom& atom) const )
+CHECK(ChainPredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class SecondaryStructurePredicate::
 
-CHECK(SecondaryStructurePredicate::()(const Atom& atom) const )
+CHECK(SecondaryStructurePredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class SolventPredicate::
 
-CHECK(SolventPredicate::()(const Atom& atom) const )
+CHECK(SolventPredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class MoleculePredicate::
 
-CHECK(MoleculePredicate::()(const Atom& atom) const )
+CHECK(MoleculePredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class BackBonePredicate::
 
-CHECK(BackBonePredicate::()(const Atom& atom) const )
+CHECK(BackBonePredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class NucleicAcidPredicate::
 
-CHECK(NucleicAcidPredicate::()(const Atom& atom) const )
+CHECK(NucleicAcidPredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
 
 // tests for class NucleotidePredicate::
 
-CHECK(NucleotidePredicate::()(const Atom& atom) const )
+CHECK(NucleotidePredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
@@ -141,7 +166,7 @@ f.close();
 
 // tests for class inRingPredicate::
 
-CHECK(InRingPredicate::()(const Atom& atom) const )
+CHECK(InRingPredicate::operator () (const Atom& atom) const )
 	InRingPredicate in0Ring;
 	in0Ring.setArgument("0");
 	InRingPredicate in1Ring;
@@ -215,7 +240,7 @@ RESULT
 
 // tests for class ConnectedToPredicate::
 
-CHECK(ConnectedToPredicate::()(const Atom& atom) const )
+CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	AtomIterator it = S.beginAtom();
 	ConnectedToPredicate connectedTo;
 	STATUS("(H)");
@@ -268,7 +293,7 @@ RESULT
 
 // tests for class AromaticBondsPredicate::
 
-CHECK(AromaticBondsPredicate::()(const Atom& atom) const )
+CHECK(AromaticBondsPredicate::operator () (const Atom& atom) const )
 	AromaticBondsPredicate aromaticBonds0;
 	aromaticBonds0.setArgument("0");
 	AromaticBondsPredicate aromaticBonds1;
@@ -348,7 +373,7 @@ RESULT
 
 // tests for class NumberOfBondsPredicate::
 
-CHECK(NumberOfBondsPredicate::()(const Atom& atom) const )
+CHECK(NumberOfBondsPredicate::operator () (const Atom& atom) const )
 	NumberOfBondsPredicate numberOfBonds0;
 	numberOfBonds0.setArgument("0");
 	NumberOfBondsPredicate numberOfBonds1;
@@ -427,7 +452,7 @@ g.close();
 
 // tests for class DoubleBondsPredicate::
 
-CHECK(DoubleBondsPredicate::()(const Atom& atom) const )
+CHECK(DoubleBondsPredicate::operator () (const Atom& atom) const )
 	DoubleBondsPredicate doubleBonds0;
 	doubleBonds0.setArgument("0");
 	DoubleBondsPredicate doubleBonds1;
@@ -481,7 +506,7 @@ RESULT
 
 // tests for class SingleBondsPredicate::
 
-CHECK(SingleBondsPredicate::()(const Atom& atom) const )
+CHECK(SingleBondsPredicate::operator () (const Atom& atom) const )
 	SingleBondsPredicate singleBonds0;
 	singleBonds0.setArgument("0");
 	SingleBondsPredicate singleBondslt1;
@@ -562,7 +587,7 @@ RESULT
 
 // tests for class TripleBondsPredicate::
 
-CHECK(TripleBondsPredicate::()(const Atom& atom) const )
+CHECK(TripleBondsPredicate::operator () (const Atom& atom) const )
 	TripleBondsPredicate tripleBonds0;
 	tripleBonds0.setArgument("0");
 	TripleBondsPredicate tripleBonds1;
@@ -601,7 +626,7 @@ RESULT
 
 // tests for class SpHybridizedPredicate::
 
-CHECK(SpHybridizedPredicate::()(const Atom& atom) const )
+CHECK(SpHybridizedPredicate::operator () (const Atom& atom) const )
 	SpHybridizedPredicate isSp;
 
 	AtomIterator it = S.beginAtom();
@@ -624,7 +649,7 @@ RESULT
 
 // tests for class sp2HybridizedPredicate::
 
-CHECK(Sp2HybridizedPredicate::()(const Atom& atom) const )
+CHECK(Sp2HybridizedPredicate::operator () (const Atom& atom) const )
 	Sp2HybridizedPredicate isSp2;
 
 	AtomIterator it = S.beginAtom();
@@ -646,7 +671,7 @@ RESULT
 
 
 // tests for class sp3HybridizedPredicate::
-CHECK(Sp3HybridizedPredicate::()(const Atom& atom) const )
+CHECK(Sp3HybridizedPredicate::operator () (const Atom& atom) const )
 	Sp3HybridizedPredicate isSp3;
 
 	AtomIterator it = S.beginAtom();
