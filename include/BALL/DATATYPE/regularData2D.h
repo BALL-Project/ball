@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.10 2001/03/11 23:59:26 amoll Exp $
+// $Id: regularData2D.h,v 1.11 2001/06/05 15:42:13 anker Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -363,6 +363,8 @@ namespace BALL
 		ysize_ = data.ysize_;
 		groundState_ = data.groundState_;
 		sigmaGroundState_ = data.sigmaGroundState_;
+
+		return *this;
 	}
 
 	template <typename T>
