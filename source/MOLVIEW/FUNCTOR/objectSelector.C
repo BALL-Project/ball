@@ -1,4 +1,4 @@
-// $Id: objectSelector.C,v 1.3.4.4 2002/11/12 18:54:30 amoll Exp $
+// $Id: objectSelector.C,v 1.3.4.5 2002/12/02 20:59:16 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 #include <BALL/KERNEL/forEach.h>
@@ -112,7 +112,7 @@ namespace BALL
 				
 		Processor::Result ObjectSelector::operator() (Composite &composite)
 		{
-			// composite is notnot  an atom ?
+			// composite is not an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
 			{
 				return Processor::CONTINUE;
