@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.28 2005/02/18 12:08:13 oliver Exp $
+// $Id: PDBFile_test.C,v 1.29 2005/02/21 21:36:52 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -33,7 +33,7 @@ namespace BALL
 
 }
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.28 2005/02/18 12:08:13 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.29 2005/02/21 21:36:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -242,7 +242,9 @@ CHECK([EXTRA]writing of Systems containing Atoms instead of PDBAtoms)
 
 	system->insert(*protein);
 	protein->insert(*chain);
-	chain->insert(*db.getResidueCopy("ALA"));
+	Residue* res = db.getResidueCopy("ALA");
+	STATUS("Residue ID: " << res->getID())
+	chain->insert(*res);
 	TEST_EQUAL(system->countAtoms(), 10)
 	NEW_TMP_FILE(filename)
 	STATUS(system->countBonds())

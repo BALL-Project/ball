@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.9 2005/02/06 11:15:37 oliver Exp $
+// $Id: secondaryStructureProcessor.C,v 1.10 2005/02/21 21:36:52 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
@@ -762,7 +762,7 @@ namespace BALL
 	void SecondaryStructureProcessor::insertTurn_(int turn, int position)
 	{
 		bool correct = true;			
-		String *n_turn;	
+		String* n_turn = 0;	
 		if(turn == 3)
 		{ 
 			n_turn = &threeturn_;

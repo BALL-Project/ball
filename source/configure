@@ -3168,7 +3168,7 @@ echo $ECHO_N "checking your OS... $ECHO_C" >&6
 		fi
 		if test `echo $PROCESSOR` = x86_64 ; then
 			ARCHITECTURE=x86_64
-			BINFMT=Linux-Opteron
+			BINFMT=Linux-x86_64
 		fi
 		if test "${ARCHITECTURE}" = "unknown" -a "${BALL_IGNORE_ARCH}" = ""; then
 			echo "$as_me:$LINENO: result: OS: ${OS} / hardware: ${PROCESSOR}" >&5

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.34 2005/01/27 12:22:48 amoll Exp $
+// $Id: amberNonBonded.C,v 1.35 2005/02/21 21:36:52 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
@@ -919,7 +919,7 @@ namespace BALL
 		{
 			// no periodic boundary, constant dielectric
 			#ifdef BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS
-				AmberNBEnergy<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
+				AmberNBEnergy<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch>
 					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
 					 cutoffs_es, cutoffs_vdw);
 				AmberNBEnergy<(ESEnergyFunction)coulomb, (VdwEnergyFunction)vdwSixTwelve, (SwitchingFunction)cubicSwitch >
@@ -929,13 +929,13 @@ namespace BALL
 					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw);
 			#else
-				AmberNBEnergy<coulomb, vdwSixTwelve, cubicSwitch >
+				AmberNBEnergy<coulomb, vdwSixTwelve, cubicSwitch>
 					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
 					 cutoffs_es, cutoffs_vdw);
-				AmberNBEnergy<coulomb, vdwSixTwelve, cubicSwitch >
+				AmberNBEnergy<coulomb, vdwSixTwelve, cubicSwitch>
 					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
 					 cutoffs_es, cutoffs_vdw);
-				AmberNBEnergy<coulomb, vdwTenTwelve, cubicSwitch >
+				AmberNBEnergy<coulomb, vdwTenTwelve, cubicSwitch>
 					(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
 					 cutoffs_es, cutoffs_vdw);
 			#endif

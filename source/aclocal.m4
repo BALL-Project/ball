@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.63 2005/02/21 16:26:21 anhi Exp $
+dnl		$Id: aclocal.m4,v 1.64 2005/02/21 21:36:46 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -360,7 +360,7 @@ AC_DEFUN(CF_DETECT_OS,[
 		fi
 		if test `echo $PROCESSOR` = x86_64 ; then
 			ARCHITECTURE=x86_64
-			BINFMT=Linux-Opteron
+			BINFMT=Linux-x86_64
 		fi
 		if test "${ARCHITECTURE}" = "unknown" -a "${PROJECT[]_IGNORE_ARCH}" = ""; then
 			AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})

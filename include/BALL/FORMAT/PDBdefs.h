@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.h,v 1.5 2005/02/16 14:09:40 oliver Exp $
+// $Id: PDBdefs.h,v 1.6 2005/02/21 21:36:46 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBDEFS_H
@@ -715,6 +715,18 @@ namespace BALL
 			Integer    number_of_TER_records;
 			Integer    number_of_CONECT_records;
 			Integer    number_of_SEQRES_records;
+
+			RecordMASTER() { clear(); }
+			void clear()
+			{
+				record_type = RECORD_TYPE__MASTER;
+				strcpy(record_name, RECORD_TAG_MASTER);
+				zero = number_of_HET_records = number_of_HELIX_records
+						 = number_of_SHEET_records = number_of_TURN_records
+						 = number_of_SITE_records = number_of_ORIGX_SCALE_MTRIX_records
+						 = number_of_ATOM_HETATM_records = number_of_TER_records
+						 = number_of_CONECT_records = number_of_SEQRES_records = 0;
+			}
 		};
 		///
 		struct RecordMODEL
@@ -1187,9 +1199,9 @@ namespace BALL
 			
 
 			AdditionalAtomInfo()
-				:	current_chain(0),
-					current_residue(0),
-					residue_id(1),
+				:	current_chain(0x0),
+					current_residue(0x0),
+					residue_id(0),
 					residue_insertion_code(' '),
 					chain_id(' '),
 					number(1)

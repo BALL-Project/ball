@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.8 2005/02/18 12:08:12 oliver Exp $
+// $Id: PDBFileDetails.C,v 1.9 2005/02/21 21:36:52 oliver Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -976,7 +976,23 @@ namespace BALL
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
-		write_(system, info);
+		if (info.getName() == "")
+		{
+			// If info doesn't provide a name, but the system/protein does,
+			// we'll take it from there.
+			String name = system.getName();
+			if ((name == "") && (system.beginMolecule() != system.endMolecule()))
+			{
+				name = system.beginMolecule()->getName();
+			}
+			PDBInfo new_info(info);
+			new_info.setName(name);
+			write_(system, new_info);
+		}
+		else
+		{
+			write_(system, info);
+		}
 		
 		return true;
 	}
@@ -1140,6 +1156,7 @@ namespace BALL
 				}
 			}
 		}
+
 		// Now do the same trick for the residue.
 		if (atom.residue != aai.current_residue)
 		{
