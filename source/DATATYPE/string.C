@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.29 2000/09/19 15:42:27 oliver Exp $
+// $Id: string.C,v 1.30 2000/09/19 19:13:12 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -45,7 +45,7 @@ namespace BALL
 	const char* String::CHARACTER_CLASS__ASCII_NUMERIC = "0123456789";
 	const char* String::CHARACTER_CLASS__ASCII_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	const char* String::CHARACTER_CLASS__WHITESPACE = " \n\t\r\f\v";
-	const char* String::CHARACTER_CLASS__QUOTES = "\"'`";
+	const char* String::CHARACTER_CLASS__QUOTES = "\"";
 
 	String::CompareMode String::compare_mode_ = String::CASE_SENSITIVE;
 
