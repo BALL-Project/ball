@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.9 2000/10/16 19:19:42 oliver Exp $
+// $Id: forceFieldParameters.h,v 1.10 2000/10/18 10:57:45 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -48,7 +48,8 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~ForceFieldParameters();
+		virtual ~ForceFieldParameters()
+			throw();
 
 		//@}
 
