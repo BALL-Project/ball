@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.4 2000/01/10 15:51:10 oliver Exp $ 
+// $Id: regExp.C,v 1.5 2000/05/23 14:16:41 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -156,13 +156,14 @@ namespace BALL
 		 int compile_flags,
 		 int execute_flags)
 	{
-		BALL_PRECONDITION
-			(text != 0, 
-			 BALL_REGULAR_EXPRESSION_STATIC_ERROR_HANDLER(RegularExpression::ERROR__POINTER_IS_NULL));
-
-		BALL_PRECONDITION
-			(pattern != 0, 
-			 BALL_REGULAR_EXPRESSION_STATIC_ERROR_HANDLER(RegularExpression::ERROR__POINTER_IS_NULL));
+		if (text == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+		if (pattern == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 
 		regex_t regex;
 
@@ -203,22 +204,22 @@ namespace BALL
 		{
 			return false;
 		}
+		if (from < 0)
+		{
+			throw Exception::IndexUnderflow(__FILE__, __LINE__, from, 0);
+		}
+		if (from >= (Index)text.size())
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
+		}
 
-		BALL_PRECONDITION
-			(from >= 0, 
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_UNDERFLOW));
+		regmatch_t regmatch[20];
 
-		BALL_PRECONDITION
-			(from < (Index)text.size(), 
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_OVERFLOW));
-
-		regmatch_t regmatch[1];
-
-		if (regexec(&regex_, text.c_str() + from, (size_t)1, regmatch, execute_flags) == 0)
+		if (regexec(&regex_, text.c_str() + from, (size_t)20, regmatch, execute_flags) == 0)
 		{
 			found.bind
 				(text, from + (Index)regmatch[0].rm_so, 
-				 from + (Index)(regmatch[0].rm_eo - 1));
+				 (Index)(regmatch[0].rm_eo - (Index)regmatch[0].rm_so));
 
 			return true;
 		}
@@ -238,19 +239,20 @@ namespace BALL
 		 int execute_flags) const
 	{
 		if (valid_pattern_ == false)
+		{
 			return false;
+		}
+		if (from < 0)
+		{
+			throw Exception::IndexUnderflow(__FILE__, __LINE__, from, 0);
+		}
+		if (from >= (Index)text.size())
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
+		}
 
-		BALL_PRECONDITION
-			(from >= 0, 
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_UNDERFLOW));
 
-		BALL_PRECONDITION
-			(from < (Index)text.size(), 
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_OVERFLOW));
-
-		for (Index index = 0;
-				 index < (Index)number_of_subexpresions;
-				 ++index)
+		for (Index index = 0; index < (Index)number_of_subexpresions; ++index)
 		{
 			found_subexpression[index].unbind();
 		}
@@ -265,7 +267,7 @@ namespace BALL
 			{
 				found_subexpression[index].bind
 					(text, from + (Index)regmatch_ptr[index].rm_so, 
-					 from + (Index)(regmatch_ptr[index].rm_eo - 1));
+					 (Index)(regmatch_ptr[index].rm_eo - (Index)regmatch_ptr[index].rm_so));
 			}
 
 			delete [] regmatch_ptr;
@@ -280,8 +282,7 @@ namespace BALL
 		}
 	}
 
-	bool 
-	RegularExpression::find
+	bool RegularExpression::find
 		(const Substring &text,
 		 Substring &found,
 		 Index from,
@@ -291,30 +292,29 @@ namespace BALL
 		{
 			return false;
 		}
-
-		BALL_PRECONDITION
-			(text.isValid() == true,
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INVALID_SUBSTRING));
-
-		BALL_PRECONDITION
-			(from >= 0, 
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_UNDERFLOW));
-
-		BALL_PRECONDITION
-			(from < (Index)text.size(), 
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_OVERFLOW));
+		if (!text.isValid())
+		{
+			throw Substring::UnboundSubstring(__FILE__, __LINE__);
+		}
+		if (from < 0)
+		{
+			throw Exception::IndexUnderflow(__FILE__, __LINE__, from, 0);
+		}
+		if (from >= (Index)text.size())
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
+		}
 
 		regmatch_t regmatch[1];
-		char *end_of_substring = (char *)(text.c_str() + text.size());
+		char* end_of_substring = (char*)(text.c_str() + text.size());
 		char c = *end_of_substring;
 		*end_of_substring = '\0';
 
 		if (regexec(&regex_, text.c_str() + from, (size_t)1, regmatch, execute_flags) == 0)
 		{
 			found.bind
-				(text, 
-				 from + (Index)regmatch[0].rm_so,
-				 from + (Index)regmatch[0].rm_eo - 1);
+				(text, from + (Index)regmatch[0].rm_so,
+				 (Index)regmatch[0].rm_eo - (Index)regmatch[0].rm_so);
 
 			*end_of_substring = c;
 
@@ -330,8 +330,7 @@ namespace BALL
 		}
 	}
 
-	bool 
-	RegularExpression::find
+	bool RegularExpression::find
 		(const Substring &text,
 		 Substring found_subexpression[],
 		 Size number_of_subexpresions,
@@ -342,22 +341,20 @@ namespace BALL
 		{
 			return false;
 		}
+		if (!text.isValid())
+		{
+			throw Substring::UnboundSubstring(__FILE__, __LINE__);
+		}
+		if (from < 0)
+		{
+			throw Exception::IndexUnderflow(__FILE__, __LINE__, from, 0);
+		}
+		if (from >= (Index)text.size())
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
+		}
 
-		BALL_PRECONDITION
-			(text.isValid() == true,
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INVALID_SUBSTRING));
-
-		BALL_PRECONDITION
-			(from >= 0, 
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_UNDERFLOW));
-
-		BALL_PRECONDITION
-			(from < (Index)text.size(), 
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__INDEX_OVERFLOW));
-
-		for (Index index = 0;
-				 index < (Index)number_of_subexpresions;
-				 ++index)
+		for (Index index = 0; index < (Index)number_of_subexpresions; ++index)
 		{
 			found_subexpression[index].unbind();
 		}
@@ -371,14 +368,12 @@ namespace BALL
 
 		if (regexec(&regex_, text.c_str() + from, (size_t)number_of_subexpresions, regmatch_ptr, execute_flags) == 0)
 		{
-			for (Index index = 0;
-					 index < (Index)number_of_subexpresions;++index)
+			for (Index index = 0; index < (Index)number_of_subexpresions;++index)
 		 
 			{
 				found_subexpression[index].bind
-		(text, 
-		 from + (Index)regmatch_ptr[index].rm_so,
-		 from + (Index)regmatch_ptr[index].rm_eo - 1);
+					(text,  from	+ (Index)regmatch_ptr[index].rm_so,
+					 (Index)regmatch_ptr[index].rm_eo - (Index)regmatch_ptr[index].rm_so);
 			}
 
 			*end_of_substring = c;
@@ -405,11 +400,11 @@ namespace BALL
 		{
 			return false;
 		}
-
-		BALL_PRECONDITION
-			(text != 0, 
-			 BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__POINTER_IS_NULL));
-
+		if (text == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+		
 		regmatch_t regmatch[1];
 		
 		if (regexec(&regex_, text, (size_t)1, regmatch, execute_flags) == 0)
