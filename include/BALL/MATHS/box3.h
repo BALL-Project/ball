@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.7 2000/02/23 01:51:51 amoll Exp $
+// $Id: box3.h,v 1.8 2000/03/02 22:15:22 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -428,10 +428,10 @@ namespace BALL
 		BALL_DUMP_HEADER(s, this, this);
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  a: " << a << endl;
+		s << "  a: " << a << std::endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  b: " << b << endl;
+		s << "  b: " << b << std::endl;
 		
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}

@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.12 2000/02/25 19:33:48 amoll Exp $
+// $Id: line3.h,v 1.13 2000/03/02 22:18:36 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -284,10 +284,10 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  position: " << p << endl;
+			s << "  position: " << p << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  direction: " << d << endl;
+			s << "  direction: " << d << std::endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
