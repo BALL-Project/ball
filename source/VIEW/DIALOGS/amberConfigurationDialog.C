@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.9 2004/04/30 11:45:18 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.10 2004/04/30 11:47:32 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -64,10 +64,12 @@ namespace BALL
 			overwrite_charges_checkBox->setChecked(true);
 			overwrite_typenames_checkBox->setChecked(true);
 
+			/*
 			boundary_box->setChecked(false);
 			add_solvent_box->setChecked(false);
 			box_size_edit->setText("40.0000");
 			solvent_file_edit->setText("");
+			*/
 		}
 
 		const String& AmberConfigurationDialog::getFilename() const
@@ -345,8 +347,9 @@ namespace BALL
 				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "false";
 				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "false";
 			}
-		}
 */
+		}
+
 		void AmberConfigurationDialog::setAmberFF(AmberFF& amber)
 			throw()
 		{
@@ -356,12 +359,14 @@ namespace BALL
 		void AmberConfigurationDialog::chooseSolventFile()
 			throw()
 		{
+			/*
 			QString result = QFileDialog::getOpenFileName(
 					solvent_file_edit->text().ascii(), "", 0, "Select a solvent file");
 			if (!result.isEmpty())
 			{
 				solvent_file_edit->setText(result);
 			}
+			*/
 		}
 
 		void AmberConfigurationDialog::periodicBoundaryClicked()
