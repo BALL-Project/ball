@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.22 2003/11/21 01:22:53 amoll Exp $
+// $Id: mainControl.C,v 1.23 2003/12/06 00:10:41 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -371,13 +371,14 @@ bool MainControl::remove_(Composite& composite)
 	return true;
 }
 
+// e.g. is called for root of items from picking, or for MolecularControl Selection
 bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebuild)
 	throw()
 {
 	if (!composite_manager_.has(composite)) return false;
 	
 	// update all representations containing the composite
-	List<Representation*> changed_representations = primitive_manager_.changedComposite(composite);
+	List<Representation*> changed_representations = primitive_manager_.getRepresentationsOf(composite);
 	List<Representation*>::Iterator reps_it = changed_representations.begin();
 	// notify GeometricControl of changed representations
 	for (; reps_it != changed_representations.end(); reps_it++)
@@ -453,10 +454,12 @@ void MainControl::onNotify(Message *message)
 				{
 					deselectCompositeRecursive(cmessage->getComposite(), true);
 				}
+				printSelectionInfos();
+
+				updateRepresentationsOf(*cmessage->getComposite(), false);
+
 				NewSelectionMessage* nws_message = new NewSelectionMessage;					
-				notify_(nws_message);
-				// sending of scene message and geometric object selection is done in 
-				// MolecularProperties
+				notify_(nws_message); // send to MolecularControl
 			}
 			return;
 		}
@@ -695,6 +698,7 @@ void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 	for (; it_objects != objects.end(); it_objects++)
 	{
 		Composite* composite = (Composite*)(*it_objects)->getComposite();
+if (RTTI::isKindOf<Atom>(*composite))
 
 		if (composite != 0  && (selection_.has(composite) != message.isSelected()))
 		{	
@@ -713,6 +717,7 @@ void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 				roots.insert(&composite->getRoot());
 			}
 		}				
+		
 	}
 
 	printSelectionInfos();
@@ -856,12 +861,10 @@ System* MainControl::getSelectedSystem()
 void MainControl::selectCompositeRecursive(Composite* composite, bool first_call)
 	throw()
 {
-	if (selection_.has(composite))
-	{
-		return;
-	}
+	if (selection_.has(composite)) return;
 
 	composite->select();
+	if (RTTI::isKindOf<Bond>(*composite)) return;
 	selection_.insert(composite);
 
 	if (RTTI::isKindOf<Atom> (*composite))
@@ -908,19 +911,16 @@ void MainControl::selectCompositeRecursive(Composite* composite, bool first_call
 void MainControl::deselectCompositeRecursive(Composite* composite, bool first_call)
 	throw()
 {
-	if (!selection_.has(composite))
-	{
-		return;
-	}
+	if (!selection_.has(composite)) return;
 
 	composite->deselect();
+	if (RTTI::isKindOf<Bond>(*composite)) return;
 	selection_.erase(composite);
 
 	if (RTTI::isKindOf<Atom> (*composite))
 	{
-		Atom *atom = (Atom*) composite;
 		AtomBondIterator bi;		
-		BALL_FOREACH_ATOM_BOND(*atom, bi)
+		BALL_FOREACH_ATOM_BOND(*(Atom*) composite, bi)
 		{
 			bi->deselect();			
 		}				
