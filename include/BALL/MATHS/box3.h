@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.28 2001/01/21 21:10:13 amoll Exp $
+// $Id: box3.h,v 1.29 2001/02/14 01:59:57 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -16,10 +16,9 @@ namespace BALL
 
 	/**	Generic three-dimensional Box.
 			This class describes a three-dimensional box with edges parallel
-			to the coordinate system. Hence, a box is given by the coordinates of the lower
+			to the coordinate system. A box is given by the coordinates of the lower
 			left front corner and ther upper right back corner.\\
-			{\bf Definition:} \URL{BALL/MATHS/box3.h}
-			\\
+			{\bf Definition:} \URL{BALL/MATHS/box3.h}	\\
 	*/
 	template <typename T>
 	class TBox3
@@ -41,7 +40,7 @@ namespace BALL
 
 		/**	Copy constructor.
 				Create a new TBox3 object from another.
-				@param vector the TBox3 object to be copied
+				@param box the TBox3 object to be copied
 		*/	
 		TBox3(const TBox3& box)
 			throw();
@@ -76,20 +75,19 @@ namespace BALL
 		{
 		}
 
-		/** Clear method
+		/** Clear method.
 				The values are set to 0.
 		*/
 		virtual void clear()
 			throw();
 
 		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
 
 		/**	Assign from another instance of TBox3.
-				@param vector	the TBox3 object to assign from
+				@param box	the TBox3 object to assign from
 		*/
 		void set(const TBox3& box)
 			throw();
@@ -128,8 +126,8 @@ namespace BALL
 			throw();
 
 		/**	Assign to two variables of type {\tt TVector3}.
-				@param	a the first vector
-				@param	b the second vector
+				@param lower the lower corner of the box
+				@param upper the upper corner of the box
 		*/
 		void get(TVector3<T>& lower, TVector3<T>& upper) const
 			throw();
@@ -189,13 +187,13 @@ namespace BALL
 	
 		/**	Join the box with an other.
 				Instance is set to the box containing
-				both, the box and a given box.
-				@param	box the box containing both boxes
+				both, this box and a given box.
+				@param	box the box to join with
 		*/
 		void join(const TBox3& box)
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -213,7 +211,7 @@ namespace BALL
 			throw();
 
 		/**	Test if a given point is a member of the box.
-				Optional it can be testet, if it is a member of the surface.
+				Optional it can be testet, if the point lies on the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
 				@return bool, {\bf true} or {\bf false}

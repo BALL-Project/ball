@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.23 2001/01/21 21:10:14 amoll Exp $
+// $Id: circle3.h,v 1.24 2001/02/14 01:59:58 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -36,10 +36,8 @@ namespace BALL
 	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
 		throw();
 
-
 	/**	Generic Circle in Three-Dimensional Space.
-      {\bf Definition:} \URL{BALL/MATHS/.h}
-      \\
+      {\bf Definition:} \URL{BALL/MATHS/.h}  \\
 	*/
 	template <typename T>
 	class TCircle3
@@ -66,7 +64,7 @@ namespace BALL
 
 		/**	Copy constructor.
 				Create a new TCircle3 object from another.
-				@param vector the TCircle3 object to be copied
+				@param circle the TCircle3 object to be copied
 		*/	
 		TCircle3(const TCircle3& circle)
 			throw()
@@ -77,7 +75,7 @@ namespace BALL
 		}
 
 		/**	Detailed constructor.
-				Create a new TCircle3 object from two points and a {\tt T} value.
+				Create a new TCircle3 object from the central point, the normal and a radius.
 				@param	point assigned to the point 
 				@param	normal assigned to the normal
 				@param	radius assigned tp the radius
@@ -100,7 +98,7 @@ namespace BALL
 		}
 
 		/**	Clear method.
-				The value are set to 0.
+				The values are set to 0.
 		*/
 		virtual void clear() 
 			throw()
@@ -111,7 +109,6 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
@@ -136,7 +133,7 @@ namespace BALL
 		}
 
 		/**	Assign from another TCircle3.
-				@param vector	the TCirce3 object to assign from
+				@param circle	the TCirce3 object to assign from
 		*/
 		void set(const TCircle3& circle)
 			throw()
@@ -186,8 +183,8 @@ namespace BALL
 		}
 
 		/**	Assign to two variables of type TVector3 and one {\tt T} value.
-				@param	point
-				@param	normal
+				@param	point the center point
+				@param	normal the circle normal
 				@param	rhs the radius
 		*/
 		void get(TVector3<T>& point, TVector3<T>& normal, T& rhs) const
@@ -197,8 +194,8 @@ namespace BALL
 			normal = n;
 			rhs = radius;
 		}
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -222,7 +219,7 @@ namespace BALL
 		}
 
 		/**	Test if a given point is a member of the circle.
-				Optional it can be testet, if it is a member of the surface.
+				Optional it can be testet, if the point lies on the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
 				@return bool, {\bf true} or {\bf false}
@@ -241,8 +238,8 @@ namespace BALL
 											&& Maths::isLessOrEqual(p.getDistance(point), radius));
 			}
 		}
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -281,8 +278,8 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
-		//@}
 
+		//@}
 		/**	@name	Attributes
 		*/
 		//@{
@@ -301,6 +298,7 @@ namespace BALL
 				The radius of the circle.
 		*/
 		T radius;
+
 		//@}
 	};
 
@@ -312,8 +310,8 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
-			reads in two TVector3 and a {\bf T} value: p, n, radius
+	/**	Input- Operator.
+			Reads in two TVector3 and a {\bf T} value: p, n, radius
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
@@ -326,7 +324,7 @@ namespace BALL
 			return s;
 	}
 
-	/**	Output  Operator
+	/**	Output  Operator.
 			Writes the values of {\tt p}, {\tt n}, and {\tt radius} to an 
 			output stream. The three values are separated by spaces and enclosed in brackets.\\
 			{\bf Example:}\\
@@ -342,6 +340,7 @@ namespace BALL
 							 << ' ' << circle.radius 
 							 << ')';
 	}
+
 	//@}
 	//@}
 

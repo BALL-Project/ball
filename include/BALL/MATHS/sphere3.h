@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.22 2001/01/29 00:31:43 amoll Exp $
+// $Id: sphere3.h,v 1.23 2001/02/14 01:59:58 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -26,8 +26,7 @@ namespace BALL
 {
 
 	/** Generic Sphere Class.
-      {\bf Definition:} \URL{BALL/MATHS/sphere3.h}
-      \\
+      {\bf Definition:} \URL{BALL/MATHS/sphere3.h}  \\
 	*/
 	template <typename T>
 	class TSphere3
@@ -82,14 +81,14 @@ namespace BALL
 			throw()
 		{
 		}
-		//@}
 
+		//@}
 		/**	@name	Assignment	
 		*/
 		//@{
 
 		/**	Swap the contents of two instances of Sphere3.
-				@param	sphere3 the sphere3 to swap contents with
+				@param	sphere3 the Sphere3 to swap contents with
 		*/
 		void swap(TSphere3& sphere3)
 			throw()
@@ -113,7 +112,7 @@ namespace BALL
 			radius = sphere.radius;
 		}
 
-		/**	Assign to an instance of TVector3 and a variable of type {\tt T}.
+		/**	Assign from a point and a radius.
 				@param point the point to assign from
 				@param rhs the radius to assign from
 
@@ -139,7 +138,7 @@ namespace BALL
 
 		/**	Assign to another instance of Sphere.
 				Assigns the components to another Sphere.
-				@param sphere	the vector to be assigned to
+				@param sphere3	the sphere to be assigned to
 		*/
 		void get(TSphere3& sphere3) const
 			throw()
@@ -158,8 +157,8 @@ namespace BALL
 			point = p;
 			rhs = radius;
 		}
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -183,7 +182,7 @@ namespace BALL
 		}
 
 		/**	Test whether a given point is a member of the Sphere.
-				Optional it can be testet, if it is a member of the surface.
+				Optional it can be testet, if the point lies on the surface.
 				@param point the point to be tested
 				@param on_surface true to test the surface (default = false)
 				@return bool, {\bf true} or {\bf false}
@@ -209,8 +208,8 @@ namespace BALL
 		{
 			return Maths::isZero(radius);
 		}
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -246,9 +245,8 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
+
 		//@}
-
-
 		/**	@name	Attributes
 		*/
 		//@{
@@ -260,6 +258,7 @@ namespace BALL
 		/** The radius of the sphere.
 		*/
 		T radius;
+
 		//@}
 	};
 
@@ -292,8 +291,8 @@ namespace BALL
 		s << '(' << sphere3.p << ' ' << sphere3.radius << ')';
 		return s;
 	}
-	//@}
 
+	//@}
 
 	/**	The Default TSphere3 Type.
 			If double precision is not needed, {\tt TSphere3<float>} should

@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.37 2001/02/13 01:49:06 amoll Exp $
+// $Id: matrix44.h,v 1.38 2001/02/14 01:59:58 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -132,7 +132,7 @@ namespace BALL
 		}
 
 		/**	Clear method.
-				The value are set to 0.
+				The values are set to 0.
 		*/
 		virtual void clear() 
 			throw();

@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.13 2000/12/19 00:42:24 amoll Exp $
+// $Id: common.h,v 1.14 2001/02/14 01:59:58 amoll Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -33,8 +33,7 @@ namespace BALL
 
 		/**	@name	Common Mathematical Functions.
 				{\bf Namespace:} {\tt BALL::Maths}\\
-				{\bf Definition:} \URL{BALL/MATHS/common.h}
-				\\
+				{\bf Definition:} \URL{BALL/MATHS/common.h}	\\
 		*/
 		//@{ 
 
@@ -191,7 +190,7 @@ namespace BALL
 
 		/**	Test whether a number is not zero.
 				@param	t the number
-				@return bool, {\bf true}, if the absolute value of {\tt t} is at leas \Ref{Constants::EPSILON}
+				@return bool, {\bf true}, if the absolute value of {\tt t} is at least \Ref{Constants::EPSILON}
 		*/
 		template <typename T>
 		inline 
@@ -303,10 +302,10 @@ namespace BALL
 			return (long)(Maths::isLess(t, 0) ? t: (Maths::isEqual(t, (T)(long)t) ? t : t + 1));
 		}
 
-		/**	Compare two numbers to eachother.
+		/**	Compare two numbers to each other.
 				@param	a the first number
 				@param	b the second number
-				@return Index {tt -1} a < b; {tt 0} a = b; {tt 1} a > b;
+				@return Index {\tt -1} a < b; {\tt 0} a = b; {\tt 1} a > b
 		*/
 		template <typename T1, typename T2>
 		inline 
@@ -316,7 +315,7 @@ namespace BALL
 			return (Maths::isLess(a, b) ? -1 : Maths::isEqual(a, b) ? 0 : 1);
 		}
 
-		/**	Test whether two numbers are close each other.
+		/**	Test whether two numbers are close to each other.
 				@param	a the first number
 				@param	b the second number
 				@param	max_diff the maximum allowed difference between the two numbers

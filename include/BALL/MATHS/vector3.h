@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.49 2001/02/11 23:05:12 amoll Exp $
+// $Id: vector3.h,v 1.50 2001/02/14 01:59:58 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -173,7 +173,7 @@ namespace BALL
 		}
 
 		/** Clear method
-				The value are set to 0.
+				The values are set to 0.
 		*/
 		virtual void clear()
 			throw()

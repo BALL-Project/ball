@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.21 2001/01/21 21:10:14 amoll Exp $
+// $Id: plane3.h,v 1.22 2001/02/14 01:59:58 amoll Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -139,7 +139,7 @@ namespace BALL
 		}
 
 		/**	Clear method.
-				The value are set to 0.
+				The values are set to 0.
 		*/
 		virtual void clear() 
 			throw()

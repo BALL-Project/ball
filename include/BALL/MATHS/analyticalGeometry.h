@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.42 2000/12/22 20:25:07 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.43 2001/02/14 01:59:57 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -283,8 +283,8 @@ namespace BALL
 #undef BALL_MATRIX_CELL
 
 	/**	Solve a system of two equations of the form
-		  a_1 x_1 + b_1 x_2 = c_1
-		  a_2 x_1 + b_2 x_2 = c_2.
+		  $a\_1 x_1 + b\_1 x\_2 = c\_1$
+		  $a\_2 x_1 + b\_2 x\_2 = c\_2$.
 			@param	a1
 			@param	a2
 			@param	a1 
@@ -544,8 +544,8 @@ namespace BALL
 	}
 
 	/**	Get the distance between two planes.
-			@param	plane the plane
-			@param	line the line
+			@param	a the first plane
+			@param	b the second plane
 			@return T the distance
 	*/
 	template <typename T>
@@ -562,8 +562,8 @@ namespace BALL
 	}
 
 	/**	Get the angle between two Vector3.
-			@param	a the Vector3
-			@param	b the Vector3
+			@param	a the first vector
+			@param	b the second vector
 			@param	intersection_angle the resulting angle
 			@return bool, always true
 	*/
@@ -609,10 +609,10 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	bool GetAngle(const TPlane3<T>& plane, const TVector3<T> &Vector3, TAngle<T> &intersection_angle)
+	bool GetAngle(const TPlane3<T>& plane, const TVector3<T>& vector, TAngle<T>& intersection_angle)
 		throw()
 	{
-		T length_product = plane.n.getSquareLength() * Vector3.getSquareLength();
+		T length_product = plane.n.getSquareLength() * vector.getSquareLength();
 		
 		if (Maths::isZero(length_product))
 		{
@@ -620,7 +620,7 @@ namespace BALL
 		} 
 		else 
 		{
-			intersection_angle = asin(Maths::abs(plane.n * Vector3) / sqrt(length_product));
+			intersection_angle = asin(Maths::abs(plane.n * vector) / sqrt(length_product));
 			return true;
 		}
 	}
@@ -922,7 +922,7 @@ namespace BALL
 	 
 	/**	Get the intersection circle between two spheres.
 			This methods returns {\bf false}, if the two spheres
-			are identical since then no intersection circle exists.
+			are identical, since then no intersection circle exists.
 			@param	a the first sphere
 			@param	b the second sphere
 			@param	intersection_circle the intersection circle
@@ -1124,7 +1124,7 @@ namespace BALL
 		return isIntersecting(point, line);
 	}
 
-	/**	Test whether two line are intersecting.
+	/**	Test whether two lines are intersecting.
 			@param	a the first line
 			@param	b the second line
 			@return bool, true or false
@@ -1137,7 +1137,7 @@ namespace BALL
 		return Maths::isZero(GetDistance(a, b));
 	}
 
-	/**	Test whether a point is intersecting a plane.
+	/**	Test whether a point lies in a plane.
 			@param	point the point
 			@param	plane the plane
 			@return bool, true or false
@@ -1150,7 +1150,7 @@ namespace BALL
 		return Maths::isZero(GetDistance(point, plane));
 	}
 
-	/**	Test whether a point is intersecting a plane.
+	/**	Test whether a point lies in a plane.
 			@param	plane the plane
 			@param	point the point
 			@return bool, true or false
@@ -1296,7 +1296,7 @@ namespace BALL
     return getOrientedAngle(a.x, a.y, a.z, b.x, b.y, b.z, normal.x, normal.y, normal.z);
 	}
  
-	/**	Return the torsion angle of four points to eachother.
+	/**	Return the torsion angle of four points to each other.
 			@param TVector3& ax 1. vector x component
 			@param TVector3& ay 1. vector y component
 			@param TVector3& az 1. vector z component

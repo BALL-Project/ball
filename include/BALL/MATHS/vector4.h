@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.34 2001/02/11 23:05:12 amoll Exp $
+// $Id: vector4.h,v 1.35 2001/02/14 01:59:59 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -111,7 +111,7 @@ namespace BALL
 			throw();
 
 		/** Clear method
-				The value are set to 0.
+				The values are set to 0.
 		*/
 		virtual void clear()
 			throw()
@@ -343,12 +343,16 @@ namespace BALL
 		//@{
 			
 		/**	Equality operator.
+				The function Maths::isEqual is used to compare the values. 
+				\Ref{Maths::isEqual}
 				@return bool, {\bf true} if all four vector components are equal, {\bf false} otherwise
 		*/
 		bool operator == (const TVector4& vector) const
       throw();
 
 		/**	Inequality operator.
+				The function Maths::isEqual is used to compare the values. 
+				\Ref{Maths::isEqual}
 				@return bool, {\bf true} if the two vectors differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TVector4& vector) const

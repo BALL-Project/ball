@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.29 2001/01/21 21:10:14 amoll Exp $
+// $Id: line3.h,v 1.30 2001/02/14 01:59:58 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -32,11 +32,8 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TLine3<T>& line)
 		throw();
 	
-
-
 	/**	Generic Line in Three-Dimensional Space.
-      {\bf Definition:} \URL{BALL/MATHS/line3.h}
-      \\
+      {\bf Definition:} \URL{BALL/MATHS/line3.h}  \\
 	*/
 	template <typename T>
 	class TLine3
@@ -75,7 +72,7 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new TVector4 object from another.
+				Create a new TLine3 object from another.
 				@param TLine3 the TLine3 object to be copied
 				@param bool ignored - just for interface consistency
 		*/	
@@ -91,11 +88,11 @@ namespace BALL
 		/**	Detailed constructor.
 				Depending on form, create a new TLine3 object from a point and a vector
 				or from two points.
-				{\tt 0} one Point and one Vector\\
-				{\tt 1} two Points
 				@param	point assigned to {\tt p}
 				@param	vector assigned to {\tt d}
 				@param	form assigns form of parameter
+								{\tt 0} one Point and one Vector\\
+								{\tt 1} two Points
 		*/
 		TLine3(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
 			throw()
@@ -116,7 +113,7 @@ namespace BALL
 		}
 
 		/**	Clear method.
-				The value are set to 0.
+				The values are set to 0.
 		*/
 		virtual void clear() 
 			throw()
@@ -202,11 +199,11 @@ namespace BALL
 
 		/**	Assign to two instances of {\tt TVector3}.
 				Type of components depends on form.
-				If form is {\tt 0} two points, else 
-				{\tt 1} one point and the vector component.
 				@param	point the first point
 				@param	vector the second point or the vector component
-				@param	rh the h component
+				@param	form assigns form of parameter \\
+								{\tt 0} one Point and one Vector \\
+								{\tt 1} two Points
 		*/
 		void get(TVector3<T>& point,TVector3<T>& vector, Form form = FORM__PARAMETER) const
 			throw()
@@ -223,7 +220,6 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -254,7 +250,7 @@ namespace BALL
 		}
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the two lines differ in at least on component, {\bf false} otherwise
+				@return bool, {\bf true} if the two lines differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TLine3& line) const
 			throw()
@@ -297,8 +293,8 @@ namespace BALL
 				}
 			}
 		}
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -359,7 +355,7 @@ namespace BALL
 	*/
 	//@{
 	/**	Input- Operator.
-			reads two objcts of type {\bf TVector3} from an {\tt istream} and
+			Reads two objcts of type {\bf TVector3} from an {\tt istream} and
 			assigns them to {\tt d} and {\tt p}.
 	*/
 	template <typename T>
