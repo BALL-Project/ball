@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.14 2003/11/25 17:39:27 amoll Exp $
+// $Id: cartoonModel.C,v 1.15 2003/12/10 14:05:01 anhi Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -14,6 +14,7 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/MATHS/matrix44.h>
 
 using namespace std;
 
@@ -27,8 +28,8 @@ namespace BALL
 			: AddBackboneModel(),
 				last_chain_(0),
 				helix_radius_(2.4),
-				arrow_width_(0.6),
-				arrow_height_(1.5)
+				arrow_width_(2.6),
+				arrow_height_(0.5)
 		{
 		}
 
@@ -72,8 +73,9 @@ namespace BALL
 
 		void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		{
-			vector<Atom*> c_position;
+			vector<Atom*> 	c_position;
 			vector<Vector3> peptide_normals;
+			vector<bool>    is_proline; // needed for the smoothing
 			bool last_residue = false;
 
 			AtomIterator it;
@@ -81,6 +83,12 @@ namespace BALL
 			{
 				if ((it->getName() == "C"))
 				{
+					// first determine if we are in a proline residue
+					if (it->getResidue()->getName() == "PRO")
+						is_proline.push_back(true);
+					else
+						is_proline.push_back(false);
+
 					c_position.push_back(&*it);
 					// now we can find the corresponding nitrogen and oxygen
 					Atom* N = 0;
@@ -157,9 +165,18 @@ namespace BALL
 			// flip them to ensure a smooth strand representation
 			for (Position i=0; i<peptide_normals.size()-1; i++)
 			{
-				if (fabs(acos(peptide_normals[i]*peptide_normals[i+1])) >= M_PI/2.)
+			//	if (!is_proline[i+1])
 				{
-					peptide_normals[i+1]*=-1.;
+					Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
+					if ((current <= (float)Constants::PI*3./2.)&&(current >= (float)Constants::PI/2.))
+					{
+						Vector3 rotaxis = (peptide_normals[i]%peptide_normals[i+1]).normalize();
+						Matrix4x4 rotmat;
+
+						rotmat.rotate(Angle(M_PI), rotaxis);
+
+						peptide_normals[i+1] = rotmat * peptide_normals[i+1];
+					}
 				}
 			}
 
@@ -178,6 +195,9 @@ namespace BALL
 			Vector3 current_points[4];
 
 			Position last_vertices=0;
+
+			arrow_height_ = 0.5;
+			arrow_width_  = 0.8;
 
 			last_points[0] = first->getPosition() - (perpendic * arrow_width_/2.) - normal * arrow_height_/2.;
 			last_points[1] = last_points[0] + normal * arrow_height_;
