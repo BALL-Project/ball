@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.4 1999/11/05 12:20:54 oliver Exp $
+// $Id: PDBFile.C,v 1.5 1999/12/01 13:26:17 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -435,15 +435,15 @@ namespace BALL
 		unsigned long number_of_conect_records = 0;
 		unsigned long number_of_seqres_records = 0;
 		PDB::RecordType record_type = PDB::RECORD_TYPE__UNKNOWN;
-		Residue *residue[13] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		SecondaryStructure *current_sec_struc = 0;
-		Atom *current_atom = 0;
-		unsigned long length_of_secstruc = 0;
-		String temp_string;
-		HashMap<void *, PDB::Integer> atom_map;
-		Atom *covalent_bonded_atom[4];
-		Atom *hydrogen_bonded_atom[4];
-		Atom *saltbridge_bonded_atom[2];
+		Residue*							residue[13] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		SecondaryStructure*		current_sec_struc = 0;
+		Atom*									current_atom = 0;
+		Size									length_of_secstruc = 0;
+		String								temp_string;
+		HashMap<void*, PDB::Integer> atom_map;
+		Atom* covalent_bonded_atom[4];
+		Atom* hydrogen_bonded_atom[4];
+		Atom* saltbridge_bonded_atom[2];
 		unsigned short covalent_bond = 0;
 		unsigned short hydrogen_bond = 0;
 		unsigned short saltbridge_bond = 0;
@@ -455,13 +455,9 @@ namespace BALL
 		char* date = asctime(localtime(&current_time));
 		char PDB_date_format[10];
 		
-		sprintf(PDB_date_format, 
-			"%2.2s-%c%c%c-%2.2s",
-			date + 8,
-			toupper(date[4]),
-			toupper(date[5]),
-			toupper(date[6]),
-			date + 22);
+		sprintf(PDB_date_format, "%2.2s-%c%c%c-%2.2s",
+						date + 8, toupper(date[4]), toupper(date[5]),
+						toupper(date[6]), date + 22);
 
 		if (protein != 0)
 		{
@@ -469,38 +465,89 @@ namespace BALL
 		}
 		
 		sprintf(line_buffer, 
-			record_type_format_[PDB::RECORD_TYPE__HEADER].format_string,
-			record_type_format_[PDB::RECORD_TYPE__HEADER].string,
-			molecule.getName().c_str(),
-			PDB_date_format,
-			PDB_code);
+						record_type_format_[PDB::RECORD_TYPE__HEADER].format_string,
+						record_type_format_[PDB::RECORD_TYPE__HEADER].string,
+						molecule.getName().c_str(),
+						PDB_date_format,
+						PDB_code);
 
 		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 		File::getFileStream() << line_buffer << endl;
 
 		// --- SEQRES ---
 
-  if (protein != 0)
+		if (protein != 0)
 		{
-    BALL_FOREACH_CHAIN(*protein, chain_it)
-    {
-			current_chain_ = &(*chain_it);
-			number_of_residues_in_chain = current_chain_->countResidues();
-			residue_sequence_number = 0;
-				
-			BALL_FOREACH_RESIDUE((*chain_it), residue_it)
+			BALL_FOREACH_CHAIN(*protein, chain_it)
 			{
-				current_residue_ = &(*residue_it);
-
-				if (current_residue_->hasProperty(Residue::PROPERTY__NON_STANDARD) == true)
-				{
-		continue;
-				}
+				current_chain_ = &(*chain_it);
+				number_of_residues_in_chain = current_chain_->countResidues();
+				residue_sequence_number = 0;
 				
-				residue[residue_sequence_number] = current_residue_;
-				residue[residue_sequence_number]->getName().get(PDB_residue_name[residue_sequence_number], 0, 4);
-		
-				if (residue_sequence_number++ == 12)
+				BALL_FOREACH_RESIDUE((*chain_it), residue_it)
+				{
+					current_residue_ = &(*residue_it);
+
+					if (current_residue_->hasProperty(Residue::PROPERTY__NON_STANDARD) == true)
+					{
+						continue;
+					}
+				
+					residue[residue_sequence_number] = current_residue_;
+					residue[residue_sequence_number]->getName().get(PDB_residue_name[residue_sequence_number], 0, 4);
+			
+					if (residue_sequence_number++ == 12)
+					{
+						chain_name = current_chain_->getName().c_str()[0];
+						if (chain_name == 0)
+						{
+							chain_name = BALL_CHAIN_DEFAULT_NAME;
+						}
+
+		    
+						sprintf(line_buffer, 
+										record_type_format_[PDB::RECORD_TYPE__SEQRES].format_string,
+										record_type_format_[PDB::RECORD_TYPE__SEQRES].string,
+										++number_of_seqres_records,
+										chain_name,
+										number_of_residues_in_chain,
+										PDB_residue_name[0],
+										PDB_residue_name[1],
+										PDB_residue_name[2],
+										PDB_residue_name[3],
+										PDB_residue_name[4],
+										PDB_residue_name[5],
+										PDB_residue_name[6],
+										PDB_residue_name[7],
+										PDB_residue_name[8],
+										PDB_residue_name[9],
+										PDB_residue_name[10],
+										PDB_residue_name[11],
+										PDB_residue_name[12]);
+	
+						line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+						File::getFileStream() << line_buffer << endl;
+
+						residue_sequence_number = 0;
+
+						PDB_residue_name[0][0]
+							= PDB_residue_name[1][0]
+							= PDB_residue_name[2][0]
+							= PDB_residue_name[3][0]
+							= PDB_residue_name[4][0]
+							= PDB_residue_name[5][0]
+							= PDB_residue_name[6][0]
+							= PDB_residue_name[7][0]
+							= PDB_residue_name[8][0]
+							= PDB_residue_name[9][0]
+							= PDB_residue_name[10][0]
+							= PDB_residue_name[11][0]
+							= PDB_residue_name[12][0]
+							= '\0';
+					}
+				}
+
+				if (residue_sequence_number > 0)
 				{
 					chain_name = current_chain_->getName().c_str()[0];
 					if (chain_name == 0)
@@ -508,362 +555,311 @@ namespace BALL
 						chain_name = BALL_CHAIN_DEFAULT_NAME;
 					}
 
-		    
-		sprintf(line_buffer, 
-			record_type_format_[PDB::RECORD_TYPE__SEQRES].format_string,
-			record_type_format_[PDB::RECORD_TYPE__SEQRES].string,
-			++number_of_seqres_records,
-			chain_name,
-			number_of_residues_in_chain,
-			PDB_residue_name[0],
-			PDB_residue_name[1],
-			PDB_residue_name[2],
-			PDB_residue_name[3],
-			PDB_residue_name[4],
-			PDB_residue_name[5],
-			PDB_residue_name[6],
-			PDB_residue_name[7],
-			PDB_residue_name[8],
-			PDB_residue_name[9],
-			PDB_residue_name[10],
-			PDB_residue_name[11],
-			PDB_residue_name[12]);
-	
-		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+					sprintf(line_buffer, 
+						record_type_format_[PDB::RECORD_TYPE__SEQRES].format_string,
+						record_type_format_[PDB::RECORD_TYPE__SEQRES].string,
+						++number_of_seqres_records,
+						chain_name,
+						number_of_residues_in_chain,
+						PDB_residue_name[0],
+						PDB_residue_name[1],
+						PDB_residue_name[2],
+						PDB_residue_name[3],
+						PDB_residue_name[4],
+						PDB_residue_name[5],
+						PDB_residue_name[6],
+						PDB_residue_name[7],
+						PDB_residue_name[8],
+						PDB_residue_name[9],
+						PDB_residue_name[10],
+						PDB_residue_name[11],
+						PDB_residue_name[12]);
+			
+					line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 					File::getFileStream() << line_buffer << endl;
+				}
+			}
+		
 
-		residue_sequence_number = 0;
+			// --- HELIX ---
 
-		PDB_residue_name[0][0]
-			= PDB_residue_name[1][0]
-			= PDB_residue_name[2][0]
-			= PDB_residue_name[3][0]
-			= PDB_residue_name[4][0]
-			= PDB_residue_name[5][0]
-			= PDB_residue_name[6][0]
-			= PDB_residue_name[7][0]
-			= PDB_residue_name[8][0]
-			= PDB_residue_name[9][0]
-			= PDB_residue_name[10][0]
-			= PDB_residue_name[11][0]
-			= PDB_residue_name[12][0]
-			= '\0';
+			BALL_FOREACH_CHAIN(*protein, chain_it)
+			{
+				current_chain_ = &(*chain_it);
+				
+				BALL_FOREACH_SECONDARYSTRUCTURE(*chain_it, sec_struc_it)
+				{
+					current_sec_struc = &(*sec_struc_it);
+					
+					if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__HELIX) == true)
+					{
+						residue_it = current_sec_struc->beginResidue();
+						if (residue_it.isEnd())
+						{
+							continue;
+						}
+						reverse_residue_it = current_sec_struc->rbeginResidue();
+
+						current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
+
+						residue[0] = &(*residue_it);
+						residue[1] = &(*reverse_residue_it);
+						residue[0]->getName().get(PDB_residue_name[0], 0, 4);
+						residue[1]->getName().get(PDB_residue_name[1], 0, 4);
+
+						for (length_of_secstruc = 1; !residue_it.isEnd() && residue_it != reverse_residue_it;
+								 ++length_of_secstruc, ++residue_it)
+						{
+						}
+			
+						chain_name = current_chain_->getName().c_str()[0];
+						if (chain_name == 0)
+						{
+							chain_name = BALL_CHAIN_DEFAULT_NAME;
+						}
+			
+						sprintf(line_buffer, 
+										record_type_format_[PDB::RECORD_TYPE__HELIX].format_string,
+										record_type_format_[PDB::RECORD_TYPE__HELIX].string,
+										++number_of_helix_records,
+										PDB_secstruc_name,
+										PDB_residue_name[0],
+										chain_name,
+										residue[0]->getID().toLong(),
+										residue[0]->getInsertionCode(),
+										PDB_residue_name[1],
+										chain_name,
+										residue[1]->getID().toLong(),
+										residue[1]->getInsertionCode(),
+										(unsigned long)current_sec_struc->getProperty("HELIX_CLASS").getUnsignedInt(),
+										"", // comment not supported, yet
+										length_of_secstruc);
+					
+						line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+						File::getFileStream() << line_buffer << endl;
+					}
+				}
+			}
+		
+
+			// --- SHEET ---
+
+			temp_string = "12345";
+			
+			BALL_FOREACH_CHAIN(*protein, chain_it)
+			{
+				current_chain_ = &(*chain_it);
+				
+				BALL_FOREACH_SECONDARYSTRUCTURE(*chain_it, sec_struc_it)
+				{
+					current_sec_struc = &(*sec_struc_it);
+
+					if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__STRAND) == true)
+					{
+						residue_it = current_sec_struc->beginResidue();
+						if (residue_it.isEnd())
+						{
+							continue;
+						}
+						reverse_residue_it = current_sec_struc->rbeginResidue();
+
+						++number_of_sheet_records;
+		
+						if (temp_string != current_sec_struc->getName())
+						{
+							secstruc_serial_number = 0;
+							temp_string = current_sec_struc->getName();
+
+							for (length_of_secstruc = 0, sheet_it = sec_struc_it;
+									 !sheet_it.isEnd(); ++sheet_it)
+							{
+								if ((*sheet_it).hasProperty(SecondaryStructure::PROPERTY__STRAND) == true
+										&& (*sheet_it).getName() == temp_string)
+								{
+									++length_of_secstruc;
+								}
+							}
+						}
+			
+						current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
+
+						residue[0] = &(*residue_it);
+						residue[1] = &(*reverse_residue_it);
+						residue[0]->getName().get(PDB_residue_name[0], 0, 4);
+						residue[1]->getName().get(PDB_residue_name[1], 0, 4);
+
+						chain_name = current_chain_->getName().c_str()[0];
+						if (chain_name == 0)
+						{	
+							chain_name = BALL_CHAIN_DEFAULT_NAME;
+						}
+						
+						sprintf(line_buffer, 
+							record_type_format_[PDB::RECORD_TYPE__SHEET].format_string,
+							record_type_format_[PDB::RECORD_TYPE__SHEET].string,
+							++secstruc_serial_number,
+							PDB_secstruc_name,
+							length_of_secstruc,
+							PDB_residue_name[0],
+							chain_name,
+							residue[0]->getID().toLong(),
+							residue[0]->getInsertionCode(),
+							PDB_residue_name[1],
+							chain_name,
+							residue[1]->getID().toLong(),
+							residue[1]->getInsertionCode(),
+							(long)current_sec_struc->getProperty("STRAND_SENSE").getUnsignedInt(),
+							"",  // Registration. Atom name in current strand not supported, yet
+							"",  // Registration. Residue name in current strand not supported, yet
+							' ', // Registration. Chain identifier in current strand not supported, yet
+							0L,   // Registration. Residue sequence number in current strand not supported, yet
+							' ', // Registration. Insertion code in current strand not supported, yet
+							"",  // Registration. Atom name in previous strand not supported, yet
+							"",  // Registration. Residue name in previous strand not supported, yet
+							' ', // Registration. Chain identifier in previous strand not supported, yet
+							0L,   // Registration. Residue sequence number in previous strand not supported, yet
+							' ');// Registration. Insertion code in previous strand not supported, yet
+							
+							
+						line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+						File::getFileStream() << line_buffer << endl;
+					}
 				}
 			}
 
-			if (residue_sequence_number > 0)
+			// --- TURN ---
+
+			BALL_FOREACH_CHAIN(*protein, chain_it)
 			{
-				chain_name = current_chain_->getName().c_str()[0];
-				if (chain_name == 0)
+				current_chain_ = &(*chain_it);
+				
+				BALL_FOREACH_SECONDARYSTRUCTURE(*chain_it, sec_struc_it)
 				{
+					current_sec_struc = &(*sec_struc_it);
+					
+					if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__TURN) == true)
+					{
+						residue_it = current_sec_struc->beginResidue();
+						if (residue_it.isEnd())
+						{
+							continue;
+						}
+						reverse_residue_it = current_sec_struc->rbeginResidue();
+
+						current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
+
+						residue[0] = &(*residue_it);
+						residue[1] = &(*reverse_residue_it);
+						residue[0]->getName().get(PDB_residue_name[0], 0, 4);
+						residue[1]->getName().get(PDB_residue_name[1], 0, 4);
+
+						for (length_of_secstruc = 1;
+								 !residue_it.isEnd() && residue_it != reverse_residue_it;
+								 ++length_of_secstruc, ++residue_it)
+						{
+						}
+						
+						chain_name = current_chain_->getName().c_str()[0];
+						if (chain_name == 0)
+						{
+							chain_name = BALL_CHAIN_DEFAULT_NAME;
+						}
+
+						
+						sprintf(line_buffer, 
+							record_type_format_[PDB::RECORD_TYPE__TURN].format_string,
+							record_type_format_[PDB::RECORD_TYPE__TURN].string,
+							++number_of_turn_records,
+							PDB_secstruc_name,
+							PDB_residue_name[0],
+							chain_name,
+							residue[0]->getID().toLong(),
+							residue[0]->getInsertionCode(),
+							PDB_residue_name[1],
+							chain_name,
+							residue[1]->getID().toLong(),
+							residue[1]->getInsertionCode(),
+							""); // comment not supported, yet
+								
+						line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+						File::getFileStream() << line_buffer << endl;
+					}
+				}
+			}
+
+			// --- SSBOND ---
+
+			ssbond_serial_number = 0;
+
+			BALL_FOREACH_BOND(*protein, atom_it, bond_it)
+			{
+				residue[0] = (Residue*)((*bond_it).getFirstAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
+				residue[1] = (Residue*)((*bond_it).getSecondAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
+
+				if (residue[0] == 0 || residue[1] == 0
+						|| residue[0] == residue[1]
+						|| residue[0]->hasProperty(Residue::PROPERTY__HAS_SSBOND) == false
+						|| residue[1]->hasProperty(Residue::PROPERTY__HAS_SSBOND) == false)
+				{
+					continue;
+				}
+				
+				residue[0]->getName().get(PDB_residue_name[0], 0, 4);
+				residue[1]->getName().get(PDB_residue_name[1], 0, 4);
+
+				if (residue[0]->getChain() != 0)
+				{
+					chain_name = residue[0]->getChain()->getName().c_str()[0];
+					if (chain_name == (char)0)
+					{
+						chain_name = BALL_CHAIN_DEFAULT_NAME;
+					}
+				} else {
 					chain_name = BALL_CHAIN_DEFAULT_NAME;
+				}
+				char chain_name_B;
+				if (residue[1]->getChain() != 0)
+				{
+					chain_name_B = residue[1]->getChain()->getName().c_str()[0];
+					if (chain_name_B == (char)0)
+					{
+						chain_name_B = BALL_CHAIN_DEFAULT_NAME;
+					}
+				} else {
+					chain_name_B = BALL_CHAIN_DEFAULT_NAME;
 				}
 
 				sprintf(line_buffer, 
-					record_type_format_[PDB::RECORD_TYPE__SEQRES].format_string,
-					record_type_format_[PDB::RECORD_TYPE__SEQRES].string,
-					++number_of_seqres_records,
-					chain_name,
-					number_of_residues_in_chain,
+					record_type_format_[PDB::RECORD_TYPE__SSBOND].format_string,
+					record_type_format_[PDB::RECORD_TYPE__SSBOND].string,
+					++ssbond_serial_number,
 					PDB_residue_name[0],
+					chain_name,
+					residue[0]->getID().toLong(),
+					residue[0]->getInsertionCode(),
 					PDB_residue_name[1],
-					PDB_residue_name[2],
-					PDB_residue_name[3],
-					PDB_residue_name[4],
-					PDB_residue_name[5],
-					PDB_residue_name[6],
-					PDB_residue_name[7],
-					PDB_residue_name[8],
-					PDB_residue_name[9],
-					PDB_residue_name[10],
-					PDB_residue_name[11],
-					PDB_residue_name[12]);
-		
+					chain_name_B,
+					residue[1]->getID().toLong(),
+					residue[1]->getInsertionCode(),
+					0L,  // Symmetry operator for 1st residue not supported, yet
+					0L); // Symmetry operator for 2nd residue not supported, yet
+					
 				line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 				File::getFileStream() << line_buffer << endl;
 			}
-		}
-
-		// --- HELIX ---
-
-    BALL_FOREACH_CHAIN(*protein, chain_it)
-		{
-			current_chain_ = &(*chain_it);
 			
-			BALL_FOREACH_SECONDARYSTRUCTURE(*chain_it, sec_struc_it)
-			{
-				current_sec_struc = &(*sec_struc_it);
-				
-				if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__HELIX) == true)
-				{
-					residue_it = current_sec_struc->beginResidue();
-					if (residue_it.isEnd())
-					{
-						continue;
-					}
-					reverse_residue_it = current_sec_struc->rbeginResidue();
+			// --- HYDBND ---
 
-					current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
+			// --- SLTBRG ---
 
-					residue[0] = &(*residue_it);
-					residue[1] = &(*reverse_residue_it);
-					residue[0]->getName().get(PDB_residue_name[0], 0, 4);
-					residue[1]->getName().get(PDB_residue_name[1], 0, 4);
-
-					for (length_of_secstruc = 1; !residue_it.isEnd() && residue_it != reverse_residue_it;
-							 ++length_of_secstruc, ++residue_it)
-					{
-					}
-		
-					chain_name = current_chain_->getName().c_str()[0];
-					if (chain_name == 0)
-					{
-						chain_name = BALL_CHAIN_DEFAULT_NAME;
-					}
-		
-					sprintf(line_buffer, 
-									record_type_format_[PDB::RECORD_TYPE__HELIX].format_string,
-									record_type_format_[PDB::RECORD_TYPE__HELIX].string,
-									++number_of_helix_records,
-									PDB_secstruc_name,
-									PDB_residue_name[0],
-									chain_name,
-									residue[0]->getID().toLong(),
-									residue[0]->getInsertionCode(),
-									PDB_residue_name[1],
-									chain_name,
-									residue[1]->getID().toLong(),
-									residue[1]->getInsertionCode(),
-									(unsigned long)current_sec_struc->getProperty("HELIX_CLASS").getUnsignedInt(),
-									"", // comment not supported, yet
-									length_of_secstruc);
-				
-					line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-					File::getFileStream() << line_buffer << endl;
-				}
-			}
 		}
-
-		// --- SHEET ---
-
-		temp_string = "12345";
-		
-    BALL_FOREACH_CHAIN(*protein, chain_it)
-		{
-			current_chain_ = &(*chain_it);
-			
-			BALL_FOREACH_SECONDARYSTRUCTURE(*chain_it, sec_struc_it)
-			{
-				current_sec_struc = &(*sec_struc_it);
-
-				if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__STRAND) == true)
-				{
-		residue_it = current_sec_struc->beginResidue();
-		if (residue_it.isEnd())
-		{
-			continue;
-		}
-		reverse_residue_it = current_sec_struc->rbeginResidue();
-
-		++number_of_sheet_records;
-		
-		if (temp_string != current_sec_struc->getName())
-		{
-			secstruc_serial_number = 0;
-			temp_string = current_sec_struc->getName();
-
-			for (length_of_secstruc = 0,
-			 sheet_it = sec_struc_it;
-					 !sheet_it.isEnd();
-					 ++sheet_it)
-			{
-				if ((*sheet_it).hasProperty(SecondaryStructure::PROPERTY__STRAND) == true
-			&& (*sheet_it).getName() == temp_string)
-				{
-					++length_of_secstruc;
-				}
-			}
-		}
-		
-		current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
-
-		residue[0] = &(*residue_it);
-		residue[1] = &(*reverse_residue_it);
-		residue[0]->getName().get(PDB_residue_name[0], 0, 4);
-		residue[1]->getName().get(PDB_residue_name[1], 0, 4);
-
-		chain_name = current_chain_->getName().c_str()[0];
-		if (chain_name == 0)
-		{	
-			chain_name = BALL_CHAIN_DEFAULT_NAME;
-		}
-		
-		sprintf(line_buffer, 
-			record_type_format_[PDB::RECORD_TYPE__SHEET].format_string,
-			record_type_format_[PDB::RECORD_TYPE__SHEET].string,
-			++secstruc_serial_number,
-			PDB_secstruc_name,
-			length_of_secstruc,
-			PDB_residue_name[0],
-			chain_name,
-			residue[0]->getID().toLong(),
-			residue[0]->getInsertionCode(),
-			PDB_residue_name[1],
-			chain_name,
-			residue[1]->getID().toLong(),
-			residue[1]->getInsertionCode(),
-			(long)current_sec_struc->getProperty("STRAND_SENSE").getUnsignedInt(),
-			"",  // Registration. Atom name in current strand not supported, yet
-			"",  // Registration. Residue name in current strand not supported, yet
-			' ', // Registration. Chain identifier in current strand not supported, yet
-			0L,   // Registration. Residue sequence number in current strand not supported, yet
-			' ', // Registration. Insertion code in current strand not supported, yet
-			"",  // Registration. Atom name in previous strand not supported, yet
-			"",  // Registration. Residue name in previous strand not supported, yet
-			' ', // Registration. Chain identifier in previous strand not supported, yet
-			0L,   // Registration. Residue sequence number in previous strand not supported, yet
-			' ');// Registration. Insertion code in previous strand not supported, yet
-			
-				
-		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-		File::getFileStream() << line_buffer << endl;
-				}
-			}
-		}
-
-		// --- TURN ---
-
-    BALL_FOREACH_CHAIN(*protein, chain_it)
-		{
-			current_chain_ = &(*chain_it);
-			
-			BALL_FOREACH_SECONDARYSTRUCTURE(*chain_it, sec_struc_it)
-			{
-				current_sec_struc = &(*sec_struc_it);
-				
-				if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__TURN) == true)
-				{
-					residue_it = current_sec_struc->beginResidue();
-					if (residue_it.isEnd())
-					{
-						continue;
-					}
-					reverse_residue_it = current_sec_struc->rbeginResidue();
-
-					current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
-
-					residue[0] = &(*residue_it);
-					residue[1] = &(*reverse_residue_it);
-					residue[0]->getName().get(PDB_residue_name[0], 0, 4);
-					residue[1]->getName().get(PDB_residue_name[1], 0, 4);
-
-					for (length_of_secstruc = 1;
-							 !residue_it.isEnd() && residue_it != reverse_residue_it;
-							 ++length_of_secstruc, ++residue_it)
-					{
-					}
-					
-					chain_name = current_chain_->getName().c_str()[0];
-					if (chain_name == 0)
-					{
-						chain_name = BALL_CHAIN_DEFAULT_NAME;
-					}
-
-					
-					sprintf(line_buffer, 
-						record_type_format_[PDB::RECORD_TYPE__TURN].format_string,
-						record_type_format_[PDB::RECORD_TYPE__TURN].string,
-						++number_of_turn_records,
-						PDB_secstruc_name,
-						PDB_residue_name[0],
-						chain_name,
-						residue[0]->getID().toLong(),
-						residue[0]->getInsertionCode(),
-						PDB_residue_name[1],
-						chain_name,
-						residue[1]->getID().toLong(),
-						residue[1]->getInsertionCode(),
-						""); // comment not supported, yet
-							
-					line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-					File::getFileStream() << line_buffer << endl;
-				}
-			}
-		}
-
-		// --- SSBOND ---
-
-		ssbond_serial_number = 0;
-
-    BALL_FOREACH_BOND(*protein, atom_it, bond_it)
-		{
-			residue[0] = (Residue*)((*bond_it).getFirstAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
-			residue[1] = (Residue*)((*bond_it).getSecondAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
-
-			if (residue[0] == 0 || residue[1] == 0
-					|| residue[0] == residue[1]
-					|| residue[0]->hasProperty(Residue::PROPERTY__HAS_SSBOND) == false
-					|| residue[1]->hasProperty(Residue::PROPERTY__HAS_SSBOND) == false)
-			{
-				continue;
-			}
-			
-			residue[0]->getName().get(PDB_residue_name[0], 0, 4);
-			residue[1]->getName().get(PDB_residue_name[1], 0, 4);
-
-      if (residue[0]->getChain() != 0)
-      {
-        chain_name = residue[0]->getChain()->getName().c_str()[0];
-				if (chain_name == (char)0)
-				{
-					chain_name = BALL_CHAIN_DEFAULT_NAME;
-				}
-      } else {
-        chain_name = BALL_CHAIN_DEFAULT_NAME;
-      }
-			char chain_name_B;
-      if (residue[1]->getChain() != 0)
-      {
-        chain_name_B = residue[1]->getChain()->getName().c_str()[0];
-				if (chain_name_B == (char)0)
-				{
-					chain_name_B = BALL_CHAIN_DEFAULT_NAME;
-				}
-      } else {
-        chain_name_B = BALL_CHAIN_DEFAULT_NAME;
-      }
-
-			sprintf(line_buffer, 
-				record_type_format_[PDB::RECORD_TYPE__SSBOND].format_string,
-				record_type_format_[PDB::RECORD_TYPE__SSBOND].string,
-				++ssbond_serial_number,
-				PDB_residue_name[0],
-				chain_name,
-				residue[0]->getID().toLong(),
-				residue[0]->getInsertionCode(),
-				PDB_residue_name[1],
-				chain_name_B,
-				residue[1]->getID().toLong(),
-				residue[1]->getInsertionCode(),
-				0L,  // Symmetry operator for 1st residue not supported, yet
-				0L); // Symmetry operator for 2nd residue not supported, yet
-				
-			line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-			File::getFileStream() << line_buffer << endl;
-		}
-		
-		// --- HYDBND ---
-
-		// --- SLTBRG ---
-
-  }
 
 		// --- MODEL ---
 		
 		sprintf(line_buffer, 
-			record_type_format_[PDB::RECORD_TYPE__MODEL].format_string,
-			record_type_format_[PDB::RECORD_TYPE__MODEL].string,
-			1L);
+						record_type_format_[PDB::RECORD_TYPE__MODEL].format_string,
+						record_type_format_[PDB::RECORD_TYPE__MODEL].string,
+						1L);
 				
 		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 		File::getFileStream() << line_buffer << endl;
@@ -872,195 +868,192 @@ namespace BALL
 
 		atom_serial_number = 0;
 		
-  if (protein != 0)
-	{
-    BALL_FOREACH_CHAIN(*protein, chain_it)
-    {
-			current_chain_ = &(*chain_it);
-			current_residue_ = 0;
-				
-			BALL_FOREACH_RESIDUE((*chain_it), residue_it)
+		if (protein != 0)
+		{
+			BALL_FOREACH_CHAIN(*protein, chain_it)
 			{
-				current_residue_ = &(*residue_it);
-				current_residue_->getName().get(PDB_residue_name[0], 0, 4);
-
-				if (current_residue_->hasProperty(Residue::PROPERTY__AMINO_ACID) == true)
-				{
-					record_type = PDB::RECORD_TYPE__ATOM;
-				}	
-				else
-				{
-					record_type = PDB::RECORD_TYPE__HETATM;
-				}
-
-				BALL_FOREACH_PDBATOM(*current_residue_, atom_iterator)
-				{
-					++number_of_atomic_coordinate_records;
+				current_chain_ = &(*chain_it);
+				current_residue_ = 0;
 					
-					current_PDB_atom_ = &(*atom_iterator);
+				BALL_FOREACH_RESIDUE((*chain_it), residue_it)
+				{
+					current_residue_ = &(*residue_it);
+					current_residue_->getName().get(PDB_residue_name[0], 0, 4);
 
-					// get the element symbol
-					strcpy(element_symbol, current_PDB_atom_->getElement().getSymbol().c_str());
-
-					// normalize the atom name:
-					//  if the atom name starts with the element name and the element
-					//	name is a single character (e.g. C, N, O, H and the name is not
-					//  prefixed by a number) then the name should pe prefixed by
-					//  a blank to distinguish CA (carbon alpha) from CA (calcium)
-					String name = current_PDB_atom_->getName();
-					name.trim();
-					Index offset;
-					if ((name.size() < 4) && name.hasPrefix(element_symbol) && (strlen(element_symbol) == 1))
+					if (current_residue_->hasProperty(Residue::PROPERTY__AMINO_ACID) == true)
 					{
-						offset = 1;
-						PDB_atom_name[0] = ' ';
-					} else {
-						offset = 0;
+						record_type = PDB::RECORD_TYPE__ATOM;
+					}	else {
+						record_type = PDB::RECORD_TYPE__HETATM;
 					}
 
-					name.get(&(PDB_atom_name[offset]), 0, 4 - offset);
+					BALL_FOREACH_PDBATOM(*current_residue_, atom_iterator)
+					{
+						++number_of_atomic_coordinate_records;
 						
+						current_PDB_atom_ = &(*atom_iterator);
+
+						// get the element symbol
+						strcpy(element_symbol, current_PDB_atom_->getElement().getSymbol().c_str());
+
+						// normalize the atom name:
+						//  if the atom name starts with the element name and the element
+						//	name is a single character (e.g. C, N, O, H and the name is not
+						//  prefixed by a number) then the name should pe prefixed by
+						//  a blank to distinguish CA (carbon alpha) from CA (calcium)
+						String name = current_PDB_atom_->getName();
+						name.trim();
+						Index offset;
+						if ((name.size() < 4) && name.hasPrefix(element_symbol) && (strlen(element_symbol) == 1))
+						{
+							offset = 1;
+							PDB_atom_name[0] = ' ';
+						} else {
+							offset = 0;
+						}
+
+						name.get(&(PDB_atom_name[offset]), 0, 4 - offset);
+							
+						chain_name = current_chain_->getName().c_str()[0];
+						if (chain_name == (char)0)
+						{
+							chain_name = BALL_CHAIN_DEFAULT_NAME;
+						}
+
+						sprintf(line_buffer, 
+							record_type_format_[record_type].format_string,
+							record_type_format_[record_type].string,
+							++atom_serial_number,
+							PDB_atom_name,
+							current_PDB_atom_->getAlternateLocationIndicator(),
+							PDB_residue_name[0],
+							chain_name,
+							current_residue_->getID().toLong(),
+							current_residue_->getInsertionCode(),
+							current_PDB_atom_->getPosition().x,
+							current_PDB_atom_->getPosition().y,
+							current_PDB_atom_->getPosition().z,
+							current_PDB_atom_->getOccupancy(),
+							current_PDB_atom_->getTemperatureFactor(),
+							PDB_code,
+							element_symbol,
+							""); // CHARGE NOT YET SUPPORTED
+								
+						line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+						File::getFileStream() << line_buffer << endl;
+
+						atom_map[(void *)current_PDB_atom_] =  (long)atom_serial_number;
+					}
+				}
+			
+
+				// --- TER ---
+
+				if (current_residue_ != 0)
+				{
+					++number_of_ter_records;
+					
 					chain_name = current_chain_->getName().c_str()[0];
-					if (chain_name == (char)0)
+
+					if (chain_name == 0)
 					{
 						chain_name = BALL_CHAIN_DEFAULT_NAME;
 					}
 
 					sprintf(line_buffer, 
-						record_type_format_[record_type].format_string,
-						record_type_format_[record_type].string,
+						record_type_format_[PDB::RECORD_TYPE__TER].format_string,
+						record_type_format_[PDB::RECORD_TYPE__TER].string,
 						++atom_serial_number,
-						PDB_atom_name,
-						current_PDB_atom_->getAlternateLocationIndicator(),
 						PDB_residue_name[0],
 						chain_name,
 						current_residue_->getID().toLong(),
-						current_residue_->getInsertionCode(),
-						current_PDB_atom_->getPosition().x,
-						current_PDB_atom_->getPosition().y,
-						current_PDB_atom_->getPosition().z,
-						current_PDB_atom_->getOccupancy(),
-						current_PDB_atom_->getTemperatureFactor(),
-						PDB_code,
-						element_symbol,
-						""); // CHARGE NOT YET SUPPORTED
+						current_residue_->getInsertionCode());
+					
+					line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+					File::getFileStream() << line_buffer << endl;
+				}
+
+				// ---
+				
+				if (system == true)
+				{
+					BaseFragmentIterator frag_it;
+		
+					BALL_FOREACH_BASEFRAGMENT(molecule, frag_it)
+					{	
+						if (RTTI<Molecule>::isKindOf(*frag_it) == false
+								|| RTTI<Protein>::isKindOf(*frag_it) == true)
+						{
+							continue;
+						}
+
+						// invariant: *frag_it is molecule
+						BALL_FOREACH_ATOM(*frag_it, atom_it)
+						{
+							++number_of_atomic_coordinate_records;
+						
+							current_atom = &(*atom_it);
+							current_atom->getName().get(PDB_atom_name, 0, 3);
+							PDB_atom_name[2] = BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR;
+							PDB_atom_name[3] = BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR;
+							PDB_atom_name[4] = '\0';
+							strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
+						
+							current_fragment = (Fragment*)current_atom->getAncestor(RTTI<Fragment>::getDefault());
+							if (current_fragment != 0)
+							{
+								current_fragment->getName().get(PDB_residue_name[0], 0, 3);
+							} else {
+								PDB_residue_name[0][0] = '\0';
+							}
+
+							sprintf(line_buffer, 
+									record_type_format_[PDB::RECORD_TYPE__HETATM].format_string,
+									record_type_format_[PDB::RECORD_TYPE__HETATM].string,
+									++atom_serial_number,
+									PDB_atom_name,
+									BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR,
+									PDB_residue_name[0],
+									BALL_CHAIN_DEFAULT_NAME,
+									0L,
+									BALL_RESIDUE_DEFAULT_INSERTION_CODE,
+									current_atom->getPosition().x,
+									current_atom->getPosition().y,
+									current_atom->getPosition().z,
+									0.0f,
+									0.0f,
+									"",
+									"",
+									""); // CHARGE NOT YET SUPPORTED
+								
+							line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+							File::getFileStream() << line_buffer << endl;
+								
+							atom_map[(void *)current_atom] = (long)atom_serial_number;
+						}
+					}
+				
+					/** unnecessary TER record!
+					// --- TER ---
+
+					++number_of_ter_records;
+							
+					sprintf(line_buffer, 
+									record_type_format_[PDB::RECORD_TYPE__TER].format_string,
+									record_type_format_[PDB::RECORD_TYPE__TER].string,
+									++atom_serial_number,
+									"",
+									BALL_CHAIN_DEFAULT_NAME,
+									0L,
+									' ');
 							
 					line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 					File::getFileStream() << line_buffer << endl;
-
-					atom_map[(void *)current_PDB_atom_] =  (long)atom_serial_number;
+					*/
 				}
 			}
-
-		// --- TER ---
-
-			if (current_residue_ != 0)
-			{
-				++number_of_ter_records;
-				
-				chain_name = current_chain_->getName().c_str()[0];
-
-				if (chain_name == 0)
-				{
-					chain_name = BALL_CHAIN_DEFAULT_NAME;
-				}
-
-				sprintf(line_buffer, 
-					record_type_format_[PDB::RECORD_TYPE__TER].format_string,
-					record_type_format_[PDB::RECORD_TYPE__TER].string,
-					++atom_serial_number,
-					PDB_residue_name[0],
-					chain_name,
-					current_residue_->getID().toLong(),
-					current_residue_->getInsertionCode());
-				
-				line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-				File::getFileStream() << line_buffer << endl;
-			}
-
-    // ---
-      
-      if (system == true)
-      {
-	BaseFragmentIterator frag_it;
-	
-	BALL_FOREACH_BASEFRAGMENT(molecule, frag_it)
-	{
-	  if (RTTI<Molecule>::isKindOf(*frag_it) == false
-	      || RTTI<Protein>::isKindOf(*frag_it) == true)
-	  {
-	    continue;
-		}
-
-	  // invariant: *frag_it is molecule
-	  BALL_FOREACH_ATOM(*frag_it, atom_it)
-	  {
-	    ++number_of_atomic_coordinate_records;
-		
-	    current_atom = &(*atom_it);
-	    current_atom->getName().get(PDB_atom_name, 0, 3);
-	    PDB_atom_name[2] = BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR;
-	    PDB_atom_name[3] = BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR;
-	    PDB_atom_name[4] = '\0';
-	    strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
-		
-	    current_fragment = (Fragment*)current_atom->getAncestor(RTTI<Fragment>::getDefault());
-	    if (current_fragment != 0)
-	    {
-	      current_fragment->getName().get(PDB_residue_name[0], 0, 3);
-	    }
-	    else
-	    {
-	      PDB_residue_name[0][0] = '\0';
-	    }
-
-		sprintf(line_buffer, 
-		    record_type_format_[PDB::RECORD_TYPE__HETATM].format_string,
-		    record_type_format_[PDB::RECORD_TYPE__HETATM].string,
-		    ++atom_serial_number,
-		    PDB_atom_name,
-		    BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR,
-		    PDB_residue_name[0],
-		    BALL_CHAIN_DEFAULT_NAME,
-		    0L,
-		    BALL_RESIDUE_DEFAULT_INSERTION_CODE,
-		    current_atom->getPosition().x,
-		    current_atom->getPosition().y,
-		    current_atom->getPosition().z,
-		    0.0f,
-		    0.0f,
-		    "",
-		    "",
-		    ""); // CHARGE NOT YET SUPPORTED
-      
-	    line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-	    File::getFileStream() << line_buffer << endl;
-      
-	    atom_map[(void *)current_atom] = (long)atom_serial_number;
-	  }
-	}
-	
-  // --- TER ---
-
-	++number_of_ter_records;
-      
-	sprintf(line_buffer, 
-		record_type_format_[PDB::RECORD_TYPE__TER].format_string,
-		record_type_format_[PDB::RECORD_TYPE__TER].string,
-		++atom_serial_number,
-		"",
-		BALL_CHAIN_DEFAULT_NAME,
-		0L,
-		' ');
-      
-	line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-	File::getFileStream() << line_buffer << endl;
-      }
-    }
-  }
-  else
-  {
-    BALL_FOREACH_ATOM(molecule, atom_it)
+		} else {
+			BALL_FOREACH_ATOM(molecule, atom_it)
     {
       ++number_of_atomic_coordinate_records;
 
@@ -1074,11 +1067,9 @@ namespace BALL
       current_fragment = (Fragment *)current_atom->getAncestor(RTTI<Fragment>::getDefault());
       if (current_fragment != 0)
       {
-	current_fragment->getName().get(PDB_residue_name[0], 0, 4);
-      }
-      else
-      {
-	PDB_residue_name[0][0] = '\0';
+				current_fragment->getName().get(PDB_residue_name[0], 0, 4);
+      } else {
+				PDB_residue_name[0][0] = '\0';
       }
 
       sprintf(line_buffer, 
@@ -1110,154 +1101,140 @@ namespace BALL
   // --- ENDMDL ---
   
   sprintf(line_buffer, 
-			record_type_format_[PDB::RECORD_TYPE__ENDMDL].format_string,
-			record_type_format_[PDB::RECORD_TYPE__ENDMDL].string);
+					record_type_format_[PDB::RECORD_TYPE__ENDMDL].format_string,
+					record_type_format_[PDB::RECORD_TYPE__ENDMDL].string);
 				
-		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-		File::getFileStream() << line_buffer << endl;
+	line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+	File::getFileStream() << line_buffer << endl;
 
-		// --- CONECT ---
+	// --- CONECT ---
 
   for (atom_it = molecule.beginAtom(); 
-				 !atom_it.isEnd();
-				 ++atom_it)
+			 !atom_it.isEnd(); ++atom_it)
+	{
+		current_atom = &(*atom_it);
+
+		covalent_bond
+			= hydrogen_bond
+			= saltbridge_bond
+			= 0;
+
+		covalent_bonded_atom[0]
+			= covalent_bonded_atom[1]
+			= covalent_bonded_atom[2]
+			= covalent_bonded_atom[3]
+			= 0;
+				
+		hydrogen_bonded_atom[0]
+			= hydrogen_bonded_atom[1]
+			= hydrogen_bonded_atom[2]
+			= hydrogen_bonded_atom[3]
+			= 0;
+				
+		saltbridge_bonded_atom[0]
+			= saltbridge_bonded_atom[1]
+			= 0;
+
+		for (bond_it = current_atom->beginBond();
+				 !bond_it.isEnd(); ++bond_it)
 		{
-			current_atom = &(*atom_it);
-
-			covalent_bond
-				= hydrogen_bond
-				= saltbridge_bond
-				= 0;
-
-			covalent_bonded_atom[0]
-				= covalent_bonded_atom[1]
-				= covalent_bonded_atom[2]
-				= covalent_bonded_atom[3]
-				= 0;
-				
-			hydrogen_bonded_atom[0]
-				= hydrogen_bonded_atom[1]
-				= hydrogen_bonded_atom[2]
-				= hydrogen_bonded_atom[3]
-				= 0;
-				
-			saltbridge_bonded_atom[0]
-				= saltbridge_bonded_atom[1]
-				= 0;
-
-			for (bond_it = current_atom->beginBond();
-		 !bond_it.isEnd();
-		 ++bond_it)
+			switch ((*bond_it).getType())
 			{
-				switch ((*bond_it).getType())
-				{
-					case Bond::TYPE__COVALENT:
+				case Bond::TYPE__HYDROGEN:
 
-			if (covalent_bond < 4)
-			{
-				covalent_bonded_atom[covalent_bond]
-					= (*bond_it).getBondedAtomOf(*current_atom);
+					if (hydrogen_bond < 4)
+					{
+						hydrogen_bonded_atom[hydrogen_bond]
+							= (*bond_it).getBondedAtomOf(*current_atom);
 
-				if (*covalent_bonded_atom[covalent_bond] >= *current_atom)
-				{
-					covalent_bonded_atom[covalent_bond] = 0;
-				}
-				else
-				{
-					++covalent_bond;
-				}
-			}
+						if (*hydrogen_bonded_atom[hydrogen_bond] >= *current_atom)
+						{
+							hydrogen_bonded_atom[hydrogen_bond] = 0;
+						} else {
+							++hydrogen_bond;
+						}
+					}
+					
+					break;
 			
-			break;
-			
-					case Bond::TYPE__HYDROGEN:
+				case Bond::TYPE__SALT_BRIDGE:
 
-			if (hydrogen_bond < 4)
-			{
-				hydrogen_bonded_atom[hydrogen_bond]
-					= (*bond_it).getBondedAtomOf(*current_atom);
+					if (saltbridge_bond < 2)
+					{
+						saltbridge_bonded_atom[saltbridge_bond]
+							= (*bond_it).getBondedAtomOf(*current_atom);
 
-				if (*hydrogen_bonded_atom[hydrogen_bond] >= *current_atom)
-				{
-					hydrogen_bonded_atom[hydrogen_bond] = 0;
-				}
-				else
-				{
-					++hydrogen_bond;
-				}
+						if (*saltbridge_bonded_atom[saltbridge_bond] >= *current_atom)
+						{
+							saltbridge_bonded_atom[saltbridge_bond] = 0;
+						} else {
+							++saltbridge_bond;
+						}
+					}
+					
+					break;
+
+
+				default:
+
+					if (covalent_bond < 4)
+					{
+						covalent_bonded_atom[covalent_bond]
+							= (*bond_it).getBondedAtomOf(*current_atom);
+
+						if (*covalent_bonded_atom[covalent_bond] >= *current_atom)
+						{
+							covalent_bonded_atom[covalent_bond] = 0;
+						} else {
+							++covalent_bond;
+						}
+					}
 			}
-			
-			break;
-			
-					case Bond::TYPE__SALT_BRIDGE:
-
-			if (saltbridge_bond < 2)
-			{
-				saltbridge_bonded_atom[saltbridge_bond]
-					= (*bond_it).getBondedAtomOf(*current_atom);
-
-				if (*saltbridge_bonded_atom[saltbridge_bond] >= *current_atom)
-				{
-					saltbridge_bonded_atom[saltbridge_bond] = 0;
-				}
-				else
-				{
-					++saltbridge_bond;
-				}
-			}
-			
-			break;
-
-					default:
-			;
-				};
-			}
-
-			if (covalent_bond == 0
-		&& hydrogen_bond == 0
-		&& saltbridge_bond == 0)
-			{
-				continue;
-			}
-
-			++number_of_conect_records;
-
-			sprintf(line_buffer, 
-				record_type_format_[PDB::RECORD_TYPE__CONECT].format_string,
-				record_type_format_[PDB::RECORD_TYPE__CONECT].string,
-				((*atom_map.find((void *)current_atom)).second),
-				(covalent_bonded_atom[0] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[0])).second) : 0,
-				(covalent_bonded_atom[1] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[1])).second) : 0,
-				(covalent_bonded_atom[2] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[2])).second) : 0,
-				(covalent_bonded_atom[3] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[3])).second) : 0,
-				(hydrogen_bonded_atom[0] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[0])).second) : 0,
-				(hydrogen_bonded_atom[1] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[1])).second) : 0,
-				(saltbridge_bonded_atom[0] != 0) ? ((*atom_map.find((void *)saltbridge_bonded_atom[0])).second) : 0,
-				(hydrogen_bonded_atom[2] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[2])).second) : 0,
-				(hydrogen_bonded_atom[3] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[3])).second) : 0,
-				(saltbridge_bonded_atom[1] != 0) ? ((*atom_map.find((void *)saltbridge_bonded_atom[1])).second) : 0);
-
-			line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-			File::getFileStream() << line_buffer << endl;
 		}
+
+		if (covalent_bond == 0 && hydrogen_bond == 0 && saltbridge_bond == 0)
+		{
+			continue;
+		}
+
+		++number_of_conect_records;
+
+		sprintf(line_buffer, 
+						record_type_format_[PDB::RECORD_TYPE__CONECT].format_string,
+						record_type_format_[PDB::RECORD_TYPE__CONECT].string,
+						((*atom_map.find((void *)current_atom)).second),
+						(covalent_bonded_atom[0] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[0])).second) : 0,
+						(covalent_bonded_atom[1] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[1])).second) : 0,
+						(covalent_bonded_atom[2] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[2])).second) : 0,
+						(covalent_bonded_atom[3] != 0) ? ((*atom_map.find((void *)covalent_bonded_atom[3])).second) : 0,
+						(hydrogen_bonded_atom[0] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[0])).second) : 0,
+						(hydrogen_bonded_atom[1] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[1])).second) : 0,
+						(saltbridge_bonded_atom[0] != 0) ? ((*atom_map.find((void *)saltbridge_bonded_atom[0])).second) : 0,
+						(hydrogen_bonded_atom[2] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[2])).second) : 0,
+						(hydrogen_bonded_atom[3] != 0) ? ((*atom_map.find((void *)hydrogen_bonded_atom[3])).second) : 0,
+						(saltbridge_bonded_atom[1] != 0) ? ((*atom_map.find((void *)saltbridge_bonded_atom[1])).second) : 0);
+
+		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+		File::getFileStream() << line_buffer << endl;
+	}
 		
 		// --- MASTER ---
 		
 		sprintf(line_buffer, 
-			record_type_format_[PDB::RECORD_TYPE__MASTER].format_string,
-			record_type_format_[PDB::RECORD_TYPE__MASTER].string,
-			number_of_remark_records,
-			0L,
-			number_of_het_records,
-			number_of_helix_records,
-			number_of_sheet_records,
-			number_of_turn_records,
-			number_of_site_records,
-			number_of_coordinate_transformation_records,
-			number_of_atomic_coordinate_records,
-			number_of_ter_records,
-			number_of_conect_records,
-			number_of_seqres_records);
+						record_type_format_[PDB::RECORD_TYPE__MASTER].format_string,
+						record_type_format_[PDB::RECORD_TYPE__MASTER].string,
+						number_of_remark_records,
+						0L,
+						number_of_het_records,
+						number_of_helix_records,
+						number_of_sheet_records,
+						number_of_turn_records,
+						number_of_site_records,
+						number_of_coordinate_transformation_records,
+						number_of_atomic_coordinate_records,
+						number_of_ter_records,
+						number_of_conect_records,
+						number_of_seqres_records);
 				
 		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 		File::getFileStream() << line_buffer << endl;
@@ -1265,8 +1242,8 @@ namespace BALL
 		// --- END ---
 		
 		sprintf(line_buffer, 
-			record_type_format_[PDB::RECORD_TYPE__END].format_string,
-			record_type_format_[PDB::RECORD_TYPE__END].string);
+						record_type_format_[PDB::RECORD_TYPE__END].format_string,
+						record_type_format_[PDB::RECORD_TYPE__END].string);
 				
 		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
 		File::getFileStream() << line_buffer << endl;
