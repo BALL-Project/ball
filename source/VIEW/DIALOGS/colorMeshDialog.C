@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.24 2004/05/13 17:16:49 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.25 2004/05/13 17:17:34 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -201,6 +201,8 @@ void ColorMeshDialog::removeGrid_(RegularData3D& grid)
 
 void ColorMeshDialog::gridSelected()
 {
+	// prevent freezing, if clicking on representation, while
+	// an other is still rendering
 	if (!getMainControl()->compositesAreMuteable()) return;
 
 	if (mesh_ == 0) return;
