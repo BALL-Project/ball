@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.27 2003/12/11 16:22:41 amoll Exp $
+// $Id: BALL.sip,v 1.28 2003/12/11 16:33:57 amoll Exp $
 //
 //
 //
@@ -267,6 +267,7 @@
 // %Include rules.sip
 // %Include structureMapper.sip
 //%Include smilesParser.sip
+%Include surfaceProcessor.sip
 
 // SYSTEM
 // %Include directory.sip
