@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.7 1999/12/30 18:05:31 oliver Exp $
+// $Id: atom.C,v 1.8 2000/01/15 18:58:42 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -645,25 +645,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	bool Atom::apply(UnaryProcessor<Bond>& processor)
-	{
-		if (processor.start() == false)
-			return false;
-
-		Processor::Result result;
-
-		for (register int i = 0; i < number_of_bonds_; ++i)
-		{
-			result = processor(*bond_[i]);
-
-			if (result <= Processor::BREAK)
-				return (result == Processor::BREAK) ? true : false;
-		}
-
-		return processor.finish();
-	}
-
-	bool Atom::apply(UnaryProcessor<Object>& processor)
+	bool Atom::applyBonds(UnaryProcessor<Bond>& processor)
 	{
 		if (processor.start() == false)
 			return false;
