@@ -17,7 +17,11 @@ CPP_SOURCES=\
 	contourSurfaceDialog.C\
 	contourSurfaceDialogData.C\
 	peptideDialog.C\
-	peptideDialogData.C
+	peptideDialogData.C\
+	amberMinimizationDialog.C\
+	amberMinimizationDialogData.C\
+	molecularDynamicsDialog.C\
+	molecularDynamicsDialogData.C\
 
 MOC_SOURCES=\
 	atomProperties_moc.C\
@@ -32,7 +36,11 @@ MOC_SOURCES=\
 	contourSurfaceDialog_moc.C\
 	contourSurfaceDialogData_moc.C\
 	peptideDialog_moc.C\
-	peptideDialogData_moc.C
+	peptideDialogData_moc.C\
+	amberMinimizationDialog_moc.C\
+	amberMinimizationDialogData_moc.C\
+	molecularDynamicsDialog_moc.C\
+	molecularDynamicsDialogData_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -102,4 +110,29 @@ $(HEADER_DIR)/peptideDialogData.h:  peptideDialog.ui
 
 peptideDialogData.C:  $(HEADER_DIR)/peptideDialogData.h
 	$(UIC) -o $@ -impl $< peptideDialog.ui
+
+amberMinimizationDialog_moc.C:	$(HEADER_DIR)/amberMinimizationDialog.h
+	$(MOC) $< -o $@
+
+amberMinimizationDialogData_moc.C:	$(HEADER_DIR)/amberMinimizationDialogData.h
+	$(MOC) $< -o $@
+
+$(HEADER_DIR)/amberMinimizationDialogData.h:  amberMinimizationDialog.ui
+	$(UIC) -o $@ $<
+
+amberMinimizationDialogData.C:  $(HEADER_DIR)/amberMinimizationDialogData.h
+	$(UIC) -o $@ -impl $< amberMinimizationDialog.ui
+
+
+molecularDynamicsDialog_moc.C:	$(HEADER_DIR)/molecularDynamicsDialog.h
+	$(MOC) $< -o $@
+
+molecularDynamicsDialogData_moc.C:	$(HEADER_DIR)/molecularDynamicsDialogData.h
+	$(MOC) $< -o $@
+
+$(HEADER_DIR)/molecularDynamicsDialogData.h:  molecularDynamicsDialog.ui
+	$(UIC) -o $@ $<
+
+molecularDynamicsDialogData.C:  $(HEADER_DIR)/molecularDynamicsDialogData.h
+	$(UIC) -o $@ -impl $< molecularDynamicsDialog.ui
 

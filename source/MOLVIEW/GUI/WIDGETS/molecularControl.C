@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.12 2003/06/12 12:58:59 anhi Exp $
+// $Id: molecularControl.C,v 1.13 2003/07/21 07:38:48 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -38,6 +38,8 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	throw()
 {
 	bool copy_list_filled = (getCopyList_().size() > 0);
+	// prevent changes to composites while simulations are running
+	copy_list_filled = copy_list_filled && main_control.compositesAreMuteable();
 
 	// check for paste-slot: enable only if copy_list_ not empty
 	(main_control.menuBar())->setItemEnabled(paste_id_, copy_list_filled);	
@@ -47,6 +49,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 
 	// check for cut/copy-slot: enable only if one system selected
 	bool list_filled = (MainControl::getMainControl(this)->getSelectedSystem() != 0);
+	list_filled = list_filled && main_control.compositesAreMuteable();
 
 	// cut, copy, and paste are only available for top level selections
 	(main_control.menuBar())->setItemEnabled(cut_id_, list_filled);
@@ -153,11 +156,16 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 		insertContextMenuEntry("Paste", this, SLOT(paste()), OBJECT__PASTE);
 		context_menu_.setItemEnabled(OBJECT__PASTE, getCopyList_().size() > 0);
 		bool system_selected = (MainControl::getMainControl(this)->getSelectedSystem() != 0);
+		system_selected = system_selected && 
+											MainControl::getMainControl(this)->compositesAreMuteable();	
 		context_menu_.setItemEnabled(OBJECT__CUT, system_selected);
 		context_menu_.setItemEnabled(OBJECT__COPY, system_selected);
 
 		context_menu_.insertSeparator();
-		insertContextMenuEntry("Build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
+		if (MainControl::getMainControl(this)->compositesAreMuteable())
+		{
+			insertContextMenuEntry("Build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
+		}
 		//insertContextMenuEntry("remove Bonds", this, SLOT(removeBonds()), BONDS__REMOVE);
 		context_menu_.insertSeparator();
 	}

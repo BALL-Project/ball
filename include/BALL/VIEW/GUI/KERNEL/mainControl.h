@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.32 2003/03/26 13:08:54 sturm Exp $
+// $Id: mainControl.h,v 1.33 2003/07/21 07:41:39 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -488,6 +488,12 @@ namespace BALL
 			virtual void onNotify(Message *message)
 				throw();
 
+			///
+			void setCompositesMuteable(bool state) {composites_muteable_ = state;}
+
+			///
+			bool compositesAreMuteable() {return composites_muteable_;}
+
 			//@}
 			/**	@name	Predicates
 			*/
@@ -868,7 +874,7 @@ namespace BALL
 			*/
 			QLabel* 										message_label_;
 	
-			private:
+			protected:
 
 			/*_	Create a unique item ID.
 			*/
@@ -900,7 +906,8 @@ namespace BALL
 			
 			static int 									current_id_;
 
-		
+			bool 												composites_muteable_;
+
 			// used to acces the global instance of MainControl
 			static MainControl* 				theMainControl_;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.10 2003/03/26 13:56:50 anhi Exp $
+// $Id: molecularFileDialog.h,v 1.11 2003/07/21 07:40:22 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
@@ -19,17 +19,17 @@
 
 namespace BALL
 {
+	class System;
+
 	namespace MOLVIEW
 	{
 		/** MolecularFileDialog class.
 		 		This class is used to read or write Molecular files in one of several
 				file formats. Currently, PDB, HIN and MOL2 are supported.
-				Upon reading a file, the information will be stored in a  \link System System \endlink .
-				This class can also take a  \link System System \endlink  and write it in one of the
+				Upon reading a file, the information will be stored in a System.
+				This class can also take a System and write it in one of the
 				supported file formats.
-				This class is derived from  \link VIEW::ModularWidget VIEW::ModularWidget \endlink .
-				
-   			\ingroup  MolviewDialogs
+				This class is derived from VIEW::ModularWidget.
 		 */
 		class MolecularFileDialog
 			: public QWidget,
@@ -45,57 +45,43 @@ namespace BALL
 
 			/** Default Constructor.
 			 		Constructs new MolecularFileDialog.
-					Calls  \link VIEW::ModularWidget::registerWidget VIEW::ModularWidget::registerWidget \endlink 
-					@return			MolecularFileDialog new constructed MolecularFileDialog
-					@see				VIEW::ModularWidget
+					Calls VIEW::ModularWidget::registerWidget
+					\return			MolecularFileDialog new constructed MolecularFileDialog
+					\see				VIEW::ModularWidget
 			 */
 			MolecularFileDialog(QWidget* parent)
 				throw();
 
-			//@}
-			/** @name Destructors
-			 */
-			//@{
-			
+			//@} /** @name Destructors */ //@{ 
+
 			/** Destructor.
-			 		Default destruction of {\em *this} MolecularFileDialog.
 			 */
 			virtual ~MolecularFileDialog()
 				throw();
 
-			/** Explicit destructor.
-			 */
-			virtual void destroy()
-				throw();
-
-			//@}
-			/** @name Accessors: inspectors and mutators
-			 */
-			
-			//@{
-			
+			//@} /** @name Accessors: inspectors and mutators */ //@{ 
 			/** Initializes the widget.
-			 		Initializes the menu {\em File} with the entries {\em Load System} and {\em Write System}.
+			 		Initializes the menu <b> File</b> with the entries <b> Load System</b> and <b> Write System</b>.
 					This method is called automatically immediately before the main application is started.
-					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.
-					@param	main_control the  \link MainControl MainControl \endlink  object to be initialized with {\em *this} MolecularFileDialog
-					@see		finalizeWidget
-					@see		insertMenuEntry
-					@see		show
+					This method will be called by show from the MainControl object.
+					\param	main_control the MainControl object to be initialized with this MolecularFileDialog
+					\see		finalizeWidget
+					\see		insertMenuEntry
+					\see		show
 			 */
 			virtual void initializeWidget(VIEW::MainControl& main_control)
 				throw();
 
 			/** Removes the widget.
-			 		Reverses all actions performed in  \link initializeWidget initializeWidget \endlink 
-					(removes menu entries of {\em *this} MolecularFileDialog).
-					This method will be called by  \link aboutToExit aboutToExit \endlink  from the
-					 \link MainControl MainControl \endlink  object.
-					@param		main_control the  \link MainControl MainControl \endlink  object to be finalized with
-										{\em *this} MolecularFileDialog
-					@see			initializeWidget
-					@see			removeMenuEntry
-					@see			aboutToExit
+			 		Reverses all actions performed in initializeWidget
+					(removes menu entries of this MolecularFileDialog).
+					This method will be called by aboutToExit from the
+					MainControl object.
+					\param		main_control the MainControl object to be finalized with
+										this MolecularFileDialog
+					\see			initializeWidget
+					\see			removeMenuEntry
+					\see			aboutToExit
 			 */
 			virtual void finalizeWidget(VIEW::MainControl& main_control)
 				throw();
@@ -104,18 +90,27 @@ namespace BALL
 
 			/** Open a molecular file.
 			 		This method tries to open and read a molecular file, selected from a QFileDialog,
-					and, if susccesfull, converts is into a  \link System System \endlink . Then it sends a  \link NewCompositeMessage NewCompositeMessage \endlink 
-					containing the  \link Composite Composite \endlink  object made from the  \link System System \endlink  to the other  \link ConnectionObject ConnectionObject \endlink 
+					and, if susccesfull, converts is into a System. Then it sends a NewCompositeMessage
+					containing the Composite object made from the System to the other ConnectionObject
 					objects.
-			 		A  \link WindowMessage WindowMessage \endlink  will be sent to change the status bar text of the main application.
-					@see		NewCompositeMessage
-					@see		WindowMessage
-					@see		ConnectionObject
+			 		A WindowMessage will be sent to change the status bar text of the main application.
+					\see		NewCompositeMessage
+					\see		WindowMessage
+					\see		ConnectionObject
 			 */
 			virtual void readFile();
 
+			///
+			virtual void openFile(const String& file)
+				throw();
+		
+			///
+			virtual void openFile(const String& filename, const String& filetype, 
+												const String& system_name)
+				throw();
+
 			/** Write a molecular file.
-			 		This method takes a  \link System System \endlink  and saves it into a molecular file, selected from a QFileDialog.
+			 		This method takes a System and saves it into a molecular file, selected from a QFileDialog.
 			 */
 			virtual bool writeFile();
 		
@@ -159,6 +154,14 @@ namespace BALL
 			bool writeMOL2File(String filename, const System& system)
 				throw();
 			
+			///
+			virtual void fetchPreferences(INIFile &inifile)
+					throw();
+				
+			///
+			virtual void writePreferences(INIFile &inifile)
+					throw();
+				
 			//@}
 			
 			protected:
@@ -166,9 +169,20 @@ namespace BALL
 			bool finish_(const String& filename, const String& system_name, System* system)
 				throw();
 
-		};
-	} // namespace MOLVIEW
+			enum FileFormats
+			{
+				PDB_FILE = 0,
+				HIN_FILE,
+				MOL_FILE,
+				MOL2_FILE
+			};
 
+			Index file_format_;
+			Size x_, y_, width_, height_;
+			String working_dir_;
+		};
+
+	} // namespace MOLVIEW
 }	// namespace BALL
 
 #endif // BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.19 2003/03/26 13:56:45 anhi Exp $
+// $Id: common.h,v 1.20 2003/07/21 07:40:22 amoll Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -33,7 +33,7 @@ namespace BALL
     
 					\ingroup  MolviewCommon
 			*/
-			enum Property
+			enum Properties
 			{
 				/// unkown property
 				PROPERTY__UNKNOWN = -1,

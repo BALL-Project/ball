@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.16 2003/03/26 13:08:59 sturm Exp $
+// $Id: scene.h,v 1.17 2003/07/21 07:41:39 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -82,6 +82,17 @@ namespace BALL
 			Q_OBJECT
 
 		  public:
+
+			/** This class is only intended for usage with multithreading.
+			 		It induces a rebuild of the display lists and an update of the Scene and
+					should only be used internaly.
+			*/
+			class SceneUpdateEvent : public QCustomEvent
+			{
+				public:
+					SceneUpdateEvent()
+						: QCustomEvent( 65432 ){}
+			};
 
 			/** @name Class friends
 			*/
@@ -715,6 +726,11 @@ namespace BALL
 			*/
 			virtual void mouseReleaseEvent(QMouseEvent* qmouse_event);
 
+			public slots:
+
+			///
+			void exportPNG();
+
 			protected slots:
 
 			//@}
@@ -741,6 +757,7 @@ namespace BALL
 			virtual void pickingMode_();
 			//@}
 
+			virtual void customEvent( QCustomEvent * e );
 
 			private:
 
@@ -872,6 +889,9 @@ namespace BALL
 			Vector3 look_up_;
 			Vector3 right_;
 			Vector3 up_;
+
+			bool update_running_;
+			Position screenshot_nr_;
 		};
 
 

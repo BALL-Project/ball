@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.14 2003/01/06 17:43:04 amoll Exp $
+// $Id: molecularProperties.C,v 1.15 2003/07/21 07:38:49 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -377,6 +377,7 @@ namespace BALL
 			List<Composite*>& selection = MainControl::getMainControl(this)->getControlSelection();
 			Size number_of_selected_objects = selection.size(); 
 			bool selected = (number_of_selected_objects != 0);
+			selected = selected && MainControl::getMainControl(this)->compositesAreMuteable();
 
 			(main_control.menuBar())->setItemEnabled(add_hydrogens_id_, selected);
 			(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
