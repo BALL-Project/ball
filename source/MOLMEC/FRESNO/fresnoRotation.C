@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.17 2003/06/04 15:33:00 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.18 2003/06/05 09:15:02 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -168,7 +168,7 @@ namespace BALL
 		BoundingBoxProcessor bb_proc;
 		system->apply(bb_proc);
 
-    Options& options = force_field->options;
+		Options& options = force_field->options;
 
 		factor_
 			= options.setDefaultReal(FresnoFF::Option::ROT,
@@ -217,7 +217,7 @@ namespace BALL
 
 		StringHashMap< pair<float, float> > bondlengths;
 
-		if (algorithm_type_ = ALGORITHM__GUESS)
+		if (algorithm_type_ == ALGORITHM__GUESS)
 		{
 			// ?????
 			// This is not nice and should be done using an INIFile
