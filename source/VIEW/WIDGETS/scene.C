@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.70 2004/06/04 15:10:40 amoll Exp $
+// $Id: scene.C,v 1.71 2004/06/07 12:58:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -304,7 +304,6 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 			if (!gl_renderer_.hasStage()) return;
 
 			glDrawBuffer(GL_BACK_LEFT);
-//			 glDisable(GL_SCISSOR_TEST);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
 			{
@@ -333,17 +332,27 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
       float right =  2.0 *gl_renderer_.getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
 
 			//================== draw first buffer =============
+	    glMatrixMode(GL_PROJECTION);
 			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
 			{
-				glViewport(0, 0, width() / 2, height());
-		  }
-	
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-			glFrustum(left,right,
-								-2.0 * gl_renderer_.getYScale(), 
+				gl_renderer_.setSize(width()/2, height());
+				glLoadIdentity();
+				glFrustum(left,right,
+								-2.0 * gl_renderer_.getXScale() / 2, 
 								 2.0 * gl_renderer_.getYScale(),
 								nearf,farf);
+				glViewport(0, 0, width() / 2, height());
+		  }
+			else
+			{
+				glLoadIdentity();
+				glFrustum(left,right,
+									-2.0 * gl_renderer_.getXScale(), 
+									 2.0 * gl_renderer_.getYScale(),
+									nearf,farf);
+			}
+
+	
 
 			// draw models
       glMatrixMode(GL_MODELVIEW);
@@ -361,19 +370,29 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 			glPopMatrix();
 
 			//================== draw second buffer =============
-			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
-			{
-				glViewport(width() / 2, 0, width()/2, height());
-			}
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
+	    glMatrixMode(GL_PROJECTION);
       left  = -2.0 *gl_renderer_.getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
       right =  2.0 *gl_renderer_.getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
-	
-			glFrustum(left,right,
-								-2.0 * gl_renderer_.getYScale(), 
+
+			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
+			{
+				gl_renderer_.setSize(width()/2, height());
+				glLoadIdentity();
+				glFrustum(left,right,
+								-2.0 * gl_renderer_.getXScale() / 2, 
 								 2.0 * gl_renderer_.getYScale(),
 								nearf,farf);
+				glViewport(width() / 2, 0, width() / 2, height());
+		  }
+			else
+			{
+				glLoadIdentity();
+				glFrustum(left,right,
+									-2.0 * gl_renderer_.getXScale(), 
+									 2.0 * gl_renderer_.getYScale(),
+									nearf,farf);
+			}
+
 
       glMatrixMode(GL_MODELVIEW);
 
@@ -1467,6 +1486,7 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 		void Scene::enterActiveStereo()
 			throw()
 		{
+			/*
 			gl_renderer_.setStereoMode(GLRenderer::ACTIVE_STEREO);
 			GLboolean enabled = false;
 			glGetBooleanv(GL_STEREO, &enabled);
@@ -1474,8 +1494,8 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 			{
 				Log.error() << "No Stereo mode capability in driver" << std::endl;
 				setStatusbarText("No Stereo mode capability in driver");
-//		 		return;
 			}
+			*/
 			
 			last_pos_ = pos();
 			hide();
@@ -1499,9 +1519,9 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 			showNormal();  // needed on windows
 			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
 			showFullScreen();
+			setGeometry(qApp->desktop()->geometry());
 			show();
 
-			gl_renderer_.setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
 			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, false);
 			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, false);
 			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, true);
