@@ -1,4 +1,4 @@
-// $Id: openHINFile.h,v 1.2 2000/10/07 15:29:06 hekl Exp $
+// $Id: openHINFile.h,v 1.3 2000/12/22 19:12:09 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
@@ -55,7 +55,8 @@ namespace BALL
 
 			/** Destructor.
 			*/
-			virtual ~OpenHINFile();
+			virtual ~OpenHINFile()
+				throw();
 			//@}
 
 			/**	@name Exceptions

@@ -1,4 +1,4 @@
-// $Id: openPDBFile.C,v 1.2 2000/10/07 15:26:56 hekl Exp $
+// $Id: openPDBFile.C,v 1.3 2000/12/22 19:12:16 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
 
@@ -23,6 +23,7 @@ namespace BALL
 		}
 			
 		OpenPDBFile::~OpenPDBFile()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 

@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.3 2000/12/03 15:55:58 hekl Exp $
+// $Id: molecularControl.h,v 1.4 2000/12/22 19:12:14 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -61,7 +61,8 @@ namespace BALL
 			
 			MolecularControl(QWidget* parent = 0, const char* name = 0);
 			
-			virtual ~MolecularControl();
+			virtual ~MolecularControl()
+				throw();
 			//@}
 			
 			// --- ACCESSORS: INSPECTORS and MUTATORS

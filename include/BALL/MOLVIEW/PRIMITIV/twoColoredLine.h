@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.h,v 1.5 2000/12/19 22:06:47 oliver Exp $
+// $Id: twoColoredLine.h,v 1.6 2000/12/22 19:12:14 amoll Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
 #define BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
@@ -42,11 +42,9 @@ namespace BALL
 
 			TwoColoredLine();
 
-			TwoColoredLine
-				(const TwoColoredLine& rwo_colored_line, bool deep = true);
+			TwoColoredLine(const TwoColoredLine& rwo_colored_line, bool deep = true);
 
-			TwoColoredLine
-				(const VIEW::GeometricObject& geometric_object);
+			TwoColoredLine(const VIEW::GeometricObject& geometric_object);
 
 			virtual ~TwoColoredLine()
 				throw();
@@ -62,14 +60,11 @@ namespace BALL
 			*/
 			//@{
 
-			void set
-				(const TwoColoredLine& two_colored_line, bool deep = true);
+			void set(const TwoColoredLine& two_colored_line, bool deep = true);
 
-			TwoColoredLine& operator =
-				(const TwoColoredLine& two_colored_line);
+			const TwoColoredLine& operator = (const TwoColoredLine& two_colored_line);
 
-			void get
-				(TwoColoredLine& two_colored_line, bool deep = true) const;
+			void get(TwoColoredLine& two_colored_line, bool deep = true) const;
 
 			void swap(TwoColoredLine& two_colored_line);
 			//@}
@@ -90,8 +85,7 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 
@@ -99,16 +93,19 @@ namespace BALL
 			*/
 			//@{
 
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 
 
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS

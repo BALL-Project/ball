@@ -1,4 +1,4 @@
-// $Id: scene.iC,v 1.5 2000/09/23 14:40:55 hekl Exp $
+// $Id: scene.iC,v 1.6 2000/12/22 19:12:15 amoll Exp $
 
 BALL_INLINE
 void Scene::setRenderMode(RenderMode mode)
@@ -19,15 +19,13 @@ void Scene::setViewPointPosition(const Vector3& v)
 }
 
 BALL_INLINE
-void Scene::setViewPointPosition
-  (const Real x, const Real y, const Real z)
+void Scene::setViewPointPosition(const Real x, const Real y, const Real z)
 {
   setCameraPosition_(look_at_position_, Vector3(x, y, z), false);
 }
 
 BALL_INLINE
-bool Scene::setCamera
-  (const Vector3& look_at, const Vector3& view_point, bool set_origin)
+bool Scene::setCamera(const Vector3& look_at, const Vector3& view_point, bool set_origin)
 {
   return setCameraPosition_(look_at, view_point, set_origin);
 }
@@ -45,8 +43,7 @@ void Scene::getViewPointPosition(Vector3& v) const
 }
 
 BALL_INLINE
-void Scene::getViewPointPosition
-  (Real& x, Real& y, Real& z) const
+void Scene::getViewPointPosition(Real& x, Real& y, Real& z) const
 {
   x =  position_.x;
   y =  position_.y;
@@ -54,15 +51,13 @@ void Scene::getViewPointPosition
 }
 
 BALL_INLINE
-void Scene::setLookAtPosition
-  (const Vector3& v, bool set_origin)
+void Scene::setLookAtPosition(const Vector3& v, bool set_origin)
 {
   setCameraPosition_(v, position_, set_origin);  
 }
 
 BALL_INLINE
-void Scene::setLookAtPosition
-  (const Real x, const Real y, const Real z, bool set_origin)
+void Scene::setLookAtPosition(const Real x, const Real y, const Real z, bool set_origin)
 {
 	setCameraPosition_(Vector3(x, y, z), position_, set_origin);  
 }
@@ -80,8 +75,7 @@ void Scene::getLookAtPosition(Vector3& v) const
 }
      
 BALL_INLINE
-void Scene::getLookAtPosition
-  (Real& x, Real& y, Real& z) const
+void Scene::getLookAtPosition(Real& x, Real& y, Real& z) const
 {
   x = look_at_position_.x;
   y = look_at_position_.y;
@@ -132,10 +126,8 @@ const Vector3& Scene::getLookUpVector() const
 }
 
 
-
 BALL_INLINE
-void Scene::registerGLObjectCollector
-  (const GLObjectCollector& GL_object_collector)
+void Scene::registerGLObjectCollector(const GLObjectCollector& GL_object_collector)
 {
   GL_object_collector_ = (GLObjectCollector *)&GL_object_collector;
 }
@@ -155,11 +147,11 @@ const GLObjectCollector* Scene::getGLObjectCollector() const
 BALL_INLINE
 bool Scene::hasDefaultGLObjectCollector() const
 {
-  return (bool)(GL_object_collector_ == (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>());
+  return (GL_object_collector_ == (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>());
 }
 
 BALL_INLINE
 bool Scene::hasOtherGLObjectCollector() const
 {
-  return (bool)(GL_object_collector_ != (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>());
+  return (GL_object_collector_ != (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>());
 }

@@ -1,4 +1,4 @@
-// $Id: geometricObject.iC,v 1.4 2000/05/04 17:26:58 hekl Exp $ 
+// $Id: geometricObject.iC,v 1.5 2000/12/22 19:12:15 amoll Exp $ 
 
 BALL_INLINE 
 void GeometricObject::setSelectedColor(const ColorRGBA& color)
@@ -35,10 +35,7 @@ void GeometricObject::getSelectedColor
 }
 
 BALL_INLINE 
-void GeometricObject::getSelectedColor
-  (ColorUnit& red,
-   ColorUnit& green,
-   ColorUnit& blue) const
+void GeometricObject::getSelectedColor(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
 {
   selected_color_.get(red, green, blue);
 }
@@ -64,8 +61,5 @@ const String& GeometricObject::getName() const
 BALL_INLINE 
 bool GeometricObject::hasName() const
 {
-	return (bool)(!name_.isEmpty());
+	return (!name_.isEmpty());
 }
-
-
-

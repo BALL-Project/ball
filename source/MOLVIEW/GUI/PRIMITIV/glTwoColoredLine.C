@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.C,v 1.2 2000/12/12 16:19:35 oliver Exp $
+// $Id: glTwoColoredLine.C,v 1.3 2000/12/22 19:12:16 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h>
 
@@ -57,12 +57,12 @@ namespace BALL
 
 		bool GLTwoColoredLine::draw(bool with_names)
 		{
-			if (hasProperty(VIEW::GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
+			if (hasProperty(VIEW::GeometricObject::PROPERTY__OBJECT_HIDDEN))
 			{
 				return true;
 			}
 
-			if (isSelected() == true)
+			if (isSelected())
 			{
 				glColor4ub((unsigned char)getSelectedColor().red(),
 									 (unsigned char)getSelectedColor().green(),
@@ -111,6 +111,7 @@ namespace BALL
 		}
 
 		bool GLTwoColoredLine::extract()
+			throw()
 		{
 			return TwoColoredLine::extract();
 		}

@@ -1,4 +1,4 @@
-// $Id: simpleBox.C,v 1.4 2000/12/21 17:03:46 amoll Exp $
+// $Id: simpleBox.C,v 1.5 2000/12/22 19:12:18 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/simpleBox.h>
 
@@ -73,7 +73,6 @@ namespace BALL
 			throw()
 		{
 			set(SimpleBox);
-
 			return *this;
 		}
 
@@ -115,16 +114,19 @@ namespace BALL
 		}
 
 		void SimpleBox::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void SimpleBox::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool SimpleBox::extract()
+			throw()
 		{
 			return true;  
 		}

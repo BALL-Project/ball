@@ -44,6 +44,7 @@ DisplayProperties::DisplayProperties
 }
 
 DisplayProperties::~DisplayProperties()
+	throw()
 {
 }
 

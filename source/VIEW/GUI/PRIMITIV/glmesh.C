@@ -1,4 +1,4 @@
-// $Id: glmesh.C,v 1.2 2000/12/12 16:18:45 oliver Exp $
+// $Id: glmesh.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 #include <GL/gl.h>
@@ -186,6 +186,7 @@ namespace BALL
 		}
 
 		bool GLMesh::extract()
+			throw()
 		{
 			return Mesh::extract();
 		}

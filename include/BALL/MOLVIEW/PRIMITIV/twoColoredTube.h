@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.h,v 1.5 2000/12/19 22:06:47 oliver Exp $
+// $Id: twoColoredTube.h,v 1.6 2000/12/22 19:12:14 amoll Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -61,14 +61,11 @@ namespace BALL
 			*/
 			//@{
 
-			void set
-				(const TwoColoredTube& two_colored_tube, bool deep = true);
+			void set(const TwoColoredTube& two_colored_tube, bool deep = true);
 
-			TwoColoredTube& operator =
-				(const TwoColoredTube& two_colored_tube);
+			const TwoColoredTube& operator = (const TwoColoredTube& two_colored_tube);
 
-			void get
-				(TwoColoredTube& two_colored_tube, bool deep = true) const;
+			void get(TwoColoredTube& two_colored_tube, bool deep = true) const;
 
 			void swap(TwoColoredTube& two_colored_tube);
 			//@}
@@ -88,8 +85,7 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 
@@ -97,16 +93,19 @@ namespace BALL
 			*/
 			//@{
 
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 
 			
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS

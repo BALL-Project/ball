@@ -1,4 +1,4 @@
-// $Id: glline.h,v 1.2 2000/12/12 16:15:42 oliver Exp $
+// $Id: glline.h,v 1.3 2000/12/22 19:12:14 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLINE_H
@@ -34,9 +34,11 @@ namespace BALL
 			*/
 			//@{
 
-			GLLine();
+			GLLine()
+				throw();
 
-			GLLine(const GLLine& line, bool deep = true);
+			GLLine(const GLLine& line, bool deep = true)
+				throw();
 
 			GLLine(const GeometricObject& geometric_object);
 
@@ -55,7 +57,8 @@ namespace BALL
 
 			virtual bool draw(bool with_names = false);
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -64,7 +64,8 @@ namespace BALL
 
 			/** Destructor.
 			 */
-			virtual ~LabelProperties();
+			virtual ~LabelProperties()
+				throw();
 			//@}
 			
 			/** @name Accessors

@@ -1,4 +1,4 @@
-// $Id: geometricObject.C,v 1.8 2000/12/19 22:07:28 oliver Exp $
+// $Id: geometricObject.C,v 1.9 2000/12/22 19:12:17 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -19,8 +19,7 @@ namespace BALL
 			clear_();
 		}
 
-		GeometricObject::GeometricObject
-			(const GeometricObject& geometric_object, bool deep)
+		GeometricObject::GeometricObject(const GeometricObject& geometric_object, bool deep)
 			:	Composite(geometric_object, deep),
 				PropertyManager(geometric_object, deep),
 				selected_color_(geometric_object.selected_color_),
@@ -59,8 +58,7 @@ namespace BALL
 			clear_();
 		}
 
-		void GeometricObject::set
-			(const GeometricObject& geometric_object, bool deep)
+		void GeometricObject::set(const GeometricObject& geometric_object, bool deep)
 		{
 			Composite::set(geometric_object, deep);
 			PropertyManager::set(geometric_object, deep);
@@ -69,16 +67,13 @@ namespace BALL
 			name_ = geometric_object.name_;
 		}
 
-		GeometricObject& GeometricObject::operator =
-			(const GeometricObject& geometric_object)
+		const GeometricObject& GeometricObject::operator = (const GeometricObject& geometric_object)
 		{
 			set(geometric_object);
-
 			return *this;
 		}
 
-		void GeometricObject::get
-			(GeometricObject& geometric_object, bool deep) const
+		void GeometricObject::get(GeometricObject& geometric_object, bool deep) const
 		{
 			geometric_object.set(*this, deep);
 		}
@@ -92,8 +87,7 @@ namespace BALL
 			name_.swap(geometric_object.name_);
 		}
 
-		void GeometricObject::setProperty
-			(Property property)
+		void GeometricObject::setProperty(Property property)
 		{
 			if (property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
 					|| property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
@@ -141,12 +135,10 @@ namespace BALL
 		bool GeometricObject::isValid() const
 			throw()
 		{
-			return (bool)(Composite::isValid() == true
-										&& PropertyManager::isValid() == true);
+			return (Composite::isValid() && PropertyManager::isValid());
 		}
 
-		void GeometricObject::dump
-			(ostream& s, Size depth) const
+		void GeometricObject::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -246,11 +238,13 @@ namespace BALL
 		}
 				
 		void GeometricObject::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void GeometricObject::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
@@ -261,12 +255,12 @@ namespace BALL
 		}
 		*/
 		bool GeometricObject::extract()
+			throw()
 		{
 			return true;
 		}
 
-		void 
-		GeometricObject::getDrawingModeAndPrecision
+		void GeometricObject::getDrawingModeAndPrecision
 			(unsigned int& mode, unsigned int& precision) const
 		{
 			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW) == true)
@@ -316,6 +310,7 @@ namespace BALL
 		}
 
 		void GeometricObject::clear_()
+			throw()
 		{
 			setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			setProperty(GeometricObject::PROPERTY__OBJECT_OPAQUE);

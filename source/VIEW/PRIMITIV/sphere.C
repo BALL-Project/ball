@@ -1,4 +1,4 @@
-// $Id: sphere.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
+// $Id: sphere.C,v 1.8 2000/12/22 19:12:18 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 
@@ -123,16 +123,19 @@ namespace BALL
 		}
 
 		void Sphere::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Sphere::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Sphere::extract()
+			throw()
 		{
 			return true;  
 		}

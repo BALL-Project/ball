@@ -1,4 +1,4 @@
-// $Id: molecularProperties.h,v 1.3 2000/11/05 14:38:19 hekl Exp $
+// $Id: molecularProperties.h,v 1.4 2000/12/22 19:12:14 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -68,7 +68,8 @@ namespace BALL
 			
 			MolecularProperties(QWidget* parent = 0, const char* name = 0);
 			
-			virtual ~MolecularProperties();
+			virtual ~MolecularProperties()
+				throw();
 			//@}
 			
 			/**	@name Exceptions

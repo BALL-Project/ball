@@ -1,4 +1,4 @@
-// $Id: glTwoColoredTube.h,v 1.2 2000/12/12 16:16:57 oliver Exp $
+// $Id: glTwoColoredTube.h,v 1.3 2000/12/22 19:12:14 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
@@ -38,11 +38,9 @@ namespace BALL
 
 			GLTwoColoredTube();
 
-			GLTwoColoredTube
-				(const GLTwoColoredTube& GL_two_colored_tube, bool deep = true);
+			GLTwoColoredTube(const GLTwoColoredTube& GL_two_colored_tube, bool deep = true);
 
-			GLTwoColoredTube
-				(const VIEW::GeometricObject& geometric_object);
+			GLTwoColoredTube(const VIEW::GeometricObject& geometric_object);
 
 			virtual ~GLTwoColoredTube()
 				throw();
@@ -62,7 +60,8 @@ namespace BALL
 
 			virtual bool drawUserDefined();
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 
 			
 			private:

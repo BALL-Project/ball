@@ -61,7 +61,8 @@ namespace BALL
 				
 				/** Destructor for the display properties dialog.
 				 */
-				virtual ~DisplayProperties();
+				virtual ~DisplayProperties()
+					throw();
 				//@}
 				
 				/**     @name Accessors

@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.3 2000/11/12 15:27:36 hekl Exp $
+// $Id: molecularProperties.C,v 1.4 2000/12/22 19:12:16 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 
@@ -20,6 +20,7 @@ namespace BALL
     }
 
   	MolecularProperties::~MolecularProperties()
+			throw()
     {
     }
 

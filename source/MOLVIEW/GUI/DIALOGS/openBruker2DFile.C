@@ -1,4 +1,4 @@
-// $Id: openBruker2DFile.C,v 1.3 2000/12/14 18:45:55 anhi Exp $
+// $Id: openBruker2DFile.C,v 1.4 2000/12/22 19:12:16 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 
@@ -19,6 +19,7 @@ namespace BALL
     }
 
     OpenBruker2DFile::~OpenBruker2DFile()
+			throw()
     {
       #ifdef BALL_VIEW_DEBUG
       cout << "Destructing object " << (void *)this

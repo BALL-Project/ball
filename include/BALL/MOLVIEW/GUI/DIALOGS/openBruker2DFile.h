@@ -1,4 +1,4 @@
-// $Id: openBruker2DFile.h,v 1.2 2000/11/28 17:34:29 anhi Exp $
+// $Id: openBruker2DFile.h,v 1.3 2000/12/22 19:12:09 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER2DFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER2DFILE_H
@@ -25,47 +25,50 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-/** This class provides an interface to select and open spectra stored in the bruker file format.
-*/
+	/** This class provides an interface to select and open spectra stored in the bruker file format.
+	*/
   class OpenBruker2DFile
     : public FileDialog
-{
+	{
     public:
 
-// macro for create method
-  //    BALL_CREATE(OpenBruker2DFile)
+		// macro for create method
+	  //    BALL_CREATE(OpenBruker2DFile)
 
-/** Constructors and Destructors
-*/
-//@{
+		/** Constructors and Destructors
+		*/
+		//@{
       /// Constructor.
-      OpenBruker2DFile(QWidget *parent = 0, const char *name = 0);
+    OpenBruker2DFile(QWidget *parent = 0, const char *name = 0);
 
     /// Destructor
-    virtual ~OpenBruker2DFile();
-//@}
+    virtual ~OpenBruker2DFile()
+			throw();
+		//@}
 
-/** Assignment
-*/
+		/** Assignment
+		*/
 
-    /** Initialization. This method is called automatically before the main application is started. It adds the
-	dialog's menu entries and connections.
+    /** Initialization. This method is called automatically before the main application is started. 
+				It adds the	dialog's menu entries and connections.
     */
     virtual void initializeWidget(MainControl& main_control);
 
-    /**     Remove the dialog.
-	    This method is called by the dialog's destructor.
-	    It reverses all actions performed in 
-	    initializeWidget (remove menu entries and connections).
+    /** Remove the dialog.
+				This method is called by the dialog's destructor.
+				It reverses all actions performed in 
+				initializeWidget (remove menu entries and connections).
     */
     virtual void finalizeWidget(MainControl& main_control);
 
- protected:
+
+		protected:
+
     /** Open the bruker2DFile.
      */
     virtual void openFile_();
 
-};
+	};
 
 
 	}

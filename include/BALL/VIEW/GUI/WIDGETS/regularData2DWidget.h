@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.8 2000/12/15 00:38:21 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.9 2000/12/22 19:12:15 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -68,7 +68,8 @@ class NewRegularData2DMessage: public CompositeMessage
 
   NewRegularData2DMessage(const CompositeMessage& message, bool deep = true);
 
-  virtual ~NewRegularData2DMessage();
+  virtual ~NewRegularData2DMessage()
+		throw();
   //@}
 
   /**     @name   Assignment
@@ -127,7 +128,8 @@ class RegularData2DWidget
   RegularData2DWidget(int lx_, int ly_, double min=0, double max=1., QWidget *parent = 0);
   RegularData2DWidget(const RegularData2DWidget& widget);
 
-  ~RegularData2DWidget();
+  ~RegularData2DWidget()
+		throw();
 
   /**
    * Create a legend of width w, height h.

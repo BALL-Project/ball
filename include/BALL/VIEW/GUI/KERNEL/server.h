@@ -1,4 +1,4 @@
-// $Id: server.h,v 1.4 2000/11/12 15:31:11 hekl Exp $
+// $Id: server.h,v 1.5 2000/12/22 19:12:14 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -71,11 +71,13 @@ namespace BALL
 
 			/** default destructor. destroys an instance of server.
 			*/
-			virtual ~Server();
+			virtual ~Server()
+				throw();
 
 			/** clear methode. resets the timer used to control the server
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 			//@}
 
 			/**	@name	Exceptions
@@ -89,7 +91,8 @@ namespace BALL
 			{
 				public:
 
-				CompositePointerIsNull(const char* file, int line);
+				CompositePointerIsNull(const char* file, int line)
+					throw();
 			};
 			//@}
 
@@ -199,11 +202,13 @@ namespace BALL
 
 			/** returns true if the underlying timer is valid.
 		  */
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** dumps the timer states.
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -212,11 +217,13 @@ namespace BALL
 
 			/** Not yet implemented.
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Not yet implemented.
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 			

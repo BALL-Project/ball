@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.5 2000/12/03 15:55:21 hekl Exp $
+// $Id: control.h,v 1.6 2000/12/22 19:12:15 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -82,7 +82,8 @@ namespace BALL
 			Control(QWidget* parent = 0, const char* name = 0);
 			
 			// virtual destructor
-			virtual ~Control();
+			virtual ~Control()
+				throw();
 			//@}
 			
 			// --- ACCESSORS: INSPECTORS and MUTATORS
@@ -100,10 +101,12 @@ namespace BALL
 			bool updateComposite(Composite* composite);
 			
 			// get selected composites from the tree
-			List<Composite*>& getSelection();
+			List<Composite*>& getSelection()
+				throw();
 			
 			// get selected composites from the tree
-			const List<Composite*>& getSelection() const;
+			const List<Composite*>& getSelection() const
+				throw();
 			
 			// processes messages
 			virtual void onNotify(Message *message);
@@ -181,10 +184,12 @@ namespace BALL
 			void filterSelection_(Filter& filter);
 
 			// get copied composites
-			List<Composite*>& getCopyList_();
+			List<Composite*>& getCopyList_()
+				throw();
 			
 			// get copied composites
-			const List<Composite*>& getCopyList_() const;
+			const List<Composite*>& getCopyList_() const
+				throw();
 
 			
 			// function to generate the tree recursivly

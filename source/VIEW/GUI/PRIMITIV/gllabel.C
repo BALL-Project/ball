@@ -1,4 +1,4 @@
-// $Id: gllabel.C,v 1.2 2000/12/12 16:18:44 oliver Exp $
+// $Id: gllabel.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <GL/gl.h>
@@ -151,6 +151,7 @@ namespace BALL
 		}
 
 		bool GLLabel::extract()
+			throw()
 		{
 			return Label::extract();
 		}

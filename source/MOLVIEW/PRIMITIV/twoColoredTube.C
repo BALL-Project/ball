@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.C,v 1.6 2000/12/19 22:07:45 oliver Exp $
+// $Id: twoColoredTube.C,v 1.7 2000/12/22 19:12:16 amoll Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 
@@ -55,29 +55,24 @@ namespace BALL
 			ColorExtension2::destroy();
 		}
 
-		void TwoColoredTube::set
-			(const TwoColoredTube& two_colored_tube, bool deep)
+		void TwoColoredTube::set(const TwoColoredTube& two_colored_tube, bool deep)
 		{
 			BaseTube::set(two_colored_tube, deep);
 			ColorExtension2::set(two_colored_tube, deep);
 		}
 
-		TwoColoredTube& TwoColoredTube::operator =
-			(const TwoColoredTube& two_colored_tube)
+		const TwoColoredTube& TwoColoredTube::operator = (const TwoColoredTube& two_colored_tube)
 		{
 			set(two_colored_tube);
-
 			return *this;
 		}
 
-		void TwoColoredTube::get
-			(TwoColoredTube& two_colored_tube, bool deep) const
+		void TwoColoredTube::get(TwoColoredTube& two_colored_tube, bool deep) const
 		{
 			two_colored_tube.set(*this, deep);
 		}
 
-		void TwoColoredTube::swap
-			(TwoColoredTube& two_colored_tube)
+		void TwoColoredTube::swap(TwoColoredTube& two_colored_tube)
 		{
 			BaseTube::swap(two_colored_tube);
 			ColorExtension2::swap(two_colored_tube);
@@ -86,12 +81,10 @@ namespace BALL
 		bool TwoColoredTube::isValid() const
 			throw()
 		{
-			return (bool)(BaseTube::isValid() == true
-										&& ColorExtension2::isValid() == true);
+			return (BaseTube::isValid()	&& ColorExtension2::isValid());
 		}
 
-		void TwoColoredTube::dump
-			(ostream& s, Size depth) const
+		void TwoColoredTube::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -106,16 +99,19 @@ namespace BALL
 		}
 
 		void TwoColoredTube::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void TwoColoredTube::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool TwoColoredTube::extract()
+			throw()
 		{
 			return true;  
 		}

@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.C,v 1.6 2000/12/19 22:07:44 oliver Exp $
+// $Id: twoColoredLine.C,v 1.7 2000/12/22 19:12:16 amoll Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.h>
 
@@ -60,30 +60,25 @@ namespace BALL
 			Vertex2::destroy();
 		}
 
-		void TwoColoredLine::set
-			(const TwoColoredLine& two_colored_line, bool deep)
+		void TwoColoredLine::set(const TwoColoredLine& two_colored_line, bool deep)
 		{
 			VIEW::GeometricObject::set(two_colored_line, deep);
 			ColorExtension2::set(two_colored_line, deep);
 			Vertex2::set(two_colored_line, deep);
 		}
 
-		TwoColoredLine& TwoColoredLine::operator =
-			(const TwoColoredLine &two_colored_line)
+		const TwoColoredLine& TwoColoredLine::operator = (const TwoColoredLine &two_colored_line)
 		{
 			set(two_colored_line);
-
 			return *this;
 		}
 
-		void TwoColoredLine::get
-			(TwoColoredLine& two_colored_line, bool deep) const
+		void TwoColoredLine::get(TwoColoredLine& two_colored_line, bool deep) const
 		{
 			two_colored_line.set(*this, deep);
 		}
 
-		void TwoColoredLine::swap
-			(TwoColoredLine& two_colored_line)
+		void TwoColoredLine::swap(TwoColoredLine& two_colored_line)
 		{
 			VIEW::GeometricObject::swap(two_colored_line);
 			ColorExtension2::swap(two_colored_line);
@@ -93,13 +88,12 @@ namespace BALL
 		bool TwoColoredLine::isValid() const
 			throw()
 		{
-			return (bool)(VIEW::GeometricObject::isValid() == true
-										&& ColorExtension2::isValid() == true
-										&& Vertex2::isValid() == true);
+			return (VIEW::GeometricObject::isValid() &&
+										ColorExtension2::isValid() &&
+										        Vertex2::isValid());
 		}
 
-		void TwoColoredLine::dump
-			(ostream& s, Size depth) const
+		void TwoColoredLine::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -115,16 +109,19 @@ namespace BALL
 		}
 
 		void TwoColoredLine::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void TwoColoredLine::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool TwoColoredLine::extract()
+			throw()
 		{
 			return true;  
 		}

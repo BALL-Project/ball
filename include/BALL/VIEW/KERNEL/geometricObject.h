@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.11 2000/12/20 21:41:26 oliver Exp $
+// $Id: geometricObject.h,v 1.12 2000/12/22 19:12:15 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -123,10 +123,9 @@ namespace BALL
 			*/
 			//@{
 
-			void set
-				(const GeometricObject& object, bool deep = true);
+			void set(const GeometricObject& object, bool deep = true);
 
-			GeometricObject& operator = (const GeometricObject& object);
+			const GeometricObject& operator = (const GeometricObject& object);
 
 			void get(GeometricObject& object, bool deep = true) const;
 
@@ -153,8 +152,7 @@ namespace BALL
 				(ColorUnit& red, ColorUnit& green,
 				 ColorUnit& blue, ColorUnit& alpha) const;
 
-			void getSelectedColor
-				(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const;
+			void getSelectedColor(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const;
 
 		
 			void setName(const String& name);
@@ -174,8 +172,7 @@ namespace BALL
 			virtual bool isValid() const
 				throw();
 
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 
@@ -193,15 +190,16 @@ namespace BALL
 			
 			protected:
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 
-			void getDrawingModeAndPrecision
-				(unsigned int& mode, unsigned int& precision) const;
+			void getDrawingModeAndPrecision(unsigned int& mode, unsigned int& precision) const;
 
 
 			private:
 
-			void clear_();
+			void clear_()
+				throw();
 		
 			/* color of the selected object */
 			ColorRGBA selected_color_;

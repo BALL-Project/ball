@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.11 2000/12/21 17:03:35 amoll Exp $
+// $Id: mainControl.h,v 1.12 2000/12/22 19:12:14 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -149,13 +149,11 @@ namespace BALL
 					@param  inifile the new preferences filename
 					@return	MainControl - new constructed MainControl				
 			*/
-			MainControl(QWidget* parent = 0, const char* name = 0 , String inifile = ".BALL.preferences")
-				throw();
+			MainControl(QWidget* parent = 0, const char* name = 0 , String inifile = ".BALL.preferences");
 
 			/**	Copy constructor
 			*/
-			MainControl(const MainControl& main_control)
-				throw();
+			MainControl(const MainControl& main_control);
 
 			/** Destructor
 					Default destruction of {\em *this} MainControl.
@@ -210,8 +208,7 @@ namespace BALL
 			void insert
 				(Composite* composite,
 				 const String& name = "unkown",
-				 const Vector3& center = Vector3(0,0,0))
-				throw();
+				 const Vector3& center = Vector3(0,0,0));
 
 			/** Inserts a new composite.
 					With this function static composites or references of composites can be inserted.
@@ -225,8 +222,7 @@ namespace BALL
       CompositeDescriptor* insert
         (const Composite& composite,
          const String& name = "unkown",
-				 const Vector3& center = Vector3(0,0,0))
-				throw();
+				 const Vector3& center = Vector3(0,0,0));
  
 			/** Inserts a new \Ref{CompositeDescriptor} composite_descriptor.
 					The {\em composite_descriptor} is copied according to the flag
@@ -236,40 +232,34 @@ namespace BALL
 					@param deep the flag that states if a deep (default) or shallow copy should be made
 					@return CompositeDescriptor* - mutable pointer to the new created CompositeDescriptor
 			*/
-			CompositeDescriptor* insert
-				(CompositeDescriptor& composite_descriptor, bool deep = true)
-				throw();
+			CompositeDescriptor* insert(CompositeDescriptor& composite_descriptor, bool deep = true);
 
 			/** Removes a given \Ref{Composite}.
 					@param  composite the composite to be removed
 					@return bool - indicated if the remove operation was successfull
 			*/
-			bool remove(const Composite& composite, bool sent_message = true)
-				throw();
+			bool remove(const Composite& composite, bool sent_message = true);
 
 			/** Removes a given \Ref{CompositeDescriptor}.
 					@param  composite_descriptor the composite_descriptor to be removed
 					@param  sent_message a boolean flag that indicates, whether a message of the action should be sent or not.
 					@return bool - indicated if the remove operation was successfull
 			*/
-			bool remove(const CompositeDescriptor& composite_descriptor)
-				throw();
+			bool remove(const CompositeDescriptor& composite_descriptor);
 
 			/** Mutable inspection of the \Ref{CompositeDescriptor} of a given \Ref{Composite}.
 					Access a mutable reference to the CompositeDescriptor of {\em composite}.
 					@param   composite the composite whose CompositeDescriptor should be returned
 					@return  CompositeDescriptor* - mutable pointer to the CompositeDescriptor
 			*/
-			CompositeDescriptor* getDescriptor(const Composite& composite)
-				throw();
+			CompositeDescriptor* getDescriptor(const Composite& composite);
 
 			/** Constant inspection of the \Ref{CompositeDescriptor} of a given \Ref{Composite}.
 					Access a constant reference to the CompositeDescriptor of {\em composite}.
 					@param   composite the composite whose CompositeDescriptor should be returned
 					@return  CompositeDescriptor* - constante pointer to the CompositeDescriptor
 			*/
-			const CompositeDescriptor* getDescriptor(const Composite& composite) const
-				throw();
+			const CompositeDescriptor* getDescriptor(const Composite& composite) const;
 			
 			/** Mutable inspection of the list of all \Ref{CompositeDescriptor} of the MainControl
 					Access a mutable reference to the list of CompositeDescriptors.
@@ -292,8 +282,7 @@ namespace BALL
 					@return bool - indicates if the operation was successful
 					@see    MainControl::getName
 			*/
-			bool setName(const Composite& composite, const String& name)
-				throw();
+			bool setName(const Composite& composite, const String& name);
 
 			/** Mutable inspection of the name.
 					Access a mutable pointer to the name of {\em composite}.
@@ -301,8 +290,7 @@ namespace BALL
 					@return  String* - mutable pointer to the name (0 indicates that no such composite is inserted)
 					@see     MainControl::setName
 			*/
-			String* getName(const Composite& composite)
-				throw();
+			String* getName(const Composite& composite);
 
 			/** Constant inspection of the name.
 					Access a constant pointer to the name of {\em composite}.
@@ -310,24 +298,23 @@ namespace BALL
 					@return  String* - constant pointer to the name (0 indicates that no such composite is inserted)
 					@see     MainControl::setName
 			*/
-			const String* getName(const Composite& composite) const
-				throw();
+			const String* getName(const Composite& composite) const;
 
 			/** Mutable inspection of the \Ref{CompositeDescriptor} of a given name.
 					Access a mutable pointer to the descriptor of a composite with a given name.
 					@param   name the name whose CompositeDescriptor should be retrieved
-					@return  CompositeDescriptor* - mutable pointer to the CompositeDescriptor (0 indicates that no such composite with such a name exists)
+					@return  CompositeDescriptor* - mutable pointer to the CompositeDescriptor 
+									(0 indicates that no such composite with such a name exists)
 			*/
-			CompositeDescriptor* getDescriptor(const String& name)
-				throw();
+			CompositeDescriptor* getDescriptor(const String& name);
 
 			/** Constant inspection of the \Ref{CompositeDescriptor} of a given name.
 					Access a constant pointer to the descriptor of a composite with a given name.
 					@param   name the name whose CompositeDescriptor should be retrieved
-					@return  CompositeDescriptor* - constant pointer to the CompositeDescriptor (0 indicates that no such composite with such a name exists)
+					@return  CompositeDescriptor* - constant pointer to the CompositeDescriptor 
+									(0 indicates that no such composite with such a name exists)
 			*/
-			const CompositeDescriptor* getDescriptor(const String& name) const
-				throw();
+			const CompositeDescriptor* getDescriptor(const String& name) const;
 
 			/** Change of the Composite's center.
 					Change the center of {\em composite} to the center {\em v}.
@@ -336,8 +323,7 @@ namespace BALL
 					@return bool - indicates if the operation was successful
 					@see    MainControl::getCenter
 			*/
-			bool setCenter(const Composite& composite, const Vector3& v)
-				throw();
+			bool setCenter(const Composite& composite, const Vector3& v);
 
 			/** Mutable inspection of the center.
 					Access a mutable pointer to the center of {\em composite}.
@@ -345,48 +331,45 @@ namespace BALL
 					@return  Vector3* - mutable pointer to the center (0 indicates that no such composite exists)
 					@see     MainControl::setCenter
 			*/
-			Vector3* getCenter(const Composite& composite)
-				throw();
+			Vector3* getCenter(const Composite& composite);
 
 			/** Constant inspection of the center.
 					Access a constant pointer to the center of {\em composite}. 
 					@param   composite the composite whose center should be retrieved
-					@return  Vector3* - constant pointer to the center of {\em composite} (0 indicates that no such composite exists)
+					@return  Vector3* - constant pointer to the center of {\em composite} 
+									 (0 indicates that no such composite exists)
 					@see     MainControl::setCenter
 			*/
-			const Vector3* getCenter(const Composite& composite) const
-				throw();
+			const Vector3* getCenter(const Composite& composite) const;
 
 			/** Mutable inspection of the \Ref{CompositeDescriptor} for a given center.
 					Access a mutable pointer to the CompositeDescriptor of a {\em center}.
 					@param   center the center of a CompositeDescriptor
-					@return  CompositeDescriptor* - mutable pointer to a CompositeDescriptor (0 indicates that no such CompositeDescriptor exists)
+					@return  CompositeDescriptor* - mutable pointer to a CompositeDescriptor 
+									 (0 indicates that no such CompositeDescriptor exists)
 					@see     MainControl::setCenter
 			*/
-			CompositeDescriptor* getDescriptor(const Vector3& center)
-				throw();
+			CompositeDescriptor* getDescriptor(const Vector3& center);
 
 			/** Constant inspection of the \Ref{CompositeDescriptor} for a given center.
 					Access a constant pointer to the CompositeDescriptor of a {\em center}.
 					@param   center the center of a CompositeDescriptor
-					@return  CompositeDescriptor* - constant pointer to a CompositeDescriptor (0 indicates that no such CompositeDescriptor exists)
+					@return  CompositeDescriptor* - constant pointer to a CompositeDescriptor 
+									 (0 indicates that no such CompositeDescriptor exists)
 					@see     MainControl::setCenter
 			*/
-			const CompositeDescriptor* getDescriptor(const Vector3& center) const
-				throw();
+			const CompositeDescriptor* getDescriptor(const Vector3& center) const;
 
 			/** Marks the \Ref{CompositeDescriptor} of {\em composite} for update.
 					@param  composite the composite whose CompositeDescriptor should be updated
 					@return bool - indicates if the operation was successful
 			*/
-			bool update(const Composite& composite)
-				throw();
+			bool update(const Composite& composite);
 
 			/** Marks all \Ref{CompositeDescriptor}`s for update.
 					@see MainControl::update
 			*/
-			void updateAll()
-				throw();
+			void updateAll();
 
 			/** Returns a pointer to the preferences dialog (0 if not present)
 			*/
@@ -411,8 +394,7 @@ namespace BALL
 					message handling mechanism.
 					@param message the pointer to the message the should be processed
 		  */
-			virtual void onNotify(Message *message)
-				throw();
+			virtual void onNotify(Message *message);
 			//@}
 
 			/**	@name	Predicates
@@ -423,15 +405,13 @@ namespace BALL
 					@param composite the composite that should be checked
 					@return bool - indicates if the composite is inserted or not
 			*/
-			bool isInserted(const Composite& composite) const
-				throw();
+			bool isInserted(const Composite& composite) const;
 
 			/** Determines if the given {\em compositeDescriptor} is already inserted.
 					@param compositeDescriptor the compositeDescriptor that should be checked
 					@return bool - indicates if the compositeDescriptor is inserted or not
 			*/
-			bool isInserted(const CompositeDescriptor& compositeDescriptor) const
-				throw();
+			bool isInserted(const CompositeDescriptor& compositeDescriptor) const;
 			//@}
 
 			/** @name Public slots
@@ -441,19 +421,17 @@ namespace BALL
 			/**	Initialize the modular widgets and display the main window.
 			*/
 			virtual void show()
-				throw();
+				throw(PreferencesError);
 
 			/** Checks, enables or disables all the inserted menu entries
 					as the checkMenu-Function of the inserted ModularWidgets indicates.
 			*/
-			virtual void checkMenus()
-				throw();
+			virtual void checkMenus();
 
 			/** Calls applyPreferences for all ModularWidgets if the apply button
 					of the preferences dialog is pressed.
 			*/
-			virtual void applyPreferencesTab()
-				throw();
+			virtual void applyPreferencesTab();
 
 			/** Last second cleanup.
 					Must called after your own cleanup routine if you override this
@@ -473,7 +451,8 @@ namespace BALL
 					If the internal state of {\em *this} MainControl is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					@return			bool -
-											{\tt true} if the internal state of {\em *this} MainControl is correct (self-validated) and consistent,
+											{\tt true} if the internal state of {\em *this} MainControl is correct 
+																(self-validated) and consistent,
 					 						{\tt false} otherwise
 			*/
 			virtual bool isValid() const
@@ -516,8 +495,7 @@ namespace BALL
 			*/
 			void removeMenuEntry
 				(int ID, const String& name, const QObject* receiver = 0, 
-				 const char* slot = 0, int accel = 0, int entry_ID = -1)
-				throw();
+				 const char* slot = 0, int accel = 0, int entry_ID = -1);
  
 			/** insert a new menu entry to menu ID (creates menu ID if not existent)
 					@param ID - the menu ID to which the new menu entry should be inserted
@@ -530,14 +508,12 @@ namespace BALL
 			*/
 			int insertMenuEntry
 				(int ID, const String& name, const QObject* receiver = 0, 
-				 const char* slot = 0, int accel = 0, int entry_ID = -1)
-				throw();
+				 const char* slot = 0, int accel = 0, int entry_ID = -1);
 			
 			/** insert a separator into a popup menu specified by ID
 					@param ID - the id of the menu to which a speparator will be inserted
 			*/
-			void insertPopupMenuSeparator(int ID)
-				throw();
+			void insertPopupMenuSeparator(int ID);
  
 			/**	Create a unique item ID.
 			*/
@@ -547,8 +523,7 @@ namespace BALL
 			/**	Initialize one of the popup menus.
 					The ID is one of the enum PopUpID
 			*/	
-			virtual QPopupMenu* initPopupMenu(int ID)
-				throw();
+			virtual QPopupMenu* initPopupMenu(int ID);
 
 			/** Initialize a preferences tab for the widget (if needed).
 					This method is called automatically
@@ -557,8 +532,7 @@ namespace BALL
 					(if required).
 					A default tab for the application is automatically added.
 			*/
-			virtual void initializePreferencesTab(Preferences &preferences)
-				throw();
+			virtual void initializePreferencesTab(Preferences &preferences);
 			
 			/**	Remove the preferences tab.
 					This method is called by the widget's destructor.
@@ -566,8 +540,7 @@ namespace BALL
 					initializePreferencesTab (remove tabs).
 					It removed the default tab if it is created by initializePreferencesTab.
 			*/
-			virtual void finalizePreferencesTab(Preferences &preferences)
-				throw();
+			virtual void finalizePreferencesTab(Preferences &preferences);
 			
 			/** Apply the preferences of the specific tab.
 					In this method the widget can extract any changed values from
@@ -577,8 +550,7 @@ namespace BALL
 					If the default tab is created then the preferences of the tab
 					will be applied.
 			*/
-			virtual void applyPreferences(Preferences &preferences)
-				throw();
+			virtual void applyPreferences(Preferences &preferences);
 			
 			/** Fetch the widgets preferences from the inifile.
 					This method extracts the default values from the given
@@ -590,8 +562,7 @@ namespace BALL
 					If the default tab is created then those values will be fetched.
 					If you overload this method you should call it after your own fetch routine.
 			*/
-			virtual void fetchPreferences(INIFile &inifile)
-				throw();
+			virtual void fetchPreferences(INIFile &inifile);
 			
 			/** Writes the widgets preferences to the inifile.
 					This method is called by the widget's destructor.
@@ -600,41 +571,29 @@ namespace BALL
 					If the default tab is created then those values will be written.
 					If you overload this method you should call it after your own fetch routine.
 			*/
-			virtual void writePreferences(INIFile &inifile)
-				throw();
+			virtual void writePreferences(INIFile &inifile);
 			
 			/**
 			*/
-			void addModularWidget(ModularWidget* widget)
-				throw();
+			void addModularWidget(ModularWidget* widget);
 
 			/**
 			*/
-			void removeModularWidget(ModularWidget* widget)
-				throw();
+			void removeModularWidget(ModularWidget* widget);
 			//@}
 			
 			
 			protected:
 
-			void register_()
-				throw();
+			void register_();
 
-			void unregister_()
-				throw();
+			void unregister_();
 
 			private:
 
-			CompositeDescriptor* insert_
-				(const Composite& composite,
-				 const String& name,
-				 const Vector3& v)
-				throw();
+			CompositeDescriptor* insert_(const Composite& composite, const String& name, const Vector3& v);
 
-			CompositeDescriptor* insert_
-				(CompositeDescriptor& composite_descriptor,
-				 bool deep = true)
-				throw();
+			CompositeDescriptor* insert_(CompositeDescriptor& composite_descriptor, bool deep = true);
 
 			typedef HashMap<void*, List<CompositeDescriptor*>::Iterator>
 				ListIteratorHashMap;

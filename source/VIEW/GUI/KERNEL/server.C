@@ -1,4 +1,4 @@
-// $Id: server.C,v 1.2 2000/11/12 15:20:44 hekl Exp $
+// $Id: server.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
 #include <BALL/COMMON/logStream.h>
@@ -56,6 +56,7 @@ namespace BALL
 		}
 
 		Server::~Server()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -66,6 +67,7 @@ namespace BALL
 		}
 
 		void Server::clear()
+			throw()
 		{
 			QTTimer::clear();
 			ConnectionObject::clear();
@@ -222,13 +224,13 @@ namespace BALL
 		}
 
 		bool Server::isValid() const
+			throw()
 		{
-			return (bool)(QTTimer::isValid() == true
-										&& ConnectionObject::isValid() == true);
+			return (QTTimer::isValid() && ConnectionObject::isValid());
 		}
 
-		void Server::dump
-			(ostream& s, Size depth) const
+		void Server::dump(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -242,11 +244,13 @@ namespace BALL
 		}
 
 		void Server::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Server::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.4 2000/12/03 15:52:56 hekl Exp $
+// $Id: control.C,v 1.5 2000/12/22 19:12:17 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -55,6 +55,7 @@ Control::Control
 }
 
 Control::~Control()
+	throw()
 {
 }
 

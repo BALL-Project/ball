@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.4 2000/10/22 15:26:58 hekl Exp $
+// $Id: scene.h,v 1.5 2000/12/22 19:12:15 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -146,9 +146,11 @@ namespace BALL
 				 const char* name = NULL,
 				 WFlags wflags = 0);
 
-			virtual ~Scene();
+			virtual ~Scene()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 			//@}
 		
 			/**	@name Exceptions
@@ -158,7 +160,8 @@ namespace BALL
 				: public Exception::GeneralException
 			{
   			public:
-	   			MainControlMissing(const char* file, int line, const string& data);
+	   			MainControlMissing(const char* file, int line, const string& data)
+					throw();
 			};
 			//@}
 
@@ -166,19 +169,13 @@ namespace BALL
 
 			// --- ASSIGNMENT METHODS
 
-			void set
-				(const Scene& scene,
-				 bool deep = true);
+			void set(const Scene& scene, bool deep = true);
 
-			Scene& operator =
-				(const Scene& scene);
+			const Scene& operator =	(const Scene& scene);
 
-			void get
-				(Scene& scene,
-				 bool deep = true) const;
+			void get(Scene& scene, bool deep = true) const;
 
-			void swap
-				(Scene& scene);
+			void swap(Scene& scene);
 
 			// --- ACCESSORS: INSPECTORS and MUTATORS
 
@@ -189,43 +186,33 @@ namespace BALL
 			/**	@name	Camera access functions
 			*/
 			//@{
-			bool setCamera
-				(const Vector3& look_at,
-				 const Vector3& view_point,
-				 bool set_origin = true);
+			bool setCamera(const Vector3& look_at, const Vector3& view_point, bool set_origin = true);
 			
 			void setViewPointPosition(const Vector3& v);
 
 			const Vector3& getViewPointPosition() const;
 
-			void setViewPointPosition
-				(const Real x, const Real y, const Real z);		
+			void setViewPointPosition(const Real x, const Real y, const Real z);		
 			
 			void getViewPointPosition(Vector3& v) const;
 			
-			void getViewPointPosition
-				(Real &x, Real &y, Real &z) const;
+			void getViewPointPosition(Real &x, Real &y, Real &z) const;
 			
-			void setLookAtPosition
-				(const Vector3& v, bool set_origin = true);
+			void setLookAtPosition(const Vector3& v, bool set_origin = true);
 			
 			const Vector3& getLookAtPosition() const;
 
-			void setLookAtPosition
-				(const Real x, const Real y, const Real z, 
-				 bool set_origin = true);
+			void setLookAtPosition(const Real x, const Real y, const Real z, bool set_origin = true);
 			
 			void getLookAtPosition(Vector3& v) const;
 
-			void getLookAtPosition
-				(Real& x, Real& y, Real& z) const;
+			void getLookAtPosition(Real& x, Real& y, Real& z) const;
 			
 			const Vector3& getLastLookAtPosition() const;
 			
 			void getLastLookAtPosition(Vector3& v) const;
 			
-			void getLastLookAtPosition
-				(Real& x, Real& y, Real& z) const;
+			void getLastLookAtPosition(Real& x, Real& y, Real& z) const;
 			
 			Real getDistance() const;
 			
@@ -244,14 +231,14 @@ namespace BALL
 			Events events;
 			
 
-			void registerGLObjectCollector
-				(const GLObjectCollector& globject_collector);
+			void registerGLObjectCollector(const GLObjectCollector& globject_collector);
 
 			void unregisterGLObjectCollector();
 
 			const GLObjectCollector *getGLObjectCollector() const;
 
-			bool update(bool rebuild_displaylists = false);
+			bool update(bool rebuild_displaylists = false)
+				throw(MainControlMissing);
 			
 			/**	ModularWidget methods.
 			*/
@@ -278,16 +265,19 @@ namespace BALL
 
 			// --- DEBUGGERS and DIAGNOSTICS
 
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 
 			// --- STORERS
 
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 
 			// --- EXTERNAL ITERATORS
 
@@ -327,23 +317,17 @@ namespace BALL
 
 			virtual void paintGL();
 
-			virtual void resizeGL
-				(int width, int height);
+			virtual void resizeGL(int width, int height);
 
-			virtual void keyPressEvent
-				(QKeyEvent* qkey_event);
+			virtual void keyPressEvent(QKeyEvent* qkey_event);
 
-			virtual void keyReleaseEvent
-				(QKeyEvent* qkey_event);
+			virtual void keyReleaseEvent(QKeyEvent* qkey_event);
 
-			virtual void mouseMoveEvent
-				(QMouseEvent* qmouse_event);
+			virtual void mouseMoveEvent(QMouseEvent* qmouse_event);
 
-			virtual void mousePressEvent
-				(QMouseEvent* qmouse_event);
+			virtual void mousePressEvent(QMouseEvent* qmouse_event);
 
-			virtual void mouseReleaseEvent
-				(QMouseEvent* qmouse_event);
+			virtual void mouseReleaseEvent(QMouseEvent* qmouse_event);
 
 
 			protected slots:
@@ -379,11 +363,9 @@ namespace BALL
 
 			Vector3 translateObjectZ_(const Real distance);
 
-			Vector3 calculateRotatedVector_
-				(const Vector3& v, const Quaternion& q);
+			Vector3 calculateRotatedVector_(const Vector3& v, const Quaternion& q);
 
-			void calculateQuaternion_
-				(Quaternion& quaternion, const Quaternion& rotation_quaternion);
+			void calculateQuaternion_(Quaternion& quaternion, const Quaternion& rotation_quaternion);
 
 			Real sphereproject_(Real radius, Real x, Real y);
 
@@ -437,13 +419,9 @@ namespace BALL
 
 			void initViewVectors_();
 
-			void setCamera_
-				(bool set_origin = false);
+			void setCamera_(bool set_origin = false);
 
-			bool setCameraPosition_
-				(const Vector3& look_at,
-				 const Vector3& view_point,
-				 bool set_origin);
+			bool setCameraPosition_(const Vector3& look_at, const Vector3& view_point, bool set_origin);
 
 			Vector3 zoom_;
 			Vector3 position_;

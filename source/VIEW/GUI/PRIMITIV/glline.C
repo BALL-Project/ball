@@ -1,4 +1,4 @@
-// $Id: glline.C,v 1.2 2000/12/12 16:18:44 oliver Exp $
+// $Id: glline.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glline.h>
 #include <GL/gl.h>
@@ -10,12 +10,14 @@ namespace BALL
 	{
 
 		GLLine::GLLine()
+			throw()
 			:	Line(),
 				GLObject()
 		{
 		}
 
 		GLLine::GLLine(const GLLine& GL_line, bool deep)
+			throw()
 			:	Line(GL_line, deep),
 				GLObject(GL_line, deep)
 		{
@@ -103,6 +105,7 @@ namespace BALL
 		}
 
 		bool GLLine::extract()
+			throw()
 		{
 			return Line::extract();
 		}

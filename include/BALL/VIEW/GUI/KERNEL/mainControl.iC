@@ -1,9 +1,14 @@
-// $Id: mainControl.iC,v 1.7 2000/12/21 17:03:35 amoll Exp $
+// $Id: mainControl.iC,v 1.8 2000/12/22 19:12:14 amoll Exp $
 
 BALL_INLINE 
-CompositeDescriptor* MainControl::insert
-  (const Composite& composite, const String& name, const Vector3& center)
+int MainControl::getNextID()
 	throw()
+{
+	return current_id_++;
+}
+
+BALL_INLINE 
+CompositeDescriptor* MainControl::insert(const Composite& composite, const String& name, const Vector3& center)
 {
 	NewCompositeMessage message;
 	message.setComposite(composite);
@@ -12,16 +17,13 @@ CompositeDescriptor* MainControl::insert
 }
 
 BALL_INLINE 
-CompositeDescriptor* MainControl::insert
-  (CompositeDescriptor& composite_descriptor, bool deep)
-	throw()
+CompositeDescriptor* MainControl::insert(CompositeDescriptor& composite_descriptor, bool deep)
 {
   return insert_(composite_descriptor, deep);
 }
 
 BALL_INLINE 
 CompositeDescriptor* MainControl::getDescriptor(const Composite& composite)
-	throw()
 {
 	ListIteratorHashMap::ConstIterator it = composite_map_.find((void*)&composite);
   if (it != composite_map_.end())
@@ -33,9 +35,7 @@ CompositeDescriptor* MainControl::getDescriptor(const Composite& composite)
 }
     
 BALL_INLINE 
-const CompositeDescriptor* MainControl::getDescriptor
-  (const Composite& composite) const
-	throw()
+const CompositeDescriptor* MainControl::getDescriptor(const Composite& composite) const
 {
 	ListIteratorHashMap::ConstIterator it = composite_map_.find((void*)&composite);
   if (it != composite_map_.end())
@@ -62,31 +62,24 @@ const List<CompositeDescriptor*>& MainControl::getDescriptorList() const
   
 BALL_INLINE 
 const String* MainControl::getName(const Composite& composite) const
-	throw()
 {
   return ((MainControl*)this)->getName(composite);
 }
 
 BALL_INLINE 
-const CompositeDescriptor* MainControl::getDescriptor
-  (const String& name) const
-	throw()
+const CompositeDescriptor* MainControl::getDescriptor(const String& name) const
 {
   return (CompositeDescriptor*)this->getDescriptor(name);
 }
 
 BALL_INLINE 
-const Vector3* MainControl::getCenter
-  (const Composite& composite) const
-	throw()
+const Vector3* MainControl::getCenter(const Composite& composite) const
 {
   return ((MainControl*)this)->getCenter(composite);
 }
 
 BALL_INLINE 
-const CompositeDescriptor* MainControl::getDescriptor
-  (const Vector3& center) const
-	throw()
+const CompositeDescriptor* MainControl::getDescriptor(const Vector3& center) const
 {
   return (CompositeDescriptor *)this->getDescriptor(center);
 }
@@ -107,6 +100,7 @@ INIFile& MainControl::getINIFile()
 
 BALL_INLINE 
 const INIFile& MainControl::getINIFile() const
+	throw()
 {
 	return preferences_;
 }

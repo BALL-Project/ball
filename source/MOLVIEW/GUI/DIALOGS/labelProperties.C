@@ -28,6 +28,7 @@ LabelProperties::LabelProperties
 }
 
 LabelProperties::~LabelProperties()
+	throw()
 {
 }
 

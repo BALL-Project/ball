@@ -1,4 +1,4 @@
-// $Id: glsphere.C,v 1.2 2000/12/12 16:18:45 oliver Exp $
+// $Id: glsphere.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsphere.h>
 #include <GL/gl.h>
@@ -90,13 +90,10 @@ namespace BALL
 							 (GLfloat)getRadius(),
 							 (GLfloat)getRadius());
 
-			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED)
-					== true)
+			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED))
 			{
 				drawUserDefined();
-
 				glPopMatrix();
-
 				return true;
 			}
 
@@ -118,6 +115,7 @@ namespace BALL
 		}
 
 		bool GLSphere::extract()
+			throw()
 		{
 			return Sphere::extract();
 		}

@@ -1,27 +1,29 @@
-// $Id: control.iC,v 1.6 2000/10/22 15:26:18 hekl Exp $
+// $Id: control.iC,v 1.7 2000/12/22 19:12:15 amoll Exp $
 
 BALL_INLINE
 List<Composite*>& Control::getSelection()
+	throw()
 {
 	return selected_;
 }
 
 BALL_INLINE
 const List<Composite*>& Control::getSelection() const
+	throw()
 {
 	return selected_;
 }
 
 BALL_INLINE
 List<Composite*>& Control::getCopyList_()
+	throw()
 {
 	return copy_list_;
 }
 			
 BALL_INLINE
 const List<Composite*>& Control::getCopyList_() const
+	throw()
 {
 	return copy_list_;
 }
-
-

@@ -1,4 +1,4 @@
-// $Id: gltube.h,v 1.2 2000/12/12 16:15:42 oliver Exp $
+// $Id: gltube.h,v 1.3 2000/12/22 19:12:15 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
@@ -58,7 +58,8 @@ namespace BALL
 
 			virtual bool drawUserDefined();
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

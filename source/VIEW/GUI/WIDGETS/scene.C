@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.2 2000/10/22 15:18:25 hekl Exp $
+// $Id: scene.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 
@@ -19,6 +19,7 @@ namespace BALL
 
 	  Scene::MainControlMissing::MainControlMissing
 		  (const char* file, int line, const string& data)
+			throw()
 			: Exception::GeneralException(file, line, string("MainControlMissing"), data)
 		{
     }
@@ -116,7 +117,7 @@ namespace BALL
 				(events.MouseRightButtonPressed & events.MouseMoved, 
 				 events.TranslateSystem);
 
-			// register the widget with the MainControl
+			// the widget with the MainControl
 			registerWidget(this);
 		}
 
@@ -181,11 +182,12 @@ namespace BALL
 
 			resize((int)width_, (int)height_);
 
-			// register the widget with the MainControl
+			// the widget with the MainControl
 			ModularWidget::registerWidget(this);
 		}
 
 		Scene::~Scene()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -196,6 +198,7 @@ namespace BALL
 		}
 
 		void Scene::clear()
+			throw()
 		{
 			GL_object_collector_ 
 				= (GLObjectCollector *)&RTTI::getDefault<GLObjectCollector>();
@@ -220,8 +223,7 @@ namespace BALL
 			up_ = Vector3(0,0,0);
 		}
 			
-		void Scene::set
-			(const Scene& scene, bool /* deep */)
+		void Scene::set(const Scene& scene, bool /* deep */)
 		{
 			GL_object_collector_ = scene.GL_object_collector_;
 
@@ -247,6 +249,7 @@ namespace BALL
 		}
 
 		bool Scene::update(bool rebuild_displaylists)
+			throw(MainControlMissing)
 		{
 			// rebuild displaylists
 			if (rebuild_displaylists == true)
@@ -295,10 +298,9 @@ namespace BALL
 			}
 		}
 
-		Scene& Scene::operator = (const Scene& scene)
+		const Scene& Scene::operator = (const Scene& scene)
 		{
 			set(scene);
-
 			return *this;
 		}
 
@@ -315,14 +317,15 @@ namespace BALL
 
 
 		bool Scene::isValid() const
+			throw()
 		{
-			return (bool)(getParent() != 0
-										&& GL_primitive_manager_.isValid() == true
-										&& system_origin_.isValid() == true);
+			return (getParent() != 0 &&
+							GL_primitive_manager_.isValid() &&
+							system_origin_.isValid());
 		}
 
-		void Scene::dump
-			(ostream& s, Size depth) const
+		void Scene::dump(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -370,11 +373,13 @@ namespace BALL
 		}
 
 		void Scene::read(istream & /*s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Scene::write(ostream & /*s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
@@ -548,8 +553,7 @@ namespace BALL
 			y_window_pos_old_ = y_window_pos_new_;
 		}
 
-		void Scene::mousePressEvent
-			(QMouseEvent* mouse_event)
+		void Scene::mousePressEvent(QMouseEvent* mouse_event)
 		{
 			makeCurrent();
 
@@ -640,8 +644,7 @@ namespace BALL
 			}
 		}
 
-		void Scene::mouseReleaseEvent
-			(QMouseEvent *mouse_event)
+		void Scene::mouseReleaseEvent(QMouseEvent *mouse_event)
 		{
 			makeCurrent();
 
@@ -740,7 +743,7 @@ namespace BALL
 			rotate_mode_ = true;
 			setRenderMode(Scene::RENDER_MODE__COMPILE);
 	
-			// unregister picking mode controls
+			// unpicking mode controls
 			NotificationUnregister
 				(events.MouseLeftButtonPressed);
 			
@@ -760,7 +763,7 @@ namespace BALL
 				(events.MouseRightButtonReleased);
 			
 			
-			// register rotation mode controls
+			// rotation mode controls
 			NotificationRegister
 				(events.MouseLeftButtonPressed & events.MouseMoved, 
 				 events.RotateSystem);
@@ -779,7 +782,7 @@ namespace BALL
 			rotate_mode_ = false;
 			setRenderMode(Scene::RENDER_MODE__DO_NOT_COMPILE);
 			
-			// unregister rotation mode controls
+			// unrotation mode controls
 			NotificationUnregister
 				(events.MouseLeftButtonPressed & events.MouseMoved);
 			
@@ -790,7 +793,7 @@ namespace BALL
 				(events.MouseRightButtonPressed & events.MouseMoved);
 			
 			
-			// register picking mode controls
+			// picking mode controls
 			NotificationRegister
 				(events.MouseLeftButtonPressed,
 				 events.SelectionPressed);
@@ -871,10 +874,10 @@ namespace BALL
 				CompositeDescriptor *composite_descriptor
 					= *descriptor_iterator;
 
-				// register the primitive manager: used to get the right displaylists
+				// the primitive manager: used to get the right displaylists
 				composite_descriptor->registerPrimitiveManager(GL_primitive_manager_);
 
-				// register the opengl collector: collects all graphical information
+				// the opengl collector: collects all graphical information
 				composite_descriptor->registerGLObjectCollector(*GL_object_collector_);
 
 				glPushMatrix();
@@ -1002,7 +1005,6 @@ namespace BALL
 
 			updateGL();
 		}
-
 
 	  void Scene::selectionPressed_(Scene* /* scene */)
     {
@@ -1166,8 +1168,7 @@ namespace BALL
 			return (delta_y / (float)height_ * distance) * getZoomVector();  
 		}
 
-		Vector3 Scene::calculateRotatedVector_
-			(const Vector3& v, const Quaternion& q)
+		Vector3 Scene::calculateRotatedVector_(const Vector3& v, const Quaternion& q)
 		{
 			Matrix4x4 m;
 			
@@ -1180,8 +1181,7 @@ namespace BALL
 			return Vector3(tmp.x, tmp.y, tmp.z);
 		}
 
-		void Scene::calculateQuaternion_
-			(Quaternion& q, const Quaternion& rotate)
+		void Scene::calculateQuaternion_(Quaternion& q, const Quaternion& rotate)
 		{
 			Quaternion tmp;
 
@@ -1250,7 +1250,6 @@ namespace BALL
 
 			return z;
 		}
-
 
 	  // picking routine ------
 	  void Scene::selectObjects_(bool select)
@@ -1354,7 +1353,7 @@ namespace BALL
 				unsigned int z_coord;
 				
 				// find minimum z-coord
-				for (register int index = 0; index < number_of_hits; ++index)
+				for (int index = 0; index < number_of_hits; ++index)
 				{
 					names = *object_buffer_ptr;
 
@@ -1388,7 +1387,7 @@ namespace BALL
 			}
 			else // collect all objects that are in the picking area
 			{
-				for (register int index = 0; index < number_of_hits; ++index)
+				for (int index = 0; index < number_of_hits; ++index)
 				{
 					names = *object_buffer_ptr;
 					
@@ -1457,10 +1456,9 @@ namespace BALL
     }
 
 
-		void Scene::convertMatrix_
-			(const Matrix4x4 &matrix, GLfloat GL_float_array[4][4])
+		void Scene::convertMatrix_(const Matrix4x4 &matrix, GLfloat GL_float_array[4][4])
 		{
-			register int i, j;
+			int i, j;
 
 			for (i = 0; i < 4; ++i)
 			{
@@ -1535,10 +1533,7 @@ namespace BALL
 			}
 		}
 
-		bool Scene::setCameraPosition_
-			(const Vector3& look_at,
-			 const Vector3& view_point,
-			 bool set_origin)
+		bool Scene::setCameraPosition_(const Vector3& look_at, const Vector3& view_point, bool set_origin)
 		{
 			position_ = view_point;
 			look_at_position_ = look_at;
@@ -1574,8 +1569,8 @@ namespace BALL
 
 		void Scene::checkMenu(MainControl& main_control)
 		{
-			(main_control.menuBar())->setItemChecked(rotate_id_, (bool)(rotate_mode_ == true));
-			(main_control.menuBar())->setItemChecked(picking_id_, (bool)(rotate_mode_ == false));		
+			(main_control.menuBar())->setItemChecked(rotate_id_, (rotate_mode_ == true));
+			(main_control.menuBar())->setItemChecked(picking_id_, (rotate_mode_ == false));		
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.3 2000/12/03 15:54:36 hekl Exp $
+// $Id: molecularControl.C,v 1.4 2000/12/22 19:12:16 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <qpopupmenu.h>
@@ -21,6 +21,7 @@ MolecularControl::MolecularControl
 }
 
 MolecularControl::~MolecularControl()
+	throw()
 {
 }
 

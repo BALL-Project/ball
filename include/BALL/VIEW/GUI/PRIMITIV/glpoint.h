@@ -1,4 +1,4 @@
-// $Id: glpoint.h,v 1.2 2000/12/12 16:15:42 oliver Exp $
+// $Id: glpoint.h,v 1.3 2000/12/22 19:12:14 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
 #define BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
@@ -54,7 +54,8 @@ namespace BALL
 
 			virtual bool draw(bool with_names = false);
 
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
