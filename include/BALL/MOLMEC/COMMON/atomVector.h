@@ -1,4 +1,4 @@
-// $Id: atomVector.h,v 1.11 2001/07/11 23:59:32 amoll Exp $
+// $Id: atomVector.h,v 1.12 2001/07/15 11:17:06 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -23,7 +23,7 @@ namespace BALL
 			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/atomVector.h}
 	*/
 	class AtomVector
-		:	private std::vector<Atom*>
+		:	private ::std::vector<Atom*>
 	{
     public:
 
@@ -35,11 +35,11 @@ namespace BALL
 		
 		/**	Iterator type
 		*/
-		typedef std::vector<Atom*>::iterator Iterator;
+		typedef ::std::vector<Atom*>::iterator Iterator;
 
 		/**	Const iterator type.
 		*/
-		typedef std::vector<Atom*>::const_iterator ConstIterator;
+		typedef ::std::vector<Atom*>::const_iterator ConstIterator;
 
 		//@}
     /**	@name	Constructors and Destructors	
@@ -78,25 +78,23 @@ namespace BALL
 
     /**	Assignment operator
     */
-    AtomVector& operator = (const AtomVector& rhs);
+    const AtomVector& operator = (const AtomVector& rhs);
 
 		/**	Assign from another atom vector
 		*/
 		void set(const AtomVector& atoms);
 
     /**	Assignment operator for Composites.
-				Calls \Ref{set} and extracts all atoms, if 
-				none of the atoms in {\tt composite} are selected or the selected atoms
-				only (if any atom is selected in {\tt composite}.
+				Calls \Ref{set} and extracts all atoms, if none of the atoms in 
+				{\tt composite} are selected or the selected atoms	only 
+				(if any atom is selected in {\tt composite}.
 				The implementation calls {\tt \Ref{set}({\tt rhs}, {\tt rhs}.\Ref{containsSelection}())}.
-				@see	Composite::containsSelection
 				@see	Selectable
     */
-    AtomVector& operator = (const Composite& rhs);
+    const AtomVector& operator = (const Composite& rhs);
 
 		/**	Assign from a composite.
-				This method iterates over the composite tree and
-				extracts all atoms. 
+				This method iterates over the composite tree and extracts all atoms. 
 				@param	selected_only extract only selected atoms if set to {\bf true}
 		*/
 		void set(const Composite& composite, bool selected_only = false);
@@ -108,18 +106,15 @@ namespace BALL
 
 		/**	Return the vector size;
 		*/
-		using std::vector<Atom*>::size;
+		using ::std::vector<Atom*>::size;
 
-		// BAUSTELLE: PROBLEM IN DOCU: using
-    /* Random access operator
-    */
+		/// Random access operator
 		// BAUSTELLE: problem with GCC3 using std::vector<Atom*>::operator [];
-		Atom* const & operator [] (int i) const { return std::vector<Atom*>::operator [] (i); }
-    Atom*& operator [] (int i) { return std::vector<Atom*>::operator [] (i); }                                                            
-
+		Atom*       & operator [] (int i)       { return ::std::vector<Atom*>::operator [] (i); }
+		Atom* const & operator [] (int i) const { return ::std::vector<Atom*>::operator [] (i); }
+		
 		/**	Store the current atom positions.
-				AtomVector also contains an array with positions	
-				for each atom.
+				AtomVector also contains an array with positions for each atom.
 				\Ref{moveTo} considers these coordinates as start coordinates.
 		*/
 		void savePositions();
@@ -143,28 +138,30 @@ namespace BALL
 
 		/**	Insert an atom pointer.
 		*/
-		using std::vector<Atom*>::push_back;
+		using ::std::vector<Atom*>::push_back;
 
 		/**	Resize the vector.
+		 *  If the vector is resized to to more elements, than are contained,
+		 *  it is filled with NullPointers.
 		*/
-		using std::vector<Atom*>::resize;
+		using ::std::vector<Atom*>::resize;
 
     //@}
 		/**	@name	Iteration
 		*/
 		//@{
 
-		/**	begin method
+		/**	Return an iterator, pointing to the first atom pointer.
 		*/
 		//BAUSTELLE: GCC3 using std::vector<Atom*>::begin;
-		iterator begin(){return std::vector<Atom*>::begin();}
-		const_iterator begin() const {return std::vector<Atom*>::begin();}
+					iterator begin()			 { return ::std::vector<Atom*>::begin(); }
+		const_iterator begin() const { return ::std::vector<Atom*>::begin(); }
 
-		/**	end method
+		/**	Return an iterator, pointing behind the last atom pointer.
 		*/
 		//BAUSTELLE: GCC3 using std::vector<Atom*>::end;
-		iterator end(){return std::vector<Atom*>::end();}
-		const_iterator end() const {return std::vector<Atom*>::end();}
+					iterator end()			 { return std::vector<Atom*>::end(); }
+		const_iterator end() const { return std::vector<Atom*>::end(); }
 
 		//@}
 		
@@ -177,7 +174,5 @@ namespace BALL
 
 
 } // end of namespace BALL
-
-
 
 #endif // BALL_MOLMEC_MINIMIZATION_GRADIENT_H 
