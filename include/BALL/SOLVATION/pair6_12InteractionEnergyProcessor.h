@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.2 2000/10/06 10:27:15 oliver Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.3 2000/10/06 11:51:49 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -177,15 +177,14 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		Pair6_12InteractionEnergyProcessor();
+		Pair6_12InteractionEnergyProcessor() throw();
 
 		/** Copy constructor */
 		Pair6_12InteractionEnergyProcessor
-			(const Pair6_12InteractionEnergyProcessor& proc);
+			(const Pair6_12InteractionEnergyProcessor& proc) throw();
 
 		/** Destructor */
-		virtual ~Pair6_12InteractionEnergyProcessor()
-			throw();
+		virtual ~Pair6_12InteractionEnergyProcessor() throw();
 
 		//@}
 
@@ -193,13 +192,12 @@ namespace BALL
 		/** @name Assignment */
 		//@{
 
-		/** */
+		/** Assignment operator */
 		const Pair6_12InteractionEnergyProcessor& operator =
-			(const Pair6_12InteractionEnergyProcessor& proc);
+			(const Pair6_12InteractionEnergyProcessor& proc) throw();
 
 		/** Clear function */
-		virtual void clear()
-			throw();
+		virtual void clear() throw();
 		
 		//@}
 
@@ -208,7 +206,7 @@ namespace BALL
 		//@{
 
 		/** */
-		virtual bool finish();
+		virtual bool finish() throw();
 
 		//@}
 
@@ -225,11 +223,9 @@ namespace BALL
 		/** @name Predicates */
 		//@{
 
-		/** Validity */
-		bool isValid() const;
-
 		/** Equality operator */
-		bool operator == (const Pair6_12InteractionEnergyProcessor& proc) const;
+		bool operator == (const Pair6_12InteractionEnergyProcessor& proc) 
+			const throw();
 
 		//@}
 
@@ -244,7 +240,7 @@ namespace BALL
 		private:
 
 		void getExternalSurface_(vector< pair<Vector3, Surface> >& surface_map, 
-				const char* surface_file);
+				const char* surface_file) throw();
 	};
 
 } // namespace BALL

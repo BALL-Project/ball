@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.3 2000/10/06 10:27:00 oliver Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.4 2000/10/06 11:51:52 anker Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -24,7 +24,8 @@ namespace BALL
 		= 298.0;
 	const float PCMCavFreeEnergyProcessor::Default::PROBE_RADIUS = 1.385;
 
-	PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor()
+	PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor() throw()
+		:	EnergyProcessor()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 
@@ -32,14 +33,25 @@ namespace BALL
 		options.setDefaultReal(Option::ABSOLUTE_TEMPERATURE,
 				Default::ABSOLUTE_TEMPERATURE);
 		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
+		valid_ = true;
 	}
 
-	PCMCavFreeEnergyProcessor::~PCMCavFreeEnergyProcessor()
-		throw()
+	PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor
+	(const PCMCavFreeEnergyProcessor& proc) throw()
+		: EnergyProcessor(proc)
 	{
 	}
 
-	bool PCMCavFreeEnergyProcessor::finish()
+	
+	PCMCavFreeEnergyProcessor::~PCMCavFreeEnergyProcessor() throw()
+	{
+		clear();
+
+		valid_ = false;
+	}
+
+	
+	bool PCMCavFreeEnergyProcessor::finish() throw()
 	{
 		// first check for user settings
 

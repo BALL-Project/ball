@@ -1,4 +1,4 @@
-// $Id: solventDescriptor.h,v 1.2 2000/09/02 10:15:10 oliver Exp $
+// $Id: solventDescriptor.h,v 1.3 2000/10/06 11:51:49 anker Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
 #define BALL_SOLVATION_SOLVENTDESCRIPTOR_H
@@ -40,7 +40,7 @@ namespace BALL
 
 		public:
 
-		// BALL_CREATE(SolventDescriptor)
+		BALL_CREATE(SolventDescriptor)
 
 		/** @name Constructors and destructor */
 		//@{
@@ -58,23 +58,17 @@ namespace BALL
 		/** Destructor */
 		virtual ~SolventDescriptor();
 
-		/** Clear function */
-		void clear();
-
-		/** Destroy function */
-		void destroy();
-
 		//@}
 
 
 		/** @name Assignment */
 		//@{
 
-		/** */
-		void set(const SolventDescriptor& descriptor);
-
-		/** */
+		/** Assignment operator */
 		const SolventDescriptor& operator = (const SolventDescriptor& descriptor);
+
+		/** Clear function */
+		void clear();
 
 		//@}
 
@@ -109,11 +103,24 @@ namespace BALL
 		//@}
 
 
+		/** @name Predicates */
+		//@{
+
+		/** Validity */
+		bool isValid() const;
+
+		/** Equality operator */
+		bool operator == (const SolventDescriptor& descriptor) const;
+
+		//@}
+
 		protected:
 
 		String name_;
 		float number_density_;
 		std::vector<SolventAtomDescriptor> solvent_atoms_;
+
+		bool valid_;
 
 	};
 }

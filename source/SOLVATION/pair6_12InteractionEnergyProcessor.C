@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.3 2000/10/06 10:27:01 oliver Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.4 2000/10/06 11:51:52 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -8,7 +8,6 @@
 
 #include <BALL/SOLVATION/pair6_12InteractionEnergyProcessor.h>
 #include <BALL/SOLVATION/solventParameter.h>
-
 
 using namespace std;
 
@@ -50,6 +49,7 @@ namespace BALL
 
 
 	Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor()
+		throw()
 		: EnergyProcessor(),
 			solvent_()
 	{
@@ -67,7 +67,7 @@ namespace BALL
 
 
 	Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor
-		(const Pair6_12InteractionEnergyProcessor& proc)
+		(const Pair6_12InteractionEnergyProcessor& proc) throw()
 		: EnergyProcessor(proc),
 			solvent_(proc.solvent_)
 	{
@@ -82,8 +82,7 @@ namespace BALL
 	}
 
 
-	void Pair6_12InteractionEnergyProcessor::clear()
-		throw()
+	void Pair6_12InteractionEnergyProcessor::clear() throw()
 	{
 		EnergyProcessor::clear();
 		solvent_.clear();
@@ -92,7 +91,7 @@ namespace BALL
 
 	const Pair6_12InteractionEnergyProcessor&
 		Pair6_12InteractionEnergyProcessor::operator =
-		(const Pair6_12InteractionEnergyProcessor& proc)
+		(const Pair6_12InteractionEnergyProcessor& proc) throw()
 	{
 		EnergyProcessor::operator = (proc);
 		solvent_ = proc.solvent_;
@@ -101,7 +100,15 @@ namespace BALL
 	}
 
 
-	bool Pair6_12InteractionEnergyProcessor::finish()
+	bool Pair6_12InteractionEnergyProcessor::operator == (const
+	Pair6_12InteractionEnergyProcessor& proc) const throw()
+	{
+		return (EnergyProcessor::operator == (proc)
+			&& (solvent_ == proc.solvent_));
+	}
+
+
+	bool Pair6_12InteractionEnergyProcessor::finish() throw()
 	{
 
 		// first check for user settings
@@ -432,7 +439,8 @@ namespace BALL
 
 	// BAUSTELLE: sollte nicht hier stehen.
 	void Pair6_12InteractionEnergyProcessor::getExternalSurface_(
-			vector< pair<Vector3, Surface> >& surface_map, const char* surface_file)
+			vector< pair<Vector3, Surface> >& surface_map, 
+			const char* surface_file) throw()
 	{
 		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRÜFT!!!
 		surface_map.clear();
@@ -482,4 +490,5 @@ namespace BALL
 		}
 		ifs.close();
 	}
+
 } // namespace BALL

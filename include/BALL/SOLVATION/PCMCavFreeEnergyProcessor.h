@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.3 2000/10/06 10:27:15 oliver Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.4 2000/10/06 11:51:48 anker Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -102,15 +102,41 @@ namespace BALL
 			static const float PROBE_RADIUS;
 		};
 
+
 		/** @name Constructors and Destructors */
 		//@{
 
 		/** Default constructor */
-		PCMCavFreeEnergyProcessor();
+		PCMCavFreeEnergyProcessor() throw();
+
+		/** Copy constructor */
+		PCMCavFreeEnergyProcessor(const PCMCavFreeEnergyProcessor& proc)
+		throw();
 
 		/** Destructor */
-		virtual ~PCMCavFreeEnergyProcessor()
-			throw();
+		virtual ~PCMCavFreeEnergyProcessor() throw();
+
+		//@}
+
+
+		/** @name Assignment */
+		//@{
+
+		/** Assignment operator */
+		const PCMCavFreeEnergyProcessor& operator = (
+				const PCMCavFreeEnergyProcessor& proc) throw();
+
+		/** Clear function */
+		virtual void clear() throw();
+
+		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		//** Equality operator */
+		bool operator == (const PCMCavFreeEnergyProcessor& proc) const throw();
 
 		//@}
 
@@ -119,7 +145,8 @@ namespace BALL
 		//@{
 
 		/** This is where the actual computation takes place. */
-		virtual bool finish();
+		virtual bool finish() throw();
+
 		//@}
 
 

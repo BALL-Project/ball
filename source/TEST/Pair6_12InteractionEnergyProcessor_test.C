@@ -1,4 +1,4 @@
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.1 2000/10/05 17:16:56 anker Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.2 2000/10/06 11:51:56 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.1 2000/10/05 17:16:56 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.2 2000/10/06 11:51:56 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -42,16 +42,7 @@ CHECK(Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor(con
 	// BAUSTELLE
 RESULT
 
-CHECK(Pair6_12InteractionEnergyProcessor::destroy())
-	Pair6_12InteractionEnergyProcessor proc;
-	// BAUSTELLE
-RESULT
-
 CHECK(Pair6_12InteractionEnergyProcessor::clear())
-	// BAUSTELLE
-RESULT
-
-CHECK(Pair6_12InteractionEnergyProcessor::set(const Pair6_12InteractionEnergyProcessor& proc))
 	// BAUSTELLE
 RESULT
 
@@ -81,6 +72,16 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	TEST_REAL_EQUAL(val, 0.01)
 RESULT
 
+CHECK(Pair6_12InteractionEnergyProcessor::isValid())
+	Pair6_12InteractionEnergyProcessor proc;
+	TEST_EQUAL(proc.isValid(), false)
+
+	// BAUSTELLE
+RESULT
+
+CHECK(Pair6_12InteractionEnergyProcessor::operator == ())
+  // BAUSTELLE
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

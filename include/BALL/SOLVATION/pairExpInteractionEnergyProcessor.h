@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.3 2000/10/06 10:27:16 oliver Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.4 2000/10/06 11:51:49 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -207,33 +207,27 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		PairExpInteractionEnergyProcessor();
+		PairExpInteractionEnergyProcessor() throw();
 
 		/** Copy constructor */
-		PairExpInteractionEnergyProcessor(const PairExpInteractionEnergyProcessor& proc);
+		PairExpInteractionEnergyProcessor(const
+				PairExpInteractionEnergyProcessor& proc) throw();
 
 		/** Destructor */
-		virtual ~PairExpInteractionEnergyProcessor()
-			throw();
+		virtual ~PairExpInteractionEnergyProcessor() throw();
 
-		/** Destroy function */
-		virtual void destroy();
-
-		/** Clear function */
-		virtual void clear()
-			throw();
 		//@}
 
 
 		/** @name Assignment */
 		//@{
 
-		/** Set method */
-		void set(const PairExpInteractionEnergyProcessor& proc);
-
 		/** Assignment operator */
 		const PairExpInteractionEnergyProcessor& operator = 
-			(const PairExpInteractionEnergyProcessor& proc);
+			(const PairExpInteractionEnergyProcessor& proc) throw();
+
+		/** Clear function */
+		virtual void clear() throw();
 		
 		//@}
 
@@ -242,7 +236,7 @@ namespace BALL
 		//@{
 
 		/** */
-		virtual bool finish();
+		virtual bool finish() throw();
 
 		//@}
 
@@ -269,9 +263,11 @@ namespace BALL
 		private:
 
 		void computeClaverieParameters(Atom::Type solvent_type,
-				Atom::Type solute_type, std::pair<float, float>& parameters);
-		void getExternalSurface_(std::vector< std::pair<Vector3, Surface> >& surface_map, 
-				const char* surface_file);
+				Atom::Type solute_type, std::pair<float, float>& parameters)
+			throw();
+		void getExternalSurface_(
+				std::vector< std::pair<Vector3, Surface> >& surface_map, 
+				const char* surface_file) throw();
 
 	};
 

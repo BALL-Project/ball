@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.3 2000/10/06 10:27:16 oliver Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.4 2000/10/06 11:51:49 anker Exp $
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
@@ -118,20 +118,47 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		UhligCavFreeEnergyProcessor();
+		UhligCavFreeEnergyProcessor() throw();
+
+		/** Copy constructor */
+		UhligCavFreeEnergyProcessor(const UhligCavFreeEnergyProcessor& proc)
+			throw();
 
 		/** Destructor */
-		virtual ~UhligCavFreeEnergyProcessor()
+		virtual ~UhligCavFreeEnergyProcessor() throw();
+
+		//@}
+
+
+		/** @name Assignment */
+		//@{
+
+		/** Assignment operator */
+		const UhligCavFreeEnergyProcessor& operator = 
+			(const UhligCavFreeEnergyProcessor& proc) throw();
+
+		/** Clear function */
+		virtual void clear() throw();
+
+		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const UhligCavFreeEnergyProcessor& proc) const
 			throw();
 
 		//@}
 
 
-		/** @name processor functions */
+		/** @name Processor functions */
 		//@{
 
 		/** This is where the actual computation takes place. */
-		virtual bool finish();
+		virtual bool finish() throw();
+
 		//@}
 
 

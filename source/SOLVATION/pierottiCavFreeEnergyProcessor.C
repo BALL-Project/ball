@@ -1,4 +1,4 @@
-// $Id: pierottiCavFreeEnergyProcessor.C,v 1.3 2000/10/06 10:27:01 oliver Exp $
+// $Id: pierottiCavFreeEnergyProcessor.C,v 1.4 2000/10/06 11:51:53 anker Exp $
 
 #include <BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -25,7 +25,8 @@ namespace BALL
 		= 298.0;
 	const float PierottiCavFreeEnergyProcessor::Default::PROBE_RADIUS = 1.385;
 
-	PierottiCavFreeEnergyProcessor::PierottiCavFreeEnergyProcessor()
+
+	PierottiCavFreeEnergyProcessor::PierottiCavFreeEnergyProcessor() throw()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 
@@ -34,14 +35,27 @@ namespace BALL
 				Default::ABSOLUTE_TEMPERATURE);
 		options.setDefaultReal(Option::PRESSURE, Default::PRESSURE);
 		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
+
+		valid_ = true;
 	}
 
-	PierottiCavFreeEnergyProcessor::~PierottiCavFreeEnergyProcessor()
-		throw()
+
+	PierottiCavFreeEnergyProcessor::PierottiCavFreeEnergyProcessor
+	(const PierottiCavFreeEnergyProcessor& proc) throw()
+		:	EnergyProcessor(proc)
 	{
 	}
 
-	bool PierottiCavFreeEnergyProcessor::finish()
+
+	PierottiCavFreeEnergyProcessor::~PierottiCavFreeEnergyProcessor() throw()
+	{
+		clear();
+
+		valid_ = false;
+	}
+
+
+	bool PierottiCavFreeEnergyProcessor::finish() throw()
 	{
 
 		// first check for user settings

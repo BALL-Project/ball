@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.C,v 1.3 2000/10/06 10:27:01 oliver Exp $
+// $Id: uhligCavFreeEnergyProcessor.C,v 1.4 2000/10/06 11:51:53 anker Exp $
 
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -20,20 +20,35 @@ namespace BALL
 	const float UhligCavFreeEnergyProcessor::Default::CONSTANT 
 		= 3854.606;
 
-	UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor()
+
+	UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor() throw()
+		:	EnergyProcessor()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
 		options.setDefaultReal(Option::SURFACE_TENSION, Default::SURFACE_TENSION);
 		options.setDefaultReal(Option::CONSTANT, Default::CONSTANT);
+
+		valid_ = true;
 	}
 
-	UhligCavFreeEnergyProcessor::~UhligCavFreeEnergyProcessor()
-		throw()
+
+	UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor
+	(const UhligCavFreeEnergyProcessor& proc) throw()
+		: EnergyProcessor(proc)
 	{
 	}
 
-	bool UhligCavFreeEnergyProcessor::finish()
+
+	UhligCavFreeEnergyProcessor::~UhligCavFreeEnergyProcessor() throw()
+	{
+		clear();
+
+		valid_ = false;
+	}
+
+
+	bool UhligCavFreeEnergyProcessor::finish() throw()
 	{
 
 		// first check for user settings

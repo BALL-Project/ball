@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.7 2000/10/06 10:27:01 oliver Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.8 2000/10/06 11:51:53 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -64,6 +64,7 @@ namespace BALL
 		= "surface.surf";
 
 	PairExpInteractionEnergyProcessor::PairExpInteractionEnergyProcessor()
+		throw()
 		:	EnergyProcessor(),
 			options(),
 			solvent_(),
@@ -89,7 +90,7 @@ namespace BALL
 
 	
 	PairExpInteractionEnergyProcessor::PairExpInteractionEnergyProcessor(const
-			PairExpInteractionEnergyProcessor& proc)
+			PairExpInteractionEnergyProcessor& proc) throw()
 		:	EnergyProcessor(proc),
 			options(proc.options),
 			solvent_(proc.solvent_),
@@ -103,48 +104,37 @@ namespace BALL
 	PairExpInteractionEnergyProcessor::~PairExpInteractionEnergyProcessor()
 		throw()
 	{
-		destroy();
-	}
-
-	
-	void PairExpInteractionEnergyProcessor::destroy()
-	{
 		clear();
 	}
 
 	
-	void PairExpInteractionEnergyProcessor::clear()
-		throw()
+	void PairExpInteractionEnergyProcessor::clear() throw()
 	{
 		options.clear();
 		solvent_.clear();
 		alpha_ = 0.0;
 		C1_ = 0.0;
 		C2_ = 0.0;
+
+		valid_ = false;
 	}
 
 
-	void PairExpInteractionEnergyProcessor::set(const
-			PairExpInteractionEnergyProcessor& proc)
+	const PairExpInteractionEnergyProcessor&
+		PairExpInteractionEnergyProcessor::operator = 
+			(const PairExpInteractionEnergyProcessor& proc) throw()
 	{
 		options = proc.options;
 		solvent_ = proc.solvent_;
 		alpha_ = proc.alpha_;
 		C1_ = proc.C1_;
 		C2_ = proc.C2_;
-	}
 
-
-	const PairExpInteractionEnergyProcessor&
-		PairExpInteractionEnergyProcessor::operator = 
-			(const PairExpInteractionEnergyProcessor& proc)
-	{
-		set(proc);
 		return *this;
 	}
 
 
-	bool PairExpInteractionEnergyProcessor::finish()
+	bool PairExpInteractionEnergyProcessor::finish() throw()
 	{
 
 		// first check for user settings
@@ -168,12 +158,51 @@ namespace BALL
 		int surface_type = options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
-		// vdW-radius of a solvent atom of type i
+		// define the solvent
+		ForceFieldParameters ffparam(solvent_filename);
+		SolventParameter solvent_parameter_section;
+		if (!solvent_parameter_section.extractSection(ffparam,
+			"SolventDescription"))
+		{
+			Log.error() << "PairExpInteractionEnergyProcessor::finish(); "
+				<< "Cannot read solvent description." << endl;
+			return 0.0;
+		}
+		SolventDescriptor solvent_descriptor 
+			= solvent_parameter_section.getSolventDescriptor();
+		rho = solvent_descriptor.getNumberDensity();
+
+		// define the rdf, if desired
+		ForceFieldParameters rdf_ff_param(rdf_filename);
+		RDFParameter rdf_parameter;
+		if (use_rdf)
+		{
+			if (!rdf_parameter.extractSection(rdf_ff_param, "RDF"))
+			{
+				Log.error() << "PairExpInteractionEnergyProcessor::finish(); "
+					<< "Cannot read RDF descriptions." << endl;
+				return 0.0;
+			}
+		}
+
+		ForceFieldParameters fffparam(claverie_filename);
+		ClaverieParameter claverie_param;
+		if (verbosity > 1)
+		{
+			Log.info() << "claverie_filename = " << claverie_filename << endl;
+		}
+		if (!claverie_param.extractSection(fffparam, "ClaverieParameters"))
+		{
+			Log.error() << "PairExpInteractionEnergyProcessor::finish(); "
+				<< "Cannot read Claverie Parameters." << endl;
+			return 0.0;
+		}
+
+		// iterate over all different atom types in the solvent
+
 		double R_s = 0.0; // [ A ]
 		// vdW-radius of a solute atom
-		double R_j = 0.0; // [ A ]
-		// energy contributions of one triangle
-		double e_ij = 0.0; // [ ? ]
+		double R_m = 0.0; // [ A ]
 		// different energy contributions 
 		double E = 0.0;
 		double E_D = 0.0;
@@ -181,9 +210,9 @@ namespace BALL
 		double E_ij = 0.0;
 		double E_ij_D = 0.0;
 		double E_ij_R = 0.0;
+		double e_ij = 0.0; // [ ? ]
 		double e_ij_D = 0.0;
 		double e_ij_R = 0.0;
-
 
 		// a frequently used term (4*sqrt(R_i*R_j))
 		double R_ij_o; // [ m ]
@@ -199,7 +228,7 @@ namespace BALL
 		// frequently used term (alpha_/R_ij_o)
 		double a; // [ ? ]
 		double a_r_k;
-	
+
 		// Geometry
 		Vector3 r_k_vec;
 		Vector3 n_k_vec;
@@ -207,50 +236,21 @@ namespace BALL
 		Vector3 atom_center;
 		Vector3 sphere_center;
 
-		//
-		std::pair<float, float> claverie;
-
-		// define the solvent
-		ForceFieldParameters ffparam(solvent_filename);
-		SolventParameter solvent_parameter_section;
-		solvent_parameter_section.extractSection(ffparam, "SolventDescription");
-		SolventDescriptor solvent_descriptor 
-			= solvent_parameter_section.getSolventDescriptor();
-		rho = solvent_descriptor.getNumberDensity();
-
-		// define the rdf, if desired
-		ForceFieldParameters rdf_ff_param(rdf_filename);
-		RDFParameter rdf_parameter;
-		if (use_rdf)
-		{
-			// BAUSTELLE
-			if (!rdf_parameter.extractSection(rdf_ff_param, "RDF"))
-			{
-				Log.error() << "PairExpInteractionEnergyProcessor::finish(); "
-					<< "Cannot read RDF descriptions." << endl;
-				return 0.0;
-			}
-		}
-		LennardJones lennard_jones;
-		lennard_jones.extractSection(ffparam, "LennardJones");
 		Atom::Type type_i;
 		Atom::Type type_j;
 
-		ForceFieldParameters fffparam(claverie_filename);
-		ClaverieParameter claverie_param;
-		if (verbosity > 1)
-		{
-			Log.info() << "claverie_filename = " << claverie_filename << endl;
-		}
-		claverie_param.extractSection(fffparam, "ClaverieParameters");
+		std::pair<float, float> claverie;
 
-		// iterate over all different atom types in the solvent
+		SolventAtomDescriptor solvent_atom;
+		vector< pair<Vector3, Surface> > surface_map;
+		String filename;
+		AtomIterator solute_iterator;
+		PairExpRDFIntegrator integrator;
 
 		for (Size s = 0; s < solvent_descriptor.getNumberOfAtomTypes(); ++s)
 		{
 
-			SolventAtomDescriptor solvent_atom 
-				= solvent_descriptor.getAtomDescriptor(s);
+			solvent_atom = solvent_descriptor.getAtomDescriptor(s);
 			type_i = solvent_atom.type;
 			R_s = solvent_atom.radius;
 			if (verbosity > 2)
@@ -259,9 +259,6 @@ namespace BALL
 			}
 
 			// now compute the surface for the integration
-
-			vector< pair<Vector3, Surface> > surface_map;
-			String filename;
 			switch (surface_type)
 			{
 				case SURFACE__SAS:
@@ -310,7 +307,6 @@ namespace BALL
 			E_ij_R = 0.0;
 
 			// iterate over all atoms of the solute
-			AtomIterator solute_iterator;
 			for (solute_iterator = fragment_->beginAtom(); +solute_iterator;
 					++solute_iterator)
 			{
@@ -318,10 +314,10 @@ namespace BALL
 				// type_j = solute_iterator->getType();
 				type_j = ffparam.getAtomTypes().getType(solute_iterator->getTypeName());
 				atom_center = solute_iterator->getPosition();
-				R_j = solute_iterator->getRadius();
+				R_m = solute_iterator->getRadius();
 				if (verbosity > 2)
 				{
-					Log.info() << "Radius of Solute: " << R_j << endl;
+					Log.info() << "Radius of Solute: " << R_m << endl;
 				}
 
 				// compute the necessary pair potential parameters
@@ -361,6 +357,13 @@ namespace BALL
 						// n_k_vec is the normal of the current surface triangle 
 						n_k_vec = current_surface.normal[k];
 
+						if (verbosity > 3)
+						{
+							Log.info() << "r_k_vec = " << r_k_vec << endl;
+							Log.info() << "r_k = " << r_k << endl;
+							Log.info() << "n_k_vec = " << n_k_vec << endl;
+						}
+
 						if (use_rdf)
 						{
 							float A = (atom_center - sphere_center).getSquareLength();
@@ -386,8 +389,8 @@ namespace BALL
 
 							// BAUSTELLE: Sollte protected werden. Und nicht geteilt in
 							// zwei Beiträge
-							PairExpRDFIntegrator integrator(alpha_, C1_, C2_, R_ij_o, 
-									k1, k2, rdf_parameter.getRDF(type_i, type_j));
+							integrator.setConstants(alpha_, C1_, C2_, R_ij_o, k1, k2);
+							integrator.setRDF(rdf_parameter.getRDF(type_i, type_j));
 							e_ij += rho * integrator.integrateToInf(r_k)
 								* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
 
@@ -429,16 +432,21 @@ namespace BALL
 									((1.0 / a_r_k) + (2.0 / (a_r_k * a_r_k)) + 
 									 (2.0 / (a_r_k * a_r_k * a_r_k))));
 
-							if (verbosity > 0)
-							{
-								e_ij_R = rho * C1_ * K_ij_R * I_rep;
-								e_ij_D = rho * - C2_ * K_ij_D * R_ij_o_6 * I_disp;
-							}
-							e_ij = rho * ( C1_ * K_ij_R * I_rep + C2_ * K_ij_D * R_ij_o_6
-									* I_disp);
-						}
+						} // if (use_rdf)
 					} // current surface
 				} // current sphere
+
+				if (!use_rdf)
+				{
+					if (verbosity > 0)
+					{
+						e_ij_R = rho * C1_ * K_ij_R * I_rep;
+						e_ij_D = rho * - C2_ * K_ij_D * R_ij_o_6 * I_disp;
+					}
+					e_ij = rho * ( C1_ * K_ij_R * I_rep + C2_ * K_ij_D * R_ij_o_6
+							* I_disp);
+				}
+
 
 				// E_ij_x is the contribution of the combination of solvent atom
 				// type i and solute atom type j
@@ -448,9 +456,9 @@ namespace BALL
 
 			} // solute
 
-
 			// E_x is the total energy contribution
 			E += solvent_atom.number_of_atoms * E_ij;
+
 			if (verbosity > 0)
 			{
 				E_D += solvent_atom.number_of_atoms * E_ij_D;
@@ -471,7 +479,8 @@ namespace BALL
 
 	// BAUSTELLE: sollte nicht hier stehen.
 	void PairExpInteractionEnergyProcessor::getExternalSurface_(
-			vector< pair<Vector3, Surface> >& surface_map, const char* surface_file)
+			vector< pair<Vector3, Surface> >& surface_map, 
+			const char* surface_file) throw()
 	{
 		// HIER WIRD NICHTS, ABER AUCH GAR NICHTS GEPRÜFT!!!
 		surface_map.clear();

@@ -1,4 +1,4 @@
-// $Id: reissCavFreeEnergyProcessor.h,v 1.3 2000/10/06 10:27:16 oliver Exp $
+// $Id: reissCavFreeEnergyProcessor.h,v 1.4 2000/10/06 11:51:49 anker Exp $
 
 #ifndef BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
@@ -117,15 +117,40 @@ namespace BALL
 			static const float PROBE_RADIUS;
 		};
 
+
 		/** @name Constructors and Destructors */
 		//@{
 
 		/** Default constructor */
-		ReissCavFreeEnergyProcessor();
+		ReissCavFreeEnergyProcessor() throw();
+
+		/** Copy constructor */
+		ReissCavFreeEnergyProcessor(const ReissCavFreeEnergyProcessor& proc) throw();
 
 		/** Destructor */
-		virtual ~ReissCavFreeEnergyProcessor()
-			throw();
+		virtual ~ReissCavFreeEnergyProcessor() throw();
+
+		//@}
+
+
+		/** @name Assignment */
+		//@{
+
+		/** Assignment operator */
+		const ReissCavFreeEnergyProcessor& operator = 
+			(const ReissCavFreeEnergyProcessor& proc) throw();
+
+		/** Clear function */
+		virtual void clear() throw();
+
+		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const ReissCavFreeEnergyProcessor& proc) const throw();
 
 		//@}
 
@@ -134,7 +159,8 @@ namespace BALL
 		//@{
 
 		/** This is where the actual computation takes place. */
-		virtual bool finish();
+		virtual bool finish() throw();
+
 		//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.3 2000/10/06 10:27:16 oliver Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.4 2000/10/06 11:51:49 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
@@ -122,11 +122,36 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		PierottiCavFreeEnergyProcessor();
+		PierottiCavFreeEnergyProcessor() throw();
+
+		/** Copy constructor */
+		PierottiCavFreeEnergyProcessor(const PierottiCavFreeEnergyProcessor&
+				proc) throw();
 
 		/** Destructor */
-		virtual ~PierottiCavFreeEnergyProcessor()
-			throw();
+		virtual ~PierottiCavFreeEnergyProcessor() throw();
+
+		//@}
+
+
+		/** @name Assignment */
+		//@{
+
+		/** Assignment operator */
+		const PierottiCavFreeEnergyProcessor& operator = (
+				const PierottiCavFreeEnergyProcessor& proc) throw();
+
+		/** Clear function */
+		virtual void clear() throw();
+
+		//@}
+
+
+		/** @name Predicates */
+		//@{
+		
+		/** Equality operator */
+		bool operator == (const PierottiCavFreeEnergyProcessor& proc) const throw();
 
 		//@}
 
@@ -135,7 +160,8 @@ namespace BALL
 		//@{
 
 		/** This is where the actual computation takes place. */
-		virtual bool finish();
+		virtual bool finish() throw();
+
 		//@}
 
 
