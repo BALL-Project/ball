@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.55 2004/09/14 13:45:27 amoll Exp $
+// $Id: message.h,v 1.56 2004/09/14 13:45:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -281,10 +281,10 @@ class BALL_EXPORT SceneMessage: public Message
 		EXPORT_POVRAY,
 
 		/// 
-		ENTER_ROTATE_MODE
+		ENTER_ROTATE_MODE,
 
 		/// 
-		ENTER_PICKING_MODE
+		ENTER_PICKING_MODE,
 
 		/// Move Composites or a Clipping Plane
 		ENTER_MOVE_MODE
