@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.25 2004/11/13 10:26:08 amoll Exp $
+// $Id: message.C,v 1.26 2004/11/13 13:11:45 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -185,7 +185,7 @@ RepresentationMessage::RepresentationMessage()
 		type_(UNDEFINED)
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new RepresentationMessage" << std::endl;		
+		Log.error() << "new RepresentationMessage " << this<< std::endl;		
 	#endif
 }
 
@@ -195,8 +195,16 @@ RepresentationMessage::RepresentationMessage(Representation& rep, Representation
 		type_(type)
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new RepresentationMessage " << type << std::endl;		
+		Log.error() << "new RepresentationMessage " << type << " " << this << std::endl;		
 	#endif
+}
+
+RepresentationMessage::~RepresentationMessage()
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "Destructing " << this << " RepresentationMessage" << endl;
+	#endif 
 }
 
 void RepresentationMessage::setType(RepresentationMessageType type)

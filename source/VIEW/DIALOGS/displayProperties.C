@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.93 2004/11/10 15:07:18 amoll Exp $
+// $Id: displayProperties.C,v 1.94 2004/11/13 13:11:44 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -375,8 +375,9 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 
 	bool rebuild_representation = false;
 	Representation* rep = 0;
+	bool new_representation = (rep_ == 0);
 
-	if (rep_ == 0)
+	if (new_representation)
 	{
 		// create a new Representation
 		rep = new Representation((ModelType)model_type_combobox->currentItem(), 
@@ -413,53 +414,46 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	rep->setColorProcessor(color_processor);
 	rep->setModelProcessor(model_processor);
 	rep->setTransparency((Size)(transparency_slider->value() * 2.55));
+	rep->setColoringMethod((ColoringMethod)coloring_method_combobox->currentItem());
+	rep->setDrawingMode((DrawingMode)mode_combobox->currentItem());
+	rep->setModelType((ModelType)model_type_combobox->currentItem());
+
+	if (custom_precision_button->isChecked())
+	{
+		rep->setSurfaceDrawingPrecision(((float)precision_slider->value()) / 10.0);
+	}
+	else
+	{
+		rep->setSurfaceDrawingPrecision(-1);
+		rep->setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
+	}
 	
-	if (rep_ == 0) 
+	if (new_representation)
 	{	
 		List<Composite*>::ConstIterator it = composites.begin();
 		for (; it != composites.end(); it++)
 		{
 			rep->getComposites().insert(*it);
 		}
-	}
-	else
-	{
-		rep_->setModelType((ModelType)model_type_combobox->currentItem());
-		if (custom_precision_button->isChecked())
-		{
-			rep_->setSurfaceDrawingPrecision(((float)precision_slider->value()) / 10.0);
-		}
-		else
-		{
-			rep_->setSurfaceDrawingPrecision(-1);
-			rep_->setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
-		}
-		rep_->setDrawingMode((DrawingMode)mode_combobox->currentItem());
-	}
 
-	rep->setColoringMethod((ColoringMethod)coloring_method_combobox->currentItem());
+		getMainControl()->insert(*rep);
+	}
 
 	apply_button->setEnabled(false);
 	rep->update(rebuild_representation);
 	apply_button->setEnabled(true);
 
-	if (rep_ == 0)
+	if (new_representation)
 	{
-		getMainControl()->insert(*rep);
 		// no refocus, if a this is not the only Representation
-		if ((getMainControl()->getPrimitiveManager().getRepresentations().size() == 1) && 
+		if ((getMainControl()->getPrimitiveManager().getRepresentations().size() < 2) && 
 				composites.size() > 0)
 		{
-			getMainControl()->insert(*rep);
 			CompositeMessage* ccmessage = new CompositeMessage;
 			ccmessage->setComposite(**composites.begin());
 			ccmessage->setType(CompositeMessage::CENTER_CAMERA);
 			notify_(ccmessage);
 		}
-	}
-	else
-	{
-		getMainControl()->update(*rep);
 	}
 	
 	advanced_options_modified_ = false;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.23 2004/11/13 10:30:53 amoll Exp $
+// $Id: primitiveManager.C,v 1.24 2004/11/13 13:11:45 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -17,6 +17,7 @@ namespace BALL
 
 #ifdef BALL_QT_HAS_THREADS
 	UpdateRepresentationThread PrimitiveManager::thread_;
+	QMutex 										 PrimitiveManager::mutex_;
 #endif
 
 
@@ -24,7 +25,8 @@ PrimitiveManager::PrimitiveManager(MainControl* mc)
 	throw()
 	: Object(),
 		main_control_(mc),
-		update_still_to_be_started_(false)
+		update_still_to_be_started_(false),
+		update_running_(false)
 {
 }
 
@@ -230,6 +232,11 @@ List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& co
 void PrimitiveManager::update_(Representation& rep)
 	throw()
 {
+	if (!has(rep)) 
+	{
+		Log.error() << "Problem in "  << __FILE__ << "  " << __LINE__<< std::endl;
+		return;
+	}
 #ifdef BALL_QT_HAS_THREADS
 	if (rep.isHidden()) 
 	{
@@ -241,7 +248,6 @@ void PrimitiveManager::update_(Representation& rep)
 		return;
 	}
 
-	if (!has(rep)) insert(rep);
 
 	representations_to_be_updated_.push_back(&rep);
 
@@ -255,12 +261,15 @@ void PrimitiveManager::startUpdateThread_()
 #ifdef BALL_QT_HAS_THREADS
 	if (!representations_to_be_updated_.size()) return;
 
+	if (!mutex_.tryLock()) return;
+
 	if (updateRunning())
 	{
 		Log.error() << "Problem while updateing Representations in " 
 								<< __FILE__ << " " << __LINE__ << std::endl;
 		return;
 	}
+
 
 	Representation* rep = *representations_to_be_updated_.begin();
 	if (!has(*rep)) 
@@ -311,6 +320,7 @@ void PrimitiveManager::finishedUpdate_()
 #ifdef BALL_QT_HAS_THREADS
 	if (representations_to_be_updated_.size() == 0)
 	{
+		Log.error() << "Problem in "  << __FILE__ << "  " << __LINE__<< std::endl;
 		return;
 	}
 
@@ -320,7 +330,7 @@ void PrimitiveManager::finishedUpdate_()
 	// Representation might have been deleted
 	if (has(*rep))
 	{
-		// no it wasnt, so update all widgets
+		// no it wasnt, so update all widgets, that this Representation was rebuild
 		RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
 		main_control_->notify_(*msg);
 	}
@@ -332,8 +342,12 @@ void PrimitiveManager::finishedUpdate_()
 	// shouldnt happen
 	if (updateRunning())
 	{
+		Log.error() << "Problem in "  << __FILE__ << "  " << __LINE__<< std::endl;
 		return;
 	}
+
+	update_running_ = false;
+	mutex_.unlock();
 
 	startUpdateThread_();
 #endif
@@ -342,11 +356,7 @@ void PrimitiveManager::finishedUpdate_()
 bool PrimitiveManager::updateRunning() const
 	throw() 
 {
-#ifdef BALL_QT_HAS_THREADS
-	return (thread_.getRepresentation() != 0); 
-#else
-	return false;
-#endif
+	return update_running_;
 }
 
 

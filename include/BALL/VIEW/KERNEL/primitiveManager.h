@@ -1,13 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.14 2004/11/13 10:31:00 amoll Exp $
+// $Id: primitiveManager.h,v 1.15 2004/11/13 13:11:55 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 
 #ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
 #	include <BALL/VIEW/KERNEL/representation.h>
+#endif
+
+#ifdef BALL_QT_HAS_THREADS
+# include <qmutex.h>
 #endif
 
 namespace BALL
@@ -199,10 +203,12 @@ namespace BALL
 
 			#ifdef BALL_QT_HAS_THREADS
 			static UpdateRepresentationThread thread_;
+			static QMutex 										mutex_;
 			#endif
 
 			MainControl* 	main_control_;
 			bool 					update_still_to_be_started_;
+			bool 					update_running_;
 		};
 
 	} // namespace VIEW

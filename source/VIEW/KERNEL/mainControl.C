@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.132 2004/11/13 10:30:52 amoll Exp $
+// $Id: mainControl.C,v 1.133 2004/11/13 13:11:45 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -596,9 +596,10 @@ namespace BALL
 		void MainControl::onNotify(Message *message)
 			throw()
 		{
-		#ifdef BALL_VIEW_DEBUG
-			Log.error() << "MainControl " << this << " onNotify " << message << std::endl;
-		#endif
+  		#ifdef BALL_VIEW_DEBUG
+				Log.error() << "MainControl " << this << " onNotify " << message << std::endl;
+   		#endif
+
 			if (RTTI::isKindOf<CompositeMessage>(*message))
 			{
 				CompositeMessage* cmessage = RTTI::castTo<CompositeMessage>(*message);
