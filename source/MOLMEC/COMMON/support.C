@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.30.4.2 2002/02/27 02:37:11 oliver Exp $
+// $Id: support.C,v 1.30.4.3 2002/05/01 10:50:15 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -41,9 +41,9 @@ namespace BALL
 			Vector3 difference;
 			
 			// the box width / length / depth
-			double period_x;
-			double period_y;
-			double period_z;
+			double period_x = 0.0;
+			double period_y = 0.0;
+			double period_z = 0.0;
 			Vector3 period;
 
 			// Are there atoms stored in atom_vector at all?
