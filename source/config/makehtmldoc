@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-# $Id: makehtmldoc,v 1.6 2000/05/05 07:09:11 oliver Exp $
+# $Id: makehtmldoc,v 1.7 2001/07/11 09:53:37 amoll Exp $
 
 # highly non-portable code - but doesn't matter as it is intended for
 # the developers only! - OK
@@ -54,4 +54,4 @@ if test "$1" = "-v" -o "$2" = "-v" ; then
 	OPTS="${OPTS} -v"
 fi
 
-/KM/comp-bio/BALL-contrib/doc++-3.4.3/bin/doc++ $OPTS -N -u -m -w -W -G -B banner.inc -ep amsmath -eo 11pt -d . ../../include/BALL/BALL.doc
+~/doc++-3.4.7/src/doc++ $OPTS  -u -m -w -W -G -B banner.inc -ep amsmath -ep graphicx -eo 11pt -d . ../../include/BALL/BALL.doc
