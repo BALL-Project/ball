@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.6 2002/04/06 20:04:27 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.7 2002/06/04 11:58:06 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -124,12 +124,12 @@ namespace BALL
 						{
 							possible_lipophilic_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
 							// DEBUG
-							cout << "found possible lipophilic int.: " 
-								<< A_it->getFullName() << "..." << B_it->getFullName()
-								<< " (length: " 
-								<< (A_it->getPosition() - B_it->getPosition()).getLength() 
-								<< " A) " 
-								<< endl;
+							// cout << "found possible lipophilic int.: " 
+							// 	<< A_it->getFullName() << "..." << B_it->getFullName()
+							// 	<< " (length: " 
+							// 	<< (A_it->getPosition() - B_it->getPosition()).getLength() 
+							// 	<< " A) " 
+							// 	<< endl;
 							// /DEBUG
 						}
 					}
@@ -169,7 +169,7 @@ namespace BALL
 			atom1 = it->first;
 			atom2 = it->second;
 
-
+			R1 = atom1->getRadius() + atom2->getRadius() + r1_offset_;
 			R2 = R1 + r2_offset_;
 
 			distance = (atom1->getPosition() - atom2->getPosition()).getLength();
@@ -183,9 +183,10 @@ namespace BALL
 				// difference between R1 and R2 is constant
 				val = MolmecSupport::calculateFresnoHelperFunction(distance, R1, R2);
 				// DEBUG
-				cout << "LIPO: adding score of " << val
-					<< " (distance " << distance << ", R1 " << R1 << ", R2 " << R2 << ")"
-					<< endl;
+				// cout << "LIPO: adding score of " << val << ": "
+				// 	<< atom1->getFullName() << "..." << atom2->getFullName()
+				// 	<< " (distance " << distance << ", R1 " << R1 << ", R2 " << R2 << ")"
+				// 	<< endl;
 				// /DEBUG
 				
 				E += val;
@@ -193,10 +194,12 @@ namespace BALL
 		}
 
 		energy_ = factor_ *= E;
+
 		// DEBUG
 		cout << "LIPO: score is " << E << endl;
 		cout << "LIPO: energy is " << energy_ << endl;
 		// /DEBUG
+
 		return energy_;
 	}
 
