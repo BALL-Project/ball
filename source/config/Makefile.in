@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.3 1999/08/26 20:31:39 oliver Exp $
+# $Id: Makefile.in,v 1.4 1999/08/27 08:21:41 oliver Exp $
 #
 
 include config.mak
@@ -123,13 +123,13 @@ install.shared:
 
 delete.static:	
 	@echo deleting static libraries under $(BALL_PATH)/lib/$(BINFMT)...
-	@$(RM) $(STATIC_LIBS) $(BALL_PATH)/lib/$(BINFMT)
+	@$(RM) $(STATIC_LIBS) $(BALL_PATH)/lib/$(BINFMT)/lib*.a
 
 delete.shared:	
 	@echo deleting shared libraries under $(BALL_PATH)/lib/$(BINFMT)...
 	@-mkdir $(BALL_PATH)/lib 2>/dev/null
 	@-mkdir $(BALL_PATH)/lib/$(BINFMT) 2>/dev/null
-	@$(RM) $(SHARED_LIBS) $(BALL_PATH)/lib/$(BINFMT)
+	@$(RM) $(SHARED_LIBS) $(BALL_PATH)/lib/$(BINFMT)/lib*@SHARED_LIB_SUFFIX@
 
 .Dependencies:
 	@$(MAKE) depend
