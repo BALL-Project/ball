@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.16 2004/02/23 16:27:24 oliver Exp $
+// $Id: PDBFile_test.C,v 1.17 2004/02/23 17:58:38 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.16 2004/02/23 16:27:24 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.17 2004/02/23 17:58:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -48,11 +48,25 @@ CHECK(void read(System& system))
 	SecondaryStructureIterator it(S.beginSecondaryStructure());
 	for (; +it; ++it)
 	{
-		// ???
+		STATUS(i << " / " << it->getType())
+
 		// Check the correct scondary structure types
 		switch (i)
 		{
+			case 0:
+			case 2:
+			case 4:
+			case 6:
+				TEST_EQUAL(it->getType(), SecondaryStructure::COIL)
+				break;
+			
+			case 5:
+				TEST_EQUAL(it->getType(), SecondaryStructure::HELIX)
+				break;
+
 			case 1:
+			case 3:
+				TEST_EQUAL(it->getType(), SecondaryStructure::STRAND)
 				break;
 
 			// This should not happen

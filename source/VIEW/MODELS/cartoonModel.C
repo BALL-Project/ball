@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.16 2003/12/15 01:17:37 amoll Exp $
+// $Id: cartoonModel.C,v 1.17 2004/02/23 17:58:42 oliver Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -521,11 +521,11 @@ namespace BALL
 			}
 
 			SecondaryStructure& ss(*RTTI::castTo<SecondaryStructure>(composite));
-			if (ss.hasProperty(SecondaryStructure::PROPERTY__HELIX))
+			if (ss.getType() == SecondaryStructure::HELIX)
 			{
 				drawHelix_(ss);
 			}
-			else if (ss.hasProperty(SecondaryStructure::PROPERTY__STRAND))
+			else if (ss.getType() == SecondaryStructure::STRAND)
 			{
 				drawStrand_(ss);
 			}

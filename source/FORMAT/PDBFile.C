@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.43 2004/02/23 16:27:23 oliver Exp $
+// $Id: PDBFile.C,v 1.44 2004/02/23 17:58:32 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -283,7 +283,7 @@ namespace BALL
 		SecondaryStructure* sec_struc = new SecondaryStructure(helix_ID);
 		
 		new_helix_secstruc_list_.push_back(sec_struc);
-		sec_struc->setProperty(SecondaryStructure::PROPERTY__HELIX);
+		sec_struc->setType(SecondaryStructure::HELIX);
 		sec_struc->setProperty("HELIX_CLASS", (unsigned int)helix_class);
 		
 		helix_list_.push_back(partner_residue);
@@ -346,7 +346,7 @@ namespace BALL
 		SecondaryStructure* sec_struc = new SecondaryStructure(sheet_ID);
 		
 		new_sheet_secstruc_list_.push_back(sec_struc);
-		sec_struc->setProperty(SecondaryStructure::PROPERTY__STRAND);
+		sec_struc->setType(SecondaryStructure::STRAND);
 		sec_struc->setProperty("STRAND_SENSE", (sense_of_strand != 0));
 		
 		sheet_list_.push_back(partner_residue);
@@ -402,7 +402,7 @@ namespace BALL
 		SecondaryStructure* sec_struc = new SecondaryStructure(turn_ID);
 		
 		new_turn_secstruc_list_.push_back(sec_struc);
-		sec_struc->setProperty(SecondaryStructure::PROPERTY__TURN);
+		sec_struc->setType(SecondaryStructure::TURN);
 		
 		turn_list_.push_back(partner_residue);
 		
@@ -679,7 +679,7 @@ namespace BALL
 				{
 					current_sec_struc = &(*sec_struc_it);
 					
-					if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__HELIX) == true)
+					if (current_sec_struc->getType() == SecondaryStructure::HELIX)
 					{
 						residue_it = current_sec_struc->beginResidue();
 						if (residue_it.isEnd())
@@ -741,7 +741,7 @@ namespace BALL
 				{
 					current_sec_struc = &(*sec_struc_it);
 
-					if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__STRAND) == true)
+					if (current_sec_struc->getType() == SecondaryStructure::STRAND)
 					{
 						residue_it = current_sec_struc->beginResidue();
 						if (residue_it.isEnd())
@@ -760,8 +760,8 @@ namespace BALL
 							for (length_of_secstruc = 0, sheet_it = sec_struc_it;
 									 !sheet_it.isEnd(); ++sheet_it)
 							{
-								if ((*sheet_it).hasProperty(SecondaryStructure::PROPERTY__STRAND) == true
-										&& (*sheet_it).getName() == temp_string)
+								if ((sheet_it->getType() == SecondaryStructure::STRAND)
+										&& (sheet_it->getName() == temp_string))
 								{
 									++length_of_secstruc;
 								}
@@ -824,7 +824,7 @@ namespace BALL
 				{
 					current_sec_struc = &(*sec_struc_it);
 					
-					if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__TURN) == true)
+					if (current_sec_struc->getType() == SecondaryStructure::TURN)
 					{
 						residue_it = current_sec_struc->beginResidue();
 						if (residue_it.isEnd())
@@ -1614,7 +1614,7 @@ namespace BALL
 					}
 		
 					sec_struc = new SecondaryStructure();
-					sec_struc->setProperty(SecondaryStructure::PROPERTY__COIL);
+					sec_struc->setType(SecondaryStructure::COIL);
 		
 					Composite::insertParent(*sec_struc, *initial_residue, *terminal_residue, false);
 		

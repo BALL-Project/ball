@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.3 2003/11/03 20:10:07 amoll Exp $
+// $Id: secondaryStructureProcessor.C,v 1.4 2004/02/23 17:58:35 oliver Exp $
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -348,57 +348,60 @@ namespace BALL
 			 vector<char> summary(size, '-');
 		 */
 
-		for(Size i=0; i<size;i++)
+		for(Size i = 0; i < size;i++)
 		{
-			if(Fourturn[i]!='-')
+			if (Fourturn[i]!='-')
 			{
 				summary[i]= 'H';
 			}
-			else if( (bridge1[i] != '-') || (bridge2[i] != '-'))
+			else if ((bridge1[i] != '-') || (bridge2[i] != '-'))
 			{
-				if( (bridge1[i-1]!=bridge1[i]) 
-						&& (bridge1[i]!=bridge1[i+1])
-						&& (bridge2[i-1]!=bridge1[i]) 
-						&& bridge2[i+1]!=bridge1[i])
+				if ((bridge1[i-1] != bridge1[i]) 
+						&& (bridge1[i] != bridge1[i+1])
+						&& (bridge2[i-1] != bridge1[i]) 
+						&& bridge2[i+1] != bridge1[i])
 				{
 					summary[i]='B';
 				}	
-				else if( (bridge2[i-1] != bridge2[i]) 
-						&& (bridge2[i] != bridge2[i+1])
-						&& (bridge2[i] != bridge1[i-1]) 
-						&& (bridge2[i] != bridge1[i+1]))
+				else if((bridge2[i-1] != bridge2[i]) 
+								&& (bridge2[i] != bridge2[i+1])
+								&& (bridge2[i] != bridge1[i-1]) 
+								&& (bridge2[i] != bridge1[i+1]))
 				{
-					summary[i]='B';
+					summary[i] = 'B';
 				}	
 				else
 				{
-					summary[i]='E';
+					summary[i] = 'E';
 				}
 			}
-			else if	(Threeturn[i]!='-')
+			else if	(Threeturn[i] != '-')
 			{
-				summary[i]='G';
+				summary[i] = 'G';
 			}	
-			else if (Fiveturn[i]!='-')
+			else if (Fiveturn[i] != '-')
 			{
 				summary[i]= 'I';
 			}
 
 		}
+	/*
+		// ?????
 		//!!!T wenn die Helix zu klein ist
 		for(Size i= 0; i<size;i++)
 		{
 		} 
+	*/
 
 		String s1, s2, s3, s4, s5, s6;
 		for (Size i=0; i<size; i++)
 		{
-			s1+=summary[i];
-			s2+=Threeturn[i];
-			s3+=Fourturn[i];
-			s4+=Fiveturn[i];
-			s5+=bridge1[i];
-			s6+=bridge2[i];
+			s1 += summary[i];
+			s2 += Threeturn[i];
+			s3 += Fourturn[i];
+			s4 += Fiveturn[i];
+			s5 += bridge1[i];
+			s6 += bridge2[i];
 		}
 /*
 		std::cout << "summary"<< s1 << std::endl;
@@ -448,23 +451,33 @@ namespace BALL
 				}
 			}
 
+			
 			// first determine the type of this residue
-			if (summary[resnum] == 'H') 			// Alpha - HELIX
+			switch (summary[resnum])
 			{
-				// TODO: what about other helices???
-				ss->setProperty(SecondaryStructure::PROPERTY__HELIX);
-				last_struct = 'H';
+				case 'H':
+				case 'G':
+				case 'I':
+					// Assign all helices as type HELIX
+					ss->setType(SecondaryStructure::HELIX);
+					break;
+				
+				case 'E':
+				case 'B':
+					// Assign all strands/extended as type STRAND
+					ss->setType(SecondaryStructure::STRAND);
+					break;
+
+				case 'T':
+					// Assign all turns to type TURN
+					ss->setType(SecondaryStructure::TURN);
+					break;
+				
+				default:
+					// Default: loop region
+					ss->setType(SecondaryStructure::COIL);
 			}
-			else if (summary[resnum] == 'E') 	// Beta - STRAND
-			{
-				ss->setProperty(SecondaryStructure::PROPERTY__STRAND);
-				last_struct = 'E';
-			}
-			else 															// LOOP
-			{
-				ss->setProperty(SecondaryStructure::PROPERTY__TURN);
-				last_struct = 'L';
-			}
+			last_struct = summary[resnum];
 
 			new_parent.push_back(ss);
 			residues.push_back(&*ri);

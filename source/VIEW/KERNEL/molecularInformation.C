@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.C,v 1.3 2004/02/23 16:27:26 oliver Exp $
+// $Id: molecularInformation.C,v 1.4 2004/02/23 17:58:40 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/molecularInformation.h>
@@ -171,22 +171,26 @@ namespace BALL
 			
 			if (type_ == TYPE__SECONDARY_STRUCTURE)
 			{
-				const SecondaryStructure& ss = *(SecondaryStructure*) &composite;
-				if (ss.hasProperty(SecondaryStructure::PROPERTY__HELIX))
+				const SecondaryStructure* ss = dynamic_cast<SecondaryStructure*>(&composite);
+				if (ss != 0)
 				{
-					temp += " Helix";
-				}
-				else if (ss.hasProperty(SecondaryStructure::PROPERTY__TURN))
-				{
-					temp += " Turn";
-				}
-				else if (ss.hasProperty(SecondaryStructure::PROPERTY__STRAND))
-				{
-					temp += " Strand";
-				}
-				else if (ss.hasProperty(SecondaryStructure::PROPERTY__COIL))
-				{
-					temp += " Random Coil";
+					switch (ss->getType())
+					{
+						case SecondaryStructure::HELIX:
+							temp += " Helix"; 
+							break;
+						case SecondaryStructure::TURN:
+							temp += " Turn";
+							break;
+						case SecondaryStructure::STRAND:
+							temp += " Strand";
+							break;
+						case SecondaryStructure::COIL:
+							temp += " Coil";
+							break;
+						default:
+							temp += " Unknown";
+					}
 				}
 				else
 				{
@@ -207,4 +211,5 @@ namespace BALL
     }
 
 	} // namespace VIEW
+
 } // namespace BALL

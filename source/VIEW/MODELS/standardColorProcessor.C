@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.23 2004/02/23 16:27:26 oliver Exp $
+// $Id: standardColorProcessor.C,v 1.24 2004/02/23 17:58:42 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -642,19 +642,19 @@ namespace BALL
 			ColorRGBA color = default_color_;
 			if (ss != 0) 
 			{
-				if (ss->hasProperty(SecondaryStructure::PROPERTY__HELIX)) 
+				if (ss->getType() == SecondaryStructure::HELIX)
 				{
 					color = helix_color_;
 				}
-				else if (ss->hasProperty(SecondaryStructure::PROPERTY__COIL))
+				else if (ss->getType() == SecondaryStructure::COIL)
 				{
 					color = coil_color_;
 				}
-				else if (ss->hasProperty(SecondaryStructure::PROPERTY__STRAND))
+				else if (ss->getType() == SecondaryStructure::STRAND)
 				{
 					color = strand_color_;
 				}
-				else if (ss->hasProperty(SecondaryStructure::PROPERTY__TURN))	 			  
+				else if (ss->getType() == SecondaryStructure::TURN)
 				{
 					color = turn_color_;
 				}
