@@ -1,10 +1,22 @@
-// $Id: RSVertex.h,v 1.18 2001/11/08 16:46:03 strobel Exp $
+// $Id: RSVertex.h,v 1.19 2001/12/08 17:01:26 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #	include <BALL/DATATYPE/hashSet.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHEDGE_H
+#	include <BALL/STRUCTURE/graphEdge.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHFACE_H
+#	include <BALL/STRUCTURE/graphFace.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHVERTEX_H
+#	include <BALL/STRUCTURE/graphVertex.h>
 #endif
 
 
@@ -32,16 +44,22 @@ namespace BALL
 	template <typename T>
 	class TSESVertex;
 
+	template <typename T>
+	class TTriangulatedSES;
+
 	/** Generic RSVertex Class.	
 			{\bf Definition:} \URL{BALL/STRUCTURE/RSVertex.h}	
 	*/
 	template <class T>
-	class TRSVertex
+	class TRSVertex	:	public GraphVertex< TRSEdge<T>,TRSFace<T> >
 	{
 		public:
 
 		/** @name Class friends
 				\begin{itemize}
+					\item class GraphEdge< TRSVertex<T>,TRSFace<T> >
+					\item class GraphFace< TRSVertex<T>,TRSEdge<T> >
+					\item class GraphVertex< TRSEdge<T>,TRSFace<T> >
 					\item class TReducedSurface<T>
 					\item class TRSEdge<T>
 					\item class TRSFace<T>
@@ -49,8 +67,12 @@ namespace BALL
 					\item class TSESFace<T>
 					\item class TSESEdge<T>
 					\item class TSESVertex<T>
+					\item class TTriangulatedSES<T>
 				\end{itemize}
 		*/
+		friend class GraphEdge< TRSVertex<T>,TRSFace<T> >;
+		friend class GraphFace< TRSVertex<T>,TRSEdge<T> >;
+		friend class GraphVertex< TRSEdge<T>,TRSFace<T> >;
 		friend class TReducedSurface<T>;
 		friend class TRSEdge<T>;
 		friend class TRSFace<T>;
@@ -58,6 +80,7 @@ namespace BALL
 		friend class TSESFace<T>;
 		friend class TSESEdge<T>;
 		friend class TSESVertex<T>;
+		friend class TTriangulatedSES<T>;
 
 		BALL_CREATE(TRSVertex)
 
@@ -116,7 +139,7 @@ namespace BALL
 				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the	
 												RSVertex object is linked to the neighbours of the RSVertex object to be copied.
 		*/
-		void set(const TRSVertex<T>& rsvertex, bool deep = false)
+		virtual void set(const TRSVertex<T>& rsvertex, bool deep = false)
 			throw();
 
 		/**	Assign to a Index, two HashSets amd another Index.
@@ -125,7 +148,7 @@ namespace BALL
 				@param	faces	assigned to list of faces
 				@param	i			asiigned to the index of the RSVertex
 		*/
-		void set(Index atom,
+		virtual void set(Index atom,
 				const HashSet<TRSEdge<T>*>& edges,
 				const HashSet<TRSFace<T>*>& faces,
 				Index i)
@@ -198,18 +221,6 @@ namespace BALL
 		HashSet<TRSFace<T>*> getFaces() const
 			throw();
 
-		/** Set the index of the vertex.
-				@param	index	the new index
-		*/
-		void setIndex(Index index)
-			throw();
-
-		/** Return the index of the vertex.
-				@return	Index	the index of the vertex
-		*/
-		Index getIndex() const
-			throw();
-
 		/** Join two vertices if they are similar.
 				All edges and faces of the given RSVertex are inserted.
 				@param	rsvertex	the RSVertex to join with
@@ -238,14 +249,14 @@ namespace BALL
 				@return	bool	{\bf true} if the vertices are equal in all	
 											components, {\bf false} otherwise
 		*/
-		bool operator == (const TRSVertex<T>& rsvertex) const
+		virtual bool operator == (const TRSVertex<T>& rsvertex) const
 			throw();
 
 		/**	Inequality operator.
 				@return	bool	{\bf false} if the vertices are equal in all	
 											components, {\bf true} otherwise
 		*/
-		bool operator != (const TRSVertex<T>& rsvertex) const
+		virtual bool operator != (const TRSVertex<T>& rsvertex) const
 			throw();
 
 		/**	Similar
@@ -280,18 +291,15 @@ namespace BALL
 
 		protected:
 
-		/*_ The index of the atom represented by the RSVertex
-		*/
-		Index atom_;
 		/*_ The RSEdges the RSVetex belongs to
 		*/
 		HashSet<TRSEdge<T>*> edges_;
 		/*_ The RSFaces the RSVetex belongs to
 		*/
 		HashSet<TRSFace<T>*> faces_;
-		/*_ The index of the RSVertex
+		/*_ The index of the atom represented by the RSVertex
 		*/
-		Index index_;
+		Index atom_;
 
 	};
 
@@ -343,10 +351,10 @@ namespace BALL
 	template <typename T>
 	TRSVertex<T>::TRSVertex()
 		throw()
-		: atom_(-1),
+		:	GraphVertex< TRSEdge<T>,TRSFace<T> >(),
 			edges_(),
 			faces_(),
-			index_(-1)
+			atom_(-1)
 	{
 	}
 
@@ -354,10 +362,10 @@ namespace BALL
 	template <typename T>
 	TRSVertex<T>::TRSVertex(const TRSVertex<T>& rsvertex, bool deep)
 		throw()
-		: atom_(rsvertex.atom_),
+		:	GraphVertex< TRSEdge<T>,TRSFace<T> >(rsvertex,deep),
 			edges_(),
 			faces_(),
-			index_(rsvertex.index_)
+			atom_(rsvertex.atom_)
 	{
 		if (deep)
 		{
@@ -370,10 +378,10 @@ namespace BALL
 	template <typename T>
 	TRSVertex<T>::TRSVertex(Index a)
 		throw()
-		: atom_(a),
+		:	GraphVertex< TRSEdge<T>,TRSFace<T> >(),
 			edges_(),
 			faces_(),
-			index_(-1)
+			atom_(a)
 	{
 	}
 
@@ -384,11 +392,12 @@ namespace BALL
 			const HashSet<TRSFace<T>*>& faces,
 			Index i)
 		throw()
-		: atom_(a),
+		:	GraphVertex< TRSEdge<T>,TRSFace<T> >(),
 			edges_(edges),
 			faces_(faces),
-			index_(i)
+			atom_(atom)
 	{
+		index_ = i;
 	}
 
 
@@ -504,22 +513,6 @@ namespace BALL
 		throw()
 	{
 		return faces_;
-	}
-
-
-	template <typename T>
-	void TRSVertex<T>::setIndex(Index index)
-		throw()
-	{
-		index_ = index;
-	}
-
-
-	template <typename T>
-	Index TRSVertex<T>::getIndex() const
-		throw()
-	{
-		return index_;
 	}
 
 
