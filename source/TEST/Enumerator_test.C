@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.10 2002/01/12 12:19:55 oliver Exp $
+// $Id: Enumerator_test.C,v 1.11 2002/01/15 00:39:31 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.10 2002/01/12 12:19:55 oliver Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.11 2002/01/15 00:39:31 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ RESULT
 
 s = "12345";
 Enumerator<String, String::iterator, char> enumerator(s, char_assign);
-CHECK(addVariant())
+CHECK(addVariants(VariantIterator& it, const VariantVector& variants))
 	vector<char> variants; 
 	variants.push_back('0');
 	variants.push_back('1');
@@ -168,9 +168,30 @@ CHECK(createPermutation(Position i))
 	}
 RESULT
 
-
-
-
+CHECK(deleteVariants(VariantIterator& it, const VariantVector& variants))
+	vector<char> variants; 
+	variants.push_back('0');
+	variants.push_back('1');
+	variants.push_back('2');
+	variants.push_back('3');
+	variants.push_back('4');
+	variants.push_back('5');
+	variants.push_back('6');
+	variants.push_back('7');
+	variants.push_back('8');
+	variants.push_back('9');
+	enumerator.deleteVariants(s.begin(), variants);	
+	TEST_EQUAL(enumerator.countVariants(), 10000)
+	s[0] = 'X';
+	for (Position i = 0; i < enumerator.countVariants(); i++) 
+	{
+		enumerator.createPermutation(i); 
+		TEST_EQUAL(s[0], 'X')
+		String p = s(1);
+		p.reverse();
+		TEST_EQUAL(p.toUnsignedInt(), i)
+	}
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
