@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.33 2000/08/28 16:02:37 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.34 2000/09/05 09:41:14 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -1276,6 +1276,17 @@ namespace BALL
 		
 		return TAngle<T>(acosbel);
 	}
+
+							
+	/**	Return the oriented angle of two vectors wrt a normal vector.
+	*/
+  template < typename T >
+  TAngle<T>getOrientedAngle
+		(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& normal)
+  {
+    return getOrientedAngle(a.x, a.y, a.z, b.x, b.y, b.z, normal.x, normal.y, normal.z);
+	}
+ 
 
 	/**	Return the torsion angle of four points to eachother.
 			@param TVector3& ax 1. vector x component
