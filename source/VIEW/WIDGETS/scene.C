@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.69 2004/06/04 14:37:47 amoll Exp $
+// $Id: scene.C,v 1.70 2004/06/04 15:10:40 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -304,6 +304,7 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 			if (!gl_renderer_.hasStage()) return;
 
 			glDrawBuffer(GL_BACK_LEFT);
+//			 glDisable(GL_SCISSOR_TEST);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
 			{
@@ -314,13 +315,7 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 				return;
 			}
 
-			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
-			{
-        glDrawBuffer(GL_BACK);
-			  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-				glViewport(0, 0, width() / 2, height());
-		  }
-			
+			// ok, this is going the stereo way...
 			stereo_camera_ = stage_->getCamera();
 
 			Vector3	diff = stage_->getCamera().getRightVector();
@@ -338,6 +333,11 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
       float right =  2.0 *gl_renderer_.getXScale() - 0.5 * stage_->getEyeDistance() * ndfl;
 
 			//================== draw first buffer =============
+			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
+			{
+				glViewport(0, 0, width() / 2, height());
+		  }
+	
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
 			glFrustum(left,right,
@@ -347,8 +347,11 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 
 			// draw models
       glMatrixMode(GL_MODELVIEW);
-      glDrawBuffer(GL_BACK_RIGHT);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			if (gl_renderer_.getStereoMode() == GLRenderer::ACTIVE_STEREO)
+			{
+				glDrawBuffer(GL_BACK_RIGHT);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			}
 
 			glPushMatrix();
 			stereo_camera_.setViewPoint(old_view_point + diff);
@@ -360,7 +363,7 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 			//================== draw second buffer =============
 			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
 			{
-				glViewport(width() / 2, 0, width(), height());
+				glViewport(width() / 2, 0, width()/2, height());
 			}
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
@@ -373,8 +376,12 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 								nearf,farf);
 
       glMatrixMode(GL_MODELVIEW);
-      glDrawBuffer(GL_BACK_LEFT);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			if (gl_renderer_.getStereoMode() == GLRenderer::ACTIVE_STEREO)
+			{
+				glDrawBuffer(GL_BACK_LEFT);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			}
 
 			glPushMatrix();
 			stereo_camera_.setViewPoint(old_view_point - diff);
@@ -382,30 +389,6 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 			gl_renderer_.updateCamera(&stereo_camera_);
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
-
-/*
-			Vector3 old_view_point = stage_->getCamera().getViewPoint();
-			
-			// distance between the eyepoints
-			Vector3	diff = stage_->getCamera().getRightVector();
-			diff.normalize();
-			diff = diff * stage_->getEyeDistance();  
-			stage_->getCamera().setViewPoint(old_view_point - diff);
-			gl_renderer_.updateCamera();
-
-			renderRepresentations_(mode);
-			glPopMatrix();
-
-			glDrawBuffer(GL_BACK_RIGHT);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glPushMatrix();
-			stage_->getCamera().setViewPoint(old_view_point + (diff * 2));
-			gl_renderer_.updateCamera();
-			renderRepresentations_(DISPLAY_LISTS_RENDERING);
-			glPopMatrix();
-			stage_->getCamera().setViewPoint(old_view_point);
-*/
-
 		}
 
 
