@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.11 2001/06/21 02:10:51 oliver Exp $
+// $Id: list.h,v 1.12 2001/08/16 00:37:00 oliver Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -21,8 +21,6 @@
 namespace BALL 
 {
 	
-	using std::list;
-	
 	/** Extended list object.
 		This object is an improved version of the STL list class
 		{\bf Definition:} \URL{BALL/DATATYPE/list.h}
@@ -30,7 +28,7 @@ namespace BALL
 
  	template <typename Value>
 	class List
-		:	public list<Value>
+		:	public std::list<Value>
 	{
 		public:
 
@@ -40,15 +38,15 @@ namespace BALL
 
 		/**	Iterator type.
 		*/
-		typedef typename list<Value>::iterator Iterator;
+		typedef typename std::list<Value>::iterator Iterator;
 		// for STL compatibility
-		typedef typename list<Value>::iterator iterator;
+		typedef typename std::list<Value>::iterator iterator;
 
 		/**	Constant iterator type.
 		*/
-		typedef typename list<Value>::const_iterator ConstIterator;
+		typedef typename std::list<Value>::const_iterator ConstIterator;
 		// for STL compatibility
-		typedef typename list<Value>::const_iterator const_iterator;
+		typedef typename std::list<Value>::const_iterator const_iterator;
 
 		//@}
 
@@ -61,7 +59,7 @@ namespace BALL
 				Create an empty list.
 		*/
 		List() throw()
-			: list<Value>()
+			: std::list<Value>()
 		{
 		}
 
@@ -71,7 +69,7 @@ namespace BALL
 				@param	deep ignored
 		*/
 		List(const List& new_list, bool /* deep = true */) throw()
-			: list<Value>(new_list)
+			: std::list<Value>(new_list)
 		{
 		}
 			
