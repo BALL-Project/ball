@@ -1,4 +1,4 @@
-// $Id: forEach.h,v 1.2 2000/02/17 00:30:41 oliver Exp $
+// $Id: forEach.h,v 1.3 2000/04/14 13:35:07 amoll Exp $
 
 #ifndef BALL_KERNEL_FOREACH_H
 #define BALL_KERNEL_FOREACH_H
@@ -177,7 +177,7 @@ for (atom_iterator = (atom_container).beginAtom(); \
       
 
 /** Intermolecular bond iterator macro.
-    Convenience macro for easy iteration over all intermolecular bonds of {\em atom_container} that is alos a bond-container.\\
+    Convenience macro for easy iteration over all intermolecular bonds of {\em atom_container} that is also a bond-container.\\
 
 		{\bf Framework:} BALL/KERNEL\\
 		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
