@@ -1,4 +1,4 @@
-// $Id: geometricObject.C,v 1.5 2000/05/04 17:23:19 hekl Exp $
+// $Id: geometricObject.C,v 1.6 2000/06/13 18:16:21 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -92,14 +92,8 @@ namespace BALL
 		void GeometricObject::setProperty
 			(Property property)
 		{
-			if (property == GeometricObject::PROPERTY__OBJECT_STATIC 
-					|| property == GeometricObject::PROPERTY__OBJECT_DYNAMIC)
-			{
-				clearProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
-				clearProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
-			}
-			else if (property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
-							 || property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
+			if (property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
+					|| property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_TRANSPARENT);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_OPAQUE);
@@ -177,6 +171,11 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "    dynamic object: " 
 					 << BALL_VIEW_PRINT_PROPERTY(GeometricObject::PROPERTY__OBJECT_DYNAMIC) 
+					 << endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "    always front object: " 
+					 << BALL_VIEW_PRINT_PROPERTY(GeometricObject::PROPERTY__OBJECT_ALWAYS_FRONT) 
 					 << endl;
 
 			BALL_DUMP_DEPTH(s, depth);

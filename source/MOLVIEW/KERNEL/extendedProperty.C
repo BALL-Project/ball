@@ -1,4 +1,4 @@
-// $Id: extendedProperty.C,v 1.2 1999/12/19 17:14:29 oliver Exp $
+// $Id: extendedProperty.C,v 1.3 2000/06/13 18:20:27 hekl Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 
@@ -33,32 +33,26 @@ namespace BALL
 		ExtendedPropertyManager::setProperty
 			(Property __Property)
 		{
-			if (__Property == GeometricObject::PROPERTY__OBJECT_STATIC 
-					|| __Property == GeometricObject::PROPERTY__OBJECT_DYNAMIC)
-			{
-				clearProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
-				clearProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
-			}
-			else if (__Property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
-				 || __Property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
+			if (__Property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
+					|| __Property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_TRANSPARENT);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_OPAQUE);
 			}
 			else if (__Property == GeometricObject::PROPERTY__OBJECT_VISIBLE 
-				 || __Property == GeometricObject::PROPERTY__OBJECT_HIDDEN)
+							 || __Property == GeometricObject::PROPERTY__OBJECT_HIDDEN)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_VISIBLE);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN);
 			}
 			else if (__Property == GeometricObject::PROPERTY__OBJECT_OPENED 
-				 || __Property == GeometricObject::PROPERTY__OBJECT_CLOSED)
+							 || __Property == GeometricObject::PROPERTY__OBJECT_CLOSED)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_OPENED);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_CLOSED);
 			}
 			else if (__Property >= GeometricObject::PROPERTY__DRAWING_PRECISION_LOW
-				 && __Property <= GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED)
+							 && __Property <= GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED)
 			{
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM);
@@ -67,14 +61,14 @@ namespace BALL
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED);
 			}
 			else if (__Property >= GeometricObject::PROPERTY__DRAWING_MODE_DOTS 
-				 && __Property <= GeometricObject::PROPERTY__DRAWING_MODE_SOLID)
+							 && __Property <= GeometricObject::PROPERTY__DRAWING_MODE_SOLID)
 			{
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_DOTS);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
 			}
 			else if (__Property >= GeometricObject::PROPERTY__MODEL_VDW
-				 && __Property <= GeometricObject::PROPERTY__MODEL_LINES)
+							 && __Property <= GeometricObject::PROPERTY__MODEL_LINES)
 			{
 				clearProperty(GeometricObject::PROPERTY__MODEL_VDW);
 				clearProperty(GeometricObject::PROPERTY__MODEL_DOTS);
