@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.8 2000/03/28 15:27:32 oliver Exp $
+// $Id: exception.h,v 1.9 2000/04/02 14:32:25 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -39,11 +39,11 @@ namespace BALL
 				BALL provides its own \Ref{terminate} handler. This handler extracts as much information
 				as possible from the exception, prints it to {\tt cerr} and \Ref{Log}, and finally calls
 				exits the program cleanly (with exit code 1).
-				This can be rather inconvenient for debuggin, since you are told where the exception was 
+				This can be rather inconvenient for debugging, since you are told where the exception was 
 				thrown, but in general you do not know anything about the context.
-				Hence, {\tt terminate} can also create a core dump. Using a debugger (e.g. dbx or gdb)
+				Therefore {\tt terminate} can also create a core dump. Using a debugger (e.g. dbx or gdb)
 				you can then create a stack traceback.
-				To create a core dump, you should set the environment variable {\tt BALL_CORE_DUMP}
+				To create a core dump, you should set the environment variable {\tt BALL_DUMP_CORE}
 				to any (non empty) value.\\
 				{\bf Definition:}\URL{BALL/COMMON/exception.h}
 				\\
