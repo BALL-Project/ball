@@ -1,6 +1,7 @@
-// $Id: bitVector.C,v 1.13 2000/07/25 13:35:37 amoll Exp $
+// $Id: bitVector.C,v 1.14 2000/08/02 18:14:07 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
+#include <BALL/MATHS/common.h>
 
 #include <algorithm>
 
@@ -271,12 +272,34 @@ namespace BALL
 	void BitVector::setUnsignedChar(unsigned char bit_pattern)
 	{
 		setSize(BALL_CHAR_BITS, false);
-		*((unsigned char *)bitset_) = bit_pattern;
+		unsigned char c = bit_pattern;
+
+		// We do this in a loop instead of using a direct cast to avoid
+		// problems with differing byte orders (big endian/little endian)
+		for (Position i = 0; i < BALL_CHAR_BITS; i++)
+		{
+			setBit(i, (((int)c & (int)0x1) == 1));
+			c = c >> 1;
+		}
 	}
 
 	unsigned char BitVector::getUnsignedChar() const
 	{
-		return *((unsigned char *)bitset_);
+		unsigned char c = 0;
+
+		// We do this in a loop instead of using a direct cast to avoid
+		// problems with differing byte orders (big endian/little endian)
+		for (Index i = (Index)Maths::min((Size)BALL_CHAR_BITS, getSize()) - 1; i >= 0; i--)
+		{
+			// shift the bits successively into the char
+			c = c << 1;
+			if (getBit((Position)i) == true)
+			{
+				c |= 1;
+			}
+		}
+
+		return c;
 	}
 
 	void BitVector::setUnsignedShort(unsigned short bit_pattern)
