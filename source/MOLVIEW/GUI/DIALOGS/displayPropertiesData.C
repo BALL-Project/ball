@@ -80,7 +80,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::HighlightedText, white );
     pal.setDisabled( cg );
     setPalette( pal );
-    setCaption( trUtf8( "Display Settings" ) );
+    setCaption( "Display Settings"  );
 
     GroupBox_9_3 = new QGroupBox( this, "GroupBox_9_3" );
     GroupBox_9_3->setGeometry( QRect( 260, 100, 250, 60 ) ); 
@@ -136,7 +136,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     GroupBox_9_3->setFrameShape( QGroupBox::Box );
     GroupBox_9_3->setFrameShadow( QGroupBox::Sunken );
     GroupBox_9_3->setLineWidth( 2 );
-    GroupBox_9_3->setTitle( trUtf8( "selection color" ) );
+    GroupBox_9_3->setTitle(  "selection color"  );
     GroupBox_9_3->setAlignment( int( QGroupBox::AlignHCenter ) );
 
     color_sample_selection = new QLabel( GroupBox_9_3, "color_sample_selection" );
@@ -204,7 +204,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     edit_selection->setMaximumSize( QSize( 80, 30 ) );
     edit_selection->setBackgroundMode( QPushButton::PaletteButton );
     edit_selection->setFocusPolicy( QPushButton::TabFocus );
-    edit_selection->setText( trUtf8( "Edit" ) );
+    edit_selection->setText( "Edit"  );
     edit_selection->setAutoDefault( TRUE );
 
     model_groupbox = new QGroupBox( this, "model_groupbox" );
@@ -259,7 +259,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     model_groupbox->setBackgroundOrigin( QGroupBox::ParentOrigin );
     model_groupbox->setFocusPolicy( QGroupBox::NoFocus );
     model_groupbox->setLineWidth( 2 );
-    model_groupbox->setTitle( trUtf8( "static model" ) );
+    model_groupbox->setTitle( "static model" );
     model_groupbox->setAlignment( int( QGroupBox::AlignHCenter ) );
 
     model_type_label = new QLabel( model_groupbox, "model_type_label" );
@@ -267,7 +267,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     model_type_label->setBackgroundMode( QLabel::PaletteBackground );
     model_type_label->setFocusPolicy( QLabel::NoFocus );
     model_type_label->setLineWidth( 1 );
-    model_type_label->setText( trUtf8( "type" ) );
+    model_type_label->setText( "type"  );
     model_type_label->setTextFormat( QLabel::AutoText );
     model_type_label->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignLeft ) );
 
@@ -276,17 +276,17 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     model_resolution_label->setBackgroundMode( QLabel::PaletteBackground );
     model_resolution_label->setFocusPolicy( QLabel::NoFocus );
     model_resolution_label->setLineWidth( 1 );
-    model_resolution_label->setText( trUtf8( "resolution" ) );
+    model_resolution_label->setText( "resolution"  );
     model_resolution_label->setTextFormat( QLabel::AutoText );
     model_resolution_label->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignLeft ) );
 
     model_type_combobox_static = new QComboBox( FALSE, model_groupbox, "model_type_combobox_static" );
-    model_type_combobox_static->insertItem( trUtf8( "none" ) );
-    model_type_combobox_static->insertItem( trUtf8( "line" ) );
-    model_type_combobox_static->insertItem( trUtf8( "stick" ) );
-    model_type_combobox_static->insertItem( trUtf8( "ball and stick" ) );
-    model_type_combobox_static->insertItem( trUtf8( "surface" ) );
-    model_type_combobox_static->insertItem( trUtf8( "van der Waals" ) );
+    model_type_combobox_static->insertItem(  "none"  );
+    model_type_combobox_static->insertItem(  "line"  );
+    model_type_combobox_static->insertItem(  "stick"  );
+    model_type_combobox_static->insertItem(  "ball and stick" );
+    model_type_combobox_static->insertItem(  "surface"  );
+    model_type_combobox_static->insertItem(  "van der Waals"  );
     model_type_combobox_static->setGeometry( QRect( 90, 20, 140, 24 ) ); 
     model_type_combobox_static->setMinimumSize( QSize( 140, 24 ) );
     model_type_combobox_static->setMaximumSize( QSize( 140, 24 ) );
@@ -298,10 +298,10 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     model_type_combobox_static->setDuplicatesEnabled( TRUE );
 
     mode_resolution_combobox_static = new QComboBox( FALSE, model_groupbox, "mode_resolution_combobox_static" );
-    mode_resolution_combobox_static->insertItem( trUtf8( "low" ) );
-    mode_resolution_combobox_static->insertItem( trUtf8( "medium" ) );
-    mode_resolution_combobox_static->insertItem( trUtf8( "high" ) );
-    mode_resolution_combobox_static->insertItem( trUtf8( "ultra" ) );
+    mode_resolution_combobox_static->insertItem(  "low"  );
+    mode_resolution_combobox_static->insertItem(  "medium"  );
+    mode_resolution_combobox_static->insertItem(  "high"  );
+    mode_resolution_combobox_static->insertItem(  "ultra"  );
     mode_resolution_combobox_static->setGeometry( QRect( 90, 50, 140, 24 ) ); 
     mode_resolution_combobox_static->setMinimumSize( QSize( 140, 24 ) );
     mode_resolution_combobox_static->setMaximumSize( QSize( 140, 24 ) );
@@ -364,7 +364,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     model_groupbox_2->setBackgroundOrigin( QGroupBox::ParentOrigin );
     model_groupbox_2->setFocusPolicy( QGroupBox::NoFocus );
     model_groupbox_2->setLineWidth( 2 );
-    model_groupbox_2->setTitle( trUtf8( "dynamic model" ) );
+    model_groupbox_2->setTitle(  "dynamic model"  );
     model_groupbox_2->setAlignment( int( QGroupBox::AlignHCenter ) );
 
     model_resolution_label_2 = new QLabel( model_groupbox_2, "model_resolution_label_2" );
@@ -372,7 +372,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     model_resolution_label_2->setBackgroundMode( QLabel::PaletteBackground );
     model_resolution_label_2->setFocusPolicy( QLabel::NoFocus );
     model_resolution_label_2->setLineWidth( 1 );
-    model_resolution_label_2->setText( trUtf8( "resolution" ) );
+    model_resolution_label_2->setText( "resolution"  );
     model_resolution_label_2->setTextFormat( QLabel::AutoText );
     model_resolution_label_2->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignLeft ) );
 
@@ -381,15 +381,15 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     model_type_label_2->setBackgroundMode( QLabel::PaletteBackground );
     model_type_label_2->setFocusPolicy( QLabel::NoFocus );
     model_type_label_2->setLineWidth( 1 );
-    model_type_label_2->setText( trUtf8( "type" ) );
+    model_type_label_2->setText(  "type"  );
     model_type_label_2->setTextFormat( QLabel::AutoText );
     model_type_label_2->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignLeft ) );
 
     mode_resolution_combobox_dynamic = new QComboBox( FALSE, model_groupbox_2, "mode_resolution_combobox_dynamic" );
-    mode_resolution_combobox_dynamic->insertItem( trUtf8( "low" ) );
-    mode_resolution_combobox_dynamic->insertItem( trUtf8( "medium" ) );
-    mode_resolution_combobox_dynamic->insertItem( trUtf8( "high" ) );
-    mode_resolution_combobox_dynamic->insertItem( trUtf8( "ultra" ) );
+    mode_resolution_combobox_dynamic->insertItem(  "low"  );
+    mode_resolution_combobox_dynamic->insertItem(  "medium"  );
+    mode_resolution_combobox_dynamic->insertItem(  "high"  );
+    mode_resolution_combobox_dynamic->insertItem(  "ultra"  );
     mode_resolution_combobox_dynamic->setGeometry( QRect( 90, 50, 140, 24 ) ); 
     mode_resolution_combobox_dynamic->setMinimumSize( QSize( 140, 24 ) );
     mode_resolution_combobox_dynamic->setMaximumSize( QSize( 140, 24 ) );
@@ -401,13 +401,13 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     mode_resolution_combobox_dynamic->setDuplicatesEnabled( TRUE );
 
     model_type_combobox_dynamic = new QComboBox( FALSE, model_groupbox_2, "model_type_combobox_dynamic" );
-    model_type_combobox_dynamic->insertItem( trUtf8( "none" ) );
-    model_type_combobox_dynamic->insertItem( trUtf8( "line" ) );
-    model_type_combobox_dynamic->insertItem( trUtf8( "stick" ) );
-    model_type_combobox_dynamic->insertItem( trUtf8( "ball and stick" ) );
-    model_type_combobox_dynamic->insertItem( trUtf8( "surface" ) );
-    model_type_combobox_dynamic->insertItem( trUtf8( "van der Waals" ) );
-    model_type_combobox_dynamic->setGeometry( QRect( 90, 20, 140, 24 ) ); 
+    model_type_combobox_dynamic->insertItem(  "none"  );
+    model_type_combobox_dynamic->insertItem(  "line"  );
+    model_type_combobox_dynamic->insertItem(  "stick"  );
+    model_type_combobox_dynamic->insertItem(  "ball and stick" );
+    model_type_combobox_dynamic->insertItem(  "surface"  );
+    model_type_combobox_dynamic->insertItem(  "van der Waals"  );
+    model_type_combobox_dynamic->setGeometry(QRect( 90, 20, 140, 24 ) ); 
     model_type_combobox_dynamic->setMinimumSize( QSize( 140, 24 ) );
     model_type_combobox_dynamic->setMaximumSize( QSize( 140, 24 ) );
     model_type_combobox_dynamic->setBackgroundMode( QComboBox::NoBackground );
@@ -467,7 +467,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     pal.setDisabled( cg );
     close_button->setPalette( pal );
     close_button->setFocusPolicy( QPushButton::TabFocus );
-    close_button->setText( trUtf8( "&Close" ) );
+    close_button->setText(  "&Close"  );
     close_button->setAutoDefault( TRUE );
 
     apply_button = new QPushButton( this, "apply_button" );
@@ -521,7 +521,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     pal.setDisabled( cg );
     apply_button->setPalette( pal );
     apply_button->setFocusPolicy( QPushButton::TabFocus );
-    apply_button->setText( trUtf8( "&Apply" ) );
+    apply_button->setText(  "&Apply"  );
     apply_button->setAutoDefault( TRUE );
 
     color_groupbox = new QGroupBox( this, "color_groupbox" );
@@ -577,7 +577,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     color_groupbox->setBackgroundOrigin( QGroupBox::ParentOrigin );
     color_groupbox->setFocusPolicy( QGroupBox::NoFocus );
     color_groupbox->setLineWidth( 2 );
-    color_groupbox->setTitle( trUtf8( "model color" ) );
+    color_groupbox->setTitle(  "model color"  );
     color_groupbox->setAlignment( int( QGroupBox::AlignHCenter ) );
 
     static_custom = new QGroupBox( color_groupbox, "static_custom" );
@@ -588,7 +588,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     static_custom->setFrameShape( QGroupBox::Box );
     static_custom->setFrameShadow( QGroupBox::Sunken );
     static_custom->setLineWidth( 1 );
-    static_custom->setTitle( trUtf8( "custom color" ) );
+    static_custom->setTitle( "custom color"  );
     static_custom->setAlignment( int( QGroupBox::AlignHCenter ) );
 
     edit_button = new QPushButton( static_custom, "edit_button" );
@@ -597,7 +597,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     edit_button->setMaximumSize( QSize( 80, 30 ) );
     edit_button->setBackgroundMode( QPushButton::PaletteButton );
     edit_button->setFocusPolicy( QPushButton::TabFocus );
-    edit_button->setText( trUtf8( "Edit" ) );
+    edit_button->setText(  "Edit"  );
     edit_button->setAutoDefault( TRUE );
 
     color_sample = new QLabel( static_custom, "color_sample" );
@@ -655,12 +655,12 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     color_sample->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignLeft ) );
 
     coloring_type_combobox = new QComboBox( FALSE, color_groupbox, "coloring_type_combobox" );
-    coloring_type_combobox->insertItem( trUtf8( "by element" ) );
-    coloring_type_combobox->insertItem( trUtf8( "by residue type" ) );
-    coloring_type_combobox->insertItem( trUtf8( "by residue name" ) );
-    coloring_type_combobox->insertItem( trUtf8( "by atom charge" ) );
-    coloring_type_combobox->insertItem( trUtf8( "by atom distance" ) );
-    coloring_type_combobox->insertItem( trUtf8( "custom" ) );
+    coloring_type_combobox->insertItem(  "by element"  );
+    coloring_type_combobox->insertItem(  "by residue type"  );
+    coloring_type_combobox->insertItem(  "by residue name"  );
+    coloring_type_combobox->insertItem(  "by atom charge"  );
+    coloring_type_combobox->insertItem(  "by atom distance"  );
+    coloring_type_combobox->insertItem(  "custom"  );
     coloring_type_combobox->setGeometry( QRect( 20, 20, 210, 24 ) ); 
     coloring_type_combobox->setMinimumSize( QSize( 210, 24 ) );
     coloring_type_combobox->setMaximumSize( QSize( 210, 24 ) );
