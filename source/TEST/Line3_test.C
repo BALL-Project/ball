@@ -1,4 +1,4 @@
-// $Id: Line3_test.C,v 1.1 2000/02/23 01:18:02 amoll Exp $
+// $Id: Line3_test.C,v 1.2 2000/02/23 13:19:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #	include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Line3_test.C,v 1.1 2000/02/23 01:18:02 amoll Exp $")
+START_TEST(class_name, "$Id: Line3_test.C,v 1.2 2000/02/23 13:19:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -78,8 +78,8 @@ CHECK(TLine3::swap(TLine3& line))
 	line3 = Line3(v3, v4, Line3::FORM__PARAMETER);
 
 	line.swap(line2);
-	TEST_EQUAL(line, line2)
-	TEST_EQUAL(line1, line3)
+	TEST_EQUAL(line1, line2)
+	TEST_EQUAL(line, line3)
 RESULT
 
 

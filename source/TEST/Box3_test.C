@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.1 2000/02/23 12:08:55 amoll Exp $
+// $Id: Box3_test.C,v 1.2 2000/02/23 13:19:28 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.1 2000/02/23 12:08:55 amoll Exp $")
+START_TEST(class_name, "$Id: Box3_test.C,v 1.2 2000/02/23 13:19:28 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -79,14 +79,14 @@ RESULT
 //line 147: method TBox3::getSurface() const 
 CHECK(TBox3::getSurface() const )
 	box = Box3(v1, v2);
-	TEST_REAL_EQUAL(box.getSurface(), 23)
+	TEST_REAL_EQUAL(box.getSurface(), 46)
 RESULT
 
 
 //line 152: method TBox3::getVolume() const 
 CHECK(TBox3::getVolume() const )
 	box = Box3(v1, v2);
-	TEST_REAL_EQUAL(box.getVolume(), 225)
+	TEST_REAL_EQUAL(box.getVolume(), 15)
 RESULT
 
 
@@ -172,7 +172,7 @@ RESULT
 //line 272: method TBox3::set(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz)
 CHECK(TBox3::set(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz))
 	box = Box3(v1, v2);
-	box2.set(1, 2, 3, 4, 5, 6);
+	box2.set(1, 2, 3, 6, 5, 4);
 	TEST_EQUAL(box == box2, true)
 RESULT
 
