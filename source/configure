@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.111 2000/07/16 22:07:53 oliver Exp $
+#  $Id: configure,v 1.112 2000/07/17 21:24:23 oliver Exp $
 
 
 ##################################################
@@ -2182,7 +2182,7 @@ TEMPLATE_DIR=
 if test "${HAS_GPLUSPLUS}" = "true" ; then
 	CXX_MAKEDEPEND="${CXX}"
 	MAKEDEP_CXX_OPTS="-M"
-	CXXFLAGS_D="${CXXFLAGS_D} -Wall"
+	CXXFLAGS_D="${CXXFLAGS_D} -Wall -W"
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 	CXXFLAGS_O="${CXXFLAGS_O} -O2"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
