@@ -1,3 +1,4 @@
+// $Id: lineBasedFile.h,v 1.12 2001/01/24 11:58:21 amoll Exp $
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
 
@@ -60,7 +61,16 @@ namespace BALL
 		LineBasedFile(const LineBasedFile& f)
 			throw();
 
+		/**	Clear method.
+		*/
+		void clear() 
+			throw();
+
 		//@}
+
+		/**	@name Equality operators
+		*/
+		//@{
 
 		/** Equality operator
 		*/
@@ -69,6 +79,8 @@ namespace BALL
 		/** Inequality operator
 		*/
 		bool operator != (const LineBasedFile& f)  throw();
+
+		//@}
 
 		/**	@name Assignment
 		*/
@@ -79,16 +91,12 @@ namespace BALL
 		*/
 		const LineBasedFile& operator = (const LineBasedFile& file)
 			throw();
-			
-		/**	Clear method.
-		*/
-		void clear() 
-			throw();
 		//@}
 
 		/**	@name Accessors
 		*/
 		//@{
+
 		/// Get the last line number in the file.
 		Position getLineNumber() 
 			const	throw();
@@ -160,7 +168,7 @@ namespace BALL
 		Index switchString(const std::vector<String>& data) 
 			const throw();
 
-		//_@}
+		//@}
 
 		/*	@name	Protected Attributes
 		*/

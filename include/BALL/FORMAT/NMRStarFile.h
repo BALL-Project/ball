@@ -1,3 +1,5 @@
+// $Id: NMRStarFile.h,v 1.12 2001/01/24 11:58:21 amoll Exp $
+
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
 
