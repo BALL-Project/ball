@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.52 2003/05/08 10:11:50 oliver Exp $
+// $Id: HINFile.C,v 1.53 2003/05/08 20:36:59 oliver Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -15,8 +15,6 @@
 #include <BALL/KERNEL/PTE.h>
 
 #include <stack>
-
-using namespace std; // needed for endl
 
 namespace BALL 
 {
@@ -137,13 +135,13 @@ namespace BALL
 		}
 		
 		// write the bonds
-		getFileStream() << number_of_bonds << bond_string << endl;
+		getFileStream() << number_of_bonds << bond_string << std::endl;
 
 		// HyperChem uses A/ps, as does BALL. So, no conversion is needed.
 		getFileStream() << "vel " << number + 1 - atom_offset << " " 
 								 << atom.getVelocity().x << " " 
 								 << atom.getVelocity().y << " "
-								 << atom.getVelocity().z << endl;
+								 << atom.getVelocity().z << std::endl;
 	}
 
 	void HINFile::write(const Molecule& molecule)
@@ -256,13 +254,13 @@ namespace BALL
 		}
 
 		// write some default header
-		getFileStream() << "; HyperChem file created by BALL" << endl;
-		getFileStream() << ";" << endl;
-		getFileStream() << "forcefield AMBER" << endl;
+		getFileStream() << "; HyperChem file created by BALL" << std::endl;
+		getFileStream() << ";" << std::endl;
+		getFileStream() << "forcefield AMBER" << std::endl;
 
 		// ?????: 
 		// insert system temperature here
-		getFileStream() << "sys 0" << endl;
+		getFileStream() << "sys 0" << std::endl;
 
 		// ?????:
 		// insert the periodic box size (if any)
@@ -317,7 +315,7 @@ namespace BALL
 					if (current_residue != 0)
 					{
 						// write and "endres" tag
-						getFileStream() << "endres " << res_count << endl;
+						getFileStream() << "endres " << res_count << std::endl;
 					}
 
 					current_residue = this_residue;
@@ -365,7 +363,7 @@ namespace BALL
 							name = "-";
 						}
 
-						getFileStream() << "-" << endl;
+						getFileStream() << "-" << std::endl;
 					}
 				}
 
@@ -378,11 +376,11 @@ namespace BALL
 			if (current_residue != 0)
 			{
 				// write and "endres" tag
-				getFileStream() << "endres " << res_count << endl;
+				getFileStream() << "endres " << res_count << std::endl;
 			}
 
 			// write endmol keyword
-			getFileStream() << "endmol " << j + 1 << endl;
+			getFileStream() << "endmol " << j + 1 << std::endl;
 		}
 
 		// clear the atom properties
@@ -403,7 +401,7 @@ namespace BALL
 	{
 		if (!isValid())
 		{
-			Log.error() << "trying to read form invalid HINFile '" << getName() << "'" << endl;
+			Log.error() << "trying to read form invalid HINFile '" << getName() << "'" << std::endl;
 			return false;
 		}
 		
@@ -437,9 +435,9 @@ namespace BALL
 		Chain*    chain = 0;
 
 		// initial size: 100 atoms, all set to NULL pointer, 100 bonds
-		static std::vector<Atom*>	atom_vector;
+		std::vector<Atom*> atom_vector(100);
+		Position last_atom = 0;
 		static std::vector<struct HINFileBondStruct> bond_vector;
-		atom_vector.clear();
 		bond_vector.clear();
 
 		String tag;
@@ -558,7 +556,7 @@ namespace BALL
 						Position atom_number;
 						try 
 						{
-							atom_number = (Position)getLine().getField(1).toInt();
+							atom_number = (Position)getLine().getField(1).toInt() - 1;
 						}
 						catch (Exception::InvalidFormat)
 						{
@@ -566,13 +564,16 @@ namespace BALL
 						}
 
 						// Store the atom pointer in the atom_vector - we need it later to create the bonds!
-						atom_vector.push_back(atom);
-
-						// Verify that the atom indices are correct
-						if (atom_number != atom_vector.size())
+						if (atom_number >= atom_vector.size())
 						{
-							ERROR(String("unordered atoms indices: ") + getLine().getField(1))
+							atom_vector.resize(atom_vector.size() * 2);
 						}
+						atom_vector[atom_number] = atom;
+						if ((atom_number <= last_atom) && (last_atom > 0))
+						{
+							ERROR(String("unordered atom indices: ") + getLine())
+						}
+						last_atom = atom_number;
 
 						// now iterate over all bonds and insert them into the bond_vector 
 						// this table will be processed afterwards to create the bonds, as most of
@@ -598,7 +599,7 @@ namespace BALL
 								for (Position i = 0 ; i < number_of_atom_bonds; i++) 
 								{ 
 									struct HINFileBondStruct bond;
-									bond.atom1 = atom_number - 1;
+									bond.atom1 = atom_number;
 									try 
 									{
 										bond.atom2 = (Index)getLine().getField(11 + 2 * (Index)i).toInt() - 1;
@@ -667,7 +668,7 @@ namespace BALL
 						ERROR(String("illegal atom number ") + getLine().getField(1))
 					}
 
-					if (atom_number >= atom_vector.size())
+					if (atom_number > last_atom)
 					{
 						ERROR(String("cannot assign velocity for atom ") + String(atom_number) + ": atom not defined!")
 					} 
@@ -844,8 +845,8 @@ namespace BALL
 					for (Size i = 0; i < bond_vector.size(); i++)
 					{
 						// check whether both atoms exist
-						if (bond_vector[i].atom1 >= atom_vector.size() || 
-								bond_vector[i].atom2 >= atom_vector.size())
+						if (bond_vector[i].atom1 > last_atom || 
+								bond_vector[i].atom2 > last_atom)
 						{
 							// complain if one of the atoms does not exist
 							ERROR(String("HINFile: cannot create bond from atom ") + String(bond_vector[i].atom1 + 1)
@@ -863,6 +864,8 @@ namespace BALL
 					}
 
 					bond_vector.clear();
+					atom_vector.clear();
+					last_atom = 0;
 
 					throw(Exception::IndexOverflow(__FILE__, __LINE__));
 				}
@@ -932,7 +935,7 @@ namespace BALL
 				}	
 
 				// if the tag was not recognized: complain about it
-				Log.warn() << "HINFile: unknown tag " << tag << " ignored." << endl;
+				Log.warn() << "HINFile: unknown tag " << tag << " ignored." << std::endl;
 			}
 		}
 		catch (Exception::ParseError& e)
