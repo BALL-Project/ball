@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.4 2000/08/28 19:32:13 oliver Exp $
+// $Id: parameterSection.C,v 1.5 2000/09/16 11:19:36 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -325,7 +325,9 @@ namespace BALL
 		{
 			// return the section entry corresponding to the key
 			return entries_[(section_entries_[keys_[key_index]]) * number_of_variables_ + variable_index];
-		} else {
+		} 
+		else 
+		{
 			return undefined;
 		}
 	}
