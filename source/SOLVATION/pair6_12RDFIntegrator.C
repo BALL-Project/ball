@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.2 2000/09/28 17:32:03 anker Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.3 2000/10/17 17:20:44 anker Exp $
 
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
 
@@ -11,7 +11,7 @@ namespace BALL
 
 	const int Pair6_12RDFIntegrator::Default::VERBOSITY = 0;
 
-	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator()
+	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator() throw()
 		: RDFIntegrator(),
 			A_(0.0),
 			B_(0.0),
@@ -22,7 +22,8 @@ namespace BALL
 	}
 
 
-	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(const Pair6_12RDFIntegrator& integrator)
+	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(const Pair6_12RDFIntegrator&
+	integrator) throw()
 		:	RDFIntegrator(integrator),
 			options(integrator.options),
 			A_(integrator.A_),
@@ -34,7 +35,7 @@ namespace BALL
 
 
 	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(double A, double B,
-			double k1, double k2, const RadialDistributionFunction& rdf)
+			double k1, double k2, const RadialDistributionFunction& rdf) throw()
 		:	RDFIntegrator(rdf),
 			A_(A),
 			B_(B),
@@ -45,19 +46,15 @@ namespace BALL
 	}
 
 
-	Pair6_12RDFIntegrator::~Pair6_12RDFIntegrator()
-	{
-		destroy();
-	}
-
-
-	void Pair6_12RDFIntegrator::destroy()
+	Pair6_12RDFIntegrator::~Pair6_12RDFIntegrator() throw()
 	{
 		clear();
+
+		valid_ = false;
 	}
 
 
-	void Pair6_12RDFIntegrator::clear()
+	void Pair6_12RDFIntegrator::clear() throw()
 	{
 		A_ = 0.0;
 		B_ = 0.0;
@@ -68,7 +65,8 @@ namespace BALL
 	}
 
 
-	void Pair6_12RDFIntegrator::set(const Pair6_12RDFIntegrator& integrator)
+	const Pair6_12RDFIntegrator& Pair6_12RDFIntegrator::operator =
+		(const Pair6_12RDFIntegrator& integrator) throw()
 	{
 		A_ = integrator.A_;
 		B_ = integrator.B_;
@@ -76,19 +74,13 @@ namespace BALL
 		k2_ = integrator.k2_;
 		options = integrator.options;
 		RDFIntegrator::set(integrator);
-	}
 
-
-	const Pair6_12RDFIntegrator& Pair6_12RDFIntegrator::operator =
-		(const Pair6_12RDFIntegrator& integrator)
-	{
-		set(integrator);
 		return *this;
 	}
 
 
 	void Pair6_12RDFIntegrator::setConstants(double A, double B, double k1, 
-			double k2)
+			double k2) throw()
 	{
 		A_ = A;
 		B_ = B;
@@ -97,7 +89,7 @@ namespace BALL
 	}
 
 
-	double Pair6_12RDFIntegrator::integrateToInf(double from) const
+	double Pair6_12RDFIntegrator::integrateToInf(double from) const throw()
 	{
 
 		PiecewisePolynomial poly = getRDF().getRepresentation();
@@ -167,7 +159,7 @@ namespace BALL
 
 
 	double Pair6_12RDFIntegrator::integrateToInf(double from, double A, 
-			double B, double k1, double k2)
+			double B, double k1, double k2) throw()
 	{
 		setConstants(A, B, k1, k2);
 		return integrateToInf(from);
@@ -175,6 +167,7 @@ namespace BALL
 
 
 	double Pair6_12RDFIntegrator::integrate(double from, double to) const
+	throw()
 	{
 
 		PiecewisePolynomial poly = getRDF().getRepresentation();
@@ -225,28 +218,40 @@ namespace BALL
 
 
 	double Pair6_12RDFIntegrator::integrate(double from, double to, double A, 
-			double B, double k1, double k2)
+			double B, double k1, double k2) throw()
 	{
 		setConstants(A, B, k1, k2);
 		return integrate(from, to);
 	}
 
 
-	double Pair6_12RDFIntegrator::operator () (double x) const
+	double Pair6_12RDFIntegrator::operator () (double x) const throw()
 	{
 		return integrateToInf(x);
 	}
 
 
+	bool Pair6_12RDFIntegrator::operator == (const Pair6_12RDFIntegrator&
+	integrator) const throw()
+	{
+		// BAUSTELLE
+		// return ((RDFIntegrator::operator == (integrator))
+		//	&& (A_ == integrator.A_)
+		return ((A_ == integrator.A_)
+			&& (B_ == integrator.B_)
+			&& (k1_ == integrator.k1_)
+			&& (k2_ == integrator.k2_));
+	}
+
+
 	double Pair6_12RDFIntegrator::analyticallyIntegrateInterval(Interval
-			interval, Coefficients a, Position index) const
+			interval, Coefficients a, Position index) const throw()
 	{
 
 		double k = rdf_.getRepresentation().getInterval(index).first;
 		double r = interval.first;
 		double R = interval.second;
 		double val = 0.0;
-
 
 		if (fabs(k2_) < 1e-6)
 		{
@@ -339,6 +344,7 @@ namespace BALL
 
 
 	void Pair6_12RDFIntegrator::dump(ostream& stream, Size /* depth */) const
+	throw()
 	{
 		stream << "[Pair6_12RDFIntegrator:]" << endl;
 		stream << "A_ = " << A_ << endl;
@@ -349,13 +355,13 @@ namespace BALL
 	}
 
 
-	double Pair6_12RDFIntegrator::project(double x) const
+	double Pair6_12RDFIntegrator::project(double x) const throw()
 	{
 		return sqrt(x*x + k1_ * x + k2_);
 	}
 
 
-	double Pair6_12RDFIntegrator::unproject(double x) const
+	double Pair6_12RDFIntegrator::unproject(double x) const throw()
 	{
 		return sqrt(x*x - k1_*k1_ / 4 - k2_) - k1_ / 2;
 	}

@@ -1,4 +1,4 @@
-// $Id: claverieParameter.C,v 1.4 2000/09/28 12:16:19 anker Exp $
+// $Id: claverieParameter.C,v 1.5 2000/10/17 17:20:44 anker Exp $
 
 #include <BALL/SOLVATION/claverieParameter.h>
 
@@ -7,7 +7,7 @@ using namespace std;
 namespace BALL
 {
 
-	ClaverieParameter::ClaverieParameter()
+	ClaverieParameter::ClaverieParameter() throw()
 		:	ParameterSection(),
 			parameters_(),
 			indices_()
@@ -16,6 +16,7 @@ namespace BALL
 
 
 	ClaverieParameter::ClaverieParameter(const ClaverieParameter& param)
+		throw()
 		:	ParameterSection(param),
 			parameters_(param.parameters_),
 			indices_(param.indices_)
@@ -23,36 +24,35 @@ namespace BALL
 	}
 
 
-	ClaverieParameter::~ClaverieParameter()
-	{
-		destroy();
-	}
-
-	
-	void ClaverieParameter::destroy()
+	ClaverieParameter::~ClaverieParameter() throw()
 	{
 		clear();
+
+		valid_ = false;
 	}
 
 
-	void ClaverieParameter::clear()
+	void ClaverieParameter::clear() throw()
 	{
-		// ParameterSection::clear();
+		ParameterSection::clear();
 		parameters_.clear();
 		indices_.clear();
 	}
 
 
-	void ClaverieParameter::set(const ClaverieParameter& param)
+	const ClaverieParameter& ClaverieParameter::operator = 
+		(const ClaverieParameter& param) throw()
 	{
-		// ParameterSection::set(param);
+		ParameterSection::operator = (param);
 		parameters_ = param.parameters_;
 		indices_ = param.indices_;
+
+		return *this;
 	}
 
 
 	bool ClaverieParameter::hasParameters(Atom::Type solvent_type,
-			Atom::Type solute_type) const
+			Atom::Type solute_type) const throw()
 	{
 		if (indices_.has(solvent_type) && indices_.has(solute_type))
 		{
@@ -66,7 +66,7 @@ namespace BALL
 
 
 	std::pair<float, float> ClaverieParameter::getParameters(
-			Atom::Type solvent_type, Atom::Type solute_type) const
+			Atom::Type solvent_type, Atom::Type solute_type) const throw()
 	{
 		float K_m;
 		float R_m;
@@ -93,14 +93,25 @@ namespace BALL
 		return params;
 	}
 
-	std::pair<float, float> ClaverieParameter::getParameters(Atom::Type type) const
+
+	std::pair<float, float> ClaverieParameter::getParameters(Atom::Type type)
+		const throw()
 	{
 		return parameters_[indices_[type]];
 	}
 
 
+	bool ClaverieParameter::operator == (const ClaverieParameter& param)
+		const throw()
+	{
+		return ((ParameterSection::operator == (param))
+			&& (parameters_ == param.parameters_)
+			&& (indices_ == param.indices_));
+	}
+
+
 	bool ClaverieParameter::extractSection(ForceFieldParameters& parameters,
-		const String& section_name)
+		const String& section_name) throw()
 	{
 
 		if (!parameters.isValid())
@@ -151,7 +162,5 @@ namespace BALL
 		}
 		return true;
 	}
-
-
 
 }

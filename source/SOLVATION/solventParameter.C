@@ -1,4 +1,4 @@
-// $Id: solventParameter.C,v 1.2 2000/09/02 14:39:14 oliver Exp $
+// $Id: solventParameter.C,v 1.3 2000/10/17 17:20:45 anker Exp $
 
 #include <BALL/SOLVATION/solventParameter.h>
 
@@ -7,7 +7,7 @@ using namespace std;
 namespace BALL
 {
 
-	SolventParameter::SolventParameter()
+	SolventParameter::SolventParameter() throw()
 		: ParameterSection(),
 			name_(),
 			number_density_(0.0),
@@ -17,7 +17,7 @@ namespace BALL
 	}
 
 
-	SolventParameter::SolventParameter(const SolventParameter& param)
+	SolventParameter::SolventParameter(const SolventParameter& param) throw()
 		: ParameterSection(param),
 			name_(param.name_),
 			number_density_(param.number_density_),
@@ -27,52 +27,56 @@ namespace BALL
 	}
 
 
-	SolventParameter::~SolventParameter()
-	{
-		destroy();
-	}
-
-
-	void SolventParameter::destroy()
+	SolventParameter::~SolventParameter() throw()
 	{
 		clear();
+
+		valid_ = false;
 	}
 
 
-	void SolventParameter::clear()
+	void SolventParameter::clear() throw()
 	{
+		ParameterSection::clear();
 		name_ = "";
 		number_density_ = 0.0;
 		solvent_descriptor_.clear();
 		solvent_atoms_.clear();
 	}
 
-	
-	void SolventParameter::set(const SolventParameter& param)
-	{
-			// ParameterSection::set(param);
-			name_ = param.name_;
-			number_density_ = param.number_density_;
-			solvent_atoms_ = param.solvent_atoms_;
-			solvent_descriptor_ = param.solvent_descriptor_;
-	}
-
 
 	const SolventParameter& SolventParameter::operator = 
-		(const SolventParameter& param)
+		(const SolventParameter& param) throw()
 	{
-		set(param);
+		ParameterSection::operator = (param);
+		name_ = param.name_;
+		number_density_ = param.number_density_;
+		solvent_atoms_ = param.solvent_atoms_;
+		solvent_descriptor_ = param.solvent_descriptor_;
+
 		return *this;
 	}
 
 
-	SolventDescriptor SolventParameter::getSolventDescriptor() const
+	bool SolventParameter::operator == (const SolventParameter& param) const
+		throw()
+	{
+		// BAUSTELLE
+		return ((ParameterSection::operator == (param))
+			&& (name_ == param.name_)
+			&& (number_density_ == param.number_density_));
+			// && (solvent_atoms_ == param.solvent_atoms_)
+			// && (solvent_descriptor_ == param.solvent_descriptor_));
+	}
+
+
+	SolventDescriptor SolventParameter::getSolventDescriptor() const throw()
 	{
 		return solvent_descriptor_;
 	}
 
 	bool SolventParameter::extractSection(ForceFieldParameters& parameters,
-			const String& section_name)
+			const String& section_name) throw()
 	{
 		// BAUSTELLE
 		if (!parameters.isValid())

@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.8 2000/10/06 11:51:53 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.9 2000/10/17 17:20:45 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -49,7 +49,7 @@ namespace BALL
 		= 0.214;
 	const char* PairExpInteractionEnergyProcessor::Default::CLAVERIE_FILENAME
 		= "claverie.ini";
-	const bool PairExpInteractionEnergyProcessor::Default::USE_RDF = true;
+	const bool PairExpInteractionEnergyProcessor::Default::USE_RDF = false;
 	const char* PairExpInteractionEnergyProcessor::Default::RDF_FILENAME
 		= "rdf.ini";
 	const char* PairExpInteractionEnergyProcessor::Default::SOLVENT_FILENAME
@@ -147,8 +147,6 @@ namespace BALL
 		C2_ = options.getReal(Option::C2);
 		String claverie_filename = options.get(Option::CLAVERIE_FILENAME);
 		bool use_rdf = options.getBool(Option::USE_RDF);
-		// BAUSTELLE
-		use_rdf = true;
 		// the file containing the rdf descriptions
 		String rdf_filename = options.get(Option::RDF_FILENAME);
 		// the file contacining the solvent description
@@ -443,7 +441,7 @@ namespace BALL
 						e_ij_R = rho * C1_ * K_ij_R * I_rep;
 						e_ij_D = rho * - C2_ * K_ij_D * R_ij_o_6 * I_disp;
 					}
-					e_ij = rho * ( C1_ * K_ij_R * I_rep + C2_ * K_ij_D * R_ij_o_6
+					e_ij = rho * ( C1_ * K_ij_R * I_rep - C2_ * K_ij_D * R_ij_o_6
 							* I_disp);
 				}
 
@@ -469,8 +467,9 @@ namespace BALL
 
 		if (verbosity > 0)
 		{
-			Log.info() << "Dispersion energy: " << E_D << " kcal/mol\t"
-				<< "Repulsion energy: " << E_R << " kcal/mol" << endl;
+			Log.info() << "Dispersion: " << E_D << " kcal/mol\t"
+				<< "Repulsion: " << E_R << " kcal/mol\tTotal: " << E 
+				<< " kcal/mol" << endl;
 		}
 
 		energy_ = 4184 * E;

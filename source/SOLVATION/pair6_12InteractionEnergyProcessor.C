@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.5 2000/10/06 15:23:28 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.6 2000/10/17 17:20:44 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -51,7 +51,9 @@ namespace BALL
 	Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor()
 		throw()
 		: EnergyProcessor(),
-			solvent_()
+			solvent_(),
+			rdf_parameter_(),
+			rdf_integrator_()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultInteger(Option::USE_RDF, Default::USE_RDF);
@@ -69,7 +71,9 @@ namespace BALL
 	Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor
 		(const Pair6_12InteractionEnergyProcessor& proc) throw()
 		: EnergyProcessor(proc),
-			solvent_(proc.solvent_)
+			solvent_(proc.solvent_),
+			rdf_parameter_(proc.rdf_parameter_),
+			rdf_integrator_(proc.rdf_integrator_)
 	{
 	}
 
@@ -78,6 +82,7 @@ namespace BALL
 		throw()
 	{
 		clear();
+
 		valid_ = false;
 	}
 
@@ -86,6 +91,10 @@ namespace BALL
 	{
 		EnergyProcessor::clear();
 		solvent_.clear();
+		rdf_parameter_.clear();
+		rdf_integrator_.clear();
+
+		valid_ = false;
 	}
 
 
@@ -95,6 +104,8 @@ namespace BALL
 	{
 		EnergyProcessor::operator = (proc);
 		solvent_ = proc.solvent_;
+		rdf_parameter_ = proc.rdf_parameter_;
+		rdf_integrator_ = proc.rdf_integrator_;
 
 		return *this;
 	}
@@ -103,6 +114,12 @@ namespace BALL
 	bool Pair6_12InteractionEnergyProcessor::operator == (const
 	Pair6_12InteractionEnergyProcessor& proc) const throw()
 	{
+		/*
+		return (EnergyProcessor::operator == (proc)
+			&& (solvent_ == proc.solvent_)
+			&& (rdf_parameter_ == rdf_parameter_)
+			&& (rdf_integrator_ == rdf_integrator_) );
+		*/
 		return (EnergyProcessor::operator == (proc)
 			&& (solvent_ == proc.solvent_));
 	}
@@ -139,14 +156,18 @@ namespace BALL
 		SolventDescriptor solvent_descriptor 
 			= solvent_parameter_section.getSolventDescriptor();
 		rho = solvent_descriptor.getNumberDensity();
+		if (verbosity > 0)
+		{
+			Log.info() << "Using a number density of " << rho 
+				<< " (value taken from solvent descr.)" << endl;
+		}
 
 		// define the rdf, if desired
 		ForceFieldParameters rdf_ff_param(rdf_filename);
-		RDFParameter rdf_parameter;
 		if (use_rdf)
 		{
 			// BAUSTELLE
-			if (!rdf_parameter.extractSection(rdf_ff_param, "RDF"))
+			if (!rdf_parameter_.extractSection(rdf_ff_param, "RDF"))
 			{
 				Log.error() << "PairExpInteractionEnergyProcessor::finish(); "
 					<< "Cannot read RDF descriptions." << endl;
@@ -173,15 +194,15 @@ namespace BALL
 		String filename;
 
 		// different energy contributions
-		double E;
-		double E_D;
-		double E_R;
-		double E_ij;
-		double E_ij_D;
-		double E_ij_R;
-		double e_ij;
-		double e_ij_D;
-		double e_ij_R;
+		double E = 0.0;
+		double E_D = 0.0;
+		double E_R = 0.0;
+		double E_ij = 0.0;
+		double E_ij_D = 0.0;
+		double E_ij_R = 0.0;
+		double e_ij = 0.0;
+		double e_ij_D = 0.0;
+		double e_ij_R = 0.0;
 		
 		// force field parameters
 		double A_ij = 0.0;
@@ -201,7 +222,6 @@ namespace BALL
 		SolventAtomDescriptor solvent_atom;
 		AtomIterator solute_iterator;
 		LennardJones::Values values;
-		Pair6_12RDFIntegrator integrator;
 
 		for (Size s = 0; s < solvent_descriptor.getNumberOfAtomTypes(); ++s)
 		{
@@ -213,6 +233,7 @@ namespace BALL
 			{
 				Log.info() << "Radius of Solvent: " << R_s << endl;
 			}
+
 
 			// now compute the surface for the integration
 
@@ -259,17 +280,20 @@ namespace BALL
 					return false;
 			}
 
+
 			// initialize vars before iteration
 
 			E_ij = 0.0;
 			E_ij_D = 0.0;
 			E_ij_R = 0.0;
 
+
 			// iterate over all atoms of the solute
 
 			for (solute_iterator = fragment_->beginAtom(); +solute_iterator;
 					++solute_iterator)
 			{
+
 				// BAUSTELLE: Warum geht das net?
 				// type_j = solute_iterator->getType();
 				type_j = ffparam.getAtomTypes().getType(solute_iterator->getTypeName());
@@ -280,9 +304,10 @@ namespace BALL
 					Log.info() << "Radius of Solute: " << R_m << endl;
 				}
 				
+
 				// compute the necessary pair potential parameters
 
-				if (verbosity > 0)
+				if (verbosity > 1)
 				{
 					Log.info() << "type i/j " << type_i << "/" << type_j << endl;
 				}
@@ -293,7 +318,8 @@ namespace BALL
 				else
 				{
 					Log.error() << "Pair6_12InteractionEnergyProcessor::finish(): "
-						<< "Cannot assign force field parameters." << endl;
+						<< "Cannot assign force field parameters for types " 
+						<< type_i << "/" << type_j << endl;
 					return false;
 				}
 
@@ -301,10 +327,13 @@ namespace BALL
 				B_ij = values.B;
 
 				// DEBUG
+				/*
 				Log.info() << "A_ij (" << solute_iterator->getElement().getSymbol() <<
 					"," << solvent_atom.element_symbol << "): " << A_ij << endl;
 				Log.info() << "B_ij (" << solute_iterator->getElement().getSymbol() <<
 					"," << solvent_atom.element_symbol << "): " << B_ij << endl;
+				*/
+
 
 				// iterate over all surface points
 
@@ -347,7 +376,20 @@ namespace BALL
 								// A_ij = B_ij = rho = 1.0;
 								// k1 = k2 = 0.0;
 
+								rdf_integrator_.setConstants(A_ij, B_ij, k1, k2);
+								rdf_integrator_.setRDF(rdf_parameter_.getRDF(type_i, type_j));
+
+								// the integration runs from infinity to r_k, but the
+								// rdf_integrator_ integates from r_k to infinity, so we
+								// have to flip the sign. Therefore we have to subtract the
+								// values via -= instead of summing them up.
+
+								e_ij -= rho * rdf_integrator_(r_k)
+									* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+
+
 								// DEBUG
+								/*
 								Log.info() << "sphere_center = " << sphere_center << endl;
 								Log.info() << "atom_center = " << atom_center << endl;
 								Log.info() << "A = " << A << endl;
@@ -357,22 +399,18 @@ namespace BALL
 								Log.info() << "rho = " << rho << endl;
 								Log.info() << "r_k = " << r_k << endl;
 								Log.info() << "r_k_vec * n_k_vec = " << r_k_vec * n_k_vec << endl;
-
-								// BAUSTELLE: Sollte protected werden...
-								integrator.setConstants(A_ij, B_ij, k1, k2);
-								integrator.setRDF(rdf_parameter.getRDF(type_i, type_j));
-
-								e_ij += rho * integrator(r_k)
-									* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+								Log.info() << "rdf_integrator_(r_k) = " 
+									<< rdf_integrator_(r_k) << endl;
+								Log.info() << "e_ij = " << e_ij << endl;
+								*/
 
 								if (verbosity > 0)
 								{
-									// DEBUG
-									integrator.setConstants(A_ij, 0.0, k1, k2);
-									e_ij_R += rho * integrator(r_k)
+									rdf_integrator_.setConstants(A_ij, 0.0, k1, k2);
+									e_ij_R -= rho * rdf_integrator_(r_k)
 										* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
-									integrator.setConstants(0.0, B_ij, k1, k2);
-									e_ij_D += rho * integrator(r_k)
+									rdf_integrator_.setConstants(0.0, B_ij, k1, k2);
+									e_ij_D -= rho * rdf_integrator_(r_k)
 										* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
 								}
 							}
@@ -442,8 +480,8 @@ namespace BALL
 
 		if (verbosity > 0)
 		{
-			Log.info() << "Dispersion energy: " << E_D << " kJ/mol\t"
-				<< "Repulsion energy: " << E_R << " kJ/mol" << endl;
+			Log.info() << "Dispersion: " << E_D << ", Repulsion: " << E_R 
+				<< ", total: " << E << " [kJ/mol]" << endl;
 		}
 
 		energy_ = E;
@@ -474,7 +512,7 @@ namespace BALL
 			{
 				return;
 			}
-			Log.info() << "tag = " << tag << ", sphere = " << sphere_center << endl;
+			// Log.info() << "tag = " << tag << ", sphere = " << sphere_center << endl;
 			if (tag != "Sphere")
 			{
 				Log.error() << "Sphere expected" << endl;
@@ -482,7 +520,7 @@ namespace BALL
 				return;
 			}
 			ifs >> tag >> number_of_tesserae;
-			Log.info() << "tag = " << tag << ", not = " << number_of_tesserae << endl;
+			// Log.info() << "tag = " << tag << ", not = " << number_of_tesserae << endl;
 			if (tag != "Tesserae")
 			{
 				Log.error() << "Tesserae expected" << endl;
@@ -495,7 +533,7 @@ namespace BALL
 			for (Size i = 0; i < number_of_tesserae; ++i)
 			{
 				ifs >> vertex >> area;
-				Log.info() << "vertex = " << vertex << ", area = " << area << endl;
+				// Log.info() << "vertex = " << vertex << ", area = " << area << endl;
 				surface.vertex[i] = vertex;
 				normal = area * (vertex-sphere_center).normalize();
 				surface.normal[i] = normal;
