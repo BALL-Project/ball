@@ -1,10 +1,25 @@
-// $Id: string.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: string.h,v 1.2 1999/09/18 19:08:04 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+#ifndef BALL_CONFIG_CONFIG_H
+#	include <BALL/CONFIG/config.h>
+#endif
+#ifndef BALL_COMMON_GLOBAL_H
+#	include <BALL/COMMON/global.h>
+#endif
+#ifndef BALL_COMMON_CREATE_H
+#	include <BALL/COMMON/create.h>
+#endif
+#ifndef BALL_COMMON_MACROS_H
+#	include <BALL/COMMON/macros.h>
+#endif
+#ifndef BALL_COMMON_EXCEPTION_H
+#	include <BALL/COMMON/exception.h>
+#endif
+#ifndef BALL_COMMON_DEBUG_H
+#	include <BALL/COMMON/debug.h>
 #endif
 
 // for SGI CC/STL implementation
@@ -13,6 +28,7 @@
 #endif
 
 #include <string>
+using std::string;
 
 #include <ctype.h>
 #include <errno.h>
@@ -182,13 +198,7 @@ namespace BALL
 		Index getLastIndex() const;
 
 		/// Returns the substring size
-		Size size() const
-		{
-			if (bound_ == 0)
-				return 0;
-
-			return (to_ - from_ + 1);
-		}
+		Size size() const;
 
 		/// Mutable random access to a character of the substring
 		char& operator [] (Index index);
@@ -304,8 +314,9 @@ namespace BALL
 		// String has no copy constructor taking String&, bool as arguments.
 		// the compiler would confuse it with another copy constructor,
 		// cast true to 1 and copy only the string from the second character
-		// on!
-		BALL_CREATE_NODEEP(String)
+		// on! We could use BALL_CREATE_NODEEP, but this leads to trouble with
+		// inline constructors, so we code it by hand (here and in string.C)
+		virtual void* create(bool /* deep */ = true, bool empty = false) const;
 	
 		/**	@name	Enums */
 		//@{
@@ -947,7 +958,7 @@ namespace BALL
 	};
 	
 	//@}
-			
+
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/string.iC>
 #	endif
