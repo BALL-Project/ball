@@ -372,7 +372,7 @@
     </connection>
     <connection>
         <sender>element_box</sender>
-        <signal>textChanged(const QString&amp;)</signal>
+        <signal>activated(int)</signal>
         <receiver>AtomPropertiesData</receiver>
         <slot>changed()</slot>
     </connection>
