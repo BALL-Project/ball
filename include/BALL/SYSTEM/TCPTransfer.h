@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.9 2002/02/27 12:19:51 sturm Exp $
+// $Id: TCPTransfer.h,v 1.10 2002/03/16 11:42:49 amoll Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -117,6 +117,7 @@ namespace BALL
 			 */
 			bool set(::std::ofstream& file, const String& address)
 				throw();
+			
 			
 			/** Detailled set method.
 			 *  @see set(ofstream& file, const String& address)
@@ -269,6 +270,11 @@ namespace BALL
 				
 				//_ Debug method
 				void 		output_()
+					throw();
+
+			private:
+				
+				void operator = (TCPTransfer)
 					throw();
 	};
 
