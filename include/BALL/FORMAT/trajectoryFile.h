@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.h,v 1.6 2001/03/21 16:06:07 anker Exp $
+// $Id: trajectoryFile.h,v 1.7 2001/03/21 18:10:35 anker Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -109,20 +109,6 @@ namespace BALL
 		*/
 		virtual bool writeHeader()
 			throw();
-
-		/** Read a whole SnapShotManager instance from a trajectory file
-				@param the SnapShotManager instance to be assigned from file contents
-				@return true, if reading was succesful, false ow.
-		*/
-		virtual bool read(SnapShotManager& manager)
-			throw(Exception::NotImplemented);
-
-		/** Write a whole SnapShotManager instance as trajectory file
-				@param manager the snapshot manager to be written
-				@return true if the manager was written successfully
-		*/
-		virtual bool write(const SnapShotManager& manager)
-			throw(Exception::NotImplemented);
 
 		/** Append a list of SnapShots to an existing file
 				@param buffer the list os SnapShots we want to save
