@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.57 2004/10/15 11:27:44 amoll Exp $
+// $Id: geometricControl.C,v 1.58 2004/10/15 11:59:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -224,6 +224,7 @@ namespace BALL
 
 			context_menu_.insertSeparator();
 			insertContextMenuEntry("Move Clipping Plane", this, SLOT(moveClippingPlane()), 40);	
+			insertContextMenuEntry("Flip Clipping Plane", this, SLOT(flipClippingPlane()), 50);	
 			if (rep.getModelType() == MODEL_CLIPPING_PLANE)
 			{
 				context_menu_.setItemEnabled(5, false);
@@ -232,6 +233,7 @@ namespace BALL
 			else
 			{
 				context_menu_.setItemEnabled(40, false);
+				context_menu_.setItemEnabled(50, false);
 			}
 		}
 
@@ -636,6 +638,18 @@ namespace BALL
 		void GeometricControl::moveClippingPlane()
 		{
 			SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
+			notify_(msg);
+		}
+
+		void GeometricControl::flipClippingPlane()
+		{
+			context_representation_->setProperty("AX", -context_representation_->getProperty("AX").getDouble());
+			context_representation_->setProperty("BY", -context_representation_->getProperty("BY").getDouble());
+			context_representation_->setProperty("CZ", -context_representation_->getProperty("CZ").getDouble());
+			context_representation_->setProperty("D",  -context_representation_->getProperty("D").getDouble());
+
+			RepresentationMessage* msg = 
+				new RepresentationMessage(*context_representation_, RepresentationMessage::UPDATE);
 			notify_(msg);
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.146 2004/10/15 10:53:37 amoll Exp $
+// $Id: scene.C,v 1.147 2004/10/15 11:59:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -479,7 +479,8 @@ namespace BALL
 				}
 			
 				n *= -d;
-				Box b(n, e[0] * 300, e[1] * 300, 0.4);
+
+				Box b(n - (e[0] * 1500.0  + e[1] * 1500.0), e[0] * 3000.0, e[1] * 3000.0, 0.01);
 				b.setColor(0,0,255, 255);
 				gl_renderer_.render_(&b);
 
