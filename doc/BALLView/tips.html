@@ -9,10 +9,55 @@
 
 <H2>General tips and hints for BALLView</H2>
 This page gives hints for BALLView, which dont fit somewhere else...
-<h3>View molecules in 3D<a name="3D"></a></h3>
+<h3>View molecules in 3D stereo<a name="3D"></a></h3>
+BALLView provides two different ways to view molecules in 3D: Stereo with shutter glasses and side-by-side stereo.
+Both can be switched on in the menu entry "Display->Stereo".<p></p>
+When BALLView is running in a 3D Stereo modus, users can change the eye distance of the both viewpoints by
+using the cursor keys left and right. Left decreases the eye distance and right increases it. The Shift-modifier 
+boosts the effect of the two keys.  The optimal eye distance varies for every person and view, so it must be adjusted manualy.
+The amount of the eye distance can also be changed in the Preferences:<br><br>
+<img src="images/stereo_settings.png"><br><br>
+The focal distance seems to have no effect on most viewers, so its settings may be removed for future releases of BALLView.<br><br>
+<b>Caveat:</b> Since for 3D viewing two seperate images have to be created for every camera movement, the 3D performance 
+can drop to half, while rotating or zooming the view. Consider buying a fast graphics accelerator card if you want use this feature.
+
+<H4>Shutter glasses</H4>
+To use shutter glasses with BALLView, you have to use a quad buffered graphics accelerator card.
+This  has up to now only been tested with a NVIDIA Quadro card on windows.
+But it should also work well with Linux and ATI Fire cards. If you make any experiences in this field with
+BALLView, please let us know...
+
+<H4>Side by side</H4>
+For side by side stereo viewing the following hardware is needed: 
+<ul>
+	<li>two projectors with the same brightness, which project to the exactly same spot</li>
+	<li>polarisation filters to fit on them</li>
+	<li>special polarisation glasses</li>
+	<li>a silver coated canvas</li>
+</ul>
+But this form of stereo projection does not require a specific type of graphics accelerator cards.
+
 <h3>Visualise hydrogen bonds<a name="hydrogen_bonds"></a></h3>
-<h3>Use the POV-RAY export<a name="POVRay"></a></h3>
+To visualise hydrogen bonds, BALLView first has to calculate their position. This can be done, by highlighting a
+System and clicking on the menu entry "Tools->Calculate H-bonds" (ALT-N). Then a new Representation for them has
+to be created, while using the model "H-Bonds". The result could look like:<br>
+<img src="images/hbonds.png">
+
+<h3>Usage of the POV-RAY export<a name="POVRay"></a></h3>
+<a href="http://www.povray.org/">POV-Ray</a> is an external rendering program which is freely available.
+The POV-Ray files which were created by BALLView contain the command line, with which POV-Ray should be invoked to
+render the image. This line could look like:
+<pre>povray +Imy.pov +FN +Omy.pov.png +QR +W1037 +H922 -UV</pre>
+To use antialiasing in POV-Ray, the flag "+A0.3" can be added.
+
 <h3>Create animations<a name="animations"></a></h3>
+<img src="images/animation_menu.png">
+
 <h3>Create movies from pictures<a name="movies"></a></h3>
+To create movies from a set of images, we suggest useage of the GNU program <a href="http://www.mplayerhq.hu/h">mencoder</a>, 
+which is freely available for Linux, MacOS and Windows.
+To create an AVI video with 25 frames per second from all PNG images in the current directory with the codec <a href="http://www.xvid.org/">XviD</a> and a bitrate of 1600 kbit/s invoke
+<pre>mencoder  "mf://*.png"  -mf fps=25 -o output.avi -ovc xvid  -xvidencopts pass=1:bitrate=1600</pre>
+
 </body>
 </html>
