@@ -1,4 +1,7 @@
-// $Id: analyticalGeometry.h,v 1.49 2001/12/13 18:17:10 strobel Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: analyticalGeometry.h,v 1.49.4.1 2002/08/22 17:27:00 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -992,7 +995,8 @@ namespace BALL
 											 const TSphere3<T>& s2,
 											 const TSphere3<T>& s3,
 											 TVector3<T>& p1,
-											 TVector3<T>& p2)
+											 TVector3<T>& p2,
+											 bool test = true)
 		throw()
 	{
 		T r1_square = s1.radius*s1.radius;
@@ -1026,35 +1030,38 @@ namespace BALL
 			{
 				p1 = line.p+x1*line.d;
 				p2 = line.p+x2*line.d;
-				TVector3<T> test = s1.p-p1;
-				if (Maths::isNotEqual(test*test,r1_square))
+				if (test)
 				{
-					return false;
-				}
-				test = s1.p-p2;
-				if (Maths::isNotEqual(test*test,r1_square))
-				{
-					return false;
-				}
-				test = s2.p-p1;
-				if (Maths::isNotEqual(test*test,r2_square))
-				{
-					return false;
-				}
-				test = s2.p-p2;
-				if (Maths::isNotEqual(test*test,r2_square))
-				{
-					return false;
-				}
-				test = s3.p-p1;
-				if (Maths::isNotEqual(test*test,r3_square))
-				{
-					return false;
-				}
-				test = s3.p-p2;
-				if (Maths::isNotEqual(test*test,r3_square))
-				{
-					return false;
+					TVector3<T> test = s1.p-p1;
+					if (Maths::isNotEqual(test*test,r1_square))
+					{
+						return false;
+					}
+					test = s1.p-p2;
+					if (Maths::isNotEqual(test*test,r1_square))
+					{
+						return false;
+					}
+					test = s2.p-p1;
+					if (Maths::isNotEqual(test*test,r2_square))
+					{
+						return false;
+					}
+					test = s2.p-p2;
+					if (Maths::isNotEqual(test*test,r2_square))
+					{
+						return false;
+					}
+					test = s3.p-p1;
+					if (Maths::isNotEqual(test*test,r3_square))
+					{
+						return false;
+					}
+					test = s3.p-p2;
+					if (Maths::isNotEqual(test*test,r3_square))
+					{
+						return false;
+					}
 				}
 				return true;
 			}
