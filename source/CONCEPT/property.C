@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.16 2000/08/28 16:47:46 oliver Exp $
+// $Id: property.C,v 1.17 2000/08/29 14:49:58 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -36,7 +36,7 @@ namespace BALL
 				case	FLOAT:				pm.writePrimitive(data_.f, "data_.f");		break;
 				case	UNSIGNED_INT:	pm.writePrimitive(data_.ui, "data_.ui"); break;
 				case	BOOL:					pm.writePrimitive(data_.b, "data_.b");		break;
-				case	STRING:				pm.writePrimitive(data_.s, "data_.s");		break;
+				case	STRING:				pm.writePrimitive(String(data_.s), "data_.s");		break;
 				case	OBJECT:				pm.writeObjectPointer(data_.object, "data_.object"); break;
 				case	NONE:					break;
 				default:
@@ -52,7 +52,7 @@ namespace BALL
 		type_ = (Type)type;
 		pm.readPrimitive(name_, "name_");
 
-		string s;
+		String s;
 		switch (type_)
 		{
 			case	INT:					pm.readPrimitive(data_.i, "data_.i");		break;
