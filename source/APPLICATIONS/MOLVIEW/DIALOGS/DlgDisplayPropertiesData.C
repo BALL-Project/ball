@@ -165,7 +165,7 @@ DlgDisplayPropertiesData::DlgDisplayPropertiesData(QWidget *parent, const char *
     model_type_combobox_->insertItem( tr( "line" ) );
     model_type_combobox_->insertItem( tr( "stick" ) );
     model_type_combobox_->insertItem( tr( "ball and stick" ) );
-    model_type_combobox_->insertItem( tr( "surface" ) );
+    //model_type_combobox_->insertItem( tr( "surface" ) );
     model_type_combobox_->insertItem( tr( "van der Waals" ) );
     model_type_combobox_->setMaxCount( 2147483647 );
     model_type_combobox_->setAutoCompletion( FALSE );
