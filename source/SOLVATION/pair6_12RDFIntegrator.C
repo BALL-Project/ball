@@ -1,9 +1,13 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.15 2002/01/15 02:00:55 oliver Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.15.4.1 2002/12/01 13:49:10 oliver Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
 
 using namespace std;
+
+#ifdef BALL_COMPILER_MSVC
+#	define atanh(x) ((log  (1+x) - log (1-x))/2)
+#endif
 
 namespace BALL
 {

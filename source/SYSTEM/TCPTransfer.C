@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.18.4.8 2002/11/30 13:24:25 oliver Exp $
+// $Id: TCPTransfer.C,v 1.18.4.9 2002/12/01 13:49:10 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -22,8 +22,18 @@
 #	include <sys/ioctl.h>		// FIONBIO
 #endif
 #ifdef BALL_USE_WINSOCK
+#	include <winsock2.h>
 #	include <io.h>
 #	define GLOBAL_CLOSE	_close
+
+	/* Pauses for a specified number of seconds. */
+	void sleep( clock_t wait )
+	{
+		clock_t goal;
+		goal = wait * 1000 + clock();
+		while( goal > clock());
+	}
+
 #else
 #	define GLOBAL_CLOSE ::close
 #endif
@@ -112,7 +122,7 @@ void TCPTransfer::set(std::ofstream&  file,
 	password_				= password;
 	port_ 					= port;
 	fstream_ 				= &file;
-	status_					= NO_ERROR;
+	status_					= (Status)NO_ERROR;
 	received_bytes_ = 0;
 
 	if (socket_ != 0)
@@ -216,7 +226,7 @@ bool TCPTransfer::set(std::ofstream& file, const String& address)
 		return false;
 	}
 	
-	status_ = NO_ERROR;
+	status_ = (Status)NO_ERROR;
 	
 	return true;
 }
@@ -271,7 +281,7 @@ TCPTransfer::Status TCPTransfer::getHTTPStatus_()
 		return UNKNOWN_ERROR;
 	}
 
-	return NO_ERROR;
+	return (Status)NO_ERROR;
 }
 
 	
@@ -346,7 +356,7 @@ TCPTransfer::Status TCPTransfer::getHTTP_()
 	}
 	while (bytes > 0);
 
-	return NO_ERROR;
+	return (Status)NO_ERROR;
 }
 	
 
@@ -354,12 +364,16 @@ TCPTransfer::Status TCPTransfer::setBlock_(Socket socket, bool block)
 	throw()
 {
 	int temp = !block;
-	if (ioctl(socket, FIONBIO, &temp) == -1)
-	{
-		return CONNECT_ERROR;
-	}
 
-	return NO_ERROR;
+	// WIN port
+	#ifndef BALL_USE_WINSOCK
+		if (ioctl(socket, FIONBIO, &temp) == -1)
+		{
+			return (Status)CONNECT_ERROR;
+		}
+	#endif
+
+	return (Status)NO_ERROR;
 }
 
 
@@ -393,7 +407,7 @@ TCPTransfer::Status TCPTransfer::logon_(const String& query)
 	if (socket_ == -1)
 	{
 		socket_ = 0;
-		status_ = SOCKET_ERROR;
+		status_ = (Status)SOCKET_ERROR;
 		return status_;
 	}  
 
@@ -426,7 +440,7 @@ TCPTransfer::Status TCPTransfer::logon_(const String& query)
 		output_();
 	#endif
 	
-	status_ = NO_ERROR;
+	status_ = (Status)NO_ERROR;
 	return status_;
 }	
 
@@ -478,7 +492,7 @@ TCPTransfer::Status TCPTransfer::sendData_(const String& query, Socket socket)
 		return status_;
 	}
 
-	return NO_ERROR;
+	return (Status)NO_ERROR;
 }
 
 
@@ -669,7 +683,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	Socket socket2 = socket(AF_INET, SOCK_STREAM, 0); 
 	if (socket2 == -1)
 	{
-		status_ = SOCKET_ERROR;
+		status_ = (Status)SOCKET_ERROR;
 		return status_;
 	}  
 
@@ -750,7 +764,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	
 	if (bytes == 0)
 	{
-		return NO_ERROR;
+		return (Status)NO_ERROR;
 	}
 	
 	if (control_bytes < 1)
@@ -763,7 +777,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 
 	if (!getFTPMessage_(226)) return status_;
 
-	return NO_ERROR;
+	return (Status)NO_ERROR;
 }
 
 } // namespace BALL

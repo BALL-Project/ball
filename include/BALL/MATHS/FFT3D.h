@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.1.2.6 2002/11/07 19:21:55 anhi Exp $
+// $Id: FFT3D.h,v 1.1.2.7 2002/12/01 13:49:10 oliver Exp $
 
 #ifndef BALL_MATHS_FFT3D_H
 #define BALL_MATHS_FFT3D_H
@@ -29,7 +29,7 @@ namespace BALL
 {
 
 	/** A class to perform Fast Fourier Transforms and inverse Fast Fourier Transforms
-			on regularly spaced three dimensional data. \\
+			on regularly-spaced three-dimensional data. \\
 			This class makes use of the freely available library {\bf FFTW}, which can be
 			found at \URL{www.fftw.org}. Normalization, translation and scaling of the
 			coordinate system can be handled automatically. The normalization is chosen
@@ -38,7 +38,8 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/MATHS/FFT3D.h}
 	 */
 
-	class FFT3D : public TRegularData3D<FFTW_COMPLEX>
+	class FFT3D 
+		: public TRegularData3D<FFTW_COMPLEX>
 	{
 		public:
 

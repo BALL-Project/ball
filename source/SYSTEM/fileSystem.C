@@ -1,9 +1,11 @@
-// $Id: fileSystem.C,v 1.12 2002/01/12 12:19:55 oliver Exp $
+// $Id: fileSystem.C,v 1.12.4.1 2002/12/01 13:49:11 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
 #include <BALL/DATATYPE/regExp.h>
+#ifdef BALL_HAS_PWD_H
 #include <pwd.h> // 'getpwnam'
+#endif
 
 namespace BALL 
 {
@@ -79,6 +81,10 @@ namespace BALL
 	void FileSystem::expandTilde_(String& path)
 		throw()
 	{
+// WIN port: How to do this under Windows? WHAT to do?
+#ifndef BALL_COMPILER_MSVC
+			
+
 		if (path.isEmpty() == true)
 		{
 			return;
@@ -138,7 +144,8 @@ namespace BALL
 		String buffer(passwd->pw_dir);
 		buffer.append(path.c_str() + index);
 		buffer.swap(path);
-		
+#endif
+
 		return;
 	}
 

@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.14 2001/02/14 01:59:58 amoll Exp $
+// $Id: common.h,v 1.14.4.1 2002/12/01 13:49:10 oliver Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -9,8 +9,12 @@
 
 #include <math.h>
 
-#ifdef BALL_INCLUDE_IEEEFP
+#ifdef BALL_HAS_IEEEFP_H
 # include <ieeefp.h>
+#endif
+
+#ifdef BALL_HAS_FLOAT_H
+# include <float.h>
 #endif
 
 #ifndef BALL_COMMON_CONSTANTS_H
@@ -173,7 +177,11 @@ namespace BALL
 		bool isNan(const T& t)
 			throw()
 		{
-			return isnan(t);
+			#ifdef BALL_COMPILER_MSVC
+				return _isnan(t);
+			#else
+				return isnan(t);
+			#endif
 		}
 
 		/**	Test whether a number is zero.

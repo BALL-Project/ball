@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.39.4.1 2002/11/30 09:48:44 oliver Exp $
+// $Id: file.h,v 1.39.4.2 2002/12/01 13:49:10 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -24,6 +24,20 @@
 #include <sys/types.h>
 #include <sys/stat.h>		// 'stat', 'lstat'
 #include <stdio.h>			// 'rename'
+
+#ifdef BALL_COMPILER_MSVC
+#	include <fcntl.h>
+#	include <sys/types.h>
+#	include <sys/stat.h>
+#	include <stdio.h>
+#	include <io.h>
+	// Define the missing symbols from <unistd.h>,
+	// which M$, in its infinite wisdom, was unable to provide.
+#	define F_OK 0
+#	define W_OK 2
+#	define R_OK 4
+#endif
+
 
 #ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h>			// 'access', 'rename', 'truncate'

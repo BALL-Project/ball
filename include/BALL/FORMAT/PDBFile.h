@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.17 2001/08/24 01:32:11 oliver Exp $
+// $Id: PDBFile.h,v 1.17.4.1 2002/12/01 13:49:10 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -37,7 +37,7 @@ namespace BALL
 {
 
 	inline
-	Index Hash(const Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>& quadruple)
+	HashIndex Hash(const Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>& quadruple)
 	{
 		return (Index)quadruple.third;
 	}

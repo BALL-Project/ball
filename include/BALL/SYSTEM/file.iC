@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.16 2001/12/29 17:58:29 oliver Exp $
+// $Id: file.iC,v 1.16.4.1 2002/12/01 13:49:10 oliver Exp $
 
 BALL_INLINE 
 void File::clear()
@@ -142,8 +142,14 @@ bool File::truncate(String path, Size size)
 	}
 
   FileSystem::canonizePath(path);
-  
-  return (::truncate(path.c_str(), (long)size) == 0);
+  #ifdef BALL_COMPILER_MSVC
+	int fh = _open(path.c_str(), _O_RDWR | _O_CREAT, _S_IREAD | _S_IWRITE );
+	int result = _chsize(fh, (long)size);
+	_close(fh);
+	return (result == 0);
+  #else
+	return (::truncate(path.c_str(), (long)size) == 0);
+  #endif
 }
 
 BALL_INLINE 
@@ -246,8 +252,11 @@ bool File::isExecutable(String name)
 	throw (Exception::FileNotFound)
 {
   FileSystem::canonizePath(name);
-  
-  return (::access(name.c_str(), X_OK) == 0);
+  #ifdef BALL_COMPILER_MSVC
+	return false;
+  #else
+	return (::access(name.c_str(), X_OK) == 0);
+  #endif
 }
 
 BALL_INLINE 
