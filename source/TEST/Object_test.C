@@ -1,4 +1,4 @@
-// $Id: Object_test.C,v 1.1 2001/05/28 11:51:41 anker Exp $
+// $Id: Object_test.C,v 1.2 2001/05/29 12:24:27 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Object_test.C,v 1.1 2001/05/28 11:51:41 anker Exp $")
+START_TEST(class_name, "$Id: Object_test.C,v 1.2 2001/05/29 12:24:27 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ Object* ptr;
 CHECK(Object::Object() throw())
 	ptr = new Object;
 	TEST_NOT_EQUAL(ptr, 0)
-	TEST_EQUAL(ptr->getHandle(), 1)
+	TEST_EQUAL(ptr->getHandle(), 0)
 RESULT
 
 
@@ -55,19 +55,19 @@ RESULT
 
 CHECK(Object::getHandle() const  throw())
 	Object object3;
-	TEST_EQUAL(object3.getHandle(), 4)
+	TEST_EQUAL(object3.getHandle(), 3)
 RESULT
 
 
 CHECK(Object::getNextHandle() throw())
 	Object object4;
-	TEST_EQUAL(object4.getNextHandle(), 6)
+	TEST_EQUAL(object4.getNextHandle(), 5)
 RESULT
 
 
 CHECK(Object::getNewHandle() throw())
 	Object object5;
-	TEST_EQUAL(object5.getNewHandle(), 7)
+	TEST_EQUAL(object5.getNewHandle(), 6)
 RESULT
 
 
@@ -187,7 +187,9 @@ CHECK(Object::dump(::std::ostream& s = std::cout, Size depth = 0) const  throw()
 RESULT
 
 
-#ifdef BALL_SUPPORT_OBJECT_MANAGER
+// BAUSTELLE
+// #ifdef BALL_SUPPORT_OBJECT_MANAGER
+#ifdef THIS_SHOULD_NOT_BE_DEFINED
 
 CHECK(Object::getPrevious() throw())
 	Object object22;
