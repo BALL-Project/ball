@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.6 2000/06/06 13:16:11 oliver Exp $
+// $Id: global.h,v 1.7 2000/09/01 10:13:41 anker Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -51,7 +51,9 @@ extern bool fdpb_calculation;
 
 // the results of the SES and SAS area calculations
 extern float total_SAS_area;
+extern float total_SAS_volume;
 extern float total_SES_area;
+extern float total_SES_volume;
 
 // a hash map containing the atom surfaces of the SAS (if calculated)
 extern HashMap<Atom*, float> surface_map;

@@ -1,4 +1,4 @@
-// $Id: global.C,v 1.7 2000/06/22 10:20:40 oliver Exp $
+// $Id: global.C,v 1.8 2000/09/01 10:13:37 anker Exp $
 #include "global.h"
 
 FragmentDB*           frag_db = 0;
@@ -32,7 +32,9 @@ bool fdpb_calculation = false;
 
 // the results of the SES and SAS area calculations
 float total_SAS_area = 0.0;
+float total_SAS_volume = 0.0;
 float total_SES_area = 0.0;
+float total_SES_volume = 0.0;
 
 // a hash map containing the atom surfaces of the SAS (if calculated)
 HashMap<Atom*, float> surface_map;

@@ -1,4 +1,4 @@
-// $Id: main.C,v 1.7 2000/06/08 08:36:04 oliver Exp $
+// $Id: main.C,v 1.8 2000/09/01 10:13:41 anker Exp $
 
 #include <iomanip>
 
@@ -18,14 +18,18 @@ void usage()
 							<< endl
 	            << "PB [<options>]" << endl
 	            <<"   where <options> is one or more of the following possibilities:" << endl
-	            << "     -P                   perform a Finite DIfference Poisson Boltzmann calculation" << endl
-	            << "     -A                   calculate the solvent accessible surface of the solute" << endl
-	            << "     -E                   calculate the solvent excluded surface of the solute" << endl
+	            << "     -P                   perform a Finite Difference Poisson Boltzmann" << endl
+							<< "                            calculation" << endl
+	            << "     -A                   calculate the solvent accessible surface and" << endl
+							<< "                            volume of the solute" << endl
+	            << "     -E                   calculate the solvent excluded surface and" << endl
+							<< "                            volume of the solute" << endl
 	            << endl
 	            << "further options:" << endl
 	            << "     -p <FILE>            read <FILE> as a PDB file" << endl
 	            << "     -h <FILE>            read <FILE> as a HyperChem file" << endl
-	            << "     -H <FILE>            read <FILE> as a HyperChem file but do not assign charges" << endl
+	            << "     -H <FILE>            read <FILE> as a HyperChem file but do not assign" << endl
+							<< "                            charges" << endl
 	            << "     -o <FILE>            read FDPB options from <FILE>" << endl
 	            << "     -c <FILE>            read charges from <FILE>" << endl
 	            << "     -r <FILE>            read radii from <FILE>" << endl
@@ -33,15 +37,18 @@ void usage()
 	            << "     -u <FILE>            read charge rules from <FILE>" << endl
 	            << "     -w <FILE>            read radius rules from <FILE>" << endl
 	            << "     -0                   clear all charges in subsequently read structures" << endl
-	            << "     -s                   calculate the solvation free energy by performing a second" << endl
-	            << "                          FDPB calculation in vacuum" << endl
-	            << "     -n                   normalize all atom names in subsequently read structures" << endl
+	            << "     -s                   calculate the solvation free energy by performing a " << endl
+	            << "                            second FDPB calculation in vacuum" << endl
+	            << "     -n                   normalize all atom names in subsequently read" << endl
+							<< "                            structures" << endl
 	            << "     -b                   try to build the bonds (e.g. for PDB files)" << endl
-	            << "     -d <FILE>            dump the atom charges, radii, and surface fractions to <FILE> (for debugging)" << endl
+	            << "     -d <FILE>            dump the atom charges, radii, and surface fractions" << endl
+							<< "                            to <FILE> (for debugging)" << endl
 	            << "     -v                   verbose output (implies ``verbosity 99'' in the" << endl
 	            << "                            option file, print additional results and options)" << endl
 	            << "     -x <RADIUS>          the probe sphere radius for solvent accessible and" << endl
-	            << "                            solvent excluded surface calculations [default = 1.4 A]" << endl
+	            << "                            solvent excluded surface calculations" << endl
+							<< "                            [default = 1.4 A]" << endl
 	            << endl
 	            << "  By default, charges and radii are taken from data/charges/PARSE.crg" << endl
 	            << "  and data/radii/PARSE.siz." << endl 
@@ -215,7 +222,10 @@ int main(int argc, char** argv)
 	if (ses_calculation)
 	{
 		total_SES_area = calculateSESArea(S, probe_radius);
+		total_SES_volume = calculateSESVolume(S, probe_radius);
 		Log.info() << "Solvent excluded surface : " << total_SES_area << " A^2";
+		Log.info() << endl;
+		Log.info() << "Solvent excluded volume : " << total_SES_volume << " A^3";
 		Log.info() << " (" << probe_radius << " Angstrom probe radius)" << endl;
 	}
 
@@ -225,7 +235,10 @@ int main(int argc, char** argv)
 	if (sas_calculation)
 	{
 		total_SAS_area = calculateSASAtomAreas(S, surface_map, probe_radius);
+		total_SAS_volume = calculateSASVolume(S, probe_radius);
 		Log.info() << "Solvent accessible surface : " << total_SAS_area << " A^2";
+		Log.info() << endl;
+		Log.info() << "Solvent accessible volume : " << total_SAS_volume << " A^3";
 		Log.info() << " (" << probe_radius << " Angstrom probe radius)" << endl;
 	}
 
