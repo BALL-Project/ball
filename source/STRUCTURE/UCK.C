@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK.C,v 1.3 2004/06/26 20:17:16 oliver Exp $
+// $Id: UCK.C,v 1.4 2004/10/30 09:42:54 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/UCK.h>
@@ -41,7 +41,7 @@ namespace BALL
 	}
 	
 	// copy constructor
-	UCK::UCK(UCK::UCK& uck)
+	UCK::UCK(UCK& uck)
 	{
 		depth_		= uck.getDepth();
 		formula_	= uck.getFormula();
