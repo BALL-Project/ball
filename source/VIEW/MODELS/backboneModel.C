@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.30 2004/12/29 17:06:14 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.31 2005/01/08 18:53:27 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -107,29 +107,36 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void AddBackboneModel::collectAtoms_(Residue& residue)
+		void AddBackboneModel::collectAtoms_(AtomContainer& ac)
 			throw()
 		{
 			AtomIterator it;
-			BALL_FOREACH_ATOM(residue, it)
+			const Residue* residue = dynamic_cast<Residue*>(&ac);
+			String full_name;
+			String name;
+			if (residue != 0)
 			{
+				full_name = residue->getFullName();
+				name      = residue->getName();
+			}
+
+			BALL_FOREACH_ATOM(ac, it)
+			{
+				if (residue == 0) 
+				{
+					full_name = ((Residue*)it->getParent())->getFullName();
+					     name = ((Residue*)it->getParent())->getName();
+				}
+
 				// collect only CA-Atoms and CH3 atoms in ACE and NME
 				if (((it->getName().hasSubstring("CA")) ||
 				    (it->getName().hasSubstring("CH3") &&
-						(residue.getFullName() == "ACE" 	||
-						 residue.getFullName() == "ACE-N" ||
-						 residue.getFullName() == "NME" 	||
-						 residue.getFullName() == "NME-C" )
+						(full_name == "ACE" 	|| full_name == "ACE-N" ||
+						 full_name == "NME" 	|| full_name == "NME-C" )
 						)) || (
 						// or we collect P atoms in nucleotides
-						residue.getName().size() == 1 &&
-						it->getName() == "P" 					&&
-						(
-						 residue.getName() == "C" ||
-						 residue.getName() == "G" ||
-						 residue.getName() == "T" ||
-						 residue.getName() == "A"
-						)))
+						name.size() == 1 && it->getName() == "P" &&
+						(name == "C" || name == "G" || name == "T" || name == "A")))
 				{
 					SplinePoint spline_point((*it).getPosition(), &*it);
 					spline_vector_.push_back(spline_point);
