@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.9 1999/12/28 18:19:40 oliver Exp $
+// $Id: composite.C,v 1.10 2000/01/07 21:56:52 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -344,7 +344,7 @@ namespace BALL
 	{
 		// calculate the new selection flags according 
 		// to the current contents of the counters
-		bool new_selected = ((number_of_selected_children_ == number_of_children_)
+		bool new_selected = (((number_of_selected_children_ == number_of_children_) && (number_of_children_ > 0))
 												 || ((number_of_children_ == 0) && selected_));
 		bool new_contains_selection = ((number_of_children_containing_selection_ > 0) || new_selected);
 		
@@ -1263,11 +1263,15 @@ namespace BALL
 		return true;
 	}
 
-	void Composite::dump(std::ostream &s, Size depth) const
+	void Composite::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
+		BALL_DUMP_DEPTH(s, depth);
+    BALL_DUMP_HEADER(s, this, this)
+
 		Object::dump(s, depth);
+		Selectable::dump(s, depth);
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  parent: "
@@ -1301,22 +1305,30 @@ namespace BALL
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  number of children:" << number_of_children_ << endl;
+
+		BALL_DUMP_DEPTH(s, depth);
+		s << "  contains_selection_:" << contains_selection_ << endl;
+
+		BALL_DUMP_DEPTH(s, depth);
+		s << "  number of selected children:" << number_of_selected_children_ << endl;
+
+		BALL_DUMP_DEPTH(s, depth);
+		s << "  number of children containing selection:" << number_of_children_containing_selection_ << endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  children:" << endl;
 		
-		for (Composite *composite_ptr = first_child_;
-				 composite_ptr != 0;
-				 composite_ptr = composite_ptr->next_)
+		for (Composite* composite_ptr = first_child_;
+				 composite_ptr != 0; composite_ptr = composite_ptr->next_)
 		{
 			BALL_DUMP_DEPTH(s, depth);
-			cout << "    [" << ((composite_ptr->previous_) 
-				? composite_ptr->previous_->getHandle() 
-				: INVALID_HANDLE) << "] <- "
-		 << "[" << composite_ptr->getHandle() << "] -> "
-		 << "[" << ((composite_ptr->next_) 
-					? composite_ptr->next_->getHandle() 
-					: INVALID_HANDLE) << "]" << endl;
+			s << "    [" << ((composite_ptr->previous_) 
+											 ? composite_ptr->previous_->getHandle() 
+											 : INVALID_HANDLE) << "] <- "
+				<< "[" << composite_ptr->getHandle() << "] -> "
+				<< "[" << ((composite_ptr->next_) 
+									 ? composite_ptr->next_->getHandle() 
+									 : INVALID_HANDLE) << "]" << endl;
 			
 			composite_ptr->dump(s, depth + 1);
 		}
