@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.48 2004/03/02 00:26:23 amoll Exp $
+// $Id: molecularControl.C,v 1.49 2004/03/02 01:00:15 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -159,12 +159,15 @@ MolecularControl::~MolecularControl()
 void MolecularControl::checkMenu(MainControl& main_control)
 	throw()
 {
-	bool copy_list_filled = (getCopyList_().size() > 0);
 	// prevent changes to composites while simulations are running
-	copy_list_filled = copy_list_filled && main_control.compositesAreMuteable();
-
-	// check for paste-slot: enable only if copy_list_ not empty and it makes sense
-	bool allow_paste = copy_list_filled;
+	
+	// check for paste-slot: enable only if one selected item &&
+	// 																			copy_list_ not empty && 
+	// 																			no simulation running &&
+	// 																			it makes sense
+	bool allow_paste = getSelection().size() == 1 &&
+										 getCopyList_().size() > 0 &&
+										 main_control.compositesAreMuteable();
 	if (allow_paste)
 	{
 		List<Composite*>::Iterator it = getCopyList_().begin();
@@ -180,13 +183,16 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	menuBar()->setItemEnabled(paste_id_, allow_paste);	
 
 	// check for clearClipboard-slot: enable only if copy_list_ not empty
-	menuBar()->setItemEnabled(clipboard_id_, copy_list_filled);
+	bool copy_list_filled = (getCopyList_().size() > 0);
+	menuBar()->setItemEnabled(clipboard_id_, copy_list_filled && 
+																					 main_control.compositesAreMuteable());
 
 	// check for cut and delete slot 
 	bool list_filled = (selected_.size() != 0 && main_control.compositesAreMuteable());
 	menuBar()->setItemEnabled(cut_id_, list_filled);
 	menuBar()->setItemEnabled(copy_id_, list_filled);	
 
+	// enable global delete entry for all GenericControls.
 	if (list_filled) getMainControl()->enableDeleteEntry();
 }
 
@@ -1169,7 +1175,7 @@ void MolecularControl::deleteCurrentItems()
 bool MolecularControl::pasteAllowedFor_(Composite& child)
 	throw()
 {
-	Composite& parent = *context_item_->getComposite();
+	Composite& parent = **getSelection().begin();
 
 	if (RTTI::isKindOf<System>(child)) return false;
 
