@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.128 2004/09/03 23:38:20 amoll Exp $
+// $Id: scene.C,v 1.129 2004/09/08 11:45:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1379,16 +1379,18 @@ namespace BALL
 		{
 			menuBar()->setItemChecked(rotate_id_, 	(current_mode_ == ROTATE__MODE));
 			menuBar()->setItemChecked(picking_id_,  (current_mode_ == PICKING__MODE));		
+
+			bool animation_running = false;
+			#ifdef BALL_QT_HAS_THREADS
+				animation_running = (animation_thread_ != 0 && animation_thread_->running());
+			#endif
 			
 			menuBar()->setItemEnabled(start_animation_id_, 
-					animation_points_.size() > 0 && 
-					getMainControl()->compositesAreMuteable()
-			#ifdef BALL_QT_HAS_THREADS
-					&& (animation_thread_ == 0 || !animation_thread_->running())
-			#endif
-					);
+																animation_points_.size() > 0 && 
+																getMainControl()->compositesAreMuteable() &&
+																!animation_running);
 			
-			menuBar()->setItemEnabled(clear_animation_id_, animation_points_.size() > 0);
+			menuBar()->setItemEnabled(clear_animation_id_, animation_points_.size() > 0 && !animation_running);
 		}
 
 		//##########################EVENTS#################################
@@ -1846,6 +1848,11 @@ namespace BALL
 			menuBar()->setItemEnabled(start_animation_id_, false);
 			menuBar()->setItemEnabled(cancel_animation_id_, true);
 
+			menuBar()->setItemEnabled(animation_repeat_id_, false);
+			menuBar()->setItemEnabled(animation_export_POV_id_, false);
+			menuBar()->setItemEnabled(animation_export_PNG_id_, false);
+			menuBar()->setItemEnabled(clear_animation_id_, false);
+
 			#ifdef BALL_QT_HAS_THREADS
 				if (animation_thread_ != 0) delete animation_thread_;
 				animation_thread_ = new AnimationThread();
@@ -1934,6 +1941,11 @@ namespace BALL
 			stop_animation_ = false;
 			menuBar()->setItemEnabled(start_animation_id_, true);
 			menuBar()->setItemEnabled(cancel_animation_id_, false);
+
+			menuBar()->setItemEnabled(animation_repeat_id_, true);
+			menuBar()->setItemEnabled(animation_export_POV_id_, true);
+			menuBar()->setItemEnabled(animation_export_PNG_id_, true);
+			menuBar()->setItemEnabled(clear_animation_id_, true);
 		}
 
 		void Scene::animationRepeatClicked()
