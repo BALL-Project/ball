@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.24 2001/09/19 17:29:58 strobel Exp $
+// $Id: reducedSurface.h,v 1.25 2001/09/19 22:21:55 amoll Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -926,8 +926,8 @@ namespace BALL
 																					"NULL-POINTER FOUND");
 			}
 		}
-		HashSet<TRSEdge<T>*>::ConstIterator e;
-		HashSet<TRSFace<T>*>::ConstIterator f;
+		typename HashSet<TRSEdge<T>*>::ConstIterator e;
+		typename HashSet<TRSFace<T>*>::ConstIterator f;
 		for (Position i = 0; i < number_of_vertices_; i++)
 		{
 			for (e = reduced_surface.vertices_[i]->edges_.begin();
@@ -1157,8 +1157,8 @@ namespace BALL
 																					"NULL-POINTER FOUND");
 			}
 		}
-		HashSet<TRSEdge<T>*>::ConstIterator e;
-		HashSet<TRSFace<T>*>::ConstIterator f;
+		typename HashSet<TRSEdge<T>*>::ConstIterator e;
+		typename HashSet<TRSFace<T>*>::ConstIterator f;
 		for (Position i = 0; i < number_of_vertices_; i++)
 		{
 			for (e = reduced_surface.vertices_[i]->edges_.begin();
@@ -2111,11 +2111,11 @@ namespace BALL
 					std::cout << "bearbeite Atom " << atom;
 					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 					#endif
-		::std::list<TRSVertex<T>*>::iterator v;
+		typename ::std::list<TRSVertex<T>*>::iterator v;
 		TRSVertex<T>* vertex;
 		HashSet<TRSFace<T>*> faces;
 		HashSet<TRSFace<T>*> treat_faces;
-		HashSet<TRSFace<T>*>::Iterator f;
+		typename HashSet<TRSFace<T>*>::Iterator f;
 		//HashSet<TRSEdge<T>*> edges;
 		//HashSet<TRSEdge<T>*> delete_edges;
 		HashSet<TRSVertex<T>*> test_vertices;
@@ -2224,7 +2224,7 @@ namespace BALL
 				number_of_faces_++;
 			}
 			test_vertices.erase(vertex);
-			HashSet<TRSVertex<T>*>::Iterator test;
+			typename HashSet<TRSVertex<T>*>::Iterator test;
 			for (test = test_vertices.begin(); test != test_vertices.end(); test++)
 			{
 						#ifdef print_rs_debug_info
@@ -2418,7 +2418,7 @@ namespace BALL
 				else
 				{
 					bool found = false;
-					std::list< std::pair< Index,TSphere3<T> > >::iterator j;
+					typename std::list< std::pair< Index,TSphere3<T> > >::iterator j;
 					#ifdef print_rs_debug_info
 					for (j = candidates.begin(); j != candidates.end(); j++)
 					{
@@ -2558,7 +2558,7 @@ namespace BALL
 		}
 		list< pair< Index,TSphere3<T> > > candidates;
 		findThirdAtom(atom1,atom2,atom_list,candidates);
-		std::list< std::pair< Index,TSphere3<T> > >::iterator k;
+		typename std::list< std::pair< Index,TSphere3<T> > >::iterator k;
 		Index back(-1);
 				#ifdef debug_rs
 				print << pre << atom1 << "  " << atom2 << "\n";
@@ -2826,7 +2826,7 @@ namespace BALL
 			return NULL;
 		}
 //std::cout << "    §8\n";
-		std::list< pair< Index,TSphere3<T> > >::iterator i = candidates.begin();
+		typename std::list< pair< Index,TSphere3<T> > >::iterator i = candidates.begin();
 		Index a3 = candidates.begin()->first;
 		TSphere3<T> probe = candidates.begin()->second;
 //std::cout << "    §9\n";
@@ -2983,7 +2983,7 @@ namespace BALL
 		T dir_ex = ((extrem == 0) ? next_atom.p[direction]-next_atom.radius
 															: next_atom.p[direction]+next_atom.radius);
 		Index a_ex = *indices.begin();
-		HashSet<Index>::ConstIterator i;
+		typename HashSet<Index>::ConstIterator i;
 		for (i = indices.begin(); i != indices.end(); i++)
 		{
 			next_atom = atom_[*i];
@@ -3346,7 +3346,7 @@ namespace BALL
 				Maths::isGreater(circle1.radius,probe_radius_)		 )
 		{
 			TPlane3<T> plane(circle1.p,circle1.n);
-			HashSet<Index>::ConstIterator i;
+			typename HashSet<Index>::ConstIterator i;
 			TCircle3<T> test_circle;
 			TSphere3<T> sphere;
 			T dist;

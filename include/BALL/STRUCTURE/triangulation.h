@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.24 2001/09/19 17:37:30 strobel Exp $
+// $Id: triangulation.h,v 1.25 2001/09/19 22:21:55 amoll Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -209,7 +209,7 @@ namespace BALL
 				}
 			}
 			TVector3<T> mass(0,0,0);
-			std::list<Position>::iterator j;
+			typename std::list<Position>::iterator j;
 			//for (Position j = 0; j < ses->spheric_faces[i]->vertex.size(); j++)
 			for (j = ecken.begin(); j != ecken.end(); j++)
 			{
@@ -229,7 +229,7 @@ namespace BALL
 			{
 				if (ses->spheric_faces[i]->edge[j] != NULL)
 				{
-					std::list<TTriangleEdge<T>*>::iterator e;
+					typename std::list<TTriangleEdge<T>*>::iterator e;
 					for (e = edge[ses->spheric_faces[i]->edge[j]->index].begin();
 							 e != edge[ses->spheric_faces[i]->edge[j]->index].end(); e++)
 					{
@@ -415,7 +415,7 @@ namespace BALL
 			normal.negate();
 		}
 		Position offset = 0;
-		std::list<TTriangle<T>*>::iterator last = surface->triangles.end();
+		typename std::list<TTriangle<T>*>::iterator last = surface->triangles.end();
 		for (Position counter = 0; counter < 2; counter++)
 		{
 			TCircle3<T> circle(face->edge[0+offset]->circle.p,
@@ -1226,7 +1226,7 @@ namespace BALL
 		}
 				#ifdef print_debug_info
 				std::cout << third.size() << " Kandidaten gefunden: ";
-				std::list<TTrianglePoint<T>*>::iterator rt;
+				typename std::list<TTrianglePoint<T>*>::iterator rt;
 				for (rt = third.begin(); rt != third.end(); rt++)
 				{
 					std::cout << (*rt)->index << "  ";
@@ -1252,7 +1252,7 @@ namespace BALL
 							 (triangle->point[0]->p-triangle->point[2]->p)	);
 		TAngle<T> min(3*Constants::PI,true);
 		std::list<TTrianglePoint<T>*> real_third;
-		std::list<TTrianglePoint<T>*>::iterator p = third.begin();
+		typename std::list<TTrianglePoint<T>*>::iterator p = third.begin();
 		TVector3<T> new_normal;
 		TVector3<T> axis(edge->point[1]->p-edge->point[0]->p);
 		TAngle<T> angle;

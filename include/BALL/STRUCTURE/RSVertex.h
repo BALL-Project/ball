@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.16 2001/09/19 17:27:20 strobel Exp $
+// $Id: RSVertex.h,v 1.17 2001/09/19 22:21:54 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -344,14 +344,14 @@ namespace BALL
 		if (deep)
 		{
 			TRSEdge<T>* edge;
-			HashSet<TRSEdge<T>*>::ConstIterator e;
+			typename HashSet<TRSEdge<T>*>::ConstIterator e;
 			for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
 			{
 				edge = new TRSEdge<T>(**e,false);
 				edges_.insert(edge);
 			}
 			TRSFace<T>* face;
-			HashSet<TRSFace<T>*>::ConstIterator f;
+			typename HashSet<TRSFace<T>*>::ConstIterator f;
 			for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
 			{
 				face = new TRSFace<T>(**f,false);
@@ -401,14 +401,14 @@ namespace BALL
 		if (deep)
 		{
 			TRSEdge<T>* edge;
-			HashSet<TRSEdge<T>*>::ConstIterator e;
+			typename HashSet<TRSEdge<T>*>::ConstIterator e;
 			for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
 			{
 				edge = new TRSEdge<T>(**e,false);
 				edges_.insert(edge);
 			}
 			TRSFace<T>* face;
-			HashSet<TRSFace<T>*>::ConstIterator f;
+			typename HashSet<TRSFace<T>*>::ConstIterator f;
 			for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
 			{
 				face = new TRSFace<T>(**f,false);
