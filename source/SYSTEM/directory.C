@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.23 2003/05/25 21:38:10 oliver Exp $
+// $Id: directory.C,v 1.24 2003/06/22 10:27:47 oliver Exp $
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -33,7 +33,7 @@ namespace BALL
 			{
 				directory_path_ = buffer;
 				free(buffer);
-				dir_ = CreateFile(buffer_,
+				dir_ = CreateFile(buffer,
 													FILE_LIST_DIRECTORY,                // access (read/write) mode
 													FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 													NULL,                               // security descriptor
@@ -566,19 +566,16 @@ namespace BALL
 		(const String& directory_path, bool set_current)
 	{
 		
+		backup_path_ = "";
+		char* buffer;
 #ifdef BALL_COMPILER_MSVC
 		CloseHandle(dir_);
 		FindClose(dirent_);
 		dir_ = dirent_= INVALID_HANDLE_VALUE;
-		backup_path_ = "";
-		char * buffer_;
-
 		if ((directory_path[0] == FileSystem::PATH_SEPARATOR)|| (directory_path[1] == ':' && directory_path[2] == FileSystem::PATH_SEPARATOR))
 #else
 		dir_ = 0;
 		dirent_ = 0;
-		backup_path_ = "";
-		char* buffer;
 		if (directory_path[0] == FileSystem::PATH_SEPARATOR)		//absolute path
 #endif
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.iC,v 1.14 2003/05/25 21:38:08 oliver Exp $
+// $Id: directory.iC,v 1.15 2003/06/22 10:27:46 oliver Exp $
 //
 
 BALL_INLINE
@@ -150,7 +150,7 @@ bool Directory::remove(String directory_path)
 	#ifdef BALL_COMPILER_MSVC
 
 		// get alsolute path
-		char* buffer = ::_getcwd(NULL,MAX_PATH_LENGTH)
+		char* buffer = ::_getcwd(NULL, MAX_PATH_LENGTH);
 		String old_dir(buffer);
 		free(buffer);
 		if(::_chdir(directory_path.data()) == 0)

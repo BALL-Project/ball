@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.51 2003/06/19 13:07:34 oliver Exp $
+// $Id: composite.h,v 1.52 2003/06/22 10:27:46 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -860,7 +860,7 @@ B		*/
 				return *this;
 			}
 
-			BALL_INLINE	Composite* getContainer()	throw() { throw bound_; }
+			BALL_INLINE	Composite* getContainer()	throw() { return bound_; }
 
 			BALL_INLINE	const Composite* getContainer() const	throw() { return bound_; }
 

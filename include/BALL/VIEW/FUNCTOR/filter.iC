@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: filter.iC,v 1.3 2002/02/27 12:19:57 sturm Exp $
+// $Id: filter.iC,v 1.4 2003/06/22 10:27:47 oliver Exp $
 
 BALL_INLINE
 bool Filter::getResult() const
@@ -29,13 +29,6 @@ Filter::operator long () const
   throw()
 {
 	return (long)((object_passed_ == true) ? 1 : 0);
-}
-
-BALL_INLINE
-Filter::operator void* () const
-  throw()
-{
-	return (void*)((object_passed_ == true) ? 1 : 0);
 }
 
 BALL_INLINE

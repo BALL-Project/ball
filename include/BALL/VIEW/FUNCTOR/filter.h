@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: filter.h,v 1.11 2003/03/26 13:08:48 sturm Exp $
+// $Id: filter.h,v 1.12 2003/06/22 10:27:46 oliver Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H
@@ -140,14 +140,6 @@ namespace BALL
 			operator long () const
 				throw();
 
-			/** Conversion to void*.
-					Cast {\em *this} filter to a void* value.
-					@return  int <tt>(void*)1</tt> if the  \link Composite Composite \endlink  object passed through {\em *this} filter, <tt>(void*)0</tt> otherwise
-					@see     getResult
-					@see     setResult_
-			*/
-			operator void* () const
-				throw();
 			//@}
 
 			protected:
