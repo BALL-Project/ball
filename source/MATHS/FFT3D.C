@@ -1,4 +1,4 @@
-// $Id: FFT3D.C,v 1.4 2003/05/03 17:29:32 oliver Exp $
+// $Id: FFT3D.C,v 1.5 2003/05/06 12:34:59 oliver Exp $
 
 #include <BALL/MATHS/FFT3D.h>
 
@@ -44,7 +44,7 @@ namespace BALL
 
 	FFT3D::FFT3D(Size ldnX, Size ldnY, Size ldnZ, double stepPhysX, double stepPhysY, double stepPhysZ, Vector3 origin, bool inFourierSpace)
 		throw()
-		: TRegularData3D<FFTW_COMPLEX>(Vector3(-origin.x,-origin.y,-origin.z), Vector3((((1<<ldnX)-1)*stepPhysX_)-origin.x,(((1<<ldnX)-1)*stepPhysY_)-origin.y,(((1<<ldnZ)-1)*stepPhysZ_)-origin.z), (1<<ldnX), (1<<ldnY), (1<<ldnZ)),
+		: TRegularData3D<FFTW_COMPLEX>(TRegularData3D<FFTW_COMPLEX>::IndexType((1<<ldnX), (1<<ldnY), (1<<ldnZ)), -origin, Vector3((((1<<ldnX)-1)*stepPhysX_),(((1<<ldnX)-1)*stepPhysY_),(((1<<ldnZ)-1)*stepPhysZ_))),
 		  lengthX_(1<<ldnX),
 			lengthY_(1<<ldnY),
 			lengthZ_(1<<ldnZ),
@@ -74,7 +74,7 @@ namespace BALL
 		throw()
 	{
 		clear();
-		data = fft3D.data;
+		TRegularData3D<FFTW_COMPLEX>::operator = (fft3D);
 		lengthX_ = fft3D.lengthX_;
 		lengthY_ = fft3D.lengthY_;
 		lengthZ_ = fft3D.lengthZ_;
@@ -178,8 +178,8 @@ namespace BALL
 	void FFT3D::doFFT()
 		throw()
 	{
-//		fftwnd_one(planForward_, &(*data.begin()), 0);
-		fftwnd_one(planForward_,data, 0); //TRegularData3D is *not* based on vector but on standard-arrays...
+		fftwnd_one(planForward_, &(operator[](0)), 0);
+		// fftwnd_one(planForward_,data, 0); //TRegularData3D is *not* based on vector but on standard-arrays...
 		inFourierSpace_ = true;
 		numPhysToFourier_++;
 	}
@@ -187,8 +187,8 @@ namespace BALL
 	void FFT3D::doiFFT()
 		throw()
 	{
-		//fftwnd_one(planBackward_, &(*data.begin()), 0);
-		fftwnd_one(planBackward_,data,0);
+		fftwnd_one(planBackward_, &(operator[](0)), 0);
+		// fftwnd_one(planBackward_,data,0);
 		inFourierSpace_ = false;
 		numFourierToPhys_++;
 	}
@@ -381,7 +381,7 @@ namespace BALL
 	{
 		if (!inFourierSpace_)
 		{
-			if (position > number_of_grid_points_)
+			if (position >= size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -401,7 +401,7 @@ namespace BALL
 		}
 		else
 		{
-			if (position > number_of_grid_points_)
+			if (position >= size())
 			{
 				throw Exception::OutOfGrid(__FILE__, __LINE__);
 			}
@@ -584,7 +584,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return data[internalPos];
+		return operator[](internalPos);
 	}
 
 	const FFTW_COMPLEX& FFT3D::operator[](const Vector3& pos) const
@@ -639,19 +639,19 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return data[internalPos];
+		return operator [] (internalPos);
 	}
 
 	FFTW_COMPLEX& FFT3D::operator[](const Position& pos)
 		throw(Exception::OutOfGrid)
 	{
-		return data[pos];
+		return operator [] (pos);
 	}
 
 	const FFTW_COMPLEX& FFT3D::operator[](const Position& pos) const
 		throw(Exception::OutOfGrid)
 	{
-		return data[pos];
+		return operator [] (pos);
 	}
 
 	Complex FFT3D::phase(const Vector3& pos) const
@@ -687,13 +687,9 @@ namespace BALL
 			Size lengthY = from.getMaxYIndex()+1;
 			Size lengthZ = from.getMaxZIndex()+1;
 			
-			TRegularData3D<Complex> newGrid(from.getPhysSpaceMinX(), 
-																			from.getPhysSpaceMinY(),
-																			from.getPhysSpaceMinZ(),
-																			from.getPhysSpaceMaxX(),
-																			from.getPhysSpaceMaxY(),
-																			from.getPhysSpaceMaxZ(),
-																			lengthX, lengthY, lengthZ);
+			TRegularData3D<Complex> newGrid(TRegularData3D<Complex>::IndexType(lengthX, lengthY, lengthZ),
+																			Vector3(from.getPhysSpaceMinX(), from.getPhysSpaceMinY(), from.getPhysSpaceMinZ()),
+																			Vector3(from.getPhysSpaceMaxX(), from.getPhysSpaceMaxY(), from.getPhysSpaceMaxZ()));
 
 			// and fill it
 			double normalization=1./(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
@@ -736,13 +732,13 @@ namespace BALL
 
 
 			
-			TRegularData3D<Complex> newGrid(from.getFourierSpaceMinX(), 
-																			from.getFourierSpaceMinY(),
-																			from.getFourierSpaceMinZ(),
-																			from.getFourierSpaceMaxX(),
-																			from.getFourierSpaceMaxY(),
-																			from.getFourierSpaceMaxZ(),
-																			lengthX, lengthY, lengthZ);
+			TRegularData3D<Complex> newGrid(TRegularData3D<Complex>::IndexType(lengthX, lengthY, lengthZ),
+																			Vector3(from.getFourierSpaceMinX(), 
+																							from.getFourierSpaceMinY(),
+																							from.getFourierSpaceMinZ()),
+																			Vector3(from.getFourierSpaceMaxX(),
+																							from.getFourierSpaceMaxY(),
+																							from.getFourierSpaceMaxZ()));
 
 			// and fill it
 			double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
@@ -801,16 +797,16 @@ namespace BALL
 			Size lengthY = from.getMaxYIndex()+1;
 			Size lengthZ = from.getMaxZIndex()+1;
 			
-			RegularData3D newGrid(from.getPhysSpaceMinX(), 
-														from.getPhysSpaceMinY(),
-														from.getPhysSpaceMinZ(),
-														from.getPhysSpaceMaxX(),
-														from.getPhysSpaceMaxY(),
-														from.getPhysSpaceMaxZ(),
-														lengthX, lengthY, lengthZ);
+			RegularData3D newGrid(RegularData3D::IndexType(lengthX, lengthY, lengthZ),
+														Vector3(from.getPhysSpaceMinX(), 
+																		from.getPhysSpaceMinY(),
+																		from.getPhysSpaceMinZ()),
+														Vector3(from.getPhysSpaceMaxX(),
+																		from.getPhysSpaceMaxY(),
+																		from.getPhysSpaceMaxZ()));
 
 			// and fill it
-			double normalization=1./(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization = 1./(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
 			FFTW_COMPLEX dataIn;
 			Complex      dataOut;
 			
@@ -850,13 +846,14 @@ namespace BALL
 
 
 			
-			RegularData3D newGrid(from.getFourierSpaceMinX(), 
-														from.getFourierSpaceMinY(),
-														from.getFourierSpaceMinZ(),
-														from.getFourierSpaceMaxX(),
-														from.getFourierSpaceMaxY(),
-														from.getFourierSpaceMaxZ(),
-														lengthX, lengthY, lengthZ);
+			RegularData3D newGrid(RegularData3D::IndexType(lengthX, lengthY, lengthZ),
+														Vector3(from.getFourierSpaceMinX(), 
+																		from.getFourierSpaceMinY(),
+																		from.getFourierSpaceMinZ()),
+														Vector3(from.getFourierSpaceMaxX(),
+																		from.getFourierSpaceMaxY(),
+																		from.getFourierSpaceMaxZ()));
+
 
 			// and fill it
 			double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
