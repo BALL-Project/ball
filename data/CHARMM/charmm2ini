@@ -1,0 +1,1150 @@
+#!/opt/gnu/bin/gawk -f
+# 
+# $Id: charmm2ini,v 1.1 2000/12/06 11:41:03 oliver Exp $
+#
+#  CHARMM parameter and topology file converter
+#  produces output for BALL force field INI files
+#
+
+#
+#  functions to translate an atom name
+
+# replace all '%' (CHARMM wildcard for single character)
+# with '?' (BALL wildcard for single character)
+# and 'X' (CHARMM wildcard for any type)
+# with '*' (BALL wildcard)
+#
+function wildcardSubst(name)
+{
+	sub(/\%/, "?", name)	
+	sub(/^X$/, "*", name)
+	return name
+}
+
+function PDBAtomName(atom, res) 
+{
+	query_name = res ":" atom
+	gsub("-[A-Z]*:", ":", query_name)
+	if (translation[query_name] != "")
+	{
+		atom = translation[query_name]
+		gsub("^.*:", "", atom)
+	} else {
+		if (translation["*:"atom] != "")
+		{
+			atom = translation["*:"atom]
+			gsub("^.*:", "", atom)
+		}
+	}
+	return atom
+}
+
+function completePDBName(atom_name)
+{
+	split(atom_name, fields, ":")
+	res = fields[1]
+	atom = fields[2]
+	query_name = res ":" atom
+	gsub("-[A-Z]*:", ":", query_name)
+	if (translation[query_name] != "")
+	{
+		atom = translation[query_name]
+		gsub("^.*:", "", atom)
+	} else {
+		if (translation["*:"atom] != "")
+		{
+			atom = translation["*:"atom]
+			gsub("^.*:", "", atom)
+		}
+	}
+	return res":"atom
+}
+
+BEGIN\
+{
+	if (ARGC != 3 && ARGC != 4)
+	{
+		print "charmm2ini <parm file> <top file> [<EEF1_file>]" > "/dev/stderr"
+		exit
+	}	
+
+	# read the atom name translation table
+	# from AmberNames.dat
+	# the first column contains the AMBER name, the second column the PDB name
+	result = getline < "CHARMMNames.dat"
+	if (result == 0)
+	{
+		print "Could not open name conversion file CHARMMNames.dat" >"/dev/stderr"
+		exit
+	}
+	while (result == 1)
+	{
+		translation[$1] = $2
+		result = getline < "CHARMMNames.dat"
+	}
+	close("CHARMMNames.dat")
+
+
+	# number of different names (res + atom) 
+	# for the ChargesAndTypeNames section
+	number_of_names=0
+
+
+	#	read all CHARMM atom types from an external
+	# file since the param files do not contain an explicit listing
+	# of the types
+	number_of_atom_types = 0;
+	getline < "CHARMMTypes.dat"
+	while (RT != 0)
+	{
+		if (substr($1, 1, 1) != "#")
+		{
+			atom_types[number_of_atom_types] = $1
+			type_map[$1] = number_of_atom_types
+			$1 = ""
+			sub(/^ */, "", $0)
+			atom_type_comment[number_of_atom_types] = $0		
+			number_of_atom_types++
+		}
+		getline < "CHARMMTypes.dat"
+	}
+	close("CHARMMTypes.dat")
+
+	# add the wildcard type to the type_map
+	type_map["*"] = -1
+	}
+	{
+	if (ARGIND == 1)
+	{
+		# write the parameter file title as a comment to the first line
+		print "; " $0 
+		print "; converted from " FILENAME " using charmm2ini"
+		print ";"
+
+		#	next section: bond stretch parameters
+		#
+		print "[QuadraticBondStretch]"
+		print "ver:version key:I key:J value:k value:r0 value:comment"
+		print "@unit_k=kcal/mol"
+		print "@unit_r0=Angstrom"
+		print ";"
+		print ";"
+		print ";  Rev   I     J       k           r0      comment"
+		print ";  --- ----- ----- ---------- ------------ -----------------------"
+		
+		getline
+		while (substr($1, 1, 4) != "BOND")
+		{
+			getline
+		}
+		
+		getline
+		while (substr($1, 1, 4) != "THET" && substr($1, 1, 4) != "ANGL")
+		{
+			# avoid comment lines
+			if ((substr($1, 1, 1) != "!") && (NF > 3))
+			{
+				rev = 1.0
+				I = $1
+				J = $2
+				k = $3
+				sub(/!/, "", $4) # remove the '!' (indicating comments) from field $4
+				r0 = $4
+
+				# check whether the types are known
+				if (type_map[I] == "")
+				{
+					print "Unknown atom type " I " in line " FNR " of " FILENAME> "/dev/stderr"
+					exit
+				}
+				if (type_map[J] == "")
+				{
+					print "Unknown atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+				
+				# extract the comment
+				$1 = ""
+				$2 = ""
+				$3 = ""
+				$4 = ""
+				comment = $0
+
+				sub(/^[! ]*/, "", comment)
+			
+				printf "   %3.1f  %-4s  %-4s %9.3f  %11.7f   %c%s%c\n", rev, I, J, k, r0, 34, comment, 34
+			}
+			
+			getline
+		}
+		print ""
+		print ""
+
+		
+		# next section: angle bend parameters
+		#
+		print "[QuadraticAngleBend]"
+		print "ver:version key:I key:J key:K value:k value:theta0 value:comment"
+		print "@unit_k=kcal/mol"
+		print "@unit_theta0=degree"
+		print ";"
+		print ";"
+		print ";  Rev   I     J     K       k         r0      comment"
+		print ";  --- ----- ----- ----- ---------- ---------- -----------------------"
+		
+		getline
+		while (substr($1, 1, 4) != "DIHE" && substr($1, 1, 3) != "PHI")
+		{
+			# avoid comment lines
+			if ((substr($1, 1, 1) != "!") && (NF > 4))
+			{
+				rev = 1.0
+				I = $1
+				J = $2
+				K = $3
+				k = $4
+				theta0 = $5
+				sub(/!/, "", theta0)
+				
+				# check whether the types are known
+				if (type_map[I] == "")
+				{
+					print "Unknown atom type " I " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+				if (type_map[J] == "")
+				{
+					print "Unknown atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+				if (type_map[K] == "")
+				{
+					print "Unknown atom type " K " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+
+				# extract the comment
+				$1 = $2 = $3 = $4 = $5 = ""
+				comment = $0
+				sub(/^[! ]*/, "", comment)
+			
+				printf "   %3.1f  %-4s  %-4s  %-4s %10.5f %10.5f %c%s%c\n", rev, I, J, K, k, theta0, 34, comment, 34
+			}
+			
+			getline
+		}
+		print ""
+		print ""
+		
+		# next section: proper torsions
+		#
+		print "[Torsions]"
+		print "ver:version key:I key:J key:K key:L key:n value:div value:V value:phi0 value:f value:comment"
+		print "@unit_V=kcal/mol"
+		print "@unit_phi0=degree"
+		print "@unit_div=1"
+		print "@unit_f=1"
+		print ";"
+		print "; energy is calculated as follows:"
+		print ";"
+		print ";   E = (V / div) * (1 + cos(f * phi + phi0))"
+		print ";"
+		print ";"
+		print ";  Rev   I     J     K     L    n    div     V         phi0     f    comment"
+		print ";  --- ----- ----- ----- ----- ---   --- ---------- ---------- --- -----------------------"
+		
+		# clear some variables we need later
+		old_I = old_J = old_K = old_L = ""
+		first = 0
+		number = 0
+
+		getline
+		while (substr($1, 1, 4) != "IMPH")
+		{
+			if ((substr($1, 1, 1) != "!") && (NF > 6))
+			{
+				rev = 1.0
+				I = wildcardSubst($1)
+				J = wildcardSubst($2)
+				K = wildcardSubst($3)
+				L = wildcardSubst($4)
+				div = 1
+				V = $5
+				phi0 = $7
+				sub(/!/, "", phi0)
+				f = $6
+				
+				# check whether the types are known
+				if (type_map[I] == "")
+				{
+					print "Unknown atom type " I " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+				if (type_map[J] == "")
+				{
+					print "Unknown atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+				if (type_map[K] == "")
+				{
+					print "Unknown atom type " K " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+				if (type_map[L] == "")
+				{
+					print "Unknown atom type " L " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+
+				$1 = $2 = $3 = $4 = $5 = $6 = $7 = ""
+				comment = $0
+				sub(/^[! ]*/, "", comment)
+			
+				# check for a repeated line
+				if (I == old_I && J == old_J \
+						&& K == old_K && L == old_L)
+				{
+					# buffer all lines
+					div_arr[number] = div
+					V_arr[number] = V
+					phi0_arr[number] = phi0
+					f_arr[number] = f
+					comment_arr[number] = comment
+					number++
+				} else {
+					# print the buffered lines
+					if (number > 0)
+					{
+						printf "   %3.1f  %-4s  %-4s  %-4s  %-4s  %-4s  %1d  %10.5f %10.5f  %1d  %c%s%c\n",\
+										 rev, old_I, old_J, old_K, old_L, "N", number, 0.0, 0.0, 0, 34, "", 34
+						for (i = 0; i < number; i++)
+						{
+							printf "   %3.1f  %-4s  %-4s  %-4s  %-4s  %-4s  %1d  %10.5f %10.5f  %1d  %c%s%c\n",\
+										 rev, old_I, old_J, old_K, old_L, i + 1, div_arr[i], V_arr[i], phi0_arr[i], f_arr[i], 34, comment_arr[i], 34
+						}
+					}
+					
+					# and buffer the new line
+					div_arr[0] = div
+					V_arr[0] = V
+					phi0_arr[0] = phi0
+					f_arr[0] = f
+					comment_arr[0] = comment
+					number = 1
+				}
+
+				# remember the atom types of this line
+				old_I = I
+				old_J = J
+				old_K = K
+				old_L = L				
+			}
+
+			getline
+		}
+		
+		if (number > 0)
+		{
+			# print the buffered lines
+			printf "   %3.1f  %-4s  %-4s  %-4s  %-4s  %-4s  %1d  %10.5f %10.5f  %1d  %c%s%c\n",\
+						 rev, old_I, old_J, old_K, old_L, "N", number, 0.0, 0.0, 0, 34, "", 34
+			for (i = 0; i < number; i++)
+			{
+				printf "   %3.1f  %-4s  %-4s  %-4s  %-4s  %-4s  %1d  %10.5f %10.5f  %1d  %c%s%c\n",\
+							 rev, old_I, old_J, old_K, old_L, i + 1, div_arr[i], V_arr[i], phi0_arr[i], f_arr[i], 34, comment_arr[i], 34
+			}
+		}
+					
+		print ""
+		print ""
+		
+		# next section: improper torsions
+		#
+		print "[ImproperTorsions]"
+		print "ver:version key:I key:J key:K key:L value:k value:phase value:comment"
+		print "@unit_k=kcal/mol"
+		print "@unit_phase=deg"
+		print ";"
+		print "; energy is calculated as follows:"
+		print ";"
+		print ";   E = k * (psi - psi0)^2"
+		print ";"
+		print ";"
+		print ";  Rev   I     J     K     L        k          phase           comment"
+		print ";  --- ----- ----- ----- ----- ---------- ------------- -----------------------"
+		
+		getline
+		while ((substr($1, 0, 4) != "NONB") && (substr($1, 0, 4) != "NBON"))
+		{
+			if ((substr($1, 1, 1) != "!") && (NF > 6))
+			{
+				rev = 1.0
+				I = wildcardSubst($1)
+				J = wildcardSubst($2)
+				K = wildcardSubst($3)
+				L = wildcardSubst($4)
+				div = 1
+				k = $5
+				psi0 = $7
+				sub(/!/, "", psi0)
+				f = $6
+				
+				# check whether the types are known
+				if (type_map[I] == "")
+				{
+					print "Unknown atom type " I " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+				if (type_map[J] == "")
+				{
+					print "Unknown atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+				if (type_map[K] == "")
+				{
+					print "Unknown atom type " K " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+				if (type_map[L] == "")
+				{
+					print "Unknown atom type " L " in line " FNR " of " FILENAME > "/dev/stderr"
+					exit
+				}
+
+				$1 = $2 = $3 = $4 = $5 = $6 = $7 = ""
+				comment = $0
+				sub(/^[! ]*/, "", comment)
+			
+				printf "   %3.1f  %-4s  %-4s  %-4s  %-4s %10.5f %10.5f %c%s%c\n",\
+									 rev,    I,    J,    K,     L,   k,    psi0, 34, comment, 34
+			}
+
+			getline
+		}
+					
+		print ""
+		print ""
+
+		# next section: vdW parameters
+		#
+		print "[LennardJones]"
+		print "ver:version key:I value:R value:epsilon"
+		print "@unit_R=Angstrom"
+		print "@unit_epsilon=kcal/mol"
+		
+		# print the nonbonded options
+		$1 = ""
+		options_string = $0
+		getline 
+		options_string = options_string " " $0
+		number_of_options = split(options_string, options)
+		for (i = 1; i <= number_of_options; i++)
+		{
+			if (((i + 1) <= number_of_options) && (match(options[i + 1], "^[0-9\.eE\+\-]*$") != 0))
+			{
+				print "@" options[i] "=" options[i+1]
+				i++
+			} else {
+				print "@" options[i] "=true"
+			}
+		}
+			
+		
+		print ";"
+		print ";"
+		print ";  Rev type   Rmin/2      Emin    comment"
+		print ";  --- ---- ---------- ---------- -------------------------"
+		
+		number_of_14_params = 0
+
+
+		getline
+		while (substr($1, 1, 4) != "NBFI")
+		{
+			if ((substr($1, 1, 1) != "!") && (NF >= 4))
+			{
+				rev = 1.0
+				I = $1
+				sub(/ /, "", I)
+				sub(/!/, "", $4)
+				I = wildcardSubst(I)
+				Rmin = $4
+				Emin = $3
+				r_min[I] = Rmin
+				if ((match($5, /[0-9.\-\+eE]/) > 0)\
+						&& (match($6, /[0-9.\-\+eE]/) > 0)\
+						&& (match($7, /[0-9.\-\+eE]/) > 0))
+				{
+					sub(/!/, "", $7)
+					Emin14[number_of_14_params] = $6
+					Rmin14[number_of_14_params] = $7
+					Type14[number_of_14_params] = I
+					number_of_14_params++
+					$5 = $6 = $7 = ""
+				}
+					
+				$1 = $2 = $3 = $4 = ""
+				comment = $0;
+				sub(/^[! ]*/, "", comment)
+
+				printf "   %3.1f %-4s %10.6f %10.6f %c%s%c\n", rev, I, Rmin, Emin, 34, comment, 34
+			}
+
+			getline
+		}
+		print "" 
+		print ""
+
+		print "[LennardJones14]"
+		print "ver:version key:I value:R value:epsilon"
+		print "@unit_R=Angstrom"
+		print "@unit_epsilon=kcal/mol"
+		print ";"
+		print ";"
+		print ";  Rev type   Rmin/2      Emin    comment"
+		print ";  --- ---- ---------- ---------- -------------------------"
+
+		for (i = 0; i < number_of_14_params; i++)
+		{
+			printf "   %3.1f %-4s %10.6f %10.6f\n", rev, Type14[i], Rmin14[i], Emin14[i]
+		}
+		print "" 
+		print ""
+		
+		# next section: NBFIX
+		#
+		number_of_14_params = 0
+		print "[SpecificNonBonded]"
+		print "ver:version key:I key:J value:R value:epsilon"
+		print "@unit_R=Angstrom"
+		print "@unit_epsilon=kcal/mol"
+		print ";"
+		print ";"
+		print ";  Rev  I    J      Rmin      epsilon"
+		print ";  --- ---- ---- ---------- ----------"
+		
+
+		getline
+		while (substr($1, 1, 4) != "HBON")
+		{
+			if ((substr($1, 1, 1) != "!") && (NF > 3))
+			{
+				rev = 1.0
+				I = wildcardSubst($1)
+				J = wildcardSubst($2)
+				Rmin = $4
+				Emin = $3
+
+				if (Emin != 0.0)
+				{
+					printf "   %3.1f  %-4s %-4s %10.4f %10.4f\n", rev, I, J, Rmin, Emin
+				}
+
+
+				if ((match($5, /[0-9.\-\+eE]/) > 0) && (match($6, /[0-9.\-\+eE]/) > 0))	
+				{
+					Rmin14[number_of_14_params] = $6
+					Emin14[number_of_14_params] = $5
+					TypeI14[number_of_14_params] = I
+					TypeJ14[number_of_14_params] = J
+		
+					number_of_14_params++
+				}
+			}
+			
+			getline
+		}
+		print ""
+		print ""
+		number_of_14_params = 0
+		print "[SpecificNonBonded14]"
+		print "ver:version key:I key:J value:R value:epsilon"
+		print "@unit_R=Angstrom"
+		print "@unit_epsilon=kcal/mol"
+		print ";"
+		print ";"
+		print ";  Rev  I    J      Rmin      epsilon"
+		print ";  --- ---- ---- ---------- ----------"
+		
+
+		for (i = 0; i < number_of_14_params; i++)
+		{
+			if (Emin14[i] != 0.0)
+			{
+				printf "   %3.1f  %-4s %-4s %10.4f %10.4f\n", rev, 
+							TypeI14[i], TypeJ14[i], Rmin14[i], Emin14[i]
+			}
+		}
+
+		print ""
+		print ""
+					
+		while (ARGIND == 1)
+		{
+			getline
+		}
+	}
+
+	if (ARGIND == 2)
+	{
+		# read the masses for the different atom types
+		# and the default patches
+		while ($1 != "RESI" )
+		{
+			#  read mass
+			if ($1 == "MASS")
+			{
+				mass[$3] = $4
+			}
+			#   read default patch names
+			if (substr($1, 1, 4) == "DEFA")
+			{
+				default_patch_first = $3
+				default_patch_last = $5
+			}
+			
+			#   read autogenerate tag
+			if (substr($1, 1, 4) == "AUTO")
+			{
+				if ((substr($2, 1, 4) == "DIHE") || (substr($3, 1, 4) == "DIHE"))
+				{	
+					create_residue_dihedrals = true
+				} else {
+					create_residue_dihedrals = false
+				}
+				if ((substr($2, 1, 4) != "ANGL") && (substr($3, 1, 4) != "ANGL"))
+				{	
+					print "Cannot read parameter files without autogenerated angles!" >"/dev/stderr"
+				}
+			}
+			
+			getline
+		}
+		
+		# write a section for the atom types
+		print "[AtomTypes]"
+		print "value:ver key:type value:mass value:extended value:comment"
+		print "@unit_mass=g/mol"
+		print ";"
+		print ";"
+		print ";   Rev Type    mass     extended   comment"
+		print ";   --- ---- ---------- ---------- ---------------------------------------------"
+		rev = 1.0
+		for (i = 0; i < number_of_atom_types; i++)
+		{
+			if (mass[atom_types[i]] != "")
+			{
+				if (match(atom_types[i],/^..[1-4][Ee]/) != 0)
+				{
+					extended="true"
+				} else {
+					extended="false"
+				}
+				printf "    %3.1f %-4s %10.6f   %-5s    %c%s%c\n", rev, atom_types[i], mass[atom_types[i]], extended, 34, atom_type_comment[i], 34
+			}
+		}
+		print ""
+		print ""
+
+
+		number_of_residue_atoms = 0
+		number_of_residues = 0
+		number_of_res_torsions = 0
+
+		# next section: improper torsions 
+		#
+		print "[ResidueImproperTorsions]"
+		print "key:name value:B value:C value:D"
+		print ";"
+		print ";"
+		print ";    res:atom    atom B atom C atom D"
+		print ";  ------------  ------ ------ ------" 	
+
+		
+		while ($1 != "END")
+		{
+			while (substr($1, 1, 1) == "!")
+			{
+				getline
+			} 
+			line_read = "false"
+
+			if ($1 == "RESI")
+			{
+				name = $2
+				res_names[number_of_residues] = name
+				number_of_residues++
+				
+				#	set the default patches for this residue
+				#	(overwritten by a PATC card)
+				first_patch[name] = default_patch_first
+				last_patch[name] = default_patch_last
+				
+				getline
+				line_read = "true"
+				while ($1 != "END" && $1 != "PRES" && $1 != "" && $1 != "RESI")
+				{
+					# extract the types and charges
+					# 
+					if ($1 == "ATOM")
+					{
+						atom = name":"$2
+						atom_charge[atom] = $4
+						atom_type[atom] = $3
+						residue_atom_list[name] = residue_atom_list[name] " " $2
+						residue_atoms[number_of_residue_atoms] = atom
+						number_of_residue_atoms++
+					}
+
+					# check for required patches
+					# (overwriting the default patches)
+					if (substr($1, 1, 4) == "PATC")
+					{	
+						if ((NF != 5) && (NF != 3))
+						{
+							print "illegal PATCh card in line " FNR " of " FILENAME >"/dev/stderr"
+							exit
+						}
+						first_patch[name] = $3
+						if (NF > 3)
+						{
+							last_patch[name] = $5
+						}
+					}
+
+					# extract the improper torsions
+					#
+					if ($1 == "IMPH")
+					{
+						# check whether we have a complete line
+						if ((NF != 5) && (NF != 9) && (NF != 13))
+						{
+							print "illegal IMPH line in line " FNR " of " FILENAME
+						} else {
+							printf "    %-8s      %-4s   %-4s   %-4s\n", 
+								name ":" PDBAtomName($2, name), PDBAtomName($3, name), PDBAtomName($4, name), PDBAtomName($5, name)
+							if (NF > 5)	
+							{
+								printf "    %-8s      %-4s   %-4s   %-4s\n", 
+									name ":" PDBAtomName($6, name), PDBAtomName($7, name), PDBAtomName($8, name), PDBAtomName($9, name)
+							}
+							if (NF > 9)	
+							{
+								printf "    %-8s      %-4s   %-4s   %-4s\n", 
+									name ":" PDBAtomName($10, name), PDBAtomName($11, name), PDBAtomName($12, name), PDBAtomName($13, name)
+							}
+						}
+					}
+
+					# extract the proper torsions
+					#
+					if ($1 == "DIHE")
+					{
+						# check whether we have a complete line
+						if ((NF != 5) && (NF != 9) && (NF != 13))
+						{
+							print "illegal DIHE line in line " FNR " of " FILENAME
+						} else {
+							res_torsions_res[number_of_res_torsions] = name
+							res_torsions_A[number_of_res_torsions] = PDBAtomName($2, name)
+							res_torsions_B[number_of_res_torsions] = PDBAtomName($3, name)
+							res_torsions_C[number_of_res_torsions] = PDBAtomName($4, name)
+							res_torsions_D[number_of_res_torsions] = PDBAtomName($5, name)
+							number_of_res_torsions++
+
+							if (NF > 5)	
+							{
+								res_torsions_res[number_of_res_torsions] = name
+								res_torsions_A[number_of_res_torsions] = PDBAtomName($6, name)
+								res_torsions_B[number_of_res_torsions] = PDBAtomName($7, name)
+								res_torsions_C[number_of_res_torsions] = PDBAtomName($8, name)
+								res_torsions_D[number_of_res_torsions] = PDBAtomName($9, name)
+								number_of_res_torsions++
+
+								if (NF > 9)	
+								{
+									res_torsions_res[number_of_res_torsions] = name
+									res_torsions_A[number_of_res_torsions] = PDBAtomName($10, name)
+									res_torsions_B[number_of_res_torsions] = PDBAtomName($11, name)
+									res_torsions_C[number_of_res_torsions] = PDBAtomName($12, name)
+									res_torsions_D[number_of_res_torsions] = PDBAtomName($13, name)
+									number_of_res_torsions++
+								}
+							}
+						}
+					}
+					getline 
+				} 
+			}
+			#	read residue patches
+			#
+			if ($1 == "PRES")
+			{
+				name = $2
+				# just to find out whether we have this patch
+				patch_names[name] = name
+
+				getline 
+				line_read = "true"
+				while ($1 != "" && $1 != "END" && $1 != "RESI" && $1 != "PRES")
+				{
+					#	read DELEte cards
+					# we only interpret the deleted atoms - the rest is irrelevant
+					if (substr($1, 1, 4) == "DELE" && $2 == "ATOM")
+					{
+						for (i = 3; i <= NF; i++)
+						{
+							patch_deletes[name] = patch_deletes[name] " " $i
+						}
+					}
+
+					#	read ATOM cards
+					# remember the new charge and atom type
+					if (substr($1, 1, 4) == "ATOM")
+					{
+						patch_charge[name":"$2] = $4
+						patch_type[name":"$2] = $3
+						patch_atoms[name] = patch_atoms[name] " " $2
+					}
+
+					# read improper torsions
+					#
+					if ($1 == "IMPH")
+					{
+						# check whether we have a complete line
+						if ((NF != 5) && (NF != 9) && (NF != 13))
+						{
+							print "illegal IMPH line for residue patch " name " in line " FNR " of " FILENAME
+						} else {
+							for (i = 2; i <= NF; i++)
+							{
+								patch_impropers[name] = patch_impropers[name]" "$i
+							}
+						}
+					}
+
+					# read proper torsions
+					#
+					if ($1 == "DIHE")
+					{
+						# check whether we have a complete line
+						if ((NF != 5) && (NF != 9) && (NF != 13))
+						{
+							print "illegal DIHE line for residue patch " name " in line " FNR " of " FILENAME
+						} else {
+							for (i = 2; i <= NF; i++)
+							{
+								patch_torsions[name] = patch_torsions[name]" "$i
+							}
+						}
+					}
+
+					getline
+				}
+			}
+			#	read the next line if neither "RESI" nor "PRES"
+			# were found
+			#
+			if (line_read = "false")
+			{
+				getline
+			}
+		}
+
+		#
+		# write the patched impropers
+		#
+		for (j = 0; j < number_of_residues; j++)
+		{
+			name = res_names[j]
+			# check whether we need a first patch
+			if (first_patch[res_names[j]] != "NONE")
+			{
+				patch_name = first_patch[res_names[i]]
+				if (patch_names[patch_name] != patch_name)
+				{
+					print "undefined first patch " patch_name " for residue " res_names[j] >"/dev/stderr"
+				}
+				# if impropers were defined for this patch,
+				# append them to the current section
+				if (patch_impropers[patch_name] != "")
+				{
+					number_of_atoms = split(patch_impropers[patch_name], imp_atoms)
+					for (i = 1; i < number_of_atoms; i = i + 4)
+					{
+						name = name"-N"
+						printf "    %-8s      %-4s   %-4s   %-4s\n", 
+								name ":" PDBAtomName(imp_atoms[i], name), PDBAtomName(imp_atoms[i+1], name), 
+								PDBAtomName(imp_atoms[i+2], name), PDBAtomName(imp_atoms[i+3], name)
+					}
+				}
+			}
+
+			# check whether we need a last patch
+			if (last_patch[res_names[j]] != "NONE")
+			{
+				patch_name = last_patch[res_names[j]]
+				if (patch_names[patch_name] != patch_name)
+				{
+					print "undefined last patch " patch_name " for residue " res_names[j] >"/dev/stderr"
+				}
+				# if impropers were defined for this patch,
+				# append them to the current section
+				if (patch_impropers[patch_name] != "")
+				{
+					number_of_atoms = split(patch_impropers[patch_name], imp_atoms, " ")
+					for (i = 1; i < number_of_atoms; i = i + 4)
+					{
+						name = name"-C"
+						printf "    %-8s      %-4s   %-4s   %-4s\n", 
+								name ":" PDBAtomName(imp_atoms[i], name), PDBAtomName(imp_atoms[i+1], name), 
+								PDBAtomName(imp_atoms[i+2], name), PDBAtomName(imp_atoms[i+3], name)
+					}
+				}
+			}
+		}
+		
+		# done with the residue improper section
+		print ""
+		print ""
+
+		#
+		# next section: improper torsions 
+		#
+		print "[ResidueTorsions]"
+		print "value:ver key:name key:A key:B key:C key:D"
+		print ";"
+		print "; + indicates: atom in the next residue"
+		print "; - indicates: atom in the previous residue"
+		print ";"
+		print ";"
+		print ";  rev residue  atom A  atom B  atom C  atom D"
+		print ";  --- -------  ------  ------  ------  ------" 	
+		for (i = 0; i < number_of_res_torsions; i++)
+		{
+			printf "   %3.1f  %-8s  %-4s    %-4s    %-4s    %-4s\n", 
+							rev, res_torsions_res[i], res_torsions_A[i], res_torsions_B[i], res_torsions_C[i], res_torsions_D[i]
+		}
+		print ""
+		print ""
+
+
+		# write the ChargesAndTypes section
+		# write the section header
+		print ""
+		print "[ChargesAndTypeNames]"
+		print "ver:version key:name value:q value:type"
+		print "@unit_q=e0"
+		
+		for (i = 0; i < number_of_residue_atoms; i++)
+		{
+			atom = completePDBName(residue_atoms[i])
+			printf "   1.0 %-10s %8.5f %-5s\n", 
+				atom, atom_charge[residue_atoms[i]], atom_type[residue_atoms[i]]
+		}
+
+		#  now append the charges and types for the patched
+		#	 residues
+		for (i = 0; i < number_of_residues;i++)
+		{
+			name = res_names[i]
+			if (first_patch[name] != "NONE")
+			{
+				# which patch is to be applied?
+				patch_name = first_patch[name]
+				all_atoms = residue_atom_list[name]
+				
+				number_of_atoms = split(all_atoms, atoms, " ")
+				# delete atoms if necessary
+				if (patch_deletes[patch_name] != "")
+				{
+					# create arrays with the atoms and the atoms to delete
+					number_of_atoms_to_delete = split(patch_deletes[patch_name], del_atoms, " ")
+
+					# remove the atoms to delete from the atoms
+					for (j = 1; j <= number_of_atoms; j++)
+					{
+						for (k = 1; k <= number_of_atoms_to_delete; k++)
+						{
+							if (del_atoms[k] == atoms[j])
+							{
+								atoms[j] = ""
+							}
+						}
+					}
+					
+					# atoms now contains all remaining atoms
+					#	now check for added atoms
+					if (patch_atoms[patch_name] != "")
+					{
+						number_of_changed_atoms =	split(patch_atoms[patch_name], changed_atoms, " ")
+						
+						# ignore changed atoms
+						for (j = 1; j <= number_of_changed_atoms; j++)
+						{
+							for (k = 1; k <= number_of_atoms; k++)
+							{
+								if (changed_atoms[j] == atoms[k])
+								{
+									break;
+								}
+							}
+							# is this a new atom?
+							if (k > number_of_atoms)
+							{
+								# yes, add it to the atoms_array
+								atoms[changed_atoms[j]] = changed_atoms[j]
+							}
+						}
+					}
+					
+					# write the types and charges for the patched residue
+					# 
+					for (idx in atoms)
+					{
+						atom = atoms[idx]
+						if (atom != "")
+						{
+							atom_name = name "-N:" PDBAtomName(atom, name)
+							if (patch_charge[patch_name":"atom] != "")
+							{
+								printf "   1.0 %-10s %8.5f %-5s\n", atom_name, patch_charge[patch_name":"atom], patch_type[patch_name":"atom]	
+							} else {
+								printf "   1.0 %-10s %8.5f %-5s\n", atom_name, atom_charge[name":"atom], atom_type[name":"atom]	
+							}
+						}
+					}
+				}
+			}
+			# add C-terminal patches
+			if (last_patch[name] != "NONE")
+			{
+				# which patch is to be applied?
+				patch_name = last_patch[name]
+				all_atoms = residue_atom_list[name]
+				
+				number_of_atoms = split(all_atoms, atoms, " ")
+				# delete atoms if necessary
+				if (patch_deletes[patch_name] != "")
+				{
+					# create arrays with the atoms and the atoms to delete
+					number_of_atoms_to_delete = split(patch_deletes[patch_name], del_atoms, " ")
+
+					# remove the atoms to delete from the atoms
+					for (j = 1; j <= number_of_atoms; j++)
+					{
+						for (k = 1; k <= number_of_atoms_to_delete; k++)
+						{
+							if (del_atoms[k] == atoms[j])
+							{
+								atoms[j] = ""
+							}
+						}
+					}
+					
+					# atoms now contains all remaining atoms
+					#	now check for added atoms
+					if (patch_atoms[patch_name] != "")
+					{
+						number_of_changed_atoms =	split(patch_atoms[patch_name], changed_atoms, " ")
+						
+						# ignore changed atoms
+						for (j = 1; j <= number_of_changed_atoms; j++)
+						{
+							for (k = 1; k <= number_of_atoms; k++)
+							{
+								if (changed_atoms[j] == atoms[k])
+								{
+									break;
+								}
+							}
+							# is this a new atom?
+							if (k > number_of_atoms)
+							{
+								# yes, add it to the atoms_array
+								atoms[changed_atoms[j]] = changed_atoms[j]
+							}
+						}
+					}
+					
+					# write the types and charges for the patched residue
+					# 
+					for (idx in atoms)
+					{
+						atom = atoms[idx]
+						if (atom != "")
+						{
+							atom_name = name "-C:" PDBAtomName(atom, name)
+							if (patch_charge[patch_name":"atom] != "")
+							{
+								printf "   1.0 %-10s %8.5f %-5s\n", atom_name, patch_charge[patch_name":"atom], patch_type[patch_name":"atom]	
+							} else {
+								printf "   1.0 %-10s %8.5f %-5s\n", atom_name, atom_charge[name":"atom], atom_type[name":"atom]	
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	getline
+	print "" 
+	print "" 
+
+	#  read the EEF1 parameters
+	#  
+	if (ARGIND == 3)
+	{
+		# write a section for the atom types
+		print "[EEF1Solvation]"
+		print "value:ver key:type value:V value:dG_ref value:dG_free value:dH_ref value:Cp_ref value:sig_w value:R_min"
+		print "@unit_V=Angstrom^3"
+		print "@unit_R_min=Angstrom"
+		print "@unit_dG_free=kcal/mol"
+		print "@unit_dG_ref=kcal/mol"
+		print "@unit_dH_ref=kcal/mol"
+		print "@unit_Cp_ref=cal/(molK)"
+		print "@unit_sig_w=Angstrom"
+		print ";"
+		print ";"
+		print ";   Rev Type        V       dG_ref     dG_free    dH_Ref     Cp_ref     sig_w       R_min"
+		print ";   --- ----    --------- ---------- ---------- ---------- ---------- ---------- ----------"
+		rev = 1.0
+
+		# read the EEF solvation parameters
+		lines_read = 1
+		while ($1 != "" && lines_read > 0)
+		{
+			# ignore comment lines
+			if (substr($1, 1,1) != "!")
+			{
+				type = $1
+				volume = $2
+				dGref = $3
+				dGfree = $4
+				dHref = $5
+				Cpref = $6
+				sigw = $7 
+				R_min = r_min[$1]
+				if (R_min == "")
+				{
+					R_min = r_min[substr($1,1,1)"?"]	
+					if (R_min == "")
+					{
+						R_min = r_min[substr($1,1,1)"*"]
+						if (R_min == "")
+						{
+							print "could not find vdw parameter for type " $1 " while reading line " FNR " of " FILENAME >"/dev/stderr"
+							exit
+						}
+					}
+				}
+				printf "    %3.1f %-4s %10.3f %10.3f %10.3f %10.3f %10.3f %10.3f %10.3f\n", rev, type, volume, dGref, dGfree, dHref, Cpref, sigw, R_min
+			}
+			
+			lines_read = getline
+		}
+		print ""
+		print ""
+	}		
+}

@@ -1,0 +1,44 @@
+#  $Id: CHARMMTypes.dat,v 1.1 2000/12/06 11:41:02 oliver Exp $
+#
+#  CHARMM atom types
+#  initial list taken from p. 210 of:
+#
+#   Brooks et al.: CHARMM: A program for Macromolecular Energy, 
+#      Minimization, and Dynamics Calculation, . J Comput Chem, 2(4), 187-217 (1983)
+#
+H      Hydrogen which can hydrogen bond bound to neutral atom
+HC     Hydrogen which can hydrogen bond bound to charged atom
+HA     Aliphatic hydrogen
+CT     Aliphatic carbon
+C      Carbonyl carbon
+CH1E   An extended atom carbon with one hydrogen
+CH2E   An extended atom carbon with two hydrogens
+CH3E   An extended atom carbon with three hydrogens
+CR1E   An extended atom carbon in an aromatic ring with one hydrogen
+N      A peptide hydrogen with no hydrogens attached
+NR     A nitrogen in an aromatic ring with no hydrogens
+NP     A pyrole nitrogen
+NH1E   An extended atom peptide nitrogen with one hydrogen
+NH2E   An extended atom peptide nitrogen with two hydrogens
+NH3E   An extended atom peptide nitrogen with three hydrogens
+NC2E   An extended atin charged guanidinium nitrogen with two hydrogens
+NH1    A peptide nitrogen bound to one hydrogen
+NH2    A peptide nitrogen bound to two hydrogens
+NH3    A nitrogen bound to three hydrogens
+NC2    A charged guanidinium nitrogen bound to hydrogens
+O      Carbonyl oxgen
+OC     Carboxy oxygen
+OH1E   Extended atom hydroxy oxygen
+OH2E   Extended atom water
+OH1    Hydroxy oxygen
+OH2    Water oxygen
+S      Sulphur
+SH1E   Extended atom sulphur with one hydrogen
+FE     Iron (as in heme)
+OS
+CR
+CM
+OM
+LP
+HT
+OT
