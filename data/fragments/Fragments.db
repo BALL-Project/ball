@@ -24,12 +24,12 @@
 	<node>#include:MG<value>fragments/MG.db:/MG</value></node>
 </node>
 <node>Names
- <node>#include:Discover<value>fragments/Names.Discover.db:/Discover</value></node>
- <node>#include:Amber<value>fragments/Names.Amber.db:/Amber</value></node>
- <node>#include:CHARMM<value>fragments/Names.CHARMM.db:/CHARMM</value></node>
- <node>#include:XPLOR<value>fragments/Names.XPLOR.db:/XPLOR</value></node>
- <node>#include:Star<value>fragments/Names.Star.db:/Star</value></node>
+	<node>#include:Discover<value>fragments/Names.Discover.db:/Discover</value></node>
+	<node>#include:Amber<value>fragments/Names.Amber.db:/Amber</value></node>
+	<node>#include:CHARMM<value>fragments/Names.CHARMM.db:/CHARMM</value></node>
+	<node>#include:XPLOR<value>fragments/Names.XPLOR.db:/XPLOR</value></node>
+	<node>#include:Star<value>fragments/Names.Star.db:/Star</value></node>
 </node>
 <node>Defaults
- <node>Naming<value>PDB</value></node>
+	<node>Naming<value>PDB</value></node>
 </node>
