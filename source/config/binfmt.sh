@@ -3,7 +3,7 @@
 ############################################################
 # source directory shadow builder for multiplatform builds #
 ############################################################
-# $Id: binfmt.sh,v 1.6 1999/12/18 11:29:05 oliver Exp $
+# $Id: binfmt.sh,v 1.7 2000/01/27 08:45:21 oliver Exp $
 ############################################################
 
 UNAME=uname
@@ -25,7 +25,7 @@ if test "$OS" = SunOS ; then
 	if test "$OSMAJOR" = 5 ; then
 		OS=Solaris
 		ARCHITECTURE=`${UNAME} -p`
-		BINFMT="${OS}-${ARCHITECTURE}"
+		BINFMT="${OS}-${OSREV}-${ARCHITECTURE}"
 	else
 		OS=SunOS
 	fi
@@ -59,12 +59,7 @@ if test ${OS} = IRIX64 ; then
 fi
 
 if test $OS = IRIX ; then
-	if test "$OSMAJOR" = 5 ; then
-		BINFMT=IRIX5
-	fi
-	if test "$OSMAJOR" = 6 ; then
-		BINFMT=IRIX6
-	fi
+	BINFMT=IRIX-${OSREV}
 fi
 
 if test "$OS" != Linux && test "$OS" != Solaris && test "$OS" != IRIX ; then
