@@ -6,13 +6,15 @@
 
 ///////////////////////////
 
-#include <BALL/QSAR/descriptor.h>
+#include <BALL/QSAR/surfaceBase.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/PTE.h>
+
 
 ///////////////////////////
-START_TEST(Descriptor, "")
+START_TEST(SurfaceBase, "")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,29 +29,24 @@ infile.close();
 Molecule * molecule;
 Size limit = S.countMolecules();
 
-CHECK(Descriptor)	
+CHECK(SurfaceBase)	
 
-	Descriptor desc;
-	const String name = "the fancy name";
-	const String unit = "a heavy unit";
-
-	// test default values
-	TEST_EQUAL(desc.getName(), "generic descriptor")
-	TEST_EQUAL(desc.getUnit(), "")
-	
-	desc.setName(name);
-	desc.setUnit(unit);
-	S.apply(desc);
+	SurfaceBase sb;
+	S.apply(sb);
 
 	for (Size i=0;i!=limit;++i)
-  {
+	{
 		molecule = S.getMolecule(i);
-		TEST_EQUAL(molecule->hasProperty(name), true)
-		TEST_EQUAL(molecule->getProperty(name).getDouble(), 0)
-		TEST_EQUAL(desc.getName(), name)
-		TEST_EQUAL(desc.getUnit(), unit)
+		TEST_EQUAL(molecule->hasProperty("PositiveVdWSurface"), true)
+		TEST_EQUAL(molecule->hasProperty("NegativeVdWSurface"), true)
+		TEST_EQUAL(molecule->hasProperty("PositivePolarVdWSurface"), true)
+		TEST_EQUAL(molecule->hasProperty("NegativePolarVdWSurface"), true)
+		TEST_EQUAL(molecule->hasProperty("HydrophobicVdWSurface"), true)
+		TEST_EQUAL(molecule->hasProperty("PolarVdWSurface"), true)
+		TEST_EQUAL(molecule->hasProperty("VdWSurface"), true)
+		TEST_EQUAL(molecule->hasProperty("VdWVolume"), true)
+		TEST_EQUAL(molecule->hasProperty("Density"), true)
 	}
-
 		
 RESULT
 

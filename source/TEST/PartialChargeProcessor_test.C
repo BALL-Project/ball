@@ -6,15 +6,18 @@
 
 ///////////////////////////
 
-#include <BALL/QSAR/descriptor.h>
+#include <BALL/QSAR/partialChargeProcessor.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 
 ///////////////////////////
-START_TEST(Descriptor, "")
+START_TEST(PartialChargeProcessor, "")
 
 /////////////////////////////////////////////////////////////
+// tests only if the partial charge processor
+// creates the PEOEPartialCharge proeprty
+// no numerical correctness is tested
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
@@ -27,30 +30,20 @@ infile.close();
 Molecule * molecule;
 Size limit = S.countMolecules();
 
-CHECK(Descriptor)	
+CHECK(PartialChargeProcessor)	
 
-	Descriptor desc;
-	const String name = "the fancy name";
-	const String unit = "a heavy unit";
-
-	// test default values
-	TEST_EQUAL(desc.getName(), "generic descriptor")
-	TEST_EQUAL(desc.getUnit(), "")
-	
-	desc.setName(name);
-	desc.setUnit(unit);
-	S.apply(desc);
+	PartialChargeProcessor pcp;
+	S.apply(pcp);
 
 	for (Size i=0;i!=limit;++i)
-  {
+	{
 		molecule = S.getMolecule(i);
-		TEST_EQUAL(molecule->hasProperty(name), true)
-		TEST_EQUAL(molecule->getProperty(name).getDouble(), 0)
-		TEST_EQUAL(desc.getName(), name)
-		TEST_EQUAL(desc.getUnit(), unit)
+		AtomConstIterator a_it = molecule->beginAtom();
+		for (;a_it!=molecule->endAtom();++a_it)
+		{
+			TEST_EQUAL(a_it->hasProperty("PEOEPartialCharge"), true)
+		}
 	}
-
-		
 RESULT
 
 /////////////////////////////////////////////////////////////
