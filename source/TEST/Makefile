@@ -1,5 +1,3 @@
-default:	all
-
 DIRECTORY=TEST
 
 EXECUTABLES = \
@@ -71,6 +69,9 @@ EXECUTABLES = \
 	Vector4_test\
 	XYZFile_test
 
+# default target
+all:	$(EXECUTABLES)
+
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
@@ -87,11 +88,9 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 .o:
 	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)
 # 
-%.C:
+%%.C:
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
  	
-
-all:	$(EXECUTABLES)
 
 test:	$(EXECUTABLES)
 	@./runtests $(EXECUTABLES)
