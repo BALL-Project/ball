@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.52 2003/06/22 10:27:46 oliver Exp $
+// $Id: composite.h,v 1.53 2003/06/26 15:54:37 anker Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -1127,9 +1127,9 @@ B		*/
 		
 			BALL_INLINE Composite* getPosition() throw() { return position_;	}
 			
+			BALL_INLINE const Composite* getPosition() const throw() { return position_; }
 			BALL_INLINE void setPosition(Composite* position) throw() { position_ = position; }
 
-			BALL_INLINE const Composite* getPosition() const throw() { return position_; }
 
 			BALL_INLINE Composite& getData() throw() { return *position_; }
 
@@ -1272,39 +1272,45 @@ B		*/
 				}
 				// Otherwise, we try the first child. If there's one,
 				// that's our next position.
-				else if (p->first_child_ != 0)
+				else 
 				{
-					p = p->first_child_;
-				}
-				// Otherwise, we try to walk to the right at the current level.
-				else if (p->next_ != 0)
-				{
-					p = p->next_;
-				}
-				// If that doesn't work out, we'll have to climb up again.
-				// Now, we either revisit a node we have already been to,
-				// or we are trying to climb up *beyond* our iteration root
-				// (bound_). In the latter case, we return a past-the-end-iterator (0).
-				else
-				{
-					// If we could not walk left or right and we are at the root
-					// again, then we are done with the iteration (this is the case
-					// if bound_ is a leaf node).
-					if (p == bound_)
+					if (p->first_child_ != 0)
 					{
-						return 0;
+						p = p->first_child_;
 					}
-					while (p->next_ == 0)
+					else 
 					{
-						p = p->parent_;
-						if ((p == bound_) || (p == 0))
+						// If we are already in the root node, we are done.
+						if (p == bound_)
 						{
 							return 0;
 						}
+						// Otherwise, we try to walk to the right at the current level.
+						if (p->next_ != 0)
+						{
+							p = p->next_;
+						}
+						// If that doesn't work out, we'll have to climb up again.
+						// Now, we either revisit a node we have already been to, or we
+						// are trying to climb up *beyond* our iteration root (bound_).
+						// In the latter case, we return a past-the-end-iterator (0).
+						else
+						{
+							// If we could not walk left or right and we are at the root
+							// again, then we are done with the iteration (this is the
+							// case if bound_ is a leaf node).
+							while (p->next_ == 0)
+							{
+								p = p->parent_;
+								if ((p == bound_) || (p == 0))
+								{
+									return 0;
+								}
+							}
+							p = p->next_;
+						}
 					}
-					p = p->next_;
 				}
-					
 				return p;
 			}
 		};
