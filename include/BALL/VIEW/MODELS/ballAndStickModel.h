@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.12 2004/07/12 21:19:16 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.13 2004/07/15 12:05:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -186,6 +186,14 @@ namespace BALL
 			bool isStickModel() const
 				throw();
 
+			///
+			bool dashedBondsEnabled() const
+				throw() { return dashed_bonds_;}
+
+			///
+			void enableDashedBonds(bool state)
+				throw() { dashed_bonds_ = state;}
+
 			//@} 
 			/**	@name	debuggers and diagnostics 
 			*/ 
@@ -221,6 +229,7 @@ namespace BALL
 			float stick_radius_;
 		
 			bool ball_and_stick_;
+			bool dashed_bonds_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

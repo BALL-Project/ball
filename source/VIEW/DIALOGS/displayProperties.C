@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.73 2004/07/10 15:40:43 amoll Exp $
+// $Id: displayProperties.C,v 1.74 2004/07/15 12:05:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -455,6 +455,7 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 			((AddBallAndStickModel*)model_processor)->enableBallAndStickModel();
 			((AddBallAndStickModel*)model_processor)->setStickRadius(model_settings_->getBallAndStickStickRadius());
 			((AddBallAndStickModel*)model_processor)->setBallRadius(model_settings_->getBallRadius());
+			((AddBallAndStickModel*)model_processor)->enableDashedBonds(model_settings_->ballAndStickDashedBondsEnabled());
 			break;
 			
 		case MODEL_SE_SURFACE:

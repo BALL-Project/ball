@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.17 2004/07/14 22:34:04 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.18 2004/07/15 12:05:39 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -24,7 +24,8 @@ AddBallAndStickModel::AddBallAndStickModel()
 	: AtomBondModelBaseProcessor(),
 		ball_radius_((float)0.4),
 		stick_radius_((float)0.2),
-		ball_and_stick_(true)
+		ball_and_stick_(true),
+		dashed_bonds_(false)
 {
 }
 
@@ -33,7 +34,8 @@ AddBallAndStickModel::AddBallAndStickModel(const AddBallAndStickModel &add_ball_
 	: AtomBondModelBaseProcessor(add_ball_and_stick),
 		ball_radius_(add_ball_and_stick.ball_radius_),
 		stick_radius_(add_ball_and_stick.stick_radius_),
-		ball_and_stick_(add_ball_and_stick.ball_and_stick_)
+		ball_and_stick_(add_ball_and_stick.ball_and_stick_),
+		dashed_bonds_(add_ball_and_stick.dashed_bonds_)
 {
 }
 
@@ -54,6 +56,7 @@ void AddBallAndStickModel::clear()
 	ball_radius_ = (float)0.4;
 	stick_radius_ = (float)0.2;
 	ball_and_stick_ = true;
+	dashed_bonds_ = false;
 }
 
 void AddBallAndStickModel::set(const AddBallAndStickModel &add_ball_and_stick)
@@ -64,6 +67,7 @@ void AddBallAndStickModel::set(const AddBallAndStickModel &add_ball_and_stick)
 	ball_radius_ = add_ball_and_stick.ball_radius_;
 	stick_radius_ = add_ball_and_stick.stick_radius_;
 	ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
+	dashed_bonds_ = add_ball_and_stick.dashed_bonds_;
 }
 
 const AddBallAndStickModel &AddBallAndStickModel::operator = 
@@ -118,7 +122,7 @@ void AddBallAndStickModel::setStickRadius(const float radius)
 
 Processor::Result AddBallAndStickModel::operator() (Composite& composite)
 {
-	if (ball_and_stick_)
+	if (dashed_bonds_)
 	{
 		AtomBondModelBaseProcessor::operator() (composite);
 	}
@@ -187,7 +191,7 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 	// no visualisation for hydrogen bonds
 	if (bond.getType() == Bond::TYPE__HYDROGEN) return;
 
-	if (!ball_and_stick_ ||
+	if (!dashed_bonds_ ||
 			(bond.getOrder() != Bond::ORDER__DOUBLE &&
 			 bond.getOrder() != Bond::ORDER__TRIPLE &&
 			 bond.getOrder() != Bond::ORDER__AROMATIC))
@@ -294,7 +298,7 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 void AddBallAndStickModel::visualiseRings_()
 	throw()
 {
-	if (!ball_and_stick_) return;
+	if (!dashed_bonds_) return;
 
 	vector<vector<Atom*> >::iterator it = rings_.begin();
 	for(; it != rings_.end(); it++)

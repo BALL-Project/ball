@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.15 2004/02/24 19:03:48 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.16 2004/07/15 12:05:46 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -36,6 +36,7 @@ namespace BALL
 			{
 				ball_stick_cylinder_radius_slider->setValue(2);
 				ball_stick_sphere_radius_slider->setValue(4);
+				ball_stick_dashed_bonds->setChecked(true);
 			}
 			
 			if (all || list_box->currentItem() == 2)
@@ -109,6 +110,11 @@ namespace BALL
 			writePreference_(file, "stick_radius", *stick_radius_slider);
 			writePreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius_slider);
 			writePreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius_slider);
+			if (ball_stick_dashed_bonds->isChecked())
+			{
+				file.insertValue("MODEL_OPTIONS", "ball_stick_dashed_bonds", true);
+			}
+
 			writePreference_(file, "vdw_radius_factor", *vdw_radius_factor_slider);
 			writePreference_(file, "surface_probe_radius", *surface_probe_radius_slider);
 			writePreference_(file, "tube_radius", *tube_radius_slider);
@@ -124,8 +130,12 @@ namespace BALL
 			throw()
 		{
 			fetchPreference_(file, "stick_radius", *stick_radius_slider);
+			
 			fetchPreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius_slider);
 			fetchPreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius_slider);
+			ball_stick_dashed_bonds->setChecked(
+				(file.hasEntry("MODEL_OPTIONS", "ball_stick_dashed_bonds")));
+			
 			fetchPreference_(file, "vdw_radius_factor", *vdw_radius_factor_slider);
 			fetchPreference_(file, "surface_probe_radius", *surface_probe_radius_slider);
 			fetchPreference_(file, "tube_radius", *tube_radius_slider);
