@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.13 2004/07/26 21:54:01 amoll Exp $
+// $Id: mainControl.sip,v 1.14 2004/09/23 14:19:20 oliver Exp $
 //
 
 class MainControl
@@ -34,7 +34,7 @@ class MainControl
 
 	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
-	static MainControl* getInstance(Position /index/);
+	static MainControl* getInstance(int /index/);
 
   CompositeManager& getCompositeManager() throw();
   INIFile& getINIFile() throw();
