@@ -1,4 +1,4 @@
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.4 2000/10/17 17:22:12 anker Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.5 2000/11/14 19:13:06 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.4 2000/10/17 17:22:12 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.5 2000/11/14 19:13:06 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -69,6 +69,8 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	double val = proc.getEnergy();
 	TEST_REAL_EQUAL(val, -6.027207050)
 
+	proc.options.set(Pair6_12InteractionEnergyProcessor::Option::RDF_FILENAME,
+	"data/6_12-test.rdf-fake.ini");
 	proc.options.setBool(Pair6_12InteractionEnergyProcessor::Option::USE_RDF,
 			true);
 	S.apply(proc);
@@ -80,6 +82,8 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	S.apply(proc);
 	val = proc.getEnergy();
 	TEST_REAL_EQUAL(val, -6.027207050)
+
+	// BAUSTELLE: USE_RDF=true geht trotz nicht gesetzten Dateinamens!!!
 RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::isValid())
