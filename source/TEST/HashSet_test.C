@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashSet_test.C,v 1.14 2002/12/12 11:34:41 oliver Exp $
+// $Id: HashSet_test.C,v 1.15 2003/04/09 08:39:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -46,7 +46,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.14 2002/12/12 11:34:41 oliver Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.15 2003/04/09 08:39:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -760,6 +760,8 @@ CHECK(HashSet STL compatibility)
 	TEST_EQUAL(std::find(il.begin(), il.end(), 3) != il.end(), true)
 	TEST_EQUAL(std::find(il.begin(), il.end(), 4) != il.end(), true)
 RESULT
+
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
