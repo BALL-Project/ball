@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.23 2003/04/17 06:07:20 oliver Exp $
+// $Id: common.h,v 1.24 2003/05/08 09:11:54 sneumann Exp $
 
 #ifndef BALL_MATHS_COMMON_H
 #define BALL_MATHS_COMMON_H
@@ -167,18 +167,6 @@ namespace BALL
 #endif
 		}
 
-		/**	Test whether a number is infinite.
-				@param	t the number
-				@return bool, <b>true</b> if <tt>t</tt> equals <tt>inf</tt> or <tt>-inf</tt>
-		*/
-		template <typename T>
-		inline 
-		bool isInfinite(const T& t)
-			throw()
-		{
-			return (!Maths::isFinite(t) && !Maths::isNan(t));
-		}
-
 		/**	Test whether a value is not a number.
 				@param	t the number
 				@return bool, <b>true</b> if t equals <tt>nan</tt>
@@ -193,6 +181,18 @@ namespace BALL
 			#else
 				return (isnan(t) != 0);
 			#endif
+		}
+
+		/**	Test whether a number is infinite.
+				@param	t the number
+				@return bool, <b>true</b> if <tt>t</tt> equals <tt>inf</tt> or <tt>-inf</tt>
+		*/
+		template <typename T>
+		inline 
+		bool isInfinite(const T& t)
+			throw()
+		{
+			return (!Maths::isFinite(t) && !Maths::isNan(t));
 		}
 
 		/**	Test whether a number is zero.
