@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.4 2005/01/25 15:14:36 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.5 2005/01/25 16:03:55 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.4 2005/01/25 15:14:36 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.5 2005/01/25 16:03:55 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,47 +19,45 @@ START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.4 2005/01/25 15:14:36 amoll Exp $")
 using namespace BALL;
 using namespace BALL::SysInfo;
 
-///  insert tests for each member function here         
-///
 	
 CHECK(getFreeMemory())
-	TEST_EQUAL(getFreeMemory() > 0, true)
-	Log.error() <<getFreeMemory() << std::endl;
+	TEST_EQUAL(getFreeMemory() > 0.0, true)
+// 	Log.error() <<getFre eMemory() << std::endl;
 RESULT		
 
 CHECK(getAvailableMemory())
-	TEST_EQUAL(getAvailableMemory() > 0, true)
-	Log.error() <<getAvailableMemory() << std::endl;
+	TEST_EQUAL(getAvailableMemory() > 0.0, true)
+//  	Log.error() <<getAvailableMemory() << std::endl;
 RESULT		
 
 
 CHECK(getTotalMemory())
 	TEST_EQUAL(getTotalMemory() > 0, true)
 	TEST_EQUAL(getTotalMemory(), getTotalMemory())
-	Log.error() <<getTotalMemory() << std::endl;
+// 	Log.error() <<getTotalMemory() << std::endl;
 RESULT		
 
 CHECK(getBufferdMemory())
 	long bufferd = getBufferdMemory();
 	TEST_EQUAL(bufferd > 0 || bufferd == -1, true)
-	Log.error() <<getBufferdMemory() << std::endl;
+// 	Log.error() <<getBufferdMemory() << std::endl;
 RESULT		
 
 CHECK(getFreeSwapSpace())
 	TEST_EQUAL(getFreeSwapSpace() >= 0, true)
-	Log.error() <<getFreeSwapSpace() << std::endl;
+// 	Log.error() <<getFreeSwapSpace() << std::endl;
 RESULT		
 
 
 CHECK(getUptime())
 	float uptime = getUptime();
 	TEST_EQUAL(uptime > 0 || uptime == -1, true)
-	Log.error() <<getUptime() << std::endl;
+// 	Log.error() <<getUptime() << std::endl;
 RESULT		
 
 CHECK(getNumberOfProcessors())
 	TEST_EQUAL(getNumberOfProcessors() >= 1, true)
-	Log.error() <<getNumberOfProcessors() << std::endl;
+// 	Log.error() <<getNumberOfProcessors() << std::endl;
 RESULT		
 
 /*
@@ -79,7 +77,7 @@ RESULT
 
 CHECK(Extra1)
 	Index i1 = getAvailableMemory();
-	if (i1 > 1000) i1-=1000;
+	i1 *= 0.9;
 	char* c = new char[i1];
 	delete[] c;
 RESULT
