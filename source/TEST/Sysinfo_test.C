@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.3 2005/01/25 15:08:50 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.4 2005/01/25 15:14:36 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.3 2005/01/25 15:08:50 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.4 2005/01/25 15:14:36 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -40,10 +40,16 @@ CHECK(getTotalMemory())
 RESULT		
 
 CHECK(getBufferdMemory())
-	Index bufferd = getBufferdMemory();
+	long bufferd = getBufferdMemory();
 	TEST_EQUAL(bufferd > 0 || bufferd == -1, true)
 	Log.error() <<getBufferdMemory() << std::endl;
 RESULT		
+
+CHECK(getFreeSwapSpace())
+	TEST_EQUAL(getFreeSwapSpace() >= 0, true)
+	Log.error() <<getFreeSwapSpace() << std::endl;
+RESULT		
+
 
 CHECK(getUptime())
 	float uptime = getUptime();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.h,v 1.3 2005/01/25 14:59:58 amoll Exp $
+// $Id: sysinfo.h,v 1.4 2005/01/25 15:14:27 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_SYSINFO_H
@@ -21,6 +21,11 @@ namespace BALL
 	 */
 	namespace SysInfo
 	{
+		/** The the total amount of free memory (under linux + getBufferdMemory()).
+				@return -1 if no valid value could be read
+		*/
+		long getAvailableMemory();
+	
 		/** The the amount of freee memory.
 				@return -1 if no valid value could be read
 		*/
@@ -35,6 +40,11 @@ namespace BALL
 				@return -1 if no valid value could be read
 		*/
 		long getBufferdMemory();
+
+		/** Return the the amount of free swap memory.
+				@return -1 if no valid value could be read
+		*/
+		long getFreeSwapSpace();
 
 		/** Get the uptime of the system.
 		 		Work currently only under Linux.

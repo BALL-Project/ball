@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.3 2005/01/25 14:59:56 amoll Exp $
+// $Id: sysinfo.C,v 1.4 2005/01/25 15:14:29 amoll Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -18,6 +18,16 @@ namespace BALL
 {
 	namespace SysInfo
 	{
+
+		long getAvailableMemory()
+		{
+			long mem = getFreeMemory();
+#ifndef BALL_PLATFORM_WINDOWS
+			mem += getBufferdMemory();
+#endif
+			return mem;
+		}
+
 		long getFreeMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
@@ -45,7 +55,7 @@ namespace BALL
 			GlobalMemoryStatus (&ms);
 			return (long) ms.dwTotalPhys;
 			*/
-			MEMORYSTATUSEX statex;
+ 			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
 			return (long) statex.ullFullPhys
 #else
@@ -114,6 +124,21 @@ namespace BALL
 #endif
 		}
 
+
+		long getFreeSwapSpace()
+		{
+#ifdef BALL_PLATFORM_WINDOWS
+ 			MEMORYSTATUSEX statex;
+			GlobalMemoryStatusEx (&statex);
+			return (long) statex.ullAvailPageFile;
+#else
+			struct sysinfo info;
+			long result = sysinfo(&info);
+			if (result == -1) return result;
+			return info.freeswap;
+#endif
+
+		}
 
 	} // namespace SysInfo
 } // namespace BALL
