@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.29 2002/01/09 01:27:28 oliver Exp $
+// $Id: standardPredicates.C,v 1.30 2002/01/10 14:40:16 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -118,6 +118,8 @@ namespace BALL
  		const Chain* chain = atom.getAncestor(RTTI::getDefault<Chain>());
 		if (chain != 0)
 		{
+			// DEBUG
+			// Log.info() << "NAME: " << chain->getName() << endl;
 			return (chain->getName() == argument_);
 		}
 
@@ -690,26 +692,29 @@ namespace BALL
 			if (subgroups.size() >= atom.countBonds())
 			{
 				// Log.info() << "Too few bonds (" << atom.countBonds() 
-				//					 << " instead of " << subgroups.size() << ")" << endl;
+				// 	<< " instead of " << subgroups.size() << ")" << endl;
 				// return false;
 			}
 
 			HashSet<const Bond*> deeper; 
 
-			// Iteriere über alle Bindungen von atom.
+			// Iterate over all bonds of atom
 			for (Size i = 0; i < atom.countBonds(); ++i)
 			{
 				bond = atom.getBond(i);
-				// Log.info() << "Bond: " << atom.getFullName() << " - " <<
-				//	bond->getPartner(atom)->getFullName();
+				// DEBUG
+				// Log.info() << "Bond: " << atom.getFullName() << " - " 
+				//	<< bond->getPartner(atom)->getFullName();
 
 				// Follow this bond only if its type matches and it isn't the bond
 				// we came from. This implies special treatment of cycles.
 				if (bond != source)
 				{
-					// Log.info() << ": not source";
+					// DEBUG
+					//Log.info() << ": not source";
 					if (bondOrderMatch_(subgroups_it->first, bond->getOrder()))
 					{
+						// DEBUG
 						// Log.info() << ", order match";
 						if (subgroups_it->second.size() < 1) 
 						{
@@ -725,6 +730,7 @@ namespace BALL
 							if ((bond->getPartner(atom)->getElement().getSymbol()
 										== subgroups_it->second) || (subgroups_it->second == '*'))
 							{
+								// DEBUG
 								// Log.info() << ", base match.";
 								deeper.insert(bond);
 							}
@@ -734,12 +740,14 @@ namespace BALL
 							if (findAndTest_(subgroups_it->second, 
 										*(atom.getBond(i)->getPartner(atom)), bond))
 							{
+								// DEBUG
 								// Log.info() << ", recursion.";
 								deeper.insert(bond);
 							}
 						}
 					}
 				}
+				// DEBUG
 				// Log.info() << endl;
 			}
 			if (!deeper.isEmpty())
@@ -766,6 +774,7 @@ namespace BALL
 			list<HashSet <const Bond*> >::iterator it = L.begin();
 			list< list< HashSet<const Bond*> >:: iterator > hash_del_list;
 
+			// DEBUG
 			// Log.info() << "Sizes of hash sets before first block:";
 			for (; it != L.end(); ++it)
 			{
