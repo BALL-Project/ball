@@ -1,4 +1,4 @@
-// $Id: structureMapper.h,v 1.5 2000/03/26 12:38:30 oliver Exp $
+// $Id: structureMapper.h,v 1.6 2000/06/29 11:07:37 len Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -127,6 +127,14 @@ namespace BALL
 			const Vector3& v1,
 			const Vector3& v2,
 			const Vector3& v3);
+
+		Matrix4x4 matchBackboneAtoms
+			(const Residue* r1,
+			 const Residue* r2);
+
+		int mapResidues
+			(const list<Residue*>& l1,
+			 const list<Residue*>& l2);
 	 
 		vector<vector<Fragment*> >& 
 		searchPattern_
