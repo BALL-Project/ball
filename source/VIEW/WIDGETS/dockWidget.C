@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.3 2003/09/08 16:39:40 amoll Exp $
+// $Id: dockWidget.C,v 1.4 2003/09/09 23:23:22 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -19,6 +19,7 @@ DockWidget::DockWidget(QWidget* parent, const char* name)
 : QDockWindow(QDockWindow::InDock, parent),
 	ModularWidget(name)
 {
+	layout_ = new QVBoxLayout(this);
   caption_label_ = new QLabel(this, "caption_label");
 	caption_label_->resize(120, 12);
   caption_label_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
@@ -29,9 +30,10 @@ DockWidget::DockWidget(QWidget* parent, const char* name)
   caption_label_->setFont( caption_label_font ); 
   caption_label_->setFrameShape(QLabel::NoFrame);
   caption_label_->setAlignment(QLabel::AlignCenter);
+	layout_->addWidget(caption_label_);
+	boxLayout()->addItem(layout_);
 
 	setOrientation(Qt::Vertical);
-	boxLayout()->addWidget(caption_label_);
   resize( QSize(132, 293));
 
 	if (name != 0) 
@@ -54,7 +56,7 @@ void DockWidget::setGuest(QWidget& guest)
 	guest.reparent(this, p, true);
 	guest.resize(120,1000);
   guest.setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, 0, 0, false));
-	boxLayout()->addWidget(&guest);
+	layout_->addWidget(&guest);
 	setMinimumSize(20, 20);
 	setCloseMode(QDockWindow::Always);
 	setResizeEnabled(true);
