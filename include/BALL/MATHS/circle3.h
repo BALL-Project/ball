@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.10 2000/03/02 18:07:42 amoll Exp $
+// $Id: circle3.h,v 1.11 2000/03/21 23:08:06 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -133,13 +133,13 @@ namespace BALL
 		/**	Assign the circle components.
 				@param	point assigned to the point 
 				@param	normal assigned to the normal
-				@param	radius assigned tp the radius
+				@param	rad assigned tp the radius
 		*/
-		void set(const TVector3<T>& point, const TVector3<T>& normal, const T& radius)
+		void set(const TVector3<T>& point, const TVector3<T>& normal, const T& rad)
 		{
 			p = point;
 			n = normal;
-			radius = radius;
+			radius = rad;
 		}
 
 		/**	Assignment operator.
