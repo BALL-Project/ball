@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.3 2000/12/07 14:56:36 strobel Exp $
+// $Id: RSEdge.h,v 1.4 2001/01/24 13:23:24 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -117,7 +117,6 @@ namespace BALL
 		*/
 		//@{
 
-
 		/**	Assign from another RSEdge.
 				@param rsedge	the RSEdge object to assign from
 				@param deep ignored
@@ -166,7 +165,8 @@ namespace BALL
 			intersection_point0_ = intersection_point0; intersection_point1_ = intersection_point1;
 			singular_ = singular; index_ = index;
 		}
-
+		
+    //@}
 
 		/**	@name	Accessors
 		*/
@@ -522,7 +522,6 @@ namespace BALL
 
 	/**	Input- Operator
 	*/
-
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TRSEdge<T>& rsedge)
 	{
@@ -532,32 +531,31 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-		template <typename T>
-		std::ostream& operator << (std::ostream& s, TRSEdge<T>& rsedge)
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, TRSEdge<T>& rsedge)
+	{
+		s << "RSEDGE" << rsedge.getIndex()
+			<< "([" << (rsedge.getVertex(0) == NULL ? -2 : rsedge.getVertex(0)->getIndex()) << ' '
+			<<				 (rsedge.getVertex(1) == NULL ? -2 : rsedge.getVertex(1)->getIndex()) << "] "
+			<< "[" << (rsedge.getFace(0) == NULL ? -2 : rsedge.getFace(0)->getIndex()) << ' '
+			<<				(rsedge.getFace(1) == NULL ? -2 : rsedge.getFace(1)->getIndex()) << "] "
+			<< rsedge.getCenterOfTorus() << ' '
+			<< rsedge.getMajorRadiusOfTorus() << ' ' << rsedge.getPhi() << ' '
+			<< rsedge.getContactCircle(0) << ' '
+			<< rsedge.getContactCircle(1) << ' ';
+		bool singular(rsedge.isSingular());
+		if (singular)
 		{
-			s << "RSEDGE" << rsedge.getIndex()
-				<< "([" << (rsedge.getVertex(0) == NULL ? -2 : rsedge.getVertex(0)->getIndex()) << ' '
-				<<				 (rsedge.getVertex(1) == NULL ? -2 : rsedge.getVertex(1)->getIndex()) << "] "
-				<< "[" << (rsedge.getFace(0) == NULL ? -2 : rsedge.getFace(0)->getIndex()) << ' '
-				<<				(rsedge.getFace(1) == NULL ? -2 : rsedge.getFace(1)->getIndex()) << "] "
-				<< rsedge.getCenterOfTorus() << ' '
-				<< rsedge.getMajorRadiusOfTorus() << ' ' << rsedge.getPhi() << ' '
-				<< rsedge.getContactCircle(0) << ' '
-				<< rsedge.getContactCircle(1) << ' ';
-			bool singular(rsedge.isSingular());
-			if (singular)
-			{
-				s << rsedge.getIntersectionPoint(0) << ' '
-					<< rsedge.getIntersectionPoint(1) << " true)";
-			}
-			else
-			{
-				s << TVector3<T>::getZero() << ' ' << TVector3<T>::getZero() << " false)";
-			}
-			return s;
+			s << rsedge.getIntersectionPoint(0) << ' '
+				<< rsedge.getIntersectionPoint(1) << " true)";
 		}
+		else
+		{
+			s << TVector3<T>::getZero() << ' ' << TVector3<T>::getZero() << " false)";
+		}
+		return s;
+	}
 	//@}
-
 
 	/**	The Default RSEdge Type.
 			If double precision is not needed, {\tt RSEdge<float>} should

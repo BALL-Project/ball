@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.4 2000/12/07 14:57:13 strobel Exp $
+// $Id: RSFace.h,v 1.5 2001/01/24 13:23:24 amoll Exp $
 
 #ifndef secure
 #define secure
@@ -133,6 +133,7 @@ namespace BALL
 			normal_.normalize();
 		}
 
+    //@}
 		/**	@name	Predicates
 		*/
 		//@{
