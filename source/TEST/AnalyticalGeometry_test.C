@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.19 2000/06/27 23:00:14 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.20 2000/09/05 09:56:17 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.19 2000/06/27 23:00:14 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.20 2000/09/05 09:56:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -871,6 +871,14 @@ CHECK(TAngle<T> getTorsionAngle
 	TEST_EXCEPTION(Exception::DivisionByZero, 
 		getTorsionAngle((float)0, (float)0, (float)0, (float)0, (float)0, (float)0, 
 										(float)0, (float)0, (float)0, (float)0, (float)0, (float)0))
+RESULT
+
+CHECK(TAngle<T> getOrientedAngle<T>(T ax, T ay, T az, T bx, T by, T bz, T nx, T ny, T nz))
+	// BAUSTELLE
+RESULT
+
+CHECK(TAngle<T> getOrientedAngle<T>(const TVector<T>& a, const TVector3<T>& b, const TVector3<T>& normal))
+	// BAUSTELLE
 RESULT
 
 END_TEST
