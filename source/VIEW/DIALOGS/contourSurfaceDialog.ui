@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>463</width>
-            <height>164</height>
+            <height>107</height>
         </rect>
     </property>
     <property name="caption">
@@ -24,11 +24,17 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>2</x>
-                <y>61</y>
-                <width>177</width>
-                <height>55</height>
+                <x>4</x>
+                <y>51</y>
+                <width>154</width>
+                <height>49</height>
             </rect>
+        </property>
+        <property name="frameShape">
+            <enum>GroupBoxPanel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
         </property>
         <property name="title">
             <string>threshold</string>
@@ -39,56 +45,11 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>10</x>
+                    <x>8</x>
                     <y>18</y>
-                    <width>160</width>
-                    <height>28</height>
+                    <width>138</width>
+                    <height>23</height>
                 </rect>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>groupBox1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>2</x>
-                <y>0</y>
-                <width>454</width>
-                <height>55</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>RegularData file</string>
-        </property>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>filename</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>17</y>
-                    <width>354</width>
-                    <height>28</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>browse_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>366</x>
-                    <y>17</y>
-                    <width>82</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>browse</string>
             </property>
         </widget>
     </widget>
@@ -98,9 +59,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>4</x>
-                <y>123</y>
-                <width>454</width>
+                <x>178</x>
+                <y>64</y>
+                <width>274</width>
                 <height>33</height>
             </rect>
         </property>
@@ -150,6 +111,35 @@
             </widget>
         </hbox>
     </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>2</x>
+                <y>0</y>
+                <width>454</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>RegularData</string>
+        </property>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>grids</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>18</y>
+                    <width>438</width>
+                    <height>24</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -165,21 +155,20 @@
         <slot>accept()</slot>
     </connection>
     <connection>
-        <sender>filename</sender>
+        <sender>threshold</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>ContourSurfaceDialogData</receiver>
-        <slot>fileNameChanged()</slot>
+        <slot>valuesChanged()</slot>
     </connection>
     <connection>
-        <sender>browse_button</sender>
-        <signal>clicked()</signal>
+        <sender>grids</sender>
+        <signal>activated(int)</signal>
         <receiver>ContourSurfaceDialogData</receiver>
-        <slot>browseFiles()</slot>
+        <slot>valuesChanged()</slot>
     </connection>
 </connections>
 <slots>
-    <slot>browseFiles()</slot>
-    <slot>fileNameChanged()</slot>
+    <slot>valuesChanged()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

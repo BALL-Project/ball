@@ -5,13 +5,16 @@
 #define BALL_VIEW_DIALOGS_CONTOURSURFACEDIALOG_H
 
 #include <BALL/VIEW/UIC/contourSurfaceDialogData.h>
-#include <BALL/SYSTEM/path.h>
-#include <BALL/DATATYPE/string.h>
+
+#ifndef BALL_DATATYPE_REGULARDATA3D_H
+ #include <BALL/DATATYPE/regularData3D.h>
+#endif
 
 namespace BALL
 {
  namespace VIEW
-   {
+ {
+	 class DatasetControl;
 
 /** Dialog for creating contour surfaces from RegularData3D
     \ingroup  ViewDialogs
@@ -25,12 +28,18 @@ class ContourSurfaceDialog
     ContourSurfaceDialog( QWidget* parent = 0, const char* name = 0);
     ~ContourSurfaceDialog();
 
-    String getFileName() const;
+    RegularData3D* getGrid();
     double getThreshold() const;
+		void setDatasetControl(DatasetControl* control) {control_ = control;}
+	public slots:
+		virtual bool exec();
 
 	protected slots: 
-    virtual void browseFiles(); 
-		virtual void fileNameChanged();
+		virtual void valuesChanged();
+	
+	private:
+		RegularData3D* grid_;
+		DatasetControl* control_;
 };
 
 } } // namespaces

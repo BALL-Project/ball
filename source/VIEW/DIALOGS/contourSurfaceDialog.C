@@ -2,16 +2,12 @@
 // vi: set ts=2:
 //
 #include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
+#include <BALL/VIEW/WIDGETS/datasetControl.h>
 
-#include <qframe.h>
-#include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qfiledialog.h>
+#include <qcombobox.h>
 
 namespace BALL
 {
@@ -25,40 +21,63 @@ ContourSurfaceDialog::ContourSurfaceDialog( QWidget* parent,  const char* name )
 
 ContourSurfaceDialog::~ContourSurfaceDialog()
 {
-  // no need to delete child widgets, Qt does it all for us
 }
 
 double ContourSurfaceDialog::getThreshold() const	
 {
-	return (double)String(threshold->text().ascii()).toFloat();
-}
-
-String ContourSurfaceDialog::getFileName() const
-{
-	return filename->text().ascii();
-}
-
-void ContourSurfaceDialog::fileNameChanged()
-{
-	buttonOk->setEnabled(getFileName() != "");
-}
-
-void ContourSurfaceDialog::browseFiles()
-{
-	// look up the full path of the parameter file
-	Path p;
-	String file = p.find(getFileName());
-	if (file == "")
+	if (threshold->text().isEmpty()) return DBL_MAX;
+	try
 	{
-		file = getFileName();
+		return (double)String(threshold->text().ascii()).toFloat();
 	}
-	QString tmp = file.c_str();
-	QString result = QFileDialog::getOpenFileName(tmp, "*", 0, "Select a RegularData file");
-	if (!result.isEmpty())
+	catch(...)
 	{
-		// store the new filename in the lineedit field
-		filename->setText(result);
+		return DBL_MAX;
 	}
 }
+
+RegularData3D* ContourSurfaceDialog::getGrid() 
+{
+	return grid_;
+}
+
+void ContourSurfaceDialog::valuesChanged()
+{
+	buttonOk->setEnabled((grids->currentItem() != -1) && 
+												!grids->currentText().isEmpty() &&
+												(getThreshold() != DBL_MAX));
+}
+
+bool ContourSurfaceDialog::exec()
+{
+	grids->clear();
+	List<std::pair<RegularData3D*, String> > grid_pair_list;
+	List<std::pair<RegularData3D*, String> >::Iterator it;
+	if (control_ != 0) 
+	{
+		grid_pair_list = control_->getGrids();
+		it = grid_pair_list.begin(); 
+		for (; it != grid_pair_list.end(); it++)
+		{
+			grids->insertItem((*it).second.c_str());
+		}
+	}
+
+	valuesChanged();
+	if (!ContourSurfaceDialogData::exec()) return false;
+	
+	if (grids->currentItem() != -1)
+	{
+		it = grid_pair_list.begin();
+		for (Index i = 0; i < grids->currentItem(); i++)
+		{
+			it++;
+		}
+		grid_ = (*it).first;
+	}
+
+	return true;
+}
+		
 
 }} //namespaces
