@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.20 2000/03/14 21:35:10 oliver Exp $
+// $Id: matrix44.h,v 1.21 2000/03/15 02:21:50 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -80,7 +80,7 @@ namespace BALL
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
 		*/
-		TMatrix4x4(const T* ptr[4]);
+		TMatrix4x4(const T ptr[4][4]);
 
 		/**	Copy constructor.
 				Create a new TMatrix4x4 object from another.
@@ -136,7 +136,7 @@ namespace BALL
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
 		*/
-		void set(const T* ptr[4]);
+		void set(const T ptr[4][4]);
 
 		/**	Assign from another TMatrix4x4.
 				@param TMatrix4x4	the TMatrix4x4 object to assign from
@@ -173,7 +173,7 @@ namespace BALL
 				Assign the components from an array assigned by{\tt ptr}.
 				@param ptr the array to construct from
 		**/
-		TMatrix4x4& operator = (const T* ptr[4]);
+		TMatrix4x4& operator = (const T ptr[4][4]);
 
 		/**	Assignment operator.
 				Assign the components from another TMatrix4x4.
@@ -193,7 +193,7 @@ namespace BALL
 				@exception NullPointer if {\tt ptr == 0}
 				@param ptr the array to assign to
 		*/
-		void get(T* ptr[4]) const;
+		void get(T ptr[4][4]) const;
 
 		/**	Assign to another TMatrix4x4.
 				Assigns the components to another TMatrix4x4.
@@ -691,7 +691,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TMatrix4x4<T>::TMatrix4x4(const T* array_ptr[4])
+	TMatrix4x4<T>::TMatrix4x4(const T array_ptr[4][4])
 	{
 		if (array_ptr == 0)
 			throw Exception::NullPointer(__FILE__, __LINE__);
@@ -780,7 +780,7 @@ namespace BALL
 	}
 
 	template <class T>
-	void TMatrix4x4<T>::set(const T* array_ptr[4])
+	void TMatrix4x4<T>::set(const T array_ptr[4][4])
 	{
     if (array_ptr == 0)
       throw Exception::NullPointer(__FILE__, __LINE__);
@@ -884,7 +884,7 @@ namespace BALL
 	}
 
 	template <class T>
-	BALL_INLINE TMatrix4x4<T>& TMatrix4x4<T>::operator = (const T* array_ptr[4])
+	BALL_INLINE TMatrix4x4<T>& TMatrix4x4<T>::operator = (const T array_ptr[4][4])
 	{
 		set(array_ptr);
 
@@ -925,7 +925,7 @@ namespace BALL
 	}
 
 	template <class T>
-	void TMatrix4x4<T>::get(T* array_ptr[4]) const
+	void TMatrix4x4<T>::get(T array_ptr[4][4]) const
 	{
     if (array_ptr == 0)
        throw Exception::NullPointer(__FILE__, __LINE__);
