@@ -1,4 +1,4 @@
-// $Id: simpleDescriptor.C,v 1.2 2001/12/17 02:50:03 oliver Exp $
+// $Id: simpleDescriptors.C,v 1.1 2001/12/17 02:59:44 oliver Exp $
 
 #include <BALL/QSAR/simpleDescriptors.h>
 
