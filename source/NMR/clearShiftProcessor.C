@@ -1,4 +1,4 @@
-// $Id: clearShiftProcessor.C,v 1.5 2000/09/20 13:51:17 amoll Exp $
+// $Id: clearShiftProcessor.C,v 1.6 2000/09/22 11:56:49 oliver Exp $
 
 #include<BALL/NMR/clearShiftProcessor.h>
 
@@ -7,7 +7,9 @@ namespace BALL
 
 	ClearShiftProcessor::ClearShiftProcessor()
 		throw()
+		:	ShiftModule()
 	{
+		valid_ = true;
 	}
 
 	ClearShiftProcessor::~ClearShiftProcessor()
@@ -15,17 +17,23 @@ namespace BALL
 	{
 	}
 
+	ClearShiftProcessor::ClearShiftProcessor(const ClearShiftProcessor& processor)
+		throw()
+		:	ShiftModule(processor)
+	{
+	}
+
 	Processor::Result ClearShiftProcessor::operator () (Composite& composite)
 		throw()
 	{
-		// clear the "chemical_shift" property of the atom
-		// (if defined)
+		// clear the checmical shift property (ShiftModule::PROPERTY__SHIFT)
+		// of the atom(if defined)
 		Atom* atom = dynamic_cast<Atom*>(&composite);
 		if (atom != 0)
 		{
-			if (atom->hasProperty("chemical_shift"))
+			if (atom->hasProperty(ShiftModule::PROPERTY__SHIFT))
 			{
-				atom->clearProperty("chemical_shift");
+				atom->clearProperty(ShiftModule::PROPERTY__SHIFT);
 			}
 		}
 
