@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.4.2.2 2002/10/30 00:08:47 amoll Exp $
+// $Id: contourSurface.h,v 1.4.2.3 2002/11/26 13:59:13 oliver Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -34,13 +34,13 @@
 
 namespace BALL
 {
-	typedef pair<Position,Position> KeyType;
+	typedef std::pair<Position, Position> KeyType;
 
 
 	template<>
-	HashIndex BALL::Hash(const KeyType& p);
+	HashIndex Hash(const KeyType& p) throw();
 
-static int init_facet_data[NUM_BASIS_CUBES][NUM_CUBE_EDGES] = {
+	static int init_facet_data[NUM_BASIS_CUBES][NUM_CUBE_EDGES] = {
 	  /* 7654 3210 (corners markers) */
 	  
 	  /* 0000 0000b */   {-1,-1,-1,  -1,-1,-1,  -1,-1,-1,  -1,-1,-1,},
@@ -184,7 +184,8 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
       {\bf Definition:} \URL{BALL/DATATYPE/contourLine.h}
   */
   template <typename T>  
-  class TContourSurface : public Surface
+  class TContourSurface 
+		: public Surface
   {
     public:
 
