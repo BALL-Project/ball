@@ -1,11 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.7 2003/08/29 15:37:03 amoll Exp $
+// $Id: colorRGBA.C,v 1.8 2003/12/04 09:51:36 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
 #include <BALL/COMMON/rtti.h>
+
+#include <qcolor.h>
+
 using namespace std;
 
 namespace BALL
@@ -59,6 +62,13 @@ namespace BALL
 				blue_(blue),
 				alpha_(alpha)
 		{
+		}
+
+		ColorRGBA::ColorRGBA(const QColor& color, const ColorUnit& alpha)
+			throw()
+		{
+			set(color);
+			setAlpha(alpha);
 		}
 		 
 		ColorRGBA::~ColorRGBA()
@@ -170,6 +180,29 @@ namespace BALL
 				(unsigned char)blue_, (unsigned char)alpha_);
 
 			s.set(&temp[0]);
+		}
+
+		void ColorRGBA::get(QColor& color) const
+			throw()
+		{
+			color.setRgb(getRed(), getGreen(), getBlue());
+		}
+
+		QColor ColorRGBA::getQColor() const
+			throw()
+		{
+			QColor color;
+			get(color);
+			return color;
+		}
+
+		bool ColorRGBA::set(const QColor& color)
+			throw()
+		{
+			if (!color.isValid()) return false;
+
+			set(color.red(), color.green(), color.blue());
+			return false;
 		}
 
 		void ColorRGBA::swap(ColorRGBA& color)
