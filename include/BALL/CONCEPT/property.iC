@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.23 2001/08/16 00:34:46 oliver Exp $
+// $Id: property.iC,v 1.24 2001/12/13 01:49:55 oliver Exp $
 
 using namespace std;
 
@@ -349,7 +349,9 @@ BALL_INLINE
 void PropertyManager::swap(PropertyManager& property_manager)
 	throw()
 {
-  bitvector_.swap(property_manager.bitvector_);
+	BitVector tmp = bitvector_;
+	bitvector_ = property_manager.bitvector_;
+	property_manager.bitvector_ = tmp;
 	named_properties_.swap(property_manager.named_properties_);
 }
 
