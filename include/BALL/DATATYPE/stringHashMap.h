@@ -1,4 +1,4 @@
-// $Id: stringHashMap.h,v 1.9 2000/08/30 19:58:03 oliver Exp $
+// $Id: stringHashMap.h,v 1.10 2000/10/05 08:27:04 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -227,20 +227,7 @@ namespace BALL
 		*/
 		void host(Visitor<StringHashMap<Value> >& visitor)
 		{
-			//BAUSTELLE
-		}
-		//@}
-
-		/**	@name	Internal Iterators */
-		//@{
-
-		/** Processor application method.
-				Applies the processor to each entry of the hash map.
-				@param processor the processor to be applied
-		*/
-		bool apply(UnaryProcessor<StringHashMap<Value> >& processor)
-		{
-			// BAUSTELLE
+			visitor.visit(*this);
 		}
 		//@}
 
