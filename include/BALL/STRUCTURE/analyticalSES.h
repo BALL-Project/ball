@@ -1,4 +1,4 @@
-// $Id: analyticalSES.h,v 1.3 2000/06/15 17:12:09 oliver Exp $
+// $Id: analyticalSES.h,v 1.4 2000/06/27 08:27:41 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
 #define BALL_STRUCTURE_ANALYTICALSES_H
@@ -9,8 +9,23 @@
 
 namespace BALL 
 {
-	
+	// forward declarations
 	class BaseFragment;
+	class Atom;
+	template <typename Key, typename Value>
+	class HashMap;
+	
+	/**	Calculate the solvent excluded surface area analytically.
+			This method uses the algorithm by Michael L. Connolly.
+			BAUSTELLE
+		
+			@param	fragment the kernel object containing the atoms
+			@param	probe_radius the probe radius used for the SAS
+			@param	number_of_dots the number of dots used per atom
+			@return the SES area in $\AA^2$
+	*/
+	float calculateSESAtomArea
+		(const BaseFragment& fragment, HashMap<Atom*,float>& atom_areas, float probe_radius = 1.5);
 	
 	/**	Calculate the solvent excluded surface area analytically.
 			This method uses the algorithm by Michael L. Connolly.
