@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.h,v 1.4 2000/01/10 15:51:04 oliver Exp $
+// $Id: periodicBoundary.h,v 1.5 2000/02/02 09:49:40 len Exp $
 // Molecular Mechanics: class representing periodic boundary conditions
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -45,35 +45,69 @@ namespace BALL
 		*/
 		//@{
 
-		///	Vector containing the lower corner of the box
-		static const char* PERIODIC_BOX_LOWER;
+		struct Option {
 
-		///	Vector containing the lower corner of the box
-		static const char* PERIODIC_BOX_UPPER;
+			///	Vector containing the lower corner of the box
+			static const char* PERIODIC_BOX_LOWER;
 
-		/// Bool 
-		static const char* PERIODIC_BOX_ENABLED;
+			///	Vector containing the upper corner of the box
+			static const char* PERIODIC_BOX_UPPER;
+
+			///	 Bool that indicates whether periodic boundary is enabled or not 
+			static const char* PERIODIC_BOX_ENABLED;
 		
-		/// Minimum distance between solute molecules and the box in Angstrom
-		static const char* PERIODIC_BOX_DISTANCE;
+			///	Minimum distance between solute molecules and the box in Angstrom
+			static const char* PERIODIC_BOX_DISTANCE;
 			
-		/// Flag to initiate the addition of solvent to the box
-		static const char* PERIODIC_BOX_ADD_SOLVENT;
+			///	Flag to initiate the addition of solvent to the box
+			static const char* PERIODIC_BOX_ADD_SOLVENT;
 			
-		/** Name of the file containing the solvent.
+			/** 	Name of the file containing the solvent.
 				This file should contain an equilibrated box of the solvent
 				in the HyperChem format.
-		*/
-		static const char* PERIODIC_BOX_SOLVENT_FILE;
+			*/
+			static const char* PERIODIC_BOX_SOLVENT_FILE;
 
-		/** Minimum distance between solvent and solute for added solvent.
-		*/
-		static const char* PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE;
+			/**	Minimum distance between solvent and solute for added solvent.
+			*/
+			static const char* PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE;
 
-		/**	Filename for the default solvent.
-		*/
-		static const char* PERIODIC_WATER_FILE;
+			/**	Filename for the default solvent.
+			*/
+			static const char* PERIODIC_WATER_FILE;
+
+			};
 			
+		struct Default {
+			///	Default vector for the lower corner of the box
+			static const Vector3 PERIODIC_BOX_LOWER; 
+
+			///	Default vector for the upper corner of the box
+			static const Vector3 PERIODIC_BOX_UPPER;
+
+			///	Default bool value for periodic boundary (enabled or not)
+			static const bool PERIODIC_BOX_ENABLED;
+
+			///	Default minimum distance between solute molecules and the box in Angstrom
+			static const float PERIODIC_BOX_DISTANCE;
+
+			///	Default value of the flag to initiate the addition of solvent to the box
+			static const bool PERIODIC_BOX_ADD_SOLVENT;
+
+			/**	Default file for adding solvent molecules into the box.
+				This file should contain an equilibrated box of the solvent
+				in the HyperChem format.
+			*/
+			static const char* PERIODIC_BOX_SOLVENT_FILE;
+
+			///	Default minimum distance between solvent and solute for added solvent.
+			static const float PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE;
+
+			///	Default file for default solvent.
+			static const char* PERIODIC_WATER_FILE;
+
+			};
+
 		//@}
 
 		/**	@name	Constructors and Destructors	
@@ -118,6 +152,10 @@ namespace BALL
 		/**	Sets up the periodic box
 		*/
 		bool setup();
+
+		/**	Generate the vector of molecules of the system
+		*/
+		Size	generateMoleculesVector();
 
 		//@}
 
