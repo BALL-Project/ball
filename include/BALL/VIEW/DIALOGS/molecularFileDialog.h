@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.12 2004/02/26 08:41:34 anhi Exp $
+// $Id: molecularFileDialog.h,v 1.13 2004/04/18 15:29:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -185,14 +185,11 @@ namespace BALL
 				MOL2_FILE
 			};
 
-			Index file_format_;
 			Index save_id_;
-			Size x_, y_, width_, height_;
 			String working_dir_;
 		};
 
 	} // namespace VIEW
-
 }	// namespace BALL
 
 #endif // BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H

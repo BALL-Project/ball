@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.18 2004/04/14 15:16:32 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.19 2004/04/18 15:30:11 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -24,12 +24,7 @@ namespace BALL
 		MolecularFileDialog::MolecularFileDialog(QWidget *parent, const char* name)
 			throw()
 			:	QWidget(parent),
-				ModularWidget(name),
-				file_format_(0),
-				x_(100),
-				y_(100),
-				width_(500),
-				height_(500)
+				ModularWidget(name)
 		{
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new MolecularFileDialog " << this << std::endl;
@@ -72,54 +67,32 @@ namespace BALL
 
 		void MolecularFileDialog::readFiles()
 		{
-			QFileDialog *fd = new QFileDialog(getMainControl(), "Molecular File Dialog", true);
+			QStringList files = QFileDialog::getOpenFileNames(
+													"*.pdb *.brk *.ent *.hin *.mol *.mol2",
+													working_dir_.c_str(),
+													getMainControl(),
+													"Molecular File Dialog",
+													"Choose a file to open" );
 
-			fd->setMode(QFileDialog::ExistingFiles);
-			fd->setFilter("PDB Files (*.pdb *.brk *.ent)");
-			fd->addFilter("HIN Files (*.hin)");
-			fd->addFilter("MOL Files (*.mol)");
-			fd->addFilter("MOL2 Files (*.mol2)");
-
-			fd->setSelectedFilter(file_format_);
-
-			fd->setCaption("Select a molecular file");
-			fd->setViewMode(QFileDialog::Detail);
-			fd->setGeometry(x_, y_, width_, height_);
-
-			if (working_dir_ != "") fd->setDir(working_dir_.c_str());
-
-			int result_dialog = fd->exec();
-			x_ = fd->x();
-			y_ = fd->y();
-			width_ = fd->width();
-			height_ = fd->height();
-
-			#ifdef BALL_PLATFORM_WINDOWS
-			// workaround for strange microsoft windows behaviour
-				x_+= 4;
-				y_+= 23;
-			#endif
-
-			working_dir_ = fd->dirPath();
-			if (!result_dialog == QDialog::Accepted) return;
-
-
-			QStringList files = fd->selectedFiles();
-			String filter(fd->selectedFilter().ascii());
-
- 		  for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) 
+ 		  for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) 
 			{
-				QString qfile = *it;
-				QString qfilename = *it;
 				// construct a name for the system(the filename without the dir path)
-				qfilename.remove(0, fd->dirPath().length() + 1);
+				String filename = (*it).ascii();
+				while (filename.has(FileSystem::PATH_SEPARATOR))
+				{
+					filename = filename.after(FileSystem::PATH_SEPARATOR);
+				}
+
+				QString qfilename = filename.c_str();
+				QString filter;
 
 				if (qfilename.find('.') != -1)
 				{
+					filter = qfilename.right(qfilename.find('.'));
 					qfilename = qfilename.left(qfilename.find('.'));
 				}
 
-				openFile(String(qfile.ascii()), String(filter), String(qfilename.ascii()));
+				openFile((*it).ascii(), filter.ascii(), qfilename.ascii());
 			}
 		}
 
@@ -156,31 +129,26 @@ namespace BALL
 				return;
 			}
 
-
-			if (filetype.hasSubstring("pdb") ||
-					filetype.hasSubstring("brk") ||
-					filetype.hasSubstring("ent") )
+			if (filetype.hasSubstring("pdb") || filetype.hasSubstring("PDB") ||
+					filetype.hasSubstring("brk") || filetype.hasSubstring("BRK") ||
+					filetype.hasSubstring("ent") || filetype.hasSubstring("ENT"))
 			{
 				readPDBFile(filename, system_name);
-				file_format_ = PDB_FILE;
 			}
 			else if (filetype.hasSubstring("HIN") ||
 							 filetype.hasSubstring("hin"))
 			{
 				readHINFile(filename, system_name);
-				file_format_ = HIN_FILE;
 			}
 			else if (filetype.hasSubstring("MOL2") ||
 							 filetype.hasSubstring("mol2"))
 			{
 				readMOL2File(filename, system_name);
-				file_format_ = MOL_FILE;
 			}
 			else if (filetype.hasSubstring("MOL") ||
 							 filetype.hasSubstring("mol"))
 			{
 				readMOLFile(filename, system_name);
-				file_format_ = MOL2_FILE;
 			}
 			else
 			{
@@ -199,63 +167,63 @@ namespace BALL
 				Log.error() << "Not a single system selected! Aborting writing..." << std::endl;
 				return false;
 			}
-			
-			QFileDialog *fd = new QFileDialog(
-					(MainControl*) ((ConnectionObject*)this)->getRoot()
-					, "Molecular File Dialog", true);
-			fd->setMode(QFileDialog::AnyFile);
-			fd->setFilter("PDB Files (*.pdb)");
-			fd->addFilter("HIN Files (*.hin)");
-			fd->addFilter("MOL Files (*.mol)");
-			fd->addFilter("MOL2 Files (*.mol2)");
 
-			fd->setSelectedFilter(file_format_);
+			setStatusbarText("writing file...");
 
-			fd->setCaption("Select a filename for writing the system");
-			fd->setViewMode(QFileDialog::Detail);
-			fd->setGeometry(x_, y_, width_, height_);
-			if (working_dir_ != "") fd->setDir(working_dir_.c_str());
+			QString s = QFileDialog::getSaveFileName(
+										working_dir_.c_str(),
+										"*.pdb *.brk *.ent *.hin *.mol *.mol2",
+										getMainControl(),
+										"Molecular File Dialog",
+										"Choose a filename to save under" );
 
-			int result_dialog = fd->exec();
-			x_ = fd->x();
-			y_ = fd->y();
-			width_ = fd->width();
-			height_ = fd->height();
-			working_dir_ = fd->dirPath();
-			if (!result_dialog == QDialog::Accepted) return false;
+			String filename = s.ascii();
 
-			String filename(fd->selectedFile().ascii());
-			String filter(fd->selectedFilter().ascii());
-			
 			if (filename == "/" || filename == "\\") 
 			{
 				return false;
 			}
 
-			setStatusbarText("writing molecular file...");
+			String temp(filename);
+			if (filename.has(FileSystem::PATH_SEPARATOR))
+			{
+				while (temp.has(FileSystem::PATH_SEPARATOR))
+				{
+					temp = temp.after(FileSystem::PATH_SEPARATOR);
+				}
+			}
+
+			String filter;
+			if (temp.hasSubstring("."))
+			{
+				filter = temp.after(".");
+			}
 
 			const System& system = *(const System*) (*selection.begin());
 
 			bool result = false;
-			if (filter.hasSubstring("PDB"))
+			if (filter == "PDB" || filter == "pdb" ||
+					filter == "ent" || filter == "ENT" ||
+					filter == "brk" || filter == "BRK")
 			{
 				result = writePDBFile(filename, system);
-				file_format_ = PDB_FILE;
 			}
-			else if (filter.hasSubstring("HIN"))
+			else if (filter.hasSubstring("HIN") || filter.hasSubstring("hin"))
 			{
 				result = writeHINFile(filename, system);
-				file_format_ = HIN_FILE;
 			}
-			else if (filter.hasSubstring("MOL"))
+			else if (filter.hasSubstring("MOL") || filter.hasSubstring("mol"))
 			{
 				result = writeMOLFile(filename, system);
-				file_format_ = MOL_FILE;
 			}
-			else if (filter.hasSubstring("MOL2"))
+			else if (filter.hasSubstring("MOL2") || filter.hasSubstring("mol2"))
 			{
 				result = writeMOL2File(filename, system);
-				file_format_ = MOL2_FILE;
+			}
+			else
+			{
+				setStatusbarText("Unknown file format, aborting...");
+				return false;
 			}
 
 			if (!result) 
@@ -264,7 +232,7 @@ namespace BALL
 			}
 		
 			Log.info() << "> " << system.countAtoms() << " atoms written to file \"" << filename << "\"" << std::endl;
-
+			setStatusbarText("Finished writing.");
 			return true;
 		}
 
@@ -502,11 +470,6 @@ namespace BALL
 		void MolecularFileDialog::writePreferences(INIFile& inifile)
 			throw()
 		{
-			inifile.insertValue("WINDOWS", "File::format", String(file_format_));
-			inifile.insertValue("WINDOWS", "File::dialog_x", String(x_));
-			inifile.insertValue("WINDOWS", "File::dialog_y", String(y_));
-			inifile.insertValue("WINDOWS", "File::dialog_width", String(width_));
-			inifile.insertValue("WINDOWS", "File::dialog_height", String(height_));
 			inifile.insertValue("WINDOWS", "File::working_dir", working_dir_);
 		}
 		
@@ -514,25 +477,6 @@ namespace BALL
 		void MolecularFileDialog::fetchPreferences(INIFile& inifile)
 			throw()
 		{
-			if (inifile.hasEntry("WINDOWS", "File::format"))
-			{
-				file_format_ = inifile.getValue("WINDOWS", "File::format").toInt();
-			}
-
-			if (inifile.hasEntry("WINDOWS", "File::dialog_x") &&
-					inifile.hasEntry("WINDOWS", "File::dialog_y"))
-			{
-				x_ = inifile.getValue("WINDOWS", "File::dialog_x").toInt(),
-				y_ = inifile.getValue("WINDOWS", "File::dialog_y").toInt();
-			}
-
-			if (inifile.hasEntry("WINDOWS", "File::dialog_width") &&
-					inifile.hasEntry("WINDOWS", "File::dialog_height"))
-			{
-				width_ = inifile.getValue("WINDOWS", "File::dialog_width").toInt(),
-				height_ = inifile.getValue("WINDOWS", "File::dialog_height").toInt();
-			}
-
 			if (inifile.hasEntry("WINDOWS", "File::working_dir"))
 			{
 				working_dir_ = inifile.getValue("WINDOWS", "File::working_dir");
