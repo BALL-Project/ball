@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.h,v 1.7 2003/02/21 16:05:20 anhi Exp $
+// $Id: moleculeObjectCreator.h,v 1.8 2003/03/03 08:17:31 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -43,7 +43,9 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewGui
+     *  @{
+     */
 		using VIEW::ObjectCreator;
 
 		/** MoleculeObjectCreator class.
@@ -132,7 +134,7 @@ namespace BALL
 				throw();
 			//@}
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

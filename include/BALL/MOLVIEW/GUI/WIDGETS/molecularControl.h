@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.12 2003/02/21 16:05:26 anhi Exp $
+// $Id: molecularControl.h,v 1.13 2003/03/03 08:17:33 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -26,6 +26,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
+    /** \ingroup MolviewGuiWidgets
+     *  @{
+     */
 		using VIEW::Control;
 
 		/**	The MolecularControl class.
@@ -223,7 +226,7 @@ namespace BALL
 			// tests wether a composite holds the criterias
 			MolecularFilter molecular_filter_;
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

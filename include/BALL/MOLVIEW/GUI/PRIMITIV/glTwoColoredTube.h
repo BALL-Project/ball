@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glTwoColoredTube.h,v 1.9 2003/02/21 16:05:25 anhi Exp $
+// $Id: glTwoColoredTube.h,v 1.10 2003/03/03 08:17:32 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
@@ -18,6 +18,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
+    /** \ingroup MolviewGuiPrimitves
+     *  @{
+     */
 		using VIEW::GLObject;
 		
 		/** GLTwoColoredTube class.
@@ -222,7 +225,7 @@ namespace BALL
 				(const Vector3& vertex_1, const Vector3& vertex_2,
 				 const Vector3& rotation_axis, const Real angle);
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

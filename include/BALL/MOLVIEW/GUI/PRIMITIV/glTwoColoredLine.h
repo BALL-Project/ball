@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glTwoColoredLine.h,v 1.10 2003/02/21 16:05:23 anhi Exp $
+// $Id: glTwoColoredLine.h,v 1.11 2003/03/03 08:17:32 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
@@ -18,6 +18,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
+    /** \ingroup MolviewGuiPrimitves
+     *  @{
+     */
 		using VIEW::GLObject;
 		
 		/** GLTwoColoredLine class.
@@ -216,7 +219,7 @@ namespace BALL
 
 			//@}
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

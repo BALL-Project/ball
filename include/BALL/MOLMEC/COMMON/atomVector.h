@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.h,v 1.16 2003/02/21 16:04:16 anhi Exp $
+// $Id: atomVector.h,v 1.17 2003/03/03 08:17:20 sturm Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -16,7 +16,9 @@
 
 namespace BALL 
 { 
-	
+    /** \ingroup MolmecCommon
+     *  @{
+     */	
 	class Gradient;
 	class Atom;
 	class Composite;
@@ -175,7 +177,7 @@ namespace BALL
 		std::vector<Vector3>	saved_position_;
   };
 
-
+     /** @} */
 } // end of namespace BALL
 
 #endif // BALL_MOLMEC_MINIMIZATION_GRADIENT_H 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.15 2003/02/21 16:05:27 anhi Exp $
+// $Id: molecularProperties.h,v 1.16 2003/03/03 08:17:33 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -23,7 +23,9 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewGuiWidgets
+     *  @{
+     */
 		/**	The MolecularProperties class.
 				The class MolecularProperties is a widget that converts certain  \link Message Message \endlink 
 				objects to other  \link Message Message \endlink  objects.
@@ -179,7 +181,7 @@ namespace BALL
 			Real 												view_distance_;
 
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

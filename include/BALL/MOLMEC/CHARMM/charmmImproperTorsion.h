@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.h,v 1.10 2003/02/21 16:04:11 anhi Exp $
+// $Id: charmmImproperTorsion.h,v 1.11 2003/03/03 08:17:18 sturm Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMIMPROPERTORSION_H
@@ -25,7 +25,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup CHARMM
+     *  @{
+     */
 	/**	Charmm improper torsion component.
 			The CHARMM force field employs a harmonic out-of-plane potential for improper
 			torsions.	An imporper torsion is defined for four atoms {\it A}, {\it B}, {\it C},
@@ -106,7 +108,7 @@ namespace BALL
 		//_@}
 	 
 	};
-
+     /** @} */
 } // namespace BALL 
 
 #endif // BALL_MOLMEC_CHARMM_CHARMMIMPROPERTORSION_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.h,v 1.16 2003/02/21 16:04:31 anhi Exp $
+// $Id: microCanonicalMD.h,v 1.17 2003/03/03 08:17:24 sturm Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -50,7 +50,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup MDSimulation
+     *  @{
+     */
 	/** Microcanonical MD: A class for doing molecular dynamics simulations      
 			according to the principle of a microcanonical ensemble (NVE), i.e.,
 			the total energy of the system is kept constant. Numerical
@@ -173,7 +175,7 @@ namespace BALL
     //_@} 
 
     };  // end of class MicroCanonicalMD  
-
+     /** @} */
   } // end of namespace BALL
 
 #endif // BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H

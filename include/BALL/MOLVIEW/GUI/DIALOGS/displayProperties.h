@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.23 2003/02/21 16:05:06 anhi Exp $
+// $Id: displayProperties.h,v 1.24 2003/03/03 08:17:27 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -66,7 +66,9 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewDialogs
+     *  @{
+     */
 		/// Exception to be thrown if invalid option is given for a modelprocessor
  		class InvalidOption: public Exception::GeneralException
 		{
@@ -495,7 +497,7 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.iC>
 #		endif 
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.18 2003/02/21 16:04:27 anhi Exp $
+// $Id: support.h,v 1.19 2003/03/03 08:17:23 sturm Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -30,7 +30,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup MolmecCommon
+     *  @{
+     */	 
 	class Atom;
 	class System;
 
@@ -231,7 +233,7 @@ namespace BALL
 		}
 
 	} // namespace MolmecSupport
-
+     /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_COMMON_SUPPORT_H

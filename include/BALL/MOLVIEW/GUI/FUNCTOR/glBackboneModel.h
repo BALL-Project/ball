@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackboneModel.h,v 1.8 2003/02/21 16:05:14 anhi Exp $
+// $Id: glBackboneModel.h,v 1.9 2003/03/03 08:17:29 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
@@ -18,7 +18,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewGuiFunctor
+     *  @{
+     */
 		/** AddGLBackboneModel class.
 				The class AddGLBackboneModel is derived from the class 
 				 \link BackboneModel BackboneModel \endlink  and extents this class by overriding the creation
@@ -94,7 +96,7 @@ namespace BALL
 			virtual Backbone* createBackbone_();
 			//@}
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

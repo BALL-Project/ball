@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glSurfaceModel.h,v 1.8 2003/02/21 16:05:17 anhi Exp $
+// $Id: glSurfaceModel.h,v 1.9 2003/03/03 08:17:30 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
@@ -18,7 +18,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewGuiFunctor
+     *  @{
+     */
 		/** AddGLSurfaceModel class.
 				The class AddGLSurfaceModel is derived from the class 
 				 \link SurfaceModel SurfaceModel \endlink  and extents this class by overriding the creation
@@ -93,7 +95,7 @@ namespace BALL
 			virtual Mesh* createMesh_();
 			//@}
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.h,v 1.18 2003/02/21 16:04:30 anhi Exp $
+// $Id: canonicalMD.h,v 1.19 2003/03/03 08:17:24 sturm Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -52,7 +52,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup MDSimulation
+     *  @{
+     */
 	/** A MD simulation in the canoncial ensemble.
 			A class for doing molecular dynamics simulations      
 			according to the principle of a canonical ensemble (NVT), i.e., 
@@ -214,7 +216,7 @@ namespace BALL
     //_@} 
 
     };  // end of class CanonicalMD  
-
+     /** @} */
   } // end of namespace BALL 
 
 #endif // BALL_MOLMEC_MDSIMULATION_CANONICALMD_H

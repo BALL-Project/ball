@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.h,v 1.8 2003/02/21 16:04:26 anhi Exp $
+// $Id: snapShotManager.h,v 1.9 2003/03/03 08:17:23 sturm Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -36,7 +36,9 @@
 
 namespace BALL
 {
-
+    /** \ingroup MolmecCommon
+     *  @{
+     */	
 	class TrajectoryFile;
 
   /**	Snapshot management for MD simulations.
@@ -305,6 +307,7 @@ namespace BALL
     //_@}
 
 	}; // end of class SnapshotManager 
+     /** @} */
 }
 
 #endif //  BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H

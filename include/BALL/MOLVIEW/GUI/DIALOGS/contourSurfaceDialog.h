@@ -28,7 +28,9 @@ namespace BALL
 {
  namespace MOLVIEW
    {
-
+    /** \ingroup MolviewDialogs
+     *  @{
+     */
 class ContourSurfaceDialog : public QDialog
 { 
     Q_OBJECT
@@ -63,6 +65,7 @@ public slots:
      virtual void browseSaveFiles();
 
 };
+     /** @} */
 }
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.12 2003/02/21 16:04:36 anhi Exp $
+// $Id: steepestDescent.h,v 1.13 2003/03/03 08:17:26 sturm Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -33,7 +33,9 @@
 
 namespace BALL 
 {
-
+    /** \ingroup MolmecEnergyMinimizer
+     *  @{
+     */
 	class SteepestDescentMinimizer 
 		:	public EnergyMinimizer	
 	{
@@ -152,7 +154,7 @@ namespace BALL
 		*/
 		double step_;
 	};
-
+     /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H

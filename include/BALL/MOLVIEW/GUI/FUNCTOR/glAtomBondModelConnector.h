@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glAtomBondModelConnector.h,v 1.9 2003/02/21 16:05:12 anhi Exp $
+// $Id: glAtomBondModelConnector.h,v 1.10 2003/03/03 08:17:29 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
@@ -33,7 +33,9 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-		
+    /** \ingroup MolviewGuiFunctor
+     *  @{
+     */		
 		/** GLAtomBondModelConnector class.
 				The class GLAtomBondModelConnector is derived from the class 
 				 \link AtomBondModelConnector AtomBondModelConnector \endlink  and extents this class by overriding the creation
@@ -163,7 +165,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.iC>
 #	endif
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glLineModel.h,v 1.8 2003/02/21 16:05:16 anhi Exp $
+// $Id: glLineModel.h,v 1.9 2003/03/03 08:17:30 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
@@ -26,7 +26,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-		
+    /** \ingroup MolviewGuiFunctor
+     *  @{
+     */		
 		/** AddGLLineModel class.
 				The class AddGLLineModel is derived from the class 
 				 \link AddLineModel AddLineModel \endlink  and extents this class by overriding the creation
@@ -136,7 +138,7 @@ namespace BALL
 
 			//@}
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

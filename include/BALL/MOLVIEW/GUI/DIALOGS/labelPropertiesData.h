@@ -16,7 +16,9 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewDialogs
+     *  @{
+     */
 		class LabelPropertiesData : public QDialog
 		{
 			Q_OBJECT
@@ -42,7 +44,7 @@ namespace BALL
 		//#		ifndef BALL_NO_INLINE_FUNCTIONS
 		//#			include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.iC>
 		//#		endif 
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

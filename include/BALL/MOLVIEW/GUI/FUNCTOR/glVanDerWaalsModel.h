@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glVanDerWaalsModel.h,v 1.9 2003/02/21 16:05:18 anhi Exp $
+// $Id: glVanDerWaalsModel.h,v 1.10 2003/03/03 08:17:31 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
@@ -18,6 +18,9 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
+    /** \ingroup MolviewGuiFunctor
+     *  @{
+     */
 		/** AddGLVanDerWaalsModel class.
 				The class AddGLVanDerWaalsModel is derived from the class 
 				 \link AddVanDerWaalsModel AddVanDerWaalsModel \endlink  and extents this class by overriding the creation
@@ -98,7 +101,7 @@ namespace BALL
 			virtual Sphere* createSphere_();
 			//@}
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBallAndStickModel.h,v 1.8 2003/02/21 16:05:15 anhi Exp $
+// $Id: glBallAndStickModel.h,v 1.9 2003/03/03 08:17:30 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
@@ -27,7 +27,9 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-
+    /** \ingroup MolviewGuiFunctor
+     *  @{
+     */
 		/** AddGLBallAndStickModel class.
 				The class AddGLBallAndStickModel is derived from the class 
 				 \link AddBallAndStickModel AddBallAndStickModel \endlink  and extents this class by overriding the creation
@@ -138,7 +140,7 @@ namespace BALL
 
 			private:
 		};
-
+     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL
