@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.h,v 1.6 2001/10/27 16:23:50 amoll Exp $
+// $Id: TCPTransfer.h,v 1.7 2002/01/09 15:49:20 amoll Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -84,7 +84,7 @@ namespace BALL
 			 *	the syntax: \\
 			 *	http[ftp]://login:pass@server.com:port/fileaddress
 			 */
-			TCPTransfer(::std::ofstream& file, const String& address, bool debug = false)
+			TCPTransfer(::std::ofstream& file, const String& address)
 				throw();
 			
 			/// Destructor.
@@ -102,7 +102,7 @@ namespace BALL
 			 * 	You can set a new file and address, but the transfer is not
 			 * 	yet done. To do that, use transfer() afterwards.
 			 */
-			bool set(::std::ofstream& file, const String& address, bool debug = false)
+			bool set(::std::ofstream& file, const String& address)
 				throw();
 			
 			/** Detailled set method.
@@ -114,8 +114,7 @@ namespace BALL
 							 const String& file_address,
 							 const String& login,
 							 const String& password,
-							 Position 		 port = 80,
-							 bool					 debug = false)
+							 Position 		 port = 80)
 				throw();
 
 			/** Return the host address.
@@ -197,22 +196,6 @@ namespace BALL
 				return buffer_;
 			}
 
-			/** Set debug output mode.
-			 *  If set to true, all networktraffic is stored in the ofstream.
-			 */
-			void setDebugOutput(bool debug)
-				throw()
-			{
-				debug_ = debug;
-			}
-			
-			/// Test if instance is in debug output mode.
-			bool isInDebugMode() const
-				throw()
-			{
-				return debug_;
-			}
-			
 			/** Transfer method.
 					If the address is specified, the file can be transfered
 					with this method.
@@ -234,7 +217,6 @@ namespace BALL
 				Protocol 		protocol_;
 				char* 			buffer_;
 				Socket			socket_;
-				bool				debug_;
 				::std::ofstream*  fstream_;
 				
 				/*_ Send data through the socket.
