@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.91 2004/06/28 15:00:24 amoll Exp $
+// $Id: scene.C,v 1.92 2004/06/28 15:22:56 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -426,9 +426,13 @@ namespace BALL
 			Vector3 n(rep.getProperty("AX").getDouble(),
 								rep.getProperty("BY").getDouble(),
 								rep.getProperty("CZ").getDouble());
-			n.normalize();
+			if (n.getSquareLength() != 0)
+			{
+				n.normalize();
+			}
 			float d = rep.getProperty("D").getDouble();
 			glPushMatrix();
+
 
 			if (rep.hasProperty(Representation::PROPERTY__HIDDEN))
 			{
@@ -454,7 +458,6 @@ namespace BALL
 					}
 				}
 
-				
 				glTranslatef(-n.x * d, -n.y * d, -n.z * d);
 				glScalef(200, 200, 200);
 				glColor3f(0., 0., 1.0);
