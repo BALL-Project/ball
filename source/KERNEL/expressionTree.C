@@ -1,4 +1,4 @@
-// $Id: expressionTree.C,v 1.5 2001/12/30 13:28:46 sturm Exp $
+// $Id: expressionTree.C,v 1.6 2002/01/10 15:00:40 anker Exp $
 
 #include <BALL/KERNEL/expressionTree.h>
 
@@ -57,8 +57,6 @@ namespace BALL
 	}
 	
 
-	// ?????: 
-	// should we clone predicate_ or should we only set the pointer?
 	ExpressionTree::ExpressionTree(const ExpressionTree& tree)
 		throw()
 		:	type_(tree.type_),
@@ -81,8 +79,6 @@ namespace BALL
 	{
 		type_ = INVALID;
 		negate_ = false;
-		// ?????
-		// memory leak if nobody cares for the predicate.
 		predicate_ = 0;
 		children_.clear();
 	}
