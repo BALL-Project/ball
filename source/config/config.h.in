@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.29.2.8 2002/12/01 13:37:28 oliver Exp $ 
+// $Id: config.h.in,v 1.29.2.9 2002/12/09 21:42:26 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -157,6 +157,9 @@
 // the correct initialisation of the base classes. These base classes are
 // either something like std::basic_ios<char> etc., or ios, istream etc.
 #undef BALL_HAS_ANSI_IOSTREAM
+
+// Define whether inline functions may be used as template parameters.
+#undef BALL_HAS_INLINE_TPL_ARGS
 
 // Define the precision for the BALL Complex type (has to be consistent
 // with the FFTW precision, if included).
