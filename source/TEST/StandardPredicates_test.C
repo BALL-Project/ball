@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.6 2000/05/24 10:45:45 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.7 2000/05/24 15:12:59 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.6 2000/05/24 10:45:45 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.7 2000/05/24 15:12:59 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -233,6 +233,9 @@ CHECK(ConnectedToPredicate::()(const Atom& atom) const )
 	TEST_EQUAL(connectedTo(*it), true)
 	STATUS("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
 	connectedTo.setArgument("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))");
+	TEST_EQUAL(connectedTo(*it), true)
+	STATUS("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
+	connectedTo.setArgument("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))");
 	TEST_EQUAL(connectedTo(*it), true)
 
 	++it;

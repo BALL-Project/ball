@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.7 2000/05/24 10:45:18 anker Exp $
+// $Id: standardPredicates.C,v 1.8 2000/05/24 15:12:49 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -365,7 +365,6 @@ namespace BALL
 		int depth = 0;
 		Size position = 0;
 		std::pair<String, String> this_pair;
-		String current_bond;
 		String tmp;
 
 		for (; position < group.size(); ++position)
@@ -415,6 +414,7 @@ namespace BALL
 					}
 					if (depth == 0) 
 					{
+						Log.info() << "push_back: " << tmp << endl;
 						this_pair.second = tmp;
 						subs.push_back(this_pair);
 					}
@@ -436,8 +436,60 @@ namespace BALL
 					}
 					break;
 
+					/*
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+					if (depth == 1)
+					{
+						Log.info() << "about to copy " << group[position-1] << " " << 
+							group[position] << " times" << endl;
+						if (position == 0)
+						{
+							Log.error() << "encountered a number as first char." << endl;
+							return false;
+						}
+						if (group[position-1] == ')')
+						{
+							// BAUSTELLE
+						}
+						else
+						{
+							// assumming the string to be correct, i. e.
+							// group[position-1] is an element.
+							for (int j = 1; j < ((String) group[position]).toInt(); ++j)
+							{
+								tmp = tmp + group[position-1];
+							}
+						}
+					}
+					break;
+					*/
+
+				/* 
+				case 'H' : 
+				case 'C' : 
+				case 'O' : 
+				case 'N' : 
+					if (depth == 0)
+					{
+						Log.info() << "encountered Element without brackets, applying ()";
+						tmp = tmp + '(' + group[position] + ')';
+						Log.info() << tmp << endl;
+					}
+					else
+					{
+						tmp = tmp + group[position];
+					}
+					break;
+				 */
+				
 				default :
-					current_bond = "";
 					if (depth > 0)
 					{
 						tmp = tmp + group[position];
@@ -506,7 +558,7 @@ namespace BALL
 	bool ConnectedToPredicate::findAndTest(const String& group, const Atom&
 			atom, HashSet<const Bond*>& found) const
 	{
-		if (group[0] == atom.getElement().getSymbol()) 
+		if ((group[0] == atom.getElement().getSymbol()) || (group[0] == '*'))
 		{
 			return find(group, atom, found);
 		}
@@ -567,8 +619,8 @@ namespace BALL
 
 					if (subgroups_it->second.size() == 1)
 					{
-						if (atom.getBond(i)->getPartner(atom)->getElement().getSymbol()
-								== subgroups_it->second)
+						if ((atom.getBond(i)->getPartner(atom)->getElement().getSymbol()
+								== subgroups_it->second) || (subgroups_it->second == '*'))
 						{
 							deeper.insert(atom.getBond(i));
 						}

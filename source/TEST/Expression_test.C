@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.1 2000/05/19 15:58:33 oliver Exp $
+// $Id: Expression_test.C,v 1.2 2000/05/24 15:12:58 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.1 2000/05/19 15:58:33 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.2 2000/05/24 15:12:58 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -68,8 +68,6 @@ RESULT
 CHECK(ExpressionTree(Type type, list<ExpressionTree*> children, bool negate = false))
   //BAUSTELLE
 RESULT
-
-
 
 
 CHECK(bool operator () (const Atom& atom) const )
