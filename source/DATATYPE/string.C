@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.36 2001/05/12 12:30:22 amoll Exp $
+// $Id: string.C,v 1.37 2001/05/17 17:45:26 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -205,7 +205,7 @@ namespace BALL
 		assign(str);
 	}
 
-#define BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(type, format_string) \
+#	define BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(type, format_string) \
 	String::String(type t) 	throw()\
 	{ \
 		char buffer[128]; \
@@ -336,15 +336,16 @@ namespace BALL
 	bool String::toBool() const
 		throw()
 	{
-		Size index = (Size)find_first_not_of(CHARACTER_CLASS__WHITESPACE);
+		string::size_type str_index = find_first_not_of(CHARACTER_CLASS__WHITESPACE);
 		
 		if (size() == 0)
 		{
 			return true;
 		}
 
-		if (index != (Size)string::npos)
+		if (str_index != string::npos)
 		{
+			Size index = (Index)str_index;
 			if (!(c_str()[index] == '0' && (isWhitespace(c_str()[index + 1]) == true || c_str()[index + 1] == '\0'))
 					&& !(c_str()[index++] == 'f'
 					&& c_str()[index++] == 'a'
@@ -596,7 +597,6 @@ namespace BALL
 		return number_of_fields;
 	}
 
-
 	Size String::countFieldsQuoted(const char* delimiters, const char* quotes) const
 		throw(Exception::NullPointer)
 	{
@@ -688,7 +688,6 @@ namespace BALL
 
 		return number_of_fields;
 	}
-
 
 	String String::getField(Index index, const char* delimiters, Index* from_and_next_field) const
 		throw(Exception::IndexUnderflow, Exception::NullPointer)
@@ -784,7 +783,6 @@ namespace BALL
 		return String();
 	}
 
-
 	const char* eatDelimiters_(const char* start, const char* end, const char* delimiters)
 		throw()
 	{
@@ -797,7 +795,6 @@ namespace BALL
 		
 		return start;
 	}
-
 
 	String String::getFieldQuoted(Index index, const char* delimiters, 
 																const char* quotes, Index* from_and_next_field) const
@@ -904,7 +901,6 @@ namespace BALL
 		return field;
 	}
 
-
 	Size String::split(String string_array[], Size array_size, const char* delimiters, Index from) const
 		throw(Exception::IndexUnderflow, Exception::NullPointer)
 	{
@@ -932,7 +928,6 @@ namespace BALL
 
 		return array_index; 
 	}
-
 
 	Size String::split(vector<String>& strings, const char* delimiters, Index from) const
 		throw(Exception::IndexUnderflow, Exception::NullPointer)
@@ -972,18 +967,17 @@ namespace BALL
 		return (Size)strings.size(); 
 	}
 
-
 	String& String::trimLeft(const char* trimmed_chars)
 		throw()
 	{
-		if (trimmed_chars == 0)
+		if ((trimmed_chars == 0) || (size() == 0))
 		{
 			return *this;
 		}
 
-		Index index = (Index)find_first_not_of(trimmed_chars);
+		string::size_type index = find_first_not_of(trimmed_chars);
 		
-		if (index > 0)
+		if (index != string::npos)
 		{
 			// erase the whitespace characters on the left
 			erase(0, index);
@@ -1001,7 +995,6 @@ namespace BALL
 		return *this;
 	}
 
-
 	String& String::trimRight(const char* trimmed_chars)
 		throw()
 	{
@@ -1010,9 +1003,9 @@ namespace BALL
 			return *this;
 		}
 
-		Size index = (Size)find_last_not_of(trimmed_chars);
+		string::size_type index = find_last_not_of(trimmed_chars);
 		
-		if (index < (size() - 1))
+		if (index != string::npos)
 		{
 			// delete the whitespace characters on the right hand side
 			erase(index + 1);
@@ -1038,7 +1031,6 @@ namespace BALL
 		return result;
 	}
 
-
 	String operator + (char c, const String& s)
 		throw()
 	{
@@ -1046,7 +1038,6 @@ namespace BALL
 		result.append(s);
 		return result;
 	}
-
 
 	bool String::hasPrefix(const String& s) const
 		throw()
@@ -1062,7 +1053,6 @@ namespace BALL
 
 		return (memcmp(c_str(), s.c_str(), s.size()) == 0);
 	}
-
 
 	bool String::hasSuffix(const String& s) const
 		throw()
@@ -1102,7 +1092,6 @@ namespace BALL
 
 	#undef BALL_STRING_DEFINE_IS_CLASS_METHOD
 
-
 	String& String::reverse(Index from, Size len)
 		throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
@@ -1124,7 +1113,6 @@ namespace BALL
 
 		return *this;
 	}
-
 
 	int String::compare(const String& s, Index from, Size len) const
 		throw(Exception::IndexUnderflow, Exception::IndexOverflow)
@@ -1167,7 +1155,6 @@ namespace BALL
 		return result;
 	}
 
-
 	int String::compare(const String& s, Index from) const
 		throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
@@ -1195,7 +1182,8 @@ namespace BALL
 				{
 					break;
 				}
-			}			
+			}
+			
 		}
 		else 
 		{
@@ -1209,7 +1197,6 @@ namespace BALL
 		
 		return result;
 	}
-
 
 	int String::compare(const char* char_ptr, Index from, Size len) const
 		throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
@@ -1245,6 +1232,7 @@ namespace BALL
 					break;
 				}
 			}
+			
 		}
 		else 
 		{
@@ -1258,7 +1246,6 @@ namespace BALL
 
 		return result;
 	}
-
 
 	int String::compare(const char* char_ptr, Index from) const
 		throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
@@ -1315,6 +1302,7 @@ namespace BALL
 					break;
 				}
 			}
+			
 		} 
 		else 
 		{
@@ -1328,7 +1316,6 @@ namespace BALL
 
 		return result;
 	}
-
 
 	istream& getline(istream& s, String& str, char delimiter)
 		throw()
@@ -1348,7 +1335,6 @@ namespace BALL
 
 		return s;
 	}
-
 
 	void String::dump(ostream &s, Size depth) const
 		throw()
@@ -1374,27 +1360,26 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-
 	Index String::substitute(const String& to_replace, const String& replacing)
 		throw()
 	{
 		Size replaced_size = (Size)to_replace.size();
 
-		Index found = 0;
+		string::size_type found = 0;
 		if (to_replace != "")
 		{
-			found = (Index)find(to_replace);
+			found = find(to_replace);
 		}
 
-		if (found != (Index)EndPos)
+		if (found != string::npos)
 		{
 			replace(found, replaced_size, replacing);
 		}
 
-		return found;
+		return (Index)found;
 	}
-
  
+
 	void String::validateIndex_(Index& index) const
 		throw (Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
@@ -1454,7 +1439,6 @@ namespace BALL
 		}
  	}
 
-
 	void Substring::validateRange_(Index& from, Size& len) const
 		throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
@@ -1489,7 +1473,6 @@ namespace BALL
 			throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)len, size);
 		}
  	}
-
 
 	void String::validateCharPtrRange_(Index& from, Size& len, const char* char_ptr)
 		throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
