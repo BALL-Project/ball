@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.5 2005/03/23 00:09:52 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.6 2005/03/23 13:43:56 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -22,6 +22,8 @@
 
 using namespace std;
 using namespace BALL;
+
+String dir;
 
 System* readTestFile(String filename)
 {
@@ -94,7 +96,7 @@ vector<float> getResults(String filename)
 	return results;
 }
 
-int runtests(const vector<String>& filenames, const String& dir)
+int runtests(const vector<String>& filenames)
 {
 	MMFF94 mmff;
 
@@ -189,7 +191,7 @@ int runtests(const vector<String>& filenames, const String& dir)
 	return 0;
 }
 
-vector<String> getTestFiles(const String& dir)
+vector<String> getTestFiles()
 {
 	vector<String> results;
 	LineBasedFile infile(dir + FileSystem::PATH_SEPARATOR + "filenames.txt");
@@ -206,15 +208,23 @@ vector<String> getTestFiles(const String& dir)
 
 int main(int argc, char** argv)
 {
-	if (argc != 2)
+	if (argc != 3)
 	{
-		Log.error() << "Usage: readMMFF94TestFile <dir with extracted test files>" << std::endl;
+		Log.error() << "Usage: readMMFF94TestFile <dir with extracted test files> <all|system name>" << std::endl;
 		return 1;
 	}
 
-	vector<String> files;
-//       	files.push_back("BITNAT10");
-         	files = getTestFiles(argv[1]);
+	dir = argv[1];
 
-	return runtests(files, argv[1]);
+	vector<String> files;
+	if (String(argv[2]) == "all")
+	{
+   files = getTestFiles();
+	}
+	else
+	{
+   files.push_back(argv[2]);
+	}
+
+	return runtests(files);
 }

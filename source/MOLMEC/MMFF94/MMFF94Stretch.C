@@ -1,15 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.7 2005/03/23 00:09:46 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.8 2005/03/23 13:44:03 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
 
 #define BALL_DEBUG_MMFF
 
@@ -74,22 +76,38 @@ namespace BALL
 		stretch_.clear();
 		rings_.clear();
 
+		vector<vector<Atom*> > rings;
+
 		RingPerceptionProcessor rpp;
-		vector< vector<Atom*> > rings;
 		rpp.calculateSSSR(rings, *getForceField()->getSystem());
 
-		for (Position pos = 0; pos < rings.size(); pos++)
+		AromaticityProcessor ap;
+		ap.aromatize(rings, *getForceField()->getSystem());
+
+		for (Position i = 0; i < rings.size(); i++)
 		{
-			if (rings[pos].size() >= 5 && rings[pos].size() <= 6)
+			bool ok = true;
+			for (Position j = 0; j < rings[i].size(); j++)
+			{
+				if (!rings[i][j]->hasProperty("IsAromatic"))
+				{
+					ok = false;
+					break;
+				}
+			}
+
+			if (ok &&
+				rings[i].size() >=5 && rings[i].size() <= 6)
 			{
 				rings_.push_back(HashSet<Atom*>());
-				Position ring_pos = rings_.size() - 1;
-				for (Position atom_pos = 0; atom_pos < rings[pos].size(); atom_pos++)
+				for (Position j = 0; j < rings[i].size(); j++)
 				{
-					rings_[ring_pos].insert(rings[pos][atom_pos]);
+					rings_[rings_.size() - 1].insert(rings[i][j]);
 				}
 			}
 		}
+		
+Log.error() << "#~~#   1 "  << rings_.size()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 
 		bool use_selection = getForceField()->getUseSelection();
 
@@ -129,8 +147,8 @@ namespace BALL
 					parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B) &&
 					bond.getOrder() == 1   									&&
 					(isSp_(atom1) || isSp2_(atom1)) 				&&
-					(isSp_(atom2) || isSp2_(atom2));//					&&
-//   					!isInOneRing_(bond);
+					(isSp_(atom2) || isSp2_(atom2))					&&
+ 					!isInOneAromaticRing_(bond);
 /*
 Log.info() << "-----------------------------------------------------" << std::endl;
 Log.info() << atom1.getFullName() << " 1> " 
@@ -214,7 +232,7 @@ if (get_sbmb)
 		return true;
 	}
 
-	bool MMFF94Stretch::isInOneRing_(const Bond& bond)
+	bool MMFF94Stretch::isInOneAromaticRing_(const Bond& bond)
 	{
 		Atom* atom1 = (Atom*) bond.getFirstAtom();
 		Atom* atom2 = (Atom*) bond.getSecondAtom();
@@ -223,7 +241,7 @@ if (get_sbmb)
 			if (rings_[pos].has(atom1) &&
 					rings_[pos].has(atom2))
 			{
-#ifdef _BALL_DEBUG_MMFF
+#ifdef BALL_DEBUG_MMFF
 				Log.info() << atom1->getName() << " " 
 									 << atom2->getName() << " "  
 									 << " removed atom from sbmbs" << std::endl;
