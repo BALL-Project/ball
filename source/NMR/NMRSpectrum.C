@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.C,v 1.10 2000/09/27 18:05:18 oliver Exp $
+// $Id: NMRSpectrum.C,v 1.11 2000/09/27 20:47:17 oliver Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/NMR/randomCoilShiftProcessor.h>
@@ -120,11 +120,6 @@ namespace BALL
 
 	float NMRSpectrum::getSpectrumMax() const
 	{
-		if (is_sorted_)
-		{
-			return spectrum_.rbegin()->getValue();
-		}
-
 		float max = Limits<float>::min();
 		list<Peak1D>::const_iterator it = spectrum_.begin();
 		while (it != spectrum_.end())
