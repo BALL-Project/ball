@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.h,v 1.5 2000/09/18 09:57:58 amoll Exp $
+// $Id: assignShiftProcessor.h,v 1.6 2000/09/18 12:15:13 amoll Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -19,8 +19,7 @@
 
 namespace BALL 
 {
-	const vector<NMRAtomData*> dummy;
-                
+               
 	/**	Set a property called chemical_shift.
 	*/
 	class AssignShiftProcessor
@@ -84,6 +83,8 @@ namespace BALL
 		bool															valid_;
 		const Molecule*										molecule_;
 		Position													number_of_fragment_;
+
+		static const vector<NMRAtomData*>	dummyVectorOfNMRAtomData;
 	};
 
 	//@}
