@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.140 2004/11/15 16:20:16 amoll Exp $
+// $Id: mainControl.C,v 1.141 2004/11/24 14:25:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -134,7 +134,7 @@ namespace BALL
 			char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
 			if (BALLView_data_path != 0)
 			{
-				putenv((char*)((BALL::String("BALL_DATA_PATH=") + BALL::String(BALLView_data_path)).c_str()));
+				putenv(const_cast<char*>((String("BALL_DATA_PATH=") + String(BALLView_data_path)).c_str()));
 			}
 
 			try
@@ -657,7 +657,7 @@ namespace BALL
 			else if (RTTI::isKindOf<TransformationMessage> (*message))
 			{
 				if (compositesAreLocked()) return;
-				moveItems(((TransformationMessage*) message)->getMatrix());
+				moveItems((dynamic_cast<TransformationMessage*>(message))->getMatrix());
 			}
 			else if (RTTI::isKindOf<RepresentationMessage>(*message))
 			{
@@ -927,7 +927,7 @@ namespace BALL
 			Size nr = 0;
 			for (; it_objects != objects.end(); it_objects++)
 			{
-				Composite* composite = (Composite*)(*it_objects)->getComposite();
+				Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
 
 				if (composite != 0  && (selection_.has(composite) != message.isSelected()))
 				{	
@@ -983,8 +983,8 @@ namespace BALL
 						 RTTI::isKindOf<Atom>(**it) && 
 						 nr_of_atoms < 5)
 			{
-				atoms[nr_of_atoms] = (Atom*) *it;
-				times.push_back(((Atom*) *it)->getSelectionTime());
+				atoms[nr_of_atoms] = dynamic_cast<Atom*>(*it);
+				times.push_back((dynamic_cast<Atom*>(*it))->getSelectionTime());
 				nr_of_atoms++;
 				it++;
 			}
@@ -1077,13 +1077,12 @@ namespace BALL
 		System* MainControl::getSelectedSystem()
 			throw()
 		{
-			if (control_selection_.size() != 1 || 
-					!RTTI::isKindOf<System>(**control_selection_.begin()))
+			if (control_selection_.size() != 1)
 			{
 				return 0;
 			}
 			
-			return (System*) *control_selection_.begin();
+			return dynamic_cast<System*>(*control_selection_.begin());
 		}
 
 
@@ -1096,7 +1095,7 @@ namespace BALL
 
 			if (RTTI::isKindOf<Atom> (*composite))
 			{
-				Atom *atom = (Atom*) composite;
+				Atom *atom = dynamic_cast<Atom*>(composite);
 				AtomBondIterator bi;		
 				BALL_FOREACH_ATOM_BOND(*atom, bi)
 				{
@@ -1145,7 +1144,7 @@ namespace BALL
 			if (RTTI::isKindOf<Atom> (*composite))
 			{
 				AtomBondIterator bi;		
-				BALL_FOREACH_ATOM_BOND(*(Atom*) composite, bi)
+				BALL_FOREACH_ATOM_BOND(*dynamic_cast<Atom*>(composite), bi)
 				{
 					bi->deselect();			
 				}				
@@ -1359,7 +1358,7 @@ namespace BALL
 			{
 				if (RTTI::isKindOf<GenericControl>(**it))
 				{
-					((GenericControl*) (*it))->deleteCurrentItems();
+					(dynamic_cast<GenericControl*>(*it))->deleteCurrentItems();
 				}
 			}
 		}
@@ -1460,7 +1459,7 @@ namespace BALL
 			
 			if (e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
 			{
-				SimulationOutput* so = (SimulationOutput*) e;
+				SimulationOutput* so = dynamic_cast<SimulationOutput*>(e);
  				Log.info() << so->getMessage() << std::endl;
  				setStatusbarText(so->getMessage(), so->isImportant());
 				return;
@@ -1468,14 +1467,14 @@ namespace BALL
 			
 			if (e->type() == (QEvent::Type)UPDATE_COMPOSITE_EVENT)
 			{
-				UpdateCompositeEvent* so = (UpdateCompositeEvent*) e;
+				UpdateCompositeEvent* so = dynamic_cast<UpdateCompositeEvent*>(e);
 				if (so->getComposite() == 0) 
 				{
 					Log.warn() << "Could not update visualisation in " << __FILE__ << __LINE__ << std::endl;
 					return;
 				}
 
-				updateRepresentationsOf(*(Composite*)so->getComposite(), true);
+				updateRepresentationsOf(* const_cast<Composite*>(so->getComposite()), true);
 			}
 		#else
 			e->type(); // prevent warning for single thread build
