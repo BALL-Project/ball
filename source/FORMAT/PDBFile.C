@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.48 2005/02/12 23:08:27 oliver Exp $
+// $Id: PDBFile.C,v 1.49 2005/02/13 21:58:13 amoll Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -18,6 +18,10 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdlib.h>
+
+using std::streampos;
+using std::ios;
+using std::endl;
 
 namespace BALL 
 {
