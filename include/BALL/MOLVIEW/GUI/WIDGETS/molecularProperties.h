@@ -1,4 +1,4 @@
-// $Id: molecularProperties.h,v 1.1 2000/09/23 15:38:17 hekl Exp $
+// $Id: molecularProperties.h,v 1.2 2000/10/08 17:45:45 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -8,6 +8,7 @@
 #endif
 
 #include <iostream>
+#include <qwidget.h>
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -17,8 +18,8 @@
 #	include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
-#	include <BALL/VIEW/KERNEL/connectionObject.h>
+#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
+# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
@@ -87,8 +88,7 @@ namespace BALL
 			
 			void onNotify(Message *message);
 			//@}
-			
-			
+
 		private:
 			
 			FragmentDB* fragment_db_;  			
