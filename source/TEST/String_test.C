@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.31 2001/05/17 17:44:55 oliver Exp $
+// $Id: String_test.C,v 1.32 2001/07/07 08:53:17 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.31 2001/05/17 17:44:55 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.32 2001/07/07 08:53:17 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -948,7 +948,6 @@ CHECK(String::getFieldQuoted(Index field, const char* delimiters, const char* qu
 RESULT
 
 CHECK(String::split(String[], Size, char*, Index))
-//BAUSTELLE: argumente 3 und 4 checken!
 	String arr[10];
 	s4 = "a b c d e f g";
 	TEST_EQUAL(s4.split(arr, 10), 7)
