@@ -1,4 +1,4 @@
-// $Id: glVanDerWaalsModel.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
+// $Id: glVanDerWaalsModel.h,v 1.4 2001/07/04 12:58:56 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
@@ -32,9 +32,9 @@ namespace BALL
 				shapes they present.
 				This class has the same functionality as its base class \Ref{AddVanDerWaalsModel}.
 				@memo    AddGLVanDerWaalsModel class (BALL MOLVIEW gui functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/04 12:58:56 $
 		*/
 		class AddGLVanDerWaalsModel: public AddVanDerWaalsModel
 		{
@@ -45,7 +45,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new addGLVanDerWaalsModel.
+					Constructs new addGLVanDerWaalsModel.
 					@return      AddGLVanDerWaalsModel new constructed addGLVanDerWaalsModel
 					@see         AddVanDerWaalsModel
 			*/
@@ -53,7 +53,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor.
-					Construct new addGLVanDerWaalsModel by copying the addGLVanDerWaalsModel
+					Constructs new addGLVanDerWaalsModel by copying the addGLVanDerWaalsModel
 					{\em add_GL_van_der_waals_model}. Initializes the state of {\em this} 
 					addGLVanDerWaalsModel to the state of {\em add_GL_van_der_waals_model}.
 					@param       add_GL_van_der_waals_model the addGLVanDerWaalsModel to be copied
@@ -92,8 +92,8 @@ namespace BALL
 					@see  AddVanDerWaalsModel
 			*/
 			//@{
-			/** Create a sphere.
-					Create a \Ref{GLSphere} object and returns it as \Ref{Sphere}.
+			/** Creates a sphere.
+					Creates a \Ref{GLSphere} object and returns it as \Ref{Sphere}.
 					This overridden method of the class \Ref{AddVanDerWaalsModel} creates
 					a primitive with openGL implementation.
 					The method \Ref{operator()} uses this method to create a sphere
