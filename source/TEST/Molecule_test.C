@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Molecule_test.C,v 1.14 2002/12/12 11:34:42 oliver Exp $
+// $Id: Molecule_test.C,v 1.15 2003/02/10 16:42:42 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,12 +12,13 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Molecule, "$Id: Molecule_test.C,v 1.14 2002/12/12 11:34:42 oliver Exp $")
+START_TEST(Molecule, "$Id: Molecule_test.C,v 1.15 2003/02/10 16:42:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+
 String filename;
 using std::ofstream;
 using std::ios;
