@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.13 2000/05/26 09:25:15 anker Exp $
+// $Id: standardPredicates.C,v 1.14 2000/05/26 12:50:35 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -463,7 +463,6 @@ namespace BALL
 					break;
 
 					/*
-				case '1':
 				case '2':
 				case '3':
 				case '4':
@@ -556,11 +555,11 @@ namespace BALL
 
 	bool ConnectedToPredicate::findAndTest
 		(const String& group, const Atom& atom, 
-		 HashSet<const Bond*>& found) const
+		 HashSet<const Bond*>& found, const Bond* source) const
 	{
 		if ((group[0] == atom.getElement().getSymbol()) || (group[0] == '*'))
 		{
-			return find(group, atom, found);
+			return find(group, atom, found, source);
 		}
 		else
 		{
@@ -570,7 +569,7 @@ namespace BALL
 
 	bool ConnectedToPredicate::find
 		(const String& group, const Atom& atom,
-		 HashSet<const Bond*>& found) const
+		 HashSet<const Bond*>& found, const Bond* source) const
 	{
 		// BAUSTELLE
 
@@ -605,45 +604,42 @@ namespace BALL
 		for (subgroups_it = subgroups.begin(); subgroups_it !=
 				 subgroups.end(); ++subgroups_it) 
 		{
-			HashSet<const Bond*> deeper;
+			HashSet<const Bond*> deeper; //  = found;
+
+			// Iteriere über alle Bindungen von atom.
 			for (Size i = 0; i < atom.countBonds(); ++i)
 			{
 				bond = atom.getBond(i);
-				// Follow this bond only if its type matches and it wasn't found
-				// earlier.
-				if (deeper.has(bond))
-				{
-					Log.info() << "deeper has bond already!" << endl;
-					return false;
-				}
-				if (bondOrderMatch(subgroups_it->first, bond->getOrder()))
-				{
-					if (subgroups_it->second.size() < 1) 
-					{
-						Log.error() << "ConnectedToPredicate::find: subgroup too short: " 
-												<< subgroups_it->second.size() << " " 
-												<< subgroups_it->second << endl;
-						return false;
-					}
 
-					if (subgroups_it->second.size() == 1)
+				// Follow this bond only if its type matches and it isn't the bond
+				// we came from. This implies special treatment of cycles.
+				if (bond != source)
+				{
+					if (bondOrderMatch(subgroups_it->first, bond->getOrder()))
 					{
-						if ((bond->getPartner(atom)->getElement().getSymbol()
-								== subgroups_it->second) || (subgroups_it->second == '*'))
+						if (subgroups_it->second.size() < 1) 
 						{
-							deeper.insert(bond);
+							Log.error() << "ConnectedToPredicate::find: subgroup too short: " 
+								<< subgroups_it->second.size() << " " 
+								<< subgroups_it->second << endl;
+							return false;
 						}
-						else 
-						{//BAUSTELLE
-						}
-					}
-					else
-					{
-						if (findAndTest(subgroups_it->second, *(atom.getBond(i)->getPartner(atom)), deeper))
-						{//BAUSTELLE
+
+						if (subgroups_it->second.size() == 1)
+						{
+							if ((bond->getPartner(atom)->getElement().getSymbol()
+										== subgroups_it->second) || (subgroups_it->second == '*'))
+							{
+								deeper.insert(bond);
+							}
 						}
 						else
-						{//BAUSTELLE
+						{
+							if (findAndTest(subgroups_it->second, 
+										*(atom.getBond(i)->getPartner(atom)), deeper, bond))
+							{
+								deeper.insert(bond);
+							}
 						}
 					}
 				}
@@ -755,7 +751,7 @@ namespace BALL
 	{
 		//BAUSTELLE
 		HashSet<const Bond*> found;
-		if (find(argument_, atom, found))
+		if (find(argument_, atom, found, 0))
 		{
 			return true;
 		}
