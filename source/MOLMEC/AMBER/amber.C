@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.C,v 1.23 2004/02/19 10:38:30 oliver Exp $
+// $Id: amber.C,v 1.24 2004/02/19 20:27:55 amoll Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -352,5 +352,19 @@ namespace BALL
 		return parameters_initialized_;
 	}
 
+	String AmberFF::getResults() const
+		throw()
+	{
+		String result = String("\n")
+		+ "AMBER Energy:\n"
+		+ " - electrostatic     : " +String(getESEnergy())+  " kJ/mol\n" 
+		+ " - van der Waals     : " +String(getVdWEnergy())+  " kJ/mol\n"
+		+ " - bond stretch      : " +String(getStretchEnergy())+  " kJ/mol\n"
+		+ " - angle bend        : " +String(getBendEnergy())+  " kJ/mol\n" 
+		+ " - torsion           : " +String(getTorsionEnergy())+  " kJ/mol\n" 
+		+ "---------------------------------------\n" 
+		+ "  total energy       : " +String(getEnergy()) + " kJ/mol\n";
+		return result;
+	}
 	
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.19 2004/02/17 14:46:04 oliver Exp $
+// $Id: charmm.C,v 1.20 2004/02/19 20:27:55 amoll Exp $
 //
 
 // Molecular Mechanics: Charmm force field class
@@ -422,4 +422,21 @@ namespace BALL
 		return parameters_initialized_;
 	}
 	
+	String CharmmFF::getResults() const
+		throw()
+	{
+		String result = String("\n") 
+		+ "CHARMM Energy:\n"
+		+ " - electrostatic	: " + String(getESEnergy())+  " kJ/mol\n" 
+		+ " - van der Waals	: " + String(getVdWEnergy()) + " kJ/mol\n"
+		+ " - solvation	: " + String(getSolvationEnergy())+  "kJ/mol\n" 
+		+ " - nonbonded		: " + String(getNonbondedEnergy())+  "kJ/mol\n"
+		+ " - bond stretch      : " + String(getStretchEnergy())+  " kJ/mol\n"
+		+ " - angle bend		: " + String(getBendEnergy())+  " kJ/mol\n"
+		+ " - torsion	: " + String(getTorsionEnergy())+  " kJ/mol\n"
+		+ "---------------------------------------\n"
+		+ "  total energy		: " +String(getEnergy())+  " kJ/mol\n";
+		return result;
+	}
+
 } // namespace BALL
