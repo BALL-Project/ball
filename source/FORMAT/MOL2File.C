@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.14 2001/12/19 02:40:24 oliver Exp $
+// $Id: MOL2File.C,v 1.15 2002/01/05 19:01:48 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -301,7 +301,18 @@ namespace BALL
 		// interpret the section we already read from the file
 		return buildAll_(system);
 	}
+
+	Molecule* MOL2File::read()
+		throw(Exception::ParseError)
+	{
+		return GenericMolFile::read();
+	}
 				
+	void MOL2File::write(const Molecule& molecule)
+	{
+		GenericMolFile::write(molecule);
+	}
+
 	void MOL2File::readAtomSection_()
 	{
 		Size number_of_fields = 1;

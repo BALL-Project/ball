@@ -1,4 +1,4 @@
-// $Id: MOL2File.h,v 1.12 2002/01/04 03:31:14 oliver Exp $
+// $Id: MOL2File.h,v 1.13 2002/01/05 19:01:44 oliver Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -73,8 +73,14 @@ namespace BALL
 		virtual bool read(System&	system)
 			throw(Exception::ParseError);
 
-		using GenericMolFile::read;
-		using GenericMolFile::write;
+		/**	
+		*/
+		virtual Molecule* read()
+			throw(Exception::ParseError);
+
+		/**	
+		*/
+		virtual void write(const Molecule& molecule);
 		//@}
 
 		protected:
