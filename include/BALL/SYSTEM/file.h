@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.4 1999/12/28 21:29:22 oliver Exp $
+// $Id: file.h,v 1.5 2000/02/17 09:48:11 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -49,23 +49,35 @@ namespace BALL
 		///
 		enum ProtectionMode
 		{
+			///
 			PROTECTION_MODE__INVALID                   = -1,
+			///
 			PROTECTION_MODE__UNKNOWN                   = 0,
+			///
 			PROTECTION_MODE__MASK                      = S_IRWXU | S_IRWXG | S_IRWXO,
-
+			///
 			PROTECTION_MODE__OWNER_READ_WRITE_EXECUTE  = S_IRWXU,
+			///
 			PROTECTION_MODE__OWNER_READ                = S_IRUSR,
+			///
 			PROTECTION_MODE__OWNER_WRITE               = S_IWUSR,
+			///
 			PROTECTION_MODE__OWNER_EXECUTE             = S_IXUSR,
-
+			///
 			PROTECTION_MODE__GROUP_READ_WRITE_EXECUTE  = S_IRWXG,
+			///
 			PROTECTION_MODE__GROUP_READ                = S_IRGRP,
+			///
 			PROTECTION_MODE__GROUP_WRITE               = S_IWGRP,
+			///
 			PROTECTION_MODE__GROUP_EXECUTE             = S_IXGRP,
-
+			///
 			PROTECTION_MODE__OTHER_READ_WRITE_EXECUTE  = S_IRWXO,
+			///
 			PROTECTION_MODE__OTHER_READ                = S_IROTH,
+			///
 			PROTECTION_MODE__OTHER_WRITE               = S_IWOTH,
+			///
 			PROTECTION_MODE__OTHER_EXECUTE             = S_IXOTH
 		};
 
@@ -73,8 +85,11 @@ namespace BALL
 		*/
 		enum Protocol
 		{
+			///
 			PROTOCOL__FILE   = 1,
+			///
 			PROTOCOL__EXEC   = 2,
+			///
 			PROTOCOL__ACTION = 3
 		};
 		
@@ -82,13 +97,21 @@ namespace BALL
 		*/
 		enum Type
 		{
+			///
 			TYPE__UNKNOWN            = 0,
+			///
 			TYPE__DIRECTORY          = 1,
+			///
 			TYPE__CHAR_SPECIAL_FILE  = 2,
+			///
 			TYPE__BLOCK_SPECIAL_FILE = 3,
+			///
 			TYPE__REGULAR_FILE       = 4,
+			///
 			TYPE__SYMBOLIC_LINK      = 5,
+			///
 			TYPE__SOCKET             = 6,
+			///
 			TYPE__FIFO_SPECIAL_FILE  = 7
 		};
 		//@}
