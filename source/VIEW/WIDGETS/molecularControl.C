@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.35 2004/02/06 15:09:48 amoll Exp $
+// $Id: molecularControl.C,v 1.36 2004/02/07 20:00:50 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -90,13 +90,15 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 	listview->setColumnWidth(1, 60);
 
 	QPushButton* help_button = new QPushButton(this);
-	help_button->resize(40, 12);
-	help_button->setText("Help");
+	help_button->resize(30, 30);
+	help_button->setMaximumSize(30, 30);
+	help_button->setText("?");
+	help_button->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0, false));
 	connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
 
 	QHBoxLayout* layout2 = new QHBoxLayout();
 	selector_edit_->setPaletteBackgroundColor(QColor(255, 255, 0));
-	selector_edit_->resize(90, 12);
+	selector_edit_->resize(90, 30);
 	selector_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
 	layout2->addWidget(selector_edit_);
 	layout2->addWidget(help_button);
@@ -1119,7 +1121,7 @@ void MolecularControl::applySelector()
 
 	NewSelectionMessage* nm = new NewSelectionMessage;
 	nm->setOpenItems(true);
-	notify_(nm);
+	getMainControl()->sendMessage(*nm);
 
 	setStatusbarText(String("Selected " + String(s.getNumberOfSelectedAtoms()) + " Atoms."));
 }
