@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.18 2003/03/26 13:08:47 sturm Exp $
+// $Id: colorUnit.h,v 1.19 2003/04/17 09:49:54 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -187,18 +187,7 @@ namespace BALL
 			ColorUnit(const double value)
 				throw(Exception::InvalidRange);
 
-			/** Constructor with Parameter long double.
-					Constructs new colorUnit by initialising its value with the given 
-					long double representing a value of range (0 - 1.0).
-					@param       value a long double (0 - 1.0)
-					@exception   InvalidRange if <tt>value < 0.0 || value > 1.0</tt>
-					@return      ColorUnit new constructed colorUnit
-			*/
-			ColorUnit(const long double value)
-				throw(Exception::InvalidRange);
-
 			//@}
-
 			/** @name Destructors */
 			//@{
 
