@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.19 2005/01/18 15:07:40 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.20 2005/01/18 16:24:08 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -314,7 +314,7 @@ namespace BALL
 			render(rep, true);
 			display_list->endDefinition();
 
-			if (use_vertex_buffer_)
+			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 			{
 				clearVertexBuffersFor(*(Representation*)&rep);
 				const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
@@ -365,7 +365,7 @@ namespace BALL
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 			if (for_display_list)
 			{
-				if (use_vertex_buffer_)
+				if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 				{
 					// draw everything except of meshes, these are put into vertex buffer objects in bufferRepresentation()
 					for (; it != geometric_objects.end(); it++)
@@ -385,8 +385,10 @@ namespace BALL
 			}
 			else // drawing for picking directly
 			{
-				if (use_vertex_buffer_)
+				if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 				{
+					initDrawingMeshes_();
+					MeshBuffer::setGLRenderer(this);
 					// we have to draw from the vertex buffer objects
 					for (; it != geometric_objects.end(); it++)
 					{
@@ -402,6 +404,7 @@ namespace BALL
 							mesh_to_buffer_[mesh]->draw();
 						}
 					}
+					finishDrawingMeshes_();
 				}
 				else
 				{
@@ -688,10 +691,38 @@ namespace BALL
 			glEnable(GL_LIGHTING);
 		}
 
+		
+		void GLRenderer::initDrawingMeshes_()
+		{
+			if (drawing_mode_ == DRAWING_MODE_DOTS)
+			{
+				glDisable(GL_LIGHTING);
+				normalVector3_(normal_vector_);
+			}
+			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
+			{
+				glDisable(GL_LIGHTING);
+			}
+			else // draw the triangles solid
+			{
+				if (render_mode_ == RENDER_MODE_SOLID)
+				{
+					glDisable(GL_CULL_FACE);
+					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+				}
+				else
+				{
+					glEnable(GL_CULL_FACE);
+				}
+			}
+		}
 
 		void GLRenderer::renderMesh_(const Mesh& mesh)
 			throw()
 		{
+			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME) renderMeshWithVertexArray_(mesh);
+			initDrawingMeshes_();
+
 			// If we have only one color for the whole mesh, this can
 			// be assigned efficiently
 			bool multiple_colors = true;
@@ -713,10 +744,7 @@ namespace BALL
 			///////////////////////////////////////////////////////////////////
 			if (drawing_mode_ == DRAWING_MODE_DOTS)
 			{
-				glDisable(GL_LIGHTING);
 				glBegin(GL_POINTS);
-
-				normalVector3_(normal_vector_);
 
 				if (!multiple_colors)
 				{
@@ -739,8 +767,6 @@ namespace BALL
 			///////////////////////////////////////////////////////////////////
 			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
 			{
-				glDisable(GL_LIGHTING);
-
 				Size nr_triangles = mesh.triangle.size();
 				
 				if (!multiple_colors)
@@ -780,76 +806,64 @@ namespace BALL
 			///////////////////////////////////////////////////////////////////
 			else 				// draw the triangles solid
 			{
-				if (render_mode_ == RENDER_MODE_SOLID)
+				glBegin(GL_TRIANGLES);
+
+				Size nr_triangles = mesh.triangle.size();
+
+				if (!multiple_colors)
 				{
-					glDisable(GL_CULL_FACE);
-					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+					for (Size index = 0; index < nr_triangles; ++index)
+					{
+						normalVector3_(mesh.normal[mesh.triangle[index].v1]);
+						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+
+						normalVector3_(mesh.normal[mesh.triangle[index].v2]);
+						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+						normalVector3_(mesh.normal[mesh.triangle[index].v3]);
+						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+					}
 				}
 				else
 				{
-					glEnable(GL_CULL_FACE);
-				}
-
-				if (use_vertex_buffer_)
-				{
-					renderMeshWithVertexArray_(mesh);
-				}
-				else
-				{	
-					glBegin(GL_TRIANGLES);
-
-					Size nr_triangles = mesh.triangle.size();
-
-					if (!multiple_colors)
+					for (Size index = 0; index < nr_triangles; ++index)
 					{
-						for (Size index = 0; index < nr_triangles; ++index)
-						{
-							normalVector3_(mesh.normal[mesh.triangle[index].v1]);
-							vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+						Position p = mesh.triangle[index].v1;
+						setColorRGBA_(mesh.colorList[p]);
+						normalVector3_(  mesh.normal[p]);
+						vertexVector3_(  mesh.vertex[p]);
 
-							normalVector3_(mesh.normal[mesh.triangle[index].v2]);
-							vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+						p = mesh.triangle[index].v2;
+						setColorRGBA_(mesh.colorList[p]);
+						normalVector3_(  mesh.normal[p]);
+						vertexVector3_(  mesh.vertex[p]);
 
-							normalVector3_(mesh.normal[mesh.triangle[index].v3]);
-							vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-						}
+						p = mesh.triangle[index].v3;
+						setColorRGBA_(mesh.colorList[p]);
+						normalVector3_(  mesh.normal[p]);
+						vertexVector3_(  mesh.vertex[p]);
 					}
-					else
-					{
-						for (Size index = 0; index < nr_triangles; ++index)
-						{
-							Position p = mesh.triangle[index].v1;
-							setColorRGBA_(mesh.colorList[p]);
-							normalVector3_(  mesh.normal[p]);
-							vertexVector3_(  mesh.vertex[p]);
-
-							p = mesh.triangle[index].v2;
-							setColorRGBA_(mesh.colorList[p]);
-							normalVector3_(  mesh.normal[p]);
-							vertexVector3_(  mesh.vertex[p]);
-
-							p = mesh.triangle[index].v3;
-							setColorRGBA_(mesh.colorList[p]);
-							normalVector3_(  mesh.normal[p]);
-							vertexVector3_(  mesh.vertex[p]);
-						}
-					}
-
-					glEnd();
-				}
-				if (render_mode_ == RENDER_MODE_SOLID)
-				{
-					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
 				}
 
-				glEnable(GL_CULL_FACE);
+				glEnd();
 			}
-			
+
+			finishDrawingMeshes_();
+		}
+
+		void GLRenderer::finishDrawingMeshes_()
+		{
 			if (drawing_mode_ == DRAWING_MODE_DOTS ||
 					drawing_mode_ == DRAWING_MODE_WIREFRAME)
 			{
 				glEnable(GL_LIGHTING);
 			}
+			else // solid
+			{
+				glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
+			}
+
+			glEnable(GL_CULL_FACE);
 		}
 
 		void GLRenderer::renderMeshWithVertexArray_(const Mesh& mesh)
@@ -857,7 +871,7 @@ namespace BALL
 		{
 			if (mesh_to_buffer_.has(&mesh)) 
 			{
-				mesh_to_buffer_[&mesh]->draw();
+				mesh_to_buffer_[&mesh]->initialize();
 				return;
 			}
 
@@ -1522,8 +1536,10 @@ namespace BALL
 			if (rep.isHidden()) return;
 
 			// if we have vertex buffers for this Representation, draw them
-			if (use_vertex_buffer_)
+			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 			{
+				initDrawingMeshes_();
+				MeshBuffer::setGLRenderer(this);
 				const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
 				List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 				for (; it != geometric_objects.end(); it++)
@@ -1538,6 +1554,7 @@ namespace BALL
 						hit->second->draw();
 					}
 				}
+				finishDrawingMeshes_();
 			}
 
 			// if we have a displaylist for this Representation, draw it

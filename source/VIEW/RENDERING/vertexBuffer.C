@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.7 2005/01/18 13:49:16 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.8 2005/01/18 16:24:09 amoll Exp $
 //
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
+#include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <qgl.h>
@@ -13,6 +14,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+GLRenderer* MeshBuffer::gl_renderer_ = 0;
 
 MeshBuffer::MeshBuffer()
 : mesh_(0),
@@ -144,17 +147,20 @@ void MeshBuffer::clearBuffer()
 
 bool MeshBuffer::draw()
 {
-	if (!filled_) return false;
+	if (!filled_ || gl_renderer_ == 0) return false;
 #ifdef GL_ARB_vertex_buffer_object
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[0]);
 	glVertexPointer(3, GL_FLOAT, 0, 0); 
 
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[1]);
-	glNormalPointer(GL_FLOAT, 0, 0);
+	if (gl_renderer_->getRenderMode() == GLRenderer::RENDER_MODE_SOLID)
+	{
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[1]);
+		glNormalPointer(GL_FLOAT, 0, 0);
+	}
 
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffers_[3]);
 	glIndexPointer(GL_UNSIGNED_INT, 0, 0);
@@ -178,7 +184,19 @@ bool MeshBuffer::draw()
 		}
 	}
 
-	glDrawElements(GL_TRIANGLES, mesh_->triangle.size() * 3, GL_UNSIGNED_INT, 0);
+	DrawingMode drawing_mode = gl_renderer_->getDrawingMode();
+	if (drawing_mode == DRAWING_MODE_SOLID)
+	{
+		glDrawElements(GL_TRIANGLES, mesh_->triangle.size() * 3, GL_UNSIGNED_INT, 0);
+	}
+	else if (drawing_mode == DRAWING_MODE_WIREFRAME)
+	{
+		glDrawElements(GL_TRIANGLE_STRIP, mesh_->triangle.size() * 3, GL_UNSIGNED_INT, 0);
+	}
+	else // dots
+	{
+		glDrawElements(GL_POINTS, mesh_->vertex.size() * 3, GL_UNSIGNED_INT, 0);
+	}
 
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.11 2005/01/18 15:08:06 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.12 2005/01/18 16:24:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -268,6 +268,9 @@ namespace BALL
 			///
 			bool vertexBuffersEnabled() const;
 
+			///
+			DrawingMode getDrawingMode() const;
+
 			//@}
 			// protected:
 
@@ -282,6 +285,12 @@ namespace BALL
 			///
 			virtual void renderMesh_(const Mesh& /*mesh*/)
 				throw();
+
+			///
+			void initDrawingMeshes_();
+
+			///
+			void finishDrawingMeshes_();
 
 			///
 			virtual void renderPoint_(const Point& /*point*/)
@@ -392,7 +401,7 @@ namespace BALL
 				throw();
 
 			///
-			Index 								drawing_mode_;
+			DrawingMode 					drawing_mode_;
 
 			///
 			Index 								drawing_precision_;

@@ -146,3 +146,6 @@ bool GLRenderer::vertexBuffersEnabled() const
 	return use_vertex_buffer_;
 }
 
+BALL_INLINE
+DrawingMode GLRenderer::getDrawingMode() const { return drawing_mode_;}
+
