@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.4 2000/10/14 18:48:26 amoll Exp $
+// $Id: lineBasedFile.C,v 1.5 2000/10/15 16:54:12 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -265,7 +265,7 @@ namespace BALL
 			}
 		}
 
-		return String(start, end - start);
+		return String(line_, start, end - start);
 	}
 
 	int LineBasedFile::switchString(const vector<String>& data)
