@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.11 2001/03/22 19:42:14 anker Exp $
+// $Id: DCDFile.C,v 1.12 2001/03/29 08:20:19 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -7,21 +7,6 @@ using namespace std;
 
 namespace BALL
 {
-
-	template <typename T>
-	BALL_INLINE
-	void swapBytes(T& t)
-	{
-		if (sizeof(T) % 2 != 0)
-		{
-			Log.error() << "Cannot swap types of uneven size." << endl;
-			return;
-		}
-
-		char* tmp = reinterpret_cast<char*>(&t);
-		std::reverse(tmp, tmp + sizeof(T));
-	}
-	
 
 	DCDFile::DCDFile()
 		throw()
@@ -35,7 +20,7 @@ namespace BALL
 
 	DCDFile::DCDFile(const DCDFile& file)
 		throw()
-		:	TrajectoryFile(),
+		:	TrajectoryFile(file),
 			header_(file.header_),
 			swap_bytes_(file.swap_bytes_)
 	{
