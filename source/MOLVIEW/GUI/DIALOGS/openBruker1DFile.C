@@ -1,4 +1,4 @@
-// $Id: openBruker1DFile.C,v 1.2 2001/05/13 16:28:12 hekl Exp $
+// $Id: openBruker1DFile.C,v 1.3 2001/06/06 15:04:25 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h>
 
@@ -22,30 +22,30 @@ namespace BALL
       throw()
     {
       #ifdef BALL_VIEW_DEBUG
-      cout << "Destructing object " << (void *)this
-	   << " of class " << RTTI::getName<OpenBruker1DFile>() << endl;
+      Log.info() << "Destructing object " << (void *)this
+				<< " of class " << RTTI::getName<OpenBruker1DFile>() << endl;
       #endif
     }
 
     void OpenBruker1DFile::initializeWidget(MainControl& main_control)
-	throw()
+  throw()
     {
       main_control.insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&1D File", this,
-				   SLOT(exec()),
-				   CTRL+Key_1);
+											SLOT(exec()),
+											CTRL+Key_1);
     }
 
     void OpenBruker1DFile::finalizeWidget(MainControl& main_control)
-	throw()
+  throw()
     {
       main_control.removeMenuEntry
-	(MainControl::FILE_IMPORT, "Bruker&1D File", this,
-	 SLOT(exec()),
-	 CTRL+Key_1);
+  (MainControl::FILE_IMPORT, "Bruker&1D File", this,
+   SLOT(exec()),
+   CTRL+Key_1);
     }
 
     void OpenBruker1DFile::openFile_()
-	throw()
+  throw()
     {
       // notify the main window
       WindowMessage window_message;
@@ -59,14 +59,14 @@ namespace BALL
 
       try
       {
-	myfile->read(mydir);
+  myfile->read(mydir);
       }
       catch(...)
       {
-	Log.info() << "> read Bruker1D file failed." << endl;
-	delete myfile;
+  Log.info() << "> read Bruker1D file failed." << endl;
+  delete myfile;
 
-	return;
+  return;
       }
 
       // writing to log
