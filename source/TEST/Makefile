@@ -118,7 +118,8 @@ EXECUTABLES_MOLMEC = \
 	EnergyMinimizer_test\
 	LineSearch_test\
 	SteepestDescentMinimizer_test\
-	ConjugateGradientMinimizer_test
+	ConjugateGradientMinimizer_test\
+	AtomTypes_test
 
 EXECUTABLES_NMR = \
 	AssignShiftProcessor_test\
