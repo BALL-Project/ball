@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.110 2000/10/18 19:45:36 oliver Exp $
+dnl    $Id: configure.in,v 1.111 2000/10/18 20:18:48 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -963,7 +963,13 @@ if test "${HAS_GPLUSPLUS}" = "true" ; then
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 	CXXFLAGS_O="${CXXFLAGS_O} -O2"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
-	CXXFLAGS="${CXXFLAGS} -fPIC"
+
+	dnl  We do not need the -fPIC flag for CYGWIN,
+	dnl  because its code is always position independent.
+  dnl  A warning is emitted otherwise.
+	if test "${OS}" != "CYGWIN" ; then
+		CXXFLAGS="${CXXFLAGS} -fPIC"
+	fi
 
 	DYNAR="${CXX}"
 	if test "${OS}" != "Solaris" ; then
@@ -1768,6 +1774,10 @@ dnl
 dnl		check whether the <regex.h> header exists
 dnl
 AC_CHECK_HEADER(regex.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
+if test "${HAS_REGEX_H}" = "false" ; then
+	AC_CHECK_HEADER(regexp.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
+	AC_DEFINE(BALL_USE_REGEXP_H)
+fi
 if test "${HAS_REGEX_H}" = "false" ; then
 	AC_MSG_RESULT()
 	AC_MSG_RESULT([Regular expression headers regex.h not found!])

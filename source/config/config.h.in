@@ -95,6 +95,9 @@
 // for some floating point functions
 #undef BALL_INCLUDE_IEEEFP
 
+// on some systems, we do not have regex.h, so we have to use regexp.h
+#undef BALL_USE_REGEXP_H
+
 // Define to `int' if <sys/types.h> doesn't define.  
 #undef pid_t
 
