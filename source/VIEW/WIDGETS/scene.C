@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.133 2004/09/14 15:25:05 amoll Exp $
+// $Id: scene.C,v 1.134 2004/09/14 16:15:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1565,7 +1565,7 @@ namespace BALL
 				// rotate
 				case Qt::LeftButton:
 				{
-					if (delta_x > delta_y)
+					if (delta_x * delta_x > delta_y * delta_y)
 					{
 						Angle angle(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * -30)), false);
 						m.rotate(angle, camera.getLookUpVector());
