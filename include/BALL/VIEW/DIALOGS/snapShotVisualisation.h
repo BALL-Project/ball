@@ -6,7 +6,6 @@
 #endif
 
 #include <BALL/VIEW/UIC/snapShotVisualisationData.h>
-#include <qstring.h>
 
 namespace BALL
 {
@@ -15,29 +14,32 @@ namespace BALL
 	namespace VIEW
 	{
 
-/** Dialog for visualising SnapShot instances
+/** Dialog to visualise SnapShot instances
+ 		@see SnapShotManager
+		@see SnapShot
 		\ingroup ViewDialogs
 */
 class SnapshotVisualisationDialog 
 	: public SnapshotVisualisationDialogData, 
 		public ModularWidget
 {
-
 	Q_OBJECT
 
 	public:	
 
+	BALL_EMBEDDABLE(SnapshotVisualisationDialog)
+
 	/// Constructor
 	SnapshotVisualisationDialog
-		(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+		(QWidget* parent = 0, const char* name = 0);//, bool modal = FALSE, WFlags fl = 0);
 
 	/// Destructor
 	~SnapshotVisualisationDialog() throw();
 	
-	///This function sets a SnapShotManager
+	///This function sets the SnapShotManager
 	void setSnapShotManager(SnapShotManager* snapshot_manager);
   
-	///This function gets a SnapShotManager
+	///This function gets the SnapShotManager
 	const SnapShotManager* getSnapShotManager() 
 		{return (snap_shot_manager_);}
 
