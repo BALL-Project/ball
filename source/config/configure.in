@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.51 2000/01/28 11:08:46 oliver Exp $
+dnl    $Id: configure.in,v 1.52 2000/01/28 16:52:29 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -893,6 +893,26 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 	dnl		get debuggable code...
 	CPPFLAGS_D="${CPPFLAGS_D} +K0"
 	CPPFLAGS_DI="${CPPFLAGS_DI} -g"
+
+	dnl
+	dnl	if we are running under Solaris/SPARC,
+  dnl	KAI can produce 32 or 64 bit code
+	dnl
+	if test "${OS}" = Solaris -a "${ARCHITECTURE}" = sparc ; then
+		if test "${BINFMT_64_BIT}" = true ; then
+			BINFMT=${BINFMT}_V9
+			CXX_NAME="${CXX_NAME}_V9"
+			LDFLAGS="${LDFLAGS} -xarch=v9"
+			CPPFLAGS="${CPPLAGS} -xarch=v9"
+			AROPTS="${AROPTS} -xarch=v9"
+			DYNAROPTS="${DYNAROPTS} -xarch=v9"
+		else
+			SUN_BINFMT=V8
+			BINFMT=${BINFMT}_V8
+			CXX_NAME="${CXX_NAME}_V8"
+		fi
+	fi
+
 	COMPILER_DONE=true
 fi
 
