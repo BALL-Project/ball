@@ -1,4 +1,4 @@
-// $Id: hash.h,v 1.4 1999/12/30 20:30:32 oliver Exp $
+// $Id: hash.h,v 1.5 2000/06/06 09:44:24 oliver Exp $
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H
@@ -105,7 +105,10 @@ namespace BALL
 
 	//@}
 		
-	/**	Calculate the next prime 
+	/**	Calculate the next prime number.
+			This method returns the first prime number that is 
+			greater or equal to the number given as the argument.
+			Only odd prime numbers are returned, the lowest number returned is 3.
 	*/
 	HashIndex getNextPrime(HashIndex l);
 
