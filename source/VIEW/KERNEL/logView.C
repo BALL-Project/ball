@@ -18,6 +18,8 @@ namespace BALL
 		{
 			Log.insert(strstream_);
 			Log.insertNotification(strstream_, *this);
+			setReadOnly(TRUE);
+			setAutoUpdate(TRUE);
 		}
 
 		LogView::LogView(const LogView& view, bool deep)
@@ -28,6 +30,8 @@ namespace BALL
 		{
 			Log.insert(strstream_);
 			Log.insertNotification(strstream_, *this);
+			setReadOnly(TRUE);
+			setAutoUpdate(TRUE);
 		}
 
 		LogView::~LogView()
