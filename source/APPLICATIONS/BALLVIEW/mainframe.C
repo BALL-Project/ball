@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.38 2004/11/09 15:57:09 amoll Exp $
+// $Id: mainframe.C,v 1.39 2004/11/10 15:51:52 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -46,6 +46,7 @@ namespace BALL
 			scene_(0),
 			dataset_control_(0),
 			display_properties_(0),
+			surface_dialog_(0),
 			file_dialog_(0),
 			fullscreen_(false),
 			menu_cs_(-1),
