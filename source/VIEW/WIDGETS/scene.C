@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.43 2004/03/14 13:26:09 amoll Exp $
+// $Id: scene.C,v 1.44 2004/03/23 21:32:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/KERNEL/events.h>
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -45,13 +44,11 @@ Scene::Scene()
 	throw()
 	:	QGLWidget(),
 		ModularWidget("<Scene>"),
-		events(),
 		rotate_id_(-1),
 		picking_id_(-1),
 		rotate_mode_(true),
 		system_origin_(0.0),
 		quaternion_(),
-		key_pressed_(Scene::KEY_PRESSED__NONE),
 		need_update_(false),
 		update_running_(false),
 		stage_(new Stage),
@@ -70,13 +67,11 @@ Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
 	throw()
 	:	QGLWidget(parent_widget, name, 0, w_flags),
 		ModularWidget(name),
-		events(this),
 		rotate_id_(-1),
 		picking_id_(-1),
 		rotate_mode_(true),
 		system_origin_(0.0, 0.0, 0.0),
 		quaternion_(),
-		key_pressed_(Scene::KEY_PRESSED__NONE),
 		need_update_(false),
 		update_running_(false),
 		stage_(new Stage),
@@ -88,21 +83,6 @@ Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new Scene (2) " << this << std::endl;
 #endif
-	events.RotateSystem.registerRotateSystem(&BALL::VIEW::Scene::rotateSystem_);
-	events.TranslateSystem.registerTranslateSystem(&BALL::VIEW::Scene::translateSystem_);
-	events.ZoomSystem.registerZoomSystem(&BALL::VIEW::Scene::zoomSystem_);
-
-	events.SelectionPressedMoved.registerSelectionPressedMoved(&BALL::VIEW::Scene::selectionPressedMoved_);
-	events.SelectionPressed.registerSelectionPressed(&BALL::VIEW::Scene::selectionPressed_);
-	events.SelectionReleased.registerSelectionReleased(&BALL::VIEW::Scene::selectionReleased_);
-
-	events.DeselectionPressedMoved.registerDeselectionPressedMoved(&BALL::VIEW::Scene::deselectionPressedMoved_);
-	events.DeselectionPressed.registerDeselectionPressed(&BALL::VIEW::Scene::deselectionPressed_);
-	events.DeselectionReleased.registerDeselectionReleased(&BALL::VIEW::Scene::deselectionReleased_);
-
-	NotificationRegister(events.MouseLeftButtonPressed & events.MouseMoved, events.RotateSystem);
-	NotificationRegister(events.MouseMiddleButtonPressed & events.MouseMoved, events.ZoomSystem);
-	NotificationRegister(events.MouseRightButtonPressed & events.MouseMoved, events.TranslateSystem);
 
 	// the widget with the MainControl
 	registerWidget(this);
@@ -118,10 +98,8 @@ Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, WFlag
 	throw()
 	:	QGLWidget(parent_widget, name, 0, w_flags),
 		ModularWidget(scene),
-		events(this),
 		system_origin_(scene.system_origin_),
 		quaternion_(scene.quaternion_),
-		key_pressed_(Scene::KEY_PRESSED__NONE),
 		stage_(new Stage(*scene.stage_)),
 		light_settings_(new LightSettings(this)),
 		stage_settings_(new StageSettings(this)),
@@ -131,21 +109,6 @@ Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, WFlag
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new Scene (3) " << this << std::endl;
 #endif
-	events.RotateSystem.registerRotateSystem(&BALL::VIEW::Scene::rotateSystem_);
-	events.TranslateSystem.registerTranslateSystem(&BALL::VIEW::Scene::translateSystem_);
-	events.ZoomSystem.registerZoomSystem(&BALL::VIEW::Scene::zoomSystem_);
-
-	events.SelectionPressedMoved.registerSelectionPressedMoved(&BALL::VIEW::Scene::selectionPressedMoved_);
-	events.SelectionPressed.registerSelectionPressed(&BALL::VIEW::Scene::selectionPressed_);
-	events.SelectionReleased.registerSelectionReleased(&BALL::VIEW::Scene::selectionReleased_);
-
-	events.DeselectionPressedMoved.registerDeselectionPressedMoved(&BALL::VIEW::Scene::deselectionPressedMoved_);
-	events.DeselectionPressed.registerDeselectionPressed(&BALL::VIEW::Scene::deselectionPressed_);
-	events.DeselectionReleased.registerDeselectionReleased(&BALL::VIEW::Scene::deselectionReleased_);
-
-	NotificationRegister(events.MouseLeftButtonPressed & events.MouseMoved, events.RotateSystem);
-	NotificationRegister(events.MouseMiddleButtonPressed & events.MouseMoved, events.ZoomSystem);
-	NotificationRegister(events.MouseRightButtonPressed & events.MouseMoved, events.TranslateSystem); 
 
 	resize((Size) scene.gl_renderer_.getWidth(), (Size) scene.gl_renderer_.getHeight());
 
@@ -168,7 +131,6 @@ void Scene::clear()
 {
 	system_origin_.set(0.0, 0.0, 0.0);
 	quaternion_.setIdentity();
-	key_pressed_ = Scene::KEY_PRESSED__NONE;
 
 	stage_->clear();
 }
@@ -205,9 +167,6 @@ void Scene::dump(ostream& s, Size depth) const
 	stage_->dump(s, depth);
 	
 	quaternion_.dump(s, depth + 1);
-
-	BALL_DUMP_DEPTH(s, depth + 1);
-	s << "KeyPressed: " << (Index)key_pressed_ << endl;
 
 	BALL_DUMP_STREAM_SUFFIX(s);     
 }
@@ -1108,117 +1067,52 @@ void Scene::checkMenu(MainControl& /*main_control*/)
 
 //##########################EVENTS#################################
 
-void Scene::keyPressEvent(QKeyEvent *key_event)
-{
-	switch (key_event->key())
-	{
-		case Key_Shift:
-			key_pressed_ = (Scene::KeyPressed)((int)key_pressed_ + 1);
-			break;
-
-		case Key_Control:
-			key_pressed_ = (Scene::KeyPressed)((int)key_pressed_ + 2);
-			break;
-
-		default:
-			key_event->ignore();
-			break;
-	}
-}
-
-void Scene::keyReleaseEvent(QKeyEvent *key_event)
-{
-	switch (key_event->key())
-	{
-		case Key_Shift:
-			key_pressed_ = (Scene::KeyPressed)((int)key_pressed_ - 1);
-			break;
-
-		case Key_Control:
-			key_pressed_ = (Scene::KeyPressed)((int)key_pressed_ - 2);
-			break;
-
-		default:
-			key_event->ignore();
-			break;
-	}
-}
-
-void Scene::mouseMoveEvent(QMouseEvent *mouse_event)
+void Scene::mouseMoveEvent(QMouseEvent *e)
 {
 	makeCurrent();
 
 	need_update_ = true;
 
-	x_window_pos_new_ = mouse_event->x();
-	y_window_pos_new_ = mouse_event->y();
+	x_window_pos_new_ = e->x();
+	y_window_pos_new_ = e->y();
 
-	switch (actual_mouse_button_)
+	// ============ picking mode ================
+	if (!rotate_mode_)
 	{
-		case Scene::MOUSE_BUTTON__NONE:
+		if (e->state() == Qt::LeftButton ||
+				e->state() == Qt::RightButton)
+		{
+			selectionPressedMoved_(this);
+		}
+
+		x_window_pos_old_ = x_window_pos_new_;
+		y_window_pos_old_ = y_window_pos_new_;
+		return;
+	}
+
+	// ============ rotate mode ================
+	switch (e->state())
+	{
+		case Qt::RightButton:
+			translateSystem_(this);
+			break;
+		case Qt::MidButton:
+			zoomSystem_(this);
 			break;
 
-		case Scene::MOUSE_BUTTON__ONE:
-			switch (key_pressed_)
-			{
-				case Scene::KEY_PRESSED__NONE:
-					Notify(events.MouseLeftButtonPressedMouseMoved);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT:
-					Notify(events.MouseLeftButtonPressedShiftKeyPressedMouseMoved);
-					break;
-
-				case Scene::KEY_PRESSED__CONTROL:
-					Notify(events.MouseLeftButtonPressedControlKeyPressedMouseMoved);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT_CONTROL:
-					Notify(events.MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
-					break;
-			}
+		case (Qt::ShiftButton | Qt::LeftButton): 
+			zoomSystem_(this);
+			break;
+					
+		case (Qt::ControlButton | Qt::LeftButton):
+			translateSystem_(this);
+			break;
+				
+		case Qt::LeftButton:
+			rotateSystem_(this);
 			break;
 
-		case Scene::MOUSE_BUTTON__TWO:
-			switch (key_pressed_)
-			{
-				case Scene::KEY_PRESSED__NONE:
-					Notify(events.MouseMiddleButtonPressedMouseMoved);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT:
-					Notify(events.MouseMiddleButtonPressedShiftKeyPressedMouseMoved);
-					break;
-
-				case Scene::KEY_PRESSED__CONTROL:
-					Notify(events.MouseMiddleButtonPressedControlKeyPressedMouseMoved);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT_CONTROL:
-					Notify(events.MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
-					break;
-			}
-			break;
-
-		case Scene::MOUSE_BUTTON__THREE:
-			switch (key_pressed_)
-			{
-				case Scene::KEY_PRESSED__NONE:
-					Notify(events.MouseRightButtonPressedMouseMoved);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT:
-					Notify(events.MouseRightButtonPressedShiftKeyPressedMouseMoved);
-					break;
-
-				case Scene::KEY_PRESSED__CONTROL:
-					Notify(events.MouseRightButtonPressedControlKeyPressedMouseMoved);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT_CONTROL:
-					Notify(events.MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMoved);
-					break;
-			}
+		default:
 			break;
 	}
 
@@ -1226,175 +1120,61 @@ void Scene::mouseMoveEvent(QMouseEvent *mouse_event)
 	y_window_pos_old_ = y_window_pos_new_;
 }
 
-void Scene::mousePressEvent(QMouseEvent* mouse_event)
+
+void Scene::mousePressEvent(QMouseEvent* e)
 {
 	makeCurrent();
 
-	x_window_pos_old_ = mouse_event->x();
-	y_window_pos_old_ = mouse_event->y();
+	x_window_pos_old_ = e->x();
+	y_window_pos_old_ = e->y();
 
-	switch (mouse_event->button())
+	if (rotate_mode_)
 	{
-		case NoButton:
-			actual_mouse_button_ = Scene::MOUSE_BUTTON__NONE;
-			break;
+		return;
+	}
 
-		case LeftButton:
-			actual_mouse_button_ = Scene::MOUSE_BUTTON__ONE;
-
-			switch (key_pressed_)
-			{
-				case Scene::KEY_PRESSED__NONE:
-					Notify(events.MouseLeftButtonPressed);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT:
-					Notify(events.MouseLeftButtonPressedShiftKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__CONTROL:
-					Notify(events.MouseLeftButtonPressedControlKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT_CONTROL:
-					Notify(events.MouseLeftButtonPressedShiftKeyPressedControlKeyPressed);
-					break;
-			}
-			break;
-			
-		case MidButton:
-			actual_mouse_button_ = Scene::MOUSE_BUTTON__TWO;
-
-			switch (key_pressed_)
-			{
-				case Scene::KEY_PRESSED__NONE:
-					Notify(events.MouseMiddleButtonPressed);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT:
-					Notify(events.MouseMiddleButtonPressedShiftKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__CONTROL:
-					Notify(events.MouseMiddleButtonPressedControlKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT_CONTROL:
-					Notify(events.MouseMiddleButtonPressedShiftKeyPressedControlKeyPressed);
-					break;
-			}
-			break;
-			
-		case RightButton:
-			actual_mouse_button_ = Scene::MOUSE_BUTTON__THREE;
-
-			switch (key_pressed_)
-			{
-				case Scene::KEY_PRESSED__NONE:
-					Notify(events.MouseRightButtonPressed);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT:
-					Notify(events.MouseRightButtonPressedShiftKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__CONTROL:
-					Notify(events.MouseRightButtonPressedControlKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT_CONTROL:
-					Notify(events.MouseRightButtonPressedShiftKeyPressedControlKeyPressed);
-					break;
-
-				default:
-					break;
-			}
-		default:
-			break;
-
+	if (e->button() == Qt::LeftButton ||
+ 			e->button() == Qt::RightButton)
+	{
+		selectionPressed_(this);
 	}
 }
 
-void Scene::mouseReleaseEvent(QMouseEvent *mouse_event)
+
+void Scene::mouseReleaseEvent(QMouseEvent *e)
 {
 	makeCurrent();
 
-	switch (mouse_event->button())
+	// ============ picking mode ================
+	if (!rotate_mode_)
 	{
-		case NoButton:
-			actual_mouse_button_ = Scene::MOUSE_BUTTON__NONE;
-			break;
+		if (e->button() == Qt::LeftButton)
+		{
+			selectionReleased_(this);
+		}
+		else if (e->button() == Qt::RightButton)
+		{
+			deselectionReleased_(this);
+		}
 
-		case LeftButton:
-			actual_mouse_button_ = Scene::MOUSE_BUTTON__ONE;
+		return;
+	}
 
-			switch (key_pressed_)
-			{
-				case Scene::KEY_PRESSED__NONE:
-					Notify(events.MouseLeftButtonReleased);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT:
-					Notify(events.MouseLeftButtonReleasedShiftKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__CONTROL:
-					Notify(events.MouseLeftButtonReleasedControlKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT_CONTROL:
-					Notify(events.MouseLeftButtonReleasedShiftKeyPressedControlKeyPressed);
-					break;
-			}
+	// ============ rotate mode ================
+	switch (e->state())
+	{
+		case (Qt::ShiftButton | Qt::LeftButton):
+			zoomSystem_(this);
 			break;
 			
-		case MidButton:
-			actual_mouse_button_ = Scene::MOUSE_BUTTON__TWO;
-
-			switch (key_pressed_)
-			{
-				case Scene::KEY_PRESSED__NONE:
-					Notify(events.MouseMiddleButtonReleased);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT:
-					Notify(events.MouseMiddleButtonReleasedShiftKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__CONTROL:
-					Notify(events.MouseMiddleButtonReleasedControlKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT_CONTROL:
-					Notify(events.MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressed);
-					break;
-			}
+		case (Qt::ControlButton | Qt::LeftButton):
+			translateSystem_(this);
 			break;
-			
-		case RightButton:
-			actual_mouse_button_ = Scene::MOUSE_BUTTON__THREE;
+		
+		case Qt::LeftButton:
+			rotateSystem_(this);
+			break;
 
-			switch (key_pressed_)
-			{
-				case Scene::KEY_PRESSED__NONE:
-					Notify(events.MouseRightButtonReleased);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT:
-					Notify(events.MouseRightButtonReleasedShiftKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__CONTROL:
-					Notify(events.MouseRightButtonReleasedControlKeyPressed);
-					break;
-
-				case Scene::KEY_PRESSED__SHIFT_CONTROL:
-					Notify(events.MouseRightButtonReleasedShiftKeyPressedControlKeyPressed);
-					break;
-
-				default:
-					break;
-			}
 		default:
 			break;
 	}
@@ -1423,38 +1203,12 @@ void Scene::rotateMode_()
 {
 	rotate_mode_ = true;
 	setCursor(QCursor(Qt::SizeAllCursor));
-
-	// unpicking mode controls
-	NotificationUnregister(events.MouseLeftButtonPressed);
-	NotificationUnregister(events.MouseLeftButtonPressed & events.MouseMoved);
-	NotificationUnregister(events.MouseLeftButtonReleased);
-	NotificationUnregister(events.MouseRightButtonPressed);
-	NotificationUnregister(events.MouseRightButtonPressed & events.MouseMoved);
-	NotificationUnregister(events.MouseRightButtonReleased);
-	
-	// rotation mode controls
-	NotificationRegister(events.MouseLeftButtonPressed & events.MouseMoved, events.RotateSystem);
-	NotificationRegister(events.MouseMiddleButtonPressed & events.MouseMoved, events.ZoomSystem); 
-	NotificationRegister(events.MouseRightButtonPressed & events.MouseMoved, events.TranslateSystem);			
 }
 
 void Scene::pickingMode_()
 {
 	rotate_mode_ = false;
 	setCursor(QCursor(Qt::CrossCursor));
-	
-	// unrotation mode controls
-	NotificationUnregister(events.MouseLeftButtonPressed & events.MouseMoved); 
-	NotificationUnregister(events.MouseMiddleButtonPressed & events.MouseMoved); 
-	NotificationUnregister(events.MouseRightButtonPressed & events.MouseMoved); 
-	
-	// picking mode controls
-	NotificationRegister(events.MouseLeftButtonPressed, events.SelectionPressed); 
-	NotificationRegister(events.MouseLeftButtonPressed & events.MouseMoved, events.SelectionPressedMoved); 
-	NotificationRegister(events.MouseLeftButtonReleased, events.SelectionReleased); 
-	NotificationRegister(events.MouseRightButtonPressed, events.DeselectionPressed); 
-	NotificationRegister(events.MouseRightButtonPressed & events.MouseMoved, events.DeselectionPressedMoved); 
-	NotificationRegister(events.MouseRightButtonReleased, events.DeselectionReleased);
 }
 
 
@@ -1502,6 +1256,7 @@ void Scene::selectionPressedMoved_(Scene* /* scene */)
 	
 	painter.end();
 }
+
 
 void Scene::exportPNG()
 {
@@ -1580,10 +1335,5 @@ void Scene::switchStereo()
 	gl_renderer_.setStereoMode(stereo);
 	update();
 }
-
-
-#	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/WIDGETS/scene.iC>
-#	endif
 
 } }// namespaces

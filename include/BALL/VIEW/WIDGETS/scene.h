@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.23 2004/03/03 18:21:49 amoll Exp $
+// $Id: scene.h,v 1.24 2004/03/23 21:32:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -11,10 +11,6 @@
 
 #ifndef BALL_MATHS_QUATERNION_H
 #	include <BALL/MATHS/quaternion.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_EVENTS_H
-#	include <BALL/VIEW/KERNEL/events.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
@@ -52,8 +48,6 @@ namespace BALL
 				mechanism of BALL. Connecting two or more Scenes together means that that
 				mouse action performed in one Scene are also transfered to all other connected
 				Scenes. These other Scenes can have different Camera angles or other properties.
-				The class Events is a container class of appropriate events that can
-				be assigned to a Scene.
 				\ingroup ViewWidgets
 		*/
 		class BALL_EXPORT Scene
@@ -75,12 +69,6 @@ namespace BALL
 					SceneUpdateEvent()
 						: QCustomEvent( SCENE_UPDATE_EVENT){}
 			};
-
-			/** @name Class friends
-			*/
-			//@{
-			/// The class Events.
-			friend class Events;
 
 			//@} 
 			/** @name Enums 
@@ -116,11 +104,6 @@ namespace BALL
 					  - camera look at position set to <tt> Vector(0,0,0)</tt>
 						- camera look up vector to <tt> Vector(0,0,-1)</tt>
 					\par
-					The following events are used initially:
-					  - MouseLeftButtonPressed & MouseMoved are connected to RotateSystem
-					  - MouseMiddleButtonPressed & MouseMoved are connected to ZoomSystem
-					  - MouseRightButtonPressed & MouseMoved are connected to TranslateSystem
-					\par					
 					Calls registerWidget.
 					\param      parent_widget the parent widget of this scene 
 					\param      name the name of this scene 
@@ -132,10 +115,6 @@ namespace BALL
 
 			/** Copy constructor.
 					Initialize the width, height and camera position.
-					The following events are used initially:
-					  - MouseLeftButtonPressed & MouseMoved are connected to RotateSystem
-					  - MouseMiddleButtonPressed & MouseMoved are connected to ZoomSystem
-					  - MouseRightButtonPressed & MouseMoved are connected to TranslateSystem
 					\par					
 					Calls registerWidget.
 					\param  scene the scene to be copied
@@ -212,17 +191,6 @@ namespace BALL
 			*/
 			virtual bool exportScene(Renderer &er) const
 				throw();
-
-			//@}			
-			/** @name Event class
-			*/
-			//@{
-			
-			/** This object contains all possible events this scene can sent via the 
-					Notification mechanism of BALL
-					\see  Events
-			*/
-			Events events;
 
 			//@}	
 			/**	ModularWidget methods.
@@ -376,69 +344,27 @@ namespace BALL
 			*/
 			virtual void resizeGL(int width, int height);
 
-			/** Catch key press events.
-					Catch the following key press events:
-					  - <tt> Key_Shift</tt> the SHIFT key was pressed
-					  - <tt> Key_Control</tt> the SHIFT key was pressed
-					\par
-					This events will be stored for later processing.
-					See QT-library for information concerning key press events.
-					\param qkey_event the QT-key event (See QT-library for key events)
-					\see   keyReleaseEvent
-					\see   mouseMoveEvent
-					\see   mousePressEvent
-					\see   mouseReleaseEvent
-			*/ 
-			virtual void keyPressEvent(QKeyEvent* qkey_event);
-
-			/** Catch key release events.
-					Catch the following key release events:
-					  - <tt> Key_Shift</tt> the SHIFT key was released
-					  - <tt> Key_Control</tt> the SHIFT key was released
-					\par
-					This events will be stored for later processing.
-					See QT-library for information concerning key released events.
-					\param qkey_event the QT-key event (See QT-library for key events)
-					\see  keyPressEvent
-					\see  mouseMoveEvent
-					\see  mousePressEvent
-					\see  mouseReleaseEvent
-			*/ 
-			virtual void keyReleaseEvent(QKeyEvent* qkey_event);
-
-			/** Catch mouse move events.
-					Catch mouse move events, store the actual mouse position in this scene
+			/** Catch mouse move events, store the actual mouse position in this scene
 					widget and sent events accordingly.
-					Calls Notify
-					\param  qmouse_event the QT-mouse event (See QT-library for mouse events)
-					\see    Events
+					\param  e the QT-mouse event (See QT-library for mouse events)
 			*/
 			virtual void mouseMoveEvent(QMouseEvent* qmouse_event);
 
-			/** Catch mouse press events.
-					Catch mouse press events, store the actual mouse position in this scene
+			/** Catch mouse press events, store the actual mouse position in this scene
 					widget and sent events accordingly.
-					Calls Notify
-					\param  qmouse_event the QT-mouse event (See QT-library for mouse events)
-					\see    Events
+					\param  e the QT-mouse event (See QT-library for mouse events)
 			*/
 			virtual void mousePressEvent(QMouseEvent* qmouse_event);
 
-			/** Catch mouse release events.
-					Catch mouse release events, store the actual mouse position in this scene
+			/** Catch mouse release events, store the actual mouse position in this scene
 					widget and sent events accordingly.
-					Calls Notify
-					\param  qmouse_event the QT-mouse event (See QT-library for mouse events)
-					\see    Events
+					\param  e the QT-mouse event (See QT-library for mouse events)
 			*/
 			virtual void mouseReleaseEvent(QMouseEvent* qmouse_event);
 
 #ifndef QT_NO_WHEELEVENT
-			/** Catch mouse wheel events.
-			 		Catch mouse wheel events and zoom the scene accordingly.
-					Calls Notify
-					\param  qmouse_event the QT-mouse event (See QT-library for mouse events)
-					\see    Events
+			/** Catch mouse wheel events and zoom the scene accordingly.
+					\param  e the QT-mouse event (See QT-library for mouse events)
 			*/
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
 #endif
@@ -518,14 +444,6 @@ namespace BALL
 				EVENT__MOVED        = 3
 			};
 
-			enum KeyPressed
-			{
-				KEY_PRESSED__NONE          = 0,
-				KEY_PRESSED__SHIFT         = 1,
-				KEY_PRESSED__CONTROL       = 2,
-				KEY_PRESSED__SHIFT_CONTROL = 3
-			};
-
 			enum MouseButton
 			{
 				MOUSE_BUTTON__NONE  = 0,
@@ -557,9 +475,9 @@ namespace BALL
 			void selectionReleased_(Scene* scene);
 			void selectionPressedMoved_(Scene* scene);
 
-			void deselectionPressed_(Scene* scene);
+// 			void deselectionPressed_(Scene* scene);
 			void deselectionReleased_(Scene* scene);
-			void deselectionPressedMoved_(Scene* scene);
+// 			void deselectionPressedMoved_(Scene* scene);
 
 			void calculateQuaternion_(Quaternion& quaternion, const Quaternion* rotate = 0);
 
@@ -584,7 +502,6 @@ namespace BALL
 			Vector3 system_origin_;
 			Quaternion quaternion_;
 
-			KeyPressed		key_pressed_;
 			MouseButton		actual_mouse_button_;
 
 			bool need_update_;
@@ -615,10 +532,6 @@ namespace BALL
 			Position screenshot_nr_,
 							 pov_nr_;
 		};
-
-#	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/WIDGETS/scene.iC>
-#	endif
 
 } } // namespaces
 
