@@ -59,6 +59,7 @@ Fixed:
 		- several core dumps related to missing mutex locks
 		- several memory leaks, e.g. in OpenGL renderer
 		- problem with linking of C runtime library under windows
+		- HBondModel: showed only first H-bond of an atom and had a problem with the normals of the discs
 
 
 Changed:
