@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.14 2000/01/28 16:37:46 oliver Exp $
+// $Id: amberTorsion.C,v 1.15 2000/01/30 18:24:40 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -366,11 +366,12 @@ namespace BALL
 
 		vector<SingleAmberTorsion>::const_iterator it = torsion_.begin(); 
 
-		for ( ; it != torsion_.end(); it++) 
+		for (; it != torsion_.end(); it++) 
 		{
-			if ( getForceField()->getUseSelection() == false ||
-					( getForceField()->getUseSelection() == true &&
-					(it->atom1->isSelected() || it->atom2->isSelected() || it->atom3->isSelected() || it->atom4->isSelected())))
+			if (getForceField()->getUseSelection() == false ||
+					(getForceField()->getUseSelection() == true &&
+					(it->atom1->isSelected() || it->atom2->isSelected() 
+					 || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
 				a21 = it->atom1->getPosition() - it->atom2->getPosition();
 				a23 = it->atom3->getPosition() - it->atom2->getPosition();
@@ -382,8 +383,6 @@ namespace BALL
 				float length_cross2321 = cross2321.getLength();
 				float length_cross2334 = cross2334.getLength();
 
-
-				// QUESTION: Only two test for the cross products seem to be necessary
 				if (length_cross2321 != 0 && length_cross2334 != 0) 
 				{
 					cross2321 /= length_cross2321;
@@ -392,14 +391,19 @@ namespace BALL
 					cosphi = cross2321 * cross2334;
 
 					if (cosphi > 1.0)
-								cosphi = 1.0;
+					{
+						cosphi = 1.0;
+					}
 					if (cosphi < -1.0)
-								cosphi = -1.0;
+					{
+						cosphi = -1.0;
+					}
 
 					energy_ += it->V * ( 1 + cos(it->f * acos(cosphi) - it->phase));
 				}
 			}
 		}
+
 		return energy_;
 	}
 
@@ -417,9 +421,10 @@ namespace BALL
 
 		for ( ; it != torsion_.end(); it++) 
 		{
-			if ( getForceField()->getUseSelection() == false ||
+			if (getForceField()->getUseSelection() == false ||
  					( getForceField()->getUseSelection() == true &&
-					(it->atom1->isSelected() || it->atom2->isSelected() || it->atom3->isSelected() || it->atom4->isSelected())))
+					(it->atom1->isSelected() || it->atom2->isSelected() 
+					 || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
 				ab = it->atom1->getPosition() - it->atom2->getPosition();
 				float length_ab = ab.getLength();
@@ -445,25 +450,26 @@ namespace BALL
 						cosphi = (t * u) / (length_t * length_u);
 
 						if (cosphi > 1.0)
-							{
-								cosphi = 1.0;
-							}
+						{
+							cosphi = 1.0;
+						}
 						if (cosphi < -1.0)
-							{
-								cosphi = -1.0;
-							}
+						{
+							cosphi = -1.0;
+						}
+
 						// multiply with the barrier height and a factor
 						// for unit conversion: 1e13: kJ/(mol A) -> J/(mol m)
 						//  AVOGADRO: J/mol -> J
 						dEdphi = (-it->V) * (1e13 / Constants::AVOGADRO) * it->f * sin(it->f * acos(cosphi) - it->phase);
 
-/*
+
 						float direction = (t % u) * cb;
 						if (direction > 0.0)
 						{
-								dEdphi = -dEdphi;
+							dEdphi = -dEdphi;
 						}
-*/
+
 						Vector3 ca = it->atom3->getPosition() - it->atom1->getPosition();
 						Vector3 db = it->atom4->getPosition() - it->atom2->getPosition();
 						Vector3 dEdt =   dEdphi / (length_t2 * cb.getLength()) * (t % cb);
