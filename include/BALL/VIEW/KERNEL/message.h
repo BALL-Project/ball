@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.24 2003/09/01 09:21:49 amoll Exp $
+// $Id: message.h,v 1.25 2003/09/02 10:58:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -14,6 +14,7 @@
 namespace BALL
 {
 	class Composite;
+	class TrajectoryFile;
 
 	namespace VIEW
 	{
@@ -805,8 +806,6 @@ namespace BALL
 			virtual ~MolecularSelectionMessage()
 				throw();
 			//@}
-		
-			private:
 		};
 
 		class ShowDisplayPropertiesMessage
@@ -815,6 +814,23 @@ namespace BALL
 			public:
 				ShowDisplayPropertiesMessage()
 					: Message(){};
+		};
+
+		class NewTrajectoryMessage
+			:public CompositeMessage
+		{
+			public:
+				NewTrajectoryMessage()
+					throw();
+
+				void setTrajectoryFile(TrajectoryFile* file)
+					throw() { file_ = file;}
+
+				TrajectoryFile* getTrajectoryFile()
+					throw() { return file_;}
+
+			protected:
+				TrajectoryFile* file_;
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
