@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.C,v 1.7 2001/09/19 11:05:20 aubertin Exp $
+// $Id: uhligCavFreeEnergyProcessor.C,v 1.7.4.1 2002/12/11 14:10:48 anker Exp $
 
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -53,17 +53,17 @@ namespace BALL
 		valid_ = true;
 	}
 
-        const UhligCavFreeEnergyProcessor& UhligCavFreeEnergyProcessor::operator = (const UhligCavFreeEnergyProcessor& proc) throw()     
-        {
-	         valid_=proc.valid_;
-                 energy_=proc.energy_;
-                 fragment_=proc.fragment_;  
-                 return *this;
-        }
+	const UhligCavFreeEnergyProcessor& UhligCavFreeEnergyProcessor::operator = (const UhligCavFreeEnergyProcessor& proc) throw()     
+	{
+		valid_=proc.valid_;
+		energy_=proc.energy_;
+		fragment_=proc.fragment_;  
+		return *this;
+	}
 
-        bool UhligCavFreeEnergyProcessor::operator == (const UhligCavFreeEnergyProcessor& proc) const throw()
-        {
-          bool result;
+	bool UhligCavFreeEnergyProcessor::operator == (const UhligCavFreeEnergyProcessor& proc) const throw()
+	{
+		bool result;
 		if ((fragment_ == 0) && (proc.fragment_ == 0))
 		{
 			result = ((energy_ == proc.energy_) && (valid_ == proc.valid_));
@@ -90,7 +90,7 @@ namespace BALL
 		// first check for user settings
 
 		// for now, there is nothing to report
-		//int verbosity = (int) options.getInteger(Option::VERBOSITY);
+		int verbosity = (int) options.getInteger(Option::VERBOSITY);
 		// the solvent radius [ A ]
 		double solvent_radius = options.getReal(Option::PROBE_RADIUS);
 		// the surface tension [ J/mol/A^2 ]
