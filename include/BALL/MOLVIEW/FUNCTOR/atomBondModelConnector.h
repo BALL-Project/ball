@@ -1,4 +1,4 @@
-// $Id: atomBondModelConnector.h,v 1.5.4.2 2002/10/23 20:05:00 amoll Exp $
+// $Id: atomBondModelConnector.h,v 1.5.4.3 2002/12/04 23:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
@@ -26,11 +26,11 @@
 using BALL::VIEW::Line;
 using BALL::VIEW::Tube;
 
-class Atom;
-class Bond;
-
 namespace BALL
 {
+	class Atom;
+	class Bond;
+
 	namespace MOLVIEW
 	{
 		/** AtomBondModelConnector class.

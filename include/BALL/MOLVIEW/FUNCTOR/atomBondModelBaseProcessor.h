@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.h,v 1.7.4.1 2002/10/23 15:20:25 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.7.4.2 2002/12/04 23:49:22 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
@@ -23,10 +23,11 @@
 # include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
-class Atom;
 
 namespace BALL
 {
+	class Atom;
+
 	namespace MOLVIEW
 	{
 

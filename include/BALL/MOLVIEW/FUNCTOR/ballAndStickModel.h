@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.h,v 1.10.4.1 2002/10/23 14:25:02 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.10.4.2 2002/12/04 23:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
@@ -19,10 +19,10 @@
 #	include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 #endif
 
-class Atom;
-
 namespace BALL
 {
+	class Atom;
+
 	namespace MOLVIEW
 	{
 
