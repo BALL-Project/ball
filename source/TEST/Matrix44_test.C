@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.9 2000/05/04 18:32:17 oliver Exp $
+// $Id: Matrix44_test.C,v 1.10 2000/05/06 00:47:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Matrix44_test.C,v 1.9 2000/05/04 18:32:17 oliver Exp $")
+START_TEST(class_name, "$Id: Matrix44_test.C,v 1.10 2000/05/06 00:47:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -323,9 +323,9 @@ CHECK(TMatrix4x4::setIdentity())
 RESULT
 
 
-//line 256: method TMatrix4x4::fill(const T& t = (T)1)
-CHECK(TMatrix4x4::fill(const T& t = (T)1))
-	m1.fill(2.0);
+//line 256: method TMatrix4x4::set(const T& t = (T)1)
+CHECK(TMatrix4x4::set(const T& t = (T)1))
+	m1.set(2.0);
 	m2 = Matrix4x4(2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
@@ -734,7 +734,7 @@ RESULT
 //line 402: method TMatrix4x4::setTranslation(const T& x, const T& y, const T& z)
 CHECK(TMatrix4x4::setTranslation(const T& x, const T& y, const T& z))
 	float x = 2.0, y = 3.0, z = 4.0;
-	m1.fill(9.0);
+	m1.set(9.0);
 	m1.setTranslation(x, y, z);
 	x = m1.m12 * m1.m13 *	m1.m21 * m1.m23 *	m1.m31 * m1.m32 *	m1.m41 * m1.m42 * m1.m43;
 	TEST_REAL_EQUAL(x , 0)
