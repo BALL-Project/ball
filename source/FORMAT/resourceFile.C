@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.8 2000/03/07 13:29:41 oliver Exp $
+// $Id: resourceFile.C,v 1.9 2000/06/30 06:00:59 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -620,6 +620,20 @@ namespace BALL
 		open(name);
 	}
 
+	ResourceFile::ResourceFile(const ResourceFile& resource_file)
+		:	File(resource_file),
+			root_()
+	{
+		if (good())
+		{
+			*this >> *this;
+			if (eof())
+			{
+				clear();
+			}
+		}
+	}
+
 	ResourceFile::~ResourceFile()
 	{
 		close();
@@ -636,7 +650,9 @@ namespace BALL
 				clear();
 			}
 
-		} else {
+		} 
+		else 
+		{
 			clear(rdstate() | ios::failbit);
 		}
 
