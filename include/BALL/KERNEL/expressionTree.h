@@ -1,4 +1,4 @@
-// $Id: expressionTree.h,v 1.1 2001/07/16 19:38:42 anker Exp $
+// $Id: expressionTree.h,v 1.2 2002/01/10 14:59:14 anker Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONTREE_H
 #define BALL_KERNEL_EXPRESSIONTREE_H
@@ -55,7 +55,8 @@ namespace BALL
 		ExpressionTree() 
 			throw();
 			
-		/** Copy constructor 
+		/** Copy constructor. Note that this copy constructor does not copy
+				predicates but only stores pointers to them.
 		 */
 		ExpressionTree(const ExpressionTree& tree) 
 			throw();
