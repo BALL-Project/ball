@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.1 1999/08/26 08:02:34 oliver Exp $ 
+// $Id: options.C,v 1.2 1999/09/01 09:42:08 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -38,22 +38,23 @@ namespace BALL
 	{
 		errno = 0;
 		char*	endptr;
-		const char* ptr;
-
-		ptr = get(key).c_str();
+		String value(get(key));
 
 		// an empty Stringg is no real number
-		if (!strcmp(ptr, ""))
+		if (value =="")
+		{
 			return false;
+		}
 		
 		// try to convert it to a number
-		strtod(get(key).c_str(), &endptr);
+		strtod(value.c_str(), &endptr);
 
 		// return and tell whether it happend to work
-		return (errno == 0) && (endptr != get(key).c_str());
+		return (errno == 0) && (endptr != value.c_str());
 	}
 
-	bool Options::isVector(const String& key) const {
+	bool Options::isVector(const String& key) const 
+	{
 		float	dummy;
 		
 		if (!has(key))
@@ -118,19 +119,24 @@ namespace BALL
 		}
 	}
 
-	Vector3	Options::getVector(const String& key) const {
+	Vector3	Options::getVector(const String& key) const 
+	{
 		Vector3	h(0,0,0);
 		
 		if (!has(key))
+		{
 			return h;
+		}
 
 		sscanf(get(key).c_str(), "(%f %f %f)", &(h.x), &(h.y), &(h.z));
 		
 		return h;
 	}
 
-	bool Options::getBool(const String& key) const {
-		if ((*find(key)).second == "true"){
+	bool Options::getBool(const String& key) const 
+	{
+		if ((*find(key)).second == "true")
+		{
 			return true;
 		} else {
 			return false;
@@ -274,7 +280,8 @@ namespace BALL
 
 		char		buffer[MaxEntryLength + 1];
 		String	s, key;
-		while (infile.getline(buffer, MaxEntryLength)){
+		while (infile.getline(buffer, MaxEntryLength))
+		{
 			if ((buffer[0] != '#') && (buffer[0] != '!') && (buffer[0] != ';')) 
 			{
 				s = buffer;
