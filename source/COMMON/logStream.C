@@ -1,10 +1,12 @@
-// $Id: logStream.C,v 1.17 2000/10/17 10:14:33 oliver Exp $
+// $Id: logStream.C,v 1.18 2000/10/18 17:10:45 oliver Exp $
 
+#include <limits.h>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/notification.h>
 
 #include <sys/time.h>
 #include <stdio.h>
+#include <limits.h>
 
 #define BUFFER_LENGTH 32768
 
@@ -24,6 +26,12 @@ using std::cerr;
 
 namespace BALL 
 {
+	// at this point, it is not yet possible to
+	// include BALL/COMMON/limits.h (which were a 
+	// much nicer solution...). Ugly header dependencies...
+	const int LogStreamBuf::MIN_LEVEL = INT_MIN;
+	const int LogStreamBuf::MAX_LEVEL = INT_MAX;
+	const Time LogStreamBuf::MAX_TIME = INT_MAX;
 
 	LogStreamBuf::LogStreamBuf() 
 		: streambuf(),
@@ -80,7 +88,9 @@ namespace BALL
 
 					// mark everything as read
 					line_end = pptr() + 1;
-				} else {
+				} 
+				else 
+				{
 					memcpy(&(buf[0]), line_start, line_end - line_start + 1);
 					buf[line_end - line_start] = '\0';
 						
@@ -143,7 +153,8 @@ namespace BALL
 		return 0;
 	}
 
-	string LogStreamBuf::expandPrefix_(const string& prefix, const int& level, const time_t& time) const
+	string LogStreamBuf::expandPrefix_
+		(const string& prefix, int level, Time time) const
 	{
 		Size		index = 0;
 		Size		copied_index = 0;
@@ -288,7 +299,7 @@ namespace BALL
 		rdbuf()->loglines_.clear();
 	}
 
-	void LogStream::insert(ostream& stream, const int& min_level, const int& max_level) 
+	void LogStream::insert(ostream& stream, int min_level, int max_level) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -394,7 +405,7 @@ namespace BALL
 		// if the stream is not found nothing happens!		
 	}
 
-	void LogStream::setMinLevel(const ostream& stream, const int& level) 
+	void LogStream::setMinLevel(const ostream& stream, int level) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -417,7 +428,7 @@ namespace BALL
 		}
 	}
 
-	void LogStream::setMaxLevel(const ostream& stream, const int& level) 
+	void LogStream::setMaxLevel(const ostream& stream, int level) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -467,7 +478,7 @@ namespace BALL
 		}
 	}
 	
-	Size LogStream::getNumberOfLines(const int& min_level, const int& max_level) const  
+	Size LogStream::getNumberOfLines(int min_level, int max_level) const  
 	{
 
 		// cast this to const, to access non const method rdbuf() which
@@ -550,8 +561,8 @@ namespace BALL
 	}
 
 	list<int>	LogStream::filterLines
-		(const int& min_level, const int& max_level,
-		 const time_t& earliest, const time_t& latest, const string& s) const
+		(int min_level, int max_level,
+		 Time earliest, Time latest, const string& s) const
 	{
     using std::list;																																
 		list<int>	list_indices;
