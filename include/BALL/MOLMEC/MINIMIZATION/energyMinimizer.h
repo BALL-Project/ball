@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.7 1999/12/28 18:51:17 oliver Exp $
+// $Id: energyMinimizer.h,v 1.8 1999/12/30 13:21:30 pmueller Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -81,7 +81,7 @@ namespace BALL {
 
 			/**    Trajectory ouput frequency 
 			*/
-			static const char* SNAPSHOT_OUTPUT_FREQUENCY;
+			static const char* SNAPSHOT_FREQUENCY;
 
 			/**    Number of iteration 
 			*/
@@ -118,7 +118,7 @@ namespace BALL {
 
 			/**    Snapshot frequency 
 			*/
-			static Size SNAPSHOT_OUTPUT_FREQUENCY;
+			static Size SNAPSHOT_FREQUENCY;
 
 			/**    Number of iteration 
 			*/
@@ -293,11 +293,11 @@ namespace BALL {
 
 		/**	Set the snapshot frequency
 		*/
-		void	setSnapshotOutputFrequency(Size snapshot_output_frequency);
+		void	setSnapShotFrequency(Size snapshot_frequency);
 
 		/**	Get the snapshot output frequency
 		*/
-		Size	getSnapshotOutputFrequency(void) const;
+		Size	getSnapShotFrequency(void) const;
 
 		/**	Return the force field of the energy minimizer
 		*/
@@ -365,7 +365,7 @@ namespace BALL {
 
 		/*_	Frequency of atom coordinate ouput;
 		*/
-		Size	snapshot_output_frequency_;
+		Size	snapshot_frequency_;
 
 		/*_	If the energy difference (before and after an iteration) 
 			is smaller than this bound, the minimization procedure stops.
