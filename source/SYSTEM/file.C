@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.40 2003/07/03 10:05:38 amoll Exp $
+// $Id: file.C,v 1.41 2003/07/03 11:41:26 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
+#include <BALL/DATATYPE/regularExpression.h>
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <stdlib.h>     // 'getenv'
