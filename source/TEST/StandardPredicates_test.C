@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.22 2003/01/22 17:16:59 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.23 2003/01/24 21:50:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.22 2003/01/22 17:16:59 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.23 2003/01/24 21:50:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -934,7 +934,7 @@ CHECK(Sp2HybridizedPredicate::operator () (const Atom& atom) const )
 			case 4:
 			case 6:
 			case 7:
-				TEST_EQUAL(isSp2(*it), true)
+				TEST_EQUAL(isSp2(*it), false)
 				break;
 			default:
 				TEST_EQUAL(isSp2(*it), false)
