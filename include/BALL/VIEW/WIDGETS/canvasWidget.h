@@ -75,7 +75,7 @@ namespace BALL
 
       //Copyconstructor doesn't work because of the QT private copy constructors
 			CanvasWidget(const CanvasWidget& cw)
-				throw();
+				throw(){};
 
       QCanvas canvas_;
       std::vector<QCanvasItem*> objects_; //e.g PixItem, Polygonzuege
