@@ -1,5 +1,5 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.1 2002/02/14 17:02:55 anker Exp $
-// Molecular Mechanics: Fresno force field, lipophilic component
+// $Id: fresnoBuriedPolar.C,v 1.1.2.2 2002/03/05 22:53:56 anker Exp $
+// Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/support.h>
@@ -76,7 +76,7 @@ namespace BALL
 			return false;
 		}
 
-		// clear the vector of lipophilic interactions
+		// clear the vector of buried polar interactions
 		possible_buried_polar_interactions_.clear();
 
 		// ?????
@@ -84,14 +84,6 @@ namespace BALL
 		// the fresno types
 
 		System* system = force_field->getSystem();
-		if (system->countMolecules() != 2)
-		{
-			Log.warn() << "FresnoBuriedPolar::setup(): "
-				<< "need two molecules for lipophilic evaluation, skipping"
-				<< endl;
-			possible_buried_polar_interactions_.clear();
-			return true;
-		}
 
 		FresnoFF* fff = dynamic_cast<FresnoFF*>(force_field);
 
@@ -130,6 +122,14 @@ namespace BALL
 									&& (type_A == FresnoFF::POLAR)))
 						{
 							possible_buried_polar_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
+							// DEBUG
+							cout << "found possible buried polar int.: " 
+								<< A_it->getFullName() << "..." << B_it->getFullName()
+								<< " (length: " 
+								<< (A_it->getPosition() - B_it->getPosition()).getLength() 
+								<< " A) " 
+								<< endl;
+							// /DEBUG
 						}
 					}
 				}
@@ -139,7 +139,7 @@ namespace BALL
 		// DEBUG
 		cout << "FresnoBuriedPolar setup statistics:" << endl;
 		cout << "Found " << possible_buried_polar_interactions_.size() 
-			<< " possible lipophilic interactions" << endl << endl;
+			<< " possible buried polar interactions" << endl << endl;
 		// /DEBUG
 
 		return true;
@@ -172,12 +172,6 @@ namespace BALL
 
 			distance = (atom1->getPosition() - atom2->getPosition()).getLength();
 
-			// DEBUG
-			// cout << "BP distance: " << distance << endl;
-			// cout << "R1: " << R1 << endl;
-			// cout << "R2: " << R2 << endl;
-			// /DEBUG
-
 			// if the distance is too large, the product of g1 and g2 is zero, so
 			// we can skip the rest
 
@@ -186,12 +180,17 @@ namespace BALL
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
 				val = MolmecSupport::calculateFresnoHelperFunction(distance, R1, R2);
+
+				// DEBUG
+				cout << "BP: adding score of " << val
+					<< " (distance " << distance << ", R1 " << R1 << ", R2 " << R2 << ")"
+					<< endl;
+				// /DEBUG
+
+				E += val;
 			}
 		}
-
-		E = val;
 		return E;
-		
 	}
 
 
