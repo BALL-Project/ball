@@ -1,4 +1,4 @@
-// $Id: fileDialog.C,v 1.1 2000/09/23 13:28:31 hekl Exp $
+// $Id: fileDialog.C,v 1.2 2000/10/07 15:24:38 hekl Exp $
 
 #include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
  
@@ -12,12 +12,15 @@ namespace BALL
 	{
 	  FileDialog::FileDialog(string header, QFileDialog::Mode mode, QWidget* parent, const char* name)
 			:	QFileDialog(parent, name, TRUE),
-				ConnectionObject(),
+				ModularWidget(),
 				dir_path_(),
 				filename_()
 		{
 			setCaption(QString(header.c_str()));
 			setMode(mode);
+
+			// register the widget with the MainControl
+			ModularWidget::registerWidget(this);
 		}
 			
 		FileDialog::~FileDialog()
@@ -26,6 +29,18 @@ namespace BALL
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<FileDialog>() << endl;
 			#endif 
+		}
+
+		void FileDialog::initializeWidget(MainControl& /* main_control */)
+		{
+		}
+
+		void FileDialog::finalizeWidget(MainControl& /* main_control */)
+		{
+		}
+		
+		void FileDialog::checkMenu(MainControl& /* main_control */)
+		{
 		}
 
 		int FileDialog::exec()

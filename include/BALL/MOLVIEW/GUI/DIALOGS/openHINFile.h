@@ -1,4 +1,4 @@
-// $Id: openHINFile.h,v 1.1 2000/09/23 15:38:03 hekl Exp $
+// $Id: openHINFile.h,v 1.2 2000/10/07 15:29:06 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
@@ -48,8 +48,13 @@ namespace BALL
 
 			/** 
 			*/
+			/** Constructor.
+					Construct a file dialog for opening hin files.
+			*/
 			OpenHINFile(QWidget* parent = 0, const char* name = 0);
 
+			/** Destructor.
+			*/
 			virtual ~OpenHINFile();
 			//@}
 
@@ -66,6 +71,20 @@ namespace BALL
 			/**	@name	Accessors
 			*/
 			//@{
+			/**     Initialize the file dialog.
+							This method is called automatically
+							immediately before the main application 
+							is started. It adds the dialog's 
+							menu entries and connections.
+			*/
+			virtual void initializeWidget(MainControl& main_control);
+			
+			/**     Remove the dialog.
+							This method is called by the dialog's destructor.
+							It reverses all actions performed in 
+							initializeWidget (remove menu entries and connections).
+			*/
+			virtual void finalizeWidget(MainControl& main_control);
 			//@}
 
 			/**	@name	Predicates
@@ -78,6 +97,12 @@ namespace BALL
 			/**	@name	Protected Members
 			*/
 			//@{
+
+			/** Open the hin file.
+					Opens the hin file and sents a message to the other dialogs that a new
+					hin file was inserted.
+					(sents message: NewCompositeMessage)
+			*/
 			virtual void openFile_();
 			//@}
 
