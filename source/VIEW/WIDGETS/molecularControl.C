@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.72 2004/10/07 15:12:05 amoll Exp $
+// $Id: molecularControl.C,v 1.73 2004/10/20 10:07:48 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -907,6 +907,7 @@ void MolecularControl::clearClipboard()
 
 void MolecularControl::move()
 {
+	select();
 	SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
 	notify_(msg);
 }
