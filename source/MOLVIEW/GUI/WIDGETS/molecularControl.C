@@ -1,7 +1,4 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: molecularControl.C,v 1.8 2002/12/12 10:57:47 oliver Exp $
+// $Id: molecularControl.C,v 1.9 2002/12/12 17:19:15 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -157,7 +154,7 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 
 		context_menu_.insertSeparator();
 		insertContextMenuEntry("build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
-		insertContextMenuEntry("remove Bonds", this, SLOT(removeBonds()), BONDS__REMOVE);
+		//insertContextMenuEntry("remove Bonds", this, SLOT(removeBonds()), BONDS__REMOVE);
 		context_menu_.insertSeparator();
 	}
 	if (RTTI::isKindOf<Atom>(*composite) ||
@@ -182,11 +179,54 @@ void MolecularControl::atomProperties()
 {
 	AtomProperties as((Atom*)context_composite_, this);
 	as.exec();
+
 	ChangedCompositeMessage* message = new ChangedCompositeMessage;
 	message->setComposite(context_composite_);
 	notify_(message);
+	
+	DrawMessage* draw_message = new DrawMessage;
+	draw_message->setDeletable(true);
+	draw_message->setComposite(context_composite_);
+	notify_(draw_message);
+
+
+	SceneMessage *scene_message = new SceneMessage;
+	scene_message->updateOnly();
+	scene_message->setDeletable(true);
+	notify_(scene_message); 
 }
 	
+void MolecularControl::buildBonds()
+{
+	BuildBondsMessage* message = new BuildBondsMessage;
+	notify_(message);
+}
+	
+void MolecularControl::centerCamera()
+{
+	CenterCameraMessage* message = new CenterCameraMessage;
+	notify_(message);
+}
+
+void MolecularControl::select()
+{
+	SelectMessage* message = new SelectMessage;
+	message->select_ = true;
+	notify_(message);
+}
+
+void MolecularControl::deselect()
+{
+	SelectMessage* message = new SelectMessage;
+	message->select_ = false;
+	notify_(message);
+}
+
+void MolecularControl::checkResidue()
+{
+	CheckResidueMessage* message = new CheckResidueMessage;
+	notify_(message);
+}
 
 	} // namespace MOLVIEW
 
