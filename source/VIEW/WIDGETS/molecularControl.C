@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.87 2004/12/14 12:55:59 amoll Exp $
+// $Id: molecularControl.C,v 1.88 2004/12/14 13:42:50 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -816,7 +816,7 @@ void MolecularControl::paste()
 {
 	if (copy_list_.size() == 0) return;
 
-	setStatusbarText("pasted " + String(copy_list_.size()) + " objects...");
+	setStatusbarText("Pasted " + String(copy_list_.size()) + " objects...");
 
 	HashSet<Composite*> changed_roots;
 	// copying composites
@@ -848,7 +848,7 @@ void MolecularControl::paste()
 		// the new_child pointer is then already in composite_to_item_
 		// this shouldnt happen , but it does, no idea why
 		// maybe its removeRecursiveComposite_ in cut()
-		composite_to_item_.erase(new_child);
+//   		composite_to_item_.erase(new_child);
 
 		Composite* parent = *selected_.begin();
 		parent->appendChild(*new_child);
@@ -952,15 +952,6 @@ void MolecularControl::updateListViewItem_(SelectableListViewItem* parent, Compo
 		return;
 	}
 
-	for (Position p = 0; p < composite.getDegree(); p++)
-	{
-		if (!composite_to_item_.has(composite.getChild(p)))
-		{
-			generateListViewItem_(composite_to_item_[&composite], *composite.getChild(p));
-		}
-	}
-
-	// find the ListViewItem belonging to the composite
 	recurseUpdate_(composite_to_item_[&composite], composite);
 }
 
