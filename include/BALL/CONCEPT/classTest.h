@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.56 2004/11/07 08:25:35 oliver Exp $
+// $Id: classTest.h,v 1.57 2005/01/18 22:26:14 amoll Exp $
 //
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
@@ -829,8 +829,8 @@ int main(int argc, char **argv)\
 #ifdef BALL_HAS_SSTREAM
 #define COMPARE_OUTPUT(text) \
                 Log.remove(TEST_strstr);\
-                Log.insert(std::cout, LogStream::INFORMATION, LogStream::ERROR - 1);\
-                Log.insert(std::cerr, LogStream::ERROR);\
+                Log.insert(std::cout, LogStream::INFORMATION_LEVEL, LogStream::ERROR_LEVEL - 1);\
+                Log.insert(std::cerr, LogStream::ERROR_LEVEL);\
                 TEST::this_test = (::strncmp(TEST_strstr.str().c_str(), text, TEST_strstr.str().size()) == 0);\
                 TEST::test = TEST::test && TEST::this_test;\
                 \
@@ -857,8 +857,8 @@ int main(int argc, char **argv)\
 #else
 #define COMPARE_OUTPUT(text) \
 		Log.remove(TEST_strstr);\
-		Log.insert(std::cout, LogStream::INFORMATION, LogStream::ERROR - 1);\
-		Log.insert(std::cerr, LogStream::ERROR);\
+		Log.insert(std::cout, LogStream::INFORMATION_LEVEL, LogStream::ERROR_LEVEL - 1);\
+		Log.insert(std::cerr, LogStream::ERROR_LEVEL);\
 		TEST::this_test = (::strncmp(TEST_strstr.str(), text, TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0) == 0);\
 		TEST::test = TEST::test && TEST::this_test;\
 		\
