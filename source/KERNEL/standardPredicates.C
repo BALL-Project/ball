@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.30.2.1 2002/04/07 17:39:00 anker Exp $
+// $Id: standardPredicates.C,v 1.30.2.2 2002/04/08 16:40:02 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -118,8 +118,6 @@ namespace BALL
  		const Chain* chain = atom.getAncestor(RTTI::getDefault<Chain>());
 		if (chain != 0)
 		{
-			// DEBUG
-			// Log.info() << "NAME: " << chain->getName() << endl;
 			return (chain->getName() == argument_);
 		}
 
@@ -944,9 +942,6 @@ namespace BALL
 		// treated as not hybridzed.
 
 		String symbol = atom.getElement().getSymbol();
-		// DEBUG
-		cout << "SYMBOL " << symbol << endl;
-		// /DEBUG
 		if (symbol == "C")
 		{
 			if (atom.countBonds() != 4)
