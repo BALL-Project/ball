@@ -1,4 +1,4 @@
-// $Id: ExpressionParser_test.C,v 1.4 2002/01/28 00:43:55 oliver Exp $
+// $Id: ExpressionParser_test.C,v 1.5 2002/01/28 01:07:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,15 +18,14 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.4 2002/01/28 00:43:55 oliver Exp $")
+START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.5 2002/01/28 01:07:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 CHECK(ExpressionParser::parse(const String& s))
 	ExpressionParser parser;
-	parser.parse("pases('(H2)') AND element('H'))");
-	parser.getSyntaxTree().dump();
+	parser.parse("test('(H2)') AND element(H)");
 RESULT
 
 // tests for class SyntaxTree::
