@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.5 2003/09/04 22:17:46 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.6 2003/09/15 15:13:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -61,10 +61,14 @@ namespace BALL
 			/** Inspection of the selected style.
 					Access the selected style of this mainControlPreferences.
 					This method will be called from the method MainControl::applyPreferences.
-					\return  QStyle* a pointer to the selected style of this mainControlPreferences 
+					\return  QStyle* a pointer to the selected style of this MainControlPreferences 
 					(See documentation of QT-library for information concerning styles)
 			 */
 			QStyle* getStyle()
+				throw();
+
+			///
+			bool showLabelsEnabled() const
 				throw();
 			
 			/** Fetch the preferences.
