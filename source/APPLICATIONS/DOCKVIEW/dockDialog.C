@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.2 2005/01/06 15:24:02 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.3 2005/01/06 15:22:31 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -70,6 +70,8 @@ namespace BALL
 																	 SLOT(show()), CTRL+Key_D);   
 		}   
 		
+		
+
 		/*void DockDialog::onNotify(Message *message)
 			throw()
 		{
