@@ -1,4 +1,4 @@
-// $Id: randomAccessIterator.h,v 1.12 2001/07/15 20:08:11 oliver Exp $ 
+// $Id: randomAccessIterator.h,v 1.13 2001/07/15 20:58:54 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -123,22 +123,22 @@ namespace BALL
 		bool isREnd() const
 			throw(Exception::InvalidIterator);
 
-		/** Prefix Increment operator.
+		/** Prefix increment operator.
 		 */
 		RandomAccessIterator& operator ++ ()
 			throw(Exception::InvalidIterator);
 
-		/** Postfix Increment operator. 
+		/** Postfix increment operator. 
 		 */
 		RandomAccessIterator operator ++ (int)
 			throw(Exception::InvalidIterator);
 
-		/** Prefix Decrement operator.
+		/** Prefix decrement operator.
 		 */
 		RandomAccessIterator& operator -- ()
 			throw(Exception::InvalidIterator);
 
-		/** Postfix Decrement operator.
+		/** Postfix decrement operator.
 		 */
 		RandomAccessIterator operator -- (int)
 			throw(Exception::InvalidIterator);
@@ -525,27 +525,6 @@ namespace BALL
 		}
 	
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	Distance operator -
-		(const RandomAccessIterator<Container, DataType, Position, Traits>& a,
-	   const RandomAccessIterator<Container, DataType, Position, Traits>& b)
-		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
-		{
-			if (!a.traits_ptr_->isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-			if (!b.traits_ptr_->isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-			if (a.traits_ptr_->getContainer() != b.traits_ptr_->getContainer())
-			{
-				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
-			}
-			return a.traits_ptr_->getDistance(*(b.traits_ptr_));
-		}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
 	RandomAccessIterator<Container, DataType, Position, Traits> operator +
 		(Distance distance, const RandomAccessIterator<Container, DataType, Position, Traits>& iterator)
 		throw(Exception::InvalidIterator)
@@ -796,22 +775,22 @@ namespace BALL
 		bool isREnd() const
 			throw(Exception::InvalidIterator);
 
-		/** Prefix Increment Operator
+		/** Prefix increment operator
 		 */
 		ConstRandomAccessIterator& operator ++ ()
 			throw(Exception::InvalidIterator);
 
-		/** Postfix Increment Operator
+		/** Postfix increment operator
 		 */
 		ConstRandomAccessIterator operator ++ (int)
 			throw(Exception::InvalidIterator);
 
-		/** Prefix Decrement Operator
+		/** Prefix decrement operator
 		 */
 		ConstRandomAccessIterator& operator -- ()
 			throw(Exception::InvalidIterator);
 
-		/** Postfix Decrement Operator
+		/** Postfix decrement operator
 		 */
 		ConstRandomAccessIterator operator -- (int)
 			throw(Exception::InvalidIterator);
