@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.12 1999/12/18 11:28:25 oliver Exp $
+dnl    $Id: configure.in,v 1.13 1999/12/18 12:48:15 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1240,7 +1240,7 @@ dnl
 if test "${USE_BALLVIEW}" = true ; then
   if test "${BALLVIEW_PLATFORM}" = "" ; then
 		dnl 	all SGI machines come with OpenGL, don't they?
-		if test "${OS}" == IRIX ; then
+		if test "${OS}" = IRIX ; then
 			BALLVIEW_PLATFORM="OpenGL"
 		else 
 			dnl		let's ask the user....
