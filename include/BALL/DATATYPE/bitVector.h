@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.40 2003/06/12 10:40:05 oliver Exp $
+// $Id: bitVector.h,v 1.41 2003/06/19 13:08:18 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
@@ -115,14 +115,14 @@ namespace BALL
 		/** Assignment operator.
 				Assign the position from a Bit to this instance
 		*/
-		const Bit& operator = (const Bit& bit) throw();
+		Bit& operator = (const Bit& bit) throw();
 
 		/** Assignment operator.
 				Assign a bool value to this instance.
 				The bit in the bitvector is set to the given value.
 				@exception IllegalOperation if instance points to a const bitvector
 		*/
-		const Bit& operator = (const bool bit) 
+		Bit& operator = (const bool bit) 
 			throw(Exception::NullPointer, IllegalOperation);
 
 		/** Clear method 
@@ -243,13 +243,13 @@ namespace BALL
 		  throw(Exception::OutOfMemory);
 
 		/// Assignment from an other BitVector instance.
-		const BitVector& operator = (const BitVector& bit_vector)
+		BitVector& operator = (const BitVector& bit_vector)
 		  throw(Exception::OutOfMemory);
 
 		/** Assignment from a char string.
 				If a char is different from '0', it is interpreted as true.
 		*/
-		const BitVector& operator = (const char *bit_string)
+		BitVector& operator = (const char *bit_string)
 		  throw(Exception::OutOfMemory);
 
 		/// Assignment to an other BitVector.
