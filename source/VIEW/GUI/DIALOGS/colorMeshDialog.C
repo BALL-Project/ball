@@ -545,7 +545,7 @@ void ColorMeshDialog::loadSettings_()
 
 	surface_tab->setCurrentPage(config.tab);
 
-	for (Position p = 0; p < grid_combobox->count(); p++)
+	for (Position p = 0; p < (Position)grid_combobox->count(); p++)
 	{
 		if (grid_combobox->text(p) != "" &&
 				grid_combobox->text(p).ascii() == config.selected_grid)
