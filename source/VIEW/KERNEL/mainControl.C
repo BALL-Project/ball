@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.156 2004/12/15 16:08:49 amoll Exp $
+// $Id: mainControl.C,v 1.157 2004/12/16 18:54:20 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1357,6 +1357,20 @@ namespace BALL
 		bool MainControl::remove(Representation& rep)
 			throw()
 		{
+			if (rep.hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
+			{
+				SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
+				notify_(scene_message);
+			}
+			else if (rep.hasProperty("AX"))
+			{
+				SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
+				notify_(scene_message);
+			}
+					
+			RepresentationMessage* message = new RepresentationMessage(rep, RepresentationMessage::REMOVE);
+			notify_(message);
+
 			return primitive_manager_.remove(rep);
 		}
 

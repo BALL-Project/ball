@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.71 2004/12/14 15:28:07 amoll Exp $
+// $Id: geometricControl.C,v 1.72 2004/12/16 18:53:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -335,7 +335,7 @@ namespace BALL
 
 			if (creating_representations_) 
 			{
-				setStatusbarText("Can not modify representations, while creating a new one!");
+				setStatusbarText("Can not modify representations, while creating a new one!", true);
 				return;
 			}
 
@@ -343,20 +343,7 @@ namespace BALL
 			List<Representation*>::Iterator it = reps.begin();
 			for (; it != reps.end(); ++it)
 			{
-				removeRepresentation(**it);
-				if ((*it)->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
-				{
-					SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
-					notify_(scene_message);
-				}
-				else if ((*it)->hasProperty("AX"))
-				{
-					SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
-					notify_(scene_message);
-				}
-					
-				RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::REMOVE);
-				notify_(message);
+				getMainControl()->remove(**it);
 			}
 
 			setStatusbarText("Deleted representation.");
@@ -391,7 +378,7 @@ namespace BALL
 			if (getMainControl()->compositesAreLocked() ||
 					creating_representations_)
 			{
-				setStatusbarText("No changes to representations allowed, while simulation is running or creating new representations!");
+				setStatusbarText("No changes to representations allowed, while simulation is running or creating new representations!", true);
 				return;
 			}
 
