@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.12 2001/01/21 23:01:22 amoll Exp $
+// $Id: PTE.h,v 1.13 2001/01/22 20:48:00 amoll Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -703,6 +703,18 @@ namespace BALL
 				throw();
 			//@}
 
+			/**	@name	Assignment */
+			//@{
+		
+			/** Assignment operator
+					Does not assign anything.
+					Implemented just for the OCI.
+			*/
+			const PTE_& operator = (const PTE_& /*pte*/)
+				throw();
+			
+			//@}
+
 			/**	@name	Accessors
 			*/
 			//@{
@@ -722,20 +734,17 @@ namespace BALL
 
 			//@}
 
-			/**	@name	Assignment */
-			//@{
-
-			/** Assignment operator.
-			*/
-			const PTE_& operator = (const PTE_& pte)
-				throw();
-
-			//@}
-
 			/**	@name	Operators
 			*/
 			//@{
 		
+			/** Equality operator.
+					Always returns true.
+					Implemented just for the OCI.
+			*/
+			bool operator == (const PTE_& pte) const
+				throw();
+
 			/** Access operator with a given symbol.
 					@return Element the Element with the symbol {\em symbol}
 			*/

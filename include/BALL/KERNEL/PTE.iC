@@ -1,4 +1,4 @@
-// $Id: PTE.iC,v 1.5 2001/01/21 20:39:17 amoll Exp $
+// $Id: PTE.iC,v 1.6 2001/01/22 20:48:00 amoll Exp $
 
 BALL_INLINE 
 void Element::clear()
@@ -205,14 +205,6 @@ void PTE_::clear()
 }
 
 BALL_INLINE 
-const PTE_& PTE_::operator = (const PTE_& pte)
-	throw()
-{
-  *this = PTE_(pte);
-	return *this;
-}
-
-BALL_INLINE 
 Element& PTE_::operator [](const String& symbol)
 	throw()
 {
@@ -268,4 +260,18 @@ const Element& PTE_::operator [] (Position position) const
 	throw()
 {
   return ((PTE_ *)this)->operator[](position);
+}
+
+BALL_INLINE 
+bool PTE_::operator == (const PTE_& /*pte*/) const
+	throw()
+{
+  return true;
+}
+
+BALL_INLINE 
+const PTE_& PTE_::operator = (const PTE_& /*pte*/)
+	throw()
+{
+	return *this;
 }
