@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.17 2003/04/16 21:15:27 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.18 2003/04/17 06:06:08 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -382,6 +382,9 @@ AC_DEFUN(CF_DETECT_OS,[
 	if test "${OS}" = FreeBSD ; then
 		AC_DEFINE(BALL_OS_FREEBSD,FREEBSD)
 	fi
+	if test "${OS}" = Darwin ; then
+		AC_DEFINE(BALL_OS_DARWIN,DARWIN)
+	fi
 
 	dnl
 	dnl		create ARCHITECTURE defines
@@ -407,6 +410,9 @@ AC_DEFUN(CF_DETECT_OS,[
 	SHARED_LIB_SUFFIX=so
 	if test "${OS}" = HP-UX ; then
 		SHARED_LIB_SUFFIX=sl
+	fi
+	if test "${OS}" = Darwin ; then
+		SHARED_LIB_SUFFIX=dylib
 	fi
 	AC_SUBST(SHARED_LIB_SUFFIX)
 	])
@@ -629,9 +635,13 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 
   DYNAR="${CXX}"
   if test "${OS}" != "Solaris" ; then
-    DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
-  else
     DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
+  else 
+    if test "${OS}" == Darwin ; then
+	    DYNAROPTS="${DYNAROPTS} -dynamiclib -fPIC -o"			
+		else	
+  	  DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
+		fi
   fi
 
   if test "${IS_EGXX}" = true; then
