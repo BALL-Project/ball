@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.8 2000/03/03 02:09:57 amoll Exp $
+// $Id: sphere3.h,v 1.9 2000/03/03 18:36:25 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -221,10 +221,10 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  position: " << p << endl;
+			s << "  position: " << p << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  radius: " << radius << endl;
+			s << "  radius: " << radius << std::endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
