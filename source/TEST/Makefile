@@ -7,6 +7,7 @@ EXECUTABLES = \
 	Angle_test\
 	AnisotropyShiftProcessor_test\
 	AssignShiftProcessor_test\
+	AssignShiftProcessor_test2\
 	Atom_test\
 	AtomContainer_test\
 	AtomicContactEnergy_test\
