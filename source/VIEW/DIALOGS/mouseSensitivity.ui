@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>MouseSensitivityData</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>202</width>
-            <height>134</height>
+            <height>106</height>
         </rect>
     </property>
     <property name="caption">
@@ -49,13 +49,32 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
+            <cstring>ok_button_</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>70</y>
+                <width>80</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>OK</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>cancel_button_</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>120</x>
-                <y>90</y>
-                <width>70</width>
+                <x>110</x>
+                <y>70</y>
+                <width>80</width>
                 <height>27</height>
             </rect>
         </property>
@@ -84,24 +103,8 @@
         <property name="orientation">
             <enum>Horizontal</enum>
         </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>ok_button_</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>90</y>
-                <width>70</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>OK</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
+        <property name="tickmarks">
+            <enum>Below</enum>
         </property>
     </widget>
 </widget>
