@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.13 2000/07/05 21:46:28 oliver Exp $ 
+// $Id: pointGrid.h,v 1.14 2000/07/06 13:07:10 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -528,11 +528,9 @@ namespace BALL
 	template <class GridDataType>
 	BALL_INLINE
 	PointGrid<GridDataType>::PointGrid
-		(const float lower_x, const float lower_y, const float lower_z,
-		 const float upper_x, const float upper_y, const float upper_z,
-		 const Size grid_points_x,
-		 const Size grid_points_y,
-		 const Size grid_points_z)
+		(float lower_x, float lower_y, float lower_z,
+		 float upper_x, float upper_y, float upper_z,
+		 Size grid_points_x, Size grid_points_y, Size grid_points_z)
 	{
 
 		// set data and number_of_grid_points_ to 0/0, just to be sure 
@@ -591,11 +589,8 @@ namespace BALL
 
 	template <class GridDataType>
 	PointGrid<GridDataType>::PointGrid
-		(const Vector3& lower,
-		 const Vector3& upper,
-		 const Size grid_points_x,
-		 const Size grid_points_y,
-		 const Size grid_points_z) 
+		(const Vector3& lower, const Vector3& upper,
+		 Size grid_points_x, Size grid_points_y, Size grid_points_z) 
 		: data(0)
 	{
 		*this = PointGrid(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
@@ -610,7 +605,9 @@ namespace BALL
 		: data(0)
 	{
 		*this = PointGrid(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
-											spacing, spacing, spacing);
+											(Size)((upper.x - lower.x) / spacing + 1), 
+											(Size)((upper.x - lower.x) / spacing + 1), 
+											(Size)((upper.x - lower.x) / spacing + 1));
 	}
 			
 	template <class GridDataType>
@@ -976,7 +973,8 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	void PointGrid<GridDataType>::setOrigin(const float x, const float y, const float z) {
+	void PointGrid<GridDataType>::setOrigin(const float x, const float y, const float z) 
+	{
 		origin_.set(x, y, z);
 	}
 
