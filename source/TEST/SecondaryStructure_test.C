@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SecondaryStructure_test.C,v 1.11 2002/12/12 11:34:44 oliver Exp $
+// $Id: SecondaryStructure_test.C,v 1.12 2003/07/01 13:38:10 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.11 2002/12/12 11:34:44 oliver Exp $")
+START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.12 2003/07/01 13:38:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,16 +24,16 @@ using std::ios;
 
 SecondaryStructure* s1;
 
-CHECK(SecondaryStructure())
+CHECK(SecondaryStructure() throw())
 	s1 = new SecondaryStructure;
 	TEST_NOT_EQUAL(s1, 0)
 RESULT											
 
-CHECK(~SecondaryStructure())
+CHECK(~SecondaryStructure() throw())
 	delete s1;
 RESULT
 
-CHECK(SecondaryStructure(const SecondaryStructure& SecondaryStructure, bool deep = true))
+CHECK(SecondaryStructure(const SecondaryStructure& secondary_structure, bool deep = true) throw())
 	Residue r1;
 	SecondaryStructure s1("s1"), s2;
 	s1.append(r1);
@@ -42,14 +42,14 @@ CHECK(SecondaryStructure(const SecondaryStructure& SecondaryStructure, bool deep
 	TEST_EQUAL(s2.countResidues(), 1)
 RESULT
 
-CHECK(SecondaryStructure(const String& name))
+CHECK(SecondaryStructure(const String& name) throw())
 	SecondaryStructure s1("s1");
 	TEST_EQUAL(s1.getName(), "s1")
 	SecondaryStructure s2("");
 	TEST_EQUAL(s2.getName(), "")
 RESULT
 
-CHECK(clear())
+CHECK(void clear() throw())
 	Protein p1;
 	SecondaryStructure s1("s1");
 	Residue r1;
@@ -60,7 +60,7 @@ CHECK(clear())
 	TEST_EQUAL(s1.countResidues(), 0)
 RESULT
 
-CHECK(destroy())
+CHECK(void destroy() throw())
 	Protein p1;
 	SecondaryStructure s1("s1");
 	Residue r1;
@@ -71,7 +71,7 @@ CHECK(destroy())
 	TEST_EQUAL(s1.countResidues(), 0)
 RESULT
 
-CHECK(SecondaryStructure::set(const SecondaryStructure& SecondaryStructure, bool deep = true))
+CHECK(void set(const SecondaryStructure& secondary_structure, bool deep = true) throw())
 	SecondaryStructure s1("s1"), s2;
 	Residue r1;
 	s1.append(r1);
@@ -80,7 +80,7 @@ CHECK(SecondaryStructure::set(const SecondaryStructure& SecondaryStructure, bool
 	TEST_EQUAL(s2.countResidues(), 1)
 RESULT
 
-CHECK(SecondaryStructure::SecondaryStructure& operator = (const SecondaryStructure& SecondaryStructure))
+CHECK(SecondaryStructure& operator = (const SecondaryStructure& secondary_structure) throw())
 	SecondaryStructure s1("s1"), s2;
 	Residue r1;
 	s1.append(r1);
@@ -89,7 +89,7 @@ CHECK(SecondaryStructure::SecondaryStructure& operator = (const SecondaryStructu
 	TEST_EQUAL(s2.countResidues(), 1)
 RESULT
 
-CHECK(SecondaryStructure::get(SecondaryStructure& SecondaryStructure, bool deep = true) const )
+CHECK(void get(SecondaryStructure& secondary_structure, bool deep = true) const throw())
 	SecondaryStructure s1("s1"), s2;
 	Residue r1;
 	s1.append(r1);
@@ -98,7 +98,7 @@ CHECK(SecondaryStructure::get(SecondaryStructure& SecondaryStructure, bool deep 
 	TEST_EQUAL(s2.countResidues(), 1)
 RESULT
 
-CHECK(SecondaryStructure::swap(SecondaryStructure& SecondaryStructure))
+CHECK(void swap(SecondaryStructure& secondary_structure) throw())
 	SecondaryStructure s1("s1");
 	SecondaryStructure s2("s2");
 	Residue r1, r2, r3;
@@ -112,7 +112,7 @@ CHECK(SecondaryStructure::swap(SecondaryStructure& SecondaryStructure))
 	TEST_EQUAL(s2.countResidues(), 2)
 RESULT
 
-CHECK(SecondaryStructure::getProtein())
+CHECK(Protein* getProtein() throw())
 	Protein p1;
 	SecondaryStructure s1("s1");
 	p1.append(s1);
@@ -120,7 +120,7 @@ CHECK(SecondaryStructure::getProtein())
 	TEST_EQUAL(p1.getName(), "X")
 RESULT
 
-CHECK(SecondaryStructure::getProtein() const )
+CHECK(const Protein* getProtein() const throw())
 	Protein p1("X");
 	SecondaryStructure s1("s1");
 	p1.append(s1);
@@ -128,7 +128,7 @@ CHECK(SecondaryStructure::getProtein() const )
 	TEST_EQUAL(s1.getProtein()->getName(), "X")
 RESULT
 
-CHECK(SecondaryStructure::getChain())
+CHECK(Chain* getChain() throw())
 	Chain c1;
 	SecondaryStructure s1("s1");
 	c1.append(s1);
@@ -136,7 +136,7 @@ CHECK(SecondaryStructure::getChain())
 	TEST_EQUAL(c1.getName(), "X")
 RESULT
 
-CHECK(SecondaryStructure::getChain() const )
+CHECK(const Chain* getChain() const throw())
 	Chain c1("X");
 	SecondaryStructure s1("s1");
 	c1.append(s1);
@@ -144,7 +144,7 @@ CHECK(SecondaryStructure::getChain() const )
 	TEST_EQUAL(s1.getChain()->getName(), "X")
 RESULT
 
-CHECK(Residue::getResidue(Position position))
+CHECK(Residue* getResidue(Position position) throw())
 	SecondaryStructure s1("s1");
 	TEST_EQUAL(s1.getResidue(0), 0)
 	Residue r1("X");
@@ -153,7 +153,7 @@ CHECK(Residue::getResidue(Position position))
 	TEST_EQUAL(r1.getName(), "r1")
 RESULT
 
-CHECK(Residue::getResidue(Position position) const )
+CHECK(const Residue* getResidue(Position position) const throw())
 	SecondaryStructure s1("s1");
 	TEST_EQUAL(s1.getResidue(0), 0)
 	Residue r1("r1");
@@ -161,7 +161,7 @@ CHECK(Residue::getResidue(Position position) const )
 	TEST_EQUAL(s1.getResidue(0), &r1)
 RESULT
 
-CHECK(SecondaryStructure::getPDBAtom(Position position))
+CHECK(PDBAtom* getPDBAtom(Position position) throw())
 	SecondaryStructure s1("s1");
 	TEST_EQUAL(s1.getPDBAtom(0), 0)
 	PDBAtom a1("x");
@@ -172,7 +172,7 @@ CHECK(SecondaryStructure::getPDBAtom(Position position))
 	TEST_EQUAL(a1.getName(), "a1")
 RESULT
 
-CHECK(SecondaryStructure::getPDBAtom(Position position) const )
+CHECK(const PDBAtom* getPDBAtom(Position position) const throw())
 	SecondaryStructure s1("s1");
 	TEST_EQUAL(s1.getPDBAtom(0), 0)
 	Residue r1;
@@ -182,7 +182,7 @@ CHECK(SecondaryStructure::getPDBAtom(Position position) const )
 	TEST_EQUAL(s1.getPDBAtom(0), &a1)
 RESULT
 
-CHECK(SecondaryStructure::getNTerminal())
+CHECK(Residue* getNTerminal() throw())
 	SecondaryStructure s1;
 	Residue r1("X");
 	Residue r2("r2");
@@ -199,7 +199,7 @@ CHECK(SecondaryStructure::getNTerminal())
 	TEST_EQUAL(r1.getName(), "r1")
 RESULT
 
-CHECK(SecondaryStructure::getNTerminal() const )
+CHECK(const Residue* getNTerminal() const throw())
 	SecondaryStructure s1;
 	Residue r1("r1");
 	Residue r2("r2");
@@ -215,7 +215,7 @@ CHECK(SecondaryStructure::getNTerminal() const )
 	}
 RESULT
 
-CHECK(SecondaryStructure::getCTerminal())
+CHECK(Residue* getCTerminal() throw())
 	SecondaryStructure s1;
 	Residue r1("1");
 	Residue r2("2");
@@ -232,7 +232,7 @@ CHECK(SecondaryStructure::getCTerminal())
 	TEST_EQUAL(r2.getName(), "r2")
 RESULT
 
-CHECK(SecondaryStructure::getCTerminal() const )
+CHECK(const Residue* getCTerminal() const throw())
 	SecondaryStructure s1;
 	Residue r1("r1");
 	Residue r2("r2");
@@ -248,7 +248,7 @@ CHECK(SecondaryStructure::getCTerminal() const )
 	}
 RESULT
 
-CHECK(SecondaryStructure::countResidues() const )
+CHECK(Size countResidues() const throw())
 	SecondaryStructure s1;
 	Residue r1("r1");
 	TEST_EQUAL(s1.countResidues(), 0)
@@ -256,7 +256,7 @@ CHECK(SecondaryStructure::countResidues() const )
 	TEST_EQUAL(s1.countResidues(), 1)
 RESULT
 
-CHECK(SecondaryStructure::countPDBAtoms() const )
+CHECK(Size countPDBAtoms() const throw())
 	SecondaryStructure s1;
 	Residue r1("r1");
 	PDBAtom a1("a1");
@@ -267,7 +267,7 @@ CHECK(SecondaryStructure::countPDBAtoms() const )
 RESULT
 
 
-CHECK(SecondaryStructure::prepend(Residue& Residue))
+CHECK(void prepend(Residue& residue) throw())
 	SecondaryStructure s1;
 	Residue r1;
 	Residue r2;
@@ -278,7 +278,7 @@ CHECK(SecondaryStructure::prepend(Residue& Residue))
 	TEST_EQUAL(s1.getResidue(1), &r1)
 RESULT
 
-CHECK(SecondaryStructure::append(Residue& Residue))
+CHECK(void append(Residue& residue) throw())
 	SecondaryStructure s1;
 	Residue r1;
 	Residue r2;
@@ -288,7 +288,7 @@ CHECK(SecondaryStructure::append(Residue& Residue))
 	TEST_EQUAL(s1.getResidue(1), &r2)
 RESULT
 
-CHECK(SecondaryStructure::insert(Residue& Residue))
+CHECK(void insert(Residue& residue) throw())
 	SecondaryStructure s1;
 	Residue r1;
 	Residue r2;
@@ -298,7 +298,7 @@ CHECK(SecondaryStructure::insert(Residue& Residue))
 	TEST_EQUAL(s1.getResidue(1), &r2)
 RESULT
 
-CHECK(SecondaryStructure::insertBefore(Residue& Residue, Composite& before))
+CHECK(void insertBefore(Residue& residue, Composite& before) throw())
 	SecondaryStructure s1;
 	Residue r1;
 	Residue r2;
@@ -311,7 +311,7 @@ CHECK(SecondaryStructure::insertBefore(Residue& Residue, Composite& before))
 	TEST_EQUAL(s1.getResidue(2), &r2)
 RESULT
 
-CHECK(SecondaryStructure::insertAfter(Residue& Residue, Composite& after))
+CHECK(void insertAfter(Residue& residue, Composite& after) throw())
 	SecondaryStructure s1;
 	Residue r1;
 	Residue r2;
@@ -324,7 +324,7 @@ CHECK(SecondaryStructure::insertAfter(Residue& Residue, Composite& after))
 	TEST_EQUAL(s1.getResidue(2), &r2)
 RESULT
 
-CHECK(SecondaryStructure::remove(Residue& Residue))
+CHECK(bool remove(Residue& residue) throw())
 	SecondaryStructure s1("s1");
 	Residue r1;
 	Residue r2;
@@ -335,7 +335,7 @@ CHECK(SecondaryStructure::remove(Residue& Residue))
 	TEST_EQUAL(s1.getResidue(0), &r2)
 RESULT
 
-CHECK(SecondaryStructure::spliceBefore(SecondaryStructure& SecondaryStructure))
+CHECK(void spliceBefore(SecondaryStructure& secondary_structure) throw())
 	SecondaryStructure s1('x');
 	SecondaryStructure s2('x');
 	Residue r1("r1");
@@ -347,7 +347,7 @@ CHECK(SecondaryStructure::spliceBefore(SecondaryStructure& SecondaryStructure))
 	TEST_EQUAL(s1.getResidue(1), &r1)
 RESULT
 
-CHECK(SecondaryStructure::spliceAfter(SecondaryStructure& SecondaryStructure))
+CHECK(void spliceAfter(SecondaryStructure& secondary_structure) throw())
 	SecondaryStructure s1('x');
 	SecondaryStructure s2('x');
 	Residue r1("r1");
@@ -359,7 +359,7 @@ CHECK(SecondaryStructure::spliceAfter(SecondaryStructure& SecondaryStructure))
 	TEST_EQUAL(s1.getResidue(1), &r2)
 RESULT
 
-CHECK(SecondaryStructure::splice(SecondaryStructure& SecondaryStructure))
+CHECK(void splice(SecondaryStructure& secondary_structure) throw())
 	SecondaryStructure s1('x');
 	SecondaryStructure s2('x');
 	Residue r1("r1");
@@ -371,14 +371,14 @@ CHECK(SecondaryStructure::splice(SecondaryStructure& SecondaryStructure))
 	TEST_EQUAL(s1.getResidue(1), &r1)
 RESULT
 
-CHECK(SecondaryStructure::isValid() const )
+CHECK(bool isValid() const throw())
 	SecondaryStructure s1("s1");
 	Residue r1;
 	s1.append(r1);
 	TEST_EQUAL(s1.isValid(), true)
 RESULT
 
-CHECK(SecondaryStructure::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	SecondaryStructure s1("SecondaryStructure1");
 	Residue r1, r2;
 	r1.setName("Residue1");
@@ -397,7 +397,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<SecondaryStructure>(), SecondaryStructure::createDefault);
 pm.registerClass(getStreamName<Residue>(), Residue::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	SecondaryStructure* f1= new SecondaryStructure("name1");
 	Residue* f2 = new Residue("name2");
@@ -410,7 +410,7 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -431,7 +431,7 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const SecondaryStructure& secondary_structure) const throw())
 	SecondaryStructure b1;
 	SecondaryStructure b2;
 	TEST_EQUAL(b1 == b2, false)
@@ -439,6 +439,111 @@ CHECK(operator ==)
 	TEST_EQUAL(b1 == b1, true)
 RESULT
 
+CHECK(bool operator != (const SecondaryStructure& secondary_structure) const throw())
+	SecondaryStructure b1;
+	SecondaryStructure b2;
+	TEST_EQUAL(b1 != b2, true) 
+	b1 = b2;
+	TEST_EQUAL(b1 != b1, false)
+RESULT
+
+CHECK(BALL_CREATE_DEEP(SecondaryStructure))
+	SecondaryStructure s1("s1");
+	Residue r1('x');
+	s1.insert(r1);
+	SecondaryStructure* test = (SecondaryStructure*) s1.create(false, true);
+	TEST_EQUAL(test->getName(), "")
+	TEST_EQUAL(test->countResidues(), 0)
+	delete test;
+	test = (SecondaryStructure*) s1.create(true, false);
+	TEST_EQUAL(test->getName(), "s1")
+	TEST_EQUAL(test->countResidues(), 1)
+	delete test;
+RESULT
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS (Residue)(PDBAtom))
+  // ???
+RESULT
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer))
+  // ???
+RESULT
+
+// =======================================================================
+// not to be tested
+// =======================================================================
+
+CHECK(Atom* getAtom(Position position) throw())
+  // not to be tested
+RESULT
+
+CHECK(bool remove(Atom &atom) throw())
+  // not to be tested
+RESULT
+
+CHECK(bool remove(AtomContainer &atom_container) throw())
+  // not to be tested
+RESULT
+
+CHECK(const Atom* getAtom(Position position) const throw())
+  // not to be tested
+RESULT
+
+CHECK(const Fragment* getFragment(Position position) const throw())
+  // not to be tested
+RESULT
+
+CHECK(void append(Atom &atom) throw())
+  // not to be tested
+RESULT
+
+CHECK(void append(AtomContainer &atom_container) throw())
+  // not to be tested
+RESULT
+
+CHECK(void insert(Atom &atom) throw())
+  // not to be tested
+RESULT
+
+CHECK(void insert(AtomContainer &atom_container) throw())
+  // not to be tested
+RESULT
+
+CHECK(void insertAfter(Atom &atom, Composite &after) throw())
+  // not to be tested
+RESULT
+
+CHECK(void insertAfter(AtomContainer &atom_container, Composite &after) throw())
+  // not to be tested
+RESULT
+
+CHECK(void insertBefore(Atom &atom, Composite &before) throw())
+  // not to be tested
+RESULT
+
+CHECK(void insertBefore(AtomContainer &atom_container, Composite &before) throw())
+  // not to be tested
+RESULT
+
+CHECK(void prepend(Atom &atom) throw())
+  // not to be tested
+RESULT
+
+CHECK(void prepend(AtomContainer &atom_container) throw())
+  // not to be tested
+RESULT
+
+CHECK(void splice(AtomContainer &atom_container) throw())
+  // not to be tested
+RESULT
+
+CHECK(void spliceAfter(AtomContainer &atom_container) throw())
+  // not to be tested
+RESULT
+
+CHECK(void spliceBefore(AtomContainer &atom_container) throw())
+  // not to be tested
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
