@@ -62,7 +62,8 @@ EXECUTABLES_CONCEPTS =$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	Selectable_test\
 	PropertyManager_test\
 	Composite_test\
-	Embeddable_test
+	Embeddable_test\
+	RandomAccessIterator_test
 
 EXECUTABLES_KERNEL = \
 	PTE_test\
