@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.16 2003/07/21 07:38:48 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.17 2003/08/20 00:20:24 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
@@ -12,7 +12,7 @@
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/FORMAT/MOL2File.h>
-#include <BALL/MATHS/box3.h>
+#include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
 
 using namespace BALL::VIEW;
@@ -359,7 +359,7 @@ namespace BALL
 			throw()
 		{
 			bool has_periodic_boundary = false;
-			Box3 bounding_box;
+			SimpleBox3 bounding_box;
 
 			setStatusbarText("reading HIN file...");
 
