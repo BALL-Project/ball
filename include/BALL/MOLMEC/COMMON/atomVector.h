@@ -1,4 +1,4 @@
-// $Id: atomVector.h,v 1.2 2000/08/30 19:58:17 oliver Exp $
+// $Id: atomVector.h,v 1.3 2000/10/05 22:29:17 oliver Exp $
 // A class containing a vector of atom pointers
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -11,8 +11,6 @@
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
 #endif
-
-using namespace std;
 
 namespace BALL 
 { 
@@ -28,7 +26,7 @@ namespace BALL
 			\\
 	*/
 	class AtomVector
-		:	private vector<Atom*>
+		:	private std::vector<Atom*>
 	{
     public:
 
@@ -40,11 +38,11 @@ namespace BALL
 		
 		/**	Iterator type
 		*/
-		typedef vector<Atom*>::iterator Iterator;
+		typedef std::vector<Atom*>::iterator Iterator;
 
 		/**	Const iterator type.
 		*/
-		typedef vector<Atom*>::const_iterator ConstIterator;
+		typedef std::vector<Atom*>::const_iterator ConstIterator;
 		//@}
 		
 
@@ -74,7 +72,7 @@ namespace BALL
 		/**	Clear the vector.
 				Removes all atoms from the vector
 		*/
-		using vector<Atom*>::clear;
+		using std::vector<Atom*>::clear;
     //@}
 
 
@@ -115,11 +113,11 @@ namespace BALL
     //@{
 		/**	Return the vector size;
 		*/
-		using vector<Atom*>::size;
+		using std::vector<Atom*>::size;
 
     /** Random access operator
     */
-    using vector<Atom*>::operator [];
+    using std::vector<Atom*>::operator [];
 
 		/**	Store the current atom positions.
 				AtomVector also contains an array with positions	
@@ -149,11 +147,11 @@ namespace BALL
 
 		/**	Insert an atom pointer.
 		*/
-		using vector<Atom*>::push_back;
+		using std::vector<Atom*>::push_back;
 
 		/**	Resize the vector.
 		*/
-		using vector<Atom*>::resize;
+		using std::vector<Atom*>::resize;
     //@}
 
 		/**	@name	Iteration
@@ -161,17 +159,17 @@ namespace BALL
 		//@{
 		/**	begin method
 		*/
-		using vector<Atom*>::begin;
+		using std::vector<Atom*>::begin;
 
 		/**	end method
 		*/
-		using vector<Atom*>::end;
+		using std::vector<Atom*>::end;
 		//@}
 		
 		protected:
 		/**	The saved positions.
 		*/
-		vector<Vector3>	saved_position_;
+		std::vector<Vector3>	saved_position_;
   };
 
 } // end of namespace BALL

@@ -1,4 +1,4 @@
-// $Id: gradient.h,v 1.3 2000/08/30 19:58:18 oliver Exp $ 
+// $Id: gradient.h,v 1.4 2000/10/05 22:29:17 oliver Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_COMMON_GRADIENT_H 
@@ -13,8 +13,6 @@
 #endif
 
 #include <vector>
-
-using namespace std;
 
 namespace BALL 
 { 
@@ -39,7 +37,7 @@ namespace BALL
 			\\
 	*/
 	class Gradient
-		:	private vector<Vector3>
+		:	private std::vector<Vector3>
 	{
     public:
 
@@ -50,11 +48,11 @@ namespace BALL
 		//@{
 		/**	Iterator type
 		*/
-		typedef vector<Vector3>::iterator Iterator;
+		typedef std::vector<Vector3>::iterator Iterator;
 
 		/**	Const iterator type
 		*/
-		typedef vector<Vector3>::const_iterator ConstIterator;
+		typedef std::vector<Vector3>::const_iterator ConstIterator;
 		//@}
 
     /**	@name	Constructors and Destructors	
@@ -118,11 +116,11 @@ namespace BALL
 
 		/*	Return the number of components of the gradient.
 		*/
-		using vector<Vector3>::size;
+		using std::vector<Vector3>::size;
 
     /* Return the component for an atom.
     */
-    using vector<Vector3>::operator [];
+    using std::vector<Vector3>::operator [];
 
 		/**	Invalidate the gradient.
 		*/	
@@ -139,11 +137,11 @@ namespace BALL
 			
 		/**	Return an iterator to the begining of the vector
 		*/
-		using vector<Vector3>::begin;
+		using std::vector<Vector3>::begin;
 
 		/**	Return a past-the-end vector.
 		*/
-		using vector<Vector3>::end;
+		using std::vector<Vector3>::end;
 		//@}
 
     /**	@name	Public Attributes

@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.6 2000/07/03 10:51:37 oliver Exp $
+// $Id: enumerator.h,v 1.7 2000/10/05 22:28:01 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -21,8 +21,6 @@
 
 #include <vector>
 
-using namespace std;
-
 namespace BALL
 {
 
@@ -31,10 +29,9 @@ namespace BALL
 			permutations of the variants given in a list (@see BAUSTELLE). Each
 			permutation thus can be denoted by an integer.
 			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
-	 */
-	
+	*/
 	class EnumeratorIndex
-		: public vector<Position>
+		: public std::vector<Position>
 	{
 		public:
 
@@ -66,15 +63,15 @@ namespace BALL
 		 *  @param variant_list the list of variants to be applied
 		 */
 		template <typename Variant, typename VariantIterator>
-		EnumeratorIndex(const list<pair<VariantIterator, vector<Variant> > >& variant_list)
-			: vector<Position>(variant_list.size()),
+		EnumeratorIndex(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
+			: std::vector<Position>(variant_list.size()),
 				modulus_(variant_list.size()),
 				base_multipliers_(variant_list.size())
 		{ 
 			// compute the base multipliers for later usage 
 			Index i;
 			Size multiplier = 1;
-			list<pair<VariantIterator, vector<Variant> > >::const_iterator list_it = variant_list.begin();
+			std::list<std::pair<VariantIterator, std::vector<Variant> > >::const_iterator list_it = variant_list.begin();
 			for (i = size() - 1; i >= 0; i--, list_it++)
 			{
 				operator[](i) = 0;
@@ -97,7 +94,7 @@ namespace BALL
 
 		/** access the modulus part of the enumerator
 		 */
-		const vector<Size>& getModulus() const;
+		const std::vector<Size>& getModulus() const;
 
 		/** increment an instance of EnumeratorIndex. Increment the least
 		 * significant component and apply any overflow to more signficant
@@ -139,9 +136,9 @@ namespace BALL
 		 * possibilities for each variant in the list. Most significant
 		 * component is operator[](0), so incrementing starts with
 		 * operator[](size())
-		 */
-			vector<Size>		 modulus_;
-			vector<Size>		 base_multipliers_;
+		*/
+		std::vector<Size>		 modulus_;
+		std::vector<Size>		 base_multipliers_;
 	};
 
 	/** @name Predicates for EnumeratorIndex class
@@ -209,17 +206,17 @@ namespace BALL
 
 		/**
 		*/
-		typedef vector<Variant>							
+		typedef std::vector<Variant>							
 			VariantVector;
 
 		/**
 		*/
-		typedef pair<VariantIterator, VariantVector>
+		typedef std::pair<VariantIterator, VariantVector>
 			Site;
 
 		/**
 		*/
-		typedef list<Site>
+		typedef std::list<Site>
 			SiteList;
 
 		/** Mutable forward iterator
