@@ -1,4 +1,4 @@
-// $Id: directory.C,v 1.15.4.2 2002/11/30 10:32:02 oliver Exp $
+// $Id: directory.C,v 1.15.4.3 2002/11/30 13:09:59 oliver Exp $
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -254,7 +254,7 @@ namespace BALL
 		synchronize_();	
 		if (::chdir("..") != 0) return desynchronize_(false);
 		bool result1 = (::rmdir(directory_path_.data()) == 0);
-		bool result2;
+		bool result2 = false;
 		if (backup_path_ != "")
 		{
 			result2 = ::chdir(backup_path_.data());

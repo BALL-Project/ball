@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.13.4.3 2002/11/30 12:49:15 oliver Exp $
+// $Id: directory.h,v 1.13.4.4 2002/11/30 13:09:43 oliver Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -31,6 +31,7 @@
 #ifdef BALL_HAS_DIRECT_H
 #	include <direct.h>
 #endif
+#include <stdio.h>
 
 namespace BALL 
 {
