@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.22 2000/05/01 08:20:51 oliver Exp $
+// $Id: line3.h,v 1.23 2000/05/04 11:06:33 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -72,7 +72,7 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new TVector4 object from an other.
+				Create a new TVector4 object from another.
 				@param TLine3 the TLine3 object to be copied
 				@param bool ignored - just for interface consistency
 		*/	
@@ -127,7 +127,7 @@ namespace BALL
 			line.d = temp_vector;
 		}
 
-		/**	Assign from an other TLine3.
+		/**	Assign from another TLine3.
 				@param line	the TLine3 object to assign from
 		*/
 		void set(const TLine3& line)
@@ -154,7 +154,7 @@ namespace BALL
 		}
 
 		/**	Assignment operator.
-				Assign the components from an other line.
+				Assign the components from another line.
 				@param line the vector to assign from
 		**/
 		TLine3& operator = (const TLine3& line)
@@ -165,9 +165,9 @@ namespace BALL
 			return *this;
 		}
 
-		/**	Assign to an other TLine3.
-				Assigns the vector components to an other vector.
-				@param line	the line to be asigned to
+		/**	Assign to another TLine3.
+				Assigns the vector components to another vector.
+				@param line	the line to be assigned to
 		*/
 		void get(TLine3& line)
 		{

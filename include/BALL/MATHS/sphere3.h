@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.17 2000/05/01 08:20:52 oliver Exp $
+// $Id: sphere3.h,v 1.18 2000/05/04 11:06:34 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -51,7 +51,7 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new Sphere3 object from an other.
+				Create a new Sphere3 object from another.
 				@param sphere3 the Sphere3 object to be copied
 		*/	
 		TSphere3(const TSphere3& sphere3)
@@ -98,7 +98,7 @@ namespace BALL
 			sphere3.radius = temp;
 		}
 
-		/**	Assign from an other Sphere3.
+		/**	Assign from another Sphere3.
 				@param sphere3	the Sphere3 object to assign from
 		*/
 		void set(const TSphere3& sphere)
@@ -119,7 +119,7 @@ namespace BALL
 		}
 
 		/**	Assignment operator.
-				Assign the components from an other Sphere.
+				Assign the components from another Sphere.
 				@param sphere3 the sphere to assign from
 		**/
 		TSphere3& operator =
@@ -131,9 +131,9 @@ namespace BALL
 			return *this;
 		}
 
-		/**	Assign to an other Sphere.
-				Assigns the components to an other Sphere.
-				@param sphere	the vector to be asigned to
+		/**	Assign to another Sphere.
+				Assigns the components to another Sphere.
+				@param sphere	the vector to be assigned to
 		*/
 		void get(TSphere3& sphere3) const
 		{

@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.37 2000/05/03 08:04:38 oliver Exp $
+// $Id: vector3.h,v 1.38 2000/05/04 11:06:34 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -110,7 +110,7 @@ namespace BALL
 		}
 
 		/**	Detailed constructor.
-				Create a new TVector3 object from three {\tt T} variables.
+				Create a new TVector3 object from three variables of type {\tt T}.
 				@param	vx assigned to {\tt x}
 				@param	vy assigned to {\tt y}
 				@param	vz assigned to {\tt z}
@@ -124,7 +124,7 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new TVector3 object from an other.
+				Create a new TVector3 object from another.
 				@param vector the TVector3 object to be copied
 		*/	
 		TVector3(const TVector3& vector)
@@ -139,7 +139,6 @@ namespace BALL
 				Create a TVector3 object and set its coordinates to 
 				the point described by the three spherical polar coordinates
 				{\tt r} (radius), {\tt phi} (azimuth), and {\tt theta} (co-latitude).
-				@see set
 				@param r the radius
 				@param phi the azimuth 
 				@param theta the co-latitude
@@ -205,12 +204,12 @@ namespace BALL
 		*/
 		void set(const T& vx, const T& vy, const T& vz);
 
-		/**	Assign from an other TVector3.
+		/**	Assign from another TVector3.
 				@param vector	the TVector3 object to assign from
 		*/
 		void set(const TVector3& vector);
 
-		/**	Set from spherical polar coordinates.
+		/**	Assign from spherical polar coordinates.
 				The radius describes the distance of the point from the origin.\\
 				{\tt phi}	ranges from 0 to $2 \pi$, {\tt theta} ranges from 0 (north pole, positive z-axis)
 				to $\pi$ (south pole, negative z-axis).\\
@@ -229,7 +228,7 @@ namespace BALL
 		void set(const T& r, const TAngle<T>& phi, const TAngle<T> &theta);
 
 		/**	Assignment operator.
-				Assign the vector components from an other vector.
+				Assign the vector components from another vector.
 				@param v the vector to assign from
 		**/
 		TVector3& operator = (const TVector3& v);
@@ -256,13 +255,13 @@ namespace BALL
 		*/
 		void get(T& x, T& y, T& z) const;
 
-		/**	Assign to an other Vector3.
-				Assigns the vector components to an other vector.
-				@param vector	the vector to be asigned to
+		/**	Assign to another Vector3.
+				Assigns the vector components to another vector.
+				@param vector	the vector to be assigned to
 		*/
 		void get(TVector3& vector) const;
 
-		/**	Assign polar coordinates.
+		/**	Assign to polar coordinates.
 				Sets {\tt r}, {\tt phi}, and {\tt theta} to the
 				coordinates of the vector in spherical polar coordinates.
 				@param	r the radius (returned)
@@ -293,14 +292,14 @@ namespace BALL
 		/**	Normalize the vector.
 				The vector is scaled with its length:
 				$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}$.
-				@return T, a reference to {\tt this} vector
+				@return T, a reference to the normalized vector
 				@exception DivisionByZero if the length of the vector is 0
 		*/
 		TVector3& normalize();
 
 		/**	Negate the vector.
 				Negate the three components of the vector
-				@return T, a reference to {\tt this} vector
+				@return T, a reference to {\em *this} vector
 		*/
 		TVector3& negate();
 
@@ -309,6 +308,7 @@ namespace BALL
 		static const TVector3& getZero();
 
 		/**	Return a vector with all components 1.
+				@return: TVector4(1, 1, 1, 1)
 		*/
 		static const TVector3& getUnit();
 
@@ -340,58 +340,57 @@ namespace BALL
 		/**	Add a vector to this vector.
 				Add the components of {\tt vector} to this vector.
 				@param vector the vector to add
-				@return TVector3&, {\tt *this}
+				@return TVector3&, {\em *this}
 		*/
 		TVector3& operator += (const TVector3& vector);
 
 		/**	Subtract a vector from this vector.
-				Subtract {\tt vector} from this vector componentwise.
 				@param vector the vector to subtract
-				@return TVector3&, {\tt *this}
+				@return TVector3&, {\em *this}
 		*/
 		TVector3& operator -= (const TVector3& vector);
 
 		/**	Scalar product.
 				Return {\tt TVector3(x * scalar, y * scalar, z * scalar)}.
-				@param scalar, the scalar to multiply with
+				@param scalar, the scalar to multiply by
 				@return TVector3, the scalar product of this vector and {\tt scalar}
 		*/
 		TVector3 operator * (const T& scalar);
 
-		/**	Multiply with a scalar.
-				Multiply all components of the vector with a {\tt scalar}.
-				@param scalar the scalar to multiply with
-				@return TVector3&, {\tt *this}
+		/**	Multiply by a scalar.
+				Multiply all components of the vector by a {\tt scalar} value.
+				@param scalar the to multiply by
+				@return TVector3&, {\em *this}
 		*/
 		TVector3& operator *= (const T& scalar);
 
 		/**	Fraction of a vector.
 				Return {\tt TVector3(x / scalar, y / scalar, z / scalar)}.
-				@param lambda the scalar to divide by
+				@param lambda the scalar value to divide by
 				@return TVector3& 
 				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
 		*/
 		TVector3 operator / (const T& lambda);
 
 		/**	Divide a vector by a scalar.
-				@param lambda the scalar to divide by
-				@return TVector3&, {\tt *this}
+				@param lambda the scalar value to divide by
+				@return TVector3&, {\em *this}
 				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
 		*/
 		TVector3& operator /= (const T& lambda);
 
 		/** Dot product.
-				Return the dot product of this vector with {\tt vector}.
+				Return the dot product of this vector and {\tt vector}.
 		*/
 		T operator * (const TVector3& vector) const;
 
 		/** Cross product.
-				Return the cross product of this vector with {\tt vector}.
+				Return the cross product of this vector and {\tt vector}.
 		*/
 		TVector3 operator % (const TVector3& vector) const;
 
 		/**	Assign to the cross product.
-				Assign the vector to its cross product with an other vector.
+				Assign the vector to its cross product with another vector.
 		*/
 		TVector3& operator %= (const TVector3& vector);
 
@@ -401,29 +400,29 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Return the distance to an other vector.
+		/**	Return the distance to another vector.
 		*/
 		T getDistance(const TVector3& vector3) const;
 
-		/**	Return the squared distance to an other vector.
+		/**	Return the squared distance to another vector.
 		*/
 		T getSquareDistance(const TVector3& vector) const;
 
-		/**	Return the enclose angle between two vectors.
+		/**	Return the enclosed angle of two vectors.
 				@exception Exception::DivisionByZero if the product of the squared
 								lengths of the two vectors equals {\tt (T)0}
 		*/
 		TAngle<T> getAngle(const TVector3& vector) const;
 
-		/**	Return the orthogonal projection of this vector onto an other.
+		/**	Return the orthogonal projection of this vector onto another.
 				@param direction the vector to project onto
 		*/
 		TVector3 getOrthogonalProjection(const TVector3& direction) const;
 
 		/**	Return the perpendicular normalization of the vector
-				@param TVector3& a 1. vector
-				@param TVector3& b 2. vector
-				@param TVector3& c 3. vector
+				@param TVector3& a 1st vector
+				@param TVector3& b 2nd vector
+				@param TVector3& c 3rd vector
 				@return static TVector3 the perpendicular normalization
 		*/
 		static TVector3 getPerpendicularNormalization
@@ -445,16 +444,22 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
+				The function Maths::isEqual is used to compare the values. 
+				\Ref{Maths::isEqual}
 				@return bool, {\bf true} if all three vector components are equal, {\bf false} otherwise
 		*/
 		bool operator == (const TVector3& vector) const;
 	
 		/**	Inequality operator.
+				The function Maths::isEqual is used to compare the values. 
+				\Ref{Maths::isEqual}
 				@return bool, {\bf true} if the two vectors differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TVector3& vector) const;
 
 		/**	Zero predicate.
+				The function Maths::isZero is used to compare the values with zero. 
+				\Ref{Maths::isZero}
 		*/
 		bool isZero() const;
 
@@ -472,7 +477,7 @@ namespace BALL
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		/**	Test if instance is valid.
-				Always returns true
+				Always returns true.
 				@return bool {\bf true}
 		*/
 		bool isValid() const;
@@ -481,8 +486,8 @@ namespace BALL
 
 
 		/**	@name	Vector components
-				For easier access the three components of the vector
-				are accesible to the public.
+				For easier access, the three components of the vector
+				are public members.
 		*/
 		//@{
 	
@@ -983,7 +988,8 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	/**	Default three-dimensional vector class
+	/**	Default three-dimensional vector class.
+			This is the class used in BALL kernel to represent points, coordinates.
 	*/
 	typedef TVector3<float> Vector3;
 
@@ -1010,7 +1016,7 @@ namespace BALL
 		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
 	}
 
-	/**	Multiply operator for a scalar with a vector
+	/**	Multiplication operator for a scalar and a vector
   		@return TVector3 - the new vector
 	*/
 	template <typename T>
@@ -1020,7 +1026,7 @@ namespace BALL
 		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 	}
 
-	/**	Multiply operator for a vector with a scalar
+	/**	Multiplication operator for a vector and a scalar.
   		@return TVector3 the new vector
 	*/
 	template <typename T>
@@ -1029,8 +1035,9 @@ namespace BALL
 		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 	}
 
-	/**	Input- Operator
-			reads in four {\bf T} : x, y, z, h
+	/**	Input- Operator.
+			Reads the values of {\tt three} vector components ot type {\em T}
+			from an istream. The components are read in the order of x, y, z.
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector3<T>& v)
@@ -1041,8 +1048,9 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output- Operator
-			gives three {\bf T} out: x, y, z
+	/**	Output- Operator.
+			Writes the values of {\tt three} vector components ot type {\em T}
+			to an ostream. The components are writen in the order of x, y, z.
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector3<T>& v)

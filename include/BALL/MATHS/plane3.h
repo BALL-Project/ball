@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.14 2000/05/01 08:20:52 oliver Exp $
+// $Id: plane3.h,v 1.15 2000/05/04 11:06:34 amoll Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -193,7 +193,7 @@ namespace BALL
 
 		/**	Assign to another Plane3.
 				Assigns the components to another plane.
-				@param plane the plane to be asigned to
+				@param plane the plane to be assigned to
 		*/
 		void get(TPlane3& plane) const
 		{
@@ -202,8 +202,8 @@ namespace BALL
 		}
 
 		/**	Assign to a point and a normal.
-				@param point the point to be asigned to
-				@param normal the normal to be asigned to
+				@param point the point to be assigned to
+				@param normal the normal to be assigned to
 		*/
 		void get(TVector3<T>& point, TVector3<T>& normal) const
 		{

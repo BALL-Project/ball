@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.18 2000/05/01 08:20:51 oliver Exp $
+// $Id: box3.h,v 1.19 2000/05/04 11:06:32 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -39,7 +39,7 @@ namespace BALL
 		TBox3();
 
 		/**	Copy constructor.
-				Create a new TBox3 object from an other.
+				Create a new TBox3 object from another.
 				@param vector the TBox3 object to be copied
 		*/	
 		TBox3(const TBox3& box);
@@ -108,7 +108,7 @@ namespace BALL
 
 		/**	Assign to another TBox3.
 				Assigns the box components to another box.
-				@param box	the box to be asigned to
+				@param box	the box to be assigned to
 		*/
 		void get(TBox3& box) const;
 

@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.18 2000/05/01 08:20:52 oliver Exp $
+// $Id: quaternion.h,v 1.19 2000/05/04 11:06:34 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -49,7 +49,7 @@ namespace BALL
 		TQuaternion();
 
 		/**	Copy constructor.
-				Create a new TQuaternion object from an other.
+				Create a new TQuaternion object from another.
 				@param TQuaternion the TQuaternion object to be copied
 		*/	
 		TQuaternion(const TQuaternion& q);
@@ -62,7 +62,7 @@ namespace BALL
 		TQuaternion(const TVector3<T>& axis, const T &angle);
 
 		/**	Detailed constructor.
-				Create a new TQuaternion object from three {\tt T} values and an angle.
+				Create a new TQuaternion object from three values of type {\bf T} and an angle.
 				@param x assigned to the x-component of the axis
 				@param y assigned to the y-component of the axis
 				@param z assigned to the z-component of the axis
@@ -97,13 +97,13 @@ namespace BALL
 		*/
 		void set(const T& x, const T& y, const T& z, const T& angle);
 
-		/**	Assign from an other TQuaternion.
+		/**	Assign from another TQuaternion.
 				@param q the TQuaternion object to assign from
 		*/
 		TQuaternion& operator = (const TQuaternion& q);
 
-		/**	Assign to an other TQuaternion.
-				Assigns the components to an other TQuaternion.
+		/**	Assign to another TQuaternion.
+				Assigns the components to another TQuaternion.
 				@param q the TQuaternion to be assigned to
 		*/
 		void get(TQuaternion& q) const;
@@ -155,13 +155,13 @@ namespace BALL
 
 		/**	Add a TQuaternion to this TQuaternion.
 				@param q the TQuaternion to add
-				@return TQuaternion&, {\tt *this}
+				@return TQuaternion&, {\em *this}
 		*/
 		TQuaternion& operator += (const TQuaternion& q);
 
 		/**	Substract a TQuaternion from this TQuaternion.
 				@param q the TQuaternion to substract
-				@return TQuaternion&, {\tt *this}
+				@return TQuaternion&, {\em *this}
 		*/
 		TQuaternion& operator -= (const TQuaternion& q);
 

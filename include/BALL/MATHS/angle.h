@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.24 2000/04/29 15:28:34 amoll Exp $
+// $Id: angle.h,v 1.25 2000/05/04 11:06:32 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -202,13 +202,13 @@ namespace BALL
 
 		/**	Addition operator.
 				@param angle the angle to add
-				@return TAngle, {\tt *this}
+				@return TAngle, {\em *this}
 		*/
 		TAngle& operator += (const TAngle& angle);
 
 		/**	Add a value to this angle.
 				@param value the value to add
-				@return TAngle, {\tt *this}
+				@return TAngle, {\em *this}
 		*/
 		TAngle& operator += (const T& val);
 
@@ -220,13 +220,13 @@ namespace BALL
 
 		/**	Substraction operator.
 				@param angle the angle to substract
-				@return TAngle, {\tt *this}
+				@return TAngle, {\em *this}
 		*/
 		TAngle& operator -= (const TAngle& angle);
 
 		/**	Substract a value from this angle.
 				@param val the value to substract
-				@return TAngle, {\tt *this}
+				@return TAngle, {\em *this}
 		*/
 		TAngle& operator -= (const T& val);
 
@@ -237,28 +237,28 @@ namespace BALL
 		TAngle operator - (const TAngle& angle);
 
 		/**	Multiply an angle with this angle.
-				@param angle the angle to multiply with
-				@return TAngle, {\tt *this}
+				@param angle the angle to multiply by
+				@return TAngle, {\em *this}
 		*/
 		TAngle& operator *= (const TAngle& angle);
 
 		/**	Multiply a value with this angle.
-				@param val the value to multiply with
-				@return TAngle, {\tt *this}
+				@param val the value to multiply by
+				@return TAngle, {\em *this}
 		*/
 		TAngle& operator *=	(const T& val);
 
 
 		/**	Division operator.
 				@param angle the angle to divide by
-				@return TAngle, {\tt *this}
+				@return TAngle, {\em *this}
 		*/
 		TAngle& operator /= (const TAngle& angle);
 
 
 		/**	Divide this angle by a value.
 				@param val the angle to divide by
-				@return TAngle, {\tt *this}
+				@return TAngle, {\em *this}
 		*/
 		TAngle& operator /=	(const T& val);
 
@@ -296,7 +296,7 @@ namespace BALL
 				This test uses Maths::isLess instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\tt this} angle is smaller than {\tt value}
+				@return bool, {\bf true} if {\em *this} angle is smaller than {\tt value}
 		*/
 		bool operator <	(const TAngle& angle) const;
 
@@ -304,7 +304,7 @@ namespace BALL
 				This test uses Maths::isLess instead of comparing the
 				values directly.
 				@param val the value to compare with
-				@return bool, {\bf true} if {\tt this} angle is smaller than {\tt value}
+				@return bool, {\bf true} if {\em *this} angle is smaller than {\tt value}
 		*/
 		bool operator <	(const T& val) const;
 
@@ -312,7 +312,7 @@ namespace BALL
 				This test uses Maths::isLessOrEqual instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\tt this} angle is smaller or equal than {\tt value}
+				@return bool, {\bf true} if {\em *this} angle is smaller or equal than {\tt value}
 		*/
 		bool operator <= (const TAngle& angle) const;
 
@@ -320,7 +320,7 @@ namespace BALL
 				This test uses Maths::isGreaterOrEqual instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\tt this} angle is greater or equal than {\tt value}
+				@return bool, {\bf true} if {\em *this} angle is greater or equal than {\tt value}
 		*/
 		bool operator >=	(const TAngle& angle) const;
 
@@ -328,7 +328,7 @@ namespace BALL
 				This test uses Maths::isGreater instead of comparing the
 				values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\tt this} angle is greater than {\tt value}
+				@return bool, {\bf true} if {\em *this} angle is greater than {\tt value}
 		*/
 		bool operator > (const TAngle& angle) const;
 
@@ -336,7 +336,7 @@ namespace BALL
 				Both angles are normalized and afterwards compared with Maths::isEqual
 				instead of comparing the values directly.
 				@param angle the angle to compare with
-				@return bool, {\bf true} if {\tt this} angle is equal to {\tt value}
+				@return bool, {\bf true} if {\em *this} angle is equal to {\tt value}
 		*/
 		bool isEquivalent(TAngle angle) const;
 		//@}

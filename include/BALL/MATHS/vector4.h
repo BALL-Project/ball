@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.26 2000/05/01 08:18:12 oliver Exp $
+// $Id: vector4.h,v 1.27 2000/05/04 11:06:35 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -26,7 +26,7 @@ namespace BALL
 {
 
 	/**	@name	Four-dimensional vector
-			@memo	representation of points and vectors in four-dimensional space: class \Ref{TVector4} and class \Ref{Vector4}
+			@memo	Representation of points and vectors in four-dimensional space.
 	*/
 	//@{
 
@@ -70,23 +70,23 @@ namespace BALL
 
 		/**	Array constructor.
 				This constructor creates a TVector4 object from the first
-				four elements pointed to by {\tt ptr}.
+				four elements pointed of array {\tt ptr}.
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
 		*/
 		TVector4(const T* ptr);
 
 		/**	Detailed constructor.
-				Create a new TVector4 object from three or four {\tt T} variables.
+				Create a new TVector4 object from three or four values of type {\tt T}.
 				@param	x assigned to {\tt x}
 				@param	y assigned to {\tt y}
 				@param	z assigned to {\tt z}
-				@param	h assigned to {\tt h} default = 1 ; 
+				@param	h assigned to {\tt h}, default: 1 ; 
 		*/
 		TVector4(const T& x, const T& y, const T& z, const T& h = (T)1);
 
 		/**	Copy constructor.
-				Create a new TVector4 object from an other.
+				Create a new TVector4 object from another.
 				@param vector the TVector4 object to be copied
 		*/	
 		TVector4(const TVector4& vector);
@@ -104,7 +104,7 @@ namespace BALL
 	
 		/**	Assign from an array.
 				Assign the four components {\tt x}, {\tt y}, {\tt z} and {\tt h} from
-				the first four elements of the array pointed to by {\tt ptr}.
+				the first four elements of the array pointed of array {\tt ptr}.
 				@param ptr an array
 				@exception Nullpointer if {\tt ptr == 0}
 		*/
@@ -114,30 +114,30 @@ namespace BALL
 				@param rx the new x component
 				@param ry the new y component
 				@param rz the new z component
-				@param rh the new h component, default = 1
+				@param rh the new h component, default: 1
 		*/
 		void set(const T& rx, const T& ry, const T& rz, const T& rh = (T)1);
 
-		/**	Assign from an other TVector4.
+		/**	Assign from another TVector4.
 				@param vector	the TVector4 object to assign from
 		*/
 		void set(const TVector4& vector);
 
 		/**	Array assignment operator.
-				Assigns the first four elements of an array to the vector components.
+				Assigns the first four elements of an array to the vector components x, y, z and h.
 				@param	ptr the array
 				@exception	NullPointer if {\tt ptr == 0}
 		*/
 		TVector4& operator = (const T* ptr);
 
 		/**	Assignment operator.
-				Assign the vector components from an other vector.
+				Assign the vector components from another vector.
 				@param vector the vector to assign from
 		**/
 		TVector4& operator = (const TVector4& vector);
 
 		/**	Assign to an array.
-				Sets the first four array elements pointed to by {\tt ptr} 
+				Sets the first four array elements pointed of array {\tt ptr} 
 				to the values of the four vector components.
 				@param ptr the array
 				@exception	NullPointer if {\tt ptr == 0}
@@ -152,9 +152,9 @@ namespace BALL
 		*/
 		void get(T& rx, T& ry, T& rz, T& rh) const;
 
-		/**	Assign to an other Vector4.
-				Assigns the vector components to an other vector.
-				@param vector	the vector to be asigned to
+		/**	Assign to another Vector4.
+				Assigns the vector components to another vector.
+				@param vector	the vector to be assigned to
 		*/
 		void get(TVector4& vector) const;
 
@@ -177,7 +177,7 @@ namespace BALL
 
 		/**	Return the squared length of the vector.
 				This method avoids the square root needed in getLength,
-				so this method is preferred if possible.
+				so this method should be preferred if possible.
 				@return T, $x^2 + y^2 + z^2 + h^2$
 		*/
 		T getSquareLength() const;
@@ -185,7 +185,7 @@ namespace BALL
 		/**	Normalize the vector.
 				The vector is scaled with its length:
 				${x|y|z|h\} *= \sqrt{x^2 + y^2 + z^2 + h^2}$.
-				@return T, a reference to {\tt this} vector
+				@return T, a reference to {\em *this} vector
 				@exception DivisionByZero if the length of the vector is 0
 		*/
 		TVector4& normalize();
@@ -198,10 +198,10 @@ namespace BALL
 		*/
 		static const TVector4& getUnit();
 
-		/** Assign one value to the vector components.
-				@param value	the value to be asigned to, default = 1
+		/** Assign one value to all vector components.
+				@param value	the value to be assigned to, default: 1
 		*/
-		void fill(const T& value = (T)1);
+		void set(const T& value = (T)1);
 
 		/**	Mutable array-like access to the components.
 				@exception Exception::IndexUnderflow if {\tt index < 0}
@@ -229,27 +229,27 @@ namespace BALL
 
 		/**	Add a vector to this vector.
 				@param vector the vector to add
-				@return TVector4, {\tt *this}
+				@return TVector4, {\em *this}
 		*/
 		TVector4& operator += (const TVector4& vector);
 
 		/**	Subtract a vector from this vector.
 				@param vector the vector to subtract
-				@return TVector4, {\tt *this}
+				@return TVector4, {\em *this}
 		*/
 		TVector4& operator -= (const TVector4& vector);
 
 		/**	Scalar product.
 				Return {\tt TVector4(x * scalar, y * scalar, z * scalar, h * scalar)}.
-				@param scalar, the scalar to multiply with
+				@param scalar, the scalar to multiply by
 				@return TVector4 the scalar product of this vector and {\tt scalar}
 		*/
 		TVector4 operator * (const T& scalar);
 
-		/**	Multiply with a scalar.
+		/**	Multiply by a scalar.
 				Multiply all components of the vector with a {\tt scalar}.
-				@param scalar the scalar to multiply with
-				@return TVector4& {\tt *this}
+				@param scalar the scalar to multiply by
+				@return TVector4& {\em *this}
 		*/
 		TVector4& operator *= (const T& scalar);
 
@@ -263,27 +263,27 @@ namespace BALL
 
 		/**	Divide a vector by a scalar.
 				@param scalar the scalar to divide by
-				@return TVector4\&, {\tt *this}
+				@return TVector4&, {\em *this}
 				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
 		*/
 		TVector4& operator /= (const T& scalar);
 
 		/** Dot product.
-				@param vector the vector to multiply with
+				@param vector the vector to multiply by
 				@return T the dot product of this vector with {\tt vector}.
 		*/
 		T operator * (const TVector4& vector) const;
 
-		/**	Return the distance to an other vector
-				@param vector the vector to compare to
+		/**	Return the distance to another vector
+				@param vector the reference vector
 				@return T, the distance
 		*/
 		T getDistance(const TVector4& vector) const;
 
-		/**	Return the squared distance to an other vector
+		/**	Return the squared distance to another vector.
 				This method avoids the square root needed in getDistance,
-				so this method is preferred if possible.
-				@param vector the vector to compare with
+				so this method should be preferred if possible.
+				@param vector the reference vector
 				@return T, the squared distance
 		*/
 		T getSquareDistance(const TVector4& vector) const;
@@ -341,6 +341,8 @@ namespace BALL
 		/**	height component of the vector
 		*/
 		T h;
+
+		/** All vector components are public members for convenience. */
 		//@}
 	};
 
@@ -557,7 +559,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TVector4<T>::fill(const T& value)
+	void TVector4<T>::set(const T& value)
 	{
 		x = y = z = h = value;
 	}
@@ -760,14 +762,14 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	/**	Default four-dimensional vector class
+	/**	Default four-dimensional vector type
 	*/
 	typedef TVector4<float> Vector4;
 
 	/**	@name	Operators
 	*/
 	//@{
-	/**	Addition operator for a scalar with a vector
+	/**	Addition operator for two vectors
 	*/
 	template <typename T>
 	BALL_INLINE 
@@ -786,7 +788,7 @@ namespace BALL
 		return TVector4<T>(a.x - b.x, a.y - b.y, a.z - b.z, a.h - b.h);
 	}
 
-	/**	Multiply operator for a scalar with a vector
+	/**	Multiplication operator for a scalar and a vector
   		@return TVector4 the new vector
 	*/
 	template <typename T>
@@ -796,7 +798,7 @@ namespace BALL
 		return TVector4<T>(scalar * v.x, scalar * v.y, scalar * v.z, scalar * v.h);
 	}
 
-	/**	Multiply operator for a vector with a scalar
+	/**	Multiplication operator for a vector and a scalar
   		@return TVector4 the new vector
 	*/
 	template <typename T>
@@ -808,7 +810,8 @@ namespace BALL
 
 
 	/**	Input- Operator
-			reads in four {\bf T} : x, y, z, h
+			Reads four values of type {\bf T} from an input stream and assigns them to 
+			the components x, y, z and h of the vector.
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector4<T>& v)
@@ -818,7 +821,7 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output Operator
+	/**	Output Operator.
 			Write the four components of the vector to an output stream.
 			The values are enclosed by brackets.\\
 			{\bf Example:}\\

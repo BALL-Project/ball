@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.26 2000/05/01 08:20:51 oliver Exp $
+// $Id: matrix44.h,v 1.27 2000/05/04 11:06:33 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -83,7 +83,7 @@ namespace BALL
 		TMatrix4x4(const T ptr[4][4]);
 
 		/**	Copy constructor.
-				Create a new TMatrix4x4 object from an other.
+				Create a new TMatrix4x4 object from another.
 				@param TMatrix4x4 the TMatrix4x4 object to be copied
 				@param bool ignored - just for interface consistency
 		*/	
@@ -138,7 +138,7 @@ namespace BALL
 		*/
 		void set(const T ptr[4][4]);
 
-		/**	Assign from an other TMatrix4x4.
+		/**	Assign from another TMatrix4x4.
 				@param TMatrix4x4	the TMatrix4x4 object to assign from
 		*/
 		void set(const TMatrix4x4& m);
@@ -176,7 +176,7 @@ namespace BALL
 		TMatrix4x4& operator = (const T ptr[4][4]);
 
 		/**	Assignment operator.
-				Assign the components from an other TMatrix4x4.
+				Assign the components from another TMatrix4x4.
 				@param TMatrix4x4 the TMatrix4x4 to assign from
 		**/
 		TMatrix4x4& operator = (const TMatrix4x4& m);
@@ -195,9 +195,9 @@ namespace BALL
 		*/
 		void get(T ptr[4][4]) const;
 
-		/**	Assign to an other TMatrix4x4.
-				Assigns the components to an other TMatrix4x4.
-				@param TMatrix4x4	the TMatrix4x4 to be asigned to
+		/**	Assign to another TMatrix4x4.
+				Assigns the components to another TMatrix4x4.
+				@param TMatrix4x4	the TMatrix4x4 to be assigned to
 		*/
 		void get(TMatrix4x4& m) const;
 
@@ -332,40 +332,40 @@ namespace BALL
 		TMatrix4x4 operator - () const;
 
 		/** Addition operator,
-				adds an other matrix to this matrix and return the result
+				adds another matrix to this matrix and return the result
 				@param m the matrix to add
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator + (const TMatrix4x4& m) const;
 
 		/** Addition operator
-				Adds an other matrix to this matrix
+				Adds another matrix to this matrix
 				@param m the matrix to add
-				@return TMatrix4x4&, {\tt *this}
+				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator += (const TMatrix4x4& m);
 
 		/** Subtraction operator,
-				subtract an other matrix from this matrix and return the result
+				subtract another matrix from this matrix and return the result
 				@param m the matrix to subtract
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator - (const TMatrix4x4& m) const;
 
 		/** Subtraction operator
-				Subtract an other matrix from this matrix
+				Subtract another matrix from this matrix
 				@param m the matrix to subtract
-				@return TMatrix4x4&, {\tt *this}
+				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator -= (const TMatrix4x4& m);
 
-		/**	Multiply operator for a scalar with the matrix
+		/**	Multiplication operator for a scalar with the matrix
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator * (const T& scalar) const;
 
-		/**	Multiply operator for a scalar with the matrix
-				@return TMatrix4x4&, {\tt *this}
+		/**	Multiplication operator for a scalar with the matrix
+				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator *= (const T& scalar);
 
@@ -377,29 +377,29 @@ namespace BALL
 
 		/**	Division operator for the matrix and a scalar
 				@exception DivisionByZero if {\tt scalar == 0}
-				@return TMatrix4x4&, {\tt *this}
+				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator /= (const T& scalar);
 
-		/**	Multiply operator for two matrices
+		/**	Multiplication operator for two matrices
 				@return TMatrix4x4 the result
 		*/
 		TMatrix4x4 operator * (const TMatrix4x4& m) const;
 
-		/**	Multiply operator for two matrices
-				@return TMatrix4x4&, {\tt *this}
+		/**	Multiplication operator for two matrices
+				@return TMatrix4x4&, {\em *this}
 		*/
 		TMatrix4x4& operator *= (const TMatrix4x4& m);
 
-		/**	Multiply operator with a TVector4
-				@return TMatrix4x4&, {\tt *this}
+		/**	Multiplication operator with a TVector4
+				@return TMatrix4x4&, {\em *this}
 		*/
 		TVector4<T> operator * (const TVector4<T> &) const;
 
 		/**	Invert the matrix.
 				Tests if the matrix can be inverted.
 				If this is possible, the result is returned in 
-				an other matrix.
+				another matrix.
 				@param inverse is assigned the inverse matrix 
 				@return bool true if the inverse matrix could be calculated, otherwise false.
 		*/

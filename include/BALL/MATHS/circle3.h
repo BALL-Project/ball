@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.16 2000/04/29 15:28:35 amoll Exp $
+// $Id: circle3.h,v 1.17 2000/05/04 11:06:33 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -63,7 +63,7 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new TCircle3 object from an other.
+				Create a new TCircle3 object from another.
 				@param vector the TCircle3 object to be copied
 		*/	
 		TCircle3(const TCircle3& circle)
@@ -118,7 +118,7 @@ namespace BALL
 			circle.radius = temp;
 		}
 
-		/**	Assign from an other TCircle3.
+		/**	Assign from another TCircle3.
 				@param vector	the TCirce3 object to assign from
 		*/
 		void set(const TCircle3& circle)
@@ -141,7 +141,7 @@ namespace BALL
 		}
 
 		/**	Assignment operator.
-				Assign the components from an other circle.
+				Assign the components from another circle.
 				@param circle the circle to assign from
 		**/
 		TCircle3& operator = (const TCircle3& circle)
@@ -153,9 +153,9 @@ namespace BALL
 			return *this;
 		}
 
-		/**	Assign to an other TCircle3.
-				Assigns the components to an other circle.
-				@param circle	the circle to be asigned to
+		/**	Assign to another TCircle3.
+				Assigns the components to another circle.
+				@param circle	the circle to be assigned to
 		*/
 		void get(TCircle3& circle) const
 		{

@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.9 2000/05/01 08:20:51 oliver Exp $
+// $Id: common.h,v 1.10 2000/05/04 11:06:33 amoll Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -176,7 +176,7 @@ namespace BALL
 			return (abs(t) >= Constants::EPSILON);
 		}
 
-		/**	Test if a number is equal to an other.
+		/**	Test if a number is equal to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is below \Ref{Constants::EPSILON}
@@ -188,7 +188,7 @@ namespace BALL
 			return (abs(a - b) < Constants::EPSILON);
 		}
 
-		/**	Test if a number is not equal to an other.
+		/**	Test if a number is not equal to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if the absolute distance of {\tt a} and {\tt b} is at least \Ref{Constants::EPSILON}
@@ -200,7 +200,7 @@ namespace BALL
 			return (abs(a - b) >= Constants::EPSILON);
 		}
 
-		/**	Test if a number is less compared to an other.
+		/**	Test if a number is less compared to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is smaller than {\tt b}
@@ -212,7 +212,7 @@ namespace BALL
 			return (a - b <= -Constants::EPSILON);
 		}
 
-		/**	Test if a number is less or equal compared to an other.
+		/**	Test if a number is less or equal compared to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is less or equal {\tt b}
@@ -236,7 +236,7 @@ namespace BALL
 			return (a - b > -Constants::EPSILON);
 		}
 
-		/**	Test if a number is greater compared to an other.
+		/**	Test if a number is greater compared to another.
 				@param	a the first number
 				@param	b the second number
 				@return bool, {\bf true} if {\tt a} is greater than {\tt b}
