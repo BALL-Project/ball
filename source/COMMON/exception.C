@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.14 2000/09/01 10:15:29 anker Exp $
+// $Id: exception.C,v 1.15 2000/10/03 02:01:26 amoll Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -162,7 +162,6 @@ namespace BALL
 			{
 				return filename_;
 			}
-		
 
 			InvalidFormat::InvalidFormat(const char* file, int line, const string& s)
 				:	GeneralException(file, line, "InvalidFormat", ""),
@@ -174,6 +173,19 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 		
+			ReadFileError::ReadFileError(const string& message = "", const string& line = "", int line_nr = -1)
+				: GeneralException(__FILE__, __LINE__, "ReadFileError", "")
+			{
+				message_ = message;
+				message_ += "; last read line number = ";
+				char* c = new char(20);
+				//itoa(line_nr, c, 10);
+				//message_ += c;
+				message_ += "\n contents of line: \n";
+				message_ += line;
+
+				globalHandler.setMessage(message_);
+			}
 
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")
 

@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.15 2000/08/09 09:18:43 amoll Exp $
+// $Id: exception.h,v 1.16 2000/10/03 02:01:13 amoll Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -237,15 +237,15 @@ namespace BALL
 			NotImplemented(const char* file, int line);
 		};
 
-		/**     Illegal tree operation.
-						This exception is thrown to indicate that an illegal tree operation
-						i.e. node->setLeftChild(node) was requested.
+		/** Illegal tree operation.
+				This exception is thrown to indicate that an illegal tree operation
+				i.e. node->setLeftChild(node) was requested.
 		*/
 		class IllegalTreeOperation
-						: public GeneralException
+			: public GeneralException
 		{
-						public:
-						IllegalTreeOperation(const char* file, int line);
+			public:
+			IllegalTreeOperation(const char* file, int line);
 		};
 
 		/**	Out of memory.
@@ -307,7 +307,17 @@ namespace BALL
 			protected:
 			string filename_;
 		};
-			
+
+		/** Exception thrown if a file could not be processed right.
+		*/
+		class ReadFileError
+			: public GeneralException
+		{
+			friend class ReadFile;
+
+			public:
+			ReadFileError(const string& message = "", const string& line = "", int line_nr = -1);
+		};
 
 		/**
 		*/
