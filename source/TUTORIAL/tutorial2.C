@@ -1,4 +1,4 @@
-// $Id: tutorial2.C,v 1.2 2000/03/09 22:27:19 oliver Exp $
+// $Id: tutorial2.C,v 1.3 2000/03/26 18:27:38 oliver Exp $
 // tutorial example 2
 // ------------------
 // read BPTI from a PDB file, print its sequence
@@ -33,11 +33,15 @@ int main()
 	infile.close();
 
 
+	// print the sequence of BPTI
 	ResidueIterator res_it;
 	for (res_it = S.beginResidue(); 
 			 res_it != S.endResidue();
 			 ++res_it)
 	{
-		cout << res_it->getName() << endl;
+		cout << res_it->getName() << " ";
 	}
+	cout << endl;
+
+	
 }
