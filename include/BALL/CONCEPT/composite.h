@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.37 2002/12/12 09:46:22 oliver Exp $
+// $Id: composite.h,v 1.38 2003/02/08 16:10:18 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -1167,13 +1167,13 @@ namespace BALL
 				return (bound_ == 0);
 			}
 
-			Composite *&getPosition()
+			Composite*& getPosition()
 				throw()
 			{
 				return child_;
 			}
 
-			Composite *const& getPosition() const
+			Composite* const& getPosition() const
 				throw()
 			{
 				return child_;
