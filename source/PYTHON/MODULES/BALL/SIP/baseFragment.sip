@@ -1,4 +1,4 @@
-// $Id: baseFragment.sip,v 1.2 2000/08/07 15:21:03 oliver Exp $
+// $Id: baseFragment.sip,v 1.3 2000/08/28 15:48:08 oliver Exp $
 
 class BaseFragment
   : Composite, 
@@ -10,6 +10,10 @@ class BaseFragment
 %End
 
   public:
+  enum Property
+  {
+    NUMBER_OF_PROPERTIES = 0
+  };
   BaseFragment();
   BaseFragment(const BaseFragment&, bool = true);
   BaseFragment(const String&);
@@ -67,6 +71,7 @@ class BaseFragment
 	bool apply(AtomProcessor& /processor/);
 	bool apply(CompositeProcessor& /processor/);
 	bool apply(FragmentProcessor& /processor/);
+	bool apply(ResidueProcessor& /processor/);
 
 	
 	operator const char* ();

@@ -1,34 +1,35 @@
-// $Id: fragment.sip,v 1.1 2000/07/18 21:27:36 oliver Exp $
+// $Id: fragment.sip,v 1.2 2000/08/28 15:48:08 oliver Exp $
 
 class Fragment
- : BaseFragment
+  : BaseFragment
 {
 %HeaderCode
 	#include <BALL/KERNEL/fragment.h>
 	using namespace BALL;
 %End
-	public:
+  public:
+  // BALL_CREATE(Fragment)
+  enum Property
+  {
+   NUMBER_OF_PROPERTIES = BaseFragment::Property::NUMBER_OF_PROPERTIES
+  };
   Fragment();
-  Fragment(const Fragment& /fragment/, bool = true);
+  Fragment(const Fragment& /fragment/, bool /deep/ = true);
   Fragment(const String& /name/);
-	~Fragment();
-  virtual void clear();
-  virtual void destroy();
-	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-	//  void persistentRead(PersistenceManager& pm);
-	//  Fragment& operator = (const Fragment& fragment);
-  virtual bool isValid() const;
-	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
-	//  virtual void read(istream& s);
-	//  virtual void write(ostream& s) const;
-
-	operator const char* ();
+  ~Fragment();
+  // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+  // void persistentRead(PersistenceManager& pm);
+  // Fragment& operator = (const Fragment& fragment);
+  // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+  // virtual void read(std::istream& s);
+  // virtual void write(std::ostream& s) const;
+  operator const char* ();
 %MemberCode
   Fragment* ptr;
   if ((ptr = (Fragment*)sipGetCppPtr(sipThis,sipClass_Fragment)) == NULL)
     return NULL;
 
-  return PyString_FromString(String(String("Fragment ") + ptr->getName() 
-				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+  return PyString_FromString(String(String("Fragment ") + ptr->getName()
+        + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
 %End
-};  
+};

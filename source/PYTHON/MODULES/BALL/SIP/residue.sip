@@ -1,4 +1,4 @@
-// $Id: residue.sip,v 1.1 2000/07/18 21:28:23 oliver Exp $
+// $Id: residue.sip,v 1.2 2000/08/28 15:48:09 oliver Exp $
 
 class Residue
   : Fragment
@@ -8,46 +8,69 @@ class Residue
 	using namespace BALL;
 %End
   public:
+  // BALL_CREATE(Residue)
+  enum Property
+  {
+   	PROPERTY__NON_STANDARD = Fragment::Property::NUMBER_OF_PROPERTIES + 1,
+	  PROPERTY__AMINO_ACID,
+   	PROPERTY__WATER,
+  	PROPERTY__HAS_SSBOND,
+   	PROPERTY__C_TERMINAL,
+   	PROPERTY__N_TERMINAL,
+   	PROPERTY__CYCLIC,
+   	NUMBER_OF_PROPERTIES
+  };
+  enum FullNameType
+  {
+   	NO_VARIANT_EXTENSIONS,
+   	ADD_VARIANT_EXTENSIONS
+  };
   Residue();
-  Residue(const Residue&, bool = true);
-  Residue(const String&, const String&, char);
-	~Residue();
+  Residue(const Residue& /residue/, bool /deep/ = true);
+  Residue(const String& /name/, const String& /id/ = "" , char /insertion_code/ = ' ' );
+  ~Residue();
   virtual void clear();
   virtual void destroy();
-	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-	//  void persistentRead(PersistenceManager& pm);
-  void set(const Residue&, bool = true);
-	//  Residue& operator = (const Residue&);
-  void get(Residue&, bool = true) const;
-  void swap(Residue&);
+  // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+  // void persistentRead(PersistenceManager& pm);
+  void set(const Residue& /residue/, bool /deep/ = true);
+  // Residue& operator = (const Residue& residue);
+  void get(Residue& /residue/, bool /deep/ = true) const;
+  void swap(Residue& /residue/);
+  String getFullName(FullNameType /type/ = ADD_VARIANT_EXTENSIONS) const;
+  bool hasTorsionPhi() const;
+  Angle getTorsionPhi() const;
+  bool hasTorsionPsi() const;
+  Angle getTorsionPsi() const;  
   Protein* getProtein();
   const Protein* getProtein() const;
   Chain* getChain();
   const Chain* getChain() const;
-  PDBAtom* getPDBAtom(int);
-  const PDBAtom* getPDBAtom(int) const;
-  void setID(const String&);
+  PDBAtom* getPDBAtom(Position /position/);
+  const PDBAtom* getPDBAtom(Position /position/) const;
+  void setID(const String& /id/);
   const String& getID() const;
-  void setInsertionCode(char);
+  void setInsertionCode(char /insertion_code/);
   char getInsertionCode() const;
-  int countPDBAtoms() const;
-  void prepend(PDBAtom&);
-  void append(PDBAtom&);
-  void insert(PDBAtom&);
-  void insertBefore(PDBAtom&, Composite&);
-  void insertAfter(PDBAtom&, Composite&);
-  bool remove(PDBAtom&);
-  void spliceBefore(Residue&);
-  void spliceAfter(Residue&);
-  void splice(Residue&);
+  Size countPDBAtoms() const;
+  void prepend(PDBAtom& /atom/);
+  void append(PDBAtom& /atom/);
+  void insert(PDBAtom& /atom/);
+  void insertBefore(PDBAtom& /atom/, Composite& /before/);
+  void insertAfter(PDBAtom& /atom/, Composite& /after/);
+  bool remove(PDBAtom& /atom/);
+  void spliceBefore(Residue& /residue/);
+  void spliceAfter(Residue& /residue/);
+  void splice(Residue& /residue/);
   bool isAminoAcid() const;
   bool isTerminal() const;
   bool isNTerminal() const;
   bool isCTerminal() const;
   virtual bool isValid() const;
-	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
-	//  virtual void read(istream& s);
-	//  virtual void write(ostream& s) const;
+  // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+  // virtual void read(std::istream& s);
+  // virtual void write(std::ostream& s) const;
+  // BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
 	operator const char* ();
 %MemberCode
   Residue* ptr;
@@ -55,6 +78,6 @@ class Residue
     return NULL;
 
   return PyString_FromString(String(String("Residue ") + ptr->getName() + ptr->getID()
-				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+        + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
 %End
 };
