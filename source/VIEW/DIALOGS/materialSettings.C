@@ -1,6 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: materialSettings.C,v 1.3 2004/06/26 08:52:58 oliver Exp $
+// 
+
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
@@ -94,9 +97,9 @@ namespace BALL
 
 		void MaterialSettings::materialSelected(int button_id)
 		{
-				red_slider->setValue((int)(material_values_[button_id][0] * 10.0));
+			red_slider->setValue((int)(material_values_[button_id][0] * 10.0));
 			green_slider->setValue((int)(material_values_[button_id][1] * 10.0));
-			 blue_slider->setValue((int)(material_values_[button_id][2] * 10.0));
+			blue_slider->setValue((int)(material_values_[button_id][2] * 10.0));
 			alpha_slider->setValue((int)(material_values_[button_id][3] * 10.0));
 		}
 			
