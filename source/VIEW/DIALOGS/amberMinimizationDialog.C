@@ -164,9 +164,10 @@ void AmberMinimizationDialog::setEnergyDifference(double energy_difference)
 	energy_difference_lineedit->setText(QString(String(energy_difference).c_str()));
 }
 
-const String& AmberMinimizationDialog::getFilename() const
-{
-	static String filename;
+String AmberMinimizationDialog::getFilename() const
+{ 
+	if (!parameter_file_edit->isEnabled()) return "";
+	String filename;
 	filename = parameter_file_edit->text().ascii();
 	return filename;
 }
