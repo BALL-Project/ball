@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.8 2000/10/23 23:31:09 amoll Exp $
+// $Id: genericPDBFile.C,v 1.9 2000/10/25 19:28:47 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -859,7 +859,7 @@ namespace BALL
 					backup = *line_column;
 					*line_column = '\0';
 					var_arg_double = va_arg(var_args, double *);
-					*var_arg_double = atof(temp);
+					*var_arg_double = ::atof(temp);
 					*line_column = backup;
 
 					//	cout << "float (" << field_size << "): '" << *var_arg_double << "'" << endl;
