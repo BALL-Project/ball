@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.20 2001/05/07 00:10:00 oliver Exp $
+// $Id: classTest.h,v 1.21 2001/05/07 15:57:16 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -87,7 +87,6 @@ namespace TEST {\
 	std::ifstream	templatefile;\
 	bool					equal_files;\
 	double				precision = 1e-6;\
-	std::strstream			strstr;\
 }\
 \
 \
@@ -595,7 +594,7 @@ int main(int argc, char **argv)\
 		to ensure that a function prints an error message to the
 		global logging facility \Ref{Log}. It disables the output
 		to {\tt cout} and {\tt cerr} and redirects all output to
-		{\tt level} to a temporary {\tt strstream}. The contents 
+		{\tt level} to a temporary {\tt ostrstream}. The contents 
 		of this stream can be compared with the expected output	
 		afterwards using the macro \Ref{COMPARE_OUTPUT}.
 		Each {\tt CAPTURE_OUTPUT} requires exactly one subsequent
@@ -603,7 +602,7 @@ int main(int argc, char **argv)\
 */
 #define CAPTURE_OUTPUT(level) \
 	{\
-		std::strstream TEST_strstr;\
+		std::ostrstream TEST_strstr;\
 		Log.remove(std::cout);\
 		Log.remove(std::cerr);\
 		Log.insert(TEST_strstr, level, level);
