@@ -8,15 +8,6 @@ b:
 build:
 	latex tutorial
 
-install:
-	@echo "Deleting old tutorial directory..."
-	-@rm -rf /www/pub/www.mpi-sb.mpg.de/BALL/TUTORIAL
-	@echo "Generating html in the WWW area..."
-	@mkdir /www/pub/www.mpi-sb.mpg.de/BALL/TUTORIAL
-	latex2html -local_icons -init_file latex2html-init.BALL -dir /www/pub/www.mpi-sb.mpg.de/BALL/TUTORIAL tutorial.tex 2>&1|tee l2h.log
-	@echo "moving PDF + PS files..."
-	mv -f tutorial.pdf tutorial.ps /www/pub/www.mpi-sb.mpg.de/BALL/doc/
-
 html:
 	-@rm -fr HTML
 	@mkdir HTML
