@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158.2.2 2005/01/10 13:23:59 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.3 2005/01/13 12:20:11 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1218,6 +1218,7 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << text << std::endl;
 #endif
+			if (message_label_->text().ascii() == text.c_str()) return;
 
 			if (beep) 
 			{
