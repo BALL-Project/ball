@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.8 2000/02/28 02:58:54 amoll Exp $
+// $Id: plane3.h,v 1.9 2000/03/02 22:22:14 amoll Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -33,6 +33,16 @@ namespace BALL
       {\bf Definition:} \URL{BALL/MATHS/.h}
 			A plane is defined by a point and its normal.
 	*/
+
+	template <typename T>
+	class TPlane3;
+
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TPlane3<T>& plane);
+
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane);
+
 	template <class T>
 	class TPlane3
 	{
@@ -273,23 +283,6 @@ namespace BALL
 		}
 		//@}
 
-		/**	@name	Storers
-		*/
-		//@{
-
-		///
-		friend std::istream& operator >> (std::istream& s, TPlane3& plane)
-		{
-			return (s >> "PLANE(" >> plane.p >> ", " >> plane.n >> ")");
-		}
-
-		///
-		friend std::ostream& operator << (std::ostream& s, const TPlane3& plane)
-		{
-			return (s << plane.p  << plane.n);
-		}
-		//@}
-
 		/**	@name	Attributes
 		*/
 		//@{
@@ -306,6 +299,31 @@ namespace BALL
 	/**	Default plane class of type {\bf float}
 	*/
 	typedef TPlane3<float> Plane3;
+
+	/**	@name	Storers
+	*/
+	//@{
+
+	/**	Input- Operator
+			reads in two TVector3 and a {\bf T} value: p, n, value
+	*/
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TPlane3<T>& plane)
+	{
+		char c;
+		s >> c >> plane.p >>  plane.n >> c;
+		return s;
+	}
+
+	/**	Input- Operator
+			prints out two TVector3 and a {\bf T} value: p, n, value
+	*/
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
+	{
+		return (s << '(' << plane.p << ' '  << plane.n << ')');
+	}
+	//@}
 
 } // namespace BALL
 
