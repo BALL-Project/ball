@@ -1,2 +1,0 @@
-/Object: [0-9a-zA-Fx]* is instance of class: .*BALL.*TVector2.*
-  (x =  1.2, y = 2.3)

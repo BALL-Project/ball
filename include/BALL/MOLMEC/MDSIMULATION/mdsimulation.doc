@@ -1,9 +1,0 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: mdsimulation.doc,v 1.6 2003/08/26 08:04:26 oliver Exp $
-//
-
-/**	\defgroup MDSimulation	Molecular Dynamics Simulation
-* 	\ingroup Molmec
-*/

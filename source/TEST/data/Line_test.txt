@@ -1,3 +1,0 @@
-/Object: [0-9a-fA-Fx]+ is instance of class: .*
-  position: (0 1 2)
-  direction: (3 4 5)
