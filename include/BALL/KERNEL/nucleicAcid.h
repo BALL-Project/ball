@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.6 2000/04/14 13:29:31 amoll Exp $ 
+// $Id: nucleicAcid.h,v 1.7 2000/04/16 21:13:07 amoll Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -89,7 +89,11 @@ namespace BALL
 		/**	@name Assignment Methods */
 		//@{
 
-		/**
+		/** Assignment with cloning facility.
+				Assign the NucleicAcid {\em nucleic_acid} to {\em *this} NucleicAcid.
+				The assignment is either deep or shallow (default).
+				@param  nucleic_acid the NucleicAcid to be copied (cloned)
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em nucleic_acid}
 		*/
 		void set(const NucleicAcid& nucleic_acid, bool deep = true);
 
@@ -97,7 +101,7 @@ namespace BALL
 		*/
 		NucleicAcid& operator = (const NucleicAcid& nucleic_acid);
 
-		/**	Assign an NucleicAcid object from another
+		/**	Assign a NucleicAcid object from another
 		*/
 		void get(NucleicAcid& nucleic_acid, bool deep = true) const;
 	
