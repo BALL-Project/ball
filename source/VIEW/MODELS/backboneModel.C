@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.11 2004/06/07 10:16:58 amoll Exp $
+// $Id: backboneModel.C,v 1.12 2004/06/07 13:16:23 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -237,13 +237,13 @@ namespace BALL
 			geometric_objects_.push_back(sphere);
 		}
 
-		bool AddBackboneModel::createGeometricObjects()
-			throw()
+		bool AddBackboneModel::finish()
 		{
+			if (spline_vector_.size() == 0) return true;
+
 			createBackbone_();
 			return true;
 		}
-
 		
 	} // namespace VIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.23 2004/02/26 19:05:33 amoll Exp $
+// $Id: cartoonModel.C,v 1.24 2004/06/07 13:16:23 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -56,7 +56,6 @@ namespace BALL
 
 		bool AddCartoonModel::finish()
 		{
- 			clear_();
 			return true;
 		}
 
