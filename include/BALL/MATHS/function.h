@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.5 2001/02/16 00:06:52 amoll Exp $
+// $Id: function.h,v 1.6 2001/02/19 12:41:23 anker Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -13,7 +13,7 @@ namespace BALL
 			already known at compile time. \\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
-	// BAUSTELLE float templates sind nicht ansi.
+	// BAUSTELLE float templates sind nicht ANSI.
 	template <int constant_template>
 	class ConstantFunction
 	{
