@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.61 2003/12/01 07:35:10 oliver Exp $
+// $Id: atom.h,v 1.62 2003/12/15 18:10:35 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -75,13 +75,10 @@ namespace BALL
 				- "force" - the force experienced by the atom (for forcefield
 							calculations, in units of Newton)
 				- "bonds" - up to  \link MAX_NUMBER_OF_BONDS MAX_NUMBER_OF_BONDS \endlink  bonds to other atoms
-			
-			
 			 \par
 			@see Bond
 			@see Molecule
 			@see AtomContainer
-    
 			\ingroup KernelContainers 
 	*/
 	class Atom
@@ -91,7 +88,6 @@ namespace BALL
 		public:
 
 			/** @name Class friends
-			
 						- class Bond
 					
 			*/
@@ -107,8 +103,7 @@ namespace BALL
 			*/
 			//@{
 		
-			/** Anonymous enumeration.
-					Unnamed enumeration of all non-categorized constants.
+			/** Unnamed enumeration of all non-categorized constants.
 			*/
 			enum 
 			{
@@ -157,7 +152,6 @@ namespace BALL
 
 			/** Default constructor.
 					The state of this instance is:
-
 						- element type is unknown (Element::UNKNOWN)
 						- charge is 0
 						- name is empty string
@@ -168,7 +162,6 @@ namespace BALL
 						- velocity is  \link Vector3 Vector3 \endlink (0,0,0)
 						- force is  \link Vector3 Vector3 \endlink (0,0,0)
 						- bond table is empty (atom has no bonds)
-					
 					@return  Atom - new atom
 					@see     Composite::Composite
 					@see     PropertyManager::PropertyManager
@@ -250,7 +243,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	@name	Persistence 
 			*/
 			//@{
@@ -268,7 +260,6 @@ namespace BALL
 				throw(Exception::GeneralException);
 
 			//@}
-
 			/** @name Assignment methods 
 			*/
 			//@{
@@ -311,10 +302,10 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	Predicates
 			*/
 			//@{
+			
 			/**	Equality operator.
 					Two atoms are equal if they have the same handle.
 					@see Object::operator ==
@@ -327,8 +318,8 @@ namespace BALL
 			*/
 			bool operator != (const Atom& atom) const
 				throw();
+
 			//@}
-				
 			/** @name Accessors: inspectors and mutators 
 			*/
 			//@{ 
@@ -993,10 +984,10 @@ namespace BALL
 			}
 
 		//@}
-
 		/**	@name Efficient handling of atom attributes
 		*/
 		//@{
+		
 		///
 		class StaticAtomAttributes
 		{
@@ -1065,11 +1056,18 @@ namespace BALL
 
 		StaticAtomAttributes* getAttributePtr();
 		const StaticAtomAttributes* getAttributePtr() const;
-		//@}
 
+		/** Get the time, when the attributes vector was last modified.
+		 		This needed for the GeometricObject 's in VIEW, because they
+				store pointer to the position of atoms. These have to be updated,
+				after a resize of the vector.
+		*/
+		static const PreciseTime& getAttributesModificationTime() 
+			throw() { return attributes_changed_time_;}
 
 		protected:
 
+		//@}
 		/**	@name Attributes
 		*/
 		//@{
@@ -1079,6 +1077,9 @@ namespace BALL
 
 		///
 		static AtomIndexList		free_list_;
+
+		/// time of the last resize of the attributes vector
+		static PreciseTime 			attributes_changed_time_;
 
 		///
 		Position				index_;

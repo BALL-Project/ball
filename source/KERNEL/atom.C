@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.48 2003/12/15 16:00:29 amoll Exp $
+// $Id: atom.C,v 1.49 2003/12/15 18:12:42 amoll Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -20,6 +20,7 @@ namespace BALL
 
 	Atom::AttributeVector			Atom::static_attributes_;
 	Atom::AtomIndexList				Atom::free_list_;
+	PreciseTime 							Atom::attributes_changed_time_;
 
 	Atom::AttributeVector::~AttributeVector() throw()
 	{
@@ -136,6 +137,8 @@ namespace BALL
 	{
 		if (free_list_.empty() || static_attributes_.empty())
 		{
+			// mark time of last resize of the attributes vector
+			attributes_changed_time_ = PreciseTime::now();
 			// double the size of the array
 			size_t i = static_attributes_.size();
 			static_attributes_.resize(std::max((size_t)10000, 2 * i));
