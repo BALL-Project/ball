@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.51 2004/07/23 14:16:01 amoll Exp $
+// $Id: mainControl.h,v 1.52 2004/07/27 11:55:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -712,7 +712,7 @@ namespace BALL
 
 			///
 			void setWorkingDir(const String& dir)
-				throw() { working_dir_ = dir;}
+				throw();
 
 			///
 			void enableLoggingToFile()
