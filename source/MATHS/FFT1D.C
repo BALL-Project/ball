@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.C,v 1.3 2002/12/18 16:00:34 sturm Exp $
+// $Id: FFT1D.C,v 1.4 2003/01/10 08:21:30 oliver Exp $
 
 #include <BALL/MATHS/FFT1D.h>
 
@@ -97,7 +97,7 @@ namespace BALL
 	void FFT1D::destroy()
 		throw()
 	{		
-		TRegularData1D<FFTW_COMPLEX>::destroy();
+		TRegularData1D<FFTW_COMPLEX>::clear();
 		
 		length_ = 0;
 		origin_ = 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.12 2002/12/12 17:00:52 oliver Exp $
+// $Id: complex.h,v 1.13 2003/01/10 08:21:20 oliver Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -618,6 +618,6 @@ namespace BALL
 		throw();
 #endif
 	
-}// namespace BALL
+} // namespace BALL
 
 #endif // BALL_MATHS_COMPLEX_H

@@ -14632,14 +14632,12 @@ _ACEOF
 
 		echo "$as_me:$LINENO: checking linking against libfftw" >&5
 echo $ECHO_N "checking linking against libfftw... $ECHO_C" >&6
-				if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
-			SAVE_LIBS=${LIBS}
-			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${FFTW_LIB}/libfftw.a ${LIBS}"
-			LDFLAGS=
-			FFTW_LINKING_OK=0
-			cat >conftest.$ac_ext <<_ACEOF
+		SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS="${FFTW_LIB}/libfftw.a ${LIBS}"
+		LDFLAGS=
+		FFTW_LINKING_OK=0
+		cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
 _ACEOF
@@ -14647,11 +14645,13 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
+									#include <fftw.h>
 
 int
 main ()
 {
 
+									fftw_create_plan(1, 10, 0);
 
   ;
   return 0;
@@ -14676,10 +14676,26 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-			LIBS=${SAVE_LIBS}
-			LDFLAGS=${SAVE_LDFLAGS}
+		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+			echo "$as_me:$LINENO: result: Cannot link against libfftw. Please check config.log and" >&5
+echo "${ECHO_T}Cannot link against libfftw. Please check config.log and" >&6
+			echo "$as_me:$LINENO: result: specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&5
+echo "${ECHO_T}specify appropriate options to configure (e.g. --with-fftw-lib/incl)." >&6
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+			{ { echo "$as_me:$LINENO: error: Aborted" >&5
+echo "$as_me: error: Aborted" >&2;}
+   { (exit 1); exit 1; }; }
+		else
+			echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 		fi
-
 	fi
 	cat >>confdefs.h <<_ACEOF
 #define BALL_COMPLEX_TYPE ${BALL_COMPLEX_TYPE}

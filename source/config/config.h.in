@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.32 2002/12/22 13:19:21 oliver Exp $ 
+// $Id: config.h.in,v 1.33 2003/01/10 08:21:33 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -163,8 +163,9 @@
 // with the FFTW precision, if included).
 #define BALL_COMPLEX_PRECISION float
 
-// Define whether the FFTW library may be included.
+// Define whether the FFTW library/header is available.
 #undef BALL_HAS_FFTW
+#undef BALL_HAS_FFTW_H
 
 // Define whether to use the ARM style or ANSI style access modifications
 //   ARM style:   BaseClass::foo;

@@ -2297,7 +2297,6 @@ AC_DEFUN(CF_CHECK_XDR, [
 dnl
 dnl FFTW -- Fastest Fourier Transform in the West
 dnl
-
 AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 	if test "${FFTW_SUPPORT}" = true ; then
 		FFTW_SUPPORT=true
@@ -2404,22 +2403,29 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 
 
 		AC_MSG_CHECKING(linking against libfftw)
-		dnl ????
-		if test "${X_LINKING_OK+set}" != set ; then
-			X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
-			SAVE_LIBS=${LIBS}
-			SAVE_LDFLAGS=${LDFLAGS}
-			LIBS="${FFTW_LIB}/libfftw.a ${LIBS}"
-			LDFLAGS=
-			FFTW_LINKING_OK=0
-			AC_TRY_LINK([
-									],
-									[
-									], FFTW_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-			LDFLAGS=${SAVE_LDFLAGS}
+		SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS="${FFTW_LIB}/libfftw.a ${LIBS}"
+		LDFLAGS=
+		FFTW_LINKING_OK=0
+		AC_TRY_LINK([
+									#include <fftw.h>
+								],
+								[
+									fftw_create_plan(1, 10, 0);
+								], FFTW_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${FFTW_LINKING_OK+set}" != "set" ; then
+			AC_MSG_RESULT(no)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Cannot link against libfftw. Please check config.log and])
+			AC_MSG_RESULT([specify appropriate options to configure (e.g. --with-fftw-lib/incl).])
+			AC_MSG_RESULT()
+			AC_MSG_ERROR(Aborted)
+		else
+			AC_MSG_RESULT(yes)
 		fi
-
 	fi
 	AC_DEFINE_UNQUOTED(BALL_COMPLEX_TYPE, ${BALL_COMPLEX_TYPE})
 ])
