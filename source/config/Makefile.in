@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.22 2001/04/10 16:20:56 oliver Exp $
+# $Id: Makefile.in,v 1.23 2001/04/30 02:32:15 oliver Exp $
 #
 
 include config.mak
@@ -178,3 +178,11 @@ intdistnodoc:
 dummy:
 
 
+
+configure:  config/configure.in config/configure.header
+	@echo "Creating new ./configure from config/configure.in"
+	@autoconf config/configure.in > configure.tmp
+	@cat configure.tmp|sed "2r config/configure.header" >configure
+	@-rm configure.tmp
+	@chmod 755 configure
+ 
