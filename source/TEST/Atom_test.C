@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.21 2004/02/23 20:40:16 anker Exp $
+// $Id: Atom_test.C,v 1.22 2004/02/24 08:14:49 anker Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -18,7 +18,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.21 2004/02/23 20:40:16 anker Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.22 2004/02/24 08:14:49 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,10 +37,8 @@ CHECK(void setCharge(float charge) throw())
 RESULT
 
 CHECK(float getCharge() const throw())
-	// see setCharge()
-	TEST_REAL_EQUAL(atom->getCharge(), 0.0)
-	atom->setCharge(1.23456);
-	TEST_REAL_EQUAL(atom->getCharge(), 1.23456);
+	Atom a;
+	TEST_REAL_EQUAL(a.getCharge(), 0.0);
 RESULT
 
 const Atom ac;
@@ -79,7 +77,6 @@ RESULT
 
 CHECK(Vector3& getPosition() throw())
 	Atom a;
-	Log.error() << &a.getPosition() << std::endl;
 	a.getPosition().set(1,2,3);
 	TEST_EQUAL(a.getPosition(), Vector3(1,2,3))
 RESULT

@@ -1,6 +1,6 @@
 /Object: [0-9a-zA-Fx]* is instance of class: BALL::Atom
 /Object: [0-9a-zA-Fx]* is instance of class: BALL::Atom
-  handle: 156
+  handle: 157
   auto-deletable: 0
 /Object: [0-9a-zA-Fx]* is instance of class: BALL::Atom
   selected: 0
