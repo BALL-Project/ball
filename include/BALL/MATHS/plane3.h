@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.10 2000/03/03 10:01:19 oliver Exp $
+// $Id: plane3.h,v 1.11 2000/03/22 00:49:20 amoll Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -97,10 +97,38 @@ namespace BALL
 		{
 		}
 
+		/**	Constructor.
+				Create a new TPlane3 object from four {\tt T} values.
+				Form: COORDINATE (ax + by + cz + d = 0)
+				@param	a, b, c are used to calculate the normal {\tt n} and the point {\tt p}
+		*/
+		TPlane3(const T& a, const T& b, const T& c, const T& d)
+		{
+			n = Vector3(a, b, c);
+			if (a == 0 && b == 0 && c == 0)
+			{
+				throw Exception::DivisionByZero(__FILE__, __LINE__);			
+			}
+			if (!Maths::isZero(a))
+			{
+				p.set(-d / a, 0, 0);
+			 }
+			else if (!Maths::isZero(b))
+			{
+				p.set(0, -d / b, 0);
+			}
+			else if (!Maths::isZero(c))
+			{
+				p.set(0, 0, -d / c);
+			}
+		}
+
+
 		/**	Destructor.	
 				Destructs the TPlane3 object. As there are no dynamic
 				data structures, nothing happens.
-		*/			virtual ~TPlane3()
+		*/
+		virtual ~TPlane3()
 		{
 		}
 		//@}
@@ -122,7 +150,7 @@ namespace BALL
 		}
 
 		/**	Swap the contents of two planes.
-				@param	vector the plane to swap contents with
+				@param vector the plane to swap contents with
 				@param bool ignored - just for interface consistency
 		*/
 		void set(const TPlane3& plane, bool /* deep */ = true)
@@ -139,6 +167,17 @@ namespace BALL
 		{
 			p = point;
 			n = normal;
+		}
+
+		/**	Assign from three points.
+				@param a the first point
+				@param b the second point
+				@param c the third point
+		*/
+		void set(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
+		{
+				p = a;
+				n = (a - b) % (b - c);
 		}
 
 		/**	Assignment operator.
