@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashSet_test.C,v 1.17 2003/06/12 14:12:31 amoll Exp $
+// $Id: HashSet_test.C,v 1.18 2003/06/15 09:03:41 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -46,32 +46,32 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.17 2003/06/12 14:12:31 amoll Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.18 2003/06/15 09:03:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 HashSet<int>* set_ptr;
-CHECK(HashSet::HashSet())
+CHECK(HashSet(Size initial_capacity = INITIAL_CAPACITY, Size number_of_buckets = INITIAL_NUMBER_OF_BUCKETS) throw())
 	set_ptr = new HashSet<int>;
 	TEST_NOT_EQUAL(set_ptr, 0)
 RESULT
 
-CHECK(HashSet::~HashSet())
+CHECK(~HashSet() throw())
 	delete set_ptr;
 RESULT
 
-CHECK(HashSet::size())
+CHECK(Size size() const throw())
 	HashSet<int> hs;
 	TEST_EQUAL(hs.size(), 0)
 RESULT
 
-CHECK(HashSet::getSize())
+CHECK(Size getSize() const throw())
 	HashSet<int> hs;
 	TEST_EQUAL(hs.getSize(), 0)
 RESULT
 
-CHECK(HashSet::HashSet(const HashSet&))
+CHECK(HashSet(const HashSet& hash_set) throw())
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -85,7 +85,7 @@ CHECK(HashSet::HashSet(const HashSet&))
 	TEST_EQUAL(nhs.has(3), false)
 RESULT
 
-CHECK(HashSet::clear())
+CHECK(void clear() throw())
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -96,7 +96,7 @@ CHECK(HashSet::clear())
 	TEST_EQUAL(hs.getBucketSize(), 3)
 RESULT
 
-CHECK(HashSet::destroy())
+CHECK(void destroy() throw())
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -107,7 +107,7 @@ CHECK(HashSet::destroy())
 	TEST_EQUAL(hs.getBucketSize(), 3)
 RESULT
 
-CHECK(HashSet::set(const HashSet&, bool))
+CHECK(void set(const HashSet& hash_set) throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -119,7 +119,7 @@ CHECK(HashSet::set(const HashSet&, bool))
 	TEST_EQUAL(hs2.getBucketSize(), 3)
 RESULT
 
-CHECK(HashSet::get(HashSet&, bool) const)
+CHECK(void get(HashSet& hash_set) const throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -131,7 +131,7 @@ CHECK(HashSet::get(HashSet&, bool) const)
 	TEST_EQUAL(hs2.getBucketSize(), 3)
 RESULT
 
-CHECK(HashSet::swap(HashSet&, bool))
+CHECK(void swap(HashSet& hash_set) throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -158,7 +158,7 @@ CHECK(HashSet::swap(HashSet&, bool))
 	TEST_EQUAL(hs.has(3), true)
 RESULT
 
-CHECK(HashSet::operator = (const HashSet& rhs))
+CHECK(const HashSet& operator = (const HashSet& rhs) throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -170,7 +170,7 @@ CHECK(HashSet::operator = (const HashSet& rhs))
 	TEST_EQUAL(hs2.getBucketSize(), 3)
 RESULT
 
-CHECK(HashSet::operator &= (const HashSet& rhs))
+CHECK(const HashSet& operator &= (const HashSet& rhs) throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -199,7 +199,7 @@ CHECK(HashSet::operator &= (const HashSet& rhs))
 	TEST_EQUAL(hs.has(3), true)
 RESULT
 
-CHECK(HashSet::operator |= (const HashSet& rhs))
+CHECK(const HashSet& operator |= (const HashSet& rhs) throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -228,7 +228,7 @@ CHECK(HashSet::operator |= (const HashSet& rhs))
 	TEST_EQUAL(hs.has(3), true)
 RESULT
 
-CHECK(HashSet::operator & (const HashSet& rhs) const)
+CHECK(HashSet operator & (const HashSet& rhs) const throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -266,7 +266,7 @@ CHECK(HashSet::operator & (const HashSet& rhs) const)
 	TEST_EQUAL(hs2.getSize(), 2)
 RESULT
 
-CHECK(HashSet::operator | (const HashSet& rhs))
+CHECK(HashSet operator | (const HashSet& rhs) const throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -313,7 +313,7 @@ CHECK(HashSet::operator | (const HashSet& rhs))
 	TEST_EQUAL(hs3.has(3), true)
 RESULT
 
-CHECK(HashSet::operator += (const HashSet& rhs))
+CHECK(const HashSet& operator += (const HashSet& rhs) throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -342,7 +342,7 @@ CHECK(HashSet::operator += (const HashSet& rhs))
 	TEST_EQUAL(hs.has(3), true)
 RESULT
 
-CHECK(HashSet::operator + (const HashSet& rhs))
+CHECK(HashSet operator + (const HashSet& rhs) const throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -389,7 +389,7 @@ CHECK(HashSet::operator + (const HashSet& rhs))
 	TEST_EQUAL(hs3.has(3), true)
 RESULT
 
-CHECK(HashSet::operator -= (const HashSet& rhs))
+CHECK(const HashSet& operator -= (const HashSet& rhs) throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -418,7 +418,7 @@ CHECK(HashSet::operator -= (const HashSet& rhs))
 	TEST_EQUAL(hs.has(3), false)
 RESULT
 
-CHECK(HashSet::operator - (const HashSet& rhs) const)
+CHECK(HashSet operator - (const HashSet& rhs) const throw())
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -456,17 +456,17 @@ CHECK(HashSet::operator - (const HashSet& rhs) const)
 	TEST_EQUAL(hs2.getSize(), 2)
 RESULT
 
-CHECK(HashSet::getBucketSize() const)
+CHECK(Size getBucketSize() const throw())
 	HashSet<int> hs;
 	TEST_EQUAL(hs.getBucketSize(), 3)
 RESULT
 
-CHECK(HashSet::getCapacity())
+CHECK(Size getCapacity() const throw())
 	HashSet<int> hs;
 	TEST_EQUAL(hs.getCapacity(), 4)
 RESULT
 
-CHECK(HashSet::insert(const ValueType& entry))
+CHECK(std::pair<Iterator, bool> insert(const ValueType& item) throw())
 	HashSet<int> hs;
 	TEST_EQUAL(hs.getSize(), 0)
 	hs.insert(0);
@@ -479,7 +479,7 @@ CHECK(HashSet::insert(const ValueType& entry))
 	TEST_EQUAL(hs.getSize(), 3)
 RESULT
 
-CHECK(HashSet::find(const int& key))
+CHECK(Iterator find(const Key& key) throw())
 	HashSet<int> hs;
 	TEST_EQUAL((hs.find(0) == hs.end()), true)
 	TEST_EQUAL((hs.find(1) == hs.end()), true)
@@ -497,7 +497,7 @@ CHECK(HashSet::find(const int& key))
 	TEST_EQUAL((hs.find(-2) == hs.end()), true)
 RESULT
 
-CHECK(HashSet::find(const int& key) const)
+CHECK(ConstIterator find(const Key& key) const throw())
 	HashSet<int> h_mutable;
 	const HashSet<int>& hs = const_cast<const HashSet<int>&>(h_mutable);
 	TEST_EQUAL((hs.find(0) == hs.end()), true)
@@ -516,7 +516,7 @@ CHECK(HashSet::find(const int& key) const)
 	TEST_EQUAL((hs.find(-2) == hs.end()), true)
 RESULT
 
-CHECK(HashSet::erase(const ValueType& entry))
+CHECK(Size erase(const KeyType& key) throw())
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -552,7 +552,7 @@ CHECK(HashSet::erase(const ValueType& entry))
 	TEST_EQUAL(hs.getSize(), 2)
 RESULT
 
-CHECK(HashSet::erase(Iterator first, Iterator last))
+CHECK(void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators))
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -595,7 +595,7 @@ CHECK(HashSet::erase(Iterator first, Iterator last))
 	TEST_EXCEPTION(Exception::IncompatibleIterators, hs.erase(hs2.begin(), hs.end()))
 RESULT
 
-CHECK(HashSet::erase(Iterator pos))
+CHECK(void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator))
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -625,7 +625,7 @@ CHECK(HashSet::erase(Iterator pos))
 	TEST_EXCEPTION(Exception::IncompatibleIterators, hs2.erase(hs.begin()))
 RESULT
 
-CHECK(HashSet::host(Visitor<HashSet<Key> >& visitor))
+CHECK(void host(Visitor<HashSet<Key> >& visitor) throw())
 	HashSet<int> hs;
 	hs.insert(1);
 	hs.insert(2);
@@ -635,7 +635,7 @@ CHECK(HashSet::host(Visitor<HashSet<Key> >& visitor))
 	TEST_EQUAL(mv.value_sum, 6)
 RESULT
 
-CHECK(HashSet::has(const Key&))
+CHECK(bool has(const Key& key) const throw())
 	HashSet<int> hs;
 	TEST_EQUAL(hs.has(0), false)
 	TEST_EQUAL(hs.has(1), false)
@@ -658,7 +658,7 @@ CHECK(HashSet::has(const Key&))
 	TEST_EQUAL(hs.has(-117), false)
 RESULT
 
-CHECK(HashSet::isEmpty())
+CHECK(bool isEmpty() const throw())
 	HashSet<int> hs;
 	TEST_EQUAL(hs.isEmpty(), true)
 	hs.insert(0);
@@ -669,7 +669,7 @@ CHECK(HashSet::isEmpty())
 	TEST_EQUAL(hs.isEmpty(), false)
 RESULT
 
-CHECK(HashSet::operator == (const HashSet&) const)
+CHECK(bool operator == (const HashSet& hash_set) const throw())
 	HashSet<int> hs;
 	hs.insert(1);
 	hs.insert(2);
@@ -685,7 +685,7 @@ CHECK(HashSet::operator == (const HashSet&) const)
 	TEST_EQUAL(hs == hs2, false)
 RESULT
 
-CHECK(HashSet::operator != (const HashSet&) const)
+CHECK(bool operator != (const HashSet& hash_set) const throw())
 	HashSet<int> hs;
 	hs.insert(1);
 	hs.insert(2);
@@ -701,7 +701,7 @@ CHECK(HashSet::operator != (const HashSet&) const)
 	TEST_EQUAL(hs != hs2, true)
 RESULT
 
-CHECK(HashSet::dump(std::ostream&, Size) const)
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -759,7 +759,112 @@ CHECK([EXTRA] HashSet STL compatibility)
 	TEST_EQUAL(std::find(il.begin(), il.end(), 4) != il.end(), true)
 RESULT
 
+CHECK(ValueType& getData() throw())
+  // ???
+RESULT
 
+CHECK(bool apply(UnaryProcessor<ValueType>& processor) throw())
+  // ???
+RESULT
+
+
+CHECK(ConstIterator begin() const throw())
+  // ???
+RESULT
+
+CHECK(ConstIterator end() const throw())
+  // ???
+RESULT
+
+CHECK(Iterator begin() throw())
+  // ???
+RESULT
+
+CHECK(Iterator end() throw())
+  // ???
+RESULT
+
+CHECK(Iterator insert(Iterator pos, const ValueType& item) throw())
+  // ???
+RESULT
+
+
+CHECK(IllegalKey(const char* file, int line))
+  // ???
+RESULT
+
+// ===================== Iterators ================================
+CHECK(HashSet* getContainer() throw())
+  // ???
+RESULT
+
+CHECK(IteratorPosition& getPosition() throw())
+  // ???
+RESULT
+
+CHECK(IteratorTraits_& operator = (const IteratorTraits_& traits) throw())
+  // ???
+RESULT
+
+CHECK(IteratorTraits_() throw())
+  // ???
+RESULT
+
+CHECK(IteratorTraits_(const HashSet& hash_set) throw())
+  // ???
+RESULT
+
+CHECK(IteratorTraits_(const IteratorTraits_& traits) throw())
+  // ???
+RESULT
+
+CHECK(bool isBegin() const throw())
+  // ???
+RESULT
+
+CHECK(bool isEnd() const throw())
+  // ???
+RESULT
+
+CHECK(bool isSingular() const throw())
+  // ???
+RESULT
+
+CHECK(bool operator != (const IteratorTraits_& traits) const throw())
+  // ???
+RESULT
+
+CHECK(bool operator == (const IteratorTraits_& traits) const throw())
+  // ???
+RESULT
+
+CHECK(const HashSet* getContainer() const throw())
+  // ???
+RESULT
+
+CHECK(const IteratorPosition& getPosition() const throw())
+  // ???
+RESULT
+
+CHECK(const ValueType& getData() const throw())
+  // ???
+RESULT
+
+CHECK(void forward() throw())
+  // ???
+RESULT
+
+CHECK(void invalidate() throw())
+  // ???
+RESULT
+
+CHECK(void toBegin() throw())
+  // ???
+RESULT
+
+CHECK(void toEnd() throw())
+  // ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
