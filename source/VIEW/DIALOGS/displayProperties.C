@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.47 2003/11/23 23:15:58 amoll Exp $
+// $Id: displayProperties.C,v 1.48 2003/12/02 14:44:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -554,8 +554,8 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	{
 		// create a new Representation
 		rep = new Representation((ModelType)model_type_combobox->currentItem(), 
-														 precision_combobox->currentItem(), 
-														 mode_combobox->currentItem());
+														 (DrawingPrecision)precision_combobox->currentItem(), 
+														 (DrawingMode)mode_combobox->currentItem());
 		rebuild_representation = true;
 		if (custom_precision_button->isChecked())
 		{
@@ -616,9 +616,9 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		else
 		{
 			rep_->setSurfaceDrawingPrecision(-1);
-			rep_->setDrawingPrecision(precision_combobox->currentItem());
+			rep_->setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
 		}
-		rep_->setDrawingMode(mode_combobox->currentItem());
+		rep_->setDrawingMode((DrawingMode)mode_combobox->currentItem());
 	}
 
 	rep->setColoringMethod((ColoringMethod)coloring_method_combobox->currentItem());

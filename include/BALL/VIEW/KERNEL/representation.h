@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.9 2003/11/23 16:40:59 amoll Exp $
+// $Id: representation.h,v 1.10 2003/12/02 14:43:34 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -89,8 +89,8 @@ namespace BALL
 
 			///
 			Representation(ModelType model_type,
-										 Index drawing_precision_,
-										 Index drawing_mode_)
+										 DrawingPrecision drawing_precision_,
+										 DrawingMode drawing_mode_)
 				throw();
 
 			///
@@ -126,11 +126,11 @@ namespace BALL
 				throw();
 
 			///
-			void setDrawingPrecision(Index precision)
+			void setDrawingPrecision(DrawingPrecision precision)
 				throw();
 
 			///
-			Index getDrawingPrecision() const
+			DrawingPrecision getDrawingPrecision() const
 				throw() { return drawing_precision_;}
 
 			///
@@ -142,11 +142,11 @@ namespace BALL
 				throw();
 
 			///
-			void setDrawingMode(Index mode)
+			void setDrawingMode(DrawingMode mode)
 				throw() { drawing_mode_ = mode;}
 
 			///
-			Index getDrawingMode() const
+			DrawingMode getDrawingMode() const
 				throw() { return drawing_mode_;}
 			
 			///
@@ -218,7 +218,7 @@ namespace BALL
 				throw() { coloring_method_= type;}
 
 			///
-			Index getColoringMethod() const
+			ColoringMethod getColoringMethod() const
 				throw() { return coloring_method_;}
 
 			///
@@ -261,10 +261,10 @@ namespace BALL
 				throw();
 
 			//_
-			Index 							drawing_mode_;
+			DrawingMode 				drawing_mode_;
 
 			//_
-			Index 							drawing_precision_;
+			DrawingPrecision 		drawing_precision_;
 
 			//_
 			float 							surface_drawing_precision_;

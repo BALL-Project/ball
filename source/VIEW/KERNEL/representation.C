@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.13 2003/11/23 16:42:48 amoll Exp $
+// $Id: representation.C,v 1.14 2003/12/02 14:43:37 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -38,8 +38,8 @@ namespace BALL
 
 
 		Representation::Representation(ModelType model_type,
-																	 Index drawing_precision,
-																	 Index drawing_mode)
+																	 DrawingPrecision drawing_precision,
+																	 DrawingMode drawing_mode)
 			throw()
 				: PropertyManager(),
 					drawing_mode_(drawing_mode),
@@ -292,7 +292,7 @@ namespace BALL
 			}
 		}
 
-		void Representation::setDrawingPrecision(Index precision)
+		void Representation::setDrawingPrecision(DrawingPrecision precision)
 			throw() 
 		{
 			drawing_precision_ = precision;
