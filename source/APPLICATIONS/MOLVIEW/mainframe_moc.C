@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Mainframe meta object code from reading C++ file 'mainframe.h'
 **
-** Created: Sun Jan 16 12:41:58 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.9 $)
+** Created: Sun Jan 16 17:20:26 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.10 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -115,7 +115,7 @@ void Mainframe::staticMetaObject()
     m1_t22 v1_22 = Q_AMPERSAND Mainframe::applyPreferencesDialog;
     m1_t23 v1_23 = Q_AMPERSAND Mainframe::startServer;
     m1_t24 v1_24 = Q_AMPERSAND Mainframe::stopServer;
-    m1_t25 v1_25 = Q_AMPERSAND Mainframe::toggleServer;
+    m1_t25 v1_25 = Q_AMPERSAND Mainframe::checkServer;
     QMetaData *slot_tbl = QMetaObject::new_metadata(26);
     slot_tbl[0].name = "checkMenuEntries()";
     slot_tbl[1].name = "importPDB()";
@@ -142,7 +142,7 @@ void Mainframe::staticMetaObject()
     slot_tbl[22].name = "applyPreferencesDialog()";
     slot_tbl[23].name = "startServer()";
     slot_tbl[24].name = "stopServer()";
-    slot_tbl[25].name = "toggleServer()";
+    slot_tbl[25].name = "checkServer()";
     slot_tbl[0].ptr = *((QMember*)&v1_0);
     slot_tbl[1].ptr = *((QMember*)&v1_1);
     slot_tbl[2].ptr = *((QMember*)&v1_2);

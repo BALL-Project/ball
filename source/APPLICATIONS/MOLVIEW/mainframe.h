@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.9 2000/01/16 12:46:29 oliver Exp $
+// $Id: mainframe.h,v 1.10 2000/01/16 17:33:05 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -177,7 +177,7 @@ class Mainframe
 
 		void startServer();
 		void stopServer();
-		void toggleServer();
+		void checkServer();
 
 		
 		
@@ -213,6 +213,8 @@ class Mainframe
 
 		QLabel*						server_icon_;
 		QLabel*						tool_box_;
+
+		Server						server_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -12,6 +12,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
+#include <BALL/MOLVIEW/OPENGL/KERNEL/moleculeObjectCreator.h>
 
 using namespace std;
 
@@ -35,7 +36,8 @@ Mainframe::Mainframe
 		selection_(),
 		copy_list_(),
 		server_icon_(0),
-		tool_box_(0)
+		tool_box_(0),
+		server_()
 {
 	// ---------------------
 	// setup main window
@@ -52,7 +54,6 @@ Mainframe::Mainframe
 	// ---------------------
 	// create widgets ------
 	// ---------------------
-	
 	vert_splitter_ = new QSplitter(this, "VertSplitter");
 	CHECK_PTR(vert_splitter_);
 	vert_splitter_->setOrientation(Vertical);
@@ -261,8 +262,28 @@ Mainframe::Mainframe
 	//--------------------------------
 	// setup preferences dialog
 	//--------------------------------
-
 	preferences_dialog_.getPreferences(preferences_);
+
+
+	//--------------------------------
+	// setup the VIEW server
+	//--------------------------------
+  // connecting server with mainframe
+  NotificationRegister(server_, *this);
+
+  // registering scene for creation
+  server_.registerCreationScene(getScene());
+
+  // registering object generator
+  MoleculeObjectCreator object_creator;
+  server_.registerObjectCreator(object_creator);
+
+  // registering object processor
+  server_.registerObjectProcessor(getObjectProcessor());
+
+	// check whether we should start the server
+	// and on which port
+	checkServer();
 }
 
 Mainframe::~Mainframe()
@@ -827,6 +848,7 @@ void Mainframe::applyPreferencesDialog()
 	
 	if (preferences_dialog_.isTabEnabled(preferences_dialog_.getNetworkTab()))
 	{
+		checkServer();
 	}
 	
 	if (preferences_dialog_.isTabEnabled(preferences_dialog_.getDisplayTab()))
@@ -1021,25 +1043,46 @@ bool Mainframe::onNotify(Server& server)
 	return true;
 }
 
-void Mainframe::toggleServer()
-{
-	if (server_icon_->isVisible())
-	{
-		stopServer();
-	} else {
-		startServer();
-	}
-}
 void Mainframe::startServer()
 {
+	// retrieve the port number
+	int port = preferences_dialog_.getNetworkTab()->getPort();
+	
+	// set the port and active the server
+	server_.setPort(port);
+	server_.activate();
+	
+	// adjust the tool tip and update the server icon
+	QString tip;
+	tip.sprintf("VIEW Server listening on port %d", port); 
+	QToolTip::add(server_icon_, tip);
 	server_icon_->show();
 	statusBar()->update();
 }
 
 void Mainframe::stopServer()
 {
+	// stop the server
+	server_.deactivate();
+
+	// hide the icon
 	server_icon_->hide();
+	QToolTip::add(server_icon_, "VIEW Server disabled");
 	statusBar()->update();
+}
+
+void Mainframe::checkServer()
+{
+	// retrieve the settings of the preferences
+	// dialog box
+	bool start_server = preferences_dialog_.getNetworkTab()->getServerStatus();
+	
+	if (start_server)
+	{
+		startServer();
+	} else {
+		stopServer();
+	}
 }
 
 void Mainframe::calculateAmberEnergy()

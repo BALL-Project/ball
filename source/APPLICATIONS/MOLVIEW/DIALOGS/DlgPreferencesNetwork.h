@@ -29,5 +29,12 @@ public:
 
 		void setPreferences(INIFile& inifile);
 		void getPreferences(INIFile& inifile);
+
+		int getPort();
+
+		bool getServerStatus();
+
+public slots:
+		void resetPort();
 };
 #endif // DlgPreferencesNetwork_included

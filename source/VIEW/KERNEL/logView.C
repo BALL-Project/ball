@@ -43,16 +43,11 @@ namespace BALL
 
 			Log.remove(strstream_);
 
-			destroy();
+			clear();
 		}
 
 		void LogView::clear()
 		{
-		}
-
-		void LogView::destroy()
-		{
-			clear();
 		}
 
 		bool LogView::isValid() const

@@ -49,7 +49,7 @@ LineEdit {
 		Alignment {AlignRight}
 		Rect {120 20 50 30}
 		Name {LineEdit_1}
-		Variable {port_number_lineedit_}
+		Variable {port_}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -73,6 +73,7 @@ PushButton {
 		AutoResize {FALSE}
 		Rect {250 20 100 30}
 		Name {PushButton_6}
+		Signal {[Protected]  clicked --> resetPort  ()}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -93,7 +94,7 @@ CheckBox {
 		AutoResize {TRUE}
 		Rect {40 80 118 21}
 		Name {CheckBox_1}
-		Variable {accept_clients_checkbox_}
+		Variable {server_status_}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
