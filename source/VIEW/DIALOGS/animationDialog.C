@@ -7,7 +7,9 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 
 #include <qpushbutton.h>
+#include <qcheckbox.h>
 #include <qlistbox.h>
+#include <qspinbox.h>
 
 namespace BALL
 {
@@ -26,6 +28,45 @@ AnimationDialog::~AnimationDialog()
 
 void AnimationDialog::animatePressed()
 {
+	List<Camera>::Iterator it = cameras_.begin();
+	Camera last_camera = *it;
+	it++;
+
+	for (; it != cameras_.end(); it++)
+	{
+		Camera camera = last_camera;
+		Vector3 diff_viewpoint = (camera.getViewPoint() - (*it).getViewPoint());
+		Vector3 diff_up = (camera.getLookUpVector() - (*it).getLookUpVector());
+		Vector3 diff_look_at = (camera.getLookAtPosition() - (*it).getLookAtPosition());
+
+		Vector3 max = diff_viewpoint;
+		if (diff_look_at.getLength() > max.getLength()) max = diff_look_at;
+		Size steps = (Size) (max.getLength() * smoothness->value());
+		diff_viewpoint /= steps;
+		diff_up /= steps;
+		diff_look_at /= steps;
+
+		for (Size i = 0; i < steps; i++)
+		{
+			camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
+			camera.setLookUpVector(camera.getLookUpVector() - diff_up);
+			camera.setLookAtPosition(camera.getLookAtPosition() - diff_look_at);
+			((Scene*) Scene::getInstance(0))->setCamera(camera);
+
+			if (export_PNG->isChecked())
+			{
+				((Scene*) Scene::getInstance(0))->exportPNG();
+			}
+
+			if (export_POV->isChecked())
+			{
+				((Scene*) Scene::getInstance(0))->exportPOVRay();
+			}
+		}
+		
+		last_camera = *it;
+	}
+
 }
 
 void AnimationDialog::cancelPressed()
@@ -50,6 +91,7 @@ void AnimationDialog::gotoPressed()
 			((Scene*) Scene::getInstance(0))->setCamera(*it);
 			return;
 		}
+		it++;
 	}
 }
 
@@ -93,11 +135,8 @@ void AnimationDialog::addPressed()
 
 void AnimationDialog::entrySelected()
 {
-	if (entries->selectedItem() == 0)
-	{
-		delete_button->setEnabled(false);
-		goto_button->setEnabled(false);
-	}
+	delete_button->setEnabled(entries->selectedItem() != 0);
+	goto_button->setEnabled(entries->selectedItem() != 0);
 }
 
 // NAMESPACE
