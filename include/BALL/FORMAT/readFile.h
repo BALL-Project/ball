@@ -25,52 +25,76 @@ namespace BALL
 
 		protected:
 
+			/*_	@name	Constructors
+			*/
+			//_@{
+
+			/** Standard constructor
+			*/	
+			ReadFile() {};
+
+			/** Detailled constuctor.
+					Opens the given file.
+			*/
 			ReadFile(const String& file_name);
+
+			/** Copy constructor
+			*/
+			ReadFile(const ReadFile& rf);
+
+			//_@}
+
+
+			/** Assignment operator
+			*/
+			ReadFile& ReadFile::operator = (const ReadFile& rf);
 
 			/*_	@name	Help-Methods for File Acces
 			*/
 			//_@{
 
-			/** function to get a token surrounded by delimiter
+			/** Function to get a token surrounded by delimiter
 					starting at position pos in the String
 			*/
 			String getToken_(Position& pos, char delimiter) const;
 
-			/** function to get a token starting at position pos in the String
+			/** Function to get a token starting at position pos in the String
 			*/
 			String getToken_(Position& pos) const;
 
-			/// function to get the first token from a String
+			/// Function to get the first token from a String
 			String getToken_() const;
 
-			/// copy a subString to a new String
+			/// Copy a subString to a new String
 			String copyString_(Position start, Position end = 0) const;
 
-			/// function to test if a String starts like an other String
+			/// Function to test if a String starts like an other String
 			bool startsWith_(const String& text) const;
 
-			/// function to test if a String starts like an other String
+			/// Function to test if a String starts like an other String
 			bool search_(const String& text);
 
-			/// like search above, but stops search when coming to a line staring with stop
+			/// Like search above, but stops search when coming to a line staring with stop
 			bool search_(const String& text, const String& stop);
 
-			/// return the position of line_ in data or -1 if it does not exist in data
+			/// Return the position of line_ in data or -1 if it does not exist in data
 			int switch_(const std::vector<String>& data) const;
 
-			/// tests a condition, if false prints an errormsg and terminates the programm
-			void test_(bool condition, const String& msg) const;
+			/// Tests a condition, if false prints an errormsg and terminates the programm
+			void test_(const char* file, int line, bool condition, const String& msg) const;
 
-			/// reads a line
+			/// Reads a line and counts the line number
 			void readLine_();
 
 			/// skip a given number of lines
 			void skipLines_(Size number = 0);
 
-			/// return true if line_ has text
+			/// Return true if line_ has text
 			bool has_(const String& text) const;
 			
-			/// spool back to the start of the file
+			/** Spool back to the start of the file.
+					This is done by closing and reopening the file.
+			*/
 			void rewind_();
 
 			//_@}
@@ -92,10 +116,6 @@ namespace BALL
 			String file_name_;
 
 			//_@}
-
-			private:
-
-			ReadFile();
 
 	};
 

@@ -1,4 +1,4 @@
-// $Id: readFile.C,v 1.6 2000/10/03 02:04:06 amoll Exp $
+// $Id: readFile.C,v 1.7 2000/10/03 18:57:50 amoll Exp $
 
 #include<BALL/FORMAT/readFile.h>
 
@@ -20,7 +20,9 @@ namespace BALL
 
 	String ReadFile::getToken_(Position& pos, char delimiter) const
 	{
-		test_(pos < line_.size(), "in getToken_ : pos too large");
+		test_(__FILE__, __LINE__,
+					pos < line_.size(),
+					"in getToken_ : pos too large");
 
 		while (pos < line_.size() && line_[pos] != delimiter)
 		{
@@ -28,26 +30,36 @@ namespace BALL
 		}
 		++pos;
 
-		test_(pos < line_.size(), "open token");
+		test_(__FILE__, __LINE__,
+					pos < line_.size(),
+					"open token");
 
 		String token;
 
 		while (line_[pos] != delimiter)
 		{
-			test_(pos < line_.size(), "open token");
+			test_(__FILE__, __LINE__,
+						pos < line_.size(), 
+						"open token");
 
 			token += line_[pos];
 			++pos;
 		}
 
 		++pos;
-		test_(token.size() > 0, "token could not be read");
+
+		test_(__FILE__, __LINE__,
+					token.size() > 0,
+					"token could not be read");
+
 		return token;
 	}
 
 	String ReadFile::getToken_(Position& pos) const
 	{
-		test_(pos < line_.size(), "in getToken_ : pos too large");
+		test_(__FILE__, __LINE__,
+					pos < line_.size(),
+					"in getToken_ : pos too large");
 
 		while (pos < line_.size() && isspace(line_[pos]))
 		{
@@ -63,7 +75,11 @@ namespace BALL
 		}
 
 		++pos;
-		test_(token.size() > 0, "token could not be read");
+
+		test_(__FILE__, __LINE__,
+					token.size() > 0,
+					"token could not be read");
+
 		return token;
 	}
 
@@ -84,7 +100,10 @@ namespace BALL
 			++pos;
 		}
 		
-		test_(token.size() > 0, "token could not be read");
+		test_(__FILE__, __LINE__,
+					token.size() > 0,
+					"token could not be read");
+
 		return token;
 	}
 
@@ -95,7 +114,10 @@ namespace BALL
 			end = line_.size() - 1;
 		}
 
-		test_(end < line_.size(), "error in copyString_");
+		test_(__FILE__, __LINE__,
+					end < line_.size(),
+					"error in copyString_");
+
 		String dest;
 
 		for (; start <= end ; ++start)
@@ -155,11 +177,11 @@ namespace BALL
 		return false;
 	}
 
-	void ReadFile::test_(bool condition, const String& msg) const
+	void ReadFile::test_(const char* file, int line, bool condition, const String& msg) const
 	{
 		if (!condition)
 		{
-			throw Exception::ReadFileError(msg, line_, line_number_);
+			throw Exception::ReadFileError(file, line, msg, line_, line_number_);
 		}
 	}
 
@@ -188,6 +210,21 @@ namespace BALL
 	{
 		in.close();
 		in.open(file_name_.c_str());
+		line_number_ = 0;
+		line_ = "";
+	}
+
+	ReadFile& ReadFile::operator = (const ReadFile& rf)
+	{
+		file_name_ = rf.file_name_;
+		rewind_();
+		return *this;
+	}
+
+	ReadFile::ReadFile(const ReadFile& rf)
+	{
+		file_name_ = rf.file_name_;
+		rewind_();
 	}
 
 } //namespace

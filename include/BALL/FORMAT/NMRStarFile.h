@@ -24,14 +24,14 @@ namespace BALL
 	//@{
 	struct NMRAtomData
 	{
-		Position atom_ID;
-		Position residue_seq_code;
-		String residue_label;
-		String atom_name;
-		char atom_type;
-		float shift_value;
-		float error_value;
-		Position ambiguity_code;
+		Position	atom_ID;
+		Position	residue_seq_code;
+		String		residue_label;
+		String		atom_name;
+		char			atom_type;
+		float			shift_value;
+		float			error_value;
+		Position	ambiguity_code;
 	};
 
 	/** @name	SampleConditions.
@@ -44,10 +44,10 @@ namespace BALL
 	{
 		SampleCondition();
 
-		String name;
-		float temperature;
-		float pH;
-		float pressure;
+		String	name;
+		float		temperature;
+		float		pH;
+		float		pressure;
 	};
 
 	/** @name	ShiftReferenceElement.
@@ -60,15 +60,15 @@ namespace BALL
 	{
 		ShiftReferenceElement();
 
-		String mol_common_name;
-		char atom_type;
-		Position isotope_number;
-		String atom_group;
-		String shift_units;
-		float shift_value;
-		char reference_method;
-		char reference_type;
-		float indirect_shift_ratio;
+		String		mol_common_name;
+		char			atom_type;
+		Position	isotope_number;
+		String		atom_group;
+		String		shift_units;
+		float			shift_value;
+		char			reference_method;
+		char			reference_type;
+		float			indirect_shift_ratio;
 	};
 
 	/** @name	ShiftReferenceSet.
@@ -87,13 +87,13 @@ namespace BALL
 	{
 		NMRAtomDataSet();
 
-		String name;
+		String										name;
 		std::vector<NMRAtomData*> atom_data;
-		SampleCondition* condition;
-		ShiftReferenceSet* reference;
+		SampleCondition*					condition;
+		ShiftReferenceSet*				reference;
 	};
 
-	ostream& operator << (ostream &s, const NMRAtomData& ad);
+	ostream& operator << (ostream &s,				 const NMRAtomData& ad);
 	ostream& operator << (::std::ostream& s, const SampleCondition& sc);
 	ostream& operator << (::std::ostream& s, const ShiftReferenceElement& sre);
 	ostream& operator << (::std::ostream& s, const ShiftReferenceSet& sr);
@@ -113,6 +113,14 @@ namespace BALL
 		: public ReadFile
 	{
 		public:
+
+			/** Standard constructor
+			*/
+			NMRStarFile();
+			
+			/** Copy constructor
+			*/
+			NMRStarFile(const NMRStarFile& f);
 
 			/** Detailled constuctor.
 					Opens the given file and extracts all usefull data.
@@ -173,7 +181,7 @@ namespace BALL
 			static void initializeReferenceOptions_();
 			//_@}
 
-			/*_	@name	NMR-Star specific elements
+			/*_	@name	NMR-Star specific attributes
 			*/
 			//_@{
 
@@ -195,7 +203,8 @@ namespace BALL
 			/// contains Strings with the used reference options
 			static std::vector<String> reference_options_;
 
-			enum ShiftReferenceTypes
+			/// internal enumeration used in readShiftReferences_()
+			enum ShiftReferenceTypes_
 			{
 				MOL_COMMON_NAME,
 				ATOM_TYPE,
@@ -210,8 +219,6 @@ namespace BALL
 
 			//_@}
 
-			/// default constuctor made private to prevent use
-			NMRStarFile();
 	};
 	//@}
 
