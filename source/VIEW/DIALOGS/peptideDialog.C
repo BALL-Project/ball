@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.4 2003/11/05 09:25:46 bender Exp $
+// $Id: peptideDialog.C,v 1.5 2003/11/12 09:36:43 bender Exp $
 //
 #include <iostream>
 
@@ -95,6 +95,12 @@ namespace BALL
 			}
 			sequence->insert(new_aa.c_str());
 		}
+		
+		bool PeptideDialog::islower_(char ch)
+			throw()
+		{
+			return ( ch>=97 && ch<=122 );
+		}
 
 		void PeptideDialog::insert_seq()
 		{
@@ -103,58 +109,67 @@ namespace BALL
 			int sequence_size = sequence_.size();
 
 			String last_letter = *(written_seq.end()-1);
+			last_letter.toUpper();
 			static const string all_amino_acids = "ACDEFGHIKLMNPQRSTVWY";
-			if (all_amino_acids.find(last_letter) == string::npos && written_seq_size != 0)
+			
+			if (all_amino_acids.find(last_letter) != string::npos || written_seq == "")
 			{
-				last_letter.toUpper();
-				if(written_seq > 1)
-					written_seq = written_seq.getSubstring(0, written_seq.size()-1);
-				else
-					written_seq = "";
-				static const string no_amino_acids = "BJOUXZ";
-				if (no_amino_acids.find(last_letter) != string::npos)
+				char ch = *(written_seq.end()-1);
+				if (islower_(ch) == true) //if last_letter is lower case, change to upper case
 				{
+					//delete last written letter and write it as upper case letter
+					if(written_seq > 1)
+						written_seq = written_seq.getSubstring(0, written_seq.size()-1);
+					else
+						written_seq = "";
+					written_seq = written_seq + last_letter;
 					sequence->setText(written_seq.c_str());
-					return;
+					return;	
 				}
-				//delete last written letter and write it as upper case letter
-				written_seq = written_seq + last_letter;
-				sequence->setText(written_seq.c_str());
-				return;
-			}
-
-			// if written_seq > already built sequence => add amino acid
-			if (written_seq_size > sequence_size)
-			{
-					written_seq.toLower();
-					const String aa = *(written_seq.end()-1);
-					Angle a_phi(String(phi->text().ascii()).toFloat(), false);
-					Angle a_psi(String(psi->text().ascii()).toFloat(), false);
-					Angle a_omega(String(omega->text().ascii()).toFloat(), false);
-					addAminoAcid(aa.c_str(), a_phi, a_psi, a_omega);
-			}
-			//if written_seq < already built sequence => delete amino acid
-			if (written_seq_size < sequence_size)
-			{
-					sequence_.pop_back();
-					if (sequence_.size() != 0)
+				else 
+				{
+					// if written_seq > already built sequence => add amino acid
+					if (written_seq_size > sequence_size)
 					{
-						Peptides::AminoAcidDescriptor& aad = sequence_[sequence_.size()-1];
-						String data = String(aad.getPhi().toDegree());
-						truncString_(data);
-						phi->setText(data.c_str());
-
-						data = String(aad.getPsi().toDegree());
-						truncString_(data);
-						psi->setText(data.c_str());
-
-						data = String(aad.getOmega().toDegree());
-						truncString_(data);
-						omega->setText(data.c_str());
+						written_seq.toLower();
+						const String aa = *(written_seq.end()-1);
+						Angle a_phi(String(phi->text().ascii()).toFloat(), false);
+						Angle a_psi(String(psi->text().ascii()).toFloat(), false);
+						Angle a_omega(String(omega->text().ascii()).toFloat(), false);
+						addAminoAcid(aa.c_str(), a_phi, a_psi, a_omega);
 					}
+					//if written_seq < already built sequence => delete amino acid
+					if (written_seq_size < sequence_size)
+					{
+						sequence_.pop_back();
+						if (sequence_.size() != 0)
+						{
+							Peptides::AminoAcidDescriptor& aad = sequence_[sequence_.size()-1];
+							String data = String(aad.getPhi().toDegree());
+							truncString_(data);
+							phi->setText(data.c_str());
+
+							data = String(aad.getPsi().toDegree());
+							truncString_(data);
+							psi->setText(data.c_str());
+
+							data = String(aad.getOmega().toDegree());
+							truncString_(data);
+							omega->setText(data.c_str());
+						}
+					}
+					if (written_seq_size == sequence_size)// do nothing
+						return;	
+				}
 			}
-			if (written_seq_size == sequence_size)
-				return;
+			else//if written letter is no amino acid, set text to original string and return
+			{
+				if(written_seq > 1)
+						written_seq = written_seq.getSubstring(0, written_seq.size()-1);
+					else
+						written_seq = "";
+				sequence->setText(written_seq.c_str());
+			}
 		}
 
 		String PeptideDialog::getSequence()
