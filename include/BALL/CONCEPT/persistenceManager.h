@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.6 1999/12/30 20:30:38 oliver Exp $
+// $Id: persistenceManager.h,v 1.7 2000/01/16 17:26:48 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -180,7 +180,7 @@ namespace BALL
 		template <typename T>
 		bool checkObjectHeader(const T& /* object */, const char* name = 0)
 		{
-			void* ptr;
+			LongPointerType ptr;
 			return checkHeader(RTTI::getStreamName<T>(), name, ptr);
 		}
 
@@ -188,7 +188,7 @@ namespace BALL
 		*/
 		bool checkObjectHeader(const char* type_name)
 		{
-			void* ptr;
+			LongPointerType ptr;
 			return checkHeader(type_name, 0, ptr);
 		}
 
@@ -199,7 +199,7 @@ namespace BALL
 		{
 			object_out_.insert(object);
 
-			writeHeader(RTTI::getStreamName<T>(), name, (void*)object);
+			writeHeader(RTTI::getStreamName<T>(), name, (LongPointerType)(void*)object);
 		}
 
 		/**
@@ -273,7 +273,7 @@ namespace BALL
 			}
 
 			writeObjectPointerHeader(RTTI::getStreamName<T>(), name);
-			put((void*)object);
+			put((LongPointerType)(void*)object);
 			writePrimitiveTrailer();
 		}
  
@@ -287,11 +287,13 @@ namespace BALL
 				return false;
 			}
 
-			void* ptr;
+			LongPointerType ptr;
 			get(ptr);
 
 			if (ptr != 0)
-				pointer_list_.push_back(pair<void**, void*>((void**)&object, ptr));
+			{
+				pointer_list_.push_back(pair<void**, LongPointerType>((void**)&object, ptr));
+			}
 
 			object = (T*)ptr;
 
@@ -309,7 +311,7 @@ namespace BALL
 			}
 
 			writeObjectReferenceHeader(RTTI::getStreamName<T>(), name);
-			put((void*)&object);
+			put((LongPointerType)(void*)&object);
 			writePrimitiveTrailer();
 		} 
 
@@ -323,13 +325,20 @@ namespace BALL
 				return false;
 			}
 
-			void* ptr;
+			LongPointerType ptr;
 			get(ptr);
 
-			object = *((T*)ptr);
+			// store a zero in the corresponding pointer
+			// since we cannot convert 64 bit pointers to
+			// 32 bit pointers - this is required, if an object
+			// written on a 64 bit architecture is read on a 32 bit
+			// machine
+			object = 0;
 
 			if (ptr != 0);
-				pointer_list_.push_back(pair<void**, void*>((void**)&object, ptr));
+			{
+				pointer_list_.push_back(pair<void**, LongPointerType>((void**)&object, ptr));
+			}
 
 			return checkPrimitiveTrailer();
 		}
@@ -385,7 +394,7 @@ namespace BALL
 			for (Position i = 0; i < size; i++)
 			{
 				ptr = (PersistentObject*)arr[i];
-				put((void*)ptr);
+				put((LongPointerType)(void*)ptr);
 				if (ptr != 0 && !object_out_.has(ptr))
 				{
 					object_out_needed_.push_back(ptr);
@@ -405,13 +414,15 @@ namespace BALL
 				return false;
 			}
 
-			void* ptr;
+			LongPointerType ptr;
 			for (Position i = 0; i < size; i++) 
 			{
 				get(ptr);
 
 				if (ptr != 0)
-					pointer_list_.push_back(pair<void**, void*>((void**)&(array[i]), ptr));
+				{
+					pointer_list_.push_back(pair<void**, LongPointerType>((void**)&(array[i]), ptr));
+				}
 
 				array[i] = (T*)ptr;
 			}
@@ -437,17 +448,17 @@ namespace BALL
 				The exact behaviour of this method is implementation dependend - it is abstract for
 				PersistenceManager.
 		*/
-		virtual void writeHeader(const char* type_name, const char* name, void* ptr) = 0;
+		virtual void writeHeader(const char* type_name, const char* name, LongPointerType ptr) = 0;
 
 		/**	Check for an object header.
 				@param type_name the stream name of the class to be read
 				@param name the expected name of the object 
-				@param ptr a reference to a void pointer to store the this pointer of the 
+				@param ptr a reference to a {\tt LongPointerType} to store the {\tt this} pointer of the 
 								object read from the stream
 				@return bool {\bf true}, if the header was correct, {\bf false} otherwise
-				@return ptr the void pointer is set to the value read from the file
+				@return ptr the pointer is set to the value read from the file
 		*/
-		virtual bool checkHeader(const char* type_name, const char* name, void*& ptr) = 0;
+		virtual bool checkHeader(const char* type_name, const char* name, LongPointerType& ptr) = 0;
 
 		/**
 		*/
@@ -478,7 +489,7 @@ namespace BALL
 				The name (if set) is ignored. the type name is returned in {\tt type\_name}
 				and the address of the object is read but not inserted into the table.
 		*/
-		virtual bool getObjectHeader(String& type_name, void*& ptr) = 0;
+		virtual bool getObjectHeader(String& type_name, LongPointerType& ptr) = 0;
 
 		/**	Write a variable/member name.
 		*/
@@ -615,6 +626,9 @@ namespace BALL
 		*/
 		virtual void put(const void* p) = 0;
 
+		/**	Write a 64bit pointer to the output.
+		*/
+		virtual void put(const LongPointerType& p) = 0;
 		//@}
 
 		/**	@name	Get methods for primitive data types.
@@ -673,28 +687,45 @@ namespace BALL
 		*/
 		virtual void get(void*& p) = 0;
 
+		/**	Read a 64bit pointer from the input stream.
+		*/
+		virtual void get(LongPointerType& p) = 0;
+
 		//@}
 
 
 		protected:
 
-		void addPointerPair_(void* old_ptr, void* new_ptr);
+		void addPointerPair_(LongPointerType old_ptr, void* new_ptr);
 				
 		void addNeededObjects_();
 
 		bool updatePointers_();
 
-		typedef	HashSet<const PersistentObject*>	ObjectSet;
-		typedef	list<const PersistentObject*>			ObjectList;
-		typedef	HashMap<void*, void*>							PointerMap;
-		typedef	list<pair<void**, void*> >				PointerList;
+		typedef	HashSet<const PersistentObject*>			ObjectSet;
+		typedef	list<const PersistentObject*>					ObjectList;
+		typedef	HashMap<LongPointerType, void*>				PointerMap;
+		typedef	list<pair<void**, LongPointerType> >	PointerList;
 
 		StringHashMap<CreateMethod>		create_methods_;
 
+		// a hash set containing the pointers of the 
+		// objects that were already written
 		ObjectSet		object_out_;
+
+		// a list of object pointers that were referenced
+		// by objects already written, but have not yet
+		// been written themselves
 		ObjectList	object_out_needed_;
+
+		// a map relating the pointers read from the stream (LongPointerType)
+		// with the pointers of the persistent objects that were created dynamically
 		PointerMap	pointer_map_;
+		
+		//
 		PointerList	pointer_list_;
+
+		//
 		ObjectList	object_in_;
 
 		std::ostream*	os;

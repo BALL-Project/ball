@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.4 2000/01/10 15:51:10 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.5 2000/01/16 17:26:51 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -40,7 +40,8 @@ namespace BALL
 		return result;
 	}
 			
-  void TextPersistenceManager::writeHeader(const char* type_name, const char* name, void* ptr)
+  void TextPersistenceManager::writeHeader
+		(const char* type_name, const char* name, LongPointerType ptr)
   {
     *os << indent();
 
@@ -51,7 +52,7 @@ namespace BALL
       *os << "OBJECT ";
 		}
 
-    *os << type_name << " @ " << dec << (PointerInt)ptr;
+    *os << type_name << " @ " << dec << ptr;
     if ((name != 0) && (*name != (char)0))
     {
       *os << " " << name;
@@ -127,7 +128,7 @@ namespace BALL
 		}
 	}
 
-	bool TextPersistenceManager::checkHeader(const char* type_name, const char* name, void*& ptr)
+	bool TextPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			if (name == 0)
@@ -164,7 +165,7 @@ namespace BALL
 		if (ptr == 0) 
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
-				Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " << dec << (PointerInt)ptr << "!" << endl;
+				Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " << dec << (LongPointerType)ptr << "!" << endl;
 #			endif
 
 			return false;
@@ -192,7 +193,7 @@ namespace BALL
 		return true;
 	}
 
-	bool TextPersistenceManager::getObjectHeader(String& type_name, void*& ptr)
+	bool TextPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.level(LogStream::INFORMATION) << "entering getObjectHeader()" << endl;
@@ -444,6 +445,12 @@ namespace BALL
 	}
 
 	
+	void TextPersistenceManager::put(const LongPointerType& p)
+	{
+		*os << ' ' << dec << p << ' ';
+	}
+
+	
 	void TextPersistenceManager::get(char& c)
 	{
 		int i;
@@ -494,6 +501,11 @@ namespace BALL
 		PointerInt i;
 		*is >> i;
 		p = (void*)i;
+	}
+
+	void TextPersistenceManager::get(LongPointerType& p)
+	{
+		*is >> p;
 	}
 
 #define BALL_DEFINE_NUMBER_GET(type)\

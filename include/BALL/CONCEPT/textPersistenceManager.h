@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.h,v 1.2 2000/01/10 15:50:56 oliver Exp $
+// $Id: textPersistenceManager.h,v 1.3 2000/01/16 17:26:48 oliver Exp $
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -49,19 +49,19 @@ namespace BALL
 				name) or the object's {\tt name}.\\
 				The indentation level is incremented.
 				{\bf Example for a base object:}
-\begin{verbatim}
-    BASEOBJECT BALL::Composite @ 1145254238 -
-\end{verbatim}
+				\begin{verbatim}
+					BASEOBJECT BALL::Composite @ 1145254238 -
+				\end{verbatim}
 				{\bf Example for a member object:}
-\begin{verbatim}
-    BASEOBJECT BALL::Bond @ 2334208924 bond_
-\end{verbatim}
+				\begin{verbatim}
+					BASEOBJECT BALL::Bond @ 2334208924 bond_
+				\end{verbatim}
 		*/
-		virtual void writeHeader(const char* type_name, const char* name, void* ptr);
+		virtual void writeHeader(const char* type_name, const char* name, LongPointerType ptr);
 
 		/**	Check for an an object header.
 		*/
-		virtual bool checkHeader(const char* type_name, const char* name, void*& ptr);
+		virtual bool checkHeader(const char* type_name, const char* name, LongPointerType& ptr);
 
 		/**
 		*/
@@ -89,7 +89,7 @@ namespace BALL
 
 		/**	Get an (unknown) object header.
 		*/
-		virtual bool getObjectHeader(String& type_name, void*& ptr);
+		virtual bool getObjectHeader(String& type_name, LongPointerType& ptr);
 
 		/**	Write a variable/member name.
 		*/
@@ -220,6 +220,10 @@ namespace BALL
 		*/
 		virtual void put(const void* p);
 
+		/**	Write a 64 bit pointer to the output.
+		*/
+		virtual void put(const LongPointerType& p);
+
 		//@}
 
 		/**	@name	Get methods for primitive data types.
@@ -277,6 +281,10 @@ namespace BALL
 		/**	Read a pointer from the input stream.
 		*/
 		virtual void get(void*& p);
+
+		/**	Read a 64 bit pointer from the input stream.
+		*/
+		virtual void get(LongPointerType& p);
 
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.2 1999/10/30 12:53:31 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.3 2000/01/16 17:26:51 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -11,7 +11,7 @@ namespace BALL
 	{
 	}
 
-  void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, void* ptr)
+  void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, LongPointerType ptr)
   {
     if ((name != 0) && (!strcmp(name, "")))
     {
@@ -73,7 +73,7 @@ namespace BALL
 		return true;
 	}
 
-	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, void*& ptr)
+	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.level(LogStream::INFORMATION) << "entering checkHeader(" << type_name << ", " << name << ")" << endl;
@@ -98,7 +98,7 @@ namespace BALL
 		return true;
 	}
 
-	bool XDRPersistenceManager::getObjectHeader(String& type_name, void*& ptr)
+	bool XDRPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.level(LogStream::INFORMATION) << "entering getObjectHeader()" << endl;
@@ -264,6 +264,15 @@ namespace BALL
 		os->put(b ? (unsigned char)1 : (unsigned char)0);
 	}
 
+	void XDRPersistenceManager::put(const LongPointerType& p)
+	{
+		const unsigned char*	ptr = (const unsigned char*)&p;
+		for (unsigned short j = 0; j < sizeof(p); ++j)
+		{
+			os->put((unsigned char)*ptr++);
+		}
+	}
+
 #define BALL_DEFINE_NUMBER_PUT(type)\
 	void XDRPersistenceManager::put(const type i)\
 	{\
@@ -346,6 +355,7 @@ namespace BALL
 	BALL_DEFINE_NUMBER_GET(unsigned long)
 	BALL_DEFINE_NUMBER_GET(float)
 	BALL_DEFINE_NUMBER_GET(double)	
+	BALL_DEFINE_NUMBER_GET(LongPointerType)
 	BALL_DEFINE_NUMBER_GET(void*)
 
 } // namespace BALL

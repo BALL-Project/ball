@@ -1,4 +1,4 @@
-// $Id: persistenceManager.C,v 1.2 1999/12/28 18:19:40 oliver Exp $
+// $Id: persistenceManager.C,v 1.3 2000/01/16 17:26:51 oliver Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 
@@ -94,7 +94,9 @@ namespace BALL
 	PersistentObject*	PersistenceManager::readObject()
 	{
 		if (is == 0)
+		{
 			return 0;
+		}
 
 		PersistentObject*	first_object = 0;
 		PersistentObject*	obj = 0;
@@ -103,8 +105,8 @@ namespace BALL
 		pointer_list_.clear();
 		object_in_.clear();
 		
-		String	type_name;
-		void*		ptr;
+		String						type_name;
+		LongPointerType		ptr;
 
 		// if an error happened, just exit the loop 
 		// to clean up the mess 
@@ -194,13 +196,13 @@ namespace BALL
 	}
 
 
-	void PersistenceManager::addPointerPair_(void* old_ptr, void* new_ptr)
+	void PersistenceManager::addPointerPair_(LongPointerType old_ptr, void* new_ptr)
 	{
 #		ifdef DEBUG_PERSISTENCE
 			Log.info() << "PersistenceManager: pointer pair (" << old_ptr << "/" << new_ptr << ")" << endl;
 #		endif
 
-		pointer_map_.insert(pair<void*,void*>(old_ptr, new_ptr));
+		pointer_map_.insert(pair<LongPointerType, void*>(old_ptr, new_ptr));
 	}
 
 
