@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.C,v 1.4 2001/03/11 19:41:03 anker Exp $
+// $Id: trajectoryFile.C,v 1.5 2001/03/21 16:06:33 anker Exp $
 
 #include <BALL/FORMAT/trajectoryFile.h>
 
@@ -122,6 +122,13 @@ namespace BALL
 		throw()
 	{
 		return number_of_snapshots_;
+	}
+
+
+	Size TrajectoryFile::getNumberOfAtoms() const
+		throw()
+	{
+		return number_of_atoms_;
 	}
 
 
