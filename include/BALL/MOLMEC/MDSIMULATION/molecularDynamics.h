@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.2 1999/12/30 18:13:44 pmueller Exp $
+// $Id: molecularDynamics.h,v 1.3 2000/01/04 11:59:41 oliver Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -88,36 +88,36 @@ namespace BALL
             {
             /**     The maximal number of iterations to be carried out 
              */
-            const static char *MAXIMAL_NUMBER_OF_ITERATIONS;        
+            static const char *MAXIMAL_NUMBER_OF_ITERATIONS;        
 
             /**     The current number of iteration 
              */
-            const static char *NUMBER_OF_ITERATION;        
+            static const char *NUMBER_OF_ITERATION;        
 
             /**     After how many iterations shall energy information be saved 
             */
-            const static char *ENERGY_OUTPUT_FREQUENCY;
+            static const char *ENERGY_OUTPUT_FREQUENCY;
 
             /**    After how many iterations shall a snapshot of the system be taken         
             */
-            const static char *SNAPSHOT_FREQUENCY;
+            static const char *SNAPSHOT_FREQUENCY;
 
             /**    The time step in picoseconds 
             */
-            const static char *TIME_STEP; 
+            static const char *TIME_STEP; 
 
             /**    The reference temperature in Kelvin
             */
-            const static char *REFERENCE_TEMPERATURE; 
+            static const char *REFERENCE_TEMPERATURE; 
 
             /**    The parameter for heat bath coupling in picoseconds. 
                    It should be greater than 0.1 ps. 
             */
-            const static char *BATH_RELAXATION_TIME; 
+            static const char *BATH_RELAXATION_TIME; 
 
             /**    The current time of the simulation in picoseconds
             */
-            const static char  *CURRENT_TIME; 
+            static const char  *CURRENT_TIME; 
             };
 
           struct Default
@@ -125,41 +125,41 @@ namespace BALL
              /**     The maximal number of iterations to be simulated. 
                      Default 10,000
              */
-             const static int MAXIMAL_NUMBER_OF_ITERATIONS; 
+             static const int MAXIMAL_NUMBER_OF_ITERATIONS; 
 
              /**     The current number of iteration 
              */
-             const static int NUMBER_OF_ITERATION; 
+             static const int NUMBER_OF_ITERATION; 
 
              /**     After how many iterations shall the current energy/temperature 
                      be calculated/saved.
                      Default 50  
              */
-             const static int ENERGY_OUTPUT_FREQUENCY;
+             static const int ENERGY_OUTPUT_FREQUENCY;
 
              /**    After how many iterations shall the current positions/velocities be saved.
              Default 1000
              */
-             const static int SNAPSHOT_FREQUENCY;        
+             static const int SNAPSHOT_FREQUENCY;        
 
              /**    The size of the time step in picoseconds. Default 0.0005 ps
              */
-             const static float TIME_STEP;             
+             static const float TIME_STEP;             
 
              /**     The reference temperature for the simulated system.
                      Default 300 K.
              */
-             const static float REFERENCE_TEMPERATURE; 
+             static const float REFERENCE_TEMPERATURE; 
 
 
              /**    The parameter for heat bath coupling in picoseconds. Default = 0.2 ps
              */
-             const static float BATH_RELAXATION_TIME; 
+             static const float BATH_RELAXATION_TIME; 
 
              /**    The current time of the simulation in picoseconds
                     Useful when doing several successive MD runs on the system 
              */
-             const static float CURRENT_TIME;                   
+             static const float CURRENT_TIME;                   
              };
 
 	     /**	@name	Constructors and Destructors	
