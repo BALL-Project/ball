@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.7 2004/01/18 21:55:32 oliver Exp $
+// $Id: molecularFileDialog.h,v 1.8 2004/02/12 12:57:14 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -29,7 +29,7 @@ namespace BALL
 		Upon reading a file, the information will be stored in a System.
 		This class can also take a System and write it in one of the
 		supported file formats.
-		This class is derived from VIEW::ModularWidget.
+		This class is derived from ModularWidget.
 		\ingroup ViewDialogs
  */
 class MolecularFileDialog
@@ -45,67 +45,64 @@ class MolecularFileDialog
 	//@{
 
 	/** Default Constructor.
-			Constructs new MolecularFileDialog.
-			Calls VIEW::ModularWidget::registerWidget
-			\return			MolecularFileDialog new constructed MolecularFileDialog
-			\see				VIEW::ModularWidget
+			Calls ModularWidget::registerWidget()
 	 */
-	MolecularFileDialog(QWidget* parent, const char* name = "<MolecularFileDialog>")
+	MolecularFileDialog(QWidget* parent = 0, const char* name = "<MolecularFileDialog>")
 		throw();
-
-	//@} /** @name Destructors */ //@{ 
+	//
+	//@} 
+	/** @name Destructors 
+	*/ 
+	//@{ 
 
 	/** Destructor.
 	 */
 	virtual ~MolecularFileDialog()
 		throw();
 
-	//@} /** @name Accessors: inspectors and mutators */ //@{ 
-	/** Initializes the widget.
-			Initializes the menu <b> File</b> with the entries <b> Load System</b> and <b> Write System</b>.
+	//@} 
+	/** @name Accessors: inspectors and mutators 
+	*/ 
+	//@{ 
+	
+	/** Initializes the menuentries in <b>File</b>.
 			This method is called automatically immediately before the main application is started.
-			This method will be called by show from the MainControl object.
-			\param	main_control the MainControl object to be initialized with this MolecularFileDialog
+			This method will be called MainControl::show().
+			\param	main_control the MainControl object to be initialized 
 			\see		finalizeWidget
-			\see		insertMenuEntry
-			\see		show
 	 */
-	virtual void initializeWidget(VIEW::MainControl& main_control)
+	virtual void initializeWidget(MainControl& main_control)
 		throw();
 
-	/** Removes the widget.
-			Reverses all actions performed in initializeWidget
-			(removes menu entries of this MolecularFileDialog).
-			This method will be called by aboutToExit from the
-			MainControl object.
-			\param		main_control the MainControl object to be finalized with
-								this MolecularFileDialog
+	/** Removes the widget and its menu entries.
+			This method will be called by MainControl::aboutToExit().
+			\param		main_control the MainControl object to be finalized
 			\see			initializeWidget
-			\see			removeMenuEntry
-			\see			aboutToExit
 	 */
-	virtual void finalizeWidget(VIEW::MainControl& main_control)
+	virtual void finalizeWidget(MainControl& main_control)
 		throw();
 
 public slots:
 
 	/** Open a molecular file.
 			This method tries to open and read a molecular file, selected from a QFileDialog,
-			and, if susccesfull, converts is into a System. Then it sends a NewCompositeMessage
-			containing the Composite object made from the System to the other ConnectionObject
-			objects.
-			A WindowMessage will be sent to change the status bar text of the main application.
-			\see		NewCompositeMessage
-			\see		WindowMessage
+			and, if susccesfull, converts is into a System. Then it sends a CompositeMessage
+			containing the System to the other ConnectionObject instances.
+			\see		CompositeMessage
 			\see		ConnectionObject
 	 */
 	virtual void readFile();
 
-	///
+	/** Open a given molecular file.
+	 		The file type is identified by the filename extension.
+	*/
 	virtual void openFile(const String& file)
 		throw();
 
-	///
+	/** Wrapper for the read methods.
+	 		The filetype String is used to indentify the file type (HIN, PDP, MOL, MOL2).
+			It is possible to give the system a designated name, otherwise it is named by the file.
+	*/
 	virtual void openFile(const String& filename, const String& filetype, 
 										const String& system_name)
 		throw();
@@ -155,21 +152,26 @@ public slots:
 	bool writeMOL2File(String filename, const System& system)
 		throw();
 	
-	///
+	/// Overloaded from ModularWidget
 	virtual void fetchPreferences(INIFile &inifile)
 		throw();
 		
-	///
+	/// Overloaded from ModularWidget
 	virtual void writePreferences(INIFile &inifile)
 		throw();
 
-	///
+	/// Overloaded from ModularWidget
 	virtual void checkMenuEntries()
 		throw();
 		
 	//@}
 	
 	protected:
+
+	// Only for Python interface
+	MolecularFileDialog(const MolecularFileDialog& mfd)
+		throw() {};
+
 
 	bool finish_(const String& filename, const String& system_name, System* system)
 		throw();
