@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.55 2004/01/28 15:16:36 amoll Exp $
+// $Id: mainControl.C,v 1.56 2004/01/29 12:43:27 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -88,7 +88,7 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 
 	statusBar()->addWidget(message_label_, 20);
 
-	timer_->setInterval(9000);
+	timer_->setInterval(1000);
 	timer_->setLabel(message_label_);
 
 	initPopupMenu(EDIT);
@@ -1011,6 +1011,7 @@ void MainControl::setStatusbarText(const String& text)
 	throw()
 {
 	message_label_->setText(text.c_str());
+	message_label_->setPaletteForegroundColor( QColor(255, 0, 0) );
 	timer_->stopTimer();
 	timer_->startTimer();
 	QWidget::update();
@@ -1190,15 +1191,31 @@ void MainControl::setCompositesMuteable(bool state)
 StatusbarTimer::StatusbarTimer(QObject* parent)
 	throw()
 	: QTTimer(parent),
-		label_(0)
+		label_(0),
+		seconds_(0)
 {}
 
 void StatusbarTimer::timer()
 	throw()
 {
-	if (!label_) return;
-	label_->setText("");
 	stopTimer();
+
+	if (!label_) return;
+	if (label_->text() == "") 
+	{
+		seconds_ = 0;
+		return;
+	}
+
+	label_->setPaletteForegroundColor( QColor(0,0,0) );
+
+	startTimer();
+	seconds_ ++;
+
+	if (seconds_ < 9) return;
+
+	seconds_ = 0;
+	label_->setText("");
 }
 
 void StatusbarTimer::setLabel(QLabel* label)
