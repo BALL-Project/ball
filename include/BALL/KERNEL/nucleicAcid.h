@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.9 2000/05/10 18:55:12 amoll Exp $ 
+// $Id: nucleicAcid.h,v 1.10 2000/05/15 11:40:03 amoll Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -67,7 +67,7 @@ namespace BALL
 		virtual void clear();
 	
 		/**	Clear the contents of the nucleic acid and remove it from 
-				other kernel objects.
+				parent kernel objects.
 		*/
 		virtual void destroy();
 
@@ -116,7 +116,7 @@ namespace BALL
 		//@{
 
 		/** Get a pointer to a child Nucleotide at a given position.
-				The reference is 0 if {\em *this} instance does not have an Nucleotide at the given position.
+				The reference is 0 if {\em *this} instance does not have a Nucleotide at the given position.
 				@param   position the position of the child Nucleotide
 				@return  Nucleotide* -
 								 mutable reference to the child Nucleotide at {\em positon} of {\em *this},
@@ -124,7 +124,7 @@ namespace BALL
 		Nucleotide* getNucleotide(Position position);
 	
 		/** Get a pointer to a child Nucleotide at a given position.
-				The reference is 0 if {\em *this} instance does not have an Nucleotide at the given position.
+				The reference is 0 if {\em *this} instance does not have a Nucleotide at the given position.
 				@param   position the position of the child Nucleotide
 				@return  Nucleotide* -
 								 constant reference to the child Nucleotide at {\em positon} of {\em *this},
@@ -132,18 +132,30 @@ namespace BALL
 		const Nucleotide* getNucleotide(Position position) const;
 
 		/**	Retrieve a pointer to the Nucleotide at the 3'-end of {\em *this}.
+				The reference is 0 if {\em *this} instance does not have a Nucleotide.
+				@return  Nucleotide* -
+								 mutable reference to the first child Nucleotide
 		*/
 		Nucleotide* get3Prime();
 
 		/**	Retrieve a const pointer to the nucleotide at the 3'-end of {\em *this}.
+				The reference is 0 if {\em *this} instance does not have a Nucleotide.
+				@return  Nucleotide* -
+								 constant reference to the first child Nucleotide
 		*/
 		const Nucleotide* get3Prime() const;
 
 		/**	Retrieve a pointer to the Nucleotide at the 5'-end of {\em *this}.
+				The reference is 0 if {\em *this} instance does not have a Nucleotide.
+				@return  Nucleotide* -
+								 mutable reference to the last child Nucleotide
 		*/
 		Nucleotide* get5Prime();
 
 		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of {\em *this}.
+				The reference is 0 if {\em *this} instance does not have a Nucleotide.
+				@return  Nucleotide* -
+								 constant reference to the last child Nucleotide
 		*/
 		const Nucleotide* get5Prime() const;
 
@@ -158,6 +170,7 @@ namespace BALL
 		const String& getID() const;
 
 		/**	Return the number of Nucleotides contained in {\em *this} NucleicAcid.
+				@return Size - number of Nucleotides
 		*/
 		Size countNucleotides() const;
 		//@}

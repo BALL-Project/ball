@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.9 2000/05/12 00:03:52 amoll Exp $
+// $Id: nucleotide.h,v 1.10 2000/05/15 11:40:03 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -153,12 +153,12 @@ namespace BALL
 		const String& getID() const;
 
 		/**	Set the insertion code of the nucleotide.
-				@param id the new ID
+				@param insertion_code the new insertion code
 		*/
 		void setInsertionCode(char insertion_code);
 
 		/**	Retrieve the insertion code of the nucleotide.
-				@return String the ID
+				@return String the insertion code (constant)
 		*/
 		char getInsertionCode() const;
 
@@ -205,9 +205,7 @@ namespace BALL
 		void spliceAfter(Nucleotide& nucleotide);
 
 		/**	Move the children of {\tt nucleotide} into this instance.
-				The children of {\tt nucleotide} are inserted at the position of 
-				{\tt nucleotide} if it is a child of {\em *this}.
-				Otherwise the children are inserted using \Ref{spliceBefore}.
+				The children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(Nucleotide& nucleotide);
 
