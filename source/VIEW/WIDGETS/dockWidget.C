@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.20 2004/07/03 12:09:30 amoll Exp $
+// $Id: dockWidget.C,v 1.21 2004/07/04 15:28:36 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -96,44 +96,11 @@ namespace BALL
 			ModularWidget::writePreferences(inifile);
 
 			inifile.insertValue("WINDOWS", getIdentifier() + "::docked", String(area() != 0));
-			if (!area()) return;
-
-			Dock dock;
-			Index index, offset;
-			bool newline;
-			getMainControl()->getLocation(this, dock, index, newline, offset);
-			inifile.insertValue("WINDOWS", getIdentifier() + "::dockarea", String(dock));
-			inifile.insertValue("WINDOWS", getIdentifier() + "::dockindex", String(index));
-			inifile.insertValue("WINDOWS", getIdentifier() + "::dockoffset", String(offset));
-			inifile.insertValue("WINDOWS", getIdentifier() + "::docknewline", String(newline));
 		}
 
 		void DockWidget::fetchPreferences(INIFile & inifile)
 			throw()
 		{
-			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::docked"))
-			{
-				if (!inifile.getValue("WINDOWS", getIdentifier() + "::docked").toUnsignedInt())
-				{
-					undock();
-					show();
-				}
-				else
-				{
-					if (inifile.hasEntry("WINDOWS", getIdentifier() + "::dockarea")  &&
-							inifile.hasEntry("WINDOWS", getIdentifier() + "::dockindex") &&
-							inifile.hasEntry("WINDOWS", getIdentifier() + "::dockoffset")    &&
-							inifile.hasEntry("WINDOWS", getIdentifier() + "::docknewline"))
-					{
-						Dock dock = (Dock) inifile.getValue("WINDOWS", getIdentifier() + "::dockarea").toUnsignedInt();
-						Index index = inifile.getValue("WINDOWS", getIdentifier() + "::dockindex").toUnsignedInt();
-						Index offset = inifile.getValue("WINDOWS", getIdentifier() + "::dockoffset").toUnsignedInt();
-						bool newline = inifile.getValue("WINDOWS", getIdentifier() + "::docknewline").toUnsignedInt();
-						getMainControl()->moveDockWindow(this, dock, newline, index, offset);
-					}
-				}
-			}
-
 			ModularWidget::fetchPreferences(inifile);
 			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::height"))
 			{
