@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.11 2001/06/28 17:09:06 strobel Exp $
+// $Id: RSVertex.h,v 1.12 2001/06/28 17:20:51 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -147,6 +147,12 @@ namespace BALL
 				@param	face	a pointer to the new RSFace
 		*/
 		void pushFace(TRSFace<T>* face)
+			throw();
+
+		/** Delete a face from the HashSet of RSFaces the RSVertex belongs to.
+				@param	edge	a pointer to the RSFace to delete
+		*/
+		void deleteFace(TRSFace<T>* face)
 			throw();
 
 		/** Return the HashSet of RFSaces the RSVertex belongs to.
@@ -433,6 +439,14 @@ namespace BALL
 		throw()
 	{
 		faces_.insert(face);
+	}
+
+
+	template <typename T>
+	void TRSVertex<T>::deleteFace(TRSFace<T>* face)
+		throw()
+	{
+		faces_.erase(face);
 	}
 
 
