@@ -1,13 +1,13 @@
-dnl    $Id: configure.in,v 1.131 2001/05/08 21:12:30 oliver Exp $
+dnl    $Id: configure.in,v 1.132 2001/05/09 16:18:24 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
 dnl
-dnl    disable caching - just to be sure
+dnl    disable caching in MULTI_BUILD mode - just to be sure
 dnl   
-dnl define([AC_CACHE_LOAD], )dnl
-dnl define([AC_CACHE_SAVE], )dnl
-
+if test "${MULTI_BUILD}" = "true" ; then
+	rm config.cache
+fi
 
 dnl 
 dnl    some initialization stuff...
