@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.40 2003/12/15 18:14:10 amoll Exp $
+// $Id: mainControl.C,v 1.41 2003/12/15 18:15:58 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -399,10 +399,10 @@ bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebui
 		else 
 		{
 			if (rep->getModelType() == MODEL_SE_SURFACE ||
-				rep->getModelType() == MODEL_SA_SURFACE ||
-				rep->getModelType() == MODEL_BACKBONE 	||
-				rep->getModelType() == MODEL_CARTOON    ||
-				force)
+					rep->getModelType() == MODEL_SA_SURFACE ||
+					rep->getModelType() == MODEL_BACKBONE 	||
+					rep->getModelType() == MODEL_CARTOON    ||
+					force)
 			{
 				rep->update(rebuild);
 			}
