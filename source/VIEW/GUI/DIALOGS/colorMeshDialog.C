@@ -74,40 +74,8 @@ void ColorMeshDialog::applyPressed()
 	}
 		
 	// repaint of the scene and the composites needed
-	
-	/*
-	ChangedCompositeMessage *changed_message = new ChangedCompositeMessage;
-	changed_message->setComposite(*composite_);
-	changed_message->setDeletable(true);
-	notify_(changed_message);
-
-	MainControl::getMainControl(this)->update(*composite_);	
-	
-	DrawMessage* message = new DrawMessage;
-	message->setComposite(composite_);
-	message->setDeletable(true);
-	notify_(message);
-
-
-	// update scene
-	SceneMessage* scene_message = new SceneMessage;
-	scene_message->updateOnly();
-	scene_message->setDeletable(true);
-	notify_(scene_message);
-*/	
 	Scene* scene= (Scene*) Scene::getInstance(0);
 	scene->update(true);
-
-/*
-	// repaint of the scene and the composites needed
-	MainControl::getMainControl(this)->update(*composite_);	
-	MainControl::getMainControl(this)->repaint();
-
-	SceneMessage* scene_message = new SceneMessage;
-	scene_message->updateOnly();
-	scene_message->setDeletable(true);
-	notify_(scene_message);
-	*/
 }
 
 
@@ -219,19 +187,17 @@ void ColorMeshDialog::tabChanged()
 
 void ColorMeshDialog::computePressed()
 {
-	//if (rep_->getComposites().size() == 0) return;
-
 	String name;
 	RegularData3D* dat = 0;
 	switch(compute_method->currentItem())
 	{
 		case GRID_FROM_DISTANCE:
-			name = "from distance";
+			name = "distance";
 			dat = createGridFromDistance_();
 			break;
 
 		case GRID_FROM_FDPD:
-			name = "from FDPD";
+			name = "electrostatic potential";
 			dat = createGridFromFPDB_();
 			break;
 
@@ -248,8 +214,7 @@ void ColorMeshDialog::computePressed()
 
 	// get information about the composite
 	MolecularInformation 	information;
-//	((Composite*)*rep_->getComposites().begin())->host(information);
-	name += " from " + information.getName();
+	name += " of " + information.getName();
 
 	if (!insertGrid_(*dat, name))
 	{
@@ -476,24 +441,6 @@ void ColorMeshDialog::colorByCustomColor_()
 	ColorRGBA col(red_box->value(), green_box->value(), blue_box->value(), alpha_box->value());
 	mesh_->colorList.resize(1);
 	mesh_->colorList[0] = col;
-
-	/*
-	if (transparency_group_custom->selected() == (QButton*) none_button_custom)
-	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_FULL);
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-	}
-	else if (transparency_group_custom->selected() == (QButton*) full_button_custom)
-	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_FULL);
-	}			
-	else if (transparency_group_custom->selected() == (QButton*) alpha_button_custom)
-	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_FULL);
-		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-	}
-	*/
 }
 
 
@@ -532,24 +479,6 @@ void ColorMeshDialog::colorByGrid_()
 								<< "inside the grid! Aborting the coloring..." << std::endl;
 		return;
 	}
-
-	/*
-	if (transparency_group_grid->selected() == (QButton*) none_button_grid)
-	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_FULL);
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-	}
-	else if (transparency_group_grid->selected() == (QButton*) full_button_grid)
-	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_FULL);
-	}			
-	else if (transparency_group_grid->selected() == (QButton*) alpha_button_grid)
-	{
-		rep_->clearProperty(Representation::PROPERTY__TRANSPARENT_FULL);
-		rep_->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
-	}
-	*/
 }
 
 
@@ -564,9 +493,6 @@ RegularData3D* ColorMeshDialog::createGridFromFPDB_()
 	}
 	dialog->setSystem(&system);
 	dialog->exec();
-
-	// update Mesh-pointer, because it can change in the FDPB-Dialog
-	//setMesh(*(Mesh*)*(rep_->getGeometricObjects().begin()));
 
 	FDPB& solver = dialog->getFDPBSolver();
 	if (solver.phi_grid == 0) return 0;
@@ -593,50 +519,6 @@ void ColorMeshDialog::saveSettings_()
 	config.max_value = String(max_box->text().ascii()).toFloat();
 
 	config.number_of_levels = levels_box->value();
-
-	config.transparency = 0;
-	if (surface_tab->currentPage() == by_grid)
-	{
-		config.tab = 0;
-		if (transparency_group_grid->selected() == (QButton*) none_button_grid)
-		{
-			config.transparency = 0;
-		}
-		else if (transparency_group_grid->selected() == (QButton*) full_button_grid)
-		{
-			config.transparency = 1;
-		}			
-		else
-		{
-			config.transparency = 2;
-		}
-	}
-	else if (surface_tab->currentPage() == by_color)
-	{
-		config.tab = 1;
-
-		if (transparency_group_custom->selected() == (QButton*) none_button_custom)
-		{
-			config.transparency = 0;
-		}
-		else if (transparency_group_custom->selected() == (QButton*) full_button_custom)
-		{
-			config.transparency = 1;
-		}			
-		else
-		{
-			config.transparency = 2;
-		}
-	}
-	else
-	{
-		config.tab = 2;
-	}
-
-	if (grid_combobox->currentText() != "")
-	{
-		config.selected_grid = grid_combobox->currentText().ascii();
-	}
 }
 
 
@@ -663,37 +545,6 @@ void ColorMeshDialog::loadSettings_()
 
 	surface_tab->setCurrentPage(config.tab);
 
-	if (config.tab == 0)
-	{
-		if (config.transparency == 0)
-		{
-			none_button_grid->setEnabled(true);
-		}
-		else if (config.transparency == 1)
-		{
-			alpha_button_grid->setEnabled(true);
-		}
-		else
-		{
-			full_button_grid->setEnabled(true);
-		}
-	}
-	else if (config.tab == 1)
-	{
-		if (config.transparency == 0)
-		{
-			none_button_custom->setEnabled(true);
-		}
-		else if (config.transparency == 1)
-		{
-			alpha_button_custom->setEnabled(true);
-		}
-		else
-		{
-			full_button_custom->setEnabled(true);
-		}
-	}
-			
 	for (Position p = 0; p < grid_combobox->count(); p++)
 	{
 		if (grid_combobox->text(p) != "" &&
