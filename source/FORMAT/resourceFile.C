@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.C,v 1.27 2002/12/20 16:57:27 oliver Exp $
+// $Id: resourceFile.C,v 1.28 2003/07/24 11:46:44 amoll Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -140,8 +140,13 @@ namespace BALL
 		{
 			path = parent->getKey() + ResourceFile::SEPARATOR + path;
 		}
-		
-		path = ResourceFile::SEPARATOR + path;
+
+		// make sure we dont get 2 leading slashes
+		if (path.size() > 0 &&
+				path[0] != ResourceFile::SEPARATOR)
+		{
+			path = ResourceFile::SEPARATOR + path;
+		}
 
 		return path;
 	}
