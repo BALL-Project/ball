@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.11 2005/01/28 18:10:42 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.12 2005/01/28 18:15:45 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -278,7 +278,7 @@ namespace BALL
 			out << "#declare BALLFinishTubeSolid        = BALLFinish" << endl;
 			out << "#declare BALLFinishTubeTransp       = BALLFinish" << endl;
 			out << "#declare BALLFinishMesh             = BALLFinish" << endl;
-			out << "#declare BALLFinishWire             = finish " << endl;
+			out << "#declare BALLFinishWire             = BALLFinish" << endl;
 			out << "#declare wire_radius 								= 0.01;" << std::endl;
 			out << std::endl;
 			

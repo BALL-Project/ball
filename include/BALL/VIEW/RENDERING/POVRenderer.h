@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.7.2.3 2005/01/04 15:30:10 amoll Exp $
+// $Id: POVRenderer.h,v 1.7.2.4 2005/01/28 18:10:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -178,6 +178,7 @@ namespace BALL
 				ColorMap color_map_;
 				vector<const ColorRGBA*> color_vector_;
 				vector<const Representation*> representations_;
+				HashSet<const Mesh*> wireframes_;
 		};
   
 	} // namespace BALL
