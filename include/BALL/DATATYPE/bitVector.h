@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.18 2000/11/13 15:27:14 anker Exp $
+// $Id: bitVector.h,v 1.19 2000/11/27 16:21:06 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -57,6 +57,19 @@ namespace BALL
 	{
 		public:
 
+		/**	@name Exceptions
+		*/
+		//@{
+		/** Exception thrown if a file could not be processed right.
+		*/
+		class IllegalOperation
+			: public Exception::GeneralException
+		{
+			public:
+			IllegalOperation(const char* file, int line);
+		};
+		//@}
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -69,7 +82,19 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		Bit(const BitVector& bitvector, Index index = 0) throw();
+		Bit(const Bit& bit) throw();
+
+		/** Detailed constructor.
+				For use with nonconst bitvector.
+		*/
+		Bit(BitVector* bitvector, Index index = 0) 
+			throw(Exception::NullPointer);
+
+		/** Detailed constructor.
+				For use with const bitvector.
+		*/
+		Bit(const BitVector* const bitvector, Index index = 0) 
+			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Destructor
 		*/
@@ -92,16 +117,18 @@ namespace BALL
 		//@{
 		
 		/** Assignment operator.
-				Assign the bool value from a Bit to this instance
+				Assign the position from a Bit to this instance
 		*/
-		const Bit& operator = (const Bit& bit) throw(Exception::NullPointer);
+		const Bit& operator = (const Bit& bit) throw();
 
 		/** Assignment operator.
 				Assign a bool value to this instance
 		*/
-		const Bit& operator = (bool bit) throw(Exception::NullPointer);
+		const Bit& operator = (bool bit) 
+			throw(Exception::NullPointer, IllegalOperation);
 
-		/** Clear method */
+		/** Clear method 
+		*/
 		virtual void clear() throw();
 
 		//@}
@@ -111,9 +138,9 @@ namespace BALL
 		//@{
 
 		/** Equality operator.
-				Test if two instances have the same bool value
+				Test if two instances have the same position in a bitvector
 		*/
-		bool operator == (const Bit& bit) const throw(Exception::NullPointer);
+		bool operator == (const Bit& bit) const throw();
 
 		/** Equality operator.
 				Test if this instance has the given bool value
@@ -121,9 +148,9 @@ namespace BALL
 		bool operator == (bool bit) const throw(Exception::NullPointer);
 
 		/** Inequality operator.
-				Test if two instances have different bool values
+				Test if two instances point to different positions.
 		*/
-		bool operator != (const Bit& bit) const throw(Exception::NullPointer);
+		bool operator != (const Bit& bit) const throw();
 
 		/** Inequality operator.
 				Test if this instance has not the given bool value
@@ -137,6 +164,7 @@ namespace BALL
 
 		BitVector* 	bitvector_;
 		Index 			index_;
+		bool				bitvector_muteable_;
 	};
 
 
@@ -526,7 +554,6 @@ namespace BALL
 		Size 				size_;
 		Size 				block_size_;
 		BlockType* 	bitset_;
-		bool 				resizable_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

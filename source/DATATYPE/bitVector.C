@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.21 2000/11/24 02:12:25 amoll Exp $
+// $Id: bitVector.C,v 1.22 2000/11/27 16:21:18 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -12,11 +12,17 @@ namespace BALL
 
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
+	Bit::IllegalOperation::IllegalOperation(const char* file, int line)
+		:	GeneralException(file, line)
+	{
+		message_ = "Trying to modifiy a const bitvector by a bit";
+		Exception::globalHandler.setMessage(message_);
+	}
+
 	BitVector::BitVector()
 		throw()
 		:	size_(0),
-			block_size_(BALL_BLOCK_SIZE(BlockSize)),
-			resizable_(true)
+			block_size_(BALL_BLOCK_SIZE(BlockSize))
 	{
 		bitset_ = new BlockType[block_size_];
 
@@ -31,8 +37,7 @@ namespace BALL
 	BitVector::BitVector(Size size)
 		throw(Exception::OutOfMemory)
 		:	size_(size),
-			block_size_(BALL_BLOCK_SIZE(size)),
-			resizable_(true)
+			block_size_(BALL_BLOCK_SIZE(size))
 	{				
 		bitset_ = new BlockType[block_size_];
 
@@ -47,8 +52,7 @@ namespace BALL
 	BitVector::BitVector(const BitVector& bit_vector, bool /* deep */)
 		throw(Exception::OutOfMemory)
 		:	size_(bit_vector.size_),
-			block_size_(bit_vector.block_size_),
-			resizable_(bit_vector.resizable_)
+			block_size_(bit_vector.block_size_)
 	{
 		bitset_ = new BlockType[block_size_];
 
@@ -64,8 +68,7 @@ namespace BALL
 		throw(Exception::OutOfMemory)
 		: size_(BALL_BLOCK_BITS),
 			block_size_(BALL_BLOCK_SIZE(BALL_BLOCK_BITS)),
-			bitset_(new BlockType[1]),
-			resizable_(true)
+			bitset_(new BlockType[1])
 	{
 		set(bit_string);
 	}
@@ -94,9 +97,7 @@ namespace BALL
 		}
 
 		memcpy(bitset_, bit_vector.bitset_, block_size_ << (sizeof(BlockType) - 1));
-
 		size_				= bit_vector.size_;
-		resizable_	= bit_vector.resizable_;
 	}
 
 	void BitVector::swap(BitVector& bit_vector)
@@ -105,17 +106,14 @@ namespace BALL
 		BALL::Size temp				 = size_;
 		BALL::Size temp_block	 = block_size_;
 		BlockType* temp_bitset = bitset_;
-		bool temp_resizable		 = resizable_;
 
 		size_				= bit_vector.size_;
 		block_size_ = bit_vector.block_size_;
 		bitset_			= bit_vector.bitset_;
-		resizable_	= bit_vector.resizable_;
 
 		bit_vector.size_				= temp;
 		bit_vector.block_size_  = temp_block;
 		bit_vector.bitset_			= temp_bitset;
-		bit_vector.resizable_		= temp_resizable;
 	}
 
 	void BitVector::validateRange_(Index& first, Index& last) const
@@ -256,7 +254,7 @@ namespace BALL
 		setSize(strlen(bit_string));
 		for (Size i = 0; i < size_ ; i++)
 		{
-			setBit((Index)i, (bool)(*tmp != '0'));
+			setBit((Index)i, (*tmp != '0'));
 			tmp++;
 		}
 	}
@@ -724,7 +722,6 @@ namespace BALL
 			
 			delete[] bitset_;	
 			bitset_ = tmp;
-
 		} 
 		else 
 		{

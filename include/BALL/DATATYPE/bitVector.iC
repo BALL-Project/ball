@@ -1,19 +1,60 @@
-// $Id: bitVector.iC,v 1.14 2000/11/24 02:13:22 amoll Exp $
+// $Id: bitVector.iC,v 1.16 2000/11/30 22:59:33 amoll Exp $
 
 BALL_INLINE
 Bit::Bit() 
 	throw()
 	: bitvector_(0),
-		index_(0)
+		index_(0),
+		bitvector_muteable_(false)
 {
 }
 
 BALL_INLINE
-Bit::Bit(const BitVector& bit_vector, Index index) 
+Bit::Bit(const Bit& bit) 
 	throw()
-	:	bitvector_((BitVector*) &bit_vector),
-		index_(index)
+	: bitvector_(bit.bitvector_),
+		index_(bit.index_),
+		bitvector_muteable_(bit.bitvector_muteable_)
 {
+}
+
+BALL_INLINE
+Bit::Bit(const BitVector* const bit_vector, Index index) 
+	throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
+{
+	if (bit_vector == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+
+	if (index < (Index) - bit_vector->getSize() )
+	{
+		throw Exception::IndexUnderflow(__FILE__, __LINE__);
+	}
+
+	if (index >= (Index) bit_vector->getSize())
+	{
+		throw Exception::IndexOverflow(__FILE__, __LINE__);
+	}
+
+	bitvector_					= const_cast<BitVector *> (bit_vector);
+	index_							= index;
+	bitvector_muteable_ = false;
+}
+
+BALL_INLINE
+Bit::Bit(BitVector* bit_vector, Index index) 
+	throw(Exception::NullPointer)
+{
+	if (bit_vector == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+
+	bitvector_					= bit_vector;
+	index_							= index;
+	bitvector_muteable_ = true;
+
 }
 
 BALL_INLINE
@@ -26,8 +67,9 @@ BALL_INLINE
 void Bit::clear() 
 	throw()
 {
-	bitvector_ = 0;
-	index_		 = 0;
+	bitvector_					= 0;
+	index_							= 0;
+	bitvector_muteable_ = false;
 }
 
 
@@ -153,7 +195,7 @@ BALL_INLINE
 bool BitVector::operator != (const BitVector &bit_vector) const
 	throw()
 {
-  return (bool)!(*this == bit_vector);
+  return !(*this == bit_vector);
 }
 
 BALL_INLINE 
@@ -168,7 +210,7 @@ Bit BitVector::operator [] (Index index)
   throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 {
 	block_(index);
-	return Bit(*this, index);
+	return Bit(this, index);
 }
 
 BALL_INLINE
@@ -245,26 +287,18 @@ bool Bit::operator != (bool bit) const
 
 BALL_INLINE
 bool Bit::operator == (const Bit& bit) const 
-	throw(Exception::NullPointer)
+	throw()
 {
-	if (bitvector_ == 0 || bit.bitvector_ == 0)
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-
-	return bitvector_->getBit(index_) == bit.bitvector_->getBit(bit.index_);
+	return (bitvector_					== bit.bitvector_					&& 
+					index_							== bit.index_							&&
+					bitvector_muteable_	== bit.bitvector_muteable_	);
 }
 
 BALL_INLINE
 bool Bit::operator != (const Bit& bit) const 
-	throw(Exception::NullPointer)
+	throw()
 {
-	if (bitvector_ == 0 || bit.bitvector_ == 0)
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-
-	return bitvector_->getBit(index_) != bit.bitvector_->getBit(bit.index_);
+	return !(*this == bit);
 }
 
 BALL_INLINE
@@ -281,25 +315,27 @@ Bit::operator bool() const
 
 BALL_INLINE
 const Bit& Bit::operator = (const Bit& bit)	
-	throw(Exception::NullPointer)
+	throw()
 {
-	if (bitvector_ == 0 || bit.bitvector_ == 0)
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
+	bitvector_					= bit.bitvector_;
+	index_							= bit.index_;
+	bitvector_muteable_	= bit.bitvector_muteable_;
 
-	bitvector_ = bit.bitvector_;
-	index_ = bit.index_;
 	return *this;
 }
 
 BALL_INLINE
 const Bit& Bit::operator = (const bool bit)
-	throw(Exception::NullPointer)
+	throw(Exception::NullPointer, IllegalOperation)
 {
 	if (bitvector_ == 0)
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
+
+	if (bitvector_muteable_ == false)
+	{
+		throw IllegalOperation(__FILE__, __LINE__);
 	}
 
 	bitvector_->setBit(index_, bit);
