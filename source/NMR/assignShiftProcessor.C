@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.7 2000/09/18 12:16:29 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.8 2000/09/18 14:39:05 oliver Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 
@@ -8,6 +8,10 @@
 
 #ifndef BALL_KERNEL_PTE_H
 # include <BALL/KERNEL/PTE.h>
+#endif
+
+#ifndef BALL_STRUCTURE_FRAGMENTDB_H
+# include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -25,6 +29,15 @@ namespace BALL
 
 	bool AssignShiftProcessor::start()
 	{
+		// BAUSTELLE: this could be done in a more general manner
+		FragmentDB frag_db;
+		StringHashMap<String>* map = 0;
+		if (frag_db.getNamingStandards().has("Amber"))
+		{
+			map = frag_db.getNamingStandards()["Amber"];
+		}
+		
+		
 		if (!valid_)
 		{
 			Log.error() << "AssignShiftProcessor: shift data were not assigned" << endl;
@@ -72,9 +85,15 @@ cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
 				continue;
 			}
 
-			String entry(atom_data_[atompos]->residueLabel);
-			entry += ":";
-			entry += atom_data_[atompos]->atomName;
+
+			// normalize the atom name to reflect the PDB standard
+			String residue_name = atom_data_[atompos]->residueLabel;
+			String atom_name = atom_data_[atompos]->atomName;
+			if (map != 0)
+			{
+				frag_db.normalize_names.matchName(residue_name, atom_name, map);
+			}
+			String entry(residue_name + ":" + atom_name);
 			
 			// from now on getting the transformed name for H-atoms
 			if (!transformTable.has(entry))
