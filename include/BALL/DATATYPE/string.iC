@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.14 2000/07/10 23:27:13 amoll Exp $
+// $Id: string.iC,v 1.15 2000/07/14 14:42:24 amoll Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -41,6 +41,10 @@ bool Substring::operator == (const char* char_ptr) const
 	{
 		throw UnboundSubstring(__FILE__, __LINE__);
 	}
+	if (char_ptr == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 	// to prevent compiler warning:
 	if ((signed)strlen(char_ptr) != (to_ - from_ +1))
 	{
@@ -55,6 +59,10 @@ bool Substring::operator != (const char *char_ptr) const
 	if (bound_ == 0)
 	{
 		throw UnboundSubstring(__FILE__, __LINE__);
+	}
+	if (char_ptr == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 	// to prevent compiler warning:
 	if ((signed)strlen(char_ptr) != (to_ - from_ +1))
@@ -375,6 +383,10 @@ bool Substring::isValid() const
 BALL_INLINE 
 Substring& Substring::toLower()
 {
+  if (bound_ == 0)
+  {
+    throw UnboundSubstring(__FILE__, __LINE__);
+	}
 	(*bound_).toLower(from_, to_ - from_);
   return *this;
 }
@@ -382,6 +394,10 @@ Substring& Substring::toLower()
 BALL_INLINE 
 Substring& Substring::toUpper()
 {
+  if (bound_ == 0)
+  {
+    throw UnboundSubstring(__FILE__, __LINE__);
+	}
 	(*bound_).toUpper(from_, to_ - from_);
   return *this;
 }
@@ -456,6 +472,11 @@ unsigned char String::toUnsignedChar() const
 BALL_INLINE 
 short String::toShort() const
 {
+	if (!isFloat())
+	{
+		throw Exception::InvalidFormat(__FILE__, __LINE__);
+	}
+
 	errno = 0;
   short s = (short)atoi(c_str());
 
@@ -470,6 +491,11 @@ short String::toShort() const
 BALL_INLINE 
 unsigned short String::toUnsignedShort() const
 {
+	if (!isFloat())
+	{
+		throw Exception::InvalidFormat(__FILE__, __LINE__);
+	}
+
 	errno = 0;
   unsigned short us = (unsigned short)atoi(c_str());
 
@@ -484,6 +510,11 @@ unsigned short String::toUnsignedShort() const
 BALL_INLINE
 int String::toInt() const
 {
+	if (!isFloat())
+	{
+		throw Exception::InvalidFormat(__FILE__, __LINE__);
+	}
+
 	errno = 0;
   int i = atoi(c_str());
 
@@ -498,6 +529,11 @@ int String::toInt() const
 BALL_INLINE 
 unsigned int String::toUnsignedInt() const
 {
+	if (!isFloat())
+	{
+		throw Exception::InvalidFormat(__FILE__, __LINE__);
+	}
+
 	errno = 0;
   unsigned int ui = (unsigned int)strtoul(c_str(), (char **)0, 10);
 
@@ -512,6 +548,11 @@ unsigned int String::toUnsignedInt() const
 BALL_INLINE 
 long String::toLong() const
 {
+	if (!isFloat())
+	{
+		throw Exception::InvalidFormat(__FILE__, __LINE__);
+	}
+
 	errno = 0;
   long l = atol(c_str());
 
@@ -526,6 +567,11 @@ long String::toLong() const
 BALL_INLINE 
 unsigned long String::toUnsignedLong() const
 {
+	if (!isFloat())
+	{
+		throw Exception::InvalidFormat(__FILE__, __LINE__);
+	}
+
 	errno = 0;
   unsigned long ul = strtoul(c_str(), (char **)0, 10);
 
@@ -540,6 +586,11 @@ unsigned long String::toUnsignedLong() const
 BALL_INLINE 
 float String::toFloat() const
 {
+	if (!isFloat())
+	{
+		throw Exception::InvalidFormat(__FILE__, __LINE__);
+	}
+
 	errno = 0;
   float f = (float)atof(c_str());
 
@@ -551,9 +602,13 @@ float String::toFloat() const
   return f;
 }
 
-BALL_INLINE 
+BALL_INLINE
 double String::toDouble() const
 {
+	if (!isFloat())
+	{
+		throw Exception::InvalidFormat(__FILE__, __LINE__);
+	}
 	errno = 0;
   double d = atof(c_str());
 
@@ -767,6 +822,23 @@ BALL_INLINE
 bool String::isDigit(char c)
 {
   return (bool)((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_NUMERIC, c) != 0));
+}
+
+BALL_INLINE 
+bool String::isFloat() const 
+{
+/*	errno = 0;
+  strtod(c_str(), 0);
+  return (errno == 0);*/
+	const char* FLOAT = "0123456789.-+";
+	for (int i=0;i<size() ;i++ )
+	{
+		if (strchr(FLOAT, (*this)[i]) == 0)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 BALL_INLINE 

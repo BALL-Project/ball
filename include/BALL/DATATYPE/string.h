@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.15 2000/06/27 22:08:54 oliver Exp $
+// $Id: string.h,v 1.16 2000/07/14 14:42:24 amoll Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -369,6 +369,9 @@ namespace BALL
 
 		/// Character class containing the digits from 0 to 9
 		static const char* CHARACTER_CLASS__ASCII_NUMERIC;
+
+		/// Character class containing the digits from 0 to 9 and a dot
+		static const char* CHARACTER_CLASS__ASCII_FLOAT;
 
 		/**	Character class containing all whitespace characters.
 				Whitespace characters are:\\
@@ -783,6 +786,12 @@ namespace BALL
 				It returns also {\bf true}, if called for an empty string.
 		*/
 		bool isDigit() const;
+
+		/** True, if the string is a floating number.
+				(It contains only numbers and maybe a dot).
+				It returns also {\bf true}, if called for an empty string.
+		*/
+		bool isFloat() const;
 
 		/** True, if the string only contains spaces.
 				It returns also {\bf true}, if called for an empty string.
