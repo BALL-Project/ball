@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.sip,v 1.2 2003/12/12 17:52:44 amoll Exp $
+// $Id: ballAndStickModel.sip,v 1.3 2003/12/19 12:31:07 amoll Exp $
 //
 
 class AddBallAndStickModel  
@@ -25,7 +25,6 @@ class AddBallAndStickModel
   void clear() throw();
   void enableBallAndStickModel() throw();
   void enableStickModel() throw();
-  void getBallRadius(float&) throw();
   void set(const AddBallAndStickModel&) throw();
   void setBallRadius(const float);// throw(Exception::OutOfRange);
   void setStickRadius(const float);// throw(Exception::OutOfRange);
