@@ -1,15 +1,16 @@
-// $Id: Fragment_test.C,v 1.5 2000/05/08 14:01:53 amoll Exp $
+// $Id: Fragment_test.C,v 1.6 2000/05/15 10:52:44 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/molecule.h>
 
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.6 2000/05/15 10:52:44 oliver Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 using namespace BALL;
+using namespace std;
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.5 2000/05/08 14:01:53 amoll Exp $")
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
 String filename;
 NEW_TMP_FILE(filename)
 

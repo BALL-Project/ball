@@ -1,4 +1,4 @@
-// $Id: Chain_test.C,v 1.1 2000/05/09 16:10:43 amoll Exp $
+// $Id: Chain_test.C,v 1.2 2000/05/15 10:52:44 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,12 +13,15 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: Chain_test.C,v 1.1 2000/05/09 16:10:43 amoll Exp $")
+START_TEST(BaseFragment, "$Id: Chain_test.C,v 1.2 2000/05/15 10:52:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
 
 using namespace BALL;
+using namespace std;
+
 String filename;
 NEW_TMP_FILE(filename)
 
