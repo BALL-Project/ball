@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.34 2002/12/20 19:12:58 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.35 2003/02/24 16:57:31 anker Exp $ 
 
 // FDPB: Finite Difference Poisson Solver
 
@@ -2318,9 +2318,9 @@ namespace BALL
 		}
 
 		// DEBUG
-		File file("phi_grid", ::std::ios::out);
-		file << *phi_grid;
-		file.close();
+		// File file("phi_grid", ::std::ios::out);
+		// file << *phi_grid;
+		// file.close();
 		// /DEBUG
 
 		if ((rms_change <= rms_criterion) && (max_residual <= max_criterion))
