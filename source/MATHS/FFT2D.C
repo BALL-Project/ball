@@ -1,4 +1,4 @@
-// $Id: FFT2D.C,v 1.1.2.2 2002/08/27 11:58:24 oliver Exp $
+// $Id: FFT2D.C,v 1.1.2.3 2002/09/08 18:45:50 anhi Exp $
 
 #include <BALL/MATHS/FFT2D.h>
 
@@ -484,11 +484,3 @@ namespace BALL
 	}
 }
 
-std::ostream& operator << (std::ostream& s, const FFTW_COMPLEX& c)
-			throw()
-{
-	s << '(' << c.re << " " << c.im << ')' << std::endl;
-
-	return s;
-}
-		
