@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.h,v 1.7 2001/02/02 18:00:51 amoll Exp $
+// $Id: EFShiftProcessor.h,v 1.8 2001/02/03 13:33:25 amoll Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -111,10 +111,8 @@ namespace BALL
 				Coulomb's law and the charges and positions of the atoms in the 
 				\Ref{effector_list_}.
 				The chemical shift induced by the electric field effect is calculated as
-				\begin{equation}
-					\delta_{EF} = \varepsilon_1 * E_z + \varepsilon_2 * E^2
-				\end{equation}
-				where constants $\varepsilon_1$ and $\varpesilon_2$ are read
+					$ delta_{EF} = varepsilon_1 * E_z + varepsilon_2 * E^2 $
+				where constants $ varepsilon_1 $ and $ varpesilon_2 $ are read
 				from the parameter file (section "ElectricFieldEffect").
 				The chemical shift is stored in the \emph{first} atom
 				using the named property \Ref{ShiftModule::PROPERTY__SHIFT} 
