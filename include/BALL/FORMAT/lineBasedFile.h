@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.28 2003/07/09 12:54:46 amoll Exp $
+// $Id: lineBasedFile.h,v 1.29 2003/07/11 14:02:59 amoll Exp $
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
@@ -34,9 +34,11 @@ namespace BALL
 			throw();
 			
 		/** Detailed constuctor.
+		 		@param trim_whitespaces - sets wheter leading and trailing whitespaces 
+							 shall be removed while reading the file
 				Open the given file.
 		*/
-		LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in)
+		LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in, bool trim_whitespaces = false)
 			throw(Exception::FileNotFound);
 
 		/** Copy constructor
@@ -173,6 +175,14 @@ namespace BALL
 		*/
 		bool parseColumnFormat(const char* format, Position index, Size length, void* arg);
 
+		/// Set wheter leading and trailing whitespaces in lines shall be removed
+		void enableTrimWhitespaces(bool state)
+			throw();
+		
+		///
+		bool trimWhiteSpacesEnabled() const
+			throw();
+
 		//@}
 		/*	@name	Protected Attributes
 		*/
@@ -183,6 +193,8 @@ namespace BALL
 
 		/// line number in the file
 		Position line_number_;
+
+		bool trim_whitespaces_;
 		//_@}
 	};
 
