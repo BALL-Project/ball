@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.h,v 1.10 2001/07/14 12:57:26 amoll Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.11 2002/01/10 01:29:35 oliver Exp $
 
 #ifndef BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
 #define BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
@@ -47,6 +47,11 @@ namespace BALL
 		/**	Default constructor.
 		*/
 		AnisotropyShiftProcessor()
+			throw();
+
+		/**	Copy constructor
+		*/
+		AnisotropyShiftProcessor(const AnisotropyShiftProcessor& processor)
 			throw();
 		
 		/**	Destructor
