@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>ModelSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -1790,13 +1790,13 @@
                         </size>
                     </property>
                     <property name="minValue">
-                        <number>50</number>
+                        <number>1</number>
                     </property>
                     <property name="maxValue">
-                        <number>500</number>
+                        <number>50</number>
                     </property>
                     <property name="value">
-                        <number>130</number>
+                        <number>10</number>
                     </property>
                     <property name="orientation">
                         <enum>Horizontal</enum>
@@ -1805,7 +1805,7 @@
                         <enum>Above</enum>
                     </property>
                     <property name="tickInterval">
-                        <number>70</number>
+                        <number>10</number>
                     </property>
                 </widget>
             </widget>

@@ -53,9 +53,9 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 												 	getString_(atom->getPosition().z) + String(")")).c_str());
 
 	force_edit->setText((String("(") + 
-											 getString_(atom->getForce().x) + String("|") +
-											 getString_(atom->getForce().y) + String("|") +
-											 getString_(atom->getForce().z) + String(")")).c_str());
+											 getString_(atom->getForce().x * pow(10., 12)) + String("|") +
+											 getString_(atom->getForce().y * pow(10., 12)) + String("|") +
+											 getString_(atom->getForce().z * pow(10., 12)) + String(")")).c_str());
 
 	velocity_edit->setText((String("(") + 
 													getString_(atom->getVelocity().x) + String("|") +
