@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ContourSurfaceDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -33,6 +33,9 @@
         <hbox>
             <property name="name">
                 <cstring>unnamed</cstring>
+            </property>
+            <property name="spacing">
+                <number>5</number>
             </property>
             <widget class="QGroupBox">
                 <property name="name">
