@@ -1,4 +1,4 @@
-// $Id: embeddable.h,v 1.3 2000/07/17 21:57:56 oliver Exp $
+// $Id: embeddable.h,v 1.4 2000/07/18 21:24:58 oliver Exp $
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #define BALL_CONCEPT_EMBEDDABLE_H
@@ -57,11 +57,11 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		Embeddable();
-
-		/**	Standard constructor
+		Embeddable(const String& identifier = "<Embeddable>");
+		
+		/**	Copy constructor
 		*/
-		Embeddable(const String& identifier);
+		Embeddable(const Embeddable& embeddable);
 		
 		/**
 		*/
