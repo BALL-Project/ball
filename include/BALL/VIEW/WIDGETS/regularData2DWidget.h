@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.6 2004/02/26 08:41:48 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.7 2004/03/29 11:09:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -39,10 +39,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		//  class regularData2DWidget used to plot one-dimensional data
 		class MainControl;
 
-		/**  New RegularData2D Message Classic.
+		/**  RegularData2D Message.
 				\ingroup ViewWidgets
 		 */
 		class BALL_EXPORT UpdateRegularData2DMessage 
@@ -81,6 +80,7 @@ namespace BALL
 
 
 		/** Widget used to display one-dimensional data.
+		 		WARNING: This code is still under heavy development, no warranty given.
 		 \ingroup ViewWidgets
 		 */
 		class BALL_EXPORT RegularData2DWidget
@@ -125,5 +125,4 @@ namespace BALL
 		}; //end of class RegularData2DWidget
 
 	} //end of namespace VIEW	
-	
 }//end of namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.7 2004/02/26 08:41:47 anhi Exp $
+// $Id: regularData1DWidget.h,v 1.8 2004/03/29 11:09:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -30,10 +30,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		//  class regularData1DWidget used to plot one-dimensional data
 		class MainControl;
 
-		/**  New RegularData1D Message Classic.
+		/**  RegularData1D Message
 				\ingroup ViewWidgets
 		 */
 		class BALL_EXPORT UpdateRegularData1DMessage 
@@ -72,7 +71,8 @@ namespace BALL
 
 
 		/** Widget used to display one-dimensional data.
-		 \ingroup ViewWidgets
+		 		WARNING: This code is still under heavy development, no warranty given.
+		 		\ingroup ViewWidgets
 		 */
 		class BALL_EXPORT RegularData1DWidget
 			:public CanvasWidget 
@@ -107,9 +107,6 @@ namespace BALL
 			
 		protected:
 			RegularData1D data_;
-			//QPointArray point_data_; //to create the polygon
-			//			QCanvasPolygon *polygon_;
-			//QCanvasSpline *polygon_;
 			QColor diagram_color_;
 			QColor background_color_;
 			Size height_; // is it neccessary? 
@@ -119,5 +116,4 @@ namespace BALL
 		}; //end of class RegularData1DWidget
 
 	} //end of namespace VIEW
-
 }//end of namespace BALL
