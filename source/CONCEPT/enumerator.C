@@ -1,10 +1,12 @@
-// $Id: enumerator.C,v 1.10.4.1 2002/06/05 00:29:00 oliver Exp $
+// $Id: enumerator.C,v 1.10.4.2 2002/06/05 22:52:40 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/CONCEPT/enumerator.h>
 
+#include <algorithm>
+#include <functional>
 
 namespace BALL 
 {
@@ -88,6 +90,7 @@ namespace BALL
 	const EnumeratorIndex& EnumeratorIndex::operator = (const EnumeratorIndex& rhs)
 		throw()
 	{
+		std::vector<Position>::operator = (rhs);
 		modulus_ = rhs.modulus_;
 		base_multipliers_ = rhs.base_multipliers_;
 		
@@ -95,36 +98,58 @@ namespace BALL
 	}
 
 	const EnumeratorIndex& EnumeratorIndex::operator = (Position index)
-		throw()
+		throw(Exception::IndexOverflow)
 	{	
-		for (Position i = 0; i < size(); ++i)
+		for (Position i = 0; i < std::vector<Position>::size(); ++i)
 		{
-			operator[](i) = index / base_multipliers_[i];
-			index -= base_multipliers_[i] * operator[](i);
+			Position digit = index / base_multipliers_[i]; 
+			if (digit >= modulus_[i])
+			{
+				throw Exception::IndexOverflow(__FILE__, __LINE__, index);
+			}
+			std::vector<Position>::operator[](i) = digit;
+			index -= base_multipliers_[i] * digit;
 		}
+
+		return *this;
 	}
 
-
-	bool operator == (const EnumeratorIndex& x, const EnumeratorIndex& y)
-		throw(EnumeratorIndex::IncompatibleIndex)
+	EnumeratorIndex& EnumeratorIndex::operator << (Size modulus)
+		throw(Exception::OutOfRange)
 	{
-		if (x.getModulus() != y.getModulus())
+		// there's no point in counting in the unary system or below
+		if (modulus < 2)
 		{
-			throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
+			throw Exception::OutOfRange(__FILE__, __LINE__);
 		}
 
-		return (static_cast<const vector<Position>&>(x) == static_cast<const vector<Position>&>(y));
+		// initialize the new digit
+		std::vector<Position>::push_back(0);
+	
+		// update the modulus array
+		modulus_.push_back(modulus);
+
+		// transform the multipliers for each digit (by multiplying
+    // the old contents with the new modulus and adding a one
+    // for the new digit)
+		std::transform(base_multipliers_.begin(), base_multipliers_.end(),
+									 base_multipliers_.begin(),
+									 std::bind2nd(std::multiplies<Position>(), modulus));
+		base_multipliers_.push_back(1);		
+		
+		return *this;
 	}
 
-	bool operator != (const EnumeratorIndex& x, const EnumeratorIndex& y)
-		throw(EnumeratorIndex::IncompatibleIndex)
+	bool EnumeratorIndex::operator == (const EnumeratorIndex& rhs)
+		throw()
 	{
-		if (x.getModulus() != y.getModulus())
-		{
-			throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
-		}
+		return (modulus_ == rhs.modulus_) && (static_cast<const vector<Position>&>(*this) == static_cast<const vector<Position>&>(rhs));
+	}
 
-		return (static_cast<const vector<Position>&>(x) != static_cast<const vector<Position>&>(y));
+	bool EnumeratorIndex::operator != (const EnumeratorIndex& rhs)
+		throw()
+	{
+		return (modulus_ != rhs.modulus_) || (static_cast<const vector<Position>&>(*this) != static_cast<const vector<Position>&>(rhs));
 	}
 
 	bool EnumeratorIndex::operator < (const EnumeratorIndex& rhs)

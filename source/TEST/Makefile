@@ -269,3 +269,5 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
 
+Enumerator_test:	Enumerator_test.o ../CONCEPT/enumerator.o
+	$(CXX) $(LDFLAGS) -o Enumerator_test Enumerator_test.o ../CONCEPT/enumerator.o $(LIBS)

@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.19.4.1 2002/06/05 00:28:59 oliver Exp $
+// $Id: enumerator.h,v 1.19.4.2 2002/06/05 22:52:39 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -35,7 +35,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
 	*/
 	class EnumeratorIndex
-		: public std::vector<Position>
+		: private std::vector<Position>
 	{
 		public:
 
@@ -80,6 +80,20 @@ namespace BALL
 
 		//@}
 
+		/**	@name Assignment
+		*/
+		//@{
+		/** Assignment operator.
+		 */
+		const EnumeratorIndex& operator = (const EnumeratorIndex& rhs)
+			throw();
+
+		/** Assignment operator for Position.
+		 */
+		const EnumeratorIndex& operator = (Position index)
+			throw(Exception::IndexOverflow);
+		//@}
+
 		/** @name Accessors
 		 */
 		//@{
@@ -108,22 +122,38 @@ namespace BALL
 		EnumeratorIndex& operator -- ()
 			throw(Exception::IndexUnderflow);
 
+		/**	Random access operator
+		*/
+		Position operator [] (Position pos) const
+			throw();
+
+		/**	Random access operator
+		*/
+		Position& operator [] (Position pos)
+			throw();
+
+		/**	Return the size of the array.
+		*/
+		Size getSize() const
+			throw();
+
+		/**	Add a new digit.	
+				Push the modulus to the ack of the modulus array and
+				initialize the corresponding digit with zero.
+				\\
+				{\bf Example:} To construct a hex counter with three
+				digits, you can use something like:
+				\begin{verbatim}
+					EnumerationIndex counter;
+					counter << 16 << 16 << 16;
+				\end{verbatim}
+				The counter will be initialized with all zeros.
+			@exception OutOfRange if the modulus is less than 2
+		*/
+		EnumeratorIndex& operator << (Size modulus)
+			throw(Exception::OutOfRange);
 		//@}
 		
-		/**	@name Assignment
-		*/
-		//@{
-		/** Assignment operator.
-		 */
-		const EnumeratorIndex& operator = (const EnumeratorIndex& rhs)
-			throw();
-
-		/** Assignment operator for Position.
-		 */
-		const EnumeratorIndex& operator = (Position index)
-			throw();
-		//@}
-
 		/** @name Predicates for EnumeratorIndex class
 		 */
 		//@{
@@ -565,13 +595,13 @@ namespace BALL
 	void Enumerator<Container, VariantIterator, Variant>::createPermutation(const EnumeratorIndex& index)
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
-		if (index.size() != variant_sites_.size())
+		if (index.getSize() != variant_sites_.size())
 		{
 			throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
 		}
 
 		typename SiteList::iterator it = variant_sites_.begin();
-		Position i((Position)(index.size() - 1));
+		Position i((Position)(index.getSize() - 1));
 		for (; it != variant_sites_.end(); ++it, --i)
 		{
 			mutate_(it->first, it->second[index[i]]);

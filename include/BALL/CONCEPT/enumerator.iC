@@ -1,4 +1,4 @@
-// $Id: enumerator.iC,v 1.2.4.1 2002/06/05 00:29:00 oliver Exp $
+// $Id: enumerator.iC,v 1.2.4.2 2002/06/05 22:52:40 oliver Exp $
 
 BALL_INLINE
 const vector<Size>& EnumeratorIndex::getModulus() const
@@ -12,4 +12,25 @@ Size EnumeratorIndex::getModulus(Position pos) const
 	throw()
 {
 	return modulus_[pos];
+}
+
+BALL_INLINE
+Position EnumeratorIndex::operator [] (Position pos) const
+	throw()
+{
+	return std::vector<Position>::operator [] (pos);
+}
+ 
+BALL_INLINE
+Position& EnumeratorIndex::operator [] (Position pos)
+	throw()
+{
+	return std::vector<Position>::operator [] (pos);
+}
+
+BALL_INLINE
+Size EnumeratorIndex::getSize() const
+	throw()
+{
+	return (Size)size();
 }
