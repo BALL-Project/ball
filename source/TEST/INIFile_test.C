@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.13 2001/04/22 18:10:58 amoll Exp $
+// $Id: INIFile_test.C,v 1.14 2001/04/23 22:00:14 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.13 2001/04/22 18:10:58 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.14 2001/04/23 22:00:14 amoll Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -196,12 +196,14 @@ CHECK(INIFile::appendLine(const String& section_name, const String& line))
 	
 	TEST_EQUAL(ini.appendLine("Section9", "GAU"), false)	
 	TEST_EQUAL(ini.appendLine("Section2", "[AU"), false)	
-	TEST_EQUAL(ini.appendLine("Section3", "test1 = 123"), false)	
-	TEST_EQUAL(ini.getNumberOfLines(), 10)
+	TEST_EQUAL(ini.appendLine("Section3", "test1 = 123"), true)	
+	TEST_EQUAL(*ini.getLine(9), "test1 = 123")
+	TEST_EQUAL(ini.getNumberOfLines(), 11)
+  TEST_EQUAL(ini.getValue("Section3", "test1"), "123") 
 
 	TEST_EQUAL(ini.appendLine("Section3", "insert1=ok"), true)
-	TEST_EQUAL(ini.getNumberOfLines(), 11)
-	TEST_EQUAL(ini.getSectionLength("Section3"), 6)
+	TEST_EQUAL(ini.getNumberOfLines(), 12)
+	TEST_EQUAL(ini.getSectionLength("Section3"), 7)
 	TEST_EQUAL(ini.hasEntry("Section3", "insert1"), true)
 	TEST_EQUAL(ini.getValue("Section3", "insert1"), "ok")
 
