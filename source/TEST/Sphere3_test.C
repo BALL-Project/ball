@@ -1,4 +1,4 @@
-// $Id: Sphere3_test.C,v 1.2 2000/03/03 11:54:50 oliver Exp $
+// $Id: Sphere3_test.C,v 1.3 2000/03/27 12:10:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Sphere3_test.C,v 1.2 2000/03/03 11:54:50 oliver Exp $")
+START_TEST(class_name, "$Id: Sphere3_test.C,v 1.3 2000/03/27 12:10:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ CHECK(TSphere3(const TVector3<T>& point, const T& radius))
 RESULT
 
 //line
-CHECK(TSphere3(const TSphere3& sphere3,bool /* deep */ = true))
+CHECK(TSphere3(const TSphere3& sphere3))
 	s = Sphere3(v, 4.0);
 	s2 = Sphere3(s);
 	TEST_EQUAL(s2.p, s.p)
@@ -101,7 +101,7 @@ CHECK(bool operator != (const TSphere3& sphere3) const )
 RESULT
 
 
-CHECK(void set(const TSphere3& sphere3, bool /* deep */ = true))
+CHECK(void set(const TSphere3& sphere3))
 	s = Sphere3();
 	s2 = Sphere3(v, 4.0);
 	s.set(s2);
@@ -122,14 +122,14 @@ CHECK(TSphere3 &operator =(const TSphere3& sphere3))
 	TEST_EQUAL(s, s2)
 RESULT
 
-CHECK(void get(TSphere3& sphere3, bool /* deep */ = true) const)
+CHECK(void get(TSphere3& sphere3) const)
 	s = Sphere3(v, 4.0);
 	s2 = Sphere3();
 	s.get(s2);
 	TEST_EQUAL(s, s2)
 RESULT
 
-CHECK(void get(TSphere3& sphere3, bool /* deep */ = true) const)
+CHECK(void get(TSphere3& sphere3) const)
 	s = Sphere3(v, 4.0);
 	v2 = Vector3();
 	s.get(v2, radius);
