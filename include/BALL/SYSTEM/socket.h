@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.2 1999/10/30 12:53:29 oliver Exp $
+// $Id: socket.h,v 1.3 1999/11/01 15:35:00 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -519,7 +519,7 @@ namespace BALL
 		}
 		
 		///
-		SocketBuf*operator -> () 
+		SocketBuf* operator -> () 
 		{ 
 			return rdbuf(); 
 		}
