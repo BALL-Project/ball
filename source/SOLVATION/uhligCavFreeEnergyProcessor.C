@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: uhligCavFreeEnergyProcessor.C,v 1.9 2002/12/12 11:04:08 oliver Exp $
+// $Id: uhligCavFreeEnergyProcessor.C,v 1.10 2002/12/16 12:14:12 anker Exp $
 
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -103,6 +103,15 @@ namespace BALL
 		
 		double A = calculateSASArea(*fragment_, solvent_radius);
 		
+		if (verbosity > 0)
+		{
+			Log.info() << "Uhlig parameters and calculated values:" << endl
+			<< "solvent radius:  " << solvent_radius << endl
+			<< "surface tension: " << gamma << endl
+			<< "constant:        " << C << endl
+			<< "SAS area:        " << A << endl;
+		}
+
 		// return energy in units of kJ/mol
 		energy_ = (gamma * A + C)/1000; 
 		return 1;
