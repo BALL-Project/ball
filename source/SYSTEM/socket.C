@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.25.4.2 2002/11/30 10:32:02 oliver Exp $
+// $Id: socket.C,v 1.25.4.3 2002/11/30 11:18:14 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -18,7 +18,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#ifdef BALL_INCLUDE_SYS_TIME_H
+#ifdef BALL_HAS_SYS_TIME_H
 #	include <sys/time.h>
 #endif
 #ifdef BALL_HAS_UNISTD_H
