@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.17.4.3 2002/12/01 21:45:23 oliver Exp $
+// $Id: timeStamp.C,v 1.17.4.4 2002/12/05 16:47:36 crauser Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
@@ -24,6 +24,11 @@ namespace BALL
 		: secs_(0),
 			usecs_(0)
 	{
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+		LARGE_INTEGER t;
+		QueryPerformanceFrequency(&t);
+		ticks=(long) t.QuadPart;
+#endif
 	}
 
 	PreciseTime::PreciseTime(const PreciseTime& time)
@@ -31,6 +36,9 @@ namespace BALL
 		:	secs_(time.secs_),
 			usecs_(time.usecs_)
 	{
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+		ticks=time.ticks;
+#endif
 	}
 
 	TimeStamp::TimeStamp()
@@ -66,9 +74,17 @@ namespace BALL
 		throw()
 	{
 #ifdef BALL_COMPILER_MSVC
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+		LARGE_INTEGER tvl;
+		QueryPerformanceCounter(&tvl);
+		long sec = tvl.QuadPart/ticks;
+		long usec = tvl.QuadPart/ticks * 1000000;
+		return PreciseTime(sec,usec);
+#else
 		struct _timeb tv;
 		_ftime(&tv);
 		return PreciseTime(tv.time, tv.millitm * 1000);
+#endif
 #else
 		// get the current time via the system call
 		// gettimeofday()
