@@ -1,4 +1,4 @@
-// $Id: singleton.h,v 1.3 2000/01/10 15:50:56 oliver Exp $
+// $Id: singleton.h,v 1.4 2000/07/16 19:27:46 oliver Exp $
 
 #ifndef BALL_CONCEPT_SINGLETON_H
 #define BALL_CONCEPT_SINGLETON_H
@@ -52,7 +52,7 @@ namespace BALL
 			++countReferences_();
 		}
 
-		Singleton &operator = (const Singleton &);
+		Singleton& operator = (const Singleton &);
 
 		private:
 
