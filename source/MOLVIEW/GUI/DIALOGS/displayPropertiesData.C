@@ -1,16 +1,12 @@
 // $Id:
 
-#include <qpixmap.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qgroupbox.h>
-
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.h>
+
+#include <qlayout.h>
+#include <qgroupbox.h>
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -187,53 +183,53 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
     color_sample->setMinimumSize(0, 0);
     color_sample->setMaximumSize(32767, 32767);
     {
-        QColorGroup normal;
-        normal.setColor( QColorGroup::Foreground, QColor( QRgb( 0 ) ) );
-        normal.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
-        normal.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
-        normal.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
-        normal.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
-        normal.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
-        normal.setColor( QColorGroup::Text, QColor( QRgb( 0 ) ) );
-        normal.setColor( QColorGroup::BrightText, QColor( QRgb( 0 ) ) );
-        normal.setColor( QColorGroup::ButtonText, QColor( QRgb( 0 ) ) );
-        normal.setColor( QColorGroup::Base, QColor( QRgb( 16777215 ) ) );
-        normal.setColor( QColorGroup::Background, QColor( QRgb( 16711680 ) ) );
-        normal.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
-        normal.setColor( QColorGroup::Highlight, QColor( QRgb( 0 ) ) );
-        normal.setColor( QColorGroup::HighlightedText, QColor( QRgb( 16777215 ) ) );
-        QColorGroup disabled;
-        disabled.setColor( QColorGroup::Foreground, QColor( QRgb( 8421504 ) ) );
-        disabled.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
-        disabled.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
-        disabled.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
-        disabled.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
-        disabled.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
-        disabled.setColor( QColorGroup::Text, QColor( QRgb( 8421504 ) ) );
-        disabled.setColor( QColorGroup::BrightText, QColor( QRgb( 8421504 ) ) );
-        disabled.setColor( QColorGroup::ButtonText, QColor( QRgb( 8421504 ) ) );
-        disabled.setColor( QColorGroup::Base, QColor( QRgb( 12632256 ) ) );
-        disabled.setColor( QColorGroup::Background, QColor( QRgb( 12632256 ) ) );
-        disabled.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
-        disabled.setColor( QColorGroup::Highlight, QColor( QRgb( 8421504 ) ) );
-        disabled.setColor( QColorGroup::HighlightedText, QColor( QRgb( 12632256 ) ) );
-        QColorGroup active;
-        active.setColor( QColorGroup::Foreground, QColor( QRgb( 0 ) ) );
-        active.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
-        active.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
-        active.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
-        active.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
-        active.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
-        active.setColor( QColorGroup::Text, QColor( QRgb( 0 ) ) );
-        active.setColor( QColorGroup::BrightText, QColor( QRgb( 0 ) ) );
-        active.setColor( QColorGroup::ButtonText, QColor( QRgb( 0 ) ) );
-        active.setColor( QColorGroup::Base, QColor( QRgb( 16777215 ) ) );
-        active.setColor( QColorGroup::Background, QColor( QRgb( 12632256 ) ) );
-        active.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
-        active.setColor( QColorGroup::Highlight, QColor( QRgb( 0 ) ) );
-        active.setColor( QColorGroup::HighlightedText, QColor( QRgb( 16777215 ) ) );
-        QPalette palette( normal, disabled, active );
-        color_sample->setPalette( palette );
+			QColorGroup normal;
+			normal.setColor( QColorGroup::Foreground, QColor( QRgb( 0 ) ) );
+			normal.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
+			normal.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
+			normal.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
+			normal.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
+			normal.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
+			normal.setColor( QColorGroup::Text, QColor( QRgb( 0 ) ) );
+			normal.setColor( QColorGroup::BrightText, QColor( QRgb( 0 ) ) );
+			normal.setColor( QColorGroup::ButtonText, QColor( QRgb( 0 ) ) );
+			normal.setColor( QColorGroup::Base, QColor( QRgb( 16777215 ) ) );
+			normal.setColor( QColorGroup::Background, QColor( QRgb( 16711680 ) ) );
+			normal.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
+			normal.setColor( QColorGroup::Highlight, QColor( QRgb( 0 ) ) );
+			normal.setColor( QColorGroup::HighlightedText, QColor( QRgb( 16777215 ) ) );
+			QColorGroup disabled;
+			disabled.setColor( QColorGroup::Foreground, QColor( QRgb( 8421504 ) ) );
+			disabled.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
+			disabled.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
+			disabled.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
+			disabled.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
+			disabled.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
+			disabled.setColor( QColorGroup::Text, QColor( QRgb( 8421504 ) ) );
+			disabled.setColor( QColorGroup::BrightText, QColor( QRgb( 8421504 ) ) );
+			disabled.setColor( QColorGroup::ButtonText, QColor( QRgb( 8421504 ) ) );
+			disabled.setColor( QColorGroup::Base, QColor( QRgb( 12632256 ) ) );
+			disabled.setColor( QColorGroup::Background, QColor( QRgb( 12632256 ) ) );
+			disabled.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
+			disabled.setColor( QColorGroup::Highlight, QColor( QRgb( 8421504 ) ) );
+			disabled.setColor( QColorGroup::HighlightedText, QColor( QRgb( 12632256 ) ) );
+			QColorGroup active;
+			active.setColor( QColorGroup::Foreground, QColor( QRgb( 0 ) ) );
+			active.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
+			active.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
+			active.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
+			active.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
+			active.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
+			active.setColor( QColorGroup::Text, QColor( QRgb( 0 ) ) );
+			active.setColor( QColorGroup::BrightText, QColor( QRgb( 0 ) ) );
+			active.setColor( QColorGroup::ButtonText, QColor( QRgb( 0 ) ) );
+			active.setColor( QColorGroup::Base, QColor( QRgb( 16777215 ) ) );
+			active.setColor( QColorGroup::Background, QColor( QRgb( 12632256 ) ) );
+			active.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
+			active.setColor( QColorGroup::Highlight, QColor( QRgb( 0 ) ) );
+			active.setColor( QColorGroup::HighlightedText, QColor( QRgb( 16777215 ) ) );
+			QPalette palette( normal, disabled, active );
+			color_sample->setPalette( palette );
     }
     color_sample->setFocusPolicy(QWidget::NoFocus);
     color_sample->setBackgroundMode(QWidget::PaletteBackground);
@@ -253,10 +249,6 @@ DisplayPropertiesData::DisplayPropertiesData(QWidget *parent, const char *name)
 DisplayPropertiesData::~DisplayPropertiesData()
 {
 }
-
-//#		ifdef BALL_NO_INLINE_FUNCTIONS
-//#			include <BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.iC>
-//#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,10 +1,8 @@
-// $Id: displayProperties.C,v 1.13.4.1 2002/05/12 14:06:24 oliver Exp $
-
+// $Id: displayProperties.C,v 1.13.4.2 2002/10/19 14:47:27 amoll Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/system.h>
-
 
 #include <qcolordialog.h>
 #include <qpopupmenu.h>
@@ -942,7 +940,8 @@ namespace BALL
 						catch (Exception::GeneralException e)
 						{
 							using namespace Exception;
-							Log.error() << "DisplayProperties: caught exception while constructing graphical representation." << std::endl;
+							Log.error() << "DisplayProperties: caught exception while constructing graphical representation." 
+													<< std::endl;
 							Log.error() << "DisplayProperties: " << e << std::endl;
 						}
 					}
@@ -1107,7 +1106,8 @@ namespace BALL
 							catch (Exception::GeneralException e)
 							{
 								using namespace Exception;
-								Log.error() << "DisplayProperties: caught exception while constructing graphical representation." << std::endl;
+								Log.error() << "DisplayProperties: caught exception while constructing graphical representation." 
+														<< std::endl;
 								Log.error() << "DisplayProperties: " << e << std::endl;
 							}
 						}
@@ -1125,49 +1125,47 @@ namespace BALL
 
 		void DisplayProperties::calculateCenter_(Composite &composite)
 		{
-					GeometricCenterProcessor center;
+			GeometricCenterProcessor center;
 
-					applyOnComposite_(composite, &center);
-						
-					setViewCenter_(center.getCenter());
-					setViewDirection_(2);
+			applyOnComposite_(composite, &center);
+					
+			setViewCenter_(center.getCenter());
+			setViewDirection_(2);
 
-					if (getValue_(ADDRESS__CAMERA_DISTANCE) != -1)
-					{
-						setViewDistance_(getValue_(ADDRESS__CAMERA_DISTANCE));
-					}
-					else
-					{
-						BoundingBoxProcessor bbox;
+			if (getValue_(ADDRESS__CAMERA_DISTANCE) != -1)
+			{
+				setViewDistance_(getValue_(ADDRESS__CAMERA_DISTANCE));
+			}
+			else
+			{
+				BoundingBoxProcessor bbox;
 
-						applyOnComposite_(composite, &bbox);
+				applyOnComposite_(composite, &bbox);
 
-						//				cout << (bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z << endl;
-
-						setViewDistance_((bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z + 3);
-					}
+				setViewDistance_((bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z + 3);
+			}
 		}
 
 		bool DisplayProperties::checkResidue_(Composite &composite)
 		{
-					ResidueChecker residue_checker(fragmentdb_);
+			ResidueChecker residue_checker(fragmentdb_);
 
-					if (RTTI::isKindOf<AtomContainer>(composite))
-					{
-						(RTTI::castTo<AtomContainer>(composite))->apply(residue_checker);
+			if (RTTI::isKindOf<AtomContainer>(composite))
+			{
+				(RTTI::castTo<AtomContainer>(composite))->apply(residue_checker);
 
-						return residue_checker.getStatus();
-					}
-					else if (RTTI::isKindOf<System>(composite))
-					{
-						(RTTI::castTo<System>(composite))->apply(residue_checker);
+				return residue_checker.getStatus();
+			}
+			else if (RTTI::isKindOf<System>(composite))
+			{
+				(RTTI::castTo<System>(composite))->apply(residue_checker);
 
-						return residue_checker.getStatus();				
-					} else {
-						Log << "ResidueChecker: cannot apply to a " << typeid(composite).name() << " object" << endl;
-					}
-					
-					return false;
+				return residue_checker.getStatus();				
+			} else {
+				Log << "ResidueChecker: cannot apply to a " << typeid(composite).name() << " object" << endl;
+			}
+			
+			return false;
 		}
 
 		void DisplayProperties::setColorCalculator_
@@ -1176,43 +1174,43 @@ namespace BALL
 			 const ColorRGBA & /* second_color */,
 			 const ColorRGBA & /* third_color */)
 		{
-					switch (values)
-					{
-						default:
-						case COLORCALCULATOR_VALUES__CUSTOM:
-							color_calculator_ = &custom_color_calculator_;
-							color_calculator_->setDefaultColor(first_color);
-							break;
+			switch (values)
+			{
+				default:
+				case COLORCALCULATOR_VALUES__CUSTOM:
+					color_calculator_ = &custom_color_calculator_;
+					color_calculator_->setDefaultColor(first_color);
+					break;
 
-						case COLORCALCULATOR_VALUES__ELEMENT:
-							color_calculator_ = &element_color_calculator_;
-							break;
+				case COLORCALCULATOR_VALUES__ELEMENT:
+					color_calculator_ = &element_color_calculator_;
+					break;
 
-						case COLORCALCULATOR_VALUES__RESIDUE_NAME:
-							color_calculator_ = &residue_name_color_calculator_;
-							break;
+				case COLORCALCULATOR_VALUES__RESIDUE_NAME:
+					color_calculator_ = &residue_name_color_calculator_;
+					break;
 
-						case COLORCALCULATOR_VALUES__ATOM_CHARGE:
-							color_calculator_ = &atom_charge_color_calculator_;
-							break;
-					}
+				case COLORCALCULATOR_VALUES__ATOM_CHARGE:
+					color_calculator_ = &atom_charge_color_calculator_;
+					break;
+			}
 		}
 
 		void DisplayProperties::setColorCalculator_(ColorCalculator& color_calculator)
 		{
-					color_calculator_ = &color_calculator;
+			color_calculator_ = &color_calculator;
 		}
 
 		void DisplayProperties::applyOnComposite_ 
 			(Composite &composite, UnaryProcessor<Composite> *processor)
 		{
-					composite.apply(*processor);
+			composite.apply(*processor);
 		}
 
 		void DisplayProperties::applyOnComposite_
 			(Composite &composite, UnaryProcessor<Atom> *processor)
 		{
-					composite.apply(*processor);
+			composite.apply(*processor);
 		}
 
 
