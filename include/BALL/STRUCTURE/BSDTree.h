@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.7 2001/02/22 16:23:19 strobel Exp $
+// $Id: BSDTree.h,v 1.8 2001/02/23 01:40:29 amoll Exp $
 
 #define DEBUG_BSDTREE
 
@@ -19,11 +19,8 @@
 namespace BALL 
 {
 
-	/** Generic BSD Tree Class.
-
-			\\
-			{\bf Definition:}\URL{BALL/STRUCTURE/BSDTree.h}
-			\\
+	/** Generic BSD Tree Class.	\\
+			{\bf Definition:}\URL{BALL/STRUCTURE/BSDTree.h}	\\
 	*/
 	template <typename T>
 	class TBSDTree
@@ -47,8 +44,8 @@ namespace BALL
 			DIRECTION_Y  = 1,
 			DIRECTION_Z  = 2
 		};
-		//@}
 
+		//@}
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -62,7 +59,6 @@ namespace BALL
 				bounding_box_(), left_(NULL), right_(NULL)
 		{
 		}
-
 
 		// BAUSTELLE: should honor the deep flag!
 		/**	Copy constructor.
@@ -156,7 +152,6 @@ namespace BALL
 			}
 		}
 		//@}
-
 		/**	@name	Assignment	
 		*/
 		//@{
@@ -173,7 +168,6 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name	Acessors
 		*/
 		//@{
@@ -200,7 +194,6 @@ namespace BALL
 				z_max = Maths::max(point_[*i].z,z_max);
 			}
 		}
-
 
 		void build()
 		{
@@ -271,7 +264,6 @@ namespace BALL
 			}
 		}
 
-
 		list<Index> get(const TVector3<T>& p, const T& length)
 		{
 			TBox3<T> test_box(TVector3<T>(p.x-length,p.y-length,p.z-length),
@@ -311,8 +303,8 @@ namespace BALL
 				}
 			}
 		}
-		//@}
 
+		//@}
 
 		protected:
 
