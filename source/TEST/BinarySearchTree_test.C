@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.3 2000/07/31 21:57:57 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.4 2000/08/01 10:13:26 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,6 +18,7 @@ class BSTreeItemCollector
 	{
 		// clear the item list
 		list_.clear();
+		list_it_ = list_.begin();
 		return true;
 	}
 
@@ -38,22 +39,34 @@ class BSTreeItemCollector
 		return list_;
 	}
 	
+	BSTreeItem* getPointer()
+	{
+		if (list_it_ == list_.end())
+		{
+			return 0;
+		}
+		BSTreeItem* temp = *list_it_;
+		list_it_++;
+		return temp;
+	}
+	Size getSize()
+	{
+		return list_.size();
+	}
+	
+	void reset()
+	{
+		list_it_ = list_.begin();
+	}
+
+
 	private:
 	list<BSTreeItem*>	list_;
+	list<BSTreeItem*>::iterator list_it_;
 };
 
-BSTreeItem* test(list<BSTreeItem*>& mylist, list<BSTreeItem*>::iterator& list_it)
-{
-	if (list_it == mylist.end())
-	{
-		return 0;
-	}
-	BSTreeItem* temp = *list_it;
-	list_it++;
-	return temp;
-}
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.3 2000/07/31 21:57:57 amoll Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.4 2000/08/01 10:13:26 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -197,14 +210,13 @@ CHECK(rotateLeft())
 RESULT
 
 BSTreeItemCollector myproc;
-list<BSTreeItem*>::iterator list_it;
 
 CHECK(applyPreorder(UnaryProcessor<BSTreeItem>& processor))
-	list<BSTreeItem*> mylist(myproc.getList());
+	myproc.start();
 	item.applyPreorder(myproc);
-	list_it = mylist.begin();
-//	TEST_EQUAL((list_it != mylist.end()) && (*list_it == &left), true)
-	TEST_EQUAL(test(mylist, list_it), &left)
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 7)
+	TEST_EQUAL(myproc.getPointer(), &left)
 RESULT
 
 CHECK(applyInorder(UnaryProcessor<BSTreeItem>& processor))
