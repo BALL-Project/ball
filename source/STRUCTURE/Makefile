@@ -1,8 +1,9 @@
 DIRECTORY=STRUCTURE
-
 THISLIB=$(LIBNAME)
 
-CPP_SOURCES=\
+SMILES_SOURCES=$(BALL_HAS_FLEX_YACC:true=smilesParser.C smilesParserParser.C smilesParserLexer.C)
+
+CPP_SOURCES= $(SMILES_SOURCES)\
 	analyticalSES.C\
 	BSDTree.C\
 	connolly.C\
@@ -36,5 +37,20 @@ CPP_SOURCES=\
 	triangulatedSES.C\
 	triangulatedSurface.C
 
+
 include ../common.mak
 include .Dependencies
+
+test:
+	@echo "SMILES_SOURCE      = $(SMILES_SOURCES)"
+	@echo "BALL_HAS_FLEX_YACC = $(BALL_HAS_FLEX_YACC)"
+	@echo "CPP_SOURCES        = $(CPP_SOURCES)"
+	@echo "OBJECTS            = $(OBJECTS)"
+
+smilesParserParser.C:	smilesParserParser.y
+	$(YACC) -d smilesParserParser.y &&\
+		$(MV) y.tab.h smilesParserParser.h &&\
+		$(MV) y.tab.c smilesParserParser.C
+
+smilesParserLexer.C: smilesParserLexer.l smilesParserParser.C
+	$(LEX) -osmilesParserLexer.C smilesParserLexer.l
