@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.25 2001/07/14 18:46:05 oliver Exp $
+// $Id: classTest.h,v 1.26 2001/12/07 00:45:56 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -219,6 +219,8 @@ int main(int argc, char **argv)\
 		std::cout << "checking " << #test_name << "... " << std::flush;\
 	try\
 	{\
+		while (true)\
+		{\
 
 /**	Print a status message.
 		If tests require longer preparations, {\tt STATUS} may be used to 
@@ -233,15 +235,15 @@ int main(int argc, char **argv)\
 		\end{verbatim}
 */
 #define STATUS(message)\
-	if (TEST::verbose > 1)\
-	{\
-		if (!TEST::newline) \
-		{\
-			TEST::newline = true;\
-			std::cout << std::endl;\
-		}\
-		std::cout << "  status (line " << __LINE__ << "): " << message << std::endl;\
-	}\
+					if (TEST::verbose > 1)\
+					{\
+						if (!TEST::newline) \
+						{\
+							TEST::newline = true;\
+							std::cout << std::endl;\
+						}\
+						std::cout << "  status (line " << __LINE__ << "): " << message << std::endl;\
+					}\
 
 /**	Check subtest result.
 		Each elementary test macro updates an internal variable ({\bf TEST}, defined by 
@@ -261,6 +263,8 @@ int main(int argc, char **argv)\
 		the current subtest will be marked as failed (as is the whole test program).
 */
 #define RESULT \
+			break;\
+		}\
   }\
 	/* catch FileNotFound exceptions to print out the file name */\
 	catch (BALL::Exception::FileNotFound e)\
@@ -467,6 +471,13 @@ int main(int argc, char **argv)\
 				std::cout << " - " << std::endl;\
 		}\
 	}\
+
+/** Skip remainder of subtest.
+    If the condition is not fulfilled, the remainder of the test is skipped.
+    The status (whether it fails or passes) remains unchanged.
+*/
+#define ABORT_IF(condition) \
+  if (condition) break;
 
 /**	File comparison macro.
 		This macro is used to test file operations. It compares the file with name {\tt filename} 
