@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.113 2004/10/09 15:36:06 amoll Exp $
+// $Id: mainControl.C,v 1.114 2004/10/14 15:21:20 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -408,7 +408,7 @@ namespace BALL
 			// overridden in Controls
 			if (delete_id_ != 0) menuBar()->setItemEnabled(delete_id_, false);
 
-			setCompositesMuteable(simulation_thread_ == 0);
+			if (simulation_thread_ != 0) setCompositesMuteable(false);
 
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
@@ -1309,8 +1309,10 @@ namespace BALL
 		{
 			if (!primitive_manager_.has(rep)) return false;
 
+
 			RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::REMOVE);
 			notify_(rm);
+
 			primitive_manager_.remove(rep);
 
 			return true;
@@ -1372,6 +1374,9 @@ namespace BALL
 		void MainControl::setCompositesMuteable(bool state) 
 		{
 			if (state == composites_muteable_) return;
+
+			// prevent reseting to normal mode while simulation is still running
+			if (state && simulation_thread_ != 0) return;
 
 			composites_muteable_ = state;
 			if (state)

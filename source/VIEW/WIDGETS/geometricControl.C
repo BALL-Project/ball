@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.55 2004/09/16 11:23:54 amoll Exp $
+// $Id: geometricControl.C,v 1.56 2004/10/14 15:21:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -300,6 +300,8 @@ namespace BALL
 		void GeometricControl::generateListViewItem_(Representation& rep)
 			throw()
 		{
+			if (!getMainControl()->getPrimitiveManager().has(rep)) return;
+
 			QString properties = rep.getProperties().c_str();
 			// create a new list item
 			SelectableListViewItem* new_item = 
@@ -326,6 +328,7 @@ namespace BALL
 			for (ItemList::Iterator it = selected.begin(); it != selected.end(); ++it)
 			{
 				Representation* rep = ((SelectableListViewItem*) *it)->getRepresentation();
+				getMainControl()->getPrimitiveManager().remove(*rep);
 				if (rep->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 				{
 					SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
@@ -341,7 +344,6 @@ namespace BALL
 																																	 RepresentationMessage::REMOVE);
 				notify_(message);
 
-				getMainControl()->getPrimitiveManager().remove(*rep);
 				removeRepresentation(*rep);
 			}
 
@@ -499,7 +501,7 @@ namespace BALL
 			throw()
 		{
 			ItemList item_list = getSelectedItems(); 
-			if (item_list.size() > 0) main_control.setDeleteEntryEnabled(true);
+			if (item_list.size() > 0 && main_control.compositesAreMuteable()) main_control.setDeleteEntryEnabled(true);
 		}
 
 		void GeometricControl::focusRepresentation()

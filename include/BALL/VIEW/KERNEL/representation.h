@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.23 2004/07/26 13:45:19 amoll Exp $
+// $Id: representation.h,v 1.24 2004/10/14 15:21:24 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -272,7 +272,7 @@ namespace BALL
 			///
 			void dump(std::ostream& s, Size depth) const
 				throw();
-			
+
 			///
 			String toString() const
 				throw();

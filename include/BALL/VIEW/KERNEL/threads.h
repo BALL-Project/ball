@@ -71,6 +71,10 @@ namespace VIEW
 				throw() { rep_ = &rep;}
 
 			///
+			Representation* getRepresentation()
+				throw() { return rep_; }
+
+			///
 			void setRebuild(bool rebuild)
 				throw(){ rebuild_ = rebuild;}
 

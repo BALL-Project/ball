@@ -37,14 +37,10 @@ Fixed:
 - creation of models for several selected items
 - overall cleanup of RegularDataWidgets
 - export of PNGs could result in strange problems e.g. with empty images
-- it was possible to delete molecular entities while simulation was running -> core dump
 - its now possible to create transparent wireframe and dot models
 - AtomDistanceColorProcessor
 - PeptideDialog: deletion of sequence
 - increased performance of SnapShot visualisation, especially for large numbers of SnapShots
-- SnapShotVisualisation Dialog could cause core dump
-- DatasetControl could cause core dump, after deleting trajectory when 
-	SnapShotVisualisation Dialog was still open
 - A click on the "default" button in Preferences now only works on currently selected page
 - it was not possible to reset the Element-Coloring-Scheme to the default values 
 - issue with restoring window's geometry on X11 (still buggy on some X-Servers)
@@ -55,6 +51,12 @@ Fixed:
 - prevent flicking on startup from MainControlPreferences dialog
 - ResidueIndexColorProcessor now no longer counts water Residues 
 - ResidueNameColorProcessor now supports RNA
+- core dumps:
+ - when starting a simulation, while a Representation was still updateing
+ - when removing a Representation, while a simulation was running
+ - after deleting trajectory when SnapShotVisualisation Dialog was still open
+ - from SnapShotVisualisation Dialog
+ - from deleting molecular entities while simulation was running
 
 Changed:
 - Layout of Preferences 
