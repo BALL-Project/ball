@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.25 2001/05/16 01:47:32 oliver Exp $
+// $Id: Composite_test.C,v 1.26 2001/12/31 19:05:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.25 2001/05/16 01:47:32 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.26 2001/12/31 19:05:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1226,13 +1226,16 @@ CHECK(bool applyLevel(UnaryProcessor<Composite>& processor, long level))
 
 	b.applyLevel(myproc, 1);
 	TEST_EQUAL(myproc.getSize(), 2)
-	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();// ???
+	TEST_EQUAL(myproc.getPointer(), &c) 
+	myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), &d) 
+	myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
 
 	b.applyLevel(myproc, 2);
 	TEST_EQUAL(myproc.getSize(), 1)
-	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), &e) 
+	myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 

@@ -1,4 +1,4 @@
-// $Id: Object_test.C,v 1.7 2001/12/30 13:28:58 sturm Exp $
+// $Id: Object_test.C,v 1.8 2001/12/31 19:05:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Object, "$Id: Object_test.C,v 1.7 2001/12/30 13:28:58 sturm Exp $")
+START_TEST(Object, "$Id: Object_test.C,v 1.8 2001/12/31 19:05:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -173,8 +173,14 @@ CHECK(Object::isValid() const  throw())
 RESULT
 
 
-CHECK(Object::dump(::std::ostream& s = std::cout, Size depth = 0) const  throw())
-  // ?????
+CHECK(Object::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
+	Object o;
+	String filename;
+  NEW_TMP_FILE(filename)
+  std::ofstream outfile(filename.c_str(), File::OUT);
+  o.dump(outfile);
+  outfile.close();
+  TEST_FILE(filename.c_str(), "data/Object_test.txt", true)
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.15 2001/12/30 13:28:52 sturm Exp $
+// $Id: createSpectrumProcessor.C,v 1.16 2001/12/31 19:05:51 oliver Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -47,7 +47,7 @@ namespace BALL
 
 		Path path;
 		String expanded_filename = path.find(filename);
-		if (expanded_filename == "")
+		if (expanded_filename.empty())
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
@@ -230,10 +230,10 @@ namespace BALL
 		return expression_.getExpressionString();
 	}
 
-	const RegularData1D& operator << (RegularData1D& data, const PeakList1D& peak_list)
+	const RegularData1D& operator << (RegularData1D& data, const PeakList1D& /* peak_list */)
 		throw()
 	{
-		// ?????
+		// ????? implementation missing!
 
 		return data;
 	}
