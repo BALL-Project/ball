@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.7 2000/07/31 15:16:55 oliver Exp $
+// $Id: binarySearchTree.h,v 1.8 2000/08/01 12:35:50 amoll Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -67,22 +67,12 @@ namespace BALL
 		/**	Default constructor.
 				Create a new and empty BSTreeItem
 		*/
-		BSTreeItem()
-			: left(0),
-				right(0),
-				color(BSTreeItem::BLACK)
-		{
-		}
+		BSTreeItem();
 
 		/**	Copy constructor.
 				Create a new BSTreeItem from another
 		*/
-		BSTreeItem(const BSTreeItem& item, bool /* deep */= true)
-			: left(item.left),
-				right(item.right),
-				color(item.color)
-		{
-		}
+		BSTreeItem(const BSTreeItem& item, bool /* deep */= true);
 
 		/**	Detailled Constructor.
 				Create a new BSTreeItem with color {\tt color} and the two child items
@@ -91,19 +81,12 @@ namespace BALL
 				@param	left_item the left child
 				@param	right_item the right child
 		*/
-		BSTreeItem(BSTreeItem* left_item, BSTreeItem* right_item, char color = BSTreeItem::BLACK)
-			:	left(left_item),
-				right(right_item),
-				color(color)
-		{
-		}
+		BSTreeItem(BSTreeItem* left_item, BSTreeItem* right_item, char color = BSTreeItem::BLACK);
 
 		/**	Destructor.
 				Destruct the BSTreeItem
 		*/
-		~BSTreeItem()
-		{
-		}
+		~BSTreeItem();
 		//@}
 
 		/**	@name	Accessors
@@ -115,36 +98,35 @@ namespace BALL
 				is not destructed.
 				@param	item the new left child
 		*/
-		void setLeftChild(BSTreeItem* item)
-		{
-			left = item;
-		}
+		void setLeftChild(BSTreeItem* item);
 
 		/**	Return the left child.
 				@return the item's left child item
 		*/
-		BSTreeItem*& getLeftChild()
-		{
-			return (BSTreeItem*&)left;
-		}
+		BSTreeItem*& getLeftChild() const;
 		
 		/**	Assign the right child.
 				The item's right child is replaced by {\tt item}. The replaced item
 				is not destructed.
 				@param	item the new right child
 		*/
-		void setRightChild(BSTreeItem *item)
-		{
-			right = item;
-		}
+		void setRightChild(BSTreeItem *item);
 
 		/**	Return the right child.
 				@return the item's right child item
 		*/
-		BSTreeItem*& getRightChild()
-		{
-			return (BSTreeItem*&)right;
-		}
+		BSTreeItem*& getRightChild() const;
+
+		/**	Return the color of this instance.
+				@return char the color 0 = RED, 1 = BLACK
+		*/
+		char getColor() const;
+
+		/**	Set the color of this instance.
+				If no suitable value for color is given nothing happens.
+				@param color the color 0 = RED, 1 = BLACK
+		*/
+		void setColor(char color);
 
 		/**	
 		*/
@@ -200,115 +182,35 @@ namespace BALL
 
 		/**
 		*/
-		bool applyPreorder(UnaryProcessor<BSTreeItem>& processor)
-		{
-			if (processor.start() == false)
-				return false;
-
-			Processor::Result result = applyPreorder_(processor);
-
-			if (result <= Processor::BREAK)
-				return (result == Processor::BREAK) ? true : false;
-
-			return processor.finish();
-		}
+		bool applyPreorder(UnaryProcessor<BSTreeItem>& processor);
 		
 		/**
 		*/
-		bool applyInorder(UnaryProcessor<BSTreeItem>& processor)
-		{
-			if (processor.start() == false)
-				return false;
-
-			Processor::Result result = applyInorder_(processor);
-
-			if (result <= Processor::BREAK)
-				return (result == Processor::BREAK) ? true : false;
-
-			return processor.finish();
-		}
+		bool applyInorder(UnaryProcessor<BSTreeItem>& processor);
 
 		/**
 		*/
-		bool applyPostorder(UnaryProcessor<BSTreeItem>& processor)
-		{
-			if (processor.start() == false)
-				return false;
-	
-			Processor::Result result = applyPostorder_(processor);
-
-			if (result <= Processor::BREAK)
-				return (result == Processor::BREAK) ? true : false;
-
-			return processor.finish();
-		}
+		bool applyPostorder(UnaryProcessor<BSTreeItem>& processor);
 
 		/**
 		*/
-		bool applyLevelorder(UnaryProcessor<BSTreeItem>& processor)
-		{
-			if (processor.start() == false)
-				return false;
-
-			Processor::Result result = applyLevelorder_(processor);
-
-			if (result <= Processor::BREAK)
-				return (result == Processor::BREAK) ? true : false;
-
-			return processor.finish();
-		}
+		bool applyLevelorder(UnaryProcessor<BSTreeItem>& processor);
 
 		/**
 		*/
-		bool applyPreorderFlat(UnaryProcessor<BSTreeItem>& processor)
-		{
-			if (processor.start() == false)
-				return false;
-
-			Processor::Result result = applyPreorderFlat_(processor);
-
-			if (result <= Processor::BREAK)
-				return (result == Processor::BREAK) ? true : false;
-
-			return processor.finish();
-		}
+		bool applyPreorderFlat(UnaryProcessor<BSTreeItem>& processor);
 
 		/**
 		*/
-		bool applyInorderFlat(UnaryProcessor<BSTreeItem>& processor)
-		{
-			if (processor.start() == false)
-				return false;
-
-			Processor::Result result = applyInorderFlat_(processor);
-
-			if (result <= Processor::BREAK)
-				return (result == Processor::BREAK) ? true : false;
-
-			return processor.finish();
-		}
+		bool applyInorderFlat(UnaryProcessor<BSTreeItem>& processor);
 
 		/**
 		*/
-		bool applyPostorderFlat(UnaryProcessor<BSTreeItem>& processor)
-		{
-			if (processor.start() == false)
-				return false;
-
-			Processor::Result result = applyPostorderFlat_(processor);
-
-			if (result <= Processor::BREAK)
-				return (result == Processor::BREAK) ? true : false;
-
-			return processor.finish();
-		}
+		bool applyPostorderFlat(UnaryProcessor<BSTreeItem>& processor);
 
 		/**
 		*/
-		bool apply(UnaryProcessor<BSTreeItem>& processor)
-		{
-			return applyPreorder(processor);
-		}
+		bool apply(UnaryProcessor<BSTreeItem>& processor);
 		//@}
 
 
@@ -321,41 +223,14 @@ namespace BALL
 				a leaf of the tree, i.e. if it has no children.
 				@return bool {\bf true} if the node has no children
 		*/
-		bool isLeaf() const
-		{
-			return (left == 0 && right == 0);
-		}
+		bool isLeaf() const;
 
 		/**	Return true if the node is an interior node of the tree.
 				This method returns {\bf true} if the node is 
 				an interior node of the tree, i.e. if it has children.
 				@return bool {\bf true} if the node has children
 		*/
-		bool isInterior() const
-		{
-			return (left != 0 || right != 0);
-		}
-		//@}
-
-		/**	@name	Attributes
-		*/
-		//@{
-
-		/**	The left child.
-				{\tt left} is a pointer to the left child of this node.
-		*/
-		BSTreeItem* left;
-
-		/**	The right child.
-				{\tt right} is a pointer to the right child of this node.
-		*/
-		BSTreeItem* right;
-
-		/**	The color of the node.
-				Each node has a color: either {\tt RED} or {\tt BLACK}.
-		*/
-		char color;
-
+		bool isInterior() const;
 		//@}
 
 		struct Pack 
@@ -371,23 +246,32 @@ namespace BALL
 			BSTreeItem* pm;
 		};
 
-		static BSTreeItem* insertBalance
-			(BSTreeItem* root, 
-			 BSTreeItem::Pack& pp);
+		static BSTreeItem* insertBalance(BSTreeItem* root, BSTreeItem::Pack& pp);
 		
-		static BSTreeItem* removeBalance
-			(BSTreeItem* root, 
-			 BSTreeItem::Pack& pp);
+		static BSTreeItem* removeBalance(BSTreeItem* root, BSTreeItem::Pack& pp);
 		
-		static BSTreeItem* replace
-			(BSTreeItem* root, 
-			 BSTreeItem::Pack& pp);
+		static BSTreeItem* replace(BSTreeItem* root, BSTreeItem::Pack& pp);
 		
-		static BSTreeItem* detachMinimum
-			(BSTreeItem*& root);
+		static BSTreeItem* detachMinimum(BSTreeItem*& root);
 		
-		static BSTreeItem* detachMaximum
-			(BSTreeItem*& root);
+		static BSTreeItem* detachMaximum(BSTreeItem*& root);
+
+		protected:
+
+		/**	The left child.
+				{\tt left} is a pointer to the left child of this node.
+		*/
+		BSTreeItem* left_;
+
+		/**	The right child.
+				{\tt right} is a pointer to the right child of this node.
+		*/
+		BSTreeItem* right_;
+
+		/**	The color of the node.
+				Each node has a color: either {\tt RED} or {\tt BLACK}.
+		*/
+		char color_;
 
 		private:
 
@@ -468,14 +352,14 @@ namespace BALL
 		*/
 		TBSTreeItem*& getLeftChild()
 		{
-			return (TBSTreeItem*&)left;
+			return (TBSTreeItem*&)left_;
 		}
 		
 		/**
 		*/
 		TBSTreeItem*& getRightChild()
 		{
-			return (TBSTreeItem*&)right;
+			return (TBSTreeItem*&)right_;
 		}
 
 		/**
@@ -492,12 +376,12 @@ namespace BALL
 					++size;
 				}
 
-				if (item->left)
+				if (item->left_)
 				{
-					size += ((TBSTreeItem*)item->left)->count(data, comparator);
+					size += ((TBSTreeItem*)item->left_)->count(data, comparator);
 				}
 	
-				item = (TBSTreeItem*)item->right;
+				item = (TBSTreeItem*)item->right_;
 			}
 
 			return size;
@@ -1742,10 +1626,10 @@ namespace BALL
 	{
 		BSTreeItem* parent = root_->getParentOfMinimum();
 		
-		if (parent && parent->left)
+		if (parent && parent->left_)
 		{
 			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-				((BSTreeItem *&)root_, parent->left, parent, false);
+				((BSTreeItem *&)root_, parent->left_, parent, false);
 		} else {
 			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
 				((BSTreeItem *&)root_, root_, 0, false);
@@ -1758,10 +1642,10 @@ namespace BALL
 	{
 		BSTreeItem* parent = root_->getParentOfMaximum();
 		
-		if (parent && parent->right)
+		if (parent && parent->right_)
 		{
 			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-				((BSTreeItem *&)root_, parent->right, parent, true);
+				((BSTreeItem *&)root_, parent->right_, parent, true);
 		} else {
 			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
 				((BSTreeItem *&)root_, root_, 0, false);
@@ -2037,7 +1921,7 @@ namespace BALL
 		} else {
 			return newItem
 				(((TBSTreeItem<DataType> *)item)->data_, 
-				 clone_(item->left), clone_(item->right), item->color);
+				 clone_(item->left_), clone_(item->right_), item->color_);
 		}
 	}
 
@@ -2061,14 +1945,14 @@ namespace BALL
 		{
 			if (parent != 0)
 			{
-				if (parent->left == (BSTreeItem *)childitem)
+				if (parent->left_ == (BSTreeItem *)childitem)
 				{
 					if (comparator_->isLess(parent->data_, childitem->data_) == true)
 					{
 						return false;
 					}
 				}
-				else if (parent->right == (BSTreeItem *)childitem)
+				else if (parent->right_ == (BSTreeItem *)childitem)
 				{
 					if (comparator_->isLess(childitem->data_, parent->data_) == true)
 					{
@@ -2077,8 +1961,8 @@ namespace BALL
 				}
 			}
 			
-			if (isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->left) == false
-					|| isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->right) == false)
+			if (isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->left_) == false
+					|| isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->right_) == false)
 			{
 				return false;
 			}
@@ -2095,25 +1979,29 @@ namespace BALL
 
 		if (item != 0)
 		{
-			s << item->data_ << " (" << (int)item->color << ')' << endl;
+			s << item->data_ << " (" << (int)item->color_ << ')' << endl;
 
-			if (item->right != 0)
+			if (item->right_ != 0)
 			{
 				BALL_DUMP_DEPTH(s, depth);
 				s << "  r: ";
-				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->right);
+				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->right_);
 			}
 
-			if (item->left != 0)
+			if (item->left_ != 0)
 			{
 				BALL_DUMP_DEPTH(s, depth);
 				s << "  l: ";
-				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->left);
+				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->left_);
 			}
 		}
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
+
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/DATATYPE/binarySearchTree.iC>
+#	endif
 
 } // namespace BALL
 

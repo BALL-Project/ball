@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.C,v 1.3 2000/08/01 08:05:07 oliver Exp $
+// $Id: binarySearchTree.C,v 1.4 2000/08/01 12:36:06 amoll Exp $
 
 #include <BALL/DATATYPE/binarySearchTree.h>
 
@@ -12,17 +12,17 @@ namespace BALL
 
 		while(item) 
 		{
-			if (item->left)
+			if (item->left_)
 			{
-				size += item->left->getSize();
+				size += item->left_->getSize();
 			}
 			
-			if (item->right) 
+			if (item->right_) 
 			{
 				++size; 
 			}
 			
-			item = item->right;
+			item = item->right_;
 		}
 
 		return size;
@@ -30,12 +30,11 @@ namespace BALL
 
 	Size BSTreeItem::getHeight() const
 	{
-		Size lhsize = (left) ? left->getHeight() : 0;
-		Size rhsize = (right) ? right->getHeight() : 0;
+		Size lhsize = (left_) ? left_->getHeight() : 0;
+		Size rhsize = (right_) ? right_->getHeight() : 0;
 
 		return (((lhsize > rhsize) ? lhsize : rhsize) + 1);
 	}
-
 
 	Processor::Result BSTreeItem::applyPreorder_
 		(UnaryProcessor<BSTreeItem>& processor)
@@ -52,9 +51,9 @@ namespace BALL
 				return result;
 			}
 			
-			if (item->left)
+			if (item->left_)
 			{
-				result = item->left->applyPreorder_(processor);
+				result = item->left_->applyPreorder_(processor);
 				
 				if (result <= Processor::BREAK)
 				{
@@ -62,7 +61,7 @@ namespace BALL
 				}
 			}
 			
-			item = item->right;
+			item = item->right_;
 		}
 
 		return Processor::CONTINUE;
@@ -76,9 +75,9 @@ namespace BALL
 
 		while(item) 
 		{
-			if (item->left)
+			if (item->left_)
 			{
-				result = item->left->applyInorder_(processor);
+				result = item->left_->applyInorder_(processor);
 				
 				if (result <= Processor::BREAK)
 				{
@@ -93,7 +92,7 @@ namespace BALL
 				return result;
 			}
 			
-			item = item->right;
+			item = item->right_;
 		}
 
 		return Processor::CONTINUE;
@@ -104,9 +103,9 @@ namespace BALL
 	{
 		Processor::Result result = Processor::ABORT;
 
-		if (left)
+		if (left_)
 		{
-			result = left->applyPostorder_(processor);
+			result = left_->applyPostorder_(processor);
 				
 			if (result <= Processor::BREAK)
 			{
@@ -114,9 +113,9 @@ namespace BALL
 			}
 		}
 		
-		if (right)
+		if (right_)
 		{
-			result = right->applyPostorder_(processor);
+			result = right_->applyPostorder_(processor);
 				
 			if (result <= Processor::BREAK)
 			{
@@ -147,7 +146,7 @@ namespace BALL
 				 }
 
 				 path.push(item);
-				 item = item->left;
+				 item = item->left_;
 			}
 			else 
 			{
@@ -157,7 +156,7 @@ namespace BALL
 					break;
 				}
 				
-				item = item->right;
+				item = item->right_;
 			}
 		}
 
@@ -177,7 +176,7 @@ namespace BALL
 			if (item) 
 			{
 				path.push(item);
-				item = item->left;
+				item = item->left_;
 			}
 			else 
 			{
@@ -194,7 +193,7 @@ namespace BALL
 					return result;
 				}
 				
-				item = item->right;
+				item = item->right_;
 			}
 		}
 
@@ -218,7 +217,7 @@ namespace BALL
 				if (item) 
 				{
 					path.push(item);
-					item = item->left;
+					item = item->left_;
 				}
 				else 
 				{
@@ -237,21 +236,21 @@ namespace BALL
 				
 				item = *path.top();
 				
-				if (leftitem == item->left && item->right)
+				if (leftitem == item->left_ && item->right_)
 				{
-					item = item->right;
+					item = item->right_;
 					state = false;
 				}
 				else 
 				{
-		result = processor(*item);
+					result = processor(*item);
 		
-		if (result <= Processor::BREAK)
-		{
-			return result;
-		}
+					if (result <= Processor::BREAK)
+					{
+						return result;
+					}
 
-		path.pop();
+					path.pop();
 				}
 			}
 		}
@@ -280,13 +279,17 @@ namespace BALL
 			result = processor(*parentitem);
 
 			if (result <= Processor::BREAK)
+			{
 				return result;
-			
-			if (parentitem->left)
-				path.pushBottom(parentitem->left);
-			
-			if (parentitem->right)
-				path.pushBottom(parentitem->right);
+			}
+			if (parentitem->left_)
+			{
+				path.pushBottom(parentitem->left_);
+			}
+			if (parentitem->right_)
+			{
+				path.pushBottom(parentitem->right_);
+			}
 		}
 
 		return Processor::CONTINUE;
@@ -295,35 +298,31 @@ namespace BALL
 
 	#ifdef OLD
 
-	BSTreeItem *
-	BSTreeItem::rotateRight
-		()
+	BSTreeItem*	BSTreeItem::rotateRight()
 	{
 		BSTreeItem *item = this;
 
-		if (item->left != 0) 
+		if (item->left_ != 0) 
 		{
 			BSTreeItem *p = item;
-			item = item->left;
-			p->left = item->right;
-			item->right = p;
+			item = item->left_;
+			p->left_ = item->right_;
+			item->right_ = p;
 		}
 
 		return item;
 	}
 
-	BSTreeItem *
-	BSTreeItem::rotateLeft
-		()
+	BSTreeItem* BSTreeItem::rotateLeft()
 	{
 		BSTreeItem *item = this;
 
-		if (item->right != 0) 
+		if (item->right_ != 0) 
 		{
 			BSTreeItem *p = item;
-			item = item->right;
-			p->right = item->left;
-			item->left = p;
+			item = item->right_;
+			p->right_ = item->left_;
+			item->left_ = p;
 		}
 
 		return item;
@@ -331,96 +330,79 @@ namespace BALL
 
 	#else
 
-	BSTreeItem *
-	BSTreeItem::rotateRight
-		()
-	// PRECONDITION left child of p exists.
-	{
+	BSTreeItem* BSTreeItem::rotateRight()
+	{	// PRECONDITION left child of p exists.
 		BSTreeItem *p = this;
-		BSTreeItem *item = p->left;
-		p->left = item->right;
-		item->right = p;
+		BSTreeItem *item = p->left_;
+		p->left_ = item->right_;
+		item->right_ = p;
 		return item;
 	}
 
-	BSTreeItem *
-	BSTreeItem::rotateLeft
-		()
-	// PRECONDITION right child of p exists.
-	{
+	BSTreeItem*	BSTreeItem::rotateLeft()
+	{	// PRECONDITION right child of p exists.
 		BSTreeItem *p = this;
-		BSTreeItem *item = p->right;
-		p->right = item->left;
-		item->left = p;
+		BSTreeItem *item = p->right_;
+		p->right_ = item->left_;
+		item->left_ = p;
 		return item;
 	}
 
 	#endif
 
-	const BSTreeItem *
-	BSTreeItem::getMinimum
-		() const
+	const BSTreeItem*	BSTreeItem::getMinimum() const
 	{
 		const BSTreeItem *item = this;
 
-		while(item->left)
+		while(item->left_)
 		{
-			item = item->left;
+			item = item->left_;
 		}
 
 		return item;
 	}
 
-	const BSTreeItem *
-	BSTreeItem::getMaximum
-		() const
+	const BSTreeItem*	BSTreeItem::getMaximum() const
 	{
 		const BSTreeItem *item = this;
 
-		while(item->right)
+		while(item->right_)
 		{
-			item = item->right;
+			item = item->right_;
 		}
 
 		return item;
 	}
 
-
-	BSTreeItem *
-	BSTreeItem::getParentOfMinimum
-		()
+	BSTreeItem* BSTreeItem::getParentOfMinimum()
 	{
 		BSTreeItem *item = this;
 		BSTreeItem *p = 0;
 
-		while(item->left) 
+		while(item->left_) 
 		{
 			p = item;
-			item = item->left;
+			item = item->left_;
 		}
 
 		return p;
 	}
 
-	BSTreeItem *
-	BSTreeItem::getParentOfMaximum
-		()
+	BSTreeItem* BSTreeItem::getParentOfMaximum()
 	{
 		BSTreeItem *item = this;
 		BSTreeItem *p = 0;
 
-		while(item->right) 
+		while(item->right_) 
 		{
 			p = item;
-			item = item->right;
+			item = item->right_;
 		}
 
 		return p;
 	}
 
-	BSTreeItem *
-	BSTreeItem::getParentOfPredecessor
-		()
+	BSTreeItem* BSTreeItem::getParentOfPredecessor()
 	// Returns parent of predecessor of item, assumed to be 
 	// a binary search tree. Predecessor is the right child
 	// of node returned, unless item itself is the parent. Then 
@@ -430,24 +412,22 @@ namespace BALL
 		BSTreeItem *item = this;
 		BSTreeItem *p = 0;
 		// Go left, then all the way right
-		BSTreeItem *q = item->left;
+		BSTreeItem *q = item->left_;
 
 		if (q) 
 		{
 			p = item;
-			while(q->right) 
+			while(q->right_) 
 			{
 				p = q;
-				q = q->right;
+				q = q->right_;
 			}
 		}
 
 		return p;
 	}
 
-	BSTreeItem *
-	BSTreeItem::getParentOfSuccessor
-		()
+	BSTreeItem* BSTreeItem::getParentOfSuccessor()
 	// Returns parent of successor of item, assumed to be 
 	// a binary search tree. Successor is the left child
 	// of node returned, unless item itself is the parent.
@@ -457,15 +437,15 @@ namespace BALL
 		BSTreeItem *item = this;
 		BSTreeItem *p = 0;
 		// Go right, then all the way left
-		BSTreeItem *q = item->right;
+		BSTreeItem *q = item->right_;
 
 		if (q) 
 		{
 			p = item;
-			while(q->left) 
+			while(q->left_) 
 			{
 				p = q;
-				q = q->left;
+				q = q->left_;
 			}
 		}
 
@@ -486,39 +466,39 @@ namespace BALL
 
 		if (t != 0)	
 		{
-			if (t->left == 0 || t->right == 0) 
+			if (t->left_ == 0 || t->right_ == 0) 
 			{
 				// At least one child is null, so use the other 
 				// as the replacement. (It may be null too.)
-				replacement = (t->left) ? t->left : t->right;
+				replacement = (t->left_) ? t->left_ : t->right_;
 			}
 			else 
 			{	// Neither child is null
 				psucc = t->getParentOfSuccessor(); // guaranteed not null
 				if (psucc == t) 
 				{ // Immediate successor
-					replacement = psucc->right;
+					replacement = psucc->right_;
 				}
 				else 
 				{ 
 					// Detach replacement from where it is and relocate
 					// it to where t used to be.
-					replacement = psucc->left;
-					psucc->left = psucc->left->right;
-					replacement->right = t->right;
+					replacement = psucc->left_;
+					psucc->left_ = psucc->left_->right_;
+					replacement->right_ = t->right_;
 				}
 				// Finish relocating replacement to go where t used to.
-				replacement->left = t->left;
+				replacement->left_ = t->left_;
 			}
 			if (p != 0) 
 			{ // Fixup parent of t to point to replacement
 				if (right_side) 
 				{
-					p->right = replacement; 
+					p->right_ = replacement; 
 				}
 				else 
 				{
-					p->left = replacement;
+					p->left_ = replacement;
 				}
 			}
 			else
@@ -543,10 +523,8 @@ namespace BALL
 	#define M  (pp.m)
 	#define PM (pp.pm)
 
-	BSTreeItem *
-	BSTreeItem::insertBalance
-		(BSTreeItem *root, 
-		 BSTreeItem::Pack &pp)
+	BSTreeItem* BSTreeItem::insertBalance
+		(BSTreeItem* root, BSTreeItem::Pack& pp)
 	// Balance adjusting for top down insertions. Eliminates
 	// both p and t from being red by doing rotations and
 	// color changes. g, p, t ASSUMED not null coming in. 
@@ -554,45 +532,59 @@ namespace BALL
 	// and p will be valid wrt each other. g and gg will 
 	// not reflect the proper ordering.
 	{
-		BSTreeItem *cofgg = 0; // New child of great-grandparent
-		bool side = (bool)(GG && GG->right == G);
+		BSTreeItem* cofgg = 0; // New child of great-grandparent
+		bool side = (bool)(GG && GG->right_ == G);
 
-		if (G->left == P) {
-			 if (P->right == T) { // Do double rotate
-					G->left = T->right;
-					T->right = G;
-					P->right = T->left;
-					T->left = P;
-					P = GG;
-					cofgg = T;
-			 }
-			 else { // Do single rotate right
-					G->left = P->right;
-					P->right = G;
-					cofgg = P;
-			 }
-		}
-		else { // G->right == p
-			if (P->left == T) {  // Do double rotate
-				 G->right = T->left;
-				 T->left = G;
-				 P->left = T->right;
-				 T->right = P;
-				 P = GG;
-				 cofgg = T;
+		if (G->left_ == P)
+		{
+			if (P->right_ == T) 
+			{	// Do double rotate
+				G->left_ = T->right_;
+				T->right_ = G;
+				P->right_ = T->left_;
+				T->left_ = P;
+				P = GG;
+				cofgg = T;
 			}
-			else { // Do single rotate left
-				 G->right = P->left;
-				 P->left = G;
-				 cofgg = P;
+			else 
+			{ // Do single rotate right
+				G->left_ = P->right_;
+				P->right_ = G;
+				cofgg = P;
+			}
+		}
+		else 
+		{	// G->right == p
+			if (P->left_ == T) 
+			{  // Do double rotate
+				G->right_ = T->left_;
+				T->left_ = G;
+				P->left_ = T->right_;
+				T->right_ = P;
+				P = GG;
+				cofgg = T;
+			}
+			else 
+			{ // Do single rotate left
+				G->right_ = P->left_;
+				P->left_ = G;
+				cofgg = P;
 			}
 		}
 	 
-		cofgg->color = BSTreeItem::BLACK;
-		G->color = BSTreeItem::RED;
+		cofgg->color_= BSTreeItem::BLACK;
+		G->color_ = BSTreeItem::RED;
 
-		if (GG) {
-			 if (side) GG->right = cofgg; else GG->left = cofgg;
+		if (GG) 
+		{
+			if (side)
+			{	
+				GG->right_ = cofgg;
+			}
+			else 
+			{
+				GG->left_ = cofgg;
+			}
 		}
 		else root = cofgg;
 
@@ -603,7 +595,8 @@ namespace BALL
 	BSTreeItem* BSTreeItem::removeBalance
 		(BSTreeItem* root, BSTreeItem::Pack& pp)
 	{
-		if ((T == 0 || T->color == BSTreeItem::BLACK) && S && S->color == BSTreeItem::RED) 
+		if ((T == 0 || T->color_ == BSTreeItem::BLACK) && 
+				S && S->color_ == BSTreeItem::RED) 
 		{
 			// Case: t black, s red. t might be null,
 			// but s and p must not be.
@@ -611,7 +604,14 @@ namespace BALL
 			// Fix g child to be s. Also s may become p of m
 			if (G) 
 			{
-				if (G->left == P) G->left = S; else G->right = S;
+				if (G->left_ == P) 
+				{	
+					G->left_ = S;
+				}
+				else 
+				{
+					G->right_ = S;
+				}
 			}
 			else 
 			{
@@ -623,155 +623,220 @@ namespace BALL
 				PM = S;
 			}
 			// Finish rotating
-			if (P->left == T) 
+			if (P->left_ == T) 
 			{
 				// RotateLeft(p);
-				P->right = LS;
-				S->left = P;
+				P->right_ = LS;
+				S->left_ = P;
 				G = S;
 				S = LS;
 			}
 			else 
 			{
 				// RotateRight(p);
-				P->left = RS;
-				S->right = P;
+				P->left_ = RS;
+				S->right_ = P;
 				G = S;
 				S = RS;
 			}
 	#ifndef TRYIT
-			 // Fixup children of s
-			 if (S) { LS = S->getLeftChild(); RS = S->getRightChild(); }
-			 // Fixup colors
-			 P->color = BSTreeItem::RED; G->color = BSTreeItem::BLACK;
+			// Fixup children of s
+			if (S) 
+			{ 
+				LS = S->getLeftChild(); 
+				RS = S->getRightChild();
+			}
+			// Fixup colors
+			P->color_ = BSTreeItem::RED; G->color_ = BSTreeItem::BLACK;
 	#else
-			 // Fixup children of s and color of s
-			 if (S) { LS = S->getLeftChild(); RS = S->getRightChild(); S->color = BSTreeItem::RED; }
-			 // Finish fixing up colors
-			 T->color = BSTreeItem::RED; G->color = BSTreeItem::BLACK;
+			// Fixup children of s and color of s
+			if (S) 
+			{ 
+				LS = S->getLeftChild(); 
+				RS = S->getRightChild(); 
+				S->color_ = BSTreeItem::RED; 
+			}
+			// Finish fixing up colors
+			T->color_ = BSTreeItem::RED; 
+			G->color_ = BSTreeItem::BLACK;
 	#endif
 		}
 
-		if (T && T->color == BSTreeItem::BLACK &&
-				(T->left == 0 || T->getLeftChild()->color == BSTreeItem::BLACK) &&
-				(T->right == 0 || T->getRightChild()->color == BSTreeItem::BLACK)) {
-
-			 // Case: t is a black 2 node.
-
-			 if (S && S->color == BSTreeItem::BLACK &&
-					 (S->left == 0 || S->getLeftChild()->color == BSTreeItem::BLACK) &&
-					 (S->right == 0 || S->getRightChild()->color == BSTreeItem::BLACK)) {
-
+		if (T && T->color_ == BSTreeItem::BLACK &&
+				(T->left_ == 0 || T->getLeftChild()->color_ == BSTreeItem::BLACK) &&
+				(T->right_ == 0 || T->getRightChild()->color_ == BSTreeItem::BLACK)) 
+		{
+			// Case: t is a black 2 node.
+			if (S && S->color_ == BSTreeItem::BLACK &&
+					 (S->left_ == 0 || S->getLeftChild()->color_ == BSTreeItem::BLACK) &&
+					 (S->right_ == 0 || S->getRightChild()->color_ == BSTreeItem::BLACK))
+			{
 				 // Case: t and s are black 2 nodes.
+				 P->color_ = BSTreeItem::BLACK; 
+				 T->color_ = BSTreeItem::RED; 
+				 S->color_ = BSTreeItem::RED;
+			}
+			else 
+			{	
+				if (LS && LS->color_ == BSTreeItem::RED) 
+				{
+					 // Case: t is a black 2 node, s is 3 or 4 node,
+					 // LS is red (RS might be)
 
-				 P->color = BSTreeItem::BLACK; T->color = BSTreeItem::RED; S->color = BSTreeItem::RED;
-
+					 if (P->left_ == T) 
+					 {	// Fix colors
+							LS->color_ = P->color_; P->color_ = BSTreeItem::BLACK; T->color_ = BSTreeItem::RED;
+							// Fix g child to be LS. ALSo LS may become p of m
+							if (G) 
+							{
+								if (G->left_ == P)
+								{
+									G->left_ = LS; 
+								}
+								else 
+								{
+									G->right_ = LS;
+								}
+							}
+							else 
+							{
+								root = LS;
+							}
+							if (P == M) 
+							{
+								PM = LS;
+							}
+							// Finish: DoubleRotateLeft(s, p);
+							P->right_ = LS->left_;
+							LS->left_ = P;
+							S->left_ = LS->right_;
+							LS->right_ = S;
+							G = LS;
+							// We won't fix up s, LS, and since they get reassigned
+							// at the top of next loop
+					 }
+					 else 
+					 {	// Fixup colors
+							S->color_ = P->color_; LS->color_ = BSTreeItem::BLACK;
+							P->color_ = BSTreeItem::BLACK; T->color_ = BSTreeItem::RED;
+							// Fixup g child to be s. ALSo s may become p of m
+							if (G) 
+							{
+								if (G->left_ == P) 
+								{
+									G->left_ = S; 
+								}
+								else 
+								{
+									G->right_ = S;
+								}
+							}
+							else 
+							{
+								root = S;
+							}
+							if (P == M) 
+							{
+								PM = S;
+							}
+							// Finish: RotateRight(p);
+							P->left_ = RS;
+							S->right_ = P;
+							G = S;
+							// We won't fix up s, LS, and since they get reassigned
+							// at the top of next loop
+					 }
 			 }
-			 else if (LS && LS->color == BSTreeItem::RED) {
-
-				 // Case: t is a black 2 node, s is 3 or 4 node,
-				 // LS is red (RS might be)
-
-				 if (P->left == T) {
-						// Fix colors
-						LS->color = P->color; P->color = BSTreeItem::BLACK; T->color = BSTreeItem::RED;
-						// Fix g child to be LS. ALSo LS may become p of m
-						if (G) {
-							 if (G->left == P) G->left = LS; else G->right = LS;
-						}
-						else root = LS;
-						if (P == M) PM = LS;
-						// Finish: DoubleRotateLeft(s, p);
-						P->right = LS->left;
-						LS->left = P;
-						S->left = LS->right;
-						LS->right = S;
-						G = LS;
-						// We won't fix up s, LS, and since they get reassigned
-						// at the top of next loop
-				 }
-				 else {
-						// Fixup colors
-						S->color = P->color; LS->color = BSTreeItem::BLACK;
-						P->color = BSTreeItem::BLACK; T->color = BSTreeItem::RED;
-						// Fixup g child to be s. ALSo s may become p of m
-						if (G) {
-							 if (G->left == P) G->left = S; else G->right = S;
-						}
-						else root = S;
-						if (P == M) PM = S;
-						// Finish: RotateRight(p);
-						P->left = RS;
-						S->right = P;
-						G = S;
-						// We won't fix up s, LS, and since they get reassigned
-						// at the top of next loop
-				 }
-
-			 }
-			 else if (RS && RS->color == BSTreeItem::RED) {
-
-				 // Case: t is a 2 node, s is a 3 node, LS black, RS red
-
-				 if (P->left == T) {
-						// Fix colors
-						RS->color = BSTreeItem::BLACK; S->color = P->color;
-						P->color = BSTreeItem::BLACK; T->color = BSTreeItem::RED;
+			 else if (RS && RS->color_ == BSTreeItem::RED) 
+			 { // Case: t is a 2 node, s is a 3 node, LS black, RS red
+					if (P->left_ == T) 
+					{	// Fix colors
+						RS->color_ = BSTreeItem::BLACK; 
+						S->color_ = P->color_;
+						P->color_ = BSTreeItem::BLACK; 
+						T->color_ = BSTreeItem::RED;
 						// Fix g child to be s. ALSo, s may become p of m
-						if (G) {
-							 if (G->left == P) G->left = S; else G->right = S;
+						if (G) 
+						{
+							 if (G->left_ == P) 
+							 {
+								G->left_ = S; 
+							 }
+							 else 
+							 {
+								G->right_ = S;
+  						 }
 						}
-						else root = S;
-						if (P == M) PM = S;
+						else 
+						{
+							root = S;
+						}
+						if (P == M) 
+						{
+							PM = S;
+						}
 						// Finish: RotateLeft(p);
-						P->right = LS;
-						S->left = P;
+						P->right_ = LS;
+						S->left_ = P;
 						G = S;
 						// We won't fix up s, LS, and since they get reassigned
 						// at the top of next loop
-				 }
-				 else {
+					}
+					else 
+					{
 						// Fix colors
-						RS->color = P->color; P->color = BSTreeItem::BLACK; T->color = BSTreeItem::RED;
+						RS->color_ = P->color_; 
+						P->color_ = BSTreeItem::BLACK; 
+						T->color_ = BSTreeItem::RED;
 						// Fix g child to become RS. ALSo, RS may become p of m.
-						if (G) {
-							 if (G->left == P) G->left = RS; else G->right = RS;
+						if (G) 
+						{
+								if (G->left_ == P) 
+							  {
+									G->left_ = RS;
+								}
+								else 
+								{
+									G->right_ = RS;
+								}
 						}
-						else root = RS;
-						if (P == M) PM = RS;
+						else 
+						{
+							root = RS;
+						}
+						if (P == M) 
+						{
+							PM = RS;
+						}
 						// Finish: DoubleRotateRight(s, p);
-						P->left = RS->right;
-						RS->right = P;
-						S->right = RS->left;
-						RS->left = S;
+						P->left_ = RS->right_;
+						RS->right_ = P;
+						S->right_ = RS->left_;
+						RS->left_ = S;
 						G = RS;
 						// We won't fix up s, LS, and since they get reassigned
 						// at the top of next loop
-				 }
-
-			 }
+					}
+				}
+			}
 		}
 
 		return root;
 	}
 
-	BSTreeItem *
-	BSTreeItem::replace
-		(BSTreeItem *root, 
-		 BSTreeItem::Pack &pp)
+	// At this point, m is the node to delete, pm is it's parent,
+	// p is the replacement node, g is it's parent. If m has no
+	// successor, p will = m, and replacement is the non-null
+	// child of m.
+	BSTreeItem*	BSTreeItem::replace(BSTreeItem* root, BSTreeItem::Pack& pp)
 	{
-		// At this point, m is the node to delete, pm is it's parent,
-		// p is the replacement node, g is it's parent. If m has no
-		// successor, p will = m, and replacement is the non-null
-		// child of m.
-
 		if (M) 
 		{ // Matching node was found
-			if (P == M || M->left == 0 || M->right == 0) 
+			if (P == M || M->left_ == 0 || M->right_ == 0) 
 			{
 				// No successor, and/or at least one child null
 				// Get non-null child, if any, else p will be null
-				P = (M->left) ? M->getLeftChild() : M->getRightChild();
+				P = (M->left_) ? M->getLeftChild() : M->getRightChild();
 			}
 			else 
 			{ // m has a successor to use as a replacement
@@ -779,33 +844,43 @@ namespace BALL
 				{
 					// Successor isn't immediate child of m, so detach
 					// from where it is, attach to where m is
-					G->left = P->right;
-					P->right = M->right;
+					G->left_  = P->right_;
+					P->right_ = M->right_;
 				}
 				// Finish attaching where m is.
-				P->left = M->left;
+				P->left_ = M->left_;
 			}
 			// p should have same color as m since it's going where m was
 			if (P) 
 			{
-				P->color = M->color;
+				P->color_ = M->color_;
 			}
 		}
 
 		// Fixup pm child link to be p
-		if (M) {
-			 if (PM) {
-					if (PM->left == M) PM->left = P; else PM->right = P;
-			 }
-			 else root = P; // New root, possibly null
+		if (M) 
+		{
+			if (PM) 
+			{
+				if (PM->left_ == M) 
+				{
+					PM->left_ = P;
+				}
+				else 
+				{
+					PM->right_ = P;
+				}
+			}
+			else 
+			{
+				root = P; // New root, possibly null
+			}
 		}
 
 		return root;
 	}
 
-	BSTreeItem *
-	BSTreeItem::detachMinimum
-		(BSTreeItem *&root)
+	BSTreeItem* BSTreeItem::detachMinimum(BSTreeItem *&root)
 	{
 		BSTreeItem::Pack pp;
 
@@ -817,23 +892,30 @@ namespace BALL
 		T = root; 
 		P = G = M = PM = 0;
 
-		while (T) {
-
+		while (T) 
+		{
 			// Pretend we're on the matching node
-			M = T; PM = P;
+			M = T; 
+			PM = P;
 
 			// Update ancestor pointers
-			G = P; P = T;
+			G = P;
+			P = T;
 
 			// Then go all the way left or right
 
-			T = P->getLeftChild(); S = P->getRightChild();
+			T = P->getLeftChild();
+			S = P->getRightChild();
 
-			if (S) {
-				 LS = S->getLeftChild(); RS = S->getRightChild();
+			if (S) 
+			{
+				 LS = S->getLeftChild(); 
+				 RS = S->getRightChild();
 			}
-			else {
-				 LS = 0; RS = 0;
+			else 
+			{
+				 LS = 0;
+				 RS = 0;
 			}
 
 			root = removeBalance(root, pp);
@@ -842,14 +924,15 @@ namespace BALL
 
 		root = replace(root, pp);
 
-		if (root) root->color = BSTreeItem::BLACK;
+		if (root)
+		{
+			root->color_ = BSTreeItem::BLACK;
+		}
 
 		return M; // Node to delete
 	}
 
-	BSTreeItem *
-	BSTreeItem::detachMaximum
-		(BSTreeItem *&root)
+	BSTreeItem*	BSTreeItem::detachMaximum(BSTreeItem *&root)
 	{
 		BSTreeItem::Pack pp;
 
@@ -878,7 +961,8 @@ namespace BALL
 
 			if (S)
 			{
-				LS = S->getLeftChild(); RS = S->getRightChild();
+				LS = S->getLeftChild();
+				RS = S->getRightChild();
 			}
 			else
 			{
@@ -891,12 +975,13 @@ namespace BALL
 
 		root = replace(root, pp);
 
-		if (root) root->color = BSTreeItem::BLACK;
+		if (root)
+		{
+			root->color_ = BSTreeItem::BLACK;
+		}
 
 		return M; // Node to delete
 	}
-
-
 
 	void BSTreeIterator::set(const BSTreeItem* item, BSTreeIterator::WalkOrder walk_order)
 	{
@@ -929,7 +1014,7 @@ namespace BALL
 			{
 				path_.push(current_);
 				const BSTreeItem *item = current_;
-				current_ = current_->left;
+				current_ = current_->getLeftChild();
 				return item;
 			}
 			else
@@ -940,7 +1025,7 @@ namespace BALL
 				}
 				else
 				{
-					current_ = current_->right;
+					current_ = current_->getRightChild();
 				}
 			}
 		}
@@ -957,7 +1042,7 @@ namespace BALL
 			if (current_)
 			{
 				path_.push(current_);
-				current_ = current_->left;
+				current_ = current_->getLeftChild();
 			}
 			else
 			{
@@ -968,7 +1053,7 @@ namespace BALL
 				else
 				{
 					const BSTreeItem *item = current_;
-					current_ = current_->right;
+					current_ = current_->getRightChild();
 					return item;
 				}
 			}
@@ -988,7 +1073,7 @@ namespace BALL
 				if (current_)
 				{
 					path_.push(current_);
-					current_ = current_->left;
+					current_ = current_->getLeftChild();
 				}
 				else
 				{
@@ -1000,47 +1085,47 @@ namespace BALL
 				const BSTreeItem *item = current_;
 				if (path_.isEmpty())
 				{
-		return (current_ = 0); // At root
+					return (current_ = 0); // At root
 				}
 				current_ = *path_.top();
-				if (item == current_->left
-			&& current_->right)
+				if (item == current_->getLeftChild() && current_->getRightChild())
 				{ // Coming back up the tree from the left, and
-		// there is a right child, so go right. 
-		// Note that current_ is still on top of stack.
-		current_ = current_->right;
-		state_ = false;
-				 }
-				 else
-				 { // Coming back up the tree from the right,
-		 // or there was no right child, so visit
-		 // the node, and continue on up. (state stays at true.)
-		 path_.pop();
-		 return current_;
-				 }
+					// there is a right child, so go right. 
+					// Note that current_ is still on top of stack.
+					current_ = current_->getRightChild();
+					state_ = false;
+				}
+				else
+				{ // Coming back up the tree from the right,
+					// or there was no right child, so visit
+					// the node, and continue on up. (state stays at true.)
+					path_.pop();
+					return current_;
+				}
 			}
 		}
 		return 0;
 	}
 
-	const BSTreeItem *
-	BSTreeIterator::forwardLevelOrder
-		()
+	const BSTreeItem*	BSTreeIterator::forwardLevelOrder()
 	{
 		if (path_.pop(current_) == 0)
 		{
 			return 0;
 		}
-		if (current_->left != 0)
+		if (current_->getLeftChild() != 0)
 		{
-			path_.pushBottom(current_->left);
+			path_.pushBottom(current_->getLeftChild());
 		}
-		if (current_->right != 0)
+		if (current_->getRightChild() != 0)
 		{
-			path_.pushBottom(current_->right);
+			path_.pushBottom(current_->getRightChild());
 		}
 		return current_;
 	}
 
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/DATATYPE/binarySearchTree.iC>
+#	endif
 
 } // namespace BALL

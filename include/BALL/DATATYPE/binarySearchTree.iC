@@ -1,0 +1,201 @@
+BALL_INLINE
+BSTreeItem::BSTreeItem()
+	: left_(0),
+		right_(0),
+		color_(BSTreeItem::BLACK)
+{
+}
+
+BALL_INLINE
+BSTreeItem::BSTreeItem(const BSTreeItem& item, bool /* deep */= true)
+	: left_(item.left_),
+		right_(item.right_),
+		color_(item.color_)
+{
+}
+
+BALL_INLINE
+BSTreeItem::BSTreeItem(BSTreeItem* left_item, BSTreeItem* right_item, char color = BSTreeItem::BLACK)
+	:	left_(left_item),
+		right_(right_item),
+		color_(color)
+{
+}
+
+BALL_INLINE
+BSTreeItem::~BSTreeItem()
+{
+}
+
+BALL_INLINE
+void BSTreeItem::setLeftChild(BSTreeItem* item)
+{
+	if (item == this || item == right_)
+	{
+		throw Exception::GeneralException(__FILE__, __LINE__);
+	}
+	left_ = item;
+}
+
+BALL_INLINE
+BSTreeItem*& BSTreeItem::getLeftChild() const
+{
+	return (BSTreeItem*&)left_;
+}
+
+BALL_INLINE
+void BSTreeItem::setRightChild(BSTreeItem *item)
+{
+	if (item == this || item == left_)
+	{
+		throw Exception::GeneralException(__FILE__, __LINE__);
+	}
+	right_ = item;
+}
+
+BALL_INLINE
+BSTreeItem*& BSTreeItem::getRightChild() const
+{
+	return (BSTreeItem*&)right_;
+}
+
+BALL_INLINE
+char BSTreeItem::getColor() const
+{
+	return color_;
+}
+
+BALL_INLINE
+void BSTreeItem::setColor(char color)
+{
+	if (color == RED)
+	{
+		color_ = RED;
+		return;
+	}
+	if (color == BLACK)
+	{
+		color_ = BLACK;
+	}
+}
+
+BALL_INLINE
+bool BSTreeItem::applyPreorder(UnaryProcessor<BSTreeItem>& processor)
+{
+	if (processor.start() == false)
+	{
+		return false;
+	}
+	Processor::Result result = applyPreorder_(processor);
+
+	if (result <= Processor::BREAK)
+	{
+		return (result == Processor::BREAK) ? true : false;
+	}
+
+	return processor.finish();
+}
+
+BALL_INLINE
+bool BSTreeItem::applyInorder(UnaryProcessor<BSTreeItem>& processor)
+{
+	if (processor.start() == false)
+		return false;
+
+	Processor::Result result = applyInorder_(processor);
+
+	if (result <= Processor::BREAK)
+		return (result == Processor::BREAK) ? true : false;
+
+	return processor.finish();
+}
+
+BALL_INLINE
+bool BSTreeItem::applyPostorder(UnaryProcessor<BSTreeItem>& processor)
+{
+	if (processor.start() == false)
+		return false;
+
+	Processor::Result result = applyPostorder_(processor);
+
+	if (result <= Processor::BREAK)
+		return (result == Processor::BREAK) ? true : false;
+
+	return processor.finish();
+}
+
+BALL_INLINE
+bool BSTreeItem::applyLevelorder(UnaryProcessor<BSTreeItem>& processor)
+{
+	if (processor.start() == false)
+		return false;
+
+	Processor::Result result = applyLevelorder_(processor);
+
+	if (result <= Processor::BREAK)
+		return (result == Processor::BREAK) ? true : false;
+
+	return processor.finish();
+}
+
+
+
+BALL_INLINE
+bool BSTreeItem::applyPreorderFlat(UnaryProcessor<BSTreeItem>& processor)
+{
+	if (processor.start() == false)
+		return false;
+
+	Processor::Result result = applyPreorderFlat_(processor);
+
+	if (result <= Processor::BREAK)
+		return (result == Processor::BREAK) ? true : false;
+
+	return processor.finish();
+}
+
+BALL_INLINE
+bool BSTreeItem::applyInorderFlat(UnaryProcessor<BSTreeItem>& processor)
+{
+	if (processor.start() == false)
+		return false;
+
+	Processor::Result result = applyInorderFlat_(processor);
+
+	if (result <= Processor::BREAK)
+		return (result == Processor::BREAK) ? true : false;
+
+	return processor.finish();
+}
+
+BALL_INLINE
+bool BSTreeItem::applyPostorderFlat(UnaryProcessor<BSTreeItem>& processor)
+{
+	if (processor.start() == false)
+		return false;
+
+	Processor::Result result = applyPostorderFlat_(processor);
+
+	if (result <= Processor::BREAK)
+		return (result == Processor::BREAK) ? true : false;
+
+	return processor.finish();
+}
+
+BALL_INLINE
+bool BSTreeItem::apply(UnaryProcessor<BSTreeItem>& processor)
+{
+	return applyPreorder(processor);
+}
+
+BALL_INLINE
+bool BSTreeItem::isLeaf() const
+{
+	return (left_ == 0 && right_ == 0);
+}
+
+BALL_INLINE
+bool BSTreeItem::isInterior() const
+{
+	return (left_ != 0 || right_ != 0);
+}
