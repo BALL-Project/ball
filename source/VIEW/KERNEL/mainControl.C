@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.16 2003/10/15 13:41:45 amoll Exp $
+// $Id: mainControl.C,v 1.17 2003/11/03 16:51:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -360,7 +360,7 @@ bool MainControl::remove_(Composite& composite)
 	return true;
 }
 
-bool MainControl::update(const Composite& composite)
+bool MainControl::update(const Composite& composite, bool rebuild)
 	throw()
 {
 	if (!composite_manager_.has(composite)) return false;
@@ -371,7 +371,15 @@ bool MainControl::update(const Composite& composite)
 	// notify GeometricControl of changed representations
 	for (; reps_it != changed_representations.end(); reps_it++)
 	{
-		RepresentationMessage* ur_message = new RepresentationMessage(*reps_it, RepresentationMessage::UPDATE);
+		Representation* rep = *reps_it;
+		if (rep->getModelType() == MODEL_SE_SURFACE ||
+				rep->getModelType() == MODEL_SA_SURFACE ||
+				rep->getModelType() == MODEL_BACKBONE 	||
+				rep->getModelType() == MODEL_CARTOON)
+		{
+			rep->update(rebuild);
+		}
+		RepresentationMessage* ur_message = new RepresentationMessage(rep, RepresentationMessage::UPDATE);
 		notify_(ur_message);
 	}
 
@@ -861,6 +869,7 @@ void MainControl::selectCompositeRecursive(Composite* composite, bool first_call
 			{
 				if (!selection_.has(parent->getChild(i)))
 				{
+					update(composite->getRoot(), false);
 					return;
 				}
 			}
@@ -869,6 +878,7 @@ void MainControl::selectCompositeRecursive(Composite* composite, bool first_call
 			parent->select();
 			parent = parent->getParent();
 		}
+		update(composite->getRoot(), false);
 	}
 }
 
@@ -909,6 +919,8 @@ void MainControl::deselectCompositeRecursive(Composite* composite, bool first_ca
 			selection_.erase(parent);
 			parent = parent->getParent();
 		}
+
+		update(composite->getRoot(), false);
 	}
 }
 
