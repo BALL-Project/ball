@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.50 2001/02/14 01:59:58 amoll Exp $
+// $Id: vector3.h,v 1.51 2001/03/12 10:49:42 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -1016,7 +1016,17 @@ namespace BALL
 			throw Exception::DivisionByZero(__FILE__, __LINE__);
 		}
 		
-		return (TAngle<T>)acos(((*this) * vector) / sqrt(length_product));
+		T acos_arg = ((*this) * vector) / sqrt(length_product);
+
+		// ensure that the argument of acos is in the correct range
+		// (might happen if the angle between the two vectors is
+		// very close to zero)
+		if (fabs(acos_arg) > 1.0)
+		{	
+			return (TAngle<T>)0.0;
+		}
+		
+		return (TAngle<T>)acos(acos_arg);
 	}
 
 	template <typename T>
