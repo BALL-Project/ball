@@ -1,4 +1,4 @@
-// $Id: colorUnit.h,v 1.8 2001/05/13 13:28:50 hekl Exp $
+// $Id: colorUnit.h,v 1.9 2001/07/08 10:58:58 aubertin Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -29,13 +29,13 @@ namespace BALL
 				(e.g. integer, float, string values can be given as parameter). The integer
 				values are of range 0-255, the float values are of range 0-1.0 and the strings
 				given are in hex format "00"-"FF".
-				ColorUnit provides certain conversion functions as well that will convert
+				ColorUnit provides certain conversion functions as well, that will convert
 				its value to the needed type.
 				This class is used by the class \Ref{ColorRGBA} and \Ref{ColorHSV}.
 				@memo    ColorUnit class (BALL VIEW datatype framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/05/13 13:28:50 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.9 $
+				@date    $Date: 2001/07/08 10:58:58 $
 		*/
 		class ColorUnit
 		{
@@ -65,14 +65,14 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new colorUnit. Its value will be set to zero (0).
+					Constructs new colorUnit. Its value will be set to zero (0).
 					@return      ColorUnit new constructed colorUnit
 			*/
 			ColorUnit()
 				throw();
 		
 			/** Copy constructor.
-					Construct new colorUnit by copying the colorUnit {\em color_unit}.
+					Constructs new colorUnit by copying the colorUnit {\em color_unit}.
 					@param       color_unit the colorUnit to be copied
 					@return      ColorUnit new constructed colorUnit copied from {\em color_unit}
 			*/
@@ -80,7 +80,7 @@ namespace BALL
 				throw();
 
 			/** Constructor with Parameter char*.
-					Construct new colorUnit by initialising its value with the given pointer to
+					Constructs new colorUnit by initialising its value with the given pointer to
 					a string representing a value in hex format (00 - FF, or 00 - ff).
 					@param       value the pointer to a string (00 - FF, or 00 - ff)
 					@exception   InvalidRange if {\tt string length != 2}
@@ -91,7 +91,7 @@ namespace BALL
 				throw(Exception::InvalidRange, NotInHexFormat);
 
 			/** Constructor with Parameter String.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					string representing a value in hex format (00 - FF, or 00 - ff).
 					@param       value a string (00 - FF, or 00 - ff)
 					@exception   InvalidRange if {\tt string length != 2}
@@ -102,7 +102,7 @@ namespace BALL
 				throw(Exception::InvalidRange, NotInHexFormat);
 
 			/** Constructor with Parameter unsigned char.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					unsigned char representing a value in integer format (0 - 255).
 					@param       value a char (0 - 255)
 					@return      ColorUnit new constructed colorUnit
@@ -111,7 +111,7 @@ namespace BALL
 				throw();
 
 			/** Constructor with Parameter short.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					short representing a value in integer format (0 - 255).
 					@param       value a short (0 - 255)
 					@exception   InvalidRange if {\tt value < 0 || value > 255}
@@ -121,7 +121,7 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter unsigned short.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					unsigned short representing a value in integer format (0 - 255).
 					@param       value a unsigned short (0 - 255)
 					@exception   InvalidRange if {\tt value > 255}
@@ -131,7 +131,7 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter int.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					int representing a value in integer format (0 - 255).
 					@param       value an int (0 - 255)
 					@exception   InvalidRange if {\tt value < 0 || value > 255}
@@ -141,7 +141,7 @@ namespace BALL
 				throw(Exception::InvalidRange);
 		
 			/** Constructor with Parameter unsigned int.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					unsigned int representing a value in integer format (0 - 255).
 					@param       value an unsigned int (0 - 255)
 					@exception   InvalidRange if {\tt value > 255}
@@ -151,7 +151,7 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter long.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					long representing a value in integer format (0 - 255).
 					@param       value an long (0 - 255)
 					@exception   InvalidRange if {\tt value < 0 || value > 255}
@@ -161,7 +161,7 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter unsigned long.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					unsigned long representing a value in integer format (0 - 255).
 					@param       value an unsigned long (0 - 255)
 					@exception   InvalidRange if {\tt value > 255}
@@ -171,7 +171,7 @@ namespace BALL
 				throw(Exception::InvalidRange);
 		
 			/** Constructor with Parameter float.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					float representing a value of range (0 - 1.0).
 					@param       value a float (0 - 1.0)
 					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
@@ -181,7 +181,7 @@ namespace BALL
 				throw(Exception::InvalidRange);
 		
 			/** Constructor with Parameter double.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					double representing a value of range (0 - 1.0).
 					@param       value a double (0 - 1.0)
 					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
@@ -191,7 +191,7 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Constructor with Parameter long double.
-					Construct new colorUnit by initialising its value with the given 
+					Constructs new colorUnit by initialising its value with the given 
 					long double representing a value of range (0 - 1.0).
 					@param       value a long double (0 - 1.0)
 					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
@@ -214,7 +214,7 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Set the value of {\em *this} colorUnit to the default value.
+					Sets the value of {\em *this} colorUnit to the default value.
 					The value of {\em *this} colorUnit is:
 					\begin{itemize}
 						\item value is zero (0)
@@ -325,7 +325,7 @@ namespace BALL
 			//@{
 			
 			/** Assignment.
-					Assign the colorUnit {\em color_unit} to {\em *this} colorUnit.
+					Assigns the colorUnit {\em color_unit} to {\em *this} colorUnit.
 					The value of {\em *this} is initialized to the value of the colorUnit {\em color_unit}.\\
 					@param       color_unit the colorUnit to be copied 
 			*/
@@ -333,7 +333,7 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the colorUnit {\em color_unit} to {\em *this} colorUnit.
+					Assigns the colorUnit {\em color_unit} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					The value of {\em *this} is initialized to the value of the colorUnit {\em color_unit}.\\
 					@param       color_unit the colorUnit to be copied
@@ -344,7 +344,7 @@ namespace BALL
 				throw();
 		
 			/** Copying.
-					Copy {\em *this} colorUnit to the colorUnit {\em color_unit}.
+					Copies {\em *this} colorUnit to the colorUnit {\em color_unit}.
 					Calls \Ref{set}.
 					The value of the colorUnit {\em color_unit} is initialized to the value of {\em *this} colorUnit.\\
 					@param       color_unit the colorUnit to be assigned to
@@ -354,7 +354,7 @@ namespace BALL
 				throw();
 
 			/** Swapping of colorUnits.
-					Swap the values of {\em *this} colorUnit with the colorUnit {\em color_unit}.
+					Swaps the values of {\em *this} colorUnit with the colorUnit {\em color_unit}.
 					@param       color_unit the colorUnit being swapped with {\em *this} colorUnit 
 					@see         ColorUnit
 			*/
@@ -367,8 +367,8 @@ namespace BALL
 			*/
 			//@{ 
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					a pointer {\em value} to a string.
 					@param       value the new value of {\em *this} colorUnit (a string in the format {\tt "00"-"FF"} or {\tt "00"-"ff"})
 					@exception   InvalidRange if {\tt string length != 2}
@@ -378,8 +378,8 @@ namespace BALL
 			void set(const char* value)
 				throw(Exception::InvalidRange, NotInHexFormat);
 
-			/** Assignment operator with char*
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with char*.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value the pointer to a string containing a value in hex format ({\tt "00"-"FF"} or {\tt "00"-"ff"})
 					@exception   InvalidRange if {\tt string length != 2}
@@ -391,7 +391,7 @@ namespace BALL
 				throw(Exception::InvalidRange, NotInHexFormat);
 		
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using a char pointer.
+					Accesses the value of {\em *this} colorUnit by using a char pointer.
 					Memory must be allocated for this parameter. The memory must be at least
 					the size of 3 bytes.
 					@param   value a char* receiving the value of {\em *this} colorUnit in hex format ({\tt "00"-"FF"} or {\tt "00"-"ff"})
@@ -400,8 +400,8 @@ namespace BALL
 			void get(char* value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					a string {\em value}.
 					@param       value a string (in the format {\tt "00"-"FF"} or {\tt "00"-"ff"})
 					@exception   InvalidRange if {\tt string length != 2}
@@ -411,8 +411,8 @@ namespace BALL
 			void set(const String& value)
 				throw(Exception::InvalidRange, NotInHexFormat);
 
-			/** Assignment operator with string
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with string.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value a string containing a value in hex format ({\tt "00"-"FF"} or {\tt "00"-"ff"})
 					@exception   InvalidRange if {\tt string length != 2}
@@ -424,15 +424,15 @@ namespace BALL
 				throw(Exception::InvalidRange, NotInHexFormat);
 		
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using a string.
+					Accesses the value of {\em *this} colorUnit by using a string.
 					@param   value a string receiving the value of {\em *this} colorUnit in hex format ({\tt "00"-"FF"} or {\tt "00"-"ff"})
 					@see     set
 			*/
 			void get(String& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					a unsigned char {\em value}.
 					@param       value an unsigned char of range {\tt 0-255}
 					@see         get
@@ -440,8 +440,8 @@ namespace BALL
 			void set(const unsigned char value)
 				throw();
 
-			/** Assignment operator with unsigned char
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with unsigned char.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value an unsigned char containing a value of range {\tt 0-255}
 					@return      ColorUnit& constant reference of {\em *this} colorUnit
@@ -451,15 +451,15 @@ namespace BALL
 				throw();
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using an unsigned char.
+					Accesses the value of {\em *this} colorUnit by using an unsigned char.
 					@param   value an unsigned char receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
 					@see     set
 			*/
 			void get(unsigned char& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					a short {\em value}.
 					@param       value a short of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value < 0 || value > 255}
@@ -468,8 +468,8 @@ namespace BALL
 			void set(const short value)
 				throw(Exception::InvalidRange);
 
-			/** Assignment operator with short
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with short.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value a short containing a value of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value < 0 || value > 255}
@@ -480,15 +480,15 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using a short.
+					Accesses the value of {\em *this} colorUnit by using a short.
 					@param   value a short receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
 					@see     set
 			*/
 			void get(short& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					an unsigned short {\em value}.
 					@param       value an unsigned short of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value > 255}
@@ -497,8 +497,8 @@ namespace BALL
 			void set(const unsigned short value)
 				throw(Exception::InvalidRange);
 
-			/** Assignment operator with unsigned short
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with unsigned short.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value an unsigned short containing a value of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value > 255}
@@ -509,15 +509,15 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using an unsigned short.
+					Accesses the value of {\em *this} colorUnit by using an unsigned short.
 					@param   value an unsigned short receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
 					@see     set
 			*/
 			void get(unsigned short& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					an int {\em value}.
 					@param       value an int of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value < 0 || value > 255}
@@ -526,8 +526,8 @@ namespace BALL
 			void set(const int value)
 				throw(Exception::InvalidRange);
 
-			/** Assignment operator with int
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with int.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value an int containing a value of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value < 0 || value > 255}
@@ -538,15 +538,15 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using an int.
+					Accesses the value of {\em *this} colorUnit by using an int.
 					@param   value an int receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
 					@see     set
 			*/
 			void get(int& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					an unsigned int {\em value}.
 					@param       value an unsigned int of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value > 255}
@@ -555,8 +555,8 @@ namespace BALL
 			void set(const unsigned int value)
 				throw(Exception::InvalidRange);
 
-			/** Assignment operator with unsigned int
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with unsigned int.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value an unsigned int containing a value of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value > 255}
@@ -567,15 +567,15 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using an unsigned int.
+					Accesses the value of {\em *this} colorUnit by using an unsigned int.
 					@param   value an unsigned int receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
 					@see     set
 			*/
 			void get(unsigned int& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					a long {\em value}.
 					@param       value a long of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value < 0 || value > 255}
@@ -584,8 +584,8 @@ namespace BALL
 			void set(const long value)
 				throw(Exception::InvalidRange);
 
-			/** Assignment operator with long
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with long.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value a long containing a value of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value < 0 || value > 255}
@@ -596,15 +596,15 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using a long.
+					Accesses the value of {\em *this} colorUnit by using a long.
 					@param   value a long receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
 					@see     set
 			*/
 			void get(long& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					an unsigned long {\em value}.
 					@param       value an unsigned long of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value > 255}
@@ -613,8 +613,8 @@ namespace BALL
 			void set(const unsigned long value)
 				throw(Exception::InvalidRange);
 
-			/** Assignment operator with unsigned long
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with unsigned long.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value an unsigned long containing a value of range {\tt 0-255}
 					@exception   InvalidRange if {\tt value > 255}
@@ -625,15 +625,15 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using an unsigned long.
+					Accesses the value of {\em *this} colorUnit by using an unsigned long.
 					@param   value an unsigned long receiving the value of {\em *this} colorUnit (range: {\tt 0-255})
 					@see     set
 			*/
 			void get(unsigned long& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					a float {\em value}.
 					@param       value a float of range 0-1.0
 					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
@@ -642,8 +642,8 @@ namespace BALL
 			void set(const float value)
 				throw(Exception::InvalidRange);
 
-			/** Assignment operator with float
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with float.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value a float containing a value of range 0-1.0
 					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
@@ -654,15 +654,15 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using a float.
+					Accesses the value of {\em *this} colorUnit by using a float.
 					@param   value a float receiving the value of {\em *this} colorUnit (range: 0-1.0)
 					@see     set
 			*/
 			void get(float& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					a double {\em value}.
 					@param       value a double of range 0-1.0
 					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
@@ -671,8 +671,8 @@ namespace BALL
 			void set(const double value)
 				throw(Exception::InvalidRange);
 
-			/** Assignment operator with double
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with double.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value a double containing a value of range 0-1.0
 					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
@@ -683,15 +683,15 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using a double.
+					Accesses the value of {\em *this} colorUnit by using a double.
 					@param   value a double receiving the value of {\em *this} colorUnit (range: 0-1.0)
 					@see     set
 			*/
 			void get(double& value) const
 				throw();
 
-			/** Change the value of the colorUnit.
-					Change the value of {\em *this} colorUnit to the value represented by 
+			/** Changes the value of the colorUnit.
+					Changes the value of {\em *this} colorUnit to the value represented by 
 					a long double {\em value}.
 					@param       value a long double of range 0-1.0
 					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
@@ -700,8 +700,8 @@ namespace BALL
 			void set(const long double value)
 				throw(Exception::InvalidRange);
 
-			/** Assignment operator with long double
-					Assign the contents of {\em value} to {\em *this} colorUnit.
+			/** Assignment operator with long double.
+					Assigns the contents of {\em value} to {\em *this} colorUnit.
 					Calls \Ref{set}.
 					@param       value a long double containing a value of range 0-1.0
 					@exception   InvalidRange if {\tt value < 0.0 || value > 1.0}
@@ -712,7 +712,7 @@ namespace BALL
 				throw(Exception::InvalidRange);
 
 			/** Inspection of the colorUnit's value.
-					Access the value of {\em *this} colorUnit by using a long double.
+					Accesses the value of {\em *this} colorUnit by using a long double.
 					@param   value a long double receiving the value of {\em *this} colorUnit (range: 0-1.0)
 					@see     set
 			*/
@@ -726,7 +726,7 @@ namespace BALL
 			//@{
 
 			/** Equality test.
-					Test if {\em color_unit} is equal to {\em *this} colorUnit.
+					Tests if {\em color_unit} is equal to {\em *this} colorUnit.
 					Equality means that the internals value (floats) of the colorUnit's
 					are equal.
 					@param   color_unit the colorUnit to be compared with
@@ -736,7 +736,7 @@ namespace BALL
 				throw();
 
 			/** Unequality test.
-					Test if {\em color_unit} is not equal to {\em *this} colorUnit.
+					Tests if {\em color_unit} is not equal to {\em *this} colorUnit.
 					Unequality means that the internals value (floats) of the colorUnit's
 					are unequal.
 					@param   color_unit the colorUnit to be compared with
@@ -746,7 +746,7 @@ namespace BALL
 				throw();
 			
 			/** Smaller test.
-					Test if {\em *this} is smaller than {\em color_unit} colorUnit.
+					Tests if {\em *this} is smaller than {\em color_unit} colorUnit.
 					Smaller means that the internal value (float) {\em *this} is
 					smaller than the internal value (float) of {\em color_unit} colorUnit.
 					@param   color_unit the colorUnit to be compared with
@@ -756,7 +756,7 @@ namespace BALL
 				throw();
 			
 			/** Smaller or equal test.
-					Test if {\em *this} is smaller or equal than {\em color_unit} colorUnit.
+					Tests if {\em *this} is smaller or equal than {\em color_unit} colorUnit.
 					Smaller or equal means that the internal value (float) {\em *this} is
 					smaller or equal than the internal value (float) of {\em color_unit} colorUnit.
 					@param   color_unit the colorUnit to be compared with
@@ -766,7 +766,7 @@ namespace BALL
 				throw();
 			
 			/** Greater test.
-					Test if {\em *this} is greater than {\em color_unit} colorUnit.
+					Tests if {\em *this} is greater than {\em color_unit} colorUnit.
 					Greater means that the internal value (float) {\em *this} is
 					greater than the internal value (float) of {\em color_unit} colorUnit.
 					@param   color_unit the colorUnit to be compared with
@@ -776,7 +776,7 @@ namespace BALL
 				throw();
 
 			/** Greater or equal test.
-					Test if {\em *this} is greater or equal than {\em color_unit} colorUnit.
+					Tests if {\em *this} is greater or equal than {\em color_unit} colorUnit.
 					Greater or equal means that the internal value (float) {\em *this} is
 					greater or equal than the internal value (float) of {\em color_unit} colorUnit.
 					@param   color_unit the colorUnit to be compared with
@@ -791,7 +791,7 @@ namespace BALL
 			//@{
 
 			/** Internal value dump.
-					Dump the current value of {\em *this} colorUnit to 
+					Dumps the current value of {\em *this} colorUnit to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 					The value will be outputed as an integer of range {\tt 0-255}.
 					@param   s output stream where to output the value of {\em *this} colorUnit
@@ -807,7 +807,7 @@ namespace BALL
 			//@{
 
 			/** Persistent stream input and value restorage.
-					Read persistent colorUnit data from the input stream {\em s} and restore the value of {\em *this}.\\
+					Reads persistent colorUnit data from the input stream {\em s} and restores the value of {\em *this}.\\
 					{\bf Note:} Not yet implemented.
 					@param  s input stream from where to restore the value of {\em *this} colorUnit
 			*/
@@ -815,7 +815,7 @@ namespace BALL
 				throw();
 
 			/** Persistent stream output and value storage.
-					Write persistent colorUnit data to the output stream {\em s} and store the value of {\em *this}.\\
+					Writes persistent colorUnit data to the output stream {\em s} and stores the value of {\em *this}.\\
 					{\bf Note:} Not yet implemented.
 					@param  s output stream to where the value of {\em *this} colorUnit will be stored
 			*/
@@ -823,7 +823,7 @@ namespace BALL
 				throw();
 
 			/** Friendly stream input.
-					Read colorUnit data from the input stream {\em s} and restore the value of {\em *this}.
+					Reads colorUnit data from the input stream {\em s} and restore the value of {\em *this}.
 					The value will be needed in integer format of range {\tt 0-255}.
 					This method is provided for convienience.
 					@param  s input stream from where to restore the value of {\em *this} colorUnit
@@ -832,7 +832,7 @@ namespace BALL
 			friend std::istream& operator >> (std::istream& s, ColorUnit& color_unit);
 
 			/** Friendly stream output.
-					Write colorUnit data to the output stream {\em s} and store the value of {\em *this}.
+					Writes colorUnit data to the output stream {\em s} and store the value of {\em *this}.
 					The value will be stored in integer format of range {\tt 0-255}.
 					This method is provided for convienience.
 					@param  s output stream to where the value of {\em *this} colorUnit will be stored
