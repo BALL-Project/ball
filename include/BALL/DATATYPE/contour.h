@@ -1,4 +1,4 @@
-// $Id: contour.h,v 1.7 2000/12/17 15:55:11 oliver Exp $
+// $Id: contour.h,v 1.8 2001/06/06 14:16:09 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H
@@ -59,7 +59,7 @@ namespace BALL
 		/**
 				
 		*/
-		void apply(const TRegularData2D<T>& data);
+		void apply(TRegularData2D<T>& data);
 
 		/// Clear method
 		virtual void clear();
@@ -135,7 +135,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TContour<T>::apply(const TRegularData2D<T>& data)
+	void TContour<T>::apply(TRegularData2D<T>& data)
 	{
 		Position i;
 		double step = (end_ - start_) / num_lines_;

@@ -1,4 +1,4 @@
-// $Id: contourLine.h,v 1.6 2001/03/11 23:59:49 amoll Exp $
+// $Id: contourLine.h,v 1.7 2001/06/06 14:16:09 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -18,43 +18,44 @@ namespace BALL
   // First I define some macros needed for the marching cube-algorithm. 
 	// The names come from the number associated with the different corners of the square.
   #define INTERPOL12 { \
-						from.getConvertedPosition(act_cell_x, act_cell_y, dummy);\
-						d1 = from[act_cell_x + act_cell_y*(number_of_cells_x+1)];\
-						d2 = from[act_cell_x + 1 + act_cell_y*(number_of_cells_x+1)];\
-						from.getConvertedPosition(act_cell_x + 1, act_cell_y + 1, dummy2);\
-						slope = (d2 - d1) / (dummy2.first - dummy.first);\
-						dummy.first += (threshold - d1)/slope;\
-						data_.push_back(dummy);\
+						vec = from.getGridCoordinates(act_cell_x, act_cell_y);\
+						d1  = from[act_cell_x + act_cell_y*(number_of_cells_x+1)];\
+						d2  = from[act_cell_x + 1 + act_cell_y*(number_of_cells_x+1)];\
+						vec2 = from.getGridCoordinates(act_cell_x + 1, act_cell_y + 1);\
+						slope = (d2 - d1) / (vec2.x - vec.x);\
+						vec.x += (threshold - d1)/slope;\
+						data_.push_back(vec);\
   } 
 
   #define INTERPOL18 { \
-						from.getConvertedPosition(act_cell_x, act_cell_y, dummy);\
-						d1 = from[act_cell_x + act_cell_y*(number_of_cells_x+1)];\
-						d2 = from[act_cell_x + (act_cell_y+1)*(number_of_cells_x+1)];\
-						from.getConvertedPosition(act_cell_x, act_cell_y+1, dummy2);\
-						slope = (d2 - d1) / (dummy2.second - dummy.second);\
-						dummy.second += (threshold - d1)/slope;\
-						data_.push_back(dummy);\
+						vec = from.getGridCoordinates(act_cell_x, act_cell_y);\
+						d1  = from[act_cell_x + act_cell_y*(number_of_cells_x+1)];\
+						d2  = from[act_cell_x + (act_cell_y+1)*(number_of_cells_x+1)];\
+						vec2 = from.getGridCoordinates(act_cell_x, act_cell_y+1);\
+						slope = (d2 - d1) / (vec2.y - vec.y);\
+						vec.y += (threshold - d1)/slope;\
+						data_.push_back(vec);\
   }
 
   #define INTERPOL24 {  \
-            from.getConvertedPosition(act_cell_x+1, act_cell_y, dummy);\
-            d1 = from[act_cell_x+1 + act_cell_y*(number_of_cells_x+1)];\
-            d2 = from[act_cell_x+1 + (act_cell_y+1)*(number_of_cells_x+1)];\
-            from.getConvertedPosition(act_cell_x+1, act_cell_y+1, dummy2);\
-            slope = (d2 - d1) / (dummy2.second - dummy.second);\
-            dummy.second += (threshold - d1)/slope;\
-            data_.push_back(dummy);\
+            vec = from.getGridCoordinates(act_cell_x+1, act_cell_y);\
+            d1  = from[act_cell_x+1 + act_cell_y*(number_of_cells_x+1)];\
+            d2  = from[act_cell_x+1 + (act_cell_y+1)*(number_of_cells_x+1)];\
+            vec2 = from.getGridCoordinates(act_cell_x+1, act_cell_y+1);\
+            slope = (d2 - d1) / (vec2.y - vec.y);\
+            vec.y += (threshold - d1)/slope;\
+            data_.push_back(vec);\
   }
 
+	// is it vec.x += or vec.y += ...?
   #define INTERPOL48 {  \
-				    from.getConvertedPosition(act_cell_x+1, act_cell_y+1, dummy);\
-            d1 = from[act_cell_x+1 + (act_cell_y+1)*(number_of_cells_x+1)];\
-            d2 = from[act_cell_x   + (act_cell_y+1)*(number_of_cells_x+1)];\
-            from.getConvertedPosition(act_cell_x, act_cell_y+1, dummy2);\
-            slope = (d2 - d1) / (dummy2.first - dummy.first);\
-            dummy.second += (threshold - d1)/slope;\
-            data_.push_back(dummy);\
+				    vec = from.getGridCoordinates(act_cell_x+1, act_cell_y+1);\
+            d1  = from[act_cell_x+1 + (act_cell_y+2)*(number_of_cells_x+1)];\
+            d2  = from[act_cell_x   + (act_cell_y+1)*(number_of_cells_x+1)];\
+            vec2 = from.getGridCoordinates(act_cell_x, act_cell_y+1);\
+            slope = (d2 - d1) / (vec2.x - vec.x);\
+            vec.x += (threshold - d1)/slope;\
+						data_.push_back(vec);\
   }
 
 
@@ -73,7 +74,7 @@ namespace BALL
       /** The point type.
 	        This type is used to store points in the 2-d regularData.
       */
-      typedef std::pair<T, T> PointType;
+      typedef Vector2 PointType;
       
       /** The vector type.
 	        This type is used to store the endpoints of the contour-line.
@@ -96,7 +97,7 @@ namespace BALL
       //@}
 
       /// Creates a contour line from a given data set.
-      void createContourLine(const TRegularData2D<T>& from);
+      void createContourLine(TRegularData2D<T>& from);
 
       /// Internal functions used for the marching cube-algorithm.
       void interpol12();
@@ -185,6 +186,8 @@ namespace BALL
       height_ = data.height_;
       it_ = data.it_;
       index_ = data.index_;
+
+			return *this;
     }
 
     template <typename T>
@@ -197,7 +200,7 @@ namespace BALL
     }
 
     template <typename T>
-    void TContourLine<T>::createContourLine(const TRegularData2D<T>& from)
+    void TContourLine<T>::createContourLine(TRegularData2D<T>& from)
     {
       // This function uses a "marching cubes"-style algorithm to determine the contour-lines.
       //Size number_of_cells;
@@ -205,12 +208,12 @@ namespace BALL
       Size number_of_cells_y;
       Position act_cell_x;
       Position act_cell_y;
-      PointType dummy, dummy2;
+      PointType vec, vec2;
       double d1, d2, slope;
       double threshold = height_;
 
-      number_of_cells_x = (Size) from.getXSize() - 1;
-      number_of_cells_y = (Size) from.getYSize() - 1;
+      number_of_cells_x = (Size) from.getMaxXIndex();
+      number_of_cells_y = (Size) from.getMaxYIndex();
       //number_of_cells   = number_of_cells_x * number_of_cells_y;
       
       for (act_cell_y = 0; act_cell_y < number_of_cells_y; act_cell_y++)
