@@ -49,6 +49,7 @@ EXECUTABLES = \
 	PointGrid_test\
 	PoissonBoltzmann_test\
 	PropertyManager_test\
+	Protein_test\
 	Quaternion_test\
 	Residue_test\
 	ResourceFile_test\
@@ -186,6 +187,9 @@ PoissonBoltzmann_test:	PoissonBoltzmann_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 PropertyManager_test:	PropertyManager_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Protein_test:	Protein_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Quaternion_test: Quaternion_test.o
