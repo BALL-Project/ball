@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.8 2000/09/18 14:39:05 oliver Exp $
+// $Id: assignShiftProcessor.C,v 1.9 2000/09/19 12:20:15 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 
@@ -71,21 +71,6 @@ cout << endl << endl;
 		// ----------------------read the shiftdata ------------------------
 		for (Position atompos = 0; atompos < atom_data_.size() ; atompos++)
 		{
-			String prefix(atom_data_[atompos]->residueSeqCode);
-			prefix += atom_data_[atompos]->residueLabel;
-			prefix += ":";
-
-			// non H-atoms need no name transforming
-			if (atom_data_[atompos]->atomType != 'H')
-			{
-				String atomName(prefix);
-				atomName += atom_data_[atompos]->atomName;
-				shift_table_[atomName] = atom_data_[atompos]->shiftValue;
-cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
-				continue;
-			}
-
-
 			// normalize the atom name to reflect the PDB standard
 			String residue_name = atom_data_[atompos]->residueLabel;
 			String atom_name = atom_data_[atompos]->atomName;
@@ -93,22 +78,30 @@ cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
 			{
 				frag_db.normalize_names.matchName(residue_name, atom_name, map);
 			}
-			String entry(residue_name + ":" + atom_name);
-			
-			// from now on getting the transformed name for H-atoms
-			if (!transformTable.has(entry))
+			const String entry(residue_name + ":" + atom_name);
+
+			String prefix(atom_data_[atompos]->residueSeqCode);
+			prefix += residue_name;
+			prefix += ":";
+
+			// non H-atoms need no name transforming
+			if (atom_data_[atompos]->atomType != 'H' || !transformTable.has(entry))
 			{
-				Log.error() << "AssignShiftProcessor: unknown atom from shift data "
-					<< entry << endl;
+				String fullName(prefix);
+				fullName += atom_name;
+				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
+cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 				continue;
 			}
 
+			// from now on getting the transformed name for H-atoms
+
 			if (!transformTable[entry].has('/'))
 			{
-				String atomName(atom_data_[atompos]->residueSeqCode);
-				atomName += transformTable[entry];
-				shift_table_[atomName] = atom_data_[atompos]->shiftValue;
-cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
+				String fullName(residue_name);
+				fullName += transformTable[entry];
+				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
+cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 				continue;
 			}
 
@@ -116,10 +109,10 @@ cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
 			Size size = transformTable[entry].split(arr, 5, "/");
 			for (Position wordpos = 0; wordpos < size ; wordpos++ )
 			{
-				String atomName(prefix);
-				atomName += arr[wordpos];	
-				shift_table_[atomName] = atom_data_[atompos]->shiftValue;
-cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
+				String fullName(prefix);
+				fullName += arr[wordpos];	
+				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
+cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 			}
 		}
 
@@ -160,20 +153,20 @@ cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
 		PDBAtom* patom_;
 		patom_= RTTI::castTo<PDBAtom>(object);
 		
-		String atomName(number_of_fragment_);
-		atomName += patom_->getFragment()->getName();
-		atomName += ":";
-		atomName += patom_->getName();
+		String fullName(number_of_fragment_);
+		fullName += patom_->getFragment()->getName();
+		fullName += ":";
+		fullName += patom_->getName();
 
 		patom_->clearProperty("chemical_shift");
-		if (shift_table_.has(atomName))
+		if (shift_table_.has(fullName))
 		{
-			patom_->setProperty("chemical_shift", shift_table_[atomName]);
-cout << "atom found " << atomName << endl;
+			patom_->setProperty("chemical_shift", shift_table_[fullName]);
+cout << "atom found " << fullName << endl;
 		}
 else 
 {
-	Log.error() << "AssignShiftProcessor: entry not found: " << atomName << endl;   
+	Log.error() << "AssignShiftProcessor: entry not found: " << fullName << endl;   
 }               
 
 		return Processor::CONTINUE;
