@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.29 2004/08/31 11:21:08 amoll Exp $
+// $Id: mainframe.C,v 1.30 2004/09/02 13:51:20 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -245,7 +245,11 @@ namespace BALL
 	{
 		// Display about dialog
 		AboutDialog about;
-		about.qt_version_label->setText(QString("QT ") + qVersion());
+		QString version = QString("QT ") + qVersion();
+#ifdef BALL_QT_HAS_THREADS
+		version += "(mt)";
+#endif
+		about.qt_version_label->setText(version);
 		QFont font = about.BALLView_version_label->font();
 		about.BALLView_version_label->setText(QString("BALLView ") + BALL_RELEASE_STRING);
 		font.setPixelSize(18);

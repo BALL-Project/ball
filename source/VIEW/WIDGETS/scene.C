@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.125 2004/09/01 14:24:49 amoll Exp $
+// $Id: scene.C,v 1.126 2004/09/02 13:55:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -466,16 +466,6 @@ namespace BALL
 				glBegin(GL_QUADS);
 				glNormal3f(n.x, -n.y, n.z);
 				glVertex3f(0,0,0);
-				glVertex3f(e[0].x, e[0].y, e[0].z);
-				glVertex3f(e[0].x + e[1].x, e[0].y + e[1].y, e[0].z + e[1].z);
-				glVertex3f(e[1].x, e[1].y, e[1].z);
-				glEnd();
-
-				// draw backside
-				glTranslatef(0.00001, 0.00001, 0.00001);
-				glBegin(GL_QUADS);
-				glNormal3f(-n.x, n.y, n.z);
-				glVertex3f(0.,0.,0.);
 				glVertex3f(e[0].x, e[0].y, e[0].z);
 				glVertex3f(e[0].x + e[1].x, e[0].y + e[1].y, e[0].z + e[1].z);
 				glVertex3f(e[1].x, e[1].y, e[1].z);
