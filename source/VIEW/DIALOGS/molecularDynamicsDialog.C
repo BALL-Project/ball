@@ -152,7 +152,7 @@ bool MolecularDynamicsDialog::saveImages() const
 
 void MolecularDynamicsDialog::enableDCDFileSelected()
 {
-	dcd_file_edit->setEnabled(true);
+	dcd_file_edit->setEnabled(enable_dcd->isChecked());
 }
 
 String MolecularDynamicsDialog::getDCDFile() const
