@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.12 2002/12/20 19:12:58 oliver Exp $
+// $Id: molecularFileDialog.C,v 1.13 2003/02/28 09:25:36 anhi Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -112,13 +112,13 @@ namespace BALL
 			{
 				readHINFile(filename, String(qfilename));
 			}
-			else if (filter.hasSubstring("MOL"))
-			{
-				readMOLFile(filename, String(qfilename));
-			}
 			else if (filter.hasSubstring("MOL2"))
 			{
 				readMOL2File(filename, String(qfilename));
+			}
+			else if (filter.hasSubstring("MOL"))
+			{
+				readMOLFile(filename, String(qfilename));
 			}
 		}
 
