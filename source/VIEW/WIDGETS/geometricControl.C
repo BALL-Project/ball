@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.54 2004/09/15 13:14:45 amoll Exp $
+// $Id: geometricControl.C,v 1.55 2004/09/16 11:23:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -329,6 +329,11 @@ namespace BALL
 				if (rep->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 				{
 					SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
+					notify_(scene_message);
+				}
+				else if (rep->hasProperty("D"))
+				{
+					SceneMessage *scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
 					notify_(scene_message);
 				}
 					

@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.70 2004/09/15 13:10:25 amoll Exp $
+// $Id: molecularControl.C,v 1.71 2004/09/16 11:23:54 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
-#include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 #include <qmenubar.h>
@@ -307,10 +305,6 @@ bool MolecularControl::reactToMessages_(Message* message)
 		NewSelectionMessage* nsm = (NewSelectionMessage*) message;
 		setSelection_(true, nsm->openItems());
 		updateSelection();
-	}
-	else if (RTTI::isKindOf<TransformationMessage> (*message))
-	{
-		moveItems(((TransformationMessage*)message)->getMatrix());
 	}
 
 	return false;
@@ -1263,62 +1257,5 @@ Size MolecularControl::applySelector(const String& expression)
 	selector_edit_->setText(expression.c_str());
 	return applySelector();
 }
-
-void MolecularControl::moveItems(const Matrix4x4& m)
-	throw()
-{
-	if (selected_.size() == 0) return;
-
-	// copy list, because selection could change
-	List<Composite*> selection = selected_;
-	List<Composite*>::Iterator it = selection.begin();
-	HashSet<Composite*> roots;
-
-	if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
-	{
-		GeometricCenterProcessor center_processor;
-		Vector3 center;
-		for(; it != selection.end(); it++)
-		{
-			(*it)->apply(center_processor);
-			center += center_processor.getCenter();
-		}
-		
-		center /= (float) selection.size();
-
-		Matrix4x4 mym1, mym2;
-		mym1.setTranslation(center * -1);
-		mym2.setTranslation(center);
-
-		TransformationProcessor tp1(mym1);
-		TransformationProcessor tp2(m);
-		TransformationProcessor tp3(mym2);
-
-		for (it = selection.begin(); it != selection.end(); it++)
-		{
-			(*it)->apply(tp1);
- 			(*it)->apply(tp2);
-			(*it)->apply(tp3) ;
-			roots.insert(&(**it).getRoot());
-		}
-	}
-	else
-	{
-		TransformationProcessor tp(m);
-		for(; it != selection.end(); it++)
-		{
-			(*it)->apply(tp);
-			roots.insert(&(**it).getRoot());
-		}
-	}
-
-	HashSet<Composite*>::Iterator rit = roots.begin();
-	for(; rit != roots.end(); rit++)
-	{
-		CompositeMessage* msg = new CompositeMessage(**rit, CompositeMessage::CHANGED_COMPOSITE);
-		notify_(msg);
-	}
-}
-
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.42 2004/09/13 17:12:50 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.43 2004/09/16 11:19:52 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -210,10 +210,10 @@ namespace BALL
 				{142,  65, 211},   // TYR
 				{ 61, 255, 000},   // TRP
 
-				{ 61, 255, 100},   // A
-				{142, 115, 255},   // C
-				{142, 115, 121},   // G
-				{255, 255, 160}    // T
+				{255, 255 , 0}, // A
+				{255, 0, 0},   	// C
+				{0, 255, 0},  	// G
+				{0, 0, 255}    	// T
 			};                                       
 
 			const char* residue_names[BALL_NR_RESIDUES] = 

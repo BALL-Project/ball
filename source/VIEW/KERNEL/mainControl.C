@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.104 2004/09/02 15:10:18 amoll Exp $
+// $Id: mainControl.C,v 1.105 2004/09/16 11:23:54 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -21,6 +21,9 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/MATHS/common.h>
+
+#include <BALL/STRUCTURE/geometricTransformations.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -655,6 +658,10 @@ namespace BALL
 				GeometricObjectSelectionMessage* selection_message = 
 					RTTI::castTo<GeometricObjectSelectionMessage>(*message);
 				selectComposites_(*selection_message);
+			}
+			else if (RTTI::isKindOf<TransformationMessage> (*message))
+			{
+				moveItems(((TransformationMessage*) message)->getMatrix());
 			}
 		}
 
@@ -1630,6 +1637,62 @@ namespace BALL
 			if (directory.setCurrent())
 			{
 				working_dir_ = dir;
+			}
+		}
+
+
+		void MainControl::moveItems(const Matrix4x4& m)
+			throw()
+		{
+			if (selection_.size() == 0) return;
+
+			// copy list, because selection could change
+			HashSet<Composite*> selection = selection_;
+			HashSet<Composite*>::Iterator it = selection.begin();
+			HashSet<Composite*> roots;
+
+			if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
+			{
+				GeometricCenterProcessor center_processor;
+				Vector3 center;
+				for(; it != selection.end(); it++)
+				{
+					(*it)->apply(center_processor);
+					center += center_processor.getCenter();
+				}
+				
+				center /= (float) selection.size();
+
+				Matrix4x4 mym1, mym2;
+				mym1.setTranslation(center * -1);
+				mym2.setTranslation(center);
+
+				TransformationProcessor tp1(mym1);
+				TransformationProcessor tp2(m);
+				TransformationProcessor tp3(mym2);
+
+				for (it = selection.begin(); it != selection.end(); it++)
+				{
+					(*it)->apply(tp1);
+					(*it)->apply(tp2);
+					(*it)->apply(tp3) ;
+					roots.insert(&(**it).getRoot());
+				}
+			}
+			else
+			{
+				TransformationProcessor tp(m);
+				for(; it != selection.end(); it++)
+				{
+					(*it)->apply(tp);
+					roots.insert(&(**it).getRoot());
+				}
+			}
+
+			HashSet<Composite*>::Iterator rit = roots.begin();
+			for(; rit != roots.end(); rit++)
+			{
+				update(**rit);
 			}
 		}
 

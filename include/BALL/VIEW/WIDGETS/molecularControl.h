@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.36 2004/09/15 11:46:15 amoll Exp $
+// $Id: molecularControl.h,v 1.37 2004/09/16 11:23:58 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -333,11 +333,7 @@ namespace BALL
 
 			/// Connected to the clear selection button
 			virtual void clearSelector();
-
-			///
-			void moveItems(const Matrix4x4& m)
-				throw();
-
+			
 			//@} 
 			/** @name Protected members 
 			*/ 

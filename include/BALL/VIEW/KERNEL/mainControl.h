@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.54 2004/08/16 12:36:57 amoll Exp $
+// $Id: mainControl.h,v 1.55 2004/09/16 11:23:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -731,6 +731,10 @@ namespace BALL
 
 			///
 			const String& getLoggingFilename() const
+				throw();
+
+			///
+			void moveItems(const Matrix4x4& m)
 				throw();
 
 			//@}
