@@ -1,0 +1,8 @@
+// $Id: kernel.doc,v 1.1 2000/01/12 00:13:54 oliver Exp $
+
+/**@name	VIEW/KERNEL
+		@nonames
+*/
+//@{
+	//@Include: *.h
+//@}
