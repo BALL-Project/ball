@@ -1,4 +1,4 @@
-// $Id: directory.C,v 1.14 2000/07/04 08:20:07 oliver Exp $
+// $Id: directory.C,v 1.15 2001/05/17 12:19:25 oliver Exp $
 
 #include <dirent.h>
 #include <stdio.h>
@@ -222,7 +222,7 @@ namespace BALL
 			FileSystem::canonizePath(directory_path_);
 			if (directory_path_.hasSuffix(String(FileSystem::PATH_SEPARATOR)))
 			{
-				directory_path_.truncate(directory_path_.size() - 1);
+				directory_path_.truncate((Size)directory_path_.size() - 1);
 			}
 		}
 		else 

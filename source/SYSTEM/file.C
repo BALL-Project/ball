@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.16 2000/12/19 13:23:37 anker Exp $
+// $Id: file.C,v 1.17 2001/05/17 12:19:25 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <math.h>
@@ -176,7 +176,7 @@ namespace BALL
 		}
 		streampos old_position = ((fstream*)this)->tellg();
 		((fstream*)this)->seekg(0, ios::end);
-		Size size = (Size)(((fstream*)this)->tellg() - old_position);
+		Size size = (Size)((Size)((fstream*)this)->tellg() - old_position);
 		((fstream*)this)->seekg(old_position);
 		
 		return size;

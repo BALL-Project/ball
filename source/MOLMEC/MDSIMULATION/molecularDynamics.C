@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.C,v 1.8 2001/05/17 01:30:54 oliver Exp $
+// $Id: molecularDynamics.C,v 1.9 2001/05/17 12:19:23 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -200,12 +200,12 @@ namespace BALL
 		// temperature calculated and saved 
 		options.setDefaultInteger (MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY,
 															 MolecularDynamics::Default::ENERGY_OUTPUT_FREQUENCY);
-		energy_output_frequency_ = options.getInteger (MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY);
+		energy_output_frequency_ = (Size)options.getInteger (MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY);
 
 		// After how many iterations are positions and velocities saved 
 		options.setDefaultInteger (MolecularDynamics::Option::SNAPSHOT_FREQUENCY,
 															 MolecularDynamics::Default::SNAPSHOT_FREQUENCY);
-		snapshot_frequency_ = options.getInteger (MolecularDynamics::Option::SNAPSHOT_FREQUENCY);
+		snapshot_frequency_ = (Size)options.getInteger (MolecularDynamics::Option::SNAPSHOT_FREQUENCY);
 
 
 

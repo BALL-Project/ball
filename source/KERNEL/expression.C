@@ -482,7 +482,7 @@ namespace BALL
     sy++;
     Index bracket_count = 1;
     Size i;
-    for (i = sy; (i < (Size)s.size()) && (bracket_count > 0); ++i)
+    for (i = (Size)sy; (i < (Size)s.size()) && (bracket_count > 0); ++i)
     {
       switch (s[i])
       {

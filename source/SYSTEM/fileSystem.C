@@ -1,4 +1,4 @@
-// $Id: fileSystem.C,v 1.6 2000/10/30 00:20:06 amoll Exp $
+// $Id: fileSystem.C,v 1.7 2001/05/17 12:19:25 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -92,7 +92,7 @@ namespace BALL
 			if (user_name != 0)
 			{
 				Size size = 0;
-				size = strlen(user_name);
+				size = (Size)strlen(user_name);
 				path.insert(1, user_name);
 				index += (Index)(size - 1);
 			}

@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.26 2001/05/15 08:41:09 anker Exp $ 
+// $Id: hashSet.h,v 1.27 2001/05/17 12:19:20 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -652,7 +652,7 @@ namespace BALL
 	Size HashSet<Key>::getBucketSize() const
 		throw()
 	{
-		return bucket_.size();
+		return (Size)bucket_.size();
 	}
 
 	template <class Key>
@@ -1056,13 +1056,15 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	void HashSet<Key>::rehash()		throw()
+	void HashSet<Key>::rehash()		
+		throw()
 	{
-		capacity_ = (Size)getNextPrime(bucket_.size() << 1);
+		capacity_ = (Size)getNextPrime((Size)bucket_.size() << 1);
 	}
 
   template <class Key>
-  void HashSet<Key>::deleteBuckets_()		throw()
+  void HashSet<Key>::deleteBuckets_()		
+		throw()
   {
     Size i = 0;
     Node* node = 0;
