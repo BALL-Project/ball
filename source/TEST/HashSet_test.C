@@ -1,4 +1,4 @@
-// $Id: HashSet_test.C,v 1.8 2000/09/05 13:13:01 oliver Exp $
+// $Id: HashSet_test.C,v 1.9 2000/09/05 14:03:04 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.8 2000/09/05 13:13:01 oliver Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.9 2000/09/05 14:03:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -315,6 +315,9 @@ CHECK(HashSet::erase(Iterator pos))
 	TEST_EQUAL(hs.getSize(), 0)
 	hs.erase(hs.begin());
 	TEST_EQUAL(hs.getSize(), 0)
+
+	HashSet<int> hs2;
+	TEST_EXCEPTION(Exception::IncompatibleIterators, hs2.erase(hs.begin()))
 RESULT
 
 CHECK(HashSet::host(Visitor<int>&))
