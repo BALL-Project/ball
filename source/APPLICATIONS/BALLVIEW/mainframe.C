@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.40 2004/11/27 20:54:03 amoll Exp $
+// $Id: mainframe.C,v 1.41 2004/11/27 21:36:22 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -18,7 +18,6 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
-#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 
 #include <BALL/COMMON/version.h>
 
@@ -113,9 +112,6 @@ namespace BALL
 		CHECK_PTR(logview);
 		logview->setMinimumSize(10, 10);
 
-		FDPBDialog* FDPB_dialog = new FDPBDialog(this);
-		CHECK_PTR(FDPB_dialog);
-
 		#ifdef BALL_PYTHON_SUPPORT
 			PyWidget* pywidget = new PyWidget(this, "Python Interpreter");
 			CHECK_PTR(pywidget);
@@ -140,11 +136,6 @@ namespace BALL
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 										ALT+Key_X);
 
-		// Tools Menu -------------------------------------------------------------------
-		hint = "Calculate the Electrostatics with FDPB, if one System selected.";
-		menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", FDPB_dialog, SLOT(show()), 0,
-				-1, hint);
-				
 		// Help-Menu -------------------------------------------------------------------
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
 
@@ -240,7 +231,8 @@ namespace BALL
 
 		if (file.hasSuffix(".bvp"))
 		{
-			MainControl::loadBALLViewProjectFile(file);
+//   			MainControl::loadBALLViewProjectFile(file);
+			loadBALLViewProjectFile(file);
 			return;
 		}
 
