@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeIterator.h,v 1.13 2003/08/26 08:04:18 oliver Exp $
+// $Id: moleculeIterator.h,v 1.14 2004/05/17 14:02:00 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
@@ -55,17 +55,20 @@ namespace BALL
 	};
 
 
-
+	///
 	typedef BidirectionalIterator
 		<Composite, Molecule, Composite::CompositeIterator, MoleculeIteratorTraits>
 		MoleculeIterator;
 
+	///
 	typedef ConstBidirectionalIterator
 		<Composite, Molecule, Composite::CompositeIterator, MoleculeIteratorTraits>
 		MoleculeConstIterator;
 
+	///
 	typedef std::reverse_iterator<MoleculeIterator> MoleculeReverseIterator;
-
+	
+	///
 	typedef std::reverse_iterator<MoleculeConstIterator> MoleculeConstReverseIterator;
 
 } // namespace BALL

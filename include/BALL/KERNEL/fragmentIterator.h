@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentIterator.h,v 1.17 2003/08/26 08:04:18 oliver Exp $
+// $Id: fragmentIterator.h,v 1.18 2004/05/17 14:02:00 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
@@ -20,7 +20,6 @@ namespace BALL
 	/** Traits class for the FragmentIterator.
 			Intended for internal use only!
 			 \par
-			
     	\ingroup  KernelIterators
 	*/
 	class FragmentIteratorTraits
@@ -67,16 +66,20 @@ namespace BALL
 		predicate_ = &RTTI::getDefault<KernelPredicate<Fragment> >();
 	}
 
+	///
 	typedef BidirectionalIterator
 		<Composite, Fragment, Composite::CompositeIterator, FragmentIteratorTraits>
 		FragmentIterator;
 
+	///
 	typedef ConstBidirectionalIterator
 		<Composite, Fragment, Composite::CompositeIterator, FragmentIteratorTraits>
 		FragmentConstIterator;
 
+	///
 	typedef std::reverse_iterator<FragmentIterator> FragmentReverseIterator;
 
+	///
 	typedef std::reverse_iterator<FragmentConstIterator> FragmentConstReverseIterator;
 
 } // namespace BALL 
