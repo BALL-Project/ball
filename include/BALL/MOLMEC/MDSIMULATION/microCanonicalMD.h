@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.h,v 1.3 2000/03/26 12:49:30 oliver Exp $
+// $Id: microCanonicalMD.h,v 1.4 2000/05/10 08:39:25 pmueller Exp $
 // Microcanonical MD: A class for doing molecular dynamics simulations      
 // according to the principle of a microcanonical ensemble (NVE), i.e., 
 // the total energy of the system is kept constant.
@@ -50,10 +50,6 @@
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MOLECULARDYNAMICS_H
 #	include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
-#	include <BALL/MOLMEC/COMMON/snapShot.h>
 #endif
 
 
@@ -140,20 +136,29 @@ namespace BALL
     /** @name Accessors
     */
 
+    /** Choose a new time step
+    */
+    virtual void setTimeStep(double step); 
+
     //@{
     /**  This method does the actual simulation stuff
-         It runs for the number of iterations currently stored in
-         'number_of_iterations_'
+         It runs for getMaximalNumberOfIterations() iterations. 
+         restart = true means that the counting of iterations is
+                   continued from the previous run. 
     */
     virtual void simulate(bool restart = false);
 
-    /**  This method does the actual simulation stuff
-         It runs for the indicated number of iterations
+    /**  This method does the actual simulation stuff. 
+         It runs for the indicated number of iterations.
+         restart = true means that the counting of iterations is
+                   continued from the previous run. 
     */
     virtual void simulateIterations(Size number,bool restart = false);
 
-    /**  This method does the actual simulation stuff
-         It runs for the indicated time in picoseconds  
+    /**  This method does the actual simulation stuff. 
+         It runs for the indicated time in picoseconds . 
+         restart = true means that the counting of iterations is
+                   continued from the previous run. 
     */
     virtual void simulateTime(double simulation_time,bool restart = false); 
 
