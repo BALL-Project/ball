@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.C,v 1.24 2003/06/11 08:10:02 oliver Exp $
+// $Id: residue.C,v 1.25 2003/06/19 13:24:03 oliver Exp $
 //
 
 #include <BALL/KERNEL/residue.h>
@@ -92,7 +92,7 @@ namespace BALL
 		insertion_code_ = residue.insertion_code_;
 	}
 			
-	const Residue& Residue::operator =(const Residue& residue)
+	Residue& Residue::operator = (const Residue& residue)
 		throw()
 	{
 		set(residue);

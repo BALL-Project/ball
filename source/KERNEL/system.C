@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.C,v 1.23 2002/02/27 12:21:26 sturm Exp $
+// $Id: system.C,v 1.24 2003/06/19 13:24:03 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -62,7 +62,7 @@ namespace BALL
 		AtomContainer::set(system, deep);
 	}
 			
-	const System& System::operator = (const System& system)
+	System& System::operator = (const System& system)
 		throw()
 	{
 		AtomContainer::set(system);

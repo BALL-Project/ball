@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.40 2003/05/26 14:22:51 oliver Exp $
+// $Id: expression.C,v 1.41 2003/06/19 13:24:03 oliver Exp $
 //
 
 #include <BALL/KERNEL/expression.h>
@@ -76,7 +76,7 @@ namespace BALL
 	}
 
 
-	const Expression& Expression::operator = (const Expression& expression)
+	Expression& Expression::operator = (const Expression& expression)
 		throw()
 	{
 

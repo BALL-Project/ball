@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionPredicate.C,v 1.4 2002/02/27 12:21:23 sturm Exp $
+// $Id: expressionPredicate.C,v 1.5 2003/06/19 13:24:03 oliver Exp $
 
 #include <BALL/KERNEL/expressionPredicate.h>
 
@@ -40,8 +40,7 @@ namespace BALL
 	}
 
 
-	const ExpressionPredicate& ExpressionPredicate::operator =
-		(const ExpressionPredicate& predicate) 
+	ExpressionPredicate& ExpressionPredicate::operator = (const ExpressionPredicate& predicate) 
 		throw()
 	{
 		UnaryPredicate<Atom>::operator = (predicate);

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.C,v 1.17 2002/12/22 14:01:51 oliver Exp $
+// $Id: secondaryStructure.C,v 1.18 2003/06/19 13:24:03 oliver Exp $
+//
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -72,7 +73,7 @@ namespace BALL
 		AtomContainer::set(secondary_structure, deep);
 	}
 			
-	const SecondaryStructure& SecondaryStructure::operator =(const SecondaryStructure& secondary_structure)
+	SecondaryStructure& SecondaryStructure::operator = (const SecondaryStructure& secondary_structure)
 		throw()
 	{
 		set(secondary_structure);

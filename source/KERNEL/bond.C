@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.30 2003/03/14 10:11:27 oliver Exp $
+// $Id: bond.C,v 1.31 2003/06/19 13:24:02 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -173,7 +173,7 @@ namespace BALL
 		bond_type_ = (Bond::Order)tmp;
 	}
  
-	const Bond& Bond::operator = (const Bond& bond)
+	Bond& Bond::operator = (const Bond& bond)
 		throw()
 	{
 		PropertyManager::operator = (bond);

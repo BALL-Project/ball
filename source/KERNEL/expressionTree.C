@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionTree.C,v 1.9 2003/05/26 14:22:51 oliver Exp $
+// $Id: expressionTree.C,v 1.10 2003/06/19 13:24:03 oliver Exp $
 //
 
 #include <BALL/KERNEL/expressionTree.h>
@@ -110,7 +110,7 @@ namespace BALL
 	}
 
 
-	const ExpressionTree& ExpressionTree::operator = (const ExpressionTree& tree)
+	ExpressionTree& ExpressionTree::operator = (const ExpressionTree& tree)
 		throw()
 	{
 		// Avoid self assignment.

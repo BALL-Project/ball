@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.C,v 1.14 2002/12/18 06:10:07 oliver Exp $
+// $Id: PDBAtom.C,v 1.15 2003/06/19 13:24:02 oliver Exp $
+//
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -138,7 +139,7 @@ namespace BALL
     pdb_atom.set(*this, deep);
   }
 
-	const PDBAtom& PDBAtom::operator =(const PDBAtom& pdb_atom)
+	PDBAtom& PDBAtom::operator = (const PDBAtom& pdb_atom)
 		throw()
 	{
 		Atom::operator =(pdb_atom);

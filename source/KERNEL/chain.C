@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.C,v 1.17 2002/12/19 21:01:34 oliver Exp $
+// $Id: chain.C,v 1.18 2003/06/19 13:24:02 oliver Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -58,7 +58,7 @@ namespace BALL
 		AtomContainer::set(chain, deep);
 	}
 			
-	const Chain& Chain::operator = (const Chain &chain)
+	Chain& Chain::operator = (const Chain &chain)
 		throw()
 	{
 		set(chain);

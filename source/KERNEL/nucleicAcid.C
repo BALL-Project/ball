@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.C,v 1.14 2002/02/27 12:21:24 sturm Exp $
+// $Id: nucleicAcid.C,v 1.15 2003/06/19 13:24:03 oliver Exp $
+//
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -77,7 +78,7 @@ namespace BALL
 		id_ = nucleic_acid.id_;
 	}
 			
-	const NucleicAcid& NucleicAcid::operator =(const NucleicAcid &nucleic_acid)
+	NucleicAcid& NucleicAcid::operator = (const NucleicAcid& nucleic_acid)
 		throw()
 	{
 		set(nucleic_acid);

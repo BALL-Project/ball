@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.C,v 1.13 2002/12/18 06:10:07 oliver Exp $
+// $Id: fragment.C,v 1.14 2003/06/19 13:24:03 oliver Exp $
+//
 
 #include <BALL/KERNEL/fragment.h>
 
@@ -50,7 +51,7 @@ namespace BALL
     pm.checkObjectTrailer(0);
 	}
 	
-	const Fragment& Fragment::operator =(const Fragment& fragment)
+	Fragment& Fragment::operator = (const Fragment& fragment)
 		throw()
 	{
 		AtomContainer::operator =(fragment);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.41 2003/05/26 16:19:53 oliver Exp $
+// $Id: atom.C,v 1.42 2003/06/19 13:24:02 oliver Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -58,7 +58,7 @@ namespace BALL
 	}
 
 	
-	const Atom::StaticAtomAttributes& Atom::StaticAtomAttributes::operator = 
+	Atom::StaticAtomAttributes& Atom::StaticAtomAttributes::operator = 
 		(const Atom::StaticAtomAttributes& attr)
 	{
 		charge = attr.charge;
@@ -256,7 +256,7 @@ namespace BALL
     atom.set(*this, deep);
   }
 
-	const Atom& Atom::operator = (const Atom &atom)
+	Atom& Atom::operator = (const Atom& atom)
 		throw()
 	{
 		Composite::operator =(atom);

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.C,v 1.14 2002/12/16 17:15:33 oliver Exp $
+// $Id: PTE.C,v 1.15 2003/06/19 13:24:02 oliver Exp $
+//
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -459,7 +460,7 @@ namespace BALL
 		return s;
 	}
 
-	const Element& Element::operator =(const Element& element)
+	Element& Element::operator = (const Element& element)
 		throw()
 	{
 		name_ = element.name_;

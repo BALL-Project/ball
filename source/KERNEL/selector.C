@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.C,v 1.24 2002/02/27 12:21:25 sturm Exp $
+// $Id: selector.C,v 1.25 2003/06/19 13:24:03 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -54,7 +54,7 @@ namespace BALL
 		expression_.clear();
 	}
 
-	const Selector& Selector::operator = (const Selector& selector)
+	Selector& Selector::operator = (const Selector& selector)
 		throw()
 	{
 		number_of_selected_atoms_ = selector.number_of_selected_atoms_;

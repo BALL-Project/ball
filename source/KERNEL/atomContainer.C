@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.C,v 1.14 2003/02/08 16:14:48 oliver Exp $
+// $Id: atomContainer.C,v 1.15 2003/06/19 13:24:02 oliver Exp $
+//
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -109,7 +110,7 @@ namespace BALL
     clone_bonds = clone_them;
 	}
 			
-	const AtomContainer& AtomContainer::operator = (const AtomContainer& atom_container)
+	AtomContainer& AtomContainer::operator = (const AtomContainer& atom_container)
 		throw()
 	{
 		set(atom_container);
@@ -230,7 +231,7 @@ namespace BALL
 		Size size = 0;
 
 		for (AtomContainerConstIterator atom_container_it = ++beginAtomContainer();
-				 !atom_container_it.isEnd();++atom_container_it)
+				 !atom_container_it.isEnd(); ++atom_container_it)
 		{
 			++size;
 		}
@@ -243,7 +244,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (AtomConstIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
+		for (AtomConstIterator atom_it(beginAtom()); !atom_it.isEnd(); ++atom_it)
 		{
 			++size;
 		}

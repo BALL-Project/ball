@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.C,v 1.12 2002/02/27 12:21:24 sturm Exp $
+// $Id: nucleotide.C,v 1.13 2003/06/19 13:24:03 oliver Exp $
+//
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -87,7 +88,7 @@ namespace BALL
 		insertion_code_ = nucleotide.insertion_code_;
 	}
 			
-	const Nucleotide& Nucleotide::operator =(const Nucleotide& nucleotide)
+	Nucleotide& Nucleotide::operator = (const Nucleotide& nucleotide)
 		throw()
 	{
 		set(nucleotide);

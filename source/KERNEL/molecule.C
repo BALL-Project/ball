@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.C,v 1.14 2002/12/18 06:10:07 oliver Exp $
+// $Id: molecule.C,v 1.15 2003/06/19 13:24:03 oliver Exp $
+//
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -57,7 +58,7 @@ namespace BALL
 		AtomContainer::set(molecule, deep);
 	}
 			
-	const Molecule& Molecule::operator =(const Molecule& molecule)
+	Molecule& Molecule::operator = (const Molecule& molecule)
 		throw()
 	{
 		set(molecule);

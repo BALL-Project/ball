@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.C,v 1.14 2002/02/27 12:21:25 sturm Exp $
+// $Id: protein.C,v 1.15 2003/06/19 13:24:03 oliver Exp $
+//
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -77,7 +78,7 @@ namespace BALL
 		id_ = protein.id_;
 	}
 			
-	const Protein& Protein::operator =(const Protein &protein)
+	Protein& Protein::operator =(const Protein &protein)
 		throw()
 	{
 		set(protein);
