@@ -1256,6 +1256,31 @@ AC_DEFUN(CF_CHECK_TPL_NULL_ARGS, [
 ])
 
 dnl
+dnl		Check whether the compiler allows parameterization oftemplate functions
+dnl		with inline functions (SGI CC has a problem with that)
+dnl
+AC_DEFUN(CF_CHECK_INLINE_TPL_ARGS, [
+	AC_MSG_CHECKING(for inline template function arguments)
+	BALL_HAS_INLINE_TPL_ARGS=no
+	AC_TRY_COMPILE(
+		[
+			template <int i>
+			inline double foo(double x){ return i * x; }
+
+			typedef double (*Function)(double);
+
+			template <Function F>
+			inline double bar(double x) { return F(x); }
+		],
+		[
+			double d = bar< foo<3> >(2.0);
+		],
+		BALL_HAS_INLINE_TPL_ARGS=yes
+	)
+	AC_MSG_RESULT($BALL_HAS_INLINE_TPL_ARGS)
+])
+
+dnl
 dnl   check for ANSI compliant <iostream>
 dnl   We need this for the base classes (ios vs. basic_ios<char>) in socket.h/C
 dnl

@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.20 2002/12/09 19:35:11 oliver Exp $
+dnl    $Id: configure.ac,v 1.1.2.21 2002/12/09 21:42:21 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -297,11 +297,13 @@ dnl
 dnl		Check for some C++/STL features
 dnl		  -- the numeric_limits class
 dnl     -- null template arguments (whether <> is required)
+dnl			-- inline functions as template function arguments
 dnl 		-- ANSI-compliant iostreams 
 dnl			-- ARM vs. ANSI-style access modifications
 dnl
 CF_CHECK_NUM_LIMITS
 CF_CHECK_TPL_NULL_ARGS
+CF_CHECK_INLINE_TPL_ARGS
 CF_CHECK_ANSI_IOSTREAM
 CF_CHECK_ARM_ACCESS_MODIFICATION
 
