@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.5 2000/03/15 02:21:29 amoll Exp $
+// $Id: Matrix44_test.C,v 1.6 2000/03/16 08:20:18 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Matrix44_test.C,v 1.5 2000/03/15 02:21:29 amoll Exp $")
+START_TEST(class_name, "$Id: Matrix44_test.C,v 1.6 2000/03/16 08:20:18 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -132,12 +132,12 @@ RESULT
 
 CHECK(TMatrix4x4(const T ptr[4][4]))
 	float v[4][4];
-	float pos = 1.0;
+	int pos = 1;
 	for (int i=0; i<4; i++ )
 	{
 			for (int j=0; j<4; j++  )
 			{
-				v[i][j] = pos;
+				v[i][j] = (float)pos;
 				pos++;
 			}
 	}
@@ -167,12 +167,12 @@ RESULT
 CHECK(set( const T ptr[4][4]))
 	m1 = Matrix4x4();
 	float v[4][4];
-	float pos = 1.0;
+	int pos = 1;
 	for (int i=0; i<4; i++ )
 	{
 			for (int j=0; j<4; j++ )
 			{
-				v[i][j] = pos;
+				v[i][j] = (float)pos;
 				pos++;
 			}
 	}
@@ -220,12 +220,12 @@ RESULT
 CHECK(operator = ( const T ptr[4][4]))
 	m1 = Matrix4x4();
 	float v[4][4];
-	float pos = 1.0;
+	int pos = 1;
 	for (int i=0; i<4; i++ )
 	{
 			for (int j=0; j<4; j++ )
 			{
-				v[i][j] = pos;
+				v[i][j] = (float)pos;
 				pos++;
 			}
 	}
@@ -829,6 +829,7 @@ RESULT
 
 //line 471: method TMatrix4x4::rotate(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z)
 CHECK(TMatrix4x4::rotate(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z))
+
 	m1 = Matrix4x4(m);
 	Angle b = Angle(Constants::PI * 2);
 	m1.rotate(b, 1.0, 2.0, 3.0);
