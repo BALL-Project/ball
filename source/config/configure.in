@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.3 1999/08/26 10:14:50 oliver Exp $
+dnl    $Id: configure.in,v 1.4 1999/08/26 11:00:18 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -261,6 +261,7 @@ AC_SUBST(OSMAJOR)
 AC_SUBST(OS)
 AC_SUBST(OSREV)
 AC_SUBST(BINFMT)
+AC_SUBST(BINFMT_PATH)
 AC_SUBST(ARCHITECTURE)
 
 AC_MSG_CHECKING(your OS)
@@ -1613,6 +1614,11 @@ if test "${MULTI_BUILD}" = "true" ; then
 	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST
 
 	${CP} config/Makefile.multiplatform Makefile
+
+	dnl   define the string to substitute in common.mak
+	BINFMT_PATH="/${BINFMT}"
+else
+	BINFMT_PATH=""
 fi
 
 AC_OUTPUT([
