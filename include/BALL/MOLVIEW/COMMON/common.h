@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.9 2000/06/18 16:37:21 hekl Exp $
+// $Id: common.h,v 1.10 2000/06/25 19:17:38 hekl Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -68,6 +68,8 @@ namespace BALL
 		{
 			enum Property
 			{
+				PROPERTY__UNKNOWN = -1,
+
 				// Object Properties
 				PROPERTY__OBJECT_STATIC = VIEW::GeometricObject::PROPERTY__OBJECT_STATIC,     // Default
 				PROPERTY__OBJECT_DYNAMIC,
