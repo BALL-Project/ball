@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.1 2004/02/18 11:45:11 bender Exp $
+// $Id: charmmConfigurationDialog.C,v 1.2 2004/02/19 10:38:30 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
@@ -368,11 +368,12 @@ namespace BALL
 		void CharmmConfigurationDialog::applyTo(CharmmFF& charmm)
 			throw()
 		{
-			charmm.options[CharmmFF::Option::ASSIGN_TYPES] = getAssignTypes();
-			charmm.options[CharmmFF::Option::ASSIGN_CHARGES] = getAssignCharges();
-			charmm.options[CharmmFF::Option::ASSIGN_TYPENAMES] = getAssignTypenames();
-			charmm.options[CharmmFF::Option::OVERWRITE_CHARGES] = getOverwriteCharges();
-			charmm.options[CharmmFF::Option::OVERWRITE_TYPENAMES] = getOverwriteTypenames();
+			charmm.options[CharmmFF::Option::ASSIGN_TYPES] = (getAssignTypes() ? "true" : "false");
+			charmm.options[CharmmFF::Option::ASSIGN_CHARGES] = (getAssignCharges() ? "true" : "false");
+			charmm.options[CharmmFF::Option::ASSIGN_TYPENAMES] = (getAssignTypenames() ? "true" : "false");
+			charmm.options[CharmmFF::Option::OVERWRITE_CHARGES] = (getOverwriteCharges() ? "true" : "false");
+			charmm.options[CharmmFF::Option::OVERWRITE_TYPENAMES] = (getOverwriteTypenames() ? "true" : "false");
+
 			charmm.options[CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = getUseDistanceDependentDC();
 			charmm.options[CharmmFF::Option::USE_EEF1] = getUseEEF1();
 			charmm.options[CharmmFF::Option::NONBONDED_CUTOFF] = getNonbondedCutoff();

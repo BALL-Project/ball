@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.20 2004/02/19 10:17:05 oliver Exp $
+// $Id: molecularStructure.C,v 1.21 2004/02/19 10:38:31 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -895,11 +895,13 @@ namespace BALL
 		setStatusbarText("setting up force field...");
 		
 		ForceField& ff = getForceField();
+		ff.options.dump(Log.info());
 		if (!ff.setup(*system))
 		{
 			setStatusbarText("Force field setup failed. See log for details.");
 			return;
 		}
+		ff.options.dump(Log.info());
 
 		// CHARMM setup may delete atoms (converted to united atoms!),
 		// so we have to make sure the rest of the world realizes something might have changed.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.4 2004/02/18 11:45:11 bender Exp $
+// $Id: amberConfigurationDialog.C,v 1.5 2004/02/19 10:38:30 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -319,11 +319,12 @@ namespace BALL
 		void AmberConfigurationDialog::applyTo(AmberFF& amber)
 			throw()
 		{
-			amber.options[AmberFF::Option::ASSIGN_TYPES] = getAssignTypes();
-			amber.options[AmberFF::Option::ASSIGN_CHARGES] = getAssignCharges();
-			amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = getAssignTypenames();
-			amber.options[AmberFF::Option::OVERWRITE_CHARGES] = getOverwriteCharges();
-			amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = getOverwriteTypenames();
+			amber.options[AmberFF::Option::ASSIGN_TYPES] = (getAssignTypes() ? "true" : "false");
+			amber.options[AmberFF::Option::ASSIGN_CHARGES] = (getAssignCharges()  ? "true" : "false");
+			amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = (getAssignTypenames() ? "true" : "false");
+			amber.options[AmberFF::Option::OVERWRITE_CHARGES] = (getOverwriteCharges() ? "true" : "false");
+			amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = (getOverwriteTypenames() ? "true" : "false");
+
 			amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = getUseDistanceDependentDC();
 			amber.options[AmberFF::Option::NONBONDED_CUTOFF] = getNonbondedCutoff();
 			amber.options[AmberFF::Option::VDW_CUTOFF] = getVdwCutoff();

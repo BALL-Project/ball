@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.C,v 1.22 2002/02/27 12:21:29 sturm Exp $
+// $Id: amber.C,v 1.23 2004/02/19 10:38:30 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -219,7 +219,7 @@ namespace BALL
 		}
 
 		// check the options whether types, type names, or charges 
-		// have to be (re)asigned
+		// have to be (re)assigned
 		options.setDefaultBool(Option::ASSIGN_CHARGES, Default::ASSIGN_CHARGES);
 		bool assign_charges = options.getBool(Option::ASSIGN_CHARGES);
 		options.setDefaultBool(Option::ASSIGN_TYPES, Default::ASSIGN_TYPES);
