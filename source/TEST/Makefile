@@ -25,6 +25,7 @@ EXECUTABLES = \
 	Box3_test\
 	CharmmFF_test\
 	ClassTest_test\
+	Common_test\
 	Composite_test\
 	DefaultProcessors_test\
 	EnergyMinimizer_test\
@@ -104,6 +105,9 @@ Circle3_test:	Circle3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 ClassTest_test:	ClassTest_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Common_test:	Common_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Composite_test:	Composite_test.o
