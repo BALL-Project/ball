@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'aboutDialog.ui'
 **
-** Created: Thu Oct 21 14:49:22 2004
-**      by: The User Interface Compiler ($Id: aboutDialog.h,v 1.1.2.1 2005/01/06 15:23:44 leonhardt Exp $)
+** Created: Thu Jan 6 16:25:30 2005
+**      by: The User Interface Compiler ($Id: aboutDialog.h,v 1.1.2.2 2005/01/06 15:27:55 leonhardt Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -17,6 +17,7 @@
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
+class QSpacerItem;
 class QLabel;
 class QPushButton;
 
@@ -39,6 +40,7 @@ protected:
 
 protected slots:
     virtual void languageChange();
+
 private:
     QPixmap image0;
 
