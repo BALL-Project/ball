@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.28 2005/01/11 15:28:45 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.29 2005/01/11 16:31:46 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -160,17 +160,6 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 	/////////////////////////////////////
 	else if (ss.getType() == SecondaryStructure::STRAND)
 	{
-		// add CA atom for first residue
-		ait = (*rit).beginAtom();
-		for (; +ait; ++ait)
-		{
-			if ((*ait).getName() == "CA")
-			{
-				spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
-				break;
-			}
-		}
-
 		for (; +rit; ++rit)
 		{
 			Atom* C = 0;
@@ -231,13 +220,11 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	throw()
 {
-	bool is_terminal_segment = false;
-	bool first_residue = true;
-	bool last_residue = false;
-
 	vector<Vector3> 			peptide_normals;
 
 	ResidueIterator ri;
+
+	// calculate the normals of the peptide bonds for all residues of the SecondaryStructure
 	BALL_FOREACH_RESIDUE(ss, ri)
 	{
 		// we have to find the following atoms:
@@ -313,9 +300,13 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		// if we are at the last residue break
 		if (!nextN) 
 		{
-			last_residue = true;
-			if (ri->isTerminal()) is_terminal_segment = true;
-			continue;
+			if (!ri->isTerminal())
+			{
+				Log.error() << "Could not find next N atom, aborting..." << std::endl;
+				return;
+			}
+
+			break;
 		}
 
 		// calculate the normal of this peptide bond
@@ -328,45 +319,28 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 			return;
 		}
 
-		normal.normalize();
-		peptide_normals.push_back(normal);
+		peptide_normals.push_back(normal.normalize());
 
 		// we have computed the normal. now compute the two spline points corresponding to this
 		// amino acid: we take the point between the current N (N) and the C_alpha (CA) and
 		// the point between the C_alpha and C
 		
-		// if this is the first residue, we also add the position of the N-atom to prevent
-		// large "holes" in the representation. we also reuse the same normal as for the
-		// first "real" spline point
-		if (first_residue)
-		{
-			peptide_normals.push_back(normal);
-			first_residue = false;
-		}
-
-		if (last_residue)
-		{
-			if (peptide_normals.size() == 0) 
-			{
-				Log.error() << "Could not draw cartoon style: no peptide bonds found!" << std::endl;
-				return;
-			}
-
-			peptide_normals[peptide_normals.size() - 1] = 
-			peptide_normals[peptide_normals.size() - 2];
-		}
 	} // iteration over all residues of secondary structure
+
+	peptide_normals[peptide_normals.size() - 1] = 
+	peptide_normals[peptide_normals.size() - 2];
+
+	Matrix4x4 rotmat;
+	Angle angle_pi(M_PI);
 
 	// if two adjacent normals differ by more than 90 degrees, we
 	// flip them to ensure a smooth strand representation
 	for (Position i = 0; i < peptide_normals.size() - 1; i++)
 	{
-		Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
+		const Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
 		if ((current <= (float)Constants::PI * 1.5) && (current >= (float)Constants::PI / 2.0))
 		{
-			Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i + 1]).normalize();
-			Matrix4x4 rotmat;
-			rotmat.rotate(Angle(M_PI), rotaxis);
+			rotmat.rotate(angle_pi, (peptide_normals[i] % peptide_normals[i + 1]));
 			peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
 		}
 	}
@@ -378,40 +352,13 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		// vectors and compute the angle in between them.
 		// Then we reduce the angle by an appropriate rotation to a third of the
 		// original angle.
-		Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i+1]);
+		const Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i+1]);
 
 		if (rotaxis.getSquareLength() > 1e-3)
 		{
 			const Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
-			Angle new_angle = Angle(1.0 / 3.0 * current);
-
-			Angle diff_angle = new_angle - current;
-			Matrix4x4 rotmat;
-			rotmat.rotate(diff_angle, rotaxis);
-
+			rotmat.rotate(Angle(1.0 / 3.0 * current) - current, rotaxis);
 			peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
-		}
-	}
-		
-	// an additional smoothing run...
-	for (Position i = peptide_normals.size() - 1; i > 0; i--)
-	{
-		// To smooth the strand representation a bit, we iterate over all normal
-		// vectors and compute the angle in between them.
-		// Then we reduce the angle by an appropriate rotation to a third of the
-		// original angle.
-		Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i-1]);
-
-		if (rotaxis.getSquareLength() > 1e-3)
-		{
-			const Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i-1])));
-			Angle new_angle = Angle(1.0 / 3.0 * current);
-
-			Angle diff_angle = new_angle - current;
-			Matrix4x4 rotmat;
-			rotmat.rotate(diff_angle, rotaxis);
-
-			peptide_normals[i - 1] = rotmat * peptide_normals[i - 1];
 		}
 	}
 
@@ -483,7 +430,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	// iterate over all but the last amino acid (last amino acid becomes the arrow)
 	Position res;
 	Position spline_point_nr = start;
-	const Position nr_res = ss.countResidues() - 1;
+	const Position nr_res = ss.countResidues() - 2;
 	for (res = 0; res < nr_res; res++)
 	{
 		if (res != 0) 
