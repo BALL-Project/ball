@@ -1,4 +1,4 @@
-// $Id: path.C,v 1.5 2000/03/27 19:42:24 oliver Exp $
+// $Id: path.C,v 1.6 2000/04/02 14:34:13 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/path.h>
@@ -84,7 +84,12 @@ namespace BALL
 
 	string Path::find(const string& name) 
 	{
-		string	result = findStrict(name);
+		if (name == "")
+		{
+			return name;
+		}
+
+		string result = findStrict(name);
 
 		if (result == string("")) 
 		{
