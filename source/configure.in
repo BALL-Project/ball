@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.13 2002/11/26 21:40:04 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.14 2002/11/27 08:11:29 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1353,6 +1353,7 @@ if test "${COMPILER_DONE}" != true ; then
 		AC_DEFINE(SOLARIS,)
 
 		TEMPLATE_DIR="SunWS_cache"
+
 		dnl  a nasty bug in SUNPro CC 5.3 causes trouble
 		dnl  with the function templates in amberNonBonded.C
 		AC_DEFINE(BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS,)
