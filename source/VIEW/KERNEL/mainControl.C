@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.2 2003/08/26 15:26:31 amoll Exp $
+// $Id: mainControl.C,v 1.3 2003/08/29 10:55:55 amoll Exp $
 //
 
 // this is required for QMenuItem
@@ -421,8 +421,8 @@ namespace BALL
 				NewSelectionMessage* nws_message = new NewSelectionMessage;					
 				notify_(nws_message);
 
-				// sending of scene message and geometric object selector is done in MolecularProperties, because
-				// ObjectSelector is part of MOLVIEW
+				// sending of scene message and geometric object selector is done in 
+				// MolecularProperties
 			}
     }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.2 2003/08/26 15:01:09 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.3 2003/08/29 10:55:55 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -34,8 +34,6 @@ namespace BALL
 {
 	 namespace VIEW
 	 {
-			using BALL::VIEW::MolecularInformation;
-
 			ColorMeshDialog::ColorMeshDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
 				: ColorMeshDialogData(parent, name, modal, fl),
 					mesh_(0),
