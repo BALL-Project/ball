@@ -126,7 +126,7 @@ namespace BALL
 		{
 			if (!representations_to_be_updated_) return;
 
-			while (main_control_->getPrimitiveManager().updateStillToBeStarted())
+			while (main_control_->getPrimitiveManager().updatePending())
 			{
 				msleep(10);
 			}

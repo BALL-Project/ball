@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.41 2004/10/09 15:36:06 amoll Exp $
+// $Id: pyWidget.C,v 1.42 2004/11/12 15:12:45 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -18,6 +18,10 @@
 #include <qscrollbar.h>
 #include <qfiledialog.h>
 #include <qapplication.h>
+
+// currently doesnt work right
+#undef BALL_QT_HAS_THREADS
+
 
 namespace BALL
 {

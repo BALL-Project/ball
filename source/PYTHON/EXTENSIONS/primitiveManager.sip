@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.sip,v 1.5 2004/11/12 15:05:25 amoll Exp $
+// $Id: primitiveManager.sip,v 1.6 2004/11/12 15:08:08 amoll Exp $
 //
 
 class PrimitiveManager
@@ -38,5 +38,5 @@ class PrimitiveManager
 	void setMainControl(MainControl&) throw();
 	bool updateRunning() const throw();
 	void willUpdateSoon() throw();
-	bool updateStillToBeStarted() const throw();
+	bool updatePending() const throw();
 };

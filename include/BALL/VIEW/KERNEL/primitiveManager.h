@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.10 2004/11/12 15:04:20 amoll Exp $
+// $Id: primitiveManager.h,v 1.11 2004/11/12 15:07:31 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -171,7 +171,7 @@ namespace BALL
 				throw();
 
 			///
-			bool updateStillToBeStarted() const
+			bool updatePending() const
 				throw();
 			
 			protected:
