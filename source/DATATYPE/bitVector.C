@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.27 2001/12/11 12:01:24 oliver Exp $
+// $Id: bitVector.C,v 1.28 2001/12/12 11:29:48 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -15,10 +15,15 @@ namespace BALL
 	Bit::IllegalOperation::IllegalOperation(const char* file, int line)
 		:	Exception::GeneralException(file, line)
 	{
-		message_ = "Trying to modifiy a const bitvector by a bit";
+		message_ = "Trying to modify a const bitvector by a bit";
 		Exception::globalHandler.setMessage(message_);
 	}
 
+
+	Bit::~Bit()
+		throw()
+	{
+	}
 
 	Bit::Bit() 
 		throw()
@@ -55,7 +60,7 @@ namespace BALL
 		}
 	}
 
-	BitVector::BitVector(const BitVector& bit_vector, bool /* deep */)
+	BitVector::BitVector(const BitVector& bit_vector)
 		throw(Exception::OutOfMemory)
 		:	size_(bit_vector.size_),
 			bitset_(bit_vector.bitset_)
@@ -75,24 +80,11 @@ namespace BALL
 	{
 	}
 
-	void BitVector::set(const BitVector& bit_vector, bool /* deep */)
+	void BitVector::set(const BitVector& bit_vector)
   	throw(Exception::OutOfMemory)
 	{
 		bitset_= bit_vector.bitset_;
 		size_	= bit_vector.size_;
-	}
-
-	void BitVector::swap(BitVector& bit_vector)
-		throw()
-	{
-		Size temp = size_;
-		VectorType temp_bitset = bitset_;
-
-		size_				= bit_vector.size_;
-		bitset_			= bit_vector.bitset_;
-
-		bit_vector.size_				= temp;
-		bit_vector.bitset_			= temp_bitset;
 	}
 
 	void BitVector::validateRange_(Index& first, Index& last) const
@@ -185,7 +177,7 @@ namespace BALL
 		}
 	}
 
-	BitVector BitVector::operator ()(Index first, Index last) const
+	BitVector BitVector::operator () (Index first, Index last) const
 	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		using std::min;
@@ -229,11 +221,20 @@ namespace BALL
 			return;
 		}
 
+		bitset_.resize((Size)((strlen(bit_string) + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT));
+		for (Position i = 0; i < bitset_.size(); i++)
+		{
+			bitset_[i] = (BlockType)0;
+		}
+
 		const char* tmp = bit_string;
-		setSize((Size)strlen(bit_string));
 		for (Index i = size_ - 1; i >= 0; i--)
 		{
-			setBit(i, (*tmp != '0'));
+			if (*tmp != '0')
+			{
+				bitset_[block_(i)] |= mask_(i);
+				std::cout << "setting bit #" << i << ": " << (int)bitset_[block_(i)] << std::endl;
+			}
 			tmp++;
 		}
 	}
@@ -397,7 +398,7 @@ namespace BALL
 			setSize(bit_vector.size_, true);
 		} 
 
-		for (Position i = 0; i < bit_vector.size_; i++)
+		for (Position i = 0; i < bitset_.size(); i++)
 		{
 			bitset_[i] ^= bit_vector.bitset_[i];
 		}
@@ -412,9 +413,11 @@ namespace BALL
 			setSize(bit_vector.size_, true);
 		}
 
-		for (Position i = 0; i < size_; i++)
+		for (Position i = 0; i < bitset_.size(); i++)
 		{
+			std::cout << (int)bitset_[i] << " | " << (int)bit_vector.bitset_[i] << " = ";
 			bitset_[i] |= bit_vector.bitset_[i];
+			std::cout << (int) bitset_[i] << std::endl;
 		}
 	}
 
@@ -427,7 +430,7 @@ namespace BALL
 			setSize(bit_vector.size_, true);
 		}
 
-		for (Position i = 0; i < size_; i++)
+		for (Position i = 0; i < bitset_.size(); i++)
 		{
 			bitset_[i] &= bit_vector.bitset_[i];
 		}
@@ -621,7 +624,7 @@ namespace BALL
 		throw(Exception::OutOfMemory)
 	{
 		// calculate new block size
-		Size	block_size		 = (Size)((size  + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT);
+		Size block_size = BALL_BLOCK_SIZE(size);
 
 		if (keep) 
 		{
@@ -634,14 +637,17 @@ namespace BALL
 			// reset the new contents to zero
 			for (Position i = size_; i < size; i++)
 			{		
-				(*this)[i] = false;
+				bitset_[block_(i)] &= ~mask_(i);
 			}
 		} 
 		else 
 		{
 			// resize the array and clear its contents
 			bitset_.resize(block_size);
-			bitset_.clear();
+			for (Position i = 0; i < bitset_.size(); i++)
+			{
+				bitset_[i] = (BlockType)0;
+			}
 		}
 
 		size_ = size;
