@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.16 2004/10/22 20:50:38 amoll Exp $
+// $Id: backboneModel.C,v 1.17 2004/10/22 20:58:17 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -194,23 +194,23 @@ namespace BALL
 
 				Vector3 new_vector;
 
-				new_vector.x = (float)
+				new_vector.x = (float) (
 											 (h1 * a.getVector().x) + 
 											 (h2 * b.getVector().x) + 
 											 (h3 * a.getTangentialVector().x) + 
-											 (h4 * b.getTangentialVector().x);
+											 (h4 * b.getTangentialVector().x));
 
-				new_vector.y = (float)
+				new_vector.y = (float) (
 											 (h1 * a.getVector().y) + 
 											 (h2 * b.getVector().y) + 
 											 (h3 * a.getTangentialVector().y) + 
-											 (h4 * b.getTangentialVector().y);
+											 (h4 * b.getTangentialVector().y));
 
-				new_vector.z = (float)
+				new_vector.z = (float) (
 											 (h1 * a.getVector().z) + 
 											 (h2 * b.getVector().z) + 
 											 (h3 * a.getTangentialVector().z) + 
-											 (h4 * b.getTangentialVector().z);
+											 (h4 * b.getTangentialVector().z));
 
 				spline_.push_back(new_vector);
 
@@ -273,5 +273,4 @@ namespace BALL
 		}
 		
 	} // namespace VIEW
-
 } // namespace BALL

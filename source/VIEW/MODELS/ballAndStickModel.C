@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.19 2004/09/27 15:29:15 oliver Exp $
+// $Id: ballAndStickModel.C,v 1.20 2004/10/22 21:01:24 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
@@ -217,29 +217,29 @@ namespace BALL
 					normal = dir % Vector3(0,1,0);
 				}
 				normal.normalize();
-				normal *= stick_radius_ / 1.5;
+				normal *= stick_radius_ / (float) 1.5;
 
 				Vector3 normal2;
 				normal2 = dir % normal;
 				normal2.normalize();
-				normal2 *= stick_radius_ / 1.5;
+				normal2 *= stick_radius_ / (float) 1.5;
 				
 				TwoColoredTube* tube = new TwoColoredTube;
-				tube->setRadius(stick_radius_ / 2.4);
+				tube->setRadius(stick_radius_ / (float) 2.4);
 				tube->setVertex1(bond.getFirstAtom()->getPosition() - normal - normal2);
 				tube->setVertex2(bond.getSecondAtom()->getPosition() - normal - normal2);
 				tube->setComposite(&bond);
 				geometric_objects_.push_back(tube);
 				
 				TwoColoredTube* tube2 = new TwoColoredTube;
-				tube2->setRadius(stick_radius_ / 2.4);
+				tube2->setRadius(stick_radius_ / (float) 2.4);
 				tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal - normal2);
 				tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal - normal2);
 				tube2->setComposite(&bond);
 				geometric_objects_.push_back(tube2);
 
 				TwoColoredTube* tube3 = new TwoColoredTube;
-				tube3->setRadius(stick_radius_ / 2.4);
+				tube3->setRadius(stick_radius_ / (float) 2.4);
 				tube3->setVertex1(bond.getFirstAtom()->getPosition() + normal2);
 				tube3->setVertex2(bond.getSecondAtom()->getPosition() + normal2);
 				tube3->setComposite(&bond);
@@ -278,17 +278,17 @@ namespace BALL
 					normal = dir % Vector3(0,1,0);
 				}
 				normal.normalize();
-				normal *= stick_radius_ / 1.5;
+				normal *= stick_radius_ / (float) 1.5;
 				
 				TwoColoredTube *tube = new TwoColoredTube;
-				tube->setRadius(stick_radius_ / 2.4);
+				tube->setRadius(stick_radius_ / (float) 2.4);
 				tube->setVertex1(bond.getFirstAtom()->getPosition() - normal);
 				tube->setVertex2(bond.getSecondAtom()->getPosition() - normal);
 				tube->setComposite(&bond);
 				geometric_objects_.push_back(tube);
 				
 				TwoColoredTube *tube2 = new TwoColoredTube;
-				tube2->setRadius(stick_radius_ / 2.4);
+				tube2->setRadius(stick_radius_ / (float) 2.4);
 				tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal);
 				tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal);
 				tube2->setComposite(&bond);
@@ -339,13 +339,13 @@ namespace BALL
 		{
 			n1.normalize();
 			n2.normalize();
-			n1 *= stick_radius_ / 1.5;
-			n2 *= stick_radius_ / 1.5;
+			n1 *= stick_radius_ / (float) 1.5;
+			n2 *= stick_radius_ / (float) 1.5;
 
 			const Bond& bond = *a1.getBond(a2);
 
 			TwoColoredTube *tube = new TwoColoredTube;
-			tube->setRadius(stick_radius_ / 2.4);
+			tube->setRadius(stick_radius_ / (float) 2.4);
 			tube->setVertex1(a1.getPosition() - n1);
 			tube->setVertex2(a2.getPosition() - n2);
 			tube->setComposite(&bond);
@@ -353,21 +353,21 @@ namespace BALL
 
 			// generate tubes
 			Vector3 v = a2.getPosition() + n2 - (a1.getPosition() + n1);
-			Vector3 last = a1.getPosition() + n1 + v / 4.5;
+			Vector3 last = a1.getPosition() + n1 + v / (float) 4.5;
 			for (Position p = 0; p < 3; p++)
 			{
 				TwoColoredTube *tube = new TwoColoredTube;
-				tube->setRadius(stick_radius_ / 2.4);
+				tube->setRadius(stick_radius_ / (float) 2.4);
 				tube->setComposite(&bond);
 				tube->setVertex1(last);
 				tube->setVertex2(last + (v / 8));
 				geometric_objects_.push_back(tube);
 
-				Disc* disc = new Disc(Circle3(last, v, stick_radius_ / 2.4));
+				Disc* disc = new Disc(Circle3(last, v, stick_radius_ / (float) 2.4));
 				disc->setComposite(&a1);
 				geometric_objects_.push_back(disc);
 
-				disc = new Disc(Circle3(last + (v / 8), v, stick_radius_ / 2.4));
+				disc = new Disc(Circle3(last + (v / 8), v, stick_radius_ / (float) 2.4));
 				disc->setComposite(&a2);
 				geometric_objects_.push_back(disc);
 
