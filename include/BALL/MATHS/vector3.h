@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.74 2004/05/27 19:49:42 oliver Exp $
+// $Id: vector3.h,v 1.75 2004/07/05 20:57:28 oliver Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -22,6 +22,10 @@
 #ifndef BALL_MATHS_COMMON_H
 #	include <BALL/MATHS/common.h>
 #endif
+
+#ifdef BALL_HAS_IEEEFP_H
+#	include <ieeefp.h>
+#endif 
 
 
 namespace BALL 

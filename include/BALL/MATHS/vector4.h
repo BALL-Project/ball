@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.52 2004/05/27 19:49:43 oliver Exp $
+// $Id: vector4.h,v 1.53 2004/07/05 20:57:29 oliver Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR4_H
@@ -11,13 +11,13 @@
 #	include <BALL/COMMON/exception.h>
 #endif
 
-#ifdef BALL_HAS_IEEEFP_H
-#	include <ieeefp.h>
-#endif 
-
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>
 #endif
+
+#ifdef BALL_HAS_IEEEFP_H
+#	include <ieeefp.h>
+#endif 
 
 namespace BALL 
 {
