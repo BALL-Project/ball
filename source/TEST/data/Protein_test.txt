@@ -31,6 +31,8 @@
       number of selected children:0
       number of children containing selection:0
       children:
+/Object: [0-9a-fA-Fx]+ is instance of class: .*PropertyManager.*
+    0  
       name: Residue1
       id: 
       insertion code:  
@@ -51,8 +53,12 @@
       number of selected children:0
       number of children containing selection:0
       children:
+/Object: [0-9a-fA-Fx]+ is instance of class: .*PropertyManager.*
+    0  
       name: Residue2
       id: 
       insertion code:  
+/Object: [0-9a-fA-Fx]+ is instance of class: .*PropertyManager.*
+0  
   name: Protein1
   id: 

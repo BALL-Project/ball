@@ -43,6 +43,8 @@
       number of bonds: 0
       bonds: 
 
+/Object: [0-9a-fA-Fx]+ is instance of class: .*PropertyManager.*
+0  
   name: r1
   id: test
   insertion code: X
