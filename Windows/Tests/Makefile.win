@@ -4,9 +4,9 @@
 #---------------------------------------------------------------
 
 
-CC = cl -c -nologo -MD -Zm1200 -TP -EHsc -GR -Zi /D "WIN32" -Od
+CC = cl -c -nologo -MD -Zm1200 -TP -EHsc -GR -Zi /D "WIN32" -Od -RTC1 -GS /D "DEBUG"
 LD = cl -nologo -MD
-LDOPTS = /link /OPT:NOREF /DEBUG /ASSEMBLYDEBUG /MAP
+LDOPTS = /link /OPT:NOREF /DEBUG /ASSEMBLYDEBUG /MAP /MAPINFO:EXPORTS /MAPINFO:LINES
 BALL_LIB = ..\..\lib\libBall.lib
 
 #XLIB = user32.lib gdi32.lib comdlg32.lib shell32.lib advapi32.lib wsock32.lib 
