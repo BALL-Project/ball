@@ -1,9 +1,9 @@
-# $Id: Makefile,v 1.4 2000/03/27 19:58:56 oliver Exp $
+# $Id: Makefile,v 1.5 2000/04/28 12:33:51 oliver Exp $
 #========================
 # BALL/TUTORIAL Makefile
 #========================
 
-EXECUTABLES=tutorial1
+EXECUTABLES=tutorial1 tutorial2
 
 all:	$(EXECUTABLES)
 
