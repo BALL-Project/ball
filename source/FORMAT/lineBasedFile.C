@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.2 2000/10/10 10:56:23 oliver Exp $
+// $Id: lineBasedFile.C,v 1.3 2000/10/14 13:04:18 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -51,6 +51,12 @@ namespace BALL
 		: File(filename, open_mode),
 			line_number_(0)
 	{
+	}
+
+	void LineBasedFile::clear()
+		throw()
+	{
+		// BAUSTELLE
 	}
 
 	String LineBasedFile::getField(Position pos, const String& quotes, const String& delimiters)
