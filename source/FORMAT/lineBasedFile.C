@@ -1,8 +1,10 @@
-// $Id: lineBasedFile.C,v 1.22 2001/12/26 03:35:53 oliver Exp $
+// $Id: lineBasedFile.C,v 1.23 2002/02/23 13:37:19 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
 #include <stdio.h>
+
+#define BALL_MAX_LINE_LENGTH 65536
 
 using namespace std;
 
@@ -129,8 +131,9 @@ namespace BALL
 			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
 																	"LineBasedFile::readLine");
 		}
-
-		line_.getline(getFileStream());
+		static char buffer[BALL_MAX_LINE_LENGTH];
+		getFileStream().getline(buffer, BALL_MAX_LINE_LENGTH);
+		line_.assign(buffer);
 		++line_number_;
 		return !eof();
 	}
