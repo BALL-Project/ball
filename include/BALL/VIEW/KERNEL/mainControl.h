@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.30 2004/01/28 15:16:13 amoll Exp $
+// $Id: mainControl.h,v 1.31 2004/01/29 12:43:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -80,6 +80,8 @@ namespace BALL
 
 			private:
 				QLabel* label_;
+				// used to know when to change the color of the text and when to remove it
+				Size 		seconds_;
 		};
 
 		/**	MainControl is the main administration unit for a program and must be
