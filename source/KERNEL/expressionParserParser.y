@@ -23,9 +23,9 @@ extern void ExpressionParsererror(char* s);
 
 %left 	<text>		TK_OR
 %left 	<text>		TK_AND
-%left							TK_NOT
-%left							TK_WHITESPACE;
-%token	<text>		TK_ARGS
+%left		<text>		TK_NOT
+%left		<text>		TK_WHITESPACE;
+%left		<text>		TK_SOMETHING
 %token	<text>		TK_PREDICATE_NAME
 %token	<text>		TK_OPEN_BRACKET
 %token	<text>		TK_CLOSE_BRACKET
@@ -33,7 +33,10 @@ extern void ExpressionParsererror(char* s);
 %type		<node>		kernel_expression
 %type		<node>		expression
 %type		<node>		predicate
-
+%type		<text>		balanced_brackets
+%type		<text>		outer_brackets
+%type		<text>		inside_brackets
+%type		<text>		something
 
 %start kernel_expression
 
@@ -71,16 +74,53 @@ expression:
 	;
 
 predicate:
-		TK_PREDICATE_NAME TK_OPEN_BRACKET TK_ARGS TK_CLOSE_BRACKET { 
+		TK_PREDICATE_NAME outer_brackets { 
 			*$2 = '\0';
-			*($4 - 1) = '\0';
-			$$ = new ExpressionParser::SyntaxTree($1, $3 + 1);
-		}
-	|	TK_PREDICATE_NAME TK_OPEN_BRACKET TK_CLOSE_BRACKET { 
-			*$2 = '\0';
-			$$ = new ExpressionParser::SyntaxTree($1, 0);
+			$$ = new ExpressionParser::SyntaxTree($1, $2 + 1);
 		}
 	;
+
+outer_brackets:
+		balanced_brackets {
+			$$ = $1;
+			*($1 + strlen($1) - 1) = '\0';
+		}
+
+balanced_brackets:
+		TK_OPEN_BRACKET inside_brackets TK_CLOSE_BRACKET {
+			$$ = $1;
+		}
+
+inside_brackets:
+		inside_brackets balanced_brackets {
+			$$ = $1;
+		}
+	|	something {
+			$$ = $1;
+		}
+
+something:	
+		{
+			$$ = 0;
+		}
+	|	TK_SOMETHING something {
+			$$ = $1;
+		}
+	|	TK_WHITESPACE something {
+			$$ = $1;
+		}
+	|	TK_PREDICATE_NAME something {
+			$$ = $1;
+		}
+	|	TK_AND something {
+			$$ = $1;
+		}
+	|	TK_OR something {
+			$$ = $1;
+		}
+	|	TK_NOT something {
+			$$ = $1;
+		}
 
 %%
 

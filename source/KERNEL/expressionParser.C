@@ -1,4 +1,4 @@
-// $Id: expressionParser.C,v 1.2 2002/01/27 21:37:06 oliver Exp $
+// $Id: expressionParser.C,v 1.3 2002/01/28 00:10:06 oliver Exp $
 
 #include <BALL/KERNEL/expressionParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -45,7 +45,7 @@ namespace BALL
 			argument((args == 0) ? "" : args),
 			evaluated(false),
 			negate(false),
-			type(),
+			type(ExpressionTree::LEAF),
 			children()
 	{
 	}
@@ -122,6 +122,10 @@ namespace BALL
 
 	ExpressionParser::~ExpressionParser()
 	{
+		if (syntax_tree_ != 0)
+		{
+			delete syntax_tree_;
+		}
 	}
 
 	const ExpressionParser::SyntaxTree& ExpressionParser::getSyntaxTree() const

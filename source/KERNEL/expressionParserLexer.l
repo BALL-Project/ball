@@ -1,5 +1,5 @@
 %{
-// $Id: expressionParserLexer.l,v 1.3 2002/01/27 21:37:06 oliver Exp $
+// $Id: expressionParserLexer.l,v 1.4 2002/01/28 00:10:06 oliver Exp $
 #include <BALL/KERNEL/expressionParser.h>
 
 using namespace BALL;
@@ -16,29 +16,26 @@ using namespace BALL;
 
 NOT|! {
 						ExpressionParser::state.current_parser->state.char_count += strlen(yytext);						
+						ExpressionParserlval.text = yytext;
 						return TK_NOT;
 }
 
 AND|\&\& {
 						ExpressionParser::state.current_parser->state.char_count += strlen(yytext);						
+						ExpressionParserlval.text = yytext;
 						return TK_AND;
 }
 
 OR|\|\| {
 						ExpressionParser::state.current_parser->state.char_count += strlen(yytext);
-						return TK_AND;
+						ExpressionParserlval.text = yytext;
+						return TK_OR;
 }
 
 [0-9a-zA-Z_]* {
 						ExpressionParser::state.current_parser->state.char_count += strlen(yytext);
 						ExpressionParserlval.text = yytext;
 						return TK_PREDICATE_NAME;
-}
-
-\"[^\"]*\" {
-						ExpressionParser::state.current_parser->state.char_count += strlen(yytext);
-						ExpressionParserlval.text = yytext;
-						return TK_ARGS;
 }
 
 [\040\t]* { 
@@ -60,7 +57,8 @@ OR|\|\| {
 
 .	{
 						ExpressionParser::state.current_parser->state.char_count++;
-						return yytext[0];
+						ExpressionParserlval.text = yytext;
+						return TK_SOMETHING;
 }
 %%
 

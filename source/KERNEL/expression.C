@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.33 2002/01/26 22:08:08 oliver Exp $
+// $Id: expression.C,v 1.34 2002/01/28 00:10:06 oliver Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/expressionParser.h>
@@ -170,22 +170,15 @@ namespace BALL
 		throw(Exception::ParseError)
 	{
 		// don't use clear() here, because it also would delete create_methods_
-		delete expression_tree_;
+		if (expression_tree_ != 0)
+		{
+			delete expression_tree_;
+		}
 		expression_tree_ = 0;
 
-		// make certain all expressions are bracketed correctly
-		if ((expression_string.size() > 0) && (expression_string[0] != '('))
-		{
-			expression_string_ = "(";
-			expression_string_ += expression_string;
-			expression_string_ += ")";
-		}
-		else
-		{
-			expression_string_ = expression_string;
-		}
+		// remember the expression
+		expression_string_ = expression_string;
 		
-
 		// create a temporary tree from which the expression_tree_ can be built
 		ExpressionParser parser;
 		parser.parse(expression_string);
@@ -225,14 +218,14 @@ namespace BALL
 
     if (t.type == ExpressionTree::LEAF)
     {
-      if (hasPredicate(t.expression))
+      if (hasPredicate(t.predicate))
       {
-        root->setPredicate(getPredicate(t.expression, t.argument));
+        root->setPredicate(getPredicate(t.predicate, t.argument));
 			}
 			else
 			{
         Log.error() << "Expression::constructExpressionTree_: "
-					<< "could not find predicate for expression " << t.expression 
+					<< "could not find predicate for expression " << t.predicate 
 					<< "(" << t.argument << ")" << endl;
         root->setType(ExpressionTree::INVALID);
 			}
