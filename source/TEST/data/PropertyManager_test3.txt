@@ -1,0 +1,9 @@
+/Object: [0-9a-z]+ is instance of class: PropertyManager
+8 00000101 
+(PROP1BOOL: 1)
+(PROP2INT: -12345)
+(PROP3UNSIGNED_INT: 12345)
+(PROP4DOUBLE: 1.2345)
+(PROP5DOUBLE: 2.345)
+(PROP6BOOL: 1)
+/(PROP7OBJECT: [0-9a-z]+)

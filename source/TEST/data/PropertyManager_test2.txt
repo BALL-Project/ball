@@ -1,0 +1,45 @@
+STORABLE BALL::BitVector  bitvector_ 
+  unsigned_int size = 8 
+  bool - = FALSE 
+  bool - = FALSE 
+  bool - = FALSE 
+  bool - = FALSE 
+  bool - = FALSE 
+  bool - = TRUE 
+  bool - = FALSE 
+  bool - = TRUE 
+END_STORABLE
+unsigned_int size = 7 
+/OBJECT BALL::NamedProperty @ [0-9]+ -
+  int type_ = 0 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP1 
+  bool data_.b = TRUE 
+END_OBJECT
+/OBJECT BALL::NamedProperty @ [0-9]+ -
+  int type_ = 1 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP2 
+  int data_.i = -12345 
+END_OBJECT
+/OBJECT BALL::NamedProperty @ [0-9]+ -
+  int type_ = 2 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP3 
+  unsigned_int data_.ui = 12345 
+END_OBJECT
+/OBJECT BALL::NamedProperty @ [0-9]+ -
+  int type_ = 4 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP4 
+END_OBJECT
+/OBJECT BALL::NamedProperty @ [0-9]+ -
+  int type_ = 4 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP5 
+END_OBJECT
+/OBJECT BALL::NamedProperty @ [0-9]+ -
+  int type_ = 0 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP6 
+  bool data_.b = TRUE 
+END_OBJECT
+/OBJECT BALL::NamedProperty @ [0-9]+ -
+  int type_ = 6 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP7 
+  BALL::PersistentObject * data_.object  [0-9]+ 
+END_OBJECT
