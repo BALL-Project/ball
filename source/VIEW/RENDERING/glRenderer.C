@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.8 2005/01/13 18:45:30 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.9 2005/01/14 12:18:07 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1349,6 +1349,12 @@ namespace BALL
 								camera->getLookUpVector().z);
 
 			normal_vector_ = (-camera->getViewVector().normalize());
+		}
+
+		bool GLRenderer::hasDisplayListFor(const Representation& rep) const
+			throw()
+		{
+			return display_lists_.has(&rep);
 		}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.2 2005/01/03 13:40:59 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.3 2005/01/14 12:18:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -210,6 +210,10 @@ namespace BALL
 
 			///
 			void drawFromDisplayList(const Representation& rep)
+				throw();
+
+			///
+			bool hasDisplayListFor(const Representation& rep) const
 				throw();
 			
 			///
