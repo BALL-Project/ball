@@ -734,7 +734,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
-							CommandLine="c:\cygwin\bin\bison -y -p ExpressionParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)expressionParserParser.C&quot;
+							CommandLine="$(ProjectDir)..\..\Contrib\bin\bison  -y -p ExpressionParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)expressionParserParser.C&quot;
 "
 							Outputs="$(InputDir)expressionParserParser.C"/>
 					</FileConfiguration>
@@ -930,7 +930,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
-							CommandLine="c:\cygwin\bin\bison -y -p parsedFunction -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)parsedFunctionParser.C&quot;
+							CommandLine="$(ProjectDir)..\..\Contrib\bin\bison -y -p parsedFunction -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)parsedFunctionParser.C&quot;
 "
 							Outputs="$(InputDir)parsedFunctionParser.C;$(InputDir)parsedFunctionParser.h"/>
 					</FileConfiguration>
@@ -1445,7 +1445,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
-							CommandLine="c:\cygwin\bin\bison -y -p SmilesParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)smilesParserParser.C&quot;
+							CommandLine="$(ProjectDir)..\..\Contrib\bin\bison -y -p SmilesParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)smilesParserParser.C&quot;
 "
 							Outputs="$(InputDir)smilesParserParser.C;$(InputDir)smilesParserParser.h"/>
 					</FileConfiguration>
