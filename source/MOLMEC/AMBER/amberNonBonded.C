@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.10 2001/05/16 01:43:36 oliver Exp $
+// $Id: amberNonBonded.C,v 1.11 2001/05/16 11:21:02 anker Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -34,20 +34,24 @@ namespace BALL
 	// copy constructor
 	AmberNonBonded::AmberNonBonded(const AmberNonBonded&	component, bool clone_deep)
 		:	ForceFieldComponent(component, clone_deep),
-			non_bonded_(component.non_bonded_),
-			number_of_1_4_(component.number_of_1_4_),
 			electrostatic_energy_(component.electrostatic_energy_),
 			vdw_energy_(component.vdw_energy_),
-			algorithm_type_(component.algorithm_type_),
+			non_bonded_(component.non_bonded_),
+			is_hydrogen_bond_(component.is_hydrogen_bond_),
+			number_of_1_4_(component.number_of_1_4_),
 			cut_off_(component.cut_off_),
-			cut_on_electrostatic_(component.cut_on_electrostatic_),
-			cut_off_electrostatic_(component.cut_off_electrostatic_),
 			cut_off_vdw_(component.cut_off_vdw_),
 			cut_on_vdw_(component.cut_on_vdw_),
+			cut_off_electrostatic_(component.cut_off_electrostatic_),
+			cut_on_electrostatic_(component.cut_on_electrostatic_),
 			inverse_distance_off_on_vdw_3_(component.inverse_distance_off_on_vdw_3_),
 			inverse_distance_off_on_electrostatic_3_(component.inverse_distance_off_on_electrostatic_3_),
 			scaling_vdw_1_4_(component.scaling_vdw_1_4_),
-			scaling_electrostatic_1_4_(component.scaling_electrostatic_1_4_)
+			scaling_electrostatic_1_4_(component.scaling_electrostatic_1_4_),
+			use_dist_depend_dielectric_(component.use_dist_depend_dielectric_),
+			algorithm_type_(component.algorithm_type_),
+			van_der_waals_(component.van_der_waals_),
+			hydrogen_bond_(component.hydrogen_bond_)
 	{
 	}
 
