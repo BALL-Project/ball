@@ -9,8 +9,8 @@ MOC_SOURCES=\
 	labelProperties_moc.C\
 	labelPropertiesData_moc.C\
 	contourSurfaceDialog_moc.C\
-	atomSettings_moc.C\
-	atomSettingsData_moc.C\
+	atomProperties_moc.C\
+	atomPropertiesData_moc.C\
 	molecularFileDialog_moc.C
 
 BUILT_SOURCES=$(MOC_SOURCES)
@@ -27,8 +27,8 @@ CURRENTDIR_SOURCES=\
 	openBruker1DFile.C\
 	openBruker2DFile.C\
 	contourSurfaceDialog.C\
-	atomSettings.C\
-	atomSettingsData.C\
+	atomProperties.C\
+	atomPropertiesData.C\
 	molecularFileDialog.C\
 	$(MOC_SOURCES)
 
@@ -52,11 +52,11 @@ labelPropertiesData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelPr
 contourSurfaceDialog_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h -o contourSurfaceDialog_moc.C
 
-atomSettings_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h -o atomSettings_moc.C
+atomProperties_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomProperties.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomProperties.h -o atomProperties_moc.C
 
-atomSettingsData_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettingsData.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettingsData.h -o atomSettingsData_moc.C
+atomPropertiesData_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomPropertiesData.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomPropertiesData.h -o atomPropertiesData_moc.C
 	
 molecularFileDialog_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h -o molecularFileDialog_moc.C

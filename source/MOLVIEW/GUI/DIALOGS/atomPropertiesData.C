@@ -35,7 +35,6 @@ AtomPropertiesData::AtomPropertiesData( QWidget* parent,  const char* name, bool
     TextLabel7 = new QLabel( this, "TextLabel7" );
     TextLabel7->setGeometry( QRect( 10, 160, 70, 21 ) ); 
     TextLabel7->setFrameShape( QLabel::NoFrame );
-    TextLabel7->setFrameShadow( QLabel:: );
     TextLabel7->setText( tr( "position:" ) );
 
     TextLabel6 = new QLabel( this, "TextLabel6" );

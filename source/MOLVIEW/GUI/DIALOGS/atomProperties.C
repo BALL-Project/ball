@@ -44,7 +44,7 @@ AtomProperties::AtomProperties( Atom* atom, QWidget* parent,  const char* name, 
 		element = PTE.getElement(nr);
 		if (element == Element::UNKNOWN) break;
 
-		element_box->insertItem(element.getName().c_str(), nr+1);
+		element_box->insertItem(element.getName().c_str());
 	}
 
 	element_box->setCurrentItem(atom->getElement().getAtomicNumber());
@@ -65,7 +65,7 @@ AtomProperties::~AtomProperties()
 /* 
  * public slot
  */
-void AtomProperties::changed( const QString & )
+void AtomProperties::changed()
 {
 	apply_button->setEnabled(true);
 }
@@ -81,7 +81,7 @@ void AtomProperties::applyClicked()
 		atom_->setTypeName(String(type_edit->text()));
 		atom_->setCharge(String(charge_edit->text()).toFloat());
 		atom_->setRadius(String(radius_edit->text()).toFloat());
-		atom_->setElement(PTE.getElement(element_box->currentItem()));
+		atom_->setElement(PTE[(String(element_box->currentText()))]);
 	}
 	catch(Exception::InvalidFormat)
 	{

@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>298</width>
+            <width>364</width>
             <height>315</height>
         </rect>
     </property>
@@ -19,6 +19,106 @@
         <name>caption</name>
         <string>Atom Properties</string>
     </property>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>name:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel2</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>40</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>type name:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel3</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>70</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>element:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel8</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>100</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>radius:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel4</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>130</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>charge:</string>
+        </property>
+    </widget>
     <widget>
         <class>QLabel</class>
         <property stdset="1">
@@ -51,26 +151,6 @@
         <class>QLabel</class>
         <property stdset="1">
             <name>name</name>
-            <cstring>TextLabel6</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>220</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>force:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
             <cstring>TextLabel5</cstring>
         </property>
         <property stdset="1">
@@ -91,100 +171,20 @@
         <class>QLabel</class>
         <property stdset="1">
             <name>name</name>
-            <cstring>TextLabel4</cstring>
+            <cstring>TextLabel6</cstring>
         </property>
         <property stdset="1">
             <name>geometry</name>
             <rect>
                 <x>10</x>
-                <y>130</y>
+                <y>220</y>
                 <width>70</width>
                 <height>21</height>
             </rect>
         </property>
         <property stdset="1">
             <name>text</name>
-            <string>charge:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>TextLabel8</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>100</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>radius:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>TextLabel3</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>70</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>element:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>TextLabel2</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>40</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>type name:</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>TextLabel1</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>name:</string>
+            <string>force:</string>
         </property>
     </widget>
     <widget>
@@ -198,7 +198,7 @@
             <rect>
                 <x>90</x>
                 <y>10</y>
-                <width>200</width>
+                <width>260</width>
                 <height>21</height>
             </rect>
         </property>
@@ -214,7 +214,7 @@
             <rect>
                 <x>90</x>
                 <y>40</y>
-                <width>200</width>
+                <width>260</width>
                 <height>21</height>
             </rect>
         </property>
@@ -230,7 +230,7 @@
             <rect>
                 <x>90</x>
                 <y>70</y>
-                <width>200</width>
+                <width>260</width>
                 <height>21</height>
             </rect>
         </property>
@@ -246,7 +246,7 @@
             <rect>
                 <x>90</x>
                 <y>100</y>
-                <width>200</width>
+                <width>260</width>
                 <height>21</height>
             </rect>
         </property>
@@ -262,7 +262,7 @@
             <rect>
                 <x>90</x>
                 <y>130</y>
-                <width>200</width>
+                <width>260</width>
                 <height>21</height>
             </rect>
         </property>
@@ -282,7 +282,7 @@
             <rect>
                 <x>90</x>
                 <y>160</y>
-                <width>200</width>
+                <width>260</width>
                 <height>21</height>
             </rect>
         </property>
@@ -306,7 +306,7 @@
             <rect>
                 <x>90</x>
                 <y>190</y>
-                <width>200</width>
+                <width>260</width>
                 <height>21</height>
             </rect>
         </property>
@@ -326,33 +326,9 @@
             <rect>
                 <x>90</x>
                 <y>220</y>
-                <width>200</width>
+                <width>260</width>
                 <height>21</height>
             </rect>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>close_button</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>180</x>
-                <y>270</y>
-                <width>90</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>cancel</string>
-        </property>
-        <property stdset="1">
-            <name>default</name>
-            <bool>true</bool>
         </property>
     </widget>
     <widget>
@@ -368,15 +344,39 @@
         <property stdset="1">
             <name>geometry</name>
             <rect>
-                <x>30</x>
+                <x>60</x>
                 <y>270</y>
-                <width>90</width>
+                <width>100</width>
                 <height>34</height>
             </rect>
         </property>
         <property stdset="1">
             <name>text</name>
             <string>apply</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>close_button</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>210</x>
+                <y>270</y>
+                <width>100</width>
+                <height>34</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>cancel</string>
+        </property>
+        <property stdset="1">
+            <name>default</name>
+            <bool>true</bool>
         </property>
     </widget>
 </widget>

@@ -20,7 +20,7 @@ public:
 	~AtomProperties();
 
 public slots:
-	void changed( const QString & );
+	void changed();
 	void applyClicked();
 	void closeClicked();
 
