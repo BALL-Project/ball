@@ -1,8 +1,0 @@
-// $Id: common.doc,v 1.1 2000/01/12 00:13:52 oliver Exp $
-
-/**@name	VIEW/COMMON
-		@nonames
-*/
-//@{
-	//@Include: global.h
-//@}
