@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.3 2001/03/11 21:03:07 anker Exp $
+// $Id: HINFile_test.C,v 1.4 2001/03/11 23:19:32 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.3 2001/03/11 21:03:07 anker Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.4 2001/03/11 23:19:32 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@ HINFile* ptr;
 
 CHECK(HINFile::HINFile())
 	ptr = new HINFile;
-	CHECK_NOT_EQUAL(ptr, 0)
+	TEST_NOT_EQUAL(ptr, 0)
 RESULT
 
 
