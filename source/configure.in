@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.7 2001/12/07 00:39:09 oliver Exp $
+dnl    $Id: configure.in,v 1.8 2001/12/17 01:25:08 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -3212,7 +3212,7 @@ dnl
 dnl    create files
 dnl
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
 AC_SUBST(SUBDIRS)
 
 if test "${MULTI_BUILD}" = "true" ; then
