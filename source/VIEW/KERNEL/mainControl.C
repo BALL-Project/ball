@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.46 2003/12/20 15:32:38 amoll Exp $
+// $Id: mainControl.C,v 1.47 2003/12/20 15:57:07 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -368,8 +368,7 @@ bool MainControl::remove_(Composite& composite)
 
 	if (removed_representations.size() > 0)
 	{
-		SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-		notify_(scene_message);
+		redrawAllRepresentations();
 	}
 
 	composite_manager_.remove(composite);
@@ -409,14 +408,13 @@ bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebui
  		notify_(ur_message);
 	}
 
-	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-	notify_(scene_message);
+	redrawAllRepresentations();
 
 	return true;
 }
 
 
-void MainControl::updateAllRepresentations(bool rebuild_display_lists)
+void MainControl::redrawAllRepresentations(bool rebuild_display_lists)
 	throw()
 {
 	// update scene
@@ -882,8 +880,6 @@ System* MainControl::getSelectedSystem()
 void MainControl::selectCompositeRecursive(Composite* composite, bool first_call)
 	throw()
 {
-	if (selection_.has(composite)) return;
-
 	composite->select();
 	if (RTTI::isKindOf<Bond>(*composite)) return;
 	selection_.insert(composite);
@@ -932,8 +928,6 @@ void MainControl::selectCompositeRecursive(Composite* composite, bool first_call
 void MainControl::deselectCompositeRecursive(Composite* composite, bool first_call)
 	throw()
 {
-	if (!selection_.has(composite)) return;
-
 	composite->deselect();
 	if (RTTI::isKindOf<Bond>(*composite)) return;
 	selection_.erase(composite);
@@ -1074,8 +1068,7 @@ bool MainControl::insert(Representation& rep)
 	RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::ADD);
 	notify_(rm);
 
-	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-	notify_(scene_message);
+	redrawAllRepresentations();
 
 	return true;
 }
@@ -1090,8 +1083,7 @@ bool MainControl::update(Representation& rep)
 	RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::UPDATE);
 	notify_(rm);
 
-	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-	notify_(scene_message);
+	redrawAllRepresentations();
 
 	return true;
 }
@@ -1105,8 +1097,7 @@ bool MainControl::remove(Representation& rep)
 	notify_(rm);
 	primitive_manager_.remove(rep);
 
-	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-	notify_(scene_message);
+	redrawAllRepresentations();
 
 	return true;
 }
@@ -1125,14 +1116,13 @@ void MainControl::clearSelection()
 	CompositeManager::CompositeIterator it = getCompositeManager().begin();
 	for (; it != getCompositeManager().end(); it++)
 	{
-		getSelection().insert(*it);
 		deselectCompositeRecursive(*it);
 		updateRepresentationsOf(**it, true);
 	}
 
  	getSelection().clear();
 
- 	updateAllRepresentations(true);
+ 	redrawAllRepresentations(true);
 
 	NewSelectionMessage* nm = new NewSelectionMessage;
 	sendMessage(*nm);

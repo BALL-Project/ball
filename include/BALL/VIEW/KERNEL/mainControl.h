@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.26 2003/12/20 15:32:24 amoll Exp $
+// $Id: mainControl.h,v 1.27 2003/12/20 15:55:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -242,12 +242,11 @@ namespace BALL
 			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true, bool force = false)
 				throw();
 
-			/** Redraws all inserted Representation.
-					Same as updateRepresentationsOf but all Representation objects are redrawn.
+			/** Redraws all inserted Representation, but doesnt change the Models.
 					\param rebuild_display_lists set to true lets the Scene rebuild the GLDisplayList objects.
-					\see update
+					\see updateRepresentationsOf
 			*/
-			void updateAllRepresentations(bool rebuild_display_lists = false)
+			void redrawAllRepresentations(bool rebuild_display_lists = false)
 				throw();
 
 			/** Update a Composite in all ModularWidget.
