@@ -92,7 +92,7 @@ balanced_brackets:
 		}
 
 inside_brackets:
-		inside_brackets balanced_brackets {
+		something balanced_brackets inside_brackets {
 			$$ = $1;
 		}
 	|	something {
