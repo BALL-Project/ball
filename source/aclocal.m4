@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.50.2.1 2004/05/11 18:55:07 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.50.2.2 2004/05/11 20:18:44 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -652,7 +652,15 @@ AC_DEFUN(CF_GXX_OPTIONS, [
   MAKEDEP_CXX_OPTS="-M"
   CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
-  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
+	dnl
+	dnl	Some compiler versions have problems with -O3 unter Darwin (3.3.0),
+	dnl so we go back to -O2.
+	dnl
+	if test "${OS}" = "Darwin" ; then
+	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long"		
+	else
+	  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
+	fi
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
   dnl  We do not need the -fPIC flag for CYGWIN and Darwin,

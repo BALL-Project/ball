@@ -4290,7 +4290,11 @@ echo "${ECHO_T}yes" >&6
   MAKEDEP_CXX_OPTS="-M"
   CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
-  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
+					if test "${OS}" = "Darwin" ; then
+	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long"
+	else
+	  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
+	fi
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
         if test "${OS}" != "CYGWIN" -a "${OS}" != "Darwin" ; then
