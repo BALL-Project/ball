@@ -1,14 +1,10 @@
-// $Id: removeModel.h,v 1.4 2000/04/25 15:28:11 hekl Exp $
+// $Id: removeModel.h,v 1.5 2000/06/25 19:14:42 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
-#endif
-
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -19,10 +15,6 @@
 #	include <BALL/KERNEL/bond.h>
 #endif
 
-#ifndef BALL_KERNEL_FOREACH_H
-#	include <BALL/KERNEL/forEach.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
@@ -31,8 +23,8 @@
 #	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
-#	include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
+#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
+#	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 #endif
 
 
@@ -45,7 +37,7 @@ namespace BALL
 		/**
 		*/
 		class RemoveModel
-			: public BaseModelProcessor
+			: public AtomBondModelBaseProcessor
 		{
 			public:
 
@@ -125,8 +117,6 @@ namespace BALL
 
 			
 			private:
-
-			List<Atom*> used_atoms_;
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS

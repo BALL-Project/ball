@@ -1,4 +1,4 @@
-// $Id: lineModel.h,v 1.4 2000/04/25 15:28:11 hekl Exp $
+// $Id: lineModel.h,v 1.5 2000/06/25 19:14:42 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
@@ -7,20 +7,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_KERNEL_FOREACH_H
-#	include <BALL/KERNEL/forEach.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -39,8 +27,8 @@
 #	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
-#	include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
+#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
+#	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 #endif
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
@@ -60,7 +48,7 @@ namespace BALL
 		/**
 		*/
 		class AddLineModel
-			: public BaseModelProcessor
+			: public AtomBondModelBaseProcessor
 		{
 			public:
 
@@ -134,8 +122,6 @@ namespace BALL
 			virtual Line* createLine_();
 
 			virtual TwoColoredLine* createTwoColoredLine_();
-
-			List<Atom*> used_atoms_;
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.h,v 1.6 2000/04/25 15:28:12 hekl Exp $
+// $Id: vanDerWaalsModel.h,v 1.7 2000/06/25 19:14:42 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -27,8 +27,8 @@
 #	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
-#include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
+#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
+#include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 #endif
 
 namespace BALL
@@ -43,7 +43,7 @@ namespace BALL
 		/**
 		*/
 		class AddVanDerWaalsModel
-			: public BaseModelProcessor
+			: public AtomBondModelBaseProcessor
 		{
 			public:
 
@@ -76,6 +76,25 @@ namespace BALL
 
 			//@}
 			
+			/**	@name Debugging and Diagnostics
+			*/
+			//@{
+
+			virtual void dump
+				(std::ostream& s = std::cout, Size depth = 0) const;
+			//@}
+
+			/**	@name	Storers
+			*/
+			//@{
+			
+
+			virtual void read(std::istream& s);
+
+			virtual void write(std::ostream& s) const;
+			//@}
+
+
 			private:
 
 			virtual Sphere* createSphere_();
