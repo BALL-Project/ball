@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.13 2001/03/06 00:12:23 amoll Exp $
+// $Id: solventExcludedSurface.h,v 1.14 2001/06/19 21:15:06 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -394,6 +394,10 @@ namespace BALL
 			TSphere3<T> probe2(neighbour2->rsface->getCenter(),radius_of_probe);
 			TCircle3<T> intersection_circle;
 			GetIntersection(probe1,probe2,intersection_circle);
+			new_point1->n = intersection_circle.p-new_point1->p;
+			new_point1->n.normalize();
+			new_point3->n = intersection_circle.p-new_point3->p;
+			new_point3->n.normalize();
 			TSESEdge<T>* new_edge4 = new TSESEdge<T>(new_point1,new_point3,neighbour0,neighbour2,
 																							 intersection_circle,face->rsedge,edges.size());
 			new_edge4->type = 2;
@@ -531,7 +535,8 @@ namespace BALL
 
 		vector<TSESVertex<T>*> vertices;
 		vector<TSESEdge<T>*> edges;
-		vector<TSESEdge<T>*> singular_edges;
+		//vector<TSESEdge<T>*> singular_edges;
+		list<TSESEdge<T>*> singular_edges;
 		vector<TSESFace<T>*> contact_faces;
 		vector<TSESFace<T>*> toric_faces;
 		vector<TSESFace<T>*> spheric_faces;
@@ -576,7 +581,19 @@ namespace BALL
 			}
 		}
 		s << "singular Edges:\n";
-		for (Position i = 0; i < ses.singular_edges.size(); i++)
+		list<TSESEdge<T>*>::iterator se;
+		for (se = ses.singular_edges.begin(); se != ses.singular_edges.end(); se++)
+		{
+			if (*se != NULL)
+			{
+				s << "  " << **se << "\n";
+			}
+			else
+			{
+				s << "  --\n";
+			}
+		}
+		/*for (Position i = 0; i < ses.singular_edges.size(); i++)
 		{
 			if (ses.singular_edges[i] != NULL)
 			{
@@ -586,7 +603,7 @@ namespace BALL
 			{
 				s << "  --\n";
 			}
-		}
+		}*/
 		s << "contact Faces:\n";
 		for (Position i = 0; i < ses.contact_faces.size(); i++)
 		{
