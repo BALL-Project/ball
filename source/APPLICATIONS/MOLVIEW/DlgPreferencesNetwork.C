@@ -24,3 +24,11 @@ DlgPreferencesNetwork::DlgPreferencesNetwork
 DlgPreferencesNetwork::~DlgPreferencesNetwork()
 {
 }
+
+void DlgPreferencesNetwork::setPreferences(INIFile& inifile)
+{
+}
+
+void DlgPreferencesNetwork::getPreferences(INIFile& inifile)
+{
+}

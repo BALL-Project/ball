@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.7 2000/01/14 20:48:39 oliver Exp $
+// $Id: mainframe.h,v 1.8 2000/01/15 19:08:49 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -10,6 +10,7 @@
 #include <strstream>
 
 #include <qmetaobject.h>
+#include <qmainwindow.h>
 #include <qwidget.h>
 #include <qmenubar.h>
 #include <qkeycode.h>
@@ -73,7 +74,7 @@ using namespace BALL::MOLVIEW;
 
 
 class Mainframe	
-: public QWidget,
+: public QMainWindow,
 	public NotificationTarget<Server>
 {
 	Q_OBJECT
@@ -99,6 +100,9 @@ class Mainframe
 			MENU__BUILD_CHECK_RESIDUE,
 			MENU__BUILD_BUILD_BONDS,
 			MENU__BUILD_ADD_HYDROGENS,
+			MENU__BUILD_ASSIGN_CHARGES,
+			MENU__BUILD_AMBER_ENERGY,
+			MENU__BUILD_AMBER_MINIMIZATION,
 
 			MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG,
 			MENU__DISPLAY_OPEN_PREFERENCES_DIALOG,
@@ -123,7 +127,7 @@ class Mainframe
 
 		void addComposite(Composite*, QString*);
 
-		void removeComposite(Composite*, bool delete_composite = true);
+		void removeComposite(Composite*);
 
 
  protected:
@@ -155,6 +159,9 @@ class Mainframe
 		void checkResidue();
 		void buildBonds();
 		void addHydrogens();
+		void assignCharges();
+		void calculateAmberEnergy();
+		void amberMinimization();
 		
     // Display menu
 		void openDisplayPropertiesDialog();
@@ -173,6 +180,7 @@ class Mainframe
 		void toggleServer();
 
 		
+		
   protected:
 	  
 	  void resizeEvent(QResizeEvent* event);
@@ -184,13 +192,11 @@ class Mainframe
     MoleculeObjectProcessor		object_processor_;
 		MoleculeGLObjectCollector GL_object_collector_;
 
-		QMenuBar*			menubar_;
 		QPopupMenu*		edit_menu_;
 		QSplitter*		hor_splitter_;
 		QSplitter*		vert_splitter_;
 		Control*			control_;
 		LogView*			logview_;
-		QStatusBar*		statusbar_;
 		QVBoxLayout*	vboxlayout_;
 		
 		DlgDisplayProperties	display_properties_dialog_;
@@ -204,7 +210,6 @@ class Mainframe
 		
 		List<Composite*>	selection_;
 		List<Composite*>  copy_list_;
-		List<Composite*>  cut_list_;
 
 		QLabel*						server_icon_;
 		QLabel*						tool_box_;

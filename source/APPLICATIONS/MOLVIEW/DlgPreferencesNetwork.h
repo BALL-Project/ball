@@ -11,6 +11,9 @@
 #define DlgPreferencesNetwork_included
 
 #include "DlgPreferencesNetworkData.h"
+#include <BALL/FORMAT/INIFile.h>
+
+using namespace BALL;
 
 class DlgPreferencesNetwork : public DlgPreferencesNetworkData
 {
@@ -23,5 +26,8 @@ public:
         const char *name = NULL );
 
     virtual ~DlgPreferencesNetwork();
+
+		void setPreferences(INIFile& inifile);
+		void getPreferences(INIFile& inifile);
 };
 #endif // DlgPreferencesNetwork_included

@@ -24,7 +24,7 @@ GroupBox {
 		LineWidth {1}
 		MidLineWidth {0}
 		FrameMargin {0}
-		Rect {20 70 340 120}
+		Rect {5 71 370 134}
 		Name {GroupBox_1}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -44,8 +44,9 @@ CheckBox {
 		Text {depth cueing}
 		AutoRepeat {FALSE}
 		AutoResize {TRUE}
-		Rect {30 20 111 21}
+		Rect {46 12 111 21}
 		Name {CheckBox_2}
+		Variable {depth_cueing_check_}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -64,8 +65,9 @@ CheckBox {
 		Text {coordinate axes}
 		AutoRepeat {FALSE}
 		AutoResize {TRUE}
-		Rect {220 20 131 21}
+		Rect {203 12 131 21}
 		Name {CheckBox_3}
+		Variable {coordinate_axes_check_}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -88,11 +90,11 @@ Label {
 		LineWidth {1}
 		MidLineWidth {0}
 		FrameMargin {0}
-		Rect {60 120 100 30}
+		Rect {64 123 80 30}
 		Name {Label_3}
 		Variable {color_sample_}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
+		MinimumSize {80 30}
+		MaximumSize {80 30}
 		BackgroundPixmap {}
 		UseBackgroundPixmap {FALSE}
 		AdjustSize {FALSE}
@@ -112,8 +114,9 @@ PushButton {
 		Text {Edit}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {220 120 100 30}
+		Rect {252 123 61 29}
 		Name {PushButton_7}
+		Variable {edit_button_}
 		Signal {[Protected]  clicked --> editColor  ()}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -129,4 +132,79 @@ PushButton {
 		PalettePropagation {SameFont}
 }
 
+Box_Layout-1{
+	Direction {TopToBottom}
+	Border {5}
+	AutoBorder {5}
+	Name {}
+	Strut {0}
+	Stretch {1}
+}
+Box_Layout-1.1{
+	Direction {TopToBottom}
+	Border {5}
+	AutoBorder {5}
+	Name {}
+	Strut {0}
+	Stretch {1}
+}
+Box_Spacing-1.1.1{
+	Spacing {7}
+}
+Box_Layout-1.1.2{
+	Direction {LeftToRight}
+	Border {5}
+	AutoBorder {5}
+	Name {}
+	Strut {0}
+	Stretch {4}
+}
+Box_Stretch-1.1.2.1{
+	Stretch {1}
+}
+Layout_Widget-1.1.2.2{
+	Widget {CheckBox_2}
+	BoxStretch {1}
+	Alignment {0}
+}
+Box_Stretch-1.1.2.3{
+	Stretch {1}
+}
+Layout_Widget-1.1.2.4{
+	Widget {CheckBox_3}
+	BoxStretch {1}
+	Alignment {0}
+}
+Box_Stretch-1.1.2.5{
+	Stretch {1}
+}
+Box_Stretch-1.1.3{
+	Stretch {1}
+}
+Layout_Widget-1.1.4{
+	Widget {GroupBox_1}
+	BoxStretch {4}
+	Alignment {0}
+}
+Box_Layout-1.1.4.1{
+	Direction {LeftToRight}
+	Border {5}
+	AutoBorder {5}
+	Name {}
+	Strut {0}
+	Stretch {1}
+}
+Box_Spacing-1.1.4.1.1{
+	Spacing {7}
+}
+Layout_Widget-1.1.4.1.2{
+	Widget {Label_3}
+	BoxStretch {1}
+	Alignment {36}
+}
+Layout_Widget-1.1.4.1.3{
+	Widget {PushButton_7}
+	BoxStretch {1}
+	Alignment {36}
+}
 }

@@ -5,7 +5,12 @@
 #include <qcolordialog.h>
 #include <qfiledialog.h>
 #include <qlabel.h>
+#include <qtooltip.h>
 #include <qfile.h>
+
+#include <BALL/MOLMEC/AMBER/amber.h>
+#include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
+#include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 
 using namespace std;
 
@@ -14,13 +19,11 @@ Mainframe::Mainframe
 	:	scene_(0),
 		object_processor_(),
 		GL_object_collector_(),
-		menubar_(0),
 		edit_menu_(0),
 		hor_splitter_(0),
 		vert_splitter_(0),
 		control_(0),
 		logview_(0),
-		statusbar_(0),
 		vboxlayout_(0),
 		display_properties_dialog_(this),
 		preferences_dialog_(this),
@@ -30,10 +33,309 @@ Mainframe::Mainframe
 		fragment_db_(),
 		selection_(),
 		copy_list_(),
-		cut_list_(),
 		server_icon_(0),
 		tool_box_(0)
 {
+	// ---------------------
+	// setup main window
+	// ---------------------
+	static const char * molview_icon_xpm[] = 
+	{
+		"32 32 257 2",
+		"  	c None",
+		". 	c #060614",
+		"+ 	c #868654",
+		"@ 	c #464629",
+		"# 	c #C6C6A4",
+		"$ 	c #66663C",
+		"% 	c #A6A67C",
+		"& 	c #2A2A14",
+		"* 	c #46467C",
+		"= 	c #2A2A94",
+		"- 	c #E6E6E2",
+		"; 	c #76764C",
+		"> 	c #96966E",
+		", 	c #B6B69A",
+		"' 	c #565628",
+		") 	c #363618",
+		"! 	c #D6D6D0",
+		"~ 	c #161609",
+		"{ 	c #8A8A94",
+		"] 	c #666697",
+		"^ 	c #A6A6BF",
+		"/ 	c #7676AC",
+		"( 	c #B6B6C7",
+		"_ 	c #363654",
+		": 	c #56567C",
+		"< 	c #9696DC",
+		"[ 	c #161658",
+		"} 	c #CECEB8",
+		"| 	c #565658",
+		"1 	c #8E8E60",
+		"2 	c #464644",
+		"3 	c #6E6E48",
+		"4 	c #3A3A78",
+		"5 	c #F6F6F3",
+		"6 	c #9E9E7F",
+		"7 	c #B2B27C",
+		"8 	c #BEBEA9",
+		"9 	c #DEDED1",
+		"0 	c #7E7E50",
+		"a 	c #2A2A48",
+		"b 	c #4646A4",
+		"c 	c #3E3E20",
+		"d 	c #C6C6D0",
+		"e 	c #EEEEEF",
+		"f 	c #222218",
+		"g 	c #3E3E44",
+		"h 	c #5E5E51",
+		"i 	c #4E4E28",
+		"j 	c #626231",
+		"k 	c #8E8E98",
+		"l 	c #6E6EA4",
+		"m 	c #7E7E91",
+		"n 	c #5E5E8C",
+		"o 	c #1E1E58",
+		"p 	c #9E9E98",
+		"q 	c #DEDEE8",
+		"r 	c #86867C",
+		"s 	c #66666C",
+		"t 	c #323290",
+		"u 	c #B6B6AE",
+		"v 	c #AEAEB9",
+		"w 	c #CECED4",
+		"x 	c #8E8E82",
+		"y 	c #6E6E6C",
+		"z 	c #0E0E04",
+		"A 	c #A6A69C",
+		"B 	c #2E2E17",
+		"C 	c #4E4E77",
+		"D 	c #BEBECC",
+		"E 	c #4E4E4C",
+		"F 	c #3E3EA4",
+		"G 	c #AEAEA0",
+		"H 	c #7E7E74",
+		"I 	c #C6C6BF",
+		"J 	c #EAEAF8",
+		"K 	c #767664",
+		"L 	c #9A9AA0",
+		"M 	c #161631",
+		"N 	c #6666B4",
+		"O 	c #BEBEB9",
+		"P 	c #1E1E78",
+		"Q 	c #66665C",
+		"R 	c #56563C",
+		"S 	c #36362F",
+		"T 	c #D6D6DC",
+		"U 	c #363660",
+		"V 	c #6E6E58",
+		"W 	c #3E3E34",
+		"X 	c #8E8EBC",
+		"Y 	c #3636B4",
+		"Z 	c #0E0E27",
+		"` 	c #4E4E91",
+		" .	c #464636",
+		"..	c #EAEAE6",
+		"+.	c #96967F",
+		"@.	c #6666AC",
+		"#.	c #5656BC",
+		"$.	c #CECEC9",
+		"%.	c #565668",
+		"&.	c #424287",
+		"*.	c #FEFEFC",
+		"=.	c #A2A284",
+		"-.	c #E2E2D8",
+		";.	c #32324C",
+		">.	c #3E3E5C",
+		",.	c #5E5E6C",
+		"'.	c #7E7EC4",
+		").	c #AEAEDC",
+		"!.	c #B2B2A4",
+		"~.	c #868667",
+		"{.	c #CACAAC",
+		"].	c #A6A694",
+		"^.	c #BABA9E",
+		"/.	c #7676B4",
+		"(.	c #565698",
+		"_.	c #9E9EAC",
+		":.	c #8E8E6C",
+		"<.	c #FAFAFA",
+		"[.	c #7E7E64",
+		"}.	c #4E4EA4",
+		"|.	c #CACAE4",
+		"1.	c #F2F2F1",
+		"2.	c #1E1E34",
+		"3.	c #52522F",
+		"4.	c #5E5EAC",
+		"5.	c #A2A29C",
+		"6.	c #E2E2E6",
+		"7.	c #8A8A87",
+		"8.	c #BABAB2",
+		"9.	c #92927F",
+		"0.	c #262638",
+		"a.	c #8686B7",
+		"b.	c #6E6ECC",
+		"c.	c #2E2E2C",
+		"d.	c #9E9ECC",
+		"e.	c #BABAE4",
+		"f.	c #46465C",
+		"g.	c #3E3E94",
+		"h.	c #C2C2DF",
+		"i.	c #4E4E64",
+		"j.	c #3E3EC4",
+		"k.	c #5252C0",
+		"l.	c #76765C",
+		"m.	c #16161C",
+		"n.	c #1A1A6C",
+		"o.	c #AEAE8C",
+		"p.	c #8E8EAC",
+		"q.	c #8282A4",
+		"r.	c #5E5EA4",
+		"s.	c #66667C",
+		"t.	c #121218",
+		"u.	c #1A1A40",
+		"v.	c #222287",
+		"w.	c #12123C",
+		"x.	c #323264",
+		"y.	c #4A4A1C",
+		"z.	c #6A6A47",
+		"A.	c #2E2E89",
+		"B.	c #6A6A94",
+		"C.	c #AAAABC",
+		"D.	c #BABAD4",
+		"E.	c #3A3A4C",
+		"F.	c #424224",
+		"G.	c #42424C",
+		"H.	c #62625C",
+		"I.	c #22224C",
+		"J.	c #D2D2D7",
+		"K.	c #AAAAA2",
+		"L.	c #323224",
+		"M.	c #525280",
+		"N.	c #52524C",
+		"O.	c #4242B4",
+		"P.	c #82827E",
+		"Q.	c #7A7A6F",
+		"R.	c #3A3A37",
+		"S.	c #9292C4",
+		"T.	c #424261",
+		"U.	c #8282BC",
+		"V.	c #B2B2CC",
+		"W.	c #222244",
+		"X.	c #6262BC",
+		"Y.	c #7272BC",
+		"Z.	c #32323C",
+		"`.	c #AAAA84",
+		" +	c #4A4A74",
+		".+	c #7A7A44",
+		"++	c #9A9A74",
+		"@+	c #5A5A29",
+		"#+	c #DADAD0",
+		"$+	c #1A1A0C",
+		"%+	c #7A7AA9",
+		"&+	c #5A5A54",
+		"*+	c #727246",
+		"=+	c #3E3E7C",
+		"-+	c #C2C2A8",
+		";+	c #4A4AAC",
+		">+	c #CACACE",
+		",+	c #929294",
+		"'+	c #8A8A79",
+		")+	c #6A6A64",
+		"!+	c #B2B2B9",
+		"~+	c #727270",
+		"{+	c #C2C2C7",
+		"]+	c #CACAC4",
+		"^+	c #C2C2B8",
+		"/+	c #22227C",
+		"(+	c #6A6A58",
+		"_+	c #5A5A39",
+		":+	c #DADADE",
+		"<+	c #3A3A64",
+		"[+	c #72725C",
+		"}+	c #424237",
+		"|+	c #4A4A34",
+		"1+	c #9A9A7C",
+		"2+	c #6A6AA4",
+		"3+	c #D2D2C7",
+		"4+	c #5A5A64",
+		"5+	c #626264",
+		"6+	c #8A8A6A",
+		"7+	c #AAAA91",
+		"8+	c #7A7ABC",
+		"9+	c #5A5A98",
+		"0+	c #929272",
+		"a+	c #828262",
+		"b+	c #2A2A3C",
+		"c+	c #A2A2D4",
+		"d+	c #4A4A60",
+		"e+	c #B2B294",
+		"f+	c #62629C",
+		"g+	c #0A0A14",
+		"h+	c #121204",
+		"i+	c #A2A2AC",
+		"j+	c #7A7A5C",
+		"k+	c #626240",
+		"l+	c #3232A0",
+		"m+	c #6666CC",
+		"n+	c #C6C6B4",
+		"o+	c #66664C",
+		"p+	c #E6E6EC",
+		"q+	c #B6B6A4",
+		"r+	c #8A8AA4",
+		"s+	c #A6A6CC",
+		"t+	c #F6F6FC",
+		"u+	c #9E9E8C",
+		"v+	c #DEDEDC",
+		"w+	c #222224",
+		"x+	c #3E3E54",
+		"y+	c #5E5E5C",
+		"z+	c #4E4E34",
+		"A+	c #9E9EA4",
+		"B+	c #DEDEF4",
+		"C+	c #CECEE4",
+		"D+	c #4E4E84",
+		"E+	c #AEAEAC",
+		"F+	c #767674",
+		"G+	c #36363C",
+		"H+	c #8E8ECC",
+		"*.*.*.*.*.*.*.*.*.*.*.*.*.*.D.B+*.t+*.*.*.*.*.*.*.*.*.*.*.*.*.*.",
+		"*.*.*.*.*.*.*.*.*.*.*.*.1.5.= * H 4 V.<.*.*.*.*.*.*.*.*.*.*.*.*.",
+		"*.*.*.*.*.*.*.1.C+e u 6+k+~.F R.F.R.3.Q k } p+|.*.*.*.*.*.*.*.*.",
+		"*.*.*.*.*.*.*.f+Y ,.6 n+9 ].A.H e 8.3 /+v.}+x+W.>+e *.*.*.*.*.*.",
+		"*.*.*.*.*.q _. . +X.u 1 1+{.s+[.*.*.*.i.;.)+|+B B A./ *.*.*.*.*.",
+		"*.*.*.*.*.@.c..+6+&.c+t+*.*.*.8 r J <._+$.*.*.p w+o ,.*.*.*.*.*.",
+		"*.*.*.*.e o+R -+*.; *.*.*.*.*.q Z | Q.3.1.1.J.~+Z C.~.7+*.*.*.*.",
+		"*.*.*.*.H.* P.<.*.l.*.*.*.*.3+&+..t+s.y+G.<+x $.L [.- z.$.*.*.*.",
+		"*.z z ,+M A.z z q M z z z z y+5 <.2+z z 6.r *.*.*., e+} k+..*.*.",
+		"*.z z z S z z z a+z z -.>+z z 0+@+U z z *.6+*.*.*.*.> {+,+;+S.*.",
+		"*.z z z z z z z ) z z {+1+z z '+^+..z z u++.e *.*.*.T O.D+=+: *.",
+		"*.z z z.z *.z z !+z z M.6 z z <.*.*.z z 3.` m 1.*.*.G r a+@+7.*.",
+		"D z z &+{+6+z z *.z z V.*.z z U.-.<.z z 3 @ I =.e+D H *.5 @+Z J.",
+		"e z z t r+..z z 5 z z *.*.z z 1.! , z z 5 a+k+5 ! t D *...@+G+t+",
+		"*.z z ~.*.*.z z ^.z z *.<.z z *.*.*.z z *.1.k+2+e.:.*.*.e.C H.*.",
+		"*.z z > <.*.z z (.m z z z z *.*.*.*.z z z z z Y n.L.W F.c.P M.*.",
+		"*.9.^.> t+*.*.<.7.A i 5 v # *.*.*.*.{.-.*.*.,+n.E.; >+3+P.g+V *.",
+		"*.z z P.e z z !.$.z z z z z z *.*.-.z z z z z O e z z *.e z z z ",
+		"<.z z }.n z z Q.*.$.@ z z *.p.d.7+8 z z % ; 7.-+~.z z *.*.~ z z ",
+		":+z z R p+z z 9+*.(.Y z z *.G h.*.*.z z 0+;.] ^+*.z z K.x h+z z ",
+		"*.z z *+1.z z H u+M n.z z o.7 <.*.*.z z z z D *.*.z z t z t.z z ",
+		"*.z z ;.+ z z 7.$+Q.L z z 5+F.$ ++8.z z !.+.1.*.*.z z 7.z . z z ",
+		"*.z z y _+z z }+O Y.V.z z ] X I 7.T.z z 6.=.*.*.*.z z ..z E+z z ",
+		"*.*.z z z z u.e *.P.!+z z 1.-+1+<.w z z ^ #.} 5 J 0+z z z z z *.",
+		"*.*.*.z z  .2.n+*.z z z z z z 3+r+).z z z z z 0+k.a.p z 1.z *.*.",
+		"*.*.*.*.*.6 T.}+1.i+h.*.*.*.*.*.x a.<.R.A *.*.5 0 a m.! *.*.*.*.",
+		"*.*.*.*.*.D u.h+S d+9+{.! *.*.{.8 *.*.7.g d , j+c h+Z t+*.*.*.*.",
+		"*.*.*.*.*.*.v+F+m.g.#+$.=.> Y./ *.*.- d+Z W.R.2.E D.d *.*.*.*.*.",
+		"*.*.*.*.*.*.*.T M * 0 1 7+! a.}+1 a+c |+M h K.q.! *.*.*.*.*.*.*.",
+		"*.*.*.*.*.*.*.*.*.*.*.>++.$ &.}.& f &.G - *.*.*.*.*.*.*.*.*.*.*.",
+		"*.*.*.*.*.*.*.*.*.*.*.*.*.*.a.x.I !+{+*.*.*.*.*.*.*.*.*.*.*.*.*.",
+		"*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*."
+	};
+
+	setCaption("MolVIEW");
+	setIcon(*new QPixmap(molview_icon_xpm));
+
 	// ---------------------
 	// Logstream setup -----
 	// ---------------------
@@ -43,15 +345,13 @@ Mainframe::Mainframe
 	// ---------------------
 	// create widgets ------
 	// ---------------------
-	setCaption("MolVIEW");
-	menubar_ = new QMenuBar(this);
-	CHECK_PTR(menubar_);
-
-	vert_splitter_ = new QSplitter(this);
+	
+	vert_splitter_ = new QSplitter(this, "VertSplitter");
 	CHECK_PTR(vert_splitter_);
 	vert_splitter_->setOrientation(Vertical);
+	setCentralWidget(vert_splitter_);
 
-	hor_splitter_ = new QSplitter(vert_splitter_);
+	hor_splitter_ = new QSplitter(vert_splitter_, "HorSplitter");
 	CHECK_PTR(hor_splitter_);
 
 	control_ = new Control(hor_splitter_);
@@ -63,14 +363,13 @@ Mainframe::Mainframe
 	logview_ = new LogView(vert_splitter_);
 	CHECK_PTR(logview_);
 
-	statusbar_ = new QStatusBar(this);
-	CHECK_PTR(statusbar_);
-	QLabel* message_label = new QLabel(tr("Ready."), statusbar_);
-	statusbar_->addWidget(message_label, 20);
+	QLabel* message_label = new QLabel(tr("Ready."), statusBar());
+	statusBar()->addWidget(message_label, 20);
 
 
-	server_icon_ = new QLabel(statusbar_);
-	statusbar_->addWidget(server_icon_, 1, TRUE );
+	server_icon_ = new QLabel(statusBar());
+	statusBar()->addWidget(server_icon_, 1, TRUE );
+	QToolTip::add(server_icon_, "VIEW server status");
 
 	static const char * mini_ray_xpm[] = 
 	{
@@ -98,7 +397,7 @@ Mainframe::Mainframe
 	QPixmap icon(mini_ray_xpm);
 
 	server_icon_->setPixmap(icon);
-	server_icon_->hide();
+	server_icon_->show();
  
 	// ---------------------
 	// Scene setup ---------
@@ -186,14 +485,19 @@ Mainframe::Mainframe
 	CHECK_PTR(build_menu);
 	popup_menus_.push_back(build_menu);
 
-	build_menu->setItemEnabled(MENU__BUILD_CHECK_RESIDUE, FALSE);
-	build_menu->setItemEnabled(MENU__BUILD_BUILD_BONDS, FALSE);
 	build_menu->insertItem("Check St&ructure", this, 
 												 SLOT(checkResidue()), CTRL+Key_R, MENU__BUILD_CHECK_RESIDUE);
 	build_menu->insertItem("&Build Bonds", this, 
 												 SLOT(buildBonds()), CTRL+Key_B, MENU__BUILD_BUILD_BONDS);
 	build_menu->insertItem("Add &Hydrogens", this, 
 												 SLOT(addHydrogens()), CTRL+Key_H, MENU__BUILD_ADD_HYDROGENS);
+	build_menu->insertItem("Assign &Charges", this, 
+												 SLOT(assignCharges()), CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
+	build_menu->insertSeparator();
+	build_menu->insertItem("Calculate AMBER &Energy", this, 
+												 SLOT(calculateAmberEnergy()), CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
+	build_menu->insertItem("Perform Energy &Minimization", this, 
+												 SLOT(amberMinimization()), CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
 	
 
 	// Display Menu -------------------------------------------------------------------
@@ -223,31 +527,24 @@ Mainframe::Mainframe
 
 	// Menu ------------------------------------------------------------------------
 
-	menubar_->insertItem("&File", file_menu);
-	menubar_->insertItem("&Edit", edit_menu_);
-	menubar_->insertItem("&Build", build_menu);
-	menubar_->insertItem("&Display", display_menu);
-	menubar_->insertSeparator();
-	menubar_->insertItem("&Help", help_menu);
-	menubar_->setSeparator(QMenuBar::InWindowsStyle);
+	menuBar()->insertItem("&File", file_menu);
+	menuBar()->insertItem("&Edit", edit_menu_);
+	menuBar()->insertItem("&Build", build_menu);
+	menuBar()->insertItem("&Display", display_menu);
+	menuBar()->insertSeparator();
+	menuBar()->insertItem("&Help", help_menu);
+	menuBar()->setSeparator(QMenuBar::InWindowsStyle);
 	
-
-	// ---------------------
-	// Layout --------------
-	// ---------------------
-
-	vboxlayout_ = new QVBoxLayout(this);
-	CHECK_PTR(vboxlayout_);
-
-  vboxlayout_->setMenuBar(menubar_);
-	vboxlayout_->addWidget(vert_splitter_);
-	vboxlayout_->addWidget(statusbar_);
 
 	// ---------------------
 	// Connectivity --------
 	// ---------------------
 
 	connect(display_menu,
+					SIGNAL(aboutToShow()),
+					this,
+					SLOT(checkMenuEntries()));
+	connect(build_menu,
 					SIGNAL(aboutToShow()),
 					this,
 					SLOT(checkMenuEntries()));
@@ -260,7 +557,7 @@ Mainframe::Mainframe
 					this,
 					SLOT(applyDisplayPropertiesDialog()));
 	connect(&preferences_dialog_,
-					SIGNAL(apply()),
+					SIGNAL(applyButtonPressed()),
 					this,
 					SLOT(applyPreferencesDialog()));
 
@@ -341,7 +638,7 @@ void Mainframe::importPDB()
 			}
 
 			// PDB file laden
-			statusbar_->message("reading PDB-File...");
+			statusBar()->message("reading PDB-File...");
 
 			PDBFile pdb_file(filename.ascii());
 
@@ -352,11 +649,11 @@ void Mainframe::importPDB()
 			Log.info() << "> read " << system.countAtoms() << " atoms from PDB file \"" 
 								 << filename.ascii() << "\"" << endl;
 
-			statusbar_->message("normalizing names...");
+			statusBar()->message("normalizing names...");
 	    system.apply(*fragment_db_.normalizeNames);
 			Log.info() << "> normalized names" << endl;
 
-			statusbar_->message("generating missing bonds...");
+			statusBar()->message("generating missing bonds...");
 	    system.apply(*fragment_db_.buildBonds);
 			Log.info() << "> generated missing bonds" << endl;
   
@@ -369,7 +666,7 @@ void Mainframe::importPDB()
 			}
 
 			addComposite(&system, &filename);
-			statusbar_->clear();
+			statusBar()->clear();
 		}
 	}
 }
@@ -397,7 +694,7 @@ void Mainframe::importHIN()
 				return;
 			}
 
-			statusbar_->message("reading HIN file...");
+			statusBar()->message("reading HIN file...");
 
 			HINFile hin_file(filename.ascii());
 
@@ -417,7 +714,7 @@ void Mainframe::importHIN()
 
 			addComposite(&system, &filename);
 			
-			statusbar_->clear();
+			statusBar()->clear();
 		}
 	}
 }
@@ -431,7 +728,7 @@ void Mainframe::about()
 {
 	DlgAbout about_box;
 	about_box.exec();
-	statusbar_->message("MolVIEW V 0.9 alpha");
+	statusBar()->message("MolVIEW V 0.9 alpha", 1500);
 }
 
 void Mainframe::checkMenuEntries()
@@ -441,49 +738,54 @@ void Mainframe::checkMenuEntries()
 	bool selected = (selection.size() > 0);
 
 	// enable for multiple selection
-	menubar_->setItemEnabled(MENU__EDIT_SELECT, selected);
-	menubar_->setItemEnabled(MENU__EDIT_DESELECT, selected);
+	menuBar()->setItemEnabled(MENU__EDIT_SELECT, selected);
+	menuBar()->setItemEnabled(MENU__EDIT_DESELECT, selected);
+	menuBar()->setItemEnabled(MENU__BUILD_ADD_HYDROGENS, selected);
+	menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, selected);
+	menuBar()->setItemEnabled(MENU__BUILD_CHECK_RESIDUE, selected);
+	menuBar()->setItemEnabled(MENU__BUILD_BUILD_BONDS, selected);
 	
 	// these menu points for single items only
-	menubar_->setItemEnabled(MENU__DISPLAY_CENTER_CAMERA, selected && (selection.size() == 1));
+	menuBar()->setItemEnabled(MENU__DISPLAY_CENTER_CAMERA, selected && (selection.size() == 1));
 
 	// set the checkboxes for the non-modal dialogs
-	menubar_->setItemChecked(MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG, 
+	menuBar()->setItemChecked(MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG, 
 													 display_properties_dialog_.isVisible());
-	menubar_->setItemChecked(MENU__DISPLAY_OPEN_PREFERENCES_DIALOG, 
+	menuBar()->setItemChecked(MENU__DISPLAY_OPEN_PREFERENCES_DIALOG, 
 													 preferences_dialog_.isVisible());
 
 	// check for paste-slot: enable only if copy_list_ not empty
-	menubar_
-		->setItemEnabled(MENU__EDIT_PASTE, 
-										 (bool)(copy_list_.size() > 0) 
-										 || (bool)(cut_list_.size() > 0));
+	menuBar()->setItemEnabled
+		(MENU__EDIT_PASTE, 
+		 (bool)(copy_list_.size() > 0));
 
 	// check for clearClipboard-slot: enable only if copy_list_ not empty
-	menubar_
-		->setItemEnabled(MENU__EDIT_CLEAR_CLIPBOARD, 
-										 (bool)(copy_list_.size() > 0) 
-										 || (bool)(cut_list_.size() > 0));
+	menuBar()->setItemEnabled
+		(MENU__EDIT_CLEAR_CLIPBOARD, 
+		 (bool)(copy_list_.size() > 0));
 
 	// check for erase-slot: enable erase-slot only if all selected composites
 	// are systems
-	if (selection.size() > 0)
+	bool all_systems = (selection.size() > 0);
+
+	List<Composite*>::ConstIterator list_it = selection.begin();	
+	for (; list_it != selection.end(); ++list_it)
 	{
-		bool all_systems = true;
-
-		List<Composite*>::ConstIterator list_it = selection.begin();	
-		for (; list_it != selection.end(); ++list_it)
+		if (!RTTI::isKindOf<System>(**list_it))
 		{
-			if (!RTTI::isKindOf<System>(**list_it))
-			{
-				all_systems = false;
-			}
+			all_systems = false;
 		}
-
-		menubar_->setItemEnabled(MENU__EDIT_CUT, all_systems);
-		menubar_->setItemEnabled(MENU__EDIT_COPY, all_systems);
-		menubar_->setItemEnabled(MENU__EDIT_DELETE, all_systems);
 	}
+
+	// cut, copy, and paste will are only available for 
+	// top level selections
+	menuBar()->setItemEnabled(MENU__EDIT_CUT, all_systems);
+	menuBar()->setItemEnabled(MENU__EDIT_COPY, all_systems);
+	menuBar()->setItemEnabled(MENU__EDIT_DELETE, all_systems);
+	
+	// AMBER methods are available only for single systems
+	menuBar()->setItemEnabled(MENU__BUILD_AMBER_ENERGY, (all_systems && (selection.size() == 1)));
+	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MINIMIZATION, (all_systems && (selection.size() == 1)));
 }
 
 void Mainframe::cut()
@@ -497,21 +799,18 @@ void Mainframe::cut()
 	QString message;
 	message.sprintf("cutting %d systems...", 
 													selection.size());
-	statusbar_->message(message);
-
-	// clear copy list
-	copy_list_.clear();
+	statusBar()->message(message);
 
 	// delete old composites
-	if (cut_list_.size() > 0)
+	if (copy_list_.size() > 0)
 	{
-		List<Composite*>::ConstIterator list_it = cut_list_.begin();	
-		for (; list_it != cut_list_.end(); ++list_it)
+		List<Composite*>::ConstIterator list_it = copy_list_.begin();	
+		for (; list_it != copy_list_.end(); ++list_it)
 		{
 			delete *list_it;
 		}
 
-		cut_list_.clear();
+		copy_list_.clear();
 	}
 
 	// remove all system composites from the tree and from the scene
@@ -520,16 +819,16 @@ void Mainframe::cut()
 	for (; list_it != selection.end(); ++list_it)
 	{
 		// insert deep clone of the composite into the cut list
-		cut_list_.push_back((Composite*)(*list_it)->create());
+		copy_list_.push_back((Composite*)(*list_it)->create());
 
-		removeComposite(*list_it, false);
+		removeComposite(*list_it);
 	}
 
 	scene_->update();
 
 	control_->invalidateSelection();
 
-	statusbar_->clear();
+	statusBar()->clear();
 }
 
 void Mainframe::copy()
@@ -543,30 +842,34 @@ void Mainframe::copy()
 	QString message;
 	message.sprintf("copying %d systems...", 
 													selection.size());
-	statusbar_->message(message);
+	statusBar()->message(message);
 
 	// delete old cutted composites
-	if (cut_list_.size() > 0)
+	if (copy_list_.size() > 0)
 	{
-		List<Composite*>::ConstIterator list_it = cut_list_.begin();	
-		for (; list_it != cut_list_.end(); ++list_it)
+		List<Composite*>::ConstIterator list_it = copy_list_.begin();	
+		for (; list_it != copy_list_.end(); ++list_it)
 		{
 			delete *list_it;
 		}
 
-		cut_list_.clear();
+		copy_list_.clear();
 	}
 
 	// copy the selected composites into the copy_list_
-	copy_list_ = const_cast<List<Composite*>&>(selection);
+	List<Composite*>::ConstIterator list_it = selection.begin();	
+	for (; list_it != selection.end(); ++list_it)
+	{
+		// insert deep clone of the composite into the cut list
+		copy_list_.push_back((Composite*)(*list_it)->create());
+	}
 
-	statusbar_->clear();
+	statusBar()->clear();
 }
 
 void Mainframe::paste()
 {
-	if (copy_list_.size() == 0
-			&& cut_list_.size() == 0)
+	if (copy_list_.size() == 0)
 	{
 		return;
 	}
@@ -574,7 +877,7 @@ void Mainframe::paste()
 	QString message;
 	message.sprintf("pasting %d systems...", 
 													copy_list_.size());
-	statusbar_->message(message);
+	statusBar()->message(message);
 
 	// copying composites
 	List<Composite*>::ConstIterator list_it = copy_list_.begin();	
@@ -583,16 +886,9 @@ void Mainframe::paste()
 		addComposite(*list_it, 0);
 	}
 
-	// adding cutted composites
-	List<Composite*>::ConstIterator cut_list_it = cut_list_.begin();	
-	for (; cut_list_it != cut_list_.end(); ++cut_list_it)
-	{
-		addComposite(*cut_list_it, 0);
-	}
-
 	control_->invalidateSelection();
 
-	statusbar_->clear();
+	statusBar()->clear();
 }
 
 void Mainframe::erase()
@@ -606,7 +902,7 @@ void Mainframe::erase()
 	QString message;
 	message.sprintf("erasing %d systems...", 
 													selection.size());
-	statusbar_->message(message);
+	statusBar()->message(message);
 
 	// erase all system composites
 	List<Composite*>::ConstIterator list_it = selection.begin();	
@@ -618,17 +914,26 @@ void Mainframe::erase()
 	control_->invalidateSelection();
 
 	scene_->update();
-	statusbar_->clear();
+	statusBar()->clear();
 }
 
 void Mainframe::clearClipboard()
 {
-	statusbar_->message("clearing clipboard...");
+	statusBar()->message("clearing clipboard...");
 
-	copy_list_.clear();
-	cut_list_.clear();
+	// delete old composites
+	if (copy_list_.size() > 0)
+	{
+		List<Composite*>::ConstIterator list_it = copy_list_.begin();	
+		for (; list_it != copy_list_.end(); ++list_it)
+		{
+			delete *list_it;
+		}
 
-	statusbar_->clear();
+		copy_list_.clear();
+	}
+
+	statusBar()->clear();
 }
 
 void Mainframe::select()
@@ -642,7 +947,7 @@ void Mainframe::select()
 	QString message;
 	message.sprintf("selecting %d objects...", 
 													selection.size());
-	statusbar_->message(message);
+	statusBar()->message(message);
 
 	int value_static = object_processor_.getValue(ADDRESS__STATIC_MODEL);
 	int value_dynamic = object_processor_.getValue(ADDRESS__DYNAMIC_MODEL);
@@ -662,7 +967,7 @@ void Mainframe::select()
 	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic);
 
 	scene_->update();
-	statusbar_->clear();
+	statusBar()->clear();
 }
 
 void Mainframe::deselect()
@@ -674,9 +979,8 @@ void Mainframe::deselect()
 	}
 
 	QString message;
-	message.sprintf("selecting %d objects...", 
-													selection.size());
-	statusbar_->message(message);
+	message.sprintf("selecting %d objects...", selection.size());
+	statusBar()->message(message);
 
 	int value_static = object_processor_.getValue(ADDRESS__STATIC_MODEL);
 	int value_dynamic = object_processor_.getValue(ADDRESS__DYNAMIC_MODEL);
@@ -696,7 +1000,7 @@ void Mainframe::deselect()
 	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic);
 
 	scene_->update();
-	statusbar_->clear();
+	statusBar()->clear();
 }
 
 void Mainframe::checkResidue()
@@ -709,38 +1013,23 @@ void Mainframe::checkResidue()
 
 	QString message;
 	message.sprintf("selecting %d objects...", selection.size());
-	statusbar_->message(message);
+	statusBar()->message(message);
 
 	ResidueChecker res_check(fragment_db_);
 	bool okay = true;
 	List<Composite*>::ConstIterator list_it = selection.begin();	
 	for (; list_it != selection.end(); ++list_it)
 	{	
-		Residue* residue = dynamic_cast<Residue*>(*list_it);
-		if (residue != 0)
-		{
-			residue->apply(res_check);
-			okay = okay && res_check.getStatus();	
-		} else {
-			Composite::SubcompositeIterator it = (*list_it)->beginSubcomposite();
-			for (; +it; ++it)
-			{
-				residue = dynamic_cast<Residue*>(&*it);
-				if (residue != 0)
-				{
-					residue->apply(res_check);
-					okay = okay && res_check.getStatus();	
-				}	
-			}
-		}
+		(*list_it)->apply(res_check);
+		okay = okay && res_check.getStatus();	
 	}
 
 	if (okay)
 	{
 		Log.info() << "ResidueChecker: no errors found." << endl;
-		statusbar_->message("no errors.");
+		statusBar()->message("no errors.");
 	} else {
-		statusbar_->message("errors found!");
+		statusBar()->message("errors found!");
 	}
 }
 
@@ -751,8 +1040,8 @@ void Mainframe::centerCamera()
 	{
 		return;
 	}
-	
-	  // use specified object processor for calculating the center
+
+  // use specified object processor for calculating the center
   object_processor_.calculateCenter(*selection.front());
 
   // set the camera on the the new composite
@@ -774,75 +1063,19 @@ void Mainframe::buildBonds()
 
 	Size number_of_bonds = 0;
 
-	statusbar_->message("building bonds...");
+	statusBar()->message("building bonds...");
 	List<Composite*>::ConstIterator list_it = selection.begin();	
 	for (; list_it != selection.end(); ++list_it)
 	{	
-		Fragment* frag = dynamic_cast<Fragment*>(*list_it);
-		if (frag != 0)
-		{
-			frag->apply(*fragment_db_.buildBonds);
-			number_of_bonds += fragment_db_.buildBonds->getNumberOfBondsBuilt();
-      object_processor_.applyOn(*frag);
-      scene_->getCompositeManager()->update(frag->getRoot());
- 		} else {
-			System* system = dynamic_cast<System*>(*list_it);
-			if (system != 0)
-			{
-				system->apply(*fragment_db_.buildBonds);
-				number_of_bonds += fragment_db_.buildBonds->getNumberOfBondsBuilt();
-				object_processor_.applyOn(*system);
-				scene_->getCompositeManager()->update(system->getRoot());
-			} else {
-				Molecule* molecule = dynamic_cast<Molecule*>(*list_it);
-				if (molecule != 0)
-				{
-					molecule->apply(*fragment_db_.buildBonds);
-					number_of_bonds += fragment_db_.buildBonds->getNumberOfBondsBuilt();
-					object_processor_.applyOn(*molecule);
-					scene_->getCompositeManager()->update(molecule->getRoot());
-				} else {
-					Chain* chain = dynamic_cast<Chain*>(*list_it);
-					if (chain != 0)
-					{
-						chain->apply(*fragment_db_.buildBonds);
-						number_of_bonds += fragment_db_.buildBonds->getNumberOfBondsBuilt();
-						object_processor_.applyOn(*chain);
-						scene_->getCompositeManager()->update(chain->getRoot());
-					} else {
-						SecondaryStructure* sec_struc = dynamic_cast<SecondaryStructure*>(*list_it);
-						if (sec_struc != 0)
-						{
-							sec_struc->apply(*fragment_db_.buildBonds);
-							number_of_bonds += fragment_db_.buildBonds->getNumberOfBondsBuilt();
-							object_processor_.applyOn(*sec_struc);
-							scene_->getCompositeManager()->update(sec_struc->getRoot());
-						} else {
-							Composite::SubcompositeIterator it = (*list_it)->beginSubcomposite();
-							for (; +it; ++it)
-							{
-								frag = dynamic_cast<Fragment*>(&*it);
-								if (frag != 0)
-								{
-									frag->apply(*fragment_db_.buildBonds);
-									number_of_bonds += fragment_db_.buildBonds->getNumberOfBondsBuilt();
-									object_processor_.applyOn(*frag);
-									scene_->getCompositeManager()->update(frag->getRoot());
-								}	
-							}
-						}
-					}
-				}
-			}
-		}
+		(*list_it)->apply(*fragment_db_.buildBonds);
+		number_of_bonds += fragment_db_.buildBonds->getNumberOfBondsBuilt();
+		object_processor_.applyOn(**list_it);
+		scene_->getCompositeManager()->update((*list_it)->getRoot());
 	}
 
-	
 	scene_->update();
-	statusbar_->clear();
-	QString message;
-	message.sprintf("Added %d bonds.", number_of_bonds);
-	statusbar_->message(message, 2000);
+	statusBar()->clear();
+	Log.info() << "Added " << number_of_bonds << " bonds." << endl;
 }
 
 void Mainframe::addHydrogens()
@@ -855,43 +1088,27 @@ void Mainframe::addHydrogens()
 
 	Size number_of_hydrogens = 0;
 
-	statusbar_->message("adding hydrogens...");
+	statusBar()->message("adding hydrogens...");
 	List<Composite*>::ConstIterator list_it = selection.begin();	
 	for (; list_it != selection.end(); ++list_it)
 	{	
-		Residue* residue = dynamic_cast<Residue*>(*list_it);
-		if (residue != 0)
-		{
-			residue->apply(*fragment_db_.addHydrogens);
-			number_of_hydrogens += fragment_db_.addHydrogens->getNumberOfInsertedH();
-			residue->apply(*fragment_db_.buildBonds);
-			object_processor_.applyOn(*residue);
-			scene_->getCompositeManager()->update(residue->getRoot());
-		} else {
-			Composite::SubcompositeIterator it = (*list_it)->beginSubcomposite();
-			for (; +it; ++it)
-			{
-				residue = dynamic_cast<Residue*>(&*it);
-				if (residue != 0)
-				{
-					residue->apply(*fragment_db_.addHydrogens);
-					number_of_hydrogens += fragment_db_.addHydrogens->getNumberOfInsertedH();
-					residue->apply(*fragment_db_.buildBonds);
-					object_processor_.applyOn(*residue);
-					scene_->getCompositeManager()->update(residue->getRoot());
-				}	
-			}
-		}
+		(*list_it)->apply(*fragment_db_.addHydrogens);
+		number_of_hydrogens += fragment_db_.addHydrogens->getNumberOfInsertedH();
+		(*list_it)->apply(*fragment_db_.buildBonds);
+		object_processor_.applyOn(**list_it);
+		scene_->getCompositeManager()->update((*list_it)->getRoot());
 	}
 
 	Log.info() << "added " << number_of_hydrogens << " hydrogen atoms." << endl;
-	statusbar_->clear();
-	QString message;
-	message.sprintf("Added %d hydrogen atoms.", number_of_hydrogens);
-	statusbar_->message(message, 2000);
+	statusBar()->clear();
 
 	// update the marked representations
 	scene_->update();
+}
+
+void Mainframe::assignCharges()
+{
+	
 }
 
 void Mainframe::applyDisplayPropertiesDialog()
@@ -905,7 +1122,7 @@ void Mainframe::applyDisplayPropertiesDialog()
 	QString message;
 	message.sprintf("setting display properties for %d objects...", 
 													selection.size());
-	statusbar_->message(message);
+	statusBar()->message(message);
 
 	List<Composite*>::ConstIterator list_it = selection.begin();	
 	for (; list_it != selection.end(); ++list_it)
@@ -914,25 +1131,43 @@ void Mainframe::applyDisplayPropertiesDialog()
 		scene_->getCompositeManager()->update((**list_it).getRoot());
 	}
 	scene_->update();
-	statusbar_->clear();
+	statusBar()->clear();
 }
 
 void Mainframe::applyPreferencesDialog()
 {
+	if (preferences_dialog_.isTabEnabled(preferences_dialog_.getGeneralTab()))
+	{
+		QApplication::setStyle(preferences_dialog_.getGeneralTab()->getStyle());
+		update();
+	}
+	
+	if (preferences_dialog_.isTabEnabled(preferences_dialog_.getNetworkTab()))
+	{
+	}
+	
+	if (preferences_dialog_.isTabEnabled(preferences_dialog_.getDisplayTab()))
+	{
+		if (preferences_dialog_.getDisplayTab()->isDepthCueingEnabled())
+		{
+		}
+
+		if (preferences_dialog_.getDisplayTab()->isCoordinateAxesEnabled())
+		{
+		}
+	}	
 }
 
 void Mainframe::openDisplayPropertiesDialog()
 {
 	display_properties_dialog_.show();
 	display_properties_dialog_.raise();
-	startServer();
 }
 
 void Mainframe::openPreferencesDialog()
 {
 	preferences_dialog_.show();
 	preferences_dialog_.raise();
-	stopServer();
 }
 
 void Mainframe::resizeEvent
@@ -958,7 +1193,7 @@ void Mainframe::setPreferences(INIFile& inifile) const
 	// the splitter positions
 	// 
 	QValueList<int> size_list = hor_splitter_->sizes();
-	String value_string;
+	String value_string = "";
 	QValueListConstIterator<int> list_it = size_list.begin();
 	for (; list_it != size_list.end(); ++list_it)
 	{
@@ -1037,7 +1272,7 @@ void Mainframe::addComposite(Composite* composite, QString* name)
 	}
 
 	// insert into the scene
-	statusbar_->message("creating graphical representation...");
+	statusBar()->message("creating graphical representation...");
 
 	// create a new composite descriptor
   CompositeDescriptor composite_descriptor;
@@ -1080,24 +1315,19 @@ void Mainframe::addComposite(Composite* composite, QString* name)
  
 
   // generate the tree representation
-  statusbar_->message("> generating tree representation... ");
+  statusBar()->message("> generating tree representation... ");
 
   // generate ListViewItem
   control_->addComposite(new_composite, name);	
 }
 
-void Mainframe::removeComposite(Composite* composite, bool delete_composite)
+void Mainframe::removeComposite(Composite* composite)
 {
 	// remove the tree from the control
 	control_->removeComposite(composite);
 
 	// removes the composite from the scene
 	scene_->getCompositeManager()->remove(*composite);
-
-	if (delete_composite)
-	{
-		delete composite;
-	}
 }
 
 bool Mainframe::onNotify(Server& server)
@@ -1119,13 +1349,116 @@ void Mainframe::toggleServer()
 void Mainframe::startServer()
 {
 	server_icon_->show();
-	statusbar_->update();
+	statusBar()->update();
 }
 
 void Mainframe::stopServer()
 {
 	server_icon_->hide();
-	statusbar_->update();
+	statusBar()->update();
+}
+
+void Mainframe::calculateAmberEnergy()
+{
+	const List<Composite*> selection = control_->getSelection();
+	if (selection.size() != 1)
+	{
+		return;
+	}
+
+	if (!RTTI::isKindOf<System>(*selection.front()))
+	{
+		return;
+	}
+
+	// retrieve the system from the selection
+	System& system = *RTTI::castTo<System>(*selection.front());
+
+	// set up the AMBER force field
+	statusBar()->message("setting up force field...");
+	AmberFF amber;
+	amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
+	amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+	amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+	amber.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
+	amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+	amber.setup(system);
+
+	// calculate the energy
+	statusBar()->message("calculating energy...");
+	amber.updateEnergy();
+
+	// print the result
+	Log.info() << "AMBER Energy:" << endl;
+	Log.info() << " - electrostatic     : " << amber.getESEnergy() << " kJ/mol" << endl;
+	Log.info() << " - van der Waals     : " << amber.getVdWEnergy() << " kJ/mol" << endl;
+	Log.info() << " - bond stretch      : " << amber.getStretchEnergy() << " kJ/mol" << endl;
+	Log.info() << " - angle bend        : " << amber.getBendEnergy() << " kJ/mol" << endl;
+	Log.info() << " - torsion           : " << amber.getTorsionEnergy() << " kJ/mol" << endl;
+	Log.info() << "---------------------------------------" << endl;
+	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
+	QString message;
+	message.sprintf("Total AMBER energy: %f kJ/mol.", amber.getEnergy());
+	statusBar()->message(message, 5000);
+}
+
+void Mainframe::amberMinimization()
+{
+	const List<Composite*> selection = control_->getSelection();
+	if (selection.size() == 0)
+	{
+		return;
+	}
+	// retrieve the system from the selection
+	System& system = *RTTI::castTo<System>(*selection.front());
+
+	// set up the AMBER force field
+	statusBar()->message("setting up force field...");
+	statusBar()->update();
+	update();
+	AmberFF amber;
+  amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
+  amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+  amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+  amber.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
+  amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+ 	amber.setup(system);
+
+	// calculate the energy
+	statusBar()->message("starting minimization...");
+	statusBar()->update();
+	amber.updateEnergy();
+
+	ConjugateGradientMinimizer minimizer(amber);
+	while (!minimizer.minimize(2, true))
+	{
+    scene_->getCompositeManager()->update(system.getRoot());
+		QString message;
+		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+										minimizer.getNumberOfIteration(),
+										amber.getEnergy(),
+										amber.getRMSGradient());
+		statusBar()->message(message);
+		statusBar()->update();
+		scene_->update();
+		update();
+ 	}
+
+	Log.info() << endl << "minimization terminated." << endl << endl;
+
+	// print the result
+	Log.info() << "AMBER Energy:" << endl;
+	Log.info() << " - electrostatic     : " << amber.getESEnergy() << " kJ/mol" << endl;
+	Log.info() << " - van der Waals     : " << amber.getVdWEnergy() << " kJ/mol" << endl;
+	Log.info() << " - bond stretch      : " << amber.getStretchEnergy() << " kJ/mol" << endl;
+	Log.info() << " - angle bend        : " << amber.getBendEnergy() << " kJ/mol" << endl;
+	Log.info() << " - torsion           : " << amber.getTorsionEnergy() << " kJ/mol" << endl;
+	Log.info() << "---------------------------------------" << endl;
+	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
+
+	QString message;
+	message.sprintf("Total AMBER energy: %f kJ/mol.", amber.getEnergy());
+	statusBar()->message(message, 5000);
 }
 
 #ifdef BALL_NO_INLINE_FUNCTIONS

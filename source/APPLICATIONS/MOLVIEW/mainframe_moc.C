@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Mainframe meta object code from reading C++ file 'mainframe.h'
 **
-** Created: Fri Jan 14 20:57:21 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.7 $)
+** Created: Sat Jan 15 14:05:17 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.8 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -42,8 +42,8 @@ void Mainframe::initMetaObject()
 {
     if ( metaObj )
 	return;
-    if ( strcmp(QWidget::className(), "QWidget") != 0 )
-	badSuperclassWarning("Mainframe","QWidget");
+    if ( strcmp(QMainWindow::className(), "QMainWindow") != 0 )
+	badSuperclassWarning("Mainframe","QMainWindow");
 
 #if QT_VERSION >= 199
     staticMetaObject();
@@ -58,10 +58,10 @@ void Mainframe::staticMetaObject()
 {
     if ( metaObj )
 	return;
-    QWidget::staticMetaObject();
+    QMainWindow::staticMetaObject();
 #else
 
-    QWidget::initMetaObject();
+    QMainWindow::initMetaObject();
 #endif
 
     typedef void(Mainframe::*m1_t0)();
@@ -87,6 +87,9 @@ void Mainframe::staticMetaObject()
     typedef void(Mainframe::*m1_t20)();
     typedef void(Mainframe::*m1_t21)();
     typedef void(Mainframe::*m1_t22)();
+    typedef void(Mainframe::*m1_t23)();
+    typedef void(Mainframe::*m1_t24)();
+    typedef void(Mainframe::*m1_t25)();
     m1_t0 v1_0 = Q_AMPERSAND Mainframe::checkMenuEntries;
     m1_t1 v1_1 = Q_AMPERSAND Mainframe::importPDB;
     m1_t2 v1_2 = Q_AMPERSAND Mainframe::importHIN;
@@ -101,16 +104,19 @@ void Mainframe::staticMetaObject()
     m1_t11 v1_11 = Q_AMPERSAND Mainframe::checkResidue;
     m1_t12 v1_12 = Q_AMPERSAND Mainframe::buildBonds;
     m1_t13 v1_13 = Q_AMPERSAND Mainframe::addHydrogens;
-    m1_t14 v1_14 = Q_AMPERSAND Mainframe::openDisplayPropertiesDialog;
-    m1_t15 v1_15 = Q_AMPERSAND Mainframe::openPreferencesDialog;
-    m1_t16 v1_16 = Q_AMPERSAND Mainframe::centerCamera;
-    m1_t17 v1_17 = Q_AMPERSAND Mainframe::about;
-    m1_t18 v1_18 = Q_AMPERSAND Mainframe::applyDisplayPropertiesDialog;
-    m1_t19 v1_19 = Q_AMPERSAND Mainframe::applyPreferencesDialog;
-    m1_t20 v1_20 = Q_AMPERSAND Mainframe::startServer;
-    m1_t21 v1_21 = Q_AMPERSAND Mainframe::stopServer;
-    m1_t22 v1_22 = Q_AMPERSAND Mainframe::toggleServer;
-    QMetaData *slot_tbl = QMetaObject::new_metadata(23);
+    m1_t14 v1_14 = Q_AMPERSAND Mainframe::assignCharges;
+    m1_t15 v1_15 = Q_AMPERSAND Mainframe::calculateAmberEnergy;
+    m1_t16 v1_16 = Q_AMPERSAND Mainframe::amberMinimization;
+    m1_t17 v1_17 = Q_AMPERSAND Mainframe::openDisplayPropertiesDialog;
+    m1_t18 v1_18 = Q_AMPERSAND Mainframe::openPreferencesDialog;
+    m1_t19 v1_19 = Q_AMPERSAND Mainframe::centerCamera;
+    m1_t20 v1_20 = Q_AMPERSAND Mainframe::about;
+    m1_t21 v1_21 = Q_AMPERSAND Mainframe::applyDisplayPropertiesDialog;
+    m1_t22 v1_22 = Q_AMPERSAND Mainframe::applyPreferencesDialog;
+    m1_t23 v1_23 = Q_AMPERSAND Mainframe::startServer;
+    m1_t24 v1_24 = Q_AMPERSAND Mainframe::stopServer;
+    m1_t25 v1_25 = Q_AMPERSAND Mainframe::toggleServer;
+    QMetaData *slot_tbl = QMetaObject::new_metadata(26);
     slot_tbl[0].name = "checkMenuEntries()";
     slot_tbl[1].name = "importPDB()";
     slot_tbl[2].name = "importHIN()";
@@ -125,15 +131,18 @@ void Mainframe::staticMetaObject()
     slot_tbl[11].name = "checkResidue()";
     slot_tbl[12].name = "buildBonds()";
     slot_tbl[13].name = "addHydrogens()";
-    slot_tbl[14].name = "openDisplayPropertiesDialog()";
-    slot_tbl[15].name = "openPreferencesDialog()";
-    slot_tbl[16].name = "centerCamera()";
-    slot_tbl[17].name = "about()";
-    slot_tbl[18].name = "applyDisplayPropertiesDialog()";
-    slot_tbl[19].name = "applyPreferencesDialog()";
-    slot_tbl[20].name = "startServer()";
-    slot_tbl[21].name = "stopServer()";
-    slot_tbl[22].name = "toggleServer()";
+    slot_tbl[14].name = "assignCharges()";
+    slot_tbl[15].name = "calculateAmberEnergy()";
+    slot_tbl[16].name = "amberMinimization()";
+    slot_tbl[17].name = "openDisplayPropertiesDialog()";
+    slot_tbl[18].name = "openPreferencesDialog()";
+    slot_tbl[19].name = "centerCamera()";
+    slot_tbl[20].name = "about()";
+    slot_tbl[21].name = "applyDisplayPropertiesDialog()";
+    slot_tbl[22].name = "applyPreferencesDialog()";
+    slot_tbl[23].name = "startServer()";
+    slot_tbl[24].name = "stopServer()";
+    slot_tbl[25].name = "toggleServer()";
     slot_tbl[0].ptr = *((QMember*)&v1_0);
     slot_tbl[1].ptr = *((QMember*)&v1_1);
     slot_tbl[2].ptr = *((QMember*)&v1_2);
@@ -157,8 +166,11 @@ void Mainframe::staticMetaObject()
     slot_tbl[20].ptr = *((QMember*)&v1_20);
     slot_tbl[21].ptr = *((QMember*)&v1_21);
     slot_tbl[22].ptr = *((QMember*)&v1_22);
+    slot_tbl[23].ptr = *((QMember*)&v1_23);
+    slot_tbl[24].ptr = *((QMember*)&v1_24);
+    slot_tbl[25].ptr = *((QMember*)&v1_25);
     metaObj = QMetaObject::new_metaobject(
-	"Mainframe", "QWidget",
-	slot_tbl, 23,
+	"Mainframe", "QMainWindow",
+	slot_tbl, 26,
 	0, 0 );
 }

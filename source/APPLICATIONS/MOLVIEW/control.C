@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.10 2000/01/14 20:48:37 oliver Exp $
+// $Id: control.C,v 1.11 2000/01/15 19:08:49 oliver Exp $
 
 #include "control.h"
 
@@ -39,7 +39,7 @@ bool Control::addComposite
 	// if the own name is empty use name as name
 	QString name = getName(composite);
 
-	if ((name == "UNKNOWN") && (own_name != 0))
+	if ((name[0] == '<') && (own_name != 0))
 	{
 		name = *own_name;
 	}
@@ -213,7 +213,9 @@ QString Control::getName
 	// empty string
 	if (temp.isEmpty() || temp.isNull())
 	{
-		temp = "UNKNOWN";
+		temp = "<";
+		temp += getTypeName(composite);
+		temp += ">";		
 	}
 
 	return temp;
@@ -446,11 +448,11 @@ void Control::genListViewItem_
 		return;
 	}
 
-	// if getName returns ´UNKNOWN´ and name__pString contains a valid string
-	// use it instead of the string ´UNKNOWN´
+	// if getName returns "<xxxx>"  and name contains a valid string
+	// use it instead of the default name
 	QString name = getName(composite);
 
-	if (name == "UNKNOWN")
+	if (name[0] == '<')
 	{
 		if (default_name == 0)
 		{

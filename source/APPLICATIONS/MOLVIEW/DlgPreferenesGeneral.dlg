@@ -18,17 +18,17 @@ Grid {10}
 TextTranslated {TRUE}
 
 VButtonGroup {
-		Exclusive {FALSE}
+		Exclusive {TRUE}
 		Title {GUI Style}
 		Alignment {AlignHCenter}
 		Style {33}
 		LineWidth {1}
 		MidLineWidth {0}
 		FrameMargin {0}
-		Rect {10 10 130 190}
+		Rect {52 39 102 132}
 		Name {VButtonGroup_1}
-		MinimumSize {0 0}
-		MaximumSize {32767 32767}
+		MinimumSize {102 132}
+		MaximumSize {102 132}
 		BackgroundPixmap {}
 		UseBackgroundPixmap {FALSE}
 		AdjustSize {FALSE}
@@ -41,12 +41,13 @@ VButtonGroup {
 		PalettePropagation {SameFont}
 }
 RadioButton {
-		Checked {FALSE}
+		Checked {TRUE}
 		Text {Platinum}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {30 80 80 30}
+		Rect {60 64 91 22}
 		Name {RadioButton_1}
+		Variable {is_platinum_style}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -65,8 +66,9 @@ RadioButton {
 		Text {Windows }
 		AutoRepeat {FALSE}
 		AutoResize {TRUE}
-		Rect {30 120 86 21}
+		Rect {60 91 91 22}
 		Name {RadioButton_2}
+		Variable {is_windows_style}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -85,8 +87,9 @@ RadioButton {
 		Text {Motif}
 		AutoRepeat {FALSE}
 		AutoResize {TRUE}
-		Rect {30 160 54 21}
+		Rect {60 118 91 22}
 		Name {RadioButton_3}
+		Variable {is_motif_style}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -105,8 +108,9 @@ RadioButton {
 		Text {CDE}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {30 40 80 30}
+		Rect {60 145 91 22}
 		Name {RadioButton_4}
+		Variable {is_cde_style}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -121,4 +125,43 @@ RadioButton {
 		PalettePropagation {SameFont}
 }
 
+Box_Layout-1{
+	Direction {TopToBottom}
+	Border {5}
+	AutoBorder {5}
+	Name {}
+	Strut {0}
+	Stretch {1}
+}
+Box_Layout-1.1{
+	Direction {LeftToRight}
+	Border {5}
+	AutoBorder {5}
+	Name {}
+	Strut {0}
+	Stretch {1}
+}
+Box_Spacing-1.1.1{
+	Spacing {7}
+}
+Layout_Widget-1.1.2{
+	Widget {VButtonGroup_1}
+	BoxStretch {1}
+	Alignment {36}
+}
+Layout_Widget-1.1.2.1{
+	Widget {RadioButton_1}
+}
+Layout_Widget-1.1.2.2{
+	Widget {RadioButton_2}
+}
+Layout_Widget-1.1.2.3{
+	Widget {RadioButton_3}
+}
+Layout_Widget-1.1.2.4{
+	Widget {RadioButton_4}
+}
+Box_Stretch-1.1.3{
+	Stretch {1}
+}
 }

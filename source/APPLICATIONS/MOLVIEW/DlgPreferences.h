@@ -11,6 +11,9 @@
 #define DlgPreferences_included
 
 #include "DlgPreferencesData.h"
+#include "DlgPreferencesGeneral.h"
+#include "DlgPreferencesNetwork.h"
+#include "DlgPreferencesDisplay.h"
 #include <BALL/FORMAT/INIFile.h>
 
 using namespace BALL;
@@ -29,5 +32,17 @@ public:
 
 		void setPreferences(INIFile& inifile);
 		void getPreferences(INIFile& inifile);
+
+		DlgPreferencesGeneral* getGeneralTab();
+		DlgPreferencesNetwork* getNetworkTab();
+		DlgPreferencesDisplay* getDisplayTab();
+
+private:
+
+		DlgPreferencesGeneral* general_tab_;
+		DlgPreferencesNetwork* network_tab_;
+		DlgPreferencesDisplay* display_tab_;
+
+		
 };
 #endif // DlgPreferences_included

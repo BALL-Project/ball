@@ -11,6 +11,9 @@
 #define DlgPreferencesGeneral_included
 
 #include "DlgPreferencesGeneralData.h"
+#include <BALL/FORMAT/INIFile.h>
+
+using namespace BALL; 
 
 class DlgPreferencesGeneral : public DlgPreferencesGeneralData
 {
@@ -23,5 +26,10 @@ public:
         const char *name = NULL );
 
     virtual ~DlgPreferencesGeneral();
+
+		QStyle* getStyle();
+
+		void setPreferences(INIFile& inifile);
+		void getPreferences(INIFile& inifile);
 };
 #endif // DlgPreferencesGeneral_included
