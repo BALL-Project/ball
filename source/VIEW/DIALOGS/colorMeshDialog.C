@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.43 2004/12/14 16:17:19 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.44 2004/12/14 16:36:03 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -60,7 +60,13 @@ void ColorMeshDialog::applyPressed()
 		
 	rep_->setModelProcessor(0);
 	rep_->setColorProcessor(0);
-	rep_->update(true);
+	if (rep_->isHidden())
+	{
+		rep_->setNeedsUpdate();
+		return;
+	}
+	RepresentationMessage* msg = new RepresentationMessage(*rep_, RepresentationMessage::UPDATE);
+	notify_(*msg);
 }
 
 

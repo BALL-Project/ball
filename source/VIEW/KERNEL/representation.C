@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.59 2004/12/14 16:12:30 amoll Exp $
+// $Id: representation.C,v 1.60 2004/12/14 16:36:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -313,8 +313,8 @@ namespace BALL
 			t.stop();
 #endif
 
-			// if multithreaded, the PrimitiveManager will send the Update message, otherwise do it here...
 #ifndef BALL_QT_HAS_THREADS
+			// if multithreaded, the PrimitiveManager will send the Update message, otherwise do it here...
 			MainControl* mc = getMainControl();
 			if (mc != 0)
 			{
@@ -349,6 +349,8 @@ namespace BALL
 		void Representation::setModelProcessor(ModelProcessor* processor)
 			throw() 
 		{ 
+			if (processor == 0 && model_processor_ == 0) return;
+
 			GeometricObjectList::ConstIterator it = geometric_objects_.begin();
 			for (;it != geometric_objects_.end(); it++)
 			{
