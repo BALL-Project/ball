@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.6 2000/05/31 19:58:30 oliver Exp $
+// $Id: file.h,v 1.7 2000/06/09 12:30:17 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -120,19 +120,34 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** Default constructor.
+				Construct new File object.
+				@return    File - new constructed File object
 		*/
 		File();
 
-		/**
+		/** Detailed constructor.
+				Construct new File object from the file {\em name}
+				and open the file.
+				@param  name the name of the file to be opend
+				@param  OpenMode the std::ios::openmode to be used
+				@see    open
+				@return File - new constructed File object
 		*/
 		File(const String& name, OpenMode open_mode = std::ios::in);
 
-		/**	Copy constructor.
+		/** Copy constructor.
+				Construct new File object by copying the File {\em file}
+				and open the file.
+				@param  file the File object to be copied (cloned)
+				@see    open
+				@return File - new constructed File cloned from {\em file}
 		*/
 		File(const File& file);
 
-		/**
+		/** Destructor.
+				Default destruction of {\em *this} File.
+				The file is closed.
 		*/
 		virtual ~File();
 
@@ -147,29 +162,44 @@ namespace BALL
 		*/
 		static void disableProtocol(Protocol protocol);
 
-		/**	
+		/**	Open a given file.
+				The standard constructor uses this method.
+				@param name the name of the file
+				@param open_mode the open mode, default is std::ios::in
+				@return bool true if the file could be opend
 		*/
 		bool open(const String& name, OpenMode open_mode = std::ios::in);
 
-		/**	
+		/**	Reopen the file.
+				The file is closed and reopend.
+				@return bool true if the file could be reopend
 		*/
 		bool reopen();
 
-		/**	
+		/**	Close the file.
 		*/
 		void close();
 
-		/**	
+		/**	Return the name of the file.
+				@return String the name of the file
 		*/
 		const String& getName() const;
 
-		/**	
+		/**
 		*/
 		const String& getOriginalName() const;
 
-		/**	
+		/**	Return the size of the file.
+				If the file does not exist 0 is returned.
+				@return Size the size of the file
 		*/
-		Size getSize() const;
+		Size getSize();
+
+		/**	Return the size of a given file.
+				If the file does not exist 0 is returned.
+				@return Size the size of the file
+		*/
+		static Size getSize(String name);
 
 		/**	
 		*/
@@ -187,44 +217,76 @@ namespace BALL
 		*/
 		std::fstream& getFileStream();
 		
-		/**	
+		/**	Copy a given file to a given destination.
+				If a file with the destination name exists allready, nothing happens.
+				@param source_name the name of the source file
+				@param destination_name the name of the destination file
+				@param buffer_size the buffer size to use while copying
+				@return true if copying was successfull
 		*/
 		static bool copy
 			(String source_name, String destination_name, Size buffer_size = 4096);
 
-		/**	
+		/**	Copy the file this File object is associated with to a given destination.
+				If a file with the destination name exists allready, nothing happens.
+				@param destination_name the name of the destination file
+				@param buffer_size the buffer size to use while copying
+				@return true if copying was successfull
 		*/
 		bool copyTo(const String& destination_name, Size buffer_size = 4096);
 
-		/**	
+		/**	Move a given file to a given destination.
+				If a file with the destination name exists allready, nothing happens.
+				@param source_name the name of the source file
+				@param destination_name the name of the destination file
+				@param buffer_size the buffer size to use while moving
+				@return true if copying was successfull
 		*/
 		static bool move(const String& source_name, const String& destination_name);
 
-		/**	
+		/**	Move the file this File object is associated with to a given destination.
+				If a file with the destination name exists allready, nothing happens.
+				@param destination_name the name of the destination file
+				@param buffer_size the buffer size to use while moving
+				@return true if copying was successfull
 		*/
 		bool moveTo(const String& destination_name);
 
-		/**	
+		/**	Remove the file "name".
+				@param name the name of the file to be removed
+				@return bool true if the file could be removed
 		*/
 		static bool remove(String name);
 
-		/**	
+		/**	Remove the file, this File object is associated with.
+				@return bool true if the file could be removed
 		*/
 		bool remove() const;
 
-		/**	
+		/**	Rename a file.
+				@param old_path the path and name of the file to be renamed
+				@param new_path the new path and name of the file
+				@return bool true if the file could be renamed
 		*/
 		static bool rename(String old_path, String new_path);
 
-		/**	
+		/**	Rename the file this File object is associated with to a given name.
+				If a file with the destination name exists allready, nothing happens.
+				@param new_path the new path and name of the file
+				@return bool true if the file could be renamed
 		*/
-		bool renameTo(const String& new_path) const;
+		bool renameTo(const String& new_path);
 
-		/**	
+		/**	Truncate a given file.
+				@param path the path to the file
+				@param size the new size of the file
+				@return bool true if the file could be truncated
 		*/
 		static bool truncate(String path, Size size = 0);
 
-		/**	
+		/**	Truncate the file this File object is associated with.
+				@param size the new size of the file
+				@return bool true if the file could be truncated
 		*/
 		bool truncate(Size size = 0) const;
 
@@ -245,10 +307,12 @@ namespace BALL
 		//@{
 
 		/**	Equality comparison operator.
+				Two File objects are equal if they point to the same file.
 		*/
 		bool operator == (const File& file) const;
 		
 		/**	Inequality comparison operator.
+				Two File objects are equal if they point not to the same file.
 		*/
 		bool operator != (const File& file) const;
 		//@}
@@ -257,11 +321,13 @@ namespace BALL
 		*/
 		static bool isProtocolEnabled(Protocol protocol);
 
-		/**	
+		/**	Test if the file is opend.
+				The standard constructor opens the file.
 		*/
 		bool isOpen() const;
 
-		/**	
+		/**	Test if the file is closed.
+				The standard constructor opens the file.
 		*/
 		bool isClosed() const;
 
@@ -277,19 +343,25 @@ namespace BALL
 		*/
 		bool isCanonized() const;
 	
-		/**	
+		/**	Test if a given file is readable.
+				@param name the name of the file
+				@return true if the file can be read
 		*/
 		static bool isReadable(String name);
 
-		/**	
+		/**	Test if the file is readable.
+				@return true if the file can be read
 		*/
 		bool isReadable() const;
 
-		/**	
+		/**	Test if a given file is writeable.
+				@param name the name of the file
+				@return true if the file is writeable
 		*/
 		static bool isWritable(String name);
 
-		/**	
+		/**	Test if the file is writeable.
+				@return true if the file is writeable
 		*/
 		bool isWritable() const;
 
@@ -316,10 +388,12 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
-		/**
+		/**	Test if the file ist valid.
+				This function uses std::fstream::good().
+				@return bool true if the file is valid
 		*/
 		bool isValid() const;
-	
+
 		/**
 		*/
 		static void dumpRegisteredActions(std::ostream& s)
