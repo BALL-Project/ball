@@ -6,6 +6,7 @@
 #include <qdialog.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <qpushbutton.h>
 
 namespace BALL
 {
@@ -37,6 +38,7 @@ namespace BALL
 				QComboBox *model_type_combobox_;
 				QComboBox *mode_resolution_combobox_;
 				QLabel *color_sample;
+				QPushButton *apply_button_;
 			};
 
 		//#		ifndef BALL_NO_INLINE_FUNCTIONS
