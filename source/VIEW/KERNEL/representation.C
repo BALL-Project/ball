@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.51 2004/11/14 16:46:29 amoll Exp $
+// $Id: representation.C,v 1.52 2004/12/03 00:31:07 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -417,6 +417,11 @@ namespace BALL
 		bool Representation::needsUpdate() const
 			throw()
 		{
+			if (getModelType() == MODEL_CLIPPING_PLANE)
+			{
+				return false;
+			}
+
 			if (needs_update_ || 
 					getModelBuildTime() < Atom::getAttributesModificationTime())
 			{
