@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.46 2003/08/26 09:17:48 oliver Exp $
+// $Id: atom.C,v 1.47 2003/12/01 07:35:11 oliver Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -12,7 +12,6 @@
 #include <BALL/KERNEL/PTE.h> 
 
 #include <algorithm>
-//#include <functional>
 
 using namespace::std;
 
@@ -371,7 +370,7 @@ namespace BALL
 		String name = name_;
 		name.trim();
 
-		// add the parnet name only if non-empty
+		// add the parent name only if non-empty
 		if (parent_name != ":")
 		{
 			name = parent_name + name;

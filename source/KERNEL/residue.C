@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.C,v 1.28 2003/08/26 09:17:50 oliver Exp $
+// $Id: residue.C,v 1.29 2003/12/01 07:35:11 oliver Exp $
 //
 
 #include <BALL/KERNEL/residue.h>
@@ -480,7 +480,7 @@ namespace BALL
 		full_name.trim();
 
 		// if the variant extension should be added, do so
-		if (type == ADD_VARIANT_EXTENSIONS)
+		if (type == ADD_VARIANT_EXTENSIONS || type == ADD_VARIANT_EXTENSIONS_AND_ID)
 		{
 			String suffix = "-";
 			if (isNTerminal()) 
@@ -504,6 +504,10 @@ namespace BALL
 			{
 				full_name += suffix;
 			}
+		}
+		if (type == ADD_RESIDUE_ID || type == ADD_VARIANT_EXTENSIONS_AND_ID)
+		{
+			full_name += String(getID());
 		}
 
 		return full_name;

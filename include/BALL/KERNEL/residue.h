@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.39 2003/08/26 08:04:19 oliver Exp $
+// $Id: residue.h,v 1.40 2003/12/01 07:35:10 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_RESIDUE_H
@@ -76,14 +76,19 @@ namespace BALL
 		*/
 		enum FullNameType
 		{
-			///
+			/// This returns the unmodified residue name only
 			NO_VARIANT_EXTENSIONS,
-
-			///
-			ADD_VARIANT_EXTENSIONS
+			/// Add the residue variant extensions (e.g. '-C' for C-terminal residues)
+			ADD_VARIANT_EXTENSIONS,
+			// Add the residue ID separated by a colon
+      ADD_RESIDUE_ID,
+      // Add the residue ID and the residue extension
+      ADD_VARIANT_EXTENSIONS_AND_ID
 		};
 
 		//@}
+
+
 		/**	@name	Constructors and Destructors 
 		*/
 		//@{	

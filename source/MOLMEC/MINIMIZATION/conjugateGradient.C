@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.31 2003/05/02 12:34:36 anhi Exp $
+// $Id: conjugateGradient.C,v 1.32 2003/12/01 07:35:12 oliver Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -796,13 +796,13 @@ namespace BALL
 		if (result)
 		{
 			updateStepSize(lambda_);
-			step_ = std::max(0.01, step_);
+			step_ = std::max(0.001, step_);
 		}
 		else
 		{
 			// Reset step size.
 			// Ensure a minimum step size.
-			step_ = std::max(0.01, step_);
+			step_ = std::max(0.001, step_);
 		}
 
 		#ifdef BALL_DEBUG

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.3 2003/11/29 14:47:11 oliver Exp $
+// $Id: main.C,v 1.4 2003/12/01 07:35:11 oliver Exp $
+//
 
 #include <iomanip>
 
@@ -32,6 +33,8 @@ void usage()
 	            << "     -n                   normalize all atom names in subsequently read structures" << endl
 	            << "     -b                   try to build the bonds (e.g. for PDB files)" << endl
 	            << "     -v                   verbose output" << endl
+	            << "     -d                   steepest descent minimizer" << endl
+						  << "     -e <ENERGY>          energy limit per residue in kJ/mol (default: " << energy_limit << " kJ/mol)" << endl
 							<< "     -g <GRAD>            gradient criterion for optimization (in units of kJ/(mol A))" << endl
 							<< "     -i <GRAD>            maximum number of iterations (default: " << max_iterations  << endl
 							<< "     -s <STRING>          select only the atoms that match <STRING> for optimization." << endl
@@ -44,7 +47,6 @@ void usage()
 							<< "                            - element(<element>)" << endl
 							<< "                            - residue(<residuename>)" << endl
 							<< "                            - residueID(<PDB ID>)" << endl
-							<< "                            - protein()" << endl
 							<< "                            - secondaryStruct()" << endl
 							<< "                            - solvent()" << endl
 							<< "                            - backbone()" << endl
@@ -86,7 +88,7 @@ int main(int argc, char** argv)
 
 		// check for another argument for those 
 		// options requiring a filename (-p -h -H -g -s -f)
-		if (String("phHgisf").has(option[1]) && (i == (argc - 1)))
+		if (String("phHgisfe").has(option[1]) && (i == (argc - 1)))
 		{
 			// pring usage hints, an error message, exit
 			usage();
@@ -129,6 +131,10 @@ int main(int argc, char** argv)
 				readHINFileNoAssignment(argv[++i]);
 				break;
 		
+			case 'e':		// energy limit
+				energy_limit = atof(argv[++i]);
+				break;
+		
 			case 'v':		// change verbosity
 				verbose = true;
 				break;
@@ -141,6 +147,10 @@ int main(int argc, char** argv)
 			case 'b':		// build bonds for next files read
 				// set the normalize names flag
 				build_bonds = true;
+				break;
+
+			case 'd':		// use steepest descent
+				sd_minimizer = true;
 				break;
 
 			case 's':		// selection

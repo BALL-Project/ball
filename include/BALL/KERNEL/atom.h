@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.60 2003/08/26 08:04:16 oliver Exp $
+// $Id: atom.h,v 1.61 2003/12/01 07:35:10 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -142,7 +142,11 @@ namespace BALL
 				// Do not add extensions
 				NO_VARIANT_EXTENSIONS,
 				// Add the residue extensions
-				ADD_VARIANT_EXTENSIONS
+				ADD_VARIANT_EXTENSIONS,
+				// Add the residue ID
+				ADD_RESIDUE_ID,
+				// Add the residue ID and the residue extension
+				ADD_VARIANT_EXTENSIONS_AND_ID
 			};
 
 			//@}  

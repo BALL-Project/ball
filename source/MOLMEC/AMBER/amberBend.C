@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.C,v 1.19 2003/08/26 09:17:51 oliver Exp $
+// $Id: amberBend.C,v 1.20 2003/12/01 07:35:11 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
@@ -107,9 +107,9 @@ namespace BALL
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) 
-									<< " (atoms are: " << this_bend.atom1->ptr->getFullName() << "/" 
-									<< this_bend.atom2->ptr->getFullName() << "/" 
-									<< this_bend.atom3->ptr->getFullName() << ")" << endl;
+									<< " (atoms are: " << this_bend.atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
+									<< this_bend.atom2->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
+									<< this_bend.atom3->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
 							}
 							else
 							{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.54 2003/08/28 13:23:12 oliver Exp $
+// $Id: standardPredicates.C,v 1.55 2003/12/01 07:35:11 oliver Exp $
 //
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -93,7 +93,17 @@ namespace BALL
     const Residue*	res = atom.getAncestor(RTTI::getDefault<Residue>());
 		if (res != 0)
 		{
-			return (res->getID() == argument_);
+			if (!argument_.has('-'))
+			{
+				return (res->getID() == argument_);
+			}
+			else	
+			{
+				Size first = argument_.before("-").toString().toUnsignedInt();
+				Size last = argument_.after("-").toString().toUnsignedInt();
+				Size idx = res->getID().toUnsignedInt();
+				return (idx >= first && idx <= last);
+			}
 		}
 		
 		return false;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.17 2003/11/29 14:47:12 oliver Exp $
+// $Id: lineSearch.C,v 1.18 2003/12/01 07:35:12 oliver Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -14,10 +14,10 @@
 #define LINESEARCH__DEFAULT_ALPHA 0.0001
 
 // parameter beta for 'sufficient gradient reduction'
-#define LINESEARCH__DEFAULT_BETA  0.95
+#define LINESEARCH__DEFAULT_BETA  0.9
 
 // maximum number of interpolation steps for a line search
-#define LINESEARCH__DEFAULT_MAX_STEPS			10
+#define LINESEARCH__DEFAULT_MAX_STEPS			2
 
 //#define BALL_DEBUG
 #undef BALL_DEBUG

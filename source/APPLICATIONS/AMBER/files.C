@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: files.C,v 1.8 2003/11/29 14:47:11 oliver Exp $
+// $Id: files.C,v 1.9 2003/12/01 07:35:10 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -9,6 +9,7 @@
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
+#include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/selector.h>
@@ -174,6 +175,7 @@ void checkStructures()
 	S.apply(check);
 
 	// Check residue energies
+	double energy_limit = 500.0;
 	S.deselect();
 	amber.setup(S);
 	ResidueIterator it = S.beginResidue();
@@ -184,14 +186,14 @@ void checkStructures()
 		double residue_energy = amber.getStretchEnergy() + amber.getBendEnergy()
 													+ amber.getVdWEnergy();
 		
-		if (residue_energy > 100.0)
+		if (residue_energy > energy_limit)
 		{
 			Log.info() << "suspicious energies in residue " << it->getFullName() << ":" << it->getID() << " " << residue_energy 
 								 << " kJ/mol (bend: " << amber.getBendEnergy() << " kJ/mol, stretch: " << amber.getStretchEnergy() 
 								 << " kJ/mol, vdW: " << amber.getVdWEnergy() << " kJ/mol)" << endl;
 		}
 		it->deselect();
-		double quality = std::max(0.0, std::min(1.0, (100.0 - residue_energy) / 100.0));
+		double quality = std::max(0.0, std::min(1.0, (energy_limit - residue_energy) / energy_limit));
 		for (PDBAtomIterator ai = it->beginPDBAtom(); +ai; ++ai)
 		{
 			ai->setOccupancy(quality);
@@ -228,22 +230,30 @@ void optimize()
 	}
 	
 	// minimize
-	Log.info() << "starting minimization" << endl;
-	ConjugateGradientMinimizer minimizer(amber);
+	Log.info() << "starting minimization";
+	EnergyMinimizer* minimizer;
+	if (sd_minimizer)
+	{
+		minimizer = new SteepestDescentMinimizer(amber);
+	}
+	else
+	{
+		minimizer = new ConjugateGradientMinimizer(amber);
+	}
+	
 	if (verbose)
 	{
-		minimizer.setEnergyOutputFrequency(1);
+		minimizer->setEnergyOutputFrequency(1);
 	} 
 	else 
 	{
-		minimizer.setEnergyOutputFrequency(20);
+		minimizer->setEnergyOutputFrequency(20);
 	}
-	minimizer.setEnergyDifferenceBound(1e-9);
-	minimizer.setMaxSameEnergy(20);
-	minimizer.setMaxGradient(max_gradient);
-	minimizer.setMaxNumberOfIterations(max_iterations);
+	minimizer->setEnergyDifferenceBound(1e-9);
+	minimizer->setMaxSameEnergy(20);
+	minimizer->setMaxGradient(max_gradient);
 
-	minimizer.minimize();
+	minimizer->minimize(max_iterations);
 
 	Log.info() << "minimization complete" << endl;
 	Log.info() << "final gradient: " << amber.getRMSGradient() << " kJ/mol A" << endl;
@@ -255,7 +265,7 @@ void optimize()
 	// dump the minimizer and force field options
 	// for documentation purposes
 	amber.options.dump(Log);
-	minimizer.options.dump(Log);
+	minimizer->options.dump(Log);
 
 	Log.info() << "done." << endl;
 }

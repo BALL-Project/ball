@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.C,v 1.4 2003/11/29 14:47:11 oliver Exp $
+// $Id: global.C,v 1.5 2003/12/01 07:35:10 oliver Exp $
 //
 
 #include "global.h"
@@ -39,3 +39,6 @@ double max_gradient = 0.1; // kJ/(mol A)
 Size max_iterations = 400;
 
 String FF_filename = "Amber/amber96.ini";
+String out_filename = "";
+bool sd_minimizer = false;
+double energy_limit = 500.0; // kJ/mol

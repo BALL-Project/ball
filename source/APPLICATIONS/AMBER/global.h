@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.2 2002/02/27 12:20:22 sturm Exp $
+// $Id: global.h,v 1.3 2003/12/01 07:35:11 oliver Exp $
+//
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -49,5 +50,17 @@ extern String selection;
 // the optimizer gradient criterion
 extern double max_gradient;
 
+// the maximum number of iterations
+extern Size max_iterations;
+
 // the filename of the force field parameter file
 extern String FF_filename;
+
+// the filename of the output file
+extern String out_filename;
+
+//
+extern bool sd_minimizer;
+
+// The energy limit for warnings.
+extern double energy_limit;
