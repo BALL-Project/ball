@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.84 2003/10/04 15:19:40 amoll Exp $
+// $Id: mainframe.C,v 1.85 2003/10/05 15:27:40 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -150,9 +150,6 @@ namespace BALL
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 										ALT+Key_X, MENU_FULLSCREEN);
-		insertMenuEntry(MainControl::DISPLAY, "Contour S&urface", this,  SLOT(computeSurface()), 
-										CTRL+Key_U,MENU_OPEN_SURFACE_DIALOG);
-
 		// Build Menu -------------------------------------------------------------------
 		hint = "To assign charges, one System has to be selected.";
 		insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()), 
@@ -172,6 +169,10 @@ namespace BALL
 		hint = "To perform a MD simulation , first select the molecular structures.";
 		insertMenuEntry(MainControl::TOOLS, "Molecular &Dynamics", this, SLOT(amberMDSimulation()), 
 										CTRL+Key_D, MENU_AMBER_MDSIMULATION, hint);
+		hint = "Calculate an isocontour surface from a 3D grid";
+		insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  SLOT(computeSurface()), 
+										CTRL+Key_U,MENU_OPEN_SURFACE_DIALOG, hint);
+
 	#ifdef QT_THREAD_SUPPORT
 		hint = "Abort a running simulation thread";
 		insertMenuEntry(MainControl::TOOLS, "Abort Calculation", this, SLOT(stopSimulation()),
@@ -355,7 +356,7 @@ namespace BALL
 
 		Representation* rep = getPrimitiveManager().createRepresentation();
 		rep->insert(*mesh);
-		rep->setModelType(4); // Setting Representation type to Surface
+		rep->setModelType(MODEL_CONTOUR_SURFACE); // Setting Representation type to Surface
 
 		RepresentationMessage* message = new RepresentationMessage(rep, RepresentationMessage::ADD);
 		notify_(message);
