@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.19 2001/01/20 00:25:18 amoll Exp $
+// $Id: property.h,v 1.20 2001/01/21 23:00:19 amoll Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -178,7 +178,7 @@ namespace BALL
 
 		/** Clear method
 		*/
-		void clear()
+		virtual void clear()
 			throw();
 		//@}	
 
