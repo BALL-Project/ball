@@ -613,10 +613,10 @@ namespace BALL
 		}
 	}
 
-	NMRStarFile::NMRStarFile(char* filename)
+	NMRStarFile::NMRStarFile(const String filename)
 		:	numberOfShifts(0)
 	{
-		in.open(filename);
+		in.open(filename.c_str());
 		if (!in)
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
