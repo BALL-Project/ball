@@ -1,3 +1,5 @@
+import time
+
 m = MainControl.getInstance(0)
 pm = m.getPrimitiveManager()
 py = PyWidget.getInstance(0)
@@ -19,15 +21,13 @@ def runTest(name, model):
 	global result
 	run = 0
 	model_result = 0
+	t = time.clock()
 	while run < nr_runs and not py.toAbortScript():
-		t = Timer()
-		t.start()
 		dp.selectModel(model)
 		dp.applyButtonClicked()
-		t.stop()
-		model_result += t.getCPUTime()
 		run += 1
 		clearRepresentations()
+	model_result = time.clock() - t
 	print name+" "+str(model_result)+" seconds"
 	result += model_result
 
@@ -49,4 +49,6 @@ runTest("SES", 			MODEL_SE_SURFACE)
 print "Result: "+str(result)+" seconds"
 result /= nr_runs
 result = 1 / result
+#scale result
+result /= 2
 print "Result: "+str(result)+" BALLView stones"

@@ -1,3 +1,5 @@
+import time
+
 m = MainControl.getInstance(0)
 pm = m.getPrimitiveManager()
 py = PyWidget.getInstance(0)
@@ -18,11 +20,8 @@ def clearRepresentations():
 def runTest(name, model):
 	global result
 	run = 0
-	model_result = 0
 	dp.selectModel(model)
 	dp.applyButtonClicked()
-	t = Timer()
-	t.start()
 	v = Vector3(13, 84, 41)
 	l = Vector3(13, 84, -7)
 	u = Vector3(0, -1, 0)
@@ -33,6 +32,7 @@ def runTest(name, model):
 	sm = SceneMessage(SceneMessage.UPDATE_CAMERA)
 	sm.setStage(s)
 	m.sendMessage(sm)
+	t = time.clock()
 	while run < nr_runs and not py.toAbortScript():
 		run += 1
 		v = v + Vector3(0,0,1)
@@ -41,9 +41,8 @@ def runTest(name, model):
 		sm = SceneMessage(SceneMessage.UPDATE_CAMERA)
 		sm.setStage(s)
 		m.sendMessage(sm)
-	model_result += t.getCPUTime()
+	model_result = time.clock() - t
 	clearRepresentations()
-	t.stop()
 	print name+" "+str(model_result)+" seconds"
 	result += model_result
 
