@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.4 2000/03/13 18:11:41 amoll Exp $
+// $Id: common.h,v 1.5 2000/04/02 15:48:26 amoll Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -20,7 +20,10 @@ namespace BALL
 		*/
 		//@{ 
 
-		///
+		/**	Return the absolute value of a number.
+				@param	t the number
+				@return T the absolute value
+		*/
 		template <class T>
 		inline 
 		T abs(const T& t)
@@ -28,7 +31,10 @@ namespace BALL
 			return BALL_ABS(t);
 		}
 
-		///
+		/**	Return the fraction of a number.
+				@param	t the number
+				@return T the fraction
+		*/
 		template <class T>
 		inline 
 		T frac(const T& t)
@@ -37,7 +43,11 @@ namespace BALL
 			return (t - (T)tmp);
 		}
 
-		///
+		/**	Return the greater of two numbers.
+				@param	a the first number
+				@param	b the second number
+				@return T the greatest number
+		*/
 		template <class T>
 		inline 
 		T max(const T& a, const T& b)
@@ -45,7 +55,12 @@ namespace BALL
 			return BALL_MAX(a, b);
 		}
 
-		///
+		/**	Return the greatest of three numbers.
+				@param	a the first number
+				@param	b the second number
+				@param	c the third number
+				@return T the greatest number
+		*/
 		template <class T>
 		inline 
 		T max(const T& a, const T& b, const T &ct)
@@ -53,7 +68,11 @@ namespace BALL
 			return BALL_MAX3(a, b, ct);
 		}
 
-		///
+		/**	Return the smallest of two numbers.
+				@param	a the first number
+				@param	b the second number
+				@return T the smallest number
+		*/
 		template <class T>
 		inline 
 		T min(const T& a, const T& b)
@@ -61,7 +80,12 @@ namespace BALL
 			return BALL_MIN(a, b);
 		}
 
-		///
+		/**	Return the smallest of three numbers.
+				@param	a the first number
+				@param	b the second number
+				@param	c the third number
+				@return T the smallest number
+		*/
 		template <class T>
 		inline 
 		T min(const T& a, const T& b, const T &ct)
@@ -69,7 +93,10 @@ namespace BALL
 			return BALL_MIN3(a, b, ct);
 		}
 
-		///
+		/**	Round a number and return the result.
+				@param	t the number
+				@return T the result
+		*/
 		template <class T>
 		inline 
 		T round(const T& t)               
@@ -77,7 +104,10 @@ namespace BALL
 			return (T)(t > 0 ? long(t + 0.5) : long(t - 0.5)); 
 		}
 
-		///
+		/**	Return the sign of a number.
+				@param	t the number
+				@return Index {\tt -1} t < 0;  {\tt 0} t = 0; {\tt 1} t > 0
+		*/
 		template <class T>
 		inline 
 		T sgn(const T& t)
@@ -85,7 +115,10 @@ namespace BALL
 			return BALL_SGN(t);
 		}
 
-		///
+		/**	Test if a number is finite.
+				@param	t the number
+				@return bool
+		*/
 		template <class T>
 		inline 
 		bool isFinite(const T& t)
@@ -93,7 +126,10 @@ namespace BALL
 			return (bool)finite(t);
 		}
 
-		///
+		/**	Test if a number is infinite.
+				@param	t the number
+				@return bool
+		*/
 		template <class T>
 		inline 
 		bool isInfinite(const T& t)
@@ -101,7 +137,10 @@ namespace BALL
 			return (bool)(!Maths::isFinite(t) && !Maths::isNan(t));
 		}
 
-		///
+		/**	Test if a value is not a number.
+				@param	t the number
+				@return bool
+		*/
 		template <class T>
 		inline 
 		bool isNan(const T& t)
@@ -109,7 +148,10 @@ namespace BALL
 			return (bool)isnan(t);
 		}
 
-		///
+		/**	Test if a number is zero.
+				@param	t the number
+				@return bool
+		*/
 		template <class T>
 		inline 
 		bool isZero(const T& t)
@@ -117,7 +159,10 @@ namespace BALL
 			return (abs(t) < Constants::EPSILON);
 		}
 
-		///
+		/**	Test if a number is not zero.
+				@param	t the number
+				@return bool
+		*/
 		template <class T>
 		inline 
 		bool isNotZero(const T& t)
@@ -125,7 +170,11 @@ namespace BALL
 			return (abs(t) >= Constants::EPSILON);
 		}
 
-		///
+		/**	Test if a number is equal to an other.
+				@param	a the first number
+				@param	b the second number
+				@return bool
+		*/
 		template <class T1, class T2>
 		inline 
 		bool isEqual(const T1& a, const T2& b)
@@ -133,7 +182,11 @@ namespace BALL
 			return (abs(a - b) < Constants::EPSILON);
 		}
 
-		///
+		/**	Test if a number is not equal to an other.
+				@param	a the first number
+				@param	b the second number
+				@return bool
+		*/
 		template <class T1, class T2>
 		inline 
 		bool isNotEqual(const T1& a, const T2& b)
@@ -141,7 +194,11 @@ namespace BALL
 			return (abs(a - b) >= Constants::EPSILON);
 		}
 
-		///
+		/**	Test if a number is less compared to an other.
+				@param	a the first number
+				@param	b the second number
+				@return bool
+		*/
 		template <class T1, class T2>
 		inline 
 		bool isLess(const T1& a, const T2& b)
@@ -149,7 +206,11 @@ namespace BALL
 			return (a - b <= -Constants::EPSILON);
 		}
 
-		///
+		/**	Test if a number is less or equal compared to an other.
+				@param	a the first number
+				@param	b the second number
+				@return bool
+		*/
 		template <class T1, class T2>
 		inline 
 		bool isLessOrEqual(const T1& a, const T2& b)
@@ -157,7 +218,11 @@ namespace BALL
 			return (a - b < Constants::EPSILON);
 		}
 
-		///
+		/**	Test if a number is greater or equal compared to an other.
+				@param	a the first number
+				@param	b the second number
+				@return bool
+		*/
 		template <class T1, class T2>
 		inline 
 		bool isGreaterOrEqual(const T1& a, const T2& b)
@@ -165,7 +230,11 @@ namespace BALL
 			return (a - b > -Constants::EPSILON);
 		}
 
-		///
+		/**	Test if a number is greater compared to an other.
+				@param	a the first number
+				@param	b the second number
+				@return bool
+		*/
 		template <class T1, class T2>
 		inline 
 		bool isGreater(const T1& a, const T2& b)
@@ -173,7 +242,10 @@ namespace BALL
 			return (a - b >= Constants::EPSILON);
 		}
 
-		///
+		/**	Return the floor of an number.
+				@param	t the number
+				@return T the floor
+		*/
 		template <class T>
 		inline 
 		long floor(const T& t)
@@ -181,7 +253,10 @@ namespace BALL
 			return (long)(Maths::isGreater(t, 0) ? t: (Maths::isEqual(t, (T)(long)t) ? t : t - 1));
 		}
 
-		///
+		/**	Return the ceiling of an number.
+				@param	t the number
+				@return T the ceiling
+		*/
 		template <class T>
 		inline 
 		long ceiling(const T& t)
@@ -189,7 +264,11 @@ namespace BALL
 			return (long)(Maths::isLess(t, 0) ? t: (Maths::isEqual(t, (T)(long)t) ? t : t + 1));
 		}
 
-		///
+		/**	Compare two numbers to eachother.
+				@param	a the first number
+				@param	b the second number
+				@return Index {tt -1} a < b; {tt 0} a = b; {tt 1} a > b;
+		*/
 		template <class T1, class T2>
 		inline 
 		Index compare(const T1& a, const T2& b)
@@ -197,7 +276,12 @@ namespace BALL
 			return (Maths::isLess(a, b) ? -1 : Maths::isEqual(a, b) ? 0 : 1);
 		}
 
-		///
+		/**	Test if two numbers are near eachother.
+				@param	a the first number
+				@param	b the second number
+				@param	maxDiff the maximum allowed difference between the two numbers
+				@return bool
+		*/
 		template <class T1, class T2, class T3>
 		inline 
 		bool isNear(const T1& a, const T2& b, const T3& maxDiff)
