@@ -133,6 +133,15 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 %%.C:
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
 
+JohnsonBoveyShiftProcessor_test:	JohnsonBoveyShiftProcessor_test.o ../NMR/johnsonBoveyShiftProcessor.o
+	$(CXX) $(CXXFLAGS) JohnsonBoveyShiftProcessor_test.o ../NMR/johnsonBoveyShiftProcessor.o $(LDFLAGS) -o JohnsonBoveyShiftProcessor_test $(LIBS)
+
+AnisotropyShiftProcessor_test:	AnisotropyShiftProcessor_test.o ../NMR/anisotropyShiftProcessor.o
+	$(CXX) $(CXXFLAGS) AnisotropyShiftProcessor_test.o ../NMR/anisotropyShiftProcessor.o $(LDFLAGS) -o AnisotropyShiftProcessor_test $(LIBS)
+
+HaighMallionShiftProcessor_test:	HaighMallionShiftProcessor_test.o ../NMR/haighMallionShiftProcessor.o
+	$(CXX) $(CXXFLAGS) HaighMallionShiftProcessor_test.o ../NMR/haighMallionShiftProcessor.o $(LDFLAGS) -o HaighMallionShiftProcessor_test $(LIBS)
+
 test:	$(EXECUTABLES)
 	@./runtests $(EXECUTABLES)
 

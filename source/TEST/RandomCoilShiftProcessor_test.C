@@ -1,4 +1,4 @@
-// $Id: RandomCoilShiftProcessor_test.C,v 1.2 2000/09/22 00:33:48 amoll Exp $
+// $Id: RandomCoilShiftProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(RandomCoilShiftProcessor, "$Id: RandomCoilShiftProcessor_test.C,v 1.2 2000/09/22 00:33:48 amoll Exp $")
+START_TEST(RandomCoilShiftProcessor, "$Id: RandomCoilShiftProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -75,24 +75,24 @@ CHECK(chemical shifts)
 		Position i = 0;
 		for (; +atom_it; ++atom_it)
 		{
-			if (atom_it->hasProperty(RandomCoilShiftProcessor::PROPERTY__RANDOMCOIL_SHIFT))
+			if (atom_it->hasProperty(RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT))
 			{
-				float shift = atom_it->getProperty(RandomCoilShiftProcessor::PROPERTY__RANDOMCOIL_SHIFT).getFloat();
+				float shift = atom_it->getProperty(RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT).getFloat();
 				STATUS("shift #" << i << " of " << atom_it->getFullName() << ": " << shift)
 				switch (i)
 				{
-					case  0: TEST_REAL_EQUAL(shift, 8.24) break; // ALA:1H
-					case  1: TEST_REAL_EQUAL(shift, 8.24) break; // ALA:2H
-					case  2: TEST_REAL_EQUAL(shift, 8.24) break; // ALA:3H
-					case  3: TEST_REAL_EQUAL(shift, 4.32) break; // ALA:HA
+					case  0: TEST_REAL_EQUAL(shift, 8.04) break; // ALA:1H
+					case  1: TEST_REAL_EQUAL(shift, 8.04) break; // ALA:2H
+					case  2: TEST_REAL_EQUAL(shift, 8.04) break; // ALA:3H
+					case  3: TEST_REAL_EQUAL(shift, 3.67) break; // ALA:HA
 					case  4: TEST_REAL_EQUAL(shift, 1.40) break; // ALA:1HB
 					case  5: TEST_REAL_EQUAL(shift, 1.40) break; // ALA:2HB
 					case  6: TEST_REAL_EQUAL(shift, 1.40) break; // ALA:3HB
-					case  7: TEST_REAL_EQUAL(shift, 8.33) break; // GLY:H
-					case  8: TEST_REAL_EQUAL(shift, 3.96) break; // GLY:2HA
-					case  9: TEST_REAL_EQUAL(shift, 3.96) break; // GLY:1HA
-					case 10: TEST_REAL_EQUAL(shift, 8.31) break; // SER:H
-					case 11: TEST_REAL_EQUAL(shift, 4.47) break; // SER:HA
+					case  7: TEST_REAL_EQUAL(shift, 8.35) break; // GLY:H
+					case  8: TEST_REAL_EQUAL(shift, 3.53) break; // GLY:2HA
+					case  9: TEST_REAL_EQUAL(shift, 3.53) break; // GLY:1HA
+					case 10: TEST_REAL_EQUAL(shift, 8.11) break; // SER:H
+					case 11: TEST_REAL_EQUAL(shift, 3.82) break; // SER:HA
 					case 12: TEST_REAL_EQUAL(shift, 3.89) break; // SER:2HB
 					case 13: TEST_REAL_EQUAL(shift, 3.89) break; // SER:1HB
 				}

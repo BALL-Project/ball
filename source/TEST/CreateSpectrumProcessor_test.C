@@ -1,4 +1,4 @@
-// $Id: CreateSpectrumProcessor_test.C,v 1.2 2000/09/22 11:15:11 amoll Exp $
+// $Id: CreateSpectrumProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(CreateSpectrumProcessor, "$Id: CreateSpectrumProcessor_test.C,v 1.2 2000/09/22 11:15:11 amoll Exp $")
+START_TEST(CreateSpectrumProcessor, "$Id: CreateSpectrumProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -42,11 +42,9 @@ RESULT
 HINFile f("data/CreateSpectrumProcessor_test.hin");
 System S;
 f >> S;
-ClearChargeProcessor clear_charge;
-S.apply(clear_charge);
 
 CHECK(list<Peak1D>& getPeakList())
-//BAUSTELLE
+	//BAUSTELLE
 RESULT
 
 /////////////////////////////////////////////////////////////

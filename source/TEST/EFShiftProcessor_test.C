@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor_test.C,v 1.2 2000/09/21 09:29:26 oliver Exp $
+// $Id: EFShiftProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(EFShiftProcessor, "$Id: EFShiftProcessor_test.C,v 1.2 2000/09/21 09:29:26 oliver Exp $")
+START_TEST(EFShiftProcessor, "$Id: EFShiftProcessor_test.C,v 1.3 2000/09/25 19:08:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -141,7 +141,6 @@ CHECK(chemical shifts)
 	sp.setParameters(parameters);
 	sp.init();
 	TEST_EQUAL(S.countAtoms(), 31)
-
 	
 	if (S.countAtoms() == 31)
 	{
