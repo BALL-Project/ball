@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.11 2001/02/28 01:17:12 amoll Exp $
+// $Id: parameterSection.h,v 1.12 2001/03/10 20:40:35 amoll Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -18,6 +18,20 @@ namespace BALL
 	class Parameters;
 
 	/**	General Parameter Section Class.
+			It is similar to \Ref{INIFile}, but a little bit more sophisticated.
+			Just as in a INIFile there can be comment lines starting with either 
+			"{\bf ;}", "{\bf !}" or "{\bf #}" and it is divided in sections.
+			A section-line looks like "{\bf [ElectricFieldEffect]}".
+			The first non-comment line in a section is the format-line.
+			It defines the sort of values stored in the section and their order: \\
+			"{\bf key:residue key:atom value:charge }" \\
+			Option lines start with a "{\bf @ }": \\
+			"{\bf @exclude_residue_field=true }" \\
+			The values are stored in fields seperated by whitespaces in the order given
+			by their format-line: \\
+			"{\bf     Ca       Ca        9.6 }" \\		
+			Each value line may contain version information, indicated by a variable 
+			definition named "ver"; thus only the latest version will be version will be accessed.
 			{\bf Definition:} \URL{BALL/FORMAT/ParameterSection.h} \\
 	*/
 	class ParameterSection 
@@ -25,6 +39,12 @@ namespace BALL
 		public:
 
 		BALL_CREATE(ParameterSection)
+
+
+		/**	Result Type for unknown items.
+		*/
+		static const String UNDEFINED;
+
 
 		/**	@name Enums
 		*/
@@ -70,7 +90,7 @@ namespace BALL
 			throw();
 
 		/**	Return the name of the section read.
-				The section name is empty befor \Ref{extractSection} was called.
+				The section name is empty before \Ref{extractSection} was called.
 				@return the	name of the section extracted
 		*/
 		const String& getSectionName() const
@@ -104,6 +124,8 @@ namespace BALL
 		bool hasVariable(const String& variable) const throw();
 
 		/**	Return the column index of a variable.
+				If section doesn't have the variable, INVALID_POSITION
+				is returned.
 		*/
 		Position getColumnIndex(const String& variable) const throw();
 
@@ -115,13 +137,15 @@ namespace BALL
 		*/
 		Size getNumberOfKeys() const throw();
 
-		/**	Fast access to the value array 
+		/**	Fast access to the value array.
+				If the value is undefined, \Ref{UNDEFINED} is returned.
 		*/
 		const String& getValue(Position key_index, Position variable_index)
 			const throw();
 
 		/**	Fast access to the key array.
 				The first key has the index 0.
+				If the key is undefined, \Ref{UNDEFINED} is returned.
 		*/
 		const String& getKey(Position key_index) const throw();
 

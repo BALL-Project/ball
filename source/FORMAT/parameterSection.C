@@ -1,13 +1,13 @@
-// $Id: parameterSection.C,v 1.13 2001/03/09 20:54:28 amoll Exp $
-//
+// $Id: parameterSection.C,v 1.14 2001/03/10 20:40:11 amoll Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
 
-using namespace std;
-
 namespace BALL 
 {
+
+	const String ParameterSection::UNDEFINED = "(UNDEFINED)";
+
 
 	ParameterSection::ParameterSection() throw()
 		:	section_name_(""),
@@ -81,14 +81,13 @@ namespace BALL
 			return false;
 		}
 	
-		// this instance should be valid only if extractSection didn`t fail
+		// this instance is only valid if extractSection works
 		valid_ = false;
 
 		// store the section name
 		section_name_ = section_name;
 		
 		INIFile&  ini_file = parameters.getParameterFile();		
-
 		// check for the existence of the required section
 		if (!ini_file.hasSection(section_name) ||
 				 ini_file.getSectionLength(section_name) == 0)
@@ -104,58 +103,56 @@ namespace BALL
    		 return true;
    	}
 
+		// ================================================================
+		// loop over all lines and store the format line
+		// skip all comment and options lines
+		// count the number of non-comment lines
+
 		// count non-comment lines only
 		int	number_of_lines = 0;
 		String line;
-
-		// loop over all lines and store the format line
-		// skip all comment and options lines
-		// and count the number of non-comment lines
 		Size first_line = ini_file.getSectionFirstLine(section_name);
-		Size last_line = ini_file.getSectionLastLine(section_name);
+		Size  last_line = ini_file.getSectionLastLine(section_name);
 
 		for (Position i = first_line; i <= last_line; i++)
 		{						
 			// get the line and remove leading white spaces
 			if (ini_file.getLine(i) == 0)
 			{
-				Log.error() << "Could not make INIFile::getLine(), i = " << i << endl;
+				Log.error() << "Error in call to INIFile::getLine(), i = " << i
+										<< " , File: << " << ini_file.getFilename() << endl;
 				return false;
 			}
 			line = *ini_file.getLine(i);
 			line.trimLeft();
 
-			// comment lines start with "!" or ";" or "#"
-			// option lines start with "@"
-			if (line.size() > 0)
+			// skip all empty lines, comments and option lines
+			if (line.isEmpty()   || 
+					(line[0] == ';') || (line[0] == '!') || (line[0] == '#') || (line[0] == '@'))
 			{
-				if ((line[0] != ';') && (line[0] != '!') && (line[0] != '#') && (line[0] != '@'))
-				{
-					// extract format line: the first non-comment/non-option line
-					if (number_of_lines == 0)
-					{
-						format_line_ = line;
-					}
-
-					// count non-comment lines
-					number_of_lines++;
-				}
+				// comment lines start with "!" or ";" or "#"
+				// option lines start with "@"
+				continue;
 			}
+
+			// extract format line: the first non-comment/non-option line
+			if (number_of_lines == 0)
+			{
+				format_line_ = line;
+			}
+
+			// count non-comment lines
+			number_of_lines++;
 		}
-
-
-		// clear the old contents of variable_names_
-		variable_names_.clear();
-
-		//
+		
+		// ===========================================================================
 		// interpret the format line
-		//
 	
 		// f contains the fields resulting from a splitQuoted of the format line
 		vector<String> f;
 		Size number_of_fields = format_line_.split(f, String::CHARACTER_CLASS__WHITESPACE);
 
-		if (number_of_fields == 0)
+		if (number_of_fields == 0 || number_of_fields > 20)
 		{
 			Log.error() << "ParameterSection::extractSection: error reading section " << section_name 
 				<< " of file " << ini_file.getFilename() << ": wrong number of fields in the format line: " 
@@ -165,19 +162,18 @@ namespace BALL
 			return false;
 		}
 
-		// keys is an array containing the fields that will we assembled to the line key
+		// Initialisations:
+
+		// keys is an array containing the fields that will be assembled to the line key
 		Index	keys[ParameterSection::MAX_FIELDS];
 		Size	number_of_keys = 0;
-
 		// variables is an array containing the fields that represent variables
 		Index	variables[ParameterSection::MAX_FIELDS];
 		Size number_of_variables = 0;
-
+		// clear the old contents of variable_names_
+		variable_names_.clear();
 
 		// check every field definition 
-
-
-
 		for (Position i = 0; i < (Position)number_of_fields; i++)
 		{
 			if (f[i].hasPrefix("key:"))
@@ -188,9 +184,9 @@ namespace BALL
 
 			if (f[i].hasPrefix("value:")) 
 			{
-				// check whether a  variable name was given
-				String variable_name = f[i].after(":", 0);
-				if (variable_name == "")
+				// check whether a variable name was given
+				String variable_name(f[i].after(":", 0));
+				if (variable_name.isEmpty())
 				{
 					Log.error() << "ParameterSection::extractSection: error while reading section "
 											<< section_name << ": empty variable name: " << f[i] << endl;	
@@ -214,6 +210,9 @@ namespace BALL
 		{
 			return false;
 		}
+		// format line looks ok
+		// ======================================================================
+		// now extract all non-comment lines
 
 		// true, if each line contains version information
 		// indicated by a variable definition named "ver"
@@ -224,119 +223,105 @@ namespace BALL
 
 		// allocate space for all entries
 		entries_.clear();
-		entries_.resize(number_of_lines * number_of_variables);
-		
+		entries_.resize(number_of_lines * number_of_variables);	
 		// clear all former contest of the keys_ array
 		keys_.clear();
 		section_entries_.clear();
 		
-		// now extract all non-comment lines
-		bool ignore_entry;
 		number_of_lines = -1; // skip format line
-		for (Position i = 0; i < ini_file.getSectionLength(section_name); i++)
+
+		for (Position i = first_line; i <= last_line; i++)
 		{
 			line = *ini_file.getLine(i);
 			line.trimLeft();
-			if (line.size() > 0) 
+
+			// if line is empty or is a comment line, nothing to be done
+			if ((line.isEmpty()) ||
+					(line[0] == ';') || (line[0] == '!') || (line[0] == '#')) 
 			{
-				if ((line[0] != ';') && (line[0] != '!') && (line[0] != '#') && (line[0] != '@')) 
+				continue;
+			}
+
+			// options are of the form "@option=value"
+			if (line[0] == '@') 
+			{
+				// remove the leading '@'
+				line.erase(0, 1);
+				
+				// insert the option
+				String option_key		= line.before("=");
+				String option_value = line.after("=");
+				options.set(option_key, option_value);
+				continue;
+			}
+
+			number_of_lines++;
+
+			// skip format line 
+			if (number_of_lines == 0) 
+			{
+				continue;
+			}
+
+			// now split the line...
+			char* c = "\"'";
+			number_of_fields = line.splitQuoted(f,String::CHARACTER_CLASS__WHITESPACE, c);
+			
+			// assemble the keys
+			String key;
+			for (Size j = 0; j < number_of_keys; j++) 
+			{
+				key.append(f[keys[j]]);	
+				if (j != number_of_keys - 1)
 				{
-					number_of_lines++;
-					// skip format line 
-					if (number_of_lines > 0) 
-					{
-						// now split the line...
-						number_of_fields = line.splitQuoted(f);
-						
-						// assemble the keys
-						Size	j;	// loop variable
-						String	key = "";
-						for (j = 0; j < number_of_keys; j++) 
-						{
-							key.append(f[keys[j]]);	
-							if (j != number_of_keys - 1)
-							{
-								key.append(" ");
-							}
-						}
-							
-						// if another entry with higher version number has already been read, 
-						// ignore_entry is set to true.
-						ignore_entry = false;
-
-						if (check_version) 
-						{
-							// check whether we have already read this key
-							if (section_entries_.has(key)) 
-							{
-								// yes, we do - compare version numbers
-								float old_version = entries_[section_entries_[key] 
-																						* number_of_variables_ 
-																						+ variable_names_["ver"]].toFloat();
-								float new_version = f[variables[variable_names_["ver"]]].toFloat();
-								if (old_version > new_version)	
-								{
-									ignore_entry = true;
-								} 
-								else 
-								{
-									if (old_version == new_version)
-									{
-										Log.warn() << "ParameterSection: repeated entry with same version number in line " 
-															 << number_of_lines << " of section [" << section_name << "] " << endl;
-										Log.warn() << "  in file " << ini_file.getFilename() << ":" << endl;
-										Log.warn() << " > " << line << endl;
-										ignore_entry = true;
-									}
-								}
-							}
-						}
-						
-						if (!ignore_entry)
-						{
-							// if this key is new, remember it!
-							if (!section_entries_.has(key))
-							{
-								// add the key to the array of keys
-								keys_.push_back(key);
-
-								// insert the key into the hash map
-								section_entries_[key] = number_of_lines;
-							}
-
-							// copy all variable fields to the corresponding array
-							for (j = 0; j < (Position)number_of_variables; j++)
-							{
-								if ((Position)variables[j] < f.size())
-								{
-									entries_[number_of_lines * number_of_variables_ + j] = f[variables[j]];
-								}
-							}
-						} 
-					}
+					key.append(" ");
+				}
+			}
+				
+			// check whether we have already read this key
+			if (check_version && section_entries_.has(key)) 
+			{
+				// yes, we do - compare version numbers
+				float old_version = entries_[section_entries_[key] * number_of_variables_ 
+															        + variable_names_["ver"]].toFloat();
+				float new_version = f[variables[variable_names_["ver"]]].toFloat();
+				if (old_version > new_version)	
+				{
+					// key is ignored because a newer version already exists
+					continue;
 				} 
-				else 
+
+				if (old_version == new_version)
 				{
-					if (line[0] == '@') 
-					{
-						// we found an option. 
-						// options are of the form "@option=value"
-						
-						// remove the leading '@'
-						line.erase(0, 1);
-						
-						// insert the option
-						String option_key		= line.before("=");
-						String option_value = line.after("=");
-						options.set(option_key, option_value);
-					}
+					Log.warn() << "ParameterSection: repeated entry with same version number in line " 
+										 << number_of_lines << " of section [" << section_name << "] " << endl
+										 << "  in file " << ini_file.getFilename() << ": " << line << endl;
+					continue;
+				}
+			}	
+			
+			// no version checking
+			// if this key is new, remember it!
+			if (!section_entries_.has(key))
+			{
+				// add the key to the array of keys
+				keys_.push_back(key);
+
+				// insert the key into the hash map
+				section_entries_[key] = number_of_lines;
+			}
+
+			// copy all variable fields to the corresponding array
+			for (Position j = 0; j < (Position)number_of_variables; j++)
+			{
+				if ((Position)variables[j] < f.size())
+				{
+					entries_[number_of_lines * number_of_variables_ + j] = f[variables[j]];
 				}
 			}
 		}
 
-		// mark as valid
 		valid_ = true;
-		
 		return true;
 	}
 
@@ -354,14 +339,10 @@ namespace BALL
 	const String& ParameterSection::getValue(const String& key,	 
 			const String& variable) const throw()
 	{
-		// define a dummy value returned, if a undefined key/variable
-		// pair is requested
-		static const String undefined("(undefined)");
-		
 		// check whether the entry exists
 		if (!section_entries_.has(key) || !variable_names_.has(variable))
 		{
-			return undefined;
+			return UNDEFINED;
 		}
 
 		// return the value
@@ -371,10 +352,6 @@ namespace BALL
 	const String& ParameterSection::getValue(Size key_index, 
 			Size variable_index) const throw()
 	{
-		// define a dummy value returned, if a undefined key/variable
-		// pair is requested
-		static const String undefined("(undefined)");
-		
 		// check whether the entry exists
 		if ((key_index < keys_.size()) 
 				&& (variable_index < number_of_variables_))
@@ -382,22 +359,16 @@ namespace BALL
 			// return the section entry corresponding to the key
 			return entries_[(section_entries_[keys_[key_index]]) * number_of_variables_ + variable_index];
 		} 
-		else 
-		{
-			return undefined;
-		}
+
+		return UNDEFINED;
 	}
 		
 	const String& ParameterSection::getKey(Position key_index) const throw()
 	{
-		// define a dummy value returned, if an undefined key/variable
-		// pair is requested
-		static const String undefined("(undefined)");
-		
 		// check whether the entry exists
 		if ((key_index >= section_entries_.size()))
 		{
-			return undefined;
+			return UNDEFINED;
 		}
 
 		// return the value
@@ -427,7 +398,7 @@ namespace BALL
 			return variable_names_[variable];
 		}
  
-		return 0;
+		return INVALID_POSITION;
 	}
 
 	const ParameterSection& ParameterSection::operator = 
