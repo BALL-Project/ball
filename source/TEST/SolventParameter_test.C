@@ -1,11 +1,11 @@
-// $Id: SolventParameter_test.C,v 1.5 2001/08/14 12:44:00 amoll Exp $
+// $Id: SolventParameter_test.C,v 1.6 2001/08/14 20:28:14 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.5 2001/08/14 12:44:00 amoll Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.6 2001/08/14 20:28:14 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -13,15 +13,10 @@ START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.5 2001/08/14 12:4
 using namespace BALL;
 
 CHECK(SolventParameter())
+  SolventParameter* s_ptr;
+	s_ptr = new SolventParameter;
+	TEST_NOT_EQUAL(s_ptr,0)
   //BAUSTELLE
-RESULT
-
-
-CHECK(SolventParameter(Parameters& parameters))
-	SolventParameter* sp;
-	Parameters p;
-	sp = new SolventParameter(p);
-	TEST_NOT_EQUAL(sp, 0)
 RESULT
 
 
