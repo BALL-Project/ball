@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.sip,v 1.4 2003/10/29 22:08:39 oliver Exp $
+// $Id: composite.sip,v 1.5 2004/11/17 20:12:12 oliver Exp $
 //
 
 class Composite
@@ -71,6 +71,7 @@ class Composite
   void spliceAfter(Composite& /composite/);
   void splice(Composite& /composite/);
   bool removeChild(Composite& /child/);
+	bool removeSelected();
   void replace(Composite& /composite/);
   void swap(Composite& /composite/);
   virtual void select() throw();
