@@ -1,11 +1,11 @@
-// $Id: Directory_test.C,v 1.2 2000/06/21 10:35:37 amoll Exp $
+// $Id: Directory_test.C,v 1.3 2000/06/26 09:38:29 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/directory.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Directory_test.C,v 1.2 2000/06/21 10:35:37 amoll Exp $")
+START_TEST(class_name, "$Id: Directory_test.C,v 1.3 2000/06/26 09:38:29 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -133,6 +133,9 @@ CHECK(Directory::create(String& path, mode_t mode = 0777))
 	TEST_EQUAL(d2.create("data/Directory_test/test2"), true)
 	TEST_EQUAL(d2.isCurrent(), true)
 	TEST_EQUAL(d.setCurrent(testDir), true)
+	Directory d3;
+	TEST_EQUAL(d2.create(testDir + "/data/Directory_test/test3", 700), true)
+	d2.remove(testDir + "/data/Directory_test/test3");
 RESULT
 
 CHECK(Directory::remove(String old_path))
