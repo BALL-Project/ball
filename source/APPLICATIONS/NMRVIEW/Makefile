@@ -1,0 +1,23 @@
+# $Id: Makefile,v 1.1 2000/12/09 12:56:16 oliver Exp $
+
+EXECUTABLE=nmrview
+DIRECTORY=APPLICATIONS/NMRVIEW
+all:	$(EXECUTABLE)
+
+clean:	default_clean
+
+include ../../common.mak
+include .Dependencies
+
+
+BALL_INCLUDES=$(BALLVIEW_INCLUDES)
+
+CPP_SOURCES=nmrview.C
+
+MOC_SOURCES=
+
+SPECIAL_OBJECTS=
+
+nmrview:	$(OBJECTS) $(SPECIAL_OBJECTS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS)
+
