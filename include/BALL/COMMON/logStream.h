@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.12 2000/10/18 12:39:32 oliver Exp $
+// $Id: logStream.h,v 1.13 2000/10/18 17:09:37 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -9,10 +9,6 @@
 
 #ifndef BALL_COMMON_GLOBAL_H
 #	include <BALL/COMMON/global.h>
-#endif
-
-#ifndef BALL_COMMON_LIMITS_H
-#	include <BALL/COMMON/limits.h>
 #endif
 
 #ifndef BALL_COMMON_DEBUG_H
@@ -106,110 +102,118 @@ namespace BALL
 
 		public:
 
-			/**	@name Constructors and Destructors
-			*/
-			//@{
-			
-			/** Default constructor.
-					Create a new LogStreamBuf object.
-			*/
-			LogStreamBuf();
+		/**	@name	Constants
+		*/
+		//@{
+		static const int MAX_LEVEL;
+		static const int MIN_LEVEL;
+		static const Time MAX_TIME;
+		//@}
 
-			/** Destructor.
-					Destruct the buffer and free all stored messages strings.
-			*/
-			virtual ~LogStreamBuf();
-			
-			//@}
-			
+		/**	@name Constructors and Destructors
+		*/
+		//@{
+		
+		/** Default constructor.
+				Create a new LogStreamBuf object.
+		*/
+		LogStreamBuf();
 
-			/**	@name	Debugging and Diagnostics
-			*/
-			//@{
-			
-			/** Dump method.
-					Dumps the contents of the whole message buffer 
-					including time and log level.
-			*/
-			virtual void dump(std::ostream& s);
+		/** Destructor.
+				Destruct the buffer and free all stored messages strings.
+		*/
+		virtual ~LogStreamBuf();
+		
+		//@}
+		
 
-			//@}
+		/**	@name	Debugging and Diagnostics
+		*/
+		//@{
+		
+		/** Dump method.
+				Dumps the contents of the whole message buffer 
+				including time and log level.
+		*/
+		virtual void dump(std::ostream& s);
 
-			/**	@name	Stream methods 
-			*/
-			//@{
+		//@}
 
-			/**	Sync method.
-					This method is called as soon as the ostream is flushed
-					(especially this method is called by flush or endl).
-					It transfers the contents of the streambufs putbuffer 
-					into a logline if a newline or linefeed character 
-					is found in the buffer ("$\backslash$n" or "$\backslash$r" resp.).
-					The line is then removed from the putbuffer.
-					Incomplete lines (not terminated by $\backslash$n/$\backslash$r are
-					stored in incomplete\_line\_.
-			*/
-			virtual int sync();
+		/**	@name	Stream methods 
+		*/
+		//@{
 
-			/**	Overflow method.
-					This method calls sync and {\tt streambuf::overflow(c)} to 
-					prevent a buffer overflow.
-			*/
-			virtual int overflow(int c = -1);
-			//@}
+		/**	Sync method.
+				This method is called as soon as the ostream is flushed
+				(especially this method is called by flush or endl).
+				It transfers the contents of the streambufs putbuffer 
+				into a logline if a newline or linefeed character 
+				is found in the buffer ("$\backslash$n" or "$\backslash$r" resp.).
+				The line is then removed from the putbuffer.
+				Incomplete lines (not terminated by $\backslash$n/$\backslash$r are
+				stored in incomplete\_line\_.
+		*/
+		virtual int sync();
 
-			struct Stream 
+		/**	Overflow method.
+				This method calls sync and {\tt streambuf::overflow(c)} to 
+				prevent a buffer overflow.
+		*/
+		virtual int overflow(int c = -1);
+		//@}
+
+		struct Stream 
+		{
+			std::ostream*				stream;
+			string							prefix;
+			int									min_level;
+			int									max_level;
+			LogStreamNotifier*	target;
+		
+			Stream()
+				:	stream(0),
+					min_level(MIN_LEVEL),
+					max_level(MAX_LEVEL),
+					target(0)
 			{
-				std::ostream*				stream;
-				string							prefix;
-				int									min_level;
-				int									max_level;
-				LogStreamNotifier*	target;
-			
-				Stream()
-					:	stream(0),
-						min_level(Limits<int>::min()),
-						max_level(Limits<int>::max()),
-						target(0)
-				{
-				}
-			};
+			}
+		};
 
-			typedef struct Stream StreamStruct;
+		typedef struct Stream StreamStruct;
 		
 
 		protected:
 
-			struct LoglineStruct 
-			{	
-				int     level;
-				string  text;
-				Time  time;
+		struct LoglineStruct 
+		{	
+			int     level;
+			string  text;
+			Time  time;
 
-				LoglineStruct()
-					: level(0),
-						text(""),
-						time(0)
-				{}
-			};
+			LoglineStruct()
+				: level(0),
+					text(""),
+					time(0)
+			{}
+		};
 
-			typedef struct LoglineStruct Logline;
+		typedef struct LoglineStruct Logline;
 
 
-			// interpret the prefix format string and return the expanded prefix
-			string expandPrefix_(const string& prefix, const int& level, const Time& time) const;
+		// interpret the prefix format string and return the expanded prefix
+		string expandPrefix_(const string& prefix, int level, Time time) const;
+
+		char* 									pbuf_;
+
+		vector<Logline> 				loglines_;
 	
-			char* 									pbuf_;
+		int											level_;
 
-			vector<Logline> 				loglines_;
+		int											tmp_level_;
 		
-			int											level_;
+		list<StreamStruct>			stream_list_;
 
-			int											tmp_level_;
-			
-			list<StreamStruct>			stream_list_;
-
-			string									incomplete_line_;
+		string									incomplete_line_;
 	};
 
 
@@ -308,7 +312,7 @@ namespace BALL
 				(except for messages which use the temporary loglevel
 				set by \Ref{level}).
 		*/
-		void setLevel(const int& level);
+		void setLevel(int level);
 
 		/**	Return the current log level.
 				The LogStreamBuf object has an internal current log level ({\tt level\_}).
@@ -334,25 +338,25 @@ namespace BALL
 				@return	LogStream the log stream
 				@param	level the temporary log level
 		*/
-		LogStream& level(const int& n);
+		LogStream& level(int level);
 
 		/**	Log an information message.
 				This is method equivalent to \Ref{level}(LogStream::INFORMATION + n). 
 				@param	n the channel 
 		*/
-		LogStream& info(const int& n = 0);
+		LogStream& info(int n = 0);
 
 		/**	Log an error message.
 				This is method equivalent to \Ref{level}(LogStream::ERROR + n). 
 				@param	n the channel 
 		*/
-		LogStream& error(const int& n = 0);
+		LogStream& error(int n = 0);
 
 		/**	Log an information message.
 				This is method equivalent to \Ref{level}(LogStream::WARNING + n). 
 				@param	n the channel 
 		*/
-		LogStream& warn(const int& n = 0);
+		LogStream& warn(int n = 0);
 
 		//@}
 
@@ -374,7 +378,9 @@ namespace BALL
 				@param	min_level the minimum level of messages copied to this stream
 				@param	max_level the maximum level of messages copied to this stream
 		*/
-		void insert(std::ostream& s, const int& min_level = Limits<int>::min(), const int& max_level = Limits<int>::max());
+		void insert
+			(std::ostream& s, int min_level = LogStreamBuf::MIN_LEVEL, 
+			 int MAX_LEVEL = LogStreamBuf::MAX_LEVEL);
 
 		/**	Remove an association with a stream.
 				Remove a stream from the stream list and avoid the copying of new messages to
@@ -400,7 +406,7 @@ namespace BALL
 				@param	s the associated stream
 				@param	min_level the new minimum level
 		*/
-		void setMinLevel(const std::ostream& s, const int& min_level);
+		void setMinLevel(const std::ostream& s, int min_level);
 		
 		/**	Set the maximum log level of an associated stream.
 				This method changes the maximum log level of an already
@@ -409,7 +415,7 @@ namespace BALL
 				@param	s the associated stream
 				@param	min_level the new minimum level
 		*/
-		void setMaxLevel(const std::ostream& s, const int& max_level);
+		void setMaxLevel(const std::ostream& s, int max_level);
 
 		/**	Set prefix for output to this stream.
 				Each line written to the stream will be prefixed by
@@ -450,7 +456,9 @@ namespace BALL
 				@param	min_level the minimum log level of the counted messages
 				@param	max_level the maximum log level of the counted messages
 		*/
-		Size	getNumberOfLines(const int& min_level = Limits<int>::min(), const int& max_level = Limits<int>::max()) const;
+		Size getNumberOfLines
+			(int min_level = LogStreamBuf::MIN_LEVEL, 
+			 int max_level = LogStreamBuf::MAX_LEVEL) const;
 
 		/**	Return the text of a specific line.
 				This method returns the content of a specific message without
@@ -481,8 +489,10 @@ namespace BALL
 				@param latest (long) the time of messages to stop filtering
 				@param s a string to look for
 		*/
-		list<int>	filterLines(const int& min_level = Limits<int>::min(), const int& max_level = Limits<int>::max(),
-														 const Time& earliest = 0, const Time& latest = Limits<Time>::max(), const string& s = "") const;
+		list<int>	filterLines
+			(int min_level = LogStreamBuf::MIN_LEVEL, int max_level = LogStreamBuf::MAX_LEVEL,
+			 Time earliest = 0, Time latest = LogStreamBuf::MAX_TIME, 
+			 const string& s = "") const;
 		//@}
 
 		private:
