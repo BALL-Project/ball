@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.2 2001/08/24 01:33:14 oliver Exp $
+dnl    $Id: configure.in,v 1.3 2001/09/04 01:12:32 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -169,6 +169,11 @@ fi
 # Python.h and libsip.a
 if test "$with_python" != "" -a "$with_python" != "no" -o "$enable_python" = yes ; then
 	PYTHON_SUPPORT=true
+	if test "${with_python}" != "" ; then
+		PYTHON_EXE=${with_python}
+	else
+		PYTHON_EXE=python
+	fi
 else
 	PYTHON_SUPPORT=
 fi
@@ -180,6 +185,7 @@ PYTHON_INCLUDE_PATH=$with_python_incl
 # and additional linker options (e.g. -ltermcap etc.)
 PYTHON_LIBPATH=$with_python_libs
 PYTHON_LDOPTS=$with_python_ldopts
+
 
 # the paths to the SIP library, header, and executable
 SIP_LIBPATH=$with_sip_lib
@@ -2782,32 +2788,30 @@ AC_SUBST(PYTHON_SUPPORT)
 AC_SUBST(PYTHON_LIBS)
 
 if test "${PYTHON_SUPPORT}" = true ; then
+	dnl
+	dnl Python support won't work without BALLVIEW!
+  dnl (at least for the moment...)
+	dnl
+	if test "${USE_BALLVIEW}" = false ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(BALL Python support requires the visualization component)
+		AC_MSG_RESULT(BALLVIEW. Please reconfigure without --without-BALLVIEW.")
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(Aborted)
+	fi
 	AC_DEFINE(BALL_PYTHON_SUPPORT)
 
 	dnl 
 	dnl Find the python executable (specified via --with-python
 	dnl 
  
-	if test "$with_python" = "" ; then
-		AC_PATH_PROG(PYTHON_EXECUTABLE, python)
+	AC_PATH_PROG(PYTHON_EXECUTABLE, python)
  
-		if test "${PYTHON_EXECUTABLE}" = "" ; then
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([Could not find Python interpreter ]${with_python})
-			AC_MSG_RESULT([Please use --with-python=EXE to specify its location.])
-      AC_MSG_ERROR(Aborted)
-		fi
-	else
-		AC_MSG_CHECKING(for Python executable)
-		if test -e "${with_python}" ; then
-	    PYTHON_EXECUTABLE=$with_python
-			AC_MSG_RESULT(${PYTHON_EXECUTABLE})
-		else
-			AC_MSG_RESULT()
-			AC_MSG_RESULT([Did not find a Python executable at the specified location.])
-			AC_MSG_RESULT([Please check the path you specified for --with-python=...])
-			AC_MSG_ERROR(Aborted)
-		fi
+	if test "${PYTHON_EXECUTABLE}" = "" ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Could not find Python interpreter ]${with_python})
+		AC_MSG_RESULT([Please use --with-python=EXE to specify its location.])
+    AC_MSG_ERROR(Aborted)
 	fi
 
 	dnl
@@ -2819,6 +2823,11 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	PYTHON_VERSION_NUMBER_1=`echo ${PYTHON_VERSION} | ${CUT} -d. -f1`
 	PYTHON_VERSION_NUMBER_2=`echo ${PYTHON_VERSION} | ${CUT} -d. -f2`
 	PYTHON_VERSION_NUMBER_3=`echo ${PYTHON_VERSION} | ${CUT} -d. -f3`
+	dnl
+	dnl	shorten the release number to Major.minor (only those are used to construct
+  dnl include and lib paths)
+  dnl
+  PYTHON_VERSION="${PYTHON_VERSION_NUMBER_1}.${PYTHON_VERSION_NUMBER_2}"
 	
 	dnl
 	dnl  We need at least Python 2.0
