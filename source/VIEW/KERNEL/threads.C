@@ -10,12 +10,15 @@
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
+
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
+
+#include <BALL/SYSTEM/directory.h>
 
 #include <qapplication.h>
 
@@ -98,9 +101,15 @@ namespace BALL
 			if (url_ == "") return;
 			try
 			{
+				// store current working directory
+				Directory d;
 				File f(url_);
+				d.changeToUserHomeDir();
+
+				// create the temporary file in the users home dir
 				File::createTemporaryFilename(filename_);
 				f.copyTo(filename_);
+				d.setCurrent();
 			}
 			catch(...)
 			{}

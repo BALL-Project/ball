@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.14 2004/10/09 15:35:53 amoll Exp $
+// $Id: main.C,v 1.15 2004/12/07 15:33:53 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -46,36 +46,19 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 
 	// =============== testing if we can write in current directoy =====================
 	bool dir_error = false;
-	char* home_dir = 0;
-	try
+	BALL::String home_dir = BALL::Directory::getUserHomeDir();
+
+	if (home_dir == "")
 	{
-		BALL::String temp_file_name;
-		BALL::File::createTemporaryFilename(temp_file_name);
-		BALL::File out(temp_file_name, std::ios::out);
-		out << "test" << std::endl;
-		out.remove();
-	}
-	catch(...)
-	{
-		// oh, we have a problem, look for the users home dir
-		dir_error = true;
-
-		// default for UNIX/LINUX
-		home_dir = getenv("HOME");
-		if (home_dir == 0) 
+		try
 		{
-			// windows
-			home_dir = getenv("HOMEPATH");
+			BALL::String temp_file_name;
+			BALL::File::createTemporaryFilename(temp_file_name);
+			BALL::File out(temp_file_name, std::ios::out);
+			out << "test" << std::endl;
+			out.remove();
 		}
-
-		// changedir to the homedir
-		if (home_dir != 0)
-		{
-			BALL::Directory dir(home_dir);
-			dir_error = !dir.setCurrent();
-		}
-
-		if (dir_error)
+		catch(...)
 		{
 			QMessageBox::warning(0, "Error while starting BALLView",
 					QString("You dont have write access to the current working directory\n") + 
@@ -90,8 +73,8 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	BALL::Mainframe mainframe;
 	application.setMainWidget(&mainframe);
 
-	// if we need to use the users homedir as working dir, do so
-	if (home_dir != 0 && !dir_error)
+	// can we use the users homedir as working dir?
+	if (home_dir != "")
 	{
 		mainframe.setWorkingDir(home_dir);
 	}
