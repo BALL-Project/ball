@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.5 2003/08/31 18:12:30 amoll Exp $
+// $Id: geometricControl.C,v 1.6 2003/09/08 00:14:12 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -39,28 +39,17 @@ void GeometricControl::SelectableListViewItem::stateChange(bool)
 
 GeometricControl::GeometricControl(QWidget* parent, const char* name)
 	throw()
-		:	QListView(parent, name),
-			ModularWidget(name),
+		:	GenericControl(parent, name),
 			context_menu_(),
 			context_representation_(0),
-			context_item_(0),
 			colorMeshDlg_(0)
 {
-	// appearance
-	setRootIsDecorated(TRUE);
-	setSorting(-1);
-	setSelectionMode(QListView::Extended);
-	addColumn("[visible] Type");
-	addColumn("Properties");
-	setColumnWidth(0, 60);
-	setColumnWidth(1, 60);
+	listview->addColumn("[visible] Type");
+	listview->addColumn("Properties");
+	listview->setColumnWidth(0, 60);
+	listview->setColumnWidth(1, 60);
 
-	connect(this, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)), this,
-					SLOT(onContextMenu(QListViewItem*, const QPoint&, int)));
-
-	connect(this, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
-
-	registerWidget(this);
+	connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 }
 
 GeometricControl::~GeometricControl()
@@ -80,7 +69,7 @@ void GeometricControl::addRepresentation(Representation& rep)
 	generateListViewItem_(rep);
 
 	// update the view
-	updateContents();
+	listview->triggerUpdate();
 }
 
 void GeometricControl::removeRepresentation(Representation& rep)
@@ -91,7 +80,7 @@ void GeometricControl::removeRepresentation(Representation& rep)
 	{
 		delete item;
 		representation_to_item_.erase(&rep);		
-		updateContents();
+		listview->triggerUpdate();
 		return;
 	}
 
@@ -110,8 +99,7 @@ void GeometricControl::updateRepresentation(Representation& rep)
 	item->setText(0, getRepresentationName_(rep).c_str());
 	item->setText(1, properties);
 
-	// update the view
-	updateContents();
+	listview->triggerUpdate();
 
 	return;
 }
@@ -234,7 +222,7 @@ void GeometricControl::generateListViewItem_(Representation& rep)
 	QString properties = rep.getProperties().c_str();
 	// create a new list item
 	SelectableListViewItem* new_item = 
-		new SelectableListViewItem(this, getRepresentationName_(rep).c_str(), properties, &rep, *this);
+		new SelectableListViewItem(listview, getRepresentationName_(rep).c_str(), properties, &rep, *this);
 
 	CHECK_PTR(new_item);
 	new_item->setOn(true);
@@ -325,7 +313,7 @@ void GeometricControl::modifyRepresentation_()
 void GeometricControl::updateSelection()
 {
 	QListViewItem* item = 0;
-	QListViewItemIterator it(this);
+	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
 		if (it.current()->isSelected())
@@ -397,53 +385,4 @@ void GeometricControl::updateSelection()
 	}
 }
 
-void GeometricControl::initializeWidget(MainControl& main_control)
-{
-	window_menu_entry_id_ = 
-		main_control.insertMenuEntry(MainControl::WINDOWS, 
-				"GeometricControl", this, SLOT(switchShowWidget()));
-	getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
-}
-
-
-void GeometricControl::finalizeWidget(MainControl& main_control)
-{
-	main_control.removeMenuEntry(MainControl::WINDOWS, "GeometricControl", this, SLOT(switchShowWidget()));
-}
-
-void GeometricControl::switchShowWidget()
-	throw()
-{
-	QMenuBar* menu = getMainControl()->menuBar();
-	if (menu->isItemChecked(window_menu_entry_id_))
-	{
-		hide();
-		menu->setItemChecked(window_menu_entry_id_, false);
-	}
-	else
-	{
-		show();
-		menu->setItemChecked(window_menu_entry_id_, true);
-	}
-}
-
-
-void GeometricControl::writePreferences(INIFile& inifile)
-	throw()
-{
-	inifile.insertValue("WINDOWS", "GeometricControl::on", 
-		String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
-}
-
-void GeometricControl::fetchPreferences(INIFile & inifile)
-	throw()
-{
-	if (inifile.hasEntry("WINDOWS", "GeometricControl::on") &&
-			inifile.getValue("WINDOWS", "GeometricControl::on").toUnsignedInt() == 0) 
-	{
-		switchShowWidget();
-	}
-}
-
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
