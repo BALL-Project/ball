@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.13 2002/12/13 13:32:43 amoll Exp $
+// $Id: control.C,v 1.14 2002/12/17 20:12:20 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -35,7 +35,6 @@ Control::SelectableListViewItem::SelectableListViewItem(QListView* parent, const
 void Control::SelectableListViewItem::stateChange(bool)
 	throw()
 {
-	QCheckListItem::stateChange(true);
 	if (RTTI::isKindOf<GeometricObject> (*composite_)) return;
 	control_reference_.selectedComposite(composite_, isOn());
 }
