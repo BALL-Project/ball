@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.6 2004/05/05 18:03:19 amoll Exp $
+// $Id: main.C,v 1.7 2004/05/05 18:03:53 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -13,7 +13,6 @@
 #include <BALL/SYSTEM/directory.h>
 
 #include <iostream>
-#undef BALL_PLATFORM_WINDOWS
 
 #ifndef BALL_PLATFORM_WINDOWS
 int main(int argc, char **argv)
