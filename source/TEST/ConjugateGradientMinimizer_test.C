@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.16 2003/04/24 20:49:55 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.17 2003/05/02 12:37:15 anhi Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.16 2003/04/24 20:49:55 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.17 2003/05/02 12:37:15 anhi Exp $")
 
 using namespace BALL;
 
@@ -401,7 +401,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(3E-3)
+	PRECISION(3E-2)
 	TEST_REAL_EQUAL(energy, 5.906)
 
 	AtomIterator atit;
@@ -414,7 +414,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 		++i;
 	}
 
-	PRECISION(2E-2)
+	PRECISION(1E-1)
 	Angle torsion;
 	torsion = getTorsionAngle(pos[2].x, pos[2].y, pos[2].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[6].x, pos[6].y, pos[6].z);
 	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
