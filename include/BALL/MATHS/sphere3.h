@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.10 2000/03/26 21:44:43 oliver Exp $
+// $Id: sphere3.h,v 1.11 2000/03/27 12:10:01 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -103,8 +103,8 @@ namespace BALL
 		*/
 		void set(const TSphere3& sphere)
 		{
-			p = sphere3.p;
-			radius = sphere3.radius;
+			p = sphere.p;
+			radius = sphere.radius;
 		}
 
 		/**	Assign to a TVector3 and a variable of type {\tt T}.
@@ -122,7 +122,7 @@ namespace BALL
 				Assign the components from another Sphere.
 				@param sphere3 the spehere to assign from
 		**/
-		TSphere3 &operator =
+		TSphere3& operator =
 			(const TSphere3& sphere3)
 		{
 			p = sphere3.p;
