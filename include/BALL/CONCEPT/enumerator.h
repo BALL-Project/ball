@@ -1,15 +1,7 @@
-// $Id: enumerator.h,v 1.1 2000/06/14 14:45:34 anker Exp $
+// $Id: enumerator.h,v 1.2 2000/06/15 11:48:35 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
-
-#include <iostream>
-#include <functional>
-#include <algorithm>
-#include <string>
-#include <list>
-#include <vector>
-#include <math.h>
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -18,6 +10,12 @@
 #ifndef BALL_COMMON_EXCEPTION_H
 # include <BALL/COMMON/exception.h>
 #endif
+
+#ifndef BALL_CONCEPT_FORWARDITERATOR_H
+#	include <BALL/CONCEPT/forwardIterator.h>
+#endif
+
+#include <vector>
 
 using namespace std;
 
@@ -63,8 +61,8 @@ namespace BALL
 		/** Detailled Constructor
 		 *  @param variant_list the list of variants to be applied
 		 */
-		template <typename Variant, typename Iterator>
-			EnumeratorIndex(const list<pair<Iterator, vector<Variant> > >& variant_list)
+		template <typename Variant, typename VariantIterator>
+		EnumeratorIndex(const list<pair<VariantIterator, vector<Variant> > >& variant_list)
 			: vector<Position>(variant_list.size()),
 				modulus_(variant_list.size()),
 				base_multipliers_(variant_list.size())
@@ -72,7 +70,7 @@ namespace BALL
 			// compute the base multipliers for later usage 
 			Index i;
 			Size multiplier = 1;
-			list<pair<Iterator, vector<Variant> > >::const_iterator list_it = variant_list.begin();
+			list<pair<VariantIterator, vector<Variant> > >::const_iterator list_it = variant_list.begin();
 			for (i = size() - 1; i >= 0; i--, list_it++)
 			{
 				operator[](i) = 0;
@@ -189,130 +187,291 @@ namespace BALL
 
 	//@}
 
-	template <class Container, class Iterator, class Variant>
-		class Enumerator
-		{	
-			typedef void (*MutatorFunction)(Variant&, Variant&);
+	template <class Container, class VariantIterator, class Variant>
+	class Enumerator
+	{	
+		protected:
+		class IteratorTraits_;
+		
+		public:
 
-			typedef vector<Variant>							
-				VariantVector;
+		/**	@name Type definitions
+		*/
+		//@{
+			
+		/**
+		*/
+		typedef void (*MutatorFunction)(Variant&, Variant&);
 
-			typedef pair<Iterator, VariantVector>
-				Site;
+		/**
+		*/
+		typedef vector<Variant>							
+			VariantVector;
 
-			typedef list<Site>
-				SiteList;
+		/**
+		*/
+		typedef pair<VariantIterator, VariantVector>
+			Site;
 
+		/**
+		*/
+		typedef list<Site>
+			SiteList;
+
+		/** Mutable forward iterator
+		*/
+		typedef ForwardIterator<Enumerator<Container, VariantIterator, Variant>, EnumeratorIndex, EnumeratorIndex*, IteratorTraits_>
+			Iterator;
+
+		/** Constant forward iterator
+		*/
+		typedef ConstForwardIterator<Enumerator<Container, VariantIterator, Variant>, EnumeratorIndex, EnumeratorIndex*, IteratorTraits_>
+			ConstIterator;
+
+		//@}
+
+		/** @name Constructors and Destructors
+		*/
+		//@{
+		/** Default Constructor
+		*/
+		Enumerator()
+		{
+		}
+		
+		/** Detailed Constructor
+		 * @param container a Container class to be mutated
+		 * @param mutator the function defining the mutations to be applied
+		 */
+		Enumerator(Container& container, MutatorFunction mutator)
+			:	container_(container),
+				mutator_(mutator)
+		{
+		}
+
+		/** Default Destructor
+		 */
+		~Enumerator()
+		{
+		}
+		
+		//@}
+
+		/** @name Accessors
+		 */
+		//@{
+		/** Add variants to the list of variants
+		 */
+		void addVariants(const VariantIterator& it, const VariantVector& variants)
+		{
+			variant_sites_.push_back(Site(it, variants));
+		}
+
+		/** Delete variants from the list of variants
+		 */
+		void deleteVariants(const VariantIterator& it, const VariantVector& variants)
+		{
+			// BAUSTELLE
+		}
+
+		/** Count all variants.
+		 * @return the number of all possible variants
+		 */
+		Size countVariants()
+		{
+			Size total = 1;
+			SiteList::iterator it;
+			for (it = variant_sites_.begin(); it != variant_sites_.end(); ++it)
+			{
+				total *= it->second.size();
+			}
+			return total;
+		}
+
+		/** Access the current content
+		 * @return a reference to the container class of this enumerator
+		 */
+		Container& getCurrent()
+		{
+			return container_;
+		}
+
+		/** Create a permuatation denoted by its number.
+		 * @param index the number of the permutation to be created
+		 */
+		void createPermutation(const Position index)
+		{
+			EnumeratorIndex enumerator_index(variant_sites_);
+			enumerator_index = index;
+			createPermutation(enumerator_index);
+		}
+
+		/** Create a permutation denoted by an instance of EnumeratorIndex.
+		 * @param index the instance of EnumeratorIndex that describes the
+		 * permutation to be created
+		 */
+		void createPermutation(const EnumeratorIndex& index)
+		{
+			if (index.size() != variant_sites_.size())
+			{
+				throw EnumeratorIndex::IncompatibleIndex();
+			}
+
+			SiteList::iterator it = variant_sites_.begin();
+			Position i = index.size() - 1;
+			for (; it != variant_sites_.end(); ++it, --i)
+			{
+				mutate_(it->first, it->second[index[i]]);
+			}
+		}
+
+		//@}
+
+		protected:
+
+		/**
+		*/
+		class IteratorTraits_
+		{
+			friend class Enumerator<Container, VariantIterator, Variant>;
+			
 			public:
-			
-			/** @name Constructors and Destructors
-			//@{
-			/** Default Constructor
-			 */
-			Enumerator()
+				
+			typedef Enumerator<Container, VariantIterator, Variant>	
+				ContainerType;
+
+			typedef Enumerator<Container, VariantIterator, Variant>* 
+				ContainerPointer;
+
+			typedef EnumeratorIndex														
+				IteratorPosition;
+
+			typedef EnumeratorIndex
+				ValueType;
+
+			IteratorTraits_()
+				:	bound_(0),	
+					position_(0)
+			{
+			}
+				
+			IteratorTraits_(const ContainerType& enumerator)
+				:	bound_(const_cast<ContainerPointer>(&enumerator)),
+					position_(0)
 			{
 			}
 			
-			/** Detailled Constructor
-			 * @param container a Container class to be mutated
-			 * @param mutator the function defining the mutations to be applied
-			 */
-			Enumerator(Container& container, MutatorFunction mutator)
-				:	container_(container),
-			mutator_(mutator)
-			{
-			}
-
-			/** Default Destructor
-			 */
-			~Enumerator()
+			
+			IteratorTraits_(const IteratorTraits_& traits)
+				:	bound_(traits.bound_)
+					position_(traits.position_)
 			{
 			}
 			
-			//@}
-
-			/** @name Accessors
-			 */
-			//@{
-			/** Add variants to the list of variants
-			 */
-			void addVariants(const Iterator& it, const VariantVector& variants)
-			{
-				variant_sites_.push_back(Site(it, variants));
+			IteratorTraits_& operator = (const IteratorTraits_& traits)
+      {
+        bound_ = traits.bound_;
+        position_ = traits.position_;
+ 
+        return *this;
 			}
 
-			/** Delete variants from the list of variants
-			 */
-			void deleteVariants(const Iterator& it, const VariantVector& variants)
+			const ContainerType* getContainer() const	
 			{
-				// BAUSTELLE
+				return bound_;
+			}
+			
+			ContainerPointer getContainer()
+			{
+				return bound_;
 			}
 
-			/** Count all variants.
-			 * @return the number of all possible variants
-			 */
-			Size countVariants()
+			bool isSingular() const
 			{
-				Size total = 1;
-				SiteList::iterator it;
-				for (it = variant_sites_.begin(); it != variant_sites_.end(); ++it)
-				{
-					total *= it->second.size();
-				}
-				return total;
+				return (bound_ == 0);
+			}
+ 
+      IteratorPosition& getPosition()
+      {
+        return position_;
 			}
 
-			/** Access the current content
-			 * @return a reference to the container class of this enumerator
-			 */
-			Container& getCurrent()
-			{
-				return container_;
+      const IteratorPosition& getPosition() const
+      {
+        return position_;
 			}
 
-			/** Create a permuatation denoted by its number.
-			 * @param index the number of the permutation to be created
-			 */
-			void createPermutation(const Position index)
-			{
-				EnumeratorIndex enumerator_index(variant_sites_);
-				enumerator_index = index;
-				createPermutation(enumerator_index);
+      bool operator == (const IteratorTraits_& traits) const
+      {
+        return (bool)(position_ == traits.position_);
 			}
 
-			/** Create a permutation denoted by an instance of EnumeratorIndex.
-			 * @param index the instance of EnumeratorIndex that describes the
-			 * permutation to be created
-			 */
-			void createPermutation(const EnumeratorIndex& index)
-			{
-				if (index.size() != variant_sites_.size())
-				{
-					throw EnumeratorIndex::IncompatibleIndex();
-				}
-
-				SiteList::iterator it = variant_sites_.begin();
-				Position i = index.size() - 1;
-				for (; it != variant_sites_.end(); ++it, --i)
-				{
-					mutate_(it->first, it->second[index[i]]);
-				}
+      bool operator != (const IteratorTraits_& traits) const
+      {
+        return (bool)(position_ != traits.position_);
+			}
+      bool isValid() const
+      {
+        return (bound_ != 0);
 			}
 
-			//@}
+      void invalidate()
+      {
+        bound_ = 0;
+        position_ = 0;
+			}
 
+			void toBegin()
+			{
+				position_ = 0;
+			}
+
+			bool isBegin() const
+			{
+				return (position_ == 0);
+			}
+			
+			void toEnd()
+			{
+				position_ = position_.getNumberOfCombinations();
+			}
+			
+			bool isEnd() const
+			{
+				return (position_ == position_.getNumberOfCombinations());
+			}
+			
+			ValueType& getData()
+			{
+				return position_;
+			}
+			
+			const ValueType& getData() const
+			{
+				return position_;
+			}
+			
+			void forward()
+			{
+				position_++;
+			}
+			
 			protected:
-
-			void mutate_(Iterator& it, Variant& v)
-			{
-				mutator_(*it, v);
-			}
-
-			Container& container_;
-			MutatorFunction mutator_;
-			SiteList  variant_sites_;
+			
+			ContainerPointer	bound_;
+			IteratorPosition	position_;
 		};
+	
 
+		void mutate_(VariantIterator& it, Variant& v)
+		{
+			mutator_(*it, v);
+		}
+
+		Container& container_;
+		MutatorFunction mutator_;
+		SiteList  variant_sites_;
+	};
 }
 
 #endif // BALL_CONCEPT_ENUMERATOR_H
