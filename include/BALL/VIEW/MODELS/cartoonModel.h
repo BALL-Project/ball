@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.19 2004/09/10 13:28:33 amoll Exp $
+// $Id: cartoonModel.h,v 1.20 2004/09/10 14:41:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -114,6 +114,14 @@ namespace BALL
 			///
 			float getArrowHeight() const
 				throw() { return arrow_height_;}
+
+			///
+			void setDrawDNAAsLadderModel(bool state)
+				throw() { draw_DNA_as_ladder_ = state;}
+
+			///
+			bool drawDNAAsLadderModel()
+				throw() { return draw_DNA_as_ladder_;}
 
 			//@}
 
