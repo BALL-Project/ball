@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.1.2.5 2002/12/11 21:18:03 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.1.2.6 2002/12/11 22:35:09 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -300,7 +300,7 @@ namespace BALL
 
 			if (system->getName() == "")
 			{
-				system->setName(filename);
+				system->setName(system_name);
 			}
 
 			// notify tree of a new composite
@@ -341,7 +341,7 @@ namespace BALL
 
 			if (system->getName() == "")
 			{
-				system->setName(filename);
+				system->setName(system_name);
 			}
 
 			// notify tree of a new composite
