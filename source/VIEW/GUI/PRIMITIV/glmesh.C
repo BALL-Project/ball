@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glmesh.C,v 1.8 2002/12/16 12:23:08 sturm Exp $
+// $Id: glmesh.C,v 1.9 2002/12/20 20:14:36 anhi Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 
@@ -111,6 +111,14 @@ namespace BALL
 			}
 
 			glPushMatrix();
+			unsigned int precision;
+			unsigned int mode;
+
+			getDrawingModeAndPrecision(mode, precision);
+			mode += GeometricObject::PROPERTY__DRAWING_MODE_DOTS;
+
+			cout << mode << endl;
+			
 			// If we have only one color for the whole mesh, this can
 			// be assigned efficiently
 			if (colorList.size() < vertex.size())
@@ -127,10 +135,6 @@ namespace BALL
 										 (unsigned char)colorList[0].getAlpha());
 				}
 					
-				unsigned int precision;
-				unsigned int mode;
-
-				getDrawingModeAndPrecision(mode, precision);
 
 				Triangle t;
 				Vector3 v, n;
@@ -154,6 +158,7 @@ namespace BALL
 				}
 				else if (mode == GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME)
 				{
+
 					// draw the triangles with lines
 					for (Size index = 0; index < triangle.size(); ++index)
 					{
