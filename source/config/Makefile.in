@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile.in,v 1.39 2004/11/05 10:05:06 oliver Exp $
+# $Id: Makefile.in,v 1.40 2004/11/10 22:35:40 amoll Exp $
 #
 
 include config.mak
@@ -31,8 +31,8 @@ staticlibs: $(STATIC_LIBS)
 
 install:	install.shared
 
-molview:
-	@( cd APPLICATIONS/MOLVIEW; make )
+BALLView:
+	@( cd APPLICATIONS/BALLVIEW; make )
 
 PB:
 	@( cd APPLICATIONS/PB; make )
