@@ -1,4 +1,4 @@
-// $Id: rtti.C,v 1.8 2002/01/03 01:53:39 oliver Exp $
+// $Id: rtti.C,v 1.8.4.1 2002/12/08 12:51:41 oliver Exp $
 
 #include <BALL/COMMON/rtti.h>
 #include <typeinfo>
@@ -31,6 +31,13 @@ namespace BALL
     #endif                                                                                                                                   
 #else
 		string s(t.name());
+		#ifdef BALL_COMPILER_MSVC
+			// MSVC prefixes all class names with "class " -- delete it!
+			while (s.find("class ") != string::npos) 
+				s.erase(s.find("class "), 6);
+		#endif
+		
+		
 #endif
 
 
