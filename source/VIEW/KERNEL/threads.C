@@ -205,15 +205,16 @@ namespace BALL
 
 				ForceField& ff = *minimizer_->getForceField();
 				bool ok = true;
+				bool converged = false;
 				// iterate until done and refresh the screen every "steps" iterations
 				while (!main_control_->stopedSimulation() &&
 								minimizer_->getNumberOfIterations() < minimizer_->getMaxNumberOfIterations() &&
-								ok)
+								!converged && ok)
 				{
-					minimizer_->minimize(steps_between_updates_, true);
-			
-					updateScene_();
+					converged = minimizer_->minimize(steps_between_updates_, true);
+					ok = 			 !minimizer_->wasAborted();
 
+					updateScene_();
 					waitForUpdateOfRepresentations_();
 
 					QString message;
@@ -221,7 +222,6 @@ namespace BALL
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(message.ascii());
-					ok = !minimizer_->wasAborted();
 				}
 
 				updateScene_();

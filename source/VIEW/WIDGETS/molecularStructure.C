@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.81 2005/02/07 22:09:47 amoll Exp $
+// $Id: molecularStructure.C,v 1.82 2005/02/18 13:39:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1109,9 +1109,10 @@ namespace BALL
 				// ============================= WITHOUT MULTITHREADING =================================
 				// iterate until done and refresh the screen every "steps" iterations
 				bool ok = true;
-				while (ok && minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
+				bool converged = false;
+				while (ok && !converged && minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
 				{
-					minimizer->minimize(minimization_dialog_.getRefresh(), true);
+					converged = minimizer->minimize(minimization_dialog_.getRefresh(), true);
 					getMainControl()->update(*system);
 
 					setStatusbarText(String("Iteration ") + String(minimizer->getNumberOfIterations())
