@@ -62,6 +62,7 @@ EXECUTABLES_DATATYPES = \
 
 EXECUTABLES_CONCEPTS = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	Enumerator_test\
+	Factory_test\
 	LogStream_test\
 	AutoDeletable_test\
 	Object_test\

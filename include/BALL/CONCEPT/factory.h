@@ -1,4 +1,4 @@
-// $Id: factory.h,v 1.1.2.1 2002/11/30 15:57:58 oliver Exp $
+// $Id: factory.h,v 1.1.2.2 2002/11/30 16:27:21 oliver Exp $
 
 #ifndef BALL_CONCEPT_FACTORY_H
 #define BALL_CONCEPT_FACTORY_H
@@ -17,19 +17,23 @@ namespace BALL
 			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/factory.h}
 	*/
+	template <typename T>
 	class Factory
 	{
 		public:
 		
 		/// Return a pointer to a new instance of T
 		static T* create() { return new T; }
+
 		/// Return a void pointer to a new instance of T
 		static void* createVoid() { return (void*)new T; }
+
 		/// Return a reference to a (pre-instantiated) default object
-		static const T& getDefault() { return default_; }
-		protected:
-		///
-		static T default_;
+		static const T& getDefault() 
+		{ 
+			static T def; 
+			return def; 
+		}
 	};
 
 
