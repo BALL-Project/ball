@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.16.4.2 2002/08/22 17:20:31 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.16.4.3 2002/11/30 15:05:54 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -126,7 +126,7 @@ namespace BALL
 		vector<String>	lines;
 		String line;
 		RegularExpression regexp("[A-Z][A-Z][A-Z] [0-9] [0-9] [0-9] [0-9] *[0-9]* *[0-9]* *[0-9\\.]*");
-		while (f)
+		while (f.good())
 		{
 			line.getline(f);
 			if (regexp.match(line))

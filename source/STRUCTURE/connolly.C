@@ -1,9 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connolly.C,v 1.9.4.3 2002/11/30 14:11:44 oliver Exp $
+// $Id: connolly.C,v 1.9.4.4 2002/11/30 15:05:54 oliver Exp $
+
+// WIN
+// required in order to get M_PI out of math.h (MS .NET)
+#define _USE_MATH_DEFINES 
 
 #include <math.h>
+
 #ifdef BALL_HAS_VALUES_H
 # include <values.h> // required for M_PI on some systems
 #endif
