@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.12 2003/11/21 01:22:52 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.13 2003/11/22 14:21:20 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -21,7 +21,6 @@ namespace BALL
 				: ModelSettingsDialogData( parent, name, fl )
 		{
 			setDefaults();
-			show();
 		}
 
 		void ModelSettingsDialog::setDefaults(bool all)
