@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.10 2000/12/13 15:14:29 strobel Exp $
+// $Id: triangulation.h,v 1.11 2000/12/13 19:00:52 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -116,23 +116,23 @@ namespace BALL
 		}
 		for (Position i = 0; i < triangulated_contact_face.size(); i++)
 		{
-					cout << "c " << i << "\n";
+					std::cout << "c " << i << "\n";
 			*surface += (*triangulated_contact_face[i]);
-					cout << "  ... hinzugefügt\n";
+					std::cout << "  ... hinzugefügt\n";
 			TSphere3<T> sphere(rs->getSphere(ses->contact_faces[i]->rsvertex->getAtom()));
-					cout << "  ... Mittelpunkt ermittelt\n";
+					std::cout << "  ... Mittelpunkt ermittelt\n";
 			SewFace(contact_contour[i],toric_contour,sphere,true,surface);
-					cout << "  ... genäht\n";
+					std::cout << "  ... genäht\n";
 		}
 		for (Position i = 0; i < triangulated_spheric_face.size(); i++)
 		{
-					cout << "s " << i << "\n";
+					std::cout << "s " << i << "\n";
 			*surface += (*triangulated_spheric_face[i]);
-					cout << "  ... hinzugefügt\n";
+					std::cout << "  ... hinzugefügt\n";
 			TSphere3<T> sphere(ses->spheric_faces[i]->rsface->getCenter(),radius_of_probe);
-					cout << "  ... Mittelpunkt ermittelt\n";
+					std::cout << "  ... Mittelpunkt ermittelt\n";
 			SewFace(spheric_contour[i],toric_contour,sphere,false,surface);
-					cout << "  ... genäht\n";
+					std::cout << "  ... genäht\n";
 		}
 		return surface;
 	}
@@ -550,24 +550,24 @@ namespace BALL
 			if (c->second.size() == 0)
 			{
 				empty.insert(c->first);
-						cout << "    " << c->first << "\n    ... empty\n";
+						std::cout << "    " << c->first << "\n    ... empty\n";
 			}
 			else
 			{
 				std::list< TTriangulatedSurface<T>::Point* > contour_in;
 				std::list< TTriangulatedSurface<T>::Point* > contour_out;
-						cout << "    " << c->first << "\n";
+						std::cout << "    " << c->first << "\n";
 				contour_out = edge_contours[c->first];
-						cout << "    ... " << contour_out.size() << " Punkte außen\n";
-						cout << "    ... " << c->second.size()+1 << " Punkte innen\n";
+						std::cout << "    ... " << contour_out.size() << " Punkte außen\n";
+						std::cout << "    ... " << c->second.size()+1 << " Punkte innen\n";
 				SortContour(c->second,contour_out,contour_in,(T)0);
-						cout << "    ... innen sortiert\n";
+						std::cout << "    ... innen sortiert\n";
 				SewContours(contour_in,contour_out,sphere.p,convex,surface);
-						cout << "    ... genäht\n";
+						std::cout << "    ... genäht\n";
 			}
 			c++;
 		}
-		cout << "    ... behandle leere Contouren\n";
+		std::cout << "    ... behandle leere Contouren\n";
 		if (empty.size() == contour.size())
 		{
 			SewEmptyContour(contour,edge_contours,sphere,convex,surface);
@@ -576,7 +576,7 @@ namespace BALL
 		{
 			//SewEmptyEdges(contour,edge_contours,empty,surface);
 		}
-		cout << "    ... fertig\n";
+		std::cout << "    ... fertig\n";
 	}
 
 
@@ -807,32 +807,32 @@ namespace BALL
 			 HashSet<Position>& empty,
 			 TTriangulatedSurface<T>* surface)
 	{
-		cout << "#1\n";
+		std::cout << "#1\n";
 		std::list<TTriangulatedSurface<T>::Point*> points;
 		std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >::iterator c;
 		HashSet<Position>::Iterator e;
 		std::list<TTriangulatedSurface<T>::Point*>::iterator p;
-		cout << "#2\n";
+		std::cout << "#2\n";
 		while (empty.size() > 0)
 		{
 			Position edge = *empty.begin();
 			empty.erase(edge);
-		cout << "#3\n";
+		std::cout << "#3\n";
 			for (p = edge_contours[edge].begin(); p != edge_contours[edge].end(); p++)
 			{
 				points.push_back(*p);
 			}
-		cout << "#4\n";
+		std::cout << "#4\n";
 			bool done = true;
 			while (done)
 			{
-		cout << "#5\n";
+		std::cout << "#5\n";
 				done = false;
 				e = empty.begin();
-		cout << "#6\n";
+		std::cout << "#6\n";
 				while (e != empty.end())
 				{
-		cout << "#7\n";
+		std::cout << "#7\n";
 					if (edge_contours[*e].front() == points.front())
 					{
 						for (p = ++edge_contours[*e].begin(); p != edge_contours[*e].end(); p++)
@@ -842,7 +842,7 @@ namespace BALL
 						empty.erase(*e);
 						done = true;
 					}
-		cout << "#8\n";
+		std::cout << "#8\n";
 					if (edge_contours[*e].front() == points.back())
 					{
 						for (p = ++edge_contours[*e].begin(); p != edge_contours[*e].end(); p++)
@@ -852,7 +852,7 @@ namespace BALL
 						empty.erase(*e);
 						done = true;
 					}
-		cout << "#9\n";
+		std::cout << "#9\n";
 					if (edge_contours[*e].back() == points.front())
 					{
 						for (p = edge_contours[*e].end(); p != edge_contours[*e].begin();)
@@ -862,7 +862,7 @@ namespace BALL
 						empty.erase(*e);
 						done = true;
 					}
-		cout << "#10\n";
+		std::cout << "#10\n";
 					if (edge_contours[*e].back() == points.back())
 					{
 						for (p = edge_contours[*e].end(); p != edge_contours[*e].begin();)
@@ -872,17 +872,17 @@ namespace BALL
 						empty.erase(*e);
 						done = true;
 					}
-		cout << "#11\n";
+		std::cout << "#11\n";
 					e++;
 				}
 			}
-		cout << "#12\n";
+		std::cout << "#12\n";
 			TTriangulatedSurface<T>::Point* middle;
 			c = contour.begin();
-		cout << "#13\n";
+		std::cout << "#13\n";
 			while (c != contour.end())
 			{
-		cout << "#14\n";
+		std::cout << "#14\n";
 				if (edge_contours[c->first].front() == points.front())
 				{
 					c = contour.end();
@@ -901,7 +901,7 @@ namespace BALL
 					}
 				}
 			}
-		cout << "#15\n";
+		std::cout << "#15\n";
 			p = points.begin();
 			p++;
 			TTriangulatedSurface<T>::Triangle* t = new TTriangulatedSurface<T>::Triangle;
@@ -909,7 +909,7 @@ namespace BALL
 			t->point[1] = points.front();
 			t->point[2] = *p;
 			surface->triangles.push_back(t);
-		cout << "#16\n";
+		std::cout << "#16\n";
 			while (p != --points.end())
 			{
 				t = new TTriangulatedSurface<T>::Triangle;
@@ -919,9 +919,9 @@ namespace BALL
 				t->point[2] = *p;
 				surface->triangles.push_back(t);
 			}
-		cout << "#17\n";
+		std::cout << "#17\n";
 		}
-		cout << "#18\n";
+		std::cout << "#18\n";
 	}
 
 

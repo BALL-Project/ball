@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.3 2000/12/13 15:14:28 strobel Exp $
+// $Id: SESFace.h,v 1.4 2000/12/13 19:00:52 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -246,7 +246,7 @@ namespace BALL
 			{
 				return;
 			}
-			cout << *this << "\n";
+			std::cout << *this << "\n";
 			if (singular == false)
 			{
 				TSESEdge<T>* edge0;
@@ -393,7 +393,7 @@ namespace BALL
 				vertex[4] = p4;
 				vertex[5] = p5;
 			}
-			cout << *this << "\n";
+			std::cout << *this << "\n";
 		}
 
 		//@}

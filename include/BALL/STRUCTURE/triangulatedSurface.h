@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.10 2000/12/13 17:14:10 oliver Exp $
+// $Id: triangulatedSurface.h,v 1.11 2000/12/13 19:00:52 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -385,7 +385,7 @@ namespace BALL
 
 
 	template <class T>
-	void TTriangulatedSurface<T>::refineSphere(Position iterations, bool out = true)
+	void TTriangulatedSurface<T>::refineSphere(Position iterations, bool out)
 	{
 		for (Position i = 0; i < iterations; i++)
 		{
