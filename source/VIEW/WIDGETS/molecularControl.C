@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.28 2004/01/13 00:44:47 amoll Exp $
+// $Id: molecularControl.C,v 1.29 2004/01/13 15:28:09 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -158,8 +158,9 @@ bool MolecularControl::reactToMessages_(Message* message)
 			
 			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
 			case CompositeMessage::CHANGED_COMPOSITE:
-				removeComposite(*(Composite *)composite_message->getComposite());
-				addComposite(*(Composite *)composite_message->getComposite());
+					removeComposite(composite_message->getComposite()->getRoot());
+					addComposite(composite_message->getComposite()->getRoot());
+				
 				return (composite_message->getType() == CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 				
 			case CompositeMessage::SELECTED_COMPOSITE:
@@ -532,7 +533,7 @@ void MolecularControl::onNotify(Message *message)
 	Log.error() << "MolecularControl " << this << " onNotify " << message << std::endl;
 #endif
 
-	GenericControl::onNotify(message);
+ 	GenericControl::onNotify(message);
 
 	// react accordingly to the given message
 	if (reactToMessages_(message))
