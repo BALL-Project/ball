@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.20 2004/07/14 12:26:47 amoll Exp $
+// $Id: glRenderer.h,v 1.21 2004/07/14 14:41:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -124,7 +124,7 @@ namespace BALL
 				throw();
 
 			///
-			Name getName(const GeometricObject& object)
+			inline Name getName(const GeometricObject& object)
 				throw();
 
 			///
@@ -368,8 +368,8 @@ namespace BALL
 			static const int 		sphere_indices_[20][3];
 
 			// naming of geometric objects
-			typedef HashMap<GeometricObject*, Name> NameHashMap;
-			typedef HashMap<Name, GeometricObject*> GeometricObjectHashMap;
+			typedef HashMap<const GeometricObject*, Name> NameHashMap;
+			typedef HashMap<Name, const GeometricObject*> GeometricObjectHashMap;
 			typedef HashMap<const Representation*, GLDisplayList*> DisplayListHashMap;
 
 			GeometricObjectHashMap	name_to_object_;

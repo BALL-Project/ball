@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.103 2004/07/14 12:26:50 amoll Exp $
+// $Id: scene.C,v 1.104 2004/07/14 14:42:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -282,6 +282,7 @@ namespace BALL
 
 		void Scene::initializeGL()
 		{
+			QGLWidget::initializeGL();
 			if (!format().rgba())  Log.error() << "no rgba mode for OpenGL available." << endl;
 
 			gl_renderer_.init(*stage_, (float) width(), (float) height());
@@ -309,17 +310,11 @@ namespace BALL
 		{
 			makeCurrent();
 
-			//abort if GL was not yet initialised
-			if (!gl_renderer_.hasStage()) return;
-
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
 			{
-				glPushMatrix();
 				renderRepresentations_(mode);
-				glPopMatrix();
-
 				return;
 			}
 
@@ -531,7 +526,6 @@ namespace BALL
 					gl_renderer_.renderTube_(t);
 				}
 			}
-	
 			// -------------------------------------------------------------------
 			
 			// render all "normal" (non always front and non transparent models)
@@ -581,16 +575,16 @@ namespace BALL
 		{
 			switch (mode)
 			{
-				case DIRECT_RENDERING:
-					gl_renderer_.render(rep);
-					break;
-
 				case DISPLAY_LISTS_RENDERING:
 					gl_renderer_.drawFromDisplayList(rep);
 					break;
 
 				case REBUILD_DISPLAY_LISTS:
 					gl_renderer_.rebuildDisplayListFor(rep);
+					break;
+
+				case DIRECT_RENDERING:
+					gl_renderer_.render(rep);
 					break;
 			}
 		}
@@ -814,8 +808,8 @@ namespace BALL
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
 			{
 				gl_renderer_.updateCamera();
-				gl_renderer_.setLights();
-				light_settings_->updateFromStage();
+ 				gl_renderer_.setLights();
+ 				light_settings_->updateFromStage();
 			}
 			updateGL();
 		}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.34 2004/07/14 12:26:52 amoll Exp $
+// $Id: glRenderer.C,v 1.35 2004/07/14 14:41:22 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -205,7 +205,9 @@ namespace BALL
 			throw()
 		{
 			GLenum light_nr = GL_LIGHT0;
-			for (; light_nr < GL_LIGHT0 + 20; light_nr++)
+			GLenum LIGHTS_MAX = GL_MAX_LIGHTS;
+			if (LIGHTS_MAX > GL_LIGHT0 + 10) LIGHTS_MAX = GL_LIGHT0 + 10;
+			for (; light_nr < LIGHTS_MAX; light_nr++)
 			{
 				glDisable(light_nr);
 			}
@@ -305,7 +307,7 @@ namespace BALL
 			
 			GLDisplayList* display_list = display_lists_[&rep];
 			display_list->clear();
-			display_list->useCompileMode();
+			 display_list->useCompileMode();
 
 			display_list->startDefinition();
 			render(rep);
@@ -348,7 +350,7 @@ namespace BALL
 			drawing_precision_  = representation.getDrawingPrecision();
 			drawing_mode_ 		  = representation.getDrawingMode();
 
-			if (drawing_mode_ == DRAWING_MODE_DOTS)
+			if (representation.getDrawingMode() == DRAWING_MODE_DOTS)
 			{
 				glDisable(GL_LIGHTING);
 			}
@@ -357,7 +359,6 @@ namespace BALL
 				glEnable(GL_LIGHTING);
 			}
 
-			glPushMatrix();
 			List<GeometricObject*>::ConstIterator it;
 			for (it =  representation.getGeometricObjects().begin();
 					 it != representation.getGeometricObjects().end();
@@ -366,10 +367,7 @@ namespace BALL
 				render_(*it);
 			}
 
-			// restore Matrix stack
-			glPopMatrix();
 			glFlush();
-
 
 			return true;
 		}
@@ -408,7 +406,7 @@ namespace BALL
 		void GLRenderer::render_(const GeometricObject* object)
 			throw()
 		{
-			glLoadName(getName(*object));
+		 	glLoadName(getName(*object));
 			Renderer::render_(object);
 		}
 
@@ -836,48 +834,6 @@ namespace BALL
 			return text_array;
 		}
 
-		#		define BALL_OPENGL_SPHERE_X .525731112119133606
-		#		define BALL_OPENGL_SPHERE_Z .850650808352039932
-
-		const float GLRenderer::sphere_vertices_[12][3] =
-		{
-			{-BALL_OPENGL_SPHERE_X, 0.0, BALL_OPENGL_SPHERE_Z},
-			{ BALL_OPENGL_SPHERE_X, 0.0, BALL_OPENGL_SPHERE_Z},
-			{-BALL_OPENGL_SPHERE_X, 0.0,-BALL_OPENGL_SPHERE_Z},
-			{ BALL_OPENGL_SPHERE_X, 0.0,-BALL_OPENGL_SPHERE_Z},
-			{ 0.0, BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X},
-			{ 0.0, BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X},
-			{ 0.0,-BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X},
-			{ 0.0,-BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X},
-			{ BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X, 0.0},
-			{-BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X, 0.0},
-			{ BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X, 0.0},
-			{-BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X, 0.0}
-		};
-
-		const int GLRenderer::sphere_indices_[20][3] =
-		{
-			{ 0, 4, 1},
-			{ 0, 9, 4},
-			{ 9, 5, 4},
-			{ 4, 5, 8},
-			{ 4, 8, 1},
-			{ 8,10, 1},
-			{ 8, 3,10},
-			{ 5, 3, 8},
-			{ 5, 2, 3},
-			{ 2, 7, 3},
-			{ 7,10, 3},
-			{ 7, 6,10},
-			{ 7,11, 6},
-			{11, 0, 6},
-			{ 0, 1, 6},
-			{ 6, 1,10},
-			{ 9, 0,11},
-			{ 9,11, 2},
-			{ 9, 2, 5},
-			{ 7, 2,11}
-		};
 
 		void GLRenderer::createSpheres_()
 			throw()
@@ -931,6 +887,36 @@ namespace BALL
 			
 		}
 
+
+		// ======================== data for dotted spheres =======================
+		#		define BALL_OPENGL_SPHERE_X .525731112119133606
+		#		define BALL_OPENGL_SPHERE_Z .850650808352039932
+
+		const float GLRenderer::sphere_vertices_[12][3] =
+		{
+			{-BALL_OPENGL_SPHERE_X, 0.0, BALL_OPENGL_SPHERE_Z},
+			{ BALL_OPENGL_SPHERE_X, 0.0, BALL_OPENGL_SPHERE_Z},
+			{-BALL_OPENGL_SPHERE_X, 0.0,-BALL_OPENGL_SPHERE_Z},
+			{ BALL_OPENGL_SPHERE_X, 0.0,-BALL_OPENGL_SPHERE_Z},
+			{ 0.0, BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X},
+			{ 0.0, BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X},
+			{ 0.0,-BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X},
+			{ 0.0,-BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X},
+			{ BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X, 0.0},
+			{-BALL_OPENGL_SPHERE_Z, BALL_OPENGL_SPHERE_X, 0.0},
+			{ BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X, 0.0},
+			{-BALL_OPENGL_SPHERE_Z,-BALL_OPENGL_SPHERE_X, 0.0}
+		};
+
+		const int GLRenderer::sphere_indices_[20][3] =
+		{
+			{ 0, 4, 1}, { 0, 9, 4}, { 9, 5, 4}, { 4, 5, 8}, { 4, 8, 1},
+			{ 8,10, 1}, { 8, 3,10}, { 5, 3, 8}, { 5, 2, 3}, { 2, 7, 3},
+			{ 7,10, 3}, { 7, 6,10}, { 7,11, 6}, {11, 0, 6}, { 0, 1, 6},
+			{ 6, 1,10}, { 9, 0,11}, { 9,11, 2}, { 9, 2, 5}, { 7, 2,11}
+		};
+
+
 		void GLRenderer::createDottedSphere_(int precision)
 			throw()
 		{
@@ -963,9 +949,7 @@ namespace BALL
 			{
 				Vector3 result = v1 + v2 + v3;
 				result.normalize();
-
-				glVertex3f((GLfloat)result.x, (GLfloat)result.y, (GLfloat)result.z);
-
+				vertexVector3_(result);
 				return;
 			}
 
@@ -1186,9 +1170,7 @@ namespace BALL
 		GLRenderer::Name GLRenderer::getName(const GeometricObject& object)
 			throw()
 		{
-			GeometricObject* obj = const_cast<GeometricObject*>(&object);
-
-			NameHashMap::Iterator name_iterator = object_to_name_.find(obj);
+			NameHashMap::Iterator name_iterator = object_to_name_.find(&object);
 
 			if (name_iterator != object_to_name_.end())
 			{
@@ -1197,8 +1179,8 @@ namespace BALL
 
 			Name name = ++all_names_;
 
-			object_to_name_.insert(NameHashMap::ValueType(obj, name));
-			name_to_object_.insert(GeometricObjectHashMap::ValueType(name, obj));
+			object_to_name_.insert(NameHashMap::ValueType(&object, name));
+			name_to_object_.insert(GeometricObjectHashMap::ValueType(name, &object));
 
 			return name;
 		}
@@ -1215,7 +1197,7 @@ namespace BALL
 
 			GeometricObjectHashMap::ConstIterator it = name_to_object_.find(name);
 
-			return it->second;
+			return (GeometricObject*) it->second;
 		}
 
 
