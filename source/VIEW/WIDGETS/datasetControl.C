@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.35.4.1 2005/04/01 14:34:17 haid Exp $
+// $Id: datasetControl.C,v 1.35.4.2 2005/04/04 16:07:44 haid Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -37,6 +37,7 @@ DatasetControl::DatasetControl(QWidget* parent, const char* name)
 	throw()
 	:	GenericControl(parent, name),
 		dialog_(0),
+		result_dialog_(0),
 		surface_dialog_(0),
 		menu_cs_(0)
 {
@@ -135,8 +136,6 @@ void DatasetControl::addTrajectory()
 void DatasetControl::insertTrajectory_(TrajectoryFile* file, System& system)
 	throw()
 {
-	Log.info() << " in insertTrajectory_ !!!!!!!!!!!!! " << std::endl;
-
 	if (file->getNumberOfAtoms() != system.countAtoms())
 	{
 		setStatusbarText("Number of atoms do not match. Aborting...");
@@ -353,7 +352,7 @@ void DatasetControl::onContextMenu_(QListViewItem* item,  const QPoint& point, i
 	}
 	else if (item_to_dock_result_.has(item))
 	{
-		menu_entry_pos = context_menu.insertItem("Show Dock Results", this, SLOT(showDockResult_()));
+		menu_entry_pos = context_menu.insertItem("Show Dock Result", this, SLOT(showDockResult_()));
 		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 	}
 	else if (item_to_grid1_.has(item))
@@ -425,7 +424,7 @@ void DatasetControl::showDockResult_()
 	
 	// setup result_dialog 
 	result_dialog_->setDockResult(item_to_dock_result_[context_item_]);
-	
+	result_dialog_->setDockedSystem((System*)(item_to_composite_[context_item_]));
 	result_dialog_->show();
 }
 
