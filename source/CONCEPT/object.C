@@ -1,4 +1,4 @@
-// $Id: object.C,v 1.9 2001/07/05 17:49:50 oliver Exp $
+// $Id: object.C,v 1.10 2001/07/25 11:25:22 oliver Exp $
 
 #include <BALL/CONCEPT/object.h>
 
@@ -20,7 +20,7 @@ namespace BALL
 	{
 	}
 
-	Object::Object(const Object& /* object */, bool)
+	Object::Object(const Object& /* object */)
 		throw()
 		:	AutoDeletable(),
 			handle_(Object::global_handle_++)
