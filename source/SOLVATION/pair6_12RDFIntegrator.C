@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.6 2000/11/29 14:05:36 anker Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.7 2000/11/29 14:52:07 anker Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
@@ -157,6 +157,10 @@ namespace BALL
 		{
 			interval = Interval(from, lower_inf);
 			val = integrate(from, interval.second);
+		}
+		else 
+		{
+			lower_inf = from;
 		}
 
 		// now compute the rest of the integral, i. e. the term to infinity.
