@@ -127,11 +127,6 @@ namespace VIEW
 			///
 			Composite* getComposite() throw() { return composite_;}
 
-			/** Notify the thread, that about the state of the visualisation update.
-			 		(The SimulationThread will wait for this call.)
-			*/
-			void setUpdateRunning(bool state) { update_vis_running_ = state;}
-
 			///
 			void exportSceneToPNG();
 
@@ -151,7 +146,6 @@ namespace VIEW
 			MainControl* 	main_control_;
 			DCDFile*   		dcd_file_;
 			Composite* 		composite_;
-			bool       		update_vis_running_;
 		};
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.iC,v 1.2 2004/01/13 15:16:31 amoll Exp $
+// $Id: mainControl.iC,v 1.3 2004/11/10 15:22:08 amoll Exp $
 
 BALL_INLINE 
 int MainControl::getNextID_()
@@ -37,3 +37,76 @@ List<Composite*>& MainControl::getMolecularControlSelection()
 {
 	return control_selection_;
 }
+
+BALL_INLINE
+void MainControl::quit()
+{
+	QApplication::exit();
+	about_to_quit_ = true;
+}
+
+BALL_INLINE
+bool MainControl::compositesAreLocked()
+	throw()
+{
+	return (composites_locked_by_main_control_ || locking_widget_ != 0);
+}
+
+BALL_INLINE
+ModularWidget* MainControl::getLockingWidget() 
+	throw()
+{
+	return locking_widget_;
+}
+
+BALL_INLINE
+bool MainControl::updateOfRepresentationRunning()
+	throw()
+{
+	return primitive_manager_.updateRunning();
+}
+
+BALL_INLINE
+String MainControl::getStatusbarText() const
+	throw()
+{
+	return message_label_->text().ascii();
+}
+
+BALL_INLINE
+const String& MainControl::getLoggingFilename() const
+	throw()
+{
+	return logging_file_name_;
+}
+
+BALL_INLINE
+void MainControl::setMenuHint(Index id, const String& string)
+	throw()
+{
+	menu_entries_hints_[id] = string;
+	menuBar()->setWhatsThis(id, string.c_str());
+}
+
+BALL_INLINE
+const String& MainControl::getMenuHint(Index id) const
+	throw() 
+{
+	return menu_entries_hints_[id];
+}
+
+BALL_INLINE
+const HashSet<Composite*>& MainControl::getSelection() const
+	throw()
+{
+	return selection_;
+}
+
+BALL_INLINE
+HashSet<Composite*>& MainControl::getSelection() 
+	throw()
+{
+	return selection_;
+}
+
+

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.123 2004/11/10 02:56:46 amoll Exp $
+// $Id: mainControl.C,v 1.124 2004/11/10 15:22:11 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1083,19 +1083,6 @@ namespace BALL
 			}
 		}
 
-
-		const HashSet<Composite*>& MainControl::getSelection() const
-			throw()
-		{
-			return selection_;
-		}
-
-		HashSet<Composite*>& MainControl::getSelection() 
-			throw()
-		{
-			return selection_;
-		}
-
 		System* MainControl::getSelectedSystem()
 			throw()
 		{
@@ -1229,19 +1216,6 @@ namespace BALL
 			QString s = mys.c_str();
 			QTextStream stream( &s, IO_ReadWrite);
 			stream >> *this;
-		}
-
-		void MainControl::setMenuHint(Index id, const String& string)
-			throw()
-		{
-			menu_entries_hints_[id] = string;
-			menuBar()->setWhatsThis(id, string.c_str());
-		}
-
-		const String& MainControl::getMenuHint(Index id) const
-			throw() 
-		{
-			return menu_entries_hints_[id];
 		}
 
 		void MainControl::menuItemHighlighted(int id)
@@ -1484,7 +1458,7 @@ namespace BALL
 //   				if (so->isImportant() ||
 //   				    getStatusbarText().size() == 0)
 //   				{
-				setStatusbarText(so->getMessage(), so->isImportant());
+				setStatusbarText(so->getMessage(), true);
 //   				}
 				return;
 			}
@@ -1510,15 +1484,6 @@ namespace BALL
 
 				qApp->wakeUpGuiThread();
 				qApp->processEvents();
-				if (simulation_thread_ == 0 || 
-						stop_simulation_) 
-				{
-					return;
-				}
-
-				// ok, continue simulation
-				simulation_thread_->setUpdateRunning(false);
-				return;
 			}
 		#endif
 		}
@@ -1621,12 +1586,6 @@ namespace BALL
 				disableLoggingToFile();
 				enableLoggingToFile();
 			}
-		}
-
-		const String& MainControl::getLoggingFilename() const
-			throw()
-		{
-			return logging_file_name_;
 		}
 
 		// ======================= StatusbarTimer =========================
@@ -1751,18 +1710,6 @@ namespace BALL
 			}
 		}
 
-		void MainControl::quit()
-		{
- 			QApplication::exit();
-			about_to_quit_ = true;
-		}
-
-		bool MainControl::compositesAreLocked()
-			throw()
-		{
-			return (composites_locked_by_main_control_ || locking_widget_ != 0);
-		}
-
 		bool MainControl::lockCompositesFor(ModularWidget* widget)
 			throw()
 		{
@@ -1786,12 +1733,6 @@ namespace BALL
 			return true;
 		}
 
-		ModularWidget* MainControl::getLockingWidget() 
-			throw()
-		{
-			return locking_widget_;
-		}
-
 		bool MainControl::lockCompositesForMainControl_()
 			throw()
 		{
@@ -1800,20 +1741,6 @@ namespace BALL
 			setBusyMode_(true);
 			return true;
 		}
-
-
-		bool MainControl::updateOfRepresentationRunning()
-			throw()
-		{
-			return primitive_manager_.updateRunning();
-		}
-
-		String MainControl::getStatusbarText() const
-			throw()
-		{
-			return message_label_->text().ascii();
-		}
-		
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>

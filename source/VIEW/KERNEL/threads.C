@@ -73,8 +73,7 @@ namespace BALL
 			: QThread(),
 				main_control_(0),
 				dcd_file_(0),
-				composite_(0),
-				update_vis_running_(false)
+				composite_(0)
 		{
 		}
 
@@ -85,13 +84,6 @@ namespace BALL
 
 		void SimulationThread::updateScene_()
 		{
-			if (main_control_->stopedSimulation()) 
-			{
-				update_vis_running_ = false;
-				return;
-			}
-
-			update_vis_running_ = true;
 			// notify MainControl to update all Representations for the Composite
 			UpdateCompositeEvent* se = new UpdateCompositeEvent;
 			se->setComposite(composite_);
@@ -155,7 +147,11 @@ namespace BALL
 					output_(message.ascii());
 
 					// prevent continuation of simulation, before update of visualisation has finished
-					while (update_vis_running_ && !main_control_->stopedSimulation()) msleep(10);
+					while (main_control_->updateOfRepresentationRunning() && 
+								!main_control_->stopedSimulation()) 
+					{
+						msleep(10);
+					}
 				}
 
 				updateScene_();
@@ -221,7 +217,11 @@ namespace BALL
 							 !main_control_->stopedSimulation())
 				{
 					// prevent continuation of simulation, before update of visualisation has finished
-					while (update_vis_running_ && !main_control_->stopedSimulation()) msleep(10);
+					while (main_control_->updateOfRepresentationRunning() && 
+								 !main_control_->stopedSimulation()) 
+					{
+						msleep(10);
+					}
 
 					md_->simulateIterations(steps_between_updates_, true);
 					updateScene_();
