@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.43 2004/11/28 22:18:01 amoll Exp $
+// $Id: mainframe.C,v 1.44 2004/11/28 22:19:47 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -284,23 +284,6 @@ namespace BALL
  		MainControl::loadBALLViewProjectFile(result.ascii());
 	}
 
-
-	void Mainframe::setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)
-		throw()
-	{
-		if (hash_set.has(current))
-		{
-			getSelection().insert(c);
-			hash_set.erase(current);
-		}
-
-		current++;
-
-		for (Position p = 0; p < c->getDegree() && hash_set.size() > 0; p++)
-		{
-			setSelection_(c->getChild(p), hash_set, current);
-		}
-	}
 
 	void Mainframe::keyPressEvent(QKeyEvent* e)
 	{

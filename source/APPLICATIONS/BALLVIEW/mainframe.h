@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.9 2004/11/28 22:18:01 amoll Exp $
+// $Id: mainframe.h,v 1.10 2004/11/28 22:19:22 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -81,9 +81,6 @@ namespace BALL
 		void loadBALLViewProjectFile() throw();
 		
 		protected:
-
-		void setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)
-			throw();
 
 		Scene*										scene_;
 		DatasetControl* 					dataset_control_;
