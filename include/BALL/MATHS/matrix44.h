@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.9 2000/03/08 18:36:50 amoll Exp $
+// $Id: matrix44.h,v 1.10 2000/03/11 12:00:10 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -1336,7 +1336,7 @@ namespace BALL
 	BALL_INLINE 
 	TMatrix4x4<T>TMatrix4x4<T>::operator / (const T& scalar) const
 	{
-		if (scalae == (T)0)
+		if (scalar == (T)0)
 		{
 			throw Exception::DivisionByZero(__FILE__, __LINE__);
 		}
