@@ -1,4 +1,4 @@
-// $Id: radius.C,v 1.2 1999/12/19 17:15:42 oliver Exp $
+// $Id: radius.C,v 1.3 1999/12/28 18:00:23 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/radius.h>
 
@@ -72,7 +72,7 @@ namespace BALL
 			return true;
 		}
 
-		void Radius::dump(ostream& s, unsigned long depth) const
+		void Radius::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

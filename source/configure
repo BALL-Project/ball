@@ -1,7 +1,7 @@
 #! /bin/sh
 
 ###############
-###  $Id: configure,v 1.23 1999/12/22 17:53:49 oliver Exp $
+###  $Id: configure,v 1.24 1999/12/28 18:03:57 oliver Exp $
 ###############
 ###############
 ###
@@ -12,14 +12,14 @@
 #CXX=
 
 #    and this flag to add compiler specific flags
-#CXXFLAGS=
+#CXXFLAGS=-xarch=v9a
 
 #   Use this flag to enable debug mode:
-#DEBUG=true
+DEBUG=true
 
 #   if you do not want to include BALLView,
 #   set USE_BALLVIEW to false
-USE_BALLVIEW=false
+USE_BALLVIEW=true
 
 #   all variables *_INCLUDES should be set to the path of
 #   include directory. E.g. your OpenGL include file GL/gl.h
@@ -42,13 +42,13 @@ MESA_INCLUDES=
 MESA_LIBS=
 
 #    ...and for QT (see also BALL/contrib/qt!)
-QT_INCLUDES=
-QT_LIBS=
+QT_INCLUDES=/KM/comp-bio/BALL-contrib/qt-2.0.2/include
+QT_LIBS=/KM/comp-bio/BALL-contrib/qt-2.0.2/lib/Solaris-sparc-g++_2.95.2
 
 #   if you do not want to be asked by configure
 #   which BALLView platform to use, put it here
 #   Possible values are Mesa or OpenGL
-BALLVIEW_PLATFORM=
+BALLVIEW_PLATFORM=OpenGL
 
 
 #   This applies to 64 bit SGI machines only.
@@ -4843,7 +4843,7 @@ BINFMT="${BINFMT}-${CXX_NAME}"
 
 if test "${MULTI_BUILD}" = "true" ; then
 	touch ${BINFORMAT_FILE}
-	if test "`${GREP} ^${BINFMT}\\$ ${BINFORMAT_FILE}`" = "" ; then
+	if test "`${GREP} \^${BINFMT}\\$ ${BINFORMAT_FILE}`" = "" ; then
 		echo ${BINFMT} >> ${BINFORMAT_FILE}
 	fi
 fi

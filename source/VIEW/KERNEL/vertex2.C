@@ -1,6 +1,8 @@
-// $Id: vertex2.C,v 1.2 1999/12/19 17:15:42 oliver Exp $
+// $Id: vertex2.C,v 1.3 1999/12/28 18:00:24 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/vertex2.h>
+
+using namespace std;
 
 namespace BALL
 {
@@ -139,7 +141,7 @@ namespace BALL
 		}
 
 		void Vertex2::dump
-			(ostream& s, unsigned long depth) const
+			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

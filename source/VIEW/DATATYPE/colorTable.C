@@ -1,4 +1,4 @@
-// $Id: colorTable.C,v 1.2 1999/12/19 17:15:34 oliver Exp $
+// $Id: colorTable.C,v 1.3 1999/12/28 18:00:20 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 
@@ -56,7 +56,7 @@ namespace BALL
 		}
 
 		void ColorTable::dump
-			(ostream& s, unsigned long /* depth */) const
+			(ostream& s, Size /* depth */) const
 		{
 			for (Size i = 0; i < size(); i++)
 			{

@@ -1,4 +1,4 @@
-// $Id: basesphere.C,v 1.2 1999/12/19 17:15:54 oliver Exp $
+// $Id: basesphere.C,v 1.3 1999/12/28 18:00:29 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/basesphere.h>
 
@@ -95,7 +95,7 @@ namespace BALL
 		}
 
 		void BaseSphere::dump
-			(ostream& s, unsigned long depth) const
+			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,6 +1,8 @@
-// $Id: lineModel.C,v 1.2 1999/12/19 17:14:26 oliver Exp $
+// $Id: lineModel.C,v 1.3 1999/12/28 18:00:46 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
+
+using namespace std;
 
 namespace BALL
 {
@@ -234,8 +236,7 @@ namespace BALL
 
 		void 
 		AddLineModel::dump
-			(ostream& s,
-			 unsigned long depth) const
+			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

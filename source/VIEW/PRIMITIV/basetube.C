@@ -1,6 +1,8 @@
-// $Id: basetube.C,v 1.2 1999/12/19 17:15:54 oliver Exp $
+// $Id: basetube.C,v 1.3 1999/12/28 18:00:29 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/basetube.h>
+
+using namespace std;
 
 namespace BALL
 {
@@ -87,7 +89,7 @@ namespace BALL
 		}
 
 		void BaseTube::dump
-			(ostream& s, unsigned long depth) const
+			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

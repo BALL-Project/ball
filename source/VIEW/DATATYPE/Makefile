@@ -9,4 +9,4 @@ CPP_SOURCES=\
 	colorUnitHue.C
 
 include ../../common.mak
-
+include .Dependencies

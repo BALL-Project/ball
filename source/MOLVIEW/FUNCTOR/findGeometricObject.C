@@ -1,6 +1,8 @@
-// $Id: findGeometricObject.C,v 1.2 1999/12/19 17:14:25 oliver Exp $
+// $Id: findGeometricObject.C,v 1.3 1999/12/28 18:00:46 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
+
+using namespace std;
 
 namespace BALL
 {
@@ -90,6 +92,7 @@ namespace BALL
 		FindGeometricObject::start
 			()
 		{
+			Log.info() << "starting FindGeometricObject::start()" << endl;
 			geometric_object_ = 0;
 
 			return true;
@@ -99,6 +102,7 @@ namespace BALL
 		FindGeometricObject::finish
 			()
 		{
+			Log.info() << "starting FindGeometricObject::finish()" << endl;
 			return true;
 		}
 				
@@ -106,24 +110,26 @@ namespace BALL
 		FindGeometricObject::operator ()
 			(Composite &composite)
 		{
+			Log.info() << "FindGeometricObject::operator(" << (void*)&composite << ")" << endl;
 			// skip composites that are not instances of geometricObject
 			if (RTTI<VIEW::GeometricObject>::isKindOf(composite) == false)
 			{
 				return Processor::CONTINUE;
 			}
 
+			Log.info() << "FindGeometricObject::operator(" << (void*)&composite << "): isKindOf(Composite)" << endl;
 			VIEW::GeometricObject *__pGeometricObject 
 				= RTTI<VIEW::GeometricObject>::castTo(composite);
 
 			BitVector and_bitvector = getBitVector().operator&(__pGeometricObject->getBitVector());
 			BitVector help_bitvector(and_bitvector.getSize());
 
-			help_bitvector.or(getBitVector());
-			/*
-			cout << "own: " << help_bitvector << " object:  " << __pGeometricObject->getBitVector()
+			help_bitvector.bitwiseOr(getBitVector());
+			
+			Log.info() << "own: " << help_bitvector << " object:  " << __pGeometricObject->getBitVector()
 					 << "  &: " << and_bitvector << " size own: " << help_bitvector.getSize()
 					 << "  temp size: " << and_bitvector.getSize() << endl;
-			*/
+			
 			if (and_bitvector == help_bitvector)
 			{
 				geometric_object_ = __pGeometricObject;
@@ -143,8 +149,7 @@ namespace BALL
 
 		void 
 		FindGeometricObject::dump
-			(ostream& s,
-			 unsigned long depth) const
+			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

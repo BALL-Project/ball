@@ -21,7 +21,7 @@ Mainframe::Mainframe
 	// Logstream setup -----
 	// ---------------------
 
-	__mLogStream_.insert(cout);
+	__mLogStream_.insert(std::cout);
 	
 	// ---------------------
 	// Menu ----------------

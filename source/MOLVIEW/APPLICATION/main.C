@@ -16,8 +16,6 @@ using namespace BALL::MOLVIEW;
 
 int main(int argc, char **argv)
 {
-	Log.insert(cout);
-	
   QApplication __QApplication(argc, argv);
 
 	// creating Mainframe

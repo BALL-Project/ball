@@ -1,7 +1,8 @@
-// $Id: twoColoredTube.C,v 1.2 1999/12/19 17:14:39 oliver Exp $
-
+// $Id: twoColoredTube.C,v 1.3 1999/12/28 18:00:48 oliver Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
+
+using namespace std;
 
 namespace BALL
 {
@@ -86,7 +87,7 @@ namespace BALL
 		}
 
 		void TwoColoredTube::dump
-			(ostream& s, unsigned long depth) const
+			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

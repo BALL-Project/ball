@@ -1,4 +1,4 @@
-// $Id: colorUnit.C,v 1.2 1999/12/19 17:15:34 oliver Exp $
+// $Id: colorUnit.C,v 1.3 1999/12/28 18:00:20 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
@@ -506,7 +506,7 @@ namespace BALL
 		}
 
 		void ColorUnit::dump
-			(ostream& s, unsigned long depth) const
+			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.1 1999/12/22 19:09:36 oliver Exp $
+// $Id: control.C,v 1.2 1999/12/28 18:00:44 oliver Exp $
 
 #include <BALL/MOLVIEW/APPLICATION/control.h>
 
@@ -358,9 +358,17 @@ Control::ContextMenu
 	{
 	  case TYPE__SYSTEM:
 			__QPopupMenu.insertItem("remove System", REMOVE__SYSTEM);
-			__QPopupMenu.insertItem("Camera", camera__pQPopupMenu);
-			camera__pQPopupMenu->insertItem("center System", CAMERA__CENTER_SYSTEM);
-			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
+		  __QPopupMenu.insertSeparator();
+//			__QPopupMenu.insertItem("Camera", camera__pQPopupMenu);
+//			camera__pQPopupMenu->insertItem("center System", CAMERA__CENTER_SYSTEM);
+//			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
+		  __QPopupMenu.insertItem("remove Model", DISPLAY__REMOVE_MODEL);
+		  __QPopupMenu.insertItem("generate Wireframe model", DISPLAY__LINES);
+		  __QPopupMenu.insertItem("generate Stick model", DISPLAY__STICK);
+		  __QPopupMenu.insertItem("generate Ball and Stick model", DISPLAY__BALL_AND_STICK);
+		  __QPopupMenu.insertItem("generate Van der Waals model", DISPLAY__VAN_DER_WAALS);
+		  __QPopupMenu.insertSeparator();
+		  __QPopupMenu.insertItem("center System", CAMERA__CENTER_SYSTEM);
 			break;
 
 	  case TYPE__PROTEIN:
@@ -369,7 +377,14 @@ Control::ContextMenu
 	  case TYPE__RESIDUE:
 	  case TYPE__SECONDARY_STRUCTURE:
 	  case TYPE__FRAGMENT:
-			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
+//			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
+		  __QPopupMenu.insertItem("remove Model", DISPLAY__REMOVE_MODEL);
+		  __QPopupMenu.insertItem("generate Wireframe model", DISPLAY__LINES);
+		  __QPopupMenu.insertItem("generate Stick model", DISPLAY__STICK);
+		  __QPopupMenu.insertItem("generate Ball and Stick model", DISPLAY__BALL_AND_STICK);
+		  __QPopupMenu.insertItem("generate Van der Waals model", DISPLAY__VAN_DER_WAALS);
+		  __QPopupMenu.insertSeparator();
+		  __QPopupMenu.insertItem("center System", CAMERA__CENTER_SYSTEM);
 			break;
 
 	  default:
@@ -381,8 +396,11 @@ Control::ContextMenu
 	__QPopupMenu.insertSeparator();
 	__QPopupMenu.insertItem("Test 3   ", 4);
 	
+
 	// execute the action
-	switch (__QPopupMenu.exec(__rQPoint))
+	int result = __QPopupMenu.exec(__rQPoint);
+	Log.info() << "ACTION: " << result << std::endl;
+	switch (result)
 	{
 	  case REMOVE__SYSTEM:
 		{
@@ -421,6 +439,8 @@ Control::ContextMenu
 
   	case DISPLAY__REMOVE_MODEL:
 		{
+			Log.info() << "REMOVE_MODEL" << std::endl;
+
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
 

@@ -1,5 +1,8 @@
-// $Id: vanDerWaalsModel.C,v 1.2 1999/12/19 17:14:26 oliver Exp $
+// $Id: vanDerWaalsModel.C,v 1.3 1999/12/28 18:00:46 oliver Exp $
+
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
+
+using namespace std;
 
 namespace BALL
 {

@@ -1,4 +1,4 @@
-// $Id: colorExtension4.C,v 1.2 1999/12/19 17:15:41 oliver Exp $
+// $Id: colorExtension4.C,v 1.3 1999/12/28 18:00:23 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension4.h>
 
@@ -80,7 +80,7 @@ namespace BALL
 		}
 
 		void ColorExtension4::dump
-			(ostream& s, unsigned long depth) const
+			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

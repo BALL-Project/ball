@@ -1,7 +1,8 @@
-// $Id: client.C,v 1.2 1999/12/19 17:15:40 oliver Exp $
+// $Id: client.C,v 1.3 1999/12/28 18:00:21 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
+using namespace std;
 
 namespace BALL
 {
@@ -80,7 +81,7 @@ namespace BALL
 		}
 
 		void Client::dump
-			(ostream& s, unsigned long depth) const
+			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

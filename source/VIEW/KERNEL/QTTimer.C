@@ -1,4 +1,4 @@
-// $Id: QTTimer.C,v 1.2 1999/12/19 17:15:40 oliver Exp $
+// $Id: QTTimer.C,v 1.3 1999/12/28 18:00:21 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
 
@@ -112,7 +112,7 @@ namespace BALL
 			return true;
 		}
 
-		void QTTimer::dump(ostream& s, unsigned long depth) const
+		void QTTimer::dump(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
