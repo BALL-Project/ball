@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.h,v 1.17 2002/04/18 18:25:30 strobel Exp $
+// $Id: SESFace.h,v 1.18 2002/06/19 12:40:43 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -325,21 +325,20 @@ namespace BALL
 		{
 			s << "(" << sesface.getRSFace()->getIndex() << ") [";
 		}
-		for (Position i = 0; i < sesface.numberOfVertices(); i++)
+		std::list<TSESVertex<T>*> vertices(sesface.getVertices());
+		typename std::list<TSESVertex<T>*>::iterator v = vertices.begin();
+		while (v != vertices.end())
 		{
-			s << sesface.getVertex(i)->getIndex() << ' ';
+			s << (*v)->getIndex() << ' ';
+			v++;
 		}
 		s << "] [";
-		for (Position i = 0; i < sesface.numberOfEdges(); i++)
+		std::list<TSESEdge<T>*> edges(sesface.getEdges());
+		typename std::list<TSESEdge<T>*>::iterator e = edges.begin();
+		while (e != edges.end())
 		{
-			if (sesface.getEdge(i) == NULL)
-			{
-				s << "(nil) ";
-			}
-			else
-			{
-				s << sesface.getEdge(i)->getIndex() << ' ';
-			}
+			s << (*e)->getIndex() << ' ';
+			e++;
 		}
 		//s << "] [";
 		//for (Position i = 0; i < sesface.orientation_.size(); i++)
@@ -555,10 +554,11 @@ namespace BALL
 		if (singular == false)
 		{
 			HashSet<TSESVertex<T>*> points;
-			points.insert(vertex_[0]);
-			points.insert(vertex_[1]);
-			points.insert(vertex_[2]);
-			points.insert(vertex_[3]);
+			typename std::list<TSESVertex<T>*>::iterator v;
+			for (v = vertex_.begin(); v != vertex_.end(); v++)
+			{
+				points.insert(*v);
+			}
 			TSESEdge<T>* edge0;
 			TSESEdge<T>* edge1;
 			TSESEdge<T>* edge2;
@@ -567,34 +567,34 @@ namespace BALL
 			TSESVertex<T>* p1;
 			TSESVertex<T>* p2;
 			TSESVertex<T>* p3;
-			Index i = 0;
-			while (edge_[i]->type_ != TSESEdge<T>::TYPE_CONCAVE)
+			typename std::list<TSESEdge<T>*>::iterator e = edge_.begin();
+			while ((*e)->type_ != TSESEdge<T>::TYPE_CONCAVE)
 			{
-				i++;
+				e++;
 			}
-			edge0 = edge_[i];								// edge0 = first concave edge
-			i++;
-			while (edge_[i]->type_ != TSESEdge<T>::TYPE_CONCAVE)
+			edge0 = *e;								// edge0 = first concave edge
+			e++;
+			while ((*e)->type_ != TSESEdge<T>::TYPE_CONCAVE)
 			{
-				i++;
+				e++;
 			}   	
-			edge2 = edge_[i];								// edge2 = second concave edge
+			edge2 = *e;								// edge2 = second concave edge
 			p0 = edge0->vertex_[0];
 			p1 = edge0->vertex_[1];
 			Size number_of_vertices = points.size();
 			if (number_of_vertices == 4)
 			{
-				TSESEdge<T>* e;
-				if (getEdge(p1,edge2->vertex_[0],e))
+				TSESEdge<T>* edge;
+				if (getEdge(p1,edge2->vertex_[0],edge))
 				{
-					edge1 = e;
+					edge1 = edge;
 					p2 = edge2->vertex_[0];
 					p3 = edge2->vertex_[1];
 				}
 				else																					//	  	____e3____
 				{																							//     /          \			x
-					getEdge(p1,edge2->vertex_[1],e);						//  p0 \          /p3
-					edge1 = e;																	//      \        /
+					getEdge(p1,edge2->vertex_[1],edge);					//  p0 \          /p3
+					edge1 = edge;																//      \        /
 					p2 = edge2->vertex_[1];											//    e0|        |e2
 					p3 = edge2->vertex_[0];											//      |        |
 				}																							//      /________\			x
@@ -615,14 +615,16 @@ namespace BALL
 				getEdge(p1,p2,edge1);
 				getEdge(p0,p3,edge3);
 			}
-			edge_[0] = edge0;
-			edge_[1] = edge1;
-			edge_[2] = edge2;
-			edge_[3] = edge3;
-			vertex_[0] = p0;
-			vertex_[1] = p1;
-			vertex_[2] = p2;
-			vertex_[3] = p3;
+			edge_.clear();
+			edge_.push_back(edge0);
+			edge_.push_back(edge1);
+			edge_.push_back(edge2);
+			edge_.push_back(edge3);
+			vertex_.clear();
+			vertex_.push_back(p0);
+			vertex_.push_back(p1);
+			vertex_.push_back(p2);
+			vertex_.push_back(p3);
 		}
 		else
 		{
@@ -638,68 +640,73 @@ namespace BALL
 			TSESVertex<T>* p3;
 			TSESVertex<T>* p4;
 			TSESVertex<T>* p5;
-			Index i = 0;
-			while (edge_[i]->type_ != TSESEdge<T>::TYPE_CONVEX)
+			typename std::list<TSESEdge<T>*>::iterator e = edge_.begin();
+			while ((*e)->type_ != TSESEdge<T>::TYPE_CONVEX)
 			{
-				i++;
+				e++;
 			}
-			edge0 = edge_[i];								// edge0 = first convex edge
+			edge0 = *e;								// edge0 = first convex edge
 			p0 = edge0->vertex_[0];
 			p2 = edge0->vertex_[1];
-			i++;
-			while (edge_[i]->type_ != TSESEdge<T>::TYPE_CONVEX)
+			e++;
+			while ((*e)->type_ != TSESEdge<T>::TYPE_CONVEX)
 			{
-				i++;
-			}   	
-			edge3 = edge_[i];								// edge3 = second convex edge
+				e++;
+			}
+			edge3 = *e;								// edge3 = second convex edge
 			p3 = edge3->vertex_[0];
 			p5 = edge3->vertex_[1];
-			for (i = 0; i < (Index)edge_.size(); i++)
+			e = edge_.begin();
+			while (e != edge_.end())
 			{
-				if ((edge_[i]->vertex_[0] == p0) && (edge_[i] != edge0))
+				if (((*e)->vertex_[0] == p0) && ((*e) != edge0))
 				{
-					edge1 = edge_[i];
+					edge1 = *e;
 					p1 = edge1->vertex_[1];
 				}
 				else
 				{
-					if ((edge_[i]->vertex_[1] == p0) && (edge_[i] != edge0))
+					if (((*e)->vertex_[1] == p0) && ((*e) != edge0))
 					{
-						edge1 = edge_[i];
+						edge1 = *e;
 						p1 = edge1->vertex_[0];
 					}
 				}
+				e++;
 			}
-			for (i = (Index)edge_.size()-1; i >= 0; i--)
+			while (e != edge_.begin())
 			{
-				if (((edge_[i]->vertex_[0] == p1) && (edge_[i]->vertex_[1] == p2)) ||
-						((edge_[i]->vertex_[1] == p1) && (edge_[i]->vertex_[0] == p2))		)
+				e--;
+				if ((((*e)->vertex_[0] == p1) && ((*e)->vertex_[1] == p2)) ||
+						(((*e)->vertex_[1] == p1) && ((*e)->vertex_[0] == p2))		)
 				{
-					edge2 = edge_[i];
+					edge2 = *e;
 				}
 			}
-			for (i = 0; i < (Index)edge_.size(); i++)
+			while (e != edge_.end())
 			{
-				if ((edge_[i]->vertex_[0] == p3) && (edge_[i] != edge3))
+				if (((*e)->vertex_[0] == p3) && ((*e) != edge3))
 				{
-					edge4 = edge_[i];
+					edge4 = *e;
 					p4 = edge4->vertex_[1];
 				}
 				else
 				{
-					if ((edge_[i]->vertex_[1] == p3) && (edge_[i] != edge3))
+					if (((*e)->vertex_[1] == p3) && ((*e) != edge3))
 					{
-						edge4 = edge_[i];
+						edge4 = *e;
 						p4 = edge4->vertex_[0];
 					}
 				}
+				e++;
 			}
-			for (i = (Index)edge_.size()-1; i >= 0; i--)
+			while (e != edge_.begin())
 			{
-				if (((edge_[i]->vertex_[0] == p5) && (edge_[i]->vertex_[1] == p4)) ||
-						((edge_[i]->vertex_[1] == p5) && (edge_[i]->vertex_[0] == p4))		)
+				e--;
+				if ((((*e)->vertex_[0] == p5) && ((*e)->vertex_[1] == p4)) ||
+						(((*e)->vertex_[1] == p5) && ((*e)->vertex_[0] == p4))		)
 				{
-					edge5 = edge_[i];
+					edge5 = *e;
 				}
 			}
 			if (edge1->circle_ != edge4->circle_)
@@ -711,18 +718,20 @@ namespace BALL
 				p5 = p3;
 				p3 = tmp;
 			}
-			edge_[0] = edge0;
-			edge_[1] = edge1;
-			edge_[2] = edge2;
-			edge_[3] = edge3;
-			edge_[4] = edge4;
-			edge_[5] = edge5;
-			vertex_[0] = p0;
-			vertex_[1] = p1;
-			vertex_[2] = p2;
-			vertex_[3] = p3;
-			vertex_[4] = p4;
-			vertex_[5] = p5;
+			edge_.clear();
+			edge_.push_back(edge0);
+			edge_.push_back(edge1);
+			edge_.push_back(edge2);
+			edge_.push_back(edge3);
+			edge_.push_back(edge4);
+			edge_.push_back(edge5);
+			vertex_.clear();
+			vertex_.push_back(p0);
+			vertex_.push_back(p1);
+			vertex_.push_back(p2);
+			vertex_.push_back(p3);
+			vertex_.push_back(p4);
+			vertex_.push_back(p5);
 		}
 	}
 
@@ -731,18 +740,16 @@ namespace BALL
 	bool TSESFace<T>::isNeighbouredTo(TSESFace<T>* face) const
 		throw()
 	{
-		for (Position i = 0; i < edge_.size(); i++)
+		typename std::list<TSESEdge<T>*>::const_iterator e;
+		for (e = edge_.begin(); e != edge_.end(); e++)
 		{
-			if (edge_[i] != NULL)
+			if ((*e)->face_[0] == face)
 			{
-				if (edge_[i]->face_[0] == face)
-				{
-					return true;
-				}
-				if (edge_[i]->face_[1] == face)
-				{
-					return true;
-				}
+				return true;
+			}
+			if ((*e)->face_[1] == face)
+			{
+				return true;
 			}
 		}
 		return false;
