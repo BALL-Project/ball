@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.12 2000/09/07 19:40:13 oliver Exp $
+// $Id: common.h,v 1.13 2000/12/19 00:42:24 amoll Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -45,6 +45,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		T abs(const T& t)
+			throw()
 		{
 			return BALL_ABS(t);
 		}
@@ -56,6 +57,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		T frac(const T& t)
+			throw()
 		{ 
 			long tmp = (long)t;
 			return (t - (T)tmp);
@@ -69,6 +71,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		T max(const T& a, const T& b)
+			throw()
 		{ 
 			return BALL_MAX(a, b);
 		}
@@ -82,6 +85,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		T max(const T& a, const T& b, const T &ct)
+			throw()
 		{ 
 			return BALL_MAX3(a, b, ct);
 		}
@@ -94,6 +98,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		T min(const T& a, const T& b)
+			throw()
 		{ 
 			return BALL_MIN(a, b);
 		}
@@ -107,6 +112,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		T min(const T& a, const T& b, const T &ct)
+			throw()
 		{ 
 			return BALL_MIN3(a, b, ct);
 		}
@@ -118,6 +124,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		T round(const T& t)               
+			throw()
 		{ 
 			return (T)(t > 0 ? long(t + 0.5) : long(t - 0.5)); 
 		}
@@ -129,6 +136,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		T sgn(const T& t)
+			throw()
 		{
 			return BALL_SGN(t);
 		}
@@ -140,8 +148,9 @@ namespace BALL
 		template <typename T>
 		inline 
 		bool isFinite(const T& t)
+			throw()
 		{
-			return (bool)finite(t);
+			return finite(t);
 		}
 
 		/**	Test whether a number is infinite.
@@ -151,8 +160,9 @@ namespace BALL
 		template <typename T>
 		inline 
 		bool isInfinite(const T& t)
+			throw()
 		{
-			return (bool)(!Maths::isFinite(t) && !Maths::isNan(t));
+			return (!Maths::isFinite(t) && !Maths::isNan(t));
 		}
 
 		/**	Test whether a value is not a number.
@@ -162,8 +172,9 @@ namespace BALL
 		template <typename T>
 		inline 
 		bool isNan(const T& t)
+			throw()
 		{
-			return (bool)isnan(t);
+			return isnan(t);
 		}
 
 		/**	Test whether a number is zero.
@@ -173,6 +184,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		bool isZero(const T& t)
+			throw()
 		{
 			return (abs(t) < Constants::EPSILON);
 		}
@@ -184,6 +196,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		bool isNotZero(const T& t)
+			throw()
 		{
 			return (abs(t) >= Constants::EPSILON);
 		}
@@ -196,6 +209,7 @@ namespace BALL
 		template <typename T1, typename T2>
 		inline 
 		bool isEqual(const T1& a, const T2& b)
+			throw()
 		{
 			return (abs(a - b) < Constants::EPSILON);
 		}
@@ -208,6 +222,7 @@ namespace BALL
 		template <typename T1, typename T2>
 		inline 
 		bool isNotEqual(const T1& a, const T2& b)
+			throw()
 		{
 			return (abs(a - b) >= Constants::EPSILON);
 		}
@@ -220,6 +235,7 @@ namespace BALL
 		template <typename T1, typename T2>
 		inline 
 		bool isLess(const T1& a, const T2& b)
+			throw()
 		{
 			return ((a - b) <= -Constants::EPSILON);
 		}
@@ -232,6 +248,7 @@ namespace BALL
 		template <typename T1, typename T2>
 		inline 
 		bool isLessOrEqual(const T1& a, const T2& b)
+			throw()
 		{
 			return ((a - b) < Constants::EPSILON);
 		}
@@ -244,6 +261,7 @@ namespace BALL
 		template <typename T1, typename T2>
 		inline 
 		bool isGreaterOrEqual(const T1& a, const T2& b)
+			throw()
 		{
 			return ((a - b) > -Constants::EPSILON);
 		}
@@ -256,6 +274,7 @@ namespace BALL
 		template <typename T1, typename T2>
 		inline 
 		bool isGreater(const T1& a, const T2& b)
+			throw()
 		{
 			return (a - b >= Constants::EPSILON);
 		}
@@ -267,6 +286,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		long floor(const T& t)
+			throw()
 		{
 			return (long)(Maths::isGreater(t, 0) ? t: (Maths::isEqual(t, (T)(long)t) ? t : t - 1));
 		}
@@ -278,6 +298,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		long ceiling(const T& t)
+			throw()
 		{
 			return (long)(Maths::isLess(t, 0) ? t: (Maths::isEqual(t, (T)(long)t) ? t : t + 1));
 		}
@@ -290,6 +311,7 @@ namespace BALL
 		template <typename T1, typename T2>
 		inline 
 		Index compare(const T1& a, const T2& b)
+			throw()
 		{
 			return (Maths::isLess(a, b) ? -1 : Maths::isEqual(a, b) ? 0 : 1);
 		}
@@ -303,6 +325,7 @@ namespace BALL
 		template <typename T>
 		inline 
 		bool isNear(const T& a, const T& b, const T& max_diff)
+			throw()
 		{
 			return (abs((double)a - (double)b) < abs((double)max_diff));
 		}

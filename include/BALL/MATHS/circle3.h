@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.21 2000/10/28 22:35:25 amoll Exp $
+// $Id: circle3.h,v 1.22 2000/12/19 00:42:24 amoll Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -29,10 +29,12 @@ namespace BALL
 	class TCircle3;
 
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TCircle3<T>& circle);
+	std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
+		throw();
 
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle);
+	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
+		throw();
 
 
 	/**	Generic Circle in Three-Dimensional Space.
@@ -55,6 +57,7 @@ namespace BALL
 				are initialized to {\tt 0}.
 		*/
 		TCircle3()
+			throw()
 			: p(),
 				n(),
 				radius(0)
@@ -66,6 +69,7 @@ namespace BALL
 				@param vector the TCircle3 object to be copied
 		*/	
 		TCircle3(const TCircle3& circle)
+			throw()
 			:	p(circle.p),
 				n(circle.n),
 				radius(circle.radius)
@@ -79,6 +83,7 @@ namespace BALL
 				@param	radius assigned tp the radius
 		*/
 		TCircle3(const TVector3<T>& point, const TVector3<T>& normal, const T& radius)
+			throw()
 			:	p(point),
 				n(normal),
 				radius(radius)
@@ -90,6 +95,7 @@ namespace BALL
 				data structures, nothing happens.
 		*/	
 		virtual ~TCircle3()
+			throw()
 		{
 		}
 		//@}
@@ -102,6 +108,7 @@ namespace BALL
 				@param	circle the circle to swap contents with
 		*/
 		void swap(TCircle3& circle)
+			throw()
 		{
 			TVector3<T> temp_vector(p);
 			p = circle.p;
@@ -120,6 +127,7 @@ namespace BALL
 				@param vector	the TCirce3 object to assign from
 		*/
 		void set(const TCircle3& circle)
+			throw()
 		{
 			p = circle.p;
 			n = circle.n;
@@ -132,6 +140,7 @@ namespace BALL
 				@param	rad assigned to the radius
 		*/
 		void set(const TVector3<T>& point, const TVector3<T>& normal, const T& rad)
+			throw()
 		{
 			p = point;
 			n = normal;
@@ -142,7 +151,8 @@ namespace BALL
 				Assign the components from another circle.
 				@param circle the circle to assign from
 		**/
-		TCircle3& operator = (const TCircle3& circle)
+		const TCircle3& operator = (const TCircle3& circle)
+			throw()
 		{
 			p = circle.p;
 			n = circle.n;
@@ -156,6 +166,7 @@ namespace BALL
 				@param circle	the circle to be assigned to
 		*/
 		void get(TCircle3& circle) const
+			throw()
 		{
 			circle.p = p;
 			circle.n = n;
@@ -168,6 +179,7 @@ namespace BALL
 				@param	rhs the radius
 		*/
 		void get(TVector3<T>& point, TVector3<T>& normal, T& rhs) const
+			throw()
 		{
 			point = p;
 			normal = n;
@@ -183,16 +195,18 @@ namespace BALL
 				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
 		*/
 		bool operator == (const TCircle3& circle) const
+			throw()
 		{
-			return (bool)(p == circle.p && n == circle.n && Maths::isEqual(radius, circle.radius));
+			return (p == circle.p && n == circle.n && Maths::isEqual(radius, circle.radius));
 		}
 
 		/**	Inequality operator.
 				@return bool, {\bf false} if all components are equal, {\bf true} otherwise
 		*/
 		bool operator != (const TCircle3& circle) const
+			throw()
 		{
-			return (bool)(p != circle.p || n != circle.n || Maths::isNotEqual(radius, circle.radius));
+			return (p != circle.p || n != circle.n || Maths::isNotEqual(radius, circle.radius));
 		}
 
 		/**	Test if a given point is a member of the circle.
@@ -202,13 +216,16 @@ namespace BALL
 				@return bool, {\bf true} or {\bf false}
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
+			throw()
 		{
-			if (on_surface == true)
+			if (on_surface)
 			{
-				return (bool)(Maths::isZero(n * (point - p))
+				return (Maths::isZero(n * (point - p))
 											&& Maths::isEqual(p.getDistance(point), radius));
-			} else {
-				return (bool)(Maths::isZero(n * (point - p)) 
+			} 
+			else 
+			{
+				return (Maths::isZero(n * (point - p)) 
 											&& Maths::isLessOrEqual(p.getDistance(point), radius));
 			}
 		}
@@ -223,6 +240,7 @@ namespace BALL
 				@return bool {\bf true}
 		*/
 		bool isValid() const
+			throw()
 		{
 			return true;
 		}
@@ -234,6 +252,7 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 	
@@ -286,6 +305,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
+		throw()
 	{
 		  char c;
 			s >> c;
@@ -303,6 +323,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
+		throw()
 	{
 			return s << '(' << circle.p 
 							 << ' ' << circle.n

@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.20 2000/08/30 19:58:14 oliver Exp $
+// $Id: sphere3.h,v 1.21 2000/12/19 00:42:24 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -45,6 +45,7 @@ namespace BALL
 				are initialized to {\tt (T)0}.
 		*/
 		TSphere3()
+			throw()
 			: p(),
 				radius(0)
 		{
@@ -55,6 +56,7 @@ namespace BALL
 				@param sphere3 the Sphere3 object to be copied
 		*/	
 		TSphere3(const TSphere3& sphere3)
+			throw()
 			: p(sphere3.p),
 				radius(sphere3.radius)
 		{
@@ -66,6 +68,7 @@ namespace BALL
 				@param	radius assigned to the radius
 		*/
 		TSphere3(const TVector3<T>& point, const T& radius)
+			throw()
 			: p(point),
 				radius(radius)
 		{
@@ -76,6 +79,7 @@ namespace BALL
 				data structures, nothing happens.
 		*/
 		virtual ~TSphere3()
+			throw()
 		{
 		}
 		//@}
@@ -88,6 +92,7 @@ namespace BALL
 				@param	sphere3 the sphere3 to swap contents with
 		*/
 		void swap(TSphere3& sphere3)
+			throw()
 		{
 			TVector3<T> temp_point(p);
 			p = sphere3.p;
@@ -102,6 +107,7 @@ namespace BALL
 				@param sphere3	the Sphere3 object to assign from
 		*/
 		void set(const TSphere3& sphere)
+			throw()
 		{
 			p = sphere.p;
 			radius = sphere.radius;
@@ -113,6 +119,7 @@ namespace BALL
 
 		*/
 		void set(const TVector3<T>& point, const T& rhs)
+			throw()
 		{
 			p = point;
 			radius = rhs;
@@ -122,12 +129,11 @@ namespace BALL
 				Assign the components from another instance of Sphere.
 				@param sphere3 the sphere to assign from
 		**/
-		TSphere3& operator =
-			(const TSphere3& sphere3)
+		const TSphere3& operator = (const TSphere3& sphere3)
+			throw()
 		{
 			p = sphere3.p;
 			radius = sphere3.radius;
-
 			return *this;
 		}
 
@@ -136,6 +142,7 @@ namespace BALL
 				@param sphere	the vector to be assigned to
 		*/
 		void get(TSphere3& sphere3) const
+			throw()
 		{
 			sphere3.p = p;
 			sphere3.radius = radius;
@@ -146,6 +153,7 @@ namespace BALL
 				@param	rhs the radius component
 		*/
 		void get(TVector3<T>& point, T& rhs) const
+			throw()
 		{
 			point = p;
 			rhs = radius;
@@ -160,16 +168,18 @@ namespace BALL
 				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
 		*/
 		bool operator == (const TSphere3& sphere3) const
+			throw()
 		{
-			return (bool)(p == sphere3.p && Maths::isEqual(radius, sphere3.radius));
+			return (p == sphere3.p && Maths::isEqual(radius, sphere3.radius));
 		}
 
 		/**	Inequality operator.
 				@return bool, {\bf true} if the two Sphere3 differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TSphere3& sphere3) const
+			throw()
 		{
-			return (bool)(p != sphere3.p || Maths::isNotEqual(radius, sphere3.radius));
+			return (p != sphere3.p || Maths::isNotEqual(radius, sphere3.radius));
 		}
 
 		/**	Test whether a given point is a member of the Sphere.
@@ -179,11 +189,14 @@ namespace BALL
 				@return bool, {\bf true} or {\bf false}
 		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
+			throw()
 		{
-			if (on_surface == true)
+			if (on_surface)
 			{
 				return Maths::isEqual(p.getDistance(point), radius);
-			} else {
+			} 
+			else 
+			{
 				return Maths::isLessOrEqual(p.getDistance(point), radius);
 			}
 		}
@@ -192,6 +205,7 @@ namespace BALL
 				@return bool, {\bf true} or {\bf false}
 		*/
 		bool isEmpty() const
+			throw()
 		{
 			return Maths::isZero(radius);
 		}
@@ -206,6 +220,7 @@ namespace BALL
 				@return bool {\bf true}
 		*/
 		bool isValid() const
+			throw()
 		{
 			return true;
 		}
@@ -217,6 +232,7 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -231,7 +247,6 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 		//@}
-
 
 
 		/**	@name	Attributes
@@ -257,6 +272,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
+		throw()
 	{
 		char c;
 		s >> c >> sphere3.p >> sphere3.radius >> c;
@@ -271,6 +287,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere3)
+		throw()
 	{
 		s << '(' << sphere3.p << ' ' << sphere3.radius << ')';
 		return s;

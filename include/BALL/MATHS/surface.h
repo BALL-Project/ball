@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.7 2000/10/10 20:28:50 oliver Exp $
+// $Id: surface.h,v 1.8 2000/12/19 00:42:24 amoll Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -46,13 +46,16 @@ namespace BALL
 		//@{
 
 		///
-		TSurface();
+		TSurface()
+			throw();
 
 		///
-		TSurface(const TSurface& surface);
+		TSurface(const TSurface& surface)
+			throw();
 
 		///
-		virtual ~TSurface();
+		virtual ~TSurface()
+			throw();
 		//@}
 
 		/**	@name	Assignment
@@ -60,22 +63,27 @@ namespace BALL
 		//@{
 
 		///
-		void set(const TSurface& box);
+		void set(const TSurface& box)
+			throw();
 
 		///
-		const TSurface& operator = (const TSurface& box);
+		const TSurface& operator = (const TSurface& box)
+			throw();
 
 		///
-		void get(TSurface& box) const;
+		void get(TSurface& box) const
+			throw();
 
 		///
-		void clear();
+		void clear()
+			throw();
 
 		/**	Read from MSMS file.
 				Read the contents of the vertex and faces file created by Michael
 				Sanners software MSMS.
 		*/
-		void readMSMSFile(const String& vert_filename, const String& face_filename);
+		void readMSMSFile(const String& vert_filename, const String& face_filename)
+			throw(Exception::FileNotFound);
 		//@}
 
 		/**	@name	Accessors
@@ -83,7 +91,8 @@ namespace BALL
 		//@{
 
 		///
-		float getArea() const;
+		float getArea() const
+			throw();
 		//@}
 
 		/**	@name	Predicates
@@ -91,17 +100,20 @@ namespace BALL
 		//@{
 
 		///
-		bool operator == (const TSurface& box) const;
+		bool operator == (const TSurface& box) const
+			throw();
 
 		///
-		bool operator != (const TSurface& box) const;
+		bool operator != (const TSurface& box) const
+			throw();
 		//@}
 
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
 		///
-		bool isValid() const;
+		bool isValid() const
+			throw();
 		//@}
 
 		/**	@name	Attributes
@@ -125,12 +137,14 @@ namespace BALL
 
 	template <typename T>
 	TSurface<T>::TSurface()
+		throw()
 		:	valid_(false)
 	{
 	}
 
 	template <typename T>
 	TSurface<T>::TSurface(const TSurface<T>& surface)
+		throw()
 		:	vertex(surface.vertex),
 			normal(surface.normal),
 			triangle(surface.triangle),
@@ -140,12 +154,14 @@ namespace BALL
 
 	template <typename T>
 	TSurface<T>::~TSurface()
+		throw()
 	{
 		valid_ = false;
 	}
 
 	template <typename T>
 	void TSurface<T>::clear()
+		throw()
 	{
 		valid_ = true;
 		vertex.clear();
@@ -155,6 +171,7 @@ namespace BALL
 	
 	template <typename T>
 	void TSurface<T>::set(const TSurface<T>& surface)
+		throw()
 	{
 		vertex = surface.vertex;
 		normal = surface.normal;
@@ -164,6 +181,7 @@ namespace BALL
 
 	template <typename T>
 	const TSurface<T>& TSurface<T>::operator = (const TSurface<T>& surface)
+		throw()
 	{
 		vertex = surface.vertex;
 		normal = surface.normal;
@@ -174,6 +192,7 @@ namespace BALL
 	
 	template <typename T>
 	void TSurface<T>::get(TSurface<T>& surface) const
+		throw()
 	{
 		surface.vertex = vertex;
 		surface.normal = normal;
@@ -182,8 +201,8 @@ namespace BALL
 	}
 	
 	template <typename T>
-	void TSurface<T>::readMSMSFile
-		(const String& vert_filename, const String& face_filename)
+	void TSurface<T>::readMSMSFile(const String& vert_filename, const String& face_filename)
+		throw(Exception::FileNotFound)
 	{
 		// delete old contents
 		normal.clear();
@@ -259,6 +278,7 @@ namespace BALL
 
 	template <typename T>
 	float TSurface<T>::getArea() const
+		throw()
 	{
 		float area = 0;
 		// add the areas of all triangles
@@ -278,6 +298,7 @@ namespace BALL
 
 	template <typename T>
 	bool TSurface<T>::isValid() const
+		throw()
 	{
 		return valid_;
 	}

@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.27 2000/10/28 22:35:25 amoll Exp $
+// $Id: line3.h,v 1.28 2000/12/19 00:42:24 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -25,10 +25,12 @@ namespace BALL
 	class TLine3;
 	
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TLine3<T>& line);
+	std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
+		throw();
 
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TLine3<T>& line);
+	std::istream& operator >> (std::istream& s, TLine3<T>& line)
+		throw();
 	
 
 
@@ -66,6 +68,7 @@ namespace BALL
 				This method creates a new TLine3 object.
 		*/
 		TLine3()
+			throw()
 			:	p(),
 				d()
 		{
@@ -77,6 +80,7 @@ namespace BALL
 				@param bool ignored - just for interface consistency
 		*/	
 		TLine3(const TLine3& line)
+			throw()
 			:	p(line.p),
 				d(line.d)
 		{
@@ -93,8 +97,8 @@ namespace BALL
 				@param	vector assigned to {\tt d}
 				@param	form assigns form of parameter
 		*/
-		TLine3(const TVector3<T>& point, const TVector3<T>& vector, 
-					 Form form = FORM__PARAMETER)
+		TLine3(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
+			throw()
 			:	p(point),
 				d((form == FORM__PARAMETER) 
 					? vector 
@@ -107,6 +111,7 @@ namespace BALL
 				data structures, nothing happens.
 		*/
 		virtual ~TLine3()
+			throw()
 		{
 		}
 		//@}
@@ -119,6 +124,7 @@ namespace BALL
 				@param	line the TLine3 to swap contents with
 		*/
 		void swap(TLine3& line)
+			throw()
 		{
 			TVector3<T> temp_point(p);
 			p = line.p;
@@ -133,6 +139,7 @@ namespace BALL
 				@param line	the TLine3 object to assign from
 		*/
 		void set(const TLine3& line)
+			throw()
 		{
 			p = line.p;
 			d = line.d;
@@ -145,6 +152,7 @@ namespace BALL
 				@param	form assigns form of parameter
 		*/
 		void set(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
+			throw()
 		{
 			p = point;
 			if (form == FORM__PARAMETER) 
@@ -161,7 +169,8 @@ namespace BALL
 				Assign the components from another instance of line.
 				@param line the vector to assign from
 		**/
-		TLine3& operator = (const TLine3& line)
+		const TLine3& operator = (const TLine3& line)
+			throw()
 		{
 			p = line.p;
 			d = line.d;
@@ -174,6 +183,7 @@ namespace BALL
 				@param line	the line to be assigned to
 		*/
 		void get(TLine3& line)
+			throw()
 		{
 			line.p = p;
 			line.d = d;
@@ -187,8 +197,8 @@ namespace BALL
 				@param	vector the second point or the vector component
 				@param	rh the h component
 		*/
-		void get(TVector3<T>& point,TVector3<T>& vector,
-						 Form form = FORM__PARAMETER) const
+		void get(TVector3<T>& point,TVector3<T>& vector, Form form = FORM__PARAMETER) const
+			throw()
 		{
 			point = p;
 			if (form == FORM__PARAMETER) 
@@ -213,6 +223,7 @@ namespace BALL
 				@exception DivisionByZero if the length of the vector is 0
 		*/
 		void normalize()
+			throw()
 		{
 			d.normalize();
 		}
@@ -226,29 +237,31 @@ namespace BALL
 				@return bool, {\bf true} if both components are equal, {\bf false} otherwise
 		*/
 		bool operator ==(const TLine3& line) const
+			throw()
 		{
-			return (bool)(p == line.p && d == line.d);
+			return (p == line.p && d == line.d);
 		}
 
 		/**	Inequality operator.
 				@return bool, {\bf true} if the two lines differ in at least on component, {\bf false} otherwise
 		*/
 		bool operator != (const TLine3& line) const
+			throw()
 		{
-			return (bool)(p != line.p || d != line.d);
+			return (p != line.p || d != line.d);
 		}
 
 		/**	Test whether a given point is a member of the line.
 				@return bool, {\bf true} or {\bf false}
 		*/
 		bool has(const TVector3<T>& point) const
+			throw()
 		{
 			if (Maths::isNotZero(d.x))
 			{
 				T c = (point.x - p.x) / d.x;
 
-				return (bool)(Maths::isEqual(p.y + c * d.y, point.y)
-											&& Maths::isEqual(p.z + c * d.z, point.z));
+				return (Maths::isEqual(p.y + c * d.y, point.y) && Maths::isEqual(p.z + c * d.z, point.z));
 			}
 			else 
 			{
@@ -256,14 +269,14 @@ namespace BALL
 				{
 					T c = (point.y - p.y) / d.y;
 
-					return (bool)(Maths::isEqual(p.x, point.x)   // invariant: d.x == 0
+					return (Maths::isEqual(p.x, point.x)   // invariant: d.x == 0
 												&& Maths::isEqual(p.z + c * d.z, point.z));
 				}
 				else 
 				{
 					if (Maths::isNotZero(d.z))
 					{
-						return (bool)(Maths::isEqual(p.x, point.x)   // invariant: d.x == 0
+						return (Maths::isEqual(p.x, point.x)   // invariant: d.x == 0
 													&& Maths::isEqual(p.y, point.y)); // invariant: d.y == 0
 					}
 					else 
@@ -284,6 +297,7 @@ namespace BALL
 				@return bool {\bf true}
 		*/
 		bool isValid() const
+			throw()
 		{
 			return true;
 		}
@@ -295,6 +309,7 @@ namespace BALL
 				@param   depth - the dumping depth
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -338,6 +353,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TLine3<T>& line)
+		throw()
 	{
 		char c;
 		s >> c >> line.p >> line.d >> c;
@@ -353,6 +369,7 @@ namespace BALL
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
+		throw()
 	{
 		s << '(' << line.p << ' ' << line.d << ')';
 		return s;
