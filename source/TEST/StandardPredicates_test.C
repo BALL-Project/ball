@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.11 2000/05/26 09:26:07 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.12 2000/05/26 15:06:09 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.11 2000/05/26 09:26:07 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.12 2000/05/26 15:06:09 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -325,6 +325,8 @@ RESULT
 // tests for class ConnectedToPredicate::
 
 CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
+	ConnectedToPredicate connectedTo;
+
 	// we may not walk back again!
 	Atom* a1 = new Atom;
 	Atom* a2 = new Atom;
@@ -333,7 +335,6 @@ CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	Bond* bond = a1->createBond(*a2);
 	bond->setOrder(Bond::ORDER__SINGLE);
 	STATUS("(-N(-C(-N(-C(-N(-C(-N(-C(-N(-C(-N)))))))))))")
-	ConnectedToPredicate connectedTo;
 	connectedTo.setArgument("(-N(-C(-N(-C(-N(-C(-N(-C(-N(-C(-N)))))))))))");
 	TEST_EQUAL(connectedTo(*a1), false)
 	delete a1;
@@ -365,19 +366,25 @@ CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	connectedTo.setArgument("(H)(H)(H)(C(H)(C(~O)(~O)))");
 	TEST_EQUAL(connectedTo(*it), true)
 	STATUS("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
-	connectedTo.setArgument("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))");
+	connectedTo.setArgument("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C))))");
 	TEST_EQUAL(connectedTo(*it), true)
 	STATUS("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
-	connectedTo.setArgument("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))");
+	connectedTo.setArgument("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C))))");
 	TEST_EQUAL(connectedTo(*it), true)
 	STATUS("(-H(-N(-H)))")
 	connectedTo.setArgument("(-H(-N(-H)))");
 	TEST_EQUAL(connectedTo(*it), false);
+	STATUS("(-C(-*)(-*)(-*)(-*))")
+	connectedTo.setArgument("(-C(-*)(-*)(-*)(-*))");
+	TEST_EQUAL(connectedTo(*it), false);
 
 	++it;
 	STATUS("(-N(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C))))))")
-	connectedTo.setArgument("(-N(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C))))))");
+	connectedTo.setArgument("(-N(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C)))))");
 	TEST_EQUAL(connectedTo(*it), true)
+	STATUS("(-N(-C(-*)(-*)(-*)(-*)))")
+	connectedTo.setArgument("(-C(-*)(-*)(-*)(-*))");
+	TEST_EQUAL(connectedTo(*it), false);
 	
 	++it;
 	STATUS("(-N(-H)(-H)(-H))(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C)))")

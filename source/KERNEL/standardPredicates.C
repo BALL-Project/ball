@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.14 2000/05/26 12:50:35 anker Exp $
+// $Id: standardPredicates.C,v 1.15 2000/05/26 15:06:05 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -604,19 +604,30 @@ namespace BALL
 		for (subgroups_it = subgroups.begin(); subgroups_it !=
 				 subgroups.end(); ++subgroups_it) 
 		{
+			if (subgroups.size() >= atom.countBonds())
+			{
+				// Log.info() << "Too few bonds (" << atom.countBonds() 
+				//					 << " instead of " << subgroups.size() << ")" << endl;
+				// return false;
+			}
+
 			HashSet<const Bond*> deeper; //  = found;
 
 			// Iteriere über alle Bindungen von atom.
 			for (Size i = 0; i < atom.countBonds(); ++i)
 			{
 				bond = atom.getBond(i);
+				// Log.info() << "Bond: " << atom.getFullName() << " - " <<
+				//	bond->getPartner(atom)->getFullName();
 
 				// Follow this bond only if its type matches and it isn't the bond
 				// we came from. This implies special treatment of cycles.
 				if (bond != source)
 				{
+					// Log.info() << ": not source";
 					if (bondOrderMatch(subgroups_it->first, bond->getOrder()))
 					{
+						// Log.info() << ", order match";
 						if (subgroups_it->second.size() < 1) 
 						{
 							Log.error() << "ConnectedToPredicate::find: subgroup too short: " 
@@ -630,6 +641,7 @@ namespace BALL
 							if ((bond->getPartner(atom)->getElement().getSymbol()
 										== subgroups_it->second) || (subgroups_it->second == '*'))
 							{
+								// Log.info() << ", base match.";
 								deeper.insert(bond);
 							}
 						}
@@ -638,11 +650,13 @@ namespace BALL
 							if (findAndTest(subgroups_it->second, 
 										*(atom.getBond(i)->getPartner(atom)), deeper, bond))
 							{
+								// Log.info() << ", recursion.";
 								deeper.insert(bond);
 							}
 						}
 					}
 				}
+				// Log.info() << endl;
 			}
 			if (!deeper.isEmpty())
 			{
@@ -650,6 +664,7 @@ namespace BALL
 			}
 		}
 
+		// Log.info() << "L: " << L.size();
 		if (L.empty()  || (L.size() != subgroups.size()))
 		{
 			return false;
@@ -665,9 +680,12 @@ namespace BALL
 			list<const Bond*> del_list;
 			list<const Bond*>::iterator del_it;
 			list<HashSet <const Bond*> >::iterator it = L.begin();
+			list< list< HashSet<const Bond*> >:: iterator > hash_del_list;
 
+			// Log.info() << "Sizes of hash sets before first block:";
 			for (; it != L.end(); ++it)
 			{
+				// Log.info() << " " << it->size();
 				if (it->size() == 1)
 				{
 					if (std::find(del_list.begin(), del_list.end(),
@@ -675,6 +693,8 @@ namespace BALL
 					{
 						// This match was assumed to be definite, but obviously
 						// isn't. So the pattern couldn't be applied.
+						// Log.info() << "DOUBLE SINGLE." << endl;
+						found.clear() ;
 						return false;
 					}
 					// this match is now assumed to be definite, so delete it from
@@ -686,32 +706,10 @@ namespace BALL
 
 					// Now clear the hashset.
 					it->clear();
+					hash_del_list.push_back(it);
 				}
 			}
-
-			list< list< HashSet<const Bond*> >:: iterator > hash_del_list;
-
-			for (it = L.begin(); it != L.end(); ++it) 
-			{
-				// Delete the contents of del_list in all Hashsets
-				for (del_it = del_list.begin(); del_it != del_list.end(); ++del_it)
-				{
-					if (it->has(*del_it))
-					{
-						it->erase(*del_it);
-					}
-					if (it->size() == 0)
-					{
-						// Don't insert iterators twice!
-
-						if (std::find(hash_del_list.begin(), hash_del_list.end(),
-									it) == hash_del_list.end()) 
-						{
-							hash_del_list.push_back(it);
-						}
-					}
-				}
-			}
+			// Log.info() << endl;
 
 			// now erase the empty hashsets in L
 
@@ -724,9 +722,36 @@ namespace BALL
 				L.erase(*hash_del_it);
 			}
 
+			// delete definite items from all other hashsets
+
+			// Log.info() << "Sizes of remaining sets before GREEDY:";
+			for (it = L.begin(); it != L.end(); ++it) 
+			{
+				// Delete the contents of del_list in all Hashsets
+				for (del_it = del_list.begin(); del_it != del_list.end(); ++del_it)
+				{
+					// delete definite items from those hash sets
+					if (it->has(*del_it))
+					{
+						it->erase(*del_it);
+					}
+
+
+					// if there is an empty hashset, something went wrong
+					if (it->size() == 0)
+					{
+						return false;
+					}
+				}
+				// Log.info() << " " << it->size();
+			}
+			// Log.info() << endl;
+
 			// SECOND BLOCK: If there are ambiguous results, just grab one
 			// and make it definite by deleting a hashset containing it and
 			// all occurrences in all other hashsets. (GREEDY).
+
+			// Log.info() << "Sizes of remaining sets after GREEDY:";
 
 			if (L.size() > 0)
 			{
@@ -739,8 +764,16 @@ namespace BALL
 					{
 						it->erase(grab);
 					}
+
+					// Log.info() << " " << it->size();
+
+					if (it->size() == 0)
+					{
+						return false;
+					}
 				}
 			}
+			// Log.info() << endl;
 		} while (L.size() > 0);
 
 		// L was emptied and no errors occurred, so return true.
