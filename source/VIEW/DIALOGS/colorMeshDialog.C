@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.13 2003/10/28 00:23:16 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.14 2003/11/17 17:37:31 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -61,7 +61,7 @@ void ColorMeshDialog::applyPressed()
 	}
 		
 	// repaint of the scene and the composites needed
-	MainControl::getMainControl(this)->updateAll(true);
+	MainControl::getMainControl(this)->updateAllRepresentations(true);
 }
 
 

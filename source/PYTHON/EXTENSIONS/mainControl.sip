@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.6 2003/11/15 10:59:06 oliver Exp $
+// $Id: mainControl.sip,v 1.7 2003/11/17 17:37:30 amoll Exp $
 //
 
 class MainControl
@@ -45,7 +45,7 @@ class MainControl
 	// QPopupMenu* initPopupMenu(int /ID/) throw();
 	System* getSelectedSystem() throw();
 	bool compositesAreMuteable();
-	bool update(const Composite& /composite/, bool /rebuild/ = true) throw();
+	bool updateRepresentationsOf(const Composite& /composite/, bool /rebuild/ = true) throw();
 	const FragmentDB& getFragmentDB() const throw();
 	PyCompositeList getSelection() const throw();
 	const INIFile& getINIFile() const throw();
@@ -85,5 +85,9 @@ class MainControl
 	// void setLabel(QLabel* /label/) throw();
 	void setMenuHint(Index /id/, const String& /hint/) throw();
 	void setStatusbarText(const String& /text/) throw();
-	void updateAll(bool /rebuild_display_lists/ = false) throw();
+	void updateAllRepresentations(bool /rebuild_display_lists/ = false) throw();
+	bool update(Composite& /composite/) throw();
+	bool insert(Composite& /composite/) throw();
+	bool remove(Composite& /composite/) throw();
+
 };

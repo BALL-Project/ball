@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.18 2003/11/05 23:02:06 amoll Exp $
+// $Id: mainControl.C,v 1.19 2003/11/17 17:37:32 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -355,12 +355,12 @@ bool MainControl::remove_(Composite& composite)
 		notify_(rr_message);
 	}
 
-	if (removed_representations.size() > 0) updateAll();
+	if (removed_representations.size() > 0) updateAllRepresentations();
 
 	return true;
 }
 
-bool MainControl::update(const Composite& composite, bool rebuild)
+bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebuild)
 	throw()
 {
 	if (!composite_manager_.has(composite)) return false;
@@ -390,7 +390,7 @@ bool MainControl::update(const Composite& composite, bool rebuild)
 }
 
 
-void MainControl::updateAll(bool rebuild_display_lists)
+void MainControl::updateAllRepresentations(bool rebuild_display_lists)
 	throw()
 {
 	// update scene
@@ -709,7 +709,7 @@ void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 	HashSet<Composite*>::Iterator it = roots.begin();
 	for(; it != roots.end(); it++)
 	{
-		update(**it, false);
+		updateRepresentationsOf(**it, false);
 	}
 
 	#ifdef BALL_DEBUG_VIEW
@@ -994,6 +994,44 @@ void MainControl::dump(ostream& s, Size depth) const
 	BALL_DUMP_STREAM_SUFFIX(s);     
 }
 
+bool MainControl::update(Composite& composite)
+	throw()
+{
+	if (!composite_manager_.has(composite)) return false;
+
+	CompositeMessage* cm = new CompositeMessage(composite, 
+			CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+	notify_(cm);
+	updateRepresentationsOf(composite.getRoot());
+
+	return true;
+}
+
+bool MainControl::insert(Composite& composite)
+	throw()
+{
+	if (composite_manager_.has(composite)) return false;
+
+	composite_manager_.insert(composite);
+	CompositeMessage* cm = new CompositeMessage(composite, 
+			CompositeMessage::NEW_COMPOSITE);
+	notify_(cm);
+	
+	return true;
+}
+
+bool MainControl::remove(Composite& composite)
+	throw()
+{
+	if (!composite_manager_.has(composite)) return false;
+
+	CompositeMessage* cm = new CompositeMessage(composite, 
+			CompositeMessage::REMOVED_COMPOSITE);
+	notify_(cm);
+	remove_(composite);
+
+	return true;
+}
 // ======================= StatusbarTimer =========================
 StatusbarTimer::StatusbarTimer(QObject* parent)
 	throw()
