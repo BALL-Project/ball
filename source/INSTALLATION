@@ -230,7 +230,7 @@ Windows/cygwin:
 
 Windows/DOT NET:
   - There is an additional file provided with more detailed installation instructions
-    on our website
+    in BALL/Windows/README.txt
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.15 2004/04/16 11:39:39 amoll Exp $
+document revision: $Id: INSTALLATION,v 1.16 2004/06/14 15:50:41 amoll Exp $
