@@ -1,4 +1,4 @@
-// $Id: structureMapper.h,v 1.9.4.1 2002/05/12 13:33:22 oliver Exp $
+// $Id: structureMapper.h,v 1.9.4.2 2002/05/16 00:30:06 oliver Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -121,15 +121,21 @@ namespace BALL
 
 		/**	
 		*/
-		static Matrix4x4 matchBackboneAtoms(const Residue* r1, const Residue* r2);
+		static Matrix4x4 matchBackboneAtoms(const Residue& r1, const Residue& r2);
 
-		Size mapResidues(const list<Residue*>& l1, const list<Residue*>& l2);
+		/**	
+		*/
+		Size mapResiduesByBackbone(const list<Residue*>& l1, const list<Residue*>& l2);
 	 
+		/**
+		*/
 		vector<vector<Fragment*> >& searchPattern
 			(vector<Fragment*>& pattern, Composite& composite,
 			 double max_rmsd = 4.0,	   double max_center_tolerance = 2.0,
 			 double upper_bound = 8.0, double lower_bound = 4.0);
 
+		/**	Map two proteins onto each other.
+		*/
 		Matrix4x4 mapProteins
 			(Protein& P1, Protein& P2, 
 			 map<String, Size>&	type_map,
@@ -152,7 +158,8 @@ namespace BALL
 		*/
 		Composite*	B_;
 		
-		/*_	The current atom bijection (needed for the caclulation of the rmsd 
+		/*_	The current atom bijection.
+				Required for the caclulation of the RMSD.
 		*/
 		StructureMapper::AtomBijection bijection_;
 		
