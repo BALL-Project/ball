@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.23 2003/12/06 00:10:41 amoll Exp $
+// $Id: mainControl.C,v 1.24 2003/12/09 15:15:31 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -11,7 +11,6 @@
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 
-#include <BALL/VIEW/WIDGETS/control.h>
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
