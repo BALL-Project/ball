@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.19 2005/01/26 22:09:24 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.20 2005/01/27 15:27:54 oliver Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -12,6 +12,7 @@
  #include <windows.h>
  #include <wingdi.h>	
 #else
+ #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
  #include <GL/gl.h>
  #include <GL/glx.h>
 #endif
