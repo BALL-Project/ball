@@ -1,8 +1,13 @@
-// $Id: timeStamp.C,v 1.17 2002/01/04 19:52:08 oliver Exp $
+// $Id: timeStamp.C,v 1.17.4.1 2002/11/29 23:07:37 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
-#include <sys/time.h>
+#ifdef BALL_HAS_SYS_TIME_H
+#	include <sys/time.h>
+#endif 
+#ifdef BALL_HAS_TIME_H
+#	include <time.h>
+#endif 
 
 using namespace std;
 

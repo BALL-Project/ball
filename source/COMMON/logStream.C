@@ -1,10 +1,9 @@
-// $Id: logStream.C,v 1.25 2001/06/23 01:46:49 oliver Exp $
+// $Id: logStream.C,v 1.25.4.1 2002/11/29 23:07:37 oliver Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/notification.h>
 
-#include <sys/time.h>
 #include <stdio.h>
 #include <limits.h>
 #include <string.h>
