@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.25 2003/04/28 19:21:27 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.26 2003/07/03 12:20:46 amoll Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
-
+#include <BALL/DATATYPE/regularExpression.h>
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
