@@ -30,13 +30,13 @@ void SimulationThread::updateScene_()
 {
 	Mainframe::UpdateCompositeEvent* se = new Mainframe::UpdateCompositeEvent;
 	se->setComposite(composite_);
-	postEvent(main_frame_, se);
+	qApp->postEvent(main_frame_, se);
 
 	/*
 	// old behavior: no rebuilding of surfaces
 	Scene* scene= (Scene*) Scene::getInstance(0);
 	Scene::SceneUpdateEvent* su = new Scene::SceneUpdateEvent;
-	postEvent(scene, su);  // Qt will delete it when done
+	qApp->postEvent(scene, su);  // Qt will delete it when done
 	*/
 }
 
@@ -44,7 +44,7 @@ void SimulationThread::output_(const String& string)
 {
 	Mainframe::SimulationOutput* su = new Mainframe::SimulationOutput;
 	su->setMessage(string);
-	postEvent(main_frame_, su);  // Qt will delete it when done
+	qApp->postEvent(main_frame_, su);  // Qt will delete it when done
 }
 
 void SimulationThread::outputAmberResult_(const AmberFF& amber)
@@ -64,7 +64,7 @@ void SimulationThread::outputAmberResult_(const AmberFF& amber)
 void SimulationThread::finish_()
 {
 	Mainframe::SimulationThreadFinished* su = new Mainframe::SimulationThreadFinished;
-	postEvent(main_frame_, su);  // Qt will delete it when done
+	qApp->postEvent(main_frame_, su);  // Qt will delete it when done
 }
 
 void EnergyMinimizerThread::run()
