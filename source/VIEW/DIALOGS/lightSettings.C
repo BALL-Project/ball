@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.13 2005/02/06 20:57:08 oliver Exp $
+// $Id: lightSettings.C,v 1.14 2005/02/10 23:21:54 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -99,13 +99,26 @@ void LightSettings::defaultsPressed()
 {
 	clearFields_();
 	lights_.clear();
+	const Camera& camera = stage_->getCamera();
 	LightSource light;
 	light.setType(LightSource::POSITIONAL);
-	light.setPosition(stage_->getCamera().getViewPoint() - 
-										stage_->getCamera().getViewVector() * 4);
-	light.setDirection(stage_->getCamera().getLookAtPosition());
-	lights_.push_back(light);
 
+	// position light 20 space units behind camera position
+	Vector3 pos = camera.getViewVector();
+	pos.normalize();
+	pos *= -20;
+	pos += camera.getViewPoint();
+	
+	// create a kind of headlight
+	Vector3 up = camera.getLookUpVector();
+	up.normalize();
+	up *= 4;
+ 	pos += up;
+	
+	light.setPosition(pos);
+	light.setDirection(camera.getLookAtPosition());
+
+	lights_.push_back(light);
 	current_light_ = -1;
 	update();
 }
