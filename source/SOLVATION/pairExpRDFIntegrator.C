@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.4 2000/09/02 17:36:31 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.5 2000/09/18 16:18:49 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -226,10 +226,12 @@ namespace BALL
 	{
 		setConstants(alpha, C1, C2, R_ij_o, k1, k2);
 		// DEBUG
+		/*
 		Log.info() << "alpha_ = " << alpha_ << endl;
 		Log.info() << "C1_ = " << C1_ << endl;
 		Log.info() << "C2_ = " << C2_ << endl;
 		Log.info() << "R_ij_o_ = " << R_ij_o_ << endl;
+		*/
 		return integrate(from, to);
 	}
 
@@ -261,18 +263,22 @@ namespace BALL
 		double k = rdf_.getRepresentation().getInterval(index).first;
 
 		// DEBUG
+		/*
 		Log.info() << "r = " << r << endl;
 		Log.info() << "R = " << R << endl;
 		Log.info() << "b = " << b << endl;
 		Log.info() << "R_ij_o_6 = " << R_ij_o_6 << endl;
 		Log.info() << "a[0] = " << a[0] << " a[1] = " << a[1] 
 			<< " a[2] = " << a[2] << " a[3] = " << a[3] << endl;
-		Log.info() << "k = " << k << endl;
+		Log.info() << "x0 = " << k << endl;
+		Log.info() << "k1 = " << k1_ << endl;
+		Log.info() << "k2 = " << k2_ << endl;
+		*/
 
 		if (fabs(k2_) < 1e-10)
 		{
 
-			Log.info() << "keine geometrische Korrektur nötig." << endl;
+			// Log.info() << "keine geometrische Korrektur nötig." << endl;
 
 			// the molecule we sit on is that defining the current sphere, so we
 			// dont have to consider the geometric correction. Thus we have an
@@ -290,7 +296,7 @@ namespace BALL
 			val = s1+s2;
 
 
-			Log.info() << "RDF::integralToRC(), ohne G: " << val << endl;
+			// Log.info() << "RDF::integralToRC(), ohne G: " << val << endl;
 
 			return val;
 
@@ -302,22 +308,34 @@ namespace BALL
 			// situation. As this seems analytically impossible, we have to do it
 			// numerically. The method we use is the trapezium method.
 
-			// BAUSTELLE: Die Anzahl der Stützstellen muss per Option konfiguriert
-			// werden können.
-
 			double area = 0;
-			double x = r;
 			unsigned int n = samples;
+
+			// lower case variables are for the potential term
+			double x = r;
 			double s = (R-r)/n;
+			// upper case variables are for the rdf term (representing the
+			// geometrical correction)
+			double X = sqrt((r*r + k1_ * r + k2_));
+			double S = (sqrt((R*R + k1_ * R + k2_))-X)/n;
 			while (n > 0)
 			{
-				area += ((exp(-b*x) - R_ij_o_6/pow(x,6))*rdf_(x) 
-						+ (exp(-b*x) - R_ij_o_6/pow(x,6))*rdf_(x+s))/2.0 * s;
+				// DEBUG
+				/*
+				Log.info() << "rdf_(" << X << ") = " << rdf_(X) << endl;
+				Log.info() << "e^(-b*" << x << ") - R_ij_o/(" << x << ")^6 = " << 
+					(exp(-b*x) - R_ij_o_6/pow(x,6)) << endl;
+				Log.info() << "e^(-b*" << x << ") = " << exp(-b*x) << endl;
+				Log.info() << "R_ij_o/(" << x << ")^6 = " << R_ij_o_6/pow(x,6) << endl;
+				*/
+				area += ((exp(-b*x) - R_ij_o_6/pow(x,6)) * rdf_(X) 
+						+ (exp(-b*(x+s)) - R_ij_o_6/pow(x+s,6)) * rdf_(X+S))/2.0 * s;
 				x += s;
+				X += S;
 				--n;
 			}
 
-			Log.info() << "RDF::integralToRC(), mit G: " << area << endl;
+			// Log.info() << "RDF::integralToRC(), mit G: " << area << endl;
 
 			return area;
 		}
