@@ -4597,21 +4597,74 @@ _ACEOF
 
 
 
-        TEMPLATE_DIR=""
+		if test "${CXX_VERSION_1}" != "" -a "${CXX_VERSION_2}" != "" ; then
+		if test ${CXX_VERSION_1} -ge 8 ; then
+			if test ${CXX_VERSION_1} = 8 -a ${CXX_VERSION_2} -ge 1 ; then
+				if test `basename ${CXX}` = "icc" ; then
+					echo "$as_me:$LINENO: result: WARNING: Starting with version 8.1, ipcp should be used instead of icc." >&5
+echo "${ECHO_T}WARNING: Starting with version 8.1, ipcp should be used instead of icc." >&6
+					echo "$as_me:$LINENO: result: Otherwise, linking errors will occur! Please call configure again" >&5
+echo "${ECHO_T}Otherwise, linking errors will occur! Please call configure again" >&6
+					echo "$as_me:$LINENO: result: with icpc as the compiler." >&5
+echo "${ECHO_T}with icpc as the compiler." >&6
+					echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+
+	echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+	echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6
+	echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6
+S	echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6
+	echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in source. It contains the relevant" >&6
+	echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6
+	echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6
+	echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6
+	echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6
+	echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+				fi
+			fi
+		fi
+	fi
+
+  TEMPLATE_DIR=""
   AR="${CXX}"
   DYNAR="${CXX}"
   AROPTS="${AROPTS} -o"
-  DYNAROPTS="${DYNAROPTS} -cxxlib-gcc -shared -o"
+  DYNAROPTS="${DYNAROPTS} -shared -o"
   CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-  CXXFLAGS="${CXXFLAGS} -cxxlib-gcc -KPIC"
+  CXXFLAGS="${CXXFLAGS} -KPIC"
 
     CXXFLAGS_O="${CXXFLAGS_O} -O1"
 
-      CXXFLAGS_D="${CXXFLAGS_D} -O0 -w1"
-  CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+      CXXFLAGS_D="${CXXFLAGS_D} -O0 -g -w1"
+  CXXFLAGS_DI="${CXXFLAGS_DI}"
  ;;
 Compaq )
 		echo "$as_me:$LINENO: checking compiler version" >&5

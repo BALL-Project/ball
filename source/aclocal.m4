@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.61 2005/02/06 09:44:54 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.62 2005/02/07 22:55:54 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -827,7 +827,6 @@ AC_DEFUN(CF_IDENTIFY_INTEL, [
 	fi
 ])
 
-
 dnl
 dnl		Set the Intel icc-specific options.
 dnl
@@ -842,27 +841,39 @@ AC_DEFUN(CF_INTEL_OPTIONS,[
 	AC_MSG_RESULT(${VERSION_OUTPUT})
 	CF_DIGEST_CXX_VERSION
 
-  dnl   KAI C++ stores a list of instantiated templates
-  dnl   in directories called ti_files
-  dnl   make clean should remove these
+	dnl
+	if test "${CXX_VERSION_1}" != "" -a "${CXX_VERSION_2}" != "" ; then
+		if test ${CXX_VERSION_1} -ge 8 ; then
+			if test ${CXX_VERSION_1} = 8 -a ${CXX_VERSION_2} -ge 1 ; then
+				if test `basename ${CXX}` = "icc" ; then
+					AC_MSG_RESULT([WARNING: Starting with version 8.1, ipcp should be used instead of icc.])
+					AC_MSG_RESULT([Otherwise, linking errors will occur! Please call configure again])
+					AC_MSG_RESULT([with icpc as the compiler.])
+					AC_MSG_RESULT()
+					CF_ERROR(Aborted.)
+				fi
+			fi
+		fi
+	fi
+
   TEMPLATE_DIR=""
   AR="${CXX}"
   DYNAR="${CXX}"
   AROPTS="${AROPTS} -o"
-  DYNAROPTS="${DYNAROPTS} -cxxlib-gcc -shared -o"
+  DYNAROPTS="${DYNAROPTS} -shared -o"
   CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-  CXXFLAGS="${CXXFLAGS} -cxxlib-gcc -KPIC"
+  CXXFLAGS="${CXXFLAGS} -KPIC"
 
-  dnl   Turn on optimization
+  dnl   optimze as on highest level: this compiler
   CXXFLAGS_O="${CXXFLAGS_O} -O1"
 
   dnl   avoid high level optimization to
   dnl   get debuggable code...
-  CXXFLAGS_D="${CXXFLAGS_D} -O0 -w1"
-  CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+  CXXFLAGS_D="${CXXFLAGS_D} -O0 -g -w1"
+  CXXFLAGS_DI="${CXXFLAGS_DI}"
 ])
 
 dnl
