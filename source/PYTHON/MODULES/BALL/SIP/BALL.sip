@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.7 2000/11/15 14:20:58 oliver Exp $
+// $Id: BALL.sip,v 1.8 2001/01/16 17:26:59 anker Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -57,7 +57,10 @@
 // list.h // ??
 // listStack.h // ?? 
 %Include options.sip
-%Include pointGrid.sip //  float only!
+// %Include pointGrid.sip //  float only! and obsolete
+%Include regularData1D.sip
+%Include regularData2D.sip
+%Include regularData3D.sip
 // quadruple.h // ??
 // redBlackTree.h // ??
 %Include regExp.sip
@@ -83,6 +86,8 @@
 // %Include parameterSection.sip
 // %Include parameters.sip
 %Include resourceFile.sip
+%Include trajectoryFile.sip
+%Include DCDFile.sip
 
 
 // KERNEL
