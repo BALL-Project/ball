@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.2 2001/12/22 16:39:15 oliver Exp $
+// $Id: file.sip,v 1.3 2001/12/23 23:08:12 oliver Exp $
 
 class std__openmode
 {
@@ -34,34 +34,28 @@ class File
   bool open(const String&, File::OpenMode /openmode/ = File::IN);
 %MemberCode
 
-    const String *a0;
-    PyObject *a0obj;
+    const String* a0;
+		int a0IsTemp = 0;
     File::OpenMode a1 = File::IN;
 
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"I|i",sipCanConvertTo_String,&a0obj,&a1))
+    File* ptr = 0;
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"mM1i",sipThisObj, sipClass_File,&ptr,
+										sipConvertTo_String,&a0,&a0IsTemp,
+										&a1))
     {
       bool res;
-      File *ptr;
 
-      if ((ptr = (File *)sipGetCppPtr((sipThisType*)a0,sipClass_File)) == NULL)
-        return NULL;
-
-      int iserr = 0;
-
-      int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-
-      if (iserr)
-        return NULL;
-
-      res = ptr -> File::open(* a0, a1);
+      res = ptr -> File::open(*a0, a1);
 
 			if (res == false)
 			{
 				Log.error() << "Cannot open file " << *a0 << std::endl;
 			}
 
-      if (istemp0)
-        delete a0;
+      if (a0IsTemp)
+			{
+				delete a0;
+			}
 
       return sipConvertFromBool((int)res);
     }
