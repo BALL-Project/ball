@@ -1,4 +1,4 @@
-// $Id: nucleotide.C,v 1.3 2000/05/10 18:54:30 amoll Exp $
+// $Id: nucleotide.C,v 1.4 2000/05/15 16:01:01 amoll Exp $
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -184,21 +184,44 @@ namespace BALL
 
 	bool Nucleotide::isTerminal() const
 	{
-		// BAUSTELLE
+		const NucleicAcid* parent = (*this).getNucleicAcid();
+		/*if (parent != 0)
+		{
+			if (parent->get3Prime() == this ||
+					parent->get5Prime() == this)
+			{
+				return true;
+			}
+		}*/
 		return false;
 	}
 
 	bool Nucleotide::is5Prime() const
 	{
-		// BAUSTELLE
+		const NucleicAcid* parent = getNucleicAcid();
+		if (parent != 0)
+		{
+			if (parent->get5Prime() == this)
+			{
+				return true;
+			}
+		}
 		return false;
 	}
 		
 	bool Nucleotide::is3Prime() const
 	{
+		const NucleicAcid* parent = getNucleicAcid();
+		if (parent != 0)
+		{
+			if (parent->get3Prime() == this)
+			{
+				return true;
+			}
+		}
 		return false;
 	}
-		
+
 	bool Nucleotide::isValid() const
 	{ 
 		if (Fragment::isValid() == false
