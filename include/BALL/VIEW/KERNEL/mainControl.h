@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.68 2004/11/14 22:42:01 amoll Exp $
+// $Id: mainControl.h,v 1.69 2004/11/28 22:17:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -747,6 +747,12 @@ namespace BALL
 			*/
 			virtual void openFile(const String& /*file*/) throw() {};
 
+			///
+			void saveBALLViewProjectFile(const String& filename);
+			
+			///
+			void loadBALLViewProjectFile(const String& filename) throw();
+
 			//@}
 			
 			protected slots:
@@ -777,6 +783,9 @@ namespace BALL
 			/*_	Create a unique item ID for a menuentry by adding 1 to current_id_
 			*/
 			int getNextID_()
+				throw();
+
+			void setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)
 				throw();
 
 			void selectRecursive_(Composite* composite)

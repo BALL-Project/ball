@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.142 2004/11/26 11:30:51 amoll Exp $
+// $Id: mainControl.C,v 1.143 2004/11/28 22:17:21 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -15,6 +15,7 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
+#include <BALL/VIEW/DIALOGS/displayProperties.h>
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
@@ -26,6 +27,7 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <BALL/SYSTEM/directory.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 
 #ifdef BALL_QT_HAS_THREADS
 #	include <BALL/VIEW/KERNEL/threads.h>
@@ -37,6 +39,7 @@
 #include <qpushbutton.h> // needed for preferences
 #include <qcursor.h>     // wait cursor
 #include <qmessagebox.h> 
+#include <qfiledialog.h> 
 
 #include <algorithm> // sort
 
@@ -1671,6 +1674,307 @@ namespace BALL
 			setBusyMode_(false);
 			return true;
 		}
+
+
+	void MainControl::saveBALLViewProjectFile(const String& filename)
+		throw()
+	{
+		INIFile out(filename);
+		out.appendSection("WINDOWS");
+		out.appendSection("BALLVIEW_PROJECT");
+
+		// check menu entries, fetch and apply preferences
+		List<ModularWidget*>::Iterator mit = modular_widgets_.begin(); 
+		for (; mit != modular_widgets_.end(); ++mit)
+		{
+			(*mit)->writePreferences(out);
+		}
+
+		CompositeManager::CompositeIterator cit = getCompositeManager().begin();
+		for (Index system_nr = 1; cit != getCompositeManager().end(); cit++)
+		{
+			if (!RTTI::isKindOf<System>(**cit)) continue;
+			String molecular_file = String(filename)+"_molecule" + String(system_nr) + ".xdr";
+			out.insertValue("BALLVIEW_PROJECT", "MolecularFile" + String(system_nr), molecular_file);
+
+			ofstream outfile(molecular_file.c_str(), std::ios::out);
+			if (!outfile.good()) 
+			{
+				setStatusbarText("Could not write project file to " + molecular_file, true);
+				outfile.close();
+				return;
+			}
+
+			TextPersistenceManager pm(outfile);
+			(*dynamic_cast<System*>(*cit)) >> pm;
+			outfile.close();
+			system_nr++;
+		}
+
+		if (Scene::getInstance(0) != 0)
+		{
+			out.insertValue("BALLVIEW_PROJECT", "Camera", Scene::getInstance(0)->getStage()->getCamera().toString());
+		}
+
+		Position nr_of_representations = 0;
+		PrimitiveManager::RepresentationsConstIterator it = getPrimitiveManager().begin();
+		for (; it != getPrimitiveManager().end(); it++)
+		{
+			if ((**it).begin() == (**it).end()) 
+			{
+				Log.error() << "Error while writing Project File in " << __FILE__ << " " << __LINE__ << std::endl;
+				continue;
+			}
+
+			bool ok = true;
+
+			Representation::CompositesIterator cit = (**it).begin();
+			const Composite* root = &(**cit).getRoot();
+			for (; cit != (**it).end(); cit++)
+			{
+				if ((**cit).getRoot() != *root)
+				{
+					ok = false;
+					break;
+				}
+			}
+
+			if (!ok) 
+			{	
+				Log.error() << "Error while writing Project File in " << __FILE__ << " " << __LINE__ << std::endl;
+				continue;
+			}
+
+			Index system_nr = -1;
+			CompositeManager::CompositeIterator cit2 = getCompositeManager().begin();
+			for (Position nr = 0; cit2 != getCompositeManager().end(); cit2++)
+			{
+				if (root == *cit2) system_nr = nr;
+
+				nr++;
+			}
+
+			if (system_nr == -1) continue;
+
+			out.insertValue("BALLVIEW_PROJECT", 
+											String("Representation") + String(nr_of_representations),  
+											String(system_nr) + String(";") + (**it).toString());
+			nr_of_representations++;
+		}
+				
+		writePreferences(out);
+	} 
+
+	void MainControl::loadBALLViewProjectFile(const String& filename)
+		throw()
+	{
+		INIFile *in = new INIFile(filename);
+		in->read();
+
+		// check menu entries, fetch and apply preferences
+		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+		for (; it != modular_widgets_.end(); ++it)
+		{
+			(*it)->fetchPreferences(*in);
+			(*it)->applyPreferences();
+		}
+
+		for (Position pos = 1; pos < 1000; pos++)
+		{
+			if (!in->hasEntry("BALLVIEW_PROJECT", "MolecularFile" + String(pos)))
+			{
+				break;
+			}
+
+			String molecular_file = in->getValue("BALLVIEW_PROJECT", "MolecularFile" + String(pos));
+			if (DisplayProperties::getInstance(0) != 0)
+			{
+				DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
+			}
+
+			ifstream infile(molecular_file.c_str(), std::ios::in);
+			TextPersistenceManager pm(infile);
+			PersistentObject* po = pm.readObject();
+			if (!RTTI::isKindOf<System>(*po))
+			{
+				setStatusbarText("Error while reading project file! Aborting...");
+				Log.error() << "Error while reading project file! Aborting..." << std::endl;
+				return;
+			}
+			infile.close();
+			insert(*(System*) po);
+		}
+
+		try
+		{
+			for (Position p = 0; p < 9999999; p++)
+			{
+				if (!in->hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
+
+				String data_string = in->getValue("BALLVIEW_PROJECT", "Representation" + String(p));
+
+				vector<String> string_vector;
+				Size split_size;
+
+				// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H
+				// 								 ^ 																	System Number
+				// 								         ^            							Model Settings
+				// 								         							 ^            Composites numbers
+				// 								         							     ^        Custom Color
+				// 								         							     			^   Hidden Flag
+
+				if (data_string.hasPrefix("CP:")) 
+				{
+					data_string = data_string.after("CP:");
+					// we have a clipping plane
+					split_size = data_string.split(string_vector);
+					if (split_size != 4) continue;
+
+					Representation* rep = new Representation();
+					rep->setModelType(MODEL_CLIPPING_PLANE);
+					rep->setProperty("AX", string_vector[0].toFloat());
+					rep->setProperty("BY", string_vector[1].toFloat());
+					rep->setProperty("CZ", string_vector[2].toFloat());
+					rep->setProperty("D", string_vector[3].toFloat());
+
+					insert(*rep);
+					continue;
+				}
+
+				// split off information of system number
+				split_size = data_string.split(string_vector, ";");
+				Position system_pos = string_vector[0].toUnsignedInt();
+
+				// split off between representation settings and composite numbers
+				data_string = string_vector[1];
+				vector<String> string_vector2;
+				data_string.split(string_vector2, "[]");
+				data_string = string_vector2[0];
+				if (DisplayProperties::getInstance(0) != 0)
+				{
+					DisplayProperties::getInstance(0)->getSettingsFromString(data_string);
+				}
+
+				// Composite positions
+				data_string = string_vector2[1];
+				data_string.split(string_vector2, ",");
+				HashSet<Position> hash_set;
+				for (Position p = 0; p < string_vector2.size(); p++)
+				{
+					hash_set.insert(string_vector2[p].toUnsignedInt());
+				}
+
+				Position pos = getCompositeManager().getNumberOfComposites() - 1;
+				CompositeManager::CompositeIterator cit2 = getCompositeManager().begin();
+				for (; cit2 != getCompositeManager().end() && system_pos != pos; cit2++)
+				{
+					pos--;
+				}
+
+				if (cit2 == getCompositeManager().end())  
+				{
+					setStatusbarText("Error while reading project file! Aborting...");
+					Log.error() << "Error while reading project file! Aborting..." << std::endl;
+					continue;
+				}
+
+				data_string = string_vector[1];
+				if (data_string.has('|'))
+				{
+					data_string.split(string_vector2, "|");
+					ColorRGBA color;
+					color = string_vector2[1];
+					if (DisplayProperties::getInstance(0) != 0)
+					{
+						DisplayProperties::getInstance(0)->setCustomColor(color);
+					}
+				}
+
+				getSelection().clear();
+				Position current = 0;
+				setSelection_(*cit2, hash_set, current);
+				NewSelectionMessage* msg = new NewSelectionMessage();
+				notify_(msg);
+			
+				if (DisplayProperties::getInstance(0) != 0)
+				{
+					DisplayProperties::getInstance(0)->apply();
+				}	
+
+				if (string_vector2.size() == 3 && string_vector2[2].has('H'))
+				{
+					Representation* rep = 0;
+					PrimitiveManager::RepresentationsIterator pit = getPrimitiveManager().begin();
+					for (; pit != getPrimitiveManager().end(); pit++)
+					{
+						rep = *pit;
+					}
+
+					rep->setHidden(true);
+					rep->update(false);
+
+#ifndef BALL_QT_HAS_THREADS
+			 		RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
+ 					notify_(msg);
+#endif
+				}
+			}
+		}
+		catch(Exception::InvalidFormat e)
+		{
+			setStatusbarText("Error while reading project file! Aborting...");
+			Log.error() << "Error while reading project file! Aborting..." << std::endl;
+			Log.error() << e << std::endl;
+			return;
+		}
+	
+		getSelection().clear();
+		NewSelectionMessage* msg = new NewSelectionMessage();
+		notify_(msg);
+ 	
+		fetchPreferences(*in);
+
+		if (in->hasEntry("BALLVIEW_PROJECT", "Camera"))
+		{
+			Stage stage;
+			Camera c;
+			if (!c.readFromString(in->getValue("BALLVIEW_PROJECT", "Camera")))
+			{
+				setStatusbarText("Could not read Camera position from project");
+				Log.error() << "Could not read Camera position from project" << std::endl;
+				return;
+			}
+			stage.setCamera(c);
+			SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+			msg->setStage(stage);
+			notify_(msg);
+		}
+
+		if (DisplayProperties::getInstance(0) != 0)
+		{
+			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
+		}
+
+		Scene::getInstance(0)->fetchPreferences(*in);
+		Scene::getInstance(0)->applyPreferences();
+	}
+
+	void MainControl::setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)
+		throw()
+	{
+		if (hash_set.has(current))
+		{
+			getSelection().insert(c);
+			hash_set.erase(current);
+		}
+
+		current++;
+
+		for (Position p = 0; p < c->getDegree() && hash_set.size() > 0; p++)
+		{
+			setSelection_(c->getChild(p), hash_set, current);
+		}
+	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>
