@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.51 2004/09/10 13:10:42 amoll Exp $
+// $Id: geometricControl.C,v 1.52 2004/09/15 12:03:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -624,20 +624,38 @@ namespace BALL
 
 		void GeometricControl::moveClippingPlane()
 		{
-			if (context_representation_ == 0) return;
-
-			if (transformation_dialog_) 
-			{
-				transformation_dialog_->hide();
-				delete transformation_dialog_;
-			}
-			
-			transformation_dialog_ = new TransformationDialog(this);
-			transformation_dialog_->show();
-			transformation_dialog_->setRepresentation(context_representation_);
+			SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
+			notify_(msg);
 		}
 
+		void GeometricControl::moveItems(const Matrix4x4& m)
+			throw()
+		{
+			if (context_representation_ == 0 ||
+					!context_representation_->hasProperty("AX")) 
+			{
+				return;
+			}
 
+			Vector3 n(context_representation_->getProperty("AX").getDouble(),
+								context_representation_->getProperty("BY").getDouble(),
+								context_representation_->getProperty("CZ").getDouble());
+			float d = context_representation_->getProperty("D").getDouble();
+
+			if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
+			{
+				n.normalize();
+			}
+			else
+			{
+				Vector3 t(m.m14, m.m24, m.m34);
+				context_representation_->setProperty("D", d + t * n);
+			}
+
+			RepresentationMessage* msg = 
+				new RepresentationMessage(*context_representation_, RepresentationMessage::UPDATE);
+			notify_(msg);
+		}
 	
 	} // namespace VIEW
 } // namespace BALL

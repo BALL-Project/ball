@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.19 2004/06/24 23:03:43 amoll Exp $
+// $Id: geometricControl.h,v 1.20 2004/09/15 12:03:51 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -20,6 +20,10 @@
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #	include <BALL/VIEW/KERNEL/molecularInformation.h>
+#endif
+
+#ifndef BALL_MATHS_MATRIX44_H
+ #include <BALL/MATHS/matrix44.h>
 #endif
 
 #include <qpoint.h>
@@ -182,6 +186,10 @@ namespace BALL
 
 			/// Overloaded from ModularWidget
 			virtual void checkMenu(MainControl& main_control)
+				throw();
+
+			///
+			void moveItems(const Matrix4x4& m)
 				throw();
 
 			public slots:
