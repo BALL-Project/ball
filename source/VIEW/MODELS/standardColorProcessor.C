@@ -1,13 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.18 2003/11/20 01:25:19 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.19 2003/11/20 17:17:16 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/chain.h>
+#include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -261,6 +264,7 @@ namespace BALL
 			return default_color_;
 		}
 
+		// ========================================================================
 		ResidueNumberColorProcessor::ResidueNumberColorProcessor()
 			throw()
 			: ColorProcessor()
@@ -280,25 +284,66 @@ namespace BALL
 
 			Position pos;
 
-			if (RTTI::isKindOf<Residue>(*composite))
+			try
 			{
-				pos = ((const Residue*)composite)->getID().toUnsignedShort();
-			}
-			else
-			{
-				try
+				if (RTTI::isKindOf<Residue>(*composite))
+				{
+					pos = ((const Residue*)composite)->getID().toUnsignedShort();
+				}
+				else
 				{
 					pos = ((const Residue*)(composite->getAncestor(residue)))->getID().toUnsignedShort();
 				}
-				catch(...)
-				{
-					return default_color_;
-				}
 			}
-			while (pos > max_) pos = pos - max_;
-			ColorRGBA color;// = colors_[pos];
+			catch(...)
+			{
+				return default_color_;
+			}
+
+			ColorRGBA color = table_.map(pos);
 			color.setAlpha(255 - transparency_);
-			return color;
+		}
+
+		bool ResidueNumberColorProcessor::start()
+			throw()
+		{
+			ColorProcessor::start();
+			max_ = 0;
+			table_.clear();
+			table_ = ColorTable(500);
+			ColorRGBA base_colors[3];
+			base_colors[0] = first_color_;
+			base_colors[1] = middle_color_;
+			base_colors[2] = last_color_;
+			table_.setBaseColors(base_colors, 3);
+
+			CompositeSet::ConstIterator it = composites_->begin();
+			for(; it != composites_->end(); it++)
+			{
+				Position pos = 0;
+				if (RTTI::isKindOf<System>(**it))
+				{
+					pos = ((const System*) *it)->countResidues();
+				}
+				else if (RTTI::isKindOf<Protein>(**it))
+				{
+					pos = ((const Protein*) *it)->countResidues();
+				}
+				else if (RTTI::isKindOf<Chain>(**it))
+				{
+					pos = ((const Chain*) *it)->countResidues();
+				}
+				else if (RTTI::isKindOf<SecondaryStructure>(**it))
+				{
+					pos = ((const SecondaryStructure*) *it)->countResidues();
+				}
+				if (pos > max_) max_ = pos;
+			}
+
+			max_++;
+			table_.setRange(0, max_);
+			table_.createTable();
+			return true;
 		}
 
 		////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.15 2003/11/20 01:25:47 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.16 2003/11/20 17:17:19 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -10,10 +10,17 @@
 #	include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
 
+#ifndef BALL_VIEW_DATATYPTE_COLORTABLE_H
+# include <BALL/VIEW/DATATYPE/colorTable.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
 	{
+
+		typedef List<GeometricObject*> GeometricObjectList;
+
 		/** ElementColorProcessor class.
 				The class ElementColorProcessor is derived from the class ColorProcessor.
 				It is used for calculating element colors of a given Atom object.
@@ -86,8 +93,20 @@ namespace BALL
 				///
 				const ColorRGBA& getLastColor() const { return last_color_;}
 
+				///
+				/*
+				virtual Processor::Result operator() (GeometricObject*& object)
+					throw();
+					*/
+				
+				///
+				virtual bool start()
+					throw();
+
 			protected:
+				GeometricObjectList list_;
 				ColorRGBA first_color_, middle_color_, last_color_;
+				ColorTable table_;
 				Position max_;
 		};
 
@@ -355,7 +374,6 @@ namespace BALL
 			private:
 
 			typedef HashMap<const Atom*, float> AtomDistanceHashMap;
-			typedef List<GeometricObject*> GeometricObjectList;
 
 			AtomDistanceHashMap atom_2_distance_;
 			GeometricObjectList list_;
