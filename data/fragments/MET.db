@@ -40,8 +40,6 @@
     <node>25<value>1HG CG s</value></node>
     <node>26<value>2HG CG s</value></node>
     <node>27<value>SD CG s</value></node>
-    <node>31<value>LP1 SD s</value></node>
-    <node>32<value>LP2 SD s</value></node>
     <node>33<value>CE SD s</value></node>
     <node>37<value>1HE CE s</value></node>
     <node>38<value>2HE CE s</value></node>

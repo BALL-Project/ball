@@ -32,8 +32,6 @@
     <node>20<value>2HB CB s</value></node>
     <node>21<value>SG CB s</value></node>
     <node>25<value>HG SG s</value></node>
-    <node>26<value>LP1 SG s</value></node>
-    <node>27<value>LP2 SG s</value></node>
     <node>28<value>1H N s</value></node>
     <node>29<value>2H N s</value></node>
     <node>30<value>OXT C a</value></node>
