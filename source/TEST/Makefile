@@ -33,6 +33,7 @@ EXECUTABLES = \
 	Fragment_test\
 	FragmentDB_test\
 	Gradient_test\
+	Hash_test\
 	HashMap_test\
 	HashSet_test\
 	HINFile_test\
@@ -50,6 +51,7 @@ EXECUTABLES = \
 	Nucleotide_test\
 	OoiEnergy_test\
 	Options_test\
+	Path_test\
 	PDBFile_test\
 	Plane3_test\
 	PointGrid_test\
@@ -148,6 +150,9 @@ FragmentDB_test:	FragmentDB_test.o
 Gradient_test:	Gradient_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+Hash_test:	Hash_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 HashMap_test:	HashMap_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -200,6 +205,9 @@ OoiEnergy_test:	OoiEnergy_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 NumericalSAS_test:	NumericalSAS_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Path_test:	Path_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 PDBFile_test:	PDBFile_test.o
