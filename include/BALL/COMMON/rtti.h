@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.13 2001/05/29 12:21:01 anker Exp $
+// $Id: rtti.h,v 1.14 2001/06/23 02:33:29 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -139,6 +139,22 @@ namespace BALL
 			if (typeid(T) == typeid(PointerSizeInt))
 			{
 				return "BALL::PointerSizeInt";
+			}
+			if (typeid(T) == typeid(bool))
+			{
+				return "bool";
+			}
+			if (typeid(T) == typeid(float))
+			{
+				return "float";
+			}
+			if (typeid(T) == typeid(char))
+			{
+				return "char";
+			}
+			if (typeid(T) == typeid(double))
+			{
+				return "double";
 			}
 			static string s("");
 			static bool is_set = false;
