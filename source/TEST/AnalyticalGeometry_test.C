@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.15 2000/04/05 19:40:51 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.16 2000/04/16 20:11:24 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.15 2000/04/05 19:40:51 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.16 2000/04/16 20:11:24 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -188,24 +188,24 @@ CHECK(SolveSquaredEquality(const T& a, const T& b, const T &c, T &x1, T &x2))
 	float x1, x2;
 	// 0 + 0 = 0
 	// -1^2 - 1 = 0 
-	TEST_REAL_EQUAL(SolveSquaredEquality((float)1.0, (float)1.0, (float)0.0, x1, x2), 2.0)
-	TEST_REAL_EQUAL(x1, 0.0)
-	TEST_REAL_EQUAL(x2, -1.0)
+	TEST_EQUAL(SolveQuadraticEquation( (float)-1.0, (float)-1.0, (float)0.0, x1, x2), 2)
+	TEST_REAL_EQUAL(x1, -1.0)
+	TEST_REAL_EQUAL(x2, 0.0)
 	// 2*2^2 + 2*2 = 0
 	// 2*0^2 + 2*0 = 0
-	TEST_REAL_EQUAL(SolveSquaredEquality((float)2.0, (float)-4.0, (float)0.0, x1, x2), 2.0)
+	TEST_EQUAL(SolveQuadraticEquation((float)2.0, (float)-4.0, (float)0.0, x1, x2), 2)
 	TEST_REAL_EQUAL(x1, 2.0)
 	TEST_REAL_EQUAL(x2, 0.0)
 	// 2*2^2  + 4*2  - 16 = 0
 	// 2*-4^2 + 4*-4 - 16 = 0
-	TEST_REAL_EQUAL(SolveSquaredEquality((float)2.0, (float)4.0, (float)-16.0, x1, x2), 2.0)
+	TEST_EQUAL(SolveQuadraticEquation((float)2.0, (float)4.0, (float)-16.0, x1, x2), 2)
 	TEST_REAL_EQUAL(x1, 2.0)
 	TEST_REAL_EQUAL(x2, -4.0)
 	// 0*x^2 + 0*x + 1 != 0 
-	TEST_REAL_EQUAL(SolveSquaredEquality((float)0.0, (float)0.0, (float)1.0, x1, x2), 0.0)
+	TEST_EQUAL(SolveQuadraticEquation((float)0.0, (float)0.0, (float)1.0, x1, x2), 0)
 	TEST_REAL_EQUAL(x1, 2.0)
 	// 0*x^2 + 1*1 + 1 = 0
-	TEST_REAL_EQUAL(SolveSquaredEquality((float)0.0, (float)1.0, (float)1.0, x1, x2), 1.0)
+	TEST_EQUAL(SolveQuadraticEquation((float)0.0, (float)1.0, (float)1.0, x1, x2), 1)
 	TEST_REAL_EQUAL(x1, 1.0)
 	TEST_REAL_EQUAL(x2, 1.0)
 RESULT
