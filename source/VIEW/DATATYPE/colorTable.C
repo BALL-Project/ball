@@ -1,4 +1,4 @@
-// $Id: colorTable.C,v 1.4.4.1 2002/08/16 15:32:20 anhi Exp $
+// $Id: colorTable.C,v 1.4.4.2 2002/09/02 09:44:39 anhi Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 
@@ -146,7 +146,7 @@ namespace BALL
 				color_number_ = old_colNum + (numInterpolSteps*(old_colNum-1));
 			}
 			
-			ColorRGBA col1, col2, dummy;
+			ColorRGBA col1, col2;
 			float pos;
 			
 			for (Index i=0; i<old_colNum-1; i++)
@@ -174,12 +174,9 @@ namespace BALL
 
 			// This can probably done much faster...
 			(*this).resize(color_number_);
-			
-			for (Index i=0; i<color_number_; i++)
-			{
-				(*this)[i] = new_table[i];
-			}
 
+			copy(new_table.begin(), new_table.end(), (*this).begin());
+			
 			return (color_number_);
 		}
 		
