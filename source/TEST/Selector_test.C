@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Selector_test.C,v 1.12 2002/12/12 11:34:44 oliver Exp $
+// $Id: Selector_test.C,v 1.13 2003/07/01 13:51:08 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(Selector, "$Id: Selector_test.C,v 1.12 2002/12/12 11:34:44 oliver Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.13 2003/07/01 13:51:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,19 +24,19 @@ using namespace BALL;
 
 Selector* ptr;
 
-CHECK(Selector::Selector() throw())
+CHECK(Selector() throw())
 	ptr = new Selector;
 	TEST_NOT_EQUAL(ptr, 0)
 	TEST_EQUAL(ptr->getNumberOfSelectedAtoms(), 0)
 RESULT
 
 
-CHECK(Selector::~Selector() throw())
+CHECK(~Selector() throw())
 	delete ptr;
 RESULT
 
 
-CHECK(Selector::Selector(const Selector& selector) throw())
+CHECK(Selector(const Selector& selector) throw())
 	Selector s1;
 	Expression e("true()");
 	s1.setExpression(e);
@@ -50,7 +50,7 @@ CHECK(Selector::Selector(const Selector& selector) throw())
 RESULT
 
 
-CHECK(Selector::Selector(const String& expression_string) throw())
+CHECK(Selector(const String& expression_string) throw())
 	Selector s("true()");
 	Expression e("true()");
 	bool test = (s.getExpression() == e);
@@ -58,7 +58,7 @@ CHECK(Selector::Selector(const String& expression_string) throw())
 RESULT
 
 
-CHECK(Selector::Processor::Result operator () (Composite& composite) throw())
+CHECK(Processor::Result operator () (Composite& composite) throw())
 	HINFile file("data/Selector_test.hin");
 	System S;
 	file >> S;
@@ -98,14 +98,14 @@ CHECK(Selector::Processor::Result operator () (Composite& composite) throw())
 RESULT
 
 
-CHECK(Selector::start() throw())
+CHECK(bool start() throw())
 	Selector s;
 	s.start();
 	TEST_EQUAL(s.getNumberOfSelectedAtoms(), 0)
 RESULT
 
 
-CHECK(Selector::getNumberOfSelectedAtoms() const  throw())
+CHECK(Size getNumberOfSelectedAtoms() const throw())
 	HINFile file("data/Selector_test.hin");
 	System S;
 	file >> S;
@@ -137,7 +137,39 @@ CHECK(Selector::getNumberOfSelectedAtoms() const  throw())
 	}
 RESULT
 
+CHECK(Selector& operator = (const Selector& selector) throw())
+	Selector s("true()");
+	Selector s2;
+	s2 = s;
+	TEST_EQUAL(s == s2, true)
+RESULT
 
+CHECK(bool operator == (const Selector& selector) const throw())
+	Selector s("true()");
+	Selector s2("false()");
+	TEST_EQUAL(s == s2, false)
+	s2 = s;
+	TEST_EQUAL(s == s2, true)
+RESULT
+
+CHECK(const Expression& getExpression() const throw())
+	Selector s("true()");
+	TEST_EQUAL(s.getExpression()== Expression("true()"), true)
+	Selector empty;
+	TEST_EQUAL(empty.getExpression() == Expression(), true);
+RESULT
+
+CHECK(void clear() throw())
+	Selector s("true()");
+	s.clear();
+	TEST_EQUAL(s.getExpression() == Expression(), true)
+RESULT
+
+CHECK(void setExpression(const Expression& expression) throw())
+	Selector s("true()");
+	s.setExpression(Expression("false()"));
+	TEST_EQUAL(s.getExpression() == Expression("false()"), true)
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
