@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.44 2004/02/23 17:26:01 anhi Exp $
+// $Id: exception.h,v 1.44.2.1 2004/05/18 11:45:17 amoll Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -298,7 +298,7 @@ namespace BALL
 				This exception should be thrown to indicate not yet inplemented
 				methods.  If you take the time to use the detailed constructor
 				instead of the default constructor, identification of the concerned
-				source will get {\em much} easier!
+				source will get <b>  much </b> easier!
 		*/
 		class NotImplemented
 			: public GeneralException
