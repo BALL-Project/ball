@@ -13,6 +13,7 @@
 
 #include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
+#include <BALL/MOLVIEW/GUI/DIALOGS/peptideDialog.h>
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
@@ -32,6 +33,7 @@
 
 using namespace std;
 
+using BALL::MOLVIEW::PeptideDialog;
 
 Mainframe::Mainframe(QWidget* parent, const char* name)
 	:	MainControl(parent, name, ".options"),
@@ -140,7 +142,7 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 									CTRL+Key_S, MENU__BUILD_AMBER_MDSIMULATION);
   insertMenuEntry(MainControl::DISPLAY, "Contour Surface", this,  SLOT(computeSurface()), 
 									CTRL+Key_S,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
-			
+	insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()));
 	// Help-Menu -------------------------------------------------------------------
 	insertMenuEntry(MainControl::HELP, "&About", this, SLOT(about()), CTRL+Key_A, MENU__HELP_ABOUT);
 
@@ -609,6 +611,22 @@ void Mainframe::writePreferences(INIFile& inifile)
 	MainControl::writePreferences(inifile);
 }
 
+void Mainframe::buildPeptide()
+{
+	PeptideDialog* dialog = new PeptideDialog;
+	dialog->exec();
+
+	Protein* protein = dialog->getProtein();
+	if (protein == 0) return;
+
+	System* system = new System;
+	system->insert(*protein);
+	NewCompositeMessage* new_message = new NewCompositeMessage;
+	new_message->setDeletable(false);
+	new_message->setComposite(system);
+	new_message->setCompositeName("Peptide");
+	notify_(new_message);
+}
 
 #ifdef BALL_NO_INLINE_FUNCTIONS
 #	include "mainframe.iC"

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.35 2003/06/05 10:29:14 amoll Exp $
+// $Id: mainframe.h,v 1.36 2003/06/11 15:42:30 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -135,6 +135,7 @@ class Mainframe
 	void amberMinimization();
 	void amberMDSimulation();
   void computeSurface();
+	void buildPeptide();
 
 	// Help menu
 	void about();
