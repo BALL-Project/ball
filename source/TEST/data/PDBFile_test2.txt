@@ -5,18 +5,8 @@ SEQRES   3     58  ALA GLY LEU CYS GLN THR PHE VAL TYR GLY GLY CYS ARG
 SEQRES   4     58  ALA LYS ARG ASN ASN PHE LYS SER ALA GLU ASP CYS MET
 SEQRES   5     58  ARG THR CYS GLY GLY ALA                            
 HELIX    1  H1 SER     47  GLY     56  1                                  10
-SHEET    1     4 ARG     1  LYS    15  0             0              0 
 SHEET    1  S1 2 ALA    16  ALA    25  0             0              0 
-SHEET    1     3 LYS    26  ALA    27  0             0              0 
-SHEET    1  S1 1 GLY    28  GLY    36  0             0              0 
-SHEET    1     2 GLY    37  LYS    46  0             0              0 
-SHEET    2     2 GLY    57  ALA    58  0             0              0 
-TURN     1     ARG     1  LYS    15                                   
-TURN     2  S1 ALA    16  ALA    25                                   
-TURN     3     LYS    26  ALA    27                                   
-TURN     4  S1 GLY    28  GLY    36                                   
-TURN     5     GLY    37  LYS    46                                   
-TURN     6     GLY    57  ALA    58                                   
+SHEET    2  S1 2 GLY    28  GLY    36  0             0              0 
 SSBOND   1 CYS      5    CYS     55                             0      0
 SSBOND   2 CYS     14    CYS     38                             0      0
 SSBOND   3 CYS     30    CYS     51                             0      0
@@ -921,5 +911,5 @@ CONECT  478  477    0    0    0    0    0    0    0    0    0
 CONECT  590  206  589    0    0    0    0    0    0    0    0
 CONECT  798  478  797    0    0    0    0    0    0    0    0
 CONECT  863   78  862    0    0    0    0    0    0    0    0
-MASTER        0    0    0    1    6    6    0    0  892    1    6    5
+MASTER        0    0    0    1    2    0    0    0  892    1    6    5
 END   
