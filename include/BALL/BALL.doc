@@ -19,19 +19,20 @@
 
 		 <center><h1>Biochemical Algorithms Library</h1><p>Reference Manual</center>
 		\version 1.0pre1
-		\author <p>Tim Aubertin</p>
-						Nicolas Pascal Boghossian </p>
-		 				Andreas Burchardt </p>
-						Andreas Crauser </p>
-						Andreas Hildebrandt </p>
-						Heiko Klein </p>
-						Andreas Kerzmann </p>
-						Oliver Kohlbacher </p>
-						Hans-Peter Lenhof </p>
-						Andreas Moll </p>
-						Peter M&uuml;ller </p>
-						Stefan Strobel </p>
-						Marc Sturm </p>
+		\author 
+				- Tim Aubertin
+				- Nicolas Pascal Boghossian
+		 		- Andreas Burchardt
+				-	Andreas Crauser
+				-	Andreas Hildebrandt
+				-	Heiko Klein
+				- Andreas Kerzmann
+				- Oliver Kohlbacher
+				- Hans-Peter Lenhof
+				- Andreas Moll
+				- Peter M&uuml;ller
+				- Stefan Strobel
+				- Marc Sturm
 
 */
 
