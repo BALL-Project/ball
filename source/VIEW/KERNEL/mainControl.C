@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.128 2004/11/10 23:10:16 amoll Exp $
+// $Id: mainControl.C,v 1.129 2004/11/11 22:19:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1466,18 +1466,7 @@ namespace BALL
 					return;
 				}
 
-				qApp->wakeUpGuiThread();
-				qApp->processEvents();
-				if (simulation_thread_ == 0 ||
-						stop_simulation_) 
-				{
-					return;
-				}
-
 				updateRepresentationsOf(*(Composite*)so->getComposite(), true);
-
-				qApp->wakeUpGuiThread();
-				qApp->processEvents();
 			}
 		#endif
 		}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.16 2004/11/10 23:10:16 amoll Exp $
+// $Id: primitiveManager.C,v 1.17 2004/11/11 22:19:07 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -295,7 +295,8 @@ void PrimitiveManager::finishedUpdate_()
 																			RepresentationMessage::UPDATE);
 	main_control_->sendMessage(*msg);
 
-	if (!updateRunning())
+	if (!updateRunning() &&
+			representations_to_be_updated_.size() > 0)
 	{
 		startUpdateThread_(**representations_to_be_updated_.begin());
 	}
