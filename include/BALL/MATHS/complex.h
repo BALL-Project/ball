@@ -1,4 +1,4 @@
-// $Id: complex.h,v 1.4 2002/08/30 11:56:49 oliver Exp $
+// $Id: complex.h,v 1.5 2002/09/03 14:29:59 oliver Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -590,7 +590,7 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TComplex<T>& cpx)
 		throw()
 	{
-		return s >> re >> im;
+		return s >> cpx.re >> cpx.im;
 	}
 
 	template <typename T>
@@ -598,7 +598,7 @@ namespace BALL
 		throw()
 	{
 		
-		return s << re << " " << im;
+		return s << cpx.re << " " << cpx.im;
 	}
 
 	
