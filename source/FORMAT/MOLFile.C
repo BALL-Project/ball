@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.23 2004/05/10 09:25:21 oliver Exp $
+// $Id: MOLFile.C,v 1.24 2004/05/10 11:00:05 amoll Exp $
 //
 
 
@@ -141,7 +141,7 @@ namespace BALL
 			atom.symbol = it->getElement().getSymbol();
 			atom.position = it->getPosition();
 			atom.mass_difference = 0;
-			switch (it->getFormalCharge())
+			switch ((int)it->getFormalCharge())
 			{
 				case  3: atom.charge = 1; break;
 				case  2: atom.charge = 2; break;
