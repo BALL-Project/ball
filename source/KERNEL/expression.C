@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.45 2004/01/13 13:25:09 amoll Exp $
+// $Id: expression.C,v 1.46 2004/02/07 19:35:05 amoll Exp $
 //
 
 #include <BALL/KERNEL/expression.h>
@@ -205,7 +205,7 @@ namespace BALL
 
 
   ExpressionTree* Expression::constructExpressionTree_(const ExpressionParser::SyntaxTree& t)
-		throw()
+		throw(Exception::ParseError)
   {
     ExpressionTree* root = new ExpressionTree;
     root->setType(t.type);
@@ -219,10 +219,11 @@ namespace BALL
 			}
 			else
 			{
-        Log.error() << "Expression::constructExpressionTree_: "
-					<< "could not find predicate for expression " << t.predicate 
-					<< "(" << t.argument << ")" << endl;
         root->setType(ExpressionTree::INVALID);
+
+				throw Exception::ParseError(__FILE__, 0, 
+																		String(t.predicate  + "(" + t.argument + ")"),
+																		"Predicate could not be found");
 			}
 
 		}

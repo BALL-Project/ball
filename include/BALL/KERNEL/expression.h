@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.30 2004/01/13 13:24:59 amoll Exp $
+// $Id: expression.h,v 1.31 2004/02/07 19:34:47 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_EXPRESSION_H
@@ -159,8 +159,7 @@ namespace BALL
 		/*_ Construct the expression tree from the SyntaxTree
 		*/
 		ExpressionTree*	constructExpressionTree_(const ExpressionParser::SyntaxTree& tree)
-			
-			throw();
+			throw(Exception::ParseError);
 
 		/*_ Register the predicates defined by default.
 				See also: \URL{BALL/KERNEL/standardPredicates.h}
