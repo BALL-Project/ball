@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.1 2005/02/17 02:54:55 bertsch Exp $
+// $Id: buildBondsProcessor.h,v 1.2 2005/02/17 15:04:25 bertsch Exp $
 //
 
 #ifndef BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
@@ -30,7 +30,7 @@
 #include <vector>
 #include <utility>
 
-//#define BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEFAULT_FILE "bond_lengths/bond_lengths.db"
+#define BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEFAULT_FILE "bond_lengths/bond_lengths.db"
 
 namespace BALL 
 {

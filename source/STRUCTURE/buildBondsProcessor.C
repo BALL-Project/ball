@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.1 2005/02/17 02:54:56 bertsch Exp $
+// $Id: buildBondsProcessor.C,v 1.2 2005/02/17 15:04:25 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -19,10 +19,7 @@
 #define BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEBUG
 #undef  BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEBUG
 
-#define BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEFAULT_FILE "../../data/bond_lengths/bond_lengths.db"
-
 #define MAX_LENGTH_DEFECT 0.4
-
 
 using namespace std;
 
@@ -217,17 +214,17 @@ namespace BALL
 			filename = String(BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEFAULT_FILE);
 		}
 		Path path;
-		String file = path.find(filename);
-		if (file == "")
+		String filepath = path.find(filename);
+		if (filepath == "")
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
 		
-		ResourceFile * resource_db = new ResourceFile(filename);
+		ResourceFile * resource_db = new ResourceFile(filepath);
 		if (!resource_db->isValid())
 		{
 			delete resource_db;
-			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+			throw Exception::FileNotFound(__FILE__, __LINE__, filepath);
 		}
 
 		// put content of file into ResourceEntry
