@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.16 2004/02/17 16:07:19 oliver Exp $
+// $Id: JCAMPFile.C,v 1.17 2004/03/07 01:08:16 amoll Exp $
 //
 
 
@@ -167,7 +167,7 @@ namespace BALL
 			switch (entry_it->second.type)
 			{
 			  case STRING: 
-					(*this) << entry_it->second.string_value << "\n";
+					(*this) << entry_it->second.string_value.c_str() << "\n";
 					break;
 
 			  case NUMERIC:
