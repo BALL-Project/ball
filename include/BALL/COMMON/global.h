@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.9 2001/05/17 01:30:41 oliver Exp $
+// $Id: global.h,v 1.9.4.1 2002/05/27 23:57:13 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -9,9 +9,16 @@
 
 #include <limits.h>
 #include <time.h>
+#include <complex>
 
 #if defined(BALL_LOG_MEMORY) && !defined(BALL_COMMON_MEMORY_H)
 #	include <BALL/COMMON/memory.h>
+#endif
+
+// If possible use the ISO C99-compliant header stdint.h
+// to define the portable integer types.
+#ifdef BALL_INCLUDE_STDINT
+#	include <stdint.h>
 #endif
 
 namespace BALL
@@ -20,6 +27,7 @@ namespace BALL
 	typedef int (*ComparatorType)(const void *, const void *);
 
 
+	#ifndef BALL_INCLUDE_STDINT
 	/**	@name Type aliases defined by BALL.
 			These predefined types are used in BALL for portability and
 			comprehensibility.
@@ -28,7 +36,7 @@ namespace BALL
 	//@{
 
 	/**	Distance type.
-			Use this type to represent distances in indices.
+			Use this type to represent distances in indices. Signed.
 			\\
 			{\bf Size:} 32 bit\\
 			{\bf persistent}
@@ -38,7 +46,7 @@ namespace BALL
 	/**	Handle type.
 			Use this type to represent {\bf handles}. Handles are used
 			for the non-ambiguous identification of objects (e.g. object derived
-      from \Ref{Object}).
+      from \Ref{Object}). Handles are unsigned.
 			\\
 			{\bf Size:} 32 bit\\
 			{\bf persistent}
@@ -141,7 +149,28 @@ namespace BALL
 			{\bf persistent}
 	*/
 	typedef BALL_64BIT_UINT_TYPE PointerSizeInt;
+	#else
+		// the ISO C99 definitions
+		typedef int32_t	Distance; 
+		typedef uint32_t	Handle;
+		typedef int32_t	Index;
+		typedef uint32_t	Size;
+		typedef time_t	Time;
+		typedef	uint32_t	HashIndex;
+		typedef	uint32_t	Position;
+		typedef float Real;
+		typedef double DoubleReal;
+		typedef uint32_t Property;
+		typedef int32_t ErrorCode;
+		typedef	uint8_t Byte;
+		typedef uint64_t PointerSizeInt;
 
+	#endif
+
+
+	/**	Complex numbers
+	*/
+	typedef complex<float> Complex;
 	//@}
 
 	enum ASCII
