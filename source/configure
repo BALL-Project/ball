@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.100 2000/05/15 19:08:29 oliver Exp $
+#  $Id: configure,v 1.101 2000/05/17 15:04:34 oliver Exp $
 
 
 ##################################################
@@ -6656,8 +6656,10 @@ fi
 
 if test "${MULTI_BUILD}" = "true" ; then
 	${RM}  ${BINFMT}/.Dependencies 2>/dev/null
+	${RM}  ${BINFMT}/lib*.objects 2>/dev/null
 else
 	${RM}  .Dependencies 2>/dev/null
+	${RM}  lib*.objects 2>/dev/null
 fi
 
 

@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.90 2000/05/15 19:08:25 oliver Exp $
+dnl    $Id: configure.in,v 1.91 2000/05/17 15:04:29 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2526,12 +2526,14 @@ fi
 	
 
 dnl
-dnl		make sure the dependencies are (re)built
+dnl		make sure the dependencies and object lists are (re)built
 dnl
 if test "${MULTI_BUILD}" = "true" ; then
 	${RM}  ${BINFMT}/.Dependencies 2>/dev/null
+	${RM}  ${BINFMT}/lib*.objects 2>/dev/null
 else
 	${RM}  .Dependencies 2>/dev/null
+	${RM}  lib*.objects 2>/dev/null
 fi
 
 dnl
