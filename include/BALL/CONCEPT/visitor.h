@@ -1,4 +1,4 @@
-// $Id: visitor.h,v 1.2 2000/01/10 15:50:56 oliver Exp $
+// $Id: visitor.h,v 1.3 2000/02/16 19:13:06 oliver Exp $
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #define BALL_CONCEPT_VISITOR_H
@@ -10,50 +10,55 @@
 namespace BALL 
 {
 
-	/**	Generic Visistor Class.
+	/**	Generic Visitor Class.
 			This class implements the visitor design pattern.
 			{\bf Definition:} \URL{BALL/CONCEPT/visitor.h}
 	*/
-	template <class Host>
+	template <typename Host>
 	class Visitor
 	{
 		public:
 
-		/**	@name Constructors and Destructors
-		*/
+		/**	@name	Constructors and destructors
+		*/	
 		//@{
-
-		/**	Default Constructor.
-				The Default constructor has no functionality.
+		/**	Default constructor
 		*/
-		Visitor()
-		{
-		}
+		Visitor();
 
-		/**	Copy constructor.
-				The copy constructor has no functionality.
+		/**	Copy constructor
 		*/
-		Visitor(const Visitor& /* visitor */, bool /* deep */ = false)
-		{
-		}
+		Visitor(const Visitor& visitor);
 
-		/**	Destructor.
-				The destructor has no functionality.
+		/**	Destructor
 		*/
-		virtual ~Visitor()
-		{
-		}
+		virtual ~Visitor();
+
 		//@}
-
-		/**	Visit method.
-				
+		
+		/**	Visit method.				
+				The visit method is an abstract method defining an 
+				interface between the visitor object and its host.
 		*/
-		virtual void visit(Host &);
+		virtual void visit(Host &) = 0;
 
 	};
 
-	template <class Host>
-	inline void Visitor<Host>::visit(Host &)
+	template <typename T>
+	BALL_INLINE
+	Visitor<T>::Visitor()
+	{
+	}
+
+	template <typename T>
+	BALL_INLINE
+	Visitor<T>::Visitor(const Visitor<T>& /* visitor */)
+	{
+	}
+
+	template <typename T>
+	BALL_INLINE
+	Visitor<T>::~Visitor()
 	{
 	}
 }

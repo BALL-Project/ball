@@ -1,4 +1,4 @@
-// $Id: comparator.h,v 1.2 2000/01/10 15:50:55 oliver Exp $
+// $Id: comparator.h,v 1.3 2000/02/16 19:09:23 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPARATOR_H
 #define BALL_CONCEPT_COMPARATOR_H
@@ -13,7 +13,7 @@ namespace BALL
 	/**	Generic Comparator Class.
 			{\bf Definition:} \URL{BALL/CONCEPT/comparator.h}
 	*/
-	template <class T>
+	template <typename T>
 	class Comparator
 	{
 		public:
@@ -24,15 +24,11 @@ namespace BALL
 	
 		/**	Default constructor
 		*/
-		Comparator()
-		{
-		}
+		Comparator();
 
 		/**	Destructor
 		*/
-		virtual ~Comparator()
-		{
-		}
+		virtual ~Comparator();
 		//@}
 
 		/**	@name	Predicates
@@ -65,9 +61,19 @@ namespace BALL
 
 		/**
 		*/
-		int operator ()(const T& a, const T& b) const;
+		int operator () (const T& a, const T& b) const;
 		//@}
 	};
+
+	template <typename T>
+	inline Comparator<T>::Comparator()
+	{
+	}
+
+	template <typename T>
+	inline Comparator<T>::~Comparator()
+	{
+	}
 
 	template <class T>
 	inline bool Comparator<T>::isEqual(const T& a, const T& b) const
@@ -115,7 +121,7 @@ namespace BALL
 		{ 
 			return -1;
 		} else { 
-				return 1;
+			return 1;
 		}
 	}
 

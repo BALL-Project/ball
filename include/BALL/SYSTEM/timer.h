@@ -1,4 +1,4 @@
-// $Id: timer.h,v 1.3 2000/01/10 15:51:08 oliver Exp $
+// $Id: timer.h,v 1.4 2000/02/16 19:15:54 oliver Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -10,7 +10,7 @@
 #include <sys/time.h>
 #include <iostream>
 
-namespace BALL 
+namespace BALL
 {
 
 	/**	Timer Class
@@ -221,6 +221,6 @@ namespace BALL
 #		include "timer.iC"
 #	endif
 
-} // namespace BALL
+}
 
 #endif // BALL_SYSTEM_TIMER_H

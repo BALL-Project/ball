@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.12 2000/02/06 19:40:08 oliver Exp $
+// $Id: composite.h,v 1.13 2000/02/16 19:09:45 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -565,6 +565,7 @@ namespace BALL
 
 		/**	@name	Application and Hosting */
 		//@{
+
 		///
 		void host(Visitor<Composite>& visitor);
 

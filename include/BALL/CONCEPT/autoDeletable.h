@@ -1,4 +1,4 @@
-// $Id: autoDeletable.h,v 1.2 2000/01/10 15:50:54 oliver Exp $
+// $Id: autoDeletable.h,v 1.3 2000/02/16 19:08:55 oliver Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -117,6 +117,6 @@ namespace BALL
 #		include <BALL/CONCEPT/autoDeletable.iC>
 #	endif
 
-}
+} // namespace BALL
 
 #endif // BALL_CONCEPT_AUTODELETABLE_H
