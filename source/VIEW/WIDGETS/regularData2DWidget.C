@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.2 2003/08/26 16:07:03 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.3 2003/08/28 16:42:48 amoll Exp $
 
-#include <BALL/VIEWKERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/DATATYPE/contour.h>
-#include <BALL/VIEWWIDGETS/regularData2DWidget.h>
-#include <BALL/VIEWDIALOGS/dlgMoveOverlay.h>
+#include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
+#include <BALL/VIEW/DIALOGS/moveOverlayDialog.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
@@ -376,7 +376,7 @@ namespace BALL
 			pm_cont_ = new QPixmap(data_length_x_, data_length_y_);
 			pm_cont_->fill(black);
 
-			mvover_ = new DlgMoveOverlay(this, "Overlay");
+			mvover_ = new MoveOverlayDialog(this, "Overlay");
 
 			connect(mvover_, SIGNAL(sigMove(int)), this, SLOT(slotOverlayMove(int)));
 			mvover_->show();
