@@ -3,6 +3,7 @@
 //
 #include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
+#include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
 #include <BALL/SYSTEM/path.h>
@@ -74,21 +75,39 @@ void ColorMeshDialog::applyPressed()
 		
 	// repaint of the scene and the composites needed
 	
+	/*
 	ChangedCompositeMessage *changed_message = new ChangedCompositeMessage;
 	changed_message->setComposite(*composite_);
 	changed_message->setDeletable(true);
 	notify_(changed_message);
 
-	/*
+	MainControl::getMainControl(this)->update(*composite_);	
+	
 	DrawMessage* message = new DrawMessage;
 	message->setComposite(composite_);
+	message->setDeletable(true);
 	notify_(message);
-*/
+
 
 	// update scene
 	SceneMessage* scene_message = new SceneMessage;
 	scene_message->updateOnly();
+	scene_message->setDeletable(true);
 	notify_(scene_message);
+*/	
+	Scene* scene= (Scene*) Scene::getInstance(0);
+	scene->update(true);
+
+/*
+	// repaint of the scene and the composites needed
+	MainControl::getMainControl(this)->update(*composite_);	
+	MainControl::getMainControl(this)->repaint();
+
+	SceneMessage* scene_message = new SceneMessage;
+	scene_message->updateOnly();
+	scene_message->setDeletable(true);
+	notify_(scene_message);
+	*/
 }
 
 
