@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.C,v 1.3 2000/02/14 22:42:45 oliver Exp $
+// $Id: charmmEEF1.C,v 1.4 2000/10/05 17:34:23 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -22,12 +22,26 @@ namespace BALL
 	{
 	}
 
-	CharmmEEF1::~CharmmEEF1()
+
+	CharmmEEF1::CharmmEEF1(const CharmmEEF1& charmm_EEF1)
+		:	ParameterSection(charmm_EEF1),
+			V_(charmm_EEF1.V_),
+			dG_ref_(charmm_EEF1.dG_ref_),
+			dG_free_(charmm_EEF1.dG_free_),
+			dH_ref_(charmm_EEF1.dH_ref_),
+			Cp_ref_(charmm_EEF1.Cp_ref_),
+			sig_w_(charmm_EEF1.sig_w_),
+			R_min_(charmm_EEF1.R_min_),
+			is_defined_(charmm_EEF1.is_defined_)
 	{
-		destroy();
 	}
 
-	void CharmmEEF1::destroy() 
+	CharmmEEF1::~CharmmEEF1()
+	{
+		clear();
+	}
+
+	void CharmmEEF1::clear() 
 	{
 		// clear allocated parameter fields
 		delete [] V_;
@@ -38,7 +52,7 @@ namespace BALL
 		delete [] sig_w_;
 		delete [] R_min_;
 
-		ParameterSection::destroy();
+		ParameterSection::clear();
 	}
 
 	bool CharmmEEF1::extractSection(Parameters& parameters, const String& section_name)
@@ -297,6 +311,73 @@ namespace BALL
 		}
 
 		return false;
+	}
+
+
+	const CharmmEEF1& CharmmEEF1::operator = (const CharmmEEF1& charmm_EEF1)
+	{
+		number_of_atom_types_ = charmm_EEF1.number_of_atom_types_;
+		V_ = charmm_EEF1.V_;
+		dG_ref_ = charmm_EEF1.dG_ref_;
+		dG_free_ = charmm_EEF1.dG_free_;
+		dH_ref_ = charmm_EEF1.dH_ref_;
+		Cp_ref_ = charmm_EEF1.Cp_ref_;
+		sig_w_ = charmm_EEF1.sig_w_;
+		R_min_ = charmm_EEF1.R_min_;
+		is_defined_ = charmm_EEF1.is_defined_;
+
+		return *this;
+	}
+
+	
+	bool CharmmEEF1::operator == (const CharmmEEF1& charmm_EEF1) const
+	{
+		if (!ParameterSection::operator == (charmm_EEF1))
+		{
+			return false;
+		}
+		else 
+		{
+			if (number_of_atom_types_ != charmm_EEF1.number_of_atom_types_)
+			{
+				return false;
+			}
+			else
+			{
+				for (Size i = 0; i < number_of_atom_types_; ++i)
+				{
+					if (V_ != charmm_EEF1.V_)
+					{
+						return false;
+					}
+					if (dG_ref_ != charmm_EEF1.dG_ref_)
+					{
+						return false;
+					}
+					if (dG_free_ != charmm_EEF1.dG_free_)
+					{
+						return false;
+					}
+					if (dH_ref_ != charmm_EEF1.dH_ref_)
+					{
+						return false;
+					}
+					if (Cp_ref_ != charmm_EEF1.Cp_ref_)
+					{
+						return false;
+					}
+					if (sig_w_ != charmm_EEF1.sig_w_)
+					{
+						return false;
+					}
+					if (R_min_ != charmm_EEF1.R_min_)
+					{
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 	 
 } // namespace BALL

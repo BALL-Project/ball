@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.h,v 1.5 2000/02/14 22:42:39 oliver Exp $
+// $Id: cosineTorsion.h,v 1.6 2000/10/05 17:34:15 anker Exp $
 // Molecular Mechanics Parameter: class describing the parameter
 // section required for torsions using a cosine type potential function
  
@@ -120,20 +120,18 @@ namespace BALL
 			SingleValues	values;
 		};
 
-		/**	@name	Constructors and Destructors
-		*/	
+		/**	@name	Constructors and Destructors */	
 		//@{
-		/**	Default constructor.
-		*/
-		CosineTorsion();
 
-		/**	Destructor.
-		*/
+		/**	Default constructor.  */
+		CosineTorsion();
+		
+		/** Copy constructor */
+		CosineTorsion(const CosineTorsion& cosine_torsion);
+
+		/**	Destructor.  */
 		virtual ~CosineTorsion();
 
-		/**	Destroy method.
-		*/
-		virtual void destroy();
 		//@}
 		
 		/**	@name	 Accessors
@@ -161,6 +159,27 @@ namespace BALL
 		*/
 		bool assignParameters(CosineTorsion::Values& parameters, Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
 		//@}
+
+		/** @name Assignment */
+		//@{
+
+		/**	Clear method.  */
+		virtual void clear();
+
+		/** Assignment operator */
+		const CosineTorsion& operator = (const CosineTorsion& cosine_torsion);
+		
+		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const CosineTorsion& cosine_torsion) const;
+
+		//@}
+
 
 		protected:
 

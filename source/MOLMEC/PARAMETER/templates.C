@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.9 2000/07/06 14:44:25 oliver Exp $
+// $Id: templates.C,v 1.10 2000/10/05 17:34:25 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -23,19 +23,19 @@ namespace BALL
 	}
 
 
-	void Templates::destroy()
+	void Templates::clear()
 	{
-		charges_.destroy();
-		type_names_.destroy();
+		charges_.clear();
+		type_names_.clear();
 
-		ParameterSection::destroy();
+		ParameterSection::clear();
 	}
 
 		
 
 	Templates::~Templates()
 	{
-		destroy();
+		clear();
 	}
 
 	Templates& Templates::operator = (const Templates& templates)
@@ -50,8 +50,8 @@ namespace BALL
 		(Parameters& parameters, const String& section_name)
 	{
 		// clean up first
-		type_names_.destroy();
-		charges_.destroy();
+		type_names_.clear();
+		charges_.clear();
 
 		// extract the basis information
 		if (!ParameterSection::extractSection(parameters, section_name))

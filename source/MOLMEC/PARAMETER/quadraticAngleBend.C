@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.C,v 1.7 2000/02/15 18:12:19 oliver Exp $
+// $Id: quadraticAngleBend.C,v 1.8 2000/10/05 17:34:24 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
@@ -17,16 +17,16 @@ namespace BALL
 
 	QuadraticAngleBend::~QuadraticAngleBend()
 	{
-		destroy();
+		clear();
 	}
 
-	void QuadraticAngleBend::destroy() 
+	void QuadraticAngleBend::clear() 
 	{
 		// clear allocatd parameter fields
 		values_.clear();
 		value_index_.clear();
 
-		ParameterSection::destroy();
+		ParameterSection::clear();
 	}
 
 	bool QuadraticAngleBend::extractSection

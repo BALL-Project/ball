@@ -1,4 +1,4 @@
-// $Id: quadraticImproperTorsion.C,v 1.3 2000/02/14 22:42:47 oliver Exp $
+// $Id: quadraticImproperTorsion.C,v 1.4 2000/10/05 17:34:24 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h>
@@ -17,12 +17,12 @@ namespace BALL
 
 	QuadraticImproperTorsion::~QuadraticImproperTorsion()
 	{
-		destroy();
+		clear();
 	}
 
-	void QuadraticImproperTorsion::destroy() 
+	void QuadraticImproperTorsion::clear() 
 	{
-		ParameterSection::destroy();
+		ParameterSection::clear();
 	}
 
 	bool QuadraticImproperTorsion::extractSection

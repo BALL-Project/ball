@@ -1,4 +1,4 @@
-// $Id: atomTypes.h,v 1.3 2000/02/14 22:42:39 oliver Exp $
+// $Id: atomTypes.h,v 1.4 2000/10/05 17:34:15 anker Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -45,10 +45,6 @@ namespace BALL
 		*/
 		virtual ~AtomTypes();
 
-		/**	Destroy method.
-		*/
-		virtual void destroy();
-
 		//@}
 		
 		/**	Parameter extraction
@@ -83,13 +79,29 @@ namespace BALL
 		*/
 		//@{
 
+		/** Clear method */
+		virtual void clear();
+
 		/**	Assignment operator.
 				copy the contents of {\tt atom\_types} into {\tt this}
 				atom types object.
 				@param	atom_types the atom types object to be copied
 		*/
 		AtomTypes& operator = (const AtomTypes& atom_types);
+
 		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const AtomTypes& atom_types) const;
+
+		//@}
+
+
+
 		protected:
 		
 		/*_	Contains the numeric types for each atom type string

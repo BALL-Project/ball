@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.C,v 1.3 2000/02/14 22:42:45 oliver Exp $
+// $Id: cosineTorsion.C,v 1.4 2000/10/05 17:34:23 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
@@ -17,12 +17,12 @@ namespace BALL
 
 	CosineTorsion::~CosineTorsion()
 	{
-		destroy();
+		clear();
 	}
 
-	void CosineTorsion::destroy() 
+	void CosineTorsion::clear() 
 	{
-		ParameterSection::destroy();
+		ParameterSection::clear();
 	}
 
 	bool CosineTorsion::extractSection(Parameters& parameters, const String& section_name)

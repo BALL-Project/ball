@@ -1,4 +1,4 @@
-// $Id: atomTypes.C,v 1.6 2000/02/14 22:42:45 oliver Exp $
+// $Id: atomTypes.C,v 1.7 2000/10/05 17:34:23 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
@@ -24,24 +24,23 @@ namespace BALL
 	}
 
 
-	void AtomTypes::destroy()
-	{
-		names_.clear();
-		type_map_.destroy();
-
-		ParameterSection::destroy();
-	}
-
-		
-
 	AtomTypes::~AtomTypes()
 	{
-		destroy();
+		clear();
 	}
+
+	void AtomTypes::clear()
+	{
+		names_.clear();
+		type_map_.clear();
+
+		ParameterSection::clear();
+	}
+
 
 	AtomTypes& AtomTypes::operator = (const AtomTypes& atom_types)
 	{
-		destroy();
+		clear();
 
 		names_ = atom_types.names_;
 		type_map_.set(atom_types.type_map_);
@@ -113,6 +112,15 @@ namespace BALL
 	Size AtomTypes::getNumberOfTypes() const 
 	{
 		return names_.size();
+	}
+
+
+	bool AtomTypes::operator == (const AtomTypes& atom_types) const
+	{
+		bool equal = ParameterSection::operator == (atom_types);
+		return (equal
+			&& (type_map_ == atom_types.type_map_)
+			&& (names_ == atom_types.names_));
 	}
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: templates.h,v 1.3 2000/02/14 22:42:41 oliver Exp $
+// $Id: templates.h,v 1.4 2000/10/05 17:34:19 anker Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_TEMPLATES_H
@@ -39,10 +39,6 @@ namespace BALL
 		/**	Destructor.
 		*/
 		virtual ~Templates();
-
-		/**	Destroy method.
-		*/
-		virtual void destroy();
 
 		//@}
 		
@@ -88,12 +84,16 @@ namespace BALL
 		*/
 		//@{
 
+		/**	Clear method. */
+		virtual void clear();
+
 		/**	Assignment operator.
 				copy the contents of {\tt templates} into {\tt this}
 				residue template object.
 				@param	templates the residue template object to be copied
 		*/
 		Templates& operator = (const Templates& templates);
+
 		//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.h,v 1.5 2000/02/14 22:42:39 oliver Exp $
+// $Id: charmmEEF1.h,v 1.6 2000/10/05 17:34:15 anker Exp $
 // Molecular Mechanics Parameter: class describing parameters needed 
 // for the EEF1 solvation component in the CHARMM force field
  
@@ -47,18 +47,20 @@ namespace BALL
 		};
 
 
-		/**	Default constructor.
-		*/
+		/** @name Constructors and Destructor */
+		//@{
+
+		/**	Default constructor.  */
 		CharmmEEF1();
 
-		/**	Destructor.
-		*/
+		/** Copy constructor */
+		CharmmEEF1(const CharmmEEF1& charmm_EEF1);
+
+		/**	Destructor.  */
 		virtual ~CharmmEEF1();
 
-		/**	Destroy method.
-		*/
-		virtual void destroy();
-		
+		//@}
+
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section\_name from ini\_file,
 				interprets (if given) a format line, reads the data from this section according to 
@@ -81,6 +83,26 @@ namespace BALL
 		*/
 		bool assignParameters(CharmmEEF1::Values& parameters, Atom::Type I) const;
 
+
+		/** @name Assignment */
+		//@{
+
+		/**	Clear method.  */
+		virtual void clear();
+
+		/** Assignment operator */
+		const CharmmEEF1& operator = (const CharmmEEF1& charmm_EEF1);
+
+		//@}
+		
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const CharmmEEF1& charmm_EEF1) const;
+
+		//@}
 
 		protected:
 

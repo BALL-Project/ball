@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.7 2000/02/17 00:30:45 oliver Exp $
+// $Id: forceFieldParameters.h,v 1.8 2000/10/05 17:34:16 anker Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -27,6 +27,8 @@ namespace BALL
 	{
 		public:
 
+		BALL_CREATE(ForceFieldParameters)
+
 		friend class ForceField;
 
 		/**@name	Constructors and destructor	*/
@@ -42,13 +44,26 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		ForceFieldParameters(const ForceFieldParameters& force_field_parameter, bool deep = true);
+		ForceFieldParameters(const ForceFieldParameters& force_field_parameter);
 
 		/**	Destructor.
 		*/
 		virtual ~ForceFieldParameters();
 
 		//@}
+
+
+		/** @name Assignment */
+		//@{
+
+		/** Clear method */
+		virtual void clear();
+
+		/** Assignment operator */
+		const ForceFieldParameters& operator = (const ForceFieldParameters& param);
+		
+		//@}
+
 
 		/**@name	Accessors 	*/
 		//@{
@@ -73,7 +88,12 @@ namespace BALL
 				@return bool - {\tt valid_ && parameter_file_.isValid() && atom_types_.isValid()}
 		*/
 		virtual bool isValid() const;
+
+		/** Equality operator */
+		bool operator == (const ForceFieldParameters& param) const;
+
 		//@}
+
 
 		protected:
 

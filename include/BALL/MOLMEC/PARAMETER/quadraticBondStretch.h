@@ -1,4 +1,4 @@
-// $Id: quadraticBondStretch.h,v 1.5 2000/02/14 22:42:40 oliver Exp $
+// $Id: quadraticBondStretch.h,v 1.6 2000/10/05 17:34:17 anker Exp $
 // Molecular Mechanics Parameter: class describing the parameters
 // required for a harmonic stretch potential
  
@@ -50,10 +50,6 @@ namespace BALL
 		*/
 		virtual ~QuadraticBondStretch();
 
-		/**	Destroy method.
-		*/
-		virtual void destroy();
-		
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section\_name from ini\_file,
 				interprets (if given) a format line, reads the data from this section according to 
@@ -78,6 +74,16 @@ namespace BALL
 		bool assignParameters
 			(QuadraticBondStretch::Values& parameters, 
 			 Atom::Type I, Atom::Type J) const;
+
+
+		/** @name Assignment */
+		//@{
+
+		/**	Clear method  */
+		virtual void clear();
+
+		//@}
+		
 
 		protected:
 

@@ -1,4 +1,4 @@
-// $Id: quadraticImproperTorsion.h,v 1.3 2000/02/14 22:42:41 oliver Exp $
+// $Id: quadraticImproperTorsion.h,v 1.4 2000/10/05 17:34:18 anker Exp $
 // Molecular Mechanics Parameter: class describing the parameters required to
 // describe a harmonic improper torsion (out-of-plane) potential
  
@@ -52,10 +52,6 @@ namespace BALL
 		*/
 		virtual ~QuadraticImproperTorsion();
 
-		/**	Destroy method.
-		*/
-		virtual void destroy();
-		
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section\_name from ini\_file,
 				interprets (if given) a format line, reads the data from this section according to 
@@ -78,6 +74,14 @@ namespace BALL
 		*/
 		bool assignParameters(QuadraticImproperTorsion::Values& parameters, Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
 
+		/** @name Assignment */
+		//@{
+
+		/**	Clear method. */
+		virtual void clear();
+
+		//@}
+		
 		protected:
 
 		Size									number_of_atom_types_;

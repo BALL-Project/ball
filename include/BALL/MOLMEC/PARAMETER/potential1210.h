@@ -1,4 +1,4 @@
-// $Id: potential1210.h,v 1.5 2000/02/14 22:42:40 oliver Exp $
+// $Id: potential1210.h,v 1.6 2000/10/05 17:34:16 anker Exp $
 // Molecular Mechanics Parameter: class describing the parameters required
 // for a 12-10 (hydrogen bond) potential
  
@@ -50,10 +50,6 @@ namespace BALL
 		*/
 		virtual ~Potential1210();
 
-		/**	Destroy method.
-		*/
-		virtual void destroy();
-		
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section\_name from ini\_file,
 				interprets (if given) a format line, reads the data from this section according to 
@@ -79,6 +75,16 @@ namespace BALL
 			(Potential1210::Values& parameters, 
 			 Atom::Type I, Atom::Type J) const;
 
+
+		/** @name Assignment */
+		//@{
+
+		/**	Clear method. */
+		virtual void clear();
+
+		//@}
+
+		
 		protected:
 
 		Size									number_of_atom_types_;

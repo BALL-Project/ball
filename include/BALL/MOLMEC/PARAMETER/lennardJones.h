@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.12 2000/10/05 08:31:00 oliver Exp $
+// $Id: lennardJones.h,v 1.13 2000/10/05 17:34:16 anker Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -86,9 +86,6 @@ namespace BALL
 		*/
 		virtual ~LennardJones();
 
-		/**	Destroy method.
-		*/
-		virtual void destroy();
 		//@}
 		
 		/**	Reads a parameter section from an INI file.
@@ -114,6 +111,13 @@ namespace BALL
 		*/
 		bool assignParameters(Values& parameters, Atom::Type I, Atom::Type J) const;
 
+		/** @name Assignment */
+		//@{
+
+		/**	Clear method. */
+		virtual void clear();
+
+		//@}
 
 		protected:
 

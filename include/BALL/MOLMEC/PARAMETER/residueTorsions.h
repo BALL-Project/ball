@@ -1,4 +1,4 @@
-// $Id: residueTorsions.h,v 1.6 2000/02/17 00:30:45 oliver Exp $
+// $Id: residueTorsions.h,v 1.7 2000/10/05 17:34:18 anker Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -78,9 +78,6 @@ namespace BALL
 		*/
 		virtual ~ResidueTorsions();
 
-		/**	Destroy method.
-		*/
-		virtual void destroy();
 		//@}
 		
 		/**	@name	Accessors
@@ -112,6 +109,16 @@ namespace BALL
 			(const String& residue, const String& atom_A, const String& atom_B,
 			 const String& atom_C, const String& atom_D) const;
 		//@}
+
+
+		/** @name Assignment */
+		//@{
+
+		/**	Clear method.  */
+		virtual void clear();
+
+		//@}
+
 
 		protected:
 

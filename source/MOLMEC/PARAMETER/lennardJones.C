@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.8 2000/09/22 16:25:34 anker Exp $
+// $Id: lennardJones.C,v 1.9 2000/10/05 17:34:24 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -21,10 +21,10 @@ namespace BALL
 
 	LennardJones::~LennardJones()
 	{
-		destroy();
+		clear();
 	}
 
-	void LennardJones::destroy() 
+	void LennardJones::clear() 
 	{
 		// clear allocated parameter fields
 		delete [] A_;
@@ -33,7 +33,7 @@ namespace BALL
 		delete [] Bij_;
 		delete [] is_defined_;
 
-		ParameterSection::destroy();
+		ParameterSection::clear();
 	}
 
 	bool LennardJones::extractSection
