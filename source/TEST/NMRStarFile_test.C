@@ -1,4 +1,4 @@
-// $Id: NMRStarFile_test.C,v 1.7 2000/10/03 18:55:35 amoll Exp $
+// $Id: NMRStarFile_test.C,v 1.8 2000/10/06 12:02:10 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 using namespace BALL;
 
-START_TEST(String,"$Id: NMRStarFile_test.C,v 1.7 2000/10/03 18:55:35 amoll Exp $")
+START_TEST(String,"$Id: NMRStarFile_test.C,v 1.8 2000/10/06 12:02:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -64,8 +64,8 @@ CHECK(NMRStarFile::NMRStarFile(filename))
 	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->atom_group, "methyl protons")
 	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->shift_units, "ppm")
 	TEST_REAL_EQUAL(rs.getData()[0]->reference->elements[0]->shift_value, 0)
-	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->reference_method, NMRStarFile::INTERNAL_REFERENCE)
-	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->reference_type, NMRStarFile::DIRECT_TYPE)
+	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->reference_method, (char)NMRStarFile::INTERNAL_REFERENCE)
+	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->reference_type, (char)NMRStarFile::DIRECT_TYPE)
 	TEST_REAL_EQUAL(rs.getData()[0]->reference->elements[0]->indirect_shift_ratio, 1)
 
 	/*
