@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.34 2003/03/26 13:08:41 sturm Exp $
+// $Id: surfaceProcessor.h,v 1.35 2003/05/08 11:29:41 oliver Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -28,6 +28,17 @@ namespace BALL
 	{
 		public:
 
+		/**	@name Enums
+		*/
+		//@{
+		///
+		enum SurfaceType
+		{
+			SOLVENT_EXCLUDED_SURFACE,
+			SOLVENT_ACCESSIBLE_SURFACE
+		};
+		//@}
+
 		/** @name Constructors and destructor.
 		*/
 		//@{
@@ -36,6 +47,7 @@ namespace BALL
 		SurfaceProcessor();
 	
 		//@}
+
 		/** @name Processor related methods.
 		*/
 		//@{
@@ -50,36 +62,45 @@ namespace BALL
  		virtual Processor::Result operator () (Atom&  atom);
 
 		///
- 		virtual Processor::Result operator () (Atom*& atom)
-		{ return operator() (*atom);}
-
+ 		virtual Processor::Result operator () (Atom*& atom) { return operator() (*atom);}
 		//@}
+
 		/** @name Accessors.
 		*/
 		//@{
 
 		///
-		const Surface& getSurface() const;
+		const Surface& getSurface() const { return surface_; }
 		
 		///
-		void getSurface(Surface& surface) const;
+		Surface& getSurface() { return surface_; }
 	
 		///
-		void setProbeRadius(double radius);
+		void setProbeRadius(double radius) { probe_radius_ = radius; }
 		
 		///
-		double getProbeRadius();
+		double getProbeRadius() const { return probe_radius_; }
 		
 		///
-		void setDensity(double radius);
+		void setDensity(double density) { density_ = density; }
 		
 		///
-		double getDensity();
+		double getDensity() const { return density_; }
 		
 		///
-		std::vector< TSphere3<double> >& getSpheres();
+		std::vector<TSphere3<double> >& getSpheres() { return spheres_; }
 
+		/** Set the surface type to be computed.
+				Default is SOLVENT_EXCLUDED_SURFACE.
+		*/
+		void setType(SurfaceType type) { surface_type_ = type; }
+
+		/// Get the surface type to be computed.
+		SurfaceType getType() const  { return surface_type_; }
 		//@}
+
+
+		protected:
 
 		///
 		double													radius_offset_;
@@ -87,10 +108,8 @@ namespace BALL
 		///
 		double													vdw_factor_;
 
-		protected:
-
 		//_
-		bool														ses_;
+		SurfaceType											surface_type_;
 		
 		//_
 		Surface													surface_;
