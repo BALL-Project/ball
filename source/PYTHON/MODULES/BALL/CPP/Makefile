@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.5 2000/08/30 19:58:36 oliver Exp $
+# $Id: Makefile,v 1.6 2000/10/05 22:33:20 oliver Exp $
 #
 
 all: libBALLc.so
@@ -223,4 +223,4 @@ libBALLc.so:	$(SIP_OBJECTS) $(PYBALL_OBJECTS)
 	$(DYNAR) $(DYNAROPTS) libBALLc.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) $(BALL_LIBS)
 
 install: libBALLc.so
-	cp libBALLc.so BALL.py BALL.pyc $(BALL_PATH)/lib/$(BINFMT)
+	cp libBALLc.so BALL.py $(BALL_PATH)/lib/$(BINFMT)

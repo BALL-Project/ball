@@ -1,11 +1,11 @@
-// $Id: pyWidget.sip,v 1.1 2000/07/18 21:28:20 oliver Exp $
+// $Id: pyWidget.sip,v 1.2 2000/10/05 22:33:36 oliver Exp $
 
 class PyWidget
   // : public QMultiLineEdit,
   : ModularWidget
 {
 %HeaderCode
-	#include <BALL/VIEW/OPENGL/WIDGETS/pyWidget.h>
+	#include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 	using namespace BALL;
 	using namespace VIEW;
 %End

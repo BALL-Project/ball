@@ -1,10 +1,10 @@
-// $Id: pyCompositeDescriptorList.sip,v 1.1 2000/07/18 21:28:08 oliver Exp $
+// $Id: pyCompositeDescriptorList.sip,v 1.2 2000/10/05 22:33:36 oliver Exp $
 
 class PyCompositeDescriptorList
 {
 %HeaderCode
 	#include <BALL/DATATYPE/list.h>
-	#include <BALL/VIEW/OPENGL/KERNEL/compositeDescriptor.h>
+	#include <BALL/VIEW/GUI/KERNEL/compositeDescriptor.h>
 	#include "sipBALLCompositeDescriptor.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 	typedef List<CompositeDescriptor*> PyCompositeDescriptorList;

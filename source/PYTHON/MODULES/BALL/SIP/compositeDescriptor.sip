@@ -1,9 +1,9 @@
-// $Id: compositeDescriptor.sip,v 1.1 2000/07/18 21:27:24 oliver Exp $
+// $Id: compositeDescriptor.sip,v 1.2 2000/10/05 22:33:35 oliver Exp $
 
 class CompositeDescriptor
 {
 %HeaderCode
-	#include <BALL/VIEW/OPENGL/KERNEL/compositeDescriptor.h>
+	#include <BALL/VIEW/GUI/KERNEL/compositeDescriptor.h>
   #include <BALL/PYTHON/pyBALLSipHelper.h> 
 	using namespace BALL;
 	using namespace VIEW;
@@ -24,25 +24,11 @@ class CompositeDescriptor
   void setName(const String& /name/);
   String& getName();
   const String& getName() const;
-  void setCenter(const Vector3& /center/);
-  void setCenter(float /x/, float /y/, float /z/);
-  Vector3& getCenter();
-  const Vector3& getCenter() const;
-  void setBoundingBox(const Box3& /bounding_box/);
-  void setBoundingBox
-    (const Vector3& /upper/, const Vector3& /lower/);
-  void setBoundingBox
-    (float /upper_x/, float /upper_y/, float /upper_z/,
-     float /lower_x/, float /lower_y/, float /lower_z/);
-  Box3& getBoundingBox();
-  const Box3& getBoundingBox() const;
   void setQuaternion(const Quaternion& /quaternion/);
   void setQuaternion(const Vector3& /axis/, float /angle/);
   void setQuaternion(const Vector3& /axis/, const Angle& /angle/);
   Quaternion& getQuaternion();
   const Quaternion& getQuaternion() const;
-  void setComposite(const Composite& /composite/);
-  void setComposite(const Composite* /composite/, bool /allow_deletion/ = false);
   Composite* getComposite();
 %MemberCode
   sipThisType *sipThis;

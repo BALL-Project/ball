@@ -400,241 +400,6 @@ static PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_setCenter(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
-		return NULL;
-
-	{
-		const Vector3 *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
-		{
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Vector3(a0obj,(Vector3 **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> CompositeDescriptor::setCenter(* a0);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	{
-		float a0;
-		float a1;
-		float a2;
-
-		if (sipParseArgs(sipArgs,"fff",&a0,&a1,&a2))
-		{
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			ptr -> CompositeDescriptor::setCenter( a0, a1, a2);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_setCenter);
-
-	return NULL;
-}
-
-static PyObject *sipDo_CompositeDescriptor_getCenter(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			Vector3 *res;
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			res = &ptr -> CompositeDescriptor::getCenter();
-
-			return sipMapCppToSelf(res,sipClass_Vector3);
-		}
-	}
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			const Vector3 *res;
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			res = &ptr -> CompositeDescriptor::getCenter();
-
-			return sipMapCppToSelf(res,sipClass_Vector3);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_getCenter);
-
-	return NULL;
-}
-
-static PyObject *sipDo_CompositeDescriptor_setBoundingBox(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
-		return NULL;
-
-	{
-		const Box3 *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
-		{
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Box3(a0obj,(Box3 **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> CompositeDescriptor::setBoundingBox(* a0);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	{
-		const Vector3 *a0;
-		PyObject *a0obj;
-		const Vector3 *a1;
-		PyObject *a1obj;
-
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
-		{
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Vector3(a0obj,(Vector3 **)&a0,1,&iserr);
-			sipConvertTo_Vector3(a1obj,(Vector3 **)&a1,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> CompositeDescriptor::setBoundingBox(* a0,* a1);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	{
-		float a0;
-		float a1;
-		float a2;
-		float a3;
-		float a4;
-		float a5;
-
-		if (sipParseArgs(sipArgs,"ffffff",&a0,&a1,&a2,&a3,&a4,&a5))
-		{
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			ptr -> CompositeDescriptor::setBoundingBox( a0, a1, a2, a3, a4, a5);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_setBoundingBox);
-
-	return NULL;
-}
-
-static PyObject *sipDo_CompositeDescriptor_getBoundingBox(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			Box3 *res;
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			res = &ptr -> CompositeDescriptor::getBoundingBox();
-
-			return sipMapCppToSelf(res,sipClass_Box3);
-		}
-	}
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			const Box3 *res;
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			res = &ptr -> CompositeDescriptor::getBoundingBox();
-
-			return sipMapCppToSelf(res,sipClass_Box3);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_getBoundingBox);
-
-	return NULL;
-}
-
 static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -772,71 +537,6 @@ static PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_setComposite(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
-		return NULL;
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
-		{
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> CompositeDescriptor::setComposite(* a0);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		long a1 = false;
-
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Composite,&a0obj,&a1))
-		{
-			CompositeDescriptor *ptr;
-
-			if ((ptr = (CompositeDescriptor *)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,0,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> CompositeDescriptor::setComposite( a0, (bool)a1);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_setComposite);
-
-	return NULL;
-}
-
 static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -845,7 +545,7 @@ static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyO
 		return NULL;
 
 	{
-#line 48 "compositeDescriptor.sip"
+#line 34 "compositeDescriptor.sip"
   sipThisType *sipThis;
 
   if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
@@ -863,7 +563,7 @@ static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyO
     return pyMapBALLObjectToSip(*res);
   }
 	return NULL;
-#line 871 "../CPP/sipBALLCompositeDescriptor.cpp"
+#line 571 "../CPP/sipBALLCompositeDescriptor.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -1081,14 +781,14 @@ static void sipDealloc_CompositeDescriptor(sipThisType *sipThis)
 
 static PyObject *sipPyInternalRepr_CompositeDescriptor(sipThisType *sipThis)
 {
-#line 83 "compositeDescriptor.sip"
+#line 69 "compositeDescriptor.sip"
   CompositeDescriptor* ptr;
   if ((ptr = (CompositeDescriptor*)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
     return NULL;
 
 	String tmp = String("CompositeDescriptor { ") + ptr->getName() + " }";
   return PyString_FromString(tmp.c_str());
-#line 1096 "../CPP/sipBALLCompositeDescriptor.cpp"
+#line 796 "../CPP/sipBALLCompositeDescriptor.cpp"
 }
 
 PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
@@ -1183,13 +883,8 @@ PyMethodDef sipClassAttrTab_CompositeDescriptor[] = {
 	{sipName_BALL_swap, sipDo_CompositeDescriptor_swap, METH_VARARGS, NULL},
 	{sipName_BALL_setName, sipDo_CompositeDescriptor_setName, METH_VARARGS, NULL},
 	{sipName_BALL_getName, sipDo_CompositeDescriptor_getName, METH_VARARGS, NULL},
-	{sipName_BALL_setCenter, sipDo_CompositeDescriptor_setCenter, METH_VARARGS, NULL},
-	{sipName_BALL_getCenter, sipDo_CompositeDescriptor_getCenter, METH_VARARGS, NULL},
-	{sipName_BALL_setBoundingBox, sipDo_CompositeDescriptor_setBoundingBox, METH_VARARGS, NULL},
-	{sipName_BALL_getBoundingBox, sipDo_CompositeDescriptor_getBoundingBox, METH_VARARGS, NULL},
 	{sipName_BALL_setQuaternion, sipDo_CompositeDescriptor_setQuaternion, METH_VARARGS, NULL},
 	{sipName_BALL_getQuaternion, sipDo_CompositeDescriptor_getQuaternion, METH_VARARGS, NULL},
-	{sipName_BALL_setComposite, sipDo_CompositeDescriptor_setComposite, METH_VARARGS, NULL},
 	{sipName_BALL_getComposite, sipDo_CompositeDescriptor_getComposite, METH_VARARGS, NULL},
 	{sipName_BALL_update, sipDo_CompositeDescriptor_update, METH_VARARGS, NULL},
 	{sipName_BALL_drawEntity, sipDo_CompositeDescriptor_drawEntity, METH_VARARGS, NULL},

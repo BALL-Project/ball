@@ -21,7 +21,7 @@ static PyTypeObject sipType_MainControl = {
 	0,
 };
 
-sipMainControl::sipMainControl(const MainControl& a0,bool a1): MainControl(a0,a1)
+sipMainControl::sipMainControl(): MainControl()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
@@ -288,284 +288,6 @@ static PyObject *sipDo_MainControl_destroy(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_set(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
-		return NULL;
-
-	{
-		const MainControl *a0;
-		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_MainControl,&a0obj,&a1))
-		{
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_MainControl(a0obj,(MainControl **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			ptr -> MainControl::set(* a0, (bool)a1);
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_set);
-
-	return NULL;
-}
-
-static PyObject *sipDo_MainControl_prepend(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
-		return NULL;
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		Vector3 a1def = Vector3(0,0,0);
-		const Vector3 *a1 = &a1def;
-		PyObject *a1obj = NULL;
-		Box3 a2def = Box3(0,0,0,0,0,0);
-		const Box3 *a2 = &a2def;
-		PyObject *a2obj = NULL;
-		const String *a3 = NULL;
-		PyObject *a3obj = NULL;
-
-		if (sipParseArgs(sipArgs,"I|III",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Box3,&a2obj,sipCanConvertTo_String,&a3obj))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-			sipConvertTo_Vector3(a1obj,(Vector3 **)&a1,1,&iserr);
-			sipConvertTo_Box3(a2obj,(Box3 **)&a2,1,&iserr);
-			int istemp3 = sipConvertTo_String(a3obj,(String **)&a3,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::prepend(* a0,* a1,* a2,* a3);
-
-			if (istemp3)
-				delete a3;
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		float a1;
-		float a2;
-		float a3;
-		float a4;
-		float a5;
-		float a6;
-		float a7;
-		float a8;
-		float a9;
-		const String *a10 = NULL;
-		PyObject *a10obj = NULL;
-
-		if (sipParseArgs(sipArgs,"Ifffffffff|I",sipCanConvertTo_Composite,&a0obj,&a1,&a2,&a3,&a4,&a5,&a6,&a7,&a8,&a9,sipCanConvertTo_String,&a10obj))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-			int istemp10 = sipConvertTo_String(a10obj,(String **)&a10,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::prepend(* a0, a1, a2, a3, a4, a5, a6, a7, a8, a9,* a10);
-
-			if (istemp10)
-				delete a10;
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		CompositeDescriptor *a0;
-		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_CompositeDescriptor,&a0obj,&a1))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_CompositeDescriptor(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::prepend(* a0, (bool)a1);
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_prepend);
-
-	return NULL;
-}
-
-static PyObject *sipDo_MainControl_append(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
-		return NULL;
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		Vector3 a1def = Vector3(0,0,0);
-		const Vector3 *a1 = &a1def;
-		PyObject *a1obj = NULL;
-		Box3 a2def = Box3(0,0,0,0,0,0);
-		const Box3 *a2 = &a2def;
-		PyObject *a2obj = NULL;
-		const String *a3 = NULL;
-		PyObject *a3obj = NULL;
-
-		if (sipParseArgs(sipArgs,"I|III",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Box3,&a2obj,sipCanConvertTo_String,&a3obj))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-			sipConvertTo_Vector3(a1obj,(Vector3 **)&a1,1,&iserr);
-			sipConvertTo_Box3(a2obj,(Box3 **)&a2,1,&iserr);
-			int istemp3 = sipConvertTo_String(a3obj,(String **)&a3,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::append(* a0,* a1,* a2,* a3);
-
-			if (istemp3)
-				delete a3;
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		float a1;
-		float a2;
-		float a3;
-		float a4;
-		float a5;
-		float a6;
-		float a7;
-		float a8;
-		float a9;
-		const String *a10 = NULL;
-		PyObject *a10obj = NULL;
-
-		if (sipParseArgs(sipArgs,"Ifffffffff|I",sipCanConvertTo_Composite,&a0obj,&a1,&a2,&a3,&a4,&a5,&a6,&a7,&a8,&a9,sipCanConvertTo_String,&a10obj))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-			int istemp10 = sipConvertTo_String(a10obj,(String **)&a10,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::append(* a0, a1, a2, a3, a4, a5, a6, a7, a8, a9,* a10);
-
-			if (istemp10)
-				delete a10;
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		CompositeDescriptor *a0;
-		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_CompositeDescriptor,&a0obj,&a1))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_CompositeDescriptor(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::append(* a0, (bool)a1);
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_append);
-
-	return NULL;
-}
-
 static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -576,16 +298,13 @@ static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs
 	{
 		const Composite *a0;
 		PyObject *a0obj;
-		Vector3 a1def = Vector3(0,0,0);
-		const Vector3 *a1 = &a1def;
+		const String *a1 = NULL;
 		PyObject *a1obj = NULL;
-		Box3 a2def = Box3(0,0,0,0,0,0);
-		const Box3 *a2 = &a2def;
+		Vector3 a2def = Vector3(0,0,0);
+		const Vector3 *a2 = &a2def;
 		PyObject *a2obj = NULL;
-		const String *a3 = NULL;
-		PyObject *a3obj = NULL;
 
-		if (sipParseArgs(sipArgs,"I|III",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Box3,&a2obj,sipCanConvertTo_String,&a3obj))
+		if (sipParseArgs(sipArgs,"I|II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_Vector3,&a2obj))
 		{
 			CompositeDescriptor *res;
 			MainControl *ptr;
@@ -596,83 +315,16 @@ static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs
 			int iserr = 0;
 
 			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-			sipConvertTo_Vector3(a1obj,(Vector3 **)&a1,1,&iserr);
-			sipConvertTo_Box3(a2obj,(Box3 **)&a2,1,&iserr);
-			int istemp3 = sipConvertTo_String(a3obj,(String **)&a3,1,&iserr);
+			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
+			sipConvertTo_Vector3(a2obj,(Vector3 **)&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = ptr -> MainControl::insert(* a0,* a1,* a2,* a3);
+			res = ptr -> MainControl::insert(* a0,* a1,* a2);
 
-			if (istemp3)
-				delete a3;
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		float a1;
-		float a2;
-		float a3;
-		float a4;
-		float a5;
-		float a6;
-		float a7;
-		float a8;
-		float a9;
-		const String *a10 = NULL;
-		PyObject *a10obj = NULL;
-
-		if (sipParseArgs(sipArgs,"Ifffffffff|I",sipCanConvertTo_Composite,&a0obj,&a1,&a2,&a3,&a4,&a5,&a6,&a7,&a8,&a9,sipCanConvertTo_String,&a10obj))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-			int istemp10 = sipConvertTo_String(a10obj,(String **)&a10,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::insert(* a0, a1, a2, a3, a4, a5, a6, a7, a8, a9,* a10);
-
-			if (istemp10)
-				delete a10;
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		CompositeDescriptor *a0;
-		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_CompositeDescriptor,&a0obj,&a1))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_CompositeDescriptor(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::insert(* a0, (bool)a1);
+			if (istemp1)
+				delete a1;
 
 			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
 		}
@@ -745,226 +397,6 @@ static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_remove);
-
-	return NULL;
-}
-
-static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
-		return NULL;
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getDescriptor(* a0);
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
-		{
-			const CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getDescriptor(* a0);
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const String *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getDescriptor(* a0);
-
-			if (istemp0)
-				delete a0;
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const String *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
-		{
-			const CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getDescriptor(* a0);
-
-			if (istemp0)
-				delete a0;
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const Vector3 *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Vector3(a0obj,(Vector3 **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getDescriptor(* a0);
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const Vector3 *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
-		{
-			const CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Vector3(a0obj,(Vector3 **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getDescriptor(* a0);
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const Box3 *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
-		{
-			CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Box3(a0obj,(Box3 **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getDescriptor(* a0);
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	{
-		const Box3 *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
-		{
-			const CompositeDescriptor *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Box3(a0obj,(Box3 **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getDescriptor(* a0);
-
-			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getDescriptor);
 
 	return NULL;
 }
@@ -1110,6 +542,126 @@ static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
+static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
+		return NULL;
+
+	{
+		const String *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		{
+			CompositeDescriptor *res;
+			MainControl *ptr;
+
+			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> MainControl::getDescriptor(* a0);
+
+			if (istemp0)
+				delete a0;
+
+			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
+		}
+	}
+
+	{
+		const String *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		{
+			const CompositeDescriptor *res;
+			MainControl *ptr;
+
+			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> MainControl::getDescriptor(* a0);
+
+			if (istemp0)
+				delete a0;
+
+			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
+		}
+	}
+
+	{
+		const Vector3 *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
+		{
+			CompositeDescriptor *res;
+			MainControl *ptr;
+
+			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Vector3(a0obj,(Vector3 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> MainControl::getDescriptor(* a0);
+
+			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
+		}
+	}
+
+	{
+		const Vector3 *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
+		{
+			const CompositeDescriptor *res;
+			MainControl *ptr;
+
+			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Vector3(a0obj,(Vector3 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> MainControl::getDescriptor(* a0);
+
+			return sipMapCppToSelf(res,sipClass_CompositeDescriptor);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getDescriptor);
+
+	return NULL;
+}
+
 static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -1140,34 +692,6 @@ static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipA
 				return NULL;
 
 			res = ptr -> MainControl::setCenter(* a0,* a1);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		float a1;
-		float a2;
-		float a3;
-
-		if (sipParseArgs(sipArgs,"Ifff",sipCanConvertTo_Composite,&a0obj,&a1,&a2,&a3))
-		{
-			bool res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::setCenter(* a0, a1, a2, a3);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1240,174 +764,6 @@ static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipA
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getCenter);
-
-	return NULL;
-}
-
-static PyObject *sipDo_MainControl_setBoundingBox(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
-		return NULL;
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		const Box3 *a1;
-		PyObject *a1obj;
-
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Box3,&a1obj))
-		{
-			bool res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-			sipConvertTo_Box3(a1obj,(Box3 **)&a1,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::setBoundingBox(* a0,* a1);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		const Vector3 *a1;
-		PyObject *a1obj;
-		const Vector3 *a2;
-		PyObject *a2obj;
-
-		if (sipParseArgs(sipArgs,"III",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
-		{
-			bool res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-			sipConvertTo_Vector3(a1obj,(Vector3 **)&a1,1,&iserr);
-			sipConvertTo_Vector3(a2obj,(Vector3 **)&a2,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::setBoundingBox(* a0,* a1,* a2);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-		float a1;
-		float a2;
-		float a3;
-		float a4;
-		float a5;
-		float a6;
-
-		if (sipParseArgs(sipArgs,"Iffffff",sipCanConvertTo_Composite,&a0obj,&a1,&a2,&a3,&a4,&a5,&a6))
-		{
-			bool res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::setBoundingBox(* a0, a1, a2, a3, a4, a5, a6);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_setBoundingBox);
-
-	return NULL;
-}
-
-static PyObject *sipDo_MainControl_getBoundingBox(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
-		return NULL;
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
-		{
-			Box3 *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getBoundingBox(* a0);
-
-			return sipMapCppToSelf(res,sipClass_Box3);
-		}
-	}
-
-	{
-		const Composite *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
-		{
-			const Box3 *res;
-			MainControl *ptr;
-
-			if ((ptr = (MainControl *)sipGetCppPtr(sipThis,sipClass_MainControl)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_Composite(a0obj,(Composite **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> MainControl::getBoundingBox(* a0);
-
-			return sipMapCppToSelf(res,sipClass_Box3);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getBoundingBox);
 
 	return NULL;
 }
@@ -1705,20 +1061,9 @@ PyObject *sipNew_MainControl(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		const MainControl *a0;
-		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_MainControl,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-"))
 		{
-			int iserr = 0;
-
-			sipConvertTo_MainControl(a0obj,(MainControl **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new sipMainControl(* a0, (bool)a1);
+			sipNew = new sipMainControl();
 	}
 	}
 
@@ -1769,19 +1114,14 @@ PyObject *sipNew_MainControl(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_MainControl[] = {
 	{sipName_BALL_clear, sipDo_MainControl_clear, METH_VARARGS, NULL},
 	{sipName_BALL_destroy, sipDo_MainControl_destroy, METH_VARARGS, NULL},
-	{sipName_BALL_set, sipDo_MainControl_set, METH_VARARGS, NULL},
-	{sipName_BALL_prepend, sipDo_MainControl_prepend, METH_VARARGS, NULL},
-	{sipName_BALL_append, sipDo_MainControl_append, METH_VARARGS, NULL},
 	{sipName_BALL_insert, sipDo_MainControl_insert, METH_VARARGS, NULL},
 	{sipName_BALL_remove, sipDo_MainControl_remove, METH_VARARGS, NULL},
-	{sipName_BALL_getDescriptor, sipDo_MainControl_getDescriptor, METH_VARARGS, NULL},
 	{sipName_BALL_getDescriptorList, sipDo_MainControl_getDescriptorList, METH_VARARGS, NULL},
 	{sipName_BALL_setName, sipDo_MainControl_setName, METH_VARARGS, NULL},
 	{sipName_BALL_getName, sipDo_MainControl_getName, METH_VARARGS, NULL},
+	{sipName_BALL_getDescriptor, sipDo_MainControl_getDescriptor, METH_VARARGS, NULL},
 	{sipName_BALL_setCenter, sipDo_MainControl_setCenter, METH_VARARGS, NULL},
 	{sipName_BALL_getCenter, sipDo_MainControl_getCenter, METH_VARARGS, NULL},
-	{sipName_BALL_setBoundingBox, sipDo_MainControl_setBoundingBox, METH_VARARGS, NULL},
-	{sipName_BALL_getBoundingBox, sipDo_MainControl_getBoundingBox, METH_VARARGS, NULL},
 	{sipName_BALL_update, sipDo_MainControl_update, METH_VARARGS, NULL},
 	{sipName_BALL_updateAll, sipDo_MainControl_updateAll, METH_VARARGS, NULL},
 	{sipName_BALL_getOptions, sipDo_MainControl_getOptions, METH_VARARGS, NULL},

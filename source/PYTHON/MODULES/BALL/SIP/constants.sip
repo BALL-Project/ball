@@ -1,3 +1,4 @@
+// $Id: constants.sip,v 1.2 2000/10/05 22:33:36 oliver Exp $
 class Constant
 {
 %HeaderCode
