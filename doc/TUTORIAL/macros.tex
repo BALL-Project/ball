@@ -6,7 +6,7 @@
 
 %\usepackage[draft]{graphicx}
 \usepackage{graphicx}
-% use graphics pacakge
+% use graphics package
 
 \usepackage{times}
 % use postscript fonts
@@ -322,11 +322,20 @@
 %%     FAQ macros
 %%
 \newcounter{FAQcounter}
+\newcounter{FAQseparatorCounter}
 \setcounter{FAQcounter}{0}
+\setcounter{FAQseparatorCounter}{0}
 \newcommand{\FAQquestion}[1]{%
-	\ifthenelse{\theFAQcounter=0}{}{\vspace{0.5cm}\begin{center}\rule{0.5\textwidth}{1pt}\end{center}\vspace{0.5cm}}%
+	\ifthenelse{\theFAQseparatorCounter=0}{}{\vspace{0.5mm}\begin{center}\rule{0.5\textwidth}{0.1pt}\end{center}\vspace{0.5mm}}%
 	\stepcounter{FAQcounter}%
-	\noindent{\bf Question \theFAQcounter:} {\em #1 \par}%
+	\stepcounter{FAQseparatorCounter}%
+	\noindent{\normalfont\bf\sffamily Question \theFAQcounter:} {\em #1 \par}%
 }
-\newcommand{\FAQanswer}[1]{\bigskip\noindent{\bf Answer:} #1\par}	
-\newcommand{\FAQURL}[1]{{\tt #1}}
+\newcommand{\FAQanswer}[1]{\bigskip\noindent{\normalfont\bf\sffamily Answer:} #1\par}	
+\newcommand{\FAQURL}[1]{\mbox{\tt #1}}
+\newcommand{\FAQCategory}[1]{
+	\par\vspace{0.5cm}
+	\graybox{\hspace{-3pt}\makebox[\linewidth][c]{\normalfont\bf\sffamily\Large{#1}}}
+	\par\vspace{0.6cm}
+	\setcounter{FAQseparatorCounter}{0}
+}
