@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum_test.C,v 1.4 2000/09/27 12:01:04 oliver Exp $
+// $Id: NMRSpectrum_test.C,v 1.5 2001/05/06 23:11:35 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(NMRSpectrum, "$Id: NMRSpectrum_test.C,v 1.4 2000/09/27 12:01:04 oliver Exp $")
+START_TEST(NMRSpectrum, "$Id: NMRSpectrum_test.C,v 1.5 2001/05/06 23:11:35 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -63,10 +63,6 @@ HINFile f("data/NMRSpectrum_test.hin");
 System system;
 f >> system;
 
-FragmentDB db;
-ResidueChecker rc(db);
-system.apply(rc);
-
 CHECK(NMRSpectrum::calculateShifts())
 	NMRSpectrum spectrum;
 	spectrum.setShiftModel(sm);
@@ -80,7 +76,7 @@ CHECK(NMRSpectrum::createSpectrum())
 	spectrum.setShiftModel(sm);
 	spectrum.calculateShifts();
   spectrum.createSpectrum();
-	TEST_EQUAL(spectrum.getPeakList().size(), 831)
+	TEST_EQUAL(spectrum.getPeakList().size(), 873)
 RESULT
 
 list<Peak1D> peaks;
@@ -122,7 +118,7 @@ String filename;
 CHECK(NMRSpectrum::plotSpectrum(const String& filename) const )
 	NEW_TMP_FILE(filename)
 	spectrum.setDensity(32768);
-	spectrum.plotSpectrum("test.dat");
+	spectrum.plotSpectrum(filename);
 	TEST_FILE(filename.c_str(), "data/NMRSpectrum_test.dat", false)
 RESULT
 
@@ -134,11 +130,9 @@ RESULT
 
 CHECK(NMRSpectrum::writePeaks(const String& filename) const )
 	NEW_TMP_FILE(filename)
-	spectrum.writePeaks("parv.peaks"); 
+	spectrum.writePeaks(filename); 
 	TEST_FILE(filename.c_str(), "data/NMRSpectrum_test/writePeaks.txt", false)
 RESULT
-
-Log.info() << " Number of peaks in spectrum: " << spectrum.getPeakList().size() << endl;
 
 CHECK(NMRSpectrum::makeDifference(const float&, const String&, const String&, const String&))
   //BAUSTELLE
