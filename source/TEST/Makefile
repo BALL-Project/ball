@@ -78,12 +78,10 @@ EXECUTABLES = \
 	Vector4_test\
 	XYZFile_test
 
-CPP_SOURCES=$(EXECUTABLES:=.C)
-OBJECTS=$(CPP_SOURCES:.C=.o)
+OBJECTS=$(EXECUTABLES:=.o)
 
-$(OBJECTS): $(CPP_SOURCES)
 
-$(EXECUTABLES): $(OBJECTS)
+%_test: %_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 
