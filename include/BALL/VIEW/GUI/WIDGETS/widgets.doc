@@ -1,0 +1,8 @@
+// $Id: widgets.doc,v 1.1 2000/10/05 08:38:26 oliver Exp $
+
+/**@name	VIEW/GUI/WIDGETS
+		@nonames
+*/
+//@{
+	//@Include: *.h
+//@}
