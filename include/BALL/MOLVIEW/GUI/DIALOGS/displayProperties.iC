@@ -58,15 +58,3 @@ void DisplayProperties::setColorCalculator_(ColorCalculator& color_calculator)
 	color_calculator_ = &color_calculator;
 }
 
-BALL_INLINE
-void DisplayProperties::applyOnComposite_(Composite &composite, UnaryProcessor<Composite> *processor)
-{
-	composite.apply(*processor);
-}
-
-BALL_INLINE
-void DisplayProperties::applyOnComposite_(Composite &composite, UnaryProcessor<Atom> *processor)
-{
-	composite.apply(*processor);
-}
-
