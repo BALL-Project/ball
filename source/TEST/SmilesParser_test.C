@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SmilesParser_test.C,v 1.5 2003/05/27 14:04:32 oliver Exp $
+// $Id: SmilesParser_test.C,v 1.6 2003/05/28 16:51:57 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -66,7 +66,7 @@ Line readSmilesLine(std::istream& is)
 	return s;
 }
 
-START_TEST(SmilesParser, "$Id: SmilesParser_test.C,v 1.5 2003/05/27 14:04:32 oliver Exp $")
+START_TEST(SmilesParser, "$Id: SmilesParser_test.C,v 1.6 2003/05/28 16:51:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ CHECK(C)
 	TEST_EQUAL(atom.getElement(), PTE[Element::C])	
 	TEST_EQUAL(atom.countBonds(), 4)	
 RESULT											
-/*
+
 
 CHECK([C])
 	sp.parse("[C]");
@@ -116,7 +116,7 @@ CHECK(example library)
 	}
 	
 RESULT
-*/
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
