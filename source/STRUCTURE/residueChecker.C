@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.C,v 1.24 2004/03/20 13:22:25 oliver Exp $
+// $Id: residueChecker.C,v 1.25 2004/03/20 19:33:38 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/residueChecker.h>
@@ -336,10 +336,15 @@ namespace BALL
 						radius2 = atom_it2->getElement().getAtomicRadius();
 					}
 
-					// Computte the square of the sum of the vdw radii minus 0.5 Angstrom
+					// Computte the square of the sum of the vdw radii minus 0.6 Angstrom
 					// overlap.
-					double min_dist = radius1 + radius2 - 0.5;
+					double min_dist = std::max(radius1 + radius2 - 0.6, 0.0);
+					if (atom_it->isGeminal(*atom_it2))
+					{
+						min_dist = std::max(min_dist - 1.0, 0.0);
+					}
 					min_dist *= min_dist;
+
 
 					// If the atoms are further apart, skip them.
 					if (pos.getSquareDistance(atom_it2->getPosition()) > min_dist)
