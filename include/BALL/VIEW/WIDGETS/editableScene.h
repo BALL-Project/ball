@@ -23,8 +23,6 @@
 // has to come after BALL includes to prevent problems with Visual Stuio Net
 #include <qgl.h>
 
-
-
 namespace BALL
 {
 	namespace VIEW
@@ -39,11 +37,11 @@ class BALL_EXPORT EditableScene
 
 			BALL_EMBEDDABLE(EditableScene, ModularWidget)	
 
-				//@} 
 			/**	@name	Constructors 
 			*/	
 			//@{
 
+			///
 			EditableScene()
 				throw();
 	
@@ -97,41 +95,42 @@ class BALL_EXPORT EditableScene
 			virtual void clear()
 				throw();
 			
+			//@}
 
+			///
 			enum EditMode
 			{
 				INSERT__MODE = PICKING__MODE + 1
 			};
 
 
-			
+			///
 			void initializeWidget(MainControl& main_control)
 				throw();
 	
+			///
 			void finalizeWidget(MainControl& main_control)
 				throw();
 
-
+			///
 			void checkMenu(MainControl& main_control)
 				throw();
 
 
-	public slots:
-			//#############################################################
-			//								Mouse Events
-			//############################################################
+		public slots:
+
+			///
 			virtual void mousePressEvent(QMouseEvent* e);
 
-			
+			///
 		  virtual void mouseMoveEvent(QMouseEvent *e);
 
-
+			///
 			virtual void mouseReleaseEvent(QMouseEvent *e);
 
 
 	protected slots:
 			virtual void editMode_();
-
 
 			
 		private:
