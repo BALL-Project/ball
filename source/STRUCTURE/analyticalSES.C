@@ -1,9 +1,9 @@
-// $Id: analyticalSES.C,v 1.5 2000/03/26 12:36:24 oliver Exp $
-// $Id: analyticalSES.C,v 1.5 2000/03/26 12:36:24 oliver Exp $
+// $Id: analyticalSES.C,v 1.6 2000/05/30 10:35:55 oliver Exp $
+// $Id: analyticalSES.C,v 1.6 2000/05/30 10:35:55 oliver Exp $
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/DATATYPE/hashSet.h>
+#include <BALL/KERNEL/baseFragment.h>
 
 namespace BALL
 {
@@ -12,18 +12,15 @@ namespace BALL
 												double* volume, double* area, double probe, double exclude);
 
 	float calculateSESArea	
-		(const Composite& composite, float probe_radius)
+		(const BaseFragment& fragment, float probe_radius)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
 		vector<Atom*>	atoms;
-		Composite::SubcompositeIterator	it = composite.beginSubcomposite();
-		for (; it != composite.endSubcomposite(); ++it)
+		AtomIterator	it = fragment.beginAtom();
+		for (; +it; ++it)
 		{
-			if (RTTI::isKindOf<Atom>(*it))
-			{
-				atoms.push_back(RTTI::castTo<Atom>(*it));
-			}
+			atoms.push_back(&*it);
 		}
 		
 		// if no atoms are found, return zero
