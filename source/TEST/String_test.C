@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.8 2000/01/19 17:56:34 oliver Exp $
+// $Id: String_test.C,v 1.9 2000/05/23 14:19:07 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.8 2000/01/19 17:56:34 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.9 2000/05/23 14:19:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1863,6 +1863,15 @@ CHECK(Substring::toString())
 Substring sub(s5);
 String s6 = sub.toString();
 TEST_EQUAL(s6, s5)
+RESULT
+
+
+CHECK(Substring::set(const char* char_ptr))
+	String s = "ABCDEFG";
+	Substring sub(s, 2, 2);
+	TEST_EQUAL(sub, "CD")
+	sub.set("TEST");
+	TEST_EQUAL(s, "ABTESTEFG")
 RESULT
 
 /////////////////////////////////////////////////////////////
