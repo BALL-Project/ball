@@ -1,4 +1,4 @@
-// $Id: atomVector.C,v 1.4 2001/06/27 02:02:24 oliver Exp $
+// $Id: atomVector.C,v 1.5 2001/07/15 11:17:45 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -30,13 +30,13 @@ namespace BALL
 	{
 	}
 
-	AtomVector& AtomVector::operator = (const AtomVector& rhs)
+	const AtomVector& AtomVector::operator = (const AtomVector& rhs)
 	{
 		set(rhs);
 		return *this;
 	}
 
-	AtomVector& AtomVector::operator = (const Composite& rhs)
+	const AtomVector& AtomVector::operator = (const Composite& rhs)
 	{
 		set(rhs, rhs.containsSelection());
 		return *this;
@@ -67,8 +67,7 @@ namespace BALL
 			Atom* atom = const_cast<Atom*>(dynamic_cast<const Atom*>(&*it));
 			if (atom != 0)
 			{
-				// store this atom only if it is selected or 
-				// selected_only == false
+				// store this atom only if it is selected or selected_only == false
 				if (!selected_only || atom->isSelected())
 				{
 					push_back(atom);
@@ -93,8 +92,7 @@ namespace BALL
 
 	void AtomVector::resetPositions()
 	{
-		// move only if a saved position exists for
-		// every atom
+		// move only if a saved position exists for every atom
 		if (saved_position_.size() == size())
 		{
 			Iterator it(begin());
@@ -108,8 +106,7 @@ namespace BALL
 
 	void AtomVector::moveTo(const Gradient& gradient, float step)
 	{
-		// move only if a saved position exists for
-		// every atom
+		// move only if a saved position exists for every atom
 		if (gradient.size() == size())
 		{
 			// use the saves positions
@@ -123,8 +120,7 @@ namespace BALL
 					(*it)->setPosition(*pos_it + *grad_it * step);
 				}
 			}
-			// we don't have saved positions, use the current atom
-			// positions
+			// we don't have saved positions, use the current atom positions
 			else 
 			{
 				Iterator it(begin());
@@ -137,5 +133,4 @@ namespace BALL
 		}
 	}
 
-	
 } // namespace BALL
