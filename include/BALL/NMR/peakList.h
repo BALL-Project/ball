@@ -1,4 +1,4 @@
- // $Id: peakList.h,v 1.5 2001/12/30 13:28:41 sturm Exp $
+ // $Id: peakList.h,v 1.6 2002/01/05 02:54:28 oliver Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -40,10 +40,13 @@ namespace BALL
 		/// The peak type
 		typedef	PT										PeakType;
 	
+		///
 		typedef typename List<PT>::iterator					Iterator;
-		typedef typename List<PT>::ConstIterator		ConstIterator;
-		
+
+		///
+		typedef typename List<PT>::ConstIterator		ConstIterator;		
 		//@}
+
 		/** @name	Constructors and Destructors
 		*/
 		//@{
@@ -97,8 +100,10 @@ namespace BALL
 		
 	/// 1D peak list
 	typedef PeakList<Peak<float> >			PeakList1D;
+
 	/// 2D peak list
 	typedef PeakList<Peak<Vector2> >		PeakList2D;
+
 	/// 3D peak list
 	typedef PeakList<Peak<Vector3> >		PeakList3D;
 	
@@ -136,13 +141,10 @@ namespace BALL
 	float PeakList<PT>::getMaxIntensity() const
 	{
 		ConstIterator it = begin();
-		float max = Limits<float>::min();
+		float max = -Limits<float>::max();
 		for (; it != end(); ++it)
 		{
-			if (it->getIntensity() < max)
-			{
-				max = it->getIntensity();
-			}
+			max = std::max(max, it->getIntensity());
 		}
 		
 		return max;
@@ -155,10 +157,7 @@ namespace BALL
 		float min = Limits<float>::max();
 		for (; it != end(); ++it)
 		{
-			if (it->getIntensity() > min)
-			{
-				min = it->getIntensity();
-			}
+			min = std::min(min, it->getIntensity());
 		}
 		
 		return min;
@@ -167,18 +166,87 @@ namespace BALL
 	template <typename PT>
 	PeakList<PT>::Position PeakList<PT>::getMinPosition() const
 	{
-		// ?????
-		Position pos;
-		return pos;
+		ConstIterator it = begin();
+		PeakList<PT>::Position min = Limits<PeakList<PT>::Position>::max();
+		for (; it != end(); ++it)
+		{
+			min = std::min(min, it->getPosition());
+		}
+		return min;
 	}
 
 	template <typename PT>
 	PeakList<PT>::Position PeakList<PT>::getMaxPosition() const
 	{
-		// ?????
-		Position pos;
-		return pos;
+		ConstIterator it = begin();
+		PeakList<PT>::Position max = -Limits<PeakList<PT>::Position>::max();
+		for (; it != end(); ++it)
+		{
+			max = std::max(max, it->getPosition());
+		}
+
+		return max;
 	}
+
+	template <>
+	PeakList<Peak2D>::Position PeakList<Peak2D>::getMinPosition() const
+	{
+		ConstIterator it = begin();
+		Peak2D::Position min(Limits<float>::max(), Limits<float>::max());
+		for (; it != end(); ++it)
+		{
+			min.x = std::min(min.x, it->getPosition().x);
+			min.y = std::min(min.y, it->getPosition().y);
+		}
+
+		return min;
+	}
+
+	template <>
+	PeakList<Peak2D>::Position PeakList<Peak2D>::getMaxPosition() const
+	{
+		ConstIterator it = begin();
+		Peak2D::Position max(-Limits<float>::max(), -Limits<float>::max());
+		for (; it != end(); ++it)
+		{
+			max.x = std::max(max.x, it->getPosition().x);
+			max.y = std::max(max.y, it->getPosition().y);
+		}
+
+		return max;
+	}
+
+	template <>
+	PeakList<Peak3D>::Position PeakList<Peak3D>::getMinPosition() const
+	{
+		ConstIterator it = begin();
+		Peak3D::Position min(Limits<float>::max(), Limits<float>::max(), Limits<float>::max());
+		for (; it != end(); ++it)
+		{
+			min.x = std::min(min.x, it->getPosition().x);
+			min.y = std::min(min.y, it->getPosition().y);
+			min.z = std::min(min.z, it->getPosition().z);
+		}
+
+		return min;
+	}
+
+	template <>
+	PeakList<Peak3D>::Position PeakList<Peak3D>::getMaxPosition() const
+	{
+		ConstIterator it = begin();
+		Peak3D::Position max(-Limits<float>::max(), -Limits<float>::max(), -Limits<float>::max());
+		for (; it != end(); ++it)
+		{
+			max.x = std::max(max.x, it->getPosition().x);
+			max.y = std::max(max.y, it->getPosition().y);
+			max.z = std::max(max.z, it->getPosition().z);
+		}
+
+		return max;
+	}
+
+
 
 } // namespace BALL
 
