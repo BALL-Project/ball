@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.200 2003/06/23 12:26:52 amoll Exp $
+# $Id: Makefile,v 1.201 2003/06/26 12:13:09 amoll Exp $
 #
 
 DIRECTORY=TEST
@@ -102,6 +102,8 @@ EXECUTABLES_CONCEPTS = \
 EXECUTABLES_KERNEL = \
 	PTE_test\
 	Atom_test\
+	AtomStaticAtomAttributes_test\
+	AtomAttributeVector_test\
 	Bond_test\
 	AtomContainer_test\
 	Fragment_test\
