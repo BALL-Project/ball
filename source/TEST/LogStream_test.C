@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.1 2000/05/24 00:02:57 amoll Exp $
+// $Id: LogStream_test.C,v 1.2 2000/05/24 00:47:14 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.1 2000/05/24 00:02:57 amoll Exp $")
+START_TEST(class_name, "$Id: LogStream_test.C,v 1.2 2000/05/24 00:47:14 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,11 +37,14 @@ CHECK(LogStream(LogStreamBuf* buf))
 RESULT
 
 CHECK(rdbuf())
-// BAUSTELLE
+	LogStream l1;
+//	TEST_EQUAL(l1.rdbuf(), )
 RESULT
 
 CHECK(operator -> ())
-	//TEST_EQUAL(l1->*this, l1.rdbuf())
+	LogStream l1;
+	l1 << "abc";
+	//TEST_EQUAL(l1->StreamStruct.min_level, 0)
 RESULT
 
 CHECK(setLevel(int level))
@@ -70,11 +73,11 @@ RESULT
 
 CHECK(info(int n = 0))
 	LogStream l1;
-	l1.warn() << "TEST" <<endl;
+	l1.info() << "TEST" <<endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
 	TEST_EQUAL(l1.getLineLevel(0), LogStream::INFORMATION)
-	l1.warn(1) << "TEST2" <<endl;
+	l1.info(1) << "TEST2" <<endl;
 	TEST_EQUAL(l1.getLineLevel(1), LogStream::INFORMATION + 1)
 RESULT
 
@@ -84,6 +87,8 @@ CHECK(error(int n = 0))
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
 	TEST_EQUAL(l1.getLineLevel(0), LogStream::ERROR)
+	l1.error(1) << "TEST2" <<endl;
+	TEST_EQUAL(l1.getLineLevel(1), LogStream::ERROR + 1)
 RESULT
 
 CHECK(warn(int n = 0))
@@ -92,6 +97,8 @@ CHECK(warn(int n = 0))
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
 	TEST_EQUAL(l1.getLineLevel(0), LogStream::WARNING)
+	l1.warn(1) << "TEST2" <<endl;
+	TEST_EQUAL(l1.getLineLevel(1), LogStream::WARNING + 1)
 RESULT
 
 CHECK(insert(std::ostream& s, int min_level = INT_MIN, int max_level = INT_MAX))
