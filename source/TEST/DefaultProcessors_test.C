@@ -1,4 +1,4 @@
-// $Id: DefaultProcessors_test.C,v 1.4 2001/07/15 17:37:54 amoll Exp $
+// $Id: DefaultProcessors_test.C,v 1.5 2001/07/15 21:06:11 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,12 +7,13 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.4 2001/07/15 17:37:54 amoll Exp $")
+START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.5 2001/07/15 21:06:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 // tests for class ClearChargeProcessor::
 System s;
