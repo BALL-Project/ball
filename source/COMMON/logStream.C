@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.3 1999/09/08 13:34:16 oliver Exp $
+// $Id: logStream.C,v 1.4 1999/09/17 16:39:09 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 
@@ -227,7 +227,7 @@ namespace BALL
 		{
 			// associate cout to informations and warnings,
 			// cerr to errors by default
-			insert(cout, WARNING, ERROR - 1);
+			insert(cout, INFORMATION, ERROR - 1);
 			insert(cerr, ERROR);
 		}
 	}
