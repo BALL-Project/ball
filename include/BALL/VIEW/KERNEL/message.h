@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.46 2004/02/26 08:41:38 anhi Exp $
+// $Id: message.h,v 1.47 2004/04/01 12:13:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -395,13 +395,6 @@ class BALL_EXPORT GenericSelectionMessage: public Message
 	List<Composite*> selection_;
 };
 
-///
-class BALL_EXPORT SelectionMessage: public GenericSelectionMessage
-{
-	public:
-		SelectionMessage()
-			throw();
-};
 
 /** Used to inform MainControl of selection in MolecularControl (not the one of the checkboxes!) \par
 		Send by MolecularControl.\par
@@ -413,6 +406,7 @@ class BALL_EXPORT ControlSelectionMessage: public GenericSelectionMessage
 	ControlSelectionMessage()
 		throw();
 };
+
 
 /** Send by MainControl to Control objects to sync selection
  */

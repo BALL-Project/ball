@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.19 2004/02/11 16:19:00 amoll Exp $
+// $Id: message.C,v 1.20 2004/04/01 12:13:23 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -264,12 +264,6 @@ CreateRepresentationMessage::CreateRepresentationMessage(const List<Composite*>&
 		coloring_method_(coloring_method)
 {
 }
-
-SelectionMessage::SelectionMessage()
-	throw()
-	: GenericSelectionMessage()
-{}
-		
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/message.iC>
