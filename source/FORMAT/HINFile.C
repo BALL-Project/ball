@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.39 2001/12/19 02:40:24 oliver Exp $
+// $Id: HINFile.C,v 1.40 2001/12/19 04:13:01 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -814,7 +814,7 @@ namespace BALL
 
 					number_of_bonds = 0;
 
-					break;
+					throw(Exception::IndexOverflow(__FILE__, __LINE__));
 				}
 
 
@@ -890,6 +890,9 @@ namespace BALL
 			delete molecule;
 			delete residue;
 			throw e;
+		}
+		catch (Exception::IndexOverflow)
+		{
 		}
 
 		// if we read a protein, return it as a molecule anyway
