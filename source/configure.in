@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.6 2002/08/19 16:42:12 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.7 2002/08/20 09:15:50 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2403,7 +2403,7 @@ if test "${FFTW_SUPPORT}" = true ; then
 		AC_MSG_RESULT(  http://www.fftw.org)
 		AC_MSG_ERROR(Aborted.)
 	else
-		AC_MSG_RESULT((${FFTW_INCL_PATH}))	
+		AC_MSG_RESULT((${FFTW_INCL_PATH}))
 	fi
 
 	AC_MSG_CHECKING(for FFT library)
@@ -2419,7 +2419,7 @@ if test "${FFTW_SUPPORT}" = true ; then
 		AC_MSG_ERROR(Aborted.)
 	else
 		AC_MSG_RESULT((${FFTW_LIB}))
-		LIBS="${LIBS} -L${FFTW_LIB} -lfftw"
+		LIBS="${LIBS} ${FFTW_LIB}/libfftw.a"
 	fi
 
 	dnl prevent the use of -L/usr/lib - this may lead to problems with different
@@ -2434,29 +2434,33 @@ if test "${FFTW_SUPPORT}" = true ; then
 	LDFLAGS="${LDFLAGS} -I${FFTW_INCL_PATH}"
 	AC_TRY_RUN(
 		[
+			#include <fstream>
 			#include <fftw.h>
 			int main(int, char**)
 			{
+					std::ofstream os("fftwres.tmp", std::ios::out);
 #ifdef FFTW_ENABLE_FLOAT
-					return -1;
+					os << "1" << std::endl;
 #else
-					return -2;
+					os << "2" << std::endl;
 #endif
+					return 0;
 			}
 		],
 		FFTW_PRECISION_TEST=true,
 		DUMMY=0,
 		DUMMY=0
 	)
-	EXIT_CODE=$?
-	if test ${EXIT_CODE} = -1 -a "${FFTW_PRECISION_TEST}" = "true" ; then
+	EXIT_CODE=`${CAT} fftwres.tmp`
+	${RM} fftwres.tmp 2>/dev/null
+	if test "${EXIT_CODE}" = 1 -a "${FFTW_PRECISION_TEST}" = "true" ; then
 		FFTW_PRECISION=float
-	elif test ${EXIT_CODE} = -2 -a "${FFTW_PRECISION_TEST}" = "true" ; then 
+	elif test "${EXIT_CODE}" = 2  -a "${FFTW_PRECISION_TEST}" = "true" ; then 
 		FFTW_PRECISION=double
 	else
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(FFTW_PRECISION_TEST=${FFTW_PRECISION_TEST})
-		AC_MSG_RESULT(exit code = ${EXIT_CODE})
+		AC_MSG_RESULT(EXIT_CODE = ${EXIT_CODE})
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(Unable to determine precision.)
 		AC_MSG_ERROR(Aborted.)
@@ -3243,12 +3247,10 @@ else
 fi
 
 
-
-
 dnl
 dnl		include the default BALL include path
 dnl
-BALL_INCLUDES="-I$BALL_PATH/include"
+BALL_INCLUDES="-I$BALL_PATH/include ${BALL_INCLUDES}"
 
 dnl
 dnl		expand BINFMT to include the compiler name
