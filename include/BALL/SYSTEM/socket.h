@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.h,v 1.27 2002/12/23 08:26:13 oliver Exp $
+// $Id: socket.h,v 1.28 2002/12/23 08:33:17 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -30,7 +30,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <byteswap.h>
 
 #ifdef BALL_HAS_UIO_H
 #	include <sys/uio.h>
