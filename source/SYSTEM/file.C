@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.46 2003/08/28 12:26:56 anker Exp $
+// $Id: file.C,v 1.47 2003/08/28 13:51:28 anker Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -45,8 +45,6 @@ namespace BALL
 
 	TransformationManager::TransformationManager()
 	{
-		String pdb_export_string("http://www.rcsb.org/pdb/cgi/export.cgi/%F.pdb?job=download;pdbId=%F;page=;opt=show;format=PDB;pre=1&compression=None");
-		registerTransformation("pdb:*", pdb_export_string);
 	}
 	
 	TransformationManager::~TransformationManager()
@@ -90,9 +88,8 @@ namespace BALL
 			Size count = 0;
 			while ((result.substitute("%s", name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
 
-			// substitute "%f" with the full name without the last file suffix
-			// (after and including the last ".") and "%f[suffix]" with the full
-			// filename without [suffix]
+			// substitute "%f" with the full name without the last file suffix (after and including the last ".")
+			// and "%f[suffix]" with the full filename without [suffix]
 			if (result.hasSubstring("%f["))
 			{
 				String full_name = name;
@@ -124,27 +121,8 @@ namespace BALL
 				count = 0;
 				while ((result.substitute("%f", full_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
 			}
-
-			// substitute "%F" with the full name without the first prefix
-			// (before and including the first ":")
-			if (result.hasSubstring("%F"))
-			{
-				String full_name = name;
-				if (full_name.has(':'))
-				{
-					String prefix = name(0, name.find_first_of(':') + 1);
-					if (!prefix.empty() && full_name.hasPrefix(prefix))
-					{
-						full_name = full_name((Size)prefix.size(), (Size)full_name.size() - (Size)prefix.size());
-					}
-				}
-				count = 0;
-				while ((result.substitute("%F", full_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
-			}
-
-			// substitute "%b" with the basename without the last file suffix
-			// (after and including the last ".") and "%f[suffix]" with the full
-			// filename without [suffix]
+			// substitute "%f" with the full name without the last file suffix (after and including the last ".")
+			// and "%f[suffix]" with the full filename without [suffix]
 			if (result.hasSubstring("%b["))
 			{
 				RegularExpression suffix_regexp("%b\\[[^]]*\\]");
