@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.103 2004/08/31 14:34:03 amoll Exp $
+// $Id: mainControl.C,v 1.104 2004/09/02 15:10:18 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -761,7 +761,6 @@ namespace BALL
 			throw()
 		{
 			main_control_preferences_ = new MainControlPreferences();
-			CHECK_PTR(main_control_preferences_);
 
 			preferences.insertPage(main_control_preferences_, "General");
 			preferences.showPage(0);
