@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.6 1999/10/30 12:53:33 oliver Exp $
+// $Id: string.C,v 1.7 1999/12/16 17:24:07 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -557,22 +557,42 @@ namespace BALL
 		
 		if (index > 0)
 		{
+			// erase the whitespace characters on the left
 			erase(0, index);
+		} else {
+			// if nothing was found, the string might contain only whitespaces!
+			String trimmed(trimmed_chars);
+			if (trimmed.has((*this)[0]))
+			{
+				assign("");
+			}
 		}
 
 		return *this;
 	}
 
-	String& String::trimRight(const char *trimmed_chars)
+	String& String::trimRight(const char* trimmed_chars)
 	{
 		if (trimmed_chars == 0)
+		{
 			return *this;
+		}
 
 		Size index = find_last_not_of(trimmed_chars);
 		
 		if (index < (size() - 1))
+		{
+			// delete the whitespace characters on the right hand side
 			erase(index + 1);
-
+		} else {
+			// if nothing was found, the string might contain only whitespaces!
+			String trimmed(trimmed_chars);
+			if (trimmed.has((*this)[size() - 1]))
+			{
+				assign("");
+			}
+		}
+		
 		return *this;
 	}
 
