@@ -1,0 +1,7 @@
+FILE=/tmp/mytmp-$USER
+check_test $1 \
+ | sed -e "s/  '/  /" \
+ | sed -e "s/'//" > $FILE
+
+grep "ostream" $FILE | sed -e "s/^/\/\//"
+grep "operator =" $FILE | sed -e "s/^/\/\//"
