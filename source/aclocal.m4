@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.19 2003/04/17 20:21:07 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.20 2003/04/18 17:36:34 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -634,12 +634,12 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 
   DYNAR="${CXX}"
   if test "${OS}" != "Solaris" ; then
-    DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
+    DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
   else 
     if test "${OS}" == Darwin ; then
 	    DYNAROPTS="${DYNAROPTS} -dynamiclib -fPIC -o"			
 		else	
-  	  DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
+  	  DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
 		fi
   fi
 
@@ -3252,10 +3252,18 @@ AC_DEFUN(CF_PYTHON, [
 		AC_MSG_RESULT(Linker options for Python library: ${PYTHON_LIBS})
 			
 		dnl
-		dnl	 SIP
+		dnl	 SIP executable
 		dnl
-		AC_MSG_CHECKING(sip executable)
-		AC_MSG_RESULT(${SIP})
+		CF_MSG_PATH_PROG(SIP,sip,no)
+		if test "${SIP}" = no ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Could not find SIP executable!)
+			AC_MSG_RESULT(Please specify the location of SIP using the)
+			AC_MSG_RESULT( --with-sip=PATH)
+			AC_MSG_RESULT(option or make sure it is in your current PATH.)
+			AC_MSG_RESULT()
+			AC_MSG_ERROR(Aborted.)
+		fi
 
 		dnl
 		dnl libsip.so 
@@ -3265,20 +3273,29 @@ AC_DEFUN(CF_PYTHON, [
 			SIP_LIB=" -L${SIP_LIBPATH} -lsip"
 			AC_MSG_RESULT(${SIP_LIB})
 		else
-			AC_MSG_RESULT(not found in ${SIP_LIBPATH})
-			AC_MSG_RESULT()
-			AC_MSG_RESULT(Please specify the path to the directory that contains)
-			AC_MSG_RESULT(libsip.so using the option --with-sip-lib=DIR.)
-			AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
-			AC_MSG_RESULT(from)
-			AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
-			AC_MSG_ERROR(Aborted.)
+			SIP_LIB_LOCATION=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
+			if test "${SIP_LIB_LOCATION}" != "" ; then
+				SIP_LIB=" -L`AS_DIRNAME("${SIP_LIB_LOCATION}")` -lsip"
+				AC_MSG_RESULT(${SIP_LIB})			
+			else
+				AC_MSG_RESULT(not found in ${SIP_LIBPATH})
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(Please specify the path to the directory that contains)
+				AC_MSG_RESULT(libsip.so using the option --with-sip-lib=DIR.)
+				AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
+				AC_MSG_RESULT(from)
+				AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
+				AC_MSG_ERROR(Aborted.)
+			fi
 		fi
 		
 		dnl
-		dnl	sip.h
+		dnl	SIP header file (sip.h)
 		dnl
-		AC_MSG_CHECKING(sip headers (sip.h))
+		AC_MSG_CHECKING(sip header file)
+		if test "${SIP_INCLUDE_PATH}" = "" ; then
+			SIP_INCLUDE_PATH="${PYTHON_INC_PATH}"
+		fi
 		CF_FIND_HEADER(SIP_INC_PATH, sip.h, ${SIP_INCLUDE_PATH})
 		if test "${SIP_INC_PATH}" = "" ; then
 			AC_MSG_RESULT(not found!)
