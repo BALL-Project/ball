@@ -1,21 +1,17 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.20 2004/04/28 15:38:38 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.21 2005/01/30 14:02:23 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
-
-#include <BALL/MOLMEC/COMMON/forceField.h>
 
 #include <BALL/KERNEL/standardPredicates.h>
 #include <BALL/KERNEL/PTE.h>
-
+#include <BALL/KERNEL/atomIterator.h>
+#include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/FRESNO/fresno.h>
 #include <BALL/MOLMEC/FRESNO/fresnoDesolvation.h>
-
 #include <BALL/STRUCTURE/defaultProcessors.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
-
 #include <BALL/DATATYPE/hashMap.h>
-#include <BALL/KERNEL/atomIterator.h>
-
 #include <BALL/ENERGY/distanceCoulomb.h>
+#include <BALL/SYSTEM/timer.h>
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -31,6 +27,7 @@ namespace BALL
 			calculation_method_(0),
 			verbosity_(0),
 			fdpb_(),
+			gbm_(),
 			bulk_water_dc_(0.0),
 			vacuum_dc_(0.0)
 	{
@@ -46,6 +43,7 @@ namespace BALL
 			calculation_method_(0),
 			verbosity_(0),
 			fdpb_(),
+			gbm_(),
 			bulk_water_dc_(0.0),
 			vacuum_dc_(0.0)
 	{
@@ -61,6 +59,7 @@ namespace BALL
 			calculation_method_(0),
 			verbosity_(0),
 			fdpb_(),
+			gbm_(),
 			bulk_water_dc_(0.0),
 			vacuum_dc_(0.0)
 	{
@@ -92,6 +91,10 @@ namespace BALL
 	bool FresnoDesolvation::setup()
 		throw()
 	{
+
+		Timer timer;
+		timer.start();
+
 		ForceField* force_field = getForceField();
 		if (force_field == 0)
 		{
@@ -110,6 +113,15 @@ namespace BALL
 		calculation_method_ 
 			= options.setDefaultInteger(FresnoFF::Option::DESOLV_METHOD,
 					FresnoFF::Default::DESOLV_METHOD);
+
+		use_gb_ 
+			= options.setDefaultBool(FresnoFF::Option::DESOLV_GB,
+					FresnoFF::Default::DESOLV_GB);
+
+		if (use_gb_ == true)
+		{
+			gbm_.setScalingFactorFile(options[FresnoFF::Option::GB_SCALING_FILE]);
+		}
 
 		/*
 
@@ -201,7 +213,6 @@ namespace BALL
 							<< ": CHARMM/EEF1 solvation." << endl << endl;
 						break;
 					}
-
 			}
 		}
 
@@ -279,10 +290,18 @@ namespace BALL
 				result = computeEnergyDifference_(system, dG_reac_system);
 				if (result == false) return false;
 
+				// DEBUG
+				std::cout << "AB " << dG_reac_system << std::endl;
+				// /DEBUG
+
 				system.clear();
 				system.insert(*((Molecule*)(desolv_protein_.create(true))));
 				result = computeEnergyDifference_(system, dG_reac_protein);
 				if (result == false) return false;
+
+				// DEBUG
+				std::cout << "A " << dG_reac_protein << std::endl;
+				// /DEBUG
 
 
 			}
@@ -350,6 +369,11 @@ namespace BALL
 			{
 				result = computeEnergyDifference_(system, dG_reac_ligand);
 				if (result == false) return false;
+				
+				// DEBUG
+				std::cout << "B " << dG_reac_ligand << std::endl;
+				// /DEBUG
+
 			}
 
 			energy_ = dG_reac_system - dG_reac_protein - dG_reac_ligand;
@@ -536,7 +560,7 @@ namespace BALL
 					{
 						if (calculation_method_ == CALCULATION__EEF1)
 						{
-							Log.info() << "Calculating CHARMM EEF1 solvation energy." << endl;
+							Log.info() << "Calculating CHARMM EEF1 solvation energy disabled at the moment." << endl;
 						}
 						else
 						{
@@ -551,7 +575,12 @@ namespace BALL
 
 		energy_ *= factor_;
 
-		return true;
+		timer.stop();
+		Log.info() << "FresnoDesolvation::setup(): " 
+			<< timer.getCPUTime() << " s" << std::endl;
+
+		return(true);
+
 	}
 
 
@@ -581,35 +610,49 @@ namespace BALL
 	{
 		float dG;
 
-		fdpb_.options[FDPB::Option::SOLVENT_DC] = bulk_water_dc_;
-		if (fdpb_.setup(system))
+		if (use_gb_ == true)
 		{
-			fdpb_.solve();
-			dG = fdpb_.getEnergy();
-			if (verbosity_ > 0)
-			{
-				Log.info() << "dG in water: " 
-					<< fdpb_.getEnergy() << endl;
-			}
+			gbm_.setup(system);
 
-			fdpb_.options[FDPB::Option::SOLVENT_DC] = vacuum_dc_;
-			fdpb_.setup(system);
-			fdpb_.solve();
-			if (verbosity_ > 0)
-			{
-				Log.info() << "dG in vacuum: " 
-					<< fdpb_.getEnergy() << endl;
-			}
-			dG -= fdpb_.getEnergy();
+			gbm_.setSolventDC(bulk_water_dc_);
+			dG = gbm_.calculateSolvationEnergy();
 
 			energy = dG;
-			return true;
+			return(true);
+
 		}
 		else
 		{
-			Log.error() << "FresnoDesolvation::computeEnergyDifference_(): "
-				<< "could not setup FDPB solver." << endl;
-			return false;
+			fdpb_.options[FDPB::Option::SOLVENT_DC] = bulk_water_dc_;
+			if (fdpb_.setup(system))
+			{
+				fdpb_.solve();
+				dG = fdpb_.getEnergy();
+				if (verbosity_ > 0)
+				{
+					Log.info() << "dG in water: " 
+						<< fdpb_.getEnergy() << endl;
+				}
+
+				fdpb_.options[FDPB::Option::SOLVENT_DC] = vacuum_dc_;
+				fdpb_.setup(system);
+				fdpb_.solve();
+				if (verbosity_ > 0)
+				{
+					Log.info() << "dG in vacuum: " 
+						<< fdpb_.getEnergy() << endl;
+				}
+				dG -= fdpb_.getEnergy();
+
+				energy = dG;
+				return true;
+			}
+			else
+			{
+				Log.error() << "FresnoDesolvation::computeEnergyDifference_(): "
+					<< "could not setup FDPB solver." << endl;
+				return false;
+			}
 		}
 	}
 
@@ -617,22 +660,32 @@ namespace BALL
 	bool FresnoDesolvation::computeESEnergy_(System& system, float& energy)
 		throw()
 	{
-		if (fdpb_.setup(system))
+		if (use_gb_ == true)
 		{
-			fdpb_.solve();
-			energy = fdpb_.getEnergy();
-			return true;
+			gbm_.setup(system);
+			energy = gbm_.calculateEnergy();
+			return(true);
 		}
 		else
 		{
-			Log.error() << "FresnoDesolvation::computeESEnergy_(): "
-				<< "could not setup FDPB solver." << endl;
-			return false;
+			if (fdpb_.setup(system))
+			{
+				fdpb_.solve();
+				energy = fdpb_.getEnergy();
+				return true;
+			}
+			else
+			{
+				Log.error() << "FresnoDesolvation::computeESEnergy_(): "
+					<< "could not setup FDPB solver." << endl;
+				return false;
+			}
 		}
 	}
 
 
-	float FresnoDesolvation::computeESInteractionEnergy_(const Molecule& molecule)
+	float FresnoDesolvation::computeESInteractionEnergy_(const Molecule&
+	molecule, const HashMap<const Atom*, float>& p_hash)
 		throw()
 	{
 
@@ -642,11 +695,28 @@ namespace BALL
 
 		for (; +atom_it; ++atom_it)
 		{
-			dGint += atom_it->getCharge() 
-				* fdpb_.phi_grid->getInterpolatedValue(atom_it->getPosition());
+			float potential;
+			if (use_gb_ == true)
+			{
+				potential = p_hash[&*atom_it];
+			}
+			else
+			{
+				potential 
+					= fdpb_.phi_grid->getInterpolatedValue(atom_it->getPosition());
+
+				potential *= Constants::NA * 1e-3;
+			}
+
+			// DEBUG
+			std::cout << "phi(" << atom_it->getFullName() << ") = " << potential 
+				<< " charge  = " << atom_it->getCharge() << std::endl;
+			// /DEBUG
+
+			dGint += atom_it->getCharge() * potential;
 		}
 
-		return Constants::e0 * Constants::NA * 1e-3 * dGint;
+		return(Constants::e0 * dGint);
 	}
 
 
@@ -658,6 +728,8 @@ namespace BALL
 		// we are computing in bulk water.
 		fdpb_.options[FDPB::Option::SOLVENT_DC] = bulk_water_dc_;
 
+		// We need something for clearing the charges of a molecule (for the
+		// so-called "ghost" complexes
 		ClearChargeProcessor clear_charges;
 		ClearRadiusProcessor clear_radii;
 
@@ -683,21 +755,25 @@ namespace BALL
 		float dGint_AB = 0.0;
 		float dGint_BA = 0.0;
 
-		// calculate the ES energy of the protein
+		// 1. Calculate the ES energy of the protein
 
-		if (verbosity_ > 0) Log.info() << "  calculating dGes_A... ";
+		// Therefore "remove" the ligand by setting its radii and charges to 0
 		ligand.apply(clear_charges);
 		ligand.apply(clear_radii);
-		// protein radii and charges are still untouched
+
+		// Protein radii and charges are still untouched, so we can instantly
+		// calculate the ES energy
 		bool result = computeESEnergy_(system, dGes_A);
 		if (result == false) return false;
-		if (verbosity_ > 0) Log.info() << dGes_A << endl;
+		if (verbosity_ > 0) Log.info() << "dGes_A = " << dGes_A << endl;
 
-		// calculate the ES energy of the ligand
+		// 2. Calculate the ES energy of the ligand
 
-		if (verbosity_ > 0) Log.info() << "  calculating dGes_B... ";
+		// Therefore "remove" the protein by setting its radii and charges to 0
 		protein.apply(clear_charges);
 		protein.apply(clear_radii);
+
+		// Retrieve the ligand's radii and charges
 		for (it = ligand.beginAtom(); +it; ++it)
 		{
 			if (radii.has(&*it)) it->setRadius(radii[&*it]);
@@ -715,14 +791,16 @@ namespace BALL
 				return false;
 			}
 		}
+
+		// Now compute the ES energy
 		result = computeESEnergy_(system, dGes_B);
 		if (result == false) return false;
-		if (verbosity_ > 0) Log.info() << dGes_B << endl;
+		if (verbosity_ > 0) Log.info() << "dGes_B = " << dGes_B << endl;
 
-		// calculate the ES energy of the protein in presence of a cavity
+		// 3. Calculate the ES energy of the protein in presence of a cavity
 		// of the ligand
 
-		if (verbosity_ > 0) Log.info() << "  calculating dGes_A_cav_B...";
+		// Retrieve charges and radii of the protein
 		for (it = protein.beginAtom(); +it; ++it)
 		{
 			if (radii.has(&*it)) it->setRadius(radii[&*it]);
@@ -740,10 +818,25 @@ namespace BALL
 				return false;
 			}
 		}
+
+		// Clear charges of the ligand in order to create the "ghost" particle,
+		// i. e. an uncharged cavity formed like the ligand
+		// Ligand radii should still be correct
 		ligand.apply(clear_charges);
-		// ligand radii should be correct
+
+		// Comoute the electrostatic energy
 		result = computeESEnergy_(system, dGes_A_cav_B);
 		if (result == false) return false;
+		if (verbosity_ > 0) Log.info() << "dGes_A_cav_B = " << dGes_A_cav_B << endl;
+
+		// 5. (a) Compute the ES interaction energies of the complex partners.
+		// This is done by computing the energy of the ligand in the potential
+		// of the protein and vice versa
+		HashMap<const Atom*, float> p_hash;
+		if (use_gb_ == true)
+		{
+			gbm_.calculatePotential(p_hash);
+		}
 
 		for (it = ligand.beginAtom(); +it; ++it)
 		{
@@ -755,11 +848,10 @@ namespace BALL
 				return false;
 			}
 		}
-		dGint_AB = computeESInteractionEnergy_(ligand);
+		dGint_AB = computeESInteractionEnergy_(ligand, p_hash);
+		if (verbosity_ > 0) Log.info() << "dGint_AB = " << dGint_AB << endl;
 
-		if (verbosity_ > 0) Log.info() << " " << dGes_A_cav_B << endl;
-
-		// calculate the ES energy of the ligand in presence of a cavity of
+		// 4. Calculate the ES energy of the ligand in presence of a cavity of
 		// the protein
 
 		if (verbosity_ > 0) Log.info() << "  calculating dGes_B_cav_A...";
@@ -778,6 +870,15 @@ namespace BALL
 		// ligand radii should be correct.
 		result = computeESEnergy_(system, dGes_B_cav_A);
 		if (result == false) return false;
+		if (verbosity_ > 0) Log.info() << "dGes_B_cav_A = " << dGes_B_cav_A << endl;
+
+		// 5. (a) Compute the ES interaction energies of the complex partners.
+		// This is done by computing the energy of the ligand in the potential
+		// of the protein and vice versa
+		if (use_gb_ == true)
+		{
+			gbm_.calculatePotential(p_hash);
+		}
 
 		for (it = protein.beginAtom(); +it; ++it)
 		{
@@ -789,9 +890,8 @@ namespace BALL
 				return false;
 			}
 		}
-		dGint_BA = computeESInteractionEnergy_(protein);
-
-		if (verbosity_ > 0) Log.info() << " " << dGes_B_cav_A << endl;
+		dGint_BA = computeESInteractionEnergy_(protein, p_hash);
+		if (verbosity_ > 0) Log.info() << "dGint_BA = " << dGint_BA << endl;
 
 		// calculate the changes in solvation energy
 		float ddGsolv = dGes_B_cav_A - dGes_B + dGes_A_cav_B - dGes_A;
