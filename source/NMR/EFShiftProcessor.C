@@ -1,19 +1,16 @@
-// $Id: EFShiftProcessor.C,v 1.2 2000/09/19 19:20:28 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.3 2000/09/20 11:11:03 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
-
-#ifndef BALL_COMMON_PATH_H
-# include <BALL/SYSTEM/path.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-# include <BALL/KERNEL/bond.h>
-#endif
+#include <BALL/SYSTEM/path.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/FORMAT/parameterSection.h>
 
 using namespace std;
 
 namespace BALL 
 {
+	
+	const char* PROPERTY__EF_SHIFT = "ElectricFieldShift";
 
 	EFShiftProcessor::EFShiftProcessor()
 		throw()
@@ -24,12 +21,13 @@ namespace BALL
 	EFShiftProcessor::EFShiftProcessor(const EFShiftProcessor& processor)
 		throw()
 		:	ShiftModule(processor),
-			proton_list_(processor.proton_list_),
+			bond_list_(processor.bond_list_),
 			effector_list_(processor.effector_list_),
-			atom_list_(processor.atom_list_),
 			first_atom_expressions_(processor.first_atom_expressions_),
 			second_atom_expressions_(processor.second_atom_expressions_),
-			parameter_section_(processor.parameter_section_)
+			epsilon1_(processor.epsilon1_),
+			epsilon2_(processor.epsilon2_),
+			charge_map_(processor.charge_map_)
 	{
 	}
 	
@@ -38,6 +36,66 @@ namespace BALL
 	{
 	}
 
+	void EFShiftProcessor::init()
+		throw()
+	{
+		// if no parameters are assigned, abort immediately
+		if (parameters_ == 0)
+		{
+			return;
+		}
+
+		// check that the parameter file contains the correct section...
+		ParameterSection parameter_section;
+		parameter_section.extractSection(*parameters_, "ElectricFieldEffect");
+
+		// ..and that this section contains the correct coulm names
+		if (!parameter_section.hasVariable("first_atom") || !parameter_section.hasVariable("second_atom")
+				|| !parameter_section.hasVariable("epsilon1") || !parameter_section.hasVariable("epsilon2"))
+		{
+			return;
+		}
+
+		// check for the option "exclude_residue_field"
+		exclude_residue_field_ = false;
+		if (parameter_section.options.has("exclude_residue_field"))
+		{
+			exclude_residue_field_ = parameter_section.options.getBool("exclude_residue_field");
+		}
+
+		// clear the arrays containing the expressions, the parameters, and the charge map
+		first_atom_expressions_.clear();
+		second_atom_expressions_.clear();
+		epsilon1_.clear();
+		epsilon2_.clear();
+		charge_map_.clear();
+
+		// extract the atom expressions and the corresponding polarizabilities
+		Position first_atom_column = parameter_section.getColumnIndex("first_atom");
+		Position second_atom_column = parameter_section.getColumnIndex("second_atom");
+		Position epsilon1_column = parameter_section.getColumnIndex("epsilon1");
+		Position epsilon2_column = parameter_section.getColumnIndex("epsilon2");
+
+		for (Position counter = 0; counter < parameter_section.getNumberOfKeys(); counter++)
+		{
+			first_atom_expressions_.push_back(Expression(parameter_section.getValue(counter, first_atom_column)));
+			second_atom_expressions_.push_back(Expression(parameter_section.getValue(counter, second_atom_column)));
+			epsilon1_.push_back(parameter_section.getValue(counter, epsilon1_column).toFloat());
+			epsilon2_.push_back(parameter_section.getValue(counter, epsilon2_column).toFloat());
+		}
+
+		// extract the charge assignment map
+		bool result = parameter_section.extractSection(*parameters_, "Charges");
+		if ((result == true) && parameter_section.hasVariable("charge"))
+		{
+			Position charge_column = parameter_section.getColumnIndex("charge");
+			for (Position i = 0; i < parameter_section.getNumberOfKeys(); i++)
+			{
+				charge_map_[parameter_section.getKey(i)] = parameter_section.getValue(i, charge_column).toFloat();
+			}
+		}
+	}
+		
 	bool EFShiftProcessor::start()
 		throw()
 	{
@@ -47,29 +105,13 @@ namespace BALL
 			return false;
 		}
 
-		// building the Expression List for the shiftatoms		
-		parameter_section_.extractSection(*parameters_, "EFShift-Bonds");
+		// clear the bond list and the effector list
+		bond_list_.clear();
+		effector_list_.clear();
 
-		// clear the arrays containing the expressions
-		first_atom_expressions_.clear();
-		second_atom_expressions_.clear();
-		
-		if (!parameter_section_.hasVariable("first_atom") || !parameter_section_.hasVariable("second_atom"))
-		{
-			return false;
-		}
-
-		Position first_atom_column = parameter_section_.getColumnIndex("first_atom");
-		Position second_atom_column = parameter_section_.getColumnIndex("second_atom");
-		for (Position counter = 0; counter < parameter_section_.getNumberOfKeys(); counter++)
-		{
-			first_atom_expressions_.push_back(Expression(parameter_section_.getValue(counter, first_atom_column)));
-			second_atom_expressions_.push_back(Expression(parameter_section_.getValue(counter, second_atom_column)));
-		}
-				
 		return true;
 	}
-		
+
 	bool EFShiftProcessor::finish()
 		throw()
 	{
@@ -79,77 +121,90 @@ namespace BALL
 			return false;
 		}
 
-		parameter_section_.extractSection(*parameters_, "EFShift-Bonds");
-
-		if (atom_list_.size() <= 0 || effector_list_.size() <= 0)
+		// if there were no effectors or no bonds, return immediately
+		if ((bond_list_.size() == 0) || (effector_list_.size() == 0))
 		{
 			return true;
 		}
 
-		list<Atom*>::iterator atom_iter;
-		list<Atom*>::iterator effector_iter;
-		atom_iter = atom_list_.begin();
-		
-		Position key = 0;
-
-		for (; atom_iter != atom_list_.end(); ++atom_iter)
+		// iterate over all bonds
+		list<Bond*>::iterator bond_it = bond_list_.begin();
+		for (; bond_it != bond_list_.end(); ++bond_it)
 		{
-			for (Position counter = 0; counter < first_atom_expressions_.size(); counter++)
+			Position bond_type = INVALID_POSITION;
+			Atom*	first_atom;
+			Atom* second_atom;
+			
+			// Iterate over all expressions and try to match them
+			// with the bond's atoms.
+			for (Position i = 0; i < first_atom_expressions_.size(); ++i)
 			{
-				if (first_atom_expressions_[counter](**atom_iter))
+				// First, try to match first/fist and second/second.
+				if (first_atom_expressions_[i](*(*bond_it)->getFirstAtom())
+						&& second_atom_expressions_[i](*(*bond_it)->getSecondAtom()))
 				{
-					// exit the loop if we found a matching expression
-					key = counter;
+					// remember the atoms and the bond type (for the parameters)
+					first_atom = (*bond_it)->getFirstAtom();
+					second_atom = (*bond_it)->getSecondAtom();
+					bond_type = i;
+					break;
+				}
+				// Otherwise: try first/second and second/first
+				else if (first_atom_expressions_[i](*(*bond_it)->getSecondAtom())
+						&& second_atom_expressions_[i](*(*bond_it)->getFirstAtom()))
+				{
+					// remember the atoms and the bond type (for the parameters)
+					first_atom = (*bond_it)->getSecondAtom();
+					second_atom = (*bond_it)->getFirstAtom();
+					bond_type = i;
 					break;
 				}
 			}
-			// was passiert wenn keine expression gefunden wurde???
-
-			const Vector3 proton_pos = (*atom_iter)->getPosition();
-
-			Vector3 second_atom_pos;
-			for (Position counter = 0; counter < (*atom_iter)->countBonds(); counter++)
+			
+			if (bond_type != INVALID_POSITION)
 			{
-				Bond* bond = (*atom_iter)->getBond(counter);
-				if (second_atom_expressions_[key](*bond->getBoundAtom(*(*atom_iter)))) 
+				// We found parameters for a bond -- 
+				// calculate the electric field and the induced secondary shift.
+				
+				Vector3 first_atom_pos = first_atom->getPosition();
+				Vector3 second_atom_pos = second_atom->getPosition();
+				Vector3 bond_vector(first_atom_pos - second_atom_pos);
+				
+				// the electric field 
+				Vector3 E(0.0);
+				
+				list<Atom*>::const_iterator effector_it = effector_list_.begin();
+				for (; effector_it != effector_list_.end(); ++effector_it)
 				{
-					second_atom_pos = (*atom_iter)->getBond(counter)->getBoundAtom(*(*atom_iter))->getPosition();
-					break;
+					// Exclude effectors from the same residue (fragment) if 
+					// exclude_residue_field is set (read from options in init()).
+					if (!exclude_residue_field_ || ((*effector_it)->getFragment() != first_atom->getFragment()))
+					{
+						Vector3 distance(first_atom_pos - (*effector_it)->getPosition());
+						// translate the charge to ESU (from elementary charges)
+						float charge = (*effector_it)->getCharge() * 4.8;
+						
+						// add to the field
+						E += charge / distance.getSquareLength();
+					}
 				}
+				
+				// Calculate the field component E_z along the bond axis
+				// 
+				float Ez = (bond_vector * E) / bond_vector.getSquareLength();
+				
+				// calculate the secondary shift induced by this field
+				float delta_EF = - epsilon1_[bond_type] * Ez - epsilon2_[bond_type] * E.getSquareLength();
+
+				// store the shift in the corresponding properties
+				float shift = first_atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+				shift += delta_EF;
+				first_atom->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
+
+				shift = first_atom->getProperty(PROPERTY__EF_SHIFT).getFloat();
+				shift += delta_EF;
+				first_atom->setProperty(PROPERTY__EF_SHIFT, shift);
 			}
-			// hier kann was nicht stimmen, die letzte zuweisung von second_atom_pos wuerde ueberschrieben
-			second_atom_pos = (*atom_iter)->getBond(0)->getBoundAtom(*(*atom_iter))->getPosition();
-
-			const Vector3 distance_proton_second = proton_pos - second_atom_pos;
-			float Ez = 0;
-
-			for (effector_iter = effector_list_.begin(); 
-					 effector_iter != effector_list_.end();
-					 ++effector_iter)
-			{
-				if ( (*effector_iter)->getFragment() != (*atom_iter)->getFragment() )
-				{
-					Vector3 atom_pos = (*effector_iter)->getPosition();
-					Vector3 distance_proton_effector = proton_pos - atom_pos;			
-
-					float dps_scalar = distance_proton_second.getLength();
-					float dpe_scalar = distance_proton_effector.getLength();
-
-					float charge = (*effector_iter)->getCharge();
-					float Efact = charge / (dpe_scalar * dpe_scalar);
-
-					float sc = distance_proton_second * distance_proton_effector;
-					float theta = sc / (dps_scalar * dps_scalar);
-
-					Ez += theta * Efact;
-				}
-			}
-			float epsilon1 = parameter_section_.getValue(key, "epsilon1").toFloat();
-			double shift = (*atom_iter)->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-			shift = epsilon1 * Ez;
-
-			(*atom_iter)->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
-			(*atom_iter)->setProperty("ElectricFieldShift", -Ez * epsilon1);
 		}
 
 		return true;
@@ -158,27 +213,36 @@ namespace BALL
 	Processor::Result EFShiftProcessor::operator () (Composite& object)
 		throw()
 	{
-		// Here, we collect all parameterized atoms
+		// Here, we collect all bonds
 		// and all charged atoms (as effectors of the electric field)
 		if (RTTI::isKindOf<Atom>(object))
 		{
 			Atom* atom_ptr = RTTI::castTo<Atom>(object);
-		
-			// if the atom matches any of our expressions, save it in the
-			// atom list (containing those atom whose shift is to be calculated)
-			for (Position counter = 0; counter < first_atom_expressions_.size(); counter++)
+			
+			// iterate over all bonds of the atom and collect these bonds in 
+			// the bond_list_
+			Atom::BondIterator bond_it = atom_ptr->beginBond();
+			for (; +bond_it; ++bond_it)
 			{
-				if (first_atom_expressions_[counter](*atom_ptr))
-				{
-					atom_list_.push_back(atom_ptr);
-					break;
+				if ((bond_it->getFirstAtom() == atom_ptr) && (bond_it->getSecondAtom() != 0))
+				{	
+					// store each bond once (isFirstAtom) and take care that
+					// it is valid (i.e. it has a second atom defined as well)
+					bond_list_.push_back(&*bond_it);
 				}
 			}
-				
-			// store all charged atoms in the effector list
+		
+			// Store all charged atoms in the effector list.
 			if (atom_ptr->getCharge() != 0.0)
 			{
 				effector_list_.push_back(atom_ptr);
+			}
+
+			// Assign the charge (if it is defined for this atom).
+			String full_name = atom_ptr->getFullName();
+			if (charge_map_.has(full_name))
+			{
+				atom_ptr->setCharge(charge_map_[full_name]);
 			}
 		}
 		
