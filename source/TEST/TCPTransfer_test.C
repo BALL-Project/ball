@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.5 2001/10/17 21:25:37 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.6 2001/12/04 18:47:38 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,13 +7,92 @@
 #include <BALL/SYSTEM/file.h>
 ///////////////////////////
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.5 2001/10/17 21:25:37 amoll Exp $")
+#include <sys/socket.h>		// socket
+#include <netdb.h>				// gethostbyname
+#include <netinet/in.h> 	// sockaddr_in
+#include <unistd.h>  			// close
+#include <iostream.h> 		// cout, endl
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
+#if defined(__hpux__) || defined(__linux__)
+# include <sys/ioctl.h>		//ioctl, FIONBIO
+#else
+# include <sys/filio.h>		//ioctl, FIONBIO
+#endif
 
 using namespace BALL;
 using namespace std;
+
+//test if networking is available
+bool testNetwork()
+{
+	typedef int Socket;
+	Socket socket_;
+	//first we will test if we get http access to the ZBI
+	struct hostent* ht = gethostbyname("www.zbi-saar.de");
+	if (ht == NULL)
+	{
+		return 0;
+	}  
+
+	socket_ = socket(AF_INET, SOCK_STREAM, 0); 
+	if (socket_ == -1)
+	{
+		return 0;
+	}  
+
+	struct sockaddr_in host;  
+	host.sin_family = AF_INET;
+	host.sin_port	  = htons(80);
+	host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
+	
+	if(connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
+	{
+		close(socket_);
+		return 0;
+	}
+	close(socket_);
+
+	// now testing if we get FTP access to the MPI
+	ht = gethostbyname("ftp.mpi-sb.mpg.de");
+	if (ht == NULL)
+	{
+		return 0;
+	}  
+
+	socket_ = socket(AF_INET, SOCK_STREAM, 0); 
+	if (socket_ == -1)
+	{
+		socket_ = 0;
+		return 0;
+	}  
+
+	host.sin_family = AF_INET;
+	host.sin_port	  = htons(21);
+	host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
+	
+	if(connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
+	{
+		close(socket_);
+		return 0;
+	}
+	close(socket_);
+
+	return true;
+}
+
+/////////////////////////
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.6 2001/12/04 18:47:38 amoll Exp $")
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+// if no network-connection available, stop test
+bool network = false;
+CHECK(network)
+	network = testNetwork();
+RESULT	
+
+if (network)
+{
 
 TCPTransfer* tcp_ptr;
 CHECK(cstr)
@@ -45,18 +124,18 @@ CHECK(http)
 	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), ios::out);
 	
-	TCPTransfer tcp_t(out ,"http://tucows.uni-erlangen.de:80/index.html" , false);
-	TEST_EQUAL(tcp_t.getHostAddress(), "tucows.uni-erlangen.de")
-	TEST_EQUAL(tcp_t.getFileAddress(), "/index.html")
+	TCPTransfer tcp_t(out ,"http://www.zbi.uni-saarland.de/zbi/BALL/test/TCPTransferTest.txt" , false);
+	TEST_EQUAL(tcp_t.getHostAddress(), "www.zbi.uni-saarland.de")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/zbi/BALL/test/TCPTransferTest.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
 	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
-	TEST_EQUAL(tcp_t.getReceivedBytes(), 2238)
+	TEST_EQUAL(tcp_t.getReceivedBytes(), 3665)
 	TEST_EQUAL(tcp_t.getLogin(), "")
 	TEST_EQUAL(tcp_t.getPassword(), "")
 	out.close();
 	
 	File f(filename);
-	TEST_EQUAL(f.getSize(), 2238)
+	TEST_EQUAL(f.getSize(), 3665)
 	f.close();
 
 	File::createTemporaryFilename(filename);
@@ -112,6 +191,7 @@ CHECK(ftp2)
 	f.close();
 RESULT
 
+} // network test
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
