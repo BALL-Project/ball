@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.17 2003/12/17 13:31:12 amoll Exp $
+// $Id: glRenderer.C,v 1.18 2003/12/18 02:10:09 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -282,7 +282,7 @@ namespace BALL
 		{
 			if (!display_lists_.has(&rep)) 
 			{
-				Log.error() << "Could not draw Representation " << &rep << std::endl;
+//	 			Log.error() << "Could not draw Representation " << &rep << std::endl;
 				return;
 			}
 
