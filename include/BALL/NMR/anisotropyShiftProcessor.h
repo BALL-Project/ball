@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.h,v 1.5 2000/09/24 13:16:47 oliver Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.6 2000/09/30 16:37:21 oliver Exp $
 
 #ifndef BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
 #define BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
@@ -143,6 +143,7 @@ namespace BALL
 		std::list<const Atom*> proton_list_;	
 		std::list<const Bond*> eff_list_;
 		std::list<const Bond*> eff_list_2_;
+		bool ignore_other_chain_;
 	};
 
 } // namespace BALL
