@@ -1,82 +1,25 @@
 #!/bin/sh
 #
-#  $Id: makedistribution,v 1.1 1999/08/26 08:02:33 oliver Exp $
+#  $Id: makedistribution,v 1.2 2000/01/17 09:42:28 oliver Exp $
 #
 
-if test "$1" = "-int" ; then
-	echo "compiling internal  distribution (including everything)..."
-else
-	echo "compiling distribution..."
-fi
+# create a dummy directory and extract the current CVS version of BALL
+cd /tmp
+rm -fr BALL-dist 2>/dev/null
+mkdir BALL-dist 
+cd BALL-dist
+cvs co BALL
+# remove CVS information
+find . -name CVS -exec rm -fr {} \;
+cd BALL/source
+FILE="BALL-`grep BALL_RELEASE_STRING ../include/BALL/COMMON/version.h | awk '{print $3}'| tr -d \\"`.tar"
 
+mv config/Makefile.dummy .
+cd ../../
 
-# remove objects and stuff
-make clean lib_clean
+echo "creating archive ${FILE}..."
+tar cf ${FILE}
 
-# create documentation
-if test "$1" != "-intnodoc" ; then
-	make doc
-fi
-
-# cleanup documentation
-cd ../doc/tex
-mv BALL.ps ..
-cd ..
-rm -fr tex
-
-cd ..
-dir=`basename \`pwd\`` 
-echo "BASEDIR: $dir"
-FILE=$dir-`date +%y%m%d`.tar
-cd ..
-
-
-# clean up files in source and prepare for distribution
-( cd $dir/source 
-		rm configure 
-		make configure 
-		rm config.h config.log config.mak config.status \
-				common.mak .Dependencies */.Dependencies 
-		find . -name ii_files -exec rm -fr {} \; 2>/dev/null
-		find . -name Template.DB -exec rm {} \; 2>/dev/null
-)
-
-cp $dir/source/config/Makefile.dummy $dir/source/Makefile
-
-# creating internal distribution (non-public)
-if test "$1" = "-int" ; then
-	echo "tarring relevant directories..."
-	tar cf $FILE \
-		$dir/include\
-		$dir/doc\
-		$dir/source
-else
-	if test "$1" = "-intnodoc" ; then
-		echo "tarring relevant directories..."
-		tar cf $FILE \
-			$dir/include\
-			$dir/source
-	else 
-		
-		echo "collecting source files..."
-		SOURCEFILES=`find $dir/source -name \*.C -print; find $dir/source -name \*.c -print; find $dir/source -name .dummy.c -print`
-
-
-		echo "creating archive $FILE..."
-		tar cf $FILE \
-			$dir/source/README\
-			$dir/source/COPYING\
-			$dir/source/configure\
-			$dir/source/Makefile\
-			$dir/source/*/Makefile\
-			$dir/source/config/*.in\
-			$dir/source/config/Makefile.dummy\
-			$dir/source/config/makedistribution\
-			$dir/include\
-			$dir/data\
-			$dir/source/*/Makefile\
-			$SOURCEFILES
-	fi
-fi
 echo "compressing archive $FILE..."
 gzip -9 $FILE
+mv ${FILE}.gz ~
