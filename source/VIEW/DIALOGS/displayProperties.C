@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.9 2003/09/04 19:06:00 amoll Exp $
+// $Id: displayProperties.C,v 1.10 2003/09/04 23:14:46 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -29,7 +29,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-	  InvalidOption::InvalidOption(const char* file, int line, int option)
+		DisplayProperties::InvalidOption::InvalidOption(const char* file, int line, int option)
 			throw()
 			: Exception::GeneralException(file, line, "Invalid option: ", option)
 		{
