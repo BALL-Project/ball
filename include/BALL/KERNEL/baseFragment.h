@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.13 2000/04/17 15:22:01 amoll Exp $
+// $Id: baseFragment.h,v 1.14 2000/04/25 14:02:44 amoll Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -171,7 +171,7 @@ namespace BALL
 				The reference is 0 if {\em *this} BaseFragment does not have a parent molecule.\\
 				\\
 				{\bf Note:} No corresponding mutator BaseFragment::setMolecule exists to
-				consider design of contract - an BaseFragment may not insert into into a molecule,
+				consider design of contract - an BaseFragment may not insert into a molecule,
 				it must be inserted via the molecule.
 				@return  Molecule* -
 								 mutable reference to the parent molecule of {\em *this} BaseFragment,
@@ -184,7 +184,7 @@ namespace BALL
 				The reference is 0 if {\em *this} BaseFragment does not have a parent molecule.\\
 				\\
 				{\bf Note:} No corresponding mutator BaseFragment::setMolecule exists to
-				consider design of contract - an BaseFragment may not insert into into a molecule,
+				consider design of contract - an BaseFragment may not insert into a molecule,
 				it must be inserted via the molecule.
 				@return  Molecule* -
 								 constant reference to the parent molecule of {\em *this} BaseFragment,

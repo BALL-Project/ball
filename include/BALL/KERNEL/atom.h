@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.18 2000/04/17 20:50:09 amoll Exp $
+// $Id: atom.h,v 1.19 2000/04/25 14:02:43 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,8 +83,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.18 $
-			@date    $Date: 2000/04/17 20:50:09 $
+			@version $Revision: 1.19 $
+			@date    $Date: 2000/04/25 14:02:43 $
 	*/
 	class Atom
 		: public Composite,
@@ -112,7 +112,7 @@ namespace BALL
 			//@{
 		
 			/** Anonymous enumeration.
-					Unnamed enumeration of all all non-categorized constants.
+					Unnamed enumeration of all non-categorized constants.
 			*/
 			enum 
 			{
@@ -175,8 +175,8 @@ namespace BALL
 					{\bf Note:} Deep copying of atoms does not include bond cloning.
 
 					@param       atom the atom to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em stom}
-					@return      Atom - new constructed atom cloned from {\em stom}
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
+					@return      Atom - new constructed atom cloned from {\em atom}
 					@see         Composite::Composite
 					@see         PropertyManager::PropertyManager
 			*/
@@ -229,7 +229,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} atom.
-					If the atom has bonds in common with another atom that atom is disconnected and
+					If the atom has bonds in common with an other atom that atom is disconnected and
 					the associated \Ref{Bond} instance is destroyed.
 					Calls \Ref{Atom::destroy}.
 
@@ -337,7 +337,7 @@ namespace BALL
 			/** Swapping of atoms.
 					Swap the states of {\em *this} atom with the atom {\em atom}.
 
-					@param       atom the atom {\em *this} atom is being swapped with
+					@param       atom the atom being swapped with {\em *this} atom 
 					@see         Atom::Atom
 			*/
 			void swap(Atom& atom);
@@ -384,7 +384,7 @@ namespace BALL
 					The reference is 0 if {\em *this} atom does not have a parent molecule.\\
 					\\
 					{\bf Note:} No corresponding mutator Atom::setMolecule exists to
-					consider design of contract - an atom may not insert into into a molecule,
+					consider design of contract - an atom may not insert into a molecule,
 					it must be inserted via the molecule.
 
 					@return      Molecule* -
@@ -398,7 +398,7 @@ namespace BALL
 					The reference is 0 if {\em *this} atom does not have a parent molecule.\\
 					\\
 					{\bf Note:} No corresponding mutator Atom::setMolecule exists to
-					consider design of contract - an atom may not insert into into a molecule,
+					consider design of contract - an atom may not insert into a molecule,
 					it must be inserted via the molecule.
 
 					@return      Molecule* -
@@ -412,7 +412,7 @@ namespace BALL
 					The reference is 0 if {\em *this} atom does not have a parent fragment.\\
 					\\
 					{\bf Note:} No corresponding mutator Atom::setFragment exists to
-					consider design of contract - an atom may not insert into into a fragment,
+					consider design of contract - an atom may not insert into a fragment,
 					it must be inserted via the fragment.
 
 					@return      Fragment* -
@@ -426,7 +426,7 @@ namespace BALL
 					The reference is 0 if {\em *this} atom does not have a parent fragment.\\
 					\\
 					{\bf Note:} No corresponding mutator Atom::setFragment exists to
-					consider design of contract - an atom may not insert into into a fragment,
+					consider design of contract - an atom may not insert into a fragment,
 					it must be inserted via the fragment.
 
 					@return      Fragment* -
@@ -461,14 +461,14 @@ namespace BALL
 
 			/** Assemble a fully specified atom name.
 					This method returns at fully specified atom name as used for charge and type assignments.
-					The name consists of the name of the residue the atom is conatined in, a colon, and the atom name.
+					The name consists of the name of the residue the atom is contained in, a colon, and the atom name.
 					Blanks are removed from both names. For example, for the alpha carbon atom of isoleucine {\tt getFullName} 
 					will return the name {\tt ILE:CA}. 
 					For N terminal residues, {\tt -N} is appended to the residue name, for C terminal residues {\tt -C}.
-					If the residue is a CYS an involved in a disulphide bridge, an additional {\tt -S} or {\tt S} (for terminal residue)
-					is appended. Single amino acids (C and N terminal) {\tt -M} is added.\\
-					If the atom is not contained in a residue, the name if the parent fragment 
-					is taken instead of	the residue name. If there is no parent fragment, name of the parent molecule ist taken.
+					If the residue is a CYS involved in a disulphide bridge, an additional {\tt -S} or {\tt S} (for terminal residue)
+					is appended. For single amino acids (C and N terminal) {\tt -M} is added.\\
+					If the atom is not contained in a residue, the name of the parent fragment 
+					is taken instead of	the residue name. If there is no parent fragment, the name of the parent molecule ist taken.
 					If the atom is not contained in any superstructure, getFullname returns getName.
 					@param	type if type is set to {\tt Atom::NO_VARIANT_EXTENSIONS}, the variant extension ({\tt -XX}) is omitted
 					@return	String&
@@ -543,7 +543,7 @@ namespace BALL
 			Type getType() const;
 		
 
-			/**	Set the type name of the atom.
+			/**	Get the type name of the atom.
 			*/
 			String getTypeName() const;
 
@@ -553,7 +553,6 @@ namespace BALL
 
 			/** Change of the atom's velocity vector.
 					Change the velocity vector of {\em *this} atom to {\em velocity}.
-					
 
 					@param       velocity the new velocity vector of {\em *this} atom
 					@see         Atom::getVelocity
@@ -614,7 +613,6 @@ namespace BALL
 					\Ref{Atom::createBond}.
 
 					@param       index the index of the bond to be accessed to
-					@exception   IndexUnderflow if {\tt index < 0}
 					@exception   IndexOverflow if {\tt index > MAX_NUMBER_OF_BONDS}
 					@return      Bond* -
 											 mutable reference to the bond that is indexed in {\em *this} atom's bond table,
@@ -633,7 +631,6 @@ namespace BALL
 					\Ref{Atom::createBond}.
 
 					@param       index the index of the bond to be accessed to
-					@exception   IndexUnderflow if {\tt index < 0}
 					@exception   IndexOverflow if {\tt index > MAX_NUMBER_OF_BONDS}
 					@return      Bond* -
 											 constant reference to the bond that is indexed in {\em *this} atom's bond table,
