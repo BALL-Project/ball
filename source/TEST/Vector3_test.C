@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.16 2000/03/09 18:46:46 amoll Exp $
+// $Id: Vector3_test.C,v 1.17 2000/03/09 18:55:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.16 2000/03/09 18:46:46 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.17 2000/03/09 18:55:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -474,10 +474,10 @@ CHECK(TAngle<T> TVector3<T>::getTorsionAngle())
 	c = Vector3(50.0, 101.0, 202.0);
 	d = Vector3(200.0, 401.0, 602.0);
 	angle = a.getTorsionAngle(a, b, c, d);
-  TEST_EQUAL(angle == 0, true )
+  TEST_EQUAL(angle, 0.0)
 	d = Vector3(50.0, 101.0, 602.0);
 	angle = a.getTorsionAngle(a, b, c, d);
-  TEST_EQUAL(angle == 0, true )
+  TEST_EQUAL(angle, 0.0)
 RESULT
 
 //line 449
