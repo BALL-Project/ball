@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.2 2005/02/14 12:45:10 amoll Exp $
+// $Id: PDBFileDetails.C,v 1.3 2005/02/14 13:08:00 amoll Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -1686,9 +1686,5 @@ namespace BALL
 	void PDBFile::writeRecord_(const PDB::RecordCONECT& cr)
 	{
 	}
-
-#	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/FORMAT/PDBFile.iC>
-#	endif
 
 } // namespace BALL
