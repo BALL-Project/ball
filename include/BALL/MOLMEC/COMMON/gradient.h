@@ -1,4 +1,4 @@
-// $Id: gradient.h,v 1.7 2001/06/21 02:23:13 oliver Exp $ 
+// $Id: gradient.h,v 1.8 2001/07/07 02:52:12 oliver Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_COMMON_GRADIENT_H 
@@ -93,9 +93,16 @@ namespace BALL
 		*/
     void set(const AtomVector& atoms);
 
-		/**	Negate the gradient
+		/**	Negate the gradient.
+				Iterate over all force vectors of the gradient and
+				invert the signs.
 		*/
 		void negate();
+
+    /** Normalize the gradient.
+				Rescale to unity length
+    */
+    void normalize();
 
 		/**	Dot product operator
 				@exception InvalidRange if the two gradients have different sizes
@@ -103,13 +110,10 @@ namespace BALL
 		double operator * (const Gradient& gradient) const;
 
     //@}
+
     /**	@name	Accessors 
     */
     //@{
-
-    /** Normalize the gradient
-    */
-    void normalize();
 
 		/*	Return the number of components of the gradient.
 		*/
@@ -130,6 +134,7 @@ namespace BALL
 		bool isValid() const;
 
     //@}
+
 		/**	@name	Iteration
 		*/
 		//@{
@@ -147,6 +152,7 @@ namespace BALL
 		ConstIterator end() const { return vector<Vector3>::end(); }
 
 		//@}
+
     /**	@name	Public Attributes
     */
     //@{
