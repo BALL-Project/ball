@@ -30,7 +30,7 @@ External software and libraries:
 
     http://www.mesa3d.org 
 
-  If MESA is used, please add call configure with the option "--with-mesa"
+  If MESA is used, please call configure with the option "--with-mesa"
 
 
 2) Building the libraries
@@ -184,4 +184,4 @@ and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa 
 (libGL.so, libGLU.so).
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.5 2000/01/19 18:28:33 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.6 2000/01/24 20:31:27 oliver Exp $
