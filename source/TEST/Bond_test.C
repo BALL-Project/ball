@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.6 2000/04/17 14:10:32 amoll Exp $
+// $Id: Bond_test.C,v 1.7 2000/04/26 07:17:31 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.6 2000/04/17 14:10:32 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.7 2000/04/26 07:17:31 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -134,45 +134,61 @@ CHECK(operator = (Bond&))
 RESULT
 
 CHECK(get(Bond&, bool))
-	Atom a1;
-	Atom a2;
-	Bond b1("bond", a1, a2), b2;
-	b1.setType(1);
-	b1.setOrder(1);
-	b1.setName("abc");
-	b2.get(b1);
-	TEST_EQUAL(b1.getFirstAtom(), b2.getFirstAtom())
-	TEST_EQUAL(b1.getSecondAtom(), b2.getSecondAtom())
-	TEST_EQUAL(b1.getName(), b2.getName())
-	TEST_EQUAL(b1.getOrder(), b2.getOrder())
-	TEST_EQUAL(b1.getType(), b2.getType())
+	Atom* a1 = new Atom;
+	Atom* a2 = new Atom;
+	Bond* b1 = new Bond("bond", *a1, *a2);
+	Bond* b2 = new Bond;
+	b1->setType(1);
+	b1->setOrder(1);
+	b1->setName("abc");
+	b2->get(*b1);
+	TEST_EQUAL(b1->getFirstAtom(), b2->getFirstAtom())
+	TEST_EQUAL(b1->getSecondAtom(), b2->getSecondAtom())
+	TEST_EQUAL(b1->getName(), b2->getName())
+	TEST_EQUAL(b1->getOrder(), b2->getOrder())
+	TEST_EQUAL(b1->getType(), b2->getType())
+	b2->destroy();
+	delete a1;
+	delete a2;
 RESULT
 
 CHECK(swap())
-	Atom a1, a2;
-	Atom a3, a4;
-	Bond b1("bond1", a1, a2), b2;
-	Bond b3("bond2", a3, a4), b4;
-	b1.setType(1);
-	b1.setOrder(1);
-	b1.setName("a");
-	b3.setType(0);
-	b3.setOrder(0);
-	b3.setName("b");
-	b2 = b1;
-	b4 = b3;
-	b4.swap(b1);
-	TEST_EQUAL(b1.getFirstAtom(), b3.getFirstAtom())
-	TEST_EQUAL(b1.getSecondAtom(), b3.getSecondAtom())
-	TEST_EQUAL(b1.getName(), b3.getName())
-	TEST_EQUAL(b1.getOrder(), b3.getOrder())
-	TEST_EQUAL(b1.getType(), b3.getType())
+	Atom* a1 = new Atom;
+	Atom* a2 = new Atom;
+	Atom* a3 = new Atom;
+	Atom* a4 = new Atom;
+	Bond* b1 = new Bond("bond1", *a1, *a2);
+	Bond* b2 = new Bond;
+	Bond* b3 = new Bond("bond2", *a3, *a4);
+	Bond* b4 = new Bond;
+	b1->setType(1);
+	b1->setOrder(1);
+	b1->setName("a");
+	b3->setType(0);
+	b3->setOrder(0);
+	b3->setName("b");
+	*b2 = *b1;
+	*b4 = *b3;
+	b4->swap(*b1);
+	TEST_EQUAL(b1->getFirstAtom(), b3->getFirstAtom())
+	TEST_EQUAL(b1->getSecondAtom(), b3->getSecondAtom())
+	TEST_EQUAL(b1->getName(), b3->getName())
+	TEST_EQUAL(b1->getOrder(), b3->getOrder())
+	TEST_EQUAL(b1->getType(), b3->getType())
 
-	TEST_EQUAL(b2.getFirstAtom(), b4.getFirstAtom())
-	TEST_EQUAL(b2.getSecondAtom(), b4.getSecondAtom())
-	TEST_EQUAL(b2.getName(), b4.getName())
-	TEST_EQUAL(b2.getOrder(), b4.getOrder())
-	TEST_EQUAL(b2.getType(), b4.getType())
+	TEST_EQUAL(b2->getFirstAtom(), b4->getFirstAtom())
+	TEST_EQUAL(b2->getSecondAtom(), b4->getSecondAtom())
+	TEST_EQUAL(b2->getName(), b4->getName())
+	TEST_EQUAL(b2->getOrder(), b4->getOrder())
+	TEST_EQUAL(b2->getType(), b4->getType())
+	b1->destroy();
+	b2->destroy();
+	b3->destroy();
+	b4->destroy();
+	delete a1;
+	delete a2;
+	delete a3;
+	delete a4;
 RESULT
 
 CHECK(setFirstAtom(Atom*))
