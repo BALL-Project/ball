@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.15 2004/06/25 16:33:55 amoll Exp $
+// $Id: POVRenderer.C,v 1.16 2004/06/28 15:40:29 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -239,8 +239,8 @@ namespace BALL
 			{
 				outfile_ << "  clipped_by{" << endl
 								 << "   plane{< -"  // negate normal vector
-					       << (*it).normal.x << ", " 
-					       << (*it).normal.y << ", " 
+					       << (*it).normal.x << ", -" 
+					       << (*it).normal.y << ", -" 
 					       << (*it).normal.z << ">, "
 					       << (*it).translation
 								 << "  }" << endl
