@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.105 2003/12/19 20:24:30 amoll Exp $
+// $Id: mainframe.C,v 1.106 2003/12/19 21:14:30 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -29,11 +29,11 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/FORMAT/DCDFile.h>
-//#include <BALL/VIEW/WIDGETS/dockablePixmapWidget.h>
+
+//testing:
 #include <BALL/VIEW/WIDGETS/dockableRegularData1DWidget.h>
-#include <BALL/MATHS/parsedFunction.h>
-#include <BALL/VIEW/DIALOGS/parsedFunctionDialog.h>
-#include <qlineedit.h>
+//#include <BALL/MATHS/parsedFunction.h>
+//#include <BALL/VIEW/DIALOGS/parsedFunctionDialog.h>
 
 #include "aboutDialog.h"
 
@@ -42,11 +42,6 @@
 #endif
 
 #include <qmenubar.h>
-#include <qdockwindow.h>
-#include <qstatusbar.h>
-#include <qlabel.h>
-#include <qaccel.h> 
-#include <qsettings.h>
 
 #ifdef BALL_QT_HAS_THREADS
 #	include "threads.h"

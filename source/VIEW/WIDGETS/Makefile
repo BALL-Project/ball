@@ -18,12 +18,9 @@ CPP_SOURCES=\
 	molecularControl.C\
 	molecularProperties.C\
 	canvasWidget.C\
-	dockableCanvasWidget.C\
 	dockableRegularData1DWidget.C\
 	scene.C\
 	regularData1DWidget.C
-#	pixmapWidget.C\
-
 
 UIC_SOURCES=\
   genericControlData.C
@@ -43,11 +40,9 @@ MOC_SOURCES=\
 	molecularControl_moc.C\
 	molecularProperties_moc.C\
 	scene_moc.C\
-	dockableCanvasWidget_moc.C\
 	dockableRegularData1DWidget_moc.C\
 	canvasWidget_moc.C\
 	regularData1DWidget_moc.C
-#	pixmapWidget_moc.C
 
 
 PYTHON_MOC_SOURCES=\
@@ -91,9 +86,6 @@ regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
 
 canvasWidget_moc.C:	$(HEADER_DIR)/canvasWidget.h
 	$(MOC) $(HEADER_DIR)/canvasWidget.h -o $@
-
-dockableCanvasWidget_moc.C:	$(HEADER_DIR)/dockableCanvasWidget.h
-	$(MOC) $(HEADER_DIR)/dockableCanvasWidget.h -o $@
 
 regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData2DWidget.h -o $@
