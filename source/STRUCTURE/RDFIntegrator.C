@@ -1,8 +1,8 @@
-// $Id: RDFIntegrator.C,v 1.2 2000/09/01 05:57:34 oliver Exp $
+// $Id: RDFIntegrator.C,v 1.3 2000/09/01 06:09:46 oliver Exp $
 
 #include <BALL/STRUCTURE/RDFIntegrator.h>
 
-using namespace BALL;
+using namespace std;
 
 namespace BALL
 {
