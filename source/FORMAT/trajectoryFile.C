@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.C,v 1.5 2001/03/21 16:06:33 anker Exp $
+// $Id: trajectoryFile.C,v 1.6 2001/03/21 18:14:40 anker Exp $
 
 #include <BALL/FORMAT/trajectoryFile.h>
 
@@ -77,24 +77,6 @@ namespace BALL
 		throw()
 	{
 		Log.error() << "TrajectoryFile::writeHeader(): " 
-			<< "This method should not be called" << endl;
-		return false;
-	}
-
-
-	bool TrajectoryFile::read(SnapShotManager& /* manager */)
-		throw(Exception::NotImplemented)
-	{
-		Log.error() << "TrajectoryFile::read(): " 
-			<< "This method should not be called" << endl;
-		return false;
-	}
-	
-
-	bool TrajectoryFile::write(const SnapShotManager& /* manager */)
-		throw(Exception::NotImplemented)
-	{
-		Log.error() << "TrajectoryFile::write(): " 
 			<< "This method should not be called" << endl;
 		return false;
 	}
