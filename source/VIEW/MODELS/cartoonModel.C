@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.17 2005/01/07 13:31:58 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.18 2005/01/07 13:36:29 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -873,8 +873,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	// same data structures for faster access
 	////////////////////////////////////////////////////////////
 	Mesh::Triangle t;
-	Size s_old = 0;  // start position of the last points in the meshs vertices
-	Size s_new = 0;  // start position of the  new points in the meshs vertices
+	Size s_old = 0;  // start position of the last points of the mesh1 vertices
 
 	//------------------------------------------------------>
 	// iterate over all spline_points_
@@ -912,7 +911,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		}
 
 		////////////////////////////////////////////////////////////
-		// create a new mesh if we have a different atom now
+		// create two new meshes if we have a different residue
 		////////////////////////////////////////////////////////////
 		if (atoms_of_spline_points_[p] != 0 &&
 				mesh1->getComposite() != atoms_of_spline_points_[p]->getParent())
@@ -947,7 +946,6 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			s_old = 0;
 		}
 		
-		
 		////////////////////////////////////////////////////////////
 		// insert connection between tubes
 		////////////////////////////////////////////////////////////
@@ -972,7 +970,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		// insert the points of the two new circles
 		////////////////////////////////////////////////////////////
 		// we will add an other point next, so here we do an off by one :)
-		s_new = mesh1->vertex.size();
+		Size s_new = mesh1->vertex.size();
 
 		//------------------------------------------------------>
 		// iterate over all points of the circle
@@ -1025,6 +1023,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	sphere->setComposite(atoms_of_spline_points_[end - 1]);
 	geometric_objects_.push_back(sphere);
 }
+
 // -----------------------------------------------------------------------
 // --------------------- DNA -------------------------------------------->
 void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
