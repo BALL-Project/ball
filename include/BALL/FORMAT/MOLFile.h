@@ -1,4 +1,4 @@
-// $Id: MOLFile.h,v 1.1 2001/12/17 01:43:08 oliver Exp $
+// $Id: MOLFile.h,v 1.2 2001/12/18 01:19:10 oliver Exp $
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -27,71 +27,6 @@ namespace BALL
 		public:
 
 		BALL_CREATE(MOLFile)
-
-		/**	@name	Constructors and Destructors
-		*/
-		//@{
-
-		/**	Default constructor
-		*/
-		MOLFile()
-			throw();
-
-		/** Detailed constructor.
-		*/
-		MOLFile(const String& filename, File::OpenMode open_mode = File::IN)
-			throw(Exception::FileNotFound);
-
-		/**	Copy constructor
-		*/
-		MOLFile(const MOLFile& file)
-			throw(Exception::FileNotFound);
-
-		/// Destructor
-		virtual ~MOLFile()
-			throw();
-		
-		//@}
-
-		/**	@name Reading and Writing of Kernel Datastructures
-		*/
-		//@{
-		
-		/**	Write a system to the MOL file.
-				Note that this changes the properties of atoms in the system.
-		*/
-		virtual void write(const System& system);
-		
-		/**	Read a system from the MOL file
-		*/
-		virtual void read(System&	system)
-			throw(Exception::ParseError);
-
-		//@}
-
-		/**	@name	Accessors
-		*/
-		//@{
-				
-		//@}
-
-		protected:
-		/**	@name Format definitions
-		*/
-		//@{
-		/// The format of the counts line
-		static const String counts_format_;
-
-		/// The format of an entry of the atom block
-		static const String atom_format_;
-
-		/// The format of an entry of the bond block
-		static const String bond_format_;
-		//@}
-
-		/// Read the CTAB of a MOL file and construct a Molecule from its data
-		Molecule* readCTAB(std::vector<Atom*>& atom_map)
-			throw(Exception::ParseError);
 
 		/**	@name	Structs
 		*/
@@ -183,17 +118,96 @@ namespace BALL
 		};
 		//@}
 
-		void readCountsLine(CountsStruct& counts);
+		/**	@name	Constructors and Destructors
+		*/
+		//@{
 
-		void readAtomLine(AtomStruct& atom);
+		/**	Default constructor
+		*/
+		MOLFile()
+			throw();
 
-		void readBondLine(BondStruct& bond);
+		/** Detailed constructor.
+		*/
+		MOLFile(const String& filename, File::OpenMode open_mode = File::IN)
+			throw(Exception::FileNotFound);
 
-		void writeCountsLine(const CountsStruct& counts);
+		/**	Copy constructor
+		*/
+		MOLFile(const MOLFile& file)
+			throw(Exception::FileNotFound);
 
-		void writeAtomLine(const AtomStruct& atom);
+		/// Destructor
+		virtual ~MOLFile()
+			throw();
+		
+		//@}
 
-		void writeBondLine(const BondStruct& bond);
+		/**	@name Reading and Writing of Kernel Datastructures
+		*/
+		//@{
+		
+		/**	Write a system to the MOL file.
+				Note that this changes the properties of atoms in the system.
+		*/
+		virtual void write(const System& system);
+		
+		/**	Read a system from the MOL file
+		*/
+		virtual void read(System&	system)
+			throw(Exception::ParseError);
+
+		/**	Read a single molecule from the file
+		*/
+		virtual void read(Molecule& molecule)
+			throw(Exception::ParseError);
+			
+		/**	Write a molecule to the file
+		*/
+		virtual void write(const Molecule& molecule);
+		//@}
+
+		/**	@name	Accessors
+		*/
+		//@{
+				
+		//@}
+
+		protected:
+		/**	@name Format definitions
+		*/
+		//@{
+		/// The format of the counts line
+		static const String counts_format_;
+
+		/// The format of an entry of the atom block
+		static const String atom_format_;
+
+		/// The format of an entry of the bond block
+		static const String bond_format_;
+		//@}
+
+		/// Read the CTAB of a MOL file and construct a Molecule from its data
+		void readCTAB_(Molecule& molecule, std::vector<Atom*>& atom_map)
+			throw(Exception::ParseError);
+
+		/// Read the Counts line of a MOL file
+		void readCountsLine_(CountsStruct& counts);
+
+		/// Read a line from the atom block
+		void readAtomLine_(AtomStruct& atom);
+
+		/// Read a line from the bond block
+		void readBondLine_(BondStruct& bond);
+
+		/// Write the Counts line
+		void writeCountsLine_(const CountsStruct& counts);
+
+		/// Write a line of the atom block
+		void writeAtomLine_(const AtomStruct& atom);
+
+		/// Write a line of the bond block 
+		void writeBondLine_(const BondStruct& bond);
 	};
 
 } // namespace BALL

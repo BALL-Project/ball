@@ -130,6 +130,7 @@ EXECUTABLES_FORMATS =\
 	GenericMolFile_test\
 	HINFile_test\
 	MOLFile_test\
+	SDFile_test\
 	MOL2File_test\
 	NMRStarFile_test\
 	DCDFile_test\
@@ -169,6 +170,10 @@ EXECUTABLES_SOLVATION = \
 	PairExpInteractionEnergyProcessor_test\
 	PairExpRDFIntegrator_test
 
+EXECUTABLES_QSAR = \
+	Descriptor_test.C\
+	SimpleDescriptors_test.C
+
 EXECUTABLES = \
 	$(EXECUTABLES_BASIC)\
 	$(EXECUTABLES_SYSTEM)\
@@ -181,6 +186,7 @@ EXECUTABLES = \
 	$(EXECUTABLES_NMR)\
 	$(EXECUTABLES_ENERGY)\
 	$(EXECUTABLES_STRUCTURE)\
+	$(EXECUTABLES_QSAR)\
 	$(EXECUTABLES_SOLVATION)
 
 # default target
@@ -207,7 +213,7 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 %%.C:
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
 
-test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test solvation_test
+test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
 	@./runtests -success
 
 info:
@@ -246,9 +252,14 @@ nmr_test:	$(EXECUTABLES_NMR)
 structure_test:	$(EXECUTABLES_STRUCTURE)
 	@./runtests -section "STRUCTURE" $(TEST_OPTIONS) $(EXECUTABLES_STRUCTURE)
 
+qsar_test:	$(EXECUTABLES_QSAR)
+	@./runtests -section "QSAR" $(TEST_OPTIONS) $(EXECUTABLES_QSAR)
+
 solvation_test:	$(EXECUTABLES_SOLVATION)
 	@./runtests -section "SOLVATION" $(TEST_OPTIONS) $(EXECUTABLES_SOLVATION)
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
  
+MOLFile_test: MOLFile_test.o ../FORMAT/MOLFile.o ../FORMAT/lineBasedFile.o
+	$(CXX) $(CXXFLAGS) MOLFile_test.o ../FORMAT/MOLFile.o ../FORMAT/lineBasedFile.o $(LDFLAGS) -o $@ $(LIBS)

@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.15 2001/07/15 17:32:40 amoll Exp $
+// $Id: PropertyManager_test.C,v 1.16 2001/12/18 01:20:12 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.15 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.16 2001/12/18 01:20:12 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -680,6 +680,14 @@ CHECK(PropertyManager::countNamedProperties() const )
 	TEST_EQUAL(m.countNamedProperties(), 1)
 	m.setProperty("TEST_PROP1", "");
 	TEST_EQUAL(m.countNamedProperties(), 1)
+RESULT
+
+CHECK(PropertyManager::getNamedProperty(Position index) const)
+	//???
+RESULT
+
+CHECK(PropertyManager::getNamedProperty(Position index) const)
+	//???
 RESULT
 
 CHECK(PropertyManager::hasProperty(Property property) const )
