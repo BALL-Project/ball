@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57 2004/12/16 18:59:08 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.1 2004/12/27 15:46:30 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -261,7 +261,16 @@ namespace BALL
 													it->getDirection().z};
 				glLightfv(light_nr, GL_SPOT_DIRECTION, dir);
 				// setup the angle of the light cone
-				GLfloat angle = it->getAngle().toDegree();
+				
+				GLfloat angle;
+				if (it->getAngle() <= 90)
+				{
+					angle = it->getAngle().toDegree();
+				}
+				else
+				{
+					angle = 90;
+				}
 				glLightfv(light_nr, GL_SPOT_CUTOFF, &angle);
 				// ---------------------------------------------------------------
 				if (it->getType() == LightSource::POSITIONAL)
