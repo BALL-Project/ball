@@ -1,4 +1,4 @@
-// $Id: clip_protein_around_ligand.C,v 1.1 2003/05/27 16:19:43 anker Exp $
+// $Id: clip_protein_around_ligand.C,v 1.2 2003/06/02 17:24:23 anker Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -32,7 +32,7 @@ void usage(const String& name)
 		<< "This program is designed for clipping the protein structures around" <<endl
 		<< "a ligand. The artificial chains that are created during that process" <<endl
 		<< "are finalised by adding NME and ACE and caps and reconstructed parts" <<endl
-		<< "of the protein will be structurally optimised by employing an AMBER" << endl
+		<< "of the protein will be structurally optimised by employing an AMBER" << endl << endl
 		<< "forcefield." << endl
 		<< "  -p <FILE>    use FILE as receptor (PDB format)" << endl
 		<< "  -l <FILE>    use FILE as ligand (PDB format)" << endl
@@ -40,6 +40,7 @@ void usage(const String& name)
 		<< "  -c <CUTOFF>  use CUTOFF (default: 8 A)" << endl;
 		// << "  -o {yes,no}  optimize reconstructed atoms (default: yes)" << endl;          
 }
+
 
 // *Appends* sulphur bridges to the list
 Size find_sulphur_bridges(const System& system,
@@ -66,11 +67,8 @@ Size find_sulphur_bridges(const System& system,
 				&& (residue1 != 0)
 				&& (residue2 != 0))
 		{
-			// DEBUG
-			cout << "Found sulphur bridge " << residue1->getID() << "---" 
-				<< residue2->getID() << endl;
-			cout << bond_it->getType() << endl;
-			// /DEBUG
+			// cout << "Found sulphur bridge " << residue1->getID() << "---" 
+			//	<< residue2->getID() << endl;
 			sulphur_bridges.push_back(pair<const Residue*, const Residue*>(residue1, residue2));
 			found++;
 		}
@@ -110,9 +108,7 @@ Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db)
 	PDBAtom* new_atom = new PDBAtom(atom);
 	if (new_atom == 0) return(0);
 
-	// DEBUG
-	cout << "Copying " << ((Atom)atom).getFullName() << endl;
-	// /DEBUG
+	// Copy the anchor atom
 	new_residue->insert(*new_atom);
 	
 	AtomBondIterator bond_it = atom.beginBond();
@@ -121,10 +117,7 @@ Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db)
 		PDBAtom* partner = (PDBAtom*) bond_it->getPartner(atom);
 		if (partner->getResidue() == atom.getResidue())
 		{
-			// DEBUG
-			cout << "Copying " << partner->getFullName() << "-"
-				<< partner->getResidue()->getID() << endl;
-			// /DEBUG
+			// Copy the connected atoms
 			PDBAtom* new_partner = new PDBAtom(*partner);
 			if (new_partner == 0) return (0);
 			if (new_partner->getName() == "CA")
@@ -326,15 +319,16 @@ int main(int argc, char** argv)
 				{
 					if (!cut.has(&*res_it))
 					{
-						Log.info() << "Inserting residue " << res_it->getFullName() 
-							<< " (" << res_it->getID() << ")" << endl;
+						// distance is less than the cutoff, co add this residue to the
+						// cut
 						cut.insert(&*res_it);
+
+						// if there is too short a gap between chain snippets, add
+						// residue that lies inbetween to the cut.
 						if ((res_it->getID().toInt() - 2) == last_inserted_ID)
 						{
 							tmp_res_it = res_it;
 							tmp_res_it--;
-							Log.info() << "Inserting residue " << tmp_res_it->getFullName() 
-								<< " (" << tmp_res_it->getID() << ")" << endl;
 							cut.insert(&*tmp_res_it);
 						}
 						last_inserted_ID = res_it->getID().toInt();
@@ -397,10 +391,7 @@ int main(int argc, char** argv)
 
 					if (!residues_with_sulphur_bridges.has(&*res_it))
 					{
-						// DEBUG
-						cout << "Reconstructing residue that lost ist sulphur bridge ("
-							<< res_it->getID() << ")" << endl;
-						// /DEBUG
+						// Reconstruct  residues that lost their sulphur bridges
 						residue->clearProperty(Residue::PROPERTY__HAS_SSBOND);
 						residue->apply(reconstruct);
 						residue->apply(db.build_bonds);
@@ -420,16 +411,23 @@ int main(int argc, char** argv)
 				// if there was no new chain, create a new one with a methyl cap
 				if (chain == 0)
 				{
-					// DEBUG
-					cout << "Creating new chain" << endl;
-					// /DEBUG
+					// create a new chain for this fragment of the protein
 					chain = new Chain;
 
 					// if we are at the first residue we don't need any caps.
-					if (res_it != chain_it->beginResidue())
+					if ((!res_it->isNTerminal())
+							&& (res_it->hasProperty(Residue::PROPERTY__AMINO_ACID)))
 					{
 
-						// get a reference to the previous residue
+						if (res_it == chain_it->beginResidue())
+						{
+							cout << "Error. The first residue ("
+								<< res_it->getFullName() << ") is not N-terminal." << endl;
+							res_it->dump();
+							exit(1);
+						}
+
+						// get a reference to the previous residue...
 						tmp_res_it = res_it;
 						tmp_res_it--;
 
@@ -438,39 +436,58 @@ int main(int argc, char** argv)
 						{
 							if (atom_it->getName() == "C") break;
 						}
-						// and transform it into a cap.
-						tmp_res = transform_residue_to_cap(*atom_it, db);
-						tmp_res->setID(String(current_ID - 1));
-						chain->insert(*tmp_res);
+
+						if (atom_it == tmp_res_it->endPDBAtom())
+						{
+							Log.warn() << "Warning. Did not find C in peptide bond." << endl;
+						}
+						else
+						{
+							// ...and transform it into a cap.
+							cout << "Transforming " << tmp_res_it->getFullName() << ":"
+								<< tmp_res_it->getID() << " into ACE-N" << endl;
+							tmp_res = transform_residue_to_cap(*atom_it, db);
+							tmp_res->setID(String(current_ID - 1));
+							chain->insert(*tmp_res);
+						}
 					}
 				}
 
 				chain->insert(*residue);
-				last_residue = residue;
+				last_residue = &*res_it;
 				cout << "Inserting " << res_it->getFullName() << "-"
-					<< res_it->getID() << " (" << get_residue_charge(*res_it)
-					<< " C)" << endl;
+					<< res_it->getID() << endl;
 			}
 			else
 			{
-				// If we created a chain and the current residue was *not* found,
-				// we have to finalise this chain.
+				// If we created a chain and the current residue is *not* in the
+				// cut we have to finalise this chain.
 				if (chain != 0)
 				{
-					// DEBUG
-					cout << "Finalising chain" << endl;
-					// /DEBUG
-					// transform this residue to an end cap
-					PDBAtomIterator atom_it = res_it->beginPDBAtom();
-					for (; +atom_it; ++atom_it)
+					// Only transform if the last residue was not terminal.
+					if ((!last_residue->isCTerminal())
+							&& (last_residue->hasProperty(Residue::PROPERTY__AMINO_ACID)))
 					{
-						if (atom_it->getName() == "N") break;
+						// transform this residue to an end cap
+						PDBAtomIterator atom_it = res_it->beginPDBAtom();
+						for (; +atom_it; ++atom_it)
+						{
+							if (atom_it->getName() == "N") break;
+						}
+
+						if (atom_it == res_it->endPDBAtom())
+						{
+							Log.warn() << "Warning. Did not find N in peptide bond." << endl;
+						}
+						else
+						{
+							cout << "Transforming " << res_it->getFullName() << ":"
+								<< res_it->getID() << " into NME-C" << endl;
+							tmp_res = transform_residue_to_cap(*atom_it, db);
+							tmp_res->setID(String(current_ID + 1));
+							chain->insert(*tmp_res);
+						}
 					}
-					// and transform it into a cap.
-					tmp_res = transform_residue_to_cap(*atom_it, db);
-					tmp_res->setID(String(current_ID + 1));
-					chain->insert(*tmp_res);
-					// chain->insert(Residue(*res_it));
 
 					// insert the finalised chain into the output protein.
 					cut_protein->insert(*chain);
@@ -489,12 +506,11 @@ int main(int argc, char** argv)
 
 	Path path;
 
-	Log.info() << "Assigning charges (protein)." << endl;
+	cout << endl;
+	cout << "Assigning charges (protein)." << endl;
 	String charge_rule_file_name("/home/staff/anker/Interlec20/fresno/PARSE.rul.modified");
 	String tmp = path.find(charge_rule_file_name);
 	if (tmp != "") charge_rule_file_name = tmp;
-
-	cout << charge_rule_file_name << endl;
 
 	INIFile charge_ini(charge_rule_file_name);
 	charge_ini.read();
@@ -504,12 +520,12 @@ int main(int argc, char** argv)
 	for (res_it = cut_protein->beginResidue(); +res_it; ++res_it)
 	{
 		float c = get_residue_charge(*res_it);
-		cout << "Charge opf " << res_it->getFullName() << ":" 
+		cout << "Charge of " << res_it->getFullName() << ":" 
 			<< res_it->getID() << " is " << c << endl;
 		charge += c;
 	}
 
-	cout << "TOTAL CHARGE: " << charge << endl;
+	cout << "CHARGE=" << charge << endl;
 
 	String parameter_file_name("Amber/amber94gly.ini");
 	tmp = path.find(parameter_file_name);
