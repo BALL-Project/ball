@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.18 2001/05/24 14:45:02 anker Exp $ 
+// $Id: nucleicAcid.h,v 1.19 2001/05/28 09:23:28 anker Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -268,7 +268,7 @@ namespace BALL
 			 					this instance
 		*/
 		virtual void read(std::istream& s)
-			throw(Exception::NotImplemented);
+			throw();
 
 		/* Persistent stream input and state restorage.
 			 Read persistent data from the input stream {\em s} and restore 
@@ -278,7 +278,7 @@ namespace BALL
 			 					this instance
 		*/
 		virtual void write(std::ostream& s) const
-			throw(Exception::NotImplemented);
+			throw();
 
 		//@}
 
