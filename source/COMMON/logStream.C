@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.24 2001/05/17 01:30:48 oliver Exp $
+// $Id: logStream.C,v 1.25 2001/06/23 01:46:49 oliver Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
@@ -214,7 +214,7 @@ namespace BALL
 						break;
 
 					case 't': // time: HH:MM	
-						strftime(buf, BUFFER_LENGTH - 1, "%R", localtime(&time));
+						strftime(buf, BUFFER_LENGTH - 1, "%H:%M", localtime(&time));
 						result.append(buf);
 						break;
 
@@ -229,12 +229,12 @@ namespace BALL
 						break;
 
 					case 'S':	// time+date: DD.MM.YYYY, HH:MM:SS
-						strftime(buf, BUFFER_LENGTH - 1, "%d.%m.%Y, %R", localtime(&time));
+						strftime(buf, BUFFER_LENGTH - 1, "%d.%m.%Y, %H:%M:%S", localtime(&time));
 						result.append(buf);
 						break;
 
 					case 's':	// time+date: DD.MM., HH:MM
-						strftime(buf, BUFFER_LENGTH - 1, "%d.%m., %H:%M:%S", localtime(&time));
+						strftime(buf, BUFFER_LENGTH - 1, "%d.%m., %H:%M", localtime(&time));
 						result.append(buf);
 						break;
 
