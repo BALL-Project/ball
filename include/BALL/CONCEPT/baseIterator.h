@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.16 2001/07/04 18:30:29 amoll Exp $
+// $Id: baseIterator.h,v 1.17 2001/07/15 20:09:48 oliver Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -226,7 +226,8 @@ namespace BALL
 
 		protected:
 
-		/*_ BAUSTELLE: Why is this ctor protected?
+		/*_ Constructor.
+				Protected to allow instantiation and use in derived classes only.
 		*/
 		ConstBaseIterator(const Container& container)
 			throw();
