@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.13 2002/10/31 14:51:41 anker Exp $
+// $Id: fresno.C,v 1.1.2.14 2002/11/19 01:36:13 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -52,10 +52,14 @@ namespace BALL
 	const char* FresnoFF::Option::PROBE_RADIUS = "probe_radius";
 	const char* FresnoFF::Option::SURFACE_TENSION = "surface_tesnion";
 	const char* FresnoFF::Option::UHLIG_CONSTANT = "uhlig_constant";
-	const char* FresnoFF::Option::SOLVENT_NUMBER_DENSITY = "solvent_number_density";
+	const char* FresnoFF::Option::SOLVENT_NUMBER_DENSITY 
+		= "solvent_number_density";
 	const char* FresnoFF::Option::ABSOLUTE_TEMPERATURE = "absolute_temperature";
 	const char* FresnoFF::Option::NONPOLAR_METHOD = "nonpolar_method";
 	const char* FresnoFF::Option::VERBOSITY = "verbosity";
+	const char* FresnoFF::Option::SOLVENT_DESCRIPTOR_FILE 
+		= "solvent_descriptor_file";
+
 
 	const float FresnoFF::Default::CONST = -33.614;
 	const float FresnoFF::Default::HB = -0.014;
@@ -89,6 +93,8 @@ namespace BALL
 	const float FresnoFF::Default::ABSOLUTE_TEMPERATURE = 0;
 	const Size FresnoFF::Default::NONPOLAR_METHOD = 0;
 	const Size FresnoFF::Default::VERBOSITY = 9;
+	const String FresnoFF::Default::SOLVENT_DESCRIPTOR_FILE 
+		= "solvents/PCM-water.ini";
 
 	void FresnoFF::registerComponents_()
 		throw()

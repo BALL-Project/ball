@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.C,v 1.1.2.2 2002/11/12 16:26:02 anker Exp $
+// $Id: fresnoNonPolar.C,v 1.1.2.3 2002/11/19 01:36:14 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -22,15 +22,17 @@ namespace BALL
 	FresnoNonPolar::FresnoNonPolar()
 		throw()
 		:	ForceFieldComponent(),
+			verbosity_(0),
+			factor_(0.0),
+			calculation_method_(0),
 			probe_radius_(0.0),
 			surface_tension_(0.0),
 			constant_(0.0),
 			solvent_number_density_(0.0),
 			absolute_temperature_(0.0),
-			calculation_method_(0),
-			verbosity_(0),
 			uhlig_(),
-			pcm_()
+			pcm_(),
+			vdw_solvent_()
 	{
 		// set component name
 		setName("Fresno NonPolar");
@@ -40,15 +42,17 @@ namespace BALL
 	FresnoNonPolar::FresnoNonPolar(ForceField& force_field)
 		throw()
 		:	ForceFieldComponent(force_field),
+			verbosity_(0),
+			factor_(0.0),
+			calculation_method_(0),
 			probe_radius_(0.0),
 			surface_tension_(0.0),
 			constant_(0.0),
 			solvent_number_density_(0.0),
 			absolute_temperature_(0.0),
-			calculation_method_(0),
-			verbosity_(0),
 			uhlig_(),
-			pcm_()
+			pcm_(),
+			vdw_solvent_()
 	{
 		// set component name
 		setName("Fresno NonPolar");
@@ -58,15 +62,17 @@ namespace BALL
 	FresnoNonPolar::FresnoNonPolar(const FresnoNonPolar& fd, bool deep)
 		throw()
 		:	ForceFieldComponent(fd, deep),
-			probe_radius_(0.0),
-			surface_tension_(0.0),
-			constant_(0.0),
-			solvent_number_density_(0.0),
-			absolute_temperature_(0.0),
-			calculation_method_(0),
-			verbosity_(0),
-			uhlig_(),
-			pcm_()
+			verbosity_(fd.verbosity_),
+			factor_(fd.factor_),
+			calculation_method_(fd.calculation_method_),
+			probe_radius_(fd.probe_radius_),
+			surface_tension_(fd.surface_tension_),
+			constant_(fd.constant_),
+			solvent_number_density_(fd.solvent_number_density_),
+			absolute_temperature_(fd.absolute_temperature_),
+			uhlig_(fd.uhlig_),
+			pcm_(fd.pcm_),
+			vdw_solvent_(fd.vdw_solvent_)
 	{
 	}
 
@@ -136,6 +142,10 @@ namespace BALL
 		verbosity_
 			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
 					FresnoFF::Default::VERBOSITY);
+
+		String solvent_descriptor_file 
+			= options.setDefault(FresnoFF::Option::SOLVENT_DESCRIPTOR_FILE,
+					FresnoFF::Default::SOLVENT_DESCRIPTOR_FILE);
 
 		if (verbosity_ > 0)
 		{
@@ -212,6 +222,10 @@ namespace BALL
 			{
 				if (calculation_method_ == CALCULATION__VDW_SOLVENT)
 				{
+					if (solvent_descriptor_file != "")
+					{
+						vdw_solvent_.options.set(Pair6_12InteractionEnergyProcessor::Option::SOLVENT_FILENAME, solvent_descriptor_file);
+					}
 					processor = &vdw_solvent_;
 				}
 				else
