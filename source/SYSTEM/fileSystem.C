@@ -1,4 +1,4 @@
-// $Id: fileSystem.C,v 1.3 2000/01/10 15:51:15 oliver Exp $
+// $Id: fileSystem.C,v 1.4 2000/03/30 19:49:24 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -9,10 +9,10 @@ namespace BALL
 {
 
 	const char FileSystem::PATH_SEPARATOR = '/';
-	const char *const FileSystem::CURRENT_DIRECTORY = ".";
-	const char *const FileSystem::PARENT_DIRECTORY = "..";
+	const char* const FileSystem::CURRENT_DIRECTORY = ".";
+	const char* const FileSystem::PARENT_DIRECTORY = "..";
 	// must be adapted in case of porting to other platforms than UNIX
-	static const char *const REGEXP_CONFORM_PARENT_DIRECTORY = "\\.\\.";
+	static const char* const REGEXP_CONFORM_PARENT_DIRECTORY = "\\.\\.";
 
 	String& FileSystem::canonizePath(String& path)
 	{
@@ -37,7 +37,9 @@ namespace BALL
 		s.set(FileSystem::CURRENT_DIRECTORY);
 		s += FileSystem::PATH_SEPARATOR;
 		if (path.hasPrefix(s) == true)
-			path.erase(0, s.size());
+		{
+			path.erase(0, s.size());	
+		}
 
 		// remove trailing "/."
 		s.set(FileSystem::PATH_SEPARATOR);

@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.4 1999/12/17 11:18:04 oliver Exp $
+// $Id: file.C,v 1.5 2000/03/30 19:49:24 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 
@@ -71,7 +71,9 @@ namespace BALL
 			system(exec_string.c_str());
 
 			is_temporary_ = true;
-		} else {
+		} 
+		else 
+		{
 			if (name_.hasPrefix("file:") == true)
 			{
 				if (BALL_BIT_IS_CLEARED(protocol_ability_, File::PROTOCOL__FILE))
@@ -104,10 +106,14 @@ namespace BALL
 					system(exec_string.c_str());
 		
 					is_temporary_ = true;
-				} else {
+				} 
+				else 
+				{
 					is_temporary_ = false;
 				}
-			} else {
+			} 
+			else 
+			{
 				is_temporary_ = false;
 			}
 		}
