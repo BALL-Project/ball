@@ -1,8 +1,18 @@
-// $Id: assignShiftProcessor.C,v 1.4 2000/09/16 07:44:12 oliver Exp $
+// $Id: assignShiftProcessor.C,v 1.5 2000/09/17 23:54:49 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 
-#include <BALL/KERNEL/PTE.h>
+#ifndef BALL_KERNEL_PDBATOM_H
+#	include<BALL/KERNEL/PDBAtom.h>
+#endif
+
+#ifndef BALL_KERNEL_PTE_H
+# include <BALL/KERNEL/PTE.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+# include<BALL/DATATYPE/string.h>
+#endif
 
 using namespace std;
 
@@ -13,13 +23,81 @@ namespace BALL
 	{
 		if (!valid_)
 		{
-			Log.error() << endl << "AssignShiftProcessor: shift data were not assigned" << endl;
+			Log.error() << "AssignShiftProcessor: shift data were not assigned" << endl;
 			return false;
 		}
 
-		for (Position i = 0; i < atom_data_.size() ; i++)
+		// ---------------------read translate table ------------------------
+		ifstream tableFile("../../data/NMR/translate.dat",ios::in);
+		if (!tableFile)
 		{
-			shift_table_[atom_data_[i]->atomName] = atom_data_[i]->shiftValue;
+			Log.error() << "AssignShiftProcessor: translate.dat not found:" << endl;   
+			return false;
+		}
+		StringHashMap<String> transformTable;
+
+		String name;
+		do
+		{
+			String entry;
+			tableFile >> name;
+			tableFile >> entry;
+			transformTable[name] = entry;
+cout << name << " " << entry << endl;
+		}
+		while (name != "END");
+		tableFile.close();
+cout << endl << endl;
+
+		// ----------------------read the shiftdata ------------------------
+		for (Position atompos = 0; atompos < atom_data_.size() ; atompos++)
+		{
+			String prefix(atom_data_[atompos]->residueSeqCode);
+			prefix += atom_data_[atompos]->residueLabel;
+			prefix += ":";
+
+			// non H-atoms need no name transforming
+			if (atom_data_[atompos]->atomType != 'H')
+			{
+				String atomName(prefix);
+				atomName += atom_data_[atompos]->atomName;
+				shift_table_[atomName] = atom_data_[atompos]->shiftValue;
+cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
+
+				continue;
+			}
+
+			String entry(atom_data_[atompos]->residueLabel);
+			entry += ":";
+			entry += atom_data_[atompos]->atomName;
+			
+			// from now on getting the transformed name for H-atoms
+			if (!transformTable.has(entry))
+			{
+				Log.error() << "AssignShiftProcessor: unknown atom from shift data "
+					<< entry << endl;
+				continue;
+			}
+
+			if (!transformTable[entry].has('/'))
+			{
+				String atomName(atom_data_[atompos]->residueSeqCode);//prefix);
+				atomName += transformTable[entry];
+				shift_table_[atomName] = atom_data_[atompos]->shiftValue;
+cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
+
+				continue;
+			}
+
+			String arr[5];
+			Size size = transformTable[entry].split(arr, 5, "/");
+			for (Position wordpos = 0; wordpos < size ; wordpos++ )
+			{
+				String atomName(prefix);
+				atomName += arr[wordpos];	
+				shift_table_[atomName] = atom_data_[atompos]->shiftValue;
+cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
+			}
 		}
 
 		return true;
@@ -27,37 +105,62 @@ namespace BALL
 
 	Processor::Result AssignShiftProcessor::operator()(Composite&  object)
 	{
-		float shift;
-		String atomName;
-		PDBAtom *patom_;
-
-		if (RTTI::isKindOf<PDBAtom>(object))
+		//-----------------security queries------------------------------------------------
+		if (!RTTI::isKindOf<PDBAtom>(object))
 		{
-			patom_=RTTI::castTo<PDBAtom>(object);
+			//Log.error() << "AssignShiftProcessor: given object is not a PDBAtom" << endl;
+			return Processor::CONTINUE;
+		}
 
-			if (patom_->getElement() == PTE[Element::H] || patom_->getElement() == PTE[Element::N])
-			{
-				atomName = patom_->getFullName();
-				atomName.substitute("-", "");
-				patom_->clearProperty("chemical_shift");
-			
-				if (shift_table_.has(atomName))
-				{
-					shift = shift_table_[atomName];
-					patom_->setProperty("chemical_shift", shift);
-				}
-				else 
-				{
-					Log.error() << endl << "AssignShiftProcessor: entry not found:"<<atomName;   
-				}               
-			}
+		PDBAtom *patom_;
+		patom_= RTTI::castTo<PDBAtom>(object);
+
+		if (molecule_ == 0)
+		{
+			molecule_ = patom_->getMolecule();
+			number_of_fragment_ = 0;
 		}
 		else
 		{
-			Log.error() << endl << "AssignShiftProcessor: given object is not a PDBAtom" << endl;
+			if (patom_->getMolecule() != molecule_)
+			{
+				Log.error() << "AssignShiftProcessor: atom not from same molecule as before" << endl;
+				return Processor::BREAK;
+			}
+		}
+		
+		// --------------------count the position of the fragment------------------------------
+		if (fragment_ != patom_->getFragment())
+		{
+			number_of_fragment_++;
+			fragment_ = patom_->getFragment();
+		}
+
+		// --------------------set the shift value--------------------------------------------
+		if (patom_->getElement() == PTE[Element::H] || patom_->getElement() == PTE[Element::N])
+		{
+			String atomName(number_of_fragment_);
+			atomName += fragment_->getName();
+			atomName += ":";
+			atomName += patom_->getName();
+
+			patom_->clearProperty("chemical_shift");
+			if (shift_table_.has(atomName))
+			{
+				patom_->setProperty("chemical_shift", shift_table_[atomName]);
+cout << "atom found " << atomName << endl;
+			}
+			else 
+			{
+				Log.error() << "AssignShiftProcessor: entry not found: " << atomName << endl;   
+			}               
 		}
 
 		return Processor::CONTINUE;
 	}
+
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/NMR/assignShiftProcessor.iC>
+#	endif
 
 }//namespace BALL

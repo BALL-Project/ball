@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.h,v 1.3 2000/09/16 07:43:16 oliver Exp $
+// $Id: assignShiftProcessor.h,v 1.4 2000/09/17 23:54:34 amoll Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -19,6 +19,7 @@
 
 namespace BALL 
 {
+	const vector<NMRAtomData*> dummy;
                 
 	/**	Set a property called chemical_shift.
 	*/
@@ -51,7 +52,6 @@ namespace BALL
 		
 		//@}
 
-		
 		/**@name	Processor specific functions.
 		*/
 		//@{
@@ -82,9 +82,16 @@ namespace BALL
 		StringHashMap<float>							shift_table_;
 		const std::vector<NMRAtomData*>&	atom_data_;
 		bool															valid_;
+		const Fragment*										fragment_;
+		const Molecule*										molecule_;
+		Position													number_of_fragment_;
 	};
 
 	//@}
+
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/NMR/assignShiftProcessor.iC>
+#	endif
 
 } // namespace BALL
 
