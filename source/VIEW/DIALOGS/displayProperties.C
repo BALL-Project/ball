@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.23 2003/10/21 15:37:20 amoll Exp $
+// $Id: displayProperties.C,v 1.24 2003/10/23 12:59:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -454,7 +454,8 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		// modify an existing Representation
 		// If the represenation has the same ModelProcessor as the currently selected,
 		// we dont have to rebuild the geometric objects.
-		if (rep_->getModelType() != model_type_)
+		if (rep_->getModelType() != model_type_ ||
+				rep_->getDrawingPrecision() != precision_)
 		{
 			rebuild_representation = true;
 		}
