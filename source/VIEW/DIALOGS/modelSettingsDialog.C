@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.14 2004/01/20 16:47:56 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.15 2004/02/24 19:03:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -57,8 +57,8 @@ namespace BALL
 			{
 				cartoon_tube_radius_slider->setValue(4);
 				cartoon_helix_radius_slider->setValue(20);
-				cartoon_arrow_width_slider->setValue(4);
-				cartoon_arrow_height_slider->setValue(8);
+				cartoon_arrow_width_slider->setValue(20);
+				cartoon_arrow_height_slider->setValue(4);
 			}
 			
 			if (all || list_box->currentItem() == 6)
