@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.18 2000/03/30 09:34:48 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.19 2000/03/30 19:50:56 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -36,7 +36,7 @@
 
 namespace BALL 
 {
-	/**	@name AnalyticalGeometry
+	/**	@name Analytical Geometry
 			@memo representation of analytical geometry functions,
 						using the classes: common, TAngle, TCircle3, TLine3, TPlane3, TSphere3, TVector3.
 	*/

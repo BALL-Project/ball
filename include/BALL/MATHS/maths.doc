@@ -26,4 +26,5 @@
 		//@Include: surface.h
 	//@}
 	//@Include: common.h
+	//@Include: analyticalGeometry.h
 //@}
