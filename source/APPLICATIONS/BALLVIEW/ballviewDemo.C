@@ -174,8 +174,9 @@ void BALLViewDemo::accept()
 	}
 	else if (id == 7)
 	{
-		HBondProcessor proc;
- 	 	system_->apply(proc); 
+		getMainControl()->getMolecularControlSelection().clear();
+		getMainControl()->getMolecularControlSelection().push_back(system);
+		ms->calculateHBonds();
    	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
    	notify_(crmsg);
  		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);
