@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GenericMolFile_test.C,v 1.2 2002/02/27 12:24:33 sturm Exp $
+// $Id: GenericMolFile_test.C,v 1.3 2002/12/12 11:34:41 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(GenericMolFile, "$Id: GenericMolFile_test.C,v 1.2 2002/02/27 12:24:33 sturm Exp $")
+START_TEST(GenericMolFile, "$Id: GenericMolFile_test.C,v 1.3 2002/12/12 11:34:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,7 +34,7 @@ RESULT
 
 GenericMolFile mol;
 
-CHECK(GenericMolFile::GenericMolFile(const String& filename, File::OpenMode open_mode = File::IN))
+CHECK(GenericMolFile::GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in))
   mol = GenericMolFile("data/GenericMolFile_test.dat");
   TEST_EQUAL(mol.isValid(), true)
 RESULT

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE_test.C,v 1.9 2002/02/27 12:24:42 sturm Exp $
+// $Id: PTE_test.C,v 1.10 2002/12/12 11:34:43 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.9 2002/02/27 12:24:42 sturm Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.10 2002/12/12 11:34:43 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -231,7 +231,7 @@ RESULT
 String filename;
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const Element& element))
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << e1;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/PTE_test.txt")

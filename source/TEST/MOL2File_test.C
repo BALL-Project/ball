@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File_test.C,v 1.8 2002/02/27 12:24:38 sturm Exp $
+// $Id: MOL2File_test.C,v 1.9 2002/12/12 11:34:41 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.8 2002/02/27 12:24:38 sturm Exp $")
+START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.9 2002/12/12 11:34:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -55,7 +56,7 @@ RESULT
 
 
 CHECK(MOL2File::MOL2File(const String& filename, File::OpenMode open_mode))
-	MOL2File f("data/AAG.mol2", File::IN);
+	MOL2File f("data/AAG.mol2", std::ios::in);
 	System system;
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 30)
@@ -100,7 +101,7 @@ CHECK(MOL2File::write(const System& system))
 
 	String filename;
 	NEW_TMP_FILE(filename)
-	MOL2File f(filename, File::OUT);
+	MOL2File f(filename, std::ios::out);
 	f.write(S);
 	f.close();
 	
@@ -143,7 +144,7 @@ CHECK(MOL2File::MOL2File& operator << (const System& system))
 
 	String filename;
 	NEW_TMP_FILE(filename)
-	MOL2File f(filename, File::OUT);
+	MOL2File f(filename, std::ios::out);
 	f << S;	
 	f.close();
 	

@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PropertyManager_test.C,v 1.20 2002/02/27 12:24:47 sturm Exp $
-#include <BALL/CONCEPT/classTest.h>
+// $Id: PropertyManager_test.C,v 1.21 2002/12/12 11:34:43 oliver Exp $
 
 ///////////////////////////
 #include <BALL/CONCEPT/property.h>
@@ -13,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.20 2002/02/27 12:24:47 sturm Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.21 2002/12/12 11:34:43 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -144,7 +143,7 @@ pm.registerClass(getStreamName<NamedProperty>(), getNew<NamedProperty>);
 
 CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = "") const )
 	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), File::OUT);
+	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
@@ -290,160 +289,6 @@ RESULT
 CHECK(NamedProperty::getString() const )
   //TESTED ABOVE
 RESULT
-
-CHECK(friend std::ostream& operator << (std::ostream& s, const NamedProperty& property))
-	PersistentObject po;
-	string str("test");
-	Protein protein("PROTEIN1");
-	NamedProperty np1("NP1", true);
-	NamedProperty np2("NP2", (int)-1234);
-	NamedProperty np3("NP3", (unsigned int) 2345);
-	NamedProperty np4("NP4", (float) 1.234);
-	NamedProperty np5("NP5", (double) 2.34);
-	NamedProperty np6("NP6", str);
-	NamedProperty np7("NP7", protein);
-	NamedProperty np8("NP8");
-
-	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), std::ios::out);
-	outstr << np1;
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Bool2.txt")
-
-	NEW_TMP_FILE(filename)
-	outstr.open(filename.c_str());
-	outstr << np2;
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Int2.txt")
-
-	NEW_TMP_FILE(filename)
-	outstr.open(filename.c_str());
-	outstr << np3;
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_UInt2.txt")
-
-	NEW_TMP_FILE(filename)
-	outstr.open(filename.c_str());
-	outstr << np4;
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Float2.txt")
-
-	NEW_TMP_FILE(filename)
-	outstr.open(filename.c_str());
-	outstr << np5;
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Double2.txt")
-
-	NEW_TMP_FILE(filename)
-	outstr.open(filename.c_str());
-	outstr << np6;
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_String2.txt")
-
-	NEW_TMP_FILE(filename)
-	outstr.open(filename.c_str());
-	outstr << np7;
-	outstr.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Object2.txt")
-
-	NEW_TMP_FILE(filename)
-	outstr.open(filename.c_str());
-	outstr << np8;
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_None2.txt")
-RESULT
-
-CHECK(friend std::ostream& operator >> (std::ostream& s, NamedProperty& property))
-	PersistentObject po;
-	NamedProperty np;
-
-	std::ifstream instr("data/PropertyManager_test/NamedProperty_test_Bool2.txt");
-	instr >> np;
-	instr.close();
-
-	TEST_EQUAL(np.getType(), NamedProperty::BOOL)
-	TEST_EQUAL(np.getBool(), true)
-	TEST_EQUAL(np.getName(), "NP1")
-
-	// due to some problems with iostream and IRIX/CC, we have to clear the 
-	// stream prior to reuse...
-	instr.clear();
-	instr.open("data/PropertyManager_test/NamedProperty_test_Int2.txt");
-	instr >> np;
-	instr.close();
-
-	TEST_EQUAL(np.getType(), NamedProperty::INT)
-	TEST_EQUAL(np.getInt(), -1234)
-	TEST_EQUAL(np.getName(), "NP2")
-
-	// due to some problems with iostream and IRIX/CC, we have to clear the 
-	// stream prior to reuse...
-	instr.clear();
-	instr.open("data/PropertyManager_test/NamedProperty_test_UInt2.txt");
-	instr >> np;
-	instr.close();
-
-	TEST_EQUAL(np.getType(), NamedProperty::UNSIGNED_INT)
-	TEST_EQUAL(np.getUnsignedInt(), 2345)
-	TEST_EQUAL(np.getName(), "NP3")
-
-	// due to some problems with iostream and IRIX/CC, we have to clear the 
-	// stream prior to reuse...
-	instr.clear();
-	instr.open("data/PropertyManager_test/NamedProperty_test_Float2.txt");
-	instr >> np;
-	instr.close();
-
-	TEST_EQUAL(np.getType(), NamedProperty::FLOAT)
-	TEST_REAL_EQUAL(np.getFloat(), 1.234)
-	TEST_EQUAL(np.getName(), "NP4")
-
-	// due to some problems with iostream and IRIX/CC, we have to clear the 
-	// stream prior to reuse...
-	instr.clear();
-	instr.open("data/PropertyManager_test/NamedProperty_test_Double2.txt");
-	instr >> np;
-	instr.close();
-
-	TEST_EQUAL(np.getType(), NamedProperty::DOUBLE)
-	TEST_EQUAL(np.getDouble(), 2.34)
-	TEST_EQUAL(np.getName(), "NP5")
-
-	// due to some problems with iostream and IRIX/CC, we have to clear the 
-	// stream prior to reuse...
-	instr.clear();
-	instr.open("data/PropertyManager_test/NamedProperty_test_String2.txt");
-	instr >> np;
-	instr.close();
-
-	TEST_EQUAL(np.getType(), NamedProperty::STRING)
-	TEST_EQUAL(np.getString(), "test")
-	TEST_EQUAL(np.getName(), "NP6")
-
-	// due to some problems with iostream and IRIX/CC, we have to clear the 
-	// stream prior to reuse...
-	instr.clear();
-	instr.open("data/PropertyManager_test/NamedProperty_test_Object2.txt");
-	instr >> np;
-	instr.close();
-
-	TEST_EQUAL(np.getType(), NamedProperty::OBJECT)
-	TEST_NOT_EQUAL(np.getObject(), 0)
-	TEST_EQUAL(np.getName(), "NP7")
-
-	// due to some problems with iostream and IRIX/CC, we have to clear the 
-	// stream prior to reuse...
-	instr.clear();
-	instr.open("data/PropertyManager_test/NamedProperty_test_None2.txt");
-	instr >> np;
-	instr.close();
-
-	TEST_EQUAL(np.getType(), NamedProperty::NONE)
-	TEST_EQUAL(np.getName(), "NP8")
-RESULT
-
-
-
 
 PropertyManager* p;
 CHECK(PropertyManager())
@@ -731,61 +576,21 @@ CHECK(PropertyManager::hasProperty(const string& name) const )
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
 RESULT
 
-CHECK(PropertyManager::std::ostream& operator << (std::ostream& s, const PropertyManager& property_manager))
-	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), File::OUT);
-	string str("test");
-	PersistentObject ob;
-	m.setProperty("PROP1", true);
-	m.setProperty("PROP2", -12345);
-	m.setProperty("PROP3", (unsigned int)12345);
-	m.setProperty("PROP4", (float)1.2345);
-	m.setProperty("PROP5", (double) 2.345);
-	m.setProperty("PROP6", str);
-	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")
-	m.setProperty("PROP7", ob);
-	m.setProperty("PROP8");
-	m.setProperty(0);
-	m.setProperty(2);
-	outstr << m;
-	outstr.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_ostream1.txt")
-RESULT
-
-
-CHECK(PropertyManager::std::istream& operator >> (std::istream& s, PropertyManager& property_manager))
-	std::ifstream instr("data/PropertyManager_test/PropertyManager_test_ostream2.txt");
-	PropertyManager m;
-	TEST_EQUAL(m.countNamedProperties(), 0)
-	instr >> m;
-	instr.close();
-	TEST_EQUAL(m.countNamedProperties(), 8)
-	TEST_EQUAL(m.hasProperty("PROP1"), true)
-	TEST_EQUAL(m.hasProperty("PROP2"), true)
-	TEST_EQUAL(m.hasProperty("PROP3"), true)
-	TEST_EQUAL(m.hasProperty("PROP4"), true)
-	TEST_EQUAL(m.hasProperty("PROP5"), true)
-	TEST_EQUAL(m.hasProperty("PROP6"), true)
-	TEST_EQUAL(m.hasProperty("PROP7"), true)
-	TEST_EQUAL(m.hasProperty("PROP8"), true)
-	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
-	TEST_EQUAL(m.getProperty("PROP1").getBool(), true)	
-	TEST_EQUAL(m.getProperty("PROP2").getInt(), -12345)
-	TEST_EQUAL(m.getProperty("PROP3").getUnsignedInt(), 12345)
-	TEST_REAL_EQUAL(m.getProperty("PROP4").getFloat(), 1.2345)
-	TEST_REAL_EQUAL(m.getProperty("PROP5").getDouble(), 2.345)
-	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")
-	TEST_NOT_EQUAL(m.getProperty("PROP7").getObject(), 0) 
-	TEST_EQUAL(m.countNamedProperties(), 8);
-	TEST_EQUAL(m.getBitVector().getBit(0), true)
-	TEST_EQUAL(m.getBitVector().getBit(1), false)
-	TEST_EQUAL(m.getBitVector().getBit(2), true)
-RESULT
-
-
 CHECK(PropertyManager::write(PersistenceManager& pm) const )
 	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), File::OUT);
+	String str("test");
+	PersistentObject ob;
+	m.setProperty("PROP1", true);
+  m.setProperty("PROP2", -12345);
+  m.setProperty("PROP3", (unsigned int)12345);
+  m.setProperty("PROP4", (float)1.2345);
+  m.setProperty("PROP5", (double) 2.345);
+  m.setProperty("PROP6", str);
+  m.setProperty("PROP7", ob);
+  m.setProperty("PROP8");
+  m.setProperty(0);
+  m.setProperty(2);
+	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	m.write(pm);
 	ofile.close();	
@@ -828,7 +633,7 @@ RESULT
 
 CHECK(PropertyManager::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	m.dump(outstr); 
 	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_dump.txt")
 RESULT

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.11 2002/02/27 12:24:23 sturm Exp $
+// $Id: Atom_test.C,v 1.12 2002/12/12 11:34:39 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +14,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.11 2002/02/27 12:24:23 sturm Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.12 2002/12/12 11:34:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -74,6 +75,32 @@ CHECK(setForce(Vector3&)/getForce())
 	TEST_EQUAL(atom->getForce(), null_vector)
 	atom->setForce(test_vector);
 	TEST_EQUAL(atom->getForce(), test_vector)
+RESULT
+
+// the static attributes
+CHECK(getIndex() const)
+	Atom* a1_ptr = new Atom;
+	Atom* a2_ptr = new Atom;
+	TEST_NOT_EQUAL(a1_ptr->getIndex(), a2_ptr->getIndex())
+	delete a1_ptr;
+	delete a2_ptr;
+RESULT
+
+CHECK(getAttributePtr())
+	Atom* a1_ptr = new Atom;
+	Atom* a2_ptr = new Atom;
+	TEST_NOT_EQUAL(a1_ptr->getAttributePtr(), 0)
+	TEST_NOT_EQUAL(a2_ptr->getAttributePtr(), 0)
+	TEST_NOT_EQUAL(a2_ptr->getAttributePtr(), a1_ptr->getAttributePtr())
+	TEST_EQUAL(a1_ptr->getAttributePtr(), &(Atom::getAttributes()[a1_ptr->getIndex()]))
+	TEST_EQUAL(a2_ptr->getAttributePtr(), &(Atom::getAttributes()[a2_ptr->getIndex()]))
+	TEST_EQUAL((a1_ptr->getIndex() < Atom::getAttributes().size()), true)
+	TEST_EQUAL((a2_ptr->getIndex() < Atom::getAttributes().size()), true)
+
+	TEST_EQUAL(a1_ptr->getAttributePtr()->ptr, a1_ptr)
+	TEST_EQUAL(a2_ptr->getAttributePtr()->ptr, a2_ptr)
+	delete a1_ptr;
+	delete a2_ptr;
 RESULT
 			
 CHECK(countBonds())
@@ -343,7 +370,7 @@ using std::ofstream;
 using std::ios;
 CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
 	NEW_TMP_FILE(filename)
-	ofstream	ofile(filename.c_str(), File::OUT);
+	ofstream	ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	using namespace RTTI;
 	pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
@@ -401,6 +428,37 @@ CHECK(operator !=)
 	TEST_EQUAL(a1 != a2, true)
 
 	TEST_EQUAL(a2 != a2, false)
+RESULT
+
+CHECK(compact(const AtomIndexList& indices))
+	Atom::AtomIndexList block;
+	Atom::AtomPtrList ptrs;
+	std::list<Atom*> atoms;
+
+	// create 50 atoms and remember the index of every second of those
+	Position min_idx = Atom::getAttributes().size();
+	for (Position i = 0; i < 50; i += 2)
+	{
+		atoms.push_back(new Atom);
+		atoms.back()->setType(i);
+
+		atoms.push_back(new Atom);
+		atoms.back()->setType(i + 1);
+		block.push_back(atoms.back()->getIndex());
+		ptrs.push_back(atoms.back());
+		min_idx = std::min(min_idx, atoms.back()->getIndex());
+		STATUS(atoms.back()->getType() << " - " << atoms.back()->getIndex())
+	}
+	
+	Position first_pos = Atom::compact(block);
+	TEST_EQUAL((first_pos < Atom::getAttributes().size()), true)
+	Atom::AtomPtrList::const_iterator ptr_it = ptrs.begin();	
+	for (; ptr_it != ptrs.end(); ++ptr_it)
+	{
+		TEST_EQUAL((*ptr_it)->getIndex() >= first_pos, true)
+		TEST_EQUAL((*ptr_it)->getIndex() < (first_pos + block.size()), true)
+		STATUS((*ptr_it)->getType() << " - " << (*ptr_it)->getIndex())
+	}
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,0 +1,506 @@
+// $Id: String_test1.C,v 1.2 2002/12/12 11:34:45 oliver Exp $
+
+#include <BALL/CONCEPT/classTest.h>
+
+///////////////////////////
+#include <BALL/DATATYPE/string.h>
+#include <string.h>
+#include <string>
+///////////////////////////
+
+START_TEST(String,"$Id: String_test1.C,v 1.2 2002/12/12 11:34:45 oliver Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+using namespace BALL;
+using std::string;
+
+String* s;	
+CHECK(String::String())
+	s = new String;
+	TEST_NOT_EQUAL(0, s)
+	TEST_EQUAL(0, strlen(s->c_str()))
+RESULT
+
+CHECK(String::~String())
+	delete s;
+RESULT
+
+CHECK(String::size()/c_str())
+	s = new String();
+	TEST_EQUAL(strlen(s->c_str()), 0)
+	TEST_EQUAL(s->size(), 0)
+	delete s;
+	s = new String("ABC");
+	TEST_EQUAL(s->size(), 3)
+	TEST_EQUAL(strlen(s->c_str()), 3)
+	TEST_EQUAL(s->c_str()[0], 'A')
+	TEST_EQUAL(s->c_str()[1], 'B')
+	TEST_EQUAL(s->c_str()[2], 'C')
+	TEST_EQUAL(strcmp("ABC", s->c_str()), 0)
+RESULT
+
+String* s2;
+CHECK(String::String(String&))
+	s2 = new String(*s);
+	TEST_EQUAL(s2->size(), 3)
+	TEST_EQUAL(strcmp(s2->c_str(), "ABC"), 0)
+	delete s2;
+	String* s3 = new String;
+	s2 = new String(*s3);
+	TEST_EQUAL(s2->size(), 0)
+	TEST_EQUAL(strcmp(s2->c_str(), ""), 0)
+	delete s3;
+RESULT
+delete s2;
+delete s;
+
+CHECK(String::String(string&))
+	string sx;
+	sx = "ABC";
+	s2 = new String(sx);
+	TEST_EQUAL(s2->size(), 3)
+	TEST_EQUAL(strcmp(s2->c_str(), "ABC"), 0)
+	delete s2;
+	string* s3 = new string;
+	s2 = new String(*s3);
+	TEST_EQUAL(s2->size(), 0)
+	TEST_EQUAL(strcmp(s2->c_str(), ""), 0)
+	delete s3;
+RESULT
+
+String empty;
+String non_empty("Hallo");
+CHECK(String::operator == (char*))
+	TEST_EQUAL((empty == ""), true)
+	TEST_EQUAL((empty == "Hallo"), false)
+	TEST_EQUAL((empty == "Halla"), false)
+	TEST_EQUAL((empty == "Halloh"), false)
+	TEST_EQUAL((empty == "Hall"), false)
+	TEST_EQUAL((empty == empty.c_str()), true)
+	TEST_EQUAL((non_empty == ""), false)
+	TEST_EQUAL((non_empty == "Hallo"), true)
+	TEST_EQUAL((non_empty == "Halloh"), false)
+	TEST_EQUAL((non_empty == "Hall"), false)
+	TEST_EQUAL((non_empty == "Halla"), false)
+	TEST_EQUAL((non_empty == non_empty.c_str()), true)
+RESULT
+
+String hall("Hall");
+String halloh("Halloh");
+CHECK(String::operator == (String&))
+	TEST_EQUAL((empty == non_empty), false)
+	TEST_EQUAL((empty == empty), true)
+	TEST_EQUAL((non_empty == non_empty), true)
+	TEST_EQUAL((non_empty == hall), false)
+	TEST_EQUAL((non_empty == halloh), false)
+RESULT
+
+CHECK(String::create(bool, bool))
+	s2 = (String*)(halloh.create(true, false));
+	TEST_EQUAL(*s2, halloh)
+	delete s2;
+	s2 = (String*)(halloh.create(false, false));
+	TEST_EQUAL(*s2, halloh)
+	delete s2;
+	s2 = (String*)(halloh.create(true, true));
+	TEST_EQUAL(*s2, "")
+	delete s2;
+	s2 = (String*)(halloh.create(false, true));
+	TEST_EQUAL(*s2, "")
+	delete s2;
+RESULT
+
+CHECK(String::String(String&, Index, Size))
+	s2 = new String(halloh, 2, 4);
+	TEST_EQUAL(*s2, "lloh")
+	delete s2;
+	s2 = new String(halloh, 4, 2);
+	TEST_EQUAL(*s2, "oh")
+	delete s2;
+	s2 = new String(halloh, 3);
+	TEST_EQUAL(*s2, "loh")
+	delete s2;
+	s2 = new String(halloh, -2);
+	TEST_EQUAL(*s2, "oh")
+	delete s2;
+	s2 = new String(halloh, 0, 0);
+	TEST_EQUAL(*s2, "")
+	delete s2;
+	s2 = new String(halloh, -1);
+	TEST_EQUAL(*s2, "h")
+	delete s2;
+	s2 = 0;
+	TEST_EXCEPTION(Exception::IndexOverflow, s2 = new String(halloh, 1, 7))
+	if (s2 != 0)
+		delete s2;
+RESULT
+
+CHECK(String::String(const char*, Index, Size))
+	s2 = new String("halloh");
+	TEST_EQUAL(*s2, "halloh")
+	delete s2;
+	s2 = new String("halloh", 1);
+	TEST_EQUAL(*s2, "alloh")
+	delete s2;
+	s2 = new String("halloh", 1, 2);
+	TEST_EQUAL(*s2, "al")
+	delete s2;
+	s2 = new String("halloh", -1, 0);
+	TEST_EQUAL(*s2, "")
+	delete s2;
+	s2 = new String("halloh", -5);
+	TEST_EQUAL(*s2, "alloh")
+	delete s2;
+	s2 = new String("halloh", 2, 3);
+	TEST_EQUAL(*s2, "llo")
+	delete s2;
+	s2 = 0;
+	TEST_EXCEPTION(Exception::IndexOverflow, s2 = new String("halloh", 0, 8))
+	if (s2 != 0)
+		delete s2;
+	s2 = 0;
+	TEST_EXCEPTION(Exception::IndexUnderflow, s2 = new String("halloh", -12))
+	if (s2 != 0)
+		delete s2;
+RESULT
+
+CHECK(String::String(Size, char*, ... ))
+	s2 = new String(15, "%s", "halloh");
+	TEST_EQUAL(*s2, "halloh")
+	delete s2;
+	s2 = new String(2, "%s", "halloh");
+	TEST_EQUAL(*s2, "h")
+	delete s2;
+	s2 = new String(15, "%3.1f", 1.2);
+	TEST_EQUAL(*s2, "1.2")
+	delete s2;
+	s2 = 0;
+	TEST_EXCEPTION(Exception::IndexUnderflow, s2 = new String(0, "%s", "Halloh"))
+	if (s2 != 0)
+	{
+		delete s2;
+	}
+	s2 = 0;
+	TEST_EXCEPTION(Exception::NullPointer, s2 = new String(15, (char*)0, "Halloh", 1.5, 1.2))
+	if (s2 != 0)
+	{
+		delete s2;
+	}
+RESULT
+
+CHECK(String::String(stringstream))
+	std::stringstream instream("ABC DEF");
+	s2 = new String(instream);
+	TEST_NOT_EQUAL(s2, 0)
+	TEST_EQUAL(*s2, "ABC")
+	delete s2;
+	s2 = new String(instream);
+	TEST_EQUAL(*s2, "DEF")
+	delete s2;
+RESULT
+
+CHECK(String::String(char, Size))
+	s2 = new String('a', (Size)1);
+	TEST_EQUAL(*s2, "a")
+	delete s2;
+	s2 = new String('a', (Size)2);
+	TEST_EQUAL(*s2, "aa")
+	delete s2;
+	s2 = new String('a', (Size)0);
+	TEST_EQUAL(*s2, "")
+	delete s2;
+RESULT
+
+CHECK(String::String(char))
+	s2 = new String('a');
+	TEST_EQUAL(*s2, "a")
+	delete s2;
+RESULT
+
+CHECK(String::String(unsigned char))
+	s2 = new String((unsigned char)'b');
+	TEST_EQUAL(*s2, "b")
+	delete s2;
+RESULT
+
+CHECK(String::String(short))
+	s2 = new String((short)7);
+	TEST_EQUAL(*s2, "7")
+	delete s2;
+	s2 = new String((short)-8);
+	TEST_EQUAL(*s2, "-8")
+	delete s2;
+RESULT
+
+CHECK(String::String(unsigned short))
+	s2 = new String((unsigned short)7);
+	TEST_EQUAL(*s2, "7")
+	delete s2;
+	s2 = new String((unsigned short)0);
+	TEST_EQUAL(*s2, "0")
+	delete s2;
+RESULT
+
+CHECK(String::String(int))
+	s2 = new String((int)7);
+	TEST_EQUAL(*s2, "7")
+	delete s2;
+	s2 = new String((int)-8);
+	TEST_EQUAL(*s2, "-8")
+	delete s2;
+RESULT
+
+CHECK(String::String(unsigned int))
+	s2 = new String((unsigned int)7);
+	TEST_EQUAL(*s2, "7")
+	delete s2;
+	s2 = new String((unsigned int)0);
+	TEST_EQUAL(*s2, "0")
+	delete s2;
+RESULT
+
+CHECK(String::String(unsigned long))
+	s2 = new String((unsigned long)7);
+	TEST_EQUAL(*s2, "7")
+	delete s2;
+	s2 = new String((unsigned long)0);
+	TEST_EQUAL(*s2, "0")
+	delete s2;
+RESULT
+
+CHECK(String::String(long))
+	s2 = new String((long)7);
+	TEST_EQUAL(*s2, "7")
+	delete s2;
+	s2 = new String((long)-8);
+	TEST_EQUAL(*s2, "-8")
+	delete s2;
+RESULT
+
+CHECK(String::String(float))
+	s2 = new String((float)0.0);
+	TEST_REAL_EQUAL(atof(s2->c_str()), 0);
+	delete s2;
+	s2 = new String((float)-1.2);
+	TEST_REAL_EQUAL(atof(s2->c_str()), -1.2)
+	delete s2;
+RESULT
+
+CHECK(String::String(double))
+	s2 = new String((double)0.0);
+	TEST_REAL_EQUAL(atof(s2->c_str()), 0);
+	delete s2;
+	s2 = new String((double)-1.2);
+	TEST_REAL_EQUAL(atof(s2->c_str()), -1.2)
+	delete s2;
+RESULT
+
+CHECK(String::destroy())
+	s2 = new String("hallo");
+	s2->destroy();
+	TEST_EQUAL(*s2, "")
+RESULT
+delete s2;
+
+const String abcdef = "abcdef";
+const String ABCDEF = "ABCDEF";
+Substring empty_sub;
+const Substring abcdef_sub(abcdef, 0, 6);
+const Substring ABCDEF_sub(ABCDEF, 0, 6);
+Substring test_sub1(ABCDEF, 0, 6);
+Substring test_sub2;
+String test_string;
+
+CHECK(String::set(String&, Index, Size))
+	s2 = new String("AAAA");
+	s2->set(halloh);
+	TEST_EQUAL(*s2, halloh)
+	s2->set(halloh, 1);
+	TEST_EQUAL(*s2, "alloh")
+	s2->set(halloh, -2);
+	TEST_EQUAL(*s2, "oh")
+	s2->set(halloh, -2, 0);
+	TEST_EQUAL(*s2, "");
+	s2->set(halloh, 1, 2);
+	TEST_EQUAL(*s2, "al")
+	TEST_EXCEPTION(Exception::IndexUnderflow, s2->set(halloh, -10, 3))
+	TEST_EXCEPTION(Exception::IndexOverflow, s2->set(halloh, 0, 10))
+RESULT
+delete s2;
+
+CHECK(String::set(char*, Index, Size))
+	s2 = new String("AAAA");
+	s2->set("halloh");
+	TEST_EQUAL(*s2, "halloh")
+	s2->set("halloh", 1);
+	TEST_EQUAL(*s2, "alloh")
+	s2->set("halloh", -2);
+	TEST_EQUAL(*s2, "oh")
+	s2->set("halloh", -2, 0);
+	TEST_EQUAL(*s2, "");
+	s2->set("halloh", 1, 2);
+	TEST_EQUAL(*s2, "al")
+	TEST_EXCEPTION(Exception::IndexUnderflow, s2->set("halloh", -10, 3))
+	TEST_EXCEPTION(Exception::IndexOverflow, s2->set("halloh", 0, 10))
+RESULT
+delete s2;
+
+CHECK(String::set(Size, char*, ...))
+	s2 = new String;
+	s2->set(15, "%s", "halloh");
+	TEST_EQUAL(*s2, "halloh")
+	s2->set(2, "%s", "halloh");
+	TEST_EQUAL(*s2, "h")
+	s2->set(15, "%3.1f", 1.2);
+	TEST_EQUAL(*s2, "1.2")
+	TEST_EXCEPTION(Exception::IndexUnderflow, s2->set(0, "%s", "Halloh"))
+	TEST_EXCEPTION(Exception::NullPointer, s2->set(15, (char*)0, "Halloh", 1.5, 1.2))
+RESULT
+delete s2;
+
+CHECK(String::set(stringstream&))
+	std::stringstream instream("ABC DEF GHI jkl mno");
+	s2 = new String;
+	s2->set(instream);
+	TEST_EQUAL(*s2, "ABC")
+	s2->set(instream);
+	TEST_EQUAL(*s2, "DEF")
+	delete s2;
+RESULT
+
+s2 = new String;
+CHECK(String::set(char, Size))
+	s2->set('A');
+	TEST_EQUAL(*s2, "A")
+	s2->set('B', (Size)2);
+	TEST_EQUAL(*s2, "BB");
+	s2->set('C', (Size)0);
+	TEST_EQUAL(*s2, "")
+RESULT
+
+CHECK(String::set(unsigned char))
+	s2->set((unsigned char)'b');
+	TEST_EQUAL(*s2, "b")
+RESULT
+
+CHECK(String::set(short))
+	s2->set((short)7);
+	TEST_EQUAL(*s2, "7")
+	s2->set((short)-8);
+	TEST_EQUAL(*s2, "-8")
+RESULT
+
+CHECK(String::set(unsigned short))
+	s2->set((unsigned short)7);
+	TEST_EQUAL(*s2, "7")
+	s2->set((unsigned short)0);
+	TEST_EQUAL(*s2, "0")
+RESULT
+
+CHECK(String::set(int))
+	s2->set((int)7);
+	TEST_EQUAL(*s2, "7")
+	s2->set((int)-8);
+	TEST_EQUAL(*s2, "-8")
+RESULT
+
+CHECK(String::set(unsigned int))
+	s2->set((unsigned int)7);
+	TEST_EQUAL(*s2, "7")
+	s2->set((unsigned int)0);
+	TEST_EQUAL(*s2, "0")
+RESULT
+
+CHECK(String::set(unsigned long))
+	s2->set((unsigned long)7);
+	TEST_EQUAL(*s2, "7")
+	s2->set((unsigned long)0);
+	TEST_EQUAL(*s2, "0")
+RESULT
+
+CHECK(String::set(long))
+	s2->set((long)7);
+	TEST_EQUAL(*s2, "7")
+	s2->set((long)-8);
+	TEST_EQUAL(*s2, "-8")
+RESULT
+
+CHECK(String::set(float))
+	s2->set((float)0.0);
+	TEST_REAL_EQUAL(atof(s2->c_str()), 0);
+	s2->set((float)-1.2);
+	TEST_REAL_EQUAL(atof(s2->c_str()), -1.2)
+RESULT
+
+CHECK(String::set(double))
+	s2->set((double)0.0);
+	TEST_REAL_EQUAL(atof(s2->c_str()), 0);
+	s2->set((double)-1.2);
+	TEST_REAL_EQUAL(atof(s2->c_str()), -1.2)
+RESULT
+
+CHECK(String::get(char*, Index, Size))
+	char test_string[15];
+	s2->set("TEST");
+	s2->get(test_string);
+	TEST_EQUAL(strlen(test_string), 4);
+	TEST_EQUAL(strcmp(test_string, "TEST"), 0)
+	s2->get(test_string, 1);
+	TEST_EQUAL(strcmp(test_string, "EST"), 0)
+	s2->get(test_string, -2);
+	TEST_EQUAL(strcmp(test_string, "ST"), 0)
+	s2->get(test_string, 0, 1);
+	TEST_EQUAL(strcmp(test_string, "T"), 0)
+	s2->get(test_string, 1, 1);
+	TEST_EQUAL(strcmp(test_string, "E"), 0)
+	s2->get(test_string, 2, 2);
+	TEST_EQUAL(strcmp(test_string, "ST"), 0)
+RESULT
+delete s2;
+
+String s4;
+
+CHECK(String::operator = (String&))
+	String s5("Hallo");
+	s4 = s5;
+	TEST_EQUAL(s4, s5)
+	s5.set("");
+	s4 = s5;
+	TEST_EQUAL(s4, s5)
+	String s6;
+	s4 = s6;
+	TEST_EQUAL(s4, s6)
+RESULT
+
+CHECK(String::operator = (char*))
+	s4 = "TestTestTestTest";
+	TEST_EQUAL(s4, "TestTestTestTest")
+	s4 = "";
+	TEST_EQUAL(s4, "");
+RESULT
+
+CHECK(String::operator = (stringstream&))
+	std::stringstream instream("ABC DEF GHI jkl mni");
+	s2 = new String;
+	*s2 = instream;
+	TEST_EQUAL(*s2, "ABC")
+	*s2 = instream;
+	TEST_EQUAL(*s2, "DEF")
+	delete s2;
+RESULT
+
+CHECK(String::operator = (char))
+	s4 = 'a';
+	TEST_EQUAL(s4, "a");
+RESULT
+
+CHECK(String::operator = (unsigned char))
+	s4 = (unsigned char)'b';
+	TEST_EQUAL(s4, "b")
+RESULT
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+END_TEST

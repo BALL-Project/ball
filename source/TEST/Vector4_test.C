@@ -1,14 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector4_test.C,v 1.26 2002/02/27 12:25:03 sturm Exp $
+// $Id: Vector4_test.C,v 1.27 2002/12/12 11:34:46 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.26 2002/02/27 12:25:03 sturm Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.27 2002/12/12 11:34:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -143,7 +144,7 @@ RESULT
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << v;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt")
@@ -367,7 +368,7 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	v.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Vector4_test.txt")
@@ -454,7 +455,7 @@ CHECK(TVector4::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	v.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Vector4_test.txt")
@@ -474,7 +475,7 @@ RESULT
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << v;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt")

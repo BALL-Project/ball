@@ -1,4 +1,4 @@
-/Object: [0-9a-fx]+ is instance of class: Timer
+/Object: [0-9a-fA-Fx]+ is instance of class: Timer
 /CPU speed: [0-9]+
 is running: false
 /last clock seconds: [0-9]+

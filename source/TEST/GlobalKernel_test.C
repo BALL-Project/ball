@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GlobalKernel_test.C,v 1.3 2002/02/27 12:24:33 sturm Exp $
+// $Id: GlobalKernel_test.C,v 1.4 2002/12/12 11:34:41 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +10,7 @@
 #include <BALL/KERNEL/chain.h>
 ///////////////////////////
 
-START_TEST(GlobalKernel, "$Id: GlobalKernel_test.C,v 1.3 2002/02/27 12:24:33 sturm Exp $")
+START_TEST(GlobalKernel, "$Id: GlobalKernel_test.C,v 1.4 2002/12/12 11:34:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -56,16 +57,20 @@ CHECK("cloneBonds")
 	TEST_EQUAL(a211.getBond(0)->getName(), "1.")
 	TEST_EQUAL(a211.getBond(0)->getOrder(), Bond::ORDER__QUADRUPLE)
 	TEST_EQUAL(a211.getBond(0)->getType(), Bond::TYPE__DISULPHIDE_BRIDGE)
+	TEST_EQUAL(*a211.getBond(0)->getFirstAtom() < *a211.getBond(0)->getSecondAtom(), true)
+	
 
 	TEST_EQUAL(a211.isBoundTo(a221), true)
 	TEST_EQUAL(a211.getBond(1)->getName(), "2.")
 	TEST_EQUAL(a211.getBond(1)->getOrder(), Bond::ORDER__AROMATIC)
 	TEST_EQUAL(a211.getBond(1)->getType(), Bond::TYPE__PEPTIDE)
+	TEST_EQUAL(*a211.getBond(1)->getFirstAtom() < *a211.getBond(1)->getSecondAtom(), true )
 
 	TEST_EQUAL(a212.isBoundTo(a221), true)
 	TEST_EQUAL(a212.getBond(1)->getName(), "3.")
 	TEST_EQUAL(a212.getBond(1)->getOrder(), Bond::ORDER__TRIPLE)
 	TEST_EQUAL(a212.getBond(1)->getType(), Bond::TYPE__HYDROGEN)
+	TEST_EQUAL(*a211.getBond(1)->getFirstAtom() < *a212.getBond(1)->getSecondAtom(), true)
 	
 	TEST_EQUAL(a222.countBonds(), 0)
 RESULT

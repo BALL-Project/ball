@@ -1,15 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.13 2002/02/27 12:25:00 sturm Exp $
+// $Id: Timer_test.C,v 1.14 2002/12/12 11:34:46 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/SYSTEM/file.h>
+
+#ifdef BALL_COMPILER_MSVC
+#	include<windows.h>
+#	define sleep(a) Sleep(1000 * a)
+#endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.13 2002/02/27 12:25:00 sturm Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.14 2002/12/12 11:34:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -18,7 +24,7 @@ using namespace BALL;
 
 #define BUSY_WAIT \
 	STATUS("WAITING")\
-	{ double x = 0.0; for (int i = 0; i < 500000; i++, x += rand()); }
+	{ double x = 0.0; for (int i = 0; i < 5e6; i++, x += rand()); }
 
 CHECK(Timer::Timer())
 	Timer* t1 = new Timer();
@@ -80,11 +86,16 @@ RESULT
 CHECK(Timer::reset())
 	Timer t1;
 	t1.start();
-	// busy waiting
+	// some waiting
 	t1.reset();
 	// this is somewhat dangerous, but the best we could come up
 	// with
 	TEST_EQUAL(t1.isRunning(), true)
+	t1.stop();
+	STATUS(t1.getClockTime())
+	STATUS(t1.getUserTime())
+	STATUS(t1.getSystemTime())
+	STATUS(t1.getCPUTime())
 	TEST_EQUAL(t1.getClockTime() < 0.1, true)	
 	TEST_EQUAL(t1.getUserTime() < 0.1, true)	
 	TEST_EQUAL(t1.getSystemTime() < 0.1, true)	
@@ -128,18 +139,27 @@ CHECK(Timer::getSystemTime() const )
 RESULT
 
 CHECK(Timer::getCPUTime() const )
+	Timer t0;
+	t0.start();
 	Timer t1;
+	STATUS(t1.getCPUTime())
 	TEST_EQUAL(t1.getCPUTime(), 0)	
 	t1.start();
 	sleep(2);
 	t1.stop();
+	STATUS(t1.getCPUTime())
 	TEST_EQUAL(t1.getCPUTime() <= 1, true)	
 	t1.reset();
 	t1.start();
 	BUSY_WAIT
+	BUSY_WAIT
 	t1.stop();
+	STATUS(t1.getCPUTime())
 	TEST_EQUAL(t1.getCPUTime() > 0, true)	
 	TEST_REAL_EQUAL(t1.getCPUTime(), t1.getSystemTime() + t1.getUserTime())	
+	STATUS(t0.getCPUTime())
+	t0.stop();
+	STATUS(t0.getCPUTime())
 RESULT
 
 CHECK(Timer::Timer& operator = (const Timer& timer))
@@ -150,7 +170,7 @@ CHECK(Timer::Timer& operator = (const Timer& timer))
 	Timer t2;
 	t2 = t1;
 	TEST_EQUAL(t2.isRunning(), false)
-	TEST_EQUAL(t1.getClockTime(), t2.getClockTime())	
+	TEST_REAL_EQUAL(t1.getClockTime(), t2.getClockTime())	
 	TEST_REAL_EQUAL(t1.getUserTime(), t2.getUserTime())	
 	TEST_REAL_EQUAL(t1.getSystemTime(), t2.getSystemTime())	
 	TEST_REAL_EQUAL(t1.getCPUTime(), t2.getCPUTime())	
@@ -250,7 +270,9 @@ CHECK(Timer::dump(::std::ostream& s = ::std::cout, Size depth = 0L) const )
 	t1.stop();
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+
+	std::ofstream outfile(filename.c_str(), std::ios::out);
+
 	t1.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Timer_test.txt")

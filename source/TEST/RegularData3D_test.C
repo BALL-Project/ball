@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.5 2002/02/27 12:24:51 sturm Exp $
+// $Id: RegularData3D_test.C,v 1.6 2002/12/12 11:34:44 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.5 2002/02/27 12:24:51 sturm Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.6 2002/12/12 11:34:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -32,6 +32,7 @@ CHECK(RegularData3D<T>(float, float, float, float, float, float, Size, Size, Siz
 															11, 11, 11);
 	TEST_NOT_EQUAL(grid, 0)
 	TEST_EQUAL(grid->getSize(), 1331)
+	TEST_EQUAL(*grid, RegularData3D(0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 11, 11, 11))
 	delete grid;
 RESULT
 
@@ -57,22 +58,31 @@ RESULT
 
 RegularData3D g(0.0, 0.0, 0.0, 10.0, 10.0, 10.0,	11, 11, 11);
 
-CHECK(set(const RegularData3D<T>& grid))
+CHECK(resize())
 	RegularData3D g1;
-	g1.set(g);
-	TEST_EQUAL(g1.getSize(), 1331)
+	Vector3 lower(0.0, 21, -79.4);
+	Vector3 upper(1.0, 23, -78.6);
+	TVector3<Size> nogp(3, 4, 5);
+
+	g1.resize(lower, upper, nogp);
+
+	TEST_EQUAL(g1.getSize(), 60)
+	TEST_EQUAL(g1.getOrigin(), lower)
+	TEST_EQUAL(g1.getDimension(), upper - lower)
+
 RESULT
 
 CHECK(operator = (const RegularData3D<T>& grid))
 	RegularData3D g1;
 	g1 = g;
 	TEST_EQUAL(g1.getSize(), 1331)
+	TEST_EQUAL((g1 == g), true)
 RESULT
 
 CHECK(dump())
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	// fill g with zero!
 	for (Position k = 0; k < g.getSize(); k++)
 	{
@@ -335,6 +345,62 @@ CHECK(has()1/1)
 	TEST_EQUAL(h.has(v), false)
 RESULT
 
+
+
+CHECK(operator << (ostream& os, const RegularData3D&))
+	String filename;
+	NEW_TMP_FILE(filename)
+	
+	STATUS(1)
+	Vector3 lower(-1.0, -2.0, -3.0);
+	Vector3 upper(3.0, 2.0, 1.0);
+	TRegularData3D<float>	data(lower, upper, 0.5);
+	
+	STATUS(2)
+	// fill the grid with something meaningful
+	for (Position i = 0; i < data.getSize(); i++, data[i] = (float)((float)i / data.getSize()));
+	
+	STATUS(3)
+	std::ofstream os(filename.c_str(), std::ios::out);
+	os << data;
+	os.close();
+
+	STATUS(4)
+	std::ifstream is(filename.c_str());
+	STATUS(5)
+	TRegularData3D<float> in_data;
+	STATUS(5.1)
+	is >> in_data;
+	STATUS(5.2)
+	is.close();
+	STATUS(5.3)
+
+	TEST_EQUAL(in_data.getSize(), data.getSize())
+	ABORT_IF(in_data.getSize() != data.getSize())
+	
+	STATUS(6)
+
+	TEST_REAL_EQUAL(data.getXSpacing(), in_data.getXSpacing())
+	TEST_REAL_EQUAL(data.getYSpacing(), in_data.getYSpacing())
+	TEST_REAL_EQUAL(data.getZSpacing(), in_data.getZSpacing())
+
+	STATUS(7)
+	TEST_REAL_EQUAL(data.getMinX(), in_data.getMinX())
+	TEST_REAL_EQUAL(data.getMinY(), in_data.getMinY())
+	TEST_REAL_EQUAL(data.getMinZ(), in_data.getMinZ())
+
+	STATUS(8)
+	TEST_REAL_EQUAL(data.getMaxX(), in_data.getMaxX())
+	TEST_REAL_EQUAL(data.getMaxY(), in_data.getMaxY())
+	TEST_REAL_EQUAL(data.getMaxZ(), in_data.getMaxZ())
+
+	STATUS(9)
+	for (Position i = 0; i < data.getSize(); i++)
+	{
+		STATUS(i)
+		TEST_REAL_EQUAL(data[i], in_data[i])
+	}
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

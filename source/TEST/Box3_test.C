@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Box3_test.C,v 1.18 2002/02/27 12:24:25 sturm Exp $
+// $Id: Box3_test.C,v 1.19 2002/12/12 11:34:39 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +10,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(Box3, "$Id: Box3_test.C,v 1.18 2002/02/27 12:24:25 sturm Exp $")
+START_TEST(Box3, "$Id: Box3_test.C,v 1.19 2002/12/12 11:34:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -244,7 +245,7 @@ CHECK(TBox3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Box3 v(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	v.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Box3_test.txt")
@@ -262,7 +263,7 @@ RESULT
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TBox3<T>& Box3))
 	Box3 v(1, 2, 3, 4, 5, 6);
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << v;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Box3_test2.txt")

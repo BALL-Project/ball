@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Selector_test.C,v 1.11 2002/02/27 12:24:54 sturm Exp $
+// $Id: Selector_test.C,v 1.12 2002/12/12 11:34:44 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(Selector, "$Id: Selector_test.C,v 1.11 2002/02/27 12:24:54 sturm Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.12 2002/12/12 11:34:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -67,6 +68,9 @@ CHECK(Selector::Processor::Result operator () (Composite& composite) throw())
 	test_expressions.insert(pair<String, Size>("true()", 6));
 	test_expressions.insert(pair<String, Size>("connectedTo((-H))", 2));
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
+	test_expressions.insert(pair<String, Size>("(element(H))", 4));
+	test_expressions.insert(pair<String, Size>("!element(H)", 2));
+	test_expressions.insert(pair<String, Size>("!(element(H))", 2));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
 	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
@@ -88,6 +92,7 @@ CHECK(Selector::Processor::Result operator () (Composite& composite) throw())
 				counter++;
 			}
 		}
+		STATUS("testing expression " << exp_iterator->first)
 		TEST_EQUAL(s.getNumberOfSelectedAtoms(), counter)
 	}
 RESULT
@@ -110,6 +115,11 @@ CHECK(Selector::getNumberOfSelectedAtoms() const  throw())
 	test_expressions.insert(pair<String, Size>("true()", 6));
 	test_expressions.insert(pair<String, Size>("connectedTo((-H))", 2));
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
+	test_expressions.insert(pair<String, Size>("!element(H)", 2));
+	test_expressions.insert(pair<String, Size>("(element(H))", 4));
+	test_expressions.insert(pair<String, Size>("!(element(H))", 2));
+	test_expressions.insert(pair<String, Size>("(!(element(H)))", 2));
+	test_expressions.insert(pair<String, Size>("!(!(element(H)))", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
 	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
@@ -122,6 +132,7 @@ CHECK(Selector::getNumberOfSelectedAtoms() const  throw())
 		S.deselect();
 		s.setExpression(exp_iterator->first);
 		S.apply(s);
+		STATUS("testing expression " << exp_iterator->first)
 		TEST_EQUAL(s.getNumberOfSelectedAtoms(), exp_iterator->second);
 	}
 RESULT

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bond_test.C,v 1.26 2002/02/27 12:24:25 sturm Exp $
+// $Id: Bond_test.C,v 1.27 2002/12/12 11:34:39 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +15,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.26 2002/02/27 12:24:25 sturm Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.27 2002/12/12 11:34:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -439,7 +440,7 @@ CHECK(dump(ostream&, Size))
 	b1.setOrder(1);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	b1.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Bond_test.txt")
@@ -472,7 +473,7 @@ pm.registerClass(getStreamName<Bond>(), Bond::createDefault);
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), File::OUT);
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Atom a1;
 	a1.setName("a1");
 	Atom a2;

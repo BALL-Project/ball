@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashMap_test.C,v 1.13 2002/02/27 12:24:35 sturm Exp $
+// $Id: HashMap_test.C,v 1.14 2002/12/12 11:34:41 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -37,7 +38,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashMap, "$Id: HashMap_test.C,v 1.13 2002/02/27 12:24:35 sturm Exp $")
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.14 2002/12/12 11:34:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -422,7 +423,7 @@ CHECK(HashMap::dump(std::ostream&, Size) const)
 
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	hm.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/HashMap_test.txt")

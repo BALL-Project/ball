@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.19 2002/02/27 12:24:57 sturm Exp $
+// $Id: StandardPredicates_test.C,v 1.20 2002/12/12 11:34:44 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.19 2002/02/27 12:24:57 sturm Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.20 2002/12/12 11:34:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -383,6 +384,11 @@ CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	bond->setOrder(Bond::ORDER__SINGLE);
 	STATUS("(-N(-C(-N(-C(-N(-C(-N(-C(-N(-C(-N)))))))))))")
 	connectedTo.setArgument("(-N(-C(-N(-C(-N(-C(-N(-C(-N(-C(-N)))))))))))");
+	TEST_EQUAL(connectedTo.getArgument(), "(-N(-C(-N(-C(-N(-C(-N(-C(-N(-C(-N)))))))))))")
+	TEST_EQUAL(connectedTo(*a1), false)
+	STATUS("NCNCNCNCNCN")
+	connectedTo.setArgument("NCNCNCNCNCN");
+	TEST_EQUAL(connectedTo.getArgument(), "NCNCNCNCNCN")
 	TEST_EQUAL(connectedTo(*a1), false)
 	STATUS("(-N)")
 	connectedTo.setArgument("(-N)");
@@ -394,47 +400,129 @@ CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	delete a2;
 
 	AtomIterator it = S.beginAtom();
+
 	STATUS("(H)");
 	connectedTo.setArgument("(H)");
 	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(C)");
 	connectedTo.setArgument("(C)");
 	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(O)");
 	connectedTo.setArgument("(O)");
 	TEST_EQUAL(connectedTo(*it), false)
+
 	STATUS("(H)(H)(H)");
 	connectedTo.setArgument("(H)(H)(H)");
 	TEST_EQUAL(connectedTo(*it), true)
+
+	// The following is not the same as (H)(H)(H)! Actually it means (H(H(H)))
+	STATUS("HHH");
+	connectedTo.setArgument("HHH");
+	TEST_EQUAL(connectedTo(*it), false)
+
+	STATUS("H3");
+	connectedTo.setArgument("H3");
+	TEST_EQUAL(connectedTo(*it), true)
+
+	STATUS("H4");
+	connectedTo.setArgument("H4");
+	TEST_EQUAL(connectedTo(*it), false)
+
+	STATUS("H1");
+	connectedTo.setArgument("H1");
+	TEST_EQUAL(connectedTo(*it), true)
+
+	// This is another special case: whenever a number indicates that
+	// elements have to be multiplied, the parser treats it as a subgroup.
+	// Always.
+	STATUS("H1H1");
+	connectedTo.setArgument("H1H1");
+	TEST_EQUAL(connectedTo(*it), true)
+
+	STATUS("(H1)(H1)");
+	connectedTo.setArgument("(H1)(H1)");
+	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(C(H))");
 	connectedTo.setArgument("(C(H))");
 	TEST_EQUAL(connectedTo(*it), true)
+
+	STATUS("CH");
+	connectedTo.setArgument("CH");
+	TEST_EQUAL(connectedTo(*it), true)
+
+	STATUS("CH)");
+	connectedTo.setArgument("CH)");
+	TEST_EQUAL(connectedTo(*it), false)
+
+	STATUS("(CH");
+	connectedTo.setArgument("(CH");
+	TEST_EQUAL(connectedTo(*it), false)
+
+	STATUS("C(H");
+	connectedTo.setArgument("C(H");
+	TEST_EQUAL(connectedTo(*it), false)
+
+	STATUS("(H)(H)(H)(C(H)(C(~O)(~O)))")
+	connectedTo.setArgument("(H)(H)(H)(C(H)(C(~O)(~O)))");
+	TEST_EQUAL(connectedTo(*it), true)
+
+	STATUS("(H3)(C(H)(CO2)CH2)")
+	connectedTo.setArgument("(H3)(C(H)(CO2)CH2)");
+	TEST_EQUAL(connectedTo(*it), true)
+
+	STATUS("(H3)C(H)(CO2)CH2")
+	connectedTo.setArgument("(H3)C(H)(CO2)CH2");
+	TEST_EQUAL(connectedTo(*it), true)
+
+	STATUS("(H3)C(C(H2)C)C")
+	connectedTo.setArgument("(H3)C(C(H2)C)C");
+	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(H)(H)(H)(C(H)(C(O)(=O)))");
 	connectedTo.setArgument("(H)(H)(H)(C(H)(C(O)(=O)))");
 	TEST_EQUAL(connectedTo(*it), false)
+
 	STATUS("(H)(H)(H)(C(H)(C(-O)(-O)))");
 	connectedTo.setArgument("(H)(H)(H)(C(H)(C(-O)(-O)))");
 	TEST_EQUAL(connectedTo(*it), false)
-	STATUS("(H)(H)(H)(C(H)(C(~O)(~O)))");
-	connectedTo.setArgument("(H)(H)(H)(C(H)(C(~O)(~O)))");
-	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
 	connectedTo.setArgument("(-H)(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C))))");
 	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C)))))")
 	connectedTo.setArgument("(-H)(-*)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C))))");
 	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(-H(-N(-H)))")
 	connectedTo.setArgument("(-H(-N(-H)))");
 	TEST_EQUAL(connectedTo(*it), false);
+
 	STATUS("(-C(-*)(-*)(-*)(-*))")
 	connectedTo.setArgument("(-C(-*)(-*)(-*)(-*))");
 	TEST_EQUAL(connectedTo(*it), false);
 
+	STATUS("H3C(CO2)(H)CH2@1CCNCC@1")
+	connectedTo.setArgument("H3C(CO2)(H)CH2@1CCNCC@1");
+	TEST_EQUAL(connectedTo(*it), true);
+
+	STATUS("H3C(CO2)(H)CH2C@1CNCC@1")
+	connectedTo.setArgument("H3C(CO2)(H)CH2C@1CNCC@1");
+	TEST_EQUAL(connectedTo(*it), false);
+
+	STATUS("H3C(CFe2)(H)CH2@1CCNCC@1")
+	connectedTo.setArgument("H3C(CFe2)(H)CH2@1CCNCC@1");
+	TEST_EQUAL(connectedTo(*it), false);
+
 	++it;
+
 	STATUS("(-N(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H)(~C))))))")
 	connectedTo.setArgument("(-N(-H)(-H)(-C(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C)))))");
 	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(-N(-C(-*)(-*)(-*)(-*)))")
 	connectedTo.setArgument("(-C(-*)(-*)(-*)(-*))");
 	TEST_EQUAL(connectedTo(*it), false);
@@ -443,18 +531,23 @@ CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	STATUS("(-N(-H)(-H)(-H))(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C)))")
 	connectedTo.setArgument("(-N(-H)(-H)(-H))(-H)(-C(~O)(~O))(-C(-H)(-H)(-C(~C(-H))(~C)))");
 	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(-N(-H)(-H)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))")
 	connectedTo.setArgument("(-N(-H)(-H)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))");
 	TEST_EQUAL(connectedTo(*it), false)
+
 	STATUS("(-N(-H)(-O)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))");
 	connectedTo.setArgument("(-N(-H)(-O)(-H))(-H)(-C(~O)(~O))(-C(=H)(-H)(-C(~C(-H))(~C)))");
 	TEST_EQUAL(connectedTo(*it), false)
+
 	STATUS("(C(~O)(~*))")
 	connectedTo.setArgument("(C(~O)(~*))");
 	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(-H)(-C)(-C)")
 	connectedTo.setArgument("(-H)(-C)(-C)");
 	TEST_EQUAL(connectedTo(*it), true)
+
 	STATUS("(-H)(-C(-H))(-C(-H))")
 	connectedTo.setArgument("(-H)(-C(-H))(-C(-H))");
 	TEST_EQUAL(connectedTo(*it), false)
@@ -860,6 +953,9 @@ CHECK(Sp3HybridizedPredicate::operator () (const Atom& atom) const )
 	}
 RESULT
 
+CHECK(ChargePredicate::operator ())
+  // ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

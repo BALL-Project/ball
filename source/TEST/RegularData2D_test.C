@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData2D_test.C,v 1.9 2002/02/27 12:24:50 sturm Exp $
+// $Id: RegularData2D_test.C,v 1.10 2002/12/12 11:34:44 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.9 2002/02/27 12:24:50 sturm Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.10 2002/12/12 11:34:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -68,14 +68,6 @@ CHECK(getSize())
 	TEST_EQUAL(g2.getSize(), 0)
 RESULT
 
-CHECK(set(const RegularData2D& grid))
-	g[1] = 1.2345;
-	RegularData2D g1;
-	g1.set(g);
-	TEST_EQUAL(g1.getSize(), 6)
-	TEST_REAL_EQUAL(g1[1], 1.2345)
-RESULT
-
 CHECK(operator = (const RegularData2D& grid))
 	g[1] = 1.2345;
 	RegularData2D g1;
@@ -87,7 +79,7 @@ RESULT
 CHECK(dump())
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	for (Position k = 0; k < g.getSize(); k++)
 	{
 		g[k] = k;

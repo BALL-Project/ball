@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile_test.C,v 1.18 2002/02/27 12:24:35 sturm Exp $
+// $Id: INIFile_test.C,v 1.19 2002/12/12 11:34:41 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -28,14 +29,15 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.18 2002/02/27 12:24:35 sturm Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.19 2002/12/12 11:34:41 oliver Exp $")
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
 INIFile* ini1 = 0;
-CHECK(INIFile::INIFile())
+CHECK(INIstd::ios::inIFile())
 	ini1 = new INIFile;
 	TEST_NOT_EQUAL(ini1, 0)
 RESULT
@@ -55,7 +57,7 @@ RESULT
 
 String filename;
 NEW_TMP_FILE(filename)
-CHECK(INIFile::INIFile(const String& filename))
+CHECK(INIstd::ios::inIFile(const String& filename))
 	INIFile ini(filename);
 	TEST_EQUAL(ini.getFilename(), filename)
 RESULT
@@ -354,6 +356,18 @@ CHECK(INIFile::setValue(const String& section, const String& key, const String& 
   TEST_EQUAL(*(ini.getLine(5)), "test1=YYY")
   TEST_EQUAL(ini.getValue("Section3", "test1"), "YYY")
   TEST_EQUAL(ini.setValue("Section3", "test1", "XXX"), true)
+RESULT
+
+CHECK(INIFile::insertValue(const String& section, const String& key, const String& value))
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+	TEST_EQUAL(ini.insertValue("nonsense", "test", "insertValue_test"), false)
+	TEST_EQUAL(ini.insertValue("Section1", "test", "insertValue_test"), true)
+	TEST_EQUAL(ini.getValue("Section1", "test"), "insertValue_test")
+	TEST_EQUAL(*(ini.getLine(1)), "test=insertValue_test")
+	TEST_EQUAL(ini.insertValue("Section1", "test", "setValue_test"), false)
+	ini.setFilename("asdasd");
+	TEST_EQUAL(ini.write(), true)
 RESULT
 
 CHECK(INIFile::write())

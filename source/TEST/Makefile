@@ -51,7 +51,10 @@ EXECUTABLES_DATATYPES = \
 	HashSet_test\
 	HashGrid3_test\
 	Options_test\
-	String_test\
+	String_test1\
+	String_test2\
+	String_test3\
+	String_test4\
 	Triple_test\
 	Quadruple_test\
 	RegularData1D_test\
@@ -67,7 +70,8 @@ EXECUTABLES_CONCEPTS = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	TextPersistenceManager_test\
 	Selectable_test\
 	PropertyManager_test\
-	Composite_test\
+	Composite_test1\
+	Composite_test2\
 	Embeddable_test\
 	RandomAccessIterator_test
 

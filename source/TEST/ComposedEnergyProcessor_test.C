@@ -1,16 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ComposedEnergyProcessor_test.C,v 1.5 2002/02/27 12:24:27 sturm Exp $
+// $Id: ComposedEnergyProcessor_test.C,v 1.6 2002/12/12 11:34:39 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/ENERGY/composedEnergyProcessor.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/system.h>
+
 ///////////////////////////
 
-START_TEST(ComposedEnergyProcessor_test, "$Id: ComposedEnergyProcessor_test.C,v 1.5 2002/02/27 12:24:27 sturm Exp $")
+START_TEST(ComposedEnergyProcessor_test, "$Id: ComposedEnergyProcessor_test.C,v 1.6 2002/12/12 11:34:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -40,7 +42,7 @@ using namespace BALL;
   {
     numberOfFragments += 1;
     EnergyProcessor::operator() (fragment);
-    return Processor::CONTINUE;
+    return BALL::Processor::CONTINUE;
   }
   
   virtual bool finish() throw() 

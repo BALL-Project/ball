@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularExpression_test.C,v 1.11 2002/02/27 12:24:51 sturm Exp $
+// $Id: RegularExpression_test.C,v 1.12 2002/12/12 11:34:44 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.11 2002/02/27 12:24:51 sturm Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.12 2002/12/12 11:34:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -230,7 +231,7 @@ RESULT
 CHECK(RegularExpression::dump(::std::ostream& s = ::std::cout, Size depth = 0) const )
 	re2.set("[A-Z]+");
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	re2.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Regular_Expression.txt")
@@ -238,7 +239,7 @@ RESULT
 
 CHECK(RegularExpression::friend::std::ostream& operator << (::std::ostream& s, const RegularExpression& regular_expression))
 	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << re2;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Regular_Expression2.txt")

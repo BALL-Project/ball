@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomContainer_test.C,v 1.7 2002/02/27 12:24:23 sturm Exp $
+// $Id: AtomContainer_test.C,v 1.8 2002/12/12 11:34:39 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 
 #include <algorithm>
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.7 2002/02/27 12:24:23 sturm Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.8 2002/12/12 11:34:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -221,7 +221,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<AtomContainer>(), AtomContainer::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), File::OUT);
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	AtomContainer* f1 = new AtomContainer("name1");
 	AtomContainer* f2 = new AtomContainer("name2");
 	AtomContainer* f3 = new AtomContainer("name3");
@@ -692,7 +692,7 @@ CHECK(dump(ostream&, Size))
 	Atom a1;
 	a1.setName("A1");
 	ac2.append(a1);
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	ac1.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/AtomContainer_test.txt")

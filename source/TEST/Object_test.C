@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Object_test.C,v 1.11 2002/02/27 12:24:41 sturm Exp $
+// $Id: Object_test.C,v 1.12 2002/12/12 11:34:42 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Object, "$Id: Object_test.C,v 1.11 2002/02/27 12:24:41 sturm Exp $")
+START_TEST(Object, "$Id: Object_test.C,v 1.12 2002/12/12 11:34:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -183,7 +184,7 @@ CHECK(Object::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
 	Object o;
 	String filename;
   NEW_TMP_FILE(filename)
-  std::ofstream outfile(filename.c_str(), File::OUT);
+  std::ofstream outfile(filename.c_str(), std::ios::out);
   o.dump(outfile);
   outfile.close();
   TEST_FILE_REGEXP(filename.c_str(), "data/Object_test.txt")

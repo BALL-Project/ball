@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FileSystem_test.C,v 1.4 2002/02/27 12:24:31 sturm Exp $
+// $Id: FileSystem_test.C,v 1.5 2002/12/12 11:34:40 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(FileSystem, "$Id: FileSystem_test.C,v 1.4 2002/02/27 12:24:31 sturm Exp $")
+START_TEST(FileSystem, "$Id: FileSystem_test.C,v 1.5 2002/12/12 11:34:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,7 +23,11 @@ CHECK(canonizePath(String& path) -- expansion of tilde)
 	String path("~" + PS + "test.dat");
 	FileSystem::canonizePath(path);
 	TEST_EQUAL(path.hasSuffix(PS + "test.dat"), true)
+#ifdef BALL_COMPILER_MSVC
+	TEST_EQUAL(path[0],'C')
+#else
 	TEST_EQUAL(path[0], FileSystem::PATH_SEPARATOR)
+#endif
 RESULT
 
 CHECK(canonizePath(String& path) -- removal of duplicate path separators)
@@ -64,7 +69,7 @@ RESULT
 CHECK(path(const String& filename))
 	String filename = PS + "test" + PS + PS + "TEST" + PS + "basename.sfx";
 	TEST_EQUAL(FileSystem::path(filename), PS + "test" + PS + PS + "TEST" + PS)
-	TEST_EQUAL(FileSystem::path(PS), "/")
+	TEST_EQUAL(FileSystem::path(PS), PS)
 	TEST_EQUAL(FileSystem::path(""), "")
 	TEST_EQUAL(FileSystem::path("test"), "")
 RESULT

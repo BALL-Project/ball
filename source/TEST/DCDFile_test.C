@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.9 2002/02/27 12:24:28 sturm Exp $
+// $Id: DCDFile_test.C,v 1.10 2002/12/12 11:34:40 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.9 2002/02/27 12:24:28 sturm Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.10 2002/12/12 11:34:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -50,24 +51,24 @@ RESULT
 
 CHECK(DCDFile::DCDFile(const String& name, File::OpenMode open_mode) throw())
   //?????
-  DCDFile test_file(dcd_test_file, File::IN);
+  DCDFile test_file(dcd_test_file, std::ios::in);
 	TEST_EQUAL(test_file.isOpen(), true)
-	TEST_EQUAL(test_file.getOpenMode(), File::IN)
+	TEST_EQUAL(test_file.getOpenMode(), std::ios::in)
 	test_file.close();
 	TEST_EQUAL(test_file.isOpen(), false)
 
 	String filename;
 	NEW_TMP_FILE(filename)
-	DCDFile test_file2(filename, File::OUT);
+	DCDFile test_file2(filename, std::ios::out);
 	TEST_EQUAL(test_file2.isOpen(), true)
-	TEST_EQUAL(test_file2.getOpenMode(), File::OUT)
+	TEST_EQUAL(test_file2.getOpenMode(), std::ios::out)
 	test_file2.close();
 	TEST_EQUAL(test_file2.isOpen(), false)
 RESULT
 
 
 CHECK(DCDFile::DCDFile& operator = (const DCDFile& file) throw())
-  DCDFile one(dcd_test_file, File::IN);
+  DCDFile one(dcd_test_file, std::ios::in);
 	DCDFile two;
 	two = one;
 	bool test = (one == two);
@@ -76,7 +77,7 @@ RESULT
 
 
 CHECK(DCDFile::clear() throw())
-	DCDFile file(dcd_test_file, File::IN);
+	DCDFile file(dcd_test_file, std::ios::in);
 	file.clear();
 	DCDFile empty;
 	bool test = (file == empty);
@@ -85,8 +86,8 @@ RESULT
 
 
 CHECK(DCDFile::bool operator == (const DCDFile& file) throw())
-  DCDFile one(dcd_test_file, File::IN);
-  DCDFile two(dcd_test_file, File::IN);
+  DCDFile one(dcd_test_file, std::ios::in);
+  DCDFile two(dcd_test_file, std::ios::in);
 	bool test = (one == two);
 	TEST_EQUAL(test, true)
 	DCDFile three;
@@ -98,11 +99,11 @@ RESULT
 // dedicated test here. There is no reasonable way to test it, anyway.
 
 CHECK(DCDFile::readHeader() throw())
-  DCDFile one(dcd_test_file, File::IN);
+  DCDFile one(dcd_test_file, std::ios::in);
 	bool test = one.readHeader();
 	TEST_EQUAL(test, false)
 	one.close();
-	DCDFile two("data/INIFile_test.ini", File::IN);
+	DCDFile two("data/INIFile_test.ini", std::ios::in);
 	test = two.readHeader();
 	TEST_EQUAL(test, false)
 RESULT
@@ -111,10 +112,10 @@ RESULT
 CHECK(DCDFile::writeHeader() throw())
 	// ?????:
 	// Oh, how did this temporary file thing work again?
-	// DCDFile one(temporary, File::OUT);
+	// DCDFile one(temporary, std::ios::out);
 	// one.writeHeader();
 	// one.close();
-	// DCDFile two(temporary, File::IN);
+	// DCDFile two(temporary, std::ios::in);
 	// bool test = two.readHeader();
 	// TEST_EQUAL(test, true);
 RESULT
@@ -126,7 +127,7 @@ CHECK(DCDFile::append(const SnapShot& snapshot) throw())
 	// DCDFile one(temporary, File::out);
 	// one.append(snap);
 	// one.close();
-	// DCDFile two(temporary, File::IN);
+	// DCDFile two(temporary, std::ios::in);
 	// SnapShot snap2;
 	// two.readHeader();
 	// two.read(snap2);

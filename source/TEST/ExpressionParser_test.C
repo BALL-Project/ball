@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ExpressionParser_test.C,v 1.6 2002/02/27 12:24:30 sturm Exp $
+// $Id: ExpressionParser_test.C,v 1.7 2002/12/12 11:34:40 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -21,7 +22,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.6 2002/02/27 12:24:30 sturm Exp $")
+START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.7 2002/12/12 11:34:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -86,9 +87,6 @@ CHECK(SyntaxTree::end() throw())
 
 	SyntaxTree st;
 	SyntaxTree::Iterator test_it = st.end();
-
-	// ?????
-	// Dunno what's happening here: test_it seems to be glued to child2.
 	st.children = children;
 	test_it = --st.end();
 	bool test = (*test_it == child3);

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RuleEvaluator_test.C,v 1.6 2002/02/27 12:24:52 sturm Exp $
+// $Id: RuleEvaluator_test.C,v 1.7 2002/12/12 11:34:44 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(RuleEvaluator, "$Id: RuleEvaluator_test.C,v 1.6 2002/02/27 12:24:52 sturm Exp $")
+START_TEST(RuleEvaluator, "$Id: RuleEvaluator_test.C,v 1.7 2002/12/12 11:34:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -99,9 +100,9 @@ CHECK(RuleEvaluator::String operator () (const Atom& atom) const )
 	++it;
 	TEST_EQUAL(eval.operator()(*it), "CT")
 	++it;
-	TEST_EQUAL(eval.operator()(*it), "H-def")
+	TEST_EQUAL(eval.operator()(*it), "HCF")
 	++it;
-	TEST_EQUAL(eval.operator()(*it), "H-def")
+	TEST_EQUAL(eval.operator()(*it), "HCF")
 	++it;
 	TEST_EQUAL(eval.operator()(*it), "")
 RESULT

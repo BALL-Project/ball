@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tutorial3.C,v 1.3 2002/02/27 12:25:08 sturm Exp $
+// $Id: tutorial3.C,v 1.4 2002/12/12 11:36:12 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
@@ -48,10 +48,12 @@ int main()
 	amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
 	amber.setup(S);
 
+	Log.info() << "Creating MDS..." << std::endl;
 	CanonicalMD md(amber);
 	md.setReferenceTemperature(300);
 	md.setEnergyOutputFrequency(1);
 	md.simulateIterations(10);
+
 	std::cout << "Simulation settings:" << std::endl;
 	md.options.dump(std::cout);
 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Matrix44_test.C,v 1.18 2002/02/27 12:24:39 sturm Exp $
+// $Id: Matrix44_test.C,v 1.19 2002/12/12 11:34:42 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +14,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.18 2002/02/27 12:24:39 sturm Exp $")
+START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.19 2002/12/12 11:34:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -946,7 +947,7 @@ RESULT
 CHECK(TMatrix4x4::dump(std::ostream& s = std::cout, Size depth = 0) const )
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	m.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Matrix4x4_test.txt")
@@ -961,7 +962,7 @@ RESULT
 
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m))
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << m;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Matrix4x4_test2.txt")
