@@ -24,7 +24,7 @@ class test:
 	# expressions for use in all files.
 	exp = [\
 		re.compile(''),																		#00 DOS carriage
-		re.compile('\?\?\?'),																	#01 code problems
+		re.compile('\?\?\?'),																#01 code problems
 		re.compile('cout'),																	#02 no cout in BALL!
 		re.compile('cerr'),																	#03 no cerr in BALL!
 		re.compile('[\s(]+int[\s\(\)\&\*]+'),								#04 integer values are bad!
@@ -40,6 +40,8 @@ class test:
 		re.compile('const[\s]*double[\s]*&')								#14 no const double references
 	]
 	
+	#																											#99 tab info line lack
+	
 	# expressions for use with header-files
 	exp_header = [
 		re.compile('///[\s]*\Z'),														#100 empty comment
@@ -48,6 +50,7 @@ class test:
 		re.compile('@param[\s]*{'),													#103 standard problem => tex error
 		re.compile('@return[\s]*{') 												#104 standard problem => tex error
 	]
+	
 	
 	#test if check is empty																		
 	exp_check = [	
@@ -89,6 +92,25 @@ class test:
 		self.line = self.f.readline()
 		if not self.line: return 0
 		self.test_line(self.line)
+		return 1
+
+	
+	#test if file start with tab info lines
+	def BALL_TABINFO_TEST(self):
+		tabInfoLines=(
+			'// -*- Mode: C++; tab-width: 2; -*-',
+			'// vi: set ts=2:',
+			'//',
+			'// $Id:')
+		#compare first 4 lines with tab info lines
+		while self.linenr < 3: 
+			self.linenr = self.linenr + 1
+			self.lastline = self.line
+			self.line = self.f.readline()
+			if not self.line: break;
+			if string.find(self.line, tabInfoLines[self.linenr]) == -1: 
+				self.write(99)
+				break
 		return 1
 
 
@@ -172,8 +194,14 @@ class test:
 			self.debug()
 			sys.exit(self.errors)
 			
+		# tab info lines test
+		self.BALL_TABINFO_TEST()
+
 		# general testing
 		self.BALL_ALL_TEST()
+		
+		# test for tabulator config files
+		
 		
 		# file is a TEST-FILE
 		if string.find(sys.argv[1], '_test.C') != -1:
