@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.39 2003/06/11 16:09:23 oliver Exp $
+// $Id: bitVector.h,v 1.40 2003/06/12 10:40:05 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
