@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.4 2000/03/21 02:59:49 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.5 2000/03/21 12:46:57 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.4 2000/03/21 02:59:49 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.5 2000/03/21 12:46:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -145,9 +145,10 @@ CHECK(isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>&
 	v1.set(1.0, 2.0, 3.0);
 	v2.set(2.0, 4.0, 6.0);
 	v3.set(3.0, 6.0, 9.0);
-	//TEST_EQUAL(isComplanar(v1, v2, v3), true) BAUSTELLE
-	v3.set(3.0, 6.0, 19.0);
-	//TEST_EQUAL(isComplanar(v1, v2, v2), false) BAUSTELLE
+	TEST_EQUAL(isComplanar(v1, v2, v3), true)
+	v3.set(35.0, -6.1, 9.1);
+	v3.set(3.0, -66.0, 19.0);
+	TEST_EQUAL(isComplanar(v1, v2, v2), false)
 RESULT
 
 
@@ -182,6 +183,15 @@ CHECK(isOrthogonal(const TVector3<T>& vector, const TPlane3<T>& plane))
 	TEST_EQUAL(isOrthogonal(p1, v1), false)
 RESULT
 
+CHECK(isOrthogonal(const TPlane3<T>& plane, const TVector3<T>& vector))
+	v1.set(1.0, 2.0, 3.0);
+	v2.set(0.0, 5.0, 0.0);
+	v3.set(5.0, 0.0, 0.0);
+	p1 = Plane3(v1, v2, v3);
+	v3.set(5.0, 0.0, 5.0);
+	TEST_EQUAL(isOrthogonal(v3, p1), true)
+	TEST_EQUAL(isOrthogonal(v1, p1), false)
+RESULT
 
 //line1005: method isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b)
 CHECK(isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b))
@@ -199,6 +209,15 @@ CHECK(isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b))
 	TEST_EQUAL(isOrthogonal(p1, p2), false)
 RESULT
 
+CHECK(isIntersecting(const TVector3<T>& point, const TLine3<T>& line))
+	v1.set(1.0, 2.0, 3.0);
+	v2.set(0.0, 5.0, 0.0);
+	v3.set(1.0, 4.0, 3.0);
+	l1 = Line3(v1, v2);
+	TEST_EQUAL(isIntersecting(v3, l1), true)
+	v3.set(0.0, 4.0, 3.0);
+	TEST_EQUAL(isIntersecting(v3, l1), false)
+RESULT
 
 //line1029: method isIntersecting(const TLine3<T>& line, const TVector3<T>& point)
 CHECK(isIntersecting(const TLine3<T>& line, const TVector3<T>& point))
@@ -209,6 +228,18 @@ CHECK(isIntersecting(const TLine3<T>& line, const TVector3<T>& point))
 	TEST_EQUAL(isIntersecting(l1, v3), true)
 	v3.set(0.0, 4.0, 3.0);
 	TEST_EQUAL(isIntersecting(l1, v3), false)
+RESULT
+
+CHECK(isIntersecting(const TLine3<T>& a, const TLine3<T>& b))
+	v1.set(1.0, 2.0, 3.0);
+	v2.set(0.0, 5.0, 0.0);
+	v3.set(1.0, 4.0, 3.0);
+	l1 = Line3(v1, v2);
+	l2 = Line3(v1, v3);
+	TEST_EQUAL(isIntersecting(l1, l2), true)
+	v3.set(110.0, 4.0, 3.0);
+	l2 = Line3(v1, v3);
+	TEST_EQUAL(isIntersecting(l1, l2), false)
 RESULT
 
 
@@ -224,6 +255,16 @@ CHECK(isIntersecting(const TVector3<T>& point, const TPlane3<T>& plane))
 	TEST_EQUAL(isIntersecting(v1, p1), true)
 RESULT
 
+CHECK(isIntersecting(const TPlane3<T>& plane, const TVector3<T>& point))
+	v1.set(1.0, 2.0, 3.0);
+	v2.set(0.0, 5.0, 0.0);
+	v3.set(0.0, 0.0, 6.0);  
+	p1 = Plane3(v1, v2, v3);
+	TEST_EQUAL(isIntersecting(p1, v1), true)
+	v1.set(0.0, 0.0, 0.0);
+	p1 = Plane3(v1, v2, v3);
+	TEST_EQUAL(isIntersecting(p1, v1), true)
+RESULT
 
 //line1077: method isIntersecting(const TLine3<T>& line, const TPlane3<T>& plane)
 CHECK(isIntersecting(const TLine3<T>& line, const TPlane3<T>& plane))
