@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.18 2001/06/22 11:03:23 oliver Exp $
+// $Id: reducedSurface.h,v 1.19 2001/06/28 17:10:08 strobel Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -192,7 +192,7 @@ namespace BALL
 				@return TSpherer3<T>, the i'th sphere
 		*/
     TSphere3<T> getSphere(Position i)
-			throw();
+			throw(Exception::IndexOverflow);
 
 		/** Return the vertices
 				@return vector< TRSVertex<T>* > all vertices
@@ -205,7 +205,7 @@ namespace BALL
 				@return TSpherer3<T>, the i'th rsvertex
 		*/
 		TRSVertex<T>* getVertex(Position i)
-			throw();
+			throw(Exception::IndexOverflow);
 
 		/** Return the edges
 				@return vector< TRSEdge<T>* > all edges
@@ -218,7 +218,7 @@ namespace BALL
 				@return TSpherer3<T>, the i'th rsedge
 		*/
 		TRSEdge<T>* getEdge(Position i)
-			throw();
+			throw(Exception::IndexOverflow);
 
 		/** Return the faces
 				@return vector< TRSFace<T>* > all faces
@@ -231,10 +231,10 @@ namespace BALL
 				@return TSpherer3<T>, the i'th rsface
 		*/
 		TRSFace<T>* getFace(Position i)
-			throw();
+			throw(Exception::IndexOverflow);
 
 		/** Delete a pair of similar faces
-				@param	face1	a pointer to the first edge
+				@param	face1	a pointer to the first face
 				@param	face2	a pointer to the second face
 		*/
 		void deleteSimilarFaces(TRSFace<T>* face1, TRSFace<T>* face2)
@@ -500,7 +500,7 @@ namespace BALL
 			throw();
 
 
-    /*_ Getb the extrem coordinate of a circle in a given direction
+    /*_ Get the extrem coordinate of a circle in a given direction
     	@param	circle		the circle
 			@param	direction	search in x-direction, if direction is 0,
 												search in y-direction, if direction is 1,
@@ -940,7 +940,7 @@ namespace BALL
 
 	template <typename T>
 	TSphere3<T> TReducedSurface<T>::getSphere(Position i)
-		throw()
+		throw(Exception::IndexOverflow)
 	{
 		if (i < atom_.size())
 		{
@@ -963,7 +963,7 @@ namespace BALL
 
 	template <typename T>
 	TRSVertex<T>* TReducedSurface<T>::getVertex(Position i)
-		throw()
+		throw(Exception::IndexOverflow)
 	{
 		if (i < number_of_vertices_)
 		{
@@ -986,7 +986,7 @@ namespace BALL
 
 	template <typename T>
 	TRSEdge<T>* TReducedSurface<T>::getEdge(Position i)
-		throw()
+		throw(Exception::IndexOverflow)
 	{
 		if (i < number_of_edges_)
 		{
@@ -1009,7 +1009,7 @@ namespace BALL
 
 	template <typename T>
 	TRSFace<T>* TReducedSurface<T>::getFace(Position i)
-		throw()
+		throw(Exception::IndexOverflow)
 	{
 		if (i < number_of_faces_)
 		{
@@ -1183,7 +1183,7 @@ namespace BALL
 		throw()
 	{
 		treatFace(face,indices,new_vertices,vertices);
-		extendComponent(indices,new_vertices,vertices);
+		//extendComponent(indices,new_vertices,vertices);
 	}
 
 
