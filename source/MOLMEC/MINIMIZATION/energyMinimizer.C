@@ -1,9 +1,12 @@
-// $Id: energyMinimizer.C,v 1.3 1999/12/17 18:38:37 pmueller Exp $
+// $Id: energyMinimizer.C,v 1.4 1999/12/28 17:53:25 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/COMMON/limits.h>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
 	const char* EnergyMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS = 
                                                              "maximal_number_of_iterations";

@@ -1,7 +1,9 @@
-// $Id: steepestDescent.C,v 1.7 1999/12/27 13:01:51 pmueller Exp $
+// $Id: steepestDescent.C,v 1.8 1999/12/28 17:53:25 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/COMMON/limits.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -309,7 +311,7 @@ namespace BALL
 			}
 
       // Check if a snapshot of the system shall be made
-      if(snapShot_ptr_ != 0 && number_of_iteration_ % snapshot_frequency_ == 0)
+      if(snapShot_ptr_ != 0 && number_of_iteration_ % snapshot_output_frequency_ == 0)
         {
         snapShot_ptr_->takeSnapShot();
         }
