@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.33 2005/01/24 17:22:06 amoll Exp $
+// $Id: amberNonBonded.C,v 1.34 2005/01/27 12:22:48 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
@@ -191,7 +191,7 @@ namespace BALL
 	AmberNonBonded::determineMethodOfAtomPairGeneration()
 		throw()
 	{
-		if (force_field_->getAtoms().size() > 4000) 
+		if (force_field_->getAtoms().size() > 900) 
 		{ 
 			return MolmecSupport::HASH_GRID;
 		} 
@@ -213,18 +213,11 @@ namespace BALL
 		// Calculate all non bonded atom pairs
 		ForceField::PairVector atom_pair_vector;
 
-		try
-		{
-			MolmecSupport::calculateNonBondedAtomPairs
-				(atom_pair_vector, getForceField()->getAtoms(), 
-				 getForceField()->periodic_boundary.getBox(),
-				 cut_off_, force_field_->periodic_boundary.isEnabled(), 
-				 algorithm_type_);
-		}
-		catch (...)
-		{
-			throw Exception::TooManyErrors(__FILE__, __LINE__);
-		}
+		MolmecSupport::calculateNonBondedAtomPairs
+			(atom_pair_vector, getForceField()->getAtoms(), 
+			 getForceField()->periodic_boundary.getBox(),
+			 cut_off_, force_field_->periodic_boundary.isEnabled(), 
+			 algorithm_type_);
 
 		if (getForceField()->getSystem()->containsSelection())
 		{
