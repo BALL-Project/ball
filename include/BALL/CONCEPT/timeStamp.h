@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.10 2000/12/10 22:02:33 amoll Exp $
+// $Id: timeStamp.h,v 1.11 2001/02/20 11:36:58 amoll Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -29,12 +29,9 @@ namespace BALL
 	/**	Time class.
 			Used to store a point of time.
 			This class  provides a higher precision than \Ref{Time}
-			(below seconds).
-			\\
-			{\bf Interface:} {\tt Storable}
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/timeStamp.h}
-			\\
+			(below seconds). \\
+			{\bf Interface:} {\tt Storable}	\\
+			{\bf Definition:} \URL{BALL/CONCEPT/timeStamp.h} \\
 	*/
 	class PreciseTime
 	{
@@ -46,6 +43,7 @@ namespace BALL
 		/**	@name Constructors and Destructors.
 		*/
 		//@{
+
 		/**	Default constructor.
 				Initialize with zero.
 		*/
@@ -66,19 +64,21 @@ namespace BALL
 		*/
 		virtual ~PreciseTime()
 			throw();
-		//@}
 
+		//@}
 		/**	@name Constants.
 		*/
 		//@{
+
 		/**	Zero object.
 		*/
 		static const PreciseTime ZERO;
-		//@}
 
+		//@}
 		/**	@name Assignment
 		*/
 		//@{
+
 		/** Assignment method
 		*/
 		void set(long secs, long usecs) 
@@ -98,11 +98,12 @@ namespace BALL
 		*/
 		virtual void clear() 
 			throw();
-		//@}
 
+		//@}
 		/**	@name Predicates
 		*/
 		//@{
+
 		/**	Greater than operator.
 		*/
 		bool operator < (const PreciseTime& time) const 
@@ -117,8 +118,8 @@ namespace BALL
 		*/
 		bool operator == (const PreciseTime& time) const 
 			throw();
+
 		//@}
-		
 		/**	@name Accessors 
 		*/
 		//@{
@@ -138,6 +139,7 @@ namespace BALL
 		*/
 		static PreciseTime now() 
 			throw();
+
 		//@}
     /** @name Storable interface.
     */
@@ -160,6 +162,7 @@ namespace BALL
     */
     bool read(PersistenceManager& pm)
 			throw();
+
 		//@}
  
 		protected:
@@ -169,20 +172,17 @@ namespace BALL
 	};
 
 	/**	Time stamp concept.
-			
-			This class implements a so-caleld time stamp. It is used to 
+			This class implements a so-called time stamp. It is used to 
 			store modification or creation times of objects.
-	
-			{\bf Interface:} {\tt Storable}
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/timeStamp.h}
-			\\
+			{\bf Interface:} {\tt Storable}	\\
+			{\bf Definition:} \URL{BALL/CONCEPT/timeStamp.h} \\
 	*/
 	class TimeStamp
 	{
 		public:
 
 		BALL_CREATE(TimeStamp)
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -196,8 +196,8 @@ namespace BALL
 		*/
 		virtual ~TimeStamp()
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -228,10 +228,10 @@ namespace BALL
 			throw();
 		
 		//@}
-
 		/**	@name Accessors
 		*/	
 		//@{
+
 		/**	Update the time stamp.
 				Store the value of {\tt time} in the internal time stamp.
 				If {\tt time} is 0, use the current time (as given by
@@ -246,8 +246,8 @@ namespace BALL
 		*/
 		const PreciseTime& getTime() const 
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Assignment
 		*/
 		//@{
@@ -263,7 +263,6 @@ namespace BALL
 			throw();
 
 		//@}
-
     /** @name Storable interface.
     */
     //@{
@@ -285,6 +284,7 @@ namespace BALL
     */
     bool read(PersistenceManager& pm)
 			throw();
+
 		//@}
 
 		protected:
@@ -297,6 +297,7 @@ namespace BALL
 	/**	Global stream operators for PreciseTime and TimeStamp
 	*/
 	//@{
+
 	/**	Print the contents of a PreciseTime object to a stream.
 	*/
 	std::ostream& operator << (std::ostream& os, const PreciseTime& time)
@@ -306,6 +307,7 @@ namespace BALL
 	*/
 	std::ostream& operator << (std::ostream& os, const TimeStamp& stamp)
 		throw();
+
 	//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.32 2001/02/11 23:05:07 amoll Exp $
+// $Id: string.h,v 1.33 2001/02/20 11:36:33 amoll Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -117,12 +117,12 @@ namespace BALL
 		/**	Character class containing all whitespace characters.
 				Whitespace characters are:\\
 				\begin{itemize}
-					\item blank ({\tt" "})
-					\item horizontal tab ({\tt"\\ t"})
-					\item new-line ({\tt"\\ n"})
-					\item line-feed ({\tt"\\ r"})
-					\item vertical tab ({\tt"\\ v"})
-					\item form-feed ({\tt"\\ f"})
+					\item blank " "
+					\item horizontal tab $ "\backslash t" $
+					\item new-line $ "\backslash n" $
+					\item line-feed $ "\backslash r" $
+					\item vertical tab $ "\backslash v" $
+					\item form-feed $ "\backslash f" $
 				\end{itemize}
 		*/
 		static const char* CHARACTER_CLASS__WHITESPACE;
