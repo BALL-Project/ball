@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.80 2004/11/25 01:10:21 amoll Exp $
+// $Id: molecularControl.C,v 1.81 2004/12/07 22:46:07 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1226,7 +1226,8 @@ bool MolecularControl::pasteAllowedFor_(Composite& child)
 
 	if (RTTI::isKindOf<SecondaryStructure>(parent)) return (RTTI::isKindOf<Residue>(child));
 
-	if (RTTI::isKindOf<Chain>(parent)) return (RTTI::isKindOf<SecondaryStructure>(child));
+	if (RTTI::isKindOf<Chain>(parent)) return (RTTI::isKindOf<SecondaryStructure>(child) ||
+																						 RTTI::isKindOf<Residue>(child));
 	
 	if (RTTI::isKindOf<Protein>(parent)) return (RTTI::isKindOf<Chain>(child));
 
