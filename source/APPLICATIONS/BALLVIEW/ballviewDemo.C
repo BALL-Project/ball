@@ -152,7 +152,10 @@ void BALLViewDemo::accept()
 	if (id < 7)
 	{
 		ModelType type = (ModelType) id;
-		if (type >= MODEL_SA_SURFACE) ((Index)type) ++;
+		if (type >= MODEL_SA_SURFACE)
+		{
+			type = (ModelType)((Index)type + 1);
+		}
  		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, type, COLORING_ELEMENT);
 		notify_(crmsg);
 	}
@@ -282,7 +285,7 @@ void BALLViewDemo::accept()
 		notify_(crmsg);
 	}
 
-	buttonOk->setEnabled(!disable_button);
+	buttonOk->setEnabled(true);
 }
 
 
