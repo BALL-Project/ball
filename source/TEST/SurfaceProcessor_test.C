@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SurfaceProcessor_test.C,v 1.5 2003/05/08 12:05:14 oliver Exp $
+// $Id: SurfaceProcessor_test.C,v 1.6 2003/05/08 18:23:49 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(SurfaceProcessor, "$Id: SurfaceProcessor_test.C,v 1.5 2003/05/08 12:05:14 oliver Exp $")
+START_TEST(SurfaceProcessor, "$Id: SurfaceProcessor_test.C,v 1.6 2003/05/08 18:23:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -71,21 +71,6 @@ CHECK(SurfaceProcessor / methane)
 	Surface surface = proc.getSurface();
 	TEST_EQUAL(surface.getNumberOfTriangles(), 422)
 	TEST_EQUAL(surface.getNumberOfVertices(), 213)
-RESULT
-
-CHECK(SurfaceProcessor / List)
-	SurfaceProcessor sp;
-	List<Atom*> composites;
-	Atom a, b;
-	b.setPosition(Vector3(2, 2, 2));
-	composites.apply(sp);
-	TEST_EQUAL(sp.getSurface().getNumberOfTriangles(), 0)
-	TEST_EQUAL(sp.getSurface().getNumberOfVertices(), 0)
-	composites.push_back(&a);
-	composites.push_back(&b);
-	composites.apply(sp);
-	TEST_EQUAL(sp.getSurface().getNumberOfTriangles(), 256)
-	TEST_EQUAL(sp.getSurface().getNumberOfVertices(), 130)
 RESULT
 
 /////////////////////////////////////////////////////////////
