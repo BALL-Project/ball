@@ -14,6 +14,7 @@ CPP_SOURCES= $(FFT_SOURCES)\
 	angle.C\
 	box3.C\
 	circle3.C\
+	complex.C\
 	function.C\
 	line3.C\
 	matrix44.C\
