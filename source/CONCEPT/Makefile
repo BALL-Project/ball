@@ -9,6 +9,7 @@ CPP_SOURCES= $(XDR_SOURCES)\
 	composite.C\
 	embeddable.C\
 	enumerator.C\
+	factory.C\
 	notification.C\
 	object.C\
 	persistenceManager.C\
