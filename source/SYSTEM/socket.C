@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.3 1999/09/01 07:02:14 oliver Exp $
+// $Id: socket.C,v 1.4 1999/09/08 13:36:33 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -323,7 +323,7 @@ namespace BALL {
 
 	SocketBuf	SocketBuf::accept(SockAddr& sa)
 	{
-		int len = sa.getSize();
+		BALL_SOCKLEN_TYPE len = sa.getSize();
 		int soc = -1;
 
 		while ((soc = ::accept (rep->sock, sa.getAddr (), &len)) == -1 && errno == EINTR)
@@ -396,7 +396,7 @@ namespace BALL {
 		}
 		
 		int	rval;
-		int	sock_addr_len = sa.getSize();
+		BALL_SOCKLEN_TYPE	sock_addr_len = sa.getSize();
 		
 		if ((rval = ::recvfrom (rep->sock, (char*) buf, len, msgf, sa.getAddr (), &sock_addr_len)) == -1)
 		{
@@ -611,7 +611,7 @@ namespace BALL {
 
 	int SocketBuf::getopt(option op, void* buf, int len, level l) const
 	{
-		int	rlen = len;
+		BALL_SOCKLEN_TYPE	rlen = len;
 		if (::getsockopt (rep->sock, l, op, (char*) buf, &rlen) == -1)
 		{
 			perror ("SocketBuf::getopt");
@@ -937,7 +937,7 @@ namespace BALL {
 	SockInetAddr SockInetBuf::localaddr() const
 	{
 		SockInetAddr sin;
-		int len = sin.getSize();
+		BALL_SOCKLEN_TYPE len = sin.getSize();
 		if (::getsockname(rep->sock, sin.getAddr(), &len) == -1)
 		{
 			perror("SockInetBuf::localaddr()");
@@ -972,7 +972,7 @@ namespace BALL {
 	SockInetAddr SockInetBuf::peeraddr() const
 	{
 		SockInetAddr sin;
-		int len = sin.getSize();
+		BALL_SOCKLEN_TYPE len = sin.getSize();
 		if (::getpeername(rep->sock, sin.getAddr(), &len) == -1)
 		{
 			perror("SockInetBuf::peeraddr()");
