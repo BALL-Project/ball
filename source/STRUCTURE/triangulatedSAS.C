@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSAS.C,v 1.4 2003/12/17 11:52:57 strobel Exp $
+// $Id: triangulatedSAS.C,v 1.5 2004/02/18 19:03:30 oliver Exp $
 
 #	include <BALL/KERNEL/atom.h>
 #	include <BALL/KERNEL/molecule.h>
@@ -646,9 +646,10 @@ std::cout << "onePointOutside ...\n";
 		test = ((t->edge_[edge[1]]->vertex_[0]->index_ == -1) ? 0 : 1);
 		v3 = t->edge_[edge[1]]->vertex_[test];
 		v4 = t->edge_[edge[1]]->vertex_[1-test];
+
 		// get the relative index of v4 which is needed
 		// to compute the correct orientation of the first new triangle
-		Index index;
+		Index index = 0;
 		for (Position j = 0; j < 3; j++)
 		{
 			if (t->vertex_[j] == v4)

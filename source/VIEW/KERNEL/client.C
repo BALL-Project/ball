@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.C,v 1.15 2003/08/26 13:44:05 oliver Exp $
+// $Id: client.C,v 1.16 2004/02/18 19:03:30 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/client.h>
@@ -87,83 +87,6 @@ namespace BALL
 
 			iostream_socket->close();
     }
-
-		// ????????????
-		/*
-		void Client::setCreatorValue(int address, int value)
-    {
-			#ifdef BALL_VIEW_DEBUG
-					
-			if (!isValid())
-			{
-				throw InvalidClient(__FILE__, __LINE__);
-			}
-				
-			#endif
-
-			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_.c_str(), port_);
-
-			iostream_socket << (int)COMMAND__SET_CREATOR_VALUE << " ";
-			iostream_socket << address << " ";
-			iostream_socket << value << endl;
-		
-			iostream_socket->close();
-		}
-
-		int Client::getCreatorValue(int address)
-    {
-			#ifdef BALL_VIEW_DEBUG
-					
-			if (!isValid())
-			{
-				throw InvalidClient(__FILE__, __LINE__);
-			}
-				
-			#endif
-
-			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_.c_str(), port_);
-
-			iostream_socket << (int)COMMAND__GET_CREATOR_VALUE << " ";
-			iostream_socket << address << endl;
-
-			int value = -1;
-
-			iostream_socket >> value;
-
-			iostream_socket->close();
-
-			return value;
-		}
-
-		bool Client::hasCreatorValue(int address, int value)
-    {
-			#ifdef BALL_VIEW_DEBUG
-					
-			if (!isValid())
-			{
-				throw InvalidClient(__FILE__, __LINE__);
-			}
-				
-			#endif
-
-			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_.c_str(), port_);
-
-			iostream_socket << (int)COMMAND__HAS_CREATOR_VALUE << " ";
-			iostream_socket << address << " ";
-			iostream_socket << value << endl;
-
-			bool has_value = false;
-
-			iostream_socket >> has_value;
-
-			iostream_socket->close();
-
-			return has_value;
-		}
-		*/
 
 		bool Client::isValid() const
 			throw()
