@@ -17,11 +17,9 @@
 #	include <qstring.h>
 #endif
 
-#ifndef QTEXTVIEW_H
-#	include <qtextview.h>
+#ifndef QMULTILINEEDIT_H
+# include <qmultilineedit.h>
 #endif
-
-#include <qmultilineedit.h>
 
 #ifndef BALL_CONCEPT_NOTIFICATION_h
 # include <BALL/CONCEPT/notification.h>

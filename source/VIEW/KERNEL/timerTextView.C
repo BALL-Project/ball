@@ -18,8 +18,6 @@ namespace BALL
 		{
 			Log.insert(strstream_);
 			Log.insertNotification(strstream_, *this);
-
-			//			setTextFormat(PlainText);
 		}
 
 		TimerTextView::TimerTextView(const TimerTextView& view, bool deep)
@@ -30,8 +28,6 @@ namespace BALL
 		{
 			Log.insert(strstream_);
 			Log.insertNotification(strstream_, *this);
-
-			//			setTextFormat(PlainText);
 		}
 
 		TimerTextView::~TimerTextView()
@@ -101,7 +97,7 @@ namespace BALL
 				history_string_ += QString(line.c_str());
 
 				setText(history_string_);
-				//	scrollBy(0, visibleHeight());
+				setCursorPosition(numLines(), 0);
 				repaint();
 
 				qApp->processEvents();
