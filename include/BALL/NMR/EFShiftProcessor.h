@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.h,v 1.5 2000/09/21 22:46:31 amoll Exp $
+// $Id: EFShiftProcessor.h,v 1.6 2001/02/01 18:14:00 amoll Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -29,13 +29,13 @@ namespace BALL
 		*/
 		//@{
 
-		/**	A symbolic name for the electric field contribution to the chemical shift
+		/**	A symbolic name for the electric field contribution to the chemical shift.
 				@see ShiftModule::PROPERTY__SHIFT
 		*/
 		static const char* PROPERTY__EF_SHIFT;
 		//@}
 		
-		/**@name	Constructors and Destructors
+		/** @name	Constructors and Destructors.
 		*/
 		//@{
 
@@ -44,20 +44,21 @@ namespace BALL
 		EFShiftProcessor()
 			throw();
 	
-		/**	Copy constructor
+		/**	Copy constructor.
 		*/
 		EFShiftProcessor(const EFShiftProcessor& processor)
 			throw();
 			
-		/**	Destructor
+		/**	Destructor.
 		*/
 		virtual ~EFShiftProcessor()
 			throw();	
-		//@}
 
-		/**	@name	Accessors
+		//@}
+		/**	@name	Accessors.
 		*/
 		//@{
+
 		/**	Initialization method.
 				This method reads the parameter section "ElectricFieldEffect" and
 				parses its contents.
@@ -65,8 +66,7 @@ namespace BALL
 				a bond (the first expression matches the atom whose shift is to be
 				calculated, the second describes its bond partner).
 				For each of these bonds, two parameters are given, 
-				$\varepsilon_1$ and	$\varepsilon_2$.
-				\\
+				$\varepsilon_1$ and	$\varepsilon_2$. \\
 				Then, this method extracts the contents of the "Charges"
 				section and thus constructs an hash map containing residue and atom names 
 				the corresponding charges.
@@ -76,8 +76,8 @@ namespace BALL
 		*/
 		virtual void init()
 			throw();
+
 		//@}
-	
 		/**	@name	Processor specific functions.
 		*/
 		//@{
@@ -85,7 +85,7 @@ namespace BALL
 		/**	Processor start method.
 				This method clears the bond and effector list.
 				It fails if no parameters were assigned.
-				@return {\bf false} if {\tt parameters_ == 0}
+				@return bool, {\bf false} if {\tt parameters_ == 0}
 		*/
 		virtual bool start()
 			throw();
@@ -97,7 +97,7 @@ namespace BALL
 				Charged atoms	are stored in the atom list \Ref{effector_list_}.
 				All bonds are stored in \Ref{bond_list_}.
 				@return \Ref{Processor::CONTINUE}
-				@param composite an arbitrary composite. All non-atom objects are ignored
+				@param composite an arbitrary composite. All non-atom objects are ignored.
 		*/
 		virtual Processor::Result operator () (Composite& composite)
 			throw();
@@ -118,8 +118,8 @@ namespace BALL
 				from the parameter file (section "ElectricFieldEffect").
 				The chemical shift is stored in the \emph{first} atom
 				using the named property \Ref{ShiftModule::PROPERTY__SHIFT} 
-				and  in the named property \Ref{PROPERTY__EF_SHIFT}.
-				@return {\bf false} if {\tt parameters_ == 0}
+				and in the named property \Ref{PROPERTY__EF_SHIFT}.
+				@return bool, {\bf false} if {\tt parameters_ == 0}
 		*/
 		virtual bool finish()
 			throw();
@@ -127,7 +127,7 @@ namespace BALL
 
 		protected:
 	
-		/**	The list of bonds collected by {\tt operator ()}
+		/**	The list of bonds collected by {\tt operator ()}.
 		*/
 		std::list<Bond*>				bond_list_;
 
@@ -135,19 +135,19 @@ namespace BALL
 		*/
 		std::list<Atom*>				effector_list_;
 
-		/**	The expressions describing the first atom of a bond
+		/**	The expressions describing the first atom of a bond.
 		*/
 		std::vector<Expression>	first_atom_expressions_;
 
-		/**	The expressions describing the first atom of a bond
+		/**	The expressions describing the first atom of a bond.
 		*/
 		std::vector<Expression>	second_atom_expressions_;
 
-		/**	The parameter $\varepsilon_1$
+		/**	The parameter $\varepsilon_1$.
 		*/
 		std::vector<float>			epsilon1_;
 
-		/**	The parameter $\varepsilon_2$
+		/**	The parameter $\varepsilon_2$.
 		*/
 		std::vector<float>			epsilon2_;
 
@@ -156,7 +156,7 @@ namespace BALL
 		StringHashMap<float>		charge_map_;
 
 		/**	A flag indicating whether effectors in the same residues are to be considered.
-				Set this flag by specifying the option "{\tt exclude_residue_field=true}" in 
+				Set this flag by specifying the option {\tt exclude_residue_field = true} in 
 				the ElectricFieldShift section of the parameter file.
 				Default is false.
 		*/
