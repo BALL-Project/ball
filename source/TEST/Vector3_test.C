@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.9 2000/02/21 18:16:22 amoll Exp $ #include
+// $Id: Vector3_test.C,v 1.10 2000/02/24 15:10:50 amoll Exp $ #include
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.9 2000/02/21 18:16:22 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.10 2000/02/24 15:10:50 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,7 +37,6 @@ RESULT
 Vector3 v;
 Vector3 v1;
 Vector3 v2;
-float x;
 
 //line 321
 CHECK(TVector3::T& operator [] (Index index) const)
@@ -45,8 +44,8 @@ CHECK(TVector3::T& operator [] (Index index) const)
 	TEST_REAL_EQUAL(v[0], 1)
 	TEST_REAL_EQUAL(v[1], 2.0)
 	TEST_REAL_EQUAL(v[2], 3.0)
-	TEST_EXCEPTION(Exception::IndexUnderflow, x == v[-1])
-	TEST_EXCEPTION(Exception::IndexOverflow,  x == v[3])
+	TEST_EXCEPTION(Exception::IndexUnderflow, v[-1])
+	TEST_EXCEPTION(Exception::IndexOverflow,  v[3])
 RESULT
 
 
@@ -424,8 +423,8 @@ RESULT
 CHECK(TVector3<T> TVector3<T>::getOrthogonalProjection(const TVector3<T>& direction) const)
 	v  = Vector3(0, 1, 2);
 	v1 = Vector3(1, 2, 4);
-	v2 = v.getOrthogonalProjection(v);
-	TEST_EQUAL(v2 , (v1 * v / (v1 * v1) * v1))
+	v2 = v.getOrthogonalProjection(v1);
+	TEST_EQUAL(v2 == (v1 * v / (v1 * v1) * v1), true)
 RESULT
 
 //line 426 /// BAUSTELLE code in vector 3 could be improved!
@@ -434,34 +433,24 @@ CHECK(TVector3<T> TVector3<T>::getPerpendicularNormalization())
 	v1 = Vector3(9, 8, 7);
 	v2 = Vector3(4, 5, 6);
 	Vector3 e, f;
-	e.getPerpendicularNormalization(v, v, v2);
-	f = Vector3(-6, 12, 6);
-	TEST_EQUAL(e, f);
+	e.getPerpendicularNormalization(v, v1, v2);
+	f = Vector3(-6, 12, -6);
+	TEST_EQUAL(e == f , true);
 RESULT
 
 //line 436 /// BAUSTELLE code in vector 3 could be improved!
 CHECK(TAngle<T> TVector3<T>::getTorsionTAngle())
 	Vector3 a, b, c, d, e;
-	Angle angle, angle2;
-	float test, erg;
-	a = Vector3(1, 2, 3);
-	b = Vector3(9, 8, 7);
-	c = Vector3(4, 5, 6);
-	d = Vector3(3, 2, 0);
+	Angle angle;
+	a = Vector3(0, 1, 2);
+	b = Vector3(100, 201, 302);
+	c = Vector3(50, 101, 202);
+	d = Vector3(200, 401, 602);
 	angle = a.getTorsionTAngle(a, b, c, d);
-	a = Vector3(318, 162, 6);
-	b = Vector3(5, 3, 1);
-	c = Vector3(15, -29, -12);
-	d = Vector3(-6, 12, 6);
-	angle2 = c.getAngle(d);
-	if (Maths::isLess(a * b, 0))
-	{
-		TEST_EQUAL(-angle , angle2 )
-	}
-	else
-	{
-		TEST_EQUAL(angle , angle2 )
-	}
+  TEST_EQUAL(angle == 0, true )
+	d = Vector3(50, 101, 602);
+	angle = a.getTorsionTAngle(a, b, c, d);
+  TEST_EQUAL(angle == 0, true )
 RESULT
 
 //line 449
@@ -498,9 +487,9 @@ RESULT
 CHECK(TVector3::isOrthogonalTo(TVector3& vector) const )
 	v2 = Vector3(1, 0, 3);
 	v  = Vector3(0, 2, 0);
-	TEST_EQUAL(v.isOrthogonalTo(v2) , true)
+	TEST_EQUAL(v.isOrthogonalTo(v2), true)
 	v[0]=1;
-	TEST_EQUAL(v.isOrthogonalTo(v2) , false)
+	TEST_EQUAL(v.isOrthogonalTo(v2), false)
 RESULT
 
 //line 471
@@ -571,8 +560,6 @@ CHECK(std::ostream& operator << (std::ostream& s, const TVector3<T>& vector))
 	//TEST_REAL_EQUAL(v[1], 2)
 	//TEST_REAL_EQUAL(v[2], 3)
 RESULT
-
-
 
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
