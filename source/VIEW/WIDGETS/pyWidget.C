@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.17 2003/11/14 13:39:14 amoll Exp $
+// $Id: pyWidget.C,v 1.18 2003/11/14 13:40:06 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -433,7 +433,6 @@ namespace BALL
 		void PyWidgetData::cut()
 		{
 			QTextEdit::cut();
-			newPrompt_();
 		}
 
 		void PyWidgetData::clear()
