@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.5 2003/09/19 18:17:59 amoll Exp $
+// $Id: genericControl.C,v 1.6 2003/11/23 17:50:33 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -41,6 +41,22 @@ GenericControl::~GenericControl()
 	  Log.error() << "Destructing object " << (void *)this << " of class " 
 								<< RTTI::getName<GenericControl>() << endl;
   #endif 
+}
+
+	GenericControl::ItemList GenericControl::getSelectedItems()
+	throw()
+{
+	ItemList selected;
+	QListViewItemIterator it(listview);
+	for (; it.current(); ++it)
+	{
+		if (it.current()->isSelected())
+		{
+ 			selected.push_back(it.current());
+		}
+	}
+
+	return selected;
 }
 
 } } // namespaces

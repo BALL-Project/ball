@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.4 2003/09/08 16:27:24 amoll Exp $
+// $Id: genericControl.h,v 1.5 2003/11/23 17:50:10 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -38,6 +38,9 @@ namespace BALL
 
 			public:
 
+			/// typedef
+			typedef List<QListViewItem*> ItemList;
+
 			/** @name Macros.
 		  */
 			//@{
@@ -69,8 +72,12 @@ namespace BALL
 			virtual ~GenericControl()
 				throw();
 
-			//@}
+			///
+			ItemList getSelectedItems()
+				throw();
 
+			//@}
+			
 		  protected slots:
 			
 			virtual void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
