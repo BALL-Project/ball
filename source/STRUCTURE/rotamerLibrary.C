@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.23 2003/04/12 10:04:18 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.24 2003/04/17 18:51:15 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -47,7 +47,7 @@ namespace BALL
 
 	RotamerLibrary::RotamerLibrary()
 		:	variants_(),
-			valid_(true)
+			valid_(false)
 	{
 	}
 
@@ -204,7 +204,8 @@ namespace BALL
 
 	// default constructor for ResidueRotamerSet
 	ResidueRotamerSet::ResidueRotamerSet()
-		: name_(""),
+		: valid_(false),
+			name_(""),
 			side_chain_(),
 			atom_name_map_(),
 			rotamers_(),
@@ -382,7 +383,8 @@ namespace BALL
 
 	// Copy Constructor
 	ResidueRotamerSet::ResidueRotamerSet(const ResidueRotamerSet& residue_rotamer_set)
-		: name_(residue_rotamer_set.name_),
+		: valid_(residue_rotamer_set.valid_),
+			name_(residue_rotamer_set.name_),
 			side_chain_(residue_rotamer_set.side_chain_),
 			atom_name_map_(),
 			rotamers_(residue_rotamer_set.rotamers_),
