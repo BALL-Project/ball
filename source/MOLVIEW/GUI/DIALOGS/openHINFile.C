@@ -1,7 +1,6 @@
-// $Id: openHINFile.C,v 1.6.4.3 2002/11/28 17:16:23 amoll Exp $
+// $Id: openHINFile.C,v 1.6.4.4 2002/12/03 10:08:49 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
-
 #include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
 #include <BALL/MATHS/box3.h>
 #include <BALL/KERNEL/system.h>

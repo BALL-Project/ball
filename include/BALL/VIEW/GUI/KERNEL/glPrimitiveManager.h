@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.h,v 1.7.4.4 2002/11/07 19:21:18 amoll Exp $
+// $Id: glPrimitiveManager.h,v 1.7.4.5 2002/12/03 10:08:49 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -14,8 +14,6 @@
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #	include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #endif
-
-#include <GL/gl.h>
 
 #define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE 12
 

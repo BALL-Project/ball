@@ -1,4 +1,4 @@
-// $Id: color.C,v 1.5 2000/01/13 22:31:55 oliver Exp $
+// $Id: color.C,v 1.5.4.1 2002/12/03 10:08:49 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/color.h>
 using namespace std;
@@ -17,7 +17,7 @@ namespace BALL
 		{
 		}
 
-		ColorRGBA::ColorRGBA(const ColorRGBA& color, bool /* deep */ )
+		ColorRGBA::ColorRGBA(const ColorRGBA& color)
 			:	red_(color.red_),
 				green_(color.green_),
 				blue_(color.blue_),
@@ -83,7 +83,7 @@ namespace BALL
 			return String(&temp[0]);  
 		}
 
-		void ColorRGBA::set(const ColorRGBA& color, bool /* deep */)
+		void ColorRGBA::set(const ColorRGBA& color)
 		{
 			red_ = color.red_;
 			green_ = color.green_;
@@ -646,7 +646,7 @@ namespace BALL
 					
 				if ((length != 6) && (length != 7))
 				{
-					throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+					throw BALL::Exception::InvalidRange(__FILE__, __LINE__);
 				}
 								
 			#endif
@@ -695,7 +695,7 @@ namespace BALL
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/DATATYPE/color.iC>
+//#			include <BALL/VIEW/DATATYPE/color.iC>
 #		endif
 
 	} // namespace VIEW

@@ -1,13 +1,16 @@
-// $Id: fileDialog.h,v 1.7.4.1 2002/10/25 23:41:00 amoll Exp $
+// $Id: fileDialog.h,v 1.7.4.2 2002/12/03 10:08:49 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
+
+#include <qfiledialog.h>
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
-#include <qfiledialog.h>
+
+
 
 namespace BALL
 {

@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.9 2002/12/02 20:53:12 amoll Exp $
+// $Id: control.h,v 1.10.4.10 2002/12/03 10:08:49 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -448,9 +448,7 @@ namespace BALL
 
 			/**
 			*/
-			void selectedComposite(Composite* composite, bool state)
-				throw();
-
+			void selectedComposite(Composite* composite, bool state);
 
 		  signals:
 			

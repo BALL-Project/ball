@@ -1,12 +1,15 @@
-// $Id: POVRenderer.C,v 1.1.2.4 2002/11/27 23:30:06 oliver Exp $
+// $Id: POVRenderer.C,v 1.1.2.5 2002/12/03 10:08:49 oliver Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
+
+#include <BALL/SYSTEM/file.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/VIEW/PRIMITIV/point.h>
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 #include <BALL/VIEW/PRIMITIV/tube.h>
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
+
 
 using std::endl;
 
@@ -26,7 +29,7 @@ namespace BALL
 			throw(Exception::FileNotFound)
 			: ExternalRenderer()
 		{
-			outfile_.open(name, File::OUT);
+			outfile_.open(name, std::ios::out);
 		}
 
 		POVRenderer::~POVRenderer()
@@ -34,7 +37,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
-									 << " of class " << RTTI::getName<POVRenderer>() << endl;
+					<< " of class " << RTTI::getName<POVRenderer>() << std::endl;
 			#endif
 
 			destroy();
@@ -54,7 +57,7 @@ namespace BALL
 		void POVRenderer::setFileName(const String& name)
 			throw(Exception::FileNotFound)
 		{
-			outfile_.open(name, File::OUT);
+			outfile_.open(name, std::ios::out);
 		}
 
 		String POVRenderer::POVColorRGBA(const ColorRGBA& input)
@@ -98,10 +101,12 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG_PROCESSORS
-				Log.info() << "Start the POVRender output..." << endl;
+			Log.info() << "Start the POVRender output..." << std::endl;
 			#endif
 
-			outfile_ << "// POVRay file created by the BALL POVRenderer" << endl << endl;
+			outfile_	<< "// POVRay file created by the BALL POVRenderer" 
+								<< std::endl 
+								<< std::endl;
 
 			// Find out the camera position. This is stored in the Scene.
 			Vector3 view_point = scene_->getViewPointPosition();

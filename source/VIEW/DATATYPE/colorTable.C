@@ -1,4 +1,4 @@
-// $Id: colorTable.C,v 1.4.4.8 2002/11/26 16:55:30 anhi Exp $
+// $Id: colorTable.C,v 1.4.4.9 2002/12/03 10:08:49 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/COMMON/rtti.h>
@@ -236,7 +236,7 @@ namespace BALL
 				}
 			}
 
-			Index index = (Index) rint((value - min_)/(max_-min_)*(size()-1));
+			Index index = (Index)((value - min_) / (max_ - min_) * (size() - 1) + 0.5);
 
 			return (*this)[index];
 		}
@@ -268,7 +268,7 @@ namespace BALL
 				}
 			}
 
-			Index index = (Index) rint((value - min_)/(max_-min_)*(size()-1));
+			Index index = (Index)((value - min_) / (max_ - min_) * (size() - 1) + 0.5);
 
 			return (*this)[index];
 		}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.31.4.1 2002/08/22 17:17:55 oliver Exp $
+// $Id: reducedSurface.h,v 1.31.4.3 2002/12/03 10:08:48 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -172,8 +172,6 @@ namespace BALL
 			STATUS_OK  = 0,
 			STATUS_NOT_OK = 1,
 			STATUS_NOT_TESTED = 2
-			//STATUS_JUST_TREATED = 3,
-			//STATUS_NOT_EXISTING = 4
 		};
 
 		/** status of an atom
@@ -3306,11 +3304,11 @@ namespace BALL
 		}
 		if (extrem == 0)
 		{
-			return Maths::min(min, max);
+			return std::min(min, max);
 		}
 		else
 		{
-			return Maths::max(min, max);
+			return std::max(min, max);
 		}
 	}
 

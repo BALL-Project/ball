@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.30 2002/01/05 03:59:09 oliver Exp $
+// $Id: bitVector.C,v 1.30.4.1 2002/12/03 10:08:49 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -7,8 +7,16 @@
 
 using namespace std;
 
+
 namespace BALL 
 {
+	// CHECK: min/max issue
+	// collision in the defintion of Maths::min/max and std::min/max
+	#ifndef BALL_COMPILER_MSVC
+		using namespace Maths;
+	#else
+		#include <algorithm>
+	#endif
 
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
@@ -285,7 +293,8 @@ namespace BALL
 
 		// We do this in a loop instead of using a direct cast to avoid
 		// problems with differing byte orders (big endian/little endian)
-		for (Index i = (Index)Maths::min((Size)BALL_CHAR_BITS, getSize()) - 1; i >= 0; i--)
+
+		for (Index i = (Index)std::min((Size)BALL_CHAR_BITS, getSize()) - 1; i >= 0; i--)
 		{
 			c = c << 1;
 			if (getBit((Index)i) == true)
@@ -314,7 +323,7 @@ namespace BALL
 		throw()
 	{
 		unsigned short c = 0;
-		Index i = (Index)Maths::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1;
+		Index i = (Index)std::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1;
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
@@ -345,7 +354,7 @@ namespace BALL
 	{
 		unsigned int c = 0;
 
-		Index i = (Index)Maths::min((Size)(sizeof(unsigned int) * BALL_CHAR_BITS), getSize()) - 1;
+		Index i = (Index)std::min((Size)(sizeof(unsigned int) * BALL_CHAR_BITS), getSize()) - 1;
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
@@ -376,7 +385,7 @@ namespace BALL
 	{
 		unsigned long c = 0;
 
-		Index i = (Index)Maths::min((Size)(sizeof(unsigned long) * BALL_CHAR_BITS), getSize()) - 1;
+		Index i = (Index)std::min((Size)(sizeof(unsigned long) * BALL_CHAR_BITS), getSize()) - 1;
 		for (; i >= 0; i--)
 		{
 			c = c << 1;

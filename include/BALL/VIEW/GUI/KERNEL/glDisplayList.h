@@ -1,10 +1,16 @@
-// $Id: glDisplayList.h,v 1.6.4.1 2002/10/25 23:33:11 amoll Exp $
+// $Id: glDisplayList.h,v 1.6.4.2 2002/12/03 10:08:49 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifdef BALL_COMPILER_MSVC
+#define APIENTRY    __stdcall
+#define CALLBACK __stdcall
+#define WINGDIAPI __declspec(dllimport) 
 #endif
 
 #include <GL/gl.h>

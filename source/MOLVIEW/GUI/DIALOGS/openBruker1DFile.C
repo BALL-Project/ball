@@ -1,4 +1,4 @@
-// $Id: openBruker1DFile.C,v 1.4.4.1 2002/10/21 15:40:09 amoll Exp $
+// $Id: openBruker1DFile.C,v 1.4.4.2 2002/12/03 10:08:49 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h>
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -55,13 +55,13 @@ namespace BALL
       }
       catch(...)
       {
-			  Log.info() << "> read Bruker1D file failed." << endl;
+				Log.info() << "> read Bruker1D file failed." << std::endl;
 			  delete myfile;
 			  return;
       }
 
       // writing to log
-      Log.info() << "> Bruker file " << mydir << " succesfully read." << endl;
+			Log.info() << "> Bruker file " << mydir << " succesfully read." << std::endl;
 
       // notify main window
       NewRegularData1DMessage new_message;

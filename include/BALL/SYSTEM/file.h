@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.39.4.3 2002/12/01 21:45:23 oliver Exp $
+// $Id: file.h,v 1.39.4.4 2002/12/03 10:08:49 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -229,7 +229,7 @@ namespace BALL
 				@see    open
 				@return File - new constructed File object
 		*/
-		File(const String& name, OpenMode open_mode = IN)
+		File(const String& name, OpenMode open_mode = std::ios::in)
 			throw (Exception::FileNotFound);
 
 		/** Copy constructor.
@@ -278,7 +278,7 @@ namespace BALL
 				@param open_mode the open mode, default is IN
 				@return bool true if the file could be opened
 		*/
-		bool open(const String& name, OpenMode open_mode = IN)
+		bool open(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw (Exception::FileNotFound);
 
 		/**	Reopen the file.

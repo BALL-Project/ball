@@ -1,6 +1,8 @@
-// $Id: clientScene.C,v 1.6.4.1 2002/10/18 14:47:58 amoll Exp $
+// $Id: clientScene.C,v 1.6.4.2 2002/12/03 10:08:49 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/clientScene.h>
+
+#include <BALL/VIEW/COMMON/global.h>
 
 using namespace std;
 
@@ -12,11 +14,10 @@ namespace BALL
 
 
 		ClientScene::ClientScene()
-			:
-			host_(0),
-			port_(0),
-			scenehandle_(0),
-			pm_()
+			: host_(0),
+				port_(0),
+				scenehandle_(0),
+				pm_()
 		{
 		}
 
@@ -30,11 +31,10 @@ namespace BALL
 
 		ClientScene::ClientScene
 			(const ClientScene&  clientScene , bool /* deep */)
-				:
-			host_(clientScene.host_),
-			port_(clientScene.port_),
-			scenehandle_(clientScene.scenehandle_),
-			pm_()
+			:	host_(clientScene.host_),
+				port_(clientScene.port_),
+				scenehandle_(clientScene.scenehandle_),
+				pm_()
 		{
 		}
 
@@ -144,7 +144,7 @@ namespace BALL
 			iostream_socket->close();
     }
 
-	  void ClientScene::insert(Composite &composite)
+	  void ClientScene::insert(Composite& composite)
     {
 			#ifdef BALL_VIEW_DEBUG
 					
