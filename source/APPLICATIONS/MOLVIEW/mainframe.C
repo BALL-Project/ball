@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.99 2003/12/12 11:11:51 oliver Exp $
+// $Id: mainframe.C,v 1.100 2003/12/12 12:17:45 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -667,8 +667,8 @@ void Mainframe::amberMDSimulation()
 		dcd = new DCDFile(md_dialog_->getDCDFile(), File::IN);
 
 		NewTrajectoryMessage* message = new NewTrajectoryMessage;
-		message->setComposite(amber->getSystem());
-		message->setTrajectoryFile(dcd);
+		message->setComposite(*amber->getSystem());
+		message->setTrajectoryFile(*dcd);
 		notify_(message);
 	}
 
