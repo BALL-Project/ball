@@ -1,0 +1,40 @@
+PB: Finite Difference Poisson-Boltzmann Solver
+----------------------------------------------
+
+This application solves the linear Poisson-Boltzmann equation on a
+three-dimensional grid. Input are structures (usually from a PDB file),
+radius and charge files (default: PARSE radii and charges, see ref. [1]). 
+This program may be used to calculate electrostatic free energies, e.g.
+the electrostatic contribution of the solvation energy of proteins.
+Solvation energies are usually calculated as differences between the energy of
+the solute in vacuum and the solute in the corresponding solvent.
+
+Possible options in a configuration file (incomplete list, for a more
+complete description refer to the BALL Reference Manual, class FDPB):
+
+	- spacing (float)       
+        the grid spacing (default: 0.6) [Angstrom]
+
+  - border (float)
+        the minimum distance between the solute and the border 
+        of the grid (default: 4.0) [Angstrom]
+
+  - solute_dielectric_constant (float)
+        the solute dielectric constant (default: 2.0)
+  
+  - solvent_dielectric_constant (float)
+        the solvent dielectric constant (default: 78.0)
+
+  - verbosity (integer)
+        the amount of output created (0: terse, 99: REALLY verbose)
+
+
+
+
+References:
+[1]  D. Sitkoff, K. A. Sharp, B. Honig: 
+     Accurate Calculation of hydration free energies using macroscopic solvent
+     models, J. Phys. Chem., 98:7 (1994), 1978-1988
+
+           
+        
