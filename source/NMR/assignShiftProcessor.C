@@ -1,4 +1,8 @@
+// $Id: assignShiftProcessor.C,v 1.4 2000/09/16 07:44:12 oliver Exp $
+
 #include<BALL/NMR/assignShiftProcessor.h>
+
+#include <BALL/KERNEL/PTE.h>
 
 using namespace std;
 

@@ -1,4 +1,4 @@
-// $Id: randomCoil.C,v 1.3 2000/09/08 07:13:24 oliver Exp $
+// $Id: randomCoil.C,v 1.4 2000/09/16 07:44:13 oliver Exp $
 
 #include<BALL/NMR/randomCoil.h>
 
@@ -6,95 +6,116 @@ using namespace std;
 
 namespace BALL
 {
+	const int MAX_EXPR = 5;
 
-//Konstruktor
+	//Konstruktor
 
-	RandomCoilShift::RandomCoilShift ()
+	RandomCoilShift::RandomCoilShift()
 	{
-		// setzen des Standardpfades für die randomcoilshift daten
+		ini_filename_="/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";
+	}
 
-		file_ = "../div/random.dat";
+		
+	//Destruktor
 
+	RandomCoilShift::~RandomCoilShift()
+	{
 	}
 
 
-//Destruktor
+	//StartFunktion
 
-	RandomCoilShift::~RandomCoilShift ()
+	bool RandomCoilShift::start()
 	{
-	}
-
-
-//StartFunktion
-
-	bool RandomCoilShift::start ()
-	{
-		// aufbau der Stringhashmap rc_table aus dem file random.dat
-
-		String residue, atom, eintrag;
-		float rc_shift;
-
-		ifstream infile (file_, ios::in);
-
-		do
+		// aufbau der ParameterSection ShiftData
+		
+		//cout << "RandomCoilShift::start()" << endl;
+		
+		int number_of_keys;
+		int counter;
+		
+		parameters_.setFilename(ini_filename_);
+		
+		// einlesen der shift Atome und liste von expressions aufbauen
+		
+		parameter_section_.extractSection(parameters_, "RC-ShiftAtoms");
+		
+		number_of_keys = parameter_section_.getNumberOfKeys();
+		
+		expressions_.clear();
+		
+		Position description_column = parameter_section_.getColumnIndex("description");
+		
+		String description;
+		
+		for(counter=0;counter<number_of_keys;counter++)
 		{
-			infile >> residue;
-			infile >> atom;
-			infile >> rc_shift;
-			eintrag = residue;
-			eintrag.append (":");
-			eintrag.append (atom);
-			rc_table_[eintrag] = rc_shift;
+			description = parameter_section_.getValue(counter,description_column);
+			while (description.has('_'))
+				description.substitute("_"," ");
+			//cout << description << endl;
+				
+			expressions_.push_back(Expression(description));
 		}
-		while (residue != "END");
-
-		return 1;
+		
+		return true;
 	}
 
-	bool RandomCoilShift::finish ()
-	{
-		// hier passiert nichts
-		return 1;
+	bool RandomCoilShift::finish()
+	{ 
+		return true;
 	}
 
-	Processor::Result RandomCoilShift::operator () (Composite& composite)
+	Processor::Result RandomCoilShift::operator()(Composite&  object)
 	{
 		// lese aus der rc_table den entsprechenden Eintrag und addiere zum shift
 
-		float rc_shift;
-		String residue, atom, eintrag;
+		//cout << "RandomCoilShift::operator()" << endl;
 
-		if (RTTI::isKindOf<PDBAtom>(composite))
+		parameter_section_.extractSection(parameters_,"RC-ShiftData");
+
+		float rc_shift;
+		String residue,atom,eintrag;
+		Position counter;
+		
+		if (RTTI::isKindOf<PDBAtom>(object))
 		{
 			//cout  << endl << "Object is ProteinAtom";
-			patom_ = RTTI::castTo<PDBAtom>(composite);
-
-			if (patom_->getElement () == PTE[Element::H])
+			PDBAtom* atom_ptr = RTTI::castTo<PDBAtom>(object);
+			
+			for(counter = 0; counter < expressions_.size(); counter++)
 			{
-				residue = patom_->getResidue ()->getName ();
-				atom = patom_->getName ();
-				eintrag = residue;
-				eintrag.append (":");
-				eintrag.append (atom);
-				if (rc_table_.has (eintrag))
+				if (expressions_[counter](*atom_ptr))
 				{
-					//cout << endl <<"Eintrag gefunden:"<<eintrag;
-					rc_shift = rc_table_[eintrag];
-					shift_ = patom_->getProperty ("chemical_shift").getFloat ();
-					shift_ -= rc_shift;
-					patom_->setProperty ("chemical_shift", shift_);
+					residue = atom_ptr->getResidue()->getName();
+					atom= atom_ptr->getName();
+					eintrag=residue;
+					eintrag.append(" ");
+					eintrag.append(atom);
+					//cout << "suche nach :" <<eintrag << endl;
+					if (parameter_section_.has(eintrag))
+						{
+						//cout <<"Eintrag gefunden:"<<eintrag<<endl;
+						rc_shift=(parameter_section_.getValue(eintrag,"shift")).toFloat();
+						rc_shift*=-1;
+						//cout <<"Eintrag ist :"<<rc_shift << endl;
+						
+						float shift = atom_ptr->getProperty("chemical_shift").getFloat();
+						shift +=rc_shift;
+						atom_ptr->setProperty("chemical_shift", shift);
+						atom_ptr->setProperty("RC",rc_shift);
+						}
+						else 
+							{
+							atom_ptr->clearProperty("chemical_shift");
+							cout << "Eintrag nicht gefunden:"<<eintrag <<endl;
+							}		
+					//cout << endl <<"RC:Residue :"<<atom_ptr->getResidue()->getName()<<" Atom :"<<atom_ptr->getName()<< " chemical_shift :" << shift;
+				
+					}
 				}
-				else
-				{
-					shift_ = 1000;
-					patom_->setProperty ("chemical_shift", shift_);
-					//cout << endl << "Eintrag nicht gefunden:"<<eintrag; 
-				}
-				//cout << endl <<"RC:Residue :"<<patom_->getResidue()->getName()<<" Atom :"<<patom_->getName()<< " chemical_shift :" << shift_;
-
 			}
+			return Processor::CONTINUE;
 		}
-		return Processor::CONTINUE;
-	}
+}//namespace BALL
 
-}	//namespace BALL

@@ -1,4 +1,4 @@
-// $Id: names.C,v 1.3 2000/09/07 19:38:31 oliver Exp $
+	// $Id: names.C,v 1.4 2000/09/16 07:44:13 oliver Exp $
 
 #include<BALL/NMR/names.h>
 
@@ -34,7 +34,7 @@ namespace BALL
 		}
 		else if (module_name == "LEF")
 		{
-			return (new LEFShift);
+			return (new LEFShiftProcessor);
 		}
 		else if (module_name == "ANISO")
 		{
@@ -45,7 +45,7 @@ namespace BALL
 			return (new RandomCoilShift);
 		}
 
-		return NULL;
+		return 0;
 	}
 
 }	// namespace BALL

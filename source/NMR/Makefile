@@ -4,6 +4,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	assignShiftProcessor.C\
+	clearShiftProcessor.C\
 	LEF.C\
 	anisotropy.C\
 	haighMallion.C\
