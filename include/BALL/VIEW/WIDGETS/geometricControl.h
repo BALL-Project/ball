@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.8 2003/11/23 16:41:00 amoll Exp $
+// $Id: geometricControl.h,v 1.9 2004/01/18 21:55:35 oliver Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -77,15 +77,8 @@ namespace BALL
 
 			public:
 			
-			/** @name Macros.
-		  */
-			//@{
+			BALL_EMBEDDABLE(GeometricControl,GenericControl)
 
-			/** Embeddable Macro.
-			*/
-			BALL_EMBEDDABLE(GeometricControl)
-
-			//@}
 			/**	@name	Constructors and Destructors
 			*/	
 			//@{

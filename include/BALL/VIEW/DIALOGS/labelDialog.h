@@ -38,7 +38,7 @@ namespace BALL
 			public ModularWidget
 		{
 			Q_OBJECT
-			BALL_EMBEDDABLE(LabelDialog)
+			BALL_EMBEDDABLE(LabelDialog,ModularWidget)
 				
 			public:
 			

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.7 2003/10/15 14:16:21 amoll Exp $
+// $Id: colorMeshDialog.h,v 1.8 2004/01/18 21:55:31 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -40,80 +40,84 @@ namespace BALL
 			: public ColorMeshDialogData,
 				public ModularWidget
 		{ 
-				Q_OBJECT
+			Q_OBJECT
 
 			public:
 
-				BALL_EMBEDDABLE(ColorMeshDialog)
+			BALL_EMBEDDABLE(ColorMeshDialog,ModularWidget)
 
-				///
-				class ColoringConfig
-				{
-					public:
+			///
+			class ColoringConfig
+			{
+				public:
 
-					ColorRGBA min_min_color, min_color, mid_color, max_color, max_max_color, custom_color;
-					float min_value, mid_value, max_value;
-					Size number_of_levels;
-					Position transparency;
-					Position tab;
-					String selected_grid;
-				};
+				ColorRGBA min_min_color, min_color, mid_color, max_color, max_max_color, custom_color;
+				float min_value, mid_value, max_value;
+				Size number_of_levels;
+				Position transparency;
+				Position tab;
+				String selected_grid;
+			};
 
-				///
-				ColorMeshDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+			///
+			ColorMeshDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
 
-				///
-				~ColorMeshDialog()
-					throw();
-						
-				///
-				virtual void onNotify(Message *message)
-					throw();
+			///
+			~ColorMeshDialog()
+				throw();
+					
+			///
+			virtual void onNotify(Message *message)
+				throw();
 
-				///
-				void setMesh(Mesh* mesh, Representation* rep)
-					throw();
+			///
+			void setMesh(Mesh* mesh, Representation* rep)
+				throw();
 				
-		public slots:
-				void applyPressed();
-				void cancelPressed();
-				void colorBoxesChanged();
-				void maxPressed();
-				void midPressed();
-				void minPressed();
-				void minMinPressed();
-				void maxMaxPressed();
-				void tabChanged();		
-				void autoScalePressed();
-				void choosePressed();
-				void gridSelected();
-				void show();
+			public slots:
+			
+			void applyPressed();
+			void cancelPressed();
+			void colorBoxesChanged();
+			void maxPressed();
+			void midPressed();
+			void minPressed();
+			void minMinPressed();
+			void maxMaxPressed();
+			void tabChanged();		
+			void autoScalePressed();
+			void choosePressed();
+			void gridSelected();
+			void show();
 
-		protected:
-				QColor setColor(QPushButton* button);
-				void colorByCustomColor_();
-				void colorByGrid_();
-				bool insertGrid_(RegularData3D& grid, const String& name);
-				void removeGrid_(RegularData3D& grid);
-				void setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box);
-				void getColor_(const ColorRGBA& color, QPushButton* button, QSpinBox* box);
-				void saveSettings_();
-				void loadSettings_();
-				void invalidateGrid_()
-					throw();
+			protected:
+			QColor setColor(QPushButton* button);
+			void colorByCustomColor_();
+			void colorByGrid_();
+			bool insertGrid_(RegularData3D& grid, const String& name);
+			void removeGrid_(RegularData3D& grid);
+			void setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box);
+			void getColor_(const ColorRGBA& color, QPushButton* button, QSpinBox* box);
+			void saveSettings_();
+			void loadSettings_();
+			void invalidateGrid_()
+				throw();
 
-				RegularData3D* grid_;
-				float min_value_;
-				float mid_value_;
-				float max_value_;
+			RegularData3D* grid_;
+			float min_value_;
+			float mid_value_;
+			float max_value_;
 
-				ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
+			ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 
-				HashMap<Representation*, ColoringConfig> configs_;
-				Mesh* mesh_;		
-				Representation* rep_;
-				List<RegularData3D*> grid_list_;
+			HashMap<Representation*, ColoringConfig> configs_;
+			Mesh* mesh_;		
+			Representation* rep_;
+			List<RegularData3D*> grid_list_;
 		};
 
-} } // Namespaces
+	} // namespace VIEW
+
+} // namespace BALL
+
 #endif

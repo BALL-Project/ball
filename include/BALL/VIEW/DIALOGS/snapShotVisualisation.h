@@ -27,7 +27,7 @@ class SnapshotVisualisationDialog
 
 	public:	
 
-	BALL_EMBEDDABLE(SnapshotVisualisationDialog)
+	BALL_EMBEDDABLE(SnapshotVisualisationDialog, ModularWidget)
 
 	/// Constructor
 	SnapshotVisualisationDialog

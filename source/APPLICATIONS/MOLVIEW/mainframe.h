@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.58 2003/12/20 15:28:43 amoll Exp $
+// $Id: mainframe.h,v 1.59 2004/01/18 21:55:36 oliver Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -86,6 +86,8 @@ namespace BALL
 
 		public:
 
+		BALL_EMBEDDABLE(Mainframe, MainControl)
+
 		/** This class is only intended for usage with multithreading.
 				It notifies the Mainframe, that the thread for simulations has finished and can be deleted.
 				This should only be used internaly.
@@ -159,7 +161,6 @@ namespace BALL
 			MENU__HELP_ABOUT
 		};
 
-		BALL_EMBEDDABLE(MainControl)
 
 		Mainframe(QWidget* parent = 0, const char* name = 0);
 

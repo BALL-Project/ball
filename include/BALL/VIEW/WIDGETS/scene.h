@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.14 2003/12/09 13:41:48 amoll Exp $
+// $Id: scene.h,v 1.15 2004/01/18 21:55:36 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -61,6 +61,8 @@ namespace BALL
 
 		  public:
 
+			BALL_EMBEDDABLE(Scene, ModularWidget)
+
 			/** This class is only intended for usage with multithreading.
 			 		It induces a rebuild of the display lists and an update of the Scene and
 					should only be used internaly.
@@ -78,13 +80,13 @@ namespace BALL
 			/// The class Events.
 			friend class Events;
 
-			//@} /** @name Macros */ //@{
+			//@} 
 			
-			/** Embeddable Macro.
-			*/
-			BALL_EMBEDDABLE(Scene)
 
-			//@} /** @name Enums */ //@{
+			//@} 
+			
+			/** @name Enums */ 
+			//@{
 			
 			/** There a three different kind of rendering for a Scene:
 			*/

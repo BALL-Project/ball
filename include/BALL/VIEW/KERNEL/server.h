@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.4 2003/11/21 01:22:23 amoll Exp $
+// $Id: server.h,v 1.5 2004/01/18 21:55:34 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -58,7 +58,7 @@ namespace BALL
 		{
 			public:
 			
-			BALL_EMBEDDABLE(Server)
+			BALL_EMBEDDABLE(Server,ModularWidget)
 
 			/**	@name	Constructors
 			*/	

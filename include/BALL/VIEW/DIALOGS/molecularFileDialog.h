@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.6 2003/09/17 23:40:45 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.7 2004/01/18 21:55:32 oliver Exp $
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -38,7 +38,7 @@ class MolecularFileDialog
 {
 	Q_OBJECT
 	public:
-	BALL_EMBEDDABLE(MolecularFileDialog)
+	BALL_EMBEDDABLE(MolecularFileDialog, ModularWidget)
 
 	/** @name Constructors
 	 */

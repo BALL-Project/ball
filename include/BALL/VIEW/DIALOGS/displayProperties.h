@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.25 2004/01/16 17:12:31 amoll Exp $
+// $Id: displayProperties.h,v 1.26 2004/01/18 21:55:32 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -49,7 +49,7 @@ namespace BALL
 				
 			public:
 			
-			BALL_EMBEDDABLE(DisplayProperties)
+			BALL_EMBEDDABLE(DisplayProperties,ModularWidget)
 
 			/// Exception to be thrown if an invalid option is given for a modelprocessor
 			class InvalidOption: public Exception::GeneralException

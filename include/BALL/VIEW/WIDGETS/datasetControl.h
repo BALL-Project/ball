@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.4 2003/12/01 20:37:09 amoll Exp $
+// $Id: datasetControl.h,v 1.5 2004/01/18 21:55:34 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -51,15 +51,8 @@ namespace BALL
 
 			public:
 
-			/** @name Macros.
-		  */
-			//@{
+			BALL_EMBEDDABLE(DatasetControl,GenericControl)
 
-			/** Embeddable Macro.
-			*/
-			BALL_EMBEDDABLE(DatasetControl)
-
-			//@}
 			/**	@name	Constructors and Destructors
 			*/	
 			//@{

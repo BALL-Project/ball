@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.12 2004/01/15 13:03:36 amoll Exp $
+// $Id: molecularProperties.h,v 1.13 2004/01/18 21:55:35 oliver Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
@@ -46,9 +46,11 @@ class MolecularProperties
 		public ModularWidget
 {
 	Q_OBJECT
-	BALL_EMBEDDABLE(MolecularProperties)
 
 	public:
+
+	BALL_EMBEDDABLE(MolecularProperties, ModularWidget)
+
 	
 	/**	@name	Constructors
 	*/	

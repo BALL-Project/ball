@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.7 2004/01/13 00:42:55 amoll Exp $
+// $Id: genericControl.h,v 1.8 2004/01/18 21:55:34 oliver Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -46,7 +46,7 @@ namespace BALL
 
 			/** Embeddable Macro.
 			*/
-			BALL_EMBEDDABLE(GenericControl)
+			BALL_EMBEDDABLE(GenericControl,DockWidget)
 
 			//@}
 			/**	@name	Constructors and Destructors

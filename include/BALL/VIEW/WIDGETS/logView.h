@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.8 2003/12/09 13:22:50 amoll Exp $
+// $Id: logView.h,v 1.9 2004/01/18 21:55:35 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -60,7 +60,7 @@ namespace BALL
 
 			public:
 
-			BALL_EMBEDDABLE(LogView)
+			BALL_EMBEDDABLE(LogView,DockWidget)
 		
 			/**	@name	Constructors
 			*/	

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.8 2003/12/09 14:59:59 amoll Exp $
+// $Id: modularWidget.h,v 1.9 2004/01/18 21:55:34 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -53,7 +53,7 @@ namespace BALL
 		{
 		  public:
 			
-			BALL_EMBEDDABLE(ModularWidget)			
+			BALL_EMBEDDABLE(ModularWidget,Embeddable)
 			BALL_CREATE(ModularWidget)
 			
 			/**	@name	Constructors

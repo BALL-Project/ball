@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.18 2003/10/15 14:11:45 amoll Exp $
+// $Id: embeddable.h,v 1.19 2004/01/18 21:55:31 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
@@ -34,7 +34,7 @@ namespace BALL
 			of each of these classes, even for classes further down in the inheritance.
 			The argument ist just the class type, e.g. BALL::ModularWidget.
 	*/
-	#define BALL_EMBEDDABLE(TYPE)\
+	#define BALL_EMBEDDABLE(TYPE,BASE)\
 		virtual void registerThis() throw() \
 		{ \
 			if (typeid(*this) != typeid(TYPE))\
@@ -43,6 +43,7 @@ namespace BALL
                   << "BALL_EMBEDDABLE(...) was not specified in the class declaration!" << std::endl;\
 			}\
 			Embeddable::registerInstance_(typeid(TYPE), this);\
+			Embeddable::registerInstance_(typeid(BASE), this);\
 		}\
 		\
 		static TYPE* getInstance(Position index) throw() { return dynamic_cast<TYPE*>(Embeddable::getInstance_(typeid(TYPE), index)); };\

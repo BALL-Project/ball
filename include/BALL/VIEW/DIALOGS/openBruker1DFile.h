@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.h,v 1.5 2003/09/04 22:17:47 amoll Exp $
+// $Id: openBruker1DFile.h,v 1.6 2004/01/18 21:55:32 oliver Exp $
 
 #ifndef BALL_VIEW_DIALOGS_OPENBRUKER1DFILE_H
 #define BALL_VIEW_DIALOGS_OPENBRUKER1DFILE_H
@@ -32,7 +32,7 @@ namespace BALL
 				public ModularWidget
 		{
 			Q_OBJECT
-			BALL_EMBEDDABLE(OpenBruker1DFile)
+			BALL_EMBEDDABLE(OpenBruker1DFile, ModularWidget)
 			public:
 
 			/** Constructors and Destructors

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.28 2004/01/13 15:16:31 amoll Exp $
+// $Id: mainControl.h,v 1.29 2004/01/18 21:55:33 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -116,7 +116,7 @@ namespace BALL
 
 			public:
 
-			BALL_EMBEDDABLE(MainControl)
+			BALL_EMBEDDABLE(MainControl,Embeddable)
 
 			/**	@name Enumerations
 			*/
