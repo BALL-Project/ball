@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.34 2004/11/03 17:04:14 amoll Exp $
+// $Id: INIFile.C,v 1.35 2004/11/17 20:12:27 oliver Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -438,9 +438,10 @@ namespace BALL
 	bool INIFile::insertValue(const String& section_name, const String& key, const String& value)
 	{
 		// does section exists?
-		if (!section_index_.has(section_name) ||
-				hasEntry(section_name, key)) 
+		if (!section_index_.has(section_name) || hasEntry(section_name, key))
+		{
 			return false;
+		}
 
 		String new_line(key + "=" + value);
 		appendLine(section_name, new_line);
@@ -451,9 +452,8 @@ namespace BALL
 	bool INIFile::setValue(const String& section_name, const String& key, const String& new_value)
 	{
 		// does section exists?
-		if (!section_index_.has(section_name)									||
-				key.isEmpty()																			||
-				!section_index_[section_name]->key_map_.has(key))
+		if (!section_index_.has(section_name)	|| key.isEmpty()
+				|| !section_index_[section_name]->key_map_.has(key))
 		{
 			return false;
 		}
@@ -512,8 +512,8 @@ namespace BALL
 			line.erase(0, 1);
 			if (!line.has(']'))
 			{
-				Log.error() << "In INIFile " << filename_ << " , while adding section:"
-										<< "missing bracet." << endl;
+				Log.error() << "INIFile::appendSection " << filename_ << " , while adding section:"
+										<< "missing bracket." << endl;
 				return false;
 			}
 			line = line.before("]");			
@@ -521,7 +521,7 @@ namespace BALL
 
 		if (section_index_.has(line))
 		{
-      Log.error() << "In INIFile " << filename_ << " , while adding section: '"
+      Log.error() << "INIFile::appendSection: " << filename_ << " , while adding section: '"
                   << line << "' already exists." << endl;
 			return false;
 		}
