@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.27 2004/03/17 13:37:25 amoll Exp $
+// $Id: DCDFile.C,v 1.28 2004/03/17 21:07:43 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -266,10 +266,7 @@ namespace BALL
 			seekg(ts_pos);
 
 			// read the length of a time step
-			BinaryFileAdaptor<float> adapt_float;
-			*this >> adapt_float;
-			if (swap_bytes_) swapBytes(adapt_float.getData());
-			time_step_length_ = adapt_float.getData();
+			time_step_length_ = readFloat_();
 			if (verbosity_ > 0)
 			{
 				Log.info() << "DCDFile::readHeader(): length of a time step: " 
@@ -610,9 +607,7 @@ namespace BALL
 	bool DCDFile::readSize_(Size expected_size, const String& what)
 		throw()
 	{
-		*this >> adapt_size_; 
-		if (swap_bytes_) swapBytes(adapt_size_.getData());
-		Size tmp = adapt_size_.getData();
+		Size tmp = readSize_();
 		// sanity check
 		if (tmp != expected_size)
 		{
@@ -624,12 +619,12 @@ namespace BALL
 		return true;
 	}
 
-	void DCDFile::readFloat_(float& to)
+	float DCDFile::readFloat_()
 		throw()
 	{
 		*this >> adapt_float_; 
 		if (swap_bytes_) swapBytes(adapt_float_.getData());
-		to = adapt_float_.getData();
+		return adapt_float_.getData();
 	}
 
 	bool DCDFile::readVector_(vector<Vector3>& v)
@@ -642,7 +637,7 @@ namespace BALL
 		if (!readSize_(expected_size, "X")) return false;
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			readFloat_(v[atom].x); 
+			v[atom].x = readFloat_();
 		}
 		if (!readSize_(expected_size, "X")) return false;
 
@@ -650,7 +645,7 @@ namespace BALL
 		if (!readSize_(expected_size, "Y")) return false;
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			readFloat_(v[atom].y); 
+			v[atom].y = readFloat_();
 		}
 		if (!readSize_(expected_size, "Y")) return false;
 
@@ -658,7 +653,7 @@ namespace BALL
 		if (!readSize_(expected_size, "Z")) return false;
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			readFloat_(v[atom].z); 
+			v[atom].z = readFloat_();
 		}
 		if (!readSize_(expected_size, "Z")) return false;
 

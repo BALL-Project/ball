@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.28 2004/03/17 13:37:05 amoll Exp $
+// $Id: DCDFile.h,v 1.29 2004/03/17 21:08:00 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_DCDFILE_H
@@ -162,7 +162,7 @@ namespace BALL
 		protected:
 
 		//_
- 		void readFloat_(float& to)
+ 		float readFloat_()
 			throw(); 
 
 		//_
