@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.50 2003/04/22 21:46:15 oliver Exp $
+// $Id: file.h,v 1.51 2003/05/08 08:58:43 sneumann Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -754,7 +754,7 @@ namespace BALL
 	{
 		if (sizeof(T) % 2 != 0)
 		{
-			Log.error() << "Cannot swap types of uneven size." << endl;
+			Log.error() << "Cannot swap types of uneven size." << std::endl;
 			return;
 		}
 
