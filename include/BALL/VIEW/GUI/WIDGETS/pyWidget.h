@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.12 2003/03/26 13:08:58 sturm Exp $
+// $Id: pyWidget.h,v 1.13 2003/03/27 17:57:41 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -18,17 +18,18 @@
 #	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
-#include <qmultilineedit.h>
+#include <qtextedit.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
+
 /** Python Widget class.
 	\ingroup ViewGuiWidgets	
 */
 class PyWidget
-	: public QMultiLineEdit,
+	: public QTextEdit,
 		public ModularWidget 
 {
 	Q_OBJECT
@@ -40,8 +41,9 @@ class PyWidget
 	/**	@name	Constructors and Destructors
 	*/
 	//@{
+
 	/** Standard constructor.
-			Creates a new widget. If the widget is part of a BALL \ref{MainControl} widget, 
+			If the widget is part of a BALL \ref{MainControl} widget, 
 			it inserts a menu entry <tt>Tools|Restart Python</tt> into the menu bar.
 			@param parent the parent widget
 			@param name the widget name
@@ -56,32 +58,33 @@ class PyWidget
 	/// Destructor
 	virtual ~PyWidget()
 		throw();
-	//@}
 
 	public slots:
 
+	//@}
 	/**	@name Running the interpreter
 	*/
 	//@{
+	
 	/** Start the interpreter.
-			This method initializes the interpreter if it
-			is not yet running. An already running interpreter 
-			is reinitialized.
-			This method calls <tt>PyInitialize()</tt> to 
-			create an interpreter.
+			This method initializes the interpreter if it is not yet running. 
+			An already running interpreter is reinitialized.
+			This method calls <tt>PyInitialize()</tt> to create an interpreter.
 			This is a QT <b>SLOT</b>.
 	*/
 	virtual void startInterpreter();
+	
 	/**	Stop the interpreter.
 			The interpreter is stoped by calling <tt>Py_Finish()</tt>.
 			This is a QT <b>SLOT</b>.
 	*/
 	virtual void stopInterpreter();
+	
 	//@}
-
 	/**	@name	ModularWidget related methods
 	*/
 	//@{
+
 	/**	Setup the menu entries.
 			PyWidget creates an entry in Tools|Restart Python and connects
 			the entry to startInterpreter().
@@ -91,10 +94,10 @@ class PyWidget
 	/**	Remove menu entries.
 	*/
 	virtual void finalizeWidget(MainControl& main_control);
-	//@}
 	
 	public:
 
+	//@}
 	/** @name	Widget related methods
 			These methods implement the basic behaviour of the edit window by 
 			overwriting the corresponding methods of <tt>QMultiLineEdit</tt>.
@@ -102,29 +105,37 @@ class PyWidget
 			overwrite them in derived classes.
 	*/
 	//@{
+	
 	///
-	virtual void cursorUp(bool mark = FALSE);
+	virtual bool cursorUp();
+	
 	///
-	virtual void cursorDown(bool mark = FALSE);
+	virtual bool cursorDown();
+	
 	///
-	virtual void newLine();
-	///
-	virtual void cursorLeft(bool mark = FALSE, bool wrap = TRUE);
-	///
-	virtual void backspace();
-	///
-	virtual void cursorRight(bool mark = FALSE, bool wrap = TRUE);
+	virtual bool returnPressed();
+
 	///
 	virtual void mousePressEvent(QMouseEvent* m);
-	///
-	virtual void home(bool mark = FALSE);
+	
+	/** Internal state dump.
+			Dump the current internal state of {\em *this} to 
+			the output ostream {\em s} with dumping depth {\em depth}.
+			@param   s - output stream where to output the internal state of {\em *this}
+			@param   depth - the dumping depth
+	*/
+	void dump(std::ostream& s = std::cout, Size depth = 0) const
+		throw();
+
 	//@}
 
 	protected:
 
+	void keyPressEvent(QKeyEvent* e);
+
 	void parseLine_();
 
-	void appendToHistory_(const char*);
+	void appendToHistory_(const QString& line);
 	
 	/**	Print prompt.
 			Determine the correct type of prompt and append it 
@@ -142,6 +153,9 @@ class PyWidget
 			function is used for this specific line.
 	*/	
 	void retrieveHistoryLine_(Position index);
+
+
+	String getCurrentLine_();
 
 	bool						multi_line_mode_;
 	String					multi_line_text_;

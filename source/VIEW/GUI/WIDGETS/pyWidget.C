@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.10 2003/01/06 17:43:30 amoll Exp $
+// $Id: pyWidget.C,v 1.11 2003/03/27 17:57:33 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
@@ -9,15 +9,15 @@
 #include <Python.h>
 
 #include <qscrollbar.h>
+#include <qnamespace.h> 
 
 namespace BALL
 {
-	namespace VIEW;
+	namespace VIEW
 	{
 
-PyWidget::PyWidget
-	(QWidget* parent, const char* name)
-	: QMultiLineEdit(parent, name),
+PyWidget::PyWidget(QWidget* parent, const char* name)
+	: QTextEdit(parent, name),
 		ModularWidget(name)
 {
 	// register the widget with the MainControl
@@ -25,7 +25,7 @@ PyWidget::PyWidget
 }
 
 PyWidget::PyWidget(const PyWidget& widget)
-	:	QMultiLineEdit(),
+	:	QTextEdit(),
 		ModularWidget(widget)
 {
 }
@@ -38,23 +38,21 @@ PyWidget::~PyWidget()
 
 void PyWidget::initializeWidget(MainControl& main_control)
 {
-	main_control.insertMenuEntry
-		(MainControl::TOOLS, "&Restart Python", 
-		 this, SLOT(startInterpreter()));
+	main_control.insertMenuEntry(MainControl::TOOLS, "&Restart Python", this, SLOT(startInterpreter()));
 }
 
-void PyWidget::finalizeWidget
-	(MainControl& main_control)
+
+void PyWidget::finalizeWidget(MainControl& main_control)
 {
-	main_control.removeMenuEntry
-		(MainControl::TOOLS, "&Restart Python", 
-		 this, SLOT(startInterpreter()));
+	main_control.removeMenuEntry(MainControl::TOOLS, "&Restart Python", this, SLOT(startInterpreter()));
 }
+
 
 void PyWidget::stopInterpreter()
 {
 	PyInterpreter::finalize();
 }
+
 
 void PyWidget::startInterpreter()
 {
@@ -71,57 +69,43 @@ void PyWidget::startInterpreter()
 	history_position_ = history_.size() + 1;
 }
 
+
 void PyWidget::retrieveHistoryLine_(Position index)
 {
-	// we do not have a history - something went wrong
-	if (history_.size() == 0)
-	{
-		return;
-	}
+Log.error() << "retrieveHistoryLine_" << std::endl;
+	if (index >= history_.size()) return;
 
 	int row, col;
 	getCursorPosition(&row, &col);
 	
-	if (history_position_ >= history_.size())
+	// store the current line (it is not from history!)
+	String line = getCurrentLine_();
+	if (line.size() > 4)
 	{
-		// store the current line (it is not from history!)
-		String line(textLine(row));
-		if (line.size() > 4)
-		{
-			current_line_.set(line, 4);
-		}
-		else
-		{	
-			current_line_ = "";
-		}
+		current_line_.set(line, 4);
 	}
+	else
+	{	
+		current_line_ = "";
+	}
+	// append ?????
 	
-	String line = getPrompt_();
-	if (index < history_.size())
-	{
-		line.append(history_[index]);
-	}
-	else 
-	{
-		line.append(current_line_);
-	}
+	line = getPrompt_()+ history_[index];
 
 	// replace the line's contents
-	removeLine(row);
-	setAutoUpdate(false);
-	insertLine(line.c_str(), row);
-	setCursorPosition(numLines(), col);
-	end();
+	removeParagraph(row);
+	insertParagraph(line.c_str(), row);
+	setCursorPosition(row, col); 
 	QScrollBar* sb = verticalScrollBar();
 	if (sb != 0)
 	{
 		sb->setValue(sb->maxValue());
 	}
-	setAutoUpdate(true);
 
 	// update the history position
 	history_position_ = index;
 }
+
 
 
 void PyWidget::mousePressEvent(QMouseEvent* /* m */) 
@@ -130,36 +114,33 @@ void PyWidget::mousePressEvent(QMouseEvent* /* m */)
 	// they might place the cursor anywhere!
 }
 
-void PyWidget::cursorUp(bool /* mark */)
+
+bool PyWidget::cursorUp()
 {
-	if (history_position_ > 0)
-	{
-		retrieveHistoryLine_(history_position_ - 1);
-	}
+	retrieveHistoryLine_(history_position_ - 1);
+	return false;
 }
 
-void PyWidget::cursorDown(bool /* mark */)
+
+bool PyWidget::cursorDown()
 {
-	if (history_position_ < history_.size())
-	{
-		retrieveHistoryLine_(history_position_ + 1);
-	}
+	retrieveHistoryLine_(history_position_ + 1);
+	return false;
 }
 
-void PyWidget::newLine()
-{
-	// move the cursor to the end of the line
-	end();
 
+bool PyWidget::returnPressed()
+{
+Log.error() << "returnPressed" << std::endl;
 	// check for an empty line (respect the prompt)
 	int row, col;
 	getCursorPosition(&row, &col);
 	if (col < 5)
 	{
-		if (multi_line_mode_ == true)
+		if (multi_line_mode_)
 		{
 			// in multi line mode: end of input - parse it!
-			QMultiLineEdit::newLine();
+			QTextEdit::returnPressed();
 			parseLine_();
 		}
 		else	
@@ -167,69 +148,34 @@ void PyWidget::newLine()
 			// return on an empty line is handled 
 			// as in the interactive interpreter: do nothing and 
 			// print another prompt
-			QMultiLineEdit::newLine();
-			removeLine(numLines() - 1);
+			current_line_ = getCurrentLine_();
+			QTextEdit::returnPressed();
 			newPrompt_();
 		}
 	} 
 	else 
 	{	
 		// parse the line
-		QMultiLineEdit::newLine();	
+		current_line_ = getCurrentLine_();
+		QTextEdit::returnPressed();	
 		parseLine_();
 	}
-}
 
-void PyWidget::cursorLeft(bool mark, bool /* wrap */)
-{
-	// prevent the cursor from deleting the 
-	// prompt (">>> ")
-	int row, col;
-	getCursorPosition(&row, &col);
-	if (col > 4)
-	{
-		QMultiLineEdit::cursorLeft(mark, FALSE);
-	}
-}
-
-void PyWidget::backspace()
-{
-	// prevent the cursor from deleting the 
-	// prompt (">>> ")
-	int row, col;
-	getCursorPosition(&row, &col);
-	if (col > 4)
-	{
-		QMultiLineEdit::backspace();
-	}
-}
-
-void PyWidget::home(bool /* mark */)
-{
-	// prevent the cursor from getting in
-	// front of the prompt (">>> ")
-	int row, col;
-	getCursorPosition(&row, &col);
-	setCursorPosition(row, 4);
-}
-
-void PyWidget::cursorRight(bool mark, bool /* wrap */)
-{
-	QMultiLineEdit::cursorRight(mark, FALSE);
+	return false;
 }
 
 
 void PyWidget::parseLine_()
 {
+Log.error() << "parseLine_" << std::endl;
 	if (!Py_IsInitialized())
 	{
 		append("ERROR: no interpreter running!\n");
 		return;
 	}
 
-	int line_no, row_no;
-	getCursorPosition(&line_no, &row_no);
-	QString line(textLine(line_no - 1));
+	QString line = current_line_.c_str();
+
 	if (line.length() > 4)
 	{
 		line = line.mid(4);
@@ -238,7 +184,8 @@ void PyWidget::parseLine_()
 	{
 		line = "";
 	}
-	if (multi_line_mode_ == true)
+
+	if (multi_line_mode_)
 	{
 		if (line.isEmpty())
 		{
@@ -250,7 +197,6 @@ void PyWidget::parseLine_()
 			appendToHistory_(line);
 			multi_line_text_.append(line);
 			multi_line_text_.append("\n");
-			removeLine(numLines() - 1);
 			newPrompt_();
 			return;
 		}
@@ -258,6 +204,7 @@ void PyWidget::parseLine_()
 	else
 	{
 		if (line.isEmpty()) return;
+
 		if (((line.length() > 3) && ((line.left(3) == "for") || (line.left(3) == "def")) &&  line[3].isSpace())
 				|| ((line.length() > 4) && (line.left(4) == "class") && line[4].isSpace())
 				|| ((line.length() > 5) && (line.left(5) == "while") && line[5].isSpace())
@@ -271,12 +218,12 @@ void PyWidget::parseLine_()
 				multi_line_text_.append("\n");
 				appendToHistory_(line);
 
-				removeLine(numLines() - 1);
 				newPrompt_();
 				return;
 			}
 		}
 	}
+
 	if (line.isEmpty())
 	{
 		return;			
@@ -292,19 +239,18 @@ void PyWidget::parseLine_()
 	String result = PyInterpreter::run(line.ascii());
 	multi_line_mode_ = false;
 
-	removeLine(numLines() - 1);
 	if (result != "")
 	{
 		append(result.c_str());
-		removeLine(numLines() - 1);
 	}
 
 	newPrompt_();
 }
 
-void PyWidget::appendToHistory_(const char* line)
+void PyWidget::appendToHistory_(const QString& line)
 {
-	history_.push_back(line);
+Log.error() << "appendToHistory_" << std::endl;
+	history_.push_back(String(line));
 	history_position_ = history_.size();
 }
 
@@ -315,11 +261,99 @@ const char* PyWidget::getPrompt_() const
 
 void PyWidget::newPrompt_()
 {
+Log.error() << "newPrompt_" << std::endl;
 	append(getPrompt_());
-	setCursorPosition(numLines() - 1, 0);
-	end();
+	setCursorPosition(lines() - 1, 4);
 
 	emit textChanged();
 }
+
+
+void PyWidget::keyPressEvent(QKeyEvent* e)
+{
+	int row, col;
+	getCursorPosition(&row, &col);
+	bool qt_continue = true;
+
+	if (e->key() == Key_Left || e->key() == Key_Backspace)
+	{
+		qt_continue = (col > 4);
+	}
+	else if (e->key() == Key_Up)
+	{
+		qt_continue = cursorUp();
+	}
+	else if (e->key() == Key_Down)
+	{
+		qt_continue = cursorDown();
+	}
+	else if (e->key() == Key_Home)
+	{
+		setCursorPosition(row, 4);
+		qt_continue = false;
+	}
+	else if (e->key() == Key_Return)
+	{
+		qt_continue = returnPressed();
+	}
+	else if (e->key() == Key_Print)
+	{
+		Log.error() << "print " << std::endl; 
+		dump();
+	}
+	else if (e->key() == Key_Escape)
+	{
+		Log.error() << "||: " << getCurrentLine_() << "|"<< std::endl;
+	}
+
+
+	if (qt_continue)
+	{
+		QTextEdit::keyPressEvent(e);
+	}
+} 
+
+
+
+void PyWidget::dump(std::ostream& s, Size depth) const
+	throw()
+{
+	BALL_DUMP_STREAM_PREFIX(s);
+
+	BALL_DUMP_HEADER(s, this, this);
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "multiline_mode : " << multi_line_mode_<< std::endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "multi_line_text  : " << multi_line_text_<< std::endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "history : "<< std::endl;
+	
+	for (Position i = 0; i < history_.size(); i++)
+	{
+		BALL_DUMP_DEPTH(s, depth);
+		s << history_[i]<< std::endl;
+	}
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "history_position : " << history_position_ << std::endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "current_line : " << current_line_ << std::endl;
+
+	BALL_DUMP_STREAM_SUFFIX(s);
+}
+
+
+String PyWidget::getCurrentLine_()
+{
+	int row, col;
+	getCursorPosition(&row, &col);
+	return String(text(row));
+}
+
+
 
 } } // namespace
