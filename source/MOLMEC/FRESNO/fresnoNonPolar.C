@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.C,v 1.1.2.6 2002/11/22 18:38:12 anker Exp $
+// $Id: fresnoNonPolar.C,v 1.1.2.7 2003/02/14 11:03:19 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -200,15 +200,15 @@ namespace BALL
 		{
 			if (probe_radius_ != 0.0)
 			{
-				uhlig_.options.setInteger(UhligCavFreeEnergyProcessor::Option::PROBE_RADIUS, probe_radius_);
+				uhlig_.options.setReal(UhligCavFreeEnergyProcessor::Option::PROBE_RADIUS, probe_radius_);
 			}
 			if (surface_tension_ != 0.0)
 			{
-				uhlig_.options.setInteger(UhligCavFreeEnergyProcessor::Option::SURFACE_TENSION, surface_tension_);
+				uhlig_.options.setReal(UhligCavFreeEnergyProcessor::Option::SURFACE_TENSION, surface_tension_);
 			}
 			if (constant_ != 0.0)
 			{
-				uhlig_.options.setInteger(UhligCavFreeEnergyProcessor::Option::CONSTANT, constant_);
+				uhlig_.options.setReal(UhligCavFreeEnergyProcessor::Option::CONSTANT, constant_);
 			}
 			processor = &uhlig_;
 		}
@@ -218,15 +218,15 @@ namespace BALL
 			{
 				if (probe_radius_ != 0.0)
 				{
-					pcm_.options.setInteger(PCMCavFreeEnergyProcessor::Option::PROBE_RADIUS, probe_radius_);
+					pcm_.options.setReal(PCMCavFreeEnergyProcessor::Option::PROBE_RADIUS, probe_radius_);
 				}
 				if (absolute_temperature_ != 0.0)
 				{
-					pcm_.options.setInteger(PCMCavFreeEnergyProcessor::Option::ABSOLUTE_TEMPERATURE, absolute_temperature_);
+					pcm_.options.setReal(PCMCavFreeEnergyProcessor::Option::ABSOLUTE_TEMPERATURE, absolute_temperature_);
 				}
 				if (solvent_number_density_ != 0.0)
 				{
-					pcm_.options.setInteger(PCMCavFreeEnergyProcessor::Option::SOLVENT_NUMBER_DENSITY, solvent_number_density_);
+					pcm_.options.setReal(PCMCavFreeEnergyProcessor::Option::SOLVENT_NUMBER_DENSITY, solvent_number_density_);
 				}
 				processor = &pcm_;
 			}
