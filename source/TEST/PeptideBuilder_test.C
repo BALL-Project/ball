@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeptideBuilder_test.C,v 1.6 2003/06/12 18:03:18 oliver Exp $
+// $Id: PeptideBuilder_test.C,v 1.7 2004/02/13 17:00:22 anhi Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.6 2003/06/12 18:03:18 oliver Exp $")
+START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.7 2004/02/13 17:00:22 anhi Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -156,12 +156,12 @@ CHECK(construct())
 	ResidueIterator resIt;
   resIt = prot->beginResidue();
 
+	PRECISION(1e-3)
 	TEST_EQUAL(resIt->getName(), "LEU")
 	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
   TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(-58.,false));
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "SER")
-	PRECISION(1e-3)
   TEST_REAL_EQUAL(fabs(resIt->getTorsionPhi().toRadian()), M_PI)
 	TEST_REAL_EQUAL(fabs(resIt->getTorsionPsi().toRadian()), M_PI)
   ++resIt;
