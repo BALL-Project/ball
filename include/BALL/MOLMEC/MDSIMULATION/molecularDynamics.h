@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.h,v 1.28 2004/04/17 14:14:52 oliver Exp $
+// $Id: molecularDynamics.h,v 1.29 2005/01/24 16:02:48 amoll Exp $
 //
 
 // MolecularDynamics: A base class for molecular dynamics simulations    
@@ -308,6 +308,20 @@ namespace BALL
 				 by  \link MolecularDynamics MolecularDynamics \endlink  is simply empty.
 		*/
 		virtual void simulateIterations(Size number, bool restart = false);
+
+		/** Specify if the MDSimulation aborts if the Energy is greater than 10^10.
+		*/
+		void enableEnergyAbortCondition(bool state);
+
+		/// Query if the MDSimulation aborts if the Energy is greater than abort_energy_
+		bool energyAbortConditionEnabled() const;
+
+		///
+		void setEnergyToAbort(float value);
+		
+		///
+		float getEnergyToAbort() const;
+		
 		//@}
 
 		/**  @name Public Attributes
@@ -396,6 +410,12 @@ namespace BALL
 		/*_  The Snapshot Manager that is used for taking snapshots
 		*/
 		SnapShotManager* snapshot_manager_ptr_;
+
+		//_ 
+		bool abort_by_energy_enabled_;
+		
+		//_ 
+		float abort_energy_;
 
 		//_@}
 		

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.C,v 1.17 2005/01/18 21:37:53 amoll Exp $
+// $Id: molecularDynamics.C,v 1.18 2005/01/24 16:03:00 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -40,7 +40,9 @@ namespace BALL
   MolecularDynamics::MolecularDynamics()
 		:	valid_(false),
 			force_field_ptr_(0),
-			system_ptr_(0)
+			system_ptr_(0),
+			abort_by_energy_enabled_(true),
+			abort_energy_(10000000000.0)
 	{
 		// As no force field has been named, there is not much to do. 
 		// Just indicate that the MD simulation is not ready yet. 
@@ -48,9 +50,11 @@ namespace BALL
 
 	// Constructor expecting a force field 
 	MolecularDynamics::MolecularDynamics(ForceField& force_field)
+		:	abort_energy_(10000000000.0)
 	{
 		valid_ = true;
 		force_field_ptr_ = &force_field;
+		abort_by_energy_enabled_ = true;
 
 		if (!valid_)
 		{
@@ -99,6 +103,8 @@ namespace BALL
 			energy_output_frequency_ = rhs.energy_output_frequency_;
 			snapshot_frequency_ = rhs.snapshot_frequency_;
 			snapshot_manager_ptr_ = rhs.snapshot_manager_ptr_;
+			abort_by_energy_enabled_ = rhs.abort_by_energy_enabled_;
+			abort_energy_ = rhs.abort_energy_;
 		}
 	}
 
@@ -120,6 +126,27 @@ namespace BALL
 
 		return valid_;
 	}
+
+	void MolecularDynamics::enableEnergyAbortCondition(bool state)
+	{
+		abort_by_energy_enabled_ = state;
+	}
+
+	bool MolecularDynamics::energyAbortConditionEnabled() const
+	{
+		return abort_by_energy_enabled_;
+	}
+
+	void MolecularDynamics::setEnergyToAbort(float value)
+	{
+		abort_energy_ = value;
+	}
+		
+	float MolecularDynamics::getEnergyToAbort() const
+	{
+		return abort_energy_;
+	}
+		
 
 	// This is the real setup method doing all the work! 
 	bool MolecularDynamics::setup(ForceField & force_field, SnapShotManager* ssm, const Options& new_options)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.C,v 1.11 2004/04/17 14:14:56 oliver Exp $
+// $Id: microCanonicalMD.C,v 1.12 2005/01/24 16:02:59 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
@@ -282,6 +282,13 @@ namespace BALL
 			if (snapshot_manager_ptr_ != 0 && iteration % snapshot_frequency_ == 0)
 			{
 				snapshot_manager_ptr_->takeSnapShot();
+			}
+
+			if (Maths::isNan(force_field_ptr_->getEnergy())) return;
+
+			if (abort_by_energy_enabled_)
+			{
+				if (force_field_ptr_->getEnergy() > abort_energy_) return;
 			}
 
 		}	// next iteration 
