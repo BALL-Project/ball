@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.6 2000/01/10 15:51:15 oliver Exp $
+// $Id: residueChecker.C,v 1.7 2000/01/13 22:36:03 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -123,8 +123,8 @@ namespace BALL
 						Log.warn() << *set_it << " ";
 					}
 					Log.warn() << endl;
+					status_ = false;
 				}
-				status_ = false;
 
 				// check bond lengths (should be within +/- 15% of reference values)
 				Atom::BondIterator bond_it;
