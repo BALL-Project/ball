@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.19 2003/03/26 13:08:12 sturm Exp $
+// $Id: version.h,v 1.20 2003/04/01 21:13:03 oliver Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -44,7 +44,7 @@ namespace BALL
 			BETA,
 			NONPUBLIC,
 			PRERELEASE,
-			PATCHLEVEL,
+			PATCHLVL, // this can't be PATCHLEVEL due to a collision with historic Python versions (< 2.2).
 			UNKNOWN
 		};
 
@@ -63,7 +63,7 @@ namespace BALL
 		static int getMinorRevision() throw(Exception::InvalidFormat);
 
 		/** Return the type of release:
-				ALPHA, BETA, NONPUPLIC, STABLE, PRERELEASE, PATCHLEVEL, UNKNOWN.
+				ALPHA, BETA, NONPUPLIC, STABLE, PRERELEASE, PATCHLVL, UNKNOWN.
 		*/
 		static Type getType() throw();
 		
