@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.1 2005/01/03 13:23:57 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.2 2005/01/03 13:40:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -27,9 +27,12 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-
 #ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
 # include <BALL/VIEW/RENDERING/glQuadricObject.h>
+#endif
+
+#ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
+# include <BALL/VIEW/RENDERING/glDisplayList.h>
 #endif
 
 #include <qgl.h>
@@ -168,11 +171,11 @@ namespace BALL
 
 			///
 			float getXScale() const
-				throw() { return x_scale_;}
+				throw();
 
 			///
 			float getYScale() const
-				throw() { return y_scale_;}
+				throw();
 
 			/** Update the camera position with gluLookAt,
 			 		either from a given Camera, or from the default
@@ -215,11 +218,11 @@ namespace BALL
 
 			///
 			StereoMode getStereoMode() const
-				throw() { return stereo_;}
+				throw();
 
 			///
 			RenderMode getRenderMode() const
-				throw() { return render_mode_;}
+				throw();
 			
 			///
 			virtual bool render(const Representation& representation)
@@ -274,7 +277,7 @@ namespace BALL
 
 			//_
 			void setColor4ub_(const GeometricObject& object)
-				throw(){ setColorRGBA_(object.getColor()); }
+				throw();
 
 			//_
 			GLubyte* generateBitmapFromText_(const String& text, int& width, int& height) const
@@ -318,31 +321,32 @@ namespace BALL
 
 			//_
 			void normalVector3_(const Vector3& v) 
-				throw() { glNormal3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);}
+				throw();
 
 			//_
 			void vertexVector3_(const Vector3& v)
-				throw() { glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+				throw();
 
 			//_
 			void translateVector3_(const Vector3& v)
-				throw() { glTranslatef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+				throw();
 
 			//_
 			void scaleVector3_(const Vector3& v)
-				throw() { glScalef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+				throw();
 
 			//_
 			void rotateVector3Angle_(const Vector3& v, Real angle)
-				throw() { glRotatef(angle, v.x, v.y, v.z); }
+				throw();
 
 			//_
 			void scale_(float f)
-				throw() { glScalef(f, f, f);}
+				throw();
 
 			//_
 			void setColorRGBA_(const ColorRGBA& color)
-				throw() { glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());}
+				throw();
+
 			///
 			Index 								drawing_mode_;
 
@@ -379,6 +383,10 @@ namespace BALL
 			StereoMode stereo_;
 			RenderMode render_mode_;
 		};
+
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/RENDERING/glRenderer.iC>
+#	endif
 
 	} // namespace VIEW
 } // namespace BALL

@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.4 2005/01/03 13:23:52 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.5 2005/01/03 13:41:03 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
-#include <BALL/VIEW/RENDERING/glDisplayList.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
@@ -147,37 +146,6 @@ namespace BALL
 			createBoxes_();
 
 			return true;
-		}
-
-
-		void GLRenderer::initTransparent()
-			throw()
-		{
-			if (render_mode_ == RENDER_MODE_TRANSPARENT) return;
-			render_mode_ = RENDER_MODE_TRANSPARENT;
-			glEnable(GL_DEPTH_TEST);
-			glEnable(GL_BLEND);
-			glDepthMask(GL_FALSE);
-		}
-
-		void GLRenderer::initSolid()
-			throw()
-		{
-			if (render_mode_ == RENDER_MODE_SOLID) return;
-			render_mode_ = RENDER_MODE_SOLID;
-			glEnable(GL_DEPTH_TEST);
-			glDisable(GL_BLEND);
-			glDepthMask(GL_TRUE);
-		}
-
-		void GLRenderer::initAlwaysFront()
-			throw()
-		{
-			if (render_mode_ == RENDER_MODE_ALWAYS_FRONT) return;
-			render_mode_ = RENDER_MODE_ALWAYS_FRONT;
-			glDisable(GL_DEPTH_TEST);
-			glDisable(GL_BLEND);
-			glDepthMask(GL_TRUE);
 		}
 
 
@@ -333,17 +301,6 @@ namespace BALL
 			display_list->endDefinition();
 		}
 
-		void GLRenderer::drawFromDisplayList(const Representation& rep)
-			throw()
-		{
-			if (!display_lists_.has(&rep) || rep.isHidden()) 
-			{
-				return;
-			}
-
-			display_lists_[&rep]->draw();
-		}
-
 
 		bool GLRenderer::render(const Representation& representation)
 			throw()
@@ -374,7 +331,7 @@ namespace BALL
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 			for (; it != geometric_objects.end(); it++)
 			{
-				glLoadName(getName(**it));
+ 				glLoadName(getName(**it));
 				render_(*it);
 			}
 
@@ -1206,47 +1163,6 @@ namespace BALL
 			glEnd();
 		}
 
-		// ############################ NAMING ###################################
-		GLRenderer::Name GLRenderer::getName(const GeometricObject& object)
-			throw()
-		{
-			const NameHashMap::Iterator name_iterator = object_to_name_.find(&object);
-
-			if (name_iterator != object_to_name_.end())
-			{
-				return name_iterator->second;
-			}
-
-			const Name name = ++all_names_;
-
-			object_to_name_.insert(NameHashMap::ValueType(&object, name));
-			name_to_object_.insert(GeometricObjectHashMap::ValueType(name, &object));
-
-			return name;
-		}
-
-
-		GeometricObject* GLRenderer::getObject(GLRenderer::Name name) const
-			throw()
-		{
-			if (name == 0 || !name_to_object_.has(name))
-			{
-				return 0;
-			}
-
-			return (GeometricObject*) name_to_object_.find(name)->second;
-		}
-
-
-		void GLRenderer::clearNames_()
-			throw()
-		{
-			name_to_object_.clear();
-			object_to_name_.clear();
-
-			all_names_ = 0;
-		}
-
 
 		// ############################ PICKING ###################################		
 		void GLRenderer::pickObjects1(float x1, float y1, float x2, float y2)
@@ -1424,12 +1340,8 @@ namespace BALL
 		}
 
 
-		void GLRenderer::setStereoMode(StereoMode state)
-			throw()
-		{
-			if (state == stereo_) return;
-			stereo_ = state;
-		}
-
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/RENDERING/glRenderer.iC>
+#	endif
 
 } } // namespaces
