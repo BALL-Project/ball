@@ -1,5 +1,18 @@
-// $Id: file.iC,v 1.8 2000/07/12 19:33:51 oliver Exp $
+// $Id: file.iC,v 1.9 2000/10/20 08:14:35 oliver Exp $
 
+
+BALL_INLINE 
+bool File::isValid() const
+{
+  return (bool)((File *)this)->::std::fstream::good();
+}
+
+BALL_INLINE 
+File& File::operator = (const File& file)
+{
+  set(file);
+  return *this;
+}
 
 BALL_INLINE 
 bool File::set(const String& name)
@@ -125,19 +138,6 @@ BALL_INLINE
 bool File::operator != (const File &file) const
 {
   return (bool)(name_ != file.name_);
-}
-
-BALL_INLINE 
-File& File::operator = (const File& file)
-{
-  set(file);
-  return *this;
-}
-
-BALL_INLINE 
-bool File::isValid() const
-{
-  return (bool)((File *)this)->::std::fstream::good();
 }
 
 BALL_INLINE 
