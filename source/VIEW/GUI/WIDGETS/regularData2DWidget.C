@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.4 2000/12/04 16:57:20 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.5 2000/12/04 17:06:29 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -106,7 +106,7 @@ void PixWid::mouseMoveEvent( QMouseEvent *e )
   emit (mouseMoved(e->x(), e->y()));
 }
 
-RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) : QScrollView(parent), ModularWidget("RegularData2DWidget"), lengthx(lx_), lengthy(ly_), min_(min), max_(max), minx_(0), maxx_(1), miny_(0), maxy_(1), showMousePos_(true), posLabel_(0), soffsetf1_(0), soffsetf2_(0), swidthf1_(0), swidthf2_(0), bfreqf1_(0), bfreqf2_(0), pm(0), legendMap(0), bufferMap(0), act_lower_left_x_(0), act_lower_left_y_(0), zoom_x_(1), zoom_y_(1), cont_(0)
+RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) : QScrollView(parent), ModularWidget("RegularData2DWidget"), lengthx(lx_), lengthy(ly_), min_(min), max_(max), showMousePos_(true), posLabel_(0), soffsetf1_(0), soffsetf2_(0), swidthf1_(0), swidthf2_(0), bfreqf1_(0), bfreqf2_(0), pm(0), legendMap(0), bufferMap(0), act_lower_left_x_(0), act_lower_left_y_(0), zoom_x_(1), zoom_y_(1), cont_(0)
 {
   createLegend( 20, 40 );
 
