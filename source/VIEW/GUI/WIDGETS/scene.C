@@ -1,9 +1,11 @@
-// $Id: scene.C,v 1.1 2000/09/23 13:28:39 hekl Exp $
+// $Id: scene.C,v 1.2 2000/10/22 15:18:25 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 
 #include <qpainter.h>
 #include <qkeycode.h>
+#include <qpopupmenu.h>
+#include <qmenubar.h>
 
 #include "events.C"
 
@@ -29,6 +31,9 @@ namespace BALL
 			:	QGLWidget(),
 				ModularWidget("<Scene>"),
 				events(),
+				rotate_id_(-1),
+				picking_id_(-1),
+				rotate_mode_(true),
 				GL_object_collector_(0),
 				system_origin_(0.0),
 				quaternion_(),
@@ -56,6 +61,9 @@ namespace BALL
 			:	QGLWidget(parent_widget, name, 0, w_flags),
 				ModularWidget(name),
 				events(this),
+				rotate_id_(-1),
+				picking_id_(-1),
+				rotate_mode_(true),
 				GL_object_collector_((GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>()),
 				GL_primitive_manager_(),
 				system_origin_(0.0, 0.0, 0.0),
@@ -727,6 +735,86 @@ namespace BALL
 			}
 		}
 
+		void Scene::rotateMode_()
+		{
+			rotate_mode_ = true;
+			setRenderMode(Scene::RENDER_MODE__COMPILE);
+	
+			// unregister picking mode controls
+			NotificationUnregister
+				(events.MouseLeftButtonPressed);
+			
+			NotificationUnregister
+				(events.MouseLeftButtonPressed & events.MouseMoved);
+			
+			NotificationUnregister
+				(events.MouseLeftButtonReleased);
+			
+			NotificationUnregister
+				(events.MouseRightButtonPressed);
+			
+			NotificationUnregister
+				(events.MouseRightButtonPressed & events.MouseMoved);
+			
+			NotificationUnregister
+				(events.MouseRightButtonReleased);
+			
+			
+			// register rotation mode controls
+			NotificationRegister
+				(events.MouseLeftButtonPressed & events.MouseMoved, 
+				 events.RotateSystem);
+			
+			NotificationRegister
+				(events.MouseMiddleButtonPressed & events.MouseMoved, 
+				 events.ZoomSystem);
+			
+			NotificationRegister
+				(events.MouseRightButtonPressed & events.MouseMoved, 
+				 events.TranslateSystem);			
+		}
+
+		void Scene::pickingMode_()
+		{
+			rotate_mode_ = false;
+			setRenderMode(Scene::RENDER_MODE__DO_NOT_COMPILE);
+			
+			// unregister rotation mode controls
+			NotificationUnregister
+				(events.MouseLeftButtonPressed & events.MouseMoved);
+			
+			NotificationUnregister
+				(events.MouseMiddleButtonPressed & events.MouseMoved);
+			
+			NotificationUnregister
+				(events.MouseRightButtonPressed & events.MouseMoved);
+			
+			
+			// register picking mode controls
+			NotificationRegister
+				(events.MouseLeftButtonPressed,
+				 events.SelectionPressed);
+			
+			NotificationRegister
+				(events.MouseLeftButtonPressed & events.MouseMoved, 
+				 events.SelectionPressedMoved);
+			
+			NotificationRegister
+				(events.MouseLeftButtonReleased, 
+				 events.SelectionReleased);
+			
+			NotificationRegister
+				(events.MouseRightButtonPressed,
+				 events.DeselectionPressed);
+			
+			NotificationRegister
+				(events.MouseRightButtonPressed & events.MouseMoved, 
+				 events.DeselectionPressedMoved);
+			
+			NotificationRegister
+				(events.MouseRightButtonReleased, 
+				 events.DeselectionReleased);
+		}
 
 		// --------------------------------------------------------------------------
 		// ---- private Member functions --------------------------------------------
@@ -1464,16 +1552,30 @@ namespace BALL
 
 		void Scene::initializeWidget(MainControl& main_control)
 		{
-			main_control.insertMenuEntry(MainControl::TOOLS, "TEST");
+			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
+
+			rotate_id_ 
+				= main_control.insertMenuEntry
+				   (MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
+			
+			picking_id_ 
+				= main_control.insertMenuEntry
+				   (MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
 		}
 
 		void Scene::finalizeWidget(MainControl& main_control)
 		{
-			main_control.removeMenuEntry(MainControl::TOOLS, "TEST");
+			main_control.removeMenuEntry
+				(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
+			
+			main_control.removeMenuEntry
+				(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
 		}
 
-		void Scene::checkMenu(MainControl& /* main_control */)
+		void Scene::checkMenu(MainControl& main_control)
 		{
+			(main_control.menuBar())->setItemChecked(rotate_id_, (bool)(rotate_mode_ == true));
+			(main_control.menuBar())->setItemChecked(picking_id_, (bool)(rotate_mode_ == false));		
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
