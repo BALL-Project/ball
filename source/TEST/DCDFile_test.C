@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.15 2003/07/03 15:47:04 amoll Exp $
+// $Id: DCDFile_test.C,v 1.16 2003/07/05 13:02:05 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.15 2003/07/03 15:47:04 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.16 2003/07/05 13:02:05 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -126,10 +126,12 @@ CHECK(bool writeHeader() throw())
 	String temporary;
 	NEW_TMP_FILE(temporary)
 	DCDFile one(temporary, std::ios::out);
-	one.writeHeader();
+	bool test = one.writeHeader();
+	TEST_EQUAL(test, true);
 	one.close();
+	TEST_NOT_EQUAL(one.getSize(), 0)
 	DCDFile two(temporary, std::ios::in);
-	bool test = two.readHeader();
+	test = two.readHeader();
 	TEST_EQUAL(test, true);
 RESULT
 
@@ -163,9 +165,9 @@ CHECK(bool append(const SnapShot& snapshot) throw())
 RESULT
 
 
+SnapShot ss;
 CHECK(bool read(SnapShot& snapshot) throw())
 	DCDFile dcd(filename);
-	SnapShot ss;
 	TEST_EQUAL(dcd.read(ss), true)
 	ss.applySnapShot(system);
 	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
@@ -177,11 +179,33 @@ RESULT
 
 
 CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw())
-  //?????
+	vector<SnapShot> v;
+	v.push_back(ss);
+	TEST_EQUAL(ss.getNumberOfAtoms(), 892)
+	String temporary;
+	NEW_TMP_FILE(temporary)
+	Log.error() << std::endl << temporary << std::endl;
+	DCDFile dcd(temporary, std::ios::out);
+	TEST_EQUAL(dcd.isOpen(), true)
+	TEST_EQUAL(dcd.isAccessible(), true)
+	TEST_EQUAL(dcd.getNumberOfSnapShots(), 0)
+	bool result = dcd.flushToDisk(v);
+	TEST_EQUAL(result, true)
+	TEST_EQUAL(dcd.getNumberOfSnapShots(), 1)
+	TEST_NOT_EQUAL(dcd.getSize(), 0)
+
+	result = dcd.flushToDisk(v);
+	TEST_EQUAL(result, true)
+	TEST_EQUAL(dcd.getNumberOfSnapShots(), 2)
+	TEST_NOT_EQUAL(dcd.getSize(), 0)
 RESULT
 
 CHECK(BALL_CREATE(DCDFile))
-  //?????
+	NEW_TMP_FILE(filename);
+	DCDFile dcd(filename);
+	DCDFile* dcd_ptr = (DCDFile*) dcd.create();
+	TEST_NOT_EQUAL(dcd_ptr, 0)
+	TEST_EQUAL(dcd_ptr->getName(), filename)
 RESULT
 
 CHECK(bool hasVelocities() const throw())
