@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.15 2004/11/09 15:56:08 amoll Exp $
+// $Id: FDPBDialog.C,v 1.16 2004/11/17 13:42:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -251,7 +251,7 @@ namespace BALL
 				return false;
 			}
 
-			if (lockComposites()) return false;
+			if (!lockComposites()) return false;
 			
 			applyValues_();
 			applyProcessors_();

@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.29 2004/11/15 17:14:02 amoll Exp $
+// $Id: primitiveManager.C,v 1.30 2004/11/17 13:45:00 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -266,6 +266,10 @@ void PrimitiveManager::update_(Representation& rep)
 void PrimitiveManager::startUpdateThread_()
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "starting Representation Update" << std::endl;
+#endif
+
 #ifdef BALL_QT_HAS_THREADS
 	if (!representations_to_be_updated_.size()) return;
 
@@ -349,6 +353,10 @@ void PrimitiveManager::finishedUpdate_()
 
 	if (representations_to_be_updated_.size() == 0)
 	{
+		#ifdef BALL_VIEW_DEBUG
+			Log.error() << "finished all Representations Update" << std::endl;
+		#endif
+
 		update_running_ = false;
 		update_pending_ = false;
 		update_finished_.wakeAll();
