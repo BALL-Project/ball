@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.8 2001/02/26 00:21:49 amoll Exp $
+// $Id: global.h,v 1.9 2001/06/05 15:45:58 anker Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -23,38 +23,49 @@ namespace BALL
 {
 
 	/**	Bond cloning method.
-			This template function implements the cloning of \Ref{Bond}s in AtomContainers.
-			As Bonds are not integrated in the Composite tree structure of kernel objects,
-			a simple deep cloning of a composite only copies all composites down to atoms. Bonds are not
-			included because they are not {\em children} of the atoms but stored in a bond array.
-			However, cloning of any kernel objects should naturally clone bonds, too. The implementation of
-			this {\em cloning-with-bonds} is divided in two parts: first, a deep (recursive) cloning of
-			all composites is performed. Second, the root composite (which is always an AtomContainer) 
-			calls \Ref{cloneBonds} for the cloned system to copy the bonds.\\
-      The trouble with this implementation is that each clone method must have the possibility to
-      call {\bf cloneBonds}, but only the first clone method in the recursive call tree is allowed
-      to call it. This is guaranteed by the use of a global static variable \Ref{clone_bonds}.
-			The first clone method called sets clone_bonds to {\bf false} thereby forbidding the use of
-      cloneBonds to all subsequently called clone methods. Then, it calls cloneBonds and 
-			resets clone_bonds to {\bf true}.\\
-			This method assumes that the second argument (the composite without bonds) is a deep
-			copy of the first argument (the composite containing the atoms). If the tree structures of both
-			composites are not isomorphous, bonds are created in an unpredictable way.\\
-			{\bf Namespace:} BALL\\
-			{\bf Definition:} \URL{BALL/KERNEL/global.h} \\
+			This template function implements the cloning of \Ref{Bond}s in
+			AtomContainers.  As Bonds are not integrated in the Composite tree
+			structure of kernel objects, a simple deep cloning of a composite
+			only copies all composites down to atoms. Bonds are not included
+			because they are not {\em children} of the atoms but stored in a bond
+			array.  However, cloning of any kernel objects should naturally clone
+			bonds, too. The implementation of this {\em cloning-with-bonds} is
+			divided in two parts: first, a deep (recursive) cloning of all
+			composites is performed. Second, the root composite (which is always
+			an AtomContainer) calls \Ref{cloneBonds} for the cloned system to
+			copy the bonds.
+			\\
+			The trouble with this implementation is that each clone method must
+			have the possibility to call {\bf cloneBonds}, but only the first
+			clone method in the recursive call tree is allowed to call it. This
+			is guaranteed by the use of a global static variable
+			\Ref{clone_bonds}.  The first clone method called sets clone_bonds to
+			{\bf false} thereby forbidding the use of cloneBonds to all
+			subsequently called clone methods. Then, it calls cloneBonds and
+			resets clone_bonds to {\bf true}.
+			\\
+			This method assumes that the second argument (the composite without
+			bonds) is a deep copy of the first argument (the composite containing
+			the atoms). If the tree structures of both composites are not
+			isomorphous, bonds are created in an unpredictable way.
+			\\
+			{\bf Namespace:} BALL
+			\\
+			{\bf Definition:} \URL{BALL/KERNEL/global.h}
+			\\
 			@param atom_container	the atom_container containing the bonds
 			@param cloned a deep copy of {\bf atom_container}
 	*/
 	template <class AtomContainerType>
 	void cloneBonds(const AtomContainerType& atom_container, AtomContainerType& cloned)
 	{
-		AtomIterator atom_iter_a;
+		AtomConstIterator atom_iter_a;
 		AtomIterator atom_iter_b;
-		Atom::BondIterator bond_iter;
+		Atom::BondConstIterator bond_iter;
 		
 		typedef HashMap<const Atom*, Atom*>	AtomMap;
 
-		list<Bond*>	bond_list;
+		list<const Bond*>	bond_list;
 		AtomMap			atom_map;
 
 		// iterate over the two composite structures in parallel
@@ -82,7 +93,7 @@ namespace BALL
 		// if both atoms of the bond are contained in the cloned structure,
 		// thus preventing the copying of bonds between atoms of atom_container
 		// and atoms outside atom_container
-		list<Bond*>::iterator list_iter = bond_list.begin();
+		list<const Bond*>::iterator list_iter = bond_list.begin();
 		for ( ; list_iter != bond_list.end(); ++list_iter)
 		{
 			if (atom_map.has((*list_iter)->getFirstAtom()) && atom_map.has((*list_iter)->getSecondAtom()))
