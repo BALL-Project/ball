@@ -1,4 +1,4 @@
-// $Id: baseModel.h,v 1.4 2000/04/25 15:28:10 hekl Exp $
+// $Id: baseModel.h,v 1.5 2000/05/04 17:29:12 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECT_H
 #	include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
+#endif
+
+#ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
+#	include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 #endif
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
