@@ -5,15 +5,18 @@
 #include <qapplication.h>
 #include "mainframe.h"
 #include <BALL/common.h>
+
+/*
 #ifdef Q_WS_X11
 # include <X11/Xlib.h>
 #endif
-
+*/
 
 int main(int argc, char **argv)
 {
 	#ifdef Q_WS_X11
-		XInitThreads();
+		// doesnt work on some X11 servers
+		//XInitThreads();
 		//BALL::Log.error() << "Enabling multi threads in Xlib" << std::endl;
 	#endif
 		
