@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PropertyManager_test.C,v 1.24 2003/06/17 15:44:06 anker Exp $
+// $Id: PropertyManager_test.C,v 1.25 2003/06/20 10:49:45 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.24 2003/06/17 15:44:06 anker Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.25 2003/06/20 10:49:45 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,6 +33,7 @@ CHECK(~PropertyManager() throw())
 RESULT
 
 PropertyManager m;
+m.setProperty("TEST_PROP", (unsigned int)123456);
 
 CHECK(PropertyManager(const PropertyManager& property_manager) throw())
 	PropertyManager* p2;
