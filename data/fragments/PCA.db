@@ -36,6 +36,7 @@
     <node>24<value>1HG CG s</value></node>
     <node>25<value>2HG CG s</value></node>
     <node>26<value>OXT C s</value></node>
+		<node>27<value>N CA s</value></node>
   </node>
 	<node>Connections
 		<node>N-term<value>N C-term s 1.33 0.5</value></node>
