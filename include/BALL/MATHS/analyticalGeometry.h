@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.31 2000/05/15 19:15:09 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.32 2000/06/20 11:38:24 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -922,15 +922,39 @@ namespace BALL
 	}
 	 
 	/**	Get the intersection circle between two spheres.
+			This methods returns {\bf false}, if the two spheres
+			are identical since then no intersection circle exists.
 			@param	a the first sphere
+			@param	b the second sphere
 			@param	intersection_circle the intersection circle
-			@return bool, true if an intersection can be calculated, otherwise false
+			@return bool, {\bf true} if an intersection can be calculated, otherwise {\bf false}
 	*/
 	template <typename T>
 	bool GetIntersection
 		(const TSphere3<T>& a, const TSphere3<T>& b, 
 		 TCircle3<T>& intersection_circle)
 	{
+		// if the two spheres are concentric, there is
+		// no intersection circle - return false
+		if (Maths::isZero((a.p - b.p).getSquareLength()))
+		{
+			return false;
+		}
+		
+		// check for intersection
+		// x is the fraction of the difference vector of
+		// a.p and b.p where the intersection plane is cut
+		T difference_squared = (b.p.x - a.p.x) * (b.p.x - a.p.x) 
+												 + (b.p.y - a.p.y) * (b.p.y - a.p.y) 
+												 + (b.p.z - a.p.z) * (b.p.z - a.p.z);
+		T x = 0.5 + (a.radius * a.radius - b.radius * b.radius) / (2.0 * difference_squared);
+		if ((x < 0.0) || (x > 1.0) || (sqrt(difference_squared) > (a.radius + b.radius))) 
+		{
+			// the two spheres do not intersect!
+			return false;
+		}
+		
+		// calculate the intersection plane
 		TPlane3<T> plane
 			(-2 * b.p.x + 2 * a.p.x,
 			 -2 * b.p.y + 2 * a.p.y,
@@ -946,9 +970,8 @@ namespace BALL
 
 		plane.hessify();
 
-
+		// calculate the circle lying on that plane
 		T d = plane.n * plane.p;
-
 		intersection_circle.set(d * plane.n, plane.n, sqrt(a.radius * a.radius - d * d));
 
 		return true;
