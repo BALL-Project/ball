@@ -8,6 +8,8 @@ class SecondaryStructureProcessor
 %End
 	public:
 	SecondaryStructureProcessor();
-	void compute();
-	// Processor::Result operator() (Composite& /composite/);
+	Processor::Result operator() (Composite& /composite/);
+%MethodCode
+  sipRes = sipCpp->operator () (*a0);
+%End
 };
