@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.C,v 1.27 2005/01/18 21:36:37 amoll Exp $
+// $Id: periodicBoundary.C,v 1.28 2005/01/18 21:38:43 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
@@ -325,8 +325,7 @@ namespace BALL
 				box_.a = p.getLower() - Vector3(dist);
 				box_.b = p.getUpper() + Vector3(dist);
 			
-				Log.level(LogStream::INFORMATION) << "Creating periodic boundary with a minimum distance of " 
-					<< dist << " Angstrom" << endl;
+				Log.info() << "Creating periodic boundary with a minimum distance of " << dist << " Angstrom" << endl;
 			}
 		}
 		
