@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.22 2000/09/06 19:57:36 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.23 2000/09/13 06:33:03 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.22 2000/09/06 19:57:36 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.23 2000/09/13 06:33:03 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -607,13 +607,18 @@ RESULT
 CHECK(GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle))
 	v1.set(0.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 5);
+	s2 = Sphere3(v1, 1);
 	v1.set(5.0, 0.0, 0.0);
-	s2 = Sphere3(v1, 5);
-	TEST_EQUAL(GetIntersection(s1, s2, c1), true)
+	s3 = Sphere3(v1, 5);
+	s4 = Sphere3(v1, 1);
+	TEST_EQUAL(GetIntersection(s2, s4, c1), false)
+	TEST_EQUAL(GetIntersection(s1, s3, c1), true)
 	v1.set(2.5, 0.0, 0.0);
 	v2.set(1.0, 0.0, 0.0);
 	c2 = Circle3(v1, v2, sqrt(25.0 - 6.25));
-	TEST_EQUAL(c1, c2);
+	TEST_EQUAL(c1.n, c2.n)
+	TEST_EQUAL(c1.p, c2.p)
+	TEST_REAL_EQUAL(c1.radius, c2.radius)
 RESULT
 
 CHECK(isCollinear(const TVector3<T>& a, const TVector3<T>& b))
