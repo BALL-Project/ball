@@ -366,7 +366,7 @@ Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const
 
 void MolecularDynamicsDialog::advancedOptions()
 {
-	advancedOptionsDialog* dialog = new advancedOptionsDialog();
+	AdvancedOptionsDialog* dialog = new AdvancedOptionsDialog();
 	//restore previos changes  in dialog
 	dialog->setOptions( nonbonded_cutoff, vdw_cutoff, vdw_cuton, electrostatic_cutoff, electrostatic_cuton,
 				    scaling_electrostatic_1_4, scaling_vdw_1_4, use_dddc, assign_charges, assign_typenames,
