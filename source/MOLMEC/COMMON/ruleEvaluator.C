@@ -1,6 +1,7 @@
-// $Id: ruleEvaluator.C,v 1.2 2000/05/24 12:40:07 anker Exp $
+// $Id: ruleEvaluator.C,v 1.3 2000/05/24 16:20:40 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
+#include <BALL/FORMAT/INIFile.h>
 #include <BALL/KERNEL/PTE.h>
 
 using namespace std;
@@ -54,7 +55,13 @@ namespace BALL
 		return prefix_;
 	}
 
-	bool RuleEvaluator::initialize(INIFile& file, const String& prefix)
+	void RuleEvaluator::setPrefix(const String& prefix)
+	{
+		prefix_ = prefix;
+	}
+
+	bool RuleEvaluator::initialize
+		(INIFile& file, const String& prefix)
 	{
 		// destroy the old rules
 		rule_map_.clear();
@@ -101,9 +108,11 @@ namespace BALL
 			return;
 		}
 
-		// we have to create an entry in the hash map for the first
-		// entry
-		bool has_rules = false;
+		// create a new entry for symbol
+		if (!rule_map_.has(symbol))
+		{
+			rule_map_.insert(symbol, list<pair<Expression, String> >());
+		}
 
 		// iterate over all lines of the respective section
 		Position i = file.getSectionFirstLine(section_name);
@@ -112,24 +121,22 @@ namespace BALL
 			String line(*file.getLine(i));
 			if (line.has('='))
 			{
-				String value = line.before("=");	
-				String expression_string = line.after("=");
-				expression_string.trim();
-				if (expression_string != "")
+				if (line[0] == '=')
 				{
-					// if this is the first expression for
-					// this symbol, we create a new list in the hash map
-					if (!has_rules)
-					{
-						// create a new entry for symbol
-						rule_map_.insert(symbol, list<pair<Expression, String> >());
-						// do not create the entry twice
-						has_rules = true;
-					}
-					
-					// push the expression into the list
-					rule_map_[symbol].push_back(pair<Expression, String>(Expression(expression_string), value));
+					Log.error() << "RuleEvaluator:: invalid rule in line " << i << ": " << line << endl;
+					continue;
 				}
+
+				String value = line.before("=");	
+				String expression_string;
+				if (line.after("=").isValid())
+				{
+					expression_string = line.after("=");
+				}
+				expression_string.trim();
+
+				// push the expression into the list
+				rule_map_[symbol].push_back(pair<Expression, String>(Expression(expression_string), value));
 			}
 		}
 	}
@@ -153,12 +160,10 @@ namespace BALL
 				{
 					// retrieve the return value
 					result = it->second;
-
-					// done with the iteration
-					it = rule_map_[symbol].end();
+					break;
 				}
 			}
-		}
+		} 
 		
 		// if no rule was applicable, check the default rule "*"
 		if ((result == "") && (rule_map_.has("*")))
@@ -172,9 +177,9 @@ namespace BALL
 				{
 					// retrieve the return value
 					result = it->second;
-
-					// done with the iteration
-					it = rule_map_["*"].end();
+					
+					// and exit the loop
+					break;
 				}
 			}
 		}
