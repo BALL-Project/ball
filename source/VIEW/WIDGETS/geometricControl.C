@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.62 2004/11/09 21:35:24 amoll Exp $
+// $Id: geometricControl.C,v 1.63 2004/11/09 21:51:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -498,7 +498,13 @@ namespace BALL
 			throw()
 		{
 			ItemList item_list = getSelectedItems(); 
-			if (item_list.size() > 0 && !main_control.compositesAreLocked()) main_control.setDeleteEntryEnabled(true);
+			if (item_list.size() > 0 && 
+					!main_control.compositesAreLocked() &&
+					!main_control.updateOfRepresentationRunning()
+					) 
+			{
+				main_control.setDeleteEntryEnabled(true);
+			}
 		}
 
 		void GeometricControl::focusRepresentation()
