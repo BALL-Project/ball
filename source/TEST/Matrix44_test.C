@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Matrix44_test.C,v 1.20 2003/06/09 22:40:52 oliver Exp $
+// $Id: Matrix44_test.C,v 1.21 2003/06/10 21:49:48 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,7 +15,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.20 2003/06/09 22:40:52 oliver Exp $")
+START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.21 2003/06/10 21:49:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -293,7 +293,7 @@ CHECK(static const TMatrix4x4& getZero() throw())
 RESULT
 
 CHECK(static const TMatrix4x4& getIdentity() throw())
-	const Matrix4x4 c = m1.getIdentity(); //??? set instead of get?
+	const Matrix4x4 c = m1.getIdentity(); 
 	m2 = Matrix4x4(1.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	TEST_EQUAL(c.isEqual(m2), true)
 RESULT
