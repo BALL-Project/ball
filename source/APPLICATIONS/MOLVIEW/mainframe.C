@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.129 2004/02/23 22:04:54 amoll Exp $
+// $Id: mainframe.C,v 1.130 2004/03/03 00:19:51 oliver Exp $
 //
 
 #include "mainframe.h"
@@ -127,9 +127,6 @@ namespace BALL
 		// File Menu
 		insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), 
 										CTRL+Key_Y, MENU_EXPORT_POVRAYFILE);
-
-// 		insertMenuEntry(MainControl::FILE_EXPORT, "VRML", this, SLOT(exportVRML()), 
-// 										CTRL+Key_Y, MENU_EXPORT_VRMLFILE);
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 										ALT+Key_X, MENU_FULLSCREEN);
@@ -212,34 +209,25 @@ namespace BALL
 		// execute the surface dialog and abort if cancel is clicked
 		if (!surface_dialog_->exec()) return;
 
+		// Create a new contour surface.
 		ContourSurface cs(*surface_dialog_->getGrid(), surface_dialog_->getThreshold());
-		Mesh* mesh = new Mesh();
-		*static_cast<Surface*>(mesh) = (Surface) cs;
+		Mesh* mesh = new Mesh;
+		mesh->Surface::operator = (static_cast<Surface&>(cs));
 
+		// Create a new representation containing the contour surface.
 		Representation* rep = getPrimitiveManager().createRepresentation();
 		rep->insert(*mesh);
 		rep->setModelType(MODEL_CONTOUR_SURFACE); 
 
+		// Make sure molview knows about the new representation.
 		RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
 		notify_(message);
 	}
 
 	void Mainframe::about()
 	{
-		// showing about dialog
+		// Display about dialog
 		AboutDialog about;
-		String version = String("(BALL ") +
-										 String(VersionInfo::getMajorRevision()) + "." +
-										 String(VersionInfo::getMinorRevision()) + ")";
-	
-		about.BALL_version_label->setText(version.c_str());
-
-		version = String("(QT ") + qVersion();	
-#ifdef BALL_QT_HAS_THREADS
-		version += " mt";
-#endif
-		version += ")";
-		about.qt_version_label->setText(version.c_str());
 		about.exec(); 
 	}
 
@@ -252,13 +240,12 @@ namespace BALL
 			showNormal();	
 			showFullScreen();
 			setGeometry(qApp->desktop()->screenGeometry());
-
-			fullscreen_ = true;
-			return;
 		}
-
-		showNormal();
-		fullscreen_ = false;
+		else
+		{
+			showNormal();
+		}
+		fullscreen_ = !fullscreen_;
 	}
 
 	void Mainframe::openFile(const String& file)
