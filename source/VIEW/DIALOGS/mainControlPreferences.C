@@ -1,16 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: 
+// $Id: mainControlPreferences.C,v 1.6 2003/08/29 07:02:45 oliver Exp $
+//
 
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 
-#include <qradiobutton.h>
-#include <qplatinumstyle.h>
-#include <qwindowsstyle.h>
-#include <qmotifstyle.h>
-#include <qcdestyle.h>
-#include <qsgistyle.h>
+#include <qcombobox.h>
+#include <qstylefactory.h>
 
 namespace BALL
 {
@@ -21,8 +18,8 @@ namespace BALL
 			throw()
 			: MainControlPreferencesData(parent, name, fl)
 		{
-			style_box_.setEditable(false);
-			style_box_.insertStringList(QStyleFactory::keys());
+			style_box_->setEditable(false);
+			style_box_->insertStringList(QStyleFactory::keys());
 			show();
 		}
 		
@@ -38,7 +35,7 @@ namespace BALL
 		QStyle* MainControlPreferences::getStyle()
 			throw()
 		{
-			QStyle* new_style = QStyleFactory.create(style_box_.currentText());			
+			QStyle* new_style = QStyleFactory::create(style_box_->currentText());			
 			return new_style;
 		}
 		
@@ -52,7 +49,7 @@ namespace BALL
 			}
 			if (QStyleFactory::keys().grep(style).size() > 0)
 			{
-				style_box_.setCurrentText(*QStyleFactory::keys().grep(style).begin());
+				style_box_->setCurrentText(*QStyleFactory::keys().grep(style).begin());
 			}
 		}
 		
@@ -60,7 +57,7 @@ namespace BALL
 			throw()
 		{
 			// save the style settings
-			String style = style_box_.getCurrentText();
+			String style = style_box_->currentText().ascii();
 			inifile.insertValue("WINDOWS", "style", style);
 		}
 		
