@@ -1,10 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.3 2003/09/01 10:27:20 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.4 2003/09/03 10:16:21 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
-#include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
 
@@ -18,16 +17,14 @@ namespace BALL
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor()
 			throw()
 			:	ModelProcessor(),
-			  used_atoms_(),
-				hashed_atoms_()
+			  used_atoms_()
 		{
 		}
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor(const AtomBondModelBaseProcessor& processor)
 			throw()
 			:	ModelProcessor(processor),
-				used_atoms_(),
-				hashed_atoms_()
+				used_atoms_()
 		{
 		}
 

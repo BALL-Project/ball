@@ -1,32 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.4 2003/09/01 10:27:41 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.5 2003/09/03 10:16:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
 
-#ifndef BALL_CONCEPT_COMPOSITE_H
-#	include <BALL/CONCEPT/composite.h>
-#endif
-
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
-#endif
-
-#ifndef BALL_DATATYPE_HASHSET_H
-#	include <BALL/DATATYPE/hashSet.h>
 #endif
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
 #	include <BALL/VIEW/MODELS/modelProcessor.h>
 #endif
-
-#ifndef BALL_VIEW_COMMON_H
-# include <BALL/VIEW/KERNEL/common.h>
-#endif
-
 
 namespace BALL
 {
@@ -214,7 +201,6 @@ namespace BALL
 			private:
 
 			List<const Atom*> used_atoms_;
-			HashSet<const Atom*> hashed_atoms_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
