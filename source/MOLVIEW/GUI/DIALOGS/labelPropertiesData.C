@@ -1,0 +1,211 @@
+// $Id:
+
+#include <qpixmap.h>
+#include <qlayout.h>
+#include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h>
+
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qgroupbox.h>
+
+namespace BALL
+{
+
+	namespace MOLVIEW
+	{
+
+LabelPropertiesData::LabelPropertiesData(QWidget *parent, const char *name)
+                       : QDialog(parent, name, FALSE, 0)
+{
+    QGroupBox *qtarch_GroupBox_11 = new QGroupBox(this, "GroupBox_11");
+    qtarch_GroupBox_11->setGeometry(10, 10, 230, 160);
+    qtarch_GroupBox_11->setMinimumSize(0, 0);
+    qtarch_GroupBox_11->setMaximumSize(32767, 32767);
+    qtarch_GroupBox_11->setFocusPolicy(QWidget::NoFocus);
+    qtarch_GroupBox_11->setBackgroundMode(QWidget::PaletteBackground);
+    qtarch_GroupBox_11->setFontPropagation(QWidget::SameFont);
+    qtarch_GroupBox_11->setPalettePropagation(QWidget::SameFont);
+    qtarch_GroupBox_11->setFrameStyle( 50 );
+    qtarch_GroupBox_11->setLineWidth( 1 );
+    qtarch_GroupBox_11->setMidLineWidth( 0 );
+    qtarch_GroupBox_11->QFrame::setMargin( 0 );
+    qtarch_GroupBox_11->setTitle( "Label selected objects" );
+    qtarch_GroupBox_11->setAlignment( AlignHCenter );
+
+    QGroupBox *qtarch_GroupBox_12 = new QGroupBox(qtarch_GroupBox_11, "GroupBox_12");
+    qtarch_GroupBox_12->setGeometry(10, 70, 210, 80);
+    qtarch_GroupBox_12->setMinimumSize(0, 0);
+    qtarch_GroupBox_12->setMaximumSize(32767, 32767);
+    qtarch_GroupBox_12->setFocusPolicy(QWidget::NoFocus);
+    qtarch_GroupBox_12->setBackgroundMode(QWidget::PaletteBackground);
+    qtarch_GroupBox_12->setFontPropagation(QWidget::SameFont);
+    qtarch_GroupBox_12->setPalettePropagation(QWidget::SameFont);
+    qtarch_GroupBox_12->setFrameStyle( 50 );
+    qtarch_GroupBox_12->setLineWidth( 1 );
+    qtarch_GroupBox_12->setMidLineWidth( 0 );
+    qtarch_GroupBox_12->QFrame::setMargin( 0 );
+    qtarch_GroupBox_12->setTitle( "Custom Color" );
+    qtarch_GroupBox_12->setAlignment( AlignLeft );
+
+    label_edit_ = new QLineEdit(qtarch_GroupBox_11, "LineEdit_1");
+    label_edit_->setGeometry(50, 30, 170, 30);
+    label_edit_->setMinimumSize(170, 30);
+    label_edit_->setMaximumSize(170, 30);
+    label_edit_->setFocusPolicy(QWidget::StrongFocus);
+    label_edit_->setBackgroundMode(QWidget::PaletteBase);
+    label_edit_->setFontPropagation(QWidget::SameFont);
+    label_edit_->setPalettePropagation(QWidget::SameFont);
+    label_edit_->setText( "" );
+    label_edit_->setMaxLength( 32767 );
+    label_edit_->setFrame( QLineEdit::Normal );
+    label_edit_->setFrame( TRUE );
+    label_edit_->setAlignment( AlignLeft );
+
+    QLabel *qtarch_Label_4 = new QLabel(qtarch_GroupBox_11, "Label_4");
+    qtarch_Label_4->setGeometry(10, 30, 40, 30);
+    qtarch_Label_4->setMinimumSize(0, 0);
+    qtarch_Label_4->setMaximumSize(32767, 32767);
+    qtarch_Label_4->setFocusPolicy(QWidget::NoFocus);
+    qtarch_Label_4->setBackgroundMode(QWidget::PaletteBackground);
+    qtarch_Label_4->setFontPropagation(QWidget::SameFont);
+    qtarch_Label_4->setPalettePropagation(QWidget::SameFont);
+    qtarch_Label_4->setFrameStyle( 0 );
+    qtarch_Label_4->setLineWidth( 1 );
+    qtarch_Label_4->setMidLineWidth( 0 );
+    qtarch_Label_4->QFrame::setMargin( 0 );
+    qtarch_Label_4->setText( "Label" );
+    qtarch_Label_4->setAlignment( AlignLeft|AlignVCenter|ExpandTabs );
+    qtarch_Label_4->setMargin( 0 );
+
+    color_sample_ = new QLabel(qtarch_GroupBox_12, "Label_5");
+    color_sample_->setGeometry(20, 30, 60, 30);
+    color_sample_->setMinimumSize(0, 0);
+    color_sample_->setMaximumSize(32767, 32767);
+    {
+        QColorGroup normal;
+        normal.setColor( QColorGroup::Foreground, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
+        normal.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
+        normal.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
+        normal.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
+        normal.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
+        normal.setColor( QColorGroup::Text, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::BrightText, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::ButtonText, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::Base, QColor( QRgb( 16777215 ) ) );
+        normal.setColor( QColorGroup::Background, QColor( QRgb( 16711680 ) ) );
+        normal.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::Highlight, QColor( QRgb( 0 ) ) );
+        normal.setColor( QColorGroup::HighlightedText, QColor( QRgb( 16777215 ) ) );
+        QColorGroup disabled;
+        disabled.setColor( QColorGroup::Foreground, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
+        disabled.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
+        disabled.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
+        disabled.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
+        disabled.setColor( QColorGroup::Text, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::BrightText, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::ButtonText, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::Base, QColor( QRgb( 12632256 ) ) );
+        disabled.setColor( QColorGroup::Background, QColor( QRgb( 12632256 ) ) );
+        disabled.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
+        disabled.setColor( QColorGroup::Highlight, QColor( QRgb( 8421504 ) ) );
+        disabled.setColor( QColorGroup::HighlightedText, QColor( QRgb( 12632256 ) ) );
+        QColorGroup active;
+        active.setColor( QColorGroup::Foreground, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::Button, QColor( QRgb( 12632256 ) ) );
+        active.setColor( QColorGroup::Light, QColor( QRgb( 15527148 ) ) );
+        active.setColor( QColorGroup::Midlight, QColor( QRgb( 14474460 ) ) );
+        active.setColor( QColorGroup::Dark, QColor( QRgb( 8421504 ) ) );
+        active.setColor( QColorGroup::Mid, QColor( QRgb( 10526884 ) ) );
+        active.setColor( QColorGroup::Text, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::BrightText, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::ButtonText, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::Base, QColor( QRgb( 16777215 ) ) );
+        active.setColor( QColorGroup::Background, QColor( QRgb( 12632256 ) ) );
+        active.setColor( QColorGroup::Shadow, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::Highlight, QColor( QRgb( 0 ) ) );
+        active.setColor( QColorGroup::HighlightedText, QColor( QRgb( 16777215 ) ) );
+        QPalette palette( normal, disabled, active );
+        color_sample_->setPalette( palette );
+    }
+    color_sample_->setFocusPolicy(QWidget::NoFocus);
+    color_sample_->setBackgroundMode(QWidget::PaletteBackground);
+    color_sample_->setFontPropagation(QWidget::SameFont);
+    color_sample_->setPalettePropagation(QWidget::SameFont);
+    color_sample_->setFrameStyle( 0 );
+    color_sample_->setLineWidth( 1 );
+    color_sample_->setMidLineWidth( 0 );
+    color_sample_->QFrame::setMargin( 0 );
+    color_sample_->setText( "" );
+    color_sample_->setAlignment( AlignLeft|AlignVCenter|ExpandTabs );
+    color_sample_->setMargin( 0 );
+
+    QPushButton *qtarch_PushButton_4 = new QPushButton(qtarch_GroupBox_12, "PushButton_4");
+    qtarch_PushButton_4->setGeometry(110, 30, 80, 30);
+    qtarch_PushButton_4->setMinimumSize(0, 0);
+    qtarch_PushButton_4->setMaximumSize(32767, 32767);
+    qtarch_PushButton_4->setFocusPolicy(QWidget::TabFocus);
+    qtarch_PushButton_4->setBackgroundMode(QWidget::PaletteButton);
+    qtarch_PushButton_4->setFontPropagation(QWidget::SameFont);
+    qtarch_PushButton_4->setPalettePropagation(QWidget::SameFont);
+    qtarch_PushButton_4->setText( "Edit" );
+    qtarch_PushButton_4->setAutoRepeat( FALSE );
+    qtarch_PushButton_4->setAutoResize( FALSE );
+    qtarch_PushButton_4->setToggleButton( FALSE );
+    qtarch_PushButton_4->setDefault( FALSE );
+    qtarch_PushButton_4->setAutoDefault( TRUE );
+    qtarch_PushButton_4->setIsMenuButton( FALSE );
+    connect(qtarch_PushButton_4, SIGNAL(clicked()), SLOT(editColor()));
+
+    apply_button_ = new QPushButton(this, "apply_button");
+    apply_button_->setGeometry(10, 180, 100, 30);
+    apply_button_->setMinimumSize(0, 0);
+    apply_button_->setMaximumSize(32767, 32767);
+    apply_button_->setFocusPolicy(QWidget::TabFocus);
+    apply_button_->setBackgroundMode(QWidget::PaletteButton);
+    apply_button_->setFontPropagation(QWidget::SameFont);
+    apply_button_->setPalettePropagation(QWidget::SameFont);
+    apply_button_->setText( "&Apply" );
+    apply_button_->setAutoRepeat( FALSE );
+    apply_button_->setAutoResize( FALSE );
+    apply_button_->setToggleButton( FALSE );
+    apply_button_->setDefault( FALSE );
+    apply_button_->setAutoDefault( TRUE );
+    apply_button_->setIsMenuButton( FALSE );
+    connect(apply_button_, SIGNAL(clicked()), SLOT(applyButtonClicked()));
+
+    QPushButton *qtarch_close_button = new QPushButton(this, "close_button");
+    qtarch_close_button->setGeometry(140, 180, 100, 30);
+    qtarch_close_button->setMinimumSize(0, 0);
+    qtarch_close_button->setMaximumSize(32767, 32767);
+    qtarch_close_button->setFocusPolicy(QWidget::TabFocus);
+    qtarch_close_button->setBackgroundMode(QWidget::PaletteButton);
+    qtarch_close_button->setFontPropagation(QWidget::SameFont);
+    qtarch_close_button->setPalettePropagation(QWidget::SameFont);
+    qtarch_close_button->setText( "&Close" );
+    qtarch_close_button->setAutoRepeat( FALSE );
+    qtarch_close_button->setAutoResize( FALSE );
+    qtarch_close_button->setToggleButton( FALSE );
+    qtarch_close_button->setDefault( FALSE );
+    qtarch_close_button->setAutoDefault( TRUE );
+    qtarch_close_button->setIsMenuButton( FALSE );
+    connect(qtarch_close_button, SIGNAL(clicked()), SLOT(accept()));
+
+    resize(250,220);
+    setMinimumSize(250, 220);
+    setMaximumSize(250, 220);
+}
+
+LabelPropertiesData::~LabelPropertiesData()
+{
+}
+
+//#		ifdef BALL_NO_INLINE_FUNCTIONS
+//#			include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.iC>
+//#		endif
+
+	} // namespace MOLVIEW
+
+} // namespace BALL
