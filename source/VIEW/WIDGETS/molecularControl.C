@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.37 2004/02/09 12:50:56 amoll Exp $
+// $Id: molecularControl.C,v 1.38 2004/02/09 12:52:30 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1093,7 +1093,7 @@ void MolecularControl::applySelector()
 	}
 	catch(Exception::ParseError e)
 	{
-		setStatusbarText("Invalid expression " + e.getExpression() + ": "+ e.getMessage());
+		setStatusbarText(String("Invalid expression ") + e.getMessage());
 		return;
 	}
 
