@@ -1,25 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.h,v 1.25 2003/07/24 10:41:50 amoll Exp $
+// $Id: snapShot.h,v 1.26 2003/08/21 20:36:42 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
 #define BALL_MOLMEC_COMMON_SNAPSHOT_H
  
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
-#endif
-
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
 #endif
 
 namespace BALL
 {
+	class System;
+
 	/** SnapShot class, containing the actual data of one single snapshot.
 			It consists of the posistions, velocities and forces for each atom
 			along with kinetic and potential energy of selected atoms. It is used
