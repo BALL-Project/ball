@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.18 2003/06/04 15:46:34 amoll Exp $
+// $Id: control.C,v 1.19 2003/06/06 10:41:40 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -58,7 +58,7 @@ Control::Control(QWidget* parent, const char* name)
 			context_menu_(),
 			context_composite_(0),
 			context_item_(0),
-			colorMeshDlg_(0)
+			colorMeshDlg_(new ColorMeshDialog(this))
 {
 	// appearance
 	setRootIsDecorated(TRUE);
@@ -233,11 +233,6 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* /* item */)
 	// This is used to provide the coloring for meshes...
 	if (RTTI::isKindOf<Mesh>(*composite))
 	{	
-		if (colorMeshDlg_)
-		{
-			delete colorMeshDlg_;
-		}
-		colorMeshDlg_ = new ColorMeshDialog(this);
 		colorMeshDlg_->setMesh(*(Mesh*)RTTI::castTo<Mesh>(*composite));
 		colorMeshDlg_->setComposite(*composite->getParent());
 		insertContextMenuEntry("Properties", colorMeshDlg_, SLOT(show()));	

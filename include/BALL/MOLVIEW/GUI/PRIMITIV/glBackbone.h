@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackbone.h,v 1.14 2003/03/26 13:56:53 anhi Exp $
+// $Id: glBackbone.h,v 1.15 2003/06/06 10:41:12 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -222,8 +222,6 @@ namespace BALL
 				throw();
 
 			//@}
-
-  		private:
 
 			//_
 			virtual Sphere* createSphere_();
