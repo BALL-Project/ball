@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.C,v 1.11 2000/09/25 21:23:07 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.12 2001/06/27 02:01:17 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -184,18 +184,18 @@ namespace BALL
 						&& second_atom_expressions_[i](*(*bond_it)->getSecondAtom()))
 				{
 					// remember the atoms and the bond type (for the parameters)
-					first_atom = (*bond_it)->getFirstAtom();
-					second_atom = (*bond_it)->getSecondAtom();
+					first_atom = const_cast<Atom*>((*bond_it)->getFirstAtom());
+					second_atom = const_cast<Atom*>((*bond_it)->getSecondAtom());
 					bond_type = i;
 					break;
 				}
 				// Otherwise: try first/second and second/first
 				else if (first_atom_expressions_[i](*(*bond_it)->getSecondAtom())
-						 && second_atom_expressions_[i](*(*bond_it)->getFirstAtom()))
+								 && second_atom_expressions_[i](*(*bond_it)->getFirstAtom()))
 				{
 					// remember the atoms and the bond type (for the parameters)
-					first_atom  = (*bond_it)->getSecondAtom();
-					second_atom = (*bond_it)->getFirstAtom();
+					first_atom  = const_cast<Atom*>((*bond_it)->getSecondAtom());
+					second_atom = const_cast<Atom*>((*bond_it)->getFirstAtom());
 					bond_type = i;
 					break;
 				}
