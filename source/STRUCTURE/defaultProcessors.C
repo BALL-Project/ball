@@ -1,17 +1,13 @@
-// $Id: defaultProcessors.C,v 1.12 2001/04/29 23:57:55 oliver Exp $
+// $Id: defaultProcessors.C,v 1.13 2001/07/15 18:12:24 amoll Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
-#include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/path.h>
-#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/residue.h>
-#include <stdio.h>
-#include <math.h>
 
-using namespace std;
+using namespace ::std;
 
 namespace BALL 
 {
@@ -19,19 +15,17 @@ namespace BALL
 	Processor::Result ClearChargeProcessor::operator () (Atom& atom)
 	{
 		atom.setCharge(0);
-
 		return Processor::CONTINUE;
 	}
 
 	Processor::Result ClearRadiusProcessor::operator () (Atom& atom)
 	{
 		atom.setRadius(0);
-
 		return Processor::CONTINUE;
 	}
 
 
-	// AssignRadiusProcessor
+	// AssignRadiusProcessor ==============================================
 
 	AssignRadiusProcessor::AssignRadiusProcessor()
 		:	number_of_errors_(0),
@@ -40,6 +34,7 @@ namespace BALL
 	}
 
 	AssignRadiusProcessor::AssignRadiusProcessor(const String& filename)
+		throw(Exception::FileNotFound)
 		:	number_of_errors_(0),
 			number_of_assignments_(0)
 	{
@@ -49,7 +44,6 @@ namespace BALL
 		
 		if (filename_ == "")
 		{
-			// throw FileNotFound if the file could not be found in the DATA_PATH
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
 	}
@@ -68,12 +62,9 @@ namespace BALL
 
 	Processor::Result AssignRadiusProcessor::operator () (Atom& atom)
 	{
-		String		name;
-		String		atom_name;
 		String		res_name;
-		float			radius;
-
 		Fragment* frag = atom.getFragment();
+		
 		if (frag != 0)
 		{
 			res_name = frag->getName().trim();
@@ -82,13 +73,12 @@ namespace BALL
 		{
 			res_name = "";
 		}
-		atom_name = atom.getName().trim();
+		String atom_name = atom.getName().trim();
 		String original_res_name = res_name;
 
 		if (RTTI::isKindOf<Residue>(*atom.getFragment()))
 		{
-			Residue* residue;
-			residue = RTTI::castTo<Residue>(*atom.getFragment());
+			Residue* residue = RTTI::castTo<Residue>(*atom.getFragment());
 				
 			String suffix("-");
 			if (residue->isNTerminal())
@@ -112,7 +102,8 @@ namespace BALL
 			}
 		}
 
-		name = res_name + ":" + atom_name;
+		String name = res_name + ":" + atom_name;
+		float	 radius;
 
 		if (table_.has(name.c_str()))
 		{
@@ -147,14 +138,14 @@ namespace BALL
 				}
 			}
 		}
-
 					
 		return Processor::CONTINUE;
 	}
 
 	bool AssignRadiusProcessor::buildTable_()
+		throw(Exception::FileNotFound)
 	{
-		ifstream	infile(filename_.c_str());
+		ifstream infile(filename_.c_str());
 
 		if (!infile)
 		{
@@ -178,17 +169,18 @@ namespace BALL
 		return true;
 	}
 
-	unsigned long AssignRadiusProcessor::getNumberOfErrors()
+	Size AssignRadiusProcessor::getNumberOfErrors()
 	{
 		return number_of_errors_;
 	}
 
-	unsigned long AssignRadiusProcessor::getNumberOfAssignments()
+	Size AssignRadiusProcessor::getNumberOfAssignments()
 	{
 		return number_of_assignments_;
 	}
 
 	void AssignRadiusProcessor::setFilename(const String& filename)
+		throw(Exception::FileNotFound)
 	{
 		Path path;
 		filename_ = path.find(filename);
@@ -198,7 +190,6 @@ namespace BALL
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
 	}
-
 	 
 	String& AssignRadiusProcessor::getFilename()
 	{
@@ -206,13 +197,14 @@ namespace BALL
 	}
 
 	 
-	// AssignChargeProcessor
+	// AssignChargeProcessor ==================================================
 	AssignChargeProcessor::AssignChargeProcessor()
 		:	AssignRadiusProcessor()
 	{
 	}
 
 	AssignChargeProcessor::AssignChargeProcessor(const String& filename)
+		throw(Exception::FileNotFound)
 		: AssignRadiusProcessor(filename)
 	{
 	}
@@ -228,12 +220,9 @@ namespace BALL
 
 	Processor::Result AssignChargeProcessor::operator () (Atom& atom)
 	{
-		String		name;
-		String		atom_name;
 		String		res_name;
-		float			charge;
-
 		Fragment* frag = atom.getFragment();
+
 		if (frag != 0)
 		{
 			res_name = frag->getName().trim();
@@ -242,13 +231,13 @@ namespace BALL
 		{
 			res_name = "";
 		}
-		atom_name = atom.getName().trim();
+		
+		String atom_name = atom.getName().trim();
 		String original_res_name = res_name;
 
 		if (RTTI::isKindOf<Residue>(*atom.getFragment()))
 		{
-			Residue* residue;
-			residue = RTTI::castTo<Residue>(*atom.getFragment());
+			Residue* residue = RTTI::castTo<Residue>(*atom.getFragment());
 				
 			String suffix("-");
 			if (residue->isNTerminal())
@@ -272,7 +261,8 @@ namespace BALL
 			}
 		}
 
-		name = res_name + ":" + atom_name;
+		String name = res_name + ":" + atom_name;
+		float	 charge;
 
 
 		if (table_.has(name))
