@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.7 2005/03/14 16:20:33 amoll Exp $
+// $Id: buildBondsProcessor.C,v 1.8 2005/03/24 22:25:48 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -124,6 +124,34 @@ namespace BALL
 		ac.apply(bbox);		
 		Vector3 size = bbox.getUpper() - bbox.getLower();
 
+		// if at least one single number of the coordinates from the atoms
+		// is nan, the bounding box would be huge
+		if (Maths::isNan(size.x) || Maths::isNan(size.y) || Maths::isNan(size.z))
+		{
+			// this is just a fallback; simple method which is computationally hard
+			// (s.th. like O(n^2))
+			AtomIterator ait1, ait2;
+			BALL_FOREACH_ATOM_PAIR(ac, ait1, ait2)
+			{
+				float dist = ait1->getPosition().getDistance(ait2->getPosition());
+				float max_dist(0), min_dist(0);
+				Size an1(ait1->getElement().getAtomicNumber());
+				Size an2(ait2->getElement().getAtomicNumber());
+
+				if (getMaxBondLength_(max_dist, an1, an2) &&
+						getMaxBondLength_(min_dist, an1, an2) &&
+						dist <= max_dist &&
+						dist >= min_dist &&
+						ait1->isBoundTo(*ait2))
+				{
+					Bond* const b = ait1->createBond(*ait2);
+					b->setOrder(Bond::ORDER__UNKNOWN);
+					num_bonds++;
+				}
+			}
+			return num_bonds;
+		}
+		
 		// build HashGrid
 		HashGrid3<Atom*> grid(bbox.getLower() - Vector3(1.0), size + Vector3(2.0), max_length_ + 0.01);
 	
@@ -173,7 +201,7 @@ namespace BALL
 									if (*ait1 <= *ait2) continue;
 									// test the distance criterion for the specific element pair
 									const float dist = atom_pos1.getSquareDistance((*ait2)->getPosition());
-									float max_dist, min_dist;
+									float max_dist(0), min_dist(0);
 									const Size& an1 = atom1.getElement().getAtomicNumber();
 									const Size& an2 = (*ait2)->getElement().getAtomicNumber();
 
@@ -204,7 +232,7 @@ namespace BALL
 							{
 								// test the distance criterion for the specific element pair
 								const float dist = atom_pos1.getSquareDistance((*ait2)->getPosition());
-								float max_dist, min_dist;
+								float max_dist(0), min_dist(0);
 								const Size& an1 = atom1.getElement().getAtomicNumber();
 								const Size& an2 = (*ait2)->getElement().getAtomicNumber();
 
@@ -513,7 +541,10 @@ namespace BALL
 					
 					if (key == "max")
 					{
-						if (value > max_length_) max_length_ = value;
+						if (value > max_length_) 
+						{
+							max_length_ = value;
+						}
 						max_bond_lengths_[an1][an2] = value * value;
 
 						continue;
@@ -521,12 +552,6 @@ namespace BALL
 
 					if (key == "min")
 					{
-						if (value == 0) 
-						{
-							min_bond_lengths_[an1][an2] = LONG_MAX;
-							continue;
-						}
-
 						min_bond_lengths_[an1][an2] = value * value;
 					}
 					else

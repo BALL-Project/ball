@@ -1,16 +1,10 @@
 <node>BondLengthsDB
 	<node>1
 		<node>Names
-			<node>Carbon</node>
-			<node>C</node>
+			<node>Hydrogen</node>
+			<node>H</node>
 		</node>
 		<node>Partners
-			<node>1
-				<node>BondLengths
-					<node>max<value>0</value></node>
-					<node>min<value>0</value></node>
-				</node>
-			</node>
 			<node>6
 				<node>BondLengths
 					<node>max<value>1.15</value></node>
@@ -89,12 +83,6 @@
 					<node>min<value>1.0</value></node>
 				</node>
 			</node>
-			<node>12
-				<node>BondLengths
-					<node>max<value>0</value></node>
-					<node>min<value>0</value></node>
-				</node>
-			</node>
 			<node>15
 				<node>BondLengths
 					<node>max<value>1.95</value></node>
@@ -163,12 +151,6 @@
 					<node>min<value>1.25</value></node>
 				</node>
 			</node>
-			<node>12
-				<node>BondLengths
-					<node>max<value>0</value></node>
-					<node>min<value>0</value></node>
-				</node>
-			</node>
 			<node>15
 				<node>BondLengths
 					<node>max<value>1.8</value></node>
@@ -214,12 +196,6 @@
 					<node>max<value>1.55</value></node>
 					<node>single<value>1.47</value></node>
 					<node>min<value>1.40</value></node>
-				</node>
-			</node>
-			<node>12
-				<node>BondLengths
-					<node>max<value>0</value></node>
-					<node>min<value>0</value></node>
 				</node>
 			</node>
 			<node>15
