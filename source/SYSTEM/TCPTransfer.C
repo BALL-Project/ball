@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.29 2003/08/26 09:18:28 oliver Exp $
+// $Id: TCPTransfer.C,v 1.30 2003/08/28 13:23:12 oliver Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -315,7 +315,7 @@ namespace BALL
 		}
 
 		// now cutting of the head
-		Size bytes = received_bytes_;
+		int bytes = received_bytes_;
 		Position pos = 0; 
 		for (; pos < (Position)bytes; pos++)
 		{

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.C,v 1.2 2003/08/26 15:26:31 amoll Exp $
+// $Id: events.C,v 1.3 2003/08/28 13:23:12 oliver Exp $
+//
 
 #include <BALL/VIEW/KERNEL/events.h>
 

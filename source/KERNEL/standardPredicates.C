@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.53 2003/07/07 11:17:50 anker Exp $
+// $Id: standardPredicates.C,v 1.54 2003/08/28 13:23:12 oliver Exp $
+//
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -762,8 +763,8 @@ namespace BALL
 		// is still unknown.
 		if (link_mark_ != 0)
 		{
-			pair<CTPNode*, CTPNode*> tmp(child, 0);
-			link_map_.insert(pair<char, pair<CTPNode*, CTPNode*> >(link_mark_, tmp));
+			std::pair<CTPNode*, CTPNode*> tmp(child, 0);
+			link_map_.insert(pair<char, std::pair<CTPNode*, CTPNode*> >(link_mark_, tmp));
 			link_mark_ = 0;
 		}
 		return child;

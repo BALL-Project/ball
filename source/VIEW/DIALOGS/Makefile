@@ -1,14 +1,14 @@
 #
-# $Id: Makefile,v 1.12 2003/08/27 14:35:37 amoll Exp $
+# $Id: Makefile,v 1.13 2003/08/28 13:23:12 oliver Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
 
 # Where the headers of the derived classes reside
-HEADER_DIR		=$(BALL_PATH)/include/BALL/$(DIRECTORY)
+HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
 
 # Where the UIC-created headers reside
-UIC_DIR				=$(BALL_PATH)/include/BALL/VIEW/UIC
+UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 
 THISLIB=$(LIBNAME)
 
@@ -88,8 +88,7 @@ MOC_SOURCES=\
 	transformationDialog_moc.C\
 	transformationDialogData_moc.C
 
-UIC_SOURCES=\
-	amberMinimizationDialogData.C\
+UIC_SOURCES=amberMinimizationDialogData.C\
 	atomPropertiesData.C\
 	colorMeshDialogData.C\
 	displayPropertiesData.C\
