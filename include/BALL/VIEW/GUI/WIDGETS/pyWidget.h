@@ -1,4 +1,4 @@
-// $Id: pyWidget.h,v 1.3 2000/09/23 14:15:07 hekl Exp $
+// $Id: pyWidget.h,v 1.4 2001/03/02 10:51:56 anker Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -48,7 +48,8 @@ class PyWidget
   PyWidget(const PyWidget& widget);
 
 	/// Destructor
-	virtual ~PyWidget();
+	virtual ~PyWidget()
+		throw();
 	//@}
 
 	public slots:
