@@ -1,4 +1,4 @@
-// $Id: embeddable.C,v 1.7 2001/05/17 01:30:49 oliver Exp $
+// $Id: embeddable.C,v 1.8 2001/06/05 15:49:20 anker Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
@@ -51,7 +51,8 @@ namespace BALL
 
 	// protected:
 
-	void Embeddable::registerInstance_(const type_info& type, Embeddable* instance) 
+	void Embeddable::registerInstance_(const type_info& type,
+			Embeddable* instance) 
 		throw()
 	{
 		// retrieve the class name
@@ -73,8 +74,9 @@ namespace BALL
 		}
 		else 
 		{
-			Log.warn() << "Embeddable::registerInstance_: trying to register an already registered instance at " 
-								 << instance << " (type = " << class_id_string << ")" << endl;
+			Log.warn() << "Embeddable::registerInstance_: "
+				<< "trying to register an already registered instance at " 
+				<< instance << " (type = " << class_id_string << ")" << endl;
 		}
 	}
 
