@@ -1,4 +1,4 @@
-// $Id: colorHSV.h,v 1.4 2001/07/06 15:39:57 aubertin Exp $
+// $Id: colorHSV.h,v 1.5 2001/07/11 14:46:42 aubertin Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
 #define BALL_VIEW_DATATYPE_COLORHSV_H
@@ -39,8 +39,8 @@ namespace BALL
 				conversions.
 				@memo    ColorHSV class (BALL VIEW datatype framework)
 				@author  $Author: aubertin $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/06 15:39:57 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/11 14:46:42 $
 		*/
 		class ColorHSV
 		{
@@ -348,11 +348,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the hue component.
-					Accesses the constant reference of the hue component of {\em *this} colorHSV.
-					See \Ref{ColorUnitHue} for further information concerning type conversion.
-					@return      ColorUnitHue& constant reference to the hue component of {\em *this} colorHSV
-					@see         setHue
-					@see         ColorUnitHue
+					For further information see {\em ColorUnitHue& getHue()}.
 			*/
 			const ColorUnitHue& getHue() const
 				throw();
@@ -379,11 +375,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the saturation component.
-					Accesses the constant reference of the saturation component of {\em *this} colorHSV.
-					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& constant reference to the saturation component of {\em *this} colorHSV
-					@see         setSaturation
-					@see         ColorUnit
+			                For further information see {\em ColorUnit& getSaturation()}.
 			*/
 			const ColorUnit& getSaturation() const
 				throw();
@@ -410,11 +402,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the value component.
-					Accesses the constant reference of the value component of {\em *this} colorHSV.
-					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& constant reference to the value component of {\em *this} colorHSV
-					@see         setValue
-					@see         ColorUnit
+			                For further information see {\em ColorUnit& getValue()}.
 			*/
 			const ColorUnit& getValue() const
 				throw();
