@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.40 2003/03/26 13:56:14 anhi Exp $
+// $Id: persistenceManager.h,v 1.41 2003/04/17 16:32:58 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -973,8 +973,8 @@ namespace BALL
 
 
 	template <class T>
-	bool PersistenceManager::readObjectArray(const T* array, const char* name,
-			Size& size)
+	bool PersistenceManager::readObjectArray
+		(const T* array, const char* name, Size& size)
 		throw()
 	{
 		if (!checkObjectArrayHeader(RTTI::getStreamName<T>(), name, size))
@@ -988,13 +988,14 @@ namespace BALL
 			(*this).readObject(ptr[i], "");
 		}
 
-		return checkObjectArrayTrailer();
+		bool result = checkObjectArrayTrailer();
+		return result;
 	} 
 
 
 	template <class T>
-	void PersistenceManager::writeObjectPointerArray(T** arr, const char* name,
-			const Size size)
+	void PersistenceManager::writeObjectPointerArray
+		(T** arr, const char* name, const Size size)
 		throw()
 	{
 		writeObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size);
