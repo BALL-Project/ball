@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.25 2000/09/16 08:33:59 oliver Exp $
+// $Id: String_test.C,v 1.26 2000/09/16 10:46:21 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.25 2000/09/16 08:33:59 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.26 2000/09/16 10:46:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -911,7 +911,6 @@ CHECK(String::split(String[], Size, char*, Index))
 RESULT
 
 CHECK(String::split(vector<String>& strings, const char* delimiters, Index from = 0))
-//BAUSTELLE: argumente 3 und 4 checken!
 	vector<String> arr;
 	s4 = "a b c d e f g";
 	TEST_EQUAL(s4.split(arr), 7)
@@ -922,41 +921,37 @@ CHECK(String::split(vector<String>& strings, const char* delimiters, Index from 
 	TEST_EQUAL(arr[4], "e")
 	TEST_EQUAL(arr[5], "f")
 	TEST_EQUAL(arr[6], "g")
-	TEST_EQUAL(arr[7], "")
+	TEST_EQUAL(arr.size(), 7)
 	s4 = "b c d e f g h";
-	TEST_EQUAL(s4.split(arr), 5)
+	TEST_EQUAL(s4.split(arr), 7)
+	TEST_EQUAL(arr.size(), 7)
 	TEST_EQUAL(arr[0], "b")
 	TEST_EQUAL(arr[1], "c")
 	TEST_EQUAL(arr[2], "d")
 	TEST_EQUAL(arr[3], "e")
 	TEST_EQUAL(arr[4], "f")
-	TEST_EQUAL(arr[5], "f")
-	TEST_EQUAL(arr[6], "g")
-	TEST_EQUAL(arr[7], "")
-	arr[0] = "";
-	TEST_EQUAL(s4.split(arr, 0), 0)
-	TEST_EQUAL(arr[0], "")
-	TEST_EQUAL(arr[1], "c")
+	TEST_EQUAL(arr[5], "g")
+	TEST_EQUAL(arr[6], "h")
 	s4= "";
-	TEST_EQUAL(s4.split(arr, 10), 0)
-	TEST_EQUAL(arr[0], "")
+	TEST_EQUAL(s4.split(arr), 0)
+	TEST_EQUAL(arr.size(), 0)
 
 	s4 = "a/b(cd)e*f-g";
 	char* c = "/()*-";
-	TEST_EQUAL(s4.split(arr, 10, c), 6)
+	TEST_EQUAL(s4.split(arr, c), 6)
+	TEST_EQUAL(arr.size(), 6)
 	TEST_EQUAL(arr[0], "a")
 	TEST_EQUAL(arr[1], "b")
 	TEST_EQUAL(arr[2], "cd")
 	TEST_EQUAL(arr[3], "e")
 	TEST_EQUAL(arr[4], "f")
 	TEST_EQUAL(arr[5], "g")
-	TEST_EQUAL(arr[6], "g")
 
 	s4 = "b/c d e/f g h";
-	TEST_EQUAL(s4.split(arr, 5, c, 2), 2)
+	TEST_EQUAL(s4.split(arr, c, 2), 2)
 	TEST_EQUAL(arr[0], "c d e")
 	TEST_EQUAL(arr[1], "f g h")
-	TEST_EQUAL(arr[2], "cd")
+	TEST_EQUAL(arr.size(), 2)
 RESULT
 
 CHECK(String::trimLeft(char*))
