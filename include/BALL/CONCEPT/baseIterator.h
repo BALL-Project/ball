@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.7 2001/05/30 17:09:44 anker Exp $
+// $Id: baseIterator.h,v 1.8 2001/05/30 22:27:41 oliver Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -24,9 +24,36 @@ namespace BALL
 
 	/**	Generic Iterator Class.
 			This template class implements the basic behaviour of 
-			an iterator.
+			an iterator. Iterators are basically STL-like iterators. They 
+			provide the full STL iterator interface, but also offer additional
+			features.
+				
+			An important difference exists for the iterators of the kernel objects. 
+			For most kernel onjects, multiple iterators exist. Therefore, we could
+			not simply use {\tt begin()} and {\tt end()} like in STL, but we
+			introduced specialized methods like \Ref{AtomContainer::beginAtom} and
+			\Ref{AtomContainer::endAtom}. For similar reasons, the iterators for
+			kernel classes are not implemented as nested classes of the respective kernel
+			classes, but as independent classes to avoid code replication.
+			An exception is \Ref{Atom::BondIterator}, which is relevant to \Ref{Atom} 
+			alone.
+
+			Each BALL iterator can be bound to a container, so once the iteration
+			has started, it "knows" about the end() of the container.
+			Therefore, BALL iterators additionally implement the unary plus operator
+			to check for the validity of the iterator.
+			this allows the convenient implementation of for loops, e.g. as follows:
+			\\
+			\begin{verbatim}
+				AtomIterator atom_it = system.beginAtom();
+				for (; +atom_it; ++atom_it)
+				{
+					....
+				}
+			\end{verbatim}
 			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/baseIterator.h}
+			\\
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class BaseIterator
@@ -34,7 +61,31 @@ namespace BALL
 
 		public:
 
-		BALL_CREATE_DEEP(BaseIterator)
+		BALL_CREATE(BaseIterator)
+
+		/**	@name Typedefs.
+				The names of these typedefs deviate from the usual
+				BALL class names due to restrictions imposed by STL compliance.
+		*/
+		//@{
+		/**
+		*/
+		typedef DataType	value_type;
+		/**
+		*/
+		typedef Position	difference_type;
+		/**
+		*/
+		typedef	DataType*	pointer;
+		/**
+		*/
+		typedef DataType&	reference;
+
+		/**
+		*/
+		typedef std::bidirectional_iterator_tag iterator_category;
+
+		//@}
 
 		/**	@name	Constructors and Destructors 
 		*/
@@ -85,34 +136,22 @@ namespace BALL
 		*/
 		//@{
 
-		/** BAUSTELLE
+		/** Return the total number of iterators of that type currently instantiated.
 		*/
 		static Size countIterators()
 			throw();
 
-		/** BAUSTELLE
+		/**	Return the number of iterators of that type currently bound to a container.
 		*/
-		static Size countIterators(const Container &container)
+		static Size countIterators(const Container& container)
 			throw();
 
-		/** BAUSTELLE
+		/** Return the number of iterators of that type currently pointing to a certain position of a given container.
 		*/
 		static Size countIterators(const Container& container,
 				const Position& position)
 			throw();
 
-		/** BAUSTELLE
-		*/
-		Size countCollisions() const
-			throw();
-	
-		/** BAUSTELLE
-				@return
-		*/
-		static Size countCollisions(const Container &container,
-				const Position &iteratorPosition)
-			throw();
-	
 		/** Invalidate an iterator.
 		*/
 		void invalidate()
@@ -166,7 +205,7 @@ namespace BALL
 		/** Convert an iterator to its Datatype by returning a const reference to 
 				the current data.
 		*/
-		const DataType& operator *() const
+		const DataType& operator * () const
 			throw(Exception::InvalidIterator);
 
 		/** Return a pointer to the current data.
@@ -186,34 +225,24 @@ namespace BALL
 		//@{
 
 		/** Equality operator.
-				@return {\bf true} if both iterators point at the same item.
+				@return {\bf true} if both iterators point to the same item.
 		*/
 		bool operator == (const BaseIterator& iterator) const
 			throw(Exception::IncompatibleIterators);
 
-		/** Inequality operator. @see operator ==
+		/** Inequality operator. 
+				@see operator ==
 		*/
 		bool operator != (const BaseIterator &iterator) const
 			throw();
 
 		/** Singularity predicate.
-				This method returns {\bf true} if the iterator is singular, i. e.
+				This method returns {\bf true} if the iterator is singular, i.e., 
 				not associated with a container.
 		*/
 		bool isSingular() const
 			throw();
 
-		/** Uniqueness predicate. BAUSTELLE
-		*/
-		bool isUnique() const
-			throw();
-	
-		/** Uniqueness predicate. BAUSTELLE
-		*/
-		static bool isUnique(const Container &container,
-				const Position &iteratorPosition)
-			throw();
-	
 		/** Validity predicate.
 				@return {\bf true} if the iterator is valid, i. e. pointing at data
 				BAUSTELLE
@@ -348,7 +377,7 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	Size BaseIterator<Container, DataType, Position, Traits>::countIterators(const Container &container)
+	Size BaseIterator<Container, DataType, Position, Traits>::countIterators(const Container& container)
 		throw()
 	{
 		Size size = 0;
@@ -382,27 +411,6 @@ namespace BALL
 		}
 
 		return size;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	Size BaseIterator<Container, DataType, Position, Traits>::countCollisions() const
-		throw()
-	{
-		if (traits_ptr_->isSingular() == true)
-		{
-			return 0;
-		} 
-		else 
-		{
-			return (BaseIterator::countIterators(*traits_ptr_->getContainer(), traits_ptr_->getPosition()) - 1);
-		}
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	Size BaseIterator<Container, DataType, Position, Traits>::countCollisions(const Container &container, const Position &iteratorPosition)
-		throw()
-	{
-		return (BaseIterator::countIterators(container, iteratorPosition) - 1);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -534,27 +542,6 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BaseIterator<Container, DataType, Position, Traits>::isUnique() const
-		throw()
-	{
-		if (traits_ptr_->isValid() == false)
-		{
-			return true;
-		}	
-		else 
-		{
-			return (BaseIterator::countIterators(*traits_ptr_->getContainer(), traits_ptr_->getPosition()) == 1);
-		}
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BaseIterator<Container, DataType, Position, Traits>::isUnique(const Container &container, const Position &iteratorPosition)
-		throw()
-	{
-		return (BaseIterator::countIterators(container, iteratorPosition) == 1);
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool BaseIterator<Container, DataType, Position, Traits>::isValid() const
 		throw()
 	{
@@ -639,7 +626,7 @@ namespace BALL
 
 		/**
 		*/
-		operator const Position & ()
+		operator const Position&  ()
 			throw();
 
 		/**
@@ -700,7 +687,7 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::operator const Position & ()
+	ConstBaseIterator<Container, DataType, Position, Traits>::operator const Position&  ()
 		throw()
 	{
 		return traits_ptr_->getPosition();
