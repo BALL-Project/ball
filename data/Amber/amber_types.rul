@@ -1,4 +1,4 @@
-; $Id: amber_types.rul,v 1.2 2003/08/26 09:17:26 oliver Exp $
+; $Id: amber_types.rul,v 1.3 2005/02/05 18:23:44 anker Exp $
 ;
 ; first tentative rule firl for assigning AMBER and GlyCam atom types. This
 ; is still *ALPHA* code. Use at your own risk. Use this file with
@@ -60,6 +60,8 @@ CV = sp2Hybridized() AND inRing(5) AND connectedTo((C)(N))
 ; sp2 aromatic in a five-membered ring next to a carbon and NH (e.g.
 ; C_delta in His(epsilon) and in Trp).
 CW = sp2Hybridized() AND inRing(5) AND connectedTo((C)(NH))
+; default: no type
+? = true()
 
 [TypenameRules:N]
 ; ?????
@@ -101,6 +103,8 @@ OS = sp3Hybridized() AND connectedTo((C)(C)) AND inRing()
 O2 = sp2Hybridized() AND connectedTo(CO)
 ; carbonyl
 O  = sp2Hybridized() AND connectedTo(=C)
+; default: no type
+? = true()
 
 [TypenameRules:H]
 ; attached to N
@@ -137,6 +141,8 @@ HP = connectedTo(CC(*)(*)(*)(*))
 HP = connectedTo(CN(*)(*)(*))
 HP = connectedTo(CP(*)(*)(*))
 HP = connectedTo(CO(*)(*)(*))
+; default: no type
+? = true()
 
 [TypenameRules:P]
 ; default 
@@ -147,9 +153,9 @@ P = true()
 S  = connectedTo(S)
 ; sulfur in cysteine
 SH = connectedTo((C)(H))
+; default: no type
+? = true()
 
 [TypenameRules:LP]
 ; default
 LP = true()
-
-
