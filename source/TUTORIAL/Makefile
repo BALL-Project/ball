@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.8 2002/01/16 10:47:44 anker Exp $
+# $Id: Makefile,v 1.9 2002/01/18 01:35:11 oliver Exp $
 #========================
 # BALL/TUTORIAL Makefile
 #========================
@@ -16,7 +16,7 @@ include ../common.mak
 BALL_CXXFLAGS=
 
 clean:	default_clean
-	@$(RM) $(EXECUTABLES)
+	@-$(RM) $(EXECUTABLES) *.o 2>/dev/null
 
 tutorial1:	tutorial1.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
