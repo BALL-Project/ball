@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.41 2004/07/04 17:04:12 amoll Exp $
+// $Id: representation.C,v 1.42 2004/07/07 17:19:31 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -489,10 +489,19 @@ namespace BALL
 			throw()
 		{
 			String result;
+			if (getModelType() == MODEL_CLIPPING_PLANE)
+			{
+				result+= String(getProperty("AX").getFloat()) + " ";
+				result+= String(getProperty("BY").getFloat()) + " ";
+				result+= String(getProperty("CZ").getFloat()) + " ";
+				result+= String(getProperty("D").getFloat());
+				return result;
+			}
+
+			result += String(model_type_) + " ";
 			result += String(drawing_mode_) + " ";
 			result += String(drawing_precision_) + " ";
 			result += String(surface_drawing_precision_) + " ";
-			result += String(model_type_) + " ";
 			result += String(coloring_method_) + " ";
 			result += String(transparency_) + " ";
 

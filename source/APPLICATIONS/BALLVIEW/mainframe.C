@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.13 2004/07/05 10:12:53 amoll Exp $
+// $Id: mainframe.C,v 1.14 2004/07/07 17:21:49 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -393,46 +393,64 @@ namespace BALL
 						
 		System* new_system = getSelectedSystem();
 
-	
-		for (Position p = 0; p < 9999999; p++)
+		try
 		{
-			if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p)))
+			for (Position p = 0; p < 9999999; p++)
 			{
-				break;
-			}
+				if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p)))
+				{
+					break;
+				}
 
-			String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
-			display_properties_->getSettingsFromString(data_string);
+				String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
 
-			vector<String> string_vector;
-			Size split_size = data_string.split(string_vector, "[]");
-			if (split_size < 2) return;
-			data_string = string_vector[1];
-			data_string.split(string_vector, ",");
-			HashSet<Position> hash_set;
-			try
-			{
+
+				vector<String> string_vector;
+				Size split_size = data_string.split(string_vector, "[]");
+				if (split_size == 1) 
+				{
+					Size split_size = data_string.split(string_vector);
+					if (split_size != 4)
+					{
+						continue;
+					}
+
+					Representation* rep = new Representation();
+					rep->setModelType(MODEL_CLIPPING_PLANE);
+					rep->setProperty("AX", string_vector[0].toFloat());
+					rep->setProperty("BY", string_vector[1].toFloat());
+					rep->setProperty("CZ", string_vector[2].toFloat());
+					rep->setProperty("D", string_vector[3].toFloat());
+
+					insert(*rep);
+					continue;
+				}
+				display_properties_->getSettingsFromString(data_string);
+				
+				data_string = string_vector[1];
+				data_string.split(string_vector, ",");
+				HashSet<Position> hash_set;
 				for (Position p = 0; p < string_vector.size(); p++)
 				{
 					hash_set.insert(string_vector[p].toUnsignedInt());
 				}
-			}
-			catch(...)
-			{
-				setStatusbarText("Error while reading project file! Aborting...");
-				Log.error() << "Error while reading project file! Aborting..." << std::endl;
-				return;
-			}
 	
-			getSelection().clear();
-			Position current = 0;
-			setSelection_(new_system, hash_set, current);
-			NewSelectionMessage* msg = new NewSelectionMessage();
-			notify_(msg);
- 		
-			display_properties_->applyButtonClicked();
+				getSelection().clear();
+				Position current = 0;
+				setSelection_(new_system, hash_set, current);
+				NewSelectionMessage* msg = new NewSelectionMessage();
+				notify_(msg);
+			
+				display_properties_->applyButtonClicked();
+			}
 		}
-
+		catch(...)
+		{
+			setStatusbarText("Error while reading project file! Aborting...");
+			Log.error() << "Error while reading project file! Aborting..." << std::endl;
+			return;
+		}
+	
 		getSelection().clear();
 		NewSelectionMessage* msg = new NewSelectionMessage();
 		notify_(msg);

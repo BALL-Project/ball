@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.69 2004/07/07 16:17:11 amoll Exp $
+// $Id: displayProperties.C,v 1.70 2004/07/07 17:19:31 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -917,14 +917,18 @@ bool DisplayProperties::getSettingsFromString(const String& data)
 	throw()
 {
 	vector<String> fields;
-	if (data.split(fields) < 6) return false;
+	if (data.split(fields) < 6 ||
+			fields[0].toUnsignedInt() >= MODEL_LABEL) 
+	{
+		return false;
+	}
 	
 	try
 	{
-		selectMode(fields[0].toUnsignedInt());
-		setDrawingPrecision(fields[1].toUnsignedInt());
-		setSurfaceDrawingPrecision(fields[2].toFloat());
-		selectModel(fields[3].toUnsignedInt());
+		selectModel(fields[0].toUnsignedInt());
+		selectMode(fields[1].toUnsignedInt());
+		setDrawingPrecision(fields[2].toUnsignedInt());
+		setSurfaceDrawingPrecision(fields[3].toFloat());
 		selectColoringMethod(fields[4].toUnsignedInt());
 		setTransparency((Position)(fields[5].toFloat() / 2.55));
 	}
