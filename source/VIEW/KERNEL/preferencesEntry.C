@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.14 2004/10/22 21:46:37 amoll Exp $
+// $Id: preferencesEntry.C,v 1.15 2004/11/29 13:50:23 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -65,23 +65,23 @@ namespace BALL
 
 				if (RTTI::isKindOf<QSlider>(**it))
 				{
-					inifile.insertValue(inifile_section_name_, name, String(((QSlider*)(*it))->value()));
+					inifile.insertValue(inifile_section_name_, name, String((dynamic_cast<QSlider*>(*it))->value()));
 				}
 				else if (RTTI::isKindOf<QLabel>(**it))
 				{
-					inifile.insertValue(inifile_section_name_, name, getLabelColor_((QLabel*)*it));
+					inifile.insertValue(inifile_section_name_, name, getLabelColor_(dynamic_cast<QLabel*>(*it)));
 				}
 				else if (RTTI::isKindOf<QLineEdit>(**it))
 				{
-					inifile.insertValue(inifile_section_name_, name, ((QLineEdit*)(*it))->text().ascii());
+					inifile.insertValue(inifile_section_name_, name, ((dynamic_cast<QLineEdit*>(*it)))->text().ascii());
 				}
 				else if (RTTI::isKindOf<QCheckBox>(**it))
 				{
-					inifile.insertValue(inifile_section_name_, name, String(((QCheckBox*)*it)->isChecked()));
+					inifile.insertValue(inifile_section_name_, name, String((dynamic_cast<QCheckBox*>(*it))->isChecked()));
 				}
 				else if (RTTI::isKindOf<QComboBox>(**it))
 				{
-					inifile.insertValue(inifile_section_name_, name, String(((QComboBox*)*it)->currentItem()));
+					inifile.insertValue(inifile_section_name_, name, String((dynamic_cast<QComboBox*>(*it))->currentItem()));
 				}
 				else if (RTTI::isKindOf<QButtonGroup>(**it))
 				{
@@ -120,28 +120,28 @@ namespace BALL
 				{
 					if (RTTI::isKindOf<QSlider>(**it))
 					{
-						((QSlider*) *it)->setValue(value.toInt());
+						(dynamic_cast<QSlider*>(*it))->setValue(value.toInt());
 					}
 					else if (RTTI::isKindOf<QLabel>(**it))
 					{
-						setLabelColor_((QLabel*)*it, ColorRGBA(value));
+						setLabelColor_((dynamic_cast<QLabel*>(*it)), ColorRGBA(value));
 					}
 					else if (RTTI::isKindOf<QLineEdit>(**it))
 					{
-						((QLineEdit*)(*it))->setText(value.c_str());
+						(dynamic_cast<QLineEdit*>(*it))->setText(value.c_str());
 					}
 					else if (RTTI::isKindOf<QCheckBox>(**it))
 					{
-						((QCheckBox*) *it)->setChecked(value == "1");
+						(dynamic_cast<QCheckBox*>(*it))->setChecked(value == "1");
 					}
 					else if (RTTI::isKindOf<QComboBox>(**it))
 					{
-						if (value.toUnsignedInt() >= (Position)((QComboBox*) *it)->count()) continue;
-						((QComboBox*) *it)->setCurrentItem(value.toInt());
+						if (value.toUnsignedInt() >= (Position)(dynamic_cast<QComboBox*>(*it))->count()) continue;
+						(dynamic_cast<QComboBox*>(*it))->setCurrentItem(value.toInt());
 					}
 					else if (RTTI::isKindOf<QButtonGroup>(**it))
 					{
-						((QButtonGroup*) *it)->setButton(value.toInt());
+						(dynamic_cast<QButtonGroup*>(*it))->setButton(value.toInt());
 					}
 					else 
 					{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.145 2004/11/29 08:57:34 oliver Exp $
+// $Id: mainControl.C,v 1.146 2004/11/29 13:51:19 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1711,7 +1711,7 @@ Log.error() << "#~~#   2 "   <<
 			String molecular_file = String(filename)+"_molecule" + String(system_nr) + ".xdr";
 			out.insertValue("BALLVIEW_PROJECT", "MolecularFile" + String(system_nr), molecular_file);
 
-			ofstream outfile(molecular_file.c_str(), std::ios::out);
+			std::ofstream outfile(molecular_file.c_str(), std::ios::out);
 			if (!outfile.good()) 
 			{
 				setStatusbarText("Could not write project file to " + molecular_file, true);
@@ -1806,7 +1806,7 @@ Log.error() << "#~~#   2 "   <<
 				DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
 			}
 
-			ifstream infile(molecular_file.c_str(), std::ios::in);
+			std::ifstream infile(molecular_file.c_str(), std::ios::in);
 			TextPersistenceManager pm(infile);
 			PersistentObject* po = pm.readObject();
 			if (!RTTI::isKindOf<System>(*po))
