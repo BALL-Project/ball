@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.16 2003/10/05 21:18:14 amoll Exp $
+// $Id: scene.C,v 1.17 2003/10/06 15:24:54 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1513,7 +1513,7 @@ void Scene::switchStereo()
 
 Log.error() << "#~~#   3 " << stereo << std::endl;
 	menu->setItemChecked(stereo_id_, stereo);
-	gl_renderer_.setStereoMode(stereo);
+	//gl_renderer_.setStereoMode(stereo);
 	update();
 }
 

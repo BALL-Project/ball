@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.2 2003/10/05 21:08:58 amoll Exp $
+// $Id: datasetControl.h,v 1.3 2003/10/06 15:24:54 oliver Exp $
+//
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
 #define BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -149,7 +150,7 @@ namespace BALL
 			void insertTrajectory_(TrajectoryFile* file, System& system)
 				throw();
 			
-			void insertGrid_(RegularData3D* file, System& system, const String& name)
+			void insertGrid_(RegularData3D* file, System* system, const String& name)
 				throw();
 			
 			void insertComposite_(Composite* composite, QListViewItem* item)
