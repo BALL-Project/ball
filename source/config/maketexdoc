@@ -1,7 +1,5 @@
 #!/usr/local/bin/bash
 
-PS2PDF="/opt/adobe/AcroDist_2.1/bin/distill -v -thumbs on -embedall -pairs"
-
 mkdir ../doc 2>/dev/null
 mkdir ../doc/tex 2>/dev/null
 cp config/docxx.sty ../doc/tex
@@ -12,5 +10,6 @@ cd ../../doc/tex
 latex BALL
 latex BALL
 dvips BALL
-${PS2PDF} BALL.ps BALL.pdf
+pdflatex BALL
+pdflatex BALL
 mv BALL.ps BALL.pdf ..
