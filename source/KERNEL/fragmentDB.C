@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: fragmentDB.C,v 1.2 1999/08/27 16:51:23 oliver Exp $
 
 #include <BALL/KERNEL/fragmentDB.h>
 
@@ -13,17 +13,13 @@
 /*			Things still missing (among others)
 				===================================
 				- check for unique atom names
-				- add hydrogen processor
+				- add hydrogen processor modifications: removal of (addh ..) entries from database
 				- create bond processor
 				- saving of fragment databases
 				- dynamic import of databases
 				- check for completeness of a residue
-				- diverse special treatments for some amino acids
-				- bond detection between CYS-CYS
 				- hydrogen optimization using a simple force field
-				- treatment of carboxy- and amino-terminal amino acids
 				- standard-path for fragment databases
-				
 */
 
 #define FRAGMENT_DB_INCLUDE_TAG "#include:"
@@ -195,27 +191,37 @@ namespace BALL
 		String					path;
 					
 		if (!isValid() || !tree->isValid())
+		{
 			return FragmentDB::TYPE__UNKNOWN;
+		}
 
 		if (!has(fragment_name))
+		{
 			return FragmentDB::TYPE__UNKNOWN;
+		}
 		
 		path = (*name_to_path_.find(fragment_name)).second;
 		path += "/Type";
 		entry = tree->findChild(path);
 		entry = tree->findChild("");
 			
-		if (entry == 0)
-			return FragmentDB::TYPE__UNKNOWN;
-			
-		if (entry->getValue() == "residue")
-			return FragmentDB::TYPE__RESIDUE;
+		if (entry != 0)
+		{
+			if (entry->getValue() == "residue")
+			{
+				return FragmentDB::TYPE__RESIDUE;
+			}
 
-		if (entry->getValue() == "molecule")
-			return FragmentDB::TYPE__MOLECULE;
+			if (entry->getValue() == "molecule")
+			{
+				return FragmentDB::TYPE__MOLECULE;
+			}
 
-		if (entry->getValue() == "fragment")
-			return FragmentDB::TYPE__MOLECULE;
+			if (entry->getValue() == "fragment")
+			{
+				return FragmentDB::TYPE__MOLECULE;
+			}
+		}
 
 		return FragmentDB::TYPE__UNKNOWN;
 	}
@@ -2235,7 +2241,23 @@ namespace BALL
 				}
 			}
 		}
+	}
 
+	list<String> FragmentDB::getVariantNames(const String& name) const
+	{
+		list<String> names;
+
+		if (name_to_variants_.has(name))
+		{
+			list<Residue*>::const_iterator it = name_to_variants_[name].begin();
+			list<Residue*>::const_iterator end_it = name_to_variants_[name].end();
+			for (; it != end_it; it++)
+			{
+				names.push_back((*it)->getName());
+			}
+		}
+
+		return names;
 	}
  
 
