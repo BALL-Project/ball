@@ -1,4 +1,4 @@
-// $Id: Selector_test.C,v 1.7 2001/07/16 12:38:26 anker Exp $
+// $Id: Selector_test.C,v 1.8 2001/07/17 02:36:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Selector, "$Id: Selector_test.C,v 1.7 2001/07/16 12:38:26 anker Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.8 2001/07/17 02:36:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ CHECK(Selector::Processor::Result operator () (Composite& composite) throw())
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
-	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 0));
+	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
 
 	Selector s;
 	TEST_EQUAL(s.getNumberOfSelectedAtoms(), 0)
@@ -109,7 +109,7 @@ CHECK(Selector::getNumberOfSelectedAtoms() const  throw())
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
-	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 0));
+	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
 
 	Selector s;
 	TEST_EQUAL(s.getNumberOfSelectedAtoms(), 0)
