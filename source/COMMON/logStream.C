@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.22 2001/05/10 13:39:54 oliver Exp $
+// $Id: logStream.C,v 1.23 2001/05/10 23:32:42 oliver Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
@@ -154,12 +154,11 @@ namespace BALL
 	string LogStreamBuf::expandPrefix_
 		(const string& prefix, int level, Time time) const
 	{
-		Size		index = 0;
-		Size		copied_index = 0;
-		string	result("");
+		string::size_type	index = 0;
+		Size copied_index = 0;
+		string result("");
 
-		// workaround to reduce physical dependency: (Size)-1 as replacement for String::EndPos
-		while ((index = (Size)prefix.find("%", index)) != (Size)-1) 
+		while ((index = prefix.find("%", index)) != string::npos) 
 		{
 			// append any constant parts of the string to the result
 			if (copied_index < index) 
@@ -592,8 +591,7 @@ namespace BALL
 			{
 				if (s.length() > 0)
 				{
-					// workaround to reduce physical dependency: (Size)-1 as replacement for String::EndPos
-					if (log->loglines_[pos].text.find(s, 0) != (Size)-1)
+					if (log->loglines_[pos].text.find(s, 0) != string::npos)
 					{
 						list_indices.push_back((int)pos);
 					}
