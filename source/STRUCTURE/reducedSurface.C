@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.C,v 1.8 2003/08/26 09:18:27 oliver Exp $
+// $Id: reducedSurface.C,v 1.9 2003/09/04 15:53:32 aubertin Exp $
 //
 
 #include <BALL/STRUCTURE/reducedSurface.h>
@@ -836,10 +836,10 @@ namespace BALL
 		// This function rolls the probe sphere over a RSEdge.
 		// From all atoms that can be touced by the probe sphere when it touches
 		// the two atoms of the edge is this one selected for which the rotation
-		// angle is the smallet. A new face is found.
+		// angle is the smallest. A new face is found.
 		// If this face already exists the edge exists twice, too. These two
 		// edges and their vertices are joined.
-		// If the face does not exist yet it will be created. A new vertex and
+		// If the face does not exist yet, it will be created. A new vertex and
 		// two new edges will be created, too.
 		// In both cases the treated edge will be updated. It has not to be
 		// considerd again.
