@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.C,v 1.3 2002/12/17 14:13:20 anker Exp $
+// $Id: reducedSurface.C,v 1.4 2002/12/17 17:37:15 oliver Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/RSEdge.h>
@@ -1116,7 +1116,6 @@ namespace BALL
 					}
 					else
 					{
-						bool found = false;
 						std::list< std::pair< Index,TSphere3<double> > >::iterator j;
 						j = candidates.begin();
 						while (j != candidates.end())
@@ -1142,7 +1141,6 @@ namespace BALL
 									new_vertices_.insert(vertex1);
 									i = neighbours_[atom1].end()--;
 									j = candidates.end()--;
-									found = true;
 								}
 							}
 							j++;
@@ -2042,10 +2040,14 @@ namespace BALL
 			(Position a1, Position a2, Position a3)
 		throw()
 	{
-		sort((Index)a1,(Index)a2,(Index)a3,(Index)a1,(Index)a2,(Index)a3);
-		TSphere3<double> s1(rs_->atom_[a1]);
-		TSphere3<double> s2(rs_->atom_[a2]);
-		TSphere3<double> s3(rs_->atom_[a3]);
+		Index ai1 = (Index)a1;
+		Index ai2 = (Index)a2;
+		Index ai3 = (Index)a3;
+
+		sort(ai1, ai2, ai3, ai1, ai2, ai3);
+		TSphere3<double> s1(rs_->atom_[ai1]);
+		TSphere3<double> s2(rs_->atom_[ai2]);
+		TSphere3<double> s3(rs_->atom_[ai3]);
 		s1.radius += rs_->probe_radius_;
 		s2.radius += rs_->probe_radius_;
 		s3.radius += rs_->probe_radius_;
@@ -2053,11 +2055,11 @@ namespace BALL
 		TVector3<double> c2;
 		if (GetIntersection(s1,s2,s3,c1,c2))
 		{
-			ProbePosition* position = probe_positions_[a1][a2][a3];
+			ProbePosition* position = probe_positions_[ai1][ai2][ai3];
 			if (position == NULL)
 			{
-				probe_positions_[a1][a2][a3] = new ProbePosition;
-				position = probe_positions_[a1][a2][a3];
+				probe_positions_[ai1][ai2][ai3] = new ProbePosition;
+				position = probe_positions_[ai1][ai2][ai3];
 			}
 			position->status[0] = STATUS_NOT_TESTED;
 			position->status[1] = STATUS_NOT_TESTED;
@@ -2066,8 +2068,8 @@ namespace BALL
 		}
 		else
 		{
-			delete probe_positions_[a1][a2][a3];
-			probe_positions_[a1][a2][a3] = NULL;
+			delete probe_positions_[ai1][ai2][ai3];
+			probe_positions_[ai1][ai2][ai3] = NULL;
 		}
 	}
 
