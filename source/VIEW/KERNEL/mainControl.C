@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.26 2003/12/09 16:41:15 amoll Exp $
+// $Id: mainControl.C,v 1.27 2003/12/09 16:43:32 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1055,6 +1055,9 @@ bool MainControl::insert(Representation& rep)
 	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::ADD);
 	notify_(rm);
 
+	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
+	notify_(scene_message);
+
 	return true;
 }
 
@@ -1082,6 +1085,10 @@ bool MainControl::remove(Representation& rep)
 	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::REMOVE);
 	notify_(rm);
 	primitive_manager_.remove(rep);
+
+	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
+	notify_(scene_message);
+
 	return true;
 }
 // ======================= StatusbarTimer =========================
