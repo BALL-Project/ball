@@ -1,0 +1,146 @@
+// $Id: geoprim.iC,v 1.3 2000/09/23 14:18:22 hekl Exp $
+
+// ----<CLASS Sphere>--------------------------------------------------------------
+
+BALL_INLINE 
+GeometricObject* Sphere::getGeometricObject()
+{
+  return (GeometricObject*)this;
+}
+
+
+// ----<CLASS Tube>--------------------------------------------------------------
+
+BALL_INLINE Real 
+Tube::getSquareLength() const
+{
+  return (getPoint2() - getPoint1()).getSquareLength();
+}
+
+BALL_INLINE Real 
+Tube::getLength() const
+{
+  return (getPoint2() - getPoint1()).getLength();
+}
+
+BALL_INLINE
+bool Tube::getSquareLength
+  (Real& ) const
+{
+   = (getPoint2() - getPoint1()).getSquareLength();
+
+  return true;
+}
+
+BALL_INLINE bool 
+Tube::getLength
+(Real &) const
+{
+   = (getPoint2() - getPoint1()).getLength();
+
+  return true;
+}
+
+BALL_INLINE GeometricObject *
+Tube::getGeometricObject
+  ()
+{
+  return (GeometricObject *)this;
+}
+
+// ----<CLASS Cone>--------------------------------------------------------------
+
+BALL_INLINE Real 
+Cone::getSquareLength
+  () const
+{
+  return (getPoint2() - getPoint1()).getSquareLength();
+}
+
+BALL_INLINE Real 
+Cone::getLength
+  () const
+{
+  return (getPoint2() - getPoint1()).getLength();
+}
+
+BALL_INLINE bool 
+Cone::getSquareLength
+  (Real &) const
+{
+   = (getPoint2() - getPoint1()).getSquareLength();
+
+  return true;
+}
+
+BALL_INLINE bool 
+Cone::getLength
+(Real &) const
+{
+   = (getPoint2() - getPoint1()).getLength();
+
+  return true;
+}
+
+BALL_INLINE GeometricObject *
+Cone::getGeometricObject
+  ()
+{
+  return (GeometricObject *)this;
+}
+
+// ----<CLASS Box>--------------------------------------------------------------
+
+BALL_INLINE Real 
+Box::getSquareDiameter
+  () const
+{
+  return (getPoint2() - getPoint1()).getSquareLength();
+}
+
+BALL_INLINE Real 
+Box::getDiameter
+  () const
+{
+  return (getPoint2() - getPoint1()).getLength();
+}
+
+BALL_INLINE bool 
+Box::getSquareDiameter
+  (Real &) const
+{
+   = (getPoint2() - getPoint1()).getSquareLength();
+
+  return true;
+}
+
+BALL_INLINE bool 
+Box::getDiameter
+(Real &) const
+{
+   = (getPoint2() - getPoint1()).getLength();
+
+  return true;
+}
+
+BALL_INLINE GeometricObject *
+Box::getGeometricObject
+  ()
+{
+  return (GeometricObject *)this;
+}
+ 
+// --- Emacs-specific commands: ---
+// Local Variables:
+// mode:C++
+// End:
+
+
+
+
+
+
+
+ 
+
+

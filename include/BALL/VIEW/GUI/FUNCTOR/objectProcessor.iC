@@ -1,0 +1,38 @@
+// $Id: objectProcessor.iC,v 1.3 2000/09/23 14:18:20 hekl Exp $
+
+BALL_INLINE
+void ObjectProcessor::setViewCenter(const Vector3 &vector)
+{
+	view_center_vector_ = vector;
+}
+
+BALL_INLINE
+Vector3 ObjectProcessor::getViewCenter() const
+{
+	return view_center_vector_;
+}
+
+BALL_INLINE
+void ObjectProcessor::setViewDirection(int direction)
+{
+	view_direction_ = direction;
+}
+
+BALL_INLINE
+int ObjectProcessor::getViewDirection() const
+{
+	return view_direction_;
+}
+
+BALL_INLINE
+void ObjectProcessor::setViewDistance(Real distance)
+{
+  view_distance_ = distance;
+}
+
+BALL_INLINE
+Real ObjectProcessor::getViewDistance() const
+{
+	return view_distance_;
+}
+

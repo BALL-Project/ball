@@ -1,0 +1,115 @@
+// $Id: glEntityDescriptor.iC,v 1.3 2000/09/23 14:18:20 hekl Exp $
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getStaticDisplayList()
+{
+  return &static_display_list_;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getStaticDisplayList() const
+{
+  return &static_display_list_;
+}
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getStaticAlwaysFrontDisplayList()
+{
+  return &static_always_front_display_list_;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getStaticAlwaysFrontDisplayList() const
+{
+  return &static_always_front_display_list_;
+}
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getStaticWireframeDisplayList()
+{
+  return &static_wireframe_display_list_;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getStaticWireframeDisplayList() const
+{
+  return &static_wireframe_display_list_;
+}
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getStaticWireframeAlwaysFrontDisplayList()
+{
+  return &static_wireframe_always_front_display_list_;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getStaticWireframeAlwaysFrontDisplayList() const
+{
+  return &static_wireframe_always_front_display_list_;
+}
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getDynamicDisplayList()
+{
+  return &dynamic_display_list_;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getDynamicDisplayList() const
+{
+  return &dynamic_display_list_;
+}
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getDynamicAlwaysFrontDisplayList()
+{
+  return &dynamic_always_front_display_list_;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getDynamicAlwaysFrontDisplayList() const
+{
+  return &dynamic_always_front_display_list_;
+}
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getTransparentDisplayList()
+{
+  return &transparent_display_list_;;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getTransparentDisplayList() const
+{
+  return &transparent_display_list_;;
+}
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getTransparentAlwaysFrontDisplayList()
+{
+  return &transparent_always_front_display_list_;;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getTransparentAlwaysFrontDisplayList() const
+{
+  return &transparent_always_front_display_list_;;
+}
+
+BALL_INLINE 
+void GLEntityDescriptor::update()
+{
+	update_ = true;
+}
+
+BALL_INLINE 
+void GLEntityDescriptor::cancelUpdate()
+{
+	update_ = false;
+}
+
+BALL_INLINE 
+bool GLEntityDescriptor::needUpdate() const
+{
+	return update_;
+}

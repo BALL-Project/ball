@@ -1,0 +1,165 @@
+// $Id: scene.iC,v 1.3 2000/09/23 14:18:25 hekl Exp $
+
+BALL_INLINE
+void Scene::setRenderMode(RenderMode mode)
+{
+	render_mode_ = mode;
+}
+
+BALL_INLINE
+Scene::RenderMode Scene::getRenderMode() const
+{
+	return render_mode_;
+}
+
+BALL_INLINE
+void Scene::setViewPointPosition(const Vector3& v)
+{
+  setCameraPosition_(look_at_position_, v, false);
+}
+
+BALL_INLINE
+void Scene::setViewPointPosition
+  (const Real x, const Real y, const Real z)
+{
+  setCameraPosition_(look_at_position_, Vector3(x, y, z), false);
+}
+
+BALL_INLINE
+bool Scene::setCamera
+  (const Vector3& look_at, const Vector3& view_point, bool set_origin)
+{
+  return setCameraPosition_(look_at, view_point, set_origin);
+}
+    
+BALL_INLINE
+const Vector3& Scene::getViewPointPosition() const
+{
+  return position_;
+}
+
+BALL_INLINE
+void Scene::getViewPointPosition(Vector3& v) const
+{
+  v = position_;
+}
+
+BALL_INLINE
+void Scene::getViewPointPosition
+  (Real& x, Real& y, Real& z) const
+{
+  x =  position_.x;
+  y =  position_.y;
+  z =  position_.z;
+}
+
+BALL_INLINE
+void Scene::setLookAtPosition
+  (const Vector3& v, bool set_origin)
+{
+  setCameraPosition_(v, position_, set_origin);  
+}
+
+BALL_INLINE
+void Scene::setLookAtPosition
+  (const Real x, const Real y, const Real z, bool set_origin)
+{
+	setCameraPosition_(Vector3(x, y, z), position_, set_origin);  
+}
+
+BALL_INLINE
+const Vector3& Scene::getLookAtPosition() const
+{
+  return look_at_position_;
+}
+
+BALL_INLINE
+void Scene::getLookAtPosition(Vector3& v) const
+{
+  v = look_at_position_;
+}
+     
+BALL_INLINE
+void Scene::getLookAtPosition
+  (Real& x, Real& y, Real& z) const
+{
+  x = look_at_position_.x;
+  y = look_at_position_.y;
+  z = look_at_position_.z;
+}
+     
+BALL_INLINE
+const Vector3& Scene::getLastLookAtPosition() const
+{
+  return last_look_at_position_;
+}
+    
+BALL_INLINE
+void Scene::getLastLookAtPosition(Vector3& v) const
+{
+  v = last_look_at_position_;
+}
+    
+BALL_INLINE
+void Scene::getLastLookAtPosition
+  (Real& x, Real& y, Real& z) const
+{
+  last_look_at_position_.get(x, y, z);
+}
+
+BALL_INLINE
+const Vector3& Scene::getZoomVector() const
+{
+  return zoom_;
+}
+
+BALL_INLINE
+const Vector3& Scene::getUpVector() const
+{
+  return up_;
+}
+
+BALL_INLINE
+const Vector3& Scene::getRightVector() const
+{
+  return right_;
+}
+
+BALL_INLINE
+const Vector3& Scene::getLookUpVector() const
+{
+  return look_up_;
+}
+
+
+
+BALL_INLINE
+void Scene::registerGLObjectCollector
+  (const GLObjectCollector& GL_object_collector)
+{
+  GL_object_collector_ = (GLObjectCollector *)&GL_object_collector;
+}
+
+BALL_INLINE
+void Scene::unregisterGLObjectCollector()
+{
+  GL_object_collector_  = (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>();
+}
+
+BALL_INLINE
+const GLObjectCollector* Scene::getGLObjectCollector() const
+{
+  return GL_object_collector_;
+}
+
+BALL_INLINE
+bool Scene::hasDefaultGLObjectCollector() const
+{
+  return (bool)(GL_object_collector_ == (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>());
+}
+
+BALL_INLINE
+bool Scene::hasOtherGLObjectCollector() const
+{
+  return (bool)(GL_object_collector_ != (GLObjectCollector*)&RTTI::getDefault<GLObjectCollector>());
+}

@@ -1,7 +1,7 @@
-// $Id: fileDialog.h,v 1.1 2000/09/23 12:49:21 hekl Exp $
+// $Id: fileDialog.h,v 1.2 2000/09/23 14:15:02 hekl Exp $
 
-#ifndef BALL_VIEW_OPENGL_WIDGETS_FILEDIALOG_H
-#define BALL_VIEW_OPENGL_WIDGETS_FILEDIALOG_H
+#ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
+#define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -89,11 +89,11 @@ namespace BALL
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/OPENGL/WIDGETS/fileDialog.iC>
+#			include <BALL/VIEW/GUI/DIALOGS/fileDialog.iC>
 #		endif 
 
 		} // namespace VIEW
 
 	} // namespace BALL
 
-#endif // BALL_VIEW_OPENGL_WIDGETS_FILEDIALOG_H
+#endif // BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H

@@ -3,7 +3,8 @@ DIRECTORY=VIEW/GUI/DIALOGS
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	filesDialog.C
+	fileDialog.C
+
 
 include ../../../common.mak
 include .Dependencies
