@@ -31,6 +31,12 @@ AnimationDialog::~AnimationDialog()
 
 void AnimationDialog::animatePressed()
 {
+	if (cameras_.size() < 2) return;
+
+	stop_ = false;
+	cancel_button->setEnabled(true);
+	animate_button->setEnabled(false);
+
 #ifdef BALL_QT_HAS_THREADS
 	if (animation_thread_ != 0) delete animation_thread_;
 	animation_thread_ = new AnimationThread();
@@ -44,21 +50,12 @@ void AnimationDialog::animatePressed()
 
 void AnimationDialog::animate_()
 {
-	if (cameras_.size() < 2) return;
-
-	stop_ = false;
-	cancel_button->setEnabled(true);
-	animate_button->setEnabled(false);
-
 	List<Camera>::Iterator it = cameras_.begin();
 	Camera last_camera = *it;
 	it++;
 
 	for (; it != cameras_.end(); it++)
 	{
-//	 	qApp->wakeUpGuiThread();
-// 		qApp->processEvents(500);
-
 		if (*it == last_camera) continue;
  
 		Camera camera = last_camera;
@@ -175,6 +172,65 @@ void AnimationDialog::entrySelected()
 	goto_button->setEnabled(entries->selectedItem() != 0);
 }
 
+
+#ifdef BALL_QT_HAS_THREADS
+void AnimationThread::run() 
+{
+	List<Camera>::Iterator it = ani_->cameras_.begin();
+	Camera last_camera = *it;
+	it++;
+
+	for (; it != ani_->cameras_.end(); it++)
+	{
+		if (*it == last_camera) continue;
+ 
+		Camera camera = last_camera;
+		Vector3 diff_viewpoint = (camera.getViewPoint() - (*it).getViewPoint());
+		Vector3 diff_up = (camera.getLookUpVector() - (*it).getLookUpVector());
+		Vector3 diff_look_at = (camera.getLookAtPosition() - (*it).getLookAtPosition());
+
+		Vector3 max = diff_viewpoint;
+		if (diff_look_at.getLength() > max.getLength()) max = diff_look_at;
+		Size steps = (Size) (max.getLength() * ani_->smoothness->value());
+		diff_viewpoint /= steps;
+		diff_up /= steps;
+		diff_look_at /= steps;
+
+		for (Size i = 0; i < steps && !ani_->stop_; i++)
+		{
+// 	 	qApp->wakeUpGuiThread();
+//   		qApp->processEvents( 500);
+   	 	msleep(50);
+
+			camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
+			camera.setLookUpVector(camera.getLookUpVector() - diff_up);
+			camera.setLookAtPosition(camera.getLookAtPosition() - diff_look_at);
+			Scene* scene = ((Scene*) Scene::getInstance(0));
+
+			Scene::SceneSetCameraEvent* e = new Scene::SceneSetCameraEvent();
+			e->camera = camera;
+			qApp->postEvent(scene, e);
+
+			if (ani_->export_PNG->isChecked())
+			{
+				Scene::SceneExportPNGEvent* e = new Scene::SceneExportPNGEvent();
+				qApp->postEvent(scene, e);
+			}
+
+			if (ani_->export_POV->isChecked())
+			{
+				Scene::SceneExportPOVEvent* e = new Scene::SceneExportPOVEvent();
+				qApp->postEvent(scene, e);
+			}
+		}
+		
+		last_camera = *it;
+	}
+
+	ani_->cancel_button->setEnabled(false);
+	ani_->animate_button->setEnabled(true);
+}
+#endif
 
 // NAMESPACE
 } }

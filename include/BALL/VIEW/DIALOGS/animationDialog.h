@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: animationDialog.h,v 1.2 2004/08/15 22:17:10 amoll Exp $
+// $Id: animationDialog.h,v 1.3 2004/08/15 23:21:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_ANIMATIONDIALOG_H
@@ -52,7 +52,7 @@ namespace BALL
 				void cancelPressed();
 				void addPressed();
 
-			protected:
+// 			protected:
 				void animate_();
 
 				List<Camera> cameras_;
@@ -76,7 +76,7 @@ namespace BALL
 					throw() { ani_ = ani;}
 
 				///
-				virtual void run() {ani_->animate_();}
+				virtual void run();// {ani_->animate_();}
 
 				protected:
 				AnimationDialog* ani_;
