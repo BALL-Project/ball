@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.7 2002/04/11 11:29:06 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.8 2002/06/04 11:53:24 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -114,39 +114,40 @@ namespace BALL
 
 		for (; +A_it; ++A_it)
 		{
-			if (fresno_types.has(&*A_it))
+			type_A = fresno_types[&*A_it];
+			for (B_it = B->beginAtom(); +B_it; ++B_it)
 			{
-				type_A = fresno_types[&*A_it];
-				if ((type_A == FresnoFF::LIPOPHILIC)
-						|| (type_A == FresnoFF::POLAR))
+				type_B = fresno_types[&*B_it];
+				if ((((type_B == FresnoFF::POLAR)
+								|| (type_B == FresnoFF::HBOND_ACCEPTOR)
+								|| (type_B == FresnoFF::HBOND_DONOR)
+								|| (type_B == FresnoFF::HBOND_ACCEPTOR_DONOR)
+								|| (type_B == FresnoFF::HBOND_HYDROGEN))
+							&& (type_A == FresnoFF::LIPOPHILIC))
+						|| ((type_B == FresnoFF::LIPOPHILIC)
+							&& ((type_A == FresnoFF::POLAR)
+								|| (type_A == FresnoFF::HBOND_ACCEPTOR)
+								|| (type_A == FresnoFF::HBOND_DONOR)
+								|| (type_A == FresnoFF::HBOND_ACCEPTOR_DONOR)
+								|| (type_A == FresnoFF::HBOND_HYDROGEN))))
 				{
-					for (B_it = B->beginAtom(); +B_it; ++B_it)
-					{
-						type_B = fresno_types[&*B_it];
-						if (((type_B == FresnoFF::POLAR)
-									&& (type_A == FresnoFF::LIPOPHILIC))
-								|| ((type_B == FresnoFF::LIPOPHILIC)
-									&& (type_A == FresnoFF::POLAR)))
-						{
-							possible_buried_polar_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
-							// DEBUG
-							cout << "found possible buried polar int.: " 
-								<< A_it->getFullName() << "..." << B_it->getFullName()
-								<< " (length: " 
-								<< (A_it->getPosition() - B_it->getPosition()).getLength() 
-								<< " A) " 
-								<< endl;
-							// /DEBUG
-						}
-					}
+					possible_buried_polar_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
+					// DEBUG
+					// cout << "found possible buried polar int.: " 
+					// 	<< A_it->getFullName() << "..." << B_it->getFullName()
+					// 	<< " (length: " 
+					// 	<< (A_it->getPosition() - B_it->getPosition()).getLength() 
+					// 	<< " A) " 
+					// 	<< endl;
+					// /DEBUG
 				}
 			}
 		}
 
 		// DEBUG
-		cout << "FresnoBuriedPolar setup statistics:" << endl;
-		cout << "Found " << possible_buried_polar_interactions_.size() 
-			<< " possible buried polar interactions" << endl << endl;
+		// cout << "FresnoBuriedPolar setup statistics:" << endl;
+		// cout << "Found " << possible_buried_polar_interactions_.size() 
+		// 	<< " possible buried polar interactions" << endl << endl;
 		// /DEBUG
 
 		return true;
@@ -189,19 +190,23 @@ namespace BALL
 				val = MolmecSupport::calculateFresnoHelperFunction(distance, R1, R2);
 
 				// DEBUG
-				cout << "BP: adding score of " << val
-					<< " (distance " << distance << ", R1 " << R1 << ", R2 " << R2 << ")"
-					<< endl;
+				// cout << "BP: adding score of " << val << ": "
+				// 	<< atom1->getFullName() << "..." << atom2->getFullName()
+				// 	<< " (d " << distance << ", R1 " << R1 << ", R2 " << R2 << ")"
+				// 	<< endl;
 				// /DEBUG
 
 				E += val;
 			}
 		}
+
 		energy_ = factor_ * E;
+
 		// DEBUG
 		cout << "BP: score is " << E << endl;
 		cout << "BP: energy is " << energy_ << endl;
 		// /DEBUG
+
 		return energy_;
 	}
 
