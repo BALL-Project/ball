@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile_test.C,v 1.26 2004/02/25 10:40:28 oliver Exp $
+// $Id: INIFile_test.C,v 1.27 2004/11/18 16:15:07 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -29,7 +29,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.26 2004/02/25 10:40:28 oliver Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.27 2004/11/18 16:15:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -403,13 +403,13 @@ CHECK(bool appendSection(const String& section))
 	TEST_EQUAL(ini.hasSection(ini.HEADER), true)
 	CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendSection(ini.HEADER), false)
-		const char* output ="In INIFile data/INIFile_test.ini , while adding section: '#HEADER!' already exists.\n";
+		const char* output = "INIFile::appendSection: data/INIFile_test.ini , while adding section: '#HEADER!' already exists.\n";
 	COMPARE_OUTPUT(output)
   TEST_EQUAL(ini.getNumberOfLines(), 10)
 
   CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(ini.appendSection("Section1"), false)
-	COMPARE_OUTPUT("In INIFile data/INIFile_test.ini , while adding section: 'Section1' already exists.\n")
+	COMPARE_OUTPUT("INIFile::appendSection: data/INIFile_test.ini , while adding section: 'Section1' already exists.\n")
   TEST_EQUAL(ini.getNumberOfLines(), 10)
 	TEST_EQUAL(ini.hasSection("Section1"), true)
 
@@ -421,7 +421,7 @@ CHECK(bool appendSection(const String& section))
 	INIFile emptyFile;
   CAPTURE_OUTPUT_LEVEL(2000)
 		TEST_EQUAL(emptyFile.appendSection(emptyFile.HEADER), false)
-  COMPARE_OUTPUT("In INIFile  , while adding section: '#HEADER!' already exists.\n")
+  COMPARE_OUTPUT("INIFile::appendSection:  , while adding section: '#HEADER!' already exists.\n")
 	TEST_EQUAL(emptyFile.hasSection(emptyFile.HEADER), true)
 	TEST_EQUAL(emptyFile.appendSection("asd"), true)
 RESULT
