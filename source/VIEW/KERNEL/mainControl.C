@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.90 2004/05/27 19:50:02 oliver Exp $
+// $Id: mainControl.C,v 1.91 2004/06/03 16:30:34 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -530,8 +530,11 @@ namespace BALL
 					}
 				}
 				
+			#ifndef BALL_QT_HAS_THREADS
+				// if build multithreaded, the Representation will send the message itself
 				RepresentationMessage* ur_message = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
 				notify_(ur_message);
+			#endif
 			}
 
 			return true;

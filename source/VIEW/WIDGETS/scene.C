@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.66 2004/06/03 15:13:46 amoll Exp $
+// $Id: scene.C,v 1.67 2004/06/03 16:31:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -205,6 +205,7 @@ namespace BALL
 				makeCurrent();
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = rm->getRepresentation();
+Log.error() << "#~~#   4 " << rm << " " << rm->getType()   << __FILE__ << "  " << __LINE__<< std::endl;
 				switch (rm->getType())
 				{
 					case RepresentationMessage::ADD:
@@ -234,6 +235,7 @@ namespace BALL
 
 			SceneMessage *scene_message = RTTI::castTo<SceneMessage>(*message);
 
+Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << __LINE__<< std::endl;
 			switch (scene_message->getType())
 			{
 				case SceneMessage::REDRAW:
@@ -618,16 +620,13 @@ namespace BALL
 			if (width == 0)	width = 1;
 			if (height == 0) height = 1;
 			gl_renderer_.pickObjects2(objects, width, height);
+			glFlush();
 
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
 			message->setSelection(objects);
 			message->setSelected(select);
 			// sent collected objects
 			notify_(message);
-
-			updateCamera_();
-			renderView_(REBUILD_DISPLAY_LISTS);
-			updateGL();
 		}
 
 		void Scene::changeEyeDistance_(Scene* scene)
@@ -1470,7 +1469,7 @@ namespace BALL
 				glMatrixMode(GL_MODELVIEW);
 
 				hide();
-// 				showNormal();
+// 				showNormal();  // to be removed (today 3.6.2004) ?????
 				reparent((QWidget*)getMainControl(), getWFlags() & ~WType_Mask, last_pos_, false);
 				((QMainWindow*)getMainControl())->setCentralWidget(this);
 				show();
@@ -1480,10 +1479,10 @@ namespace BALL
 			{
 				last_pos_ = pos();
 				hide();
-// 				showNormal();
+// 				showNormal();  // to be removed (today 3.6.2004) ?????
 				reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
-// 				showFullScreen();
- 				setGeometry(qApp->desktop()->screenGeometry());
+				showFullScreen();
+//  				setGeometry(qApp->desktop()->screenGeometry());
 				stereo = true;
 				show();
 			}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.25 2004/06/03 14:41:03 amoll Exp $
+// $Id: glRenderer.C,v 1.26 2004/06/03 16:35:25 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1235,7 +1235,6 @@ namespace BALL
 			glFrustum(-2.0 * x_scale_, 2.0 * x_scale_, -2.0 * y_scale_, 2.0 * y_scale_, 1.5, 300);
 			
 			glMatrixMode(GL_MODELVIEW);
-			glPushMatrix();
 			updateCamera();
 		}			
 
@@ -1243,7 +1242,6 @@ namespace BALL
 		void GLRenderer::pickObjects2(List<GeometricObject*>& objects, int width, int height)
 			throw()
 		{
-			glPopMatrix();
 			glFlush();
 
 			glMatrixMode(GL_PROJECTION);
