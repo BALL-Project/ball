@@ -39,12 +39,14 @@
 		<node>27<value>N CA s</value></node>
   </node>
 	<node>Connections
-		<node>N-term<value>N C-term s 1.33 0.5</value></node>
+    <node>C-term<value>C N-term s 1.33 0.5</value></node>
 	</node>
 	<node>Properties
 		<node>AMINO_ACID</node>
 	</node>
 	<node>Variants
+		<node>Default
+		</node>
 		<node>PCA-N
 			<node>Delete
 				<node>OXT</node>
