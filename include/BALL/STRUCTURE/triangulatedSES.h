@@ -1,20 +1,23 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.h,v 1.8 2002/04/18 18:16:02 strobel Exp $
+// $Id: triangulatedSES.h,v 1.9 2002/06/19 12:48:44 strobel Exp $
+// $Id: triangulatedSES.h,v 1.9 2002/06/19 12:48:44 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
 #define BALL_STRUCTURE_TRIANGULATEDSES_H
 
-//#define with_indices
-//#define debug_triangulation
-#ifdef debug_triangulation
-#	define with_bonds
-//#	define with_normals
-//#	define debug_triangulation_with_planes
-#endif
-#ifdef with_indices
-#	define print_debug_info
+#ifdef DEBUG
+//#	define with_indices
+//#	define debug_triangulation
+#	ifdef debug_triangulation
+#		define with_bonds
+//#		define with_normals
+//#		define debug_triangulation_with_planes
+#	endif
+#	ifdef with_indices
+#		define print_debug_info
+#	endif
 #endif
 
 #ifdef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -217,7 +220,7 @@ namespace BALL
 				(			 TTriangulatedSES<T>&													part,
 							 std::list<TTriangleEdge<T>*>&								border,
 				 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours,
-				 const std::vector<TSESEdge<T>*>&										sesedge,
+				 const std::list<TSESEdge<T>*>&											sesedge,
 				 const TSphere3<T>&																	sphere,
 			 			#ifdef print_debug_info
 				 		int halt,
@@ -230,7 +233,7 @@ namespace BALL
 							 std::list<TTriangleEdge<T>*>&								border,
 							 Size&																				border_size,
 				 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours,
-				 const vector<TSESEdge<T>*>&												sesedge,
+				 const std::list<TSESEdge<T>*>&											sesedge,
 				 const TSphere3<T>&																	sphere,
 				 const HashSet<TTrianglePoint<T>*>&									points,
 							#ifdef print_debug_info
@@ -447,6 +450,12 @@ namespace BALL
 				file << *ses_;
 				file.close();
 				#endif
+		ses_->splitSphericFaces();
+				#ifdef debug_surface_processor_print
+				file.open("SolventExcludedSurface.split.log");
+				file << *ses_;
+				file.close();
+				#endif
 		// Store for each SESVertex a TrianglePoint ...
 		std::vector<TTrianglePoint<T>*> point(ses_->vertices_.size());
 		for (Position i = 0;  i < ses_->vertices_.size(); i++)
@@ -529,25 +538,15 @@ namespace BALL
 			current_face = not_triangulated_faces.front();
 			not_triangulated_faces.pop_front();
 			bool ok = false;
-			Position i = 0;
-			while (!ok && (i < current_face->number_of_edges_))
+			typename std::list<TSESEdge<T>*>::iterator e = current_face->edge_.begin();
+			while (!ok && (e != current_face->edge_.end()))
 			{
-				if (current_face->edge_[i] == NULL)
+				if (edge[(*e)->index_].front()->face_[0] != NULL)
 				{
-					i++;
+					(*e)->type_ = TSESEdge<T>::TYPE_CONCAVE;
+					ok = true;
 				}
-				else
-				{
-					if (edge[current_face->edge_[i]->index_].front()->face_[0] != NULL)
-					{
-						current_face->edge_[i]->type_ = TSESEdge<T>::TYPE_CONCAVE;
-						ok = true;
-					}
-					else
-					{
-						i++;
-					}
-				}
+				e++;
 			}
 			if (ok)
 			{
@@ -591,12 +590,18 @@ namespace BALL
 						std::cout << "    ... " << face->index_ << "\n";;
 						#endif
 		//face->normalize(false);
-		TSESEdge<T>* edge0 = face->edge_[0];
-		TSESEdge<T>* edge1 = face->edge_[1];
-		TSESEdge<T>* edge2 = face->edge_[2];
-		TSESEdge<T>* edge3 = face->edge_[3];
-		TSESVertex<T>* p0 = face->vertex_[0];
-		TSESVertex<T>* p1 = face->vertex_[1];
+		typename std::list<TSESEdge<T>*>::iterator e = face->edge_.begin();
+		TSESEdge<T>* edge0 = *e;
+		e++;
+		TSESEdge<T>* edge1 = *e;
+		e++;
+		TSESEdge<T>* edge2 = *e;
+		e++;
+		TSESEdge<T>* edge3 = *e;
+		typename std::list<TSESVertex<T>*>::iterator v = face->vertex_.begin();
+		TSESVertex<T>* p0 = *v;
+		v++;
+		TSESVertex<T>* p1 = *v;
 		//TSESVertex<T>* p2 = face->vertex_[2];
 		//TSESVertex<T>* p3 = face->vertex_[3];
 		// In how much segments the edge should be triangulated? This depends on the angle of the
@@ -683,11 +688,11 @@ namespace BALL
 			 std::vector< list<TTriangleEdge<T>*> >& border)
 		throw()
 	{
-		TVector3<T> normal(face->edge_[0]->circle_.n);
-		TCircle3<T> circle1(face->edge_[0]->circle_);
-		TCircle3<T> circle2(face->edge_[1]->circle_.p,
+		TVector3<T> normal(face->edge_.front()->circle_.n);
+		TCircle3<T> circle1(face->edge_.front()->circle_);
+		TCircle3<T> circle2(face->edge_.back()->circle_.p,
 												normal,
-												face->edge_[1]->circle_.radius);
+												face->edge_.back()->circle_.radius);
 		TCircle3<T> circle3(face->rsedge_->center_of_torus_,
 												normal,
 												face->rsedge_->radius_of_torus_);
@@ -716,7 +721,7 @@ namespace BALL
 		points2.pop_back();
 		centers.pop_back();
 		TSESEdge<T>* dummy(NULL);
-		buildTriangles(dummy,face->edge_[0],dummy,face->edge_[1],
+		buildTriangles(dummy,face->edge_.front(),dummy,face->edge_.back(),
 									 centers,points1,points2,
 									 points,radius_of_probe,sqrt_density,border);
 	}
@@ -732,8 +737,34 @@ namespace BALL
 		throw()
 	{
 		face->normalize(true);
+		typename std::list<TSESEdge<T>*>::iterator e = face->edge_.begin();
+		std::vector<TSESEdge<T>*> edge(6);
+		edge[0] = *e;
+		e++;
+		edge[1] = *e;
+		e++;
+		edge[2] = *e;
+		e++;
+		edge[3] = *e;
+		e++;
+		edge[4] = *e;
+		e++;
+		edge[5] = *e;
+		typename std::list<TSESVertex<T>*>::iterator v = face->vertex_.begin();
+		std::vector<TSESVertex<T>*> vertex(6);
+		vertex[0] = *v;
+		v++;
+		vertex[1] = *v;
+		v++;
+		vertex[2] = *v;
+		v++;
+		vertex[3] = *v;
+		v++;
+		vertex[4] = *v;
+		v++;
+		vertex[5] = *v;
 		Size number_of_segments = (Size)Maths::round(face->rsedge_->phi_.value*
-																								 face->edge_[1]->circle_.radius*sqrt_density);
+																								 edge[1]->circle_.radius*sqrt_density);
 		if (number_of_segments == 0)
 		{
 			number_of_segments++;
@@ -745,15 +776,15 @@ namespace BALL
 		for (Position counter = 0; counter < 2; counter++)
 		{
 			std::vector< TVector3<T> > edge_segments;
-			partitionOfCircle(face->edge_[0+offset]->circle_,
-												face->edge_[0+offset]->vertex_[0]->point_,
+			partitionOfCircle(edge[0+offset]->circle_,
+												edge[0+offset]->vertex_[0]->point_,
 												psi,
 												number_of_segments,
 												edge_segments);
 			edge_segments.pop_back();
-			edge_segments.push_back(face->edge_[0+offset]->vertex_[1]->point_);
-			TVector3<T> axis(face->edge_[0+offset]->circle_.n);
-			if (face->edge_[0+offset]->vertex_[0] != face->vertex_[0+offset])
+			edge_segments.push_back(edge[0+offset]->vertex_[1]->point_);
+			TVector3<T> axis(edge[0+offset]->circle_.n);
+			if (edge[0+offset]->vertex_[0] != vertex[0+offset])
 			{
 				TVector3<T> tmp;
 				for (Position i = 0; i < (number_of_segments+1)/2; i++)
@@ -767,18 +798,18 @@ namespace BALL
 			std::vector< TVector3<T> > point;
 			for (Position i = 0; i < number_of_segments+1; i++)
 			{
-				point.push_back(face->vertex_[1+offset]->point_);
+				point.push_back(vertex[1+offset]->point_);
 			}
 			TCircle3<T> center_circle(face->rsedge_->center_of_torus_,
 																axis,
 																face->rsedge_->radius_of_torus_);
 			vector< TVector3<T> > centers;
-			partitionOfCircle(center_circle,face->edge_[1+offset]->circle_.p,psi,number_of_segments,centers);
+			partitionOfCircle(center_circle,edge[1+offset]->circle_.p,psi,number_of_segments,centers);
 			centers.pop_back();
-			centers.push_back(face->edge_[2+offset]->circle_.p);
+			centers.push_back(edge[2+offset]->circle_.p);
 			TSESEdge<T>* dummy(NULL);
-			buildTriangles(face->edge_[1+offset],face->edge_[0+offset],
-										 face->edge_[2+offset],dummy,centers,edge_segments,point,
+			buildTriangles(edge[1+offset],edge[0+offset],edge[2+offset],
+										 dummy,centers,edge_segments,point,
 										 points,radius_of_probe,sqrt_density,border);
 			offset += 3;
 			TTriangle<T>* test_triangle;
@@ -957,15 +988,95 @@ namespace BALL
 					#ifdef debug_surface_processor_verbose
 					std::cout << "    ... " << face->index_ << " ... ";
 					#endif
-		Position number_of_edges = face->number_of_edges_;
+		Position number_of_edges = face->edge_.size();
 		if (number_of_edges > 0)
 		{
 			// the face does not come from a free vertex
 			if (number_of_edges == 2)
 			{
-				if ((edge_contours[face->edge_[0]->index_].size() == 1) &&
-						(edge_contours[face->edge_[1]->index_].size() == 1)		)
+				if ((edge_contours[face->edge_.front()->index_].size() == 1) &&
+						(edge_contours[face->edge_.back()->index_].size() == 1)		)
 				{
+					return;
+				}
+			}
+			if (number_of_edges == 3)
+			{
+				Position counter = 0;
+				TTrianglePoint<T>* point0(NULL);
+				TTrianglePoint<T>* point1(NULL);
+				TTrianglePoint<T>* point2(NULL);
+				typename std::list<TSESEdge<T>*>::iterator it;
+				for (it = face->edge_.begin(); it != face->edge_.end(); it++)
+				{
+					if (edge_contours[(*it)->index_].size() == 1)
+					{
+						counter++;
+						TTriangleEdge<T>* edge = edge_contours[(*it)->index_].front();
+						TTrianglePoint<T>* p0 = edge->vertex_[0];
+						TTrianglePoint<T>* p1 = edge->vertex_[1];
+						if ((p0 != point0) && (p0 != point1) && (p0 != point2))
+						{
+							if (point0 == NULL)
+							{
+								point0 = p0;
+							}
+							else
+							{
+								if (point1 == NULL)
+								{
+									point1 = p0;
+								}
+								else
+								{
+									if (point2 == NULL)
+									{
+										point2 = p0;
+									}
+								}
+							}
+						}
+						if ((p1 != point0) && (p1 != point1) && (p1 != point2))
+						{
+							if (point0 == NULL)
+							{
+								point0 = p1;
+							}
+							else
+							{
+								if (point1 == NULL)
+								{
+									point1 = p1;
+								}
+								else
+								{
+									if (point2 == NULL)
+									{
+										point2 = p1;
+									}
+								}
+							}
+						}
+					}
+				}
+				if (counter == 3)
+				{
+					TTriangle<T>* triangle = new TTriangle<T>;
+					TVector3<T> normal((point0->point_-point1->point_)%(point0->point_-point2->point_));
+					if (Maths::isLess(normal*(sphere.p-point1->point_),(T)0))
+					{
+						triangle->vertex_[0] = point0;
+						triangle->vertex_[1] = point1;
+						triangle->vertex_[2] = point2;
+					}
+					else
+					{
+						triangle->vertex_[0] = point0;
+						triangle->vertex_[1] = point2;
+						triangle->vertex_[2] = point1;
+					}
+					triangles_.push_back(triangle);
+					number_of_triangles_++;
 					return;
 				}
 			}
@@ -987,17 +1098,17 @@ namespace BALL
 				#ifdef print_debug_info
 				std::cout << part.number_of_points_ << " (" << part.points_.size() << ")\n";
 				#endif
-			TPlane3<T> plane;
-			TSESEdge<T>* edge;
 			// cut the face with all its edges
-			for (Position k = 0; k < number_of_edges; k++)
+			TPlane3<T> plane;
+			//TSESEdge<T>* edge;
+			typename std::list<TSESEdge<T>*>::iterator edge;
+			for (edge = face->edge_.begin(); edge != face->edge_.end(); edge++)
 			{
-				edge = face->edge_[k];
-				plane.p = edge->circle_.p-sphere.p;
-				plane.n = edge->circle_.n;
+				plane.p = (*edge)->circle_.p-sphere.p;
+				plane.n = (*edge)->circle_.n;
 				part.cut(plane,0.05);
 						#ifdef print_debug_info
-						std::cout << "schneide mit plane " << plane << " von edge " << *edge
+						std::cout << "schneide mit plane " << plane << " von edge " << **edge
 											<< " ... " << part.number_of_points_ << " (" << part.points_.size() << ")\n";
 						#endif
 						#ifdef debug_triangulation_with_planes
@@ -1018,10 +1129,10 @@ namespace BALL
 					{
 						(*ppart)->index_ += 10000;
 					}
-					int halt;
+					int halt = 0;
 					if ((face->index_ == 54) || (face->index_ == 88))
 					{
-						halt = 0;
+						//halt = 0;
 					}
 					if (halt == 0) cin >> halt; else { cout << "\n"; halt--;}
 					#endif
@@ -1098,8 +1209,11 @@ namespace BALL
 					std::cout << "    ... " << face->index_ << " ... ";
 					#endif
 					#ifdef print_debug_info
-					int halt;
-					//halt = 0;
+					int halt = 0;
+					if (face->index_ == 699)
+					{
+						halt = 0;
+					}
 					if (halt == 0) cin >> halt; else { cout << "\n"; halt--;}
 					#endif
 		TTriangulatedSES<T> part;
@@ -1145,7 +1259,7 @@ namespace BALL
 			(			 TTriangulatedSES<T>&													part,
 						 std::list<TTriangleEdge<T>*>&								border,
 			 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours,
-			 const std::vector<TSESEdge<T>*>&										sesedge,
+			 const std::list<TSESEdge<T>*>&											sesedge,
 			 const TSphere3<T>&																	sphere,
 		 			#ifdef print_debug_info
 			 		int halt,
@@ -1176,57 +1290,52 @@ namespace BALL
 				}
 				#endif
 		typename std::list<TTriangleEdge<T>*>::const_iterator c;
-		for (Position k = 0; k < sesedge.size(); k++)
+		typename std::list<TSESEdge<T>*>::const_iterator e;
+		for (e = sesedge.begin(); e != sesedge.end(); e++)
 		{
-			if (sesedge[k] != NULL)
+					#ifdef print_debug_info
+					std::cout << (*e)->index_ << ":  ";
+					#endif
+			for (c = edge_contours[(*e)->index_].begin();
+					 c != edge_contours[(*e)->index_].end(); c++)
 			{
+				points.insert((*c)->vertex_[0]);
+				points.insert((*c)->vertex_[1]);
 						#ifdef print_debug_info
-						std::cout << sesedge[k]->index_ << ":  ";
-						#endif
-				for (c = edge_contours[sesedge[k]->index_].begin();
-						 c != edge_contours[sesedge[k]->index_].end(); c++)
-				{
-					points.insert((*c)->vertex_[0]);
-					points.insert((*c)->vertex_[1]);
-							#ifdef print_debug_info
-							std::cout << (*c)->vertex_[0]->index_;
-							if (sphere.has((*c)->vertex_[0]->point_))
-							{
-								std::cout << "+  ";
-							}
-							else
-							{
-								std::cout << "-  ";
-							}
-							std::cout << (*c)->vertex_[1]->index_;
-							if (sphere.has((*c)->vertex_[1]->point_))
-							{
-								std::cout << "+  ";
-							}
-							else
-							{
-								std::cout << "-  ";
-							}
-							#endif
-				}
-						#ifdef print_debug_info
-						std::cout << "\n";
+						std::cout << (*c)->vertex_[0]->index_;
+						if (sphere.has((*c)->vertex_[0]->point_))
+						{
+							std::cout << "+  ";
+						}
+						else
+						{
+							std::cout << "-  ";
+						}
+						std::cout << (*c)->vertex_[1]->index_;
+						if (sphere.has((*c)->vertex_[1]->point_))
+						{
+							std::cout << "+  ";
+						}
+						else
+						{
+							std::cout << "-  ";
+						}
 						#endif
 			}
+					#ifdef print_debug_info
+					std::cout << "\n";
+					#endif
 		}
 				#ifdef print_debug_info
-				for (Position k = 0; k < sesedge.size(); k++)
+				for (e = sesedge.begin(); e != sesedge.end(); e++)
 				{
-					if (sesedge[k] != NULL)
+					std::cout << (*e)->index_ << ":  ";
+					for (c = edge_contours[(*e)->index_].begin();
+							 c != edge_contours[(*e)->index_].end(); c++)
 					{
-						std::cout << sesedge[k]->index_ << ":  ";
-						for (c = edge_contours[sesedge[k]->index_].begin();
-								 c != edge_contours[sesedge[k]->index_].end(); c++)
-						{
-							std::cout << "  " << **c << "\n";
-							std::cout << "    " << *((*c)->vertex_[0]) << "\n";
-							std::cout << "    " << *((*c)->vertex_[1]) << "\n";
-						}
+						std::cout << "  " << **c << "\n";
+						std::cout << "    " << *((*c)->vertex_[0]) << "\n";
+						std::cout << "    " << *((*c)->vertex_[1]) << "\n";
 					}
 				}
 				#endif
@@ -1410,7 +1519,7 @@ namespace BALL
 						 std::list<TTriangleEdge<T>*>&								border,
 						 Size&																				border_size,
 			 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours,
-			 const vector<TSESEdge<T>*>&												sesedge,
+			 const std::list<TSESEdge<T>*>&											sesedge,
 			 const TSphere3<T>&																	sphere,
 			 const HashSet<TTrianglePoint<T>*>&									points,
 						#ifdef print_debug_info
@@ -1422,29 +1531,22 @@ namespace BALL
 	{
 		TSESEdge<T>* first_sesedge;
 		TTriangleEdge<T>* edge;
-		Position i = 0;
 		bool found = false;
 		bool found_;
-		while ((found == false) && (i < sesedge.size()))
+		typename std::list<TSESEdge<T>*>::const_iterator e = sesedge.begin();
+		while ((found == false) && (e != sesedge.end()))
 		{
 			found_ = false;
-			while ((found_ == false) && (i < sesedge.size()))
+			while ((found_ == false) && (e != sesedge.end()))
 			{
-				if (sesedge[i] == NULL)
+				if ((*e)->type_ == TSESEdge<T>::TYPE_SINGULAR)
 				{
-					i++;
+					e++;
 				}
 				else
 				{
-					if (sesedge[i]->type_ == TSESEdge<T>::TYPE_SINGULAR)
-					{
-						i++;
-					}
-					else
-					{
-						found_ = true;
-						first_sesedge = sesedge[i];
-					}
+					found_ = true;
+					first_sesedge = *e;
 				}
 			}
 			if (found_)
@@ -1461,7 +1563,7 @@ namespace BALL
 					if (diff*diff < 0.01)
 					{
 						found = false;
-						i++;
+						e++;
 					}
 				}
 			}
@@ -1521,8 +1623,6 @@ namespace BALL
 			{
 				normal.set(edge_vector % (edge->vertex_[0]->point_-(*next)->point_));
 				T test_value = normal*edge->vertex_[0]->point_;
-				//bool in = false;
-				//bool out = false;
 				bool is_convex = true;
 				test = points.begin();
 				while (test != points.end())
@@ -1554,36 +1654,8 @@ namespace BALL
 								std::cout << "--\n";
 							}
 							#endif
-					/*if ((*test != *next) && (*test != edge->vertex_[0]) && (*test != edge->vertex_[1]))
-					{
-						T this_value = normal*(*test)->point_;
-						if (Maths::isLess(this_value,test_value))
-						{
-							in = true;
-						}
-						else
-						{
-							if (Maths::isGreater(this_value,test_value))
-							{
-								out = true;
-							}
-						}
-					}*/
 					test++;
 				}
-				/*if (!(in && out))
-				{
-					third.push_back(*next);
-							#ifdef print_debug_info
-							std::cout << **next << " passt\n";
-							#endif
-				}
-						#ifdef print_debug_info
-						else
-						{
-							std::cout << **next << " passt nicht\n";
-						}
-						#endif*/
 				if (is_convex)
 				{
 					third.push_back(*next);
