@@ -9,93 +9,54 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** @name Type aliases defined by VIEW.
-				These predefined types are used in VIEW for portability and
-				comprehensibility.
-				{\bf Definition:} \URL{BALL/VIEW/COMMON/global.h}
+		/**     @name Type aliases defined by VIEW
+						These predefined types are used in VIEW for portability and
+						comprehensibility.
+						{\bf Definition:} \URL{BALL/VIEW/COMMON/global.h}
 		*/
 		//@{
 		
-		/** SceneHandle type.
-				Use this type to represent {\bf scene handles}. Scene handles are used
-				for the non-ambiguous identification of scenes.
+		/**     SceneHandle type.
+						Use this type to represent {\bf scene handles}. Scene handles are used
+						for the non-ambiguous identification of scenes.
 		*/
-		typedef unsigned long    SceneHandle;   
-		
+		typedef unsigned long    SceneHandle;      
 		//@}
 
-		/**	@name Constant definition
+		/**			@name Constant definition
 		*/	
 		//@{
 
 		/**	The default port for the VIEW server.
 				Default port is 20000.
+				@see  Server
 		*/
 		#define VIEW_DEFAULT_PORT 20000
 
 		//@}
 
-		/** @name Enums defined by VIEW.
+		/**     @name Enums defined by VIEW
 		*/
 		//@{
 
-		/** Command enums.
-				Use these enums in the client server classes.
-				These enums specify the commands the server is able
-				to understand.
+		/**     Command enums.
+						These enums are used in the client and server classes.
+						These enums specify the commands the server is able
+						to understand (at the moment).
+						@see  Server
+						@see  Client
 		*/
 		enum Command
 		{
-			///
+			/// unknown command.
 			COMMAND__UNKOWN              = 0,
-			///
-			COMMAND__OPEN_SCENE          = 1,
-			///
-			COMMAND__CLOSE_SCENE         = 2,
-			///
-			COMMAND__RESIZE_SCENE        = 3,
-			///
-			COMMAND__SHOW_SCENE          = 4,
-			///
-			COMMAND__HIDE_SCENE          = 5,
-			///
-			COMMAND__DESTROY_SCENE       = 6,
-			///
-			COMMAND__SEND_OBJECT         = 7,
-			///
-			COMMAND__UPDATE_SCENE        = 8,
-			///
-			COMMAND__SET_CREATOR_VALUE   = 9,
-			///
-			COMMAND__GET_CREATOR_VALUE   = 10,
-			///
-			COMMAND__HAS_CREATOR_VALUE   = 11,
-			///
-			COMMAND__SET_PROCESSOR_VALUE = 12,
-			///
-			COMMAND__GET_PROCESSOR_VALUE = 13,
-			///
-			COMMAND__HAS_PROCESSOR_VALUE = 14,
-			
-			///
+
+			/// sent command. This command will be used for indicating a new object that is about to be received
+			COMMAND__SEND_OBJECT         = 1,
+
+			/// next free command.
 			NUMBER_OF_COMMANDS
 		};	
-
-		/** Range enum.
-		*/
-		enum Range
-		{
-			///
-			RANGE__ADDRESS = 50
-		};
-
-		/** Value enum
-		*/
-		enum Value
-		{
-			///
-			VALUE__INVALID              = -1
-		};
 		//@}
 
 	} // namespace VIEW
