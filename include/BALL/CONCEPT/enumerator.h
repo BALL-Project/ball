@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.11 2001/06/22 10:49:20 oliver Exp $
+// $Id: enumerator.h,v 1.12 2001/06/26 08:57:22 anker Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -20,6 +20,7 @@
 #endif
 
 #include <vector>
+#include <list>
 
 namespace BALL
 {
@@ -31,7 +32,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
 	*/
 	class EnumeratorIndex
-		: public std::vector<Position>
+		: public ::std::vector<Position>
 	{
 		public:
 
@@ -64,9 +65,9 @@ namespace BALL
 			  @param variant_list the list of variants to be applied
 		 */
 		template <typename Variant, typename VariantIterator>
-		EnumeratorIndex(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
+		EnumeratorIndex(const ::std::list< ::std::pair< VariantIterator, ::std::vector<Variant> > >& variant_list)
 			throw()
-			: std::vector<Position>(variant_list.size()),
+			: ::std::vector<Position>(variant_list.size()),
 				modulus_(variant_list.size()),
 				base_multipliers_(variant_list.size())
 		{ 
@@ -223,12 +224,12 @@ namespace BALL
 
 		/**
 		*/
-		typedef std::pair<VariantIterator, VariantVector>
+		typedef ::std::pair<VariantIterator, VariantVector>
 			Site;
 
 		/**
 		*/
-		typedef std::list<Site>
+		typedef ::std::list<Site>
 			SiteList;
 
 		/** Mutable forward iterator
