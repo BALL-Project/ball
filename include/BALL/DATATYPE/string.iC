@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.iC,v 1.42 2003/03/08 08:03:41 oliver Exp $
+// $Id: string.iC,v 1.43 2003/05/21 14:37:20 oliver Exp $
 
 BALL_INLINE 
 String::String()
@@ -512,7 +512,9 @@ String String::trim(const char* trimmed) const
 	throw()
 {
 	String tmp(*this);
-  return tmp.trimRight(trimmed).trimLeft(trimmed);
+	tmp.trimRight(trimmed);
+	tmp.trimLeft(trimmed);
+  return tmp;
 }
 
 BALL_INLINE 
@@ -595,7 +597,7 @@ BALL_INLINE
 bool String::has(char c) const
 	throw()
 {
-  return ((c != 0) && (find(c, 0) != string::npos));
+  return ((c != (char)0) && (find(c, 0) != string::npos));
 }
 
 BALL_INLINE 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.49 2003/03/26 13:56:20 anhi Exp $
+// $Id: string.h,v 1.50 2003/05/21 14:37:20 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -395,6 +396,7 @@ namespace BALL
 			throw();
 
 		//@}
+
 		/** @name Compare mode setting
 		*/
 		//@{
@@ -934,6 +936,9 @@ namespace BALL
 			throw();
 
 		//@}
+
+		/// Constant empty string.
+		static const String EMPTY;
 
 		protected:
 	
