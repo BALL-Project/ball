@@ -1,4 +1,4 @@
-// $Id: version.C,v 1.1 2000/06/27 23:09:52 oliver Exp $
+// $Id: version.C,v 1.2 2000/06/28 20:23:41 oliver Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
@@ -32,7 +32,8 @@ namespace BALL
 		{
 			return UNKNOWN;
 		}
-		switch (release[-1])
+		char release_suffix = release[release.size() - 1];
+		switch (release_suffix)
 		{
 			case 'a': 
 				return ALPHA; break;
