@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.17 2001/02/06 18:14:39 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.18 2001/03/11 23:51:27 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -475,7 +475,7 @@ void RegularData2DWidget::plotContour()
 			l.resetCounter();
 	
 			// set it's colour
-			QColor pcol = con2rgb(cont_start_ + (cont_end_ - cont_start_) / cont_num_ * i, cont_start_, max_);
+			//QColor pcol = con2rgb(cont_start_ + (cont_end_ - cont_start_) / cont_num_ * i, cont_start_, max_);
 			paint.setPen(red);
 			++i;
 			
