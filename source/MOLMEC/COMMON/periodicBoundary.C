@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.13 2000/10/16 20:02:08 oliver Exp $
+// $Id: periodicBoundary.C,v 1.14 2001/01/26 15:00:27 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -365,7 +365,8 @@ namespace BALL
 		return true;
 	}
 
-	// Fill the part of the box that contains no system atoms with solvent molecules
+	// Fill the part of the box that contains no system atoms with solvent
+	// molecules
 	Size PeriodicBoundary::addSolvent(const String& filename) const
 	{
 		// try to find and read the file
@@ -380,8 +381,9 @@ namespace BALL
 		removeSolvent();
 
 		// read the system
-		System system;
-		hin >> system;
+		System solvent;
+		hin >> solvent;
+
 		
 		if (!hin.hasPeriodicBoundary())
 		{
@@ -391,10 +393,15 @@ namespace BALL
 		}
 		
 		Box3 solvent_box = hin.getPeriodicBoundary();
+		Log.info() << "Box from HINFile = " << solvent_box << endl;
+
+		// adapt foreign water boxes to our definition
+		MolmecSupport::adaptWaterBox(solvent, solvent_box);
 
 		// copy solvent molecules from the solvent system into 
 		// the simulation system
-		if ((force_field_ == 0) || (force_field_->getSystem() == 0))
+		System* system = force_field_->getSystem();
+		if ((force_field_ == 0) || (system == 0))
 		{
 			Log.error() << "Force field does not contain  a system." << endl;
 			return 0;
@@ -407,9 +414,24 @@ namespace BALL
 			solvent_solute_distance = options->getReal(Option::PERIODIC_BOX_SOLVENT_SOLUTE_DISTANCE);
 		}
 
+		// build a hash grid containing _only_ the solute molecules; this is
+		// needed for addNonOverlappingMolecules()
+		// (we add 102% of the distance to make sure we get no points
+		// on the grid boundary)
+		Vector3	additional_space(solvent_solute_distance * 1.02);
+		HashGrid3<Atom*> solute_grid(box_.a - additional_space,
+				box_.b - box_.a + additional_space + additional_space,
+				solvent_solute_distance);
+
+		// Insert the atoms of the solute into the hash grid
+		AtomIterator atom_it = system->beginAtom();
+		for ( ; +atom_it; ++atom_it) 
+		{
+			solute_grid.insert(atom_it->getPosition(), &*atom_it);
+		}
 
 		// set the property IS_SOLVENT for all molecules in the solvent box
-		MoleculeIterator mol_it = system.beginMolecule();
+		MoleculeIterator mol_it = solvent.beginMolecule();
 		for (; +mol_it; ++mol_it)
 		{
 			mol_it->setProperty(Molecule::IS_SOLVENT);
@@ -419,7 +441,9 @@ namespace BALL
 		Size added_molecules = 0;
 		TranslationProcessor translation;
 		
-		Vector3 basis = -solvent_box.a + box_.a;
+		// This is the vector that translates the lower vector of the solvent
+		// box to the lower vector of the periodic box
+		Vector3 basis = box_.a - solvent_box.a;
 		
 		// calculate the number of solvent boxes needed for each dimension
 		float width = solvent_box.getWidth();
@@ -440,12 +464,11 @@ namespace BALL
 					tmp.y = basis.y + (float)j * height;
 					tmp.z = basis.z + (float)k * depth;
 					translation.setTranslation(tmp);
-					system.apply(translation);
+					solvent.apply(translation);
 					
 					// check for overlaps and insert solvent molecules
 					added_molecules += MolmecSupport::addNonOverlappingMolecules
-															(*force_field_->getSystem(), 
-																system, box_, 
+															(*system, solute_grid, solvent, box_, 
 																solvent_solute_distance);
 
 					tmp.x = -tmp.x;
@@ -453,11 +476,13 @@ namespace BALL
 					tmp.z = -tmp.z;
 
 					translation.setTranslation(tmp);
-					system.apply(translation);
+					solvent.apply(translation);
 				}
 			}
 		}
-			
+
+		// DEBUG
+		Log.info() << "added " << added_molecules << " molecules" << endl;
 		return added_molecules;
 	}
 
