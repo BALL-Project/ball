@@ -1,4 +1,4 @@
-// $Id: assignment.C,v 1.4 2000/05/30 13:07:30 oliver Exp $
+// $Id: assignment.C,v 1.5 2000/06/02 09:32:53 oliver Exp $
 
 #include "global.h"
 #include "assignment.h"
@@ -65,6 +65,21 @@ void normalizeNames(System& system)
 		
 		// apply the normalize names processor
 		system.apply(frag_db->normalize_names);
+	}
+}
+		
+void buildBonds(System& system)
+{
+	if (build_bonds)
+	{
+		// create a fragment DB id required
+		if (frag_db == 0)
+		{
+			frag_db = new FragmentDB;
+		}
+		
+		// apply the normalize names processor
+		system.apply(frag_db->build_bonds);
 	}
 }
 		

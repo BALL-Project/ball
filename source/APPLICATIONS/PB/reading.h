@@ -1,4 +1,11 @@
-// $Id: reading.h,v 1.2 2000/05/25 11:02:42 oliver Exp $
+// $Id: reading.h,v 1.3 2000/06/02 09:32:55 oliver Exp $
+
+enum RuleType
+{
+	CHARGES_AND_RADII,
+	CHARGES,
+	RADII
+};
 
 // read the contents of a PDB file and assign
 // charges and radii 
@@ -21,7 +28,7 @@ void readRadiusFile(const String& filename);
 void readChargeFile(const String& filename);
 
 // read a charge and radius rule file
-void readRuleFile(const String& filename);
+void readRuleFile(const String& filename, RuleType rule_type);
 
 // dump the positions, charges, and radii to a file
 void dumpFile();

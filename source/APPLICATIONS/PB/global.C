@@ -1,4 +1,4 @@
-// $Id: global.C,v 1.4 2000/05/30 10:48:42 oliver Exp $
+// $Id: global.C,v 1.5 2000/06/02 09:32:54 oliver Exp $
 #include "global.h"
 
 FragmentDB*           frag_db = 0;
@@ -19,6 +19,7 @@ String dump_file;
 bool verbose = false;
 bool clear_charges = false;
 bool normalize_names = false;
+bool build_bonds = false;
 bool use_charge_rules = false;
 bool use_radius_rules = false;
 bool calculate_solvation_energy = false;

@@ -1,4 +1,4 @@
-// $Id: reading.C,v 1.3 2000/05/25 11:02:42 oliver Exp $
+// $Id: reading.C,v 1.4 2000/06/02 09:32:54 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
@@ -39,6 +39,9 @@ void readPDBFile(const String& filename)
 	
 	// normalize the names
 	normalizeNames(system);
+
+	// build the bonds
+	buildBonds(system);
 
 	// assign charges and radii
 	assignCharges(system);
@@ -123,11 +126,21 @@ void readRadiusFile(const String& filename)
 	use_radius_rules = false;
 }
 
-void readRuleFile(const String& filename)
+void readRuleFile(const String& filename, RuleType rule_type)
 {
 	if (verbose)
 	{
-		Log.info() << "reading charges and radius rules from " << filename << endl;
+		switch (rule_type)
+		{
+			case CHARGES_AND_RADII:
+				Log.info() << "reading charge and radius rules from " << filename << endl;
+				break;
+			case CHARGES:
+				Log.info() << "reading charge rules from " << filename << endl;
+				break;
+			case RADII:
+				Log.info() << "reading radius rules from " << filename << endl;
+		}
 	}
 
 	// open the rules file
@@ -135,13 +148,25 @@ void readRuleFile(const String& filename)
 	
 	// read the rules
 	ini.read();
-	charge_rules.initialize(ini, "ChargeRules");
-	radius_rules.initialize(ini, "RadiusRules");
 
-	// ignore the other assignment processors
-	use_charge_rules = true;
-	use_radius_rules = true;
+	switch (rule_type)
+	{
+		case CHARGES_AND_RADII:
+			charge_rules.initialize(ini, "ChargeRules");
+			radius_rules.initialize(ini, "RadiusRules");
+			use_charge_rules = true;
+			use_radius_rules = true;
+			break;
 
+		case RADII:
+			radius_rules.initialize(ini, "RadiusRules");
+			use_radius_rules = true;
+			break;
+
+		case CHARGES:
+			charge_rules.initialize(ini, "ChargeRules");
+			use_charge_rules = true;
+	}
 }
 
 void dumpFile()

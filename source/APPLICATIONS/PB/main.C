@@ -1,4 +1,4 @@
-// $Id: main.C,v 1.4 2000/05/30 10:48:44 oliver Exp $
+// $Id: main.C,v 1.5 2000/06/02 09:32:54 oliver Exp $
 
 #include "global.h"
 #include "reading.h"
@@ -20,12 +20,15 @@ void usage()
 	Log.error() << "     -o <FILE>            read FDPB options from <FILE>" << endl;
 	Log.error() << "     -c <FILE>            read charges from <FILE>" << endl;
 	Log.error() << "     -r <FILE>            read radii from <FILE>" << endl;
-	Log.error() << "     -u <FILE>            read charge and type rules form <FILE>" << endl;
+	Log.error() << "     -t <FILE>            read charge and radius rules from <FILE>" << endl;
+	Log.error() << "     -u <FILE>            read charge rules from <FILE>" << endl;
+	Log.error() << "     -w <FILE>            read radius rules from <FILE>" << endl;
 	Log.error() << "     -0                   clear all charges in subsequently read structures" << endl;
 	Log.error() << "     -s                   calculate the solvation free energy by performing a second" << endl;
 	Log.error() << "                          FDPB calculation in vacuum" << endl;
 	Log.error() << "     -a                   calculate the solvent accessible surface of the solute" << endl;
 	Log.error() << "     -n                   normalize all atom names in subsequently read structures" << endl;
+	Log.error() << "     -b                   try to build the bonds (e.g. for PDB files)" << endl;
 	Log.error() << "     -d <FILE>            dump the atom charges and radii to <FILE> (for debugging)" << endl;
 	Log.error() << "     -v                   verbose output (implies ``verbosity 99'' in the" << endl;
 	Log.error() << "                            option file, print additional results and options)" << endl;
@@ -62,8 +65,8 @@ int main(int argc, char** argv)
 		}
 
 		// check for another argument for those 
-		// options requiring a filename (-p -h -c -r -o -u -d)
-		if (String("phcroud").has(option[1]) && (i == (argc - 1)))
+		// options requiring a filename (-p -h -c -r -o -u -t -w -d)
+		if (String("phcroutwd").has(option[1]) && (i == (argc - 1)))
 		{
 			// pring usage hints, an error message, exit
 			usage();
@@ -99,7 +102,15 @@ int main(int argc, char** argv)
 				break;
 
 			case 'u':		// read a rule file
-				readRuleFile(argv[++i]);
+				readRuleFile(argv[++i], CHARGES_AND_RADII);
+				break;
+
+			case 't':		// read a rule file
+				readRuleFile(argv[++i], CHARGES);
+				break;
+
+			case 'w':		// read a rule file
+				readRuleFile(argv[++i], RADII);
 				break;
 
 			case 's':		// calculate solvation energy
@@ -127,6 +138,11 @@ int main(int argc, char** argv)
 			case 'n':		// normalize names for next files read
 				// set the normalize names flag
 				normalize_names = true;
+				break;
+
+			case 'b':		// build bonds for next files read
+				// set the normalize names flag
+				build_bonds = true;
 				break;
 
 			default:		// unknown option

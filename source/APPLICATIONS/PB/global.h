@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.4 2000/05/30 10:48:43 oliver Exp $
+// $Id: global.h,v 1.5 2000/06/02 09:32:54 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -42,6 +42,9 @@ extern bool clear_charges;
 
 //  true, if the names should be normalized upon read
 extern bool normalize_names;
+
+//  true, if the bonds should be built upon read
+extern bool build_bonds;
 
 // true, if the rule-based assignment is to be used
 extern bool use_charge_rules;
