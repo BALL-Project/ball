@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.15 2001/05/07 09:29:08 anker Exp $
+// $Id: DCDFile.C,v 1.16 2001/09/06 14:55:02 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -109,7 +109,7 @@ namespace BALL
 
 		BinaryFileAdaptor<char> adapt_char;
 		BinaryFileAdaptor<Size> adapt_Size;
-		BinaryFileAdaptor<DoubleReal> adapt_DoubleReal;
+		BinaryFileAdaptor<double> adapt_double;
 
 		// read the "header" of the 84 byte block. This must contain the number
 		// 84 to indicate the size of this block
@@ -189,9 +189,9 @@ namespace BALL
 		}
 
 		// read the length of a time step
-		*this >> adapt_DoubleReal;
-		if (swap_bytes_) swapBytes(adapt_DoubleReal.getData());
-		header_.time_step_length = adapt_DoubleReal.getData();
+		*this >> adapt_double;
+		if (swap_bytes_) swapBytes(adapt_double.getData());
+		header_.time_step_length = adapt_double.getData();
 
 		// skip unused fields
 		for (Size i = 0; i < 9; ++i)
@@ -314,7 +314,7 @@ namespace BALL
 		{
 			*this << BinaryFileAdaptor<Size>(header_.unused_1[i]);
 		}
-		*this << BinaryFileAdaptor<DoubleReal>(header_.time_step_length);
+		*this << BinaryFileAdaptor<double>(header_.time_step_length);
 		for (i = 0; i < 9; ++i)
 		{
 			*this << BinaryFileAdaptor<Size>(header_.unused_2[i]);
@@ -349,19 +349,19 @@ namespace BALL
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		for (Size atom = 0; atom < noa; ++atom)
 		{
-			*this << BinaryFileAdaptor<Real>((Real) positions[atom].x);
+			*this << BinaryFileAdaptor<float>((float) positions[atom].x);
 		}
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		for (Size atom = 0; atom < noa; ++atom)
 		{
-			*this << BinaryFileAdaptor<Real>((Real) positions[atom].y);
+			*this << BinaryFileAdaptor<float>((float) positions[atom].y);
 		}
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		*this << BinaryFileAdaptor<Size>(4*noa);
 		for (Size atom = 0; atom < noa; ++atom)
 		{
-			*this << BinaryFileAdaptor<Real>((Real) positions[atom].z);
+			*this << BinaryFileAdaptor<float>((float) positions[atom].z);
 		}
 		*this << BinaryFileAdaptor<Size>(4*noa);
 
@@ -378,19 +378,19 @@ namespace BALL
 			*this << BinaryFileAdaptor<Size>(4*noa);
 			for (Size atom = 0; atom < noa; ++atom)
 			{
-				*this << BinaryFileAdaptor<Real>((Real) velocities[atom].x);
+				*this << BinaryFileAdaptor<float>((float) velocities[atom].x);
 			}
 			*this << BinaryFileAdaptor<Size>(4*noa);
 			*this << BinaryFileAdaptor<Size>(4*noa);
 			for (Size atom = 0; atom < noa; ++atom)
 			{
-				*this << BinaryFileAdaptor<Real>((Real) velocities[atom].y);
+				*this << BinaryFileAdaptor<float>((float) velocities[atom].y);
 			}
 			*this << BinaryFileAdaptor<Size>(4*noa);
 			*this << BinaryFileAdaptor<Size>(4*noa);
 			for (Size atom = 0; atom < noa; ++atom)
 			{
-				*this << BinaryFileAdaptor<Real>((Real) velocities[atom].z);
+				*this << BinaryFileAdaptor<float>((float) velocities[atom].z);
 			}
 			*this << BinaryFileAdaptor<Size>(4*noa);
 		}
@@ -420,7 +420,7 @@ namespace BALL
 
 		vector<Vector3> positions(expected_noa);
 		BinaryFileAdaptor<Size> adapt_Size;
-		BinaryFileAdaptor<Real> adapt_Real;
+		BinaryFileAdaptor<float> adapt_float;
 
 		// first read the x coordinates
 
@@ -445,9 +445,9 @@ namespace BALL
 		// now read the x positions
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			*this >> adapt_Real; 
-			if (swap_bytes_) swapBytes(adapt_Real.getData());
-			positions[atom].x = adapt_Real.getData();
+			*this >> adapt_float; 
+			if (swap_bytes_) swapBytes(adapt_float.getData());
+			positions[atom].x = adapt_float.getData();
 		}
 		// and the block "footer"
 		*this >> adapt_Size; 
@@ -478,9 +478,9 @@ namespace BALL
 		// data
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			*this >> adapt_Real; 
-			if (swap_bytes_) swapBytes(adapt_Real.getData());
-			positions[atom].y = adapt_Real.getData();
+			*this >> adapt_float; 
+			if (swap_bytes_) swapBytes(adapt_float.getData());
+			positions[atom].y = adapt_float.getData();
 		}
 		// footer
 		*this >> adapt_Size; 
@@ -512,9 +512,9 @@ namespace BALL
 		// data
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			*this >> adapt_Real; 
-			if (swap_bytes_) swapBytes(adapt_Real.getData());
-			positions[atom].z = adapt_Real.getData();
+			*this >> adapt_float; 
+			if (swap_bytes_) swapBytes(adapt_float.getData());
+			positions[atom].z = adapt_float.getData();
 		}
 		// footer
 		*this >> adapt_Size; 
@@ -558,9 +558,9 @@ namespace BALL
 			// now read the x velocities
 			for (Size atom = 0; atom < expected_noa; ++atom)
 			{
-				*this >> adapt_Real; 
-				if (swap_bytes_) swapBytes(adapt_Real.getData());
-				velocities[atom].x = adapt_Real.getData();
+				*this >> adapt_float; 
+				if (swap_bytes_) swapBytes(adapt_float.getData());
+				velocities[atom].x = adapt_float.getData();
 			}
 			// and the block "footer"
 			*this >> adapt_Size; 
@@ -591,9 +591,9 @@ namespace BALL
 			// data
 			for (Size atom = 0; atom < expected_noa; ++atom)
 			{
-				*this >> adapt_Real; 
-				if (swap_bytes_) swapBytes(adapt_Real.getData());
-				velocities[atom].y = adapt_Real.getData();
+				*this >> adapt_float; 
+				if (swap_bytes_) swapBytes(adapt_float.getData());
+				velocities[atom].y = adapt_float.getData();
 			}
 			// footer
 			*this >> adapt_Size; 
@@ -625,9 +625,9 @@ namespace BALL
 			// data
 			for (Size atom = 0; atom < expected_noa; ++atom)
 			{
-				*this >> adapt_Real; 
-				if (swap_bytes_) swapBytes(adapt_Real.getData());
-				velocities[atom].z = adapt_Real.getData();
+				*this >> adapt_float; 
+				if (swap_bytes_) swapBytes(adapt_float.getData());
+				velocities[atom].z = adapt_float.getData();
 			}
 			// footer
 			*this >> adapt_Size; 
@@ -689,7 +689,7 @@ namespace BALL
 			return false;
 		}
 
-		if (sizeof(DoubleReal) != 8)
+		if (sizeof(double) != 8)
 		{
 			Log.error() << "DCDFile::DCDFile(): "
 				<< "Size of double is not equal to 4 on this machine." << endl;
