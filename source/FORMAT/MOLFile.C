@@ -1,4 +1,4 @@
-// $Id: MOLFile.C,v 1.11.4.1 2002/03/10 01:34:21 oliver Exp $
+// $Id: MOLFile.C,v 1.11.4.2 2002/05/01 10:46:30 oliver Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -480,7 +480,10 @@ namespace BALL
 																	"Unable to read header block");
 		}
 		static vector<Atom*> atom_map;
-		return readCTAB_(atom_map);
+		Molecule* mol = readCTAB_(atom_map);
+		mol->setName(name);
+
+		return mol;
 	}
 	
 	void MOLFile::readCountsLine_(MOLFile::CountsStruct& counts)
