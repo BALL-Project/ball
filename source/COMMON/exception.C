@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.5 1999/10/30 12:53:30 oliver Exp $
+// $Id: exception.C,v 1.6 2000/03/16 12:17:17 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -7,7 +7,9 @@
 #include <typeinfo>
 #include <exception>
 #include <stdio.h>
+#include <stdlib.h>	// for getenv in terminate()
 
+#define BALL_CORE_DUMP_ENVNAME "BALL_DUMP_CORE"
 
 #define DEF_EXCEPTION(a,b) \
 	a##::##a##(const char* file, int line)\
@@ -194,9 +196,23 @@ namespace BALL
 				Log.error() << "---------------------------------------------------" << endl;
 				Log.error() << "last entry in the exception handler: " << endl;
 				Log.error() << "exception of type " << name_.c_str() << " occured in line " 
-					<< line_ << " of " << file_.c_str() << endl;
+										<< line_ << " of " << file_.c_str() << endl;
 				Log.error() << "error message: " << message_.c_str() << endl;
 				Log.error() << "---------------------------------------------------" << endl;
+
+
+				// if the environment variable declared in BALL_CORE_DUMP_ENVNAME
+				// is set, provoke a core dump (this is helpful to get s stack traceback)
+				if (getenv(BALL_CORE_DUMP_ENVNAME) != 0)
+				{
+					Log.error() << "dumping core file.... (to avoid this, unset " << BALL_CORE_DUMP_ENVNAME 
+											<< " in your environment)" << endl;
+					// provoke a core dump 
+					int* ptr = 0;
+					*ptr = 1;
+				}
+
+				// otherwise exit cleanly
 				exit(1);
 			}
 				
