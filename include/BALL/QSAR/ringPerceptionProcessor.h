@@ -1,6 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: ringPerceptionProcessor.h,v 1.5 2004/11/03 20:33:25 oliver Exp $
 //
 
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
@@ -17,6 +18,9 @@ namespace BALL
 	/**	Processor, which marks all atoms and bonds in a ring structure with the
 	    Composite Property "InRing".
 			calculateSSSR() can also compute the number of rings found.
+			
+			The processor is an implementation of Figueras algorithm, described in:
+			J. Figueras, J. Chem. Inf. Comput. Sci., 1996, 36(5), 986-991
 	*/
 	class RingPerceptionProcessor
 		:	public UnaryProcessor<AtomContainer>
@@ -80,10 +84,12 @@ namespace BALL
 		*/
 		Size getRing_(Atom* n, HashSet<Atom*>& ring_set);
 
-		/*_ The atom which is part of the smallest ring is deleted.
+		/*_ A bond, which when deleted leads to the smallest ring
+				is deleted. 
 				@param ring_set atoms to test
+				@param ac the atom container the algorithm works on
 		*/
-		void checkEdges_(HashSet<Atom*>& ring_set);
+		void checkEdges_(HashSet<Atom*>& ring_set, AtomContainer& ac);
 		//@}
 	};
 } // namespace BALL

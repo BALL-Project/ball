@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.8 2004/11/02 13:23:58 amoll Exp $
+// $Id: ringPerceptionProcessor.C,v 1.9 2004/11/03 20:33:25 oliver Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -18,8 +18,7 @@
 #include <vector>
 #include <queue>
 
-using std::deque;
-using std::pair;
+using namespace std;
 
 namespace BALL
 {
@@ -136,18 +135,19 @@ namespace BALL
 					Atom& a = **it2;
 					if (a.countBonds() != 0)
 					{
-						a.destroyBond(* a.beginBond()->getPartner(a));
+						Atom::BondIterator b_it = a.beginBond();
+						a.destroyBond(* b_it->getPartner(a));
 					}
 				}
 
 				continue;
 			}
 
-			if (min_deg >= 3 && getRing_(init, ring_set) != 0)
+			if (min_deg > 2 && getRing_(init, ring_set) != 0)
 			{
 				// add ring_set ro sssr
 				SSSR.push_back(ring_set);
-				checkEdges_(ring_set);
+				checkEdges_(ring_set, ac_copy);
 			}
 		}
 	
@@ -207,7 +207,6 @@ namespace BALL
 				b_it->setProperty("InRing", false);
 			}
 		}
-		
 		return sssr_orig.size();
 	}
 
@@ -266,36 +265,98 @@ namespace BALL
 	}
 
 
-
-	void RingPerceptionProcessor::checkEdges_(HashSet<Atom*>& ring_set)
+	void RingPerceptionProcessor::checkEdges_(HashSet<Atom*>& ring_set, AtomContainer& ac)
 	{
-		Size min_ring_size = Limits<int>::max();
+		// from Figueras' paper:
+		// "checkEdges(n, ringSet)... selects an optimum edge for
+		// elimination in structures without N2 nodes. Each edge in
+		// ringSet is selected in turn for trial, and the edge is restored
+		// after its trial is finished. The larger of the two rings that
+		// includes the end nodes of the trial is noted. Final
+		// selection for edge eliminiation is that edge that is incident
+		// on the smallest of the collection of these largest rings. After
+		// an edge is removed, new N2 nodes will appear to serve for as
+		// foci for further ring perception."
 
-		// atom which is part of the smallest ring
-		Atom* min_atom = 0; 
+		// The last sentence is definitely incorrect, as there are 
+		// (sub)structures which have only atoms which are bonded 
+		// four times!
+
+		typedef HashSet<Atom*>::Iterator hs_it;
+		HashSet<Bond*> visited_bonds;
+		vector<Size> largest_rings;
+		vector<std::pair<Atom*, Atom*> > incident_edges;
+
+		hs_it it=ring_set.begin();
+		hs_it it2=ring_set.begin();
 		
-		HashSet<Atom*>::Iterator iter = ring_set.begin();
-		for (; +iter; ++iter)
+		for (; +it; ++it)
 		{
-			Atom::BondIterator bond_it=(*iter)->beginBond();
-			for (; +bond_it; ++bond_it)
+			// bond to examine
+			Atom * partner = 0;
+			for (it2=ring_set.begin(); +it2; ++it2)
 			{
-				Atom* atom = bond_it->getPartner(**iter);
-				if (atom == 0) continue;
-
-				HashSet<Atom*> dummy;
-				Size ring_size = getRing_(atom, dummy);
-							
-				if (min_ring_size > ring_size)
+				if ((*it)->isBoundTo(**it2))
 				{
-					min_ring_size = ring_size;
-					min_atom = *iter;
+					Bond * bnd = (*it)->getBond(**it2);
+					if (!visited_bonds.has(bnd))
+					{
+						visited_bonds.insert(bnd);
+						partner = *it2;
+						break;
+					}
 				}
 			}
+
+// delete bond on a copy, mapping needed
+			AtomContainer ac_copy(ac);
+	    HashMap<Atom*, Atom*> orig_to_copy;
+	    AtomIterator orig = ac.beginAtom();
+	    AtomIterator copy = ac_copy.beginAtom();
+			
+	    for (; +orig; ++orig, ++copy)
+	    {
+				orig_to_copy[&*orig] = &*copy;
+			}
+
+			Atom * atom1 = orig_to_copy[*it];
+			Atom * atom2 = orig_to_copy[partner];	
+			atom1->destroyBond(*atom2);
+
+			// notice largest ring which contains 
+			// the end atom of the bond
+			HashSet<Atom*> ring_set1, ring_set2;
+			Size ring_size1 = getRing_(atom1, ring_set1);
+			Size ring_size2 = getRing_(atom2, ring_set2);
+			
+			if (ring_size1 > ring_size2)
+			{
+				largest_rings.push_back(ring_set1.size());
+				incident_edges.push_back(std::make_pair(*it, partner));
+			}
+			else
+			{
+				largest_rings.push_back(ring_set2.size());
+				incident_edges.push_back(std::make_pair(*it, partner));
+			}
 		}
+
+		// find smallest of the biggest rings
+		vector<Size>::iterator it1=largest_rings.begin();
+		Size iter(0), smallest_ring_it(0), smallest_ring(0);
+
+		for (; it1!=largest_rings.end(); ++it1, ++iter)
+		{
+			if (*it1 < smallest_ring)
+			{
+				smallest_ring = *it1;
+				smallest_ring_it = iter;
+			}
+		}
+
+		// destroy the selected bond
+		incident_edges[smallest_ring_it].first->destroyBond(* incident_edges[smallest_ring_it].second);
 		
-		// Finally the atom which produces the smallest ring is deleted.
-		if (min_atom != 0) min_atom->destroy();
 	}
 
 } // namespace BALL
