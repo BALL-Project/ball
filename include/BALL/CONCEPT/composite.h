@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.47 2003/06/11 16:09:22 oliver Exp $
+// $Id: composite.h,v 1.48 2003/06/12 10:40:02 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -1023,8 +1023,6 @@ namespace BALL
 			return AncestorConstIterator::end(*this);
 		}
 
-
-
 		class ChildCompositeIteratorTraits
 		{
 			public:
@@ -1098,7 +1096,7 @@ namespace BALL
 
 			BALL_INLINE void forward() throw() {	child_ = child_->next_;	}
 
-			BALL_INLINE void backward()	throw()	{	child_ = child_->previous_;	}
+			BALL_INLINE void backward()	throw()	{	if (isEnd()) { child_ = bound_->last_child_; } else  { child_ = child_->previous_; }	}
 
 			private:
 
