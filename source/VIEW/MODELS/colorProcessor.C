@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.5 2005/01/12 22:27:25 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.6 2005/01/12 23:30:04 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -105,7 +105,8 @@ namespace BALL
 					return Processor::CONTINUE;
 				}
 
-				if (composite != last_composite_of_grid_)
+				if (composite == 0 ||
+						composite != last_composite_of_grid_)
 				{
 					createAtomGrid_(composite);
 				}
@@ -242,10 +243,23 @@ namespace BALL
 			}
 			boxp.finish();
 
-			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+			const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+			
+			// grid spacing, tradeoff between speed and memory consumption
+			float grid_spacing = 5.0;
+			if (diagonal.getSquareLength() < 5000)
+			{
+				grid_spacing = 2.0;
+			} 
+			else if (diagonal.getSquareLength() > 10000)
+			{
+				// well this will be really slow, but prevent locking machine by consuming all memory
+				grid_spacing = 9.0;
+			}
+			
 			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_),
 														diagonal + Vector3(2 * additional_grid_distance_),
-														5.0); // spacing, increase this, if the grid consumes too much memory
+														grid_spacing); 
 		 
 			for (lit = atoms.begin(); lit != atoms.end(); lit++)
 			{
