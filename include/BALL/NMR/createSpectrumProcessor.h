@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.h,v 1.5 2000/09/20 14:04:37 amoll Exp $
+// $Id: createSpectrumProcessor.h,v 1.6 2000/09/20 18:31:35 amoll Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -7,11 +7,11 @@
 #	include<BALL/NMR/peak.h>
 #endif
 
-#include<BALL/KERNEL/atom.h>
-
+#ifndef BALL_KERNEL_ATOM_H
+# include<BALL/KERNEL/atom.h>
+#endif
 
 #include <list>
-
 
 namespace BALL 
 {
