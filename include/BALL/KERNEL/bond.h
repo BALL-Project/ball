@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.7 2000/04/09 23:23:02 amoll Exp $
+// $Id: bond.h,v 1.8 2000/04/13 23:05:46 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.7 $
-			@date    $Date: 2000/04/09 23:23:02 $
+			@version $Revision: 1.8 $
+			@date    $Date: 2000/04/13 23:05:46 $
 	*/
 	class Bond
 		: public Composite,
@@ -475,7 +475,7 @@ namespace BALL
 		
 			/** Constant inspection of the bond's length.
 					Access the length of {\em *this} bond.
-
+					@exception NullPointer if the bond has not two atoms
 					@return      Real - copy of the the length of {\em *this} bond
 			*/
 			Real getLength() const;
