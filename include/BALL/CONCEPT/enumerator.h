@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.9 2001/02/05 17:13:36 amoll Exp $
+// $Id: enumerator.h,v 1.10 2001/02/05 17:43:57 amoll Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -111,9 +111,9 @@ namespace BALL
 		EnumeratorIndex& operator -- ()
 			throw(Exception::IndexUnderflow);
 
-		/** Set an instance of EnumeratorIndex to the value corresponding to
+		/** Set an instance of EnumeratorIndex to the value corresponding to 
 			  the number {\tt index}.
-			  @param index the number of the permutation to which the instance
+			  @param index the number of the permutation to which the instance 
 			  should be set
 		 */
 		void set(Position index)
