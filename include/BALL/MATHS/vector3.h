@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.72 2004/05/18 11:54:45 amoll Exp $
+// $Id: vector3.h,v 1.73 2004/05/18 13:05:44 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -182,11 +182,9 @@ namespace BALL
 				<tt>phi</tt>	ranges from 0 to \f$2 \pi\f$, <tt>theta</tt> ranges from 0 (north pole, positive z-axis)
 				to \f$\pi\f$ (south pole, negative z-axis). \par
 				Coordinates are calculated according to the following formulae: \par
-				\f[
-					x & = & r \sin \theta \cos \phi \par
-					y & = & r \sin \theta \sin \phi \par
-					z & = & r \cos \theta
-				\f]
+				\f[ x  =  r \sin \theta \cos \phi \f] \par
+				\f[ y  =  r \sin \theta \sin \phi \f] \par
+				\f[ z  =  r \cos \theta \f] 
 				@param	r the radius
 				@param	phi the azimuth
 				@param	theta	the co-latitude
