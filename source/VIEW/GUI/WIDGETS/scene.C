@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.8 2002/12/12 11:43:25 oliver Exp $
+// $Id: scene.C,v 1.9 2002/12/15 12:31:19 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
@@ -150,7 +150,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<Scene>() << endl;
+				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<Scene>() << endl;
 			#endif 
 
 			destroy();
@@ -219,8 +219,7 @@ namespace BALL
 			{
 				MainControl::DescriptorIterator descriptor_iterator;
 				
-				ConnectionObject *object = getRoot();
-				MainControl *main_control = RTTI::castTo<MainControl>(*object);
+				MainControl *main_control = MainControl::getMainControl(this);
 				
 				if (main_control == 0)
 				{
@@ -246,7 +245,7 @@ namespace BALL
 			{
 				SceneMessage *scene_message = RTTI::castTo<SceneMessage>(*message);
 
-				if (scene_message->isUpdateOnly() == false)
+				if (!scene_message->isUpdateOnly())
 				{
 					setCamera(scene_message->getCameraLookAt(), scene_message->getCameraViewPoint());
 				}
@@ -337,19 +336,6 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
 
-		void Scene::read(istream & /*s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Scene::write(ostream & /*s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-			
 		// --------------------------------------------------------------------------
 		// ---- protected Member functions (QT) -------------------------------------
 		// --------------------------------------------------------------------------
@@ -784,7 +770,7 @@ namespace BALL
 			}
 
 			#ifdef BALL_VIEW_DEBUG
-				cout << "rendering." << endl;
+				Log.info() << "rendering." << endl;
 			#endif
 
 			Matrix4x4 m;
@@ -804,16 +790,8 @@ namespace BALL
 			// rotate the system
 			glMultMatrixf(&matrix[0][0]);
 
-			MainControl::DescriptorIterator descriptor_iterator;
 
-			ConnectionObject *object = getParent();
-			
-			if (object == 0)
-			{
-				throw MainControlMissing(__FILE__, __LINE__, "");
-			}
-			
-			MainControl *main_control = RTTI::castTo<MainControl>(*object);
+			MainControl *main_control = MainControl::getMainControl(this);
 
 			if (main_control == 0)
 			{
@@ -821,8 +799,8 @@ namespace BALL
 			}
 			
 			// draw the system
-			for (descriptor_iterator = main_control->getDescriptorList().begin();
-					 descriptor_iterator != main_control->getDescriptorList().end(); 
+			MainControl::DescriptorIterator descriptor_iterator = main_control->getDescriptorList().begin();
+			for (; descriptor_iterator != main_control->getDescriptorList().end(); 
 					 ++descriptor_iterator)
 			{
 				CompositeDescriptor *composite_descriptor = *descriptor_iterator;
@@ -836,10 +814,10 @@ namespace BALL
 				glPushMatrix();
 
 				#ifdef BALL_VIEW_DEBUG
-					cout << "drawing." << endl;
+					Log.info() << "drawing." << endl;
 				#endif
 
-				/* calculate the the center of the object respective to the system origin */
+				// calculate the the center of the object respective to the system origin 
 				Vector3 center = composite_descriptor->getCenter();
 
 				center -= system_origin_;
@@ -1047,8 +1025,8 @@ namespace BALL
 			Real right2 = ((float)width_ - x_window_pos_new_ * 2.0) / width_;
 			Real up2 = ((float)height_ - y_window_pos_new_ * 2.0) / height_;
 
-			if (BALL_REAL_EQUAL(right1, right2, Constants::EPSILON) == true
-					&& BALL_REAL_EQUAL(up1, up2, Constants::EPSILON) == true)
+			if (BALL_REAL_EQUAL(right1, right2, Constants::EPSILON) &&
+					BALL_REAL_EQUAL(up1, up2, Constants::EPSILON))
 			{
 				tmp.setIdentity();
 			}
@@ -1070,12 +1048,12 @@ namespace BALL
 
 				Real phi = (a - b).getLength();
 				
-				if (BALL_REAL_GREATER(phi, (Real)1, Constants::EPSILON) == true)
+				if (BALL_REAL_GREATER(phi, (Real)1, Constants::EPSILON))
 				{
 					phi = (Real)1;
 				}
 
-				if (BALL_REAL_LESS(phi, (Real)-1, Constants::EPSILON) == true)
+				if (BALL_REAL_LESS(phi, (Real)-1, Constants::EPSILON))
 				{
 					phi = (Real)-1;
 				}
@@ -1094,7 +1072,7 @@ namespace BALL
 
 			Real dist = (Real)sqrt((float)(x * x + y * y));
 
-			if (BALL_REAL_LESS(dist, radius * sqrt(2.0) / 2.0, Constants::EPSILON) == true)
+			if (BALL_REAL_LESS(dist, radius * sqrt(2.0) / 2.0, Constants::EPSILON))
 			{
 				z = (Real)sqrt((float)(radius * radius - dist * dist));
 			}
@@ -1254,13 +1232,11 @@ namespace BALL
 			GeometricCollector collector;
 			collector.collectSelectedGeometricObjects(true);
 
-			ConnectionObject *object = getParent();
-			if (object == 0)
+			MainControl *main_control = MainControl::getMainControl(this);
+			if (main_control == 0)
 			{
 				throw MainControlMissing(__FILE__, __LINE__, "");
 			}
-			
-			MainControl *main_control = RTTI::castTo<MainControl>(*object);
 
 			// collect selected objects
 			MainControl::DescriptorIterator descriptor_iterator;
@@ -1331,7 +1307,7 @@ namespace BALL
 
 		void Scene::setCamera_(bool set_origin)
 		{
-			if (set_origin == true)
+			if (set_origin)
 			{
 				system_origin_ = getLookAtPosition();
 			}
@@ -1377,13 +1353,11 @@ namespace BALL
 		{
 			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
-			rotate_id_ 
-				= main_control.insertMenuEntry
-				   (MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
+			rotate_id_ = main_control.insertMenuEntry(
+											MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
 			
-			picking_id_ 
-				= main_control.insertMenuEntry
-				   (MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
+			picking_id_ = main_control.insertMenuEntry(
+										 	MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
 		}
 
 		void Scene::finalizeWidget(MainControl& main_control)
@@ -1396,8 +1370,8 @@ namespace BALL
 		void Scene::checkMenu(MainControl& main_control)
 			throw()
 		{
-			(main_control.menuBar())->setItemChecked(rotate_id_, (rotate_mode_ == true));
-			(main_control.menuBar())->setItemChecked(picking_id_, (rotate_mode_ == false));		
+			(main_control.menuBar())->setItemChecked(rotate_id_, (rotate_mode_));
+			(main_control.menuBar())->setItemChecked(picking_id_, (!rotate_mode_));		
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
