@@ -1,4 +1,4 @@
-// $Id: selectable.C,v 1.5 2000/12/09 21:56:04 amoll Exp $
+// $Id: selectable.C,v 1.5.4.1 2002/05/01 10:37:32 oliver Exp $
 
 #include <BALL/CONCEPT/selectable.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -38,20 +38,6 @@ namespace BALL
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}  
-
-  ostream& operator << (ostream& s, const Selectable& selectable)
-		throw()
-  {
-		s << selectable.selected_;
-		return s;
-	}
-
-  istream& operator >> (istream& s, Selectable& selectable)
-		throw()
-  {
-    s >> selectable.selected_;
-		return s;
-	}
 
   void Selectable::write(PersistenceManager& pm) const
 		throw()
