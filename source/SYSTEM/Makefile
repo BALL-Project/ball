@@ -8,6 +8,7 @@ CPP_SOURCES=\
 	fileSystem.C\
 	path.C\
 	socket.C\
+	sysinfo.C\
 	TCPTransfer.C\
 	timer.C
 
