@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.7 2000/12/04 20:53:40 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.8 2000/12/04 21:01:21 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -712,7 +712,7 @@ void RegularData2DWidget::NewMousePos( Position x, Position y )
       };
       message += dummy.setNum( numDum, 'e', 5 );
       posLabel_ = new QLabel( message, MainControl::getMainControl(this)->statusBar() );
-      MainControl::getMainControl(this)->statusBar()->addWidget( posLabel_ );
+      MainControl::getMainControl(this)->statusBar()->addWidget( posLabel_, 0 );
       posLabel_->show();
     };
   };
