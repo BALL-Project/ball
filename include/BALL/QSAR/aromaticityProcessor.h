@@ -59,8 +59,17 @@ namespace BALL
 				@param SSSR ring set as vector<vector<Atom*> >, (vector of rings in vector<Atom*>) 
 				after the processing this variable holds all aromatic systems, which are not necessarily single rings!
 		*/
-  	void aromatize(vector<vector<Atom*> >& sssr, AtomContainer& ac);
+  	void aromatize(const vector<vector<Atom*> >& sssr, AtomContainer& ac);
 
+		/** Method to set aromaticity with the use of simple rules. Each ring from the given SSSR set
+		 * 	(which needs just to be a set of rings) is examined for itself. (needed for the implementation
+		 * 	of the MMFF94 force field which does not agree with the advanced araomtaticity definition of
+		 * 	the default method.). \par
+		 * 	It does not set any aromaticity flags, neither at the atoms nor bonds to bond order aromatic!
+		 * 	@Param sssr is the set to be examined, only aromatic rings will stay 
+		 */
+		void aromatizeSimple(vector<vector<Atom*> >& sssr);
+		
 		//@}
 		/** @name Processor-related methods
 		*/

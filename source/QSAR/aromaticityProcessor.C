@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.5 2005/03/25 18:41:44 bertsch Exp $
+// $Id: aromaticityProcessor.C,v 1.6 2005/03/28 16:09:29 bertsch Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -82,15 +82,82 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-
-	void AromaticityProcessor::aromatize(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
+	void AromaticityProcessor::aromatizeSimple(vector<vector<Atom*> >& sssr)
+	{
+		vector<HashSet<Atom*> > aromatic_rings;
+		// for each
+		for (vector<vector<Atom*> >::iterator it=sssr.begin();it!=sssr.end();++it)
+		{
+			HashSet<Atom*> ring;
+			for (vector<Atom*>::iterator ait=it->begin();ait!=it->end();++ait)
+			{
+				ring.insert(*ait);
+			}
+			// first ensure that the rings has alternating double bonds
+			Size destab(0);
+			bool can_be(true);
+			for (HashSet<Atom*>::Iterator ait=ring.begin(); +ait; ++ait)
+			{
+				Size s_bonds(0), d_bonds(0), a_bonds(0);
+				for (Atom::BondIterator bit=(*ait)->beginBond(); +bit; ++bit)
+				{
+					if (ring.has(bit->getPartner(**ait)))
+					{
+						if (bit->getOrder() == Bond::ORDER__SINGLE) s_bonds++;
+						if (bit->getOrder() == Bond::ORDER__DOUBLE) d_bonds++;
+						if (bit->getOrder() == Bond::ORDER__AROMATIC) a_bonds++;
+					}
+				}
+				if ((*ait)->getElement() == PTE[Element::C])
+				{
+					if (!((d_bonds == 1 && s_bonds > 0) || a_bonds > 1))
+					{
+						can_be = false;
+						break;
+					}
+				}
+				else
+				{
+					if (!(d_bonds == 1 || a_bonds > 1))
+					{
+						destab++;
+					}
+				}
+			}
+			
+			if (can_be && destab < 2)
+			{
+				// count pi-electrons
+				Size num_pi = countPiElectrons_(ring);
+				// aromatic? 
+				if ((num_pi-2)%4 == 0)
+				{
+					aromatic_rings.push_back(ring);
+				}
+			}
+		}
+	
+		// write the aromatic rings back to the sssr set
+		sssr.clear();
+		for (vector<HashSet<Atom*> >::const_iterator it=aromatic_rings.begin();it!=aromatic_rings.end();++it)
+		{
+			vector<Atom*> ring;
+			for (HashSet<Atom*>::ConstIterator ait=it->begin(); +ait; ++ait)
+			{
+				ring.push_back(*ait);
+			}
+			sssr.push_back(ring);
+		}
+	}
+	
+	void AromaticityProcessor::aromatize(const vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
 		//cerr << "AromaticityProcessor::aromatize(vector<vector<Atom*> >& sssr_orig)";
 		vector<HashSet<Atom*> > sssr;
-		for (vector<vector<Atom*> >::iterator it1=sssr_orig.begin();it1!=sssr_orig.end();++it1)
+		for (vector<vector<Atom*> >::const_iterator it1=sssr_orig.begin();it1!=sssr_orig.end();++it1)
 		{
 			HashSet<Atom*> ring;
-			for (vector<Atom*>::iterator it2=it1->begin();it2!=it1->end();++it2)
+			for (vector<Atom*>::const_iterator it2=it1->begin();it2!=it1->end();++it2)
 			{
 				ring.insert(*it2);
 			}
