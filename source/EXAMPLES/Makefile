@@ -1,5 +1,5 @@
 
-EXECUTABLES=proteinMapper PDB2discover amberEnergy
+EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy
 
 all:	$(EXECUTABLES)
 
