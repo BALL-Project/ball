@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>441</width>
-            <height>289</height>
+            <height>295</height>
         </rect>
     </property>
     <property name="caption">
@@ -17,7 +17,7 @@
     </property>
     <widget class="QTabWidget">
         <property name="name">
-            <cstring>tabs</cstring>
+            <cstring>tabwidget</cstring>
         </property>
         <property name="geometry">
             <rect>

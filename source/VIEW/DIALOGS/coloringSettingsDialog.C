@@ -92,8 +92,8 @@ QWidget* QColorTable::beginEdit(int row, int col, bool)
 ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* name, WFlags fl )
     : ColoringSettingsDialogData( parent, name, fl )
 {
-	element_table_ = new QColorTable(tabs->page(0));
-	residue_table_ = new QColorTable(tabs->page(2));
+	element_table_ = new QColorTable(tabwidget->page(0));
+	residue_table_ = new QColorTable(tabwidget->page(2));
 	setDefaults();
 }
 

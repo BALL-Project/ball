@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.43 2003/11/20 01:21:47 amoll Exp $
+// $Id: displayProperties.C,v 1.44 2003/11/20 22:19:25 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -29,6 +29,7 @@
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qradiobutton.h>
+#include <qtabwidget.h>
 
 namespace BALL
 {
@@ -659,16 +660,91 @@ void DisplayProperties::coloringOptionsPressed()
 {
 	if (preferences_ == 0) return;
 
-	preferences_->show();
 	preferences_->showPage(coloring_settings_);
+
+	switch (coloring_method_combobox->currentItem())
+	{
+		case COLORING_ELEMENT:
+			coloring_settings_->tabwidget->setCurrentPage(0);
+			break;
+
+		case COLORING_RESIDUE_NAME:
+			coloring_settings_->tabwidget->setCurrentPage(2);
+			break;
+
+		case COLORING_RESIDUE_INDEX:
+			coloring_settings_->tabwidget->setCurrentPage(1);
+			break;
+
+		case COLORING_SECONDARY_STRUCTURE:
+			coloring_settings_->tabwidget->setCurrentPage(7);
+			break;
+
+		case COLORING_ATOM_CHARGE:
+			coloring_settings_->tabwidget->setCurrentPage(3);
+			break;
+
+		case COLORING_CUSTOM:
+			break;
+
+		case COLORING_DISTANCE:
+			coloring_settings_->tabwidget->setCurrentPage(4);
+			break;
+
+		case COLORING_TEMPERATURE_FACTOR:
+			coloring_settings_->tabwidget->setCurrentPage(5);
+			break;
+
+		case COLORING_OCCUPANCY:
+			coloring_settings_->tabwidget->setCurrentPage(6);
+			break;
+	}
+
+	preferences_->show();
 }
 
 void DisplayProperties::modelOptionsPressed()
 {
 	if (preferences_ == 0) return;
 
-	preferences_->show();
 	preferences_->showPage(model_settings_);
+
+	switch (model_type_combobox->currentItem())
+	{
+		case MODEL_LINES:
+			break;
+			
+		case MODEL_STICK:
+			model_settings_->tabwidget->setCurrentPage(0);
+			break;
+			
+		case MODEL_BALL_AND_STICK:
+			model_settings_->tabwidget->setCurrentPage(1);
+			break;
+			
+		case MODEL_SE_SURFACE:
+		case MODEL_SA_SURFACE:
+			model_settings_->tabwidget->setCurrentPage(3);
+			break;
+			
+		case MODEL_VDW:
+			model_settings_->tabwidget->setCurrentPage(2);
+			break;
+
+		case MODEL_BACKBONE:
+			model_settings_->tabwidget->setCurrentPage(4);
+			break;
+
+		case MODEL_CARTOON:
+			model_settings_->tabwidget->setCurrentPage(5);
+			break;
+			
+		case MODEL_HBONDS:
+			model_settings_->tabwidget->setCurrentPage(6);
+			break;
+	}
+
+	preferences_->show();
 }
 
 void DisplayProperties::precisionBoxChanged(int index)
