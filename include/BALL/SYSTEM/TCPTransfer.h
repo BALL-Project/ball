@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.h,v 1.5 2001/10/16 23:37:00 amoll Exp $
+// $Id: TCPTransfer.h,v 1.6 2001/10/27 16:23:50 amoll Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -24,7 +24,6 @@ namespace BALL
 	 * 	Support for login, password and port is build in for
 	 * 	FTP and HTTP. FTP transports are done by passive FTP, so
 	 * 	no problems with local firewalls are encountered.
-	 * 	NOTE: Authentification doesnt yet works for HTTP.
 	 */
 	class TCPTransfer
 	{
