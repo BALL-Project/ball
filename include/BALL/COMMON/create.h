@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: create.h,v 1.10 2003/08/26 08:04:05 oliver Exp $
+// $Id: create.h,v 1.11 2004/02/18 23:24:02 oliver Exp $
 //
 
 #ifndef BALL_COMMON_CREATE_H
@@ -87,10 +87,10 @@
 		If the create method has to be implemented by the user, this macro just defines 
 		the create method and the createDefault method.
 		The function signatures are:
-		\begin{verbatim}
+		\verbatim
 			virtual void* create(bool deep = true, bool empty = false) const;
 			static void* createDefault();
-		\end{verbatim}
+		\endverbatim
 */
 #define BALL_DEFINE_CREATE(name)\
 \

@@ -1,4 +1,4 @@
-// $Id: view.doc,v 1.14 2003/09/04 23:14:09 amoll Exp $
+// $Id: view.doc,v 1.15 2004/02/18 23:24:05 oliver Exp $
 
 /**	\addtogroup Visualisation
          VIEW is a framework for the implementation of GUI based visualizations.
@@ -14,29 +14,30 @@
          described in the section \link Kernel Kernel \endlink classes. There can be easily created more primitives.
          The most important classes are the widgets classes for they are needed for creating an
          application.
-         First, the class \link MainControl MainControl \endlink is the most important widget for building an application.
-         The \link MainControl MainControl \endlink is the main window of the application. It provides a menu bar and 
+
+         First, the class \link BALL::VIEW::MainControl MainControl \endlink is the most important widget for building an application.
+         The \link BALL::VIEW::MainControl MainControl \endlink is the main window of the application. It provides a menu bar and 
          a status bar that can be initialized and changed by its child widgets. Those child widgets must be derived
-         from \link ModularWidget ModularWidget \endlink that provides interface methods to create, maintain and remove
+         from \link BALL::VIEW::ModularWidget ModularWidget \endlink that provides interface methods to create, maintain and remove
          menu entries and preferences tab dialogs. Further the modular widget does all the connectivity
-         needed to insert the widget properly into the \link MainControl MainControl \endlink 
+         needed to insert the widget properly into the \link BALL::VIEW::MainControl MainControl \endlink 
 				 (like setup the menu entries, fetch the preferences
          and handle the signal/slot mechanism of the underlying QT-widgets).
-         To insert such a widget derived from \link ModularWidget ModularWidget \endlink just create it with 
-				 \link MainControl MainControl \endlink as parent. 
+         To insert such a widget derived from \link BALL::VIEW::ModularWidget ModularWidget \endlink just create it with 
+				 \link BALL::VIEW::MainControl MainControl \endlink as parent. 
          Each modular widget is a component that can be used to build an application block for block.
-         They use a \link Message Message \endlink communication queue which is maintained by the class 
-				 \link MainControl MainControl \endlink that
+         They use a \link BALL::VIEW::Message Message \endlink communication queue which is maintained by the class 
+				 \link BALL::VIEW::MainControl MainControl \endlink that
          relays all catched messages to all other inserted modular widgets except the one which had
          originally sent the message.
-         With these messages it is possible for the widgets to notify the \link MainControl MainControl 
+         With these messages it is possible for the widgets to notify the \link BALL::VIEW::MainControl MainControl 
 				 \endlink of changes done to the
          graphical representation of certain objects or to change the contents of the status bar
          or even notify of objects no longer available.
-         The forth class we introduce is the class \link Scene Scene \endlink that provides the three-dimensional
-         interactive visualization of the above mentioned \link GeometricObject GeometricObject \endlink objects.
+         The forth class we introduce is the class \link BALL::VIEW::Scene Scene \endlink that provides the three-dimensional
+         interactive visualization of the above mentioned \link BALL::VIEW::GeometricObject GeometricObject \endlink objects.
          With this class it is possible to rotate, translate, zoom or pick objects by mouse click.
-         Another important class is the class \link Control Control \endlink. With the help of this class the
+         Another important class is the class \link BALL::VIEW::GenericControl Control \endlink. With the help of this class the
          hierarchical structure of the visualized objects can be displayed and manipulated.
 				 <br> <br> <br>
          The following code is an example for building an application (the includes have been omitted):
@@ -66,11 +67,11 @@
          }
          \endcode
          <b>Note</b> This application only demonstrates how to build an application.
-         It opens a main window with both the \link Control Control \endlink and \link Scene Scene \endlink
+         It opens a main window with both the \link BALL::VIEW::Control Control \endlink and \link BALL::VIEW::Scene Scene \endlink
 				 but as there are no means by which any geometric object can be added no objects will be shown in either
-         the \link Control Control \endlink and the \link Scene Scene \endlink widget.
+         the \link BALL::VIEW::Control Control \endlink and the \link BALL::VIEW::Scene Scene \endlink widget.
          In the section \link MOLVIEW MOLVIEW \endlink there is an example application that extends this example by using
-         several more widgets to allow loading of \link System System \endlink objects, changing the
+         several more widgets to allow loading of \link BALL::System System \endlink objects, changing the
          visualization of the inserted objects and manipulating those objects.
 				 <br> <br>
          For more information about QT widgets and application programming see

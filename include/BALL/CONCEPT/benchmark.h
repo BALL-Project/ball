@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: benchmark.h,v 1.13 2003/08/26 08:04:06 oliver Exp $
+// $Id: benchmark.h,v 1.14 2004/02/18 23:24:03 oliver Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -53,8 +53,8 @@
 /**	Start the timer.
 		This macro is used to determine the running time of a set of commands.
 		It may be used in benchmarks and requires a prior invocation of the
-		 \link START_BENCHMARK START_BENCHMARK \endlink  macro.
-		All commands that are between the START_TIMER and the  \link STOP_TIMER STOP_TIMER \endlink 
+		 \link #START_BENCHMARK START_BENCHMARK \endlink  macro.
+		All commands that are between the START_TIMER and the  \link #STOP_TIMER STOP_TIMER \endlink 
 		command contribute to the overall running time of the benchmark.
 		\ingroup Benchmark
 */
@@ -65,8 +65,8 @@
 /**	Stop the timer.
 		This macro is used to determine the running time of a set of commands.
 		It may be used in benchmarks and requires a prior invocation of the
-		 \link START_BENCHMARK START_BENCHMARK \endlink  and  \link START_TIMER START_TIMER \endlink  macros.
-		All commands that are between the START_TIMER and the  \link STOP_TIMER STOP_TIMER \endlink 
+		 \link #START_BENCHMARK START_BENCHMARK \endlink  and  \link #START_TIMER START_TIMER \endlink  macros.
+		All commands that are between the START_TIMER and the  \link #STOP_TIMER STOP_TIMER \endlink 
 		command contribute to the overall running time of the benchmark.
 		\ingroup Benchmark
 */

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.h,v 1.43 2004/02/18 18:19:04 anhi Exp $
+// $Id: line3.h,v 1.44 2004/02/18 23:24:04 oliver Exp $
 //
 
 #ifndef BALL_MATHS_LINE3_H
@@ -222,13 +222,14 @@ namespace BALL
 		}
 
 		//@}
+
 		/**	@name	Accessors
 		*/
 		//@{
 
 		/**	Normalize the vector component.
 				The vector is scaled with its length:
-				$\{x|y|z|\} *= \sqrt{x^2 + y^2 + z^2}$.
+				\f$\{x|y|z|\} *= \sqrt{x^2 + y^2 + z^2}\f$.
 				@exception DivisionByZero if the length of the vector is 0
 		*/
 		void normalize()

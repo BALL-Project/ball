@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.18 2004/02/18 18:19:04 anhi Exp $
+// $Id: vector2.h,v 1.19 2004/02/18 23:24:04 oliver Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR2_H
@@ -199,7 +199,7 @@ namespace BALL
 
 		/**	Return the length of the vector.
 				The length of the vector is calculated as
-				$\sqrt{x^2 + y^2}$.
+				\f$\sqrt{x^2 + y^2}\f$.
 				@return T, the vector length
 		*/	
 		T getLength() const
@@ -208,14 +208,14 @@ namespace BALL
 		/**	Return the squared length of the vector.
 				This method avoids the square root needed in getLength,
 				so this method is preferred if possible.
-				@return T, $x^2 + y^2$
+				@return T, \f$x^2 + y^2\f$
 		*/
 		T getSquareLength() const
 			throw();
 
 		/**	Normalize the vector.
 				The vector is scaled with its length:
-				$\{x|y|z\} *= \sqrt{x^2 + y^2}$.
+				\f$\{x|y|z\} *= \sqrt{x^2 + y^2}\f$.
 				@return T, a reference to the normalized vector
 				@exception DivisionByZero if the length of the vector is 0
 		*/

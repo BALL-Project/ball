@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ooiEnergy.h,v 1.12 2003/08/26 08:04:48 oliver Exp $
+// $Id: ooiEnergy.h,v 1.13 2004/02/18 23:24:05 oliver Exp $
 //
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
@@ -28,7 +28,7 @@ namespace BALL
 
 			The method is parameterized for proteins only. Calling the function with different
 			structures probably yields results of arbitrary meaninglessness.
-			\pare
+			\par
 
 			The energy is returned in units of kJ/mol.
 			Unparametrized atoms are simply ignored, which might lead to unreasonable values.  

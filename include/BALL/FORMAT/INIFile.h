@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.38 2003/12/10 15:54:19 anhi Exp $
+// $Id: INIFile.h,v 1.39 2004/02/18 23:24:03 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -44,7 +44,7 @@ namespace BALL
 
 		class IteratorTraits_;
 	
-		///
+		/** A section within an INI file */
 		class Section
 		{
 			public:

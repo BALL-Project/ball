@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.h,v 1.26 2003/08/26 08:04:15 oliver Exp $
+// $Id: genericPDBFile.h,v 1.27 2004/02/18 23:24:04 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
@@ -272,9 +272,11 @@ namespace BALL
 		*/
 		struct RecordCISPEP
 		{
+			///
 			RecordType     record_type;
 			RecordName     record_name;
 			Integer        record_serial_number;
+			///
 			struct CisPeptide
 			{
 				ResidueName residue_name;
@@ -314,6 +316,7 @@ namespace BALL
 		{
 			RecordType record_type;
 			RecordName record_name;
+			///
 			struct UnitCell
 			{
 				Real     a;
@@ -335,11 +338,13 @@ namespace BALL
 			RecordName record_name;
 			IDcode     entry_code;
 			Character  chain_ID;
+			///
 			struct InitialSequence
 			{
 				Integer  number;
 				AChar    insertion_code;
 			} initial_sequence;
+			///
 			struct EndingSequence
 			{
 				Integer  number;
@@ -348,11 +353,13 @@ namespace BALL
 			LString6   sequence_database_name;
 			LString8   sequence_database_accession_code;
 			LString12  sequence_database_ID_code;
+			///
 			struct InitialDatabaseSegment
 			{
 				Integer  number;
 				AChar    insertion_code;
 			} initial_database_segment;
+			///
 			struct EndingDatabaseSegment
 			{
 				Integer  number;
@@ -360,20 +367,21 @@ namespace BALL
 			} ending_database_segment;
 		};
 
-		/**
-		*/
+		///
 		struct RecordEND
 		{
 			RecordType record_type;
 			RecordName record_name;
 		};
-		
+
+		///
 		struct RecordENDMDL
 		{
 			RecordType record_type;
 			RecordName record_name;
 		};
 		
+		///
 		struct RecordEXPDTA
 		{
 			RecordType   record_type;
@@ -382,6 +390,7 @@ namespace BALL
 			SList        technique;
 		};
 		
+		///
 		struct RecordFORMUL
 		{
 			RecordType record_type;
@@ -393,6 +402,7 @@ namespace BALL
 			PDBString  chemical_formula;
 		};
 		
+		///
 		struct RecordFTNOTE
 		{
 			RecordType record_type;
@@ -401,6 +411,7 @@ namespace BALL
 			PDBString  text;
 		};
 		
+		///
 		struct RecordHEADER
 		{
 			RecordType record_type;
@@ -410,12 +421,14 @@ namespace BALL
 			IDcode     ID_code;
 		};
 		
+		///
 		struct RecordHELIX
 		{
 			RecordType    record_type;
 			RecordName    record_name;
 			Integer       serial_number;
 			LString3      helix_ID;
+			///
 			struct InitialResidue
 			{
 				ResidueName residue_name;
@@ -423,6 +436,7 @@ namespace BALL
 				Integer     sequence_number;
 				AChar       insertion_code;
 			} initial_residue;
+			///
 			struct TerminalResidue
 			{
 				ResidueName residue_name;
@@ -435,6 +449,7 @@ namespace BALL
 			Integer       length;
 		};
 		
+		///
 		struct RecordHET
 		{
 			RecordType record_type;
@@ -447,6 +462,7 @@ namespace BALL
 			PDBString  text;
 		};
 		
+		///
 		struct RecordHETATM
 		{
 			RecordType  record_type;
@@ -466,6 +482,7 @@ namespace BALL
 			LString2    charge; 
 		};
 		
+		///
 		struct RecordHETNAM
 		{
 			RecordType   record_type;
@@ -475,10 +492,12 @@ namespace BALL
 			PDBString    chemical_name;
 		};
 		
+		///
 		struct RecordHYDBND
 		{
 			RecordType       record_type;
 			RecordName       record_name;
+			///
 			struct HydrogenPartnerAtom
 			{
 				Atom           atom_name;
@@ -491,6 +510,7 @@ namespace BALL
 					AChar        insertion_code;
 				} residue;
 			} hydrogen_partner_atom[2];
+			///
 			struct HydrogenAtom
 			{
 				Atom           atom_name;
@@ -506,13 +526,14 @@ namespace BALL
 			SymmetryOperator second_non_hydrogen_atom;
 		};
 		
+		///
 		struct RecordJRNL
 		{
 			RecordType record_type;
 			RecordName record_name;
 			LString    text;
 		};
-		
+		///
 		struct RecordKEYWDS
 		{
 			RecordType   record_type;
@@ -520,11 +541,12 @@ namespace BALL
 			Continuation continuation;
 			PDBList      keywords;
 		};
-		
+		///
 		struct RecordLINK
 		{
 			RecordType      record_type;
 			RecordName      record_name;
+			///			
 			struct LinkPartner
 			{
 				Atom          atom_name;
@@ -540,7 +562,7 @@ namespace BALL
 			SymmetryOperator first_atom;
 			SymmetryOperator second_atom;
 		};
-		
+		///
 		struct RecordMASTER
 		{
 			RecordType record_type;
@@ -558,14 +580,14 @@ namespace BALL
 			Integer    number_of_CONECT_records;
 			Integer    number_of_SEQRES_records;
 		};
-		
+		///
 		struct RecordMODEL
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Integer    model_serial_number;
 		};
-		
+		///
 		struct RecordMODRES
 		{
 			RecordType  record_type;
@@ -578,7 +600,7 @@ namespace BALL
 			ResidueName standard_residue_name;
 			PDBString   comment;
 		};
-		
+		///
 		struct RecordMTRIX1
 		{
 			RecordType record_type;
@@ -587,7 +609,7 @@ namespace BALL
 			Real       transformation_matrix[4];
 			Integer    is_given;
 		};
-		
+		///
 		struct RecordMTRIX2
 		{
 			RecordType record_type;
@@ -596,7 +618,7 @@ namespace BALL
 			Real       transformation_matrix[4];
 			Integer    is_given;
 		};
-		
+		///
 		struct RecordMTRIX3
 		{
 			RecordType record_type;
@@ -605,7 +627,7 @@ namespace BALL
 			Real       transformation_matrix[4];
 			Integer    is_given;
 		};
-		
+		///
 		struct RecordOBSLTE
 		{
 			RecordType  record_type;
@@ -615,28 +637,28 @@ namespace BALL
 			IDcode       entry_code;
 			IDcode       replacing_entry_code[8];
 		};
-		
+		///
 		struct RecordORIGX1
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Real       transformation_matrix[4];
 		};
-		
+		///
 		struct RecordORIGX2
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Real       transformation_matrix[4];
 		};
-		
+		///
 		struct RecordORIGX3
 		{
 			RecordType record_type;
 			RecordName record_name;
 			Real       transformation_matrix[4];
 		};
-		
+		///
 		struct RecordREMARK
 		{
 			RecordType record_type;
@@ -644,7 +666,7 @@ namespace BALL
 			Integer    remark_number;
 			LString    text;
 		};
-		
+		///
 		struct RecordREVDAT
 		{
 			RecordType   record_type;
@@ -657,8 +679,7 @@ namespace BALL
 			LString6     name_of_modified_record[4];
 		};
 
-		/**
-		*/
+		///
 		struct RecordSCALE1
 		{
 			RecordType record_type;
@@ -666,8 +687,7 @@ namespace BALL
 			Real       transformation_matrix[4];
 		};
 
-		/**
-		*/
+		///
 		struct RecordSCALE2
 		{
 			RecordType record_type;
@@ -675,8 +695,7 @@ namespace BALL
 			Real       transformation_matrix[4];
 		};
 
-		/**
-		*/
+		///
 		struct RecordSCALE3
 		{
 			RecordType record_type;
@@ -684,8 +703,7 @@ namespace BALL
 			Real       transformation_matrix[4];
 		};
 
-		/**
-		*/
+		///
 		struct RecordSEQRES
 		{
 			RecordType  record_type;
@@ -696,8 +714,7 @@ namespace BALL
 			ResidueName residue_name[13];
 		};
 
-		/**
-		*/
+		///
 		struct RecordSHEET
 		{
 			RecordType    record_type;
@@ -705,6 +722,7 @@ namespace BALL
 			Integer       strand_number;
 			LString3      sheet_ID;
 			Integer       number_of_strands;
+			///
 			struct InitialResidue
 			{
 				ResidueName residue_name;
@@ -712,6 +730,7 @@ namespace BALL
 				Integer     sequence_number;
 				AChar       insertion_code;
 			} initial_residue;
+			///
 			struct TerminalResidue
 			{
 				ResidueName residue_name;
@@ -721,6 +740,7 @@ namespace BALL
 			} terminal_residue;
 			Integer       sense_of_strand;
 			Atom          atom_name_in_current_strand;
+			///
 			struct ResidueInCurrentStrand
 			{
 				ResidueName residue_name;
@@ -729,6 +749,7 @@ namespace BALL
 				AChar       insertion_code;
 			} residue_in_current_strand;
 			Atom          atom_name_in_previous_strand;
+			///
 			struct ResidueInPreviousStrand
 			{
 				ResidueName residue_name;
@@ -738,8 +759,7 @@ namespace BALL
 			} residue_in_previous_strand;
 		};
 
-		/**
-		*/
+		///
 		struct RecordSIGATM
 		{
 			RecordType  record_type;
@@ -759,8 +779,7 @@ namespace BALL
 			LString2    charge; 
 		};
 
-		/**
-		*/
+		///
 		struct RecordSIGUIJ
 		{
 			RecordType  record_type;
@@ -783,8 +802,7 @@ namespace BALL
 			LString2    charge; 
 		};
 
-		/**
-		*/
+		///
 		struct RecordSITE
 		{
 			RecordType    record_type;
@@ -792,6 +810,7 @@ namespace BALL
 			Integer       sequence_number;
 			LString3      name;
 			Integer       number_of_residues;
+			///
 			struct Residue
 			{
 				ResidueName residue_name;
@@ -801,16 +820,17 @@ namespace BALL
 			} residue[4];
 		};
 
-		/**
-		*/
+		///
 		struct RecordSLTBRG
 		{
 			RecordType      record_type;
 			RecordName      record_name;
+			///
 			struct PartnerAtom
 			{
 				Atom          atom_name;
 				Character     alternate_location_indicator;
+				///
 				struct Residue
 				{
 					ResidueName residue_name;
@@ -823,8 +843,7 @@ namespace BALL
 			SymmetryOperator second_atom;
 		};
 
-		/**
-		*/
+		///
 		struct RecordSOURCE
 		{
 			RecordType        record_type;
@@ -833,13 +852,13 @@ namespace BALL
 			SpecificationList sources;
 		};
 
-		/**
-		*/
+		///
 		struct RecordSSBOND
 		{
 			RecordType    record_type;
 			RecordName    record_name;
 			Integer       serial_number;
+			///
 			struct PartnerResidue
 			{
 				ResidueName residue_name;

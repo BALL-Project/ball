@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.14 2003/12/15 02:38:22 amoll Exp $
+// $Id: kernel.doc,v 1.15 2004/02/18 23:24:06 oliver Exp $
 
 /** \defgroup ViewKernel Kernel
 		\ingroup Visualisation
@@ -9,12 +9,12 @@
 
 /** \defgroup ViewKernelClient Client/Server request handling
 		\ingroup ViewKernel
-		With the help of the class <it>Client</it> it is possible
-		to transfer a \link Composite Composite \endlink to a <it>VIEW</it> application with
+		With the help of the class <em>Client</em> it is possible
+		to transfer a \link BALL::Composite Composite \endlink to a <em>VIEW</em> application with
 		a Server. 
-		The class <it>QTTimer</it> is a timer class that is necessary for the
-		\link Server Server \endlink class. It queries every given interval whether new
-		data from the client is accessable and directs it to the <it>VIEW</it>
+		The class <em>QTTimer</em> is a timer class that is necessary for the
+		\link BALL::VIEW::Server Server \endlink class. It queries every given interval whether new
+		data from the client is accessable and directs it to the <em>VIEW</em>
 		application.
  */
 
@@ -22,10 +22,10 @@
 		 \ingroup ViewKernel
 		 These classes are responsible that the widgets and dialogs
 		 can communicate with each other. If a new widget or dialog
-		 is created it must be derived from the class \link ConnectionObject ConnectionObject \endlink.
+		 is created it must be derived from the class \link BALL::ConnectionObject ConnectionObject \endlink.
 		 This class defines the interface and the properties needed to 
 		 communicate with other widgets.
-		 The class \link Message Message \endlink and the various derived classes define
+		 The class \link BALL::VIEW::Message Message \endlink and the various derived classes define
 		 some useful messages for special events.
  */
 
@@ -37,7 +37,7 @@
 
 /**  \defgroup ViewKernelGeometricPrimitives Geometric primitives and their management
 		 \ingroup ViewKernel
-		 The class \link GeometricObject GeometricObject \endlink is the most important base class
+		 The class \link BALL::VIEW::GeometricObject GeometricObject \endlink is the most important base class
 		 for all primitives. It contains the base properties and base
 		 interface definition all primitives must have.
 		 The other classes manage the GeometricObjects.

@@ -1,4 +1,4 @@
-// $Id: datatype.doc,v 1.8 2003/12/15 02:58:52 amoll Exp $
+// $Id: datatype.doc,v 1.9 2004/02/18 23:24:05 oliver Exp $
 
 /** \defgroup ViewDatatypes Datatypes for the VIEW framework
 		\ingroup Visualisation
@@ -12,9 +12,9 @@
 				color. Because of the conversion class ColorUnit different
 				types of input parameter are possible.
 				The class ColorHSV uses the HSV parameter to define a
-				color. It uses the class ColorUnit for the <it>S</it> and <it>V</it> component.
-				These two components as all RGBA components are of range <it>0 - 255</it>.
-				The <it>H</it> component however is of range <it>0 - 360</it>. Therefore
+				color. It uses the class ColorUnit for the <em>S</em> and <em>V</em> component.
+				These two components as all RGBA components are of range <em>0 - 255</em>.
+				The <em>H</em> component however is of range <em>0 - 360</em>. Therefore
 				the class ColorUnitHue is used for different types of input
 				parameter.
  */

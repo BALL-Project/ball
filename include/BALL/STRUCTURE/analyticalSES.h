@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalSES.h,v 1.14 2003/08/26 08:04:51 oliver Exp $
+// $Id: analyticalSES.h,v 1.15 2004/02/18 23:24:05 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
@@ -24,7 +24,7 @@ namespace BALL
 			?????		
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
-			@return the SES area in $\AA^2$
+			@return the SES area in \f$\AA^2\f$
     	
 			\ingroup  Surface
 	*/
@@ -36,7 +36,7 @@ namespace BALL
 			?????
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
-			@return the SES area in $\AA^2$
+			@return the SES area in \f$\AA^2\f$
 
 			\ingroup  Surface
 	*/
@@ -48,7 +48,7 @@ namespace BALL
 			?????
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
-			@return the volume in $\AA^3$
+			@return the volume in \f$\AA^3\f$
 
 			\ingroup  Surface
 	*/

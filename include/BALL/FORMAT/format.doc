@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: format.doc,v 1.12 2003/08/26 08:04:14 oliver Exp $
+// $Id: format.doc,v 1.13 2004/02/18 23:24:04 oliver Exp $
 //
 
 /** \defgroup Format File Formats
@@ -9,13 +9,13 @@
 		BALL supports a number of different file formats and offers 
 		a set of classes do read and write thos formats.
 		Some of these classes provide interfaces for the format
-		classes, e.g. <link> GenericMolFile GenericMolFile <endlink>, which implements a
+		classes, e.g. \link BALL::GenericMolFile GenericMolFile \endlink, which implements a
 		generic interface for molecular file formats. Others
 		implement specific formats. In addition, classes like
-		<link> LineBasedFile LineBasedFile <endlink> provide simple interface to allow
+		\link BALL::LineBasedFile LineBasedFile \endlink provide simple interface to allow
 		the user the rapid implementation of user-defined file	
 		formats or for parsing specialized formats.
-		All file format classes are derived from <link> File File <endlink>
+		All file format classes are derived from \link BALL::File File \endlink
 		and provide the features implemented there, e.g.
 		on-the-fly transformation and URL retrieval.
 */

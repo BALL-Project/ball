@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.60 2003/08/26 08:04:20 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.61 2004/02/18 23:24:04 oliver Exp $
 //
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -179,21 +179,21 @@ namespace BALL
 	/**	Solve a system of linear equations.
 		  Given a system of linear equations \par
 			 \par
-			$
+			\f$
 				\begin{array}{ccccccccc}
-				 a_{1,1} x_1 & + & a_{1,2} x_2 & + & \ldots & + & a_{1,n} x_n & = & a_{1,(n+1)} \par
-				 a_{2,1} x_1 & + & a_{2,2} x_2 & + & \ldots & + & a_{2,n} x_n & = & a_{2,(n+1)} \par
-				   \vdots    &   &   \vdots    &   & \ddots &   &   \vdots    &   &   \vdots \par
-				 a_{n,1} x_1 & + & a_{n,2} x_2 & + & \ldots & + & a_{n,n} x_n & = & a_{n,(n+1)} \par
+				 a_{1,1} x_1 & + & a_{1,2} x_2 & + & \ldots & + & a_{1,n} x_n & = & a_{1,(n+1)} \\
+				 a_{2,1} x_1 & + & a_{2,2} x_2 & + & \ldots & + & a_{2,n} x_n & = & a_{2,(n+1)} \\
+				   \vdots    &   &   \vdots    &   & \ddots &   &   \vdots    &   &   \vdots \\
+				 a_{n,1} x_1 & + & a_{n,2} x_2 & + & \ldots & + & a_{n,n} x_n & = & a_{n,(n+1)} \\
 				\end{array}
-			$
+			\f$
 			 \par
-			in matrix form, identify the solution $x = (x_1, x_2,\ldots x_N)$. \par
-			<tt>m</tt> should point to a C-style array containing the $n\times(n+1)$ matrix <b>A</b>. \par
+			in matrix form, identify the solution \f$x = (x_1, x_2,\ldots x_N)\f$. \par
+			<tt>m</tt> should point to a C-style array containing the \f$n\times(n+1)\f$ matrix <b>A</b>. \par
 			The elements of <b>A</b> are row-ordered, i.e., they are ordered like this: \par
-			$
+			\f$
 				a_{1,1}, a_{1,2}, \cdot, a_{1,(n+1)}, a_{2,1}, \ldots a_{n,(n+1)}
-			$ \par
+			\f$ \par
 			<tt>x</tt> points to a C-style array that will contain the solution vector <b>x</b>
 			upon successful termination of the function. \par
 			If there is no solution or the system is under-determined, return <b>false</b>.
@@ -289,8 +289,8 @@ namespace BALL
 #undef BALL_MATRIX_CELL
 
 	/**	Solve a system of two equations of the form
-		  $a_1 x_1 + b_1 x_2 = c_1$ and 
-		  $a_2 x_1 + b_2 x_2 = c_2$.
+		  \f$a_1 x_1 + b_1 x_2 = c_1\f$ and 
+		  \f$a_2 x_1 + b_2 x_2 = c_2\f$.
 			@param	a1- c2 constants of the system
 			@param x1 the first solution
 			@param x2 the second solution
@@ -316,7 +316,7 @@ namespace BALL
 	}
 
 	/**	Solve a quadratic equation of the form
-			a $x^2 + b x + c = 0$.
+			a \f$x^2 + b x + c = 0\f$.
 			@param	a
 			@param	b 
 			@param	c 

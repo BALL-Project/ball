@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.h,v 1.24 2003/08/26 08:04:52 oliver Exp $
+// $Id: numericalSAS.h,v 1.25 2004/02/18 23:24:05 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
@@ -82,9 +82,9 @@ namespace BALL
 			does not contain any triangles. The normals for each point
 			normals to the SAS in that point, their length equals the 
 			fraction of the surface area represented by this point in $ A^2$:
-			\[	
+			\f[	
 					|\vec{n_i}| = \frac{\mathrm{SAS\quad\ of \quad atom} \quad i}{\mathrm{number\quad of\quad points\quad on\quad the\quad SAS\quad of\quad atom} \quad i}     
-			\]
+			\f]
 			Atoms with a radius of 0 are ignored.
 			@param  surface_points a surface object containing the point coordinates and their normals (returned)
 			@param	fragment the kernel object containing the atoms

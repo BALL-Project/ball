@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.68 2004/02/18 18:19:05 anhi Exp $
+// $Id: vector3.h,v 1.69 2004/02/18 23:24:05 oliver Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -180,8 +180,8 @@ namespace BALL
 
 		/**	Assign from spherical polar coordinates.
 				The radius describes the distance of the point from the origin. \par
-				<tt>phi</tt>	ranges from 0 to $2 \pi$, <tt>theta</tt> ranges from 0 (north pole, positive z-axis)
-				to $\pi$ (south pole, negative z-axis). \par
+				<tt>phi</tt>	ranges from 0 to \f$2 \pi\f$, <tt>theta</tt> ranges from 0 (north pole, positive z-axis)
+				to \f$\pi\f$ (south pole, negative z-axis). \par
 				Coordinates are calculated according to the following formulae: \par
 				\[
 					\begin{aligned}
@@ -261,7 +261,7 @@ namespace BALL
 
 		/**	Return the length of the vector.
 				The length of the vector is calculated as
-				$\sqrt{x^2 + y^2 + z^2}$.
+				\f$\sqrt{x^2 + y^2 + z^2}\f$.
 				@return T, the vector length
 		*/	
 		T getLength() const
@@ -270,14 +270,14 @@ namespace BALL
 		/**	Return the squared length of the vector.
 				This method avoids the square root needed in getLength,
 				so this method is preferred if possible.
-				@return T, $x^2 + y^2 + z^2$
+				@return T, \f$x^2 + y^2 + z^2\f$
 		*/
 		T getSquareLength() const
 			throw();
 
 		/**	Normalize the vector.
 				The vector is scaled with its length:
-				$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}$.
+				\f$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}\f$.
 				@return T, a reference to the normalized vector
 				@exception DivisionByZero if the length of the vector is 0
 		*/

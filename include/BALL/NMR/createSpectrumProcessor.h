@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: createSpectrumProcessor.h,v 1.23 2003/08/26 08:04:44 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.24 2004/02/18 23:24:05 oliver Exp $
 //
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -164,11 +164,11 @@ namespace BALL
 			representation of the spectrum. The spectrum synthesis is
 			based upon the assumption of a Lorentzian line shape. Peak width,
 			position, and height are taken from each individual peak of the 
-			peak list. Each point in the  \link RegularData1D RegularData1D \endlink  array is assigned
+			peak list. Each point in the  \link TRegularData1D RegularData1D \endlink  array is assigned
 			the sum of all Lorentzians centered at the peak positions:
-			\begin{equation}
-					S(\delta) = \sum_{i} \frac{h_i}{w_i (\delta_i-\delta)^2},
-			\end{equation}
+			\f[
+					S(\delta) = \sum_{i} \frac{h_i}{w_i (\delta_i-\delta)^2}
+			\f]  
 			where $\delta$ is the shift coordinate and each peak is defined
 			by its position $\delta_i$, intensity $h_i$, and width $w_i$.
 	\ingroup Spectra

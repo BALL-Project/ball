@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forEach.h,v 1.10 2003/08/26 08:04:10 oliver Exp $
+// $Id: forEach.h,v 1.11 2004/02/18 23:24:03 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_FOREACH_H
@@ -14,14 +14,14 @@
 		Use this macro for convenient iteration over BALL container 
 		classes. \par
 		<b>Example:</b> \par
-\begin{verbatim}
+\verbatim
 		HashMap<int,int> hm;
 		HashMap<int,int>::Iterator it;
 		BALL_FOREACH(p,it)
 		{
 			cout << it->first << endl;
 		}
-\end{verbatim}
+\endverbatim
 		
 		@param container an instance of a BALL container class
 		@param element_iterator an iterator of the container class

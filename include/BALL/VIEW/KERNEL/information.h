@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.4 2004/02/18 18:19:06 anhi Exp $
+// $Id: information.h,v 1.5 2004/02/18 23:24:06 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_INFORMATION_H
@@ -63,7 +63,7 @@ namespace BALL
 			};
 			//@}
 
-			/**	@name	Constructors
+			/**	@name	Constructors and Destructor
 			*/	
 			//@{
 
@@ -73,7 +73,6 @@ namespace BALL
 			Information()
 				throw();
 
-			//@} /** @name Destructors */ //@{
 
 			/** Destructor.
 			*/

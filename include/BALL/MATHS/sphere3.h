@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.35 2003/08/26 08:04:22 oliver Exp $
+// $Id: sphere3.h,v 1.36 2004/02/18 23:24:04 oliver Exp $
 //
 
 #ifndef BALL_MATHS_SPHERE3_H
@@ -305,7 +305,7 @@ namespace BALL
 
 	//@}
 
-	/**	The default sphere type.
+	/**	Default sphere type.
 			If double precision is not needed, <tt>TSphere3<float></tt> should
 			be used. It is predefined as <tt>Sphere3</tt> for convenience.
 	*/

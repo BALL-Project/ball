@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.19 2004/02/18 18:19:07 anhi Exp $
+// $Id: colorProcessor.h,v 1.20 2004/02/18 23:24:06 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -98,9 +98,11 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			//@} /**	@name	Asignment */ //@{
+			//@} 
+			/**	@name	Asignment */ 
+			//@{
 
-			/** Assignment.
+			/** Assignment
 			*/
 			void set(const ColorProcessor& color_calculator)
 				throw();
@@ -112,7 +114,8 @@ namespace BALL
 				throw();
 
 			//@} 
-			/**	@name	Accessors: inspectors and mutators */ 
+
+			/**	@name	Accessors */ 
 			//@{
 
 			/** Change the default color.

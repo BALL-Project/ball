@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.41 2003/08/26 08:04:05 oliver Exp $
+// $Id: exception.h,v 1.42 2004/02/18 23:24:02 oliver Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -523,7 +523,7 @@ namespace BALL
         and the location (file, line number). The following code block
         can thus be used to catch any BALL exceptions and convert them to
         human readable information:
-				\begin{verbatim}
+				\verbatim
 				try
 				{
 					.... // some code which potentially throws an exception
@@ -532,7 +532,7 @@ namespace BALL
 				{
 					Log.error() << "caught exception: " << e << std::endl;
 				}
-				\end{verbatim}
+				\endverbatim
 				 \ingroup Common
 		*/
 		std::ostream& operator << (std::ostream& os, const Exception::GeneralException& e);

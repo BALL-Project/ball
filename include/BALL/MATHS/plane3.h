@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.34 2004/02/18 18:19:04 anhi Exp $
+// $Id: plane3.h,v 1.35 2004/02/18 23:24:04 oliver Exp $
 //
 
 #ifndef BALL_MATHS_PLANE3_H
@@ -245,7 +245,7 @@ namespace BALL
 
 		/**	Normalize the the normal of the plane.
 				The normal is scaled with its length:
-				$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}$.
+				\f$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}\f$.
 				@exception DivisionByZero if the length of the normal is 0
 		*/
 		void normalize()
@@ -263,7 +263,7 @@ namespace BALL
 
 		/**	Hessify the plane.
 				The normal is scaled with its length:
-				$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}$.
+				\f$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}\f$.
 				If the dot product of the point with the normal
 				is less then zero, the normal is negated.
 		*/

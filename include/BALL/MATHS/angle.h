@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.41 2004/02/18 18:19:03 anhi Exp $
+// $Id: angle.h,v 1.42 2004/02/18 23:24:04 oliver Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -218,8 +218,8 @@ namespace BALL
 
 		/**	Normalize the angle over a given range.
 				<tt>RANGE__UNLIMITED = 0</tt> no limitations.
-				<tt>RANGE__UNSIGNED  = 1</tt> $0 \le \mathtt{angle} \le 360, 0 \le angle \le 2 \pi$.
-				<tt>RANGE__SIGNED    = 2</tt> $-180 \le \mathtt{angle} \le 180, -\pi \le \mathtt{angle} \le \pi$.
+				<tt>RANGE__UNSIGNED  = 1</tt> \f$0 \le \mathtt{angle} \le 360, 0 \le angle \le 2 \pi\f$.
+				<tt>RANGE__SIGNED    = 2</tt> \f$-180 \le \mathtt{angle} \le 180, -\pi \le \mathtt{angle} \le \pi\f$.
 				@param range the range of the angle
 		*/		
 		void normalize(Range range)

@@ -1,11 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forEach.h,v 1.15 2003/08/26 08:04:17 oliver Exp $
+// $Id: forEach.h,v 1.16 2004/02/18 23:24:04 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_FOREACH_H
 #define BALL_KERNEL_FOREACH_H
+
+// This is mostly to allow Doxygen to put the macros to where they belong
+namespace BALL
+{
 
 /** @name Convenient iteration macros
 * 	 \ingroup KernelMiscellaneous 
@@ -15,8 +19,8 @@
 
 /** Molecule iterator macro.
     Convenience macro for easy iteration over all molecules of {\em molecule_container}.
-   	@param   molecule_container container of  \link Molecule Molecule \endlink  instances
-    @param   molecule_iterator  \link MoleculeIterator MoleculeIterator \endlink  instance
+   	@param   molecule_container container of  \link BALL::Molecule Molecule \endlink  instances
+    @param   molecule_iterator  \link BALL::MoleculeIterator MoleculeIterator \endlink  instance
     @see     Molecule
     @see     MoleculeIterator
 */
@@ -27,8 +31,8 @@ for (molecule_iterator = (molecule_container).beginMolecule(); \
 
 /** Fragment iterator macro.
     Convenience macro for easy iteration over all fragments of {\em fragment_container}.
-    @param   fragment_container container of  \link Fragment Fragment \endlink  instances
-    @param   fragment_iterator  \link FragmentIterator FragmentIterator \endlink  instance
+    @param   fragment_container container of  \link BALL::Fragment Fragment \endlink  instances
+    @param   fragment_iterator  \link BALL::FragmentIterator FragmentIterator \endlink  instance
     @see     Fragment
     @see     FragmentIterator
 */
@@ -39,8 +43,8 @@ for (fragment_iterator = (fragment_container).beginFragment(); \
 
 /** AtomContainer iterator macro.
     Convenience macro for easy iteration over all atom containers of {\em atom_container}.
-    @param   atom_containers container of  \link AtomContainer AtomContainer \endlink  instances
-    @param   atom_container_iterator  \link AtomContainerIterator AtomContainerIterator \endlink  instance
+    @param   atom_containers container of  \link BALL::AtomContainer AtomContainer \endlink  instances
+    @param   atom_container_iterator  \link BALL::AtomContainerIterator AtomContainerIterator \endlink  instance
     @see     AtomContainer
     @see     AtomContainerIterator
 */
@@ -51,8 +55,8 @@ for (atom_container_iterator = (atom_containers).beginAtomContainer(); \
 
 /** Atom iterator macro.
     Convenience macro for easy iteration over all atoms of {\em atom_container}.
-    @param   atom_container container of  \link Atom Atom \endlink  instances
-    @param   atom_iterator  \link AtomIterator AtomIterator \endlink  instance
+    @param   atom_container container of  \link BALL::Atom Atom \endlink  instances
+    @param   atom_iterator  \link BALL::AtomIterator AtomIterator \endlink  instance
     @see     Atom
     @see     AtomIterator
 */
@@ -63,8 +67,8 @@ for (atom_iterator = (atom_container).beginAtom(); \
 
 /** Atom bond iterator macro.
     Convenience macro for easy iteration over all bonds of {\em bond_container}.
-    @param   bond_container  \link Atom Atom \endlink  instance container of  \link Bond Bond \endlink  instances
-    @param   bond_iterator  \link AtomBondIterator AtomBondIterator \endlink  instance
+    @param   bond_container  \link BALL::Atom Atom \endlink  instance container of  \link BALL::Bond Bond \endlink  instances
+    @param   bond_iterator  \link BALL::AtomBondIterator AtomBondIterator \endlink  instance
     @see     Atom
     @see     Bond
     @see     AtomBondIterator
@@ -76,9 +80,9 @@ for (bond_iterator = (bond_container).beginBond(); \
 
 /** Atom pair iterator macro.
     Convenience macro for easy iteration over all atom pairs of {\em atom_container}.
-    @param   atom_container container of  \link Atom Atom \endlink  instances
-    @param   first_atom_iterator first  \link AtomIterator AtomIterator \endlink  instance
-    @param   second_atom_iterator second  \link AtomIterator AtomIterator \endlink  instance
+    @param   atom_container container of  \link BALL::Atom Atom \endlink  instances
+    @param   first_atom_iterator first  \link BALL::AtomIterator AtomIterator \endlink  instance
+    @param   second_atom_iterator second  \link BALL::AtomIterator AtomIterator \endlink  instance
     @see     Atom
     @see     AtomIterator
 */
@@ -92,9 +96,9 @@ for (first_atom_iterator = (atom_container).beginAtom(); \
 
 /** Bond iterator macro.
     Convenience macro for easy iteration over all bonds of all atoms in {\em atom_container}.
-    @param   atom_container container of  \link Atom Atom \endlink  instances
-    @param   atom_iterator  \link AtomIterator AtomIterator \endlink  instance which is the container of  \link Bond Bond \endlink  instances
-    @param   bond_iterator  \link AtomBondIterator AtomBondIterator \endlink  instance
+    @param   atom_container container of  \link BALL::Atom Atom \endlink  instances
+    @param   atom_iterator  \link BALL::AtomIterator AtomIterator \endlink  instance which is the container of  \link BALL::Bond Bond \endlink  instances
+    @param   bond_iterator  \link BALL::AtomBondIterator AtomBondIterator \endlink  instance
     @see     Atom
     @see     Bond
     @see     AtomIterator
@@ -112,9 +116,9 @@ for (atom_iterator = (atom_container).beginAtom(); \
 /** Intermolecular bond iterator macro.
     Convenience macro for easy iteration over all 
 		intermolecular bonds of atoms in {\em atom_container}.
-    @param   atom_container container of  \link Atom Atom \endlink  instances
-    @param   atom_iterator  \link AtomIterator AtomIterator \endlink  instance which is the container of  \link Bond Bond \endlink  instances
-    @param   bond_iterator  \link AtomBondIterator AtomBondIterator \endlink  instance
+    @param   atom_container container of  \link BALL::Atom Atom \endlink  instances
+    @param   atom_iterator  \link BALL::AtomIterator AtomIterator \endlink  instance which is the container of  \link BALL::Bond Bond \endlink  instances
+    @param   bond_iterator  \link BALL::AtomBondIterator AtomBondIterator \endlink  instance
 */
 #define BALL_FOREACH_INTERBOND(atom_container, atom_iterator, bond_iterator) \
 for (atom_iterator = (atom_container).beginAtom(); \
@@ -129,9 +133,9 @@ for (atom_iterator = (atom_container).beginAtom(); \
 /** Intramolecular bond iterator macro.
     Convenience macro for easy iteration over all 
 		intramolecular (internal) bonds of {\em atom_container}.
-    @param   atom_container container of  \link Atom Atom \endlink  instances
-    @param   atom_iterator  \link AtomIterator AtomIterator \endlink  instance which is the container of  \link Bond Bond \endlink  instances
-    @param   bond_iterator  \link AtomBondIterator AtomBondIterator \endlink  instance
+    @param   atom_container container of  \link BALL::Atom Atom \endlink  instances
+    @param   atom_iterator  \link BALL::AtomIterator AtomIterator \endlink  instance which is the container of  \link BALL::Bond Bond \endlink  instances
+    @param   bond_iterator  \link BALL::AtomBondIterator AtomBondIterator \endlink  instance
 */
 #define BALL_FOREACH_INTRABOND(atom_container, atom_iterator, bond_iterator) \
 for (atom_iterator = (atom_container).beginAtom(); \
@@ -144,8 +148,8 @@ for (atom_iterator = (atom_container).beginAtom(); \
       
 /** Protein iterator macro.
     Convenience macro for easy iteration over all proteins of {\em protein_container}.
-    @param   protein_container container of  \link Protein Protein \endlink  instances
-    @param   protein_iterator  \link ProteinIterator ProteinIterator \endlink  instance
+    @param   protein_container container of  \link BALL::Protein Protein \endlink  instances
+    @param   protein_iterator  \link BALL::ProteinIterator ProteinIterator \endlink  instance
     @see     Protein
 */
 #define BALL_FOREACH_PROTEIN(protein_container, protein_iterator) \
@@ -155,8 +159,8 @@ for (protein_iterator = (protein_container).beginProtein(); \
 
 /** Chain iterator macro.
     Convenience macro for easy iteration over all chains of {\em chain_container}.
-    @param   chain_container container of  \link Chain Chain \endlink  instances
-    @param   chain_iterator  \link ChainIterator ChainIterator \endlink  instance
+    @param   chain_container container of  \link BALL::Chain Chain \endlink  instances
+    @param   chain_iterator  \link BALL::ChainIterator ChainIterator \endlink  instance
 */
 #define BALL_FOREACH_CHAIN(chain_container, chain_iterator) \
 for (chain_iterator = (chain_container).beginChain(); \
@@ -166,8 +170,8 @@ for (chain_iterator = (chain_container).beginChain(); \
 /** SecondaryStructure iterator macro.
     Convenience macro for easy iteration over all secondary structures 
 		of {\em secondary_structure_container}.
-    @param   secondary_structure_container container of  \link SecondaryStructure SecondaryStructure \endlink  instances
-    @param   secondary_structure_iterator  \link SecondaryStructureIterator SecondaryStructureIterator \endlink  instance
+    @param   secondary_structure_container container of  \link BALL::SecondaryStructure SecondaryStructure \endlink  instances
+    @param   secondary_structure_iterator  \link BALL::SecondaryStructureIterator SecondaryStructureIterator \endlink  instance
 */
 #define BALL_FOREACH_SECONDARYSTRUCTURE(secondary_structure_container, secondary_structure_iterator) \
 for (secondary_structure_iterator = (secondary_structure_container).beginSecondaryStructure(); \
@@ -176,8 +180,8 @@ for (secondary_structure_iterator = (secondary_structure_container).beginSeconda
 
 /** Residue iterator macro.
     Convenience macro for easy iteration over all residues of {\em residue_container}.
-    @param   residue_container container of  \link Residue Residue \endlink  instances
-    @param   residue_iterator  \link ResidueIterator ResidueIterator \endlink  instance
+    @param   residue_container container of  \link BALL::Residue Residue \endlink  instances
+    @param   residue_iterator  \link BALL::ResidueIterator ResidueIterator \endlink  instance
 */
 #define BALL_FOREACH_RESIDUE(residue_container, residue_iterator) \
 for (residue_iterator = (residue_container).beginResidue(); \
@@ -186,14 +190,16 @@ for (residue_iterator = (residue_container).beginResidue(); \
 
 
 /** PDBAtom iterator macro.
-    Convenience macro for easy iteration over all  \link PDBAtom PDBAtom \endlink s of {\em pdb_atom_container}.
-    @param   pdb_atom_container container of  \link PDBAtom PDBAtom \endlink  instances
-    @param   pdb_atom_iterator  \link PDBAtomIterator PDBAtomIterator \endlink  instance
+    Convenience macro for easy iteration over all  \link BALL::PDBAtom PDBAtom \endlink s of {\em pdb_atom_container}.
+    @param   pdb_atom_container container of  \link BALL::PDBAtom PDBAtom \endlink  instances
+    @param   pdb_atom_iterator  \link BALL::PDBAtomIterator PDBAtomIterator \endlink  instance
 */
 #define BALL_FOREACH_PDBATOM(pdb_atom_container, pdb_atom_iterator) \
 for (pdb_atom_iterator = (pdb_atom_container).beginPDBAtom(); \
      !pdb_atom_iterator.isEnd(); ++pdb_atom_iterator)
 
 //@}
+
+} // namespace BALL
 
 #endif // BALL_KERNEL_FOREACH_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.47 2004/02/18 18:19:05 anhi Exp $
+// $Id: vector4.h,v 1.48 2004/02/18 23:24:05 oliver Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR4_H
@@ -128,7 +128,7 @@ namespace BALL
 		//@{
 	
 		/**	Assign from an array.
-				Assign the four components <tt>x</tt>, <tt>y</tt>, <tt>z</tt> and {\tt h} from
+				Assign the four components <tt>x</tt>, <tt>y</tt>, <tt>z</tt> and <tt>h</tt> from
 				the first four elements of the array pointed to by <tt>ptr</tt>.
 				@param ptr an array
 				@exception Nullpointer if <tt>ptr == 0</tt>
@@ -211,7 +211,7 @@ namespace BALL
 
 		/**	Return the length of the vector.
 				The length of the vector is calculated as
-				$\sqrt{x^2 + y^2 + z^2 + h^2}$.
+				\f$\sqrt{x^2 + y^2 + z^2 + h^2}\f$.
 				@return T, the vector length
 		*/	
 		T getLength() const
@@ -220,14 +220,14 @@ namespace BALL
 		/**	Return the squared length of the vector.
 				This method avoids the square root needed in getLength,
 				so this method should be preferred if possible.
-				@return T, $x^2 + y^2 + z^2 + h^2$
+				@return T, \f$x^2 + y^2 + z^2 + h^2\f$
 		*/
 		T getSquareLength() const
       throw();
 
 		/**	Normalize the vector.
 				The vector is scaled with its length:
-				$\{x|y|z|h\} *= \sqrt{x^2 + y^2 + z^2 + h^2}$.
+				\f$\{x|y|z|h\} *= \sqrt{x^2 + y^2 + z^2 + h^2}\f$.
 				@return T, a reference to {\em *this} vector
 				@exception DivisionByZero if the length of the vector is 0
 		*/
@@ -286,14 +286,14 @@ namespace BALL
 
 		/**	Subtract a vector from this vector.
 				@param vector the vector to subtract
-				@return TVector4, {\em *this}
+				@return TVector4 {\em *this}
 		*/
 		TVector4& operator -= (const TVector4& vector)
       throw();
 
 		/**	Scalar product.
 				Return <tt>TVector4(x * scalar, y * scalar, z * scalar, h * scalar)</tt>.
-				@param scalar, the scalar to multiply by
+				@param scalar the scalar to multiply by
 				@return TVector4 the scalar product of this vector and <tt>scalar</tt>
 		*/
 		TVector4 operator * (const T& scalar)
@@ -354,7 +354,7 @@ namespace BALL
 			
 		/**	Equality operator.
 				The function Maths::isEqual is used to compare the values. 
-				 \link Maths::isEqual Maths::isEqual \endlink 
+				 \link isEqual Maths::isEqual \endlink 
 				@return bool, <b>true</b> if all four vector components are equal, <b>false</b> otherwise
 		*/
 		bool operator == (const TVector4& vector) const

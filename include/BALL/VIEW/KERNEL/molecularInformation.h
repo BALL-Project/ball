@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.4 2004/02/18 18:19:07 anhi Exp $
+// $Id: molecularInformation.h,v 1.5 2004/02/18 23:24:06 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #define BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
@@ -60,7 +60,9 @@ namespace BALL
 				TYPE__ATOM                 = 7
 			};
 
-			//@} /**	@name	Constructors and Destructors */	//@{
+			//@} 
+			/**	@name	Constructors and Destructors */	
+			//@{
 
 			/** Default Constructor.
 					Calls clear.
@@ -92,16 +94,13 @@ namespace BALL
 					\see     Type
 					\see     visit
 			*/
-			Type getType() const
-			  throw() { return type_;}
+			Type getType() const throw() { return type_;}
 
 			///
-			String getName() const
-				throw() { return name_;}
+			String getName() const throw() { return name_;}
 
 			///
-			String getTypeName() const
-				throw() { return type_name_;}
+			String getTypeName() const throw() { return type_name_;}
 
 			/** Visit method.
 					This method tries to determine the name and the type of the Composite

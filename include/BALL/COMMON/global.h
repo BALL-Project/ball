@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.19 2003/08/26 08:04:05 oliver Exp $
+// $Id: global.h,v 1.20 2004/02/18 23:24:03 oliver Exp $
 //
 
 #ifndef BALL_COMMON_GLOBAL_H
@@ -67,7 +67,7 @@ namespace BALL
 
 	/**	Index type.
 			Use this type to represent indices (e.g. in strings or other sequences).
-			Theses indices may be signed, contrary to the  \link Size Size \endlink  type.
+			Theses indices may be signed, contrary to the  \link ::Size Size \endlink  type.
 			 \par
 			<b>Size:</b> 32 bit \par
 			<b>persistent</b>
@@ -93,8 +93,7 @@ namespace BALL
 	typedef time_t 	Time;
 
 	/**	HashIndex type.
-			Use this type to access the result of a hash functions. All hash functions
-			defined in namespace  \link Hashing Hashing \endlink  return a HashIndex. HashIndex is unsigned.
+			Use this type to access the result of a hash functions. HashIndex is unsigned.
 			 \par
 			<b>Size:</b> 32 bit \par
 			<b>persistent</b>
@@ -103,7 +102,7 @@ namespace BALL
 
 	/**	Position type.
 			Use this type to represent positions (e.g. in a container) that
-			cannot be negative (contrary to  \link Index Index \endlink ).
+			cannot be negative (contrary to  \link ::Index Index \endlink ).
 			 \par
 			<b>Size:</b> 32 bit \par
 			<b>persistent</b>
