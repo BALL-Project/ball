@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.11 2004/02/23 17:26:09 anhi Exp $
+// $Id: cartoonModel.h,v 1.12 2004/02/24 17:16:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -132,6 +132,8 @@ namespace BALL
 			std::vector<Vector3> spline_;
 
 			Composite* last_chain_;
+
+			SplinePoint last_spline_point_;
 
 			float helix_radius_;
 			float arrow_width_;
