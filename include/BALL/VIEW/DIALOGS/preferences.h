@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.10 2004/05/27 19:49:48 oliver Exp $
+// $Id: preferences.h,v 1.11 2004/09/01 14:28:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -95,6 +95,10 @@ namespace BALL
 					\see    fetchPreferences
 			*/
 			void writePreferences(INIFile &inifile)
+				throw();
+
+			///
+			const QWidget* currentPage() const
 				throw();
 
 			public slots:

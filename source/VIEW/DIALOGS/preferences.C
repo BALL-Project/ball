@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.8 2004/01/18 13:40:59 amoll Exp $
+// $Id: preferences.C,v 1.9 2004/09/01 14:28:29 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -112,6 +112,12 @@ namespace BALL
 				list_box->setCurrentItem(nr);
 			}
 			widget_stack->raiseWidget(nr + 1);
+		}
+
+		const QWidget* Preferences::currentPage() const
+			throw()
+		{
+			return widget_stack->visibleWidget();
 		}
 		
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.124 2004/08/31 14:33:07 amoll Exp $
+// $Id: scene.C,v 1.125 2004/09/01 14:24:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1076,10 +1076,23 @@ namespace BALL
 		void Scene::defaultPreferences()
 			throw()
 		{
+			// are we initialized ?
 			if (light_settings_ == 0) return;
-			stage_settings_->setDefaultValues();
-			light_settings_->setDefaultValues();
-			material_settings_->setDefaultValues();
+
+			const QWidget* current_page = getMainControl()->getPreferences()->currentPage();
+
+			if (current_page == stage_settings_)
+			{
+				stage_settings_->setDefaultValues();
+			}
+			else if (current_page == light_settings_)
+			{
+				light_settings_->setDefaultValues();
+			}
+			else if (current_page == material_settings_)
+			{
+				material_settings_->setDefaultValues();
+			}
 		}
 
 

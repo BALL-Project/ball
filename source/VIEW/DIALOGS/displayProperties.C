@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.79 2004/09/01 14:14:03 amoll Exp $
+// $Id: displayProperties.C,v 1.80 2004/09/01 14:26:23 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -754,8 +754,19 @@ void DisplayProperties::applyPreferences()
 void DisplayProperties::defaultPreferences()
 	throw()
 {
-	if (model_settings_    != 0)    model_settings_->setDefaultValues();
-	if (coloring_settings_ != 0) coloring_settings_->setDefaultValues();
+	// are we initialized ?
+	if (model_settings_    == 0)  return;
+		
+	const QWidget* current_page = getMainControl()->getPreferences()->currentPage();
+
+	if (current_page == model_settings_)
+	{
+		model_settings_->setDefaultValues();
+	}
+	else if (current_page == coloring_settings_) 
+	{
+		coloring_settings_->setDefaultValues();
+	}
 }
 
 bool DisplayProperties::getSettingsFromString(const String& data)
