@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.10 2001/04/03 13:15:21 strobel Exp $
+// $Id: RSFace.h,v 1.11 2001/06/18 17:24:18 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -263,7 +263,7 @@ namespace BALL
 		/** Return of one of the three rsedges of the rsface.
 				@return	RSEdge*	the first rsedge if i = 0,
 												the second rsedge if i = 1
-												the third rsedge if otherwse
+												the third rsedge if otherwise
 		*/
 		TRSEdge<T>* getEdge(const Position i) const
 		{
