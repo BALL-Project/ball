@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.22 2001/05/17 01:30:51 oliver Exp $
+// $Id: parameterSection.C,v 1.23 2001/08/22 11:14:51 sturm Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -123,7 +123,7 @@ namespace BALL
 			// get the line and remove leading white spaces	
 			String line(*it);
 			line.trimLeft();
-
+			line.trimRight();
 			// skip all empty lines, comments and option lines
 			if (line.isEmpty()   || 
 					(line[0] == ';') || (line[0] == '!') || (line[0] == '#') || (line[0] == '@'))
@@ -236,7 +236,7 @@ namespace BALL
 		{
 			line = *it;
 			line.trimLeft();
-
+			line.trimRight();
 			// if line is empty or is a comment line, nothing to be done
 			if ((line.isEmpty()) ||
 					(line[0] == ';') || (line[0] == '!') || (line[0] == '#')) 
