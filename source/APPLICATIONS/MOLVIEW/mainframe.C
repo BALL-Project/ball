@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.130 2004/03/03 00:19:51 oliver Exp $
+// $Id: mainframe.C,v 1.131 2004/03/04 15:47:10 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -126,24 +126,24 @@ namespace BALL
 
 		// File Menu
 		insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), 
-										CTRL+Key_Y, MENU_EXPORT_POVRAYFILE);
+										CTRL+Key_Y);
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
-										ALT+Key_X, MENU_FULLSCREEN);
+										ALT+Key_X);
 
 		// Tools Menu -------------------------------------------------------------------
 		hint = "Calculate the Electrostatics with FDPB, if one System selected.";
-		insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", FDPB_dialog_, SLOT(show()), 0,
-				MENU_FDPB, hint);
+		menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", FDPB_dialog_, SLOT(show()), 0,
+				-1, hint);
 				
 		insertPopupMenuSeparator(MainControl::TOOLS);
 
 		hint = "Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.";
-		insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  SLOT(computeIsoContourSurface()), 
-										CTRL+Key_U,MENU_CONTOUR_SURFACE, hint);
+		menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  SLOT(computeIsoContourSurface()), 
+										CTRL+Key_U,-1, hint);
 
 		// Help-Menu -------------------------------------------------------------------
-		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), CTRL+Key_9, MENU__HELP_ABOUT);
+		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
 
 		// Menu ------------------------------------------------------------------------
 		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
@@ -166,8 +166,8 @@ namespace BALL
 
 	void Mainframe::checkMenus()
 	{
-		menuBar()->setItemEnabled(MENU_FDPB, getSelectedSystem() && composites_muteable_);
-		menuBar()->setItemEnabled(MENU_CONTOUR_SURFACE, composites_muteable_ && dataset_control_->getGrids().size());
+		menuBar()->setItemEnabled(menu_FPDB_, getSelectedSystem() && composites_muteable_);
+		menuBar()->setItemEnabled(menu_cs_, composites_muteable_ && dataset_control_->getGrids().size());
 		MainControl::checkMenus();
 	}
 

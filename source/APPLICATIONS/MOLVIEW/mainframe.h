@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.67 2004/02/23 22:05:14 amoll Exp $
+// $Id: mainframe.h,v 1.68 2004/03/04 15:47:24 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -80,20 +80,6 @@ namespace BALL
 
 		BALL_EMBEDDABLE(Mainframe, MainControl)
 
-		enum MenuKey
-		{
-			MENU_EXPORT_POVRAYFILE = 20000,
-			MENU_EXPORT_VRMLFILE,
-			MENU_STOPSIMULATION,
-			MENU_FDPB,
-
-			MENU_FULLSCREEN,
-			MENU_CONTOUR_SURFACE,
-
-			MENU__HELP_ABOUT
-		};
-
-
 		Mainframe(QWidget* parent = 0, const char* name = 0);
 
 		virtual ~Mainframe() throw();
@@ -136,6 +122,8 @@ namespace BALL
 		Server*   								server_;
 		LogView*									logview_;
 		bool 											fullscreen_;
+
+		Index menu_cs_, menu_FPDB_;
 	};
 
 } // namespace BALL
