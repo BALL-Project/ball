@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.3 1999/09/19 18:37:44 oliver Exp $
+// $Id: amberBend.C,v 1.4 1999/09/19 18:54:49 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -58,9 +58,9 @@ namespace BALL
 		static FFPSQuadraticAngleBend bend_parameters;
 		static bool result = false;
 		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
-		if ((amber_force_field != 0) && !amber_force_field->hasInitializedParameters())
+		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())
 		{
-			bend_parameters.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
+			result = bend_parameters.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
 
 			if (result == false) 
 			{
