@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.13 2003/05/23 15:39:07 oliver Exp $
+// $Id: contourSurface.h,v 1.14 2003/05/26 14:22:46 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
@@ -349,7 +349,6 @@ namespace BALL
 				cube.setTo(current_index);
 
 				// Walk along the x-axis....
-				Position curr_cell_x = 0;
 				for (Position curr_cell_x = 0; (curr_cell_x < (number_of_cells_x - 2)); )
 				{
 					// Compute topology, triangles, and add those triangles to the surface.
