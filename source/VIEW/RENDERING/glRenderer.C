@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.20 2005/01/18 16:24:08 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.21 2005/01/18 16:39:51 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -25,7 +25,6 @@
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qimage.h>
-#include <GL/glext.h>
 
 using namespace std;
 
@@ -53,10 +52,6 @@ namespace BALL
  				use_vertex_buffer_(false),
 				picking_mode_(false)
 		{
-#ifdef GL_ARB_vertex_buffer_object
-			use_vertex_buffer_ = true;
-#endif
-//   			use_vertex_buffer_ = false;
 		}
 
 		GLRenderer::~GLRenderer()
@@ -160,10 +155,7 @@ namespace BALL
 			createTubes_();
 			createBoxes_();
 
-			if (!isExtensionSupported("GL_ARB_vertex_buffer_object"))
-			{
-				use_vertex_buffer_ = false;
-			}
+			use_vertex_buffer_ = isExtensionSupported("GL_ARB_vertex_buffer_object");
 
 			return true;
 		}
