@@ -7,6 +7,7 @@
 #include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/representation.h>
 #include <qlineedit.h>
 
 namespace BALL
@@ -35,6 +36,14 @@ TransformationDialog::~TransformationDialog() throw()
 
 bool TransformationDialog::translate(float x, float y, float z)
 {
+	if (rep_ != 0)
+	{
+		rep_->setProperty("X", rep_->getProperty("X").getDouble() + x); 
+		rep_->setProperty("Y", rep_->getProperty("Y").getDouble() + y); 
+		rep_->setProperty("Z", rep_->getProperty("Z").getDouble() + z); 
+		return true;
+	}
+
   if (!composite_) return false;
 
   matrix_.setTranslation(x,y,z);	
@@ -44,7 +53,13 @@ bool TransformationDialog::translate(float x, float y, float z)
 
 bool TransformationDialog::rotateX(float angle, bool radian)
 {
-  if (!composite_) return false;
+ 	if (rep_ != 0)
+	{
+		rep_->setProperty("AX", rep_->getProperty("AX").getDouble() + angle); 
+		return true;
+	}
+
+ if (!composite_) return false;
   
 	composite_->apply(center_processor_);
 	composite_center_ = center_processor_.getCenter();
@@ -66,6 +81,12 @@ bool TransformationDialog::rotateX(float angle, bool radian)
 
 bool TransformationDialog::rotateY(float angle, bool radian)
 {
+ 	if (rep_ != 0)
+	{
+		rep_->setProperty("AY", rep_->getProperty("AY").getDouble() + angle); 
+		return true;
+	}
+
   if (!composite_) return false;
 
 	composite_->apply(center_processor_);
@@ -88,6 +109,12 @@ bool TransformationDialog::rotateY(float angle, bool radian)
 
 bool TransformationDialog::rotateZ(float angle, bool radian)
 {
+ 	if (rep_ != 0)
+	{
+		rep_->setProperty("AZ", rep_->getProperty("AZ").getDouble() + angle); 
+		return true;
+	}
+
   if (!composite_) return false;
 
 	composite_->apply(center_processor_);
@@ -216,9 +243,19 @@ float TransformationDialog::getRotation() const
 
 void TransformationDialog::update_()
 {
-	CompositeMessage* message = new CompositeMessage(*composite_, 
-													CompositeMessage::CHANGED_COMPOSITE);
-	notify_(message);
+	if (composite_ != 0)
+	{
+		CompositeMessage* message = new CompositeMessage(*composite_, 
+														CompositeMessage::CHANGED_COMPOSITE);
+		notify_(message);
+	}
+
+	if (rep_ != 0)
+	{
+		RepresentationMessage* message = new RepresentationMessage(*rep_,
+														RepresentationMessage::UPDATE);
+		notify_(message);
+	}
 }
 
 void TransformationDialog::onNotify(Message *message)
@@ -237,12 +274,32 @@ void TransformationDialog::onNotify(Message *message)
 		{
 			composite_ = 0;
 		}
+
+		return;
+	}
+
+	if (RTTI::isKindOf<RepresentationMessage>(*message))
+	{
+		RepresentationMessage* m = (RepresentationMessage*) message;
+		if (m->getType() == RepresentationMessage::REMOVE &&
+				m->getRepresentation() == rep_)
+		{
+			rep_ = 0;
+			hide();
+		}
 	}
 }
 
 void TransformationDialog::setComposite(Composite* composite) 
 {
 	composite_ = composite;
+	rep_ = 0;
+}
+
+void TransformationDialog::setRepresentation(Representation* rep)
+{
+	rep_ = rep;
+	composite_ = 0;
 }
   
 } } // namespaces

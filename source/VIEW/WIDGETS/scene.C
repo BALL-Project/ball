@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.74 2004/06/10 13:29:21 amoll Exp $
+// $Id: scene.C,v 1.75 2004/06/13 19:18:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -415,6 +415,14 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
+			GLint nr_planes;
+			glGetIntegerv(GL_MAX_CLIP_PLANES, &nr_planes);
+			for (GLint i = 0; i < GL_MAX_CLIP_PLANES; i++)
+			{
+				glDisable(GL_CLIP_PLANE0 + i);
+			}
+			current_clipping_plane_ = 0;
+
 			PrimitiveManager::RepresentationList::ConstIterator it;
 
 			// render all "normal" (non always front and non transparent models)
@@ -458,6 +466,33 @@ namespace BALL
 		void Scene::render_(const Representation& rep, RenderMode mode)
 			throw()
 		{
+			if (rep.getModelType() == MODEL_CLIPPING_PLANE)
+			{
+				if (rep.hasProperty(Representation::PROPERTY__HIDDEN)) 
+				{
+					current_clipping_plane_++;
+					return;
+				}
+
+				glPushMatrix();
+				glTranslatef (
+						rep.getProperty("X").getDouble(),
+						rep.getProperty("Y").getDouble(),
+						rep.getProperty("Z").getDouble());
+
+				glRotated(rep.getProperty("AX").getDouble(), 1, 0, 0);
+				glRotated(rep.getProperty("AY").getDouble(), 0, 1, 0);
+				glRotated(rep.getProperty("AZ").getDouble(), 0, 0, 1);
+
+				GLdouble plane[] ={1, 0, 0, 0};
+				glClipPlane(GL_CLIP_PLANE0 + current_clipping_plane_, plane);
+				glEnable(GL_CLIP_PLANE0 + current_clipping_plane_);
+				glPopMatrix();
+
+				current_clipping_plane_++;
+				return;
+			}
+
 			switch (mode)
 			{
 				case DIRECT_RENDERING:

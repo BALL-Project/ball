@@ -22,6 +22,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class Representation;
 
 		/** Dialog for moving molecular objects.
 				\ingroup ViewDialogs
@@ -48,6 +49,12 @@ namespace BALL
 			
 			///This function gets the Composite
 			Composite* getComposite() { return (composite_);}
+
+			///
+			void setRepresentation(Representation* rep);
+
+			///
+			Representation* getRepresentation() { return rep_;}
 			
 			/** This function is used to translate a molecule in 3D dimensional space */
 			bool translate(float x, float y, float z);
@@ -115,6 +122,9 @@ namespace BALL
 			
 			/** Its a pointer of a selected ligand */
 			Composite* composite_;
+
+			///
+			Representation* rep_;
 			
 			/** Its a pointer of the TransformationProcessor */
 			TransformationProcessor my_processor_;
@@ -133,5 +143,4 @@ namespace BALL
 		};
 
 	} // namespace VIEW
-
 } // namespace BALL

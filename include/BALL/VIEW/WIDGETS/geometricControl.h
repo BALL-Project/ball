@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.17 2004/04/17 20:05:28 amoll Exp $
+// $Id: geometricControl.h,v 1.18 2004/06/13 19:18:49 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -32,6 +32,7 @@ namespace BALL
 	{
 		class Representation;
 		class ColorMeshDialog;
+		class TransformationDialog;
 
 		/**	GeometricControl is a widget to display the list of representations.
 				There are methods available to modify the representations.
@@ -110,6 +111,14 @@ namespace BALL
 			*/
 			virtual void clear()
 				throw() {};
+
+			///
+			void initializeWidget(MainControl& main_control)
+				throw();
+			
+			///
+			void finalizeWidget(MainControl& main_control)
+				throw();
 
 			//@} /**	@name	Accessors: inspectors and mutators */ 
 			//@{
@@ -191,6 +200,12 @@ namespace BALL
 			///
 			virtual void focusRepresentation();
 
+			///
+			virtual void createNewClippingPlane();
+
+			///
+			virtual void moveClippingPlane();
+
 		  protected slots:
 			
 			//@} 
@@ -250,6 +265,8 @@ namespace BALL
 			MolecularInformation information_;
 
 			bool  creating_representations_;
+
+			TransformationDialog* 	transformation_dialog_;
 		};
 		
 } } // namespaces

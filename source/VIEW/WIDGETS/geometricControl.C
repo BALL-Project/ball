@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.40 2004/05/27 19:50:03 oliver Exp $
+// $Id: geometricControl.C,v 1.41 2004/06/13 19:18:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -9,6 +9,7 @@
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
+#include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -61,7 +62,8 @@ namespace BALL
 				context_menu_(),
 				context_representation_(0),
 				colorMeshDlg_(new ColorMeshDialog(this, "ColorMeshDialog")),
-				creating_representations_(false)
+				creating_representations_(false),
+				transformation_dialog_(0)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new GeometricControl " << this << std::endl;
@@ -219,6 +221,13 @@ namespace BALL
 			if (!isSurfaceModel(rep.getModelType()))
 			{
 				context_menu_.setItemEnabled(30, false);
+			}
+
+			context_menu_.insertSeparator();
+			insertContextMenuEntry("Move Clipping Plane", this, SLOT(moveClippingPlane()), 40);	
+			if (rep.getModelType() != MODEL_CLIPPING_PLANE)
+			{
+				context_menu_.setItemEnabled(40, false);
 			}
 		}
 
@@ -586,6 +595,54 @@ namespace BALL
 			scene_message->getCamera().setViewPoint(vwp);
 			notify_(scene_message);
 		}
-	} // namespace VIEW
 
+		void GeometricControl::createNewClippingPlane()
+		{
+			Representation* rep = new Representation();
+			rep->setModelType(MODEL_CLIPPING_PLANE);
+			rep->setProperty("AX", double(0.0));
+			rep->setProperty("AY", double(0.0));
+			rep->setProperty("AZ", double(0.0));
+			rep->setProperty("D", double(0.0));
+			rep->setProperty("X", double(25.0));
+			rep->setProperty("Y", double(25.0));
+			rep->setProperty("Z", double(25.0));
+			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
+			getMainControl()->insert(*rep);
+		}
+		
+		void GeometricControl::initializeWidget(MainControl& main_control)
+			throw()
+		{
+			String hint;
+			main_control.insertMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
+					SLOT(createNewClippingPlane()), 0, -1, hint);   
+		}
+
+		void GeometricControl::finalizeWidget(MainControl& main_control)
+			throw()
+		{
+			main_control.removeMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
+					SLOT(createNewClippingPlane()), 0);
+		}
+
+		void GeometricControl::moveClippingPlane()
+		{
+			if (context_representation_ == 0) return;
+
+			if (transformation_dialog_) 
+			{
+				getMainControl()->removeModularWidget(transformation_dialog_);
+				transformation_dialog_->hide();
+				delete transformation_dialog_;
+			}
+			
+			transformation_dialog_ = new TransformationDialog(this);
+			transformation_dialog_->show();
+			transformation_dialog_->setRepresentation(context_representation_);
+		}
+
+
+	
+	} // namespace VIEW
 } // namespace BALL
