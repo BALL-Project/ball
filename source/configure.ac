@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.14 2002/12/05 13:02:01 anhi Exp $
+dnl    $Id: configure.ac,v 1.1.2.15 2002/12/05 13:37:15 anhi Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -678,7 +678,8 @@ AC_OUTPUT([Makefile \
 					 EXAMPLES/Makefile \
 					 TEST/Makefile])
  
-AC_PREFIX_DEFAULT(${BALL_PATH})
+dnl AC_PREFIX_DEFAULT(${BALL_PATH})
+AC_PREFIX_DEFAULT(`cd ..; pwd`)
 
 dnl
 dnl    copy config.h to the includes directory
