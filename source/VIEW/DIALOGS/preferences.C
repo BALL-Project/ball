@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.2 2003/08/26 15:01:11 amoll Exp $
+// $Id: preferences.C,v 1.3 2003/08/28 21:28:20 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -54,6 +54,9 @@ namespace BALL
 		{
 			++number_of_tabs_;
 			addTab(child, name);
+
+			// set size for all child tabs
+			child->resize(380,210);
 		}
 		
 		void Preferences::removeTab(QWidget *child)
