@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.7 2003/09/01 10:28:13 amoll Exp $
+// $Id: displayProperties.C,v 1.8 2003/09/03 13:05:01 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -15,6 +15,7 @@
 #include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/VIEW/MODELS/surfaceModel.h>
 #include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
+#include <BALL/VIEW/MODELS/HBondModel.h>
 
 #include <qcolordialog.h>
 #include <qmenubar.h>
@@ -194,7 +195,7 @@ namespace BALL
 
 		void DisplayProperties::selectModel(int index)
 		{
-			if (index > 8)
+			if (index >= MODEL_LABEL)
 			{
 				throw(InvalidOption(__FILE__, __LINE__, index));
 			}
@@ -357,6 +358,10 @@ namespace BALL
 
 				case MODEL_CARTOON:
 					model_processor = new AddCartoonModel;
+					break;
+					
+				case MODEL_HBONDS:
+					model_processor = new HBondModelProcessor;
 					break;
 					
 				default:

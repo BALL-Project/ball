@@ -1133,6 +1133,11 @@
                     <string>cartoon</string>
                 </property>
             </item>
+            <item>
+                <property name="text">
+                    <string>H-bonds</string>
+                </property>
+            </item>
             <property name="name">
                 <cstring>model_type_combobox</cstring>
             </property>
