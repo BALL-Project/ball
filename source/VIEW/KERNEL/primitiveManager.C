@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.22 2004/11/12 17:33:02 amoll Exp $
+// $Id: primitiveManager.C,v 1.23 2004/11/13 10:30:53 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -54,11 +54,13 @@ void PrimitiveManager::clear()
 }
 
 
-bool PrimitiveManager::insert(Representation& representation)
+bool PrimitiveManager::insert(Representation& representation, bool send_message)
 	throw()
 {
 	if (has(representation)) return false;
 	representations_.push_back(&representation);
+
+	if (!send_message) return true;
 
 	RepresentationMessage* rm = new RepresentationMessage(representation, RepresentationMessage::ADD);
 	main_control_->notify_(*rm);
@@ -79,7 +81,7 @@ bool PrimitiveManager::has(const Representation& representation) const
 }
 
 
-bool PrimitiveManager::remove(Representation& representation)
+bool PrimitiveManager::remove(Representation& representation, bool send_message)
 	throw()
 {
 	bool found = false;
@@ -97,8 +99,11 @@ bool PrimitiveManager::remove(Representation& representation)
 
 	representations_.erase(it);
 
-	RepresentationMessage* rm = new RepresentationMessage(representation, RepresentationMessage::REMOVE);
-	main_control_->notify_(*rm);
+	if (send_message)
+	{
+		RepresentationMessage* rm = new RepresentationMessage(representation, RepresentationMessage::REMOVE);
+		main_control_->notify_(*rm);
+	}
 
 	if (willBeUpdated(representation))
 	{
@@ -138,7 +143,7 @@ Representation* PrimitiveManager::createRepresentation()
 	throw()
 {
 	Representation* rp = new Representation;
-	insert(*rp);
+	insert(*rp, false);
 	return rp;
 }
 

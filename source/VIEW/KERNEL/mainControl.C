@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.131 2004/11/12 17:33:02 amoll Exp $
+// $Id: mainControl.C,v 1.132 2004/11/13 10:30:52 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -667,11 +667,11 @@ namespace BALL
 				switch (msg->getType())
 				{
 					case RepresentationMessage::ADD:
-						insert(*msg->getRepresentation());
+						primitive_manager_.insert(*msg->getRepresentation(), false);
 						break;
 
 					case RepresentationMessage::REMOVE:
-						remove(*msg->getRepresentation());
+						primitive_manager_.remove(*msg->getRepresentation(), false);
 						break;
 
 					default:

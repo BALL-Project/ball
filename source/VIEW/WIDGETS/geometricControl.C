@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.63 2004/11/09 21:51:11 amoll Exp $
+// $Id: geometricControl.C,v 1.64 2004/11/13 10:30:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -97,7 +97,8 @@ namespace BALL
 		{
 			if (representation_to_item_.has(&rep)) 
 			{
-				Log.error() << "Tried to add an already inserted Representation in " << __FILE__ << __LINE__ << std::endl;
+				Log.error() << "Tried to add an already inserted Representation in " 
+										<< __FILE__ << " " << __LINE__ << std::endl;
 				return;
 			}
 			generateListViewItem_(rep);

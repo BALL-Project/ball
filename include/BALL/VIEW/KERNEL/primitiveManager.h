@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.13 2004/11/12 17:33:06 amoll Exp $
+// $Id: primitiveManager.h,v 1.14 2004/11/13 10:31:00 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -86,15 +86,18 @@ namespace BALL
 
 			/** Delete a representation.
 					It will be removed from the list of representations, 
-					its GeometricObject will be deleted, but it will not be removed from the screen.
-					To do this, send a SceneMessage or a RepresentationMessage.\par
-					Calls Representation::clear.
+					its GeometricObject will be deleted. 
+					If send_message is set to true, a RepresentationMessage with
+					type REMOVE is send to notify all ModularWidget's.
 			*/
-			bool remove(Representation& representation)
+			bool remove(Representation& representation, bool send_message = true)
 				throw();
 
-			/// Insert a Representation
-			bool insert(Representation& representation)
+			/** Insert a Representation
+					If send_message is set to true, a RepresentationMessage with
+					type ADD is send to notify all ModularWidget's.
+			*/
+			bool insert(Representation& representation, bool send_message = true)
 				throw();
 
 			/// Get the list with the Representations

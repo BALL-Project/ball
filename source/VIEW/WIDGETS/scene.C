@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.152 2004/11/09 15:55:49 amoll Exp $
+// $Id: scene.C,v 1.153 2004/11/13 10:30:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -596,7 +596,7 @@ namespace BALL
 			{
 				if ((*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 				{
-					gl_renderer_.initSolid();
+					gl_renderer_.initAlwaysFront();
 					render_(**it, mode);
 				}
 			}

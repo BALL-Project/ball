@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.24 2004/11/13 10:09:12 amoll Exp $
+// $Id: message.C,v 1.25 2004/11/13 10:26:08 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
 
 using namespace std;
 
-// #define BALL_VIEW_DEBUG
+//#define BALL_VIEW_DEBUG
 
 namespace BALL
 {
@@ -76,6 +76,9 @@ CompositeMessage::CompositeMessage(const CompositeMessage& message)
 CompositeMessage::~CompositeMessage()
 	throw()
 {
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "Destructing " << this << " CompositeMessage" << endl;
+	#endif 
 }
 
 SceneMessage::SceneMessage(SceneMessageType type)
@@ -85,7 +88,7 @@ SceneMessage::SceneMessage(SceneMessageType type)
 		stage_()
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new SceneMessage" << std::endl;		
+		Log.error() << "new SceneMessage " << type << " " << this << std::endl;		
 	#endif
 }
 
@@ -96,7 +99,7 @@ SceneMessage::SceneMessage(const SceneMessage& message)
 		stage_(message.stage_)
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new SceneMessage" << type_ << std::endl;		
+		Log.error() << "new SceneMessage2 " << type_ << " " << this << std::endl;		
 	#endif
 }
 
@@ -104,8 +107,7 @@ SceneMessage::~SceneMessage()
 	throw()
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "Destructing object " << (void *)this 
-								<< " of class " << RTTI::getName<SceneMessage>() << endl;
+		Log.error() << "Destructing " << this << " SceneMessage" << endl;
 	#endif 
 }
 
@@ -193,7 +195,7 @@ RepresentationMessage::RepresentationMessage(Representation& rep, Representation
 		type_(type)
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "new RepresentationMessage" << std::endl;		
+		Log.error() << "new RepresentationMessage " << type << std::endl;		
 	#endif
 }
 
