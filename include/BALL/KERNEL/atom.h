@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.35 2001/02/26 00:21:48 amoll Exp $
+// $Id: atom.h,v 1.36 2001/05/24 15:26:58 anker Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -56,12 +56,15 @@ namespace BALL
 			{\bf Category:} \Ref{Bond} container\\
 			{\bf Concept:} composite design pattern\\
 			An instance of Atom represents an instance of a chemical element ("atom").
-			During each runtime instance of a program an atom is unique and identified by a \Ref{Object::Handle}.
+			During each runtime instance of a program an atom is unique and
+			identified by a \Ref{Object::Handle}.
 			Atom equality is defined as atom identity.
-			A linear ordering of atoms is defined as the linear order of the \Ref{Object::Handle}'s.
+			A linear ordering of atoms is defined as the linear order of the
+			\Ref{Object::Handle}'s.
 			Two atoms are connected by a \Ref{Bond} instance ("bond").
 			There can exist only one bond between two atoms.
-			For the sake of maintainability the first atom "owns" the bond thus the bond is existentially dependent on the first atom
+			For the sake of maintainability the first atom "owns" the bond thus
+			the bond is existentially dependent on the first atom
 			whilst the second atom "owes" the bond from the first atom.
 			Bonds and atoms define an implict molecular graph.
 			An atom may be inserted in a \Ref{Fragment} instance ("parent fragment").
@@ -202,8 +205,8 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					If the atom has bonds in common with an other atom that atom is disconnected and
-					the associated \Ref{Bond} instance is destroyed.
+					If the atom has bonds in common with an other atom that atom is
+					disconnected and the associated \Ref{Bond} instance is destroyed.
 					Calls \Ref{Atom::destroy}.
 					@see  Atom::destroy
 			*/
@@ -220,7 +223,8 @@ namespace BALL
 		
 			/** Explicit destructor.
 					Destroy this instance explicitly without releasing its heap 
-					memory thus this instance may exist further. Calls \Ref{Composite::destroy}.
+					memory thus this instance may exist further. Calls
+					\Ref{Composite::destroy}.
 					Set the state of this instance to the default values. 
 					@see  Composite::destroy
 					@see  Atom
