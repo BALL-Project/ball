@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.32 2002/12/12 10:20:16 oliver Exp $
+// $Id: standardPredicates.C,v 1.33 2002/12/19 13:33:17 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -491,8 +491,29 @@ namespace BALL
 	ConnectedToPredicate::CTPNode::~CTPNode()
 		throw()
 	{
-		// ?????
-		// TODO
+		destroy();
+	}
+
+	void ConnectedToPredicate::CTPNode::destroy()
+		throw()
+	{
+		for (Iterator it = begin(); it != end(); ++it) 
+		{
+			(*it)->destroy();
+			delete &*it;
+		}
+	}
+
+	void ConnectedToPredicate::CTPNode::clear()
+		throw()
+	{
+		element_symbol_ = "<uninitialized>";
+		bond_type_ = BONDTYPE__UNINITIALISED;
+		for (Iterator it = begin(); it != end(); ++it) (*it)->clear();
+		parent_ = 0;
+		finished_ = false;
+		linked_ = false;
+		link_list_.clear();
 	}
 
 	void ConnectedToPredicate::CTPNode::setParent(ConnectedToPredicate::CTPNode* parent)
@@ -552,25 +573,6 @@ namespace BALL
 	{
 		return children_.end();
 	}
-
-	/* 
-	ConnectedToPredicate::CTPNode* ConnectedToPredicate::CTPNode::getChild(Size index) const
-		throw()
-	{
-		if (index < getNumberOfChildren())
-		{
-			ConnectedToPredicate::CTPNode* child = children_[index];
-			return child;
-		}
-		else
-		{
-			Log.error() << "ConnectedToPredicate::CTPNode::getChild(): "
-				<< "Trying to access non-existant child with index " << index
-				<< ". Returning NULL." << endl;
-			return 0;
-		}
-	}
-	*/
 
 	void ConnectedToPredicate::CTPNode::removeChild(CTPNode* child)
 		throw()
@@ -747,9 +749,28 @@ namespace BALL
 	ConnectedToPredicate::CTPNode* ConnectedToPredicate::createNewNode_(ConnectedToPredicate::CTPNode* node)
 		throw()
 	{
+		// PARANOIA
+		if (node == 0)
+		{
+			Log.error() << "ConnectedToPredicate::createNewNode_: "
+				<< "got NULL as argument" << ::std::endl;
+			return(0);
+		}
+		// /PARANOIA
+
 		// whenever we create a new node, the old one is finished.
 		node->setFinished();
 		CTPNode* child = new CTPNode;
+
+		// PARANOIA
+		if (child == 0)
+		{
+			Log.error() << "ConnectedToPredicate::createNewNode_: "
+				<< "Could not create a child node" << ::std::endl;
+			return(0);
+		}
+		// /PARANOIA
+
 		child->setParent(node);
 		node->addChild(child);
 		if (link_mark_ != 0)
@@ -780,6 +801,16 @@ namespace BALL
 		std::vector<CTPNode*> bracket_stack;
 
 		CTPNode* root = new CTPNode;
+		
+		// PARANOIA
+		if (root == 0)
+		{
+			Log.error() << "ConnectedToPredicate::parse_(): "
+				<< "could not create the root node" << endl;
+			return(0);
+		}
+		// /PARANOIA
+		
 		root->setSymbol("/");
 		current = root;
 		all_nodes.push_back(root);
@@ -789,13 +820,21 @@ namespace BALL
 		String lowercase("abcdefghijklmnopqrstuvwxyz");
 		String numbers("12345678");
 
-
 		for (; position < input.size(); ++position)
 		{
+			// PARANOIA
+			if (current == 0)
+			{
+				Log.error() << ""
+					<< "current is NULL at beginning of for loop." << endl;
+			}
+			// /PARANOIA
+
 			if (verbosity > 90)
 			{
 				Log.info() << "Examining character " << input[position] << endl;
 			}
+
 			if (input[position] == '(')
 			{
 				if (bond_chars.has(input[position - 1]))
@@ -1151,9 +1190,12 @@ namespace BALL
 	{
 		if (current == 0)
 		{
-			Log.error() << "dump(): got 0" << endl;
+			Log.error() << "ConnectedToPredicate::dump(): got 0" << endl;
 			return;
 		}
+		// DEBUG
+		Log.info() << "CTPNode address: " << current << endl;
+		// /DEBUG
 		if (current->isLinked())
 		{
 			Log.info() << "@{" << current << "}";
@@ -1179,14 +1221,11 @@ namespace BALL
 		argument_ = argument;
 		if (tree_ != 0)
 		{
-			delete(tree_);
+			tree_->destroy();
 		}
 		tree_ = parse_(argument_);
 		link_map_.clear();
 		link_mark_ = 0;
-		// DEBUG
-		// dump();
-		// /DEBUG
 	}
 
 	bool ConnectedToPredicate::operator () (const Atom& atom) const

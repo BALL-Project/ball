@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.22 2002/12/12 09:48:45 oliver Exp $
+// $Id: standardPredicates.h,v 1.23 2002/12/19 13:33:17 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -499,6 +499,16 @@ namespace BALL
 					/**
 					 */
 					virtual ~CTPNode()
+						throw();
+
+					/**
+					*/
+					virtual void destroy()
+						throw();
+
+					/**
+					*/
+					virtual void clear()
 						throw();
 
 					/**
