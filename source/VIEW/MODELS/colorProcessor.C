@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.15 2003/10/26 10:29:01 oliver Exp $
+// $Id: colorProcessor.C,v 1.16 2003/10/26 22:51:04 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -196,7 +196,13 @@ namespace BALL
 			std::vector<Vector3>::iterator sit = mesh.vertex.begin();
 			for(; sit != mesh.vertex.end(); sit++)
 			{
-				const Atom* atom = *atom_grid_.getClosestItem(*sit, 1);
+				// make sure we found an atom
+				const Atom* const* ptr = atom_grid_.getClosestItem(*sit, 1);
+				const Atom* atom = 0;
+				if (ptr != 0)
+				{
+					atom = *ptr;
+				}
 
 				if (atom == 0)
 				{
