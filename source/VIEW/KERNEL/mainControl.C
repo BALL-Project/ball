@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.34 2003/12/10 18:45:24 amoll Exp $
+// $Id: mainControl.C,v 1.35 2003/12/12 17:48:31 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1098,8 +1098,8 @@ void MainControl::sendMessage(Message& message)
 	throw()
 {
 	message.setDeletable(false);
+	onNotify(&message);
 	notify_(&message);
-//	 onNotify_(&message);
 }
 // ======================= StatusbarTimer =========================
 StatusbarTimer::StatusbarTimer(QObject* parent)

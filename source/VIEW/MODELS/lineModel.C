@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.6 2003/12/12 15:07:37 amoll Exp $
+// $Id: lineModel.C,v 1.7 2003/12/12 17:49:01 amoll Exp $
 
 #include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
-#include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 
 using namespace std;
@@ -23,9 +22,9 @@ AddLineModel::AddLineModel()
 {
 }
 
-AddLineModel::AddLineModel(const AddLineModel& rAddLineModel)
+AddLineModel::AddLineModel(const AddLineModel& model)
 	throw()
-	: AtomBondModelBaseProcessor(rAddLineModel)
+	: AtomBondModelBaseProcessor(model)
 {
 }
 
@@ -46,7 +45,6 @@ bool AddLineModel::finish()
 		
 Processor::Result AddLineModel::operator() (Composite &composite)
 {
-	// composite is an atom ?
 	if (!RTTI::isKindOf<Atom>(composite))
 	{
 		return Processor::CONTINUE;
@@ -54,7 +52,6 @@ Processor::Result AddLineModel::operator() (Composite &composite)
 
 	Atom *atom = RTTI::castTo<Atom>(composite);
 
-	// generate help BallPrimitive
 	Point *point_ptr = new Point;
 
 	if (point_ptr == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Point));
@@ -91,6 +88,12 @@ void AddLineModel::visualiseBond_(const Bond& bond)
 	TwoColoredLine *line = new TwoColoredLine;
 
 	if (line == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredLine));
+
+	if (bond.getFirstAtom() == 0 ||
+			bond.getSecondAtom() == 0)
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 					
 	line->setVertex1Address(bond.getFirstAtom()->getPosition());
 	line->setVertex2Address(bond.getSecondAtom()->getPosition());
