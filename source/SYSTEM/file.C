@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.5 2000/03/30 19:49:24 oliver Exp $
+// $Id: file.C,v 1.6 2000/06/09 12:29:46 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
 
@@ -43,6 +43,17 @@ namespace BALL
 		open(name, open_mode);
 	}
 
+	File::File(const File& file)
+	{
+		name_ = file.name_;
+		original_name_ = file.original_name_;
+		open_mode_ = file.open_mode_;
+		is_open_ = file.is_open_;
+		is_temporary_ = file.is_temporary_;
+
+		open(name_, open_mode_);
+	}
+
 	File::~File()
 	{
 		close();
@@ -71,9 +82,7 @@ namespace BALL
 			system(exec_string.c_str());
 
 			is_temporary_ = true;
-		} 
-		else 
-		{
+		} else {
 			if (name_.hasPrefix("file:") == true)
 			{
 				if (BALL_BIT_IS_CLEARED(protocol_ability_, File::PROTOCOL__FILE))
@@ -106,14 +115,10 @@ namespace BALL
 					system(exec_string.c_str());
 		
 					is_temporary_ = true;
-				} 
-				else 
-				{
+				} else {
 					is_temporary_ = false;
 				}
-			} 
-			else 
-			{
+			} else {
 				is_temporary_ = false;
 			}
 		}
@@ -135,6 +140,12 @@ namespace BALL
 
 	bool File::copy(String source_name, String destination_name, Size buffer_size)
 	{
+
+		if (source_name == "" || destination_name == "" || source_name == destination_name)
+		{
+			return false;
+		}
+
 		FileSystem::canonizePath(source_name);
 		FileSystem::canonizePath(destination_name);
 
@@ -158,17 +169,15 @@ namespace BALL
 		};
 		
 		delete [] buffer;
+		source.close();
+		destination.close();
 
 		if (destination)
 		{
-			source.close();
-			destination.close();
-
 			return true;
-		} else {
-			source.close();
-			destination.close();
-
+		}
+		else 
+		{
 			return false;
 		}
 	}
@@ -191,8 +200,15 @@ namespace BALL
 		}
 	}
 
-	Size File::getSize() const
+	Size File::getSize()
 	{
+		if (!is_open_)
+		{
+			if (open(original_name_, open_mode_) == false)
+			{
+				return 0;
+			}		
+		}
 		streampos old_position = ((fstream*)this)->tellg();
 		((fstream*)this)->seekg(0, ios::end);
 		Size size = (Size)(((fstream*)this)->tellg() - old_position);

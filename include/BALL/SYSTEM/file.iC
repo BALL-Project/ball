@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.4 1999/12/04 18:34:25 oliver Exp $
+// $Id: file.iC,v 1.5 2000/06/09 12:30:56 amoll Exp $
 
 BALL_INLINE 
 void File::enableProtocol(File::Protocol protocol)
@@ -66,13 +66,22 @@ bool File::remove() const
 BALL_INLINE 
 bool File::move(const String& source_name, const String& destination_name)
 {
-  return (File::copy(source_name, destination_name) == true && File::remove(source_name) == true);
+  if (File::copy(source_name, destination_name))
+  {
+    return File::remove(source_name);
+  }
+  return false;
 }
 
 BALL_INLINE 
 bool File::moveTo(const String& destination_name)
 {
-  return File::move(name_, destination_name);
+  if (File::move(name_, destination_name))
+  {
+     name_ = destination_name;
+     return true;
+  }
+  return false;
 }
 
 
@@ -86,9 +95,14 @@ bool File::rename(String old_path, String new_path)
 }
 
 BALL_INLINE 
-bool File::renameTo(const String& new_path) const
+bool File::renameTo(const String& new_path)
 {
-  return File::rename(name_, new_path);
+  if (File::rename(name_, new_path))
+  {
+    name_ = new_path;
+    return true;
+  }
+  return false;
 }
 
 BALL_INLINE 
@@ -235,4 +249,11 @@ BALL_INLINE
 bool File::hasFormat(const String& s) const
 {
   return (original_name_.hasSuffix(s) == true && hasFormat(s) == true);
+}
+
+BALL_INLINE 
+Size File::getSize(String name)
+{
+  File tmp(name);
+  return tmp.getSize();
 }
