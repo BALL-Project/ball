@@ -1,7 +1,7 @@
 #! /bin/sh
 
 ###############
-###  $Id: configure,v 1.26 1999/12/30 18:05:02 oliver Exp $
+###  $Id: configure,v 1.27 1999/12/30 20:30:43 oliver Exp $
 ###############
 ###############
 ###
@@ -43,7 +43,7 @@
 
 #    ...and for QT (see also BALL/contrib/qt!)
 QT_INCLUDES=/KM/comp-bio/BALL-contrib/qt-2.00/include
-QT_LIBS=/KM/comp-bio/BALL-contrib/qt-2.00/lib/Solaris-sparc-egcs_1.1.2
+QT_LIBS=/KM/comp-bio/BALL-contrib/qt-2.00/lib/IRIX6-CC_7.3.1m
 
 #   if you do not want to be asked by configure
 #   which BALLView platform to use, put it here

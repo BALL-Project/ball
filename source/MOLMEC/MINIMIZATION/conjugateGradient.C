@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.C,v 1.3 1999/12/30 17:36:34 pmueller Exp $
+// $Id: conjugateGradient.C,v 1.4 1999/12/30 20:30:44 oliver Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -387,8 +387,7 @@ namespace BALL
       else
          {
          Log.level(LogStream::ERROR)
-                       << " gradient has length zero -> program is aborted in li
-ne "
+                       << " gradient has length zero -> program is aborted in line "
                        << __LINE__ << "in file " << __FILE__ << endl;
          exit(0);
          }

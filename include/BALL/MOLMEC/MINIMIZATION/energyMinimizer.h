@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.8 1999/12/30 13:21:30 pmueller Exp $
+// $Id: energyMinimizer.h,v 1.9 1999/12/30 20:30:41 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -220,7 +220,7 @@ namespace BALL {
 
 		/**	Specific setup
 		*/
-		virtual bool specificSetup(void);
+		virtual bool specificSetup();
 
 		//@}
 
@@ -232,7 +232,7 @@ namespace BALL {
 
 		/**	Get the current iteration number
 		*/
-		Size	getNumberOfIteration(void) const;
+		Size	getNumberOfIteration() const;
 
 		/**	Set the iteration number
 		*/
@@ -262,7 +262,7 @@ namespace BALL {
 
 		/**	Get the energy ouput frequency
 		*/
-		Size	getEnergyOutputFrequency(void) const;
+		Size	getEnergyOutputFrequency() const;
 
 		/** Set the energy difference bound for convergence 
 		*/
@@ -270,7 +270,7 @@ namespace BALL {
 
 		/**	Get the energy difference bound
 		*/
-		float	getEnergyDifferenceBound(void) const;
+		float	getEnergyDifferenceBound() const;
 
     /** Set the maximum RMS gradient (first convergence criterion).
       The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
@@ -297,11 +297,11 @@ namespace BALL {
 
 		/**	Get the snapshot output frequency
 		*/
-		Size	getSnapShotFrequency(void) const;
+		Size	getSnapShotFrequency() const;
 
 		/**	Return the force field of the energy minimizer
 		*/
-		ForceField*	getForceField(void);
+		ForceField*	getForceField();
 
 		/**	Minimize the energy of the system bound to the force field.	
 				If a number of steps is given, the minimization is aborted after

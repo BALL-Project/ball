@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.C,v 1.4 1999/12/28 17:53:25 oliver Exp $
+// $Id: energyMinimizer.C,v 1.5 1999/12/30 20:30:44 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/COMMON/limits.h>
@@ -12,8 +12,8 @@ namespace BALL
                                                              "maximal_number_of_iterations";
 	const char* EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY = 
                                                              "energy_output_frequency";
-	const char* EnergyMinimizer::Option::SNAPSHOT_OUTPUT_FREQUENCY = 
-                                                             "snapshot_output_frequency";
+	const char* EnergyMinimizer::Option::SNAPSHOT_FREQUENCY = 
+                                                             "snapshot_frequency";
 	const char* EnergyMinimizer::Option::NUMBER_OF_ITERATION = "number_of_iteration";
 
   // if the current rms gradient is below this one, we are converged
@@ -30,7 +30,7 @@ namespace BALL
 
 	Size EnergyMinimizer::Default::MAXIMAL_NUMBER_OF_ITERATIONS = 1000;
 	Size EnergyMinimizer::Default::ENERGY_OUTPUT_FREQUENCY = 50;
-	Size EnergyMinimizer::Default::SNAPSHOT_OUTPUT_FREQUENCY = Limits<Size>::max();
+	Size EnergyMinimizer::Default::SNAPSHOT_FREQUENCY = Limits<Size>::max();
 	Size EnergyMinimizer::Default::NUMBER_OF_ITERATION = 0;              // start number 
   Size EnergyMinimizer::Default::MAX_SAME_ENERGY = 20; 
 	float EnergyMinimizer::Default::ENERGY_DIFFERENCE_BOUND = 1e-4;      // in kJ/mol
@@ -57,7 +57,7 @@ namespace BALL
 		number_of_iteration_						= energy_minimizer.number_of_iteration_;
 		maximal_number_of_iterations_		= energy_minimizer.maximal_number_of_iterations_ ;
 		energy_output_frequency_				= energy_minimizer.energy_output_frequency_;
-		snapshot_output_frequency_			= energy_minimizer.snapshot_output_frequency_;
+		snapshot_frequency_							= energy_minimizer.snapshot_frequency_;
 		energy_difference_bound_				= energy_minimizer.energy_difference_bound_ ;
     max_gradient_                   = energy_minimizer.max_gradient_; 
     max_same_energy_                = energy_minimizer.max_same_energy_; 
@@ -82,7 +82,7 @@ namespace BALL
 			number_of_iteration_						= energy_minimizer.number_of_iteration_;
 			maximal_number_of_iterations_		= energy_minimizer.maximal_number_of_iterations_ ;
 			energy_output_frequency_				= energy_minimizer.energy_output_frequency_;
-			snapshot_output_frequency_			= energy_minimizer.snapshot_output_frequency_;
+			snapshot_frequency_							= energy_minimizer.snapshot_frequency_;
       max_same_energy_                = energy_minimizer.max_same_energy_; 
 			energy_difference_bound_				= energy_minimizer.energy_difference_bound_ ;
 			max_gradient_				            = energy_minimizer.max_gradient_ ;
@@ -232,15 +232,15 @@ BAUSTELLE
 	}
 
 	//	Set the trajectory ouput frequency
-	void EnergyMinimizer::setSnapshotOutputFrequency(Size snapshot_output_frequency)
+	void EnergyMinimizer::setSnapshotFrequency(Size snapshot_frequency)
 	{
-		snapshot_output_frequency_ = snapshot_output_frequency;
+		snapshot_frequency_ = snapshot_frequency;
 	}
 
 	//	Get the trajectory ouput frequency
-	Size EnergyMinimizer::getSnapshotOutputFrequency() const
+	Size EnergyMinimizer::getSnapshotFrequency() const
 	{
-		return snapshot_output_frequency_;
+		return snapshot_frequency_;
 	}
 
 	// Get the force field of the energy minimizer
@@ -279,9 +279,9 @@ BAUSTELLE
                                (long)EnergyMinimizer::Default::ENERGY_OUTPUT_FREQUENCY);
 		energy_output_frequency_ = (Size)(options.getInteger(EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY));
 
-		options.setDefaultInteger(EnergyMinimizer::Option::SNAPSHOT_OUTPUT_FREQUENCY, 
-                               (long)EnergyMinimizer::Default::SNAPSHOT_OUTPUT_FREQUENCY);
-		snapshot_output_frequency_ = (Size)(options.getInteger(EnergyMinimizer::Option::SNAPSHOT_OUTPUT_FREQUENCY));
+		options.setDefaultInteger(EnergyMinimizer::Option::SNAPSHOT_FREQUENCY, 
+                               (long)EnergyMinimizer::Default::SNAPSHOT_FREQUENCY);
+		snapshot_frequency_ = (Size)(options.getInteger(EnergyMinimizer::Option::SNAPSHOT_FREQUENCY));
 
 		options.setDefaultInteger(EnergyMinimizer::Option::NUMBER_OF_ITERATION, 
                                (long)EnergyMinimizer::Default::NUMBER_OF_ITERATION);

@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.5 1999/12/28 18:41:33 oliver Exp $
+// $Id: persistenceManager.h,v 1.6 1999/12/30 20:30:38 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -60,7 +60,7 @@ namespace BALL
 				This type describes a method to dynamically create a specific object.
 				It should return a {\tt void} pointer for interface compatibility and doesn't take an argument.
 				It creates a new object and returns the object's {\tt this} pointer (cast to {\tt void*}).
-				The \Ref{getNew} method of the RTTI class is an example for such a method.
+				The \Ref{getNew} function (in the RTTI namespace) is an example for such a method.
 				@see registerClass
 				@see RTTI
 				@see CREATE
@@ -102,8 +102,8 @@ namespace BALL
         method for a class:
 \begin{verbatim}
 	PersistenceManager pm;
-	pm.registerClass(RTTI<Atom>::getStreamName(), RTTI<Atom>::getNew);
-	pm.registerClass(RTTI<Composite>::getStreamName(), RTTI<Composite>::getNew);
+	pm.registerClass(RTTI::getStreamName<Atom>(), RTTI::getNew<Atom>);
+	pm.registerClass(RTTI::getStreamName<Composite>(), RTTI::getNew<Composite>);
 \end{verbatim}
 				Remember to include the {\em baseclasses} of each class, too! To register all 
 				kernel classes, use the \Ref{BALL_REGISTER_PERSISTENT_KERNEL_CLASSES} macro.
@@ -177,11 +177,11 @@ namespace BALL
 
 		/**
 		*/
-		template <class T>
+		template <typename T>
 		bool checkObjectHeader(const T& /* object */, const char* name = 0)
 		{
 			void* ptr;
-			return checkHeader(RTTI<T>::getStreamName(), name, ptr);
+			return checkHeader(RTTI::getStreamName<T>(), name, ptr);
 		}
 
 		/**
@@ -194,12 +194,12 @@ namespace BALL
 
 		/**
 		*/
-		template <class T>
+		template <typename T>
 		void writeObjectHeader(const T* object, const char* name = 0)
 		{
 			object_out_.insert(object);
 
-			writeHeader(RTTI<T>::getStreamName(), name, (void*)object);
+			writeHeader(RTTI::getStreamName<T>(), name, (void*)object);
 		}
 
 		/**
@@ -220,20 +220,20 @@ namespace BALL
 				@param	t the variable
 				@param	name the variable name
 		*/
-		template <class T>
+		template <typename T>
 		void writePrimitive(const T& t, const char* name)
 		{
-			writePrimitiveHeader(RTTI<T>::getStreamName(), name);
+			writePrimitiveHeader(RTTI::getStreamName<T>(), name);
 			put(t);
 			writePrimitiveTrailer();
 		}
  
 		/**	Read a primitive member variable.
 		*/
-		template <class T>
+		template <typename T>
 		bool readPrimitive(T& t, const char* name)
 		{
-			if (!checkPrimitiveHeader(RTTI<T>::getStreamName(), name))
+			if (!checkPrimitiveHeader(RTTI::getStreamName<T>(), name))
 			{
 				return false;
 			}
@@ -245,20 +245,20 @@ namespace BALL
 
 		/**	Write a storable object.
 		*/
-		template <class T>
+		template <typename T>
 		void writeStorableObject(const T& t, const char* name)
 		{
-			writeStorableHeader(RTTI<T>::getStreamName(), name);
+			writeStorableHeader(RTTI::getStreamName<T>(), name);
 			t.write(*this);
 			writeStorableTrailer();
 		}
 			
 		/**	Read a storable object.
 		*/
-		template <class T>
+		template <typename T>
 		bool readStorableObject(T& t, const char* name)
 		{
-			return (checkStorableHeader(RTTI<T>::getStreamName(), name) 
+			return (checkStorableHeader(RTTI::getStreamName<T>(), name) 
 							&& t.read(*this) && checkStorableTrailer());
 		}
 
@@ -272,7 +272,7 @@ namespace BALL
 				object_out_needed_.push_back(object);
 			}
 
-			writeObjectPointerHeader(RTTI<T>::getStreamName(), name);
+			writeObjectPointerHeader(RTTI::getStreamName<T>(), name);
 			put((void*)object);
 			writePrimitiveTrailer();
 		}
@@ -282,7 +282,7 @@ namespace BALL
 		template <class T>
 		bool readObjectPointer(T*& object, const char* name)
 		{
-			if (!checkObjectPointerHeader(RTTI<T>::getStreamName(), name))
+			if (!checkObjectPointerHeader(RTTI::getStreamName<T>(), name))
 			{
 				return false;
 			}
@@ -308,7 +308,7 @@ namespace BALL
 				object_out_needed_.push_back(&object);
 			}
 
-			writeObjectReferenceHeader(RTTI<T>::getStreamName(), name);
+			writeObjectReferenceHeader(RTTI::getStreamName<T>(), name);
 			put((void*)&object);
 			writePrimitiveTrailer();
 		} 
@@ -318,7 +318,7 @@ namespace BALL
 		template <class T>
 		bool readObjectReference(T& object, const char* name)
 		{
-			if (!checkObjectReferenceHeader(RTTI<T>::getStreamName(), name))
+			if (!checkObjectReferenceHeader(RTTI::getStreamName<T>(), name))
 			{
 				return false;
 			}
@@ -343,7 +343,7 @@ namespace BALL
 		template <class T>
 		void writeObjectArray(const T* array, const char* name, Size size)
 		{
-			writeObjectArrayHeader(RTTI<T>::getStreamName(), name, size);
+			writeObjectArrayHeader(RTTI::getStreamName<T>(), name, size);
 
 			for (Position i = 0; i < size; i++)
 				(*this).writeObject(array[i], "-");
@@ -360,7 +360,7 @@ namespace BALL
 		template <class T>
 		bool readObjectArray(const T* array, const char* name, Size& size)
 		{
-			if (!checkObjectArrayHeader(RTTI<T>::getStreamName(), name, size))
+			if (!checkObjectArrayHeader(RTTI::getStreamName<T>(), name, size))
 			{
 				return false;
 			}
@@ -379,7 +379,7 @@ namespace BALL
 		template <class T>
 		void writeObjectPointerArray(T** arr, const char* name, const Size size)
 		{
-			writeObjectPointerArrayHeader(RTTI<T>::getStreamName(), name, size);
+			writeObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size);
 
 			PersistentObject* ptr;
 			for (Position i = 0; i < size; i++)
@@ -400,7 +400,7 @@ namespace BALL
 		template <class T>
 		bool readObjectPointerArray(T** array, const char* name, Size& size)
 		{
-			if (!checkObjectPointerArrayHeader(RTTI<T>::getStreamName(), name, size))
+			if (!checkObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size))
 			{
 				return false;
 			}

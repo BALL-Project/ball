@@ -1,4 +1,4 @@
-// $Id: object.iC,v 1.2 1999/10/30 12:53:21 oliver Exp $
+// $Id: object.iC,v 1.3 1999/12/30 20:30:38 oliver Exp $
 
 BALL_INLINE 
 Handle Object::getHandle () const
@@ -31,7 +31,7 @@ void Object::destroy()
 BALL_INLINE 
 bool Object::operator == (const Object &object) const
 {
-  return (bool)(RTTI<Object>::isInstanceOf(object) && (handle_ == object.handle_));
+  return (bool)(RTTI::isInstanceOf<Object>(object) && (handle_ == object.handle_));
 }
 
 BALL_INLINE 
@@ -43,7 +43,7 @@ bool Object::operator != (const Object &object) const
 BALL_INLINE 
 bool Object::operator < (const Object &object) const
 {
-  return (bool)(RTTI<Object>::isInstanceOf(object) && (handle_ < object.handle_));
+  return (bool)(RTTI::isInstanceOf<Object>(object) && (handle_ < object.handle_));
 }
 
 BALL_INLINE 

@@ -1,4 +1,4 @@
-// $Id: baseFragmentIterator.h,v 1.2 1999/12/04 18:34:17 oliver Exp $ 
+// $Id: baseFragmentIterator.h,v 1.3 1999/12/30 20:30:40 oliver Exp $ 
 
 #ifndef BALL_KERNEL_BASEFRAGMENTITERATOR_H
 #define BALL_KERNEL_BASEFRAGMENTITERATOR_H
@@ -19,7 +19,8 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	class BaseFragment;
 	class BaseFragmentIteratorTraits_
@@ -32,13 +33,13 @@ namespace BALL {
 		BaseFragmentIteratorTraits_()
 			:	CompositeIteratorTraits_()
 		{
-			predicate_ = &RTTI<KernelPredicate<BaseFragment> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<BaseFragment> >();
 		}
 			
 		BaseFragmentIteratorTraits_(const Composite& composite)
 			:	CompositeIteratorTraits_(composite)
 		{
-			predicate_ = &RTTI<KernelPredicate<BaseFragment> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<BaseFragment> >();
 		}
 			
 		BaseFragmentIteratorTraits_(const BaseFragmentIteratorTraits_& traits, bool /* deep */ = true)
@@ -55,7 +56,7 @@ namespace BALL {
 
 		void resetPredicate()
 		{
-			predicate_ = &RTTI<KernelPredicate<BaseFragment> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<BaseFragment> >();
 		}
 	
 	};

@@ -1,4 +1,4 @@
-// $Id: colorCalculator.iC,v 1.2 1999/12/19 17:18:49 oliver Exp $
+// $Id: colorCalculator.iC,v 1.3 1999/12/30 20:30:42 oliver Exp $
 
 BALL_INLINE
 void ColorCalculator::setColorTable
@@ -10,7 +10,7 @@ void ColorCalculator::setColorTable
 BALL_INLINE
 void ColorCalculator::resetColorTable()
 {
-  color_table_ = const_cast<ColorTable*>((const ColorTable*)&RTTI<ElementColor>::getDefault());
+  color_table_ = const_cast<ColorTable*>((const ColorTable*)&RTTI::getDefault<ElementColor>());
 }
 
 BALL_INLINE

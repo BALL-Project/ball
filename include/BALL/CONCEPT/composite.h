@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.7 1999/12/28 18:40:30 oliver Exp $
+// $Id: composite.h,v 1.8 1999/12/30 20:30:37 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -253,14 +253,14 @@ namespace BALL
 				@return a pointer to the first composite found that is a kind of T or 0 if no
 								matching composite was found to the root of the tree
 		*/
-		template <class T>
+		template <typename T>
 		Composite* getAncestor(const T& /* t */)
 		{
 			
 			for (Composite* composite_ptr = parent_;
 					 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
 			{
-				if (RTTI<T>::isKindOf(*composite_ptr))
+				if (RTTI::isKindOf<T>(*composite_ptr))
 				{
 					return composite_ptr;
 				}

@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.2 1999/10/30 12:53:23 oliver Exp $
+// $Id: binarySearchTree.h,v 1.3 1999/12/30 20:30:39 oliver Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -1426,7 +1426,7 @@ namespace BALL
 	template<typename DataType>
 	TBSTree<DataType>::TBSTree()
 		:	root_(0),
-			comparator_(RTTI<Comparator<DataType> >::getDefault())
+			comparator_(RTTI::getDefault<Comparator<DataType> >())
 	{
 	}
 
@@ -1545,7 +1545,7 @@ namespace BALL
 	BALL_INLINE 
 	void TBSTree<DataType>::resetComparator()
 	{
-		comparator_ = RTTI<Comparator<DataType> >::getDefault();
+		comparator_ = RTTI::getDefault<Comparator<DataType> >();
 	}
 
 	template <class DataType>

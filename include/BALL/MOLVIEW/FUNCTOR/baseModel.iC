@@ -1,4 +1,4 @@
-// $Id: baseModel.iC,v 1.2 1999/12/19 17:18:48 oliver Exp $
+// $Id: baseModel.iC,v 1.3 1999/12/30 20:30:42 oliver Exp $
 
 BALL_INLINE
 void BaseModelProcessor::enableStaticModel()
@@ -34,7 +34,7 @@ void BaseModelProcessor::setColorCalculator
 BALL_INLINE
 void BaseModelProcessor::resetColorCalculator()
 {
-  color_calculator_ = const_cast<ColorCalculator*>((const ColorCalculator*)&RTTI<ColorCalculator>::getDefault());
+  color_calculator_ = const_cast<ColorCalculator*>((const ColorCalculator*)&RTTI::getDefault<ColorCalculator>());
 }
   
 BALL_INLINE
@@ -70,13 +70,13 @@ bool BaseModelProcessor::isDynamicModelDisabled()
 BALL_INLINE
 bool BaseModelProcessor::isDefaultColorCalculator()
 {
-  return (bool)(color_calculator_ == const_cast<ColorCalculator*>((ColorCalculator*)&RTTI<ColorCalculator>::getDefault()));
+  return (bool)(color_calculator_ == const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()));
 }
 
 BALL_INLINE
 bool BaseModelProcessor::isOtherColorCalculator()
 {
-  return (bool)(color_calculator_ != const_cast<ColorCalculator*>((ColorCalculator*)&RTTI<ColorCalculator>::getDefault()));
+  return (bool)(color_calculator_ != const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()));
 }
 
 BALL_INLINE

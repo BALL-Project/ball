@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.4 1999/12/28 18:41:03 oliver Exp $ 
+// $Id: object.h,v 1.5 1999/12/30 20:30:38 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -180,14 +180,18 @@ namespace BALL
 			static Size countObjects();
 
 			/// Returns the total number of registered objects of a certain kind
-			template <class U>
+			template <typename U>
 			Size countObjects(const U& u)
 			{
 				Size count = 0;
 
 		    for (ObjectIterator object_it = begin(); object_it.isValid(); ++object_it)
-    		  if (RTTI<U>::isKindOf(*object_it))
+				{
+    		  if (RTTI::isKindOf<U>(*object_it))
+					{
 		        ++count;
+					}
+				}
 
 		    return count;
 			}

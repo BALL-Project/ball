@@ -1,4 +1,4 @@
-// $Id: predicate.h,v 1.2 1999/12/01 13:26:44 oliver Exp $
+// $Id: predicate.h,v 1.3 1999/12/30 20:30:41 oliver Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -17,7 +17,7 @@ namespace BALL
 	/**	@name	Kernel Predicates
 			This chapter describes a set of unary predicates acting on \Ref{Composites}, that
 			can be used to identify the class type of a composite at runtime.\\
-			This predicates are functionally similar to the \Ref{RTTI:isKindOf} method.
+			This predicates are functionally similar to the \Ref{RTTI:isKindOf} function.
 			They decide whether a given composite is an instance of a certain class (or of
 			a class derived thereof). Forinstance, the application of a \Ref{MoleculePredicate}
 			to a composite will yield {\bf true}, if the given composite was an instance of \Ref{Molecule}
@@ -60,7 +60,7 @@ namespace BALL
 	template <class T>
 	bool KernelPredicate<T>::operator () (const Composite& composite) const
 	{
-		return RTTI<T>::isKindOf(composite);
+		return RTTI::isKindOf<T>(composite);
 	}
 
 	//@}

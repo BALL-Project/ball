@@ -1,4 +1,4 @@
-// $Id: proteinIterator.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: proteinIterator.h,v 1.2 1999/12/30 20:30:41 oliver Exp $
 
 #ifndef BALL_KERNEL_PROTEINITERATOR_H
 #define BALL_KERNEL_PROTEINITERATOR_H
@@ -19,7 +19,8 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	class ProteinIteratorTraits_
 		: public CompositeIteratorTraits_
@@ -31,13 +32,13 @@ namespace BALL {
 		ProteinIteratorTraits_()
 			:	CompositeIteratorTraits_()
 		{
-			predicate_ = &RTTI<KernelPredicate<Protein> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<Protein> >();
 		}
 			
 		ProteinIteratorTraits_(const Composite& composite)
 			:	CompositeIteratorTraits_(composite)
 		{
-			predicate_ = &RTTI<KernelPredicate<Protein> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<Protein> >();
 		}
 			
 		ProteinIteratorTraits_(const ProteinIteratorTraits_& traits, bool /* deep */ = true)
@@ -53,7 +54,7 @@ namespace BALL {
 
 		void resetPredicate()
 		{
-			predicate_ = &RTTI<KernelPredicate<Protein> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<Protein> >();
 		}
 	};
 

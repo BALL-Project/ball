@@ -1,4 +1,4 @@
-// $Id: atomIterator.h,v 1.2 1999/12/04 18:34:17 oliver Exp $
+// $Id: atomIterator.h,v 1.3 1999/12/30 20:30:40 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
 #define BALL_KERNEL_ATOMITERATOR_H
@@ -19,7 +19,8 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	class AtomIteratorTraits_
 		: public CompositeIteratorTraits_ 
@@ -31,13 +32,13 @@ namespace BALL {
 		AtomIteratorTraits_()
 			:	CompositeIteratorTraits_()
 		{
-			predicate_ = &RTTI<KernelPredicate<Atom> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
 		}
 			
 		AtomIteratorTraits_(const Composite& composite)
 			:	CompositeIteratorTraits_(composite)
 		{
-			predicate_ = &RTTI<KernelPredicate<Atom> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
 		}
 			
 		AtomIteratorTraits_(const AtomIteratorTraits_& traits, bool /* deep */ = true)
@@ -53,7 +54,7 @@ namespace BALL {
 
 		void resetPredicate()
 		{
-			predicate_ = &RTTI<KernelPredicate<Atom> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<Atom> >();
 		}
 
 	};

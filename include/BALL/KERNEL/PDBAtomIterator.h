@@ -1,4 +1,4 @@
-// $Id: PDBAtomIterator.h,v 1.2 1999/12/04 18:34:16 oliver Exp $ 
+// $Id: PDBAtomIterator.h,v 1.3 1999/12/30 20:30:39 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
 #define BALL_KERNEL_PDBATOMITERATOR_H
@@ -31,13 +31,13 @@ namespace BALL {
 		PDBAtomIteratorTraits_()
 			:	CompositeIteratorTraits_()
 		{
-			predicate_ = &RTTI<KernelPredicate<PDBAtom> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 		}
 			
 		PDBAtomIteratorTraits_(const Composite& composite)
 			:	CompositeIteratorTraits_(composite)
 		{
-			predicate_ = &RTTI<KernelPredicate<PDBAtom> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 		}
 			
 		PDBAtomIteratorTraits_(const PDBAtomIteratorTraits_& traits, bool /* deep */ = true)
@@ -53,7 +53,7 @@ namespace BALL {
 
 		void resetPredicate()
 		{
-			predicate_ = &RTTI<KernelPredicate<PDBAtom> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 		}
 
 	};

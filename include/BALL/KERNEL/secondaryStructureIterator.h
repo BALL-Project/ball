@@ -1,4 +1,4 @@
-// $Id: secondaryStructureIterator.h,v 1.2 1999/12/04 18:34:19 oliver Exp $
+// $Id: secondaryStructureIterator.h,v 1.3 1999/12/30 20:30:41 oliver Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
 #define BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
@@ -19,7 +19,8 @@
 #	include <BALL/KERNEL/predicate.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	class SecondaryStructureIteratorTraits_
 		: public CompositeIteratorTraits_
@@ -31,13 +32,13 @@ namespace BALL {
 		SecondaryStructureIteratorTraits_()
 			:	CompositeIteratorTraits_()
 		{
-			predicate_ = &RTTI<KernelPredicate<SecondaryStructure> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<SecondaryStructure> >();
 		}
 			
 		SecondaryStructureIteratorTraits_(const Composite& composite)
 			:	CompositeIteratorTraits_(composite)
 		{
-			predicate_ = &RTTI<KernelPredicate<SecondaryStructure> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<SecondaryStructure> >();
 		}
 			
 		SecondaryStructureIteratorTraits_(const SecondaryStructureIteratorTraits_& traits, bool /* deep */ = true)
@@ -53,7 +54,7 @@ namespace BALL {
 
 		void resetPredicate()
 		{
-			predicate_ = &RTTI<KernelPredicate<SecondaryStructure> >::getDefault();
+			predicate_ = &RTTI::getDefault<KernelPredicate<SecondaryStructure> >();
 		}
 	};
 

@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.2 1999/12/28 18:30:28 oliver Exp $
+// $Id: rtti.h,v 1.3 1999/12/30 20:30:32 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -37,61 +37,65 @@ namespace BALL
 
 	/**	Simplified RunTime Type Identification.
 			ANSI C++ provides support for runtime type identification (RTTI). However, the support
-			is very basic. This template class provides a more readable support for RTTI. It defines
+			is very basic. The template functions of the RTTI namespace  provide a more 
+			readable support for RTTI. It defines
 			predicates such as \Ref{isKindOf} that simplify tests on the hereditary relationship of
 			different objects.\\
-			To use the RTTI template class, parametrize it with the type you are interested in.
+			To use the RTTI template functions, parametrize it with the type you are interested in.
 			For example, to find out whether a given molecule is a protein, the following code
 			can be used:\\
 \begin{verbatim}
-	Molecule m;
+	Molecule& m =...;
 	...
-	if (RTTI<Protein>::isKindOf(m)) {
+	if (RTTI::isKindOf<Protein>(m)) 
+	{
 		// perform some protein specific operations
 	} else {
 		// this is only a molecule...
 	}
 \end{verbatim}
 	*/
-	template <class T>
-	class RTTI 
+	namespace RTTI
 	{
 
-		public:
-		
-		/**	Returns a reference to a static default instance of the corresponding class.
+		/**	Return a reference to a static default instance of the corresponding class.
 				This method is basically intended to provide a default object for certain operations
 				that require an instance of a certain class without really using this instance.
 				It is mainly used inside the RTTI class.
 		*/
-		static const T& getDefault() 
+		template <typename T>
+		const T& getDefault() 
 		{
 			static T t;
 			return t;
 		}
 
-		/**	Returns a void pointer to a new instance of the class.
+		/**	Return a void pointer to a new instance of the class.
 				Use this method to provide an easy factoy for obejct of a certain class.
 				The main use of this function lies in obejct persistence. The \Ref{PersistenceManager}
 				needs a function for the dynamic creation of objects.
 		*/
-		static void* getNew()
+		template <typename T>
+		void* getNew()
 		{
 			return (void*)new T;
 		}
 
-		/**	Returns the name of the class.
+		/**	Return the name of the class.
 				This method returns the name of the class as given by {\tt typeid(<class instance>.name())}.
 				No additional name demangling and whitespace substitution are performed.
 				@see	
 		*/
-		static const char* getName()
+		template <typename T>
+		const char* getName()
 		{
-			return typeid(getDefault()).name();
+			return typeid(getDefault<T>()).name();
 		}
 
-		///
-		static const char* getStreamName()
+		/**
+		*/
+		template <typename T>
+		const char* getStreamName()
 		{
 			static string s("");
 			static bool is_set = false;
@@ -99,56 +103,63 @@ namespace BALL
 			if (!is_set)
 			{
 				is_set = true;
-				s = streamClassName(typeid(getDefault()));
+				s = streamClassName(typeid(getDefault<T>()));
 			}
 
 			return s.c_str();
 		}
 
-		///
-		template <class U>
-		static bool isBaseOf(const U& u) 
+		/**
+		*/
+		template <typename T, typename U>
+		bool isBaseOf(const U& u) 
 		{
 			static T t;
 			T*	pt	= &t;
 			U* U_ptr = dynamic_cast<U*>(pt);
 			return (U_ptr != (U*)(&t)) && (U_ptr != 0);
 		}
-		
-		///
-		template <class U>
-		static bool isKindOf(const U&  u)
+
+		/**
+		*/
+		template <typename T, typename U>
+		bool isKindOf(const U&  u)
 		{
 			return (0 != dynamic_cast<const T*>(&u));
 		}
 
-		///
-		template <class U>
-		static T* castTo(const U& u)
+		/**
+		*/
+		template <typename T, typename U>
+		T* castTo(const U& u)
 		{
 			return const_cast<T*>(dynamic_cast<const T*>(&u));
 		}
 
-		///
-		template <class U>
-		static bool isInstanceOf(const U& u)
+		/**
+		*/
+		template <typename T, typename U>
+		bool isInstanceOf(const U& u)
 		{
 			T		t;
 			U* 	U_ptr = const_cast<U*>(&u);
 			if ((dynamic_cast<T*>(U_ptr) != 0) && (dynamic_cast<U*>(&t) != 0))
+			{
 				return true;
+			}
 			
 			return false;
 		}
 
-		///
-		template <class U>
-		static bool isDerivedFrom(const U& u)
+		/**
+		*/
+		template <typename T, typename U>
+		bool isDerivedFrom(const U& u)
 		{
-			return (isKindOf(u) && !isInstanceOf(u));
+			return (isKindOf<T>(u) && !isInstanceOf<T>(u));
 		}
 
-	};
+	} // namespace RTTI
 
 } // namespace BALL
 

@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.4 1999/12/28 18:42:26 oliver Exp $
+// $Id: property.h,v 1.5 1999/12/30 20:30:39 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -32,8 +32,6 @@ namespace BALL
 	class NamedProperty
 		:	public PersistentObject
 	{
-		friend class RTTI<NamedProperty>;
-
 		public:
 		/**	The different types of data a NamedProperty may contain.
 				
