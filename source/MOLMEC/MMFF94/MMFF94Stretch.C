@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.11 2005/03/23 16:13:23 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.12 2005/03/24 13:53:12 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -147,19 +147,28 @@ Log.info() << "MMFF94Strech Number of rings: "  << rings_.size() << std::endl;
 				// are both atoms sp or sp2 hypridised?
 				bool get_sbmb = 
 					parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B) &&
-					bond.getOrder() == 1   									&&
+					bond.getOrder() == Bond::ORDER__SINGLE  									&&
 					(isSp_(atom1) || isSp2_(atom1)) 				&&
 					(isSp_(atom2) || isSp2_(atom2))					&&
  					!isInOneAromaticRing_(bond);
 
-
+// debug->
 int reason = 0;
 if (!parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B)) reason = 1;
-if (bond.getOrder() != 1) reason = 2;
+if (bond.getOrder() != Bond::ORDER__SINGLE) reason = 2;
 if (! ((isSp_(atom1) || isSp2_(atom1)) && (isSp_(atom2) || isSp2_(atom2)))) reason = 3;
 if (isInOneAromaticRing_(bond)) reason = 4;
 
+/*
+Log.info() << " (atoms are: " 
+							<< atom1.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << " " 
+							<< atom2.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ") " 
+							<< bond.getOrder() 
+							<< std::endl;
+*/
+
 dummy_stretch.reason = reason;
+// <- debug
 
 
 				dummy_stretch.sbmb = get_sbmb;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.3 2005/03/22 18:27:25 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.4 2005/03/24 13:53:11 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -14,6 +14,87 @@ using namespace std;
 
 namespace BALL 
 {
+
+	MMFF94AtomTypeData::MMFF94AtomTypeData()
+		: aspec(0),
+			crd(0),
+			val(0),
+			pilp(0),
+			mltb(0),
+			arom(0),
+			lin(0),
+			sbmb(0)
+	{
+	}
+
+	MMFF94AtomTypesContainer::MMFF94AtomTypesContainer()
+		: is_initialized_(false)
+	{
+	}
+
+	MMFF94AtomTypesContainer::MMFF94AtomTypesContainer(const MMFF94AtomTypesContainer& to_copy)
+	{
+		data_ = to_copy.data_;
+	}
+
+	bool MMFF94AtomTypesContainer::readDataSet(const String& filename)
+	{
+		data_.clear();
+
+		LineBasedFile infile(filename);
+		vector<String> fields;
+
+		data_.resize(99);
+
+		try
+		{
+			while (infile.readLine())
+			{
+				// comments
+				if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+				{
+					continue;
+				}
+				
+				if (infile.getLine().split(fields) != 9)
+				{
+					Log.error() << "Error in " << filename << " Not 9 fields in one line " << infile.getLine() << std::endl;
+					return false;
+				}
+
+				Position pos 			= fields[0].toUnsignedInt();
+
+				// shouldnt happen, but just to be sure
+				if (pos > data_.size()) data_.resize(pos);
+
+				data_[pos].aspec 	= fields[1].toUnsignedInt();
+				data_[pos].crd 		= fields[2].toUnsignedInt();
+				data_[pos].val 		= fields[3].toUnsignedInt();
+				data_[pos].pilp 	= fields[4].toUnsignedInt();
+				data_[pos].mltb 	= fields[5].toUnsignedInt();
+				data_[pos].arom 	= fields[6].toUnsignedInt();
+				data_[pos].lin 		= fields[7].toUnsignedInt();
+				data_[pos].sbmb 	= fields[8].toUnsignedInt();
+			}
+		}
+		catch(...)
+		{
+			Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
+			Log.error() << " in File " << filename << std::endl;
+			infile.close();
+			return false;
+		}
+
+		infile.close();
+
+		is_initialized_ = true;
+		return true;
+	}
+
+
+	///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
+
 	MMFF94BondStretchParameters::MMFF94BondStretchParameters()
 		: is_initialized_(false),
 			nr_of_atom_types_(100)

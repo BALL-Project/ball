@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.2 2005/03/22 15:41:11 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.3 2005/03/24 13:53:11 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -149,6 +149,11 @@ namespace BALL
 		if (folder == "") 
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, folder_);
+		}
+
+		if (!atom_types_.isInitialized())
+		{
+			atom_types_.readDataSet(folder + "MMFFPROP.PAR");
 		}
 
 		return true;
