@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.34.2.1 2004/12/27 14:55:01 amoll Exp $
+// $Id: primitiveManager.C,v 1.34.2.2 2005/01/13 12:43:23 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -309,9 +309,13 @@ void PrimitiveManager::startUpdateThread_()
 	// no statusbar changes while beeing otherwise busy
 	if (main_control_->compositesAreLocked()) return;
 
+	thread_.wait(500);
+	if (!thread_.running()) return;
+	
 	// keep the user informed: we are still building the Representation -> Statusbar text
 	Position pos = 3;
 	String dots;
+
 	while (thread_.running())
 	{
 		main_control_->setStatusbarText("Creating Model " + dots);
