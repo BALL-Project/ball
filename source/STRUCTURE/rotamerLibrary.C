@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.15 2001/06/05 15:53:30 anker Exp $
+// $Id: rotamerLibrary.C,v 1.16 2001/12/17 01:30:27 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -854,6 +854,12 @@ namespace BALL
 		}
 
 		return r;
+	}
+
+
+	const Rotamer& ResidueRotamerSet::getRotamer(Position index) const
+	{
+		return rotamers_[index % getNumberOfRotamers()];
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
