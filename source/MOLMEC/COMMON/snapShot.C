@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.22 2001/03/21 16:23:33 anker Exp $
+// $Id: snapShot.C,v 1.23 2001/03/28 13:49:51 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -176,7 +176,7 @@ namespace BALL
 	}
 
 
-	void SnapShot::setAtomVelocitites(const ::std::vector<Vector3>& atom_velocities)
+	void SnapShot::setAtomVelocities(const ::std::vector<Vector3>& atom_velocities)
 		throw()
 	{
 		atom_velocities_ = atom_velocities;
@@ -365,21 +365,26 @@ namespace BALL
 
 	::std::ostream& operator << (::std::ostream& os, const SnapShot& ss)
 	{
-		os << ss.getNumberOfAtoms() << endl;
+		os << ss.getNumberOfAtoms() << endl << endl;
 
 		vector<Vector3> data = ss.getAtomPositions();
 
+		os << "Atom positions:" << endl;
 		vector<Vector3>::const_iterator it = data.begin();
 		for (; it != data.end(); ++it)
 		{
 			os << *it << endl;
 		}
 
+		os << endl << "Atom velocities:" << endl;
+
 		data = ss.getAtomVelocities();
 		for (it = data.begin(); it != data.end(); ++it)
 		{
 			os << *it << endl;
 		}
+
+		os << endl << "Atom forces:" << endl;
 
 		data = ss.getAtomForces();
 		for (it = data.begin(); it != data.end(); ++it)
