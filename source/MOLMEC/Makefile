@@ -1,3 +1,6 @@
+# MOLMEC/Makefile
+# $Id: Makefile,v 1.5 2000/02/10 11:55:45 oliver Exp $
+#
 include ../config.mak
 
 DIRECTORY=MOLMEC
@@ -6,11 +9,11 @@ THISLIB=$(LIBNAME)
 
 DIRS=\
 	AMBER\
+	CHARMM\
 	COMMON\
 	MINIMIZATION\
 	MDSIMULATION\
 	PARAMETER
-
 
 default:	dirs
 
