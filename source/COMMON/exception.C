@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.C,v 1.35 2004/09/01 12:22:45 amoll Exp $
+// $Id: exception.C,v 1.36 2004/09/01 12:38:12 amoll Exp $
 //
 
 #include <BALL/COMMON/exception.h>
@@ -288,7 +288,7 @@ namespace BALL
 			{
 			}
 		
-			InvalidOption::InvalidOption(const char* file, int line, int option)
+			InvalidOption::InvalidOption(const char* file, int line, String option)
 				throw()
 				: GeneralException(file, line, "Invalid option: ", option)
 			{

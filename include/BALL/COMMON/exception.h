@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.47 2004/09/01 12:22:34 amoll Exp $
+// $Id: exception.h,v 1.48 2004/09/01 12:38:15 amoll Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -441,7 +441,7 @@ namespace BALL
 			public:
 
 				///
-				InvalidOption(const char* file, int line, int option)
+				InvalidOption(const char* file, int line, String option)
 					throw();
 		};
 
