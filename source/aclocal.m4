@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.27 2003/05/27 06:39:21 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.28 2003/05/27 14:03:23 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -171,8 +171,9 @@ AC_DEFUN(CF_FIND_LIB,[
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in $3 /usr/lib /opt/lib ; do
+		for i in $3 ; do
 			for j in $i/$2.* ; do
+				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -181,7 +182,7 @@ AC_DEFUN(CF_FIND_LIB,[
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/$2.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -2640,7 +2641,27 @@ AC_DEFUN(CF_BALLVIEW, [
 
 				AC_MSG_CHECKING(for libqt${QT_MT_SUFFIX})
 				if test "${QTDIR}" != "" ; then
-					CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+					if test "${QT_MT_SUFFIX}" = "-mt" ; then
+						if test -a "${QTDIR}/lib/libqt-mt.so" ; then
+							QT_LIBPATH="${QTDIR}/lib"
+						elif test -a "${QTDIR}/lib/libqt.so" ; then
+							QT_LIBPATH="${QTDIR}/lib"
+							QT_MT_SUFFIX=""
+						fi
+						if test "${QT_LIBPATH}" = "" ; then
+							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+						fi
+					else	
+						if test -a "${QTDIR}/lib/libqt.so" ; then
+							QT_LIBPATH="${QTDIR}/lib"
+						elif test -a "${QTDIR}/lib/libqt-mt.so" ; then
+							QT_LIBPATH="${QTDIR}/lib"
+							QT_MT_SUFFIX="-mt"
+						fi
+						if test "${QT_LIBPATH}" = "" ; then
+							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+						fi
+					fi
 				else
 					CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
 				fi
@@ -2959,7 +2980,7 @@ AC_DEFUN(CF_BALLVIEW, [
 		if test "${QT_LINKING_OK+set}" != set ; then
 			AC_MSG_RESULT(no)
 			AC_MSG_RESULT()
-			AC_MSG_RESULT([Cannot link against libqgl/qt - disabling support for visualization!])
+			AC_MSG_RESULT([Cannot link against libqgl/qt!])
 			AC_MSG_RESULT([If QT is installed, please specify the path to the library])
 			AC_MSG_RESULT([using the option --with-qt-libs=DIR])
 			AC_MSG_RESULT()
@@ -2973,7 +2994,7 @@ AC_DEFUN(CF_BALLVIEW, [
 			AC_MSG_CHECKING(QT library version)
 			SAVE_LIBS=${LIBS}
 			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-			LD_LIBRARY_PATH="${X11_LIBPATH}:${OPENGL_LIBPATH}:${QT_LIBPATH}:${LD_LIBRARY_PATH}"
+			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
 			export LD_LIBRARY_PATH
 			echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
 			AC_TRY_RUN(
@@ -3007,9 +3028,8 @@ AC_DEFUN(CF_BALLVIEW, [
 				AC_MSG_RESULT(Perhaps you specified the wrong library or the)
 				AC_MSG_RESULT(X11 libraries are in conflict with any other library.)
 				AC_MSG_RESULT(You might also want to check your LD_LIBRARY_PATH.)
-				AC_MSG_RESULT(Support for visualization is disabled.)
 				AC_MSG_RESULT()
-				USE_BALLVIEW=false
+				AC_MSG_ERROR(Aborted)
 			else
 				QT_VERSION_STRING=`cat qt.version`
 				AC_MSG_RESULT(${QT_VERSION_STRING})
@@ -3020,34 +3040,15 @@ AC_DEFUN(CF_BALLVIEW, [
 				dnl
 				${RM} qt.version 2>/dev/null
 				QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
-				if test "${QT_MAJOR}" -lt 2 ; then
+				if test "${QT_MAJOR}" -lt 3 ; then
 					AC_MSG_RESULT()
-					AC_MSG_RESULT(QT version 2.x is required.)
-					AC_MSG_RESULT(Please install version QT Version 2 (at least 2.0.2))
+					AC_MSG_RESULT(QT version 3.x is required.)
+					AC_MSG_RESULT(Please install version QT Version 3 (at least 3.0.6))
 					AC_MSG_RESULT(which can be obtained from)
 					AC_MSG_RESULT()
 					AC_MSG_RESULT(  www.troll.no/qt)
 					AC_MSG_RESULT()
-					AC_MSG_RESULT(Support for visualization is disabled.)
-					AC_MSG_RESULT()
-					USE_BALLVIEW=false
-				else
-					dnl
-					dnl  give a hint if somebody is using 2.00 which
-					dnl  has a serious bug in QListView: multiple selection
-					dnl  does not work as expected!
-					dnl
-					if test "${QT_VERSION_STRING}" = "2.00" ; then
-						AC_MSG_RESULT()
-						AC_MSG_RESULT(QT verison 2.00 is known to contain a bug)
-						AC_MSG_RESULT(that affects some features of MOLVIEW.)
-						AC_MSG_RESULT(Please install at least version 2.0.2)
-						AC_MSG_RESULT(which can be obtained from)
-						AC_MSG_RESULT()
-						AC_MSG_RESULT(  www.troll.no/qt)
-						AC_MSG_RESULT()
-						AC_MSG_RESULT()
-					fi
+					AC_MSG_ERROR(Aborted)
 				fi
 			fi
 		fi

@@ -4009,7 +4009,11 @@ echo "$as_me: error: aborted." >&2;}
 			if test "${CXX_VERSION_2}" -lt 3 ; then
 	  CXXFLAGS="${CXXFLAGS} -ieee"
 	else
-	  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+		if test "${CXX_VERSION_2}" -ge 5 ; then
+						      		  CXXFLAGS="${CXXFLAGS} -mieee -nopure_cname"
+		else
+		  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+		fi
 	fi
 
   LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
@@ -14779,8 +14783,9 @@ echo $ECHO_N "checking for FFT library... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in ${FFTW_LIBPATH} /usr/lib /opt/lib ; do
+		for i in ${FFTW_LIBPATH} ; do
 			for j in $i/libfftw.* ; do
+				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -14789,7 +14794,7 @@ echo $ECHO_N "checking for FFT library... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/libfftw.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -15404,8 +15409,9 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} /usr/lib /opt/lib ; do
+		for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} ; do
 			for j in $i/libMesaGL.* ; do
+				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -15414,7 +15420,7 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/libMesaGL.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -15478,8 +15484,9 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} /usr/lib /opt/lib ; do
+		for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} ; do
 			for j in $i/libGL.* ; do
+				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -15488,7 +15495,7 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/libGL.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -15673,8 +15680,9 @@ echo $ECHO_N "checking for OpenGL library... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in  /usr/lib /opt/lib ; do
+		for i in  ; do
 			for j in $i/libGL.* ; do
+				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -15683,7 +15691,7 @@ echo $ECHO_N "checking for OpenGL library... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/libGL.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -15945,6 +15953,14 @@ echo "${ECHO_T}(${QT_INCPATH})" >&6
 				echo "$as_me:$LINENO: checking for libqt${QT_MT_SUFFIX}" >&5
 echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 				if test "${QTDIR}" != "" ; then
+					if test "${QT_MT_SUFFIX}" = "-mt" ; then
+						if test -a "${QTDIR}/lib/libqt-mt.so" ; then
+							QT_LIBPATH="${QTDIR}/lib"
+						elif test -a "${QTDIR}/lib/libqt.so" ; then
+							QT_LIBPATH="${QTDIR}/lib"
+							QT_MT_SUFFIX=""
+						fi
+						if test "${QT_LIBPATH}" = "" ; then
 
 	_LIBS=
 
@@ -15953,8 +15969,9 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include /usr/lib /opt/lib ; do
+		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
+				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -15963,7 +15980,7 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -16018,7 +16035,15 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 
 	QT_LIBPATH="${_LIBS}"
 
-				else
+						fi
+					else
+						if test -a "${QTDIR}/lib/libqt.so" ; then
+							QT_LIBPATH="${QTDIR}/lib"
+						elif test -a "${QTDIR}/lib/libqt-mt.so" ; then
+							QT_LIBPATH="${QTDIR}/lib"
+							QT_MT_SUFFIX="-mt"
+						fi
+						if test "${QT_LIBPATH}" = "" ; then
 
 	_LIBS=
 
@@ -16027,7 +16052,18 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} /usr/lib /opt/lib ; do
+		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include ; do
+			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
+				echo "checking for ${_LIBS} in $j..."
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -16037,7 +16073,74 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
+			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" != ""; then
+			for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include /dev/null; do
+				if test "${_LIBS}" = "" ; then
+					_TMP=`${FIND} $i -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+					for j in ${_TMP} ; do
+						if test "${_LIBS}" = "" ; then
+							_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+						fi
+					done
+				fi
+			done
+		fi
+
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /opt -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+				fi
+			done
+		fi
+
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /usr -name "libqt${QT_MT_SUFFIX}*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/libqt${QT_MT_SUFFIX}.*/\//"`
+				fi
+			done
+		fi
+
+	fi
+
+	QT_LIBPATH="${_LIBS}"
+
+						fi
+					fi
+				else
+
+	_LIBS=
+
+		if test "${QT_LIBPATH}" != "" ; then
+		_LIBS=${QT_LIBPATH}
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} ; do
+			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
+				echo "checking for ${_LIBS} in $j..."
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -16171,8 +16274,9 @@ echo $ECHO_N "checking for libqgl... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include /usr/lib /opt/lib ; do
+		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include ; do
 			for j in $i/libqgl.* ; do
+				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -16181,7 +16285,7 @@ echo $ECHO_N "checking for libqgl... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/libqgl.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -16245,8 +16349,9 @@ echo $ECHO_N "checking for libqgl... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} /usr/lib /opt/lib ; do
+		for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} ; do
 			for j in $i/libqgl.* ; do
+				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
@@ -16255,7 +16360,7 @@ echo $ECHO_N "checking for libqgl... $ECHO_C" >&6
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/*/lib /opt/*/lib ; do
+		for i in /usr/lib /opt/lib /usr/*/lib /opt/*/lib ; do
 			for j in $i/libqgl.* ; do
 				if test -f "$j" -a "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -17007,8 +17112,8 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 echo "${ECHO_T}no" >&6
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:$LINENO: result: Cannot link against libqgl/qt - disabling support for visualization!" >&5
-echo "${ECHO_T}Cannot link against libqgl/qt - disabling support for visualization!" >&6
+			echo "$as_me:$LINENO: result: Cannot link against libqgl/qt!" >&5
+echo "${ECHO_T}Cannot link against libqgl/qt!" >&6
 			echo "$as_me:$LINENO: result: If QT is installed, please specify the path to the library" >&5
 echo "${ECHO_T}If QT is installed, please specify the path to the library" >&6
 			echo "$as_me:$LINENO: result: using the option --with-qt-libs=DIR" >&5
@@ -17026,7 +17131,7 @@ echo "${ECHO_T}yes" >&6
 echo $ECHO_N "checking QT library version... $ECHO_C" >&6
 			SAVE_LIBS=${LIBS}
 			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-			LD_LIBRARY_PATH="${X11_LIBPATH}:${OPENGL_LIBPATH}:${QT_LIBPATH}:${LD_LIBRARY_PATH}"
+			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
 			export LD_LIBRARY_PATH
 			echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
 			if test "$cross_compiling" = yes; then
@@ -17093,11 +17198,11 @@ echo "${ECHO_T}Perhaps you specified the wrong library or the" >&6
 echo "${ECHO_T}X11 libraries are in conflict with any other library." >&6
 				echo "$as_me:$LINENO: result: You might also want to check your LD_LIBRARY_PATH." >&5
 echo "${ECHO_T}You might also want to check your LD_LIBRARY_PATH." >&6
-				echo "$as_me:$LINENO: result: Support for visualization is disabled." >&5
-echo "${ECHO_T}Support for visualization is disabled." >&6
 				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-				USE_BALLVIEW=false
+				{ { echo "$as_me:$LINENO: error: Aborted" >&5
+echo "$as_me: error: Aborted" >&2;}
+   { (exit 1); exit 1; }; }
 			else
 				QT_VERSION_STRING=`cat qt.version`
 				echo "$as_me:$LINENO: result: ${QT_VERSION_STRING}" >&5
@@ -17105,13 +17210,13 @@ echo "${ECHO_T}${QT_VERSION_STRING}" >&6
 
 																				${RM} qt.version 2>/dev/null
 				QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
-				if test "${QT_MAJOR}" -lt 2 ; then
+				if test "${QT_MAJOR}" -lt 3 ; then
 					echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-					echo "$as_me:$LINENO: result: QT version 2.x is required." >&5
-echo "${ECHO_T}QT version 2.x is required." >&6
-					echo "$as_me:$LINENO: result: Please install version QT Version 2 (at least 2.0.2)" >&5
-echo "${ECHO_T}Please install version QT Version 2 (at least 2.0.2)" >&6
+					echo "$as_me:$LINENO: result: QT version 3.x is required." >&5
+echo "${ECHO_T}QT version 3.x is required." >&6
+					echo "$as_me:$LINENO: result: Please install version QT Version 3 (at least 3.0.6)" >&5
+echo "${ECHO_T}Please install version QT Version 3 (at least 3.0.6)" >&6
 					echo "$as_me:$LINENO: result: which can be obtained from" >&5
 echo "${ECHO_T}which can be obtained from" >&6
 					echo "$as_me:$LINENO: result: " >&5
@@ -17120,32 +17225,9 @@ echo "${ECHO_T}" >&6
 echo "${ECHO_T}www.troll.no/qt" >&6
 					echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-					echo "$as_me:$LINENO: result: Support for visualization is disabled." >&5
-echo "${ECHO_T}Support for visualization is disabled." >&6
-					echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-					USE_BALLVIEW=false
-				else
-																														if test "${QT_VERSION_STRING}" = "2.00" ; then
-						echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-						echo "$as_me:$LINENO: result: QT verison 2.00 is known to contain a bug" >&5
-echo "${ECHO_T}QT verison 2.00 is known to contain a bug" >&6
-						echo "$as_me:$LINENO: result: that affects some features of MOLVIEW." >&5
-echo "${ECHO_T}that affects some features of MOLVIEW." >&6
-						echo "$as_me:$LINENO: result: Please install at least version 2.0.2" >&5
-echo "${ECHO_T}Please install at least version 2.0.2" >&6
-						echo "$as_me:$LINENO: result: which can be obtained from" >&5
-echo "${ECHO_T}which can be obtained from" >&6
-						echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-						echo "$as_me:$LINENO: result: www.troll.no/qt" >&5
-echo "${ECHO_T}www.troll.no/qt" >&6
-						echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-						echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-					fi
+					{ { echo "$as_me:$LINENO: error: Aborted" >&5
+echo "$as_me: error: Aborted" >&2;}
+   { (exit 1); exit 1; }; }
 				fi
 			fi
 		fi
