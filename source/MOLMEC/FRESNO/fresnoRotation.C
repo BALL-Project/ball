@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.12 2002/11/22 15:12:40 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.13 2002/11/22 18:38:37 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -213,7 +213,7 @@ namespace BALL
 		cycleDFS_(atom1, visited,
 				tree, possible_cycle_bonds, cycle_bonds, cycle_count);
 
-		if (verbosity >= 90) { Log.info() << "Tree size: " << tree.size() << endl; }
+		if (verbosity >= 90) Log.info() << "Tree size: " << tree.size() << endl;
 
 		// initialize the data structures for another dfs and count the heavy
 		// atoms in the system 
@@ -704,6 +704,10 @@ namespace BALL
 		throw()
 	{
 
+		// ?????
+		// make a private member from this
+		Size verbosity 
+			= getForceField()->options.getInteger(FresnoFF::Option::VERBOSITY);
 		// mark this atom as visited
 		visited.insert(atom);
 
@@ -736,11 +740,12 @@ namespace BALL
 								+ bind_distance_offset_;
 							if (dist < bind_distance)
 							{
-								// DEBUG
-								Log.info() << "Found bound atom " << atom->getFullName() 
-									<< ". dist: " << dist << " bind_distance: "
-									<< bind_distance << endl;
-								// /DEBUG
+								if (verbosity >= 90)
+								{
+									Log.info() << "Found bound atom " << atom->getFullName() 
+										<< ". dist: " << dist << " bind_distance: "
+										<< bind_distance << endl;
+								}
 								return true;
 							}
 						}
