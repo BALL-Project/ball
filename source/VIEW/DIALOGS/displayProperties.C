@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.54 2003/12/18 12:22:39 amoll Exp $
+// $Id: displayProperties.C,v 1.55 2003/12/19 13:12:05 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -781,7 +781,7 @@ void DisplayProperties::checkDrawingPrecision_()
 		return;
 	}
 
-	if (isSurfaceModel((ModelType)model_type_combobox->currentItem()))
+	if (!isSurfaceModel((ModelType)model_type_combobox->currentItem()))
 	{
 		presets_precision_button->setChecked(true);
 		custom_precision_button->setEnabled(false);
