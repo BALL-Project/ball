@@ -1,17 +1,11 @@
-// $Id: kernel.doc,v 1.13 2002/12/12 09:48:45 oliver Exp $
+// $Id: kernel.doc,v 1.14 2003/01/08 11:24:01 amoll Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on BALL kernel datastructures. 
 		\\
 		The hierarchy of the kernel classes looks like this: 
 		\\
-		\TEX{
-			\begin{figure}[htbp]
-				\begin{center}
-					\includegraphics[width=17cm]{../../doc/images/KERNEL}
-				\end{center}
-			\end{figure}
-		}
+		\IMG{../../doc/images/KERNEL.gif}
 */
 //@{
 
