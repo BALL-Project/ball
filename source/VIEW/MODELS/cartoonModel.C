@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.20 2005/01/07 14:45:47 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.21 2005/01/08 18:28:25 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -770,22 +770,16 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	}
 
 	// overall direction of the helix
-	Vector3 helix_dir = spline_points_[end] - spline_points_[start];
-	helix_dir.normalize();
-//   	helix_dir *= (ribbon_width_ * 0.5);
+	const Vector3 helix_dir((spline_points_[end] - spline_points_[start]).normalize());
 
-	// distance vector between the two tubes
+	// distance difference vector for growing/shrinking of helix at start/end
+	const Vector3 helix_step = helix_dir * ribbon_width_ / 12;
+
+	// distance vector changes dynamicaly later by helix_step
 	Vector3 tube_diff;
-
-	// create sphere for the point
-	Sphere* sphere = new Sphere;
-	sphere->setRadius(tube_radius_);
-	sphere->setPosition(last_point_);
-	sphere->setComposite(atoms_of_spline_points_[start]);
-	geometric_objects_.push_back(sphere);
-
-	// calculate the number of slides for the circle and the angle in between them
-	Size slides = (Size)(8.0 + drawing_precision_ * 8.0);
+	
+	// calculate the number of slides for the circles and the angle in between them
+	Size slides = (Size)(8 + drawing_precision_ * 4);
 	Angle slides_angle = Angle(360.0 / slides, false);
 
 	// direction vector of the two current spline points
@@ -955,11 +949,11 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		////////////////////////////////////////////////////////////
 		if (p < start + 10)
 		{
-			tube_diff += helix_dir * 0.125;
+			tube_diff += helix_step;
 		}
-		else if (p > end - 11)
+		else if (p > end - 12)
 		{
-			tube_diff -= helix_dir * 0.125;
+			tube_diff -= helix_step;
 		}
 
 		Vector3 vn(-(dir_new % helix_dir));
@@ -1028,13 +1022,6 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	}
 
 	have_start_point_ = true;
-	
-	// create a sphere as an end cap for the point
-	sphere = new Sphere;
-	sphere->setRadius(tube_radius_);
-	sphere->setPosition(last_point_);
-	sphere->setComposite(atoms_of_spline_points_[end - 1]);
-	geometric_objects_.push_back(sphere);
 }
 
 // -----------------------------------------------------------------------
