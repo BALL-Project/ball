@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.16 2001/05/24 14:45:50 anker Exp $
+// $Id: standardPredicates.h,v 1.17 2001/05/24 15:37:30 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -306,8 +306,6 @@ namespace BALL
 
 			BALL_CREATE(InRingPredicate)
 
-			InRingPredicate();
-			
 			/** Evaluate the predicate for the atom {\tt atom}.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
