@@ -392,7 +392,6 @@ void DownloadPDBFile::abort()
 void DownloadPDBFile::downloadStarted_()
 	throw()
 {
-	hide();
 	aborted_ = false;
 	setStatusbarText("Started download, please wait...");
 	button_abort->setEnabled(true);
