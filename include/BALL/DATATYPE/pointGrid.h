@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.14 2000/07/06 13:07:10 oliver Exp $ 
+// $Id: pointGrid.h,v 1.15 2000/07/07 03:50:05 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -743,62 +743,17 @@ namespace BALL
 	PointGrid<GridDataType>::GridIndex PointGrid<GridDataType>::getIndex
 		(const float x, const float y, const float z) const 
 	{
-		GridIndex	index;
-		long i;
+		if (x > upper_.x  ||	y > upper_.y  ||	z > upper_.z  ||
+				x < origin_.x ||	y < origin_.y ||	z < origin_.z)
+		{
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}				
 		
-		i = (long)((x - origin_.x) / spacing_.x + 0.5);
+		GridIndex	index;
 
-		if (i < 0)
-		{
-			index.x = 0;
-		} 
-		else 
-		{
-			if  (i >= (long)number_of_points_x_)
-			{
-				index.x = number_of_points_x_ - 1;
-			} 
-			else 
-			{
-				index.x = (Index) i;
-			}
-		}
-
-		i = (long)((y - origin_.y) / spacing_.y + 0.5);
-
-		if (i < 0)
-		{
-			index.y = 0;
-		} 
-		else 
-		{
-			if  (i >= (long)number_of_points_y_)
-			{
-				index.y = number_of_points_y_ - 1;
-			} 
-			else 
-			{
-				index.y = (Index) i;
-			}
-		}
-
-		i = (long)((z - origin_.z) / spacing_.z + 0.5);
-
-		if (i < 0)
-		{
-					index.z = 0;
-		} 
-		else 
-		{
-			if  (i >= (long)number_of_points_z_)
-			{
-				index.z = number_of_points_z_ - 1;
-			} 
-			else 
-			{
-				index.z = (Index) i;
-			}
-		}
+		index.x = (Index) ((x - origin_.x) / spacing_.x + 0.5);
+		index.y = (Index) ((y - origin_.y) / spacing_.y + 0.5);
+		index.z = (Index) ((z - origin_.z) / spacing_.z + 0.5);
 
 		return index;
 	}
@@ -1008,7 +963,6 @@ namespace BALL
 	{
 		return has(vector.x, vector.y, vector.z);
 	}
-
 
 	template <typename GridDataType>
 	BALL_INLINE
