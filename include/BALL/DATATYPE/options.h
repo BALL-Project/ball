@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.21 2003/08/26 08:04:11 oliver Exp $
+// $Id: options.h,v 1.22 2004/05/17 14:36:44 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_OPTIONS_H
@@ -159,7 +159,7 @@ namespace BALL
 					If the value is neither "true", nor "false" or the key does
 					not exist false is returned!
 					You might want to check the value's validity as a bool first
-					by calling  \link isBool isBool \endlink .
+					by calling  isBool().
 					@param	key the key
 					@return	bool, boolean value
 		*/
@@ -169,7 +169,7 @@ namespace BALL
 					If the value could not be converted to a floating point number or the key
 					does not exist a value of #0.0# is returned. \par
 					You might want to check the value's validity as a floating point 
-					number first by calling  \link isReal isReal \endlink .
+					number first by calling  isReal().
 					@param	key the key
 					@return float, floating point value
 		*/
@@ -193,7 +193,7 @@ namespace BALL
 					If the value corresponding to <b>key</b> could not be converted to an
 					integer number or the key does not exists, zero is returned.
 					It is possible to check for the validity 
-					of this conversion by calling  \link isInteger isInteger \endlink .
+					of this conversion by calling isInteger() .
 					@return 	long the integer value
 					@param	key the key
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.43 2004/02/23 15:19:58 anhi Exp $
+// $Id: bitVector.h,v 1.44 2004/05/17 14:36:44 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
@@ -263,8 +263,8 @@ namespace BALL
 
 		/** Return a sub-BitVector.
 				A new BitVector is created and filled with elements of this instance.
-				@param first, the index of the first element to be copied
-				@param last, the index of the last element to be copied
+				@param first the index of the first element to be copied
+				@param last the index of the last element to be copied
 				@return BitVector a partial copy of this instance
 		*/
 		BitVector operator () (Index first,Index last) const
@@ -440,12 +440,12 @@ namespace BALL
 
 		/** And Operator.
 				Creates a new BitVector object and fills it with the result of
-				{\em this and bit\_Vector}.
+				{\em this and bit_Vector}.
 		*/
 		BitVector operator & (const BitVector& bit_vector) 
 			throw(Exception::OutOfMemory);
 
-		/** Compute {\em this and bit\_vector}.
+		/** Compute {\em this and bit_vector}.
 				The result is saved in this instance.
 		*/
 		BitVector& operator &= (const BitVector& bit_vector) 
@@ -453,12 +453,12 @@ namespace BALL
 
 		/** Xor Operator.
 				Creates a new BitVector object and fills it with the result of
-				{\em this Xor bit\_vector}.
+				{\em this Xor bit_vector}.
 		*/
 		BitVector operator ^ (const BitVector& bit_vector) 
 			throw(Exception::OutOfMemory);
 
-		/** Compute {\em this xor bit\_vector}.
+		/** Compute {\em this xor bit_vector}.
 				The result is saved in this instance.
 		*/
 		BitVector& operator ^= (const BitVector& bit_vector) 
