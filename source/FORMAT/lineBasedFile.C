@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.1 2000/10/10 08:51:56 amoll Exp $
+// $Id: lineBasedFile.C,v 1.2 2000/10/10 10:56:23 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -39,7 +39,14 @@ namespace BALL
 		return line_;
 	}
 
-	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode = File::IN)
+	LineBasedFile::LineBasedFile()
+		throw()
+		:	File(),
+			line_number_(0)
+	{
+	}
+
+	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
 		: File(filename, open_mode),
 			line_number_(0)
