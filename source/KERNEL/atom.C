@@ -1,9 +1,10 @@
-// $Id: atom.C,v 1.8 2000/01/15 18:58:42 oliver Exp $
+// $Id: atom.C,v 1.9 2000/02/06 19:56:51 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/fragment.h>
+#include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PSE.h> 
 
@@ -223,12 +224,12 @@ namespace BALL
 		element_ = &element;
 	}
 
-	Element & Atom::getElement()
+	Element& Atom::getElement()
 	{
 		return *element_;
 	}
 
-	const Element &Atom::getElement() const
+	const Element& Atom::getElement() const
 	{
 		return *element_;
 	}
@@ -243,42 +244,19 @@ namespace BALL
 		return charge_;
 	}
 
-	Molecule *Atom::getMolecule()
+	Molecule* Atom::getMolecule()
 	{
-		for (Composite::AncestorIterator ancestor_it = beginAncestor();
-				 !ancestor_it.isEnd();
-				 ++ancestor_it)
-		{
-			if (RTTI::isKindOf<Molecule>(*ancestor_it))
-			{
-				return (Molecule *)&*ancestor_it;
-			}
-		}
-
-		return 0;
+		return Composite::getAncestor(RTTI::getDefault<Molecule>());
 	}
 
-	const Molecule *
-	Atom::getMolecule
-		() const
+	const Molecule* Atom::getMolecule() const
 	{
 		return ((Atom *)this)->getMolecule();
 	}
 
-	Fragment *
-	Atom::getFragment
-		()
+	Fragment* Atom::getFragment()
 	{
-		for (Composite::AncestorIterator ancestor_it = beginAncestor();
-				 !ancestor_it.isEnd(); ++ancestor_it)
-		{
-			if (RTTI::isKindOf<Fragment>(*ancestor_it))
-			{
-				return (Fragment *)&*ancestor_it;
-			}
-		}
-
-		return 0;
+		return Composite::getAncestor(RTTI::getDefault<Fragment>());
 	}
 
 	const Fragment *Atom::getFragment() const
@@ -296,10 +274,61 @@ namespace BALL
 		return name_;
 	}
 
-	const String &Atom::getName() const
+	const String& Atom::getName() const
 	{
 		return name_;
 	}
+
+	String Atom::getFullName() const
+	{
+		String parent_name;
+		// determine the parent`s name
+		const Residue* parent = getAncestor(RTTI::getDefault<Residue>());
+		if (parent == 0)
+		{
+			if (getFragment() != 0)
+			{
+				parent_name = getFragment()->getName();
+				parent_name.trim();
+				parent_name += ":";
+			}
+			else if (getMolecule() != 0)
+			{
+				parent_name = getMolecule()->getName();
+				parent_name.trim();
+				parent_name += ":";
+			}
+		} else {
+			parent_name = parent->getName();
+			parent_name.trim();
+			String suffix = "-";
+			if (parent->isNTerminal())
+			{
+				suffix = "-N";
+			}
+			if (parent->isCTerminal())
+			{
+				suffix = "-C";
+			}
+			if (parent->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+			{
+				suffix += "S";
+			}
+
+			if (suffix != "-")
+			{
+				parent_name += suffix;
+			}
+
+			parent_name += ":";
+		}
+
+		// assemble the complete name
+		String name = name_;
+		name.trim();
+		return (parent_name + name);
+	}
+
 
 	void Atom::setPosition(const Vector3 &position)
 	{
