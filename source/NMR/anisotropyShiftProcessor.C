@@ -1,335 +1,279 @@
-// $Id: anisotropyShiftProcessor.C,v 1.2 2000/09/19 13:34:27 oliver Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.3 2000/09/19 21:04:45 amoll Exp $
 
 #include<BALL/NMR/anisotropyShiftProcessor.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// noch zu erledigen :
-// 
-///////////////////////////////////////////////////////////////////////////////
+#ifndef BALL_KERNEL_ATOM_H
+# include<BALL/KERNEL/atom.h>
+#endif
+
+#ifndef BALL_KERNEL_PTE_H
+# include<BALL/KERNEL/PTE.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+# include<BALL/DATATYPE/string.h>
+#endif
+
 using namespace std;
 
 namespace BALL
 {
 
-//Konstruktor
-
 	AnisotropyShiftProcessor::AnisotropyShiftProcessor()
 		throw()
 	{
-		//cout << endl << "AnisotropyShiftProcessor::AnisotropyShiftProcessor()";
 	}
 
-
-//Destruktor
-
-	AnisotropyShiftProcessor::~AnisotropyShiftProcessor ()
+	AnisotropyShiftProcessor::~AnisotropyShiftProcessor()
 		throw()
 	{
-		//cout << endl << "AnisotropyShiftProcessor::~AnisotropyShiftProcessor()";
 	}
 
-
-//StartFunktion
-
-	bool AnisotropyShiftProcessor::start ()
+	bool AnisotropyShiftProcessor::finish()
 		throw()
 	{
-		// hier passiert nichts
-		//cout << endl << "AnisotropyShiftProcessor::start()";
-		return 1;
-	}
-
-
-//FinishFunktion
-
-	bool AnisotropyShiftProcessor::finish ()
-		throw()
-	{
-		//cout << endl << "Aniso Modul";
-
-		int anzahl, zaehler;
-		float stheta, sgamma, abstand, ts, gs, calc1, calc2;
-		Vector3 vz, vx, vy, hilf, c_pos, o_pos, x_pos, n_pos, cen, v1, v2, v3;
-		const float dX1 = -13.0;
-		const float dX2 = -4.0;
-		const float dXN1 = -11.0;
-		const float dXN2 = -5.0;
-		const float ndX1 = -11;
-		const float ndX2 = 1.4;
-		const float ndXN1 = -7.0;
-		const float ndXN2 = 1.0;
-
-		String name;
-		Atom *c_atom, *o_atom, *x_atom, *n_atom;
-		  list < PDBAtom * >::iterator proton_iter;
-		  list < Bond * >::iterator eff_iter;
-		Bond *hbond;
-
-		if (proton_list_.size () > 0)
+		if (proton_list_.size() == 0)
 		{
-			// Iteriere über alle Protonen in proton_list_
-
-			for (proton_iter = proton_list_.begin (); proton_iter != proton_list_.end (); ++proton_iter)
-			{
-				gs = 0;
-
-				for (eff_iter = eff_list_.begin (); eff_iter != eff_list_.end (); ++eff_iter)
-				{
-					// Für jedes Proton iteriere über alle Effektorbindungen in eff_list_
-					//cout << endl << " Eff-Bindung wird bearbeitet : ";        
-
-					patom_ = *proton_iter;
-					bond_ = *eff_iter;
-					c_atom = (bond_->getFirstAtom ());
-					o_atom = (bond_->getSecondAtom ());
-
-					if ((*proton_iter)->getResidue () != c_atom->getFragment ())
-					{
-						name = c_atom->getName ();
-						if (name == "C")
-							name = "CA";
-						else if (name == "CG")
-							name = "CB";
-						else if (name == "CD")
-							name = "CG";
-
-						anzahl = c_atom->countBonds ();
-						for (zaehler = 0; zaehler < anzahl; zaehler++)
-						{
-							hbond = c_atom->getBond (zaehler);
-							if ((hbond->getBoundAtom (*c_atom)->getName ()) == name)
-								x_atom = hbond->getBoundAtom (*c_atom);
-						}
-
-						c_pos = c_atom->getPosition ();
-						o_pos = o_atom->getPosition ();
-						x_pos = x_atom->getPosition ();
-						// baue rechtwinkliges Koordinatensystem auf :
-
-						vz = o_pos - c_pos;
-						vz /= vz.getLength ();
-						hilf = x_pos - c_pos;
-						vy = vz % hilf;
-						vy /= vy.getLength ();
-						vx = vz % vy;
-						vx /= vx.getLength ();
-						cen = c_pos + (vz * 1.1);
-						v1 = patom_->getPosition () - cen;
-						v2 = v1 % vy;
-						v3 = v2 % vx;
-
-						abstand = v1.getLength ();
-						stheta = v2.getLength () / (v1.getLength () * vy.getLength ());
-						sgamma = v3.getLength () / (v2.getLength () * vx.getLength ());
-
-						ts = 0;
-						if ((*proton_iter)->getName () == "H")
-						{
-							calc1 = dXN1 * ((3.0 * stheta * stheta) - 2.0);
-							calc2 = dXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
-						}
-						else
-						{
-							calc1 = dX1 * ((3.0 * stheta * stheta) - 2.0);
-							calc2 = dX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
-						}
-						ts = (calc1 + calc2) / (3.0 * abstand * abstand * abstand);
-						gs += ts;
-					}
-				}
-
-				for (eff_iter = eff_list_2_.begin (); eff_iter != eff_list_2_.end (); ++eff_iter)
-				{
-					patom_ = *proton_iter;
-					bond_ = *eff_iter;
-					c_atom = bond_->getFirstAtom ();
-					n_atom = bond_->getSecondAtom ();
-
-					if (!(((*proton_iter)->getName () == "H") && ((*proton_iter)->getResidue () == n_atom->getFragment ())))
-					{
-						anzahl = c_atom->countBonds ();
-						for (zaehler = 0; zaehler < anzahl; zaehler++)
-						{
-							hbond = c_atom->getBond (zaehler);
-							if ((hbond->getBoundAtom (*c_atom)->getName ()) == "O")
-								o_atom = hbond->getBoundAtom (*c_atom);
-						}
-						c_pos = c_atom->getPosition ();
-						o_pos = o_atom->getPosition ();
-						n_pos = n_atom->getPosition ();
-
-						// baue rechtwinkliges Koordinatensystem auf
-						vz = n_pos - c_pos;
-						abstand = vz.getLength ();
-						vz /= abstand;
-						hilf = o_pos - c_pos;
-						vy = vz % hilf;
-						vy /= vy.getLength ();
-						vx = vz % vy;
-						vx /= vx.getLength ();
-						cen = c_pos + (vz * (0.85 * abstand));
-						v1 = patom_->getPosition () - cen;
-						v2 = v1 % vy;
-						v3 = v2 % vx;
-
-						abstand = v1.getLength ();
-						stheta = v2.getLength () / (v1.getLength () * vy.getLength ());
-						sgamma = v3.getLength () / (v2.getLength () * vx.getLength ());
-
-						ts = 0;
-						if ((*proton_iter)->getName () == "H")
-						{
-							calc1 = ndXN1 * ((3.0 * stheta * stheta) - 2.0);
-							calc2 = ndXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
-						}
-						else
-						{
-							calc1 = ndX1 * ((3.0 * stheta * stheta) - 2.0);
-							calc2 = ndX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
-						}
-
-						ts = (calc1 + calc2) / (3.0 * abstand * abstand * abstand);
-						gs += ts;
-					}
-				}
-				shift_ = (*proton_iter)->getProperty ("chemical_shift").getFloat ();
-				shift_ += gs;
-				(*proton_iter)->setProperty ("chemical_shift", shift_);
-				//Log.level(LogStream::INFORMATION)  << "chemical_shift :" << shift_ << endl;
-				//cout << endl <<"AnISO:Residue :"<<(*proton_iter)->getResidue()->getName()<<" Atom :"<<(*proton_iter)->getName()<< " chemical_shift :" << shift_;
-			}
+			return true;
 		}
-		return 1;
+
+		const float dX1   = -13.0;
+		const float dX2   =  -4.0;
+		const float dXN1  = -11.0;
+		const float dXN2  =  -5.0;
+		const float ndX1  = -11.0;
+		const float ndX2  =   1.4;
+		const float ndXN1 =  -7.0;
+		const float ndXN2 =   1.0;
+
+	  list<const PDBAtom*>::iterator proton_iter;
+	  list<const Bond*   >::iterator eff_iter;
+
+		// Iteriere über alle Protonen in proton_list_
+		for (proton_iter = proton_list_.begin(); proton_iter != proton_list_.end(); ++proton_iter)
+		{
+			float gs = 0;
+
+			for (eff_iter = eff_list_.begin(); eff_iter != eff_list_.end(); ++eff_iter)
+			{
+				// Für jedes Proton iteriere über alle Effektorbindungen in eff_list_
+				const PDBAtom* patom = *proton_iter;
+				const Bond* bond = *eff_iter;
+				const Atom* c_atom = (bond->getFirstAtom());
+				const Atom* o_atom = (bond->getSecondAtom());
+				const Atom* x_atom = 0;
+				if ((*proton_iter)->getResidue() != c_atom->getFragment())
+				{
+					String name = c_atom->getName();
+					if (name == "C")
+					{
+						name = "CA";
+					}
+					else 
+					{
+						if (name == "CG")
+						{
+							name = "CB";
+						}
+						else 
+						{
+							if (name == "CD")
+							{
+								name = "CG";
+							}
+						}
+					}
+					for (Position pos = 0; pos < patom->countBonds(); pos++)
+					{
+						const Bond& hbond = *c_atom->getBond(pos);
+						if ((hbond.getBoundAtom(*c_atom)->getName()) == name)
+						{
+							x_atom = hbond.getBoundAtom(*c_atom);
+							break;
+						}
+					}
+					// was passiert wenn x_atom nicht gesetzt ???
+
+					const Vector3& c_pos = c_atom->getPosition();
+					const Vector3& o_pos = o_atom->getPosition();
+					const Vector3& x_pos = x_atom->getPosition();
+
+					// baue rechtwinkliges Koordinatensystem auf :
+					Vector3 vz = o_pos - c_pos;
+					vz /= vz.getLength();
+					Vector3 vy = vz % (x_pos - c_pos);
+					vy /= vy.getLength();
+					Vector3 vx = vz % vy;
+					vx /= vx.getLength();
+					const Vector3 cen = c_pos + (vz * 1.1);
+					const Vector3 v1 = patom->getPosition() - cen;
+					const Vector3 v2 = v1 % vy;
+					const Vector3 v3 = v2 % vx;
+
+					const float& distance = v1.getLength();
+					const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
+					const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
+					float calc1, calc2;
+					if ((*proton_iter)->getName() == "H")
+					{
+						calc1 = dXN1 * ((3.0 * stheta * stheta) - 2.0);
+						calc2 = dXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+					}
+					else
+					{
+						calc1 = dX1 * ((3.0 * stheta * stheta) - 2.0);
+						calc2 = dX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+					}
+					gs += (calc1 + calc2) / (3.0 * distance * distance * distance);
+				}
+			}
+
+			for (eff_iter = eff_list_2_.begin(); eff_iter != eff_list_2_.end(); ++eff_iter)
+			{
+				const PDBAtom* patom = *proton_iter;
+				const Bond* bond = *eff_iter;
+				const Atom* c_atom = bond->getFirstAtom();
+				const Atom* n_atom = bond->getSecondAtom();
+				const Atom* o_atom = 0;
+
+				if (!(((*proton_iter)->getName() == "H") && 
+						 ((*proton_iter)->getResidue() == n_atom->getFragment())))
+				{
+					for (Position pos = 0; pos < patom->countBonds(); pos++)
+					{
+						const Bond& hbond = *c_atom->getBond(pos);
+						if ((hbond.getBoundAtom(*c_atom)->getName()) == "O")
+						{
+							o_atom = hbond.getBoundAtom(*c_atom);
+						}
+					}
+					const Vector3& c_pos = c_atom->getPosition();
+					const Vector3& o_pos = o_atom->getPosition();
+					const Vector3& n_pos = n_atom->getPosition();
+
+					// baue rechtwinkliges Koordinatensystem auf
+					Vector3 vz = n_pos - c_pos;
+					const float vz_scalar = vz.getLength();
+					vz.normalize();
+					Vector3 vy = vz % (o_pos - c_pos);
+					vy.normalize();
+					Vector3 vx = vz % vy;
+					vx.normalize();
+					const Vector3 cen = c_pos + (vz * (0.85 * vz_scalar));
+					const Vector3 v1 = patom->getPosition() - cen;
+					const Vector3 v2 = v1 % vy;
+					const Vector3 v3 = v2 % vx;
+
+					const float& distance = v1.getLength();
+					const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
+					const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
+					float calc1, calc2;
+					if ((*proton_iter)->getName() == "H")
+					{
+						calc1 = ndXN1 * ((3.0 * stheta * stheta) - 2.0);
+						calc2 = ndXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+					}
+					else
+					{
+						calc1 = ndX1 * ((3.0 * stheta * stheta) - 2.0);
+						calc2 = ndX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+					}
+
+					gs += (calc1 + calc2) / (3.0 * distance * distance * distance);
+				}
+			}
+			float shift = (*proton_iter)->getProperty("chemical_shift").getFloat();
+			shift += gs;
+			(const_cast<PDBAtom*>(*proton_iter))->setProperty("chemical_shift", shift);
+		}
+		return true;
 	}
 
-
-//apply Funktion
-
-	Processor::Result AnisotropyShiftProcessor::operator () (Composite& composite)
+	Processor::Result AnisotropyShiftProcessor::operator()(Composite& composite)
 		throw()
 	{
 		// hier werden alle Effektorbindungen gesammelt( C=O ) und in eff_list_ gespeichert.
 		// hier werden alle Wasserstoffe in proton_list_ gespeichert.
-
-		int anzahl, zaehler, n, o, n_zahl;
-		String residue_name;
-
-		if (RTTI::isKindOf < PDBAtom > (composite))
+		if (!RTTI::isKindOf<PDBAtom>(composite))
 		{
-			//cout  << endl << "Object is ProteinAtom";
+			return Processor::CONTINUE;
+		}
 
-			patom_ = RTTI::castTo<PDBAtom>(composite);
+		const PDBAtom* patom = RTTI::castTo<PDBAtom>(composite);
 
-			// suche im Backbone
+		if (patom->getElement() == PTE[Element::H])
+		{
+			proton_list_.push_back(patom);
+			return Processor::CONTINUE;
+		}
 
-			if (patom_->getName () == "C")
+		if (patom->getElement() != PTE[Element::C])
+		{
+			return Processor::CONTINUE;
+		}
+
+		// suche im Backbone
+		if (patom->getName() == "C" && patom->isBound())
+		{
+			bool foundN = false;
+			bool foundO = false;
+			Position bondN;
+
+			// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-Doppelbindung
+			for (Position pos = 0; pos < patom->countBonds(); pos++)
 			{
-				if (patom_->isBound ())
+				const Bond* bond = patom->getBond(pos);
+				if ((bond->getBoundAtom(*patom)->getName()) == "N")
 				{
-					n = 0;
-					o = 0;
-					anzahl = patom_->countBonds ();
-					//cout << endl << "anzahl :" << anzahl;
-
-					// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-
-					// Doppelbindung
-
-					for (zaehler = 0; zaehler < anzahl; zaehler++)
-					{
-						bond_ = patom_->getBond (zaehler);
-						if ((bond_->getBoundAtom (*patom_)->getName ()) == "N")
-						{
-							n = 1;
-							n_zahl = zaehler;
-						}
-						if ((bond_->getBoundAtom (*patom_)->getName ()) == "O")
-						{
-							o = 1;
-							eff_list_.push_back (bond_);
-							//cout  << "... Bindung in list 1 eingefügt.";
-						}
-					}
-					if (n * o)
-					{
-						bond_ = patom_->getBond (n_zahl);
-						eff_list_2_.push_back (bond_);
-						//cout << " ... Bindung auch in list 2 eingefügt.";
-					}
+					foundN = true;
+					bondN  = pos;
+				}
+				if ((bond->getBoundAtom(*patom)->getName()) == "O")
+				{
+					foundO = true;
+					eff_list_.push_back(bond);
 				}
 			}
-
-
-			// suche in der Seitenkette , nur ASP ASN GLU GLN
-
-			if (patom_->getElement () == PTE[Element::C])
+			if (foundN && foundO)
 			{
-				residue_name = patom_->getResidue ()->getName ();
-				if ((residue_name == "ASP") || (residue_name == "ASN"))
+				eff_list_2_.push_back(patom->getBond(bondN));
+			}
+			return Processor::CONTINUE;
+		}
+
+		// suche in der Seitenkette nach ASP ASN GLU GLN
+		const String& residue_name = patom->getResidue()->getName();
+
+		if ((residue_name == "ASP" || residue_name == "ASN") &&
+				 patom->getName() == "CG" && patom->isBound()	)
+		{
+			// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-Doppelbindung
+			for (Position pos = 0; pos < patom->countBonds(); pos++)
+			{
+				const Bond* bond = patom->getBond(pos);
+				if (bond->getBoundAtom(*patom)->getElement() == PTE[Element::O] &&
+						bond->getBoundAtom(*patom)->getName() == "OD1")
 				{
-					if (patom_->getName () == "CG")
-					{
-						if (patom_->isBound ())
-						{
-							anzahl = patom_->countBonds ();
-							//cout << endl << "anzahl :" << anzahl;
-
-							// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-
-							// Doppelbindung
-
-							for (zaehler = 0; zaehler < anzahl; zaehler++)
-							{
-								bond_ = patom_->getBond (zaehler);
-								if ((bond_->getBoundAtom (*patom_)->getElement ()) == PTE[Element::O])
-								{
-									if ((bond_->getBoundAtom (*patom_)->getName ()) == "OD1")
-										eff_list_.push_back (bond_);
-									//cout  << "... Bindung eingefügt.";
-								}
-							}
-
-						}
-					}
-				}
-
-				if ((residue_name == "GLU") || (residue_name == "GLN"))
-				{
-					if (patom_->getName () == "CD")
-					{
-						if (patom_->isBound ())
-						{
-							anzahl = patom_->countBonds ();
-							//cout << endl << "anzahl :" << anzahl;
-
-							// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-
-							// Doppelbindung
-
-							for (zaehler = 0; zaehler < anzahl; zaehler++)
-							{
-								bond_ = patom_->getBond (zaehler);
-								if ((bond_->getBoundAtom (*patom_)->getElement ()) == PTE[Element::O])
-								{
-									if ((bond_->getBoundAtom (*patom_)->getName ()) == "OE1")
-										eff_list_.push_back (bond_);
-									//cout  << "... Bindung eingefügt.";
-								}
-							}
-
-						}
-					}
+					eff_list_.push_back(bond);
 				}
 			}
+			return Processor::CONTINUE;
+		}
 
-
-
-			if (patom_->getElement () == PTE[Element::H])
+		if ((residue_name == "GLU" || residue_name == "GLN") &&
+				 patom->getName() == "CD" && patom->isBound()	)
+		{
+			// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-Doppelbindung
+			for (Position pos = 0; pos < patom->countBonds(); pos++)
 			{
-				// Element ist Hydrogen
-				proton_list_.push_back (patom_);
-				//cout << "...eingefügt.";
+				const Bond* bond = patom->getBond(pos);
+				if (bond->getBoundAtom(*patom)->getElement() == PTE[Element::O] &&
+						bond->getBoundAtom(*patom)->getName() == "OE1"  )
+				{
+					eff_list_.push_back(bond);
+				}
 			}
-		}	// Ende is kind of ProteinAtom : die proton_list_ wurde um protonen erweitert.
-		//               eff_list_ wurde um Effektorbindungen erweitert.  
-
+		}
 		return Processor::CONTINUE;
 	}
 

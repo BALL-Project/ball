@@ -1,37 +1,28 @@
-// $Id: anisotropyShiftProcessor.h,v 1.1 2000/09/19 13:34:58 oliver Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.2 2000/09/19 21:04:34 amoll Exp $
 
-#include<BALL/COMMON/constants.h>
-#include<BALL/KERNEL/system.h>
-#include<BALL/KERNEL/atom.h>
-#include<BALL/KERNEL/bond.h>
-#include<BALL/KERNEL/residue.h>
-#include<BALL/KERNEL/molecule.h>
-#include<BALL/KERNEL/protein.h>
-#include<BALL/KERNEL/residue.h>
+#ifndef BALL_KERNEL_BOND_H
+# include <BALL/KERNEL/bond.h>
+#endif
+
+#ifndef BALL_KERNEL_PDBATOM_H
 #include<BALL/KERNEL/PDBAtom.h>
-#include<BALL/DATATYPE/string.h>
-#include<BALL/DATATYPE/stringHashMap.h>
-#include<BALL/KERNEL/PTE.h>
+#endif
 
-#ifndef SHIFT_MODULE
+#ifndef BALL_NMR_SHIFT_MODULE
 #	include<BALL/NMR/shiftModule.h>
 #endif
 
 #include <list>
-using std::list;
 
 namespace BALL 
 {
 		
-/**@name	AnIso
+/**@name	Anisotropy
 */
 //@{		
 
-/**	Shift assignment processor implementing AnIso
+/**	Shift assignment processor implementing Anisotropy
 */
-
-
-
 class AnisotropyShiftProcessor:public ShiftModule
 	{
 	public:
@@ -50,15 +41,9 @@ class AnisotropyShiftProcessor:public ShiftModule
 	
 	//@}
 
-	
 	/**@name	Processor specific functions.
 	*/
 	//@{
-	
-	/**	Start method.
-		nothing important is done yet.
-	*/
-	virtual bool start() throw();
 	
 	/**	Finish method.
 		Here chemical shift calculation is done.
@@ -74,7 +59,7 @@ class AnisotropyShiftProcessor:public ShiftModule
 		{\tt vz} = {\tt o\_pos} - {\tt c\_pos} and is normalized.
 		{\tt vy} is the vectorproduct of vz and the difference vector of {\tt x\_pos} and {\tt c\_pos}
 		and is normalized.
-		{\tt vx} is the vectorprodukct of vz and vy and is normalized.
+		{\tt vx} is the vectorproduct of vz and vy and is normalized.
 		Then the center {\tt cen} of the effector bound is set to {\tt c\_pos} + 1.1 * {\tt vz}.
 		Next three vector are calculated :
 		{\tt v1} is the difference vector of the actual hydrogen and {\tt cen}.
@@ -90,10 +75,10 @@ class AnisotropyShiftProcessor:public ShiftModule
 		{\tt ts} = ( {\tt calc1} + {\tt calc2} ) / ( 3.0 * {\tt abstand} * {\tt abstand} * {\tt abstand} )
 		{\tt ts} is added to {\tt gs}.
 
-		{\tt dX1} and {\tt dX2} are some constant floats. If the actual Hydrogen´s name is "H" the
-		constant floats {\tt dXN1} and {\tt dXN2} are used instead.
+		{\tt dX1} and {\tt dX2} are some constant floats. 
+		If the actual Hydrogen´s name is "H" the constant floats {\tt dXN1} and {\tt dXN2} are used instead.
 
-		if {\tt eff\_list\_} has finished C=O anisotropy for actual Hydrogen is done and iteration
+		If {\tt eff\_list\_} has finished C=O anisotropy for actual Hydrogen is done and iteration
 		over all C=N anisotropy effector bounds of {\tt eff\_list\_2\_} is started.
 		This calculation is very similar with just some differences :
 		We got three position vectors called:
@@ -115,8 +100,6 @@ class AnisotropyShiftProcessor:public ShiftModule
 
 		Finally C=N anisotropy has finished and {\tt gs} is added to the actual hydrogen´s shift.
 		Then iteration goes on with next hydrogen.
-	
-		
 	*/
 	virtual bool finish() throw();
 
@@ -130,29 +113,16 @@ class AnisotropyShiftProcessor:public ShiftModule
 		"ASP" or "ASN, and finally bounds between atoms named "CD" and "OE1" in 
 		residues called "GLU" and "GLN".
 		Effectors of C=N anisotropy are all bounds between atoms named "C" and "N".
-		
 	*/
 	virtual Processor::Result operator() (Composite& composite) throw();
 	//@}
 	
-
 	private:
-	
-	// private Variablen :
-
-	list<PDBAtom*> proton_list_;	
-	list<Bond*> eff_list_;
-	list<Bond*> eff_list_2_;
-	PDBAtom* patom_;
-	Bond* bond_;
-	float shift_;
-	// private Funktionen :
-	
-	
-	
+		std::list<const PDBAtom*> proton_list_;	
+		std::list<const Bond*> eff_list_;
+		std::list<const Bond*> eff_list_2_;
 };
 
 } // namespace BALL
-
 
 //@}
