@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.33 2003/11/03 01:05:28 amoll Exp $
+// $Id: displayProperties.C,v 1.34 2003/11/08 16:19:32 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -405,6 +405,10 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 
 		case COLORING_RESIDUE_INDEX:
 			color_processor = new ResidueNumberColorProcessor;
+			break;
+
+		case COLORING_SECONDARY_STRUCTURE:
+			color_processor = new SecondaryStructureColorProcessor;
 			break;
 
 		case COLORING_ATOM_CHARGE:

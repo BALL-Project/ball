@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.15 2003/11/03 02:05:45 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.16 2003/11/08 16:19:03 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -9,6 +9,7 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/secondaryStructure.h>
 
 namespace BALL
 {
@@ -569,6 +570,89 @@ namespace BALL
 				return interpolateColor(atom->getOccupancy());
 			}
 		}
+
+		////////////////////////////////////////////////////////////////////
+		SecondaryStructureColorProcessor::SecondaryStructureColorProcessor()
+			: ColorProcessor(),
+			  helix_color_(0,0,255),
+				coil_color_(0,155,155),
+				strand_color_(255,0,0),
+				turn_color_(255,255,0)
+		{
+		}
+
+		ColorRGBA SecondaryStructureColorProcessor::getColor(const Composite* composite)
+		{
+			const SecondaryStructure* ss = 0;
+			if (RTTI::isKindOf<SecondaryStructure>(*composite))
+			{
+				ss = (const SecondaryStructure*) composite;
+			}
+			else 
+			{
+				SecondaryStructure dummy;
+				ss = (const SecondaryStructure*) composite->getAncestor(dummy);
+			}
+
+			if (ss == 0) return default_color_;
+
+			if      (ss->hasProperty(SecondaryStructure::PROPERTY__HELIX)) 				return helix_color_;
+			else if (ss->hasProperty(SecondaryStructure::PROPERTY__RANDOM_COIL))  return coil_color_;
+			else if (ss->hasProperty(SecondaryStructure::PROPERTY__STRAND))  			return strand_color_;
+			else if (ss->hasProperty(SecondaryStructure::PROPERTY__TURN))	 			  return turn_color_;
+			else 																																	return default_color_;
+		}
+
+
+		void SecondaryStructureColorProcessor::setHelixColor(const ColorRGBA& color)
+			throw()
+		{
+			helix_color_ = color;
+		}
+
+		void SecondaryStructureColorProcessor::setCoilColor(const ColorRGBA& color)
+			throw()
+		{
+			coil_color_ = color;
+		}
+
+		void SecondaryStructureColorProcessor::setStrandColor(const ColorRGBA& color)
+			throw()
+		{
+			strand_color_ = color;
+		}
+
+		void SecondaryStructureColorProcessor::setTurnColor(const ColorRGBA& color)
+			throw()
+		{
+			turn_color_ = color;
+		}
+
+		const ColorRGBA& SecondaryStructureColorProcessor::getHelixColor() const
+			throw()
+		{
+			return helix_color_;
+		}
+
+		const ColorRGBA& SecondaryStructureColorProcessor::getCoilColor() const
+			throw()
+		{
+			return coil_color_;
+		}
+
+		const ColorRGBA& SecondaryStructureColorProcessor::getStrandColor() const
+			throw()
+		{
+			return strand_color_;
+		}
+
+		const ColorRGBA& SecondaryStructureColorProcessor::getTurnColor() const
+			throw()
+		{
+			return turn_color_;
+		}
+
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>

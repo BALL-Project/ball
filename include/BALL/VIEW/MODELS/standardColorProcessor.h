@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.11 2003/11/03 02:06:20 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.12 2003/11/08 16:19:23 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -378,6 +378,59 @@ namespace BALL
 			virtual ColorRGBA getColor(const Composite* composite);
 		};
 
+		/// Coloring by the secondary structure, a Composite is in
+		class SecondaryStructureColorProcessor
+			: public ColorProcessor
+		{
+			public:
+
+			///
+			SecondaryStructureColorProcessor();
+
+			/// Operator ()
+			virtual ColorRGBA getColor(const Composite* composite);
+
+			///
+			void setHelixColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setCoilColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setStrandColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setTurnColor(const ColorRGBA& color)
+				throw();
+
+			///
+			const ColorRGBA& getHelixColor() const
+				throw();
+
+			///
+			const ColorRGBA& getCoilColor() const
+				throw();
+
+			///
+			const ColorRGBA& getStrandColor() const
+				throw();
+
+			///
+			const ColorRGBA& getTurnColor() const
+				throw();
+
+			private:
+
+			///
+			ColorRGBA helix_color_,
+								coil_color_,
+								strand_color_,
+								turn_color_;
+		};
+			
 				
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>
