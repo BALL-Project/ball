@@ -99,7 +99,7 @@ namespace BALL
 										const String& delimiters = String::CHARACTER_CLASS__WHITESPACE)
 			const	throw(Exception::IndexUnderflow, Exception::NullPointer);
 
-		/// Copy a subString to a new String
+		/// Copy a substring to a new String
 		String copyString(Position start, Position end = 0) 
 			const throw(Exception::IndexUnderflow, Exception::NullPointer);
 
