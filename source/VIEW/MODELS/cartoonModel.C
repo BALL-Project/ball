@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.18 2005/01/07 13:36:29 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.19 2005/01/07 13:40:10 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -855,17 +855,17 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	geometric_objects_.push_back(mesh2);
 	
 	// insert connection between tubes 2 times, because of trouble with normals
-	Vector3 vn(-(dir % helix_dir));
 	mesh2->vertex.push_back(last_point_ + helix_dir);
-	mesh2->normal.push_back(vn);
 	mesh2->vertex.push_back(last_point_ - helix_dir);
+	Vector3 vn(-(dir % helix_dir));
+	mesh2->normal.push_back(vn);
 	mesh2->normal.push_back(vn);
 
 	for (Position p = 0; p < slides; p++)
 	{
 		mesh1->vertex.push_back(last_point_ + helix_dir + new_points[p]);
-		mesh1->normal.push_back(new_points[p]);
 		mesh1->vertex.push_back(last_point_ - helix_dir + new_points[p]);
+		mesh1->normal.push_back(new_points[p]);
 		mesh1->normal.push_back(new_points[p]);
 	}
 	
