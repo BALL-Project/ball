@@ -1,4 +1,4 @@
-// $Id: surface.C,v 1.6 2000/06/02 07:12:41 oliver Exp $
+// $Id: surface.C,v 1.7 2000/06/30 06:02:13 oliver Exp $
 
 #include <BALL/MATHS/surface.h>
 
@@ -36,6 +36,22 @@ namespace BALL
 	void Surface::destroy()
 	{
 		clear();
+	}
+
+	void Surface::set(const Surface& surface)
+	{
+		vertex = surface.vertex;
+		normal = surface.normal;
+		triangle = surface.triangle;
+		valid_ = surface.valid_;
+	}
+	
+	void Surface::get(Surface& surface) const
+	{
+		surface.vertex = vertex;
+		surface.normal = normal;
+		surface.triangle = triangle;
+		surface.valid_ = valid_;
 	}
 	
 	void Surface::readMSMSFile
@@ -130,5 +146,11 @@ namespace BALL
 		
 		return area;
 	}
+
+	bool Surface::isValid() const
+	{
+		return valid_;
+	}
+
 
 } // namespace BALL
