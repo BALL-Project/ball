@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.12 2004/02/18 11:45:12 bender Exp $
+// $Id: molecularStructure.C,v 1.13 2004/02/18 16:38:19 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -839,6 +839,12 @@ namespace BALL
 				Log.error() << "Charmm force field setup failed." <<std::endl;
 				return;
 			}
+
+
+			CompositeMessage *change_message = 
+				new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+			notify_(change_message);
+
 		}
 
 		// calculate the energy
@@ -1047,6 +1053,11 @@ namespace BALL
 				Log.error() << "Setup of charmm force field failed." << endl;
 				return;
 			}
+
+			CompositeMessage *change_message = 
+				new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+			notify_(change_message);
+
 			// calculate the energy
 			setStatusbarText("starting simulation...");
 			charmm.updateEnergy();
