@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.30 2005/01/24 17:22:08 amoll Exp $
+// $Id: charmmNonBonded.C,v 1.31 2005/02/14 22:29:14 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
@@ -480,7 +480,7 @@ namespace BALL
 	// Build a vector of non-bonded atom pairs with the vdw parameters 
 	// The vector starts with 1-4 interactions
 	void CharmmNonBonded::buildVectorOfNonBondedAtomPairs(const vector<pair<Atom*, Atom*> >& atom_vector)
-		throw()
+		throw(Exception::TooManyErrors)
 	{
 		// throw away the old rubbish
 		non_bonded_.clear();

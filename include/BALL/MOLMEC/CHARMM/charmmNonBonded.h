@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.h,v 1.21 2004/12/27 17:06:31 amoll Exp $
+// $Id: charmmNonBonded.h,v 1.22 2005/02/14 22:29:36 amoll Exp $
 //
 // Molecular Mechanics: Charmm force field, non-bonded component
 // (van der Waals, electrostatics, EEF1 solvation)
@@ -155,7 +155,7 @@ namespace BALL
 		*/
 		virtual void buildVectorOfNonBondedAtomPairs
 			(const std::vector<std::pair<Atom*, Atom*> >& atom_vector)
-			throw();
+			throw(Exception::TooManyErrors);
 
 		//@}
 
