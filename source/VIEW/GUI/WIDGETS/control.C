@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.7 2002/11/28 17:13:07 amoll Exp $
+// $Id: control.C,v 1.7.4.8 2002/11/29 00:47:57 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -10,6 +10,33 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+Control::MyListViewItem::MyListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+	throw()
+	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
+		composite_(composite),
+		control_reference_(control)
+{
+	setText(1, type);
+}
+
+Control::MyListViewItem::MyListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+	throw()
+	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
+		composite_(composite),
+		control_reference_(control)
+{
+	setText(1, type);
+}
+
+void Control::MyListViewItem::stateChange(bool)
+	throw()
+{
+	QCheckListItem::stateChange(true);
+	control_reference_.selectedComposite(composite_, isOn());
+}
+
+
 
 Control::Control(QWidget* parent, const char* name)
 	throw()
@@ -31,9 +58,9 @@ Control::Control(QWidget* parent, const char* name)
 	setRootIsDecorated(TRUE);
 	setSorting(-1);
 	setSelectionMode(QListView::Extended);
-	addColumn("Name");
+	addColumn("[selected] Name");
 	addColumn("Type");
-	setColumnWidth(0, 80);
+	setColumnWidth(0, 120);
 	setColumnWidth(1, 60);
 
 	// if the selection of any item changed,
@@ -202,17 +229,51 @@ void Control::invalidateSelection()
 	updateSelection();
 }
 
+void Control::setSelection_()
+	throw(MainControlMissing)
+{	
+	MainControl* main_control = MainControl::getMainControl(this);	
+	if (main_control == 0) 
+	{
+		throw(MainControlMissing(__FILE__, __LINE__, ""));
+	}
+
+	const HashSet<Composite*>& hash_set = main_control->getSelection();
+	QListViewItemIterator it(this);
+	for (; it.current(); ++it)
+	{
+		if (hash_set.has(getCompositeAddress_(it.current())))
+		{
+			((QCheckListItem*) it.current())->setOn(true);
+			it.current()->setSelected(true);
+			QListViewItem* parent = it.current()->parent();
+			while (parent != 0)
+			{
+				parent->setOpen(true);
+				parent = parent->parent();
+			}
+		}
+		else
+		{
+			((QCheckListItem*) it.current())->setOn(false);
+			it.current()->setSelected(false);
+			it.current()->setOpen(false);
+		}
+	}
+}
+
+
 void Control::updateSelection()
 {
-	filterSelection_(geometric_filter_);
-	sentSelection();
+	//filterSelection_(geometric_filter_);
+	//sentSelection();
 }
 
 void Control::sentSelection()
 {
 	// sent new selection through tree
 	GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
-	message->setSelection(getSelection());
+	message->setSelection(selected_);
 	message->setDeletable(true);
 
 	notify_(message);
@@ -265,7 +326,6 @@ void Control::filterSelection_(Filter& filter)
 			if (composite != 0)
 			{
 				composite->host(filter);
-				
 				if (filter)
 				{
 					selected_.push_back(composite);
@@ -273,42 +333,12 @@ void Control::filterSelection_(Filter& filter)
 			}
 		}
 	}
-
-	/*		
-	List<Composite*>::Iterator it = selected_.begin();
-	List<Composite*>::Iterator remove_it = selected_.end();
-	
-	for (; it != selected_.end(); ++it)
-	{	
-		// remove iterator from list
-		if (remove_it != selected_.end())
-		{
-			selected_.erase(remove_it);
-		}
-
-		// apply filter criteria
-		(*it)->host(filter);
-
-		// if filter does not apply => remove composite from list
-		if (!filter)
-		{
-			remove_it = it;
-		}
-	}
-
-	// remove iterator from list (the last)
-	if (remove_it != selected_.end())
-	{
-		selected_.erase(remove_it);
-	}
-	*/
 }
 
 bool Control::reactToMessages_(Message* message)
 	throw()
 {
 	bool update = false;
-
 	if (RTTI::isKindOf<NewCompositeMessage>(*message))
 	{
 		NewCompositeMessage *composite_message = RTTI::castTo<NewCompositeMessage>(*message);
@@ -323,6 +353,10 @@ bool Control::reactToMessages_(Message* message)
   {
     ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
 		update = updateComposite(&(composite_message->getComposite()->getRoot()));
+	}
+	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
+	{
+		setSelection_();
 	}
 
 	return update;
@@ -383,17 +417,7 @@ Composite* Control::getCompositeAddress_(QListViewItem* item)
 		return 0;
 	}
 
-	// get address from the attached composite
-	QString address = item->text(COLUMN_ID__ADDRESS);
-
-	// convert address string to the real composite address
-	Composite* composite = 0;
-	if (address != 0)
-	{
-		composite = (Composite*)(atoi(address.ascii()));
-	}
-
-	return composite;
+	return ((MyListViewItem*) item)->getComposite();
 }
 
 void Control::generateListViewItem_(QListViewItem* item, Composite* composite, QString* default_name)
@@ -427,8 +451,6 @@ void Control::generateListViewItem_(QListViewItem* item, Composite* composite, Q
 
 	// create an entry for this composite
 	QString type = getInformationVisitor_().getTypeName().c_str();
-	QString address_string;
-	address_string.sprintf("%ld", (((unsigned long)((void*)composite))));
 
 	// create a new list item
 	QListViewItem* new_item = 0;
@@ -436,18 +458,12 @@ void Control::generateListViewItem_(QListViewItem* item, Composite* composite, Q
 	// is this the first item?
 	if (item == 0)
 	{
-		// yes, insert into the root node 
-		new_item = new QListViewItem
-							(this, 
-							 name, type, QString::null, QString::null,
-							 QString::null, QString::null, address_string);
+		new_item = new MyListViewItem(this, name, type, composite, *this);
 	} 
 	else 
 	{
 		// no, insert into the current item
-		new_item = new QListViewItem
-							(item, name, type, QString::null, QString::null,
-							 QString::null, QString::null, address_string);
+		new_item = new MyListViewItem(item, name, type, composite, *this);
 	}
 	CHECK_PTR(new_item);
 
@@ -483,16 +499,13 @@ bool Control::updateListViewItem_(QListViewItem* item, Composite* composite, QSt
 QListViewItem* Control::findListViewItem_(Composite* composite)
 	throw()
 {
-	QString address;
-	address.sprintf("%ld", (((unsigned long)((void *)composite))));
-
 	QListViewItemIterator it(this);
 
 	// iterate through all items
 	for (; it.current(); ++it)
 	{
 		// find the address of the composite
-		if (it.current()->text(6) == address)
+		if (((MyListViewItem*) it.current())->getComposite() == composite)
 		{
 			return it.current();
 		}
@@ -742,6 +755,30 @@ void Control::eraseGeometricObject()
 	// clean up
 	delete context_item_;
 	updateContents();
+}
+
+void Control::selectedComposite(Composite* composite, bool state)
+	throw()
+{
+	if (composite == 0) 
+	{
+		Log.error() << "NULLPOINTER in Control::selectedComposite" << endl;
+		return;
+	}
+
+	MainControl* main_control = MainControl::getMainControl(this);	
+	if (main_control == 0) 
+	{
+		throw(MainControlMissing(__FILE__, __LINE__, ""));
+	}
+	
+	if (MainControl::getMainControl(this)->getSelection().has(composite) == state)
+	{
+		return;
+	}
+
+	CompositeSelectedMessage* message = new CompositeSelectedMessage(composite, state);
+	notify_(message);
 }
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
