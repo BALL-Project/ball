@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.16 2002/12/16 15:35:16 amoll Exp $
+// $Id: geometricObject.C,v 1.17 2002/12/17 16:11:08 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -23,8 +23,7 @@ namespace BALL
 			clear_();
 		}
 
-		GeometricObject::GeometricObject
-			(const GeometricObject& geometric_object, bool deep)
+		GeometricObject::GeometricObject(const GeometricObject& geometric_object, bool deep)
 			throw()
 			:	Composite(geometric_object, deep),
 				PropertyManager(geometric_object),
@@ -36,7 +35,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << this << " of class " << RTTI::getName<GeometricObject>() << endl;
+				Log.info() << "Destructing object " << this << " of class " << RTTI::getName<GeometricObject>() << endl;
 			#endif 
 
 			destroy();
@@ -92,33 +91,33 @@ namespace BALL
 		void GeometricObject::setProperty(Property property)
 			throw()
 		{
-			if (property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
-					|| property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
+			if (property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT || 
+					property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_TRANSPARENT);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_OPAQUE);
 			}
-			else if (property == GeometricObject::PROPERTY__OBJECT_VISIBLE 
-							 || property == GeometricObject::PROPERTY__OBJECT_HIDDEN)
+			else if (property == GeometricObject::PROPERTY__OBJECT_VISIBLE || 
+							 property == GeometricObject::PROPERTY__OBJECT_HIDDEN)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_VISIBLE);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN);
 			}
-			else if (property == GeometricObject::PROPERTY__OBJECT_OPENED 
-							 || property == GeometricObject::PROPERTY__OBJECT_CLOSED)
+			else if (property == GeometricObject::PROPERTY__OBJECT_OPENED || 
+							 property == GeometricObject::PROPERTY__OBJECT_CLOSED)
 			{
 				clearProperty(GeometricObject::PROPERTY__OBJECT_OPENED);
 				clearProperty(GeometricObject::PROPERTY__OBJECT_CLOSED);
 			}
-			else if (property >= GeometricObject::PROPERTY__DRAWING_PRECISION_LOW
-							 && property <= GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH)
+			else if (property >= GeometricObject::PROPERTY__DRAWING_PRECISION_LOW && 
+							 property <= GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH)
 			{
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
 			}
-			else if (property >= GeometricObject::PROPERTY__DRAWING_MODE_DOTS 
-							 && property <= GeometricObject::PROPERTY__DRAWING_MODE_SOLID)
+			else if (property >= GeometricObject::PROPERTY__DRAWING_MODE_DOTS && 
+							 property <= GeometricObject::PROPERTY__DRAWING_MODE_SOLID)
 			{
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_DOTS);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
@@ -235,15 +234,15 @@ namespace BALL
 		void GeometricObject::getDrawingModeAndPrecision(unsigned int& mode, unsigned int& precision) const
 			throw()
 		{
-			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW) == true)
+			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW))
 			{
 				precision = (unsigned int)GeometricObject::PROPERTY__DRAWING_PRECISION_LOW;
 			} 
-			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM) == true)
+			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM))
 			{
 				precision = (unsigned int)GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM;
 			} 
-			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH) == true)
+			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH))
 			{
 				precision = (unsigned int)GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH;
 			} 
@@ -252,15 +251,15 @@ namespace BALL
 				precision = (unsigned int)GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH;
 			}
 
-			if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_DOTS) == true)
+			if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_DOTS))
 			{
 				mode = (unsigned int)GeometricObject::PROPERTY__DRAWING_MODE_DOTS;
 			} 
-			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME) == true)
+			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME))
 			{
 				mode = (unsigned int)GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME;
 			} 
-			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID) == true)
+			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID))
 			{
 				mode = (unsigned int)GeometricObject::PROPERTY__DRAWING_MODE_SOLID;
 			}
@@ -269,7 +268,8 @@ namespace BALL
 				mode = (unsigned int)GeometricObject::PROPERTY__DRAWING_MODE_SOLID;
 			}
 
-			precision -= (unsigned int)GeometricObject::PROPERTY__DRAWING_PRECISION_LOW;
+			// removed precision ultra, shifted all precisions 1 up
+			precision = precision - (unsigned int)GeometricObject::PROPERTY__DRAWING_PRECISION_LOW + 1;
 			mode -= (unsigned int)GeometricObject::PROPERTY__DRAWING_MODE_DOTS;
 		}
 
