@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.8 2000/06/29 14:12:48 amoll Exp $
+// $Id: file.h,v 1.9 2000/07/12 19:33:50 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -39,7 +39,29 @@ namespace BALL
 		/**	@name	Type definitions
 		*/
 		//@{
-		typedef std::ios::openmode OpenMode;
+			
+		/**	File open modes.
+				This type is used to describe the standard openmodes for files
+				as described in Section 27.4.2.1.4 of the ANSI C++ standard.
+		*/
+		typedef std::ios::open_mode OpenMode;			
+		//@}
+		
+		/**	@name	Constants
+		*/
+		//{
+		/// Open for input (default)
+		static const OpenMode IN;
+		/// Open for output
+		static const OpenMode OUT;
+			/// Append. Seek to end before each write operation
+		static const OpenMode APP;
+			/// Binary mode
+		static const OpenMode BINARY;
+			/// Seek to end directly after opening.
+		static const OpenMode ATE;
+			/// Truncate an existing file.
+		static const OpenMode TRUNC;
 		//@}
 
 		/**	@name	Enums
@@ -83,18 +105,6 @@ namespace BALL
 
 		/**	
 		*/
-		enum Protocol
-		{
-			///
-			PROTOCOL__FILE   = 1,
-			///
-			PROTOCOL__EXEC   = 2,
-			///
-			PROTOCOL__ACTION = 3
-		};
-		
-		/**	
-		*/
 		enum Type
 		{
 			///
@@ -130,11 +140,11 @@ namespace BALL
 				Construct new File object from the file {\em name}
 				and open the file.
 				@param  name the name of the file to be opend
-				@param  OpenMode the std::ios::openmode to be used
+				@param  OpenMode the openmode to be used
 				@see    open
 				@return File - new constructed File object
 		*/
-		File(const String& name, OpenMode open_mode = std::ios::in);
+		File(const String& name, OpenMode open_mode = IN);
 
 		/** Copy constructor.
 				Construct new File object by copying the File {\em file}
@@ -182,10 +192,10 @@ namespace BALL
 		/**	Open a given file.
 				The standard constructor uses this method.
 				@param name the name of the file
-				@param open_mode the open mode, default is std::ios::in
+				@param open_mode the open mode, default is IN
 				@return bool true if the file could be opend
 		*/
-		bool open(const String& name, OpenMode open_mode = std::ios::in);
+		bool open(const String& name, OpenMode open_mode = IN);
 
 		/**	Reopen the file.
 				The file is closed and reopend.
@@ -215,10 +225,10 @@ namespace BALL
 		static Size getSize(String name);
 
 		/** Return the open mode.
-				Default is std::ios::in.
+				Default is IN.
 				@return int the open mode
 		*/
-		int getOpenMode() const;
+		File::OpenMode getOpenMode() const;
 		
 		/**	Return the filetype of a given file.
 				@param name the name of the file.
@@ -418,9 +428,9 @@ namespace BALL
 		String name_;
 
 		private:
-		OpenMode open_mode_;
-		bool is_open_;
-		bool is_temporary_;
+		OpenMode	open_mode_;
+		bool			is_open_;
+		bool			is_temporary_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

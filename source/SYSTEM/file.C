@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.8 2000/06/30 15:45:25 amoll Exp $
+// $Id: file.C,v 1.9 2000/07/12 19:33:54 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 
@@ -15,6 +15,13 @@ using std::endl;
 namespace BALL 
 {
 
+  const File::OpenMode File::IN = std::ios::in;
+  const File::OpenMode File::OUT = std::ios::out;
+  const File::OpenMode File::APP = std::ios::app;
+  const File::OpenMode File::BINARY = std::ios::binary;
+  const File::OpenMode File::ATE = std::ios::ate;
+  const File::OpenMode File::TRUNC = std::ios::trunc;
+ 
 	File::File()
 		:	fstream(),
 			name_(),
