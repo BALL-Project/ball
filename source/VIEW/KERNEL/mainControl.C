@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.153 2004/12/09 12:59:31 amoll Exp $
+// $Id: mainControl.C,v 1.154 2004/12/10 14:54:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1233,7 +1233,7 @@ namespace BALL
 				message_label_->setPaletteForegroundColor( QColor(0,0,0) );
 			}
 
-			timer_.start(4000);
+			timer_.start(6000);
 		}
 
 		void MainControl::clearStatusBarText_()
@@ -1242,7 +1242,7 @@ namespace BALL
 			{
 				message_label_->setPaletteForegroundColor( QColor(0,0,0) );
 				important_text_in_statusbar_ = false;
-				timer_.start(4000);
+				timer_.start(6000);
 			}
 
 			message_label_->setText("");
