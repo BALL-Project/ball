@@ -1,4 +1,4 @@
-// $Id: vertex2.C,v 1.5 2000/03/15 08:44:38 oliver Exp $
+// $Id: vertex2.C,v 1.6 2000/03/27 16:46:09 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/vertex2.h>
 
@@ -59,8 +59,8 @@ namespace BALL
 
 		void Vertex2::set(const Vertex2& v, bool deep)
 		{
-			vertex1_.set(v.vertex1_, deep);
-			vertex2_.set(v.vertex2_, deep);
+			vertex1_.set(v.vertex1_);
+			vertex2_.set(v.vertex2_);
 			
 			if (deep == true)
 			{
