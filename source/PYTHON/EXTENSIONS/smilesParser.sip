@@ -1,8 +1,13 @@
-// $Id: smilesParser.sip,v 1.1 2002/02/03 14:28:24 oliver Exp $
+// $Id: smilesParser.sip,v 1.2 2002/02/15 01:57:28 oliver Exp $
 
 
 class SmilesParser
 {
+%HeaderCode
+	#include <BALL/STRUCTURE/smilesParser.h>
+	using namespace BALL;
+%End
+
 	public:
 	enum ZEIsomerType
 	{
@@ -34,6 +39,7 @@ class SmilesParser
 		: Bond
 	{
 		public:
+		~SPBond() throw();
 		SPBond(SmilesParser::SPAtom* /first/, SmilesParser::SPAtom* /second/, Index /order/ = 1);
 		SmilesParser::ZEIsomerType getZEType() const;
 		void setZEType(SmilesParser::ZEIsomerType /type/);
@@ -67,7 +73,7 @@ class SmilesParser
 	~SmilesParser();
 	void parse(const String& /s/)
 		throw(ParseError);
-	const System& getSystem() const;
+	System getSystem() const;
 	//SPAtom* createAtom(const String& /symbol/, bool /in_bracket/ = false);
 	//void createBonds(SPAtom* /atom/, const ConnectionList* /list/);
 	//void createBond(SPAtom* /left/, SPAtom* /right/, Index /order/);

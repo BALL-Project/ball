@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.6 2002/02/03 14:28:24 oliver Exp $
+// $Id: BALL.sip,v 1.7 2002/02/15 01:57:28 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -209,7 +209,7 @@
 
 
 // MOLVIEW ??
-
+%Include client.sip
 
 // NMR
 // %Include johnsonBovey.sip // ??

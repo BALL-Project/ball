@@ -1,10 +1,10 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.11 2002/02/14 20:32:36 oliver Exp $
+# $Id: Makefile,v 1.12 2002/02/15 01:57:28 oliver Exp $
 #
 
-DIRECTORY=PYTHON_EXTENSIONS
+DIRECTORY=PYTHON/EXTENSIONS
 
 # allow processing of SIP files
 .SUFFIXES: .sip
@@ -47,7 +47,7 @@ CPP_SOURCES = $(SIP_SOURCES:.h=.C) $(PYBALL_SOURCES)
 CPP_OBJECTS = $(SIP_OBJECTS) $(PYBALL_OBJECTS)
 
 BALL.py:	sip
-sipBALLVersion.h:	sip_helper
+sipBALLVersion.h:	sip_helper 
 sip_helper.C:	Makefile.inc
 pyBALLSipHelper.C: sipBALLVersion.h
 
@@ -83,6 +83,6 @@ clean:
 	@-$(RM) $(CLEAN_FILES) 2>/dev/null
 	@-$(RM) -fr SIP
 
-depend: sipBALLVersion.h Makefile.inc .Dependencies
+depend: sip sipBALLVersion.h Makefile.inc .Dependencies
 
 include .Dependencies

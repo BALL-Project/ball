@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.22 2002/01/15 15:40:14 amoll Exp $
+# $Id: Makefile,v 1.23 2002/02/15 01:57:27 oliver Exp $
 
 DIRECTORY=PYTHON
 
@@ -11,3 +11,9 @@ include ../common.mak
 include .Dependencies
 
 ADD_INCLUDES=$(PYTHON_INCLUDES)
+
+depend: subdepend
+
+subdepend:
+	@touch EXTENSIONS/.Dependencies
+	@cd EXTENSIONS ; $(MAKE) depend

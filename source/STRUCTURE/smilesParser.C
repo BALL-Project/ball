@@ -1,4 +1,4 @@
-// $Id: smilesParser.C,v 1.6 2002/02/12 14:42:53 amoll Exp $
+// $Id: smilesParser.C,v 1.7 2002/02/15 01:57:28 oliver Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -72,6 +72,10 @@ namespace BALL
 	}
 
 	SmilesParser::SmilesParser()
+	{
+	}
+
+	SmilesParser::SmilesParser(const SmilesParser& /* parser */)
 	{
 	}
 
@@ -150,6 +154,21 @@ namespace BALL
 	{
 		left->createBond(*this, *right);
 		setOrder(order);
+	}
+
+	SmilesParser::SPBond::~SPBond()
+		throw()
+	{
+	}
+
+	SmilesParser::ZEIsomerType SmilesParser::SPBond::getZEType() const
+	{
+		return ze_type_;
+	}
+
+	void SmilesParser::SPBond::setZEType(SmilesParser::ZEIsomerType type)
+	{
+		ze_type_ = type;
 	}
 
 	struct SmilesParser::State SmilesParser::state;
