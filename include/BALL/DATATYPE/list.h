@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.3 2000/01/13 22:16:49 oliver Exp $
+// $Id: list.h,v 1.4 2000/07/07 04:20:42 amoll Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -110,7 +110,11 @@ namespace BALL
 		/// Swaps the contents of two lists
     void swap(List& list)
 		{
-			swap(*this, list);
+		//	swap(*this, list);
+			List<Value> temp;
+			temp.set(*this);
+			(*this).set(list);
+			list.set(temp);
 		}
 
 		//@}
