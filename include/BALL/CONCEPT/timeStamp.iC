@@ -1,25 +1,25 @@
-// $Id: timeStamp.iC,v 1.1 2000/09/27 10:01:44 oliver Exp $
+// $Id: timeStamp.iC,v 1.2 2000/10/18 12:39:58 oliver Exp $
 
 BALL_INLINE
-long Time::getSeconds() const throw()
+long PreciseTime::getSeconds() const throw()
 {
 	return secs_;
 }
 
 BALL_INLINE
-long Time::getMicroSeconds() const throw()
+long PreciseTime::getMicroSeconds() const throw()
 {
 	return usecs_;
 }
 
 BALL_INLINE
-bool TimeStamp::isOlderThan(const Time& time) const throw()
+bool TimeStamp::isOlderThan(const PreciseTime& time) const throw()
 {
 	return (time_ < time);
 }
 
 BALL_INLINE
-bool TimeStamp::isNewerThan(const Time& time) const throw()
+bool TimeStamp::isNewerThan(const PreciseTime& time) const throw()
 {
 	return (time_ > time);
 }

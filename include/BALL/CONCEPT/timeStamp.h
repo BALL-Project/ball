@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.6 2000/10/16 19:16:44 oliver Exp $
+// $Id: timeStamp.h,v 1.7 2000/10/18 12:39:58 oliver Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -24,17 +24,20 @@ namespace BALL
 
 	/**	Time class.
 			Used to store a point of time.
+			This class  provides a higher precision than \Ref{Time}
+			(below seconds).
 			\\
 			{\bf Interface:} {\tt Storable}
 			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/timeStamp.h}
 			\\
 	*/
-	class Time
+	class PreciseTime
 	{
 		
 		public:
-		BALL_CREATE(Time)
+
+		BALL_CREATE(PreciseTime)
 
 		/**	@name Constructors and Destructors.
 		*/
@@ -42,15 +45,15 @@ namespace BALL
 		/**	Default constructor.
 				Initialize with zero.
 		*/
-		Time();
+		PreciseTime();
 			
 		/**	Copy constructor
 		*/
-		Time(const Time& time);
+		PreciseTime(const PreciseTime& time);
 			
 		/**	Destructor
 		*/
-		virtual ~Time();
+		virtual ~PreciseTime();
 		//@}
 
 		/**	@name Constants.
@@ -58,7 +61,7 @@ namespace BALL
 		//@{
 		/**	Zero object.
 		*/
-		static const Time ZERO;
+		static const PreciseTime ZERO;
 		//@}
 
 		/**	@name Assignment
@@ -71,12 +74,12 @@ namespace BALL
 
 		/**
 		*/
-		void set(const Time& time) 
+		void set(const PreciseTime& time) 
 			throw();
 
 		/**	Assignment operator
 		*/
-		const Time& operator = (const Time& time) 
+		const PreciseTime& operator = (const PreciseTime& time) 
 			throw();
 
 		/**	Clear method
@@ -90,17 +93,17 @@ namespace BALL
 		//@{
 		/**	Greater than operator.
 		*/
-		bool operator < (const Time& time) const 
+		bool operator < (const PreciseTime& time) const 
 			throw();
 
 		/**	Lesser than operator.
 		*/
-		bool operator > (const Time& time) const 
+		bool operator > (const PreciseTime& time) const 
 			throw();
 
 		/**	Equality operator.
 		*/
-		bool operator == (const Time& time) const 
+		bool operator == (const PreciseTime& time) const 
 			throw();
 		//@}
 		
@@ -119,9 +122,9 @@ namespace BALL
 			throw();
 
 		/**	Return the current time.
-				@return Time the current time in seconds since Jan. 1, 1970
+				@return PreciseTime the current time in seconds since Jan. 1, 1970
 		*/
-		static const Time& now() 
+		static const PreciseTime& now() 
 			throw();
 		//@}
     /** @name Storable interface.
@@ -129,7 +132,7 @@ namespace BALL
     //@{
 
     /** Persistent stream writing.
-        This method writes the contents of the \Ref{Time} objects to the
+        This method writes the contents of the \Ref{PreciseTime} objects to the
         persistent stream using the {\tt writePrimitive} method
         of the PersistenceManager.
         @param pm the persistence manager
@@ -137,7 +140,7 @@ namespace BALL
     void write(PersistenceManager& pm) const;
 
     /** Persistent stream reading.
-        This method reads the contents of a \Ref{Time} object from the
+        This method reads the contents of a \Ref{PreciseTime} object from the
         persistent stream using the {\tt readPrimitive} method
         of the PersistenceManager.
         @param pm the persistence manager
@@ -183,12 +186,12 @@ namespace BALL
 
 		/**	Check the time stamp.
 		*/
-		bool isNewerThan(const Time& time) const 
+		bool isNewerThan(const PreciseTime& time) const 
 			throw();
 		
 		/**	Check the time stamp.
 		*/
-		bool isOlderThan(const Time& time) const 
+		bool isOlderThan(const PreciseTime& time) const 
 			throw();
 
 		/**	Check the time stamp.
@@ -208,16 +211,16 @@ namespace BALL
 		/**	Update the time stamp.
 				Store the value of {\tt time} in the internal time stamp.
 				If {\tt time} is 0, use the current time (as given by
-				\Ref{Time::now}).
-				@param time the new time stamp (default = \Ref{Time::now})														
+				\Ref{PreciseTime::now}).
+				@param time the new time stamp (default = \Ref{PreciseTime::now})														
 		*/
-		virtual void stamp(const Time& time = Time::ZERO) 
+		virtual void stamp(const PreciseTime& time = PreciseTime::ZERO) 
 			throw();
 
 		/**	Return the time of last modification
-				@return Time the time stamp
+				@return the time stamp
 		*/
-		const Time& getTime() const 
+		const PreciseTime& getTime() const 
 			throw();
 		//@}
 
@@ -227,7 +230,7 @@ namespace BALL
 
 		/**	Assignment operator
 		*/
-		const Time& operator = (const Time& time) 
+		const PreciseTime& operator = (const PreciseTime& time) 
 			throw();
 
 		/**	Clear method
@@ -262,15 +265,15 @@ namespace BALL
 
 		/**	The time stamp.
 		*/
-		Time time_;
+		PreciseTime time_;
 	};
 
-	/**	Global stream operators for Time and TimeStamp
+	/**	Global stream operators for PreciseTime and TimeStamp
 	*/
 	//@{
-	/**	Print the contents of a Time object to a stream.
+	/**	Print the contents of a PreciseTime object to a stream.
 	*/
-	std::ostream& operator << (std::ostream& os, const Time& time);
+	std::ostream& operator << (std::ostream& os, const PreciseTime& time);
 
 	/**	Print the contents of a TimeStamp object to a stream.
 	*/

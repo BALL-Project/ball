@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.6 2000/10/17 10:15:38 oliver Exp $
+// $Id: timeStamp.C,v 1.7 2000/10/18 12:42:55 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -9,77 +9,77 @@ using namespace std;
 
 namespace BALL 
 {
-	Time::Time()
+	PreciseTime::PreciseTime()
 		: secs_(0),
 			usecs_(0)
 	{
 	}
 
-	Time::Time(const Time& time)
+	PreciseTime::PreciseTime(const PreciseTime& time)
 		:	secs_(time.secs_),
 		 	usecs_(time.usecs_)
 	{
 	}
 
-	Time::~Time()
+	PreciseTime::~PreciseTime()
 	{
 	}
 
-	void Time::set(const Time& time) throw()
+	void PreciseTime::set(const PreciseTime& time) throw()
 	{
 		secs_ = time.secs_;
 		usecs_ = time.usecs_;
 	}
 
-	void Time::set(long secs, long usecs) throw()
+	void PreciseTime::set(long secs, long usecs) throw()
 	{
 		secs_ = secs;
 		usecs_ = usecs;
 	}
 
-	const Time& Time::operator = (const Time& time) throw()
+	const PreciseTime& PreciseTime::operator = (const PreciseTime& time) throw()
 	{
 		set(time);
 		return *this;
 	}
 
-	void Time::clear() 
+	void PreciseTime::clear() 
 		throw()
 	{
 		secs_ = 0;
 		usecs_ = 0;
 	}
 
-	bool Time::operator < (const Time& time) const throw()
+	bool PreciseTime::operator < (const PreciseTime& time) const throw()
 	{
 		return ((secs_ < time.secs_) || ((secs_ == time.secs_) && (usecs_ < time.usecs_)));
 	}
 
-	bool Time::operator > (const Time& time) const throw()
+	bool PreciseTime::operator > (const PreciseTime& time) const throw()
 	{
 		return ((secs_ > time.secs_) || ((secs_ == time.secs_) && (usecs_ > time.usecs_)));
 	}
 
-	bool Time::operator == (const Time& time) const throw()
+	bool PreciseTime::operator == (const PreciseTime& time) const throw()
 	{
 		return ((secs_ == time.secs_) && (usecs_ == time.usecs_));
 	}
 
 
-	void Time::write(PersistenceManager& pm) const
+	void PreciseTime::write(PersistenceManager& pm) const
   {
 		pm.writePrimitive(secs_, "secs_");
 		pm.writePrimitive(usecs_, "usecs_");
 	}
 
-	bool Time::read(PersistenceManager& pm)
+	bool PreciseTime::read(PersistenceManager& pm)
 	{
 		return (pm.readPrimitive(secs_, "secs_") && pm.readPrimitive(usecs_, "usecs_"));
 	}
 	
-	const Time& Time::now() throw()
+	const PreciseTime& PreciseTime::now() throw()
 	{
-		static Time t;
+		static PreciseTime t;
 
 		// get the current time via the system call
 		// gettimeofday()
@@ -93,7 +93,7 @@ namespace BALL
 		return t;
 	}
 
-	const Time Time::ZERO;
+	const PreciseTime PreciseTime::ZERO;
 
  
 	TimeStamp::TimeStamp()
@@ -112,14 +112,14 @@ namespace BALL
 		time_.clear();
 	}
 
-	void TimeStamp::stamp(const Time& time) 
+	void TimeStamp::stamp(const PreciseTime& time) 
 		throw ()
 	{
 		// in the default case, stamp with the current 
 		// time
-		if (time == Time::ZERO)
+		if (time == PreciseTime::ZERO)
 		{
-			time_ = Time::now();
+			time_ = PreciseTime::now();
 		}
 		else 
 		{
@@ -129,7 +129,7 @@ namespace BALL
 
 	
 
-	const Time& TimeStamp::getTime() const throw()
+	const PreciseTime& TimeStamp::getTime() const throw()
 	{
 		return time_;
 	}
@@ -147,7 +147,7 @@ namespace BALL
 
 
 
-  ostream& operator << (ostream& os, const Time& time)
+  ostream& operator << (ostream& os, const PreciseTime& time)
 	{
 		String usecs((double)time.getMicroSeconds() / 1.0e6);
 		time_t secs = (time_t)time.getSeconds();

@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.23 2000/08/30 19:57:59 oliver Exp $
+// $Id: composite.h,v 1.24 2000/10/18 12:39:57 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -401,11 +401,13 @@ namespace BALL
 			
 		/**	Return the time of last modification
 		*/
-		const Time& getModificationTime() const throw();
+		const PreciseTime& getModificationTime() const 
+			throw();
 
 		/**	Return the time of last change of selection.
 		*/
-		const Time& getSelectionTime() const throw();
+		const PreciseTime& getSelectionTime() const 
+			throw();
 
 		/**	Modify a time stamp.
 				Update one or both of the two time stamps with the
