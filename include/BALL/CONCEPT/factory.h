@@ -1,4 +1,4 @@
-// $Id: factory.h,v 1.1.2.2 2002/11/30 16:27:21 oliver Exp $
+// $Id: factory.h,v 1.1.2.3 2002/12/02 06:20:40 oliver Exp $
 
 #ifndef BALL_CONCEPT_FACTORY_H
 #define BALL_CONCEPT_FACTORY_H
@@ -31,12 +31,10 @@ namespace BALL
 		/// Return a reference to a (pre-instantiated) default object
 		static const T& getDefault() 
 		{ 
-			static T def; 
-			return def; 
+			static T default_instance;
+			return default_instance;
 		}
 	};
-
-
 }
 
 #endif // BALL_CONCEPT_FACTORY_H
