@@ -1,4 +1,4 @@
-// $Id: genericMolFile.C,v 1.2 2001/12/19 02:40:25 oliver Exp $
+// $Id: genericMolFile.C,v 1.3 2001/12/20 01:12:15 oliver Exp $
 
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/KERNEL/system.h>
@@ -36,6 +36,8 @@ namespace BALL
 			return false;
 		}
 
+		initRead();
+
 		bool read_anything = false;
 		Molecule* molecule = 0;
 		while ((molecule = read()) != 0)
@@ -59,6 +61,12 @@ namespace BALL
 
 	void GenericMolFile::write(const System& system)
 	{
+		if (!isOpen())
+		{
+			return;
+		}
+
+		initWrite();
 		MoleculeConstIterator molecule = system.beginMolecule();
 		for (; +molecule; ++molecule)
 		{
@@ -93,6 +101,14 @@ namespace BALL
 	GenericMolFile& GenericMolFile::operator << (const Molecule& molecule)
 	{
 		write(molecule);
+	}
+
+	void GenericMolFile::initRead()
+	{
+	}
+
+	void GenericMolFile::initWrite()
+	{
 	}
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.18 2001/12/18 01:14:29 oliver Exp $
+// $Id: lineBasedFile.C,v 1.19 2001/12/20 01:12:15 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -8,23 +8,6 @@ using namespace std;
 
 namespace BALL
 {
-
-	LineBasedFile::LineBasedFileError::LineBasedFileError
-		  (const char* file, int line, const LineBasedFile* f, const string& message)
-		: Exception::GeneralException(file, line, "LineBasedFileError", "")
-	{
-		message_ = message;
-		if (f != 0)
-		{
-			message_ += "\n last read line number = ";
-			char buf[40];
-			sprintf(buf, "%i", (int) f->getLineNumber());
-			message_ += buf;
-			message_ += "\n contents of line: \n";
-			message_ += f->getLine();
-		}
-		Exception::globalHandler.setMessage(message_);
-	}
 
 	LineBasedFile::LineBasedFile()
 		throw()
@@ -76,12 +59,12 @@ namespace BALL
 	}
 
 
-	bool LineBasedFile::search(const String& text, bool return_to_point)
-		throw(LineBasedFile::LineBasedFileError)
+	bool LineBasedFile::search(const String& text, bool return_to_start)
+		throw(Exception::ParseError)
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
-			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
+			throw Exception::ParseError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend for read access or at all.");
 		}
 
@@ -94,19 +77,19 @@ namespace BALL
 			}
 		}
 		
-		if (return_to_point)
+		if (return_to_start)
 		{
 			goToLine(start_point);
 		}
 		return false;
 	}
 
-	bool LineBasedFile::search(const String& text, const String& stop, bool return_to_point)
-		throw(LineBasedFile::LineBasedFileError)
+	bool LineBasedFile::search(const String& text, const String& stop, bool return_to_start)
+		throw(Exception::ParseError)
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
-			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
+			throw Exception::ParseError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend for read access or at all.");
 		}
 
@@ -116,7 +99,7 @@ namespace BALL
 		{
 			if (startsWith(stop))
 			{
-				if (return_to_point)
+				if (return_to_start)
 				{
 					goToLine(start_point);
 				}
@@ -130,7 +113,7 @@ namespace BALL
 			}
 		}
 
-		if (return_to_point)
+		if (return_to_start)
 		{
 			goToLine(start_point);
 		}
@@ -139,11 +122,11 @@ namespace BALL
 	}
 
 	bool LineBasedFile::readLine()
-		throw(LineBasedFile::LineBasedFileError)
+		throw(Exception::ParseError)
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
-			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
+			throw Exception::ParseError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend for read access or at all.");
 		}
 
@@ -160,7 +143,7 @@ namespace BALL
 	}
 
 	bool LineBasedFile::skipLines(Size number)
-		throw(LineBasedFile::LineBasedFileError)
+		throw(Exception::ParseError)
 	{
 		for (Position i = 0; i < number +1; i++)
 		{
@@ -174,11 +157,11 @@ namespace BALL
 	}
 
 	void LineBasedFile::rewind()
-		 throw(LineBasedFile::LineBasedFileError)
+		 throw(Exception::ParseError)
 	{
 		if (!isOpen())
 		{
-			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
+			throw Exception::ParseError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend.");
 		}
 		File::reopen();
@@ -187,11 +170,11 @@ namespace BALL
 	}
 
 	bool LineBasedFile::goToLine(Position line_number)
-		 throw(LineBasedFile::LineBasedFileError)
+		 throw(Exception::ParseError)
 	{
 		if (!isOpen())
 		{
-			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, 
+			throw Exception::ParseError(__FILE__, __LINE__, this, 
 							"File " + getName() +" is not opend.");
 		}
 
@@ -223,11 +206,11 @@ namespace BALL
 	}
 
 	void LineBasedFile::test(const char* file, int line, bool condition, const String& msg)
-		const throw(LineBasedFile::LineBasedFileError)
+		const throw(Exception::ParseError)
 	{
 		if (!condition)
 		{
-			throw LineBasedFile::LineBasedFileError(file, line, this, msg);
+			throw Exception::ParseError(file, line, this, msg);
 		}
 	}
 

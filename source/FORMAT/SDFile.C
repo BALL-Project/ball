@@ -1,4 +1,4 @@
-// $Id: SDFile.C,v 1.3 2001/12/19 02:40:25 oliver Exp $
+// $Id: SDFile.C,v 1.4 2001/12/20 01:12:15 oliver Exp $
 
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -80,8 +80,9 @@ namespace BALL
 	void SDFile::readPropertyBlock_(Molecule& molecule)
 	{
 		// the end of the block is marked by "$$$$"
-		while (readLine() && good() && !startsWith("$$$$"))
+		while (good() && !startsWith("$$$$"))
 		{
+			// properties start with "> "
 			if (startsWith("> "))
 			{
 				// we found a new property line: read it and construct 
@@ -90,11 +91,15 @@ namespace BALL
 				readLine();
 				molecule.setProperty(property_name, getLine().trim());
 			}
+			
+			// read the next line
+			readLine();
 		}
 	}
 
 	void SDFile::writePropertyBlock_(const Molecule& molecule)
 	{
+		// iterate over all named properties
 		for (Position i = 0; i < molecule.countNamedProperties(); i++)
 		{
 			const NamedProperty& property(molecule.getNamedProperty(i));
@@ -115,7 +120,8 @@ namespace BALL
 					default:
 						getFileStream() << std::endl;
 				}
-				getFileStream() << std::endl;
+				// add a carriage return and a blank line (as a field separator)
+				getFileStream() << std::endl << std::endl;
 			}
 		}
 

@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.40 2001/12/19 04:13:01 oliver Exp $
+// $Id: HINFile.C,v 1.41 2001/12/20 01:12:14 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -379,11 +379,6 @@ namespace BALL
 			IN_RESIDUE
 		};
 		
-		// reset some private members
-		box_.a.set(0.0);
-		box_.b.set(0.0);
-		temperature_ = 0.0;
-
 		// define a macro to print an error message for the file (only once!)
 #		define ERROR(msg)\
 				throw Exception::ParseError(__FILE__, __LINE__, getLine(), String("while reading line " + String(getLineNumber()) + " of '" + getName() + "': " + (msg)));
@@ -405,8 +400,8 @@ namespace BALL
 
 		// All <mol>s that contain <res>idues are inserted
 		// as single chains into this protein
-		Protein*	protein = 0;
-		Chain*		chain = 0;
+		Protein* protein = 0;
+		Chain* chain = 0;
 
 		String tag;
 
@@ -788,7 +783,6 @@ namespace BALL
 
 					fragment = 0;
 					chain = 0;
-					molecule = 0;
 
 					// now build all bonds
 					for (Size i = 0; i < number_of_bonds; i++)
@@ -806,7 +800,7 @@ namespace BALL
 						else  
 						{
 							// everything all right, create the bond
-							Bond* b =  atom_vector[bond_vector[i].atom1]->createBond(*atom_vector[bond_vector[i].atom2]);
+							Bond* b = atom_vector[bond_vector[i].atom1]->createBond(*atom_vector[bond_vector[i].atom2]);
 						
 							b->setOrder(bond_vector[i].order);
 						}
@@ -887,8 +881,11 @@ namespace BALL
 		}
 		catch (Exception::ParseError& e)
 		{
+			delete protein;
 			delete molecule;
 			delete residue;
+			delete fragment;
+			delete chain;
 			throw e;
 		}
 		catch (Exception::IndexOverflow)
@@ -903,7 +900,7 @@ namespace BALL
 		}
 
 		// if desired, try to remove the lone pairs from old AMBER HC-Files 
-		if (true) // BAUSTELLE
+		if (molecule != 0 && true) // BAUSTELLE
 		{
 			// a list to hold the lone pairs (for deletion)
 			list<Atom*> del_list;
@@ -956,6 +953,14 @@ namespace BALL
 
 		// return the resulting molecule
 		return molecule;
+	}
+
+	void HINFile::initRead()
+	{
+		// reset some private members
+		box_.a.set(0.0);
+		box_.b.set(0.0);
+		temperature_ = 0.0;
 	}
 
 	bool HINFile::hasPeriodicBoundary() const

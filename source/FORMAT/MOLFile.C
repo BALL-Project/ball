@@ -1,4 +1,4 @@
-// $Id: MOLFile.C,v 1.4 2001/12/19 02:40:25 oliver Exp $
+// $Id: MOLFile.C,v 1.5 2001/12/20 01:12:14 oliver Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -331,83 +331,76 @@ namespace BALL
 			}
 
 			// read the properties block
-			while (readLine() && good() && startsWith("M "))
+			while (!startsWith("M  END") && readLine() && good() && startsWith("M "))
 			{
-				if (startsWith("M  END"))
+				// delete the "M  " part of the line -- the next three letters are the tag.
+				String tag(getLine().getSubstring(3, 3));
+				tag.trim();
+
+				if (tag == "A") // atom alias
 				{
-					break;
+					//????
+				}
+				else if (tag == "V") // atom value
+				{
+				}
+				else if (tag == "G") // group
+				{
+				}
+				else if (tag == "CHG") // charge
+				{
+				}
+				else if (tag == "RAD") // radical
+				{
+				}
+				else if (tag == "ISO") // radical
+				{
+				}
+				else if (tag == "RBC") // ring bond count
+				{
+				}
+				else if (tag == "SUB") // substitution count
+				{
+				}
+				else if (tag == "UNS") // unsaturated atom
+				{
+				}
+				else if (tag == "LIN") // link atom
+				{
+				}
+				else if (tag == "ALS") // atom list
+				{
+				}
+				else if (tag == "APO") // attachment point
+				{
+				}
+				else if (tag == "AAL") // atom attachment order
+				{
+				}
+				else if (tag == "RGP") // Rgroup label location
+				{
+				}
+				else if (tag == "LOG") // Rgroup logic, unstisfied sites, Range of occurrence
+				{
+				}
+				else if (tag == "STY") // Sgroup type
+				{
+				}
+				else if (tag == "SST") // Sgroup subtype
+				{
+				}
+				else if (tag == "SLB") // Sgroup labels
+				{
+				}
+				else if (tag == "SCN") // Sgroup connectivity
+				{
+				}
+				else if (tag == "") // Sgroup connectivity
+				{
 				}
 				else
 				{
-					// delete the "M  " part of the line -- the next three letters are the tag.
-					String tag(getLine().getSubstring(3, 3));
-					tag.trim();
-
-					if (tag == "A") // atom alias
-					{
-						//????
-					}
-					else if (tag == "V") // atom value
-					{
-					}
-					else if (tag == "G") // group
-					{
-					}
-					else if (tag == "CHG") // charge
-					{
-					}
-					else if (tag == "RAD") // radical
-					{
-					}
-					else if (tag == "ISO") // radical
-					{
-					}
-					else if (tag == "RBC") // ring bond count
-					{
-					}
-					else if (tag == "SUB") // substitution count
-					{
-					}
-					else if (tag == "UNS") // unsaturated atom
-					{
-					}
-					else if (tag == "LIN") // link atom
-					{
-					}
-					else if (tag == "ALS") // atom list
-					{
-					}
-					else if (tag == "APO") // attachment point
-					{
-					}
-					else if (tag == "AAL") // atom attachment order
-					{
-					}
-					else if (tag == "RGP") // Rgroup label location
-					{
-					}
-					else if (tag == "LOG") // Rgroup logic, unstisfied sites, Range of occurrence
-					{
-					}
-					else if (tag == "STY") // Sgroup type
-					{
-					}
-					else if (tag == "SST") // Sgroup subtype
-					{
-					}
-					else if (tag == "SLB") // Sgroup labels
-					{
-					}
-					else if (tag == "SCN") // Sgroup connectivity
-					{
-					}
-					else if (tag == "") // Sgroup connectivity
-					{
-					}
-					else
-					{
-						Log.warn() << "MOLFile::readCTAB_: ignoring property entry " << getLine() << std::endl;
-					}
+					Log.warn() << "MOLFile::readCTAB_: ignoring property entry " << getLine() << std::endl;
 				}
 			}
 		}
@@ -449,8 +442,14 @@ namespace BALL
 		throw(Exception::ParseError)
 	{
 		// read the header block: first line == name, third line = comment, second line ignored
-		bool ok = true;
-		ok &= readLine();
+		bool ok = readLine();
+		if (!ok || !good())
+		{
+			// end of file encountered or not open -- nothing there to read...
+			return 0;
+		}
+
+		
 		String name = getLine();
 		ok &= readLine();
 		ok &= readLine();
@@ -479,13 +478,13 @@ namespace BALL
 		counts.number_of_atom_lists = 0;
 		parseColumnFormat("%3d", 6, 3, (void*)&counts.number_of_atom_lists);
 
-		counts.number_of_stext_entries = 0;
-		parseColumnFormat("%3d", 12, 3, (void*)&counts.number_of_stext_entries);
-
 		Size chiral = 0;
-		parseColumnFormat("%3d", 15, 3, (void*)&chiral);
+		parseColumnFormat("%3d", 12, 3, (void*)&chiral);
 		counts.chiral = (chiral == 0);
 		
+		counts.number_of_stext_entries = 0;
+		parseColumnFormat("%3d", 15, 3, (void*)&counts.number_of_stext_entries);
+
 		counts.number_of_reaction_components = 0;
 		parseColumnFormat("%3d", 18, 3, (void*)&counts.number_of_reaction_components);
 
@@ -496,7 +495,7 @@ namespace BALL
 		parseColumnFormat("%3d", 24, 3, (void*)&counts.number_of_products);
 
 		counts.number_of_intermediates = 0;
-		parseColumnFormat("%3d", 24, 3, (void*)&counts.number_of_intermediates);
+		parseColumnFormat("%3d", 27, 3, (void*)&counts.number_of_intermediates);
 	}
 
 	void MOLFile::writeCountsLine_(const MOLFile::CountsStruct& counts)
