@@ -1,10 +1,14 @@
-// $Id: createSpectrumProcessor.h,v 1.10 2001/03/02 22:19:33 amoll Exp $
+// $Id: createSpectrumProcessor.h,v 1.11 2001/07/14 22:55:24 oliver Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
 
 #ifndef BALL_NMR_PEAK_H
 #	include <BALL/NMR/peak.h>
+#endif
+
+#ifndef BALL_NMR_PEAKLIST_H
+#	include <BALL/NMR/peakList.h>
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -22,8 +26,6 @@
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include <BALL/NMR/shiftModule.h>
 #endif
-
-#include <list>
 
 namespace BALL 
 {
@@ -71,7 +73,7 @@ namespace BALL
 		
 		/**	Returns a reference to {\tt peaklist_}.
 		*/
-		const list<Peak1D>& getPeakList() const;
+		const PeakList1D& getPeakList() const;
 		
 		//@}
 		/**	@name Accessors
@@ -107,7 +109,7 @@ namespace BALL
 
 		protected:
 
-		std::list<Peak1D> peaklist_;
+		PeakList1D							peaklist_;
 
 		StringHashSet						ignore_atoms_;
 
