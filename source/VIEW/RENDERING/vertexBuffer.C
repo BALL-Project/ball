@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.1 2005/01/16 15:59:53 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.2 2005/01/16 20:47:56 amoll Exp $
 //
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -111,10 +111,10 @@ bool MeshBuffer::initialize()
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[3]);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 3, vertex, GL_STATIC_DRAW_ARB);
 
-	delete normals;
-	delete vertex;
-	delete indices;
-	delete colors;
+	delete[] normals;
+	delete[] vertex;
+	delete[] indices;
+	delete[] colors;
 
 	filled_ = true;
 
@@ -131,7 +131,6 @@ void MeshBuffer::clear()
 void MeshBuffer::clearBuffer()
 {
 	if (!filled_) return;
-	Log.error() << "clearbuffer" << std::endl;
 	glDeleteBuffersARB(4, buffers_);
 	filled_ = false;
 }
