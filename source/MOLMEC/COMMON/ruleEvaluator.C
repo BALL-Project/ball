@@ -1,8 +1,10 @@
-// $Id: ruleEvaluator.C,v 1.4 2000/05/24 17:58:03 oliver Exp $
+// $Id: ruleEvaluator.C,v 1.5 2000/05/25 11:02:01 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/KERNEL/PTE.h>
+
+//#define DEBUG_RULEEVALUATOR
 
 using namespace std;
 
@@ -159,6 +161,9 @@ namespace BALL
 				// check whether the expression matches for this atom
 				if (it->first(atom))
 				{
+					#ifdef DEBUG_RULEEVALUATOR
+						Log.info() << "atom "<< atom.getFullName() << " matches rule " << it->first.getExpression() << endl;
+					#endif
 					// retrieve the return value
 					result = it->second;
 					break;
