@@ -1,18 +1,10 @@
-// $Id: HINFile.h,v 1.14 2001/08/01 01:06:27 oliver Exp $
+// $Id: HINFile.h,v 1.15 2001/12/17 01:43:35 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
-
-#ifndef BALL_SYSTEM_FILE_H
-#	include <BALL/SYSTEM/file.h>
-#endif
-
-#ifndef BALL_DATATYPE_HASHMAP_H
-# include <BALL/DATATYPE/hashMap.h>
+#ifndef BALL_FORMAT_GENERICMOLFILE_H
+#	include <BALL/FORMAT/genericMolFile.h>
 #endif
 
 #ifndef BALL_MATHS_BOX_H
@@ -29,58 +21,49 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/FORMAT/HINFile.h} \\
 	*/
 	class HINFile
-		: public File
+		: public GenericMolFile
 	{
 		public:
 
 		BALL_CREATE(HINFile)
 
-		/**	@name	Constructors and Destructors
+		/** @name Constructors and Destructors
 		*/
 		//@{
-
-		/**	Default constructor
+		/** Default constructor
 		*/
-		HINFile();
+		HINFile()
+			throw();
 
-		/** Detailed constructor.
-		*/
-		HINFile(const String& filename, File::OpenMode open_mode = File::IN)
-			throw(Exception::FileNotFound);
-
-		/**	Copy constructor
+		/** Copy constructor
 		*/
 		HINFile(const HINFile& file)
 			throw(Exception::FileNotFound);
 
-		/// Destructor
+		/** Detailed constructor
+		*/
+		HINFile(const String& filename, File::OpenMode open_mode = File::IN)
+			throw(Exception::FileNotFound);
+
+		/**	Destructor
+		*/
 		virtual ~HINFile()
 			throw();
-		
 		//@}
 
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{
 		
-		/**	Write a system to the HIN file.
+		/**	Write a system to a HIN file.
 				Note that this changes the properties of atoms in the system.
 		*/
 		virtual void write(const System& system);
 		
 		/**	Read a system from the HIN file
 		*/
-		virtual void read(System&	system);
-
-		/**	Read a system from a HIN file.
-		*/
-		virtual HINFile& operator >> (System& system);
-		
-		/**	Write a system to a HIN file.
-				Note that this changes the properties of atoms in the system.
-		*/
-		virtual HINFile& operator << (System& system);
-		
+		virtual void read(System&	system)
+			throw(Exception::ParseError);
 		//@}
 
 		/**	@name	Accessors
@@ -95,7 +78,7 @@ namespace BALL
 				An emptry box is returned if no periodic boundary is defined.
 				@return	the boundary box
 		*/
-		Box3	getPeriodicBoundary() const;
+		Box3 getPeriodicBoundary() const;
 
 		/**	Return the temperature stored in the file.
 				HIN files may contain a {\tt sys} entry containing

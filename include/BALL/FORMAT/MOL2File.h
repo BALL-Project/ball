@@ -1,14 +1,10 @@
-// $Id: MOL2File.h,v 1.9 2001/08/01 01:06:27 oliver Exp $
+// $Id: MOL2File.h,v 1.10 2001/12/17 01:43:35 oliver Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
-
-#ifndef BALL_SYSTEM_FILE_H
-#	include <BALL/SYSTEM/file.h>
+#ifndef BALL_FORMAT_GENERICMOLFILE_H
+#	include <BALL/FORMAT/genericMolFile.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -26,7 +22,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/FORMAT/MOL2File.h} \\
 	*/
 	class MOL2File
-		: public File
+		: public GenericMolFile
 	{
 		public:
 
@@ -45,7 +41,8 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		MOL2File();
+		MOL2File()
+			throw();
 
 		/** Detailed constructor
 		*/
@@ -69,28 +66,12 @@ namespace BALL
 		
 		/**	Write a system to the MOL2 file
 		*/
-		virtual void write(const System&	system);
+		virtual void write(const System& system);
 		
 		/**	Read a system from the MOL2 file
 		*/
-		virtual void read(System&	system);
-
-		/**	Read a system from the MOL2 file
-		*/
-		virtual MOL2File& operator >> (System& system)
-		{
-			read(system);
-			return *this;
-		}
-		
-		/**	Write a system to the MOL2 file
-		*/
-		virtual MOL2File& operator << (const System& system)
-		{
-			write(system);	
-			return *this;
-		}
-		
+		virtual void read(System&	system)
+			throw(Exception::ParseError);
 		//@}
 
 		protected:
