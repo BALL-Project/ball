@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.15 2000/09/04 20:55:23 amoll Exp $ 
+// $Id: hashSet.h,v 1.16 2000/09/05 07:16:59 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -734,7 +734,9 @@ namespace BALL
 		if (node_ptr == bucket_[bucket])
 		{
 			bucket_[bucket] = node_ptr->next;
-		} else {
+		} 
+		else 
+		{
 			previous->next = node_ptr->next;
 		}
 
@@ -746,7 +748,7 @@ namespace BALL
 	template <class Key>
 	void HashSet<Key>::erase(Iterator pos)
 	{
-		if (pos.bound_ != this)
+		if (pos.getTraits().bound_ != this)
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
@@ -756,21 +758,24 @@ namespace BALL
 			return;
 		}
 				
-		if (pos == bucket_[pos.bucket_])
+		if (pos.getTraits().getPosition() == bucket_[pos.getTraits().bucket_])
 		{
-			bucket_[pos.bucket_] = pos->next;
-		} else {
-			(pos-1)->next = pos->next;
+			bucket_[pos.getTraits().bucket_] = pos.getTraits().getPosition()->next;
+		} 
+		else 
+		{
+			(pos.getTraits().getPosition() - 1)->next = pos.getTraits().getPosition()->next;
 		}
 
-		deleteNode_(pos);
+
+		deleteNode_(pos.getTraits().getPosition());
 		--size_;
 	}
 
 	template <class Key>
 	void HashSet<Key>::erase(Iterator f, Iterator l)
 	{
-		if (f.bound_ != this || l.bound_ != this)
+		if (f.getTraits().bound_ != this || l.getTraits().bound_ != this)
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
@@ -785,14 +790,16 @@ namespace BALL
 			return;
 		}
 
-		if (f == bucket_[f.bucket_])
+		if (f == bucket_[f.getTraits().bucket_])
 		{
-			bucket_[f.bucket_] = l;
-		} else {
+			bucket_[f.getTraits().bucket_] = l;
+		} 
+		else 
+		{
 			(f-1)->next = l;
 		}
 
-		int diff = f.position_ - l.position_;
+		Index diff = f.position_ - l.position_;
 		while (f.position_ < l.position_)
 		{
 			deleteNode_(f);
