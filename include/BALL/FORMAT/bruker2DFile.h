@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.h,v 1.8 2000/11/28 17:26:03 anhi Exp $
+// $Id: bruker2DFile.h,v 1.9 2000/12/01 17:23:11 anhi Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
@@ -47,11 +47,6 @@ class Bruker2D
   /**	Destructor.
   */
   ~Bruker2D();
-
-  /**
-   * Read a spectrum.
-   */
-  void read(vector<double>& dat);
 
   /** Read a spectrum. It will be stored in spectrum_;
    */

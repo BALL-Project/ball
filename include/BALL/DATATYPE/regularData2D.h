@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.4 2000/11/28 17:21:01 anhi Exp $
+// $Id: regularData2D.h,v 1.5 2000/12/01 17:20:46 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -128,6 +128,14 @@ namespace BALL
 		*/
 		Size getSize() const;
 
+		/**     Return the upper bound of the data's values
+		 */
+		const T& getUpperBound() const;
+
+		/**     Return the lower bound of the data's values
+		 */
+		const T& getLowerBound() const;
+
 		/**     Return the number of items per line
 		 */
 		Size getXSize() const;
@@ -151,6 +159,14 @@ namespace BALL
 		/**     Return the upper bound in y direction
 		 */
 		double getYUpper() const;
+
+		/**     Set the upper bound of the data.
+		 */
+		void setUpperBound(T ub);
+
+		/**     Set the lower bound of the data.
+		 */
+		void setLowerBound(T lb);
 
 		/**     Set the size in x direction
 		 */
@@ -192,6 +208,14 @@ namespace BALL
 		//@}
 	
 		protected:
+		/**     The lower bound of the values.
+		 */
+		T                       lower_;
+
+		/**     The upper bound of the values.
+		 */
+		T                       upper_;
+
 		/**	The lower bound in x direction
 		*/
 		double			xlower_;
@@ -386,8 +410,8 @@ namespace BALL
 	BALL_INLINE
 	void TRegularData2D<T>::getConvertedPosition(Position x, Position y, pair<T, T>& dum) const
 	{
-	  dum.first = xlower_ - (double) x / xsize_ * (double)(xupper_ - xlower_) / xsize_;
-	  dum.second = ylower_ - (double) y / ysize_ * (double)(yupper_ - ylower_) / ysize_;
+	  dum.first =  (double) x * (xupper_ - xlower_) / xsize_ + xlower_;
+	  dum.second = (double) y * (yupper_ - ylower_) / ysize_ + ylower_;
 	}
 
 	template <typename T>
@@ -444,6 +468,20 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
+	const T& TRegularData2D<T>::getUpperBound() const
+	{
+      	        return upper_;
+	}
+
+	template <typename T>
+	BALL_INLINE
+	const T& TRegularData2D<T>::getLowerBound() const
+	{
+      	        return lower_;
+	}
+
+	template <typename T>
+	BALL_INLINE
 	Size TRegularData2D<T>::getXSize() const
 	{
 		return xsize_;
@@ -486,9 +524,23 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
+	void TRegularData2D<T>::setLowerBound(T lb)
+	{
+		lower_ = lb;
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TRegularData2D<T>::setUpperBound(T ub)
+	{
+	        upper_ = ub;
+	}
+
+	template <typename T>
+	BALL_INLINE
 	void TRegularData2D<T>::setXLower(double xlower)
 	{
-		xlower_ = xlower;
+	        xlower_ = xlower;
 	}
 	
 	template <typename T>

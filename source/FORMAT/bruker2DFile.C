@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.C,v 1.8 2000/11/29 13:17:05 anhi Exp $
+// $Id: bruker2DFile.C,v 1.9 2000/12/01 17:27:49 anhi Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -44,7 +44,7 @@ namespace BALL
 	  maxx_ = (int) parsf2_->parameter( "YMAX_p" );
 		
 	  close();
-	  open(name);
+	  open(name+"/2rr");
 	  read();
 	}
 
@@ -57,6 +57,7 @@ namespace BALL
 	  File& f = static_cast<File&> (*this);
 	  int SIF1_, SIF2_, XDIMF1_, XDIMF2_;
 	  bool littleEndian;
+	  double a, b;
 
 	  // first we will have to find out whether we are using big or little endian on this machine.
 	  int endTest = 1;
@@ -77,6 +78,21 @@ namespace BALL
 	  spectrum_.setYSize(SIF1_);
 	  spectrum_.resize(SIF2_, SIF1_);
 
+	  a = parsf2_->parameter( "OFFSET" );
+	  b = parsf2_->parameter( "OFFSET" ) - (parsf2_->parameter( "SW_p" ) / parsf2_->parameter( "SF" ));
+	  
+	  spectrum_.setXLower((a<b) ? a : b);
+	  spectrum_.setXUpper((a>b) ? a : b);
+
+	  a = parsf1_->parameter( "OFFSET" );
+	  b = parsf1_->parameter( "OFFSET" ) - (parsf1_->parameter( "SW_p" ) / parsf1_->parameter( "SF" ));
+
+	  spectrum_.setYLower((a<b) ? a : b);
+	  spectrum_.setYUpper((a>b) ? a : b);
+
+	  spectrum_.setLowerBound(parsf1_->parameter( "YMIN_p" ));
+	  spectrum_.setUpperBound(parsf1_->parameter( "YMAX_p" ));
+
 	  // Back to the beginning of the file.
 	  f.reopen( );
 	  
@@ -90,7 +106,7 @@ namespace BALL
 		  break;
 		};
 		
-		f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
+		f.read(c, 4);
 		if ( parsf1_->parameter( "BYTORDP" ) == 1 ) {
 		  if (littleEndian == true) // no conversion needed;
 		  {
@@ -120,86 +136,6 @@ namespace BALL
 	    };
 	  };
 	}
-
-  
-  /** Read a spectrum.
-   */
-  void Bruker2D::read(vector<double>& dat)
-  {
-    dat_ = &dat;
-	  
-    char c[4];
-    signed long int &numdum = *(signed long int*) (&c[0]);
-    int actMat, actMatF1, actMatF2;
-    int matNumF1, matNumF2, f1, f2;
-    File& f = static_cast<File&> (*this);
-    int SIF1_, SIF2_, XDIMF1_, XDIMF2_;
-    bool littleEndian;
-
-  
-    // first we will have to find out whether we are using big or little endian on this machine.
-    int endTest = 1;
-    if (*(char *) &endTest == 1)
-      {
-	littleEndian = true;
-      } else {
-	littleEndian = false;
-      };
-
-
-    SIF1_   = (int) parsf1_->parameter( "SI"   );
-    SIF2_   = (int) parsf2_->parameter( "SI"   );
-    XDIMF1_ = (int) parsf1_->parameter( "XDIM" );
-    XDIMF2_ = (int) parsf2_->parameter( "XDIM" );
-
-    if ( dat.size() < (SIF1_ * SIF2_ ) )
-      { 
-	dat.resize( SIF1_ * SIF2_ );
-      };
-    // Zurück an den Anfang des Files.
-    f.reopen( );
-	  
-    matNumF2 = (int) (SIF2_ / XDIMF2_); // Anzahl Matrizen in F2 - Richtung
-    matNumF1 = (int) (SIF1_ / XDIMF1_); // Anzahl Matrizen in F1 - Richtung
-	  
-    for ( actMat=0; actMat < matNumF2 * matNumF1; actMat++ ) { // Gehe alle Submatrizen durch
-      for ( f1 = 0; f1 < XDIMF1_; f1++ ) {   // in jeder Matrix: gehe alle Zeilen durch
-	for ( f2 = 0; f2 < XDIMF2_; f2++ ) { // gehe alle Spalten durch
-	  if (!f.good()) {
-	    break;
-	  };
-		
-	  f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
-	  if ( parsf1_->parameter( "BYTORDP" ) == 1 ) {
-		  if (littleEndian == true) // no conversion needed;
-		  {
-		  } else { // conversion from little to big
-		    numdum = ( ((numdum & 0x000000FFL) << 24)
-              		      |((numdum & 0x0000FF00L) << 8)
-              		      |((numdum & 0x00FF0000L) >> 8)
-			      |((numdum & 0xFF000000L) >> 24));
-		  };
-		} else {
-		  if (littleEndian == true) // conversion from big to little
-		  {
-		    numdum = ( ((numdum & 0x000000FFL) << 24)
-              		      |((numdum & 0x0000FF00L) << 8)
-              		      |((numdum & 0x00FF0000L) >> 8)
-			      |((numdum & 0xFF000000L) >> 24));
-		  } else { // no conversion needed;
-		  };
-		};
-		
-	  // Die wievielte Matrix in der aktuellen Zeile/Spalte haben wir erreicht?
-	  actMatF2 = (actMat % matNumF2);
-	  actMatF1 = (actMat / matNumF2);
-		
-	  dat[ f2 + XDIMF2_ * actMatF2 + ( ( f1 + XDIMF1_ * actMatF1 ) * SIF2_ ) ] = numdum;
-	};
-      };
-    };
-  }
-	
 
   /** Return a reference to the spectrum.
    */

@@ -8,7 +8,8 @@ CPP_SOURCES=\
 	labelProperties.C\
 	labelPropertiesData.C\
 	openHINFile.C\
-	openPDBFile.C
+	openPDBFile.C\
+	openBruker2DFile.C
 
 MOC_SOURCES=\
 	displayProperties_moc.C\
@@ -16,7 +17,8 @@ MOC_SOURCES=\
 	labelProperties_moc.C\
 	labelPropertiesData_moc.C\
 	openHINFile_moc.C\
-	openPDBFile_moc.C
+	openPDBFile_moc.C\
+	openBruker2DFile_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -41,3 +43,5 @@ openHINFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h
 openPDBFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h -o openPDBFile_moc.C
 
+openBruker2DFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h -o openBruker2DFile_moc.C

@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.3 2000/11/28 17:42:18 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.4 2000/12/01 17:26:08 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -47,8 +47,8 @@
 #       include <BALL/FORMAT/JCAMPFile.h>
 #endif
 
-#ifndef BALL_DATATYPE_CONTOURLINE_H
-#       include <BALL/DATATYPE/contourLine.h>
+#ifndef BALL_DATATYPE_CONTOUR_H
+#       include <BALL/DATATYPE/contour.h>
 #endif
 
 using namespace BALL;
@@ -107,10 +107,13 @@ class PixWid
     void mousePressEvent( QMouseEvent *e );
     void mouseReleaseEvent( QMouseEvent *e );
   signals:
-    void mouseMoved( int, int );
+    void mouseMoved(Position, Position);
+    void selected( QPoint, QPoint );
+    void context(QMouseEvent* e);
 
   private:
-    QPoint beg_old, beg, end_old, end;
+    QPoint beg_old_, beg_, end_old_, end_;
+    bool select_;
 };
 
 class RegularData2DWidget 
@@ -134,32 +137,21 @@ class RegularData2DWidget
   void scale(Size nx, Size ny, double x1, double y1, double x2, double y2);
 
   /**
-   * Creates a pixmap containing nx * ny data points from startx to endx and starty to endy
-   */
-  void getData(Size nx, Size ny, double startx, double endx, double starty, double endy);
-
-  /**
    * Creates a lorentzian "peak" in the (interpolated) data with width xwidth, ywidth, amplitude amp 
    * and maximum at xpos, ypos.
    */
   void addLorentzian( double xpos, double ypos, double amp, int xwidth=1, int ywidth=1 );
 
-  /**
-   * Tries to read a spectrum from directory "dirName".
-   */
-  bool readSpec( string dirName );
-
-  Bruker2D& GetBrukerFile();
-
-  void SetShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, double bfreqf1, double bfreqf2);
-
  public slots:
+  void onNotify(Message *message);
   bool reactToMessages_(Message* message);
 
   void paintEvent( QPaintEvent * );
   void drawContents( QPainter *paint, int clipx, int clipy, int clipw, int cliph );
   void resizeEvent( QResizeEvent * );
-  void NewMousePos( int x, int y );
+  void NewMousePos( Position x, Position y );
+  void Selected(QPoint beg, QPoint end);
+  void slotZoomOut();
  
   void enterEvent( QEvent * );
   void leaveEvent( QEvent * );
@@ -182,14 +174,14 @@ class RegularData2DWidget
 
   void createPlot();
 
+  /**   Display the data as contour-plot.
+   */
+  void plotContour();
+
  protected:
   QPixmap *pm, *legendMap, *bufferMap;
   PixWid *pixWid;
   Size legendLastX, legendLastY;
-  /* Stores original data. */
-  vector<double> specDat_;
-  /* Stores data after interpolation. */
-  vector<double> fullData;
   /* Length of original data. */
   Size lengthx, lengthy;
   /* Length of field (after interpolation). */
@@ -200,8 +192,6 @@ class RegularData2DWidget
   bool showMousePos_;
   /* Shows mouse position.*/
   QLabel *posLabel_;
-  /* Reads and stores the spectrum. */
-  Bruker2D *spectrum_;
   double soffsetf1_, soffsetf2_;
   double swidthf1_, swidthf2_;
   double bfreqf1_, bfreqf2_;
@@ -210,6 +200,17 @@ class RegularData2DWidget
   RegularData2D *spec_;
   /* Context-menu */
   QPopupMenu *men_;
+  /* If we zoom into the data, we have to store the position of the lower left corner of the
+     area we are looking at at the moment and we have to know a zoom - factor.
+  */
+  Position act_lower_left_x_;
+  Position act_lower_left_y_;
+  double zoom_x_;
+  double zoom_y_;
+  /* This class creates and stores a number of contour-lines */
+  Contour *cont_;
+  /* The number and range of the contour-lines we want to plot. */
+  Size cont_num_, cont_start_, cont_end_;
 };
   
 #endif

@@ -1,4 +1,4 @@
-// $Id: contourLine.h,v 1.1 2000/11/28 17:21:58 anhi Exp $
+// $Id: contourLine.h,v 1.2 2000/12/01 17:21:23 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -85,7 +85,7 @@ namespace BALL
        */
       //@{
       /// Default constructor
-      TContourLine(T height);
+      TContourLine(T height = 0);
 
       /// Copy constructor
       TContourLine(const TContourLine& copyTContourLine);

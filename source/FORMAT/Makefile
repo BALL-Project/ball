@@ -13,7 +13,10 @@ CPP_SOURCES=\
 	PDBFile.C\
 	resourceFile.C\
 	XYZFile.C\
-	NMRStarFile.C
+	NMRStarFile.C\
+	JCAMPFile.C\
+        bruker1DFile.C\
+        bruker2DFile.C   
 
 include ../common.mak
 include .Dependencies
