@@ -95,3 +95,7 @@ TransformationApplicator_test:	TransformationApplicator_test.o
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES)
+
+String_test.o:	String_test.C
+	$(CXX) $(CPPFLAGS) $(ADD_CPPFLAGS) $(CPP_MODE_FLAGS_NO_OPTIMIZATION) $(BALL_CPPFLAGS) $(BALL_INCLUDES) -c $*.C -o $@
+ 
