@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.7 2004/07/16 14:03:10 amoll Exp $
+// $Id: POVRenderer.h,v 1.7.2.1 2004/12/30 15:25:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -152,6 +152,7 @@ namespace BALL
 			protected:
 
 				std::ostream* outfile_;
+				String trimFloatValue_(float value);
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;

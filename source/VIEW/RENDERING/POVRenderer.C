@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.1 2004/12/30 15:05:47 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.2 2004/12/30 15:25:10 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -113,7 +113,7 @@ namespace BALL
  			output += trimFloatValue_(input.getGreen()) + ", ";
  			output += trimFloatValue_(input.getBlue()) + ", ";
 			// TODO: sensible parameter for "filter"
-			output += "0.0 ,";
+			output += "0., ";
 			// TODO: transmit seems not to be linear in alpha
 			output += trimFloatValue_(1. - (float) input.getAlpha());
 			output += ">";
@@ -265,7 +265,8 @@ namespace BALL
 			// stage uses opengl values for material parameters (-1.0 -> 1.0), so normalize these
 			(*outfile_) << "specular " 	<< stage.getSpecularIntensity() / 2.0 + 0.5 << " ";
 			(*outfile_) << "diffuse " 	<< stage.getDiffuseIntensity() 	/ 2.0 + 0.5 << " ";
-			(*outfile_) << "ambient "	 	<< stage.getAmbientIntensity() 	/ 2.0 + 0.5 << " }" << endl;
+			// povray uses an other ambient setting
+			(*outfile_) << "ambient 0.0 "	 	<< endl;
 			(*outfile_) << "#declare BALLFinishSphereSolid      = BALLFinish" << endl;
 			(*outfile_) << "#declare BALLFinishSphereTransp     = BALLFinish" << endl;
 			(*outfile_) << "#declare BALLFinishTubeSolid        = BALLFinish" << endl;
@@ -326,13 +327,13 @@ namespace BALL
 			Vector3 position = sphere.getPosition();
 
 			// now write the information into the (*outfile_)
-			(*outfile_) << "\tsphere {" << endl << "\t\t";
+			(*outfile_) << "\tsphere { ";
 			(*outfile_) << POVVector3(position) << ", ";
-			(*outfile_) << radius << endl;
+			(*outfile_) << radius;
 			//(*outfile_) <<"\t\ttexture {" << endl;
-			(*outfile_) << "\tpigment { " << POVColorRGBA(color) << " } " << endl;
-			(*outfile_) << "\t" << POVFinish("Sphere", color) << endl;
-			(*outfile_) << "\t}" << endl << endl;
+			(*outfile_) << " pigment { " << POVColorRGBA(color) << " } ";
+			(*outfile_) << POVFinish("Sphere", color);
+			(*outfile_) << " }" << endl << endl;
 		}
 
 		void POVRenderer::renderDisc_(const Disc& disc)
@@ -357,13 +358,13 @@ namespace BALL
 			normal -= origin_;
 
 			// now write the information into the (*outfile_)
-			(*outfile_) << "\tdisc {" << std::endl << "\t\t";
+			(*outfile_) << "\tdisc { ";
 			(*outfile_) << POVVector3(position) << ", ";
 			(*outfile_) << POVVector3(normal) << ", ";
-			(*outfile_) << radius << std::endl;
-			(*outfile_) << "\tpigment { " << POVColorRGBA(color) << " } " << std::endl;
-			(*outfile_) << "\t" << POVFinish("Tube", color) << endl; // We use the same finish as for tubes -> helices
-			(*outfile_) << "\t} " << std::endl << std::endl;
+			(*outfile_) << radius;
+			(*outfile_) << " pigment { " << POVColorRGBA(color) << " } ";
+			(*outfile_) << POVFinish("Tube", color); // We use the same finish as for tubes -> helices
+			(*outfile_) << "} " << std::endl << std::endl;
 		}
 
 		void POVRenderer::renderTube_(const Tube& tube)
@@ -388,13 +389,13 @@ namespace BALL
 			Vector3  cap_point = tube.getVertex2();
 
 			// now write the information into the (*outfile_)
-			(*outfile_) << "\tcylinder {" << endl;
-			(*outfile_) << "\t\t" << POVVector3(base_point) << ", ";
+			(*outfile_) << "\tcylinder {";
+			(*outfile_) << "\t" << POVVector3(base_point) << ", ";
 			(*outfile_)           << POVVector3( cap_point) << ", ";
-			(*outfile_)           <<                 radius << std::endl;
-			(*outfile_) << "\tpigment { " << POVColorRGBA(color) << " } " << std::endl;
-			(*outfile_) << "\t" << POVFinish("Tube", color) << std::endl; 
-			(*outfile_) << "\t} " << std::endl;
+			(*outfile_)           <<                 radius;
+			(*outfile_) << " pigment { " << POVColorRGBA(color) << " } ";
+			(*outfile_) << POVFinish("Tube", color);
+			(*outfile_) << "} " << std::endl;
 		}	
 
 		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
@@ -424,21 +425,21 @@ namespace BALL
 			Vector3  mid_point = tube.getMiddleVertex();
 
 			// now write the information into the (*outfile_)
-			(*outfile_) << "\tcylinder {" << endl;
-			(*outfile_) << "\t\t" << POVVector3(base_point) << ", ";
+			(*outfile_) << "\tcylinder { ";
+			(*outfile_) << POVVector3(base_point) << ", ";
 			(*outfile_)           << POVVector3( mid_point) << ", ";
-			(*outfile_)           <<                 radius << endl;
-			(*outfile_) << "\tpigment { " << POVColorRGBA(color1) << " } " << endl;
-			(*outfile_) << "\t" << POVFinish("Tube", color1) << endl; 
-			(*outfile_) << "\t}" << endl << endl;
+			(*outfile_)           <<                 radius;
+			(*outfile_) << " pigment { " << POVColorRGBA(color1) << " } ";
+			(*outfile_) << POVFinish("Tube", color1);
+			(*outfile_) << "}" << endl;
 			
-			(*outfile_) << "\tcylinder {" << endl;
-			(*outfile_) << "\t\t" << POVVector3(mid_point) << ", ";
+			(*outfile_) << "\tcylinder {";
+			(*outfile_) << POVVector3(mid_point) << ", ";
 			(*outfile_)           << POVVector3(cap_point) << ", ";
-			(*outfile_)           <<                 radius << endl;
-			(*outfile_) << "\tpigment { " << POVColorRGBA(color2) << " } " << endl;
-			(*outfile_) << "\t" << POVFinish("Tube", color2) << endl; 
-			(*outfile_) << "\t}" << endl << endl;
+			(*outfile_)           <<                 radius;
+			(*outfile_) << " pigment { " << POVColorRGBA(color2) << " } ";
+			(*outfile_) << POVFinish("Tube", color2);
+			(*outfile_) << "}" << endl << endl;
 		}
 
 		void POVRenderer::renderMesh_(const Mesh& mesh)
@@ -478,7 +479,7 @@ namespace BALL
 					n3 = mesh.normal[t.v3] - origin_;
 
 					(*outfile_) << "\t\tsmooth_triangle {" << endl;
-					(*outfile_) << "\t\t\t#local BALLColor = texture { pigment { " << POVColorRGBA(c1) << " } }" << endl;
+					(*outfile_) << "\t\t\t#local color = texture { pigment { " << POVColorRGBA(c1) << " } }" << endl;
 
 
 					(*outfile_) << "\t\t\t" << POVVector3(v1) << ", ";
@@ -491,8 +492,7 @@ namespace BALL
 
 					// And now the color. This is easy here, because we
 					// only have one color.
-					(*outfile_) <<"\t\t\ttexture { BALLColor }" << endl;
-					(*outfile_) << "\t\t}" << endl << endl;
+					(*outfile_) <<"\t\t\ttexture { color } }" << endl;
 				}
 			}
 			else
@@ -513,11 +513,11 @@ namespace BALL
 					c3 = mesh.colorList[t.v3];
 
 					(*outfile_) << "\t\tsmooth_triangle {" << std::endl;
-					(*outfile_) << "\t\t\t#local BALLColor1 = texture { pigment { " 
+					(*outfile_) << "\t\t\t#local color1 = texture { pigment { " 
 									 << POVColorRGBA(c1) << " } finish { BALLFinishMesh } }" << std::endl;
-					(*outfile_) << "\t\t\t#local BALLColor2 = texture { pigment { " 
+					(*outfile_) << "\t\t\t#local color2 = texture { pigment { " 
 									 << POVColorRGBA(c2) << " } finish { BALLFinishMesh } }" << std::endl;
-					(*outfile_) << "\t\t\t#local BALLColor3 = texture { pigment { " 
+					(*outfile_) << "\t\t\t#local color3 = texture { pigment { " 
 									 << POVColorRGBA(c3) << " } finish { BALLFinishMesh } }" << std::endl << std::endl;
 
 					(*outfile_) << "\t\t\t" << POVVector3(v1) << ", ";
@@ -528,9 +528,7 @@ namespace BALL
 					(*outfile_)             << POVVector3(n3) << std::endl << std::endl;
 
 					// And now the colors.
-					(*outfile_) <<"\t\t\ttexture_list {" << std::endl;
-					(*outfile_) << "\t\t\t\t\tBALLColor1 BALLColor2 BALLColor3" << std::endl;
-					(*outfile_) << "\t\t\t}" << std::endl;
+					(*outfile_) <<"\t\t\ttexture_list { color1 color2 color3 }" << std::endl;
 					(*outfile_) << "\t\t}" << std::endl << std::endl;
 				}
 			}
