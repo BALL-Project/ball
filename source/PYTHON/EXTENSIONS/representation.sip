@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.9 2004/07/26 13:46:02 amoll Exp $
+// $Id: representation.sip,v 1.10 2004/07/26 20:30:54 amoll Exp $
 //
 
 class Representation
@@ -53,6 +53,6 @@ class Representation
 	void setTransparency(Size /value/) throw();
 	void update(bool /rebuild/) throw();
 	bool isHidden() const throw();
-	void setHidden(bool state) throw();
+	void setHidden(bool) throw();
 	~Representation() throw();
 };
