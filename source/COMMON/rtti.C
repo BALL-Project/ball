@@ -1,4 +1,7 @@
-// $Id: rtti.C,v 1.8 2002/01/03 01:53:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: rtti.C,v 1.9 2002/02/27 12:20:34 sturm Exp $
 
 #include <BALL/COMMON/rtti.h>
 #include <typeinfo>

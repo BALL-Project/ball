@@ -1,4 +1,7 @@
-// $Id: OoiEnergy_test.C,v 1.2 2000/05/31 17:37:07 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: OoiEnergy_test.C,v 1.3 2002/02/27 12:24:41 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(OOiEnergy, "$Id: OoiEnergy_test.C,v 1.2 2000/05/31 17:37:07 oliver Exp $")
+START_TEST(OOiEnergy, "$Id: OoiEnergy_test.C,v 1.3 2002/02/27 12:24:41 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

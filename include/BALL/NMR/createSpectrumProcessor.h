@@ -1,4 +1,7 @@
-// $Id: createSpectrumProcessor.h,v 1.13 2001/09/28 14:44:25 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: createSpectrumProcessor.h,v 1.14 2002/02/27 12:19:30 sturm Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H

@@ -1,4 +1,7 @@
-// $Id: SESEdge.h,v 1.13 2002/01/14 20:58:57 strobel Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SESEdge.h,v 1.14 2002/02/27 12:19:43 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H

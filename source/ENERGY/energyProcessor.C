@@ -1,4 +1,7 @@
-// $Id: energyProcessor.C,v 1.5 2001/07/17 12:09:08 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: energyProcessor.C,v 1.6 2002/02/27 12:21:14 sturm Exp $
 
 #include <BALL/ENERGY/energyProcessor.h>
 

@@ -1,4 +1,7 @@
-// $Id: SDFile_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SDFile_test.C,v 1.6 2002/02/27 12:24:52 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(SDFile, "$Id: SDFile_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(SDFile, "$Id: SDFile_test.C,v 1.6 2002/02/27 12:24:52 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: moleculeIterator.h,v 1.4 2000/08/30 19:58:09 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: moleculeIterator.h,v 1.5 2002/02/27 12:18:49 sturm Exp $
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
 #define BALL_KERNEL_MOLECULEITERATOR_H

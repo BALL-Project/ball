@@ -1,4 +1,7 @@
-// $Id: common.h,v 1.14 2001/02/14 01:59:58 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: common.h,v 1.15 2002/02/27 12:18:54 sturm Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H

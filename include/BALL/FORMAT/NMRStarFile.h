@@ -1,4 +1,7 @@
-// $Id: NMRStarFile.h,v 1.17 2001/12/20 02:35:31 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: NMRStarFile.h,v 1.18 2002/02/27 12:18:39 sturm Exp $
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H

@@ -1,4 +1,7 @@
-// $Id: directory.C,v 1.15 2001/05/17 12:19:25 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: directory.C,v 1.16 2002/02/27 12:24:19 sturm Exp $
 
 #include <dirent.h>
 #include <stdio.h>

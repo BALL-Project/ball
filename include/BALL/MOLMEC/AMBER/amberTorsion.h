@@ -1,4 +1,7 @@
-// $Id: amberTorsion.h,v 1.11 2001/07/11 23:59:23 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: amberTorsion.h,v 1.12 2002/02/27 12:18:59 sturm Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERTORSION_H

@@ -1,4 +1,7 @@
-// $Id: pyProteinList.h,v 1.3 2001/07/25 11:30:49 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyProteinList.h,v 1.4 2002/02/27 12:19:36 sturm Exp $
 
 #ifndef BALL_PYTHON_PYPROTEINLIST_H
 #define BALL_PYTHON_PYPROTEINLIST_H

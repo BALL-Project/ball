@@ -1,4 +1,7 @@
-// $Id: standardPredicates.C,v 1.30 2002/01/10 14:40:16 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: standardPredicates.C,v 1.31 2002/02/27 12:21:25 sturm Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 

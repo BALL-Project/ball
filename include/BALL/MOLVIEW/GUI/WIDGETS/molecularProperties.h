@@ -1,4 +1,7 @@
-// $Id: molecularProperties.h,v 1.8 2001/12/28 02:33:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularProperties.h,v 1.9 2002/02/27 12:19:25 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H

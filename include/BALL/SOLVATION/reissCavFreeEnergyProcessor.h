@@ -1,4 +1,7 @@
-// $Id: reissCavFreeEnergyProcessor.h,v 1.9 2001/07/14 12:58:39 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: reissCavFreeEnergyProcessor.h,v 1.10 2002/02/27 12:19:39 sturm Exp $
 
 #ifndef BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H

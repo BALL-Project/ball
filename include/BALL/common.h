@@ -1,4 +1,7 @@
-// $Id: common.h,v 1.2 2000/06/06 13:18:49 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: common.h,v 1.3 2002/02/27 12:18:17 sturm Exp $
 
 // common BALL includes
 

@@ -1,4 +1,7 @@
-// $Id: XYZFile_test.C,v 1.4 2002/01/26 22:01:30 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: XYZFile_test.C,v 1.5 2002/02/27 12:25:04 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.4 2002/01/26 22:01:30 oliver Exp $")
+START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.5 2002/02/27 12:25:04 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

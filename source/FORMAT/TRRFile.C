@@ -1,4 +1,7 @@
-// $Id: TRRFile.C,v 1.2 2002/01/15 02:00:12 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: TRRFile.C,v 1.3 2002/02/27 12:21:18 sturm Exp $
 
 #include <BALL/FORMAT/TRRFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>

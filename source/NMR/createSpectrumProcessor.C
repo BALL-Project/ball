@@ -1,4 +1,7 @@
-// $Id: createSpectrumProcessor.C,v 1.17 2002/01/04 11:34:37 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: createSpectrumProcessor.C,v 1.18 2002/02/27 12:23:53 sturm Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>

@@ -1,4 +1,7 @@
-// $Id: RDFParameter.h,v 1.8 2001/12/30 13:28:42 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RDFParameter.h,v 1.9 2002/02/27 12:19:41 sturm Exp $
 
 #ifndef BALL__RDFPARAMETER_H
 #define BALL__RDFPARAMETER_H

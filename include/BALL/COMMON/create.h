@@ -1,4 +1,7 @@
-// $Id: create.h,v 1.4 2001/02/04 10:29:43 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: create.h,v 1.5 2002/02/27 12:18:19 sturm Exp $
 
 #ifndef BALL_COMMON_CREATE_H
 #define BALL_COMMON_CREATE_H

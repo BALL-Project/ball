@@ -1,4 +1,7 @@
-// $Id: AnalyticalSES_test.C,v 1.8 2001/06/05 15:53:33 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: AnalyticalSES_test.C,v 1.9 2002/02/27 12:24:21 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +9,7 @@
 #include <BALL/KERNEL/fragment.h>
 ///////////////////////////
 
-START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.8 2001/06/05 15:53:33 anker Exp $")
+START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.9 2002/02/27 12:24:21 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

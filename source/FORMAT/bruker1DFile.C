@@ -1,4 +1,7 @@
-// $Id: bruker1DFile.C,v 1.13 2001/12/30 13:28:45 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: bruker1DFile.C,v 1.14 2002/02/27 12:21:19 sturm Exp $
 
 #include <BALL/FORMAT/bruker1DFile.h>
 

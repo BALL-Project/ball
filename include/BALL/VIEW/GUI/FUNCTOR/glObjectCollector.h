@@ -1,4 +1,7 @@
-// $Id: glObjectCollector.h,v 1.6 2001/07/16 14:49:29 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glObjectCollector.h,v 1.7 2002/02/27 12:19:58 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
 #define BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H

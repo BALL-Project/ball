@@ -1,4 +1,7 @@
-// $Id: removeModel.C,v 1.11 2001/07/15 18:50:29 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: removeModel.C,v 1.12 2002/02/27 12:21:51 sturm Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 

@@ -1,4 +1,7 @@
-// $Id: forceField.C,v 1.27 2002/01/05 04:00:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: forceField.C,v 1.28 2002/02/27 12:21:34 sturm Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 

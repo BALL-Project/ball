@@ -1,4 +1,7 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.15 2002/01/15 02:00:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pair6_12RDFIntegrator.C,v 1.16 2002/02/27 12:24:05 sturm Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>

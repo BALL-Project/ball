@@ -1,4 +1,7 @@
-// $Id: numericalIntegrator.h,v 1.7 2002/01/09 01:02:47 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: numericalIntegrator.h,v 1.8 2002/02/27 12:18:55 sturm Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H

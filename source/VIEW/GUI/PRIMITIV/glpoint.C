@@ -1,4 +1,7 @@
-// $Id: glpoint.C,v 1.6 2001/05/13 14:28:37 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glpoint.C,v 1.7 2002/02/27 12:25:17 sturm Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glpoint.h>
 #include <GL/gl.h>

@@ -1,4 +1,7 @@
-// $Id: Atom_test.C,v 1.10 2001/01/21 21:27:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Atom_test.C,v 1.11 2002/02/27 12:24:23 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +13,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.10 2001/01/21 21:27:33 amoll Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.11 2002/02/27 12:24:23 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

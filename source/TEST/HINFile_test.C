@@ -1,4 +1,7 @@
-// $Id: HINFile_test.C,v 1.18 2002/01/26 22:01:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HINFile_test.C,v 1.19 2002/02/27 12:24:34 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.18 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.19 2002/02/27 12:24:34 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

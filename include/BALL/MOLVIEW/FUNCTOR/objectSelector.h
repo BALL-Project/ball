@@ -1,4 +1,7 @@
-// $Id: objectSelector.h,v 1.3 2001/07/16 14:49:23 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: objectSelector.h,v 1.4 2002/02/27 12:19:14 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H

@@ -1,4 +1,7 @@
-// $Id: residueIterator.h,v 1.3 2000/08/30 19:58:11 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: residueIterator.h,v 1.4 2002/02/27 12:18:51 sturm Exp $
 
 #ifndef BALL_KERNEL_RESIDUEITERATOR_H
 #define BALL_KERNEL_RESIDUEITERATOR_H

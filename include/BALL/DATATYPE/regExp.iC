@@ -1,4 +1,7 @@
-// $Id: regExp.iC,v 1.5 2000/12/05 10:28:00 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regExp.iC,v 1.6 2002/02/27 12:18:34 sturm Exp $
 
 BALL_INLINE 
 void RegularExpression::set(const RegularExpression& regular_expression, bool /* deep */)

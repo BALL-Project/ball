@@ -1,4 +1,7 @@
-// $Id: amberEnergy.C,v 1.5 2001/01/31 05:48:46 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: amberEnergy.C,v 1.6 2002/02/27 12:21:15 sturm Exp $
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>

@@ -1,4 +1,7 @@
-// $Id: color.h,v 1.7 2001/02/04 15:58:18 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: color.h,v 1.8 2002/02/27 12:19:54 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLOR_H
 #define BALL_VIEW_DATATYPE_COLOR_H

@@ -1,4 +1,7 @@
-// $Id: MOLFile.h,v 1.3 2001/12/19 02:40:22 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MOLFile.h,v 1.4 2002/02/27 12:18:39 sturm Exp $
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H

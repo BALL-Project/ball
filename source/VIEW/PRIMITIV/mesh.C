@@ -1,4 +1,7 @@
-// $Id: mesh.C,v 1.6 2001/02/04 16:14:28 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: mesh.C,v 1.7 2002/02/27 12:25:27 sturm Exp $
 
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 

@@ -1,4 +1,7 @@
-// $Id: ComposedEnergyProcessor_test.C,v 1.4 2001/07/16 11:14:31 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ComposedEnergyProcessor_test.C,v 1.5 2002/02/27 12:24:27 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +10,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(ComposedEnergyProcessor_test, "$Id: ComposedEnergyProcessor_test.C,v 1.4 2001/07/16 11:14:31 amoll Exp $")
+START_TEST(ComposedEnergyProcessor_test, "$Id: ComposedEnergyProcessor_test.C,v 1.5 2002/02/27 12:24:27 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

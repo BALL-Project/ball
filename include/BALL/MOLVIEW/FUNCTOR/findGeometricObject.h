@@ -1,4 +1,7 @@
-// $Id: findGeometricObject.h,v 1.8 2001/07/16 14:49:23 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: findGeometricObject.h,v 1.9 2002/02/27 12:19:12 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
 #define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H

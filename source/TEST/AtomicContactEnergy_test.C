@@ -1,4 +1,7 @@
-// $Id: AtomicContactEnergy_test.C,v 1.6 2000/05/23 10:23:45 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: AtomicContactEnergy_test.C,v 1.7 2002/02/27 12:24:24 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(AtomicContactEnergy, "$Id: AtomicContactEnergy_test.C,v 1.6 2000/05/23 10:23:45 oliver Exp $")
+START_TEST(AtomicContactEnergy, "$Id: AtomicContactEnergy_test.C,v 1.7 2002/02/27 12:24:24 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: extendedProperty.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: extendedProperty.h,v 1.7 2002/02/27 12:19:25 sturm Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H

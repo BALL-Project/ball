@@ -1,4 +1,7 @@
-// $Id: Gradient_test.C,v 1.3 2001/07/07 02:51:42 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Gradient_test.C,v 1.4 2002/02/27 12:24:33 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 #include <BALL/MOLMEC/COMMON/atomVector.h>
 ///////////////////////////
 
-START_TEST(Gradient, "$Id: Gradient_test.C,v 1.3 2001/07/07 02:51:42 oliver Exp $")
+START_TEST(Gradient, "$Id: Gradient_test.C,v 1.4 2002/02/27 12:24:33 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

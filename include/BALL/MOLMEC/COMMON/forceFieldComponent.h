@@ -1,4 +1,7 @@
-// $Id: forceFieldComponent.h,v 1.10 2002/01/31 10:15:30 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: forceFieldComponent.h,v 1.11 2002/02/27 12:19:02 sturm Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H

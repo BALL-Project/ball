@@ -1,4 +1,7 @@
-// $Id: bondIterator.h,v 1.3 2001/07/04 15:57:03 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: bondIterator.h,v 1.4 2002/02/27 12:18:46 sturm Exp $
 
 #ifndef BALL_KERNEL_BONDITERATOR_H
 #define BALL_KERNEL_BONDITERATOR_H

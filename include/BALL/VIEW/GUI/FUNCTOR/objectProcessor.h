@@ -1,4 +1,7 @@
-// $Id: objectProcessor.h,v 1.3 2000/09/23 14:15:03 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: objectProcessor.h,v 1.4 2002/02/27 12:19:59 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_OBJECTPROCESSOR_H
 #define BALL_VIEW_GUI_FUNCTOR_OBJECTPROCESSOR_H

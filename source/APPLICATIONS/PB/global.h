@@ -1,4 +1,7 @@
-// $Id: global.h,v 1.8 2001/07/17 12:51:54 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: global.h,v 1.9 2002/02/27 12:20:31 sturm Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/SOLVATION/poissonBoltzmann.h>

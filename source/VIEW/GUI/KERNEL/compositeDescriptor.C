@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $I: compositeDescriptor.C,v 1.3 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/compositeDescriptor.h>

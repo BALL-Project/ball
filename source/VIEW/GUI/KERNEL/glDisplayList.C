@@ -1,4 +1,7 @@
-// $Id: glDisplayList.C,v 1.5 2001/07/29 17:38:09 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glDisplayList.C,v 1.6 2002/02/27 12:25:13 sturm Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #include <BALL/COMMON/exception.h>

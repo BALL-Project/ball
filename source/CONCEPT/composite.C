@@ -1,4 +1,7 @@
-// $Id: composite.C,v 1.33 2002/01/12 12:19:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: composite.C,v 1.34 2002/02/27 12:20:39 sturm Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>

@@ -1,4 +1,7 @@
-// $Id: KernelIteration_bench.C,v 1.2 2001/07/12 01:22:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: KernelIteration_bench.C,v 1.3 2002/02/27 12:20:32 sturm Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -10,7 +13,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelIteration_bench.C,v 1.2 2001/07/12 01:22:34 oliver Exp $")
+START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelIteration_bench.C,v 1.3 2002/02/27 12:20:32 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

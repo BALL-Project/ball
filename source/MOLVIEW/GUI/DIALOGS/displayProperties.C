@@ -1,4 +1,7 @@
-// $Id: displayProperties.C,v 1.13 2002/01/13 18:23:40 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: displayProperties.C,v 1.14 2002/02/27 12:21:56 sturm Exp $
 
 
 #include <BALL/KERNEL/molecule.h>

@@ -1,4 +1,7 @@
-// $Id: regularData2D.h,v 1.16 2001/12/30 13:28:36 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regularData2D.h,v 1.17 2002/02/27 12:18:34 sturm Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H

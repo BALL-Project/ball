@@ -1,4 +1,7 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.12 2001/12/30 13:28:41 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.13 2002/02/27 12:19:38 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H

@@ -1,4 +1,7 @@
-// $Id: object.h,v 1.15 2001/07/25 11:24:34 oliver Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: object.h,v 1.16 2002/02/27 12:18:26 sturm Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H

@@ -1,4 +1,7 @@
-// $Id: notification.h,v 1.12 2001/07/15 18:00:37 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: notification.h,v 1.13 2002/02/27 12:18:25 sturm Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H

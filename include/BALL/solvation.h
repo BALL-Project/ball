@@ -1,4 +1,7 @@
-// $Id: solvation.h,v 1.1 2000/01/03 15:17:35 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: solvation.h,v 1.2 2002/02/27 12:18:19 sturm Exp $
 // SOLVATION header file
 // collective header file for all headers in BALL/SOLVATION
 

@@ -1,4 +1,7 @@
-// $Id: XYZFile.h,v 1.6 2001/08/01 01:06:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: XYZFile.h,v 1.7 2002/02/27 12:18:40 sturm Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H

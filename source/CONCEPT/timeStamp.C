@@ -1,4 +1,7 @@
-// $Id: timeStamp.C,v 1.17 2002/01/04 19:52:08 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: timeStamp.C,v 1.18 2002/02/27 12:21:11 sturm Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 

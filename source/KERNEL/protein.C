@@ -1,4 +1,7 @@
-// $Id: protein.C,v 1.13 2001/07/15 16:12:42 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: protein.C,v 1.14 2002/02/27 12:21:25 sturm Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>

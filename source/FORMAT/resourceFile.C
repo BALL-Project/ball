@@ -1,4 +1,7 @@
-// $Id: resourceFile.C,v 1.24 2002/01/12 01:59:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: resourceFile.C,v 1.25 2002/02/27 12:21:20 sturm Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 

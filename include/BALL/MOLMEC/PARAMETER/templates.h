@@ -1,4 +1,7 @@
-// $Id: templates.h,v 1.6 2001/03/02 22:10:27 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: templates.h,v 1.7 2002/02/27 12:19:08 sturm Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_TEMPLATES_H

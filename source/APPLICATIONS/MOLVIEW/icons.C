@@ -1,4 +1,7 @@
-// $Id: icons.C,v 1.4 2000/11/12 15:16:14 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: icons.C,v 1.5 2002/02/27 12:20:22 sturm Exp $
 
 // this file contains the icons needed by MolVIEW in XPM format
 

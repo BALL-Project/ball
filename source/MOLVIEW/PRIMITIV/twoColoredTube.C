@@ -1,4 +1,7 @@
-// $Id: twoColoredTube.C,v 1.9 2001/05/13 15:02:42 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: twoColoredTube.C,v 1.10 2002/02/27 12:23:51 sturm Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 

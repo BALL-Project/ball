@@ -1,4 +1,7 @@
-// $Id: vector2.h,v 1.6 2001/07/16 02:12:57 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: vector2.h,v 1.7 2002/02/27 12:18:57 sturm Exp $
 
 #ifndef BALL_MATHS_Vector2_H
 #define BALL_MATHS_Vector2_H

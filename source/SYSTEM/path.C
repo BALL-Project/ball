@@ -1,4 +1,7 @@
-// $Id: path.C,v 1.2 2001/05/10 23:33:33 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: path.C,v 1.3 2002/02/27 12:24:20 sturm Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/SYSTEM/path.h>

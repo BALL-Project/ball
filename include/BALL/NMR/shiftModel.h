@@ -1,4 +1,7 @@
-// $Id: shiftModel.h,v 1.7 2001/05/16 13:25:15 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: shiftModel.h,v 1.8 2002/02/27 12:19:32 sturm Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H

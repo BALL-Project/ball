@@ -1,4 +1,7 @@
-// $Id: contour.h,v 1.9 2001/06/21 21:46:07 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: contour.h,v 1.10 2002/02/27 12:18:31 sturm Exp $
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H

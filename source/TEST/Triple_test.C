@@ -1,11 +1,14 @@
-// $Id: Triple_test.C,v 1.2 2001/07/29 18:57:15 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Triple_test.C,v 1.3 2002/02/27 12:25:02 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/DATATYPE/triple.h>
 ///////////////////////////
 
-START_TEST(Triple, "$Id: Triple_test.C,v 1.2 2001/07/29 18:57:15 oliver Exp $")
+START_TEST(Triple, "$Id: Triple_test.C,v 1.3 2002/02/27 12:25:02 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

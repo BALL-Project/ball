@@ -1,4 +1,7 @@
-// $Id: global.C,v 1.2 2000/06/22 10:21:04 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: global.C,v 1.3 2002/02/27 12:20:22 sturm Exp $
 #include "global.h"
 
 FragmentDB*           frag_db = 0;

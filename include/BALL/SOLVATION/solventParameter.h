@@ -1,4 +1,7 @@
-// $Id: solventParameter.h,v 1.7 2001/08/21 11:22:30 aubertin Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: solventParameter.h,v 1.8 2002/02/27 12:19:40 sturm Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
 #define BALL_SOLVATION_SOLVENTPARAMETER_H

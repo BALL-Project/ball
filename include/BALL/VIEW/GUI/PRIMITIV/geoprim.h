@@ -1,4 +1,7 @@
-// $Id: geoprim.h,v 1.2 2000/12/12 16:15:42 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: geoprim.h,v 1.3 2002/02/27 12:20:04 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV__H
 #define BALL_VIEW_GUI_PRIMITIV__H

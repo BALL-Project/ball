@@ -1,4 +1,7 @@
-// $Id: version.C,v 1.8 2000/11/13 19:31:01 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: version.C,v 1.9 2002/02/27 12:20:34 sturm Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>

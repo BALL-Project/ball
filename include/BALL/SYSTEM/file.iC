@@ -1,4 +1,7 @@
-// $Id: file.iC,v 1.16 2001/12/29 17:58:29 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: file.iC,v 1.17 2002/02/27 12:19:52 sturm Exp $
 
 BALL_INLINE 
 void File::clear()

@@ -1,4 +1,7 @@
-// $Id: HaighMallionShiftProcessor_test.C,v 1.7 2001/12/30 13:28:58 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HaighMallionShiftProcessor_test.C,v 1.8 2002/02/27 12:24:34 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.7 2001/12/30 13:28:58 sturm Exp $")
+START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.8 2002/02/27 12:24:34 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

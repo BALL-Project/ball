@@ -1,4 +1,7 @@
-// $Id: scene.C,v 1.6 2001/05/27 10:31:25 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: scene.C,v 1.7 2002/02/27 12:25:20 sturm Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 

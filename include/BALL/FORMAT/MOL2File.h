@@ -1,4 +1,7 @@
-// $Id: MOL2File.h,v 1.13 2002/01/05 19:01:44 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MOL2File.h,v 1.14 2002/02/27 12:18:38 sturm Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H

@@ -1,4 +1,7 @@
-// $Id: expressionParser.h,v 1.2 2002/01/27 21:36:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: expressionParser.h,v 1.3 2002/02/27 12:18:47 sturm Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_PARSER_H
 #define BALL_KERNEL_EXPRESSION_PARSER_H

@@ -1,4 +1,7 @@
-// $Id: Selector_test.C,v 1.10 2002/01/12 18:20:54 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Selector_test.C,v 1.11 2002/02/27 12:24:54 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(Selector, "$Id: Selector_test.C,v 1.10 2002/01/12 18:20:54 oliver Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.11 2002/02/27 12:24:54 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

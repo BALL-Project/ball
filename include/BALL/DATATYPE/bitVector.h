@@ -1,4 +1,7 @@
-// $Id: bitVector.h,v 1.30 2001/12/30 13:28:36 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: bitVector.h,v 1.31 2002/02/27 12:18:30 sturm Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H

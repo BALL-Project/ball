@@ -1,9 +1,12 @@
-// $Id: Options_test.C,v 1.4 2002/01/26 22:01:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Options_test.C,v 1.5 2002/02/27 12:24:41 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/DATATYPE/options.h>
 
-START_TEST(Options, "$Id: Options_test.C,v 1.4 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(Options, "$Id: Options_test.C,v 1.5 2002/02/27 12:24:41 sturm Exp $")
 
 using BALL::Options;
 using BALL::Vector3;

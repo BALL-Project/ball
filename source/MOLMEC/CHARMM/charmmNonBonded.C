@@ -1,4 +1,7 @@
-// $Id: charmmNonBonded.C,v 1.15 2001/12/30 13:28:48 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmmNonBonded.C,v 1.16 2002/02/27 12:21:32 sturm Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>

@@ -1,4 +1,7 @@
-// $Id: selectable.h,v 1.9 2001/02/10 20:01:27 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: selectable.h,v 1.10 2002/02/27 12:18:29 sturm Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H

@@ -1,4 +1,7 @@
-// $Id: iterator.h,v 1.11 2001/07/15 20:52:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: iterator.h,v 1.12 2002/02/27 12:18:48 sturm Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H

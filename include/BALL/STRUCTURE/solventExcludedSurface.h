@@ -1,4 +1,7 @@
-// $Id: solventExcludedSurface.h,v 1.21 2002/01/14 21:01:34 strobel Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: solventExcludedSurface.h,v 1.22 2002/02/27 12:19:47 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H

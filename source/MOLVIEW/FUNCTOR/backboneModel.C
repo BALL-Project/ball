@@ -1,4 +1,7 @@
-// $Id: backboneModel.C,v 1.4 2001/07/15 18:50:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: backboneModel.C,v 1.5 2002/02/27 12:21:47 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>

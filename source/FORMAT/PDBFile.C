@@ -1,4 +1,7 @@
-// $Id: PDBFile.C,v 1.26 2001/08/24 01:26:52 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PDBFile.C,v 1.27 2002/02/27 12:21:18 sturm Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 

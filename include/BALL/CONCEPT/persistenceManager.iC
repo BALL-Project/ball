@@ -1,4 +1,7 @@
-// $Id: persistenceManager.iC,v 1.1 2001/05/30 15:15:19 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: persistenceManager.iC,v 1.2 2002/02/27 12:18:26 sturm Exp $
 
 BALL_INLINE
 bool PersistenceManager::checkObjectHeader(const char* type_name)

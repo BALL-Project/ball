@@ -1,4 +1,7 @@
-// $Id: quadraticImproperTorsion.C,v 1.7 2001/12/14 01:18:12 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: quadraticImproperTorsion.C,v 1.8 2002/02/27 12:21:44 sturm Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h>

@@ -1,4 +1,7 @@
-// $Id: bond.h,v 1.28 2001/07/15 16:14:22 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: bond.h,v 1.29 2002/02/27 12:18:45 sturm Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H

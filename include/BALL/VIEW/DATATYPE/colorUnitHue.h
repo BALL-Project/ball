@@ -1,4 +1,7 @@
-// $Id: colorUnitHue.h,v 1.9 2001/07/16 14:49:29 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorUnitHue.h,v 1.10 2002/02/27 12:19:56 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
 #define BALL_VIEW_DATATYPE_COLORUNITHUE_H

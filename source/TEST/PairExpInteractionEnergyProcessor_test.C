@@ -1,4 +1,7 @@
-// $Id: PairExpInteractionEnergyProcessor_test.C,v 1.4 2001/12/30 13:28:59 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PairExpInteractionEnergyProcessor_test.C,v 1.5 2002/02/27 12:24:43 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(PairExpInteractionEnergyProcessor, "$Id: PairExpInteractionEnergyProcessor_test.C,v 1.4 2001/12/30 13:28:59 sturm Exp $")
+START_TEST(PairExpInteractionEnergyProcessor, "$Id: PairExpInteractionEnergyProcessor_test.C,v 1.5 2002/02/27 12:24:43 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: pyWidget.h,v 1.5 2001/06/26 09:04:07 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyWidget.h,v 1.6 2002/02/27 12:20:09 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H

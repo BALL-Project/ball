@@ -1,4 +1,7 @@
-// $Id: moleculeGLObjectCollector.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: moleculeGLObjectCollector.h,v 1.6 2002/02/27 12:19:22 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H

@@ -1,4 +1,7 @@
-// $Id: molmec.h,v 1.1 2000/01/03 15:17:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molmec.h,v 1.2 2002/02/27 12:18:18 sturm Exp $
 // MOLMEC header file
 // collective header file for all headers in BALL/MOLMEC
 

@@ -1,4 +1,7 @@
-// $Id: StructureMapper_test.C,v 1.3 2001/12/17 01:29:42 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: StructureMapper_test.C,v 1.4 2002/02/27 12:24:59 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/STRUCTURE/structureMapper.h>
@@ -7,7 +10,7 @@
 #include <BALL/MATHS/quaternion.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.3 2001/12/17 01:29:42 oliver Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.4 2002/02/27 12:24:59 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: parameters.C,v 1.9 2001/04/23 22:00:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: parameters.C,v 1.10 2002/02/27 12:21:20 sturm Exp $
 //
 
 #include <BALL/FORMAT/parameters.h>

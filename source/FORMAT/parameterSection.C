@@ -1,4 +1,7 @@
-// $Id: parameterSection.C,v 1.24 2001/08/23 18:06:04 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: parameterSection.C,v 1.25 2002/02/27 12:21:20 sturm Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>

@@ -1,4 +1,7 @@
-// $Id: genericMolFile.h,v 1.10 2002/01/11 13:26:11 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: genericMolFile.h,v 1.11 2002/02/27 12:18:40 sturm Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H

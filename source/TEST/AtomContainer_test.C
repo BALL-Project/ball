@@ -1,4 +1,7 @@
-// $Id: AtomContainer_test.C,v 1.6 2002/01/26 22:01:26 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: AtomContainer_test.C,v 1.7 2002/02/27 12:24:23 sturm Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +13,7 @@
 
 #include <algorithm>
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.6 2002/01/26 22:01:26 oliver Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.7 2002/02/27 12:24:23 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

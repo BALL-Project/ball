@@ -1,4 +1,7 @@
-// $Id: control.h,v 1.1 2000/09/23 15:38:16 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: control.h,v 1.2 2002/02/27 12:19:24 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_CONTROL_H

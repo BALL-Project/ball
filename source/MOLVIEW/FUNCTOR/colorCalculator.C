@@ -1,4 +1,7 @@
-// $Id: colorCalculator.C,v 1.9 2001/07/15 18:50:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorCalculator.C,v 1.10 2002/02/27 12:21:49 sturm Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/colorCalculator.h>
 

@@ -1,4 +1,7 @@
-// $Id: solventDescriptor.C,v 1.8 2002/01/15 02:00:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: solventDescriptor.C,v 1.9 2002/02/27 12:24:07 sturm Exp $
 
 #include <BALL/SOLVATION/solventDescriptor.h>
 

@@ -1,4 +1,7 @@
-// $Id: claverieParameter.h,v 1.7 2001/12/30 13:28:41 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: claverieParameter.h,v 1.8 2002/02/27 12:19:38 sturm Exp $
 
 #ifndef BALL_SOLVATION_CLAVERIEPARAMETER_H
 #define BALL_SOLVATION_CLAVERIEPARAMETER_H

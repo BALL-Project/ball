@@ -1,4 +1,7 @@
-// $Id: reissCavFreeEnergyProcessor.C,v 1.10 2001/09/28 08:42:50 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: reissCavFreeEnergyProcessor.C,v 1.11 2002/02/27 12:24:07 sturm Exp $
 
 #include <BALL/SOLVATION/reissCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>

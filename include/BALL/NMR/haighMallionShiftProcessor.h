@@ -1,4 +1,7 @@
-// $Id: haighMallionShiftProcessor.h,v 1.8 2001/06/21 21:35:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: haighMallionShiftProcessor.h,v 1.9 2002/02/27 12:19:31 sturm Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>

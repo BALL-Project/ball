@@ -1,4 +1,7 @@
-// $Id: HINFile.h,v 1.17 2001/12/20 01:10:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HINFile.h,v 1.18 2002/02/27 12:18:38 sturm Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H

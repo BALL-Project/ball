@@ -1,4 +1,7 @@
-// $Id: list.h,v 1.13 2002/01/15 02:00:49 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: list.h,v 1.14 2002/02/27 12:18:32 sturm Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H

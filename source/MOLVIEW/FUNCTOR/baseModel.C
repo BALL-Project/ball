@@ -1,4 +1,7 @@
-// $Id: baseModel.C,v 1.13 2001/06/18 17:28:45 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: baseModel.C,v 1.14 2002/02/27 12:21:48 sturm Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 

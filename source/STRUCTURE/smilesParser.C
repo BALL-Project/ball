@@ -1,4 +1,7 @@
-// $Id: smilesParser.C,v 1.7 2002/02/15 01:57:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: smilesParser.C,v 1.8 2002/02/27 12:24:16 sturm Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>

@@ -1,4 +1,7 @@
-// $Id: assignment.C,v 1.5 2000/06/02 09:32:53 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: assignment.C,v 1.6 2002/02/27 12:20:30 sturm Exp $
 
 #include "global.h"
 #include "assignment.h"

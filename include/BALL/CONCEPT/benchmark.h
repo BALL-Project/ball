@@ -1,4 +1,7 @@
-// $Id: benchmark.h,v 1.4 2001/07/14 12:56:44 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: benchmark.h,v 1.5 2002/02/27 12:18:23 sturm Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>

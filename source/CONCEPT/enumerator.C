@@ -1,4 +1,7 @@
-// $Id: enumerator.C,v 1.10 2001/07/29 17:35:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: enumerator.C,v 1.11 2002/02/27 12:21:09 sturm Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/exception.h>

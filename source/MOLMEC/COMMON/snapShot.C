@@ -1,4 +1,7 @@
-// $Id: snapShot.C,v 1.27 2001/12/30 13:28:49 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: snapShot.C,v 1.28 2002/02/27 12:21:35 sturm Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>

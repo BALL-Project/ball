@@ -1,4 +1,7 @@
-// $Id: hash.h,v 1.12 2001/07/05 17:50:57 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: hash.h,v 1.13 2002/02/27 12:18:20 sturm Exp $
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H

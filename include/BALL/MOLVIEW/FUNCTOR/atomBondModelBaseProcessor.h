@@ -1,4 +1,7 @@
-// $Id: atomBondModelBaseProcessor.h,v 1.7 2001/07/16 14:49:23 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: atomBondModelBaseProcessor.h,v 1.8 2002/02/27 12:19:09 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H

@@ -1,4 +1,7 @@
-// $Id: DefaultProcessors_test.C,v 1.5 2001/07/15 21:06:11 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: DefaultProcessors_test.C,v 1.6 2002/02/27 12:24:28 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +10,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.5 2001/07/15 21:06:11 oliver Exp $")
+START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.6 2002/02/27 12:24:28 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: reducedSurface.h,v 1.31 2002/01/17 00:44:07 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: reducedSurface.h,v 1.32 2002/02/27 12:19:45 sturm Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H

@@ -1,4 +1,7 @@
-// $Id: persistentObject.h,v 1.7 2002/01/12 12:19:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: persistentObject.h,v 1.8 2002/02/27 12:18:27 sturm Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
 #define BALL_CONCEPT_PERSISTENTOBJECT_H

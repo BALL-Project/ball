@@ -1,4 +1,7 @@
-// $Id: geometricProperties.h,v 1.13 2001/03/06 00:12:23 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: geometricProperties.h,v 1.14 2002/02/27 12:19:44 sturm Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H

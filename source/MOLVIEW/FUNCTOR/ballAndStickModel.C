@@ -1,4 +1,7 @@
-// $Id: ballAndStickModel.C,v 1.13 2001/07/15 18:50:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ballAndStickModel.C,v 1.14 2002/02/27 12:21:48 sturm Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 

@@ -1,4 +1,7 @@
-// $Id: triangulation.h,v 1.25 2001/09/19 22:21:55 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: triangulation.h,v 1.26 2002/02/27 12:19:50 sturm Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H

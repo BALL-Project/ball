@@ -1,4 +1,7 @@
-// $Id: vertex2.C,v 1.9 2001/05/13 14:28:38 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: vertex2.C,v 1.10 2002/02/27 12:25:25 sturm Exp $
 
 #include <BALL/VIEW/KERNEL/vertex2.h>
 

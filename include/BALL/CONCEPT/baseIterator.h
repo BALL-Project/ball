@@ -1,4 +1,7 @@
-// $Id: baseIterator.h,v 1.17 2001/07/15 20:09:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: baseIterator.h,v 1.18 2002/02/27 12:18:23 sturm Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H

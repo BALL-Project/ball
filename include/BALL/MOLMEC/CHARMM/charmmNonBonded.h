@@ -1,4 +1,7 @@
-// $Id: charmmNonBonded.h,v 1.9 2001/07/11 23:59:31 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmmNonBonded.h,v 1.10 2002/02/27 12:19:00 sturm Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H

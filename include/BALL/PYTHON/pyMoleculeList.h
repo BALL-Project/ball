@@ -1,4 +1,7 @@
-// $Id: pyMoleculeList.h,v 1.4 2001/07/25 11:30:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyMoleculeList.h,v 1.5 2002/02/27 12:19:35 sturm Exp $
 
 #ifndef BALL_PYTHON_PYMOLECULELIST_H
 #define BALL_PYTHON_PYMOLECULELIST_H

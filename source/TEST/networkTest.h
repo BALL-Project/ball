@@ -1,4 +1,7 @@
-// $Id: networkTest.h,v 1.4 2002/01/16 03:47:44 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: networkTest.h,v 1.5 2002/02/27 12:25:04 sturm Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK
 #define BSD_COMP 

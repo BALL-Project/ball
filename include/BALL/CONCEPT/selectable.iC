@@ -1,4 +1,7 @@
-// $Id: selectable.iC,v 1.5 2001/02/10 20:01:27 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: selectable.iC,v 1.6 2002/02/27 12:18:29 sturm Exp $
 
 BALL_INLINE 
 void Selectable::clear()

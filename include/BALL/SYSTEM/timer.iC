@@ -1,4 +1,7 @@
-// $Id: timer.iC,v 1.4 2001/01/26 01:36:59 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: timer.iC,v 1.5 2002/02/27 12:19:53 sturm Exp $
 
 BALL_INLINE 
 bool Timer::isValid() const

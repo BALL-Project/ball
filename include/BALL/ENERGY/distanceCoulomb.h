@@ -1,4 +1,7 @@
-// $Id: distanceCoulomb.h,v 1.5 2000/08/30 19:58:03 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: distanceCoulomb.h,v 1.6 2002/02/27 12:18:37 sturm Exp $
 
 #ifndef BALL_ENERGY_DISTANCE_COULOMB_H
 #define BALL_ENERGY_DISTANCE_COULOMB_H

@@ -1,4 +1,7 @@
-// $Id: energyMinimizer.C,v 1.11 2001/12/30 13:28:50 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: energyMinimizer.C,v 1.12 2002/02/27 12:21:37 sturm Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 

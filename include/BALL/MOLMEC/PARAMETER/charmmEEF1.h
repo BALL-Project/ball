@@ -1,4 +1,7 @@
-// $Id: charmmEEF1.h,v 1.10 2001/12/30 13:28:40 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmmEEF1.h,v 1.11 2002/02/27 12:19:06 sturm Exp $
 // Molecular Mechanics Parameter: class describing parameters needed 
 // for the EEF1 solvation component in the CHARMM force field
  

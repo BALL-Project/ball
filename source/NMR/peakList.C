@@ -1,4 +1,7 @@
-// $Id: peakList.C,v 1.2 2002/01/05 03:21:30 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: peakList.C,v 1.3 2002/02/27 12:23:54 sturm Exp $
 
 #include <BALL/NMR/peakList.h>
 

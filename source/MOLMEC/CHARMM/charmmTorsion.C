@@ -1,4 +1,7 @@
-// $Id: charmmTorsion.C,v 1.8 2001/12/30 13:28:48 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmmTorsion.C,v 1.9 2002/02/27 12:21:33 sturm Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>

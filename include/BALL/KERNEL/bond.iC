@@ -1,4 +1,7 @@
-// $Id: bond.iC,v 1.2 2001/06/29 19:33:06 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: bond.iC,v 1.3 2002/02/27 12:18:45 sturm Exp $
 
 	BALL_INLINE
 	void Bond::clear_()

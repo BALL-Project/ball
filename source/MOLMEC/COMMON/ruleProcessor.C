@@ -1,4 +1,7 @@
-// $Id: ruleProcessor.C,v 1.6 2001/12/30 13:28:49 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ruleProcessor.C,v 1.7 2002/02/27 12:21:35 sturm Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleProcessor.h>
 #include <BALL/FORMAT/INIFile.h>

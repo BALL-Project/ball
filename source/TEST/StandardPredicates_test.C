@@ -1,4 +1,7 @@
-// $Id: StandardPredicates_test.C,v 1.18 2002/01/09 02:56:13 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: StandardPredicates_test.C,v 1.19 2002/02/27 12:24:57 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.18 2002/01/09 02:56:13 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.19 2002/02/27 12:24:57 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

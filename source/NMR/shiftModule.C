@@ -1,4 +1,7 @@
-// $Id: shiftModule.C,v 1.8 2000/09/21 13:48:04 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: shiftModule.C,v 1.9 2002/02/27 12:23:55 sturm Exp $
 
 #include<BALL/NMR/shiftModule.h>
 

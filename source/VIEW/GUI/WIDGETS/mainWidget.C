@@ -1,4 +1,7 @@
-// $Id: mainWidget.C,v 1.1 2000/09/23 13:28:38 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: mainWidget.C,v 1.2 2002/02/27 12:25:19 sturm Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/mainWidget.h>
 

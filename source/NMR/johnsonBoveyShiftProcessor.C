@@ -1,4 +1,7 @@
-// $Id: johnsonBoveyShiftProcessor.C,v 1.12 2001/12/30 13:28:52 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: johnsonBoveyShiftProcessor.C,v 1.13 2002/02/27 12:23:54 sturm Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>

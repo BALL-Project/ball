@@ -1,4 +1,7 @@
-// $Id: classTest.h,v 1.31 2002/01/26 21:35:06 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: classTest.h,v 1.32 2002/02/27 12:18:23 sturm Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>

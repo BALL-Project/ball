@@ -1,10 +1,13 @@
-// $Id: TranslationApplicator_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: TranslationApplicator_test.C,v 1.2 2002/02/27 12:25:02 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/fragment.h>
 
-START_TEST(TranslationApplictor, "$Id: TranslationApplicator_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(TranslationApplictor, "$Id: TranslationApplicator_test.C,v 1.2 2002/02/27 12:25:02 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: glEntityDescriptor.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glEntityDescriptor.C,v 1.5 2002/02/27 12:25:14 sturm Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h>
 #include <BALL/COMMON/exception.h>

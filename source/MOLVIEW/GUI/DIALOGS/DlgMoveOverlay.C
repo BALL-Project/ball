@@ -1,4 +1,7 @@
-// $Id: DlgMoveOverlay.C,v 1.2 2001/01/24 13:03:31 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: DlgMoveOverlay.C,v 1.3 2002/02/27 12:21:54 sturm Exp $
 /**********************************************************************
 
 	--- Qt Architect generated file ---

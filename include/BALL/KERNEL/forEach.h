@@ -1,4 +1,7 @@
-// $Id: forEach.h,v 1.7 2001/06/29 19:58:37 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: forEach.h,v 1.8 2002/02/27 12:18:47 sturm Exp $
 
 #ifndef BALL_KERNEL_FOREACH_H
 #define BALL_KERNEL_FOREACH_H

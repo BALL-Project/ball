@@ -1,4 +1,7 @@
-// $Id: glline.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glline.C,v 1.6 2002/02/27 12:25:16 sturm Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glline.h>
 #include <GL/gl.h>

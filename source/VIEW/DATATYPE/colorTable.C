@@ -1,4 +1,7 @@
-// $Id: colorTable.C,v 1.4 1999/12/30 18:05:44 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorTable.C,v 1.5 2002/02/27 12:25:10 sturm Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 

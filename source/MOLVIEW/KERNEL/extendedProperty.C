@@ -1,4 +1,7 @@
-// $Id: extendedProperty.C,v 1.8 2001/07/15 19:28:44 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: extendedProperty.C,v 1.9 2002/02/27 12:23:50 sturm Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 

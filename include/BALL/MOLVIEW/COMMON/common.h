@@ -1,4 +1,7 @@
-// $Id: common.h,v 1.12 2001/05/13 14:55:21 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: common.h,v 1.13 2002/02/27 12:19:08 sturm Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H

@@ -1,4 +1,7 @@
-// $Id: function.h,v 1.14 2001/12/30 13:28:39 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: function.h,v 1.15 2002/02/27 12:18:54 sturm Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H

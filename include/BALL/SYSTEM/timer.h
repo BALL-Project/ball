@@ -1,4 +1,7 @@
-// $Id: timer.h,v 1.6 2001/02/26 00:23:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: timer.h,v 1.7 2002/02/27 12:19:53 sturm Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H

@@ -1,4 +1,7 @@
-// $Id: modularWidget.C,v 1.9 2002/01/16 02:59:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: modularWidget.C,v 1.10 2002/02/27 12:25:19 sturm Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 

@@ -1,4 +1,7 @@
-// $Id: mainframe.h,v 1.30 2001/10/11 00:47:26 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: mainframe.h,v 1.31 2002/02/27 12:20:23 sturm Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H

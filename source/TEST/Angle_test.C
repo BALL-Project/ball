@@ -1,11 +1,14 @@
-// $Id: Angle_test.C,v 1.17 2002/01/26 22:01:26 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Angle_test.C,v 1.18 2002/02/27 12:24:22 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(Angle, "$Id: Angle_test.C,v 1.17 2002/01/26 22:01:26 oliver Exp $")
+START_TEST(Angle, "$Id: Angle_test.C,v 1.18 2002/02/27 12:24:22 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: File_test.C,v 1.34 2002/01/26 22:01:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: File_test.C,v 1.35 2002/02/27 12:24:31 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +15,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(File, "$Id: File_test.C,v 1.34 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.35 2002/02/27 12:24:31 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: quadruple.h,v 1.6 2001/02/11 23:05:07 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: quadruple.h,v 1.7 2002/02/27 12:18:33 sturm Exp $
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
 #define BALL_DATATYPE_QUADRUPLE_H

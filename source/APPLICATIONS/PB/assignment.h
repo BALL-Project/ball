@@ -1,4 +1,7 @@
-// $Id: assignment.h,v 1.2 2000/06/02 09:32:53 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: assignment.h,v 1.3 2002/02/27 12:20:31 sturm Exp $
 
 // assign charges to a system and honour the clear_charge flag
 void assignCharges(System& system);

@@ -1,4 +1,7 @@
-// $Id: elementColor.h,v 1.5 2001/12/30 13:28:40 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: elementColor.h,v 1.6 2002/02/27 12:19:08 sturm Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
 #define BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H

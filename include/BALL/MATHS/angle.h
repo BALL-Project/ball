@@ -1,4 +1,7 @@
-// $Id: angle.h,v 1.30 2001/02/11 23:05:12 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: angle.h,v 1.31 2002/02/27 12:18:53 sturm Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H

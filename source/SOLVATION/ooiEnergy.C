@@ -1,4 +1,7 @@
-// $Id: ooiEnergy.C,v 1.13 2001/06/05 15:53:28 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ooiEnergy.C,v 1.14 2002/02/27 12:24:04 sturm Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 

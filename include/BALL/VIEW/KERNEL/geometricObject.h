@@ -1,4 +1,7 @@
-// $Id: geometricObject.h,v 1.19 2001/07/16 14:49:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: geometricObject.h,v 1.20 2002/02/27 12:20:15 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H

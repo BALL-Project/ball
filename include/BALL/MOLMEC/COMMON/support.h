@@ -1,4 +1,7 @@
-// $Id: support.h,v 1.15 2001/12/30 13:28:40 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: support.h,v 1.16 2002/02/27 12:19:03 sturm Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H

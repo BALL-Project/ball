@@ -1,3 +1,6 @@
-// $Id: angle.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: angle.C,v 1.2 2002/02/27 12:21:26 sturm Exp $
 
 #include <BALL/MATHS/angle.h>

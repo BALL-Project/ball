@@ -1,4 +1,7 @@
-// $Id: coulomb.h,v 1.5 2001/02/27 01:58:22 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: coulomb.h,v 1.6 2002/02/27 12:18:37 sturm Exp $
 
 #ifndef BALL_ENERGY_COULOMB_H
 #define BALL_ENERGY_COULOMB_H

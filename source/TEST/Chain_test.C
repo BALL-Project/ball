@@ -1,4 +1,7 @@
-// $Id: Chain_test.C,v 1.12 2002/01/26 22:01:26 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Chain_test.C,v 1.13 2002/02/27 12:24:25 sturm Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +15,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.12 2002/01/26 22:01:26 oliver Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.13 2002/02/27 12:24:25 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

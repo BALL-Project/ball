@@ -1,4 +1,7 @@
-// $Id: persistenceManager.h,v 1.34 2001/12/30 13:28:35 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: persistenceManager.h,v 1.35 2002/02/27 12:18:26 sturm Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H

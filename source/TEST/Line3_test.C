@@ -1,4 +1,7 @@
-// $Id: Line3_test.C,v 1.11 2002/01/26 22:01:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Line3_test.C,v 1.12 2002/02/27 12:24:37 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +9,7 @@
 #	include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Line3, "$Id: Line3_test.C,v 1.11 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(Line3, "$Id: Line3_test.C,v 1.12 2002/02/27 12:24:37 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

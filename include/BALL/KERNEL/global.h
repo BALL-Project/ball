@@ -1,4 +1,7 @@
-// $Id: global.h,v 1.9 2001/06/05 15:45:58 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: global.h,v 1.10 2002/02/27 12:18:48 sturm Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H

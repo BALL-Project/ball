@@ -1,4 +1,7 @@
-// $Id: scene.iC,v 1.7 2001/05/13 14:03:45 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: scene.iC,v 1.8 2002/02/27 12:20:10 sturm Exp $
 
 BALL_INLINE
 void Scene::setRenderMode_(RenderMode mode)

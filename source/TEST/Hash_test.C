@@ -1,11 +1,14 @@
-// $Id: Hash_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Hash_test.C,v 1.8 2002/02/27 12:24:35 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/COMMON/hash.h>
 ///////////////////////////
 
-START_TEST(Hash, "$Id: Hash_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(Hash, "$Id: Hash_test.C,v 1.8 2002/02/27 12:24:35 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

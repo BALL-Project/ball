@@ -1,4 +1,7 @@
-// $Id: string.C,v 1.40 2002/01/05 03:59:09 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: string.C,v 1.41 2002/02/27 12:21:12 sturm Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>

@@ -1,4 +1,7 @@
-// $Id: information.h,v 1.7 2001/07/16 14:49:29 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: information.h,v 1.8 2002/02/27 12:19:57 sturm Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H

@@ -1,4 +1,7 @@
-// $Id: sphere.h,v 1.11 2001/07/16 14:49:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: sphere.h,v 1.12 2002/02/27 12:20:20 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H

@@ -1,4 +1,7 @@
-// $Id: expressionTree.C,v 1.6 2002/01/10 15:00:40 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: expressionTree.C,v 1.7 2002/02/27 12:21:23 sturm Exp $
 
 #include <BALL/KERNEL/expressionTree.h>
 

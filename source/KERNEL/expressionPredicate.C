@@ -1,4 +1,7 @@
-// $Id: expressionPredicate.C,v 1.3 2002/01/09 01:27:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: expressionPredicate.C,v 1.4 2002/02/27 12:21:23 sturm Exp $
 
 #include <BALL/KERNEL/expressionPredicate.h>
 

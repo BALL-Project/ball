@@ -1,4 +1,7 @@
-// $Id: templates.C,v 1.13 2001/12/14 01:18:13 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: templates.C,v 1.14 2002/02/27 12:21:45 sturm Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>

@@ -1,4 +1,7 @@
-// $Id: stringHashMap.h,v 1.15 2001/07/09 21:17:11 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: stringHashMap.h,v 1.16 2002/02/27 12:18:35 sturm Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H

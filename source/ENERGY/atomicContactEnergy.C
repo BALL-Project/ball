@@ -1,4 +1,7 @@
-// $Id: atomicContactEnergy.C,v 1.1 2000/09/05 14:29:15 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: atomicContactEnergy.C,v 1.2 2002/02/27 12:21:13 sturm Exp $
 
 #include <BALL/ENERGY/atomicContactEnergy.h>
 

@@ -1,4 +1,7 @@
-// $Id: MOL2File.C,v 1.15 2002/01/05 19:01:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MOL2File.C,v 1.16 2002/02/27 12:21:17 sturm Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>

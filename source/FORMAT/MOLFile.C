@@ -1,4 +1,7 @@
-// $Id: MOLFile.C,v 1.11 2002/01/17 00:46:32 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MOLFile.C,v 1.12 2002/02/27 12:21:17 sturm Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>

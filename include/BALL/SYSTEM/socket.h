@@ -1,4 +1,7 @@
-// $Id: socket.h,v 1.24 2001/12/30 13:28:44 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: socket.h,v 1.25 2002/02/27 12:19:53 sturm Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H

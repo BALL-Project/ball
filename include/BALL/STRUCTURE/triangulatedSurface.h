@@ -1,4 +1,7 @@
-// $Id: triangulatedSurface.h,v 1.25 2002/01/14 21:04:28 strobel Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: triangulatedSurface.h,v 1.26 2002/02/27 12:19:49 sturm Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H

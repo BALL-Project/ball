@@ -1,4 +1,7 @@
-// $Id: atomBondModelConnector.C,v 1.5 2001/07/01 21:45:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: atomBondModelConnector.C,v 1.6 2002/02/27 12:21:47 sturm Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h>
 

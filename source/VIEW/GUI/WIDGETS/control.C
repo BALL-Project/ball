@@ -1,4 +1,7 @@
-// $Id: control.C,v 1.7 2001/05/13 14:26:25 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: control.C,v 1.8 2002/02/27 12:25:18 sturm Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>

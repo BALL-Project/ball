@@ -1,4 +1,7 @@
-// $Id: SASAreas.C,v 1.1 2001/01/31 05:47:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SASAreas.C,v 1.2 2002/02/27 12:21:14 sturm Exp $
 
 // Calculate the solvent accessible surface (SAS) areas of the
 // residues of a protein.

@@ -1,4 +1,7 @@
-// $Id: surfaceProcessor.h,v 1.22 2002/01/17 00:44:07 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: surfaceProcessor.h,v 1.23 2002/02/27 12:19:48 sturm Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>

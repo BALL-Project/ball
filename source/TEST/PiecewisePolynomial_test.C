@@ -1,4 +1,7 @@
-// $Id: PiecewisePolynomial_test.C,v 1.7 2001/12/30 13:29:00 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PiecewisePolynomial_test.C,v 1.8 2002/02/27 12:24:46 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(PiecewisePolynomial, "$Id: PiecewisePolynomial_test.C,v 1.7 2001/12/30 13:29:00 sturm Exp $")
+START_TEST(PiecewisePolynomial, "$Id: PiecewisePolynomial_test.C,v 1.8 2002/02/27 12:24:46 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

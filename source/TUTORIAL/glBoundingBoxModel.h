@@ -1,4 +1,7 @@
-// $Id: glBoundingBoxModel.h,v 1.1 2002/01/12 21:22:45 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glBoundingBoxModel.h,v 1.2 2002/02/27 12:25:06 sturm Exp $
 // molview tutorial example
 // ------------------------
 // create a processor that computes the bounding box of a molecular structure

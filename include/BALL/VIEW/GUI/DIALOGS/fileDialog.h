@@ -1,4 +1,7 @@
-// $Id: fileDialog.h,v 1.7 2001/12/28 02:33:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: fileDialog.h,v 1.8 2002/02/27 12:19:58 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H

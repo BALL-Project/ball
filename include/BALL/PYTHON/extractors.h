@@ -1,4 +1,7 @@
-// $Id: extractors.h,v 1.8 2001/07/16 14:49:29 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: extractors.h,v 1.9 2002/02/27 12:19:33 sturm Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H

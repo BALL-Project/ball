@@ -1,4 +1,7 @@
-// $Id: triple.h,v 1.2 2001/07/29 18:56:35 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: triple.h,v 1.3 2002/02/27 12:18:36 sturm Exp $
 
 #ifndef BALL_DATATYPE_TRIPLE_H
 #define BALL_DATATYPE_TRIPLE_H

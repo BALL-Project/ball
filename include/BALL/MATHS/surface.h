@@ -1,4 +1,7 @@
-// $Id: surface.h,v 1.13 2002/01/05 03:57:45 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: surface.h,v 1.14 2002/02/27 12:18:56 sturm Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H

@@ -1,4 +1,7 @@
-// $Id: lineBasedFile.C,v 1.23 2002/02/23 13:37:19 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: lineBasedFile.C,v 1.24 2002/02/27 12:21:20 sturm Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>

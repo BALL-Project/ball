@@ -1,4 +1,7 @@
-// $Id: trajectoryFile.C,v 1.7 2002/01/15 02:00:12 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: trajectoryFile.C,v 1.8 2002/02/27 12:21:21 sturm Exp $
 
 #include <BALL/FORMAT/trajectoryFile.h>
 

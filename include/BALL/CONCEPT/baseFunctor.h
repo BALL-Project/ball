@@ -1,4 +1,7 @@
-// $Id: baseFunctor.h,v 1.2 2000/01/10 15:50:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: baseFunctor.h,v 1.3 2002/02/27 12:18:22 sturm Exp $
 
 #ifndef BALL_CONCEPT_BASEFUNCTOR_H
 #define BALL_CONCEPT_BASEFUNCTOR_H

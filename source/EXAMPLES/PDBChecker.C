@@ -1,4 +1,7 @@
-// $Id: PDBChecker.C,v 1.3 2000/02/16 19:18:32 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PDBChecker.C,v 1.4 2002/02/27 12:21:14 sturm Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>

@@ -1,4 +1,7 @@
-// $Id: pairExpRDFIntegrator.C,v 1.16 2002/01/15 02:00:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pairExpRDFIntegrator.C,v 1.17 2002/02/27 12:24:06 sturm Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 

@@ -1,4 +1,7 @@
-// $Id: normal.C,v 1.6 2001/05/13 14:28:38 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: normal.C,v 1.7 2002/02/27 12:25:24 sturm Exp $
 
 #include <BALL/VIEW/KERNEL/normal.h>
 

@@ -1,4 +1,7 @@
-// $Id: molecularDynamics.h,v 1.19 2001/09/01 16:08:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularDynamics.h,v 1.20 2002/02/27 12:19:04 sturm Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 

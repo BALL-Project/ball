@@ -1,4 +1,7 @@
-// $Id: QTTimer.C,v 1.12 2001/07/29 17:38:09 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: QTTimer.C,v 1.13 2002/02/27 12:25:21 sturm Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>

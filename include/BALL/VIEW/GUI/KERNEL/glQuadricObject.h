@@ -1,4 +1,7 @@
-// $Id: glQuadricObject.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glQuadricObject.h,v 1.8 2002/02/27 12:20:02 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H

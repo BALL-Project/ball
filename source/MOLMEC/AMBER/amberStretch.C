@@ -1,4 +1,7 @@
-// $Id: amberStretch.C,v 1.14 2001/06/27 10:40:04 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: amberStretch.C,v 1.15 2002/02/27 12:21:30 sturm Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>

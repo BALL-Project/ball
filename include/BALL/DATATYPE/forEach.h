@@ -1,4 +1,7 @@
-// $Id: forEach.h,v 1.3 2000/10/05 21:50:07 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: forEach.h,v 1.4 2002/02/27 12:18:31 sturm Exp $
 
 #ifndef BALL_DATATYPE_FOREACH_H
 #define BALL_DATATYPE_FOREACH_H

@@ -1,4 +1,7 @@
-// $Id: socket.C,v 1.25 2001/06/07 20:13:54 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: socket.C,v 1.26 2002/02/27 12:24:20 sturm Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////

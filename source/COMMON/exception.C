@@ -1,4 +1,7 @@
-// $Id: exception.C,v 1.31 2002/01/28 09:54:45 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: exception.C,v 1.32 2002/02/27 12:20:33 sturm Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>

@@ -1,4 +1,7 @@
-// $Id: geometricObject.C,v 1.12 2001/06/18 17:28:18 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: geometricObject.C,v 1.13 2002/02/27 12:25:23 sturm Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 

@@ -1,4 +1,7 @@
-// $Id: path.h,v 1.2 2001/02/26 00:23:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: path.h,v 1.3 2002/02/27 12:19:52 sturm Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H

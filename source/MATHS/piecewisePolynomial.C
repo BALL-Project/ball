@@ -1,4 +1,7 @@
-// $Id: piecewisePolynomial.C,v 1.6 2001/12/30 13:28:47 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: piecewisePolynomial.C,v 1.7 2002/02/27 12:21:28 sturm Exp $
 
 #include <BALL/MATHS/piecewisePolynomial.h>
 

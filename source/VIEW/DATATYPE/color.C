@@ -1,4 +1,7 @@
-// $Id: color.C,v 1.5 2000/01/13 22:31:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: color.C,v 1.6 2002/02/27 12:25:09 sturm Exp $
 
 #include <BALL/VIEW/DATATYPE/color.h>
 using namespace std;

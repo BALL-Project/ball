@@ -1,4 +1,7 @@
-// $Id: residue.C,v 1.21 2001/07/15 16:12:43 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: residue.C,v 1.22 2002/02/27 12:21:25 sturm Exp $
 
 #include <BALL/KERNEL/residue.h>
 

@@ -1,4 +1,7 @@
-// $Id: openPDBFile.C,v 1.5 2001/05/13 16:28:12 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: openPDBFile.C,v 1.6 2002/02/27 12:23:45 sturm Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
 

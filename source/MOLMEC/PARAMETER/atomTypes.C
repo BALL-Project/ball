@@ -1,4 +1,7 @@
-// $Id: atomTypes.C,v 1.10 2001/12/14 01:18:11 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: atomTypes.C,v 1.11 2002/02/27 12:21:38 sturm Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>

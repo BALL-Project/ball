@@ -1,4 +1,7 @@
-// $Id: property.h,v 1.26 2002/01/15 03:22:50 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: property.h,v 1.27 2002/02/27 12:18:27 sturm Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H

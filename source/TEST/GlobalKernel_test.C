@@ -1,4 +1,7 @@
-// $Id: GlobalKernel_test.C,v 1.2 2001/07/15 17:32:39 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: GlobalKernel_test.C,v 1.3 2002/02/27 12:24:33 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +9,7 @@
 #include <BALL/KERNEL/chain.h>
 ///////////////////////////
 
-START_TEST(GlobalKernel, "$Id: GlobalKernel_test.C,v 1.2 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(GlobalKernel, "$Id: GlobalKernel_test.C,v 1.3 2002/02/27 12:24:33 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

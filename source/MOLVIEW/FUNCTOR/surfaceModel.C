@@ -1,4 +1,7 @@
-// $Id: surfaceModel.C,v 1.13 2002/01/18 01:35:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: surfaceModel.C,v 1.14 2002/02/27 12:21:52 sturm Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>

@@ -1,4 +1,7 @@
-// $Id: RegularData1D_test.C,v 1.11 2001/07/16 00:26:37 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RegularData1D_test.C,v 1.12 2002/02/27 12:24:50 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.11 2001/07/16 00:26:37 oliver Exp $")
+START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.12 2002/02/27 12:24:50 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

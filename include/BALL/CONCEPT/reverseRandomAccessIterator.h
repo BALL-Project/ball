@@ -1,4 +1,7 @@
-// $Id: reverseRandomAccessIterator.h,v 1.6 2001/06/29 14:13:00 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: reverseRandomAccessIterator.h,v 1.7 2002/02/27 12:18:28 sturm Exp $
 
 #ifndef BALL_CONCEPT_REVERSERANDOMACCESS_H
 #define BALL_CONCEPT_REVERSERANDOMACCESS_H

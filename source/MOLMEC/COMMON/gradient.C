@@ -1,4 +1,7 @@
-// $Id: gradient.C,v 1.5 2001/07/05 17:52:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: gradient.C,v 1.6 2002/02/27 12:21:34 sturm Exp $
 // Atom gradient class: this class represents the gradient (i.e. the negative forces)
 // for a given system as a vector<Vector3>. THe gradient is stored in units of kJ/(mol A)
 

@@ -1,4 +1,7 @@
-// $Id: DCDFile.C,v 1.18 2001/12/30 13:28:45 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: DCDFile.C,v 1.19 2002/02/27 12:21:16 sturm Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>

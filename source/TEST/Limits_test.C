@@ -1,4 +1,7 @@
-// $Id: Limits_test.C,v 1.3 2001/12/17 11:29:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Limits_test.C,v 1.4 2002/02/27 12:24:37 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +14,7 @@
 #include <values.h>
 ///////////////////////////
 
-START_TEST(Limits, "$Id: Limits_test.C,v 1.3 2001/12/17 11:29:34 oliver Exp $")
+START_TEST(Limits, "$Id: Limits_test.C,v 1.4 2002/02/27 12:24:37 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

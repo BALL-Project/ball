@@ -1,4 +1,7 @@
-// $Id: pyAtomContainerList.C,v 1.1 2001/09/03 16:53:11 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyAtomContainerList.C,v 1.2 2002/02/27 12:23:57 sturm Exp $
 
 #include <BALL/PYTHON/pyAtomContainerList.h>
 #include <BALL/KERNEL/atomContainer.h>

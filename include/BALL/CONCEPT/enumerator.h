@@ -1,4 +1,7 @@
-// $Id: enumerator.h,v 1.19 2002/01/16 11:33:10 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: enumerator.h,v 1.20 2002/02/27 12:18:25 sturm Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H

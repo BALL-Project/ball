@@ -1,4 +1,7 @@
-// $Id: HashMap_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HashMap_test.C,v 1.13 2002/02/27 12:24:35 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -34,7 +37,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashMap, "$Id: HashMap_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.13 2002/02/27 12:24:35 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

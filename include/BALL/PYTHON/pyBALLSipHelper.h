@@ -1,4 +1,7 @@
-// $Id: pyBALLSipHelper.h,v 1.1 2000/07/04 08:05:33 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyBALLSipHelper.h,v 1.2 2002/02/27 12:19:34 sturm Exp $
 
 #ifndef BALL_PYTHON_PYBALLSIPHELPER_H
 #define BALL_PYTHON_PYBALLSIPHELPER_H

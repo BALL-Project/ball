@@ -1,4 +1,7 @@
-// $Id: timeStamp.h,v 1.13 2001/07/14 13:12:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: timeStamp.h,v 1.14 2002/02/27 12:18:29 sturm Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H

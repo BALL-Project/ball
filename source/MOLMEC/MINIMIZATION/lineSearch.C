@@ -1,4 +1,7 @@
-// $Id: lineSearch.C,v 1.4 2001/12/17 01:33:00 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: lineSearch.C,v 1.5 2002/02/27 12:21:37 sturm Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>

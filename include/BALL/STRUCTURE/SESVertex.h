@@ -1,4 +1,7 @@
-// $Id: SESVertex.h,v 1.11 2002/01/07 17:49:40 strobel Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SESVertex.h,v 1.12 2002/02/27 12:19:43 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H

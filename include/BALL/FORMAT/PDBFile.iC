@@ -1,4 +1,7 @@
-// $Id: PDBFile.iC,v 1.4 2000/10/20 16:32:51 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PDBFile.iC,v 1.5 2002/02/27 12:18:39 sturm Exp $
 
 BALL_INLINE 
 bool PDBFile::readUnknownRecord(const char * /* line */)

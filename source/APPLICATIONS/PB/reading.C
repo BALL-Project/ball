@@ -1,4 +1,7 @@
-// $Id: reading.C,v 1.6 2000/06/08 08:36:05 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: reading.C,v 1.7 2002/02/27 12:20:32 sturm Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>

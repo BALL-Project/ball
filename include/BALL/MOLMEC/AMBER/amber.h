@@ -1,4 +1,7 @@
-// $Id: amber.h,v 1.13 2002/02/14 16:46:52 anker Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: amber.h,v 1.14 2002/02/27 12:18:58 sturm Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H

@@ -1,11 +1,14 @@
-// $Id: Directory_test.C,v 1.5 2001/07/15 17:32:38 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Directory_test.C,v 1.6 2002/02/27 12:24:29 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/directory.h>
 ///////////////////////////
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.5 2001/07/15 17:32:38 amoll Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.6 2002/02/27 12:24:29 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

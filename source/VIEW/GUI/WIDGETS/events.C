@@ -1,4 +1,7 @@
-// $Id: events.C,v 1.2 2001/05/13 14:26:25 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: events.C,v 1.3 2002/02/27 12:25:19 sturm Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/events.h>
 

@@ -1,4 +1,7 @@
-// $Id: proteinMapper.C,v 1.7 2000/09/06 19:36:59 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: proteinMapper.C,v 1.8 2002/02/27 12:21:15 sturm Exp $
 
 //========================================================================
 // protein mapper example

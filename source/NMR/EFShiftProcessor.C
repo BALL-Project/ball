@@ -1,4 +1,7 @@
-// $Id: EFShiftProcessor.C,v 1.12 2001/06/27 02:01:17 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: EFShiftProcessor.C,v 1.13 2002/02/27 12:23:51 sturm Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>

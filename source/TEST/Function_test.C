@@ -1,4 +1,7 @@
-// $Id: Function_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Function_test.C,v 1.8 2002/02/27 12:24:32 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Function, "$Id: Function_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(Function, "$Id: Function_test.C,v 1.8 2002/02/27 12:24:32 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

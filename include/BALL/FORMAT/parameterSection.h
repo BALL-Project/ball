@@ -1,4 +1,7 @@
-// $Id: parameterSection.h,v 1.15 2002/01/10 01:29:06 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: parameterSection.h,v 1.16 2002/02/27 12:18:41 sturm Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H

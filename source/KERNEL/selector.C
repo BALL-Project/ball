@@ -1,4 +1,7 @@
-// $Id: selector.C,v 1.23 2002/01/09 01:27:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: selector.C,v 1.24 2002/02/27 12:21:25 sturm Exp $
 
 #include <BALL/KERNEL/selector.h>
 

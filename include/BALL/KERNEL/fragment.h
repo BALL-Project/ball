@@ -1,4 +1,7 @@
-// $Id: fragment.h,v 1.16 2001/07/15 16:14:22 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: fragment.h,v 1.17 2002/02/27 12:18:48 sturm Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H

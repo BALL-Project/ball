@@ -1,4 +1,7 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.12 2002/01/13 13:54:52 aubertin Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.13 2002/02/27 12:19:38 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H

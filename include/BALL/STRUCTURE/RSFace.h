@@ -1,4 +1,7 @@
-// $Id: RSFace.h,v 1.21 2002/01/07 17:48:09 strobel Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RSFace.h,v 1.22 2002/02/27 12:19:42 sturm Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H

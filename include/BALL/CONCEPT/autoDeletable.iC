@@ -1,4 +1,7 @@
-// $Id: autoDeletable.iC,v 1.6 2002/01/12 12:19:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: autoDeletable.iC,v 1.7 2002/02/27 12:18:22 sturm Exp $
 
 BALL_INLINE 
 AutoDeletable::AutoDeletable()

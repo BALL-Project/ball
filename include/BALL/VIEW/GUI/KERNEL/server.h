@@ -1,4 +1,7 @@
-// $Id: server.h,v 1.10 2001/12/28 02:33:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: server.h,v 1.11 2002/02/27 12:20:03 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H

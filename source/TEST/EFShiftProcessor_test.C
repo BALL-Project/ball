@@ -1,4 +1,7 @@
-// $Id: EFShiftProcessor_test.C,v 1.4 2001/12/30 13:28:57 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: EFShiftProcessor_test.C,v 1.5 2002/02/27 12:24:29 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(EFShiftProcessor, "$Id: EFShiftProcessor_test.C,v 1.4 2001/12/30 13:28:57 sturm Exp $")
+START_TEST(EFShiftProcessor, "$Id: EFShiftProcessor_test.C,v 1.5 2002/02/27 12:24:29 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

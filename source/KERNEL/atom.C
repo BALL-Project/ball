@@ -1,4 +1,7 @@
-// $Id: atom.C,v 1.35 2001/07/15 16:12:42 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: atom.C,v 1.36 2002/02/27 12:21:22 sturm Exp $
 
 #include <BALL/KERNEL/atom.h>
 

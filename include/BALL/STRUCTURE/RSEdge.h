@@ -1,4 +1,7 @@
-// $Id: RSEdge.h,v 1.21 2002/01/07 17:47:03 strobel Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RSEdge.h,v 1.22 2002/02/27 12:19:41 sturm Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H

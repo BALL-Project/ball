@@ -1,4 +1,7 @@
-// $Id: datatype.h,v 1.3 2001/07/15 18:56:03 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: datatype.h,v 1.4 2002/02/27 12:18:17 sturm Exp $
 // DATATYPE header file
 // collective header file for all headers in BALL/DATATYPE
 

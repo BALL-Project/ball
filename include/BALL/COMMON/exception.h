@@ -1,4 +1,7 @@
-// $Id: exception.h,v 1.31 2002/01/28 09:54:45 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: exception.h,v 1.32 2002/02/27 12:18:20 sturm Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H

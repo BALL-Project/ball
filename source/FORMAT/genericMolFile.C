@@ -1,4 +1,7 @@
-// $Id: genericMolFile.C,v 1.4 2001/12/26 03:35:52 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: genericMolFile.C,v 1.5 2002/02/27 12:21:19 sturm Exp $
 
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/KERNEL/system.h>

@@ -1,4 +1,7 @@
-// $Id: selectable.C,v 1.5 2000/12/09 21:56:04 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: selectable.C,v 1.6 2002/02/27 12:21:10 sturm Exp $
 
 #include <BALL/CONCEPT/selectable.h>
 #include <BALL/CONCEPT/persistenceManager.h>

@@ -1,4 +1,7 @@
-// $Id: baseModelConnector.h,v 1.5 2001/07/16 14:49:23 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: baseModelConnector.h,v 1.6 2002/02/27 12:19:11 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H

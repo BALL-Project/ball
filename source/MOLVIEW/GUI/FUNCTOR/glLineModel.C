@@ -1,4 +1,7 @@
-// $Id: glLineModel.C,v 1.4 2001/05/13 15:02:41 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glLineModel.C,v 1.5 2002/02/27 12:23:46 sturm Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h>
 

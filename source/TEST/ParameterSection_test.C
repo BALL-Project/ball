@@ -1,4 +1,7 @@
-// $Id: ParameterSection_test.C,v 1.12 2002/01/10 11:37:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ParameterSection_test.C,v 1.13 2002/02/27 12:24:44 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.12 2002/01/10 11:37:38 oliver Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.13 2002/02/27 12:24:44 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

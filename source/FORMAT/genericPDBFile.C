@@ -1,4 +1,7 @@
-// $Id: genericPDBFile.C,v 1.18 2002/01/04 01:39:07 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: genericPDBFile.C,v 1.19 2002/02/27 12:21:19 sturm Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 

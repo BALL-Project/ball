@@ -1,4 +1,7 @@
-// $Id: main.C,v 1.9 2002/01/16 02:41:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: main.C,v 1.10 2002/02/27 12:20:31 sturm Exp $
 
 #include <iomanip>
 

@@ -1,4 +1,7 @@
-// $Id: openBruker2DFile.C,v 1.6 2001/05/13 16:28:12 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: openBruker2DFile.C,v 1.7 2002/02/27 12:22:58 sturm Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 

@@ -1,4 +1,7 @@
-// $Id: geometricObject.iC,v 1.6 2001/05/13 13:47:47 hekl Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: geometricObject.iC,v 1.7 2002/02/27 12:20:15 sturm Exp $ 
 
 BALL_INLINE 
 void GeometricObject::setSelectedColor(const ColorRGBA& color)

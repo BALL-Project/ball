@@ -1,4 +1,7 @@
-// $Id: gllabel.C,v 1.6 2001/07/01 19:41:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: gllabel.C,v 1.7 2002/02/27 12:25:16 sturm Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <GL/gl.h>

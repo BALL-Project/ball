@@ -1,4 +1,7 @@
-// $Id: logStream.C,v 1.25 2001/06/23 01:46:49 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: logStream.C,v 1.26 2002/02/27 12:20:34 sturm Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>

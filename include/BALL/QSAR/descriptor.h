@@ -1,4 +1,7 @@
-// $Id: descriptor.h,v 1.3 2001/12/17 03:17:51 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: descriptor.h,v 1.4 2002/02/27 12:19:37 sturm Exp $
 
 #ifndef BALL_QSAR_DESCRIPTOR_H
 #define BALL_QSAR_DESCRIPTOR_H

@@ -1,4 +1,7 @@
-// $Id: HINFile.C,v 1.45 2002/01/17 00:45:56 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HINFile.C,v 1.46 2002/02/27 12:21:16 sturm Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>

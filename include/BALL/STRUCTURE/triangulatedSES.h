@@ -1,4 +1,7 @@
-// $Id: triangulatedSES.h,v 1.6 2002/01/17 00:44:07 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: triangulatedSES.h,v 1.7 2002/02/27 12:19:49 sturm Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
 #define BALL_STRUCTURE_TRIANGULATEDSES_H

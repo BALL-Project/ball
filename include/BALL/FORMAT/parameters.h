@@ -1,4 +1,7 @@
-// $Id: parameters.h,v 1.7 2001/02/28 01:17:13 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: parameters.h,v 1.8 2002/02/27 12:18:42 sturm Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H

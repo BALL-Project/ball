@@ -1,4 +1,7 @@
-// $Id: ExpressionParser_test.C,v 1.5 2002/01/28 01:07:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ExpressionParser_test.C,v 1.6 2002/02/27 12:24:30 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.5 2002/01/28 01:07:27 oliver Exp $")
+START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.6 2002/02/27 12:24:30 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

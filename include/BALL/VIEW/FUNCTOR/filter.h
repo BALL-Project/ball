@@ -1,4 +1,7 @@
-// $Id: filter.h,v 1.5 2001/07/16 14:49:29 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: filter.h,v 1.6 2002/02/27 12:19:56 sturm Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H

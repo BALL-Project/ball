@@ -1,4 +1,7 @@
-// $Id: piecewiseFunction.h,v 1.12 2001/07/14 12:56:14 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: piecewiseFunction.h,v 1.13 2002/02/27 12:18:55 sturm Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H

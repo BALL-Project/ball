@@ -1,4 +1,7 @@
-// $Id: glObject.iC,v 1.6 2001/05/13 13:57:02 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glObject.iC,v 1.7 2002/02/27 12:20:01 sturm Exp $
 
 BALL_INLINE 
 void GLObject::setGLPrimitiveManager

@@ -1,4 +1,7 @@
-// $Id: Molecule_test.C,v 1.12 2002/01/26 22:01:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Molecule_test.C,v 1.13 2002/02/27 12:24:39 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Molecule, "$Id: Molecule_test.C,v 1.12 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(Molecule, "$Id: Molecule_test.C,v 1.13 2002/02/27 12:24:39 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

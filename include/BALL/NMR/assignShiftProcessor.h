@@ -1,4 +1,7 @@
-// $Id: assignShiftProcessor.h,v 1.13 2001/06/21 21:35:05 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: assignShiftProcessor.h,v 1.14 2002/02/27 12:19:30 sturm Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H

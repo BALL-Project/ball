@@ -1,4 +1,7 @@
-// $Id: PreciseTime_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PreciseTime_test.C,v 1.9 2002/02/27 12:24:47 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.9 2002/02/27 12:24:47 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

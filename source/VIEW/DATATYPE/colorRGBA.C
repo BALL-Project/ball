@@ -1,4 +1,7 @@
-// $Id: colorRGBA.C,v 1.2 2001/05/13 14:28:35 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorRGBA.C,v 1.3 2002/02/27 12:25:09 sturm Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>

@@ -1,4 +1,7 @@
-// $Id: windowEventTimer.h,v 1.3 2000/01/08 20:31:44 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: windowEventTimer.h,v 1.4 2002/02/27 12:19:27 sturm Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_WINDOWEVENTTIMER_H
 #define BALL_MOLVIEW_KERNEL_WINDOWEVENTTIMER_H

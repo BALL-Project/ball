@@ -1,4 +1,7 @@
-// $Id: extendedGLObjectCollector.C,v 1.2 2001/12/30 13:28:52 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: extendedGLObjectCollector.C,v 1.3 2002/02/27 12:23:47 sturm Exp $
 
 #include <BALL/MOLVIEW/GUI/KERNEL/extendedGLObjectCollector.h>
 

@@ -1,4 +1,7 @@
-// $Id: PDBAtomIterator.h,v 1.12 2002/01/04 03:19:48 oliver Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PDBAtomIterator.h,v 1.13 2002/02/27 12:18:43 sturm Exp $ 
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
 #define BALL_KERNEL_PDBATOMITERATOR_H

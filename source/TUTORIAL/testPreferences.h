@@ -1,4 +1,7 @@
-// $Id: testPreferences.h,v 1.1 2002/01/12 21:22:46 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: testPreferences.h,v 1.2 2002/02/27 12:25:08 sturm Exp $
 // view tutorial example
 // ---------------------
 // creation of a dialog

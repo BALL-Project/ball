@@ -1,4 +1,7 @@
-// $Id: bitVector.C,v 1.30 2002/01/05 03:59:09 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: bitVector.C,v 1.31 2002/02/27 12:21:11 sturm Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>

@@ -1,4 +1,7 @@
-// $Id: point.h,v 1.10 2001/07/16 14:49:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: point.h,v 1.11 2002/02/27 12:20:20 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H

@@ -1,4 +1,7 @@
-// $Id: INIFile.h,v 1.25 2001/08/21 01:24:17 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: INIFile.h,v 1.26 2002/02/27 12:18:38 sturm Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H

@@ -1,4 +1,7 @@
-// $Id: singularities.h,v 1.18 2001/12/30 13:28:43 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: singularities.h,v 1.19 2002/02/27 12:19:47 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H

@@ -1,4 +1,7 @@
-// $Id: support.C,v 1.30 2002/01/18 01:35:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: support.C,v 1.31 2002/02/27 12:21:35 sturm Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>

@@ -1,4 +1,7 @@
-// $Id: charmmBend.C,v 1.5 2000/06/30 05:56:14 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmmBend.C,v 1.6 2002/02/27 12:21:31 sturm Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>

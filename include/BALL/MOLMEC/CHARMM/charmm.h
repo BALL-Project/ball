@@ -1,4 +1,7 @@
-// $Id: charmm.h,v 1.6 2001/02/28 01:17:38 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmm.h,v 1.7 2002/02/27 12:18:59 sturm Exp $
 // Molecular Mechanics: CHARMM force field class
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H

@@ -1,4 +1,7 @@
-// $Id: canonicalMD.h,v 1.16 2001/09/01 16:08:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: canonicalMD.h,v 1.17 2002/02/27 12:19:04 sturm Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   

@@ -1,4 +1,7 @@
-// $Id: clientScene.C,v 1.6 2000/01/13 22:32:43 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: clientScene.C,v 1.7 2002/02/27 12:25:22 sturm Exp $
 
 #include <BALL/VIEW/KERNEL/clientScene.h>
 

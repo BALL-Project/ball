@@ -1,4 +1,7 @@
-// $Id: NumericalIntegrator_test.C,v 1.7 2002/01/09 02:17:04 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: NumericalIntegrator_test.C,v 1.8 2002/02/27 12:24:40 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(NumericalIntegrator, "$Id: NumericalIntegrator_test.C,v 1.7 2002/01/09 02:17:04 oliver Exp $")
+START_TEST(NumericalIntegrator, "$Id: NumericalIntegrator_test.C,v 1.8 2002/02/27 12:24:40 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
