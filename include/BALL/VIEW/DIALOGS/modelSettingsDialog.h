@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.10 2004/01/20 16:48:03 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.11 2004/02/18 23:43:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -19,7 +19,7 @@ namespace BALL
 
 	namespace VIEW
 	{
-		/** Dialog for the molecular model settings
+		/** Dialog for the molecular model settings, it is inserted into the Preferences.
 				\ingroup ViewDialogs
 		*/
 		class ModelSettingsDialog 
