@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.9 2003/05/26 15:43:41 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.10 2003/06/13 14:39:47 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.9 2003/05/26 15:43:41 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.10 2003/06/13 14:39:47 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,18 +21,18 @@ using namespace BALL;
 using namespace std;
 
 XDRPersistenceManager* pm_ptr = 0;
-CHECK(XDRPersistenceManager::XDRPersistenceManager())
+CHECK(XDRPersistenceManager() throw())
 	pm_ptr = new XDRPersistenceManager;
 	TEST_NOT_EQUAL(pm_ptr, 0)
 RESULT
 
-CHECK(XDRPersistenceManager::~XDRPersistenceManager())
+CHECK(~XDRPersistenceManager())
 	delete pm_ptr;
 RESULT
 
 String filename;
 NEW_TMP_FILE(filename)
-CHECK(XDRPersistenceManager::XDRPersistenceManager(std::ostream& os))
+CHECK(XDRPersistenceManager(std::ostream& os) throw())
 	ofstream os(filename.c_str(), std::ios::out);
 	Composite comp;
 	XDRPersistenceManager pm(os);
@@ -41,7 +41,7 @@ CHECK(XDRPersistenceManager::XDRPersistenceManager(std::ostream& os))
 RESULT
 
 
-CHECK(XDRPersistenceManager::XDRPersistenceManager(std::istream& is))
+CHECK(XDRPersistenceManager(std::istream& is) throw())
 	ifstream is(filename.c_str());
 	XDRPersistenceManager pm(is);
 	PersistentObject* po = pm.readObject();
@@ -51,142 +51,159 @@ CHECK(XDRPersistenceManager::XDRPersistenceManager(std::istream& is))
 RESULT
 
 
-CHECK(XDRPersistenceManager::XDRPersistenceManager(std::istream& is, std::ostream& os))
+CHECK(XDRPersistenceManager(std::istream& is, std::ostream& os) throw())
+	String outfilename;
+	NEW_TMP_FILE(outfilename);
+	ifstream is(filename.c_str());
+	ofstream os(outfilename.c_str(), std::ios::out);
+	XDRPersistenceManager pm(is, os);
+	PersistentObject* po = pm.readObject();
+	is.close();
+	TEST_NOT_EQUAL(po, 0)
+	TEST_EQUAL(RTTI::isKindOf<Composite>(*po), true)
+	// *po >> pm;
+	os.close();
+RESULT
+
+
+CHECK(void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr) throw())
+	String outfilename;
+	NEW_TMP_FILE(outfilename);
+	ofstream os(outfilename.c_str(), std::ios::out);
+	XDRPersistenceManager pm(os);
+	Composite composite;
+	// composite >> pm;
+	os.close();
+	TEST_FILE_REGEXP(outfilename.c_str(), "data/XDRPersistenceManager_test1.txt")
+RESULT
+
+
+CHECK(bool checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeHeader(const char* type_name, const char* name, LongPointerType ptr))
+CHECK(void writeTrailer(const char* name = 0) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr))
+CHECK(bool checkTrailer(const char* name = 0) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeTrailer(const char* name = 0))
+CHECK(void writeStreamHeader() throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkTrailer(const char* name = 0))
+CHECK(void writeStreamTrailer() throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeStreamHeader())
+CHECK(bool checkStreamHeader() throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeStreamTrailer())
+CHECK(bool checkStreamTrailer() throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkStreamHeader())
+CHECK(bool getObjectHeader(String& type_name, PointerSizeUInt& ptr) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkStreamTrailer())
+CHECK(void writeName(const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr))
+CHECK(bool checkName(const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeName(const char* name))
+CHECK(void writeStorableHeader(const char* type_name, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkName(const char* name))
+CHECK(bool checkStorableHeader(const char* type_name, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeStorableHeader(const char* type_name, const char* name))
+CHECK(void writePrimitiveHeader(const char* type_name, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkStorableHeader(const char* type_name, const char* name))
+CHECK(bool checkPrimitiveHeader(const char* type_name, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writePrimitiveHeader(const char* type_name, const char* name))
+CHECK(void writeStorableTrailer() throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkPrimitiveHeader(const char* type_name, const char* name))
+CHECK(bool checkStorableTrailer() throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeStorableTrailer())
+CHECK(void writePrimitiveTrailer() throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkStorableTrailer())
+CHECK(bool checkPrimitiveTrailer() throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writePrimitiveTrailer())
+CHECK(void writeObjectPointerHeader(const char* type_name, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkPrimitiveTrailer())
+CHECK(bool checkObjectPointerHeader(const char* type_name, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeObjectPointerHeader(const char* type_name, const char* name))
+CHECK(void writeObjectReferenceHeader(const char* type_name, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkObjectPointerHeader(const char* type_name, const char* name))
+CHECK(bool checkObjectReferenceHeader(const char* type_name, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeObjectReferenceHeader(const char* type_name, const char* name))
+CHECK(void writeObjectPointerArrayHeader(const char* type_name, const char* name, Size size) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkObjectReferenceHeader(const char* type_name, const char* name))
+CHECK(bool checkObjectPointerArrayHeader(const char* type_name, const char* name, Size& size) throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::writeObjectPointerArrayHeader(const char* type_name, const char* name, Size size))
+CHECK(void writeObjectPointerArrayTrailer() throw())
   //?????
 RESULT
 
 
-CHECK(XDRPersistenceManager::checkObjectPointerArrayHeader(const char* type_name, const char* name, Size& size))
-  //?????
-RESULT
-
-
-CHECK(XDRPersistenceManager::writeObjectPointerArrayTrailer())
-  //?????
-RESULT
-
-
-CHECK(XDRPersistenceManager::checkObjectPointerArrayTrailer())
+CHECK(bool checkObjectPointerArrayTrailer() throw())
   //?????
 RESULT
 
@@ -198,7 +215,7 @@ XDRPersistenceManager pm;
 pm.setOstream(outfile);
 pm.initializeOutputStream();
 pm.writeStreamHeader();
-CHECK(XDRPersistenceManager::put(const char c))
+CHECK(void put(const char c) throw())
 	pm.put((char)0);
 	pm.put((char)85);
 	pm.put((char)-86);
@@ -206,7 +223,7 @@ CHECK(XDRPersistenceManager::put(const char c))
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const Byte b))
+CHECK(void put(const Byte b) throw())
 	pm.put((Byte)0);
 	pm.put((Byte)85);
 	pm.put((Byte)170);
@@ -214,7 +231,7 @@ CHECK(XDRPersistenceManager::put(const Byte b))
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const Index i))
+CHECK(void put(const Index i) throw())
 	pm.put((Index)0);
 	pm.put((Index)-1);
 	pm.put((Index)0xAA55CC33);
@@ -222,7 +239,7 @@ CHECK(XDRPersistenceManager::put(const Index i))
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const Size s))
+CHECK(void put(const Size s) throw())
 	pm.put((Size)0);
 	pm.put((Size)0xAA55CC33);
 	pm.put((Size)0xCC33AA55);
@@ -230,27 +247,27 @@ CHECK(XDRPersistenceManager::put(const Size s))
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const bool b))
+CHECK(void put(const bool b) throw())
 	pm.put(true);
 	pm.put(false);
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const Real x))
+CHECK(void put(const Real f) throw())
   pm.put((Real)0.0);
 	pm.put((Real)1.234567);
 	pm.put((Real)-9.87654e37);
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const DoubleReal x))
+CHECK(void put(const DoubleReal d) throw())
   pm.put((DoubleReal)0.0);
 	pm.put((DoubleReal)1.234567);
 	pm.put((DoubleReal)-9.87654e300);
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const string& s))
+CHECK(void put(const string& s) throw())
   pm.put(String(""));
 	pm.put(String("ABCDEFGHIJKLMNOPQRSTUVWxyz"));
 RESULT
@@ -263,7 +280,7 @@ PointerSizeUInt psi2 = 0xFEDCBA98;
 psi2 <<= 32;
 psi2 += 0x01234567;
 
-CHECK(XDRPersistenceManager::put(const PointerSizeUInt p))
+CHECK(void put(const PointerSizeUInt p) throw())
 	pm.put((PointerSizeUInt)0);
 	pm.put(psi1);
 	pm.put(psi2);
@@ -278,7 +295,7 @@ pm.setIstream(infile);
 pm.initializeInputStream();
 pm.checkStreamHeader();
 
-CHECK(XDRPersistenceManager::get(char& c))
+CHECK(void get(char& c) throw())
 	char c;
 	pm.get(c);
 	TEST_EQUAL((Index)(signed char)c, 0)
@@ -291,7 +308,7 @@ CHECK(XDRPersistenceManager::get(char& c))
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(Byte& c))
+CHECK(void get(Byte& c) throw())
 	Byte c;
 	pm.get(c);
 	TEST_EQUAL((Size)c, 0)
@@ -304,7 +321,7 @@ CHECK(XDRPersistenceManager::get(Byte& c))
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(Index& s))
+CHECK(void get(Index& s) throw())
 	Index i;
 	pm.get(i);
 	TEST_EQUAL(i, (Index)0)
@@ -317,7 +334,7 @@ CHECK(XDRPersistenceManager::get(Index& s))
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(Size& s))
+CHECK(void get(Size& s) throw())
 	Size s;
 	pm.get(s);
 	TEST_EQUAL(s, (Size)0)
@@ -330,7 +347,7 @@ CHECK(XDRPersistenceManager::get(Size& s))
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(bool& s))
+CHECK(void get(bool& b) throw())
   bool b;
 	pm.get(b);
 	TEST_EQUAL(b, true)
@@ -339,7 +356,7 @@ CHECK(XDRPersistenceManager::get(bool& s))
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(Real& x))
+CHECK(void get(Real& f) throw())
 	Real x;
 	pm.get(x);
   TEST_REAL_EQUAL(x, (Real)0.0)
@@ -350,7 +367,7 @@ CHECK(XDRPersistenceManager::get(Real& x))
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(DoubleReal& s))
+CHECK(void get(DoubleReal& d) throw())
 	DoubleReal x;
 	pm.get(x);
   TEST_REAL_EQUAL(x, (DoubleReal)0.0)
@@ -361,8 +378,8 @@ CHECK(XDRPersistenceManager::get(DoubleReal& s))
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(String& s))
-	String s;
+CHECK(void get(string& s) throw())
+	string s;
 	pm.get(s);
 	TEST_EQUAL(s, "")
 	pm.get(s);
@@ -370,7 +387,7 @@ CHECK(XDRPersistenceManager::get(String& s))
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(PointerSizeUInt& p))
+CHECK(void get(PointerSizeUInt& p) throw())
 	PointerSizeUInt p;
 	pm.get(p);
 	TEST_EQUAL(p, 0)
@@ -382,6 +399,22 @@ RESULT
 
 pm.finalizeInputStream();
 infile.close();
+
+CHECK(void finalizeInputStream() throw())
+  // ???
+RESULT
+
+CHECK(void finalizeOutputStream() throw())
+	// ???
+RESULT
+
+CHECK(void initializeInputStream() throw())
+	// ???
+RESULT
+
+CHECK(void initializeOutputStream() throw())
+	// ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

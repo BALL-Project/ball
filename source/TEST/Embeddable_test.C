@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Embeddable_test.C,v 1.3 2002/02/27 12:24:29 sturm Exp $
+// $Id: Embeddable_test.C,v 1.4 2003/06/13 14:39:57 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -42,22 +42,38 @@ START_TEST(Embeddable, "$Id")
 // testing multiple registrateion/deregistration
 Log.remove(std::cout);
 
-// tests for class Embeddable::
+// tests for class 
 
-CHECK(Embeddable::~Embeddable())
+CHECK(~Embeddable() throw())
   A* a_ptr = new A;
 	TEST_NOT_EQUAL(a_ptr, 0)
 	delete a_ptr;
 RESULT
 
-CHECK(Embeddable::countInstances())
+CHECK(Embeddable(const Embeddable& embeddable) throw())
+  // ???
+RESULT
+
+CHECK(Embeddable(const String& identifier = "<Embeddable>") throw())
+  // ???
+RESULT
+
+CHECK(void setIdentifier(const String& identifier) throw())
+  // ???
+RESULT
+
+CHECK(const String& getIdentifier() const throw())
+  // ???
+RESULT
+
+CHECK([EXTRA] Size countInstances() throw())
 	TEST_EQUAL(A::countInstances(), 0)
 	TEST_EQUAL(C::countInstances(), 0)
 RESULT											
 
 A* a_ptr = 0;
 C* c_ptr = 0;
-CHECK(Embeddable::registerThis() throw())
+CHECK(void registerThis() throw())
   a_ptr = new A;
 	TEST_EQUAL(A::countInstances(), 0)
 	TEST_EQUAL(C::countInstances(), 0)
@@ -78,7 +94,7 @@ CHECK(Embeddable::registerThis() throw())
 	TEST_EQUAL(C::countInstances(), 1)
 RESULT
 
-CHECK(Embeddable::unregisterThis() throw())
+CHECK(void unregisterThis() throw())
 	TEST_EQUAL(A::countInstances(), 1)
 	TEST_EQUAL(C::countInstances(), 1)
 	a_ptr->unregisterThis();
@@ -95,7 +111,7 @@ CHECK(Embeddable::unregisterThis() throw())
 	TEST_EQUAL(C::countInstances(), 0)
 RESULT
 
-CHECK(Embeddable::getInstance(Position index))
+CHECK([EXTRA] getInstance(Position index))
 	A a1;
 	A a2;
 	A a3;
@@ -108,6 +124,23 @@ CHECK(Embeddable::getInstance(Position index))
 	TEST_EQUAL(A::getInstance(2), &a1)
 	TEST_EQUAL(A::getInstance(3), 0)
 	TEST_EQUAL(A::getInstance(1234), 0)
+RESULT											
+
+CHECK([EXTRA] getInstance(const String& identifier))
+	A a1;
+	a1.setIdentifier(String("One"));
+	A a2;
+	a1.setIdentifier(String("Two"));
+	A a3;
+	a1.setIdentifier(String("Three"));
+	a3.registerThis();
+	a2.registerThis();
+	a1.registerThis();
+	TEST_EQUAL(A::countInstances(), 3)
+	TEST_EQUAL(A::getInstance("Three"), &a3)
+	TEST_EQUAL(A::getInstance("Two"), &a2)
+	TEST_EQUAL(A::getInstance("One"), &a1)
+	TEST_EQUAL(A::getInstance("Four"), 0)
 RESULT											
 
 /////////////////////////////////////////////////////////////
