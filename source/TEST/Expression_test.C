@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.15 2001/07/30 01:24:47 oliver Exp $
+// $Id: Expression_test.C,v 1.16 2001/07/31 00:50:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.15 2001/07/30 01:24:47 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.16 2001/07/31 00:50:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -678,6 +678,10 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
+	// BAUSTELLE: this expression still doesn't work correctly! The expression in brackets
+	// is not interpreted correctly... Instead, "element(H) OR name(OXT) AND chain(A)" 
+	// behaves as expected. Anyway, the used test case (Expression_test.hin) does not
+	// allow to successfully test thoses predicates, since it does not contain a chain A!
 	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
 
 	Expression e;
@@ -762,13 +766,13 @@ CHECK(Expression::setExpression(const String& expression) throw())
 	String test_expression("connectedTo((-H))");
 	Expression e;
 	e.setExpression(test_expression);
-	TEST_EQUAL(e.getExpressionString(), "(connectedTo((-H)))")
+	TEST_EQUAL(e.getExpressionString(), test_expression)
 RESULT
 
 
 CHECK(Expression::getExpressionString() const  throw())
-	Expression e("(connectedTo((-H)))");
-	TEST_EQUAL("(connectedTo((-H)))", e.getExpressionString())
+	Expression e("connectedTo((-H))");
+	TEST_EQUAL("connectedTo((-H))", e.getExpressionString())
 RESULT
 
 
