@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.21 2003/03/12 16:11:50 oliver Exp $
+// $Id: conjugateGradient.C,v 1.22 2003/03/14 10:11:27 oliver Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -520,7 +520,7 @@ namespace BALL
 
 			// Compute an initial direction (along the negative gradient).
 			old_dir_grad_valid = false;	
-			direction_.clear();
+			direction_.invalidate();
 			updateDirection();
 		}
 
@@ -821,6 +821,14 @@ Log.info() << "CG fS end: step, lambda " << step_ << " " << lambda_ << std::endl
 
 	void ConjugateGradientMinimizer::updateStepSize(double lambda)
 	{
+		if (lambda > 0.9) 
+		{
+			step_ *= 2.0;
+		}
+		else if (lambda < 0.1)
+		{
+			step_ *= 0.5;
+		}
 	}
 
 } // end of namespace BALL

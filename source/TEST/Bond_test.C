@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bond_test.C,v 1.28 2003/02/10 11:10:20 oliver Exp $
+// $Id: Bond_test.C,v 1.29 2003/03/14 10:11:27 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +15,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.28 2003/02/10 11:10:20 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.29 2003/03/14 10:11:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -98,10 +98,11 @@ CHECK(createBond(Bond&, Atom&, Atom&))
 		}
 		else
 		{
-			TEST_EXCEPTION(Bond::TooManyBonds, Bond::createBond(bonds[i], atoms[0], atoms[i + 1]))
+			TEST_EXCEPTION(Bond::TooManyBonds, bonds[i].createBond(bonds[i], atoms[0], atoms[i + 1]))
 			TEST_EQUAL(atoms[0].countBonds(), Atom::MAX_NUMBER_OF_BONDS);
 		}
 	}		
+	atoms[0].destroyBonds();
 RESULT
 
 CHECK(clear())

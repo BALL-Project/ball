@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.29 2003/03/03 10:08:39 oliver Exp $
+// $Id: bond.C,v 1.30 2003/03/14 10:11:27 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -66,7 +66,16 @@ namespace BALL
 			bond_order_(order),
 			bond_type_(type)
 	{
-		createBond(*this, first, second);
+		try
+		{
+			createBond(*this, first, second);
+		}
+		catch (TooManyBonds& e)
+		{
+			first_ = 0;
+			second_ = 0;
+			throw(e);
+		}
 	}
 
 	Bond* Bond::createBond(Bond& bond, Atom& first, Atom& second)
@@ -78,7 +87,7 @@ namespace BALL
 			return 0;
 		}
 		
-		Bond *bond_ptr = first.getBond(second);
+		Bond* bond_ptr = first.getBond(second);
 
 		if (bond_ptr != 0)
 		{

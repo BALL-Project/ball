@@ -3,7 +3,7 @@
 //
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
-#include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
+#include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 #include <BALL/KERNEL/selector.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
 	
 	// now we create a minimizer object that uses a conjugate 
 	// gradient algorithm to optimize the atom positions
-	ConjugateGradientMinimizer minimizer;
+	SteepestDescentMinimizer minimizer;
 
 	// calculate the total energy of the system
 	float initial_energy = FF.updateEnergy();

@@ -3,6 +3,9 @@ DIRECTORY=TEST
 XDR_DEPENDENT_EXECUTABLES=\
 	XDRPersistenceManager_test
 
+VIEW_EXECUTABLES=\
+	
+
 EXECUTABLES_BASIC = \
 	ClassTest_test\
 	RegularExpression_test\
