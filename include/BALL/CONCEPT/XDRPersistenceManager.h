@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.12 2000/10/30 21:50:14 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.13 2000/12/12 16:18:08 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -72,13 +72,13 @@ namespace BALL
 				This method stores \Ref{OBJECT_HEADER} as an int value to mark the
 				start of an object (using {\tt xdr_int}).
 		*/
-		virtual void writeHeader(const char* type_name, const char* name, LongPointerType ptr);
+		virtual void writeHeader(const char* type_name, const char* name, PointerSizeInt ptr);
 
 		/**	Check for an object header.
 				This method reads an int form the input stream (using {\tt xdr_int}) and
 				returns {\bf true} if the value read equals \Ref{OBJECT_HEADER}.
 		*/
-		virtual bool checkHeader(const char* type_name, const char* name, LongPointerType& ptr);
+		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr);
 
 		/** Write an object trailer.
 				This method stores \Ref{OBJECT_TRAILER} as an int value to mark the
@@ -110,7 +110,7 @@ namespace BALL
 
 		/**	Get an (unknown) object header.
 		*/
-		virtual bool getObjectHeader(String& type_name, LongPointerType& ptr);
+		virtual bool getObjectHeader(String& type_name, PointerSizeInt& ptr);
 
 		/**	Write a variable/member name.
 		*/
@@ -216,43 +216,17 @@ namespace BALL
 		*/
 		virtual void put(const char c);
 
-		/**	Write an unsigned char to the output stream.
+		/**	Write a single byte the output stream.
 		*/
-		virtual void put(const unsigned char c);
+		virtual void put(const Byte b);
 
-		/**	Write a signed short to the output stream.
+		/**	Write an Index to the output stream.
 		*/
-		virtual void put(const short s);
+		virtual void put(const Index i);
 
-		/**	Write an unsigned short to the output stream.
+		/**	Write a Size or a Position to the output stream.
 		*/
-		virtual void put(const unsigned short s);
-
-		/**	Write a signed integer to the output stream.
-		*/
-		virtual void put(const int s);
-
-		/**	Write an unsigned integer to the output stream.
-		*/
-		virtual void put(const unsigned int s);
-
-		/**	Write a signed long to the output stream.
-		*/
-		virtual void put(const long s);
-
-		/**	Write an unsigned long to the output stream.
-		*/
-		virtual void put(const unsigned long s);
-
-#ifndef BALL_64BIT_ARCHITECTURE
-		/**	Write a signed long long to the output stream.
-		*/
-		virtual void put(const long long s);
-
-		/**	Write an unsigned long long to the output stream.
-		*/
-		virtual void put(const unsigned long long s);
-#endif
+		virtual void put(const Size s);
 
 		/**	Write a boolean value to the output stream.
 		*/
@@ -260,11 +234,11 @@ namespace BALL
 
 		/**	Write a single precision floating point number to the output stream.
 		*/
-		virtual void put(const float f);
+		virtual void put(const Real f);
 
 		/**	Write a double precision floating point number to the output stream.
 		*/
-		virtual void put(const double d);
+		virtual void put(const DoubleReal d);
 
 		/**	Write a string to the output.
 		*/
@@ -272,7 +246,7 @@ namespace BALL
 
 		/**	Write a pointer to the output.
 		*/
-		virtual void put(const void* p);
+		virtual void put(const PointerSizeInt p);
 		//@}
 
 		/**	@name	Get methods for primitive data types.
@@ -283,43 +257,17 @@ namespace BALL
 		*/
 		virtual void get(char& c);
 
-		/**	Read an unsigned char from the input stream.
+		/**	Read a single byte from the input stream.
 		*/
-		virtual void get(unsigned char& c);
+		virtual void get(Byte& c);
 
-		/**	Read a signed short from the input stream.
+		/**	Read an Index from the input stream.
 		*/
-		virtual void get(short& s);
+		virtual void get(Index& s);
 
-		/**	Read an unsigned short from the input stream.
+		/**	Read a Size or a Position from the input stream.
 		*/
-		virtual void get(unsigned short& s);
-
-		/**	Read a signed integer from the input stream.
-		*/
-		virtual void get(int& s);
-
-		/**	Read an unsigned integer from the input stream.
-		*/
-		virtual void get(unsigned int& s);
-
-		/**	Read a signed long from the input stream.
-		*/
-		virtual void get(long& s);
-
-		/**	Read an unsigned long from the input stream.
-		*/
-		virtual void get(unsigned long& s);
-
-#ifndef BALL_64BIT_ARCHITECTURE
-		/**	Read a signed long long from the input stream.
-		*/
-		virtual void get(long long& s);
-
-		/**	Read an unsigned long long from the input stream.
-		*/
-		virtual void get(unsigned long long& s);
-#endif
+		virtual void get(Size& s);
 
 		/**	Read a boolean value from the input stream.
 		*/
@@ -327,11 +275,11 @@ namespace BALL
 
 		/**	Read a single precision floating point number from the input stream.
 		*/
-		virtual void get(float& f);
+		virtual void get(Real& f);
 
 		/**	Read a double precision floating point number from the input stream.
 		*/
-		virtual void get(double& d);
+		virtual void get(DoubleReal& d);
 
 		/**	Read a string from the output stream.
 		*/
@@ -339,7 +287,7 @@ namespace BALL
 
 		/**	Read a pointer from the input stream.
 		*/
-		virtual void get(void*& p);
+		virtual void get(PointerSizeInt& p);
 		//@}
 
 		private:

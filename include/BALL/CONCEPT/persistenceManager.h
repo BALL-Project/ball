@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.19 2000/10/30 21:50:14 oliver Exp $
+// $Id: persistenceManager.h,v 1.20 2000/12/12 16:18:08 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -208,7 +208,7 @@ namespace BALL
 		template <typename T>
 		bool checkObjectHeader(const T& /* object */, const char* name = 0)
 		{
-			LongPointerType ptr;
+			PointerSizeInt ptr;
 			return checkHeader(RTTI::getStreamName<T>(), name, ptr);
 		}
 
@@ -216,7 +216,7 @@ namespace BALL
 		*/
 		bool checkObjectHeader(const char* type_name)
 		{
-			LongPointerType ptr;
+			PointerSizeInt ptr;
 			return checkHeader(type_name, 0, ptr);
 		}
 
@@ -227,7 +227,7 @@ namespace BALL
 		{
 			object_out_.insert(object);
 
-			writeHeader(RTTI::getStreamName<T>(), name, (LongPointerType)(void*)object);
+			writeHeader(RTTI::getStreamName<T>(), name, (PointerSizeInt)(void*)object);
 		}
 
 		/**
@@ -301,7 +301,7 @@ namespace BALL
 			}
 
 			writeObjectPointerHeader(RTTI::getStreamName<T>(), name);
-			put((LongPointerType)(void*)object);
+			put((PointerSizeInt)(void*)object);
 			writePrimitiveTrailer();
 		}
  
@@ -315,12 +315,12 @@ namespace BALL
 				return false;
 			}
 
-			LongPointerType ptr;
+			PointerSizeInt ptr;
 			get(ptr);
 
 			if (ptr != 0)
 			{
-				pointer_list_.push_back(pair<void**, LongPointerType>((void**)&object, ptr));
+				pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&object, ptr));
 			}
 
 			object = (T*)ptr;
@@ -339,7 +339,7 @@ namespace BALL
 			}
 
 			writeObjectReferenceHeader(RTTI::getStreamName<T>(), name);
-			put((LongPointerType)(void*)&object);
+			put((PointerSizeInt)(void*)&object);
 			writePrimitiveTrailer();
 		} 
 
@@ -353,7 +353,7 @@ namespace BALL
 				return false;
 			}
 
-			LongPointerType ptr;
+			PointerSizeInt ptr;
 			get(ptr);
 
 			// store a zero in the corresponding pointer
@@ -365,7 +365,7 @@ namespace BALL
 
 			if (ptr != 0);
 			{
-				pointer_list_.push_back(pair<void**, LongPointerType>((void**)&object, ptr));
+				pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&object, ptr));
 			}
 
 			return checkPrimitiveTrailer();
@@ -422,7 +422,7 @@ namespace BALL
 			for (Position i = 0; i < size; i++)
 			{
 				ptr = (PersistentObject*)arr[i];
-				put((LongPointerType)(void*)ptr);
+				put((PointerSizeInt)(void*)ptr);
 				if (ptr != 0 && !object_out_.has(ptr))
 				{
 					object_out_needed_.push_back(ptr);
@@ -442,14 +442,14 @@ namespace BALL
 				return false;
 			}
 
-			LongPointerType ptr;
+			PointerSizeInt ptr;
 			for (Position i = 0; i < size; i++) 
 			{
 				get(ptr);
 
 				if (ptr != 0)
 				{
-					pointer_list_.push_back(pair<void**, LongPointerType>((void**)&(array[i]), ptr));
+					pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&(array[i]), ptr));
 				}
 
 				array[i] = (T*)ptr;
@@ -476,17 +476,17 @@ namespace BALL
 				The exact behaviour of this method is implementation dependend - it is abstract for
 				PersistenceManager.
 		*/
-		virtual void writeHeader(const char* type_name, const char* name, LongPointerType ptr) = 0;
+		virtual void writeHeader(const char* type_name, const char* name, PointerSizeInt ptr) = 0;
 
 		/**	Check for an object header.
 				@param type_name the stream name of the class to be read
 				@param name the expected name of the object 
-				@param ptr a reference to a {\tt LongPointerType} to store the {\tt this} pointer of the 
+				@param ptr a reference to a {\tt PointerSizeInt} to store the {\tt this} pointer of the 
 								object read from the stream
 				@return bool {\bf true}, if the header was correct, {\bf false} otherwise
 				@return ptr the pointer is set to the value read from the file
 		*/
-		virtual bool checkHeader(const char* type_name, const char* name, LongPointerType& ptr) = 0;
+		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr) = 0;
 
 		/**
 		*/
@@ -517,7 +517,7 @@ namespace BALL
 				The name (if set) is ignored. The type name is returned in {\tt type\_name}
 				and the address of the object is read but not inserted into the table.
 		*/
-		virtual bool getObjectHeader(String& type_name, LongPointerType& ptr) = 0;
+		virtual bool getObjectHeader(String& type_name, PointerSizeInt& ptr) = 0;
 
 		/**	Write a variable/member name.
 		*/
@@ -591,7 +591,6 @@ namespace BALL
 		*/
 		virtual bool checkObjectPointerArrayTrailer() = 0;
 
-
 		/**	Prepare the output stream for output
 		*/
 		virtual void initializeOutputStream();
@@ -611,6 +610,21 @@ namespace BALL
 		//@}
 
 		/**	@name	Put methods for primitive data types.
+				Persistence in BALL supports the following predefined data types:
+				\begin{tabular}{lcc}
+					Name & signed/unsigned & Size (in bit)\\
+					\hline
+					char & signed & 8\\
+					bool & - & 1\\
+					Byte & unsigned & 8\\
+					Index & signed & 32\\
+					Size/Position & unsigned & 32\\
+					PointerSizeInt & unsigned & 64\\
+					float & signed & 32\\
+					double & signed & 64\\
+					long double & signed & 128\\
+					String & - & -
+				\end{tabular}
 		*/
 		//@{
 		
@@ -618,45 +632,17 @@ namespace BALL
 		*/
 		virtual void put(const char c) = 0;
 
-		/**	Write an unsigned char to the output stream.
+		/**	Write a single byte to the output stream.
 		*/
-		virtual void put(const unsigned char c) = 0;
+		virtual void put(const Byte c) = 0;
 
-		/**	Write a signed short to the output stream.
+		/**	Write an Index to the output stream.
 		*/
-		virtual void put(const short s) = 0;
+		virtual void put(const Index i) = 0;
 
-		/**	Write an unsigned short to the output stream.
+		/**	Write a Position or a Size to the output stream.
 		*/
-		virtual void put(const unsigned short s) = 0;
-
-		/**	Write a signed integer to the output stream.
-		*/
-		virtual void put(const int s) = 0;
-
-		/**	Write an unsigned integer to the output stream.
-		*/
-		virtual void put(const unsigned int s) = 0;
-
-		/**	Write a signed long to the output stream.
-		*/
-		virtual void put(const long s) = 0;
-
-		/**	Write an unsigned long to the output stream.
-		*/
-		virtual void put(const unsigned long s) = 0;
-
-#ifndef BALL_64BIT_ARCHITECTURE
-		/**	Write a signed long long to the output stream.
-				Available on 32bit machines only!
-		*/
-		virtual void put(const long long s) = 0;
-
-		/**	Write an unsigned long long to the output stream.
-				Available on 32bit machines only!
-		*/
-		virtual void put(const unsigned long long s) = 0;
-#endif
+		virtual void put(const Size p) = 0;
 
 		/**	Write a boolean value to the output stream.
 		*/
@@ -664,19 +650,19 @@ namespace BALL
 
 		/**	Write a single precision floating point number to the output stream.
 		*/
-		virtual void put(const float f) = 0;
+		virtual void put(const Real f) = 0;
 
 		/**	Write a double precision floating point number to the output stream.
 		*/
-		virtual void put(const double d) = 0;
+		virtual void put(const DoubleReal d) = 0;
 
 		/**	Write a string to the output.
 		*/
 		virtual void put(const string& s) = 0;
 
-		/**	Write a pointer to the output.
+		/**	Write a pointer to the output.
 		*/
-		virtual void put(const void* p) = 0;
+		virtual void put(const PointerSizeInt p) = 0;
 
 		//@}
 
@@ -688,45 +674,17 @@ namespace BALL
 		*/
 		virtual void get(char& c) = 0;
 
-		/**	Read an unsigned char from the input stream.
+		/**	Read a single Byte from the input stream.
 		*/
-		virtual void get(unsigned char& c) = 0;
+		virtual void get(Byte& b) = 0;
 
-		/**	Read a signed short from the input stream.
+		/**	Read an Index from the input stream.
 		*/
-		virtual void get(short& s) = 0;
+		virtual void get(Index& s) = 0;
 
-		/**	Read an unsigned short from the input stream.
+		/**	Read a Size or a Position from the input stream.
 		*/
-		virtual void get(unsigned short& s) = 0;
-
-		/**	Read a signed integer from the input stream.
-		*/
-		virtual void get(int& s) = 0;
-
-		/**	Read an unsigned integer from the input stream.
-		*/
-		virtual void get(unsigned int& s) = 0;
-
-		/**	Read a signed long from the input stream.
-		*/
-		virtual void get(long& s) = 0;
-
-		/**	Read an unsigned long from the input stream.
-		*/
-		virtual void get(unsigned long& s) = 0;
-
-#ifndef BALL_64BIT_ARCHITECTURE
-		/**	Read a signed long from the input stream.
-				Available on 32bit machines only;
-		*/
-		virtual void get(long long& s) = 0;
-
-		/**	Read an unsigned long from the input stream.
-				Available on 32bit machines only;
-		*/
-		virtual void get(unsigned long long& s) = 0;
-#endif
+		virtual void get(Size& s) = 0;
 
 		/**	Read a boolean value from the input stream.
 		*/
@@ -734,19 +692,19 @@ namespace BALL
 
 		/**	Read a single precision floating point number from the input stream.
 		*/
-		virtual void get(float& f) = 0;
+		virtual void get(Real& f) = 0;
 
 		/**	Read a double precision floating point number from the input stream.
 		*/
-		virtual void get(double& d) = 0;
+		virtual void get(DoubleReal& d) = 0;
 
 		/**	Read a string from the output stream.
 		*/
 		virtual void get(string& s) = 0;
 
-		/**	Read a pointer from the input stream.
+		/**	Read a 64-bit pointer from the input stream.
 		*/
-		virtual void get(void*& p) = 0;
+		virtual void get(PointerSizeInt& p) = 0;
 		//@}
 
 
@@ -757,7 +715,7 @@ namespace BALL
 		*/
 		void registerKernelClasses_();
 
-		void addPointerPair_(LongPointerType old_ptr, void* new_ptr);
+		void addPointerPair_(PointerSizeInt old_ptr, void* new_ptr);
 				
 		void addNeededObjects_();
 
@@ -765,8 +723,8 @@ namespace BALL
 
 		typedef	HashSet<const PersistentObject*>			ObjectSet;
 		typedef	list<const PersistentObject*>					ObjectList;
-		typedef	HashMap<LongPointerType, void*>				PointerMap;
-		typedef	list<pair<void**, LongPointerType> >	PointerList;
+		typedef	HashMap<PointerSizeInt, void*>				PointerMap;
+		typedef	list<pair<void**, PointerSizeInt> >	PointerList;
 
 		StringHashMap<CreateMethod>		create_methods_;
 
@@ -779,7 +737,7 @@ namespace BALL
 		// been written themselves
 		ObjectList	object_out_needed_;
 
-		// a map relating the pointers read from the stream (LongPointerType)
+		// a map relating the pointers read from the stream (PointerSizeInt)
 		// with the pointers of the persistent objects that were created dynamically
 		PointerMap	pointer_map_;
 		
