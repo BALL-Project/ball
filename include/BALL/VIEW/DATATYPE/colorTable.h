@@ -1,30 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorTable.h,v 1.10 2003/08/26 08:04:57 oliver Exp $
+// $Id: colorTable.h,v 1.11 2003/12/01 15:36:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #	include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
-#include <iostream>
 #include <vector>
 
 namespace BALL 
 {
-
 	namespace VIEW 
 	{
 		/** This class is used to implement a color table that can be used to
@@ -101,7 +91,7 @@ namespace BALL
 				throw();
 
 			/// Decides if we should interpolate the alpha channel as well
-			void setAlphaBlending(const bool blending)
+			void setAlphaBlending(bool blending)
 				throw();
 
 			/// Returns true if the alpha channel is interpolated between colors, false otherwise.
@@ -139,14 +129,14 @@ namespace BALL
 			*/	
 			//@{
 
-			/**	
+			/**	Dump the content to an ostream
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			protected:
 
-			Index			color_number_;
+			Size 			color_number_;
 			bool			alpha_blending_;
 			ColorRGBA min_color_;
 			ColorRGBA	max_color_;
@@ -156,7 +146,6 @@ namespace BALL
 		};
   
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_DATATYPE_COLORTABLE_H
