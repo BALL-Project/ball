@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.9 2001/06/05 15:37:35 anker Exp $
+// $Id: baseIterator.h,v 1.10 2001/06/06 12:17:08 anker Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -290,7 +290,7 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const ConstBaseIterator& iterator, bool /* deep */ = true)
+	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const ConstBaseIterator& iterator, bool /* deep */)
 		throw()
 		:	previous_(0),
 			next_(ConstBaseIterator::getFirstIterator_())
