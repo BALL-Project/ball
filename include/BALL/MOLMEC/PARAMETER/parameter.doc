@@ -1,9 +1,5 @@
-// $Id: parameter.doc,v 1.2 2001/03/07 22:19:45 amoll Exp $
+// $Id: parameter.doc,v 1.3 2003/02/25 15:23:16 anhi Exp $
 
-/**	@name	Force Field Parameters
+/**	\defgroup MolmecParameters	Force Field Parameters
+* 	\ingroup Molmec
 */
-//@{
-
-	//@Include: *.h
-
-//@}

@@ -1,11 +1,5 @@
-// $Id: mdsimulation.doc,v 1.4 2001/07/11 23:59:32 amoll Exp $
+// $Id: mdsimulation.doc,v 1.5 2003/02/25 15:23:16 anhi Exp $
 
-/**	@name	Molecular Dynamics Simulation
+/**	\defgroup MDSimulation	Molecular Dynamics Simulation
+* 	\ingroup Molmec
 */
-//@{
-
-	//@Include: molecularDynamics.h
-	//@Include: microCanonicalMD.h
-	//@Include: canonicalMD.h
-
-//@}

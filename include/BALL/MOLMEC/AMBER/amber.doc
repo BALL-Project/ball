@@ -1,13 +1,5 @@
-// $Id: amber.doc,v 1.2 2001/03/07 22:19:44 amoll Exp $
+// $Id: amber.doc,v 1.3 2003/02/25 15:23:15 anhi Exp $
 
-/**	@name	AMBER Force Field.
-*/
-//@{
-
-	//@Include: amber.h
-	//@Include: amberBend.h
-	//@Include: amberNonBonded.h
-	//@Include: amberStretch.h
-	//@Include: amberTorsion.h
-
-//@}
+/**	\defgroup AMBER	AMBER Force Field.
+		\ingroup Molmec	
+ */

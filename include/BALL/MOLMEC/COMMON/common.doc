@@ -1,26 +1,10 @@
-// $Id: common.doc,v 1.7 2002/01/31 10:15:30 anker Exp $
+// $Id: common.doc,v 1.8 2003/02/25 15:23:15 anhi Exp $
 
-/**	@name	General Force Field Classes.
+/**	\defgroup MolmecCommon	General Force Field Classes.
+* 	\ingroup Molmec
 */
-//@{
 
-	//@Include: assignTypes.h
-	//@Include: atomVector.h
-	//@Include: forceField.h
-	//@Include: forceFieldComponent.h
-	//@Include: gradient.h
-	//@Include: periodicBoundary.h
-	//@Include: support.h
-	//@Include: snapShot.h
-	//@Include: snapShotManager.h
-	/**	@name	Rule-based parameter assignment
+/**	\defgroup MolmecAssignment Rule-based parameter assignment
+	* \ingroup Molmec
 	*/
-	//@{
-		//@Include: ruleEvaluator.h
-		//@Include: ruleProcessor.h
-		//@Include: chargeRuleProcessor.h  
-		//@Include: radiusRuleProcessor.h
-		//@Include: typenameRuleProcessor.h
-		//@Include: typeRuleProcessor.h
-	//@}
-//@}
+

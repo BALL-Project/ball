@@ -1,12 +1,5 @@
-// $Id: minimization.doc,v 1.4 2001/03/07 22:19:45 amoll Exp $
+// $Id: minimization.doc,v 1.5 2003/02/25 15:23:16 anhi Exp $
 
-/**	@name	Energy Minimizer
+/**	\defgroup MolmecEnergyMinimizer	Energy Minimizer
+* 	\ingroup Molmec
 */
-//@{
-
-	//@Include: energyMinimizer.h
-	//@Include: conjugateGradient.h 
-	//@Include:	lineSearch.h
-	//@Include: steepestDescent.h
-
-//@}

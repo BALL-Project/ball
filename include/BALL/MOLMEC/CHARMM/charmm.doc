@@ -1,14 +1,5 @@
-// $Id: charmm.doc,v 1.2 2001/03/07 22:19:44 amoll Exp $
+// $Id: charmm.doc,v 1.3 2003/02/25 15:23:15 anhi Exp $
 
-/**	@name	CHARMM Force Field.
+/**	\defgroup CHARMM	CHARMM Force Field.
+* 	\ingroup Molmec
 */
-//@{
-
-	//@Include: charmm.h
-	//@Include: charmmBend.h
-	//@Include: charmmNonBonded.h
-	//@Include: charmmStretch.h
-	//@Include: charmmImproperTorsion.h
-	//@Include: charmmTorsion.h
-
-//@}
