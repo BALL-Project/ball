@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.8 2001/03/11 22:00:54 anker Exp $
+// $Id: DCDFile.C,v 1.9 2001/03/21 16:22:14 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -239,7 +239,7 @@ namespace BALL
 
 		// now read the actual number of atoms
 		*this >> adapt_Size;
-		header_.number_of_atoms = adapt_Size.getData();
+		header_.number_of_atoms = number_of_atoms_ = adapt_Size.getData();
 
 		// and check the footer
 		*this >> adapt_Size;
@@ -350,11 +350,15 @@ namespace BALL
 		throw()
 	{
 		Size tmp;
-		// the number if atoms has to be read from the file header before ever
+
+		// the number of atoms has to be read from the file header before ever
 		// thinking of reading correct information
-		Size expected_noa = snapshot.getNumberOfAtoms();
+
+		Size expected_noa = getNumberOfAtoms();
+		snapshot.setNumberOfAtoms(expected_noa);
 		Size expected_size = 4 * expected_noa;
-		vector<Vector3> positions = snapshot.getAtomPositions();
+
+		vector<Vector3> positions(expected_noa);
 		BinaryFileAdaptor<Size> adaptSize;
 		BinaryFileAdaptor<Real> adaptReal;
 
@@ -374,6 +378,7 @@ namespace BALL
 				<< "expected " << expected_size << " but got " << tmp << endl;
 			return false;
 		}
+
 		// now read the x positions
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
@@ -388,7 +393,7 @@ namespace BALL
 			return false;
 		}
 
-		// the same proecedure for y coordinates
+		// the same proceedure for y coordinates
 
 		// header
 		*this >> adaptSize; tmp = adaptSize.getData();
@@ -402,7 +407,7 @@ namespace BALL
 		// data
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			*this >> adaptReal; positions[atom].x = adaptReal.getData();
+			*this >> adaptReal; positions[atom].y = adaptReal.getData();
 		}
 		// footer
 		*this >> adaptSize; tmp = adaptSize.getData();
@@ -428,7 +433,7 @@ namespace BALL
 		// data
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			*this >> adaptReal; positions[atom].x = adaptReal.getData();
+			*this >> adaptReal; positions[atom].z = adaptReal.getData();
 		}
 		// footer
 		*this >> adaptSize; tmp = adaptSize.getData();
@@ -442,11 +447,12 @@ namespace BALL
 
 		if (positions.size() == 0)
 		{
-			Log.error() << "DCDFile::append(): "
+			Log.error() << "DCDFile::read(): "
 				<< "No atom positions available" << endl;
 			return false;
 		}
 
+		snapshot.setAtomPositions(positions);
 		return true;
 	}
 
