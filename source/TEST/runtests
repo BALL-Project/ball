@@ -51,7 +51,7 @@ for i in $* ; do
 	rm $i.log 2>/dev/null
 
 	# run it and examine its return value
-	if ./$i 2>&1 >/dev/null ; then
+	if ./$i 2>/dev/null >/dev/null ; then
 		# test passed - OK
 		echo "OK"
 	else 
@@ -70,7 +70,7 @@ for i in $* ; do
 		# rerun it in verbose mode to find out which
 		# subtest failed
 		echo "Failure in test $i. Please check log file $i.log."
-		( ./$i -V 2>&1 >$i.log ) 2>/dev/null
+		( ./$i -V 2>&1 |cat > $i.log ) 2>/dev/null
 		if test -f core ; then
 			rm core
 		fi
