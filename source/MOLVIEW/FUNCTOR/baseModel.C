@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.12 2001/05/13 16:27:25 hekl Exp $
+// $Id: baseModel.C,v 1.13 2001/06/18 17:28:45 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -65,7 +65,7 @@ namespace BALL
 		{
 			clear_();
 
-			ExtendedPropertyManager::set(base_model_processor, deep);
+			ExtendedPropertyManager::set(base_model_processor);
 			find_geometric_object_.set(base_model_processor.find_geometric_object_, deep);
 			color_calculator_ = base_model_processor.color_calculator_;
 			model_connector_ = base_model_processor.model_connector_;

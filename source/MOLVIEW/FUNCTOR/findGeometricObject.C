@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.11 2001/05/13 15:02:39 hekl Exp $
+// $Id: findGeometricObject.C,v 1.12 2001/06/18 17:28:45 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -52,12 +52,12 @@ namespace BALL
 		}
 
 		void FindGeometricObjects::set
-			(const FindGeometricObjects &find_geometric_objects, bool deep)
+			(const FindGeometricObjects &find_geometric_objects, bool /* deep */)
 			throw()
 		{
 			clear();
 
-			ExtendedPropertyManager::set(find_geometric_objects, deep);
+			ExtendedPropertyManager::set(find_geometric_objects);
 		}
 
 		const FindGeometricObjects& FindGeometricObjects::operator =

@@ -1,4 +1,4 @@
-// $Id: baseModelConnector.C,v 1.5 2001/05/13 16:27:25 hekl Exp $
+// $Id: baseModelConnector.C,v 1.6 2001/06/18 17:28:45 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
 
@@ -23,7 +23,7 @@ namespace BALL
 			(const BaseModelConnector& connector, bool deep)
 			throw()
 			:	Visitor<Composite>(connector),
-				PropertyManager(connector, deep),
+				PropertyManager(connector),
 				searcher_(),
 				color_calculator_(connector.color_calculator_)
 		{
@@ -59,7 +59,7 @@ namespace BALL
 			 bool deep)
 			throw()
 		{
-			PropertyManager::set(connector, deep);
+			PropertyManager::set(connector);
 			
 			color_calculator_ = connector.color_calculator_;
 		}
