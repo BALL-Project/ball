@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.50 2003/05/05 20:43:30 oliver Exp $
+// $Id: HINFile.C,v 1.51 2003/05/06 19:40:11 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -291,7 +291,7 @@ namespace BALL
 			if (name != "")
 			{
 				// Make sure the name does not contain double quotes.
-				name.erase('"');
+				while (name.substitute("\"", "") != String::EndPos);
 				getFileStream() << "mol " << j + 1 << " \"" << name << "\"" << std::endl;
 			}
 			else
@@ -795,7 +795,12 @@ namespace BALL
 
 					if (getLine().countFields() > 2)
 					{
-						String name = getLine().after("mol ");
+						// Determine the thrid field (the molecule name).
+						// The name may (latest versions) be enclosed by double quotes.
+						std::vector<String> fields;
+						getLine().splitQuoted(fields, String::CHARACTER_CLASS__WHITESPACE, "\"");
+						String name(fields[2]);
+
 						if ((name != "") && (name != "-"))
 						{
 							// Remove leading/trailing blanks from the name.
