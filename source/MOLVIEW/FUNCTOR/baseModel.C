@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModel.C,v 1.16 2002/12/17 16:09:58 amoll Exp $
+// $Id: baseModel.C,v 1.17 2002/12/18 03:13:31 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -62,8 +62,7 @@ namespace BALL
 		{
 		}
 
-		void BaseModelProcessor::set
-			(const BaseModelProcessor& base_model_processor, bool deep)
+		void BaseModelProcessor::set(const BaseModelProcessor& base_model_processor, bool deep)
 			throw()
 		{
 			clear_();
@@ -74,24 +73,20 @@ namespace BALL
 			model_connector_ = base_model_processor.model_connector_;
 		}
 
-		const BaseModelProcessor& BaseModelProcessor::operator =
-			(const BaseModelProcessor& base_model_processor)
+		const BaseModelProcessor& BaseModelProcessor::operator = (const BaseModelProcessor& base_model_processor)
 			throw()
 		{
 			set(base_model_processor);
-
 			return *this;
 		}
 
-		void BaseModelProcessor::get
-			(BaseModelProcessor& base_model_processor, bool deep) const
+		void BaseModelProcessor::get(BaseModelProcessor& base_model_processor, bool deep) const
 			throw()
 		{
 			base_model_processor.set(*this, deep);
 		}
 
-		void BaseModelProcessor::swap
-			(BaseModelProcessor& base_model_processor)
+		void BaseModelProcessor::swap(BaseModelProcessor& base_model_processor)
 			throw()
 		{
 			ExtendedPropertyManager::swap(base_model_processor);
@@ -142,9 +137,9 @@ namespace BALL
 		bool BaseModelProcessor::isValid() const
 			throw()
 		{
-			return (ExtendedPropertyManager::isValid()
-							&& model_connector_->isValid()
-							&& find_geometric_object_.isValid());
+			return (ExtendedPropertyManager::isValid() && 
+										 model_connector_->isValid() && 
+								find_geometric_object_.isValid());
 		}
 
 		void BaseModelProcessor::dump(ostream& s, Size depth) const

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModel.h,v 1.13 2002/12/12 09:48:48 oliver Exp $
+// $Id: baseModel.h,v 1.14 2002/12/18 03:13:01 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -81,12 +81,10 @@ namespace BALL
 					@see         BaseModelConnector
 					@see         FindGeometricObjects
 			*/
-			BaseModelProcessor
-				(const BaseModelProcessor& base_model_processor, bool deep = true)
+			BaseModelProcessor(const BaseModelProcessor& base_model_processor, bool deep = true)
 			  throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -123,9 +121,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
-			
+			//@}
 			/**	@name	Assignment
 			*/
 			//@{
@@ -160,8 +157,7 @@ namespace BALL
 					@return      BaseModelProcessor& constant reference of {\em *this} baseModelProcessor
 					@see         set
 			*/
-			const BaseModelProcessor& operator =
-				(const BaseModelProcessor& base_model_processor)
+			const BaseModelProcessor& operator = (const BaseModelProcessor& base_model_processor)
 				throw();
 
 			/** Copying.
@@ -174,8 +170,7 @@ namespace BALL
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em base_model_processor}
 					@see         set
 			*/
-			void get
-				(BaseModelProcessor& base_model_processor, bool deep = true) const
+			void get(BaseModelProcessor& base_model_processor, bool deep = true) const
 				throw();
 
 			/** Swapping of baseModelProcessor's.
@@ -190,11 +185,10 @@ namespace BALL
 					@see         FindGeometricObject
 					@see         ColorCalculator
 			*/
-			void swap
-				(BaseModelProcessor& base_model_processor)
+			void swap(BaseModelProcessor& base_model_processor)
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -257,8 +251,7 @@ namespace BALL
 					@see     unregisterColorCalculator
 					@see     ColorCalculator
 			*/
-			void registerColorCalculator
-				(const ColorCalculator& color_calculator)
+			void registerColorCalculator(const ColorCalculator& color_calculator)
 				throw();
 
 			/** Unregister the colorCalculator.
@@ -286,8 +279,7 @@ namespace BALL
 					@see     unregisterBaseModelConnector
 					@see     BaseModelConnector
 			*/
-			void registerModelConnector
-				(const BaseModelConnector& model_connector)
+			void registerModelConnector(const BaseModelConnector& model_connector)
 				throw();
 
 			/** Unregister the baseModelConnector.
@@ -308,12 +300,12 @@ namespace BALL
 			*/
 			BaseModelConnector* getModelConnector()
 				throw();
-			//@}
 
-				
+			//@}
 			/**	@name Processor specific methods
 			*/
 			//@{
+			
 			/** Start method.
 					Set the properties of \Ref{FindGeometricObjects} search processor and the properties
 					of \Ref{BaseModelConnector} to the properties of {\em *this} baseModelProcessor
@@ -408,8 +400,8 @@ namespace BALL
 			*/
 			bool isDefaultColorCalculatorRegistered()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -439,17 +431,16 @@ namespace BALL
 					@param   s output stream where to output the state of {\em *this} atomBondModelConnector
 					@param   depth the dumping depth
 			*/
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
-			
 			protected:
 
+			//@}
 			/** @name Protected members
 			*/
 			//@{
+			
 			/** Mutable inspection of the search processor.
 					Access the mutable reference to \Ref{FindGeometricObjects} of {\em *this}
 					atomBondModelConnector.

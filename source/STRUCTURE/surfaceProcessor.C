@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.C,v 1.4 2002/12/17 15:54:07 anker Exp $
+// $Id: surfaceProcessor.C,v 1.5 2002/12/18 03:14:33 amoll Exp $
 
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 
@@ -38,20 +38,16 @@ namespace BALL
 		{
 			if (atom.getElement().getVanDerWaalsRadius() > 0.0)
 			{
-				spheres_.push_back(TSphere3<double>(position,
-													 vdw_factor_*atom.getElement().getVanDerWaalsRadius()
-													 + radius_offset_));
+				spheres_.push_back(TSphere3<double>(position, vdw_factor_*atom.getElement().getVanDerWaalsRadius() + radius_offset_));
 			}
 			else
 			{
-				spheres_.push_back(TSphere3<double>(position,
-							radius_offset_+vdw_factor_));
+				spheres_.push_back(TSphere3<double>(position, radius_offset_+vdw_factor_));
 			}
 		}
 		else
 		{
-			spheres_.push_back(TSphere3<double>(position, 
-						radius_offset_+vdw_factor_));
+			spheres_.push_back(TSphere3<double>(position, radius_offset_+vdw_factor_));
 		}
 		return Processor::CONTINUE;
 	}
@@ -62,7 +58,7 @@ namespace BALL
 		ReducedSurface* reduced_surface = new ReducedSurface(spheres_,probe_radius_);
 		reduced_surface->compute();
 
-		if (ses_ == true)
+		if (ses_)
 		{
 			SolventExcludedSurface* ses = new SolventExcludedSurface(reduced_surface);
 			ses->compute();
@@ -92,8 +88,9 @@ namespace BALL
 				delete surface;
 			}
 			delete ses;
-			std::cout << "    ProbeRadius: " << probe_radius_
-				<< "    Durchläufe: " << i;
+#ifdef BALL_DEBUG
+			Log.error() << "    ProbeRadius: " << probe_radius_ << "    Durchläufe: " << i << std::endl;
+#endif
 		}
 		else
 		{
@@ -145,4 +142,4 @@ namespace BALL
 		return spheres_;
 	}
 
-}
+} // namespace

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.7 2002/12/12 09:48:49 oliver Exp $
+// $Id: surfaceModel.h,v 1.8 2002/12/18 03:13:01 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -27,14 +27,11 @@ namespace BALL
 
 		/** AddSurfaceModel class.
 				The class AddSurfaceModel is a model processor that creates a surface model
-				of the given start \Ref{Composite} object. If the start composite object
-				is of kind \Ref{System} than the \Ref{SurfaceProcessor} is applied to it.
+				of the given start \Ref{Composite} object. 
 				A \Ref{Mesh} object is created and filled with the method \Ref{getSurface}
 				from the class \Ref{SurfaceProcessor}.
-				The derived class \Ref{AddGLSurfaceModel} uses the \Ref{GLMesh} with
-				openGL implementation.
-				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation. \\
+				The derived class \Ref{AddGLSurfaceModel} uses the \Ref{GLMesh} with openGL implementation.
+				For information about the processor concept see \Ref{Processor} in tbe BALL documentation. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/surfaceModel.h}
 				@see     Mesh
 				@see     SurfaceProcessor
@@ -63,12 +60,10 @@ namespace BALL
 					@return      AddSurfaceModel new constructed addSurfaceModel copied from {\em add_surface_model}
 					@see         BaseModelProcessor
 			*/
-			AddSurfaceModel
-				(const AddSurfaceModel& add_surface_model, bool deep = true)
+			AddSurfaceModel(const AddSurfaceModel& add_surface_model, bool deep = true)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -94,12 +89,12 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+
 			//@}
-
-
 			/**	@name Processor specific methods
 			*/
 			//@{
+			
 			/** Start method.
 					Clears all internal structures.
 					Calls \Ref{BaseModelProcessor::start}.
@@ -112,8 +107,6 @@ namespace BALL
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
 					has finished processing the \Ref{Composite} tree.
-					If the start \Ref{Composite} object determined by the \Ref{operator()} method
-					is of kind \Ref{System} than the \Ref{SurfaceProcessor} will be applied to it.
 					The created \Ref{Mesh} object will be filled with the method \Ref{getSurface}
 					from the \Ref{SurfaceProcessor}.
 					@return bool {\tt true} if the finish of {\em *this} addSurfaceModel was successful, {\tt false} otherwise
@@ -121,7 +114,6 @@ namespace BALL
 					@see    Mesh
 					@see    operator()
 					@see    Composite
-					@see    System
 					@see    SurfaceProcessor
 			*/
 			virtual bool finish();
@@ -137,11 +129,12 @@ namespace BALL
 					@see    Composite
 			*/
 			virtual Processor::Result operator() (Composite& composite);
-			//@}
 
+			//@}
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+			
 			/** Internal value dump.
 					Dump the current state of {\em *this} addSurfaceModel to 
 					the output ostream {\em s} with dumping depth {\em depth}.
@@ -150,13 +143,12 @@ namespace BALL
 					@param   depth the dumping depth
 					@see     BaseModelProcessor
 			*/
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
 			protected:
 
+			//@}
 			/** @name Creation method
 					This method creates a primitives without OpenGL implementation.
 					This method is overridden by the class \Ref{AddGLSurfaceModel}
@@ -165,6 +157,7 @@ namespace BALL
 					@see  AddGLSurfaceModel
 			*/
 			//@{
+			
 			/** Create a mesh.
 					Create a \Ref{Mesh} object.
 					This method is overridden by the class \Ref{AddGLSurfaceModel} to
@@ -176,13 +169,14 @@ namespace BALL
 					@see  Composite
 			*/
 			virtual Mesh* createMesh_();
+
 			//@}
 
 		  private:
 
-			bool get_composite_;
+			bool 				get_composite_;
 
-			Composite* start_composite_;
+			Composite* 	start_composite_;
 		};
 
 	} // namespace MOLVIEW
