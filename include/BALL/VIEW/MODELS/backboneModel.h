@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.4 2003/09/01 10:27:41 amoll Exp $
+// $Id: backboneModel.h,v 1.5 2003/10/18 10:59:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -9,10 +9,6 @@
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
 #	include <BALL/VIEW/MODELS/modelProcessor.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
-#include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -43,7 +39,7 @@ namespace BALL
 			  public:
 
 				SplinePoint() {}
-				SplinePoint(const Vector3& point, const ColorRGBA& color);
+				SplinePoint(const Vector3& point, const Atom* atom);
 				~SplinePoint() {}
 
 				void setVector(const Vector3& point) {point_ = point;}
@@ -52,14 +48,14 @@ namespace BALL
 				void setTangentialVector(const Vector3& tangent) {tangent_ = tangent;}
 				const Vector3 &getTangentialVector() const {return tangent_;}
 				
-				void setColor(const ColorRGBA& color) {color_ = color;}
-				const ColorRGBA &getColor() const {return color_;}
+				void setAtom(const Atom* atom) {atom_ = atom;}
+				const Atom* getAtom() const { return atom_;}
 
 			  private:
 
 				Vector3 point_;
 				Vector3 tangent_;
-				ColorRGBA color_;
+				const Atom* atom_;
 			};
 
 			public:
@@ -105,7 +101,7 @@ namespace BALL
 			/** Finish method.
 					This method will be internally called from the processor mechanism when the processor
 					has finished processing the Composite tree.
-					All previously inserted Atom objects and their calculated colors
+					All previously inserted Atom objects 
 					(inserted in the method operator()) will be used to create a backbone.
 					\return bool true if the finish was successful, false otherwise
 					@exeception OutOfMemory thrown if the memory allocation failed
@@ -117,12 +113,7 @@ namespace BALL
 					Composite tree. If a Composite is of kind Atom and has the
 					substring <b>CA</b> in its name (this method collects only <b>CA</b>-atoms) than
 					that atom	is stored for later processing in the finish method.
-					The color for that Atom object is calculated with the ColorCalculator
-					object retrieved with the method getColorCalculator() and stored for later
-					generation of the backbone model.
 					\param  composite the Composite object that will be processed
-					\see    ColorCalculator
-					\see    getColorCalculator()
 			*/
 			virtual Processor::Result operator() (Composite& composite);
 
@@ -145,7 +136,6 @@ namespace BALL
 
 			protected:
 			//_ init the spline array with both the positions from the atom list
-			//_ and the colors from the color list
 			void initSplineArray_();
 
 			//_ calculates to every splinepoint the tangential vector
@@ -156,8 +146,8 @@ namespace BALL
 			void createSplinePath_();
 			//_ create a spline segment between two spline points a and b
 			void createSplineSegment_(const SplinePoint &a, const SplinePoint &b);
-			//_ builds a graphical representation to this point with color
-			void buildGraphicalRepresentation_(const Vector3 &point, const ColorRGBA &color);
+			//_ builds a graphical representation to this point 
+			void buildGraphicalRepresentation_(const Vector3 &point, const Atom* atom);
 
 			//_
 			void createBackbone_()

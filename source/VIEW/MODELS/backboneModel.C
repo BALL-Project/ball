@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.5 2003/10/17 16:17:36 amoll Exp $
+// $Id: backboneModel.C,v 1.6 2003/10/18 10:59:16 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -18,10 +18,10 @@ namespace BALL
 	namespace VIEW
 	{
 
-		AddBackboneModel::SplinePoint::SplinePoint(const Vector3& point, const ColorRGBA& color)
+		AddBackboneModel::SplinePoint::SplinePoint(const Vector3& point, const Atom* atom)
 			: point_(point),
 				tangent_(),
-				color_(color)
+				atom_(atom)
 		{}
 
 		AddBackboneModel::AddBackboneModel()
@@ -97,12 +97,8 @@ namespace BALL
 						 residue.getFullName() == "NME-C" )
 						))
 				{
-					/*
-					getColorProcessor()->operator() (&*it);
-				
-					SplinePoint spline_point((*it).getPosition(), getColorProcessor()->getColor());
+					SplinePoint spline_point((*it).getPosition(), &*it);
 					spline_vector_.push_back(spline_point);
-					*/
 				}
 			}
 
@@ -123,7 +119,7 @@ namespace BALL
 		}
 
 
-		// creates the backbone representation from the given atom and atom colors list
+		// creates the backbone representation from the given atom 
 		void AddBackboneModel::createBackbone_()
 			throw()
 		{
@@ -207,14 +203,14 @@ namespace BALL
 
 				// build the objects
 				buildGraphicalRepresentation_
-					(new_vector, ((index <= max_step/2) ? a.getColor() : b.getColor()));
+					(new_vector, ((index <= max_step/2) ? a.getAtom() : b.getAtom()));
 			}
 		}
 
 
 		// builds a graphical representation to this point
 		void AddBackboneModel::buildGraphicalRepresentation_(const Vector3 &point, 
-																												 const ColorRGBA &color)
+																												 const Atom* atom)
 		{
 			if (have_start_point_)
 			{
@@ -227,7 +223,7 @@ namespace BALL
 				tube->setRadius(0.4);
 				tube->setVertex1(last_point_);
 				tube->setVertex2(point);
-				tube->setColor(color);
+				tube->setComposite(atom);
 				geometric_objects_.push_back(tube);
 			}
 			else
@@ -243,7 +239,7 @@ namespace BALL
 
 			sphere->setRadius(0.4);
 			sphere->setPosition(point);
-			sphere->setColor(color);
+			sphere->setComposite(atom);
 			geometric_objects_.push_back(sphere);
 		}
 
