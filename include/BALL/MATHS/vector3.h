@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.25 2000/03/14 21:35:11 oliver Exp $
+// $Id: vector3.h,v 1.26 2000/03/17 13:47:24 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -423,17 +423,6 @@ namespace BALL
 		*/
 		static TVector3 getPerpendicularNormalization
 			(const TVector3& a, const TVector3& b, const TVector3& c);
-
-		/**	Return the torsion angle of four vectors to eachother.
-				@param TVector3& a 1. vector
-				@param TVector3& b 2. vector
-				@param TVector3& c 3. vector
-				@param TVector3& d 4. vector
-				@return static TAngle the torsion angle
-		*/
-		static TAngle<T> getTorsionAngle
-			(const TVector3& a, const TVector3& b,
-			 const TVector3& c, const TVector3& d);
 
 		//@}
 	
@@ -909,37 +898,6 @@ namespace BALL
 			(diff1.y * diff2.z - diff1.z * diff2.y,
 			 diff1.z * diff2.x - diff1.x * diff2.z,
 			 diff1.x * diff2.y - diff1.y * diff2.x);
-	}
-
-	template <typename T>
-	TAngle<T> TVector3<T>::getTorsionAngle
-		(const TVector3<T> &a, const TVector3<T> &b, 
-		 const TVector3<T> &c, const TVector3<T> &d)
-	{
-		TVector3<T> ba(b.x - a.x, b.y - a.y, b.z - a.z);
-		TVector3<T> bc(b.x - c.x, b.y - c.y, b.z - c.z);
-		TVector3<T> cd(c.x - d.x, c.y - d.y, c.z - d.z);
-		TVector3<T> cross_ba_bc
-			(ba.y * bc.z - ba.z * bc.y,
-			 ba.z * bc.x - ba.x * bc.z,
-			 ba.x * bc.y - ba.y * bc.x);
-		
-		TVector3<T> cross_cd_bc
-			(cd.y * bc.z - cd.z * bc.y,
-			 cd.z * bc.x - cd.x * bc.z,
-			 cd.x * bc.y - cd.y * bc.x);
-		
-		TVector3<T> cross_cross_cd_bc_cross_ba_bc
-			(cross_cd_bc.y * cross_ba_bc.z - cross_cd_bc.z * cross_ba_bc.y,
-			 cross_cd_bc.z * cross_ba_bc.x - cross_cd_bc.x * cross_ba_bc.z,
-			 cross_cd_bc.x * cross_ba_bc.y - cross_cd_bc.y * cross_ba_bc.x);
-
-		if (Maths::isLess(cross_cross_cd_bc_cross_ba_bc * bc, 0))
-		{
-			return -cross_cd_bc.getAngle(cross_ba_bc);
-		} else {
-			return cross_cd_bc.getAngle(cross_ba_bc);
-		}
 	}
 
 	template <typename T>
