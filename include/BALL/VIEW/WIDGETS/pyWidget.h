@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.15 2004/04/19 17:09:37 amoll Exp $
+// $Id: pyWidget.h,v 1.16 2004/04/19 22:12:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -21,11 +21,31 @@
 
 #include <qtextedit.h>
 
+#ifdef BALL_QT_HAS_THREADS
+# include <qthread.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
 	{
 		class PythonSettings;
+
+		class RunPythonThread
+			: public QThread
+		{
+			public:
+				RunPythonThread()
+					throw();
+
+				///
+				virtual void run();
+
+				bool state;
+				String input;
+				String output;
+		};
+
 
 		/** Python Widget base class.
 		 		This class was added, because we had to overwrite some qt-methods.
@@ -150,16 +170,17 @@ namespace BALL
 
 			String getCurrentLine_();
 
-			bool						multi_line_mode_;
-			Size 						multi_lines_;
-			String					multi_line_text_;
-			vector<String>	history_;
-			vector<bool> 		results_;
-			Position				history_position_;
-			String					current_line_;
-			String 					startup_script_;
-			PythonSettings* python_settings_;
-			bool 						stop_script_;
+			bool							multi_line_mode_;
+			Size 							multi_lines_;
+			String						multi_line_text_;
+			vector<String>		history_;
+			vector<bool> 			results_;
+			Position					history_position_;
+			String						current_line_;
+			String 						startup_script_;
+			PythonSettings* 	python_settings_;
+			RunPythonThread* 	thread_;
+			bool 							stop_script_;
 		}; 
 
 
@@ -245,11 +266,11 @@ namespace BALL
 			virtual void stopInterpreter();
 			
 			///
-			bool toAbortScript() throw() { return text_edit_->stop_script_;}
+			bool toAbortScript() throw();
 
 			protected:
 
-			PyWidgetData* text_edit_;
+			PyWidgetData* 		text_edit_;
 		};
 
 	} // namespaces	

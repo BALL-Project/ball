@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.26 2004/04/19 17:27:56 amoll Exp $
+// $Id: pyWidget.C,v 1.27 2004/04/19 22:12:36 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -16,14 +16,30 @@
 
 #include <qscrollbar.h>
 #include <qfiledialog.h>
+#include <qapplication.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+#ifdef BALL_QT_HAS_THREADS
+		RunPythonThread::RunPythonThread()
+			throw()
+			: QThread(),
+				input(),
+				output()
+		{}
+
+		void RunPythonThread::run()
+		{
+			output = PyInterpreter::run(input, state);
+		}
+#endif
+
 		PyWidgetData::PyWidgetData(QWidget* parent, const char* name)
 			: QTextEdit(parent, name),
+				thread_(new RunPythonThread()),
 				stop_script_(false)
 		{
 			setWrapPolicy(QTextEdit::Anywhere);
@@ -38,6 +54,14 @@ namespace BALL
 		PyWidgetData::~PyWidgetData()
 			throw()
 		{	
+#ifdef BALL_QT_HAS_THREADS
+			if (thread_->running())
+			{
+				thread_->wait(500);
+				thread_->terminate();
+			}
+			delete thread_;
+#endif
 		}
 
 
@@ -49,6 +73,7 @@ namespace BALL
 
 		void PyWidgetData::startInterpreter()
 		{
+			stop_script_ = false;
 			// initialize the interpreter
 			PyInterpreter::initialize();
 
@@ -147,12 +172,6 @@ namespace BALL
 				return false;
 			}
 
-			if (stop_script_) 
-			{
-				stop_script_ = false;
-				return true;
-			}
-
 			// check for comments
 			String temp(line);
 			temp.trim();
@@ -198,9 +217,26 @@ namespace BALL
 				line = multi_line_text_ + "\n";
 			}
 
+			bool state = true;
 			bool ok = true;
-			bool state;
-			String result = PyInterpreter::run(line, state);
+		  String result;
+#ifndef BALL_QT_HAS_THREADS
+			result = PyInterpreter::run(line, state);
+#else
+			thread_->input = line;
+			thread_->start();
+
+			while (thread_->running()) 
+			{
+				qApp->wakeUpGuiThread();
+				qApp->processEvents(500);
+				thread_->wait(50);
+			}
+
+			result = thread_->output;
+			state = thread_->state;
+#endif
+
 			if (result != "") 
 			{
 				if (result.hasSubstring("ERROR"))
@@ -252,7 +288,6 @@ namespace BALL
 		bool PyWidgetData::parseLine_()
 		{
 			String line = current_line_.getSubstring(4);
-			stop_script_ = false;
 			return parseLine_(line);
 		}
 
@@ -350,6 +385,7 @@ namespace BALL
 
 		void PyWidgetData::runFile(const String& filename)
 		{
+			stop_script_ = false;
 			append(String("> running File " + filename + "\n").c_str());
 			LineBasedFile file;
 			try
@@ -372,8 +408,18 @@ namespace BALL
 					newPrompt_();
 					return;
 				}
+
+				if (stop_script_) 
+				{
+					stop_script_ = false;
+					((PyWidget*)parent())->setStatusbarText("Aborted script");
+					append("> aborted...");
+					newPrompt_();
+					return;
+				}
 			}
 			append("> finished...");
+			((PyWidget*)parent())->setStatusbarText("finished script");
 			newPrompt_();
 		}
 
@@ -488,6 +534,7 @@ namespace BALL
 		{
 			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
 			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
+			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Abort Python Script", text_edit_, SLOT(abortScript()));
 			main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
 			DockWidget::finalizeWidget(main_control);
@@ -567,13 +614,18 @@ namespace BALL
 		void PyWidgetData::abortScript()
 		{
 			((PyWidget*)(parent()))->setStatusbarText("Aborting Python script");
-			stop_script_ = true;
+			 stop_script_ = true;
 		}
 
 		PyWidget::PyWidget(const PyWidget& p)
 			throw()
 		 : DockWidget(p)
 		{}
+
+		bool PyWidget::toAbortScript() throw() 
+		{
+			return text_edit_->stop_script_;
+		}
 
 	} // namespace VIEW
 } // namespace BALL
