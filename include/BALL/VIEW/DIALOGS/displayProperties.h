@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.22 2003/12/09 12:36:19 amoll Exp $
+// $Id: displayProperties.h,v 1.23 2004/01/16 15:26:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -190,10 +190,6 @@ namespace BALL
 			/// Switch to the mode, that an existing Representation will be modified
 			void modifyRepresentationMode();
 				
-			protected slots:
-					
-			//@} /** @name Protected slots */ //@{
-					
 			/** Changes the model.
 					This slot is connected to the model combo box and will be automatically
 					called if the content of this combo box is changed.
