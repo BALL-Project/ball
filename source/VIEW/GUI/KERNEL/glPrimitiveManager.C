@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.C,v 1.6 2001/05/27 10:31:24 hekl Exp $
+// $Id: glPrimitiveManager.C,v 1.7 2001/06/06 13:57:12 anker Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 
@@ -832,7 +832,7 @@ namespace BALL
 				return 0;
 			}
 
-			GeometricObjectHashMap::Iterator it = name_to_object_.find(name);
+			GeometricObjectHashMap::ConstIterator it = name_to_object_.find(name);
 
 			return it->second;
 		}
