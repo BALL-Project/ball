@@ -1,4 +1,4 @@
-// $Id: energyProcessor.h,v 1.2 2000/08/31 16:24:15 anker Exp $
+// $Id: energyProcessor.h,v 1.3 2000/08/31 21:14:40 oliver Exp $
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #define BALL_ENERGY_ENERGYPROCESSOR_H
@@ -69,7 +69,7 @@ namespace BALL
 		/** Start-function. */
 		virtual bool start();
 
-		/** Operator-function. This function only stores the BaseFragment. */
+		/** Operator-function. This function only stores the AtomContainer. */
 		virtual Processor::Result operator () (AtomContainer& fragment);
 		
 		//@}
