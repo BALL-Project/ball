@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: defaultProcessors.C,v 1.2 1999/09/07 13:48:29 len Exp $
 
 #include <BALL/KERNEL/defaultProcessors.h>
 
@@ -56,7 +56,7 @@ namespace BALL
 
 	Processor::Result AssignRadiusProcessor::operator () (Atom& atom)
 	{
-		String		name;
+		String		name(":");
 		String		atom_name;
 		String		res_name;
 		float			radius;
@@ -76,9 +76,6 @@ namespace BALL
 			{
 				name = "-C:";
 			}
-
-		} else {
-			name = ":";
 		}
 
 		Fragment* frag = atom.getFragment();
@@ -187,7 +184,7 @@ namespace BALL
 
 	Processor::Result AssignChargeProcessor::operator () (Atom& atom)
 	{
-		String		name;
+		String		name(":");
 		String		atom_name;
 		String		res_name;
 		float			charge;
@@ -206,9 +203,6 @@ namespace BALL
 			{
 				name = "-C:";
 			}
-
-		} else {
-			name = ":";
 		}
 
 		Fragment* frag = atom.getFragment();
