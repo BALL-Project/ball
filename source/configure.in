@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.9 2002/01/03 01:53:02 oliver Exp $
+dnl    $Id: configure.in,v 1.10 2002/01/08 00:48:03 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2202,6 +2202,24 @@ else
 	AC_SUBST(BALL_HAS_XDR)
 fi
 
+dnl
+dnl		check whether LEX and YACC exist (for SMILES parser)
+dnl
+AC_PROG_LEX
+AC_PROG_YACC
+if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
+	BALL_HAS_FLEX_YACC=false
+	AC_DEFINE(BALL_HAS_FLEX_YACC, false)
+	AC_MSG_RESULT(flex and yacc/bison required! Disabling smiles parser.)
+else
+	BALL_HAS_FLEX_YACC=true
+	AC_DEFINE(BALL_HAS_FLEX_YACC, true)
+	LIBS="${LIBS} ${LEXLIB}"
+fi
+
+AC_SUBST(BALL_HAS_FLEX_YACC)
+AC_SUBST(LEX)
+AC_SUBST(YACC)
 
 dnl
 dnl   check whether ieeefp.h does really exist
