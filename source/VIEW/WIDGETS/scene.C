@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.20 2003/10/28 00:23:18 amoll Exp $
+// $Id: scene.C,v 1.21 2003/11/03 16:52:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1483,7 +1483,9 @@ void Scene::exportPNG()
 
 void Scene::customEvent( QCustomEvent * e )
 {
-	if ( e->type() == 65432 ) {  // It must be a SceneUpdateEvent
+	// It must be a SceneUpdateEvent
+	if ( e->type() == (QEvent::Type)SCENE_UPDATE_EVENT) 
+	{  
 		update(true);
 	}
 }
