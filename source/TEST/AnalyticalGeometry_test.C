@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.13 2000/03/26 16:33:51 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.14 2000/03/29 13:34:48 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.13 2000/03/26 16:33:51 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.14 2000/03/29 13:34:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,23 +33,27 @@ RESULT
 
 //line90
 CHECK(GetDeterminant(const T* m, Size dim))
-	float m[16], x, x1;
-	for (int i = 0; i < 15 ; i++ )
+	float m[16];
+	float x, x1;
+	for (Size i = 0; i < 16; i++ )
 	{
 		m[i] = (float) i;
 	}
+	m[5] = (float)6;
+	m[6] = (float)5;
 	x = GetDeterminant(m, 4);
-	m[0] = 4;
-	m[1] = 5;
-	m[2] = 6;
-	m[3] = 7;
-	m[4] = 0;
-	m[5] = 1;
-	m[6] = 2;
-	m[7] = 3;
+
+	m[0] = (float)4;
+	m[1] = (float)6;
+	m[2] = (float)5;
+	m[3] = (float)7;
+	m[4] = (float)0;
+	m[5] = (float)1;
+	m[6] = (float)2;
+	m[7] = (float)3;
 	x1 = GetDeterminant(m, 4);
 	TEST_REAL_EQUAL(-x, x1)
-	for (int i = 0; i < 15 ; i++ )
+	for (int i = 0; i < 16 ; i++ )
 	{
 		m[i] = (float) i * 2;
 	}
