@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.24 2001/02/10 20:00:59 amoll Exp $ 
+// $Id: hashMap.h,v 1.25 2001/03/06 13:08:49 balltest Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -29,6 +29,10 @@
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
+#endif
+
+#ifndef BALL_COMMON_EXCEPTION_H
+#	include <BALL/COMMON/exception.h>
 #endif
 
 #include <algorithm>
@@ -208,7 +212,8 @@ namespace BALL
 				@exception IllegalKey if the given key does not exist
 				@param	key the key
 		*/
-		const T& operator [] (const Key& key) const throw(IllegalKey);
+		const T& operator [] (const Key& key) const 
+			throw(IllegalKey);
 
 		/**	Insert a new entry into the hash map.
 		*/
@@ -749,7 +754,7 @@ namespace BALL
 	template <class Key, class T>
 	BALL_INLINE 
 	const T& HashMap<Key, T>::operator [] (const Key& key) const
-		throw(IllegalKey)
+		throw(HashMap<Key, T>::IllegalKey)
 	{
 		Iterator it = find(key);
 		if (it == end())
