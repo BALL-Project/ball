@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.4 1999/12/19 17:18:46 oliver Exp $
+// $Id: common.h,v 1.5 2000/01/08 20:30:17 hekl Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -11,7 +11,6 @@
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-#include <iostream>
 
 #define BALL_MOLVIEW_PRINT_PROPERTY(property) \
 	(hasProperty(property) ? "yes" : "no")
@@ -42,6 +41,8 @@ namespace BALL
 			VALUE__MODEL_BALL_AND_STICK = 3,
 			VALUE__MODEL_VAN_DER_WAALS  = 4,
 			VALUE__MODEL_REMOVE         = 5,
+			VALUE__SELECT               = 20,
+			VALUE__DESELECT             = 21,
 
 			VALUE__DRAWING_PRECISION_LOW    = 0,
 			VALUE__DRAWING_PRECISION_MEDIUM = 1,

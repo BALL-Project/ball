@@ -1,4 +1,4 @@
-// $Id: removeModel.C,v 1.2 1999/12/28 18:00:46 oliver Exp $
+// $Id: removeModel.C,v 1.3 2000/01/08 20:32:53 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 
@@ -92,7 +92,6 @@ namespace BALL
 		RemoveModel::start
 			()
 		{
-			Log.info() << "entring RemoveModel::start()" << endl;
 			used_atoms_.clear();
 			getSearcher().clear();
 
@@ -105,7 +104,6 @@ namespace BALL
 		RemoveModel::finish
 			()
 		{
-			Log.info() << "entring RemoveModel::finish()" << endl;
 			// generate StickPrimitives
 			Atom *first__pAtom = 0;
 			Atom *second__pAtom = 0;
@@ -168,7 +166,6 @@ namespace BALL
 		RemoveModel::operator()
 			(Atom &atom)
 		{
-			Log.info() << "entering RemoveModel::operator()" << endl;
 			// check if there are already models appended
 			atom.applyChild(getSearcher());
 
@@ -178,8 +175,6 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
-
-			Log.info() << "entering RemoveModel::operator()(...)" << endl;
 			// collect atom with geometric object for deletion
 			used_atoms_.push_back(&atom);
 

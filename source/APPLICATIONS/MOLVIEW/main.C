@@ -4,7 +4,7 @@
 
 #include <BALL/VIEW/OPENGL/KERNEL/server.h>
 
-#include <BALL/MOLVIEW/APPLICATION/mainframe.h>
+#include "mainframe.h"
 #include <BALL/MOLVIEW/OPENGL/KERNEL/moleculeObjectCreator.h>
 
 

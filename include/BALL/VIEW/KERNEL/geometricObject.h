@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.3 1999/12/28 18:37:47 oliver Exp $
+// $Id: geometricObject.h,v 1.4 2000/01/08 20:32:19 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -55,6 +55,8 @@ namespace BALL
 			friend class Scene;
 
 			public:
+			
+			BALL_CREATE(GeometricObject)
 			
 			/**	@name	Enums
 			*/

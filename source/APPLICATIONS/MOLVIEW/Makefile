@@ -13,6 +13,6 @@ OBJECTS=\
 	mainframe.o\
 	mainframe_moc.o
 
-molview:	$(OBJECTS)
+molview:	$(OBJECTS) 
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(BALLVIEW_LIBS)
 

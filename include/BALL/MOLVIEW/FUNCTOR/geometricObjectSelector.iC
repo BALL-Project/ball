@@ -1,0 +1,46 @@
+// $Id: geometricObjectSelector.iC,v 1.1 2000/01/08 20:31:27 hekl Exp $
+
+BALL_INLINE
+void 
+GeometricObjectSelector::setSelectionColor
+  (const ColorRGBA &color)
+{
+	selection_color_ = color;
+}
+
+BALL_INLINE
+const ColorRGBA &
+GeometricObjectSelector::getSelectionColor
+  (void) const
+{
+	return selection_color_;
+}
+
+BALL_INLINE
+void 
+GeometricObjectSelector::useSelectionColor()
+{
+	selection_ = true;
+}
+
+BALL_INLINE
+void 
+GeometricObjectSelector::useObjectColor()
+{
+	selection_ = false;
+}
+
+BALL_INLINE
+bool 
+GeometricObjectSelector::isSelectionColorUsed()
+{
+	return (bool)(selection_ == true);
+}
+
+BALL_INLINE
+bool 
+GeometricObjectSelector::isObjectColorUsed()
+{
+	return (bool)(selection_ == false);
+}
+

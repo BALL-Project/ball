@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.3 1999/12/28 18:00:45 oliver Exp $
+// $Id: ballAndStickModel.C,v 1.4 2000/01/08 20:32:52 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -292,7 +292,7 @@ namespace BALL
 
 		void 
 		AddBallAndStickModel::dump
-			(ostream& s, Size depth) const
+			(std::ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -318,14 +318,14 @@ namespace BALL
 
 		void 
 		AddBallAndStickModel::read
-			(istream & /* s */)
+			(std::istream & /* s */)
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void 
 		AddBallAndStickModel::write
-			(ostream & /* s */) const
+			(std::ostream & /* s */) const
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

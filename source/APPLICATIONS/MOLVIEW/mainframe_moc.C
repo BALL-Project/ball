@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Mainframe meta object code from reading C++ file 'mainframe.h'
 **
-** Created: Sat Oct 30 14:45:51 1999
-**      by: The Qt Meta Object Compiler ($Revision: 1.1 $)
+** Created: Thu Dec 30 18:22:22 1999
+**      by: The Qt Meta Object Compiler ($Revision: 1.2 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -14,7 +14,7 @@
 #error "Moc format conflict - please regenerate all moc files"
 #endif
 
-#include <BALL/MOLVIEW/APPLICATION/mainframe.h>
+#include "mainframe.h"
 #include <qmetaobject.h>
 #include <qapplication.h>
 
@@ -67,18 +67,34 @@ void Mainframe::staticMetaObject()
     typedef void(Mainframe::*m1_t0)();
     typedef void(Mainframe::*m1_t1)();
     typedef void(Mainframe::*m1_t2)();
+    typedef void(Mainframe::*m1_t3)();
+    typedef void(Mainframe::*m1_t4)(QString);
+    typedef void(Mainframe::*m1_t5)(bool,bool);
+    typedef void(Mainframe::*m1_t6)(bool);
     m1_t0 v1_0 = Q_AMPERSAND Mainframe::importPDB;
     m1_t1 v1_1 = Q_AMPERSAND Mainframe::importHIN;
-    m1_t2 v1_2 = Q_AMPERSAND Mainframe::about;
-    QMetaData *slot_tbl = QMetaObject::new_metadata(3);
+    m1_t2 v1_2 = Q_AMPERSAND Mainframe::exportPovray;
+    m1_t3 v1_3 = Q_AMPERSAND Mainframe::about;
+    m1_t4 v1_4 = Q_AMPERSAND Mainframe::displayString;
+    m1_t5 v1_5 = Q_AMPERSAND Mainframe::updateEditMenuFromSelection;
+    m1_t6 v1_6 = Q_AMPERSAND Mainframe::updateEditMenuFromCutOrCopy;
+    QMetaData *slot_tbl = QMetaObject::new_metadata(7);
     slot_tbl[0].name = "importPDB()";
     slot_tbl[1].name = "importHIN()";
-    slot_tbl[2].name = "about()";
+    slot_tbl[2].name = "exportPovray()";
+    slot_tbl[3].name = "about()";
+    slot_tbl[4].name = "displayString(QString)";
+    slot_tbl[5].name = "updateEditMenuFromSelection(bool,bool)";
+    slot_tbl[6].name = "updateEditMenuFromCutOrCopy(bool)";
     slot_tbl[0].ptr = *((QMember*)&v1_0);
     slot_tbl[1].ptr = *((QMember*)&v1_1);
     slot_tbl[2].ptr = *((QMember*)&v1_2);
+    slot_tbl[3].ptr = *((QMember*)&v1_3);
+    slot_tbl[4].ptr = *((QMember*)&v1_4);
+    slot_tbl[5].ptr = *((QMember*)&v1_5);
+    slot_tbl[6].ptr = *((QMember*)&v1_6);
     metaObj = QMetaObject::new_metaobject(
 	"Mainframe", "QWidget",
-	slot_tbl, 3,
+	slot_tbl, 7,
 	0, 0 );
 }

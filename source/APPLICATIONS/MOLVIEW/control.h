@@ -1,7 +1,7 @@
-// $Id: control.h,v 1.1 2000/01/08 12:29:38 oliver Exp $
+// $Id: control.h,v 1.2 2000/01/08 20:34:07 hekl Exp $
 
-#ifndef BALL_MOLVIEW_APPLICATION_CONTROL_H
-#define BALL_MOLVIEW_APPLICATION_CONTROL_H
+#ifndef BALL_APPLICATIONS_MOLVIEW_CONTROL_H
+#define BALL_APPLICATIONS_MOLVIEW_CONTROL_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -46,6 +46,10 @@
 #ifndef BALL_KERNEL_SYSTEM_H
 # include <BALL/KERNEL/system.h>
 #endif
+        
+#ifndef BALL_STRUCTURE_RESIDUECHECKER_H
+# include <BALL/STRUCTURE/residueChecker.h>
+#endif
 
 #ifndef BALL_VIEW_OPENGL_KERNEL_SCENE_H
 #	include <BALL/VIEW/OPENGL/KERNEL/scene.h>
@@ -62,6 +66,11 @@
 using namespace BALL;
 using namespace BALL::VIEW;
 using namespace BALL::MOLVIEW;
+
+
+#define CONTROL__TYPE_AND_NAME \
+selected_type__mQString_.ascii(), selected_name__mQString_.ascii()
+
 
 /**
  */
@@ -87,6 +96,13 @@ class Control
 			TYPE__RESIDUE              = 5,
 			TYPE__SECONDARY_STRUCTURE  = 6,
 			TYPE__ATOM                 = 7
+		};
+
+	  enum ColumnID
+		{
+			COLUMN_ID__NAME      = 0,
+			COLUMN_ID__TYPE      = 1,
+			COLUMN_ID__ADDRESS   = 6
 		};
   	//@}
 		
@@ -147,16 +163,67 @@ class Control
 	  static QString getName
 			(Composite *__pComposite);
 
+
+		void outputStatus
+			(QString message__QString, 
+			 bool prefix__bool = true, 
+			 bool composed_prefix__bool = true);
+
+		// --- DEBUGGERS and DIAGNOSTICS
+
+		// --- STORERS
+		
+		// --- EXTERNAL ITERATORS
+
+
   public slots:
 
 		void ContextMenu
 		  (QListViewItem *__pQListViewItem, 
 			 const QPoint &__rQPoint,
 			 int column__i);
+
+	  void objectSelected
+			(QListViewItem *__pQListViewItem);
 		
+	  void cut();
+		void copy();
+		void paste();
+
+		void buildBonds();
+		void removeBonds();
+
+		void select();
+		void deselect();
+
+		void checkResidue();
+
+		void removeObject();
+
+		void centerCamera();
+
+		void changeDisplay();
+
+		void clearClipboard();
+
+  signals:
+
+	  void writeText(QString __QString);
+
+		void itemSelected(bool selected__bool, bool residue__bool);
+		void itemCutOrCopied(bool copied__bool);
+
+	
   protected:
 
   private:
+
+		QListViewItem *_getRoot(QListViewItem *__pQListViewItem);
+		QString _getRootName(QListViewItem *__pQListViewItem);
+		QString _getName(QListViewItem *__pQListViewItem);
+		QString _getTypeName(QListViewItem *__pQListViewItem);
+		QString _getRootTypeName(QListViewItem *__pQListViewItem);
+		Composite *_getCompositeAddress(QListViewItem *__pQListViewItem);
 
 	  void _genListViewItem
 			(QListViewItem *__pQListViewItem,
@@ -168,11 +235,20 @@ class Control
 
 		Scene *__mpScene_;
     MoleculeObjectProcessor *__mpMoleculeObjectProcessor_;
+
+		Composite *selected__mpComposite_;
+		QListViewItem *selected__mpQListViewItem_;
+		QString selected_name__mQString_;
+		QString selected_root_name__mQString_;
+		QString selected_type__mQString_;
+		QString selected_root_type__mQString_;
+
+		Composite *copied__mpComposite_;
 };
 
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/APPLICATION/control.iC>
+#			include "control.iC"
 #		endif
 
-#endif // BALL_MOLVIEW_APPLICATION_CONTROL_H_
+#endif // BALL_MOLVIE_APPLICATIONS_MOLVIEW_CONTROL_H_

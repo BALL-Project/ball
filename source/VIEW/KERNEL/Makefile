@@ -14,6 +14,7 @@ CPP_SOURCES=\
 	normal.C\
 	QTTimer.C\
 	radius.C\
+	timerTextView.C\
 	vertex1.C\
 	vertex2.C
 

@@ -7,6 +7,7 @@ CPP_SOURCES=\
 	baseModel.C\
 	colorCalculator.C\
 	findGeometricObject.C\
+	geometricObjectSelector.C\
 	lineModel.C\
 	removeModel.C\
 	vanDerWaalsModel.C

@@ -1,17 +1,29 @@
-// $Id: control.C,v 1.1 2000/01/07 10:43:41 oliver Exp $
+// $Id: control.C,v 1.2 2000/01/08 20:34:07 hekl Exp $
 
-#include <BALL/MOLVIEW/APPLICATION/control.h>
+#include "control.h"
 
 Control::Control
   (QWidget* parent__pQWidget, 
 	 const char* name__pc)
-		:	QListView(parent__pQWidget, name__pc)
+		:	QListView(parent__pQWidget, name__pc),
+			selected__mpComposite_(0),
+			selected__mpQListViewItem_(0),
+			selected_name__mQString_("unkown"),
+			selected_root_name__mQString_("unkown"),
+			selected_type__mQString_("unkown"),
+			selected_root_type__mQString_("unkown"),
+			copied__mpComposite_(0)
 {
 	setRootIsDecorated(TRUE);
+	//	setMultiSelection(TRUE);
 
 	connect(this, 
 					SIGNAL(rightButtonClicked(QListViewItem *, const QPoint &, int)),
 					SLOT(ContextMenu(QListViewItem *, const QPoint &, int)));
+
+	connect(this,
+					SIGNAL(selectionChanged(QListViewItem *)),
+					SLOT(objectSelected(QListViewItem *)));
 }
 
 Control::~Control
@@ -45,6 +57,9 @@ Control::addComposite
 			name__QString = *name__pQString;
 		}
 	}
+
+	// status text
+	outputStatus(QString("checking scene integrity ..."), true, false);
 
 	// test, if composite is already inserted into scene
 	CompositeManager *__pCompositeManager 
@@ -84,6 +99,12 @@ Control::addComposite
 		}
 	}
 
+	// status text
+	outputStatus(QString(" done.\n"), false);
+
+	// status text
+	outputStatus(QString("generating new scene object ..."), true, false);
+
 	// insert the composite into scene
 	// create a tempory CompositeDescriptor
 	CompositeDescriptor __CompositeDescriptor;
@@ -105,15 +126,33 @@ Control::addComposite
 	// get the new cloned composite
 	Composite *new__pComposite = new__pCompositeDescriptor->getComposite();
 
+	// status text
+	outputStatus(QString(" done.\n"), false);
+
+	// status text
+	outputStatus(QString("generating graphical representation ..."), true, false);
+
 	// use specified object processor for building the visible object
 	// and setting the properties
-	__mpMoleculeObjectProcessor_->apply(*new__pComposite);
+	__mpMoleculeObjectProcessor_->applyOn(*new__pComposite);
 	
 	// set the center of the composite
 	new__pCompositeDescriptor->setCenter(__mpMoleculeObjectProcessor_->getViewCenter());
 
+	// status text
+	outputStatus(QString(" done.\n"), false);
+
+	// status text
+	outputStatus(QString("generating tree representation ..."), true, false);
+
 	// generate ListViewItem
 	_genListViewItem(0, new__pComposite, &name__QString);
+
+	// status text
+	outputStatus(QString(" done.\n"), false);
+
+	// status text
+	outputStatus(QString("setting up scene ..."), true, false);
 
 	// set the camera on the the new composite
 	__mpScene_->camera.
@@ -123,6 +162,9 @@ Control::addComposite
 
 	// update the scene
 	__mpScene_->update();
+
+	// status text
+	outputStatus(QString(" done.\n"), false);
 
 	return true;
 }
@@ -187,6 +229,11 @@ Control::getType
   (Composite *__pComposite)
 {
 	Control::Type __Type = TYPE__UNKOWN;
+
+	if (__pComposite == 0)
+	{
+		return __Type;
+	}
 
 	if (RTTI::isKindOf<System>(*__pComposite))
 	{
@@ -270,7 +317,7 @@ Control::getName
 	  case TYPE__RESIDUE:
 			{
 				Residue *residue_ptr = RTTI::castTo<Residue>(*__pComposite);
-				__QString = (residue_ptr->getName() + ": " + residue_ptr->getID()).c_str();
+				__QString = (residue_ptr->getName() + " " + residue_ptr->getID()).c_str();
 			}
 			break;
 
@@ -307,6 +354,35 @@ Control::getName
 }
 
 void 
+Control::outputStatus(QString message__QString, bool prefix__bool, bool composed_prefix__bool)
+{
+	QString composed_message__QString = "> ";
+
+	if (selected_root_name__mQString_ != "unkown")
+	{
+		if (composed_prefix__bool == true)
+		{
+			composed_message__QString = selected_root_type__mQString_;
+			composed_message__QString += " ´";
+			composed_message__QString += selected_root_name__mQString_;
+			composed_message__QString += "´> ";
+		}
+	}
+
+	composed_message__QString += message__QString;
+
+	if (prefix__bool == true)
+	{
+		writeText(composed_message__QString);
+	}
+	else
+	{
+		writeText(message__QString);
+	}
+}
+
+/*
+void 
 Control::ContextMenu
   (QListViewItem *__pQListViewItem, 
 	 const QPoint &__rQPoint,
@@ -326,12 +402,15 @@ Control::ContextMenu
 		DISPLAY__BALL_AND_STICK      = 21,
 		DISPLAY__STICK               = 22,
 		DISPLAY__VAN_DER_WAALS       = 23,
-		DISPLAY__LINES               = 24
+		DISPLAY__LINES               = 24,
+		SELECT                       = 30,
+		DESELECT                     = 31
 	};
 
 	QPopupMenu __QPopupMenu;
 	QPopupMenu *camera__pQPopupMenu = new QPopupMenu();
 	CHECK_PTR(camera__pQPopupMenu);
+	camera__pQPopupMenu->insertItem("center Camera", CAMERA__CENTER_SYSTEM);
 
 	QPopupMenu *display__pQPopupMenu = new QPopupMenu();
 	CHECK_PTR(display__pQPopupMenu);
@@ -358,17 +437,11 @@ Control::ContextMenu
 	{
 	  case TYPE__SYSTEM:
 			__QPopupMenu.insertItem("remove System", REMOVE__SYSTEM);
-		  __QPopupMenu.insertSeparator();
-//			__QPopupMenu.insertItem("Camera", camera__pQPopupMenu);
-//			camera__pQPopupMenu->insertItem("center System", CAMERA__CENTER_SYSTEM);
-//			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
-		  __QPopupMenu.insertItem("remove Model", DISPLAY__REMOVE_MODEL);
-		  __QPopupMenu.insertItem("generate Wireframe model", DISPLAY__LINES);
-		  __QPopupMenu.insertItem("generate Stick model", DISPLAY__STICK);
-		  __QPopupMenu.insertItem("generate Ball and Stick model", DISPLAY__BALL_AND_STICK);
-		  __QPopupMenu.insertItem("generate Van der Waals model", DISPLAY__VAN_DER_WAALS);
-		  __QPopupMenu.insertSeparator();
-		  __QPopupMenu.insertItem("center System", CAMERA__CENTER_SYSTEM);
+			__QPopupMenu.insertItem("Camera", camera__pQPopupMenu);
+			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
+			__QPopupMenu.insertSeparator();
+			__QPopupMenu.insertItem("select", SELECT);
+			__QPopupMenu.insertItem("deselect", DESELECT);
 			break;
 
 	  case TYPE__PROTEIN:
@@ -377,14 +450,11 @@ Control::ContextMenu
 	  case TYPE__RESIDUE:
 	  case TYPE__SECONDARY_STRUCTURE:
 	  case TYPE__FRAGMENT:
-//			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
-		  __QPopupMenu.insertItem("remove Model", DISPLAY__REMOVE_MODEL);
-		  __QPopupMenu.insertItem("generate Wireframe model", DISPLAY__LINES);
-		  __QPopupMenu.insertItem("generate Stick model", DISPLAY__STICK);
-		  __QPopupMenu.insertItem("generate Ball and Stick model", DISPLAY__BALL_AND_STICK);
-		  __QPopupMenu.insertItem("generate Van der Waals model", DISPLAY__VAN_DER_WAALS);
-		  __QPopupMenu.insertSeparator();
-		  __QPopupMenu.insertItem("center System", CAMERA__CENTER_SYSTEM);
+			__QPopupMenu.insertItem("Camera", camera__pQPopupMenu);
+			__QPopupMenu.insertItem("Display", display__pQPopupMenu);
+			__QPopupMenu.insertSeparator();
+			__QPopupMenu.insertItem("select", SELECT);
+			__QPopupMenu.insertItem("deselect", DESELECT);
 			break;
 
 	  default:
@@ -396,11 +466,11 @@ Control::ContextMenu
 	__QPopupMenu.insertSeparator();
 	__QPopupMenu.insertItem("Test 3   ", 4);
 	
+	// status text
+	outputStatus(QString("preforming action ..."));
 
 	// execute the action
-	int result = __QPopupMenu.exec(__rQPoint);
-	Log.info() << "ACTION: " << result << std::endl;
-	switch (result)
+	switch (__QPopupMenu.exec(__rQPoint))
 	{
 	  case REMOVE__SYSTEM:
 		{
@@ -425,8 +495,8 @@ Control::ContextMenu
   	case CAMERA__CENTER_SYSTEM:
 		{
 			// use specified object processor for calculating the center
-			__mpMoleculeObjectProcessor_->applyCenter(*__pComposite);
-	
+			__mpMoleculeObjectProcessor_->calculateCenter(*__pComposite);
+
 			// set the camera on the the new composite
 			__mpScene_->camera.
 				set(__mpMoleculeObjectProcessor_->getViewCenter(), 
@@ -439,12 +509,10 @@ Control::ContextMenu
 
   	case DISPLAY__REMOVE_MODEL:
 		{
-			Log.info() << "REMOVE_MODEL" << std::endl;
-
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
 
-			__mpMoleculeObjectProcessor_->apply(*__pComposite);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
 
 			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
 			__mpScene_->update();
@@ -456,12 +524,12 @@ Control::ContextMenu
 			// remove Model first
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->apply(*__pComposite);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
 
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 
-			__mpMoleculeObjectProcessor_->apply(*__pComposite);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
 
 			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
 			__mpScene_->update();
@@ -473,12 +541,12 @@ Control::ContextMenu
 			// remove Model first
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->apply(*__pComposite);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
 
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 
-			__mpMoleculeObjectProcessor_->apply(*__pComposite);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
 
 			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
 			__mpScene_->update();
@@ -490,12 +558,12 @@ Control::ContextMenu
 			// remove Model first
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->apply(*__pComposite);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
 
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 
-			__mpMoleculeObjectProcessor_->apply(*__pComposite);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
 
 			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
 			__mpScene_->update();
@@ -507,12 +575,34 @@ Control::ContextMenu
 			// remove Model first
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-			__mpMoleculeObjectProcessor_->apply(*__pComposite);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
 
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_LINES);
 			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 
-			__mpMoleculeObjectProcessor_->apply(*__pComposite);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
+
+			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
+			__mpScene_->update();
+		}
+		break;
+
+  	case SELECT:
+		{
+			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__SELECT);
+			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
+
+			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
+			__mpScene_->update();
+		}
+		break;
+
+  	case DESELECT:
+		{
+			__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
+			__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
+			__mpMoleculeObjectProcessor_->applyOn(*__pComposite);
 
 			__mpScene_->getCompositeManager()->update(__pComposite->getRoot());
 			__mpScene_->update();
@@ -526,6 +616,482 @@ Control::ContextMenu
 	// clear
 	delete camera__pQPopupMenu;
 	delete display__pQPopupMenu;
+
+	// status text
+	outputStatus(QString(" done.\n"), false);
+}
+*/
+
+void 
+Control::ContextMenu
+  (QListViewItem *__pQListViewItem, 
+	 const QPoint &__rQPoint,
+	 int column__i)
+{
+	enum
+	{
+		OBJECT__REMOVE               = 0,
+		OBJECT__CUT                  = 1,
+		OBJECT__COPY                 = 2,
+		OBJECT__PASTE                = 3,
+		CAMERA__CENTER               = 10,
+		BONDS__BUILD                 = 20,
+		BONDS__REMOVE                = 21,
+		SELECT                       = 30,
+		DESELECT                     = 31,
+		RESIDUE__CHECK               = 40,
+		DISPLAY__CHANGE              = 50
+	};
+
+	if (__pQListViewItem == 0)
+	{
+		return;
+	}
+
+	// select the current listviewitem
+	setSelected(__pQListViewItem, TRUE);
+
+	// get composite address
+	Composite *__pComposite = _getCompositeAddress(__pQListViewItem);
+	
+	// storing ptr
+	selected__mpComposite_ = __pComposite;
+	selected__mpQListViewItem_ = __pQListViewItem;
+
+	// get names and types
+	selected_name__mQString_ = _getName(__pQListViewItem);
+	selected_root_name__mQString_ = _getRootName(__pQListViewItem);
+	selected_type__mQString_ = _getTypeName(__pQListViewItem);
+	selected_root_type__mQString_ = _getRootTypeName(__pQListViewItem);
+
+	QPopupMenu __QPopupMenu;
+
+	// build the context menu
+	switch (getType(__pComposite))
+	{
+	  case TYPE__RESIDUE:
+			__QPopupMenu.insertItem("check Residue", RESIDUE__CHECK);
+			__QPopupMenu.insertSeparator();
+	  case TYPE__SYSTEM:
+	  case TYPE__PROTEIN:
+	  case TYPE__MOLECULE:
+	  case TYPE__CHAIN:
+	  case TYPE__SECONDARY_STRUCTURE:
+	  case TYPE__FRAGMENT:
+			{
+				__QPopupMenu.insertItem("cut", OBJECT__CUT);
+				__QPopupMenu.insertItem("copy", OBJECT__COPY);
+				__QPopupMenu.insertItem("paste", OBJECT__PASTE);
+				
+				if (copied__mpComposite_ != 0)
+				{
+					__QPopupMenu.setItemEnabled(OBJECT__PASTE, TRUE);
+				}
+				else
+				{
+					__QPopupMenu.setItemEnabled(OBJECT__PASTE, FALSE);
+				}
+				
+				__QPopupMenu.insertSeparator();
+				__QPopupMenu.insertItem("build Bonds", BONDS__BUILD);
+				__QPopupMenu.insertItem("remove Bonds", BONDS__REMOVE);
+				__QPopupMenu.insertSeparator();
+				
+				QString __QString("remove ");
+				__QString += getTypeName(__pComposite);
+
+				__QPopupMenu.insertItem(__QString, OBJECT__REMOVE);
+				__QPopupMenu.insertSeparator();
+				__QPopupMenu.insertItem("select", SELECT);
+				__QPopupMenu.insertItem("deselect", DESELECT);
+	
+//				if (__pComposite->isSelected())
+//				{
+//  				__QPopupMenu.setItemEnabled(DESELECT, TRUE);
+//				}
+//				else
+//				{
+//				__QPopupMenu.setItemEnabled(DESELECT, FALSE);
+//			}
+	
+				__QPopupMenu.insertSeparator();
+				__QPopupMenu.insertItem("center Camera", CAMERA__CENTER);
+				__QPopupMenu.insertSeparator();
+				__QPopupMenu.insertItem("change Display", DISPLAY__CHANGE);
+			}
+			break;
+
+	  default:
+			break;
+	}
+
+	// execute the action
+	switch (__QPopupMenu.exec(__rQPoint))
+	{
+	  case RESIDUE__CHECK:
+			checkResidue();
+			break;
+
+	  case OBJECT__CUT:
+			cut();
+			break;
+
+	  case OBJECT__COPY:
+			copy();
+			break;
+
+	  case OBJECT__PASTE:
+			paste();
+			break;
+
+	  case OBJECT__REMOVE:
+			removeObject();
+			break;
+
+	  case BONDS__BUILD:
+			buildBonds();
+			break;
+
+	  case BONDS__REMOVE:
+			removeBonds();
+			break;
+
+	  case SELECT:
+			select();
+			break;
+
+	  case DESELECT:
+			deselect();
+			break;
+
+	  case CAMERA__CENTER:
+			centerCamera();
+			break;
+
+	  case DISPLAY__CHANGE:
+			changeDisplay();
+			break;
+
+	  default:
+			break;
+	}
+}
+
+void 
+Control::objectSelected
+  (QListViewItem *__pQListViewItem)
+{
+	if (__pQListViewItem == 0)
+	{
+		selected__mpComposite_ = 0;
+		selected__mpQListViewItem_ = 0;
+		selected_name__mQString_ = "unkown";
+		selected_root_name__mQString_ = "unkown";
+		selected_type__mQString_ = "unkown";
+		selected_root_type__mQString_ = "unkown";
+
+		emit itemSelected(false, false);
+
+		return;
+	}
+
+	// convert address string to the real composite address
+	Composite *__pComposite = _getCompositeAddress(__pQListViewItem);
+
+	// storing ptr
+	selected__mpComposite_ = __pComposite;
+	selected__mpQListViewItem_ = __pQListViewItem;
+
+	// get names and types
+	selected_name__mQString_ = _getName(__pQListViewItem);
+	selected_root_name__mQString_ = _getRootName(__pQListViewItem);
+	selected_type__mQString_ = _getTypeName(__pQListViewItem);
+	selected_root_type__mQString_ = _getRootTypeName(__pQListViewItem);
+
+	if (getType(selected__mpComposite_) == TYPE__RESIDUE)
+	{
+		emit itemSelected(true, true);
+	}
+	else
+	{
+		emit itemSelected(true, false);
+	}
+}
+
+void 
+Control::cut()
+{
+	QMessageBox::about(this, "CUT-DEMO", "cut object choosen.");
+
+	emit itemCutOrCopied(true);
+}
+
+void 
+Control::copy()
+{
+	QMessageBox::about(this, "COPY-DEMO", "copy object choosen.");
+
+	emit itemCutOrCopied(true);
+}
+
+void 
+Control::paste()
+{
+	QMessageBox::about(this, "PASTE-DEMO", "paste object choosen.");
+}
+
+void 
+Control::buildBonds()
+{
+	QMessageBox::about(this, "BONDS-DEMO", "build bonds choosen.");
+}
+
+void 
+Control::removeBonds()
+{
+	QMessageBox::about(this, "BONDS-DEMO", "remove bonds choosen.");
+}
+
+void 
+Control::select()
+{
+	if (selected__mpComposite_ == 0)
+	{
+		return;
+	}
+
+	// status text
+	QString __QString;
+	__QString.sprintf("selecting %s ´%s´ ...", CONTROL__TYPE_AND_NAME);
+
+	outputStatus(__QString);
+
+	// save old values
+	int value_static__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__STATIC_MODEL);
+	int value_dynamic__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__DYNAMIC_MODEL);
+
+	__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__SELECT);
+	__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
+	__mpMoleculeObjectProcessor_->applyOn(*selected__mpComposite_);
+	
+	// restore old values
+	__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, value_static__i);
+	__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic__i);
+
+	// update scene
+	__mpScene_->getCompositeManager()->update(selected__mpComposite_->getRoot());
+	__mpScene_->update();
+
+	// status text
+	outputStatus(QString(" done.\n"), false);
+}
+
+void
+Control::deselect()
+{
+	if (selected__mpComposite_ == 0)
+	{
+		return;
+	}
+
+	// status text
+	QString __QString;
+	__QString.sprintf("deselecting %s ´%s´ ...", CONTROL__TYPE_AND_NAME);
+
+	outputStatus(__QString);
+
+	// save old values
+	int value_static__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__STATIC_MODEL);
+	int value_dynamic__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__DYNAMIC_MODEL);
+
+	__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
+	__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
+	__mpMoleculeObjectProcessor_->applyOn(*selected__mpComposite_);
+	
+	// restore old values
+	__mpMoleculeObjectProcessor_->setValue(ADDRESS__STATIC_MODEL, value_static__i);
+	__mpMoleculeObjectProcessor_->setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic__i);
+
+	// update scene
+	__mpScene_->getCompositeManager()->update(selected__mpComposite_->getRoot());
+	__mpScene_->update();
+
+	// status text
+	outputStatus(QString(" done.\n"), false);
+}
+
+void 
+Control::checkResidue()
+{
+	if (selected__mpComposite_ == 0)
+	{
+		return;
+	}
+
+	FragmentDB __FragmentDB;
+
+	ResidueChecker __ResidueChecker(__FragmentDB);
+
+	if (RTTI::isKindOf<BaseFragment>(*selected__mpComposite_))
+	{
+		(RTTI::castTo<BaseFragment>(*selected__mpComposite_))->apply(__ResidueChecker);
+	}
+}
+
+void 
+Control::removeObject()
+{
+	if (selected__mpComposite_ == 0)
+	{
+		return;
+	}
+
+	// status text
+	QString __QString;
+	__QString.sprintf("removing %s ´%s´ ...", CONTROL__TYPE_AND_NAME);
+
+	outputStatus(__QString);
+
+	if (RTTI::isKindOf<System>(*selected__mpComposite_))
+	{
+			QString remove__QString;
+			remove__QString.sprintf("Do you really want to remove %s '%s'.\n\n", 
+															CONTROL__TYPE_AND_NAME);
+
+			int button__i	= QMessageBox::information
+				(this, "Remove information", remove__QString, "Yes", "No");
+
+			if (button__i == 0) // yes
+			{
+				// removes the composite from the scene
+				__mpScene_->getCompositeManager()->remove(*selected__mpComposite_);
+				__mpScene_->update();
+
+				// removes the subtree belonging to the composite
+				delete selected__mpQListViewItem_;
+			}
+
+			selected__mpComposite_ = 0;
+			selected__mpQListViewItem_ = 0;
+	}
+	else
+	{
+		QString __QString = "remove ";
+		__QString += selected_type__mQString_;
+
+		QMessageBox::about(this, __QString, "not yet supported!");
+	}
+
+	// status text
+	outputStatus(QString(" done.\n"), false);
+}
+
+void 
+Control::centerCamera()
+{
+	if (selected__mpComposite_ == 0)
+	{
+		return;
+	}
+
+	// status text
+	QString __QString;
+	__QString.sprintf("set camera at %s ´%s´ ...", CONTROL__TYPE_AND_NAME);
+
+	outputStatus(__QString);
+
+	// use specified object processor for calculating the center
+	__mpMoleculeObjectProcessor_->calculateCenter(*selected__mpComposite_);
+	
+	// set the camera on the the new composite
+	__mpScene_->camera.
+		set(__mpMoleculeObjectProcessor_->getViewCenter(), 
+				(Camera::ViewDirection)__mpMoleculeObjectProcessor_->getViewDirection(),
+				__mpMoleculeObjectProcessor_->getViewDistance());
+	
+	__mpScene_->update();
+
+	// status text
+	outputStatus(QString(" done.\n"), false);
+}
+
+void 
+Control::changeDisplay()
+{
+	QMessageBox::about(this, "DISPLAY-DEMO", "change display choosen.");
+}
+
+void 
+Control::clearClipboard()
+{
+	QMessageBox::about(this, "CLIPBOARD-DEMO", "clear clipboard choosen.");
+
+	emit itemCutOrCopied(false);	
+}
+
+QListViewItem *
+Control::_getRoot(QListViewItem *__pQListViewItem)
+{
+	QListViewItem *parent__pQListViewItem = __pQListViewItem;
+
+	while (parent__pQListViewItem->parent() != 0)
+	{
+		parent__pQListViewItem = parent__pQListViewItem->parent();
+	}
+
+	return parent__pQListViewItem;
+}
+
+QString 
+Control::_getName(QListViewItem *__pQListViewItem)
+{
+	if (__pQListViewItem == 0)
+	{
+		return QString("unkown");
+	}
+
+	return __pQListViewItem->text(COLUMN_ID__NAME);
+}
+
+QString 
+Control::_getRootName(QListViewItem *__pQListViewItem)
+{
+	return _getName(_getRoot(__pQListViewItem));
+}
+
+QString 
+Control::_getTypeName(QListViewItem *__pQListViewItem)
+{
+	if (__pQListViewItem == 0)
+	{
+		return QString("unkown");
+	}
+
+	return __pQListViewItem->text(COLUMN_ID__TYPE);
+}
+
+QString 
+Control::_getRootTypeName(QListViewItem *__pQListViewItem)
+{
+	return _getTypeName(_getRoot(__pQListViewItem));
+}
+
+Composite *
+Control::_getCompositeAddress(QListViewItem *__pQListViewItem)
+{
+	if (__pQListViewItem == 0)
+	{
+		return (Composite *)0;
+	}
+
+	// get address from the attached composite
+	QString address__QString = __pQListViewItem->text(COLUMN_ID__ADDRESS);
+
+	// convert address string to the real composite address
+	Composite *__pComposite;
+	__pComposite = (Composite *)(atoi(address__QString.ascii()));
+
+	return __pComposite;
 }
 
 void 
@@ -979,6 +1545,6 @@ Control::_findListViewItem
 }
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/APPLICATION/control.iC>
+#			include "control.iC"
 #		endif
 

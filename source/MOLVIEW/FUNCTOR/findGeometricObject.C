@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.4 1999/12/30 18:05:37 oliver Exp $
+// $Id: findGeometricObject.C,v 1.5 2000/01/08 20:32:52 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -92,7 +92,6 @@ namespace BALL
 		FindGeometricObject::start
 			()
 		{
-			Log.info() << "starting FindGeometricObject::start()" << endl;
 			geometric_object_ = 0;
 
 			return true;
@@ -102,7 +101,6 @@ namespace BALL
 		FindGeometricObject::finish
 			()
 		{
-			Log.info() << "starting FindGeometricObject::finish()" << endl;
 			return true;
 		}
 				
@@ -110,14 +108,12 @@ namespace BALL
 		FindGeometricObject::operator ()
 			(Composite &composite)
 		{
-			Log.info() << "FindGeometricObject::operator(" << (void*)&composite << ")" << endl;
 			// skip composites that are not instances of geometricObject
 			if (RTTI::isKindOf<VIEW::GeometricObject>(composite) == false)
 			{
 				return Processor::CONTINUE;
 			}
 
-			Log.info() << "FindGeometricObject::operator(" << (void*)&composite << "): isKindOf(Composite)" << endl;
 			VIEW::GeometricObject *__pGeometricObject 
 				= RTTI::castTo<VIEW::GeometricObject>(composite);
 
@@ -125,11 +121,11 @@ namespace BALL
 			BitVector help_bitvector(and_bitvector.getSize());
 
 			help_bitvector.bitwiseOr(getBitVector());
-			
-			Log.info() << "own: " << help_bitvector << " object:  " << __pGeometricObject->getBitVector()
+			/*
+			cout << "own: " << help_bitvector << " object:  " << __pGeometricObject->getBitVector()
 					 << "  &: " << and_bitvector << " size own: " << help_bitvector.getSize()
 					 << "  temp size: " << and_bitvector.getSize() << endl;
-			
+			*/
 			if (and_bitvector == help_bitvector)
 			{
 				geometric_object_ = __pGeometricObject;

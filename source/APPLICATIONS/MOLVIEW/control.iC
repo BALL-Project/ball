@@ -1,4 +1,4 @@
-// $Id: control.iC,v 1.1 2000/01/08 12:29:38 oliver Exp $
+// $Id: control.iC,v 1.2 2000/01/08 20:34:07 hekl Exp $
 
 BALL_INLINE
 void Control::setScene
