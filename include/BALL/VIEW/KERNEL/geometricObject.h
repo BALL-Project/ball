@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.16 2001/06/26 09:04:38 anker Exp $
+// $Id: geometricObject.h,v 1.17 2001/06/29 05:45:29 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -63,9 +63,9 @@ namespace BALL
 				selected color, the name and the typename of a geometric object.
 				
 				@memo    GeometricObject class (BALL VIEW kernel framework)
-				@author  $Author: anker $
-				@version $Revision: 1.16 $
-				@date    $Date: 2001/06/26 09:04:38 $
+				@author  $Author: sturm $
+				@version $Revision: 1.17 $
+				@date    $Date: 2001/06/29 05:45:29 $
 		*/
 		class GeometricObject
 			: public Composite,
@@ -457,8 +457,8 @@ namespace BALL
 			/** Return the type name of {\em *this} geometricObject.
 					Virtually overrideable method for specifying the type name of {\em *this} geometricObject.
 					This method is used by the \Ref{Control} class to identify the geometricObjects.
-					If the derived used created geometric primitive should have a type name displayed by the
-					control class this method should be overridden.
+					If the derived primitive geometric object should have a type name displayed by the
+					control class, this method should be overridden.
 					@return  String the type name of {\em *this} geometricObject
 					@see     Control
 			*/
