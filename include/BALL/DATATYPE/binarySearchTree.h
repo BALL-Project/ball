@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.13 2000/08/09 09:17:57 amoll Exp $
+// $Id: binarySearchTree.h,v 1.14 2000/08/09 10:09:25 amoll Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -1392,7 +1392,7 @@ namespace BALL
 		for (const TBSTreeItem<DataType> *item = iterator.forward();
 				 item != 0; item = iterator.forward())
 		{
-			insert(item->data_, true);
+			insert(item->getData(), true);
 		}
 	}
 
