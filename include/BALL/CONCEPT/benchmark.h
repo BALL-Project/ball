@@ -1,4 +1,4 @@
-// $Id: benchmark.h,v 1.2 2001/04/10 17:51:17 oliver Exp $
+// $Id: benchmark.h,v 1.3 2001/05/18 02:50:39 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/timer.h>
@@ -68,7 +68,7 @@ namespace BENCHMARK {\
 	bool					all_tests = true;\
 	int						exception = 0;\
 	string				exception_name = "";\
-	char*					version_string = version;\
+	const char*		version_string = version;\
 	string				section_name = "";\
 	float					section_weight = 1.0;\
 	float					weight = overall_weight;\

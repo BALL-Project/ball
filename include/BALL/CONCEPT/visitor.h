@@ -1,4 +1,4 @@
-// $Id: visitor.h,v 1.4 2000/12/09 21:27:27 amoll Exp $
+// $Id: visitor.h,v 1.5 2001/05/18 02:50:40 oliver Exp $
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #define BALL_CONCEPT_VISITOR_H
@@ -38,14 +38,18 @@ namespace BALL
 			throw();
 
 		//@}
-		
+
 		/**	Visit method.				
 				The visit method is an abstract method defining an 
 				interface between the visitor object and its host.
 		*/
 		virtual void visit(Host &) = 0;
 
+		virtual void dummy();
 	};
+
+	template <typename T>
+	void Visitor<T>::dummy(){}
 
 	template <typename T>
 	BALL_INLINE
@@ -62,7 +66,6 @@ namespace BALL
 	}
 
 	template <typename T>
-	BALL_INLINE
 	Visitor<T>::~Visitor()
 		throw()
 	{
