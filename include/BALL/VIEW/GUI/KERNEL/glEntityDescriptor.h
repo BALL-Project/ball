@@ -1,4 +1,4 @@
-// $Id: glEntityDescriptor.h,v 1.9.4.1 2002/10/25 23:33:11 amoll Exp $
+// $Id: glEntityDescriptor.h,v 1.9.4.2 2002/10/31 22:11:37 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
@@ -34,14 +34,17 @@ namespace BALL
 					\item  {\bf static wireframe display list} - this \Ref{GLDisplayList} stores the 
 								 visualization of an object in the non-moveable state that should be drawn as wireframe
 					\item  {\bf static always front wireframe display list} - this \Ref{GLDisplayList} stores the visualization 
-								 of an object in the non-moveable state that should be drawn as wireframe and should be always in front of other objects.
-					\item  {\bf dynamic display list} - this \Ref{GLDisplayList} stores the visualization of an object in the moveable state
+								 of an object in the non-moveable state that should be drawn as wireframe and should be always 
+								 in front of other objects.
+					\item  {\bf dynamic display list} - this \Ref{GLDisplayList} stores the visualization of an object in the 
+								 moveable state
 					\item  {\bf dynamic always front display list} - this \Ref{GLDisplayList} stores the visualization 
 								 of an object in the moveable state that should be always in front of other objects
 					\item  {\bf transparent display list} - this \Ref{GLDisplayList} stores the visualization of 
 								 an object in the moveable state that should be drawn transparent
 					\item  {\bf transparent always front display list} - this \Ref{GLDisplayList} stores the visualization
-								 of an object in the moveable state that should be drawn transparent and should be always in front of other objects.
+								 of an object in the moveable state that should be drawn transparent and should be always in front 
+								 of other objects.
 				\end{itemize}
 				This class is used internally by the \Ref{CompositeDescriptor} class. \\
 				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h}
@@ -187,7 +190,8 @@ namespace BALL
 					Access the mutable pointer of the dynamic always front display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					@return      GLDisplayList* mutable pointer to the dynamic always front display list of {\em *this} glEntityDescriptor
+					@return      GLDisplayList* mutable pointer to the dynamic always front display list of 
+											 {\em *this} glEntityDescriptor
 					@see         GLDisplayList
 			*/
 			GLDisplayList* getDynamicAlwaysFrontDisplayList()
@@ -219,7 +223,8 @@ namespace BALL
 					Access the mutable pointer of the transparent always front display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					@return      GLDisplayList* mutable pointer to the transparent always front display list of {\em *this} glEntityDescriptor
+					@return      GLDisplayList* mutable pointer to the transparent always front display list of 
+											 {\em *this} glEntityDescriptor
 					@see         GLDisplayList
 			*/
 			GLDisplayList* getTransparentAlwaysFrontDisplayList()
@@ -269,6 +274,7 @@ namespace BALL
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure 
 					consistencies	of {\em *this} glEntityDescriptor.
@@ -316,9 +322,9 @@ namespace BALL
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
+
 			//@}
 				
-
 			private:
 			
 			GLDisplayList static_display_list_;
@@ -338,7 +344,6 @@ namespace BALL
 #		endif 
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
