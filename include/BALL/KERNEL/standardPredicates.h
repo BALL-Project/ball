@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.46 2004/05/18 11:21:45 amoll Exp $
+// $Id: standardPredicates.h,v 1.47 2004/05/18 11:42:05 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -829,7 +829,7 @@ namespace BALL
 				in which case the charge of the atom has to be equal to 
 				that number (down to the specified accuracy for floating 
 				point comparisons,  \link EPSILON EPSILON \endlink ), or an operator followed	
-				by a number. Possible operators are: <tt><</tt>, <tt>></tt>, <tt>>=</tt>, {\tt <=}, {\tt =}.
+				by a number. Possible operators are: <tt><</tt>, <tt>></tt>, <tt>>=</tt>, <tt> <= </tt>, <tt> = </tt>.
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox3.h,v 1.7 2004/05/18 11:21:47 amoll Exp $
+// $Id: simpleBox3.h,v 1.8 2004/05/18 11:36:42 amoll Exp $
 //
 
 #ifndef BALL_MATHS_SIMPLEBOX3_H
@@ -26,7 +26,6 @@ namespace BALL
 			This class describes a three-dimensional box with edges parallel to
 			the coordinate system. Hence, a box is given by the coordinates of
 			the lower left front corner and ther upper right back corner.\\
-			{\bf Definition:} \URL{BALL/MATHS/SimpleBox3.h}\\
 	*/
 	template <typename T>
 	class TSimpleBox3

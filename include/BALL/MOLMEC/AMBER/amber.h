@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.h,v 1.21 2004/02/19 18:46:26 amoll Exp $ 
+// $Id: amber.h,v 1.22 2004/05/18 11:39:21 amoll Exp $ 
 //
 
 // Molecular Mechanics: Amber force field class
@@ -46,7 +46,7 @@ namespace BALL
 
 			/**	Nonbonded cutoff. This value is used as cutoff radius in
 					calculations of nonbonded interactions. The unit of this option
-					is {\AA} (@see Default::NONBONDED_CUTOFF)
+					is \f${\AA}\f$ (@see Default::NONBONDED_CUTOFF)
 			*/
 			static const char* NONBONDED_CUTOFF;
 
@@ -107,23 +107,23 @@ namespace BALL
 			*/
 			static const char* FILENAME;
 
-			/**	Default non bonded cutoff of 20.0 {\AA}.
+			/**	Default non bonded cutoff of 20.0 \f${\AA}\f$.
 			*/
 			static const float NONBONDED_CUTOFF;
 
-			/**	Default van der Waals cutoff of 15.0 {\AA}.
+			/**	Default van der Waals cutoff of 15.0 \f${\AA}\f$.
 			*/
 			static const float VDW_CUTOFF;
 
-			/**	Default van der Waals cuton of 13.0 {\AA}.
+			/**	Default van der Waals cuton of 13.0 \f${\AA}\f$.
 			*/
 			static const float VDW_CUTON;
 
-			/**	Default electrostatic cutoff of 15.0 {\AA}.
+			/**	Default electrostatic cutoff of 15.0 \f${\AA}\f$.
 			*/
 			static const float ELECTROSTATIC_CUTOFF;
 
-			/**	Default electrostatic cuton of 13.0 {\AA}.
+			/**	Default electrostatic cuton of 13.0 \f${\AA}\f$.
 			*/
 			static const float ELECTROSTATIC_CUTON;
 

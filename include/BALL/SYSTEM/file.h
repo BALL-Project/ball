@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.63 2004/05/18 11:21:49 amoll Exp $
+// $Id: file.h,v 1.64 2004/05/18 11:47:41 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -115,7 +115,7 @@ namespace BALL
 					- <tt>%f</tt> is replaced by the full content of <tt>name</tt>, 
 						without any file type suffix (i.e. anything after the last dot in the filename is removed)
 					- <tt>%f[suffix]</tt> is replaced by the previous content of <tt>name</tt> without the <tt>suffix</tt>
-					- <tt>%b</tt> and <tt>%b[suffix]</tt> like <tt>%f</tt> and {\tt %f[suffix]}, except that the
+					- <tt>%b</tt> and <tt>%b[suffix]</tt> like <tt>%f</tt> and <tt> %f[suffix]</tt>, except that the
 								path is removed as well, so it is only the <b>  base name </b> of the file
 					- <tt>%p</tt> the path to the file
 					- <tt>%t</tt> a temporary file name (all occurences of <tt>%t</tt> are replace 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.43 2004/05/18 11:21:46 amoll Exp $
+// $Id: box3.h,v 1.44 2004/05/18 11:36:42 amoll Exp $
 //
 
 #ifndef BALL_MATHS_BOX3_H
@@ -27,7 +27,6 @@ namespace BALL
 			This class describes a three-dimensional box.
 			A box is given by the coordinates of the lower left front corner,
 			width, height, depth and the right vector.\\
-			{\bf Definition:} \URL{BALL/MATHS/box3.h}\\
 	*/
 	template <typename T>
 	class TBox3
