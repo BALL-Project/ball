@@ -64,13 +64,6 @@ namespace BALL
 				 */
 				//@{
 				
-				/** register a object processor.
-						This function provides a means to change the implementation of the routines,
-						that create the graphical representation of the molecular structures.
-						@param object_processor - a object processor
-				*/
-				void registerObjectProcessor(const MoleculeObjectProcessor& object_processor);
-				
 				/** set the preferences.
 						This dialog stores its preferences in an unique inifile, which must be already open
 						when given to this function.
@@ -173,7 +166,7 @@ namespace BALL
 				QString   coloring_method_string_;
 				ColorRGBA custom_color_;
 				
-				MoleculeObjectProcessor *object_processor_;
+				MoleculeObjectProcessor object_processor_;
 				
 				AtomDistanceColorCalculator distance_color_calculator_;
 				bool distance_coloring_;

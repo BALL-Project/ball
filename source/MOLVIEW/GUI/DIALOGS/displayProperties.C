@@ -27,6 +27,7 @@ DisplayProperties::DisplayProperties
   model_string_("stick"),
   precision_string_("high"),
   coloring_method_string_("by element"),
+	object_processor_(),
 	distance_color_calculator_(),
 	distance_coloring_(false),
 	selection_()
@@ -39,12 +40,6 @@ DisplayProperties::DisplayProperties
 
 DisplayProperties::~DisplayProperties()
 {
-}
-
-void DisplayProperties::registerObjectProcessor
-  (const MoleculeObjectProcessor& object_processor)
-{
-	object_processor_ = &(const_cast<MoleculeObjectProcessor&>(object_processor));
 }
 
 void DisplayProperties::setPreferences(INIFile& inifile) const
@@ -141,7 +136,7 @@ void DisplayProperties::onNotify(Message *message)
 		NewMolecularMessage *composite_message = RTTI::castTo<NewMolecularMessage>(*message);
 
 		// generate graphical representation
-		object_processor_->applyOn(*(composite_message->getComposite()));
+		object_processor_.applyOn(*(composite_message->getComposite()));
 
 		// notify tree of the changes
 		ChangedMolecularMessage *changed_message = new ChangedMolecularMessage(*composite_message);
@@ -219,38 +214,38 @@ void DisplayProperties::selectPrecision(const QString& string)
 
 	if (string == "low")
 	{
-		object_processor_
-			->setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
+		object_processor_.
+			setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
 								 VALUE__DRAWING_PRECISION_LOW);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
 								 VALUE__DRAWING_PRECISION_LOW);
 	}
 	else if (string == "medium")
 	{
-		object_processor_
-			->setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
+		object_processor_.
+			setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
 								 VALUE__DRAWING_PRECISION_MEDIUM);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
 								 VALUE__DRAWING_PRECISION_LOW);
 	}
 	else if (string == "high")
 	{
-		object_processor_
-			->setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
+		object_processor_.
+			setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
 								 VALUE__DRAWING_PRECISION_HIGH);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
 								 VALUE__DRAWING_PRECISION_LOW);
 	}
 	else if (string == "ultra")
 	{
-		object_processor_
-			->setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
+		object_processor_.
+			setValue(ADDRESS__STATIC_DRAWING_PRECISION, 
 								 VALUE__DRAWING_PRECISION_ULTRA);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_DRAWING_PRECISION, 
 								 VALUE__DRAWING_PRECISION_LOW);
 	}
 }
@@ -259,54 +254,54 @@ void DisplayProperties::selectModel(const QString& string)
 {
 	model_string_ = string;
 
-	object_processor_
-		->setValue(ADDRESS__DYNAMIC_DRAWING_MODE, 
+	object_processor_.
+		setValue(ADDRESS__DYNAMIC_DRAWING_MODE, 
 							 VALUE__DRAWING_MODE_SOLID);
 
 	if (string == "none")
 	{
-		object_processor_
-			->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
+		object_processor_.
+			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
 	}
 	else if (string == "line")
 	{
-		object_processor_
-			->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_LINES);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+		object_processor_.
+			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_LINES);
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
 	else if (string == "stick")
 	{
- 		object_processor_
-			->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+ 		object_processor_.
+			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
 	else if (string == "ball and stick")
 	{
-		object_processor_
-			->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+		object_processor_.
+			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
 	else if (string == "surface")
 	{
-		object_processor_
-			->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_SURFACE);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_SURFACE);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_DRAWING_MODE, 
+		object_processor_.
+			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_SURFACE);
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_SURFACE);
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_DRAWING_MODE, 
 								 VALUE__DRAWING_MODE_DOTS);
 	}
 	else if (string == "van der Waals")
 	{
-		object_processor_
-			->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
-		object_processor_
-			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+		object_processor_.
+			setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
+		object_processor_.
+			setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
 }
 
@@ -318,23 +313,23 @@ void DisplayProperties::selectColoringMethod(const QString& string)
 
 	if (string == "by element")
 	{
-		object_processor_
-			->setColorCalculator(COLORCALCULATOR_VALUES__ELEMENT);
+		object_processor_.
+			setColorCalculator(COLORCALCULATOR_VALUES__ELEMENT);
 	}
 	else if (string == "by residue name")
 	{
-		object_processor_
-			->setColorCalculator(COLORCALCULATOR_VALUES__RESIDUE_NAME);
+		object_processor_.
+			setColorCalculator(COLORCALCULATOR_VALUES__RESIDUE_NAME);
 	}
 	else if (string == "by atom charge")
 	{
-		object_processor_
-			->setColorCalculator(COLORCALCULATOR_VALUES__ATOM_CHARGE);
+		object_processor_.
+			setColorCalculator(COLORCALCULATOR_VALUES__ATOM_CHARGE);
 	}
 	else if (string == "by atom distance")
 	{
-		object_processor_
-			->setColorCalculator(distance_color_calculator_);
+		object_processor_.
+			setColorCalculator(distance_color_calculator_);
 		
 		distance_coloring_ = true;
 	}
@@ -347,8 +342,8 @@ void DisplayProperties::selectColoringMethod(const QString& string)
 							(float)qcolor.green() / 255.0,
 							(float)qcolor.blue() / 255.0);
 
-		object_processor_
-			->setColorCalculator(COLORCALCULATOR_VALUES__CUSTOM, color);
+		object_processor_.
+			setColorCalculator(COLORCALCULATOR_VALUES__CUSTOM, color);
 	}
 }
 
@@ -381,7 +376,7 @@ void DisplayProperties::applyButtonClicked()
 	List<Composite*>::ConstIterator list_it = selection_.begin();
 	for (; list_it != selection_.end(); ++list_it)
 	{
-		object_processor_->applyOn(**list_it);
+		object_processor_.applyOn(**list_it);
 
 		// move composite pointer to update list for later update
 		update_list.push_back(*list_it);
@@ -419,7 +414,7 @@ void DisplayProperties::editColor()
 
 	custom_color_ = color;
 
-	object_processor_->setColorCalculator(COLORCALCULATOR_VALUES__CUSTOM, color);
+	object_processor_.setColorCalculator(COLORCALCULATOR_VALUES__CUSTOM, color);
 
 	coloring_method_string_ = "custom";
   setComboBoxIndex_(coloring_type_combobox_, coloring_method_string_);
