@@ -24,10 +24,12 @@ namespace BALL
 				id_(-1),
 				selection_()
 		{
-			setCaption("Label Properties");
+			setCaption("Add Label");
 
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
+
+			hide();
 		}
 
 		LabelProperties::~LabelProperties()
@@ -98,7 +100,6 @@ namespace BALL
 			if (RTTI::isKindOf<MolecularSelectionMessage>(*message))
 			{
 				MolecularSelectionMessage *selection = RTTI::castTo<MolecularSelectionMessage>(*message);
-
 				selection_ = selection->getSelection();
 			}
 			else
@@ -108,14 +109,7 @@ namespace BALL
 			}
 
 			// disabled apply button, if selection is empty
-			if (selection_.empty())
-			{
-				apply_button_->setEnabled(false);
-			}
-			else
-			{
-				apply_button_->setEnabled(true);
-			}
+			apply_button_->setEnabled(!selection_.empty());
 		}
 
 		void LabelProperties::initializeWidget(MainControl& main_control)
@@ -123,14 +117,14 @@ namespace BALL
 		{
 			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
-			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "&Label Properties", this,
+			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "&Add Label", this,
 																				 SLOT(openDialog()), CTRL+Key_L);   
 		}
 
 		void LabelProperties::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry(MainControl::DISPLAY, "&Label Properties", this,
+			main_control.removeMenuEntry(MainControl::DISPLAY, "&Add Label", this,
 																	 SLOT(openDialog()), CTRL+Key_L);   
 		}
 
@@ -195,13 +189,13 @@ namespace BALL
 			(**list_it).appendChild(*label);
 
 			// mark composite for update
-			ChangedCompositeMessage change_message;
-			change_message.setComposite((*list_it));
+			ChangedCompositeMessage* change_message = new ChangedCompositeMessage;
+			change_message->setComposite((*list_it));
 			notify_(change_message);
 
 			// update scene
-			SceneMessage scene_message;
-			scene_message.updateOnly();
+			SceneMessage* scene_message = new SceneMessage;
+			scene_message->updateOnly();
 			notify_(scene_message);
 			
 			// clear status bar
@@ -211,15 +205,11 @@ namespace BALL
 		void LabelProperties::editColor()
 		{
 			color_sample_->setBackgroundColor(QColorDialog::getColor(color_sample_->backgroundColor()));
-
-			ColorRGBA color;
 			QColor qcolor = color_sample_->backgroundColor();
 
-			color.set((float)qcolor.red() / 255.0,
-								(float)qcolor.green() / 255.0,
-								(float)qcolor.blue() / 255.0);
-
-			custom_color_ = color;
+			custom_color_.set((float)qcolor.red() / 255.0,
+											  (float)qcolor.green() / 255.0,
+												(float)qcolor.blue() / 255.0);
 
 			update();
 		}
