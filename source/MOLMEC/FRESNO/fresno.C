@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.18 2002/11/23 16:32:21 anker Exp $
+// $Id: fresno.C,v 1.1.2.19 2003/02/10 17:13:01 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -973,6 +973,35 @@ namespace BALL
 		throw()
 	{
 		return fresno_types_;
+	}
+
+
+	String FresnoFF::getFresnoTypeString(short type) const
+		throw()
+	{
+		String string;
+		switch(type)
+		{
+			case FresnoFF::UNKNOWN: 
+				string = "UNKNOWN"; break;
+			case FresnoFF::LIPOPHILIC: 
+				string = "LIPOPHILIC"; break;
+			case FresnoFF::HBOND_DONOR: 
+				string = "HBOND_DONOR"; break;
+			case FresnoFF::HBOND_ACCEPTOR_DONOR: 
+				string = "HBOND_ACCEPTOR_DONOR"; break;
+			case FresnoFF::HBOND_ACCEPTOR: 
+				string = "HBOND_ACCEPTOR"; break;
+			case FresnoFF::HBOND_HYDROGEN: 
+				string = "HBOND_HYDROGEN"; break;
+			case FresnoFF::POLAR: 
+				string = "POLAR"; break;
+			case FresnoFF::METAL: 
+				string = "METAL"; break;
+			default: 
+				string = "ARGH";
+		}
+		return string;
 	}
 
 

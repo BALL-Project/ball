@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.15 2002/11/23 16:32:21 anker Exp $
+// $Id: fresno.h,v 1.1.2.16 2003/02/10 17:13:01 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -545,6 +545,10 @@ namespace BALL
 		const HashMap<const Atom*, short>& getFresnoTypes() const
 			throw();
 
+		/**
+		*/
+		String getFresnoTypeString(short type) const
+			throw();
 		//@}
 
 
