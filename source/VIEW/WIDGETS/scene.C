@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.54 2004/04/16 11:33:07 amoll Exp $
+// $Id: scene.C,v 1.55 2004/04/17 20:46:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -217,8 +217,7 @@ namespace BALL
 						gl_renderer_.rebuildDisplayListFor(*rep);
 						break;
 
-					case RepresentationMessage::UNDEFINED:
-					case RepresentationMessage::SELECTED:
+					default:
 						break;
 				}
 
