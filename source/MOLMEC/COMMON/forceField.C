@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.27 2002/01/05 04:00:39 oliver Exp $
+// $Id: forceField.C,v 1.27.4.1 2002/09/20 15:35:52 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -276,7 +276,7 @@ namespace BALL
 					atoms_[last] = tmp;
 				}
 			}
-			number_of_movable_atoms_ = first - 1;
+			number_of_movable_atoms_ = first;
 		}
 		else
 		{
