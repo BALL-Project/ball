@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.19 2000/10/24 21:38:47 amoll Exp $
+// $Id: logStream.C,v 1.20 2000/12/08 09:17:05 oliver Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
@@ -54,7 +54,7 @@ namespace BALL
 	{
 		char buf[BUFFER_LENGTH];
 		Size line;
-		for (line = loglines_.size(); line > 0; --line) 
+		for (line = (Size)loglines_.size(); line > 0; --line) 
 		{
 			strftime(&(buf[0]), BUFFER_LENGTH - 1, "%d.%m.%Y %T ", localtime(&(loglines_[line - 1].time)));
 			stream << buf << "[" << loglines_[line - 1].level
@@ -157,7 +157,8 @@ namespace BALL
 		Size		copied_index = 0;
 		string	result("");
 
-		while ((index = prefix.find("%", index)) != string::npos) 
+		// workaround to reduce physical dependency: (Size)-1 as replacement for String::EndPos
+		while ((index = (Size)prefix.find("%", index)) != (Size)-1) 
 		{
 			// append any constant parts of the string to the result
 			if (copied_index < index) 
@@ -590,7 +591,8 @@ namespace BALL
 			{
 				if (s.length() > 0)
 				{
-					if (log->loglines_[pos].text.find(s, 0) != string::npos )
+					// workaround to reduce physical dependency: (Size)-1 as replacement for String::EndPos
+					if (log->loglines_[pos].text.find(s, 0) != (Size)-1)
 					{
 						list_indices.push_back((int)pos);
 					}
