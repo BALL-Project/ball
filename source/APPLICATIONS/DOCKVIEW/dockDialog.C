@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.4 2005/02/17 12:51:24 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.5 2005/02/18 12:55:38 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -100,8 +100,6 @@ namespace BALL
 		{
 			algorithm_dialogs_[algorithm] = dialog;
 			algorithms->insertItem(name, algorithm);
-			
-			//Log.info() << algorithms->text(1) << std::endl;
 		}
 		
 		void DockDialog::initializeWidget(MainControl& main_control)
@@ -231,6 +229,7 @@ namespace BALL
 			}
 			
 			tab_pages->setCurrentPage(0);
+			
 			//show dialog to user
 			DockDialogData::show();
 		}
@@ -303,6 +302,19 @@ namespace BALL
 			//create docking algorithm object
 			GeometricFit geo_fit = GeometricFit();
 			
+			// keep the larger protein in System A and the smaller one in System B
+			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
+			{
+				// swap the systems
+				System* temp = docking_partner1_;
+				docking_partner1_ = docking_partner2_;
+				docking_partner2_ = temp;
+			}
+			
+			geo_fit.setup(*docking_partner1_, *docking_partner2_, options_);
+			
+			
+			/*
 			System* partner1 = new System(*docking_partner1_);
 			System* partner2 = new System(*docking_partner2_);
 
@@ -316,8 +328,9 @@ namespace BALL
 			}
 			
 			geo_fit.setup(*partner1, *partner2, options_);
+			*/
 			
-			DockingProgressDialog progress;
+			/*DockingProgressDialog progress;
 			QString s = "Docking partner 1: ";
 			progress.options->append(s.append(docking_partner1_->getName()));
 			s = "Docking partner 2: ";
@@ -334,16 +347,16 @@ namespace BALL
 				progress.options->append(s.append(it->second));
 			}
 			progress.exec();
+			*/
 			
 			// start docking
-			/*geo_fit.start();
+			geo_fit.start();
 			
-			ConformationSet rc = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
+			/*ConformationSet rc = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
 	 		rc.writeDCDFile("docking.dcd");
 
 	 		System* docked_system = new System(rc.getSystem());
 			getMainControl()->insert(*docked_system, "Docked System");
-			
 			*/
 
 			Log.info() << "End of calculate" << std::endl;
@@ -453,17 +466,21 @@ namespace BALL
 				return false;
 			}
 			
+			Log.error() << "End of applyProcessors" << std::endl;
+			
 			//send messages that systems were changed
 			CompositeMessage* message = new CompositeMessage;
 			message->setComposite(*docking_partner1_);
 			message->setType(CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-			//notify_(message);
+			notify_(message);
 			
 			CompositeMessage* message2 = new CompositeMessage;
 			message2->setComposite(*docking_partner2_);
 			message2->setType(CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-			//notify_(message2);
-
+			notify_(message2);
+			
+			Log.error() << "End of applyProcessors" << std::endl;
+			
 			return true;
 		}
 		
