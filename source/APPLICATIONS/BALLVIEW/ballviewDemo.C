@@ -94,7 +94,6 @@ void BALLViewDemo::onNotify(Message *message)
 
 	if (!isVisible()) return;
 
-//   	CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
 	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 
 	Index id = widget_stack->id(widget_stack->visibleWidget());
@@ -121,14 +120,11 @@ void BALLViewDemo::onNotify(Message *message)
 		return;
 	}
 
-	if (//id <= MODEL_HBONDS + 6 &&
-		  rmsg != 0 && 
+	if (rmsg != 0 && 
 			rmsg->getType() == RepresentationMessage::UPDATE)
 	{
 		nextStep_();
 	}
-
-	
 }
 
 void BALLViewDemo::nextStep_()
@@ -143,29 +139,28 @@ void BALLViewDemo::accept()
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
 	bool disable_button = true;
 
-//   	if (id < MODEL_HBONDS + 7)
+	// remove representations
+	PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+	Size nr = pm.getNumberOfRepresentations();
+	list<Representation*> reps = pm.getRepresentations();
+	for (Position p = 0; p < nr; p++)
 	{
-		// remove representations
-		PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
-		Size nr = pm.getNumberOfRepresentations();
-		list<Representation*> reps = pm.getRepresentations();
-		for (Position p = 0; p < nr; p++)
-		{
-			getMainControl()->remove(**reps.begin());
-			reps.pop_front();
-		}
+		getMainControl()->remove(**reps.begin());
+		reps.pop_front();
 	}
 
 	if (id < 7)
 	{
 		ModelType type = (ModelType) id;
 		if (type >= MODEL_SA_SURFACE) ((Index)type) ++;
-if (type == MODEL_SE_SURFACE) type = MODEL_LINES;
  		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, type, COLORING_ELEMENT);
 		notify_(crmsg);
 	}
 	else if (id == 7)
 	{
+		HBondProcessor proc;
+		system_->apply(proc);
+		getMainControl()->update(*system_);
    	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
    	notify_(crmsg);
  		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);
