@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.24 2004/03/20 15:22:58 amoll Exp $
+// $Id: DCDFile_test.C,v 1.25 2004/03/25 12:46:22 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.24 2004/03/20 15:22:58 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.25 2004/03/25 12:46:22 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -113,6 +113,7 @@ CHECK([EXTRA] full test writing)
 	ssm.takeSnapShot();
 	ssm.flushToDisk();
 	dcd.close();
+	TEST_EQUAL(dcd.getNumberOfSnapShots(), 2)
 	TEST_NOT_EQUAL(dcd.getSize(), 0) 
 	system.getAtom(0)->setVelocity(Vector3(1,2,3));
 RESULT

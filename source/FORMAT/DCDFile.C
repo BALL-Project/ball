@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.32 2004/03/25 11:01:26 amoll Exp $
+// $Id: DCDFile.C,v 1.33 2004/03/25 12:46:25 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -160,6 +160,8 @@ namespace BALL
 	bool DCDFile::readHeader()
 		throw()
 	{
+		current_snapshot_ = 0;
+
 		// read the "header" of the 84 byte block. This must contain the number
 		// 84 to indicate the size of this block
 		*this >> adapt_size_; 
@@ -523,9 +525,9 @@ namespace BALL
 	{
 		#ifdef BALL_DEBUG
 			Log.info() << "file position at beginning of read(): " << tellg() << endl;
-		#endif
+ 		#endif
 
-		if (!good() || eof()) return false;
+		if (!good() || current_snapshot_ >= number_of_snapshots_) return false;
 
 		// the number of atoms has to be read from the file header before ever
 		// thinking of reading correct information
@@ -591,6 +593,9 @@ namespace BALL
 
 			snapshot.setAtomVelocities(velocities);
 		}
+
+		current_snapshot_++;
+
 		return true;
 	}
 

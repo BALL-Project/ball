@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.31 2004/03/20 15:23:35 amoll Exp $
+// $Id: DCDFile.h,v 1.32 2004/03/25 12:46:18 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_DCDFILE_H
@@ -217,6 +217,13 @@ namespace BALL
 
 		//_
 		Size number_of_comments_;
+
+		/*_ We had a problem with read(Snapshot), as it
+		    still returned true at the end of file. No idea
+		    why the stream was still good! To fix this,
+		    I added this member to count the current read snapshot.
+		*/
+		Position current_snapshot_;
 
 		BinaryFileAdaptor<Size>  adapt_size_;
 		BinaryFileAdaptor<float> adapt_float_;
