@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.18 2002/01/09 02:56:13 oliver Exp $
+// $Id: StandardPredicates_test.C,v 1.18.4.1 2002/05/16 10:52:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.18 2002/01/09 02:56:13 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.18.4.1 2002/05/16 10:52:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -857,6 +857,9 @@ CHECK(Sp3HybridizedPredicate::operator () (const Atom& atom) const )
 	}
 RESULT
 
+CHECK(ChargePredicate::operator ())
+  // ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

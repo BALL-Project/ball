@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.20 2000/12/01 13:25:19 anker Exp $ 
+// $Id: options.C,v 1.20.4.1 2002/05/16 10:52:01 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -265,7 +265,7 @@ namespace BALL
 		if (!has(key))
 		{
 			set(key, value);
-			return key;
+			return value;
 		} 
 		else 
 		{

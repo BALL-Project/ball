@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.19.4.1 2002/05/15 23:39:57 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.19.4.2 2002/05/16 10:52:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.19.4.1 2002/05/15 23:39:57 oliver Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.19.4.2 2002/05/16 10:52:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -573,58 +573,6 @@ CHECK(PropertyManager::hasProperty(const string& name) const )
 	m.clearProperty("TEST_PROP");
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
 RESULT
-
-CHECK(PropertyManager::std::ostream& operator << (std::ostream& s, const PropertyManager& property_manager))
-	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), File::OUT);
-	string str("test");
-	PersistentObject ob;
-	m.setProperty("PROP1", true);
-	m.setProperty("PROP2", -12345);
-	m.setProperty("PROP3", (unsigned int)12345);
-	m.setProperty("PROP4", (float)1.2345);
-	m.setProperty("PROP5", (double) 2.345);
-	m.setProperty("PROP6", str);
-	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")
-	m.setProperty("PROP7", ob);
-	m.setProperty("PROP8");
-	m.setProperty(0);
-	m.setProperty(2);
-	outstr << m;
-	outstr.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_ostream1.txt")
-RESULT
-
-
-CHECK(PropertyManager::std::istream& operator >> (std::istream& s, PropertyManager& property_manager))
-	std::ifstream instr("data/PropertyManager_test/PropertyManager_test_ostream2.txt");
-	PropertyManager m;
-	TEST_EQUAL(m.countNamedProperties(), 0)
-	instr >> m;
-	instr.close();
-	TEST_EQUAL(m.countNamedProperties(), 8)
-	TEST_EQUAL(m.hasProperty("PROP1"), true)
-	TEST_EQUAL(m.hasProperty("PROP2"), true)
-	TEST_EQUAL(m.hasProperty("PROP3"), true)
-	TEST_EQUAL(m.hasProperty("PROP4"), true)
-	TEST_EQUAL(m.hasProperty("PROP5"), true)
-	TEST_EQUAL(m.hasProperty("PROP6"), true)
-	TEST_EQUAL(m.hasProperty("PROP7"), true)
-	TEST_EQUAL(m.hasProperty("PROP8"), true)
-	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
-	TEST_EQUAL(m.getProperty("PROP1").getBool(), true)	
-	TEST_EQUAL(m.getProperty("PROP2").getInt(), -12345)
-	TEST_EQUAL(m.getProperty("PROP3").getUnsignedInt(), 12345)
-	TEST_REAL_EQUAL(m.getProperty("PROP4").getFloat(), 1.2345)
-	TEST_REAL_EQUAL(m.getProperty("PROP5").getDouble(), 2.345)
-	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")
-	TEST_NOT_EQUAL(m.getProperty("PROP7").getObject(), 0) 
-	TEST_EQUAL(m.countNamedProperties(), 8);
-	TEST_EQUAL(m.getBitVector().getBit(0), true)
-	TEST_EQUAL(m.getBitVector().getBit(1), false)
-	TEST_EQUAL(m.getBitVector().getBit(2), true)
-RESULT
-
 
 CHECK(PropertyManager::write(PersistenceManager& pm) const )
 	NEW_TMP_FILE(filename)
