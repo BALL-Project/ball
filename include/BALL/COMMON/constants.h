@@ -1,4 +1,4 @@
-// $Id: constants.h,v 1.2 1999/12/28 18:29:49 oliver Exp $
+// $Id: constants.h,v 1.3 2000/01/14 09:58:22 oliver Exp $
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #define BALL_COMMON_CONSTANTS_H
@@ -6,7 +6,6 @@
 namespace BALL 
 {
 
-	/// The constants namespace
 	namespace Constants 
 	{
 
