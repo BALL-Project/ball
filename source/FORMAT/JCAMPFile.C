@@ -1,22 +1,28 @@
-// $Id: JCAMPFile.C,v 1.4 2000/11/15 18:15:39 anhi Exp $
+// $Id: JCAMPFile.C,v 1.5 2000/12/08 09:23:22 oliver Exp $
 
 #include <BALL/FORMAT/JCAMPFile.h>
 
 namespace BALL
 {
 
-	JCAMPFile::JCAMPFile( const String& name, OpenMode open_mode = IN ) : File( name, open_mode ), buffer_(0)
+	JCAMPFile::JCAMPFile( const String& name, OpenMode open_mode) 
+		: File(name, open_mode), 
+			buffer_(0)
 	{
 	}
 
-	JCAMPFile::JCAMPFile( const JCAMPFile& file ) : File( file ), buffer_(0)
+	JCAMPFile::JCAMPFile(const JCAMPFile& file) 
+		: File(file), 
+			buffer_(0)
 	{
 	}
 
 	JCAMPFile::~JCAMPFile()
 	{
 		if (buffer_)
+		{
 			delete[] (buffer_);
+		}
 	}
 
 	const Size JCAMPFile::MAX_LENGTH_ = 4096;
