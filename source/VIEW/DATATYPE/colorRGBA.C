@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.8 2003/12/04 09:51:36 amoll Exp $
+// $Id: colorRGBA.C,v 1.8.4.1 2004/12/30 19:30:25 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
@@ -151,9 +151,14 @@ namespace BALL
 		void ColorRGBA::get(char *char_ptr) const
 			throw()
 		{
-			sprintf(char_ptr, "%x%x%x%x",
+			sprintf(char_ptr, "%2X%2X%2X%2X",
 				(unsigned char)red_, (unsigned char)green_,
 				(unsigned char)blue_, (unsigned char)alpha_);
+
+			for (Position i = 0; i < 7; i++)
+			{
+				if (char_ptr[i] == ' ') char_ptr[i] = '0';
+			}
 		}
 
 		void ColorRGBA::set
@@ -175,9 +180,7 @@ namespace BALL
 		{
 			char temp[10];
 
-			sprintf(&temp[0], "%x%x%x%x",
-				(unsigned char)red_, (unsigned char)green_,
-				(unsigned char)blue_, (unsigned char)alpha_);
+			get(temp);
 
 			s.set(&temp[0]);
 		}
