@@ -28,6 +28,7 @@ void SimulationThread::run()
 
 void SimulationThread::updateScene_()
 {
+	if (main_frame_->stopedSimulation()) return;
 	Mainframe::UpdateCompositeEvent* se = new Mainframe::UpdateCompositeEvent;
 	se->setComposite(composite_);
 	qApp->postEvent(main_frame_, se);
@@ -42,6 +43,7 @@ void SimulationThread::updateScene_()
 
 void SimulationThread::output_(const String& string)
 {
+	if (main_frame_->stopedSimulation()) return;
 	Mainframe::SimulationOutput* su = new Mainframe::SimulationOutput;
 	su->setMessage(string);
 	qApp->postEvent(main_frame_, su);  // Qt will delete it when done
@@ -79,18 +81,18 @@ void EnergyMinimizerThread::run()
 	AmberFF& amber =*(AmberFF*)minimizer_->getForceField();
 
 	// iterate until done and refresh the screen every "steps" iterations
-	while (!minimizer_->minimize(steps_between_updates_, true) &&
+	while (!main_frame_->stopedSimulation() &&
 					minimizer_->getNumberOfIterations() < minimizer_->getMaxNumberOfIterations() &&
-				 !main_frame_->stopedSimulation())
+				 !minimizer_->minimize(steps_between_updates_, true))
 	{
 		updateScene_();
-		msleep(90);
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 										minimizer_->getNumberOfIterations(), 
 										amber.getEnergy(), amber.getRMSGradient());
 		output_(message.ascii());
+		mutex_.lock();
 	}
 
 	outputAmberResult_(amber);
@@ -151,8 +153,6 @@ void MDSimulationThread::run()
 										amber.getRMSGradient());
 		output_(message.ascii());
 		
-		msleep(90);
-		
 		if (save_images_) 
 		{
 			Scene* scene= (Scene*) Scene::getInstance(0);
@@ -160,6 +160,7 @@ void MDSimulationThread::run()
 		}
 
 		if (dcd_file_) manager.takeSnapShot();
+		mutex_.lock();
 	}
 
 	if (dcd_file_) manager.flushToDisk();
