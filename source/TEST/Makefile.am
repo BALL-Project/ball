@@ -45,7 +45,7 @@ EXECUTABLES_MATHS = \
 	PiecewisePolynomial_test
 
 MathsCommon_test_SOURCES=MathsCommon_test.C
-AnalyticalGeometry_test_SOURCES=AnalyticalGeometry.C
+AnalyticalGeometry_test_SOURCES=AnalyticalGeometry_test.C
 Angle_test_SOURCES=Angle_test.C
 Vector2_test_SOURCES=Vector2_test.C
 Vector3_test_SOURCES=Vector3_test.C
