@@ -4,7 +4,6 @@ XDR_DEPENDENT_EXECUTABLES=\
 	XDRPersistenceManager_test
 
 VIEW_EXECUTABLES=\
-	
 
 EXECUTABLES_BASIC = \
 	ClassTest_test\
@@ -65,7 +64,8 @@ EXECUTABLES_DATATYPES = \
 	Quadruple_test\
 	RegularData1D_test\
 	RegularData2D_test\
-	RegularData3D_test
+	RegularData3D_test\
+	ContourSurface_test
 
 EXECUTABLES_CONCEPTS = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	LogStream_test\
