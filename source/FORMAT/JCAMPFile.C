@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.9 2003/06/01 09:13:41 oliver Exp $
+// $Id: JCAMPFile.C,v 1.10 2003/06/01 17:05:57 oliver Exp $
 //
 
 #include <BALL/FORMAT/JCAMPFile.h>
+
+#include <iterator> // ??? debugging only
 
 namespace BALL
 {
@@ -36,9 +38,9 @@ namespace BALL
 		// title are used.
 
 		// A regular expression matching the array declaration in JCAMP
-		static RegularExpression array("^##$([^=]+)= \\(0\\.\\.([1-9][0-9]*)\\)");
-		static RegularExpression regular("^##$([^=]+)= (.*)$");
-		static RegularExpression header("^##([^=]+)= (.*)$");
+		static RegularExpression array("^##\\$([^=]+)= \\(0\\.\\.([1-9][0-9]*)\\)");
+		static RegularExpression regular("^##\\$([^=]+)= (.*)");
+		static RegularExpression header("^##([^=]+)= (.*)");
 		static std::vector<Substring> groups;
 		static JCAMPValue value;
 
@@ -53,14 +55,15 @@ namespace BALL
 					value.type = ARRAY;
 					value.numeric_value.clear();
 
-					static String key = groups[0];
-					Size number_of_values = groups[1].toString().toInt();
+					static String key = groups[1];
+					Size number_of_values = groups[2].toString().toInt() + 1;
 					while (value.numeric_value.size() < number_of_values)
 					{
 						if (!readLine() || getLine().hasPrefix("#")) 
 						{
 							break;
 						}
+						
 						static std::vector<String> fields;
 						getLine().split(fields);
 						for (Position i = 0; i < fields.size(); i++)
@@ -76,7 +79,9 @@ namespace BALL
 					}
 					else
 					{
-						throw Exception::ParseError(__FILE__, __LINE__, getName(), getLine());
+						throw Exception::ParseError(__FILE__, __LINE__, getName(), String("Error parsing array entry on line ") 
+																				+ String(getLineNumber()) + String(" (number of values read:") + String(value.numeric_value.size())
+																				+ " - number of values expected: " + String(number_of_values) + ")");
 					}
 					
 					// next entry.
@@ -85,18 +90,18 @@ namespace BALL
 				else if (regular.find(getLine(), groups))
 				{
 					// read non-array entry
-					if (groups[1].toString().isFloat())
+					if (groups[2].toString().isFloat())
 					{
 						value.numeric_value.resize(1);
 						value.type = NUMERIC;
 					}
 					else
 					{
-						value.string_value = groups[1];
+						value.string_value = groups[2];
 						value.numeric_value.resize(0);
 						value.type = STRING;
 					}
-					entries_.insert(KeyValuePair(groups[0], value));
+					entries_.insert(KeyValuePair(groups[1], value));
 
 					// next entry.
 					continue;
@@ -104,21 +109,25 @@ namespace BALL
 			}
 			else if (header.find(getLine(), groups))
 			{
-				if (groups[0] == "END")
+				if (groups[1] == "END")
 				{
 					// Abort for the "##END=" entry.
 					break;
 				}
 				value.type = STRING;
-				value.string_value = groups[1];
+				value.string_value = groups[2];
 				value.numeric_value.clear();
 
 				// Insert the header entry into the header map
-				header_.insert(std::pair<String, String>(groups[0].toString(), groups[1].toString()));
+				header_.insert(std::pair<String, String>(groups[1].toString(), groups[2].toString()));
 				// Next entry.
 				continue;
 			}
-			
+			else if (getLine().hasPrefix("##END"))
+			{
+				break;
+			}
+
 			// We could not parse this line -- abort.
 			throw Exception::ParseError(__FILE__, __LINE__, getName(), getLine());
 		};

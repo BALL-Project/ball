@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.C,v 1.21 2003/06/01 09:13:41 oliver Exp $
+// $Id: bruker2DFile.C,v 1.22 2003/06/01 17:05:57 oliver Exp $
 //
 
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -10,13 +10,13 @@ using namespace std;
 
 namespace BALL
 {
-	Bruker2D::Bruker2D() 
+	Bruker2DFile::Bruker2DFile() 
 		: File()
 	{
 		//????
 	}
 
-	Bruker2D::Bruker2D(const String& name, OpenMode open_mode) 
+	Bruker2DFile::Bruker2DFile(const String& name, OpenMode open_mode) 
 		throw(Exception::FileNotFound)
 		: File(name + FileSystem::PATH_SEPARATOR + "2rr", open_mode)
 	{
@@ -30,19 +30,19 @@ namespace BALL
 		maxx_ = (int)parsf2_.getIntValue("YMAX_p");
 	}
 
-	Bruker2D::Bruker2D( const Bruker2D& file ) 
+	Bruker2DFile::Bruker2DFile(const Bruker2DFile& file) 
 		throw(Exception::FileNotFound)
 		: File(file)
 	{
 		//????
 	}
 
-	Bruker2D::~Bruker2D()
+	Bruker2DFile::~Bruker2DFile()
 		throw()
 	{
 	}
 
-	void Bruker2D::read(const String& name)
+	void Bruker2DFile::read(const String& name)
 	{
 		JCAMPFile parsf1(name + FileSystem::PATH_SEPARATOR + "proc2s");
 		JCAMPFile parsf2_(name + FileSystem::PATH_SEPARATOR + "procs");
@@ -60,7 +60,7 @@ namespace BALL
 	  read();
 	}
 
-	void Bruker2D::read()
+	void Bruker2DFile::read()
 	{
 	  char c[4];
 		signed long int &numdum = *(signed long int*) (&c[0]);
@@ -161,7 +161,7 @@ namespace BALL
 
   /** Returns the shift corresponding to a position in the bitmap.
   */
-  std::pair<double, double> Bruker2D::getShift(Position x, Position y)
+  std::pair<double, double> Bruker2DFile::getShift(Position x, Position y)
   {
     std::pair<double, double> res;
 
@@ -173,7 +173,7 @@ namespace BALL
 
   /** Returns the coordinates of a point in the original data next to the given coordinates.
   */
-  std::pair<Position, Position> Bruker2D::getPosition(double x, double y)
+  std::pair<Position, Position> Bruker2DFile::getPosition(double x, double y)
   {
     pair<Position, Position> res;
     res.first  = (Position) (((double)(soffsetf2_ - x)) * spointnumf2_ * bfreqf2_ / swidthf2_);
@@ -185,7 +185,7 @@ namespace BALL
   /** Returns a list of peaks found in the spectrum. 
 			Peaks at the edge are ignored.
   */
-	std::list<std::pair<int, int> > Bruker2D::getPeakList() const
+	std::list<std::pair<int, int> > Bruker2DFile::getPeakList() const
   {
 		std::list<std::pair<int, int> > retlist;
 
@@ -214,7 +214,7 @@ namespace BALL
 		return retlist;
   }
 
-  void Bruker2D::setShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, 
+  void Bruker2DFile::setShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, 
 															 double bfreqf1, double bfreqf2, double spointnumf1, double spointnumf2)
   {
     soffsetf1_ = offsetf1;
