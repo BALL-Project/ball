@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.15 2004/02/18 23:24:06 oliver Exp $
+// $Id: kernel.doc,v 1.15.2.1 2004/05/18 15:26:03 amoll Exp $
 
 /** \defgroup ViewKernel Kernel
 		\ingroup Visualisation
@@ -20,11 +20,8 @@
 
 /**  \defgroup ViewKernelConnectivity Widget connectivity and message queuing
 		 \ingroup ViewKernel
-		 These classes are responsible that the widgets and dialogs
-		 can communicate with each other. If a new widget or dialog
-		 is created it must be derived from the class \link BALL::ConnectionObject ConnectionObject \endlink.
-		 This class defines the interface and the properties needed to 
-		 communicate with other widgets.
+		 These classes are responsible that the ModularWidget instances
+		 can communicate with each other. 
 		 The class \link BALL::VIEW::Message Message \endlink and the various derived classes define
 		 some useful messages for special events.
  */
@@ -38,16 +35,20 @@
 /**  \defgroup ViewKernelGeometricPrimitives Geometric primitives and their management
 		 \ingroup ViewKernel
 		 The class \link BALL::VIEW::GeometricObject GeometricObject \endlink is the most important base class
-		 for all primitives. It contains the base properties and base
+		 for all primitives (Sphere, Tube, etc.). It contains the base properties and base
 		 interface definition all primitives must have.
-		 The other classes manage the GeometricObjects.
+		 The other classes manage the GeometricObject 's.
  */
 
 /** \defgroup ViewKernelStage Setup of the Stage, Camera and LightSources
  		\ingroup ViewKernel
+		These classes provide datastructures, which are required by the Scene. 
 */
 
 /** \defgroup ViewKernelOther Other classes
  		\ingroup ViewKernel
+		Here we find the CompositeManager, which handles the creation, storing and deletion of Composite instances.
+		The class MolecularInformation provides means to get names for molecular objects. Also there a serveral enumerations
+		and methods, e.g. for model types of Representation 's.
 */
 
