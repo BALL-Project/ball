@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.C,v 1.9 2004/09/27 15:29:16 oliver Exp $
+// $Id: modelProcessor.C,v 1.10 2004/12/09 23:34:49 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -29,7 +29,8 @@ namespace BALL
 				PropertyManager(model_processor),
 				drawing_precision_(model_processor.drawing_precision_),
 				surface_drawing_precision_(-1)
-		{}
+		{
+		}
 
 		ModelProcessor::~ModelProcessor()
 			throw()
@@ -44,6 +45,7 @@ namespace BALL
 			geometric_objects_.clear();
 			drawing_precision_ = DRAWING_PRECISION_HIGH;
 			surface_drawing_precision_ = -1;
+			clearComposites();
 		}
 
 
@@ -54,5 +56,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

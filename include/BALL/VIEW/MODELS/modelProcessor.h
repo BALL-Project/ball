@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.13 2004/06/07 10:17:17 amoll Exp $
+// $Id: modelProcessor.h,v 1.14 2004/12/09 23:35:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -53,11 +53,12 @@ namespace BALL
 				ModelProcessor(const ModelProcessor& model_processor)
 					throw();
 
-				///
+				/** Destructor, calls clear
+				*/
 				~ModelProcessor()
 					throw();
 
-				///
+				/// Clear all datastructures, but dont destroy the geometric objects.
 				virtual void clear()
 					throw();
 
@@ -99,7 +100,11 @@ namespace BALL
 				float getSurfaceDrawingPrecision() const
 					throw() { return surface_drawing_precision_;}
 
-				///
+				/** Method to create geometric objects.
+				 		This method is called in Representation::update() after
+						all operator() was called for all Composites.
+				 		To be overloaded in derived classes
+				*/
 				virtual bool createGeometricObjects() 
 					throw();
 				
