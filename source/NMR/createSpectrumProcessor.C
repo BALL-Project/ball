@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.11 2001/06/14 11:37:14 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.12 2001/07/14 23:01:30 oliver Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -169,7 +169,7 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	const list<Peak1D>& CreateSpectrumProcessor::getPeakList() const
+	const PeakList1D& CreateSpectrumProcessor::getPeakList() const
 	{
 		return peaklist_;
 	}
