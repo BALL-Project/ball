@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.94 2004/07/03 12:09:30 amoll Exp $
+// $Id: mainControl.C,v 1.95 2004/07/04 15:18:18 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -797,11 +797,12 @@ namespace BALL
 
 		#ifdef BALL_PLATFORM_WINDOWS
 			// workaround for strange microsoft windows behaviour
-			x_pos += 4;
-			y_pos += 23;
+// 			x_pos += 4;
+// 			y_pos += 23;
 		#endif
 			
-			setGeometry(x_pos, y_pos, w, h);
+			resize(QSize(w,h));
+			move(QPoint(x_pos, y_pos));
 			
 			// the default preferences tab (if existent)
 			if (main_control_preferences_ != 0)
