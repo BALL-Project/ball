@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.h,v 1.6 2000/09/25 16:26:47 anker Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.7 2000/09/28 13:37:51 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -33,7 +33,7 @@ namespace BALL
 
 		/** Symbolic names for option keys.
 			This struct contains a symbolic name for each recognized key in
-			ReissCavFreeEnergyProcessor::options.
+			PairExpRDFIntegrator::options.
 		 */
 		struct Option
 		{
