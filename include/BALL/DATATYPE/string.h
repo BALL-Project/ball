@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.4 1999/11/30 19:46:50 oliver Exp $
+// $Id: string.h,v 1.5 1999/12/17 11:19:01 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -669,6 +669,7 @@ namespace BALL
 				trimLeft stops at the first character encountered that is not in {\bf trimmed}.
 				Using its default parameter CHARACTER\_CLASS\_\_WHITESPACE, it is usually handy to 
 				remove blanks from the beginning of a string.
+				Strings consisting of character from {\tt trimmed} only yield an empty string.
 		*/
 		String& trimLeft(const char* trimmed = CHARACTER_CLASS__WHITESPACE);
 
@@ -676,6 +677,7 @@ namespace BALL
 				trimRight stops at the first character encountered that is not in {\bf trimmed}.
 				Using its default parameter CHARACTER\_CLASS\_\_WHITESPACE, it is usually handy to 
 				remove blanks from the end of a string.
+				Strings consisting of character from {\tt trimmed} only yield an empty string.
 		*/
 		String& trimRight(const char* trimmed_chars = CHARACTER_CLASS__WHITESPACE);
 
