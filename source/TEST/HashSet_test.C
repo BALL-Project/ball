@@ -1,4 +1,4 @@
-// $Id: HashSet_test.C,v 1.6 2000/09/04 20:47:31 amoll Exp $
+// $Id: HashSet_test.C,v 1.7 2000/09/05 09:27:40 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.6 2000/09/04 20:47:31 amoll Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.7 2000/09/05 09:27:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -240,7 +240,7 @@ CHECK(HashSet::erase(Iterator first, Iterator last))/*
 	TEST_EQUAL(hs.getSize(), 3)*/
 RESULT
 
-CHECK(HashSet::erase(Iterator pos))/*
+CHECK(HashSet::erase(Iterator pos))
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -248,11 +248,23 @@ CHECK(HashSet::erase(Iterator pos))/*
 	hs.insert(3);
 	HashSet<int>::Iterator it1 = hs.begin();
 	++it1;
+	TEST_EQUAL(*it1, 0)
 	hs.erase(it1);
-	TEST_EQUAL(hs.has(0), true)
+	TEST_EQUAL(hs.has(0), false)
+	TEST_EQUAL(hs.has(1), true)
 	TEST_EQUAL(hs.has(2), true)
-	TEST_EQUAL(hs.has(1), false)
-	TEST_EQUAL(hs.getSize(), 3)*/
+	TEST_EQUAL(hs.has(3), true)
+	TEST_EQUAL(hs.getSize(), 3)
+	hs.erase(hs.end());
+	TEST_EQUAL(hs.getSize(), 3)
+	hs.erase(hs.begin());
+	TEST_EQUAL(hs.getSize(), 2)
+	hs.erase(hs.begin());
+	TEST_EQUAL(hs.getSize(), 1)
+	hs.erase(hs.begin());
+	TEST_EQUAL(hs.getSize(), 0)
+	hs.erase(hs.begin());
+	TEST_EQUAL(hs.getSize(), 0)
 RESULT
 
 CHECK(HashSet::host(Visitor<int>&))
@@ -333,6 +345,7 @@ RESULT
 
 CHECK(HashSet::dump(std::ostream&, Size) const)
 	HashSet<int> hs;
+	hs.insert(0);
 	hs.insert(1);
 	hs.insert(2);
 	hs.insert(3);

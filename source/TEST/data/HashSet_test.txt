@@ -1,7 +1,7 @@
-  size: 3
-  bucket size: 3
+  size: 4
+  # buckets: 3
   capacity: 4
-  load factor: 1
-/    bucket 0 \([0-9a-x]+\):
-/    bucket 1 \([0-9a-x]+\):
-/    bucket 2 \([0-9a-x]+\):
+/  load factor: 1.333*
+/    bucket 0: \([0-9a-x]+\) \([0-9a-x]+\) \(0\)
+/    bucket 1: \([0-9a-x]+\) \(0\)
+/    bucket 2: \([0-9a-x]+\) \(0\)
