@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.8 2000/08/06 15:29:04 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.9 2000/08/06 18:01:23 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -98,7 +98,7 @@ void initialize_()
 	rrright_ = TBSTreeItem<int>(8, 0, 0, BSTreeItem::BLACK);
 }
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.8 2000/08/06 15:29:04 amoll Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.9 2000/08/06 18:01:23 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -136,6 +136,19 @@ cout << "llright " <<&llright <<endl;
 cout << "rright " <<&rright <<endl;
 cout << "rrright " <<&rrright <<endl;
 cout <<endl;
+
+initialize_();
+cout <<endl;
+cout << "item_ " << &item_<<endl;
+cout << "left_ " << &left_<<endl;
+cout << "rleft_ " <<&rleft_ <<endl;
+cout << "right_ " <<&right_ <<endl;
+cout << "lright_ " <<&lright_ <<endl;
+cout << "llright_ " <<&llright_ <<endl;
+cout << "rright_ " <<&rright_ <<endl;
+cout << "rrright_ " <<&rrright_ <<endl;
+cout <<endl;
+
 
 CHECK(BSTreeItem(const BSTreeItem& item, bool /* deep */= true))
   BSTreeItem* item1;
@@ -255,30 +268,23 @@ CHECK(detachNode(BSTreeItem*& root, BSTreeItem* t, BSTreeItem* p, bool right_sid
 	initialize();
 RESULT
 
-CHECK(rotateRight())/*
+CHECK(rotateRight())
   TEST_EQUAL(right.rotateRight(), &lright)
-	right = *right.rotateRight();
-  TEST_EQUAL(lright.getColor(), BSTreeItem::RED)
-	TEST_EQUAL(lright.getLeftChild(), &rright)
-	TEST_EQUAL(lright.getRightChild(), &right)
-	TEST_EQUAL(lright.getLeftChild()->getRightChild(), &rrright)
-
-  TEST_EQUAL(lright.rotateRight(), &lright)
-  TEST_EQUAL(lright.getColor(), BSTreeItem::BLACK)
-	TEST_EQUAL(lright.getRightChild(), &rrright)
-
-  TEST_EQUAL(rright.rotateRight(), &rright)
-  TEST_EQUAL(rright.getColor(), BSTreeItem::BLACK)
-	TEST_EQUAL(rright.getLeftChild()->getRightChild(), 0)
-	initialize();*/
+	TEST_EQUAL(item.getRightChild(), &lright)
+	TEST_EQUAL(lright.getLeftChild(), &llright)
+	TEST_EQUAL(lright.getRightChild(), &right)	
+	TEST_EQUAL(right.getLeftChild(), 0)
+	TEST_EQUAL(right.getRightChild(), &rright)	
+	initialize();
 RESULT
 
-CHECK(rotateLeft())/*
-  TEST_EQUAL(item.rotateLeft(), &right)
-	TEST_EQUAL(right.getLeftChild(), &item)
-	TEST_EQUAL(item.getLeftChild(), 0)	
-	TEST_EQUAL(item.getRightChild(), &lright)	
-	TEST_EQUAL(right.getRightChild(), &rright)	*/
+CHECK(rotateLeft())
+  TEST_EQUAL(right.rotateLeft(), &rright)
+	TEST_EQUAL(item.getRightChild(), &rright)
+	TEST_EQUAL(rright.getLeftChild(), &right)
+	TEST_EQUAL(rright.getRightChild(), &rrright)	
+	TEST_EQUAL(right.getLeftChild(), &lright)
+	TEST_EQUAL(right.getRightChild(), 0)	
 	initialize();
 RESULT
 
@@ -580,14 +586,14 @@ CHECK(applyPreorder)
 	item_.applyPreorder(myproc);
 	myproc.reset();
 	TEST_EQUAL(myproc.getSize(), 8)
-/*	TEST_EQUAL(myproc.getPointer(), &item_)
-	TEST_EQUAL(myproc.getPointer(), &left_)
-	TEST_EQUAL(myproc.getPointer(), &rleft_)
-	TEST_EQUAL(myproc.getPointer(), &right_)
-	TEST_EQUAL(myproc.getPointer(), &lright_)
-	TEST_EQUAL(myproc.getPointer(), &llright_)
-	TEST_EQUAL(myproc.getPointer(), &rright_)
-	TEST_EQUAL(myproc.getPointer(), &rrright_)*/
+	TEST_EQUAL(*(myproc.getPointer()), 1)
+	TEST_EQUAL(*(myproc.getPointer()), 2)
+	TEST_EQUAL(*(myproc.getPointer()), 3)
+	TEST_EQUAL(*(myproc.getPointer()), 4)
+	TEST_EQUAL(*(myproc.getPointer()), 5)
+	TEST_EQUAL(*(myproc.getPointer()), 6)
+	TEST_EQUAL(*(myproc.getPointer()), 7)
+	TEST_EQUAL(*(myproc.getPointer()), 8)
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
