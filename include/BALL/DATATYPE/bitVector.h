@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.28 2001/12/11 12:00:18 oliver Exp $
+// $Id: bitVector.h,v 1.29 2001/12/12 11:30:21 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -18,29 +18,14 @@
 
 #include <string.h>
 
-#define BALL_BLOCK_BITS ((1 * BALL_CHAR_BITS))
-
+#define BALL_BLOCK_BITS 8
 #define BALL_BLOCK_MASK (BALL_BLOCK_BITS - 1)
+#define BALL_BLOCK_SHIFT              3
+#define BALL_BLOCK_ALL_BITS_SET       0xFF
+#define BALL_BLOCK_ALL_BITS_CLEARED   0x00
 
-#if   (BALL_BLOCK_BITS == 8)
-#  define BALL_BLOCK_SHIFT              3
-#  define BALL_BLOCK_ALL_BITS_SET       0xFF
-#  define BALL_BLOCK_ALL_BITS_CLEARED   0x00
-#elif (BALL_BLOCK_BITS == 16)
-#  define BALL_BLOCK_SHIFT              4
-#  define BALL_BLOCK_ALL_BITS_SET       0xFFFF
-#  define BALL_BLOCK_ALL_BITS_CLEARED   0x0000
-#elif (BALL_BLOCK_BITS == 32)
-#  define BALL_BLOCK_SHIFT              5
-#  define BALL_BLOCK_ALL_BITS_SET       0xFFFFFFFF
-#  define BALL_BLOCK_ALL_BITS_CLEARED   0x00000000
-#else  
-#  define BALL_BLOCK_SHIFT              6
-#  define BALL_BLOCK_ALL_BITS_SET       0xFFFFFFFFFFFFFFFF
-#  define BALL_BLOCK_ALL_BITS_CLEARED   0x0000000000000000
-#endif  
 
-#define BALL_BLOCK_SIZE(bits) (Size)(((bits) + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT)
+#define BALL_BLOCK_SIZE(bits) (Size)(((bits) + BALL_BLOCK_BITS - 1) >> BALL_BLOCK_SHIFT)
 
 
 namespace BALL 
@@ -70,6 +55,8 @@ namespace BALL
 		};
 
 		//@}
+
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -103,9 +90,11 @@ namespace BALL
 
 		/** Destructor
 		*/
-		virtual ~Bit() throw();
-
+		virtual ~Bit()	
+			throw();
 		//@}
+
+
 		/**	@name	Converters
 		*/
 		//@{
@@ -184,7 +173,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(BitVector)
+		BALL_CREATE(BitVector)
 
 
 		/**	@name	Type Definitions and Constants
@@ -213,7 +202,7 @@ namespace BALL
 
 		/** Copy constructor
 		*/
-		BitVector(const BitVector& bit_vector, bool deep = true) 
+		BitVector(const BitVector& bit_vector) 
 			throw(Exception::OutOfMemory);
 
 		/** Detailled constructor from an array of char.
@@ -237,7 +226,7 @@ namespace BALL
 		//@{
 
 		/// Assignment from an other BitVector instance.
-		void set(const BitVector& bit_vector, bool deep = true)
+		void set(const BitVector& bit_vector)
 		  throw(Exception::OutOfMemory);
 
 		/** Assignment from a char string.
@@ -258,13 +247,10 @@ namespace BALL
 		  throw(Exception::OutOfMemory);
 
 		/// Assignment to an other BitVector.
-		void get(BitVector& bitvector, bool deep = true) const
+		void get(BitVector& bitvector) const
 		  throw(Exception::OutOfMemory);
-
-		/// Swapping of two BitVector instances.
-		void swap(BitVector& bitvector) throw();
-
 		//@}
+
 		/**	@name	Accessors 
 		*/
 		//@{

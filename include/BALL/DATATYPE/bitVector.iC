@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.23 2001/12/11 12:00:18 oliver Exp $
+// $Id: bitVector.iC,v 1.24 2001/12/12 11:30:21 oliver Exp $
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
@@ -53,12 +53,6 @@ Bit::Bit(BitVector* bit_vector, Index index)
 }
 
 BALL_INLINE
-Bit::~Bit()
-	throw()
-{
-}
-
-BALL_INLINE
 void Bit::clear() 
 	throw()
 {
@@ -99,10 +93,10 @@ const BitVector& BitVector::operator = (const char* bit_string)
 }
 
 BALL_INLINE 
-void BitVector::get(BitVector& bit_vector, bool deep) const
+void BitVector::get(BitVector& bit_vector) const
   throw(Exception::OutOfMemory)
 {
-  bit_vector.set(*this, deep);
+  bit_vector.set(*this);
 }
 
 BALL_INLINE 
