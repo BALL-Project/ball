@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.43.2.5 2004/05/25 17:54:43 amoll Exp $
+// $Id: molecularStructure.C,v 1.43.2.6 2004/05/28 10:40:30 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -117,10 +117,10 @@ namespace BALL
 //			hint = " Map two proteins.";
 // 			map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
-			hint = "Calculate RMSD for two molecules or fragments of molecules.";
-			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
-			
-			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
+//			hint = "Calculate  RMSD for two molecules or fragments of molecules.";
+// 			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
+// 			
+// 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
 			hint = "Recalculate the secondary structure for a structure.";
 			calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate sec&ondary structure", this,
