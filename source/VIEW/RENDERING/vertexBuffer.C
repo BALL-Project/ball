@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.17 2005/01/24 00:08:33 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.18 2005/01/24 13:20:06 oliver Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -87,18 +87,18 @@ GLRenderer* MeshBuffer::gl_renderer_ = 0;
 
 MeshBuffer::MeshBuffer()
 : mesh_(0),
-	buffers_(),
+	buffer_(),
 	filled_(false)
 {
-	buffers_[0] = buffers_[1] = buffers_[2] = buffers_[3] = 0;
+	buffer_[0] = buffer_[1] = buffer_[2] = buffer_[3] = 0;
 }
 
 MeshBuffer::MeshBuffer(const MeshBuffer& mesh_buffer)
 : mesh_(mesh_buffer.mesh_),
-	buffers_(),
+	buffer_(),
 	filled_(false)
 {
-	buffers_[0] = buffers_[1] = buffers_[2] = buffers_[3] = 0;
+	buffer_[0] = buffer_[1] = buffer_[2] = buffer_[3] = 0;
 }
 
 const MeshBuffer& MeshBuffer::operator = (const MeshBuffer& mesh_buffer)
@@ -106,7 +106,7 @@ const MeshBuffer& MeshBuffer::operator = (const MeshBuffer& mesh_buffer)
 {
   mesh_ = mesh_buffer.mesh_;
 	filled_ = false;
-	buffers_[0] = buffers_[1] = buffers_[2] = buffers_[3] = 0;
+	buffer_[0] = buffer_[1] = buffer_[2] = buffer_[3] = 0;
 	return *this;
 }
 
@@ -120,7 +120,7 @@ bool MeshBuffer::initialize()
 	
 	// colors, normals, indices, vertex
 	// Get valid Names
-	glGenBuffersARB(4, buffers_);
+	glGenBuffersARB(4, buffer_);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -135,7 +135,7 @@ bool MeshBuffer::initialize()
 		data[start + 2] = mesh_->vertex[index].z;
 	}
 
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[0]);
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[0]);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 3, data, GL_STATIC_DRAW_ARB);
 
 	for (Size index = 0; index < nr_vertices; ++index)
@@ -146,7 +146,7 @@ bool MeshBuffer::initialize()
 		data[start + 2] = mesh_->normal[index].z;
 	}
 
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[1]);
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[1]);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 3, data, GL_STATIC_DRAW_ARB);
 
 	if (mesh_->colorList.size() > 1)
@@ -162,7 +162,7 @@ bool MeshBuffer::initialize()
 
 		glEnableClientState(GL_COLOR_ARRAY);
 
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[2]);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[2]);
 		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 4, data, GL_STATIC_DRAW_ARB);
 	}
 
@@ -178,7 +178,7 @@ bool MeshBuffer::initialize()
 		indices[start + 2] = mesh_->triangle[index].v3;
 	}
 
-	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffers_[3]);
+	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffer_[3]);
 	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, sizeof(unsigned int) * nr_triangles * 3, 
 									indices, GL_STATIC_DRAW_ARB);
 	delete[] indices;
@@ -202,7 +202,7 @@ void MeshBuffer::clear()
 void MeshBuffer::clearBuffer()
 {
 	if (!filled_) return;
-	glDeleteBuffersARB(4, buffers_);
+	glDeleteBuffersARB(4, buffer_);
 	filled_ = false;
 }
 
@@ -212,22 +212,22 @@ bool MeshBuffer::draw()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[0]);
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[0]);
 	glVertexPointer(3, GL_FLOAT, 0, 0); 
 
 	if (gl_renderer_->getRenderMode() == GLRenderer::RENDER_MODE_SOLID)
 	{
 		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[1]);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[1]);
 		glNormalPointer(GL_FLOAT, 0, 0);
 	}
 
-	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffers_[3]);
+	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffer_[3]);
 	glIndexPointer(GL_UNSIGNED_INT, 0, 0);
 
 	if (mesh_->colorList.size() > 1)
 	{
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[2]);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[2]);
 		glColorPointer (4, GL_FLOAT, 0, 0);
 	}
 	else

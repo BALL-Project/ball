@@ -3,11 +3,12 @@
 //
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 
+#include <BALL/SYSTEM/TCPTransfer.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/KERNEL/system.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
 #include <qcombobox.h> 

@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.60.2.7 2005/01/24 12:13:45 amoll Exp $
+// $Id: representation.C,v 1.60.2.8 2005/01/24 13:20:06 oliver Exp $
 //
 
+
 #include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.h,v 1.1.2.6 2005/01/19 13:15:09 amoll Exp $
+// $Id: vertexBuffer.h,v 1.1.2.7 2005/01/24 13:20:05 oliver Exp $
+//
 
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
 #define BALL_VIEW_RENDERING_VERTEXBUFFER_H
@@ -36,7 +37,7 @@ namespace BALL
 		{
 			public:
 
-			typedef unsigned int Buffer;
+			typedef GLuint Buffer[4];
 
 			///
 			MeshBuffer();
@@ -84,12 +85,13 @@ namespace BALL
 			protected:
 			
 			const Mesh* mesh_;
-			Buffer buffers_[4];
+			Buffer buffer_;
 			bool filled_;
 			static GLRenderer* gl_renderer_;
 		};
 
 	} // namespace VIEW
+
 } // namespace BALL
 
 #endif // BALL_VIEW_RENDERING_VERTEXBUFFER_H
