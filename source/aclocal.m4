@@ -1,8 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl
-dnl		$Id: aclocal.m4,v 1.35 2003/08/28 15:48:09 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.36 2003/10/26 10:28:56 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -47,6 +46,28 @@ AC_DEFUN(CF_BASENAME,[
 	done
 ])
 
+dnl    define a macro to abort configure, print an appropriate error message
+dnl    and package up the current stuff relevant to diagnosis into a tar
+dnl    file.
+AC_DEFUN(CF_ERROR,[
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([Configure failed. If you cannot solve your problem with the aid])
+	AC_MSG_RESULT([of the above error message, please contact the BALL mailing list])
+	AC_MSG_RESULT([or the BALL developers. Please enclose the file 'conf.diag.tar'])
+	AC_MSG_RESULT([which has been created in BALL/source. It contains the relevant])
+	AC_MSG_RESULT([files from this configure run. In most cases, the information])
+	AC_MSG_RESULT([is necessary to diagnose what went wrong. This file contains])
+	AC_MSG_RESULT([information about your system setup and versions of compilers])
+	AC_MSG_RESULT([and other tools installed in your system.])
+	AC_MSG_RESULT()
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then 
+		${RM} $TARFILE ; 
+	fi
+  tar cf $TARFILE configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+	AC_MSG_ERROR(Aborted.)
+])
+
 dnl    define a macro to inform the user about failed tests for programs
 dnl    it checks for the unix command given as second parameter and
 dnl    sets the shell variable given as second parameter to its absolute path
@@ -58,9 +79,7 @@ AC_DEFUN(CF_MSG_PATH_PROG,[
 		AC_MSG_RESULT([This script requires the unix command $2, but cannot find it.])
 		AC_MSG_RESULT([Please add the correct path to $2 to your \$PATH variable])
 		AC_MSG_RESULT([and restart configure.])
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(aborted)
-		exit
+		CF_ERROR
 	fi
 ])
 
@@ -332,10 +351,10 @@ AC_DEFUN(CF_DETECT_OS,[
 			BINFMT=Linux-alpha
 		fi
 
-		if test "${ARCHITECTURE}" = "unknown" ; then
+		if test "${ARCHITECTURE}" = "unknown" -a "${BALL_IGNORE_ARCH}" = ""; then
 			AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
 			AC_MSG_RESULT(Sorry - this architecture is currently not supported...)
-			AC_MSG_ERROR(aborted)
+			CF_ERROR
 		fi
 	fi
 
@@ -369,9 +388,9 @@ AC_DEFUN(CF_DETECT_OS,[
 
 	if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX \
 		-a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" \
-		-a "${OS}" != Darwin ; then
+		-a "${OS}" != Darwin -a "${BALL_IGNORE_ARCH}" = "" ; then
 		AC_MSG_RESULT(Sorry - your OS ($OS) is currently not supported...)
-		AC_MSG_ERROR(aborted)
+		CF_ERROR
 	fi
 
 	dnl
@@ -458,7 +477,7 @@ AC_DEFUN(CF_DETECT_OS,[
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(Cannot find ${CXX}. Please add it to your PATH)
 				AC_MSG_RESULT(or specify an absolute path in configure.)
-				AC_MSG_ERROR(aborted)
+				CF_ERROR
 			else
 				CXX=${CXXPATH}
 			fi
@@ -491,8 +510,7 @@ AC_DEFUN(CF_DETECT_OS,[
 			AC_MSG_RESULT(or specify an absolute path in configure by setting the variable)
 			AC_MSG_RESULT(CXX=<pathname> or specify the compiler by passing the option)
 			AC_MSG_RESULT(--with-compiler=<compiler> to configure.)
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(aborted)
+			CF_ERROR
 		fi
 	fi
 
@@ -600,8 +618,7 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 		AC_MSG_RESULT([which can be obtained from])
 		AC_MSG_RESULT([  ftp://gcc.gnu.org/pub/gcc/releases/index.html])
 		AC_MSG_RESULT([or specify a different compiler using the option --with-compiler=])
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(aborted)
+		CF_ERROR
 	fi
 
 	dnl
@@ -643,10 +660,10 @@ AC_DEFUN(CF_GXX_OPTIONS, [
   fi
 
   DYNAR="${CXX}"
-  if test "${OS}" == "Solaris" ; then
+  if test "${OS}" = "Solaris" ; then
     DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
   else 
-    if test "${OS}" == Darwin ; then
+    if test "${OS}" = Darwin ; then
 	    DYNAROPTS="${DYNAROPTS} -dynamiclib -fPIC -o"			
 		else	
   	  DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
@@ -863,8 +880,7 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
 			AC_MSG_RESULT(Your version of Digital/Compaq C++ does not provide all)
 			AC_MSG_RESULT(ANSI C++ features required by BALL.)
 			AC_MSG_RESULT(Please upgrade to release 6.2 or above.)
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(aborted.)
+			CF_ERROR
 		fi
 
   TEMPLATE_DIR="cxx_rep"
@@ -966,7 +982,7 @@ AC_DEFUN(CF_MIPSPRO_OPTIONS, [
             -o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" -lt 2; then
       AC_MSG_RESULT()
       AC_MSG_RESULT(MipsPro CC version 7.30 or above is required. Please update your compiler.)
-      AC_ERROR(Aborted)
+			CF_ERROR
     fi
 
    AR=${CXX}
@@ -1070,8 +1086,7 @@ AC_DEFUN(CF_SUNCC_OPTIONS, [
       AC_MSG_RESULT(BALL requires an ANSI C++ compliant compiler)
       AC_MSG_RESULT(SUNPro compilers are (mostly) ANSI compliant for version 5.3 and above)
       AC_MSG_RESULT(Please upgrade your compiler!)
-      AC_MSG_RESULT()
-      AC_ERROR(Abort)
+			CF_ERROR
     fi
 
     AC_DEFINE(SOLARIS,)
@@ -1206,8 +1221,7 @@ AC_DEFUN(CF_C_BIGENDIAN, [
 	)
 	if test "${BALL_ENDIAN_TEST+set}" != set ; then
 		AC_MSG_RESULT(<cannot determine>)
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(Cannot determine endianness of machine.)
+		CF_ERROR
 	else
 		dnl
 		dnl read the result of the endian test from the file
@@ -1226,8 +1240,7 @@ AC_DEFUN(CF_C_BIGENDIAN, [
 				AC_MSG_RESULT(big endian)
 			else
 				AC_MSG_RESULT(<cannot determine>)
-				AC_MSG_RESULT()
-				AC_MSG_ERROR(Cannot determine endianness of machine.)
+				CF_ERROR
 			fi
 		fi
 	fi
@@ -1342,7 +1355,7 @@ AC_DEFUN(CF_CHECK_TPL_NULL_ARGS, [
 	AC_MSG_RESULT(\"$BALL_NULL_TEMPLATE_ARGS\")
 	if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
 		AC_MSG_RESULT(could not find a suitable argument for null templates)
-		AC_ERROR(aborted)
+		CF_ERROR
 	fi
 ])
 
@@ -1471,8 +1484,7 @@ AC_DEFUN(CF_CHECK_ARM_ACCESS_MODIFICATION, [
 		AC_MSG_RESULT([Compiler does not understand ARM or ANSI style method access modification.])
 		AC_MSG_RESULT([Please specify a different compiler (e.g. g++ 2.95.2) using the option])
 		AC_MSG_RESULT([--with-compiler=<compiler>.])
-		AC_MSG_RESULT()
-		AC_ERROR(aborted.)
+		CF_ERROR
 	fi
 ])
 
@@ -1528,7 +1540,7 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 			else
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(cannot find appropriate numeric type for 64bit unsigned int)
-				AC_MSG_ERROR(abort)
+				CF_ERROR
 			fi
 		fi
 	fi
@@ -1545,7 +1557,7 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find appropriate integer type of same size as void*)
-			AC_MSG_ERROR(abort)
+			CF_ERROR
 		fi
 	fi
 	AC_DEFINE_UNQUOTED(BALL_POINTERSIZEINT_TYPE, ${BALL_POINTER_TYPE})
@@ -1565,7 +1577,7 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find appropriate numeric type for 32bit int)
-			AC_MSG_ERROR(abort)
+			CF_ERROR
 		fi
 	fi
 	AC_DEFINE_UNQUOTED(BALL_SIZE_TYPE, ${BALL_SIZE_TYPE})
@@ -1583,8 +1595,7 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find unsigned 64bit type.)
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(abort)
+			CF_ERROR
 		fi
 	fi
 	AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
@@ -1620,8 +1631,7 @@ AC_DEFUN(CF_CHECK_REGEX_H, [
 		AC_MSG_RESULT([please install the GNU regexp package from])
 		AC_MSG_RESULT()
 		AC_MSG_RESULT([  ftp://ftp.gnu.org/gnu/regex/regex-0.12.tar.gz])
-		AC_MSG_RESULT()
-		AC_MSG_ERROR(Aborted.)
+		CF_ERROR
 	fi
 ])
 
@@ -1953,10 +1963,9 @@ AC_DEFUN(CF_CHECK_GETHOSTNAME, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Could not find gethostname or sysinfo methods!])
 			AC_MSG_RESULT([Please refer to config.log to identify the problem.])
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted)
+			CF_ERROR
 		fi
-		fi
+	fi
 
 	dnl
 	dnl check for gethostname in the header
@@ -2125,16 +2134,14 @@ AC_DEFUN(CF_CHECK_XDR, [
 			AC_MSG_RESULT([Cannot find RPC headers (rpc/types.h).])
 			AC_MSG_RESULT([If your system does not provide an RPC/XDR implementation (e.g., CYGWIN),])
 			AC_MSG_RESULT([please specify the option --without-xdr to avoid this error.])
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		fi
 
 		AC_CHECK_HEADER(rpc/xdr.h, HAS_XDR_H=true, HAS_XDR_H=false)
 		if test "${HAS_XDR_H}" = false ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Cannot find XDR headers (rpc/xdr.h).])
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		fi
 
 		AC_MSG_CHECKING([arg types for xdrrec_create])
@@ -2209,7 +2216,7 @@ AC_DEFUN(CF_CHECK_XDR, [
 						AC_MSG_RESULT(())
 					else
 						AC_MSG_RESULT(not found!)
-						AC_MSG_ERROR(Aborted)
+						CF_ERROR
 					fi
 				fi
 			fi
@@ -2294,7 +2301,7 @@ AC_DEFUN(CF_CHECK_XDR, [
 			fi
 			if test "${BALL_U_QUAD_TYPE}" = "" ; then
 				AC_MSG_RESULT([Could not identify an appropriate type for xdr_u_hyper.])
-				AC_MSG_ERROR([Aborted.])
+				CF_ERROR
 			fi
 
 			AC_MSG_RESULT(${BALL_U_QUAD_TYPE})
@@ -2319,7 +2326,7 @@ AC_DEFUN(CF_CHECK_XDR, [
 			)	
 			if test "${BALL_U_QUAD_TYPE}" = "" ; then
 				AC_MSG_RESULT([Could not identify an 64 bit unsigned type (long long).])
-				AC_MSG_ERROR(aborted)
+				CF_ERROR
 			fi
 		
 			AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
@@ -2381,7 +2388,7 @@ AC_DEFUN(CF_CHECK_XDR, [
 				AC_MSG_RESULT(no)
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(Did not find XDR symbols in libc or libnsl.)
-				AC_MSG_ERROR(Aborted.)
+				CF_ERROR
 			fi
 		else
 			dnl
@@ -2416,7 +2423,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 			AC_MSG_RESULT(by passing the option --with-fftw-incl=DIR to configure.)
 			AC_MSG_RESULT(The FFTW package can be found under the following URL:)
 			AC_MSG_RESULT(  http://www.fftw.org)
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		else
 			AC_MSG_RESULT((${FFTW_INCL_PATH}))
 		fi
@@ -2430,8 +2437,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 			AC_MSG_RESULT(FFT library FFTW not found!)
 			AC_MSG_RESULT(Please install it in a standard location or specify the path)
 			AC_MSG_RESULT(with --with-fftw-lib=DIR on the command line.)
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		else
 			AC_MSG_RESULT((${FFTW_LIB}))
 			LIBS="${LIBS} ${FFTW_LIB}/libfftw.a"
@@ -2477,7 +2483,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 			AC_MSG_RESULT(EXIT_CODE = ${EXIT_CODE})
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Unable to determine precision.)
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		fi
 		LDFLAGS=${SAVE_LDFLAGS}
 		AC_MSG_RESULT(${FFTW_PRECISION})
@@ -2490,8 +2496,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Specified complex precision is inconsistent with the precision of FFTW.)
 			AC_MSG_RESULT(Please check ${FFTW_INCL_PATH}/fftw.h and your configure options.)
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		fi
 		BALL_COMPLEX_PRECISION=${FFTW_PRECISION}
 		AC_MSG_RESULT(set to ${BALL_COMPLEX_PRECISION})
@@ -2522,8 +2527,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Cannot link against libfftw. Please check config.log and])
 			AC_MSG_RESULT([specify appropriate options to configure (e.g. --with-fftw-lib/incl).])
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted)
+			CF_ERROR
 		else
 			AC_MSG_RESULT(yes)
 		fi
@@ -2566,7 +2570,7 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT(No Mesa headers found! Please specify the path to the directory)
 					AC_MSG_RESULT(containing the Mesa headers using --with-opengl-incl=DIR.)
 					AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
-					AC_MSG_ERROR(Aborted.)
+					CF_ERROR
 				else
 					AC_MSG_RESULT(${MESA_INCLUDES})
 				fi
@@ -2604,7 +2608,7 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT()
 					AC_MSG_RESULT(no OpenGL headers found! Please use the option --with-opengl-incl=DIR)
 					AC_MSG_RESULT(of configure to specify the correct path to these headers.)
-					AC_MSG_ERROR(aborted)
+					CF_ERROR
 				else
 					AC_MSG_RESULT((${OPENGL_INCPATH}))
 				fi
@@ -2616,7 +2620,7 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT()
 					AC_MSG_RESULT(no OpenGL lib found! Please use the option --with-opengl-libs=DIR)
 					AC_MSG_RESULT(of configure to specify the correct path to these libraries.)
-					AC_MSG_ERROR(aborted)
+					CF_ERROR
 				else
 					AC_MSG_RESULT((${OPENGL_LIBPATH}))
 				fi
@@ -2643,7 +2647,7 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT(path - configure will recognize this, too.)
 					AC_MSG_RESULT(The QT package can be found under the following URL:)
 					AC_MSG_RESULT(  http://www.troll.no/qt)
-					AC_MSG_ERROR(Aborted.)
+					CF_ERROR
 				else
 					AC_MSG_RESULT((${QT_INCPATH}))	
 				fi
@@ -2686,8 +2690,7 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
 					AC_MSG_RESULT([The QT package can be found under the following URL:])
 					AC_MSG_RESULT(  http://www.troll.no/qt)
-					AC_MSG_RESULT()
-					AC_MSG_ERROR(Aborted.)
+					CF_ERROR
 				else
 					AC_MSG_RESULT((${QT_LIBPATH}))	
 				fi
@@ -2708,51 +2711,33 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT([  Please check the settings of QTDIR as well or specify])
 					AC_MSG_RESULT([  the path to the library/headers with])
 					AC_MSG_RESULT([    --with-qt-libs=<DIR> / --with-qt-incl=<DIR>])
-					AC_MSG_RESULT()
-					AC_MSG_ERROR(Aborted.)
+					CF_ERROR
 				else
 					AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
 				fi			
 		
 				dnl
-				dnl  QT libraries before release 2.0 contained the OGL support in a separate
-				dnl   librarie: libqgl.a, so we hav to look for that one as well....
+				dnl  We do require QT 3.x by now. 2.x won't do...
 				dnl
 				if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
-					if test "${QT_VERSION}" -lt 200 ; then
-						QGL_LIBPATH=${QT_LIBPATH}
-						AC_MSG_CHECKING(for libqgl)
-						if test "${QTDIR}" != "" ; then
-							CF_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
-						else
-							CF_FIND_LIB(QGL_LIBPATH,libqgl,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
-						fi
-
-						if test "${QGL_LIBPATH}" = "" ; then
-							AC_MSG_RESULT((not found!))
-							AC_MSG_RESULT()
-							AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
-							AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
-							AC_MSG_RESULT([to configure.])
-							AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
-							AC_MSG_RESULT([path - configure will recognize this, too.])
-							AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
-							AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
-							AC_MSG_RESULT()
-							AC_MSG_RESULT([The complete QT package can be found under the following URL:])
-							AC_MSG_RESULT([  http://www.troll.no/qt])
-							AC_MSG_RESULT()
-							AC_MSG_ERROR(Aborted.)
-						else
-							AC_MSG_RESULT((${QT_LIBPATH}))	
-						fi
-						if test "${QGL_PATH}" != "${QT_PATH}" ; then
-							QT_PATH=${QGL_PATH}
-							AC_MSG_RESULT(using ${QT_PATH} to look for libqt.so and libqgl.s)
-						fi
+					if test "${QT_VERSION}" -lt 300 ; then
+						AC_MSG_RESULT()
+						AC_MSG_RESULT([QT version 3.0 or above is required for BALL. Please update])
+						AC_MSG_RESULT([to a more current version or specify the path to a more])
+						AC_MSG_RESULT([recent version of libqt by passing the option --with-qt-libs=DIR])
+						AC_MSG_RESULT([to configure.])
+						AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+						AC_MSG_RESULT([path - configure will recognize this, too.])
+						AC_MSG_RESULT()
+						AC_MSG_RESULT([The complete QT package can be found under the following URL:])
+						AC_MSG_RESULT([  http://www.troll.no/qt])
+						CF_ERROR
 					fi
 				fi
 
+				dnl
+				dnl	Add the QT include path to the VIEW includes
+				dnl
 				if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
 					VIEW_INCLUDES="${VIEW_INCLUDES} -I${QT_INCPATH}"
 				fi	
@@ -2883,8 +2868,7 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT()
 					AC_MSG_RESULT(Cannot link against libGL/GLU - disabling visualization support!)
 					AC_MSG_RESULT(Please specify the path to OpenGL libraries using --with-opengl-libs=DIR)
-					AC_MSG_RESULT()
-					AC_MSG_ERROR(Aborted)
+					CF_ERROR
 				else
 					AC_MSG_RESULT(yes)
 				fi
@@ -2940,8 +2924,7 @@ AC_DEFUN(CF_VIEW, [
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(Cannot link against libMesaGL/GLU - disabling visualization support!)
 				AC_MSG_RESULT(Please specify the path to libMesaGL using --with-opengl-libs=DIR)
-				AC_MSG_RESULT()
-				AC_MSG_ERROR(Aborted.)
+				CF_ERROR
 			else
 				AC_MSG_RESULT(yes)
 				OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
@@ -2989,11 +2972,10 @@ AC_DEFUN(CF_VIEW, [
 		if test "${QT_LINKING_OK+set}" != set ; then
 			AC_MSG_RESULT(no)
 			AC_MSG_RESULT()
-			AC_MSG_RESULT([Cannot link against libqgl/qt!])
+			AC_MSG_RESULT([Cannot link against libqt!])
 			AC_MSG_RESULT([If QT is installed, please specify the path to the library])
-			AC_MSG_RESULT([using the option --with-qt-libs=DIR])
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted.)
+			AC_MSG_RESULT([using the option --with-qt-libs=DIR or the environment variable QTDIR.])
+			CF_ERROR
 		else
 			AC_MSG_RESULT(yes)
 			
@@ -3037,8 +3019,7 @@ AC_DEFUN(CF_VIEW, [
 				AC_MSG_RESULT(Perhaps you specified the wrong library or the)
 				AC_MSG_RESULT(X11 libraries are in conflict with any other library.)
 				AC_MSG_RESULT(You might also want to check your LD_LIBRARY_PATH.)
-				AC_MSG_RESULT()
-				AC_MSG_ERROR(Aborted)
+				CF_ERROR
 			else
 				QT_VERSION_STRING=`cat qt.version`
 				AC_MSG_RESULT(${QT_VERSION_STRING})
@@ -3056,8 +3037,7 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT(which can be obtained from)
 					AC_MSG_RESULT()
 					AC_MSG_RESULT(  www.troll.no/qt)
-					AC_MSG_RESULT()
-					AC_MSG_ERROR(Aborted)
+					CF_ERROR
 				fi
 			fi
 		fi
@@ -3085,8 +3065,7 @@ AC_DEFUN(CF_VIEW, [
 			AC_MSG_RESULT([Please include the correct path to moc into your])
 			AC_MSG_RESULT([PATH environment variable or specify the path to moc])
 			AC_MSG_RESULT([using the option --with-moc=PATH to rerun configure.])
-			AC_MSG_RESULT()
-      AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		fi
     dnl
     dnl  Make sure the MOC we found is actually executable
@@ -3100,8 +3079,7 @@ AC_DEFUN(CF_VIEW, [
 			AC_MSG_RESULT([Please include the correct path to moc into your])
 			AC_MSG_RESULT([PATH environment variable or specify the path to moc])
 			AC_MSG_RESULT([using the option --with-moc=PATH to rerun configure.])
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		else
 			AC_MSG_RESULT(yes)
 			AC_MSG_CHECKING(moc version)
@@ -3114,8 +3092,7 @@ AC_DEFUN(CF_VIEW, [
 				AC_MSG_RESULT([Please check your QTDRI environment variable, include the correct])
 				AC_MSG_RESULT([path to moc in your PATH environment variable, or specify the correct])
 				AC_MSG_RESULT([path to moc using the option --with-moc=PATH to rerun configure.])
-				AC_MSG_RESULT()
-				AC_MSG_ERROR(Aborted.)
+				CF_ERROR
 			fi
 		fi
 	fi
@@ -3142,8 +3119,7 @@ AC_DEFUN(CF_VIEW, [
 			AC_MSG_RESULT([Please include the correct path to uic into your])
 			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
 			AC_MSG_RESULT([using the option --with-uic=PATH to rerun configure.])
-			AC_MSG_RESULT()
-      AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		fi
     
     dnl
@@ -3158,8 +3134,7 @@ AC_DEFUN(CF_VIEW, [
 			AC_MSG_RESULT([Please include the correct path to uic into your])
 			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
 			AC_MSG_RESULT([using the option --with-uic=PATH to rerun configure.])
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		else
 			AC_MSG_RESULT(yes)
 			AC_MSG_CHECKING(uic version)
@@ -3172,8 +3147,7 @@ AC_DEFUN(CF_VIEW, [
 				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
 				AC_MSG_RESULT([path to uic in your PATH environment variable, or specify the correct])
 				AC_MSG_RESULT([path to uic using the option --with-uic=PATH to rerun configure.])
-				AC_MSG_RESULT()
-				AC_MSG_ERROR(Aborted.)
+				CF_ERROR
 			fi
 		fi
 	fi
@@ -3212,8 +3186,7 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(BALL Python support requires the visualization component)
 			AC_MSG_RESULT(VIEW. Please reconfigure without --without-VIEW.)
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted)
+			CF_ERROR
 		fi
 		AC_DEFINE(BALL_PYTHON_SUPPORT)
 
@@ -3235,7 +3208,7 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Could not find Python interpreter ]${PYTHON_EXCUTABLE})
 			AC_MSG_RESULT([Please use --with-python=EXE to specify its location.])
-			AC_MSG_ERROR(Aborted)
+			CF_ERROR
 		fi
 
 		AC_MSG_CHECKING(for Python interpreter)
@@ -3245,7 +3218,7 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Could not find Python interpreter ]${PYTHON_EXCUTABLE})
 			AC_MSG_RESULT([Please use --with-python=EXE to specify its location.])
-			AC_MSG_ERROR(Aborted)
+			CF_ERROR
 		fi
 			
 		dnl
@@ -3272,7 +3245,7 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT([Python verison 2.0 or above required!])
 			AC_MSG_RESULT([Please donwload and install Python from])
 			AC_MSG_RESULT([  http://www.python.org])
-			AC_MSG_ERROR(Aborted)
+			CF_ERROR
 		fi
 		
 		AC_MSG_CHECKING(for Python installation paths)
@@ -3295,7 +3268,7 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT([Python.h using the option --with-python-incl=DIR])
 			AC_MSG_RESULT([or ensure that Python is installed in the correct directory])
 			AC_MSG_RESULT([(sys.prefix is ${PYTHON_PREFIX})])
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		else
 			AC_MSG_RESULT(${PYTHON_INC_PATH})
 			PYTHON_INCLUDES="-I${PYTHON_INC_PATH}"
@@ -3315,8 +3288,7 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
 			AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
 			AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		fi
 		AC_MSG_RESULT(${PYTHON_LIBS})
 
@@ -3329,8 +3301,7 @@ AC_DEFUN(CF_PYTHON, [
 				AC_MSG_RESULT(against the Python library using)
 				AC_MSG_RESULT( --with-python-ldopts=OPTIONS)
 				AC_MSG_RESULT([(e.g. --with-python-ldopts="-ltermcap -lm")])
-				AC_MSG_RESULT()
-				AC_MSG_ERROR(Aborted.)
+				CF_ERROR
 			fi
 			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
 			PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
@@ -3349,8 +3320,7 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT(Please specify the location of SIP using the)
 			AC_MSG_RESULT( --with-sip=PATH)
 			AC_MSG_RESULT(option or make sure it is in your current PATH.)
-			AC_MSG_RESULT()
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		fi
 
 		dnl
@@ -3373,7 +3343,7 @@ AC_DEFUN(CF_PYTHON, [
 				AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
 				AC_MSG_RESULT(from)
 				AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
-				AC_MSG_ERROR(Aborted.)
+				CF_ERROR
 			fi
 		fi
 		
@@ -3393,7 +3363,7 @@ AC_DEFUN(CF_PYTHON, [
 			AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
 			AC_MSG_RESULT(from)
 			AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
-			AC_MSG_ERROR(Aborted.)
+			CF_ERROR
 		else
 			AC_MSG_RESULT(${SIP_INC_PATH})
 			SIP_INCLUDES="-I${SIP_INC_PATH}"
