@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.37 2003/05/04 20:15:45 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.38 2003/05/12 10:53:18 anker Exp $ 
 
 // FDPB: Finite Difference Poisson Solver
 
@@ -668,11 +668,11 @@ namespace BALL
 
 			// loop variables;
 			Position x, y, z;
-			for (z = 1; z < eps_grid->getSize().z; z++)
+			for (z = 1; z < eps_grid->getSize().z - 1; z++)
 			{
-				for (y = 1; y < eps_grid->getSize().y; y++)
+				for (y = 1; y < eps_grid->getSize().y - 1; y++)
 				{
-					for (x = 1; x < eps_grid->getSize().x; x++)
+					for (x = 1; x < eps_grid->getSize().x - 1; x++)
 					{
 						Position idx = x + Nx * y + Nxy * z;
 							
