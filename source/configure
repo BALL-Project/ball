@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.68 2000/02/01 18:17:19 oliver Exp $
+#  $Id: configure,v 1.69 2000/02/02 14:35:26 oliver Exp $
 
 
 ##################################################
@@ -2060,10 +2060,10 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 		CXXFLAGS="${CXXFLAGS} --pic"
 	fi
 	
-			CXXFLAGS_O="${CXXFLAGS_O} -O3 +K3"
+			CXXFLAGS_O="${CXXFLAGS_O} +K3"
 	
 			CXXFLAGS_D="${CXXFLAGS_D} +K0"
-	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+	CXXFLAGS_DI="${CXXFLAGS_DI}"
 
 		  		if test "${OS}" = "Solaris" -a "${ARCHITECTURE}" = sparc ; then
 		if test "${BINFMT_64_BIT}" = true ; then

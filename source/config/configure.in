@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.59 2000/02/01 18:17:16 oliver Exp $
+dnl    $Id: configure.in,v 1.60 2000/02/02 14:35:24 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -885,12 +885,12 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 	
 	dnl		optimze as on highest level: this compiler 
 	dnl		does a good job optimizing!
-	CXXFLAGS_O="${CXXFLAGS_O} -O3 +K3"
+	CXXFLAGS_O="${CXXFLAGS_O} +K3"
 	
 	dnl		avoid high level optimization to
 	dnl		get debuggable code...
 	CXXFLAGS_D="${CXXFLAGS_D} +K0"
-	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+	CXXFLAGS_DI="${CXXFLAGS_DI}"
 
 	dnl
 	dnl	if we are running under Solaris/SPARC,
