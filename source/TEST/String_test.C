@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.3 1999/12/01 15:50:06 oliver Exp $
+// $Id: String_test.C,v 1.4 1999/12/16 17:24:58 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.3 1999/12/01 15:50:06 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.4 1999/12/16 17:24:58 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -812,6 +812,8 @@ RESULT
 CHECK(String::trimLeft(char*))
 s4 = "\t     abc  \t";
 TEST_EQUAL(s4.trimLeft(), "abc  \t")
+s4 = "    ";
+TEST_EQUAL(s4.trimLeft(), "")
 s4 = "abba";
 TEST_EQUAL(s4.trimLeft("a"), "bba")
 s4 = "abba";
@@ -823,6 +825,8 @@ RESULT
 CHECK(String::trimRight(char*))
 s4 = "\t     abc  \t";
 TEST_EQUAL(s4.trimRight(), "\t     abc")
+s4 = "    ";
+TEST_EQUAL(s4.trimRight(), "")
 s4 = "abba";
 TEST_EQUAL(s4.trimRight("a"), "abb")
 s4 = "abba";
@@ -834,6 +838,8 @@ RESULT
 CHECK(String::trim(char*))
 s4 = "\t     a b\tc  \t";
 TEST_EQUAL(s4.trim(), "a b\tc")
+s4 = "    ";
+TEST_EQUAL(s4.trim(), "")
 s4 = "abba";
 TEST_EQUAL(s4.trim("a"), "bb")
 s4 = "abba";
