@@ -89,6 +89,7 @@ EXECUTABLES_KERNEL = \
 	StandardPredicates_test\
 	DefaultProcessors_test\
 	FragmentDB_test\
+	ForEach_test\
 	GlobalKernel_test
 
 EXECUTABLES_MOLMEC = \
