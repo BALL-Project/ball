@@ -18,7 +18,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /usr/local
+prefix = /var/tmp/oliver/BALL
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -152,40 +152,53 @@ am__include = include
 am__quote = 
 install_sh = /var/tmp/oliver/BALL/source/install-sh
 
+ADD_SRC = MOLVIEWClient
+#ADD_SRC = 
+
 bin_PROGRAMS = \
 	proteinMapper\
 	PDB2discover\
 	amberEnergy\
 	bindingEnergy\
-	MOLVIEWClient\
 	ramachandran\
 	PDBChecker\
 	addHydrogens\
-	SASAreas
+	SASAreas\
+	$(ADD_SRC)
 
 
 proteinMapper_SOURCES = proteinMapper.C
 PDB2discover_SOURCES = PDB2discover.C
 amberEnergy_SOURCES = amberEnergy.C
 bindingEnergy_SOURCES = bindingEnergy.C
-MOLVIEWClient_SOURCES = MOLVIEWClient.C
 ramachandran_SOURCES = ramachandran.C
 PDBChecker_SOURCES = PDBChecker.C
 addHydrogens_SOURCES = addHydrogens.C
 SASAreas_SOURCES = SASAreas.C
+
+MOLVIEWClient_SOURCES = MOLVIEWClient.C
+MOLVIEWClient_LDADD = $(BALLVIEW_LIBS)
+MOLVIEWClient_CXXFLAGS = $(CXXFLAGS) $(BALLVIEW_INCLUDES)
 subdir = EXAMPLES
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =
-bin_PROGRAMS = proteinMapper$(EXEEXT) PDB2discover$(EXEEXT) \
-	amberEnergy$(EXEEXT) bindingEnergy$(EXEEXT) \
-	MOLVIEWClient$(EXEEXT) ramachandran$(EXEEXT) \
-	PDBChecker$(EXEEXT) addHydrogens$(EXEEXT) SASAreas$(EXEEXT)
+bin_PROGRAMS = proteinMapper$(EXEEXT) \
+	PDB2discover$(EXEEXT) amberEnergy$(EXEEXT) \
+	bindingEnergy$(EXEEXT) ramachandran$(EXEEXT) \
+	PDBChecker$(EXEEXT) addHydrogens$(EXEEXT) \
+	SASAreas$(EXEEXT) MOLVIEWClient$(EXEEXT)
+#bin_PROGRAMS = proteinMapper$(EXEEXT) \
+#	PDB2discover$(EXEEXT) amberEnergy$(EXEEXT) \
+#	bindingEnergy$(EXEEXT) \
+#	ramachandran$(EXEEXT) PDBChecker$(EXEEXT) \
+#	addHydrogens$(EXEEXT) SASAreas$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
-am_MOLVIEWClient_OBJECTS = MOLVIEWClient.$(OBJEXT)
+am_MOLVIEWClient_OBJECTS = \
+	MOLVIEWClient-MOLVIEWClient.$(OBJEXT)
 MOLVIEWClient_OBJECTS = $(am_MOLVIEWClient_OBJECTS)
-MOLVIEWClient_LDADD = $(LDADD)
 MOLVIEWClient_DEPENDENCIES =
+#MOLVIEWClient_DEPENDENCIES =
 MOLVIEWClient_LDFLAGS =
 am_PDB2discover_OBJECTS = PDB2discover.$(OBJEXT)
 PDB2discover_OBJECTS = $(am_PDB2discover_OBJECTS)
@@ -233,7 +246,7 @@ DEFAULT_INCLUDES =  -I. -I$(srcdir)
 CPPFLAGS = 
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-DEP_FILES = ./$(DEPDIR)/MOLVIEWClient.Po \
+DEP_FILES = ./$(DEPDIR)/MOLVIEWClient-MOLVIEWClient.Po \
 	./$(DEPDIR)/PDB2discover.Po \
 	./$(DEPDIR)/PDBChecker.Po ./$(DEPDIR)/SASAreas.Po \
 	./$(DEPDIR)/addHydrogens.Po \
@@ -293,6 +306,7 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+MOLVIEWClient-MOLVIEWClient.$(OBJEXT): MOLVIEWClient.C
 MOLVIEWClient$(EXEEXT): $(MOLVIEWClient_OBJECTS) $(MOLVIEWClient_DEPENDENCIES) 
 	@rm -f MOLVIEWClient$(EXEEXT)
 	$(CXXLINK) $(MOLVIEWClient_LDFLAGS) $(MOLVIEWClient_OBJECTS) $(MOLVIEWClient_LDADD) $(LIBS)
@@ -327,7 +341,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/MOLVIEWClient.Po
+include ./$(DEPDIR)/MOLVIEWClient-MOLVIEWClient.Po
 include ./$(DEPDIR)/PDB2discover.Po
 include ./$(DEPDIR)/PDBChecker.Po
 include ./$(DEPDIR)/SASAreas.Po
@@ -351,6 +365,18 @@ distclean-depend:
 	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' \
 	$(CXXDEPMODE) $(depcomp) \
 	$(CXXCOMPILE) -c -o $@ `cygpath -w $<`
+
+MOLVIEWClient-MOLVIEWClient.o: MOLVIEWClient.C
+	source='MOLVIEWClient.C' object='MOLVIEWClient-MOLVIEWClient.o' libtool=no \
+	depfile='$(DEPDIR)/MOLVIEWClient-MOLVIEWClient.Po' tmpdepfile='$(DEPDIR)/MOLVIEWClient-MOLVIEWClient.TPo' \
+	$(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(MOLVIEWClient_CXXFLAGS) $(CXXFLAGS) -c -o MOLVIEWClient-MOLVIEWClient.o `test -f 'MOLVIEWClient.C' || echo '$(srcdir)/'`MOLVIEWClient.C
+
+MOLVIEWClient-MOLVIEWClient.obj: MOLVIEWClient.C
+	source='MOLVIEWClient.C' object='MOLVIEWClient-MOLVIEWClient.obj' libtool=no \
+	depfile='$(DEPDIR)/MOLVIEWClient-MOLVIEWClient.Po' tmpdepfile='$(DEPDIR)/MOLVIEWClient-MOLVIEWClient.TPo' \
+	$(CXXDEPMODE) $(depcomp) \
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(MOLVIEWClient_CXXFLAGS) $(CXXFLAGS) -c -o MOLVIEWClient-MOLVIEWClient.obj `cygpath -w MOLVIEWClient.C`
 CXXDEPMODE = depmode=gcc
 uninstall-info-am:
 
