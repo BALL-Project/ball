@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.10 2005/01/04 18:12:55 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.11 2005/01/28 18:10:42 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -176,6 +176,7 @@ namespace BALL
 				Log.info() << "Start the POVRender output..." << endl;
 			#endif
 
+			wireframes_.clear();
 			representations_.clear();
 			color_map_.clear();
 			color_vector_.clear();
@@ -277,6 +278,9 @@ namespace BALL
 			out << "#declare BALLFinishTubeSolid        = BALLFinish" << endl;
 			out << "#declare BALLFinishTubeTransp       = BALLFinish" << endl;
 			out << "#declare BALLFinishMesh             = BALLFinish" << endl;
+			out << "#declare BALLFinishWire             = finish " << endl;
+			out << "#declare wire_radius 								= 0.01;" << std::endl;
+			out << std::endl;
 			
 			out << "#macro Sphere(Position, Radius, Color)" << endl;
 			out << "sphere { Position, Radius pigment { Color } finish { BALLFinishSphereSolid } }" << endl;
@@ -293,6 +297,13 @@ namespace BALL
 			out << "#macro TubeT(Position1, Position2, Radius, Color)" << endl;
 			out << "cylinder { Position1, Position2, Radius pigment { Color } finish { BALLFinishTubeTransp } }" << endl;
 			out << "#end" << endl << endl;
+
+			out << "#macro Wire(Position1, Position2, Position3, Color1, Color2, Color3)" << endl;
+			out << "cylinder { Position1, Position2, wire_radius pigment { Color1 } finish { BALLFinishWire} }" << endl;
+			out << "cylinder { Position2, Position3, wire_radius pigment { Color2 } finish { BALLFinishWire} }" << endl;
+			out << "cylinder { Position3, Position1, wire_radius pigment { Color3 } finish { BALLFinishWire} }" << endl;
+			out << "#end" << endl << endl;
+
 
 			return true;
 		}
@@ -521,6 +532,33 @@ namespace BALL
 
 			std::ostream& out = *outfile_;
 
+
+			// is this a mesh in wireframe mode?
+			if (wireframes_.has(&mesh))
+			{
+				if (mesh.colorList.size() == 0) return;
+
+				String pre = "Wire(";
+
+				for (Position tri = 0; tri < mesh.triangle.size(); tri++)
+				{
+					String v1 = POVVector3(mesh.vertex[mesh.triangle[tri].v1]);
+					String v2 = POVVector3(mesh.vertex[mesh.triangle[tri].v2]);
+					String v3 = POVVector3(mesh.vertex[mesh.triangle[tri].v3]);
+					if (v1 != v2 && v2 != v3 && v3!= v1)
+					{
+						out << pre << v1 << ", " << v2 << ", " << v3 << ", "
+								<< getColorIndex_(mesh.colorList[mesh.triangle[tri].v1]) << ","
+								<< getColorIndex_(mesh.colorList[mesh.triangle[tri].v2]) << ","
+								<< getColorIndex_(mesh.colorList[mesh.triangle[tri].v3]) << ")" << endl;
+					}
+				}
+				return;
+			}
+
+			
+			// draw BALL Mesh as POVRay mesh2
+			
 			out << "\tmesh2 {" << endl;
 			// write vertices ---->
 			out << "\t\tvertex_vectors {" << endl;
@@ -654,7 +692,7 @@ namespace BALL
 				Log.error() << "Representation " << &representation 
 										<< "not valid, so aborting." << std::endl;
 				return false;
-			}
+			}	
 
 			List<GeometricObject*>::ConstIterator it;
 
@@ -668,6 +706,11 @@ namespace BALL
 				}
 				else
 				{
+					if (representation.getDrawingMode() == DRAWING_MODE_WIREFRAME)
+					{
+						wireframes_.insert((Mesh*) *it);
+					}
+
 					Mesh& mesh = *dynamic_cast<Mesh*>(*it);
 					String color_string;
 					for (Position i = 0; i < mesh.colorList.size(); i++)
