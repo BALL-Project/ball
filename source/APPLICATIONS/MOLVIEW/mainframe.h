@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.30.4.5 2002/10/29 16:09:01 anhi Exp $
+// $Id: mainframe.h,v 1.30.4.6 2002/10/29 17:30:08 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -135,15 +135,14 @@ class Mainframe
 	virtual ~Mainframe()
 		throw();
 
-
 	virtual void fetchPreferences(INIFile& inifile)
 	throw();
+
 	virtual void writePreferences(INIFile& inifile)
 	throw();
 
 	virtual void onNotify(Message *message)
 	throw();
-
 	
 
 	public slots:

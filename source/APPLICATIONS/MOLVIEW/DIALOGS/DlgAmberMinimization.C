@@ -47,17 +47,17 @@ void DlgAmberMinimization::setPreferences(INIFile& inifile) const
 	//	
 	// the minimizer options
 	//
-	inifile.setValue("MINIMIZATION", "Iterations::Max", getMaxIterations());
-	inifile.setValue("MINIMIZATION", "Iterations::Refresh", getRefresh());
-	inifile.setValue("MINIMIZATION", "Convergence::MaxGrad", getMaxGradient());
-	inifile.setValue("MINIMIZATION", "Convergence::EnergyDifference", getEnergyDifference());
-	inifile.setValue("MINIMIZATION", "UseCGMinimizer", getUseConjugateGradient());
+	inifile.insertValue("MINIMIZATION", "Iterations::Max", getMaxIterations());
+	inifile.insertValue("MINIMIZATION", "Iterations::Refresh", getRefresh());
+	inifile.insertValue("MINIMIZATION", "Convergence::MaxGrad", getMaxGradient());
+	inifile.insertValue("MINIMIZATION", "Convergence::EnergyDifference", getEnergyDifference());
+	inifile.insertValue("MINIMIZATION", "UseCGMinimizer", getUseConjugateGradient());
 
 	//
 	// the AMBER options
 	//
-	inifile.setValue("AMBER", "Filename", getFilename());
-	inifile.setValue("AMBER", "DistanceDependentDC", getUseDistanceDependentDC());
+	inifile.insertValue("AMBER", "Filename", getFilename());
+	inifile.insertValue("AMBER", "DistanceDependentDC", getUseDistanceDependentDC());
 }
 
 

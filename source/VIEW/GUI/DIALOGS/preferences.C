@@ -90,13 +90,9 @@ namespace BALL
 		void Preferences::writePreferences(INIFile& inifile)
 			throw()
 		{
-			//	
 			// the display window position
-			//
-			inifile.setValue
-				("WINDOWS", "Preferences::x", String(x()));
-			inifile.setValue
-				("WINDOWS", "Preferences::y", String(y()));
+			inifile.insertValue("WINDOWS", "Preferences::x", String(x()));
+			inifile.insertValue("WINDOWS", "Preferences::y", String(y()));
 		}
 
 		void Preferences::openDialog()

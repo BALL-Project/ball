@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.1 2002/10/25 23:32:45 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.2 2002/10/29 17:31:34 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -779,6 +779,7 @@ namespace BALL
 		void MainControl::fetchPreferences(INIFile &inifile)
 			throw()
 		{
+			Log.info() << "MainControl::fetchPreferences" << endl;
 			// 
 			// the geometry of the main window
 			//
@@ -814,23 +815,18 @@ namespace BALL
 		void MainControl::writePreferences(INIFile &inifile)
 			throw()
 		{
-			//	
 			// the main window position
-			//
-			inifile.setValue
-				("WINDOWS", "Main::x", String(x()));
-			inifile.setValue
-				("WINDOWS", "Main::y", String(y()));
-			inifile.setValue
-				("WINDOWS", "Main::width", String(width()));
-			inifile.setValue
-				("WINDOWS", "Main::height", String(height()));
+			inifile.insertValue ("WINDOWS", "Main::x", String(x()));
+			inifile.insertValue ("WINDOWS", "Main::y", String(y()));
+			inifile.insertValue ("WINDOWS", "Main::width", String(width()));
+			inifile.insertValue ("WINDOWS", "Main::height", String(height()));
 
 			// the default preferences tab (if existent)
 			if (main_control_preferences_ != 0)
 			{
 				main_control_preferences_->writePreferences(inifile);
 			}
+			inifile.write();
 		}
 
 		void MainControl::addModularWidget(ModularWidget* widget)

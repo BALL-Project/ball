@@ -105,11 +105,11 @@ namespace BALL
 			// save them to the inifile
 			if (server_status)
 			{
-				inifile.setValue("NETWORK", "start_server", "true");
+				inifile.insertValue("NETWORK", "start_server", "true");
 			} else {
-				inifile.setValue("NETWORK", "start_server", "false");
+				inifile.insertValue("NETWORK", "start_server", "false");
 			}
-			inifile.setValue("NETWORK", "server_port", port);
+			inifile.insertValue("NETWORK", "server_port", port);
 		}
 
 		void ServerPreferences::fetchPreferences(INIFile& inifile)

@@ -186,7 +186,7 @@ namespace BALL
 			}	
 			
 			// save the style settings
-			inifile.setValue("WINDOWS", "style", style);
+			inifile.insertValue("WINDOWS", "style", style);
 		}
 		
 	} // namespace VIEW

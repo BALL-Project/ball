@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.5 2002/10/29 16:00:50 anhi Exp $
+// $Id: displayProperties.C,v 1.13.4.6 2002/10/29 17:32:52 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 
@@ -137,22 +137,16 @@ namespace BALL
 			//	
 			// the display window position
 			//
-			inifile.setValue
-				("WINDOWS", "Display::x", String(x()));
-			inifile.setValue
-				("WINDOWS", "Display::y", String(y()));
+			inifile.insertValue("WINDOWS", "Display::x", String(x()));
+			inifile.insertValue("WINDOWS", "Display::y", String(y()));
 
 			// 
 			// the combobox values
 			// 
-			inifile.setValue
-				("WINDOWS", "Display::model", model_string_.ascii());
-			inifile.setValue
-				("WINDOWS", "Display::precision", precision_string_.ascii());
-			inifile.setValue
-				("WINDOWS", "Display::colormethod", coloring_method_string_.ascii());
-			inifile.setValue
-				("WINDOWS", "Display::customcolor", custom_color_);
+			inifile.insertValue("WINDOWS", "Display::model", model_string_.ascii());
+			inifile.insertValue("WINDOWS", "Display::precision", precision_string_.ascii());
+			inifile.insertValue("WINDOWS", "Display::colormethod", coloring_method_string_.ascii());
+			inifile.insertValue("WINDOWS", "Display::customcolor", custom_color_);
 		}
 
 		void DisplayProperties::onNotify(Message *message)

@@ -82,19 +82,12 @@ namespace BALL
 		void LabelProperties::writePreferences(INIFile& inifile)
 			throw()
 		{
-			//	
 			// the label window position
-			//
-			inifile.setValue
-				("WINDOWS", "Label::x", String(x()));
-			inifile.setValue
-				("WINDOWS", "Label::y", String(y()));
+			inifile.insertValue("WINDOWS", "Label::x", String(x()));
+			inifile.insertValue("WINDOWS", "Label::y", String(y()));
 
-			// 
 			// the color value
-			// 
-			inifile.setValue
-				("WINDOWS", "Label::customcolor", custom_color_);
+			inifile.insertValue("WINDOWS", "Label::customcolor", custom_color_);
 		}
 
 		void LabelProperties::onNotify(Message *message)

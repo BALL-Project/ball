@@ -668,8 +668,10 @@ void Mainframe::fetchPreferences(INIFile& inifile)
 void Mainframe::writePreferences(INIFile& inifile)
 	throw()
 {
-	// the splitter positions
+	inifile.clear();
+	inifile.appendSection("WINDOWS");
 	// 
+	// the splitter positions
 	QValueList<int> size_list = hor_splitter_->sizes();
 	String value_string = "";
 	QValueListConstIterator<int> list_it = size_list.begin();
@@ -677,7 +679,7 @@ void Mainframe::writePreferences(INIFile& inifile)
 	{
 		value_string += String(*list_it) + " ";
 	}
-	inifile.setValue("WINDOWS", "Main::hor_splitter", value_string);
+	inifile.insertValue("WINDOWS", "Main::hor_splitter", value_string);
 
 	value_string = "";
 	size_list = vert_splitter_->sizes();
@@ -686,7 +688,7 @@ void Mainframe::writePreferences(INIFile& inifile)
 	{
 		value_string += String(*list_it) + " ";
 	}
-	inifile.setValue("WINDOWS", "Main::vert_splitter", value_string);
+	inifile.insertValue("WINDOWS", "Main::vert_splitter", value_string);
 
 	MainControl::writePreferences(inifile);
 }
