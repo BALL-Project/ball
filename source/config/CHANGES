@@ -52,3 +52,5 @@ changed:
 - interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
 - interface for the property "hidden" of Representation's
 - SnapShotVisualisation Dialog now loads all SnapShots into memory
+- from ModularWidget derived classes no longer have to deregister themselves
+- improved the code for the BALLView termination process

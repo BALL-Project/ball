@@ -290,13 +290,6 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 	tmp_.setNum(1);
   currentSnapshot->setText(tmp_);
 	startSnapshot->setText(tmp_);
-	if (snap_shot_manager_->getNumberOfSnapShotsInBuffer() == 0)
-	{
-		if (!snap_shot_manager_->readFromFile())
-		{
-			snap_shot_manager_->clearBuffer();
-		}
-	}
 }
 
 void SnapshotVisualisationDialog::snapShotInputTest()

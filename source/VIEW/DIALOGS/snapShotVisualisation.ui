@@ -96,40 +96,6 @@
                 <string>&gt;&gt;&gt;</string>
             </property>
         </widget>
-        <widget class="QSlider">
-            <property name="name">
-                <cstring>snapShotSlider</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>48</y>
-                    <width>360</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>360</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="pageStep">
-                <number>5</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Both</enum>
-            </property>
-            <property name="tickInterval">
-                <number>10</number>
-            </property>
-        </widget>
         <widget class="QPushButton">
             <property name="name">
                 <cstring>lastSnapshotButton</cstring>
@@ -348,6 +314,40 @@
             </property>
             <property name="text">
                 <string>Snapshots</string>
+            </property>
+        </widget>
+        <widget class="QSlider">
+            <property name="name">
+                <cstring>snapShotSlider</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>48</y>
+                    <width>360</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>360</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="pageStep">
+                <number>5</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Both</enum>
+            </property>
+            <property name="tickInterval">
+                <number>20</number>
             </property>
         </widget>
     </widget>

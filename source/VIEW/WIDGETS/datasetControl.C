@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.30 2004/08/27 12:55:48 amoll Exp $
+// $Id: datasetControl.C,v 1.31 2004/09/01 11:14:58 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -297,6 +297,8 @@ void DatasetControl::onContextMenu_(QListViewItem* item,  const QPoint& point, i
 		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 		menu_entry_pos = context_menu.insertItem("Visualise/Export", this, SLOT(visualiseTrajectory_()));
 		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
+		menu_entry_pos = context_menu.insertItem("Load into RAM", this, SLOT(bufferTrajectory_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 	}
 	else if (item_to_grid1_.has(item))
 	{
@@ -338,6 +340,20 @@ void DatasetControl::visualiseTrajectory_()
 	dialog_ = new SnapshotVisualisationDialog(this);
 	dialog_->setSnapShotManager(ssm);
 	dialog_->show();
+}
+
+void DatasetControl::bufferTrajectory_()
+{
+	SnapShotManager* ssm = item_to_trajectory_[context_item_];
+
+	if (ssm->getNumberOfSnapShotsInBuffer() == 0)
+	{
+		if (!ssm->readFromFile())
+		{
+			ssm->clearBuffer();
+			setStatusbarText("Could not read trajectories into buffer! Out of memory?");
+		}
+	}
 }
 
 void DatasetControl::visualiseGrid_()
