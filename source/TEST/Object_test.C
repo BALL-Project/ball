@@ -1,4 +1,4 @@
-// $Id: Object_test.C,v 1.4 2001/07/06 10:37:59 oliver Exp $
+// $Id: Object_test.C,v 1.5 2001/07/07 02:51:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Object_test.C,v 1.4 2001/07/06 10:37:59 oliver Exp $")
+START_TEST(class_name, "$Id: Object_test.C,v 1.5 2001/07/07 02:51:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -66,8 +66,8 @@ CHECK(Object::Object& operator = (const Object& /* object */) throw())
 	Handle handle2 = o2.getHandle();
 	o2 = o1;
 	// handles shouldn't change!
-	TEST_NOT_EQUAL(o1.getHandle(), handle1)
-	TEST_NOT_EQUAL(o2.getHandle(), handle2)
+	TEST_EQUAL(o1.getHandle(), handle1)
+	TEST_EQUAL(o2.getHandle(), handle2)
 RESULT
 
 
