@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.15 2000/05/05 04:25:47 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.16 2000/05/05 12:12:17 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -62,7 +62,7 @@ namespace BALL
 	const float FDPB::Default::IONIC_STRENGTH = 0.0;
 	const char* FDPB::Default::BOUNDARY = FDPB::Boundary::DIPOLE;
 	const char* FDPB::Default::CHARGE_DISTRIBUTION = FDPB::ChargeDistribution::UNIFORM;
-	const char* FDPB::Default::DIELECTRIC_SMOOTHING = FDPB::DielectricSmoothing::HARMONIC;
+	const char* FDPB::Default::DIELECTRIC_SMOOTHING = FDPB::DielectricSmoothing::NONE;
 	const float FDPB::Default::SOLVENT_DC = 78.0;
 	const float FDPB::Default::SOLUTE_DC = 2.0;
 	const float FDPB::Default::RMS_CRITERION = 1e-5;
