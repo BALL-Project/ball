@@ -67,10 +67,22 @@ del *.exe"
 			RelativePath="..\..\source\TEST\AssignShiftProcessor_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\AtomAttributeVector_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\AtomBondIteratorTraits_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\AtomContainer_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AtomIterator_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\AtomStaticAtomAttributes_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\AtomTypes_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AtomVector_test.C">
@@ -85,16 +97,31 @@ del *.exe"
 			RelativePath="..\..\source\TEST\AutoDeletable_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\BaseIterator_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\BidirectionalIterator_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\BinaryFileAdaptor_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\BitVector_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\Bit_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\Bond_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Box3_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\Bruker1DFile_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\Bruker2DFile_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Chain_test.C">
@@ -118,10 +145,43 @@ del *.exe"
 			RelativePath="..\..\source\TEST\ComposedEnergyProcessor_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\CompositeAncestorIteratorTraits_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\CompositeChildcompositeIteratorTraits_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\CompositeCompositeIteratorTraits_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\CompositeIteratorTraits_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\Composite_test1.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Composite_test2.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ConjugateGradientMinimizer_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ConstBidirectionalIterator_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ConstForwardIterator_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ConstRandomAccessIterator_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ContourLine_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ContourSurface_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\Contour_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\CreateSpectrumProcessor_test.C">
@@ -151,10 +211,19 @@ del *.exe"
 			RelativePath="..\..\source\TEST\EnergyProcessor_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\EnumeratorIndex_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\Enumerator_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ExpressionParser_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ExpressionPredicate_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ExpressionTree_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Expression_test.C">
@@ -170,6 +239,12 @@ del *.exe"
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ForEach_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ForceField_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ForwardIterator_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\FragmentDB_test.C">
@@ -199,10 +274,25 @@ del *.exe"
 			RelativePath="..\..\source\TEST\HaighMallionShiftProcessor_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\HashGrid3BoxIteratorTraits_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\HashGrid3DataItem_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\HashGrid3DataIteratorTraits_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\HashGrid3NeighborBoxItem_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\HashGrid3_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\HashGrid3_test.h">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\HashGridBox3_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\HashMap_test.C">
@@ -220,6 +310,9 @@ del *.exe"
 			RelativePath="..\..\source\TEST\ItemCollector.h">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\JCAMPFile_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\JohnsonBoveyShiftProcessor_test.C">
 		</File>
 		<File
@@ -235,6 +328,9 @@ del *.exe"
 			RelativePath="..\..\source\TEST\LineBasedFile_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\LineSearch_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\List_test.C">
 		</File>
 		<File
@@ -248,6 +344,9 @@ del *.exe"
 		</File>
 		<File
 			RelativePath="Make.lst">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\Makefile.lst">
 		</File>
 		<File
 			RelativePath="Makefile.win">
@@ -271,6 +370,9 @@ del *.exe"
 			RelativePath="..\..\source\TEST\NMRStarFile_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\NamedProperty_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\NucleicAcid_test.C">
 		</File>
 		<File
@@ -290,6 +392,9 @@ del *.exe"
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Options_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\PARSE_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PCMCavFreeEnergyProcessor_test.C">
@@ -329,6 +434,9 @@ del *.exe"
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Peak_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\PeptideBuilder_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Peptides_test.C">
@@ -409,10 +517,16 @@ del *.exe"
 			RelativePath="..\..\source\TEST\ReissCavFreeEnergyProcessor_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\ResidueChecker_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\Residue_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ResourceFile_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\RotamerLibrary_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RuleEvaluator_test.C">
@@ -466,6 +580,9 @@ del *.exe"
 			RelativePath="..\..\source\TEST\StandardPredicates_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\SteepestDescentMinimizer_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\StringHashMap_test.C">
 		</File>
 		<File
@@ -517,7 +634,13 @@ del *.exe"
 			RelativePath="..\..\source\TEST\TransformationManager_test.C">
 		</File>
 		<File
+			RelativePath="..\..\source\TEST\TransformationProcessor_test.C">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\TranslationApplicator_test.C">
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\TranslationProcessor_test.C">
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Triple_test.C">
