@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.5 2000/08/30 19:58:14 oliver Exp $
+// $Id: surface.h,v 1.6 2000/10/10 19:37:11 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -14,16 +14,18 @@
 namespace BALL 
 {
 
-	/**	Three-dimensional Surface object.
-			This class describes a three-dimensional triangulated surface. \\
+	/**	Generic Three-dimensional Surface class.
+			This class describes a three-dimensional triangulated surface. 
+			\\
 			{\bf Definition:} \URL{BALL/MATHS/surface.h}
 			\\
 	*/
-	class Surface
+	template <typename T>
+	class TSurface
 	{
 		public:
 
-		BALL_CREATE(Surface)
+		BALL_CREATE(TSurface)
 
 		/**	@name	Type Definitions
 		*/
@@ -44,13 +46,13 @@ namespace BALL
 		//@{
 
 		///
-		Surface();
+		TSurface();
 
 		///
-		Surface(const Surface& surface);
-			
+		TSurface(const TSurface& surface);
+
 		///
-		virtual ~Surface();
+		virtual ~TSurface();
 
 		///
 		void clear();
@@ -64,13 +66,13 @@ namespace BALL
 		//@{
 
 		///
-		void set(const Surface& box);
+		void set(const TSurface& box);
 
 		///
-		const Surface& operator = (const Surface& box);
+		const TSurface& operator = (const TSurface& box);
 
 		///
-		void get(Surface& box) const;
+		void get(TSurface& box) const;
 
 		/**	Read from MSMS file.
 				Read the contents of the vertex and faces file created by Michael
@@ -92,10 +94,10 @@ namespace BALL
 		//@{
 
 		///
-		bool operator == (const Surface& box) const;
+		bool operator == (const TSurface& box) const;
 
 		///
-		bool operator != (const Surface& box) const;
+		bool operator != (const TSurface& box) const;
 		//@}
 
 		/**	@name	Debugging and Diagnostics
@@ -110,19 +112,23 @@ namespace BALL
 		//@{
 
 		/// the vertices
-		vector<Vector3>		vertex;
+		vector<TVector3<T> >		vertex;
 
 		/// the normals for each vertex
-		vector<Vector3>		normal;
+		vector<TVector3<T> >		normal;
 
 		/// the triangles
-		vector<Triangle>	triangle;
+		vector<Triangle>				triangle;
 		//@}
 
 		protected:
 
 		bool valid_;
 	};
+
+	/**	Default surface type.
+	*/
+	typedef TSurface<float> Surface;
 
 } // namespace BALL
 
