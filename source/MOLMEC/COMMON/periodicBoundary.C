@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.9 2000/06/21 14:16:02 amoll Exp $
+// $Id: periodicBoundary.C,v 1.10 2000/07/06 14:43:31 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -258,7 +258,9 @@ namespace BALL
 			
 			// store the box
 			box_.set(tmp_lower, tmp_upper);
-		} else {
+		} 
+		else 
+		{
 			// we didn`t find box dimensions - perhaps we got a distance?
 
 			if (options->has(Option::PERIODIC_BOX_DISTANCE))
@@ -433,12 +435,18 @@ namespace BALL
 	// Remove the solvent molecules that have been added by periodic boundary
 	Size PeriodicBoundary::removeSolvent() const
 	{
-		Size counter = 0;
+		// check whether the force field and the system therein
+		// are set
+		if ((force_field_ == 0) || (force_field_->getSystem() == 0))
+		{
+			return 0;
+		}
 
+		Size counter = 0;
 		MoleculeIterator mol_it = force_field_->getSystem()->beginMolecule();
 		for (; +mol_it; ++mol_it) 
 		{
-			if ((*mol_it).hasProperty(Molecule::IS_SOLVENT)) 
+			if (mol_it->hasProperty(Molecule::IS_SOLVENT)) 
 			{
 				counter++;
 				Molecule* mol = &(*mol_it);
@@ -449,7 +457,9 @@ namespace BALL
 				{
 					// it was created dynamically - destruct it!
 					delete mol;
-				} else {
+				} 
+				else 
+				{
 					// this is a static object - destroy it only!
 					mol->destroy();
 				}
