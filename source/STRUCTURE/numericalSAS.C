@@ -1,24 +1,26 @@
-// $Id: numericalSAS.C,v 1.9 2000/05/31 22:55:06 oliver Exp $
+// $Id: numericalSAS.C,v 1.10 2000/06/02 07:15:17 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/DATATYPE/hashMap.h>
 #include <BALL/KERNEL/baseFragment.h>
+#include <BALL/MATHS/surface.h>
 
 using namespace std;
 
 #define FLAG_DOTS       01
 #define FLAG_VOLUME     02
 #define FLAG_ATOM_AREA  04
+
 namespace BALL
 {
 
 	// forward
 	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*, int**);
 
-	void calculateNumericalSASAtomAreas
-		(HashMap<Atom*,float>& atom_areas,
-			const BaseFragment& fragment, float probe_radius, Size number_of_dots)
+	float calculateNumericalSASAtomAreas
+		(const BaseFragment& fragment, HashMap<Atom*,float>& atom_areas,
+		 float probe_radius, Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
@@ -35,7 +37,7 @@ namespace BALL
 		// if no atoms are found, return zero
 		if (atoms.size() == 0)
 		{
-			return;
+			return 0.0;
 		}
 				
 		// create the field required by nsc and fill it with the atom coordinates
@@ -96,7 +98,7 @@ namespace BALL
 		delete [] coordinates;
 		delete [] radii;
 
-		return;
+		return area;
 	}
 
 
@@ -156,10 +158,6 @@ namespace BALL
 		{
 			free(surface_dots);
 		}
-		if (atom_dots != 0)
-		{
-			free(atom_dots);
-		}
 
 		// free the input fields
 		delete [] coordinates;
@@ -167,6 +165,114 @@ namespace BALL
 
 		return area;
 	}
+
+  float calculateNumericalSASPoints
+		(const BaseFragment& fragment, Surface& surface,
+		 float probe_radius = 1.5,  Size number_of_dots = 400)
+	{
+		// extract all atoms: iterate over all composites and
+		// check whether they are Atoms
+		vector<Atom*>	atoms;
+		AtomIterator	it = fragment.beginAtom();
+		for (; +it; ++it)
+		{
+			if (it->getRadius() > 0.0)
+			{
+				atoms.push_back(&*it);
+			}
+		}
+		
+		// if no atoms are found, return zero
+		if (atoms.size() == 0)
+		{
+			return 0.0;
+		}
+				
+		// create the field required by nsc and fill it with the atom coordinates
+		double* coordinates = new double[atoms.size() * 3];
+		double* radii = new double[atoms.size()];
+		for (Size i = 0; i < atoms.size(); i++)
+		{
+			float tmp[3];
+			atoms[i]->getPosition().get(tmp);
+			coordinates[i * 3]			= (double)tmp[0];
+			coordinates[i * 3 + 1]	= (double)tmp[1];
+			coordinates[i * 3 + 2]	= (double)tmp[2];
+			radii[i] = atoms[i]->getRadius() + probe_radius;
+		}
+
+		double area;
+		double volume;
+		int number_of_surface_dots;
+
+		// these arrays won't get out
+		double* internal_atom_areas = 0;
+		double* internal_surface_dots = 0;
+		int*		internal_atom_dots = 0;
+
+		// call nsc
+		nsc_(coordinates, radii, (int)atoms.size(),
+				 (int)number_of_dots, FLAG_ATOM_AREA|FLAG_DOTS, 
+				 &area, &internal_atom_areas, &volume, 
+				 &internal_surface_dots, &number_of_surface_dots,
+				 &internal_atom_dots);
+
+
+		// clear the surface object
+		surface.clear();
+		
+		// resize the surface's vectors
+		surface.vertex.resize(number_of_surface_dots);
+		surface.normal.resize(number_of_surface_dots);
+
+		// iterate over all atoms and add the surface points 
+		// to the surface object
+		Size point = 0;
+		for (Size j = 0; j < atoms.size(); ++j)
+		{
+			// retrieve the center of the atom
+			Vector3 center(coordinates[j * 3], coordinates[j * 3 + 1], coordinates[j * 3 + 2]);
+
+			// calculate the length for each normal
+			float length = internal_atom_areas[j] / internal_atom_dots[j];
+
+			// iterate over all points of the surface 
+			// and calculate the normal
+			for (Size i = 0; i < (Size)internal_atom_dots[j]; i++)
+			{
+				surface.vertex[point].set(internal_surface_dots[point * 3], 
+																	internal_surface_dots[point * 3 + 1], 
+																	internal_surface_dots[point * 3 + 2]);
+				surface.normal[point] = surface.vertex[point] - center;
+				surface.normal[point].normalize();
+				surface.normal[point] *= length;
+				point++;
+			}
+		}
+
+		// free arrays (if created)
+		if (internal_atom_areas != 0)
+		{
+			free(internal_atom_areas);
+		}
+		if (internal_surface_dots != 0)
+		{
+			free(internal_surface_dots);
+		}
+		if (internal_atom_dots != 0)
+		{
+			free(internal_atom_dots);
+		}
+
+
+		// free the input fields
+		delete [] coordinates;
+		delete [] radii;
+
+		return area;
+	}
+	
+											  
 
 	/*
 	 *
@@ -266,12 +372,12 @@ namespace BALL
 		<< ":" << __LINE__ << ": " 
 
 typedef double * point_double;
-	typedef int    * point_int;
-	point_double xpunsp=NULL;
-	double       del_cube;
-	point_int    ico_wk=NULL, ico_pt=NULL;
-	int          n_dot, ico_cube, last_n_dot=0, last_densit=0, last_unsp=0;
-	int          last_cubus=0;
+typedef int    * point_int;
+point_double xpunsp=NULL;
+double       del_cube;
+point_int    ico_wk=NULL, ico_pt=NULL;
+int          n_dot, ico_cube, last_n_dot=0, last_densit=0, last_unsp=0;
+int          last_cubus=0;
 
 #define FOURPI (4.*M_PI)
 #define TORAD(A)     ((A)*0.017453293)
@@ -805,7 +911,7 @@ typedef double * point_double;
 		double xi, yi, zi, xs=0., ys=0., zs=0.;
 		double dotarea, area, vol=0.;
 		point_double xus, dots=NULL, atom_area=NULL;
-		int* atom_dots = 0;
+		point_int		atom_dots = NULL;
 
 		int    nxbox, nybox, nzbox, nxy, nxyz;
 		double xmin, ymin, zmin, xmax, ymax, zmax, ra2max, d, *pco;
