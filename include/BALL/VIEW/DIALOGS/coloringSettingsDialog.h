@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.3 2003/11/19 03:44:55 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.4 2003/11/19 12:08:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -46,6 +46,7 @@ namespace BALL
 				void setContentFromEditor( QWidget *w );
 
 				void setColor(ColorRGBA color) { color_rgba_ = color;}
+				const ColorRGBA& getColor() const { return color_rgba_;}
 		protected:
 				ColorRGBA color_rgba_;
 		};
@@ -98,6 +99,7 @@ namespace BALL
 				throw();
 
 			QColorTable* element_table_;
+			QColorTable* residue_table_;
 
 		};
 

@@ -3,6 +3,7 @@
 //
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
+#include <BALL/DATATYPE/hashMap.h>
 
 #include <qpainter.h>
 #include <qtabwidget.h>
@@ -69,10 +70,12 @@ void QColorTable::setContent(const vector<String>& names, const vector<ColorRGBA
 	}
 }
 
-QWidget* QColorTable::beginEdit(int row, int col, bool replace)
+QWidget* QColorTable::beginEdit(int row, int col, bool)
 {
 	if (col == 0) return 0;
-	QColor color = QColorDialog::getColor();
+	ColorRGBA old_rgba(((QColorTableItem*)item(row,col))->getColor());
+	QColor old(old_rgba.getRed(), old_rgba.getGreen(), old_rgba.getBlue());
+	QColor color = QColorDialog::getColor(old);
 	if (!color.isValid()) return 0;
 
 	((QColorTableItem*)item(row,col))->setColor(
@@ -86,17 +89,20 @@ ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* na
     : ColoringSettingsDialogData( parent, name, fl )
 {
 	element_table_ = new QColorTable(tabs->page(0));
+	residue_table_ = new QColorTable(tabs->page(2));
 	setDefaults();
 }
 
 void ColoringSettingsDialog::writePreferences(INIFile& file)
 	throw()
 {
+	file.isValid();
 }
 
 void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
 	throw()
 {
+	file.isValid();
 }
 
 void ColoringSettingsDialog::setDefaults()
@@ -104,16 +110,41 @@ void ColoringSettingsDialog::setDefaults()
 {
 	vector<String> 		names;
 	vector<ColorRGBA> colors;
+
+	// setting residue colors
+	// create a dummy processor to get the default values
 	ElementColorProcessor elp;
 	const HashMap<Position, ColorRGBA>& color_hash_map = elp.getColorMap();
+	HashMap<Position, ColorRGBA>::ConstIterator it = color_hash_map.begin();
 
-	for (Position p = 0; p < 111; p++)
+	for(; it != color_hash_map.end(); it++)
 	{
-		names.push_back(PTE.getElement(p).getName());
-		colors.push_back(color_hash_map[p]);
+		if (it->first == 0) continue;
+		names.push_back(PTE[it->first].getSymbol());
+		colors.push_back(it->second);
 	}
+
+	names.push_back(PTE[0].getSymbol());
+	colors.push_back(color_hash_map[0]);
 	element_table_->setNamesTitle("Element");
 	element_table_->setContent(names, colors);
+	names.clear();
+	colors.clear();
+
+	// setting residue name colors
+	// create a dummy processor to get the default values
+	ResidueNameColorProcessor rcp;
+	const StringHashMap<ColorRGBA>& color_map = rcp.getColorMap();
+	StringHashMap<ColorRGBA>::ConstIterator it2 = color_map.begin();
+
+	for(; it2 != color_map.end(); it2++)
+	{
+		names.push_back(it2->first);
+		colors.push_back(it2->second);
+	}
+
+	residue_table_->setNamesTitle("Residue");
+	residue_table_->setContent(names, colors);
 }
 
 } } // NAMESPACE

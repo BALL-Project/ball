@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.13 2003/11/19 03:50:52 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.14 2003/11/19 12:05:13 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -106,6 +106,11 @@ namespace BALL
 			virtual ColorRGBA getColor(const Composite* composite);
 			//@}
 			
+			///
+			StringHashMap<ColorRGBA>& getColorMap() { return color_map_;}
+			
+			///
+			const StringHashMap<ColorRGBA>& getColorMap() const { return color_map_;}
 			protected:	
 				StringHashMap<ColorRGBA> color_map_;
 		};
