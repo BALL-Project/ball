@@ -1,4 +1,4 @@
-// $Id: snapShotManager.h,v 1.1 2001/03/11 19:33:42 anker Exp $
+// $Id: snapShotManager.h,v 1.2 2001/03/21 18:12:50 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -81,7 +81,8 @@ namespace BALL
     /** This constructor expects a valid system, a valid force field
 				and the name of a snapshot file. If the {\tt overwrite} is true
 				then any existing file of the given name will be overwritten,
-				otherwise the new data will be appended, provided that the systems match. 
+				otherwise the new data will be appended, provided that the systems
+				match. 
 				@param my_system the system to bind this manager to
 				@param my_force_field the force field that is bound to the system
 				@param my_snapshot_file 
@@ -95,7 +96,8 @@ namespace BALL
     /** This constructor expects a valid system, a valid force field
 				and the name of a snapshot file. If the {\tt overwrite} is true
 				then any existing file of the given name will be overwritten,
-				otherwise the new data will be appended, provided that the systems match. 
+				otherwise the new data will be appended, provided that the systems
+				match. 
 				@param my_system the system to bind this manager to
 				@param my_force_field the force field that is bound to the system
 				@param my_options
@@ -215,13 +217,36 @@ namespace BALL
     virtual void takeSnapShot()
 			throw();
 
-		/** This method applies a given SnapShot {\tt snapshot} to e system,
+		/** Read a certain SnapShot from a TrajectoryFile. This method tries to
+				read SnapShot number {\number} from the file
+				@param number the number of the snapshot we want to read
+				@param snapshot a buffer for returning the snapshot
+				@return {\true} if the snapshot could be read, {\false} ow.
+		*/
+		virtual bool applySnapShot(Size number)
+			throw();
+
+		/** Read a the first SnapShot from the associated TrajectoryFile.
+				@param snapshot a buffer for returning the snapshot
+				@return {\true} if the snapshot could be read, {\false} ow.
+		*/
+		virtual bool applyFirstSnapShot()
+			throw();
+
+		/** Read a the next SnapShot from the associated TrajectoryFile and
+				apply it to the system
+				@param snapshot a buffer for returning the snapshot
+				@return {\true} if the snapshot could be read, {\false} ow.
+		*/
+		virtual bool applyNextSnapShot()
+			throw();
+
+		/** This method applies the last SnapShot of the associated file
 				i. e. writes all available data (positions, forces, etc.) from the
 				SnapShot to the System. Note that a SnapShot does not need to have
 				all data.
-				@param snapshot the snapshot which will be applied
 		*/
-		virtual void applySnapShot(const SnapShot& snapshot)
+		virtual bool applyLastSnapShot()
 			throw();
 
     /// This method writes all snapshots taken so far to hard disk
