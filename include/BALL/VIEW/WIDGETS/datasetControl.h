@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.1 2003/09/18 18:55:12 amoll Exp $
+// $Id: datasetControl.h,v 1.2 2003/10/05 21:08:58 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
 #define BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -20,6 +20,10 @@
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 # include <BALL/DATATYPE/regularData3D.h>
+#endif 
+
+#ifndef BALL_DATATYPE_LIST_H
+# include <BALL/DATATYPE/list.h>
 #endif 
 
 namespace BALL
@@ -118,6 +122,9 @@ namespace BALL
 
 			///
 			void updateSelection()
+				throw();
+
+			List<std::pair<RegularData3D*, String> > getGrids()
 				throw();
 
 			//@} 

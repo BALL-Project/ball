@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.9 2003/10/05 17:18:08 amoll Exp $
+// $Id: datasetControl.C,v 1.10 2003/10/05 21:08:41 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -355,6 +355,19 @@ void DatasetControl::updateSelection()
 		}
 	}
 	notify_(message);
+}
+
+List<std::pair<RegularData3D*, String> > DatasetControl::getGrids()
+	throw()
+{
+	List<std::pair<RegularData3D*,String> > grids;
+	HashMap<QListViewItem*, RegularData3D*>::Iterator it = item_to_grid_.begin();
+	for (; it != item_to_grid_.end(); it++)
+	{
+		std::pair<RegularData3D*, String> p((*it).second, (*it).first->text(0).ascii());
+		grids.push_back(p);
+	}
+	return grids;
 }
 
 } } // namespaces
