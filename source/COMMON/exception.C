@@ -1,7 +1,8 @@
-// $Id: exception.C,v 1.27 2001/07/25 11:33:19 oliver Exp $
+// $Id: exception.C,v 1.28 2001/07/29 17:34:51 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/DATATYPE/string.h>
 
 #include <iostream>
 #include <typeinfo>
@@ -37,15 +38,25 @@ namespace BALL
 					name_("GeneralException"),
 					message_("unspecified error")
 			{
-				globalHandler.set(file_, line_, name_, message_);
+				globalHandler.set(file_, line_, String(name_), String(message_));
 			}
 
-			GeneralException::GeneralException(const char* file, int line, const string& name, const string& message) 
+			GeneralException::GeneralException(const char* file, int line, const String& name, const String& message) 
 				throw()
 				:	file_(file),
 					line_(line),
 					name_(name),
 					message_(message)
+			{
+				globalHandler.set(file_, line_, name_, message_);
+			}
+
+			GeneralException::GeneralException(const char* file, int line) 
+				throw()
+				:	file_(file),
+					line_(line),
+					name_("GeneralException"),
+					message_("unknown error")
 			{
 				globalHandler.set(file_, line_, name_, message_);
 			}
@@ -65,19 +76,19 @@ namespace BALL
 			}
 		
 
-			string GeneralException::getName() const
+			const char* GeneralException::getName() const
 				throw()
 			{
-				return name_;
+				return name_.c_str();
 			}
 
-			string GeneralException::getMessage() const
+			const char* GeneralException::getMessage() const
 				throw()
 			{
-				return message_;
+				return message_.c_str();
 			}
 
-			string GeneralException::getFile() const
+			const char* GeneralException::getFile() const
 				throw()
 			{
 				return file_;
@@ -184,7 +195,7 @@ namespace BALL
 			}
 
 			ParseError::ParseError(const char* file, int line, 
-					const char* expression, const char* message)
+					const String& expression, const String& message)
 				throw()
 				: GeneralException(file, line, "Parse Error", "")
 			{
@@ -195,7 +206,7 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 
-			FileNotFound::FileNotFound(const char* file, int line, const string& filename)
+			FileNotFound::FileNotFound(const char* file, int line, const String& filename)
 				throw()
 				:	GeneralException(file, line, "FileNotFound", ""),
 					filename_(filename)
@@ -209,13 +220,13 @@ namespace BALL
 			{
 			}
 
-			string FileNotFound::getFilename() const
+			String FileNotFound::getFilename() const
 				throw()
 			{
 				return filename_;
 			}
 
-			InvalidFormat::InvalidFormat(const char* file, int line, const string& s)
+			InvalidFormat::InvalidFormat(const char* file, int line, const String& s)
 				throw()
 				:	GeneralException(file, line, "InvalidFormat", ""),
 					format_(s)
@@ -244,6 +255,8 @@ namespace BALL
 			DEF_EXCEPTION(IncompatibleIterators, "the iterator could not be assigned because it is bound to a different container")
 
 			DEF_EXCEPTION(NotImplemented, "this method has not been implemented yet. Feel free to complain about it!")
+
+			DEF_EXCEPTION(IllegalSelfOperation, "cannot perform operation on the same object")
 
 			DEF_EXCEPTION(IllegalTreeOperation, "an illegal tree operation was requested")
 
@@ -303,8 +316,8 @@ namespace BALL
 			}
 				
 			void GlobalExceptionHandler::set
-				(const string& file, int line,
-				 const string& name, const string& message)
+				(const String& file, int line,
+				 const String& name, const String& message)
 				throw()
 			{
 				name_ = name;
@@ -313,19 +326,19 @@ namespace BALL
 				file_ = file;
 			}
 			
-			void GlobalExceptionHandler::setName(const string& name)
+			void GlobalExceptionHandler::setName(const String& name)
 				throw()
 			{
 				name_ = name;
 			}
 			
-			void GlobalExceptionHandler::setMessage(const string& message)
+			void GlobalExceptionHandler::setMessage(const String& message)
 				throw()
 			{
 				message_ = message;
 			}
 			
-			void GlobalExceptionHandler::setFile(const string& file)
+			void GlobalExceptionHandler::setFile(const String& file)
 				throw()
 			{
 				file_ = file;
@@ -337,10 +350,10 @@ namespace BALL
 				line_ = line;
 			}
 
-			string	GlobalExceptionHandler::name_			= "unknown exception";
-			int			GlobalExceptionHandler::line_			= -1;
-			string	GlobalExceptionHandler::message_	= " - ";
-			string	GlobalExceptionHandler::file_			= "unknown";
+			std::string	GlobalExceptionHandler::name_			= "unknown exception";
+			int					GlobalExceptionHandler::line_			= -1;
+			std::string	GlobalExceptionHandler::message_	= " - ";
+			std::string	GlobalExceptionHandler::file_			= "unknown";
 
 
 
