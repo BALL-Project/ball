@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.19 2002/12/12 09:48:44 oliver Exp $
+// $Id: PDBFile.h,v 1.20 2002/12/21 11:10:24 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -41,6 +41,7 @@ namespace BALL
 
 	inline
 	HashIndex Hash(const Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>& quadruple)
+		throw()
 	{
 		return (Index)quadruple.third;
 	}
