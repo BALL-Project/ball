@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.10 2000/05/19 19:39:39 amoll Exp $
+// $Id: exception.h,v 1.11 2000/05/30 10:41:47 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -12,6 +12,7 @@
 #endif
 
 #include <string>
+#include <new>
 
 namespace BALL 
 {
@@ -235,10 +236,12 @@ namespace BALL
 
 		/**	Out of memory.
 				Throw this exception to indicate that an allocation failed.
+				This exception is thrown in the BALL new handler.
 				@param	size	the number of bytes that should have been allocated
+				@see GlobalException::newHandler
 		*/
 		class OutOfMemory
-			: public GeneralException
+			: public GeneralException, public std::bad_alloc
 		{
 			public:
 			OutOfMemory(const char* file, int line, Size size = 0);
@@ -290,7 +293,21 @@ namespace BALL
 			*/
 			//@{
 
-			/**
+			/**	Default constructor.
+					This constructor installs the BALL specific handlers for
+					{\tt terminate}, {\tt unexpected}, and {\tt new_handler}.
+					{\tt terminate} or {\tt unexpected} are called to abort 
+					a program if an exception was not caught or a function 
+					exits via an exception that is not allowed by its exception
+					specification. Both functions are replaced by a function of 
+					GlobalExceptionHandler that tries to determine the 
+					last exception thrown. This mechanism only works, if all 
+					exceptions are defrived from \Ref{GeneralException}.\\
+
+					The default {\tt new_handler} is replaced by \Ref{newHandler}
+					and throws an exception of type \Ref{OutOfMemory} instead of 
+					{\tt bad_alloc} (the default behaviour defined in the ANSI C++ 
+					standard).
 			*/
 			GlobalExceptionHandler();
 			//@}
@@ -324,7 +341,11 @@ namespace BALL
 			
 			protected:
 
+			/// The BALL replacement for terminate
 			static void terminate();
+
+			/// The BALL new handler
+			static void newHandler();
 
 			static string file_;
 			static int		line_;
