@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.6 2000/06/09 12:29:46 amoll Exp $
+// $Id: file.C,v 1.7 2000/06/29 14:12:56 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
 
@@ -15,17 +15,9 @@ using std::endl;
 namespace BALL 
 {
 
-	File::ActionManager File::action_manager_;
-	unsigned char File::protocol_ability_ = BALL_BIT(File::PROTOCOL__FILE)
-																									 | BALL_BIT(File::PROTOCOL__EXEC)
-																									 | BALL_BIT(File::PROTOCOL__ACTION);
-
-
-
 	File::File()
 		:	fstream(),
 			name_(),
-			original_name_(),
 			open_mode_(ios::in),
 			is_open_(false),
 			is_temporary_(false)
@@ -35,7 +27,6 @@ namespace BALL
 	File::File(const String& name, File::OpenMode open_mode)
 		:	fstream(),
 			name_(),
-			original_name_(),
 			open_mode_(ios::in),
 			is_open_(false),
 			is_temporary_(false)
@@ -46,7 +37,6 @@ namespace BALL
 	File::File(const File& file)
 	{
 		name_ = file.name_;
-		original_name_ = file.original_name_;
 		open_mode_ = file.open_mode_;
 		is_open_ = file.is_open_;
 		is_temporary_ = file.is_temporary_;
@@ -62,66 +52,6 @@ namespace BALL
 	bool File::open(const String& name, File::OpenMode open_mode)
 	{
 		close();
-		
-		original_name_ = name_ = name;
-		
-		if ((open_mode == ios::in) && (name_.hasPrefix("exec:") == true))
-		{
-			if (BALL_BIT_IS_CLEARED(protocol_ability_, File::PROTOCOL__EXEC))
-			{
-				return false;
-			}
-			
-			name_.erase(0, 5);
-			
-			String exec_string("exec ");
-			exec_string += name_;
-			createTemporaryFilename(name_);
-			exec_string += '>';
-			exec_string += name_;
-			system(exec_string.c_str());
-
-			is_temporary_ = true;
-		} else {
-			if (name_.hasPrefix("file:") == true)
-			{
-				if (BALL_BIT_IS_CLEARED(protocol_ability_, File::PROTOCOL__FILE))
-				{
-					return false;
-				}
-
-				name_.erase(0, 5);
-			}
-
-			FileSystem::canonizePath(name_);
-
-			if (open_mode == ios::in)
-			{
-				String* exec_string_ptr = action_manager_.findExecString(name_);
-
-				if ((File::isAccessible(name_) == true) && (exec_string_ptr != 0))
-				{
-					if (BALL_BIT_IS_CLEARED(protocol_ability_, File::PROTOCOL__ACTION))
-					{
-						return false;
-					}
-
-					String exec_string("exec ");
-					exec_string += *exec_string_ptr;
-					exec_string.substitute("%s", name_);
-					createTemporaryFilename(name_);
-					exec_string += '>';
-					exec_string += name_;
-					system(exec_string.c_str());
-		
-					is_temporary_ = true;
-				} else {
-					is_temporary_ = false;
-				}
-			} else {
-				is_temporary_ = false;
-			}
-		}
 
 		fstream::open(name_.c_str(), open_mode);
 
@@ -134,8 +64,7 @@ namespace BALL
 	bool File::reopen()
 	{
 		close();
-
-		return open(original_name_, open_mode_);
+		return open(name_, open_mode_);
 	}
 
 	bool File::copy(String source_name, String destination_name, Size buffer_size)
@@ -204,7 +133,7 @@ namespace BALL
 	{
 		if (!is_open_)
 		{
-			if (open(original_name_, open_mode_) == false)
+			if (open(name_, open_mode_) == false)
 			{
 				return 0;
 			}		
@@ -271,7 +200,7 @@ namespace BALL
 	{
 		temporary = "_1234567.TMP";
 		
-		register char a, b, c, d, e, f, g;
+		char a, b, c, d, e, f, g;
 		
 		for (a = 'A'; a <= 'Z'; a++)
 			for (b = 'A'; b <= 'Z'; b++)

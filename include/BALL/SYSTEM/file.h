@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.7 2000/06/09 12:30:17 amoll Exp $
+// $Id: file.h,v 1.8 2000/06/29 14:12:48 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -152,15 +152,32 @@ namespace BALL
 		virtual ~File();
 
 		//@}
-			
-			
-		/**	
-		*/
-		static void enableProtocol(Protocol protocol);
 
-		/**	
+		/**	@name	Assignment */
+		//@{
+
+		/** Assign a file to this object.
+				@param name the name of the file
+				@return bool true if this file is valid
 		*/
-		static void disableProtocol(Protocol protocol);
+		bool set(const String& name);
+
+		/** Assignment with cloning facility.
+				Assign a File object to this object.
+				@param file the file object to assign
+				@return bool true if this file is valid
+		*/
+		bool set(const File& file);
+
+		/** Assignment operator.
+				Assign the File {\em file} to {\em *this} File.
+		*/
+		File& operator = (const File& file);
+
+		//@}
+
+		/**	@name	Accessors */
+		//@{
 
 		/**	Open a given file.
 				The standard constructor uses this method.
@@ -185,10 +202,6 @@ namespace BALL
 		*/
 		const String& getName() const;
 
-		/**
-		*/
-		const String& getOriginalName() const;
-
 		/**	Return the size of the file.
 				If the file does not exist 0 is returned.
 				@return Size the size of the file
@@ -201,19 +214,27 @@ namespace BALL
 		*/
 		static Size getSize(String name);
 
-		/**	
+		/** Return the open mode.
+				Default is std::ios::in.
+				@return int the open mode
 		*/
 		int getOpenMode() const;
 		
-		/**	
+		/**	Return the filetype of a given file.
+				@param name the name of the file.
+				@param trace_link true to follow links
+				@return Type the filetype
 		*/
 		static Type getType(String name, bool trace_link);
 
-		/**	
+		/**	Return the filetype.
+				@param trace_link true to follow links
+				@return Type the filetype
 		*/
 		Type getType(bool trace_link) const;
 
-		/**	
+		/**	Return the stream associated with this file.
+				@return std::fstream the stream
 		*/
 		std::fstream& getFileStream();
 		
@@ -289,18 +310,17 @@ namespace BALL
 				@return bool true if the file could be truncated
 		*/
 		bool truncate(Size size = 0) const;
-
-		/**	
-		*/
-		static void registerAction(const String& pattern, const String& exec);
 			
-		/**	
-		*/
-		static void unregisterAction(const String& pattern);
-			
-		/**	
+		/**	Create a temporary filename.
+				This method creates strings, starting at _AAAAAAA.TMP and tries if a 
+				file with this name exists. If not the string is returned. If a file
+				with this name exists, it continues to create names up to _ZZZZZZZ.TMP.
+				@param temporary reference to the temporary filename
+				@return bool true if a temporary filename could be found
 		*/
 		static bool createTemporaryFilename(String& temporary);
+
+		//@}
 
 		/**	@name Predicates 
 		*/
@@ -315,31 +335,37 @@ namespace BALL
 				Two File objects are equal if they point not to the same file.
 		*/
 		bool operator != (const File& file) const;
-		//@}
 
-		/**	
-		*/
-		static bool isProtocolEnabled(Protocol protocol);
+		//@}
 
 		/**	Test if the file is opend.
 				The standard constructor opens the file.
+				@return bool true if the file is closed
 		*/
 		bool isOpen() const;
 
 		/**	Test if the file is closed.
 				The standard constructor opens the file.
+				@return bool true if the file is closed
 		*/
 		bool isClosed() const;
 
-		/**	
+		/**	Test if a given file can be accessed.
+				@param name the name of the file to be tested
+				@return bool true if the file can be accessed
 		*/
 		static bool isAccessible(String name);
 
-		/**	
+		/**	Test if the file can be accessed.
+				@return bool true if the file can be accessed
 		*/
 		bool isAccessible() const;
 
-		/**	
+		/**	Test if the path of the file is canonize.
+				The path is	compared before and after call of 
+				FileSystem::canonizePath(canonized_name).
+				@see FileSystem::canonizePath
+				@return bool true if the path is cononized.
 		*/
 		bool isCanonized() const;
 	
@@ -365,25 +391,16 @@ namespace BALL
 		*/
 		bool isWritable() const;
 
-		/**	
+		/**	Test if a given file is executable.
+				@param name the name of the file
+				@return true if the file is executable
 		*/
 		static bool isExecutable(String name);
 
-		/**	
+		/**	Test if the file is executable.
+				@return true if the file is executable
 		*/
 		bool isExecutable() const;
-
-		/**	
-		*/
-		virtual bool hasFormat();
-
-		/**	
-		*/
-		bool hasFormat() const;
-
-		/**
-		*/
-		virtual bool hasFormat(const String& s) const;
 
 		/**	@name	Debugging and Diagnostics */
 		//@{
@@ -394,192 +411,16 @@ namespace BALL
 		*/
 		bool isValid() const;
 
-		/**
-		*/
-		static void dumpRegisteredActions(std::ostream& s)
-		{
-			action_manager_.dump(s);
-		}
 		//@}
-		
-		private:
 
-		File& operator = (const File& file);
+		protected:
 
-		public:
-
-		class Action_
-		{
-			friend class ActionManager;
-			public:
-
-			Action_()
-				:	regular_expression_(),
-					exec_string_(),
-					previous_action_(0),
-					next_action_(0)
-			{
-			}
-
-			Action_
-				(const String& pattern,
-				 const String& exec_string,
-				 Action_* previous_action,
-				 Action_* next_action)
-				:	regular_expression_(pattern, true),
-					exec_string_(exec_string),
-					previous_action_(previous_action),
-					next_action_(next_action)
-			{
-				if (previous_action != 0)
-				{
-					previous_action->next_action_ = this;
-				}
-		
-				if (next_action != 0)
-				{
-					next_action->previous_action_ = this;
-				}
-			}
-
-			~Action_()
-			{
-				if (previous_action_ != 0)
-				{
-					previous_action_->next_action_ = next_action_;
-				}
-
-				if (next_action_ != 0)
-				{
-					next_action_->previous_action_ = previous_action_;
-				}
-			}
-			
-			RegularExpression regular_expression_;
-			String		exec_string_;
-			Action_*	previous_action_;
-			Action_*	next_action_;
-		};
-
-		friend class Action_;
-
-		class ActionManager
-		{
-			public:
-			friend class Action_;
-
-			ActionManager()
-				:	first_action_(0)
-			{
-			}
-
-			~ActionManager()
-			{
-				unregisterActions();
-			}
-			
-			// INVARIANT: always insert neew action at the head
-			void registerAction(const String& pattern, const String& exec_string)
-			{
-				Action_* found_action = findAction(pattern);
-		
-				if (found_action == 0)
-				{
-					first_action_ = new Action_(pattern, exec_string, 0, first_action_);
-				} else {
-					found_action->regular_expression_.set(pattern, true);
-			
-					found_action->exec_string_ = exec_string;
-				}
-			}
-
-			void unregisterAction(const String& pattern)
-			{
-				for (register Action_* action = first_action_;
-						 action != 0; action = action->next_action_)
-				{
-					if (pattern == action->regular_expression_.getPattern())
-					{
-						if (action == first_action_)
-						{
-							first_action_ = first_action_->next_action_;
-						}
-						delete action;
-						break;
-					}
-				}
-			}
-
-			void unregisterActions()
-			{
-				if (first_action_ == 0)
-				{
-					return;
-				}
-			
-				for (register Action_ *next_action = 0;
-						 first_action_ != 0; first_action_ = next_action)
-				{
-					next_action = first_action_->next_action_;
-					delete first_action_;
-				}
-			}
-
-			Action_* findAction(const String& pattern)
-			{
-				for (register Action_ *action = first_action_;
-						 action != 0; action = action->next_action_)
-				{
-					if (pattern == action->regular_expression_.getPattern())
-					{
-						return action;
-					}
-				}
-
-				return 0;
-			}
-
-			String* findExecString(const String& filename)
-			{
-				for (register Action_ *action = first_action_;
-						 action != 0; action = action->next_action_)
-				{
-					if (action->regular_expression_.match(filename.c_str()) == true)
-					{
-						return &(action->exec_string_);
-					}
-				}
-
-				return 0;
-			}
-
-			void dump(std::ostream& s) const
-			{
-				s << "Registered actions: " << std::endl;
-		
-				for (register Action_ *action = first_action_;
-						 action != 0; action = action->next_action_)
-				{
-					s << "  regular expression: \"" << action->regular_expression_ << "\"" << std::endl
-						<< "  exec: \"" << action->exec_string_ << "\"" << std::endl;
-				}
-			}	
-
-			private:
-			
-			Action_* first_action_;
-		};
-
-		friend class ActionManager;
-	
 		String name_;
-		String original_name_;
+
+		private:
 		OpenMode open_mode_;
 		bool is_open_;
 		bool is_temporary_;
-
-		static ActionManager action_manager_;
-		static unsigned char protocol_ability_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,27 +1,24 @@
-// $Id: file.iC,v 1.6 2000/06/12 16:01:32 amoll Exp $
+// $Id: file.iC,v 1.7 2000/06/29 14:12:49 amoll Exp $
+
 
 BALL_INLINE 
-void File::enableProtocol(File::Protocol protocol)
+bool File::set(const String& name)
 {
-  BALL_BIT_SET(protocol_ability_, protocol);
+	*this = File(name);
+	return isValid();
 }
 
-BALL_INLINE
-void File::disableProtocol(File::Protocol protocol)
+BALL_INLINE 
+bool File::set(const File& file)
 {
-  BALL_BIT_CLEAR(protocol_ability_, protocol);
+	*this = File(file);
+	return isValid();
 }
 
 BALL_INLINE 
 const String& File::getName() const
 {
   return name_;
-}
-
-BALL_INLINE 
-const String& File::getOriginalName() const
-{
-  return original_name_;
 }
 
 BALL_INLINE 
@@ -84,7 +81,6 @@ bool File::moveTo(const String& destination_name)
   return false;
 }
 
-
 BALL_INLINE 
 bool File::rename(String old_path, String new_path)
 {
@@ -120,18 +116,6 @@ bool File::truncate(Size size) const
 }
 
 BALL_INLINE 
-void File::registerAction(const String& pattern, const String& exec)
-{
-  action_manager_.registerAction(pattern, exec);
-}
-    
-BALL_INLINE 
-void File::unregisterAction(const String& pattern)
-{
-  action_manager_.unregisterAction(pattern);
-}
-
-BALL_INLINE 
 bool File::operator == (const File &file) const
 {
   return (bool)(name_ == file.name_);
@@ -144,9 +128,10 @@ bool File::operator != (const File &file) const
 }
 
 BALL_INLINE 
-bool File::isProtocolEnabled(File::Protocol protocol)
+File& File::operator = (const File& file)
 {
-  return (bool)(BALL_BIT_IS_SET(protocol_ability_, protocol));
+  set(file);
+  return *this;
 }
 
 BALL_INLINE 
@@ -184,11 +169,11 @@ bool File::isAccessible() const
 BALL_INLINE 
 bool File::isCanonized() const
 {
-  String canonized_name(original_name_);
+  String canonized_name(name_);
 
   FileSystem::canonizePath(canonized_name);
   
-  return (bool)(original_name_ == canonized_name);
+  return (bool)(name_ == canonized_name);
 }
 
 BALL_INLINE 
@@ -231,24 +216,6 @@ BALL_INLINE
 bool File::isExecutable() const
 {
   return File::isExecutable(name_);
-}
-
-BALL_INLINE 
-bool File::hasFormat()
-{
-  return true;
-}
-
-BALL_INLINE 
-bool File::hasFormat() const
-{
-  return ((File *)this)->hasFormat();
-}
-
-BALL_INLINE 
-bool File::hasFormat(const String& s) const
-{
-  return (original_name_.hasSuffix(s) == true && hasFormat(s) == true);
 }
 
 BALL_INLINE 

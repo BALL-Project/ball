@@ -1,11 +1,13 @@
-// $Id: File_test.C,v 1.2 2000/06/21 14:16:14 amoll Exp $
+// $Id: File_test.C,v 1.3 2000/06/29 14:13:04 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/file.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.2 2000/06/21 14:16:14 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.3 2000/06/29 14:13:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -64,11 +66,6 @@ RESULT
 
 CHECK(getName())
 	TEST_EQUAL(f.getName(), "data/File_test.txt")
-	TEST_EQUAL(f.getSize(), 100)
-RESULT
-
-CHECK(getOriginalName())
-	TEST_EQUAL(f.getOriginalName(), "data/File_test.txt")
 	TEST_EQUAL(f.getSize(), 100)
 RESULT
 
@@ -134,12 +131,12 @@ CHECK(move(const String& source_name, const String& destination_name))
 	TEST_EQUAL(f.move("", "XXX"), false)
 	TEST_EQUAL(f.move("XXX", ""), false)
 
-	TEST_EQUAL(f.move("XXX", "YYY"), true) // <<<<<<<<<<<<<<
+	TEST_EQUAL(f.move("XXX", "YYY"), true)
 	TEST_EQUAL(f.isAccessible("XXX"), false)
 	TEST_EQUAL(f.getSize("YYY"), 100)
 
 	f.copyTo("XXX");
-	TEST_EQUAL(f.move("XXX", "YYY"), true) // <<<<<<<<<<<<<<
+	TEST_EQUAL(f.move("XXX", "YYY"), true)
 	TEST_EQUAL(f.getSize(), 100)
 	f.remove("XXX");
 	f.remove("YYY");
@@ -266,30 +263,61 @@ CHECK(isAccessible())
 	TEST_EQUAL(f1.isAccessible(), false)
 RESULT
 
-/*
-
 CHECK(isCanonized())
+	File f1("../TEST/data/File_test.txt");
+	TEST_EQUAL(f1.isValid(), true)
+	TEST_EQUAL(f1.isCanonized(), true)
+
+	File f2("data//File_test.txt");
+	TEST_EQUAL(f2.isValid(), true)
+	TEST_EQUAL(f2.isCanonized(), false)
+
+	File f4("data/../data/File_test.txt");
+	TEST_EQUAL(f4.isValid(), true)
+	TEST_EQUAL(f4.isCanonized(), false)
+
+	File f5("./data/File_test.txt");
+	TEST_EQUAL(f5.isValid(), true)
+	TEST_EQUAL(f5.isCanonized(), false)
+
+	File f6("data/File_test.txt");
+	TEST_EQUAL(f6.isValid(), true)
+	TEST_EQUAL(f6.isCanonized(), true)
+
+	File f7("~/File_test.txt");
+	TEST_EQUAL(f7.isCanonized(), false)
 RESULT
 
 CHECK(isReadable(String name))
+	TEST_EQUAL(f.isReadable("File_test.C"), true)	
 RESULT
 
 CHECK(isReadable())
+	File f2("File_test.C");
+	TEST_EQUAL(f2.isReadable(), true)
 RESULT
 
 CHECK(isWritable(String name))
+	TEST_EQUAL(f.isWritable("File_test.C"), true)	
 RESULT
 
 CHECK(isWritable())
+	File f2("File_test.C");
+	TEST_EQUAL(f2.isWritable(), true)	
 RESULT
 
 CHECK(isExecutable(String name))
+	TEST_EQUAL(f.isExecutable("../configure"), true)	
+	TEST_EQUAL(f.isExecutable("File_test.C"), false)	
 RESULT
 
 CHECK(isExecutable())
+	File f1("../configure");
+	TEST_EQUAL(f1.isExecutable(), true)	
+	File f2("File_test.C");
+	TEST_EQUAL(f2.isExecutable(), false)	
 RESULT
 
-*/
 CHECK(isValid())
 	TEST_EQUAL(f.isValid(), true)	
 	File f1("XXX");
