@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.9 2002/09/17 18:46:16 anhi Exp $
+// $Id: complex.h,v 1.10 2002/10/12 17:06:47 oliver Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -75,7 +75,7 @@ namespace BALL
 
 		/**	Constructor from ANSI C++ complex type.
 		*/
-		TComplex(const complex<T>& c) 
+		TComplex(const std::complex<T>& c) 
 			throw();
 
 		/**	Detailed constructor.
@@ -305,7 +305,7 @@ namespace BALL
 		//@{
 		/** Conversion to ANSI C++ complex type
 		*/
-		operator complex<T> () 
+		operator std::complex<T> () 
 			throw();
 		//@}
 	};
@@ -326,7 +326,7 @@ namespace BALL
 		
 	template <typename T>
 	BALL_INLINE
-	TComplex<T>::TComplex(const complex<T>& c) 
+	TComplex<T>::TComplex(const std::complex<T>& c) 
 		throw()
 		:	re(c.real()),
 			im(c.img())
