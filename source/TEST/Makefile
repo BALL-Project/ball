@@ -32,6 +32,7 @@ EXECUTABLES_MATHS = \
 	PiecewisePolynomial_test
 
 EXECUTABLES_SYSTEM = \
+	BinaryFileAdaptor_test\
 	Directory_test\
 	FileSystem_test\
 	File_test\
