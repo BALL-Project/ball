@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.36 2004/09/10 13:52:54 amoll Exp $
+// $Id: cartoonModel.C,v 1.37 2004/09/10 13:53:20 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -1079,10 +1079,10 @@ namespace BALL
 					// all atoms found?
 					if (error) continue;
 
-					createTriangle_(*mesh, *atoms[1], *atoms[0], *atoms[8], atoms[1], atoms[0], atoms[8]); // C4,N9,C8
-					createTriangle_(*mesh, *atoms[6], *atoms[1], *atoms[8], 0, 0, 0); 											// C5,C4,C8
-					createTriangle_(*mesh, *atoms[6], *atoms[7], *atoms[8], atoms[6], atoms[7], atoms[8]); // C5,N7,C8
-					createTriangle_(*mesh, *atoms[2], *atoms[3], *atoms[4], atoms[2], atoms[3], atoms[4]); // N3,C2,N1
+					createTriangle_(*mesh, *atoms[1], *atoms[0], *atoms[8], atoms[1], atoms[0], atoms[8]); 	// C4,N9,C8
+					createTriangle_(*mesh, *atoms[6], *atoms[1], *atoms[8], 0, 0, 0); 										 	// C5,C4,C8
+					createTriangle_(*mesh, *atoms[6], *atoms[7], *atoms[8], atoms[6], atoms[7], atoms[8]); 	// C5,N7,C8
+					createTriangle_(*mesh, *atoms[2], *atoms[3], *atoms[4], atoms[2], atoms[3], atoms[4]); 	// N3,C2,N1
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[4], atoms[1], atoms[2], 0); 				// C4,N3,N1
 					createTriangle_(*mesh, *atoms[1], *atoms[4], *atoms[5], atoms[4], atoms[5], 0); 				// C4,N1,C6
 					createTriangle_(*mesh, *atoms[1], *atoms[5], *atoms[6], atoms[5], atoms[6], 0); 				// C4,C6,C5
