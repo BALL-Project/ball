@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.15 2004/05/27 19:50:00 oliver Exp $
+// $Id: Directory_test.C,v 1.16 2004/12/07 15:28:15 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.15 2004/05/27 19:50:00 oliver Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.16 2004/12/07 15:28:15 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -395,6 +395,14 @@ CHECK(bool setCurrent())
 	TEST_EQUAL(d.setCurrent(), true)
 	d.set("this_directory_should_not_exist");
 	TEST_EQUAL(d.setCurrent(), false)
+RESULT
+
+CHECK(String getUserHomeDir())
+	TEST_NOT_EQUAL(Directory::getUserHomeDir(), "")
+RESULT
+
+CHECK(bool changeToUserHomeDir())
+	TEST_NOT_EQUAL(Directory::changeToUserHomeDir(), false)
 RESULT
 
 CHECK([Extra]cleanup)
