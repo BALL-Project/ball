@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.17 2000/12/18 12:22:51 anker Exp $
+// $Id: file.h,v 1.18 2000/12/19 00:57:00 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -501,14 +501,14 @@ namespace BALL
 	};
 
 	template <typename T>
-	ostream& operator << (ostream& os, const BinaryFileAdaptor<T>& data)
+	std::ostream& operator << (std::ostream& os, const BinaryFileAdaptor<T>& data)
 	{
 		os.write((const char*)&(data.getData()), sizeof(T));
 		return os;
 	}
 
 	template <typename T>
-	istream& operator >> (istream& is, BinaryFileAdaptor<T>& data)
+	std::istream& operator >> (std::istream& is, BinaryFileAdaptor<T>& data)
 	{
 		is.read((char*)&(data.getData()), sizeof(T));
 		return is;
