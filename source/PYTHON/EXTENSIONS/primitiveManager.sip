@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.sip,v 1.1 2003/11/15 10:59:07 oliver Exp $
+// $Id: primitiveManager.sip,v 1.2 2003/12/07 22:34:38 oliver Exp $
 //
 
 class PrimitiveManager
@@ -13,7 +13,7 @@ class PrimitiveManager
 %End
   public:
   // BALL_CREATE(PrimitiveManager);
-  PyRepresentationList changedComposite(const Composite& /composite/) throw();
+  // PyRepresentationList changedComposite(const Composite& /composite/) throw();
   PyRepresentationList removedComposite(const Composite& /composite/) throw();
   PrimitiveManager() throw();
   PrimitiveManager(const PrimitiveManager& /pm/) throw();

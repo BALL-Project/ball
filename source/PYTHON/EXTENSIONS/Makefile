@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.26 2003/11/15 12:53:57 oliver Exp $
+# $Id: Makefile,v 1.27 2003/12/07 22:34:38 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -14,9 +14,21 @@ all:	BALLmodule.so
 
 #
 include ../../common.mak
-include Makefile.inc
+-include BALL.sbf
 
-SIP_OPTS=-c SIP -e -s ".C" -m Makefile.inc
+SIP_SOURCES=\
+	$(sources)
+
+SIP_OBJECTS	=	\
+	$(sources:.C=.o)
+
+SIP_HEADERS = \
+	$(PYBALL_SOURCES:.C=.h) \
+
+SIP_HEADER_FILES =\
+	$(headers)
+	
+SIP_OPTS=-c SIP -e -s ".C" -b BALL.sbf
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
  
