@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.10 2004/03/06 13:52:59 oliver Exp $
+// $Id: POVRenderer.C,v 1.11 2004/03/09 10:46:42 anhi Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -155,7 +155,7 @@ namespace BALL
 			outfile_ << "// To render this scene, call povray (available from www.povray.org) like this:\n//" << std::endl;
 			outfile_ << "// povray +I" << outfile_.getName() 
 							 << " +FN +Otest.png +QR +W" << width_ << " +H" << height_ << " -UV\n//" << std::endl;
-			outfile_ << "camera {" << setprecision(12) << std::endl;
+			outfile_ << "camera {" << std::setprecision(12) << std::endl;
 			outfile_ << "\tperspective" << std::endl;
 			outfile_ << "\tdirection <0.0, 0.0, -1.0>" << std::endl;
 			outfile_ << "\tright " << (double)width_ / (double)height_ << " * x" << std::endl;
@@ -176,7 +176,7 @@ namespace BALL
 			outfile_ << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << std::endl;
 		  outfile_ << "\t\t>" << std::endl;
 			outfile_ << "\tinverse }" << std::endl;
-			outfile_ << "}" << setprecision(6) << std::endl << std::endl;
+			outfile_ << "}" << std::setprecision(6) << std::endl << std::endl;
 				
 			//
 			outfile_ << "// look up: " << stage.getCamera().getLookUpVector() << std::endl;
