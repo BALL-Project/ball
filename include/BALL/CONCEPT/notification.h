@@ -1,10 +1,14 @@
-// $Id: notification.h,v 1.3 2000/01/07 21:51:56 oliver Exp $
+// $Id: notification.h,v 1.4 2000/01/08 20:42:06 hekl Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
 
 #ifndef BALL_COMMON_GLOBAL_H
 #	include <BALL/COMMON/global.h>
+#endif
+
+#ifndef BALL_COMMON_RTTI_H
+#	include <BALL/COMMON/rtti.h>
 #endif
 
 #include <iostream>
@@ -226,7 +230,8 @@ namespace BALL
 		*/
 		static void* getNotificationType_()
 		{
-			return (void*)&getNotificationType_;
+			//return (void*)&getNotificationType_;			
+			return (void*)&RTTI::getDefault<NotificationSource>();
 		}
 
 		/**
