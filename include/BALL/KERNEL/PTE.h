@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.11 2000/12/16 21:29:02 amoll Exp $
+// $Id: PTE.h,v 1.12 2001/01/21 23:01:22 amoll Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -355,8 +355,26 @@ namespace BALL
 			virtual ~Element()
 				throw();
 
+			/** Clear method
+					The instance is set to the default values.
+			*/
+			virtual void clear()
+				throw();
+			
 			//@}
 
+			/**	@name	Assignment */
+			//@{
+
+			/** Assignment operator.
+					Assign {\em element} to {\em *this} instance.
+					@param   element the Element to be copied (cloned)
+					@return  Element& - {\em *this} instance
+			*/
+			const Element& operator = (const Element& element)
+				throw();
+
+			//@}
 
 			/**@name	Inspectors and Mutators
 			*/
@@ -679,6 +697,10 @@ namespace BALL
 			virtual ~PTE_()
 				throw();
 
+			/** Clear method
+			*/
+			virtual void clear()
+				throw();
 			//@}
 
 			/**	@name	Accessors
@@ -696,6 +718,16 @@ namespace BALL
 					@return Element the static Element with the symbol {\em symbol}
 			*/
 			static Element& getElement(const String& symbol)
+				throw();
+
+			//@}
+
+			/**	@name	Assignment */
+			//@{
+
+			/** Assignment operator.
+			*/
+			const PTE_& operator = (const PTE_& pte)
 				throw();
 
 			//@}
