@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.8 2004/04/23 13:07:50 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.9 2004/04/30 11:45:18 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -316,6 +316,7 @@ namespace BALL
 
 			amber.options[AmberFF::Option::FILENAME] = getFilename();
 
+			/*
 			if (boundary_box->isChecked())
 			{
 				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
@@ -345,7 +346,7 @@ namespace BALL
 				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "false";
 			}
 		}
-
+*/
 		void AmberConfigurationDialog::setAmberFF(AmberFF& amber)
 			throw()
 		{
@@ -366,6 +367,7 @@ namespace BALL
 		void AmberConfigurationDialog::periodicBoundaryClicked()
 			throw()
 		{
+			/*
 			if (boundary_box->isChecked())
 			{
 				add_solvent_box->setEnabled(true);
@@ -381,6 +383,7 @@ namespace BALL
 				add_solvent_box->setChecked(false);
 				browse_solvent_file->setEnabled(false);
 			}
+			*/
 		}
 	
 	}//namespace VIEW

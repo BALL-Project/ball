@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.5 2004/04/23 13:07:51 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.6 2004/04/30 11:47:03 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
@@ -67,10 +67,12 @@ namespace BALL
 			overwrite_typenames_checkBox->setChecked(true);
 			use_eef1_checkBox->setChecked(true);
 
+			/*
 			boundary_box->setChecked(false);
 			add_solvent_box->setChecked(false);
 			box_size_edit->setText("40.0000");
 			solvent_file_edit->setText("");
+			*/
 		}
 
 		const String& CharmmConfigurationDialog::getFilename() const
@@ -394,6 +396,7 @@ namespace BALL
 
 			charmm.options[CharmmFF::Option::FILENAME] = getFilename();
 
+			/*
 			if (boundary_box->isChecked())
 			{
 				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
@@ -422,6 +425,7 @@ namespace BALL
 				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "false";
 				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "false";
 			}
+		*/
 		}
 
 		void CharmmConfigurationDialog::setCharmmFF(CharmmFF& charmm)
@@ -433,17 +437,20 @@ namespace BALL
 		void CharmmConfigurationDialog::chooseSolventFile()
 			throw()
 		{
+			/*
 			QString result = QFileDialog::getOpenFileName(
 					solvent_file_edit->text().ascii(), "", 0, "Select a solvent file");
 			if (!result.isEmpty())
 			{
 				solvent_file_edit->setText(result);
 			}
+			*/
 		}
 	
 		void CharmmConfigurationDialog::periodicBoundaryClicked()
 			throw()
 		{
+			/*
 			if (boundary_box->isChecked())
 			{
 				add_solvent_box->setEnabled(true);
@@ -459,6 +466,7 @@ namespace BALL
 				add_solvent_box->setChecked(false);
 				browse_solvent_file->setEnabled(false);
 			}
+			*/
 		}
 	
 	}//namespace VIEW
