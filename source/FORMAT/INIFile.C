@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.4 1999/12/28 18:21:23 oliver Exp $
+// $Id: INIFile.C,v 1.5 2000/01/13 22:28:26 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
@@ -11,32 +11,42 @@ namespace BALL
 
 	// Default constructor
 	INIFile::INIFile()
+		: valid_(true),
+			filename_(""),
+			original_number_of_lines_(0)
 	{	
 	}
 
 	INIFile::INIFile(const String& filename)
+		: valid_(true),
+			filename_(filename),
+			original_number_of_lines_(0)
 	{
-		valid_ = true;
-		setFilename(filename);
 	}
 
 	void INIFile::destroy()
 	{
+		clear();
+		filename_ = "";
+		valid_ = false;
+	}
+
+	void INIFile::clear()
+	{
 		lines_.clear();
+		line_section_index_.clear();
+		original_number_of_lines_ = 0;
 		
+		section_names_.clear();
 		section_start_.clear();
 		section_end_.clear();
 		section_key_map_.destroy();
 		section_index_.destroy();
-
-		filename_ = "";
-
-		valid_ = false;
 	}
 
 	INIFile::~INIFile()
 	{
-		destroy();
+		clear();
 	}
 
 
@@ -59,27 +69,18 @@ namespace BALL
 	bool INIFile::read()
 	{
 		// destroy all datastructures - we make a new start
-		lines_.clear();
-		
-		section_start_.clear();
-		section_end_.clear();
-		section_key_map_.destroy();
-		section_index_.destroy();
-
-
-		// we invalidate this instance. If we could read everything
-		// correctly, it will be tagged valid at the end of ::read
-		valid_ = false;
+		// we only keep the filename...
+		clear();
 
 		// try to open the file
 		ifstream infile(filename_.c_str());
 
 		// if we couldn't open the file: abort
-		if (!infile)
-			return false;
+		if (!infile) return false;
 
 		// the section zero is named ""
 		String section_name("");
+		Size section_index = 0;
 
 		// read all lines from the file
 		char buffer[MAX_LINE_LENGTH];
@@ -88,7 +89,7 @@ namespace BALL
 			// store the line
 			lines_.push_back(buffer);
 
-			// rmove leading blanks
+			// remove leading blanks
 			String line(buffer);
 			line.trimLeft();
 
@@ -115,17 +116,31 @@ namespace BALL
 						// OK, this is really a section, strip the bracket to get the name
 						line = line.before("]");
 						
-						// insert this section
-						if (section_start_.size() != 0)
-						{
-							// if this is the first section, there is not end to remember
-							section_end_.push_back(lines_.size() - 2);
-						}
-						section_index_[line] = section_start_.size();
-						section_start_.push_back(lines_.size());
 						
 						// remember the current section_name
 						section_name = line;
+						section_index++;
+
+						// insert this section
+						if (section_start_.size() != 0)
+						{
+							// if this is the first section, there is no end to remember
+							section_end_.push_back(lines_.size() - 2);
+						} else {
+							// if the first line of the first section is the first line
+							// of the file, then there is no empty section 0
+							if (lines_.size() == 1)
+							{
+								section_names_.push_back(section_name);
+							} else {
+								// insert a dummy name for the first section
+								section_names_.push_back("");
+								section_names_.push_back(section_name);
+								section_index++;
+							}
+						}
+						section_index_[line] = section_start_.size();
+						section_start_.push_back(lines_.size());
 					}
 				} else {
 					// check for lines matching ".*=". These are key/value pairs
@@ -137,6 +152,8 @@ namespace BALL
 					}
 				}
 			} 
+			// store the section index for each line
+			line_section_index_.push_back(section_index);
 		}
 		
 		// terminate the last section
@@ -145,15 +162,88 @@ namespace BALL
 		// close the file
 		infile.close();
 
+		// remember the number of lines in the file
+		// lines that are added afterwards appear at the end of the
+		// lines_ vector
+		original_number_of_lines_ = lines_.size();
+
 		// done.
 		valid_ = true;
 		return true;
 	}
 
 
-	// BAUSTELLE
 	bool INIFile::write()
 	{
+		// try to open the file
+		ofstream out(filename_.c_str(), ios::out);
+		
+		if (out.bad())
+		{
+			return false;
+		}
+
+
+		// write all the original lines of the file
+		Index current_section_index = 0;
+		Size i;
+		for (i = 0; i < original_number_of_lines_; ++i)
+		{
+			// write all lines of a section 
+			if ((Index)line_section_index_[i] == current_section_index)
+			{	
+				out << lines_[i] << endl;
+			} 
+			// skip the line if it was marked for removal 
+			// (negative sign of the index)
+			else if ((Index)line_section_index_[i] == -current_section_index)
+			{
+				continue;
+			}
+			else 
+			{
+				// we entered a new section: we have to check for added lines
+				// which are inserted at the end of lines_ (index above
+				// original_number_of_lines_)
+				for (Size j = original_number_of_lines_; j < lines_.size(); j++)
+				{
+					// if any of the added lines belongs to our current
+					// section, write it to the file
+					if ((Index)line_section_index_[j] == current_section_index)
+					{
+						out << lines_[j] << endl;
+					}
+				}
+				
+				// now write the first line of the new section 
+				// if it was not marked for removal
+				if (line_section_index_[i] >= 0)
+				{
+					out << lines_[i] << endl;
+				}
+				
+				// and increment the section index
+				current_section_index++;
+			}
+		}
+
+		// now append all new sections and lines that were not
+		// read from a file
+		while (current_section_index < (Index)section_names_.size())
+		{
+			for (i = original_number_of_lines_; i < lines_.size(); i++)
+			{
+				if ((Index)line_section_index_[i] == current_section_index)
+				{
+					out << lines_[i] << endl;
+				}
+			}
+				
+			// next section
+			current_section_index++;
+		}
+		out.close();
+		
 		return true;
 	}
 
@@ -242,15 +332,52 @@ namespace BALL
 		// (it cannot be part of the section name)
 		match_name = section + "]" + key;
 
-		// check whether we know the key - return false in case of failure
+		// BAUSTELLE
+		// check whether we know the key - create it if it does not exist
 		if (!section_key_map_.has(match_name))
-			return false;
+		{
+			// verify whether the section exists
+			Index section_index = -1;
+			for (Index i = 0; i < (Index)section_names_.size(); ++i)
+			{
+				if (section_names_[(Size)i] == section)
+				{	
+					section_index = i;
+					break;
+				}
+			}
+			if (section_index < 0)
+			{
+				// create a new section header
+				section_index = (Index)section_names_.size();
+				section_names_.push_back(section);
+				lines_.push_back("[" + section + "]");
+				line_section_index_.push_back((Size)section_index);
+			}
+				
+			// create the line
+			lines_.push_back(key + "=" + new_value);
+			line_section_index_.push_back((Size)section_index);
 
-		// create the substring describing the value part of the line
-		Substring value = lines_[section_key_map_[match_name]].after('=', 0);
+			// insert the line into the hash map
+			section_key_map_.insert
+				(StringHashMap<Size>::ValueType(match_name, lines_.size() - 1));
+			
+			// done.
+			return true;
+		}
 
-		// assign its new value
-		value = new_value;
+		Size index = section_key_map_[match_name];
+		if (lines_[index][-1] != '=')
+		{
+			// create the substring describing the value part of the line
+			Substring value = lines_[index].after('=', 0);
+
+			// assign its new value
+			value = new_value;
+		} else {
+			lines_[index] += new_value;
+		}
 		
 		return true;
 	}
