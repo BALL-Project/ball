@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.9 2002/12/12 17:19:15 amoll Exp $
+// $Id: molecularControl.C,v 1.10 2002/12/13 13:26:32 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -142,36 +142,36 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 	// build the context menu
 	if (RTTI::isKindOf<AtomContainer>(*composite))
 	{
-		insertContextMenuEntry("check Residue", this, SLOT(checkResidue()), RESIDUE__CHECK);
+		insertContextMenuEntry("Check residue", this, SLOT(checkResidue()), RESIDUE__CHECK);
 		context_menu_.insertSeparator();
-		insertContextMenuEntry("cut", this, SLOT(cut()), OBJECT__CUT);
-		insertContextMenuEntry("copy", this, SLOT(copy()), OBJECT__COPY);
-		insertContextMenuEntry("paste", this, SLOT(paste()), OBJECT__PASTE);
+		insertContextMenuEntry("Cut", this, SLOT(cut()), OBJECT__CUT);
+		insertContextMenuEntry("Copy", this, SLOT(copy()), OBJECT__COPY);
+		insertContextMenuEntry("Paste", this, SLOT(paste()), OBJECT__PASTE);
 		context_menu_.setItemEnabled(OBJECT__PASTE, getCopyList_().size() > 0);
 		bool system_selected = (MainControl::getMainControl(this)->getSelectedSystem() != 0);
 		context_menu_.setItemEnabled(OBJECT__CUT, system_selected);
 		context_menu_.setItemEnabled(OBJECT__COPY, system_selected);
 
 		context_menu_.insertSeparator();
-		insertContextMenuEntry("build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
+		insertContextMenuEntry("Build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
 		//insertContextMenuEntry("remove Bonds", this, SLOT(removeBonds()), BONDS__REMOVE);
 		context_menu_.insertSeparator();
 	}
 	if (RTTI::isKindOf<Atom>(*composite) ||
 			RTTI::isKindOf<AtomContainer>(*composite))
 	{
-		insertContextMenuEntry("select", this, SLOT(select()), SELECT);
-		insertContextMenuEntry("deselect", this, SLOT(deselect()), DESELECT);
+		insertContextMenuEntry("Select", this, SLOT(select()), SELECT);
+		insertContextMenuEntry("Deselect", this, SLOT(deselect()), DESELECT);
 		context_menu_.setItemEnabled(SELECT,   !composite->isSelected());
 		context_menu_.setItemEnabled(DESELECT,  composite->isSelected());
 
 		context_menu_.insertSeparator();
-		insertContextMenuEntry("center Camera", this, SLOT(centerCamera()), CAMERA__CENTER);
+		insertContextMenuEntry("Focus camera", this, SLOT(centerCamera()), CAMERA__CENTER);
 	}
 
 	if (RTTI::isKindOf<Atom>(*composite))
 	{
-		insertContextMenuEntry("atom properties", this, SLOT(atomProperties()), ATOM__PROPERTIES);
+		insertContextMenuEntry("Properties", this, SLOT(atomProperties()), ATOM__PROPERTIES);
 	}
 }
 
