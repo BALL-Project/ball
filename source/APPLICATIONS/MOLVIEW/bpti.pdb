@@ -1,17 +1,7 @@
 HEADER   BPTI (from 2PTC.BRK)
-HELIX    4  H4 SER I   47  GLY I   56  1                                  10
-SHEET    3     2 ARG I   1  LYS I  15  0             0              0
-SHEET    1  S1 2 ALA I  16  ALA I  25  0             0              0
-SHEET    1     3 LYS I  26  ALA I  27  0             0              0
-SHEET    1  S1 1 GLY I  28  GLY I  36  0             0              0
-SHEET    1     2 GLY I  37  LYS I  46  0             0              0
-SHEET    2     2 GLY I  57  ALA I  58  0             0              0
-TURN     3     ARG I   1  LYS I  15
-TURN     4  S1 ALA I  16  ALA I  25
-TURN     5     LYS I  26  ALA I  27
-TURN     6  S1 GLY I  28  GLY I  36
-TURN     7     GLY I  37  LYS I  46
-TURN     8     GLY I  57  ALA I  58
+HELIX    1  H1 SER     47  GLY     56  1
+SHEET    1  S1 2 ALA    16  ALA    25  0
+SHEET    2  S1 2 GLY    28  GLY    36 -1
 SSBOND   7 CYS I    5    CYS I   55                                   
 SSBOND   8 CYS I   14    CYS I   38                                   
 SSBOND   9 CYS I   30    CYS I   51                                   
