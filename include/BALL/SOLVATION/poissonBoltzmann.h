@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.5 2000/05/04 13:37:02 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.6 2000/05/04 18:33:41 oliver Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -27,15 +27,7 @@ namespace BALL
 {
 
 
-	/**	Finite Difference Poisson Boltzmann Solver.
-			{\bf Definition:} \URL{BALL/SOLVATION/poissonBoltzmann.h}
-			\\
-			{\bf Implementation:} \URL[source/SOLVATION/poissonBoltzmann.C]{../../source/SOLVATION/poissonBoltzmann.C} <p>
-			\\
-			This class implements ....\\		
-
-			@see	FDPB
-	*/
+	//@Include: poissonBoltzmann.doc
 	class FDPB 
 	{
 
@@ -79,7 +71,7 @@ namespace BALL
 
 			/**	Unable to create dielectric grid/out of memory.
 					FDPB uses a {\tt PointGrid<float>} (\Ref{FDPB::eps_grid}) to describe the
-					dielectric constant \TEX{$\varepsilon$} as a function of space.
+					dielectric constant $\varepsilon$ as a function of space.
 					This grid is created by calling FDPB::setupEpsGrid().
 					It contains the relative dielectric constant between neighbouring grid points.\\
 					If virtual memory is exhausted and the grid could not be created 
@@ -88,7 +80,7 @@ namespace BALL
 			ERROR__CANNOT_CREATE_EPSILON_GRID,
 
 			/**	Unable to create grid for the modified Debye Hueckel parameter/out of memory.
-					The modified Debye Hueckel parameter \TEX{$\bar{\kappa}$} is also a function of
+					The modified Debye Hueckel parameter $\bar{\kappa}$ is also a function of
 					space and therefore represented by a PointGrid<float> (FDPB::kappa_grid).
 					The grid is created by FDPB::setupKappaGrid().\\
 					If the creation of this grid fails due to a alack of virtual memory
@@ -284,12 +276,10 @@ namespace BALL
 					estimated using Debye Hueckel theory.
 					The Potential at each point of the grid boundary is estimated
 					as the Debye Hueckel potential according to the following formula:\\
-					\TEX{
-						\begin{equation}
+					\[
 							\phi_{x,y,z} = \sum_i \frac{1}{4 \pi \varepsilon \varepsilon_0}
-													\frac{q_i}{r} e^{-\frac{r}{d}}\nonumber
-						\end{equation}
-					}\\
+													\frac{q_i}{r} e^{-\frac{r}{d}}
+					\]
 					This options tends to become {\em very} slow for large grids.
 			*/
 			static const char* DEBYE;
@@ -343,22 +333,20 @@ namespace BALL
 			/**	Uniform smoothing.
 					This method assigns the arithmetic average of the point's value and
 					its 26 next grid neighbours to the grid point:\\
-					\TEX{
-						\begin{equation}
-							\varepsilon_0 = \frac{1}{27} \left( \sum_{i=1}^{26} \varepsilon_i + \varepsilon_0 \right)\nonumber
+					\[
+							\varepsilon_0 = \frac{1}{27} \left( \sum_{i=1}^{26} \varepsilon_i + \varepsilon_0 \right)
 						\end{equation}
-					}\\
+					\]\\
 			*/
 			static const char* UNIFORM;
 
 			/**	Harmonic smoothing.
 					This method assigns the harmonic average of the point's value and 
 					its 26 next grid neighbours to the grid point:\\
-					\TEX{
-						\begin{equation}
-							\varepsilon_0 = \frac{1}{\sum_{i=1}^{26} \frac{1}{\varepsilon_i} + \frac{1}{\varepsilon_0}}\nonumber
+					\[
+							\varepsilon_0 = \frac{1}{\sum_{i=1}^{26} \frac{1}{\varepsilon_i} + \frac{1}{\varepsilon_0}}
 						\end{equation}
-					}\\
+					\]\\
 			*/
 			static const char* HARMONIC;
 		};
