@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.138 2004/11/14 23:25:42 amoll Exp $
+// $Id: mainControl.C,v 1.139 2004/11/15 01:16:51 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1411,26 +1411,7 @@ namespace BALL
 			if (simulation_thread_ == 0) return;
 
 			stop_simulation_ = true;
-			// keep the user informed: we are still terminating the calculation
-			Position pos = 3;
-			String dots;
-			while (simulation_thread_ != 0) 
-			{
-				setStatusbarText("Terminating calculation " + dots, true);
-				qApp->wakeUpGuiThread();
-				qApp->processEvents();
-				if (pos < 40) 
-				{
-					pos ++;
-					dots +="..";
-				}
-				else 
-				{
-					pos = 3;
-					dots = "...";
-				}
-				composites_locked_wait_condition_.wait(500); 
-			}
+			setStatusbarText("Terminating calculation ...", true);
 			#endif
 		}
 
@@ -1469,11 +1450,10 @@ namespace BALL
 
 		void MainControl::customEvent(QCustomEvent* e)
 		{
-			e->type(); // prevent warning for single thread build
-
 		#ifdef BALL_QT_HAS_THREADS
 			if (e->type() == (QEvent::Type)FINISHED_REPRESENTATION_UPDATE_EVENT)
 			{
+				qApp->processEvents(200);
 				primitive_manager_.finishedUpdate_();
 				return;
 			}
@@ -1503,6 +1483,8 @@ namespace BALL
 
 				updateRepresentationsOf(*(Composite*)so->getComposite(), true);
 			}
+		#else
+			e->type(); // prevent warning for single thread build
 		#endif
 		}
 
