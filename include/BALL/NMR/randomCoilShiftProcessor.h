@@ -1,4 +1,4 @@
-// $Id: randomCoilShiftProcessor.h,v 1.5 2000/09/25 19:09:35 oliver Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.6 2000/09/26 19:27:47 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
@@ -71,7 +71,7 @@ namespace BALL
 		//@{
 		
 		/**	Application method
-				If current object is a PDBAtom of kind Hydrogen its random coil shift has to be looked up
+				If current object is a Atom of kind Hydrogen its random coil shift has to be looked up
 				in {\tt rc\_table}.
 				Get Hydrogens residue name append ":" and its name, the lookup entry is reconstruced.
 				If this entry is found within the table the randomcoil shift is added to the Hydrogens
