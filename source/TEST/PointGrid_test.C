@@ -1,13 +1,15 @@
-// $Id: PointGrid_test.C,v 1.5 2000/07/03 23:03:14 amoll Exp $
+// $Id: PointGrid_test.C,v 1.6 2000/07/04 07:25:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/DATATYPE/pointGrid.h>
 
-START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.5 2000/07/03 23:03:14 amoll Exp $")
+START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.6 2000/07/04 07:25:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
 using namespace BALL;
+using namespace std;
 
 String filename;
 using BALL::PointGrid;
